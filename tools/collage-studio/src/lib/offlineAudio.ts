@@ -55,6 +55,7 @@
 
 import { demuxAacTrack, toAudioSpecificConfig } from './mp4AudioDemux';
 import { normaliseWindow, audioSchedule } from './clipWindow';
+import { applyFade, fadeSpan } from './fade';
 
 // =============================================================================
 // TYPES
@@ -126,6 +127,13 @@ export interface PrepareOptions {
   seconds: number;
   signal?: AbortSignal;
   bitrate?: number;
+  /**
+   * THE FADE — the user's REQUESTED fade length in seconds, unclamped. `lib/fade`
+   * clamps it against the take, because a fade longer than half the take is a
+   * thing a caller can ask for and not a thing this file should be able to
+   * render. Absent or 0 is OFF, and OFF is bit-identical to a build without it.
+   */
+  fadeSec?: number;
 }
 
 // =============================================================================
@@ -450,6 +458,7 @@ const mixSources = async (
   decoded: { buf: AudioBuffer; src: OfflineAudioSource }[],
   startAt: number,
   seconds: number,
+  fadeSec: number,
   onSilent?: (n: number) => void,
   onTruncated?: (n: number) => void,
 ): Promise<AudioBuffer | null> => {
@@ -612,6 +621,32 @@ const mixSources = async (
       for (let i = 0; i < d.length; i++) d[i] *= k;
     }
   }
+
+  /**
+   * THE FADE — and it runs HERE, after the limiter, for two reasons that point
+   * the same way (lib/fade.ts, DECISION 4).
+   *
+   * The limiter scales the whole mix by `CEILING / peak`. Fading FIRST would
+   * let the take's ENDS decide that scale — the peak might live inside a ramp —
+   * so switching a fade on would make the untouched middle of the export
+   * LOUDER, and by an amount that depends on where the loudest sample happened
+   * to fall. Fading after leaves every sample between the ramps bit-identical
+   * to the same export with the fade off, which is the promise the chip is
+   * making. And it is safe in the other direction too: the envelope is <= 1
+   * everywhere, so a fade applied after the ceiling can never breach it. The
+   * opposite order is safe in neither respect.
+   *
+   * The window is the OUTPUT take (0..seconds), which is the clock this buffer
+   * is already in — `length` is `ceil(seconds * SAMPLE_RATE)` and every node's
+   * `when` came out of `audioSchedule` in output time.
+   */
+  applyFade(
+    Array.from({ length: mixed.numberOfChannels }, (_, c) => mixed.getChannelData(c)),
+    mixed.sampleRate,
+    seconds,
+    fadeSpan(fadeSec, seconds),
+  );
+
   return mixed;
 };
 
@@ -818,7 +853,7 @@ export const prepareOfflineAudio = async (
   let trimmedOut = 0;
   let cappedOut = 0;
   const mixed = await mixSources(
-    decoded, startAt, seconds,
+    decoded, startAt, seconds, opts.fadeSec ?? 0,
     (n) => { trimmedOut = n; },
     (n) => { cappedOut = n; },
   );

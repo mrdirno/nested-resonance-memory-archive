@@ -50,6 +50,7 @@ import {
   type ClipWindow, type WindowedPlayback,
 } from './clipWindow';
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
+import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
 import {
   rasterBudgetPx, readDeviceSignals, createSignalCache, createRasterLedger, scaleForBudget, rasterDims,
 } from './rasterBudget';
@@ -746,6 +747,10 @@ export class Stage {
   private needsGesture = false;
   private audioCtx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
+  /** True between `applyTakeFade` and `clearTakeFade` — so restoring the gain
+   *  is a no-op on every take that never armed one (i.e. all of them, on any
+   *  browser with WebCodecs, which fades in the sample domain instead). */
+  private fadeArmed = false;
   private streamDest: MediaStreamAudioDestinationNode | null = null;
   private audioAvailable = false;
   private stream: MediaStream | null = null;
@@ -3155,6 +3160,75 @@ export class Stage {
   get isCapturing(): boolean { return this.capturing; }
   /** Frames actually painted since construction — the honest "is it moving" counter. */
   get framesPainted(): number { return this.frames; }
+
+  /**
+   * THE FADE, on the REALTIME path — the take's ends, as automation on the
+   * master gain.
+   *
+   * The offline renderer fades in the SAMPLE DOMAIN: it holds the whole mixed
+   * buffer and multiplies through it (`offlineAudio.mixSources`). This path has
+   * no samples to hold — `captureStream()` taps `masterGain` and MediaRecorder
+   * encodes whatever comes out of it in real time — so the same envelope has to
+   * be expressed as `AudioParam` automation instead. `lib/fade.ts` owns the
+   * shape for both, and its sweep asserts the two readings agree pointwise;
+   * that is the whole reason the fade is linear.
+   *
+   * THE TWO PATHS ARE MUTUALLY EXCLUSIVE BY CONSTRUCTION, and they have to be:
+   * applying both would fade the take TWICE, quadratically. `VideoStage` calls
+   * this only on the `record()` branch, which is reached only when the offline
+   * renderer is unavailable — and the offline renderer never touches this
+   * graph, because it pauses every source and draws frames.
+   *
+   * Automation is scheduled from `currentTime`, not from zero: the context has
+   * been running since the first gesture, and `setValueAtTime(0)` on a clock
+   * that is already past would be applied instantly and then never ramp.
+   */
+  applyTakeFade(takeSec: number, fadeSec: number): readonly FadeRamp[] {
+    const ctx = this.audioCtx;
+    const m = this.masterGain;
+    if (!ctx || !m || this.destroyed) return [];
+    const f = fadeSpan(fadeSec, takeSec);
+    const ramps = fadeRamps(takeSec, f);
+    try {
+      m.gain.cancelScheduledValues(ctx.currentTime);
+      if (!ramps.length) { m.gain.value = 1; return []; }
+      const t0 = ctx.currentTime;
+      m.gain.setValueAtTime(ramps[0].value, t0);
+      for (let i = 1; i < ramps.length; i++) {
+        m.gain.linearRampToValueAtTime(ramps[i].value, t0 + ramps[i].when);
+      }
+      this.fadeArmed = true;
+      return ramps;
+    } catch {
+      // A graph that will not take automation must not cost the take. The file
+      // is then un-faded, which is exactly what it was before this existed.
+      try { m.gain.value = 1; } catch { /* ignore */ }
+      this.fadeArmed = false;
+      return [];
+    }
+  }
+
+  /**
+   * Put the master gain back where the preview expects it.
+   *
+   * Called from the recorder's `finally`, so it runs on a finished take, an
+   * aborted one and a thrown one alike. Without it a cancelled take leaves the
+   * live preview ramping down to silence with no control that brings it back —
+   * the same shape as the bug that left the music stopped after the first
+   * export, and found the same way: by asking what happens when the take does
+   * not finish. A no-op when nothing was ever armed.
+   */
+  clearTakeFade(): void {
+    if (!this.fadeArmed) return;
+    this.fadeArmed = false;
+    const ctx = this.audioCtx;
+    const m = this.masterGain;
+    if (!ctx || !m) return;
+    try {
+      m.gain.cancelScheduledValues(ctx.currentTime);
+      m.gain.setValueAtTime(1, ctx.currentTime);
+    } catch { /* the graph is gone; nothing to restore */ }
+  }
 
   // ===========================================================================
   // STATUS

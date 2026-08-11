@@ -715,6 +715,18 @@ export interface OfflineRenderOptions extends FrameRecordOptions {
    *  opt-out and reports `requested: false` rather than a failure. */
   audio?: boolean;
   audioBitsPerSecond?: number;
+  /**
+   * THE FADE — seconds of fade in and out on the mixed sound, as REQUESTED.
+   * Clamped against the take by `lib/fade`, applied in the sample domain after
+   * the true-peak limiter. 0 / absent is off and produces the same bytes this
+   * renderer produced before the fade existed.
+   *
+   * It reaches the file through the MIX rather than through the picture, so it
+   * costs this module nothing but a passthrough — and it is exactly why the
+   * realtime `record()` path needs its own answer (`Stage.applyTakeFade`):
+   * that path captures a live graph and has no samples to walk.
+   */
+  audioFadeSec?: number;
 }
 
 /**
@@ -892,6 +904,7 @@ export const renderOffline = async (
             seconds,
             signal: options.signal,
             bitrate: options.audioBitsPerSecond ?? profile.audioBitsPerSecond,
+            fadeSec: options.audioFadeSec ?? 0,
           });
           audioTrack = prepared.track;
           audioReason = prepared.reason;

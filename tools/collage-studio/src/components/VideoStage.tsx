@@ -56,6 +56,7 @@ import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
 import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
 } from '../lib/soundtrack';
+import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
 
@@ -481,6 +482,21 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const [progress, setProgress] = useState<RecordProgress | null>(null);
   const [result, setResult] = useState<RecordSuccess | null>(null);
   const [seconds, setSeconds] = useState(10);
+  /**
+   * THE FADE, in seconds, as REQUESTED — `lib/fade` clamps it against whatever
+   * take actually runs.
+   *
+   * It lives HERE, beside the take length, and that placement is the decision:
+   * a fade is a property of the RENDER, exactly as the take length is, so it
+   * shares its state, its bar and its lifetime and rides in no project file, no
+   * dice roll and no composition code. Both entry points — this bar's record
+   * button and the export sheet's — go through `startRecording`, so one piece
+   * of state answers for both and neither can disagree with the other.
+   *
+   * Starts at 0 (OFF), which is what makes every export produced before this
+   * existed reproducible today.
+   */
+  const [fadeSec, setFadeSec] = useState(0);
 
   const profile = useMemo(() => getRecordingProfile(), []);
   const durations = useMemo(
@@ -810,6 +826,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
     const take = Math.min(secondsOverride ?? seconds, profile.maxSeconds);
 
+    /**
+     * THE FADE REACHES THE FILE BY TWO DIFFERENT ROUTES, AND EXACTLY ONE OF
+     * THEM RUNS PER TAKE.
+     *
+     * `renderOffline` holds the whole mixed buffer and multiplies through it in
+     * the sample domain (`offlineAudio.mixSources`). `record()` encodes a LIVE
+     * graph in real time and has no buffer to hold, so the same envelope is
+     * scheduled as automation on the master gain instead (`Stage.applyTakeFade`).
+     * `lib/fade.ts` owns the shape for both and its sweep proves the two
+     * readings agree.
+     *
+     * Applying both would fade the take TWICE — quadratically, so a 1 s fade
+     * would spend two seconds getting off the floor. The branch below is what
+     * keeps them exclusive, which is why the master-gain call sits inside the
+     * `record()` arm rather than beside `setCaptureActive(true)` at the top
+     * where the other take-resets live. `recordFrames` gets nothing because it
+     * carries no sound at all.
+     */
     const run = useRender
       ? renderOffline(stage, {
           seconds: take,
@@ -817,6 +851,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           // The size the sheet PROBED. Absent keeps the source's own width,
           // which is what every take did before the ladder existed.
           renderWidth,
+          audioFadeSec: fadeSec,
           signal: ac.signal,
           filenameBase: 'collage',
           onProgress: setProgress,
@@ -829,14 +864,14 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           filenameBase: 'collage',
           onProgress: setProgress,
         })
-      : record(stage.canvas, {
+      : (stage.applyTakeFade(take, fadeSec), record(stage.canvas, {
           stream: stream as MediaStream,
           seconds: take,
           fps: profile.fps,
           signal: ac.signal,
           filenameBase: 'collage',
           onProgress: setProgress,
-        });
+        }));
 
     run
       .then((res) => {
@@ -858,12 +893,16 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         // Release the take's surface no matter how it ended, so the next take
         // gets a fresh stream and the stage un-freezes its backing size.
         const s = stageRef.current;
-        if (s) { s.setCaptureActive(false); s.releaseStream(); }
+        // `clearTakeFade` runs on a finished take, an aborted one and a thrown
+        // one alike — a cancelled realtime take would otherwise leave the live
+        // preview ramping down to silence with no control that brings it back.
+        // A no-op on every take that never armed one, i.e. every offline render.
+        if (s) { s.clearTakeFade(); s.setCaptureActive(false); s.releaseStream(); }
         abortRef.current = null;
         setRecPhase('idle');
         setProgress(null);
       });
-  }, [recPhase, seconds, profile.fps, profile.maxSeconds, profile.videoBitsPerSecond, onNotice, support, frameSupport, status]);
+  }, [recPhase, seconds, fadeSec, profile.fps, profile.maxSeconds, profile.videoBitsPerSecond, onNotice, support, frameSupport, status]);
 
   const closeResult = useCallback(() => {
     setResult((r) => { revokeRecording(r); return null; });
@@ -1020,11 +1059,19 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const trackAction = !trackWanted
     ? 'Put the music back in the piece'
     : trackRow?.audible ? 'Mute the music' : 'Hear the music';
-  const soundSummary = soundClipCount > 0 || trackWanted
+  /** Will this take carry ANY sound? The fade chip is offered only when it
+   *  will: a control that provably cannot change the file is the inert-control
+   *  defect this component is already scarred by four times over. */
+  const willCarrySound = soundClipCount > 0 || trackWanted;
+  /** What the fade will ACTUALLY be on the take that is queued — clamped, not
+   *  requested — so the words under the record button describe the file. */
+  const fadeOnTake = fadeSpan(fadeSec, Math.min(seconds, profile.maxSeconds));
+  const soundSummary = willCarrySound
     ? ' · sound from ' + [
         soundClipCount > 0 ? `${soundClipCount} clip${soundClipCount === 1 ? '' : 's'}` : '',
         trackWanted ? 'the music' : '',
       ].filter(Boolean).join(' + ')
+      + (fadeOnTake > 0 ? `, fading in and out over ${fadeOnTake}s` : '')
     : ' · silent (nothing has its sound on)';
 
   const dock = (
@@ -1231,6 +1278,38 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 >{l.short}</button>
               );
             })}
+          </div>
+        )}
+        {/* THE FADE — ONE control, ONE tap, and it lives in the scroll row for
+            the same reason clip-length sync does: the fixed region past the
+            spacer is already play + sound + four take lengths + record, and a
+            second four-chip group there is exactly the scar the colour dice
+            left in the trades' rails (seven 44px targets, 295 of a 320px
+            phone's 304). A cycling chip is four states in one target.
+
+            Offered only when the take will carry sound at all — see
+            `willCarrySound`. And it reads the CLAMPED length, so the chip can
+            never advertise a 2s fade on a take that will only give it 1.5s. */}
+        {willCarrySound && (
+          <div className="flex items-center gap-0.5 shrink-0 pl-1">
+            <span className="text-[9px] tracking-wide text-gray-500 hidden sm:inline mr-0.5">FADE</span>
+            <button
+              onClick={() => setFadeSec(nextFade(fadeSec))}
+              disabled={busy}
+              aria-label={`Fade ${fadeLabel(fadeSec)}, tap for ${fadeLabel(nextFade(fadeSec))}`}
+              title={busy
+                ? 'Finish the export before changing the fade.'
+                : fadeSec > 0
+                  ? `The sound fades up over ${fadeOnTake}s and back down over ${fadeOnTake}s. `
+                    + `Tap for ${fadeLabel(nextFade(fadeSec))}.`
+                  : 'The take currently starts and ends at full level. '
+                    + `Tap to fade it in and out over ${fadeLabel(nextFade(fadeSec))}.`}
+              className={`px-2.5 h-11 min-w-[2.75rem] rounded text-[9px] font-black tracking-wide transition-colors disabled:opacity-40 disabled:pointer-events-none ${
+                fadeSec > 0
+                  ? 'bg-white/15 text-white'
+                  : 'text-gray-500 hover:text-white hover:bg-white/10'
+              }`}
+            >{fadeLabel(fadeSec)}</button>
           </div>
         )}
       </div>

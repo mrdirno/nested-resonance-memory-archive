@@ -213,3 +213,67 @@ const measureTonesDirect = async (
       durationSec: buf.duration,
     };
   }, { freqs, controlHz });
+
+/**
+ * The exported sound's ENVELOPE — energy at one tone, slice by slice, across the
+ * whole file.
+ *
+ * `measureTones` above asks "is this tone anywhere in the file", which is the
+ * right question for a trim and the WRONG one for anything with a time axis.
+ * The lap defect put exactly the right tone in the file and got only the WHEN
+ * wrong; a fade gets neither the tone nor the total energy wrong and changes
+ * only the SHAPE. Neither is visible to a measurement without a clock.
+ *
+ * MOVED HERE FROM `trim.spec.ts` ON ITS SECOND CALLER (`fade.spec.ts`), which
+ * is the house rule: two suites reading the same file the same way is how two
+ * suites end up disagreeing about what one MP4 contains. The implementation is
+ * that file's, verbatim — including the fact that it decodes in ONE call and
+ * therefore, unlike `measureTones`, has no WebKit demuxer fallback. Both
+ * callers are chromium-only configs today; the day one is not, this is the
+ * function that needs the ladder.
+ */
+export type ToneEnvelope = {
+  ok: boolean; reason: string; dur: number; slices: { t: number; e: number; rms: number }[];
+};
+
+export const toneEnvelope = async (
+  page: Page, hz: number, sliceSec: number,
+): Promise<ToneEnvelope> =>
+  page.evaluate(async ({ hz, sliceSec }) => {
+    const fail = (reason: string) =>
+      ({ ok: false, reason, dur: 0, slices: [] as { t: number; e: number; rms: number }[] });
+    const el = document.querySelector('video[controls]') as HTMLVideoElement | null;
+    if (!el || !el.src) return fail('no result preview element');
+    const bytes = await (await fetch(el.src)).arrayBuffer();
+    const Ctx: typeof AudioContext =
+      (window as unknown as { AudioContext: typeof AudioContext }).AudioContext
+      || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    let buf: AudioBuffer;
+    try { buf = await ctx.decodeAudioData(bytes.slice(0)); } catch (e) {
+      await ctx.close().catch(() => {});
+      return fail(`no decodable audio track (${(e as Error)?.message || e})`);
+    }
+    const rate = buf.sampleRate;
+    const ch = buf.getChannelData(0);
+    const goertzel = (data: Float32Array, freq: number): number => {
+      const n = data.length;
+      const k = Math.round((n * freq) / rate);
+      const w = (2 * Math.PI * k) / n;
+      const cw = Math.cos(w), sw = Math.sin(w), coeff = 2 * cw;
+      let s0 = 0, s1 = 0, s2 = 0;
+      for (let i = 0; i < n; i++) { s0 = data[i] + coeff * s1 - s2; s2 = s1; s1 = s0; }
+      const re = s1 - s2 * cw, im = s2 * sw;
+      return Math.sqrt(re * re + im * im) / (n / 2);
+    };
+    const n = Math.floor(rate * sliceSec);
+    const slices: { t: number; e: number; rms: number }[] = [];
+    for (let start = 0; start + n <= ch.length; start += n) {
+      const win = ch.slice(start, start + n);
+      let r = 0;
+      for (let i = 0; i < win.length; i++) r += win[i] * win[i];
+      slices.push({ t: start / rate, e: goertzel(win, hz), rms: Math.sqrt(r / win.length) });
+    }
+    await ctx.close().catch(() => {});
+    return { ok: true, reason: '', dur: ch.length / rate, slices };
+  }, { hz, sliceSec });

@@ -123,7 +123,21 @@ or re-documenting an existing capability is DD, not delivery.
   the monitor, and a file classifier disjoint from `isVideoFile` so every
   picked file lands in exactly one bucket. Music arrives UNMUTED because adding
   it is an explicit act whose whole purpose is the sound, and the take resets it
-  to the top beside `moveOriginMs` so both recorders open on the same bar.
+  to the top beside `moveOriginMs` so both recorders open on the same bar;
+  THE FADE — the take stops sounding like somebody pulled the cable out. One
+  linear envelope in `lib/fade.ts`, read by BOTH surfaces that can carry sound:
+  the offline render multiplies through the mixed buffer (`applyFade`, after the
+  true-peak limiter) and the realtime MediaRecorder fallback schedules the same
+  shape as automation on `masterGain` (`Stage.applyTakeFade`). LINEAR is not a
+  compromise, it is the reason there can be two emitters: it is the only shape
+  an `AudioParam` and a sample walk express identically, and the sweep reads the
+  ramp schedule back through `rampGainAt` and compares it to `fadeGainAt`
+  pointwise. It runs AFTER the limiter in both directions of the argument — the
+  envelope is ≤1 so it can never breach the ceiling, and limiting first stops
+  the take's ENDS from setting the level of its middle. It lives beside the take
+  LENGTH (same state, same bar, same lifetime) and therefore rides in no dice
+  roll, no composition code and no project file, because a fade is a fact about
+  a render and a code is a recipe somebody else opens with their own music.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -187,6 +201,15 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       there is no longer "one clip is quiet", it is "the export is silent".
       `tests/unit/soundtrack.invariants.mjs` covers the row handed IN; nothing
       still covers what the mixer does with it.
+      **AND THE FADE NARROWED IT AGAIN WITHOUT CLOSING IT.** `applyFade` is now
+      swept directly on real `Float32Array`s (`tests/unit/fade.invariants.mjs`,
+      including 2.16 M samples proven `Object.is`-identical with the fade off),
+      so the ENVELOPE is unit-covered end to end — but the two lines in
+      `mixSources` that hand it `mixed.getChannelData(c)`, `mixed.sampleRate`
+      and `seconds` are not, and they are exactly the kind of wiring the fake
+      `OfflineAudioContext` above exists to reach. Today the only guard on them
+      is `tests/e2e/fade.spec.ts`, which is a real artifact measurement and
+      still a whole browser render per assertion.
 - [ ] **THE TITLE CANNOT TRAVEL IN A COMPOSITION CODE, and that is a decision,
       not an oversight.** A code is a RECIPE anyone can open with their own
       photographs; somebody else's caption over your pictures is not the same
@@ -353,10 +376,25 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       samples — 1500 Hz at **3114x** the 5 kHz control, in the MIDDLE of a 5 s
       take from a 2 s file, so it lapped; muting the chip gives
       `150 frames · silent` and no decodable audio track at all.
-      Still owed on this rung: **a fade in/out** (the mix currently hard-cuts at
-      the end of the take — the honest place for it is the sample domain, right
-      where the peak limiter already walks the whole rendered buffer), volume
-      per source, ducking, and beat-sync.
+      **THE FADE IS NOW SHIPPED**, and the note that used to sit here — "the
+      honest place for it is the sample domain, right where the peak limiter
+      already walks the whole rendered buffer" — was right about the offline
+      path and BLIND to the other one. The realtime `record()` fallback encodes
+      a LIVE graph and has no buffer to walk, so the same envelope has to exist
+      twice: once as samples, once as `AudioParam` automation. That is what
+      forced the shape to be LINEAR (DECISION 1 in `lib/fade.ts`) — an
+      equal-power curve needs `setValueCurveAtTime` with a sampled table on one
+      side and a closed form on the other, i.e. a fade that is measurably not
+      the same fade depending on which recorder your browser gave you. The
+      general shape, and it is the third time this project has met it: **an
+      "obvious" implementation note names the path you were already looking at.
+      Count the surfaces BEFORE choosing the representation** — ONE LAYOUT
+      counted four, THE TITLE counted four, this counted two and the count is
+      what picked the curve.
+      Still owed on this rung: an ASYMMETRIC fade (in and out are one control
+      today, which is one job and the right first cut, but a long tail under a
+      short head is what people actually reach for), volume per source, ducking,
+      and beat-sync.
 - [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is step 1).
 - [ ] **Overlays** — stickers, shapes, picture-in-picture, masks, chroma-key.
 - [x] **Composition** — WHICH photo lands in WHICH fragment (11 arrangements) and
@@ -564,6 +602,38 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A DESIGN NOTE WRITTEN FROM INSIDE ONE CODE PATH PRESCRIBED AN IMPLEMENTATION
+  THE OTHER PATH CANNOT EXECUTE.** The Audio rung had carried this sentence
+  since THE SOUNDTRACK shipped: a fade's "honest place is the sample domain,
+  right where the peak limiter already walks the whole rendered buffer." It is
+  correct, it is specific, it names a real line — and it is only true of
+  `renderOffline`. The realtime `record()` fallback encodes a LIVE graph through
+  `captureStream`'s tap on `masterGain` and has no buffer to walk at all, so a
+  fade built to that note would simply not exist on any browser without
+  WebCodecs, silently, with every gate green (the whole suite is chromium-only,
+  and chromium always takes the offline path). Counting the surfaces FIRST is
+  what changed the design: two emitters means the envelope has to be a shape
+  both can express exactly, which is why it is linear rather than equal-power.
+  **The general shape: a "still owed" note is written by whoever was last
+  standing in one path, and it inherits that path's assumptions without saying
+  so. Before implementing one, count the surfaces the capability has to reach
+  and check the note is true of all of them.** ONE LAYOUT counted four, THE
+  TITLE counted four, THE LOOK counted four; this one had counted one.
+- **THE INSTRUMENT THAT MEASURES THE ARTIFACT LIVED INSIDE A SPEC FILE.**
+  `toneEnvelope` — decode the exported MP4 and read energy at one tone slice by
+  slice — was written in `trim.spec.ts` for the lap schedule and left there. It
+  is not a trim thing: it is the ONLY measurement in this repo with a time axis,
+  and a time axis is what every future audio capability (a fade, ducking,
+  beat-sync, an asymmetric tail) needs to prove itself. The next suite to want
+  it would have pasted a third Goertzel next to the two already in the tree, and
+  then two suites would be free to disagree about what one MP4 contains — the
+  exact reason `tone-measure.ts` exists at all. Moved on its SECOND caller, as
+  the extract-the-engine rule says, and the trim straddle test re-run to prove
+  the move changed nothing (`####........####....`, digit for digit).
+  **`measureTones` still has a private copy in `trim.spec.ts` and that is the
+  next one to collapse** — named here rather than swept in this cycle, because a
+  pure move deserves the regression run that proves it and this cycle spent that
+  budget on the envelope.
 - **A TEST ASSERTED THE LAYOUT THAT PROVIDED THE GUARANTEE, NOT THE GUARANTEE.**
   `undo.spec.ts` U4b checked that every full-bleed rail control started to the
   RIGHT of the one before it. That was true, and it was really protecting
@@ -2946,4 +3016,85 @@ frontier. Today's ceiling is tomorrow's floor.
   keyboard map (the main dice is not either), and it does not appear in the
   share code as a distinguishable act — a code records the deal, not which
   button produced it, which is correct and worth stating.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-11 · **[AXIS:COLLAGE] THE FADE — the take stops sounding like somebody
+  pulled the cable out**
+  (well empty — 0 new, 0 stranded in `building`, read UNSCOPED across all trades
+  first; breadth debt 0, so LIVE STATE's stalest-axis rule governed and it named
+  COLLAGE.) before→after: **every export began at full level on sample zero and
+  ENDED MID-BAR → the sound rises out of silence and settles back into it, over
+  0.5s, 1s or 2s, on one tap.** `mixSources` renders exactly
+  `ceil(seconds * 48000)` samples and hands every one to the encoder, so the last
+  sample of a 5 s take was whatever the song happened to be doing at 5.000 s —
+  which is what a hard cut IS, and the Audio rung has named a fade as the first
+  thing owed since THE SOUNDTRACK shipped. `lib/fade.ts` is one linear envelope
+  with TWO emitters, and the count is what set the design: the offline renderer
+  holds the whole mixed buffer and multiplies through it (`applyFade`), while the
+  realtime MediaRecorder fallback encodes a LIVE graph through `captureStream`'s
+  tap on `masterGain` and has no buffer to walk at all, so the same shape has to
+  exist as `AudioParam` automation (`Stage.applyTakeFade`). LINEAR is therefore
+  not a compromise but the enabling decision — it is the only shape both sides
+  express exactly, where an equal-power curve would need `setValueCurveAtTime`
+  with a sampled table on one side and a closed form on the other, i.e. a fade
+  that is measurably not the same fade depending on which recorder your browser
+  gave you. **The load-bearing decisions, in order of what they cost to get
+  wrong:** the fade runs AFTER the true-peak limiter, and the order is safe in
+  both directions of the argument only that way round — the envelope is ≤1 so it
+  can never breach the ceiling, and limiting first stops the take's ENDS from
+  setting the level of its middle (fading first would let a peak inside a ramp
+  lower the measured peak, the limiter would scale by less, and switching a fade
+  on would make the untouched middle LOUDER); `fadeSpan` clamps the request to
+  `take/2`, which makes "a fade longer than the take" unrepresentable rather than
+  merely tested; `applyFade` walks only the two ramp REGIONS, so the bound is a
+  value the sweep asserts rather than a property implied by arithmetic; and OFF
+  is the default, so every export made before this exists is still reproducible.
+  It lives beside the take LENGTH — same state, same bar, same lifetime — and
+  therefore rides in **no** dice roll, **no** composition code and **no** project
+  file, because a fade is a fact about a render and a `?c=` code is a recipe
+  somebody else opens with their own music. UI is ONE 44px chip that cycles
+  OFF→0.5s→1s→2s, in the scroll row rather than the fixed one: the take bar is
+  already eleven controls and a second four-chip group there is exactly the scar
+  the colour dice left in the trades' rails. It is offered only when the take
+  will carry sound at all (`willCarrySound`), because a control that provably
+  cannot change the file is the inert-control defect this component has been
+  filed against four times.
+  PROOF: `tests/unit/fade.invariants.mjs` — **708,601 assertions**: 176,088
+  envelope points across 88 (take, fade) pairs where the sample-domain envelope
+  and the ramp schedule read back through `rampGainAt` must agree pointwise,
+  99 clamps, 264 region tilings, **2,160,000 samples proven `Object.is`-identical
+  with the fade off**, 9 faded buffers checked sample-by-sample for an untouched
+  middle and for never-louder, 25 garbage inputs. MUTATION-TESTED, which is the
+  part worth keeping: 8 deliberate defects injected into the shipped module,
+  **7 killed** each on the assertion written for it — and the 8th (`up * down`
+  for `min(up, down)`) SURVIVED as an EQUIVALENT mutant, which is the clamp's
+  payoff stated as evidence rather than as prose: under `f ≤ take/2` one factor
+  is always exactly 1, so the two spellings are the same function, and removing
+  the clamp is what makes them differ. `tests/e2e/fade.spec.ts` at the ARTIFACT,
+  by DECODING the exported MP4 and reading its envelope 20 slices deep — fade
+  OFF `79999999999999999999` (flat), fade ON `01345678999997654321` (the 2 s
+  trapezoid), **worst point-by-point deviation from a hand-written `min(t/2,
+  (5-t)/2, 1)` = 0.024** against a 0.12 tolerance, and **plateau ratio
+  faded/flat = 1.000**, which is the limiter-order claim measured rather than
+  argued. That point-by-point assertion is the one that carries the test: quiet
+  ends and monotone ramps are both invariant under the ramp LENGTH — a 1 s fade
+  passes every other assertion in the file — the same lesson `trim.spec.ts` wrote
+  down when duty cycle and longest-silence both scored a one-second-late render
+  as perfect. MOBILE: F3 drives the real chip at 320/360/390/430, asserting zero
+  horizontal overflow, ≥44px in both axes, no ancestor clipping, AND that a tap
+  actually changes the value at every width. REGRESSION: soundtrack 6/6, trim
+  9/9 (straddle still reads `####........####....` digit for digit, so the
+  `toneEnvelope` move is behaviour-preserving), video-audio-export 4/4, fade 2/2,
+  `tsc --noEmit` clean, `vite build` clean. **EXTRACTION RIDER:** `toneEnvelope`
+  — the only measurement in this repo with a TIME AXIS — lived inside
+  `trim.spec.ts`, so this cycle's suite would have been the third Goertzel in the
+  tree; moved into `tone-measure.ts` beside `measureTones` on its second caller,
+  per the extract-the-engine rule. **NOT SHIPPED, AND SAID PLAINLY:** the fade is
+  SYMMETRIC (one control sets in and out together — a long tail under a short
+  head is the next rung); the realtime `record()` path's fade is proven
+  STRUCTURALLY (same pure function, ramp schedule asserted against the envelope)
+  and NOT at the artifact, because every engine in this suite has WebCodecs and
+  therefore never takes that path; and `mixSources`' two lines that hand the
+  buffer to `applyFade` are still guarded only by a whole browser render, which
+  is the fake-`OfflineAudioContext` rung the ladder has been carrying since the
+  lap schedule.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
