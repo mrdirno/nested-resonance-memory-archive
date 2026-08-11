@@ -1309,6 +1309,32 @@ key without its colon (`^off\b`) eating *"Off the main tee · hold a full tile"*
 in two of the seven vocabularies. **All three were invisible to every gate we own** — they
 are logic, not pixels, and nothing but an assertion was ever going to see them.
 
+### 2026-08-11 — THE SWITCH SAID "NOT SURE" AND WAS ALREADY THROWN
+`shared/reconcile.js` shipped with its safety property stated in its own header —
+*"a pair we are not sure of comes in switched OFF and says so"* — and the surface
+computed `on = chosen[id] !== false`. An id nobody has touched is **not** `false`, so
+EVERY pair defaulted on, the fuzzy ones included. The *"not sure it's the same one"*
+tag rendered perfectly, one centimetre from a switch that was already thrown, and a
+hand-typed reply half-resembling a row was one tap on the big yellow button away from
+marking that row committed — **the exact failure the whole design exists to make
+unreachable.**
+
+Nothing could see it. The pure-logic sweep passed: `pair()` returns `sure:false`
+correctly and the surface simply ignored the flag. The mobile gate passed: the switch
+is 44px either way. The round trip passed: a clean round trip is *all* exact matches,
+so the unsure branch never rendered once in any verification that had been run. **The
+property was only ever tested by the sentence that claimed it.**
+
+Two rules out of it. **ONE: a default that is a safety property gets ONE function that
+computes it, read by the renderer, the tally and the toggle alike** — three call sites
+each re-deriving `!== false` is three chances to disagree, and they did. **TWO: a
+property you write in a header comment is a property you must be able to FAIL.**
+`tools/toolkit-gates/reconcile-surface.mjs` now drives the states a happy path never
+reaches — the unsure pair, the reply that says neither yes nor no, the disabled button
+that has to say *which* zero it means — and asserts that an unvouched pair cannot reach
+storage. The lesson generalises past this page: **every "we would never…" in this book
+is a gate that has not been written yet.**
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -2209,4 +2235,24 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   pages end to end at 390px against the deployed site (4 asks composed → answered →
   reconciled → 3 Committed in storage, 0 pushed to In), plus all 7 trades' cards live; 56
   pages 0 failing on the mobile gate.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
+
+- 2026-08-11 · **[AXIS:INTERFACE] THE SWITCH SAID "NOT SURE" AND WAS ALREADY THROWN ·
+  THE SAFETY PROPERTY THE THIRD MESSAGE RESTS ON WAS TRUE ONLY IN ITS OWN COMMENT.**
+  Found by driving the two report states a clean round trip never reaches — the reply
+  that says neither yes nor no, and the fuzzy pair — an hour after the feature shipped
+  green through a 87-check logic sweep, a 56-page mobile gate, a live end-to-end round
+  trip and a live injection test. Before: `on = chosen[id] !== false`, so every pair
+  arrived switched ON, unsure ones included, and a hand-typed reply half-resembling a
+  row was one tap from marking it committed. After: one `isOn()` computes the default
+  (sure → on, unsure → **off**), read by the renderer, the tally and the toggle alike;
+  `chosen` holds only explicit taps so his choices survive a rebuild; the disabled
+  button now distinguishes *nothing left to tick* from *nothing vouched for yet*; and a
+  pushback with no reason reads "he didn't say why" instead of echoing our own row back.
+  **New permanent gate `tools/toolkit-gates/reconcile-surface.mjs`** — unsure arrives
+  off, a verdict-less reply offers no apply button at all, an unvouched pair cannot
+  reach storage, and the card mounts with no page error on every trade found on disk;
+  green on the working tree AND against the deployed site. **The rule out of it, which
+  is bigger than this page: every "we would never…" in this book is a gate that has not
+  been written yet.**
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
