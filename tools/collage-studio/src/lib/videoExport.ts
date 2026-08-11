@@ -253,6 +253,22 @@ export interface RecordOptions {
   /** Skip the one-time dry run (only when you have already probed). */
   skipProbe?: boolean;
   /**
+   * Called ONCE, synchronously, the instant `MediaRecorder.start()` has
+   * returned — i.e. when the take's clock genuinely begins.
+   *
+   * It exists because `record()` is not a synchronous call: before it starts
+   * anything it may `await probeVideoExportSupport()` (the one-time dry run,
+   * up to PROBE_RECORD_MS + PROBE_STOP_MS ≈ 1.9 s), then build a muxer and a
+   * graph. A caller that schedules anything on a CLOCK — WebAudio automation is
+   * the case this was added for — cannot anchor it at the call site, because
+   * everything between that instant and `rec.start()` is time the file does not
+   * contain. THE FADE was written that way first and would have recorded its
+   * whole tail at gain 0; found by an adversarial audit, not by any gate.
+   *
+   * Throwing from here must not cost the take, so it is called inside a catch.
+   */
+  onStart?: () => void;
+  /**
    * RECORD A STREAM THE CALLER ALREADY OWNS, instead of calling
    * `canvas.captureStream()` here and building an audio graph over `sources`.
    *
@@ -1551,6 +1567,11 @@ export const record = async (
     // --- 7. go ----------------------------------------------------------------
     try {
       rec.start(options.timesliceMs ?? profile.timesliceMs); // TIMESLICE MANDATORY
+      // THE TAKE'S CLOCK STARTS HERE, and nowhere earlier — see `onStart`.
+      // After the start rather than before it: a recorder that refuses to start
+      // has no take, and a caller that already armed something for one would be
+      // left holding it.
+      try { options.onStart?.(); } catch { /* a caller's hook never costs the take */ }
     } catch (e) {
       if (capTimer) clearTimeout(capTimer);
       releaseOwnTracks();

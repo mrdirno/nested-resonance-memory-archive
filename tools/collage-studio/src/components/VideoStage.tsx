@@ -864,14 +864,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           filenameBase: 'collage',
           onProgress: setProgress,
         })
-      : (stage.applyTakeFade(take, fadeSec), record(stage.canvas, {
+      : record(stage.canvas, {
           stream: stream as MediaStream,
           seconds: take,
           fps: profile.fps,
           signal: ac.signal,
           filenameBase: 'collage',
           onProgress: setProgress,
-        }));
+          // ARMED FROM `onStart`, NOT FROM HERE, and the difference is the whole
+          // take's tail. `record()` may await its one-time dry run (up to ~1.9s)
+          // before `MediaRecorder.start()` ever runs, and the envelope is
+          // anchored to `ctx.currentTime` at the moment it is scheduled — so
+          // arming it at this call site put the ramp DOWN to zero ~1.9s before
+          // the encoder stopped, and the file's tail recorded at gain 0 while
+          // its head opened part-way up the fade-in. Found by an adversarial
+          // audit; nothing in this suite could have caught it, because every
+          // engine here has WebCodecs and never takes this branch.
+          onStart: () => { stage.applyTakeFade(take, fadeSec); },
+        });
 
     run
       .then((res) => {

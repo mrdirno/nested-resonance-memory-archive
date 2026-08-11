@@ -602,6 +602,47 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **THE TAKE'S CLOCK AND THE RECORDER'S PROMISE ARE TWO DIFFERENT CLOCKS, and
+  THE FADE was wired to the wrong one at BOTH ends.** Found by the adversarial
+  audit, three independent lenses, all three confirmed under refutation — and
+  nothing in this repo's suite could have caught either half, because every
+  engine here has WebCodecs and therefore never takes the realtime branch.
+  **THE HEAD.** `stage.applyTakeFade` anchors the whole envelope to
+  `ctx.currentTime` at the instant it is called, and it was called at the call
+  site that invokes `record()` — which is not when recording starts.
+  `record()`'s first act is `await probeVideoExportSupport()`, a one-time dry
+  run worth up to `PROBE_RECORD_MS + PROBE_STOP_MS` ≈ 1.9 s, and `rec.start()`
+  is ~200 lines later. So the ramp DOWN to zero landed ~1.9 s before the encoder
+  stopped: the file's head opened part-way up the fade-in and its whole tail
+  recorded at gain 0. Reachable on any engine without a usable WebCodecs H.264
+  encoder — and, more sharply, on EVERY engine in the window before
+  `probeFrameExportSupport` resolves, because `useRender = !!frameSupport?.supported`
+  is false while the probe is still null and `canRecord` is optimistically true.
+  The fix is not a guess at the latency: `RecordOptions.onStart` now fires the
+  instant `rec.start()` returns, and the envelope is armed from there.
+  **THE TAIL.** `clearTakeFade` was called from the recorder's `.finally()`,
+  i.e. when the PROMISE settled — which is after `MediaRecorder.stop()`, after
+  finalize, and after the result is decoded back to validate it. An `AudioParam`
+  holds its last event value indefinitely and `masterGain` is not a record-only
+  tap (`ensureAudio` wires it straight to `ctx.destination`; `captureStream`
+  adds a SECOND leg), so the live preview sat at silence for those seconds and
+  then STEPPED back to full level. The fix puts the monitor's recovery into the
+  same atomic schedule, a beat after the take and as a ramp rather than a step;
+  `clearTakeFade` stays for the take that ends early.
+  **The general shape, and it is the one to carry forward: a promise settling is
+  not the event happening, and the call site of an async function is not the
+  moment it starts. Anything scheduled on a clock for an operation that begins
+  later must be armed BY that operation, not by the code that asked for it.**
+  Third finding from the same audit, same family and cheaper — and the one
+  place the refutation pass earned its own keep, by narrowing WHICH trigger is
+  reachable: an encoder error mid-loop (never, in practice, the memory cap,
+  which needs ~3x the configured bitrate for a whole take) leaves
+  `frames < totalFrames`, so `truncateAudio` cuts the audio where the envelope
+  is still 1.0 and the delivered file ends at full level — the exact hard cut
+  the feature removes — while the take bar still reads "fading in and out over
+  1s". Unfixable after the fact (the samples are AAC by then, and the mix ran
+  before the frame loop knew the length), so it is REPORTED, which is the rule
+  `mixSources`' `onTruncated` already follows one layer down.
 - **A DESIGN NOTE WRITTEN FROM INSIDE ONE CODE PATH PRESCRIBED AN IMPLEMENTATION
   THE OTHER PATH CANNOT EXECUTE.** The Audio rung had carried this sentence
   since THE SOUNDTRACK shipped: a fade's "honest place is the sample domain,
@@ -3097,4 +3138,26 @@ frontier. Today's ceiling is tomorrow's floor.
   buffer to `applyFade` are still guarded only by a whole browser render, which
   is the fake-`OfflineAudioContext` rung the ladder has been carrying since the
   lap schedule.
+  **THE ADVERSARIAL AUDIT EARNED ITS KEEP AGAIN — three lenses, THREE CONFIRMED
+  DEFECTS, every one of them in the half of the feature this suite cannot
+  reach.** All three lived in the REALTIME path or in a short-stopped render,
+  i.e. exactly where "chromium has WebCodecs so it always takes the offline
+  branch" made the gates blind: (1) the envelope was anchored at the CALL SITE
+  of `record()`, which awaits a ~1.9 s dry run before `rec.start()`, so the
+  file's tail recorded at gain 0 — fixed with a new `RecordOptions.onStart` hook
+  that fires the instant the recorder really starts; (2) `clearTakeFade` was
+  bound to the recorder's PROMISE (which settles only after stop + finalize +
+  validate) rather than to the end of the take, and `masterGain` is the MONITOR
+  bus as well as the capture tap, so the live preview sat in silence for seconds
+  and then stepped back to full level — fixed by scheduling the monitor's
+  recovery into the same atomic automation, a beat after the take and as a ramp
+  rather than a step; (3) a render that stops early has `truncateAudio` cut the
+  audio where the envelope is still 1.0, so the file ends at full level while
+  the bar still promises a fade — unfixable after the fact and therefore
+  REPORTED, the rule `mixSources`' `onTruncated` already follows one layer down.
+  Filed as ONE scar, because (1) and (2) are the same mistake twice: **a promise
+  settling is not the event happening, and the call site of an async function is
+  not the moment it starts.** Live-verified on production BEFORE the fixes
+  (fade off `79999999999999999999`, fade on `01345678999997654321`, worst delta
+  0.024, plateau ratio 1.000) and again after them.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

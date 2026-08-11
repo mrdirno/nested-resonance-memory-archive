@@ -3181,7 +3181,25 @@ export class Stage {
    *
    * Automation is scheduled from `currentTime`, not from zero: the context has
    * been running since the first gesture, and `setValueAtTime(0)` on a clock
-   * that is already past would be applied instantly and then never ramp.
+   * that is already past would be applied instantly and then never ramp. CALL
+   * IT FROM `record()`'s `onStart` HOOK, never at the call site that invokes
+   * `record()`: that function may await a ~1.9 s capability dry run first, and
+   * an envelope anchored before it puts the ramp to zero well inside the take.
+   *
+   * AND IT SCHEDULES THE MONITOR'S RECOVERY, WHICH IS NOT PART OF THE FADE.
+   * `masterGain` is not a record-only tap — `ensureAudio` wires it straight to
+   * `ctx.destination` and `captureStream` adds a SECOND leg, so this envelope is
+   * what the room hears too. An `AudioParam` holds its last event value
+   * indefinitely, so a schedule that simply ends at 0 leaves the live preview
+   * DEAD from the end of the take until something resets it — and the only
+   * reset, `clearTakeFade`, is bound to the recorder's promise, which does not
+   * settle until MediaRecorder has stopped, finalized AND decoded the result
+   * back to validate it. Seconds of silence, then a step back to full level.
+   * Same shape as the take that used to leave the music stopped for good.
+   * So the recovery is part of the same atomic schedule: it starts a beat AFTER
+   * the take (`MONITOR_GAP`, so no sample the encoder is still taking can catch
+   * it) and ramps rather than steps, because a jump from 0 to 1 on a live bus
+   * is a click. `clearTakeFade` remains, for the take that ends EARLY.
    */
   applyTakeFade(takeSec: number, fadeSec: number): readonly FadeRamp[] {
     const ctx = this.audioCtx;
@@ -3189,6 +3207,10 @@ export class Stage {
     if (!ctx || !m || this.destroyed) return [];
     const f = fadeSpan(fadeSec, takeSec);
     const ramps = fadeRamps(takeSec, f);
+    /** Clear of anything the encoder is still consuming. */
+    const MONITOR_GAP = 0.05;
+    /** Short enough to feel immediate, long enough not to click. */
+    const MONITOR_RECOVER = 0.25;
     try {
       m.gain.cancelScheduledValues(ctx.currentTime);
       if (!ramps.length) { m.gain.value = 1; return []; }
@@ -3197,6 +3219,8 @@ export class Stage {
       for (let i = 1; i < ramps.length; i++) {
         m.gain.linearRampToValueAtTime(ramps[i].value, t0 + ramps[i].when);
       }
+      m.gain.setValueAtTime(0, t0 + takeSec + MONITOR_GAP);
+      m.gain.linearRampToValueAtTime(1, t0 + takeSec + MONITOR_GAP + MONITOR_RECOVER);
       this.fadeArmed = true;
       return ramps;
     } catch {
@@ -3211,12 +3235,13 @@ export class Stage {
   /**
    * Put the master gain back where the preview expects it.
    *
-   * Called from the recorder's `finally`, so it runs on a finished take, an
-   * aborted one and a thrown one alike. Without it a cancelled take leaves the
-   * live preview ramping down to silence with no control that brings it back —
-   * the same shape as the bug that left the music stopped after the first
-   * export, and found the same way: by asking what happens when the take does
-   * not finish. A no-op when nothing was ever armed.
+   * The take that ends EARLY — Stop pressed, an abort, a track that died, a
+   * throw. `applyTakeFade` schedules the monitor's own recovery for a take that
+   * runs to its full length, so this is not the normal path back; it is the one
+   * that catches every ending the schedule could not predict. Called from the
+   * recorder's `finally`, so it runs on all of them, and a no-op when nothing
+   * was ever armed (i.e. on every offline render, which fades in the sample
+   * domain and never touches this graph).
    */
   clearTakeFade(): void {
     if (!this.fadeArmed) return;

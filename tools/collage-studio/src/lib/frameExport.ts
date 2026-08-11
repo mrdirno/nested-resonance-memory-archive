@@ -1092,6 +1092,39 @@ export const renderOffline = async (
     if (stop === 'memory') {
       warnings.push('Render stopped early to stay inside this device’s memory budget.');
     }
+    /**
+     * A FADE THAT DID NOT SURVIVE THE CUT MUST SAY SO — the same rule
+     * `mixSources`' `onTruncated` follows, applied one layer up.
+     *
+     * The fade-out is baked into the mixed buffer at output time
+     * `[seconds - f, seconds]`, but the file's audio length is decided AFTERWARDS
+     * by `truncateAudio(chunks, frames * frameDurUs)`. When the frame loop
+     * breaks early `frames < totalFrames`, the audio is cut where the envelope
+     * is still 1.0, and the delivered file ends at full level with exactly the
+     * abrupt stop the fade exists to remove. Worked example: a 10 s take at
+     * 30 fps with a 1 s fade that stops at frame 210 cuts the audio at
+     * 6.99993 s, where `fadeGainAt` returns exactly 1.
+     *
+     * THE REACHABLE TRIGGER IS THE ENCODER ERROR, NOT THE MEMORY CAP, and the
+     * distinction is worth keeping because it is the difference between a
+     * warning that fires and one that never does. `bytes` counts video chunks
+     * only, and `VideoStage` overrides neither `maxBytes` nor the bitrate, so
+     * the profile defaults apply: a full desktop take is ~120 MB against a
+     * 320 MiB ceiling and a phone's ~15 MB against 48 MiB — tripping the cap
+     * needs the encoder to average roughly 3x its own configured bitrate for
+     * the whole take. The `stop = 'error'` paths have no such margin.
+     *
+     * It cannot be fixed by re-fading: the samples are AAC by this point, and the
+     * mix ran before the frame loop, so the final length is not knowable when the
+     * envelope is applied. What CAN be wrong is the take bar still reading
+     * "fading in and out over 1s" over a file that does not. So it is reported.
+     * Not counted as a failure — the picture stopped early too, and the file is
+     * exactly as good as it was before this feature existed.
+     */
+    if (audioMuxed && (options.audioFadeSec ?? 0) > 0 && frames < totalFrames) {
+      warnings.push('The render stopped early, so the sound ends where it was cut '
+        + 'rather than on the fade you chose.');
+    }
     if (capped) {
       warnings.push(`Renders are capped at ${profile.maxSeconds}s on this device.`);
     }
