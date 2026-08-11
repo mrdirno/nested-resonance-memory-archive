@@ -2178,3 +2178,35 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   still carry their own chrome). **BACKPORT RIDER FIRED TWICE this cycle: once on the
   document contract across 7 trades, once on the bar across 3 sites.** 56 pages, 0 failing.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/write-up.html
+
+- 2026-08-11 · **[AXIS:INTERFACE] THE LOOP ASKED AND ANSWERED AND LEFT THE MAN WHO ASKED
+  READING TWO LISTS · THE THIRD MESSAGE, SHIPPED ON ALL SEVEN TRADES AT ONCE.** Before:
+  `rough-in-request` sent the ask and `answer-back` sent the reply, and step three was a
+  foreman with a text in one hand and his own list on the other screen, ticking twenty rows
+  by hand — finding eight, missing two, and never noticing the three the other man said
+  nothing at all about. After: `shared/reconcile.js`, mounted INTO the request page (two
+  lines × 7 trades, never a fourth page — the rows are already there and a second copy of a
+  list is a second version of the truth). Paste his reply; it pairs his lines to your rows,
+  shows every pair before it moves anything, ticks only what you leave switched on, and
+  stops at **Committed** because *In* is your own eyes and a message is not eyes. The join
+  is EXACT on a clean round trip — `answer-back` stores the ask verbatim, so his line is
+  our own line back, and a row is offered in **all four forms** the document could have
+  printed it in (the grouped axis is dropped from the line, and the page cannot know which
+  walk was copied); everything else is Dice-scored, timid, and shown switched OFF. **The
+  block that is the reason to open it: WHAT HE NEVER MENTIONED** — computable only by the
+  page that holds the original list, and narrowed to the one receiver when his reply is all
+  one receiver's, so it can never report the GC's items as the electrician's silence. Also
+  free: a committed row with no date reads *"no date on it"*. **A UNIT SWEEP OVER THE REAL
+  MODULE FOUND THREE DEFECTS ON ITS FIRST RUN, none of them visible to any pixel gate we
+  own** — a `var tail` inside the loop hoisting over the `var tail` outside it (the sign-off
+  cutoff read `undefined` on every line), a one-line reply eaten by the "first line is a
+  subject" rule, and a header key missing its colon (`^off\b`) eating *"Off the main tee"*.
+  `tools/toolkit-gates/reconcile-join.mjs`, 87 checks. The deploy now asserts the whole loop
+  per trade — ask, answer, and a reconcile that is both LOADED and MOUNTED. **BACKPORT
+  RIDER: this landed on all seven trades in the same cycle, not on AV first** — the request
+  page is one script block copied seven times, so a capability that lands on one is a
+  capability six trades are behind on the same day. Verified LIVE by driving all three real
+  pages end to end at 390px against the deployed site (4 asks composed → answered →
+  reconciled → 3 Committed in storage, 0 pushed to In), plus all 7 trades' cards live; 56
+  pages 0 failing on the mobile gate.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
