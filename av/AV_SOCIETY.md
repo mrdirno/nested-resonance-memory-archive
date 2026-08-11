@@ -1206,6 +1206,38 @@ is covered the day it lands. The half a gate cannot judge — a wrong-but-legal 
 printed as a **DELTA ROSTER**: the complete list of documents written as an update, short
 enough to read, and anything on it not written repeatedly about the SAME job is wrong.
 
+### 2026-08-11 — THE FIXED BAR GREW, AND THREE MEASUREMENTS ALL SAID IT WAS FINE
+Found by SCREENSHOTTING the live page after the fix above shipped — the fix was correct and
+the bar under it was not. The word count is a flex child with `flex:1` (a **0 basis**)
+sitting beside two nowrap buttons totalling 332px, in a bar whose inner width is 292px on a
+320px phone. So it was handed **0px**, its text broke into **five stacked lines**, and the
+fixed bar went from 62px to **97px on all seven trades** — a ninth of an 844px screen, gone,
+permanently, on the surface every write-up page ends at. At 320 and 360px the box was
+literally zero wide and the text drew outside it.
+**The gate had three measurements and every one of them passed.** The page does not
+overflow horizontally. No tap target shrank — the buttons are still 44px. The bar still
+clears the last control; it just clears it from 35px lower down. **Nobody had asked how TALL
+the bar was**, so a defect sitting on 56 pages was invisible to the gate written to catch
+exactly this kind of thing. It was equally invisible to a render: the page looks fine until
+you read the bar.
+**The assertion is threshold-free, which is why it generalises.** Not "the bar must be under
+N px" — *a LABEL in the action bar may not be taller than the tallest BUTTON in it.* Buttons
+carry the 44px floor and set the bar's honest height; anything taller has wrapped, and
+wrapping is the defect. Added to `mobile-watertight.mjs`, it **fires on the pre-fix state at
+all four widths in the page's DEFAULT state** — meaning it was catchable from the day the
+bar shipped — and it immediately found **two more pages of the same class**,
+`av/cable-list.html` and `plumbing/supply-house-order.html`, wrapping to two lines at 320px.
+Those two are the shape #1 forks §THE THREE SHAPES already names as migration debt, and they
+carry their own copy of the chrome, which is exactly why one fix in the shared sheet did not
+reach them. **BACKPORT RIDER: all three sites fixed in the same cycle, 56 pages, 0 failing.**
+**Rule:** the bar is the ACTION surface, so the least valuable thing on it gives up its room
+FIRST rather than growing the bar — `white-space:nowrap` + ellipsis is the universal guard in
+`note.css`, and WHICH pages additionally hide the count, and below what width, belongs to
+those pages (`docspec.css` hides it under 480px, because its two buttons are the widest pair
+in the toolkit and its count cannot fit at any phone width). And: **a fix is not verified
+until you have LOOKED at the thing you shipped.** Three gates passed this page in the same
+session that a screenshot failed it.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -2062,4 +2094,16 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   a name, a photo location, a before-value — not ten generic ones; no free-text heading,
   `S.extra` already exists; no keyword classifier, because a wrong family silently flips
   `delta` and the authors get that field wrong by hand).
+  **AND THE BAR UNDER THE FIX WAS BROKEN TOO — found by SCREENSHOTTING the live page after
+  it shipped.** The word count is a 0-basis flex child beside two nowrap buttons totalling
+  332px in a 292px bar, so it got 0px, wrapped to FIVE lines and grew the fixed bar from
+  62px to 97px on all seven trades — a ninth of the glass, permanently. All three of the
+  mobile gate's measurements passed it: no overflow, no small tap target, the bar still
+  cleared the last control (35px lower down). Nobody had asked how TALL the bar was. Now
+  asserted threshold-free — a LABEL in the action bar may not be taller than the tallest
+  BUTTON in it — which **fires on the pre-fix state at all four widths in the page's default
+  state**, and which immediately found **two more pages of the same class**
+  (`av/cable-list.html`, `plumbing/supply-house-order.html`, the two shape #1 forks that
+  still carry their own chrome). **BACKPORT RIDER FIRED TWICE this cycle: once on the
+  document contract across 7 trades, once on the bar across 3 sites.** 56 pages, 0 failing.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/write-up.html

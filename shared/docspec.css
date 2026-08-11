@@ -108,3 +108,22 @@ pre.block{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);fon
 /* the second button in the bottom bar — the whole setup, not just the block */
 #copyAll{background:transparent;border:1px solid #59616B;color:#B9BFC6}
 #copyAll:hover{border-color:#8A929B;color:#EEF0EA}
+
+/* THE BOTTOM BAR ON THIS PAGE CARRIES THE TOOLKIT'S WIDEST PAIR OF BUTTONS —
+   "Setup + block" and "Copy instructions", 332px of nowrap label between them,
+   against a 292px inner bar on the smallest phone still in service. note.css
+   stops the count from wrapping (it was breaking into five lines and inflating
+   the fixed bar from 62px to 97px on every trade). This is the rest of it, and
+   it belongs HERE rather than in note.css because it is this page's button
+   widths that cause it — thirty other pages share that bar and their counts fit.
+   Below 480px the count cannot show its whole string at any phone width, so it
+   stops competing for room instead of showing "2075 W…", and the secondary
+   button gives up padding on the narrowest glass. Never height, and never the
+   primary Copy: something had to shrink and it was never going to be the thumb
+   target (§SCARS 2026-08-11). The block's own length is on screen anyway. */
+@media (max-width:479px){
+  .bar .count{display:none}
+}
+@media (max-width:399px){
+  #copyAll{padding-left:12px;padding-right:12px}
+}

@@ -75,7 +75,7 @@ const PAGES = only ? [only] : DIRS.flatMap(dir =>
 /* Runs INSIDE the page. Returns findings, never throws — a gate that dies on one
  * page tells you nothing about the other thirty. */
 const MEASURE = (MIN_TAP) => {
-  const out = { overflow: null, taps: [], soft: [], covered: [] };
+  const out = { overflow: null, taps: [], soft: [], covered: [], grew: [] };
   const de = document.documentElement;
   const vw = de.clientWidth;
 
@@ -145,6 +145,37 @@ const MEASURE = (MIN_TAP) => {
    * is unreachable — which is the whole product on a page whose output is Copy. */
   const bar = document.querySelector('.bar, .rl-bar, [data-fixed-bar]');
   if (bar && getComputedStyle(bar).position === 'fixed') {
+    /* THE BAR MUST NOT GROW. Everything else here asks whether the bar covers
+     * something; nothing asked how TALL it had got. On every write-up page the
+     * word count was a flex child with a 0 basis sitting beside two nowrap
+     * buttons totalling 332px, so it was handed 0px, broke into FIVE stacked
+     * lines and pushed the fixed bar from 62px to 97px — a ninth of an 844px
+     * phone, gone, permanently, on all seven trades. None of the three
+     * measurements above sees it: the page does not overflow, no tap target
+     * shrank, and the bar still cleared the last control (it just cleared it
+     * from 35px lower down).
+     *
+     * The assertion is threshold-free on purpose: a LABEL in the action bar may
+     * not be taller than the tallest BUTTON in it. Buttons carry the 44px floor
+     * and set the bar's honest height; anything taller than them has wrapped,
+     * and wrapping is the defect. */
+    const kids = [...bar.children];
+    const btns = kids.filter(k => k.matches('button, a[href], [role=button]') || k.querySelector('button'));
+    const tallestBtn = btns.reduce((m, b) => Math.max(m, b.getBoundingClientRect().height), 0);
+    if (tallestBtn > 0) {
+      kids.forEach(k => {
+        if (btns.includes(k)) return;
+        const h = k.getBoundingClientRect().height;
+        if (h > tallestBtn + 1) {
+          out.grew.push({
+            sel: k.tagName.toLowerCase() + (k.className && typeof k.className === 'string' ? '.' + k.className.trim().split(/\s+/).join('.') : ''),
+            h: Math.round(h), btn: Math.round(tallestBtn),
+            text: (k.textContent || '').trim().slice(0, 40),
+          });
+        }
+      });
+    }
+
     // Scrolled to the very bottom there is nowhere left to go, so whatever the
     // bar still covers HERE is covered permanently.
     window.scrollTo(0, document.documentElement.scrollHeight);
@@ -224,6 +255,7 @@ for (const page of PAGES) {
       if (r.viewport) bad.push(`${tag} — VIEWPORT: ${r.viewport}`);
       r.taps.forEach(t => bad.push(`${tag} — TAP TARGET ${t.short}px < ${MIN_TAP}px: ${t.sel}  "${t.text}"`));
       r.covered.forEach(c => bad.push(`${tag} — UNREACHABLE, the fixed bar covers it at the bottom of the page: ${c.sel}  "${c.text}"`));
+      r.grew.forEach(g => bad.push(`${tag} — the fixed bar GREW: ${g.sel} is ${g.h}px tall beside ${g.btn}px buttons, so it wrapped and the bar ate the extra. "${g.text}"`));
       r.soft.forEach(t => soft.add(`${t.sel} ${t.short}px  "${t.text}"`));
     }
     if (errs.length) bad.push(`${width}px — pageerror: ${errs.join(' | ')}`);

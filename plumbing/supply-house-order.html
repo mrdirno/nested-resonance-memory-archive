@@ -71,7 +71,14 @@ ul.items{list-style:none;margin:0;padding:0}
 /* sticky action bar — thumbs reach it on a phone */
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
   padding:9px 14px;display:flex;gap:9px;align-items:center}
-.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+/* NEVER WRAPS. A 0-basis flex child beside nowrap buttons gets 0px and breaks
+   into stacked lines, which grows the FIXED bar and eats the glass for good
+   (§SCARS 2026-08-11 — found on the write-up pages at 5 lines, and here at 2
+   on a 320px phone). The bar is the action surface; the count gives up its
+   room first. Same rule as shared/note.css — these two pages are the shape #1
+   forks that still carry their own copy of the chrome. */
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;
+  flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
   border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
 #copy{background:var(--flag);border:1px solid var(--flag);color:#1A0E05}

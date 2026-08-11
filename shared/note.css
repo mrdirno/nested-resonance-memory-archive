@@ -123,7 +123,21 @@ ul.ticks li:has(input:checked){background:var(--tint)}
 
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
   padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
-.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+/* THE COUNT NEVER WRAPS, AND IT IS THE FIRST THING TO GO. `flex:1` gives it a
+   0 basis, so on a bar whose two buttons are 332px of nowrap label it was
+   handed 0px and its text broke into FIVE stacked lines — which inflated the
+   fixed bar from 62px to 97px on every trade, permanently eating a ninth of an
+   844px phone, and at 320/360px drew the text outside its own zero-width box.
+   None of the standing mobile gate's three measurements sees that: the page
+   does not overflow, no tap target shrank, and the bar still clears the last
+   control. So it is asserted directly now (tools/toolkit-gates/mobile-watertight
+   .mjs), and fixed here: the bar is the ACTION surface, and the least valuable
+   thing on it gives up its room first rather than growing the bar.
+   This is the universal guard — a count that wraps is never right on any page.
+   Which pages ALSO hide it, and at what width, is theirs to say (docspec.css
+   does, because its two buttons are the widest pair in the toolkit). */
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;
+  flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
   border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
 /* big enough to hit with a dirty glove without looking */
