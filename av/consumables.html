@@ -107,7 +107,7 @@ body{
 .btn{
   font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-size:14px;
   padding:10px 14px;border:1px solid var(--steel);background:transparent;color:var(--steel);
-  border-radius:2px;cursor:pointer;
+  border-radius:2px;cursor:pointer;min-height:44px;
 }
 .btn:hover{background:var(--steel);color:#EEF0EA}
 .btn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
@@ -138,7 +138,7 @@ body{
 .mini{
   font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   background:none;border:1px solid var(--line);color:var(--muted);
-  padding:4px 7px;border-radius:2px;cursor:pointer;
+  padding:4px 7px;border-radius:2px;cursor:pointer;min-height:44px;min-width:44px;
 }
 .mini:hover{border-color:var(--steel);color:var(--steel)}
 .mini:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
@@ -154,7 +154,7 @@ ul.items{list-style:none;margin:0;padding:0}
 .item.is-hidden{display:none}
 .cat.is-hidden{display:none}
 
-.row{display:flex;align-items:center;gap:11px;flex:1 1 320px;cursor:pointer;min-width:0}
+.row{display:flex;align-items:center;gap:11px;flex:1 1 320px;cursor:pointer;min-width:0;min-height:44px}
 .tick{
   appearance:none;-webkit-appearance:none;flex:none;
   width:20px;height:20px;border:2px solid var(--steel);border-radius:2px;

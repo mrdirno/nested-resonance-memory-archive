@@ -150,7 +150,7 @@
      (§THE EXPANSION ORDER — a fix that lands on one trade is half a fix). */
   .av-brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:#EEF0EA;font-family:var(--av-cond);
     text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:15px;white-space:nowrap;
-    min-width:0;overflow:hidden;flex:0 1 auto;min-height:44px;}
+    overflow:hidden;flex:0 1 auto;min-height:44px;min-width:44px;justify-content:center;}
   .av-brand b{color:var(--av-flag)}
   /* A CUT WORD IS A DIFFERENT WORD. The rules below give the brand up in two
      deliberate steps — the tail at 560px, the word at 380px — but between those
@@ -181,7 +181,17 @@
    * up its word too and keeps only the icon, which is still the home link. The CTA
    * and the tool menu never shrink: on the narrowest phone we own, what survives is
    * exactly what someone came to tap. */
-  @media (max-width:380px){ .av-brand span{display:none} .av-bar{gap:8px;padding:8px 10px} }
+  /* THE SHORT SIDE IS THE ONE A THUMB MISSES, and min-width lives in the BASE
+     rule above rather than here — which is the second half of this fix and the
+     more interesting half. The brand carried min-height:44px and was still a
+     20px target below 380px (the word hides, leaving a bare emoji) and a 41px
+     one at 390px (the tail hides, leaving the icon and a short lead like "AV").
+     Fixing only the small breakpoint left 37 of 52 pages still failing at 390 —
+     the exact width of the phone most of this trade is holding. A tap target is
+     judged on its SHORTER side at EVERY width, not at the one you thought of.
+     Measured both times by tools/toolkit-gates/mobile-watertight.mjs. */
+  @media (max-width:380px){ .av-brand span{display:none} .av-bar{gap:8px;padding:8px 10px}
+    .av-req-tail{display:none} }
   .av-menu{position:relative}
   /* TAP TARGETS >= 44px (operator 2026-08-04, the MOBILE-WATERTIGHT law). Measured
    * before the fix at a 390px viewport: Tools 39px, Wish 32px, fav 31px. These sit
@@ -484,7 +494,14 @@
     ]);
     window.__avMenu = menu;
 
-    var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell }, ["✦ Wish for a tool"]);
+    /* THE LABEL GIVES UP THREE WORDS BEFORE THE BAR GIVES UP A TAP TARGET. Below
+     * 380px the bar is genuinely out of room: brand + Tools + ★ + this CTA and
+     * its gaps came to 374px inside a 360px glass once the brand was widened to
+     * a real 44px target. Something had to shrink, and the honest thing to shrink
+     * is three words of a label that still reads — never the thumb target, and
+     * never the CTA itself, which is what the whole demand loop runs on. */
+    var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell });
+    reqBtn.innerHTML = '✦ Wish<span class="av-req-tail">&nbsp;for a tool</span>';
 
     // On a tool page, a ★ to favorite THIS tool (pins it to the top of the hub).
     var cur = currentTool();

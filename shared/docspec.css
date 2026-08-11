@@ -20,7 +20,12 @@
 .srch input{width:100%;font:inherit;font-size:16px;padding:11px 40px 11px 12px;border:1px solid var(--line);
   border-radius:2px;background:#fff;color:var(--ink);min-height:48px}
 .srch input:focus{outline:2px solid var(--deep);outline-offset:-1px}
-.srch .x{position:absolute;right:2px;top:2px;bottom:2px;width:40px;border:0;background:none;color:var(--muted);
+/* 44px ON BOTH SIDES, and it was 40×40 because it was inset 2px inside a 48px
+   field to look tidy. The field is 48px, so flush top and bottom gives the whole
+   height back and the input's 40px right padding still keeps the text clear of
+   it — the tidiness cost a tap target and bought nothing a thumb can feel.
+   Measured on all seven write-up pages by tools/toolkit-gates/mobile-watertight.mjs. */
+.srch .x{position:absolute;right:0;top:0;bottom:0;width:44px;border:0;background:none;color:var(--muted);
   font-size:20px;line-height:1;cursor:pointer;border-radius:2px}
 .srch .x:hover{color:var(--ink)}
 
