@@ -1629,6 +1629,20 @@ multi-agent audit for non-trivial changes.
   `StageStatus.rolling` now answers from the Stage, which is the only place that
   can see the move, the music, the clips AND the park at once.
 
+- **SCAR-C126-A-COLOUR-PROOF-NEEDS-A-CANVAS-THAT-IS-ONLY-THE-THING-BEING-GRADED.**
+  The scrub proof grades the LIVE canvas by dominant channel, an instrument
+  trim.spec.ts built and which averages the WHOLE surface. This spec uploaded
+  the ramp fixture AND a photograph, for realism — so a second picture entered
+  the average, and whether the ramp still won by the classifier's 1.6x margin
+  came down to the DICE: which fragment got which source and how big it came
+  out. It passed locally and the SAME assertion read `?` on the very first run
+  against production, because the two runs rolled different layouts. trim.spec
+  uploads exactly one file and now so does this. **The general shape: a
+  generative layout makes any whole-canvas measurement a random variable, so a
+  spec that grades pixels must control the composition, not just the moment.**
+  Caught by running the suite against PRODUCTION rather than treating a green
+  localhost run as the ship gate.
+
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
 the next tier (pro effects, AI-assisted editing, collaboration) becomes the

@@ -53,7 +53,18 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const APP_URL = process.env.COLLAGE_BASE_URL || '/';
 
 const RAMP = join(HERE, '..', 'fixtures', 'ramp_rgb.mp4');
-const IMG_A = join(HERE, '..', 'fixtures', 'img_a.jpg');
+
+/**
+ * ONE SOURCE, AND THAT IS NOT AN ACCIDENT — trim.spec.ts uploads exactly the
+ * same single file for exactly the same reason. `stageChannel` averages the
+ * WHOLE canvas, so a second source puts a second picture into the average and
+ * whether the ramp still wins by the classifier's 1.6x margin then depends on
+ * the DICE — which fragment got which source, and how big it came out. Measured
+ * the hard way: with a photograph beside it the first run passed locally and the
+ * SAME assertion read '?' against production, because the two runs rolled
+ * different layouts. A colour proof needs a canvas that is only the thing being
+ * graded.
+ */
 
 /** The fixture's own timing contract — see tests/e2e/trim.spec.ts. */
 const THIRDS: ReadonlyArray<{ at: number; want: 'r' | 'g' | 'b'; label: string }> = [
@@ -140,7 +151,7 @@ const scrubTo = async (page: Page, t: number) => {
 
 test.describe('THE PLAYHEAD', () => {
   test('a scrub lands on the instant it claims, and holds it', async ({ page }) => {
-    await boot(page, [RAMP, IMG_A]);
+    await boot(page, [RAMP]);
 
     // ---- P1: the ruler agrees with the take -------------------------------
     const bar = playhead(page);
@@ -188,7 +199,7 @@ test.describe('THE PLAYHEAD', () => {
 
   test('it is watertight and it still works at 390px', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 780 });
-    await boot(page, [RAMP, IMG_A]);
+    await boot(page, [RAMP]);
 
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 780 });
