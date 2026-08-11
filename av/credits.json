@@ -110,6 +110,16 @@
       "wished_date": "2026-08-10",
       "shipped_date": "2026-08-10",
       "shipped_commit": "41d4fda7"
+    },
+    {
+      "tool_name": "Walk it — verify the list one row at a time, with your hands full",
+      "tool_href": "rough-in-request.html",
+      "wisher": "an anonymous AV tech",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-10",
+      "shipped_commit": null
     }
   ]
 }

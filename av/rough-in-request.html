@@ -81,6 +81,7 @@
   </section>
 
   <p class="credit">Built for the AV Field Toolkit. Asking for something that isn't on the list, or aiming at a trade that isn't there? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+  <p class="credit">&#10022; <b>Walk it</b> &mdash; the one-row-at-a-time pass you make with your hands full &mdash; was wished into existence by an anonymous AV tech.</p>
 
   <footer class="foot">
     <span id="footName">AV Field Toolkit</span>
@@ -287,6 +288,61 @@
     rowSub: function (v) {
       return joinDots([v.area, v.place, labelOf(MILES, v.by), labelOf(WHO, v.who), v.note]);
     },
+
+    /* ── THE WALK ────────────────────────────────────────────
+       THE LIST IS COMPOSED SITTING DOWN AND VERIFIED WALKING, and only the
+       first of those had a surface. Forty grouped rows on a 390px phone, read
+       at arm's length with a light in the other hand and gloves on, is a
+       pinch-zoom and a lost place. So: the same rows, one at a time, in type
+       you can read without stopping, behind two targets you can hit with a
+       knuckle — and it runs off the keyboard alone, which is the only input
+       model a screen with no pointer has.
+
+       IT WALKS WHAT THE FILTERS ALREADY SAY. "Still open, for the electrician"
+       is Thursday morning and needs no new control; the button names the set
+       it is about to walk, because walking a different list than the one he
+       filtered is the same class of lie as counting rows the document does not
+       contain (§SCARS).
+
+       IT ADDS NO NEW DOCUMENT, ON PURPOSE. It makes the one this page already
+       sends TRUE — "still open" is only worth sending if somebody laid eyes on
+       the list today, and the walk IS that act. So the end of it does exactly
+       one thing: puts the page on STILL OPEN and takes him to the message. */
+    walk: (function () {
+      var w = R.walk || {};                 // a trade may say it in its own words
+      return {
+        label: w.label || "Walk it",
+        allLabel: w.allLabel || "the whole list",
+        emptyScope: w.emptyScope || "nothing in this scope",
+        advance: w.advance || "It's in",
+        hold: w.hold || "Not yet",
+        blankLabel: w.blankLabel || "not committed",
+        noteKey: "note",
+        notePlaceholder: w.notePlaceholder || "what's in the way",
+        endTitle: w.endTitle || "That's the walk",
+        endDone: w.endDone || "are in",
+        endOpen: w.endOpen || "still open",
+        doneLabel: w.doneLabel || "What's still open",
+        closeLabel: w.closeLabel || "Back to the list",
+        onDone: function () {
+          var seg = $("#segScope"), open = seg.querySelector('button[data-f="open"]');
+          if (open) {
+            [].forEach.call(seg.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === open); });
+            applyFilters();
+          }
+          /* CENTRE, never "start": this page wears a sticky nav, and a card
+             scrolled to the top of the viewport is a card with its heading
+             under the bar (§SCARS — the sticky nav eats what it lands on). */
+          seg.scrollIntoView({ block: "center" });
+          /* AND SEND FOCUS WHERE THE EYES WENT. The walk hands focus back to the
+             launcher it was opened from, which is now a screen above — so a man
+             on a keyboard would finish the walk and find his cursor somewhere he
+             can't see. `preventScroll` keeps the scroll we just chose. */
+          var copy = document.querySelector("#copyBtn");
+          if (copy) { try { copy.focus({ preventScroll: true }); } catch (e) { copy.focus(); } }
+        }
+      };
+    })(),
 
     /* ── the document ──────────────────────────────────────────────────────
        LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first — this gets

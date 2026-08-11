@@ -173,3 +173,96 @@ pre#preview{font-family:var(--mono);font-size:11.5px;line-height:1.45;background
    the paragraph around to get there: the padding grows the hit box and the equal
    negative margin gives the space straight back, so the line box never moves. */
 .credit a{color:var(--deep);padding:14px 4px;margin:-14px -4px;display:inline-block}
+
+/* ── THE WALK ────────────────────────────────────────────────────────────────
+   A list is COMPOSED sitting down and VERIFIED walking, and only the first of
+   those had a surface. This is the second one: one row at a time, in type you
+   can read at arm's length, behind targets you can hit with a gloved knuckle
+   without looking. Opt-in (`cfg.walk`); every page without it is untouched.
+
+   DARK ON PURPOSE. This is the one surface used out on the deck rather than in
+   the van — outdoors, in a ceiling, under a work light — where the paper-white
+   sheet the rest of the toolkit wears is a flashbulb. The trade's own accent
+   carries the affirmative, so a man knows which kit he is in without reading.
+
+   BOUND `position:fixed; inset:0` AND NEVER `100vh` — see the engine header;
+   iOS freezes `vh` to the large viewport and a vh-bound full-screen box is
+   therefore built taller than the phone it is on, invisibly to every headless
+   gate we own. */
+html.rl-walking, html.rl-walking body{overflow:hidden}
+
+.rl-walkbar{margin:0 0 10px}
+.rl-walkgo{width:100%;min-height:56px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-left:5px solid var(--flag);border-radius:2px;
+  padding:9px 13px;cursor:pointer;text-align:left}
+.rl-walkgo b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;line-height:1}
+.rl-walkgo span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#AEB6BF;
+  overflow-wrap:anywhere}
+.rl-walkgo:disabled{opacity:.45;cursor:default}
+.rl-walkgo:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+
+.rl-walk{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
+  background:#0B0E11;color:#F2F4F0;padding:8px 10px calc(10px + env(safe-area-inset-bottom));gap:8px;
+  overscroll-behavior:contain}
+.rl-walk[hidden]{display:none}
+
+.rl-wk-top{display:flex;align-items:center;gap:8px;min-height:44px;flex:0 0 auto}
+.rl-wk-ct{font-family:var(--mono);font-size:15px;letter-spacing:.06em;color:#F2F4F0;flex:0 0 auto}
+.rl-wk-ct i{font-style:normal;color:#6C757F;margin:0 1px}
+.rl-wk-scope{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--flag);
+  flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rl-wk-x{flex:0 0 auto;min-height:44px;min-width:64px;background:transparent;border:1px solid #39424C;border-radius:2px;
+  color:#D3D8DD;font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;cursor:pointer}
+.rl-wk-x:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+
+.rl-wk-prog{flex:0 0 auto;height:3px;background:#20262D;border-radius:2px;overflow:hidden}
+.rl-wk-prog i{display:block;height:100%;background:var(--flag);transition:width .12s linear}
+
+.rl-wk-body{flex:1 1 auto;min-height:0;display:flex;align-items:center;overflow-y:auto;overscroll-behavior:contain}
+.rl-wk-card,.rl-wk-end{width:100%;display:flex;flex-direction:column;gap:8px;
+  background:#161B21;border:1px solid #262E36;border-left:5px solid var(--flag);border-radius:2px;padding:14px 14px 16px}
+.rl-wk-grp{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--flag);
+  overflow-wrap:anywhere}
+/* The one line he is standing in front of. No uppercase — this is a real phrase
+   off his own list and small-caps costs legibility exactly where it matters. */
+.rl-wk-main{font-size:clamp(24px,6.8vw,40px);line-height:1.1;font-weight:700;letter-spacing:-.01em;overflow-wrap:anywhere}
+.rl-wk-sub{font-size:clamp(14px,3.8vw,19px);line-height:1.3;color:#B6BEC7;overflow-wrap:anywhere}
+.rl-wk-st{align-self:flex-start;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid #39424C;border-radius:2px;padding:5px 8px;color:#D3D8DD}
+.rl-wk-st.none{color:#78828C;border-style:dashed}
+.rl-wk-st.is-set{background:var(--flag);border-color:var(--flag);color:var(--flag-ink);font-weight:700}
+.rl-wk-flag{align-self:flex-start;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:#4A1C10;border:1px solid #C1502A;color:#FFC8B4;border-radius:2px;padding:5px 8px;overflow-wrap:anywhere}
+.rl-wk-note{font-size:14px;color:#98A2AC;overflow-wrap:anywhere}
+
+.rl-wk-nrow{flex:0 0 auto}
+.rl-wk-nin{width:100%;min-height:52px;font:inherit;font-size:17px;padding:10px 12px;border-radius:2px;
+  background:#161B21;border:1px solid #39424C;color:#F2F4F0}
+.rl-wk-nin:focus{outline:3px solid var(--flag);outline-offset:-1px}
+
+/* TWO TARGETS, SIDE BY SIDE, 96px TALL. Side by side rather than stacked so the
+   choice is a direction and not a read — after the first row his thumb knows
+   which half is which. 44px is the floor for a control you look at; this one is
+   hit with a knuckle, in gloves, on a ladder, so it is more than double it. */
+.rl-wk-acts{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rl-wk-acts1{grid-template-columns:1fr}
+.rl-wk-yes,.rl-wk-no{min-height:96px;border-radius:2px;cursor:pointer;padding:10px 8px;
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:clamp(17px,4.6vw,22px);line-height:1.05;
+  overflow-wrap:anywhere}
+.rl-wk-yes{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);font-weight:700}
+.rl-wk-no{background:transparent;border:2px solid #39424C;color:#E7EAE4;font-weight:700}
+.rl-wk-yes.is-set{box-shadow:inset 0 0 0 3px var(--flag-ink)}
+.rl-wk-yes:focus-visible,.rl-wk-no:focus-visible{outline:3px solid #F2F4F0;outline-offset:3px}
+
+.rl-wk-mini{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:44px}
+.rl-wk-m{min-height:44px;min-width:88px;background:transparent;border:1px solid #39424C;border-radius:2px;color:#D3D8DD;
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;cursor:pointer;padding:0 12px}
+.rl-wk-m:disabled{opacity:.35;cursor:default}
+.rl-wk-m:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.rl-wk-awake{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#6C757F;margin-left:auto}
+
+.rl-wk-end b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:clamp(22px,6vw,32px);line-height:1}
+.rl-wk-endn{font-size:clamp(15px,4vw,19px);color:#B6BEC7;display:flex;align-items:baseline;gap:9px;overflow-wrap:anywhere}
+.rl-wk-endn i{font-style:normal;font-family:var(--mono);font-size:clamp(24px,7vw,34px);font-weight:700;color:#F2F4F0;
+  min-width:1.4em;text-align:right}
+.rl-wk-endn.is-open i{color:var(--flag)}

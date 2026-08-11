@@ -528,6 +528,7 @@
         }).join("")
         : '<p class="rl-empty">' + esc(cfg.emptyText || "Nothing on the list yet.") + "</p>";
       renderTally(gs);
+      walkSyncLauncher();
       if (previewEl) previewEl.textContent = text();
       if (cfg.onChange) cfg.onChange(rows.length);
     }
@@ -759,7 +760,309 @@
       render(); persistNow();
     }
 
+    /* ── THE WALK ─────────────────────────────────────────────────────────────
+     * Opt-in via `cfg.walk`. Added at the fourth instance, from a working AV
+     * pro's wish for a readout he could use with his hands full.
+     *
+     * A list on this page is COMPOSED sitting down and VERIFIED walking, and
+     * only the first of those had a surface. Forty grouped rows on a 390px
+     * phone, read at arm's length with a flashlight in the other hand and
+     * gloves on, is a pinch-zoom and a lost place. So the walk is the same
+     * rows, one at a time, in type you can read without looking hard, behind
+     * two targets big enough to hit with a knuckle.
+     *
+     * IT PRODUCES NO NEW DOCUMENT, ON PURPOSE. It makes the document this page
+     * already sends TRUE: "still open" is only worth sending if somebody laid
+     * eyes on the list today, and the walk IS that act. `walk.onDone` hands the
+     * page the counts and the page decides what to do with them.
+     *
+     * THE TWO BUTTONS ARE NOT SYMMETRIC AND MUST NOT BE.
+     *   · The affirmative SETS the settled rung — it does not advance one step —
+     *     so a double tap cannot walk a row past a rung nobody verified, and a
+     *     man who taps twice has said the same true thing twice.
+     *   · The negative writes NOTHING AT ALL. A row he could not confirm keeps
+     *     exactly the state it had, because the only honest record of "I looked
+     *     and it wasn't there" this page owns is that the row is STILL OPEN.
+     *     Inventing a "checked, absent" rung here would put a value in the
+     *     document that no field on this page can carry (§SCARS "A DEFAULT IS A
+     *     CLAIM").
+     *
+     * IT WALKS scopedRows(), so the filters the page already has ARE the walk —
+     * "still open, for the electrician" is Thursday morning and needs no new
+     * control. The launcher says which scope it is about to walk, because a
+     * button that silently walks a different set than the one he filtered is
+     * the same class of lie as a document that counts rows it does not contain.
+     *
+     * EVERY CONTROL IS A REAL FOCUSABLE BUTTON AND EVERY ONE IS REACHABLE BY
+     * KEY — arrows roam, Enter picks, Escape leaves, Tab is trapped. That is
+     * plain keyboard operability, which this page owed anyway (§SCARS
+     * "`aria-modal` is a promise, not a behaviour"). It is also the only input
+     * model a screen with no pointer can offer, which is why it is worth having
+     * even where nobody is holding a keyboard.
+     *
+     * THE OVERLAY IS BOUND `position:fixed; inset:0` AND NEVER `100vh` (§SCARS
+     * "THE HARNESS CANNOT SEE WHAT ITS ENGINE DOES NOT DO", 2026-08-10): iOS
+     * freezes `vh` to the large viewport while the glass shrinks under it, so a
+     * vh-bound full-screen surface is built taller than the phone it is on and
+     * every headless gate stays green about it. */
+    var walkWrap = null, walkGo = null, walkIds = [], walkIx = 0, walkLock = null, walkPrev = null;
+
+    function walkOn() { return !!(cfg.walk && cfg.statusKey && STATUS.length); }
+    function walkDoneVal() { return cfg.statusDone || STATUS[STATUS.length - 1]; }
+    function walkRowById(id) { return rows.filter(function (x) { return x.id === id; })[0] || null; }
+    function walkScopeLabel() {
+      var fds = filterDefs().map(function (f) { return f.label; }).filter(Boolean);
+      return fds.length ? fds.join(" · ") : (cfg.walk.allLabel || "the whole list");
+    }
+    function walkGroupOf(r) {
+      var g = (r.values[groupKey] || "").trim();
+      if (!g) return cfg.ungroupedLabel || "NOT SET";
+      return (cfg.groupName ? cfg.groupName(g, groupKey) : g) || g;
+    }
+
+    /* The launcher is engine territory for the same reason the row tap is: it is
+     * a control over the list, not a piece of the page's layout. One config key
+     * lights it up; no page has to grow a button it would then have to style. */
+    function walkMountLauncher() {
+      if (!walkOn() || !listEl || !listEl.parentNode) return;
+      var bar = document.createElement("div");
+      bar.className = "rl-walkbar";
+      walkGo = document.createElement("button");
+      walkGo.type = "button";
+      walkGo.className = "rl-walkgo";
+      walkGo.addEventListener("click", walkOpen);
+      bar.appendChild(walkGo);
+      listEl.parentNode.insertBefore(bar, listEl);
+    }
+    function walkSyncLauncher() {
+      if (!walkGo) return;
+      var n = scopedRows().length;
+      var noun = n === 1 ? (cfg.noun || "row") : (cfg.nounPlural || "rows");
+      walkGo.parentNode.hidden = !rows.length;
+      walkGo.disabled = !n;
+      walkGo.innerHTML = '<b>' + esc(cfg.walk.label || "Walk it") + "</b><span>"
+        + (n ? n + " " + esc(noun) + " · " + esc(walkScopeLabel()) : esc(cfg.walk.emptyScope || "nothing in this scope"))
+        + "</span>";
+    }
+
+    function walkBuild() {
+      walkWrap = document.createElement("div");
+      walkWrap.className = "rl-walk";
+      walkWrap.hidden = true;
+      walkWrap.setAttribute("role", "dialog");
+      walkWrap.setAttribute("aria-modal", "true");
+      walkWrap.setAttribute("aria-label", cfg.walk.label || "Walk the list");
+      walkWrap.addEventListener("click", walkClick);
+      walkWrap.addEventListener("keydown", walkKey);
+      document.body.appendChild(walkWrap);
+    }
+
+    function walkPaint() {
+      var total = walkIds.length, r = null;
+      /* A row can be deleted from the pencil sheet between two taps of a walk.
+       * Skipping it is right; throwing on it would strand him mid-list. */
+      while (walkIx < total && !(r = walkRowById(walkIds[walkIx]))) walkIx++;
+      if (walkIx >= total) return walkPaintDone();
+
+      var main = cfg.rowMain ? cfg.rowMain(r.values) : (r.values[FIELDS[0].key] || "");
+      var sub = cfg.rowSub ? cfg.rowSub(r.values) : "";
+      var st = r.values[cfg.statusKey] || "";
+      var set = st === walkDoneVal();
+      var noteKey = cfg.walk.noteKey;
+      var note = noteKey ? (r.values[noteKey] || "") : "";
+
+      walkWrap.innerHTML =
+        '<div class="rl-wk-top">'
+        + '<span class="rl-wk-ct">' + (walkIx + 1) + " <i>/</i> " + total + "</span>"
+        + '<span class="rl-wk-scope">' + esc(walkScopeLabel()) + "</span>"
+        + '<button type="button" class="rl-wk-x" data-wk="quit">Close</button>'
+        + "</div>"
+        + '<div class="rl-wk-prog"><i style="width:' + Math.round((walkIx / total) * 100) + '%"></i></div>'
+        + '<div class="rl-wk-body"><div class="rl-wk-card">'
+        + '<span class="rl-wk-grp">' + esc(walkGroupOf(r)) + "</span>"
+        + '<b class="rl-wk-main">' + esc(main || "—") + "</b>"
+        + (sub ? '<span class="rl-wk-sub">' + esc(sub) + "</span>" : "")
+        + '<span class="rl-wk-st' + (set ? " is-set" : (st ? "" : " none")) + '">'
+        + esc(st || cfg.walk.blankLabel || "not started") + "</span>"
+        + (r.flag ? '<span class="rl-wk-flag">' + esc(r.flag) + "</span>" : "")
+        + (note ? '<span class="rl-wk-note">' + esc(note) + "</span>" : "")
+        + "</div></div>"
+        + (noteKey
+            ? '<div class="rl-wk-nrow" hidden><input type="text" class="rl-wk-nin" value="' + esc(note)
+              + '" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="'
+              + esc(cfg.walk.notePlaceholder || "two words about this one") + '"></div>'
+            : "")
+        + '<div class="rl-wk-acts">'
+        + '<button type="button" class="rl-wk-yes' + (set ? " is-set" : "") + '" data-wk="yes">'
+        + esc(cfg.walk.advance || ("Mark " + walkDoneVal())) + "</button>"
+        + '<button type="button" class="rl-wk-no" data-wk="no">' + esc(cfg.walk.hold || "Not yet") + "</button>"
+        + "</div>"
+        + '<div class="rl-wk-mini">'
+        + '<button type="button" class="rl-wk-m" data-wk="back"' + (walkIx ? "" : " disabled") + ">&#8592; Back</button>"
+        + (noteKey ? '<button type="button" class="rl-wk-m" data-wk="note">Note</button>' : "")
+        + (walkLock ? '<span class="rl-wk-awake">screen held awake</span>' : "")
+        + "</div>";
+      walkFocusPrimary();
+    }
+
+    /* The end of a walk is the only place this surface talks about the list as a
+     * whole, and it says only what it watched happen: how many he walked, how
+     * many carry the settled rung now, how many do not. No rate, no percentage
+     * of a denominator nobody entered. */
+    function walkPaintDone() {
+      var scope = walkIds.map(walkRowById).filter(Boolean);
+      var doneN = scope.filter(function (r) { return r.values[cfg.statusKey] === walkDoneVal(); }).length;
+      var openN = scope.length - doneN;
+      walkWrap.innerHTML =
+        '<div class="rl-wk-top">'
+        + '<span class="rl-wk-ct">' + scope.length + " <i>/</i> " + scope.length + "</span>"
+        + '<span class="rl-wk-scope">' + esc(walkScopeLabel()) + "</span>"
+        + '<button type="button" class="rl-wk-x" data-wk="quit">Close</button>'
+        + "</div>"
+        + '<div class="rl-wk-prog"><i style="width:100%"></i></div>'
+        + '<div class="rl-wk-body"><div class="rl-wk-end">'
+        + "<b>" + esc(cfg.walk.endTitle || "Walk done") + "</b>"
+        + '<span class="rl-wk-endn"><i>' + doneN + "</i>" + esc(" " + (cfg.walk.endDone || ("now " + walkDoneVal().toLowerCase()))) + "</span>"
+        + '<span class="rl-wk-endn' + (openN ? " is-open" : "") + '"><i>' + openN + "</i>"
+        + esc(" " + (cfg.walk.endOpen || "still open")) + "</span>"
+        + "</div></div>"
+        + '<div class="rl-wk-acts rl-wk-acts1">'
+        + (openN && cfg.walk.onDone
+            ? '<button type="button" class="rl-wk-yes" data-wk="finish">' + esc(cfg.walk.doneLabel || "Send what's still open") + "</button>"
+            : '<button type="button" class="rl-wk-yes" data-wk="quit">' + esc(cfg.walk.closeLabel || "Back to the list") + "</button>")
+        + "</div>"
+        + '<div class="rl-wk-mini">'
+        + '<button type="button" class="rl-wk-m" data-wk="back">&#8592; Back</button>'
+        + (openN && cfg.walk.onDone ? '<button type="button" class="rl-wk-m" data-wk="quit">Just close it</button>' : "")
+        + "</div>";
+      walkFocusPrimary();
+    }
+
+    function walkFocusPrimary() {
+      var y = walkWrap.querySelector('[data-wk="yes"],[data-wk="finish"]') || walkWrap.querySelector("button");
+      if (y) { try { y.focus(); } catch (e) {} }
+    }
+
+    function walkClick(e) {
+      var b = e.target && e.target.closest ? e.target.closest("[data-wk]") : null;
+      if (!b) return;
+      var a = b.getAttribute("data-wk");
+      if (a === "quit") return walkClose();
+      if (a === "back") { if (walkIx > 0) walkIx--; return walkPaint(); }
+      if (a === "note") {
+        var row = walkWrap.querySelector(".rl-wk-nrow");
+        if (!row) return;
+        row.hidden = !row.hidden;
+        if (!row.hidden) { var i = row.querySelector("input"); if (i) { i.focus(); walkBindNote(i); } }
+        return;
+      }
+      if (a === "yes") {
+        var r = walkRowById(walkIds[walkIx]);
+        /* SET, never advance — see the header. Idempotent by construction. */
+        if (r && r.values[cfg.statusKey] !== walkDoneVal()) {
+          r.values[cfg.statusKey] = walkDoneVal();
+          r.t = ++touch;
+          persistNow();
+        }
+        walkIx++; return walkPaint();
+      }
+      if (a === "no") { walkIx++; return walkPaint(); }
+      if (a === "finish") {
+        var scope = walkIds.map(walkRowById).filter(Boolean);
+        var doneN = scope.filter(function (x) { return x.values[cfg.statusKey] === walkDoneVal(); }).length;
+        walkClose();
+        if (cfg.walk.onDone) cfg.walk.onDone({ walked: scope.length, done: doneN, open: scope.length - doneN });
+      }
+    }
+
+    function walkBindNote(input) {
+      if (input.getAttribute("data-bound")) return;
+      input.setAttribute("data-bound", "1");
+      input.addEventListener("input", function () {
+        var r = walkRowById(walkIds[walkIx]);
+        if (!r) return;
+        r.values[cfg.walk.noteKey] = input.value;
+        r.t = ++touch;
+        schedulePersist();
+      });
+    }
+
+    function walkKey(e) {
+      if (e.key === "Escape") { e.preventDefault(); return walkClose(); }
+      /* THE NOTE FIELD IS IN THE MARKUP EVEN WHILE IT IS CLOSED, so a naive ring
+       * hands Tab a `display:none` input, `focus()` quietly does nothing, and
+       * focus falls out of a dialog that advertises `aria-modal` — the trap the
+       * book already has a scar for, rebuilt one layer down. Anything under a
+       * `[hidden]` ancestor is not in the ring. */
+      var f = [].slice.call(walkWrap.querySelectorAll("button:not([disabled]),input"))
+        .filter(function (el) { return !el.closest("[hidden]"); });
+      if (!f.length) return;
+      var i = f.indexOf(document.activeElement);
+      if (e.key === "Tab") {
+        e.preventDefault();
+        return f[e.shiftKey ? (i <= 0 ? f.length - 1 : i - 1) : (i < 0 || i === f.length - 1 ? 0 : i + 1)].focus();
+      }
+      /* Arrows roam the controls — the pointerless input model. Inside a text
+       * field they belong to the caret, so they are left alone there. */
+      if (/^Arrow(Left|Right|Up|Down)$/.test(e.key)) {
+        if (document.activeElement && document.activeElement.tagName === "INPUT") return;
+        e.preventDefault();
+        var fwd = e.key === "ArrowRight" || e.key === "ArrowDown";
+        return f[i < 0 ? 0 : (fwd ? (i + 1) % f.length : (i - 1 + f.length) % f.length)].focus();
+      }
+    }
+
+    /* Held only while the walk is open, released on the way out, and never
+     * ANNOUNCED unless the request actually resolved — a line promising an awake
+     * screen on a browser that has no such API is the page claiming a capability
+     * it does not hold (§SCARS "A DEFAULT IS A CLAIM"). */
+    function walkWake() {
+      try {
+        if (!navigator.wakeLock || !navigator.wakeLock.request) return;
+        navigator.wakeLock.request("screen").then(function (s) {
+          walkLock = s;
+          s.addEventListener("release", function () { walkLock = null; });
+          if (walkWrap && !walkWrap.hidden) {
+            var m = walkWrap.querySelector(".rl-wk-mini");
+            if (m && !m.querySelector(".rl-wk-awake")) {
+              var el = document.createElement("span");
+              el.className = "rl-wk-awake";
+              el.textContent = "screen held awake";
+              m.appendChild(el);
+            }
+          }
+        }, function () {});
+      } catch (e) {}
+    }
+    function walkVis() {
+      if (document.visibilityState === "visible" && walkWrap && !walkWrap.hidden && !walkLock) walkWake();
+    }
+
+    function walkOpen() {
+      if (!walkOn()) return;
+      walkIds = scopedRows().map(function (r) { return r.id; });
+      if (!walkIds.length) return;
+      walkIx = 0;
+      if (!walkWrap) walkBuild();
+      walkPrev = document.activeElement;
+      walkWrap.hidden = false;
+      document.documentElement.classList.add("rl-walking");
+      walkPaint();
+      walkWake();
+      document.addEventListener("visibilitychange", walkVis);
+    }
+    function walkClose() {
+      if (!walkWrap || walkWrap.hidden) return;
+      walkWrap.hidden = true;
+      document.documentElement.classList.remove("rl-walking");
+      document.removeEventListener("visibilitychange", walkVis);
+      if (walkLock) { try { walkLock.release(); } catch (e) {} walkLock = null; }
+      persistNow(); render();
+      if (walkPrev && walkPrev.focus) { try { walkPrev.focus(); } catch (e) {} }
+    }
+
     buildBar();
+    walkMountLauncher();
     render();
     if (copyBtn) copyBtn.addEventListener("click", function () {
       copyText(text(), copyBtn, cfg.onFlash);

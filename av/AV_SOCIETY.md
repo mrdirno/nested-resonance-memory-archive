@@ -392,6 +392,49 @@ somebody. · **`groupSort`** — a stated block order. Insertion order is fine f
 keeps for himself and wrong for a DOCUMENT that crosses to another company, where *here is
 what you're getting / here is what you're not* must read the same way every time.
 
+**AT THE FOURTH INSTANCE IT GREW A SECOND SURFACE RATHER THAN A FIFTH FIELD KIND — THE
+WALK (2026-08-10, opt-in `cfg.walk`, every page without it byte-identical).** Every row-log
+page until now had exactly one surface: the pencil sheet, where a list is COMPOSED sitting
+down. A list is also VERIFIED WALKING, and that half had nothing. Forty grouped rows on a
+390px phone, read at arm's length with a light in the other hand and gloves on, is a
+pinch-zoom and a lost place. So the walk is the same rows, one at a time, full screen, dark
+on purpose — this is the one surface used out on the deck rather than in the van, where the
+paper-white sheet the rest of the toolkit wears is a flashbulb — in type you can read
+without stopping, behind two targets **96px tall**: more than double the 44px floor,
+because this one is hit with a knuckle and not looked at.
+
+Four things make it honest, and each is a rule for whatever mode is added here next:
+· **IT WALKS `scopedRows()`**, so the filters the page already has ARE the walk — *"still
+  open, for the electrician"* is Thursday morning and needed no new control — and the
+  launcher NAMES the set it is about to walk, because walking a different list than the one
+  he filtered is the same class of lie as counting rows the document does not contain
+  (§SCARS 2026-08-09).
+· **THE TWO BUTTONS ARE NOT SYMMETRIC AND MUST NOT BE.** The affirmative SETS the settled
+  rung rather than advancing one step, so a double tap cannot walk a row past a rung nobody
+  verified, and a man who taps twice has said the same true thing twice. The negative writes
+  **nothing at all**: the only honest record of *"I looked and it wasn't there"* this page
+  owns is that the row is STILL OPEN, and inventing a "checked, absent" rung would put a
+  value in the document that no field on the page can carry.
+· **IT PRODUCES NO NEW DOCUMENT, ON PURPOSE.** It makes the one the page already sends TRUE
+  — "still open" is only worth sending if somebody laid eyes on the list today, and the walk
+  IS that act — so the end of it does exactly one thing: puts the page on STILL OPEN and
+  takes him to the message. It never writes to the clipboard behind him.
+· **EVERY CONTROL IS A REAL BUTTON AND EVERY ONE IS REACHABLE BY KEY** — arrows roam, Enter
+  picks, Escape leaves, Tab is trapped. That is the operability the dialog owed anyway, and
+  it is the only input model a screen with NO POINTER can offer, which is the half of this
+  that outlives the phone it shipped on.
+
+**WHERE IT DELIBERATELY DID NOT GO — the judgment, not an omission.** `answer-back` (all
+seven trades) has a FOUR-WAY answer ladder, and a two-button walk can express exactly one of
+the four; wiring it there would push a man toward whichever answer the button happens to
+name. `device-checkout` has a six-rung ladder whose settled rung is the last of six, and a
+binary tap that lands on VERIFIED asserts five steps nobody did. `whats-in-the-wall` is the
+close miss and the named next rung: its settled rung is `Covered` while the rung a pre-rock
+walk actually verifies is `In`, so it needs the walk to name its OWN rung *and* the end card
+to count "at or past that rung" **by ladder index** — two changes, not one config line.
+Written down here so the next cycle adds them deliberately instead of wiring the walk in and
+shipping a wrong count.
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
@@ -1013,6 +1056,19 @@ line whenever a filter is active — a legitimate answer, and the reason the cla
 surface until a page wanted the rollup in both states. **Swept the same cycle:** all six
 `rough-in-request` pages are filter-guarded, `device-checkout` declares no filters, so
 `answer-back` was the only instance and it is fixed on all six.
+
+### 2026-08-10 — THE FOCUS RING HANDED TAB A CONTROL THAT WAS NOT ON THE SCREEN
+The walk's note field sits in the markup the whole time and only its wrapper carries
+`hidden`, so the dialog's own focus trap — built from
+`querySelectorAll("button:not([disabled]),input")` — put a `display:none` input in the ring.
+`focus()` on a `display:none` element does not throw and does not move focus; it silently
+does nothing, so Tab at that position leaves the active element on `<body>`, OUTSIDE a
+dialog that advertises `aria-modal="true"`. That is the exact symptom of the 2026-08-06
+scar, rebuilt one layer down by code written to satisfy it — and nothing on screen changes
+when it happens, which is why it survives a look.
+**Rule:** a focus ring is built from what is REACHABLE, never from what is PRESENT — filter
+`el.closest("[hidden]")` out of it. And test it by ASSERTING `document.activeElement` after
+N presses of Tab; a screenshot of a dialog cannot show you where focus went.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -1674,3 +1730,36 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   pages in 8 dirs, ordinary glass AND the iOS condition) and
   `overlay-reachability.mjs`. Credited on the Wall of Wishes.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html
+- 2026-08-10 · **[AXIS:WELL] A LIST WAS COMPOSED SITTING DOWN AND HAD NO SURFACE FOR THE
+  HALF THAT HAPPENS WALKING · THE WALK LANDS ON ALL 7 TRADES AT ONCE.** Cleared a wish
+  STRANDED in `status=building` since 2026-08-09 — an anonymous AV tech, from an iPhone,
+  asking for a readout he could use with his hands full on a screen with no pointer. A
+  previous cycle wrote the ENGINE half of it and died before wiring or shipping anything,
+  so the queue read *served* while nothing was live and 390 lines sat uncommitted: the
+  exact failure the STEP-0 stranded sweep exists to catch. **before→after:** a row-log
+  page had ONE surface — the pencil sheet — and forty grouped rows on a 390px phone at
+  arm's length was a pinch-zoom and a lost place → a second, opt-in surface (`cfg.walk`):
+  full screen, dark on purpose, one row at a time, **96px** targets side by side,
+  keyboard-operable end to end, screen wake-lock held only while it is open, wired into
+  `<trade>/rough-in-request.html` on **all 7 trades** in the same cycle. It walks
+  `scopedRows()`, so *"still open, for the electrician"* was already a walk and needed no
+  new control; the affirmative SETS the settled rung instead of advancing (a double tap
+  cannot walk a row past a rung nobody verified); a hold writes **nothing**, because
+  still-open IS the honest record of "I looked and it wasn't there"; and the end of it
+  produces no new document — it puts the page on STILL OPEN at the message and never
+  writes the clipboard behind him. **FOUND AND FIXED BEFORE SHIP:** the dialog's own focus
+  trap put the `display:none` note input in the Tab ring, so one Tab press dropped focus
+  to `<body>` outside an `aria-modal` dialog — the 2026-08-06 scar rebuilt one layer down
+  by the code written to satisfy it (§SCARS). **DECLINED DELIBERATELY, reasons written
+  into §THE THREE SHAPES so the next cycle does not "helpfully" wire them:** `answer-back`
+  (four-way ladder, two buttons can express one of four) · `device-checkout` (six rungs, a
+  binary tap asserts five steps nobody did) · `whats-in-the-wall` (settled rung `Covered`
+  ≠ the rung a pre-rock walk verifies, needs ladder-index counting first). **VERIFIED by
+  driving the real page in a real browser and doing the job it claims** — 7 trades × 4
+  widths {320, 360, 390, 430} × 40 assertions = **1,120 green**, including zero horizontal
+  overflow with the overlay open, zoomed out to 67%, and at a 22px root font;
+  `document.activeElement` asserted after ten Tab presses; the walk surviving a reload;
+  the end-card counts checked against what the walk was actually told; and a
+  separate gate asserting all **9** row-log pages that did NOT opt in are untouched. Credited on the
+  Wall of Wishes and on all 7 pages.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
