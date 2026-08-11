@@ -1335,6 +1335,57 @@ that has to say *which* zero it means — and asserts that an unvouched pair can
 storage. The lesson generalises past this page: **every "we would never…" in this book
 is a gate that has not been written yet.**
 
+### 2026-08-11 — A RATIO WAS ALLOWED TO SAY TWO ROOMS WERE THE SAME ROOM
+An adversarial audit of the freshly shipped reconcile join, run against the file on
+disk with every finding reproduced rather than argued. **Seven defects, in a module
+that had already passed an 87-check logic sweep, a 56-page mobile gate, a live
+end-to-end round trip and a live injection test.** The classes are worth more than the
+list:
+
+**A SIMILARITY SCORE IS NOT AN IDENTITY.** Dice was allowed to grant `sure` at 0.75.
+A row of N tokens whose line differs in k of them scores `1 − k/N`, and every row in
+this toolkit is 8–14 tokens — room · ask · spec · height · gate · trade — **so a
+12-token row tolerated THREE wrong tokens and still cleared the bar.** One wrong room
+number scored 0.917, arrived switched on, and hid his line because the pair was "sure".
+*The more detail a man put on a row, the more wrong tokens the ratio forgave.* Certainty
+now requires a **unique exact** match; everything else is a proposal with his raw line
+on the glass. **And exact was not enough on its own:** the four matching forms exist
+precisely because the document drops the grouped axis, so the form with the ROOM dropped
+makes the same device in three rooms one identical string — answered *will do, will do,
+can't*, **which room he refused is not in his message**, and the greedy sort was handing
+it out by row id. An exact match against more than one row is now sure of none of them.
+
+**A PROSE RULE APPLIED TO A DOCUMENT WILL EAT THE DOCUMENT.** The sign-off detector fired
+on the first disclaimer-shaped line ANYWHERE and cut from that paragraph to the end —
+and `av/items.js` ships the spec *"Walk the wall with me before anybody roughs it"*, two
+taps to put on a list. A reply carrying that row parsed to **zero** answers, and the page
+told a foreman the other company had never mentioned any of them. **A dropped answer is
+not a missing feature, it is a false accusation against another company.** The sign-off
+is now only ever the LAST block. Same class, one floor down: `Call me: 555-0134` in a
+signature satisfied "this looks like one of our documents" and the subject rule ate the
+first of three answers.
+
+**A BATCH WRITE FROM A PHOTOGRAPH WALKS THE LIST BACKWARD.** He opens the card, walks the
+job, settles a row by hand — and Apply then pushed **In**, a thing somebody went and
+looked at, back down to **Committed**, a claim somebody else made, silently, under a
+message reading "ticked 3 rows". This is `rowlog.js`'s own pencil-sheet scar at list
+scale. The guard went into the **ENGINE**, not the caller: the ladder is monotone, so the
+only place that can say so for every caller there will ever be is the code that owns the
+ladder. `applyValues` never demotes, never blanks a stated rung, and closes the pencil
+only when the open row is in the batch.
+
+**AND THE GATE CAUGHT THIS BOOK'S OWN SCAR IN ITS OWN SETUP** — `localStorage.clear()`
+then reload, which is circular because the reload fires `pagehide` and the engine flushes
+the still-in-memory rows straight back (§SCARS 2026-08-05). It showed up as two rows and
+an "already in" tag on a list that had just been emptied. **A scar you have written down
+is not a scar you have stopped making.**
+
+**THE RULE:** *ship, then send somebody to break it, then gate what they broke.* The
+audit ran against the shipped artefact while the cycle was still open, and every finding
+became a check — `reconcile-join` 87 → 104, plus the surface gate. It found nothing on
+injection, which is the other half of what an audit is for: knowing which parts are
+actually sound.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -2255,4 +2306,23 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   green on the working tree AND against the deployed site. **The rule out of it, which
   is bigger than this page: every "we would never…" in this book is a gate that has not
   been written yet.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
+
+- 2026-08-11 · **[AXIS:INTERFACE] A RATIO WAS ALLOWED TO SAY TWO ROOMS WERE THE SAME
+  ROOM · THE THIRD MESSAGE, AUDITED AND HARDENED WHILE THE CYCLE WAS STILL OPEN.**
+  An adversarial audit of the shipped join reproduced **seven** defects against the file
+  on disk. Before: Dice granted certainty at 0.75, and a real row is 8–14 tokens, so a
+  12-token row forgave three wrong ones — one wrong room number scored 0.917, arrived
+  switched ON, and hid his line; an exact match against three identical row-forms was
+  handed out by row id; a disclaimer phrase inside a shipped SPEC string truncated the
+  whole reply to zero answers and the page announced the other company had never
+  mentioned any of them; Apply walked a verified **In** row back down to **Committed**.
+  After: `sure` requires a **unique exact** match and nothing else, the sign-off is only
+  ever the last block, `hasHead` needs real document structure, the engine's
+  `applyValues` **cannot demote**, his flag reaches the pushback block instead of the
+  couldn't-place drawer, the receiver is only named when it is true of every row shown,
+  and a pasted email's no-break spaces no longer swallow his date. Gates: reconcile-join
+  **87 → 104**, reconcile-surface extended — and the surface gate caught THIS BOOK'S
+  2026-08-05 scar in its own setup (clear-then-reload is circular). Injection: clean, 0
+  elements, 0 globals. Green on the tree AND against the deployed site.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
