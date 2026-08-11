@@ -1760,6 +1760,8 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   overflow with the overlay open, zoomed out to 67%, and at a 22px root font;
   `document.activeElement` asserted after ten Tab presses; the walk surviving a reload;
   the end-card counts checked against what the walk was actually told; and a
-  separate gate asserting all **9** row-log pages that did NOT opt in are untouched. Credited on the
+  separate gate asserting all **9** row-log pages that did NOT opt in are untouched. **Re-run
+  against the LIVE site after deploy: 1,120 green again, plus the 9-page opt-out gate.**
+  Credited on the
   Wall of Wishes and on all 7 pages.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
