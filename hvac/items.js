@@ -562,3 +562,185 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Dave — Local 3", phFrom: "Manny — Apex Mechanical", phOff: "E-201 rev 3",
   paste: "Building C — what we need from mechanical — Aug 9\n\nJob: Building C\nFrom: Dave — Local 3\n\nRoof · your unit weights and disconnect locations before we rough the whips\nMech 210 · t-stat box locations before rock\nRoof · confirm curb heights before dry-in"
 };
+
+/* ── THE VAN RESTOCK (shape #1 — shared/checklist-request.js) ──────────────
+ * The vocabulary for truck-stock.html. Written by a panel of commercial service
+ * and refrigeration hands, then cut by a second one told to kill about a third:
+ * 55 lines proposed, 37 kept, 18 killed.
+ *
+ *  · THE CATEGORIES ARE SOMEBODY'S ACTUAL VAN, not a supply-house catalog. A
+ *    tick that does not correspond to a bin on a truck is a tick nobody makes.
+ *  · qtyDefault IS THE POINT OF THIS PAGE. A van does not restock one of
+ *    everything — caps go four at a time, contactors two. Defaults are set the
+ *    way a truck really fills and left OFF the lines that genuinely vary, which
+ *    is the one thing this page has that a text message does not.
+ *  · REFRIGERATION IS HALF OF COMMERCIAL and gets forgotten by every tool built
+ *    by somebody who has only seen a rooftop. It gets its own section.
+ *  · ZERO TRADEMARKS, and in this trade that is harder than it sounds: the two
+ *    most-said words on the job are both trademarks. It is REFRIGERANT, and it
+ *    is a VALVE CORE at a SERVICE PORT. Refrigerant DESIGNATIONS (R-410A,
+ *    R-448A) are ASHRAE numbers, not brands, and are safe.
+ *  · NOTHING RATED, EVER. No charge amounts, no leak-rate thresholds, no target
+ *    superheat, no appliance-size cutoffs — not in an option, not in a sub, not
+ *    seeded in a placeholder. What is on the plate gets TYPED by the man
+ *    standing at the plate.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would
+   * be the tool choosing for him; a printed value nobody picked would be the tool
+   * putting words in his message. */
+  function n(q) { return "\u2014 " + q + " \u2014"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.cats = [
+    {
+      id: "need",
+      name: "What do you need?",
+      docName: "The main stuff",
+      hint: "Type it or paste your whole list — one per line. Quantities however you say them: 4, a bag, a case, 2 sticks.",
+      writein: true,
+      items: []
+    },
+    {
+      id: "ctrl",
+      name: "Caps, contactors & controls",
+      docName: "Caps, contactors & controls",
+      hint: "The cheap parts that keep a store closed. This is what the van eats fastest.",
+      items: [
+        { n: "Caps", sub: "MFD OFF THE OLD ONE GOES IN THE NOTE", qtyDefault: "4",
+          ax: [
+            ax("Cap", [n("which cap")].concat(["dual run", "single run", "start", "hard-start kit"]), true)
+          ] },
+        { n: "Contactors", sub: "POINTS PIT AND IT'S A NO-COOL AT 2 IN THE AFTERNOON", qtyDefault: "2",
+          ax: [
+            ax("Poles", [n("which poles")].concat(["1-pole", "2-pole", "3-pole"])),
+            ax("Coil", [n("which coil")].concat(["24V", "120V", "line voltage"]))
+          ] },
+        { n: "Relays", sub: "FAN, BLOWER, AND SEQUENCERS FOR THE STRIP HEAT", qtyDefault: "2" },
+        { n: "Transformers", sub: "SAY PRIMARY AND SECONDARY IN THE NOTE", qtyDefault: "2" },
+        { n: "T-stat wire", sub: "AND A BAG OF WIRE NUTS, SPADES AND BUTTS", qtyDefault: "1 roll",
+          ax: [
+            ax("Wire", [n("which wire")].concat(["4-wire", "5-wire", "8-wire"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "sealed",
+      name: "The sealed side",
+      docName: "Refrigerant, driers & valve parts",
+      hint: "Say the number, not the color of the jug.",
+      items: [
+        { n: "Refrigerant", sub: "BY THE NUMBER — SAY IT, DON'T GUESS IT",
+          ax: [
+            ax("Which", [n("which number")].concat(["R-410A", "R-22", "R-134a", "R-404A", "R-407C", "R-448A", "R-449A", "R-454B"]), true)
+          ] },
+        { n: "Nitro", sub: "BOTTLE SWAP — AND A REGULATOR IF MINE WALKED OFF", qtyDefault: "1 bottle" },
+        { n: "Driers", qtyDefault: "2",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/4 in", "3/8 in", "1/2 in", "5/8 in", "7/8 in"])),
+            ax("Connection", [n("which connection")].concat(["sweat", "flare"]))
+          ] },
+        { n: "Valve cores & caps", sub: "BY THE BAG — THEY VANISH", qtyDefault: "1 bag" },
+        { n: "Compressor oil", qtyDefault: "1 qt",
+          ax: [
+            ax("Oil", [n("which oil")].concat(["POE", "mineral", "AB"]), true)
+          ] },
+        { n: "Bubbles", sub: "SOAP FOR LEAKS — THE BOTTLE ALWAYS ENDS UP IN SOMEBODY ELSE'S TRUCK", qtyDefault: "1 bottle" }
+      ]
+    },
+    {
+      id: "braze",
+      name: "Braze, tube & fittings",
+      docName: "Braze, tube & fittings",
+      hint: "Nobody has ever gotten to a braze and found the truck full.",
+      items: [
+        { n: "Braze rod", qtyDefault: "1 tube",
+          ax: [
+            ax("Rod", [n("which rod")].concat(["phos-copper", "15% silver", "45% silver"]), true)
+          ] },
+        { n: "Copper tube",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/4 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in", "7/8 in", "1-1/8 in"])),
+            ax("Form", [n("which form")].concat(["soft roll", "hard — 20 ft", "hard — 10 ft"]), true)
+          ] },
+        { n: "Copper fittings", qtyDefault: "10",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/4 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in", "7/8 in", "1-1/8 in"])),
+            ax("Fitting", [n("which fitting")].concat(["coupling", "90", "45", "tee", "reducer", "cap"]), true)
+          ] },
+        { n: "Torch fuel & tips", sub: "SWAP THE EMPTY B-TANK — AND A STRIKER", qtyDefault: "1 tank" },
+        { n: "Sand cloth, flux & brushes", sub: "THE FIVE-MINUTE REASON A JOINT LEAKS", qtyDefault: "1 each" }
+      ]
+    },
+    {
+      id: "air",
+      name: "Air side",
+      docName: "Air side — belts, filters, gas heat",
+      hint: "Half of tomorrow is a belt, a filter and a flame sensor.",
+      items: [
+        { n: "Belts", sub: "NUMBER'S ON THE OLD ONE — PUT IT IN THE NOTE", qtyDefault: "2" },
+        { n: "Filters", sub: "SIZES IN THE NOTE — THE RACK NEVER MATCHES THE PRINT" },
+        { n: "Motors", sub: "CONDENSER, BLOWER, CASE FAN — THE PLATE AND THE BLADE GO IN THE NOTE", qtyDefault: "1" },
+        { n: "Igniters", sub: "THEY BREAK IF YOU LOOK AT THEM WRONG", qtyDefault: "2" },
+        { n: "Flame sensors", sub: "AND A PAD TO SCUFF THE OLD ONE", qtyDefault: "2" }
+      ]
+    },
+    {
+      id: "ref",
+      name: "Boxes & defrost",
+      docName: "Refrigeration — boxes & defrost",
+      hint: "Half of commercial is refrigeration, and it's the half that's down at 5 in the morning.",
+      items: [
+        { n: "Term & fan delay switches", sub: "DEFROST — SAY WHAT'S STAMPED ON THE OLD ONE", qtyDefault: "2" },
+        { n: "Defrost timers", sub: "MECHANICAL AND ELECTRONIC", qtyDefault: "1" },
+        { n: "Box controls & probes", sub: "AND THE CLIPS THAT HOLD THE PROBE", qtyDefault: "1" },
+        { n: "Crankcase heaters", sub: "THE ONE THAT'S ALWAYS COOKED OFF", qtyDefault: "1" }
+      ]
+    },
+    {
+      id: "drain",
+      name: "Drains, seal & tape",
+      docName: "Drains, seal & tape",
+      hint: "The callback that isn't a callback: water on somebody's floor.",
+      items: [
+        { n: "Condensate pumps", qtyDefault: "1" },
+        { n: "Float & wet switches", sub: "CHEAPER THAN A CEILING", qtyDefault: "2" },
+        { n: "PVC — pipe, fittings & glue",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/2 in", "3/4 in", "1 in", "1-1/4 in"]))
+          ] },
+        { n: "Coil cleaner", qtyDefault: "1 gal",
+          ax: [
+            ax("Cleaner", [n("which cleaner")].concat(["evap / no-rinse", "condenser"]), true)
+          ] },
+        { n: "Foil tape", sub: "NOT THE CLOTH TAPE — IT FALLS OFF BY AUGUST", qtyDefault: "2 rolls" },
+        { n: "Line insulation & glue", sub: "FOAM SLEEVE — THE ROOF EATS IT",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/4 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in", "7/8 in", "1-1/8 in"]))
+          ] }
+      ]
+    },
+    {
+      id: "wear",
+      name: "What wears out",
+      docName: "Blades, bits & what wears out",
+      hint: "Not material. Still the thing that ends the day at nine in the morning.",
+      items: [
+        { n: "Recip blades", sub: "METAL — THE BOX IS ALWAYS EMPTY", qtyDefault: "1 pk" },
+        { n: "Nut driver bits & extensions", sub: "1/4 AND 5/16 — THE TWO THAT WALK OFF", qtyDefault: "1 pk" },
+        { n: "Self-drillers & sheet metal screws", qtyDefault: "1 box" },
+        { n: "Vacuum pump oil", sub: "AND A JUG TO DUMP THE OLD ONE IN", qtyDefault: "1 qt" },
+        { n: "Wire ties, tape & markers", sub: "AND SOMETHING TO WRITE ON THE UNIT WITH", qtyDefault: "1 bag" },
+        { n: "Gloves & batteries", sub: "METER, CAMERA, FLASHLIGHT", qtyDefault: "1 box" }
+      ]
+    }
+  ];
+
+  window.TOOLKIT_ITEMS.writeinAx = [
+  ];
+})();

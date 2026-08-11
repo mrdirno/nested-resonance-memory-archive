@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Load — Framing &amp; Drywall Field Toolkit</title>
+<meta name="description" content="Boom truck's coming. Say what's on it and where every piece gets set down — then send the yard one list with a drop on every line.">
+<meta name="apple-mobile-web-app-title" content="The Load">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#B7ADFF;--tint:#EFEDFF;--deep:#4A3BA8;--flag-ink:#14103A;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
+   instead of fixing it and hides exactly the defect the pre-ship mobile gate is
+   there to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal}
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+.f textarea{resize:vertical;min-height:42px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer;min-height:44px}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+
+.hot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;cursor:pointer}
+.hot input{width:22px;height:22px;flex:none;accent-color:#C4342B;cursor:pointer}
+.hot span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:var(--muted)}
+.hot input:checked ~ span{color:#B0201A}
+.hot:has(input:checked){border-color:#C4342B;background:#FFF4F3}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+details.more>summary{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:14px;color:var(--deep);font-weight:700}
+details.more[open]>summary::before{content:"–"}
+details.more .hgrid{margin-top:9px}
+
+.lastwrap{margin:0 0 12px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+
+.jog{background:var(--steel);color:#EEF0EA;border-radius:2px;padding:11px 13px;margin:16px 0 12px}
+.jog b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:16px;display:block;color:var(--flag)}
+.jog span{display:block;font-size:12.5px;color:#B9BFC6;margin-top:2px}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+.cathint{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:#F4F5F1;border-bottom:1px solid var(--line)}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 90px;min-width:84px}
+.cfg .f.wide{flex:2 1 170px}
+/* Qty is FREE TEXT because this trade's load comes in six different units on one
+   list — 2 lifts, 60 sht, 8 bx, a pallet, 20 sticks. A number spinner is a desk
+   person's idea of how a load is counted. */
+.cfg .f.qty{flex:0 0 100px;min-width:100px}
+/* THE DROP GETS ITS OWN COLOUR. It is the field that decides whether the order
+   was any good, and it is the one a man skips when he is in a hurry — so it is
+   the one control on a ticked line that does not look like the others.
+   Selected off the engine's own `data-k`, not off a class: shared/checklist-
+   request.js emits `class="f"` / `class="f wide"` and nothing key-specific, and
+   teaching the engine a new class to colour one trade's axis would be a shared
+   change made for one page. The attribute is already there and already means
+   exactly this. */
+.cfg select[data-k="drop"]{border-color:var(--deep);background:var(--tint);font-weight:600}
+.cfg .f:has(select[data-k="drop"]) label{color:var(--deep)}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+
+.cat:first-of-type{border:2px solid var(--deep)}
+.cat:first-of-type h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
+.cat:first-of-type h2 .n{color:#D6D0FF}
+.cat:first-of-type .cathint{background:var(--tint);color:#332A73;font-size:12.5px}
+.cat:first-of-type .addrow{background:var(--tint);padding:12px}
+.cat:first-of-type .wi-input{min-height:76px}
+.cat:first-of-type .addbtn{background:var(--deep);border-color:var(--deep)}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1;align-items:stretch}
+.addrow .wi-input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);resize:vertical;line-height:1.35}
+.addrow .wi-input:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
+  min-height:44px;flex:none}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Framing &amp; Drywall &middot; Field &rarr; Yard</span>
+    <h1>The Load</h1>
+    <p class="lede">Boom truck's coming. Say what's on it &mdash; and say where every piece gets set down. Board on the wrong floor is a day gone, and nobody remembers a verbal drop at 6:40 in the morning.</p>
+  </header>
+
+  <div class="head">
+    <div class="hgrid">
+      <div class="f span2"><label>Job / site <i>(the yard files it by the job)</i></label><input id="fJob" type="text" placeholder="24-118 Riverside MOB — building B" autocomplete="off"></div>
+      <div class="f"><label>Who's asking <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Sal — 209-555-0166" autocomplete="off"></div>
+      <div class="f"><label>Need it</label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="Today">Today</button>
+          <button type="button" data-v="In the morning">In the AM</button>
+          <button type="button" data-v="date">Pick&hellip;</button>
+        </div>
+      </div>
+      <div class="f" id="dateWrap" style="display:none"><label>On site by</label><input id="fDate" type="datetime-local"></div>
+      <div class="f span2"><label>Who's meeting the truck <i>(one name, one number &mdash; a boom truck on the street with nobody to take it goes back loaded)</i></label><input id="fMeet" type="text" placeholder="Sal — 209-555-0166, or Hector if I'm on the deck" autocomplete="off"></div>
+      <div class="f span2"><label>What it's for <i>(he reads this first &mdash; he'll catch your mistakes)</i></label><input id="fFor" type="text" placeholder="3rd floor east layout starts Thursday" autocomplete="off"></div>
+      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Crew's standing without it</span></label>
+    </div>
+
+    <details class="more">
+      <summary>How the truck gets in, who signs, cost code &mdash; typed once, saved on this phone</summary>
+      <div class="hgrid">
+        <div class="f span2"><label>How it gets in <i>(the line the whole load lands on)</i></label><textarea id="fAccess" rows="3" placeholder="Boom off the north drive — 40 ft reach clears to 3rd. Window openings are out on the east elevation, 2nd and 3rd. Gate 4 code 1180, crane's on the south side till noon so come before 11."></textarea></div>
+        <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Hector — 209-555-0188" autocomplete="off"></div>
+        <div class="f"><label>Charge to</label>
+          <select id="fCharge">
+            <option>Job</option>
+            <option>T&amp;M / extra</option>
+            <option>Yard stock</option>
+          </select>
+        </div>
+        <div class="f span2"><label>PO / cost code <i>(if your office needs one)</i></label><input id="fPO" type="text" placeholder="24-118-09" autocomplete="off"></div>
+      </div>
+    </details>
+  </div>
+
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last load</button>
+  </p>
+
+  <div class="head" style="border-left-color:var(--muted);margin-bottom:14px">
+    <div class="f"><label>Anything else &mdash; not material <i>(more loads die on a locked gate than a short count)</i></label>
+      <input id="fNotes" type="text" placeholder="need the boom before the crane sets at noon · dumpster's blocking the north door · bring the empties back" autocomplete="off"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every size, gauge, length and count on here is what you typed.</b> This page doesn't size anything and doesn't know your job &mdash; no spans, no gauge charts, no fastener schedules, no assembly numbers, ever. Sizes come off your plans. Check the list before you send it, and count what comes off the truck before it drives away.
+  </div>
+
+  <p class="credit">&#10022; Built off a framing foreman's order. Something missing that came in wrong? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script>
+/* THE LOAD — the SEVENTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
+ * SHAPES: CHECKLIST → A REQUEST), and the only order page in the program with a
+ * DROP on every line. Nothing about the mechanism is here — it is all
+ * shared/checklist-request.js. This file owns the WORDS and framing/items.js
+ * owns the vocabulary.
+ *
+ * WHAT MAKES THIS ONE DIFFERENT FROM THE OTHER SIX, and it is the whole rung:
+ * EVERY OTHER TRADE'S ORDER ENDS AT THE GATE. This one arrives on a boom truck
+ * and goes through a window opening three floors up, so WHERE IT GOES is not a
+ * note — it is a field on every line, and a load set down in the wrong place is
+ * carried twice by the same crew that is supposed to be hanging it.
+ *
+ * So the drop is treated as first-class in three places:
+ *   · in the DATA — a `Drop` axis on every material line (framing/items.js)
+ *   · on the SCREEN — the only control on a ticked line that is coloured
+ *   · in the MESSAGE — printed as "→ 3rd east" at the END of the line where a
+ *     driver's eye lands, and then ROLLED UP into a BY-DROP summary, which is
+ *     the order the truck actually gets unloaded in. The by-category list is how
+ *     the yard PULLS it; the by-drop list is how the driver SETS it. Both, from
+ *     one set of ticks, because asking a foreman to write the same load out
+ *     twice is how you get the second one wrong.
+ *   · and a line with NO drop is called out by name at the bottom rather than
+ *     quietly printed, because an un-dropped line is the exact thing this page
+ *     exists to stop.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var STICKY = ["fJob", "fBy", "fMeet", "fAccess", "fSigner", "fCharge", "fPO"];
+  var SKEY = "toolkit.framing.theLoad.header.v1";
+  (function loadSticky() {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
+    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
+  })();
+  function saveSticky() {
+    var s = {};
+    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
+    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
+  }
+  STICKY.forEach(function (id) {
+    var el = $(id);
+    if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
+  });
+
+  var when = "Today";
+  function whenText() {
+    if (when !== "date") return when === "Today" ? "today" : "in the morning";
+    var d = $("fDate").value;
+    if (!d) return "pick a time";
+    var p = d.split("T"), ymd = (p[0] || "").split("-"), hm = (p[1] || "").split(":");
+    if (ymd.length < 3) return "pick a time";
+    var dt = new Date(+ymd[0], +ymd[1] - 1, +ymd[2], +(hm[0] || 0), +(hm[1] || 0));
+    // The SHIFT is the point. A load that shows up at 2 gets carried by the same
+    // crew that was supposed to hang it.
+    return "on site by " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+         + " " + dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  /* A NEUTRAL axis value (any option leading with an em-dash — see items.js
+   * §THE NEUTRAL) means the line was never given that attribute, and a value
+   * nobody picked must never reach the yard. Dropped everywhere. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function dropOf(l) { var v = l.ax && l.ax.drop; return none(v) ? "" : v; }
+
+  /* One line the way a yard man reads it: how many, then the thing, then what he
+   * needs to pull the right one — and the DROP last, on its own arrow, because
+   * that is the part the driver reads and it must not be buried mid-line. */
+  function line(l) {
+    var head = l.name;
+    var rest = [];
+    Object.keys(l.ax).forEach(function (k) {
+      var v = l.ax[k];
+      if (none(v) || k === "drop") return;
+      if (k === "size") head += ", " + v; else rest.push(v);
+    });
+    var q = (l.qty || "").trim();
+    var out = (q ? q + "  " : "") + head;
+    if (rest.length) out += "  ·  " + rest.join("  ·  ");
+    if (l.note) out += "  (" + l.note + ")";
+    var d = dropOf(l);
+    out += d ? "   → " + d : "   → DROP NOT SAID";
+    return out;
+  }
+
+  function seg(id, v) {
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+
+  var api = ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.framing.theLoad.v1",
+    qtyText: true,
+    writeinTextarea: true,
+    writeinQtyDefault: "",
+    data: D.cats,
+    writeinAx: D.writeinAx,
+    // THE INSTRUCTION LINE POINTS AT THE CONTROL, not at the text. The examples
+    // are how a foreman texts this today — drop written inline — and they stay,
+    // because a placeholder that does not look like his own message does not get
+    // read. But the DROP OF RECORD is the select on the row: telling him to type
+    // it here and then printing "DROP NOT SAID" underneath would be the page
+    // nagging him for something he just did.
+    writeinPlaceholder: "60 sht 5/8 board 12 ft — 3rd east\n2 lifts 3-5/8 studs — 2nd, in the window\n20 bx 1-1/4 fine screws — gang box\n8 bx all-purpose mud — 3rd\n— one per line. Add them, then set the drop on each one.",
+    // The note placeholder never seeds a rated word — no gauge chart, no span, no
+    // assembly. Which end, which opening, what not to block: the things a driver
+    // and a foreman actually argue about.
+    notePlaceholder: "e.g. which end, which opening, don't block the corridor — and the gauge or the length if it matters",
+    watch: ["fJob", "fBy", "fFor", "fMeet", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    persistExtra: function () {
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
+      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot;
+      return touched ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      $("fFor").value = x.forr || "";
+      $("fNotes").value = x.notes || "";
+      $("fDate").value = x.date || "";
+      $("fHot").checked = !!x.hot;
+      if (x.when) seg("segWhen", x.when);
+    },
+    onClear: function () {
+      ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
+      $("fHot").checked = false;
+      seg("segWhen", "Today");
+      showLast();
+    },
+    segments: [
+      { key: "when", id: "segWhen", def: "Today", onChange: function (v) {
+          when = v;
+          $("dateWrap").style.display = (v === "date") ? "" : "none";
+        } }
+    ],
+    countLabel: function (n) {
+      return n ? n + " line" + (n === 1 ? "" : "s") + " on it" : "Nothing on it yet";
+    },
+    onFlash: function (msg) {
+      var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+      b.setAttribute("data-label", was);
+      b.textContent = (msg === "Copied") ? "Copied. Go paste it." : msg;
+      setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+    },
+    document: function (ctx) {
+      var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
+      var meet = $("fMeet").value.trim(), notes = $("fNotes").value.trim();
+      var access = $("fAccess").value.trim(), signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
+
+      var out = "THE LOAD";
+      if (job) out += " — " + job;
+      out += "\nDate: " + ctx.today + "  ·  Need it: " + whenText();
+      if (by) out += "\nFrom: " + by;
+      if (meet) out += "\nMeeting the truck: " + meet;
+      if (forr) out += "\nFor: " + forr;
+      if ($("fHot").checked) out += "\n** CREW'S STANDING WITHOUT IT **";
+      if (access) out += "\n\nHOW IT GETS IN:\n" + access;
+
+      if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
+
+      if (!ctx.count) return out.trim() + "\n\n(nothing on it yet)";
+
+      // THE PULL LIST — by category, which is how the yard picks it.
+      ctx.sections.forEach(function (s) {
+        out += "\n\n" + (s.docName || s.name).toUpperCase() + "\n";
+        out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
+      });
+
+      /* THE SET LIST — by drop, which is how the truck gets unloaded. Same ticks,
+       * second reading. Order is FIRST-SEEN, not alphabetical: a foreman thinks
+       * about his drops in the order he walks them, and re-sorting them into
+       * "2nd, 3rd, ground" would be the page rearranging his job. */
+      var order = [], byDrop = {}, undropped = [];
+      ctx.sections.forEach(function (s) {
+        s.lines.forEach(function (l) {
+          var d = dropOf(l);
+          if (!d) { undropped.push(l); return; }
+          if (!byDrop[d]) { byDrop[d] = []; order.push(d); }
+          byDrop[d].push(l);
+        });
+      });
+      if (order.length) {
+        out += "\n\n— — — WHERE IT GOES — — —";
+        order.forEach(function (d) {
+          out += "\n\n" + d.toUpperCase() + "\n";
+          out += byDrop[d].map(function (l) {
+            var q = (l.qty || "").trim();
+            return "- " + (q ? q + "  " : "") + l.name;
+          }).join("\n");
+        });
+      }
+      if (undropped.length) {
+        // Named, never silently printed: an un-dropped line is the exact thing
+        // this page exists to stop, and burying it would make the page complicit.
+        out += "\n\nNO DROP SAID — tell me where these go before you load them:\n"
+             + undropped.map(function (l) { return "- " + l.name; }).join("\n");
+      }
+
+      out += "\n";
+      if (signer) out += "\nSigns for it if I'm not there: " + signer;
+      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+
+      out += "\n\nThat's the load. Every line says where it goes — put it where it says or we carry it twice, "
+           + "and board on the wrong floor is a day gone. If you're short, send what you've got and call me tonight; "
+           + "don't sub anything without asking."
+           + "\nField request — not a PO, and there's no number on it.";
+      return out.trim();
+    }
+  });
+
+  /* THE JOG. The picker is not a catalog and must never read like one. */
+  (function jog() {
+    var cats = document.querySelectorAll("#list .cat");
+    if (cats.length > 1) {
+      cats[1].insertAdjacentHTML("beforebegin",
+        '<div class="jog"><b>Put a drop on every line</b>'
+        + "<span>The yard can pull a perfect load and still cost you a day if it lands on the wrong floor. "
+        + "Every line has a DROP on it &mdash; anything you leave blank gets called out at the bottom of the message "
+        + "instead of guessed at. It's a jog, not a catalog: write in the rest.</span></div>");
+    }
+  })();
+
+  function showLast() {
+    $("lastwrap").style.display = api.hasLast() ? "" : "none";
+  }
+  $("last").addEventListener("click", function () {
+    api.restoreLast();
+    showLast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  showLast();
+})();
+</script>
+</body>
+</html>

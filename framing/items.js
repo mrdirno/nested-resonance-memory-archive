@@ -399,3 +399,328 @@ window.TOOLKIT_BACKING = {
 
   flags: ["Need a size", "Need a height", "Can't — tell me where else"]
 };
+
+/* ── THE LOAD (shape #1 — shared/checklist-request.js) ─────────────────────
+ * The vocabulary for the-load.html. Written by a panel of commercial metal-stud
+ * framers, residential wood framers and a taper, then cut by a second: 64 lines
+ * proposed, 44 kept, 20 killed.
+ *
+ *  · THE DROP IS ON EVERY LINE, and it is the reason this page exists. No other
+ *    trade's order needs it: this material arrives on a boom truck through a
+ *    window opening, and WHERE IT GOES is the field that decides whether the
+ *    order was any good. Board on the wrong floor is a day gone.
+ *  · MIXED UNITS ON ONE LIST — lift, bundle, stick, sheet, box, bag, roll. The
+ *    quantity is free text for exactly that reason; a number spinner is a desk
+ *    person's idea of how a load is counted.
+ *  · THE VOCABULARY GATE HERE IS SHARPER THAN ANY OTHER TRADE'S. Every hand
+ *    alive says one manufacturer's name instead of the word BOARD, a hundred
+ *    times a day. That is the reason to check the word and never the reason to
+ *    print it. It is board, it is mud (never joint compound), it is bead (never
+ *    accessories), it is a lid. And GRID is never a location — grid is the
+ *    ceiling contractor's act on this trade, and using it for a column line is
+ *    the fastest tell on a page that no framer wrote it.
+ *  · BOTH WORDS, EVERYWHERE: BACKING is commercial, BLOCKING is the wood side,
+ *    they are the same thing, and printing only one tells half this trade
+ *    family the page was not written for them.
+ *  · NOTHING RATED. No span or gauge-to-height tables, no shear or hold-down
+ *    callouts, no fastener schedules, no assembly numbers. Sizes come off HIS
+ *    plans; the page carries what he picks and recommends nothing.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would
+   * be the tool choosing for him; a printed value nobody picked would be the tool
+   * putting words in his message. */
+  function n(q) { return "\u2014 " + q + " \u2014"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.cats = [
+    {
+      id: "need",
+      name: "What do you need on the truck?",
+      docName: "The main stuff",
+      hint: "Type it, or paste your whole list — one line each, and say where it goes. Count it however you say it: 2 lifts, 60 sht, 8 bx, a pallet.",
+      writein: true,
+      items: []
+    },
+    {
+      id: "steel",
+      name: "Studs, track & plate",
+      docName: "Studs, track & plate",
+      hint: "Steel and wood on one list — it's one crew. Widths and lengths come off your plans; this page doesn't know your job and won't guess.",
+      items: [
+        { n: "Studs — steel", sub: "SAY THE GAUGE AND THE LENGTH WITH THE COUNT",
+          ax: [
+            ax("Size", [n("which width")].concat(["1-5/8 in", "2-1/2 in", "3-5/8 in", "4 in", "6 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Track", sub: "SAY THE GAUGE — AND SAY IF IT'S A LIFT OR LOOSE STICKS",
+          ax: [
+            ax("Size", [n("which width")].concat(["1-5/8 in", "2-1/2 in", "3-5/8 in", "4 in", "6 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Deep-leg track", sub: "SLIP TRACK — TOP OF WALL AT THE DECK, NOT YOUR BOTTOM TRACK",
+          ax: [
+            ax("Size", [n("which width")].concat(["1-5/8 in", "2-1/2 in", "3-5/8 in", "4 in", "6 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "2x studs & plate", sub: "PRE-CUTS OR STICKS — SAY WHICH AND HOW LONG",
+          ax: [
+            ax("Size", [n("which size")].concat(["2x4", "2x6", "2x8", "2x10", "2x12"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Flat strap & bridging", sub: "AND THE BRIDGING CLIPS — SAY THE WIDTH AND GAUGE WITH THE COUNT",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "board",
+      name: "Board",
+      docName: "Board",
+      hint: "Say the length. A truck of 8s when you wanted 12s is a wall full of butt joints and a week of taping.",
+      items: [
+        { n: "5/8 board", sub: "MOST OF WHAT'S ON THE TRUCK — SAY IF YOU WANT IT 54 WIDE",
+          ax: [
+            ax("Size", [n("how long")].concat(["8 ft", "9 ft", "10 ft", "12 ft", "14 ft", "16 ft"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "1/2 board", sub: "LIDS AND THE LIGHT WALLS",
+          ax: [
+            ax("Size", [n("how long")].concat(["8 ft", "9 ft", "10 ft", "12 ft", "14 ft", "16 ft"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Green board", sub: "MOISTURE BOARD — WET WALLS AND BEHIND THE TILE MAN",
+          ax: [
+            ax("Size", [n("how thick")].concat(["1/2 in", "5/8 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Cement board", sub: "TILE BACKER — AND IT NEEDS ITS OWN SCREWS",
+          ax: [
+            ax("Size", [n("how thick")].concat(["1/4 in", "1/2 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Shaftliner", sub: "SHAFT WALLS — THE LINER, NOT BOARD",
+          ax: [
+            ax("Size", [n("how long")].concat(["8 ft", "10 ft", "12 ft", "14 ft", "16 ft"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "mud",
+      name: "Mud & tape",
+      docName: "Mud & tape",
+      hint: "It's mud. A box, a bucket and a bag are three different pallets — say which.",
+      items: [
+        { n: "All-purpose mud", sub: "THE HEAVY ONE — BEDDING TAPE AND BEAD",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["boxes", "buckets", "bags"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Lightweight mud", sub: "THE LIGHT ONE — COATS AND SKIM",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["boxes", "buckets", "bags"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Hot mud", sub: "SETTING — SAY WHICH ONE WITH THE COUNT",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Paper tape", sub: "IT'S WHAT GOES IN THE FLATS",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["rolls", "boxes"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Mesh tape", sub: "STICKY — PATCHES AND CEMENT BOARD",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Texture", sub: "SAY THE PATTERN WITH THE COUNT",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["bags", "buckets"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "bead",
+      name: "Bead",
+      docName: "Bead",
+      hint: "Bead — never accessories. Say the length; a corner spliced because the yard sent 8s is a callback.",
+      items: [
+        { n: "Corner bead", sub: "SAY METAL, PAPER-FACED OR VINYL WITH THE COUNT",
+          ax: [
+            ax("Size", [n("how long")].concat(["8 ft", "9 ft", "10 ft", "12 ft"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Bullnose", sub: "AND THE 3-WAY CAPS — NOBODY ORDERS THE CAPS",
+          ax: [
+            ax("Size", [n("how long")].concat(["8 ft", "9 ft", "10 ft", "12 ft"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "L-bead", sub: "WHERE BOARD DIES INTO SOMETHING ELSE",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/2 in", "5/8 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "J-bead", sub: "SLIPS OVER THE EDGE — NOT THE SAME STICK AS L",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/2 in", "5/8 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Tear-away bead", sub: "THE ONE WITH THE LEG YOU RIP OFF — AT THE DECK AND THE FRAMES",
+          ax: [
+            ax("Size", [n("which size")].concat(["1/2 in", "5/8 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Off-angle & flex bead", sub: "ANYTHING THAT ISN'T A 90 — ARCHES AND THE 3-WAYS",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "fast",
+      name: "Screws, pins & nails",
+      docName: "Screws, pins & nails",
+      hint: "No schedules on here — you know yours. This is the count and where it lands.",
+      items: [
+        { n: "Board screws — fine", sub: "FOR STEEL — LOOSE BOX OR COLLATED, SAY WHICH",
+          ax: [
+            ax("Size", [n("how long")].concat(["1 in", "1-1/8 in", "1-1/4 in", "1-5/8 in", "2 in", "2-1/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Board screws — coarse", sub: "FOR WOOD — LOOSE BOX OR COLLATED, SAY WHICH",
+          ax: [
+            ax("Size", [n("how long")].concat(["1 in", "1-1/8 in", "1-1/4 in", "1-5/8 in", "2 in", "2-1/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Framing screws", sub: "PANCAKES, WAFERS, HEX SELF-DRILLERS — SAY WHICH WITH THE COUNT",
+          ax: [
+            ax("Size", [n("how long")].concat(["7/16 in", "1/2 in", "3/4 in", "1 in", "1-1/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Pins, loads & fuel", sub: "FOR THE GUN — SEND ALL THREE OR SEND NONE",
+          ax: [
+            ax("Size", [n("how long")].concat(["1/2 in", "5/8 in", "3/4 in", "1 in", "1-1/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Nails — sticks and coils", sub: "SAY THE GUN WITH THE COUNT",
+          ax: [
+            ax("Size", [n("how long")].concat(["1-1/2 in", "2 in", "2-3/8 in", "3 in", "3-1/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "guts",
+      name: "Backing, blocking & insulation",
+      docName: "Backing, blocking & insulation",
+      hint: "Backing on the commercial side, blocking on the wood side — same thing. It all has to be on the floor before anybody closes a wall.",
+      items: [
+        { n: "Backing plywood", sub: "BLOCKING PLY — THE WALL CLOSES FRIDAY WHETHER IT'S THERE OR NOT",
+          ax: [
+            ax("Size", [n("how thick")].concat(["1/2 in", "5/8 in", "3/4 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Sound batts", sub: "SAY THE WIDTH WITH THE COUNT — WRONG WIDTH AND IT WON'T STAY IN",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["bags", "bundles"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Mineral wool", sub: "SAFING — THE DECK AND THE SLAB EDGE",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["bags", "bundles"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Sound caulk", sub: "THE BLACK GOO",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["tubes", "sausages"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Firestop caulk", sub: "THE RED ONE — NOT THE SAME TUBE AS SOUND CAULK",
+          ax: [
+            ax("Unit", [n("how's it coming")].concat(["tubes", "sausages"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "lid",
+      name: "Lids, soffits & channel",
+      docName: "Lids, soffits & channel",
+      hint: "It's a lid. Channel, angle and the wire the whole thing hangs off.",
+      items: [
+        { n: "Hat channel", sub: "FURRING CHANNEL — SAME THING",
+          ax: [
+            ax("Size", [n("which size")].concat(["7/8 in", "1-1/2 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Resilient channel", sub: "RC — AND IT BENDS IF YOU STACK ANYTHING ON IT",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Black iron", sub: "COLD-ROLLED CHANNEL — THE RUNNERS",
+          ax: [
+            ax("Size", [n("which size")].concat(["3/4 in", "1-1/2 in", "2 in"])),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Wall angle", sub: "L-ANGLE — WALLS, LIDS AND KICKERS",
+          ax: [
+            ax("Size", [n("which size")].concat(["1 x 1", "1-1/2 x 1-1/2", "2 x 2", "2 x 3"]), true),
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Tie wire & hanger wire", sub: "SEND MORE THAN YOU THINK — SAY WHICH ONE WITH THE COUNT",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    },
+    {
+      id: "burn",
+      name: "The stuff that runs out",
+      docName: "The stuff that runs out",
+      hint: "Small, cheap, and it stops a whole floor at nine in the morning. It's meant to be partial.",
+      items: [
+        { n: "Knife blades", sub: "THE FIRST THING TO GO", qtyDefault: "1 bx",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Screw bits & dimplers", sub: "GONE BY LUNCH", qtyDefault: "1 bx",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Sanding — screens, sponges & pole heads", sub: "THE POLE HEAD IS THE ONE THAT BREAKS",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Chalk & keel", sub: "BLUE CHALK, LUMBER CRAYON, STRING LINE",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Shims", sub: "PLASTIC — FOR TRACK AND FRAMES",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Poly, rosin paper & masking", sub: "FLOOR PROTECTION AND THE DUST WALL",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] },
+        { n: "Dust masks, gloves & plugs", sub: "AND GLASSES — THE GANG BOX IS ALWAYS EMPTY", qtyDefault: "1 bx",
+          ax: [
+            ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+          ] }
+      ]
+    }
+  ];
+
+  window.TOOLKIT_ITEMS.writeinAx = [
+    ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
+  ];
+})();

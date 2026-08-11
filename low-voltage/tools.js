@@ -61,6 +61,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The GC, the EC or the door hardware guy sent you a list. Paste it, tap each line to say got it / in already / can’t / need to know, put a day on the ones you’re taking, and send one answer back.",
     chip: "#8A1C4B",
     audience: "LV → GC / EC / doors / ceilings"
-  }
+  },
+  {
+    name: "Shop List",
+    href: "consumables.html",
+    desc: "The fourteen-cent stuff that stops a floor. Nobody forgets the cable \u2014 what ends a day is no hooks, no anchors, no blanks. Type what you know, tick the forget-list, send it up so the crew keeps pulling.",
+    chip: "#9A3312",
+    audience: "Installer \u2192 Shop / lead"
+  },
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

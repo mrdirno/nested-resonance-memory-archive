@@ -52,6 +52,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The GC, the EC or the controls house sent you a list. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send one answer back instead of a phone call nobody wrote down.",
     chip: "#8A1C4B",
     audience: "HVAC → EC / GC / PC / controls"
-  }
+  },
+  {
+    name: "Truck Stock",
+    href: "truck-stock.html",
+    desc: "What came off the van today. Type what you know, tick the restock list \u2014 counts already set the way a truck really fills \u2014 and send the shop one list instead of four texts from a roof.",
+    chip: "#0C7A66",
+    audience: "Tech \u2192 Shop / parts runner"
+  },
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

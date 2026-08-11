@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Truck Stock — HVAC/R Field Toolkit</title>
+<meta name="description" content="What's off the van, before you're on a roof without it. Type what you know, tick down the restock list, and send the shop one list with real counts on it.">
+<meta name="apple-mobile-web-app-title" content="Truck Stock">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#4FE0C0;--tint:#E4FBF5;--deep:#0C7A66;--flag-ink:#052622;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
+   instead of fixing it and hides exactly the defect the pre-ship mobile gate is
+   there to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal}
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+.f textarea{resize:vertical;min-height:42px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer;min-height:44px}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+
+/* ONE BINARY FLAG, and for this trade it is not "urgent" — it is whether
+   something is DOWN. A shop reads "down" and loads it tonight; a shop reads
+   "high priority" and learns to ignore it, because everything is high priority.
+   Binary keeps it honest (electrical/pull-list.html, same reasoning). */
+.hot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;cursor:pointer}
+.hot input{width:22px;height:22px;flex:none;accent-color:#C4342B;cursor:pointer}
+.hot span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:var(--muted)}
+.hot input:checked ~ span{color:#B0201A}
+.hot:has(input:checked){border-color:#C4342B;background:#FFF4F3}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+details.more>summary{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:14px;color:var(--deep);font-weight:700}
+details.more[open]>summary::before{content:"–"}
+details.more .hgrid{margin-top:9px}
+
+.lastwrap{margin:0 0 12px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+
+.jog{background:var(--steel);color:#EEF0EA;border-radius:2px;padding:11px 13px;margin:16px 0 12px}
+.jog b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:16px;display:block;color:var(--flag)}
+.jog span{display:block;font-size:12.5px;color:#B9BFC6;margin-top:2px}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+.cathint{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:#F4F5F1;border-bottom:1px solid var(--line)}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 90px;min-width:84px}
+.cfg .f.wide{flex:2 1 170px}
+/* Qty is FREE TEXT ("a bag", "2 sticks", "1 qt"), so it needs more room than the
+   number spinner a desk would put here. */
+.cfg .f.qty{flex:0 0 92px;min-width:92px}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+
+/* THE WRITE-IN GOES FIRST AND IT IS THE BIGGEST THING ON THE PAGE. A tech knows
+ * most of what came off his van today; the picker underneath is the jog for the
+ * three things he would have found out about at seven tomorrow morning. */
+.cat:first-of-type{border:2px solid var(--deep)}
+.cat:first-of-type h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
+.cat:first-of-type h2 .n{color:#BDEDE1}
+.cat:first-of-type .cathint{background:var(--tint);color:#064A3E;font-size:12.5px}
+.cat:first-of-type .addrow{background:var(--tint);padding:12px}
+.cat:first-of-type .wi-input{min-height:76px}
+.cat:first-of-type .addbtn{background:var(--deep);border-color:var(--deep)}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1;align-items:stretch}
+.addrow .wi-input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);resize:vertical;line-height:1.35}
+.addrow .wi-input:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
+  min-height:44px;flex:none}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">HVAC/R &middot; Van &rarr; Shop</span>
+    <h1>Truck Stock</h1>
+    <p class="lede">What came off the van today. Type what you know, then scroll the short list and catch the two things you'd have found out about on a roof at seven in the morning.</p>
+  </header>
+
+  <div class="head">
+    <div class="hgrid">
+      <div class="f"><label>Truck <i>(however the shop knows it)</i></label><input id="fTruck" type="text" placeholder="Truck 12" autocomplete="off"></div>
+      <div class="f"><label>Who's asking <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Danny R — 209-555-0147" autocomplete="off"></div>
+      <div class="f"><label>Need it</label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="Today">Today</button>
+          <button type="button" data-v="In the morning">In the AM</button>
+          <button type="button" data-v="date">Pick&hellip;</button>
+        </div>
+      </div>
+      <div class="f" id="dateWrap" style="display:none"><label>On the truck by</label><input id="fDate" type="datetime-local"></div>
+      <div class="f span2"><label>How I'm getting it</label>
+        <select id="fHow">
+          <option>I'll swing by the shop first thing</option>
+          <option>Send it out with the runner</option>
+          <option>Put it on my shelf, I'll grab it tonight</option>
+          <option>Will-call at the supply house — I'll pick it up</option>
+          <option>Meet me at the job</option>
+        </select>
+      </div>
+      <div class="f span2"><label>What it's for <i>(he reads this first &mdash; he'll catch your mistakes)</i></label><input id="fFor" type="text" placeholder="PMs at the Northgate store Wed, plus the walk-in that's been limping" autocomplete="off"></div>
+      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Something's down waiting on it</span></label>
+    </div>
+
+    <details class="more">
+      <summary>Where to leave it, who to bill &mdash; typed once, saved on this phone</summary>
+      <div class="hgrid">
+        <div class="f span2"><label>Where to leave it if I'm not there</label><textarea id="fDrop" rows="2" placeholder="My shelf by the roll-up · or with dispatch — text me and I'll come get it"></textarea></div>
+        <div class="f"><label>Charge to</label>
+          <select id="fCharge">
+            <option>Truck stock</option>
+            <option>The call</option>
+            <option>Contract / PM</option>
+            <option>Warranty</option>
+          </select>
+        </div>
+        <div class="f"><label>Call / work order # <i>(if it's for one)</i></label><input id="fWO" type="text" placeholder="SO-44812" autocomplete="off"></div>
+      </div>
+    </details>
+  </div>
+
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last list</button>
+  </p>
+
+  <div class="head" style="border-left-color:var(--muted);margin-bottom:14px">
+    <div class="f"><label>Anything else &mdash; not material <i>(more days die on a missing key than a missing contactor)</i></label>
+      <input id="fNotes" type="text" placeholder="roof key for Northgate · gauges are due for calibration · lift rental for Thursday" autocomplete="off"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every number on here is one you typed.</b> This page doesn't size anything, doesn't spec anything and doesn't know your unit &mdash; no charge, no superheat, no ratings, ever. What's on the plate goes on the list because you read it off the plate. Check it before you order it, and check what shows up before you put it in.
+  </div>
+
+  <p class="credit">&#10022; Built off a service manager's restock sheet. Something missing that left you short? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script>
+/* TRUCK STOCK — the FIFTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
+ * SHAPES: CHECKLIST → A REQUEST), and the first ORDER page this trade has had.
+ * Nothing about the mechanism is written here — it is all
+ * shared/checklist-request.js. This file owns the WORDS and hvac/items.js owns
+ * the vocabulary, which is the whole claim the engine was extracted to make: a
+ * trade's checklist tool is a config, not a fork.
+ *
+ * WHAT MAKES THIS ONE DIFFERENT FROM THE OTHER FOUR, and it is one thing:
+ * A VAN DOES NOT RESTOCK ONE OF EVERYTHING. Caps go four at a time, contactors
+ * two. Every other shape-#1 page starts a ticked line at qty 1 because a
+ * warehouse pull is "one of these"; a truck restock that starts at 1 makes a
+ * tech retype the count on every line he ticks, which is the friction that gets
+ * a page deleted. So the counts live in the DATA (items.js `qtyDefault`), set
+ * the way a truck really fills, and left off the lines that genuinely vary.
+ *
+ * THE HEADER IS A TRUCK, NOT A JOB. Service is dispatched, not assigned: there
+ * is no job number on a restock and printing a blank one would be the page
+ * pretending to be a PO. Truck · who · when · how he is getting it, and the
+ * bill-to lives in the drawer because it changes and the rest does not.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ── STICKY HEADER ────────────────────────────────────────────────────────
+   * The answers that are the same every week for the life of a truck. They live
+   * on the device and Clear does not touch them — clearing the LIST must never
+   * cost him his truck number at 6:15 in the morning. */
+  var STICKY = ["fTruck", "fBy", "fHow", "fDrop", "fCharge"];
+  var SKEY = "toolkit.hvac.truckStock.header.v1";
+  (function loadSticky() {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
+    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
+  })();
+  function saveSticky() {
+    var s = {};
+    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
+    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
+  }
+  STICKY.forEach(function (id) {
+    var el = $(id);
+    if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
+  });
+
+  var when = "Today";
+  function whenText() {
+    if (when !== "date") return when === "Today" ? "today" : "in the morning";
+    var d = $("fDate").value;
+    if (!d) return "pick a time";
+    var p = d.split("T"), ymd = (p[0] || "").split("-"), hm = (p[1] || "").split(":");
+    if (ymd.length < 3) return "pick a time";
+    var dt = new Date(+ymd[0], +ymd[1] - 1, +ymd[2], +(hm[0] || 0), +(hm[1] || 0));
+    // "on the truck by 6:30 AM Wed" — the SHIFT is the point. "Tomorrow" does not
+    // tell a shop it has to be pulled tonight.
+    return "on the truck by " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+         + " " + dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  /* A NEUTRAL axis value (any option leading with an em-dash — see items.js
+   * §THE NEUTRAL) means the line was never given that attribute, and a value
+   * nobody picked must never reach the shop. Dropped everywhere. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+
+  /* One line the way a parts man reads it: how many, then the thing, then
+   * whatever he needs to pull the right one, then the note in parens. */
+  function line(l) {
+    var head = l.name;
+    var rest = [];
+    Object.keys(l.ax).forEach(function (k) {
+      var v = l.ax[k];
+      if (none(v)) return;
+      if (k === "size") head += ", " + v; else rest.push(v);
+    });
+    var q = (l.qty || "").trim();
+    var out = (q ? q + "  " : "") + head;
+    if (rest.length) out += "  ·  " + rest.join("  ·  ");
+    if (l.note) out += "  (" + l.note + ")";
+    return out;
+  }
+
+  function seg(id, v) {
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+
+  var api = ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.hvac.truckStock.v1",
+    qtyText: true,
+    writeinTextarea: true,
+    // A pasted line already carries its own count ("2 driers — 3/8 sweat").
+    // Starting its Qty at 1 would print a line arguing with itself.
+    writeinQtyDefault: "",
+    data: D.cats,
+    writeinAx: D.writeinAx,
+    writeinPlaceholder: "2 driers — 3/8 sweat\n1 box 3/8 soft copper\nbelt off the north RTU — number's on the old one\na bag of valve cores\n— one per line, paste the whole thing",
+    // The note placeholder is the sneakiest surface on the page: seeding it with
+    // "e.g. 410A, 5 lb, target SH" would ship every banned number through the
+    // back door. What is written off the OLD part, and where it lives — nothing
+    // rated, nothing computed.
+    notePlaceholder: "e.g. the number off the old one, what's on the plate, which bin it lives in",
+    watch: ["fTruck", "fBy", "fFor", "fNotes", "fDate", "fDrop", "fWO"],
+    persistExtra: function () {
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked, wo: $("fWO").value };
+      var touched = x.forr || x.notes || x.date || x.wo || x.when !== "Today" || x.hot;
+      return touched ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      $("fFor").value = x.forr || "";
+      $("fNotes").value = x.notes || "";
+      $("fDate").value = x.date || "";
+      $("fWO").value = x.wo || "";
+      $("fHot").checked = !!x.hot;
+      if (x.when) seg("segWhen", x.when);
+    },
+    onClear: function () {
+      ["fFor", "fNotes", "fDate", "fWO"].forEach(function (id) { $(id).value = ""; });
+      $("fHot").checked = false;
+      seg("segWhen", "Today");
+      showLast();
+    },
+    segments: [
+      { key: "when", id: "segWhen", def: "Today", onChange: function (v) {
+          when = v;
+          $("dateWrap").style.display = (v === "date") ? "" : "none";
+        } }
+    ],
+    countLabel: function (n) {
+      return n ? n + " line" + (n === 1 ? "" : "s") + " on it" : "Nothing on it yet";
+    },
+    onFlash: function (msg) {
+      var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+      b.setAttribute("data-label", was);
+      b.textContent = (msg === "Copied") ? "Copied. Go paste it." : msg;
+      setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+    },
+    document: function (ctx) {
+      var truck = $("fTruck").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
+      var notes = $("fNotes").value.trim(), drop = $("fDrop").value.trim(), wo = $("fWO").value.trim();
+
+      var out = "TRUCK STOCK";
+      if (truck) out += " — " + truck;
+      // TWO DATES, BOTH LABELLED. A list gets forwarded and read the next day;
+      // without the date on it, Tuesday's restock gets pulled Thursday. Labelled
+      // "Date", never "Sent" — this page puts text on a clipboard and has no idea
+      // whether anything was ever sent.
+      out += "\nDate: " + ctx.today + "  ·  Need it: " + whenText() + "  ·  How: " + $("fHow").value.toLowerCase();
+      if (by) out += "\nFrom: " + by;
+      if (forr) out += "\nFor: " + forr;
+      if ($("fHot").checked) out += "\n** SOMETHING'S DOWN WAITING ON THIS **";
+
+      if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
+
+      if (!ctx.count) return out.trim() + "\n\n(nothing on it yet)";
+
+      ctx.sections.forEach(function (s) {
+        out += "\n\n" + (s.docName || s.name).toUpperCase() + "\n";
+        out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
+      });
+
+      out += "\n";
+      if (drop) out += "\nIf I'm not there: " + drop;
+      out += "\nCharge to: " + $("fCharge").value + (wo ? "  ·  Call / WO: " + wo : "");
+
+      out += "\n\nThat's the truck. If you're out of something, send what you've got and text me — "
+           + "don't sub it without asking. I'd rather hear it tonight than find out at 7 on a roof."
+           + "\nTruck stock — not a PO, no job number on it.";
+      return out.trim();
+    }
+  });
+
+  /* THE JOG. The picker is not a catalog and must never read like one, so it is
+   * introduced as what it is. Inserted after mount, before the first PICKER
+   * section — the first section is the write-in and it owns the top of the page. */
+  (function jog() {
+    var cats = document.querySelectorAll("#list .cat");
+    if (cats.length > 1) {
+      cats[1].insertAdjacentHTML("beforebegin",
+        '<div class="jog"><b>The stuff you find out you\'re out of on the roof</b>'
+        + "<span>Cheap, small, and it turns a one-hour call into a two-trip call. "
+        + "The counts are set the way a van actually fills — change any of them. "
+        + "It's a jog, not a catalog: it's meant to be partial. Write in the rest.</span></div>");
+    }
+  })();
+
+  /* YESTERDAY'S LIST. Only offered when there actually is one — half of this
+   * week's restock is last week's restock. */
+  function showLast() {
+    $("lastwrap").style.display = api.hasLast() ? "" : "none";
+  }
+  $("last").addEventListener("click", function () {
+    api.restoreLast();
+    showLast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  showLast();
+})();
+</script>
+</body>
+</html>

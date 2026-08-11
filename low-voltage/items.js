@@ -402,3 +402,146 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Ken — site super", phFrom: "Ray — Sentinel Systems", phOff: "A-201 rev 4",
   paste: "Building C — close-in list — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nLevel 2 · your backing in before rock at every reader\nDoors 210/211 · frame prep confirmed before the frames get ordered\nIDF 2 · head-end power and ground before we set the rack"
 };
+
+/* ── THE SHOP LIST (shape #1 — shared/checklist-request.js) ────────────────
+ * The vocabulary for consumables.html. Written by a panel of low-voltage,
+ * security and fire-alarm hands, then cut by a second one: 50 lines proposed,
+ * 35 kept, 15 killed, and a whole section with them.
+ *
+ *  · IT IS THE FOURTEEN-CENT STUFF THAT STOPS A FLOOR. Nobody forgets the
+ *    cable. What ends a day is no J-hooks, no anchors, no blank plates — so the
+ *    picker is the forget-list and the write-in is the way in.
+ *  · FREQUENCY IS THE PRODUCT. This is the highest-traffic rung on the whole
+ *    low-voltage roster, which means FAST beats complete. Axes are used only
+ *    where the shop genuinely pulls the wrong thing without one.
+ *  · MATERIAL ONLY, NEVER DEVICE DATA. The head-end already exports IP, MAC and
+ *    firmware; a page that re-types it is double entry (§THE SYSTEM OF RECORD).
+ *  · NOTHING RATED. No cable-fill, no battery calcs, no code thresholds, and
+ *    the page never says which cable type is REQUIRED anywhere — the man picks
+ *    the type, the page carries it.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would
+   * be the tool choosing for him; a printed value nobody picked would be the tool
+   * putting words in his message. */
+  function n(q) { return "\u2014 " + q + " \u2014"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.cats = [
+    {
+      id: "need",
+      name: "What do you need?",
+      docName: "The main stuff",
+      hint: "Type it, or paste your whole list — one per line. Quantities however you say them: 2 boxes, a case, 1000 ft, (4).",
+      writein: true,
+      items: []
+    },
+    {
+      id: "hook",
+      name: "Hooks, rings & holding it up",
+      docName: "Hooks & support",
+      hint: "Nobody forgets the cable. What stops a floor is what holds it up.",
+      items: [
+        { n: "J-hooks", sub: "SAY THE SIZE AND WHAT IT SCREWS TO" },
+        { n: "Bridle rings & saddles", sub: "SCREW-IN, AND THE ONES WITH THE SADDLE" },
+        { n: "Grid clips, beam clamps & rod hangers", sub: "T-BAR · PURLIN · THREADED ROD" },
+        { n: "Hook-and-loop roll", sub: "THE FUZZY ROLL — NOT TAPE, NOT TIES" },
+        { n: "Cable ties & sticky backs", sub: "SAY BLACK OR NATURAL — AND THE TIE MOUNTS" }
+      ]
+    },
+    {
+      id: "term",
+      name: "Ends, jacks & plates",
+      docName: "Ends, jacks & plates",
+      hint: "If it doesn't match what's already in the wall it's the wrong one. Say the cable.",
+      items: [
+        { n: "RJ45 plugs & boots", sub: "PASS-THROUGH OR NOT — SOLID OR STRANDED",
+          ax: [
+            ax("Cable", [n("which cable")].concat(["Cat5e", "Cat6", "Cat6A"]), true)
+          ] },
+        { n: "Jacks & inserts", sub: "SAY THE COLOR AND IF IT'S SHIELDED — IT'S NEVER THE ONE ON THE TRUCK",
+          ax: [
+            ax("Cable", [n("which cable")].concat(["Cat5e", "Cat6", "Cat6A"]), true)
+          ] },
+        { n: "Coax ends", sub: "F OR BNC — COMPRESSION OR CRIMP, SAY WHICH",
+          ax: [
+            ax("Coax", [n("which coax")].concat(["RG6", "RG59", "RG11"]))
+          ] },
+        { n: "Beanies, butts & spades", sub: "THE LITTLE B-CONNECTORS — AND THE CRIMPS FOR DOOR HARDWARE" },
+        { n: "Faceplates", sub: "SAY HOW MANY PORTS AND WHAT COLOR" },
+        { n: "Blanks — inserts & plates", sub: "THE PUNCH LIST IS MADE OF OPEN HOLES" },
+        { n: "Mud rings & old-work brackets", sub: "LV RINGS — AND THE SURFACE BISCUITS WHERE THERE'S NO BOX" }
+      ]
+    },
+    {
+      id: "rack",
+      name: "Rack, closet & pathway",
+      docName: "Rack & closet",
+      items: [
+        { n: "Rack screws & cage nuts", sub: "SAY THE THREAD — GUESS WRONG AND THE RACK SITS" },
+        { n: "Patch cords", sub: "SAY THE LENGTH AND THE COLOR — THAT'S THE WHOLE ORDER",
+          ax: [
+            ax("Cable", [n("which cable")].concat(["Cat5e", "Cat6", "Cat6A"]), true)
+          ] },
+        { n: "Lacing bars & D-rings", sub: "AND THE SCREWS THAT GO WITH THEM" },
+        { n: "Wire duct, loom & surface raceway", sub: "SLOTTED DUCT — AND THE COVER THAT WALKS OFF" }
+      ]
+    },
+    {
+      id: "fire",
+      name: "Firestop, sleeves & seal",
+      docName: "Firestop & sleeves",
+      items: [
+        { n: "Firestop caulk", sub: "RED TUBES — AND A GUN THAT WORKS" },
+        { n: "Putty pads", sub: "FOR THE BOXES WE LEFT BEHIND US" },
+        { n: "Sleeves, grommets & bushings", sub: "THROUGH THE WALL, AND OFF THE SHARP EDGE" },
+        { n: "Duct seal", sub: "THE STUB-UPS AND THE HOLE THROUGH THE OUTSIDE WALL" }
+      ]
+    },
+    {
+      id: "label",
+      name: "Labels & marking",
+      docName: "Labels & marking",
+      items: [
+        { n: "Label printer cartridges", sub: "SAY WHICH PRINTER — HALF THE TAPES DON'T FIT" },
+        { n: "Self-lam wraps & flag labels", sub: "THE ONES THAT SURVIVE A PULL" },
+        { n: "Blank tags & write-on labels", sub: "FOR WHEN THE PRINTER DIES AT 10 AM" },
+        { n: "Markers & a paint pen", sub: "FINE AND FAT — AND ONE WHITE" }
+      ]
+    },
+    {
+      id: "anchor",
+      name: "Anchors, screws & bits",
+      docName: "Anchors, screws & bits",
+      items: [
+        { n: "Self-drillers", sub: "SELF-TAPPERS — HEX HEAD, FOR STUD AND STRUT" },
+        { n: "Wall anchors & toggles", sub: "STRAP · SPRING · PLASTIC" },
+        { n: "Concrete screws", sub: "NO SHIELD — SAY THE LENGTH" },
+        { n: "Drive pins & fuel", sub: "PINS FOR THE GAS TOOL — ONE WITHOUT THE OTHER IS NOTHING" },
+        { n: "Drill bits & hole saws", sub: "THE PILOT IS WHAT BREAKS" }
+      ]
+    },
+    {
+      id: "truck",
+      name: "Batteries, tape & truck stuff",
+      docName: "Batteries, tape & truck stuff",
+      items: [
+        { n: "Batteries — AA, AAA, 9V", sub: "THE TESTER, THE TONER, THE REMOTE" },
+        { n: "Panel batteries", sub: "SAY THE SIZE OFF THE OLD ONE" },
+        { n: "Canned smoke", sub: "EMPTY BY LUNCH ON A WALK-TEST" },
+        { n: "Tape", sub: "E-TAPE, GAFF, PAINTER'S — SAY THE COLORS" },
+        { n: "Knife blades & jacket strippers", sub: "HOOK BLADES — AND THE ONE THAT RINGS ROUND CABLE" },
+        { n: "Pull string, flat line & lube", sub: "FISH STICKS, BASKET GRIP, SOAP" }
+      ]
+    }
+  ];
+
+  window.TOOLKIT_ITEMS.writeinAx = [
+    ax("Where it goes", [n("where does it go")].concat(["Hooks & support", "Ends, jacks & plates", "Rack & closet", "Firestop & sleeves", "Labels & marking", "Anchors, screws & bits", "Batteries, tape & truck stuff"]), true)
+  ];
+})();

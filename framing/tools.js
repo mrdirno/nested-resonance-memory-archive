@@ -48,6 +48,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The letters you keep putting off — the backing closeout, the damage-isn't-ours reply, the held-up notice, the scope narrative. Pick the one you're stuck with, get the exact instructions to paste into your AI once, then dictate it in the truck.",
     chip: "#4B3F8F",
     audience: "Foremen · leads · PMs"
-  }
+  },
+  {
+    name: "The Load",
+    href: "the-load.html",
+    desc: "Boom truck\u2019s coming. Say what\u2019s on it and where every piece gets set down \u2014 a drop on every line, a by-drop list for the driver, and anything you left blank called out instead of guessed at.",
+    chip: "#4A3BA8",
+    audience: "Foreman \u2192 Yard / supplier"
+  },
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
