@@ -77,6 +77,48 @@ export const TURN_IDS: TurnId[] = ['hold', 'march', 'scatter', 'ripple', 'swap']
 /** How long one cross-dissolve takes, shared by every mode. */
 export const TURN_FADE_SEC = 0.7;
 
+/**
+ * THE SOFT SHARE — the largest fraction of a hold this app will spend
+ * dissolving, and it is the roster's own worst case rather than a new number:
+ * `ripple` holds 3.5 s and fades 0.7 s of it.
+ *
+ * The roster does not need it (every hold is long enough that 0.7 s is under
+ * this), and THE PACE does not need it either — a pace scales the CLOCK, so
+ * `fade / hold` is invariant by construction and the constant can stay a
+ * constant. A schedule handed in from OUTSIDE the roster is the case that does:
+ * `lib/beat.ts` snaps the hold to a musical multiple, and a 150 BPM track at one
+ * bar is a 1.6 s hold, where a fixed 0.7 s dissolve is 44% of the take soft —
+ * the exact smear `lib/pace.ts` proves the rejected design degenerates into.
+ */
+export const TURN_FADE_RATIO = 0.2;
+
+/**
+ * The dissolve for a hold that was not chosen by the roster. A ceiling, never a
+ * floor: a LONG hold keeps the roster's own 0.7 s rather than growing a
+ * two-second cross-fade nobody asked for.
+ */
+export const turnFadeFor = (holdSec: number): number =>
+  !(holdSec > 0) || !Number.isFinite(holdSec)
+    ? TURN_FADE_SEC
+    : Math.min(TURN_FADE_SEC, holdSec * TURN_FADE_RATIO);
+
+/**
+ * A SCHEDULE HANDED IN FROM OUTSIDE THE ROSTER — today only `lib/beat.ts`.
+ *
+ * Three numbers rather than a rate, because the point of a beat sync is that
+ * the cuts land at ABSOLUTE instants the music decides, and a rate cannot
+ * express a phase: a track whose first downbeat is 310 ms in needs the whole
+ * grid shifted, not scaled.
+ */
+export interface TurnSchedule {
+  /** Seconds between cuts. */
+  hold: number;
+  /** When the FIRST cut lands, seconds into the take. */
+  first: number;
+  /** Seconds the cross-dissolve takes. */
+  fade: number;
+}
+
 /** Sanity ceiling on the turn counter, so a runaway clock cannot ask
  *  `assignmentAt` to compose an unbounded number of steps. 4096 turns is over
  *  three hours at the fastest hold. */
@@ -139,9 +181,18 @@ const envelope = (u: number): number => 0.5 - 0.5 * Math.cos(Math.PI * u);
  * Every rest case returns `NO_TURN` by reference: an unknown id, a `hold`, a
  * non-finite or negative time, and — the one that matters for the opening frame
  * — every instant before the first turn lands.
+ *
+ * `sched` is the beat sync's grid (`lib/beat.ts`) and is READ ON ITS OWN BRANCH
+ * rather than folded into the roster path by defaulting `first` to `hold`. The
+ * two expressions are algebraically the same and NUMERICALLY are not:
+ * `floor((t - hold)/hold) + 1` and `floor(t/hold)` disagree on the boundary
+ * cases where a double rounds the subtraction, and this function's whole
+ * contract is that the roster path is the byte-identical thing it was before
+ * the beat existed. The sweep asserts that against an oracle copy of it.
  */
-export const turnAt = (id: unknown, timeSec: unknown): TurnFrame => {
+export const turnAt = (id: unknown, timeSec: unknown, sched?: TurnSchedule | null): TurnFrame => {
   if (!isTurning(id)) return NO_TURN;
+  if (sched) return scheduledTurnAt(sched, timeSec);
   const hold = DEFS[id as TurnId].hold;
   if (!(hold > 0)) return NO_TURN;
   const t = typeof timeSec === 'number' && Number.isFinite(timeSec) ? timeSec : 0;
@@ -155,6 +206,54 @@ export const turnAt = (id: unknown, timeSec: unknown): TurnFrame => {
   // so it parks on the last assignment rather than fading forever.
   if (k >= MAX_TURN_INDEX || !(elapsed < TURN_FADE_SEC)) return { a: k, b: k, mix: 0 };
   return { a: k - 1, b: k, mix: envelope(Math.max(0, elapsed) / TURN_FADE_SEC) };
+};
+
+/**
+ * THE SAME SCHEDULE, ON A GRID SOMEBODY ELSE OWNS.
+ *
+ * Turn k lands at `first + (k-1)*hold`, so turn 1 is at `first` — which
+ * `beatSchedule` sets one hold past the phase, exactly where the roster path
+ * puts its own first cut. Rest before that instant is `NO_TURN` BY REFERENCE,
+ * so a synced collage still opens on the picture the still preview is showing
+ * and the three surfaces that pass no time are untouched.
+ *
+ * A malformed schedule is REST, not an exception and not a fallback to the
+ * mode's own hold: this is reached from `refreshTurn`, sixty times a second,
+ * and a fallback would make a bad grid look like a working feature that is
+ * simply ignoring the music.
+ */
+const scheduledTurnAt = (sched: TurnSchedule, timeSec: unknown): TurnFrame => {
+  const { hold, first, fade } = sched;
+  if (!(hold > 0) || !Number.isFinite(hold) || !Number.isFinite(first) || !(fade > 0)) return NO_TURN;
+  const t = typeof timeSec === 'number' && Number.isFinite(timeSec) ? timeSec : 0;
+  if (!(t >= first)) return NO_TURN;
+
+  const rel = t - first;
+  const raw = rel / hold;
+  /**
+   * AN INSTANT THAT IS A BOUNDARY MUST READ AS ONE.
+   *
+   * `(first + 3*hold - first) / hold` is 2.9999999999999996 for some grids and
+   * 3.0000000000000004 for others — which way it rounds is a property of the
+   * bits, not of the music. Left alone, the cut at that instant happens on the
+   * path that rounds up and is one frame late on the path that rounds down, and
+   * the two paths here are THE PREVIEW AND THE EXPORTED FILE: `renderAtTime`
+   * walks a fixed frame grid that lands exactly on these instants far more
+   * often than rAF does. This project has a name for that class of divergence
+   * and a whole rung (ONE LAYOUT) about not shipping it.
+   *
+   * The roster branch above needs no such snap and does not get one: its
+   * boundaries are `k * hold` read back through the same division, so the
+   * expression is exact wherever the arithmetic is, and the sweep pins it
+   * byte-for-byte against the build that had no schedules at all.
+   */
+  const snapped = Math.round(raw);
+  const k = Math.min(MAX_TURN_INDEX, Math.floor(Math.abs(raw - snapped) < 1e-9 ? snapped : raw) + 1);
+  if (k <= 0) return NO_TURN;
+
+  const elapsed = Math.max(0, rel - (k - 1) * hold);
+  if (k >= MAX_TURN_INDEX || !(elapsed < fade)) return { a: k, b: k, mix: 0 };
+  return { a: k - 1, b: k, mix: envelope(Math.max(0, elapsed) / fade) };
 };
 
 /** Deterministic 32-bit scramble of the seed, so `scatter`'s stride does not

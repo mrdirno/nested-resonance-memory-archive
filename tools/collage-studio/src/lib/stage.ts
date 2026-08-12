@@ -42,7 +42,7 @@
 // -----------------------------------------------------------------------------
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
-import { turnAt, assignmentAt, isTurning, NO_TURN } from './turn';
+import { turnAt, assignmentAt, isTurning, NO_TURN, turnFadeFor, type TurnSchedule } from './turn';
 import { isMoving } from './motion';
 import { paceTime } from './pace';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
@@ -175,6 +175,21 @@ export interface StageSceneInput {
    * existed described.
    */
   pace?: string;
+  /**
+   * THE BEAT — a turn schedule read off the music (`lib/beat.ts`), as THREE
+   * PRIMITIVES rather than the `TurnSchedule` object it comes from.
+   *
+   * Not for tidiness: `VideoStage` hands the scene over inside an effect keyed
+   * on its own fields, and an object rebuilt on every render would re-run
+   * `setScene` on every render — which ends by resetting `moveOriginMs` and
+   * would restart the take sixty times a second. Numbers compare by value.
+   *
+   * `beatHold <= 0` means NO SYNC and takes the roster's own schedule, which is
+   * what every scene before this field existed described.
+   */
+  beatHold?: number;
+  beatFirst?: number;
+  beatFade?: number;
 }
 
 /**
@@ -778,6 +793,11 @@ export class Stage {
   /** Does this scene re-cut over the take? False keeps every cost at zero. */
   private turning = false;
   private turnMode = 'hold';
+  /**
+   * THE BEAT — the cut schedule, when the music is what decides it. Null is the
+   * roster's own hold and is the only state this Stage had before beat sync.
+   */
+  private turnSched: TurnSchedule | null = null;
   private turnSeed = 0;
   private turnResolve: ((slot: number, fromSlot: number) => StageAssetLike | null | undefined) | null = null;
   /**
@@ -1110,6 +1130,19 @@ export class Stage {
     // would otherwise jump the phase. Restarting shows you the new tempo from
     // the top, which is what the move and turn chips already do.
     this.pace = typeof scene.pace === 'string' ? scene.pace : 'even';
+
+    // THE BEAT, read here for the same reason and with the same consequence: a
+    // grid change restarts the take, which is the only honest answer when the
+    // schedule's PHASE moves — a mid-take re-phase would either skip a cut or
+    // double one, and both look like a defect rather than like a tempo change.
+    const bh = typeof scene.beatHold === 'number' ? scene.beatHold : 0;
+    this.turnSched = bh > 0
+      ? {
+          hold: bh,
+          first: typeof scene.beatFirst === 'number' ? scene.beatFirst : bh,
+          fade: typeof scene.beatFade === 'number' && scene.beatFade > 0 ? scene.beatFade : turnFadeFor(bh),
+        }
+      : null;
 
     // A scene that stops moving must go back to REST, not freeze wherever the
     // last frame left it — the still preview it hands back to is drawn at t=0,
@@ -2164,7 +2197,19 @@ export class Stage {
     // own clock — see `lib/pace.ts`. Scaling here rather than dividing the mode's
     // hold is what keeps `TURN_FADE_SEC / hold` invariant, so a fast pace cuts
     // faster instead of dissolving continuously.
-    const frame = turnAt(this.turnMode, paceTime(this.pace, this.outTime));
+    //
+    // AND A SYNCED TURN IS NOT PACED — the one decision this whole feature
+    // turns on at the compositor. The pace is not being ignored: it went into
+    // choosing the schedule (`beatSchedule` snaps the mode's hold DIVIDED by
+    // the rate to a musical multiple), and applying it a second time here would
+    // scale the clock underneath a grid whose entire purpose is to sit at
+    // absolute instants the music decides. 1.5x on a beat grid is not a faster
+    // cut, it is a cut that lands between the drums.
+    const frame = turnAt(
+      this.turnMode,
+      this.turnSched ? this.outTime : paceTime(this.pace, this.outTime),
+      this.turnSched,
+    );
 
     if (frame.a !== this.turnBoundA) {
       const asg = assignmentAt(this.turnMode, frame.a, n, this.turnSeed);

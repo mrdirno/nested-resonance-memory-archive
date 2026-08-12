@@ -176,6 +176,47 @@ or re-documenting an existing capability is DD, not delivery.
   nothing, and on a photo collage it was disabled outright. `StageStatus.rolling`
   answers from the Stage, which is the only place that can see the move, the
   music, the clips AND the park at once.
+  THE BEAT — the collage cuts ON THE MUSIC. Four cycles built a time axis and
+  a sound (THE SOUNDTRACK, THE TURN, THE FADE, THE PACE) and every clock among
+  them was INDEPENDENT of the track: a collage over a 128 BPM song cut every
+  5.000 s because `march` says 5.000 s, so the wall and the music walked past
+  each other and met by accident. Now the turn's hold is SNAPPED to the beat.
+  A BEAT SYNC IS NOT A NEW RATE DIAL, IT IS A QUANTISER ON THE RATE ALREADY
+  ASKED FOR — the obvious division roster (every beat / half bar / bar / two
+  bars) would have put a fifth chip row on a phone AND made the two controls
+  that already answer "how often" into dead weight, which is the exact defect
+  the ladder files against the pace. So the mode still says how often it wants
+  to cut, the pace still scales that want, and `lib/beat.ts` rounds the result
+  to the nearest musical multiple {1,2,4,8,16} of the detected beat — in RATIO,
+  not in seconds, because with a 0.5 s beat and a 3 s target the 2 s and 4 s
+  holds are a dead tie on the difference and 1.50x against 1.33x on the tempo.
+  THE FADE BECOMES A FRACTION OF THE HOLD, which is `lib/pace.ts`'s own
+  argument arriving from the other side: a pace can leave `TURN_FADE_SEC` a
+  constant because it scales the CLOCK, so `fade/hold` is invariant by
+  construction; a beat sync sets an ABSOLUTE hold from outside the roster, and
+  174 BPM at 2x is a 1.379 s hold that a constant 0.7 s dissolve would leave
+  50.7% soft. `turnFadeFor` caps it at the roster's own worst ratio (ripple,
+  20%) and the sweep holds every mode at exactly 20.0% at every tempo.
+  DETECTION IS A COMB, NOT A BEAT TRACKER — one period and one phase is all a
+  `first + k*hold` schedule can use. An onset envelope (rectified RMS
+  difference), autocorrelation for a coarse period, then eleven musical
+  RATIOS of it scored by comb and resolved by "the SHORTEST period that
+  explains every hit", then a fine (period, phase) search. Three separate
+  measurement bugs had to be fixed before that rule meant anything, and each
+  was found by a sweep rather than reasoned out: an interpolated tooth, then a
+  max-of-pair tooth, both let a comb whose period is a WHOLE NUMBER OF HOPS
+  sample only well-aligned onsets and beat the truth (a 180 BPM click track
+  measured 60); the real cause is that RMS is a square ROOT of a mean, so an
+  onset SPLIT between two windows measures genuinely SMALLER, not merely
+  divided — and the fix is a window twice the hop, stepped by the hop, which
+  took the alignment bias from 10.3% to 0.8%. Twelve tempi from 60 to 180 BPM
+  are now detected EXACTLY, backbeats included. It REFUSES rather than guesses:
+  white noise, silence and junk return null, because a collage cutting
+  confidently on a beat that is not there is worse than one that never synced.
+  It rides the composition code (a 23-character group; all six earlier
+  generations still decode byte-identically) and DELIBERATELY NOT THE DICE —
+  every other roll re-deals what the collage LOOKS like, and `sync` is a
+  relationship to a FILE the dice cannot see.
   THE TURN — the collage CUTS. Every time-axis feature before this one moved
   the CROP (the move), the SOUND (music, trim, the lap schedule, the fade) or
   the CLOCK (the playhead); not one of them changed WHICH PICTURE IS WHERE, so
@@ -389,6 +430,27 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       and the honest generalisation is `moveRate` and `turnRate` as two fields.
       The cost is two more code characters and a second chip row on a phone,
       which is exactly the NON-CLUTTERY question that should decide it.
+- [ ] **THE BEAT SNAPS THE CUT AND NOTHING ELSE.** The move's 12 s cycle, the
+      trim windows and the fade are all still on their own clocks, so a collage
+      cutting on the bar can be drifting on a period that has nothing to do with
+      the music. The turn was the right first cut — it is the only one of the
+      four whose events a listener can HEAR land — but a drift whose cycle is a
+      whole number of bars is the obvious next one, and it is the same
+      `snapHold` call.
+- [ ] **A DOWNBEAT IS NOT DETECTED, ONLY A BEAT.** The grid says where the
+      pulses are and says nothing about which of them is beat one, so a
+      four-beat hold lands on SOME beat of the bar rather than on the ONE. The
+      phase is snapped to the nearest beat in both directions, so the choice is
+      arbitrary rather than late — but "cut on the downbeat" is a different and
+      harder question (it needs harmonic change or a bar-level pattern, not a
+      comb), and it is what stands between this and sounding deliberate on
+      material with a strong bar structure.
+- [ ] **A LAP RE-PHASES THE MUSIC AND NOT THE GRID.** The soundtrack loops when
+      the take outruns its window; unless that window is a whole number of
+      beats, the song's downbeat moves on the second pass while the cut grid
+      does not, so a long take drifts off the music it started on. Same family
+      as "a cut at a lap is a hard cut" below, and the honest fix is the same
+      one: snap the WINDOW to the grid.
 - [ ] **A PACE DOES NOTHING TO A COLLAGE THAT IS MOSTLY VIDEO, AND NOTHING SAYS
       SO.** The same shape as the turn's own gap: a live clip is excluded from
       the turn ring, and a clip's playback rate is untouched by the pace, so a
@@ -569,10 +631,15 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       Count the surfaces BEFORE choosing the representation** — ONE LAYOUT
       counted four, THE TITLE counted four, this counted two and the count is
       what picked the curve.
+      **BEAT-SYNC IS NOW SHIPPED** — see THE BEAT in CURRENT STATE. It is the
+      first feature in this app where the SOUND drives the PICTURE rather than
+      riding under it, and it needed nothing new from this rung: the decode it
+      analyses is the same `decodeAudioData` the mixer does, at 8 kHz mono
+      because tempo survives losing every frequency detail.
       Still owed on this rung: an ASYMMETRIC fade (in and out are one control
       today, which is one job and the right first cut, but a long tail under a
       short head is what people actually reach for), volume per source, ducking,
-      and beat-sync.
+      and — now that a grid exists — snapping the TRIM to it.
 - [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is
       step 1). NOT the same rung as THE PACE, and the distinction is worth
       keeping straight: the pace is a property of the COMPOSITION's clock and
@@ -839,6 +906,57 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C147-THE-DEV-SERVER-WAS-FOUR-DAYS-OLD AND SERVING CODE THAT NO LONGER
+  EXISTED.** An e2e run failed on an assertion the module provably satisfied —
+  the same fixture through the same functions in node returned `first 4.004`
+  while the browser was acting on `first 4.496`. The cause was not the code:
+  `lsof -ti:5199` named a vite dev server **started on Aug 8, four days
+  earlier**, holding the port this project's playwright config attaches to. A
+  file CREATED during the session was transformed fresh on its first request and
+  then EDITED five times, and the watcher — on `/Volumes/dual`, an external
+  volume where fs events are not reliable — missed every edit after the first.
+  So the run was green-or-red about a version of `beat.ts` that had been
+  overwritten an hour before. **The general shape: a long-lived dev server is a
+  CACHE, and a cache on a volume whose change notifications are unreliable is a
+  cache with no invalidation.** The sibling scar to "a run silently reused
+  another project's server on :5173" — same failure (measuring something other
+  than what you wrote), different mechanism. The check is one command and it
+  belongs before believing any surprising e2e result:
+  `lsof -ti:5199 | xargs ps -o lstart,command` — if the start time predates the
+  edit you are testing, kill it and let playwright start its own.
+- **SCAR-C147-THE-SWEEP-COULD-NOT-SEE-EITHER-PHASE-BUG, AND THE BROWSER SAW
+  BOTH.** `beatSchedule` reduced its phase modulo the HOLD. Every arithmetic
+  invariant passed — the cuts really did land on beats, which is what I3 and I4
+  assert — because shifting a grid by whole beats leaves it on the same beats.
+  What it also does is put the FIRST cut up to a whole hold late: measured at
+  the artifact, a 120 BPM track under `march` snapped to 4 s cut first at
+  4.496 s where the unsynced build cuts at 4.000. Fixed to reduce modulo the
+  BEAT — and the browser immediately produced the SECOND bug hiding behind it:
+  a detector's phase is quantised to a hop, so the beat at 0.500 comes back as
+  0.496, and reduced into `[0, period)` that reads as almost a whole beat of
+  delay rather than as 4 ms early. **The snap has to go to the NEAREST beat, in
+  both directions** — a phase over half a beat becomes a small negative one,
+  which lands on exactly the same beats and puts the first cut within half a
+  beat of where the roster would have put it. **The general shape: an invariant
+  that quantifies over a SYMMETRY of the thing it is testing cannot see a defect
+  that lives in the choice of representative.** Both are now pinned by I4b,
+  which asserts the departure from the roster's own first cut rather than
+  membership of the grid.
+- **SCAR-C147-TWO SIBLING SPECS HAD NO WALL-CLOCK BUDGET, AND FAILED IDENTICALLY
+  AGAINST PRODUCTION.** `turn.spec.ts` T1/T2 and `motion.spec.ts` T1/T2 came
+  back red during this cycle's regression, on `Test timeout of 30000ms
+  exceeded` rather than on any assertion. They WAIT rather than scrub — which is
+  the point of those two tests, since something has to prove the schedule runs
+  under a real rAF clock and not only when a ruler asks it a question — and they
+  wait 5.2 s at rest before bracketing four turn boundaries, i.e. past the
+  config's 30 s default before reading a pixel. **They were not a regression and
+  the check that proved it took one command**: run the same spec with
+  `COLLAGE_BASE_URL=<production>`, which is by definition the code from before
+  the change. Identical failure. Fixed for both — the same explicit
+  `describe.configure({ timeout: 300_000 })` the scrub-based specs already
+  carry — because the previous cycle's own scar says the flake is never one
+  spec, it is one habit, and the habit here is a spec that waits without saying
+  how long it may.
 - **SCAR-C144-HOVER-BEAT-CHOSEN, ON THE ONE DEVICE THAT CANNOT UN-HOVER.**
   Found by SCREENSHOTTING THE LIVE PAGE after shipping THE PACE, not by any
   test: the `2×` chip was active and was not green. `.ui-chip:hover:not(:disabled)`
@@ -3815,4 +3933,85 @@ frontier. Today's ceiling is tomorrow's floor.
   a slow drift under fast cuts is still unaskable; a collage that is mostly
   video has almost nothing for a pace to move and nothing says so; and a clip's
   own playback rate is untouched, which is the `Speed` rung and stays open.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C147 — [AXIS:COLLAGE] THE BEAT — the collage cuts ON THE MUSIC** (well read
+  UNSCOPED across all trades first: 0 new, 0 stranded in `building`; breadth
+  debt 0, so LIVE STATE's stalest-axis rule governed and it named COLLAGE.)
+  before→after: **a collage over a 128 BPM track cut every 5.000 s because
+  `march` says 5.000 s → the hold snaps to the music and the wall lands where
+  the drums are.** Four cycles had built a time axis and a sound — THE
+  SOUNDTRACK, THE TURN, THE FADE, THE PACE — and every clock among them was
+  independent of the track, so the picture and the song met by accident.
+  **A BEAT SYNC IS NOT A NEW RATE DIAL, IT IS A QUANTISER ON THE RATE ALREADY
+  ASKED FOR.** The obvious design is a division roster (every beat / half bar /
+  bar / two bars) and it is wrong twice: a fifth chip row on a phone, and the
+  two controls that already answer "how often" (the turn's mode, THE PACE)
+  become dead weight the moment it is on — the exact defect the ladder files
+  against the pace itself. So the mode still says how often it wants to cut, the
+  pace still scales that want, and `lib/beat.ts` rounds the result to the
+  nearest musical multiple {1,2,4,8,16} of the detected beat. ONE toggle, no new
+  vocabulary, every existing control keeps its meaning.
+  **NEAREST IN RATIO, NOT IN SECONDS**: with a 0.5 s beat and a 3 s target, 2 s
+  and 4 s sit exactly 1 s away on either side — a dead tie on the difference,
+  and 1.50x against 1.33x on the tempo, which is the comparison a listener
+  actually makes.
+  **THE FADE BECOMES A FRACTION OF THE HOLD**, and that is `lib/pace.ts`'s own
+  argument arriving from the other side: a pace scales the CLOCK so `fade/hold`
+  is invariant by construction and `TURN_FADE_SEC` can stay a constant; a beat
+  sync sets an ABSOLUTE hold from outside the roster, and 174 BPM at 2x is a
+  1.379 s hold that a constant 0.7 s dissolve leaves **50.7% soft**.
+  `turnFadeFor` caps at the roster's own worst ratio and the sweep holds every
+  mode at exactly **20.0%** at every tempo (I6, with I6b as the red proof).
+  **AND A SYNCED TURN IS NOT PACED** — the pace already went into choosing the
+  schedule, and applying it again would scale the clock underneath a grid whose
+  whole purpose is to sit at absolute instants the music decides.
+  **DETECTION IS A COMB, NOT A BEAT TRACKER**: rectified-RMS onset envelope,
+  autocorrelation for a coarse period, eleven musical ratios of it scored by
+  comb and resolved by "the SHORTEST period that explains every hit", then a
+  fine (period, phase) search. THREE measurement bugs had to be fixed before
+  that rule meant anything, all found by the sweep: an interpolated tooth and
+  then a max-of-pair tooth both let a comb whose period is a WHOLE NUMBER OF
+  HOPS sample only well-aligned onsets and beat the truth (a 180 BPM click track
+  measured **60**). The cause is that RMS is a square ROOT of a mean, so an
+  onset split between two windows measures genuinely SMALLER rather than merely
+  divided; a window twice the hop, stepped by the hop, took the alignment bias
+  from **10.3% to 0.8%**. Twelve tempi 60→180 BPM now detect EXACTLY, backbeats
+  included, and white noise / silence / junk are REFUSED (a confident wrong grid
+  is worse than no sync). One gate was BUILT AND REMOVED after measuring it: the
+  "is this phase special" test reads 2.25 where the energy test reads 2.23, on
+  every signal tried — it was the same statistic at twice the cost.
+  It rides the composition code (23-character group; all six earlier generations
+  still decode byte-identically, 240 rebuilt legacy codes) and **deliberately
+  NOT the dice** — every other roll re-deals what the collage LOOKS like, and
+  `sync` is a relationship to a FILE the dice cannot see.
+  PROOF: 19 unit invariants including the ORACLE arm (31,717 checks proving the
+  unsynced path is `Object.is`-identical to the build with no beat in it, 12,332
+  of them `NO_TURN` by reference) and 20,000-schedule sweeps; **4 e2e assertions
+  on production pixels** — 120 BPM found by the real browser from a WAV the test
+  built, `march` snapped to 8 beats, and at t=4.8 s the synced wall has cut
+  (**94.5% of the frame moved, worst channel 207/255**) where the unsynced one
+  is still on its opening deal (**1.0% moved, worst 22**), with all six
+  photographs present exactly once; watertight at 320 px.
+  Regression: every unit sweep in the tree green, turn 7/7, motion 5/5, pace
+  4/4, playhead 2/2, roll-code 20/20. `tsc --noEmit` and `vite build` clean.
+  THREE SCARS, and two of them are about the PROOF rather than the code: the
+  dev server on :5199 had been running since **Aug 8** and its watcher, on an
+  external volume, had missed every edit to a file it cached on first request —
+  so a red run was measuring code that no longer existed; the arithmetic sweep
+  could not see EITHER phase bug because both live in the choice of
+  representative inside a symmetry it quantifies over, and the browser found
+  both; and two sibling specs that WAIT rather than scrub had no wall-clock
+  budget and failed identically against production, i.e. were never this
+  cycle's regression. BACKPORT RIDER FIRED: `pace.invariants.mjs` still pinned
+  the codec's group length as a literal `22` — the same class C144 filed after
+  grade/motion/turn all pinned `21` — so it now reads `MINTED_GROUP_MAX`, and
+  the sibling sweeps were swept for the same literal (15 uses, all derived).
+  NOT SHIPPED, AND SAID PLAINLY: only the CUT is snapped — the move's 12 s
+  cycle, the trim windows and the fade are still on their own clocks; a DOWNBEAT
+  is not detected, only a beat, so a four-beat hold lands on some beat of the
+  bar rather than on the one; a lap re-phases the music and not the grid; and a
+  tonal source with no percussion is accepted at 0.53 confidence because its RMS
+  really does rise and fall periodically — the BPM on the chip and the switch
+  nobody is holding down are the mitigations, not a cleverer number.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

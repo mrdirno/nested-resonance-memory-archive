@@ -280,6 +280,20 @@ const MIN_TURNED_SHARE = 0.08;
 // =============================================================================
 
 test.describe('THE TURN', () => {
+  /**
+   * A WALL-CLOCK BUDGET, NOT THE 30 s DEFAULT.
+   *
+   * This test WAITS rather than scrubs — it predates THE PLAYHEAD, and the
+   * waiting is the point of T1/T2: the schedule must run on its own under a
+   * real rAF clock and not only when a ruler asks it a question. But it waits
+   * 5.2 s at rest and then brackets four turn boundaries, which is already past
+   * the config's 30 s default before a single pixel is read, so it failed on
+   * the clock rather than on the composition — identically against production,
+   * i.e. it had nothing to do with whatever change was being reviewed at the
+   * time. Same budget the scrub-based specs carry.
+   */
+  test.describe.configure({ timeout: 300_000 });
+
   test('T1/T2 the collage re-cuts when asked, and holds when not', async ({ page }) => {
     await boot(page);
 

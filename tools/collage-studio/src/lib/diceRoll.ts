@@ -32,6 +32,7 @@ import { LOOK_IDS, type LookId } from './grade';
 import { MOVE_IDS, type MoveId } from './motion';
 import { TURN_IDS, type TurnId } from './turn';
 import { PACE_IDS, type PaceId } from './pace';
+import { SYNC_IDS, type SyncId } from './beat';
 
 // =============================================================================
 // SHAPE
@@ -91,6 +92,22 @@ export interface Roll {
    * which is the tempo those rolls were written at.
    */
   pace?: PaceId;
+  /**
+   * THE BEAT — whether the cuts snap to the music's grid. See lib/beat.ts.
+   *
+   * IN THE CODE, AND NOT IN THE DICE, which is the one place this field breaks
+   * step with the four above. It belongs in a code because "these fragments,
+   * dealt this way, re-cutting like this, ON THE BEAT" is a picture somebody
+   * can rebuild with their own photographs AND THEIR OWN TRACK — the recipe
+   * carries the relationship, never the tempo, which is a fact about a file.
+   * It is not in `rollDice` because the dice re-deals what the collage LOOKS
+   * like, and a roll that silently unsyncs a wall somebody just locked to their
+   * music would be changing a relationship to a file the dice cannot see.
+   *
+   * Optional for the reason the four above are: absent means `off`, which is
+   * what every Roll built before this field existed described.
+   */
+  sync?: SyncId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
   /**
@@ -713,13 +730,19 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
    *  roster was written at. */
   const paIdx = PACE_IDS.indexOf((r.pace ?? 'even') as PaceId);
   const pace = fw(paIdx < 0 ? 0 : paIdx, 1);
+  /** THE BEAT, as an index. Same honest-element-zero reading as the four above:
+   *  index zero is `off`, and a sync this build does not know about is a collage
+   *  that cuts on its own clock — which is what it will do anyway without the
+   *  track the code cannot carry. */
+  const syIdx = SYNC_IDS.indexOf((r.sync ?? 'off') as SyncId);
+  const sync = fw(syIdx < 0 ? 0 : syIdx, 1);
   // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
   // rollCode's optional shuffle group. It is folded into the checksum but not
   // into the code, because the guard has to cover the whole thing: the first cut
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  const body = mid + owned + look + move + turn + pace;
+  const body = mid + owned + look + move + turn + pace + sync;
   return `${head}-${body}${checksum(head + body + seed + extra)}-${seed}`.toUpperCase();
 };
 
@@ -759,6 +782,7 @@ const CHECK_LEN = 2;
  */
 export const MINTED_GROUP_LENGTHS = new Set([
   16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN, 19 + CHECK_LEN, 20 + CHECK_LEN,
+  21 + CHECK_LEN,
 ]);
 
 /**
@@ -847,7 +871,14 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // it always was — so every code ever minted still decodes byte-identically.
     const hasPace = b.length >= 20 + CHECK_LEN;
     const pai = hasPace ? n(b.slice(19, 20)) : 0;
-    const bodyLen = hasPace ? 20 : hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
+    // THE BEAT sits after the pace and before the checksum, entering the band by
+    // `>=` for exactly the reason the three fields above it do: an
+    // 18/19/20/21-length group leaves this false, `syi` reads 0, `bodyLen` is
+    // unchanged and the checksum is sliced at the offset it always was — so
+    // every code ever minted still decodes byte-identically.
+    const hasSync = b.length >= 21 + CHECK_LEN;
+    const syi = hasSync ? n(b.slice(20, 21)) : 0;
+    const bodyLen = hasSync ? 21 : hasPace ? 20 : hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
     if (b.length >= 16) {
       /**
        * A CHECKSUMMED GROUP IS ONE OF THE LENGTHS THIS PROJECT HAS MINTED, OR
@@ -906,8 +937,13 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // tempo would substitute a different rhythm for the one they sent, which is
     // invisible in a still frame and wrong in every exported second.
     const pace = PACE_IDS[pai];
-    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, tui, pai, seed];
-    if (!layout || !look || !move || !turn || !pace
+    // And again, with the sharpest version of the reason: a sync index this
+    // build has no entry for means the sender's build knows a way of relating
+    // the cuts to the music that this one does not, and the whole point of the
+    // field is WHERE the cuts land.
+    const sync = SYNC_IDS[syi];
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, tui, pai, syi, seed];
+    if (!layout || !look || !move || !turn || !pace || !sync
         || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
@@ -929,6 +965,7 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       move,
       turn,
       pace,
+      sync,
       seed,
     };
   } catch {

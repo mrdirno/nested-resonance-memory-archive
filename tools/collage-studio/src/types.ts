@@ -4,6 +4,7 @@ import type { LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
 import type { PaceId } from './lib/pace';
+import type { SyncId } from './lib/beat';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -165,6 +166,14 @@ export interface AppState {
      * tempo those projects ran at.
      */
     pace?: PaceId;
+    /**
+     * THE BEAT — whether the cuts snap to the music's grid (lib/beat.ts). Under
+     * `layout` beside the four rosters above because it is a property of WHEN
+     * the pictures change, not of what they look like. The GRID it snaps to is
+     * deliberately absent: a project does not carry the soundtrack either, and
+     * a measured tempo for a file that is not here describes nothing.
+     */
+    sync?: SyncId;
   };
   style: {
     background: string;

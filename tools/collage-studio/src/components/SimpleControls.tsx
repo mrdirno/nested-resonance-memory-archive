@@ -10,6 +10,7 @@ import { LOOKS, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
 import { PACES, type PaceId } from '../lib/pace';
+import { SYNCS, beatsLabel, type SyncId, type BeatGrid } from '../lib/beat';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -71,6 +72,17 @@ interface SimpleControlsProps {
   /** THE PACE — how fast the move and the turn run. See lib/pace.ts. */
   pace?: PaceId;
   onPace?: (p: PaceId) => void;
+  /** THE BEAT — the user's intent, which rides the code. See lib/beat.ts. */
+  sync?: SyncId;
+  onSync?: (s: SyncId) => void;
+  /** What the TRACK turned out to be. Measured, not chosen — so it rides nothing. */
+  beatGrid?: BeatGrid | null;
+  /** True while the decode/analysis is still running. */
+  beatBusy?: boolean;
+  /** How many beats the snapped hold came to, when there is one. */
+  beatBeats?: number;
+  /** Is there a track at all? */
+  hasMusic?: boolean;
 }
 
 /**
@@ -116,7 +128,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
   look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn,
-  pace = 'even', onPace
+  pace = 'even', onPace,
+  sync = 'off', onSync, beatGrid = null, beatBusy = false, beatBeats = 0, hasMusic = false
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -451,6 +464,50 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
               : (pace ?? 'even') === 'even'
                 ? 'The tempo of the drift and the cuts, on one dial. It travels in the code.'
                 : 'In the preview and in the exported video. Same shapes, different clock.'}
+          </p>
+        </div>
+      )}
+
+      {/* ---- THE BEAT: the cuts land on the music ---------------------------
+          Not a sixth rate roster — a QUANTISER on the two rows above. The TURN
+          still says what a cut is and the PACE still says how often, and this
+          rounds the hold those two asked for to the nearest musical multiple of
+          the detected beat (lib/beat.ts). So a synced collage keeps every
+          control it had, and the dissolve becomes a FRACTION of the snapped
+          hold rather than a constant, or a 150 BPM bar would be 44% soft.
+          It travels in the code — the RELATIONSHIP is a recipe; the tempo is a
+          fact about a file and stays out. It does NOT ride the dice.
+          SAYS WHAT IT NEEDS RATHER THAN DISABLING ITSELF (scar C126): with no
+          track this row is still here, still settable, and the caption is what
+          tells you the piece that is missing. ---------------------------- */}
+      {hasImages && onSync && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips" role="group" aria-label="Beat sync">
+            {SYNCS.map(o => (
+              <button
+                key={o.id}
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={(sync ?? 'off') === o.id}
+                onClick={() => onSync(o.id)}
+                title={o.title}
+                aria-pressed={(sync ?? 'off') === o.id}
+                data-testid={`sync-${o.id}`}
+              >{o.label}</button>
+            ))}
+          </div>
+          <p className="ui-caption" data-testid="beat-caption">
+            {!hasMusic
+              ? 'Cuts on the music. Add a track and the collage lands on its beat.'
+              : beatBusy
+                ? 'Listening to the track\u2026'
+                : !beatGrid
+                  ? 'No steady beat in that track \u2014 the cuts stay on their own clock.'
+                  : (turn ?? 'hold') === 'hold'
+                    ? `${Math.round(beatGrid.bpm)} BPM. Pick a TURN above and the cuts land on it.`
+                    : (sync ?? 'off') === 'off'
+                      ? `${Math.round(beatGrid.bpm)} BPM. Snap the cuts to it.`
+                      : `${Math.round(beatGrid.bpm)} BPM \u2014 cutting ${beatsLabel(beatBeats)}.`}
           </p>
         </div>
       )}

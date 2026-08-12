@@ -40,6 +40,7 @@ import type { LookId } from './grade';
 import type { MoveId } from './motion';
 import type { TurnId } from './turn';
 import type { PaceId } from './pace';
+import type { SyncId } from './beat';
 import { type Roll, encodeRoll, decodeRoll, snapRoll } from './diceRoll';
 
 /**
@@ -94,6 +95,14 @@ export interface CompositionState {
    * and turn rosters used to answer alone.
    */
   pace: PaceId;
+  /**
+   * THE BEAT — whether the cuts snap to the music's grid. In the code because
+   * the RELATIONSHIP is a recipe ("this one cuts on the beat"); the tempo it
+   * snaps to is a fact about a file and stays out, exactly as the title and the
+   * fade do. A code opened without music simply cuts on its own clock, and
+   * cuts on the beat the moment a track is added.
+   */
+  sync: SyncId;
   /** How many times "Shuffle images" has re-dealt. */
   shuffle: number;
   /** True once the count is the user's decision rather than the source total. */
@@ -122,6 +131,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   move: s.move,
   turn: s.turn,
   pace: s.pace,
+  sync: s.sync,
   countOwned: s.countOwned,
 });
 
@@ -153,6 +163,10 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   // collage running at the tempo the roster was written at, so the absence maps
   // to the no-op exactly as the three above do.
   pace: r.pace ?? 'even',
+  // Absent means `off` — a Roll built before this field existed described a
+  // collage cutting on its own clock, so the absence maps to the no-op exactly
+  // as the four above do.
+  sync: r.sync ?? 'off',
   shuffle,
   countOwned: !!r.countOwned,
 });

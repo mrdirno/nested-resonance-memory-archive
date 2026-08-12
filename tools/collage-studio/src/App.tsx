@@ -33,6 +33,9 @@ import { Template } from './lib/templates';
 import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
 import { isVideoFile, formatTimecode, openClip, revokeFrames, type ExtractedFrame } from './lib/video';
 import { isAudioFile, type SoundtrackSpec } from './lib/soundtrack';
+import { detectBeat, beatSchedule, beatLabel, BEAT_ANALYSE_SEC, isSynced, type BeatGrid, type SyncId } from './lib/beat';
+import { turnHoldSec } from './lib/turn';
+import { paceRate } from './lib/pace';
 
 import { Header } from './components/Header';
 import { SimpleControls } from './components/SimpleControls';
@@ -223,6 +226,24 @@ export default function App() {
    * different permutation.
    */
   const [pace, setPace] = useState<PaceId>('even');
+  /**
+   * THE BEAT — do the cuts snap to the music? See lib/beat.ts.
+   *
+   * TWO pieces of state, and the split is the feature: `sync` is the user's
+   * INTENT and rides the composition code, because "this one cuts on the beat"
+   * is a recipe somebody can rebuild with their own track. `beatGrid` is what
+   * this particular FILE turned out to be, is measured rather than chosen, and
+   * rides nothing at all — the same line the title and the fade sit on.
+   *
+   * The intent survives a track being removed and replaced, which is what makes
+   * swapping the music under a synced collage a one-step act.
+   */
+  const [sync, setSync] = useState<SyncId>('off');
+  const [beatGrid, setBeatGrid] = useState<BeatGrid | null>(null);
+  /** True while the decode/analysis is running, so the chip can say so. */
+  const [beatBusy, setBeatBusy] = useState(false);
+  /** The url of the track a running analysis belongs to — see `analyseBeat`. */
+  const beatTrackRef = useRef<string | null>(null);
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
 
@@ -960,6 +981,12 @@ export default function App() {
     // And the pace, for the fourth time and the same reason: the same shapes on
     // a different clock is a different piece of film.
     setPace(roll.pace ?? 'even');
+    // AND THE BEAT IS DELIBERATELY NOT TOUCHED — the one field of the roll this
+    // button leaves alone. Every line above re-deals what the collage LOOKS
+    // like; `sync` is a relationship to a FILE the dice cannot see, and a roll
+    // that silently unsynced a wall somebody had just locked to their track
+    // would be undoing a decision the button was never asked about. `rollDice`
+    // emits no `sync` for the same reason, so there is nothing here to apply.
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
     // The deal is part of the composition and the roll re-deals it; leaving the
@@ -1017,10 +1044,32 @@ export default function App() {
   // ===========================================================================
   const compositionCode = useMemo(() => encodeState({
     layoutMode, primitive, count, density, entropy, aspect, gutter,
-    bgColor, seed, arrangement, focus, twist, look, move, turn, pace, shuffle: shuffleTrigger,
+    bgColor, seed, arrangement, focus, twist, look, move, turn, pace, sync, shuffle: shuffleTrigger,
     countOwned,
   }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
-       bgColor, seed, arrangement, focus, twist, look, move, turn, pace, shuffleTrigger, countOwned]);
+       bgColor, seed, arrangement, focus, twist, look, move, turn, pace, sync, shuffleTrigger, countOwned]);
+
+  /**
+   * THE BEAT'S SCHEDULE — the turn's own hold, snapped to the music.
+   *
+   * The TARGET is the mode's hold DIVIDED BY THE PACE, which is the whole
+   * reason a beat sync did not need a rate control of its own: the pace already
+   * says "cut half again as often", the mode already says what a cut IS, and
+   * this only decides which musical multiple lands nearest what those two asked
+   * for. `paceTime` scales the CLOCK, so the hold a rate `r` expresses is
+   * `hold / r` — dividing here is reading the pace in the units this question
+   * is asked in, not a second interpretation of it.
+   *
+   * Null whenever anything is missing — no intent, no music, no grid, or a turn
+   * mode that does not cut — and null is exactly what the Stage had before this
+   * feature existed, so an unsynced collage takes the byte-identical path.
+   */
+  const beatSched = useMemo(() => {
+    if (!isSynced(sync) || !soundtrack || !beatGrid) return null;
+    const hold = turnHoldSec(turn);
+    if (!(hold > 0)) return null;
+    return beatSchedule(beatGrid, hold / (paceRate(pace) || 1), soundtrack.inSec ?? 0);
+  }, [sync, soundtrack, beatGrid, turn, pace]);
 
   /**
    * Apply a pasted code. Returns false when it is not one, so the caller can
@@ -1067,6 +1116,7 @@ export default function App() {
     setMove(s.move);
     setTurn(s.turn);
     setPace(s.pace);
+    setSync(s.sync);
     setShuffleTrigger(s.shuffle);
     // Fragments pinned by hand refer to cells of the layout that is being
     // replaced, so they cannot survive the change any more than they survive a
@@ -1511,6 +1561,7 @@ export default function App() {
    */
   const adoptSoundtrack = (file: File) => {
       const url = URL.createObjectURL(file);
+      beatTrackRef.current = url;
       // Revoked HERE rather than inside the updater: a state updater must be a
       // pure function of `prev` (React may call it twice), and `handleClear`
       // already disposes clip urls this way.
@@ -1565,11 +1616,78 @@ export default function App() {
           probe.onerror = () => land(0);
           probe.src = url;
       } catch { /* the chip simply shows no length */ }
+
+      void analyseBeat(file, url);
+  };
+
+  /**
+   * WHAT THIS TRACK'S TEMPO IS — decoded, measured once, kept until the music
+   * changes.
+   *
+   * DECODED AT 8 kHz MONO, WHICH IS THE WHOLE COST DECISION. `decodeAudioData`
+   * resamples into the context's own rate, so asking for an 8 kHz context turns
+   * a five-minute stereo track from ~106 MB of Float32 into 9.6 MB — on a phone,
+   * in a tab that is also holding a decoder per video clip. Nothing above 4 kHz
+   * carries tempo: the envelope this feeds is an RMS difference, not a spectrum.
+   *
+   * IT NEVER BLOCKS THE IMPORT. The soundtrack is adopted and playable before
+   * this starts, so a track whose analysis fails, or is still running, is a
+   * working soundtrack with no BPM on its chip — the same degradation the
+   * duration probe above already has.
+   *
+   * STALE RESULTS ARE DROPPED BY URL. Picking six songs in ten seconds is a
+   * thing people do, and the sixth decode is not guaranteed to land last.
+   */
+  const analyseBeat = async (file: File, url: string) => {
+      setBeatGrid(null);
+      setBeatBusy(true);
+      try {
+          const w = window as unknown as {
+              OfflineAudioContext?: new (ch: number, len: number, rate: number) => OfflineAudioContext;
+              webkitOfflineAudioContext?: new (ch: number, len: number, rate: number) => OfflineAudioContext;
+          };
+          const OAC = w.OfflineAudioContext ?? w.webkitOfflineAudioContext;
+          if (!OAC) return;
+          const RATE = 8000;
+          const ctx = new OAC(1, RATE, RATE);
+          const bytes = await file.arrayBuffer();
+          // The callback form is the fallback Safari still needs; `decodeAudioData`
+          // DETACHES the buffer it is handed, so the promise form gets its own
+          // slice rather than the one the callback form would find empty.
+          const buf: AudioBuffer = await new Promise((ok, no) => {
+              try {
+                  const p = (ctx as unknown as { decodeAudioData(b: ArrayBuffer): Promise<AudioBuffer> })
+                      .decodeAudioData(bytes.slice(0));
+                  if (p && typeof p.then === 'function') { p.then(ok, no); return; }
+              } catch { /* fall through to the callback form */ }
+              (ctx as unknown as {
+                  decodeAudioData(b: ArrayBuffer, ok: (x: AudioBuffer) => void, no: (e?: unknown) => void): void;
+              }).decodeAudioData(bytes.slice(0), ok, no);
+          });
+          const rate = buf.sampleRate || RATE;
+          const wanted = Math.min(buf.length, Math.ceil(BEAT_ANALYSE_SEC * rate));
+          // Channel 0, not a downmix: a beat is not a stereo property, and summing
+          // two channels would cost a second pass over every sample to learn the
+          // same period.
+          const mono = buf.getChannelData(0).subarray(0, wanted);
+          const grid = detectBeat(mono, rate);
+          // The url is the identity of the track this measurement belongs to, and
+          // it is read from a REF rather than from inside a `setSoundtrack`
+          // updater — an updater must be a pure function of `prev`, which is the
+          // rule this file already states over `adoptSoundtrack`'s revoke.
+          if (beatTrackRef.current === url) setBeatGrid(grid);
+      } catch {
+          /* No grid. The chip says so, and the collage cuts on its own clock. */
+      } finally {
+          setBeatBusy(false);
+      }
   };
 
   const removeSoundtrack = () => {
       if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
+      beatTrackRef.current = null;
       setSoundtrack(null);
+      setBeatGrid(null);
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1687,7 +1805,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1724,6 +1842,7 @@ export default function App() {
       setMove(l.move ?? 'still');
       setTurn(l.turn ?? 'hold');
       setPace(l.pace ?? 'even');
+      setSync(l.sync ?? 'off');
       if(item.state.style?.background) setBgColor(item.state.style.background);
       // ABSENT MEANS THE DEFAULT, never "keep what is on screen" — restoring a
       // snapshot that predates the title must not leave today's caption on it.
@@ -1986,7 +2105,7 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
@@ -2002,7 +2121,7 @@ export default function App() {
   // and Clear (history) each described the project by writing this same literal
   // inline — three chances to drift, and the manifest is exactly where a silent
   // field-omission becomes a wrong answer on reopen. One source of truth now.
-  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
+  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
 
   const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
 
@@ -2132,7 +2251,7 @@ export default function App() {
         const ld = loaded.state.layout;
         const ldOwned = ld.countOwned ?? true;
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -2426,6 +2545,7 @@ export default function App() {
                        look={look}
                        turn={turnScene}
                        pace={pace}
+                       beat={beatSched}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
                        controlsHost={stageControlsHost}
@@ -2607,7 +2727,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

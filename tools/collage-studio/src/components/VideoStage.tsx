@@ -57,6 +57,7 @@ import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
 } from '../lib/soundtrack';
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
+import type { TurnSchedule } from '../lib/turn';
 import { takeLength } from '../lib/playhead';
 import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
@@ -96,6 +97,14 @@ export interface VideoStageProps {
    * restart the take on every unrelated render (the scar this file records).
    */
   pace?: string;
+  /**
+   * THE BEAT — the cut schedule when the music decides it (lib/beat.ts), or
+   * null for the turn roster's own hold. An OBJECT here and THREE PRIMITIVES
+   * into the scene: the parent memoises this on the state that produced it, and
+   * the effect below keys on the numbers so a re-render with an equal schedule
+   * cannot restart the take.
+   */
+  beat?: TurnSchedule | null;
   zoom: number;
   bgColor: string;
   /**
@@ -481,7 +490,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, beat, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackWindow,
 }) => {
@@ -669,6 +678,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     }));
   }, [clips, clipLengthMode, trims]);
 
+  // THE BEAT, flattened to the three numbers the scene compares by value. A
+  // schedule object in the dependency array would be a new reference on every
+  // render of the parent, and `setScene` ends by restarting the take.
+  const beatHold = beat && beat.hold > 0 ? beat.hold : 0;
+  const beatFirst = beat && beat.hold > 0 ? beat.first : 0;
+  const beatFade = beat && beat.hold > 0 ? beat.fade : 0;
+
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -684,8 +700,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       look,
       turn,
       pace,
+      beatHold,
+      beatFirst,
+      beatFade,
     });
-  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace]);
+  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace,
+      beatHold, beatFirst, beatFade]);
 
   /**
    * THE MUSIC, handed over on its own effect and keyed on the URL, never on the

@@ -45,7 +45,7 @@ const load = async (rel, tag) => {
 const { PACE_IDS, PACES, paceRate, isPaced, paceTime } = await load('src/lib/pace.ts', 'pace');
 const { TURN_IDS, TURN_FADE_SEC, NO_TURN, turnAt, turnHoldSec } = await load('src/lib/turn.ts', 'turn');
 const { MOVE_IDS, MOVE_CYCLE_SEC, NO_MOVE, sampleMove } = await load('src/lib/motion.ts', 'motion');
-const { encodeRoll, decodeRoll, rollDice } = await load('src/lib/diceRoll.ts', 'dice');
+const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_MAX } = await load('src/lib/diceRoll.ts', 'dice');
 
 let failures = 0;
 const results = [];
@@ -303,7 +303,14 @@ const realAt = (id, t, rate) => turnAt(id, paceTime(rate, t));
 
 // ---------------------------------------------------------------------------
 // I8 — THE CODE CARRIES IT. Round trip over every pace, and the group is the
-//      22-character generation.
+//      generation this build actually mints.
+//
+//      NOT A LITERAL. This assertion carried `22` and broke the moment THE BEAT
+//      appended its own character — which is the SECOND time this exact line
+//      has broken in a sibling sweep for the same reason (C144 filed it after
+//      grade/motion/turn all pinned `21`). The property is "one character longer
+//      than the generation I am about to rebuild in I9", and that is a fact the
+//      codec owns and exports.
 // ---------------------------------------------------------------------------
 {
   let bad = null;
@@ -317,7 +324,7 @@ const realAt = (id, t, rate) => turnAt(id, paceTime(rate, t));
       checked++;
       if (!back) { bad = `refused its own output: ${code}`; break; }
       if (back.pace !== p) { bad = `${p} came back as ${back.pace}`; break; }
-      if (code.split('-')[1].length !== 22) { bad = `group is ${code.split('-')[1].length} characters`; break; }
+      if (code.split('-')[1].length !== MINTED_GROUP_MAX) { bad = `group is ${code.split('-')[1].length} characters, expected ${MINTED_GROUP_MAX}`; break; }
       for (const k of ['layout', 'primitive', 'count', 'countOwned', 'entropy', 'aspect',
                        'gutter', 'zoom', 'bg', 'arrangement', 'focus', 'twist', 'look', 'move', 'turn', 'seed']) {
         if (JSON.stringify(back[k]) !== JSON.stringify(r[k] ?? back[k])) { bad = `field ${k} moved`; break; }
@@ -326,7 +333,7 @@ const realAt = (id, t, rate) => turnAt(id, paceTime(rate, t));
     }
     if (bad) break;
   }
-  ok('I8  every pace survives the round trip in a 22-character group', bad === null,
+  ok(`I8  every pace survives the round trip in a ${MINTED_GROUP_MAX}-character group`, bad === null,
     bad ?? `${checked} codes`);
 }
 
