@@ -1040,6 +1040,47 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C156b-THREE PLACES ANSWERED "IS THE WALL TURNING" AND THE NEW FEATURE
+  ASKED THE WRONG ONE.** `Stage.setScene` builds the turn RING out of the
+  fragments that are NOT holding a live clip and switches the feature off below
+  two of them; App's own `turning` is `isTurning(turn) && images.length > 1`,
+  which counts the POOL. Those are different sets, and the difference is total
+  for the app's headline case: every frame extracted from a video carries a
+  `clipId` and binds to that clip, so a collage made of videos has an EMPTY ring
+  and **never cuts — in the preview and in the exported file — however loudly
+  MARCH is selected**. THE STRIP drew App's answer, so it put two white ticks
+  under a wall that never re-deals. In mixed pools it is worse than wrong, it is
+  SHUFFLE-DEPENDENT: 1 video + 2 photos over 3 fragments actually cuts in 195 of
+  400 deals while the strip drew the same two marks in all 400, so a remix
+  flipped the truth and not the picture. **The general shape: a feature that
+  DRAWS another feature inherits every predicate that other feature uses, and a
+  predicate that exists in three places has three values.** Fixed by publishing
+  the Stage's own answer (`StageStatus.turning`, in the `emitStatus` dedupe
+  signature) and gating the strip on it — never by re-deriving the ring in the
+  component, which is the second-place-that-decides defect `takeMap.ts` DECISION
+  1 exists to refuse. **AND NO TEST IN THE TREE COULD HAVE SEEN IT**: the unit
+  sweep interrogates `turnAt` given a mode id, which is the right oracle for
+  WHERE the cuts are and structurally blind to the Stage having switched the
+  feature off; the e2e suite closed the same door from the other side by never
+  once putting a clip and a turn mode in the same scene. `take-strip.spec.ts` S6
+  is that scene, and it pins the ground truth rather than the behaviour — two
+  videos, MARCH, parked past the would-be cut AND its dissolve, measured against
+  the same instant with the turn off: 0.0% of the frame moved, worst 0/255.
+- **SCAR-C156c-THE LABEL ROUNDED AWAY THE ONE FACT ITS OWN DOCSTRING SAID IT
+  EXISTED TO STATE.** `laneLabel`'s comment reads "`x2.5` rather than `x3`: the
+  fractional part IS the information — it says the take ends mid-pass", and the
+  code under it was `Math.round(times * 10) / 10`, which snaps anything within
+  0.05 of an integer onto it. A 10.4 s source in a 10 s take printed `x1` — it
+  plays through once — directly beside a bar drawn as a single DIMMED partial
+  pass. On a 10 s take every period from 9.524 to 10.000 s read `x1`, and
+  4.878–5.000 s read `x2` while three segments were drawn. The sweep's three
+  cases (5/10, 3/10, 30/10) all sit outside those bands, which is exactly why
+  they held. **The general shape: a docstring is not a test, and a value derived
+  a SECOND way from the same inputs will disagree with the picture at the
+  boundaries nobody sampled.** Fixed by reading the claim off the SEGMENTS the
+  component draws (`segments.at(-1).whole`) rather than off a re-rounding, so
+  the label and the bar agree by construction; I10 now sweeps 3,457 periods
+  continuously instead of three round ones.
 - **SCAR-C156-EVERYTHING DRAWN UNDER A SLIDER WAS DRAWN ON THE WRONG AXIS.**
   A range thumb's CENTRE travels from `thumb/2` to `width - thumb/2`, not from 0
   to `width` — so an overlay positioned at `left: f%` of the element is not
@@ -4311,4 +4352,39 @@ frontier. Today's ceiling is tomorrow's floor.
   no lane, so a still collage with the turn on HOLD and no music still draws
   nothing at all. And a lane past 48 seams goes to a hatch that says "too fast
   to draw" only in its title.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C156b — 2026-08-12 · [AXIS:COLLAGE] THE ADVERSARIAL AUDIT EARNED ITS KEEP
+  AGAIN — the strip was drawing cuts on a wall that cannot cut** (same cycle,
+  post-ship, pre-close; the audit ran against the shipped tree while the live
+  verification was in flight). ONE HIGH, TWO MEDIUM, FOUR LOW; the HIGH and both
+  MEDIUMs fixed, three LOWs fixed, one LOW measured and deliberately left.
+  THE HIGH IS SCAR-C156b: three predicates answer "is the wall turning" and the
+  strip read App's (`images.length > 1`, the POOL) instead of the Stage's (the
+  turn RING, which excludes every fragment holding a live clip). A collage of
+  videos never cuts and the strip drew two ticks saying it does — in mixed pools
+  shuffle-dependently, 195 of 400 deals. `StageStatus.turning` is published now
+  and the strip is gated on it.
+  THE MEDIUMS: `laneLabel` rounded away the partial pass it exists to state
+  (SCAR-C156c), and a MUTED soundtrack — which contributes neither picture nor
+  sound to the file — still got a lane. THE LOWS: `cutPlan` mirrored
+  `scheduledTurnAt`'s fade test when the PIPELINE repairs that field before the
+  compositor sees it, so a `fade: 0` grid drew nothing while the wall cut; with
+  nine sources the MUSIC lane was the one dropped, and it is the only lane whose
+  identity is unambiguous; an unmeasured source with nothing beside it came back
+  `empty` and took its own "1 source of unknown length" admission with it.
+  LEFT, WITH THE MEASUREMENT: `--fill` is a gradient stop inside the TRACK while
+  the strip is on the thumb's travel, so on WebKit they differ by
+  `thumb*|f-0.5|` — 7.8px at 20% of a 294px bar. Bounded by `thumb/2` and
+  therefore always underneath the 26px thumb itself, which is why five call
+  sites are not being touched to move a pixel nobody can see.
+  WHAT THE TESTS COULD NOT HAVE SEEN, AND NOW CAN: no spec in this tree had ever
+  put a clip and a turn mode in the SAME SCENE, and the unit sweep's oracle
+  (`turnAt` given a mode id) is structurally blind to the Stage switching the
+  feature off. S6 is that scene: two videos, MARCH, parked at 5.8s — past the
+  cut and past its dissolve — against the same instant with the turn off. 0.0%
+  of the frame moved, worst channel 0/255, and the strip draws 0 marks.
+  PROOF: 13 invariants, 19/19 mutations killed (one per finding); take-strip
+  4/4, turn + beat + playhead 15/15; the full chromium suite 149/149 on the
+  build this corrects; `tsc` and `vite build` clean.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
