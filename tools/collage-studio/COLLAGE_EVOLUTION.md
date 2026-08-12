@@ -842,6 +842,19 @@ multi-agent audit for non-trivial changes.
   `?c=` code param, so the test can boot on a fixed code and the bar can be
   re-derived from the floor of several runs on THAT composition, instead of
   being a taste-picked number held against a distribution nobody measured.
+  THE SWEEP FOR THE SAME CLASS (the rider: a fix that lands on one place and
+  leaves its siblings is half a fix). Static pass over all 28 e2e specs asking
+  "does this file's numeric bar document where it came from, and does it pin a
+  composition?" — exactly ONE spec documents measured provenance for its pixel
+  bars (`motion.spec.ts`, five citations and a per-move table of three runs),
+  and NOT ONE spec pins the seed before taking a pixel measurement. The
+  shortlist that measures PIXELS over an unseeded boot, and is therefore in the
+  same class as the defect above rather than merely adjacent to it:
+  `composition`, `look`, `twist`, `title`, `colour-dice`. This is a STATIC
+  heuristic, not a flake measurement — only `composition` has actually been run
+  enough times to show a distribution (4 runs per tree). Naming the shortlist is
+  the sweep; measuring it is the next cycle's, and cheap: run each five times
+  and read the spread.
 - **A FRAGMENT REBOUND BEFORE ITS DECODE LANDS KEEPS THE OLD PICTURE AND THE NEW
   ANALYSIS, for a few frames.** `bindTurnSource` re-points `stillKey`,
   `previewKey`, `fullKey` and `analysis` together, but only swaps `it.still` and
