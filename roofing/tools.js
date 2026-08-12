@@ -51,6 +51,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The write-ups you put off — leak calls, wet insulation, the weather day, the not-from-our-work reply, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it in the truck.",
     chip: "#4B3F8F",
     audience: "Foremen · service · PMs"
+  },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line, then put your real hours in — a dollar an hour on a rained-out year is a different dollar.",
+    chip: "#8A1C4B",
+    audience: "Hands · foremen · anybody weighing a move"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

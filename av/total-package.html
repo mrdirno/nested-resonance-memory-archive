@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Total Package &mdash; AV Field Toolkit</title>
+<meta name="description" content="Put your own package next to theirs, line by line — wages, fringes and what comes back out — and copy the difference. Your figures, your phone, nothing sent anywhere.">
+<meta name="apple-mobile-web-app-title" content="Total Package">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+<link rel="stylesheet" href="../shared/package.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">AV · this one vs that one</span>
+    <h1>Total Package</h1>
+    <p class="lede">What the job is actually worth, line by line — the rate, what the shop puts in on top, and what comes back out. Put what you're on now in one column and the offer in the other, and stop comparing two numbers that were never the same number.</p>
+  </header>
+
+  <div id="sheet"></div>
+
+  <p class="section-label">What you'd send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn"><b>The rate is not the package.</b> AV pay is a rate in one shop, a salary in the next and a rate plus per diem on the road, and every recruiter quotes the half that flatters them. Put both sides in the same shape and the offer either holds up or it doesn't.</div>
+
+  <p class="credit">&#10022; Wished into existence by an anonymous AV hand, who asked for the trades to be able to
+  see what every agreement is actually worth. We can't publish anybody's agreement &mdash; but you can put yours
+  next to theirs here, and nothing you type leaves your phone.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/package.js"></script>
+<script>
+/* TOTAL PACKAGE — the first instance of shape #5, THE RECKONING
+ * (av/AV_SOCIETY.md §THE THREE SHAPES). This whole page is a CONFIG: no CSS of
+ * its own, no DOM building, no state, no arithmetic, no persistence, no document
+ * assembly. shared/package.js owns all of that; this file owns every WORD.
+ *
+ * WHERE IT CAME FROM: a wish asking for a consolidation of union agreement
+ * documents, per local, so the trades could see why each one gets what. We
+ * REFUSED the literal ask &mdash; wage tables, agreement text and jurisdiction
+ * maps are authoritative data we do not have and cannot verify, and a stale rate
+ * on a phone is worse than no rate (&sect;SAFETY). What survived the panel is the
+ * question underneath it: what is a package actually worth, and how does mine
+ * compare. Every figure on this page is one the user typed off his own stub.
+ *
+ * NOTHING TYPED HERE LEAVES THE DEVICE, and that is a stronger rule on this page
+ * than on any other in the kit, because what gets typed here is a person's pay:
+ *   &middot; no telemetry, no variant counter, no anonymous tally &mdash; the evo loop
+ *     instruments CHOICES between variants, and a wage is not a variant;
+ *   &middot; the feedback path must never attach page state to a report. shared/
+ *     feedback.js builds its payload from its own form fields only, and on this
+ *     page that is a rule rather than an implementation detail;
+ *   &middot; the draft is localStorage and nothing else.
+ *
+ * NO PROPER NOUNS IN THE SEED LIST. Not a union, not a contractor association,
+ * not a benefit fund, not a local number &mdash; only the CATEGORY names a stub
+ * already carries. Seeding one fund's real name would be a claim about which
+ * agreement he is under, and suggesting local numbers in the column field would
+ * compile the jurisdiction directory this project just refused to ship.
+ */
+Package.mount({
+  mount: "sheet",
+  preview: "preview",
+  count: "count",
+  copy: "copy",
+  clear: "clear",
+  key: "av-package-v1",
+  basis: "hr",
+  colHints: ["What I'm on", "The offer"],
+  firstColLabel: "Yours",
+  otherColLabel: "The other one",
+  addColLabel: "\uFF0B Put another one beside it",
+  docTitle: "TOTAL PACKAGE",
+  docSub: "AV",
+  clearConfirm: "Wipe every figure off this sheet?",
+  groups: [
+      {
+          "key": "wages",
+          "name": "On the check",
+          "why": "Taxable, and it's the number in the offer email. It is not the package.",
+          "lines": [
+              {
+                  "id": "base",
+                  "label": "Base wage or salary",
+                  "sub": "switch the basis above if yours is salaried"
+              },
+              {
+                  "id": "lead",
+                  "label": "Lead / crew chief premium",
+                  "sub": "only the hours you actually hold it"
+              },
+              {
+                  "id": "show",
+                  "label": "Show, night & weekend premium",
+                  "sub": "if it's a real premium and not just OT"
+              },
+              {
+                  "id": "oncall",
+                  "label": "On-call / standby"
+              }
+          ],
+          "addLabel": "＋ Add a line of your own",
+          "addPrompt": "What's it called? Put it in however it reads on your stub or your offer."
+      },
+      {
+          "key": "fringes",
+          "name": "What they put in on top",
+          "why": "What the shop puts in on top of your rate. This is the half nobody counts when they compare two offers.",
+          "lines": [
+              {
+                  "id": "health",
+                  "label": "Health insurance — their share",
+                  "sub": "what THEY pay, not what you pay"
+              },
+              {
+                  "id": "ret",
+                  "label": "Retirement match",
+                  "sub": "flat, or type a % if that's how they wrote it"
+              },
+              {
+                  "id": "pto",
+                  "label": "Paid time off — what it's worth",
+                  "sub": "if you can put a figure on it"
+              },
+              {
+                  "id": "train",
+                  "label": "Training / certs they pay for"
+              },
+              {
+                  "id": "tool",
+                  "label": "Tool / gear allowance"
+              }
+          ],
+          "addLabel": "＋ Add another one",
+          "addPrompt": "What's it called? Put it in however they described it."
+      },
+      {
+          "key": "back",
+          "name": "What comes back out",
+          "why": "Comes off your gross. Not part of the package — but it is part of your month.",
+          "lines": [
+              {
+                  "id": "youhealth",
+                  "label": "What you pay toward health",
+                  "sub": "your side of the premium"
+              },
+              {
+                  "id": "dues",
+                  "label": "Dues",
+                  "kind": "pct",
+                  "sub": "if you're in a local — most run as a percent"
+              }
+          ],
+          "addLabel": "＋ Add a deduction of your own",
+          "addPrompt": "What's the deduction called?"
+      },
+      {
+          "key": "aside",
+          "name": "On top, and kept out of the package",
+          "why": "Real money that isn't per-hour money. It prints on its own line and never gets added in.",
+          "lines": [
+              {
+                  "id": "diem",
+                  "label": "Per diem",
+                  "kind": "aside",
+                  "unit": "a day"
+              },
+              {
+                  "id": "veh",
+                  "label": "Vehicle / phone allowance",
+                  "kind": "aside",
+                  "unit": "a month"
+              }
+          ],
+          "customKind": "aside",
+          "unit": "a day",
+          "addLabel": "＋ Add another one",
+          "addPrompt": "What's it called? It'll print by the day and stay out of the package."
+      }
+  ]
+});
+</script>
+</body>
+</html>

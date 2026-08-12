@@ -446,6 +446,74 @@ tool's data rather than re-declare it:** `answer-back` offers its "when" chips o
 `TOOLKIT_ROUGHIN.milestones`, because two lists of the same trade's gates is one list that
 rots.
 
+## THERE IS A FIFTH SHAPE, AND IT IS THE FIRST ONE THAT DOES NOT GO UP THE CHAIN
+Every shape above produces a document you send UP a chain — a request to your PM, a note
+to the super, a log for the O&M, an instruction block for your own AI. Shape #5 produces
+one you send SIDEWAYS, to your brother in another local, or to nobody at all because the
+answer was for you.
+
+5. **THE RECKONING.** Two named columns, a list of lines in the trade's own vocabulary,
+   a figure on the lines that apply, and the difference. Package vs package, bid vs bid,
+   quoted hours vs burned hours, this month vs last. There is **no tick**: the figure IS
+   the tick, which is one act instead of two and drops every unpicked value for free.
+
+**SHAPE #5'S ENGINE: `shared/package.js` + `shared/package.css`** (2026-08-12; the sheet
+loads *after* `note.css` and adds only the basis switch, the columns, the line grid and
+the totals — the chrome is note.css). First instance: **TOTAL PACKAGE**, shipped as eight
+configs in one cycle.
+
+**THIS IS THE FIRST SHAPE THAT DOES ARITHMETIC, AND THAT IS WHY IT COULD NOT BE A ROW
+LOG.** `shared/rowlog.js`'s header states as a designed boundary: *"NOT here, deliberately:
+any computed quantity… The user states every value."* Every other trade's row log relies
+on that staying true, so bending rowlog to sum a package would repeal the rule rather than
+extend it. The line shape #5 draws instead: **the tool may add up figures it watched a man
+type, and may multiply two of them together — and nothing else.** No rate, no table, no
+index, no projection, no figure from us. Same §SAFETY, one floor down.
+
+**THREE LINE KINDS, because a package is not a column of like things:** `money` (a figure
+in the basis) · `pct` (a percentage resolved per column against THAT column's own wages) ·
+`aside` (a figure with its own unit — "a day" — never summed, always printed). The `pct`
+kind is a panel finding, not a refinement: a working journeyman killed the flat-dollar
+dues line with *"it just sits there being wrong exactly when I compare two different wage
+rates, which is the entire point of the tool."* A trailing `%` typed into ANY line makes it
+a percent too, because the seed list cannot know whether his annuity is flat or off gross.
+
+**FOUR BUCKETS AND ONE REFUSAL TO CONFLATE THEM:** wages · fringes · what comes back out ·
+asides. TOTAL PACKAGE = wages + fringes, which is what a wage sheet means by it.
+Deductions show as NET ON THE CHECK and never touch the package. Vacation gets a line in
+BOTH the fringes and the deductions group on purpose — funded-on-top and deducted-from-gross
+are the commonest way this comparison is made wrong, and two labelled lines teach it.
+
+**THE BLANK-LINE FLAG IS THE HONESTY MECHANISM OF THIS SHAPE.** If one column carries a
+line the other does not, the two totals are answering different questions, and the page
+says so — on screen, next to the number it undermines, and in the document. A confident
+total built on unacknowledged blanks is the single most likely way a comparison tool
+produces a figure someone takes into a real decision and is wrong. Same rule as §THE
+RETURN LEG's dateless yes and the 2026-08-09 scar THE SUMMARY COUNTED ROWS THE DOCUMENT
+DID NOT CONTAIN.
+
+**TWO DISCLAIMERS NO CALLER CAN SWITCH OFF** — one on screen beside the totals, one inside
+the copied text. The copied block is the artifact that leaves the browser and reaches a
+business agent or a spouse, and it looks exactly like the hall's own wage sheet. It is one
+man's typing and it says so, every time, covering three points: self-reported, not
+take-home, and fringes usually pay at straight time even on overtime.
+
+**AND THE THINGS THIS SHAPE MAY NEVER DO,** written here rather than in one page's comment
+because the next instance will be tempted by all of them: no proper noun of any union,
+contractor association, benefit fund or local number in a seed list (only the CATEGORY
+names a stub already carries — seeding one fund's real name is a claim about which
+agreement he is under); no autocomplete on the column-name field (suggesting real locals
+compiles the jurisdiction directory this project refused to ship); no example figure in a
+placeholder (a suggested number is a rate assertion wearing helper text); no forward
+projection of any kind; no column ever labelled better, worse or recommended — the delta
+says MORE THAN and LESS THAN, because that is arithmetic and anything warmer is advice.
+
+**AND NO TELEMETRY, EVER, ON A PAGE THAT HOLDS A WAGE.** The evo loop instruments CHOICES
+between variants; a wage is not a variant. Every other tool's data is a cable spec or a
+punch item. This shape is exempt by design, the feedback path must never attach page state
+to a report, and both rules are written into the engine header so a later cycle reads them
+before wiring one in for convenience.
+
 ## FEEDBACK IS BUILT IN — the standard for everything we make (operator 2026-08-04)
 > *"there's a lot of bugs still and people should be able to send the feedback so the
 > loop cycles can address them. Make sure we have a solid scalable way of addressing
@@ -2417,3 +2485,38 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   projects and re-run GREEN AGAINST PRODUCTION (4/4), full chromium suite 149/149, 25/25
   unit sweeps tree-wide.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-12 · **[AXIS:WELL] FORTY-FIVE TOOLS AND NOT ONE OF THEM TOUCHED THE MONEY ·
+  8 trades × 45 tools → 8 trades × 53 tools, and a fifth shape.** The well had two wishes,
+  no bugs. The one taken asked for *"an organize consolidation of all Ibew agreements
+  documents… map borders county jurisdictions… build a trade expert per local."* **The
+  literal ask was refused and the refusal is the interesting half:** agreement text, wage
+  tables and jurisdiction maps are authoritative data we do not have, cannot verify, and
+  cannot keep current — and a stale rate on a phone is worse than no rate. What survived is
+  the question underneath it, which the wisher put in his own second sentence: *why each
+  trade gets what.* **TOTAL PACKAGE** — build your package line by line in your trade's
+  words, put theirs in the column beside it, read the difference, send it. Every figure is
+  one the user typed off his own stub; nothing is fetched and nothing leaves the device.
+  Live on all eight kits in the same cycle, on one new engine (`shared/package.js`).
+  **THE PANEL SPLIT, AND THE SPLIT IS THE RECORD.** A working journeyman scored it 7/10
+  BUILD and named the real moments (the ratification-flyer napkin math, the book-out
+  decision) — and killed the flat dues line: *"it just sits there being wrong exactly when
+  I compare two different wage rates, which is the entire point of the tool."* Dues are a
+  PERCENT of that column's own wages now, and a trailing `%` typed into any line works too.
+  The safety lens returned eleven mandatory changes, all landed: no proper noun of a union,
+  association, fund or local anywhere in a seed list; no autocomplete on the column field;
+  no example figure in a placeholder; the blank-line flag; two un-switch-off-able
+  disclaimers; MORE THAN / LESS THAN instead of anything that reads as advice; and no
+  telemetry on a page that holds a wage. **The shape skeptic scored it 2/10 and said kill
+  the columns, kill the engine, ship one page for one trade.** Overruled on the standing
+  breadth law and recorded here so the receipt is paid if it was the wrong call — but it
+  took two of its hits: THREE COLUMNS BECAME TWO (its 320px arithmetic was right), and the
+  seed lists were cut to what a stub actually carries. **BACKPORT RIDER FIRED IN THE SAME
+  CYCLE:** the wish arrived on the AV surface and shipped to all eight kits at once, AV and
+  GC carrying an offer-shaped vocabulary (salary, bonus that actually landed, what the shop
+  puts in) where the six union-hourly kits carry wages/fringes/dues/per-diem.
+  Gate: 32 overflow assertions (8 trades × 320/360/390/430), zoom-out to 0.5, zero controls
+  under 44px, zero page errors, draft survives a reload, and the arithmetic driven end to
+  end in a real browser — 66.25 vs 71.65, delta $5.40/hr = $9,720 a year at 1,800 hrs, dues
+  3% → $1.46 off 48.50 and 3.5% → $1.82 off 52.10.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/total-package.html

@@ -52,6 +52,13 @@ window.TOOLKIT_TOOLS = [
     desc: "AV, mechanical, the fitters and the GC all send you a list. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send one answer back instead of six texts.",
     chip: "#8A1C4B",
     audience: "EC → AV / HVAC / PC / GC"
+  },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and send the real difference to whoever is asking you to drive.",
+    chip: "#2E64C8",
+    audience: "JWs · foremen · anybody thinking of booking out"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

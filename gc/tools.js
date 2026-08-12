@@ -54,6 +54,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Your subs send you lists all day — access, cores, backing, power, dates. Paste one, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and answer the whole thing in one message.",
     chip: "#8A1C4B",
     audience: "GC → subs / owner vendors"
+  },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The salary is not the package. Put what you're on now next to the offer — bonus that actually landed, truck, phone, what they put in, what you pay back — and compare the whole thing.",
+    chip: "#2E7D4F",
+    audience: "Supers · PMs · anybody weighing an offer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

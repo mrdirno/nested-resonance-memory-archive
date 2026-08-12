@@ -1,0 +1,139 @@
+/* FIELD TOOLKIT — SHAPE #5 STYLESHEET (THE RECKONING).
+ *
+ * Loads AFTER shared/note.css and only adds what shape #5 needs that shapes #2
+ * and #4 did not: the basis switch, the two named columns, the line grid, the
+ * totals block and the two warnings. Everything else — the plate, cards,
+ * segments, the fixed bottom bar, the preview, the 44px floor, the trade colour
+ * variables — is note.css, because a second stylesheet that re-declares the
+ * chrome is a fork with extra steps (av/AV_SOCIETY.md §THE THREE SHAPES).
+ *
+ * THE ONE HARD LAYOUT PROBLEM THIS SHEET EXISTS TO SOLVE: money columns on a
+ * 320px phone. Every cell is `flex:1 1 0` with `min-width:0`, and every column
+ * name — which is a string the USER authored and can be any length — is
+ * ellipsised, so a row SHRINKS instead of pushing the document sideways. That
+ * pair is the 2026-08-11 scar (MIN-HEIGHT WAS SET EVERYWHERE AND MIN-WIDTH
+ * NOWHERE) and the audience-chip scar (NEVER nowrap A STRING YOU DIDN'T AUTHOR)
+ * read together. TWO columns, never three: three number fields plus a label do
+ * not fit a thumb at 320px.
+ *
+ * Same two hard mobile facts as note.css: NO overflow-x:hidden anywhere (it
+ * MASKS the defect the pre-ship gate exists to catch), and 44px minimum on
+ * every control.
+ */
+
+/* ── THE BASIS SWITCH ────────────────────────────────────────────────────
+ * The unit is the loudest control on the page on purpose. Hourly and yearly
+ * figures look identical in a text field and differ by a factor of two
+ * thousand, and the man reading what you sent him cannot ask.
+ */
+.basis{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.basis .lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.basis .seg{margin:0;flex:1 1 200px;min-width:0}
+
+/* ── THE COLUMNS ─────────────────────────────────────────────────────────
+ * A column is a NAME you type. The placeholder is a prompt, never a value: the
+ * document prints what he typed, and if he typed nothing it prints the
+ * placeholder, so an untouched sheet still reads right.
+ */
+.cols{display:flex;gap:6px;margin-top:10px;align-items:flex-end}
+.cols .cell{flex:1 1 0;min-width:0}
+.cols .cell label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cols input{width:100%;font:inherit;font-size:16px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);min-height:44px}
+.cols input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.cols .drop{flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:2px;
+  min-height:44px;min-width:44px;font-size:17px;line-height:1;cursor:pointer}
+.cols .drop:hover{border-color:var(--deep);color:var(--deep)}
+.addcol{margin-top:9px;width:100%;font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:14px;
+  padding:11px 12px;min-height:44px;border:1px dashed var(--line);background:transparent;color:var(--muted);
+  border-radius:2px;cursor:pointer}
+.addcol:hover{border-color:var(--deep);border-style:solid;color:var(--deep)}
+
+/* ── THE LINE GRID ───────────────────────────────────────────────────────
+ * No tick. The figure IS the tick — a line with a number on it is in the
+ * document and a blank line is not, which is one act instead of two and drops
+ * the unpicked value for free (§SCARS, A DEFAULT IS A CLAIM).
+ */
+.grp{margin-top:2px}
+.grph{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 4px;
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--deep)}
+.grph .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:11px;font-weight:400;
+  color:var(--muted);flex:1 1 180px;min-width:0}
+
+.line{padding:9px 0;border-top:1px dashed var(--line)}
+.line:first-child{border-top:1px solid var(--line)}
+.line.on{background:var(--tint);margin:0 -8px;padding-left:8px;padding-right:8px}
+.lbl{font-family:var(--cond);font-size:15px;letter-spacing:.02em;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.lbl .sub{font-family:var(--sans);font-size:11px;color:var(--muted);flex:1 1 140px;min-width:0}
+.lbl .rm{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font-size:15px;line-height:1;
+  cursor:pointer;min-height:44px;min-width:44px}
+.lbl .rm:hover{color:var(--deep)}
+
+.ins{display:flex;gap:6px;margin-top:6px}
+.ins .cell{flex:1 1 0;min-width:0}
+.ins .cap{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ins.nocap .cap{display:none}
+/* The unit sits on a WRAPPER, not on the cell, so it stays centred on the input
+   whatever the OS text size does to the field's height. */
+.mw{position:relative}
+.mw input{width:100%;font:inherit;font-size:16px;padding:8px 9px 8px 21px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;color:var(--ink);min-height:44px;text-align:right}
+.mw input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.mw::before{content:"$";position:absolute;left:8px;top:0;height:100%;display:flex;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--muted);pointer-events:none}
+.mw.pct input{padding:8px 22px 8px 9px}
+.mw.pct::before{content:"";left:0;width:0}
+.mw.pct::after{content:"%";position:absolute;right:8px;top:0;height:100%;display:flex;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--muted);pointer-events:none}
+
+.addline{margin-top:10px;width:100%;font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:14px;
+  padding:11px 12px;min-height:44px;border:1px dashed var(--line);background:transparent;color:var(--muted);
+  border-radius:2px;cursor:pointer}
+.addline:hover{border-color:var(--deep);border-style:solid;color:var(--deep)}
+
+/* ── HOURS ───────────────────────────────────────────────────────────────
+ * Optional, blank, and the ONLY denominator on the page — because it is the
+ * only one the tool watched a man enter (§SAFETY). No example figure in the
+ * placeholder: a suggested number is a claim wearing helper text.
+ */
+.hours{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:2px}
+.hours .cell{flex:1 1 130px;min-width:0}
+.hours label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px}
+.hours input{width:100%;font:inherit;font-size:16px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);min-height:44px}
+.hours input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.hours .note{flex:2 1 200px;min-width:0;font-size:11.5px;color:var(--muted);margin:0}
+
+/* ── THE ANSWER ──────────────────────────────────────────────────────────
+ * In the same column order as the grid, directly under the lines that made it.
+ */
+.tot{margin-top:2px}
+.totrow{display:flex;gap:6px;align-items:flex-end;padding:7px 0;border-top:1px dashed var(--line)}
+.totrow:first-child{border-top:0}
+.totrow .rl{flex:1 1 0;min-width:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.totrow .cell{flex:1 1 0;min-width:0;text-align:right;font-family:var(--cond);font-size:16px;letter-spacing:.02em}
+.totrow.big{border-top:2px solid var(--deep);padding-top:9px}
+.totrow.big .rl{color:var(--deep);font-weight:700}
+.totrow.big .cell{font-size:20px;font-weight:700;color:var(--deep)}
+.totrow .cell .u{font-family:var(--mono);font-size:9px;color:var(--muted);display:block;letter-spacing:.06em;
+  font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.delta{margin-top:9px;padding:9px 10px;border:2px solid var(--deep);background:var(--tint);border-radius:2px}
+.delta p{margin:0;font-size:13px}
+.delta b{font-family:var(--cond);font-size:17px;letter-spacing:.02em}
+.delta .up{color:#1E6B3A}
+.delta .dn{color:#8A1C1C}
+
+/* THE BLANK-LINE FLAG. Loud, next to the number it undermines — a total built
+   on lines the other column does not carry is not a comparison. */
+.gap{margin:9px 0 0;padding:8px 10px;border-left:4px solid #8A1C1C;background:#FBF2F2;font-size:12px;color:#4A2020}
+.gap b{font-family:var(--cond);font-size:13.5px;letter-spacing:.02em}
+
+/* THE SELF-REPORTED LINE, on screen, beside the totals — not in a footer. */
+.selfrep{margin:11px 0 0;padding-top:9px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}
+
+.empty{color:var(--muted);font-size:12.5px;margin:6px 0 0}

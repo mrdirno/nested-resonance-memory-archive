@@ -62,6 +62,13 @@ window.AV_TOOLS = [
     desc: "Somebody sent you a list of what they need out of you — the GC, the EC, the owner’s vendor. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send back one answer instead of a text nobody can work to.",
     chip: "#8A1C4B",
     audience: "AV → GC / EC / owner"
+  },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "Two offers, two shapes, and nobody quotes the same half. Put what you're on now next to the offer — rate, what the shop puts in, what comes back out — and see the real gap before you answer the email.",
+    chip: "#4B3F8F",
+    audience: "Techs · leads · anybody weighing an offer"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];

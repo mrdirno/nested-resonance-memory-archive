@@ -120,6 +120,16 @@
       "wished_date": "2026-08-09",
       "shipped_date": "2026-08-10",
       "shipped_commit": "914cf37e"
+    },
+    {
+      "tool_name": "Total Package — what the job is actually worth, yours next to theirs",
+      "tool_href": "total-package.html",
+      "wisher": "an anonymous AV hand",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-12",
+      "shipped_date": "2026-08-12",
+      "shipped_commit": null
     }
   ]
 }

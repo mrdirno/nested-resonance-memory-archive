@@ -48,6 +48,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The GC or another trade sent you a list of what they need out of you. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send one answer back before the pour instead of after it.",
     chip: "#8A1C4B",
     audience: "PC → GC / EC / other subs"
+  },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and get the real gap instead of an argument about the headline number.",
+    chip: "#2E7D4F",
+    audience: "JWs · foremen · anybody weighing a move"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

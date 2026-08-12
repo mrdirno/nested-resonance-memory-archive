@@ -56,5 +56,12 @@ window.TOOLKIT_TOOLS = [
     chip: "#4A3BA8",
     audience: "Foreman \u2192 Yard / supplier"
   },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package, and piece is not the rate. Put yours next to theirs line by line and use what you actually averaged — the comparison is only worth what that number is worth.",
+    chip: "#7A5A05",
+    audience: "Hands · foremen · anybody weighing a move"
+  }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

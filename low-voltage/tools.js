@@ -69,5 +69,12 @@ window.TOOLKIT_TOOLS = [
     chip: "#9A3312",
     audience: "Installer \u2192 Shop / lead"
   },
+  {
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — because LV rates sit all over the map and the fringes are where two jobs actually separate.",
+    chip: "#4B3F8F",
+    audience: "Installers · leads · anybody weighing a move"
+  }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
