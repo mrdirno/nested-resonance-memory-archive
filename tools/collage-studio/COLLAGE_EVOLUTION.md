@@ -1040,6 +1040,36 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C156-EVERYTHING DRAWN UNDER A SLIDER WAS DRAWN ON THE WRONG AXIS.**
+  A range thumb's CENTRE travels from `thumb/2` to `width - thumb/2`, not from 0
+  to `width` — so an overlay positioned at `left: f%` of the element is not
+  under the thumb at value `f`. The fade wedges shipped with that error two
+  cycles ago and nobody could see it, because a wedge is a soft triangle and
+  nothing was aligned to it. THE STRIP made it fatal: a cut mark's entire claim
+  is "the playhead crosses this when the collage cuts", and 13 px of a 227 px
+  bar is 6% of the take — most of a second on a 15 s one. **The general shape: a
+  control and a drawing of that control share an axis only if they were built
+  from the same number.** `--range-thumb` is now that number, in tokens.css,
+  used by both engines' thumbs and by the one inset that wraps everything drawn
+  beneath the bar; the two engines had been 26 px and 22 px for no reason, which
+  would have made the ruler right on one of them at best. Asserted at the
+  artifact by computing the thumb's centre the way the engine lays it out and
+  comparing it to the mark's own `getBoundingClientRect` — 408.0 against 408.0,
+  with the thumb width READ FROM THE PAGE so a test cannot pass against a build
+  that changed it.
+  **BACKPORT RIDER FIRED — the class was swept everywhere it could live, and it
+  lives in exactly two more places, both benign for a stated reason.** No trade
+  toolkit page has a slider at all (`grep -rl 'type="range"' av/ electrical/
+  framing/ gc/ hvac/ low-voltage/ plumbing/ roofing/ shared/` is empty), so the
+  class cannot exist there. Inside collage there are seven ranges; the only ones
+  with anything drawn beneath them are the playhead's, both fixed by the one
+  inset. The other five use `--fill`, a gradient stop INSIDE the track, whose
+  end disagrees with the thumb's centre by the same up-to-half-a-thumb — and is
+  invisible by construction, because that error is bounded by `thumb/2` and the
+  thumb is a 26 px disc centred on the very point it is measured against, so the
+  gradient's end is always underneath it. Not fixed, and not an oversight: the
+  cheap fix (a unitless `--fill` and a `calc` against `--range-thumb`) would
+  touch five call sites to move a pixel nobody can see.
 - **SCAR-C150-THE-PREVIEW-WAS-TIME-STRETCHING-WHERE-THE-EXPORT-RESAMPLES.**
   `HTMLMediaElement.preservesPitch` defaults to **true**, so a live `<video>` at
   2× plays faster at the SAME PITCH. The offline mixer has no such switch —
@@ -4233,4 +4263,52 @@ frontier. Today's ceiling is tomorrow's floor.
   bottom of the roster because a stalled audio node is not a still frame, and it
   needs its own answer for the sound; and a speed does not travel in a
   composition code or a project file, exactly like the trim and the music.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C156 — 2026-08-12 · [AXIS:COLLAGE] THE STRIP — the ruler stops measuring an
+  empty ten seconds** (well read UNSCOPED first and empty — 0 new, 0 stranded in
+  `building`, 19 shipped; breadth debt 0; COLLAGE named stalest, and the ladder
+  named this rung "the natural next one now that a ruler exists to draw them
+  on"). BEFORE: the playhead knew the take's length and the fade's shape and
+  nothing else — six cycles of time-domain work (THE MOVE, the trim window, the
+  music range, the lap schedule, THE FADE, THE PACE, THE BEAT) and not one of
+  them observable without exporting a file. AFTER: under the bar, on the bar's
+  own axis, a row of CUT MARKS where the collage re-deals — each a hairline plus
+  its dissolve's real width — and one LANE per timed source drawn as the passes
+  it makes, the last one short when the take ends mid-lap.
+  THE DESIGN IS ONE SENTENCE: draw the compositor's schedule, never a second
+  belief about it. `lib/takeMap.ts:cutPlan` collapses `turnAt`'s two branches
+  into one output-time `{hold, first, fade}` — the roster's hold over the pace
+  rate (`paceTime` scales the CLOCK, so a boundary at scaled `k*hold` is at real
+  `k*hold/rate`, and the FADE divides with it, which is why `fade/hold` is
+  invariant), or the beat grid verbatim and UNPACED. A lane's period is
+  `clipWindow.effectiveLength`, so the sync mode and THE SPEED reached the
+  drawing with no new seam and no fourth copy of a formula.
+  AND IT FOUND AN ERROR IN WHAT WAS ALREADY LIVE: everything drawn under the bar
+  was positioned on the TRACK's width while the thumb travels `thumb/2` to
+  `width - thumb/2`, so the fade wedges have been out by up to half a thumb
+  since they shipped — 6% of the take. `--range-thumb` is one token now, both
+  engines' thumbs and the one inset. SCAR-C156 filed; BACKPORT RIDER FIRED and
+  the sweep is named in it: no trade toolkit page has a slider at all, and the
+  five other collage ranges carry the same error inside `--fill` where it is
+  bounded by `thumb/2` and therefore always hidden under the 26px thumb itself.
+  PROOF. Unit: 11 invariants, 14/14 mutations killed — 4,511 marks each asserted
+  to be a boundary `turnAt` agrees with, a 240Hz walk of 180 schedules proving
+  none is MISSING, seams asserted against `sourceTimeAt` wrapping the window.
+  The one mutation that SURVIVED the first pass was deleting the lap epsilon,
+  which only bites on an exact division — measure-zero under 4,000 random pairs,
+  12 real cases among the 400 exact ones now swept (SCAR-C147's shape again).
+  Artifact: marks measured in the DOM at 0.3333/0.6667, one tap of `sync` moving
+  them to 0.2664/0.5331/0.7997 on a 120 BPM grid; the thumb's computed centre at
+  the 5s cut is 408.0 and the mark is drawn at 408.0; clip lane 3 laps at 1x and
+  5 at 2x; zero horizontal overflow at 320/360/390/430 — green on chromium AND
+  on both WebKit projects, then re-run GREEN AGAINST PRODUCTION. Regression
+  40/40 (playhead, mobile-watertight, pace, beat, turn, speed, soundtrack, trim,
+  video-length-sync, visual-regression); `tsc --noEmit` and `vite build` clean.
+  NOT SHIPPED, AND SAID PLAINLY: the strip is a DRAWING, not a control — a lane
+  is not yet a handle onto its clip's trim sheet, and a seam is not draggable,
+  which is where `drag-reorder` and `split/cut` now obviously live. THE MOVE has
+  no lane, so a still collage with the turn on HOLD and no music still draws
+  nothing at all. And a lane past 48 seams goes to a hatch that says "too fast
+  to draw" only in its title.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
