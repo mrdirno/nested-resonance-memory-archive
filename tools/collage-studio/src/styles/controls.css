@@ -341,7 +341,26 @@
               color var(--dur-1) var(--ease),
               transform var(--dur-1) var(--ease);
 }
-.ui-tile:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-2); }
+/* THE CHOSEN CONTROL IS NEVER HOVER-STYLED — and this was a real, measured bug
+   on the device this app is built for.
+   `.ui-chip:hover:not(:disabled)` is specificity (0,3,0) and
+   `.ui-chip[data-active='true']` is (0,2,0), so HOVER WON: the chip you just
+   chose rendered `--surface-3` instead of `--signal`. On a desktop that is a
+   flicker under the cursor. On iOS Safari a tap leaves a STICKY hover until you
+   tap somewhere else, so the chip you just tapped sat there looking UNCHOSEN —
+   measured on production at rgb(31,36,39) against rgb(22,25,27) for a chip that
+   really was unchosen, nine units per channel apart, where the correct answer is
+   rgb(61,220,151). Found by screenshotting the live page after shipping THE
+   PACE, and it was never about the pace: five of the six hover/active families
+   here had it (chip, gchip, option, swatch, tile), which is every roster row in
+   the app — the look, the move, the turn, the layout tiles, the swatches.
+   `.ui-ratio` escaped by SOURCE ORDER alone (equal specificity, active declared
+   later), which is not a property anyone should have to preserve while editing a
+   stylesheet, so it gets the guard too.
+   The fix is to make hover NOT MATCH a chosen control rather than to out-specify
+   it: the two states are mutually exclusive by intent, and saying so in the
+   selector means no future rule ordering can put them back in competition. */
+.ui-tile:hover:not(:disabled):not([data-active='true']) { color: var(--ink-1); background: var(--surface-2); }
 .ui-tile:active:not(:disabled) { transform: scale(0.975); }
 .ui-tile[data-active='true'] {
   color: var(--ink-1);
@@ -381,7 +400,7 @@
               color var(--dur-1) var(--ease),
               border-color var(--dur-1) var(--ease);
 }
-.ui-chip:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-3); }
+.ui-chip:hover:not(:disabled):not([data-active='true']) { color: var(--ink-1); background: var(--surface-3); }
 .ui-chip[data-active='true'] {
   background: var(--signal);
   border-color: transparent;
@@ -488,7 +507,7 @@
   transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease),
               border-color var(--dur-1) var(--ease);
 }
-.ui-ratio:hover { color: var(--ink-1); background: var(--surface-2); }
+.ui-ratio:hover:not([data-active='true']) { color: var(--ink-1); background: var(--surface-2); }
 .ui-ratio__box {
   width: 22px;
   border: 1.5px solid currentColor;
@@ -523,7 +542,7 @@
   color: var(--ink-3);
   transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
 }
-.ui-swatch:hover:not(:disabled) { color: var(--ink-1); }
+.ui-swatch:hover:not(:disabled):not([data-active='true']) { color: var(--ink-1); }
 .ui-swatch__dot {
   width: 20px;
   height: 20px;
@@ -556,7 +575,7 @@
   text-align: left;
   transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
 }
-.ui-option:hover:not(:disabled) { background: var(--surface-3); }
+.ui-option:hover:not(:disabled):not([data-active='true']) { background: var(--surface-3); }
 .ui-option[data-active='true'] {
   border-color: var(--signal-dim);
   background: linear-gradient(90deg, var(--signal-soft), rgba(255, 255, 255, 0.02));
@@ -715,7 +734,7 @@
   transition: background var(--t-1) var(--ease), color var(--t-1) var(--ease),
               border-color var(--t-1) var(--ease), transform var(--t-1) var(--ease);
 }
-.ui-gchip:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-2); }
+.ui-gchip:hover:not(:disabled):not([data-active='true']) { color: var(--ink-1); background: var(--surface-2); }
 .ui-gchip:active:not(:disabled) { transform: scale(0.97); }
 .ui-gchip:disabled { opacity: 0.35; }
 .ui-gchip[data-active='true'] {

@@ -253,9 +253,10 @@ or re-documenting an existing capability is DD, not delivery.
   deal, at 2× it has cut, and at 0.5× t=6.0 is STILL the opening deal where 1×
   has already cut. Measured on the canvas: 1× at 3.0 s is **0.0% moved, worst
   channel 0/255** against the opening frame — bit-identical, the hold is a hold
-  — while 2× at the same instant moves **94.5% of the frame, worst 199/255**;
-  and at 6.0 s the two swap places, 0.5× reading **0.2% / worst 23** where 1×
-  reads **94.5% / worst 199**. Three rates,
+  — while 2× at the same instant moves **94.5% of the frame, worst 202/255**;
+  and at 6.0 s the two swap places, 0.5× reading **0.5% / worst 29** where 1×
+  reads **94.5% / worst 202**. (Those are the numbers off PRODUCTION, not off
+  the dev server.) Three rates,
   same pixels, no timer anywhere — and because a scrub is the export's own path,
   green here is evidence about the file.
 
@@ -838,6 +839,32 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C144-HOVER-BEAT-CHOSEN, ON THE ONE DEVICE THAT CANNOT UN-HOVER.**
+  Found by SCREENSHOTTING THE LIVE PAGE after shipping THE PACE, not by any
+  test: the `2×` chip was active and was not green. `.ui-chip:hover:not(:disabled)`
+  is specificity (0,3,0); `.ui-chip[data-active='true']` is (0,2,0). Hover won,
+  so a chosen chip under the pointer rendered `--surface-3`. Measured on
+  production: **rgb(31,36,39) chosen-and-hovered against rgb(22,25,27) genuinely
+  unchosen — nine units per channel — where the right answer is rgb(61,220,151)**.
+  On a desktop that is a flicker. On iOS Safari a tap leaves a STICKY hover
+  until you touch something else, so **the chip you just tapped sits there
+  looking untapped**, on the exact device the MOBILE-WATERTIGHT law is written
+  for. It was never about the pace: FIVE of the six hover/active families in
+  `controls.css` had it — `ui-chip` (the look, the move, the turn, the pace),
+  `ui-gchip`, `ui-option`, `ui-swatch`, `ui-tile` — which is every roster row in
+  the app. `.ui-ratio` was correct BY SOURCE ORDER ALONE (equal specificity,
+  active declared thirteen lines later), which is not a property anyone should
+  have to preserve while editing a stylesheet, so it got the guard too.
+  **The general shape, twice over.** First: a screenshot is not decoration —
+  four e2e suites, thirteen invariants and a green production run all passed
+  over a control that looked unpressed, because every one of them asked the DOM
+  what state it was in and none of them asked what COLOUR it came out. Second:
+  the fix is to make hover NOT MATCH a chosen control (`:not([data-active='true'])`)
+  rather than to out-specify it — the two states are mutually exclusive by
+  intent, and saying so in the selector means no future reordering can put them
+  back in competition. `pace.spec.ts` P5 is the guard, and it sweeps the sibling
+  rows rather than only the row this cycle added; the mutation that removes the
+  guard fails it with exactly the two colours above.
 - **SCAR-C144-DYADIC-IS-NOT-EXACT, AND I WROTE THE CLAIM INTO THE MODULE HEADER
   BEFORE THE SWEEP READ IT BACK.** `lib/pace.ts` shipped its first draft
   claiming all five rates are dyadic rationals and therefore "EXACT in binary
@@ -3721,4 +3748,67 @@ frontier. Today's ceiling is tomorrow's floor.
   dissolve, because the schedule is deliberately periodic on a fixed hold rather
   than on the take — the exported file, which walks 0 to L monotonically, never
   sees it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C144 — [AXIS:COLLAGE] THE PACE — the roster said what SHAPE, it never said
+  how fast** (well read UNSCOPED first: 0 new, 0 stranded in `building`, across
+  all trades; breadth debt 0, so LIVE STATE's stalest-axis rule governed and it
+  named COLLAGE.) before→after: **"cut faster" was a request for a different
+  PERMUTATION → it is a request for a different tempo.** Two rungs of the ladder
+  had filed the same gap in the same words — the turn's hold is a property of
+  the mode (`march` 5s, `ripple` 3.5s, change one and you change the other) and
+  the move's 12s cycle is a constant with no control at all — so both rosters
+  were answering two questions with one chip. Five chips
+  (**0.5× · 0.75× · 1× · 1.5× · 2×**) now scale the clock the move and the turn
+  are read against, on the dice and in the composition code, and the shape
+  rosters finally answer only the question they are good at.
+  THE DESIGN IS ONE SENTENCE AND ONE REFUTATION: **scale the CLOCK, not the
+  PERIODS.** Dividing each mode's hold by the rate is the obvious build and it
+  degenerates, because `TURN_FADE_SEC` is a constant that does not divide with
+  it — `ripple` at 2× would hold 1.75s and still dissolve for 0.7s of it. The
+  sweep implements the rejected design ONLY to measure it failing: the shipped
+  one holds march/scatter/ripple/swap at **13.6 / 10.5 / 19.5 / 17.0% soft at
+  EVERY rate**, the rejected one takes ripple from **20.0% → 39.0% at 2×**. That
+  invariance is also why the control needs no clamp: there is no rate at which
+  the schedule degenerates. `lib/pace.ts` is ~30 lines of logic; the Stage
+  applies it at exactly two seams (`refreshTurn`, `crop`) and NEVER to `outTime`
+  itself, because the take's own clock is what the ruler shows, what the
+  exporter walks and what every audio schedule is written against. Rest at zero
+  survives for free (`0 * r` is 0), so the still preview, the raster export and
+  the SVG are bit-identical to a build without the file.
+  PROVED WITHOUT A CLOCK, which is the other half of the method: `renderAtTime`
+  is a pure function of the instant — that is why the offline exporter can walk
+  it — so the e2e SCRUBS instead of waiting. march holds 5s, so at 1× the wall
+  at t=3.0 is **0.0% moved, worst channel 0/255** from its opening frame; at 2×
+  the same instant reads 6.0s and moves **94.5%, worst 202/255**; at 6.0s the
+  two swap places, 0.5× reading **0.5% / worst 29** where 1× reads **94.5% /
+  worst 202**. Three rates, same pixels, no timer anywhere — measured against
+  PRODUCTION, and a scrub is the export's own path, so it is evidence about the
+  file. Both mutations red: neutering `paceTime` and cutting the Stage seam each
+  fail P1 (the seam mutation with `worst 0` — the picture literally identical).
+  AND THE SCREENSHOT CAUGHT WHAT NONE OF THAT DID. Looking at the live page at
+  390px afterwards, the chosen `2×` chip was not green: `:hover` out-specifies
+  `[data-active='true']` by one pseudo-class, so **the chip you just tapped
+  renders as unchosen** — rgb(31,36,39) against rgb(22,25,27) for one that
+  really is unchosen, and on iOS the hover STICKS after a tap. Five of the six
+  hover/active families in `controls.css` had it, which is every roster row in
+  the app; `.ui-ratio` was right by source order alone. Fixed as a class
+  (`:not([data-active='true'])` on all six) with P5 as the guard, and P5 sweeps
+  the SIBLING rows — look, move, turn — not only the row this cycle added.
+  Filed as three scars: the hover one, the module header that claimed dyadic
+  rates are exactly reversible (they are not — 3/4 and 3/2 carry a factor of
+  three; the sweep failed on its first run and the claim was corrected to what
+  is actually guaranteed), and three sibling sweeps that each pinned the codec's
+  group length as a literal `21` and all broke at once — now one exported
+  `MINTED_GROUP_MAX`.
+  PROOF: 13 invariants (one of them a red proof), 4 e2e green against
+  production. Regression: turn 7/7, motion 5/5, playhead 2/2, one-layout 4/4,
+  roll-code 20/20 (one T4 flake under parallelism on the first run, green in
+  isolation and on a full re-run — not this change), every unit sweep in the
+  tree green including rollCode's 207,028 checks, clipWindow 5,450,896, fade
+  708,601, grade 46,987, fill 368,962. `tsc --noEmit` and `vite build` clean.
+  NOT SHIPPED, AND SAID PLAINLY: it is ONE dial over two independent rhythms, so
+  a slow drift under fast cuts is still unaskable; a collage that is mostly
+  video has almost nothing for a pace to move and nothing says so; and a clip's
+  own playback rate is untouched, which is the `Speed` rung and stays open.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

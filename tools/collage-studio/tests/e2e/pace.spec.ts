@@ -276,6 +276,40 @@ test.describe('THE PACE', () => {
     await expect(page.getByTestId('pace-brisk')).toHaveAttribute('data-active', 'true');
   });
 
+  test('P5 the chip you just tapped still looks chosen — the pace row AND its siblings', async ({ page }) => {
+    // FOUND BY LOOKING AT THE LIVE PAGE, and it was never about the pace.
+    // `.ui-chip:hover:not(:disabled)` is specificity (0,3,0) and
+    // `.ui-chip[data-active='true']` is (0,2,0), so hover WON and the chip you
+    // had just chosen rendered `--surface-3`. Measured on production before the
+    // fix: rgb(31,36,39) for a chosen-and-hovered chip against rgb(22,25,27)
+    // for one that was genuinely unchosen — nine units per channel, where the
+    // right answer is `--signal`. On iOS a tap leaves a STICKY hover, so the
+    // chip you tapped sat there looking untapped on the exact device this app
+    // is for. Playwright's `click` leaves the pointer on the element, which is
+    // precisely that state, so this arm is the finger.
+    await boot(page);
+    const signal = await page.evaluate(() =>
+      getComputedStyle(document.documentElement).getPropertyValue('--signal').trim());
+    expect(signal, 'the palette must define --signal').toMatch(/^#|rgb/);
+    const asRgb = await page.evaluate((hex) => {
+      const d = document.createElement('div');
+      d.style.color = hex; document.body.appendChild(d);
+      const v = getComputedStyle(d).color; d.remove(); return v;
+    }, signal);
+
+    // EVERY roster row on this page, not only the one this cycle added: the
+    // rule is shared, so the sweep is the point.
+    for (const id of ['pace-rush', 'move-drift', 'turn-swap', 'look-noir']) {
+      const chip = page.getByTestId(id);
+      if (await chip.count() === 0) continue;
+      await chip.click();
+      await page.waitForTimeout(600);
+      await expect(chip).toHaveAttribute('data-active', 'true');
+      const bg = await chip.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg, `${id}: a chosen chip under the pointer must still read as chosen`).toBe(asRgb);
+    }
+  });
+
   test('P4 the row is watertight on a phone', async ({ page }) => {
     await boot(page);
     for (const width of [320, 360, 390, 430]) {
