@@ -42,6 +42,7 @@
 // -----------------------------------------------------------------------------
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
+import { turnAt, assignmentAt, isTurning, NO_TURN } from './turn';
 import { isMoving } from './motion';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
 import { cssFilterFor, type LookId } from './grade';
@@ -160,6 +161,34 @@ export interface StageSceneInput {
    * `asset.sourceName` against `clip.name` for video-sourced assets.
    */
   resolveClipId?: (asset: StageAssetLike) => string | null | undefined;
+  /**
+   * THE TURN — the collage re-cuts over the take (see `lib/turn.ts`). Null or
+   * a `hold` id means one deal, held, which is what every scene before this
+   * field existed described.
+   */
+  turn?: StageTurnInput | null;
+}
+
+/**
+ * WHAT THE STAGE NEEDS TO RE-CUT A COLLAGE.
+ *
+ * `resolve` is a CALLBACK rather than a precomputed table because the number of
+ * turns in a take is unbounded (a preview runs until you close it) while the
+ * number of DISTINCT bindings ever asked for is small — one per participating
+ * fragment per turn boundary. The App memoises it; the Stage calls it only when
+ * the assignment actually changes.
+ *
+ * It answers "give me the photograph that BELONGS to `fromSlot`, decorated for
+ * being drawn in `slot`'s fragment" — the focus, the twist and the move belong
+ * to the FRAGMENT, the face and the colour belong to the PHOTOGRAPH, and only
+ * the App knows how to compose the two.
+ */
+export interface StageTurnInput {
+  /** A `TurnId`. Anything that is not an active mode is treated as `hold`. */
+  id: string;
+  /** The composition seed — `scatter` derives its stride from it. */
+  seed: number;
+  resolve: (slot: number, fromSlot: number) => StageAssetLike | null | undefined;
 }
 
 export type StageClipState =
@@ -438,6 +467,44 @@ interface DrawItem {
   /** Kept so a late decode / late metadata can recompute without a rescan of the scene. */
   bx: number; by: number; bw: number; bh: number;
   analysis: unknown;
+
+  // --- THE TURN ------------------------------------------------------------
+  /**
+   * This fragment's index in the scene it was built from. THE TURN re-points
+   * fragments at OTHER fragments' photographs, and the App resolves that pair
+   * by slot, so the item has to remember which slot it is.
+   */
+  slot: number;
+  /**
+   * Whose photograph this fragment is CURRENTLY drawing, as a slot index.
+   * `slot` itself at rest — which is what makes turn 0 the deal `setScene`
+   * bound, with no call into the resolver and no rebinding at all.
+   */
+  turnFrom: number;
+  /** Whose photograph is fading IN, as a slot index. `turnFrom` when nothing is. */
+  turnTo: number;
+  /**
+   * Alpha the incoming picture is drawn at, 0..1. EXACTLY 0 is the rest case
+   * and the draw loop branches on it, so a composition that never turns
+   * executes the instruction stream it did before this field existed.
+   */
+  mix: number;
+  /** The incoming picture — a second source in the SAME cell, for the dissolve. */
+  still2: StillSource | null;
+  stillKey2: string;
+  previewKey2: string;
+  fullKey2: string;
+  /**
+   * The incoming picture's crop. A SECOND quadruple, never a reuse of
+   * `isx..ish`: the two photographs have different intrinsic sizes and one set
+   * of source-pixel numbers cannot address both, for the reason
+   * `computeVideoCrop` records about a 4K clip and its 1600px still.
+   */
+  s2ok: boolean;
+  jsx: number; jsy: number; jsw: number; jsh: number;
+  /** The incoming picture's analysis — ITS face and colour, THIS fragment's
+   *  focus, twist and move. The App composes that pair; the Stage only draws it. */
+  analysis2: unknown;
 }
 
 /**
@@ -691,6 +758,27 @@ export class Stage {
   /** Does ANY fragment in this scene move? False keeps every cost at zero. */
   private moving = false;
 
+  // --- THE TURN --------------------------------------------------------------
+  /** Does this scene re-cut over the take? False keeps every cost at zero. */
+  private turning = false;
+  private turnMode = 'hold';
+  private turnSeed = 0;
+  private turnResolve: ((slot: number, fromSlot: number) => StageAssetLike | null | undefined) | null = null;
+  /**
+   * Indices into `this.items` for the fragments that PARTICIPATE, in scene
+   * order. A fragment bound to a live clip is deliberately not one of them: a
+   * clip is already a moving picture, and excluding it keeps `refreshAdmission`
+   * — which ranks decoders by on-screen area — a scene-time decision instead of
+   * something a turn could invalidate sixty times a second.
+   */
+  private turnRing: number[] = [];
+  /** The assignment indices currently BOUND, so a frame inside one hold does no work. */
+  private turnBoundA = -1;
+  private turnBoundB = -1;
+  /** Every participating source's full key — what an offline render has to
+   *  budget rasters for, because a turn takes each of them into other cells. */
+  private turnFullKeys: string[] = [];
+
   // --- THE PLAYHEAD ----------------------------------------------------------
   /**
    * The take length the ruler measures, or 0 for "no ruler" — which is the
@@ -915,6 +1003,17 @@ export class Stage {
         tw: d.twist, tcx: d.tcx, tcy: d.tcy,
         bx: b.x, by: b.y, bw: b.w, bh: b.h,
         analysis: asset.analysis,
+        slot: i,
+        turnFrom: i,
+        turnTo: i,
+        mix: 0,
+        still2: null,
+        stillKey2: '',
+        previewKey2: '',
+        fullKey2: '',
+        s2ok: false,
+        jsx: 0, jsy: 0, jsw: 0, jsh: 0,
+        analysis2: null,
       };
 
       // Still: use the cached decode if it is already resident; otherwise the
@@ -938,10 +1037,41 @@ export class Stage {
     }
 
     this.items = items;
+
+    // THE TURN, decided ONCE per scene exactly as the move is. The ring is the
+    // set of fragments a turn may move pictures between: everything that is not
+    // holding a live clip. Under two participants there is nothing to exchange,
+    // so the whole feature switches itself off rather than pretending.
+    const turnIn = scene.turn ?? null;
+    const ring: number[] = [];
+    const fullKeys: string[] = [];
+    if (turnIn && isTurning(turnIn.id) && typeof turnIn.resolve === 'function') {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].clip !== null) continue;
+        ring.push(i);
+        if (items[i].fullKey) fullKeys.push(items[i].fullKey);
+      }
+    }
+    const turning = ring.length >= 2;
+    this.turning = turning;
+    this.turnMode = turning ? (turnIn as StageTurnInput).id : 'hold';
+    this.turnSeed = turning && Number.isFinite((turnIn as StageTurnInput).seed) ? (turnIn as StageTurnInput).seed : 0;
+    this.turnResolve = turning ? (turnIn as StageTurnInput).resolve : null;
+    this.turnRing = turning ? ring : [];
+    this.turnFullKeys = turning ? fullKeys : [];
+    // -1, not 0: turn 0 is the identity and its bindings are the ones `setScene`
+    // just made, so the first refresh inside the opening hold must find nothing
+    // to do rather than re-resolve every fragment onto itself.
+    this.turnBoundA = 0;
+    this.turnBoundB = 0;
+
     // A scene that stops moving must go back to REST, not freeze wherever the
     // last frame left it — the still preview it hands back to is drawn at t=0,
-    // and a Stage parked at t=4.2 would hold a visibly different crop.
-    if (!moving && this.moving) this.outTime = 0;
+    // and a Stage parked at t=4.2 would hold a visibly different crop. A scene
+    // that stops TURNING has the same obligation and for a sharper reason: it
+    // would otherwise hand back a deal that is not the one the still preview,
+    // the raster export and the SVG all draw.
+    if (!moving && !turning && (this.moving || this.turning)) this.outTime = 0;
     this.moving = moving;
     this.moveOriginMs = -1;
     this.ensureStills(wanted);
@@ -1176,9 +1306,12 @@ export class Stage {
     // frame and still emit a perfectly even timeline; a move read off
     // `performance.now()` here would put the judder straight back in, encoded
     // into the file, where no amount of re-recording removes it.
-    if (this.moving) {
+    // THE TURN rides the same offline clock for the same reason, and the
+    // assignment is written BEFORE the crops for the reason `tick` records.
+    if (this.moving || this.turning) {
       this.outTime = Number.isFinite(timeSec) ? Math.max(0, timeSec) : 0;
-      this.refreshMoveCrops();
+      if (this.turning) this.refreshTurn();
+      if (this.moving) this.refreshMoveCrops();
     }
     this.dirty = false;
     this.lastDrawAt = -1e9;      // never let the tick's skip-heuristic apply here
@@ -1556,6 +1689,14 @@ export class Stage {
           this.outTime = position;
         }
       }
+      // THE TURN runs FIRST: it re-points which photograph a fragment draws,
+      // and `refreshMoveCrops` then crops whatever is bound at the current
+      // instant. Reversed, the frame after a turn would crop the outgoing
+      // picture's geometry onto the incoming one for exactly one frame.
+      if (this.turning) {
+        this.refreshTurn();
+        needDraw = true;
+      }
       if (this.moving) {
         this.refreshMoveCrops();
         needDraw = true;
@@ -1570,7 +1711,7 @@ export class Stage {
     // scrub: the frame `renderAtTime` drew stays on the canvas for nothing,
     // instead of a moving composition holding a 60 Hz loop open to re-derive the
     // same crops from the same frozen clock.
-    if (playing > 0 || this.capturing || this.dirty || (this.moving && live)) {
+    if (playing > 0 || this.capturing || this.dirty || ((this.moving || this.turning) && live)) {
       this.rafId = this.view.requestAnimationFrame(this.tick);
     } else {
       // THE LAST TICK IS WHERE THE CLOCK STOPS. Nothing else knows this frame
@@ -1673,6 +1814,18 @@ export class Stage {
           ctx.translate(-it.tcx, -it.tcy);
         }
         ctx.drawImage(it.still, it.isx, it.isy, it.isw, it.ish, it.dx, it.dy, it.dw, it.dh);
+        // THE TURN — the incoming picture over the outgoing one, in the SAME
+        // cell, under the same clip and the same twist. `mix` is exactly 0
+        // whenever nothing is dissolving, so a collage that never turns runs
+        // the instruction stream it ran before this existed: one compare.
+        // `globalAlpha` is written back to 1 explicitly rather than left to the
+        // `restore()` below, because at `tw === 0` there is no inner save to
+        // restore from and the next fragment would inherit the fade.
+        if (it.mix > 0 && it.s2ok && it.still2 !== null) {
+          ctx.globalAlpha = it.mix;
+          ctx.drawImage(it.still2, it.jsx, it.jsy, it.jsw, it.jsh, it.dx, it.dy, it.dw, it.dh);
+          ctx.globalAlpha = 1;
+        }
         if (it.tw !== 0) ctx.restore();
         if (it.stroke) {
           ctx.strokeStyle = STROKE_COLOR;
@@ -1848,9 +2001,19 @@ export class Stage {
   }
 
   /** The real `calculateSmartCrop`, imported from renderer.ts — never a copy. */
-  private crop(it: DrawItem, srcW: number, srcH: number): { sx: number; sy: number; sw: number; sh: number } | null {
+  private crop(
+    it: DrawItem,
+    srcW: number,
+    srcH: number,
+    // WHOSE ANALYSIS. Defaults to the fragment's own — the only answer before
+    // THE TURN existed. A dissolve's INCOMING picture brings its own face and
+    // colour, so it is cropped against `analysis2` instead; passing it rather
+    // than reading it keeps this one function the only caller of
+    // `calculateSmartCrop` in the whole compositor.
+    from: unknown = it.analysis,
+  ): { sx: number; sy: number; sw: number; sh: number } | null {
     if (!(srcW > 0) || !(srcH > 0) || !(it.bw > 0) || !(it.bh > 0)) return null;
-    const analysis = (it.analysis as { energy?: unknown } | null | undefined) ? it.analysis : FALLBACK_ANALYSIS;
+    const analysis = (from as { energy?: unknown } | null | undefined) ? from : FALLBACK_ANALYSIS;
     try {
       const c = calculateSmartCrop(
         { x: it.bx, y: it.by, w: it.bw, h: it.bh },
@@ -1870,6 +2033,129 @@ export class Stage {
     if (!c) { it.sok = false; return; }
     it.isx = c.sx; it.isy = c.sy; it.isw = c.sw; it.ish = c.sh;
     it.sok = true;
+  }
+
+  /** The dissolve's INCOMING picture, cropped against ITS analysis in THIS cell. */
+  private computeIncomingCrop(it: DrawItem, w: number, h: number): void {
+    const c = this.crop(it, w, h, it.analysis2);
+    if (!c) { it.s2ok = false; return; }
+    it.jsx = c.sx; it.jsy = c.sy; it.jsw = c.sw; it.jsh = c.sh;
+    it.s2ok = true;
+  }
+
+  /**
+   * POINT ONE FRAGMENT AT ANOTHER FRAGMENT'S PHOTOGRAPH.
+   *
+   * The App composes the pair (its face and colour, this cell's focus, twist and
+   * move) and hands back a decorated asset; everything here is re-pointing keys
+   * and re-cropping. The destination box, the clip path, the twist angle and the
+   * pivot are NEVER touched: a turn changes which picture, never where.
+   *
+   * A source whose decode has not landed keeps whatever is already drawn rather
+   * than blanking the fragment — the same "a softer fragment beats a hole" rule
+   * `applyStillKeys` relies on, and `adoptStill` patches the pointer in the
+   * instant the decode resolves.
+   */
+  private bindTurnSource(it: DrawItem, fromSlot: number, incoming: boolean): void {
+    const asset = this.turnResolve ? this.turnResolve(it.slot, fromSlot) : null;
+    if (!asset) return;
+    const previewKey = asset.previewSrc || asset.src || '';
+    const fullKey = asset.src || asset.previewSrc || '';
+    const key = this.stillKeyFor(previewKey, fullKey);
+    const rec = key ? this.stills.get(key) : undefined;
+    const img = rec && rec.state === 'ready' && rec.img ? rec.img : null;
+    if (incoming) {
+      it.turnTo = fromSlot;
+      it.previewKey2 = previewKey;
+      it.fullKey2 = fullKey;
+      it.stillKey2 = key;
+      it.analysis2 = asset.analysis;
+      it.still2 = img;
+      it.s2ok = false;
+      if (img) this.computeIncomingCrop(it, stillW(img), stillH(img));
+      return;
+    }
+    it.turnFrom = fromSlot;
+    it.previewKey = previewKey;
+    it.fullKey = fullKey;
+    it.stillKey = key;
+    it.analysis = asset.analysis;
+    if (img) {
+      it.still = img;
+      this.computeStillCrop(it, stillW(img), stillH(img));
+    }
+  }
+
+  /**
+   * WHERE THE TAKE IS IN ITS TURN SCHEDULE, AND WHAT THAT MEANS FOR THE ITEMS.
+   *
+   * Off the draw loop and beside `refreshMoveCrops`, for the reason that
+   * function's comment gives at length: `drawFrame`'s contract is zero
+   * allocation, and resolving an asset allocates. Called from the same two
+   * places it is — `tick` and `renderAtTime`, immediately before the draw — so
+   * the live preview and the exported file walk the identical schedule.
+   *
+   * COSTS NOTHING INSIDE A HOLD. The assignment indices currently bound are
+   * remembered, so all this does between turns is compare two integers.
+   */
+  private refreshTurn(): void {
+    if (!this.turning) return;
+    const ring = this.turnRing;
+    const n = ring.length;
+    const items = this.items;
+    const frame = turnAt(this.turnMode, this.outTime);
+
+    if (frame.a !== this.turnBoundA) {
+      const asg = assignmentAt(this.turnMode, frame.a, n, this.turnSeed);
+      for (let j = 0; j < n; j++) {
+        const it = items[ring[j]];
+        const fromSlot = items[ring[asg[j]]].slot;
+        if (fromSlot !== it.turnFrom) this.bindTurnSource(it, fromSlot, false);
+      }
+      this.turnBoundA = frame.a;
+    }
+
+    if (frame.mix > 0) {
+      if (frame.b !== this.turnBoundB) {
+        const asg = assignmentAt(this.turnMode, frame.b, n, this.turnSeed);
+        for (let j = 0; j < n; j++) {
+          const it = items[ring[j]];
+          const fromSlot = items[ring[asg[j]]].slot;
+          if (fromSlot !== it.turnTo) this.bindTurnSource(it, fromSlot, true);
+        }
+        this.turnBoundB = frame.b;
+      }
+      for (let j = 0; j < n; j++) {
+        const it = items[ring[j]];
+        // A FRAGMENT WHOSE PICTURE IS NOT CHANGING DOES NOT DISSOLVE. `ripple`
+        // and `swap` leave most of the wall alone, and cross-fading a picture
+        // into itself would soften it for no reason at all.
+        it.mix = it.turnTo === it.turnFrom ? 0 : frame.mix;
+        // A move makes the crop a function of time for the incoming picture
+        // exactly as it does for the outgoing one.
+        if (this.moving && it.mix > 0 && it.still2 !== null) {
+          this.computeIncomingCrop(it, stillW(it.still2), stillH(it.still2));
+        }
+      }
+      return;
+    }
+
+    // THE FADE IS OVER — drop the incoming picture rather than leave a second
+    // decode pinned to every fragment for the whole hold.
+    if (this.turnBoundB !== this.turnBoundA) {
+      for (let j = 0; j < n; j++) {
+        const it = items[ring[j]];
+        it.mix = 0;
+        it.still2 = null;
+        it.stillKey2 = '';
+        it.previewKey2 = '';
+        it.fullKey2 = '';
+        it.analysis2 = null;
+        it.s2ok = false;
+        it.turnTo = it.turnFrom;
+      }
+      this.turnBoundB = this.turnBoundA;
+    }
   }
 
   /**
@@ -1963,6 +2249,20 @@ export class Stage {
     const items = this.items;
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
+      // The incoming picture of a dissolve rides the same swap: it is drawn from
+      // the same cache, in the same cell, on the same frame.
+      if (it.stillKey2) {
+        const k2 = this.stillKeyFor(it.previewKey2, it.fullKey2);
+        if (k2) wanted.add(k2);
+        if (k2 !== it.stillKey2) {
+          it.stillKey2 = k2;
+          const r2 = this.stills.get(k2);
+          if (r2 && r2.state === 'ready' && r2.img) {
+            it.still2 = r2.img;
+            this.computeIncomingCrop(it, stillW(r2.img), stillH(r2.img));
+          }
+        }
+      }
       const key = this.stillKeyFor(it.previewKey, it.fullKey);
       if (key) wanted.add(key);
       if (key === it.stillKey) continue;
@@ -2115,6 +2415,34 @@ export class Stage {
         : 1;
       const prev = need.get(it.fullKey) ?? 0;
       if (want > prev) need.set(it.fullKey, want);
+    }
+
+    // A TURN TAKES EVERY PICTURE INTO EVERY OTHER PARTICIPATING FRAGMENT, so
+    // budgeting each source by the cell it happens to occupy at t=0 under-sizes
+    // every raster that later lands somewhere bigger — a photograph that starts
+    // in a postage stamp and finishes across a quarter of the canvas would be
+    // rasterised for the postage stamp and drawn soft for the rest of the take.
+    // The schedule is a permutation over the ring, so the correct bound is the
+    // hungriest participating fragment, applied to every participating source.
+    if (this.turning && this.turnFullKeys.length) {
+      let hungriest = 0;
+      for (let j = 0; j < this.turnRing.length; j++) {
+        const it = this.items[this.turnRing[j]];
+        if (!it) continue;
+        const dwPx = Math.abs(it.dw) * backingScale;
+        const dhPx = Math.abs(it.dh) * backingScale;
+        const want = it.sok && it.isw > 0 && it.ish > 0
+          ? Math.max(dwPx / it.isw, dhPx / it.ish)
+          : 1;
+        if (want > hungriest) hungriest = want;
+      }
+      if (hungriest > 0) {
+        for (let j = 0; j < this.turnFullKeys.length; j++) {
+          const k = this.turnFullKeys[j];
+          if (this.deadOriginals.has(k)) continue;
+          if (hungriest > (need.get(k) ?? 0)) need.set(k, hungriest);
+        }
+      }
     }
 
     const requested = need.size;
@@ -2298,10 +2626,20 @@ export class Stage {
     let touched = false;
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      if (it.stillKey !== key) continue;
-      it.still = img;
-      this.computeStillCrop(it, w, h);
-      touched = true;
+      if (it.stillKey === key) {
+        it.still = img;
+        this.computeStillCrop(it, w, h);
+        touched = true;
+      }
+      // THE INCOMING PICTURE OF A DISSOLVE IS A SECOND LISTENER on the same
+      // decode. Without this, a fragment fading towards a photograph whose
+      // decode landed mid-fade would fade towards nothing and the outgoing
+      // picture would simply vanish at the end of the hold.
+      if (it.stillKey2 === key) {
+        it.still2 = img;
+        this.computeIncomingCrop(it, w, h);
+        touched = true;
+      }
     }
     if (touched) this.markDirty();
   }

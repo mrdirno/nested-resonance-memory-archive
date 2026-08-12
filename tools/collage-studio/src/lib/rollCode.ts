@@ -38,6 +38,7 @@ import type { LayoutMode, PrimitiveType } from '../types';
 import type { ArrangementId, FocusId, TwistId } from './composition';
 import type { LookId } from './grade';
 import type { MoveId } from './motion';
+import type { TurnId } from './turn';
 import { type Roll, encodeRoll, decodeRoll, snapRoll } from './diceRoll';
 
 /**
@@ -75,6 +76,15 @@ export interface CompositionState {
    * something belongs in a recipe.
    */
   move: MoveId;
+  /**
+   * THE TURN — how often the pictures re-cut to different fragments. In the
+   * code for the same reason the move is: "these fragments, dealt this way,
+   * re-cutting like this" is a picture somebody can rebuild with their own
+   * photographs, and that is the whole test for whether something belongs in a
+   * recipe. (Contrast the title and the fade, which are facts about YOUR
+   * render, not about the composition.)
+   */
+  turn: TurnId;
   /** How many times "Shuffle images" has re-dealt. */
   shuffle: number;
   /** True once the count is the user's decision rather than the source total. */
@@ -101,6 +111,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   twist: s.twist,
   look: s.look,
   move: s.move,
+  turn: s.turn,
   countOwned: s.countOwned,
 });
 
@@ -125,6 +136,9 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   // collage that did not move, so the absence maps to the no-op rather than to
   // a missing value the UI would have to defend against.
   move: r.move ?? 'still',
+  // Absent means `hold` — a Roll built before this field existed described a
+  // collage of one held deal, so the absence maps to the no-op.
+  turn: r.turn ?? 'hold',
   shuffle,
   countOwned: !!r.countOwned,
 });

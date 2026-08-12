@@ -176,6 +176,53 @@ or re-documenting an existing capability is DD, not delivery.
   nothing, and on a photo collage it was disabled outright. `StageStatus.rolling`
   answers from the Stage, which is the only place that can see the move, the
   music, the clips AND the park at once.
+  THE TURN — the collage CUTS. Every time-axis feature before this one moved
+  the CROP (the move), the SOUND (music, trim, the lap schedule, the fade) or
+  the CLOCK (the playhead); not one of them changed WHICH PICTURE IS WHERE, so
+  a twenty-second export was one deal of photographs held for twenty seconds,
+  breathing. Now, every few seconds, the pictures land in different fragments
+  and cross-dissolve on the way — the cut, the dissolve and the wipe at once,
+  because in a mosaic those three are one event at three granularities.
+  EVERY STATE IS A PERMUTATION OF THE DEAL, and that is what the whole design
+  is for: source-first duplicate-free filling is this app's oldest promise
+  about what a collage IS, and a time axis is exactly the sort of feature that
+  voids a static guarantee quietly. `lib/turn.ts` composes STEP permutations,
+  so by induction no two fragments can ever hold the same photograph — not at
+  rest, not mid-dissolve, not after a thousand cuts.
+  That constraint also kills the obvious first design. "Stagger the turns so
+  the wall does not blink at once" reads as free until the injectivity
+  condition is written down: with slot j showing `base[(j + k_j) mod n]` and
+  k_j in {k, k+1}, the map is injective iff the turned set is closed under +1,
+  which cyclically forces ALL or NONE — a stagger over a global rotation is
+  duplicate-free only in the two cases where it is not a stagger. `ripple` gets
+  its stagger the way that survives the proof: it rotates one parity HALF among
+  itself, which is a permutation on the nose, and measured at the artifact it
+  moves 41.1% of the frame in one cut where `march` moves 93.2%.
+  A TURN CHANGES WHICH PICTURE, NEVER WHERE. The cell, its clip path, its
+  twist angle and its grown destination box are properties of the FRAGMENT and
+  are resolved once per scene; only the source, its crop and its analysis are
+  re-pointed. That is what keeps the feature off `computeLayout`, out of the
+  SVG geometry and — the one that would have cost the most — out of
+  `refreshAdmission`: a fragment holding a live clip is a FIXED POINT of every
+  permutation, so decoder ranking stays a scene-time decision instead of
+  something a cut could invalidate sixty times a second.
+  The seam is a CALLBACK, `resolve(slot, fromSlot)`, not a table: the number of
+  cuts in a preview is unbounded while the number of distinct bindings ever
+  asked for is one per participating fragment per cut. It answers "the
+  photograph that BELONGS to `fromSlot`, decorated for `slot`'s fragment",
+  because the FACE and the COLOUR travel with the picture while the FOCUS, the
+  TWIST and the MOVE stay with the cell — and only the App knows how to compose
+  those two halves. Rest is `NO_TURN` by reference at t=0 and for the whole
+  first hold, so the still preview, the raster export and the SVG are
+  bit-identical to a build without this file (proved at the artifact: the
+  exported JPG differs by <= 1 level with `scatter` running).
+  It rides the dice and the composition code — a turn is a RECIPE ("these
+  fragments, dealt this way, re-cutting like this"), unlike the title and the
+  fade, which are facts about your own render. The group grew to 21 characters
+  and the back-compatibility rule came out free: `hasTurn` enters the
+  checksummed band by `>=`, so every 18/19/20-length code ever minted decodes
+  byte-identically, which the sweep proves by rebuilding forty legacy codes and
+  re-deriving their checksums.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -269,7 +316,41 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Drag-reorder, playhead scrub and split/cut** — the timeline WIDGET, the
       remaining half of the timeline rung. Trim is a timing CONTRACT and is done;
       these are direct manipulation and are their own increment.
-- [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
+- [~] **Transitions** — part-shipped as **THE TURN**: the cross-dissolve, the
+      cut and (in `ripple`) the wipe, expressed in the grammar a collage has —
+      between DEALS rather than between clips, because a mosaic shows every
+      source at once and has no shot to cut away from. Five modes on one chip
+      row (`hold` / `march` / `scatter` / `ripple` / `swap`), on the dice and in
+      the share code, held by one pure module (`lib/turn.ts`) that the only
+      moving surface (`stage.ts`, which is also what the offline exporter walks)
+      reaches through `refreshTurn` — sited beside `refreshMoveCrops` and called
+      from the same two places for the same reason: `drawFrame`'s contract is
+      zero allocation and resolving an asset allocates.
+      Still owed on this rung: a transition between LAYOUTS (the partition
+      itself changing, which needs a second `computeLayout` and a second draw
+      pass, and is its own increment), a per-mode SPEED (the hold is a property
+      of the mode today, exactly as the move's 12 s cycle is), and a transition
+      the SVG can express — it cannot, for the same reason it cannot express the
+      move.
+- [ ] **THE TURN'S HOLD IS A PROPERTY OF THE MODE, so "cut faster" is not
+      askable.** `march` is 5 s, `ripple` 3.5 s, and the only way to change that
+      is to pick a different mode — which also changes the permutation. The two
+      are independent and the roster pretends they are not, exactly as THE MOVE
+      pretends its speed and its shape are one choice (the scar below says so in
+      the same words). The generalisation for both is the same: a rate control
+      that snaps to a grid, quantised on the way into the code like every
+      numeric field `snapRoll` already handles.
+- [ ] **A CUT AT A LAP IS A HARD CUT.** The turn is periodic on a FIXED hold
+      and deliberately not on the take, for the reason THE MOVE settled — a
+      duration-keyed schedule would make the same collage cut differently at
+      10 s and at 30 s, and differently again when the device cap clips the
+      take. The consequence is that the live preview's clock WRAPS at the take
+      length and the wall snaps back to its base deal with no dissolve. The
+      EXPORTED file never sees it (the offline walk is monotone from 0 to L), so
+      this is a preview artefact of the existing lap decision rather than a new
+      defect — it is filed here because it is the first feature where a lap is
+      plainly VISIBLE rather than subtle, and that raises the price of
+      `THE LAP RE-SEEKS NOTHING` below.
 - [~] **Text & titles** — part-shipped as **THE TITLE**. One caption, four
       placements, three sizes, drawn on a scrim so it stays readable over any
       photograph, and it reaches every surface that produces pixels. The seam is
@@ -694,6 +775,48 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A GUARD THAT FAILS THREE RUNS IN FOUR IS NOT A GUARD — `composition.spec.ts`
+  line 225.** Found while attributing a red run during THE TURN, and it is NOT a
+  turn regression: measured on BOTH trees, 4 runs each. The assertion is the
+  fixture-sensitivity check that Detail and Centre crop differently at all
+  (`|previewGap| > 8`), but the app boots on a `Date.now()` seed, so the layout
+  and the deal are different every run and the gap is a random variable.
+  Measured gaps — THE TURN's tree: 7.5 / 5.4 / 7.4 / 6.7 (1 pass in 4). Clean
+  HEAD (`git archive HEAD` into a scratch dir, its own vite on :5198, so the
+  working tree was never disturbed): 5.2 / 5.0 / 7.4 (1 pass in 4). Identical
+  distributions, straddling a bar of 8.
+  THE COST IS NOT THE RED, IT IS WHAT THE RED TEACHES. A suite where one spec
+  cries wolf 75% of the time trains the next cycle to wave a failure through,
+  which is the exact failure mode `THE COLOUR PROOF WAS A RANDOM VARIABLE`
+  (d05f5b44) was filed for one cycle earlier — same root cause, different spec,
+  and this one was not swept then. The fix is the one that scar names: PIN THE
+  SEED. The app already accepts a whole composition (seed included) through the
+  `?c=` code param, so the test can boot on a fixed code and the bar can be
+  re-derived from the floor of several runs on THAT composition, instead of
+  being a taste-picked number held against a distribution nobody measured.
+- **A FRAGMENT REBOUND BEFORE ITS DECODE LANDS KEEPS THE OLD PICTURE AND THE NEW
+  ANALYSIS, for a few frames.** `bindTurnSource` re-points `stillKey`,
+  `previewKey`, `fullKey` and `analysis` together, but only swaps `it.still` and
+  recomputes the crop if the decode is already resident — the "a softer fragment
+  beats a hole" rule `applyStillKeys` relies on, and `adoptStill` patches the
+  pointer the instant the decode resolves. In the window between, a `move` would
+  crop the OUTGOING image against the INCOMING one's analysis: a valid, clamped,
+  slightly-wrong crop for at most a few frames. Not reachable in practice —
+  `setScene` puts every participating key in `wanted` and the first cut is at
+  least 3.5 s later — which is exactly why it is written down rather than
+  guarded: the guard would cost a per-frame branch on the one path where the
+  frame budget is the product, and the real fix is a deferred rebind that
+  retries, not a check.
+- **THE TURN IS SCOPED TO PHOTOGRAPH FRAGMENTS, and that is a decision.** A
+  fragment holding a live clip is a fixed point of every permutation. Moving a
+  clip between cells would change `clip.fragments` and `clip.area`, which are
+  what `refreshAdmission` ranks decoders by — so a cut would have to re-rank
+  decoder admission mid-take, and during a dissolve BOTH the outgoing and the
+  incoming clip would have to be `live` simultaneously or one side of the fade
+  degrades to a poster. Defensible on its own terms (a clip is already a moving
+  picture; you do not dissolve it away mid-play) and it keeps admission a
+  scene-time decision. The honest gap: in a collage that is mostly video, THE
+  TURN has little to move, and nothing in the UI says so.
 - **THE TAKE'S CLOCK AND THE RECORDER'S PROMISE ARE TWO DIFFERENT CLOCKS, and
   THE FADE was wired to the wrong one at BOTH ends.** Found by the adversarial
   audit, three independent lenses, all three confirmed under refutation — and
@@ -3372,4 +3495,53 @@ frontier. Today's ceiling is tomorrow's floor.
   all, because the tick it rides is demand-driven and photographs do not demand
   frames; and scrubbing is silent — a park stops the audio rather than scrubbing
   it, which is the one thing a real NLE does here that this does not.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C141 — [AXIS:COLLAGE] THE TURN — the collage CUTS, and every cut is a
+  permutation** — before: six cycles of time-axis work (the move, the trim, the
+  music range, the lap schedule, the fade, the playhead) and the pictures had
+  never once changed fragment; a twenty-second export was ONE deal held for
+  twenty seconds, breathing. The fundamental verb of an editor — the cut, one
+  shot becoming another — did not exist in this app at all. After: five modes on
+  one chip row (`hold` / `march` / `scatter` / `ripple` / `swap`), and every few
+  seconds the photographs land in different fragments and cross-dissolve on the
+  way, in the live preview and in the exported video.
+  THE DESIGN IS THE INVARIANT. `lib/turn.ts` composes STEP permutations, so by
+  induction every reachable state is a permutation of the deal and two fragments
+  can never hold the same photograph — which is how a time axis was added
+  without voiding the source-first duplicate-free promise `lib/fill.ts` has made
+  since the beginning. That constraint is also what ruled out the obvious first
+  design: a stagger over a global rotation is injective only if the turned set
+  is closed under +1, which cyclically forces ALL or NONE, so `ripple` takes its
+  stagger by rotating one parity HALF among itself instead. Measured at the
+  artifact across exactly one cut: ripple moves 41.1% of the frame, march 93.2%
+  — the roster is structurally different, not four chips wired to one behaviour.
+  A TURN CHANGES WHICH PICTURE, NEVER WHERE, which is what kept it off
+  `computeLayout`, out of the SVG geometry and out of `refreshAdmission` (a
+  fragment holding a live clip is a fixed point of every permutation, so decoder
+  ranking stays a scene-time decision). The seam is one callback,
+  `resolve(slot, fromSlot)` — the face and the colour travel with the
+  photograph, the focus, twist and move stay with the cell.
+  PROOF, unit: 13/13 invariants including 65,600 assignments proved to be
+  permutations across 5 modes x n=1..64 x 5 seeds x k=0..40, rest returned by
+  reference, and forty rebuilt pre-turn codes still opening as `hold` with every
+  other field unmoved. PROOF, artifact: 6/6 Playwright tests on the real page —
+  and T3 is the one to read, because the hue census literally rotated
+  (10.7/16.8/11.5/20.2/25.6/15.1 -> 11.4/20.2/14.9/10.9/17.0/25.7): the same six
+  photographs, the same six shares, in a different order. That is the
+  permutation, observed in pixels. The exported JPG differs by <= 1 level with
+  `scatter` running, so the three single-frame surfaces never saw it.
+  REGRESSION (the draw loop, the tick gate and `renderAtTime` are what put these
+  at risk): motion 5/5, playhead, source-count, one-layout, composition, plus
+  every unit sweep in the tree green — rollCode 207,028 checks (it now covers
+  `turn` in sections 1/2/3, which is more than `look` or `move` ever got there),
+  grade 46,987, clipWindow 5,450,896, fade 708,601, fill 368,962. `tsc --noEmit`
+  clean, `vite build` clean.
+  NOT SHIPPED, AND SAID PLAINLY: the LAYOUT does not change at a cut, only the
+  deal; the hold is a property of the mode so "cut faster" is not askable; a
+  collage that is mostly video has little for a turn to move and nothing says
+  so; and a lap in the live preview snaps the wall back to its base deal with no
+  dissolve, because the schedule is deliberately periodic on a fixed hold rather
+  than on the take — the exported file, which walks 0 to L monotonically, never
+  sees it.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

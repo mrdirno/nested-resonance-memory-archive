@@ -30,6 +30,7 @@ import {
 } from './composition';
 import { LOOK_IDS, type LookId } from './grade';
 import { MOVE_IDS, type MoveId } from './motion';
+import { TURN_IDS, type TurnId } from './turn';
 
 // =============================================================================
 // SHAPE
@@ -71,6 +72,15 @@ export interface Roll {
    * the picture those rolls described.
    */
   move?: MoveId;
+  /**
+   * THE TURN — how often the pictures move to different fragments, and how.
+   * See lib/turn.ts.
+   *
+   * Optional for the reason `look` and `move` are: every Roll built before this
+   * field existed is still a valid Roll, and absent means `hold`, which is
+   * exactly the picture those rolls described — one deal, held.
+   */
+  turn?: TurnId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
   /**
@@ -329,6 +339,24 @@ const moveFor = (rnd: () => number): MoveId => {
   return pick(MOVE_IDS.slice(1), rnd);
 };
 
+/**
+ * THE TURN the dice picks.
+ *
+ * Held most of the time, and by the widest margin in the roster. A turn is the
+ * only thing here that re-cuts the collage — the deal you are looking at stops
+ * being the deal — so a dice that turned half its rolls would stop handing back
+ * compositions and start handing back sequences. 74% hold; the rest flat across
+ * the four, which over a handful of presses shows the row exists without ever
+ * being what you did not ask for.
+ */
+const turnFor = (rnd: () => number): TurnId => {
+  if (rnd() < 0.74) return 'hold';
+  // Slice past `hold` rather than re-rolling, for the reason `lookFor` records:
+  // a re-roll draws a variable number of values from the stream and makes the
+  // roll depend on how many times it happened to land on index 0.
+  return pick(TURN_IDS.slice(1), rnd);
+};
+
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
   const fam = GENERATOR_BY_ID[layout]?.family;
   // Radial and sacred figures glow out of the dark and go flat on paper; the
@@ -436,6 +464,12 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // zoom, background, arrangement, focus, seed, twist and look from a given
     // rng as the build before it did.
     move: moveFor(rnd),
+    // Drawn LAST, after the move, for the fourth time and the same reason:
+    // appending to the end of the stream leaves every earlier draw untouched, so
+    // a build with the turn rolls the same layout, count, chaos, aspect, gutter,
+    // zoom, background, arrangement, focus, seed, twist, look and move from a
+    // given rng as the build before it did.
+    turn: turnFor(rnd),
     recipe: recipe?.name,
     // The dice picks a fragment count on purpose, out of the generator's own
     // sane range. That is a decision, so a code minted from it must not be
@@ -624,13 +658,18 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
    *  zero is `still`, and a move this build does not know about is no move. */
   const mvIdx = MOVE_IDS.indexOf((r.move ?? 'still') as MoveId);
   const move = fw(mvIdx < 0 ? 0 : mvIdx, 1);
+  /** THE TURN, as an index. Same honest-element-zero reading as the look and the
+   *  move: index zero is `hold`, and a turn this build does not know about is no
+   *  turn at all. */
+  const tuIdx = TURN_IDS.indexOf((r.turn ?? 'hold') as TurnId);
+  const turn = fw(tuIdx < 0 ? 0 : tuIdx, 1);
   // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
   // rollCode's optional shuffle group. It is folded into the checksum but not
   // into the code, because the guard has to cover the whole thing: the first cut
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  return `${head}-${mid}${owned}${look}${move}${checksum(head + mid + owned + look + move + seed + extra)}-${seed}`.toUpperCase();
+  return `${head}-${mid}${owned}${look}${move}${turn}${checksum(head + mid + owned + look + move + turn + seed + extra)}-${seed}`.toUpperCase();
 };
 
 /**
@@ -661,11 +700,12 @@ const CHECK_LEN = 2;
  * EVERY MIDDLE-GROUP LENGTH THIS PROJECT HAS EVER MINTED WITH A CHECKSUM.
  *
  * 15 fixed fields, then one character per generation: `countOwned` (18), THE
- * LOOK (19), THE MOVE (20). Add a field, add its length here — and the sweep in
- * tests/unit/motion.invariants.mjs will tell you if you forget, because the
- * codec would then refuse its own output.
+ * LOOK (19), THE MOVE (20), THE TURN (21). Add a field, ADD its length here —
+ * never replace, because every earlier length is a code somebody already has —
+ * and the sweeps in tests/unit/{motion,turn}.invariants.mjs will tell you if you
+ * forget, because the codec would then refuse its own output.
  */
-const MINTED_GROUP_LENGTHS = new Set([16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN]);
+const MINTED_GROUP_LENGTHS = new Set([16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN, 19 + CHECK_LEN]);
 const checksum = (body: string): string => {
   let h = 7;
   for (let i = 0; i < body.length; i++) {
@@ -724,7 +764,15 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // described a collage that did not move, and it still opens as one.
     const hasMove = b.length >= 18 + CHECK_LEN;
     const mvi = hasMove ? n(b.slice(17, 18)) : 0;
-    const bodyLen = hasMove ? 18 : hasLook ? 17 : 16;
+    // THE TURN sits after the move and before the checksum, told apart by LENGTH
+    // exactly as the move is: 20 is the pre-turn form, 21 carries a turn. The
+    // comparison is `>=`, which is the whole back-compatibility rule — an
+    // 18/19/20-length group leaves this false, `tui` reads 0, `bodyLen` is
+    // unchanged and the checksum is sliced at exactly the offset it always was,
+    // so every code ever minted decodes byte-identically.
+    const hasTurn = b.length >= 19 + CHECK_LEN;
+    const tui = hasTurn ? n(b.slice(18, 19)) : 0;
+    const bodyLen = hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
     if (b.length >= 16) {
       /**
        * A CHECKSUMMED GROUP IS ONE OF THE LENGTHS THIS PROJECT HAS MINTED, OR
@@ -774,8 +822,12 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // one does not, and opening it as a still collage would be a silent
     // substitution the recipient cannot see.
     const move = MOVE_IDS[mvi];
-    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, seed];
-    if (!layout || !look || !move || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
+    // Same treatment again: a turn index this build has no entry for means the
+    // sender knows something this build does not, and opening it as a held deal
+    // would substitute a still collage for a moving one, invisibly.
+    const turn = TURN_IDS[tui];
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, tui, seed];
+    if (!layout || !look || !move || !turn || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
       primitive: PRIMITIVE_ORDER[pri] ?? 'rect',
@@ -794,6 +846,7 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       twist: TWIST_IDS[twi] ?? 'none',
       look,
       move,
+      turn,
       seed,
     };
   } catch {

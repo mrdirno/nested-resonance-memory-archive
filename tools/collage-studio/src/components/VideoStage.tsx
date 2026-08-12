@@ -40,7 +40,7 @@ import {
   AlertTriangle, Loader2, Scissors, RotateCcw, Music,
 } from 'lucide-react';
 
-import { createStage, type Stage, type StageStatus, type StageClipInput } from '../lib/stage';
+import { createStage, type Stage, type StageStatus, type StageClipInput, type StageTurnInput } from '../lib/stage';
 import {
   record, probeVideoExportSupport, downloadRecording, revokeRecording,
   getRecordingProfile, remainingSeconds,
@@ -82,6 +82,13 @@ export interface VideoStageProps {
   clips: LiveClip[];
   mode: LayoutMode;
   aspect: number;
+  /**
+   * THE TURN — the collage re-cuts over the take (lib/turn.ts). Null is one
+   * deal held, which is what every scene before this prop existed described.
+   * The App owns the resolver because only it knows how to compose a
+   * photograph's own analysis with a fragment's focus, twist and move.
+   */
+  turn?: StageTurnInput | null;
   zoom: number;
   bgColor: string;
   /**
@@ -467,7 +474,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackWindow,
 }) => {
@@ -668,8 +675,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       bgColor,
       titlePlan,
       look,
+      turn,
     });
-  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look]);
+  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn]);
 
   /**
    * THE MUSIC, handed over on its own effect and keyed on the URL, never on the

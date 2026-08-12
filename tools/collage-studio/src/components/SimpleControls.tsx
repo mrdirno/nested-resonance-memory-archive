@@ -8,6 +8,7 @@ import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
 import { LOOKS, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
+import { TURNS, type TurnId } from '../lib/turn';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -63,6 +64,9 @@ interface SimpleControlsProps {
   /** THE MOVE — how the picture drifts inside its fragment. See lib/motion.ts. */
   move?: MoveId;
   onMove?: (m: MoveId) => void;
+  /** THE TURN — how often the collage re-cuts its deal. See lib/turn.ts. */
+  turn?: TurnId;
+  onTurn?: (t: TurnId) => void;
 }
 
 /**
@@ -107,7 +111,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
-  look = 'none', onLook, move = 'still', onMove
+  look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -368,6 +372,40 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             {(move ?? 'still') === 'still'
               ? 'Make the collage move. Photographs drift and breathe in their fragments.'
               : 'In the preview and in the exported video. The picture and the SVG stay still.'}
+          </p>
+        </div>
+      )}
+
+      {/* ---- THE TURN: the collage re-cuts -----------------------------------
+          THE MOVE gave this app a time axis; every fragment still held the same
+          photograph for the whole take. This is the CUT — every few seconds the
+          pictures land in different fragments and cross-dissolve on the way, so
+          a twenty-second export stops being one deal breathing and becomes a
+          sequence. Every state is a permutation of the deal, so two fragments
+          can never show the same photograph. It reaches the live preview and
+          the exported video; a single frame has no schedule to be at, so the
+          picture, the SVG and this preview's first instant are exactly what
+          they were. It travels in the code. ------------------------------- */}
+      {hasImages && onTurn && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips" role="group" aria-label="Turn">
+            {TURNS.map(t => (
+              <button
+                key={t.id}
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={(turn ?? 'hold') === t.id}
+                onClick={() => onTurn(t.id)}
+                title={t.title}
+                aria-pressed={(turn ?? 'hold') === t.id}
+                data-testid={`turn-${t.id}`}
+              >{t.label}</button>
+            ))}
+          </div>
+          <p className="ui-caption">
+            {(turn ?? 'hold') === 'hold'
+              ? 'Re-cut the collage. Photographs change fragments as the take runs.'
+              : 'In the preview and in the exported video. Every cut is a re-deal, never a repeat.'}
           </p>
         </div>
       )}

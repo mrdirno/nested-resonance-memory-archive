@@ -461,7 +461,7 @@ const anaFor = (twist, moveSpec) => ({
   const cur = encodeRoll({ ...base, move: 'wander' });
   const [a, b, c] = cur.split('-');
   let bad = null;
-  if (b.length !== 20) bad ??= `expected a 20-character middle group, got ${b.length}`;
+  if (b.length !== 21) bad ??= `expected a 21-character middle group, got ${b.length}`;
 
   // Rebuild the 19-character (pre-move) form by re-deriving its checksum the
   // way the old encoder did: over head + the 17 body characters + seed.

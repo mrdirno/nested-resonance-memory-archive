@@ -18,6 +18,7 @@ import {
 import { assignSources, distinctSourceCount } from './lib/fill';
 import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { withMove, type MoveId } from './lib/motion';
+import { isTurning, type TurnId } from './lib/turn';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import type { LookId } from './lib/grade';
@@ -209,6 +210,8 @@ export default function App() {
    */
   const moveOwnedRef = useRef(false);
   const chooseMove = (m: MoveId) => { moveOwnedRef.current = true; setMove(m); };
+  /** THE TURN — how often the collage re-cuts to a new deal. See lib/turn.ts. */
+  const [turn, setTurn] = useState<TurnId>('hold');
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
 
@@ -774,6 +777,38 @@ export default function App() {
    * and so renders none, and the demand-driven tick idles at zero rAF unless
    * `moving` — which is the same flag this depends on.
    */
+  /**
+   * THE TURN'S ONE SEAM WITH THE COMPOSITOR.
+   *
+   * "Give me the photograph that BELONGS to `fromSlot`, decorated for being
+   * drawn in `slot`'s fragment." The split is the whole point: the FACE and the
+   * COLOUR are properties of the photograph and travel with it, while the
+   * FOCUS, the TWIST and the MOVE are properties of the fragment and stay put —
+   * which is why this is the same expression `orderedAssets` maps, with the
+   * picture index taken from one slot and every geometric argument from the
+   * other. Identity is answered from `orderedAssets` directly, so turn 0 is
+   * bit-identical to the deal every still surface draws.
+   *
+   * A CALLBACK, not a table: the Stage asks only at a turn boundary, a few
+   * dozen times a minute, and the number of turns in a preview is unbounded.
+   */
+  const turnResolve = useCallback((slot: number, fromSlot: number) => {
+    if (slot === fromSlot) return orderedAssets[slot] ?? null;
+    const idx = shuffledIndices[fromSlot];
+    const img = images[idx];
+    if (!img) return null;
+    const H = PREVIEW_W / aspect;
+    const slotSeed = (seed ^ (slot * 2654435761)) | 0;
+    const b = layoutItems[slot]?.bounds;
+    const cell = b && b.w > 0 && b.h > 0
+      ? { cx: (b.x + b.w / 2) / PREVIEW_W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (PREVIEW_W * H) }
+      : null;
+    return withMove(withTwist(withFocus(img, focus, slotSeed), twist, slotSeed, cell), move, cell);
+  }, [orderedAssets, shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect]);
+
+  /** THE TURN needs at least two photographic fragments to exchange anything. */
+  const turning = isTurning(turn) && images.length > 1;
+
   const moving = move !== 'still' && images.length > 0;
   // A LIVE COMPOSITION IS ONE THAT CHANGES OR SOUNDS. Clips move; THE MOVE makes
   // photographs move; MUSIC makes a still collage a thing worth recording — and
@@ -788,7 +823,11 @@ export default function App() {
   // (`moving` already requires images, and a clip cannot exist without the
   // frames it landed in the pool) and load-bearing for the third, because music
   // is the one source that can arrive before any photograph.
-  const liveMode = images.length > 0 && (clips.length > 0 || moving || !!soundtrack) && stageOk;
+  // ...AND A TURN IS A MOVING PICTURE TOO. A collage of photographs that
+  // re-cuts every few seconds is exactly the case the still path cannot show —
+  // it draws one frame — so it joins the terms that claim the live surface, for
+  // the same reason THE MOVE did.
+  const liveMode = images.length > 0 && (clips.length > 0 || moving || turning || !!soundtrack) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -888,6 +927,7 @@ export default function App() {
     // collage that drifts is not the same picture as one that sits still.
     moveOwnedRef.current = true;   // a roll is a choice, even when it rolls STILL
     setMove(roll.move ?? 'still');
+    setTurn(roll.turn ?? 'hold');
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
     // The deal is part of the composition and the roll re-deals it; leaving the
@@ -945,10 +985,10 @@ export default function App() {
   // ===========================================================================
   const compositionCode = useMemo(() => encodeState({
     layoutMode, primitive, count, density, entropy, aspect, gutter,
-    bgColor, seed, arrangement, focus, twist, look, move, shuffle: shuffleTrigger,
+    bgColor, seed, arrangement, focus, twist, look, move, turn, shuffle: shuffleTrigger,
     countOwned,
   }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
-       bgColor, seed, arrangement, focus, twist, look, move, shuffleTrigger, countOwned]);
+       bgColor, seed, arrangement, focus, twist, look, move, turn, shuffleTrigger, countOwned]);
 
   /**
    * Apply a pasted code. Returns false when it is not one, so the caller can
@@ -993,6 +1033,7 @@ export default function App() {
     setFocus(s.focus);
     setTwist(s.twist);
     setMove(s.move);
+    setTurn(s.turn);
     setShuffleTrigger(s.shuffle);
     // Fragments pinned by hand refer to cells of the layout that is being
     // replaced, so they cannot survive the change any more than they survive a
@@ -1613,7 +1654,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1648,6 +1689,7 @@ export default function App() {
       setFocus(l.focus ?? 'auto');
       setTwist(l.twist ?? 'none');
       setMove(l.move ?? 'still');
+      setTurn(l.turn ?? 'hold');
       if(item.state.style?.background) setBgColor(item.state.style.background);
       // ABSENT MEANS THE DEFAULT, never "keep what is on screen" — restoring a
       // snapshot that predates the title must not leave today's caption on it.
@@ -1910,7 +1952,7 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
@@ -1926,7 +1968,7 @@ export default function App() {
   // and Clear (history) each described the project by writing this same literal
   // inline — three chances to drift, and the manifest is exactly where a silent
   // field-omission becomes a wrong answer on reopen. One source of truth now.
-  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
+  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
 
   const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
 
@@ -2056,7 +2098,7 @@ export default function App() {
         const ld = loaded.state.layout;
         const ldOwned = ld.countOwned ?? true;
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -2218,7 +2260,7 @@ export default function App() {
     dirtyRef.current = true; // there is now work that isn't on disk
     const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
     return () => window.clearTimeout(t);
-  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
+  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, turn, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
 
   // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
   // (large) blob is pulled only if the user actually taps Restore. The banner's
@@ -2348,6 +2390,7 @@ export default function App() {
                        bgColor={bgColor}
                        titlePlan={titlePlan}
                        look={look}
+                       turn={turning ? { id: turn, seed, resolve: turnResolve } : null}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
                        controlsHost={stageControlsHost}
@@ -2529,7 +2572,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

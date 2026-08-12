@@ -2,6 +2,7 @@ import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
 import type { LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
+import type { TurnId } from './lib/turn';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -146,6 +147,15 @@ export interface AppState {
      * means `still`, which is what those projects were.
      */
     move?: MoveId;
+    /**
+     * THE TURN — how often the pictures re-cut to different fragments over the
+     * take (see lib/turn.ts). Under `layout` beside `move` because it is the
+     * DEAL over time: it re-points which photograph fills which fragment,
+     * exactly as `arrangement` decides that at rest. Absent on every project
+     * saved before it existed, and absent means `hold`, which is what those
+     * projects were — one deal, held.
+     */
+    turn?: TurnId;
   };
   style: {
     background: string;

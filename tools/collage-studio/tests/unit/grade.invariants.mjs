@@ -436,7 +436,7 @@ for (const id of LOOK_IDS) {
   // new field lands, the number is what changed; when it fails without one, the
   // group silently grew and every fixed-offset slice below it has moved.
   const LOOK_AT = 16;              // the look's own character, 0-indexed
-  const GROUP_LEN = 20;            // what THIS build mints
+  const GROUP_LEN = 21;            // what THIS build mints (THE TURN made it 21)
   const code = RC.encodeState({ ...baseState, look: 'none' });
   const [a, b, c] = code.split('-');
   ok('I8c', b.length === GROUP_LEN, `the middle group must be ${GROUP_LEN} chars, got ${b.length}`);
@@ -445,11 +445,11 @@ for (const id of LOOK_IDS) {
   // a group of that length is a truncation of a real code and must not open on
   // trust — which is what it used to do.
   let refusedTruncations = 0;
-  for (const legacy of [16, 17, 18, 19]) {
+  for (const legacy of [16, 17, 18, 19, 20]) {
     if (RC.decodeState(`${a}-${b.slice(0, legacy)}-${c}`) === null) refusedTruncations++;
   }
-  ok('I8d', refusedTruncations === 4,
-    `only ${refusedTruncations}/4 truncations back to a legacy length were refused`);
+  ok('I8d', refusedTruncations === 5,
+    `only ${refusedTruncations}/5 truncations back to a legacy length were refused`);
 }
 {
   // THE CHECKSUM MUST COVER THE LOOK CHARACTER. Without that, flipping one

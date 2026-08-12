@@ -63,6 +63,7 @@ const {
 const { encodeRoll, decodeRoll, rollDice, snapRoll, ASPECT_ROSTER, PRIMITIVE_ORDER, BACKGROUND_SWATCHES } =
   await load('src/lib/diceRoll.ts', 'dice');
 const { ARRANGEMENT_IDS, FOCUS_IDS, TWIST_IDS } = await load('src/lib/composition.ts', 'composition');
+const { TURN_IDS } = await load('src/lib/turn.ts', 'turn');
 const { GENERATORS } = await load('src/engine/geom/generators/index.ts', 'generators');
 
 let checks = 0, failures = 0;
@@ -117,7 +118,7 @@ const hexOf = (r, g, b) =>
 
 const FIELDS = ['layoutMode', 'primitive', 'count', 'density', 'entropy', 'aspect',
                 'gutter', 'bgColor', 'seed', 'arrangement', 'focus', 'twist', 'shuffle',
-                'countOwned'];
+                'countOwned', 'turn'];
 
 const sameState = (a, b) => FIELDS.every((k) => Object.is(a[k], b[k]));
 const diffOf = (a, b) => FIELDS.filter((k) => !Object.is(a[k], b[k]))
@@ -151,6 +152,9 @@ const reachableState = (rnd) => ({
   focus: pick(FOCUS_IDS, rnd),
   twist: pick(TWIST_IDS, rnd),
   shuffle: rnd() < 0.55 ? 0 : Math.floor(rnd() * 500),
+  // THE TURN joins the sampled fields — which is more than `look` and `move`
+  // ever got here, and is why sections 1, 2 and 3 cover it for free.
+  turn: pick(TURN_IDS, rnd),
   // Both sides of the one bit that decides whether a recipient's pool may
   // override the count: a decision, or the source total the app derived.
   countOwned: rnd() < 0.5,
@@ -275,7 +279,7 @@ console.log('3. NO FIELD IS SILENTLY DROPPED — changing any one of them change
     gutter: GUTTER_STEPS, bgColor: FIXED_BGS,
     arrangement: ARRANGEMENT_IDS, focus: FOCUS_IDS, twist: TWIST_IDS,
     count: [1, 2, 3, 17, 60, 400], seed: [0, 1, 99, 123456, 1_700_000_000_000],
-    shuffle: [0, 1, 2, 77, 499], countOwned: [true, false],
+    shuffle: [0, 1, 2, 77, 499], countOwned: [true, false], turn: TURN_IDS,
   };
   for (let i = 0; i < 900; i++) {
     const rnd = rngOf(i * 7919 + 5);
