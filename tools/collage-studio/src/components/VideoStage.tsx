@@ -866,6 +866,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const anyPlaying = !!status?.rolling;
   const liveCount = status?.liveCount ?? 0;
   const trackRow = status?.soundtrack ?? null;
+  /** WILL THE WALL ACTUALLY CUT — the Stage's own ring test, not the chip's
+   *  intent (`StageStatus.turning`). THE STRIP draws marks off this. */
+  const stageTurning = !!status?.turning;
   /**
    * IS THERE A TAKE TO MAKE? It used to be `liveCount > 0`, i.e. "are any video
    * clips decoding", and that stopped being the same question the moment the
@@ -1291,7 +1294,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         rate: c.playbackRate ?? 1,
       },
     }));
-    if (trackUrl) {
+    // A MUTED TRACK GETS NO LANE, AND A MUTED CLIP KEEPS ITS OWN. The
+    // asymmetry is the whole point: a clip's picture is in the take whatever
+    // its sound is doing, while music has no picture — `soundtrackSource`
+    // returns `gain: 0` for a muted one, so it contributes nothing to the file
+    // at all and a lane for it is a claim about a source that is provably
+    // absent. One tap on the music chip reaches this.
+    if (trackUrl && !trackMuted) {
       sources.push({
         id: SOUNDTRACK_ID,
         kind: 'music',
@@ -1306,12 +1315,23 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         },
       });
     }
-    return takeMap(takeNow, sources, cutPlan(turn?.id, pace, beat));
+    // THE STAGE DECIDES WHETHER THERE ARE CUTS, NOT THE CHIP ROW. Three places
+    // in this app answer "is the wall turning" and only one of them is obeyed
+    // by the picture: `setScene` builds the turn ring from the fragments NOT
+    // holding a live clip and switches the feature off below two of them, so a
+    // collage made entirely of frames extracted from videos never cuts however
+    // loudly MARCH is selected — while App's `turning` (`images.length > 1`)
+    // counts the pool and says yes. Drawing the chip's answer put two ticks
+    // under a wall that never re-deals, in the preview AND in the exported
+    // file. Found by the adversarial audit, which reproduced it at 1 video / 6
+    // fragments / MARCH: ring 0, strip 2 marks.
+    const cuts = stageTurning ? cutPlan(turn?.id, pace, beat) : null;
+    return takeMap(takeNow, sources, cuts);
     // THE TRACK JOINS THE DEPS AS PRIMITIVES, for the reason the soundtrack
     // effect above states: `soundtrack` is rebuilt on every parent render, so
     // depending on the object would rebuild this map — and every div it draws —
     // on renders that changed nothing about it.
-  }, [stageClips, trackUrl, trackName, trackDur, trackIn, trackOut, takeNow, turn, pace, beat]);
+  }, [stageClips, trackUrl, trackName, trackMuted, trackDur, trackIn, trackOut, takeNow, turn, pace, beat, stageTurning]);
 
   // PUSH IT TO THE STAGE. A Stage with no take has the unbounded clock every
   // build before the playhead had, so this effect is what opts this app into

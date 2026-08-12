@@ -76,7 +76,7 @@
 import { effectiveLength, type WindowedPlayback } from './clipWindow';
 import { paceRate } from './pace';
 import { fractionOf } from './playhead';
-import { MAX_TURN_INDEX, TURN_FADE_SEC, isTurning, turnHoldSec, type TurnSchedule } from './turn';
+import { MAX_TURN_INDEX, TURN_FADE_SEC, isTurning, turnFadeFor, turnHoldSec, type TurnSchedule } from './turn';
 
 /**
  * How close to a boundary still counts as landing on it. Same order as
@@ -111,9 +111,21 @@ export const MAX_LANES = 8;
  *              one hold in, which is where `turnAt` puts turn 1.
  *
  * Null means the wall never re-cuts, and `hold`/junk/a malformed grid all mean
- * the same thing here that they mean to `turnAt`: rest. The validity test on a
- * handed-in schedule is `scheduledTurnAt`'s, character for character, so the
- * strip cannot show a grid the compositor is ignoring.
+ * the same thing here that they mean to `turnAt`: rest.
+ *
+ * THE VALIDITY TEST IS THE PIPELINE'S, NOT `scheduledTurnAt`'S — and the
+ * difference is one field. This function used to mirror `scheduledTurnAt`
+ * character for character, which sounds like the strictest possible reading and
+ * is the wrong one: nothing ever hands that function a raw schedule. VideoStage
+ * flattens it to three numbers and `setScene` REPAIRS a non-positive fade to
+ * `turnFadeFor(hold)` on the way past, so refusing a `fade: 0` here drew no
+ * cuts on a grid the compositor is cutting on. Mirror what actually runs.
+ *
+ * AND WHETHER THERE ARE CUTS AT ALL IS NOT DECIDED HERE. The Stage builds its
+ * turn RING from the fragments not holding a live clip and switches the feature
+ * off below two of them (`StageStatus.turning`); the caller gates on that. A
+ * turn mode is an INTENT, and this function only says where the cuts would land
+ * if the wall has anything to exchange.
  */
 export const cutPlan = (
   turnId: unknown,
@@ -125,8 +137,16 @@ export const cutPlan = (
   if (!isTurning(turnId)) return null;
   if (sched) {
     const { hold, first, fade } = sched;
-    if (!(hold > 0) || !Number.isFinite(hold) || !Number.isFinite(first) || !(fade > 0)) return null;
-    return { hold, first, fade };
+    if (!(hold > 0) || !Number.isFinite(hold) || !Number.isFinite(first)) return null;
+    // A NON-POSITIVE FADE IS REPAIRED, NOT REFUSED — because that is what the
+    // PIPELINE does. `scheduledTurnAt` rejects it, but nothing ever hands it
+    // one: VideoStage flattens the schedule to three numbers and `setScene`
+    // replaces a non-positive fade with `turnFadeFor(hold)` before the
+    // compositor sees it. Refusing here made the strip draw NO cuts on a grid
+    // the Stage is happily cutting on — a divergence in the safe direction and
+    // still a divergence. Latent (`beatSchedule` always sets a positive fade)
+    // and found by the adversarial audit reading the two paths side by side.
+    return { hold, first, fade: fade > 0 && Number.isFinite(fade) ? fade : turnFadeFor(hold) };
   }
   const hold = turnHoldSec(turnId);
   if (!(hold > 0)) return null;
@@ -293,7 +313,20 @@ export const takeMap = (
     const lapSec = effectiveLength(s.playback);
     const passes = lapSegments(lapSec, take);
     if (passes.laps <= 0) { unknownLanes++; continue; }
-    if (lanes.length >= MAX_LANES) { hiddenLanes++; continue; }
+    // THE MUSIC IS NEVER THE LANE THAT GETS DROPPED. Lanes fill in arrival
+    // order and the caller pushes music last, so nine clips would spend every
+    // slot and leave the one lane whose identity is unambiguous uncounted on
+    // screen — DECISION B reads a clip lane off the chip row beneath it, and
+    // music has no position in that row to be read off. It takes the last slot
+    // from a clip instead: a ninth clip lane is one of many, the music lane is
+    // the only one of its kind.
+    if (lanes.length >= MAX_LANES) {
+      const kind = s.kind === 'music' ? 'music' : 'clip';
+      const victim = kind === 'music' ? lanes.findIndex((l) => l.kind === 'clip') : -1;
+      if (victim < 0) { hiddenLanes++; continue; }
+      lanes.splice(victim, 1);
+      hiddenLanes++;
+    }
     lanes.push({
       id: s.id,
       kind: s.kind === 'music' ? 'music' : 'clip',
@@ -307,7 +340,14 @@ export const takeMap = (
     lanes,
     hiddenLanes,
     unknownLanes,
-    empty: cuts.at.length === 0 && lanes.length === 0,
+    // AN ADMISSION IS SOMETHING TO DRAW. `empty` tells the component to render
+    // nothing at all, so counting only the SHAPES meant a take whose one source
+    // has no measurable length came back empty and took DECISION 4's whole
+    // diagnostic with it — the "1 source of unknown length" that exists to stop
+    // a missing lane looking like an absent source. A soundtrack is imported at
+    // `durationSec: 0`, so that is the first second of every music import.
+    empty: cuts.at.length === 0 && lanes.length === 0
+      && hiddenLanes === 0 && unknownLanes === 0,
   };
 };
 
@@ -327,7 +367,31 @@ export const laneLabel = (lane: TakeLane, take: number): string => {
   const times = Number.isFinite(take) && take > 0 && lane.lapSec > 0
     ? take / lane.lapSec
     : 0;
-  const rounded = Math.round(times * 10) / 10;
-  const passes = rounded >= 1 ? `x${rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toFixed(1)}` : 'cut off';
+  /**
+   * A WHOLE NUMBER IS A CLAIM, SO IT IS READ OFF THE SHAPES AND NOT OFF A
+   * ROUNDING.
+   *
+   * `Math.round(times * 10) / 10` snaps anything within 0.05 of an integer onto
+   * it, so a 10.4 s source in a 10 s take printed `x1` — "it plays through
+   * once" — while the bar beside it drew a single pass dimmed to say it does
+   * not. Measured by the adversarial audit: on a 10 s take EVERY period from
+   * 9.524 s to 10 s labelled `x1`, and 4.878-5.000 s labelled `x2` while three
+   * segments were drawn. The sweep could not see it because its cases (5/10,
+   * 3/10, 30/10) all sit outside those bands.
+   *
+   * The last segment's `whole` flag is the same fact the picture is drawn from,
+   * so asking it is what makes the two agree by construction: a take that ends
+   * mid-pass never prints an integer. `x2.0` is not a rounding artefact there,
+   * it is the statement "two passes and a bit".
+   */
+  const partial = lane.segments.length > 0
+    ? !lane.segments[lane.segments.length - 1].whole
+    : lane.dense;
+  if (!(times >= 1)) {
+    return `${lane.label || (lane.kind === 'music' ? 'music' : 'clip')} — ${secLabel(lane.lapSec)} cut off`;
+  }
+  const passes = partial
+    ? `x${(Math.floor(times * 10) / 10).toFixed(1)}`
+    : `x${Math.round(times)}`;
   return `${lane.label || (lane.kind === 'music' ? 'music' : 'clip')} — ${secLabel(lane.lapSec)} ${passes}`;
 };

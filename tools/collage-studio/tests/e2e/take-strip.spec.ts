@@ -349,6 +349,92 @@ test.describe('THE STRIP', () => {
       .toBe(Math.ceil(TAKE / 3));
   });
 
+  test('S6 a mark is never drawn on a wall that cannot cut', async ({ page }) => {
+    // THE DEFECT THIS PINS. Three places in this app answer "is the wall
+    // turning". The Stage builds its ring from the fragments NOT holding a live
+    // clip and switches the feature off below two of them; App's own `turning`
+    // counts the POOL. Every frame extracted from a video carries a `clipId` and
+    // binds to that clip, so a collage made of videos has an EMPTY ring and
+    // never cuts — in the preview and in the exported file — while the chip row
+    // says MARCH. The first version of this strip drew that intent: two ticks
+    // under a wall that never re-deals. Found by an adversarial audit, because
+    // no spec in this suite had ever put a clip and a turn mode in one scene.
+    //
+    // The assertion is made BOTH ways round: the strip must say zero, and the
+    // PICTURE must prove there was nothing to say — the same instant, past the
+    // would-be first cut and past its dissolve, is byte-comparable with the
+    // turn off and with the turn on.
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+    await page.locator('input[type="file"]').first().setInputFiles([
+      join(HERE, '..', 'fixtures', 'motion.webm'),
+      join(HERE, '..', 'fixtures', 'motion_short.webm'),
+    ]);
+    await expect(page.locator('canvas').first()).toBeVisible({ timeout: 120_000 });
+    await setTake(page, TAKE);
+    await page.waitForTimeout(1500);
+
+    // A moving crop would change pixels at every instant and make "it did not
+    // cut" unmeasurable — the reason beat.spec.ts sets this too.
+    await chip(page, 'move-still');
+
+    const PAST_FIRST_CUT = MARCH_HOLD + 0.8;  // 5.8s: past the cut AND its 0.7s dissolve
+    await page.locator('input[type="range"][aria-label^="Playhead"]').fill(String(PAST_FIRST_CUT));
+    await page.waitForTimeout(1200);
+    const held = await page.evaluate(() => {
+      const cs = Array.from(document.querySelectorAll('canvas')) as HTMLCanvasElement[];
+      let el: HTMLCanvasElement | null = null; let best = 0;
+      for (const c of cs) { const a = c.width * c.height; if (a > best) { best = a; el = c; } }
+      if (!el) return null;
+      const s = document.createElement('canvas'); s.width = 96; s.height = 96;
+      const cx = s.getContext('2d', { willReadFrequently: true });
+      if (!cx) return null;
+      cx.drawImage(el, 0, 0, 96, 96);
+      return Array.from(cx.getImageData(0, 0, 96, 96).data);
+    });
+    expect(held).not.toBeNull();
+
+    await chip(page, 'turn-march');
+    await expect(strip(page)).toBeVisible({ timeout: 30_000 });
+    await expect(strip(page),
+      'a wall of clips has an empty turn ring, so there is no cut to mark')
+      .toHaveAttribute('data-cuts', '0');
+    await expect(page.getByTestId('take-strip-cut')).toHaveCount(0);
+
+    await page.locator('input[type="range"][aria-label^="Playhead"]').fill(String(PAST_FIRST_CUT));
+    await page.waitForTimeout(1200);
+    const marched = await page.evaluate(() => {
+      const cs = Array.from(document.querySelectorAll('canvas')) as HTMLCanvasElement[];
+      let el: HTMLCanvasElement | null = null; let best = 0;
+      for (const c of cs) { const a = c.width * c.height; if (a > best) { best = a; el = c; } }
+      if (!el) return null;
+      const s = document.createElement('canvas'); s.width = 96; s.height = 96;
+      const cx = s.getContext('2d', { willReadFrequently: true });
+      if (!cx) return null;
+      cx.drawImage(el, 0, 0, 96, 96);
+      return Array.from(cx.getImageData(0, 0, 96, 96).data);
+    });
+    expect(marched).not.toBeNull();
+
+    let moved = 0; let worst = 0;
+    for (let i = 0; i < held!.length; i += 4) {
+      const d = Math.max(
+        Math.abs(held![i] - marched![i]),
+        Math.abs(held![i + 1] - marched![i + 1]),
+        Math.abs(held![i + 2] - marched![i + 2]),
+      );
+      if (d > worst) worst = d;
+      if (d > 6) moved++;
+    }
+    const share = moved / (held!.length / 4);
+    console.log(`[strip] MARCH on a wall of clips at ${PAST_FIRST_CUT}s: `
+      + `${(share * 100).toFixed(1)}% of the frame moved, worst ${worst}/255 — and the strip drew 0 marks`);
+    expect(share,
+      `the wall must NOT have cut (ring is empty) — worst channel ${worst}`)
+      .toBeLessThan(0.02);
+  });
+
   test('S5 the new rows are watertight on a phone', async ({ page }) => {
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 780 });

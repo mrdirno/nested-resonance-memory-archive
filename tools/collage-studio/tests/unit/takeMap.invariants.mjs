@@ -506,19 +506,128 @@ const BPMS = [60, 90, 100, 120, 128, 140, 174, 180];
 }
 
 // -----------------------------------------------------------------------------
-// I10 — THE LABEL DOES NOT OVERSTATE. A take that ends mid-pass says so.
+// I10 — THE LABEL AGREES WITH THE SHAPES, AT EVERY PERIOD AND NOT ONLY AT THE
+//       ROUND ONES.
+//
+// The first version of this arm tested 5/10, 3/10 and 30/10 and passed while
+// the label was rounding away the very fact its docstring says it exists to
+// state: `Math.round(times*10)/10` snapped anything within 0.05 of an integer,
+// so a 10.4 s source in a 10 s take read "x1" — plays through once — beside a
+// bar drawn as a single PARTIAL pass. Found by the adversarial audit, which
+// measured the bands (9.524-10.000 s all read x1 on a 10 s take). The three
+// original cases sit outside every band, which is exactly why they held.
+//
+// So the arm now sweeps periods CONTINUOUSLY and asserts the label against the
+// segments the component draws, which is the only agreement that matters.
+// -----------------------------------------------------------------------------
+{
+  let bad = 0;
+  let checked = 0;
+  let worst = '';
+  const detail = [];
+  const laneFor = (lapSec, take) => {
+    const p = lapSegments(lapSec, take);
+    return { id: 'a', kind: 'clip', label: 'clip.mp4', lapSec, ...p };
+  };
+  for (const take of [10, 15, 5, 7.7]) {
+    for (let lapSec = 0.4; lapSec <= take * 1.6; lapSec += 0.017) {
+      const lane = laneFor(lapSec, take);
+      const label = laneLabel(lane, take);
+      checked++;
+      const last = lane.segments[lane.segments.length - 1];
+      const partial = lane.dense ? true : !!last && !last.whole;
+      // A WHOLE-NUMBER label is a claim that nothing is cut off. Read the
+      // passes TOKEN, not the whole string: the label carries a filename and a
+      // duration, both full of dots, and a naive `includes('.')` calls every
+      // label fractional (this arm's own first draft did exactly that).
+      const token = /x(\d+(?:\.\d+)?)$/.exec(label);
+      const saysWhole = !!token && !token[1].includes('.');
+      if (partial && saysWhole) {
+        bad++;
+        if (!worst) worst = `lap=${lapSec.toFixed(4)} take=${take}: "${label}" over ${lane.laps} passes, last partial`;
+      }
+      if (!partial && !saysWhole && !label.includes('cut off')) {
+        bad++;
+        if (!worst) worst = `lap=${lapSec.toFixed(4)} take=${take}: "${label}" but every pass is whole`;
+      }
+    }
+  }
+  // And the shapes the original arm pinned still hold.
+  if (!laneLabel(laneFor(5, 10), 10).includes('x2')) { bad++; detail.push('5/10 no longer x2'); }
+  if (!laneLabel(laneFor(3, 10), 10).includes('x3.3')) { bad++; detail.push('3/10 no longer x3.3'); }
+  if (!laneLabel(laneFor(30, 10), 10).includes('cut off')) { bad++; detail.push('30/10 no longer cut off'); }
+  // The exact case the audit measured.
+  const audit = laneLabel(laneFor(10.4, 10), 10);
+  if (!audit.includes('cut off')) { bad++; detail.push(`10.4/10: ${audit}`); }
+  const audit2 = laneLabel(laneFor(4.9, 10), 10);
+  if (audit2.includes('x2 ') || /x2$/.test(audit2)) { bad++; detail.push(`4.9/10: ${audit2} (3 passes drawn)`); }
+  ok('I10 the label agrees with the segments at every period', bad === 0,
+    `${checked} periods swept${worst ? ` — ${worst}` : ''}${detail.length ? ` · ${detail.join(' · ')}` : ''}`);
+}
+
+// -----------------------------------------------------------------------------
+// I11 — A GRID THE COMPOSITOR REPAIRS IS A GRID THE STRIP DRAWS.
+//
+// `scheduledTurnAt` refuses a non-positive fade, but nothing hands it one:
+// `setScene` replaces it with `turnFadeFor(hold)` first. Mirroring the stricter
+// function meant the strip drew NOTHING on a schedule the wall was cutting on.
 // -----------------------------------------------------------------------------
 {
   let bad = 0;
   const detail = [];
-  const lane = (lapSec) => ({ id: 'a', kind: 'clip', label: 'clip.mp4', lapSec, laps: 1, segments: [], dense: false });
-  const exact = laneLabel(lane(5), 10);
-  if (!exact.includes('x2') || exact.includes('x2.0')) { bad++; detail.push(`exact: ${exact}`); }
-  const frac = laneLabel(lane(3), 10);
-  if (!frac.includes('x3.3')) { bad++; detail.push(`frac: ${frac}`); }
-  const long = laneLabel(lane(30), 10);
-  if (!long.includes('cut off')) { bad++; detail.push(`long: ${long}`); }
-  ok('I10 the lane label states the partial pass', bad === 0, detail.join(' · '));
+  for (const fade of [0, -1, NaN, undefined]) {
+    const plan = cutPlan('march', 'even', { hold: 2, first: 2, fade });
+    if (!plan || !(plan.fade > 0)) { bad++; detail.push(`fade=${String(fade)} -> ${JSON.stringify(plan)}`); continue; }
+    // Repaired to the same number the Stage would have used.
+    if (plan.fade !== 0.4 && plan.fade !== Math.min(0.7, 2 * 0.2)) { bad++; detail.push(`fade=${String(fade)} repaired to ${plan.fade}`); }
+    const marks = cutMarks(plan, 10);
+    if (marks.at.length !== 4) { bad++; detail.push(`fade=${String(fade)} drew ${marks.at.length} marks`); }
+  }
+  // A hold that is genuinely unusable is still refused.
+  for (const bad2 of [{ hold: 0, first: 1, fade: 0.5 }, { hold: NaN, first: 1, fade: 0.5 }, { hold: 2, first: NaN, fade: 0.5 }]) {
+    if (cutPlan('march', 'even', bad2) !== null) { bad++; detail.push(`accepted ${JSON.stringify(bad2)}`); }
+  }
+  ok('I11 a repaired fade draws, an unusable hold still refuses', bad === 0, detail.join(' · '));
+}
+
+// -----------------------------------------------------------------------------
+// I12 — THE MUSIC IS NEVER THE LANE THAT GETS DROPPED, and an admission is
+//       never silenced by having nothing beside it.
+// -----------------------------------------------------------------------------
+{
+  let bad = 0;
+  const detail = [];
+  const clip = (i) => ({
+    id: `c${i}`, kind: 'clip', label: `c${i}`,
+    playback: { window: normaliseWindow(4, 0, 4), loop: true, rate: 1 },
+  });
+  const music = {
+    id: '__soundtrack__', kind: 'music', label: 'song.mp3',
+    playback: { window: normaliseWindow(12, 0, 12), loop: true, rate: 1 },
+  };
+  // Music arrives LAST, exactly as the caller pushes it, with every slot taken.
+  const full = takeMap(15, [...Array.from({ length: MAX_LANES + 1 }, (_, i) => clip(i)), music], null);
+  const musicLane = full.lanes.find((l) => l.kind === 'music');
+  if (!musicLane) { bad++; detail.push('music dropped when nine clips filled the slots'); }
+  if (full.lanes.length !== MAX_LANES) { bad++; detail.push(`lanes=${full.lanes.length}`); }
+  if (full.hiddenLanes !== 2) { bad++; detail.push(`hidden=${full.hiddenLanes} (one clip over + one evicted)`); }
+  // A clip past the cap is still just counted — no eviction for its own kind.
+  const clipsOnly = takeMap(15, Array.from({ length: MAX_LANES + 3 }, (_, i) => clip(i)), null);
+  if (clipsOnly.lanes.length !== MAX_LANES || clipsOnly.hiddenLanes !== 3) {
+    bad++; detail.push(`clips-only lanes=${clipsOnly.lanes.length} hidden=${clipsOnly.hiddenLanes}`);
+  }
+  // An unmeasured source with nothing else in the take must NOT come back empty:
+  // `empty` renders no strip at all and would take its own diagnostic with it.
+  const unmeasured = takeMap(10, [{
+    id: 'm', kind: 'music', label: 'song.mp3',
+    playback: { window: normaliseWindow(0), loop: true, rate: 1 },
+  }], null);
+  if (unmeasured.empty || unmeasured.unknownLanes !== 1) {
+    bad++; detail.push(`unmeasured-only: empty=${unmeasured.empty} unknown=${unmeasured.unknownLanes}`);
+  }
+  // And a genuinely empty take is still empty.
+  if (!takeMap(10, [], null).empty) { bad++; detail.push('a still take is no longer empty'); }
+  ok('I12 music keeps its lane and an admission is never silenced', bad === 0, detail.join(' · '));
 }
 
 // -----------------------------------------------------------------------------

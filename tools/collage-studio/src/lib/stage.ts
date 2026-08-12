@@ -292,6 +292,23 @@ export interface StageStatus {
    * motion and the park, so it is the place that answers.
    */
   rolling: boolean;
+  /**
+   * IS THE WALL ACTUALLY GOING TO CUT? Not "did somebody pick a turn mode" —
+   * that question is asked in two other places with two other answers, and the
+   * Stage's is the only one the picture obeys. `setScene` builds the turn RING
+   * out of the fragments that are NOT holding a live clip and switches the
+   * whole feature off below two of them, so a collage made entirely of frames
+   * extracted from videos never turns however loudly the chip row says MARCH —
+   * every fragment is bound to a clip and the ring is empty. App's own
+   * `turning` (`images.length > 1`) counts the POOL, which is a different set.
+   *
+   * Published because THE STRIP draws cut marks and a mark is a promise: two
+   * ticks under a wall that never re-deals is precisely the preview-is-not-the-
+   * file divergence this project keeps filing scars about. Re-deriving the ring
+   * in the component would be the second place that decides it, which
+   * `takeMap.ts` DECISION 1 refuses on the same grounds.
+   */
+  turning: boolean;
   /** Held on one instant by a scrub. */
   parked: boolean;
   /** Human-readable one-liner for the UI. Null when there is nothing to say. */
@@ -4037,6 +4054,7 @@ export class Stage {
         : null,
       capturing: this.capturing,
       rolling: this.isRolling,
+      turning: this.turning,
       parked: this.parked,
       message,
     };
@@ -4069,7 +4087,7 @@ export class Stage {
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
       s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
-      s.rolling + '|' + s.parked + '|' +
+      s.rolling + '|' + s.turning + '|' + s.parked + '|' +
       (s.soundtrack ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken : '-');
     for (let i = 0; i < s.clips.length; i++) {
       const c = s.clips[i];
