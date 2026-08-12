@@ -3990,11 +3990,14 @@ frontier. Today's ceiling is tomorrow's floor.
   of them `NO_TURN` by reference) and 20,000-schedule sweeps; **4 e2e assertions
   on production pixels** — 120 BPM found by the real browser from a WAV the test
   built, `march` snapped to 8 beats, and at t=4.8 s the synced wall has cut
-  (**94.5% of the frame moved, worst channel 207/255**) where the unsynced one
-  is still on its opening deal (**1.0% moved, worst 22**), with all six
+  (**93.6% of the frame moved, worst channel 196/255**) where the unsynced one
+  is still on its opening deal (**0.2% moved, worst 22**), with all six
   photographs present exactly once; watertight at 320 px.
   Regression: every unit sweep in the tree green, turn 7/7, motion 5/5, pace
-  4/4, playhead 2/2, roll-code 20/20. `tsc --noEmit` and `vite build` clean.
+  4/4, playhead 2/2, roll-code 20/20 — and `pace.spec` P5, the colour guard the
+  C144 hover scar left behind, was extended to the new row IN THIS CYCLE rather
+  than in the one that would have broken it (green on production: the chosen
+  chip reads `--signal`). `tsc --noEmit` and `vite build` clean.
   THREE SCARS, and two of them are about the PROOF rather than the code: the
   dev server on :5199 had been running since **Aug 8** and its watcher, on an
   external volume, had missed every edit to a file it cached on first request —

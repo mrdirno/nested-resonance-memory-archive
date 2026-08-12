@@ -299,7 +299,11 @@ test.describe('THE PACE', () => {
 
     // EVERY roster row on this page, not only the one this cycle added: the
     // rule is shared, so the sweep is the point.
-    for (const id of ['pace-rush', 'move-drift', 'turn-swap', 'look-noir']) {
+    // `sync-beat` is here because THE BEAT added a roster row and this guard is
+    // the one that would catch it rendering unchosen — the C144 lesson is that
+    // the sweep, not the row, is the point, so a new row joins the list in the
+    // cycle that adds it rather than in the cycle that breaks it.
+    for (const id of ['pace-rush', 'move-drift', 'turn-swap', 'look-noir', 'sync-beat']) {
       const chip = page.getByTestId(id);
       if (await chip.count() === 0) continue;
       await chip.click();
