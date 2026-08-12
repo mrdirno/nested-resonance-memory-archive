@@ -2385,3 +2385,35 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   overflow, every effective tap target ≥ 44px, no page errors. Four sections added, the
   ladder tapped, the document read end to end at 390px.
   https://mrdirno.github.io/nested-resonance-memory-archive/roofing/
+
+- 2026-08-12 · **[AXIS:COLLAGE] THE STRIP — the collage ruler stops measuring an empty ten
+  seconds · a bar that knew only its own length → a bar that shows what is IN the take.**
+  Well read UNSCOPED first and empty (0 new, 0 stranded in `building`, 19 shipped); breadth
+  debt 0 with all 8 trades served; the bump named COLLAGE stalest and the collage ladder
+  had already named this rung "the natural next one now that a ruler exists to draw them
+  on". Under the playhead, on the playhead's own axis: CUT MARKS where the collage
+  re-deals (each with its dissolve's real width) and one LANE per timed source showing the
+  passes it makes, the last drawn short when the take ends mid-lap. Two features that were
+  pure RELATIONSHIPS are visible for the first time — `march` over a 15s take draws two
+  marks at 1/3 and 2/3, and one tap of beat-sync moves them to three at 4/15, 8/15, 12/15.
+  **THIRD SIGHTING OF THE STALENESS-BLINDNESS SCAR, and this line exists to narrow it:**
+  the bump again computed `STALEST = COLLAGE — last worked never worked` on a day whose
+  four previous commits were all collage. The full detail lives in
+  `tools/collage-studio/COLLAGE_EVOLUTION.md` (C156 + C156b) as the doctrine requires; this
+  line is the date-and-tag the toolkit book's reader can actually parse.
+  **TWO SCARS, one of them pre-existing and shipped two cycles ago.** SCAR-C156: everything
+  drawn under a range input was positioned on the TRACK's width while the thumb travels
+  `thumb/2 → width-thumb/2`, so the fade wedges have been out by up to half a thumb (6% of
+  the take) since they shipped — `--range-thumb` is one token now. SCAR-C156b, found by the
+  adversarial audit AFTER ship: three predicates answer "is the wall turning" and the strip
+  read the wrong one, so a collage of videos (empty turn ring, never cuts) was drawn with
+  two cut marks. Both fixed, both live-verified.
+  **BACKPORT RIDER FIRED:** the axis class was swept across every trade — no trade toolkit
+  page has a slider at all (`grep -rl 'type="range"' av/ electrical/ framing/ gc/ hvac/
+  low-voltage/ plumbing/ roofing/ shared/` is empty), so the class cannot exist there; the
+  five other collage ranges carry it inside `--fill` where it is bounded by `thumb/2` and
+  therefore always hidden under the thumb, measured and deliberately left.
+  Proof: 13 invariants, 19/19 mutations killed, e2e green on chromium + both WebKit
+  projects and re-run GREEN AGAINST PRODUCTION (4/4), full chromium suite 149/149, 25/25
+  unit sweeps tree-wide.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
