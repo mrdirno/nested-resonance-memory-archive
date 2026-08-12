@@ -3784,7 +3784,11 @@ frontier. Today's ceiling is tomorrow's floor.
   two swap places, 0.5× reading **0.5% / worst 29** where 1× reads **94.5% /
   worst 202**. Three rates, same pixels, no timer anywhere — measured against
   PRODUCTION, and a scrub is the export's own path, so it is evidence about the
-  file. Both mutations red: neutering `paceTime` and cutting the Stage seam each
+  file. (The CUT magnitude is a random variable and re-runs read 94-96% / worst
+  ~200, because the layout is generative and each boot deals differently — the
+  scar about whole-canvas measurements applies. The HOLD is not a random
+  variable: 1× at 3.0 s reads 0.0% / worst 0 every time, because rest at zero is
+  an identity rather than a tolerance.) Both mutations red: neutering `paceTime` and cutting the Stage seam each
   fail P1 (the seam mutation with `worst 0` — the picture literally identical).
   AND THE SCREENSHOT CAUGHT WHAT NONE OF THAT DID. Looking at the live page at
   390px afterwards, the chosen `2×` chip was not green: `:hover` out-specifies
