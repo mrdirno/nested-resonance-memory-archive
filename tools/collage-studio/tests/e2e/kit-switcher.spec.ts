@@ -31,7 +31,7 @@ import { test, expect, type Page } from '@playwright/test';
 // RELATIVE, deliberately. The deployed site lives under a repo path
 // (/nested-resonance-memory-archive/) and a leading slash resolves against the
 // ORIGIN — silently dropping the prefix and 404ing every live run.
-const TRADES = ['av', 'plumbing', 'electrical', 'hvac', 'gc', 'low-voltage', 'framing'];
+const TRADES = ['av', 'plumbing', 'electrical', 'hvac', 'gc', 'low-voltage', 'framing', 'roofing'];
 // One real tool page per trade — the half of the site that had no route out.
 const TOOLPAGE: Record<string, string> = {
   av: 'consumables.html',
@@ -43,6 +43,9 @@ const TOOLPAGE: Record<string, string> = {
   // Trade #7's signature tool — the backing ledger, and the ANSWER to the ask
   // five of the six trades above already send at this crew.
   framing: 'whats-in-the-wall.html',
+  // Trade #8's signature tool — the night-seal record, and the only page in the
+  // program that has to be used at a specific hour.
+  roofing: 'whats-open.html',
 };
 const WIDTHS = [320, 360, 390, 430];
 const MIN_TAP = 44;

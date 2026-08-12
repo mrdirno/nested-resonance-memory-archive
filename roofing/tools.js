@@ -1,0 +1,56 @@
+/* ROOFING FIELD TOOLKIT — TOOL REGISTRY (the one edit point).
+ *
+ * The P0 loop (and you) add a tool HERE when its page ships from a wishing-well
+ * request or the seed roster. The hub grid and the per-page nav dropdown both
+ * read this list, so a new entry appears everywhere at once.
+ *
+ * Fields:
+ *   name      short title
+ *   href      the tool's page, relative to /roofing/
+ *   desc      one line — what document/request it helps a real roofer produce
+ *   chip      accent color (any CSS color)
+ *   audience  who it's for / who they send the output to
+ *   pinned    optional — keep at the very top of the hub regardless of favorites
+ */
+window.TOOLKIT_TOOLS = [
+  {
+    // PINNED, and it is the only tool in the program that has to be used at a
+    // specific hour. Three of the four in-trade panels proposed it independently
+    // (2026-08-12) — the strongest convergence in the roster fan-out.
+    name: "What's Open Tonight",
+    href: "whats-open.html",
+    desc: "Section by section at quitting time — how far it got, what's holding the water tonight, and what's underneath the part that's still open. Tap each section up the ladder and send it before you're off the ladder.",
+    chip: "#FF93C9",
+    audience: "Foreman → super / owner / PM",
+    pinned: true
+  },
+  {
+    name: "Before I Open It",
+    href: "rough-in-request.html",
+    desc: "Everything that has to be off, set, moved or owned before you open a section — and before you cover one. Every curb, sleeve, post and drain another outfit owes you, with the gate it has to beat. One walk, one message each.",
+    chip: "#B03171",
+    audience: "Foreman → GC / mech / EC / owner"
+  },
+  {
+    name: "Extra Work Tag",
+    href: "tm-tag.html",
+    desc: "Found it after tear-off? Write the tag standing on the open deck — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once the new roof is over it, the evidence is gone.",
+    chip: "#C4426F",
+    audience: "Foreman → super / PM"
+  },
+  {
+    name: "What I'll Hit",
+    href: "answer-back.html",
+    desc: "The mech contractor, the GC or the owner sent you a list of what they need off you. Paste it, tap each line to say will do / already done / can't / need to know, put a date on the yesses, and send one answer back before you cover that section.",
+    chip: "#8A1C4B",
+    audience: "Foreman → GC / mech / EC / owner"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — leak calls, wet insulation, the weather day, the not-from-our-work reply, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it in the truck.",
+    chip: "#4B3F8F",
+    audience: "Foremen · service · PMs"
+  }
+  // The loop appends new tools here as it builds them from wishes + the seed roster.
+];

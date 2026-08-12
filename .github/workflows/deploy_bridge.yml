@@ -23,6 +23,7 @@ on:
       - 'low-voltage/**'
       - 'gc/**'
       - 'framing/**'
+      - 'roofing/**'
       # the commons — the human layer, shared by every trade and owned by none
       - 'commons/**'
       - '.github/workflows/deploy_bridge.yml'
@@ -111,7 +112,7 @@ jobs:
           # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
           # a slug with no dir fails the build instead of silently 404ing the site.
           cp -R shared/. HELIOS-BRIDGE/dist/shared/
-          TRADES="av plumbing electrical hvac low-voltage gc framing"
+          TRADES="av plumbing electrical hvac low-voltage gc framing roofing"
           # Each `run:` block is its OWN shell, so a later step cannot see this
           # variable — publish it to the job env so the assert step below checks
           # exactly the list that was staged, from ONE definition.

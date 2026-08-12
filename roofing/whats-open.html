@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What&rsquo;s Open Tonight — Roofing Field Toolkit</title>
+<meta name="description" content="The night-seal record. Section by section at quitting time: how far it got, what&rsquo;s holding the water tonight, and what&rsquo;s underneath the part that&rsquo;s still open. One message before you&rsquo;re off the ladder.">
+<meta name="apple-mobile-web-app-title" content="What's Open Tonight">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Roofing &middot; end of day &rarr; the super, the owner, your own PM</span>
+    <h1 id="title">What&rsquo;s Open Tonight</h1>
+    <p class="lede" id="lede">Section by section at quitting time: how far it got, what&rsquo;s holding the water tonight, and what&rsquo;s underneath the part that&rsquo;s still open. One message, before you&rsquo;re off the ladder.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Nothing on this page says the roof will hold.</b> &ldquo;Dried in&rdquo; here means <i>you</i> say you dried it in &mdash; it is not a rating, not an assurance and not a warranty. This page slopes nothing, sizes nothing, rates no assembly and sets no fastening. It records what you did and what is exposed, in your words.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Building B" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Weather tonight</label><input type="text" id="hOff" placeholder="what&rsquo;s forecast &mdash; in your words" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring at 2am" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">The forecast line is not a prediction we are making &mdash; it is the reason you are sending this tonight instead of tomorrow. &ldquo;Rain after midnight&rdquo; in your own words is the whole point.</p>
+  </section>
+
+  <section class="card">
+    <h2>Where each section got to</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Set the section once &mdash; it carries. Then it&rsquo;s pick how far it got, pick what&rsquo;s holding the water, pick what&rsquo;s under it, <b>Add</b>. <b>Tap a row</b> to move it one rung up the ladder &mdash; that is the whole end-of-day job: tap each section up to where it actually got.</p>
+  </section>
+
+  <section class="card">
+    <h2>The roof tonight</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="state" class="on">How far it got</button>
+        <button type="button" data-g="under">What&rsquo;s under it</button>
+        <button type="button" data-g="area">Section</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="noexp" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row to change what&rsquo;s holding the water, put a count on it, flag it, or delete it. A row flagged <b>Watch it tonight</b> or <b>Somebody inside</b> lands in its own block at the top of the message &mdash; those are the ones that get read first.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; before you&rsquo;re off the ladder</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Still open</button>
+        <button type="button" data-f="exposed">Open with something under it</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Still open</b> is the 5pm message to the super. <b>Open with something under it</b> is the one that goes to the building engineer and the owner&rsquo;s rep, because that is the list somebody needs at 2am. <b>Everything</b> is tomorrow&rsquo;s first-move plan and your own record of the day. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser on this phone.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Roofing Field Toolkit. A state your crew calls something else, or a row you can&rsquo;t record? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Roofing Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* WHAT'S OPEN TONIGHT — the night-seal record, and trade #8's signature tool.
+ *
+ * WHY THIS PAGE EXISTS AND WHY IT IS THIS TRADE'S. Every other trade in this
+ * program races a gate somebody else owns. The roofer OWNS one, and he re-owns it
+ * every single evening: the building is either watertight tonight or it is not.
+ * If it is not, one specific person needs to know which part, what is holding the
+ * water, and what is in the space underneath — and today that conversation is a
+ * phone call nobody wrote down, or four photos in a text with no words on them.
+ *
+ * THE ROSTER FAN-OUT CONVERGED ON IT THREE WAYS (2026-08-12). Four independent
+ * in-trade panels proposed this page unprompted under three different names:
+ * "What's Open Tonight" (commercial low-slope), "Dry Tonight" (service), and
+ * "What's Still Open" (residential steep). Nothing else in the roster was named
+ * by three lenses.
+ *
+ * THE HONEST COMPETITOR IS THE CAMERA ROLL, NOT THE NOTES APP, and the steep lens
+ * said so out loud: four photos in a text takes eleven seconds. So this page only
+ * earns its place two ways. It is FASTER — one tap per section advances the
+ * ladder, because a section moves one or two rungs in a day and yesterday's log
+ * is still sitting there. And it carries the three things a photo cannot: the
+ * state word, what is temporarily holding the water, and WHAT IS UNDERNEATH.
+ *
+ * IT IS A CONFIG ON SHAPE #3. shared/rowlog.js owns the state, the grouping, the
+ * persistence, the document assembly and the copy; shared/rowlog.css owns every
+ * pixel; this file owns the WORDS and the document. The vocabulary is in items.js
+ * so a trade that adopts this page later changes words and not code.
+ *
+ * THE LADDER IS THE STATUS, and that is the whole design. On every other page on
+ * this engine the status is a small side-axis; here "how far it got" IS the
+ * ladder, so the end-of-day job is literally tapping each section up to where it
+ * reached. It does NOT wrap (no statusWrap): a welded roof does not go back to
+ * bare deck, and COMPLETE is the rung the log exists to reach.
+ *
+ * WHAT THIS PAGE REFUSES (§SAFETY, and roofing gets the sharpest edge in the
+ * program — see items.js). It never rates the seal. It never says the roof will
+ * hold, never states how much weather a temporary cut-off survives, never slopes
+ * or sizes or fastens anything, and never converts his count into another unit.
+ * "Dried in" is HIS word for what he did, and the document says so in its own
+ * closing line so nobody can read this as a certification.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var N = window.TOOLKIT_NIGHTSEAL || {};
+
+  var STATES = (N.states || []).map(function (s) { return s.label; });
+  var SEALS  = (N.seal   || []).map(function (s) { return s.label; });
+  var UNDER  = (N.under  || []).map(function (s) { return s.label; });
+  var NEXT   = (N.next   || []).map(function (s) { return s.label; });
+  var KEY = "toolkit." + (TRADE.slug || "roofing") + ".nightseal.v1";
+
+  /* THE TWO RUNGS THAT MEAN "WATERTIGHT" ARE DECLARED ONCE, BY VALUE, and every
+     reader asks this function instead of testing a string. A predicate copied
+     into three places is three places to disagree about whether the building is
+     dry, and the document would then contradict its own first line. */
+  var DRY = {};
+  ["dried-in", "complete"].forEach(function (v) {
+    (N.states || []).forEach(function (s) { if (s.v === v) DRY[s.label] = 1; });
+  });
+  /* NOTHING UNDER IT is also declared by value, not by matching words: an empty
+     roof deck over a warehouse nobody is in tonight is not an exposure, and the
+     page must not print it as one. */
+  var NO_ONE_UNDER = {};
+  ["unoccupied", "attic"].forEach(function (v) {
+    (N.under || []).forEach(function (s) { if (s.v === v) NO_ONE_UNDER[s.label] = 1; });
+  });
+  /* "Permanent" is the one seal value that is not temporary. Everything else on
+     that list — night seal, cut-off, tarp, paper, plate, tie-in — is something he
+     has to come back to, and the document says so rather than implying it. */
+  var PERMANENT = {};
+  ["permanent"].forEach(function (v) {
+    (N.seal || []).forEach(function (s) { if (s.v === v) PERMANENT[s.label] = 1; });
+  });
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* LOWERCASING DESTROYS AN ACRONYM, and this trade's picks are full of them.
+     MEASURED on the real page before ship: "IT / server room" arrived in the
+     document as "under it: it / server room", which reads as the pronoun and
+     loses the room entirely — on the one line the whole page exists to carry.
+     Same law as the height field and the count: THE PAGE NEVER EDITS A VALUE IT
+     DID NOT AUTHOR. So a value with an all-caps run in it is passed through
+     untouched, and only ordinary prose gets softened for sentence flow. */
+  function soften(s) {
+    s = String(s == null ? "" : s);
+    return /[A-Z]{2,}/.test(s) ? s : s.toLowerCase();
+  }
+
+  /* A DATE IS NOT ENOUGH ON THIS ONE DOCUMENT. Every other page in the program
+     stamps the day and that is right, because the argument is about a job. This
+     argument is about ONE NIGHT — what the roof looked like when the crew left,
+     versus when the water came in — and "Aug 12" cannot separate 3pm from 7pm on
+     the same roof. So this document carries a clock time, taken at the moment he
+     copies it, and nothing else in the program changes. */
+  function clockNow() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    var ap = h < 12 ? "am" : "pm";
+    h = h % 12; if (!h) h = 12;
+    return h + ":" + (m < 10 ? "0" : "") + m + ap;
+  }
+
+  function isOpen(v)     { return !DRY[v.state]; }
+  function hasSomeone(v) { return !!v.under && !NO_ONE_UNDER[v.under]; }
+  function isExposed(v)  { return isOpen(v) && hasSomeone(v); }
+
+  /* Page copy comes from the trade's vocabulary file, exactly like every other
+     config on this engine. */
+  if (N.toolName) {
+    $("#title").textContent = N.toolName;
+    document.title = N.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (N.lede) $("#lede").textContent = N.lede;
+  if (N.eyebrow) $("#eyebrow").textContent = N.eyebrow;
+  if (N.warn) $("#warn").innerHTML = N.warn;
+  if (N.phJob) $("#hJob").placeholder = N.phJob;
+  if (N.phFrom) $("#hFrom").placeholder = N.phFrom;
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* THE ENGINE RENDERS ONCE INSIDE mount(), WHICH IS BEFORE `rl` EXISTS, and
+     docHead / onChange / the tally all run in that first render. Reading `rl`
+     there throws and the page ships looking perfect with every word this file
+     owns dead (§SCARS). Everything that touches rows goes through here. */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "section", nounPlural: "sections", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NOT SAID",
+    emptyText: "Nothing logged yet. Put in the first section — where it is, how far it got, and what's holding the water tonight.",
+
+    /* THE LADDER IS THE STATUS. No statusWrap: a welded roof does not go back to
+       bare deck, and COMPLETE is the rung the log exists to reach. */
+    statusKey: "state", statusOrder: STATES, statusDone: STATES[STATES.length - 1],
+    flagKey: "flag", flagValues: N.flags || ["Watch it tonight", "Somebody inside"],
+
+    groupOptions: [
+      { key: "state", label: "How far it got" },
+      { key: "under", label: "What's under it" },
+      { key: "area", label: "Section" }
+    ],
+
+    /* THE BLOCKS READ IN LADDER ORDER when grouped by state, so the same roof
+       never arrives arranged differently depending on which row he tapped first.
+       Grouped by what is UNDER it, the exposures the receiver cares about lead:
+       an occupied space at the top, "nothing under it" at the bottom. */
+    groupSort: function (a, b, key) {
+      if (key === "state") {
+        var ia = STATES.indexOf(a), ib = STATES.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "under") {
+        var ja = UNDER.indexOf(a), jb = UNDER.indexOf(b);
+        var pa = NO_ONE_UNDER[a] ? 1 : 0, pb = NO_ONE_UNDER[b] ? 1 : 0;
+        if (pa !== pb) return pa - pb;
+        return (ja < 0 ? 99 : ja) - (jb < 0 ? 99 : jb);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "open", label: "still open",
+      emptyText: "Every section on here is dried in or complete. Nothing open tonight.",
+      test: function (v) { return isOpen(v); }
+    }, {
+      v: "exposed", label: "open with something under it",
+      emptyText: "Nothing open over an occupied or finished space. That is the answer somebody wants at 2am.",
+      test: function (v) { return isExposed(v); }
+    }],
+
+    fields: [
+      { key: "area", label: "Section / slope", input: "learn", lead: true, required: true, sticky: true,
+        placeholder: "Section 2, north half — then it's a button",
+        emptyHint: "Name it the way your crew and the drawings do. It becomes a button." },
+      { key: "state", label: "How far it got", input: "select", required: true,
+        placeholder: "— where it ended up" },
+      { key: "seal", label: "What's holding the water tonight", input: "chips", wide: true },
+      { key: "under", label: "What's under it", input: "chips", wide: true },
+      /* NAKED BY DESIGN, same reasoning as framing's height field (§SAFETY). No
+         chips, no example, no greyed number, and no unit forced on him — a
+         seeded "squares" turns his sheets into a conversion nobody checked. */
+      { key: "much", label: "How much of it", input: "text",
+        placeholder: "in the unit you counted — your number" },
+      { key: "next", label: "First move tomorrow", input: "chips", wide: true },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the man reading this at 2am needs" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "seal")  return SEALS;
+      if (key === "under") return UNDER;
+      if (key === "next")  return NEXT;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.area, v.state]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.seal, v.under, v.much, v.next, v.note]); },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first, exactly like
+       every other document in this program — so tonight's status and next
+       week's argument surface together when somebody searches the job name.
+       THEN THE COUNT THAT MATTERS, and it is not the total: it is how many
+       sections are still open and how many of those have somebody under them.
+       A header that leads with "9 sections" when two of them are open over a
+       server room has buried the only number anybody needed. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), wx = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, N.docSubject || "roof status tonight", c.today + ", " + clockNow()])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (wx) out.push("Tonight: " + wx);
+      out.push("");
+
+      /* Counted over the rows this copy actually CONTAINS, never over the whole
+         log — a header that counts rows the body does not show contradicts the
+         body it sits on top of. */
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("exposed") > -1 && !isExposed(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var open = src.filter(isOpen);
+      var exposed = src.filter(isExposed);
+      var line = c.shown + (c.shown === 1 ? " section" : " sections");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + (open.length ? open.length + " still open" : "nothing open");
+      if (exposed.length) {
+        line += " · " + exposed.length + " over occupied or finished space";
+      }
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, and it reads the way he says it out loud: where it is,
+       how far it got, what's holding the water, what's under it. The axis the
+       list is grouped by is dropped from the line because it is already the
+       heading. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "state";
+      var head = joinDots([g === "area" ? null : v.area, g === "state" ? null : v.state]);
+      var tail = [];
+      /* HIS COUNT, VERBATIM, and the label never repeats what he already said —
+         a man who types "12 squares" into a field must not get "12 squares of
+         it, 12 squares". Same law as framing's height: the doc labels the
+         number and never edits it. */
+      if (v.much) {
+        tail.push(/\b(sq|square|sheet|board|roll|pail|bundle|lf|ft|foot|feet|each|ea)\b/i.test(v.much)
+          ? v.much : v.much + " of it");
+      }
+      if (v.seal) tail.push(PERMANENT[v.seal] ? soften(v.seal) : "holding tonight: " + soften(v.seal));
+      if (g !== "under" && v.under) tail.push("under it: " + soften(v.under));
+      if (v.next) tail.push("tomorrow: " + soften(v.next));
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.area, v.state, v.seal, v.under]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES): a document the receiver
+       cannot reply to is a document he files. So the exposures LEAD the footer —
+       they are what somebody rings about — and then the refusal, out loud,
+       because a status message that reads as a guarantee is the one that gets
+       quoted back at you. */
+    docFoot: function () {
+      var out = [];
+      var exposed = rowsNow().filter(function (r) { return isExposed(r.values); });
+      if (exposed.length) {
+        out.push("OPEN OVER SOMEBODY — ring me before anybody starts pulling ceiling:");
+        exposed.forEach(function (r) {
+          var v = r.values;
+          out.push("  · " + joinDots([v.area, v.state])
+            + " — under it: " + soften(v.under)
+            + (v.seal ? " · holding tonight: " + soften(v.seal) : " · nothing on it"));
+        });
+        out.push("");
+      }
+      var temp = rowsNow().filter(function (r) {
+        return r.values.seal && !PERMANENT[r.values.seal] && isOpen(r.values);
+      });
+      if (temp.length) {
+        out.push("Everything above with a seal on it is TEMPORARY, not finished work — it comes back off tomorrow.");
+        out.push("");
+      }
+      out.push(N.closing || "That's the roof at quitting time. Anything listed open or temporary is not finished work — if it comes in overnight, call me before anybody starts pulling ceiling.");
+      out.push("This is what we did and what is exposed, in my words. It is not a certification that the building is watertight, it does not rate or approve any assembly, and no count on it is a price or a change order.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), wx = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + "roof status log, " + c.total
+        + " sections, " + c.today + " " + clockNow() + (wx ? ", tonight: " + wx : "")
+        + " — recorded by hand at quitting time. Not a certification, nothing rated or sized by the page.";
+    },
+    tsvColumns: [
+      { label: "Section / slope", key: "area" },
+      { label: "How far it got", key: "state" },
+      { label: "Holding the water", key: "seal" },
+      { label: "What's under it", key: "under" },
+      { label: "How much", key: "much" },
+      { label: "First move tomorrow", key: "next" },
+      { label: "Flagged", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), w = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || w || f || t) ? { job: j, wx: w, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.wx || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    onChange: function () { paintExposed(); }
+  });
+
+  /* THE LINE EVERYONE LEAVES OUT IS WHAT IS UNDERNEATH. "Section 2 is open" is
+     not something a building engineer can act on; "Section 2 is open over the
+     server room" gets somebody out of bed. So the page counts the open sections
+     he has not said an under-value for and asks — in the UI where he can fix it,
+     and NOT in the document, because publishing "3 of these have no exposure
+     recorded" invites the receiver to argue the record instead of acting on it. */
+  function paintExposed() {
+    var el = $("#noexp"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return isOpen(r.values) && !String(r.values.under || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " open section" + (n === 1 ? "" : "s") + " with nothing said about what&rsquo;s under "
+      + (n === 1 ? "it" : "them") + ".</b> That is the line the man reading this at 2am needs &mdash; open the pencil and put it on before you send it.";
+  }
+
+  /* The learn axis borrows the identifier's keyboard attributes, which exist so a
+     phone cannot destroy a device tag. "Section 2, north half" is not a device
+     tag and it does not want to arrive as SECTION 2, NORTH HALF. */
+  ["area"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  /* ── the two segmented controls ──────────────────────────────────────────── */
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one. This log is the only record of what the roof
+     looked like tonight and it lives in one browser on one phone — a single
+     mis-tap on a 44px button in the dark must not be able to destroy it. Same
+     arm-then-confirm pattern every other page on this engine uses. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    paintExposed();
+  });
+
+  /* The header fields ride on every message, so a keystroke has to reach BOTH the
+     preview and the saved copy. There is no rl.refresh() — render() repaints and
+     schedulePersist() saves, and a page that calls only one of them either shows
+     a stale document or loses the job name on reload. */
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST. The engine does not restore itself
+     inside mount() — every sibling config calls this explicitly, and a page that
+     forgets it looks perfect on a fresh load and silently drops the whole log
+     every time he backgrounds the phone. */
+  rl.restore();
+  applyFilters();
+  paintExposed();
+})();
+</script>
+</body>
+</html>

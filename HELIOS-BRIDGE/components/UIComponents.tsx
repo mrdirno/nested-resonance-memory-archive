@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -257,6 +257,19 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew that closes the wall — the backing ledger first: log what went in, how high and who asked for it as it goes in, then send the come-look message this week and the proof in October, when somebody swears there is nothing behind that rock.',
     icon: <Hammer size={18} />,
+  },
+  {
+    // TRADE #8 — the SECOND one promoted rather than inherited, by the same
+    // INTERFACE MATRIX rule that promoted framing: the next family is whichever
+    // unserved party the most served trades already chase. With the framer
+    // served, the roofer was the highest count left — named independently by
+    // electrical, HVAC and plumbing. It is also the one trade here that OWNS a
+    // gate instead of racing one: everybody else is counting down to dry-in.
+    name: 'Roofing Field Toolkit',
+    href: './roofing/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew that owns dry-in — the tear-off release first: nobody opens a roof until somebody says what happens if it rains tonight, so tick who moved what, what is protected, how much you are opening and who owns the call, and send it before the first sheet comes off.',
+    icon: <Umbrella size={18} />,
   },
 ];
 

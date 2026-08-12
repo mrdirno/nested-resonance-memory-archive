@@ -63,6 +63,7 @@
     { slug: "low-voltage", name: "Low-Voltage Field Toolkit",    short: "Low-Volt",   icon: "📹", accent: "#FF9E80" },
     { slug: "gc",          name: "GC & Site Super Toolkit",      short: "GC & Super", icon: "🦺", accent: "#8CE86B" },
     { slug: "framing",     name: "Framing & Drywall Field Toolkit", short: "Framing", icon: "🪚", accent: "#B7ADFF" },
+    { slug: "roofing",     name: "Roofing Field Toolkit",        short: "Roofing",    icon: "🪜", accent: "#FF93C9" },
     // NOT A TRADE — the commons, and the only entry here that is not a toolkit.
     // It rides this list on purpose: the six hubs each render "whoever is not me"
     // from it, so one line surfaces the human layer in every hub footer with zero

@@ -2326,3 +2326,62 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   2026-08-05 scar in its own setup (clear-then-reload is circular). Injection: clean, 0
   elements, 0 globals. Green on the tree AND against the deployed site.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
+
+- 2026-08-12 · **[AXIS:BREADTH] TRADE #8 IS LIVE — ROOFING, AND IT IS THE FIRST TRADE
+  THAT OWNS A GATE INSTEAD OF RACING ONE · 7 trades × 40 tools → 8 trades × 45 tools.**
+  Promoted by the INTERFACE MATRIX rule that promoted framing at #7 — the next family is
+  whichever unserved party the most served trades already chase — and with the framer
+  served, the roofer was the highest count left, named independently by electrical, HVAC
+  and plumbing. The BUILD ORDER had nothing owed, so the rule, not the list, chose.
+  **The axis signal was wrong and the tags are why.** The bump computed
+  `STALEST = COLLAGE — last worked never worked` while `[AXIS:COLLAGE]` was stamped that
+  same morning and the last **12 commits** were all collage. That is the second sighting
+  of the 2026-08-09 blindness scar in this book, one floor down: the reader can only see
+  tags it actually parses, and a lane that believes it has never touched its most-worked
+  axis will keep working it. Ground truth taken by date across BOTH books: BACKPORT and
+  BREADTH tied at 2026-08-09, everything else 08-10 or 08-11, collage 08-12.
+  **A BACKPORT candidate died on inspection, and that is a result.** `report-builder.html`
+  is AV-only and looked like the obvious carry-over, until `shared/docspec.js` turned out
+  to already ship ROLE + CONTINUITY + a `daily-report` to all seven trades. Backporting it
+  would have forked a page the engine had already generalised — the DOCS cycle of
+  2026-08-05 had quietly paid that debt and nobody wrote it down.
+  Seeded from a 4-lens × 3-skeptic roster fan-out (8 agents, 34 candidates, ~a third
+  killed): commercial low-slope · residential steep · service/leak · and the RECEIVING
+  lens answering as the GC, owner and neighbouring trades. Shipped: the four universals as
+  configs on the shared engines (**Before I Open It** · **Extra Work Tag** · **What I'll
+  Hit** · **Write-Up Setup**, the last carrying four roofing documents — leak-call
+  findings, what came up under the old roof, that's-not-from-our-work, roof turnover) plus
+  the signature tool.
+  **THE SIGNATURE TOOL IS `whats-open.html` — "What's Open Tonight", and three of the four
+  in-trade lenses proposed it unprompted** under three different names ("What's Open
+  Tonight", "Dry Tonight", "What's Still Open"). Nothing else in the roster was named by
+  three lenses, and the synthesis arm — which never saw the build — independently ranked
+  it #1. Section by section at quitting time: how far it got on a 12-rung tap ladder, what
+  is holding the water tonight, and **what is underneath the part that is still open**.
+  The ladder IS the status, so the end-of-day job is literally tapping each section up to
+  where it reached. Its honest competitor is the camera roll, not the notes app — the
+  steep lens said "four photos in a text takes eleven seconds" — so it only earns its
+  place by being faster and by carrying the three things a photo cannot.
+  THREE THINGS THE VERIFICATION CHANGED, all found by driving the real page and none by
+  reading it. **Lowercasing destroys an acronym:** "IT / server room" reached the document
+  as "under it: it / server room" — the pronoun, on the one line the page exists to carry.
+  Fixed with `soften()`, which passes through any value with an all-caps run; the BACKPORT
+  RIDER FIRED and all seven siblings were swept for the class — only framing lowercases
+  doc values at all and none of its pools carry acronyms, so the class was roofing-only
+  and is now closed. **A date is not enough on this one document:** the roster's own
+  sharpening said the argument is about one specific night, so this page — alone in the
+  program — stamps a clock time. **`rl.restore()` is not optional:** the first draft
+  omitted it and would have looked perfect on a fresh load while silently dropping the
+  whole log every time he backgrounded the phone.
+  NOT A SCAR, A PROBE THAT LIED: the first tap-target sweep reported 20 failures on
+  `tm-tag.html` and the same class on all eight trades. The checkboxes are 20px and sit
+  inside 44px labels — the label IS the target, measured at exactly 44.0. Measuring the
+  control instead of its effective target would have "fixed" a law every trade already
+  honours. The engine was right; the gate was wrong.
+  Accent MEASURED, not eyeballed: marking-paint rose `#FF93C9` at hue 330°, dead in the
+  only open arc left (247°→14°, 44.5° from its nearest neighbour) — 7.08:1 on the nav,
+  9.09:1 for accentInk on the accent, 5.96:1 white on accentDeep, against bars of 7/9/5.
+  Watertight at 320/360/390/430 and zoomed out: 7 pages × 4 widths, zero horizontal
+  overflow, every effective tap target ≥ 44px, no page errors. Four sections added, the
+  ladder tapped, the document read end to end at 390px.
+  https://mrdirno.github.io/nested-resonance-memory-archive/roofing/
