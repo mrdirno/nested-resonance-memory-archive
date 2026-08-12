@@ -39,6 +39,8 @@ import {
   fractionOf, lapAdjust, pumpRequest, pumpSettle, seekFromInput,
   type PumpState,
 } from '../lib/playhead';
+import { TakeStrip } from './TakeStrip';
+import type { TakeMap } from '../lib/takeMap';
 
 /** Frames of a motionless clock before the loop drops to a timer — DECISION B. */
 const IDLE_FRAMES = 40;
@@ -55,9 +57,15 @@ export interface PlayheadProps {
   fadeSec: number;
   /** A take is running: the clock is the recorder's now, not the viewer's. */
   disabled: boolean;
+  /**
+   * WHAT IS IN THE TAKE (`lib/takeMap.ts`) — the cuts and each source's passes,
+   * as fractions. Absent draws the bare bar this component shipped with, which
+   * is also what a still collage under no music still gets.
+   */
+  map?: TakeMap | null;
 }
 
-export const Playhead: React.FC<PlayheadProps> = ({ stageRef, take, fadeSec, disabled }) => {
+export const Playhead: React.FC<PlayheadProps> = ({ stageRef, take, fadeSec, disabled, map }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const readRef = useRef<HTMLSpanElement>(null);
   const pumpRef = useRef<PumpState>(PUMP_IDLE);
@@ -166,6 +174,16 @@ export const Playhead: React.FC<PlayheadProps> = ({ stageRef, take, fadeSec, dis
           style={{ ['--fill' as string]: '0%' } as React.CSSProperties}
           className="w-full"
         />
+        {/* EVERYTHING UNDER THE BAR SHARES THE BAR'S AXIS — and that axis is the
+            THUMB'S TRAVEL, not the track's width. A range thumb's centre runs
+            from `thumb/2` to `width - thumb/2`, so a mark drawn at 33% of the
+            full track sits several pixels from the playhead that is also at
+            33% — up to half a thumb at the ends. The wedges shipped with that
+            error and it was invisible while they were the only thing here;
+            THE STRIP's whole claim is that the playhead crosses a cut mark when
+            the collage cuts, which the error would make false. One inset, on
+            one wrapper, so the two readings cannot drift apart. */}
+        <div style={{ marginInline: 'calc(var(--range-thumb) / 2)' }}>
         {/* THE FADE, AS ITS OWN SHAPE. Two triangles under the ruler, drawn from
             `fadeSpan` rather than from the number on the chip — so when a 2s
             fade is clamped to 1.5s by a 3s take, the picture of it moves too.
@@ -183,6 +201,11 @@ export const Playhead: React.FC<PlayheadProps> = ({ stageRef, take, fadeSec, dis
             />
           </div>
         )}
+        {/* THE STRIP — the cuts, and every source's passes, on the same axis
+            the thumb travels. Under the fade because the fade is a property of
+            the TAKE and these are properties of what is IN it. */}
+        {map && <TakeStrip map={map} take={take} />}
+        </div>
       </div>
       <span
         className="shrink-0 text-[10px] tabular-nums text-gray-300 tracking-tight"

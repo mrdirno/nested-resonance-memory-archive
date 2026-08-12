@@ -102,8 +102,8 @@
   input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 26px;
-    height: 26px;
+    width: var(--range-thumb);
+    height: var(--range-thumb);
     margin-top: -11px;
     border-radius: 50%;
     background: var(--ink-1);
@@ -125,8 +125,11 @@
     background: var(--slider-accent);
   }
   input[type='range']::-moz-range-thumb {
-    width: 22px;
-    height: 22px;
+    /* THE SAME NUMBER AS WEBKIT'S — it was 22px, and anything drawn on this
+       axis (the fade wedges, THE STRIP) is inset by half of it, so two engines
+       with two thumbs is two rulers. See `--range-thumb` in tokens.css. */
+    width: var(--range-thumb);
+    height: var(--range-thumb);
     border-radius: 50%;
     background: var(--ink-1);
     border: 3px solid var(--slider-accent);

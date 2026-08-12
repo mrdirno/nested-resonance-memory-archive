@@ -71,6 +71,16 @@
 
   /* --- TOUCH -------------------------------------------------------------- */
   --tap: 44px;
+  /* THE RANGE THUMB, AND IT IS LOAD-BEARING GEOMETRY, NOT A LOOK.
+     A thumb's CENTRE travels from `thumb/2` to `width - thumb/2`, so anything
+     drawn UNDER a slider on the slider's own axis — the playhead's fade wedges,
+     THE STRIP's cut marks and lanes — has to be inset by half of this or it
+     claims an alignment it does not have (13px of a 227px bar is 6% of the
+     take, i.e. most of a second on a 15s one). One number, used by both engines'
+     thumbs and by everything that draws beneath them. WebKit and Firefox were
+     26px and 22px for no reason; they are the same number now because a ruler
+     cannot be right on both otherwise. */
+  --range-thumb: 26px;
 
   /* --- ELEVATION: exactly two + one glass -------------------------------- */
   --e-inset: inset 0 1px 0 rgba(255, 255, 255, 0.045);

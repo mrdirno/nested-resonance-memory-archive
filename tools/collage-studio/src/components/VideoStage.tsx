@@ -60,6 +60,7 @@ import {
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TurnSchedule } from '../lib/turn';
 import { takeLength } from '../lib/playhead';
+import { cutPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
@@ -840,6 +841,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
      of the IN handle would reach the export and not the monitor. */
   const trackIn = soundtrack?.inSec;
   const trackOut = soundtrack?.outSec;
+  /** The probed CONTAINER length, for the same reason and for THE STRIP's music
+   *  lane — the one length a chip, a slider or a ruler can draw against before
+   *  anything has been decoded (`soundtrack.soundtrackWindow`). */
+  const trackDur = soundtrack?.durationSec ?? 0;
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -1249,6 +1254,65 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    */
   const takeNow = takeLength(seconds, profile.maxSeconds);
 
+  /**
+   * WHAT IS IN THE TAKE — the strip under the playhead (`lib/takeMap.ts`).
+   *
+   * BUILT FROM `stageClips`, NOT FROM `clips` + `trims` + `speeds`. That memo is
+   * literally the array the Stage is playing: its `playbackRate` is
+   * `computeClipPlayback`'s answer with the sync mode and THE SPEED already
+   * composed and clamped, and its in/out are the trim the compositor got. Going
+   * back to the raw state here would be a SECOND place that decides a clip's
+   * period, and a ruler whose seams are 40 ms from the real ones looks right and
+   * lies about the one relationship a user is checking.
+   *
+   * The music's window is `soundtrackWindow`, which resolves against the probed
+   * CONTAINER duration — the same number the range chip and the trim sheet draw
+   * against. The mixer resolves its own against the decoded buffer (an mp3
+   * carries encoder padding), so the two can differ by a few milliseconds; that
+   * is below a pixel on this bar and is the honest limit of drawing a lane
+   * before the file has been decoded.
+   */
+  const strip = useMemo(() => {
+    const sources: TakeSourceInput[] = stageClips.map((c) => ({
+      id: c.id,
+      kind: 'clip' as const,
+      label: c.name,
+      playback: {
+        // `?? 0` is the UNKNOWN length, not a zero-length clip: `normaliseWindow`
+        // answers a zero span with a zero-length window and `takeMap` counts that
+        // source as unknown rather than drawing a lane for it (DECISION 4). A
+        // clip whose duration has not probed yet must go missing from the strip,
+        // never appear as one that plays through once.
+        window: normaliseWindow(c.durationSec ?? 0, c.inSec, c.outSec),
+        loop: true,
+        // `?? 1` mirrors `stageClips`' own `rateById.get(c.id) ?? 1`: an absent
+        // rate is natural speed there and must be natural speed here, or the
+        // lane's period is a different number from the one being played.
+        rate: c.playbackRate ?? 1,
+      },
+    }));
+    if (trackUrl) {
+      sources.push({
+        id: SOUNDTRACK_ID,
+        kind: 'music',
+        label: trackName,
+        // `loop: true, rate: 1` — `soundtrack.soundtrackSource`'s own contract,
+        // not a guess: music laps under a take that outruns it and video-length
+        // sync scales a clip's sound to match its PICTURE, which music has none of.
+        playback: {
+          window: soundtrackWindow({ url: trackUrl, name: trackName, durationSec: trackDur, inSec: trackIn, outSec: trackOut }),
+          loop: true,
+          rate: 1,
+        },
+      });
+    }
+    return takeMap(takeNow, sources, cutPlan(turn?.id, pace, beat));
+    // THE TRACK JOINS THE DEPS AS PRIMITIVES, for the reason the soundtrack
+    // effect above states: `soundtrack` is rebuilt on every parent render, so
+    // depending on the object would rebuild this map — and every div it draws —
+    // on renders that changed nothing about it.
+  }, [stageClips, trackUrl, trackName, trackDur, trackIn, trackOut, takeNow, turn, pace, beat]);
+
   // PUSH IT TO THE STAGE. A Stage with no take has the unbounded clock every
   // build before the playhead had, so this effect is what opts this app into
   // the lap; `stageGen` is in the deps because a rebuilt Stage knows nothing
@@ -1281,7 +1345,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           the only control here that is about the TAKE rather than about a
           source, and it is the one the eye should find first — every other
           thing in this bar edits what the take contains. */}
-      <Playhead stageRef={stageRef} take={takeNow} fadeSec={fadeSec} disabled={busy} />
+      <Playhead stageRef={stageRef} take={takeNow} fadeSec={fadeSec} disabled={busy} map={strip} />
       {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
           a way out. Sound starts OFF for every clip — a collage that shouts on
           import is not a nice thing to build — but each switch is INDEPENDENT,

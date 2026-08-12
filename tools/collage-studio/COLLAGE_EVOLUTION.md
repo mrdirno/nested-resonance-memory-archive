@@ -340,6 +340,41 @@ or re-documenting an existing capability is DD, not delivery.
   at 3.0 s where 1× has moved to the second), and every instant is on the
   playhead's 0.1 s grid because a range `fill` off the grid is rejected as
   "Malformed value" and reads like a broken selector.
+  THE STRIP — the ruler stops measuring an empty ten seconds. Under the
+  playhead's bar, on the playhead's own axis: a row of CUT MARKS where the
+  collage re-deals, and one LANE per timed source (each clip, then the music)
+  drawn as the passes it makes through the take, the last one short when the
+  take ends mid-lap. `lib/takeMap.ts` is the arithmetic, in fractions, exactly
+  as `fadeMarks` already was.
+  IT IS DERIVED FROM THE COMPOSITOR'S SCHEDULE, NOT FROM A SECOND BELIEF ABOUT
+  IT. `cutPlan` collapses `turnAt`'s two branches into one output-time
+  `{hold, first, fade}` — the roster's hold divided by the pace rate (because
+  `paceTime` scales the CLOCK, so a boundary at scaled `k*hold` is at real
+  `k*hold/rate`, and the fade divides with it), or the beat grid verbatim and
+  UNPACED, which is the one decision the sync feature turns on at the Stage. The
+  sweep does not restate that algebra; it imports `turnAt` and interrogates it:
+  4,511 marks, each asserted to be a boundary the compositor agrees with, plus a
+  240 Hz walk of 180 schedules proving no cut is MISSING. A lane's period is
+  `clipWindow.effectiveLength` — the same function the live element, the offline
+  seek and the offline mixer read — so THE SPEED and the sync mode reach the
+  drawing for free, and the seam is asserted against `sourceTimeAt` wrapping the
+  window rather than against `length / rate` written out a second time.
+  AND IT FOUND AN ERROR IN WHAT WAS ALREADY THERE. A range thumb's centre
+  travels from `thumb/2` to `width - thumb/2`, but everything drawn beneath the
+  bar was positioned against the TRACK's full width — so the fade wedges have
+  always been out by up to half a thumb (13 px of a 227 px bar is 6% of the
+  take, most of a second on a 15 s one). Invisible while the wedges were the
+  only thing there, and fatal to a mark whose entire claim is "the playhead
+  crosses this when the collage cuts". `--range-thumb` is now one token, used by
+  BOTH engines' thumbs (WebKit 26 px and Firefox 22 px, for no reason) and by
+  the one inset that wraps the wedges and the strip together. Measured at the
+  artifact: at the 5 s cut of a 15 s take the thumb's computed centre is 408.0
+  and the mark is drawn at 408.0.
+  WHAT IT MAKES VISIBLE FOR THE FIRST TIME is a RELATIONSHIP, which is why it is
+  worth pixels: THE BEAT shipped two cycles ago and the exported file was the
+  only witness that a sync had taken. Now `march` over a 15 s take draws two
+  marks at 1/3 and 2/3, and one tap of `sync` moves them to three at 4/15, 8/15
+  and 12/15 — the same mode, the same take, the music deciding.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -939,12 +974,42 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       own `currentTime` is already the answer), not a livelier loop. Bounded:
       every other live scene — any clip, any move — ticks and reads correctly.
 
-- [ ] **THE RULER SHOWS THE TAKE AND NOT WHAT IS IN IT.** The bar knows the
-      take's length and the fade's shape and nothing else. A real timeline draws
-      each clip's extent on it, so you can see that the 3s clip laps three times
-      inside a 10s take and that the trimmed one covers only its window. That is
-      the same widget `drag-reorder` and `split/cut` want, and it is the natural
-      next rung now that a ruler exists to draw them on.
+- [x] **THE RULER SHOWS THE TAKE AND NOT WHAT IS IN IT → THE STRIP.** CLOSED,
+      and it closed a second thing the entry did not predict: the marks and the
+      fade wedges were drawn on the TRACK's width while the playhead travels the
+      THUMB's, so everything under the bar was out by up to half a thumb (13px
+      of a 227px bar = 6% of the take). `--range-thumb` is now one token, used
+      by both engines' thumbs and by the one inset under the bar, and the e2e
+      measures the thumb's computed centre against the drawn mark: 408.0 against
+      408.0. Original text: The bar knows the take's length and the fade's shape
+      and nothing else. A real timeline draws each clip's extent on it, so you
+      can see that the 3s clip laps three times inside a 10s take and that the
+      trimmed one covers only its window. That is the same widget `drag-reorder`
+      and `split/cut` want, and it is the natural next rung now that a ruler
+      exists to draw them on.
+
+- [ ] **THE STRIP DRAWS THE TAKE AND IS NOT A CONTROL.** It shows where the
+      collage cuts and where each source laps, and you cannot touch any of it.
+      The obvious next cut is that a lane is a HANDLE: tap one to open that
+      clip's trim sheet (the sheet already exists and is already reached by a
+      button elsewhere), and drag a seam to set the OUT point. That is
+      `drag-reorder` and `split/cut` arriving as direct manipulation of the
+      thing the ruler now draws, which is the argument this rung's parent made
+      for building the picture first.
+
+- [ ] **THE MOVE HAS NO LANE, AND IT IS THE ONE THING EVERY COLLAGE HAS.** The
+      strip draws clips and music; the drift is periodic on a fixed 12 s cycle
+      (scaled by the pace) and appears nowhere on it, so a collage of
+      photographs with the turn on HOLD and no music draws no strip at all —
+      correct today (`empty`), and plainly incomplete once you notice that the
+      drift IS what is in that take. One more lane, the same `lapSegments` call
+      on `MOVE_CYCLE_SEC / paceRate`.
+
+- [ ] **A DENSE LANE IS A HATCH AND SAYS NOTHING ABOUT HOW DENSE.** Past 48
+      seams the lane draws one hatched bar; the exact count rides in the `title`
+      and the `sr-only` sentence and nowhere a thumb can reach. Fine while it
+      only happens to a 0.3 s window, worth revisiting the moment a lane is a
+      control.
 
 ## THE PER-CYCLE LOOP (burn → build → verify → ship → ratchet)
 0. **PICK ONE RUNG** (entry condition, first). One line naming the capability. Or
