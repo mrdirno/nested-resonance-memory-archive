@@ -49,9 +49,22 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..'); // tools/collage-studio
 
-const src = readFileSync(join(root, 'src/lib/exportLimits.ts'), 'utf8');
-const { code } = await esbuild.transform(src, { loader: 'ts', format: 'esm' });
 const dir = mkdtempSync(join(tmpdir(), 'exportlimits-'));
+
+// BUNDLE ONCE, COPY N TIMES. A single-file transform leaves any
+// `import './sibling'` pointing at a path the temp directory does not have, so
+// the sweep dies the first time this module grows a dependency (C150). The
+// bundled text is then the buffer `freshModule` stamps out below.
+const base = join(dir, 'exportLimits-base.mjs');
+await esbuild.build({
+  entryPoints: [join(root, 'src/lib/exportLimits.ts')],
+  outfile: base,
+  bundle: true,
+  format: 'esm',
+  platform: 'neutral',
+  logLevel: 'silent',
+});
+const code = readFileSync(base, 'utf8');
 
 /**
  * A FRESH MODULE INSTANCE PER SCENARIO. The thing under test is module-level

@@ -27,11 +27,25 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
 const dir = mkdtempSync(join(tmpdir(), 'clipwin-'));
 
+/**
+ * BUNDLE, DO NOT TRANSFORM. `esbuild.transform` compiles ONE file and leaves its
+ * `import './sibling'` lines pointing at paths that do not exist in the temp
+ * directory, so the sweep dies with ERR_MODULE_NOT_FOUND the first time the
+ * module under test grows a dependency — which reads like a broken test rather
+ * than a missing flag. `videoSync.ts` importing `speed.ts` is exactly that
+ * moment (C150). Bundling is what the majority of the sweeps in this directory
+ * already do; this one and its sibling were the stragglers.
+ */
 const load = async (rel, out) => {
-  const src = readFileSync(join(root, rel), 'utf8');
-  const { code } = await esbuild.transform(src, { loader: 'ts', format: 'esm' });
   const tmp = join(dir, out);
-  writeFileSync(tmp, code);
+  await esbuild.build({
+    entryPoints: [join(root, rel)],
+    outfile: tmp,
+    bundle: true,
+    format: 'esm',
+    platform: 'neutral',
+    logLevel: 'silent',
+  });
   return import(pathToFileURL(tmp).href);
 };
 

@@ -11,10 +11,18 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..');
-const src = readFileSync(join(root, 'src/lib/videoSync.ts'), 'utf8');
-const { code } = await esbuild.transform(src, { loader: 'ts', format: 'esm' });
+// BUNDLE, DO NOT TRANSFORM — `videoSync.ts` imports `speed.ts` (the per-clip
+// SPEED enters through `computeClipPlayback`), and a single-file transform
+// leaves that import pointing at a path the temp directory does not have.
 const tmp = join(mkdtempSync(join(tmpdir(), 'vsync-')), 'videoSync.mjs');
-writeFileSync(tmp, code);
+await esbuild.build({
+  entryPoints: [join(root, 'src/lib/videoSync.ts')],
+  outfile: tmp,
+  bundle: true,
+  format: 'esm',
+  platform: 'neutral',
+  logLevel: 'silent',
+});
 const { computeClipPlayback, referenceLength, RATE_MIN, RATE_MAX, CLIP_LENGTH_MODES } =
   await import(pathToFileURL(tmp).href);
 

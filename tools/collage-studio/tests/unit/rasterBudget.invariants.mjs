@@ -42,10 +42,18 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..'); // tools/collage-studio
 
-const src = readFileSync(join(root, 'src/lib/rasterBudget.ts'), 'utf8');
-const { code } = await esbuild.transform(src, { loader: 'ts', format: 'esm' });
+// BUNDLE, DO NOT TRANSFORM: a single-file transform leaves any
+// `import './sibling'` pointing at a path the temp directory does not have,
+// so the sweep dies the first time this module grows a dependency (C150).
 const tmp = join(mkdtempSync(join(tmpdir(), 'rasterbudget-')), 'rasterBudget.mjs');
-writeFileSync(tmp, code);
+await esbuild.build({
+  entryPoints: [join(root, 'src/lib/rasterBudget.ts')],
+  outfile: tmp,
+  bundle: true,
+  format: 'esm',
+  platform: 'neutral',
+  logLevel: 'silent',
+});
 const {
   rasterBudgetPx, createRasterLedger, scaleForBudget, rasterDims,
   createSignalCache, signalsUseful, BLANK_PROBE_RETRIES,

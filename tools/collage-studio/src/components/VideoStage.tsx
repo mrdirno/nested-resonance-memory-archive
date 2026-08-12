@@ -37,7 +37,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
-  AlertTriangle, Loader2, Scissors, RotateCcw, Music,
+  AlertTriangle, Loader2, Scissors, RotateCcw, Music, Gauge,
 } from 'lucide-react';
 
 import { createStage, type Stage, type StageStatus, type StageClipInput, type StageTurnInput } from '../lib/stage';
@@ -53,6 +53,7 @@ import {
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
+import { SPEEDS, safeSpeed, isSped, speedLabel, screenLength, NATURAL_SPEED } from '../lib/speed';
 import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
 } from '../lib/soundtrack';
@@ -65,6 +66,9 @@ import type { LookId } from '../lib/grade';
 
 /** The user's raw trim points for one clip. Absent = the whole clip. */
 type TrimMap = Record<string, { inSec: number; outSec: number } | undefined>;
+
+/** The user's per-clip SPEED multiplier. Absent = 1, the clip as it was shot. */
+type SpeedMap = Record<string, number | undefined>;
 
 /** Seconds, one decimal, no trailing noise — the field readout, not a timecode. */
 const secs = (n: number): string => `${n.toFixed(1)}s`;
@@ -241,7 +245,20 @@ const TrimSheet: React.FC<{
   /** CREDIT ON THE PAGE, where the thing they asked for is — not only in
    *  credits.json. Absent on the clip sheet, which nobody wished into being. */
   credit?: string;
-}> = ({ name, span, frames, value, onChange, onClose, credit }) => {
+  /**
+   * THE SPEED — present for a CLIP, absent for the soundtrack, and that absence
+   * is the decision rather than an omission. This sheet is shared by the two
+   * things in the app that have a length (a clip and the music), which is why it
+   * takes a name and a span instead of a clip. A rate on a SONG is a different
+   * feature with a different answer to the pitch question, and shipping it as a
+   * side effect of a prop being in scope is how a shared sheet stops being one.
+   */
+  speed?: number;
+  onSpeed?: (rate: number) => void;
+  /** True when a video-length-sync mode is matching lengths — see the note the
+   *  sheet then shows, and `lib/videoSync`'s header for why it must be said. */
+  syncing?: boolean;
+}> = ({ name, span, frames, value, onChange, onClose, credit, speed, onSpeed, syncing }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
   // A step fine enough to land on a beat, coarse enough that a thumb can hit it.
@@ -450,6 +467,67 @@ const TrimSheet: React.FC<{
           </label>
         </div>
 
+        {/* THE SPEED — how fast this clip runs, next to which part of it plays.
+            IT LIVES ON THIS SHEET BECAUSE THIS IS THE CLIP'S OWN SURFACE. The
+            dock chip row is a one-line horizontal scroll on a phone that already
+            carries a name, a trim button and a speaker per clip; a sixth roster
+            in there is the "seven empty boxes" failure in chip form. Both of the
+            questions on this sheet are about the SOURCE — which part of it, and
+            how fast — while every control outside is about the composition.
+            The rate reaches the live element, the offline picture seek and the
+            offline audio mix through the one `rate` in `clipWindow.sourceTimeAt`
+            (lib/speed.ts). It does NOT ride the dice or the composition code:
+            a code is a recipe somebody else opens with their own sources. */}
+        {onSpeed && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <Gauge size={12} className="text-emerald-400 shrink-0" />
+              <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 uppercase shrink-0">Speed</span>
+              <div className="flex-1" />
+              <span
+                className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
+                data-testid="speed-readout"
+              >
+                {safeSpeed(speed) === NATURAL_SPEED
+                  ? `as shot · ${secs(w.length)} on screen`
+                  : `${secs(w.length)} of clip · ${secs(screenLength(w.length, speed))} on screen`}
+              </span>
+            </div>
+            <div className="flex items-center gap-1" role="group" aria-label={`Speed for ${name}`}>
+              {SPEEDS.map((s) => {
+                const on = safeSpeed(speed) === s.rate;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => onSpeed(s.rate)}
+                    title={s.title}
+                    aria-pressed={on}
+                    data-testid={`speed-${s.id}`}
+                    className={`flex-1 min-w-0 h-11 rounded-lg text-[10px] font-black tabular-nums tracking-wide transition-colors ${
+                      on
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/60'
+                        : 'text-gray-400 border border-white/10 hover:text-white hover:bg-white/10'
+                    }`}
+                  >{s.label}</button>
+                );
+              })}
+            </div>
+            {/* SAY WHAT THE SYNC IS DOING TO IT. Under a stretch mode every clip
+                is forced onto ONE on-screen length, so a speed moves the length
+                everything lands on rather than making this clip outrun the
+                others — true by construction (`videoSync.computeClipPlayback`),
+                surprising in use, and therefore said out loud rather than left
+                to be discovered. */}
+            {syncing && (
+              <p className="text-[9px] tracking-wide text-gray-500 leading-relaxed">
+                Clip lengths are being matched, so this moves the length they all
+                land on — switch that off to speed up this clip alone.
+              </p>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           <span
             className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
@@ -587,6 +665,17 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    * a clip that will not be there is a promise the file cannot keep.
    */
   const [trims, setTrims] = useState<TrimMap>({});
+  /**
+   * SPEED — the same lifetime, the same reasoning, a separate map.
+   *
+   * Folding it into `trims` would make one map mean two things and force every
+   * existing read (`trims[c.id]` is a WINDOW) through a shape change; two maps
+   * with one prune rule below is the smaller lie. Session state exactly like the
+   * window: a project file stores photographs and layout, its clips are
+   * re-imported by hand, and a speed for a clip that will not be there is a
+   * promise the file cannot keep.
+   */
+  const [speeds, setSpeeds] = useState<SpeedMap>({});
   /** Which clip's trim sheet is open, or null. */
   const [trimming, setTrimming] = useState<string | null>(null);
 
@@ -607,18 +696,38 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     });
   }, []);
 
-  // A clip that has been removed must not leave its window behind: ids are
-  // minted per import, so a stale entry is dead weight that a re-import can
-  // never collide with — but it would still travel into every later `stageClips`.
+  const setSpeed = useCallback((id: string, rate: number) => {
+    setSpeeds((prev) => {
+      const next = safeSpeed(rate);
+      // NATURAL IS ABSENCE, not a stored 1. It keeps the map empty on the path
+      // nobody has touched, so the scene memo below hands `undefined` to
+      // `computeClipPlayback` and every number stays the one that shipped.
+      if (next === NATURAL_SPEED) {
+        if (prev[id] === undefined) return prev;
+        const { [id]: _drop, ...rest } = prev;
+        return rest;
+      }
+      if (prev[id] === next) return prev;
+      return { ...prev, [id]: next };
+    });
+  }, []);
+
+  // A clip that has been removed must not leave its window OR its speed behind:
+  // ids are minted per import, so a stale entry is dead weight that a re-import
+  // can never collide with — but it would still travel into every later
+  // `stageClips`. ONE effect and one rule for both maps, so a third per-clip
+  // edit inherits the rule instead of forgetting it.
   useEffect(() => {
-    setTrims((prev) => {
-      const live = new Set(clips.map((c) => c.id));
+    const live = new Set(clips.map((c) => c.id));
+    const prune = <T,>(prev: Record<string, T | undefined>): Record<string, T | undefined> => {
       const keys = Object.keys(prev);
       if (keys.every((k) => live.has(k))) return prev;
-      const next: TrimMap = {};
+      const next: Record<string, T | undefined> = {};
       for (const k of keys) if (live.has(k)) next[k] = prev[k];
       return next;
-    });
+    };
+    setTrims((prev) => prune(prev) as TrimMap);
+    setSpeeds((prev) => prune(prev) as SpeedMap);
   }, [clips]);
 
   // --- scene: everything expensive happens here, never in the draw loop ------
@@ -634,12 +743,21 @@ export const VideoStage: React.FC<VideoStageProps> = ({
      * sixty, with every rate correct and the result plainly wrong.
      * `clipWindow.effectiveLength` and invariant I10 pin this.
      */
+    /**
+     * AND THE CLIP'S OWN SPEED GOES IN THE SAME CALL, not multiplied onto the
+     * answer afterwards. A sync rate and a user speed are the same physical
+     * quantity — source seconds per output second — so a caller that multiplied
+     * them here would be the second place deciding a clip's rate, and
+     * `videoSync`'s element clamp would then be guarding the wrong number.
+     * `computeClipPlayback` composes them and clamps once (lib/speed.ts).
+     */
     const playback = computeClipPlayback(
       clips.map((c) => {
         const t = trims[c.id];
         return {
           id: c.id,
           durationSec: normaliseWindow(c.durationSec, t?.inSec, t?.outSec).length,
+          speed: speeds[c.id],
         };
       }),
       clipLengthMode,
@@ -676,7 +794,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       // playback reaches the end), and the window is meaningless without it.
       durationSec: c.durationSec,
     }));
-  }, [clips, clipLengthMode, trims]);
+  }, [clips, clipLengthMode, trims, speeds]);
 
   // THE BEAT, flattened to the three numbers the scene compares by value. A
   // schedule object in the dependency array would be a new reference on every
@@ -1181,6 +1299,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           const silentHere = wantsAudio && !audible;
           const t = trims[c.id];
           const win = normaliseWindow(c.durationSec, t?.inSec, t?.outSec);
+          const sped = isSped(speeds[c.id]);
           return (
             <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
               <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
@@ -1188,15 +1307,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   edit here that changes what a finished export contains while
                   leaving the collage looking broadly the same, so it must be
                   legible without opening anything. */}
+              {/* A SPED CLIP SAYS SO ON THE CHIP for the same reason a trimmed
+                  one does: it changes what the finished export contains while
+                  leaving the collage looking broadly the same at a glance, and
+                  it is set behind a sheet nobody has open. Same button, because
+                  the sheet behind it is where both edits live — a second button
+                  would cost 44px on the row the mobile law is tightest on.
+                  The accessible name stays `Trim <clip>`: it is what opens this
+                  sheet, and three sibling specs act on it by name. */}
               <button
                 onClick={() => setTrimming(c.id)}
                 disabled={busy || !(c.durationSec > MIN_WINDOW_SEC)}
-                title={win.full
-                  ? `Trim ${c.name} — pick the part that plays (${secs(c.durationSec)})`
-                  : `${c.name}: playing ${secs(win.inSec)}→${secs(win.outSec)} of ${secs(c.durationSec)}`}
+                title={win.full && !sped
+                  ? `Trim ${c.name} — pick the part that plays and how fast it runs (${secs(c.durationSec)})`
+                  : `${c.name}: playing ${secs(win.inSec)}→${secs(win.outSec)} of ${secs(c.durationSec)}`
+                    + (sped ? ` at ${speedLabel(speeds[c.id])}` : '')}
                 aria-label={`Trim ${c.name}`}
                 className={`h-11 min-w-[2.75rem] px-2 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
-                  win.full
+                  win.full && !sped
                     ? 'text-gray-500 hover:text-white hover:bg-white/10'
                     : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20'
                 }`}
@@ -1204,6 +1332,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 <Scissors size={14} />
                 {!win.full && (
                   <span className="text-[9px] font-black tabular-nums">{secs(win.length)}</span>
+                )}
+                {sped && (
+                  <span
+                    className="text-[9px] font-black tabular-nums"
+                    data-testid={`clip-speed-badge-${c.id}`}
+                  >{speedLabel(speeds[c.id])}</span>
                 )}
               </button>
               <button
@@ -1562,6 +1696,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             value={trims[c.id]}
             onChange={(v) => setTrim(c.id, v)}
             onClose={() => setTrimming(null)}
+            speed={speeds[c.id]}
+            onSpeed={(rate) => setSpeed(c.id, rate)}
+            // Only ever true with 2+ clips, because that is the only time the
+            // sync control is offered at all — a single clip is its own
+            // reference and a stretch mode is a no-op on it.
+            syncing={clipLengthMode !== 'loop' && clips.length > 1}
           />
         );
       })()}

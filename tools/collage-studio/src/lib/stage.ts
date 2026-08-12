@@ -690,6 +690,36 @@ const even = (n: number): number => {
 const finiteOr = (n: number | undefined, fallback: number): number =>
   typeof n === 'number' && Number.isFinite(n) ? n : fallback;
 
+/**
+ * SET THE RATE, AND MAKE THE ELEMENT PITCH WITH IT LIKE THE MIXER DOES.
+ *
+ * THE DIVERGENCE THIS CLOSES. `HTMLMediaElement.preservesPitch` defaults to
+ * TRUE, so a live `<video>` at 2x TIME-STRETCHES: faster, same pitch. The
+ * offline mixer has no such switch — `AudioBufferSourceNode.playbackRate` is a
+ * resampling and always carries the pitch with it — so the preview and the file
+ * it claims to be previewing disagreed about what a rate SOUNDS like. Latent
+ * until now, because the only thing that ever set a rate was video-length sync
+ * and its default mode ('loop') leaves every rate at 1; a per-clip SPEED puts
+ * the divergence one tap away in the default mode.
+ *
+ * Rather than teach the offline mixer to time-stretch (a pitch-preserving
+ * resampler, offline, in a worker, to make an export match a preview), the
+ * PREVIEW is corrected to tell the truth about the file. That is the direction
+ * this project always resolves these: the export is the artifact, and a preview
+ * that flatters it is the defect.
+ *
+ * Three assignments guarded separately: the WebKit alias is prefixed on older
+ * engines, and neither property exists everywhere. A rate that lands with the
+ * pitch switch missing is still the right picture at the right time.
+ */
+const applyRate = (el: HTMLVideoElement, rate: number): void => {
+  try { el.playbackRate = rate; } catch { /* re-applied on (re)admission */ }
+  try { el.preservesPitch = false; } catch { /* not supported here */ }
+  try {
+    (el as HTMLVideoElement & { webkitPreservesPitch?: boolean }).webkitPreservesPitch = false;
+  } catch { /* not supported here */ }
+};
+
 const mediaErrorText = (el: HTMLVideoElement): string => {
   const e = el.error;
   if (!e) return 'Unknown video error';
@@ -2794,8 +2824,9 @@ export class Stage {
           existing.hintDur = finiteOr(c.durationSec, existing.hintDur);
           if (existing.el) {
             this.applyLoopMode(existing);
-            // Guard the assignment: some engines throw if the element is mid-load.
-            try { existing.el.playbackRate = existing.playbackRate; } catch { /* re-applied on (re)admission */ }
+            // Guarded inside `applyRate`: some engines throw if the element is
+            // mid-load, and the pitch switch is not everywhere.
+            applyRate(existing.el, existing.playbackRate);
             // A new IN point that the playhead is already past takes effect on
             // THIS frame, not on the next lap — otherwise moving the handle looks
             // like it did nothing for however long the old window had left.
@@ -2973,9 +3004,10 @@ export class Stage {
     // trimmed one. This is set again on `loadedmetadata`, because `duration` —
     // and therefore whether the window is FULL — is not known yet at this line.
     v.loop = clip.loop;
-    // Video-length sync speed. Set before src, and re-applied on loadedmetadata
-    // below, because some engines reset playbackRate to 1 when a source loads.
-    try { v.playbackRate = clip.playbackRate; } catch { /* set again after metadata */ }
+    // Video-length sync speed × the clip's own SPEED. Set before src, and
+    // re-applied on loadedmetadata below, because some engines reset
+    // playbackRate to 1 when a source loads.
+    applyRate(v, clip.playbackRate);
     v.preload = 'auto';
     v.autoplay = true;
     v.disablePictureInPicture = true;
@@ -3067,8 +3099,8 @@ export class Stage {
       case 'durationchange':
       case 'resize': {
         // Loading a source resets playbackRate to 1 on some engines (WebKit) —
-        // restore the video-length-sync speed now that the media is ready.
-        try { el.playbackRate = clip.playbackRate; } catch { /* ignore */ }
+        // restore the rate (sync × the clip's speed) now that the media is ready.
+        applyRate(el, clip.playbackRate);
         const vw = el.videoWidth, vh = el.videoHeight;
         if (vw > 0 && vh > 0 && (vw !== clip.vw || vh !== clip.vh)) {
           clip.vw = vw; clip.vh = vh;

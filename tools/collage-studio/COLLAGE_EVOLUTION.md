@@ -300,6 +300,46 @@ or re-documenting an existing capability is DD, not delivery.
   the dev server.) Three rates,
   same pixels, no timer anywhere — and because a scrub is the export's own path,
   green here is evidence about the file.
+  THE SPEED — a CLIP has its own clock now, and it is the first control in this
+  app that belongs to a SOURCE rather than to the composition. Five chips
+  (0.25× / 0.5× / 1× / 2× / 4×) on the clip's own sheet, beside the trim,
+  because both questions there are about the file — which part of it, and how
+  fast — while every control outside is about the collage.
+  IT ENTERS THROUGH THE ONE RATE THIS APP ALREADY HAD, which is the whole
+  implementation: `clipWindow.sourceTimeAt` is the single place output time
+  becomes source time and it already took a `rate`, so the live `<video>`, the
+  offline picture seek and the offline audio mix picked the speed up with no
+  new seam, no new argument threaded through four render paths, and no fourth
+  copy of a formula this project has been burned by three times.
+  SO THE ONLY REAL DECISION WAS HOW IT COMPOSES WITH VIDEO-LENGTH SYNC, and the
+  answer is one people find surprising: under a stretch mode a per-clip speed
+  MOVES THE REFERENCE and cannot make one clip outrun another. "Every clip lands
+  on ONE on-screen length" is a constraint on the result, so a speed cannot
+  break it — what it changes is which length the reference IS, because the
+  reference is taken over `window / speed` rather than over the files. Under
+  'loop' (the default) there is no reference and the rate simply IS the speed,
+  which is the case a user has in mind. The sheet SAYS which of the two is in
+  force rather than leaving it to be discovered. The rejected design — sync
+  first, multiply the speed on afterwards — is refuted in the sweep by up to
+  **61.4×** of on-screen spread between clips that asked to be the same length.
+  THE ROSTER IS POWERS OF TWO, and here that is a guarantee rather than a
+  legibility choice (the opposite of `lib/pace.ts`, which deliberately carries
+  0.75 and documents that reversibility is a property nothing needs): a speed
+  DIVIDES a window to pick the reference and then MULTIPLIES a source time a
+  decoder is asked to seek to, so the same quantity makes a round trip through
+  both. 4000/4000 windows round-trip bitwise at {0.25, 0.5, 1, 2, 4}×, against
+  3075/4000 at 0.75×.
+  PROVED AS A RE-PARAMETERISATION, ON PRODUCTION PIXELS. A speed is not "a
+  different picture", it is the clip's own clock read at a different rate — so
+  the frame at output 1.5 s under 2× must be THE SAME FRAME as the frame at
+  output 3.0 s under 1×. Measured: **0.0% of the frame differs, worst channel
+  0/255** — bit-identical — while two genuinely different instants on the same
+  clip differ by **99.2%, worst 208/255**, so the equality is not vacuous. Both
+  directions are measured (2× reads r,g,b and then LAPS a 6 s clip back to r
+  inside a 5 s take, which 1× cannot do at all; 0.5× is still on the first third
+  at 3.0 s where 1× has moved to the second), and every instant is on the
+  playhead's 0.1 s grid because a range `fill` off the grid is rejected as
+  "Malformed value" and reads like a broken selector.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -640,13 +680,42 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       today, which is one job and the right first cut, but a long tail under a
       short head is what people actually reach for), volume per source, ducking,
       and — now that a grid exists — snapping the TRIM to it.
-- [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is
-      step 1). NOT the same rung as THE PACE, and the distinction is worth
-      keeping straight: the pace is a property of the COMPOSITION's clock and
-      moves the drift and the cuts; this one is a property of a SOURCE and moves
-      the pictures inside a clip. They compose — a clip at half speed inside a
-      collage that cuts twice as often — and this one carries the question the
-      pace does not have to answer: whether the audio pitches with it.
+- [~] **Speed** — part-shipped as **THE SPEED**: one multiplier per clip, five
+      chips (0.25× / 0.5× / 1× / 2× / 4×) on the clip's own sheet beside the
+      trim, `lib/speed.ts`. The rung's own note was right on both counts — it IS
+      a property of the SOURCE, not of the composition's clock, and it composes
+      with THE PACE — and the pitch question it flagged turned out to be the
+      interesting half (see the scar below: the preview was time-stretching
+      where the export resamples, and the fix was to stop the PREVIEW
+      flattering the file). It enters through the ONE `rate` in
+      `clipWindow.sourceTimeAt`, so the live element, the offline picture seek
+      and the offline audio mix all got it without a new seam.
+      RAMPS AND FREEZE FRAMES ARE NOT SHIPPED — see the two rungs below.
+- [ ] **A SPEED IS A SCALAR, NOT A CURVE — a RAMP is the next cut.** CapCut's
+      speed curve (slow into a beat, snap out of it) needs a per-clip envelope
+      over output time, which is the keyframe machinery `lib/motion.ts` has for
+      position and scale and nothing has for TIME. The seam is already the right
+      shape: `sourceTimeAt` takes a rate as a NUMBER, and a ramp is that number
+      becoming a function of `t` — i.e. the source time becomes an INTEGRAL of
+      the rate rather than a product, which is the whole build cost. Note the
+      audio consequence before starting: an `AudioBufferSourceNode` can be
+      automated on `playbackRate`, so the offline mixer CAN follow a curve, but
+      `audioSchedule`'s lap arithmetic is written in terms of a constant rate
+      (`L / r`) and would need the same integral.
+- [ ] **A FREEZE (speed 0) IS NOT THE BOTTOM OF THE ROSTER.** `sourceTimeAt`
+      would hold at the IN point for free (`t * 0` is 0), which makes it look
+      like a one-line addition. It is not: `AudioBufferSourceNode.playbackRate`
+      of 0 is not a still frame, it is an undefined-to-stalled node, so a frozen
+      picture would run under sound that keeps going — the preview/export
+      divergence class this project files scars about. A freeze needs its own
+      answer for the sound (mute the clip for the frozen span, most likely) and
+      is therefore its own rung, not a sixth chip.
+- [ ] **A SPEED DOES NOT TRAVEL, in a code OR in a project file** — the same
+      hole THE TRIM and THE MUSIC have, and the same reason: a composition code
+      is a RECIPE somebody else opens with their own sources, and a speed is a
+      fact about a FILE the code cannot see. Consistent, and still a real gap
+      the moment `.collage` projects carry clips rather than re-importing them.
+      Fix all three together or not at all.
 - [ ] **Overlays** — stickers, shapes, picture-in-picture, masks, chroma-key.
 - [x] **Composition** — WHICH photo lands in WHICH fragment (11 arrangements) and
       WHAT each fragment centres on (5 crop-focus modes). `lib/composition.ts`.
@@ -906,6 +975,36 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C150-THE-PREVIEW-WAS-TIME-STRETCHING-WHERE-THE-EXPORT-RESAMPLES.**
+  `HTMLMediaElement.preservesPitch` defaults to **true**, so a live `<video>` at
+  2× plays faster at the SAME PITCH. The offline mixer has no such switch —
+  `AudioBufferSourceNode.playbackRate` is a resampling and always carries the
+  pitch with it — so the preview and the file it claims to be previewing
+  disagreed about what a rate SOUNDS like. It was latent rather than harmless:
+  the only thing that ever set a rate was video-length sync, whose DEFAULT mode
+  ('loop') leaves every rate at 1, so the divergence sat behind a control most
+  people never touch. A per-clip SPEED puts it one tap away in the default mode.
+  Fixed by correcting the PREVIEW (`preservesPitch = false`, plus the WebKit
+  alias, in the one `applyRate` all three assignment sites now go through) —
+  not by teaching the offline mixer to time-stretch. **The general shape: when a
+  preview and an export disagree, the export is the artifact and the preview is
+  the defect — a preview that flatters the file is worse than one that is
+  merely ugly.** Asserted at the artifact on the real element (`rate=0.5`,
+  `preservesPitch=false`), because a flag nobody reads back is a comment.
+- **SCAR-C150-A UNIT SWEEP THAT `transform`s ONE FILE DIES THE DAY ITS MODULE
+  GROWS AN IMPORT.** `videoSync.ts` gained `import { safeSpeed } from './speed'`
+  and TWO sweeps went red instantly with `ERR_MODULE_NOT_FOUND … /speed` —
+  `esbuild.transform` compiles a single file and leaves its relative imports
+  pointing at paths that do not exist in the temp directory. The failure reads
+  like a broken test, not like a missing flag, and it lands on sweeps that were
+  green for weeks and had nothing to do with the change. The majority of this
+  directory already used `esbuild.build({ bundle: true })`; six files were
+  stragglers. **The general shape: a harness that only works while the module
+  under test has no dependencies is a harness with an undeclared precondition.**
+  BACKPORT RIDER FIRED: all six converted in the same cycle (clipWindow,
+  videoSync, fill, rasterBudget, session, exportLimits — the last builds once
+  and copies the bundled text N times, because it deliberately re-imports fresh
+  module instances), and the whole tree re-run: 24/24 sweeps green.
 - **SCAR-C147-THE-DEV-SERVER-WAS-FOUR-DAYS-OLD AND SERVING CODE THAT NO LONGER
   EXISTED.** An e2e run failed on an assertion the module provably satisfied —
   the same fixture through the same functions in node returned `first 4.004`
@@ -4017,4 +4116,56 @@ frontier. Today's ceiling is tomorrow's floor.
   tonal source with no percussion is accepted at 0.53 confidence because its RMS
   really does rise and fall periodically — the BPM on the chip and the switch
   nobody is holding down are the mitigations, not a cleverer number.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-12 · **[AXIS:COLLAGE] THE SPEED — a clip gets its own clock**
+  (well read UNSCOPED first across all trades: 0 new, 0 stranded in `building`;
+  breadth debt 0, so LIVE STATE's stalest-axis rule governed and it named
+  COLLAGE. Of the ladder's top-level rungs exactly two had never been started —
+  Speed and Overlays — and Speed was taken because its seam already existed.)
+  before→after: **every clip in a collage ran at exactly the rate the file was
+  shot at, and the only thing that could change that was a sync mode that
+  rescales ALL of them together → five chips on the clip's own sheet run THAT
+  clip at 0.25× / 0.5× / 1× / 2× / 4×, live and in the exported file.**
+  `lib/speed.ts` is the roster and the rules; the rate itself enters through the
+  ONE `rate` in `clipWindow.sourceTimeAt`, so the live `<video>`, the offline
+  frame seek and the offline audio mix all got it without a new seam. The only
+  real design decision was the composition with video-length sync, and it went
+  INSIDE `computeClipPlayback` rather than being multiplied on by the caller —
+  a sync rate and a user speed are the same physical quantity, so two places
+  deciding a clip's rate would have left the element clamp guarding the wrong
+  number. Consequence, stated in the UI rather than left to be discovered:
+  under a stretch mode a speed moves the REFERENCE (the reference is taken over
+  `window / speed`), so it cannot make one clip outrun another; under 'loop'
+  the rate simply is the speed.
+  PROOF, on PRODUCTION pixels, no wall-clock anywhere: a speed is a
+  RE-PARAMETERISATION of the clip's own time, so 2× at 1.5 s must be the same
+  frame as 1× at 3.0 s — **0.0% of the frame differs, worst channel 0/255**,
+  against **99.2% / worst 208** for two genuinely different instants. Both
+  directions measured (2× reads r,g,b then LAPS the 6 s clip back to r inside a
+  5 s take; 0.5× is still on the first third at 3.0 s where 1× has moved on),
+  and the live element reads back `rate=0.5, preservesPitch=false`. Watertight
+  at 320/360/390/430 with the sheet OPEN — five 54.4px chips, zero horizontal
+  overflow, Done still on screen.
+  Regression: 24/24 unit sweeps green (13 new in `speed.invariants.mjs`,
+  including the identity clause measured BITWISE against a verbatim copy of the
+  pre-feature function, and the rejected "multiply afterwards" design refuted at
+  61.4× of on-screen spread); e2e trim 9/9, playhead 2/2, mobile 7/7,
+  video-length-sync + source-count 7/7, pace 4/4. `tsc --noEmit` and
+  `vite build` clean.
+  TWO SCARS. `preservesPitch` defaults TRUE, so the live element was
+  time-stretching where the offline mixer resamples — the preview and the export
+  disagreeing about what a rate SOUNDS like, latent only because sync's default
+  mode leaves every rate at 1. Fixed in the PREVIEW, through one `applyRate` all
+  three assignment sites now share. And a sweep that `transform`s a single file
+  dies the day its module grows an import: two sweeps went red the moment
+  `videoSync.ts` imported `speed.ts`. BACKPORT RIDER FIRED — all six
+  non-bundling sweeps in the tree converted to `bundle: true` in the SAME cycle
+  (clipWindow, videoSync, fill, rasterBudget, session, exportLimits), not just
+  the two that were failing, because the other four carried the identical
+  undeclared precondition.
+  NOT SHIPPED, AND SAID PLAINLY: a speed is a SCALAR, not a curve — no ramps, so
+  "slow into the beat and snap out" is still unaskable; a FREEZE (0×) is not the
+  bottom of the roster because a stalled audio node is not a still frame, and it
+  needs its own answer for the sound; and a speed does not travel in a
+  composition code or a project file, exactly like the trim and the music.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
