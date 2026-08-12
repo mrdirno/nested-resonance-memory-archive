@@ -39,6 +39,7 @@ import type { ArrangementId, FocusId, TwistId } from './composition';
 import type { LookId } from './grade';
 import type { MoveId } from './motion';
 import type { TurnId } from './turn';
+import type { PaceId } from './pace';
 import { type Roll, encodeRoll, decodeRoll, snapRoll } from './diceRoll';
 
 /**
@@ -85,6 +86,14 @@ export interface CompositionState {
    * render, not about the composition.)
    */
   turn: TurnId;
+  /**
+   * THE PACE — how fast the clock the move and the turn are read against runs.
+   * In the code for the reason all three above are: "these fragments, dealt
+   * this way, re-cutting like this, at this tempo" is a picture somebody can
+   * rebuild with their own photographs. It is the RATE half of what the move
+   * and turn rosters used to answer alone.
+   */
+  pace: PaceId;
   /** How many times "Shuffle images" has re-dealt. */
   shuffle: number;
   /** True once the count is the user's decision rather than the source total. */
@@ -112,6 +121,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   look: s.look,
   move: s.move,
   turn: s.turn,
+  pace: s.pace,
   countOwned: s.countOwned,
 });
 
@@ -139,6 +149,10 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   // Absent means `hold` — a Roll built before this field existed described a
   // collage of one held deal, so the absence maps to the no-op.
   turn: r.turn ?? 'hold',
+  // Absent means `even` — a Roll built before this field existed described a
+  // collage running at the tempo the roster was written at, so the absence maps
+  // to the no-op exactly as the three above do.
+  pace: r.pace ?? 'even',
   shuffle,
   countOwned: !!r.countOwned,
 });

@@ -44,6 +44,7 @@
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
 import { turnAt, assignmentAt, isTurning, NO_TURN } from './turn';
 import { isMoving } from './motion';
+import { paceTime } from './pace';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
 import { cssFilterFor, type LookId } from './grade';
 import {
@@ -167,6 +168,13 @@ export interface StageSceneInput {
    * field existed described.
    */
   turn?: StageTurnInput | null;
+  /**
+   * THE PACE — a `PaceId` (see `lib/pace.ts`). How fast the clock the move and
+   * the turn are read against runs, relative to the roster's own tempo. Absent
+   * or `even` is that tempo, which is what every scene before this field
+   * existed described.
+   */
+  pace?: string;
 }
 
 /**
@@ -757,6 +765,14 @@ export class Stage {
   private moveOriginMs = -1;
   /** Does ANY fragment in this scene move? False keeps every cost at zero. */
   private moving = false;
+  /**
+   * THE PACE — the multiplier on the clock the move and the turn read (see
+   * `lib/pace.ts`). It is applied at exactly two seams, `refreshTurn` and
+   * `crop`, and NEVER to `outTime` itself: the take's own clock is what the
+   * ruler shows, what the exporter walks and what every audio schedule is
+   * written against, and a pace that moved it would silently re-time the sound.
+   */
+  private pace = 'even';
 
   // --- THE TURN --------------------------------------------------------------
   /** Does this scene re-cut over the take? False keeps every cost at zero. */
@@ -1083,6 +1099,17 @@ export class Stage {
     this.turnBoundA = 0;
     this.turnBoundB = -1;
     this.turnFading = false;
+
+    // THE PACE, read here rather than through a setter of its own. A rate is a
+    // pure function of the clock, so changing it changes nothing that is BOUND
+    // — no asset, no crop, no assignment — and it could have ridden a cheap
+    // `setPace`. It comes through the scene anyway because `setScene` ends by
+    // resetting `moveOriginMs`, and restarting the take is the RIGHT answer for
+    // a tempo change: the schedule is a pure function of the clock (it has to
+    // be — `renderAtTime` seeks arbitrary instants), so a mid-take rate change
+    // would otherwise jump the phase. Restarting shows you the new tempo from
+    // the top, which is what the move and turn chips already do.
+    this.pace = typeof scene.pace === 'string' ? scene.pace : 'even';
 
     // A scene that stops moving must go back to REST, not freeze wherever the
     // last frame left it — the still preview it hands back to is drawn at t=0,
@@ -2045,7 +2072,11 @@ export class Stage {
         { x: it.bx, y: it.by, w: it.bw, h: it.bh },
         { width: srcW, height: srcH, analysis },
         this.zoom,
-        this.outTime,
+        // THE PACE, on the move's half of the clock. Same seam, same reason as
+        // `refreshTurn`: one multiplication, and every surface that passes no
+        // time at all (the still preview, the raster export, the SVG) is
+        // untouched because `0 * r` is 0 and `paceTime` returns rest unchanged.
+        paceTime(this.pace, this.outTime),
       );
       if (!Number.isFinite(c.sx) || !Number.isFinite(c.sy) || !(c.sw > 0) || !(c.sh > 0)) return null;
       return c;
@@ -2129,7 +2160,11 @@ export class Stage {
     const ring = this.turnRing;
     const n = ring.length;
     const items = this.items;
-    const frame = turnAt(this.turnMode, this.outTime);
+    // THE PACE scales the clock the schedule is read against, never the take's
+    // own clock — see `lib/pace.ts`. Scaling here rather than dividing the mode's
+    // hold is what keeps `TURN_FADE_SEC / hold` invariant, so a fast pace cuts
+    // faster instead of dissolving continuously.
+    const frame = turnAt(this.turnMode, paceTime(this.pace, this.outTime));
 
     if (frame.a !== this.turnBoundA) {
       const asg = assignmentAt(this.turnMode, frame.a, n, this.turnSeed);

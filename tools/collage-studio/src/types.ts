@@ -3,6 +3,7 @@ import type { TitleSpec } from './lib/title';
 import type { LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
+import type { PaceId } from './lib/pace';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -156,6 +157,14 @@ export interface AppState {
      * projects were — one deal, held.
      */
     turn?: TurnId;
+    /**
+     * THE PACE — how fast the clock the move and the turn are read against runs
+     * (see lib/pace.ts). Under `layout` beside them because it is the RATE half
+     * of the same two rhythms, and meaningless apart from them. Absent on every
+     * project saved before it existed, and absent means `even`, which is the
+     * tempo those projects ran at.
+     */
+    pace?: PaceId;
   };
   style: {
     background: string;

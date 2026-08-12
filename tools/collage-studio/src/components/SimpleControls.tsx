@@ -9,6 +9,7 @@ import type { TitlePlace, TitleSize } from '../lib/title';
 import { LOOKS, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
+import { PACES, type PaceId } from '../lib/pace';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -67,6 +68,9 @@ interface SimpleControlsProps {
   /** THE TURN — how often the collage re-cuts its deal. See lib/turn.ts. */
   turn?: TurnId;
   onTurn?: (t: TurnId) => void;
+  /** THE PACE — how fast the move and the turn run. See lib/pace.ts. */
+  pace?: PaceId;
+  onPace?: (p: PaceId) => void;
 }
 
 /**
@@ -111,7 +115,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
-  look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn
+  look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn,
+  pace = 'even', onPace
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -406,6 +411,46 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             {(turn ?? 'hold') === 'hold'
               ? 'Re-cut the collage. Photographs change fragments as the take runs.'
               : 'In the preview and in the exported video. Every cut is a re-deal, never a repeat.'}
+          </p>
+        </div>
+      )}
+
+      {/* ---- THE PACE: how fast the clock runs -------------------------------
+          The RATE half of the two rows above. Until this existed the only way
+          to cut faster was to pick a different TURN — which also changes the
+          permutation — and there was no way at all to drift faster: the move's
+          cycle was a constant. One dial over both, because a collage has one
+          clock. It scales the TIME the schedule is read against rather than
+          each period, so the dissolve stays the same FRACTION of the hold at
+          every rate (lib/pace.ts). It travels in the code. -------------- */}
+      {hasImages && onPace && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips" role="group" aria-label="Pace">
+            {PACES.map(p => (
+              <button
+                key={p.id}
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={(pace ?? 'even') === p.id}
+                onClick={() => onPace(p.id)}
+                title={p.title}
+                aria-pressed={(pace ?? 'even') === p.id}
+                data-testid={`pace-${p.id}`}
+              >{p.label}</button>
+            ))}
+          </div>
+          <p className="ui-caption">
+            {/* SAYS WHAT IT NEEDS RATHER THAN DISABLING ITSELF. A tempo over a
+                collage that neither drifts nor cuts has nothing to speed up,
+                and the fix for that is a sentence, not a dead row — the chip
+                still sets the rate for the move you are about to pick, and it
+                still rides the dice and the code. (Scar C126: a control that
+                asks which sources exist and disables itself.) */}
+            {(move ?? 'still') === 'still' && (turn ?? 'hold') === 'hold'
+              ? 'How fast it all runs. Pick a MOVE or a TURN above and this sets the tempo.'
+              : (pace ?? 'even') === 'even'
+                ? 'The tempo of the drift and the cuts, on one dial. It travels in the code.'
+                : 'In the preview and in the exported video. Same shapes, different clock.'}
           </p>
         </div>
       )}

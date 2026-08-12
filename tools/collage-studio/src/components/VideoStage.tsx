@@ -89,6 +89,13 @@ export interface VideoStageProps {
    * photograph's own analysis with a fragment's focus, twist and move.
    */
   turn?: StageTurnInput | null;
+  /**
+   * THE PACE — a `PaceId` (lib/pace.ts). A PRIMITIVE, which is why it can join
+   * the scene effect's dep array directly: the turn next to it has to be a
+   * `useMemo` because it carries a callback, and an inline object there would
+   * restart the take on every unrelated render (the scar this file records).
+   */
+  pace?: string;
   zoom: number;
   bgColor: string;
   /**
@@ -474,7 +481,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackWindow,
 }) => {
@@ -676,8 +683,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       titlePlan,
       look,
       turn,
+      pace,
     });
-  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn]);
+  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace]);
 
   /**
    * THE MUSIC, handed over on its own effect and keyed on the URL, never on the

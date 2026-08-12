@@ -31,6 +31,7 @@ import {
 import { LOOK_IDS, type LookId } from './grade';
 import { MOVE_IDS, type MoveId } from './motion';
 import { TURN_IDS, type TurnId } from './turn';
+import { PACE_IDS, type PaceId } from './pace';
 
 // =============================================================================
 // SHAPE
@@ -81,6 +82,15 @@ export interface Roll {
    * exactly the picture those rolls described — one deal, held.
    */
   turn?: TurnId;
+  /**
+   * THE PACE — how fast the clock the move and the turn are read against runs.
+   * See lib/pace.ts.
+   *
+   * Optional for the reason `look`, `move` and `turn` are: every Roll built
+   * before this field existed is still a valid Roll, and absent means `even`,
+   * which is the tempo those rolls were written at.
+   */
+  pace?: PaceId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
   /**
@@ -357,6 +367,34 @@ const turnFor = (rnd: () => number): TurnId => {
   return pick(TURN_IDS.slice(1), rnd);
 };
 
+/**
+ * THE PACE the dice picks — and the ONLY field in the roster with a gate that
+ * depends on what the roll already chose.
+ *
+ * A pace is not like its neighbours. It cannot change what the collage IS, only
+ * how fast it gets there, so it gets the LOOSEST gate here: once the roll has
+ * put something on the clock, the tempo is a legitimate part of the surprise.
+ * The gates in this file tighten with how much a field changes the picture —
+ * 55% none for the look, 68% still for the move, 74% hold for the turn — and
+ * this one sits at the other end at 55% even, for the same reason read
+ * backwards.
+ *
+ * AND IT IS NOT ROLLED AT ALL WHEN NOTHING MOVES. A still collage that never
+ * re-cuts has no clock to run fast, so a rolled `2x` would be a value in the
+ * code that no pixel can express — the dice appearing to have done something it
+ * did not. Drawing nothing in that branch is safe here and nowhere else: the
+ * pace is drawn LAST, so a branch that skips the stream leaves every earlier
+ * draw exactly where it was.
+ */
+const paceFor = (rnd: () => number, move: MoveId, turn: TurnId): PaceId => {
+  if (move === 'still' && turn === 'hold') return 'even';
+  if (rnd() < 0.55) return 'even';
+  // Slice past `even` rather than re-rolling, for the reason `lookFor` records:
+  // a re-roll draws a variable number of values from the stream and makes the
+  // roll depend on how many times it happened to land on index 0.
+  return pick(PACE_IDS.slice(1), rnd);
+};
+
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
   const fam = GENERATOR_BY_ID[layout]?.family;
   // Radial and sacred figures glow out of the dark and go flat on paper; the
@@ -430,7 +468,7 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
   // zoom from continuous ranges; the share code quantises them. Snapping here
   // is what makes those two facts agree, so a rolled composition is exactly
   // representable by its own code instead of nearly.
-  return snapRoll({
+  const rolled = snapRoll({
     layout,
     // Every generator defines its own cell shape; `primitive` only reaches the
     // two legacy grid modes, so the roll leaves it alone rather than pretending
@@ -476,6 +514,13 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // overridden by however many photographs the recipient happens to have.
     countOwned: true,
   });
+  // THE PACE, drawn last of all and OUTSIDE the literal, because it is the one
+  // field whose gate reads what the roll already decided (`paceFor`) and a
+  // property initialiser cannot see its own siblings. Same stream discipline as
+  // every field above: appending to the end leaves every earlier draw untouched,
+  // so a build with the pace rolls the same everything-else from a given rng as
+  // the build before it did.
+  return { ...rolled, pace: paceFor(rnd, rolled.move ?? 'still', rolled.turn ?? 'hold') };
 };
 
 // =============================================================================
@@ -663,13 +708,19 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
    *  turn at all. */
   const tuIdx = TURN_IDS.indexOf((r.turn ?? 'hold') as TurnId);
   const turn = fw(tuIdx < 0 ? 0 : tuIdx, 1);
+  /** THE PACE, as an index. Same honest-element-zero reading as the three above:
+   *  index zero is `even`, and a pace this build does not know is the tempo the
+   *  roster was written at. */
+  const paIdx = PACE_IDS.indexOf((r.pace ?? 'even') as PaceId);
+  const pace = fw(paIdx < 0 ? 0 : paIdx, 1);
   // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
   // rollCode's optional shuffle group. It is folded into the checksum but not
   // into the code, because the guard has to cover the whole thing: the first cut
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  return `${head}-${mid}${owned}${look}${move}${turn}${checksum(head + mid + owned + look + move + turn + seed + extra)}-${seed}`.toUpperCase();
+  const body = mid + owned + look + move + turn + pace;
+  return `${head}-${body}${checksum(head + body + seed + extra)}-${seed}`.toUpperCase();
 };
 
 /**
@@ -700,12 +751,29 @@ const CHECK_LEN = 2;
  * EVERY MIDDLE-GROUP LENGTH THIS PROJECT HAS EVER MINTED WITH A CHECKSUM.
  *
  * 15 fixed fields, then one character per generation: `countOwned` (18), THE
- * LOOK (19), THE MOVE (20), THE TURN (21). Add a field, ADD its length here —
- * never replace, because every earlier length is a code somebody already has —
- * and the sweeps in tests/unit/{motion,turn}.invariants.mjs will tell you if you
- * forget, because the codec would then refuse its own output.
+ * LOOK (19), THE MOVE (20), THE TURN (21), THE PACE (22). Add a field, ADD its
+ * length here — never replace, because every earlier length is a code somebody
+ * already has — and the sweeps in tests/unit/{motion,turn,pace}.invariants.mjs
+ * will tell you if you forget, because the codec would then refuse its own
+ * output.
  */
-const MINTED_GROUP_LENGTHS = new Set([16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN, 19 + CHECK_LEN]);
+export const MINTED_GROUP_LENGTHS = new Set([
+  16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN, 19 + CHECK_LEN, 20 + CHECK_LEN,
+]);
+
+/**
+ * THE LENGTH THIS BUILD MINTS — the newest generation, derived rather than
+ * written down.
+ *
+ * Exported because three sibling sweeps (grade, motion, turn) each carried
+ * their own literal for it, and adding THE PACE broke all three at once with
+ * the same message. A test that pins "the current group is 21 characters" is
+ * asserting the right property through the wrong constant: what it means is
+ * "one character longer than the generation I am about to rebuild", and that
+ * is a fact the codec owns. Add a field, add its length to the set above, and
+ * every sweep follows.
+ */
+export const MINTED_GROUP_MAX = Math.max(...MINTED_GROUP_LENGTHS);
 const checksum = (body: string): string => {
   let h = 7;
   for (let i = 0; i < body.length; i++) {
@@ -772,7 +840,14 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // so every code ever minted decodes byte-identically.
     const hasTurn = b.length >= 19 + CHECK_LEN;
     const tui = hasTurn ? n(b.slice(18, 19)) : 0;
-    const bodyLen = hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
+    // THE PACE sits after the turn and before the checksum, told apart by
+    // LENGTH exactly as the turn is, and entering the band by `>=` for exactly
+    // the same reason: a 18/19/20/21-length group leaves this false, `pai`
+    // reads 0, `bodyLen` is unchanged and the checksum is sliced at the offset
+    // it always was — so every code ever minted still decodes byte-identically.
+    const hasPace = b.length >= 20 + CHECK_LEN;
+    const pai = hasPace ? n(b.slice(19, 20)) : 0;
+    const bodyLen = hasPace ? 20 : hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
     if (b.length >= 16) {
       /**
        * A CHECKSUMMED GROUP IS ONE OF THE LENGTHS THIS PROJECT HAS MINTED, OR
@@ -826,8 +901,14 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // sender knows something this build does not, and opening it as a held deal
     // would substitute a still collage for a moving one, invisibly.
     const turn = TURN_IDS[tui];
-    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, tui, seed];
-    if (!layout || !look || !move || !turn || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
+    // And again: a pace index this build has no entry for means the sender's
+    // build knows a tempo this one does not. Opening it at the roster's own
+    // tempo would substitute a different rhythm for the one they sent, which is
+    // invisible in a still frame and wrong in every exported second.
+    const pace = PACE_IDS[pai];
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, tui, pai, seed];
+    if (!layout || !look || !move || !turn || !pace
+        || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
       primitive: PRIMITIVE_ORDER[pri] ?? 'rect',
@@ -847,6 +928,7 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       look,
       move,
       turn,
+      pace,
       seed,
     };
   } catch {

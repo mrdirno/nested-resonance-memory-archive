@@ -54,6 +54,8 @@ const load = async (rel, tag) => {
 
 const G = await load('src/lib/grade.ts', 'grade');
 const RC = await load('src/lib/rollCode.ts', 'rollcode');
+// For `MINTED_GROUP_MAX` — the codec's own registry of the length it mints.
+const DICE = await load('src/lib/diceRoll.ts', 'dice');
 const {
   LOOKS, LOOK_IDS, NO_GRADE, gradeFor, gradeSteps, stepsForLook,
   cssFilterFor, svgFilterFor, svgFilterAttrFor, isNoOp, SVG_FILTER_ID, GRADE_GRID,
@@ -436,7 +438,11 @@ for (const id of LOOK_IDS) {
   // new field lands, the number is what changed; when it fails without one, the
   // group silently grew and every fixed-offset slice below it has moved.
   const LOOK_AT = 16;              // the look's own character, 0-indexed
-  const GROUP_LEN = 21;            // what THIS build mints (THE TURN made it 21)
+  // DERIVED, never a literal. This arm carried `21` and its two siblings in
+  // motion/turn carried the same number; THE PACE broke all three at once with
+  // the same message. `MINTED_GROUP_MAX` is the codec's own registry of every
+  // length it has ever emitted, so the next field updates one place.
+  const GROUP_LEN = DICE.MINTED_GROUP_MAX;
   const code = RC.encodeState({ ...baseState, look: 'none' });
   const [a, b, c] = code.split('-');
   ok('I8c', b.length === GROUP_LEN, `the middle group must be ${GROUP_LEN} chars, got ${b.length}`);

@@ -223,6 +223,41 @@ or re-documenting an existing capability is DD, not delivery.
   checksummed band by `>=`, so every 18/19/20-length code ever minted decodes
   byte-identically, which the sweep proves by rebuilding forty legacy codes and
   re-deriving their checksums.
+  THE PACE — the collage has a TEMPO, and it is the second axis two rungs of
+  the ladder below asked for in the same words. Every rhythm this app had
+  conflated the SHAPE of a motion with its RATE: `march` holds 5 s and `ripple`
+  3.5 s, so "cut faster" was a request for a different PERMUTATION, and the
+  move's 12 s cycle was a constant with no control at all. Five chips
+  (0.5× / 0.75× / 1× / 1.5× / 2×) now scale the clock the move and the turn are
+  read against, on the dice and in the composition code, so the shape rosters
+  finally answer only the question they are good at.
+  SCALE THE CLOCK, NOT THE PERIODS, and that decision is the whole file.
+  Dividing each mode's hold by the rate is the obvious implementation and it
+  degenerates: `TURN_FADE_SEC` is a CONSTANT that does not divide with the hold,
+  so `ripple` at 2× would hold 1.75 s while still dissolving for 0.7 s of it —
+  40% of the take soft instead of 20%, and 80% at 4×. Scaling the TIME leaves
+  `fade / hold` invariant by construction, which is why the control needs no
+  clamp and no per-mode exception. Measured both ways in the sweep: the shipped
+  design holds march/scatter/ripple/swap at 13.6/10.5/19.5/17.0% soft at EVERY
+  rate; the rejected one takes ripple from 20.0% to 39.0% at 2×.
+  ONE MULTIPLICATION AT TWO SEAMS. `lib/pace.ts` is 30 lines of logic and the
+  Stage applies it in exactly two places — `refreshTurn` and `crop` — never to
+  `outTime` itself, because the take's own clock is what the ruler shows, what
+  the exporter walks and what every audio schedule is written against. Rest at
+  zero survives for free (`0 * r` is 0), so the three surfaces that pass no time
+  are bit-identical to a build without the file, and the two that do (the live
+  Stage and the offline walk it shares with the exporter) get it from one place.
+  PROVED WITHOUT A CLOCK. `renderAtTime` is a pure function of the instant —
+  which is why the offline exporter can walk it — so the e2e SCRUBS instead of
+  waiting: march holds 5 s, so at 1× the wall at t=3.0 is still its opening
+  deal, at 2× it has cut, and at 0.5× t=6.0 is STILL the opening deal where 1×
+  has already cut. Measured on the canvas: 1× at 3.0 s is **0.0% moved, worst
+  channel 0/255** against the opening frame — bit-identical, the hold is a hold
+  — while 2× at the same instant moves **94.5% of the frame, worst 199/255**;
+  and at 6.0 s the two swap places, 0.5× reading **0.2% / worst 23** where 1×
+  reads **94.5% / worst 199**. Three rates,
+  same pixels, no timer anywhere — and because a scrub is the export's own path,
+  green here is evidence about the file.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -332,14 +367,33 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       of the mode today, exactly as the move's 12 s cycle is), and a transition
       the SVG can express — it cannot, for the same reason it cannot express the
       move.
-- [ ] **THE TURN'S HOLD IS A PROPERTY OF THE MODE, so "cut faster" is not
-      askable.** `march` is 5 s, `ripple` 3.5 s, and the only way to change that
-      is to pick a different mode — which also changes the permutation. The two
-      are independent and the roster pretends they are not, exactly as THE MOVE
-      pretends its speed and its shape are one choice (the scar below says so in
-      the same words). The generalisation for both is the same: a rate control
-      that snaps to a grid, quantised on the way into the code like every
-      numeric field `snapRoll` already handles.
+- [x] **THE TURN'S HOLD IS A PROPERTY OF THE MODE, so "cut faster" is not
+      askable → THE PACE.** CLOSED, together with the move's own speed rung
+      below, by the one control both entries predicted in the same words. The
+      generalisation turned out to be even smaller than "a rate control that
+      snaps to a grid": a rate is a ROSTER, so it needed no `snapRoll` arm at
+      all — a quantised index is quantised by construction, and it rides the
+      code through the machinery `look`/`move`/`turn` already built. What the
+      two entries did NOT predict is the implementation trap, and it is the
+      whole of `lib/pace.ts`: dividing the hold is wrong because
+      `TURN_FADE_SEC` does not divide with it. Original text: `march` is 5 s,
+      `ripple` 3.5 s, and the only way to change that is to pick a different
+      mode — which also changes the permutation. The two are independent and
+      the roster pretends they are not.
+- [ ] **THE PACE IS ONE DIAL OVER TWO INDEPENDENT RHYTHMS.** A slow ambient
+      drift under fast cuts is a real look and it is unaskable: one rate scales
+      the move and the turn together. Shipping one dial was the deliberate first
+      cut — the point of the rung was to make the SHAPE rosters honest, not to
+      double the roster count — but the two clocks genuinely are independent,
+      and the honest generalisation is `moveRate` and `turnRate` as two fields.
+      The cost is two more code characters and a second chip row on a phone,
+      which is exactly the NON-CLUTTERY question that should decide it.
+- [ ] **A PACE DOES NOTHING TO A COLLAGE THAT IS MOSTLY VIDEO, AND NOTHING SAYS
+      SO.** The same shape as the turn's own gap: a live clip is excluded from
+      the turn ring, and a clip's playback rate is untouched by the pace, so a
+      wall of video has almost nothing for either control to move. The caption
+      teaches the still case ("pick a MOVE or a TURN and this sets the tempo")
+      and says nothing about the video one.
 - [ ] **A CUT AT A LAP IS A HARD CUT.** The turn is periodic on a FIXED hold
       and deliberately not on the take, for the reason THE MOVE settled — a
       duration-keyed schedule would make the same collage cut differently at
@@ -518,7 +572,13 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       today, which is one job and the right first cut, but a long tail under a
       short head is what people actually reach for), volume per source, ducking,
       and beat-sync.
-- [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is step 1).
+- [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is
+      step 1). NOT the same rung as THE PACE, and the distinction is worth
+      keeping straight: the pace is a property of the COMPOSITION's clock and
+      moves the drift and the cuts; this one is a property of a SOURCE and moves
+      the pictures inside a clip. They compose — a clip at half speed inside a
+      collage that cuts twice as often — and this one carries the question the
+      pace does not have to answer: whether the audio pitches with it.
 - [ ] **Overlays** — stickers, shapes, picture-in-picture, masks, chroma-key.
 - [x] **Composition** — WHICH photo lands in WHICH fragment (11 arrangements) and
       WHAT each fragment centres on (5 crop-focus modes). `lib/composition.ts`.
@@ -610,14 +670,17 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       project is not exact. Fix, if a real one is ever hit: an exact 4-char
       aspect appended to the middle group, read by length like the others.
 
-- [ ] **A MOVE IS ONE ROSTER PICK FOR THE WHOLE COLLAGE, and the speed is not a
-      control.** Same shape as the look's own open rung, and the same fix: the
-      cycle length is a constant (`MOVE_CYCLE_SEC = 12`) and every fragment
-      takes the same move. Per-fragment moves and a speed slider are both UI
-      changes rather than engine changes — `sampleMove` already takes the spec
-      per slot — but the moment a speed is user-set it has to be SNAPPED to a
-      grid on the way in and given a field in the code, exactly as `snapRoll`
-      does for the sliders, or the round trip stops being an equality.
+- [~] **A MOVE IS ONE ROSTER PICK FOR THE WHOLE COLLAGE, and the speed is not a
+      control.** THE SPEED HALF IS CLOSED by THE PACE: `MOVE_CYCLE_SEC` is
+      still 12, but the clock it is read against is not, so the drift breathes
+      every 6 s at 2× and every 24 s at 0.5× — and the roster's periods stay
+      relative to each other, which is what keeps a rate from turning into
+      five more moves. The prediction that a user-set speed "has to be SNAPPED
+      to a grid on the way in" was right about the requirement and wrong about
+      the mechanism: a roster IS the grid.
+      Still owed: ONE MOVE FOR THE WHOLE COLLAGE. `sampleMove` already takes
+      the spec per slot, so per-fragment moves remain a UI change rather than
+      an engine change.
 - [x] **THE STILL PREVIEW OF A MOVING COLLAGE IS ITS FIRST FRAME → THE
       PLAYHEAD.** CLOSED, by exactly the widget this entry predicted: "the
       honest next cut is a scrub or a 'show me' that runs one cycle, which is
@@ -775,6 +838,40 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C144-DYADIC-IS-NOT-EXACT, AND I WROTE THE CLAIM INTO THE MODULE HEADER
+  BEFORE THE SWEEP READ IT BACK.** `lib/pace.ts` shipped its first draft
+  claiming all five rates are dyadic rationals and therefore "EXACT in binary
+  floating point and exactly reversible", with a paragraph explaining that this
+  is what stops the preview and the exporter drifting apart. Half of it is
+  true. 1/2, 1 and 2 are powers of two and exact both ways; 3/4 and 3/2 carry a
+  factor of THREE, and multiplying by three can need one more mantissa bit than
+  there is — `0.1 * 0.75 / 0.75` is 0.10000000000000002. I3 failed on the first
+  run of the sweep written to confirm the claim, which is the entire argument
+  for writing the sweep in the same cycle as the module: a header comment is
+  the one place a wrong idea can sit unexecuted for years, looking authoritative
+  to the next reader. **The general shape: a property you assert in prose is a
+  property nothing is testing.** Both were corrected — the header now says what
+  is actually guaranteed (one correctly-rounded multiplication, deterministic,
+  applied identically by the preview and the offline walk), and the arm asserts
+  exactness only for the powers of two, order-preservation for all of them, and
+  determinism, which is the property callers actually rely on. Reversibility
+  turned out to be needed by nobody: no caller ever divides by the rate.
+- **SCAR-C144-THREE-SIBLING-SWEEPS-PINNED-THE-CODEC'S-LENGTH-AS-A-LITERAL, AND
+  ONE FIELD BROKE ALL THREE.** grade I8c, motion I8c and turn I8b each carried
+  their own hand-written `21` for "the middle group this build mints", and THE
+  PACE made it 22 — three red arms, three identical messages, in files that have
+  nothing else to do with each other. Each was asserting the right property
+  through the wrong constant: what they mean is "one character longer than the
+  generation I am about to rebuild", and that is a fact the CODEC owns. Fixed
+  once, at the source: `diceRoll.ts` now exports `MINTED_GROUP_MAX` (derived
+  from `MINTED_GROUP_LENGTHS`, the registry the codec already had to maintain)
+  and all three read it. **The general shape, and it is this lane's BACKPORT
+  rider applied inside one repo: when the same literal appears in three
+  unrelated files, the next change breaks all three at once — and a test that
+  fails for a legitimate reason in three places is a test that will be edited
+  three times, which is three chances to edit it wrong.** The codec's own
+  comment already told the next author to add the length to the set; now that
+  set is the single source and the sweeps follow it.
 - **A FADE THAT COULD NOT END, BECAUSE THE FLAG WAS A COMPARISON OF TWO NUMBERS
   ONE OF WHICH HAD JUST MOVED.** Shipped in THE TURN's first cut and caught by
   the adversarial audit before anyone used it — three independent lenses
