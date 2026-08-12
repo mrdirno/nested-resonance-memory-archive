@@ -772,9 +772,27 @@ export class Stage {
    * something a turn could invalidate sixty times a second.
    */
   private turnRing: number[] = [];
-  /** The assignment indices currently BOUND, so a frame inside one hold does no work. */
-  private turnBoundA = -1;
+  /** The assignment index currently BOUND as the outgoing picture, so a frame
+   *  inside one hold does no work. */
+  private turnBoundA = 0;
+  /**
+   * The assignment index bound as the INCOMING picture, or -1 for "nothing is".
+   *
+   * -1 RATHER THAN `turnBoundA`, and `turnFading` rather than a comparison of
+   * the two. The first cut of this loop ended a fade by testing
+   * `turnBoundB !== turnBoundA` — which is ALREADY false by the time it runs,
+   * because the branch above advances `turnBoundA` to the same index in the
+   * same call. So the cleanup never executed: `mix` stuck at 0.9944 forever
+   * (measured, replaying the real schedule at 30fps), every fragment paid a
+   * second `drawImage` for the rest of the take, and — the one that shows — the
+   * incoming picture's crop is only refreshed inside the fading branch, so
+   * under a MOVE a frozen copy sat at 99.4% alpha over the one that was moving
+   * and the drift stopped. Found by an adversarial audit; three independent
+   * lenses reached it. A flag cannot be made false by a sibling assignment.
+   */
   private turnBoundB = -1;
+  /** Is an incoming assignment currently bound to the items? */
+  private turnFading = false;
   /** Every participating source's full key — what an offline render has to
    *  budget rasters for, because a turn takes each of them into other cells. */
   private turnFullKeys: string[] = [];
@@ -1063,7 +1081,8 @@ export class Stage {
     // just made, so the first refresh inside the opening hold must find nothing
     // to do rather than re-resolve every fragment onto itself.
     this.turnBoundA = 0;
-    this.turnBoundB = 0;
+    this.turnBoundB = -1;
+    this.turnFading = false;
 
     // A scene that stops moving must go back to REST, not freeze wherever the
     // last frame left it — the still preview it hands back to is drawn at t=0,
@@ -1076,6 +1095,13 @@ export class Stage {
     this.moveOriginMs = -1;
     this.ensureStills(wanted);
     this.refreshAdmission();
+    // A SCENE REBUILT MID-TAKE MUST LAND ON THE TAKE'S CURRENT DEAL. Every item
+    // above was built holding its OWN photograph — turn 0 — and the tick
+    // re-establishes the real assignment on its next frame. A PARKED preview
+    // has no next frame (`tick` only advances the clock and refreshes when
+    // `live = !offline && !parked`), so a scene rebuilt during a scrub would
+    // sit on the base deal while the ruler says 12s.
+    if (turning && this.outTime > 0) this.refreshTurn();
     this.markDirty();
     this.emitStatus();
   }
@@ -2125,6 +2151,7 @@ export class Stage {
         }
         this.turnBoundB = frame.b;
       }
+      this.turnFading = true;
       for (let j = 0; j < n; j++) {
         const it = items[ring[j]];
         // A FRAGMENT WHOSE PICTURE IS NOT CHANGING DOES NOT DISSOLVE. `ripple`
@@ -2142,7 +2169,7 @@ export class Stage {
 
     // THE FADE IS OVER — drop the incoming picture rather than leave a second
     // decode pinned to every fragment for the whole hold.
-    if (this.turnBoundB !== this.turnBoundA) {
+    if (this.turnFading) {
       for (let j = 0; j < n; j++) {
         const it = items[ring[j]];
         it.mix = 0;
@@ -2154,7 +2181,8 @@ export class Stage {
         it.s2ok = false;
         it.turnTo = it.turnFrom;
       }
-      this.turnBoundB = this.turnBoundA;
+      this.turnBoundB = -1;
+      this.turnFading = false;
     }
   }
 

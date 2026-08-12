@@ -809,6 +809,24 @@ export default function App() {
   /** THE TURN needs at least two photographic fragments to exchange anything. */
   const turning = isTurning(turn) && images.length > 1;
 
+  /**
+   * MEMOISED, AND THAT IS NOT AN OPTIMISATION.
+   *
+   * This object is a DEPENDENCY of VideoStage's scene effect, and `setScene`
+   * ends by resetting `moveOriginMs` to -1 — the take's clock origin. Built
+   * inline in the JSX it would be a fresh object on every App render, so any
+   * unrelated state change (a notice, a hover, the autosave tick) would rebuild
+   * the scene and RESTART THE TAKE, which for a schedule keyed on elapsed time
+   * means the turn is perpetually inside its first hold and never fires at all.
+   * Every other entry in that dep array is a primitive or a `useMemo` for
+   * exactly this reason — VideoStage's own comment says so about the
+   * soundtrack. Found by an adversarial audit; three lenses reached it.
+   */
+  const turnScene = useMemo(
+    () => (turning ? { id: turn, seed, resolve: turnResolve } : null),
+    [turning, turn, seed, turnResolve],
+  );
+
   const moving = move !== 'still' && images.length > 0;
   // A LIVE COMPOSITION IS ONE THAT CHANGES OR SOUNDS. Clips move; THE MOVE makes
   // photographs move; MUSIC makes a still collage a thing worth recording — and
@@ -2390,7 +2408,7 @@ export default function App() {
                        bgColor={bgColor}
                        titlePlan={titlePlan}
                        look={look}
-                       turn={turning ? { id: turn, seed, resolve: turnResolve } : null}
+                       turn={turnScene}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
                        controlsHost={stageControlsHost}

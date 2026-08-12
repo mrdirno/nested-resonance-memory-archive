@@ -45,7 +45,7 @@ async function legacyArchive(bytes: Buffer): Promise<Buffer> {
   zip.file('manifest.json', JSON.stringify({
     version: '1.0',
     mode: 'simple',
-    layout: { mode: 'minimal', primitive: 'rect', count: 4, density: 1, countOwned: true, shuffle: 0, seed: 7, aspect: 1, gutter: 0.005, entropy: 0, arrangement: 'natural', focus: 'auto', twist: 'none', move: 'still', turn: 'hold' },
+    layout: { mode: 'minimal', primitive: 'rect', count: 4, density: 1, countOwned: true, shuffle: 0, seed: 7, aspect: 1, gutter: 0.005, entropy: 0, arrangement: 'natural', focus: 'auto', twist: 'none', move: 'still' },
     style: { background: '#000000', look: 'none' },
     images: [{ id: 'legacy-1', storageFilename: 'asset-0-legacy-1.jpg', originalName: 'legacy.jpg', analysis: ANALYSIS }],
   }));

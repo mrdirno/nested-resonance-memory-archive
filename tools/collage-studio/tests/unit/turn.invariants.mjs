@@ -370,6 +370,65 @@ const rngOf = (seed) => {
     `hold ${holdPct.toFixed(1)}%, ${seen.size}/${TURN_IDS.length} ids reached`);
 }
 
+// ---------------------------------------------------------------------------
+// I10 — THE CONSUMER CONTRACT, and the invariant that was NOT here when the
+//       bug it describes shipped for ten minutes.
+//
+//       `turnAt` was correct; the loop that CONSUMES it was not. `refreshTurn`
+//       ended a fade by testing `turnBoundB !== turnBoundA` — already false,
+//       because the branch above advances `turnBoundA` to the same index in the
+//       same call — so the cleanup never ran, `mix` stuck at 0.9944 for the
+//       rest of the take and, under a move, a frozen copy covered the moving
+//       picture. Three independent audit lenses found it; nothing in this file
+//       could have.
+//
+//       So the state machine is replayed here, driven by the REAL `turnAt` at a
+//       real frame rate. It is deliberately a MODEL of stage.ts's loop rather
+//       than the loop itself (that one needs a canvas, and the e2e drives it) —
+//       what it pins is the SHAPE the loop must have: a fade must be able to
+//       END, and it cannot be ended by comparing two indices that the same call
+//       has just made equal.
+// ---------------------------------------------------------------------------
+{
+  let bad = null;
+  for (const id of ACTIVE) {
+    for (const fps of [24, 30, 60]) {
+      // The shipped shape: a FLAG, not an index comparison.
+      let boundA = 0; let boundB = -1; let fading = false;
+      let mix = 0; let cleanups = 0; let fades = 0;
+      const seconds = turnHoldSec(id) * 4 + 1;
+      for (let f = 0; f <= Math.round(seconds * fps); f++) {
+        const fr = turnAt(id, f / fps);
+        if (fr.a !== boundA) boundA = fr.a;
+        if (fr.mix > 0) {
+          if (fr.b !== boundB) { boundB = fr.b; fades++; }
+          fading = true;
+          mix = fr.mix;
+        } else if (fading) {
+          mix = 0; boundB = -1; fading = false; cleanups++;
+        }
+      }
+      if (mix !== 0) bad = `${id}@${fps}fps: mix left at ${mix.toFixed(4)} — the fade never ended`;
+      else if (fading) bad = `${id}@${fps}fps: still marked fading at rest`;
+      else if (cleanups !== fades) bad = `${id}@${fps}fps: ${fades} fades but ${cleanups} cleanups`;
+      else if (fades < 3) bad = `${id}@${fps}fps: only ${fades} fades in ${seconds}s — the schedule stalled`;
+
+      // AND THE BROKEN SHAPE MUST FAIL, or this arm proves nothing. Same replay,
+      // ending the fade by the index comparison the first cut used.
+      let bA = 0; let bB = 0; let m = 0; let c = 0;
+      for (let f = 0; f <= Math.round(seconds * fps); f++) {
+        const fr = turnAt(id, f / fps);
+        if (fr.a !== bA) bA = fr.a;
+        if (fr.mix > 0) { if (fr.b !== bB) bB = fr.b; m = fr.mix; }
+        else if (bB !== bA) { m = 0; bB = bA; c++; }
+      }
+      if (m === 0 && c > 0) bad = `${id}@${fps}fps: the RED PROOF passed — the index-comparison shape is not actually broken`;
+    }
+  }
+  ok('I10 a fade can END: the consumer replay returns mix to 0, and the shape that could not is proved broken',
+    bad === null, bad ?? '4 modes x 3 frame rates, with a red proof on each');
+}
+
 console.log('\nTHE TURN — invariant sweep\n');
 for (const line of results) console.log('  ' + line);
 console.log(`\n${results.length - failures}/${results.length} invariants hold\n`);

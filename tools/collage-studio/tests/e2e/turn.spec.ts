@@ -112,15 +112,30 @@ const HUES: [number, number, number][] = [
   [35, 215, 225],   // cyan
 ];
 
+/**
+ * ONE FIXTURE, TWO MEASUREMENTS, AND THEY PULL IN OPPOSITE DIRECTIONS.
+ *
+ * The hue census needs each tile to be UNMISTAKABLY one photograph; a move
+ * needs each tile to have STRUCTURE, because "every part of a flat colour is
+ * the same colour" (motion.spec.ts says so, and T7 measured exactly 0.00% on
+ * the first, flat version of this fixture). Both are satisfied by putting the
+ * variation entirely in BRIGHTNESS: a steep diagonal ramp plus two hard edges,
+ * all of it a scalar multiple of the hue. `hueCensus` classifies by DIRECTION
+ * in RGB, and direction is invariant under scalar multiplication — so the
+ * structure is invisible to the census by construction and plainly visible to
+ * the crop.
+ */
 const fixtures = () => HUES.map((rgb, i) => ({
   name: `hue-${i}.png`,
   mimeType: 'image/png',
   buffer: png(320, 320, (x, y) => {
-    const t = 0.72 + 0.28 * ((x + y) / (319 * 2));
+    const t = 0.30 + 0.70 * ((x + y) / (319 * 2));
+    const edge = (x > 150 && x < 172) || (y > 96 && y < 118) ? 0.45 : 1;
+    const k = t * edge;
     return [
-      Math.round(rgb[0] * t),
-      Math.round(rgb[1] * t),
-      Math.round(rgb[2] * t),
+      Math.round(rgb[0] * k),
+      Math.round(rgb[1] * k),
+      Math.round(rgb[2] * k),
     ] as [number, number, number];
   }),
 }));
@@ -387,6 +402,30 @@ test.describe('THE TURN', () => {
     await page.getByTestId('composition-code-open').click();
     await page.waitForTimeout(1500);
     await expect(page.getByTestId('turn-swap')).toHaveAttribute('data-active', 'true');
+  });
+
+  test('T7 the picture still moves AFTER a cut', async ({ page }) => {
+    // THE REGRESSION THIS EXISTS FOR. The first cut of `refreshTurn` ended a
+    // fade by comparing two indices the same call had just made equal, so the
+    // cleanup never ran: `mix` stuck at 0.9944 and the incoming picture — whose
+    // crop is only refreshed while fading — sat FROZEN at 99.4% alpha over the
+    // one that was still drifting. Nothing already in this file could see it:
+    // after a cut the two pictures are the same photograph, so the wall looks
+    // right, and the only symptom is that a move stops moving. Found by an
+    // adversarial audit, three lenses independently. This is the check.
+    await boot(page);
+    await page.getByTestId('move-drift').click();
+    await page.waitForTimeout(1200);
+    await pickTurn(page, 'march');       // lands ~1.8s in; march cuts at 5.0s
+
+    await page.waitForTimeout(4900);     // ~6.7s — past the cut AND past its fade
+    const a = await artBits(page);
+    await page.waitForTimeout(1700);     // ~8.4s — still inside the second hold
+    const b = await artBits(page);
+    const d = diff(a!, b!);
+    console.log(`[turn] drift after a cut: moved ${(d.moved * 100).toFixed(2)}%  worst ${d.worst}`);
+    expect(d.moved, `the move must survive a cut (worst ${d.worst})`).toBeGreaterThan(0.03);
+    expect(d.worst, 'and must move the picture by a real amount').toBeGreaterThan(40);
   });
 
   test('T6 the turn row is watertight on a phone', async ({ page }) => {

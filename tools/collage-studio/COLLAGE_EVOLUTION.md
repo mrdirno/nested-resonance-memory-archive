@@ -775,6 +775,54 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A FADE THAT COULD NOT END, BECAUSE THE FLAG WAS A COMPARISON OF TWO NUMBERS
+  ONE OF WHICH HAD JUST MOVED.** Shipped in THE TURN's first cut and caught by
+  the adversarial audit before anyone used it — three independent lenses
+  (canvas-state, schedule, wiring) reached it separately, which is what a lens
+  panel is for. `refreshTurn` ended a dissolve with
+  `if (this.turnBoundB !== this.turnBoundA)`, and the branch fifteen lines above
+  advances `turnBoundA` to exactly that index IN THE SAME CALL — so the guard
+  was already false and the cleanup never ran once. Replaying the real schedule
+  at 30fps: `mix` sticks at 0.9944 forever, cleanup runs 0 times where it should
+  run once per cut.
+  WHAT IT LOOKED LIKE IS WHY NOTHING CAUGHT IT. After a cut, the incoming
+  picture and the outgoing picture are the SAME photograph, so a stale 99.4%
+  alpha over an identical image is invisible — six e2e tests, a 65,600-case
+  permutation sweep and a live deploy all passed with it in. The symptom is one
+  step removed: the incoming crop is only refreshed inside the fading branch, so
+  under a MOVE a FROZEN copy sat over the drifting one and the drift stopped
+  dead. Every frame also paid a second `drawImage` per fragment for the rest of
+  the take.
+  THE FIX IS THE SHAPE, NOT THE COMPARISON: a boolean `turnFading` that a
+  sibling assignment cannot make false, and `turnBoundB = -1` as "nothing is
+  bound" rather than an index that also happens to be a valid cache key (which
+  was a second bug — a scrub back into a fade already passed would have found
+  the key present and `still2` null, and dissolved into nothing). Now guarded
+  BOTH ways: `turn.invariants.mjs` I10 replays the consumer state machine at
+  24/30/60fps against the real `turnAt` AND carries a RED PROOF that the
+  index-comparison shape fails it, and `turn.spec.ts` T7 measures on pixels that
+  a drift survives a cut (10.46% of the frame moving, worst 99).
+- **A SCENE PROP BUILT INLINE IN JSX RESTARTS THE TAKE ON EVERY UNRELATED
+  RENDER.** Also from the audit, also found by three lenses. `turn={turning ? {
+  id: turn, seed, resolve: turnResolve } : null}` allocated a fresh object every
+  App render, and that object is a dependency of VideoStage's `setScene` effect
+  — which ends by resetting `moveOriginMs` to -1, the take's clock origin. So
+  any unrelated state change (a notice, a hover, the autosave tick) rebuilt the
+  scene and restarted the clock, and a schedule keyed on ELAPSED TIME is then
+  permanently inside its first hold: the feature would simply never fire in a
+  session where anything else moves. Every other entry in that dep array is a
+  primitive or a `useMemo` for precisely this reason — VideoStage's own comment
+  says so about the soundtrack, twenty lines below the line that broke it.
+  Memoised now. The general rule this earns: ANY object handed to `setScene` is
+  a clock reset in disguise, and belongs in a `useMemo` keyed on primitives.
+- **A "LEGACY" FIXTURE THAT LEARNS THE NEW FIELD STOPS BEING A LEGACY FIXTURE.**
+  Third audit finding, minor and the most embarrassing: `session-recovery.spec.ts`'s
+  `legacyArchive()` is documented one line above itself as "a `.collage` archive
+  exactly as the PREVIOUS build wrote it", and THE TURN's first cut helpfully
+  added `turn: 'hold'` to it — deleting the repo's only coverage of a manifest
+  that LACKS the newest field, in the same commit that made the field exist.
+  Reverted. Adding a field to a legacy fixture is not maintenance; it is
+  removing the test.
 - **A GUARD THAT FAILS THREE RUNS IN FOUR IS NOT A GUARD — `composition.spec.ts`
   line 225.** Found while attributing a red run during THE TURN, and it is NOT a
   turn regression: measured on BOTH trees, 4 runs each. The assertion is the
@@ -3531,8 +3579,27 @@ frontier. Today's ceiling is tomorrow's floor.
   photographs, the same six shares, in a different order. That is the
   permutation, observed in pixels. The exported JPG differs by <= 1 level with
   `scatter` running, so the three single-frame surfaces never saw it.
+  THE AUDIT IS WHAT MADE IT TRUE, and this is the cycle to point at when
+  somebody asks whether the adversarial pass earns its cost. Four independent
+  lenses over the diff, each finding refuted by a separate skeptic. It returned
+  THREE real defects that six green e2e tests, a 65,600-case permutation sweep
+  and a LIVE DEPLOY had all passed with in: a dissolve that could never end
+  (`mix` stuck at 0.9944 forever, which froze the MOVE — invisible because the
+  two pictures either side of a completed cut are the same photograph), a scene
+  prop built inline in JSX that restarted the take clock on every unrelated
+  render (the feature would never have fired in a real session), and a "legacy"
+  fixture that had been taught the new field and so stopped being legacy. All
+  three are filed as scars above, all three are fixed, and both of the serious
+  ones now have a guard that would have caught them — `turn.invariants.mjs` I10
+  (the consumer state machine replayed at three frame rates, WITH a red proof
+  that the broken shape fails it) and `turn.spec.ts` T7 (a drift measured
+  surviving a cut on real pixels). T7 also cost the fixture a redesign: the hue
+  census wants flat tiles and a move needs structure, and the two are reconciled
+  by putting every variation in BRIGHTNESS, which the direction-based classifier
+  is invariant to by construction.
   REGRESSION (the draw loop, the tick gate and `renderAtTime` are what put these
-  at risk): motion 5/5, playhead, source-count, one-layout, composition, plus
+  at risk): motion 5/5, playhead, source-count, one-layout, session-recovery
+  24/24, plus
   every unit sweep in the tree green — rollCode 207,028 checks (it now covers
   `turn` in sections 1/2/3, which is more than `look` or `move` ever got there),
   grade 46,987, clipWindow 5,450,896, fade 708,601, fill 368,962. `tsc --noEmit`
