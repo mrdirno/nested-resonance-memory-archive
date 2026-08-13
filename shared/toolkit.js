@@ -478,8 +478,12 @@
       drop.appendChild(h("a", { href: t.href, html: "<b>" + esc(t.name) + "</b><span>" + esc(t.audience || "") + "</span>" }));
     });
     drop.appendChild(h("hr"));
+    // ALWAYS the new-tool path, and explicitly so. On a tool page the bar's CTA
+    // now opens on "wish it better" about THAT page, so this is the one route
+    // that still means "build something that doesn't exist yet" — it must not
+    // inherit the page's default or a tool page would lose the new-tool funnel.
     var reqLink = h("a", { href: "#", class: "av-req", html: "<b>✦ Wish for a tool</b><span>Aldrin's AI builds it &mdash; for real</span>" });
-    reqLink.addEventListener("click", function (e) { e.preventDefault(); closeMenu(); openWell(); });
+    reqLink.addEventListener("click", function (e) { e.preventDefault(); closeMenu(); openWell("new_tool"); });
     drop.appendChild(reqLink);
 
     // LAST, and deliberately after the wish CTA. The menu reads as: where you are
@@ -502,11 +506,27 @@
      * a real 44px target. Something had to shrink, and the honest thing to shrink
      * is three words of a label that still reads — never the thumb target, and
      * never the CTA itself, which is what the whole demand loop runs on. */
-    var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell });
-    reqBtn.innerHTML = '✦ Wish<span class="av-req-tail">&nbsp;for a tool</span>';
+    /* THE CTA NAMES WHAT IT DOES FROM WHERE YOU ARE. On a hub it is the
+     * new-tool funnel it has always been. On a tool page it is "Wish it
+     * better" — the wisher's own words (improve da36b663), and the phrase the
+     * kind picker inside has always used — because on a tool page the honest
+     * offer is "tell me about THIS", not "describe a page that doesn't exist".
+     * The tail is the part that hides below 380px, and "it better" is a
+     * character SHORTER than "for a tool", so this cannot cost the bar width it
+     * did not already have. The full sentence lives in aria-label for the
+     * widths where only "✦ Wish" survives. */
+    var cur = syncHere();
+    var reqBtn = h("button", {
+      type: "button", class: "av-req-btn",
+      "aria-label": cur ? ("Wish this tool better — " + cur.name) : "Wish for a tool",
+      title: cur ? ("Something wrong with " + cur.name + ", or it should do more? Tell us — it's already filled in.") : "Wish for a tool Aldrin's AI will build",
+      onclick: function () { openWell(cur ? "improve" : "new_tool"); }
+    });
+    reqBtn.innerHTML = cur
+      ? '✦ Wish<span class="av-req-tail">&nbsp;it better</span>'
+      : '✦ Wish<span class="av-req-tail">&nbsp;for a tool</span>';
 
     // On a tool page, a ★ to favorite THIS tool (pins it to the top of the hub).
-    var cur = currentTool();
     var favBtn = null;
     if (cur) {
       favBtn = h("button", { type: "button", class: "av-fav-btn" + (favIs(cur.href) ? " on" : ""), title: "Favorite this tool — pins it to the top of the toolkit", "aria-pressed": favIs(cur.href) ? "true" : "false" }, ["★"]);
@@ -558,6 +578,35 @@
   if (window.visualViewport) { window.visualViewport.addEventListener("resize", sizeMenuSoon); }
 
   /* ------------------------------------------------------------------ the well */
+  /* WHERE YOU ARE STANDING IS THE STRONGEST THING THE WELL KNOWS ABOUT YOU.
+   * HERE is the registry entry for this page, or null on a hub / the Wall of
+   * Wishes / any page not in TOOLS. It decides two things and nothing else:
+   * which kind the well opens on, and what `about_tool` is pre-set to.
+   *
+   * WHY improve, NOT new_tool, ON A TOOL PAGE. The ranking this program runs on
+   * is bug > improve > new_tool: something already in someone's hands beats an
+   * idea. Someone reading a hub is shopping — new_tool is the right default
+   * there and keeps it. Someone inside a tool is USING it, and the thing they
+   * are most likely to have an opinion about is the page under their thumb.
+   * Opening on new_tool there taxed the two higher-ranked kinds by three
+   * controls each, which is a default arguing with its own ranking.
+   *
+   * FALSIFIABLE (the EVO LOOP, step c): if this is right, the share of
+   * improve+bug among wishes carrying an `about_tool` rises after this ships,
+   * and the new-tool wishes that still arrive arrive from hubs. If the well
+   * instead goes quiet, or improve/bug arrive naming a tool the wisher was not
+   * on, the default is steering people rather than reading them — revert it. */
+  var HERE = null;
+  var DEFAULT_KIND = "new_tool";
+  /* Resolved lazily rather than at load: this file is included ahead of nothing
+   * in particular, and TOOLS comes from the page's own tools.js. Both callers
+   * (the bar and the well) run after the document is ready, and calling this
+   * twice is free. */
+  function syncHere() {
+    HERE = currentTool();
+    DEFAULT_KIND = HERE ? "improve" : "new_tool";
+    return HERE;
+  }
   var modal, form, errBox, sendBtn, wellAnon = false, wellKind = "new_tool", resetWellKind = null;
 
   /* THREE KINDS OF WISH (migration 077). A well that only takes "build me a new
@@ -588,6 +637,7 @@
   };
 
   function buildWell() {
+    syncHere();
     var guide = h("div", { class: "av-guide", html:
       COPY.new_tool.lead +
       "<ul>" +
@@ -625,8 +675,8 @@
     var kindBtns = KINDS.map(function (k) {
       return h("button", {
         type: "button",
-        class: "av-idbtn" + (k.v === "new_tool" ? " on" : ""),
-        "aria-pressed": k.v === "new_tool" ? "true" : "false",
+        class: "av-idbtn" + (k.v === DEFAULT_KIND ? " on" : ""),
+        "aria-pressed": k.v === DEFAULT_KIND ? "true" : "false",
         title: k.hint
       }, [k.label]);
     });
@@ -640,9 +690,29 @@
     var aboutSel = h("select", { name: "about_tool", "aria-label": "Which tool" });
     aboutSel.appendChild(h("option", { value: "" }, ["Which tool?"]));
     TOOLS.forEach(function (t) { aboutSel.appendChild(h("option", { value: t.href }, [t.name])); });
+    /* THE PAGE ALREADY KNOWS WHICH TOOL IT IS. Reported into this well
+     * (improve da36b663): "has no wish it better button that users can use to
+     * make a wish". Measured on live production at /av/cable-list.html before
+     * the fix: the bar's only CTA read "✦ WISH FOR A TOOL", the well opened on
+     * kind=new_tool, and this select was HIDDEN and EMPTY — so saying "this
+     * page is wrong" cost four controls and a hunt through a dropdown for the
+     * name of the page you were already standing on. Double entry, on the one
+     * funnel the whole program runs on.
+     * currentTool() has existed since the ★ shipped and the bar already uses it
+     * to favourite THIS page; the well simply never asked. It does now. */
     var aboutRow = h("div", { class: "av-field", style: "display:none" }, [
-      h("label", {}, ["Which tool"]), aboutSel
+      h("label", {}, [HERE ? "Which tool — this page, unless you change it" : "Which tool"]), aboutSel
     ]);
+    if (HERE) aboutSel.value = HERE.href;
+    /* A PICK THE USER MADE OUTRANKS THE PAGE THEY ARE ON, and it has to survive
+     * a round trip. new_tool is about no existing tool, so switching to it must
+     * clear the field — which means "improve → pick write-up → new_tool →
+     * improve" would otherwise come back pointing at the page in the address
+     * bar. That files a bug report against the wrong tool, which costs a cycle
+     * chasing a defect in a page that never had one. Caught driving the real
+     * sheet, not by reading it. */
+    var aboutPicked = "";
+    aboutSel.addEventListener("change", function () { aboutPicked = aboutSel.value; });
 
     var titleLabel   = h("label", {}, [COPY.new_tool.titleLabel]);
     var purposeLabel = h("label", {}, [COPY.new_tool.purposeLabel]);
@@ -666,10 +736,21 @@
       purposeLabel.textContent = c.purposeLabel;
       // A tool must exist before it can be improved or reported broken.
       aboutRow.style.display = (v === "new_tool" || !TOOLS.length) ? "none" : "";
+      // new_tool is ABOUT no existing tool, so the field clears. Coming back to
+      // improve/bug restores what the user picked, else the page they are
+      // standing on — never a blank they have to re-answer.
       if (v === "new_tool") aboutSel.value = "";
+      else if (!aboutSel.value) aboutSel.value = aboutPicked || (HERE ? HERE.href : "");
     }
     kindBtns.forEach(function (b, i) { b.addEventListener("click", function () { setKind(KINDS[i].v); }); });
-    resetWellKind = function () { setKind("new_tool"); };
+    resetWellKind = function (k) {
+      setKind(k || DEFAULT_KIND);
+      if (k !== "new_tool" && !aboutSel.value) aboutSel.value = aboutPicked || (HERE ? HERE.href : "");
+    };
+    // ONE source of truth for the sheet's opening state. Everything above renders
+    // the DEFAULT_KIND directly; this makes the guide copy, the two labels and the
+    // about-row's visibility agree with it instead of each hardcoding new_tool.
+    setKind(DEFAULT_KIND);
 
     /* ---- PROGRESSIVE DISCLOSURE (swept from shared/feedback.js, same cycle) ---
      * Reported into this very well: "your something's broken or feedback stuff
@@ -735,8 +816,17 @@
     document.body.appendChild(modal);
   }
 
-  function openWell() {
+  /* openWell(kind) — `kind` seeds which of the three the sheet opens on, so an
+   * entry point can carry its own intent: the bar's CTA on a tool page means
+   * "this page", the menu's "Wish for a tool" always means a new one.
+   * GUARD: several call sites are wired as `onclick: openWell`, which hands this
+   * a MouseEvent as argument one. Anything that is not one of the three KINDS is
+   * discarded, so a stray event can never seed a kind the DB would reject. */
+  function openWell(kind) {
+    var seed = null;
+    for (var i = 0; i < KINDS.length; i++) if (KINDS[i].v === kind) seed = kind;
     if (!modal) buildWell();
+    if (seed && seed !== wellKind && resetWellKind) resetWellKind(seed);
     modal.classList.add("av-open");
     document.documentElement.style.overflow = "hidden";
     var first = form.querySelector('[name="tool_title"]'); if (first) setTimeout(function () { first.focus(); }, 30);
