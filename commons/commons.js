@@ -124,22 +124,84 @@ window.Commons = (function () {
       });
     }
 
+    var tradeOf = function (slug) {
+      return TRADES.filter(function (x) { return x.slug === slug; })[0];
+    };
+
+    /* ---- THE PARTITION — ONE function, and the screen and the document both
+     * read it. They used to disagree, and the disagreement shipped a lie.
+     *
+     * The screen showed the floor plus your trade. The document stamped THE CHIP
+     * YOU HAD OPEN onto everything you were carrying. So: tick three electrical
+     * rows, tap Plumbing, and the counter still said 3 while nothing on screen
+     * was ticked — the picks were real, invisible, and impossible to take back
+     * out — and Copy produced WHAT'S IN THE BAG — PLUMBING over glow rods,
+     * lineman's pliers and wire strippers. The page told somebody those were a
+     * plumber's tools. (§SCARS 2026-08-13.)
+     *
+     * The bag stays CROSS-TRADE, which was never the bug: a super carries three
+     * trades' gear on purpose and dropping his picks on a chip tap would be the
+     * silent data loss this book already has a scar for. What changes is that a
+     * picked row is never invisible and never mislabelled — anything outside the
+     * current view rides in its own section, on screen and in the document. ---- */
+    function partition(v) {
+      var uni = [], own = [], away = [];
+      ROWS.forEach(function (g) {
+        if (g.t.indexOf("universal") !== -1) uni.push(g);
+        else if (g.t.indexOf(v) !== -1) own.push(g);
+        else if (picked(g.id)) away.push(g);
+      });
+      /* HIS OWN ROWS FIRST, and this was found by doing the job rather than by
+       * any gate. A section rendered in FILE order, and rows shared with several
+       * trades sit earlier in the file than any one trade's own — so the moment
+       * roofing was seeded, the first four rows under "Roofing" were still a
+       * cordless drill, a torpedo level, a voltage tester and a radio, with the
+       * eighteen written for him below them. Every count passed. The page still
+       * opened on somebody else's bag. Narrow tag list = written for this trade,
+       * so it leads; the sort is stable, so file order survives inside each band. */
+      own.sort(function (a, b) { return a.t.length - b.t.length; });
+      return { uni: uni, own: own, away: away };
+    }
+
+    /* "in your bag" / "to pass on" — the surface already names its own picks, so
+     * a third surface gets this section with no config of its own. */
+    var awayTitle = function () { return "Also " + cfg.pickLabel; };
+    var awayTrades = function (rows) {
+      var seen = [];
+      rows.forEach(function (g) {
+        g.t.forEach(function (sl) {
+          if (sl !== "universal" && seen.indexOf(sl) === -1) seen.push(sl);
+        });
+      });
+      return seen.map(function (sl) { var t = tradeOf(sl); return t ? t.name : sl; });
+    };
+
     /* ---- what shows for the current view: the universal floor is ALWAYS shown,
      * because that is the whole thesis of a commons — what every trade shares is
      * the point, and a plumber who only sees plumbing learned nothing. ---- */
     function sectionsFor(v) {
-      var uni = ROWS.filter(function (g) { return g.t.indexOf("universal") !== -1; });
-      var out = [{ slug: "universal", title: cfg.floor.title, note: cfg.floor.note, items: uni }];
+      var p = partition(v);
+      var out = [{ slug: "universal", title: cfg.floor.title, note: cfg.floor.note, items: p.uni }];
       if (v !== "universal") {
-        var t = TRADES.filter(function (x) { return x.slug === v; })[0];
-        var own = ROWS.filter(function (g) {
-          return g.t.indexOf(v) !== -1 && g.t.indexOf("universal") === -1;
-        });
+        var t = tradeOf(v);
         out.push({
           slug: v,
           title: (t ? t.name : v) + " " + cfg.own.suffix,
           note: cfg.own.note,
-          items: own
+          items: p.own
+        });
+      }
+      if (p.away.length) {
+        out.push({
+          slug: "away",
+          title: awayTitle(),
+          /* Names what the rows ARE, never where he was standing when he ticked
+           * them: he picked under ONE chip, and a row can carry several trades.
+           * Getting that backwards would be a smaller version of the same lie
+           * this section exists to fix. */
+          note: "These belong to " + awayTrades(p.away).join(", ") +
+                ". They ride in the list you copy, and this is where you take them back out.",
+          items: p.away
         });
       }
       return out;
@@ -222,25 +284,29 @@ window.Commons = (function () {
     /* ---- the handoff: the reason this is a tool and not a blog post. What a
      * journeyman actually does with this is paste it to somebody. ---- */
     function pickedText() {
-      var chosen = ROWS.filter(function (g) { return picked(g.id); });
-      var t = TRADES.filter(function (x) { return x.slug === view; })[0];
-      var named = t && t.slug !== "universal";
+      var mine = function (a) { return a.filter(function (g) { return picked(g.id); }); };
+      var p = partition(view);
+      var uni = mine(p.uni), own = mine(p.own), away = p.away; /* away is picks-only already */
+      var t = tradeOf(view);
+      /* The trade name goes in the title only when a row in the list is actually
+       * that trade's. Stamping the open chip on a list containing none of its
+       * rows is the same lie one line higher up. */
+      var named = t && t.slug !== "universal" && own.length > 0;
       var lines = [cfg.copy.title + (named ? " — " + t.name.toUpperCase() : ""), ""];
 
-      var uni = chosen.filter(function (g) { return g.t.indexOf("universal") !== -1; });
-      var rest = chosen.filter(function (g) { return g.t.indexOf("universal") === -1; });
+      var block = function (head, rows) {
+        if (!rows.length) return;
+        if (lines[lines.length - 1] !== "") lines.push("");
+        lines.push(head);
+        rows.forEach(function (g) { lines.push(cfg.copy.line(g)); });
+      };
 
-      if (uni.length) {
-        lines.push("EVERY TRADE");
-        uni.forEach(function (g) { lines.push(cfg.copy.line(g)); });
-      }
-      if (rest.length) {
-        if (uni.length) lines.push("");
-        lines.push(named ? t.name.toUpperCase() : "TRADE-SPECIFIC");
-        rest.forEach(function (g) { lines.push(cfg.copy.line(g)); });
-      }
+      block("EVERY TRADE", uni);
+      block(named ? t.name.toUpperCase() : "TRADE-SPECIFIC", own);
+      block((awayTitle() + " — " + awayTrades(away).join(", ")).toUpperCase(), away);
+
       lines.push("");
-      lines.push(cfg.copy.footer(chosen.length));
+      lines.push(cfg.copy.footer(uni.length + own.length + away.length));
       return lines.join("\n");
     }
 

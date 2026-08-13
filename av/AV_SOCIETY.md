@@ -170,6 +170,17 @@ own paperwork/communication friction. Mechanics:
   config (name · slug · palette · registry) rather than fork it — one runtime, many
   trades — and stage each `<trade>/` into the Pages artifact + assert it, exactly as
   `av/` is. A top-level trades hub lists them.
+- **AND THE COMMONS, IN THE SAME CYCLE — this list not naming it is how the hole got
+  dug twice.** A new trade is not a directory, it is a MEMBERSHIP: `commons/commons.js`
+  `COMMONS_TRADES` gets the chip, and `commons/gear.js` + `commons/tips.js` get rows
+  somebody actually wrote for that trade, seeded by the same adversarial fan-out that
+  seeded everyone else. Framing shipped 2026-08-09 with no chip at all; roofing shipped
+  2026-08-12 WITH a chip and zero rows, and was swept into three universal rows by an
+  unrelated commit four days later, which made it look served. Both were caught long
+  after the trade was live, by somebody counting — never by the trade's own launch. The
+  deploy now refuses a chip carrying fewer than six rows written for it, so this can
+  fail the build instead of failing a roofer; that gate is the floor, and seeding the
+  trade properly is the job.
 - **Same bar, same safety, same ledger.** Every trade's tools face the identical
   "would a real &lt;trade&gt; pro use this to send their boss something, FAST?" test.
   The cross-trade demand DATA stays private (the moat); the pages stay open.
@@ -637,6 +648,46 @@ a new data class, so the rules are explicit and not negotiable:
   is WEIGHT for ranking a correction and CONTEXT for building it. It is never a login, never
   required, and — like the rest of the queue — **never published**.
 
+**THE RUNGS, RANKED — and why the two the brief numbered are not the top two (2026-08-13).**
+A three-lens panel scored the unbuilt parts and all three independently attacked the ordering:
+*"it is in the founding brief" is not a rail.* The two unbuilt named parts are the two highest
+-liability things on the site, and the candidate that is **not** in the brief scored above both.
+1. **SEED EVERY CHIP FIRST.** A commons surface is offered from every other one, so a new
+   surface handed to a trade with no rows multiplies the hole instead of filling it. No fourth
+   surface while any chip is thin. (This is what shipped 2026-08-13; roofing was at zero.)
+2. **ASK FOR IT RIGHT — the cross-trade name table.** Scored 7-8 by two lenses; the only
+   candidate a journeyman said he would forward. **Its rails are already written, so build it
+   from these and do not re-derive them:** a row is ONE OBJECT under every name the field says
+   for it, **never two names joined by a slash** — if the things either side would not both
+   satisfy the same order, they are two rows. The plain generic prints first and is the name to
+   ORDER by; a trademark is labelled as what people *say*, never as what to write down
+   (`electrical/items.js` already set that precedent, and §SCARS "half a trade's vocabulary is
+   somebody's trademark" is why it cannot be skipped). Every name carries WHO SAYS IT, and a
+   regional word prints as *you might hear*, never as *it is called*. No row may separate
+   near-names by size, depth, gang or rating — a name that needs a number to be right is
+   certified data we do not ship. **The invisible failure to design against:** the table is
+   evidence about the WORD and will be read as authority about the OBJECT; the fix is in the
+   data shape (object-first, "same object" declared per row and checkable by a reviewer), never
+   in the copy. The strongest objection on record, from the lens that voted it down: this
+   project has met the translation problem twice and solved it both times as ROUTING INSIDE A
+   TOOL — `av/items.js` writes its asks in the receiver's vocabulary, `docs.js` carries `aka`
+   so a man finds his write-up by whatever his shop calls it — and a synonym that only sits in
+   a list does no work. Answer that objection in the build or do not build it.
+3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
+   "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
+   not a tutorial; what is left is an EXPLAINER (what a thing is and why it exists), which is
+   shippable and is a different, smaller promise. And the teaching layer already ships where it
+   works: `docs.js` teaches at the moment of use, and a second copy drifts.
+4. **FIELD PHOTOS — deferred a third time, on purpose and with a harder reason.** There is no
+   ingest: `shared/feedback.js` is a text-only POST with no file input. Client-side EXIF
+   stripping and resizing are unenforceable by construction — the endpoint is reachable without
+   our form — so the rail as written cannot be delivered in a browser. Moderation-before-render
+   prevents publication and does nothing about CUSTODY, and custody is the liability: a jobsite
+   photo carries a stranger's address, a face, a plate. A photo of the real item also puts a
+   logo on the one page whose credibility claim is the absence of brands. If photos ever ship,
+   v1 is **our own photography, committed, with no upload button at all** — and it must be
+   named as that, not as "part 2 delivered".
+
 
 
 ## THE INTERFACE — the axis a single-actor tool cannot reach (opened 2026-08-05)
@@ -908,6 +959,43 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A GUARD WRITTEN TO THE LETTER OF THE LAST SCAR IS SATISFIED BY THE NEXT ACCIDENT
+  (2026-08-13).** Framing shipped 2026-08-09 with no commons chip at all; the cycle that
+  found it wrote a gate — *"every trade chip lands on real content"* — and the gate asked
+  `toBeGreaterThan(0)`. Roofing then shipped 2026-08-12 **with** a chip and **zero rows**,
+  and four days later an unrelated commit widened three universal rows to the eight
+  construction trades and swept roofing in. Three. Greater than zero. Green. The deploy
+  agreed, because it counted the file (`n_gear >= 20`) and a file-wide total is not
+  coverage. So a roofer tapped his own chip and was told his trade's gear is a cordless
+  drill, a torpedo level and a non-contact voltage tester — **not one row in the entire
+  commons had ever been written for him.** THE RULE: a gate must assert the THING, not the
+  symptom the last defect happened to show. "Has rows" was the symptom; **"has rows somebody
+  wrote for it"** is the thing, and it is measurable — a row written for a trade is tagged
+  NARROWLY, a row a trade was swept into carries the whole board. Every honest trade carries
+  7–22 such rows; roofing carried 0 on both surfaces. Corollary, and it is the expensive
+  half: **a launch checklist that does not name a shared surface will not update it.**
+  §TRADE EXPANSION listed the directory, the runtime, the well, the roster, the ledger and
+  the Pages assertion, and never once said "and the commons" — so two trades in a row
+  joined the program without joining it. Fixed in both places: the checklist names it, and
+  the deploy refuses a chip with fewer than six rows written for it.
+
+- **THE FILTER YOU ARE LOOKING THROUGH IS NOT THE PROVENANCE OF WHAT YOU PICKED
+  (2026-08-13).** `commons/commons.js` rendered the floor plus your open chip, but the
+  document stamped **that chip** on every pick you were carrying. Tick three rows under
+  Electrical, tap Plumbing, and Copy produced `WHAT'S IN THE BAG — PLUMBING` over glow rods,
+  lineman's pliers and wire strippers — the page telling somebody an electrician's tools
+  were a plumber's. Two more defects lived in the same state: the picks stopped rendering
+  but kept COUNTING, so the dock read "3 in your bag" over a screen with nothing ticked, and
+  there was **no way to reach them to take them back out.** THE RULE: **one partition
+  function, read by both the screen and the document** — they had two, and two will always
+  drift. A label may only claim what the rows themselves carry: the trade name goes in the
+  title only when a row in the list is actually that trade's, and anything outside the
+  current view rides in its own named section, on screen and in the text. And the state was
+  invisible to every gate we own, because `mobile-watertight` loads pages fresh and
+  `commons-mobile` never leaves the chip it ticked on — **a gate that only ever grades the
+  empty bag is grading a page nobody has.** `tools/toolkit-gates/commons-bag.mjs` now drives
+  it: 18/18 fail against the shipped engine, 18/18 pass against the fix.
 
 - **`.sub` ON A STRING IS NOT `undefined` — IT IS `String.prototype.sub`, AND IT IS TRUTHY
   (2026-08-13).** `shared/note.js` `buildTicks()` reads `var name = typeof it === "string" ?

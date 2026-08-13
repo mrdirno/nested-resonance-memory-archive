@@ -30,6 +30,12 @@ import { test, expect, type Page } from '@playwright/test';
 
 const WIDTHS = [320, 360, 390, 430];
 
+/** A chip is an offer. These two numbers are what makes the offer true, and they
+ *  are kept in step with the same pair in .github/workflows/deploy_bridge.yml —
+ *  the browser catches it at review, the deploy refuses to publish it. */
+const WRITTEN_FLOOR = 6; // every honest trade carries 7-22 rows of its own
+const NARROW_TAGS = 3; // tagged to at most three trades = written for one of them
+
 interface Surface {
   /** RELATIVE, deliberately — the deployed site lives under a repo path
    *  (/nested-resonance-memory-archive/) and a leading slash resolves against
@@ -202,9 +208,31 @@ for (const S of SURFACES) {
 
       for (const label of trades) {
         await page.locator('.chip', { hasText: label }).first().click();
+        // The floor plus this trade's own section. A third section exists only
+        // when you are carrying picks from another trade, and this test picks
+        // nothing.
         await expect(page.locator('.sec'), `"${label}" opened onto nothing`).toHaveCount(2);
-        const n = await page.locator('.sec').nth(1).locator('.item').count();
+        const own = page.locator('.sec').nth(1);
+        const n = await own.locator('.item').count();
         expect(n, `"${label}" has a chip and no rows of its own`).toBeGreaterThan(0);
+
+        // AND THE ROWS WERE WRITTEN FOR HIM. `> 0` above was green the whole
+        // time roofing had a chip and nothing behind it: its three rows were
+        // universal rows widened to the eight construction trades by an
+        // unrelated commit, so a roofer was told his trade's gear is a cordless
+        // drill, a torpedo level and a non-contact voltage tester. This gate was
+        // authored against exactly that defect on framing and still missed it,
+        // because it counted rows instead of asking who they were for.
+        // A row written for a trade is tagged NARROWLY — the tag chips are on
+        // screen, so the browser can see the difference the count could not.
+        let written = 0;
+        for (const row of await own.locator('.item').all()) {
+          if ((await row.locator('.tag').count()) <= NARROW_TAGS) written++;
+        }
+        expect(
+          written,
+          `"${label}" shows ${n} rows and only ${written} were written for it — the rest are wide-tagged rows it was swept into`,
+        ).toBeGreaterThanOrEqual(WRITTEN_FLOOR);
       }
     });
 

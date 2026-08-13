@@ -224,6 +224,45 @@ jobs:
           n_tips=$(grep -c 'id:' HELIOS-BRIDGE/dist/commons/tips.js || true)
           [ "$n_tips" -ge 20 ] || { echo "FAIL: commons/tips.js carries only $n_tips tips — an empty commons is not a commons"; exit 1; }
 
+          # EVERY CHIP IS BACKED BY ROWS SOMEBODY WROTE FOR THAT TRADE — and the
+          # two asserts above are exactly why this one had to be written.
+          #
+          # Roofing shipped as trade #8 with a chip here and NOTHING behind it.
+          # The file-wide floors were green (102 and 114), and the browser gate
+          # asked only for "more than zero rows of its own" — which was also
+          # green, because an unrelated commit had widened three universal rows
+          # to the eight construction trades and swept roofing in by accident.
+          # For four days a roofer tapped his chip and was told his trade's gear
+          # is a cordless drill, a torpedo level and a non-contact voltage tester.
+          # A guard written to the letter of the last scar, satisfied by an
+          # accident. A total is not coverage, and "> 0" is not a bar.
+          #
+          # A row WRITTEN FOR a trade is tagged NARROWLY; a row a trade was swept
+          # into carries the whole board. So the measure is specificity, not
+          # count, and the trade list is parsed from the shipped engine so a trade
+          # added next month is covered the day it lands with no edit here.
+          node -e '
+            const fs = require("fs");
+            const D = "HELIOS-BRIDGE/dist/commons/";
+            const load = (f, k) => { const w = {}; (new Function("window", fs.readFileSync(D + f, "utf8")))(w); return w[k]; };
+            const trades = load("commons.js", "COMMONS_TRADES").map(t => t.slug).filter(s => s !== "universal");
+            const FLOOR = 6;              /* every honest trade carries 7-22; roofing carried 0 */
+            const NARROW = 3;             /* tagged to at most three trades = written for one of them */
+            let bad = 0;
+            for (const [file, key, noun] of [["gear.js","COMMONS_GEAR","gear"],["tips.js","COMMONS_TIPS","tips"]]) {
+              const rows = load(file, key);
+              for (const t of trades) {
+                const own = rows.filter(r => r.t.includes(t) && !r.t.includes("universal"));
+                const written = own.filter(r => r.t.length <= NARROW);
+                if (written.length < FLOOR) {
+                  console.error(`FAIL: ${t} has a chip on the commons and only ${written.length} ${noun} row(s) written for it (${own.length} carry the tag). A chip with nothing behind it is a lie told to one trade.`);
+                  bad++;
+                }
+              }
+            }
+            process.exit(bad ? 1 : 0);
+          ' || exit 1
+
           # EVERY COMMONS SURFACE IS OFFERED FROM EVERY OTHER ONE. commons.js
           # renders the rail from ONE list, so a surface added there with no file
           # behind it is a dead link on every commons page at once — the same shape

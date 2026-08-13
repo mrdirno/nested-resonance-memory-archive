@@ -194,8 +194,10 @@ window.COMMONS_GEAR = [
     w: "Lays out and flags on dirt and slab so nobody claims surprise." },
   { id: "punch-tape", n: "Punch tape (blue painter's tape)", t: ["gc"],
     w: "Flags the defect where the trade finds it, no explanation needed." },
-  { id: "two-way-radio", n: "Two-way radio", t: ["gc"],
-    w: "Reaches the crane, the gate and every foreman without waiting on bars." },
+  { id: "two-way-radio", n: "Two-way radio", t: ["gc", "roofing"],
+    /* "every foreman" was the super's word; a man on a deck who cannot see the
+       ground needs this more than the super does. */
+    w: "Reaches the crane, the hoist and the gate without waiting on bars." },
 
   /* ---- framing & drywall -------------------------------------------------
    * Added 2026-08-11. The trade shipped a full toolkit on 2026-08-09 and this
@@ -206,11 +208,15 @@ window.COMMONS_GEAR = [
    * just a trade quietly absent from the commons. */
   { id: "rafter-square", n: "Rafter square", t: ["framing"],
     w: "Squares a cut and steps out an angle without doing the math twice." },
-  { id: "chalk-line", n: "Chalk line (chalk box)", t: ["framing"],
-    w: "Snap blue — red is permanent, and it comes back through the painter's finish." },
+  { id: "chalk-line", n: "Chalk line (chalk box)", t: ["framing", "roofing"],
+    /* Was "Snap blue — red is permanent…the painter's finish": an instruction, and
+       BACKWARDS for the trade that snaps more line than any other. A roofer has no
+       painter, and blue will not survive dew on an open deck. States the trade-off
+       instead of prescribing one side of it. */
+    w: "Permanent chalk comes back through whatever goes over it. That is the whole decision." },
   { id: "dry-line", n: "String line (dry line)", t: ["framing"],
     w: "A wall can read plumb at every stud and still be bowed. The line shows it." },
-  { id: "aviation-snips", n: "Aviation snips, left, right & straight", t: ["framing"],
+  { id: "aviation-snips", n: "Aviation snips, left, right & straight", t: ["framing", "roofing"],
     w: "Carry all three. The wrong pair curls the cut into your hand and burrs the edge." },
   { id: "stud-crimper", n: "Stud crimper", t: ["framing"],
     w: "Locks stud into track with nothing left proud on the flange for board to rock on." },
@@ -242,8 +248,73 @@ window.COMMONS_GEAR = [
     w: "Reaches the ceiling and the top of the wall without dragging a bench around." },
   { id: "rake-light", n: "Work light on a stand", t: ["framing"],
     w: "Rake it across the wall and you find the ridges before the painter does." },
-  { id: "locking-pliers", n: "Locking pliers", t: ["framing"],
+  { id: "locking-pliers", n: "Locking pliers", t: ["framing", "roofing"],
     w: "Holds two pieces of steel together while your other hand drives the screw." },
+
+  /* ---- roofing ------------------------------------------------------------
+     Added 2026-08-13, and later than framing's late. Roofing shipped a full
+     toolkit on 2026-08-12 WITH a chip on this page and zero rows behind it, and
+     four days later an unrelated commit widened three universal rows to the eight
+     construction trades and swept it in — so the ship gate, which asks only for
+     "more than zero rows of its own", went green on an accident. A roofer tapped
+     his own chip and was told his trade's gear is a cordless drill, a torpedo
+     level and a non-contact voltage tester. §SCARS 2026-08-13.
+
+     BOTH HALVES, because `roofing/items.js` makes that an invariant: commercial
+     low-slope (welder, probe, stand-up gun, ISO knife, cut saw, torch) and
+     residential steep-slope (shovel, flat bar, hatchet, magnet), metal on both.
+     The first seed came back commercial twice over — a bag with no hammer in it —
+     and the journeyman lens caught it.
+
+     WHAT THE LENSES KILLED, so nobody re-proposes it: the shingle ripper (a slate
+     tool; on asphalt every man reaches for the flat bar he already carries), the
+     core cutter (the consultant's test cut, not the crew's — and a row telling a
+     crew to cut a hole in somebody's warranted roof is the wrong row), the seam
+     roller as its own row (folded into the welder it never leaves), and two
+     re-tags: keel, because a roofer marks with the chalk box and the paint can,
+     and the moisture meter, which is the ncvt breach wearing a tag instead of a
+     verb — "the meter says dry" is exactly the claim that leaves saturated board
+     under a new roof. Everything the height rail took is listed in §SCARS: harness,
+     jacks, ladder hooks, boots, the deck probe. Nothing on this page holds a man.
+
+     THE HATCHET SHIPS WITHOUT ITS GAUGE. The gauge's whole value is an exposure,
+     and this file prints no exposure. A row whose reason cannot be stated is not a
+     row; a row whose reason must be stated as a number is somebody else's file. */
+  { id: "tear-off-shovel", n: "Tear-off shovel (roofing spade)", t: ["roofing"],
+    w: "The notches bring the nails up with the course. A square shovel leaves them." },
+  { id: "flat-bar", n: "Flat bar", t: ["roofing"],
+    w: "Pulls the nail the shovel walked past, and lifts a course to get under." },
+  { id: "roofing-hatchet", n: "Roofing hatchet or hammer", t: ["roofing"],
+    w: "Hammer, blade and nail puller on one handle. Your hand never leaves it." },
+  { id: "hook-blades", n: "Hook blades", t: ["roofing"],
+    w: "Cuts on the pull through shingle and membrane, without the tip finding the deck." },
+  { id: "hand-seamer", n: "Hand seamer", t: ["roofing"],
+    w: "Bends and locks metal up on the roof, not down at the brake." },
+  { id: "hand-riveter", n: "Hand riveter", t: ["roofing"],
+    w: "Holds corners and splices in light metal where a screw has nothing to bite." },
+  { id: "standup-gun", n: "Stand-up screw gun", t: ["roofing"],
+    w: "Drives plates standing up instead of crawling a whole section on your knees." },
+  { id: "iso-knife", n: "Insulation knife (ISO knife)", t: ["roofing"],
+    w: "Cuts the full thickness around a curb. A utility knife only scores and snaps." },
+  /* The welder and the roller only ever exist together — same call as the solder
+     torch and the compression tool, which ship as one row each. */
+  { id: "hand-welder", n: "Hot-air hand welder and seam roller", t: ["roofing"],
+    w: "The automatic runs the field. The details are yours, and heat alone doesn't close a seam." },
+  /* It finds skips. It does NOT say a seam is good — the non-contact tester says
+     "maybe hot" and never "dead", and this is the same sentence one trade over. */
+  { id: "seam-probe", n: "Seam probe", t: ["roofing"],
+    w: "Catches skips your eye slides past. Finding none doesn't make the seam good." },
+  { id: "roof-cutter", n: "Roof cutter (cut saw)", t: ["roofing"],
+    w: "Cuts the old roof into strips so it comes off in pieces, not acres." },
+  /* Single-ply is WELDED; mod bit is TORCHED. The seed said "mod bit gets welded
+     with flame" and that one word is how a roofer knows who wrote a page. */
+  { id: "roofing-torch", n: "Roofing torch kit", t: ["roofing"],
+    w: "Torch-down mod bit — the torch, the hose and the regulator ride together." },
+  { id: "rolling-magnet", n: "Rolling magnet", t: ["roofing"],
+    w: "Tear-off throws nails into grass and driveway. You find them or the tires do." },
+  /* Says an unweighted tarp travels. Never says a weighted one stays. */
+  { id: "tarps", n: "Tarps and the weight for them", t: ["roofing", "gc"],
+    w: "Weather doesn't wait on the forecast. A tarp with nothing on it travels." },
 
   /* ---- creative / video: the one-person shop's bag -------------------------
      Trade #9, and the first bag on this page that is not a construction bag.

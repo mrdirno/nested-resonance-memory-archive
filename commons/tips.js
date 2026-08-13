@@ -193,7 +193,7 @@ window.COMMONS_TIPS = [
     w: "The screw goes through your homerun or your PEX on a day you're not there, and it turns up at trim in a painted wall." },
 
   /* ---- plumbing ---------------------------------------------------------- */
-  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage"],
+  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"],
     n: "Treat a reinspection as a lost week, not a lost hour.",
     w: "You go back on the end of his list, and every trade stacked behind you sits." },
   { id: "count-test-plugs", t: ["plumbing"],
@@ -401,6 +401,65 @@ window.COMMONS_TIPS = [
   { id: "wet-frame-pops", t: ["framing"],
     n: "Check the lumber's dried out before you board over it.",
     w: "Wet framing shrinks once the heat comes on, and every fastener pops through the paint." },
+
+  /* ---- roofing ------------------------------------------------------------
+     Added 2026-08-13. Roofing had a chip on this page from 2026-08-12 and not one
+     tip written for it — see gear.js for how that stayed green, and §SCARS.
+
+     THE HEIGHT RAIL DID MORE CUTTING HERE THAN ON ANY OTHER TRADE, and the pattern
+     worth naming is not the obvious one. Almost nothing proposed said "be safe";
+     what it did was PRICE A SAFETY EXPOSURE AS MONEY — a shutdown, a callback, a
+     claim — which is worse than an honest safety tip, because it teaches a reader
+     to weigh a hazard as a cost he can decide to eat. Killed on exactly that:
+     the fresh-air intakes (people breathing what you run, priced as your lost
+     section — unsalvageable, no rewrite exists), and a bare foot in the grass
+     itemised beside a tire and a mower blade. The subtlest one survived a rewrite
+     rather than dying: "find out what the deck is" had its reason pointed at a
+     truck driving for material, and "what is the deck under this section" is the
+     fall-through question — a reader who prices that delay and eats it has been
+     taught by this page to skip the check and walk the section. It now points at
+     the approved submittal, which is where the number lives anyway.
+
+     Also killed: three re-tags whose SENTENCES belong to other trades even though
+     the judgement travels (a roofer has no crate, no rough and no trim day, and
+     "chase it uphill along the pipe and the joist" points him at the wrong
+     geometry entirely — roof water runs the deck and the insulation), and two rows
+     that collided inside this trade's own lane, since a roofer already reads the
+     universal floor: a second end-of-day cleanup row, and a tear-off-order row
+     that restated "don't start the difficult piece in the last hour". */
+  { id: "ask-when-it-leaks", t: ["roofing"],
+    n: "Ask when it leaks before you go up.",
+    w: "Driven rain, a day later, and only in the cold are three different leaks, and you'll spend the day at the wrong end of the building." },
+  { id: "water-test-low-first", t: ["roofing"],
+    n: "Wet one area at a time, starting at the low end.",
+    w: "Wet the whole roof at once and you've proven nothing — and you can't take it back off, so now you're waiting on it to dry." },
+  { id: "leave-the-strainer-on", t: ["roofing"],
+    n: "Don't pull a strainer to make the water move faster.",
+    w: "Tear-off grit goes down the leader and stops somewhere inside the building nobody can reach, and the next storm comes out of a ceiling." },
+  { id: "tell-below-before-tearoff", t: ["roofing", "gc"],
+    n: "Before you open a section, tell whoever works under it.",
+    w: "Rust and grit come out of the deck and the light fixtures all day, and the complaint is never water — it's dust in somebody's stock." },
+  { id: "open-to-what-landed", t: ["roofing"],
+    n: "Size the day's opening off the material already on the roof, not what's on the truck.",
+    w: "A load that slides a day turns your tear-off into a night of temporary work, and you'll do that section twice." },
+  { id: "cuts-low-and-at-walls", t: ["roofing"],
+    n: "Take your test cuts low and against the walls, not in the middle of the field.",
+    w: "Wet insulation and the extra layer sit low and at the walls — cut only the dry middle and you find them after your number's in." },
+  { id: "what-deck-is-it", t: ["roofing"],
+    n: "Find out what the deck is under every section, not just the one you cut open.",
+    w: "One building holds more than one deck — the original, the addition, the patch — and your approved submittal was written for one of them." },
+  { id: "tie-in-early", t: ["roofing"],
+    n: "Cut the tie-in to the existing roof open early, not on the day you have to make it.",
+    w: "The old assembly isn't on any drawing, and the answer comes from a consultant or the manufacturer's rep — on their schedule, not yours." },
+  { id: "who-covers-your-flashing", t: ["roofing"],
+    n: "Find out who sets what goes over your flashing at every wall, and when he's coming.",
+    w: "Your half is done and open at the same time, and if he comes next month every rain in between gets filed under the roofer." },
+  { id: "weather-call-owner", t: ["roofing"],
+    n: "Find out who makes the weather call and when he makes it.",
+    w: "Settle it before the truck rolls, or it gets made late by whoever wants the day — and it's your deck that's open." },
+  { id: "magnet-after-the-dumpster", t: ["roofing"],
+    n: "Run the magnet again the morning after the dumpster leaves, not the night before.",
+    w: "The truck drags out whatever was under it, and on a house the callback is never the roof — it's a tire or a mower blade." },
 
   /* ---- creative / video ---------------------------------------------------
      Non-obvious by the same bar as every other trade: if a first-year already
