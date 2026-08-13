@@ -179,3 +179,111 @@ window.TOOLKIT_ITEMS.tag = {
     { name: "Anything their legal or brand team comes back with" }
   ]
 };
+
+/* ── STILL WAITING ON (shape #3 — shared/rowlog.js) ─────────────────────────
+ * §CREATIVE's ranked roster, rung 3, and this trade's FIRST row log. Notes Back
+ * answers their list; That's Another Round names what they added. Neither of
+ * them covers the week where nothing is moving because the other side has not
+ * sent something, which is where a one-person shop actually loses days.
+ *
+ * IT IS THE CHASE, AND THE CHASE IS A LIST — §THE GATE. "Any update on the
+ * logo?" is a paragraph, and it is also why the fourth one gets ignored: it
+ * arrives with no history, no count and nothing to act on. Six lines with a date
+ * on each is a different object, and the client can answer it in one reply.
+ *
+ * THE LINE EVERY VERSION OF THIS MESSAGE LEAVES OUT is not what you are waiting
+ * on — everyone writes that. It is WHAT IT COSTS WHEN THEIR HALF ISN'T THERE.
+ * A working one-person shop put it on the panel's record in those words: every
+ * chase message ever written lists what the client owes, and not one in fifty
+ * says what stops. So `holds` is a first-class axis here, it is in the document
+ * on every row, and the escalation filter is built out of it. "Still waiting on
+ * the logo" is nagging; "still waiting on the logo, the end card can't be built
+ * without it, and that's the last thing before Friday" is a reason to act.
+ *
+ * NO DAY MATH, DELIBERATELY. The obvious feature is "asked Aug 4 (9 days ago)"
+ * and it is refused twice over: parsing "on the call Tuesday" into a date is the
+ * page guessing, and an elapsed-day count printed at a client is the passive-
+ * aggressive register this trade's tone rail exists to prevent. He types when he
+ * asked, in his words, and the page prints it back untouched (§SAFETY — the page
+ * never edits a value it did not author). The only arithmetic is counting the
+ * rows he entered.
+ *
+ * NOTHING HERE IS A BILL. A chase list that reads as a claim for money is the
+ * one version of this message that costs the relationship it was sent to
+ * protect, so the closing says so out loud and there is no price, no rate, no
+ * day count and no fee anywhere on the page.
+ */
+window.TOOLKIT_WAITING = {
+  toolName: "Still Waiting On",
+  eyebrow: "Creative · what their side still owes you → the client",
+  lede: "The things you can’t finish without, in one list with the date you asked on each. Send it as one short message instead of a fourth “any update?” — and keep the ones already in off it.",
+
+  warn: "<b>This is a list of what you’re waiting on, and nothing else.</b> There’s no price on it, no day count, no fee and no change to what you agreed — whatever you use to invoice owns all of that. <b>It lives in this browser, on this device, and nowhere else</b>: nothing typed here is sent anywhere, which also means a new phone starts empty. The spreadsheet copy is your backup, and you can paste it back in.",
+
+  /* WHAT YOU'RE WAITING ON. The seed is the list the panel named, and it is a
+     JOG, not a menu — the field is a write-in first and these are taps under it.
+     LICENCE AND RELEASE APPEAR HERE AS ITEM NAMES AND NOWHERE ELSE: naming the
+     thing he is waiting for is not a statement about what it covers. No brand,
+     no platform, no service is named anywhere in this list. */
+  items: [
+    "The logo — the real vector, not one off the website",
+    "Brand fonts",
+    "Brand colors — the hex codes",
+    "Approved copy",
+    "The final VO script",
+    "Names and titles for the lower thirds",
+    "The legal / disclaimer line",
+    "Signed releases from everyone on camera",
+    "The music pick",
+    "Product or samples on site",
+    "Photos or footage from your side",
+    "Their graphics from whoever made them",
+    "Sign-off on the captions",
+    "Access — who unlocks, where I park",
+    "Who can say yes on the day",
+    "Sign-off from whoever has the final say"
+  ],
+
+  /* WHERE IT STANDS — the ladder, and it is three rungs because a fourth is a
+     mood. Position is meaning, same law as the answer ladder: [0] nothing back,
+     [1] a promise, [2] settled. The page reads positions, not words. */
+  states: ["Still waiting", "They said it’s coming", "In hand"],
+
+  /* WHAT IT'S HOLDING UP. The half of the message nobody writes. Every entry is
+     a piece of HIS OWN work that cannot move — never a claim about their side. */
+  holds: [
+    "Starting the edit",
+    "The first cut",
+    "The end card",
+    "The lower thirds",
+    "The graphics",
+    "The mix",
+    "The grade",
+    "The captions",
+    "The other ratios and cutdowns",
+    "Sending it to you",
+    "The shoot day itself"
+  ],
+
+  /* FLAGS, and they are a separate toggle from the ladder on purpose: a thing
+     can be waiting AND be the one that moves the date, and collapsing the two
+     loses which. Both are factual. Neither is a deadline threat. */
+  flags: ["This one first", "This is what moves the date"],
+
+  docSubject: "what I’m still waiting on",
+
+  opening: "Short list of what I’m still waiting on from your side. None of it is a problem yet — I just don’t want any of it to be the reason we slip.",
+
+  /* THE CLOSING ENDS IN AN OPTION, like every closing this trade ships. It asks
+     for the ONE thing a chase can actually get: which one is stuck, so he can
+     re-order his own week around it. */
+  closing: "If any of these are stuck on your end, tell me which one and I’ll work around it — some of them I can start without, and it’s much cheaper to know now than on the day.",
+  docBoundary: "That’s just what I’m waiting on, in my words. It isn’t a change to what we agreed and there’s no charge attached to it.",
+
+  phJob: "Northgate brand film",
+  phNext: "the next date on this — v2 to you Friday",
+  phFrom: "you / your shop",
+  phItem: "what you’re waiting on — then it’s a button",
+  phAsked: "Aug 4 — or “on the call Tuesday”",
+  phNote: "anything that makes it easier for them to find it"
+};

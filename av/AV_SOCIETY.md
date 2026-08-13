@@ -808,12 +808,16 @@ with revision rounds, and who is also their own producer.**
    change order belongs to whoever numbers it; this is the unnumbered, same-day heads-up.
 
 **THE RANKED ROSTER, off the same panel** — build in this order, re-ranked by wishes:
-3. **Still Waiting On** (row log) — the dated chase for what the client still owes (logo
-   vector, brand fonts and hex codes, approved copy, final VO script, disclaimer, names and
-   titles for lower thirds, signed releases). *Clipboard round-trip is a SHIP GATE on this
-   one:* no account and no server means the list lives in one browser, so pasting yesterday's
-   block back in must reload it, or the phone→laptop switch loses everything and it is
-   abandoned once. Four columns maximum on a phone.
+3. **Still Waiting On** (row log) — ✅ **SHIPPED 2026-08-13** (`still-waiting-on.html`).
+   The dated chase for what the client still owes. *Clipboard round-trip was named a SHIP
+   GATE here* — no account and no server means the list lives in one browser, so pasting
+   yesterday's block back must reload it or the phone→laptop switch loses everything and
+   the tool is abandoned once. **Satisfying that gate is what exposed the program-wide
+   defect** (§SCARS 2026-08-13): 21 row logs promised a backup the engine could not read.
+   The gate was met in `shared/rowlog.js`, so every trade got the restore, not just this
+   one. The build also added the axis the roster did not name — **what each thing is
+   holding up**, which the panel's field lens called the half of this message nobody
+   writes and the half that gets it answered.
 4. **Before I Export** (checklist → request) — the deliverable questions answered before the
    render. It wins by ASKING and never asserting. Ratios and frame rates are safe as *user
    picks* (geometry and arithmetic the trade says out loud); codecs, bitrates, resolutions
@@ -1699,6 +1703,75 @@ assertion reading STORAGE after the debounce window rather than watching the scr
 blank — the exact test that scar prescribes. **The fix is also the better tool:** the
 jobsite, the man's name and the account are their own sticky record now, untouched by
 Clear, because clearing a *list* must never cost him a field he already typed.
+
+### 2026-08-13 — THE BACKUP WE TOLD HIM TO KEEP COULD NOT BE PUT BACK
+Twenty-one shipped row-log pages across nine trades carried a sentence in their own
+words: *"the spreadsheet copy is every row with a tab between the columns, and it's
+also your backup: this lives in this browser on this phone."* `low-voltage/device-checkout`
+went further and gave advice — *"send yourself the spreadsheet copy at the end of a big
+day. A browser you haven't opened in a couple of weeks can clear it out, and a new phone
+definitely will."* Every word of that was TRUE, and every word of it was about KEEPING a
+copy. `shared/rowlog.js` had a TSV **writer and no reader**. There was no path, anywhere
+in the program, to put one back.
+
+**A backup you cannot restore is a receipt for one**, and the man who takes the advice is
+precisely the man who finds out on the new phone — with the walk already gone. It is the
+same class as the three pages that kept nothing (2026-08-13, above) and it hid the same
+way: the sentence describing the capability reads exactly like the capability.
+
+**The fix is a reader in the engine, so all twenty-one got it in one commit** and a page
+shipped next month gets it with no edit. It ADDS and never replaces — the restoring case
+is an empty list on a new device where add and replace are identical, and the other case
+is a list with work on it where replace destroys that work for a convenience. Clear stays
+the only control that can lose anything. It reads the HEADER rather than column order,
+because the file went to a spreadsheet and came back with columns moved, hidden and added.
+
+**AND THE SHEET IS WRITTEN IN LABELS WHILE THE ROW STORES VALUES.** The gate caught this
+on nine of the twenty-one: configs that keep `{v, label}` options store `"gc"` and print
+`"GC super"` through the column's own `value` function, so a reader writing the cell back
+raw filled the field with a label nothing matched. On `rough-in-request` — eight trades —
+the column that came back blank was **WHAT'S NEEDED**, which is the entire document. A
+picked axis now resolves through its own option list in both directions, in passes,
+because one axis gates another. The nine pages each name which field their computed
+column came from; a column that names no field is still dropped rather than guessed.
+
+### 2026-08-13 — A GOOD FEATURE WAS CALLING A THIRD PARTY ON EVERY PAGE LOAD
+An end-to-end drive of a new page reported one stray console error. The stray error was
+`shared/toolkit.js` doing `fetch("https://worldtimeapi.org/api/ip")` **on every page load
+of all 76 pages of all nine trades** — an unconsented request to somebody else's server,
+to an endpoint that is by design an IP lookup, fired from pages that tell a man in their
+own warn block that what he types stays in this browser. The rail is *no external API, no
+third-party CDN*.
+
+**It survived because everything about it looked right.** The intent was real and good —
+the clock on a job-site tablet can be wrong and a date is load-bearing on nearly every
+document this program makes. The request is invisible: the page renders correctly, no
+error is shown, and nobody reviewing a diff of a tool page would ever see it. **The
+second source in the same function already did the job**: a HEAD against our own origin
+returns a `Date` header from a clock the user is already trusting to serve the page. Same
+answer, one round trip shorter, discloses nothing that asking for the page did not.
+Removing the third party cost this program **no capability at all** — verified, not
+assumed: `av:date` still fires with the right date and the document still stamps it.
+
+That is the part worth keeping: the nicety that breaks a rail is never announced as one,
+and it is usually powering something you would defend. So the rule stopped being a
+sentence — `tools/toolkit-gates/no-third-party.mjs` loads all 76 pages with nothing
+touched and fails on any request that leaves the origin.
+
+### 2026-08-13 — TWO GATES, TWO PAGE SETS, AND THE PAGES IN THE GAP
+`rowlog-commit-merge` reported `could not add a row` on `roofing/whats-open.html` — a
+SHIPPED page — and had been doing so since that page launched. Two blind spots stacked:
+its filler dispatched `input` but never `blur`, so a `learn` axis (whose real value lives
+in a hidden field written only by the blur handler) stayed empty; and its scope was
+`#rlAdd.closest('div')`, which resolves to `.rl-lead`, so a page whose required fields are
+the lead PLUS a select down in `.rl-grid` never got the select filled. Every page that
+passed happened to have all its required fields in the lead row — which is how a scope
+that narrow reported green for weeks. Both fixed; the gate now covers 21/21 and protects
+the page it had been silently skipping. **A gate that cannot drive a page is not covering
+it**, and "2 FAILURES" at the bottom of a run is only useful if somebody reads it.
+`no-third-party` was given `mobile-watertight`'s exact discovery for the same reason —
+two gates disagreeing about what "every page" means is how a page ends up green on the
+list nobody was looking at.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -2769,3 +2842,4 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
 - `2026-08-13` — **[AXIS:WELL]** **CREATIVE FIELD TOOLKIT — trade #9** shipped from wish `3204d77c`, the first family here that is not a construction trade and the first stood up by a wish rather than off the ladder · **8 trades / 53 tools → 9 trades / 55 tools**. A 3-lens judge panel returned BUILD_NARROWER unanimously and killed "creatives" as a framing; what ships serves the one-person shop that shoots and cuts. **Notes Back** (shape #3 — the round of client notes the review tool never saw, answered line by line, carrying a rung no construction kit has: THAT'S AN EXTRA) and **That's Another Round** (shape #2 — the same-day out-of-scope heads-up, no price, ends in a choice). Hue 288.0°, the exact midpoint of the only arc wider than 62°; 7.88 / 10.74 / 7.39 on the three contrast bars. **BACKPORT RIDER FIRED, three times:** the four answer rungs, the boundary sentence and the intake's first-line assumption all became DATA across all nine `answer-back` pages with the shipped wording as the default (verified: no sibling declares any of them, so the eight are behaviour-identical); `shared/note.js` `buildTicks` was fixed on both the render and copy paths where `.sub` on a string primitive resolved to `String.prototype.sub` and printed `function sub() { [native code] }` into a client-facing message; and six commons rows a camera bag makes false left the `universal` floor. Gate: 24/24 overflow assertions clean (4 pages × 320/360/390/430, populated and empty), zero site console errors, root font bumped to 20px still clean, the paste driven end to end — 5 rows verbatim with timecodes intact and the subject line restorable — and both documents copied and read for price/fee/invoice/signature leakage. Two blockers found by the browser that every static check passed, both fixed and re-gated before ship. Storefront: entry live, drift checker clean, contract rebuilt (9 trades, 55 tools, 4 personas bound). https://mrdirno.github.io/nested-resonance-memory-archive/creative/
 - `2026-08-13` — **[AXIS:WELL]** **THE WELL NOW OPENS ON THE PAGE YOU ARE STANDING ON**, from wish `da36b663` — *"has no wish it better button that users can use to make a wish"* · **before:** on all 73 tool pages of all 9 trades the bar's only CTA read "✦ WISH FOR A TOOL", the well opened on `kind=new_tool`, and `about_tool` was hidden and empty, so reporting a shipped tool broken cost four controls plus a dropdown hunt for the name of the page you were already on (measured live at `/av/cable-list.html`, not assumed) · **after:** on a TOOL page the CTA reads "✦ Wish it better", opens on `improve`, and arrives with `about_tool` already set to that page — one tap, then type; on a HUB or the Wall of Wishes nothing changes (`new_tool`, "✦ Wish for a tool"), because someone browsing a hub is shopping; the menu's "Wish for a tool" now says `new_tool` explicitly so a tool page can never lose the new-tool funnel by inheriting the page's default. **BACKPORT RIDER FIRED — structurally and by sweep:** the fix is 99 lines in `shared/toolkit.js`, the ONE runtime all nine trades load, so av · creative · electrical · framing · gc · hvac · low-voltage · plumbing · roofing landed in the same commit and were each asserted, not assumed (same-origin iframe probe, one tool page + hub/credits per trade); the sibling surfaces were swept too — `shared/feedback.js` already opened on the highest-ranked kind (`bug`) and needed nothing, which is where this refinement was borrowed FROM, and `commons` `areas` were checked against the 9 trades on disk and are complete. **FALSIFIABLE (EVO LOOP step c, written into the code):** if the `improve` default is right, improve+bug carrying an `about_tool` rise and new_tool wishes arrive from hubs; if the well goes quiet, or improve/bug name a tool the wisher was not on, the default is steering people instead of reading them — revert it. One defect caught by driving the real sheet that every static check passed: a user's explicit tool pick was silently replaced by the current page after a round trip through `new_tool`, which would have filed bug reports against the wrong tool (§SCARS 2026-08-13). Gate: `tools/toolkit-gates/mobile-watertight.mjs` 75 pages at 320/360/390/430px, default and bumped text, **0 failing**; the CTA got NARROWER, 161px → 149px. Out of lane and routed to P5 rather than acted on: the wish also names the Vibe Cards / founder page (persona500, not this repo) and asks whether a generator should be published at all instead of its output. https://mrdirno.github.io/nested-resonance-memory-archive/av/total-package.html
 - `2026-08-13` — **[AXIS:BACKPORT]** **THE THREE PAGES THAT KEPT NOTHING** · **before:** of 55 live tool pages, 52 kept what a man typed and **three kept nothing at all** — `av/consumables.html` (the page shape #1 was proved on), `plumbing/supply-house-order.html` and `av/report-builder.html` had no save of any kind, so a reload cost the whole walk, the whole order, or the paragraph of house rules he had just written. Not "debounce-only" — the scar `shared/checklist-request.js` already carries. **No save.** · **after:** all three keep the work, through one new shape-agnostic `shared/draft.js` and **not one pixel moved** on any page. **HOW IT HID FOR WEEKS, and it is the scar worth having:** the engine's own header says it was extracted from those two pages and names them again as pages it *drives*. It never drove either. **A comment that describes coverage answers the audit question before the audit reaches the disk** — corrected to say what is true, and the fork debt left ON the roster rather than paid by pretending a rewrite is a fix. Migrating the flagship onto the engine would have risked its layout (its qty+note sit on the row; the engine hides them behind `.cfg`) and lost four behaviours the engine has no equivalent for — filter, check-shown, per-category All, the n/total tally. The defect was the SAVE, so the save is what got extracted. **THE GATE CAUGHT THE SEQUEL:** Clear wiped the list but the header kept `snapshot()` non-null, so the debounce rewrote the record a quarter-second after the wipe — §SCARS 2026-08-04 *"clear must actually clear"*, rediscovered inside a brand-new engine. Job / name / account are a **separate sticky record Clear never touches** now, which is the fix and the better tool at once. Clear also removes write-in rows outright, so **"start from last list"** ships in the same change: the only button that destroys a list is the one that keeps a copy of it. **BACKPORT RIDER FIRED — swept, not assumed:** every other persisting surface checked for the same class — `gc/weather-day` and `hvac/repair-recommendation` already carry the flush triad, `shared/docspec.js` writes synchronously on every keystroke so it has no pending timer to lose, `shared/toolkit.js` only stores favourites on tap. The class was exactly these three. Gate: **40 browser assertions, green on file:// AND re-run GREEN AGAINST PRODUCTION** — a real `page.reload()` so `pagehide` and the flush are what is under test; Clear verified by reading STORAGE after the debounce window; a fresh device via a new context, never clear-then-reload; the restore proved name-keyed by putting a write-in mid-list and asserting no quantity shifted. `mobile-watertight` 75 pages × 320/360/390/430 × default and bumped text, **0 failing**, and the new control measured at 44px with zero overflow at every width. Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html
+- `2026-08-13` — **[AXIS:DEPTH]** **THE THIRD RUNG ON TRADE #9, AND THE BACKUP THAT COULD NOT BE PUT BACK** · **before:** `creative` was the thinnest kit on the board — 2 tools against 6–8 everywhere else, no row log at all, and the shape that covers "what the other side still owes you" missing from the one trade whose week is mostly that · **after:** **9 trades / 55 tools → 9 trades / 56 tools**, and `creative/still-waiting-on.html` ships as a CONFIG on `shared/rowlog.js` — zero new mechanism, which is the one-runtime-many-trades claim tested on the least construction-like trade there is. **THE PANEL DISPOSED OF ITS OWN BALLOT.** Three lenses scored a five-candidate slate (delivery note · offload log · shoot-day confirm · pack list · rate breakdown); the shape skeptic killed four from evidence on disk and then killed the ballot itself — *"the panel already answered it and this ballot is mis-ordered"* — pointing at the ranked roster this trade has carried in `tools.js` since it launched, which puts Still Waiting On above everything offered. It was right, and that is K2 working: the arm that generated the candidates does not get to grade them. The safety lens independently graded the winner of the ballot MEDIUM-HIGH and named the offload log the worst liability proposed in nine trades (a page printing OK TO FORMAT on a claim it cannot observe). **THE LINE THE PAGE EXISTS FOR CAME OFF THE PANEL VERBATIM:** an eleven-year one-person shop, on the record — every chase message ever written lists what the client owes and *not one in fifty says what it costs when their half isn't there*. So `holds` is a first-class axis, rides on every row of the document, builds the escalation filter, and the page counts (in the UI, never in the document) how many waiting rows say nothing about what they stop. **NO DAY MATH, refused twice:** parsing "on the call Tuesday" is the page guessing, and an elapsed-day count aimed at a client is the register this trade's tone rail exists to stop. **BACKPORT RIDER FIRED THREE TIMES, all swept and asserted, none of them wished for:** (1) 21 row-log pages across 9 trades told a man the spreadsheet copy "is also your backup" and the engine had a TSV **writer and no reader** — a reader now lives in `shared/rowlog.js` so all 21 got it in one commit, additive-only so nothing on screen can be lost by pasting, header-driven so a spreadsheet round trip survives moved columns, and label↔value resolved on picked axes after the gate caught nine pages restoring **WHAT'S NEEDED** blank; (2) `shared/toolkit.js` was calling `worldtimeapi.org/api/ip` **on every load of all 76 pages** — an unconsented third-party IP lookup on pages that promise the opposite, deleted, with the same-origin `Date` header proven to give the identical answer (`av:date` still fires, document still stamps); (3) `shared/feedback.js`'s repro placeholder invited exactly the paste that would carry a client's address and names off-device, reworded on all 76 at once. **GATES: two new, one repaired.** `rowlog-restore.mjs` drives the real add bar, clicks the page's own copy button over a trustworthy origin (file:// would silently exercise the fallback branch), throws the browser away, and re-imports into a FRESH CONTEXT — **21/21 byte-identical, additive, junk refused**. `no-third-party.mjs` loads all 76 untouched — **0 leaving the origin**. `rowlog-commit-merge` was found reporting `could not add a row` on the shipped `roofing/whats-open.html` since launch (never fired `blur`, and scoped to `.rl-lead`) — fixed, **21/21**, now covering the page it had been skipping. Plus `mobile-watertight` 76 pages × 320/360/390/430 × default and bumped text **0 failing**, and 25 assertions driving the real page end to end: the document verified for what it carries AND for what it must never carry (no price, no fee, no day count, no overdue register, no round count), the chase proven to drop what is already in hand, and the list proven to survive a real reload. Storefront: entry added to the persona500 manifest (P5 pushes). https://mrdirno.github.io/nested-resonance-memory-archive/creative/still-waiting-on.html

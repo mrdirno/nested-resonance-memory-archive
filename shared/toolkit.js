@@ -938,16 +938,33 @@
   }
 
   /* --------------------------------------------------- self-aware "today" */
-  // The clock on a job-site tablet can be wrong. Resolve the real date from
-  // public sources — a world time API, then THIS server's Date response header —
-  // each rendered in the device's own timezone; fall back to the device clock.
-  // Any tool reads AV.today() / AV.todayStr() and may listen for "av:date".
+  // The clock on a job-site tablet can be wrong, and a date is the load-bearing
+  // value on nearly every document this program produces. So the real date is
+  // resolved from THIS SERVER'S OWN `Date` response header, rendered in the
+  // device's own timezone, falling back to the device clock. Any tool reads
+  // AV.today() / AV.todayStr() and may listen for "av:date".
+  //
+  // THIS USED TO ASK A THIRD PARTY FIRST, and that was a live safety-rail
+  // violation on all 76 pages of all nine trades. The first source was
+  // `fetch("https://worldtimeapi.org/api/ip")` — an unconsented request to
+  // somebody else's server on every page load, whose endpoint is by design an
+  // IP-geolocation lookup, fired from pages that tell a man in their own warn
+  // block that what he types stays in this browser. The rail is "no external
+  // API, no third-party CDN", and the intent behind the call was good, which is
+  // exactly how it survived a dozen reviews: nothing about the page looks wrong,
+  // the request is invisible, and the feature it powers is real.
+  //
+  // THE SECOND SOURCE ALREADY DID THE JOB. A HEAD against our own origin returns
+  // a `Date` header from a clock the user is already trusting to serve the page,
+  // it is the same answer, it discloses nothing that was not already disclosed
+  // by asking for the page, and it is one round trip shorter. Removing the third
+  // party cost this program no capability at all — which is the thing worth
+  // remembering the next time a nicety wants a hostname. §SCARS 2026-08-13.
   var TODAY = new Date();
   function fmtDate(d){ try{ return d.toLocaleDateString(undefined,{ year:"numeric", month:"short", day:"numeric" }); }catch(e){ return String(d); } }
   function tryDate(fn){ return new Promise(function(res){ var done=false, t=setTimeout(function(){ if(!done){ done=true; res(null); } }, 2500); try{ fn().then(function(d){ if(done)return; done=true; clearTimeout(t); res(d && !isNaN(d.getTime()) ? d : null); }).catch(function(){ if(done)return; done=true; clearTimeout(t); res(null); }); }catch(e){ if(!done){ done=true; clearTimeout(t); res(null); } } }); }
   function resolveToday(){
     var sources = [
-      function(){ return fetch("https://worldtimeapi.org/api/ip", { cache:"no-store" }).then(function(r){ return r.json(); }).then(function(j){ return new Date(j.datetime || j.utc_datetime); }); },
       function(){ return fetch(location.href, { method:"HEAD", cache:"no-store" }).then(function(r){ var h=r.headers.get("date"); return h ? new Date(h) : null; }); }
     ];
     (function step(i){ if(i>=sources.length) return; tryDate(sources[i]).then(function(d){ if(d){ TODAY=d; document.dispatchEvent(new CustomEvent("av:date", { detail:{ date:d } })); } else step(i+1); }); })(0);

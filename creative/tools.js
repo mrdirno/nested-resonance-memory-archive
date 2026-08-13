@@ -29,11 +29,19 @@ window.TOOLKIT_TOOLS = [
     desc: "“Just one small thing” landed after the rounds you agreed. Write it the same day — who asked, what they actually asked for, why it’s outside, and where the delivery date lands. Warm, no price, ends in a choice instead of an ultimatum.",
     chip: "#A61457",
     audience: "Editor / producer → the client"
+  },
+  {
+    name: "Still Waiting On",
+    href: "still-waiting-on.html",
+    desc: "The things you can’t finish without, in one list with the date you asked on each — and what each one is holding up. Tap a row as it moves: still waiting → they said it’s coming → in hand. Send the ones outstanding as one short message instead of a fourth “any update?”.",
+    chip: "#5A3FC0",
+    audience: "Editor / shooter → the client who owes you something"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
-  // Next off the panel's ranked list (av/AV_SOCIETY.md §CREATIVE): Still Waiting
-  // On (rowlog, the dated chase for what the client still owes — clipboard
-  // round-trip is a ship gate), Before I Export (checklist, the deliverable
-  // questions answered before the render), Shoot Day Confirm (checklist, access
-  // and logistics — deliberately NOT a call sheet).
+  // Next off the panel's ranked list (av/AV_SOCIETY.md §CREATIVE): Before I Export
+  // (checklist, the deliverable questions answered before the render), Shoot Day
+  // Confirm (checklist, access and logistics — deliberately NOT a call sheet, and
+  // the 2026-08-13 safety lens set its hard rails: no access-code field ever, no
+  // minors as a category, no map/geolocation/address autocomplete, and no
+  // consequence-of-non-compliance line, which is a contract term).
 ];

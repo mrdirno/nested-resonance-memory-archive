@@ -106,6 +106,24 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 .rl-del{border-color:var(--bad);color:var(--bad-ink)}
 #bar.is-editing{outline:2px solid var(--deep);outline-offset:6px;border-radius:2px}
 
+/* PUT A SAVED COPY BACK. Folded shut, because it is the control for the day the
+   phone died and not for today's walk. The summary carries the 44px tap floor in
+   its own right — a one-line disclosure is exactly the "inline link inside a
+   running sentence" case the floor keeps catching, and here it is a block, so it
+   can simply BE a target. min-width:0 on the body: a pasted spreadsheet row is
+   one very long unbroken token and a textarea is happy to widen the page for it. */
+.rl-imp{margin-top:10px;border-top:1px dashed var(--line)}
+.rl-imp-sum{display:flex;align-items:center;min-height:44px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--deep)}
+.rl-imp-sum::-webkit-details-marker{color:var(--muted)}
+.rl-imp-body{min-width:0;padding-bottom:4px}
+.rl-imp-note{margin:0 0 8px;font-size:12px;color:var(--muted)}
+.rl-imp-ta{min-height:88px}
+.rl-imp-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.rl-imp-say{font-family:var(--mono);font-size:11.5px;overflow-wrap:anywhere;min-width:0}
+.rl-imp-say.ok{color:var(--ok)}
+.rl-imp-say.bad{color:var(--bad-ink)}
+
 /* The pickers all carry, so once the list has rows the whole bar is: pick the one
    thing that changed, press Add. The summary line keeps what is carrying VISIBLE
    without keeping eight controls on screen at the top of a ladder. */

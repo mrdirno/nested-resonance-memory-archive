@@ -60,7 +60,13 @@ for (const page of PAGES) {
   const added = await p.evaluate(() => {
     const bar = document.querySelector('.rl-bar') || document.getElementById('rlBar')
       || document.querySelector('[class*="rl-"]')?.closest('div');
-    const scope = document.querySelector('#rlAdd')?.closest('div, form, section') || document;
+    /* THE WHOLE ADD BAR, not the lead row. This used to be
+       `#rlAdd.closest('div')`, which resolves to `.rl-lead` — so a page whose
+       required fields are the lead PLUS a select down in `.rl-grid` never got the
+       select filled and Add refused. Every page that passed happened to have all
+       its required fields in the lead row, which is how a scope this narrow went
+       unnoticed while reporting green. */
+    const scope = document.querySelector('#bar') || document.querySelector('#rlAdd')?.closest('div, form, section') || document;
     let n = 0;
     scope.querySelectorAll('input[type=text], input:not([type]), textarea').forEach((el) => {
       if (el.offsetParent === null) return;
@@ -71,6 +77,23 @@ for (const page of PAGES) {
     scope.querySelectorAll('select').forEach((el) => {
       if (el.offsetParent === null) return;
       if (el.options.length > 1) { el.selectedIndex = 1; el.dispatchEvent(new Event('change', { bubbles: true })); }
+    });
+    /* A `learn` AXIS DOES NOT COMMIT ON `input`. Its real value lives in a hidden
+       field and only the visible box's BLUR handler writes it there, so a filler
+       that stops at `input` leaves a required learn field empty and Add refuses —
+       which is why this gate reported "could not add a row" on the two pages
+       whose LEAD field is a learn axis, and therefore never covered them at all.
+       roofing/whats-open.html had been shipped and uncovered here since it
+       launched. Same for `chips`: the value is a hidden input set by a tap. */
+    scope.querySelectorAll('[data-learn]').forEach((el) => {
+      el.value = 'TEST-' + (++n);
+      el.dispatchEvent(new Event('blur', { bubbles: true }));
+    });
+    scope.querySelectorAll('.rl-chips[data-chips]').forEach((box) => {
+      const hidden = scope.querySelector('input[type=hidden][data-k="' + box.getAttribute('data-chips') + '"]');
+      if (hidden && hidden.value) return;                 // a learn axis already set it
+      const chip = box.querySelector('.rl-chip[data-v]');
+      if (chip) chip.click();
     });
     document.getElementById('rlAdd').click();
     return { adv: document.querySelectorAll('[data-adv]').length, rows: document.querySelectorAll('[data-edit]').length };

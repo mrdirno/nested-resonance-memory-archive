@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Still Waiting On — Creative Field Toolkit</title>
+<meta name="description" content="The things you can&rsquo;t finish without, in one list with the date you asked on each — and what each one is holding up. Send it as one short message instead of a fourth &ldquo;any update?&rdquo;">
+<meta name="apple-mobile-web-app-title" content="Still Waiting On">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Creative &middot; what their side still owes you &rarr; the client</span>
+    <h1 id="title">Still Waiting On</h1>
+    <p class="lede" id="lede">The things you can&rsquo;t finish without, in one list with the date you asked on each. Send it as one short message instead of a fourth &ldquo;any update?&rdquo; &mdash; and keep the ones already in off it.</p>
+  </header>
+
+  <div class="warn" id="warn"></div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Project</label><input type="text" id="hJob" placeholder="Northgate brand film" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hNext">The next date on this</label><input type="text" id="hNext" placeholder="v2 to you Friday" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your shop</label><input type="text" id="hFrom" placeholder="you / your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they should text" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="nextHint">The date line is the only bit of pressure in the whole message, and it is not a deadline you are setting them &mdash; it is <i>yours</i>, the thing you are trying to hit. &ldquo;v2 to you Friday&rdquo; in your own words is what makes a chase readable instead of naggy.</p>
+  </section>
+
+  <section class="card">
+    <h2>What you&rsquo;re waiting on</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Type it, or tap one of the usual ones underneath &mdash; whatever you type becomes a button for next time. Then <b>Add</b>. <b>Tap a row</b> to move it along: still waiting &rarr; they said it&rsquo;s coming &rarr; in hand. That is the whole job of this page on a Tuesday.</p>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="state" class="on">Where it stands</button>
+        <button type="button" data-g="holds">What it&rsquo;s holding up</button>
+        <button type="button" data-g="who">Who I asked</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="noholds" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row to put a date on it, say what it&rsquo;s holding up, flag it, or delete it. A row flagged <b>This one first</b> or <b>This is what moves the date</b> lands in its own block at the top of the message &mdash; those are the two that get read.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; one message, not a fourth &ldquo;any update?&rdquo;</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="waiting" class="on">Still waiting</button>
+        <button type="button" data-f="stopping">The ones stopping work</button>
+        <button type="button" data-f="">Everything</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Still waiting</b> is the message &mdash; it leaves out everything already in, which is the difference between a chase and a complaint. <b>The ones stopping work</b> is the shorter, harder version for the day it actually starts costing you. <b>Everything</b> is your own record, including what landed and when. The spreadsheet copy is every row with a tab between the columns, and it is your backup &mdash; you can paste it straight back in below.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the Creative Field Toolkit. Something you&rsquo;re always waiting on that isn&rsquo;t in the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Creative Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* STILL WAITING ON — trade #9's first row log, and the third rung on its roster.
+ *
+ * WHY IT IS THE THIRD TOOL. Notes Back answers the list they sent. That's
+ * Another Round names what they added. Neither covers the part of the week where
+ * nothing is moving because the OTHER SIDE has not sent something — and for a
+ * one-person shop that is where the days actually go. A 3-lens panel scored a
+ * separate five-candidate ballot this cycle and the shape skeptic came back with
+ * the ballot itself: the trade's own ranked roster already answered the question
+ * and put this rung above everything on it. It was right (av/AV_SOCIETY.md
+ * §CREATIVE, and the ranked list carried in tools.js since the trade shipped).
+ *
+ * IT IS A CONFIG ON SHAPE #3. shared/rowlog.js owns the state, the ladder, the
+ * grouping, the persistence, the document assembly and the copy; shared/rowlog.css
+ * owns every pixel; items.js owns the vocabulary. This file owns the WORDS OF THE
+ * DOCUMENT and nothing else. No new mechanism was built for this trade — which is
+ * the claim one-runtime-many-trades makes, tested on the least construction-like
+ * trade on the board.
+ *
+ * THE LINE THIS PAGE EXISTS FOR IS `holds`, AND IT CAME FROM THE PANEL. A working
+ * one-person shop, eleven years, on the record: every chase message ever written
+ * lists what the client owes, and not one in fifty says WHAT IT COSTS WHEN THEIR
+ * HALF ISN'T THERE. So what each thing is holding up rides on every row of the
+ * document, the escalation filter is built out of it, and the page counts — in
+ * the UI, never in the document — how many waiting rows have nothing said about
+ * what they stop.
+ *
+ * WHY THERE IS NO "(9 days ago)". It is the obvious feature and it is refused
+ * twice. Parsing "on the call Tuesday" into a date is the page guessing at a
+ * value it did not author (§SAFETY), and an elapsed-day count printed at a client
+ * is the passive-aggressive register this trade's tone rail exists to stop — the
+ * one that costs this user the relationship the message was sent to protect. He
+ * types when he asked, in his words; the page prints it back untouched. The only
+ * arithmetic anywhere on this page is counting rows he entered.
+ *
+ * WHAT IT REFUSES (§CREATIVE's safety edge, which is not the construction one).
+ * No price, no rate, no day rate, no fee, no "standard number of rounds", no
+ * overdue language and no consequence-of-non-compliance line — those are terms,
+ * and a chase list that reads as a claim for money is the one version of this
+ * message nobody should send. No brand, platform, service or tool is named
+ * anywhere in the data. Licence and release appear as item NAMES and nowhere
+ * else. The closing ends in an option, like every closing this kit ships.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var W = window.TOOLKIT_WAITING || {};
+
+  var STATES = (W.states || []).slice();
+  var HOLDS  = (W.holds  || []).slice();
+  var SEEDS  = (W.items  || []).slice();
+  var KEY = "toolkit." + (TRADE.slug || "creative") + ".waiting.v1";
+
+  /* THE SETTLED RUNG IS DECLARED BY POSITION, not by matching the word "In
+     hand" — the same law the answer ladder in this trade already runs on. A
+     predicate that tests a string is a predicate that breaks the day somebody
+     rewords the ladder, and what breaks is the difference between "still waiting
+     on this" and "you already sent this", inside a message to a client. */
+  var IN_HAND = STATES.length ? STATES[STATES.length - 1] : "";
+
+  function isWaiting(v) { return v.state !== IN_HAND; }
+  function isStopping(v) { return isWaiting(v) && !!String(v.holds || "").trim(); }
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* LOWERCASING DESTROYS AN ACRONYM and this trade is full of them — VO, SRT,
+     GFX, a brand's own all-caps name. Same law as every sibling: the page never
+     edits a value it did not author, so a value carrying an all-caps run passes
+     through untouched and only ordinary prose is softened for sentence flow. */
+  function soften(s) {
+    s = String(s == null ? "" : s);
+    return /[A-Z]{2,}/.test(s) ? s : s.toLowerCase();
+  }
+
+  if (W.toolName) {
+    $("#title").textContent = W.toolName;
+    document.title = W.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (W.lede) $("#lede").textContent = W.lede;
+  if (W.eyebrow) $("#eyebrow").textContent = W.eyebrow;
+  if (W.warn) $("#warn").innerHTML = W.warn;
+  if (W.phJob) $("#hJob").placeholder = W.phJob;
+  if (W.phNext) $("#hNext").placeholder = W.phNext;
+  if (W.phFrom) $("#hFrom").placeholder = W.phFrom;
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* The engine renders once inside mount(), which is before `rl` exists, and
+     docHead / onChange / the tally all run in that first render. Reading `rl`
+     there throws and the page ships looking perfect with every word this file
+     owns dead (§SCARS). Everything that touches rows goes through here. */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "thing", nounPlural: "things", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NOT SAID",
+    emptyText: "Nothing on the list yet. Put in the first thing you're waiting on — what it is, and when you asked for it.",
+
+    /* THE LADDER IS THE STATUS and it does not wrap: a thing that landed did
+       land, and a stray second tap must never walk a row back to blank inside a
+       message that then asks the client for something they already sent. The
+       pencil is how you correct it, which is the sibling law exactly. */
+    statusKey: "state", statusOrder: STATES, statusDone: IN_HAND,
+    flagKey: "flag", flagValues: W.flags || ["This one first", "This is what moves the date"],
+
+    groupOptions: [
+      { key: "state", label: "Where it stands" },
+      { key: "holds", label: "What it's holding up" },
+      { key: "who", label: "Who I asked" }
+    ],
+
+    /* Grouped by where it stands, the blocks read in ladder order so the same
+       list never arrives arranged differently depending on which row he tapped
+       first. Grouped by what it holds up, the seeded order is his own workflow
+       order — start the edit, first cut, end card, mix, send it. */
+    groupSort: function (a, b, key) {
+      if (key === "state") {
+        var ia = STATES.indexOf(a), ib = STATES.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "holds") {
+        var ja = HOLDS.indexOf(a), jb = HOLDS.indexOf(b);
+        return (ja < 0 ? 99 : ja) - (jb < 0 ? 99 : jb);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "waiting", label: "still waiting",
+      emptyText: "Everything on this list is in hand. Nothing to chase — send them the good news instead.",
+      test: function (v) { return isWaiting(v); }
+    }, {
+      v: "stopping", label: "the ones stopping work",
+      emptyText: "Nothing you're waiting on is stopping a specific piece of work yet. Open the pencil on a row and say what it holds up — that is the line that gets these answered.",
+      test: function (v) { return isStopping(v); }
+    }],
+
+    fields: [
+      { key: "item", label: "What you're waiting on", input: "learn", lead: true, required: true,
+        placeholder: W.phItem || "what you're waiting on — then it's a button",
+        emptyHint: "Say it the way you'd say it to them. Whatever you type becomes a button." },
+      { key: "state", label: "Where it stands", input: "select", required: true,
+        placeholder: "— where it stands" },
+      /* NAKED BY DESIGN. No date picker, no chips, no greyed example date and
+         nothing computed off it: "on the call Tuesday" is a legitimate answer
+         and a picker cannot hold it. His words, printed back untouched. */
+      { key: "asked", label: "When you asked", input: "text",
+        placeholder: W.phAsked || "Aug 4 — or “on the call Tuesday”" },
+      { key: "holds", label: "What it's holding up", input: "chips", wide: true },
+      { key: "who", label: "Who you asked", input: "text", sticky: true,
+        placeholder: "the name, if it wasn't just “the client”" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: W.phNote || "anything that makes it easier for them to find it" }
+    ],
+
+    /* THE SEED IS A JOG, NOT A MENU, and his own words come first. The engine
+       hands back what he has typed before so the two lists can be merged here
+       rather than one shadowing the other — his at the front, because by week
+       three his vocabulary is better than ours. */
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "holds") return HOLDS;
+      if (key === "item") {
+        var out = (learned || []).slice();
+        SEEDS.forEach(function (s) { if (out.indexOf(s) === -1) out.push(s); });
+        return out;
+      }
+      return null;
+    },
+
+    rowMain: function (v) { return v.item || "(nothing on this row)"; },
+    rowSub: function (v) {
+      return joinDots([v.asked ? "asked " + v.asked : null, v.holds ? "holds up " + soften(v.holds) : null, v.who, v.note]);
+    },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the PROJECT first, like every
+       document in this program, so this thread and next month's argument surface
+       together when somebody searches the job.
+       THEN THE COUNT, and the second half of it is the one that matters: not how
+       many things are outstanding, but how many are stopping work. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), next = $("#hNext").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, W.docSubject || "what I'm still waiting on", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Text me: " + tel);
+      if (next) out.push("Next on this: " + next);
+      out.push("");
+      if (W.opening) { out.push(W.opening); out.push(""); }
+
+      /* Counted over the rows this copy actually CONTAINS, never over the whole
+         list — a header that counts rows the body does not show contradicts the
+         body it sits on top of (§SCARS, the summary that counted rows the
+         document did not contain). */
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("waiting") > -1 && !isWaiting(r.values)) return false;
+        if (c.filters.indexOf("stopping") > -1 && !isStopping(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var waiting = src.filter(isWaiting);
+      var stopping = src.filter(isStopping);
+      var line = c.shown + (c.shown === 1 ? " thing" : " things");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + (waiting.length ? waiting.length + " still to come" : "nothing outstanding");
+      if (stopping.length) line += " · " + stopping.length + " holding something up";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, and it reads the way he would say it: what it is, when
+       he asked, what it is holding up. The axis the list is grouped by is
+       dropped from the line because it is already the heading above it. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "state";
+      var tail = [];
+      if (g !== "state" && v.state && v.state !== IN_HAND) tail.push(soften(v.state));
+      if (v.state === IN_HAND && g !== "state") tail.push(soften(IN_HAND));
+      if (v.asked) tail.push("asked " + v.asked);
+      if (g !== "holds" && v.holds) tail.push("holds up " + soften(v.holds));
+      if (g !== "who" && v.who) tail.push("asked " + v.who);
+      if (v.note) tail.push(v.note);
+      return joinDash([v.item, joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.item, v.holds ? "holds up " + soften(v.holds) : null, v.asked ? "asked " + v.asked : null]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES). The things that are
+       stopping work LEAD the footer, because those are what somebody can
+       actually act on today — and then the closing ends in an OPTION, and the
+       boundary line says out loud that this is not a bill. A chase that reads
+       like an invoice is the one version of this message that costs the user the
+       relationship it was written to protect. */
+    docFoot: function () {
+      var out = [];
+      var stopping = rowsNow().filter(function (r) { return isStopping(r.values); });
+      if (stopping.length > 1) {
+        out.push("THE ONES ACTUALLY STOPPING WORK:");
+        stopping.forEach(function (r) {
+          out.push("  · " + joinDash([r.values.item, "holds up " + soften(r.values.holds)]));
+        });
+        out.push("");
+      }
+      if (W.closing) out.push(W.closing);
+      if (W.docBoundary) { out.push(""); out.push(W.docBoundary); }
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), next = $("#hNext").value.trim();
+      return (job ? job + " — " : "") + "still waiting on, " + c.total
+        + (c.total === 1 ? " thing, " : " things, ") + c.today
+        + (next ? ", next on this: " + next : "")
+        + " — kept by hand. No price, no rate and no change to what was agreed anywhere on it.";
+    },
+    tsvColumns: [
+      { label: "What I'm waiting on", key: "item" },
+      { label: "Where it stands", key: "state" },
+      { label: "When I asked", key: "asked" },
+      { label: "What it's holding up", key: "holds" },
+      { label: "Who I asked", key: "who" },
+      { label: "Flagged", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), n = $("#hNext").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || n || f || t) ? { job: j, next: n, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hNext").value = x.next || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    onChange: function () { paintHolds(); }
+  });
+
+  /* THE LINE EVERYONE LEAVES OUT IS WHAT IT STOPS. "Still waiting on the logo"
+     is nagging; "still waiting on the logo, the end card can't be built without
+     it" is a reason to act. So the page counts the waiting rows he has said
+     nothing about and asks — IN THE UI where he can fix it, and NOT in the
+     document, because publishing "3 of these have no impact recorded" invites
+     the client to argue the record instead of answering it. Same law as the
+     roofing sibling's exposure count. */
+  function paintHolds() {
+    var el = $("#noholds"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return isWaiting(r.values) && !String(r.values.holds || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " thing" + (n === 1 ? "" : "s") + " you&rsquo;re waiting on with nothing said about what "
+      + (n === 1 ? "it&rsquo;s" : "they&rsquo;re") + " holding up.</b> That is the half of this message people leave out, and it is the half that gets it answered &mdash; open the pencil and put it on before you send.";
+  }
+
+  /* The learn field borrows the identifier's keyboard attributes, which exist so
+     a phone cannot destroy a device tag. "Brand fonts" is not a device tag and
+     it does not want to arrive as BRAND FONTS. */
+  ["item"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  /* ── the two segmented controls ──────────────────────────────────────────── */
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one. This list is the only record of what you asked
+     for and when, it lives in one browser on one phone, and it is the thing you
+     would want six weeks later when the date is being argued about. A single
+     mis-tap must not be able to destroy it. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hNext", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    paintHolds();
+  });
+
+  /* The header fields ride on every message, so a keystroke has to reach BOTH the
+     preview and the saved copy. There is no rl.refresh() — render() repaints and
+     schedulePersist() saves, and a page that calls only one of them either shows
+     a stale document or loses the project name on reload. */
+  ["#hJob", "#hNext", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST. The engine does not restore itself
+     inside mount() — every sibling config calls this explicitly, and a page that
+     forgets it looks perfect on a fresh load and silently drops the whole list
+     every time the phone is backgrounded. */
+  rl.restore();
+  applyFilters();
+  paintHolds();
+})();
+</script>
+</body>
+</html>

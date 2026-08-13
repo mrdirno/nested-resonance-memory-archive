@@ -771,8 +771,11 @@
     /* The office receiver wants it in a spreadsheet, so the SECOND button hands
      * him tab-separated rows — ALWAYS every row, never the delta, because this
      * button is also the only honest archive this tool has. */
+    function tsvCols() {
+      return cfg.tsvColumns || FIELDS.map(function (f) { return { label: f.label, key: f.key }; });
+    }
     function tsv() {
-      var cols = cfg.tsvColumns || FIELDS.map(function (f) { return { label: f.label, key: f.key }; });
+      var cols = tsvCols();
       var lines = [];
       if (cfg.tsvPreamble) lines.push(String(cfg.tsvPreamble({ total: rows.length, today: todayStr() })).replace(/[\t\r\n]+/g, " "));
       lines.push(cols.map(function (c) { return c.label; }).join("\t"));
@@ -784,6 +787,139 @@
         }).join("\t"));
       });
       return lines.join("\r\n");
+    }
+
+    /* ── AND THE BACKUP CAN BE READ BACK ───────────────────────────────────────
+     * TWENTY LIVE PAGES ACROSS NINE TRADES TOLD A MAN "the spreadsheet copy is
+     * also your backup: this lives in this browser on this phone", and
+     * low-voltage/device-checkout went further — "send yourself the spreadsheet
+     * copy at the end of a big day. A browser you haven't opened in a couple of
+     * weeks can clear it out, and a new phone definitely will." All true. All of
+     * it advice to KEEP a copy. And this engine had a TSV writer and no reader,
+     * so the copy he kept could not be put back. A backup you cannot restore is
+     * not a backup, it is a receipt for one — and the man who took the advice is
+     * exactly the man who finds out on the new phone. §SCARS.
+     *
+     * IT ADDS, IT NEVER REPLACES. The restoring case is an empty list on a new
+     * device, where add and replace are the same thing; the other case is a list
+     * with work already on it, where replace destroys that work to serve a
+     * convenience. This log is the only record of the walk and it lives in one
+     * browser (§TWO TAPS TO WIPE) — so the import has no destructive mode at
+     * all, and Clear stays the one control that can lose anything.
+     *
+     * IT READS THE HEADER, NOT THE COLUMN ORDER. The file went to a spreadsheet
+     * and came back; columns get moved, hidden and added there, and a positional
+     * parse would silently write the note into the status. Every cell is placed
+     * by the label above it, an unrecognised column is dropped rather than
+     * guessed, and a header that matches nothing fails LOUDLY instead of
+     * importing a page of blank rows.
+     *
+     * A CELL MAY ONLY BECOME A VALUE THE CONFIG DECLARED. A status rung the
+     * ladder does not contain lands BLANK rather than as a rung nothing can
+     * advance, and a keyless computed column (the flag) is recognised only when
+     * its cell is one of the declared flag values. Nothing here invents a field.
+     *
+     * AND THE SHEET IS WRITTEN IN LABELS WHILE THE ROW STORES VALUES. Half the
+     * configs in the program keep `{v, label}` options — the row holds "gc" and
+     * the column prints "GC super" through its own `value` function — so a
+     * reader that wrote the cell back raw would fill the field with a label
+     * nothing matches, and the chip for it would render unpicked. The gate
+     * caught this on nine shipped pages, where the column that came back blank
+     * was WHAT'S NEEDED, i.e. the entire point of the document. So a picked axis
+     * resolves its cell through that field's own option list, in BOTH
+     * directions, and a cell that is not one of its options is dropped rather
+     * than guessed. It re-resolves in passes because one axis gates another (the
+     * ask decides which sizes exist), and a single pass would read the gated
+     * field against the previous row's gate.
+     */
+    function normLab(s) {
+      return String(s == null ? "" : s)
+        .replace(/[‘’ʼ]/g, "'").replace(/[“”]/g, '"')
+        .replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
+    }
+    /* WHICH DECLARED OPTION IS THIS CELL? Matches the label OR the stored value,
+       because the two configs in this program that keep plain-string options
+       have them identical and the ones that keep `{v, label}` print the label.
+       `cur` is the half-built row, so a gated axis is asked against ITS OWN
+       row's gate rather than against whatever the bar happens to be holding. */
+    function optionValue(f, cell, cur) {
+      var opts = optionsOf(f, cur) || [], k = normLab(cell);
+      for (var i = 0; i < opts.length; i++) {
+        var o = opts[i];
+        var val = typeof o === "string" ? o : o.v;
+        var lab = typeof o === "string" ? o : (o.label || o.v);
+        if (normLab(lab) === k || normLab(val) === k) return val;
+      }
+      return null;
+    }
+    function importTsv(text) {
+      var raw = String(text == null ? "" : text).replace(/\r\n?/g, "\n").split("\n");
+      var cols = tsvCols(), i, j;
+      var want = {};
+      cols.forEach(function (c) { want[normLab(c.label)] = c; });
+
+      /* FIND THE HEADER, because line 1 is the preamble sentence on most of
+         these pages and a spreadsheet may have added rows above it. Best match
+         wins, and one lone matching column is not a header — that is a data row
+         that happens to repeat a label. */
+      var hdr = -1, best = 0;
+      for (i = 0; i < raw.length && i < 12; i++) {
+        var cells = raw[i].split("\t"), hit = 0;
+        for (j = 0; j < cells.length; j++) if (want[normLab(cells[j])]) hit++;
+        if (hit > best) { best = hit; hdr = i; }
+      }
+      if (hdr < 0 || best < 2) return { added: 0, rows: 0, reason: "no-header" };
+
+      var map = raw[hdr].split("\t").map(function (lab) { return want[normLab(lab)] || null; });
+      var made = 0, seen = 0;
+      for (i = hdr + 1; i < raw.length; i++) {
+        if (!raw[i].trim()) continue;
+        seen++;
+        var cells2 = raw[i].split("\t");
+        var v = {}, flag = "", any = false, pend = [];
+        for (j = 0; j < map.length; j++) {
+          var col = map[j]; if (!col) continue;                    // a column we do not own
+          var cell = String(cells2[j] == null ? "" : cells2[j]).trim();
+          if (!cell) continue;
+          var f = col.key ? field(col.key) : null;
+          if (f) {
+            /* A PICKED AXIS IS RESOLVED, A TYPED ONE IS NOT. Free text is his
+               own words and nothing may edit it (§SAFETY); a chip or a select
+               holds one of a declared set, and the sheet holds that set's
+               labels. Gated axes wait for the axis that gates them. */
+            if (f.input === "select" || f.input === "chips") pend.push({ f: f, cell: cell });
+            else { v[col.key] = cell; any = true; }
+          } else if (!col.key && FLAGS.indexOf(cell) > -1) {
+            flag = cell; any = true;
+          }
+        }
+        var guard = 0;
+        while (pend.length && guard++ < 4) {
+          var still = [];
+          for (j = 0; j < pend.length; j++) {
+            var hit = optionValue(pend[j].f, pend[j].cell, v);
+            if (hit == null) { still.push(pend[j]); continue; }
+            if (cfg.statusKey && pend[j].f.key === cfg.statusKey && STATUS.indexOf(hit) === -1) continue;
+            v[pend[j].f.key] = hit; any = true;
+          }
+          if (still.length === pend.length) break;                 // nothing moved: the rest are not options
+          pend = still;
+        }
+        if (!any) continue;
+        FIELDS.forEach(function (f) { if (v[f.key] == null) v[f.key] = ""; });
+        /* A LEARNED AXIS IS LEARNED FROM THE RESTORE TOO. The self-building
+           chips are what make the second row two taps; coming back to a restored
+           list with no buttons on it is the tool he left, minus its speed. */
+        FIELDS.forEach(function (f) {
+          if (f.input !== "learn" || !v[f.key]) return;
+          learned[f.key] = learned[f.key] || [];
+          if (learned[f.key].indexOf(v[f.key]) === -1) learned[f.key].push(v[f.key]);
+        });
+        rows.push({ id: seq++, t: ++touch, values: v, flag: flag });
+        made++;
+      }
+      if (made) { if (editingId != null) stopEditing(true); render(); persistNow(); }
+      return { added: made, rows: seen, reason: made ? "" : (seen ? "no-values" : "no-rows") };
     }
 
     /* ── persistence ──────────────────────────────────────────────────────────
@@ -1217,6 +1353,56 @@
       persistNow(); render();
     });
     if (tsvBtn) tsvBtn.addEventListener("click", function () { copyText(tsv(), tsvBtn, cfg.onFlash); });
+
+    /* THE RESTORE MOUNTS ITSELF, on every page that already offers the copy.
+     * The claim it repairs is printed on twenty pages across nine trades, and a
+     * capability that needs twenty pages edited to appear is a capability
+     * nineteen of them will be missing the next time somebody counts. So the
+     * engine builds it wherever the spreadsheet button already is — no markup,
+     * no config, no page to forget. `cfg.importBox` overrides the position for a
+     * page whose layout wants it somewhere else; `cfg.importOff` opts out.
+     * FOLDED SHUT: a man doing today's walk never needs it, and an open textarea
+     * above his list would cost every page vertical space for a control used on
+     * the day the phone died. */
+    var impBox = cfg.importBox ? byId(cfg.importBox) : null;
+    if (!impBox && tsvBtn && !cfg.importOff) {
+      var anchor = previewEl || tsvBtn.parentNode;
+      if (anchor && anchor.parentNode) {
+        impBox = document.createElement("div");
+        anchor.parentNode.insertBefore(impBox, anchor.nextSibling);
+      }
+    }
+    if (impBox && !cfg.importOff) {
+      var nP = cfg.nounPlural || "rows";
+      impBox.innerHTML =
+        '<details class="rl-imp"><summary class="rl-imp-sum">Put a saved copy back</summary>'
+        + '<div class="rl-imp-body">'
+        + '<p class="rl-imp-note">Paste a <b>spreadsheet copy</b> you saved earlier &mdash; the whole thing, including the row of column headings &mdash; and the ' + esc(nP)
+        + ' come back onto this list. It <b>adds</b> to what is here; it never replaces it, so nothing on screen can be lost by pasting.</p>'
+        + '<textarea class="rl-imp-ta" id="rlImpTa" rows="4" placeholder="paste the spreadsheet copy here" autocapitalize="none" autocorrect="off" spellcheck="false"></textarea>'
+        + '<div class="rl-imp-act"><button type="button" class="rl-mini" id="rlImpGo">Put it back</button>'
+        + '<span class="rl-imp-say" id="rlImpSay"></span></div>'
+        + "</div></details>";
+      var impTa = impBox.querySelector("#rlImpTa"), impSay = impBox.querySelector("#rlImpSay");
+      impBox.querySelector("#rlImpGo").addEventListener("click", function () {
+        var res = importTsv(impTa.value);
+        /* IT SAYS WHAT IT DID, AND IT SAYS WHY IT DID NOTHING. A restore that
+           silently no-ops on a man holding the only copy of his walk is the
+           worst failure this control has, so every refusal names the fix. */
+        if (res.added) {
+          impSay.className = "rl-imp-say ok";
+          impSay.textContent = "Put " + res.added + " " + (res.added === 1 ? (cfg.noun || "row") : nP) + " back.";
+          impTa.value = "";
+        } else {
+          impSay.className = "rl-imp-say bad";
+          impSay.textContent = res.reason === "no-header"
+            ? "Couldn't find the row of column headings — paste the whole spreadsheet copy, not just the rows."
+            : (res.reason === "no-rows" ? "Nothing under the headings to put back."
+              : "Found the headings, but none of those rows had anything this page keeps.");
+        }
+      });
+    }
+
     document.addEventListener("av:ready", function () { render(); });
 
     return {
@@ -1226,7 +1412,7 @@
       flaggedCount: function () { return flagged().length; },
       text: text, tsv: tsv, render: render, restore: restore, clearAll: clearAll,
       persist: persistNow, schedulePersist: schedulePersist,
-      addRange: addRange, addPasted: addPasted, applyValues: applyValues,
+      addRange: addRange, addPasted: addPasted, applyValues: applyValues, importTsv: importTsv,
       setGroup: function (k) { if (GROUPS.filter(function (g) { return g.key === k; }).length) { groupKey = k; render(); persistNow(); } },
       group: function () { return groupKey; },
       setDeltaOnly: function (b) { deltaOnly = !!b; render(); },

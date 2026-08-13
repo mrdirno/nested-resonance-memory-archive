@@ -411,12 +411,12 @@
         + " — picked by hand off our drawings, verify before anybody roughs it in. Not an RFI, not a change order.";
     },
     tsvColumns: [
-      { label: "Who", value: function (v) { return labelOf(WHO, v.who); } },
+      { label: "Who", key: "who", value: function (v) { return labelOf(WHO, v.who); } },
       { label: "Room / area", key: "area" },
-      { label: "What's needed", value: function (v) { return labelOf(ASKS, v.ask); } },
+      { label: "What's needed", key: "ask", value: function (v) { return labelOf(ASKS, v.ask); } },
       { label: "Size / type", key: "spec" },
       { label: "Height / run", key: "place" },
-      { label: "Needed before", value: function (v) { return labelOf(MILES, v.by); } },
+      { label: "Needed before", key: "by", value: function (v) { return labelOf(MILES, v.by); } },
       { label: "Where it's at", key: "status" },
       { label: "Flag", value: function (v, r) { return r.flag || ""; } },
       { label: "Note", key: "note" }

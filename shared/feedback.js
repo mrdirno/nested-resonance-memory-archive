@@ -286,9 +286,21 @@
     var bodyF = h("div", { class: "fb-f" }, [bodyLab,
       h("textarea", { name: "tool_purpose", maxlength: "2000" })]);
 
+    /* THIS BOX IS THE ONE PATH BY WHICH A TOOL'S CONTENTS CAN LEAVE THE BROWSER,
+     * and its placeholder used to invite them in. "The file, the setting, the
+     * browser — whatever you had going on" is a reasonable thing to ask a man
+     * debugging a page, and it is also exactly what a helpful person answers by
+     * pasting the draft he was looking at — which on these pages is a client's
+     * name, a site address, a phone number, a wage column or a list of who is on
+     * camera. The payload itself is clean (it sends only what is typed here) and
+     * the tools genuinely keep their own work on the device; the leak was the
+     * SENTENCE, asking for context in a way that reads as asking for the
+     * document. So it still asks for what reproduces a bug and now says what to
+     * leave out — on all nine trades at once, because this is the one module
+     * every surface loads. */
     var stepsLab = h("label", {}, ["Anything that helps us reproduce it ", h("i", {}, ["(optional)"])]);
     stepsF = h("div", { class: "fb-f" }, [stepsLab,
-      h("textarea", { name: "example", maxlength: "1600", placeholder: "The file, the setting, the browser — whatever you had going on." })]);
+      h("textarea", { name: "example", maxlength: "1600", placeholder: "What you tapped, what the page did, which phone or browser. No need to paste your list or anyone's details — we only need to find the bug." })]);
 
     /* CREDENTIALS — weight, not a login (operator 2026-08-04). Optional, never
      * required to send, NEVER published. It tells the loop the provenance of a
