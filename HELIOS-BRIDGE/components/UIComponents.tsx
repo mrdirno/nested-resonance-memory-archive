@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -270,6 +270,25 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew that owns dry-in — the tear-off release first: nobody opens a roof until somebody says what happens if it rains tonight, so tick who moved what, what is protected, how much you are opening and who owns the call, and send it before the first sheet comes off.',
     icon: <Umbrella size={18} />,
+  },
+  {
+    // TRADE #9 — the first that is not a construction trade, and the first that
+    // arrived as a WISH rather than off the researched ladder. A judge panel
+    // narrowed it hard: not "creatives" (a photographer, a motion designer and a
+    // print designer share almost no vocabulary) but the one-person shop that
+    // takes a client brief, shoots, cuts and delivers against a scope with
+    // revision rounds. Nothing new had to be built — the same five document
+    // engines the eight construction kits run cover this trade's week wearing
+    // different words.
+    //
+    // Clapperboard, not Camera: Cctv already carries the low-voltage kit, where a
+    // camera means surveillance. A slate is the tool this trade carries, and the
+    // sibling rule is that an icon is the GEAR, never the thing the trade makes.
+    name: 'Creative Field Toolkit',
+    href: './creative/',
+    tag: 'field',
+    blurb: 'Isomorphed to the people who shoot and cut — not the timeline, everything around it: paste the wall of notes the client emailed and answer every line including the ones outside the deal, or tag the "one small thing" that landed after sign-off with the delivery date attached. No price on anything, and nothing you paste leaves the browser.',
+    icon: <Clapperboard size={18} />,
   },
 ];
 
