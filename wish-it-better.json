@@ -1,0 +1,13 @@
+{
+  "spec": "wish-it-better/1.0",
+  "level": "L0",
+  "project": "nested-resonance-memory-archive",
+  "summary": "A GPL-3.0-only research archive (Nested Resonance Memory / DUALITY-ZERO) whose shipped, user-facing surfaces are the AV Field Toolkit — 53 phone-first tool pages across eight building trades on one shared runtime, where a trade is a config and never a fork — and Collage Studio, a browser generative-collage tool.",
+  "wish_channel": "https://mrdirno.github.io/nested-resonance-memory-archive/av/",
+  "origin": null,
+  "spinoffs": [],
+  "evals": "tools/toolkit-gates/",
+  "amended": [],
+  "_note": "Scope: one manifest, because every conformance criterion here is a property of the repo and not of a directory — one LICENSE, one wish queue (av_tool_requests, whose trade column already carries both the eight trades and Collage Studio), one CI workflow, one Pages artifact. The eight trades are configs on one runtime, not eight projects; the network addresses each surface by url instead. Level is L0, not L1, on two counts checked at the artifact: (1) the evals that ask whether a phone can actually reach a control — the seven harnesses in tools/toolkit-gates/ — appear zero times in .github/workflows/deploy_bridge.yml, so 'every shipped change carries an eval' is false, though that workflow's own 38 fail-the-build assertions do run against the built artifact on every deploy; (2) av_wishing_well.py gates new -> building -> shipped|declined and never deletes a row, but it has no expiry, so the K-cycle auto-expiry in WISH_IT_BETTER.md §2 is unimplemented and terminal states are reached only by hand. Two things a forker should know about the channel: nothing notifies the wisher although the form promises it — the queue's only consumer sends no mail — and the well's URL and key are injected from repo secrets at deploy time, so a fork gets the placeholder, the runtime detects it, and the well refuses to send until you wire your own backend.",
+  "repo": "https://github.com/mrdirno/nested-resonance-memory-archive"
+}
