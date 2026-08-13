@@ -202,6 +202,14 @@ ul.items{list-style:none;margin:0;padding:0}
 #nomatch{display:none;padding:26px 4px;color:var(--muted);font-family:var(--cond);
   font-size:19px;text-transform:uppercase;letter-spacing:.06em}
 
+/* ---------- yesterday's list ---------- */
+.lastwrap{margin:0 0 14px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;
+  font-size:14px;font-weight:700;background:var(--paper);border:1px dashed var(--steel);color:var(--steel);
+  border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+.lastbtn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+
 /* ---------- dock ---------- */
 .dock{
   position:fixed;left:0;right:0;bottom:0;background:var(--steel);
@@ -263,6 +271,10 @@ ul.items{list-style:none;margin:0;padding:0}
     <button class="btn" id="checkShown" type="button">Check shown</button>
   </div>
 
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last list</button>
+  </p>
+
   <main id="list"></main>
   <p id="nomatch">No items match that filter.</p>
 
@@ -276,6 +288,7 @@ ul.items{list-style:none;margin:0;padding:0}
   </div>
 </div>
 
+<script src="../shared/draft.js"></script>
 <script>
 const DATA = [
   { id:"tape", name:"Tapes & Adhesives", chip:"#2E64C8", items:[
@@ -322,6 +335,10 @@ const DATA = [
 ];
 
 const list = document.getElementById("list");
+
+/* Assigned at the bottom, once the list and the header both exist. Declared here
+   because refresh() runs during the build and must not throw on the way past. */
+var draft = null;
 
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
@@ -378,6 +395,7 @@ function refresh(){
   document.getElementById("count").textContent = String(total).padStart(2,"0");
   document.getElementById("countLabel").textContent = total === 1 ? "item needed" : "items needed";
   document.getElementById("copy").disabled = total === 0;
+  if (draft) draft.save();
 }
 
 document.addEventListener("change", e => {
@@ -425,10 +443,29 @@ document.getElementById("checkShown").addEventListener("click", () => {
 });
 
 document.getElementById("clear").addEventListener("click", () => {
-  document.querySelectorAll(".tick").forEach(t => { t.checked = false; t.closest(".item").classList.remove("is-checked"); });
-  document.querySelectorAll(".qty").forEach(q => q.value = 1);
-  document.querySelectorAll(".note").forEach(n => n.value = "");
+  /* Clear goes through the keeper so the list about to die lands in the "last"
+     slot first, and so the record is dropped instead of being rewritten by the
+     pending debounce a quarter-second later (§SCARS "clear must actually clear"). */
+  const wipe = () => {
+    /* Write-ins are removable rows: clearing must REMOVE them, not untick them,
+       or the next list starts with yesterday's duplicates sitting unticked in the
+       middle of it. Backported from the engine's clearAll(). */
+    document.querySelectorAll("#cat-writein .item").forEach(i => i.remove());
+    document.querySelectorAll(".tick").forEach(t => { t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+    document.querySelectorAll(".qty").forEach(q => q.value = 1);
+    document.querySelectorAll(".note").forEach(n => n.value = "");
+    /* Need-by is an answer about THIS list, so the next list starts at ASAP
+       rather than inheriting last Tuesday's date. The jobsite is not: it lives in
+       its own sticky record and Clear never touches it. */
+    fNeedSel.value = "asap";
+    fNeedDate.hidden = true;
+    fNeedDate.value = "";
+    reqTouched = false;
+    setReq();
+  };
+  if (draft) draft.clear(wipe); else wipe();
   refresh();
+  showLast();
 });
 
 function addWriteIn(){
@@ -517,6 +554,120 @@ function needByText(){
   }
   return "ASAP";
 }
+
+/* ── THE DRAFT ───────────────────────────────────────────────────────────────
+ * This page has been live since the kit started and has never kept a single
+ * thing anybody typed. A consumables list is a WALK: a lead ticks his way down
+ * the van and across two floors over twenty minutes, phone in one hand, and iOS
+ * evicts a background tab inside that window without warning. A tool that loses
+ * the walk is worse than the paper it replaced, because paper does not pretend.
+ *
+ * Keyed by ITEM NAME, never by position — write-ins shift every index after
+ * them, and a restore keyed on position hands a tech's "x12" to the wrong line,
+ * which is a wrong order that reads exactly like a right one.
+ *
+ * The REQUESTED date is deliberately not saved unless he edited it: it is filled
+ * from the resolved date on every load, and a saved copy would print Tuesday's
+ * date on Thursday's list — the one field where remembering is the bug. */
+draft = Draft.keep({
+  key: "toolkit.av.consumables.v1",
+  last: true,
+  snapshot(){
+    const cats = {};
+    document.querySelectorAll(".cat").forEach(cat => {
+      const id = cat.id.replace(/^cat-/, "");
+      const writein = id === "writein";
+      const rows = [...cat.querySelectorAll(".item")]
+        // A write-in row exists only because somebody typed it, so it is kept
+        // whether or not it is ticked. A seed row is only worth keeping once it
+        // is on the list.
+        .filter(i => writein || i.querySelector(".tick").checked)
+        .map(i => ({
+          n: i.querySelector(".name").textContent,
+          q: i.querySelector(".qty").value,
+          note: i.querySelector(".note").value,
+          on: i.querySelector(".tick").checked
+        }));
+      if (rows.length) cats[id] = rows;
+    });
+    const head = {
+      req: reqTouched ? fReq.value : "",
+      need: fNeedSel.value,
+      date: fNeedDate.value
+    };
+    const touched = Object.keys(cats).length || head.req || head.need !== "asap" || head.date;
+    // NULL IS THE ONLY WAY THE RECORD IS DROPPED. Returning an object here on an
+    // untouched page would make Clear un-clearable (§SCARS 2026-08-04).
+    return touched ? { cats, head } : null;
+  },
+  apply(s){
+    const h = s.head || {};
+    if (h.req) { fReq.value = h.req; reqTouched = true; }
+    if (h.need) { fNeedSel.value = h.need; fNeedDate.hidden = h.need !== "date"; }
+    if (h.date) fNeedDate.value = h.date;
+    Object.keys(s.cats || {}).forEach(id => {
+      const cat = document.getElementById("cat-" + id);
+      if (!cat) return;
+      const ul = cat.querySelector("ul.items");
+      const used = [];
+      s.cats[id].forEach(row => {
+        let li = [...ul.querySelectorAll("li.item")]
+          .find(x => x.querySelector(".name").textContent === row.n && used.indexOf(x) === -1);
+        // No free row with that name left: it was a write-in, or a seed item that
+        // has since been renamed out of the roster. Either way it comes back as a
+        // removable row rather than vanishing.
+        if (!li){
+          ul.insertAdjacentHTML("beforeend", itemHTML(row.n, "", true));
+          li = ul.lastElementChild;
+        }
+        used.push(li);
+        if (row.q != null && row.q !== "") li.querySelector(".qty").value = row.q;
+        if (row.note) li.querySelector(".note").value = row.note;
+        li.querySelector(".tick").checked = !!row.on;
+        li.classList.toggle("is-checked", !!row.on);
+      });
+    });
+  }
+});
+
+/* The need-by belongs to THIS list, so it rides in the draft and Clear resets it.
+   The fields are outside #list, so nothing else was going to notice them. */
+["fReq","fNeedSel","fNeedDate"].forEach(id => {
+  const e = document.getElementById(id);
+  e.addEventListener("input", () => draft.save());
+  e.addEventListener("change", () => draft.save());
+});
+
+/* ── THE JOBSITE IS STICKY, AND THAT IS WHY IT GETS ITS OWN RECORD ───────────
+ * A lead is on one job for a week and sends a list off it most days. Folding the
+ * jobsite into the draft made two things wrong at once: Clear could not actually
+ * clear (a touched header kept rewriting the record a quarter-second after the
+ * wipe — caught by the gate, which is the whole reason the gate reads STORAGE and
+ * not the screen), and clearing the list would have cost him the job name he had
+ * already typed. Separate record, never touched by Clear — the same split the
+ * engine's pages already ship as their sticky header. */
+const sticky = Draft.fields(["fJob"]);
+const stickyDraft = Draft.keep({
+  key: "toolkit.av.consumables.header.v1",
+  snapshot: sticky.snapshot,
+  apply: sticky.apply
+});
+sticky.watch(() => stickyDraft.save());
+
+/* YESTERDAY'S LIST. Clear now removes write-ins outright, so the undo is part of
+   the same change rather than a nicety: the only thing that destroys a list is
+   the button that also keeps a copy of it. Offered only when one exists. */
+const lastWrap = document.getElementById("lastwrap");
+function showLast(){ lastWrap.style.display = draft.hasLast() ? "" : "none"; }
+document.getElementById("last").addEventListener("click", () => {
+  document.querySelectorAll("#cat-writein .item").forEach(i => i.remove());
+  document.querySelectorAll(".tick").forEach(t => { t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+  draft.restoreLast();
+  refresh();
+  showLast();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+showLast();
 
 refresh();
 </script>

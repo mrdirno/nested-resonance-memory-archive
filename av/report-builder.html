@@ -119,6 +119,7 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-
 <script src="trade.js"></script>
 <script src="tools.js"></script>
 <script src="../shared/toolkit.js"></script>
+<script src="../shared/draft.js"></script>
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
@@ -284,11 +285,25 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-
     $("setup").innerHTML = buildSetup().map(function(s){ return "<li>" + s + "</li>"; }).join("");
   }
 
-  ["role","platform","lead","second","pm","company","custom"].forEach(function(id){
+  var IDS = ["role","platform","lead","second","pm","company","custom"];
+  IDS.forEach(function(id){
     $(id).addEventListener("input", render);
     $(id).addEventListener("change", render);
   });
   render();
+
+  /* ── WHAT HE TYPED, KEPT ───────────────────────────────────────────────────
+   * Four of these seven fields are the SAME FOREVER — his lead, his second, his
+   * PM, his company. The fifth is a free-text box he writes a paragraph of house
+   * rules into. Until now the page remembered none of it: every visit was a blank
+   * form, so the tool that exists to save him retyping made him retype first.
+   *
+   * Nothing here is a document and nothing is a day's work, so there is no "last"
+   * slot and no Clear — a set of preferences has nothing to start over from. */
+  var flat = Draft.fields(IDS);
+  var draft = Draft.keep({ key: "toolkit.av.reportBuilder.v1", snapshot: flat.snapshot, apply: flat.apply });
+  flat.watch(function(){ draft.save(); });
+  if (draft.restored) render();
 
   function copyText(t, btn){
     var was = btn.textContent;

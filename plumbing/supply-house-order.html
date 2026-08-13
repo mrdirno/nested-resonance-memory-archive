@@ -36,6 +36,14 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .seg button:last-child{border-radius:0 2px 2px 0;border-left:0}
 .seg button.on{background:var(--flag);border-color:var(--flag);color:#1A0E05}
 
+/* yesterday's order — only rendered when Clear has actually kept one */
+.lastwrap{margin:0 0 14px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;
+  font-size:14px;font-weight:700;background:var(--paper);border:1px dashed var(--steel);color:var(--steel);
+  border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+.lastbtn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+
 .cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
 .cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
   background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
@@ -122,6 +130,10 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
   </div>
 
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last order</button>
+  </p>
+
   <main id="list"></main>
 
   <p class="section-label">What the counter gets</p>
@@ -144,6 +156,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="trade.js"></script>
 <script src="tools.js"></script>
 <script src="../shared/toolkit.js"></script>
+<script src="../shared/draft.js"></script>
 <script>
 /* SUPPLY HOUSE ORDER
  *
@@ -271,6 +284,11 @@ ul.items{list-style:none;margin:0;padding:0}
   }
 
   var list = document.getElementById("list");
+
+  /* Assigned at the bottom, once the list and the header both exist. Declared
+     here because refresh() runs during the build and must not throw past it. */
+  var draft = null;
+
   list.innerHTML = DATA.map(function(cat){
     return '<section class="cat" data-id="'+cat.id+'" style="--chip:'+cat.chip+'">'
       + '<h2>'+esc(cat.name)+'<span class="n" data-n>0</span></h2>'
@@ -392,13 +410,28 @@ ul.items{list-style:none;margin:0;padding:0}
     var n = checked().length;
     countEl.textContent = n ? (n + " line" + (n === 1 ? "" : "s") + " on the list") : "Nothing on the list yet";
     preview.textContent = asText();
+    if (draft) draft.save();
   }
 
   document.getElementById("clear").addEventListener("click", function(){
-    [].forEach.call(list.querySelectorAll(".tick"), function(t){ t.checked = false; t.closest(".item").classList.remove("is-checked"); });
-    [].forEach.call(list.querySelectorAll(".i-qty"),  function(q){ q.value = 1; });
-    [].forEach.call(list.querySelectorAll(".i-note"), function(x){ x.value = ""; });
+    function wipe(){
+      // Write-ins are removable rows: clearing must REMOVE them, not untick them,
+      // or tomorrow's order starts with today's write-ins sitting unticked in the
+      // middle of it. Backported from shared/checklist-request.js clearAll().
+      [].forEach.call(writeUL.querySelectorAll(".item"), function(li){ li.remove(); });
+      [].forEach.call(list.querySelectorAll(".tick"), function(t){ t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+      [].forEach.call(list.querySelectorAll(".i-qty"),  function(q){ q.value = 1; });
+      [].forEach.call(list.querySelectorAll(".i-note"), function(x){ x.value = ""; });
+      /* The delivery call is an answer about THIS order, so the next one starts at
+         will-call/today rather than inheriting last week's Tuesday. Job, name and
+         account are not: they live in the sticky record and Clear never touches them. */
+      setSeg("segMode", "Will-call");
+      setSeg("segWhen", "Today");
+      document.getElementById("fDate").value = "";
+    }
+    if (draft) draft.clear(wipe); else wipe();
     refresh();
+    showLast();
   });
 
   var copyBtn = document.getElementById("copy");
@@ -425,6 +458,134 @@ ul.items{list-style:none;margin:0;padding:0}
       navigator.clipboard.writeText(t).then(function(){ flash("Copied"); }, fallback);
     } else { fallback(); }
   });
+
+  /* ── THE DRAFT ─────────────────────────────────────────────────────────────
+   * An order is built on the tailgate over a long few minutes — six categories,
+   * a unit and a config on every line — and then the phone rings, or he walks
+   * inside to read a fitting off the wall, and iOS evicts the tab. Until now this
+   * page kept nothing at all: every reload was a blank sheet, and the man who
+   * retypes forty lines once does not open it again.
+   *
+   * Keyed by ITEM NAME, never by position: write-ins shift every index after
+   * them, and a restore keyed on position moves a size onto the wrong fitting —
+   * a wrong order that reads exactly like a right one, which is the specific
+   * failure this page exists to prevent.
+   *
+   * An option the user picked that is no longer in the list is APPENDED rather
+   * than dropped: losing it silently would swap his config for whatever happens
+   * to be first, and first-option-as-assertion is its own scar. */
+  function setSeg(id, v){
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+  function pick(sel, v){
+    if (!sel || v == null || v === "") return;
+    var has = [].some.call(sel.options, function(o){ return o.value === v; });
+    if (!has){ var o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); }
+    sel.value = v;
+  }
+
+  draft = Draft.keep({
+    key: "toolkit.plumbing.supplyHouseOrder.v1",
+    last: true,
+    snapshot: function(){
+      var cats = {};
+      DATA.forEach(function(cat){
+        var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
+        var writein = !!cat.writein;
+        var rows = [].slice.call(sec.querySelectorAll(".item"))
+          // A write-in exists only because somebody typed it, so it is kept
+          // ticked or not. A seed line is worth keeping once it is on the order.
+          .filter(function(li){ return writein || li.classList.contains("is-checked"); })
+          .map(function(li){
+            var s = li.querySelector(".i-size"), c = li.querySelector(".i-cfg");
+            return {
+              n: li.querySelector(".name").textContent,
+              q: li.querySelector(".i-qty").value,
+              u: li.querySelector(".i-unit").value,
+              s: s ? s.value : "",
+              c: c ? c.value : "",
+              note: li.querySelector(".i-note").value,
+              on: li.classList.contains("is-checked")
+            };
+          });
+        if (rows.length) cats[cat.id] = rows;
+      });
+      var head = { mode: mode, when: when, date: document.getElementById("fDate").value };
+      var touched = Object.keys(cats).length
+        || head.mode !== "Will-call" || head.when !== "Today" || head.date;
+      // NULL IS THE ONLY WAY THE RECORD IS DROPPED — an object here on an
+      // untouched page makes Clear un-clearable (§SCARS "clear must actually clear").
+      return touched ? { cats: cats, head: head } : null;
+    },
+    apply: function(st){
+      var h = st.head || {};
+      if (h.date) document.getElementById("fDate").value = h.date;
+      if (h.mode) setSeg("segMode", h.mode);
+      if (h.when) setSeg("segWhen", h.when);
+      Object.keys(st.cats || {}).forEach(function(id){
+        var sec = list.querySelector('.cat[data-id="' + id + '"]');
+        if (!sec) return;
+        var ul = sec.querySelector("ul.items");
+        var used = [];
+        st.cats[id].forEach(function(row){
+          var li = [].slice.call(ul.querySelectorAll("li.item")).filter(function(x){
+            return x.querySelector(".name").textContent === row.n && used.indexOf(x) === -1;
+          })[0];
+          // No free row with that name left: a write-in, or a seed line renamed
+          // out of the roster. It comes back as a removable row, not as nothing.
+          if (!li){
+            ul.insertAdjacentHTML("beforeend", itemHTML({ n: row.n, s: [], c: [], u: U.ea }, true));
+            li = ul.lastElementChild;
+          }
+          used.push(li);
+          if (row.q != null && row.q !== "") li.querySelector(".i-qty").value = row.q;
+          pick(li.querySelector(".i-unit"), row.u);
+          pick(li.querySelector(".i-size"), row.s);
+          pick(li.querySelector(".i-cfg"),  row.c);
+          if (row.note) li.querySelector(".i-note").value = row.note;
+          li.querySelector(".tick").checked = !!row.on;
+          li.classList.toggle("is-checked", !!row.on);
+        });
+      });
+    }
+  });
+
+  /* The pickup/delivery call belongs to THIS order, so it rides in the draft and
+     Clear resets it. The field is outside #list; nothing else watches it. */
+  document.getElementById("fDate").addEventListener("change", function(){ draft.save(); });
+
+  /* ── JOB, NAME AND ACCOUNT ARE STICKY, AND THAT IS WHY THEY GET THEIR OWN ───
+   * A plumber is on one job for a week, his name never changes, and the account
+   * number is the shop's. Folding them into the order draft made two things wrong
+   * at once: Clear could not actually clear (a touched header rewrote the record a
+   * quarter-second after the wipe — caught by the gate, which reads STORAGE and
+   * not the screen), and clearing an order would have cost him three fields he had
+   * already typed. Separate record, never touched by Clear — the same split the
+   * engine's pages already ship as their sticky header. */
+  var sticky = Draft.fields(["fJob", "fBy", "fAcct"]);
+  var stickyDraft = Draft.keep({
+    key: "toolkit.plumbing.supplyHouseOrder.header.v1",
+    snapshot: sticky.snapshot,
+    apply: sticky.apply
+  });
+  sticky.watch(function(){ stickyDraft.save(); });
+
+  /* YESTERDAY'S ORDER. "Half of tomorrow's order is today's order" — and Clear
+     now removes write-ins outright, so the undo ships in the same change: the
+     only button that destroys an order is also the one that keeps a copy. */
+  function showLast(){
+    document.getElementById("lastwrap").style.display = draft.hasLast() ? "" : "none";
+  }
+  document.getElementById("last").addEventListener("click", function(){
+    [].forEach.call(writeUL.querySelectorAll(".item"), function(li){ li.remove(); });
+    [].forEach.call(list.querySelectorAll(".tick"), function(t){ t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+    draft.restoreLast();
+    refresh();
+    showLast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  showLast();
 
   refresh();
   document.addEventListener("av:ready", refresh); // date resolves async

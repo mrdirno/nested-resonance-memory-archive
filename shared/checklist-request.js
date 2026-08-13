@@ -400,10 +400,18 @@
      * the camera, a phone call, or the next app — and a timer that has not fired
      * yet dies with it, silently, taking the walk he just did. That scar was
      * found and fixed on ONE page (hvac/repair-recommendation.html) and left
-     * every checklist tool on three other trades still debounce-only: this
-     * engine drives av/consumables, av/cable-list, plumbing/supply-house-order
-     * and electrical/pull-list. Fixing it in the engine fixes all four at once —
-     * which is the whole reason the engine exists.
+     * every checklist tool on three other trades still debounce-only: fixing it
+     * in the engine fixes every page the engine drives at once — which is the
+     * whole reason the engine exists.
+     *
+     * WHAT THAT SENTENCE USED TO CLAIM, and it was false for weeks: "this engine
+     * drives av/consumables, av/cable-list, plumbing/supply-house-order and
+     * electrical/pull-list." It drives cable-list and pull-list. It has NEVER
+     * driven either of the two pages it was extracted FROM — they stayed forks,
+     * with no save at all, and this comment is why nobody noticed. A file that
+     * describes a coverage it does not have is worse than a file with no comment:
+     * it answers the audit question before the audit reaches the disk. Their
+     * persistence now comes from shared/draft.js; the fork itself is still owed.
      * Flush SYNCHRONOUSLY on the three events that actually precede an eviction.
      * `visibilitychange` is the one that fires on iOS; `pagehide` covers a real
      * navigation; `blur` covers focus leaving to another app on desktop. */
