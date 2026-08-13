@@ -27,6 +27,11 @@ on:
       - 'creative/**'
       # the commons — the human layer, shared by every trade and owned by none
       - 'commons/**'
+      # The network manifest is staged from the repo root below, so it needs its
+      # own trigger: without this line, raising the declared level is a correct
+      # edit on disk that never reaches the web, and the file says L1 in the repo
+      # while the published copy still says L0. Editing the manifest IS a deploy.
+      - 'wish-it-better.json'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -138,6 +143,48 @@ jobs:
           mkdir -p HELIOS-BRIDGE/dist/commons
           cp -R commons/. HELIOS-BRIDGE/dist/commons/
           echo "staged commons"
+
+          # THE NETWORK MANIFEST — the one file on this site that a machine is
+          # entitled to guess. wish-it-better.json has been at the repo root and
+          # committed since a8487909, and it 404'd at
+          # https://mrdirno.github.io/nested-resonance-memory-archive/wish-it-better.json
+          # for its whole life, because THE ARTIFACT IS THE SITE and the repo root
+          # is not inside it. Two projects on the Wish It Better network — the AV
+          # Field Toolkit and Collage Studio — are addressed by the /av/ and
+          # /collage/ URLs above, and a card or a crawler handed one of those gets
+          # the URL and nothing else: no repo, no clone, no way to reach a file
+          # that exists only in a git tree.
+          #
+          # ROOT IS NOT ENOUGH, AND THAT NEARLY SHIPPED AS THE WHOLE FIX. The
+          # network addresses those two projects by the URLs above — /av/ and
+          # /collage/ — not by this site's root, and a chip carries ONE url with
+          # no way to walk up from it. Staging only the artifact root would have
+          # left the obvious relative guess, <chip-url>wish-it-better.json, a 404
+          # on both, while the deploy went green and the commit claimed the fix.
+          # The seed project got away with root-only because its listed url IS
+          # its Pages root; this repo's are subpaths, so the copy follows the
+          # URLs the network actually lists.
+          #
+          # ONE SOURCE, N DERIVED COPIES, every one asserted byte-identical to it
+          # below. Hand-maintaining a second copy under HELIOS-BRIDGE/ would be
+          # the credits.json mistake again — a deploy-time artifact with no git
+          # history, free to drift from the thing it claims to mirror.
+          test -f wish-it-better.json || { echo "MISSING: wish-it-better.json at the repo root"; exit 1; }
+          for dest in "" av/ collage/; do
+            d="HELIOS-BRIDGE/dist/$dest"
+            test -d "$d" || { echo "FAIL: cannot stage the network manifest into $d — that surface is not in the artifact"; exit 1; }
+            # FAIL CLOSED ON A SECOND MANIFEST. A per-surface manifest checked in
+            # under tools/collage-studio/public/ would land here from the vite
+            # build and this copy would silently overwrite it — one project's
+            # declared level replaced by another, with every gate green. The
+            # scope question (one repo-scoped manifest, or one per surface) is a
+            # decision, so the build refuses instead of picking a winner.
+            if [ -f "${d}wish-it-better.json" ] && ! cmp -s wish-it-better.json "${d}wish-it-better.json"; then
+              echo "FAIL: ${d}wish-it-better.json already exists and differs from the repo-root manifest — two manifests are in flight for one surface. Settle the scope (repo-scoped at the root, or one per surface) before either ships."; exit 1
+            fi
+            cp wish-it-better.json "${d}wish-it-better.json"
+            echo "staged network manifest: /$dest"
+          done
 
       # The wishing well POSTs to Supabase with the PUBLIC anon key. It is
       # public-by-design, but a JWT-shaped string cannot live in this public repo
@@ -584,6 +631,62 @@ jobs:
             test -f "HELIOS-BRIDGE/dist/collage/$a" || { echo "MISSING ASSET: collage/$a (referenced by collage/index.html)"; exit 1; }
             echo "  ok  collage/$a"
           done
+
+          # THE NETWORK MANIFEST IS PUBLISHED, PARSES, AND HAS NOT DRIFTED.
+          #
+          # Every other check in this step is DERIVED — it walks what the shipped
+          # files reference and asserts each target exists. That derivation is
+          # structurally blind to this one file, and for a principled reason: a
+          # well-known path has no referrer, which is what well-known means. So it
+          # gets an assertion of its own or it gets nothing, and "nothing" is what
+          # it had while the file sat green at the repo root and 404'd on the web.
+          #
+          # THREE failure modes, because only the first is obvious:
+          #   deleted     — the staging line above was dropped or renamed
+          #   drifted     — someone edited a copy under HELIOS-BRIDGE/ and the
+          #                 published level stopped matching the repo-root file,
+          #                 which is the failure that makes a declared level a lie
+          #   unparseable — a manifest that 200s and does not parse is worse than
+          #                 a 404: a crawler reads a level off a file it cannot
+          #                 read, and criterion 4 asks for parsing, not presence
+          # Checked at EVERY surface the network addresses, not just the root —
+          # a card carries one URL and cannot walk up from it, so a manifest that
+          # is present at the root and absent beside the page the chip opens is
+          # still invisible to the holder of that card.
+          for dest in "" av/ collage/; do
+            f="HELIOS-BRIDGE/dist/${dest}wish-it-better.json"
+            test -f "$f" \
+              || { echo "FAIL: $f is not in the artifact — /$dest is a URL the network lists, and it is all a card holder or a crawler ever gets; a manifest that exists only in the repo is invisible to both"; exit 1; }
+            cmp -s wish-it-better.json "$f" \
+              || { echo "FAIL: $f is not byte-identical to the repo-root original — one source, N derived copies, and these have drifted"; exit 1; }
+          done
+          node -e '
+            const fs = require("fs");
+            /* NO APOSTROPHES IN THIS SCRIPT — see the docspec block above. */
+            const SPEC = "wish-it-better/1.0";
+            for (const dest of ["", "av/", "collage/"]) {
+              const f = "HELIOS-BRIDGE/dist/" + dest + "wish-it-better.json";
+              let m;
+              try { m = JSON.parse(fs.readFileSync(f, "utf8")); }
+              catch (e) { console.error("FAIL: " + f + " does not parse: " + e.message); process.exit(1); }
+              /* Presence tested by key, not by truthiness: !m[k] reports a
+                 present-but-empty level as MISSING, which sends the next reader
+                 hunting for a field that is right there. */
+              for (const k of ["spec", "level", "project", "wish_channel", "repo"]) {
+                if (!(k in m) || typeof m[k] !== "string" || !m[k].trim()) {
+                  console.error("FAIL: " + f + " has no usable " + k); process.exit(1);
+                }
+              }
+              /* Criterion 4 is parsing AND declaring a level, so a level outside
+                 the three the standard defines is a badge that means nothing.
+                 WISH_IT_BETTER.md section 3: L0 Adopting, L1 Looping, L2
+                 Networked. Cheap, and it is the field someone would raise by
+                 hand to buy a better badge. */
+              if (m.spec !== SPEC) { console.error("FAIL: " + f + " declares spec " + m.spec + ", not " + SPEC); process.exit(1); }
+              if (!/^L[0-2]$/.test(m.level)) { console.error("FAIL: " + f + " declares level " + m.level + ", which is not one of L0/L1/L2"); process.exit(1); }
+              console.log("network manifest /" + dest + ": " + m.project + " " + m.level + " (" + m.spec + "), parses, byte-identical to repo root");
+            }
+          ' || exit 1
 
           echo "artifact OK"
 
