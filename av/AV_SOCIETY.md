@@ -1631,6 +1631,42 @@ became a check — `reconcile-join` 87 → 104, plus the surface gate. It found 
 injection, which is the other half of what an audit is for: knowing which parts are
 actually sound.
 
+### 2026-08-13 — THE FORM ASKED FOR THE ONE THING THE PAGE ALREADY KNEW
+Wish `da36b663`: *"has no wish it better button that users can use to make a wish."*
+Measured on LIVE production at `/av/cable-list.html` before touching anything: the
+bar's only CTA read **"✦ WISH FOR A TOOL"**, the well opened on `kind=new_tool`, and
+the `about_tool` select was **hidden and empty**. Saying *this page is broken* cost
+four controls and a hunt through a dropdown for the name of the page you were already
+standing on — while `currentTool()` sat two functions away in the same file, already
+being used **by that same bar** to render the ★ that favourites that exact page.
+
+**The runtime knew. The well never asked.** That is the generalisable one: a form
+field asking for something the page can already answer is not a small friction, it is
+**double entry**, and this one sat on the single funnel the whole program runs on.
+Every future form gets the question *what does the page already know?* before it gets
+a field. THE GATE says ticking beats typing; we were charging four taps for a fact we
+had.
+
+**Two smaller lessons, both worth the keystrokes.**
+
+**ONE — A DEFAULT CAN ARGUE WITH ITS OWN RANKING.** The queue ranks `bug > improve >
+new_tool` because something already in someone's hands beats an idea, and the well
+opened on the *lowest* of the three everywhere, taxing the two higher ones three
+controls each. `shared/feedback.js` — the newer, more refined sibling — has opened on
+`kind="bug"` since the day it shipped. The refinement existed in this repo for over a
+week and never walked next door. **That is exactly what the BACKPORT axis is for, and
+nobody files a wish for it.**
+
+**TWO — CLEARING A FIELD SILENTLY RETARGETS THE ANSWER.** `new_tool` is about no
+existing tool, so switching to it must blank `about_tool`. Switching back restored
+**the page in the address bar** — so *improve → pick `write-up` → new_tool → improve*
+came back pointing at `cable-list`, and a bug report would have been **filed against a
+tool that never had the defect**, costing a cycle chasing it. A pick the user made
+outranks the page they are on, and it has to survive the round trip. Found by driving
+the real sheet through the state machine; `node --check` passed, the 75-page mobile
+gate passed, and both would have passed forever. **A restore path is a state machine,
+and a state machine is only ever tested by walking it backwards.**
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -2698,3 +2734,4 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   3% → $1.46 off 48.50 and 3.5% → $1.82 off 52.10.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/total-package.html
 - `2026-08-13` — **[AXIS:WELL]** **CREATIVE FIELD TOOLKIT — trade #9** shipped from wish `3204d77c`, the first family here that is not a construction trade and the first stood up by a wish rather than off the ladder · **8 trades / 53 tools → 9 trades / 55 tools**. A 3-lens judge panel returned BUILD_NARROWER unanimously and killed "creatives" as a framing; what ships serves the one-person shop that shoots and cuts. **Notes Back** (shape #3 — the round of client notes the review tool never saw, answered line by line, carrying a rung no construction kit has: THAT'S AN EXTRA) and **That's Another Round** (shape #2 — the same-day out-of-scope heads-up, no price, ends in a choice). Hue 288.0°, the exact midpoint of the only arc wider than 62°; 7.88 / 10.74 / 7.39 on the three contrast bars. **BACKPORT RIDER FIRED, three times:** the four answer rungs, the boundary sentence and the intake's first-line assumption all became DATA across all nine `answer-back` pages with the shipped wording as the default (verified: no sibling declares any of them, so the eight are behaviour-identical); `shared/note.js` `buildTicks` was fixed on both the render and copy paths where `.sub` on a string primitive resolved to `String.prototype.sub` and printed `function sub() { [native code] }` into a client-facing message; and six commons rows a camera bag makes false left the `universal` floor. Gate: 24/24 overflow assertions clean (4 pages × 320/360/390/430, populated and empty), zero site console errors, root font bumped to 20px still clean, the paste driven end to end — 5 rows verbatim with timecodes intact and the subject line restorable — and both documents copied and read for price/fee/invoice/signature leakage. Two blockers found by the browser that every static check passed, both fixed and re-gated before ship. Storefront: entry live, drift checker clean, contract rebuilt (9 trades, 55 tools, 4 personas bound). https://mrdirno.github.io/nested-resonance-memory-archive/creative/
+- `2026-08-13` — **[AXIS:WELL]** **THE WELL NOW OPENS ON THE PAGE YOU ARE STANDING ON**, from wish `da36b663` — *"has no wish it better button that users can use to make a wish"* · **before:** on all 73 tool pages of all 9 trades the bar's only CTA read "✦ WISH FOR A TOOL", the well opened on `kind=new_tool`, and `about_tool` was hidden and empty, so reporting a shipped tool broken cost four controls plus a dropdown hunt for the name of the page you were already on (measured live at `/av/cable-list.html`, not assumed) · **after:** on a TOOL page the CTA reads "✦ Wish it better", opens on `improve`, and arrives with `about_tool` already set to that page — one tap, then type; on a HUB or the Wall of Wishes nothing changes (`new_tool`, "✦ Wish for a tool"), because someone browsing a hub is shopping; the menu's "Wish for a tool" now says `new_tool` explicitly so a tool page can never lose the new-tool funnel by inheriting the page's default. **BACKPORT RIDER FIRED — structurally and by sweep:** the fix is 99 lines in `shared/toolkit.js`, the ONE runtime all nine trades load, so av · creative · electrical · framing · gc · hvac · low-voltage · plumbing · roofing landed in the same commit and were each asserted, not assumed (same-origin iframe probe, one tool page + hub/credits per trade); the sibling surfaces were swept too — `shared/feedback.js` already opened on the highest-ranked kind (`bug`) and needed nothing, which is where this refinement was borrowed FROM, and `commons` `areas` were checked against the 9 trades on disk and are complete. **FALSIFIABLE (EVO LOOP step c, written into the code):** if the `improve` default is right, improve+bug carrying an `about_tool` rise and new_tool wishes arrive from hubs; if the well goes quiet, or improve/bug name a tool the wisher was not on, the default is steering people instead of reading them — revert it. One defect caught by driving the real sheet that every static check passed: a user's explicit tool pick was silently replaced by the current page after a round trip through `new_tool`, which would have filed bug reports against the wrong tool (§SCARS 2026-08-13). Gate: `tools/toolkit-gates/mobile-watertight.mjs` 75 pages at 320/360/390/430px, default and bumped text, **0 failing**; the CTA got NARROWER, 161px → 149px. Out of lane and routed to P5 rather than acted on: the wish also names the Vibe Cards / founder page (persona500, not this repo) and asks whether a generator should be published at all instead of its output. https://mrdirno.github.io/nested-resonance-memory-archive/av/total-package.html

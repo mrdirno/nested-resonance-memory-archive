@@ -130,6 +130,16 @@
       "wished_date": "2026-08-12",
       "shipped_date": "2026-08-12",
       "shipped_commit": "dee60988"
+    },
+    {
+      "tool_name": "Wish it better — the well opens on the page you're standing on (all nine trades)",
+      "tool_href": "total-package.html",
+      "wisher": "an anonymous AV user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-13",
+      "shipped_date": "2026-08-13",
+      "shipped_commit": "8afe08fe"
     }
   ]
 }
