@@ -1,0 +1,16 @@
+{
+  "ledger": "Creative Field Toolkit \u2014 Wall of Wishes. APPEND-ONLY public credit ledger: every tool built from a wish credits the person who wished it, permanently. The immutability IS git history \u2014 this file is committed to a public repo, hash-chained, forked, and archived, so a credit can never be quietly erased. NEVER rewrite or remove an entry; only append. Anonymous wishers are credited as 'an anonymous creative <role>'.",
+  "credits": [
+    {
+      "tool_name": "The Creative Field Toolkit",
+      "tool_href": "index.html",
+      "wisher": "an anonymous creative pro",
+      "company": null,
+      "role": "pro",
+      "wished_date": "2026-08-12",
+      "shipped_date": "2026-08-13",
+      "shipped_commit": null,
+      "note": "Asked what else could be put in the hands of people who shoot and cut. A judge panel narrowed it to one population and this trade opened on it \u2014 Notes Back and That's Another Round shipped the same day."
+    }
+  ]
+}

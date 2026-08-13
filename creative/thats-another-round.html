@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>That&rsquo;s Another Round — Creative Field Toolkit</title>
+<meta name="description" content="They asked for one more small thing after the rounds you agreed. Write it down the same day — who asked, what they actually asked for, why it's outside, and where it leaves the delivery date. Warm, factual, no price, ends in a choice. Free, nothing leaves your browser.">
+<meta name="apple-mobile-web-app-title" content="Another Round">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Creative &middot; you &rarr; whoever asked</span>
+    <h1>That&rsquo;s Another Round</h1>
+    <p class="lede">&ldquo;Just one small thing&rdquo; landed after the rounds you agreed. Write it the day they ask, while it&rsquo;s still one thing and still cheap &mdash; who asked, what they actually asked for, why it&rsquo;s outside, and where that leaves the delivery date. Then send it and get on with the cut.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>It&rsquo;s a heads-up, not a bill.</b> There is no price on this, no number, no fee and no signature line &mdash; whatever you use to invoice owns all of that. This page only ever repeats back the deal <i>you</i> typed in; it has no opinion about how many rounds is normal, because there is no such number. Send it the same day, keep it warm, and end it with the choice: <b>in and the date moves, or after delivery and it doesn&rsquo;t.</b>
+  </div>
+
+  <p class="credit">&#10022; This whole toolkit was wished into existence by an anonymous creative pro, who asked what else we could put in the hands of people who shoot and cut.</p>
+  <p class="credit">&#10022; A reason your clients use that isn&rsquo;t on the list, or a line that reads too cold? Wish it better &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* THAT'S ANOTHER ROUND — the late out-of-scope ask, shipped as a CONFIG of shape
+ * #2's engine (shared/note.js). There is no CSS in this file, no DOM building,
+ * no state, no persistence and no document assembly: the engine owns all of it.
+ * This file owns the WORDS, which is the half an engine must never own.
+ *
+ * THE INCUMBENT IS NOT SOFTWARE — IT IS WRITING NOTHING AND EATING THE WORK.
+ * The numbered, invoice-tied change order belongs to whatever the user invoices
+ * with, and this program never competes with whoever numbers a document. What
+ * nobody owns is the message sent the same afternoon, before the work is done,
+ * by somebody who wants to keep the client.
+ *
+ * SO THE TONE IS THE PRODUCT (the panel's words, and it is a safety edge here,
+ * not a preference): if this reads like a collections notice it gets rewritten
+ * by hand once and never opened again. Warm, factual, one option at the end,
+ * never an ultimatum. Every closing line was written to that bar.
+ *
+ * AND IT MAY ONLY EVER RESTATE THE DEAL THE USER TYPED IN. No implied "two
+ * rounds is standard", no suggested fee, no default number anywhere on the
+ * page — the reason the "what it takes" block counts hours and days and never
+ * multiplies them by anything.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.creative.another-round.v1",
+    docName: "HEADS-UP — ONE OUTSIDE THE ROUNDS",
+    copiedLabel: "Copied. Send it today.",
+    clearConfirm: "Clear this one? Your name and your shop stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Started",
+
+    /* The job, the cut and the day ride on the SECOND line, never stacked onto
+       the heading. Findable by search, readable on a phone. */
+    subline: function (get, u) {
+      return [get("job"), get("cut"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it is findable in their inbox in November, and so it points at one cut instead of at the whole relationship.",
+        fields: [
+          { id: "job", kind: "text", label: "Job", hint: "— the way they say it", ph: "Northgate brand film", docSkip: true },
+          { id: "cut", kind: "text", label: "Which cut", hint: "— version and length", ph: "v3, :60", docSkip: true }
+        ]
+      },
+      {
+        title: "Who asked, and how",
+        tone: "loud",
+        docHead: "WHO ASKED",
+        why: "A name and a day is the whole reason this exists. A verbal on a call is the one that disappears — and the person who asked is often not the person who signed off.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who asked", options: T.roles, docLabel: "Asked by" },
+          { id: "who", kind: "text", label: "Their name", hint: "— the one line you can't rebuild later", ph: "Priya — Head of Ops", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How it came in", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" }
+        ]
+      },
+      {
+        title: "What they asked for",
+        docHead: "WHAT THEY ASKED FOR",
+        why: "In their words if you have them. What you write here is what they will read back — a fair account of the ask is what makes the rest of this land.",
+        fields: [
+          { id: "ask", kind: "area", rows: 2, label: "What they asked for", hint: "— plainly, no spin",
+            ph: "swap the opening drone shot for the new roof footage, and re-cut the :30 to match" },
+          { id: "why", kind: "ticks", subhead: "Outside the rounds because", label: "", docLabel: "OUTSIDE THE ROUNDS BECAUSE", options: T.why }
+        ]
+      },
+      {
+        title: "What it takes",
+        docHead: "WHAT IT TAKES — COUNTS ONLY, NO PRICE",
+        why: "Counts, not money. What you charge is between you and your invoice; what they need from this page is the size of the thing.",
+        fields: [
+          {
+            id: "cost", kind: "rows", label: "What it takes", addLabel: "+ Another line", docLabel: "WHAT IT TAKES",
+            cols: [
+              { id: "qty", kind: "stepper", label: "How many", ph: "qty" },
+              { id: "unit", kind: "select", label: "Of what", options: T.units }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Where the delivery date lands",
+        tone: "loud",
+        docHead: "THE DELIVERY DATE",
+        why: "This is the line they actually read. The middle answer is the one they never expect, and the third one hands the decision back to them, which is where it belongs.",
+        fields: [
+          { id: "stands", kind: "seg", label: "Delivery date", options: T.stands, docLabel: "Delivery date" },
+          { id: "date", kind: "text", label: "The date we're working to", hint: "— the one already agreed", ph: "Fri the 22nd", docLabel: "Date we agreed" }
+        ]
+      },
+      {
+        title: "What this one doesn't include",
+        docHead: "NOT IN THIS ONE",
+        why: "One small change quietly carries three others, and the same day is the only time naming them is cheap rather than awkward.",
+        fields: [
+          { id: "notin", kind: "ticks", label: "", docLabel: "NOT IN THIS ONE", options: T.notin }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this device, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + number", ph: "Sam Reyes — 415-555-0148", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Your shop", ph: "Reyes Picture Co.", docLabel: "Shop" }
+        ]
+      }
+    ],
+
+    /* THE CLOSING IS THE PRODUCT. Warm, factual, and it ends in a CHOICE — never
+       an ultimatum, never a fee, never a lecture about scope. */
+    closing: [
+      "Not a bill and not a change order — just flagging it the day you asked, so neither of us finds it at the end.",
+      "Happy to do it. Tell me which you'd rather: it goes in and the date moves, or we park it and pick it up after delivery so the date holds. Either works for me — I just need to know which one."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.cost || []).length;
+      if (n) return n + " line" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

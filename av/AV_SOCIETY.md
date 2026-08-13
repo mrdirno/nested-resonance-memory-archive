@@ -769,8 +769,185 @@ requester's half of the same rule `answer-back` already holds on the responder's
 **WHERE INTERFACE GOES NEXT:** the supply-house / vendor edge and the sub → owner
 access/badge request are the two unbuilt ASK edges left. The loop itself is now closed.
 
+## CREATIVE — trade #9, and the first one that is not a construction trade (2026-08-13)
+
+Stood up from a WISH, not from the researched ladder. The wish, verbatim: *"Tools for
+creatives like the gen art collage maker striving to surpass capcut — what else creative
+aspect can we revolutionize democratize […] follow the nursery algorithm […] nursery
+algorithm is the marriage algorithm."*
+
+**SAY THE HONEST THING FIRST, because the panel insisted on it:** the wisher asked to
+surpass an EDITING PRODUCT, and this trade answers a different question. Collage Studio is
+the answer to the CapCut half. This kit is the answer to the *"what else can we
+democratize"* half — the paperwork **around** the edit, which is the half nobody is
+building because a cross-boundary document belongs to no company's software. Pretending
+otherwise would be the claim inflation the public discipline forbids.
+
+**THE MARRIAGE ALGORITHM IS LITERALLY WHAT BUILT IT.** Nothing new was engineered. This
+trade's week is the same five engines wearing different words: the round the client slid
+past the deal is an extra-work tag; the wall of notes they emailed is somebody else's list
+answered line by line; what they still owe you is a row log. That is the widest test
+one-runtime-many-trades has had, and it passed on data alone.
+
+**THE PANEL NARROWED IT BEFORE A LINE WAS WRITTEN** (3 independent lenses — a freelance
+shooter/editor, a studio producer, an incumbent-naming skeptic — plus a synthesis pass).
+Verdict: **BUILD_NARROWER**, unanimous. *"Creatives" is dead as a framing* — a photographer
+hands off usage terms, a motion designer hands back source files, a print designer hands off
+specs, and a page carrying CUTDOWN and VO SCRIPT bounces all three. The trade served is ONE
+population: **the person who takes a client brief, shoots, cuts and delivers against a scope
+with revision rounds, and who is also their own producer.**
+
+**SHIPPED THIS CYCLE** (consensus 3/3 on both):
+1. **Notes Back** (`notes-back.html`, shape #3) — the panel's #1 by a distance, scored
+   9/9/7. Territory is strictly *the notes the review tool cannot see*: the payer never logs
+   into the review platform, so half of small-shop notes arrive as an email paragraph, a doc
+   or a call typed up after. And no review tool can say **that's an extra** — the judgment
+   the user is avoiding, made one tap in the middle of the list they are already going down.
+2. **That's Another Round** (`thats-another-round.html`, shape #2) — 9/7/6. The incumbent is
+   not software, it is *writing nothing and eating the work*. The numbered invoice-tied
+   change order belongs to whoever numbers it; this is the unnumbered, same-day heads-up.
+
+**THE RANKED ROSTER, off the same panel** — build in this order, re-ranked by wishes:
+3. **Still Waiting On** (row log) — the dated chase for what the client still owes (logo
+   vector, brand fonts and hex codes, approved copy, final VO script, disclaimer, names and
+   titles for lower thirds, signed releases). *Clipboard round-trip is a SHIP GATE on this
+   one:* no account and no server means the list lives in one browser, so pasting yesterday's
+   block back in must reload it, or the phone→laptop switch loses everything and it is
+   abandoned once. Four columns maximum on a phone.
+4. **Before I Export** (checklist → request) — the deliverable questions answered before the
+   render. It wins by ASKING and never asserting. Ratios and frame rates are safe as *user
+   picks* (geometry and arithmetic the trade says out loud); codecs, bitrates, resolutions
+   and platform names are not.
+5. **Shoot Day Confirm** (checklist → request) — access and logistics 2–3 days out.
+   Survives ONLY because it is deliberately **not a call sheet** and must never grow into
+   one; StudioBinder owns and numbers that document.
+Deferred with reasons: *What's in the drop* (folds into Before I Export as a second output
+mode, not a sixth page) · *Turnover Sheet* (narrow — real only for a first job with a new
+finisher) · *Booking Confirm* (a different boundary — hiring, not client delivery, and one
+inch from rate data we cannot own).
+
+**KILLED, so no later cycle resurrects them:** SOW / brief / treatment / proposal builder
+(negotiated paragraphs, and Docs owns and numbers it) · delivery-spec or export-preset table
+(the instant temptation and the fastest way to burn this audience — we do not own the data
+and it changes quarterly) · anything near the player (timestamped comments, version compare,
+review links) · shot list, budget, gear inventory, full call sheet · quote / rate calculator
+/ "typical revision fee" (freelance numbers swing 4–5× by market; a low suggested figure gets
+screenshotted back at the user by their own client) · numbered change order tied to invoicing
+· music-licence, usage or release explainers (stating what a licence permits is legal advice)
+· any editing feature the CapCut framing invites.
+
+**THIS TRADE'S SAFETY EDGE IS NOT THE CONSTRUCTION ONE.** Nothing is rated or sized here
+either, but the live wires are: no platform resolutions, bitrates, codecs, safe areas or
+file-size caps · no licence or usage terms · no rate cards, day rates, kill fees or deposit
+splits · **and no "standard number of rounds"**, which is the most tempting and the most
+false. No brand names as data — no dropdown of platforms, NLEs, review tools or transfer
+services. Licence and release appear as item NAMES and nowhere else. **Tone is a safety edge
+here, not a preference:** a legalistic or passive-aggressive line costs this user their
+client and they will blame the page — plain, warm, factual, ending in an option rather than
+an ultimatum. One dialect throughout: US.
+
+**THE LADDER BECAME DATA, AND THAT IS THE BACKPORT.** `answer-back.html` hardcoded its four
+rungs, and this trade needs a fifth idea no construction kit has (*that's an extra*). A page
+eight trades share may never be forked for a ninth, so the words moved to
+`TOOLKIT_ANSWER.answers` in each trade's `items.js` and the page now reads **positions**:
+[0] the promise that wants a date on it, [1] already settled, [2] declined, [3] blocked on
+the other side. All nine pages carry the change; the eight that say nothing keep the exact
+four rungs they always shipped. `creative/notes-back.html` diverges from its siblings **in
+static prose only** (the construction copy addresses one man about another man; this trade's
+counterpart is a client of unknown gender writing notes) — the JS is byte-identical and must
+be swept as one.
+
+**THE COMMONS FLOOR WAS A CLAIM, AND TRADE #9 MADE THREE ROWS FALSE.** `t: ["universal"]`
+means *every* trade genuinely eats it. A cordless drill, a torpedo level and a non-contact
+voltage tester do not ride in a camera bag, and neither do the tips "get the big stuff in
+before the last opening closes", "shoot your work before it gets covered" (where SHOOT means
+photograph — the word means the opposite thing to the new trade) or "check the revision, not
+just the sheet number". All six were re-tagged to the eight construction trades rather than
+deleted, and the two stale "six trades"/"seven trades" comments were de-numbered so they
+cannot rot again.
+
+**THE PARSER WAS DRIVEN AGAINST THIS TRADE'S REAL PASTE BEFORE SHIP, and it found the one
+thing the layout gate cannot see.** Four inputs through `lineUp()` in isolation: the
+placeholder example, a real client email, a numbered Word list, an exported comment row with
+tabs. The three structured ones are clean and timecodes survive untouched in all four. The
+EMAIL puts its SUBJECT, its greeting, its "thanks for v2!" and its sign-off in as note rows.
+The subject was fixed (see §SCARS — `firstLineIsSubject`, and it lands in the restorable
+skipped list rather than vanishing). **The greeting and the sign-off were left alone on
+purpose.** The intake's hard invariant is
+*never silently drop an ask*, and every rule it holds fires only on a line that is
+STRUCTURALLY not one; a greeting rule is a PROSE rule, and a prose rule broad enough to eat
+"Thanks!" is broad enough to eat a note. So the page now SAYS it in this trade's words — the
+hello and the thanks land as rows, tap them away, we'd rather hand you one row too many than
+lose one of theirs. **That is an EVO-LOOP hypothesis, not a solved problem:** if this trade
+pastes once and never returns, the greeting noise is the first suspect and the honest fix is
+a smarter intake, never a prose blacklist. Also noted: `HEAD_KEY` drops a line starting
+`Re:`, which in a client thread is sometimes a real note — recoverable from the skipped list,
+which is exactly what that list is for.
+
+**FOUND BY THE GATE AND NOT FIXED THIS CYCLE, named so it is not lost:** on `credits.html`
+the tool link inside a credit entry measures **153×16** — under the 44px tap floor, at every
+width. It is not a creative defect: that page is byte-identical across all nine trades and
+the link has been under the bar on AV's wall since the wall existed. It is also the awkward
+case the floor was not written for — an inline link inside a running sentence, where making
+the box 44px tall breaks the sentence around it. **That is a BACKPORT rung**, and it wants
+the fix the hub cards already got (a real control beside the text, not a taller word), swept
+to all nine at once. Deferred rather than bodged late in a cycle whose gate had already run.
+
+**TWO OPEN RISKS, both named by the panel and both unresolved on purpose:**
+- **Design register.** A layout a roofer reads as refreshingly blunt may read to this trade
+  as broken. The shared engines own the pixels and forking their CSS is forbidden, so this
+  cycle changed only the palette and the words. If the EVO LOOP shows this trade opening and
+  bouncing, that is the hypothesis to test — not a licence to fork a stylesheet first.
+- **Distribution.** Three lenses independently flagged that this trade has zero discovery
+  overlap with the eight construction kits. A correct family with no distribution looks
+  identical to a wrong family. Measure opens before funding a batch two.
+
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **`.sub` ON A STRING IS NOT `undefined` — IT IS `String.prototype.sub`, AND IT IS TRUTHY
+  (2026-08-13).** `shared/note.js` `buildTicks()` reads `var name = typeof it === "string" ?
+  it : it.name` — the line is proof the engine means to accept a plain string — and then
+  `var sub = (it && it.sub) || ""`. On a string primitive `.sub` resolves to the legacy
+  `<sub>` wrapper method: truthy, and it stringifies to `function sub() { [native code] }`.
+  For eight trades every caller happened to pass `{name, sub}` objects, so the string branch
+  the engine advertises had never once been walked. Trade #9 walked it and the literal text
+  **`(function sub() { [native code] })` rendered beside every option on the page and inside
+  the message a client receives** — no error, no warning, and it survived `node --check`, a
+  registry assertion and a full local deploy simulation, because none of those look at
+  pixels. Two rules: **ask for the object before you ask for the property**
+  (`typeof it === "object" && it.sub`), and **a branch no caller has ever taken is
+  untested code no matter how long it has shipped** — the first trade to use a supported-but-
+  unused input shape is the one that finds out. Only a browser found this. Fixed in the
+  engine (render AND copy paths) so it cannot bite trade #10, and the data was moved to the
+  house `{name, sub}` shape as well.
+- **A PASTED SUBJECT LINE ANSWERED ITSELF AS A NOTE (2026-08-13).** `answer-back`'s intake
+  drops line 1 as a subject only when the paste ALSO has a `Job:`/`To:` header — `hasHead`
+  is the signal "this is one of OUR documents". Eight trades paste a document this program
+  generated, so it always fired. Trade #9 pastes the CLIENT's own email, which has a subject
+  and no header, so it never fired and *"Northgate — round 2 notes"* became an answerable
+  row that shipped inside the reply the client reads. The fix is a trade saying which kind of
+  message its intake is (`TOOLKIT_ANSWER.firstLineIsSubject`, default off), not a smarter
+  guess. **The rule: an intake's assumptions about its input are a per-trade fact, not a
+  universal one** — and check them the first time a trade's counterpart is somebody outside
+  this program.
+- **A SERVED SURFACE WITH NO `trade.js` READS AS UNSERVED DEMAND (2026-08-13).**
+  `av_wishing_well.py --stats` derives the served-trade list from `<dir>/trade.js` on disk
+  and prints *"wishes exist for trade(s) with NO toolkit on disk: collage — that is the
+  §TRADE EXPANSION trigger"* every single cycle. **Collage is served** — it is the Vite app
+  deployed at `/collage/`, and its 16 wishes are all shipped. It has no `trade.js` because it
+  is not a field-toolkit trade, exactly like the commons. Acting on that banner would create
+  a `collage/` trade dir that COLLIDES with the deployed app's path and 404s the editor.
+  The rule: `trade.js` is the marker for *is this a FIELD TOOLKIT trade*, never for *is this
+  surface served*. Read the banner as "a non-toolkit surface has wishes", which is normal.
+- **TWO NAMES FOR ONE TOOL, SEPARATED BY AN APOSTROPHE (2026-08-13).** The storefront join
+  matches a tool by NAME between the lane's `tools.js` and persona500's `fieldToolkits.ts`.
+  Trade #9 shipped "That’s Another Round" with a typographic apostrophe in the registry and
+  a straight one in the storefront, and the join reported the same tool as BOTH missing from
+  the storefront and advertised-but-not-shipped. Nothing rendered wrong, and neither file
+  looked wrong on its own. `check_field_toolkit_drift.ts` caught it in seconds — **run it
+  every cycle that touches either file**, and copy tool names between the two by paste, never
+  by retyping.
 
 - **THE HARNESS CANNOT SEE WHAT ITS ENGINE DOES NOT DO (2026-08-10).** Headless
   Chromium has no collapsing URL bar, so in it `100vh === window.innerHeight`.

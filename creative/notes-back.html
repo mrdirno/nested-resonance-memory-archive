@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Got It / Can’t / When — Low-Voltage Field Toolkit</title>
-<meta name="description" content="Somebody sent you a list of what they need from you. Paste it, tick what you'll hit and when, flag what you can't, and send one answer back instead of a text nobody can work to.">
-<meta name="apple-mobile-web-app-title" content="Got It / Can’t / When">
+<title>Notes Back — Creative Field Toolkit</title>
+<meta name="description" content="The client sent a wall of notes. Paste it exactly as it arrived, tap each line — doing it / already in / that's an extra / need from you — and copy back one reply that answers every note in their own words. Free, nothing leaves your browser.">
+<meta name="apple-mobile-web-app-title" content="Notes Back">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#242A31">
@@ -15,23 +15,23 @@
 <div class="wrap">
 
   <header class="plate">
-    <span class="eyebrow" id="eyebrow">Low-voltage &middot; them &rarr; you &rarr; back</span>
-    <h1 id="title">Got It / Can’t / When</h1>
-    <p class="lede" id="lede">Somebody sent you a list of what they need out of you. Line it up, say what you&rsquo;ll hit and when, and send back one answer he can work to.</p>
+    <span class="eyebrow" id="eyebrow">Creative &middot; their notes &rarr; you &rarr; back</span>
+    <h1 id="title">Notes Back</h1>
+    <p class="lede" id="lede">They sent a wall of notes. Paste it, go down the list once, and send back one reply that answers every line &mdash; including the ones that aren&rsquo;t in the deal.</p>
   </header>
 
   <div class="warn" id="warn">
-    <b>What you tick here is a commitment.</b> Every line on this page came off <i>his</i> list &mdash; this page doesn&rsquo;t check it against the drawings, the code, the schedule or your contract, and it doesn&rsquo;t know whether the work is yours. Read each one before you answer it. <b>It&rsquo;s an answer, not a change order, there is no price on it, and nothing here changes anybody&rsquo;s scope.</b>
+    <b>Their words stay their words.</b> Every line here is pasted from what they sent and this page never rewrites it, never re-orders it and never touches a timecode &mdash; so your reply lines up with their email one for one. <b>It&rsquo;s an answer, not a quote and not a change order.</b> Nothing here has a price on it and nothing here changes what you agreed to; <i>that&rsquo;s an extra</i> means you&rsquo;re flagging it, not billing it.
   </div>
 
   <section class="card">
-    <h2>What he sent you <span class="why">&mdash; paste it, we line it up</span></h2>
+    <h2>What they sent you <span class="why">&mdash; paste it, we line it up</span></h2>
     <details class="more" id="intake" open style="margin-top:0;border-top:0;padding-top:0">
-      <summary id="intakeSum">Paste his message</summary>
-      <p class="note" style="margin:10px 0 8px">Paste the whole thing &mdash; the header, the sign-off, all of it. One ask per line is all we keep, and we&rsquo;ll show you anything we skipped.</p>
-      <textarea id="bPaste" placeholder="Building C &mdash; what we need from you &mdash; Aug 9&#10;&#10;Job: Building C&#10;From: Rico &mdash; Acme AV&#10;&#10;CR-204 &middot; back box + mud ring &middot; 60 AFF &middot; before rock&#10;CR-204 &middot; conduit to the ceiling &middot; 1in &middot; before rock"></textarea>
+      <summary id="intakeSum">Paste their notes</summary>
+      <p class="note" style="margin:10px 0 8px">Paste the whole thing &mdash; the greeting, the sign-off, all of it. One note per line is all we keep, and timecodes come through untouched. <b>The subject line, the hello and the thanks land as rows too</b>, because a rule smart enough to drop those is smart enough to drop a real note &mdash; tap them away, one each. We&rsquo;d rather hand you a row too many than lose one of theirs, and anything we did skip is listed below with a button to put it back.</p>
+      <textarea id="bPaste" placeholder="Northgate &mdash; round 2 notes&#10;&#10;0:04 logo holds too long&#10;0:22 can we lose the drone shot&#10;lower third for Priya &mdash; she&rsquo;s Head of Ops now&#10;music feels heavy under the VO&#10;can we also get a 9:16 for stories"></textarea>
       <div class="outrow" style="margin:8px 0 0">
-        <button type="button" class="btn" id="bPasteGo">Line it up</button>
+        <button type="button" class="btn" id="bPasteGo">Line them up</button>
       </div>
       <p class="note" id="intakeMsg" style="margin:9px 0 0" hidden></p>
       <details class="more" id="skipped" hidden>
@@ -45,19 +45,19 @@
   <section class="card">
     <h2>Who you&rsquo;re answering <span class="why">&mdash; typed once, rides on the message</span></h2>
     <div class="outrow" style="margin-bottom:0">
-      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
-      <div><label for="hTo">Who asked you</label><input type="text" id="hTo" placeholder="his name &mdash; his shop" autocapitalize="words" autocomplete="off"></div>
-      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
-      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so he can call you at the wall" autocomplete="off"></div>
-      <div><label for="hOff">His list / drawing</label><input type="text" id="hOff" placeholder="the sheet and revision he sent" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hJob">The job</label><input type="text" id="hJob" placeholder="Northgate brand film" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTo">Who sent the notes</label><input type="text" id="hTo" placeholder="their name &mdash; their side" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFrom">You / your shop</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so they call instead of typing note nine" autocomplete="off"></div>
+      <div><label for="hOff">The cut they watched</label><input type="text" id="hOff" placeholder="v2, :60" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></div>
     </div>
-    <p class="note" style="margin:9px 0 0" id="offHint">Naming his sheet back to him is what stops the second conversation. If he sent it off a revision you don&rsquo;t have, that is its own answer and it belongs in the flagged block below.</p>
+    <p class="note" style="margin:9px 0 0" id="offHint">Naming the cut back to them is what stops the second thread. If the notes came off a version you&rsquo;ve already moved past, that is its own answer and it belongs in the flagged block below.</p>
   </section>
 
   <section class="card">
     <h2>Your answer, line by line</h2>
     <div id="bar"></div>
-    <p class="note" style="margin:10px 0 0"><b>Tap a row to answer it.</b> Once for <b>will do</b>, again for <b>in already</b>, again for <b>can&rsquo;t</b>, again for <b>need to know</b> &mdash; and once more clears it. The pencil is where you put the date, the reason you can&rsquo;t, or the question you need answered.</p>
+    <p class="note" style="margin:10px 0 0"><b>Tap a note to answer it.</b> Once for <b>doing it</b>, again for <b>already in</b>, again for <b>that&rsquo;s an extra</b>, again for <b>need from you</b> &mdash; and once more clears it. The pencil is where the date goes, or what makes it an extra, or the thing you need back before you can cut it.</p>
   </section>
 
   <section class="card">
@@ -75,7 +75,7 @@
   </section>
 
   <section class="card">
-    <h2>Send it back <span class="why">&mdash; one answer, not six texts</span></h2>
+    <h2>Send it back <span class="why">&mdash; one reply, not nine</span></h2>
 
     <div class="bararea">
       <span class="lab" style="margin:0">Include</span>
@@ -89,15 +89,16 @@
       <button type="button" class="btn flag" id="copyBtn">Copy it</button>
       <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
     </div>
-    <p class="note"><b>Still owed</b> is next week&rsquo;s version of the same message &mdash; what you committed to and haven&rsquo;t got in yet, without re-listing the ones that are done. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser on this phone.</p>
+    <p class="note"><b>Still owed</b> is tomorrow&rsquo;s version of the same message &mdash; what you said you&rsquo;d do and haven&rsquo;t sent yet, without re-listing the ones that are already in. The spreadsheet copy is every line with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser, on this device, and nowhere else.</p>
     <pre id="preview"></pre>
     <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
   </section>
 
-  <p class="credit">Built for the Low-Voltage Field Toolkit. Got a list this page mangled, or an answer it won&rsquo;t let you give? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+  <p class="credit">&#10022; This whole toolkit was wished into existence by an anonymous creative pro, who asked what else we could put in the hands of people who shoot and cut.</p>
+  <p class="credit">Built for the Creative Field Toolkit. Got a notes email this page mangled, or an answer it won&rsquo;t let you give? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
 
   <footer class="foot">
-    <span id="footName">Low-Voltage Field Toolkit</span>
+    <span id="footName">Creative Field Toolkit</span>
     <a href="index.html">All tools &rarr;</a>
     <a href="credits.html">Wall of Wishes &rarr;</a>
   </footer>
@@ -110,7 +111,16 @@
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/rowlog.js"></script>
 <script>
-/* THE RETURN LEG — the other half of the cross-boundary request, and the half
+/* THIS COPY DIVERGES FROM ITS EIGHT SIBLINGS IN PROSE ONLY. The JavaScript below
+ * is byte-identical to av/ electrical/ framing/ gc/ hvac/ low-voltage/ plumbing/
+ * roofing/ answer-back.html and MUST stay that way — sweep the logic across all
+ * nine together. What differs is the static copy: the construction kits address
+ * one man about another man ("what he sent you"), and this trade's counterpart
+ * is a client of unknown gender writing notes, not a foreman writing asks. The
+ * four rungs differ too, and those are DATA (TOOLKIT_ANSWER.answers in items.js),
+ * not code — see the ladder comment below for why position is meaning.
+ *
+ * THE RETURN LEG — the other half of the cross-boundary request, and the half
  * nobody has built (av/AV_SOCIETY.md §THE INTERFACE).
  *
  * Every interface tool in this toolkit so far sends an ASK across a boundary:
@@ -293,7 +303,7 @@
 
   $("#bPasteGo").addEventListener("click", function () {
     var raw = $("#bPaste").value;
-    if (!raw.trim()) { say("<b>Nothing pasted yet.</b> Paste his message in the box above, or add the first line by hand below."); return; }
+    if (!raw.trim()) { say("<b>Nothing pasted yet.</b> Paste their notes in the box above, or add the first line by hand below."); return; }
     var r = lineUp(raw);
     var n = rl.addPasted(r.kept.join("\n"));
     prefill(raw);
@@ -305,7 +315,7 @@
       $("#skippedSum").textContent = "Show the " + r.dropped.length + " line" + (r.dropped.length === 1 ? "" : "s") + " we skipped";
     }
     say("<b>" + n + " line" + (n === 1 ? "" : "s") + " lined up.</b>"
-      + (r.dropped.length ? " We skipped " + r.dropped.length + " that looked like his header and sign-off — check them if you want." : "")
+      + (r.dropped.length ? " We skipped " + r.dropped.length + " that looked like the greeting and sign-off — check them if you want." : "")
       + " Anything on the list that isn't an ask, open the pencil and delete it.");
     if (n) { $("#bPaste").value = ""; $("#intake").open = false; }
   });
@@ -324,7 +334,7 @@
     persistKey: KEY,
     noun: "line", nounPlural: "lines", groupNoun: "block", groupNounPlural: "blocks",
     ungroupedLabel: "NO ANSWER YET",
-    emptyText: "Nothing lined up yet. Paste what he sent you above, or type the first thing he asked for.",
+    emptyText: "Nothing lined up yet. Paste what they sent you above, or type the first note by hand.",
 
     /* His words land HERE, not in an identifier axis — see the header comment.
        The ladder is the ANSWER, so it cycles rather than stopping, and the
@@ -352,19 +362,19 @@
        he already said no to, because re-sending a refusal reads as a new one. */
     filters: [{
       v: "owed", label: "still owed",
-      emptyText: "Nothing still owed on his list — everything you committed to is in.",
+      emptyText: "Nothing still owed — everything you said you'd do is already in.",
       test: function (v) { return stillOwed(v); }
     }],
 
     fields: [
-      { key: "ask", label: "What he asked for", input: "text", lead: true, required: true, wide: true,
-        placeholder: "his line, in his words" },
+      { key: "ask", label: "Their note", input: "text", lead: true, required: true, wide: true,
+        placeholder: "their line, in their words" },
       { key: "status", label: "My answer", input: "chips" },
       { key: "when", label: "When", input: "learn", sticky: true,
-        placeholder: "Thursday · with the crew Tuesday",
-        emptyHint: "Your own gates are the buttons. Type a day and it becomes one too." },
-      { key: "note", label: "Why not, or what you need to know", input: "text", wide: true,
-        placeholder: "why you can't hit it, or the question you need answered first" }
+        placeholder: "Thursday · with the next cut",
+        emptyHint: "Your own dates become the buttons. Type a day and it turns into one." },
+      { key: "note", label: "Why it's an extra, or what you need back", input: "text", wide: true,
+        placeholder: "what makes it an extra, or the thing you need before you can cut it" }
     ],
 
     optionsFor: function (key, cur, learned) {
@@ -450,7 +460,7 @@
         + " — answered by hand off the list we were sent. No price on it, not a change order.";
     },
     tsvColumns: [
-      { label: "What he asked for", key: "ask" },
+      { label: "Their note", key: "ask" },
       { label: "My answer", key: "status" },
       { label: "When", key: "when" },
       { label: "Flag", value: function (v, r) { return r.flag || ""; } },
@@ -484,7 +494,7 @@
     var el = $("#nodate"); if (!el || !rl) return;
     var n = rl.rows().filter(function (r) { return r.values.status === ANSWERS[0] && !String(r.values.when || "").trim(); }).length;
     el.hidden = !n;
-    if (n) el.innerHTML = "<b>" + n + " will-do with no date on " + (n === 1 ? "it" : "them") + ".</b> That's the half of the answer he's actually waiting on — open the pencil and put a day on it.";
+    if (n) el.innerHTML = "<b>" + n + " you said you'd do with no date on " + (n === 1 ? "it" : "them") + ".</b> That's the half they're actually waiting on — open the pencil and put a day on it.";
   }
 
   /* The learn axis borrows the identifier's keyboard attributes, which exist so a

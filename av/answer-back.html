@@ -160,14 +160,23 @@
   var MILES = (window.TOOLKIT_ROUGHIN && window.TOOLKIT_ROUGHIN.milestones) || [];
   var KEY = "toolkit." + (TRADE.slug || "av") + ".answer-back.v1";
 
-  var ANSWERS = ["Will do", "In already", "Can't", "Need to know"];
+  /* THE LADDER IS THE TRADE'S, AND POSITION IS MEANING. It was a literal here
+     until the ninth trade needed a rung no construction kit has ("that's an
+     extra"), and a page eight trades share may never be forked for a ninth
+     (av/AV_SOCIETY.md §THE THREE SHAPES). So the words come from the trade's own
+     vocabulary file and the page reads POSITIONS, never words: [0] is the
+     promise that wants a date on it, [1] is already settled, [2] is declined,
+     [3] is blocked on the other side. A trade that says nothing keeps exactly
+     the four rungs this page has always shipped. */
+  var ANSWERS = (A.answers && A.answers.length === 4) ? A.answers.slice()
+              : ["Will do", "In already", "Can't", "Need to know"];
 
   /* ONE PREDICATE, TWO READERS. The scope filter hides rows from the BODY and
      the head counts rows for the SUMMARY, and when those two disagree the
      document contradicts itself in its own first paragraph — "1 in already"
      printed above a list that deliberately does not contain it. So the rule for
      what is still owed is written once and both of them ask it. */
-  function stillOwed(v) { return v.status !== "In already" && v.status !== "Can't"; }
+  function stillOwed(v) { return v.status !== ANSWERS[1] && v.status !== ANSWERS[2]; }
 
   function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
   function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
@@ -242,7 +251,17 @@
       /* Line 1 of a message we generated is a subject built for an inbox search.
          Only treated as one when the paste actually looks like a message. */
       var first = !seenFirst; seenFirst = true;
-      if (first && hasHead && t.indexOf(" — ") > -1) { dropped.push(t); return; }
+      /* `hasHead` is the signal "this paste is one of OUR documents", whose line
+         1 is a subject we built for an inbox search. Trade #9 pastes a CLIENT's
+         raw email, which carries a subject and no Job:/To: header, so this rule
+         never fired and the subject answered itself as if it were a note — in
+         the reply the client receives. `firstLineIsSubject` lets a trade say its
+         intake is somebody else's message rather than ours. The em-dash test is
+         the whole safety of it: a greeting ("Hi Sam,") has none and stays a row,
+         and a first note rarely leads with one. And nothing is LOST either way —
+         the line lands in the visible skipped list with a button to put it
+         back, which is the same place the other eight already send it. */
+      if (first && (hasHead || A.firstLineIsSubject) && t.indexOf(" — ") > -1) { dropped.push(t); return; }
       if (HEAD_KEY.test(t) || COUNT_LINE.test(t) || GROUP_HEAD.test(t)
         || FLAG_HEAD.test(t) || RULE_LINE.test(t) || DISCLAIM.test(t)) { dropped.push(t); return; }
       /* A bullet carries no information and reads as a typo once the row is in a
@@ -311,7 +330,7 @@
        The ladder is the ANSWER, so it cycles rather than stopping, and the
        settled rung is the one in the middle. */
     pasteKey: "ask",
-    statusKey: "status", statusOrder: ANSWERS, statusWrap: true, statusDone: "In already",
+    statusKey: "status", statusOrder: ANSWERS, statusWrap: true, statusDone: ANSWERS[1],
     flagKey: "flag", flagValues: ["Not mine", "Not on my set"],
 
     groupOptions: [
@@ -414,8 +433,14 @@
        what this is NOT — because an answer with no boundary on it is the one a
        PM later reads as a scope agreement. */
     docFoot: function () {
+      /* THE BOUNDARY SENTENCE IS THE TRADE'S TOO. It was a literal here until the
+         ninth trade, whose counterpart is a client rather than a GC — "change
+         order" and "scope" are the wrong register for a freelancer answering
+         notes, and being read as cold costs that user the client. Config with
+         the shipped wording as the default, so the eight construction kits
+         emit exactly the sentence they always did. */
       return (A.closing || "That's my answer on everything you sent. Anything under CAN'T or NEED TO KNOW I need back from you before I can move on it — call me and I'll walk it with you.")
-        + "\n" + "This is what I'm committing to off the list you sent me. There's no price on it, it isn't a change order, and it doesn't change anybody's scope. If it isn't on your list it isn't on mine.";
+        + "\n" + (A.docBoundary || "This is what I'm committing to off the list you sent me. There's no price on it, it isn't a change order, and it doesn't change anybody's scope. If it isn't on your list it isn't on mine.");
     },
 
     tsvPreamble: function (c) {
@@ -457,7 +482,7 @@
        the shape that silently killed a page's whole script once already
        (§SCARS). The post-mount call below is the one that paints. */
     var el = $("#nodate"); if (!el || !rl) return;
-    var n = rl.rows().filter(function (r) { return r.values.status === "Will do" && !String(r.values.when || "").trim(); }).length;
+    var n = rl.rows().filter(function (r) { return r.values.status === ANSWERS[0] && !String(r.values.when || "").trim(); }).length;
     el.hidden = !n;
     if (n) el.innerHTML = "<b>" + n + " will-do with no date on " + (n === 1 ? "it" : "them") + ".</b> That's the half of the answer he's actually waiting on — open the pencil and put a day on it.";
   }

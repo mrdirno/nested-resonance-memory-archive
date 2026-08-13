@@ -318,7 +318,15 @@
       var ul = el("ul", "ticks");
       (def.options || []).forEach(function (it) {
         var name = typeof it === "string" ? it : it.name;
-        var sub = (it && it.sub) || "";
+        /* `.sub` ON A STRING IS NOT undefined — IT IS String.prototype.sub, the
+           legacy <sub> wrapper, and it is TRUTHY. This branch has always claimed
+           to accept a plain string (the line above proves it), and every caller
+           for eight trades happened to pass {name, sub} objects, so the string
+           path was never walked until trade #9 did. It rendered the literal text
+           "function sub() { [native code] }" beside every option on the page AND
+           inside the copied message a client receives. Ask for the object before
+           asking for the property. */
+        var sub = (it && typeof it === "object" && it.sub) || "";
         var li = el("li");
         var lab = el("label");
         var cb = el("input");
@@ -343,7 +351,9 @@
             for (var i = 0; i < (def.options || []).length; i++) {
               var it = def.options[i];
               if ((typeof it === "string" ? it : it.name) === nm) {
-                return nm + (it && it.sub ? " (" + it.sub + ")" : "");
+                /* Same String.prototype.sub trap as buildTicks above — this is
+                   the copy path, where it reached the client. */
+                return nm + (it && typeof it === "object" && it.sub ? " (" + it.sub + ")" : "");
               }
             }
             return nm;

@@ -21,7 +21,7 @@
  *     quality. Nothing on this page makes a thing safe, dead, isolated or clear.
  *   NON-OBVIOUS. If a first-year already knows it, it is a listicle line.
  *
- * THE PARTITION. `t: ["universal"]` means all SEVEN trades genuinely eat it —
+ * THE PARTITION. `t: ["universal"]` means EVERY trade in the program eats it —
  * a strict bar, because the shared floor is the whole thesis of a commons. A
  * tip three trades share is ONE row with three tags, never three rows. The
  * reader only ever sees the floor plus their own trade, so two rows may say
@@ -56,12 +56,20 @@
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
 
+/* THREE ROWS LEFT THE UNIVERSAL FLOOR when trade #9 (creative) arrived:
+ * "get the big stuff in before the last opening closes", "shoot your work
+ * before it gets covered" (where SHOOT means photograph — the word means the
+ * opposite thing to the new trade) and "check the revision, not just the sheet
+ * number". None of the three is true of a person who films for a living, and
+ * `universal` is a strict claim, not a default bucket. Re-tagged to the eight
+ * construction trades, never deleted.
+ */
 window.COMMONS_TIPS = [
   /* ---- the floor: every trade on the job eats these -------------------- */
-  { id: "big-equipment-before-walls", t: ["universal"],
+  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     n: "Get the big stuff in before the last opening closes.",
     w: "Racks, tubs, gear sections and units don't fit through a finished door, and cutting the wall back open is somebody's change order." },
-  { id: "shoot-before-cover", t: ["universal"],
+  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     n: "Shoot your work before it gets covered.",
     w: "Months later your phone is the only proof of what's behind the rock." },
   { id: "existing-damage", t: ["universal"],
@@ -97,7 +105,7 @@ window.COMMONS_TIPS = [
   { id: "last-hour", t: ["universal"],
     n: "Don't start the difficult piece in the last hour.",
     w: "Work rushed at quitting time is the piece that comes back, on your own time." },
-  { id: "check-the-revision", t: ["universal"],
+  { id: "check-the-revision", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     n: "Check the revision, not just the sheet number.",
     w: "Work built off a superseded drawing comes back out, and nobody reimburses that." },
   { id: "number-off-the-print", t: ["universal"],
@@ -392,5 +400,31 @@ window.COMMONS_TIPS = [
     w: "A screw hanging in board with nothing behind it works loose and telegraphs through the finish." },
   { id: "wet-frame-pops", t: ["framing"],
     n: "Check the lumber's dried out before you board over it.",
-    w: "Wet framing shrinks once the heat comes on, and every fastener pops through the paint." }
+    w: "Wet framing shrinks once the heat comes on, and every fastener pops through the paint." },
+
+  /* ---- creative / video ---------------------------------------------------
+     Non-obvious by the same bar as every other trade: if a first-year already
+     knows it, it is a listicle line. Nothing here states what a licence or a
+     release permits, and nothing names a platform, a codec or a product. */
+  { id: "room-tone-before-breakdown", t: ["creative"],
+    n: "Record thirty seconds of room tone before anyone starts packing.",
+    w: "The mix needs it to hide every edit in the interview, and it is the one thing you can never go back for." },
+  { id: "roll-early-hold-late", t: ["creative"],
+    n: "Roll before you call it and hold after you cut it.",
+    w: "Those handles are what let the edit breathe. Without them every dissolve is a fight." },
+  { id: "logo-and-fonts-day-one", t: ["creative"],
+    n: "Ask for the logo, the fonts and the hex codes on day one, in writing.",
+    w: "Ask at the end and they arrive the night before delivery, in the wrong format, from someone who has left." },
+  { id: "spell-the-names", t: ["creative"],
+    n: "Get names and titles spelled by the person on camera, not by whoever booked them.",
+    w: "A wrong lower third is the one mistake the whole company sees, and it is always caught after delivery." },
+  { id: "kill-the-hvac", t: ["creative"],
+    n: "Get the HVAC shut off before you set up — and get the contact's mobile to turn it back on.",
+    w: "The hum sits under every word, and the building nobody could switch back on is a story you only star in once." },
+  { id: "who-signs-off", t: ["creative"],
+    n: "Find out who signs off before you shoot, not after.",
+    w: "The person in the room is usually not the person with notes, and their boss's notes arrive after picture lock." },
+  { id: "shoot-the-cutaway-first", t: ["creative"],
+    n: "Grab the cutaways before the interview, not after.",
+    w: "Afterwards they are already checking their phone, and the cutaway is what saves the answer that rambled." }
 ];

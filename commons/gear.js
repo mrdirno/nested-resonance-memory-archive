@@ -6,7 +6,7 @@
  * "must-have tools" page on the internet is somebody's commission; this one names
  * the THING and lets a crew buy whatever their shop buys.
  *
- * THE PARTITION. `t: ["universal"]` means every one of the six trades genuinely
+ * THE PARTITION. `t: ["universal"]` means EVERY trade in the program genuinely
  * carries it — that is the whole thesis of a commons, and the bar is strict: a
  * site super does not bore studs, so spade bits and the jab saw are NOT universal
  * however many installers carry them. Everything else is tagged with the trades
@@ -47,13 +47,18 @@ window.COMMONS_GEAR = [
     w: "Opens boxes, scores drywall, strips jacket, trims foam. You'll grab it hourly." },
   { id: "multi-bit-driver", n: "Multi-bit screwdriver", t: ["universal"],
     w: "Bits and nut drivers in one handle. Kills the trip back downstairs." },
-  { id: "drill-driver", n: "Cordless drill/driver", t: ["universal"],
+  /* NOT universal any more: trade #9 (creative) is a bag of camera, grip and
+     audio, and none of these three ride in it. Left as "universal" they would
+     have told a shooter the shared floor of this program includes a drill and a
+     voltage tester, which is the exact lie the strict `universal` bar exists to
+     prevent. Re-tagged to the eight construction trades rather than deleted. */
+  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     w: "Use the clutch and the side handle — a bit that catches will twist your wrist." },
-  { id: "torpedo-level", n: "Torpedo level", t: ["universal"],
+  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     w: "Nobody remembers your wiring. Everybody sees a crooked mount." },
   { id: "headlamp", n: "Headlamp", t: ["universal"],
     w: "Panels, ceilings, crawlspaces. Hands stay on the work instead of holding light." },
-  { id: "ncvt", n: "Non-contact voltage tester", t: ["universal"],
+  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
     w: "Lights up beside an energized conductor. First pass only — it never proves dead." },
   { id: "dikes", n: "Diagonal cutters (dikes)", t: ["universal"],
     w: "Every install ends in trimming zip ties. Don't do it with a knife." },
@@ -238,5 +243,41 @@ window.COMMONS_GEAR = [
   { id: "rake-light", n: "Work light on a stand", t: ["framing"],
     w: "Rake it across the wall and you find the ridges before the painter does." },
   { id: "locking-pliers", n: "Locking pliers", t: ["framing"],
-    w: "Holds two pieces of steel together while your other hand drives the screw." }
+    w: "Holds two pieces of steel together while your other hand drives the screw." },
+
+  /* ---- creative / video: the one-person shop's bag -------------------------
+     Trade #9, and the first bag on this page that is not a construction bag.
+     Where a jobsite row is about the tool, nearly every row here is about the
+     SPARE — this trade's whole failure mode is a thing that works until the one
+     take you cannot shoot again. Nothing here names a brand, a format, a codec
+     or a rating (creative/items.js §safety), and the two paper rows are item
+     NAMES only: what a release or a licence actually covers is not ours to say. */
+  { id: "spare-batteries", n: "Spare batteries & the charger", t: ["creative"],
+    w: "Two on the camera is one. The interview always runs longer than the schedule said." },
+  { id: "more-cards", n: "More cards than the day needs", t: ["creative"],
+    w: "A card fails once in a career, on the day nobody can be brought back." },
+  { id: "offload-drives", n: "Reader and two drives to offload to", t: ["creative"],
+    w: "Copy twice before you leave the location. A card is not a backup and neither is one drive." },
+  { id: "two-lavs", n: "Two lav kits, and spares for both", t: ["creative"],
+    w: "Bring the second one for a one-person interview. It is what saves the take when the first buzzes." },
+  { id: "headphones", n: "Closed-back headphones", t: ["creative"],
+    w: "You cannot hear a buzz on the camera speaker. Wear them on every take, not just the first." },
+  { id: "nd-filters", n: "ND filters", t: ["creative"],
+    w: "Outside at midday you are either stopped down to nothing or shooting at the wrong shutter." },
+  { id: "gaff-tape", n: "Gaff tape & camera tape", t: ["creative"],
+    w: "Comes off the client's wall clean. The silver stuff takes paint with it and you buy the wall." },
+  { id: "sandbags", n: "Sandbags", t: ["creative"],
+    w: "A stand with a light up high and nothing on the leg is the one thing on set that hurts somebody." },
+  { id: "clamps", n: "A-clamps and a grip clamp", t: ["creative"],
+    w: "Holds the flag, the cable, the blind that keeps blowing into frame. You will use every one." },
+  { id: "bounce", n: "Bounce and negative fill", t: ["creative"],
+    w: "Taking light off one side does more for a face than adding another light to it." },
+  { id: "spare-plate", n: "Spare quick-release plate", t: ["creative"],
+    w: "The plate is always on the other camera, at home, on the desk. Keep one taped in the bag." },
+  { id: "lens-cloth-blower", n: "Blower, cloth and wipes", t: ["creative"],
+    w: "One speck on the front element sits in every frame of the day and nobody catches it on the flip-out." },
+  { id: "paper-releases", n: "Printed releases", t: ["creative"],
+    w: "Signed on the day or not at all — chasing one afterwards is how a shot leaves the cut. What it covers is between the client and their lawyer, not this page." },
+  { id: "sync-clap", n: "Something to clap for sync", t: ["creative"],
+    w: "A slate, or your hands in frame. Beats scrubbing two waveforms at midnight." }
 ];
