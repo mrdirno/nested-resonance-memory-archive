@@ -276,7 +276,7 @@ ul.items{list-style:none;margin:0;padding:0}
   </p>
 
   <main id="list"></main>
-  <p id="nomatch">No items match that filter.</p>
+  <p id="nomatch" aria-live="polite">No items match that filter.</p>
 
 </div>
 
@@ -289,6 +289,7 @@ ul.items{list-style:none;margin:0;padding:0}
 </div>
 
 <script src="../shared/draft.js"></script>
+<script src="../shared/find.js"></script>
 <script>
 const DATA = [
   { id:"tape", name:"Tapes & Adhesives", chip:"#2E64C8", items:[
@@ -423,14 +424,24 @@ document.addEventListener("click", e => {
 });
 
 document.getElementById("q").addEventListener("input", e => {
-  const q = e.target.value.trim().toLowerCase();
-  let hits = 0;
-  document.querySelectorAll(".item").forEach(i => {
-    const hit = !q || i.textContent.toLowerCase().includes(q);
-    i.classList.toggle("is-hidden", !hit);
-    if (hit) hits++;
-  });
-  document.getElementById("nomatch").style.display = hits ? "none" : "block";
+  const q = e.target.value.trim();
+  const els = [...document.querySelectorAll(".item")];
+  const nomatch = document.getElementById("nomatch");
+  /* Indexed off the DOM, not DATA, so write-ins and killed rows stay honest;
+     rebuilt per keystroke because the item set changes under it. Match modes
+     and the no-dead-end contract: shared/find.js header. */
+  const res = q ? Find.search(Find.index(els.map(el => ({ el })),
+    [{ get: r => r.el.textContent, w: 1, primary: true }]), q) : null;
+  if (!res || res.mode === "all"){
+    els.forEach(i => i.classList.remove("is-hidden"));
+    nomatch.style.display = "none";
+  } else {
+    const show = new Set(res.hits.map(r => r.el));
+    els.forEach(i => i.classList.toggle("is-hidden", !show.has(i)));
+    nomatch.textContent = res.mode === "none" ? "Nothing matches that — closest three shown."
+      : `Closest to “${q}” shown.`;
+    nomatch.style.display = res.mode === "exact" ? "none" : "block";
+  }
   refresh();
 });
 
