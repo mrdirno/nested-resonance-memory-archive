@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Supply House Order — Plumbing Field Toolkit</title>
+<link rel="stylesheet" href="../shared/pickfilter.css">
 <meta name="description" content="Build the will-call or delivery list on the tailgate — qty, unit, size and fitting config on every line — then copy it straight into a text to the counter.">
 <meta name="theme-color" content="#242A31">
 <style>
@@ -214,6 +215,8 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/draft.js"></script>
 <script src="../shared/dropoff.js"></script>
+<script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
 <script>
 /* SUPPLY HOUSE ORDER
  *
@@ -495,7 +498,10 @@ ul.items{list-style:none;margin:0;padding:0}
     DATA.forEach(function(cat){
       var sec = list.querySelector('.cat[data-id="'+cat.id+'"]');
       var n = sec.querySelectorAll(".item.is-checked").length;
-      sec.querySelector("[data-n]").textContent = n ? n : "";
+      /* n / TOTAL: on a six-section counter order the size of a section is what
+         you want before you decide to open it, and a blank marker said nothing. */
+      var total = sec.querySelectorAll(".item").length;
+      sec.querySelector("[data-n]").textContent = cat.writein ? (n ? n : "") : n + " / " + total;
     });
     var n = checked().length;
     countEl.textContent = n ? (n + " line" + (n === 1 ? "" : "s") + " on the list") : "Nothing on the list yet";
@@ -521,6 +527,7 @@ ul.items{list-style:none;margin:0;padding:0}
       modeUI();
     }
     if (draft) draft.clear(wipe); else wipe();
+    if (pf) pf.reset();
     refresh();
     showLast();
   });
@@ -683,6 +690,16 @@ ul.items{list-style:none;margin:0;padding:0}
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   showLast();
+
+  /* 53 lines across six sections, and until now the only way down them was the
+     thumb. shared/pickfilter.js is the same filter the AV consumables page was
+     built on, extracted: a typed word for the man who knows he needs a 3/4 90,
+     one section for the man reading to remember. */
+  var pf = PickFilter.mount({
+    list: "list",
+    placeholder: "Filter \u2014 try \u201c90\u201d or \u201cwax\u201d",
+    onCheckShown: refresh
+  });
 
   refresh();
   document.addEventListener("av:ready", refresh); // date resolves async

@@ -2000,6 +2000,38 @@ bar, because it kept its own CSS and every engine-era sweep went straight past i
 reference implementation is the file nobody re-measures.** Nobody files a wish for any of
 this, which is exactly why the BACKPORT rider owns it.
 
+### 2026-08-14 — THE REFINEMENT LANDED ON THE PAGE THAT NEEDED IT LEAST
+`av/consumables.html` grew a `shared/find.js` filter and the cycle logged it as done. That
+page holds **28 items**. The six pages driven by the engine it was extracted from hold
+**35 to 151**, and not one of them had any way to narrow a list at all — the biggest list
+in the toolkit was the one with the least help. The reason it looked finished is written
+in the previous cycle's own line: the completeness check asked *how many `type="search"`
+inputs exist on disk* and answered "exactly two", which is TRUE and is not the question.
+Counting the instances of a thing you already built cannot find the pages that should have
+had it. **A coverage check that enumerates what exists can only ever return what exists** —
+it has to enumerate the pages that qualify and subtract.
+
+### 2026-08-14 — THE ESCAPE HATCH WENT OUT WITH THE FILTER, AND MY OWN GATE COULD NOT SEE IT
+The reference filter hid any section with items but none visible — correct for a category,
+fatal for the write-in section, which is *where a man goes when the list does not have his
+thing* and therefore exactly where a hard filter sends him. Add one write-in row, filter
+for anything else, and the Add box left the page with its section. Fixed for every caller
+in the extraction. **The part worth writing down is the gate:** the first version asserted
+the hatch stays visible, ran green — and stayed green when the guard was deliberately
+deleted. An EMPTY section is never hidden by an empty-section rule, so the assertion was
+testing a case the bug cannot occur in. Only a MUTATION run exposed that; the gate now adds
+a write-in row first and then filters past it, and fails red without the guard. A gate that
+has never been run against the broken version is a gate with an unmeasured blind spot.
+
+### 2026-08-14 — THE WIDEST THE BAR EVER GETS IS A STATE THE MOBILE GATE NEVER LOADS
+`mobile-watertight` measures every page at four widths as it LOADS. "Check shown" only
+exists after somebody types, so the three-control bar — the widest arrangement that row
+ever holds, and the one most likely to push a 320px page sideways — was outside every
+existing gate by construction. Nothing was broken this time; that is luck, not coverage.
+The four-width overflow assertion now runs *inside* the pick-filter gate with the list
+narrowed. **A gate bound to page-load cannot see a layout that only a user's fingers can
+reach.**
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -3097,3 +3129,4 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   program-wide: the fixed-bar clipping on 10 trades + the gate assertion that catches it,
   the half-swept 44px `.rm` on 4 trades, and 60 sub-44px controls on `av/consumables.html`.
   84/84 pages pass the mobile gate at 320/360/390/430 · https://mrdirno.github.io/nested-resonance-memory-archive/concrete/
+- `2026-08-14` — **[AXIS:BACKPORT]** **THE BIGGEST LIST IN THE TOOLKIT WAS THE ONE WITH NO WAY DOWN IT** · **before:** eight shape #1 pages ask a man to tick his way through a list, and their sizes read off `items.js` are `concrete/mix-order` **151 items / 12 sections** · `av/cable-list` 62 · `plumbing/supply-house-order` 53 · `framing/the-load` 44 · `electrical/pull-list` 42 · `hvac/truck-stock` 37 · `low-voltage/consumables` 35 — and the only one that could be narrowed was `av/consumables.html`, **the smallest at 28**. The refinement had landed on the page that needed it least and reached none of the seven that needed it most (§SCARS, and the completeness check that could not have found it) · **after:** `shared/pickfilter.js` + `shared/pickfilter.css`, extracted from that flagship and mounted by `shared/checklist-request.js` itself, so **all six engine pages landed in one commit**, the plumbing fork was wired the same way, and the flagship was MIGRATED ONTO IT — its own 25 lines of glue deleted, its markup and CSS untouched, the module ADOPTING `#q` / `#nomatch` / `#checkShown` so not a pixel moved. **TWO DOORS, BECAUSE THE PANEL SAID ONE WAS NOT ENOUGH.** A concrete finisher read the pages before a line was written and split the case exactly: on a parts list he already knows the word ("RJ45", "wall dogs") and typing beats everything; on a list he reads to REMEMBER he has nothing to type — *"I don't know I need a washout tub until I read it"* — and his friction is different, the sections are boxed to look like folders and **none of them folds**, so every trip scrolls past six he already handled. His ask, verbatim: *skip the scroll, don't page past nine sections to get to the tenth.* So the bar carries a typed filter AND a section picker, composing through one hide/show pass. It is a `<select>`, not the chips he asked for, and the reason is on disk: `concrete/items.js` names sections in prose — *"The walk before the mud rolls"* — and twelve of those as chips is a wall of text where the list used to be. **THE SKEPTIC OVERTURNED THE SCOPE AND WAS RIGHT:** the 2026-08-13 entry names **four** behaviours the engine lacks, not one, and shipping a strict subset of already-logged debt is the "a comment claimed the coverage" failure this book has caught twice. Filter, check-shown and the **n / total** section marker all ship (the marker reuses the `[data-n]` slot every page already styles — four pages' worth of parity, zero new CSS). The fourth, per-category **All**, is **REFUSED with a reason rather than silently dropped**: it is an ungated mass-tick, twelve of them permanently on screen, and on prose checklists ("The forget-list", 21 rows) it sends a document nobody meant to send — the section picker plus Check shown reaches the same action through one mechanism. **THREE DEFECTS FIXED ON THE FLAGSHIP BY BEING EXTRACTED FROM IT:** its write-in section vanished under a filter once it held a row (§SCARS); its "Check shown" sat on screen with an empty box, where *shown* means **all of them**, one thumb, no confirm — graded a bug by the finisher, and it now only exists while something is actually being held back, which is also the first time its label is true; and its filter box shipped at **14px**, under the 16px iOS line this book holds everywhere else, so focusing it zoomed the page the operator said must never zoom. **BACKPORT RIDER FIRED — every shape #1 page on the board, none left behind:** 6 engine pages + the plumbing fork + the flagship = **8 of 8**, and the class was re-derived from disk rather than trusted. One claim I brought to the panel was **KILLED as false**: two pages looked like they carried a dead 612-line engine include, and the skeptic proved the string only ever appears in prose comments — no include, no defect, not built against. **GATE: `tools/toolkit-gates/pickfilter.mjs` is new — 8 pages, 104 assertions, and PROVED RED BY FOUR MUTATIONS** before being trusted (hide rule deleted · hatch guard deleted · check-shown ungated · flagship back to 14px). It reads what the browser COMPUTED, never what class is on; every probe word is SELF-DERIVED from the page's own item names; it ticks a line, filters it off the glass and reads the real clipboard to prove **hiding is a view and ticking is the order**; and it re-measures overflow at 320/360/390/430 **while narrowed** — the widest that bar ever gets and a state `mobile-watertight` cannot reach, because that gate measures a page as it loads. `mobile-watertight` 84 pages × 4 widths × default and bumped text **0 failing**, `no-third-party` 84/84, `order-live-header` 7/7. Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/concrete/mix-order.html

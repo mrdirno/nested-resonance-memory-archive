@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Mix Order — Concrete Field Toolkit</title>
+<link rel="stylesheet" href="../shared/pickfilter.css">
 <meta name="description" content="Type what you already know you need, then tick down the forget-list — the small stuff that stops a crew when it isn't on the truck. Copy it straight to the warehouse or the counter.">
 <meta name="apple-mobile-web-app-title" content="The Mix Order">
 <meta name="mobile-web-app-capable" content="yes">
@@ -241,6 +242,8 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="tools.js"></script>
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
+<script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script>
 /* THE MIX ORDER — trade #10's first native tool, and the EIGHTH instance of shape #1
@@ -345,6 +348,7 @@ ul.items{list-style:none;margin:0;padding:0}
   var api = ChecklistRequest.mount({
     list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
     persistKey: "toolkit.concrete.mixOrder.v1",
+    filterPlaceholder: "Filter — try “washout” or “pump”",
     qtyText: true,
     /* EVERY PICKER LINE STARTS BLANK ON THIS PAGE, and it is the one config that
      * separates a concrete order from a material pull list. The engine defaults a

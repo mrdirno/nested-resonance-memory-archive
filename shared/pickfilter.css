@@ -1,0 +1,132 @@
+/* FIELD TOOLKIT — STYLES FOR shared/pickfilter.js (narrow a tap-to-pick list).
+ *
+ * Link this on any page that lets PickFilter RENDER its bar. A page that adopts
+ * its own controls (av/consumables.html) already owns their styles and needs
+ * only the two visibility rules at the bottom.
+ *
+ * Every colour here is a variable the picker pages already define, so this sheet
+ * wears each trade's palette without knowing which trade it is on. No trade
+ * accent is used for a STATE — a filter is chrome, not the page's subject.
+ *
+ * THE TWO MOBILE FACTS, and both are ship gates rather than preferences:
+ *   · 44px minimum on every control. The bar is used one-handed, on a phone,
+ *     often in gloves.
+ *   · 16px font-size on the input. Below 16, iOS Safari zooms the page on focus
+ *     and the layout that must not "alter if zoomed out" does exactly that.
+ *     (shared/toolkit.js holds this same line on the well; the flagship's own
+ *     filter shipped at 14px and zoomed.)
+ * No fixed widths and no min-width that can outgrow a 320px viewport: the bar
+ * wraps instead, and the select is allowed to shrink because a native picker
+ * shows the full option text however narrow its closed state is.
+ */
+
+.pf-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 14px;
+}
+
+.pf-search {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.pf-search::before {                       /* the glass — drawn, never fetched */
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -7px;
+  border: 2px solid var(--muted, #5D656E);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.pf-search::after {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 50%;
+  width: 6px;
+  height: 2px;
+  margin-top: 3px;
+  background: var(--muted, #5D656E);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.pf-q {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px 10px 34px;
+  border: 1px solid var(--steel, #242A31);
+  border-radius: 2px;
+  background: var(--paper, #FBFBF8);
+  font-family: var(--sans, system-ui);
+  font-size: 16px;
+  color: var(--ink, #12161A);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.pf-q::placeholder { color: var(--muted, #5D656E); }
+.pf-q:focus-visible,
+.pf-cat:focus-visible,
+.pf-check:focus-visible { outline: 2px solid var(--flag, #2DD758); outline-offset: 1px; }
+
+.pf-cat {
+  flex: 1 1 140px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 30px 10px 11px;
+  border: 1px solid var(--steel, #242A31);
+  border-radius: 2px;
+  background: var(--paper, #FBFBF8) no-repeat right 10px center;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted, #5D656E) 50%),
+                    linear-gradient(135deg, var(--muted, #5D656E) 50%, transparent 50%);
+  background-size: 6px 6px, 6px 6px;
+  background-position: right 15px center, right 9px center;
+  font-family: var(--cond, var(--sans, system-ui));
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink, #12161A);
+  -webkit-appearance: none;
+  appearance: none;
+  text-overflow: ellipsis;
+}
+
+.pf-check {
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid var(--steel, #242A31);
+  border-radius: 2px;
+  background: var(--steel, #242A31);
+  color: #fff;
+  font-family: var(--cond, var(--sans, system-ui));
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+/* The honest label. It only ever says an answer is APPROXIMATE — an exact match
+ * says nothing, and "nothing matches" is not a state this engine can reach. */
+.pf-none {
+  display: none;
+  margin: 0;
+  padding: 18px 4px 4px;
+  color: var(--muted, #5D656E);
+  font-family: var(--cond, var(--sans, system-ui));
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.item.is-hidden,
+.cat.is-hidden { display: none; }

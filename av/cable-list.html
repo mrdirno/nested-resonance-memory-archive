@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cable &amp; Adapter List — AV Field Toolkit</title>
+<link rel="stylesheet" href="../shared/pickfilter.css">
 <meta name="description" content="Pick the cables and adapters for the job — length, spec and finish on every line — and copy a clean order for your PM or the counter.">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
@@ -184,6 +185,8 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="tools.js"></script>
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
+<script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script>
 /* CABLE & ADAPTER LIST — a wish, served.
@@ -296,6 +299,7 @@ ul.items{list-style:none;margin:0;padding:0}
   ChecklistRequest.mount({
     list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
     persistKey: "toolkit.av.cableList.v1",
+    filterPlaceholder: "Filter — try “HDMI” or “patch”",
     // Returns null when the header is untouched. The engine drops its saved record
     // only when there is genuinely nothing to save, so a caller that always hands
     // back an object would re-save an empty one 250 ms after Clear and pin the key

@@ -94,7 +94,10 @@ body{
 }
 .search input{
   width:100%;padding:10px 12px 10px 34px;border:1px solid var(--steel);
-  background:var(--paper);border-radius:2px;font-family:var(--sans);font-size:14px;color:var(--ink);
+  /* 16, never 14: below 16 iOS Safari zooms the page on focus and the layout
+     that must not alter when zoomed out does exactly that. This box shipped
+     at 14 — the reference implementation is the file nobody re-measures. */
+  background:var(--paper);border-radius:2px;font-family:var(--sans);font-size:16px;color:var(--ink);
 }
 .search::before{
   content:"";position:absolute;left:12px;top:50%;width:11px;height:11px;
@@ -302,6 +305,7 @@ ul.items{list-style:none;margin:0;padding:0}
 
 <script src="../shared/draft.js"></script>
 <script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
 <script>
 const DATA = [
   { id:"tape", name:"Tapes & Adhesives", chip:"#2E64C8", items:[
@@ -401,8 +405,6 @@ function refresh(){
     cat.classList.toggle("has-checked", on.length > 0);
     const t = cat.querySelector("[data-tally]");
     if (t) t.textContent = `${on.length} / ${items.length}`;
-    const visible = items.some(i => !i.classList.contains("is-hidden"));
-    cat.classList.toggle("is-hidden", items.length > 0 && !visible);
   });
   if (emptyMsg) emptyMsg.style.display = writeUL.children.length ? "none" : "";
   document.getElementById("count").textContent = String(total).padStart(2,"0");
@@ -435,34 +437,18 @@ document.addEventListener("click", e => {
   }
 });
 
-document.getElementById("q").addEventListener("input", e => {
-  const q = e.target.value.trim();
-  const els = [...document.querySelectorAll(".item")];
-  const nomatch = document.getElementById("nomatch");
-  /* Indexed off the DOM, not DATA, so write-ins and killed rows stay honest;
-     rebuilt per keystroke because the item set changes under it. Match modes
-     and the no-dead-end contract: shared/find.js header. */
-  const res = q ? Find.search(Find.index(els.map(el => ({ el })),
-    [{ get: r => r.el.textContent, w: 1, primary: true }]), q) : null;
-  if (!res || res.mode === "all"){
-    els.forEach(i => i.classList.remove("is-hidden"));
-    nomatch.style.display = "none";
-  } else {
-    const show = new Set(res.hits.map(r => r.el));
-    els.forEach(i => i.classList.toggle("is-hidden", !show.has(i)));
-    nomatch.textContent = res.mode === "none" ? "Nothing matches that — closest three shown."
-      : `Closest to “${q}” shown.`;
-    nomatch.style.display = res.mode === "exact" ? "none" : "block";
-  }
-  refresh();
-});
-
-document.getElementById("checkShown").addEventListener("click", () => {
-  document.querySelectorAll(".item:not(.is-hidden)").forEach(i => {
-    i.querySelector(".tick").checked = true;
-    i.classList.add("is-checked");
-  });
-  refresh();
+/* THE FILTER AND ITS "CHECK SHOWN" ARE shared/pickfilter.js NOW.
+   This page is where both were proved, and it kept its own copy of the glue —
+   which is a fork the moment a second page wants it, and six of them wanted it.
+   The markup and the CSS here are untouched: the module ADOPTS #q, #nomatch and
+   #checkShown rather than rendering its own bar, so not a pixel moves and this
+   page inherits the two fixes the extraction carried — the write-in section is
+   no longer filtered off the page along with everything else, and "Check shown"
+   only exists while something is actually being held back (with an empty box it
+   meant "tick all of them", one thumb, no confirm). */
+const pf = PickFilter.mount({
+  list: "list", input: "q", label: "nomatch", check: "checkShown",
+  onCheckShown: refresh
 });
 
 document.getElementById("clear").addEventListener("click", () => {
@@ -487,6 +473,8 @@ document.getElementById("clear").addEventListener("click", () => {
     setReq();
   };
   if (draft) draft.clear(wipe); else wipe();
+  // A wiped list still filtered down to three rows reads as a broken page.
+  if (pf) pf.reset();
   refresh();
   showLast();
 });

@@ -34,10 +34,21 @@
  * The user states the numbers; the engine only makes sure they arrive with their
  * units attached (av/AV_SOCIETY.md §SAFETY).
  *
+ * ONE THING THE ENGINE DOES NOT OWN ITS OWN CSS FOR: the filter bar. Everything
+ * above emits classes the pages already had, which is why this file ships no
+ * stylesheet — but a control that did not exist cannot be styled by a rule that
+ * does not exist. So `shared/pickfilter.js` is its own module with its own sheet
+ * (the shape #2/#3/#4 convention), and this engine just mounts it. The
+ * alternative was the same block of CSS hand-copied into six <style> blocks,
+ * which is the drift the shared sheets exist to stop.
+ *
  * Load AFTER the trade config and registry, alongside the shared runtime:
+ *   <link rel="stylesheet" href="../shared/pickfilter.css">
  *   <script src="trade.js"></script>
  *   <script src="tools.js"></script>
  *   <script src="../shared/toolkit.js"></script>
+ *   <script src="../shared/find.js"></script>
+ *   <script src="../shared/pickfilter.js"></script>
  *   <script src="../shared/checklist-request.js"></script>
  */
 (function () {
@@ -377,7 +388,16 @@
       data.forEach(function (cat) {
         var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
         var n = sec.querySelectorAll(".item.is-checked").length;
-        sec.querySelector("[data-n]").textContent = n ? n : "";
+        /* n / TOTAL, not a bare ticked count. On a 12-section page the size of a
+         * section is the thing you want before you decide to open it, and a
+         * blank marker on an untouched section told you nothing at all. Counts
+         * every row in the section, not the visible ones — the marker is about
+         * the section, not about what a filter is currently showing.
+         * (The write-in section has no fixed total: its rows are whatever you
+         * added, so a denominator there would be a number counting itself.) */
+        var total = sec.querySelectorAll(".item").length;
+        sec.querySelector("[data-n]").textContent =
+          cat.writein ? (n ? n : "") : n + " / " + total;
       });
       var n = tickedCount();
       if (countEl) {
@@ -572,11 +592,39 @@
       [].forEach.call(list.querySelectorAll(".i-note"), function (x) { x.value = ""; });
       try { if (cfg.persistKey) localStorage.removeItem(cfg.persistKey); } catch (e) {}
       if (cfg.onClear) cfg.onClear();
+      // A wiped list that is still filtered down to three rows reads as a broken
+      // page rather than a fresh one.
+      if (filter) filter.reset();
       refresh();
     }
     if (clearBtn) clearBtn.addEventListener("click", clearAll);
 
     if (copyBtn) copyBtn.addEventListener("click", function () { copyText(text(), copyBtn, cfg.onFlash); });
+
+    /* ── NARROWING THE LIST ────────────────────────────────────────────────────
+     * These lists run 35 to 151 items and had no way to get down them but the
+     * thumb. shared/pickfilter.js is that way in — a typed word for the man who
+     * knows what he wants, one section for the man who is reading to remember.
+     * It degrades to nothing if a page has not loaded find.js + pickfilter.js,
+     * so no shipped tool changes behaviour by accident; opt out with
+     * `filter: false` on a list short enough to read whole. */
+    var filter = null;
+    if (cfg.filter !== false && window.PickFilter) {
+      filter = window.PickFilter.mount({
+        list: list,
+        itemSel: ".item",
+        catSel: ".cat",
+        placeholder: cfg.filterPlaceholder || "Filter the list",
+        allLabel: cfg.filterAllLabel,
+        // Ticking rows from the filter bar is a normal tick: the per-line stamp
+        // hook has to fire for each one, then the count, the preview and the
+        // saved draft move once.
+        onCheckShown: function (rows) {
+          if (cfg.onTick) rows.forEach(function (li) { cfg.onTick(li, true); });
+          refresh();
+        }
+      });
+    }
 
     var restored = restore();
     if (restored && cfg.onRestored) cfg.onRestored();
