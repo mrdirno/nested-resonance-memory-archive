@@ -16,7 +16,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Supply House Order",
     href: "supply-house-order.html",
-    desc: "Build the will-call list on the tailgate — qty, size, material and fitting config on every line, so the counter pulls the right part the first time. Copy it straight into a text.",
+    desc: "Build it on the tailgate — qty, unit, size and fitting config on every line, so the counter pulls the right part the first time. Will-call goes out under a name; a delivery carries the gate, the window, where it lands and who signs, typed once for the job.",
     chip: "#C87137",
     audience: "Plumbers → Counter",
     pinned: true
