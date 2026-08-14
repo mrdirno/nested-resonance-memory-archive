@@ -17,7 +17,10 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
-.wrap{max-width:900px;margin:0 auto;padding:0 14px 120px}
+/* The bottom pad and the bar both budget for the home indicator. Without the
+   inset the fixed bar sits under it on a notched phone and Copy is a coin flip
+   — the same env(safe-area-inset-bottom) framing/the-load.html already carries. */
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(120px + env(safe-area-inset-bottom))}
 .plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
 .plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
@@ -27,8 +30,11 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:14px}
 .hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
 .f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--steel);font-style:normal}
 .f input,.f select{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
 .f input:focus,.f select:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.f[hidden]{display:none}
 .seg{display:flex;gap:0}
 .seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
   background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer;min-height:44px}
@@ -78,7 +84,7 @@ ul.items{list-style:none;margin:0;padding:0}
 
 /* sticky action bar — thumbs reach it on a phone */
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
-  padding:9px 14px;display:flex;gap:9px;align-items:center}
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
 /* NEVER WRAPS. A 0-basis flex child beside nowrap buttons gets 0px and breaks
    into stacked lines, which grows the FIXED bar and eats the glass for good
    (§SCARS 2026-08-11 — found on the write-up pages at 5 lines, and here at 2
@@ -110,16 +116,35 @@ ul.items{list-style:none;margin:0;padding:0}
 
   <div class="head">
     <div class="hgrid">
-      <div class="f"><label>Job / address</label><input id="fJob" type="text" placeholder="1420 Market St — 3rd floor" autocomplete="off"></div>
-      <div class="f"><label>Ordered by</label><input id="fBy" type="text" placeholder="Your name" autocomplete="off"></div>
-      <div class="f"><label>Account / PO <i></i></label><input id="fAcct" type="text" placeholder="optional" autocomplete="off"></div>
+      <div class="f"><label>Job / address <i>(the counter searches on it in October)</i></label><input id="fJob" type="text" placeholder="1420 Market St — 3rd floor" autocomplete="off"></div>
+      <!-- NAME AND CELL IN ONE FIELD. This asked for "your name" for four months
+           while all three engine-driven siblings asked for name + cell, and the
+           counter calls somebody the second a line is short: with no number on the
+           order that call goes office → PM → him, ninety minutes over a 3/4
+           coupling. The one document built to stop a phone call was making him go
+           find the phone number. -->
+      <div class="f"><label>Who's asking <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Sal — 209-555-0166" autocomplete="off"></div>
+      <div class="f"><label>Account <i>(whose account it's under)</i></label><input id="fAcct" type="text" placeholder="Your shop's name or acct #" autocomplete="off"></div>
+      <!-- PO IS ITS OWN FIELD AND IS NOT LABELLED OPTIONAL. Mashed together with
+           the account under the word "optional", it told him neither mattered —
+           and plenty of shops will not release a ticket without one, so the
+           ticket sits in the cage. -->
+      <div class="f"><label>PO / cost code <i>(if your office needs one)</i></label><input id="fPO" type="text" placeholder="24-118-09" autocomplete="off"></div>
       <div class="f"><label>Pickup or delivery</label>
         <div class="seg" id="segMode">
           <button type="button" class="on" data-v="Will-call">Will-call</button>
           <button type="button" data-v="Delivery">Delivery</button>
         </div>
       </div>
-      <div class="f"><label>Need by</label>
+      <!-- THE FULL ROW, and it is not cosmetic. Three segment buttons have a
+           min-content floor of about 200px, which is 40px more than a 160px grid
+           track: for months this cell happened to land in the LEFT column at
+           390px, where 40px of overflow still fell inside the glass, and the page
+           read as watertight. Adding two fields above it moved the same cell into
+           the RIGHT column and the same 40px went off the screen — the defect did
+           not appear, it became visible. A control that cannot fit a track does
+           not get a track. -->
+      <div class="f span2"><label>Need by</label>
         <div class="seg" id="segWhen">
           <button type="button" class="on" data-v="Today">Today</button>
           <button type="button" data-v="Tomorrow">Tomorrow</button>
@@ -127,8 +152,19 @@ ul.items{list-style:none;margin:0;padding:0}
         </div>
       </div>
       <div class="f" id="dateWrap" style="display:none"><label>Date</label><input id="fDate" type="date"></div>
+      <!-- WILL-CALL ONLY: an order with no name on it does not get handed to the
+           apprentice. It is staged in the cage under a name. -->
+      <div class="f" id="pickWrap"><label>Who's picking it up</label><input id="fPick" type="text" placeholder="Me — or the apprentice's name" autocomplete="off"></div>
     </div>
   </div>
+
+  <!-- THE DELIVERY HALF. Until this block the Delivery button changed one word in
+       the message and asked for nothing: a man tapped it and was handed a will-call
+       list with the word Delivery on it. The counter lens said it plainest — "a bare
+       Delivery button with nothing behind it is worse than no button, because he
+       taps it." Sticky, because the answer is the same for every delivery to this
+       job all year (shared/dropoff.js). -->
+  <div id="dropoff"></div>
 
   <p class="lastwrap" id="lastwrap" style="display:none">
     <button type="button" class="lastbtn" id="last">&#8635; Start from last order</button>
@@ -140,7 +176,7 @@ ul.items{list-style:none;margin:0;padding:0}
   <div class="preview" id="preview"></div>
 
   <div class="warn">
-    <b>Double-check before you order.</b> Every size, material and config on this list is what <em>you</em> picked — this tool doesn't recommend parts and it isn't a substitute for the plans, the spec, or code. Confirm the fitting config and unit of issue before it gets pulled.
+    <b>Double-check before you order.</b> Every size, material and config on this list is what <em>you</em> picked — this tool doesn't recommend parts, doesn't know what's on his shelf, and isn't a substitute for the plans, the spec, or code. Confirm the fitting config and unit of issue before it gets pulled. <b>Nothing here holds stock, books a truck or places an order</b> — it's a field request, not a PO.
   </div>
 
   <p class="credit">✦ Built from the plumbing seed roster. Wish for the next one — it gets built and you get the credit.</p>
@@ -157,6 +193,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="tools.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/draft.js"></script>
+<script src="../shared/dropoff.js"></script>
 <script>
 /* SUPPLY HOUSE ORDER
  *
@@ -309,12 +346,32 @@ ul.items{list-style:none;margin:0;padding:0}
       set(b.getAttribute("data-v"));
     });
   }
-  seg("segMode", function(v){ mode = v; refresh(); });
+  seg("segMode", function(v){ mode = v; modeUI(); refresh(); });
   seg("segWhen", function(v){
     document.getElementById("dateWrap").style.display = (v === "date") ? "" : "none";
     when = v; refresh();
   });
   document.getElementById("fDate").addEventListener("input", refresh);
+
+  /* ── THE TWO HALVES OF THE MODE ────────────────────────────────────────────
+   * Will-call and delivery are not one word apart, they are two different asks,
+   * and this page shipped for four months treating them as one word: tapping
+   * Delivery changed a line of the message and collected nothing, so the answer
+   * to "where does it go and how does it get off the truck" was still a phone
+   * call at 6am — the exact call the page exists to prevent. Each half now shows
+   * only its own question, and prints only its own question. */
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: "toolkit.plumbing.supplyHouseOrder.dropoff.v1",
+    jobField: "fJob",
+    onChange: function(){ refresh(); }
+  });
+  function modeUI(){
+    if (drop) drop.show(mode === "Delivery");
+    var pw = document.getElementById("pickWrap");
+    if (pw) pw.hidden = (mode !== "Will-call");
+  }
+  modeUI();
 
   function whenText(){
     if (when !== "date") return when;
@@ -374,16 +431,24 @@ ul.items{list-style:none;margin:0;padding:0}
   function checked(){ return [].slice.call(list.querySelectorAll(".item.is-checked")); }
 
   function asText(){
-    var job = document.getElementById("fJob").value.trim();
-    var by  = document.getElementById("fBy").value.trim();
-    var ac  = document.getElementById("fAcct").value.trim();
+    var job  = document.getElementById("fJob").value.trim();
+    var by   = document.getElementById("fBy").value.trim();
+    var ac   = document.getElementById("fAcct").value.trim();
+    var po   = document.getElementById("fPO").value.trim();
+    var pick = document.getElementById("fPick").value.trim();
 
     var out = "SUPPLY HOUSE ORDER";
     if (job) out += " — " + job;
     out += "\n" + mode + "  ·  Need by: " + whenText();
     if (by) out += "  ·  Ordered by: " + by;
-    if (ac) out += "  ·  Acct/PO: " + ac;
-    out += "\nDate: " + todayStr() + "\n";
+    if (ac) out += "  ·  Acct: " + ac;
+    if (po) out += "  ·  PO: " + po;
+    if (mode === "Will-call" && pick) out += "  ·  Picking it up: " + pick;
+    out += "\nDate: " + todayStr();
+    // Only the half he actually picked. A will-call carrying gate codes and a
+    // delivery carrying "picking it up" are both the page talking past him.
+    if (mode === "Delivery" && drop) out += drop.text();
+    out += "\n";
 
     DATA.forEach(function(cat){
       var sec = list.querySelector('.cat[data-id="'+cat.id+'"]');
@@ -394,7 +459,12 @@ ul.items{list-style:none;margin:0;padding:0}
     });
 
     if (!checked().length) return out.trim() + "\n\n(nothing ticked yet)";
-    out += "\nPlease confirm sizes and configs before pulling. Thanks.";
+    /* THE LEAD-TIME ASK IS A SENTENCE, NOT AN AXIS. A per-line "stock / special
+       order" flag was proposed and killed: neither he nor this page knows what is
+       on that shelf, and a guess wearing a heading is a guess presented as fact
+       (§SAFETY). What he actually needs back is a DATE, and the word is lead time
+       — never "quote", which is money and his PM's lane. */
+    out += "\nPlease confirm sizes and configs before pulling. Anything on here that's not on the shelf, give me a lead time before you pull the rest. Thanks.";
     return out.trim();
   }
 
@@ -428,6 +498,7 @@ ul.items{list-style:none;margin:0;padding:0}
       setSeg("segMode", "Will-call");
       setSeg("segWhen", "Today");
       document.getElementById("fDate").value = "";
+      modeUI();
     }
     if (draft) draft.clear(wipe); else wipe();
     refresh();
@@ -563,13 +634,19 @@ ul.items{list-style:none;margin:0;padding:0}
    * not the screen), and clearing an order would have cost him three fields he had
    * already typed. Separate record, never touched by Clear — the same split the
    * engine's pages already ship as their sticky header. */
-  var sticky = Draft.fields(["fJob", "fBy", "fAcct"]);
+  var sticky = Draft.fields(["fJob", "fBy", "fAcct", "fPO", "fPick"]);
   var stickyDraft = Draft.keep({
     key: "toolkit.plumbing.supplyHouseOrder.header.v1",
     snapshot: sticky.snapshot,
     apply: sticky.apply
   });
-  sticky.watch(function(){ stickyDraft.save(); });
+  /* AND THEY REDRAW. The job, the name and the account are all PRINTED in the
+     block below labelled "what the counter gets", and until this line that block
+     did not move while he typed them: the copy button rebuilt the text fresh so
+     the counter got the right thing, but the one thing he reads before sending
+     showed the last job he was on. The sticky watcher already fires on input and
+     change for all three; it just wasn't telling the page. */
+  sticky.watch(function(){ stickyDraft.save(); refresh(); });
 
   /* YESTERDAY'S ORDER. "Half of tomorrow's order is today's order" — and Clear
      now removes write-ins outright, so the undo ships in the same change: the

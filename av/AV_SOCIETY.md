@@ -817,8 +817,52 @@ it forgot to apply.
 gets argued about later, so a sure pair with nothing added reads **"no date on it"** — the
 requester's half of the same rule `answer-back` already holds on the responder's side.
 
-**WHERE INTERFACE GOES NEXT:** the supply-house / vendor edge and the sub → owner
-access/badge request are the two unbuilt ASK edges left. The loop itself is now closed.
+### THE VENDOR EDGE — the half that was unbuilt was never the list (settled 2026-08-14)
+The roster had the supply-house / vendor edge ranked as *"the strongest unbuilt ASK
+edge"* and read it as one page owed to nine trades. A panel of four field lenses and two
+skeptics killed that in one line, **on disk**: six trades already ship that page under
+their own names — `av/consumables`, `av/cable-list`, `electrical/pull-list`,
+`framing/the-load`, `hvac/truck-stock`, `low-voltage/consumables`,
+`plumbing/supply-house-order` — and `electrical/tools.js` has said *"copy it to the
+warehouse **or the counter**"* since the day it landed. Nine pages would have split each
+trade's item vocabulary across two files, and **one half goes stale**: the roofing-commons
+scar with a purchase order attached.
+
+**WHAT IS GENUINELY UNBUILT AT THIS BOUNDARY IS THE TRUCK, NOT THE LIST.** Three of the
+four lenses said so unprompted, and the receiving lens said it hardest: the list is not
+what fails. *"The flatbed with 20-footers and no boom, the drop at the front curb because
+nobody said level 2 north stair, the driver with five more stops who takes the load
+back"* — a real day of four men, and nothing on any order page could have prevented it.
+
+**AND ITS ANSWER IS A FIELD, NOT A TOOL — which is the reusable finding.** The answer to
+"how does the truck get in and where does it land" is *identical for every delivery to
+that job from every vendor all year*, so putting it on the order means re-ticking it on
+every order forever, which is the ceremony §THE GATE forbids. It ships as
+`shared/dropoff.js`: one **sticky** block, typed once per job, mounted with two lines into
+any page that already has a delivery mode, and no new storefront row. Ticks for where it
+lands / how it comes off / when it can come, text only for what no picker can hold, a
+`not before` clock because a truck at 6 when the gate opens at 7 blocks the street, and
+**one line in the document every time it appears: it is an ask, not a booking** — a man who
+ticks *boom · not before 7 · level 2* and taps Copy has put text on a clipboard, and the
+failure is silent until four men are standing.
+
+**THREE THINGS THE PANEL KILLED, keep them killed:** a per-line STOCK / SPECIAL-ORDER
+axis splitting the message into *"pull this"* and *"tell me when"* — neither we nor he
+knows what is on that shelf, and a guess wearing a heading is a guess presented as fact;
+it survives as ONE SENTENCE asking for a **lead time** (never the word *quote*, which is
+money and his PM's lane). A per-row **NO SUBS — CALL ME** flag — on a purchase document
+that reads as a contractual term, and *"if I spec his material I own his warranty"* is
+this program's own rule. A **branch picker** — a page that names real distributor
+locations is impersonation with a shelf life.
+
+**WHERE INTERFACE GOES NEXT:** (1) mount the drop-off block on the four order pages that
+carry the typed half but not the ticks — `electrical/pull-list`, `low-voltage/consumables`,
+`hvac/truck-stock`, `framing/the-load`. (2) The sub → owner access / escort / badge
+request, still unbuilt and still nobody's. (3) The long-lead **gear chase** the electrical
+lens proposed and which is a different document from an order: the same list sent six
+times over four months, with a first-class *what I'm asking for* axis (a ship date ·
+released · dimensions and weight · approved schedules · freight) because inside one
+distributor those route to four different people. The ask/answer loop itself stays closed.
 
 ## CREATIVE — trade #9, and the first one that is not a construction trade (2026-08-13)
 
@@ -959,6 +1003,53 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A MODE BUTTON WITH NOTHING BEHIND IT IS WORSE THAN NO BUTTON, BECAUSE HE TAPS IT
+  (2026-08-14).** `plumbing/supply-house-order.html` shipped a two-state segment —
+  **Will-call / Delivery** — for four months. Tapping Delivery changed one word of the
+  message and collected **nothing**: no gate, no set location, no time window, no how it
+  comes off the truck, no who's meeting it, no who signs. A man tapped it, read a message
+  that said *Delivery* at the top, and sent it — and the seven answers that decide whether
+  the truck comes back loaded were still a phone call at 6am, which is the call the page
+  exists to prevent. The supply-house counter lens found it independently and said it
+  best: *"a bare Delivery button with nothing behind it is worse than no button, because
+  he taps it."* This is the roofing-commons scar with a truck attached — **a chip with
+  nothing behind it is a lie told to one trade; a MODE with nothing behind it is a lie
+  told to one man on one morning.** THE RULE: a control that changes the DOCUMENT must
+  change the QUESTIONS. If tapping it does not add a field, remove it and print the word
+  in prose. And its half-brother, from the same page: the callback cell. Four months of
+  *"Ordered by: your name"* with no number on it, while all three engine-driven siblings
+  asked for **name + cell** — so the one document built to stop a phone call made the
+  counter go find the phone number, and the answer came back office → PM → him.
+  **A BACKPORT SWEEP IS NOT OPTIONAL BECAUSE NOBODY FILES A WISH FOR "MY SIBLING PAGE IS
+  BETTER THAN ME."**
+
+- **A HAND-KEPT LIST THAT HAS TO AGREE WITH A HAND-WRITTEN FUNCTION WILL STOP AGREEING
+  (2026-08-14).** Shape #1's engine took a `watch: [...]` array of the header ids to
+  re-render on. The document was built by a separate hand-written `document()`. Nothing
+  checked that the two named the same fields, and on **four of the five** engine-driven
+  order pages they had drifted: a charge code, a hot flag and a delivery method were read
+  into the sent text and missing from `watch`. The block on the glass under *"what you
+  send"* — the one thing he proofreads — was a generation stale, while the copied text was
+  right. Six pages, ten fields, invisible to every review because the OUTPUT was correct.
+  THE RULE: **never make correctness depend on two hand-kept lists agreeing.** The fix was
+  not to top up the array on four pages, it was to stop the array being the only source —
+  the engine now binds every header control the house convention already names, and
+  `watch` is for the exceptions. `input` AND `change`, which `shared/draft.js` had already
+  written down three files away and the engine had half of. Asserted by
+  `tools/toolkit-gates/order-live-header.mjs`, which decides whether a field is in the
+  document by **changing it and reading what the real Copy button puts on the clipboard**
+  — so it needs no list of its own and cannot drift either.
+
+- **A LATENT OVERFLOW DOES NOT APPEAR, IT BECOMES VISIBLE (2026-08-14).** The plumbing
+  order page's *Need by* segment — three buttons — has always had a min-content floor of
+  about 200px against a 160px grid track. It passed the mobile gate at every width for
+  months **because it happened to land in the LEFT column**, where 40px of overflow still
+  fell inside the glass. Adding two header fields above it moved the same cell into the
+  RIGHT column and the same 40px went off the screen. Nothing about the segment changed.
+  THE RULE: when the mobile gate fails on a page you touched, **find out whether you built
+  it or exposed it** — the fix for the second is at the thing that never fit, not at the
+  edit that revealed it. A control that cannot fit a track does not get a track (`span2`).
 
 - **A GUARD WRITTEN TO THE LETTER OF THE LAST SCAR IS SATISFIED BY THE NEXT ACCIDENT
   (2026-08-13).** Framing shipped 2026-08-09 with no commons chip at all; the cycle that
@@ -2948,3 +3039,5 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
 
 - `2026-08-13` — **[AXIS:COMMONS]** **A ROOFER TAPPED HIS OWN CHIP AND WAS HANDED A VOLTAGE TESTER** · **before:** roofing had a chip on both commons surfaces and **not one row in the entire commons had ever been written for it** — 3 "own" gear rows and 3 tips, every one of them a universal row an unrelated commit had widened to the eight construction trades, so his trade's gear read *cordless drill · torpedo level · non-contact voltage tester*. Siblings carried 7–22. Measured live before the fix, not assumed · **after:** **gear 3 own / 0 written → 21 / 18; tips 3 / 0 → 15 / 11**, seeded by the same adversarial fan-out that seeded every sibling — a seeder per surface, then a journeyman lens and a rails+partition lens cutting what it wrote. **THE PANEL REJECTED THE BALLOT AND WAS RIGHT.** The slate offered the two unbuilt parts of the founding brief (field photos, guides) plus a cross-trade name table; all three lenses independently attacked the ORDERING — *"it is in the founding brief" is not a rail* — and the shape skeptic found this hole instead and argued the decisive point: `COMMONS_SURFACES` puts every new surface in front of every reader, so shipping a third page hands the roofer a THIRD page with nothing on it. **You would be multiplying the hole.** Photos are deferred a third time on a harder reason than last time (`shared/feedback.js` is a text-only POST with no file input, so client-side EXIF-strip and resize are unenforceable by construction — and moderation prevents publication while doing nothing about CUSTODY); guides are refused as written (a guide is a procedure, and this page's own header says *not a how-to*); the name table's full rail set is now written into §THE COMMONS as rung 2 so it is not re-derived. **SIX ROWS AND THREE RE-TAGS DIED IN THE CUT:** the shingle ripper (a slate tool — on asphalt every man reaches for the flat bar he already carries, which was missing entirely), the core cutter (the consultant's test cut, and a row telling a crew to cut a hole in somebody's warranted roof), the moisture-meter re-tag — *the ncvt breach wearing a tag instead of a verb, because "the meter says dry" is the claim that leaves saturated board under a new roof* — and the fresh-air-intake tip. That last one names the pattern the height rail actually caught: almost nothing proposed said *be safe*, it **PRICED A SAFETY EXPOSURE AS MONEY** — a shutdown, a callback, a bare foot itemised beside a tire and a mower blade — which is worse than an honest safety tip because it teaches a reader to weigh a hazard as a cost he can eat. The subtlest instance survived a rewrite instead of dying: *"find out what the deck is"* had its reason pointed at a truck driving for material, and that is the fall-through question, so it now points at the approved submittal, which is where the number lives anyway. Both halves of the trade, because `roofing/items.js` makes that an invariant — the first seed came back commercial twice over, a bag with no hammer in it, and said mod bit *"gets welded"*; mod bit is **torched**, and that one word is how a roofer knows who wrote a page. **BACKPORT RIDER FIRED TWICE, all nine trades at once, in the one engine they share:** (1) the commons stamped **the chip you had open** onto every pick you were carrying — tick three rows under Electrical, tap Plumbing, and Copy produced `WHAT'S IN THE BAG — PLUMBING` over glow rods and lineman's pliers, while those picks stopped rendering and kept COUNTING, so the dock read "3 in your bag" over a screen with nothing ticked and no way to reach them; one partition function now feeds both the screen and the document, and anything outside the current view rides in its own named section. (2) **His own rows lead** — found by doing the job, not by a gate: sections render in FILE order and shared rows sit earlier in the file than any one trade's own, so the moment roofing was seeded the first four rows under "Roofing" were a drill, a level, a tester and a radio. Every count passed and the page still opened on somebody else's bag. **THE GATES THAT MISSED IT, AND THE ONE THAT COULD NOT SEE IT:** the ship gate written against the framing scar asked `toBeGreaterThan(0)` and the deploy counted the FILE (`n_gear >= 20`) — both green on an accident. Both now ask how many rows were **written for** the trade (a narrow tag list), verified firing on this exact defect and on nothing else. `tools/toolkit-gates/commons-bag.mjs` is new because every gate we owned loads the page fresh or never leaves the chip it ticked on: **18/18 fail against the shipped engine, 18/18 pass against the fix.** §TRADE EXPANSION now names the commons — framing joined the program with no chip, roofing joined with a chip and nothing behind it, and a checklist that does not name a shared surface will not update it. Gate: **commons e2e 24/24 and `commons-bag` 18/18 GREEN AGAINST PRODUCTION**, mobile-watertight 320/360/390/430 default and bumped on both surfaces, zero page errors, and the job driven end to end on the live site as a roofer. Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/commons/
 - `2026-08-14` — **[AXIS:DOCS]** **THE SEARCH THAT SAID "NO MATCHES" TO A TYPO, AND THE DEAD SESSION THAT HAD ALREADY KILLED IT** · **before:** both search boxes in the toolkit ANDed the typed tokens as raw substrings — the document library on all 8 `write-up` pages, and the item filter on `av/consumables.html` (whole-phrase `.includes`, stricter still) — and the measurement now in `shared/find.js`'s header says what that cost: all 953 queries built from the authors' own strings pass (substrings BY CONSTRUCTION — the green that means nothing), while 5,384 mechanical perturbations of the same strings missed 4,121 times (**76.5%**): +"template" 100% · plural 99% · one typo 99% · joined 97%. "daily field report template" returned an empty library on every trade and dumped the man into the custom path — which was never a niche, it was where search dumped people · **after:** `shared/find.js` live behind both — noise tokens are dropped instead of vetoing (NO stopword list: a token that scores zero across the whole library IS the measurement), coverage-tier degrade so "nothing matches" is a bug not a state, fuzzy last with a first-letter guard and an edit budget ("turnover" ≠ "handover"), the typed phrase outranks everything, and every approximate answer SAYS SO — "Closest to …" / "Nothing matched that — closest three", never a silent swap. **THIS CYCLE INHERITED THE BUILD FROM A SESSION THAT DIED BETWEEN BUILD AND SHIP** (§SCARS 2026-08-14): engine, docspec wiring and the eight include lines sat uncommitted; the well was empty and the building sweep clean, so only tree-before-well found it. Finished on top of the orphan: the mode-"all" honesty hole (a punctuation-only query labeled the FULL library "Closest to “!!!”" — the exact lie the modes exist to kill) and the port of the second box. **BACKPORT RIDER FIRED — instance list re-derived from disk, not trusted:** exactly two `type="search"` inputs exist across every page and shared module (`checklist-request.js` is tap-to-pick, not an instance), and the second, `av/consumables.html`, now runs the same engine with the same honest labels — indexed off the DOM so write-ins and killed rows stay searchable, rebuilt per keystroke because the item set changes under it, closest-three shown in place of a dead "No items match", `aria-live` on the label. Gate: **51 assertions, green local AND re-run GREEN AGAINST PRODUCTION** — rules 4/1/3 probed with SELF-DERIVED names on av + gc (exact full name #1 · "+ template" still #1 · one-typo rank 1), all 8 trades swept live for engine + honest label + closest-three, consumables driven end to end ("electrcal tape" → E-Tape, narrowed 1/28), mobile-watertight 320/360/390/430 ON the new closest-three state, zero page errors. Storefront unchanged — no new tool. https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+
+- `2026-08-14` — **[AXIS:INTERFACE]** **THE DELIVERY BUTTON THAT COLLECTED NOTHING, AND THE PREVIEW THAT WAS A GENERATION STALE ON SIX PAGES** · **before:** the well was dry (0 new, 0 building) and every trade on the BUILD ORDER had a kit, so the stalest axis governed — INTERFACE, 14 lane-cycles cold. The roster ranked the supply-house / vendor edge as "the strongest unbuilt ASK edge, one page owed to nine trades." **A panel of four field lenses and two skeptics killed that premise on disk in one line:** six trades already ship that page under their own names, and `electrical/tools.js` has said *"copy it to the warehouse OR THE COUNTER"* since it landed. What was actually unbuilt was **the truck** — and `plumbing/supply-house-order.html` had shipped a **Delivery** button for four months that changed one word of the message and asked for nothing: no gate, no set location, no window, no how-it-comes-off, no who's-meeting-it, no signer. The counter lens, answering from the receiving end and with no idea we had that page open: *"a bare Delivery button with nothing behind it is worse than no button, because he taps it."* Same page, same read: **"Ordered by: your name"** with no cell on it, while all three engine-driven siblings ask for name + cell — the one document built to stop a phone call made the counter go find the number. · **after:** `shared/dropoff.js` — the jobsite delivery block as a **FIELD, not a tool**, two lines to mount, **no new storefront row**, and sticky because the answer is the same for every delivery to that job all year. Ticks for where it lands / how it comes off / when it can come, a `not before` clock (a truck at 6 when the gate opens at 7 blocks the street), text only for which stair, the gate code, who's meeting it and who signs — and **"it's an ask, not a booking"** printed in the document every time it appears, because a man who ticks *boom · not before 7 · level 2* and taps Copy can believe he has scheduled a crane. Plumbing also got the callback cell, PO split out of the "optional" box it shared with the account, and **who's picking it up** gated to will-call. Killed by the skeptics and staying killed: a per-line stock/special-order axis (a guess wearing a heading), a NO-SUBS row flag (a contractual term on a document neither company owns), a branch picker (impersonation with a shelf life) — the lead-time ask survives as one sentence, and the word is never *quote*. · **BACKPORT RIDER FIRED, and it is where the cycle's real damage was found:** sweeping every shape #1 page for the same class turned up a defect nobody could see because the OUTPUT was right — **`watch` was a hand-kept list that had to agree with a hand-written `document()`, and on four of the five engine pages it had drifted.** A charge code, a hot flag and a delivery method were in the sent text and out of the re-render, so the block labelled *"what you send"* — the one thing he proofreads — was stale until something else poked it. **10 fields across 5 pages.** Fixed in the ENGINE, not per page: it now binds every header control the house convention names, `watch` is for exceptions, and both `input` and `change` (which `shared/draft.js` had already written down three files away). · **GATES, and both are new and both were proved by reverting the fix:** `order-live-header.mjs` decides whether a field is in the document by **changing it and reading what the real Copy button puts on the clipboard** — no list of its own to drift — then re-checks each one ALONE through a real reload from a wiped device, and taps every segment button so a block that only exists in the other mode is not invisible to it (10 defects red before the fix, 0 after, 6 pages, 9 in-document controls on plumbing). `dropoff-block.mjs` drives the block the way a foreman does and asserts the OUTPUT: every chip and every typed line by value in the copied text, the ask-not-a-booking line present, the whole block **out** of the document when the mode is switched off, and everything back after a reload — plus a banned-word pass over its own chips for a capacity, a reach or a price. `mobile-watertight` **76 pages × 320/360/390/430 × default and bumped text — 0 failing**, after fixing an overflow this cycle EXPOSED rather than created (a 3-button segment with a ~200px floor in a 160px track had been safe only because it happened to sit in the left column). `no-third-party` 76/76 clean. Storefront unchanged — no new tool, no new trade, by the panel's own verdict. BACKPORT rider: **fired** (7 shape #1 pages swept; the class was the 5 engine pages + the plumbing fork). https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html

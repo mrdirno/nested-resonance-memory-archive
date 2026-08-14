@@ -312,10 +312,42 @@
         if (first) first.focus();
       }
     });
-    (cfg.watch || []).forEach(function (id) {
-      var el = byId(id);
-      if (el) el.addEventListener("input", refresh);
-    });
+    /* THE PREVIEW IS THE DOCUMENT — and this used to be a HAND-KEPT LIST that had
+     * to agree with a HAND-WRITTEN document() with nothing checking that it did.
+     * It drifted on four of the five pages driving this engine: a charge code, a
+     * hot flag and a delivery method were read into the sent text and left out of
+     * `watch`, so the block on the glass labelled "what you send" was a
+     * generation stale — the copied text right, the thing he PROOFREADS wrong.
+     * The SAVE survived it only by luck: the save rides the re-render, so an
+     * unwatched field reached storage on nothing but shared/draft.js's flush at
+     * pagehide. That flush is the previous cycle's fix doing a job it was not
+     * written for, and it is asserted now rather than relied on.
+     *
+     * So the list stopped being the only source. Every header control the house
+     * convention already names — id `f` + a capital, outside the ticked list — is
+     * bound automatically, and `cfg.watch` stays for the ids that fall outside
+     * the convention. Binding a field the document does not read costs one
+     * re-render; missing one costs him the order.
+     *
+     * BOTH EVENTS, for the reason shared/draft.js already wrote down three files
+     * away: `input` misses a <select> in some engines and `change` misses every
+     * keystroke in a textarea. This bound only `input`. */
+    var watched = [];
+    var listEl = byId(cfg.list);
+    function watch(el) {
+      if (!el || watched.indexOf(el) !== -1) return;
+      watched.push(el);
+      el.addEventListener("input", refresh);
+      el.addEventListener("change", refresh);
+    }
+    (cfg.watch || []).forEach(function (id) { watch(byId(id)); });
+    [].forEach.call(document.querySelectorAll('input[id^="f"],select[id^="f"],textarea[id^="f"]'),
+      function (el) {
+        if (!/^f[A-Z]/.test(el.id)) return;
+        if (el.type === "hidden") return;
+        if (listEl && listEl.contains(el)) return;
+        watch(el);
+      });
 
     function sections() {
       return data.map(function (cat) {
