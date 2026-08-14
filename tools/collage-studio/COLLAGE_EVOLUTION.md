@@ -1040,6 +1040,41 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C157-THE-CAP-WAS-WRITTEN-ON-THE-KNOB-AND-THE-PICTURE-NEVER-READ-IT.**
+  A wish said the dice deals over a hundred fragments from twelve photographs.
+  It does, and the wiring defect was one line: `rollDice({ hasVideo })` — the
+  roll had no idea how big the pool was, so a recipe sampled its absolute band
+  and twelve photographs became two hundred repeats. The obvious fix — cap the
+  rolled `count` — is a cap on a number nobody is looking at, and the panel made
+  that its decisive objection before a line shipped. **`count` is a REQUEST.**
+  App.tsx says so in its own words ("the count is documented as a target, not a
+  guarantee") and the generators miss it in both directions: measured on the real
+  module across 7 aspects x 4 seeds x 3 entropies, a Flower of Life asked for 4
+  returns 39 cells and cannot go below that at ANY request; truchet asked for 12
+  returns 39; kaleidoscope overshoots 2.2x in the low band; apollonian and
+  penrose UNDER-deliver by half. So capping the request at 36 still put 87 cells
+  on the canvas. **The general shape: a ceiling imposed on an input is a promise
+  about an output, and the two are only the same number when nothing in between
+  is allowed to disagree.** Fixed with two measured facts per generator —
+  `deliveredFloor` (the fewest cells it can produce at any request) and
+  `overshoot` (delivered/requested, p75 over the low band) — used to aim the
+  request BELOW the budget and to refuse a figure that physically cannot be drawn
+  under it. **AND THE SECOND HALF OF THE SCAR IS THE DATA ITSELF:** two of those
+  numbers are measurements living in a source file, which is the same thing as a
+  comment, and this file already carries "a docstring is not a test". So the
+  sweep RE-MEASURES both against the real generators on every run and fails on
+  drift — which caught it immediately when the shipped p75 was compared against a
+  re-measured median, a units mismatch that would otherwise have shipped as a
+  gate that could never fire. **`countRange[0]` was the original lie:** written
+  as "cells this construction looks best at", read ever since as "cells it can
+  do", and false for seven of twenty-three.
+- **SCAR-C157b-THE-FLOOR-ROUNDED-UP-THROUGH-THE-CEILING.** The band the pool
+  produces is fractional (a budget divided by a density and an overshoot), and
+  the integer clamp read `hi = max(lo, floor(hi))` — so a band of [7.5, 7.5]
+  rounded the low end UP to 8 and at density 2 put 16 fragments on screen against
+  a budget of 15. Caught by the sweep in its first run, four lines after the
+  invariant that describes it. A floor is a preference and a ceiling is a
+  promise: when a fractional band cannot hold both, the promise survives.
 - **SCAR-C156b-THREE PLACES ANSWERED "IS THE WALL TURNING" AND THE NEW FEATURE
   ASKED THE WRONG ONE.** `Stage.setScene` builds the turn RING out of the
   fragments that are NOT holding a live clip and switches the feature off below
@@ -2310,6 +2345,67 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-14 · **[AXIS:WELL] THE DICE NOW SEES HOW MANY PHOTOS YOU SENT** — from
+  wish `d27650c7` (kind=bug, the well read UNSCOPED first; 1 new, 0 stranded in
+  `building`): *"You should make randomize the same count as the images uploaded
+  — why everytime I hit random it does over 100 it should be within range of the
+  number of images sent."* **before → after**, measured end to end on the real
+  generators at the wisher's own pool of twelve photographs, on cells actually
+  DRAWN and not on the number requested: **median 69 fragments → 23 · p90 180 →
+  32 · worst-in-600 434 → 62 · share of rolls that break the ceiling 79.3% →
+  2.8%.** Big pools untouched: at eighty photographs the roll is what it always
+  was (median 77 → 76). Confirmed in the DEPLOYED bundle before a line was
+  written — `count:[90,220]`, `count:[80,260]` — never re-reasoned from source.
+  **THE DEFECT WAS ONE LINE OF WIRING:** `rollDice({ hasVideo })`. The app snaps
+  the fragment count to the number of distinct sources on import and has an e2e
+  proving it; the most prominent button then threw that away, because the roll
+  was never told the pool existed, and `countOwned` latched so every later press
+  did it again. **THE PANEL RETURNED BUILD_DIFFERENT_SHAPE, UNANIMOUS, AND ITS
+  DECISIVE OBJECTION KILLED THE OBVIOUS FIX:** `count` is a REQUEST, not the
+  number of fragments — capping it at 36 still puts 87 cells on the canvas,
+  because a Flower of Life emits 39 at its smallest lattice whatever you ask for.
+  Two measured facts per generator now carry that (`deliveredFloor`,
+  `overshoot`), and the sweep RE-MEASURES both every run so neither can rot into
+  a comment. **THE PANEL'S FIRST DRAFT WAS ALSO OVERRULED, WITH ITS OWN
+  MEASUREMENT:** forcing the count UP to the source total (so "nothing is
+  stranded") moves the median at eighty photographs from 80 to 115 — it makes the
+  tool do MORE of the thing the wish is about, to enforce a guarantee the app
+  does not make (`source-count.spec.ts` R3 pins a user holding three photos at
+  two fragments as CORRECT). So the pool may only ever LOWER a roll, never raise
+  one, and that is invariant I1. **NOTHING WAS FILTERED BY TASTE** — the loudest
+  attack was that a band-filter deletes nineteen of twenty-four recipes at a
+  small pool, and this file already records that scar twice in its own words ("A
+  LEAN, not a rule"). Admission is by PHYSICS: a figure is dropped only when it
+  cannot be drawn under the ceiling at any request, which costs exactly one
+  figure and one recipe below thirteen sources and nothing above it — asserted,
+  not asserted-to, as I6. **BACKPORT RIDER FIRED — the class is "a control that
+  ignores the size of the user's own input", swept across every other count-
+  setting path in the app:** `rollDeal` (the colour dice) rolls no count and
+  needed nothing; `applyCompositionCode` carries a literal count and is correctly
+  EXEMPT (a code must reproduce the sender's picture, not the recipient's pool);
+  `templates.ts` carries fixed counts and the import grow-to-cover already lifts
+  them; and `density` was the one that bit — the readout prints `count x density`
+  and the chips go to 4x, so a ceiling on the count alone let twelve photographs
+  become 144 fragments WITH the fix installed, which is the wisher's literal
+  complaint reproducing through its own fix. Density is inside the ceiling now
+  (D6). No trade toolkit page has a generative control, so the class cannot exist
+  there. **GATES: 12 invariants over 16 pool sizes x 900 seeds x every recipe and
+  generator, all green** — including I11, which re-measures the shipped delivery
+  data against the real module, and I12, which BANDS the accepted residue (the
+  quantised figures landing on their next admissible rung) so re-widening it
+  fails loudly. Plus a new 6-assertion e2e driving the real button on the real
+  page — **3 of 5 RED against the shipped build, 6 of 6 green against the fix** —
+  and green again against PRODUCTION after deploy. Regression: all 26 unit
+  sweeps, `source-count` 7/7, `roll-code` 20/20, `colour-dice` 9/9, `tsc` and
+  `vite build` clean. **NOT SHIPPED, AND NAMED SO IT IS NOT RE-DERIVED:**
+  `slotCount = max(effectiveCount, layoutItems.length)` sizes the photo
+  assignment to the REQUEST while the renderer paints only delivered cells, so an
+  under-delivering figure leaves a source assigned to a cell nobody draws (~8% of
+  rolls at twelve). It is a separate defect in a different module, it bites the
+  manual stepper identically, and it reads at five call sites plus the export
+  path — it is the next rung, with its own gate. Wisher credited on the Wall of
+  Wishes, anonymity honoured.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-08 · **[AXIS:COLLAGE] THE SOUNDTRACK — music under the collage**
   (well empty — 0 new, 0 stranded in `building`, read UNSCOPED across all trades
   first; breadth debt 0, so LIVE STATE's stalest-axis rule governed and it named

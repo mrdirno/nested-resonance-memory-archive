@@ -946,7 +946,18 @@ export default function App() {
     // what is on screen FIRST — `compositionCode` is still this render's, i.e.
     // the composition about to be replaced.
     pushHistory();
-    const roll = rollDice({ hasVideo: clips.length > 0 });
+    // `distinctSourceCount`, never `images.length` — the ONE definition of "how
+    // many things did you send" (fill.ts), the same one the import snaps the
+    // count to. A second answer here would put the roll's ceiling ten times too
+    // high on a project made of video, whose frames outnumber its clips.
+    // `density` goes in too: what the readout calls FRAGMENTS is `count *
+    // density`, and this button does not roll density (see below), so a ceiling
+    // written on `count` alone would be a cap on a number nobody is reading.
+    const roll = rollDice({
+      hasVideo: clips.length > 0,
+      sources: distinctSourceCount(images),
+      density,
+    });
     // The dice chooses an explicit fragment count; don't let the next upload
     // silently overwrite a composition the user rolled on purpose.
     ownCount(true);

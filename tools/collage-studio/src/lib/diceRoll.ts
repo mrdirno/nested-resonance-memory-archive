@@ -21,6 +21,48 @@
 // REPRODUCIBLE AND SHAREABLE
 //   Every roll encodes to a short code. Same code, same collage, on any device
 //   — which is what makes a good roll worth sending to somebody.
+//
+// THE POOL IS A CONSTRAINT ON THE ROLL, NOT A SUGGESTION
+//   Wished for (wishing well, kind=bug): *"You should make randomize the same
+//   count as the images uploaded — why everytime I hit random it does over 100
+//   it should be within range of the number of images sent."* He was right, and
+//   the app already agreed with him everywhere except here: an import snaps the
+//   fragment count to the number of distinct sources, and one press of the dice
+//   threw that away, because `rollDice` was never told how big the pool was. So
+//   a recipe sampled out of its absolute band — Cathedral [90,220], Sunflower
+//   [80,260] — and twelve photographs became two hundred fragments, every one of
+//   them a repeat of one of the twelve. Measured on the shipped build before the
+//   fix: three photos rolled 85, 186, 109, 95, 62, 88, 61, 130.
+//   `countBandFor` is the answer: the curated band is honoured wherever it fits
+//   under what the pool can carry, and where it cannot fit, the POOL BAND
+//   replaces it. Not a clamp on the way out — a clamp would pin every high-count
+//   recipe to exactly the ceiling and kill the variety that makes the button
+//   worth pressing. And not a filter that removes those recipes either: the
+//   count is one of thirteen fields a roll deals, and losing twenty of
+//   twenty-four recipes would cost the layout, the palette and the arrangement
+//   to fix the count.
+//
+// WHAT IT CANNOT PROMISE, SAID OUT LOUD
+//   `count` is a REQUEST. Every generator is free to miss it — a kaleidoscope
+//   needs whole mirrored wedges, a mandala whole rings, Penrose deflates in
+//   phi^2 steps, and between two admissible counts there is nothing (see
+//   `quantisedCount`). So the ceiling is aimed below the budget by the factor
+//   each figure is measured to overshoot by, and a figure that cannot be drawn
+//   small enough at all is not offered — but the last word belongs to the
+//   construction, not to us. Measured over 600 rolls per pool, delivered cells
+//   against the budget:
+//        pool  1   10.7% over,  worst 1.79x   (truchet, asked for 7)
+//        pool  3   10.8% over,  worst 2.00x   (mandala, asked for 10)
+//        pool 12    2.8% over,  worst 1.72x   (mandala, asked for 15)
+//        pool 40    0.0% over,  worst 1.00x
+//   The same measurement before this change, at twelve photographs: 79.3% over,
+//   median 69 fragments, worst 434. The residue is banded and asserted as I12 in
+//   the sweep, so re-widening it fails loudly instead of quietly.
+//
+//   And a pool of eight or fewer keeps a ceiling of 24 whatever its size, which
+//   is the one place this knowingly does not do what the wish literally asked:
+//   three copies of three photographs is nine cells, and there is no figure in
+//   the roster that reads as itself at nine. That is a trade, not an oversight.
 // -----------------------------------------------------------------------------
 
 import type { LayoutMode, PrimitiveType } from '../types';
@@ -226,6 +268,137 @@ const between = (lo: number, hi: number, rnd: () => number): number => lo + rnd(
 const logCount = (lo: number, hi: number, rnd: () => number): number =>
   Math.round(Math.exp(between(Math.log(Math.max(2, lo)), Math.log(Math.max(3, hi)), rnd)));
 
+// =============================================================================
+// THE POOL CEILING
+// =============================================================================
+
+/**
+ * How many times the roll may repeat one photograph.
+ *
+ * Three, because the band it opens is what keeps the button a dice: twelve
+ * photographs get 12..36, which is a factor of three sampled log-uniformly, so
+ * consecutive presses land visibly apart. At two the range is thin enough that
+ * the count stops feeling rolled; at five a twelve-photo pool is back above
+ * sixty fragments and the wish is only half answered.
+ */
+export const MAX_REPEATS = 3;
+
+/**
+ * The smallest ceiling any pool gets, however few photographs are in it.
+ *
+ * Three copies of three photographs is nine fragments, and there is no figure in
+ * the roster that reads as itself at nine — this is the file header's own "a
+ * 6-cell Sunflower is not a sunflower", arriving from the other direction. So a
+ * small pool keeps a ceiling big enough to draw something, and pays for it in
+ * repeats: that is the honest trade, and it only ever distorts pools under
+ * eight, where a strict reading of the wish would produce a picture nobody wants.
+ */
+export const MIN_FIGURE = 24;
+
+/**
+ * The most fragments a roll may deal for a pool of `sources` distinct
+ * photos/videos. `Infinity` when nothing has been imported yet — with no pool
+ * there is no constraint, and the roll is exactly what it always was.
+ */
+export const poolCeiling = (sources: number, density = 1): number => {
+  if (sources <= 0) return Infinity;
+  // DENSITY MULTIPLIES STRAIGHT THROUGH, and the panel caught it: the number on
+  // screen is `count * density` (App.tsx `effectiveCount`, and the readout says
+  // so), the density chips go to 4x, and the dice deliberately does not touch
+  // density — so a ceiling written on `count` alone lets twelve photographs
+  // become 144 fragments with the fix installed. That is the wish's literal
+  // complaint reproducing through the fix, which is worse than not fixing it.
+  return Math.max(sources * MAX_REPEATS, MIN_FIGURE) / Math.max(1, density);
+};
+
+/**
+ * The narrowest a squeezed band is allowed to get before it is reopened downward.
+ *
+ * Without it the ceiling can land exactly on a recipe's low end — thirty photos
+ * against Cathedral's [90,220] gives a ceiling of 90 and a band of [90,90] — and
+ * a dice that returns the same number every press is a broken button wearing the
+ * fix's clothes. Only ever applied to a band the ceiling actually moved, so a
+ * roll with no pool is untouched.
+ */
+export const MIN_SPREAD = 1.5;
+
+/**
+ * The band a roll samples its fragment count from, once the pool has had its say.
+ *
+ * @param wanted  the curated band — the recipe's, or the generator's own.
+ * @param figureMin the generator's own declared minimum: below this the
+ *                construction stops being the thing it is named after. It is the
+ *                one floor that outranks the pool, because a 1-cell kaleidoscope
+ *                drawn from one uploaded photograph would honour the wish and be
+ *                a blank.
+ * @param sources how many distinct photos/videos are loaded. MUST be the app's
+ *                one definition of that (`fill.ts` `distinctSourceCount`) — a
+ *                second answer to "how many did you send" is the exact defect
+ *                SCAR-C156b is about, and here it would put the ceiling ten times
+ *                too high on a project made of video, whose extracted frames
+ *                outnumber its clips.
+ *
+ * THE PROPERTY THAT MAKES THIS SAFE: the band it returns is never WIDER at the
+ * top and never higher at the bottom than the band it was given. A pool can only
+ * ever lower a roll, never raise one — so no composition anybody liked before
+ * became unreachable, and the sparse large-fragment rolls `logCount` exists to
+ * reach are all still in the space. Swept as I1/I2 in the invariants.
+ *
+ * WHAT IT DELIBERATELY DOES NOT DO: force the count UP to the number of sources.
+ * That was in the first draft and the panel killed it with a measurement — at
+ * eighty photographs it moves the median roll from 80 to 115 fragments, i.e. it
+ * makes the tool do MORE of the thing the wish is about, to enforce a guarantee
+ * the app does not actually make: a user may already step the count below the
+ * source total on purpose, and `source-count.spec.ts` pins that as correct.
+ * "Nothing stranded" is a rule about IMPORT (App.tsx grows a count that sits
+ * under the pool), not about a roll.
+ */
+/**
+ * The fewest cells a construction can actually produce, and the factor by which
+ * it overshoots what it was asked for — both measured, both on the spec.
+ *
+ * They exist because the rolled `count` is a REQUEST and not the number of
+ * fragments: App.tsx says so in its own words ("the count is documented as a
+ * target, not a guarantee"), and the panel made it the decisive objection. A
+ * ceiling written on the request alone is a ceiling on a number nobody is
+ * looking at — measured on the shipped generators, twelve photographs with the
+ * request capped at 36 still put up to 87 cells on the canvas.
+ */
+export const deliveredFloorOf = (layout: LayoutMode): number => {
+  const spec = GENERATOR_BY_ID[layout];
+  return spec?.deliveredFloor ?? spec?.countRange?.[0] ?? 1;
+};
+export const overshootOf = (layout: LayoutMode): number =>
+  Math.max(1, GENERATOR_BY_ID[layout]?.overshoot ?? 1);
+
+export const countBandFor = (
+  wanted: readonly [number, number],
+  figureMin: number,
+  sources: number,
+  density = 1,
+  overshoot = 1,
+): [number, number] => {
+  // AIM BELOW THE CEILING BY WHAT THIS FIGURE IS KNOWN TO OVERSHOOT, so the cap
+  // lands on cells rather than on the request. Only ever lowers, and only when a
+  // pool exists — Infinity divided by anything is still Infinity, so the no-pool
+  // path is untouched.
+  const cap = poolCeiling(sources, density) / Math.max(1, overshoot);
+  const hi = Math.max(1, Math.min(wanted[1], cap));
+  // Did the pool actually lower this band? Everything conditional below is gated
+  // on it, so a roll with no pool comes out bit-for-bit what it always was.
+  const squeezed = hi < wanted[1];
+  // The curated band keeps its own low end where it still fits — a Sunflower
+  // next to forty photographs is still drawn at eighty florets. Where the whole
+  // band sits above what this pool can carry, the POOL band replaces it, which
+  // is how a roll gets to land on the pool size itself: the wish read literally.
+  let lo = wanted[0] <= hi ? wanted[0] : Math.min(sources, hi);
+  // Reopen a band the ceiling squeezed toward a pin. Not a clamp to the ceiling:
+  // a dice that returns the same number every press is a broken button.
+  if (squeezed && lo * MIN_SPREAD > hi) lo = hi / MIN_SPREAD;
+  lo = Math.max(lo, Math.min(figureMin, hi));  // never below what the figure needs
+  return [Math.min(lo, hi), hi];
+};
+
 /**
  * Entropy conditioned on family. This is the single most important constraint
  * in the whole roll: a sacred construction at entropy 0.9 is not "a wilder
@@ -427,6 +600,23 @@ export interface RollOptions {
   previous?: Roll;
   /** True when the project has video clips — unlocks the motion recipes. */
   hasVideo?: boolean;
+  /**
+   * How many DISTINCT photos/videos are loaded — the pool the roll has to fill.
+   *
+   * Omitted or 0 means "nothing imported yet", and the roll is unconstrained, so
+   * every call site written before this option existed still behaves the way it
+   * did. A caller that HAS a pool must pass `distinctSourceCount(images)` and
+   * never `images.length`: a video contributes a dozen extracted frames and one
+   * source, and counting the frames would put the ceiling ten times too high on
+   * exactly the projects this constraint exists for.
+   */
+  sources?: number;
+  /**
+   * The density multiplier on screen. The fragment count the user reads is
+   * `count * density` and the dice does not roll density, so the ceiling has to
+   * be divided by it or the cap is written on a number nobody is looking at.
+   */
+  density?: number;
   /** Force a specific recipe by name. */
   recipe?: string;
   /** Injectable for tests / reproduction. Defaults to Math.random. */
@@ -446,7 +636,36 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
   const locks = new Set(opts.locks ?? []);
   const prev = opts.previous;
 
-  const pool = RECIPES.filter((r) => opts.hasVideo || !r.video);
+  const sources = Math.max(0, opts.sources ?? 0);
+  const density = Math.max(1, opts.density ?? 1);
+  const ceiling = poolCeiling(sources, density);
+
+  /**
+   * ADMISSION BY PHYSICS, NEVER BY TASTE.
+   *
+   * A construction is dropped only when it CANNOT be drawn under this pool's
+   * ceiling at any request — a Flower of Life emits 39 cells at its smallest
+   * lattice, so offering it to somebody with three photographs is offering a
+   * figure that is going to break the promise the moment it renders. It is the
+   * same kind of gate the file already ships and nobody argued with: no video,
+   * no slit-scan.
+   *
+   * It is NOT a filter on a recipe's curated count band, and the difference is
+   * the whole design. This file records that scar twice in its own words —
+   * `arrangementFor`: "A LEAN, not a rule... a chip in the picker the dice
+   * effectively never reaches is a chip that may as well not exist" — and a
+   * band-filter re-commits it with pool size substituted for family, deleting
+   * nineteen of twenty-four recipes at a small pool. Measured, this gate costs
+   * exactly ONE figure and ONE recipe below thirteen sources, and nothing at all
+   * above it.
+   */
+  const drawable = <T,>(list: T[], layoutOf: (x: T) => LayoutMode): T[] => {
+    if (sources <= 0) return list;
+    const fits = list.filter((x) => deliveredFloorOf(layoutOf(x)) <= ceiling);
+    return fits.length ? fits : list;   // never hand back nothing
+  };
+
+  const pool = drawable(RECIPES.filter((r) => opts.hasVideo || !r.video), (r) => r.layout);
   const named = opts.recipe ? RECIPES.find((r) => r.name === opts.recipe) : undefined;
   const recipe = named ?? (rnd() < 0.62 ? pick(pool, rnd) : undefined);
 
@@ -454,14 +673,35 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
   if (locks.has('layout') && prev) layout = prev.layout;
   else if (recipe) layout = recipe.layout;
   else {
-    const usable = GENERATORS.filter((g) => opts.hasVideo || g.family !== 'motion');
+    const usable = drawable(
+      GENERATORS.filter((g) => opts.hasVideo || g.family !== 'motion'),
+      (g) => g.id as LayoutMode,
+    );
     layout = pick(usable, rnd).id as LayoutMode;
   }
 
   const spec = GENERATOR_BY_ID[layout];
-  const range: [number, number] = recipe?.count ?? spec?.countRange ?? [8, 120];
+  const wanted: [number, number] = recipe?.count ?? spec?.countRange ?? [8, 120];
+  // The pool has the last word on the ceiling — see `countBandFor` and the note
+  // in the file header. Drawn from the same stream position as before: the band
+  // is computed, not sampled, so no rng value is consumed here.
+  const range = countBandFor(wanted, spec?.countRange?.[0] ?? wanted[0], sources, density, overshootOf(layout));
 
-  const count = locks.has('count') && prev ? prev.count : logCount(range[0], range[1], rnd);
+  // Clamped INTO the band, because `logCount` floors its own arguments at 2 and 3
+  // and a pool ceiling can legitimately sit under those. A no-op for every band
+  // the roll had before this option existed (the narrowest is Manuscript's
+  // [8,34]), so it costs nothing and makes the ceiling exactly true instead of
+  // nearly true — which is the difference between an invariant and a hope.
+  // THE CEILING WINS THE ROUNDING. The first draft did `hi = max(lo, floor(hi))`
+  // and the sweep caught it in a minute: a band of [7.5, 7.5] rounded the low end
+  // UP to 8, which at density 2 put 16 fragments on screen against a budget of
+  // 15. A floor is a preference and a ceiling is a promise, so when a fractional
+  // band cannot hold both, the promise is the one that survives.
+  const hiI = Math.max(1, Math.floor(range[1]));
+  const loI = Math.min(hiI, Math.max(1, Math.round(range[0])));
+  const count = locks.has('count') && prev
+    ? prev.count
+    : Math.min(hiI, Math.max(loI, logCount(range[0], range[1], rnd)));
   const entropy = locks.has('entropy') && prev
     ? prev.entropy
     : recipe ? between(recipe.entropy[0], recipe.entropy[1], rnd) : entropyFor(layout, rnd);
@@ -526,9 +766,12 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // given rng as the build before it did.
     turn: turnFor(rnd),
     recipe: recipe?.name,
-    // The dice picks a fragment count on purpose, out of the generator's own
-    // sane range. That is a decision, so a code minted from it must not be
-    // overridden by however many photographs the recipient happens to have.
+    // The dice picks a fragment count on purpose, out of the band the figure and
+    // the sender's own pool agreed on. That is a decision, so a code minted from
+    // it must not be overridden by however many photographs the RECIPIENT
+    // happens to have — their pool constrains the rolls they press, never the
+    // picture somebody sent them. (The recipient is still never stranded: an
+    // import lifts a count that sits below the source total, App.tsx.)
     countOwned: true,
   });
   // THE PACE, drawn last of all and OUTSIDE the literal, because it is the one

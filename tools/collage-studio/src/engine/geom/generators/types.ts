@@ -107,4 +107,36 @@ export interface GeneratorSpec {
    * like a bug.
    */
   quantisedCount?: boolean;
+  /**
+   * The fewest cells this construction can produce AT ANY REQUEST — measured,
+   * not declared.
+   *
+   * Present only where it disagrees with `countRange[0]`, and it disagrees for
+   * seven of the twenty-three: a Flower of Life emits seven cells per lattice
+   * centre and the smallest lattice worth drawing is already 39, whatever you
+   * ask for. `countRange[0]` says 12. That number was written as "cells this
+   * construction looks best at" and has been read ever since as "cells this
+   * construction can do", which are different claims, and the second one is
+   * false. Anything reasoning about whether a figure FITS a budget has to read
+   * this; anything choosing a pleasing count still reads `countRange`.
+   *
+   * Measured by `tests/unit/diceRollCount.invariants.mjs` against the real
+   * generator over 7 aspects x 4 seeds x 3 entropies, which re-measures these
+   * numbers on every run and fails if one has drifted — so this cannot become
+   * another comment that outlives the code it describes.
+   */
+  deliveredFloor?: number;
+  /**
+   * Delivered cells divided by requested count, median, over the low band — the
+   * region a small photo pool forces the dice into.
+   *
+   * Present only where it exceeds 1. A request is a target (see
+   * `quantisedCount`), and for these figures the miss is systematic and upward:
+   * ask a circle packing for 20 and get 36. Anything imposing a CEILING on what
+   * ends up on the canvas has to aim below it by this much, or it is a ceiling
+   * on a number nobody is looking at. Under-delivering figures are deliberately
+   * absent rather than recorded as < 1: inflating a request to hit a target is
+   * a different decision, and not one anything currently makes.
+   */
+  overshoot?: number;
 }

@@ -43,6 +43,7 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'hilbert', name: 'Hilbert', family: 'structure', run: hilbert,
     blurb: 'A ribbon on a space-filling curve — neighbours stay near.',
     countRange: [8, 200], cost: 'low',
+    deliveredFloor: 15, overshoot: 1.5,
     gutterScale: 0.6,
     coverageFloor: 0.68,
   },
@@ -64,6 +65,7 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'delaunay', name: 'Delaunay', family: 'organic', run: delaunay,
     blurb: 'Real triangulation, dense at the points of impact.',
     countRange: [10, 240], cost: 'medium',
+    deliveredFloor: 14, overshoot: 1.4,
   },
   {
     id: 'mud-crack', name: 'Craze', family: 'organic', run: mudCrack,
@@ -80,6 +82,7 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'circle-pack', name: 'Packing', family: 'organic', run: circlePack,
     blurb: 'Discs dropped largest-first — a real packing, not a grid.',
     countRange: [8, 300], cost: 'medium',
+    overshoot: 1.8,
     coverageFloor: 0.60,
   },
   {
@@ -98,30 +101,35 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'kaleidoscope', name: 'Kaleidoscope', family: 'sacred', run: kaleidoscope,
     blurb: 'One wedge, mirrored through Dₙ — real kaleidoscope optics.',
     countRange: [12, 400], cost: 'low', animated: true,
+    overshoot: 2.2,
     quantisedCount: true,
   },
   {
     id: 'geodesic', name: 'Geodesic', family: 'sacred', run: geodesic,
     blurb: 'Icosahedron subdivided and re-projected onto a sphere.',
     countRange: [10, 320], cost: 'medium',
+    overshoot: 1.05,
     quantisedCount: true,
   },
   {
     id: 'flower-of-life', name: 'Flower of Life', family: 'sacred', run: flowerOfLife,
     blurb: 'Circles at spacing exactly r — the petals close.',
     countRange: [12, 300], cost: 'medium',
+    deliveredFloor: 39, overshoot: 3.95,
     quantisedCount: true,
   },
   {
     id: 'metatron', name: 'Metatron', family: 'sacred', run: metatron,
     blurb: '13 centres, every pair joined — the cube’s 78 chords.',
     countRange: [12, 250], cost: 'medium',
+    overshoot: 1.55,
     gutterScale: 0.18,
   },
   {
     id: 'sri-yantra', name: 'Sri Yantra', family: 'sacred', run: sriYantra,
     blurb: 'Nine interlocking triangles and the lotus rings.',
     countRange: [16, 200], cost: 'medium',
+    overshoot: 1.85,
     gutterScale: 0.5,
   },
   {
@@ -133,12 +141,14 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'mandala', name: 'Mandala', family: 'sacred', run: mandala,
     blurb: 'Rings with their own divisors, offset so no spokes form.',
     countRange: [12, 350], cost: 'low',
+    deliveredFloor: 20, overshoot: 2.25,
     quantisedCount: true,
   },
   {
     id: 'rosette', name: 'Rosette', family: 'sacred', run: rosette,
     blurb: 'Islamic star chords, extended until they meet.',
     countRange: [12, 250], cost: 'medium',
+    deliveredFloor: 15, overshoot: 1.35,
     gutterScale: 0.5,
     quantisedCount: true,
   },
@@ -146,6 +156,7 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'quasicrystal', name: 'Quasicrystal', family: 'sacred', run: quasicrystal,
     blurb: 'Odd-numbered plane waves — a pattern that never repeats.',
     countRange: [12, 280], cost: 'medium',
+    overshoot: 1.15,
   },
 
   // ---- recursive / aperiodic ---------------------------------------------
@@ -159,12 +170,14 @@ export const GENERATORS: GeneratorSpec[] = [
     id: 'truchet', name: 'Truchet', family: 'recursive', run: truchet,
     blurb: 'Rotated arc tiles at several scales; paths, not a lattice.',
     countRange: [12, 300], cost: 'low',
+    deliveredFloor: 15, overshoot: 3.25,
     quantisedCount: true,
   },
   {
     id: 'droste', name: 'Droste', family: 'recursive', run: droste,
     blurb: 'A logarithmic spiral that maps onto itself — endless zoom.',
     countRange: [12, 260], cost: 'low', animated: true,
+    deliveredFloor: 20, overshoot: 2.2,
   },
 ];
 
