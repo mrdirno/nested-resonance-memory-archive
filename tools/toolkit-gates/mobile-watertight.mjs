@@ -75,7 +75,7 @@ const PAGES = only ? [only] : DIRS.flatMap(dir =>
 /* Runs INSIDE the page. Returns findings, never throws — a gate that dies on one
  * page tells you nothing about the other thirty. */
 const MEASURE = (MIN_TAP) => {
-  const out = { overflow: null, taps: [], soft: [], covered: [], grew: [] };
+  const out = { overflow: null, taps: [], soft: [], covered: [], grew: [], clipped: [] };
   const de = document.documentElement;
   const vw = de.clientWidth;
 
@@ -176,6 +176,33 @@ const MEASURE = (MIN_TAP) => {
       });
     }
 
+    /* THE FIXED BAR'S OWN CHILDREN vs THE GLASS. Added 2026-08-14 after the
+       primary "Copy instructions" button on every trade's write-up page was
+       found running 27px off the right edge at 320px — with this gate reporting
+       PASS, because all three checks above are structurally blind to it:
+       a fixed bar never widens documentElement.scrollWidth, so the OVERFLOW
+       check cannot see it; the button was 44px tall, so the TAP check cannot see
+       it; and elementFromPoint at the bar still returned the button, because 27px
+       off the edge still leaves 161px on it, so the COVERAGE check cannot see it
+       either. Three correct measurements, one shared blind spot. The bar carries
+       the product of every page in this toolkit, so a control clipped there is
+       the whole page clipped. */
+    [...bar.children].forEach(el => {
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return;
+      const over = Math.round(r.right - vw);
+      if (over > 0 || r.left < -0.5) {
+        out.clipped.push({
+          sel: el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.className ? '.' + String(el.className).split(' ')[0] : ''),
+          over: over > 0 ? over : Math.round(-r.left),
+          side: over > 0 ? 'right' : 'left',
+          text: (el.textContent || el.value || '').trim().slice(0, 30),
+        });
+      }
+    });
+
     // Scrolled to the very bottom there is nowhere left to go, so whatever the
     // bar still covers HERE is covered permanently.
     window.scrollTo(0, document.documentElement.scrollHeight);
@@ -255,6 +282,7 @@ for (const page of PAGES) {
       if (r.viewport) bad.push(`${tag} — VIEWPORT: ${r.viewport}`);
       r.taps.forEach(t => bad.push(`${tag} — TAP TARGET ${t.short}px < ${MIN_TAP}px: ${t.sel}  "${t.text}"`));
       r.covered.forEach(c => bad.push(`${tag} — UNREACHABLE, the fixed bar covers it at the bottom of the page: ${c.sel}  "${c.text}"`));
+      r.clipped.forEach(c => bad.push(`${tag} — CLIPPED IN THE FIXED BAR: ${c.sel} runs ${c.over}px past the ${c.side} edge of the glass  "${c.text}"`));
       r.grew.forEach(g => bad.push(`${tag} — the fixed bar GREW: ${g.sel} is ${g.h}px tall beside ${g.btn}px buttons, so it wrapped and the bar ate the extra. "${g.text}"`));
       r.soft.forEach(t => soft.add(`${t.sel} ${t.short}px  "${t.text}"`));
     }

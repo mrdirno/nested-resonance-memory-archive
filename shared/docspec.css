@@ -127,3 +127,27 @@ pre.block{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);fon
 @media (max-width:399px){
   #copyAll{padding-left:12px;padding-right:12px}
 }
+/* AND IT STILL DID NOT FIT — measured 2026-08-14 in a 320px frame, on every one
+   of the ten trades, four days after the fix above shipped. The count was hidden
+   and the secondary had given up its padding, and the pair still measured
+   14 + 136 + 9 + 188 + 14 = 361px against 320px of glass: the PRIMARY Copy
+   button ran 27px off the right edge of the screen, label truncated, on the
+   smallest phone still in service.
+   WHY EVERY GATE SAID GREEN, which is the actual lesson. The bar is
+   position:fixed, so it never widens documentElement.scrollWidth — the overflow
+   check cannot see it. Its height never dropped below 44 — the tap check cannot
+   see it. elementFromPoint at the bar still returns #copy, because a button 27px
+   off the edge is still 161px ON it — the reachability check cannot see it
+   either. Three measurements, all correct, all blind to the same thing: NOTHING
+   WAS MEASURING A FIXED BAR'S CHILDREN AGAINST THE VIEWPORT. That assertion is
+   added to tools/toolkit-gates/mobile-watertight.mjs in the same commit, because
+   a defect three gates cannot see will come back.
+   The fix keeps the rule the last one set — never the height, never the thumb
+   target — and takes the room out of horizontal padding and label tracking only,
+   below 400px, where the count is already gone and there is nothing else left to
+   give. Both labels stay whole. */
+@media (max-width:399px){
+  .bar{padding-left:10px;padding-right:10px;gap:7px}
+  .bar button{padding-left:9px;padding-right:9px;font-size:14px;letter-spacing:.03em}
+  #copy{padding-left:11px;padding-right:11px}
+}

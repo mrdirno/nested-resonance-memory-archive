@@ -208,7 +208,7 @@ window.COMMONS_GEAR = [
    * just a trade quietly absent from the commons. */
   { id: "rafter-square", n: "Rafter square", t: ["framing"],
     w: "Squares a cut and steps out an angle without doing the math twice." },
-  { id: "chalk-line", n: "Chalk line (chalk box)", t: ["framing", "roofing"],
+  { id: "chalk-line", n: "Chalk line (chalk box)", t: ["framing", "roofing", "concrete"],
     /* Was "Snap blue — red is permanent…the painter's finish": an instruction, and
        BACKWARDS for the trade that snaps more line than any other. A roofer has no
        painter, and blue will not survive dew on an open deck. States the trade-off
@@ -350,5 +350,27 @@ window.COMMONS_GEAR = [
   { id: "paper-releases", n: "Printed releases", t: ["creative"],
     w: "Signed on the day or not at all — chasing one afterwards is how a shot leaves the cut. What it covers is between the client and their lawyer, not this page." },
   { id: "sync-clap", n: "Something to clap for sync", t: ["creative"],
-    w: "A slate, or your hands in frame. Beats scrubbing two waveforms at midnight." }
+    w: "A slate, or your hands in frame. Beats scrubbing two waveforms at midnight." },
+
+  /* ---- concrete: trade #10 ---------------------------------------------- */
+  { id: "come-along-rake", n: "Concrete rake (come-along)", t: ["concrete"],
+    w: "You pull mud, you don't shovel it. A square shovel in a placement is a man working twice as hard for half as far." },
+  { id: "bull-float", n: "Bull float and handles", t: ["concrete"],
+    w: "Bring the second handle section. The one pour you can't reach the middle of is the one you'll remember." },
+  { id: "hand-float-trowel", n: "Hand float and steel trowel", t: ["concrete"],
+    w: "Mag first, steel after. Reaching for the steel too early is the mistake that shows up in the finish forever." },
+  { id: "edger-groover", n: "Edger and groover", t: ["concrete"],
+    w: "The two passes nobody sees you make and everybody sees you skip. Keep both in the bucket, not in the truck." },
+  { id: "rebar-tie-tool", n: "Rebar tie tool", t: ["concrete"],
+    w: "A twister or a tie gun. Pliers work until about the two hundredth tie, and then your hand is done for the week." },
+  { id: "knee-boards", n: "Knee boards", t: ["concrete"],
+    w: "How you get back out onto a slab that won't hold you yet. Two of them, and you move the one behind you." },
+  { id: "rubber-boots-gloves", n: "Rubber boots and gloves", t: ["concrete"],
+    w: "Wet concrete is caustic and it does not hurt until hours later. Leather boots wick it straight to your skin — rinse anything that gets in." },
+  { id: "screed-straightedge", n: "Screed straightedge", t: ["concrete"],
+    w: "Magnesium, and longer than you think you need. A short one rides the high spots and puts a wave in the floor." },
+  { id: "concrete-vibrator", n: "Concrete vibrator", t: ["concrete"],
+    w: "For consolidating, not for moving mud sideways. Dragging a pour with the stick is how you leave a rock pocket at the bottom of a wall." },
+  { id: "marking-paint", n: "Marking paint", t: ["concrete", "gc"],
+    w: "Layout, wash-out, keep-off, and where the truck backs in. Everything you say once and then have to say again all day." }
 ];

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Extra Work Tag — Concrete Field Toolkit</title>
+<meta name="description" content="Not on your prints? Write the tag before you roll — who told you, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Reads in the same order as the yellow copy so you're not writing the job twice.">
+<meta name="apple-mobile-web-app-title" content="Extra Work Tag">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Concrete · Foreman → whoever told you</span>
+    <h1>Extra Work Tag</h1>
+    <p class="lede">Told to dig it deeper, re-set what somebody moved, or stand by while another trade caught up? Write the tag before you place — who told you, what you were told to do, why it's outside your contract, and the part everybody argues about later: what is NOT in this tag. Once it's covered, nobody can see what you were looking at.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one tag.</b> It reads in the same order as the yellow copy on purpose, so you can thumb the triplicate straight off it instead of writing the job twice. No prices, no totals, and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the book and the GC's app own the numbering.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the tag</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* CONCRETE EXTRA WORK TAG — the directed-work ticket, shipped as a CONFIG of shape #2's engine
+ * (shared/note.js, extracted this cycle at the second instance — see
+ * av/AV_SOCIETY.md §THE THREE SHAPES). There is no CSS in this file, no DOM
+ * building, no state, no persistence and no document assembly: the engine owns
+ * all of it. This file owns the WORDS, which is the half an engine must never
+ * own — the note's whole value is that it speaks one trade's language.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.concrete.tmtag.v1",
+    docName: "EXTRA WORK TAG",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this tag? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Tag started",
+
+    // The job, the where and the day ride on the SECOND line, never stacked onto
+    // the heading with three em-dashes. Findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  \u00b7  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "\u2014 the way everybody says it", ph: "Riverside Med — Bldg B, west half", docSkip: true }
+        ]
+      },
+      {
+        title: "Who told you",
+        tone: "loud",
+        docHead: "WHO TOLD ME",
+        why: "Signed by the super before you leave is the old way and it still works — but the name, the time and where he stood is what actually holds up.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who told you", options: T.roles, docLabel: "Told by" },
+          { id: "who", kind: "text", label: "His name", hint: "— \"the super told me\" is not a name", ph: "Ron M. — GC super", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How he gave it to you", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
+          { id: "where", kind: "text", label: "Where", hint: "— area / fixture card / grid", ph: "Grid C-4 to C-7, footings at the ramp", docLabel: "Where" }
+        ]
+      },
+      {
+        title: "What you were told to do",
+        docHead: "WHAT YOU TOLD ME TO DO",
+        why: "Your words, in the order the yellow copy reads, so you thumb the triplicate straight off this instead of writing the job twice.",
+        fields: [
+          { id: "did", kind: "area", rows: 2, label: "What you were told to do", hint: "— plainly, the way you'd say it", ph: "over-excavated the ramp footings and brought them back up with lean — hit an old foundation nobody had on the drawings" },
+          { id: "why", kind: "ticks", subhead: "Why it's outside my contract", label: "", docLabel: "WHY IT'S OUTSIDE MY CONTRACT", options: T.why }
+        ]
+      },
+      {
+        title: "What is NOT in this tag",
+        tone: "loud",
+        docHead: "WHAT'S NOT IN THIS TAG",
+        why: "The line nobody writes and everybody argues about in April. Name it the day it happened and it stops being a back-charge.",
+        fields: [
+          { id: "notin", kind: "ticks", options: T.notin },
+          { id: "pics", kind: "seg", label: "Pics", hint: "— shot before it got closed up", options: T.pics, docLabel: "Pics" }
+        ]
+      },
+      {
+        title: "Crew and material",
+        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Crew and hours", addLabel: "+ Another crew line", docLabel: "CREW",
+            cols: [
+              { id: "cls", kind: "select", label: "Class", options: T.classes },
+              { id: "men", kind: "stepper", label: "Men", ph: "men" },
+              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " h" }
+            ]
+          },
+          {
+            id: "mats", kind: "rows", label: "Material — off the truck / job stock", addLabel: "+ Another material line", docLabel: "MATERIAL",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "2 yd lean · 12 pc dowel · 3 bx tie wire · 4 bags patch · 1 roll poly" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "R. Delgado — 415-555-0177", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vega Concrete", docLabel: "Company" }
+        ]
+      },
+    ],
+
+    closing: [
+      "Nothing on here is priced and there's no number on it — your log owns the number, the office owns the price.",
+      "If that's what you told me to do, reply YES. If any of it's wrong, tell me what's wrong and I'll fix it before it goes in in the morning."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " man" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Tag started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

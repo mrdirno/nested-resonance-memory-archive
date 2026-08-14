@@ -1966,6 +1966,40 @@ survives a dead session is the code, not the verification, so the full gate runs
 from zero on the inheritor's watch. (It did: 51 assertions, local and against
 production, before the commit existed.)
 
+### 2026-08-14 — THREE GATES, ONE BLIND SPOT, AND A COPY BUTTON OFF THE GLASS
+Standing up trade #10 measured the shipped pages the way a new trade always does, and
+the sweep came back with a defect on TEN trades at once: on every `write-up.html` the
+PRIMARY "Copy instructions" button ran **27px off the right edge of a 320px screen**,
+label truncated — the one control the whole page exists to deliver. `tools/toolkit-gates/
+mobile-watertight.mjs` reported **PASS**, and so did every eyeball before it, because all
+three of its measurements are structurally blind to the same thing. The bar is
+`position:fixed`, so it never widens `documentElement.scrollWidth` — the OVERFLOW check
+cannot see it. The button is 44px tall — the TAP check cannot see it. And
+`elementFromPoint` at the bar still returns `#copy`, because 27px off the edge still
+leaves 161px on it — the REACHABILITY check cannot see it either. Three correct
+measurements with one shared hole: **nothing was measuring a fixed bar's own children
+against the viewport.** A previous cycle had already fought this exact bar (hid the count
+below 480px, trimmed the secondary's padding below 400px) and stopped when the visible
+symptom went away rather than when the arithmetic closed: 14 + 136 + 9 + 188 + 14 = 361
+against 320. The fix takes the last 41px out of horizontal padding and tracking only —
+never the height, never the thumb target — and the ASSERTION went into the gate in the
+same commit, negative-tested by reverting the CSS and confirming it fails with the exact
+27px. A defect three gates cannot see comes back.
+
+### 2026-08-14 — THE HALF-SWEPT 44px, FOUND BY THE TENTH TRADE
+The same pass found the `.rm` delete control on the shape #1 order pages at **32 x 18px**
+— on electrical, AV and plumbing, while HVAC, low-voltage and framing carried
+`min-width:44px;min-height:44px` on the identical rule. One earlier cycle had fixed the
+trades it happened to be standing in and left the siblings at 18px on the only control
+that DELETES something. Same pass, same class: every header input on those pages measured
+37.6px and every select 36.5px, on all seven, because they are one CSS rule copied seven
+times and the tap law had only ever been enforced on hub cards. And `av/consumables.html`
+— the page this book cites as its own quality bar, and the file
+`shared/checklist-request.js` was extracted FROM — carried **sixty** controls under the
+bar, because it kept its own CSS and every engine-era sweep went straight past it. **The
+reference implementation is the file nobody re-measures.** Nobody files a wish for any of
+this, which is exactly why the BACKPORT rider owns it.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -3041,3 +3075,25 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
 - `2026-08-14` — **[AXIS:DOCS]** **THE SEARCH THAT SAID "NO MATCHES" TO A TYPO, AND THE DEAD SESSION THAT HAD ALREADY KILLED IT** · **before:** both search boxes in the toolkit ANDed the typed tokens as raw substrings — the document library on all 8 `write-up` pages, and the item filter on `av/consumables.html` (whole-phrase `.includes`, stricter still) — and the measurement now in `shared/find.js`'s header says what that cost: all 953 queries built from the authors' own strings pass (substrings BY CONSTRUCTION — the green that means nothing), while 5,384 mechanical perturbations of the same strings missed 4,121 times (**76.5%**): +"template" 100% · plural 99% · one typo 99% · joined 97%. "daily field report template" returned an empty library on every trade and dumped the man into the custom path — which was never a niche, it was where search dumped people · **after:** `shared/find.js` live behind both — noise tokens are dropped instead of vetoing (NO stopword list: a token that scores zero across the whole library IS the measurement), coverage-tier degrade so "nothing matches" is a bug not a state, fuzzy last with a first-letter guard and an edit budget ("turnover" ≠ "handover"), the typed phrase outranks everything, and every approximate answer SAYS SO — "Closest to …" / "Nothing matched that — closest three", never a silent swap. **THIS CYCLE INHERITED THE BUILD FROM A SESSION THAT DIED BETWEEN BUILD AND SHIP** (§SCARS 2026-08-14): engine, docspec wiring and the eight include lines sat uncommitted; the well was empty and the building sweep clean, so only tree-before-well found it. Finished on top of the orphan: the mode-"all" honesty hole (a punctuation-only query labeled the FULL library "Closest to “!!!”" — the exact lie the modes exist to kill) and the port of the second box. **BACKPORT RIDER FIRED — instance list re-derived from disk, not trusted:** exactly two `type="search"` inputs exist across every page and shared module (`checklist-request.js` is tap-to-pick, not an instance), and the second, `av/consumables.html`, now runs the same engine with the same honest labels — indexed off the DOM so write-ins and killed rows stay searchable, rebuilt per keystroke because the item set changes under it, closest-three shown in place of a dead "No items match", `aria-live` on the label. Gate: **51 assertions, green local AND re-run GREEN AGAINST PRODUCTION** — rules 4/1/3 probed with SELF-DERIVED names on av + gc (exact full name #1 · "+ template" still #1 · one-typo rank 1), all 8 trades swept live for engine + honest label + closest-three, consumables driven end to end ("electrcal tape" → E-Tape, narrowed 1/28), mobile-watertight 320/360/390/430 ON the new closest-three state, zero page errors. Storefront unchanged — no new tool. https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
 
 - `2026-08-14` — **[AXIS:INTERFACE]** **THE DELIVERY BUTTON THAT COLLECTED NOTHING, AND THE PREVIEW THAT WAS A GENERATION STALE ON SIX PAGES** · **before:** the well was dry (0 new, 0 building) and every trade on the BUILD ORDER had a kit, so the stalest axis governed — INTERFACE, 14 lane-cycles cold. The roster ranked the supply-house / vendor edge as "the strongest unbuilt ASK edge, one page owed to nine trades." **A panel of four field lenses and two skeptics killed that premise on disk in one line:** six trades already ship that page under their own names, and `electrical/tools.js` has said *"copy it to the warehouse OR THE COUNTER"* since it landed. What was actually unbuilt was **the truck** — and `plumbing/supply-house-order.html` had shipped a **Delivery** button for four months that changed one word of the message and asked for nothing: no gate, no set location, no window, no how-it-comes-off, no who's-meeting-it, no signer. The counter lens, answering from the receiving end and with no idea we had that page open: *"a bare Delivery button with nothing behind it is worse than no button, because he taps it."* Same page, same read: **"Ordered by: your name"** with no cell on it, while all three engine-driven siblings ask for name + cell — the one document built to stop a phone call made the counter go find the number. · **after:** `shared/dropoff.js` — the jobsite delivery block as a **FIELD, not a tool**, two lines to mount, **no new storefront row**, and sticky because the answer is the same for every delivery to that job all year. Ticks for where it lands / how it comes off / when it can come, a `not before` clock (a truck at 6 when the gate opens at 7 blocks the street), text only for which stair, the gate code, who's meeting it and who signs — and **"it's an ask, not a booking"** printed in the document every time it appears, because a man who ticks *boom · not before 7 · level 2* and taps Copy can believe he has scheduled a crane. Plumbing also got the callback cell, PO split out of the "optional" box it shared with the account, and **who's picking it up** gated to will-call. Killed by the skeptics and staying killed: a per-line stock/special-order axis (a guess wearing a heading), a NO-SUBS row flag (a contractual term on a document neither company owns), a branch picker (impersonation with a shelf life) — the lead-time ask survives as one sentence, and the word is never *quote*. · **BACKPORT RIDER FIRED, and it is where the cycle's real damage was found:** sweeping every shape #1 page for the same class turned up a defect nobody could see because the OUTPUT was right — **`watch` was a hand-kept list that had to agree with a hand-written `document()`, and on four of the five engine pages it had drifted.** A charge code, a hot flag and a delivery method were in the sent text and out of the re-render, so the block labelled *"what you send"* — the one thing he proofreads — was stale until something else poked it. **10 fields across 5 pages.** Fixed in the ENGINE, not per page: it now binds every header control the house convention names, `watch` is for exceptions, and both `input` and `change` (which `shared/draft.js` had already written down three files away). · **GATES, and both are new and both were proved by reverting the fix:** `order-live-header.mjs` decides whether a field is in the document by **changing it and reading what the real Copy button puts on the clipboard** — no list of its own to drift — then re-checks each one ALONE through a real reload from a wiped device, and taps every segment button so a block that only exists in the other mode is not invisible to it (10 defects red before the fix, 0 after, 6 pages, 9 in-document controls on plumbing). `dropoff-block.mjs` drives the block the way a foreman does and asserts the OUTPUT: every chip and every typed line by value in the copied text, the ask-not-a-booking line present, the whole block **out** of the document when the mode is switched off, and everything back after a reload — plus a banned-word pass over its own chips for a capacity, a reach or a price. `mobile-watertight` **76 pages × 320/360/390/430 × default and bumped text — 0 failing**, after fixing an overflow this cycle EXPOSED rather than created (a 3-button segment with a ~200px floor in a 160px track had been safe only because it happened to sit in the left column). `no-third-party` 76/76 clean. Storefront unchanged — no new tool, no new trade, by the panel's own verdict. BACKPORT rider: **fired** (7 shape #1 pages swept; the class was the 5 engine pages + the plumbing fork). https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html
+- `2026-08-14` — [AXIS:BREADTH] **TRADE #10 IS LIVE: the Concrete Field Toolkit** (6 tools) —
+  promoted by the INTERFACE MATRIX rule for the third time, and this one the matrix had
+  been pointing at since it was written: concrete is the ONLY unserved receiver named by
+  two served trades independently (EC's sleeves/blockouts/pads/Ufer row, PC's
+  sleeve-in-the-pour row), the GC's mirror row is literally "the pre-pour call", and the
+  POUR is the earliest gate on FIVE of the six trade gate ladders — the one gate on a job
+  that does not reopen. Before: five toolkits shipped a page asking this crew for
+  something and the crew being asked had nothing. After: **Before the Pour** (pinned, the
+  receiver side of that edge, with its answer-back and reconcile loop), **The Mix Order**
+  (shape #1, 151 lines, and the first order page in the program that prints a ticked line
+  BARE — `qtyDefault:""`, because "1 Soft ground" is the engine's own
+  line-arguing-with-itself failure on the other side of the box), plus the T&M tag,
+  write-up (8 docs + 2 overrides), and total package. Vocabulary from a 6-agent fan-out
+  whose 25-year prune killed 64 of 215 order lines and a WHOLE CATEGORY — every admixture
+  dose field — on the grounds that a dose field on a phone is a dose recommendation.
+  Wired end to end: runtime TRADES, commons chip + 11 gear/10 tips rows written for it,
+  UIComponents registry, deploy `paths:` + `TRADES`, persona500 manifest (10 kits, 62
+  tools; `cement` DISPOSED OF as an include token — measured, it matches
+  `law_enforcement_fitness_specialist`). BACKPORT RIDER FIRED, three times, all
+  program-wide: the fixed-bar clipping on 10 trades + the gate assertion that catches it,
+  the half-swept 44px `.rm` on 4 trades, and 60 sub-44px controls on `av/consumables.html`.
+  84/84 pages pass the mobile gate at 320/360/390/430 · https://mrdirno.github.io/nested-resonance-memory-archive/concrete/

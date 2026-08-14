@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -289,6 +289,27 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the people who shoot and cut — not the timeline, everything around it: paste the wall of notes the client emailed and answer every line including the ones outside the deal, or tag the "one small thing" that landed after sign-off with the delivery date attached. No price on anything, and nothing you paste leaves the browser.',
     icon: <Clapperboard size={18} />,
+  },
+  {
+    // TRADE #10 — the THIRD promoted by the INTERFACE MATRIX rule, and the one
+    // the matrix was pointing at the whole time. Concrete is the only unserved
+    // receiver named by two served trades independently (the electrician's
+    // sleeves/blockouts/pads/Ufer row and the plumber's sleeve-in-the-pour row),
+    // and the GC's mirror row is literally "the pre-pour call". It is also the
+    // EARLIEST gate in the program: five of the six gate ladders open with the
+    // pour, and it is the only gate on the job that does not reopen — a wall gets
+    // cut, a ceiling gets pulled, a slab gets cored. Five toolkits already ship a
+    // page that asks this crew for something; until now the crew being asked had
+    // nothing to walk the deck with.
+    //
+    // Shovel, not HardHat or Truck: the sibling rule is that an icon is the GEAR
+    // the trade carries, never the thing it builds and never the site it stands
+    // on. HardHat is already the GC kit and a slab has no glyph.
+    name: 'Concrete Field Toolkit',
+    href: './concrete/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew everybody else is counting down to — before-the-pour first: every sleeve, blockout, embed, anchor bolt, pad and ground another outfit owes you, with the gate each one has to beat, sent as one message per trade. Nothing on it is rated, sized or dosed; the figures are the ones you read off your own approved mix design.',
+    icon: <Shovel size={18} />,
   },
 ];
 

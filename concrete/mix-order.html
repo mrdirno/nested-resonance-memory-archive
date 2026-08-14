@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Truck Stock — HVAC/R Field Toolkit</title>
-<meta name="description" content="What's off the van, before you're on a roof without it. Type what you know, tick down the restock list, and send the shop one list with real counts on it.">
-<meta name="apple-mobile-web-app-title" content="Truck Stock">
+<title>The Mix Order — Concrete Field Toolkit</title>
+<meta name="description" content="Type what you already know you need, then tick down the forget-list — the small stuff that stops a crew when it isn't on the truck. Copy it straight to the warehouse or the counter.">
+<meta name="apple-mobile-web-app-title" content="The Mix Order">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#242A31">
 <style>
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--flag:#4FE0C0;--tint:#E4FBF5;--deep:#0C7A66;--flag-ink:#052622;
+  --muted:#5D656E;--flag:#2DD758;--tint:#E3F8E9;--deep:#12742B;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 /* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
    instead of fixing it and hides exactly the defect the pre-ship mobile gate is
-   there to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+   there to catch. */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
@@ -57,10 +57,9 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .seg button + button{border-left:0}
 .seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
 
-/* ONE BINARY FLAG, and for this trade it is not "urgent" — it is whether
-   something is DOWN. A shop reads "down" and loads it tonight; a shop reads
-   "high priority" and learns to ignore it, because everything is high priority.
-   Binary keeps it honest (electrical/pull-list.html, same reasoning). */
+/* THE HOT FLAG. One binary, never a low/medium/high — "everything on my list is
+   needed at 6:30 tomorrow; because it's binary guys use it honestly and the
+   warehouse learns to trust it." */
 .hot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:1px solid var(--line);
   border-radius:2px;background:#fff;cursor:pointer}
 .hot input{width:22px;height:22px;flex:none;accent-color:#C4342B;cursor:pointer}
@@ -102,19 +101,19 @@ ul.items{list-style:none;margin:0;padding:0}
 .item.is-checked .cfg{display:flex}
 .cfg .f{flex:1 1 90px;min-width:84px}
 .cfg .f.wide{flex:2 1 170px}
-/* Qty is FREE TEXT ("a bag", "2 sticks", "1 qt"), so it needs more room than the
-   number spinner a desk would put here. */
+/* Qty is FREE TEXT here ("2 bx", "500 ft", "a case"), so it needs more room than
+   the number spinner other trades use. */
 .cfg .f.qty{flex:0 0 92px;min-width:92px}
 .cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
 .note{width:100%}
 
-/* THE WRITE-IN GOES FIRST AND IT IS THE BIGGEST THING ON THE PAGE. A tech knows
- * most of what came off his van today; the picker underneath is the jog for the
- * three things he would have found out about at seven tomorrow morning. */
+/* THE WRITE-IN GOES FIRST AND IT IS THE BIGGEST THING ON THE PAGE. "You already
+ * know most of what you need" — the picker is the memory jog that comes after,
+ * never the way in. The first section is the write-in section, styled to say so. */
 .cat:first-of-type{border:2px solid var(--deep)}
 .cat:first-of-type h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
-.cat:first-of-type h2 .n{color:#BDEDE1}
-.cat:first-of-type .cathint{background:var(--tint);color:#064A3E;font-size:12.5px}
+.cat:first-of-type h2 .n{color:#C9E7F8}
+.cat:first-of-type .cathint{background:var(--tint);color:#134863;font-size:12.5px}
 .cat:first-of-type .addrow{background:var(--tint);padding:12px}
 .cat:first-of-type .wi-input{min-height:76px}
 .cat:first-of-type .addbtn{background:var(--deep);border-color:var(--deep)}
@@ -126,6 +125,14 @@ ul.items{list-style:none;margin:0;padding:0}
 .addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
   background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
   min-height:44px;flex:none}
+
+/* 44 x 44, and it was 18px tall on FOUR pages until 2026-08-14. HVAC,
+   low-voltage and framing already carried this exact pair; electrical, AV,
+   plumbing and the brand-new concrete kit did not — one earlier cycle fixed
+   the trades it happened to be standing in and left the siblings at 18px, which
+   is precisely the half-a-fix the BACKPORT rider exists to catch. Measured live
+   in a 390px frame with a write-in row on the list: BUTTON.rm 32 x 18. It is the
+   only control that DELETES something, so it was also the smallest. */
 .rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
 .rm:hover{color:#C4342B}
 
@@ -138,7 +145,8 @@ ul.items{list-style:none;margin:0;padding:0}
 .bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
 .bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
   border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
-#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+/* "The Copy button has to be big enough to hit with a dirty glove without looking." */
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink,#06212E);padding:11px 20px}
 #copy:hover{filter:brightness(1.08)}
 #clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
 #clear:hover{border-color:#8A929B;color:#EEF0EA}
@@ -152,49 +160,51 @@ ul.items{list-style:none;margin:0;padding:0}
 <div class="wrap">
 
   <header class="plate">
-    <span class="eyebrow">HVAC/R &middot; Van &rarr; Shop</span>
-    <h1>Truck Stock</h1>
-    <p class="lede">What came off the van today. Type what you know, then scroll the short list and catch the two things you'd have found out about on a roof at seven in the morning.</p>
+    <span class="eyebrow">Concrete &middot; Field &rarr; Batch plant &amp; the pumper</span>
+    <h1>The Mix Order</h1>
+    <p class="lede">You already know the placement and the yardage. Type it up top. Then scroll the short list and catch the three things that would&rsquo;ve had the crew standing at six in the morning with a truck on the ground.</p>
   </header>
 
   <div class="head">
     <div class="hgrid">
-      <div class="f"><label>Truck <i>(however the shop knows it)</i></label><input id="fTruck" type="text" placeholder="Truck 12" autocomplete="off"></div>
-      <div class="f"><label>Who's asking <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Danny R — 209-555-0147" autocomplete="off"></div>
-      <div class="f"><label>Need it</label>
+      <div class="f span2"><label>Job <i>(number first &mdash; that&rsquo;s how they bill it)</i></label><input id="fJob" type="text" placeholder="24-118 Riverside MOB &mdash; ramp footings, grid C" autocomplete="off"></div>
+      <div class="f"><label>Who&rsquo;s ordering <i>(name + cell &mdash; dispatch calls this one)</i></label><input id="fBy" type="text" placeholder="Mike R &mdash; 415-555-0134" autocomplete="off"></div>
+      <div class="f"><label>First truck</label>
         <div class="seg" id="segWhen">
           <button type="button" class="on" data-v="Today">Today</button>
           <button type="button" data-v="In the morning">In the AM</button>
           <button type="button" data-v="date">Pick&hellip;</button>
         </div>
       </div>
-      <div class="f" id="dateWrap" style="display:none"><label>On the truck by</label><input id="fDate" type="datetime-local"></div>
-      <div class="f span2"><label>How I'm getting it</label>
+      <div class="f" id="dateWrap" style="display:none"><label>First truck on site</label><input id="fDate" type="datetime-local"></div>
+      <div class="f span2"><label>How it&rsquo;s going in <i>(the plant spaces the trucks off this)</i></label>
         <select id="fHow">
-          <option>I'll swing by the shop first thing</option>
-          <option>Send it out with the runner</option>
-          <option>Put it on my shelf, I'll grab it tonight</option>
-          <option>Will-call at the supply house — I'll pick it up</option>
-          <option>Meet me at the job</option>
+          <option>Off the chute</option>
+          <option>Boom pump</option>
+          <option>Line pump</option>
+          <option>Buggies</option>
+          <option>Conveyor</option>
+          <option>Crane and bucket</option>
+          <option>Not settled yet &mdash; call me</option>
         </select>
       </div>
-      <div class="f span2"><label>What it's for <i>(he reads this first &mdash; he'll catch your mistakes)</i></label><input id="fFor" type="text" placeholder="PMs at the Northgate store Wed, plus the walk-in that's been limping" autocomplete="off"></div>
-      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Something's down waiting on it</span></label>
+      <div class="f span2"><label>What we&rsquo;re pouring <i>(dispatch reads this first &mdash; he&rsquo;ll catch your mistakes)</i></label><input id="fFor" type="text" placeholder="ramp footings and grade beam, grid C-4 to C-7" autocomplete="off"></div>
+      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Crew is on the ground waiting</span></label>
     </div>
 
     <details class="more">
-      <summary>Where to leave it, who to bill &mdash; typed once, saved on this phone</summary>
+      <summary>Gate, who signs, cost code — typed once, saved on this phone</summary>
       <div class="hgrid">
-        <div class="f span2"><label>Where to leave it if I'm not there</label><textarea id="fDrop" rows="2" placeholder="My shelf by the roll-up · or with dispatch — text me and I'll come get it"></textarea></div>
+        <div class="f span2"><label>Getting in, staging and washout <i>(the driver needs all three)</i></label><textarea id="fAccess" rows="2" placeholder="Gate 4 off Cedar, code 1180 &mdash; back in off the north side, stay off the new slab. Washout is the pit past the conex. Call when you&rsquo;re 20 out."></textarea></div>
+        <div class="f"><label>Signs tickets if I&rsquo;m on the hose</label><input id="fSigner" type="text" placeholder="Danny T &mdash; 415-555-0199" autocomplete="off"></div>
         <div class="f"><label>Charge to</label>
           <select id="fCharge">
-            <option>Truck stock</option>
-            <option>The call</option>
-            <option>Contract / PM</option>
-            <option>Warranty</option>
+            <option>Job</option>
+            <option>T&amp;M</option>
+            <option>Extra work &mdash; tagged</option>
           </select>
         </div>
-        <div class="f"><label>Call / work order # <i>(if it's for one)</i></label><input id="fWO" type="text" placeholder="SO-44812" autocomplete="off"></div>
+        <div class="f span2"><label>PO / cost code <i>(if your office needs one)</i></label><input id="fPO" type="text" placeholder="24-118-03" autocomplete="off"></div>
       </div>
     </details>
   </div>
@@ -204,8 +214,8 @@ ul.items{list-style:none;margin:0;padding:0}
   </p>
 
   <div class="head" style="border-left-color:var(--muted);margin-bottom:14px">
-    <div class="f"><label>Anything else &mdash; not material <i>(more days die on a missing key than a missing contactor)</i></label>
-      <input id="fNotes" type="text" placeholder="roof key for Northgate · gauges are due for calibration · lift rental for Thursday" autocomplete="off"></div>
+    <div class="f"><label>Anything else &mdash; not concrete <i>(more pours die on a locked gate than a short load)</i></label>
+      <input id="fNotes" type="text" placeholder="gate open at 5 &middot; inspector called for 6 &middot; water at the hydrant, need the meter" autocomplete="off"></div>
   </div>
 
   <main id="list"></main>
@@ -214,10 +224,10 @@ ul.items{list-style:none;margin:0;padding:0}
   <div class="preview" id="preview"></div>
 
   <div class="warn">
-    <b>Every number on here is one you typed.</b> This page doesn't size anything, doesn't spec anything and doesn't know your unit &mdash; no charge, no superheat, no ratings, ever. What's on the plate goes on the list because you read it off the plate. Check it before you order it, and check what shows up before you put it in.
+    <b>Every figure on here is one you typed off your own approved mix design and your own structural drawings.</b> This page does not spec, size, dose or rate anything &mdash; no strength, no slump, no air, no bar size, no cure time, ever, not even as an example. Read it back against your submittal before you send it, and check every ticket that comes on the ground before it discharges.
   </div>
 
-  <p class="credit">&#10022; Built off a service manager's restock sheet. Something missing that left you short? Wish for it &mdash; it gets added, and you get the credit.</p>
+  <p class="credit">&#10022; Built off the four o&rsquo;clock phone call. Something missing that burned you? Wish for it &mdash; it gets added, and you get the credit.</p>
 
 </div>
 
@@ -233,25 +243,37 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script>
-/* TRUCK STOCK — the FIFTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
- * SHAPES: CHECKLIST → A REQUEST), and the first ORDER page this trade has had.
- * Nothing about the mechanism is written here — it is all
- * shared/checklist-request.js. This file owns the WORDS and hvac/items.js owns
- * the vocabulary, which is the whole claim the engine was extracted to make: a
- * trade's checklist tool is a config, not a fork.
+/* THE MIX ORDER — trade #10's first native tool, and the EIGHTH instance of shape #1
+ * (av/AV_SOCIETY.md §THE THREE SHAPES: CHECKLIST → A REQUEST). Nothing about the
+ * mechanism is written here — it is all shared/checklist-request.js. This file
+ * owns the WORDS and concrete/items.js owns the vocabulary, which is the whole
+ * claim the engine was extracted to make: a new trade's checklist tool is a
+ * config, not a fork.
  *
- * WHAT MAKES THIS ONE DIFFERENT FROM THE OTHER FOUR, and it is one thing:
- * A VAN DOES NOT RESTOCK ONE OF EVERYTHING. Caps go four at a time, contactors
- * two. Every other shape-#1 page starts a ticked line at qty 1 because a
- * warehouse pull is "one of these"; a truck restock that starts at 1 makes a
- * tech retype the count on every line he ticks, which is the friction that gets
- * a page deleted. So the counts live in the DATA (items.js `qtyDefault`), set
- * the way a truck really fills, and left off the lines that genuinely vary.
+ * WHAT A 20-YEAR COMMERCIAL FOREMAN CHANGED, on review, before a line shipped:
+ *  · THE PICKER IS NOT THE WAY IN. "Nobody forgets the wire." What gets forgotten
+ *    is the fourteen-cent stuff that stops a floor, so the write-in is FIRST and
+ *    largest, takes a pasted list one-per-line, and the picker is explicitly
+ *    framed as a memory jog underneath it.
+ *  · QTY IS FREE TEXT. "2 bx", "500 ft", "a case". A number spinner with
+ *    min=1 step=1 is a desk person's idea of how material is ordered.
+ *  · THE HEADER IS REMEMBERED. Job, name+cell, gate code, who signs, cost code —
+ *    none of it changes day to day, and re-typing it at 6:15 AM is exactly the
+ *    friction that gets an app deleted. Sticky per device, and Clear does NOT
+ *    wipe it.
+ *  · YESTERDAY'S LIST SURVIVES. "Half of tomorrow's order is today's order."
+ *    Clear stashes; "Start from last list" brings it back.
+ *  · ONE BINARY FLAG. HOT — MEN STANDING. Not low/medium/high: because it is
+ *    binary it gets used honestly and the warehouse learns to trust it.
+ *  · IT IS A LIST, NOT AN ORDER. "An order has a number and somebody's signature
+ *    on it." The message says FIELD REQUEST — NOT A PO in his words, which is
+ *    also §THE SYSTEM OF RECORD: never compete with whoever numbers the document.
  *
- * THE HEADER IS A TRUCK, NOT A JOB. Service is dispatched, not assigned: there
- * is no job number on a restock and printing a blank one would be the page
- * pretending to be a PO. Truck · who · when · how he is getting it, and the
- * bill-to lives in the drawer because it changes and the rest does not.
+ * KILLED on the same review, all of it deliberate absence: unit-of-issue
+ * dropdowns, priority levels, prices and totals, part/catalog numbers, photo
+ * upload, a share-button matrix, PDF export, accounts, order status and
+ * approvals, search over a 40-line page, and any dropdown deep enough to be
+ * slower than the text he would have typed.
  */
 (function () {
   "use strict";
@@ -259,11 +281,11 @@ ul.items{list-style:none;margin:0;padding:0}
   var $ = function (id) { return document.getElementById(id); };
 
   /* ── STICKY HEADER ────────────────────────────────────────────────────────
-   * The answers that are the same every week for the life of a truck. They live
-   * on the device and Clear does not touch them — clearing the LIST must never
-   * cost him his truck number at 6:15 in the morning. */
-  var STICKY = ["fTruck", "fBy", "fHow", "fDrop", "fCharge"];
-  var SKEY = "toolkit.hvac.truckStock.header.v1";
+   * These are the answers that are the same every morning for the life of a job.
+   * They live on the device, they are restored on open, and Clear does not touch
+   * them — clearing the LIST must never cost him the gate code. */
+  var STICKY = ["fJob", "fBy", "fHow", "fAccess", "fSigner", "fCharge", "fPO"];
+  var SKEY = "toolkit.concrete.mixOrder.header.v1";
   (function loadSticky() {
     var s = {};
     try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
@@ -287,18 +309,18 @@ ul.items{list-style:none;margin:0;padding:0}
     var p = d.split("T"), ymd = (p[0] || "").split("-"), hm = (p[1] || "").split(":");
     if (ymd.length < 3) return "pick a time";
     var dt = new Date(+ymd[0], +ymd[1] - 1, +ymd[2], +(hm[0] || 0), +(hm[1] || 0));
-    // "on the truck by 6:30 AM Wed" — the SHIFT is the point. "Tomorrow" does not
-    // tell a shop it has to be pulled tonight.
-    return "on the truck by " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+    // "On site by 6:30 AM Wed" — the SHIFT is the point. "Tomorrow" does not tell
+    // the warehouse it has to be loaded tonight.
+    return "on site by " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
          + " " + dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
   }
 
   /* A NEUTRAL axis value (any option leading with an em-dash — see items.js
    * §THE NEUTRAL) means the line was never given that attribute, and a value
-   * nobody picked must never reach the shop. Dropped everywhere. */
+   * nobody picked must never reach the warehouse. Dropped everywhere. */
   function none(v) { return !v || v.charAt(0) === "—"; }
 
-  /* One line the way a parts man reads it: how many, then the thing, then
+  /* One line the way a warehouse guy reads it: how many, then the thing, then
    * whatever he needs to pull the right one, then the note in parens. */
   function line(l) {
     var head = l.name;
@@ -322,36 +344,51 @@ ul.items{list-style:none;margin:0;padding:0}
 
   var api = ChecklistRequest.mount({
     list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
-    persistKey: "toolkit.hvac.truckStock.v1",
+    persistKey: "toolkit.concrete.mixOrder.v1",
     qtyText: true,
+    /* EVERY PICKER LINE STARTS BLANK ON THIS PAGE, and it is the one config that
+     * separates a concrete order from a material pull list. The engine defaults a
+     * ticked line to "1" because on an electrician's pull list ticking a line
+     * means at least one of the thing. Most lines HERE are not countable things —
+     * they are facts you are telling dispatch and the pumper. Left at the engine
+     * default this page emitted "1 Soft ground", "1 Washout", "1 Broom finish"
+     * and "1 Where the pump sets" (measured live at 390px before it shipped),
+     * which is the engine's own stated failure — a line arguing with itself — on
+     * the other side of the same box. Blank, the line prints as the statement it
+     * is, and the yardage lines still carry the man's own figure because he typed
+     * it. */
+    qtyDefault: "",
     writeinTextarea: true,
-    // A pasted line already carries its own count ("2 driers — 3/8 sweat").
-    // Starting its Qty at 1 would print a line arguing with itself.
+    // A pasted line already says how many ("500' #12 THHN blue", "(6) 4-11/16
+    // boxes"). Starting its Qty at 1 would print a line arguing with itself.
     writeinQtyDefault: "",
     data: D.cats,
     writeinAx: D.writeinAx,
-    writeinPlaceholder: "2 driers — 3/8 sweat\n1 box 3/8 soft copper\nbelt off the north RTU — number's on the old one\na bag of valve cores\n— one per line, paste the whole thing",
-    // The note placeholder is the sneakiest surface on the page: seeding it with
-    // "e.g. 410A, 5 lb, target SH" would ship every banned number through the
-    // back door. What is written off the OLD part, and where it lives — nothing
-    // rated, nothing computed.
-    notePlaceholder: "e.g. the number off the old one, what's on the plate, which bin it lives in",
-    watch: ["fTruck", "fBy", "fFor", "fNotes", "fDate", "fDrop", "fWO"],
+    writeinPlaceholder: "14 yd for the ramp footings\n2 yd lean for the over-ex at C-6\n6 bags patch\n\u2014 one per line, paste the whole thing",
+    // The note placeholder is the single sneakiest surface on the page, and on
+    // THIS trade it is the sharpest edge in the program: seeding it with "e.g.
+    // 4000 psi, 4 in slump, 3/4 rock" would ship every banned number through the
+    // back door as a recommendation. Where it goes, which pour, who is placing
+    // it — nothing rated, nothing sized, nothing dosed.
+    notePlaceholder: "e.g. which footings, which grid, who's placing it, what it follows",
+    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    // Only the NON-sticky, per-list answers ride the list's own saved state. The
+    // sticky header has its own key so Clear can wipe the list without costing
+    // him the gate code.
     persistExtra: function () {
-      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked, wo: $("fWO").value };
-      var touched = x.forr || x.notes || x.date || x.wo || x.when !== "Today" || x.hot;
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
+      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot;
       return touched ? x : null;
     },
     onRestoreExtra: function (x) {
       $("fFor").value = x.forr || "";
       $("fNotes").value = x.notes || "";
       $("fDate").value = x.date || "";
-      $("fWO").value = x.wo || "";
       $("fHot").checked = !!x.hot;
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
-      ["fFor", "fNotes", "fDate", "fWO"].forEach(function (id) { $(id).value = ""; });
+      ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
       seg("segWhen", "Today");
       showLast();
@@ -372,21 +409,22 @@ ul.items{list-style:none;margin:0;padding:0}
       setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
     },
     document: function (ctx) {
-      var truck = $("fTruck").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
-      var notes = $("fNotes").value.trim(), drop = $("fDrop").value.trim(), wo = $("fWO").value.trim();
+      var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
+      var notes = $("fNotes").value.trim(), access = $("fAccess").value.trim();
+      var signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
 
-      var out = "TRUCK STOCK";
-      if (truck) out += " — " + truck;
-      // TWO DATES, BOTH LABELLED. A list gets forwarded and read the next day;
-      // without the date on it, Tuesday's restock gets pulled Thursday. Labelled
-      // "Date", never "Sent" — this page puts text on a clipboard and has no idea
-      // whether anything was ever sent.
-      out += "\nDate: " + ctx.today + "  ·  Need it: " + whenText() + "  ·  How: " + $("fHow").value.toLowerCase();
+      var out = "CONCRETE ORDER";
+      if (job) out += " — " + job;
+      // TWO DATES, BOTH LABELLED. A list gets forwarded three times and read on
+      // Thursday; without the date on it, Tuesday's need gets pulled Thursday.
+      // Labelled "Date", never "Sent" — this page puts text on a clipboard and has
+      // no idea whether anything was ever sent.
+      out += "\nDate: " + ctx.today + "  \u00b7  First truck: " + whenText() + "  \u00b7  Going in: " + $("fHow").value.toLowerCase();
       if (by) out += "\nFrom: " + by;
       if (forr) out += "\nFor: " + forr;
-      if ($("fHot").checked) out += "\n** SOMETHING'S DOWN WAITING ON THIS **";
+      if ($("fHot").checked) out += "\n** CREW IS ON THE GROUND WAITING **";
 
-      if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
+      if (notes) out += "\n\nNOT CONCRETE — need these too:\n- " + notes;
 
       if (!ctx.count) return out.trim() + "\n\n(nothing on it yet)";
 
@@ -396,12 +434,14 @@ ul.items{list-style:none;margin:0;padding:0}
       });
 
       out += "\n";
-      if (drop) out += "\nIf I'm not there: " + drop;
-      out += "\nCharge to: " + $("fCharge").value + (wo ? "  ·  Call / WO: " + wo : "");
+      if (access) out += "\nGetting in, staging, washout: " + access;
+      if (signer) out += "\nSigns tickets if I'm not there: " + signer;
+      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
 
-      out += "\n\nThat's the truck. If you're out of something, send what you've got and text me — "
-           + "don't sub it without asking. I'd rather hear it tonight than find out at 7 on a roof."
-           + "\nTruck stock — not a PO, no job number on it.";
+      out += "\n\nThat's the order. If you can't hold that spacing or you're changing anything on it, "
+           + "call me before the first truck loads \u2014 not when it's on the ground. "
+           + "I'd rather hear it at 4 than find out at 6."
+           + "\nField order \u2014 not a PO, and not a change to the submitted mix.";
       return out.trim();
     }
   });
@@ -413,15 +453,13 @@ ul.items{list-style:none;margin:0;padding:0}
     var cats = document.querySelectorAll("#list .cat");
     if (cats.length > 1) {
       cats[1].insertAdjacentHTML("beforebegin",
-        '<div class="jog"><b>The stuff you find out you\'re out of on the roof</b>'
-        + "<span>Cheap, small, and it turns a one-hour call into a two-trip call. "
-        + "The counts are set the way a van actually fills — change any of them. "
-        + "It's a jog, not a catalog: it's meant to be partial. Write in the rest.</span></div>");
+        '<div class="jog"><b>Before you send it \u2014 the stuff nobody writes down</b>'
+        + "<span>Small, cheap, and it stops a pour cold when it's not on the ground at six. "
+        + "It's a jog, not a catalog \u2014 it's meant to be partial. Write in the rest.</span></div>");
     }
   })();
 
-  /* YESTERDAY'S LIST. Only offered when there actually is one — half of this
-   * week's restock is last week's restock. */
+  /* YESTERDAY'S LIST. Only offered when there actually is one. */
   function showLast() {
     $("lastwrap").style.display = api.hasLast() ? "" : "none";
   }
