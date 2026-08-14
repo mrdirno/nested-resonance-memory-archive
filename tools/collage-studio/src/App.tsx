@@ -2556,6 +2556,7 @@ export default function App() {
                        look={look}
                        turn={turnScene}
                        pace={pace}
+                       move={move}
                        beat={beatSched}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}

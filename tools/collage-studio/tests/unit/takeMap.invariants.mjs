@@ -69,9 +69,12 @@ const load = async (rel, tag) => {
 };
 
 const {
-  cutPlan, cutMarks, lapSegments, takeMap, laneLabel,
+  cutPlan, cutMarks, driftPlan, driftLabel, lapSegments, takeMap, laneLabel,
   MAX_LANE_SEGMENTS, MAX_LANES, MAX_STRIP_CUTS, EMPTY_MAP,
 } = await load('src/lib/takeMap.ts', 'takemap');
+const {
+  sampleMove, isMoving, NO_MOVE, MOVE_IDS, MOVE_CYCLE_SEC,
+} = await load('src/lib/motion.ts', 'motion');
 const { turnAt, turnHoldSec, TURN_IDS, TURN_FADE_SEC } = await load('src/lib/turn.ts', 'turn');
 const { paceTime, paceRate, PACE_IDS } = await load('src/lib/pace.ts', 'pace');
 const { beatSchedule } = await load('src/lib/beat.ts', 'beat');
@@ -631,6 +634,186 @@ const BPMS = [60, 90, 100, 120, 128, 140, 174, 180];
 }
 
 // -----------------------------------------------------------------------------
+// I13 — EVERY DRIFT SEAM IS REST, AND NOTHING BETWEEN TWO SEAMS IS.
+//
+// The same oracle as I1/I2, for the row DECISION 5 added: a seam is drawn where
+// the whole wall comes back to the picture the still preview shows, and the
+// only authority on that is `sampleMove` — which returns `NO_MOVE` BY REFERENCE
+// at t=0 and at every cycle boundary and a fresh object everywhere else. So the
+// assertion is an IDENTITY check against the compositor's own function, sampled
+// through `paceTime` because that is the clock the Stage reads the move against
+// (stage.ts: `sampleMove(spec, paceTime(this.pace, this.outTime))`).
+//
+// The interior probe is at a QUARTER of the cycle, never the half: `envelope`
+// is exactly 0 at mid-cycle for a k=2 fragment (`stagger` with ph >= 0.5), so a
+// midpoint probe would assert that a legitimately-resting fragment is moving.
+// -----------------------------------------------------------------------------
+{
+  let checked = 0;
+  let bad = 0;
+  const detail = [];
+  const PHASES = [0, 0.13, 0.5, 0.77, 0.99];
+  for (const move of MOVE_IDS.filter((id) => isMoving({ id }))) {
+    for (const pace of PACE_IDS) {
+      for (const take of TAKES) {
+        const lapSec = driftPlan(move, pace);
+        if (!(lapSec > 0)) { bad++; detail.push(`${move}/${pace} planned 0`); continue; }
+        const map = takeMap(take, [], null, lapSec);
+        if (!map.drift) { bad++; detail.push(`${move}/${pace}/${take} drew no drift row`); continue; }
+        for (const seg of map.drift.segments) {
+          const t = seg.start * take;
+          for (const ph of PHASES) {
+            checked++;
+            // THE SEAM IS REST — by reference, which is the contract the still
+            // preview, the raster export and the SVG all rely on.
+            if (sampleMove({ id: move, ph }, paceTime(pace, t)) !== NO_MOVE) {
+              bad++;
+              if (detail.length < 4) detail.push(`${move}/${pace}/${take}s: seam ${t.toFixed(6)} ph${ph} not at rest`);
+            }
+          }
+          // A QUARTER INTO THE PASS the collage is provably moving — but only
+          // where the take actually reaches, because the last pass is short.
+          const probe = t + lapSec / 4;
+          if (probe < take - 1e-9) {
+            for (const ph of PHASES) {
+              checked++;
+              if (sampleMove({ id: move, ph }, paceTime(pace, probe)) === NO_MOVE) {
+                bad++;
+                if (detail.length < 8) detail.push(`${move}/${pace}/${take}s: ${probe.toFixed(3)} ph${ph} at rest mid-pass`);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ok('I13 every drift seam is rest and nothing between two seams is', bad === 0,
+    `${checked} instants swept${detail.length ? ` · ${detail.join(' · ')}` : ''}`);
+}
+
+// -----------------------------------------------------------------------------
+// I14 — A PACE SCALES THE DRIFT EXACTLY AS IT SCALES THE HOLD, and a collage
+//       that is not moving has no row at all.
+//
+// `lib/pace.ts`'s own property read from the strip's side, the same way I4
+// reads it for the cut: the roster's 12 s is in PACED seconds, so the row's
+// period in output seconds times the rate is the constant, at every tempo.
+// -----------------------------------------------------------------------------
+{
+  let bad = 0;
+  const detail = [];
+  for (const pace of PACE_IDS) {
+    for (const move of MOVE_IDS.filter((id) => isMoving({ id }))) {
+      const p = driftPlan(move, pace);
+      if (Math.abs(p * paceRate(pace) - MOVE_CYCLE_SEC) > 1e-9) {
+        bad++; detail.push(`${move}/${pace}: ${p} * ${paceRate(pace)} != ${MOVE_CYCLE_SEC}`);
+      }
+    }
+    // STILL, AND EVERY WAY OF NOT BEING A MOVE, ANSWER ZERO — through
+    // `isMoving`, so a roster entry that stops moving stops drawing a row
+    // without this module being edited.
+    for (const id of ['still', 'nope', '', null, undefined, 42, {}]) {
+      if (driftPlan(id, pace) !== 0) { bad++; detail.push(`${String(id)} planned ${driftPlan(id, pace)}`); }
+    }
+  }
+  // A junk pace is the neutral rate, never a NaN period.
+  for (const junk of [null, undefined, 'nope', 7]) {
+    if (driftPlan('push', junk) !== MOVE_CYCLE_SEC) { bad++; detail.push(`pace=${String(junk)} -> ${driftPlan('push', junk)}`); }
+  }
+  ok('I14 a pace scales the drift and a still collage has no row', bad === 0, detail.join(' · '));
+}
+
+// -----------------------------------------------------------------------------
+// I15 — THE DRIFT IS NOT A SOURCE — DECISION 5.
+//
+// It never enters `lanes`, never takes a `MAX_LANES` slot from a clip, is never
+// counted as hidden or unknown, and it is what makes a moving collage of
+// photographs stop coming back `empty` — which is the whole defect: the one
+// composition this app is named for drew no strip at all.
+// -----------------------------------------------------------------------------
+{
+  let bad = 0;
+  const detail = [];
+  const clip = (i) => ({
+    id: `c${i}`, kind: 'clip', label: `c${i}`,
+    playback: { window: normaliseWindow(4, 0, 4), loop: true, rate: 1 },
+  });
+  const music = {
+    id: '__soundtrack__', kind: 'music', label: 'song.mp3',
+    playback: { window: normaliseWindow(12, 0, 12), loop: true, rate: 1 },
+  };
+  const drift = driftPlan('push', 'even');
+
+  // THE HEADLINE: photographs, a move, no music, no cuts.
+  const photos = takeMap(10, [], null, drift);
+  if (photos.empty) { bad++; detail.push('a moving photo collage still comes back empty'); }
+  if (!photos.drift || photos.drift.laps !== 1) { bad++; detail.push(`laps=${photos.drift?.laps}`); }
+  if (photos.lanes.length !== 0) { bad++; detail.push(`drift leaked into lanes (${photos.lanes.length})`); }
+  // 12 s in a 10 s take never finishes: one pass, NOT whole.
+  if (photos.drift && photos.drift.segments[0].whole) { bad++; detail.push('a 12s cycle claimed to finish in 10s'); }
+  if (photos.drift && !driftLabel(photos.drift, 10).includes('cut off')) {
+    bad++; detail.push(`label: ${driftLabel(photos.drift, 10)}`);
+  }
+  // And where it does finish, it says so through the same arithmetic a lane does.
+  const long = takeMap(24, [], null, drift);
+  if (!long.drift || driftLabel(long.drift, 24) !== 'drift — 12s x2') {
+    bad++; detail.push(`24s: ${long.drift ? driftLabel(long.drift, 24) : 'no row'}`);
+  }
+  // IT TAKES NO SLOT. Nine clips + music + a drift: the lanes are unchanged
+  // from I12's answer and the drift is still drawn.
+  const full = takeMap(15, [...Array.from({ length: MAX_LANES + 1 }, (_, i) => clip(i)), music], null, drift);
+  if (full.lanes.length !== MAX_LANES) { bad++; detail.push(`crowded lanes=${full.lanes.length}`); }
+  if (full.hiddenLanes !== 2) { bad++; detail.push(`crowded hidden=${full.hiddenLanes}`); }
+  if (full.unknownLanes !== 0) { bad++; detail.push(`crowded unknown=${full.unknownLanes}`); }
+  if (!full.drift) { bad++; detail.push('the drift row was evicted by nine clips'); }
+  // A STILL TAKE IS STILL EMPTY, and so is a take with no length to draw on.
+  if (!takeMap(10, [], null, 0).empty) { bad++; detail.push('a still take is no longer empty'); }
+  if (!takeMap(10, [], null).empty) { bad++; detail.push('an absent drift argument is no longer still'); }
+  if (takeMap(0, [], null, drift) !== EMPTY_MAP) { bad++; detail.push('a zero take is no longer EMPTY_MAP'); }
+  for (const junk of [NaN, Infinity, -3, '12', null]) {
+    if (takeMap(10, [], null, junk).drift !== null) { bad++; detail.push(`drift=${String(junk)} drew a row`); }
+  }
+  ok('I15 the drift is a row and never a source', bad === 0, detail.join(' · '));
+}
+
+// -----------------------------------------------------------------------------
 console.log(results.join('\n'));
 console.log(failures === 0 ? '\nALL INVARIANTS HOLD' : `\n${failures} INVARIANT(S) FAILED`);
 process.exit(failures === 0 ? 0 : 1);
+
+// =============================================================================
+// WHAT MUTATION TESTING SAID — the block line 44 has been pointing at since
+// this file was written, finally here.
+//
+// THE DRIFT ROW (DECISION 5), nine edits to `src/lib/takeMap.ts`, each applied
+// alone to the REAL module with this sweep as the only judge:
+//
+//   KILL   M1  `driftPlan` drops the `isMoving` guard            -> I14
+//   KILL   M2  `MOVE_CYCLE_SEC * rate` instead of `/ rate`       -> I13, I14
+//   KILL   M3  `driftPlan` ignores the pace entirely             -> I13, I14
+//   KILL   M4  `empty` forgets the drift                         -> I15
+//   EQUIV  M5  `driftPasses` drops the `> 0` half of its guard
+//   KILL   M6  `driftLabel` names the row `clip`                 -> I15
+//   KILL   M7  the row's period is the TAKE, not the cycle       -> I8, I12, I15
+//   KILL   M8  `passesLabel` reads the FIRST pass for `partial`  -> I10
+//   KILL   M9  `driftPasses` marks every pass whole              -> I15
+//
+// M5 IS EQUIVALENT, NOT A HOLE, and the difference is worth writing down.
+// `lapSegments` already refuses a non-positive period and answers `laps: 0`,
+// which the very next line turns into `null` — so the `> 0` test in
+// `driftPasses` cannot change an output. It is kept because the redundancy is
+// with a DIFFERENT module's contract: the day `lapSegments` grows a branch that
+// answers something else for 0, this guard is what stops a row being drawn for
+// a collage that does not move. A mutation surviving because two functions
+// agree is not the same fact as one surviving because nothing is watching.
+//
+// M8 is the interesting kill: `passesLabel` was EXTRACTED this cycle so the
+// drift and a source share one arithmetic, and the mutation confirms the
+// extraction is load-bearing — breaking it fails I10, an invariant written for
+// the lane label two cycles before the drift existed.
+//
+// Harness: apply one edit, run this file, restore FROM A SAVED COPY. Restoring
+// with `git checkout --` throws away the uncommitted work being tested — it did
+// exactly that on the first run, and the remaining eight mutations then ran
+// against a module with no drift in it and reported nothing.
+// =============================================================================

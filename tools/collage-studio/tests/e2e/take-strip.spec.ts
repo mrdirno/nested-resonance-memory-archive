@@ -31,6 +31,13 @@
  *   S5  IT IS WATERTIGHT ON A PHONE. The mobile law, on new rows added to the
  *       densest bar in the app.
  *
+ *   S7  A COLLAGE OF PHOTOGRAPHS THAT MOVES FINALLY HAS A STRIP. The defect
+ *       DECISION 5 closes, stated as a before and an after one chip apart: a
+ *       still photo collage draws NO strip (correct, and the control), and the
+ *       same collage on PUSH draws a drift row whose seam is measured in the
+ *       DOM against `MOVE_CYCLE_SEC / take`. This is the commonest thing this
+ *       app makes and it was the one composition the ruler said nothing about.
+ *
  * Run against the collage dev server (NEVER :5173 — that is Persona 500):
  *   npx playwright test tests/e2e/take-strip.spec.ts --project=chromium
  * or against the deployed release:
@@ -60,6 +67,8 @@ const BPM = 120;
 const SNAPPED_HOLD = 4.0;
 /** The music fixture's length, so the music lane's lap count is arithmetic. */
 const MUSIC_SEC = 12;
+/** `MOVE_CYCLE_SEC` from lib/motion.ts — the drift's period at 1x. */
+const MOVE_CYCLE = 12;
 
 // --- fixtures (the PNG writer and the click track are beat.spec.ts's) --------
 
@@ -435,6 +444,77 @@ test.describe('THE STRIP', () => {
       .toBeLessThan(0.02);
   });
 
+  test('S7 a collage of photographs that moves finally has a strip', async ({ page }) => {
+    await bootPhotos(page);
+
+    // THE TURN IS WHAT KEEPS THE TRANSPORT MOUNTED for the control half.
+    // `liveMode` is `clips.length > 0 || moving || turning || soundtrack`, so a
+    // still photo collage with the turn on HOLD has no Stage at all — and a
+    // strip that is absent because its whole surface unmounted would prove
+    // nothing about DECISION 5. MARCH holds the surface open while the move,
+    // and only the move, is the thing being switched.
+    await chip(page, 'turn-march');
+    await chip(page, 'move-still');
+    await setTake(page, TAKE);
+
+    // --- CONTROL: the strip is mounted and drawing, and there is NO drift row.
+    await expect(strip(page)).toBeVisible({ timeout: 30_000 });
+    const cuts = Math.floor((TAKE - 0.0001) / MARCH_HOLD);   // 5s, 10s
+    await expect(strip(page)).toHaveAttribute('data-cuts', String(cuts));
+    await expect(strip(page), 'a still collage has no drift row').toHaveAttribute('data-drift', '0');
+    await expect(page.getByTestId('take-strip-drift'),
+      'the row must be absent, not an empty trough').toHaveCount(0);
+
+    // --- AFTER: one chip. The wall is now breathing as well as cutting.
+    await chip(page, 'move-push');
+    const laps = Math.ceil(TAKE / MOVE_CYCLE);               // 15 / 12 -> 2
+    await expect(strip(page)).toHaveAttribute('data-drift', String(laps));
+    await expect(strip(page), 'the drift must not disturb the cuts')
+      .toHaveAttribute('data-cuts', String(cuts));
+    await expect(strip(page), 'photographs are not sources: no lane').toHaveAttribute('data-lanes', '0');
+    expect(await lanes(page), 'the drift must not have leaked into the source lanes').toHaveLength(0);
+
+    // --- THE SEAM IS WHERE THE DRIFT COMES BACK TO REST, measured in the DOM
+    //     the way S2 measures a cut: the second pass's own box against the
+    //     row's, never the percentage that was written into the style.
+    const seam = await page.evaluate(() => {
+      const row = document.querySelector('[data-testid="take-strip-drift"]') as HTMLElement | null;
+      if (!row) return null;
+      const box = row.getBoundingClientRect();
+      if (!(box.width > 0)) return null;
+      const seg = Array.from(row.children)
+        .map((el) => (el as HTMLElement).getBoundingClientRect())
+        .sort((a, b) => a.x - b.x);
+      return { n: seg.length, at: seg.map((r) => (r.x - box.x) / box.width) };
+    });
+    expect(seam, 'the drift row must be on the page').not.toBeNull();
+    console.log(`[strip] drift row: ${seam!.n} passes, seams at `
+      + seam!.at.map((f) => f.toFixed(4)).join(', ') + ` (expected 0, ${(MOVE_CYCLE / TAKE).toFixed(4)})`);
+    expect(seam!.n, 'a 12s cycle in a 15s take is one whole pass and one short one').toBe(laps);
+    expect(seam!.at[0]).toBeLessThan(0.005);
+    expect(Math.abs(seam!.at[1] - MOVE_CYCLE / TAKE),
+      'the seam is one drift cycle in, to within a pixel of a 300px row').toBeLessThan(0.01);
+
+    // --- THE HEADLINE. Turn the cutting off: the take now contains the drift
+    //     and NOTHING ELSE. Before DECISION 5 this exact state answered `empty`
+    //     and drew no strip at all — a bare ruler over ten seconds the collage
+    //     was busy for, on the commonest thing this app makes.
+    await chip(page, 'turn-hold');
+    await expect(strip(page), 'a drifting photo collage must still draw a strip')
+      .toBeVisible({ timeout: 30_000 });
+    await expect(strip(page)).toHaveAttribute('data-cuts', '0');
+    await expect(strip(page)).toHaveAttribute('data-lanes', '0');
+    await expect(strip(page), 'the drift is the only thing in this take')
+      .toHaveAttribute('data-drift', String(laps));
+
+    // --- AND THE PACE MOVES IT, which is the drift row's own version of S3:
+    //     2x makes the cycle 6s, so the same take holds three passes.
+    await chip(page, 'pace-rush');
+    const rushed = Math.ceil(TAKE / (MOVE_CYCLE / 2));   // 15 / 6 -> 3
+    await expect(strip(page), 'at 2x the collage breathes three times, not two')
+      .toHaveAttribute('data-drift', String(rushed));
+  });
+
   test('S5 the new rows are watertight on a phone', async ({ page }) => {
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 780 });
@@ -442,8 +522,13 @@ test.describe('THE STRIP', () => {
       await musicInput(page).setInputFiles(music());
       await expect(caption(page)).toContainText(new RegExp(`${BPM} BPM`), { timeout: 60_000 });
       await chip(page, 'turn-march');
+      // THE DRIFT ROW IS PART OF THE MOBILE LAW NOW. Three rows plus the gaps
+      // is the densest this bar has ever been; a row added without this line
+      // would be measured on a build that never drew it.
+      await chip(page, 'move-push');
       await setTake(page, TAKE);
       await expect(strip(page)).toBeVisible({ timeout: 30_000 });
+      await expect(strip(page)).toHaveAttribute('data-drift', String(Math.ceil(TAKE / MOVE_CYCLE)));
 
       const box = await page.evaluate(() => {
         const el = document.querySelector('[data-testid="take-strip"]') as HTMLElement | null;
@@ -463,8 +548,11 @@ test.describe('THE STRIP', () => {
       expect(box.left, `${width}px: the strip must start on screen`).toBeGreaterThanOrEqual(-0.5);
       expect(box.right, `${width}px: the strip must not run off the right edge`)
         .toBeLessThanOrEqual(box.clientW + 0.5);
-      // It must also be VISIBLE rather than collapsed: two rows at 5px plus the
-      // gap is 12px, and a strip that renders at zero height is not a strip.
+      // It must also be VISIBLE rather than collapsed: three rows at 6px plus
+      // the gaps is 22px, and a strip that renders at zero height is not a
+      // strip. The floor stays at 8 rather than tracking the row count — this
+      // assertion is about collapse, and a tighter number would fail the day a
+      // scene legitimately has fewer rows to draw.
       expect(box.height, `${width}px: the strip must have real height`).toBeGreaterThan(8);
     }
   });

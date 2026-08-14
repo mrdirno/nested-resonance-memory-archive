@@ -309,6 +309,18 @@ export interface StageStatus {
    * `takeMap.ts` DECISION 1 refuses on the same grounds.
    */
   turning: boolean;
+  /**
+   * IS THE COLLAGE ACTUALLY GOING TO DRIFT? The same question `turning` answers
+   * for the cut, published for the same reason and with the same hazard:
+   * `setScene` sets this from the analysis of the fragments it just built
+   * (`isMoving` per item), while the chip row knows only which move was picked.
+   * THE STRIP now draws a drift row and a row is a promise, so the component
+   * must not re-derive it — `takeMap.ts` DECISION 1 and DECISION 5.
+   *
+   * It is NOT `rolling`. That one is "is anything in this preview in motion"
+   * and answers true for a still collage under music, which has no drift at all.
+   */
+  moving: boolean;
   /** Held on one instant by a scrub. */
   parked: boolean;
   /** Human-readable one-liner for the UI. Null when there is nothing to say. */
@@ -1250,8 +1262,25 @@ export class Stage {
     // own "this was the last frame" branch never runs — without this the origin
     // would still be marked live and the next `start()` would count the whole
     // stopped interval straight into the playhead.
-    this.clockRunning = false;
+    this.freezeClock();
     this.emitStatus();
+  }
+
+  /**
+   * STOP THE CLOCK WHERE IT ACTUALLY IS.
+   *
+   * `takePosition` is DERIVED while the clock runs, so `outTime` can be many
+   * seconds behind it — that is the whole point of the derivation and it is a
+   * trap for every place that stops the clock by clearing the flag. Clearing it
+   * alone hands the next resume the position of the last frame that happened to
+   * be DRAWN, and under a soundtrack with a still picture that frame can be the
+   * first one: the bar would spring back to 0 on every hide, scroll-away or
+   * stop. Callers that mean "go to zero" or "go to t" write `outTime`
+   * themselves and deliberately do not use this.
+   */
+  private freezeClock(): void {
+    this.outTime = this.takePosition;
+    this.clockRunning = false;
   }
 
   /** Force exactly one repaint on the next frame. */
@@ -1477,15 +1506,63 @@ export class Stage {
     // position the bar's own maximum forbids, so the range input would clamp the
     // DISPLAY to 5s while the picture stayed at 20s — the bar lying about the
     // canvas, which is the one thing this whole module exists to prevent.
-    if (t > 0 && this.outTime > t) {
-      this.outTime = lapAdjust(this.outTime, t).position;
+    //
+    // READ THE DERIVED POSITION, NOT THE FIELD. `takePosition` is where the
+    // clock IS; `outTime` is where it was last written, and under a soundtrack
+    // with nothing to draw those are minutes apart. Wrapping the field would
+    // park the bar on the last frame that happened to be painted.
+    const pos = this.takePosition;
+    if (t > 0 && pos > t) {
+      this.outTime = lapAdjust(pos, t).position;
       this.clockRunning = false;
       this.markDirty();
     }
   }
 
-  /** Where the clock is, in output seconds. Read this from a rAF, not a status. */
-  get takePosition(): number { return this.outTime; }
+  /**
+   * IS THE MUSIC ACTUALLY PLAYING? The ELEMENT, never the intent flag — a muted
+   * soundtrack is still a soundtrack running under the take, and `muted` is a
+   * statement about the FILE. The one source in this app that can be playing
+   * while nothing is being drawn.
+   */
+  private get trackRolling(): boolean {
+    const el = this.track?.el;
+    return !!el && !el.paused && !el.ended;
+  }
+
+  /**
+   * WHERE THE CLOCK IS, in output seconds. Read this from a rAF, not a status.
+   *
+   * DERIVED, NOT ACCUMULATED — and that is what gives a still collage under
+   * music a clock at all. The tick is demand-driven ("nothing playing and
+   * nothing dirty -> NO rAF is rescheduled"), so a wall of photographs with no
+   * move, no clips and the turn on HOLD draws once and the loop idles. Add a
+   * soundtrack and the take is genuinely running — the song plays, the export
+   * would be ten seconds long — while `outTime` was last written whenever the
+   * final frame happened to be, so the bar sat at 0 for the whole preview.
+   *
+   * The fix is not a livelier loop. `outTime` is already `(now - origin)/1000`
+   * with the origin held across the idle (see the tick's last branch), so the
+   * position at any instant is a PURE FUNCTION of the anchor and can simply be
+   * computed when someone asks — no rAF, no timer, no wake-up. The Playhead's
+   * own pump is the only caller and it is already a loop; asking it to read a
+   * clock costs one subtraction more than reading a field.
+   *
+   * The lap is applied WITHOUT MOVING THE ANCHOR, because a getter that mutated
+   * would make the readout's own polling rate part of the clock. The tick still
+   * owns the real wrap; this is the same arithmetic, stated and thrown away.
+   *
+   * FAILS CLOSED. No `performance` (a headless view, an old engine) means no
+   * second clock consistent with the rAF timestamps `moveOriginMs` is anchored
+   * in — and a clock read against the WRONG origin is worse than a still one.
+   */
+  get takePosition(): number {
+    if (!this.clockRunning || this.offline || this.parked) return this.outTime;
+    const now = this.view?.performance?.now?.();
+    if (typeof now !== 'number' || !Number.isFinite(now) || this.moveOriginMs < 0) return this.outTime;
+    const t = Math.max(0, (now - this.moveOriginMs) / 1000);
+    return this.takeSec > 0 ? lapAdjust(t, this.takeSec).position : t;
+  }
 
   /** The ruler this Stage measures against; 0 when it has none. */
   get takeSeconds(): number { return this.takeSec; }
@@ -1850,9 +1927,39 @@ export class Stage {
       // THE LAST TICK IS WHERE THE CLOCK STOPS. Nothing else knows this frame
       // was the final one, and a clock still marked running is one that will
       // count the whole idle gap into the playhead the moment something plays.
-      this.clockRunning = false;
+      //
+      // EXCEPT UNDER MUSIC, WHERE THE IDLE GAP IS THE TAKE. A still collage
+      // with a soundtrack has nothing to draw and everything to count: the song
+      // is playing, so the take really is advancing through every one of those
+      // idle seconds, and stopping the clock here is what parked the playhead
+      // at 0 for the length of the song. Leaving `clockRunning` true is the
+      // whole fix — it holds the ANCHOR across the idle, and `takePosition`
+      // derives the position from it without a single wake-up. `pulseClock`
+      // (on the element's own `play`/`pause`) is what closes it again, so the
+      // gap a paused song spends is never counted.
+      this.clockRunning = live && this.trackRolling;
     }
   };
+
+  /**
+   * WAKE THE LOOP FOR EXACTLY ONE FRAME.
+   *
+   * The soundtrack is the only source that can start and stop while nothing is
+   * being drawn, and both edges have to reach the clock: a `play` has to
+   * RE-ANCHOR at wherever the take was parked (the tick's `!clockRunning`
+   * branch), and a `pause` has to WRITE the derived position back into
+   * `outTime` before the anchor is abandoned (the tick's normal path, followed
+   * by the branch above deciding the clock is done).
+   *
+   * One rAF does both, because the tick already contains both — which is why
+   * this is a wake-up and not a second copy of the clock. No-op while the loop
+   * is running, so the ordinary case costs one comparison.
+   */
+  private pulseClock(): void {
+    if (!this.running || this.destroyed || this.offline || this.parked) return;
+    if (this.rafId !== 0) return;
+    this.rafId = this.view.requestAnimationFrame(this.tick);
+  }
 
   /**
    * THE DRAW. Fully synchronous, zero allocation, no promises, no closures, no
@@ -2106,8 +2213,10 @@ export class Stage {
       // AND THE CLOCK FREEZES, for the same reason `stop()` freezes it: the rAF
       // is cancelled outright so the tick's "last frame" branch never runs, and
       // a clock still marked live would count every second the Stage spent
-      // scrolled off the screen straight into the playhead.
-      this.clockRunning = false;
+      // scrolled off the screen straight into the playhead. It freezes WHERE IT
+      // IS — the music is the one source that keeps playing while nothing is
+      // drawn, so the last painted frame is not where the take had got to.
+      this.freezeClock();
       this.clips.forEach((c) => { const el = c.el; if (el && !el.paused) { try { el.pause(); } catch { /* ignore */ } } });
     }
   }
@@ -3489,6 +3598,21 @@ export class Stage {
     el.addEventListener('timeupdate', () => {
       if (this.track && this.track.el === el) this.enforceTrackWindow();
     });
+    // THE TAKE'S CLOCK, ON THE TWO EDGES ONLY.
+    //
+    // `takePosition` derives the position from the anchor, so a playing song
+    // needs NO heartbeat at all — the readout computes it. What it does need is
+    // the loop to run for one frame at each edge: `play` to re-anchor at the
+    // position the take was parked on, `pause` to write the derived position
+    // back before the anchor is dropped. Anything more than these two would be
+    // a second clock, which is the divergence this file keeps filing scars
+    // about. `pause` also arrives when the element is torn down, which is what
+    // makes disposing the music close the clock without its own line.
+    const pulse = () => { if (this.track && this.track.el === el) this.pulseClock(); };
+    el.addEventListener('play', pulse);
+    el.addEventListener('playing', pulse);
+    el.addEventListener('pause', pulse);
+    el.addEventListener('ended', pulse);
 
     // The graph is built at element creation for the same reason clips build
     // theirs here: `captureStream` taps `masterGain`, and bolting a source on
@@ -3590,6 +3714,14 @@ export class Stage {
     }
     try { t.gain?.disconnect(); } catch { /* ignore */ }
     try { t.source?.disconnect(); } catch { /* ignore */ }
+    // AND THE CLOCK IT WAS HOLDING OPEN. The element's own `pause` fires here,
+    // but this method nulls `this.track` BEFORE pausing, so the listener's
+    // identity guard refuses it — correctly, since the element is on its way
+    // out. One pulse instead: the tick writes the derived position into
+    // `outTime` and then, finding nothing rolling, closes the clock. Without
+    // it a still collage whose music was removed would keep counting from an
+    // anchor nothing is driving.
+    this.pulseClock();
   }
 
   /**
@@ -4055,6 +4187,7 @@ export class Stage {
       capturing: this.capturing,
       rolling: this.isRolling,
       turning: this.turning,
+      moving: this.moving,
       parked: this.parked,
       message,
     };
@@ -4071,8 +4204,7 @@ export class Stage {
   private get isRolling(): boolean {
     if (this.offline || this.parked) return false;
     if (this.moving) return true;
-    const tel = this.track?.el;
-    if (tel && !tel.paused && !tel.ended) return true;
+    if (this.trackRolling) return true;
     const clips = this.liveClips;
     for (let i = 0; i < clips.length; i++) {
       const el = clips[i].el;

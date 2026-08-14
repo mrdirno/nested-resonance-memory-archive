@@ -62,6 +62,29 @@
 //   instead of pretending. Cuts past `MAX_STRIP_CUTS` are counted in `hidden`
 //   for the same reason. Every cap in here reports what it dropped.
 //
+// DECISION 5 — THE DRIFT IS NOT A SOURCE, SO IT IS NOT ONE OF THE `lanes`. THE
+//   MOVE is the one thing that can be in a take with nothing else in it: a
+//   collage of photographs with the turn on HOLD and no music drew NO STRIP AT
+//   ALL, which said the ten seconds were empty when the drift is exactly what
+//   is in them. It gets a row, and that row sits with the CUTS above the source
+//   lanes rather than among them, for two reasons that are both about lying:
+//     (a) DECISION B in `TakeStrip.tsx` reads a lane's identity off its
+//         POSITION — "the lanes are in the same order as the clip chips one row
+//         below" — and a row with no chip under it would shift every clip lane
+//         off the chip it names.
+//     (b) `MAX_LANES` is a budget for SOURCES, and the one thing that is true of
+//         every collage must not be the row a ninth clip evicts. Same argument
+//         the music lane already won, one step further: music is the only lane
+//         of its kind, and the drift is the only lane that is not a source.
+//   The PERIOD is `MOVE_CYCLE_SEC / paceRate` — the same division `cutPlan`'s
+//   roster branch makes and for the same reason: `paceTime` scales the CLOCK
+//   the move is sampled against, so a cycle boundary at paced `k * CYCLE` is at
+//   real `k * CYCLE / rate`. A seam is therefore an instant the whole wall is
+//   back at REST, which is the one thing `sampleMove` guarantees by reference
+//   (`NO_MOVE` at t=0 and at every cycle boundary) — so the sweep can assert
+//   every seam against the compositor's own function exactly as I1/I2 do for
+//   the cuts, rather than against this module's arithmetic written out twice.
+//
 // DECISION 4 — A SOURCE WITH NO KNOWN LENGTH GETS NO LANE, AND IS COUNTED. A
 //   clip whose duration never probed has `window.length === 0`, and the only
 //   honest lane for it is none: a full-width bar would claim it plays once
@@ -74,6 +97,7 @@
 // -----------------------------------------------------------------------------
 
 import { effectiveLength, type WindowedPlayback } from './clipWindow';
+import { MOVE_CYCLE_SEC, isMoving } from './motion';
 import { paceRate } from './pace';
 import { fractionOf } from './playhead';
 import { MAX_TURN_INDEX, TURN_FADE_SEC, isTurning, turnFadeFor, turnHoldSec, type TurnSchedule } from './turn';
@@ -153,6 +177,28 @@ export const cutPlan = (
   const r = paceRate(paceId);
   const rate = Number.isFinite(r) && r > 0 ? r : 1;
   return { hold: hold / rate, first: hold / rate, fade: TURN_FADE_SEC / rate };
+};
+
+/**
+ * THE DRIFT'S CYCLE, IN THE TAKE'S OWN SECONDS — DECISION 5.
+ *
+ * Zero means the wall never returns to rest because it never left it, and every
+ * way of not moving answers zero through the SAME function the Stage's own
+ * "keep the loop alive" flag is built from: `isMoving` refuses `still`, refuses
+ * junk, and refuses a roster entry with no zoom and no pan. Restating that test
+ * here as `id !== 'still'` would be the second place that decides whether a
+ * collage moves, which is the defect DECISION 1 refuses for the cut.
+ *
+ * WHETHER THE COLLAGE IS ACTUALLY MOVING IS NOT DECIDED HERE, for exactly the
+ * reason `cutPlan` does not decide whether the wall turns: `setScene` sets
+ * `moving` from the per-item analysis it just built, and that is the only
+ * answer the picture obeys. The caller gates on `StageStatus.moving`.
+ */
+export const driftPlan = (moveId: unknown, paceId: unknown): number => {
+  if (!isMoving({ id: moveId })) return 0;
+  const r = paceRate(paceId);
+  const rate = Number.isFinite(r) && r > 0 ? r : 1;
+  return MOVE_CYCLE_SEC / rate;
 };
 
 export interface CutMarks {
@@ -266,8 +312,17 @@ export interface TakeLane extends LanePasses {
   lapSec: number;
 }
 
+/** THE MOVE'S OWN ROW — DECISION 5. Not a `TakeLane`: it has no source, no
+ *  chip under it and no place in the `MAX_LANES` budget. */
+export interface DriftLane extends LanePasses {
+  /** Output seconds one drift cycle lasts. */
+  lapSec: number;
+}
+
 export interface TakeMap {
   cuts: CutMarks;
+  /** The drift, or null when the collage does not move — DECISION 5. */
+  drift: DriftLane | null;
   lanes: TakeLane[];
   /** Sources past `MAX_LANES` — DECISION 3. */
   hiddenLanes: number;
@@ -280,7 +335,16 @@ export interface TakeMap {
 }
 
 export const EMPTY_MAP: TakeMap = {
-  cuts: NO_CUTS, lanes: [], hiddenLanes: 0, unknownLanes: 0, empty: true,
+  cuts: NO_CUTS, drift: null, lanes: [], hiddenLanes: 0, unknownLanes: 0, empty: true,
+};
+
+/** ONE DRIFT CYCLE'S PASSES — DECISION 5. `driftSec` is `driftPlan`'s answer,
+ *  already in output seconds; 0 (the collage is still) draws no row. */
+const driftPasses = (driftSec: number, take: number): DriftLane | null => {
+  if (!Number.isFinite(driftSec) || !(driftSec > 0)) return null;
+  const passes = lapSegments(driftSec, take);
+  if (passes.laps <= 0) return null;
+  return { lapSec: driftSec, ...passes };
 };
 
 /**
@@ -294,9 +358,11 @@ export const takeMap = (
   take: number,
   sources: readonly TakeSourceInput[] | null | undefined,
   plan: TurnSchedule | null | undefined,
+  driftSec?: number,
 ): TakeMap => {
   if (!Number.isFinite(take) || !(take > 0)) return EMPTY_MAP;
   const cuts = cutMarks(plan, take);
+  const drift = driftPasses(driftSec ?? 0, take);
   const lanes: TakeLane[] = [];
   let hiddenLanes = 0;
   let unknownLanes = 0;
@@ -337,6 +403,7 @@ export const takeMap = (
   }
   return {
     cuts,
+    drift,
     lanes,
     hiddenLanes,
     unknownLanes,
@@ -346,7 +413,11 @@ export const takeMap = (
     // diagnostic with it — the "1 source of unknown length" that exists to stop
     // a missing lane looking like an absent source. A soundtrack is imported at
     // `durationSec: 0`, so that is the first second of every music import.
-    empty: cuts.at.length === 0 && lanes.length === 0
+    //
+    // AND THE DRIFT COUNTS — DECISION 5. It is the whole reason this predicate
+    // was ever wrong: a moving collage of photographs answered `empty` and drew
+    // no strip, which is the one case where the take is plainly not empty.
+    empty: cuts.at.length === 0 && !drift && lanes.length === 0
       && hiddenLanes === 0 && unknownLanes === 0,
   };
 };
@@ -363,9 +434,11 @@ const secLabel = (s: number): string =>
  * take ends mid-pass, which is the difference between a loop that lands and one
  * that gets cut off.
  */
-export const laneLabel = (lane: TakeLane, take: number): string => {
-  const times = Number.isFinite(take) && take > 0 && lane.lapSec > 0
-    ? take / lane.lapSec
+const passesLabel = (
+  name: string, lapSec: number, p: LanePasses, take: number,
+): string => {
+  const times = Number.isFinite(take) && take > 0 && lapSec > 0
+    ? take / lapSec
     : 0;
   /**
    * A WHOLE NUMBER IS A CLAIM, SO IT IS READ OFF THE SHAPES AND NOT OFF A
@@ -384,14 +457,25 @@ export const laneLabel = (lane: TakeLane, take: number): string => {
    * mid-pass never prints an integer. `x2.0` is not a rounding artefact there,
    * it is the statement "two passes and a bit".
    */
-  const partial = lane.segments.length > 0
-    ? !lane.segments[lane.segments.length - 1].whole
-    : lane.dense;
-  if (!(times >= 1)) {
-    return `${lane.label || (lane.kind === 'music' ? 'music' : 'clip')} — ${secLabel(lane.lapSec)} cut off`;
-  }
+  const partial = p.segments.length > 0
+    ? !p.segments[p.segments.length - 1].whole
+    : p.dense;
+  if (!(times >= 1)) return `${name} — ${secLabel(lapSec)} cut off`;
   const passes = partial
     ? `x${(Math.floor(times * 10) / 10).toFixed(1)}`
     : `x${Math.round(times)}`;
-  return `${lane.label || (lane.kind === 'music' ? 'music' : 'clip')} — ${secLabel(lane.lapSec)} ${passes}`;
+  return `${name} — ${secLabel(lapSec)} ${passes}`;
 };
+
+export const laneLabel = (lane: TakeLane, take: number): string =>
+  passesLabel(lane.label || (lane.kind === 'music' ? 'music' : 'clip'), lane.lapSec, lane, take);
+
+/**
+ * WHAT THE DRIFT ROW SAYS — DECISION 5, through the SAME arithmetic every other
+ * row is labelled by. `12s cut off` under a 10 s take is not a shortfall to
+ * apologise for, it is the fact: the collage ends before it has finished
+ * breathing once, which is the only thing this row can tell you that the chip
+ * row cannot.
+ */
+export const driftLabel = (drift: DriftLane, take: number): string =>
+  passesLabel('drift', drift.lapSec, drift, take);

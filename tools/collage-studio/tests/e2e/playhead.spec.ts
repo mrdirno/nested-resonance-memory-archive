@@ -54,6 +54,16 @@ const APP_URL = process.env.COLLAGE_BASE_URL || '/';
 
 const RAMP = join(HERE, '..', 'fixtures', 'ramp_rgb.mp4');
 
+/** P7's scene: two photographs and a soundtrack, i.e. no source with a picture
+ *  that changes. Two, because App's own `turning` counts the POOL — one
+ *  photograph could never be a take at all. */
+const IMG_A = join(HERE, '..', 'fixtures', 'img_a.jpg');
+const IMG_B = join(HERE, '..', 'fixtures', 'img_b.jpg');
+const MUSIC = join(HERE, '..', 'fixtures', 'music_1500.m4a');
+/** P7's ruler. Long enough that a 3 s measurement usually does not lap, short
+ *  enough that a lap is handled rather than hoped against. */
+const STILL_TAKE = 15;
+
 /**
  * ONE SOURCE, AND THAT IS NOT AN ACCIDENT — trim.spec.ts uploads exactly the
  * same single file for exactly the same reason. `stageChannel` averages the
@@ -195,6 +205,56 @@ test.describe('THE PLAYHEAD', () => {
     const resumed = Number(await bar.inputValue());
     expect(resumed, `play resumed at ${resumed}s after a park at 3.0s — it restarted from the top`)
       .toBeGreaterThan(2.9);
+  });
+
+  /**
+   * P7 — A STILL COLLAGE UNDER MUSIC HAS A CLOCK.
+   *
+   * The one scene in this app where the take is running and NOTHING IS BEING
+   * DRAWN: photographs, no clips, no move, the turn on HOLD, a soundtrack
+   * playing. The tick is demand-driven and idles there by design, and the
+   * playhead sat at 0 for the length of the song — the ruler saying the take
+   * had not started while the export would have been fifteen seconds long.
+   *
+   * THE CONTROL IS THE PICTURE. The canvas hash must be IDENTICAL across the
+   * whole measurement: if anything were drawing, the loop would be alive and
+   * the clock would have advanced for the old reason rather than the new one.
+   * A moving bar over an unchanged canvas is the whole claim.
+   */
+  test('a still collage under music still has a clock', async ({ page }) => {
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+    await page.locator('input[type="file"]').first().setInputFiles([IMG_A, IMG_B]);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.locator('input[type="file"][accept*="audio"]').setInputFiles([MUSIC]);
+
+    await page.getByRole('button', { name: `${STILL_TAKE}s`, exact: true }).click({ timeout: 60_000 });
+    await expect(playhead(page)).toBeVisible({ timeout: 60_000 });
+
+    // NOTHING TO DRAW. Both chips, explicitly, rather than trusting a default.
+    await page.getByTestId('move-still').click();
+    await page.getByTestId('turn-hold').click();
+    await page.waitForTimeout(1800);
+
+    const hash0 = await canvasHash(page);
+    const t0 = Number(await playhead(page).inputValue());
+    await page.waitForTimeout(3000);
+    const t1 = Number(await playhead(page).inputValue());
+    const hash1 = await canvasHash(page);
+
+    // The lap is a real possibility over a 3 s window on a 15 s ruler.
+    const moved = ((t1 - t0) + STILL_TAKE) % STILL_TAKE;
+    console.log(`[playhead] still collage under music: ${t0.toFixed(3)}s -> ${t1.toFixed(3)}s `
+      + `(+${moved.toFixed(3)}s over ~3s of wall clock), canvas ${hash0} -> ${hash1}`);
+
+    expect(hash0, 'the canvas must have rendered at all').not.toBe(-1);
+    expect(hash1, 'the CONTROL: nothing may be drawing, or the clock ran for the old reason')
+      .toBe(hash0);
+    expect(moved, 'the take clock must advance with the song, not sit at 0')
+      .toBeGreaterThan(2.0);
+    expect(moved, 'and it must advance at wall-clock rate, not faster')
+      .toBeLessThan(4.2);
   });
 
   test('it is watertight and it still works at 390px', async ({ page }) => {

@@ -60,7 +60,7 @@ import {
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TurnSchedule } from '../lib/turn';
 import { takeLength } from '../lib/playhead';
-import { cutPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
+import { cutPlan, driftPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
@@ -102,6 +102,15 @@ export interface VideoStageProps {
    * restart the take on every unrelated render (the scar this file records).
    */
   pace?: string;
+  /**
+   * THE MOVE — a `MoveId` (lib/motion.ts), FOR THE STRIP ONLY. The compositor
+   * never reads it here: a move reaches the picture on each fragment's own
+   * `analysis`, which the App composes. THE STRIP needs the id because a drift
+   * row states a PERIOD, and `driftPlan` asks `isMoving` — the same test
+   * `setScene` builds its own flag from — rather than restating `!== 'still'`.
+   * A primitive, for the reason `pace` beside it is one.
+   */
+  move?: string;
   /**
    * THE BEAT — the cut schedule when the music decides it (lib/beat.ts), or
    * null for the turn roster's own hold. An OBJECT here and THREE PRIMITIVES
@@ -569,7 +578,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, beat, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, move, beat, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackWindow,
 }) => {
@@ -869,6 +878,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   /** WILL THE WALL ACTUALLY CUT — the Stage's own ring test, not the chip's
    *  intent (`StageStatus.turning`). THE STRIP draws marks off this. */
   const stageTurning = !!status?.turning;
+  /** WILL THE COLLAGE ACTUALLY DRIFT — the Stage's own per-fragment answer, not
+   *  the chip's intent (`StageStatus.moving`). THE STRIP draws the drift row
+   *  off this, for the reason the line above exists. */
+  const stageMoving = !!status?.moving;
   /**
    * IS THERE A TAKE TO MAKE? It used to be `liveCount > 0`, i.e. "are any video
    * clips decoding", and that stopped being the same question the moment the
@@ -1326,12 +1339,18 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     // file. Found by the adversarial audit, which reproduced it at 1 video / 6
     // fragments / MARCH: ring 0, strip 2 marks.
     const cuts = stageTurning ? cutPlan(turn?.id, pace, beat) : null;
-    return takeMap(takeNow, sources, cuts);
+    // AND THE STAGE DECIDES WHETHER THE COLLAGE DRIFTS, for the same reason and
+    // through the same door. `setScene` sets `moving` from `isMoving` on each
+    // fragment's analysis; the chip row knows only which move was PICKED. Both
+    // are asked, and the row is drawn only when they agree — under-claiming, in
+    // the direction the cut's own scar settled.
+    const drift = stageMoving ? driftPlan(move, pace) : 0;
+    return takeMap(takeNow, sources, cuts, drift);
     // THE TRACK JOINS THE DEPS AS PRIMITIVES, for the reason the soundtrack
     // effect above states: `soundtrack` is rebuilt on every parent render, so
     // depending on the object would rebuild this map — and every div it draws —
     // on renders that changed nothing about it.
-  }, [stageClips, trackUrl, trackName, trackMuted, trackDur, trackIn, trackOut, takeNow, turn, pace, beat, stageTurning]);
+  }, [stageClips, trackUrl, trackName, trackMuted, trackDur, trackIn, trackOut, takeNow, turn, pace, move, beat, stageTurning, stageMoving]);
 
   // PUSH IT TO THE STAGE. A Stage with no take has the unbounded clock every
   // build before the playhead had, so this effect is what opts this app into

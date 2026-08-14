@@ -375,6 +375,41 @@ or re-documenting an existing capability is DD, not delivery.
   only witness that a sync had taken. Now `march` over a 15 s take draws two
   marks at 1/3 and 2/3, and one tap of `sync` moves them to three at 4/15, 8/15
   and 12/15 — the same mode, the same take, the music deciding.
+  THE STILL TAKE — the ruler and the strip finally describe a collage of
+  PHOTOGRAPHS, which is the commonest thing this app makes and was the one
+  composition both of them said nothing about. Two halves, both about the same
+  hole: what is in a take when nothing in it is a source.
+  THE DRIFT ROW. The move is periodic on `MOVE_CYCLE_SEC / paceRate` and
+  appeared nowhere on the strip, so photographs + a move + HOLD + no music drew
+  NO STRIP AT ALL (`empty`) — a bare ruler over ten seconds the collage was busy
+  for. It is a ROW, not a lane (`takeMap.ts` DECISION 5): `TakeStrip` DECISION B
+  reads a lane's identity off its POSITION against the chip row below, and
+  `MAX_LANES` is a budget for SOURCES, so a row with no chip and no place in
+  that budget belongs with the CUTS above the lanes — both are facts about the
+  whole wall rather than about one picture. Amber, the fourth colour in the
+  code, and the row is drawn by the same `Passes` component the source lanes
+  are, extracted the moment there was a second kind of row. A seam is an instant
+  the collage is back at REST, which is the one thing `sampleMove` guarantees
+  BY REFERENCE, so the sweep asserts every seam against the compositor's own
+  function (3,725 instants, identity) exactly as the cut marks are asserted
+  against `turnAt`. At the artifact: seams at 0.0000 and 0.8000 of a 15 s take,
+  measured as the pass's own box against the row's; 2× makes it three passes.
+  THE DERIVED CLOCK. The tick is demand-driven, so a still collage under music
+  drew once and idled — and the playhead sat at 0 for the length of the song
+  while the take was genuinely running. `outTime` was already `(now - anchor)`,
+  i.e. a pure function, so `takePosition` now COMPUTES the position when asked
+  instead of reading whatever the last drawn frame left behind: the Stage
+  schedules nothing at all, and the Playhead's pump — already a loop — reads a
+  getter. The tick's last branch keeps `clockRunning` true while the soundtrack
+  ELEMENT is rolling, which is what holds the anchor valid across the idle, and
+  `pulseClock` wakes the loop for exactly one frame on that element's `play` /
+  `pause` / `ended` because the tick already contains both edges. The cost of
+  the derivation is `freezeClock()`: `outTime` can now be far behind the real
+  position, so every caller that means "hold HERE" has to write it back —
+  `stop()`, `applyPowerState`, and `setTake`'s shorter-ruler wrap. Measured:
+  1.900s -> 4.900s over 3 s of wall clock with the canvas hash IDENTICAL at both
+  ends (the control — if anything were drawing, the clock would have run for the
+  old reason), and 0.000s -> 0.000s with the one line reverted.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -964,15 +999,38 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       this suite has WebCodecs. Same fix as the rung above, and they should ship
       together — one `restartTake()`, two callers.
 
-- [ ] **A STILL COLLAGE UNDER MUSIC HAS NO CLOCK, so its playhead sits at 0
-      while the song plays.** The take clock advances in the tick, and the tick
-      is demand-driven: photographs with no move and no clips draw once and the
-      loop idles, which is exactly right for the picture and wrong for the
-      ruler. Adding the soundtrack element to the reschedule condition would fix
-      it and would also hold a 60Hz rAF open for the length of a song to move a
-      bar — so the honest fix is a cheaper clock for that one case (the element's
-      own `currentTime` is already the answer), not a livelier loop. Bounded:
-      every other live scene — any clip, any move — ticks and reads correctly.
+- [x] **A STILL COLLAGE UNDER MUSIC HAS NO CLOCK → THE DERIVED CLOCK.** CLOSED,
+      and the entry was right that the fix is "a cheaper clock for that one
+      case, not a livelier loop" — and wrong about which clock. It is not the
+      element's `currentTime`: the song laps inside the take on its own window,
+      so its position is not the take's. The cheaper clock is the one that was
+      already there. `outTime` is `(now - moveOriginMs) / 1000` — a PURE
+      FUNCTION of an anchor — so the position at any instant can simply be
+      COMPUTED when someone asks. `takePosition` now derives it, the tick's last
+      branch holds `clockRunning` true while the soundtrack element is rolling
+      (which is what keeps the anchor valid across the idle), and the Stage
+      schedules NOTHING: zero rAFs, zero timers, and the Playhead's own pump —
+      already a loop — reads a getter instead of a field.
+      **THE TRAP THE DERIVATION CREATES IS THE REAL WORK.** `outTime` can now be
+      minutes behind `takePosition`, so every place that stopped the clock by
+      clearing the flag was silently freezing it at the last frame that happened
+      to be DRAWN — under a still collage that frame is the first one, so the
+      bar would spring back to 0 on every hide, scroll-away and `stop()`.
+      `freezeClock()` is the one method that means "hold HERE"; `setTake`'s
+      shorter-ruler wrap reads the derived position for the same reason; and the
+      callers that mean "go to zero" or "go to t" still write `outTime`
+      themselves and deliberately do not use it.
+      **AND THE TWO EDGES, ON THE ELEMENT.** `pulseClock` wakes the loop for
+      exactly ONE frame on the soundtrack's own `play` / `pause` / `ended`,
+      because the tick already contains both halves — re-anchor at the parked
+      position, and write the derived position back before the anchor is
+      dropped. `disposeSoundtrack` pulses too: it nulls `this.track` before
+      pausing, so the listener's identity guard (correctly) refuses that event.
+      PROOF: photographs + music, move STILL, turn HOLD — 1.900s -> 4.900s over
+      3 s of wall clock with the canvas hash IDENTICAL at both ends, which is
+      the control that makes it a measurement (if anything were drawing, the
+      clock would have run for the old reason). The same test against the one
+      reverted line reads 0.000s -> 0.000s.
 
 - [x] **THE RULER SHOWS THE TAKE AND NOT WHAT IS IN IT → THE STRIP.** CLOSED,
       and it closed a second thing the entry did not predict: the marks and the
@@ -996,14 +1054,53 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `drag-reorder` and `split/cut` arriving as direct manipulation of the
       thing the ruler now draws, which is the argument this rung's parent made
       for building the picture first.
+      **AND IT IS BLOCKED BY THE MOBILE LAW, WHICH IS WHY IT WAS NOT TAKEN THIS
+      CYCLE.** A lane is 6 px on a 2 px pitch and the ship gate is a 44 px tap
+      target. Eight source lanes at 44 px is 352 px of vertical space — the
+      whole transport — and overlapping hit areas on an 8 px pitch make "which
+      lane did you mean" unanswerable, which is worse than no control. The two
+      designs that actually satisfy the law are (a) PROGRESSIVE DISCLOSURE: the
+      strip stays a picture and tapping it opens the take's contents as a real
+      44 px list with a Trim button per row — CapCut-shaped, and a new sheet to
+      justify against ONE JOB PER TOOL; or (b) a control that is not per-lane at
+      all, e.g. drag anywhere on the strip to set the OUT point of whatever the
+      playhead is over. Measured this cycle, not guessed: the strip renders
+      22 px tall with three rows at 320/360/390/430.
 
-- [ ] **THE MOVE HAS NO LANE, AND IT IS THE ONE THING EVERY COLLAGE HAS.** The
-      strip draws clips and music; the drift is periodic on a fixed 12 s cycle
-      (scaled by the pace) and appears nowhere on it, so a collage of
-      photographs with the turn on HOLD and no music draws no strip at all —
-      correct today (`empty`), and plainly incomplete once you notice that the
-      drift IS what is in that take. One more lane, the same `lapSegments` call
-      on `MOVE_CYCLE_SEC / paceRate`.
+- [x] **THE MOVE HAS NO LANE, AND IT IS THE ONE THING EVERY COLLAGE HAS → THE
+      DRIFT ROW.** CLOSED, and the entry's own prescription — "one more lane,
+      the same `lapSegments` call on `MOVE_CYCLE_SEC / paceRate`" — was right
+      about the arithmetic and wrong about the word LANE, which is the whole of
+      `takeMap.ts` DECISION 5. A lane is a SOURCE: `TakeStrip` DECISION B reads
+      a lane's identity off its POSITION ("the lanes are in the same order as
+      the clip chips one row below"), so inserting a row with no chip under it
+      would have shifted every clip lane off the chip that names it; and
+      `MAX_LANES` is a budget for sources, so the one thing that is true of
+      every collage would have been the row a ninth clip evicts. It is a
+      SEPARATE FIELD (`TakeMap.drift`), drawn with the CUTS above the lanes,
+      because both of those are facts about the whole wall.
+      **The oracle is what makes it a measurement.** A drift seam is an instant
+      the collage is back at REST, and `sampleMove` guarantees exactly that by
+      REFERENCE (`NO_MOVE` at t=0 and at every cycle boundary) — so I13 asserts
+      every seam against the compositor's own function, sampled through
+      `paceTime` because that is the clock the Stage reads the move against.
+      3,725 instants, identity not arithmetic. The interior probe is at a
+      QUARTER of the cycle and never the half: `envelope` is exactly 0 at
+      mid-cycle for a `stagger` fragment with `ph >= 0.5`, so a midpoint probe
+      would have asserted that a legitimately-resting fragment is moving.
+      Original text: The strip draws clips and music; the drift is periodic on
+      a fixed 12 s cycle (scaled by the pace) and appears nowhere on it, so a
+      collage of photographs with the turn on HOLD and no music draws no strip
+      at all — correct today (`empty`), and plainly incomplete once you notice
+      that the drift IS what is in that take.
+- [ ] **THE DRIFT ROW SAYS WHEN, AND NEVER HOW MUCH.** Every moving mode shares
+      `MOVE_CYCLE_SEC`, so PUSH and WANDER draw the identical row — the period
+      is a property of the ROSTER, not of the pick. That is honest today (the
+      row's job is "where does it come back to rest") and it stops being honest
+      the moment per-fragment moves or a user-set amplitude exist, because then
+      two collages with the same row would be visibly different takes. The row
+      would need an amplitude, and the only amplitude the compositor knows is
+      `sampleMove`'s peak — which is per fragment.
 
 - [ ] **A DENSE LANE IS A HATCH AND SAYS NOTHING ABOUT HOW DENSE.** Past 48
       seams the lane draws one hatched bar; the exact count rides in the `title`
@@ -1040,6 +1137,22 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C159-A-MUTATION-HARNESS-THAT-RESTORES-FROM-GIT-DELETES-THE-WORK-IT-IS-
+  TESTING.** The battery for the drift row applied one edit to `takeMap.ts`, ran
+  the sweep, and restored with `git checkout -- src/lib/takeMap.ts`. That
+  restores HEAD. The module was UNCOMMITTED — the mutation harness exists
+  precisely to grade work that is not committed yet — so the first mutation
+  reported KILL correctly and then wiped every edit in the file, and the
+  remaining eight ran against a module with no drift in it and printed
+  "anchor not found" eight times. The output does not look like a catastrophe;
+  it looks like a harness with stale anchors, which is exactly how it nearly
+  went unnoticed. Restore from a copy read into memory BEFORE the first
+  mutation. The general shape, and it is the third time this project has met a
+  version of it: **a tool that reverts must be told what to revert TO, and
+  `HEAD` is not the same thing as "how I found it".** Nothing else was lost —
+  the other five files were untouched, `tsc` caught nothing because the file
+  merely reverted to a coherent older state, and the sweep passing again after
+  re-applying is what confirmed the recovery was complete rather than close.
 - **SCAR-C157-THE-CAP-WAS-WRITTEN-ON-THE-KNOB-AND-THE-PICTURE-NEVER-READ-IT.**
   A wish said the dice deals over a hundred fragments from twelve photographs.
   It does, and the wiring defect was one line: `rollDice({ hasVideo })` — the
@@ -4483,4 +4596,42 @@ frontier. Today's ceiling is tomorrow's floor.
   PROOF: 13 invariants, 19/19 mutations killed (one per finding); take-strip
   4/4, turn + beat + playhead 15/15; the full chromium suite 149/149 on the
   build this corrects; `tsc` and `vite build` clean.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C159 — 2026-08-14 · [AXIS:COLLAGE] THE STILL TAKE — the ruler and the strip
+  finally describe a collage of PHOTOGRAPHS** (well read UNSCOPED first: 0 new,
+  0 building, 23 shipped, 2 declined — no wish to claim; LIVE STATE: no trades
+  owed; stalest axis COLLAGE, 9 lane-cycles). Two rungs, one hole: what is in a
+  take when nothing in it is a source. BEFORE → AFTER, both measured at the
+  artifact. (1) THE DRIFT ROW — photographs + a move + HOLD + no music drew NO
+  STRIP AT ALL (`empty`); it now draws an amber row above the source lanes,
+  seams at 0.0000 and 0.8000 of a 15 s take, three passes at 2×. It is a ROW and
+  not a lane on purpose (`takeMap.ts` DECISION 5): DECISION B reads a lane's
+  identity off its POSITION against the chip row, and `MAX_LANES` is a budget
+  for SOURCES, so the one thing true of every collage must not be the row a
+  ninth clip evicts. Gated on `StageStatus.moving` — published this cycle beside
+  `turning` — because `setScene` builds that flag from the per-fragment analysis
+  and the chip row only knows what was picked. (2) THE DERIVED CLOCK — a still
+  collage under music sat at 0 for the length of the song; `takePosition` now
+  COMPUTES the position from the anchor the tick holds open while the soundtrack
+  element rolls, so the Stage schedules nothing at all: 1.900s → 4.900s over 3 s
+  of wall clock with the canvas hash IDENTICAL at both ends, and 0.000s →
+  0.000s with the one line reverted. Its price is `freezeClock()` — `outTime`
+  can now be far behind the truth, so `stop()`, `applyPowerState` and `setTake`
+  had to be taught to hold HERE rather than at the last frame drawn.
+  BACKPORT RIDER: no trade page touched, so no cross-trade sweep applied; the
+  in-tree sweep for the same class found the sibling — `TakeStrip` had TWO
+  copies of the pass-drawing rules the moment a second kind of row existed, and
+  `laneLabel` two copies of the lap arithmetic, both extracted (`Passes`,
+  `passesLabel`) rather than forked. Mutation M8 proves the label extraction is
+  load-bearing: breaking it fails I10, an invariant written two cycles before
+  the drift existed.
+  PROOF: 3 new invariants (I13–I15, 3,725 instants swept against `sampleMove`'s
+  own `NO_MOVE` identity), 8/9 mutations killed and the ninth demonstrated
+  EQUIVALENT rather than waved past; 25/25 unit sweeps; e2e 50/50 across
+  take-strip 5/5 (incl. the 320/360/390/430 mobile law at 22 px of strip, zero
+  overflow), playhead 3/3, motion+turn+pace+beat+soundtrack 24/24, and
+  trim+speed+video-audio-export+export-integrity+visual-regression 18/18;
+  `tsc` and `vite build` clean. Scar filed: a mutation harness that restores
+  with `git checkout --` deletes the uncommitted work it exists to grade.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
