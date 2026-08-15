@@ -705,9 +705,26 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
 1. **SEED EVERY CHIP FIRST.** A commons surface is offered from every other one, so a new
    surface handed to a trade with no rows multiplies the hole instead of filling it. No fourth
    surface while any chip is thin. (This is what shipped 2026-08-13; roofing was at zero.)
-2. **ASK FOR IT RIGHT — the cross-trade name table.** Scored 7-8 by two lenses; the only
-   candidate a journeyman said he would forward. **Its rails are already written, so build it
-   from these and do not re-derive them:** a row is ONE OBJECT under every name the field says
+   Surface #3 landed 2026-08-14 seeded for all ten trades in its first commit and gated at the
+   same per-trade floor as the other two — the deploy now parses the surface list out of the
+   shipped engine, so surface #4 is coverage-gated the day it lands with no edit to the CI.
+2. **ASK FOR IT RIGHT — the cross-trade name table. SHIPPED 2026-08-14 as `commons/names.html`,
+   surface #3.** Scored 7-8 by two lenses; the only candidate a journeyman said he would forward.
+   **THE OBJECTION WAS ANSWERED BY MAKING THE ROWS STOP BEING A PAGE.** The lens that voted it
+   down was right that a synonym sitting in a list does no work, so `names.js` is not read as a
+   page by anything except one of the three surfaces: it is an **ALIAS INDEX**, and every commons
+   surface searches *through* it with the same `shared/find.js` this toolkit already measured on
+   5,384 queries. Type **stinger** into the gear list and the extension cord comes up; type
+   **marrette**, **zap strap**, **tick tracer**, **Stillie**, **knuckle buster** — none of those
+   words exists anywhere in `gear.js`. The join is by folded object name (parentheticals dropped,
+   anything after a comma dropped, plurals folded, both sides folded the same way) so two files
+   written a week apart need not agree on ids. **A claim like that is one rename away from
+   silently becoming false, so it is COUNTED in the deploy** — through the engine's own exported
+   `Commons.aka`, never a second copy of the rule — and `tools/toolkit-gates/commons-names.mjs`
+   derives every routing probe FROM THE DATA (every alias that is not already a substring of the
+   gear page) and demands the right row on the real page. A word added next month is tested the
+   day it lands. **The rails below are now the maintenance contract, not a proposal:** a row is
+   ONE OBJECT under every name the field says
    for it, **never two names joined by a slash** — if the things either side would not both
    satisfy the same order, they are two rows. The plain generic prints first and is the name to
    ORDER by; a trademark is labelled as what people *say*, never as what to write down
@@ -723,6 +740,17 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
    TOOL — `av/items.js` writes its asks in the receiver's vocabulary, `docs.js` carries `aka`
    so a man finds his write-up by whatever his shop calls it — and a synonym that only sits in
    a list does no work. Answer that objection in the build or do not build it.
+   **THE SHAPE THAT SHIPPED, because the rails live in it and not in the copy:** `o` is the
+   object declared in one checkable clause (a reviewer can hold it against the aliases and say
+   yes or no); every alias carries `k`, and `k` — not the writer — decides the framing, so a
+   `tm` can only ever render as *a brand people say*, a `reg` only as *you might hear*, `sup` as
+   *the counter says*, `say` as *the field says*; every row wears **ORDER IT AS** above the
+   generic on every render, because a page that prints the generic as a heading and the aliases
+   as a list of equals is a page that hands a man a trademark to put on a purchase order; and
+   `no` is the near-miss guard — the rows that earn this page are the ones where the wrong word
+   gets the wrong OBJECT walked over to you, which is a different failure from not knowing the
+   word. *"Say snake on a mixed job and that is what walks over."* The gate enforces all of it
+   mechanically, digits included.
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
    not a tutorial; what is left is an EXPLAINER (what a thing is and why it exists), which is
@@ -2106,6 +2134,23 @@ the only honest way to clear it is the page's own control**, which is also the p
 user takes and therefore the one worth testing. Doing it that way immediately proved the
 two-tap arm and that "start the next one" keeps the job and the name.
 
+### 2026-08-14 — THE TENTH TRADE GOT ITS CHIP AND NOT ITS DROPDOWN
+`COMMONS_TRADES` was moved out of `gear.js` and into `commons.js` on 2026-08-11 for exactly
+one reason, written in the comment above it: framing had shipped a toolkit and never been
+added here, so a framer saw six chips and none of them was his. That fix worked and the rot
+came back **one layer out**. Each surface spelled the same ten trades out AGAIN, by hand, in
+its own `window.FEEDBACK` block — and concrete, trade #10, chip present, **eleven gear rows
+and ten tips rows behind it**, was in neither copy. `shared/feedback.js` REQUIRES an area for
+a `bug` or an `improve` (`if (kind !== "new_tool" && S.areas.length && !about)` blocks the
+submit with *"Which part is broken?"*), so a concrete finisher who found one of his own rows
+wrong had exactly two moves: **file it against another man's trade, or close the box** — and
+the first one would have entered the queue as ground truth about a trade that never said it.
+Both copies are deleted; `Commons.areas()` derives the list from the same array the chips come
+from, and the deploy now fails any commons surface whose HTML hand-lists them.
+**THE SHAPE, and it is the one worth carrying: moving a list to one place does not delete the
+copies downstream, and a comment saying where the list lives is not a gate.** The previous fix
+wrote that comment and shipped two hand-written copies past it.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -3232,3 +3277,56 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   loads `holdtest.js` and never mounts it now fails the build ·
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/evac-record.html ·
   https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/its-holding.html
+
+- `2026-08-14` — **[AXIS:COMMONS] A SYNONYM THAT ONLY SITS IN A LIST DOES NO WORK, SO THE
+  NAMES WERE NOT SHIPPED AS A LIST** · **before:** the commons had two surfaces and rung 2
+  had been ranked, railed and left unbuilt, because the lens that voted it down was right —
+  this project had met the translation problem twice and solved it both times as routing
+  inside a tool, and a glossary page routes nothing. Separately, the two lists were **126
+  gear rows and 135 tips**, second and third biggest on the whole site, and neither had any
+  way to narrow them · **after:** `commons/names.html` is surface #3 — **91 rows, one OBJECT
+  under every name the field says for it**, seeded for all ten trades in its first commit
+  (9 universal; 9–15 written for each trade) — and the rows are an **ALIAS INDEX** the other
+  surfaces search *through* with `shared/find.js`. Type **stinger**, **marrette**, **zap
+  strap**, **tick tracer**, **Stillie**, **knuckle buster** into the GEAR list and the right
+  row comes up; none of those words is anywhere in `gear.js`. **39 of 126 gear rows are now
+  reachable by a word that is not on their page**, the deploy COUNTS that join through the
+  engine's own exported `Commons.aka` so a rename cannot quietly un-hook it, and
+  `tools/toolkit-gates/commons-names.mjs` derives a probe from **every alias that is not
+  already a substring of the gear page — 134 of them, all green on the real page.**
+  **THE PAGE'S BEST ROW IS A COLLISION IT DID NOT DUCK:** "stinger" is an extension cord on
+  a set, a concrete vibrator in a pour, and a welder's electrode holder — and a concrete
+  reader meets the first two on the same screen, so the vibrator's guard names both instead
+  of the row being cut. Nine seeded passes and three adversarial lenses: **98 candidates →
+  7 cut, 33 patched.** All three lenses independently found the same three same-object id
+  collisions; two more came out of the AV pass duplicating the low-voltage pass. **THE RAILS
+  LENS FOUND A CLASS, NOT A LIST:** `k:"reg"` prints as *you might hear*, which promises a
+  PLACE, and **nineteen aliases** named a cohort — *some crews*, *older hands*, *overseas* —
+  so it was flipped uniformly in one pass and the gate now bans the phrases outright rather
+  than trusting a place allow-list that would reject the next real region. Four rows were
+  renamed because the ORDER NAME may not carry slang or two objects (rail 1/2), and where
+  the rename broke the fold-join, **the row takes the gear row's ID so the routing holds** —
+  criticism taken, suggested wording not. `bounce-board` and `wire-scrim` died because their
+  real vocabulary is four objects and a rating, and neither can be said inside the rails.
+  **BACKPORT RIDER FIRED TWICE, both one layer out from a fix that already shipped:**
+  (1) `COMMONS_TRADES` was centralised in 2026-08-11 so the framing-chip rot could not
+  repeat — and each surface then spelled the same ten trades out AGAIN by hand in its own
+  `window.FEEDBACK` block, so **concrete, trade #10, chip present and 21 rows behind it, was
+  in neither copy**; `shared/feedback.js` REQUIRES an area for a bug or an improvement, so a
+  concrete finisher who found one of his own rows wrong could only file it against another
+  man's trade or close the box. Swept all ten trades and `shared/` — the class is confined to
+  the commons, because trade pages take their well from the toolkit engine, which already
+  derives. Both copies deleted for `Commons.areas()`, and the deploy now fails any commons
+  surface whose HTML hand-lists them. (2) The pickfilter backport of 2026-08-13 reached every
+  trade's list page and skipped the commons for the same reason — it is not a trade — leaving
+  the site's second and third biggest lists unnarrowable; **all three surfaces now carry the
+  search**, and `names.js` is deliberately NOT loaded on the tips because 0 of 135 tips name
+  an object by its generic, so the tag would have been a routing claim with no work behind
+  it. The deploy's per-surface coverage gate now parses `COMMONS_SURFACES` out of the shipped
+  engine, so surface #4 is floor-gated the day it lands with no edit to the CI. Gates:
+  **commons-names 287/287, commons-bag 27/27 across three surfaces, mobile-watertight
+  320/360/390/430 default and bumped on all three, no third-party requests, zero page
+  errors**, and the job driven end to end — ticked under one trade, searched a word from
+  another, and the paste led every line with the order name. Storefront unchanged — no new
+  tool, no new trade ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/names.html

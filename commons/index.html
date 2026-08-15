@@ -33,6 +33,16 @@
 
   <ul class="rail" id="rail" aria-label="The Commons"></ul>
 
+  <!-- Searched THROUGH names.js, so a word that appears nowhere on this page
+       still finds the row: type "stinger" and the extension cord comes up. -->
+  <div class="findbar">
+    <input id="q" type="search" class="find" autocomplete="off" autocapitalize="off"
+           autocorrect="off" spellcheck="false"
+           placeholder="Find it — by whatever you call it"
+           aria-label="Search the gear across every trade">
+    <button type="button" class="findx" id="qx" aria-label="Clear the search" hidden>&#10005;</button>
+  </div>
+
   <div class="pickbar">
     <span class="picklabel">Show me</span>
     <div class="chips" id="chips" role="group" aria-label="Filter gear by trade"></div>
@@ -68,8 +78,13 @@
   </div>
 </div>
 
+<script src="../shared/find.js"></script>
 <script src="commons.js"></script>
 <script src="gear.js"></script>
+<!-- The name table is DATA here, not a page: it is what the box above searches
+     through. A gear row and a names row that describe the same object join on
+     the object's plain name, so "marrette" finds wire connectors from here. -->
+<script src="names.js"></script>
 <script>
 window.FEEDBACK = {
   surface: "commons",
@@ -77,18 +92,11 @@ window.FEEDBACK = {
   accent: "#FF6B1A",
   accentInk: "#241000",
   areaLabel: "Which trade",
-  areas: [
-    { v: "universal", label: "Every trade" },
-    { v: "av", label: "AV" },
-    { v: "plumbing", label: "Plumbing" },
-    { v: "electrical", label: "Electrical" },
-    { v: "hvac", label: "HVAC/R" },
-    { v: "low-voltage", label: "Low-voltage / fire" },
-    { v: "gc", label: "GC / site super" },
-    { v: "framing", label: "Framing / drywall" },
-    { v: "roofing", label: "Roofing" },
-    { v: "creative", label: "Creative / video" }
-  ],
+  /* DERIVED from COMMONS_TRADES, never hand-listed. This list was typed out here
+     and in tips.html, and trade #10 shipped a toolkit, got its chip, and was in
+     neither copy — so a concrete finisher had no way to say which trade he was
+     when reporting a row wrong. See commons.js §areas. */
+  areas: Commons.areas(),
   newLabel: "Add gear to the list",
   trigger: false
 };

@@ -42,9 +42,14 @@ window.COMMONS_TRADES = [
  * of every trade links "the commons" as ONE destination, so without this rail a
  * reader who landed on the gear list had no way to discover the tips existed.
  * Adding a surface here puts it on every other surface at once. */
+/* `data` and `rows` are not used by this file — they are here so the DEPLOY can
+ * derive its per-surface coverage gate from the shipped engine instead of a
+ * hand-written pair list in the workflow. A surface added here next month is
+ * gated the day it lands, with no edit to the CI. */
 window.COMMONS_SURFACES = [
-  { href: "index.html", label: "What's in the bag" },
-  { href: "tips.html",  label: "Learned the hard way" }
+  { href: "index.html", label: "What's in the bag",    data: "gear.js",  rows: "COMMONS_GEAR",  noun: "gear" },
+  { href: "tips.html",  label: "Learned the hard way", data: "tips.js",  rows: "COMMONS_TIPS",  noun: "tips" },
+  { href: "names.html", label: "Ask for it right",     data: "names.js", rows: "COMMONS_NAMES", noun: "name" }
 ];
 
 window.Commons = (function () {
@@ -63,6 +68,84 @@ window.Commons = (function () {
       return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c];
     });
   };
+
+  /* ---- THE FEEDBACK AREAS, DERIVED — never hand-listed again ---------------
+   * Each surface used to spell this list out in its own <script> block. The
+   * tenth trade shipped a toolkit on 2026-08-14, was added to COMMONS_TRADES so
+   * it got its chip here, and was in NEITHER dropdown. feedback.js REQUIRES an
+   * area for a bug or an improvement, so a concrete finisher could tick concrete
+   * rows and then had exactly two ways to report one of them wrong: file it
+   * against somebody else's trade, or close the box. Same rot as the framing
+   * chip and the roofing rows, one layer out — a hand-written copy of a list
+   * that already exists is a scar with a date on it. The deploy now refuses a
+   * commons surface that hand-lists them. */
+  function areas() {
+    return TRADES.map(function (t) { return { v: t.slug, label: t.name }; });
+  }
+
+  /* ---- THE ALIAS INDEX — why the name table is not a glossary --------------
+   *
+   * names.js is the only data file here whose rows ARE words. Left as its own
+   * page it would be a synonym list, and the panel that ranked it said exactly
+   * what is wrong with that: this project has met the translation problem twice
+   * and solved it both times as ROUTING INSIDE A TOOL — av/items.js writes its
+   * asks in the receiver's vocabulary, shared/docspec.js carries `aka` so a man
+   * finds his write-up by whatever his shop calls it — and a synonym that only
+   * sits in a list does no work.
+   *
+   * So the names are not a page, they are an INDEX, and EVERY commons surface
+   * searches through it. Type "marrette", "zap strap" or "stinger" into the gear
+   * list and the right row comes up, though not one of those words appears
+   * anywhere in gear.js. One file of words, every surface findable by them,
+   * through the same shared/find.js the toolkit already measured on 5,384
+   * queries.
+   *
+   * THE JOIN is by id first, then by the object's plain name — two data files
+   * written a week apart will not agree on ids. Both sides fold the same way:
+   * parentheticals dropped ("Diagonal cutters (dikes)"), anything after a comma
+   * dropped ("Pipe wrenches, matched pair"), plurals folded. A symmetric fold
+   * can only ever join two phrases that were already the same phrase. */
+  function fold(s) {
+    var base = String(s == null ? "" : s).replace(/\(.*?\)/g, " ").split(",")[0];
+    var t = base.toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/^ +| +$/g, "");
+    if (!t) return "";
+    return t.split(" ").map(function (w) {
+      return w.replace(/ies$/, "y").replace(/(ch|sh|s|x|z)es$/, "$1").replace(/([^s])s$/, "$1");
+    }).join(" ");
+  }
+
+  /* Built on FIRST USE, never at load: this file is loaded before its data files
+   * on every surface, so an index built here at evaluation time would be built
+   * out of an empty window and would be silently, permanently empty. Mount runs
+   * after the last <script>, which is the earliest honest moment. */
+  var _aliases = null;
+  function aliasMap() {
+    if (_aliases) return _aliases;
+    var map = {};
+    (window.COMMONS_NAMES || []).forEach(function (r) {
+      var words = (r.a || []).map(function (x) { return x.n; }).filter(Boolean);
+      if (!words.length) return;
+      [r.id, fold(r.n)].forEach(function (k) {
+        if (k) map[k] = (map[k] || []).concat(words);
+      });
+    });
+    _aliases = map;
+    return map;
+  }
+
+  /* Every word the field says for this row's object, from any trade, deduped. */
+  function akaOf(r) {
+    var m = aliasMap();
+    var all = (r.a || []).map(function (x) { return x.n; })
+      .concat(m[r.id] || [], m[fold(r.n)] || []);
+    var seen = {}, out = [];
+    all.forEach(function (w) {
+      var k = fold(w);
+      if (!w || seen[k]) return;
+      seen[k] = 1; out.push(w);
+    });
+    return out;
+  }
 
   function mount(cfg) {
     var ROWS = cfg.rows || [];
@@ -87,6 +170,24 @@ window.Commons = (function () {
       } catch (e) { return "universal"; }
     }
     var view = loadView();
+
+    /* ---- the search: ONE box, EVERY trade, through the alias index ----------
+     * The chip filter answers "what does my trade carry". The box answers the
+     * other question, the one that has no home anywhere else on the site: "he
+     * said a word at me and I do not know what he wants." So the box deliberately
+     * IGNORES the chip and searches all ten trades — you heard the word from
+     * somebody else, that is the whole reason you are typing it — and the section
+     * says so out loud rather than letting the reader assume the filter applied.
+     * Tapping a chip clears the box, because that is a man asking to browse. */
+    var q = "", ix = null;
+    if (window.Find && $("q")) {
+      ix = window.Find.index(ROWS, [
+        { get: function (r) { return r.n; },      w: 10, primary: true },
+        { get: function (r) { return akaOf(r); }, w: 8 },
+        { get: function (r) { return r.o || ""; }, w: 4 },
+        { get: function (r) { return r.w || ""; }, w: 3 }
+      ]);
+    }
 
     /* ---- the rail: where else the commons goes ---- */
     function buildRail() {
@@ -118,6 +219,7 @@ window.Commons = (function () {
         b.addEventListener("click", function () {
           view = t.slug;
           try { localStorage.setItem(VIEWKEY, view); } catch (e) {}
+          clearQuery();
           buildChips();
           render();
         });
@@ -208,10 +310,35 @@ window.Commons = (function () {
       return out;
     }
 
+    /* find.js hands back WHICH KIND of answer it found, and its own contract says
+     * the honest label is the caller's job. So the note never lets an approximate
+     * result read as an exact one, and it names the words it threw away — a token
+     * that matches nothing in the whole file is noise the reader added, and
+     * silently deleting it is how a search box lies. */
+    function searchSections() {
+      var r = window.Find.search(ix, q), note;
+      if (r.mode === "none") {
+        note = "Nothing here goes by that. The closest words we carry:";
+      } else if (r.mode === "relaxed") {
+        note = "Nothing matched all of that. Closest on the words that did:";
+      } else {
+        note = "Every trade searched, not just the one you picked — you heard it off somebody else.";
+      }
+      if (r.noise && r.noise.length) {
+        note += " Ignored “" + r.noise.join("”, “") + "” — nothing here uses that word.";
+      }
+      return [{
+        slug: "find",
+        title: r.mode === "none" ? "Closest We Carry" : "Matches",
+        note: note,
+        items: r.hits
+      }];
+    }
+
     function render() {
       var host = $("sections");
       host.textContent = "";
-      var secs = sectionsFor(view), total = 0;
+      var secs = (q && ix) ? searchSections() : sectionsFor(view), total = 0;
 
       secs.forEach(function (s) {
         total += s.items.length;
@@ -265,8 +392,14 @@ window.Commons = (function () {
         var t = TRADES.filter(function (x) { return x.slug === sl; })[0];
         return '<span class="tag">' + esc(t ? t.short : sl) + "</span>";
       }).join("");
-      txt.innerHTML = '<div class="nm">' + esc(g.n) + "</div>" +
-                      '<p class="why">' + esc(g.w) + "</p>" +
+      /* A surface owns what sits under its own name — gear and tips are a name
+       * and a reason, the name table is a name and every other name for it. The
+       * escaper is handed over rather than re-implemented per surface. */
+      var eye  = cfg.eyebrow ? cfg.eyebrow(g) : "";
+      var body = cfg.body ? cfg.body(g, esc) : '<p class="why">' + esc(g.w) + "</p>";
+      txt.innerHTML = (eye ? '<div class="nmeye">' + esc(eye) + "</div>" : "") +
+                      '<div class="nm">' + esc(g.n) + "</div>" +
+                      body +
                       (tags ? '<div class="tags">' + tags + "</div>" : "");
 
       lab.appendChild(cb);
@@ -335,6 +468,35 @@ window.Commons = (function () {
       else { done(false); setTimeout(function () { if (ta.parentNode) document.body.removeChild(ta); }, 9000); }
     }
 
+    function clearQuery() {
+      var box = $("q"), x = $("qx");
+      q = "";
+      if (box) box.value = "";
+      if (x) x.hidden = true;
+    }
+
+    var qbox = $("q"), qx = $("qx");
+    if (qbox && ix) {
+      qbox.addEventListener("input", function () {
+        q = qbox.value;
+        if (qx) qx.hidden = !q;
+        render();
+      });
+      /* A search box on a phone gets a submit, and the default is a page reload
+       * that throws the query away. */
+      qbox.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); qbox.blur(); }
+      });
+      if (qx) qx.addEventListener("click", function () {
+        clearQuery(); qbox.focus(); render();
+      });
+    } else if (qbox) {
+      /* find.js did not load. A dead box that eats what a man types is worse
+       * than no box, so it removes itself rather than pretending. */
+      var bar = qbox.parentNode;
+      if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
+    }
+
     $("copy").addEventListener("click", copyOut);
     $("clr").addEventListener("click", function () {
       picks = []; savePicks(picks); render();
@@ -353,5 +515,5 @@ window.Commons = (function () {
     render();
   }
 
-  return { mount: mount };
+  return { mount: mount, areas: areas, aka: akaOf };
 })();

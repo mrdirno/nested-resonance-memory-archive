@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask For It Right — The Commons</title>
+<meta name="description" content="One object, every name the field says for it, and the one name to write on the order. Across every trade. No brands on the order line, no sizes, nothing sponsored.">
+<meta name="theme-color" content="#242A31">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ask Right">
+<link rel="stylesheet" href="commons.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">The Commons · Every Trade</span>
+    <h1>Ask For It Right</h1>
+    <p class="lede">
+      One object, every name the field says for it, and the one name to write down. Somebody said
+      a word at you and walked off — type it in the box. Or tick what you need and copy a list
+      the other guy can actually fill.
+    </p>
+    <!-- The rail said out loud, in the masthead rather than in fine print. This
+         page is evidence about the WORD and it will be read as authority about
+         the OBJECT — so it states that limit where nobody can miss it. -->
+    <p class="oath">
+      <b>The first name is the one to write down.</b><br>
+      Everything under it is what people <em>say</em> — not what it is. No sizes, no ratings, no
+      part numbers: if two things need a number to tell them apart, they are not on here as one
+      row. Check the print, the label or the counter before you order.
+    </p>
+  </header>
+
+  <ul class="rail" id="rail" aria-label="The Commons"></ul>
+
+  <div class="findbar">
+    <input id="q" type="search" class="find" autocomplete="off" autocapitalize="off"
+           autocorrect="off" spellcheck="false"
+           placeholder="Type what you call it — or what he called it"
+           aria-label="Search every name in every trade">
+    <button type="button" class="findx" id="qx" aria-label="Clear the search" hidden>&#10005;</button>
+  </div>
+
+  <div class="pickbar">
+    <span class="picklabel">Show me</span>
+    <div class="chips" id="chips" role="group" aria-label="Filter names by trade"></div>
+  </div>
+
+  <div id="sections"></div>
+  <div id="none">Nothing here yet — pick another trade.</div>
+
+  <section class="addcard">
+    <h3>That's not what we call it</h3>
+    <p>
+      Every shop, every region and every counter has its own word. If yours is missing — or one
+      on here is wrong, or points at the wrong thing — that is a hole in the list. No account,
+      no email, about fifteen seconds.
+    </p>
+    <button type="button" class="btn" id="addbtn">＋ Add a word we say</button>
+  </section>
+
+  <div class="foot">
+    <a class="btn backlink" href="../av/">&larr; Field Toolkit &mdash; free tools for the trades</a>
+    <p>Words sent in by the field get read and checked before they show up here.</p>
+  </div>
+
+</div>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="readout"><b id="cnt">0</b><span id="cntlbl">on the list</span></div>
+    <button type="button" class="btn" id="clr">Clear</button>
+    <button type="button" class="btn go" id="copy" disabled>Copy the list</button>
+  </div>
+</div>
+
+<script src="../shared/find.js"></script>
+<script src="commons.js"></script>
+<script src="names.js"></script>
+<script>
+/* `surface` stays "commons" — the same key both other surfaces use. `trade` is
+ * the surface key in the ONE shared queue and every tool that counts served
+ * trades derives them from <dir>/trade.js on disk, so minting "commons-names"
+ * would report a trade with demand that nobody can ever build. */
+window.FEEDBACK = {
+  surface: "commons",
+  name: "the Commons name table",
+  accent: "#FF6B1A",
+  accentInk: "#241000",
+  areaLabel: "Which trade",
+  areas: Commons.areas(),
+  newLabel: "Add a word we say",
+  trigger: false
+};
+</script>
+<script src="../shared/feedback.js"></script>
+
+<script>
+(function () {
+  /* How each kind of name is FRAMED. This is the whole safety design of the
+   * page and it lives in the data shape, not in the copy: a regional word can
+   * never print as "it is called", and a trademark can never print as anything
+   * a man would put on a purchase order. */
+  var KIND = {
+    tm:  "a brand people say",
+    reg: "you might hear",
+    say: "the field says",
+    sup: "the counter says"
+  };
+
+  Commons.mount({
+    surface: "names.html",
+    rows: window.COMMONS_NAMES || [],
+    pickKey: "commons.names.v1",
+    countNoun: "names",
+    pickLabel: "on the list",
+    addKind: "new_tool",
+    floor: {
+      title: "Every Trade Says These",
+      note: "Same object on every job — and a different word for it in every truck."
+    },
+    own: {
+      suffix: "— What They Say",
+      note: "The words this trade uses, and the one to write on the order."
+    },
+    /* Every row wears it. A page that renders the generic as a heading and the
+       aliases as a list of equals is a page that hands somebody a trademark to
+       put on a purchase order. */
+    eyebrow: function () { return "Order it as"; },
+    body: function (g, esc) {
+      var out = '<p class="obj">' + esc(g.o) + "</p>";
+      if (g.a && g.a.length) {
+        out += '<div class="akas">' + g.a.map(function (x) {
+          /* The KIND is a fixed label and wears the mono eyebrow; WHO SAYS IT is
+             a sentence and wears sentence case. Run together in mono caps they
+             read as one shouted line and the eye stops going to the name.
+             And when the attribution only repeats the label — "THE COUNTER SAYS
+             the counter" — the label alone is the honest render. */
+          var by = x.by || "";
+          if (/^the (supply |rental )?counter$/i.test(by)) by = "";
+          return '<div class="aka ' + esc(x.k) + '"><b>' + esc(x.n) + "</b>" +
+                 '<span class="by"><i>' + esc(KIND[x.k] || KIND.say) + "</i>" + esc(by) + "</span></div>";
+        }).join("") + "</div>";
+      }
+      /* The near-miss guard. Not decoration: the rows that earn this page are the
+         ones where the wrong word gets the wrong OBJECT walked over to you, and
+         that is a different failure from not knowing the word at all. */
+      if (g.no) out += '<p class="notthis"><b>Not the same thing:</b> ' + esc(g.no) + "</p>";
+      return out;
+    },
+    copy: {
+      title: "ASK FOR IT RIGHT",
+      /* The generic leads every line and the rest is labelled as talk, so the
+         line survives being pasted straight into an order or a text. */
+      line: function (g) {
+        var say = (g.a || []).map(function (x) { return x.n; });
+        return "- " + g.n + (say.length ? "  (they might say: " + say.join(", ") + ")" : "");
+      },
+      footer: function (n) {
+        return String(n) + " · order by the first name — the rest is what people say";
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

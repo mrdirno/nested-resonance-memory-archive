@@ -245,9 +245,10 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
                    archive/index.html \
-                   shared/toolkit.js shared/feedback.js \
+                   shared/toolkit.js shared/feedback.js shared/find.js \
                    commons/index.html commons/gear.js commons/commons.js commons/commons.css \
                    commons/tips.html commons/tips.js \
+                   commons/names.html commons/names.js \
                    av/index.html av/trade.js av/tools.js av/consumables.html av/credits.html av/report-builder.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
@@ -263,7 +264,9 @@ jobs:
             || { echo "FAIL: commons/gear.js does not define COMMONS_GEAR"; exit 1; }
           grep -q 'COMMONS_TIPS' HELIOS-BRIDGE/dist/commons/tips.js \
             || { echo "FAIL: commons/tips.js does not define COMMONS_TIPS"; exit 1; }
-          for dep in commons.css commons.js gear.js tips.js ../shared/feedback.js; do
+          grep -q 'COMMONS_NAMES' HELIOS-BRIDGE/dist/commons/names.js \
+            || { echo "FAIL: commons/names.js does not define COMMONS_NAMES"; exit 1; }
+          for dep in commons.css commons.js gear.js tips.js names.js ../shared/feedback.js ../shared/find.js; do
             ( cd HELIOS-BRIDGE/dist/commons && test -f "$dep" ) \
               || { echo "FAIL: a commons surface loads $dep, which is not in the artifact"; exit 1; }
           done
@@ -271,6 +274,19 @@ jobs:
           [ "$n_gear" -ge 20 ] || { echo "FAIL: commons/gear.js carries only $n_gear items — an empty commons is not a commons"; exit 1; }
           n_tips=$(grep -c 'id:' HELIOS-BRIDGE/dist/commons/tips.js || true)
           [ "$n_tips" -ge 20 ] || { echo "FAIL: commons/tips.js carries only $n_tips tips — an empty commons is not a commons"; exit 1; }
+
+          # THE FEEDBACK AREAS ARE DERIVED, AND A HAND-WRITTEN COPY IS A BUILD
+          # FAILURE. Both surfaces used to spell the trade list out in their own
+          # <script> block. Trade #10 shipped a toolkit, was added to
+          # COMMONS_TRADES so it got its chip here, and was in NEITHER copy — and
+          # feedback.js REQUIRES an area for a bug or an improvement, so a
+          # concrete finisher could tick concrete rows and then had two ways to
+          # report one wrong: file it against another man's trade, or give up.
+          # The list exists once; a second copy of it is the scar.
+          for f in HELIOS-BRIDGE/dist/commons/*.html; do
+            grep -q 'areas: *Commons.areas()' "$f" \
+              || { echo "FAIL: $(basename "$f") does not take its feedback areas from Commons.areas() — a hand-written trade list here rots the day a trade ships"; exit 1; }
+          done
 
           # EVERY CHIP IS BACKED BY ROWS SOMEBODY WROTE FOR THAT TRADE — and the
           # two asserts above are exactly why this one had to be written.
@@ -294,10 +310,15 @@ jobs:
             const D = "HELIOS-BRIDGE/dist/commons/";
             const load = (f, k) => { const w = {}; (new Function("window", fs.readFileSync(D + f, "utf8")))(w); return w[k]; };
             const trades = load("commons.js", "COMMONS_TRADES").map(t => t.slug).filter(s => s !== "universal");
+            /* The surface list is parsed out of the shipped engine too, so a
+               commons surface added next month is coverage-gated the day it
+               lands with no edit to this file. It used to be a pair list typed
+               here, which is the same rot one floor up. */
+            const surfaces = load("commons.js", "COMMONS_SURFACES").filter(s => s.data && s.rows);
             const FLOOR = 6;              /* every honest trade carries 7-22; roofing carried 0 */
             const NARROW = 3;             /* tagged to at most three trades = written for one of them */
             let bad = 0;
-            for (const [file, key, noun] of [["gear.js","COMMONS_GEAR","gear"],["tips.js","COMMONS_TIPS","tips"]]) {
+            for (const { data: file, rows: key, noun } of surfaces) {
               const rows = load(file, key);
               for (const t of trades) {
                 const own = rows.filter(r => r.t.includes(t) && !r.t.includes("universal"));
@@ -309,6 +330,40 @@ jobs:
               }
             }
             process.exit(bad ? 1 : 0);
+          ' || exit 1
+
+          # THE NAME TABLE HAS TO ROUTE, OR IT IS A GLOSSARY.
+          #
+          # The panel that ranked this rung voted it down once on exactly one
+          # argument: this project has met the translation problem twice and
+          # solved it both times as ROUTING INSIDE A TOOL, and a synonym that only
+          # sits in a list does no work. The answer shipped is that names.js is an
+          # INDEX every commons surface searches through — type "marrette" into the
+          # gear list and wire connectors comes up, though that word appears
+          # nowhere in gear.js.
+          #
+          # That claim is one rename away from silently becoming false: the join
+          # is by the object's plain name, so re-wording a gear row unhooks it and
+          # nothing on screen changes. So the join is COUNTED here, against the
+          # artifact, through the engine's own exported fold rather than a second
+          # copy of the rule.
+          node -e '
+            const fs = require("fs");
+            const D = "HELIOS-BRIDGE/dist/commons/";
+            const w = {};
+            for (const f of ["commons.js", "names.js", "gear.js", "tips.js"]) {
+              (new Function("window", fs.readFileSync(D + f, "utf8")))(w);
+            }
+            if (!w.Commons || typeof w.Commons.aka !== "function") {
+              console.error("FAIL: commons.js no longer exports the alias join (Commons.aka)"); process.exit(1);
+            }
+            const FLOOR = 12;
+            const joined = w.COMMONS_GEAR.filter(r => w.Commons.aka(r).length > 0);
+            if (joined.length < FLOOR) {
+              console.error(`FAIL: only ${joined.length} of ${w.COMMONS_GEAR.length} gear rows are reachable by a name from names.js (floor ${FLOOR}). The name table has come unhooked from the gear list and is a glossary again.`);
+              process.exit(1);
+            }
+            console.log(`commons join: ${joined.length}/${w.COMMONS_GEAR.length} gear rows findable by a word that is not on the gear list`);
           ' || exit 1
 
           # EVERY COMMONS SURFACE IS OFFERED FROM EVERY OTHER ONE. commons.js
