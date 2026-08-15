@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -310,6 +310,27 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew everybody else is counting down to — before-the-pour first: every sleeve, blockout, embed, anchor bolt, pad and ground another outfit owes you, with the gate each one has to beat, sent as one message per trade. Nothing on it is rated, sized or dosed; the figures are the ones you read off your own approved mix design.',
     icon: <Shovel size={18} />,
+  },
+  {
+    // TRADE #11 — the FOURTH promoted by the INTERFACE MATRIX rule. Three served
+    // kits name the mason as a receiver in their own who[] arrays (electrical
+    // "Mason / CMU", plumbing "Mason", roofing "Mason / chimney"), and TWO of
+    // them wrote his day into their own gate ladders in their own words:
+    // electrical's "Before CMU caps out" and plumbing's "Before block goes up",
+    // each carrying an ask bound to it. Twelve spec lines aimed at a crew with no
+    // page to answer them on — the same condition that promoted concrete one
+    // trade earlier. He OWNS that gate rather than racing it, and once a wall
+    // caps and grouts, a box or a sleeve is a core bit through grout and rebar.
+    //
+    // BrickWall, and it breaks the sibling rule the same way the 🧱 chip does and
+    // for the same measured reason: a mason's gear is a trowel, a line and a
+    // story pole, none of which exists in this icon set, and Hammer is already
+    // the framing kit. See masonry/trade.js.
+    name: 'Masonry Field Toolkit',
+    href: './masonry/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew two other toolkits already count their own day down to — where the wall\'s at first: wall by wall at quitting time, the course each one got to, which cells are still open and what nobody touches, sent as one message. Nothing on it is braced, rated, sized or spaced; the course is his own words and every engineered question is handed back.',
+    icon: <BrickWall size={18} />,
   },
 ];
 

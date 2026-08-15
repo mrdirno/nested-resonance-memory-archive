@@ -1141,6 +1141,110 @@ is the exact defect the page is built to prevent.
   a field silently through a misspelled `kind` (BUILDERS returns undefined and the field
   vanishes with no warning), a colliding `id`, or a `docSkip` copied in from another page.
 
+## MASONRY — trade #11, and the first family the promotion rule could NOT decide (2026-08-15)
+
+**THE RULE THAT PROMOTED TRADES #7, #8 AND #10 STOPPED DISPOSING, AND THAT IS THE
+FINDING.** Every previous family was chosen by one measure — the highest-count unserved
+RECEIVER in the interface matrix — applied with no second criterion. Re-tallied off all
+ten shipped `items.js` files rather than off the summary table, the count nominates
+**steel** (four kits name it) over **masonry** (three) and **ceilings** (three). One of
+four independent lenses declared "no taste was required at any step" and had still missed
+`concrete/items.js` `{v:"steel", label:"Steel erector"}` — so its winner was not even tied
+for first on the axis it called decisive. **A count that has to be recounted is a
+nominator, not a judge.** From #11 on, the rule nominates and the record disposes.
+
+**BOTH NOMINEES ABOVE MASONRY WERE KILLED BY SENTENCES THIS BOOK HAD ALREADY WRITTEN.**
+
+- **CEILINGS owns the most-NAMED gate on the board** — the lid appears in all six trade
+  gate ladders — and it lost anyway, because §ROOFING's second qualification is owning an
+  IRREVERSIBLE gate, not a frequently-named one. `concrete/trade.js`, the config that
+  promoted trade #10, says verbatim: *"a wall can be cut, A CEILING CAN BE PULLED, a roof
+  can be flashed after the fact."* The program named the ceiling as its own counterexample
+  to a one-way gate, in the text that promoted the last family. (The *other* half of the
+  kill — that ACT is really the framing kit's crews — was REFUTED and should not be reused:
+  `framing/items.js` declares `grid` "Grid / ceilings" as a RECEIVER with its own start
+  date. The served kit that would supposedly absorb it treats it as another company.)
+- **STEEL was pruned by name.** §THE INTERFACE records that the six-vocabulary prune threw
+  out *"a special-inspection record"*. The bolt-up log, the weld map, the WPS and the mill
+  cert ARE that record under IBC ch.17. The test that decides it: every trade touches
+  certified data at its edges; the ones that die are the ones where it is the CENTRE.
+  Second, half of steel is already served — `concrete/trade.js` defines its crew as "form
+  setters, **rodbusters**, placers and finishers" and the commons chip reads "Concrete &
+  Rebar". NAICS 238120 is one code for erection and rebar placement.
+
+**WHY MASONRY, IN THE PROGRAM'S OWN TERMS.** Three kits name him as a receiver on disk
+(electrical "Mason / CMU", plumbing "Mason", roofing "Mason / chimney") and **two of them
+wrote his day into their own countdowns in their own words** — `electrical/items.js`
+`{v:"cmucap", label:"Before CMU caps out"}` third of seven, `plumbing/items.js`
+`{v:"block-up", label:"Before block goes up"}` third of eight — each carrying an ask bound
+to it: *"Set my boxes as you lay it" · "Run my pipe up the cell" · "Leave the cell open
+above my box" · "Don't grout the cell I'm in" · "Call me the morning of that lift" ·
+"Sleeve laid in as you go up" · "Chase in the block for my stack" · "Knock-out at my paint
+mark."* **Twelve spec lines aimed at a man with no page to answer them on** — the exact
+condition `concrete/trade.js` gives as the reason trade #10 was promoted, one trade over.
+He OWNS that gate rather than racing it: the mason sets the date everybody else counts to,
+and a capped, grouted wall with a bond beam in it is a core bit through grout and rebar,
+and on a structural wall a call to the engineer of record before anybody starts a saw.
+No fork, verified rather than assumed: `concrete/items.js` returns ZERO hits for
+cmu/mortar/brick/veneer/tuckpoint — every "block" in that file is `blockout` or `blocking`.
+
+**THE DISSENT IS RECORDED AT FULL STRENGTH, because it is right about two things.**
+Masonry is the SMALLEST working population of the three finalists, on work that is losing
+ground to tilt-up and panel, and it is **receiver-heavy and ask-light** — he is chased by
+everybody and chases comparatively few people back. That is why `rough-in-request.html`
+here is deliberately shorter than concrete's fourteen rungs instead of padded to match: a
+rung invented to fill a page is worse than a short page. And the runner-up was neither
+finalist — it was **SITEWORK**, the only remaining candidate clearing both disqualifiers:
+backfill is position #1 on three shipped ladders and a closed ditch does not reopen.
+
+**THE ACCENT COULD NOT BE THE TRADE'S OWN COLOUR, AND THAT IS A MEASUREMENT.** Brick red
+fails twice — it sits in the band low-voltage coral (14.2) and plumbing copper (24.0)
+already crowd, and **red cannot clear the contrast bar at any lightness that is not a
+pastel**: measured at hue 352 against the #242A31 nav, L50 3.64 · L55 3.76 · L60 4.02 ·
+L65 4.48 · L70 5.12 · L75 6.03, never reaching 7. The only way there is L78+, which is a
+rose sitting between roofing's pink and low-voltage's coral — a third pastel in a row. So
+the accent goes to the TOOL instead of the material: the line, at hue 75.0, the middle of
+the widest genuinely chromatic arc left (45.7 → 104.2, 58.5°). **The stale hue list nearly
+took the decision:** it recorded the commons at hue 90, which is `#BABEB6` — a 4%-saturation
+GREY. Treating a grey as occupying 90 degrees of the wheel is how a rack talks itself out
+of its own widest opening.
+
+**THE TRADE'S FOURTH REFUSAL.** Roofing refuses CAUSE and COVERAGE; concrete refuses those
+and STRENGTH; masonry refuses all three and **BRACING AND LOADING**. A wall standing
+without its diaphragm is the thing on this job that kills people, and it is engineered. A
+foreman may write that a wall is standing, that it is not braced, and that he wants
+somebody to come and look. He may not be led into writing a height, a spacing, a wind
+figure, a duration, a restricted distance, or that a wall is safe to load, backfill
+against or work under. **`wheres-the-wall.html` has no "it's fine" value on its don't-touch
+axis at all** — a blank means he said nothing — and the document carries the guard in
+words the config cannot switch off: *"A wall not named here is a wall I have said nothing
+about."* That is THE INVERSE-CLAIM GUARD, and it is this trade's contribution to the
+program: any list that names the dangerous items will be read as clearing the ones it
+did not name.
+
+**THE SEED ROSTER, from an 8-agent fan-out (four selection lenses → a synthesis arm that
+never saw the build → three in-trade panels → a 20-year prune → a build spec).** Three
+panels independently named the same three rungs. Shipped: `wheres-the-wall` (pinned) ·
+`answer-back` · `rough-in-request` · `tm-tag` · `write-up` · `getting-in` ·
+`total-package`. **THE ONE, chosen by the prune:** *"electrical and plumbing have been
+ordering two other trades to count down to 'Before CMU caps out' and 'Before block goes
+up' for months and nothing anywhere publishes the number they are counting to."*
+
+**RANKED NEXT, AND NOT HALF-BUILT ON PURPOSE: `yard-call`.** All three panels named the
+afternoon material call unprompted — block by shape and cube, mortar by the bag in a type
+HE states, sand by the yard, wire by the roll, lintels by length, and which side of the
+building the forks put it on. It is a vocabulary build the size of the supply-house order,
+and **half a yard call is worse than none**: a man who calls in an order off a list that is
+missing a line stops opening the list.
+
+**KILLED BY THE PRUNE, do not resurrect:** `still-waiting-on` (a config flag — `shared/rowlog.js`
+already ships named document filters for exactly this) · `hose-test` (the shape went
+looking for a job; the owner's consultant runs it) · `whats-in-the-block` (answer-back's
+yesses re-typed — a framer's backing is his OWN scope at dozens of points, a mason's
+built-ins are almost entirely the EC's and the plumber's asks) · `what-we-opened` (counts
+by elevation with the money stripped out is still a pay application) · `grout-day` (every
+number on it is one we are forbidden to supply, leaving four ticks and eight empty boxes).
+
 ## CREATIVE — trade #9, and the first one that is not a construction trade (2026-08-13)
 
 Stood up from a WISH, not from the researched ladder. The wish, verbatim: *"Tools for
@@ -3634,3 +3738,63 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
 - `2026-08-15` — **[AXIS:DOCS]** **THE PATH SEARCH DUMPS YOU INTO HAD ONE SENTENCE FOR EIGHTY DOCUMENTS** · **before:** every write-up in the library carries a hand-written `omit` — the field this book calls the highest-value one in the whole toolkit, the line whose absence loses the back-charge meeting. The **custom path** — what a man reaches when what he has to write is not in the list, on all 9 trades — answered it with **one hardcoded sentence**, the same string in all nine, for all five families, and it claimed to be trade-specific ("on almost every document in **this trade**"). `facts` was three generic words feeding the AI's own pre-flight check, identical for a near-miss, a delay letter and a set of minutes; `why` was the family PICKER's blurb read out as a purpose statement; `secondary` was empty where every library document offers one or two. · **after:** five **OMISSION CLASSES**, each demanding a concrete artefact — a date · a name · a before-value · a location · a named gap — **derived by classifying all 80 shipped `omit` lines**, not by taste, with the per-family counts in the code beside the table. `facts`, `why` and `secondary` now come from the family, the same way `sections: f.spine` always did. **THE CORPUS OUTRANKED THE PLAN TWICE.** The rung was recorded as FOUR classes; classifying the corpus put *"what you did NOT do"* level with the biggest and made it the most common thing a RECURRING write-up misses ("where you COULDN'T work" · "the idle half of the job"), so it shipped as the fifth. And the seed was first written as THREE-per-family off the MAX of the five documents that ship a list — the MODE of all eighty is **one**, 75 to 5, which is also the word in the heading. Seeded to one, four one tap away, **because whatever ships pre-ticked is what a man in a hurry keeps**. **AN ADVERSARIAL PASS FOUND A LIVE DEFECT ON A TRADE THIS CYCLE WAS NOT TOUCHING:** the PROSE heading over multiple omitted lines pluralises; `LOCKED[0].h`, the heading inside the **OUTPUT FORMAT** — the part that becomes the document somebody else reads — never did, so framing's five multi-omit documents have been shipping **"THE ONE NOBODY WRITES DOWN" above three bullets** since arrays landed. Confirmed against the real page before a line was changed, then fixed at print time. **BACKPORT RIDER FIRED — swept, not assumed:** the engine is shared so all 9 write-up pages take the fix in one change; the multi-omit class was re-derived from disk (exactly framing's 5, all now correct); no library document ships an empty `omit`, so the empty-red-box path was unreachable until ticking to zero made it reachable — it now says the true thing instead of painting a warning frame with nothing in it. **Swept and NOT fixed, named so it is not lost:** `creative` is the one trade with no `docs.js` and no write-up page at all — a whole-trade DEPTH gap, not this class. **THE GATES GREW, AND ONE WAS PROVED BY NEGATIVE CONTROL.** `docspec-config.mjs` now drives the custom path through **all five families** (four were never exercised — harmless while they all emitted the same string, load-bearing the moment each has its own seed), and asserts: exactly one class seeded · seeds differ across families · the dead sentence never returns · unticking all says so · ticking all pluralises the shipping heading · and the class contract itself, that every line truncates under `shortOmit()`, which fails **silently**. `mobile-watertight.mjs` grew `REVEALS` — the second time a control that only exists after a tap escaped a green gate — re-loading per state and re-running every measurement inside it; **proved by pointing the reveal at a control that does not exist and watching it fail at all four widths.** Gates: **docspec 9 trades / 149 checks / 0 failing, and RE-RUN GREEN AGAINST PRODUCTION** · **mobile-watertight 87 pages × 320/360/390/430 × default and bumped, 0 failing**, the tick list re-measured in its revealed state, and the write-up pages re-run green against production too · the live page then DRIVEN end to end on hvac — a document that is not in the library ("Freeze-stat trip investigation"), incident family, seeded class correct, the per-family facts and purpose reaching the block, the plural heading correct with two ticked, zero page errors · eyes on the real page at 320 and 390, which is how the artefact badges were caught wrapping to four lines with every number green. **A SECOND, INDEPENDENT CLASSIFICATION of the same 80 lines, run blind to the five, agreed on 4 of the 5 family seeds and forked on `incident` — written into the doctrine above with the fork intact rather than smoothed away.** Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
 
 - `2026-08-15` — **[AXIS:INTERFACE]** **THE DOOR THAT DOES NOT OPEN, AND THE TICK THAT PRETENDED IT HAD A PERMIT** · **before:** the well was dry (0 new, 0 building, every trade) and no family was owed, so the stalest axis governed — INTERFACE. **The ranked roster was WRONG, and step 0 of the ship loop is the only thing that caught it:** it still ranked *THE THIRD MESSAGE* as "now the interesting one" with a full design brief, and that rung had shipped four days earlier as `shared/reconcile.js`, 38KB, loaded on nine `rough-in-request.html` pages, implementing every constraint the entry named. The rung actually unbuilt was #2 — **sub → owner direct**, the access/escort/badge/after-hours ask, filed as *"small, and nobody owns it"*. It was right about the second half. · **after:** `<trade>/getting-in.html` on **all ten kits including creative** — one page file, ten `TOOLKIT_GETIN` configs, shape #2. The first tool in the program aimed at a party that is **not another trade**, and the only boundary where being wrong leaves four men and a truck of gear at a locked door instead of costing an hour. **A FOUR-LENS PANEL NEARLY KILLED IT, CORRECTLY:** the skeptic, handed this book's own rules as weapons, showed that every noun in the proposal — escort, badge, freight, hot work, power-down — already has an owner and a **numbering authority** on the building side, which §THE SYSTEM OF RECORD forbids competing with. **THE HANDBACK RULE IS WHY IT SURVIVED, and it is the cycle's real invention:** dropping those was the worse failure (undisclosed hot work near a detector is the fastest route onto a permanent do-not-use list), so **none of them is a status** — every permitted activity ends in a question aimed back at the man who owns the process, *"we have to touch the fire alarm (tell me who puts the panel on test — we don't)"*. That is §THE SYSTEM OF RECORD applied one level down, to a checkbox, and `getting-in.mjs` asserts it as a RULE so a later cycle cannot rewrite one into *"fire alarm coordinated"* and call it a tidy-up. **KILLED AND GATED AGAINST:** lockout/tagout and confined space · a fire-watch tick · ICRA class I–IV logic · any generated reference number, status field or approved toggle (this page has no channel back and will never know) · insurance limits and policy numbers · a risk score computed off the ticks. **NAMES SPLIT THE PANEL THREE TO ONE AND BOTH HALVES WERE RIGHT** — the receiving lens gets no badge cut without full legal names days ahead; the skeptic showed the modal use of a Copy button is a paste into a crew group chat. So names are OPTIONAL rows, DOB/SSN/licence/badge number are not fields and never will be, Clear takes the crew and leaves the sender block, and the document spends a line handing the badging form back to HIS system — **only when names are actually on it**. **THE HEADING IS THE ASK**, because the receiving lens wrote unprompted that he approves from a lock-screen preview: `ACCESS REQUEST — Sat, Aug 22 · 6pm–2am` / `Bishop Ranch 3 · Nights all week`, and **deliberately no "asked on" stamp** — the first live read of the real document put two different dates on lines one and two, which is the exact ambiguity the page exists to kill. **THE ENGINE GREW THREE ADDITIVE PRIMITIVES**, all no-ops for the eleven older note pages: `kind: "date"` (both field lenses ranked *"tomorrow"* first among things that cost a day — state keeps ISO so it restores, the document prints the **weekday** so a typo in the number has something to disagree with) · `u.doc(id)` on `subline`/`titleSuffix`, closing a gap the engine's own spec pass had already flagged · `data-f` on every field wrapper, so a gate drives a page by the id the config uses instead of matching label prose, **because matching on words means a gate silently stops testing a field the day somebody improves its label** — the same class as a hand-kept watch list, one layer out. **CREATIVE IS NOT A RESKIN:** its production lens argued the two documents should not share an engine, and its own principle — *share the atoms, not the assembly instructions* — is exactly this program's architecture, so it took the engine and got its own document: haze finding the fire alarm (handed back the way hot work is), what ends up on camera, furniture that goes back exactly as found, generator exhaust against their intakes, cable stopping a fire door closing, the real headcount including client and cast, and **asking THEM to hold their own noise during takes — the one disclosure in the whole program that runs the opposite direction**. It is called Getting In, **not "Shoot Day Confirm"** as the creative roster had it: *confirm* is the precise defect the page prevents. **BACKPORT RIDER FIRED, and it is the order engine's class asked of shape #2 in shape #2's own terms:** `note-live-fields.mjs` changes ONE field alone on a wiped device and requires the copied text to CHANGE, with `docSkip` exempting a field **BY NAME read out of the page's own source**, so an author cannot silence the gate without saying in the config that the omission was deliberate. **246 in-document fields across 20 pages, 0 defects** — shape #2 cannot have the *drift* half of that bug (one delegated listener on the whole form, no second list to fall out of step) but it can still drop a field through a misspelled `kind` (BUILDERS returns undefined and the field vanishes with no warning), a colliding `id`, or a `docSkip` copied in from another page, and that is now asserted rather than assumed. **SWEPT AND NOT FIXED, named so it is not lost:** `shared/dropoff.js` is mounted on ONE of the eight order pages — the other seven are pure `checklist-request.js` configs and **that engine has no fulfilment axis at all**, so there is nothing for `Dropoff.mount` to attach to; it is an ENGINE rung, not a rider, and it is now the strongest unbuilt INTERFACE work. **SCAR WRITTEN — A ROADMAP IS NOT A RECORD:** whoever ships a rung strikes it in the ranked list in the same cycle, and strikes it with what was LEARNED, not a checkmark. Gates: **getting-in 10/10 pages** (every value found by value in what the real Copy button put on the clipboard, every ticked option's handback present, the heading carrying date + window, the ask-not-a-booking line, the names-only line appearing only with names, Clear taking the crew) · **note-live-fields 246 fields / 20 pages** · **mobile-watertight 97 pages × 320/360/390/430 × default and bumped text, 0 failing** · **no-third-party 97/97**. Storefront: **10 entries added** to `fieldToolkits.ts`, one per trade, placement verified per-trade and the file re-parsed — P5 pushes it. https://mrdirno.github.io/nested-resonance-memory-archive/av/getting-in.html
+
+- `2026-08-15` — **[AXIS:BREADTH]** **TWO TRADES HAVE BEEN COUNTING DOWN TO A NUMBER NOBODY
+  PUBLISHES** · **before:** the well was dry (0 new, 0 building, every trade) and the roster's
+  BUILD ORDER was exhausted, so the stalest axis governed — BREADTH, eight lane-cycles cold.
+  `electrical/items.js` has shipped the milestone **"Before CMU caps out"** and
+  `plumbing/items.js` **"Before block goes up"** since those kits landed, each binding an ask
+  to it — *"Set my boxes as you lay it" · "Don't grout the cell I'm in" · "Sleeve laid in as
+  you go up" · "Knock-out at my paint mark"*, twelve spec lines in all — and the crew being
+  asked had **no page in the program at all**, while nothing anywhere published the course
+  those two trades were counting to. · **after:** **MASONRY, trade #11**, whole: hub · trade
+  config · registry · items.js · docs.js · credit ledger · 7 tools, pinned on
+  `wheres-the-wall.html`, which is that number. Wired end to end and not merely staged —
+  runtime TRADES, commons chip with **12 gear, 12 tips and 8 names rows written narrowly for
+  it**, site-root registry, deploy paths + TRADES, persona500 manifest (11 kits, 81 tools).
+  **THE PROMOTION RULE STOPPED DISPOSING AND THAT IS THE CYCLE'S REAL FINDING** — re-tallied
+  off all ten shipped `items.js` files the count nominates **steel** (4) over masonry (3),
+  and the lens that declared *"no taste was required at any step"* had missed
+  `concrete/items.js` `{v:"steel", label:"Steel erector"}`. Steel was then killed by
+  §THE INTERFACE's own prune (*"a special-inspection record"* — the bolt-up log and the weld
+  map ARE that record, and it is steel's centre, not its edge), and ceilings by a sentence
+  `concrete/trade.js` had already written while promoting trade #10: *"a wall can be cut, A
+  CEILING CAN BE PULLED"*. From #11 the rule nominates and the record disposes; the dissent
+  (masonry is the smallest population and is **receiver-heavy, ask-light**) is in §MASONRY at
+  full strength, which is why its `rough-in-request` is deliberately shorter than concrete's
+  fourteen rungs instead of padded to match. **THE ACCENT IS A MEASUREMENT, NOT A TASTE:**
+  brick red cannot clear the 7:1 nav bar at ANY lightness that is not a pastel (hue 352,
+  measured: L50 3.64 · L60 4.02 · L70 5.12 · L75 6.03), so the colour went to the trade's
+  TOOL — the line — at hue 75.0, the middle of the widest genuinely chromatic arc; the stale
+  hue list nearly stopped that by recording the commons at hue 90, which is a 4%-saturation
+  GREY. **THE INVERSE-CLAIM GUARD is the trade's contribution to the program:** a list that
+  names the walls nobody may touch WILL be read as clearing the ones it did not name, so the
+  don't-touch axis has no "it's fine" value at all and every copy carries *"A wall not named
+  here is a wall I have said nothing about."* **DRIVING THE REAL DOCUMENT FOUND TWO DEFECTS
+  THE CODE READ FINE:** the most actionable line came out `Grid C 4 to 9 · course 14 · East
+  elevation · top course` — four items, one separator, no way to tell where a wall ends — and
+  the held copy said HELD ON SOMEBODY ELSE twice in one header line. Both fixed at print time.
+  **BACKPORT RIDER FIRED TWICE, both program-wide and neither of them mine.** (1) `gear.js`
+  shipped **two different objects under one id** — "Inverted marking paint wand" and "Marking
+  paint" both `marking-paint`, both visible to a GC — and the engine keys picks BY ID, so
+  ticking either rendered BOTH checked, put BOTH in the bag document, and made it impossible
+  to remove one without the other. Renamed, and `commons-bag.mjs` now asserts row-id
+  uniqueness on every surface — **proved by negative control, which is how I found that my
+  own first cut of the assertion pushed the wrong shape and could never have fired.**
+  (2) `mobile-watertight.mjs` had never measured **shape #3's pencil-open state on any of the
+  26 row-log pages in the program** — a fresh row log is an add bar over an empty list, and
+  the editor where a man changes what is holding a wall only exists after two taps. The
+  reveal now drives it generically, and its page set is **read off what each page LOADS**
+  rather than a name list, because the first cut carried a regex of names and missed
+  `low-voltage/device-checkout.html`, 25 of 26. **Coverage proved by negative control: 104
+  sentinel reports = 26 pages × 4 widths.** Gates: **wall-state 32/32** (new, and the
+  inverse-claim assertion negative-tested by deleting the line and watching it fail) ·
+  **mobile-watertight 106 pages × 320/360/390/430 × default and bumped, 0 failing, now
+  including every row log's pencil state** · **rowlog-restore 26/26** · **note-live-fields
+  271 fields / 22 pages** (which caught the real gap that `masonry/items.js` was missing the
+  `why`, `notin`, `pics` and `classes` option lists three tm-tag fields consume) ·
+  **docspec 10 trades / 167 checks** · **commons-bag 411 states** · **commons-names 321
+  checks** · **no-third-party 106/106** · **menu-reachability 721 checks**. Storefront: one
+  entry, 7 tools, accent identical to `trade.js`, `mason` tokens measured precision-1 against
+  all 1,027 personas — P5 pushes it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/masonry/

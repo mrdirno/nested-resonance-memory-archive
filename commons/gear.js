@@ -190,7 +190,17 @@ window.COMMONS_GEAR = [
     w: "Screens framing and board before finishes go on. On slab it's a heads-up only." },
   { id: "keel", n: "Lumber crayon (keel)", t: ["gc", "framing"],
     w: "Marks wet concrete, dirty steel and rough lumber where a marker quits." },
-  { id: "marking-paint", n: "Inverted marking paint wand", t: ["gc"],
+  /* ID RENAMED 2026-08-15, and it was a live defect on a shipped surface, found
+     while standing up trade #11 and belonging to nobody. This row and "Marking
+     paint" further down BOTH carried id "marking-paint", and both are visible to
+     a GC. The engine keys picks by id (commons.js: `picks.push(g.id)`,
+     `picked(g.id)`), so on the GC chip ticking either one rendered BOTH as
+     checked, put BOTH in the bag document, and made it impossible to remove one
+     without the other — and the search index maps by id too, so a query could
+     route to the wrong object. They are two objects: this is the WAND, the other
+     is the paint. Anybody who had the wand ticked will find the can ticked
+     instead once, which is strictly better than a pick that cannot be undone. */
+  { id: "marking-paint-wand", n: "Inverted marking paint wand", t: ["gc"],
     w: "Lays out and flags on dirt and slab so nobody claims surprise." },
   { id: "punch-tape", n: "Punch tape (blue painter's tape)", t: ["gc"],
     w: "Flags the defect where the trade finds it, no explanation needed." },
@@ -372,5 +382,37 @@ window.COMMONS_GEAR = [
   { id: "concrete-vibrator", n: "Concrete vibrator", t: ["concrete"],
     w: "For consolidating, not for moving mud sideways. Dragging a pour with the stick is how you leave a rock pocket at the bottom of a wall." },
   { id: "marking-paint", n: "Marking paint", t: ["concrete", "gc"],
-    w: "Layout, wash-out, keep-off, and where the truck backs in. Everything you say once and then have to say again all day." }
+    w: "Layout, wash-out, keep-off, and where the truck backs in. Everything you say once and then have to say again all day." },
+
+  /* ---- masonry: trade #11 ------------------------------------------------
+     THE TROWEL ROW IS WHY THIS BLOCK IS TAGGED THE WAY IT IS. Before this
+     trade shipped, the only trowel in the whole program was "Hand float and
+     steel trowel" tagged concrete — a DIFFERENT OBJECT. Say "trowel" on a
+     mixed job and the finisher's steel one or the tile man's notched one walks
+     over; the brick trowel is the third thing with that name, which is exactly
+     the near-miss commons/names.js exists for. */
+  { id: "brick-trowel", n: "Brick trowel", t: ["masonry"],
+    w: "London or Philadelphia, and the length is a lifetime argument. Say trowel on a mixed job and the finisher's or the tile man's walks over." },
+  { id: "mason-line-blocks", n: "Mason's line, blocks and pins", t: ["masonry"],
+    w: "The leads are yours; everything between them belongs to the line. Carry spare — the one that snaps is always on the longest wall." },
+  { id: "line-twig", n: "Line twigs", t: ["masonry"],
+    w: "The clip that holds a long line off the course in the middle. Without one the line bellies and nobody sees it until it is tooled." },
+  { id: "jointers", n: "Jointers — concave, V, raked, weathered", t: ["masonry"],
+    w: "The profile comes off the approved panel, not out of your bag. Carry more than one, and carry a slicker for the head joints." },
+  { id: "story-pole", n: "Story pole (course rod)", t: ["masonry"],
+    w: "Marked once for the job, and every lead comes off the same stick. Coursing arguments start the day somebody reaches for a tape instead." },
+  { id: "tuckpointer", n: "Tuckpointer and pointing trowel", t: ["masonry"],
+    w: "Two widths of the same idea. Grinding out is the loud half; getting mud back in without smearing the face is the half anybody can see afterwards." },
+  { id: "mud-boards", n: "Mud boards and tubs", t: ["masonry"],
+    w: "Boards go where the layers are, not where the mixer is. A tender's whole day is the boards staying full and the mud staying live." },
+  { id: "brick-hammer-set", n: "Brick hammer, brick set and a plugging chisel", t: ["masonry"],
+    w: "A cut you make at the wall beats a walk to the saw. The plugging chisel is what gets one unit out without wrecking the three around it." },
+  { id: "mason-level", n: "Mason's level — a short one and a long one", t: ["masonry"],
+    w: "Plumb, level and the twist in one read. A short level on a lead is how a wall gets built dead wrong and perfectly straight." },
+  { id: "corner-poles", n: "Corner poles", t: ["masonry"],
+    w: "Runs a whole lift without hand-building leads. On any wall long enough to argue about, it pays for the tender's trip to the truck." },
+  { id: "grinder-shroud-vac", n: "Grinder with a dust shroud and vac, and spare blades", t: ["masonry", "concrete"],
+    w: "Grinding out is the repair and the dust is what gets you shut down on an occupied building. Joints eat blades faster than anybody budgets." },
+  { id: "wash-down-kit", n: "Wash-down kit — brushes, barrel and a pump sprayer", t: ["masonry"],
+    w: "Cleaning is a scheduled operation, not a broom at the end. Whatever you wash with, try it on the panel first — the wall you learn on is the wall you own." }
 ];

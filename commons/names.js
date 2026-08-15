@@ -713,4 +713,62 @@ window.COMMONS_NAMES = [
         { n: "shuttering oil", by: "crews in Britain, Ireland and the Gulf", k: "reg" },
         { n: "mould oil", by: "precast shops overseas", k: "say" }],
     no: "Bond breaker for tilt-up — sprayed on the casting slab so the panel lifts off. Different drum, different job." },
+
+  /* ---- masonry & brick ------------------------------------------------
+     THE FIRST ROW HERE IS THE STRONGEST NEAR-MISS ON THE WHOLE SURFACE, and
+     it is why trade #11's selection panel put it in writing before a line of
+     the kit was built: MUD means five different materials to five trades that
+     stand on the same job, and four of them are already on this commons. Say
+     it wrong and the wrong OBJECT gets walked over. TROWEL is the second, and
+     commons/gear.js proved it live — before this trade shipped, the only
+     trowel in the program was the finisher's. */
+  { id: "mortar", n: "Mortar", t: ["masonry"],
+    o: "The cement, lime and sand bed a mason lays units into and tools between them.",
+    a: [{ n: "mud", by: "masons everywhere — and it is the word on the wall", k: "say" },
+        { n: "muck", by: "crews in Britain and Ireland", k: "reg" },
+        { n: "compo", by: "crews in Britain, Ireland and Australia", k: "reg" },
+        { n: "masonry cement", by: "the counter", k: "sup" }],
+    no: "Four other things called mud on the same job: joint compound to a taper, concrete to a finisher, thinset to a tile setter, and wet dirt to a dirt hand. Say mud on a mixed job and one of those four turns up." },
+  { id: "grout-masonry", n: "Masonry grout", t: ["masonry"],
+    o: "The fluid concrete poured down the cells of a block wall to fill them, around the steel.",
+    a: [{ n: "grout", by: "masons and the batch plant", k: "say" },
+        { n: "cell fill", by: "some prints and submittals", k: "sup" },
+        { n: "core fill", by: "the plant and plenty of supers", k: "sup" }],
+    no: "Tile grout — what a tile setter means by the same word — and mortar, which is the bed between the units and is not this. \"Don't grout the cell I'm in\" is a live line in the electrician's toolkit; swap the two words and it means nothing." },
+  { id: "brick-trowel-name", n: "Brick trowel", t: ["masonry"],
+    o: "The flat diamond- or teardrop-shaped blade a mason throws a bed of mortar with.",
+    a: [{ n: "trowel", by: "masons — and it is the word on the wall", k: "say" },
+        { n: "London pattern", by: "the counter and the catalogue", k: "sup" },
+        { n: "Philadelphia pattern", by: "the counter and the catalogue", k: "sup" }],
+    no: "Two other trowels on the same job: the finisher's flat steel trowel and the tile setter's notched one. Ask for \"a trowel\" on a mixed job and you get whichever is nearest." },
+  { id: "cmu-cell", n: "Cell", t: ["masonry"],
+    o: "The hollow void running through a concrete block, top to bottom, that steel and grout go down.",
+    a: [{ n: "core", by: "plenty of hands and some prints", k: "say" },
+        { n: "void", by: "engineers and submittals", k: "sup" },
+        { n: "hole", by: "everybody in a hurry", k: "say" }],
+    no: "A core drill or a cored hole — a hole cut through finished work with a barrel bit. Ask for a core in a capped wall and you have just ordered the expensive version." },
+  { id: "bond-beam-block", n: "Bond beam block", t: ["masonry"],
+    o: "A block with its webs cut down or knocked out so a horizontal bar and grout can run through the course.",
+    a: [{ n: "knockout block", by: "layers and the yard", k: "say" },
+        { n: "beam block", by: "the yard", k: "sup" },
+        { n: "channel block", by: "the yard and some prints", k: "sup" }],
+    no: "A lintel block — the U-shaped unit that carries an opening. Different unit, different place in the wall, and the yard will send whichever one you said." },
+  { id: "jointer-tool", n: "Jointer", t: ["masonry"],
+    o: "The shaped steel bar drawn along a mortar joint to compact and profile it once it takes a thumbprint.",
+    a: [{ n: "striking iron", by: "layers and pointers", k: "say" },
+        { n: "sled runner", by: "layers, for the long one", k: "say" },
+        { n: "slicker", by: "layers, for the flat one used on head joints", k: "say" }],
+    no: "A jointer plane in a carpenter's van, and a biscuit jointer — both wood tools, and both what a mixed-trade tool crib hands over." },
+  { id: "joint-reinforcement", n: "Joint reinforcement", t: ["masonry"],
+    o: "The flat welded wire laid into a bed joint, running horizontally along the wall.",
+    a: [{ n: "ladder wire", by: "layers and the yard, for the ladder pattern", k: "say" },
+        { n: "truss wire", by: "layers and the yard, for the diagonal pattern", k: "say" },
+        { n: "wall wire", by: "the counter", k: "sup" }],
+    no: "Veneer ties and anchors — the separate pieces that tie a facing wythe back to what is behind it. Both go in a bed joint; only one of them is this." },
+  { id: "cube-of-block", n: "Cube", t: ["masonry"],
+    o: "The banded stack of block or brick a yard delivers and a forklift carries as one unit.",
+    a: [{ n: "pallet", by: "plenty of supers and the paperwork", k: "say" },
+        { n: "bundle", by: "the yard, for brick", k: "sup" },
+        { n: "strap", by: "layers and the yard, for brick", k: "say" }],
+    no: "A pallet in the sense of the wooden deck underneath — plenty of cubes arrive without one, and \"a pallet of block\" is not a quantity anybody can pull." }
 ];

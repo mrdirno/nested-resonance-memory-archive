@@ -74,6 +74,44 @@ async function tickAwayRows(page, avoid, want) {
   return took;
 }
 
+/* ── 0. TWO ROWS MAY NOT SHARE AN ID ────────────────────────────────────────
+ * Found live 2026-08-15 on the shipped gear list: "Inverted marking paint wand"
+ * and "Marking paint" both carried id "marking-paint", and both are visible to a
+ * GC. The engine keys picks BY ID (commons.js: `picks.push(g.id)` / `picked(g.id)`),
+ * so ticking either rendered both as checked, put both in the bag document, and
+ * made it impossible to remove one without the other. It survived every gate
+ * because each gate ticks whatever row is at an index and reads the row it
+ * ticked — nothing on this surface was ever comparing two rows to each other.
+ * This is structural rather than behavioural on purpose: driving the collision
+ * needs both rows to sit under the same open chip, which is one accident away
+ * from being untestable, and the invariant holds regardless. */
+{
+  const boot2 = await browser.newPage();
+  await boot2.goto(`${BASE}/commons/index.html`);
+  const surfaces = await boot2.evaluate(() => (window.COMMONS_SURFACES || []).filter((s) => s.data && s.rows));
+  for (const s of surfaces) {
+    /* Each surface loads only its OWN data file, so the rows have to be read on
+       the page that ships them — reading them all off index.html would silently
+       check one surface and pass the other two on an empty array. */
+    await boot2.goto(`${BASE}/commons/${s.href}`);
+    const rows = await boot2.evaluate((k) => (window[k] || []).map((r) => ({ id: r.id, n: r.n })), s.rows);
+    /* `fails` entries are [where, lines] PAIRS — the reporter at the bottom
+       destructures them and calls bad.join(). Pushing a bare string here made
+       the whole gate throw inside its own reporter, which is how the first cut
+       of this check "passed" without ever firing. Found by negative control. */
+    const bad = [];
+    if (!rows.length) bad.push(`no rows readable on ${s.href} — the id check graded nothing`);
+    const seen = new Map();
+    for (const r of rows) {
+      if (seen.has(r.id)) {
+        bad.push(`id "${r.id}" is on two rows — "${seen.get(r.id)}" and "${r.n}". The bag keys picks by id, so ticking one ticks both and neither can be removed alone.`);
+      } else { seen.set(r.id, r.n); checked++; }
+    }
+    if (bad.length) fails.push([`${s.data} — row ids`, bad]);
+  }
+  await boot2.close();
+}
+
 for (const href of SURFACES) {
   const url = `${BASE}/commons/${href}`;
 

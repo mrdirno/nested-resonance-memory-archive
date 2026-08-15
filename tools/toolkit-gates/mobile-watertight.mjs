@@ -48,7 +48,7 @@
  * Default base is the working tree (file://). Pass the live URL after a deploy.
  */
 import { createRequire } from 'module';
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 const require = createRequire(new URL('../collage-studio/package.json', import.meta.url));
@@ -74,6 +74,22 @@ const DIRS = readdirSync(ROOT, { withFileTypes: true })
 
 const PAGES = only ? [only] : DIRS.flatMap(dir =>
   readdirSync(ROOT + dir).filter(f => f.endsWith('.html')).sort().map(f => `${dir}/${f}`));
+
+/* WHICH PAGES ARE ROW LOGS IS READ OFF WHAT THEY LOAD, NEVER OFF THEIR NAMES.
+ * The first cut of the row-log reveal below carried a regex of page names and
+ * it missed low-voltage/device-checkout.html — 25 of 26. A hand-kept list of
+ * pages is the same rot this program has scarred twice already (the trade list
+ * spelled out in two places; a gate matching on label prose). A page that loads
+ * shared/rowlog.js IS a row log, and one that ships next month is covered with
+ * no edit here. */
+const ROWLOG = new Set(
+  PAGES.filter(pg => {
+    try { return /shared\/rowlog\.js/.test(readFileSync(ROOT + pg, 'utf8')); }
+    catch { return false; }
+  }),
+);
+/* Duck-typed so it drops straight into `r.match.test('/' + page)` below. */
+const IS_ROWLOG = { test: (slashed) => ROWLOG.has(slashed.replace(/^\//, '')) };
 
 /* ── REVEALED STATES ─────────────────────────────────────────────────────
  * A page loaded and left alone is not the page a man uses. Half of what these
@@ -110,6 +126,65 @@ const REVEALS = [
         if (cb.disabled || cb.checked) return;
         cb.click();
       });
+      return null;
+    },
+  },
+  {
+    name: 'a row logged, its pencil open',
+    /* SHAPE #3's MOST-USED STATE WAS NEVER MEASURED, on any of the 26 row-log
+       pages in the program. A fresh row log is an add bar over an empty list —
+       the pencil editor, which is where a man changes what is holding a wall,
+       puts a count on a row or flags it, only exists after two taps and had
+       never been sized at 320px. Same class as the write-up reveal above and
+       the same class as the scar that created this mechanism: the page a gate
+       loads and leaves alone is not the page anybody uses.
+
+       Generic on purpose — it drives whatever axes the config declares rather
+       than naming fields, so a row-log page that ships next month is covered
+       with no edit here. */
+    match: IS_ROWLOG,
+    run: () => {
+      const bar = document.querySelector('#bar');
+      if (!bar) return null;                     // not a row log after all — nothing to reveal
+      /* A learn axis SELECTS on Enter; clicking its chip afterwards toggles it
+         back off, which is how a driver silently adds no rows at all. */
+      bar.querySelectorAll('input.rl-learn').forEach(inp => {
+        inp.value = 'Gate probe';
+        inp.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+        inp.dispatchEvent(new Event('blur', { bubbles: true }));
+      });
+      bar.querySelectorAll('select.rl-in').forEach(sel => {
+        const opt = [...sel.options].find(o => o.value);
+        if (opt) { sel.value = opt.value; sel.dispatchEvent(new Event('change', { bubbles: true })); }
+      });
+      /* NEVER click a chip on a LEARN axis. The chip a learn field just made is
+         already selected, so clicking it toggles the value back off and the add
+         is refused for a missing required field — silently, with an empty list
+         and no error. Three ladder pages failed exactly this way on the first
+         cut of this reveal, and only those three because they are the ones
+         whose learn axis is the required lead. */
+      bar.querySelectorAll('[data-chips]').forEach(box => {
+        const key = box.getAttribute('data-chips');
+        if (bar.querySelector(`input.rl-learn[data-learn="${key}"]`)) return;
+        const chip = box.querySelector('button.rl-chip');
+        if (chip) chip.click();
+      });
+      bar.querySelectorAll('input.rl-in:not(.rl-learn)').forEach(inp => {
+        if (inp.type === 'hidden' || inp.value) return;
+        inp.value = 'probe';
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      const add = document.querySelector('#rlAdd');
+      if (!add) return 'no add control on a row-log page';
+      add.click();
+      const list = document.querySelector('#list');
+      if (!list || !list.querySelector('.rl-row, li')) return 'the row did not land in the list';
+      /* The pencil is the row's own edit control. Named by class so a relabelled
+         glyph cannot silently stop this gate testing the state — the same rule
+         the note gate learned when it matched on label prose. */
+      const pen = list.querySelector('.rl-pen, [data-act="edit"], button');
+      if (!pen) return 'a logged row exposes no control to open';
+      pen.click();
       return null;
     },
   },
