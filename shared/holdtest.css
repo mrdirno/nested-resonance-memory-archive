@@ -1,0 +1,158 @@
+/* FIELD TOOLKIT — THE HOLD TEST STYLESHEET (shared/holdtest.js).
+ *
+ * The shape is a ROW LOG whose add-row bar is a STOPWATCH: rows are not typed,
+ * they are TAPPED, and the clock writes the column a man would otherwise
+ * reconstruct from memory two hours later. Everything below serves that one
+ * fact, so the two loudest things on the page are the RUNNING CLOCK and the
+ * NEXT MARK, and they are loud enough to read at arm's length on a roof.
+ *
+ * Same contract as shared/rowlog.css: every colour that belongs to a TRADE is a
+ * variable the shared runtime injects from that trade's trade.js at boot
+ * (--flag / --flag-ink / --deep / --tint), so the HVAC vacuum record and the
+ * plumbing pressure test are this one sheet wearing two hues and neither page
+ * carries a line of its own CSS. Every colour that belongs to a STATE is fixed
+ * here, because a corrected timestamp means the same thing in every trade.
+ *
+ * The three mobile facts carried over from rowlog.css, unchanged and non-negotiable:
+ *   · NO overflow-x:hidden anywhere — it MASKS a horizontal overflow instead of
+ *     fixing it and blinds the pre-ship MOBILE-WATERTIGHT gate on exactly the
+ *     defect that gate exists to catch.
+ *   · 16px on every text control, or iOS zooms the whole page on focus.
+ *   · 44px MINIMUM on everything you tap. The MARK buttons go to 56px, because
+ *     this is the one page in the toolkit operated with one hand while the other
+ *     hand is on a valve.
+ *
+ * THE PAGE CONTRACT — a hold-test page uses these four IDs and nothing else:
+ *   #clock (the running readout) · #bar (reading + marks) · #log · #preview.
+ */
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--ok:#0C6B4F;
+  /* STATE, not trade — fixed in every toolkit on purpose. */
+  --warn:#E08A3C;--warn-ink:#8A3A00;--warn-bg:#FFF4E8;--bad:#C0392B;--bad-ink:#8E2B20;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  /* fallbacks only — the runtime overwrites these per trade at boot */
+  --flag:#F0BE1E;--flag-ink:#231B00;--deep:#22303A;--tint:#EEF1EC;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(60px + env(safe-area-inset-bottom))}
+
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 14px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,5.4vw,29px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.card.grey{border-left-color:var(--muted)}
+.card>h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;margin:0 0 9px;color:var(--ink)}
+.card>h2 .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:400;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.45}
+.note b{color:var(--ink)}
+.warn{border-left:4px solid var(--flag);background:var(--tint);padding:9px 11px;font-size:12px;color:#3A2C08;margin-bottom:12px;border-radius:2px;line-height:1.45}
+.warn b{color:var(--ink)}
+
+label,.lab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+input[type=text],input[type=tel],input[type=datetime-local],select,textarea{width:100%;min-width:0;font:inherit;font-size:16px;
+  padding:9px 10px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--deep);outline-offset:1px}
+
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.hgrid .wide{grid-column:1/-1}
+
+/* ── THE CLOCK ───────────────────────────────────────────────────────────────
+   The whole reason this tool is not the notes app. Dark, big, and it says WHAT
+   is being counted before it says how long, because "00:14:02" on its own is a
+   number and "HOLDING 00:14:02" is a fact. Tabular figures so the seconds digit
+   cannot shove the minutes sideways once a second. */
+.ht-clock{background:var(--steel);color:#EEF0EA;border-radius:2px;padding:13px 14px;margin-bottom:12px;
+  border-left:5px solid var(--flag)}
+.ht-state{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--flag);
+  margin-bottom:4px;overflow-wrap:anywhere}
+.ht-el{display:block;font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;
+  font-size:clamp(30px,10vw,46px);line-height:1;letter-spacing:.02em}
+.ht-since{display:block;margin-top:7px;font-size:12.5px;color:#B9BFC6;overflow-wrap:anywhere}
+.ht-since b{color:#EEF0EA;font-weight:700}
+.ht-idle .ht-el{font-size:clamp(17px,5vw,22px);color:#B9BFC6;letter-spacing:0;font-weight:400;font-family:var(--sans);line-height:1.3}
+
+/* ── the bar: one number, then the marks ─────────────────────────────────── */
+.ht-val{margin-bottom:10px}
+.ht-val input{font-family:var(--mono);font-size:18px;font-weight:700;min-height:52px;letter-spacing:.04em}
+.ht-unit{font-style:normal;color:var(--deep);letter-spacing:.06em}
+
+.ht-go{width:100%;min-height:60px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+  background:var(--flag);color:var(--flag-ink);border:1px solid var(--flag);border-radius:2px;
+  padding:9px 14px;cursor:pointer;text-align:left;margin-bottom:9px}
+.ht-go b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:21px;line-height:1}
+.ht-go span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.78;overflow-wrap:anywhere}
+.ht-go:hover{filter:brightness(1.06)}
+.ht-go:focus-visible{outline:3px solid var(--deep);outline-offset:2px}
+
+.ht-others{display:flex;flex-wrap:wrap;gap:7px}
+.ht-mark{flex:1 1 auto;min-width:min(100%,140px);min-height:48px;background:#fff;border:1px solid var(--line);color:var(--ink);
+  border-radius:2px;padding:8px 11px;cursor:pointer;text-align:left;font:inherit;font-size:14px}
+.ht-mark b{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;line-height:1.05}
+.ht-mark span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.ht-mark:disabled{opacity:.5;cursor:default;background:#F2F2EE}
+.ht-mark.done{border-style:dashed}
+.ht-say{margin:9px 0 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;min-height:1.2em;overflow-wrap:anywhere}
+.ht-say.bad{color:var(--bad-ink)}
+.ht-say.ok{color:var(--ok)}
+
+/* ── the log ─────────────────────────────────────────────────────────────── */
+.ht-empty{font-size:13px;color:var(--muted);margin:6px 0}
+.ht-daysep{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  border-top:1px dashed var(--line);margin:10px 0 7px;padding-top:6px}
+.ht-row{display:flex;align-items:stretch;gap:6px;margin-bottom:5px}
+.ht-body{flex:1 1 auto;min-width:0;background:#fff;border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:2px;padding:8px 10px;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.ht-row.zero .ht-body{border-left-color:var(--flag)}
+.ht-row.ended .ht-body{border-left-color:var(--muted);background:#F7F7F4}
+.ht-t{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px;font-weight:700;color:var(--ink);flex:0 0 auto}
+.ht-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14.5px;color:var(--deep);flex:0 0 auto}
+.ht-read{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}
+.ht-meta{font-size:12px;color:var(--muted);flex:1 1 100%;min-width:0;overflow-wrap:anywhere}
+.ht-meta .up{color:var(--warn-ink)}
+.ht-meta .dn{color:var(--warn-ink)}
+/* A CORRECTED TIME IS NOT THE CLOCK'S WORD. The one claim this tool makes is
+   that the stamps are real, so a stamp that was typed in afterwards says so
+   here AND in the document — never silently. */
+.ht-typed{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--warn);background:var(--warn-bg);color:var(--warn-ink);border-radius:2px;padding:2px 5px}
+.ht-pen{flex:0 0 auto;width:46px;min-height:44px;background:#fff;border:1px solid var(--line);border-radius:2px;
+  color:var(--muted);font-size:15px;cursor:pointer;line-height:1}
+.ht-pen:hover{color:var(--ink)}
+
+.ht-edit{background:#fff;border:1px solid var(--deep);border-left:4px solid var(--deep);border-radius:2px;padding:10px 11px;margin:0 0 6px}
+.ht-edit .hgrid{margin-bottom:9px}
+.ht-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+.btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;background:var(--steel);
+  color:#fff;border:1px solid var(--steel);border-radius:2px;padding:10px 16px;min-height:48px;cursor:pointer}
+.btn:hover{filter:brightness(1.15)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.flag{background:var(--flag);border-color:var(--flag);color:var(--flag-ink)}
+.btn.del{background:#fff;border-color:var(--bad);color:var(--bad-ink)}
+
+.outrow{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-end;margin-bottom:10px}
+.outrow>div{flex:1 1 150px;min-width:0}
+
+pre{font-family:var(--mono);font-size:11.5px;line-height:1.45;background:#F2F2EE;border:1px solid var(--line);border-radius:2px;
+  padding:11px 12px;margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow-y:auto}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.more>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--deep);display:flex;align-items:center;gap:6px;min-height:44px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"\25B8";display:inline-block;transition:transform .12s ease}
+details.more[open]>summary::before{transform:rotate(90deg)}
+
+.foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);
+  display:inline-flex;align-items:center;min-height:44px;padding:0 2px}
+.credit{font-size:11.5px;color:var(--muted);margin:10px 0 0;line-height:1.45}
+.credit a{color:var(--deep);padding:14px 4px;margin:-14px -4px;display:inline-block}

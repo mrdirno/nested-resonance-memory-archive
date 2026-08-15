@@ -443,6 +443,21 @@ jobs:
                 || { echo "FAIL: $t/rough-in-request.html loads reconcile.js and never mounts it — the script is dead weight and the card never appears"; exit 1; }
               echo "  $t: ask -> answer -> reconcile, all three present"
             fi
+
+            # THE HOLD TEST IS ITS ENGINE. Every other shape degrades to a form
+            # when its engine is missing; this one degrades to NOTHING, because the
+            # entire product is that the clock fills itself — a page carrying the
+            # <script> and missing the mount block shows a dead readout, stamps no
+            # times, and looks completely normal in a curl. Same assertion shape as
+            # the reconcile loop above, one engine over.
+            for p in evac-record.html its-holding.html; do
+              [ -f "HELIOS-BRIDGE/dist/$t/$p" ] || continue
+              grep -q 'shared/holdtest.js' "HELIOS-BRIDGE/dist/$t/$p" \
+                || { echo "FAIL: $t/$p does not load shared/holdtest.js — the clock would never start"; exit 1; }
+              grep -q 'HoldTest.mount' "HELIOS-BRIDGE/dist/$t/$p" \
+                || { echo "FAIL: $t/$p loads holdtest.js and never mounts it — a dead readout that still returns 200"; exit 1; }
+              echo "  $t/$p: hold-test engine mounted"
+            done
           done
 
           # THE DOCUMENT LIBRARY HAS A CONTRACT WITH ITS ENGINE, AND NOTHING

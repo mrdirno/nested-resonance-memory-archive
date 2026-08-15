@@ -61,6 +61,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Tech \u2192 Shop / parts runner"
   },
   {
+    name: "Evac Record",
+    href: "evac-record.html",
+    desc: "Pump on, valved off, readings — tap the mark and the clock writes the time. It keeps counting while the phone is in your pocket, so an hour later the record is still right. Copy the times and the numbers instead of reconstructing them at the shop.",
+    chip: "#1F6F5C",
+    audience: "Tech → Service manager / office / the next guy"
+  },
+  {
     name: "Total Package",
     href: "total-package.html",
     desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and see what the truck and the on-call are really worth against the funds.",

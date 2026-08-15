@@ -50,6 +50,13 @@ window.TOOLKIT_TOOLS = [
     audience: "PC → GC / EC / other subs"
   },
   {
+    name: "It’s Holding",
+    href: "its-holding.html",
+    desc: "Five pounds of air, ten foot of head, whatever you put on it. Tap ON TEST and the clock starts itself — readings, who looked at it, when it came off. Copy the caption that goes under the photo of the gauge.",
+    chip: "#7A3F12",
+    audience: "PC → GC / inspector / the office file"
+  },
+  {
     name: "Total Package",
     href: "total-package.html",
     desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and get the real gap instead of an argument about the headline number.",

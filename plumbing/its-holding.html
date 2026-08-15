@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>It&rsquo;s Holding — Plumbing Field Toolkit</title>
+<meta name="description" content="Put it on test, tap the mark, and the clock writes the time. Readings, who looked at it, when it came off. Copy the caption that goes under the photo of the gauge. No target, no verdict.">
+<meta name="apple-mobile-web-app-title" content="It's Holding">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/holdtest.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Plumbing &middot; the caption for the gauge photo</span>
+    <h1>It&rsquo;s Holding</h1>
+    <p class="lede">Five pounds of air, ten foot of head, whatever you put on it. Tap <b>on test</b> and the clock starts. Tap a reading when you walk past. Tap when the inspector looks at it. The photo of the gauge is the evidence &mdash; this is the times and the numbers that go under it, and it does not need you to remember when you pumped it up.</p>
+  </header>
+
+  <div class="warn">
+    <b>No target on this page, and no verdict &mdash; on purpose.</b> This tool holds no code table, no required pressure, no required duration and no inspector&rsquo;s checklist, and it will never say a test passed. It writes down what <i>you</i> read off <i>your</i> gauge and when. What is required on your job comes from the code you are under and the inspector standing there &mdash; check it before anybody signs anything.
+  </div>
+
+  <div id="clock" class="ht-clock ht-idle"></div>
+
+  <section class="card">
+    <h2>Mark it <span class="why">&mdash; you never type a time</span></h2>
+    <div class="outrow" style="margin-bottom:10px">
+      <div><label for="medium">On</label>
+        <select id="medium">
+          <option value="air">air</option>
+          <option value="water">water</option>
+          <option value="nitrogen">nitrogen</option>
+        </select>
+      </div>
+      <div><label for="unit">Reading in</label>
+        <select id="unit">
+          <option value="psi">psi</option>
+          <option value="ft of head">ft of head</option>
+          <option value="in. w.c.">in. w.c.</option>
+        </select>
+      </div>
+    </div>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0"><b>Put it on test before you opened this?</b> Tap the mark anyway, then hit the pencil on that row and put the real time in. It gets labelled <b>time typed in</b> from then on, on the page and in what you send &mdash; which is the honest thing, because every other stamp here is the clock&rsquo;s word and that one is yours.</p>
+  </section>
+
+  <section class="card">
+    <h2>The record</h2>
+    <div id="log"></div>
+    <p class="note" style="margin:10px 0 0">Tap the pencil to fix a time, fix a reading, add a note, or delete a mark. The <b>somebody looked at it</b> mark opens straight into the note &mdash; put the name in while he is still standing there.</p>
+  </section>
+
+  <section class="card grey">
+    <h2>What it&rsquo;s on <span class="why">&mdash; fill this when you send it, not at the gauge</span></h2>
+    <div class="hgrid">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hSys">What&rsquo;s on test</label><input type="text" id="hSys" placeholder="2nd floor DWV rough" autocomplete="off"></div>
+      <div class="wide"><label for="hWhere">Where</label><input type="text" id="hWhere" placeholder="grid E/4, 2nd floor north — the more of this, the less argument later" autocomplete="off"></div>
+      <div><label for="hWit">Witnessed by</label><input type="text" id="hWit" placeholder="who watched the gauge" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hBy">Your name</label><input type="text" id="hBy" placeholder="optional" autocapitalize="words" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">What it is and where it is go first, because that is what somebody searches their mail for when this comes back up six months from now &mdash; not the date, and never the tool&rsquo;s name.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it</h2>
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy the caption</button>
+      <button type="button" class="btn ghost" id="nextBtn">Start the next one</button>
+    </div>
+    <p class="note"><b>Paste it under the photo of the gauge.</b> Typed text on its own is an assertion; the photo with the clock beside it is a record. <b>Start the next one</b> clears the marks and keeps the job and your name &mdash; four sections in a day is normal. <b>Copy first:</b> this lives in this browser on this phone and nowhere else, and a browser you have not opened in a couple of weeks can clear it out.</p>
+    <pre id="preview"></pre>
+  </section>
+
+  <p class="credit">Built for the Plumbing Field Toolkit. Something missing, or wrong on a real job? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span>Plumbing Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/holdtest.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var KEY = "toolkit.plumbing.its-holding.v1";
+
+  function joinDash(parts) {
+    return parts.filter(function (x) { return x && String(x).trim(); }).join(" — ");
+  }
+
+  var ht = HoldTest.mount({
+    clock: "#clock", bar: "#bar", log: "#log", preview: "#preview", copyBtn: "#copyBtn",
+    persistKey: KEY,
+
+    unitOf: function () { return $("#unit").value; },
+    valueLabel: "Off the gauge",
+    valuePlaceholder: "the number you're looking at",
+    needValue: "Type what the gauge says first, then tap it.",
+
+    idleState: "Not on test yet",
+    idleText: "Tap ON TEST when you close the valve. From there the clock fills itself — you never type a time.",
+    emptyText: "Nothing marked yet. The first tap starts the record.",
+
+    /* THE ZERO IS THE FIRST MARK HERE, not the second — a plumber pumps it up and
+       shuts the valve in one move, where a tech runs a pump for an hour before he
+       isolates anything. Same engine, different trade, and the difference is one
+       flag in this list. */
+    marks: [
+      { key: "on", label: "On test", once: true, value: true, zero: true,
+        hint: "pumped up and closed — the clock starts here", holdLabel: "Holding" },
+      { key: "read", label: "Reading", repeat: true, value: true,
+        hint: "another look at the gauge" },
+      { key: "saw", label: "Somebody looked at it", repeat: true, note: true,
+        hint: "inspector, super, whoever eyeballed it" },
+      { key: "note", label: "Something happened", repeat: true, note: true,
+        hint: "bumped it, bled it down, found a fitting" },
+      { key: "end", label: "Off test", once: true, value: true, soft: true, end: true,
+        hint: "bled it off, drained it down" }
+    ],
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), sys = $("#hSys").value.trim(), where = $("#hWhere").value.trim();
+      var wit = $("#hWit").value.trim(), by = $("#hBy").value.trim(), med = $("#medium").value;
+      var out = [joinDash([sys, where, job, med + " test", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (sys) out.push("On test: " + sys);
+      if (where) out.push("Where: " + where);
+      out.push("Medium: " + med);
+      if (wit) out.push("Witnessed by: " + wit);
+      if (by) out.push("By: " + by);
+      return out.join("\n");
+    },
+
+    docFoot: function () {
+      return "This goes under the photo of the gauge. The photo is the evidence — this is the clock that goes with it, and who was standing there.";
+    },
+
+    persistExtra: function () {
+      var v = {
+        job: $("#hJob").value.trim(), sys: $("#hSys").value.trim(), where: $("#hWhere").value.trim(),
+        wit: $("#hWit").value.trim(), by: $("#hBy").value.trim(),
+        medium: $("#medium").value, unit: $("#unit").value
+      };
+      var any = v.job || v.sys || v.where || v.wit || v.by || v.medium !== "air" || v.unit !== "psi";
+      return any ? v : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hSys").value = x.sys || ""; $("#hWhere").value = x.where || "";
+      $("#hWit").value = x.wit || ""; $("#hBy").value = x.by || "";
+      if (x.medium) $("#medium").value = x.medium;
+      if (x.unit) $("#unit").value = x.unit;
+    }
+  });
+
+  ["#hJob", "#hSys", "#hWhere", "#hWit", "#hBy"].forEach(function (s) {
+    $(s).addEventListener("input", function () { ht.schedulePersist(); ht.render(); });
+  });
+  ["#medium", "#unit"].forEach(function (s) {
+    $(s).addEventListener("change", function () { ht.schedulePersist(); ht.render(); });
+  });
+
+  /* NEXT SECTION, SAME JOB: clears the marks and what is on test, keeps the job
+     and the name. Two taps, because a record somebody may not have copied yet is
+     not something to wipe on a stray thumb. */
+  $("#nextBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again — copy it first";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") {
+          b.removeAttribute("data-armed");
+          b.textContent = b.getAttribute("data-label");
+        }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    $("#hSys").value = ""; $("#hWhere").value = "";
+    ht.clearMarks();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  ht.restore();
+})();
+</script>
+</body>
+</html>

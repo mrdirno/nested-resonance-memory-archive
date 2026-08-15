@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evac Record — HVAC/R Field Toolkit</title>
+<meta name="description" content="Pump on, valved off, readings — tap the mark and the clock fills itself. Reopen it an hour later and it is still counting from the real stamp. Copy the times and the numbers straight to the office. No target, no verdict.">
+<meta name="apple-mobile-web-app-title" content="Evac Record">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/holdtest.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">HVAC/R &middot; at the pump, not at the desk</span>
+    <h1>Evac Record</h1>
+    <p class="lede">Pump on. Valved off at your number. Then a reading whenever you look at the gauge. You tap &mdash; the clock writes the time, and it keeps counting while the phone is in your pocket. At the end you copy the times and the numbers into a message instead of reconstructing them at the shop two hours later.</p>
+  </header>
+
+  <div class="warn">
+    <b>No target on this page, and no verdict &mdash; on purpose.</b> This tool does not know your shop&rsquo;s number, the equipment manufacturer&rsquo;s number, or anybody&rsquo;s spec, it carries no table of them, and it will never tell you a system passed. It writes down what <i>you</i> read off <i>your</i> gauge and when. What those readings mean is your call.
+  </div>
+
+  <div id="clock" class="ht-clock ht-idle"></div>
+
+  <section class="card">
+    <h2>Mark it <span class="why">&mdash; you never type a time</span></h2>
+    <div class="outrow" style="margin-bottom:10px">
+      <div style="flex:0 1 220px"><label for="unit">Reading in</label>
+        <select id="unit">
+          <option value="microns">microns</option>
+          <option value="psi">psi</option>
+        </select>
+      </div>
+    </div>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0"><b>Started before you opened this?</b> Tap the mark anyway, then hit the pencil on that row and put the real time in. It gets labelled <b>time typed in</b> from then on, on the page and in what you send &mdash; which is the honest thing, because every other stamp on the record is the clock&rsquo;s word and that one is yours.</p>
+  </section>
+
+  <section class="card">
+    <h2>The record</h2>
+    <div id="log"></div>
+    <p class="note" style="margin:10px 0 0">Tap the pencil to fix a time, fix a reading, add a note, or delete a mark you fat-fingered. Delete the <b>valved off</b> mark and the button comes back.</p>
+  </section>
+
+  <section class="card grey">
+    <h2>What it&rsquo;s on <span class="why">&mdash; fill this when you send it, not at the pump</span></h2>
+    <div class="hgrid">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hUnit">Unit tag</label><input type="text" id="hUnit" placeholder="RTU-4" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div class="wide"><label for="hWhat">What&rsquo;s on test</label><input type="text" id="hWhat" placeholder="new lineset + evap, after the compressor changeout" autocomplete="off"></div>
+      <div><label for="hGauge">Gauge</label><input type="text" id="hGauge" placeholder="the one you're reading" autocomplete="off"></div>
+      <div><label for="hBy">Your name</label><input type="text" id="hBy" placeholder="optional" autocapitalize="words" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">The unit tag is the first thing on the message, because that is what somebody searches their mail for nine months from now when a compressor comes back.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it</h2>
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy the record</button>
+      <button type="button" class="btn ghost" id="nextBtn">Start the next one</button>
+    </div>
+    <p class="note"><b>Start the next one</b> clears the marks and keeps your name, your gauge and the job &mdash; three units on one roof is one afternoon, not three setups. <b>Copy first.</b> This record lives in this browser on this phone and nowhere else: a browser you have not opened in a couple of weeks can clear it out, and a new phone definitely will.</p>
+    <pre id="preview"></pre>
+  </section>
+
+  <p class="credit">Built for the HVAC/R Field Toolkit. Something missing, or wrong on a real job? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span>HVAC/R Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/holdtest.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var KEY = "toolkit.hvac.evac-record.v1";
+
+  function joinDash(parts) {
+    return parts.filter(function (x) { return x && String(x).trim(); }).join(" — ");
+  }
+
+  var ht = HoldTest.mount({
+    clock: "#clock", bar: "#bar", log: "#log", preview: "#preview", copyBtn: "#copyBtn",
+    persistKey: KEY,
+
+    unitOf: function () { return $("#unit").value; },
+    valueLabel: "Off the gauge",
+    valuePlaceholder: "the number you're looking at",
+    needValue: "Type what the gauge says first, then tap it.",
+
+    idleState: "Not started",
+    idleText: "Tap PUMP ON when the pump starts. From there the clock fills itself — you never type a time.",
+    emptyText: "Nothing marked yet. The first tap starts the record.",
+
+    /* THE TRADE'S OWN SEQUENCE. `Pump on` covers nitro too — whatever put the
+       system under is the same mark — and `Valved off` is the zero for both,
+       because isolating it is the moment the test actually begins. */
+    marks: [
+      { key: "pump", label: "Pump on", once: true,
+        hint: "or nitro on — whatever put it under", runLabel: "Pump running" },
+      { key: "off", label: "Valved off", once: true, value: true, zero: true,
+        hint: "isolate it — the clock starts here", holdLabel: "Holding" },
+      { key: "read", label: "Reading", repeat: true, value: true,
+        hint: "another look at the gauge" },
+      { key: "note", label: "Something happened", repeat: true, note: true,
+        hint: "changed the oil, found a leak, opened it up" },
+      { key: "end", label: "Off test", once: true, value: true, soft: true, end: true,
+        hint: "broke the vacuum, bled it off, started charging" }
+    ],
+
+    /* LINE 1 IS AN INBOX SEARCH KEY, never the tool's own name — this gets pulled
+       up when a compressor comes back under warranty. It DEGRADES: no unit tag,
+       no leading separator. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), tag = $("#hUnit").value.trim();
+      var what = $("#hWhat").value.trim(), g = $("#hGauge").value.trim(), by = $("#hBy").value.trim();
+      var kind = c.unit === "psi" ? "pressure record" : "vacuum record";
+      var out = [joinDash([tag, job, kind, c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (tag) out.push("Unit: " + tag);
+      if (what) out.push("On test: " + what);
+      if (g) out.push("Gauge: " + g);
+      if (by) out.push("By: " + by);
+      return out.join("\n");
+    },
+
+    docFoot: function () {
+      return "Kept at the unit as it happened. If the office wants the gauge screen, the photo is still the photo — this is the clock that goes with it.";
+    },
+
+    persistExtra: function () {
+      var v = {
+        job: $("#hJob").value.trim(), tag: $("#hUnit").value.trim(), what: $("#hWhat").value.trim(),
+        gauge: $("#hGauge").value.trim(), by: $("#hBy").value.trim(), unit: $("#unit").value
+      };
+      var any = v.job || v.tag || v.what || v.gauge || v.by || v.unit !== "microns";
+      return any ? v : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hUnit").value = x.tag || ""; $("#hWhat").value = x.what || "";
+      $("#hGauge").value = x.gauge || ""; $("#hBy").value = x.by || "";
+      if (x.unit) $("#unit").value = x.unit;
+    }
+  });
+
+  ["#hJob", "#hUnit", "#hWhat", "#hGauge", "#hBy"].forEach(function (s) {
+    $(s).addEventListener("input", function () { ht.schedulePersist(); ht.render(); });
+  });
+  $("#unit").addEventListener("change", function () { ht.schedulePersist(); ht.render(); });
+
+  /* NEXT UNIT, SAME ROOF: clears the marks and the one field that is about THIS
+     system, keeps the job, the gauge and the name. Two taps, because wiping a
+     record somebody is still holding a gauge over is not an undoable mistake. */
+  $("#nextBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again — copy it first";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") {
+          b.removeAttribute("data-armed");
+          b.textContent = b.getAttribute("data-label");
+        }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    $("#hUnit").value = ""; $("#hWhat").value = "";
+    ht.clearMarks();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  ht.restore();
+})();
+</script>
+</body>
+</html>

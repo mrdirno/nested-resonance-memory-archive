@@ -143,6 +143,16 @@
     --av-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --av-cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--av-sans);
     --av-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;}
+  /* THE STICKY BAR OWNS THE HOLE IT MAKES. position:sticky with top:0 covers the
+     top 62px of whatever scrolls under it, so EVERY programmatic scrollIntoView
+     with block:"start" and every #anchor jump on every page of every trade landed
+     its target's first 62px behind the nav — the heading you were sent to, hidden
+     by the thing that sent you. Measured live 2026-08-14 at 320 / 360 / 390 / 430
+     / 900px: bar 62px at all five, scroll-padding-top unset (auto) everywhere.
+     Found on a new page, fixed for all of them, because the bar is injected from
+     THIS file and so is the offset it costs. 70 = 62 + a line of air.
+     NOTE: this block lives inside a template literal — no backticks in here. */
+  html{scroll-padding-top:70px}
   .av-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
     background:var(--av-steel);color:#EEF0EA;padding:8px 14px;border-bottom:2px solid var(--av-flag);
     font-family:var(--av-sans);}
