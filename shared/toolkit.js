@@ -189,23 +189,26 @@
    * below 560px, keeping the icon + the trade word ("AV", "PLUMBING") as the home
    * link. NEVER put overflow:hidden on .av-bar itself — .av-drop is absolutely
    * positioned inside it and would be clipped shut. */
-  @media (max-width:560px){ .av-brand b{display:none} .av-brand span{margin-right:0} }
-  /* At 320px (iPhone SE) a tool page also carries the favourite ★, and the bar
-   * measured 332px against a 320px viewport — 12px out. Below 380 the brand gives
-   * up its word too and keeps only the icon, which is still the home link. The CTA
-   * and the tool menu never shrink: on the narrowest phone we own, what survives is
-   * exactly what someone came to tap. */
+  @media (max-width:560px){ .av-brand b{display:none} }
   /* THE SHORT SIDE IS THE ONE A THUMB MISSES, and min-width lives in the BASE
-     rule above rather than here — which is the second half of this fix and the
-     more interesting half. The brand carried min-height:44px and was still a
-     20px target below 380px (the word hides, leaving a bare emoji) and a 41px
-     one at 390px (the tail hides, leaving the icon and a short lead like "AV").
-     Fixing only the small breakpoint left 37 of 52 pages still failing at 390 —
-     the exact width of the phone most of this trade is holding. A tap target is
-     judged on its SHORTER side at EVERY width, not at the one you thought of.
+     rule above rather than in a breakpoint — which is the second half of that fix
+     and the more interesting half. The brand carried min-height:44px and was
+     still a 20px target with the word hidden (a bare emoji) and a 41px one with
+     the tail hidden (the icon and a short lead like "AV"). Fixing only the small
+     breakpoint left 37 of 52 pages still failing at 390 — the exact width of the
+     phone most of this trade is holding. A tap target is judged on its SHORTER
+     side at EVERY width, not at the one you thought of.
      Measured both times by tools/toolkit-gates/mobile-watertight.mjs. */
-  @media (max-width:380px){ .av-brand span{display:none} .av-bar{gap:8px;padding:8px 10px}
-    .av-req-tail{display:none} }
+  /* THE LADDER BELOW IS MEASURED, NOT GUESSED. It used to be a breakpoint —
+     everything gave up at 380px — and the numbers that condemned that guess are
+     in fitBar() further down this file. The runtime sets these two classes, in
+     this order, and only when the trade word is actually being cut on THIS page
+     at THIS width. What they give up is the order this file already argued for
+     above: the CTA's three-word tail first, the trade word last, a tap target
+     never. */
+  .av-bar.av-tight{gap:8px;padding:8px 10px}
+  .av-bar.av-tight .av-req-tail{display:none}
+  .av-bar.av-tighter .av-brand span{display:none}
   .av-menu{position:relative}
   /* TAP TARGETS >= 44px (operator 2026-08-04, the MOBILE-WATERTIGHT law). Measured
    * before the fix at a 390px viewport: Tools 39px, Wish 32px, fav 31px. These sit
@@ -545,13 +548,21 @@
       favBtn.addEventListener("click", function () { var on = favToggle(cur.href); favBtn.classList.toggle("on", on); favBtn.setAttribute("aria-pressed", on ? "true" : "false"); });
     }
 
-    return h("nav", { class: "av-bar", "aria-label": TRADE.name }, [
-      h("a", { class: "av-brand", href: "index.html", html: esc(TRADE.icon) + ' <span>' + esc(TRADE.brandLead) + '&nbsp;</span><b>' + esc(TRADE.brandTail).replace(/ /g, "&nbsp;") + '</b>' }),
+    /* The trailing &nbsp; that used to close this span is gone. The brand is a
+     * flex row with gap:8px, so the space was already there — and being INSIDE
+     * the span it counted as content, so every kit reported its word 3px wider
+     * than the word is. On /av/ ("AV", 24px of text) that phantom 3px was the
+     * whole truncation, which is a measurement lying about a page that fits. */
+    var bar = h("nav", { class: "av-bar", "aria-label": TRADE.name }, [
+      h("a", { class: "av-brand", href: "index.html", html: esc(TRADE.icon) + ' <span>' + esc(TRADE.brandLead) + '</span><b>' + esc(TRADE.brandTail).replace(/ /g, "&nbsp;") + '</b>' }),
       menu,
       favBtn,
       h("div", { class: "av-spacer" }),
       reqBtn
     ]);
+    window.__avBar = bar;
+    window.__avBrandWord = bar.querySelector(".av-brand span");
+    return bar;
   }
   /* ---- THE MENU'S FLOOR IS MEASURED, NEVER ASSUMED -------------------------
    * Where the Tools menu has to stop is a fact about the device, and a
@@ -588,6 +599,60 @@
   window.addEventListener("orientationchange", sizeMenuSoon);
   window.addEventListener("scroll", sizeMenuSoon, { passive: true });
   if (window.visualViewport) { window.visualViewport.addEventListener("resize", sizeMenuSoon); }
+
+  /* ---- THE BRAND GIVES ITS WORD UP LAST, AND ONLY WHEN IT IS MEASURED ------
+   * The bar degraded on a GUESSED breakpoint — everything gave up at 380px — and
+   * above that line nothing could give up anything, so the bar took what it
+   * needed out of the one item that can shrink: the trade's own name. The brand
+   * is the ONLY flex item here with min-width:0 on its text; the menu, the star
+   * and the CTA are all nowrap and immovable. Every pixel the bar is short comes
+   * out of the word, and text-overflow:ellipsis makes that quiet.
+   * MEASURED 2026-08-15 with playwright over 11 trades x hub/tool x 320/360/390/
+   * 430: 27 of 88 states rendered the word cut. On a TOOL page at 390px — the
+   * width most of this trade is holding — the word got 24px of the 74-111px it
+   * wanted, so /electrical/ read "E...", /low-voltage/ "L...", /plumbing/ "P...".
+   * At 430px, a big phone, seven kits were still cut. The kit you are standing in
+   * was unreadable on the page a text message drops you into.
+   * A breakpoint cannot know this. The deficit depends on the WORD ("AV" is 24px,
+   * "Low-Voltage" 111px), on whether the page carries the favourite star, and on
+   * the next trade's name, which is not written yet — so the ladder is measured
+   * per page per width instead. Two forced layout reads on a nav bar, run
+   * synchronously before the first paint so the bar never flashes wide, then
+   * rAF-debounced on resize. NOT wired to visualViewport: pinch-zoom does not
+   * change the layout viewport, and the operator's law is that a page must not
+   * alter when you zoom. */
+  function brandCut() {
+    var s = window.__avBrandWord;
+    return !!s && s.scrollWidth - s.clientWidth > 1;
+  }
+  function fitBar() {
+    var bar = window.__avBar; if (!bar) return;
+    bar.classList.remove("av-tight", "av-tighter");     // always judge the FULL bar
+    if (brandCut()) {
+      bar.classList.add("av-tight");                    // the CTA gives up its tail
+      if (brandCut()) bar.classList.add("av-tighter");  // the brand gives up its word
+    }
+  }
+  var fitQueued = false;
+  function fitBarSoon() {
+    if (fitQueued) return; fitQueued = true;
+    (window.requestAnimationFrame || setTimeout)(function () { fitQueued = false; fitBar(); });
+  }
+  window.addEventListener("resize", fitBarSoon);
+  window.addEventListener("orientationchange", fitBarSoon);
+  /* A window that never resized can still change the answer: the OS text size
+   * goes up, and every word in the bar gets wider inside a glass that did not.
+   * A resize listener is structurally blind to that — which is the same family
+   * as the defect this ladder exists for. So the BAR is observed, not the window.
+   * box:"border-box" is load-bearing: the two classes this sets change the gap
+   * and the side padding, so the CONTENT box moves when they toggle and the
+   * observer would re-enter itself forever. The border box is the bar's outer
+   * box — full width, 44px-floored children, unchanged by either class — so it
+   * moves only when the WINDOW or the TEXT does, which is exactly the question. */
+  function watchBar() {
+    if (!window.ResizeObserver || !window.__avBar) return;
+    new window.ResizeObserver(fitBarSoon).observe(window.__avBar, { box: "border-box" });
+  }
 
   /* ------------------------------------------------------------------ the well */
   /* WHERE YOU ARE STANDING IS THE STRONGEST THING THE WELL KNOWS ABOUT YOU.
@@ -993,6 +1058,8 @@
       + ";--deep:" + TRADE.accentDeep + ";--tint:" + TRADE.accentTint + ";}\n";
     document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
+    fitBar();                       // before the first paint — see fitBar() above
+    watchBar();
     mountKitBlock();
     // Toolkit is the canonical global; AV stays as an alias so every page the AV
     // toolkit already shipped (which calls AV.today() / AV.toggleFav()) keeps working.

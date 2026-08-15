@@ -16,6 +16,11 @@
  *    Reported WITH THE CULPRIT — the widest element that starts inside the
  *    viewport and ends outside it — because "something overflows by 14px" costs
  *    an hour and "the .hgrid at line N overflows by 14px" costs a minute.
+ *  · TEXT CUT IN THE NAV BAR — the brand is the one element in the toolkit that
+ *    is allowed to shrink, which makes it the one place a defect is silent: it
+ *    clips its own word instead of overflowing, so nothing above sees it. Added
+ *    2026-08-15 after this gate passed every page of every trade while ten kits
+ *    rendered their name as a single letter and an ellipsis at 390px.
  *  · TAP TARGETS — every control a thumb has to hit, measured at >= 44px on its
  *    short side. A control that is 38px tall passes every visual review ever
  *    held and fails in a glove (§SCARS 2026-08-05, which found exactly that on
@@ -193,9 +198,39 @@ const REVEALS = [
 /* Runs INSIDE the page. Returns findings, never throws — a gate that dies on one
  * page tells you nothing about the other thirty. */
 const MEASURE = (MIN_TAP) => {
-  const out = { overflow: null, taps: [], soft: [], covered: [], grew: [], clipped: [] };
+  const out = { overflow: null, taps: [], soft: [], covered: [], grew: [], clipped: [], cut: [] };
   const de = document.documentElement;
   const vw = de.clientWidth;
+
+  /* A CUT WORD IS A DIFFERENT WORD, and every check in this file was blind to it.
+     The sticky nav is the one place in the toolkit where text is allowed to
+     shrink — the brand carries min-width:0 so the bar can fit a phone — and that
+     makes it the one place where a defect is SILENT: nothing overflows (the word
+     was clipped instead), no tap target shrank (the brand holds 44px either way),
+     and the bar is sticky, not fixed, so the three fixed-bar checks below never
+     look at it. This gate reported PASS on every page of every trade while
+     /electrical/ rendered its brand as "E..." at 390px and /low-voltage/ as
+     "L..." — the two kits a man is most likely to confuse, reduced to the same
+     letter, on the width most of this trade is holding.
+     The assertion is threshold-free: inside the nav bar, an element that clips
+     its own overflow must have room for the text it contains. Hiding a word
+     OUTRIGHT is fine and is what the ladder does when the bar is genuinely out of
+     room — a missing word is honest, half a word is a lie. */
+  const navbar = document.querySelector('.av-bar');
+  if (navbar) {
+    navbar.querySelectorAll('*').forEach(el => {
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return;
+      if (cs.overflowX !== 'hidden' && cs.overflowX !== 'clip') return;
+      const by = el.scrollWidth - el.clientWidth;
+      if (by <= 1) return;
+      out.cut.push({
+        sel: el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : ''),
+        by, shown: el.clientWidth, wants: el.scrollWidth,
+        text: (el.textContent || '').trim().slice(0, 40),
+      });
+    });
+  }
 
   if (de.scrollWidth > vw) {
     // Name the culprit: the element that starts inside the glass and ends outside
@@ -413,6 +448,11 @@ for (const page of PAGES) {
           bad.push(`${tag} — HORIZONTAL OVERFLOW by ${r.overflow.by}px (scrollWidth ${r.overflow.scrollWidth} > clientWidth ${r.overflow.clientWidth})`
             + (c ? `\n              culprit: ${c.sel} runs ${c.over}px past the glass  "${c.text}"` : ''));
         }
+        /* Asserted on the BUMPED pass too, unlike everything below it: bigger
+           text inside the same glass is exactly how a word that fit stops
+           fitting, and the ladder that decides this is measured, so it has to be
+           measured back. */
+        r.cut.forEach(c => bad.push(`${tag} — TEXT CUT IN THE NAV BAR: ${c.sel} shows ${c.shown}px of the ${c.wants}px it needs, so ${c.by}px of the word is gone  "${c.text}"`));
         if (bump) continue;
         if (r.viewport) bad.push(`${tag} — VIEWPORT: ${r.viewport}`);
         r.taps.forEach(t => bad.push(`${tag} — TAP TARGET ${t.short}px < ${MIN_TAP}px: ${t.sel}  "${t.text}"`));
