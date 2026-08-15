@@ -58,6 +58,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line, then put your real hours in — a dollar an hour on a rained-out year is a different dollar.",
     chip: "#8A1C4B",
     audience: "Hands · foremen · anybody weighing a move"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "The ask you send whoever holds the keys to get a crew onto the roof — the hatch, the ladder, the lot for the truck, the hoist or crane window, and the heads-up that keeps everybody underneath clear. It's an ask, not a booking, and it says so.",
+    chip: "#D6528E",
+    audience: "Roofing → building engineer / facilities / property manager"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

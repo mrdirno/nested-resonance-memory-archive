@@ -73,6 +73,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and see what the truck and the on-call are really worth against the funds.",
     chip: "#2E64C8",
     audience: "Techs · leads · anybody weighing a move"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "You need onto a roof or into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the spaces, what you need open, who's coming, and the heads-up that stops a crew getting turned around at the door. It's an ask, not a booking, and it says so.",
+    chip: "#B85C1F",
+    audience: "HVAC → building engineer / facilities / security"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

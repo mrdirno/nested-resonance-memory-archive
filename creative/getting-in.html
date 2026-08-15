@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Getting In — Creative Field Toolkit</title>
+<meta name="description" content="The ask you send the venue or building manager to get a crew in: the day, the space, who's coming, and the heads-up that keeps a crew from getting walked before you've got the shot.">
+<meta name="apple-mobile-web-app-title" content="Getting In">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">you &rarr; whoever holds the keys</span>
+    <h1 id="title">Getting In</h1>
+    <p class="lede" id="lede">You need into a room somebody else locks.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn"></div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line the building always asks you for? Wish it better &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the ask</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* GETTING IN — the INTERFACE rung that crosses the OWNER'S fence, and the first
+ * tool in the program aimed at a party that is not another trade. Every word in
+ * it is in items.js under TOOLKIT_GETIN; this file is the same on all ten kits.
+ *
+ * THE ONE THING TO UNDERSTAND BEFORE CHANGING ANYTHING HERE: the heads-up ticks
+ * are not disclosures, they are HANDBACKS. Hot work, a sprinkler head, the fire
+ * alarm, a power-down — each of those is a permit the building owns and numbers,
+ * and a checkbox that reads "hot work ☑" manufactures the belief that ticking it
+ * satisfied something. Every one of those options therefore ends in a question
+ * aimed back at the man who owns the process. If a later cycle ever rewrites one
+ * of them into a state ("hot work permit obtained", "fire watch arranged"), that
+ * is the defect this page was designed around, not a tidy-up.
+ *
+ * AND THE PAGE HAS NO CHANNEL BACK, so it never says a word about approval:
+ * no reference number, no status, no "sent", no "approved". It puts text on a
+ * clipboard. The closing line says so in the document every single time, because
+ * the failure it prevents is a foreman parking six men at a locked door at 6pm
+ * on the strength of a message he sent and nobody answered.
+ */
+(function () {
+  "use strict";
+  var G = window.TOOLKIT_GETIN;
+  var TR = window.TOOLKIT_TRADE || {};
+
+  function put(id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; }
+  put("eyebrow", G.eyebrow);
+  put("title", G.toolName);
+  put("lede", G.lede);
+  var w = document.getElementById("warn");
+  if (w && G.warn) w.innerHTML = G.warn;
+  document.title = G.toolName + " — " + (TR.name || "Field Toolkit");
+
+  Note.mount({
+    key: "toolkit." + (TR.slug || "av") + ".gettingin.v1",
+    docName: G.docName,
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this ask? Your name, company and the building stay — the crew names do not.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Ask started",
+
+    /* THE HEADING IS THE ASK. He is reading this on a lock screen between two
+       other jobs: a first line that says only ACCESS REQUEST makes him open the
+       thread to find out whether it is for tonight, and a thread he has to open
+       is a thread he answers tomorrow. Date and window ride in the title; the
+       building rides on the second line. Both are docSkip'd below so they are
+       not also printed halfway down as fields. */
+    titleSuffix: function (get, u) {
+      return [u.doc("day"), get("window")].filter(Boolean).join("  ·  ");
+    },
+    /* NO "ASKED ON" STAMP HERE, and it is not an oversight. Every other document
+       in this program is a record of something that already happened, so it dates
+       itself. This one is about a night that has not come yet — and a second date
+       one line under the first is the exact ambiguity the whole page exists to
+       kill. The first live read of this document put "Sat, Aug 22" on line one and
+       "Aug 15, 2026" on line two, and a man reading that on a lock screen between
+       two jobs has to stop and work out which one is the night. The cadence goes
+       there instead: building, then how often, and both lines are triage. */
+    subline: function (get, u) {
+      return [get("site"), u.doc("run")].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "When you need in",
+        why: "A date, not “tomorrow” — he reads this at 7am the next morning and “tomorrow” is already wrong. The weekday prints with it so a typo in the number has something to disagree with.",
+        fields: [
+          { id: "day", kind: "date", label: "Day", docSkip: true },
+          { id: "window", kind: "text", label: "Window", hint: "— what you're ASKING for", ph: "6pm – 2am", docSkip: true },
+          { id: "run", kind: "pick", label: "How often", options: G.run, docSkip: true }
+        ]
+      },
+      {
+        title: "Where",
+        docHead: "WHERE WE NEED IN",
+        why: "His name for the room, off the door — not the job number and not what the drawings call it. He has three buildings with a 214 and one of them is a clean room.",
+        fields: [
+          { id: "site", kind: "text", sticky: true, label: "Building", hint: "— the way THEY say it", ph: G.phSite, docSkip: true },
+          {
+            id: "spaces", kind: "rows", label: "Rooms you need open", addLabel: "+ Another room",
+            cols: [
+              { id: "room", kind: "text", caps: true, label: "Room", ph: G.phRoom },
+              { id: "how", kind: "text", wide: true, label: "How you get to it", ph: G.phHow }
+            ]
+          }
+        ]
+      },
+      {
+        title: "What you're doing in there",
+        docHead: "WHAT WE'RE DOING",
+        why: "The quiet killer. He isn't nosy — the scope is what tells him whether this is a two-minute yes or a thing that needs a permit, an engineer and a week. Leave it vague and he has to assume the worse one.",
+        fields: [
+          { id: "scope", kind: "text", label: "In one line", hint: "— plain, no trade shorthand", ph: G.phScope },
+          { id: "howlong", kind: "text", label: "How long you'll be in", hint: "— the real number", ph: "about 4 hours", docLabel: "How long" }
+        ]
+      },
+      {
+        title: "What you need from him",
+        docHead: "WHAT WE NEED FROM YOU",
+        why: "Each of these is a thing a man on his end physically does. Tap only what you actually need — an escort you didn't need is a body he pulled off something else.",
+        fields: [
+          { id: "need", kind: "ticks", options: G.need }
+        ]
+      },
+      {
+        title: "Before he says yes",
+        tone: "loud",
+        docHead: "BEFORE YOU SAY YES",
+        why: "The top of this list is a courtesy. The bottom of it is what gets a crew walked out and a company off the vendor list — and every one of those hands the permit back to him, because it is his to issue and his to number, never ours to tick.",
+        fields: [
+          { id: "heads", kind: "ticks", options: G.heads },
+          { id: "loud", kind: "text", label: "How long the loud/dusty part runs", hint: "— it's what he warns his tenants with", ph: G.phLoud, docLabel: "The loud part" },
+          { id: "note", kind: "area", rows: 2, label: "Anything the chips don't cover", hint: "— say it here rather than not at all", ph: "we'll be cutting into the panel — short power bump, I'll set the exact window with your engineer" }
+        ]
+      },
+      {
+        title: "Who's coming",
+        docHead: "WHO'S COMING",
+        why: "A count is enough for most buildings. Names are what get badges cut where a desk checks ID — and they are the one thing Clear wipes, because a copied message ends up in a group chat.",
+        fields: [
+          { id: "count", kind: "text", label: "How many of us", ph: "3", docLabel: "How many" },
+          {
+            id: "crew", kind: "rows", label: "Names, if he needs them", addLabel: "+ Another name",
+            hint: "— the way it reads on their ID; a nickname bounces the badge system",
+            cols: [
+              { id: "name", kind: "text", wide: true, label: "Name", ph: "Mike Reyes" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "to", kind: "text", label: "Who you're sending it to", ph: G.phTo, docLabel: "For" },
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, day-of they call you, not the office", ph: G.phMe, docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: G.phCo, docLabel: "Company" }
+        ]
+      }
+    ],
+
+    /* THE THIRD LINE ONLY EXISTS WHEN NAMES DO. A standing sentence about dates
+       of birth on an ask that carries no names is noise; on one that does, it is
+       the line that keeps the next round of badging in HIS system instead of
+       pulling personal data onto a page that has no business holding it. */
+    closing: G.closing.concat([
+      function (get) {
+        var c = get("crew") || [];
+        var any = c.some ? c.some(function (r) { return r && r.name; }) : false;
+        if (!any) return "";
+        return "Names only on here — no dates of birth, no ID numbers. If your badging needs those, send me your form or your portal and I'll do it there.";
+      }
+    ]),
+
+    countLabel: function (get, s, touched) {
+      var n = (s.spaces || []).filter(function (r) { return r && r.room; }).length;
+      if (n) return n + " room" + (n === 1 ? "" : "s") + " on the ask";
+      return touched ? "Ask started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

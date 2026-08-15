@@ -981,12 +981,165 @@ locations is impersonation with a shelf life.
 
 **WHERE INTERFACE GOES NEXT:** (1) mount the drop-off block on the four order pages that
 carry the typed half but not the ticks — `electrical/pull-list`, `low-voltage/consumables`,
-`hvac/truck-stock`, `framing/the-load`. (2) The sub → owner access / escort / badge
-request, still unbuilt and still nobody's. (3) The long-lead **gear chase** the electrical
+`hvac/truck-stock`, `framing/the-load`. **This is now the strongest unbuilt INTERFACE rung
+and it is an ENGINE job, not a mount:** `plumbing/supply-house-order.html` forks its own
+Delivery/Will-call mode and the block hangs off that, while the other seven order pages are
+pure `shared/checklist-request.js` configs and **that engine has no fulfilment axis at
+all**. There is nothing on them for `Dropoff.mount` to attach to. ~~(2) The sub → owner
+access / escort / badge request~~ — **SHIPPED 2026-08-15 as `<trade>/getting-in.html`, all
+ten kits; see §GETTING IN below.** (3) The long-lead **gear chase** the electrical
 lens proposed and which is a different document from an order: the same list sent six
 times over four months, with a first-class *what I'm asking for* axis (a ship date ·
 released · dimensions and weight · approved schedules · freight) because inside one
 distributor those route to four different people. The ask/answer loop itself stays closed.
+(4) **The forward leg on the new boundary.** Ten trades can now ask a building for a night,
+and nothing reads the answer back the way `answer-back.html` reads a rough-in ask — the
+owner boundary is served in one direction only, and the GC's copy is the one that gets
+FORWARDED rather than sent.
+
+## GETTING IN — the first tool aimed at a party that is not a trade (2026-08-15)
+
+`<trade>/getting-in.html`, **all ten kits including creative** — one page file, ten
+`TOOLKIT_GETIN` configs, shape #2 (`shared/note.js`). The ask a sub sends the OWNER'S side
+— the building engineer, facilities, security, the school office, the man with the keys —
+to get a crew into a room somebody else locks: the night, the rooms, what he has to open,
+who's coming, and the heads-up that decides whether the crew finishes or gets walked out.
+
+**WHY THIS BOUNDARY IS DIFFERENT FROM THE OTHER NINE.** Every INTERFACE tool before it
+crosses to another TRADE, where being wrong costs an hour and a phone call. This one
+crosses to the party that can leave four men and a truck of gear standing at a locked door
+at six in the morning. Both field lenses independently ranked the same failure first, in
+the same words: **not a date.** A text that says "tomorrow night" is read at 7am the next
+morning and is already wrong.
+
+### THE HANDBACK RULE — the reason this page exists at all
+
+A skeptic given the program's own rules as weapons came back with a real kill: every noun
+in the proposal — escort, badge, after-hours, freight, dock, hot work, power-down — already
+has an owner and a **numbering authority** on the building side, and §THE SYSTEM OF RECORD
+says never compete with whoever owns and numbers the document. Hot work has a Hot Work
+Permit. A sprinkler main has an Impairment Permit and sometimes a call to the fire marshal.
+Badging has a visitor-management system. Ticking a box called *hot work* manufactures the
+belief that ticking it handled it, which is **worse than no tool**.
+
+The answer is not to drop those from the page — undisclosed hot work near a detector is the
+single fastest way onto a permanent do-not-use list, so silence is the worse failure. The
+answer is that **none of them is a status. Every one of them ends in a question aimed back
+at the man who owns the process:**
+
+> - We have to touch the fire alarm *(tell me who puts the panel on test — we don't)*
+> - A sprinkler head is in the way *(that's your impairment process — tell me how you run it)*
+> - Something has to come off power *(your engineer throws it, not us — tell me the window)*
+> - Hot work — torch or solder *(that's your permit — tell me how you want it done)*
+
+That is §THE SYSTEM OF RECORD applied one level down, to a checkbox. It is asserted as a
+RULE by `tools/toolkit-gates/getting-in.mjs`: any option naming a permitted activity must
+carry a sub that addresses HIM, and the words that make a permit sound satisfied are banned
+outright. A later cycle rewriting one of those into *"fire alarm coordinated"* would look
+like a tidy-up and would be the defect.
+
+### KILLED, AND STAYING KILLED
+
+**Lockout/tagout and confined space** — execution procedures with joint signatures and
+atmospheric records; their mere presence invites the belief that a tick covers them. **A
+fire-watch tick** — the building's determination, never ours to declare; it survives only
+inside the hot-work handback. **ICRA class I–IV logic** — encoding it fakes a process
+nobody here has touched; the plain ask *"patient or clinical space next door — tell me what
+you need from us before we start"* survives. **Any generated reference number, status field,
+sent state or approved toggle** — this page has no channel back and will never know.
+**Insurance limits, policy numbers, expiry dates** — money-adjacent, and myCOI owns it.
+**A risk score computed off the ticks** — a JHA wearing a form calculation.
+
+**WHAT SURVIVED THE COI CUT, and it is a judged call against the skeptic:** the ROUTING ask.
+*"Tell me who gets our COI — if it isn't already on file"* carries no number, no limit, no
+date and no money; it is a question about where to send a document, and the field lens
+ranked a missing certificate the single biggest day-killer on this boundary.
+
+### NAMES — the panel split three to one, and both halves were right
+
+The receiving lens needs full legal names days ahead or no badge gets cut. The skeptic
+wanted **no names at all**, because the whole mechanism of this program is *copy the output
+and paste it somewhere*, and the natural paste target is a crew group chat — PII broadcast
+with zero access control, by design, as the modal use of the Copy button. A jobsite phone
+is also lost, handed to a new hire, and unmanaged.
+
+So: **names are OPTIONAL rows, never required, and DOB / SSN / licence / badge numbers are
+not fields and never will be.** Names are also the one thing Clear wipes while the sender
+block stays. And the document spends a line saying so, but **only when names are actually
+on it** — a standing sentence about dates of birth on an ask carrying no names is noise:
+
+> Names only on here — no dates of birth, no ID numbers. If your badging needs those, send
+> me your form or your portal and I'll do it there.
+
+That line is worth more than the fields it replaces: it keeps the next round of badging in
+HIS system, which is where it already lives.
+
+### THE HEADING IS THE ASK
+
+The receiving lens wrote it unprompted: he reads this on a lock screen between two other
+jobs, and *"Hi, hope you're doing well"* sinks under the next five texts and gets answered
+tomorrow. So the document opens with the two lines he triages on and nothing else:
+
+```
+ACCESS REQUEST — Sat, Aug 22  ·  6pm – 2am
+Bishop Ranch 3  ·  Nights all week
+```
+
+**And there is deliberately NO "asked on" stamp.** Every other document in this program is
+a record of something that already happened, so it dates itself. This one is about a night
+that has not come yet, and the first live read of it put *"Sat, Aug 22"* on line one and
+*"Aug 15, 2026"* on line two — a second date one line under the first is the exact
+ambiguity the whole page exists to kill. The cadence went there instead.
+
+### WHAT THE ENGINE GREW, all additive, all no-ops for the eleven older note pages
+
+- **`kind: "date"`** — the phone's own date picker; state keeps raw ISO so it restores, the
+  document prints the **weekday** beside it, because a weekday that disagrees with the
+  number is the one typo a receiver catches.
+- **`u.doc(id)`** on `subline` and `titleSuffix` — asks for the value the DOCUMENT would
+  print rather than the value STATE holds. The spec pass on this engine had already flagged
+  the gap: `get()` returns the raw read, so a heading needing the printed form had to
+  re-derive it by hand.
+- **`data-f="<field id>"`** on every field wrapper — so a gate drives a page by the id the
+  config uses instead of by counting inputs or matching label prose. Matching on words means
+  a gate silently stops testing a field the day somebody improves its label, which is the
+  same class of drift as a hand-kept watch list, one layer out.
+
+### CREATIVE IS NOT A RESKIN, AND THE PRODUCTION LENS ARGUED IT SHOULDN'T SHARE AN ENGINE
+
+Its case: the container (when, where, how many, which door, which lift) is identical, but
+the **payload** asks a different question. A contractor's disclosure answers *what system
+are you touching and does it need a permit*. A crew's answers *what is going to appear in an
+image that leaves this building, and what are you moving that has to go back exactly as
+found*. Its own recommendation — *"share the atoms, not the assembly instructions"* — is
+precisely this program's architecture: the engine is the atom, the `TOOLKIT_GETIN` config is
+the assembly. So one engine, ten configs, and creative's heads-up list is genuinely its own
+document: haze finding the fire alarm (handed back the same way hot work is), what's on
+camera, what gets moved and restored, the generator's exhaust against their intakes, cable
+across a threshold so a fire door can't close, the real headcount including client and cast,
+asking THEM to hold their own noise during takes — the one disclosure in the whole program
+that runs the opposite direction — and what "wrap" actually means.
+
+**It is called Getting In, not "Shoot Day Confirm"** as the creative roster had it. *Confirm*
+is the exact defect the page is built to prevent.
+
+### THE GATES
+
+- `tools/toolkit-gates/getting-in.mjs` — drives the real page at 390px, sets every field,
+  and looks for each value BY VALUE in what the real Copy button puts on the clipboard;
+  asserts the heading carries date + window + what it is; asserts every ticked option's
+  **handback** survived into the message, because a tick that ships without its question is
+  the defect; asserts the ask-not-a-booking line and the ask for the window he is *actually*
+  granting; asserts the names-only line appears only with names on it; and asserts Clear
+  takes the crew and leaves the sender block.
+- `tools/toolkit-gates/note-live-fields.mjs` — **the BACKPORT**, and it is the same class the
+  order engine was caught on: change ONE field, alone, on a wiped device, and the copied text
+  must CHANGE. `docSkip` exempts a field BY NAME, read out of the page's own source, so an
+  author cannot silence the gate without saying in the config that the omission was on
+  purpose. Shape #2 cannot have the *drift* half of that bug — it binds `input` and `change`
+  once, on the whole form, by delegation, so there is no second list — but it can still drop
+  a field silently through a misspelled `kind` (BUILDERS returns undefined and the field
+  vanishes with no warning), a colliding `id`, or a `docSkip` copied in from another page.
 
 ## CREATIVE — trade #9, and the first one that is not a construction trade (2026-08-13)
 
@@ -1127,6 +1280,23 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A ROADMAP IS NOT A RECORD — THE RANKED LIST SENT A CYCLE TO BUILD SOMETHING THAT HAD
+  SHIPPED FOUR DAYS EARLIER (2026-08-15).** The private roster's INTERFACE ladder still
+  ranked *THE THIRD MESSAGE* as "now the interesting one", with a full design brief and a
+  named trap. It had shipped on 2026-08-11 as `shared/reconcile.js` — 38KB, loaded on nine
+  `rough-in-request.html` pages, implementing every constraint the entry specified. The
+  build was avoided by one line of the ship loop (*confirm the thing is not ALREADY SHIPPED
+  before you build it*) and by nothing else; the roster, the book and the cycle log all
+  still read as though it were owed. **The rule: whoever ships a rung strikes it in the
+  ranked list IN THE SAME CYCLE.** A list that ranks what is unbuilt is asserting that
+  everything on it is unbuilt, and a stale entry is not a missing update — it is a false
+  statement that the next cycle acts on. The same pass found rung 1 half-struck: the
+  supply-house edge was marked shipped, but what actually shipped answered a different
+  question than the entry predicted, and nobody wrote down which half was still owed.
+  **Corollary: strike it with what you LEARNED, not just a checkmark** — "shipped, and NOT
+  as this entry predicted, and here is what is still owed" is the only form of the update
+  that is worth reading a month later.
 
 - **A HEADING THAT SAYS "ONE" ABOVE A LIST OF THREE, IN THE PART THAT SHIPS (2026-08-15).**
   `shared/docspec.js` pluralises the PROSE heading over the omitted lines — "THE LINES

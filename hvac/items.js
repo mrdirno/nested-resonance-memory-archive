@@ -744,3 +744,81 @@ window.TOOLKIT_ANSWER = {
   window.TOOLKIT_ITEMS.writeinAx = [
   ];
 })();
+
+
+/* GETTING IN (getting-in.html) — same boundary as AV's: the building engineer,
+ * not another trade, and the same handback rule on every permit-adjacent tick.
+ * What's actually this trade's own: the second locked space is the mechanical
+ * room or penthouse, not a rack room, and four of the eleven heads-up ticks are
+ * ours — roof access and the hatch, brazing (our hot work), a duct detector
+ * sitting on the building's fire alarm, and the unit going down while we're on
+ * it, because a service call that kills somebody's air for four hours is the
+ * one heads-up this trade can't ship without.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "HVAC/R · you → whoever holds the keys",
+  lede: "You need onto a roof or into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the spaces, who’s coming, and the heads-up that stops a crew getting turned around at the door.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN, and it is chips rather than a segment on purpose: four options in
+     a segment on a 320px phone is the overflow the mobile gate caught last time. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. Every one of these is a thing a man on his end
+     physically does; none of them is a fact about us. The words are the ones a
+     foreman says out loud, not the ones a visitor-management portal uses. */
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The mechanical room / penthouse open too", sub: "not just the space we’re working in" },
+    { name: "Somebody who knows which unit’s which", sub: "the roof tag and the work order don’t always match" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. The top of this list is a courtesy; the bottom of it is
+     the reason a crew gets thrown off a site for good. Read the subs: the last
+     four do not report a state, they ask him how he wants it run. */
+  heads: [
+    { name: "It’ll be loud", sub: "anchors, cores — say the word and we’ll move it later" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "The corridor gets tight", sub: "gear staged while we’re in" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" },
+    { name: "The unit’s down while we’re on it", sub: "space runs without heat or cool till we’re back — tell me if that’s a problem" },
+    { name: "Roof access", sub: "tell me which hatch and who walks it with us" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "A duct detector on your fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "Hot work — brazing", sub: "that’s your permit — tell me how you want it done" }
+  ],
+
+  phSite: "Building C",
+  phRoom: "Mech Room 2",
+  phHow: "basement, past the electrical room",
+  phScope: "changing the compressor on the air handler",
+  phLoud: "core drill for the new line set, maybe 20 min",
+  phTo: "Ray — building engineer",
+  phMe: "Manny R — 510-555-0148",
+  phCo: "Apex Mechanical",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

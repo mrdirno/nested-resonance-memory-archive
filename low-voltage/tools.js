@@ -75,6 +75,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — because LV rates sit all over the map and the fringes are where two jobs actually separate.",
     chip: "#4B3F8F",
     audience: "Installers · leads · anybody weighing a move"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "The ask that gets you into a building's own security world — the night, the rooms, who's coming, and the heads-up the panel room needs before your work sets off what you're there to fix. It's an ask, not a booking, and it says so.",
+    chip: "#2B6CB0",
+    audience: "LV → building engineer / facilities / security"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

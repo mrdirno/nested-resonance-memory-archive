@@ -148,6 +148,12 @@
 
     function wrapField(def, control, extraCls) {
       var f = el("div", "f" + (def.span === false ? "" : " span2") + (extraCls ? " " + extraCls : ""));
+      /* THE FIELD ID REACHES THE DOM so a gate can drive this page by the name
+       * the config uses instead of by counting inputs or matching label prose.
+       * Matching on words means a gate silently stops testing a field the day
+       * somebody improves its label — which is the same class of drift as a
+       * hand-kept watch list, one layer out. */
+      if (def.id) f.setAttribute("data-f", def.id);
       if (def.label) {
         var lab = el("label");
         lab.appendChild(document.createTextNode(def.label + " "));
@@ -181,6 +187,36 @@
         read: function () { return trim(inp.value); },
         write: function (v) { inp.value = v == null ? "" : v; },
         clear: function () { inp.value = ""; }
+      };
+      return wrapField(def, inp);
+    }
+
+    /* A REAL DATE, BECAUSE "TOMORROW" IS NOT ONE. The receiving end of every
+     * access ask this engine now writes ranks a non-date FIRST among the things
+     * that cost it a day: a text that says "tomorrow night" is read at 7am the
+     * next morning and is already wrong, and "8/19" from a man in a truck can
+     * arrive as 19/8. So the control is the phone's own date picker and the
+     * document prints the WEEKDAY with it — the receiver checks a calendar, and
+     * a weekday that disagrees with the number is the one typo he will catch.
+     * State keeps the raw ISO so it restores; only the document sees the words. */
+    function fmtDate(v) {
+      var p = String(v || "").split("-");
+      if (p.length !== 3) return trim(v);
+      var d = new Date(+p[0], +p[1] - 1, +p[2]);
+      if (isNaN(d.getTime())) return trim(v);
+      return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    }
+
+    function buildDate(def) {
+      var inp = el("input");
+      inp.type = "date";
+      harden(inp, def);
+      nodes[def.id] = {
+        kind: "date", def: def, elem: inp,
+        read: function () { return trim(inp.value); },
+        write: function (v) { inp.value = v == null ? "" : v; },
+        clear: function () { inp.value = ""; },
+        docValue: function () { return fmtDate(inp.value); }
       };
       return wrapField(def, inp);
     }
@@ -370,6 +406,7 @@
         }
       };
       var f = el("div", "f span2");
+      if (def.id) f.setAttribute("data-f", def.id);
       if (def.label) {
         var lab2 = el("label");
         lab2.appendChild(document.createTextNode(def.label + " "));
@@ -584,6 +621,7 @@
       };
       addRow();
       var f = el("div", "f span2");
+      if (def.id) f.setAttribute("data-f", def.id);
       if (def.label) {
         var lab3 = el("label");
         lab3.appendChild(document.createTextNode(def.label + " "));
@@ -597,7 +635,7 @@
     var BUILDERS = {
       text: buildText, area: buildArea, select: buildSelect, seg: buildSeg,
       pick: buildPick, ticks: buildTicks, impact: buildImpact, clock: buildClock,
-      rows: buildRows
+      rows: buildRows, date: buildDate
     };
 
     /* ── render the page from the spec ─────────────────────────────────────── */
@@ -713,15 +751,21 @@
     }
 
     function buildDoc() {
+      /* `u.doc(id)` is how a heading or a subline asks for the value the DOCUMENT
+       * would print rather than the value STATE holds. They are the same string
+       * for every kind but `date`, where state is ISO so it can restore and the
+       * document is "Sat, Aug 22" — and the top of this document is the one line
+       * the receiver triages off a lock screen, so it has to be the words. */
+      var u = { today: todayStr, doc: docVal };
       var head = cfg.docName || "";
       if (cfg.titleSuffix) {
-        var suf = trim(cfg.titleSuffix(get));
+        var suf = trim(cfg.titleSuffix(get, u));
         if (suf) head += " — " + suf;
       }
       var out = head;
 
       if (cfg.subline) {
-        var sub = trim(cfg.subline(get, { today: todayStr }));
+        var sub = trim(cfg.subline(get, u));
         if (sub) out += "\n" + sub;
       }
 

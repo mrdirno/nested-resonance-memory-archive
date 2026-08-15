@@ -59,6 +59,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package. Put yours next to theirs line by line — wages, fringes, dues, per diem — and send the real difference to whoever is asking you to drive.",
     chip: "#2E64C8",
     audience: "JWs · foremen · anybody thinking of booking out"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "The ask you send the building engineer to get a crew into a locked gear room — the night, the rooms, who's coming, and the heads-up that keeps you from getting turned away at the door. It's an ask, not a booking, and it says so.",
+    chip: "#B8860B",
+    audience: "Electrical → building engineer / facilities / security"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

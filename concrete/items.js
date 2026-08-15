@@ -1310,3 +1310,91 @@ window.TOOLKIT_ITEMS.writeinAx = [
     "wide": true
   }
 ];
+
+/* ── GETTING IN (shape #2 — shared/note.js) ─────────────────────────────────
+ * Ported from AV's reference build — getting-in.html is byte-identical across
+ * all ten kits, and AV's own handback rule (av/items.js, above its
+ * TOOLKIT_GETIN) still applies verbatim: a heads-up hands a permit back, it
+ * never reports one as obtained. Only this vocabulary changes.
+ *
+ * WHAT MOVES FOR CONCRETE: the ask isn't for a locked room, it's a truck and
+ * a pump onto a lot, at an hour nobody keeps office hours for — plus the one
+ * fact AV never had to carry: once the drum's turning there's no pause
+ * button. `need` trades the rack room for the route in, the lot, a washout
+ * spot and water; `heads` adds the early trucks, the point of no return once
+ * we start, and the pour going off limits after. Same bars as the rest of
+ * this file — nothing here sizes, doses, spaces or specs anything.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Concrete · you → whoever holds the keys",
+  lede: "You need a truck and a pump into a lot somebody else locks, at an hour nobody else is up for. Send the ask that gets a yes before the plant loads it — the route in, who’s coming, and the heads-up that keeps a truck from sitting at a locked gate with the drum still turning.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN — UNCHANGED from AV. Same four options, same reasoning: chips
+     instead of a segment so a 320px phone doesn’t overflow. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. AV’s rack room/IDF line — a second space
+     beyond the room being worked in — becomes the washout spot: not the pour
+     itself, somewhere else on the property. The freight elevator and the
+     dock, both interior-building asks with no concrete equivalent, become
+     the route in and the lot — where the trucks and the pump actually go. */
+  need: [
+    { name: "Gate unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The route in", sub: "wide enough for the trucks, clear overhead for the pump" },
+    { name: "The lot", sub: "somewhere for the trucks and the pump to stage and turn around" },
+    { name: "Water on site", sub: "a spigot or a hose bib we can reach" },
+    { name: "The pour area cleared", sub: "cars and anything else out of the way before the trucks roll" },
+    { name: "Somewhere to wash out", sub: "not just the pour itself — a spot you’re okay with, and who hauls it off" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "trucks and a pump moving in before anyone’s normally there" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. Three of AV’s eleven had no concrete equivalent at
+     all — ceiling tiles, furniture, a clinical space next door — and become
+     this trade’s real deal-breakers: trucks staging before anyone’s ready
+     for them, the point past which the pour cannot be paused, and the slab
+     being off limits once it’s down. The rest keep AV’s shape; the last five
+     still hand the permit back instead of reporting one obtained. */
+  heads: [
+    { name: "It’ll be loud", sub: "trucks, the pump, vibrators — say the word and we’ll move the window" },
+    { name: "Dust and water from cutting and coring", sub: "some of it finds whatever’s below us — tell me what barrier you want up" },
+    { name: "Trucks and the pump staging in the lot, early", sub: "before your gate’s normally open — tell me if that’s a problem" },
+    { name: "Once we start, we can’t stop", sub: "tell me now about anything that has to happen around us mid-pour" },
+    { name: "The lot gets tight", sub: "gear and trucks staged while we’re pouring" },
+    { name: "We might set off the alarm", sub: "trucks and equipment near the building before you’re normally open" },
+    { name: "We have to touch the fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "A sprinkler head is in the way", sub: "that’s your impairment process — tell me how you run it" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "Hot work — torch-cutting or welding", sub: "that’s your permit — tell me how you want it done" },
+    { name: "The pour’s off limits after", sub: "tell me who needs across it and when, before we close it off" }
+  ],
+
+  phSite: "Riverside MOB",
+  phRoom: "Grid C4-C7",
+  phHow: "south gate, follow the cones to the ramp footings",
+  phScope: "pouring grade beams and ramp footings — pump truck on site",
+  phLoud: "pump and trucks from 6am, done by early afternoon",
+  phTo: "Ray — GC super",
+  phMe: "Mike R — 415-555-0134",
+  phCo: "Vega Concrete",
+
+  /* closing AND warn — UNCHANGED from AV, verbatim. Neither line names a
+     room or a building; both hold exactly as written for a truck and a lot. */
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

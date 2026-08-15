@@ -287,3 +287,95 @@ window.TOOLKIT_WAITING = {
   phAsked: "Aug 4 — or “on the call Tuesday”",
   phNote: "anything that makes it easier for them to find it"
 };
+
+/* ── GETTING IN — shape #2, shared/note.js, ported from AV: the CONTAINER
+ * survives untouched, the PAYLOAD is rebuilt. When, where, how many, what
+ * vehicle, which door, who’s meeting us — a contractor and a crew fill that
+ * box the same way. What goes inside it does not: a contractor discloses
+ * what system he’s touching and whether it needs a permit; a crew discloses
+ * what’s going to appear in an image that leaves the building, and what gets
+ * moved and has to go back exactly as found. A manager burned by an
+ * electrician holds the next invoice; one burned by a crew that never comes
+ * back has no leverage at all — which is why haze finding the fire alarm
+ * outranks everything here, the way hot work outranks everything for AV.
+ * NAMED “Getting In,” never “Confirm”: believing a location is confirmed
+ * when it was only asked is the exact failure this page exists to prevent.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Creative · you → whoever owns the location",
+  lede: "You need into a building somebody else locks. Send the ask that gets a yes on the first try — the day, the space, who’s coming, and the heads-up that keeps a crew from getting walked before you’ve got the shot.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN, and it is chips rather than a segment on purpose: four options in
+     a segment on a 320px phone is the overflow the mobile gate caught last time. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. Every one of these is a thing a man on his end
+     physically does — the words are a crew’s, not a visitor-management
+     portal’s. AV’s twelfth ask, “the rack room / IDF open too,” answers a
+     question this trade never has (there is no IT closet to open), so it is
+     replaced, and one more is added — the one extra this port allows —
+     because a shoot’s real gap is a place to put people and gear that is
+     off camera, and power that is truly ours, not a shared circuit that
+     trips the moment the lights come up. */
+  need: [
+    { name: "Doors unlocked for load-in", sub: "nobody has to stay and watch us carry gear in" },
+    { name: "Somebody to let us in", sub: "meet us at the door, let us in, that’s it" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to park", sub: "the van, or the grip truck if we’re bringing one" },
+    { name: "The space cleared", sub: "off your calendar, your people out of it for the window" },
+    { name: "Somewhere off-camera for cast and gear", sub: "a room, a corner — it just needs to be out of the shot" },
+    { name: "Real power we can actually pull from", sub: "tell us which circuit, and what else is already on it" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving gear through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES — where this diverges hardest, because the failure
+     mode is a different one. AV warns a building about what a CONTRACTOR
+     does to its systems; almost none of that touches a shoot. This list is
+     ranked instead by what actually gets a crew thrown off a location —
+     haze finding a fire alarm first, by a wide margin — and that line ends
+     in the same handback AV’s hot-work line runs on: a question back to
+     whoever owns the panel, never a tick that reads as a status. Two of
+     AV’s eleven survive almost untouched, because they were never about AV
+     specifically — any after-hours crew with gear ties up a corridor and
+     trips a motion sensor the same way a low-voltage tech does. */
+  heads: [
+    { name: "Haze will find your fire alarm", sub: "tell me who puts the detectors on test — we don’t touch them" },
+    { name: "What ends up on camera", sub: "your staff, your signage, anyone else’s logo — tell us what’s off-limits" },
+    { name: "We’ll be moving your furniture", sub: "goes back exactly where it was — say now if anything’s off-limits" },
+    { name: "Where the generator’s exhaust goes", sub: "tell us where your intakes are so we don’t stage it near them" },
+    { name: "Cable across a threshold", sub: "means a door can’t fully close — tell us if that’s a problem" },
+    { name: "The real headcount", sub: "client and cast too, not just crew — everyone who’ll be in the building" },
+    { name: "Asking your side to go quiet", sub: "for a few minutes at a time — tell us if that’s workable" },
+    { name: "When we’re actually out", sub: "to us, “wrap” means gear’s gone and your keys are back in hand" },
+    { name: "The corridor gets tight", sub: "gear staged there while we’re working" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" }
+  ],
+
+  phSite: "Kestrel Hall",
+  phRoom: "Suite 4B",
+  phHow: "2nd flr, past the front desk",
+  phScope: "shooting product photos and a short video, in and out the same day",
+  phLoud: "the generator runs most of the afternoon, off by 6",
+  phTo: "Renee — venue manager",
+  phMe: "Jordan Cole — 415-555-0171",
+  phCo: "Cole Picture Co.",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

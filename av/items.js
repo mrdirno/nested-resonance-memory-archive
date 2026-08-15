@@ -512,3 +512,116 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Ken — site super", phFrom: "Rico — Acme AV", phOff: "A-201 rev 4",
   paste: "Building C — what we need from AV — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nCR-204 · confirm the display height before we rock\nLobby · your conduit stubbed above the hard lid\nBoard room · is the rack landing the week of the 18th"
 };
+
+/* GETTING IN (getting-in.html) — the ask that crosses the OWNER'S fence: the
+ * building engineer, facilities, security, the school office, whoever actually
+ * holds the keys. Shape #2, shared/note.js. Every other cross-boundary tool in
+ * this program aims at another TRADE; this one aims at the party that can leave
+ * a crew standing at a locked door with a truck full of gear, which is the one
+ * boundary where being wrong costs a whole day instead of an hour.
+ *
+ * WHAT A FOUR-LENS PANEL SETTLED, and the two lenses that disagreed:
+ *  · THE FIRST LINE IS THE WHOLE ASK. The man reading this is looking at a lock
+ *    screen between two other jobs. "Hi, hope you're well" sinks under the next
+ *    five texts and gets answered tomorrow; a first line that reads ACCESS
+ *    REQUEST — Sat, Aug 22 · 6pm–2am gets approved from the preview pane. So the
+ *    date, the window and the building ride in the HEADING, not in a field
+ *    halfway down. (The receiving lens wrote that sentence unprompted.)
+ *  · A DATE, NEVER "TOMORROW". Ranked first among the things that cost the
+ *    receiving side a day. The control is the phone's date picker and the
+ *    document prints the weekday beside it — see shared/note.js `date`.
+ *  · THE HEADS-UP LIST HANDS THE NUMBER BACK, and this is the whole reason the
+ *    skeptic did not kill the page. Hot work, a sprinkler head, the fire alarm,
+ *    a power-down: every one of those is a PERMIT the building owns and numbers,
+ *    and a tick that reads "hot work ☑" manufactures the belief that ticking it
+ *    handled it. So none of them is a status. Each one ENDS IN A QUESTION back
+ *    to the man who owns the process — which is the same rule that says never
+ *    compete with whoever owns and numbers the document, applied one level down,
+ *    to a checkbox.
+ *  · KILLED OUTRIGHT, and staying killed: lockout/tagout and confined space (an
+ *    execution procedure with joint signatures, not an announcement — their mere
+ *    presence invites the belief that a tick covers them) · a fire-watch tick
+ *    ("arranged" is the building's determination, not ours) · ICRA class I–IV
+ *    logic (encoding it fakes a process nobody here has touched; the plain ask
+ *    survives) · any generated reference number, status, or "approved" toggle
+ *    (this page has no channel back and will never know) · insurance limits,
+ *    policy numbers and expiry dates (money-adjacent, and myCOI owns it) · a
+ *    risk score computed off the ticks (a JHA wearing a form calculation).
+ *  · WHAT SURVIVED THE COI CUT, and it is a judged call: the ROUTING ask. "Tell
+ *    me who gets our COI" carries no number, no limit, no date and no money — it
+ *    is a question about where to send a document, and the field lens ranked a
+ *    missing certificate the single biggest day-killer on this boundary.
+ *  · NAMES, and the panel split three-to-one. The receiving lens needs full
+ *    legal names days ahead or no badge gets cut; the skeptic wanted no names at
+ *    all because a copied message lands in a group chat and a lost phone is a
+ *    roster. Both are right about their half, so: names are OPTIONAL rows, never
+ *    required, and DOB / SSN / licence / badge numbers are not fields and never
+ *    will be. The document says so out loud and hands the badging form back —
+ *    that line is worth more than the fields it replaces.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "AV · you → whoever holds the keys",
+  lede: "You need into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the rooms, who’s coming, and the heads-up that stops a crew getting walked out at nine.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN, and it is chips rather than a segment on purpose: four options in
+     a segment on a 320px phone is the overflow the mobile gate caught last time. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. Every one of these is a thing a man on his end
+     physically does; none of them is a fact about us. The words are the ones a
+     foreman says out loud, not the ones a visitor-management portal uses. */
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The rack room / IDF open too", sub: "not just the room we’re working in" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. The top of this list is a courtesy; the bottom of it is
+     the reason a crew gets thrown off a site for good. Read the subs: the last
+     five do not report a state, they ask him how he wants it run. */
+  heads: [
+    { name: "It’ll be loud", sub: "anchors, cores — say the word and we’ll move it later" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "The corridor gets tight", sub: "gear staged while we’re in" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" },
+    { name: "We have to touch the fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "A sprinkler head is in the way", sub: "that’s your impairment process — tell me how you run it" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "Hot work — torch or solder", sub: "that’s your permit — tell me how you want it done" },
+    { name: "Patient or clinical space next door", sub: "tell me what you need from us before we start" }
+  ],
+
+  phSite: "Bishop Ranch 3",
+  phRoom: "IDF 3B",
+  phHow: "3rd flr, behind the elevator lobby",
+  phScope: "pulling cable from 3B up to the penthouse and terminating",
+  phLoud: "hammer drill about 2 hrs, quiet by 9",
+  phTo: "Diane — building engineer",
+  phMe: "Mike R — 415-555-0134",
+  phCo: "Bayline Integration",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

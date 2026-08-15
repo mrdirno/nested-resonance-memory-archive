@@ -350,3 +350,87 @@ window.TOOLKIT_NIGHTSEAL = {
     { v: "nothing", label: "Nothing — carry on" }
   ]
 };
+
+
+/* ── GETTING IN (shape #2 — shared/note.js) ─────────────────────────────────
+ * GETTING IN, ported to roofing — same shape and same handback rule as AV's;
+ * see that header for the design rationale. What's different is where this
+ * trade's fence actually sits: almost everything it needs is OUTSIDE and
+ * ABOVE, so the ask leans on the hatch, the ladder or stair to it, the lot
+ * for the truck, and the hoist or crane window — not a locked door. It's
+ * also the trade whose work most literally rains on somebody through a
+ * ceiling, and whose smoke and fumes go straight into the building's own
+ * intakes, so the heads-up list trades AV's ceiling tiles and furniture for
+ * falling debris, closed-off ground, intake smoke, de-powered rooftop
+ * units, open weather, and the hatch itself staying open.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Roofing · you → whoever holds the keys",
+  lede: "You need onto a roof somebody else has to open up. Send the ask that gets a yes on the first try — the night, the section, who’s coming, and the heads-up that keeps a crew from getting turned away at the gate.",
+  docName: "ACCESS REQUEST",
+
+  // HOW OFTEN — unchanged from AV; chips rather than a segment for the same
+  // mobile-overflow reason.
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  // WHAT I AM ASKING HIM TO DO. Kept AV’s universal asks; swapped the rack
+  // room / IDF line for this trade’s real second door — the roof itself —
+  // and added one genuinely roofing ask: where the dumpster or chute sits.
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "Somewhere to set the dumpster or the chute", sub: "close enough we’re not carrying tear-off across the lot" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The roof hatch or penthouse door unlocked too", sub: "not just the ladder or stair up to it" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  // BEFORE YOU SAY YES. Kept the universal ones that still apply — loud,
+  // dust, a tight route, an alarm — and dropped ceiling tiles and furniture,
+  // which don’t happen on a roof. Everything else is this trade’s own: what
+  // falls, what has to be roped off underneath, where the smoke goes, what
+  // goes off power, what the weather can do to an open roof, and the hatch
+  // itself. The last three hand a real permit back, same rule as AV’s.
+  heads: [
+    { name: "It’ll be loud", sub: "tear-off, hoist and compressors — say the word and we’ll shift the noisy part" },
+    { name: "Dust and grit off the tear-off", sub: "tell me if anything downwind needs covering" },
+    { name: "The stairwell or hatch route gets tight", sub: "material staged there while we’re moving it up" },
+    { name: "We’ll trip the roof door or motion alarm", sub: "coming and going through the hatch after hours" },
+    { name: "Things come off the edge — tools, old material, debris", sub: "tell me who’s keeping people clear of the drop zone" },
+    { name: "The ground under us has to be closed off", sub: "tell me how you want that stretch roped or barricaded" },
+    { name: "Smoke and fumes will pull into your roof intakes", sub: "tell me if you want those units shut down or covered while we run" },
+    { name: "Rooftop units go off power while we’re working around them", sub: "your tech throws the disconnect, not us — tell me the window" },
+    { name: "The roof’s open tonight and it might rain", sub: "tell me if you want us to seal early or hold off starting" },
+    { name: "Hot work — torch or kettle", sub: "that’s your permit — tell me how you want it run" },
+    { name: "Roof access — the hatch stays open while we’re up", sub: "tell me if you want it manned or chained open" }
+  ],
+
+  phSite: "Building B",
+  phRoom: "Section C",
+  phHow: "roof hatch off the top-floor corridor",
+  phScope: "tearing off Section C and setting new membrane",
+  phLoud: "tear-off and hoist, quiet by 11",
+  phTo: "Carl — building engineer",
+  phMe: "Ray — 415-555-0198",
+  phCo: "Summit Roofing",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

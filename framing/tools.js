@@ -62,6 +62,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and piece is not the rate. Put yours next to theirs line by line and use what you actually averaged — the comparison is only worth what that number is worth.",
     chip: "#7A5A05",
     audience: "Hands · foremen · anybody weighing a move"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "You're the loudest crew this building will host, and the one that shows up with the most material behind it. Send the ask that gets a yes on the first try — the route in, where it stages, how loud and for how long, and the heads-up that keeps your name off the complaint list. It's an ask, not a booking, and it says so.",
+    chip: "#C4632B",
+    audience: "Framing → building engineer / facilities / security"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

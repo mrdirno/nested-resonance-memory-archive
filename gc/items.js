@@ -600,3 +600,88 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Sal — Local 38", phFrom: "Ken — site super", phOff: "P-201 rev 2",
   paste: "Building C — holes and backing — Aug 9\n\nJob: Building C\nFrom: Sal — Local 38\n\nLevel 2 · core through the deck at gridline D before we set carriers\nRestroom 210 · backing in the wet wall before rock\nSite · after-hours access Saturday for the tie-in"
 };
+
+
+/* GETTING IN — every other trade fills this out for its OWN guys; the GC
+ * fills it out for a SUB's. `co` below is HIS outfit vouching for the ask,
+ * not the crew's — sender and the people walking through the door are two
+ * different companies, so whose crew it is has to ride in `scope`, never in
+ * his own hands (see phScope). He's also the party every other trade's copy
+ * of this page gets forwarded TO, so the wording has to hold up when he's
+ * relaying somebody else's ask upward without retyping it.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "GC · you → the owner / building",
+  lede: "Your sub needs into space the owner locks. Send the ask that gets a yes on the first try — the night, the rooms, whose crew it is, and the heads-up that stops them getting walked out at nine.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN — unchanged from AV. Same overflow reason: four in a segment on
+     a 320px phone is the mobile gate’s own kill. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. AV’s 11 universal asks, unchanged, plus the
+     one swap this trade needs: a GC rarely needs a single ancillary closet
+     opened (AV’s rack room / IDF) — he needs the whole assigned space, because
+     the crew he’s bringing works across it, not in one room. And one addition
+     AV never needed: a body from the owner’s side to walk it before the crew
+     starts, because the GC is the one who answers for what shape the space
+     was in before his sub touched it. */
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The floor / suite / tenant space", sub: "not just the one room — the crew’s working across it" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Somebody from your side to walk it with us first", sub: "before the crew starts" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. Six of AV’s 11 are universal and stay word for word.
+     Four are swapped for a GC’s real ones — several subs on site at once and
+     the real headcount, the owner’s own staff and furniture still in the
+     space, noise that runs the whole floor for days rather than a two-hour
+     burst, and one sub touching a life-safety system without the GC knowing
+     in advance which one it’ll be. That last one still hands the permit back
+     exactly the way AV’s fire-alarm and sprinkler lines did — never a state,
+     always a question aimed at the man who owns the process. */
+  heads: [
+    { name: "It’ll be loud — for days, not hours", sub: "demo or framing running the whole floor — tell me if there’s a day it can’t happen" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Their staff — and their stuff — still in there", sub: "people working beside us, their furniture and equipment in the way — tell me what to protect" },
+    { name: "The corridor gets tight", sub: "gear staged while we’re in" },
+    { name: "Several of our subs in there at once", sub: "the real headcount’s higher than it looks — I’ll give you the number, not just one crew’s" },
+    { name: "One of our subs has to touch the fire alarm or a sprinkler head", sub: "tell us who puts it on test and how you want it run" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "Hot work — torch or solder", sub: "that’s your permit — tell me how you want it done" },
+    { name: "Patient or clinical space next door", sub: "tell me what you need from us before we start" }
+  ],
+
+  phSite: "Northgate Business Park",
+  phRoom: "Suite 214",
+  phHow: "2nd flr — through the north stair, not the lobby",
+  phScope: "our electrical sub pulling new circuits into the suite",
+  phLoud: "core drill for about 2 hours, wrapped by 9",
+  phTo: "Priya — owner’s rep",
+  phMe: "Ken R — 415-555-0119",
+  phCo: "Highline Construction",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

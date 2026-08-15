@@ -552,3 +552,81 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Rico — Acme AV", phFrom: "Dave — Local 3", phOff: "AV-101 rev 2",
   paste: "Building C — what we need from the electrician — Aug 9\n\nJob: Building C\nFrom: Rico — Acme AV\n\nCR-204 · back box + 2-gang mud ring · 60 AFF · before rock\nCR-204 · 1in conduit to the ceiling above the rack · before rock\nBoard room · dedicated 20A at the credenza · before trim"
 };
+
+
+/* GETTING IN (getting-in.html) — ported from AV, same shape and same rules. The
+ * locked room is the gear room here, not an IDF, and "something has to come off
+ * power" already fit this trade before anybody touched it, so it stayed as-is.
+ * Three heads-up items didn't earn their place — hot work/torch-or-solder, the
+ * sprinkler head, the patient/clinical flag — swapped for what actually stops
+ * an electrician at a locked door: a real outage, live work in the gear room,
+ * and temp power off the building's own service. One need got added too: the
+ * panel schedule. Every swap still hands the permit back to whoever owns it.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Electrical · you → whoever holds the keys",
+  lede: "You need into a room somebody else locks — usually the gear room too. Send the ask that gets a yes on the first try — the night, the rooms, who’s coming, and the heads-up that stops a crew getting walked out at nine.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN, and it is chips rather than a segment on purpose: four options in
+     a segment on a 320px phone is the overflow the mobile gate caught last time. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. Every one of these is a thing a man on his end
+     physically does; none of them is a fact about us. The words are the ones a
+     foreman says out loud, not the ones a visitor-management portal uses. */
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The electrical room / gear room open too", sub: "not just the room we’re working in" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "The panel schedule, if you have one", sub: "so we’re not tracing breakers all night" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. The top of this list is a courtesy; the bottom of it is
+     the reason a crew gets thrown off a site for good. Read the subs: the last
+     five do not report a state, they ask him how he wants it run. */
+  heads: [
+    { name: "It’ll be loud", sub: "anchors, cores — say the word and we’ll move it later" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "The corridor gets tight", sub: "gear staged while we’re in" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" },
+    { name: "We have to touch the fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "A real outage — not just a circuit", sub: "tell me what actually goes dark and for how long" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "We’ll have the gear room open and live", sub: "arc-flash boundary roped off — tell me if your people need in while we’re there" },
+    { name: "We’re pulling temp power off your service", sub: "tell me where you want us tapping and if it needs its own meter" }
+  ],
+
+  phSite: "Building C",
+  phRoom: "Elec Rm 2B",
+  phHow: "basement, past the loading dock",
+  phScope: "swapping the panel and re-terminating the feeders",
+  phLoud: "hammer drill for the strut, about an hour",
+  phTo: "Frank — chief engineer",
+  phMe: "Dave R — 415-555-0148",
+  phCo: "Bayview Electric",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

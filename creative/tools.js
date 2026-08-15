@@ -36,12 +36,21 @@ window.TOOLKIT_TOOLS = [
     desc: "The things you can’t finish without, in one list with the date you asked on each — and what each one is holding up. Tap a row as it moves: still waiting → they said it’s coming → in hand. Send the ones outstanding as one short message instead of a fourth “any update?”.",
     chip: "#5A3FC0",
     audience: "Editor / shooter → the client who owes you something"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "You need into a building somebody else locks. Send the ask that gets a yes on the first try — the day, the space, what you need open, who’s coming, and the heads-up that keeps a crew from getting walked before you’ve got the shot. It’s an ask, not a booking, and it says so.",
+    chip: "#C2660F",
+    audience: "Shooter / producer → the venue or building manager"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
   // Next off the panel's ranked list (av/AV_SOCIETY.md §CREATIVE): Before I Export
-  // (checklist, the deliverable questions answered before the render), Shoot Day
-  // Confirm (checklist, access and logistics — deliberately NOT a call sheet, and
-  // the 2026-08-13 safety lens set its hard rails: no access-code field ever, no
-  // minors as a category, no map/geolocation/address autocomplete, and no
-  // consequence-of-non-compliance line, which is a contract term).
+  // (checklist, the deliverable questions answered before the render). "Shoot Day
+  // Confirm" shipped above as GETTING IN instead — "confirm" is the exact defect
+  // the page exists to prevent: a producer who believes he's confirmed a location
+  // when he's only asked it. The 2026-08-13 safety lens's hard rails held through
+  // the rename: no access-code field ever, no minors as a category, no map/
+  // geolocation/address autocomplete, and no consequence-of-non-compliance line,
+  // which is a contract term.
 ];

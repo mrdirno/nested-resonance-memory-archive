@@ -545,3 +545,74 @@ window.TOOLKIT_ANSWER = {
     ax("Where it goes", [n("where does it go")].concat(["Hooks & support", "Ends, jacks & plates", "Rack & closet", "Firestop & sleeves", "Labels & marking", "Anchors, screws & bits", "Batteries, tape & truck stuff"]), true)
   ];
 })();
+
+
+/* GETTING IN (getting-in.html) — av's shape #2 engine, this trade's words.
+ * AV can trip a motion sensor walking through after hours; this trade IS
+ * the motion sensor, the door contact and the camera. So `need` swaps AV's
+ * borrowed "rack room / IDF" for the head end / MDF, and adds the one ask
+ * AV never has to make: somebody on THEIR side to watch a door or a camera
+ * while we test it. `heads` trades four of AV's entries for the alarms this
+ * trade actually sets off — each still hands the process back to whoever
+ * runs that system, never reports a state of ours.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Low-voltage · you → whoever holds the keys",
+  lede: "You need into rooms already wired to call somebody — the panel, the doors, the cameras — before you’ve even started the work. Send the ask that gets a yes on the first try: the night, the rooms, who’s coming, and the heads-up that keeps your own work off tonight’s alarm log.",
+  docName: "ACCESS REQUEST",
+
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The head end / panel room open too", sub: "not just the room we’re working in" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" },
+    { name: "Their security or IT on standby", sub: "we can’t test a door or a camera without somebody watching it on their side" }
+  ],
+
+  heads: [
+    { name: "It’ll be loud", sub: "anchors, cores — say the word and we’ll move it later" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "Cameras will be down while we’re on them", sub: "blind spot in your coverage till we bring them back — tell me if that’s a problem for tonight" },
+    { name: "We’ll set off door-forced and door-held alarms", sub: "your dispatch sees them start to finish — tell me if you want us to warn them first" },
+    { name: "We have to touch the fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "The access-control system will be in a test state", sub: "cards may not open what they should till we’re clear — tell me if anybody needs a door live before then" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "We’ll be working in the same closet as the fire panel", sub: "not touching it — tell me if you want somebody with us in there" },
+    { name: "Patient or clinical space next door", sub: "tell me what you need from us before we start" }
+  ],
+
+  phSite: "Crown Point Plaza",
+  phRoom: "MDF 2",
+  phHow: "2nd flr, past the security desk",
+  phScope: "adding two door readers and terminating back to the head end",
+  phLoud: "coring the mullion for the reader, about an hour, done by 8",
+  phTo: "Priya — director of security",
+  phMe: "Ray M — 415-555-0198",
+  phCo: "Sentinel Systems",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};
+

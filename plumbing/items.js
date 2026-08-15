@@ -342,3 +342,81 @@ window.TOOLKIT_ANSWER = {
   phJob: "Building C", phTo: "Ken — site super", phFrom: "Sal — Local 38", phOff: "A-201 rev 4",
   paste: "Building C — close-in list — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nLevel 2 · all your sleeves in before Thursday’s pour\nRestroom 210 · carriers set and backing in before rock\nRoof · vents through before dry-in"
 };
+
+/* GETTING IN (getting-in.html) — ported from AV's reference block with the
+ * shape, handback rules and no-channel-back discipline untouched; only the
+ * words change. The locked room becomes the mechanical room / riser closet,
+ * not the rack room / IDF. The heads-up list trades AV's fire-alarm-panel
+ * touch and bare power-down for this trade's own: restrooms out of service, a
+ * sprinkler head OR MAIN in the way, water going off to a riser or the whole
+ * building, and hot work named for what it actually is here — torch or solder
+ * on copper. `run`, `closing` and `warn` carry over verbatim; a line that
+ * already works doesn't get rewritten.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Plumbing · you → whoever holds the keys",
+  lede: "You need into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the rooms, who’s coming, and the heads-up that stops a crew getting turned away at the door.",
+  docName: "ACCESS REQUEST",
+
+  /* HOW OFTEN, and it is chips rather than a segment on purpose: four options in
+     a segment on a 320px phone is the overflow the mobile gate caught last time. */
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  /* WHAT I AM ASKING HIM TO DO. Every one of these is a thing a man on his end
+     physically does; none of them is a fact about us. The words are the ones a
+     foreman says out loud, not the ones a visitor-management portal uses. */
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "Somewhere to put the van" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "The mechanical room / riser closet open too", sub: "not just the room we’re working in" },
+    { name: "Somebody who knows where the shutoffs are", sub: "the as-builts don’t match what’s in the wall" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  /* BEFORE YOU SAY YES. The top of this list is a courtesy; the bottom of it is
+     the reason a crew gets thrown off a site for good. Read the subs: the last
+     four do not report a state, they ask him how he wants it run. */
+  heads: [
+    { name: "It’ll be loud", sub: "anchors, cores — say the word and we’ll move it later" },
+    { name: "Dust", sub: "coring and cutting — tell me what barrier you want up" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "The corridor gets tight", sub: "gear staged while we’re in" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" },
+    { name: "Restrooms out of service", sub: "tell me which ones you can be without, and for how long" },
+    { name: "A sprinkler head or main is in the way", sub: "that’s your impairment process — tell me how you run it" },
+    { name: "Water’s going off — a riser or the whole building", sub: "tell me how much notice you need and I’ll hold to the window" },
+    { name: "Hot work on copper — torch or solder", sub: "that’s your permit — tell me how you want it done" },
+    { name: "Patient or clinical space next door", sub: "tell me what you need from us before we start" }
+  ],
+
+  phSite: "Riverside Medical Center",
+  phRoom: "Mech 2B",
+  phHow: "basement level, past the boiler room",
+  phScope: "re-piping the domestic riser from the basement to the 4th floor",
+  phLoud: "core drilling about 2 hrs, done by 9",
+  phTo: "Carlos — building engineer",
+  phMe: "D. Okafor — 415-555-0177",
+  phCo: "Harbor Mechanical",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

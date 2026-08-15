@@ -61,6 +61,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The salary is not the package. Put what you're on now next to the offer — bonus that actually landed, truck, phone, what they put in, what you pay back — and compare the whole thing.",
     chip: "#2E7D4F",
     audience: "Supers · PMs · anybody weighing an offer"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "One of your subs needs into space the owner locks. Send the ask that gets a yes on the first try — the night, the rooms, whose crew it is, what you need open, and the heads-up that stops them getting walked out at nine. It's an ask, not a booking, and it says so.",
+    chip: "#B4560F",
+    audience: "GC → owner's rep / facilities / building engineer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

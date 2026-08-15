@@ -724,3 +724,72 @@ window.TOOLKIT_BACKING = {
     ax("Drop", [n("where's it going")].concat(["Ground floor", "2nd floor", "3rd floor", "4th or higher — say which", "Basement", "Outside — laydown or driveway", "Gang box / job trailer", "Split it — see the note"]), true)
   ];
 })();
+
+
+/* ── GETTING IN (getting-in.html) — shape #2, shared/note.js ──────────────
+ * Ported from AV's, same shape. AV chases a locked room; this trade chases
+ * the building's patience — it's the loudest crew in the building and the
+ * one that shows up with the most material behind it. Four heads-up lines
+ * swap for real ones: loud all day, a powder-actuated gun on the deck, dust
+ * through the whole floor, board staged in a corridor for days. `run`,
+ * `closing` and `warn` are AV's, unchanged.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Framing · you → whoever holds the keys",
+  lede: "You’re the loudest crew this building will host, and the one that shows up with the most material behind it. Send the ask that gets a yes on the first try — the route in, where it stages, how loud and for how long, and the heads-up that keeps your name off the complaint list.",
+  docName: "ACCESS REQUEST",
+
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "Nights all week" },
+    { v: "Ongoing — I’ll flag changes" }
+  ],
+
+  need: [
+    { name: "Doors unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The freight elevator" },
+    { name: "The dock" },
+    { name: "A route in that isn’t through the lobby", sub: "hoist, stairwell, or a window opening — tell me which one’s ours" },
+    { name: "Somewhere to put the van" },
+    { name: "Somewhere to stage material for the run", sub: "not just the room we’re working in — board and studs sit there for days" },
+    { name: "The room cleared", sub: "off the calendar, desks empty" },
+    { name: "Nobody there — we’ll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "we’ll be moving through zones" },
+    { name: "Tell me who gets our COI", sub: "if it isn’t already on file" }
+  ],
+
+  heads: [
+    { name: "It’ll be loud, and it runs all day", sub: "cutting, nailing, sanding — tell me the hours you need it quiet" },
+    { name: "Dust — the whole floor, not just this room", sub: "there’s a saw station running somewhere on your floor — tell me if you want a barrier or the return shut down" },
+    { name: "Ceiling tiles out", sub: "I’ll tell you which corridor and for how long" },
+    { name: "Working over your furniture", sub: "lift or ladder above desks" },
+    { name: "Material staged in the corridor for days", sub: "board, studs and bead sit there till we rock it — tell me where you’d rather it wait" },
+    { name: "We’ll set off motion and door contacts", sub: "after hours, moving between rooms" },
+    { name: "Powder-actuated shots into the deck", sub: "sounds like something worse than it is — comes in bursts, floor to floor" },
+    { name: "We have to touch the fire alarm", sub: "tell me who puts the panel on test — we don’t" },
+    { name: "A sprinkler head is in the way", sub: "that’s your impairment process — tell me how you run it" },
+    { name: "Something has to come off power", sub: "your engineer throws it, not us — tell me the window" },
+    { name: "Patient or clinical space next door", sub: "tell me what you need from us before we start" }
+  ],
+
+  phSite: "Building C",
+  phRoom: "Suite 300",
+  phHow: "3rd flr, off the freight lobby",
+  phScope: "framing walls and hanging board for the tenant build-out",
+  phLoud: "boom truck and track shots first thing, saws running all day, quiet by 4",
+  phTo: "Gary — building engineer",
+  phMe: "Mike R — 415-555-0172",
+  phCo: "Apex Interiors",
+
+  closing: [
+    "This is an ask, not a booking — nobody rolls until you reply. Wrong night? Tell me which one works and we’ll take it.",
+    "Saying yes: tell me the window you’re actually giving us and who’s meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

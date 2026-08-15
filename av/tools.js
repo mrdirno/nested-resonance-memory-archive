@@ -69,6 +69,13 @@ window.AV_TOOLS = [
     desc: "Two offers, two shapes, and nobody quotes the same half. Put what you're on now next to the offer — rate, what the shop puts in, what comes back out — and see the real gap before you answer the email.",
     chip: "#4B3F8F",
     audience: "Techs · leads · anybody weighing an offer"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "You need into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the rooms, what you need open, who's coming, and the heads-up that stops a crew getting walked out at nine. It's an ask, not a booking, and it says so.",
+    chip: "#B4560F",
+    audience: "AV → building engineer / facilities / security"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];
