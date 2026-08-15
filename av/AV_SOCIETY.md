@@ -1297,10 +1297,28 @@ with revision rounds, and who is also their own producer.**
 4. **Before I Export** (checklist → request) — the deliverable questions answered before the
    render. It wins by ASKING and never asserting. Ratios and frame rates are safe as *user
    picks* (geometry and arithmetic the trade says out loud); codecs, bitrates, resolutions
-   and platform names are not.
-5. **Shoot Day Confirm** (checklist → request) — access and logistics 2–3 days out.
-   Survives ONLY because it is deliberately **not a call sheet** and must never grow into
-   one; StudioBinder owns and numbers that document.
+   and platform names are not. **Now the top unbuilt rung on this trade.**
+5. **Shoot Day Confirm** (checklist → request) — ⚠️ **HALF SHIPPED 2026-08-15** as
+   `getting-in.html`, and the honest record is that it shipped the **venue half** — the ask
+   that gets you into somebody else's building — not the whole rung. The half still unbuilt
+   is the **participant-facing** one: the short "how the day goes" note to talent, a client
+   coming to set, or a location owner (call time, where, how long, what happens, who to
+   ask for). Every one of this trade's 4 tools and 13 documents points at a payer, a venue
+   or the next editor; nothing points at the person who has to SHOW UP. Survives ONLY
+   because it is deliberately **not a call sheet** and must never grow into one;
+   StudioBinder owns and numbers that document.
+6. **The Write-Up Setup** — ✅ **SHIPPED 2026-08-15** (`write-up.html` + `docs.js`), and it
+   was never on this list, which is the finding. The panel that built this roster was asked
+   what to BUILD NEW and answered well; **nobody asked what this trade was OWED.** Creative
+   shipped with two of the five document engines and ran live carrying three of twelve
+   shared modules while DOCS work landed on the other nine trades — a gap no ranked roster
+   could surface, because a roster of ideas has no column for a sibling's engine you never
+   inherited. The check that finds it is mechanical and takes one command: grep every
+   trade for every `shared/*.js` it loads and read the holes. **Run it before ranking
+   anything, on every trade, forever.** This cycle took creative from 3 of 12 shared
+   modules to 5 (`docspec` and, riding with it, `find`). Still owed here: **`package`**
+   (the total-package bundle every other trade ships) and **`reconcile`**; `checklist-request`
+   and `pickfilter` land the day *Before I Export* ships.
 Deferred with reasons: *What's in the drop* (folds into Before I Export as a second output
 mode, not a sixth page) · *Turnover Sheet* (narrow — real only for a first job with a new
 finisher) · *Booking Confirm* (a different boundary — hiring, not client delivery, and one
@@ -2533,6 +2551,53 @@ the gear list happened to carry two of the three was the first thing the new gat
 **AND THE POSSESSIVE:** the fold split `'` into a word break, so "plumbers tape" and
 "plumber's tape" folded differently and one of the two objects went missing for anyone who
 types the way people actually type. Apostrophes are deleted, not broken on.
+
+### 2026-08-15 — AN OVERRIDE INHERITS EVERY FIELD IT DOES NOT DECLARE, AND FIVE OF THEM PUT A GC IN THE BLOCK
+`creative/docs.js` re-addressed eight shared documents for a trade with no jobsite, and its
+own header said so: *"almost all of them change only the addressing, the name and the
+reason."* That sentence was true about what the overrides DECLARED and false about what the
+user got. `library()` merges field by field, so an override that names `name`, `to` and
+`why` inherits everything else verbatim — and five of them shipped `secondary: ["a
+one-paragraph version to paste into the GC's change form"]`, `from: "the lead on the job"`
+(which the engine prints as the user's OWN ROLE in the block's first sentence) and an `omit`
+ending *"worth nothing in a back-charge meeting"* into the instruction block a freelancer
+pastes into their AI. **The library ROW looked completely re-addressed; the BLOCK still said
+GC**, and the row is the only thing an author looks at.
+**Nothing on the board could see it.** `node --check` passes, the docspec gate passes — it
+asserts the block is non-empty and carries the eleven blocks and every omit line, not that
+the words in them belong to this trade — mobile passes, and the page returns 200. The check
+that found it is a **field-by-field walk of the MERGED library**, not the override: rebuild
+what `library()` actually returns, then read every emitted string. Two more fell out of the
+same walk: the ONE surviving shared document with no override at all (`meeting-minutes`,
+reaching a freelancer as *"Coordination Meeting Notes"* with **"oac"** among its search
+terms — the exact failure the other eight exist to prevent, sitting unnoticed in the middle
+of the list that fixes it), and an override left declared for a document that had since been
+DROPPED, which merges into nothing and reads as coverage.
+**The rule: re-addressing a shared document means walking every field it OWNS — `from`,
+`secondary`, `omit`, `halt`, `facts` — not the three that show on the row.** And a header
+that claims the addressing is fixed is a claim about the block, not about the diff.
+
+### 2026-08-15 — THE FIX I BROUGHT TO THE PANEL WAS THE ONE IT KILLED
+The delta roster flagged `brief-recap` correctly, it was fixed with `standalone: true`, and
+then the BACKPORT rider swept all eleven trades for the same class and surfaced one more
+candidate: the shared `toolbox-talk`, minutes family, delta ON. The argument was clean —
+each talk is a different topic with a different attendance list, so writing the second as an
+update to the first risks dropping the evidence the record exists to hold, structurally the
+same as `confirming-note`. **It was wrong, and only an adversarial pass reading the code
+rather than the argument caught it.** `deltaOf()` has exactly TWO behavioural call sites;
+attendance and topic are emitted **identically on both branches** (`WHO WAS THERE` is an
+always-printed spine heading, `facts` is printed unconditionally by VALIDATION, and site and
+date are in the mandatory header line), so the change bought nothing it claimed. What it
+would have COST is precise: the standalone branch deletes *"Carry every unresolved open item
+forward automatically, with the date it was first raised"* and the 48-hour escalation — on
+the one shared document whose omitted line is *"what was raised BY the crew and what you did
+about it"*, across all ten inheriting trades. Its paste rule is also a WIDER carry than
+delta's (*"keep its facts and dates"*, unqualified, versus delta's enumerated open-items /
+dates / header), so it would have made the contamination worse. **The precedent's own test
+is whether the underlying EVENT recurs on the job, not whether each instance differs** — a
+coordination meeting has a different agenda every time and still reports deltas. The
+one-instance exception stays at one instance. **A rider that fires is not a rider that ships:
+sweeping the class is mandatory, and finding nothing to fix is a valid result.**
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -3798,3 +3863,5 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   entry, 7 tools, accent identical to `trade.js`, `mason` tokens measured precision-1 against
   all 1,027 personas — P5 pushes it.
   https://mrdirno.github.io/nested-resonance-memory-archive/masonry/
+
+- `2026-08-15` — **[AXIS:BACKPORT]** **THE TRADE WHOSE WEEK IS WRITING WAS THE ONE WITH NO WRITE-UPS** · **before:** the well was dry (0 new, 0 building, 23 shipped, every trade) and no family was owed, so the stalest axis governed — BACKPORT. The gap was not on any roster and took one command to find: grep every trade for every `shared/*.js` it loads. Ten trades carry **docspec · package · reconcile · find**; **creative carried none of the four** — `toolkit`, `note`, `rowlog`, and that is all, 3 of 12 shared modules — while the DOCS axis shipped work on the other nine. `creative/trade.js` NAMES the docspec among the five engines it inherits (*"this program owns five document ENGINES — the checklist→request, the note, the row log, the reconcile and the docspec"*) and shipped with two. The previous cycle had already swept it and named it (*"`creative` is the one trade with no `docs.js` and no write-up page at all"*); this is that debt paid. · **after:** `creative/docs.js` + `creative/write-up.html` + one registry line — **13 documents live**, 5 written for this trade (the cut note that goes out with every version · where the media is · what they approved and on which cut · handing a project to another editor · the recap after the kickoff call) and **all 8 surviving shared documents re-addressed**, because a freelancer who reads *"to: the GC super"* has been told in three words that the kit was not built for them. **THE FIRST `drop` IN THE PROGRAM — nine trades and none ever declared one — and the third drop is the finding:** `change-request` is dropped because this trade **already SHIPS that document as a page**. On the ten construction kits the pair coexists because a T&M tag is a signed TICKET with hours and materials on it, structurally a different artefact from a change NARRATIVE; here they are one artefact with two front doors, and §THE GATE says ONE job per tool. First time a shipped TOOL has displaced a shared DOCUMENT, which is a real measurement of how far the shared library actually carries into a trade that is not construction. **THE GATE'S DELTA ROSTER CAUGHT THE AUTHOR ON THE FIRST RUN:** `brief-recap` is minutes-shaped and does NOT recur, so the second one would have been written as an update to a different conversation — on the one document whose whole purpose is to be read months later to settle what was in scope. `standalone: true`, the engine's documented opt-out, second instance in the program. **BACKPORT RIDER FIRED — AND THE PANEL KILLED MY OWN FIX.** Swept all 11 trades for the same class; one other candidate surfaced, the SHARED `toolbox-talk`, and an adversarial pass reading the code rather than the argument **REFUTED it on mechanism**: `deltaOf()` has two behavioural call sites, attendance and topic are emitted identically on both branches (`WHO WAS THERE` is an always-printed spine heading, `facts` is printed unconditionally by VALIDATION), so the change bought nothing — while DELETING *"carry every unresolved open item forward, with the date it was first raised"* and the 48-hour escalation on the one document whose omitted line is *"what was raised BY the crew"*, across all 10 inheriting trades. **Not shipped. A rider that fires is not a rider that ships.** **AN ADVERSARIAL FAN-OUT (4 lenses: refute · safety · voice · product-coherence) FOUND SIX DEFECTS IN THE FIRST DRAFT, ALL FIXED BEFORE SHIP:** a **deemed-acceptance clause** (*"I'll work to it as written if I don't hear back"*) in the one file whose own rails ban consequence clauses · a **bare statement of legal effect** imported from construction (*"the clock only starts when somebody is told in writing"*) into a trade with no notice clause · **five overrides that declared `name`/`to`/`why` and INHERITED** `secondary: ["a one-paragraph version to paste into the GC's change form"]`, `from: "the lead on the job"` and an `omit` ending *"worth nothing in a back-charge meeting"* **straight into the pasted block, while the file's own header claimed the addressing was fixed** (§SCARS) · `media-report` prescribing a second copy its own `note` forbids · `meeting-minutes` the ONE shared document reaching this trade untouched, as *"Coordination Meeting Notes"* with **"oac"** in its search terms · **19 vocab pairs that corrected nothing** (*"rough cut -> rough cut"*) under the heading *"the ones my phone gets wrong"*. Two shipped-tool COLLISIONS were caught the same way and fixed in words, not by deletion: `delay-notice` carried **"waiting on"** in its `aka` — the name of a shipped page — and `look-ahead` had borrowed that page's own hook sentence verbatim. And `trade` was **"creative production"**, a services-page category nobody says; it now emits *"we do video work"*. **SWEPT AND NOT FIXED, named so it is not lost:** the engine's `Office / PM contact` default field label is a shared string that reads wrong for a one-person shop but right on ten construction kits — engine work, not a config fix; and **every trade's nav brand clips to one letter at 390px** (`clientW` 24px on creative, roofing and electrical alike) while `creative/trade.js` reasons in prose that *"'Electrical' (ten) is the measured worst case and fits"* — a claim the live page contradicts on all 11 kits, pre-existing and owed its own cycle. **THE ROSTER LESSON, ratcheted into §CREATIVE:** the panel that ranked this trade was asked what to BUILD NEW and answered well; **nobody asked what it was OWED**, and a roster of ideas has no column for a sibling's engine you never inherited. Run the module-adoption grep before ranking anything, forever. Gates, all re-run GREEN AGAINST PRODUCTION: **docspec 11 trades / 182 checks / 0 failing** locally and **14/14 on creative against the live site** · **mobile-watertight `creative/write-up.html` at 320/360/390/430 × default and bumped, live** · **no-third-party 107/107** · **menu-reachability 728 checks / 104 pages** · the MERGED library walked field-by-field for construction routing (the only check that could see the inheritance leak) · and the live page driven at 390px end to end — picked a document, block 12,354 chars, omit line present, *"we do video work"*, zero GC strings, zero page errors, zero overflow. Storefront: one line added to `creative`'s `tools[]` in `fieldToolkits.ts` — P5 pushes it. https://mrdirno.github.io/nested-resonance-memory-archive/creative/write-up.html
