@@ -3954,3 +3954,80 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   https://mrdirno.github.io/nested-resonance-memory-archive/masonry/
 
 - `2026-08-15` — **[AXIS:BACKPORT]** **THE TRADE WHOSE WEEK IS WRITING WAS THE ONE WITH NO WRITE-UPS** · **before:** the well was dry (0 new, 0 building, 23 shipped, every trade) and no family was owed, so the stalest axis governed — BACKPORT. The gap was not on any roster and took one command to find: grep every trade for every `shared/*.js` it loads. Ten trades carry **docspec · package · reconcile · find**; **creative carried none of the four** — `toolkit`, `note`, `rowlog`, and that is all, 3 of 12 shared modules — while the DOCS axis shipped work on the other nine. `creative/trade.js` NAMES the docspec among the five engines it inherits (*"this program owns five document ENGINES — the checklist→request, the note, the row log, the reconcile and the docspec"*) and shipped with two. The previous cycle had already swept it and named it (*"`creative` is the one trade with no `docs.js` and no write-up page at all"*); this is that debt paid. · **after:** `creative/docs.js` + `creative/write-up.html` + one registry line — **13 documents live**, 5 written for this trade (the cut note that goes out with every version · where the media is · what they approved and on which cut · handing a project to another editor · the recap after the kickoff call) and **all 8 surviving shared documents re-addressed**, because a freelancer who reads *"to: the GC super"* has been told in three words that the kit was not built for them. **THE FIRST `drop` IN THE PROGRAM — nine trades and none ever declared one — and the third drop is the finding:** `change-request` is dropped because this trade **already SHIPS that document as a page**. On the ten construction kits the pair coexists because a T&M tag is a signed TICKET with hours and materials on it, structurally a different artefact from a change NARRATIVE; here they are one artefact with two front doors, and §THE GATE says ONE job per tool. First time a shipped TOOL has displaced a shared DOCUMENT, which is a real measurement of how far the shared library actually carries into a trade that is not construction. **THE GATE'S DELTA ROSTER CAUGHT THE AUTHOR ON THE FIRST RUN:** `brief-recap` is minutes-shaped and does NOT recur, so the second one would have been written as an update to a different conversation — on the one document whose whole purpose is to be read months later to settle what was in scope. `standalone: true`, the engine's documented opt-out, second instance in the program. **BACKPORT RIDER FIRED — AND THE PANEL KILLED MY OWN FIX.** Swept all 11 trades for the same class; one other candidate surfaced, the SHARED `toolbox-talk`, and an adversarial pass reading the code rather than the argument **REFUTED it on mechanism**: `deltaOf()` has two behavioural call sites, attendance and topic are emitted identically on both branches (`WHO WAS THERE` is an always-printed spine heading, `facts` is printed unconditionally by VALIDATION), so the change bought nothing — while DELETING *"carry every unresolved open item forward, with the date it was first raised"* and the 48-hour escalation on the one document whose omitted line is *"what was raised BY the crew"*, across all 10 inheriting trades. **Not shipped. A rider that fires is not a rider that ships.** **AN ADVERSARIAL FAN-OUT (4 lenses: refute · safety · voice · product-coherence) FOUND SIX DEFECTS IN THE FIRST DRAFT, ALL FIXED BEFORE SHIP:** a **deemed-acceptance clause** (*"I'll work to it as written if I don't hear back"*) in the one file whose own rails ban consequence clauses · a **bare statement of legal effect** imported from construction (*"the clock only starts when somebody is told in writing"*) into a trade with no notice clause · **five overrides that declared `name`/`to`/`why` and INHERITED** `secondary: ["a one-paragraph version to paste into the GC's change form"]`, `from: "the lead on the job"` and an `omit` ending *"worth nothing in a back-charge meeting"* **straight into the pasted block, while the file's own header claimed the addressing was fixed** (§SCARS) · `media-report` prescribing a second copy its own `note` forbids · `meeting-minutes` the ONE shared document reaching this trade untouched, as *"Coordination Meeting Notes"* with **"oac"** in its search terms · **19 vocab pairs that corrected nothing** (*"rough cut -> rough cut"*) under the heading *"the ones my phone gets wrong"*. Two shipped-tool COLLISIONS were caught the same way and fixed in words, not by deletion: `delay-notice` carried **"waiting on"** in its `aka` — the name of a shipped page — and `look-ahead` had borrowed that page's own hook sentence verbatim. And `trade` was **"creative production"**, a services-page category nobody says; it now emits *"we do video work"*. **SWEPT AND NOT FIXED, named so it is not lost:** the engine's `Office / PM contact` default field label is a shared string that reads wrong for a one-person shop but right on ten construction kits — engine work, not a config fix; and **every trade's nav brand clips to one letter at 390px** (`clientW` 24px on creative, roofing and electrical alike) while `creative/trade.js` reasons in prose that *"'Electrical' (ten) is the measured worst case and fits"* — a claim the live page contradicts on all 11 kits, pre-existing and owed its own cycle. **THE ROSTER LESSON, ratcheted into §CREATIVE:** the panel that ranked this trade was asked what to BUILD NEW and answered well; **nobody asked what it was OWED**, and a roster of ideas has no column for a sibling's engine you never inherited. Run the module-adoption grep before ranking anything, forever. Gates, all re-run GREEN AGAINST PRODUCTION: **docspec 11 trades / 182 checks / 0 failing** locally and **14/14 on creative against the live site** · **mobile-watertight `creative/write-up.html` at 320/360/390/430 × default and bumped, live** · **no-third-party 107/107** · **menu-reachability 728 checks / 104 pages** · the MERGED library walked field-by-field for construction routing (the only check that could see the inheritance leak) · and the live page driven at 390px end to end — picked a document, block 12,354 chars, omit line present, *"we do video work"*, zero GC strings, zero page errors, zero overflow. Storefront: one line added to `creative`'s `tools[]` in `fieldToolkits.ts` — P5 pushes it. https://mrdirno.github.io/nested-resonance-memory-archive/creative/write-up.html
+
+- `2026-08-15` — **[AXIS:BACKPORT]** **THE KIT YOU WERE STANDING IN WAS ONE LETTER AND AN
+  ELLIPSIS** · **before:** the well was dry (0 new, 0 building, 23 shipped, every trade) and
+  no family was owed, so the previous cycle's swept-and-not-fixed note governed: *"every
+  trade's nav brand clips to one letter at 390px … pre-existing and owed its own cycle."*
+  Measured rather than taken on trust — playwright over 11 trades × hub/tool × 320/360/390/
+  430: **27 of 88 states rendered the trade word CUT**, and on a TOOL page at 390px the word
+  got **24px of the 74–111px it wanted** — `/electrical/` read "E…", `/low-voltage/` "L…",
+  `/plumbing/` "P…". At **430px, a big phone, seven kits were still cut.** Cause: the bar
+  degraded on a GUESSED breakpoint (everything at 380px), so above that line nothing could
+  give up anything and the bar took what it needed out of the one flex child that can
+  shrink — the trade's own name, quietly, behind an ellipsis. · **after:** the ladder is
+  MEASURED per page per width — two forced layout reads before the first paint, then a
+  ResizeObserver on the BAR (not the window, because the OS text size changes the answer
+  without the window ever resizing), giving up the CTA's three-word tail first and the trade
+  word last, which is the order this file already argued for and never actually performed.
+  **0 of 88 cut; 77 of 88 now render the full word where 17 did**; the 11 that still hide it
+  are genuinely out of room, and `/av/` and `/gc/` keep their word at 320px where the old
+  breakpoint hid every kit's whether it fitted or not. **BACKPORT RIDER: FIRED BY
+  CONSTRUCTION** — one shared runtime, all 11 trades, 108 pages, same commit. **THE GATE
+  HAD A HOLE AND TWO NEW ASSERTIONS CLOSE IT:** mobile-watertight measured overflow, tap
+  targets, the fixed bar's height, its clipped children and what it covers, and passed every
+  page of every trade while this shipped — five correct measurements, one shared blind spot,
+  and the blind spot was the only element in the toolkit ALLOWED to shrink. Now asserted
+  (hiding a word is honest, half a word is a lie), and negative-tested against the pre-fix
+  runtime. **THE FIX THEN BROKE THE MENU, WHICH IS THE MORE USEFUL HALF:** a wider brand
+  pushes the Tools button right, the dropdown hangs `left:0` off it at `min-width:250px`, and
+  it ran off the glass on ten trades — caught by `menu-reachability`, NOT by the gate that
+  named the original bug. Clamped, in two attempts that are both now §SCARS: written first
+  against `innerWidth` (which under mobile emulation GROWS to cover the overflow, so it
+  corrected by exactly the amount that preserved it) and then ordered after the max-height
+  read (which consumes `innerHeight`, inflated by the browser ZOOMING OUT to fit the very
+  panel that was overflowing — fixing the width left the menu 47px too tall). The Tools
+  menu is now a mobile-watertight REVEAL, sampled per trade. Gates: **mobile-watertight 108
+  pages × 320/360/390/430 × default and bumped text, menu open — 0 failing** ·
+  **menu-reachability 735 checks / 105 pages PASS, zero horizontal overflow** · brand
+  re-measured **against production: 0 of 88 cut**.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/
+
+- `2026-08-15` — **[AXIS:DEPTH]** **THE LIST A MAN STOPS OPENING IS THE ONE MISSING THE LINE
+  HE ORDERS FIRST** · **before:** DEPTH was the stalest axis at 8 lane-cycles, and the rung
+  was not a matter of taste — `masonry/tools.js` shipped last week carrying a comment saying
+  what was NOT in that commit and why. Three independent in-trade panels named the afternoon
+  yard call unprompted; the 20-year prune ranked it first; it was held because *"half a yard
+  call is worse than none."* · **after:** `masonry/yard-call.html` — **62 lines over seven
+  sections**, the NINTH instance of shape #1, engine untouched. **Three mechanisms the other
+  eight order pages do not have: (1) THE UNIT OF ISSUE IS ATTACHED TO THE NUMBER** rather
+  than offered as a select — a bare number gets the yard's own word ("6 cube", "40 bags", "1
+  bundle") and words he typed himself are left exactly as typed ("half a cube"), because the
+  tool must never re-count a man's order and a unit select on 62 lines is 62 taps nobody
+  makes. **(2) THE MESSAGE CLOSES ON WHAT IS NOT ON IT** — the failure a yard call dies of
+  is an ABSENT line, so a line with no count and a heavy line with no side are named to the
+  yard. **(3) THE RUN** — face units come out of a run and the colour moves run to run, so a
+  per-line MATCH flag, a header passthrough, a gathered match list, and a call-out when one
+  exists without the other. Never a lookup: we hold nobody's lot numbers. **A THREE-LENS
+  ADVERSARIAL PANEL (safety · trade-voice · product-coherence) FOUND NINE REAL DEFECTS IN
+  THE FIRST DRAFT AND ALL NINE ARE FIXED**, the sharpest being: **"THE LULL" printed as a
+  sub-line in the one file whose own header bans that trademark by name** (and "Mortar net"
+  one section down, which had survived the de-branding pass that fixed the wire two lines
+  above it) · **ten block shapes and NO CORNER** — the first line of a real takeoff — while
+  HEADER BLOCK, which veneer ties replaced decades ago, was on the list · **no silo**, which
+  is how mud arrives on anything with real square footage · **joint reinforcement by the
+  ROLL** when it is welded 9-gauge in straight lengths, with the sub-line hedging while the
+  code committed to the wrong one · **the run silently discarded** when nothing was flagged
+  MATCH · **write-ins treated as catalogue rows** by three separate checks · and **"block
+  and no mud" printed in the OUTGOING MESSAGE**, which is a guess about a man's intent and
+  becomes noise the yard learns to skim — moved to the glass, because the tool does not get
+  a vote on what he orders. **BACKPORT RIDER: FIRED, and it found nothing to carry** — the
+  unit-attach, the absent-line close and the MATCH flag are all NEW mechanisms with no
+  sibling instance to sweep; they are written into §MASONRY and the private roster as what
+  the NEXT order page should steal rather than re-derive. Gates: mobile-watertight (live and
+  local) · order-live-header 8 pages · pickfilter 9 pages / 117 assertions · no-third-party
+  108 pages · **and the page driven end to end at 390px AGAINST PRODUCTION: 20 assertions,
+  0 page errors**, covering the unit attach, the words left alone, the match list, the
+  inverse run case, both write-in exemptions, Clear and start-from-last. Storefront: one
+  line in `masonry`'s `tools[]` in `fieldToolkits.ts` — P5 pushes it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/masonry/yard-call.html
