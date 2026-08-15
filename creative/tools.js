@@ -43,6 +43,13 @@ window.TOOLKIT_TOOLS = [
     desc: "You need into a building somebody else locks. Send the ask that gets a yes on the first try — the day, the space, what you need open, who’s coming, and the heads-up that keeps a crew from getting walked before you’ve got the shot. It’s an ask, not a booking, and it says so.",
     chip: "#C2660F",
     audience: "Shooter / producer → the venue or building manager"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The writing you put off — the day report, the cut note that goes out with every version, where the media is, what they actually approved and on which cut, the delivery note, handing a project to another editor, the recap after the kickoff call. Pick the one you’re stuck with and get the exact instructions to paste into your AI once. After that: dump the mess, get back something you can send.",
+    chip: "#1D6F63",
+    audience: "Editor / shooter / producer → whoever has to read it"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
   // Next off the panel's ranked list (av/AV_SOCIETY.md §CREATIVE): Before I Export
