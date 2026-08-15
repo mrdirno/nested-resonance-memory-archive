@@ -52,6 +52,18 @@
  * this library carries that line, and the engine gives it its own always-on
  * section in the emitted block so an AI cannot quietly drop it.
  *
+ * AND THE DOCUMENT THAT IS *NOT* IN THE LIBRARY GETS ONE TOO (2026-08-15). For
+ * months the custom path — the graceful failure of search, and the only path a
+ * man reaches when what he has to write has no entry — answered that field with
+ * a single hardcoded sentence, the same string on all nine trades and all five
+ * families, while claiming to be about "this trade". It now picks from five
+ * OMISSION CLASSES derived by classifying every one of the 80 hand-written
+ * `omit` lines on disk, each demanding a concrete artefact: a date · a name · a
+ * before-value · a location · a named gap. See §THE OMISSION CLASSES below for
+ * the counts, the per-family seed, and the 15% of real lines no fixed class can
+ * reach. `facts`, `why` and `secondary` on that same object were shrugging for
+ * the same reason and now come from the family too.
+ *
  * WHAT THE ENGINE OWNS: the eleven blocks and their wording · the five family
  * spines for a document that is not in the library · search over the library ·
  * the picked-doc state · sticky DEFAULTS that survive across documents and
@@ -99,6 +111,9 @@
     recurring: {
       name: "A report you send on a rhythm",
       hint: "daily, weekly, per-shift — it repeats, and each one should only carry what changed",
+      why: "It repeats, so its whole value is the trail. Each one is worth only what it says CHANGED, and read end to end they are the record of every day you were there.",
+      facts: ["the date", "the job or site", "who was on it", "what actually moved since the last one", "what is stopped, and who owns it"],
+      secondary: ["a rollup across several of these", "a shorter version for whoever only needs the headline"],
       delta: true,
       spine: [
         { h: "ACTION ITEMS", r: "grouped by who owns it; each one a task, decision or part needed, with a date" },
@@ -110,6 +125,9 @@
     incident: {
       name: "A record of a thing that happened",
       hint: "damage, a near-miss, a failure, a conflict on site — written once, read years later",
+      why: "Written once and read by people who were not there, sometimes years later. The only version that survives is the one written the same day.",
+      facts: ["the date and time", "the exact location", "who was involved and who saw it", "what the state already was when you got there", "who was told, when, and how"],
+      secondary: ["a short notification message to send with it", "a follow-up once the corrective action is done"],
       delta: false,
       spine: [
         { h: "WHAT HAPPENED", r: "plain sequence with times and dates; facts only, no characterisation of people" },
@@ -123,6 +141,9 @@
     verification: {
       name: "A record that something was tested or checked",
       hint: "startup, test, walk, inspection — its value is that a specific person can rely on it later",
+      why: "Somebody is going to lean on this later. Its whole value is that it says exactly what was checked, exactly what was not, and which of the two anybody is relying on.",
+      facts: ["the date and who did it", "what was tested and what was NOT", "the readings you took and where you took each one", "what could not be checked, and why"],
+      secondary: ["a one-page summary for whoever signs it", "the open items on their own, as a punch list"],
       delta: false,
       spine: [
         { h: "SCOPE", r: "exactly what was tested and what was NOT — the boundary is the whole value" },
@@ -136,6 +157,9 @@
     notice: {
       name: "A letter that puts somebody on the clock",
       hint: "delay, back-charge, missing information, access — you need a decision or a thing, by a date",
+      why: "The clock only starts when somebody is told in writing with a date on it. This is that letter, and it asks for one thing.",
+      facts: ["what you need, and the date you need it by", "who owes it", "the date you first asked", "what work it is holding"],
+      secondary: ["a short version for a text message", "a follow-up that carries the original dates forward"],
       delta: false,
       spine: [
         { h: "WHAT WE NEED", r: "leads. The specific thing or decision, and the date it is needed by. One ask, not a list of grievances." },
@@ -148,6 +172,9 @@
     minutes: {
       name: "A record of a conversation and what got decided",
       hint: "a call, a coordination meeting, a walk with the owner — the value is the decisions, not the discussion",
+      why: "Nobody remembers the discussion and everybody argues the decisions. This is the record of what got decided, who owns it, and by when.",
+      facts: ["the date and who was there", "what was decided, and by whom", "each action item, its owner and its date", "what is still open"],
+      secondary: ["a short email body to circulate it with", "just the action items, as a list"],
       delta: true,
       spine: [
         { h: "DECISIONS", r: "leads. What was decided, by whom, and effective when. Discussion that decided nothing does not appear." },
@@ -157,6 +184,115 @@
         { h: "NEEDS AN ANSWER BEFORE NEXT TIME", r: "the questions that will hold work if they stay open" }
       ]
     }
+  };
+
+  /* ── THE OMISSION CLASSES — the custom path only ────────────────────────
+   * §THE HIGHEST-VALUE FIELD IN THE LIBRARY IS `omit`. Every one of the 80
+   * documents on disk carries a hand-written one naming the specific thing that
+   * costs money on THAT document. The custom path — the one a man reaches when
+   * what he has to write is not in the library — carried a single generic
+   * sentence standing in for all 80, identical on every trade and every family,
+   * and it even claimed to be trade-specific ("on almost every document in this
+   * trade") while being the same string in all nine.
+   *
+   * These are the classes those 80 lines actually fall into. Each one demands a
+   * CONCRETE ARTEFACT he has to physically supply — a date, a name, a place a
+   * file lives, a value from before, a thing named that he did not touch. That
+   * is the whole bar: "add more detail" is not an omit line, and a tick list of
+   * ten soft ones is the generic sentence with extra steps.
+   *
+   * THE FIFTH ONE WAS NOT IN THE PLAN. The rung was recorded as FOUR — a date,
+   * a name, a photo location, a before-value. Classifying the 80 shipped lines
+   * put "what you did NOT do, by name" level with the biggest of them and made
+   * it the single most common thing a RECURRING document leaves out ("where you
+   * COULDN'T work", "the idle half of the job"). The corpus outranks the plan.
+   *
+   * NO KEYWORD CLASSIFIER, and this is a rule not a shortcut: nothing here reads
+   * the document NAME he typed. The family is picked by hand because guessing it
+   * silently flips `delta`, and an incident record written as an update to a
+   * previous one that does not exist is the §SCARS 2026-08-11 defect.
+   *
+   * WHAT THESE CANNOT REACH, MEASURED RATHER THAN WAVED AT: 12 of the 80 shipped
+   * lines (15%) name something no fixed class of MISSING FACT can express. The
+   * sharpest is av/theory-of-operation — "the design decisions that look like
+   * faults... so by month two the help desk has logged them as defects" — where
+   * the omission is an INTERPRETATION, not a date, a name, a place or a value.
+   * The rest are mostly a reference class in the notice family (the sheet number
+   * and revision a letter is written against, 4 of 26). A tick list does not
+   * reach any of them and neither would five fixed sentences; the house-rules
+   * box is the only surface that does, which is one more reason it stays free
+   * text and this stays ticks.
+   */
+  var OMIT_CLASSES = [
+    {
+      id: "when",
+      label: "The date it actually started",
+      artefact: "a date",
+      line: "The date this actually started — not the date I am writing it up. The day the condition first existed, the day I first asked, the day somebody was first told. It is the only line that establishes how long a thing has really been sitting, and it is the first one left out."
+    },
+    {
+      id: "who",
+      label: "Who said go ahead, and how",
+      artefact: "a name",
+      line: "Who authorised it, when, and by what channel — verbal, call, text or email. A name with a time on it is the difference between a change order and a donation; \"they said it was fine\" is not one."
+    },
+    {
+      id: "before",
+      label: "What it was like before I touched it",
+      artefact: "a before-value",
+      line: "The condition that was already wrong before I got there, and the reading or count from before anything changed. Without it there is no before, only an after, and the whole thing reads as though it started with me."
+    },
+    {
+      id: "where",
+      label: "Where the photos and readings are",
+      artefact: "a location",
+      line: "Where the photos, readings and tags actually live, how many there are, and what each one shows. A description with no photo reference and no timestamp is worth nothing in a back-charge meeting, and anything that got covered over is gone for good."
+    },
+    {
+      id: "notdone",
+      label: "What I did NOT do, and why",
+      artefact: "a named gap",
+      line: "What I did not do, by name, and why — what I could not get to, what I never tested, where I could not work and what stopped me. Left out I own it by silence, and it is the first section cut for looking clean."
+    }
+  ];
+
+  /* WHICH ONE STARTS TICKED, PER FAMILY — and it is ONE.
+   *
+   * The first draft seeded THREE, on the reasoning that three is what the trade
+   * author who wrote `omit` as a LIST chose, five times out of five. That is the
+   * MAX of five documents; the MODE of all eighty is one, by 75 to 5. The
+   * heading this feeds is the word "ONE", the doctrine in this file's own header
+   * is "the ONE line", and whatever ships pre-ticked is what a man in a hurry
+   * keeps — so the default biases DOWN and the other four are one tap away.
+   *
+   * Each pick is the most common class among the shipped `omit` lines OF THAT
+   * FAMILY, counted by hand over all eighty:
+   *   recurring    notdone 3 · where 2 · who 2      (n=8)
+   *   incident     before 8 · notdone 6 · who 5     (n=23)
+   *   notice       when 8 · who 4 · notdone 3       (n=26)
+   *   verification notdone 7 · who 5 · where 3      (n=19)
+   *   minutes      when 2 · who 2                   (n=4 — see below)
+   *
+   * MINUTES IS A TIE AT n=4 AND THE TIEBREAK IS STATED, not hidden: `who` loses
+   * because the minutes SPINE already carries WHO WAS THERE "and anyone who was
+   * expected and did not attend", and an omit line that repeats a section
+   * heading protects nothing. `when` — the date an item was FIRST raised, the
+   * deadline to disagree — appears nowhere in that spine.
+   *
+   * `who` and `where` win no family and are the strongest runners-up in three,
+   * which is the argument for a tick list rather than five fixed sentences.
+   *
+   * IT IS A PRIOR AND THE PAGE SAYS SO. Library documents in a family are the
+   * COMMON ones; a custom document is by definition an uncommon one. He can tick
+   * and untick every one, and an untouched tick follows the seed the way an
+   * untouched TOGGLE follows `on`.
+   */
+  var FAM_OMIT = {
+    recurring:    ["notdone"],
+    incident:     ["before"],
+    notice:       ["when"],
+    verification: ["notdone"],
+    minutes:      ["when"]
   };
 
   /* ── THE SHARED LIBRARY ─────────────────────────────────────────────────
@@ -378,6 +514,7 @@
     me: "", second: "", office: "", company: "",
     off: {},          // section headings the user turned off
     tog: {},          // toggle id -> bool
+    comit: {},        // custom path: omission class id -> bool. UNSET = follow the family seed.
     extra: "",
     q: ""             // search text
   };
@@ -530,6 +667,18 @@
        buries the one section the whole library exists to protect. */
     return out.concat(LOCKED);
   }
+  /* THE HEADING THAT SHIPS. The prose block above pluralises ("THE LINES
+     EVERYONE LEAVES OUT — NEVER DROP THEM"); the OUTPUT FORMAT heading — the one
+     that ends up in the finished document somebody else reads — did not, so all
+     five of framing's own documents have been shipping three bullets under the
+     word "ONE" since the day multi-omit landed. Found by an adversarial pass on
+     a trade this cycle was not touching, and confirmed against the real page.
+     LOCKED[0].h stays the canonical key, because isLocked() and S.off both key
+     off it; only the PRINTED form moves. */
+  function lockedHeading(hdg, n) {
+    if (hdg === LOCKED[0].h && n > 1) return "THE ONES NOBODY WRITES DOWN";
+    return hdg;
+  }
   function isLocked(hdg) {
     var k = (hdg || "").toUpperCase().replace(/[^A-Z]/g, "");
     for (var i = 0; i < LOCKED.length; i++) {
@@ -544,20 +693,50 @@
     return null;
   }
 
+  /* ── THE OMISSION TICKS (custom path) ───────────────────────────────────
+   * UNSET follows the family seed; SET is his. Exactly the rule TOGGLES already
+   * uses (`S.tog[id] === undefined ? t.on : ...`), for exactly the same reason:
+   * a control he has never touched should move when the thing it depends on
+   * moves, and one he HAS touched should not be silently overwritten. So
+   * changing family re-seeds the ticks he left alone and keeps the ones he set —
+   * unlike `S.off`, which is wiped on a family change because the SPINE it keys
+   * off is a different list of headings afterwards.
+   */
+  function omitSeed(fam) { return FAM_OMIT[fam] || FAM_OMIT.recurring; }
+  function comitOn(id, fam) {
+    var v = S.comit[id];
+    if (v === undefined) return omitSeed(fam).indexOf(id) !== -1;
+    return !!v;
+  }
+  function customOmits(fam) {
+    var out = [];
+    OMIT_CLASSES.forEach(function (c) { if (comitOn(c.id, fam)) out.push(c.line); });
+    return out;
+  }
+
   function current() {
     if (S.doc === "__custom") {
-      var f = FAMILIES[S.customFamily] || FAMILIES.recurring;
+      var fk = FAMILIES[S.customFamily] ? S.customFamily : "recurring";
+      var f = FAMILIES[fk];
       return {
         id: "__custom",
         name: S.customName || "Write-Up",
-        family: S.customFamily,
+        family: fk,
         from: "", to: "",
-        why: f.hint,
-        omit: "The one fact that proves WHEN this started and WHO agreed to it. On almost every document in this trade, that is the line that is missing when it is needed.",
+        /* `sections: f.spine` was the one field on this object already doing the
+           right thing, and it is the pattern the rest now follow. `why` was the
+           family PICKER's blurb read out as a purpose statement; `facts` — which
+           feeds the VALIDATION block, i.e. what the AI is told to check the input
+           for before it writes — was three generic words, the same three for a
+           near-miss, a delay letter and a set of minutes; `secondary` was empty
+           where every library document offers one or two. All three shrugged for
+           the same reason `omit` did, and all three had a family to ask. */
+        why: f.why || f.hint,
+        omit: customOmits(fk),
         halt: "Only if the input does not say what the document is about at all.",
-        facts: ["date", "job or site", "who was involved"],
+        facts: f.facts || ["date", "job or site", "who was involved"],
         sections: f.spine,
-        secondary: []
+        secondary: (f.secondary || []).slice()
       };
     }
     return S.doc ? byId(S.doc) : null;
@@ -707,7 +886,7 @@
     sectionsOf(d).forEach(function (s) {
       if (!isLocked(s.h) && S.off[s.h]) return;
       L.push("=========================================");
-      L.push(s.h);
+      L.push(lockedHeading(s.h, omits.length));
       L.push("=========================================");
       if (s.h === LOCKED[0].h) {
         if (omits.length) {
@@ -893,8 +1072,16 @@
       var oul = h("ul", null);
       omits.forEach(function (t) { oul.appendChild(h("li", null, t)); });
       o.appendChild(oul);
+    } else if (omits.length) {
+      o.appendChild(h("p", null, omits[0]));
     } else {
-      o.appendChild(h("p", null, omits[0] || ""));
+      /* `omits[0] || ""` painted an EMPTY red box — a warning frame with nothing
+         in it, which reads as a rendering failure. Unreachable while every
+         library document carried a line; the custom path can now be ticked down
+         to none, so it says the true thing instead, and matches word for word
+         what compose() puts in the block on the same state. */
+      o.appendChild(h("p", null, "Nothing ticked. The block will still ask your AI for the line " +
+        "everyone leaves out — but naming it yourself is what makes it come back every time."));
     }
     box.appendChild(o);
   }
@@ -953,6 +1140,7 @@
     /* spine */
     box.appendChild(sub("What the finished document says, in order"));
     var ul = h("ul", "spine");
+    var nOmit = omitLines(d).length;
     sectionsOf(d).forEach(function (s) {
       var lock = isLocked(s.h);
       var li = h("li", lock ? "locked" : "");
@@ -967,7 +1155,7 @@
       });
       lb.appendChild(cb);
       var tx = h("div", "tx");
-      tx.appendChild(h("span", "h", s.h));
+      tx.appendChild(h("span", "h", lockedHeading(s.h, nOmit)));
       tx.appendChild(h("span", "r", s.r));
       lb.appendChild(tx);
       li.appendChild(lb);
@@ -1041,7 +1229,12 @@
     var f = h("div", "f span2");
     f.appendChild(h("label", null, "What is it called where you work?"));
     var i = document.createElement("input");
-    i.type = "text"; i.value = S.customName; i.placeholder = "e.g. Pre-pour sign-off note";
+    /* `docname` is a HOOK, not a style. The tuner also renders text inputs, so
+       "the first text input in #app" is the custom name field only when nothing
+       is picked — which is exactly the state a gate arrives in LAST, after it
+       has exercised every document in the library. */
+    i.type = "text"; i.className = "docname";
+    i.value = S.customName; i.placeholder = "e.g. Pre-pour sign-off note";
     i.addEventListener("input", function () { S.customName = i.value; save(); renderPicked(); renderOut(); });
     f.appendChild(i);
     g.appendChild(f);
@@ -1064,6 +1257,42 @@
     });
     f2.appendChild(ul);
     g.appendChild(f2);
+
+    /* THE OMITTED LINE, PICKED INSTEAD OF SHRUGGED. Every library document
+       arrives with a hand-written one; this path had a single generic sentence
+       for all of them. Ticks, not a text box — §THE GATE, and `S.extra` is
+       already the place for a sentence only he could write. */
+    var f3 = h("div", "f span2");
+    var lab3 = h("label", null, "What does this one usually leave out?");
+    f3.appendChild(lab3);
+    /* `omitpick` is a HOOK, not a style: the tuner's house-rule toggles are also
+       a ul.ticks, so a gate that wants THESE ticks would otherwise have to match
+       their label text, and a check that breaks when copy is edited is a check
+       nobody keeps. */
+    var ul3 = h("ul", "ticks omitpick");
+    var fam = FAMILIES[S.customFamily] ? S.customFamily : "recurring";
+    OMIT_CLASSES.forEach(function (c) {
+      var li = h("li");
+      var lb = h("label");
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = comitOn(c.id, fam);
+      cb.addEventListener("change", function () {
+        S.comit[c.id] = cb.checked; save(); renderPicked(); renderOut();
+      });
+      lb.appendChild(cb);
+      lb.appendChild(h("span", "nm", c.label));
+      lb.appendChild(h("span", "sb", c.artefact));
+      li.appendChild(lb);
+      ul3.appendChild(li);
+    });
+    f3.appendChild(ul3);
+    /* SAY WHERE THE TICKS CAME FROM. They are seeded from what the write-ups of
+       THIS FAMILY on disk were actually missing — a prior, not a fact about his
+       document, and a page that presents a prior as a fact is lying quietly. */
+    f3.appendChild(h("p", "seedwhy",
+      "Ticked from what the other write-ups of this kind were missing. Yours may be different."));
+    g.appendChild(f3);
     box.appendChild(g);
   }
 
@@ -1186,5 +1415,6 @@
      copy of either — a gate that hardcodes the thing it is checking drifts from
      it and then reports green on the day it matters. */
   window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
-                     omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose };
+                     omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
+                     omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit };
 })();

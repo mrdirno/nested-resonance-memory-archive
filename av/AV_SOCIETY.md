@@ -353,12 +353,40 @@ started, what he did NOT do and why. Every document carries that line, and the e
 gives it **its own always-on heading** in the emitted block so an AI cannot quietly drop
 it. "Add more detail" is not an omit line and does not belong in a library file.
 
+**AND WE MEASURED IT — the 80 hand-written `omit` lines fall into FIVE OMISSION CLASSES**
+(2026-08-15), each demanding a **concrete artefact**: **a date** (the day it started, not
+the day you wrote it) · **a name** (who said go ahead, when, on what channel) · **a
+before-value** (what was already wrong, the reading before you touched it) · **a
+location** (where the photos and readings actually live) · **a named gap** (what you did
+NOT do, by name). The fifth was **not** in the plan — the rung was recorded as four, and
+classifying the corpus put "what you did NOT do" level with the biggest of them and made
+it the single most common thing a RECURRING write-up leaves out ("where you COULDN'T
+work", "the idle half of the job"). **The corpus outranks the plan.** Counts, per family:
+recurring `notdone 3 · where 2 · who 2` (n=8) · incident `before 8 · notdone 6 · who 5`
+(n=23) · notice `when 8 · who 4 · notdone 3` (n=26) · verification `notdone 7 · who 5 ·
+where 3` (n=19) · minutes `when 2 · who 2` (n=4, tie broken by the spine: it already
+carries WHO WAS THERE, so `when` is the class nothing else forces).
+
+**AND THE LIMIT IS MEASURED TOO, not waved at: 12 of the 80 (15%) name something no fixed
+class of missing FACT can express.** The sharpest is `av/theory-of-operation` — *"the
+design decisions that look like faults… so by month two the help desk has logged them as
+defects"* — an omission of INTERPRETATION, not of a date, a name, a place or a value. The
+rest are mostly a reference class in the notice family (the sheet number and revision a
+letter is written against, 4 of 26). No tick list reaches those and neither would five
+fixed sentences; the house-rules box is the only surface that does. That is the argument
+for keeping it free text and keeping this ticks.
+
 **FIVE FAMILIES cover every write-up all six trades produce** — the recurring report · the
 incident record · the verification record · the notice that puts somebody on the clock ·
 the minutes. Each has its own spine AND its own continuity rule (only `recurring` and
 `minutes` get delta reporting; an incident record read three years later must never be
 written as an update). The families are also the fallback: a document that is not in the
-library gets a real spine from its family instead of a shrug.
+library gets a real spine from its family instead of a shrug — **and since 2026-08-15 a
+real `omit`, `facts`, `why` and `secondary` too**, each seeded from the family rather than
+hardcoded. The omit seed is **exactly one** class, because the MODE of the shipped library
+is one line (75 of 80); the first draft seeded three off the MAX of the five documents
+that ship a list, which is the wrong statistic. Whatever ships pre-ticked is what a man in
+a hurry keeps, so the default biases DOWN and the other four are one tap away.
 
 `<trade>/docs.js` is the fourth data file, same boundary as the other three: `trade.js` =
 IDENTITY · `tools.js` = REGISTRY · `items.js` = picker VOCABULARY · `docs.js` = the
@@ -1081,6 +1109,44 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A HEADING THAT SAYS "ONE" ABOVE A LIST OF THREE, IN THE PART THAT SHIPS (2026-08-15).**
+  `shared/docspec.js` pluralises the PROSE heading over the omitted lines — "THE LINES
+  EVERYONE LEAVES OUT — NEVER DROP THEM" — and does not pluralise `LOCKED[0].h`, the
+  heading inside the OUTPUT FORMAT block. So every multi-omit document in the library
+  (framing's five, since the day arrays landed) has been emitting **"THE ONE NOBODY WRITES
+  DOWN" followed by three bullets**, in the template that becomes the finished document
+  somebody else reads. The instruction half was right and the product half was wrong, which
+  is the worse half to get wrong. **The rule: when a string pluralises, find every place it
+  is PRINTED, not every place it is computed** — the two headings live 60 lines apart and
+  only one of them got the branch. Fixed at print time via `lockedHeading()`; `LOCKED[0].h`
+  stays the canonical key because `isLocked()` and `S.off` both key off it. **Found by an
+  adversarial reviewer cast on a DIFFERENT question, on a trade the cycle was not
+  touching** — and then confirmed against the real page before a line was changed, because
+  a reported defect that is only reasoned about is a rumour.
+
+- **THE GATE THAT NEVER TAPPED (2026-08-15, second occurrence of the class).**
+  `mobile-watertight.mjs` loaded every page and measured it **as it arrives**, and half of
+  what these tools render only exists after a tap. That is how a fixed bar grew to a ninth
+  of the glass on seven trades with every measurement green (§SCARS 2026-08-11), found by
+  screenshotting production AFTER the ship. The class came back the moment a new control
+  lived behind "Not in the list?". **The rule: a page loaded and left alone is not the page
+  a man uses.** The gate now carries `REVEALS` — a named state, the pages it matches, and a
+  snippet that gets there — re-loads per state (pass B leaves the root font bumped, and a
+  state measured on top of that is measuring two things at once), and re-runs every
+  measurement inside it. A page matching nothing costs exactly what it cost before. **Proved
+  by negative control**, not by a green line: the reveal was deliberately pointed at a
+  control that does not exist and the gate failed at all four widths.
+
+- **THE MAX OF FIVE IS NOT THE MODE OF EIGHTY (2026-08-15).** The custom path's new omit
+  ticks were first seeded THREE-per-family, reasoning that three is what the one trade
+  author who wrote `omit` as a LIST chose, five times out of five. That is the MAX of the
+  five documents that ship a list. The MODE of all eighty is **one**, 75 to 5 — and the
+  doctrine, the file header and the shipped heading all say the word "ONE". **The rule:
+  when you justify a default from the corpus, name which statistic you took and check it is
+  the one the question asked for.** Seed reduced to one, the other four one tap away, and
+  the reasoning is in the code beside the table. Also the standing bias: **whatever ships
+  pre-ticked is what a man in a hurry keeps**, so a seeded default biases DOWN.
 
 - **A MODE BUTTON WITH NOTHING BEHIND IT IS WORSE THAN NO BUTTON, BECAUSE HE TAPS IT
   (2026-08-14).** `plumbing/supply-house-order.html` shipped a two-state segment —
@@ -3376,3 +3442,5 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   (134 routing probes + hand-off probes), commons-bag 27/27, mobile-watertight
   320/360/390/430 on all three, zero page errors ·
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
+
+- `2026-08-15` — **[AXIS:DOCS]** **THE PATH SEARCH DUMPS YOU INTO HAD ONE SENTENCE FOR EIGHTY DOCUMENTS** · **before:** every write-up in the library carries a hand-written `omit` — the field this book calls the highest-value one in the whole toolkit, the line whose absence loses the back-charge meeting. The **custom path** — what a man reaches when what he has to write is not in the list, on all 9 trades — answered it with **one hardcoded sentence**, the same string in all nine, for all five families, and it claimed to be trade-specific ("on almost every document in **this trade**"). `facts` was three generic words feeding the AI's own pre-flight check, identical for a near-miss, a delay letter and a set of minutes; `why` was the family PICKER's blurb read out as a purpose statement; `secondary` was empty where every library document offers one or two. · **after:** five **OMISSION CLASSES**, each demanding a concrete artefact — a date · a name · a before-value · a location · a named gap — **derived by classifying all 80 shipped `omit` lines**, not by taste, with the per-family counts in the code beside the table. `facts`, `why` and `secondary` now come from the family, the same way `sections: f.spine` always did. **THE CORPUS OUTRANKED THE PLAN TWICE.** The rung was recorded as FOUR classes; classifying the corpus put *"what you did NOT do"* level with the biggest and made it the most common thing a RECURRING write-up misses ("where you COULDN'T work" · "the idle half of the job"), so it shipped as the fifth. And the seed was first written as THREE-per-family off the MAX of the five documents that ship a list — the MODE of all eighty is **one**, 75 to 5, which is also the word in the heading. Seeded to one, four one tap away, **because whatever ships pre-ticked is what a man in a hurry keeps**. **AN ADVERSARIAL PASS FOUND A LIVE DEFECT ON A TRADE THIS CYCLE WAS NOT TOUCHING:** the PROSE heading over multiple omitted lines pluralises; `LOCKED[0].h`, the heading inside the **OUTPUT FORMAT** — the part that becomes the document somebody else reads — never did, so framing's five multi-omit documents have been shipping **"THE ONE NOBODY WRITES DOWN" above three bullets** since arrays landed. Confirmed against the real page before a line was changed, then fixed at print time. **BACKPORT RIDER FIRED — swept, not assumed:** the engine is shared so all 9 write-up pages take the fix in one change; the multi-omit class was re-derived from disk (exactly framing's 5, all now correct); no library document ships an empty `omit`, so the empty-red-box path was unreachable until ticking to zero made it reachable — it now says the true thing instead of painting a warning frame with nothing in it. **Swept and NOT fixed, named so it is not lost:** `creative` is the one trade with no `docs.js` and no write-up page at all — a whole-trade DEPTH gap, not this class. **THE GATES GREW, AND ONE WAS PROVED BY NEGATIVE CONTROL.** `docspec-config.mjs` now drives the custom path through **all five families** (four were never exercised — harmless while they all emitted the same string, load-bearing the moment each has its own seed), and asserts: exactly one class seeded · seeds differ across families · the dead sentence never returns · unticking all says so · ticking all pluralises the shipping heading · and the class contract itself, that every line truncates under `shortOmit()`, which fails **silently**. `mobile-watertight.mjs` grew `REVEALS` — the second time a control that only exists after a tap escaped a green gate — re-loading per state and re-running every measurement inside it; **proved by pointing the reveal at a control that does not exist and watching it fail at all four widths.** Gates: **docspec 9 trades / 149 checks / 0 failing** · **mobile-watertight 87 pages × 320/360/390/430 × default and bumped, 0 failing**, and the tick list re-measured in its revealed state · eyes on the real page at 320 and 390, which is how the artefact badges were caught wrapping to four lines with every number green. Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html

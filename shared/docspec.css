@@ -71,6 +71,21 @@
 .omit li{font-size:13px;color:#3A2321;line-height:1.4;margin:0 0 4px}
 .omit li:last-child{margin-bottom:0}
 
+/* WHERE THE CUSTOM PATH'S TICKS CAME FROM. A seeded control that does not say
+   it is a seed reads as a verdict about HIS document, which we do not have. */
+.seedwhy{margin:6px 0 0;font-size:11.5px;line-height:1.35;color:var(--muted)}
+
+/* THE ARTEFACT BADGE. ul.ticks gives its right-hand sub-label flex:1, which is
+   right for the house-rule toggles (a short label, a long aside) and backwards
+   here: the label is the long half and the badge is a fixed two-word type. Left
+   alone, "a before-value" broke over three lines and "where the file is" over
+   four, on a control whose whole job is to be read at a glance. Every numeric
+   check passed it — no overflow, 44px targets — which is the same blind spot as
+   the bar nobody measured the HEIGHT of. Scoped to .omitpick so the shared list
+   everywhere else keeps the behaviour it was written for. */
+ul.omitpick .nm{flex:1}
+ul.omitpick .sb{flex:none;white-space:nowrap}
+
 /* THE SPINE — the sections of the finished document, as a tick list with a
    handle-free reorder-free honesty: you choose what is IN, not where it goes,
    because the order is the argument and the argument is not the user's to lose. */

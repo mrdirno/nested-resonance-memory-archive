@@ -39,6 +39,9 @@
  *    re-asserted. Plus the viewport meta itself — a page carrying
  *    user-scalable=no is a page that cannot be zoomed at all, which is the same
  *    complaint one layer up.
+ *  · THE STATES A TAP OPENS — see REVEALS below. A page loaded and left alone is
+ *    not the page a man uses, and half of what these tools render only exists
+ *    after a tap. Everything above is measured again in each revealed state.
  *
  *   node tools/toolkit-gates/mobile-watertight.mjs [base-url] [--only=slug/page.html]
  *
@@ -71,6 +74,46 @@ const DIRS = readdirSync(ROOT, { withFileTypes: true })
 
 const PAGES = only ? [only] : DIRS.flatMap(dir =>
   readdirSync(ROOT + dir).filter(f => f.endsWith('.html')).sort().map(f => `${dir}/${f}`));
+
+/* ── REVEALED STATES ─────────────────────────────────────────────────────
+ * A page loaded and left alone is not the page a man uses. Half of what these
+ * tools render only exists after a tap, and this gate measured none of it —
+ * which is how a fixed bar grew to a ninth of the glass on seven trades and
+ * every measurement here still reported green (§SCARS 2026-08-11: "the standing
+ * gate never reaches [the omit list], because the omit list only exists after a
+ * pick"). That was found by screenshotting production AFTER the ship. This is
+ * the second time the class has escaped, so it stops being a thing to remember.
+ *
+ * Each entry names a state, matches the pages it applies to, and runs INSIDE
+ * the page to get there. The page is re-loaded per state, because pass B leaves
+ * a bumped root font behind and a state measured on top of it is measuring two
+ * things at once. A page that matches nothing is measured exactly as before —
+ * one load, no cost.
+ */
+const REVEALS = [
+  {
+    name: 'custom path, every omitted line ticked',
+    match: /\/write-up\.html$/,
+    /* The custom path is the graceful failure of search and it carries the
+       widest control on the page: a tick row whose label and artefact badge sit
+       on one line. Ticking them ALL is the worst case, and the worst case is
+       the only one worth measuring. */
+    run: () => {
+      const btn = [...document.querySelectorAll('button')].find(b => /Not in the list/i.test(b.textContent));
+      if (!btn) return 'no "not in the list" control';
+      btn.click();
+      const inp = document.querySelector('#app input[type=text]');
+      if (!inp) return 'custom path rendered no name field';
+      inp.value = 'Confined space entry and rescue-plan sign-off';
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      document.querySelectorAll('#app input[type=checkbox]').forEach(cb => {
+        if (cb.disabled || cb.checked) return;
+        cb.click();
+      });
+      return null;
+    },
+  },
+];
 
 /* Runs INSIDE the page. Returns findings, never throws — a gate that dies on one
  * page tells you nothing about the other thirty. */
@@ -244,6 +287,11 @@ for (const page of PAGES) {
   const bad = [];
   const soft = new Set();
 
+  /* The default state always runs; a page that has a hidden state runs again in
+     it. `null` reveal = load and leave alone, exactly what this gate always did. */
+  const STATES = [{ name: '', run: null }]
+    .concat(REVEALS.filter(r => r.match.test('/' + page)).map(r => ({ name: r.name, run: r.run })));
+
   for (const width of WIDTHS) {
     const ctx = await browser.newContext({
       viewport: { width, height: 780 },
@@ -254,37 +302,50 @@ for (const page of PAGES) {
     const p = await ctx.newPage();
     const errs = [];
     p.on('pageerror', e => errs.push(String(e)));
-    try {
-      await p.goto(url, { waitUntil: 'load', timeout: 30000 });
-    } catch (e) {
-      bad.push(`${width}px — could not load: ${e.message.split('\n')[0]}`);
-      await ctx.close();
-      continue;
-    }
-    await p.waitForTimeout(350);              // the shared runtime paints the nav
 
-    /* PASS A at the OS default, PASS B with the root text bumped the way the
-     * accessibility setting bumps it. B re-asserts overflow only — tap targets
-     * only grow with the text, and the bottom bar was already judged in A. */
-    for (const bump of [null, '20px']) {
-      if (bump) {
-        await p.addStyleTag({ content: `html{font-size:${bump} !important}` });
-        await p.waitForTimeout(120);
+    for (const state of STATES) {
+      /* Re-loaded per state on purpose: pass B leaves the root font bumped, and
+         a revealed state measured on top of that is measuring two things at once
+         and can only report the wrong one. */
+      try {
+        await p.goto(url, { waitUntil: 'load', timeout: 30000 });
+      } catch (e) {
+        bad.push(`${width}px — could not load: ${e.message.split('\n')[0]}`);
+        break;
       }
-      const r = await p.evaluate(MEASURE, MIN_TAP);
-      const tag = `${width}px${bump ? ` · text bumped to ${bump}` : ''}`;
-      if (r.overflow) {
-        const c = r.overflow.culprit;
-        bad.push(`${tag} — HORIZONTAL OVERFLOW by ${r.overflow.by}px (scrollWidth ${r.overflow.scrollWidth} > clientWidth ${r.overflow.clientWidth})`
-          + (c ? `\n              culprit: ${c.sel} runs ${c.over}px past the glass  "${c.text}"` : ''));
+      await p.waitForTimeout(350);            // the shared runtime paints the nav
+      const where = state.name ? ` · ${state.name}` : '';
+      if (state.run) {
+        let why = null;
+        try { why = await p.evaluate(state.run); }
+        catch (e) { why = e.message.split('\n')[0]; }
+        if (why) { bad.push(`${width}px${where} — COULD NOT REACH THE STATE: ${why}`); continue; }
+        await p.waitForTimeout(250);
       }
-      if (bump) continue;
-      if (r.viewport) bad.push(`${tag} — VIEWPORT: ${r.viewport}`);
-      r.taps.forEach(t => bad.push(`${tag} — TAP TARGET ${t.short}px < ${MIN_TAP}px: ${t.sel}  "${t.text}"`));
-      r.covered.forEach(c => bad.push(`${tag} — UNREACHABLE, the fixed bar covers it at the bottom of the page: ${c.sel}  "${c.text}"`));
-      r.clipped.forEach(c => bad.push(`${tag} — CLIPPED IN THE FIXED BAR: ${c.sel} runs ${c.over}px past the ${c.side} edge of the glass  "${c.text}"`));
-      r.grew.forEach(g => bad.push(`${tag} — the fixed bar GREW: ${g.sel} is ${g.h}px tall beside ${g.btn}px buttons, so it wrapped and the bar ate the extra. "${g.text}"`));
-      r.soft.forEach(t => soft.add(`${t.sel} ${t.short}px  "${t.text}"`));
+
+      /* PASS A at the OS default, PASS B with the root text bumped the way the
+       * accessibility setting bumps it. B re-asserts overflow only — tap targets
+       * only grow with the text, and the bottom bar was already judged in A. */
+      for (const bump of [null, '20px']) {
+        if (bump) {
+          await p.addStyleTag({ content: `html{font-size:${bump} !important}` });
+          await p.waitForTimeout(120);
+        }
+        const r = await p.evaluate(MEASURE, MIN_TAP);
+        const tag = `${width}px${where}${bump ? ` · text bumped to ${bump}` : ''}`;
+        if (r.overflow) {
+          const c = r.overflow.culprit;
+          bad.push(`${tag} — HORIZONTAL OVERFLOW by ${r.overflow.by}px (scrollWidth ${r.overflow.scrollWidth} > clientWidth ${r.overflow.clientWidth})`
+            + (c ? `\n              culprit: ${c.sel} runs ${c.over}px past the glass  "${c.text}"` : ''));
+        }
+        if (bump) continue;
+        if (r.viewport) bad.push(`${tag} — VIEWPORT: ${r.viewport}`);
+        r.taps.forEach(t => bad.push(`${tag} — TAP TARGET ${t.short}px < ${MIN_TAP}px: ${t.sel}  "${t.text}"`));
+        r.covered.forEach(c => bad.push(`${tag} — UNREACHABLE, the fixed bar covers it at the bottom of the page: ${c.sel}  "${c.text}"`));
+        r.clipped.forEach(c => bad.push(`${tag} — CLIPPED IN THE FIXED BAR: ${c.sel} runs ${c.over}px past the ${c.side} edge of the glass  "${c.text}"`));
+        r.grew.forEach(g => bad.push(`${tag} — the fixed bar GREW: ${g.sel} is ${g.h}px tall beside ${g.btn}px buttons, so it wrapped and the bar ate the extra. "${g.text}"`));
+        r.soft.forEach(t => soft.add(`${t.sel} ${t.short}px  "${t.text}"`));
+      }
     }
     if (errs.length) bad.push(`${width}px — pageerror: ${errs.join(' | ')}`);
     await ctx.close();

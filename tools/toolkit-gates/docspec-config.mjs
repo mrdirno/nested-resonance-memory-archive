@@ -30,7 +30,22 @@
  *     document with nothing to sell
  *   · renderOut() completed — the setup steps exist and the bar shows a count
  *   · renderAll() completed past renderOut() — the library collapsed
- * and once per trade, the CUSTOM path ("not in the list") emits a real block too.
+ * and once per trade, the CUSTOM path ("not in the list") — driven through ALL
+ * FIVE families, not just the default one, because four of them were never
+ * exercised here while they all emitted the same hardcoded sentence:
+ *   · it emits a real block, in every family
+ *   · its omitted line is a SEEDED CLASS, exactly one, and the seeds differ
+ *     across families — five families seeding one class is one hardcoded
+ *     sentence wearing a tick
+ *   · the dead generic sentence ("on almost every document in this trade",
+ *     which was the same string in all nine) never comes back
+ *   · unticking every class says so, instead of painting an empty warning box
+ *   · ticking them all pluralises the OUTPUT FORMAT heading — the prose block
+ *     above it always did, the heading that ships in the finished document did
+ *     not, so every multi-omit document in the library printed three bullets
+ *     under the word "ONE"
+ *   · and the class contract itself: every class names a concrete artefact, and
+ *     every class line truncates under shortOmit(), which fails silently.
  *
  * TRADES COME FROM DISK, never from a list here, so trade #8 is covered the day
  * it lands with no edit to this file.
@@ -139,12 +154,43 @@ for (const trade of TRADES) {
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.lib button', { timeout: 15000 });
 
-  const { docs, families } = await page.evaluate(() => ({
-    docs: window.DocSpec.library().map(d => ({ id: d.id, name: d.name, family: d.family })),
-    families: Object.keys(window.DocSpec.families),
-  }));
+  const { docs, families, classContract } = await page.evaluate(() => {
+    const D = window.DocSpec;
+    /* THE OMISSION-CLASS CONTRACT, asserted against the shipped engine.
+       shortOmit() cuts an omit line at its first sentence break or em-dash so it
+       fits the OUTPUT FORMAT bullet. It fails SILENTLY — a line with neither
+       pattern passes straight through, full length, into the compact template.
+       Every library line happens to have one; a generated class line is where
+       that stops being luck, so it is a check rather than a hope. */
+    const bad = [];
+    (D.omitClasses || []).forEach(c => {
+      if (!c.artefact) bad.push(`class "${c.id}" names no concrete artefact`);
+      if (D.shortOmit(c.line) === c.line)
+        bad.push(`class "${c.id}" has no sentence break — shortOmit() no-ops and ${c.line.length} chars land in the output-format bullet`);
+      if (!c.line || c.line.length < 80) bad.push(`class "${c.id}" line is too thin to be a real omit line`);
+    });
+    Object.keys(D.families).forEach(f => {
+      const seed = (D.famOmit || {})[f];
+      if (!seed || seed.length !== 1) bad.push(`family "${f}" seeds ${seed ? seed.length : 'no'} class(es), not exactly 1`);
+      else if (!(D.omitClasses || []).some(c => c.id === seed[0]))
+        bad.push(`family "${f}" seeds unknown class "${seed[0]}"`);
+      if (!D.families[f].facts || !D.families[f].facts.length) bad.push(`family "${f}" has no facts of its own`);
+      if (!D.families[f].why) bad.push(`family "${f}" has no purpose sentence of its own`);
+    });
+    return {
+      docs: D.library().map(d => ({ id: d.id, name: d.name, family: d.family })),
+      families: Object.keys(D.families),
+      classContract: bad,
+    };
+  });
 
   console.log(`\n${trade} — ${docs.length} documents`);
+  if (classContract.length) {
+    failing++; checked++;
+    fails.push({ trade, doc: '(omission-class contract)', bad: classContract });
+    console.log('  ** FAIL  (omission-class contract)');
+    classContract.forEach(b => console.log(`           ${b}`));
+  }
 
   for (const doc of docs) {
     checked++;
@@ -202,30 +248,103 @@ for (const trade of TRADES) {
   }
 
   /* THE CUSTOM PATH — "not in the list? build one anyway". It is the graceful
-     failure of search, so it has to produce a real block too. */
+     failure of search, so it has to produce a real block too.
+     AND ITS OMITTED LINE HAS TO BE REAL. For months this path emitted ONE
+     hardcoded sentence for every family on every trade, on the field the whole
+     library is built around, while claiming to be about "this trade". A block
+     that is 9,000 chars long passes a length check with that sentence in it, so
+     length is not the assertion: what is asserted is that the lines CHANGE with
+     the family, that they are the engine's own seeded classes, that the dead
+     sentence is gone, and that ticking them all off says so honestly instead of
+     painting an empty warning box. */
   checked++;
   const before = errs.length;
   const c = await page.evaluate(() => {
-    const btn = [...document.querySelectorAll('button')].find(b => /Not in the list/i.test(b.textContent));
-    if (!btn) return { err: 'no "not in the list" control' };
-    btn.click();
-    const inp = document.querySelector('#app input[type=text]');
-    if (!inp) return { err: 'custom path rendered no name field' };
-    inp.value = 'Pre-pour sign-off note';
-    inp.dispatchEvent(new Event('input', { bubbles: true }));
-    const block = document.querySelector('pre.block');
-    return { block: block ? block.textContent : '' };
+    const OMIT = '#app ul.ticks.omitpick input[type=checkbox]';
+    const drive = (famIdx) => {
+      /* The control toggles its own label, so match the CLOSED state and click
+         only then. Clicking blind closed the custom path again on the second
+         family and left the gate measuring the tuner. */
+      const btn = [...document.querySelectorAll('button')].find(b => /Not in the list/i.test(b.textContent));
+      if (btn) btn.click();
+      else if (![...document.querySelectorAll('button')].some(b => /Back to the list/i.test(b.textContent)))
+        return { err: 'no "not in the list" control' };
+      const inp = document.querySelector('#app input.docname');
+      if (!inp) return { err: 'custom path rendered no name field' };
+      inp.value = 'Pre-pour sign-off note';
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      const fams = [...document.querySelectorAll('#app input[type=radio][name=fam]')];
+      if (fams.length !== 5) return { err: `custom path offers ${fams.length} families, not 5` };
+      if (!fams[famIdx].checked) fams[famIdx].click();
+      const ticks = [...document.querySelectorAll(OMIT)];
+      const omitBox = document.querySelector('.omit');
+      const block = document.querySelector('pre.block');
+      return {
+        ticks: ticks.length,
+        on: ticks.filter(cb => cb.checked).length,
+        seeded: ticks.filter(cb => cb.checked).map(cb => cb.closest('li').textContent.trim()).join(' | '),
+        omitText: omitBox ? omitBox.textContent.trim() : '',
+        block: block ? block.textContent : '',
+        headings: (block ? block.textContent : '').match(/THE ONES? NOBODY WRITES DOWN/g) || [],
+      };
+    };
+    /* ALL FIVE FAMILIES. Four of them were never exercised here, which was
+       harmless while every one of them emitted the same hardcoded sentence and
+       load-bearing the moment each has its own seeded class and its own facts,
+       why and secondary asks. */
+    const runs = [];
+    for (let i = 0; i < 5; i++) {
+      const r = drive(i);
+      if (r.err) return r;
+      runs.push(r);
+    }
+    /* Untick every omission class: the honest empty state, not an empty red box. */
+    document.querySelectorAll(OMIT).forEach(cb => { if (cb.checked) cb.click(); });
+    const box = document.querySelector('.omit');
+    const blk = document.querySelector('pre.block');
+    /* And tick them ALL: the plural heading has to reach the OUTPUT FORMAT, not
+       just the prose block above it — the defect that shipped three bullets under
+       the word "ONE" on every multi-omit document in the library. */
+    document.querySelectorAll(OMIT).forEach(cb => { if (!cb.checked) cb.click(); });
+    const full = document.querySelector('pre.block');
+    return {
+      runs,
+      emptyOmitText: box ? box.textContent.trim() : '',
+      emptyBlock: blk ? blk.textContent : '',
+      allOnBlock: full ? full.textContent : '',
+    };
   });
   const cbad = [];
   if (c.err) cbad.push(c.err);
   if (errs.length > before) cbad.push('page error: ' + errs.slice(before).join(' | '));
-  if (!c.err && (!c.block || c.block.length < 400)) cbad.push(`custom block is ${c.block ? c.block.length + ' chars' : 'EMPTY'}`);
+  if (!c.err) {
+    const seeds = new Set();
+    c.runs.forEach((r, i) => {
+      if (!r.block || r.block.length < 400) cbad.push(`family #${i + 1}: custom block is ${r.block ? r.block.length + ' chars' : 'EMPTY'}`);
+      if (r.ticks < 4) cbad.push(`family #${i + 1}: ${r.ticks} omission class(es) offered — the point is a picked line, not a shrug`);
+      if (r.on !== 1) cbad.push(`family #${i + 1}: ${r.on} class(es) start ticked, not 1 — the seed biases DOWN because whatever ships ticked is what gets kept`);
+      if (/On almost every document in this trade/i.test(r.block || ''))
+        cbad.push(`family #${i + 1}: THE DEAD GENERIC SENTENCE IS BACK in the emitted block`);
+      if (r.headings.some(h => /THE ONES /.test(h)))
+        cbad.push(`family #${i + 1}: plural heading on a single seeded line`);
+      seeds.add(r.seeded);
+    });
+    /* Five families that all seed the same class are five families with one
+       hardcoded sentence again, wearing a tick. */
+    if (seeds.size < 3) cbad.push(`the five families seed only ${seeds.size} distinct class(es) — the seed is not family-driven`);
+    if (!/nothing ticked/i.test(c.emptyOmitText || ''))
+      cbad.push(`unticking every class leaves the omit box saying "${(c.emptyOmitText || '').slice(0, 60)}" — an empty warning box reads as a broken render`);
+    if (!c.emptyBlock || c.emptyBlock.length < 400) cbad.push('unticking every class emptied the block');
+    if (!/THE ONES NOBODY WRITES DOWN/.test(c.allOnBlock || ''))
+      cbad.push('with every class ticked the OUTPUT FORMAT still says "THE ONE NOBODY WRITES DOWN" above a list');
+  }
   if (cbad.length) {
     failing++; fails.push({ trade, doc: '(custom path)', bad: cbad });
     console.log(`  ** FAIL  (custom path)`);
     cbad.forEach(b => console.log(`           ${b}`));
   } else {
-    console.log(`  ok      ${'(custom path)'.padEnd(32)} ${c.block.length} chars`);
+    const r0 = c.runs[0];
+    console.log(`  ok      ${'(custom path × 5 families)'.padEnd(32)} ${r0.ticks} classes, 1 seeded each, ${new Set(c.runs.map(r => r.seeded)).size} distinct · ${r0.block.length} chars`);
   }
 
   page.off('pageerror', onErr);
