@@ -2151,6 +2151,31 @@ from, and the deploy now fails any commons surface whose HTML hand-lists them.
 copies downstream, and a comment saying where the list lives is not a gate.** The previous fix
 wrote that comment and shipped two hand-written copies past it.
 
+### 2026-08-14 — THE INDEX ANSWERED CONFIDENTLY FOR A ROW THE PAGE DOES NOT HAVE
+Found by driving the LIVE gear list after the deploy went green — every gate was passing,
+and five of six probe words landed perfectly. The sixth: **"zap strap" returned "Matches:
+Wire strippers."** No hedge, no fallback label. The alias index can only ever route to an
+object the surface actually CARRIES, and the gear list is tools — cable ties and wire
+connectors are consumables and have no row on it. So `find.js` dropped "zap" as noise
+(rule 1, correctly), matched "strap" somewhere by infix, and came back at FULL COVERAGE,
+which is `mode: "exact"` — so the honest-label branch never fired. **A fallback that
+achieves full coverage on the surviving token is indistinguishable from a hit**, and the
+gate could not see it either: routing probes are derived from aliases that DO join, so a
+word with nothing to join to was never probed. "marrette" was labelled honestly and still
+answered with a permanent marker.
+**The fix is not a better guess, it is a hand-off:** when the name table knows the word and
+this page has no row for it, that goes ABOVE the page's own results with the object named
+and a link. Then the gate exposed the better version of the same bug — **"mud ring",
+"plumber's tape" and "snake" each name TWO OR THREE different objects**, so handing him one
+silently picks a side. A loaded word now always says it is loaded (*"Three things go by
+that: Audio snake to live-sound crews; Hand drum auger to everybody; Fish tape to
+electricians"*) **even when the page can answer some of them** — a partial answer to an
+ambiguous question is the same lie in a smaller coat, and suppressing the notice because
+the gear list happened to carry two of the three was the first thing the new gate caught.
+**AND THE POSSESSIVE:** the fold split `'` into a word break, so "plumbers tape" and
+"plumber's tape" folded differently and one of the two objects went missing for anyone who
+types the way people actually type. Apostrophes are deleted, not broken on.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -3330,3 +3355,24 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   another, and the paste led every line with the order name. Storefront unchanged — no new
   tool, no new trade ·
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/names.html
+
+- `2026-08-14` — **[AXIS:COMMONS] THE WORD THAT MEANS THREE THINGS, ON A PAGE THAT ONLY HAD
+  ONE OF THEM** · **before:** the name table shipped green an hour earlier, and driving the
+  LIVE gear list found the one thing every gate agreed was fine: **"zap strap" answered
+  "Matches: Wire strippers"** with no hedge, because the index can only route to objects
+  that surface CARRIES and cable ties are consumables. Full coverage on the surviving token
+  reads as an exact hit, so the honest-label branch never ran · **after:** when the name
+  table knows a word this page cannot answer, the page **hands him off** — the object named,
+  above its own guesses, with a link. And a LOADED word always says so: **"snake" is an
+  audio snake, a hand drum auger and a fish tape**, "mud ring" and "plumber's tape" are two
+  things each, and the notice fires **even when the page can answer some of them**, because
+  a partial answer to an ambiguous question is the same lie in a smaller coat — which is
+  exactly what the new gate caught when the first cut suppressed it. The gate derives its
+  hand-off probes the same way it derives its routing probes: from every names row the gear
+  list has NO row for. Also fixed: the fold broke on `'`, so "plumbers tape" and "plumber's
+  tape" folded apart and one of the two objects vanished for anyone typing the way people
+  type. **BACKPORT: the hand-off is in the shared engine, so it is live on all three commons
+  surfaces at once, and surface #4 gets it for free.** Gates: commons-names **308/308**
+  (134 routing probes + hand-off probes), commons-bag 27/27, mobile-watertight
+  320/360/390/430 on all three, zero page errors ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/

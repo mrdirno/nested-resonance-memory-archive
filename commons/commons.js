@@ -107,7 +107,12 @@ window.Commons = (function () {
    * can only ever join two phrases that were already the same phrase. */
   function fold(s) {
     var base = String(s == null ? "" : s).replace(/\(.*?\)/g, " ").split(",")[0];
-    var t = base.toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/^ +| +$/g, "");
+    /* The apostrophe is DELETED, not turned into a break: nobody types it. He
+     * writes "plumbers tape" and the row says "plumber's tape" — split on the
+     * apostrophe those are "plumber s tape" and "plumbers tape", which fold to
+     * different things, and the second of the two objects that word names went
+     * missing. Same for lineman's, painter's, plumber's. */
+    var t = base.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, " ").replace(/^ +| +$/g, "");
     if (!t) return "";
     return t.split(" ").map(function (w) {
       return w.replace(/ies$/, "y").replace(/(ch|sh|s|x|z)es$/, "$1").replace(/([^s])s$/, "$1");
@@ -315,24 +320,117 @@ window.Commons = (function () {
      * result read as an exact one, and it names the words it threw away — a token
      * that matches nothing in the whole file is noise the reader added, and
      * silently deleting it is how a search box lies. */
+    /* ---- THE HAND-OFF — found live, on the shipped page ---------------------
+     * The alias index can only ever route to an object THIS surface carries, and
+     * the gear list is tools: cable ties and wire connectors are consumables and
+     * have no row on it. So "zap strap" dropped "zap" as noise, matched "strap"
+     * somewhere by infix, came back at full coverage — and the page said
+     * **"Matches: Wire strippers"** with total confidence to a man who asked for
+     * cable ties. "marrette" was labelled honestly but answered with a permanent
+     * marker. In both cases the commons KNOWS the word; the page he was standing
+     * on just could not answer it.
+     *
+     * So when the name table knows the query and this surface has no row for it,
+     * that goes at the TOP, above the surface's own guesses — and it never
+     * suppresses a real hit, because it only fires when the joined row is absent
+     * from the results. Routing in the other direction: the index sends the
+     * reader to the page that can answer instead of guessing. */
+    function handoff(hits) {
+      if (cfg.surface === "names.html" || !window.Find) return null;
+      var NAMES = window.COMMONS_NAMES || [];
+      if (!NAMES.length) return null;
+      if (!handoff.ix) {
+        handoff.ix = window.Find.index(NAMES, [
+          { get: function (r) { return r.n; }, w: 10, primary: true },
+          { get: function (r) { return (r.a || []).map(function (x) { return x.n; }); }, w: 9 }
+        ]);
+      }
+      /* AN EXACT WORD MAY BELONG TO MORE THAN ONE OBJECT, and on this page that
+       * is not an edge case, it is the thesis. "mud ring" is a plaster ring to an
+       * electrician and an open-back ring to a cabling tech; "plumber's tape" is
+       * hanger strap to one man and PTFE to the next. Handing him ONE of them
+       * silently picks a side, which is the same confident wrong answer this
+       * hand-off exists to stop. So an exact hit on several rows returns all of
+       * them and the page says the word is loaded. */
+      var qf = fold(q), exact = [];
+      NAMES.forEach(function (r) {
+        var said = fold(r.n) === qf || (r.a || []).some(function (x) { return fold(x.n) === qf; });
+        if (said) exact.push(r);
+      });
+      var rows = exact;
+      if (!rows.length) {
+        var f = window.Find.search(handoff.ix, q);
+        if (f.mode === "none" || !f.hits.length) return null;   /* a guess is not a hand-off */
+        rows = [f.hits[0]];
+      }
+      /* Suppress only when there is ONE thing it can mean and this page already
+       * showed it. With a loaded word the suppression is the bug: "snake" is a
+       * fish tape, a drum auger AND an audio snake, the gear list carries the
+       * first two, and staying quiet tells a man who meant the third that he has
+       * his answer. A partial answer to an ambiguous question is the same lie in
+       * a smaller coat. */
+      if (rows.length === 1) {
+        var here = hits.some(function (g) {
+          return g.id === rows[0].id || fold(g.n) === fold(rows[0].n);
+        });
+        if (here) return null;
+      }
+      return rows;
+    }
+
+    /* Who says the matching word for this row, so an ambiguous hand-off can say
+       whose word it is rather than making him guess again. */
+    function saidBy(row) {
+      var qf = fold(q), hit = null;
+      (row.a || []).forEach(function (x) { if (!hit && fold(x.n) === qf) hit = x; });
+      return hit && hit.by ? hit.by : "";
+    }
+
     function searchSections() {
       var r = window.Find.search(ix, q), note;
       if (r.mode === "none") {
-        note = "Nothing here goes by that. The closest words we carry:";
+        note = "Nothing on this page goes by that. The closest words here:";
       } else if (r.mode === "relaxed") {
         note = "Nothing matched all of that. Closest on the words that did:";
       } else {
         note = "Every trade searched, not just the one you picked — you heard it off somebody else.";
       }
-      if (r.noise && r.noise.length) {
+      /* Only worth saying when something DID match: when nothing did, the title
+         already said so and repeating it back reads as a broken sentence. */
+      if (r.mode !== "none" && r.noise && r.noise.length) {
         note += " Ignored “" + r.noise.join("”, “") + "” — nothing here uses that word.";
       }
-      return [{
+      var out = [];
+      var send = handoff(r.hits);
+      if (send && send.length === 1) {
+        out.push({
+          slug: "handoff",
+          title: "He Means " + send[0].n,
+          note: "Nothing on this page is called that — but the trades are, and “" + send[0].n +
+                "” is the name to write down. The rest of the words for it are on the name table.",
+          items: [],
+          link: { href: "names.html", label: "Ask For It Right →" }
+        });
+      } else if (send) {
+        var COUNT = ["", "", "Two", "Three", "Four", "Five"];
+        out.push({
+          slug: "handoff",
+          title: (COUNT[send.length] || String(send.length)) + " Things Go By That",
+          note: send.map(function (x) {
+            var by = saidBy(x);
+            return x.n + (by ? " to " + by : "");
+          }).join("; ") + ". Different objects, same word — say which one you want.",
+          items: [],
+          link: { href: "names.html", label: "Ask For It Right →" }
+        });
+      }
+      out.push({
         slug: "find",
-        title: r.mode === "none" ? "Closest We Carry" : "Matches",
+        title: r.mode === "none" ? "Closest On This Page" : "Matches",
         note: note,
         items: r.hits
-      }];
+      });
+      return out;
     }
 
     function render() {
@@ -342,20 +440,28 @@ window.Commons = (function () {
 
       secs.forEach(function (s) {
         total += s.items.length;
-        if (!s.items.length) return;
+        if (!s.items.length && !s.link) return;
         var sec = document.createElement("section");
-        sec.className = "sec";
+        sec.className = "sec" + (s.link ? " sendon" : "");
 
         var head = document.createElement("div");
         head.className = "sechead";
         head.innerHTML = "<h2>" + esc(s.title) + "</h2>" +
-                         '<span class="count">' + s.items.length + " " + esc(cfg.countNoun) + "</span>";
+                         (s.link ? "" : '<span class="count">' + s.items.length + " " + esc(cfg.countNoun) + "</span>");
         sec.appendChild(head);
 
         var note = document.createElement("p");
         note.className = "secnote";
         note.textContent = s.note;
         sec.appendChild(note);
+
+        if (s.link) {
+          var a = document.createElement("a");
+          a.className = "btn";
+          a.href = s.link.href;
+          a.textContent = s.link.label;
+          sec.appendChild(a);
+        }
 
         var ul = document.createElement("ul");
         ul.className = "gear";

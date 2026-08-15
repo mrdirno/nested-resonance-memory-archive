@@ -150,6 +150,42 @@ if (!probes.length) {
   await page.fill('#q', '');
 }
 
+/* 3a-ii. THE HAND-OFF. The index can only route to objects THIS surface carries,
+ * and the gear list is tools — cable ties and wire connectors are consumables and
+ * have no row on it. Found live on the shipped page: "zap strap" dropped "zap" as
+ * noise, matched "strap" by infix, came back at full coverage, and the page said
+ * "Matches: Wire strippers" with total confidence. So every alias belonging to a
+ * names row that the gear list CANNOT answer must produce the hand-off instead of
+ * a confident wrong hit. Derived from the data, same as the probes above. */
+const gearIds = new Set(GEAR.map((g) => g.id));
+const gearNames = new Set(GEAR.map((g) => norm(g.n.replace(/\(.*?\)/g, ' ').split(',')[0])));
+const orphans = NAMES.filter((r) => !gearIds.has(r.id) && !gearNames.has(norm(r.n)));
+let handoffProbes = 0;
+for (const r of orphans.slice(0, 24)) {
+  const word = (r.a || [])[0] && r.a[0].n;
+  if (!word || gearHay.includes(norm(word))) continue;
+  await page.fill('#q', word);
+  const titles = await page.locator('.sechead h2').allTextContents();
+  handoffProbes++;
+  /* A word may belong to several objects — "mud ring" and "plumber's tape" each
+   * name two — and there the honest hand-off is BOTH, not a picked side. So the
+   * gate asks that the page handed off, not that it handed off to one row. */
+  const ambiguous = NAMES.filter((x) => (x.a || []).some((al) => norm(al.n) === norm(word))).length > 1;
+  const want = ambiguous ? /things go by that/i : new RegExp('^he means ' + r.n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i');
+  if (!titles.some((t) => want.test(t.trim()))) {
+    fail(`handoff: "${word}" is a ${r.n} and the gear list carries no such row, but it answered with ${titles.join(' / ')} instead of handing him to the name table`);
+  } else ok();
+}
+await page.fill('#q', '');
+
+/* A word the whole commons has never heard must NOT produce a hand-off — that
+ * would be a guess wearing a certainty the page has not earned. */
+await page.fill('#q', 'qwertyuiop');
+if ((await page.locator('.sechead h2').allTextContents()).some((t) => /he means/i.test(t))) {
+  fail('handoff: fired on a word nothing in the commons knows — a guess is not a hand-off');
+} else ok();
+await page.fill('#q', '');
+
 /* 3b. a word in NOTHING still never dead-ends (find.js rule 2, honestly labelled) */
 await page.fill('#q', 'qwertyuiop');
 const deadNote = (await page.locator('.secnote').first().textContent()) || '';
