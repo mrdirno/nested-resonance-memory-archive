@@ -12,16 +12,15 @@
  *   audience  who it's for / who they send the output to
  *   pinned    optional — keep at the very top of the hub regardless of favorites
  *
- * WHAT IS NOT HERE YET, AND WHY IT IS NOT: THE YARD CALL. Three independent
- * in-trade panels named the afternoon material call to the yard unprompted, and
- * the 20-year prune kept it — block by shape and cube, mortar by the bag in a
- * type HE states, sand by the yard, wire by the roll, lintels by length, and
- * which side of the building the forks put it on. It is the strongest unbuilt
- * DEPTH rung in this kit and it is ranked first in av/AV_SOCIETY.md. It is not
- * in this first commit because a checklist-request the size of the supply-house
- * order is a vocabulary build in its own right, and half a yard call is worse
- * than none: a man who calls in an order off a list that is missing a line
- * stops opening the list.
+ * THE YARD CALL WAS THE LINE THIS FILE SHIPPED WITHOUT, AND IT IS PAID.
+ * The first commit named it here — three independent in-trade panels named the
+ * afternoon material call unprompted, the 20-year prune kept it first, and it
+ * was held back because "a checklist-request the size of the supply-house order
+ * is a vocabulary build in its own right, and half a yard call is worse than
+ * none: a man who calls in an order off a list that is missing a line stops
+ * opening the list." Built 2026-08-15 as the ninth instance of shape #1: 62
+ * lines across seven sections, the unit of issue attached to every bare number,
+ * and the message ending on what is NOT on the call.
  *
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
@@ -37,6 +36,16 @@ window.TOOLKIT_TOOLS = [
     chip: "#B9EE1B",
     audience: "Foreman → super / EC / plumber",
     pinned: true
+  },
+  {
+    // The one every mason makes and nobody writes down. Its whole job is to be
+    // COMPLETE — the unit of issue on every line, and a message that ends by
+    // naming what is missing rather than shipping short.
+    name: "The Yard Call",
+    href: "yard-call.html",
+    desc: "Tomorrow's material off a list instead of off your memory — block by the cube, mud by the bag, sand by the yard, wire by the roll, and which side of the building the forks set it on. Put a bare number in and the yard's own word comes with it. The message closes by naming what you didn't put on it.",
+    chip: "#8AB50E",
+    audience: "Foreman / tender → the supply house"
   },
   {
     name: "What I'll Build In",

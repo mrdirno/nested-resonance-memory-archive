@@ -577,6 +577,42 @@
   function sizeMenu() {
     var m = window.__avMenu; if (!m || !m.hasAttribute("open")) return;
     var drop = m.querySelector(".av-drop"); if (!drop) return;
+    /* THE LEFT EDGE IS SETTLED BEFORE THE FLOOR IS, AND THE ORDER IS HALF THE FIX.
+     * These two look independent and are not: a panel hanging off the right edge
+     * makes a phone ZOOM OUT to fit, and a zoomed-out phone reports a TALLER
+     * window.innerHeight — so a floor computed while the panel still overflowed
+     * was computed against a glass that only existed because of the overflow.
+     * Measured: /roofing/ at 320px got max-height 475px off an inflated
+     * innerHeight of 543, then the clamp on the next line removed the overflow,
+     * the zoom snapped back to a real 480px glass, and the menu was left 47px
+     * too tall with its last row unreachable — a defect INTRODUCED by fixing the
+     * one above it, in the same function, three lines apart. Clamp first and both
+     * readings are taken in a world that is not moving. */
+    /* AND THE LEFT EDGE IS MEASURED FOR THE SAME REASON THE FLOOR IS. The panel
+     * hangs at left:0 off the Tools button, so where it lands depends on how wide
+     * the BRAND is — and the brand is now measured per trade and per width
+     * (fitBar), so a trade that keeps its word pushes the 250px panel further
+     * right than it ever went before. Caught by
+     * tools/toolkit-gates/menu-reachability.mjs the same cycle: /roofing/ at
+     * 360px put the panel 2px past the glass once "ROOFING" stopped being hidden.
+     * Reset to 0 first so this reads the true position, pull back by exactly what
+     * runs over, and never so far that the panel's own left edge leaves the glass
+     * — off the right is a scrollbar, off the left is a menu you cannot reach.
+     * AND IT IS clientWidth, NOT innerWidth, WHICH IS THE OPPOSITE OF THE HEIGHT
+     * QUESTION SIX LINES UP. innerHeight is the right question vertically — it is
+     * the glass on iOS where 100vh is not. Horizontally innerWidth is the VISUAL
+     * viewport, and on a phone it GROWS to cover whatever runs off the side: with
+     * the panel 8px over, Chromium's mobile emulation reported innerWidth 368
+     * against a 360px layout viewport, so a clamp written against it corrected by
+     * exactly the amount that kept the overflow. A measurement that moves with the
+     * defect cannot measure the defect. clientWidth is the layout viewport, it is
+     * what documentElement.scrollWidth is compared against, and it does not move. */
+    drop.style.left = "0px";
+    var box = drop.getBoundingClientRect();
+    var lim = document.documentElement.clientWidth || window.innerWidth;
+    var over = box.right - (lim - 8);
+    if (over > 0) drop.style.left = (-Math.round(Math.min(over, Math.max(0, box.left - 8)))) + "px";
+
     var glass = window.innerHeight || document.documentElement.clientHeight || 0;
     if (!glass) return;
     // top does not depend on max-height, so this reads clean without a reset.

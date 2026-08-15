@@ -96,6 +96,23 @@ const ROWLOG = new Set(
 /* Duck-typed so it drops straight into `r.match.test('/' + page)` below. */
 const IS_ROWLOG = { test: (slashed) => ROWLOG.has(slashed.replace(/^\//, '')) };
 
+/* THE NAV MENU IS SAMPLED, NOT SWEPT, AND THE SAMPLE IS NAMED SO IT IS NOT
+ * MISTAKEN FOR COVERAGE. The dropdown is injected by the shared runtime and is
+ * identical on every page of a trade but two things: the BRAND width (which
+ * varies per trade and decides where the panel lands) and the favourite ★
+ * (which only tool pages carry, and which pushes the panel further). So the
+ * informative sample is a hub and one tool page PER TRADE — 22 loads instead of
+ * 107. Opening the menu on all of them would roughly double the runtime of the
+ * gate that has to run before every ship, and a gate nobody runs is worse than
+ * no gate (§SCARS, the soft-field reasoning). If a page ever ships its own nav,
+ * this sample stops being enough and that is the day to sweep. */
+const MENU_SAMPLE = new Set(DIRS.flatMap(dir => {
+  const files = readdirSync(ROOT + dir).filter(f => f.endsWith('.html')).sort();
+  const tool = files.find(f => f !== 'index.html');
+  return [`${dir}/index.html`, tool && `${dir}/${tool}`].filter(Boolean);
+}));
+const IS_MENU_SAMPLE = { test: (slashed) => MENU_SAMPLE.has(slashed.replace(/^\//, '')) };
+
 /* ── REVEALED STATES ─────────────────────────────────────────────────────
  * A page loaded and left alone is not the page a man uses. Half of what these
  * tools render only exists after a tap, and this gate measured none of it —
@@ -112,6 +129,30 @@ const IS_ROWLOG = { test: (slashed) => ROWLOG.has(slashed.replace(/^\//, '')) };
  * one load, no cost.
  */
 const REVEALS = [
+  {
+    name: 'the Tools menu open',
+    /* THE ONE STATE EVERY PAGE IN THE PROGRAM SHARES, AND THIS GATE HAD NEVER
+       OPENED IT. The nav's dropdown is position:absolute at left:0 off the Tools
+       button, so where it lands depends on how wide the BRAND is — and the day
+       the brand stopped being truncated (2026-08-15) the 250px panel started
+       running off the right edge of the glass on ten trades. This gate measured
+       all 107 pages at four widths and passed every one, because it only ever
+       measured the nav closed. tools/toolkit-gates/menu-reachability.mjs caught
+       it, which is the only reason it is not live: a gate that opens the menu
+       existed for an unrelated reason. Do not rely on that twice.
+
+       Sampled per trade rather than swept — see MENU_SAMPLE above for what that
+       buys and what it costs. */
+    match: IS_MENU_SAMPLE,
+    run: () => {
+      const btn = document.querySelector('.av-menu > button');
+      if (!btn) return null;                     // hub or page with no menu — nothing to reveal
+      btn.click();
+      const drop = document.querySelector('.av-menu[open] .av-drop');
+      if (!drop) return 'the Tools button did not open the menu';
+      return null;
+    },
+  },
   {
     name: 'custom path, every omitted line ticked',
     match: /\/write-up\.html$/,

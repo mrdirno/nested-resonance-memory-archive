@@ -538,3 +538,279 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It's a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test, a fire watch or a lane closure is theirs to issue and theirs to number — this page just tells them it's coming and asks how they want it run. And check your contract before you send it: plenty of them say you don't talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+
+/* ── THE YARD CALL (shape #1 — shared/checklist-request.js) ────────────────
+ * The vocabulary for yard-call.html, and the rung `masonry/tools.js` shipped
+ * naming as the one it was deliberately not building yet. Three independent
+ * in-trade panels named the afternoon call to the supply house unprompted; the
+ * 20-year prune kept it first. Its own registry comment states the bar it has to
+ * clear: "a man who calls in an order off a list that is missing a line stops
+ * opening the list."
+ *
+ *  · THE UNIT OF ISSUE IS THE LINE, not a modifier on it. Block leaves the yard
+ *    by the CUBE, mortar by the BAG, sand by the YARD, wire by the ROLL, brick by
+ *    the strap, lintels each. "6 block" and "6 cubes of block" are two different
+ *    trucks. So every line carries the word the yard sells it in, and the page
+ *    attaches that word to a bare number instead of asking him to pick a unit off
+ *    a select — which is why the quantity is free text: he already says "six
+ *    cube", "a pallet", "half a yard", and a spinner is a desk person's idea of
+ *    how a load is counted.
+ *  · THE DROP IS ONLY ON WHAT THE FORKS CARRY. Framing puts a drop on every line
+ *    because a boom truck sets everything; here the boxed goods go in the gang
+ *    box and the argument is about the heavy units — a cube set where the wall is
+ *    going, or in the scaffold line, gets moved twice by the crew that was
+ *    supposed to be laying.
+ *  · THE RUN IS THE ONE THING A SECOND ORDER CANNOT GUESS. Face units come out of
+ *    a run and the colour moves run to run. A re-order that does not name what is
+ *    already up is how a wall gets a stripe nobody can wash off. It is a FLAG on
+ *    the units it applies to and a passthrough field in the header — never a
+ *    lookup, because we do not hold anybody's lot numbers.
+ *  · NOTHING RATED, and this file's refusal list at the top governs every line
+ *    below it. No mortar type as a value (he states it), no proportion, no bar
+ *    size or lap, no lintel bearing, no wire or tie spacing, no lift height, no
+ *    cold-weather number, no brand as a thing to write down. Where a spec decides
+ *    it, the line says so and holds an empty box.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would
+   * be the tool choosing for him; a printed value nobody picked would be the tool
+   * putting words in his message. */
+  function n(q) { return "— " + q + " —"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  /* WHERE THE FORKS SET IT. Not a floor — a mason works off the ground and up a
+   * stage, so the question is which elevation and how close to the wall. "Not in
+   * the scaffold line" is the one every layer has had to say out loud. */
+  var DROPS = ["North side", "South side", "East side", "West side",
+               "At the leads", "Behind the wall — clear of the scaffold line",
+               "By the mixer", "Laydown / yard", "Inside the building", "Split it — see the note"];
+  function drop() { return ax("Set it", [n("which side")].concat(DROPS), true); }
+  /* Nominal WIDTH is the wall he is already laying, off his own set. It is not a
+   * rating, a spacing or a strength, and it is the first thing the yard asks. */
+  function width(q) { return ax("Width", [n(q || "which width")].concat(["4 in", "6 in", "8 in", "10 in", "12 in", "Two widths — see the note"])); }
+  /* The one flag that repeats: this has to match what is already standing. */
+  function matchRun() { return [{ k: "run", label: "Has to match what's already up" }]; }
+
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.yard = {
+    drops: DROPS,
+
+    cats: [
+      {
+        id: "call",
+        name: "What are you calling in?",
+        docName: "The call",
+        hint: "Paste your whole list if you keep one — one line each. Count it the way you say it: 6 cube, a pallet, 4 yard, 2 roll. Then set the heavy stuff below.",
+        writein: true,
+        items: []
+      },
+
+      {
+        id: "block",
+        name: "Block",
+        docName: "Block",
+        hint: "By the CUBE. Say the shape — a cube of stretcher where you needed bond beam is a course you can't close.",
+        items: [
+          { n: "Stretcher", sub: "THE STANDARD UNIT — BY THE CUBE", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Half block", sub: "BY THE CUBE — RUN THE BOND OUT AND YOU'RE CUTTING ALL DAY", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Bond beam / knockout", sub: "BY THE CUBE — SAY IF YOU WANT THEM KNOCKED OR SOLID-BOTTOM", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Lintel block", sub: "BY THE CUBE", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Open-end / A-block", sub: "BY THE CUBE — THE ONE THAT DROPS AROUND THE BAR", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Sash / jamb block", sub: "BY THE CUBE — SAY WHICH FRAME IT'S GOING AROUND", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Bullnose", sub: "BY THE CUBE — SAY SINGLE OR DOUBLE, AND WHICH CORNER", unit: "cube",
+            ax: [width(), drop()] },
+          /* THE FIRST LINE OF A REAL TAKEOFF, AND THE FIRST DRAFT SHIPPED WITHOUT
+             IT. An in-trade read found ten shapes and no corner: every building
+             has them, a stretcher cannot run into a 90 and come out with a
+             finished end, and a list missing the line a man orders first is the
+             list he stops opening (§THE YARD CALL's own bar). */
+          { n: "Corner / end block", sub: "BY THE CUBE — THE FINISHED END, FOR CORNERS AND WHERE THE WALL STOPS", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Pilaster block", sub: "BY THE CUBE — SAY WHICH ONE OFF YOUR SET", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Cap / solid top", sub: "BY THE CUBE", unit: "cube",
+            ax: [width(), drop()] },
+          { n: "Solid", sub: "BY THE CUBE", unit: "cube",
+            ax: [width(), drop()] }
+          /* HEADER BLOCK WAS HERE AND WAS CUT, not for safety and not for
+             clutter: it keys a brick header course into block backup, which
+             veneer ties replaced across this trade decades ago. Shipping it while
+             the CORNER was missing had the list exactly backwards. */
+        ]
+      },
+
+      {
+        id: "face",
+        name: "Face units",
+        docName: "Face units",
+        hint: "Anything that stays visible. Tick MATCH on every line that has to line up with what's already standing, and put the run in the header — colour moves run to run and a stripe doesn't wash off.",
+        items: [
+          { n: "Brick", sub: "BY THE CUBE — SAY IF YOU WANT STRAPS, AND THE SIZE AND COLOUR OFF YOUR SUBMITTAL", unit: "cube",
+            flags: matchRun(), notePlaceholder: "size, colour and blend off the approved submittal — and the run if you've got the ticket",
+            ax: [drop()] },
+          { n: "Split-face", sub: "BY THE CUBE — SAY THE COLOUR AND WHICH FACES ARE SPLIT", unit: "cube",
+            flags: matchRun(), notePlaceholder: "colour, and one face or two",
+            ax: [width(), drop()] },
+          { n: "Ground-face / burnished", sub: "BY THE CUBE — HANDLE IT LIKE GLASS", unit: "cube",
+            flags: matchRun(), notePlaceholder: "colour, and say if you want it wrapped",
+            ax: [width(), drop()] },
+          { n: "Scored", sub: "BY THE CUBE — SAY HOW MANY SCORES", unit: "cube",
+            flags: matchRun(), ax: [width(), drop()] },
+          { n: "Ribbed / fluted", sub: "BY THE CUBE", unit: "cube",
+            flags: matchRun(), ax: [width(), drop()] },
+          /* GLAZED IS ITS OWN ORDER AND ITS OWN LEAD TIME, and it was missing
+             entirely rather than folded into a neighbour — every school corridor,
+             hospital and commercial kitchen runs it. */
+          { n: "Glazed block", sub: "BY THE CUBE — SAY THE COLOUR AND WHICH FACES ARE GLAZED", unit: "cube",
+            flags: matchRun(), notePlaceholder: "colour off the approved submittal, and one face or two",
+            ax: [width(), drop()] },
+          { n: "Cast stone / precast trim", sub: "EACH — SILLS, BANDS, CAPS, COPING", unit: "ea",
+            flags: matchRun(), notePlaceholder: "which piece, and the length off the shop drawing",
+            ax: [drop()] },
+          { n: "Stone", sub: "SAY THE TON OR THE PALLET WITH THE COUNT — IT COMES BOTH WAYS",
+            flags: matchRun(), notePlaceholder: "what it is, and full bed or veneer",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "mud",
+        name: "Mud, sand & grout",
+        docName: "Mud, sand & grout",
+        hint: "The type is whatever your spec says — type it in, this page won't pick one for you. Sand by the yard. Nobody lays without all three of these.",
+        items: [
+          { n: "Mortar", sub: "BY THE BAG — SAY THE TYPE OFF YOUR SPEC", unit: "bag",
+            notePlaceholder: "the type your spec calls for, in your words — this page doesn't pick one",
+            ax: [drop()] },
+          { n: "Portland", sub: "BY THE BAG", unit: "bag", ax: [drop()] },
+          { n: "Lime", sub: "BY THE BAG", unit: "bag", ax: [drop()] },
+          { n: "Coloured mortar", sub: "BY THE BAG — THE COLOUR AND THE LOT BOTH MATTER", unit: "bag",
+            flags: matchRun(), notePlaceholder: "colour and the lot already on the wall",
+            ax: [drop()] },
+          { n: "Sand", sub: "BY THE YARD — SAY IF IT'S GOING IN A PILE OR A BOX", unit: "yd",
+            ax: [drop()] },
+          /* THE SILO IS HOW MUD ARRIVES ON ANYTHING WITH REAL SQUARE FOOTAGE, and
+             the first draft had bags and a portable mixer — which is a house, not
+             a commercial job. Half the mud calls a foreman makes are a fill or a
+             swap, and there was no line for either. */
+          { n: "Silo — fill or swap", sub: "SAY WHICH, AND WHAT'S IN IT NOW",
+            notePlaceholder: "fill it, swap it, or pick it up — and the type off your spec",
+            ax: [drop()] },
+          { n: "Grout — bagged", sub: "BY THE BAG", unit: "bag", ax: [drop()] },
+          { n: "Grout — by the truck", sub: "BY THE YARD — SAY THE TIME YOU WANT IT ON SITE", unit: "yd",
+            notePlaceholder: "what time, and where he sets up — mix is off your spec, not off this page",
+            ax: [drop()] },
+          { n: "Admixture", sub: "ONLY THE ONE YOUR SPEC ALLOWS — NAME IT, THIS PAGE WON'T",
+            notePlaceholder: "which one your spec allows, and how much is the spec's call — not this page's" },
+          { n: "Water — tank or buffalo", sub: "IF THERE'S NO BIB YOU CAN REACH", ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "inwall",
+        name: "What goes in the wall",
+        docName: "What goes in the wall",
+        hint: "Sizes, lengths and spacings come off your approved set — this page carries what you write and specs none of it.",
+        items: [
+          /* BUNDLE, NOT ROLL, and the first draft hedged in the sub-line ("by the
+             roll or the bundle") while the code committed to the wrong one. This
+             is welded 9-gauge in rigid straight lengths — coil it and the welds
+             are gone. A hedge in the words is a tell that the data is a guess. */
+          { n: "Joint reinforcement — ladder", sub: "BY THE BUNDLE", unit: "bundle",
+            ax: [width("which wall"), drop()] },
+          { n: "Joint reinforcement — truss", sub: "BY THE BUNDLE", unit: "bundle",
+            ax: [width("which wall"), drop()] },
+          { n: "Veneer ties / anchors", sub: "BY THE BOX", unit: "bx",
+            notePlaceholder: "which type off your set — screw-on, dovetail, seismic, adjustable" },
+          { n: "Rebar", sub: "SIZE AND LENGTH OFF YOUR SET — THIS PAGE WON'T SIZE IT",
+            notePlaceholder: "size and length off your approved set, and how many of each" },
+          { n: "Bar positioners", sub: "BY THE BOX", unit: "bx" },
+          { n: "Lintels — steel angle", sub: "EACH — SIZE AND LENGTH OFF THE SCHEDULE", unit: "ea",
+            notePlaceholder: "the size and length off your schedule — bearing is the engineer's, not this page's",
+            ax: [drop()] },
+          { n: "Lintels — precast", sub: "EACH — LENGTH OFF THE SCHEDULE", unit: "ea",
+            notePlaceholder: "length off your schedule",
+            ax: [drop()] },
+          { n: "Thru-wall flashing", sub: "BY THE ROLL — THE MATERIAL IS ON YOUR SET", unit: "roll",
+            notePlaceholder: "what the set calls for, and the width" },
+          { n: "Weeps / vents", sub: "BY THE BOX", unit: "bx" },
+          /* "MORTAR NET" WAS HERE AND IT IS A TRADEMARK — the same class as the
+             LULL two sections down, caught in the same read. The joint
+             reinforcement two lines up was de-branded to ladder/truss and this
+             one was not, which is how a brand survives a de-branding pass. */
+          { n: "Cavity drainage mat", sub: "BY THE ROLL", unit: "roll" },
+          { n: "Control joint key", sub: "BY THE STICK", unit: "stick",
+            notePlaceholder: "the profile off your set, and how long" },
+          { n: "Grout screen / cleanout covers", sub: "BY THE BOX OR THE BUNDLE — SAY WHICH", 
+            notePlaceholder: "which size, off your set" },
+          { n: "Insulation — cell fill or board", sub: "SAY WHICH AND HOW MUCH",
+            notePlaceholder: "which one your set calls for", ax: [drop()] },
+          { n: "Embeds, sleeves, bolts", sub: "SOMEBODY ELSE'S PIECE THAT GOES IN YOUR WALL",
+            notePlaceholder: "what it is, whose it is, and who's bringing it" }
+        ]
+      },
+
+      {
+        id: "tender",
+        name: "What the tender needs",
+        docName: "What the tender needs",
+        hint: "Half a yard call is the half nobody writes down. Mud with nothing to mix it in is a morning gone.",
+        items: [
+          { n: "Mixer", sub: "AND THE FUEL FOR IT — SAY IF YOU NEED IT DELIVERED OR YOU'RE PICKING IT UP",
+            ax: [drop()] },
+          // "THE LULL" was here in the first draft, in the one file whose own
+          // header names that trademark as forbidden — a word people SAY is not a
+          // word we PRINT, because printing it puts it on somebody's order.
+          { n: "Fuel / propane", sub: "FOR THE MIXER, THE SAW, THE TELEHANDLER" },
+          { n: "Mortar boards / pans", sub: "HOW MANY BOARDS", unit: "ea" },
+          { n: "Tubs & buckets", sub: "HOW MANY", unit: "ea" },
+          { n: "Wheelbarrows", sub: "", unit: "ea" },
+          { n: "Shovels, hoes, brushes", sub: "HOW MANY OF EACH" },
+          { n: "Scaffold frames & braces", sub: "BY THE SET — YOUR COMPETENT PERSON BUILDS IT, THIS PAGE JUST ORDERS IT", unit: "set",
+            notePlaceholder: "how many sets, and how high you're going",
+            ax: [drop()] },
+          { n: "Plank", sub: "BY THE PIECE — SAY THE LENGTH", unit: "ea", ax: [drop()] },
+          { n: "Screw jacks, base plates, guardrail", sub: "COUNTS ONLY", ax: [drop()] },
+          { n: "Saw + blades", sub: "SAY WET OR DRY — AND IF IT'S WET, WHO'S BRINGING THE WATER",
+            notePlaceholder: "wet or dry, and blade size", ax: [drop()] },
+          { n: "Line, blocks, twigs, corner poles", sub: "AND SPARE LINE" },
+          { n: "Chalk, pencils, string", sub: "" },
+          { n: "Masonry cleaner", sub: "THE ONE YOUR SPEC ALLOWS — NAME IT, THIS PAGE WON'T",
+            notePlaceholder: "the one the spec and the unit manufacturer both allow — the wrong cleaner is a warranty argument" },
+          { n: "Poly / tarps", sub: "COVER THE TOP OF THE WALL BEFORE YOU LEAVE", ax: [drop()] },
+          { n: "Heaters / blankets", sub: "COUNTS ONLY — THE PROTECTION PLAN IS NOT ON THIS PAGE" }
+        ]
+      },
+
+      {
+        id: "forks",
+        name: "The forklift, and what goes back",
+        docName: "The forklift, and what goes back",
+        hint: "The half of the call that's worth money and never gets made. Empties sitting on the job are a deposit you don't get back and a laydown you can't use.",
+        items: [
+          { n: "Forklift / telehandler", sub: "SAY WHEN YOU NEED IT AND HOW LONG YOU'RE KEEPING IT",
+            notePlaceholder: "when it lands, when it leaves, and who's certified on it" },
+          { n: "Take the empty cubes back", sub: "SAY ROUGHLY HOW MANY ARE STACKED", unit: "cube" },
+          { n: "Take the leftover material back", sub: "SAY WHAT IT IS AND WHETHER IT'S BEEN RAINED ON" },
+          { n: "Pick up the mixer / the scaffold", sub: "WHEN YOU'RE DONE WITH IT" }
+        ]
+      }
+    ],
+
+    /* A pasted line gets the same drop as a picked one — a write-in is where the
+     * odd heavy item lands ("2 cube of 12 bond beam"), and it is the line most
+     * likely to end up in the scaffold line if nobody says where it goes. */
+    writeinAx: [drop()]
+  };
+})();

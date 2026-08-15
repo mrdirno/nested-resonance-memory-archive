@@ -1230,12 +1230,39 @@ panels independently named the same three rungs. Shipped: `wheres-the-wall` (pin
 ordering two other trades to count down to 'Before CMU caps out' and 'Before block goes
 up' for months and nothing anywhere publishes the number they are counting to."*
 
-**RANKED NEXT, AND NOT HALF-BUILT ON PURPOSE: `yard-call`.** All three panels named the
-afternoon material call unprompted — block by shape and cube, mortar by the bag in a type
-HE states, sand by the yard, wire by the roll, lintels by length, and which side of the
-building the forks put it on. It is a vocabulary build the size of the supply-house order,
-and **half a yard call is worse than none**: a man who calls in an order off a list that is
-missing a line stops opening the list.
+**~~RANKED NEXT, AND NOT HALF-BUILT ON PURPOSE:~~ SHIPPED 2026-08-15: `yard-call`.** All
+three panels named the afternoon material call unprompted — block by shape and cube,
+mortar by the bag in a type HE states, sand by the yard, wire by the roll, lintels by
+length, and which side of the building the forks put it on. It was held back as a
+vocabulary build the size of the supply-house order, on the rule that **half a yard call is
+worse than none**: a man who calls in an order off a list that is missing a line stops
+opening the list. Built as the EIGHTH instance of shape #1 — 59 lines, seven sections —
+and the hold was right about where the work was. **What it does that the other seven order
+pages do not, and what the next one should steal:**
+- **THE UNIT OF ISSUE IS ATTACHED TO THE NUMBER, not offered as a select.** "6 block" and
+  "6 cube of block" are two different trucks. Each line declares the word the yard sells it
+  in; a BARE number gets that word attached ("6 cube", "40 bags", "1 roll"), and anything
+  written in words is left exactly as written ("half a cube"). The tool must never re-count
+  a man's order, and a unit select on 59 lines is 59 taps nobody makes.
+- **THE MESSAGE ENDS ON WHAT IS NOT ON IT.** The failure a yard call dies of is an ABSENT
+  line, so the document closes by naming them — a line with no count, units with no mortar
+  and no sand, a heavy line with no side — **as questions the yard man can answer**, never
+  as corrections. He is allowed to order block on its own and the page does not get a vote.
+  This is the forget-list from engine B arriving in shape #1 for the first time.
+- **THE RUN.** Face units come out of a run and the colour moves run to run; a re-order
+  that does not name what is already standing is how a wall gets a stripe that will not
+  wash off. A flag on the lines it applies to, a passthrough field in the header, a
+  gathered MATCH list, and a call-out when one exists without the other. Never a lookup —
+  we hold nobody's lot numbers.
+- **THE SIDE IS ONLY ON WHAT THE FORKS CARRY**, deliberately unlike `framing/the-load.html`
+  where a boom truck sets every line. A drop select on a box of weeps is a control that
+  teaches a man to skip controls.
+
+**STILL OWED IN THIS KIT, in the prune's order:** `before-we-grout` as a ROW LOG (the
+write-up library ships the narrative; the counted per-cell ledger is the receiving half of
+the EC's and the plumber's live asks) · the panel/mock-up record (every colour, joint and
+cleaning argument for a year resolves at one wall, and nothing in the program points at it
+yet — the `yard-call` MATCH flag is now the first thing that would read it).
 
 **KILLED BY THE PRUNE, do not resurrect:** `still-waiting-on` (a config flag — `shared/rowlog.js`
 already ships named document filters for exactly this) · `hose-test` (the shape went
@@ -1402,6 +1429,68 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A MEASUREMENT THAT MOVES WITH THE DEFECT CANNOT MEASURE THE DEFECT (2026-08-15).**
+  The nav dropdown was running off the right edge of the glass, so the runtime clamped it
+  against `window.innerWidth - 8`. It read green by hand and stayed red in the gate. Under
+  Chromium's mobile emulation `window.innerWidth` is the VISUAL viewport, and the visual
+  viewport **grows to cover whatever runs off the side** — with the panel 8px over, the
+  browser reported 368 against a 360px layout viewport, so the clamp corrected by exactly
+  the amount that preserved the overflow, at every width, on every trade. **The rule: a
+  clamp is written against the same quantity the assertion reads.** Both gates compare
+  `documentElement.scrollWidth` to `documentElement.clientWidth`, so `clientWidth` is the
+  limit — it is the layout viewport and it does not move. Note the direction is the
+  OPPOSITE of the vertical question six lines away in the same function, where
+  `innerHeight` is right precisely because it is the glass and `100vh` is not. **Same
+  window object, two axes, two different correct answers — so name which viewport you mean
+  every time, and never reason by symmetry from the other axis.**
+
+- **A SHARED-LAYOUT FIX MOVES EVERY ELEMENT DOWNSTREAM OF IT, AND THE GATE THAT NAMED THE
+  BUG IS NOT THE GATE THAT CATCHES WHAT YOU BROKE (2026-08-15).** Letting the trade word
+  survive on the nav bar pushed the Tools button right on ten trades; the dropdown hangs
+  `position:absolute; left:0` off that button with `min-width:250px`, so the panel started
+  running off the glass — 2px on roofing at 360, 66px on electrical at 320 with the text
+  bumped. **mobile-watertight passed all 107 pages at four widths while this was live**,
+  because it had never opened the menu: the one state every page in the program shares was
+  the one no reveal reproduced. `menu-reachability.mjs` caught it, and only because a gate
+  that opens the menu happened to exist for an unrelated reason. **Two rules. (1) When you
+  change something the shared runtime INJECTS, run every gate that touches that surface,
+  not only the one that named the bug you set out to fix. (2) A page that a gate loads and
+  leaves alone is not the page anybody uses — this is the third time that sentence has been
+  written here, and the fix is the same each time: a REVEAL.** The Tools menu is now one,
+  sampled at a hub and one tool page per trade rather than swept, because doubling the
+  runtime of the gate that runs before every ship buys a gate nobody runs.
+
+- **THE GATE MEASURED FIVE THINGS AND WAS STRUCTURALLY BLIND TO THE SIXTH (2026-08-15).**
+  Ten of eleven kits rendered their own name as one letter and an ellipsis at 390px —
+  "E...", "L...", "P..." — for the entire life of every page, with MOBILE-WATERTIGHT
+  reporting PASS on all of them. Overflow could not see it (the word was CLIPPED instead
+  of overflowing), tap targets could not (the brand holds 44px whether the word is there or
+  not), and the three fixed-bar checks could not (the nav is sticky, not fixed). **Five
+  correct measurements, one shared blind spot — and the blind spot was the only element in
+  the toolkit that is ALLOWED to shrink.** The rule: **anything you deliberately let shrink
+  needs its own assertion, because every other check is written for things that do not.**
+  Now asserted: inside the nav bar, an element that clips its own overflow must have room
+  for the text it contains. **Hiding a word outright is fine and is what the ladder does
+  when the bar is out of room; half a word is a lie** — a fragment reads as a name, not as
+  a truncation, which is worse than showing less.
+
+- **A DEGRADATION LADDER ON A GUESSED BREAKPOINT IS A GUESS ABOUT A WORD YOU HAVE NOT
+  WRITTEN YET (2026-08-15).** The nav gave everything up at 380px, so above that line
+  nothing could give up anything and the bar took what it needed out of the trade name.
+  A breakpoint cannot know the answer here: the deficit depends on the WORD ("AV" is 24px,
+  "Low-Voltage" 111px), on whether the page carries the favourite star, and on the NEXT
+  trade's name, which does not exist when the breakpoint is written. `creative/trade.js`
+  reasoned in prose that *"'Electrical' (ten) is the measured worst case and fits"* — a
+  claim the live page contradicted on all eleven kits. **The rule: when what fits depends
+  on DATA the CSS cannot see, measure at runtime and let the ladder fall out of the
+  measurement.** Two forced layout reads on a nav bar, before the first paint, then a
+  ResizeObserver on the BAR rather than the window — because the OS text size going up
+  changes the answer without the window ever resizing. Result: 0 of 88 states cut, 77 of 88
+  now render the full word where 17 did, and the eleven that still hide it are the ones
+  genuinely out of room. **And observe the element with `box: "border-box"`**: the classes
+  the ladder sets change gap and side padding, so a content-box observer re-enters itself
+  forever.
 
 - **A ROADMAP IS NOT A RECORD — THE RANKED LIST SENT A CYCLE TO BUILD SOMETHING THAT HAD
   SHIPPED FOUR DAYS EARLIER (2026-08-15).** The private roster's INTERFACE ladder still
