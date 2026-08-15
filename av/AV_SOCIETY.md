@@ -525,6 +525,56 @@ punch item. This shape is exempt by design, the feedback path must never attach 
 to a report, and both rules are written into the engine header so a later cycle reads them
 before wiring one in for convenience.
 
+## THERE IS A SIXTH SHAPE, AND ITS ADD-ROW BAR IS A STOPWATCH
+Shape #3 is a row log of THINGS — devices, tags, punch items — and every one of its
+mechanisms (bulk create, a tag-range generator, tap-to-advance, self-building axes,
+grouping) exists because a man is walking a job typing identifiers. None of that applies
+when the rows are MOMENTS. Forcing the hold test into shape #3 would have used about a
+fifth of that engine and fought the rest, which is the tell that it is not the same shape.
+
+6. **THE HOLD TEST.** Close a system, isolate it, watch a gauge, and be able to say
+   afterwards what it read and WHEN. HVAC/R pulls a vacuum and watches the microns come
+   back up; a plumber puts five pounds of air or ten foot of head on a rough-in and
+   watches the needle stay put; gas piping, medical gas and a flood test on a deck are the
+   same act. **The rows are not typed, they are TAPPED** — ticking beats typing taken
+   literally — and the value is entirely that the clock fills the column a man otherwise
+   reconstructs from memory two hours later, wrong, at a desk.
+
+**SHAPE #6'S ENGINE: `shared/holdtest.js` + `shared/holdtest.css`** — built as an engine
+on its FIRST instance, the same deliberate exception `shared/rowlog.js` took, because the
+SECOND config shipped in the same cycle (`hvac/evac-record.html` and
+`plumbing/its-holding.html`, 2026-08-14). A shape with two live configs on day one either
+has an engine or has a fork, and the fork is invisible for about a week.
+
+**EVERY STAMP IS AN ABSOLUTE EPOCH MILLISECOND, NEVER AN ACCUMULATING COUNTER.** This is
+the one page in the toolkit DESIGNED to be backgrounded — the phone goes in a pocket while
+a pump runs for forty minutes — so a counting timer is a page that lies the moment the
+screen locks, and the synchronous flush on `visibilitychange`/`pagehide`/`blur` is not a
+nicety here, it is the feature working at all. Verified on the live artifact: after a
+flush and a cold reload the readout resumed at `00:32:45` from the real isolation stamp
+and kept ticking.
+
+**A CORRECTED TIME CAN NEVER PASS AS THE CLOCK'S.** The single claim this shape makes is
+that the stamps are real, so the correction path — which must exist, because a man opens
+the tool twenty minutes after he started the pump — brands its row **time typed in** on
+the page AND in the document, permanently, with no config to switch it off. The honesty
+clause at the foot of the document rewrites itself when any exist. A tool whose whole
+premise is an automatic timestamp cannot ship a silent manual one.
+
+**NO TARGET, NO VERDICT, AND THE ENGINE DOES NOT KNOW WHICH WAY IS GOOD.** No shop number,
+no manufacturer number, no code table, no decay rate, no required duration, no pass. It
+prints times, readings, and the signed delta between two numbers it watched the same man
+enter — stated as `up 12 microns` / `down 2 psi` / `no change`, never as a judgement,
+because a vacuum RISES when it leaks and a pressure test FALLS when it leaks and the
+engine has no business guessing which trade it is in. Delta arithmetic is skipped entirely
+when either value fails to parse: a range, a word, a blank all print as themselves.
+
+WHAT THE CALLER OWNS: the MARKS (their words, their order, which carries a reading, which
+one is the zero), the unit, the header fields, and the document's sentences. `zero` being
+the SECOND mark for HVAC (a pump runs before anything is isolated) and the FIRST for
+plumbing (pumped up and valved shut in one move) is one flag in a list — which is the
+proof the engine is real and not a page with a config bolted on.
+
 ## FEEDBACK IS BUILT IN — the standard for everything we make (operator 2026-08-04)
 > *"there's a lot of bugs still and people should be able to send the feedback so the
 > loop cycles can address them. Make sure we have a solid scalable way of addressing
@@ -2032,6 +2082,30 @@ The four-width overflow assertion now runs *inside* the pick-filter gate with th
 narrowed. **A gate bound to page-load cannot see a layout that only a user's fingers can
 reach.**
 
+### 2026-08-14 — THE STICKY BAR OWNED A HOLE NOBODY HAD MEASURED
+The shared runtime injects a `position:sticky; top:0` nav on every page of every trade.
+Measured live at 320 / 360 / 390 / 430 / 900px it is **62px at all five**, and
+`scroll-padding-top` was **unset on every page of the whole site**. So every programmatic
+`scrollIntoView({block:"start"})` and every `#anchor` jump landed its target's first 62px
+*behind the nav* — the heading you were sent to, hidden by the thing that sent you.
+`shared/docspec.js` does exactly that twice, which means the Write-Up Setup page on all
+ten kits had been doing it since the day it shipped. **Nobody files a wish for this**: it
+reads as "the page scrolled a bit wrong", it is invisible in a screenshot taken at rest,
+and every gate we own measures a page as it LOADS. It surfaced only because a brand-new
+page scrolled its own content into view during a build. **A sticky element owns the hole
+it makes, and the file that injects the bar is the file that owes the offset** — one line
+in `shared/toolkit.js`, live on all ten trades in the same push.
+
+### 2026-08-14 — CLEARING STORAGE THEN RELOADING TESTS NOTHING
+A verification step cleared `localStorage` and called `location.reload()` to get a clean
+page. The page came back **fully populated**, and for a second that read as a persistence
+bug. It is the opposite: the engine flushes synchronously on `pagehide`, so unloading
+wrote the record straight back over the delete. The flush is doing precisely the job it
+exists for — surviving the moment the tab goes away. **On any page with an unload flush,
+the only honest way to clear it is the page's own control**, which is also the path a real
+user takes and therefore the one worth testing. Doing it that way immediately proved the
+two-tap arm and that "start the next one" keeps the job and the name.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -3130,3 +3204,31 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the half-swept 44px `.rm` on 4 trades, and 60 sub-44px controls on `av/consumables.html`.
   84/84 pages pass the mobile gate at 320/360/390/430 · https://mrdirno.github.io/nested-resonance-memory-archive/concrete/
 - `2026-08-14` — **[AXIS:BACKPORT]** **THE BIGGEST LIST IN THE TOOLKIT WAS THE ONE WITH NO WAY DOWN IT** · **before:** eight shape #1 pages ask a man to tick his way through a list, and their sizes read off `items.js` are `concrete/mix-order` **151 items / 12 sections** · `av/cable-list` 62 · `plumbing/supply-house-order` 53 · `framing/the-load` 44 · `electrical/pull-list` 42 · `hvac/truck-stock` 37 · `low-voltage/consumables` 35 — and the only one that could be narrowed was `av/consumables.html`, **the smallest at 28**. The refinement had landed on the page that needed it least and reached none of the seven that needed it most (§SCARS, and the completeness check that could not have found it) · **after:** `shared/pickfilter.js` + `shared/pickfilter.css`, extracted from that flagship and mounted by `shared/checklist-request.js` itself, so **all six engine pages landed in one commit**, the plumbing fork was wired the same way, and the flagship was MIGRATED ONTO IT — its own 25 lines of glue deleted, its markup and CSS untouched, the module ADOPTING `#q` / `#nomatch` / `#checkShown` so not a pixel moved. **TWO DOORS, BECAUSE THE PANEL SAID ONE WAS NOT ENOUGH.** A concrete finisher read the pages before a line was written and split the case exactly: on a parts list he already knows the word ("RJ45", "wall dogs") and typing beats everything; on a list he reads to REMEMBER he has nothing to type — *"I don't know I need a washout tub until I read it"* — and his friction is different, the sections are boxed to look like folders and **none of them folds**, so every trip scrolls past six he already handled. His ask, verbatim: *skip the scroll, don't page past nine sections to get to the tenth.* So the bar carries a typed filter AND a section picker, composing through one hide/show pass. It is a `<select>`, not the chips he asked for, and the reason is on disk: `concrete/items.js` names sections in prose — *"The walk before the mud rolls"* — and twelve of those as chips is a wall of text where the list used to be. **THE SKEPTIC OVERTURNED THE SCOPE AND WAS RIGHT:** the 2026-08-13 entry names **four** behaviours the engine lacks, not one, and shipping a strict subset of already-logged debt is the "a comment claimed the coverage" failure this book has caught twice. Filter, check-shown and the **n / total** section marker all ship (the marker reuses the `[data-n]` slot every page already styles — four pages' worth of parity, zero new CSS). The fourth, per-category **All**, is **REFUSED with a reason rather than silently dropped**: it is an ungated mass-tick, twelve of them permanently on screen, and on prose checklists ("The forget-list", 21 rows) it sends a document nobody meant to send — the section picker plus Check shown reaches the same action through one mechanism. **THREE DEFECTS FIXED ON THE FLAGSHIP BY BEING EXTRACTED FROM IT:** its write-in section vanished under a filter once it held a row (§SCARS); its "Check shown" sat on screen with an empty box, where *shown* means **all of them**, one thumb, no confirm — graded a bug by the finisher, and it now only exists while something is actually being held back, which is also the first time its label is true; and its filter box shipped at **14px**, under the 16px iOS line this book holds everywhere else, so focusing it zoomed the page the operator said must never zoom. **BACKPORT RIDER FIRED — every shape #1 page on the board, none left behind:** 6 engine pages + the plumbing fork + the flagship = **8 of 8**, and the class was re-derived from disk rather than trusted. One claim I brought to the panel was **KILLED as false**: two pages looked like they carried a dead 612-line engine include, and the skeptic proved the string only ever appears in prose comments — no include, no defect, not built against. **GATE: `tools/toolkit-gates/pickfilter.mjs` is new — 8 pages, 104 assertions, and PROVED RED BY FOUR MUTATIONS** before being trusted (hide rule deleted · hatch guard deleted · check-shown ungated · flagship back to 14px). It reads what the browser COMPUTED, never what class is on; every probe word is SELF-DERIVED from the page's own item names; it ticks a line, filters it off the glass and reads the real clipboard to prove **hiding is a view and ticking is the order**; and it re-measures overflow at 320/360/390/430 **while narrowed** — the widest that bar ever gets and a state `mobile-watertight` cannot reach, because that gate measures a page as it loads. `mobile-watertight` 84 pages × 4 widths × default and bumped text **0 failing**, `no-third-party` 84/84, `order-live-header` 7/7. Storefront unchanged — no new tool, no new trade. https://mrdirno.github.io/nested-resonance-memory-archive/concrete/mix-order.html
+- `2026-08-14` — **[AXIS:DEPTH]** **THE ONE COLUMN A MAN RECONSTRUCTS FROM MEMORY TWO HOURS LATER, WRONG** ·
+  **before:** the well was empty and no trade was owed, so the stalest axis governed. Every
+  trade that closes a system and watches a gauge writes the same paper afterwards — at the
+  shop, from memory — and **the times are the part that gets invented**. 62 tools, none of
+  them touched it. **after:** SHAPE #6, THE HOLD TEST — a row log whose add-row bar is a
+  **stopwatch**. `shared/holdtest.js` + `shared/holdtest.css`, built as an engine on its
+  FIRST instance because the SECOND config shipped in the same cycle:
+  `hvac/evac-record.html` (pump on · valved off · reading · off test, the roster's "best
+  sleeper on all five rosters") and `plumbing/its-holding.html` (on test · reading ·
+  **somebody looked at it** · off test — the roster's reframing as *the caption for the
+  gauge photo*, carrying system, grid, medium and witnessed-by). The `zero` mark is #2 for
+  HVAC and #1 for plumbing: one flag, not a fork. Every stamp is an **absolute epoch
+  millisecond** — verified live, a cold reload resumed at `00:32:45` from the real
+  isolation stamp and kept ticking — and a hand-corrected time is branded **time typed in**
+  on the page and in the document, permanently, with the honesty clause rewriting itself.
+  **No target, no verdict, and the engine refuses to know which direction is good**, because
+  a vacuum rises when it leaks and a pressure test falls. **BACKPORT RIDER FIRED, and it
+  found the widest-blast-radius defect of the cycle:** the sticky nav is 62px at every
+  width and `scroll-padding-top` was unset site-wide, so every `scrollIntoView({block:
+  "start"})` — including both of `shared/docspec.js`'s, i.e. the Write-Up Setup page on all
+  ten kits — hid its target's first 62px behind the nav. Fixed in `shared/toolkit.js` where
+  the bar is born; verified live on hvac, plumbing, electrical, roofing, concrete, creative
+  and gc. Two scars written (the sticky hole; clearing storage then reloading tests
+  nothing). Mobile gate: 0px overflow, no sub-44px target at 320/360/390/430 with the
+  editor open and a 60-char unbroken token in a note. Deploy assert added: a page that
+  loads `holdtest.js` and never mounts it now fails the build ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/evac-record.html ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/its-holding.html
