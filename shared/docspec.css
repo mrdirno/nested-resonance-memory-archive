@@ -166,3 +166,51 @@ pre.block{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);fon
   .bar button{padding-left:9px;padding-right:9px;font-size:14px;letter-spacing:.03em}
   #copy{padding-left:11px;padding-right:11px}
 }
+
+/* ── THE DESK — more than one document in one setup ──────────────────────
+ * Sits under the picked card. Everything here is a LIST OF ROWS with a 44px
+ * remove button, which note.css already styles for the item shapes; what it
+ * adds is `min-width:0` on the text column. That one declaration is the whole
+ * overflow story: a flex child defaults to min-width:auto, so a long document
+ * name refuses to shrink and pushes the × off a 320px screen — the exact class
+ * of defect the fixed-bar scar above was, in a container the overflow check CAN
+ * see. Nothing here declares a width.
+ */
+.desk{margin-top:11px}
+.desk h4{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:13px;
+  color:var(--muted);margin:0 0 7px}
+.deskl{list-style:none;margin:0 0 9px;padding:0}
+.deskl li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;padding:7px 7px 7px 11px;margin-bottom:6px}
+.deskl li:last-child{margin-bottom:0}
+.deskl .tx{flex:1 1 auto;min-width:0}
+.deskl .nm{display:block;font-weight:700;font-size:13.5px;color:var(--ink);line-height:1.3;
+  overflow-wrap:anywhere}
+.deskl .wy{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;margin-top:2px;
+  overflow-wrap:anywhere}
+.deskl .x{flex:0 0 44px;width:44px;height:44px;background:none;border:1px solid var(--line);
+  color:var(--muted);font-size:19px;line-height:1;cursor:pointer;border-radius:2px}
+.deskl .x:hover{color:#B0201A;border-color:#B0201A}
+.desk .addrow{margin-top:0}
+.desk .addrow.on{background:var(--deep);color:#fff;border-style:solid}
+.desk .addrow[disabled]{border-style:solid;border-color:var(--line);color:var(--muted);cursor:default}
+.desk .addrow[disabled]:hover{background:#fff}
+/* IN ADD MODE A ROW ALREADY IN THE SETUP SAYS SO, in place of the from→to line.
+   Same slot, so nothing moves when the mode flips. */
+.lib .rt.in{color:var(--deep);font-weight:700}
+
+/* THE LENGTH OF THE BLOCK, STATED — never somebody else's cap (§SAFETY: we do
+   not ship authoritative data we do not have, and an instruction-length limit
+   is a third-party product detail that changes under us). */
+.cap{margin:0 0 8px;font-size:11.5px;line-height:1.4;color:var(--muted);
+  border-left:3px solid var(--line);padding-left:9px}
+/* THE WAY OUT OF ADD MODE, AT THE TOP OF THE LIST — see docspec.js. It carries
+   the running count because the thing he is deciding is "have I got them all",
+   and the answer was three screens further down. */
+.libdone{display:flex;align-items:center;gap:9px;margin:0 0 10px;padding:7px 0 9px;
+  border-bottom:1px solid var(--line)}
+.libdone span{flex:1 1 auto;min-width:0;font-family:var(--mono);font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted)}
+.libdone button{flex:0 0 auto;min-height:44px;padding:11px 18px;font-family:var(--cond);
+  text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;cursor:pointer;
+  background:var(--deep);color:#fff;border:1px solid var(--deep);border-radius:2px}

@@ -176,6 +176,37 @@ const REVEALS = [
     },
   },
   {
+    name: 'a desk of four, mid-add',
+    match: /\/write-up\.html$/,
+    /* THE DESK (2026-08-16) is the widest thing on the page and none of it
+       exists on load: the extras list, its 44px × buttons, the character-count
+       caution, and — while adding — the library row label "✓ in this setup —
+       tap to take it out", which is three times the length of the from→to line
+       it replaces IN THE SAME SLOT. Mid-add is the only state where all of that
+       is on screen at once, so that is the state measured, with the four
+       LONGEST document names the trade has rather than the first four. */
+    run: () => {
+      if (!window.DocSpec || !window.DocSpec.library) return 'no DocSpec on a write-up page';
+      const names = window.DocSpec.library()
+        .map(d => d.name).sort((a, b) => b.length - a.length).slice(0, 4);
+      const byName = (n) => [...document.querySelectorAll('.lib button')]
+        .find(b => (b.querySelector('.nm') || {}).textContent === n);
+      const first = byName(names[0]);
+      if (!first) return 'no library row to pick';
+      first.click();
+      const add = document.querySelector('.desk button.addrow');
+      if (!add) return 'the picked card offers no way to add a second document';
+      add.click();
+      for (let i = 1; i < names.length; i++) {
+        const b = byName(names[i]);
+        if (b && !b.disabled) b.click();
+      }
+      if (!document.querySelector('.deskl li')) return 'adding documents rendered no desk list';
+      if (!document.querySelector('.lib .rt.in')) return 'add mode never labelled a row as already in the setup';
+      return null;
+    },
+  },
+  {
     name: 'a row logged, its pencil open',
     /* SHAPE #3's MOST-USED STATE WAS NEVER MEASURED, on any of the 26 row-log
        pages in the program. A fresh row log is an add bar over an empty list —

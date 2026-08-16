@@ -120,6 +120,7 @@ const EXERCISE = (name) => {
        the family would then fail the very document the opt-out fixed. */
     out.delta = d ? window.DocSpec.deltaOf(d) : null;
     out.standalone = !!(d && d.standalone);
+    out.halt = d ? (d.halt || '') : '';
     out.famName = d ? window.DocSpec.famOf(d).name : null;
   } catch (e) { out.err = 'engine introspection threw: ' + e.message; }
   return out;
@@ -220,6 +221,18 @@ for (const trade of TRADES) {
       if (r.delta === false && !(isAlone && !isDelta)) {
         bad.push(`this document stands alone but the block tells the AI to write it as an UPDATE`
           + ` (family "${doc.family}" -> "${r.famName}")`);
+      }
+      /* THE HALT LINE MUST NOT ARGUE WITH ITSELF (2026-08-16). The generic tail
+         "That is the ONLY reason to stop and ask me a question" was written for
+         a halt that names a condition, and it was being welded onto the nine
+         documents whose authors wrote "Never halt" — three of them in the SHARED
+         library, so it shipped on all eleven trades. That line decides whether a
+         man in a truck gets his report or gets interrogated, and a model
+         resolving a contradiction on it is guessing. Found by reading the
+         emitted block, not the code; asserted here so it stays gone. */
+      if (/^\s*Never\s+halt\b/i.test(r.halt || '') && /Never halt[^\n]*ONLY reason to stop/i.test(r.block)) {
+        bad.push('the halt line says "Never halt" AND "that is the ONLY reason to stop and ask me a question"'
+          + ' — the one instruction that decides whether it writes or interrogates, contradicting itself');
       }
       // every omit line, string or list, has to reach the block
       if (!r.omits || !r.omits.length) {

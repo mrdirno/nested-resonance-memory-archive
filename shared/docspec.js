@@ -503,9 +503,55 @@
     { id: "email", label: "Also give me a one-line subject and a two-line email body", sub: "for sending it on", on: false }
   ];
 
+  /* ── THE DESK: MORE THAN ONE DOCUMENT IN ONE SETUP (2026-08-16) ─────────
+   * For two months this engine emitted a setup for exactly ONE document. That
+   * is not how anybody's paperwork works. A lead writes a daily every day, an
+   * incident report four times a year and a delay letter when he has to — and
+   * the setup this page hands him covers one of the three. Nobody keeps three
+   * Custom GPTs. He sets up the daily and the other two stay unwritten, which
+   * means the page shipped a real answer to a third of the job.
+   *
+   * The fix was already stated in this file's own header and never acted on:
+   * "Ten of those eleven [blocks] are IDENTICAL for a plumber's back-charge
+   * notice and an AV daily. Only the spine, the omitted line and the vocabulary
+   * change." If that is true — and the eleven blocks below are the proof — then
+   * a second document costs only the parts that differ. So the block splits:
+   *
+   *   ONCE, at the top ...... ROLE · the ROUTER · DEFAULTS · OPERATING
+   *                           PRINCIPLES · ATTRIBUTION · INPUT HANDLING ·
+   *                           EXTRA WORK · PROTOCOL REMINDERS
+   *   ONCE PER DOCUMENT ..... WHAT THIS DOCUMENT IS FOR · CONTINUITY ·
+   *                           VALIDATION · the line everyone leaves out ·
+   *                           OUTPUT FORMAT · SECONDARY REQUESTS
+   *
+   * The per-document half is deliberately WHOLE and repeated rather than
+   * factored — this is a prompt, not code, and an AI that jumps to one section
+   * must find everything that section needs inside it.
+   *
+   * THE ROUTER IS THE LOAD-BEARING PART, and the failure mode it exists for is
+   * BLENDING: given three formats and one dump, a model will happily produce a
+   * daily with an incident's evidence section welded on. So the router names the
+   * documents with the words he actually says for them (`aka`, already in the
+   * library for search), gives his own first line priority over anything the
+   * model infers, permits exactly one question back, and forbids blending and
+   * multi-output outright.
+   *
+   * ONE DOCUMENT STILL EMITS EXACTLY WHAT IT EMITTED BEFORE, byte for byte —
+   * compose() dispatches to the untouched single-document composer, and
+   * tools/toolkit-gates/docspec-desk.mjs holds it to a golden snapshot taken
+   * from the shipped engine across all 170 library documents and all 55
+   * custom-path states before a line of this was written.
+   *
+   * THE CAP IS SIX and it is not tidiness: some AIs cap how long instructions
+   * can be, and the page says the character count out loud rather than quoting
+   * a limit for somebody else's product that we cannot verify and that changes.
+   */
+  var MAX_DOCS = 6;
+
   /* ── state ─────────────────────────────────────────────────────────────── */
   var S = {
-    doc: null,        // picked doc id, or "__custom"
+    doc: null,        // primary picked doc id, or "__custom"
+    more: [],         // THE DESK: additional library doc ids, in the order he added them
     customName: "",
     customFamily: "recurring",
     platform: "gemini",
@@ -516,7 +562,8 @@
     tog: {},          // toggle id -> bool
     comit: {},        // custom path: omission class id -> bool. UNSET = follow the family seed.
     extra: "",
-    q: ""             // search text
+    q: "",            // search text
+    adding: false     // THE DESK: the library is open to ADD a second document
   };
 
   function load() {
@@ -528,6 +575,16 @@
       }
     } catch (e) {}
     S.q = "";
+    S.adding = false;
+    /* A STORED LIST IS UNTRUSTED INPUT, and this one outlives the library it
+       points into: a document dropped from a trade's docs.js leaves a dead id in
+       somebody's localStorage forever. byId() returns null for it, and an
+       unfiltered null reached compose() as `d.name`. Sanitised on load AND
+       re-filtered in picked(), because the library is also re-derived there. */
+    if (!Array.isArray(S.more)) S.more = [];
+    S.more = S.more.filter(function (id, i) {
+      return typeof id === "string" && id !== "__custom" && id !== S.doc && S.more.indexOf(id) === i;
+    }).slice(0, MAX_DOCS - 1);
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -742,60 +799,70 @@
     return S.doc ? byId(S.doc) : null;
   }
 
+  /* THE DESK, RESOLVED. Primary first — it is the one he tuned — then the extras
+     in the order he added them. Dead ids are dropped here as well as on load
+     because the library is re-derived on every call and a trade may drop a
+     document between the two. */
+  function picked() {
+    var out = [];
+    var seen = {};
+    var p = current();
+    if (p) { out.push(p); seen[p.id] = 1; }
+    (S.more || []).forEach(function (id) {
+      if (seen[id]) return;
+      var d = byId(id);
+      if (d) { out.push(d); seen[id] = 1; }
+    });
+    return out.slice(0, MAX_DOCS);
+  }
+  function inDesk(id) {
+    return S.doc === id || (S.more || []).indexOf(id) !== -1;
+  }
+
   /* ── THE COMPOSER — the eleven blocks ──────────────────────────────────── */
   function nz(v, fb) { v = (v || "").trim(); return v || fb; }
 
+  /* ONE DOCUMENT OR THE DESK. The single-document path below is untouched and
+     must stay byte-identical — tools/toolkit-gates/docspec-desk.mjs holds it to
+     a snapshot of the shipped engine. */
   function compose() {
-    var d = current();
-    if (!d) return "";
-    /* THE TRADE WORD is declared, never derived. It used to be TRADE.name with
-       " Field Toolkit" sliced off, which produced "a AV outfit" (wrong article)
-       and left GC reading "a GC & Site Super Toolkit outfit" — the trade whose
-       name does not end in the string being stripped. A config value cannot be
-       recovered by cutting a different config value; §THE THREE SHAPES says the
-       caller owns its own words, so it declares this one. */
-    var tradeName = LIB.trade || "field";
-    var fam = famOf(d);
-    var omits = omitLines(d);
-    var me = nz(S.me, "<my name>");
-    var co = nz(S.company, "<my company>");
-    var to = nz(S.to, d.to || "the office");
-    /* TWO DIFFERENT THINGS, and conflating them printed "I am Whoever was on the
-       call at <company>" into a production instruction block. `from` is the
-       library's DESCRIPTION of who writes this document, shown on the library
-       row; `pickedRole` is what THIS user tapped. The description can carry a
-       clause and still read fine on a row; only the tapped value is short enough
-       to go in a header line, so only it does. */
-    var pickedRole = nz(S.role, "");
-    var role = pickedRole || d.from || "the person who was there";
-    var T = function (id) { var t = S.tog[id]; return t === undefined ? defOn(id) : !!t; };
-    var L = [];
+    var ds = picked();
+    if (!ds.length) return "";
+    return ds.length === 1 ? composeOne(ds[0]) : composeDesk(ds);
+  }
 
-    L.push("ROLE");
-    L.push("");
-    L.push("You write the " + d.name + " for my company. I am " + role + " at " + co +
-      "; we do " + tradeName + " work. You convert my messy field input — voice-to-text dictation, " +
-      "half-finished notes, pasted texts, end-of-day brain dumps — into one finished " + d.name +
-      " I can send to " + to +
-      " without editing it. Output the document and nothing else: no preamble, no commentary, no explaining what you did.");
-    L.push("");
-    L.push("WHAT THIS DOCUMENT IS FOR");
-    L.push("");
-    L.push(d.why);
-    if (d.note) L.push(d.note);
-    L.push("");
-
+  /* ── THE BLOCKS, EXTRACTED SO THE DESK COULD REUSE THEM ─────────────────
+   * 2026-08-16. Every string in these emitters is the one the single-document
+   * composer has been shipping since the engine landed — they were lifted out
+   * of it, not rewritten, so that adding a second document did not fork the
+   * composer inside its own file (§THE THREE SHAPES: the second instance is
+   * where the engine gets extracted). tools/toolkit-gates/docspec-desk.mjs
+   * holds the one-document output to a golden snapshot taken from the shipped
+   * engine across all 170 library documents and all 55 custom-path states
+   * BEFORE the extraction, which is the only thing that makes it safe.
+   *
+   * WHICH BLOCKS ARE SHARED AND WHICH REPEAT PER DOCUMENT is not a style call —
+   * it is the split this file's header claimed on day one and never used: the
+   * ten that do not depend on the document go once at the top, and the six that
+   * do go whole, per document, repeated. Repeated on purpose: this is a prompt,
+   * and an AI that jumps to one document's section has to find everything that
+   * section needs inside it.
+   */
+  function emitDefaults(L, ctx) {
     L.push("DEFAULTS");
     L.push("");
-    L.push("- Me: " + me + (pickedRole ? " (" + pickedRole + ")" : ""));
+    L.push("- Me: " + ctx.me + (ctx.pickedRole ? " (" + ctx.pickedRole + ")" : ""));
     if (nz(S.second, "")) L.push("- Usually with me: " + S.second.trim());
     L.push("- Office / PM contact: " + nz(S.office, "<name>"));
-    L.push("- Company: " + co);
-    L.push("- Trade: " + tradeName);
-    L.push("- Goes to: " + to);
+    L.push("- Company: " + ctx.co);
+    L.push("- Trade: " + ctx.tradeName);
+    L.push("- " + (ctx.multi ? "Usually goes to" : "Goes to") + ": " + ctx.to);
+    if (ctx.multi) L.push("Each document below names who that one goes to when it is somebody else.");
     L.push("Use these whenever the day's input does not say otherwise. Never ask me for something already established in this conversation.");
     L.push("");
+  }
 
+  function emitPrinciples(L, T) {
     L.push("OPERATING PRINCIPLES");
     L.push("");
     var pr = PRINCIPLES.slice();
@@ -804,12 +871,16 @@
     if (T("short")) pr.push("Keep it to one screen. If it does not change a decision, it does not go in.");
     pr.forEach(function (p, i) { L.push((i + 1) + ". " + p); });
     L.push("");
+  }
 
+  function emitAttrib(L) {
     L.push("ATTRIBUTION");
     L.push("");
     ATTRIB.forEach(function (a) { L.push("- " + a); });
     L.push("");
+  }
 
+  function emitInput(L, tradeName, multi) {
     L.push("INPUT HANDLING");
     L.push("");
     var n = 1;
@@ -819,10 +890,14 @@
         " terms. These are the ones my phone gets wrong: " + vocab.join("; ") +
         ". Correct anything else in the same spirit. Never mention the correction.");
     }
-    L.push(n++ + ". Group scattered input into the sections of the output format below. If something does not fit a section, put it in the open items rather than dropping it.");
+    L.push(n++ + ". Group scattered input into the sections of the output format " +
+      (multi ? "for the document I am asking for" : "below") +
+      ". If something does not fit a section, put it in the open items rather than dropping it.");
     INPUT_RULES.forEach(function (r) { L.push(n++ + ". " + r); });
     L.push("");
+  }
 
+  function emitContinuity(L, d) {
     if (deltaOf(d)) {
       L.push("CONTINUITY");
       L.push("");
@@ -835,19 +910,34 @@
       L.push("If I paste an earlier version, treat it as prior state: keep its facts and dates, and mark clearly what has changed since.");
       L.push("");
     }
+  }
 
+  function emitValidation(L, d, onlyReason) {
     L.push("VALIDATION");
     L.push("");
     L.push("Before you write, check the input for: " + (d.facts || []).join(", ") + ".");
     L.push("- No date given: use today's date. If you cannot know today's date, write <MISSING: date> and flag it.");
-    L.push("- " + (d.halt || "Only halt if the input does not say what the document is about.") + " That is the ONLY reason to stop and ask me a question.");
+    /* "NEVER HALT. THAT IS THE ONLY REASON TO STOP." Found 2026-08-16 by reading
+       the block the page actually emits rather than the code that emits it. The
+       tail sentence was written for a halt that names a condition ("Only if the
+       input does not say which room this is") and it has been welded onto the
+       nine documents whose authors said the opposite — three of them in the
+       SHARED library, so it shipped on all eleven trades, on the one instruction
+       that decides whether a man in a truck gets his report or gets interrogated.
+       A model resolving that contradiction either way is guessing, and half the
+       guesses are the wrong half. An author who wrote "Never halt" already stated
+       the rule harder than the generic tail does, so the tail stands down. */
+    var halt = d.halt || "Only halt if the input does not say what the document is about.";
+    L.push("- " + halt + (/^\s*Never\s+halt\b/i.test(halt) ? "" : " " + onlyReason));
     L.push("- Anything else missing: write the document anyway, put <MISSING> where the fact belongs, and list chasing it in the open items. A document with visible gaps is useful; a document that waits for me is not.");
     L.push("");
+  }
 
-    /* A document may name more than one. Each gets its own bullet here AND its
-       own bullet in the output format below, because the whole point of this
-       block is that an AI cannot quietly drop the line nobody writes down —
-       and a list folded into one paragraph is a list it can drop half of. */
+  /* A document may name more than one. Each gets its own bullet here AND its
+     own bullet in the output format below, because the whole point of this
+     block is that an AI cannot quietly drop the line nobody writes down —
+     and a list folded into one paragraph is a list it can drop half of. */
+  function emitOmit(L, omits) {
     L.push(omits.length > 1 ? "THE LINES EVERYONE LEAVES OUT — NEVER DROP THEM"
                             : "THE LINE EVERYONE LEAVES OUT — NEVER DROP IT");
     L.push("");
@@ -857,34 +947,41 @@
       ? "Give each of these its own line in the finished document every single time. Where my input does not cover one, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it."
       : "Give this its own line in the finished document every single time. If my input does not cover it, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it.");
     L.push("");
+  }
 
-    if (T("co")) {
-      L.push("EXTRA WORK — ISOLATE IT");
-      L.push("");
-      L.push("Anything in my input that is outside what we were originally there to do gets pulled into its own section, because it is billing evidence: work somebody else directed, materials used off another job, hours past the plan, a request that was not on the drawings, a substitution made to keep moving.");
-      L.push("For each one: what changed, who asked for it, when, and how it was authorised (verbal / call / text / email). If the authorisation is not in my input, write <MISSING> and add it to the open items. Never assume approval happened.");
-      L.push("Do not price anything. No rates, no totals, no hours priced out — the office owns the number, I own what happened.");
-      L.push("");
-    }
+  function emitExtraWork(L) {
+    L.push("EXTRA WORK — ISOLATE IT");
+    L.push("");
+    L.push("Anything in my input that is outside what we were originally there to do gets pulled into its own section, because it is billing evidence: work somebody else directed, materials used off another job, hours past the plan, a request that was not on the drawings, a substitution made to keep moving.");
+    L.push("For each one: what changed, who asked for it, when, and how it was authorised (verbal / call / text / email). If the authorisation is not in my input, write <MISSING> and add it to the open items. Never assume approval happened.");
+    L.push("Do not price anything. No rates, no totals, no hours priced out — the office owns the number, I own what happened.");
+    L.push("");
+  }
 
+  function emitReminders(L) {
     var rem = (LIB.reminders || []);
-    if (rem.length) {
-      L.push("PROTOCOL REMINDERS (trigger only when relevant — never nag)");
-      L.push("");
-      rem.forEach(function (r) { L.push("- " + r); });
-      L.push("");
-    }
+    if (!rem.length) return;
+    L.push("PROTOCOL REMINDERS (trigger only when relevant — never nag)");
+    L.push("");
+    rem.forEach(function (r) { L.push("- " + r); });
+    L.push("");
+  }
 
+  /* `useOff` is the section tick list, and it only ever applies to the document
+     he is looking at. The others in a desk ship with their full spine — he tunes
+     the one he writes daily and the four-times-a-year ones arrive whole, which
+     is the right default for a document he does not have memorised. */
+  function emitOutputFormat(L, d, omits, ctx, useOff) {
     L.push("OUTPUT FORMAT");
     L.push("");
     L.push("Output the document in a single plain-text code block, using exactly this structure. Leave out any section that is empty, except the last two, which always appear — write \"None\" if there is nothing. Keep both header lines even if a field is <MISSING>.");
     L.push("");
     L.push("[" + d.name.toUpperCase() + " | <JOB / SITE> | <MM/DD/YY>]");
-    L.push("[" + (pickedRole ? pickedRole.toUpperCase() + ": " : "") + me.toUpperCase() +
-      " | " + co.toUpperCase() + " | TO: " + to.toUpperCase() + "]");
+    L.push("[" + (ctx.pickedRole ? ctx.pickedRole.toUpperCase() + ": " : "") + ctx.me.toUpperCase() +
+      " | " + ctx.co.toUpperCase() + " | TO: " + (ctx.docTo || ctx.to).toUpperCase() + "]");
     L.push("");
     sectionsOf(d).forEach(function (s) {
-      if (!isLocked(s.h) && S.off[s.h]) return;
+      if (useOff && !isLocked(s.h) && S.off[s.h]) return;
       L.push("=========================================");
       L.push(lockedHeading(s.h, omits.length));
       L.push("=========================================");
@@ -903,7 +1000,9 @@
       }
       L.push("");
     });
+  }
 
+  function emitSecondary(L, d, T) {
     L.push("SECONDARY REQUESTS");
     L.push("");
     var sec = (d.secondary || []).slice();
@@ -911,13 +1010,179 @@
     sec.push("a rich-text or table version, outside the code block, if I ask for one");
     L.push("If I ask for it, you can also produce: " + sec.join("; ") + ". Every rule above still applies.");
     L.push("Never produce any of these unless I ask.");
+  }
 
-    if (nz(S.extra, "")) {
+  /* THE TRADE WORD is declared, never derived. It used to be TRADE.name with
+     " Field Toolkit" sliced off, which produced "a AV outfit" (wrong article)
+     and left GC reading "a GC & Site Super Toolkit outfit" — the trade whose
+     name does not end in the string being stripped. A config value cannot be
+     recovered by cutting a different config value; §THE THREE SHAPES says the
+     caller owns its own words, so it declares this one.
+
+     TWO DIFFERENT THINGS live in `role`, and conflating them printed "I am
+     Whoever was on the call at <company>" into a production instruction block.
+     `from` is the library's DESCRIPTION of who writes this document, shown on
+     the library row; `pickedRole` is what THIS user tapped. The description can
+     carry a clause and still read fine on a row; only the tapped value is short
+     enough to go in a header line, so only it does. */
+  function ctxOf(d, multi) {
+    var pickedRole = nz(S.role, "");
+    return {
+      multi: !!multi,
+      tradeName: LIB.trade || "field",
+      me: nz(S.me, "<my name>"),
+      co: nz(S.company, "<my company>"),
+      to: nz(S.to, (d && d.to) || "the office"),
+      pickedRole: pickedRole,
+      role: pickedRole || (d && d.from) || "the person who was there"
+    };
+  }
+
+  function emitExtra(L) {
+    if (!nz(S.extra, "")) return;
+    L.push("");
+    L.push("EXTRA INSTRUCTIONS FROM ME — OBEY THESE TOO");
+    L.push("");
+    L.push(S.extra.trim());
+  }
+
+  function composeOne(d) {
+    if (!d) return "";
+    var ctx = ctxOf(d, false);
+    var omits = omitLines(d);
+    var T = function (id) { var t = S.tog[id]; return t === undefined ? defOn(id) : !!t; };
+    var L = [];
+
+    L.push("ROLE");
+    L.push("");
+    L.push("You write the " + d.name + " for my company. I am " + ctx.role + " at " + ctx.co +
+      "; we do " + ctx.tradeName + " work. You convert my messy field input — voice-to-text dictation, " +
+      "half-finished notes, pasted texts, end-of-day brain dumps — into one finished " + d.name +
+      " I can send to " + ctx.to +
+      " without editing it. Output the document and nothing else: no preamble, no commentary, no explaining what you did.");
+    L.push("");
+    L.push("WHAT THIS DOCUMENT IS FOR");
+    L.push("");
+    L.push(d.why);
+    if (d.note) L.push(d.note);
+    L.push("");
+
+    emitDefaults(L, ctx);
+    emitPrinciples(L, T);
+    emitAttrib(L);
+    emitInput(L, ctx.tradeName, false);
+    emitContinuity(L, d);
+    emitValidation(L, d, "That is the ONLY reason to stop and ask me a question.");
+    emitOmit(L, omits);
+    if (T("co")) emitExtraWork(L);
+    emitReminders(L);
+    emitOutputFormat(L, d, omits, ctx, true);
+    emitSecondary(L, d, T);
+    emitExtra(L);
+
+    return L.join("\n");
+  }
+
+  /* ── THE DESK — one setup, every document he actually writes ─────────────
+   * See §THE DESK at the top of this file for why. The shape:
+   *
+   *   ROLE → THE ROUTER → the eight shared blocks → one whole section per
+   *   document → his own extra instructions, once.
+   *
+   * THE ROUTER IS THE PART THAT EARNS THIS. Hand a model three output formats
+   * and one dump and the failure is not that it picks wrong — it is that it
+   * BLENDS, and emits a daily with an incident's evidence section welded on.
+   * So: his own first line beats anything inferred, `aka` gives it the words he
+   * actually says out loud, exactly one question back is allowed, and blending
+   * and multi-output are forbidden by name.
+   */
+  var RULE = "----------------------------------------------------------------------";
+
+  function routerNames(d) {
+    /* The words he SAYS for it, not the words we filed it under. `aka` already
+       exists for search; four is where a router line stops being a hint and
+       starts being a wall of synonyms. */
+    var a = (d.aka || []).filter(function (x) { return typeof x === "string" && x.trim(); });
+    return a.slice(0, 4);
+  }
+
+  function composeDesk(ds) {
+    var primary = ds[0];
+    var ctx = ctxOf(primary, true);
+    var T = function (id) { var t = S.tog[id]; return t === undefined ? defOn(id) : !!t; };
+    var n = ds.length;
+    var L = [];
+
+    L.push("ROLE");
+    L.push("");
+    L.push("You write the paperwork for my company. I am " + ctx.role + " at " + ctx.co +
+      "; we do " + ctx.tradeName + " work. You convert my messy field input — voice-to-text dictation, " +
+      "half-finished notes, pasted texts, end-of-day brain dumps — into one finished document I can " +
+      "send on without editing it. There are " + n + " documents you write for me; every one of them " +
+      "has its own section further down. Output the document and nothing else: no preamble, no " +
+      "commentary, no explaining what you did.");
+    L.push("");
+
+    L.push("WHICH ONE I AM ASKING FOR");
+    L.push("");
+    L.push("The " + n + " documents you write for me:");
+    ds.forEach(function (d, i) {
+      L.push((i + 1) + ". " + d.name + " — " + shortOmit(d.why || "") + ".");
+      var a = routerNames(d);
+      if (a.length) L.push("   I might call it: " + a.join(", ") + ".");
+    });
+    L.push("");
+    L.push("Every dump I send you is ONE of these.");
+    L.push("- If the first line of my input names one, that wins over anything you work out for yourself.");
+    L.push("- Otherwise match what I sent against the list above and use the closest one.");
+    L.push("- If two of them genuinely fit, ask me which one and nothing else. One word back from me is enough — do not ask me anything else in the same breath.");
+    L.push("- NEVER blend two of them into one document. A daily with an incident report's sections welded on is not either document and it is worse than both.");
+    L.push("- NEVER write more than one from a single dump unless I ask for both by name.");
+    L.push("- Once you know which one it is, follow THAT document's section below exactly — its checks, its line everyone leaves out, and its output format. Everything above applies to all of them.");
+    L.push("");
+
+    emitDefaults(L, ctx);
+    emitPrinciples(L, T);
+    emitAttrib(L);
+    emitInput(L, ctx.tradeName, true);
+    if (T("co")) emitExtraWork(L);
+    emitReminders(L);
+
+    L.push(RULE);
+    L.push("The rest of this is one section per document. The dashed rules are for");
+    L.push("you to read — they never appear in anything you write.");
+    L.push(RULE);
+    L.push("");
+
+    ds.forEach(function (d, i) {
+      var omits = omitLines(d);
+      /* He typed "Goes to" while looking at the primary, so his answer owns that
+         one. The others carry the recipient their own library entry names, and
+         fall back to his if the entry does not name one. */
+      var dctx = {
+        multi: true, tradeName: ctx.tradeName, me: ctx.me, co: ctx.co,
+        to: ctx.to, pickedRole: ctx.pickedRole, role: ctx.role,
+        docTo: i === 0 ? ctx.to : nz(d.to, ctx.to)
+      };
+      L.push("DOCUMENT " + (i + 1) + " OF " + n + " — " + d.name.toUpperCase());
+      L.push(RULE);
       L.push("");
-      L.push("EXTRA INSTRUCTIONS FROM ME — OBEY THESE TOO");
+      L.push("WHAT THIS DOCUMENT IS FOR");
       L.push("");
-      L.push(S.extra.trim());
-    }
+      L.push(d.why);
+      if (d.note) L.push(d.note);
+      L.push("Goes to: " + dctx.docTo + ".");
+      L.push("");
+      emitContinuity(L, d);
+      emitValidation(L, d, "That is the ONLY reason to stop and ask me a question about this one.");
+      emitOmit(L, omits);
+      emitOutputFormat(L, d, omits, dctx, i === 0);
+      emitSecondary(L, d, T);
+      L.push("");
+      if (i < n - 1) { L.push(RULE); }
+    });
+
+    emitExtra(L);
 
     return L.join("\n");
   }
@@ -939,11 +1204,46 @@
     return false;
   }
 
+  function esc(t) {
+    return String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
   function setupSteps() {
     var p = PLATFORMS[S.platform] || PLATFORMS.other;
     var d = current();
+    var ds = picked();
     var nm = d ? d.name : "document";
     var fam = d ? famOf(d) : FAMILIES.recurring;
+
+    /* THE DESK CHANGES THE CHAT RULE, and getting it wrong is the one thing on
+       this list that corrupts a document rather than annoying him. A recurring
+       report wants one chat per job so it can report deltas; a record written
+       once and read years later must never be written as an update. A desk can
+       hold both, so when it does, the step names which are which instead of
+       picking one rule and being wrong about half of them. */
+    if (ds.length > 1) {
+      var delta = ds.filter(function (x) { return deltaOf(x); });
+      var alone = ds.filter(function (x) { return !deltaOf(x); });
+      var chat;
+      if (!alone.length) {
+        chat = "Run <b>one chat per job.</b> Starting a new chat mid-job? Paste your last one in first so it keeps the running items.";
+      } else if (!delta.length) {
+        chat = "Start a <b>new chat for each one.</b> These stand alone — they do not need the history.";
+      } else {
+        chat = "<b>One chat per job</b> for the ones that build on each other (" +
+          esc(delta.map(function (x) { return x.name; }).join(", ")) + "). A <b>new chat each time</b> for " +
+          esc(alone.map(function (x) { return x.name; }).join(", ")) +
+          " — those get read years later and must never come out written as an update.";
+      }
+      return [
+        "Open <b>" + esc(p.name) + "</b> and paste the block below into " + p.where +
+          ". Name it “" + esc(nz(LIB.trade, "Field")) + " write-ups”.",
+        chat,
+        "<b>Then just dump.</b> Say which one you want in the first line — “daily”, “incident”, whatever you call it — then the mess. Voice-to-text it in the truck, paste your texts, whatever you have.",
+        "Read it before you send it. Chase anything marked <code>&lt;MISSING&gt;</code> — that is the point of the marker."
+      ];
+    }
+
     var steps = [
       "Open <b>" + p.name + "</b> and paste the block below into " + p.where + ". Name it “" + nm + "”.",
       (d ? deltaOf(d) : fam.delta)
@@ -1018,12 +1318,24 @@
 
     function grp(t) { var li = h("li", "grp", t); return li; }
     function row(d) {
-      var li = h("li", S.doc === d.id ? "on" : "");
+      var mine = inDesk(d.id);
+      var li = h("li", mine ? "on" : "");
       var b = h("button", null);
       b.type = "button";
       b.appendChild(h("span", "nm", d.name));
       b.appendChild(h("span", "wy", d.why));
-      b.appendChild(h("span", "rt", (d.from ? d.from + " → " : "") + (d.to || "")));
+      /* IN ADD MODE THE ROW HAS TO SAY WHAT TAPPING IT DOES, because in this
+         mode a tap is a toggle and the row already in the setup is the one he is
+         most likely to tap by accident. */
+      if (S.adding && mine) {
+        b.appendChild(h("span", "rt in", d.id === S.doc ? "✓ the one you're tuning"
+                                                        : "✓ in this setup — tap to take it out"));
+      } else if (S.adding && picked().length >= MAX_DOCS) {
+        b.appendChild(h("span", "rt", "setup is full — take one out first"));
+        b.disabled = true;
+      } else {
+        b.appendChild(h("span", "rt", (d.from ? d.from + " → " : "") + (d.to || "")));
+      }
       b.addEventListener("click", function () { pick(d.id); });
       li.appendChild(b);
       return li;
@@ -1031,8 +1343,25 @@
   }
 
   function pick(id) {
+    /* IN ADD MODE THE SAME ROW MEANS SOMETHING ELSE. One list, two jobs: tapping
+       a row picks the document he is tuning, or adds a second one to the desk.
+       The row says which — a ✓ and "in this setup" — because a control that
+       looks identical in two modes is how you get a man wondering why his daily
+       just became a delay letter. */
+    if (S.adding && id !== "__custom") {
+      if (id === S.doc) return;                       // the main one; × it from the card
+      var at = S.more.indexOf(id);
+      if (at !== -1) S.more.splice(at, 1);
+      else if (picked().length < MAX_DOCS) { S.more.push(id); bump(id); }
+      save();
+      renderAll();
+      return;
+    }
     S.doc = id;
     S.off = {};
+    /* Promoting a document that is already an extra would print it twice. */
+    var was = S.more.indexOf(id);
+    if (was !== -1) S.more.splice(was, 1);
     var d = current();
     if (d && d.to && !S.to) S.to = d.to;
     if (id !== "__custom") bump(id);
@@ -1054,7 +1383,7 @@
     var chg = h("button", "chg", "Pick a different one");
     chg.type = "button";
     chg.addEventListener("click", function () {
-      S.doc = null; save(); renderAll();
+      S.doc = null; S.adding = false; save(); renderAll();
       if (el.libCard) el.libCard.scrollIntoView({ block: "start" });
     });
     p.appendChild(chg);
@@ -1084,6 +1413,68 @@
         "everyone leaves out — but naming it yourself is what makes it come back every time."));
     }
     box.appendChild(o);
+    box.appendChild(renderDesk(d));
+  }
+
+  /* ── THE DESK, ON THE PAGE ──────────────────────────────────────────────
+   * Nobody keeps three Custom GPTs. The whole point of this control is that the
+   * documents a man writes four times a year ride into the same setup as the one
+   * he writes every day, so they stop being the ones he never gets to.
+   */
+  function renderDesk(primary) {
+    var box = h("div", "desk");
+    var extras = picked().slice(1);
+    var full = picked().length >= MAX_DOCS;
+
+    if (extras.length) {
+      box.appendChild(h("h4", null, "Also in this setup"));
+      var ul = h("ul", "deskl");
+      extras.forEach(function (d) {
+        var li = h("li");
+        var tx = h("div", "tx");
+        tx.appendChild(h("span", "nm", d.name));
+        var oms = omitLines(d);
+        tx.appendChild(h("span", "wy", oms.length
+          ? "Won't drop: " + shortOmit(oms[0])
+          : (d.why || "")));
+        li.appendChild(tx);
+        var x = h("button", "x", "×");
+        x.type = "button";
+        x.setAttribute("aria-label", "Take " + d.name + " out of this setup");
+        x.addEventListener("click", function () {
+          var at = S.more.indexOf(d.id);
+          if (at !== -1) S.more.splice(at, 1);
+          save(); renderAll();
+        });
+        li.appendChild(x);
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+
+    var add = h("button", "addrow" + (S.adding ? " on" : ""),
+      S.adding ? "← Done adding" : (extras.length ? "+ Add another one" : "+ Also set up another one you write"));
+    add.type = "button";
+    if (full && !S.adding) { add.disabled = true; add.textContent = "Six is the most one setup should carry"; }
+    add.addEventListener("click", function () {
+      S.adding = !S.adding;
+      S.q = "";
+      renderAll();
+      var t = S.adding ? el.libCard : el.outCard;
+      if (t) t.scrollIntoView({ block: "start" });
+    });
+    box.appendChild(add);
+
+    /* SAY WHAT THE TICK LIST APPLIES TO. It applies to the document he is
+       looking at, and the others arrive with their full spine — which is the
+       right default for a document he writes four times a year, but only if the
+       page says so instead of letting him find out in the block. */
+    box.appendChild(h("p", "seedwhy", extras.length
+      ? "One block covers all " + picked().length + ". Your AI works out which one you want from what you " +
+        "say at the top of your dump. The tick list below tunes " + primary.name +
+        " — the others come with their full spine."
+      : "Write more than one? Put them in the same block — you paste it in once and your AI covers all of them."));
+    return box;
   }
 
   function field(label, key, ph, wide) {
@@ -1209,7 +1600,25 @@
        wrapped to four lines in the fixed bar on a phone and squeezed the two
        buttons beside it — the bar is the action surface, not a place for copy. */
     var words = txt ? txt.split(/\s+/).length : 0;
-    el.count.textContent = words ? (words + " words · paste once") : "";
+    var n = picked().length;
+    el.count.textContent = words ? (words + " words · " + (n > 1 ? n + " documents" : "paste once")) : "";
+
+    /* SAY THE NUMBER, NEVER SOMEBODY ELSE'S LIMIT. Instruction-length caps are a
+       third-party product detail that changes and that we cannot verify, and
+       §SAFETY says we do not ship authoritative data we do not have. So the page
+       states the one number it actually knows — how long the block is — names
+       the failure, and gives the fix. */
+    if (el.cap) {
+      if (n > 1) {
+        el.cap.style.display = "";
+        el.cap.textContent = txt.length.toLocaleString() + " characters, covering " + n +
+          " documents. Some AIs cap how long instructions can be — if yours cuts it off, " +
+          "take one out here and give that one a setup of its own.";
+      } else {
+        el.cap.style.display = "none";
+        el.cap.textContent = "";
+      }
+    }
   }
 
   function renderCustom() {
@@ -1302,7 +1711,30 @@
     renderPicked();
     renderTune();
     if (current()) renderOut();
-    el.libCard.style.display = (S.doc && S.doc !== "__custom") ? "none" : "";
+    el.libCard.style.display = (S.doc && S.doc !== "__custom" && !S.adding) ? "none" : "";
+    /* The custom path builds the ONE document that is not in the library, and it
+       owns the primary slot. Offering it while adding a second would promise a
+       second custom document the state cannot hold, so it is not offered. */
+    if (el.custom) el.custom.style.display = S.adding ? "none" : "";
+    if (el.libHead) {
+      el.libHead.textContent = S.adding ? "+ What else do you write?"
+                                        : "1 · What are you stuck writing?";
+    }
+    if (el.libDone) {
+      el.libDone.innerHTML = "";
+      el.libDone.style.display = S.adding ? "" : "none";
+      if (S.adding) {
+        var n = picked().length;
+        el.libDone.appendChild(h("span", null, n + (n === 1 ? " document" : " documents") + " in this setup"));
+        var db = h("button", null, "Done");
+        db.type = "button";
+        db.addEventListener("click", function () {
+          S.adding = false; renderAll();
+          if (el.outCard) el.outCard.scrollIntoView({ block: "start" });
+        });
+        el.libDone.appendChild(db);
+      }
+    }
   }
 
   /* ── copy, with the non-secure-context fallback (§SCARS) ────────────────── */
@@ -1328,7 +1760,10 @@
   function wholeSetup() {
     var p = PLATFORMS[S.platform] || PLATFORMS.other;
     var d = current();
-    return (d ? d.name.toUpperCase() : "WRITE-UP") + " — SETUP FOR " + p.name.toUpperCase() + "\n\n" +
+    var n = picked().length;
+    var title = n > 1 ? nz(LIB.trade, "FIELD").toUpperCase() + " WRITE-UPS — " + n + " DOCUMENTS"
+                      : (d ? d.name.toUpperCase() : "WRITE-UP");
+    return title + " — SETUP FOR " + p.name.toUpperCase() + "\n\n" +
       setupSteps().map(function (s, i) { return (i + 1) + ". " + s.replace(/<[^>]+>/g, ""); }).join("\n") +
       "\n\n--- PASTE EVERYTHING BELOW THIS LINE INTO " + p.name.toUpperCase() + " ---\n\n" + compose();
   }
@@ -1340,7 +1775,15 @@
     load();
 
     el.libCard = h("div", "card");
-    el.libCard.appendChild(h("h2", "blk", "1 · What are you stuck writing?"));
+    el.libHead = h("h2", "blk", "1 · What are you stuck writing?");
+    el.libCard.appendChild(el.libHead);
+    /* THE WAY OUT OF ADD MODE HAS TO BE WHERE HE IS. The add control lives on
+       the picked card, which sits BELOW the library — so entering add mode put
+       the only "done" button under fifteen documents he would have to scroll
+       past. Caught by looking at the real page at 390px, not by any gate: every
+       control was present, reachable and 44px, and the flow was still wrong. */
+    el.libDone = h("div", "libdone");
+    el.libCard.appendChild(el.libDone);
     var srch = h("div", "srch");
     var si = document.createElement("input");
     si.type = "search"; si.placeholder = "search — daily, delay, incident, handover…";
@@ -1374,6 +1817,9 @@
     el.outCard.appendChild(el.steps);
     var lbl = h("p", "subhead", "Your instructions — this is what you paste");
     el.outCard.appendChild(lbl);
+    el.cap = h("p", "cap");
+    el.cap.style.display = "none";
+    el.outCard.appendChild(el.cap);
     el.out = h("pre", "block");
     el.outCard.appendChild(el.out);
     app.appendChild(el.outCard);
@@ -1416,5 +1862,6 @@
      it and then reports green on the day it matters. */
   window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
                      omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
-                     omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit };
+                     omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit,
+                     picked: picked, maxDocs: MAX_DOCS };
 })();
