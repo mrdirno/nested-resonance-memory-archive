@@ -167,6 +167,10 @@ ul.items{list-style:none;margin:0;padding:0}
   </header>
 
   <div class="head">
+    <!-- THE JOB CARD (shared/jobcard.js). Gate, washout, who signs tickets and
+         the PO belong to a JOB, not to this phone. Tapping a chip swaps them in
+         the boxes below — the guard is the tap, not a banner he has to read. -->
+    <div id="jobcard"></div>
     <div class="hgrid">
       <div class="f span2"><label>Job <i>(number first &mdash; that&rsquo;s how they bill it)</i></label><input id="fJob" type="text" placeholder="24-118 Riverside MOB &mdash; ramp footings, grid C" autocomplete="off"></div>
       <div class="f"><label>Who&rsquo;s ordering <i>(name + cell &mdash; dispatch calls this one)</i></label><input id="fBy" type="text" placeholder="Mike R &mdash; 415-555-0134" autocomplete="off"></div>
@@ -194,7 +198,7 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>Gate, who signs, cost code — typed once, saved on this phone</summary>
+      <summary>Gate, who signs, cost code — typed once, saved with this job</summary>
       <div class="hgrid">
         <div class="f span2"><label>Getting in, staging and washout <i>(the driver needs all three)</i></label><textarea id="fAccess" rows="2" placeholder="Gate 4 off Cedar, code 1180 &mdash; back in off the north side, stay off the new slab. Washout is the pit past the conex. Call when you&rsquo;re 20 out."></textarea></div>
         <div class="f"><label>Signs tickets if I&rsquo;m on the hose</label><input id="fSigner" type="text" placeholder="Danny T &mdash; 415-555-0199" autocomplete="off"></div>
@@ -245,6 +249,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/find.js"></script>
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
+<script src="../shared/jobcard.js"></script>
 <script>
 /* THE MIX ORDER — trade #10's first native tool, and the EIGHTH instance of shape #1
  * (av/AV_SOCIETY.md §THE THREE SHAPES: CHECKLIST → A REQUEST). Nothing about the
@@ -283,26 +288,42 @@ ul.items{list-style:none;margin:0;padding:0}
   var D = window.TOOLKIT_ITEMS;
   var $ = function (id) { return document.getElementById(id); };
 
-  /* ── STICKY HEADER ────────────────────────────────────────────────────────
-   * These are the answers that are the same every morning for the life of a job.
-   * They live on the device, they are restored on open, and Clear does not touch
-   * them — clearing the LIST must never cost him the gate code. */
-  var STICKY = ["fJob", "fBy", "fHow", "fAccess", "fSigner", "fCharge", "fPO"];
-  var SKEY = "toolkit.concrete.mixOrder.header.v1";
-  (function loadSticky() {
-    var s = {};
-    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
-    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
-  })();
-  function saveSticky() {
-    var s = {};
-    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
-    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
-  }
-  STICKY.forEach(function (id) {
-    var el = $(id);
-    if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
+  /* ── THE JOB CARD ─────────────────────────────────────────────────────────
+   * Twenty hand-copied lines of `var STICKY = [...]` keyed to THIS PAGE, whose
+   * own comment claimed the values were "the same every morning for the life of
+   * a job" while the code remembered them for the life of a PHONE. See
+   * shared/jobcard.js for the panel that redesigned it — the picker IS the
+   * guard.
+   *
+   * fHow LEFT THE JOB AND IT MATTERS MORE HERE THAN ANYWHERE. "How it's going
+   * in" is the line the plant spaces the trucks off — chute against pump is a
+   * different truck interval and a different morning — so remembering last
+   * week's pour tells dispatch a rate nobody asked for. But it does not get
+   * blanked either: tools/toolkit-gates/order-live-header.mjs failed that in
+   * one line, and correctly. A field printed in the document must survive a
+   * reload, or a man who picked the pump, ticked the list and lost the tab to
+   * iOS comes back to a chute order he will never re-read.
+   *
+   * So it rides THE LIST — saved with the draft, restored with it, reset by
+   * Clear, which is the one action that means "different pour". */
+  JobCard.mount({
+    mount: "jobcard",
+    trade: "concrete",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fAccess", "fSigner", "fCharge", "fPO"],
+    device: ["fBy"],
+    legacyKey: "toolkit.concrete.mixOrder.header.v1",
+    onApply: function () { if (api) api.refresh(); }
   });
+  /* The option the page SHIPPED as its default, read before any draft restores
+   * over it — what Clear puts back, and what "untouched" means. */
+  var HOW0 = $("fHow") ? $("fHow").value : "";
+  function setHow(v) {
+    var s = $("fHow");
+    if (!s || !v) return;
+    if ([].some.call(s.options, function (o) { return o.value === v; })) s.value = v;
+  }
 
   var when = "Today";
   function whenText() {
@@ -380,8 +401,9 @@ ul.items{list-style:none;margin:0;padding:0}
     // sticky header has its own key so Clear can wipe the list without costing
     // him the gate code.
     persistExtra: function () {
-      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
-      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot;
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when,
+                hot: $("fHot").checked, how: $("fHow") ? $("fHow").value : "" };
+      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot || x.how !== HOW0;
       return touched ? x : null;
     },
     onRestoreExtra: function (x) {
@@ -389,11 +411,13 @@ ul.items{list-style:none;margin:0;padding:0}
       $("fNotes").value = x.notes || "";
       $("fDate").value = x.date || "";
       $("fHot").checked = !!x.hot;
+      setHow(x.how);
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
       ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
+      if ($("fHow")) $("fHow").value = HOW0;
       seg("segWhen", "Today");
       showLast();
     },

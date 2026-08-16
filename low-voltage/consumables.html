@@ -155,6 +155,9 @@ ul.items{list-style:none;margin:0;padding:0}
   </header>
 
   <div class="head">
+    <!-- THE JOB CARD (shared/jobcard.js). Where to drop it, who signs and the PO
+         belong to a JOB, not to this phone. -->
+    <div id="jobcard"></div>
     <div class="hgrid">
       <div class="f span2"><label>Job <i>(number first &mdash; that's how they bill it)</i></label><input id="fJob" type="text" placeholder="24-118 Riverside MOB — IDF 3" autocomplete="off"></div>
       <div class="f"><label>Who's asking <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Ray — 415-555-0134" autocomplete="off"></div>
@@ -180,7 +183,7 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>Where to drop it, who signs, cost code &mdash; typed once, saved on this phone</summary>
+      <summary>Where to drop it, who signs, cost code &mdash; typed once, saved with this job</summary>
       <div class="hgrid">
         <div class="f span2"><label>Where to drop it</label><textarea id="fAccess" rows="2" placeholder="Dock off Cedar till 2, then gate 4 — call when you're 20 out, IDF 3 is badge-only"></textarea></div>
         <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Marco — 415-555-0199" autocomplete="off"></div>
@@ -231,6 +234,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/find.js"></script>
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
+<script src="../shared/jobcard.js"></script>
 <script>
 /* SHOP LIST — the SIXTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
  * SHAPES: CHECKLIST → A REQUEST), and the direct isomorph of av/consumables.html
@@ -255,26 +259,37 @@ ul.items{list-style:none;margin:0;padding:0}
   var D = window.TOOLKIT_ITEMS;
   var $ = function (id) { return document.getElementById(id); };
 
-  /* ── STICKY HEADER ────────────────────────────────────────────────────────
-   * The answers that are the same every morning for the life of a job. They live
-   * on the device, and Clear does not touch them — clearing the LIST must never
-   * cost him the dock hours. */
-  var STICKY = ["fJob", "fBy", "fHow", "fAccess", "fSigner", "fCharge", "fPO"];
-  var SKEY = "toolkit.lowvoltage.shopList.header.v1";
-  (function loadSticky() {
-    var s = {};
-    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
-    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
-  })();
-  function saveSticky() {
-    var s = {};
-    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
-    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
-  }
-  STICKY.forEach(function (id) {
-    var el = $(id);
-    if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
+  /* ── THE JOB CARD ─────────────────────────────────────────────────────────
+   * Was twenty hand-copied lines of `var STICKY = [...]` keyed to THIS PAGE,
+   * claiming in its own comment to hold "the same every morning for the life of
+   * a job" while remembering them for the life of a PHONE. See
+   * shared/jobcard.js — the picker IS the guard.
+   *
+   * THE DOCK HOURS ARE THE POINT ON THIS PAGE. "Dock off Cedar till 2, then gate
+   * 4 — IDF 3 is badge-only" is a sequence and an exception, and it is worth
+   * exactly one building. Carried onto the next job it is a driver sitting at
+   * the wrong dock at 1:45.
+   *
+   * fHow rides THE LIST, not the job and not a blank slate: it is a per-order
+   * decision, so it must not travel with the building — and it is printed in
+   * the document, so tools/toolkit-gates/order-live-header.mjs requires it to
+   * survive a reload. Saved with the draft, reset by Clear. */
+  JobCard.mount({
+    mount: "jobcard",
+    trade: "low-voltage",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fAccess", "fSigner", "fCharge", "fPO"],
+    device: ["fBy"],
+    legacyKey: "toolkit.lowvoltage.shopList.header.v1",
+    onApply: function () { if (api) api.refresh(); }
   });
+  var HOW0 = $("fHow") ? $("fHow").value : "";
+  function setHow(v) {
+    var s = $("fHow");
+    if (!s || !v) return;
+    if ([].some.call(s.options, function (o) { return o.value === v; })) s.value = v;
+  }
 
   var when = "Today";
   function whenText() {
@@ -331,8 +346,9 @@ ul.items{list-style:none;margin:0;padding:0}
     notePlaceholder: "color, length, which closet, who for",
     watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
     persistExtra: function () {
-      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
-      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot;
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when,
+                hot: $("fHot").checked, how: $("fHow") ? $("fHow").value : "" };
+      var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot || x.how !== HOW0;
       return touched ? x : null;
     },
     onRestoreExtra: function (x) {
@@ -340,11 +356,13 @@ ul.items{list-style:none;margin:0;padding:0}
       $("fNotes").value = x.notes || "";
       $("fDate").value = x.date || "";
       $("fHot").checked = !!x.hot;
+      setHow(x.how);
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
       ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
+      if ($("fHow")) $("fHow").value = HOW0;
       seg("segWhen", "Today");
       showLast();
     },

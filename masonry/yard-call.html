@@ -174,6 +174,9 @@ ul.items{list-style:none;margin:0;padding:0}
   </header>
 
   <div class="head">
+    <!-- THE JOB CARD (shared/jobcard.js). How the forks get in, what's already
+         on the wall, who signs and the PO belong to a JOB, not to this phone. -->
+    <div id="jobcard"></div>
     <div class="hgrid">
       <div class="f span2"><label>Job / site <i>(name and street — a dispatcher can\u2019t send a truck to a job name)</i></label><input id="fJob" type="text" placeholder="Riverside MOB — 4400 Hazel Ave, east elevation" autocomplete="off"></div>
       <div class="f"><label>Who's calling <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="Dave K — 503-555-0147" autocomplete="off"></div>
@@ -192,7 +195,7 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>How the forks get in, who signs, cost code &mdash; typed once, saved on this phone</summary>
+      <summary>How the forks get in, who signs, cost code &mdash; typed once, saved with this job</summary>
       <div class="hgrid">
         <div class="f span2"><label>How the forks get in <i>(the line the whole load lands on \u2014 if you already wrote it for Getting In, paste the same words)</i></label><textarea id="fAccess" rows="3" placeholder="In off the north drive, gate 4 code 1180. Telehandler's on site. Keep the cubes off the east side — that's where the wall's going and the stage goes up Wednesday. Overhead line at the south corner, come round it."></textarea></div>
         <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Manny — 503-555-0188" autocomplete="off"></div>
@@ -248,6 +251,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/find.js"></script>
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
+<script src="../shared/jobcard.js"></script>
 <script>
 /* THE YARD CALL — the NINTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
  * SHAPES: CHECKLIST → A REQUEST) and the rung masonry/tools.js shipped naming as
@@ -312,21 +316,23 @@ ul.items{list-style:none;margin:0;padding:0}
     return q + " " + (parseFloat(q) === 1 ? u[0] : u[1]);
   }
 
-  var STICKY = ["fJob", "fBy", "fMeet", "fRun", "fAccess", "fSigner", "fCharge", "fPO"];
-  var SKEY = "toolkit.masonry.yardCall.header.v1";
-  (function loadSticky() {
-    var s = {};
-    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
-    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
-  })();
-  function saveSticky() {
-    var s = {};
-    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
-    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
-  }
-  STICKY.forEach(function (id) {
-    var el = $(id);
-    if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
+  /* ── THE JOB CARD ─────────────────────────────────────────────────────────
+   * Was twenty hand-copied lines of `var STICKY = [...]` keyed to THIS PAGE.
+   * See shared/jobcard.js — the picker IS the guard.
+   *
+   * fRun IS THE MOST PER-JOB FIELD IN THE PROGRAM. "Already on the wall — the
+   * run, the lot, the ticket, anything that has to match" is a fact about ONE
+   * elevation of ONE building. Carried onto the next job it does not merely go
+   * stale, it tells a yard to match a lot that is not there. */
+  JobCard.mount({
+    mount: "jobcard",
+    trade: "masonry",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fMeet", "fRun", "fAccess", "fSigner", "fCharge", "fPO"],
+    device: ["fBy"],
+    legacyKey: "toolkit.masonry.yardCall.header.v1",
+    onApply: function () { if (api) api.refresh(); }
   });
 
   /* THE DEFAULT IS THE MORNING, and that is not a copy of framing's page. A

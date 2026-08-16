@@ -1478,6 +1478,43 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **THE UI COPY WAS A PROMISE AND SIX PAGES BROKE IT IN THE SAME WORDS (2026-08-16).**
+  Six order pages shipped a collapsed section headed **"typed once, saved on this phone"**
+  over a hand-copied `var STICKY = [...]` / `var SKEY = "toolkit.<trade>.<page>.header.v1"`.
+  The comment above it said the values were *"the same every morning for the life of a job."*
+  The code remembered them for the life of a PHONE. A foreman on two jobs — the normal case,
+  not the edge one — got ONE gate code, ONE signer and ONE PO across both, and whichever he
+  typed last is what the next supplier read. **THE RULE: a sentence in shipped UI copy is an
+  assertion about the code, and it gets a gate like any other.** The twenty lines were also
+  the exact fork `shared/checklist-request.js` was extracted to stop, surviving in the one
+  part of the page the engine never took over — so nothing was watching it.
+
+- **THE PANEL KILLED THE GUARD I WAS ABOUT TO BUILD, WITH TWO SENTENCES FROM HIS OWN WEEK
+  (2026-08-16).** The proposal was a staleness BANNER: notice the job name changed, print
+  "filled in for <job>", offer a clear button. A two-job commercial foreman broke it before it
+  existed — he types *"Meridian TI"* on day one and *"Meridian"* or *"435 Bryant"* on day
+  forty (a mismatch that fires on nothing and trains him to tap past it), and he types
+  *"warehouse"* out of habit while standing at the downtown job (a MATCH, silent, on the one
+  case the guard exists to catch). **A guard that compares free text to free text is not a
+  guard.** His replacement is the design that shipped: *"a banner has to be read and I won't
+  always read it one-handed off a ladder at 6am. I will always notice the block change when
+  I'm the one who tapped the job that changed it. Put the safety in the action I'm already
+  taking, not in a warning stacked on top of it."* **THE RULE: prefer a guard the man
+  EXECUTES over a guard he must READ.**
+
+- **A SCOPE I INVENTED LIVED FOR ONE HOUR AND A GATE KILLED IT (2026-08-16).** The same
+  foreman was right that `fHow` — delivered / will-call / the shop runs it out — must not
+  travel with a JOB: *"that is a decision about this order... ask it fresh every single
+  time."* So the first cut gave `shared/jobcard.js` a third scope, `fresh`, blanking it to the
+  page default on load. `order-live-header.mjs` failed three pages in one run and the failure
+  it names is **worse than the one being fixed**: a man picks will-call, ticks forty lines over
+  twenty minutes, iOS evicts the tab, and he comes back to all forty lines intact and the
+  delivery method silently back on "Deliver to site" — he would never look, because everything
+  he actually worked on came back. **THE RULE: "not remembered across jobs" and "not
+  remembered at all" are different requirements, and the second one loses work.** Its real
+  home was neither scope: the engine's own `persistExtra`, reset by Clear. The `fresh` list is
+  gone from the module and the reason is written where the next page will read it.
+
 - **A COMMENT THAT WAS TRUE WHEN IT WAS WRITTEN GOES ON READING AS PERMISSION (2026-08-16).**
   `commons/tips.html` did not load `names.js`, and the tag was absent **deliberately, on a
   real measurement** written in a comment right where the tag would go: the alias index JOINS
@@ -4254,3 +4291,49 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `Write-Up Setup` note on all 11 trades in `persona500/src/data/fieldToolkits.ts` now names
   the capability (P5 pushes that repo).
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html
+
+- `2026-08-16` — **[AXIS:INTERFACE]** **THE JOB CARD — a man with two jobs stops sending one
+  job's gate code to the other job's supplier.** `shared/jobcard.js`, mounted on the five
+  order pages that hand-copied the sticky header. **Before:** six pages shipped byte-identical
+  `var STICKY = [...]` / `SKEY = "toolkit.<trade>.<page>.header.v1"` under a `<summary>`
+  reading *"typed once, saved on this phone"* — one gate code, one signer, one PO per PHONE,
+  and no staleness guard anywhere, while `shared/dropoff.js` had documented that exact hazard
+  as its own rule #4 since 2026-08-14. **After:** every job is a chip; tapping one swaps the
+  gate, the signer, the run and the PO in the boxes below; **a new job starts EMPTY**; the old
+  per-page key is adopted so nobody loses an answer saved in June. **A 4-lens panel rewrote
+  the design mid-cycle** (two-job foreman · service tech · supply-house dispatcher · a skeptic
+  told to kill it): the proposed staleness BANNER was killed by the foreman breaking its
+  string-match guard in both directions from his own week — *"put the safety in the action
+  I'm already taking, not in a warning stacked on top of it"* (§SCARS ×3).
+  **`fHow` was the live defect nobody had filed:** "how it gets here" had been sticky since
+  those pages shipped, so a will-call from last Tuesday printed onto today's order. It is now
+  per-LIST, reset by Clear — and the route there is the cycle's sharpest scar, because my first
+  cut blanked it on load and `order-live-header.mjs` failed three pages in one run for a
+  reason worse than the bug being fixed.
+  **THE GATE THE SKEPTIC DEMANDED IS WRITTEN:** `tools/toolkit-gates/jobcard-scope.mjs` —
+  5 pages, scopes derived from the module's own behaviour, asserting a new job starts empty ·
+  job A's answers never reach job B's **copied document** · switching back restores · device
+  fields do not move · survives a reload · the legacy key is adopted losslessly · and no
+  `fresh:` scope ever returns. **Proved by injecting the leak** (a new card inheriting the old
+  card's answers): 22 failures across 4 pages, then green on restore. Gates: `jobcard-scope`
+  **PASS 5** · `order-live-header` **OK 8 order pages** (was FAIL 3 mid-cycle) ·
+  `no-third-party` **108 pages, 0 requests** · `mobile-watertight` **PASS on all 5 changed
+  pages** at 320/360/390/430 × default and bumped · plus a targeted chip-row drive at the same
+  widths **with the longest job names a man actually types — 40 assertions, 0 defects**,
+  proved by injecting `white-space:nowrap` and watching 20 fail at a real 40px overflow (the
+  state `mobile-watertight` cannot reach, since it loads with empty storage and sees one blank
+  chip).
+  **AND EYES ON THE REAL PAGE CAUGHT WHAT NO GATE COULD, again.** Screenshotted at 390 with
+  one job — the state almost everybody meets first — the row rendered a label and a lit chip
+  carrying the full job name directly above a Job box repeating that same string verbatim: two
+  identical lines stacked, on the best glass on the page, to choose between one option. The
+  switcher now appears only when there is something to switch; at one job it is a single
+  dashed `+ Another job` and nothing else, which still teaches the capability because the
+  button says what it does. Storefront: no new tool; the five order-page notes in
+  `persona500/src/data/fieldToolkits.ts` now name the capability (P5 pushes that repo).
+  **BACKPORT RIDER FIRED** — the sweep is what found the shape: six trades carried the same
+  fork, and `hvac/truck-stock.html` was deliberately NOT taken (the service-tech lens: a van
+  is restocked at the shop, there is no truck arriving at a site, so a job picker there is
+  ceremony), as was `plumbing/supply-house-order.html`, which forks a different mechanism
+  (`Draft.fields`/`Draft.keep`) and is the named remainder.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/pull-list.html
