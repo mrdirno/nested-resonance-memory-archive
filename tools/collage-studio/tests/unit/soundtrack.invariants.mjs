@@ -65,6 +65,7 @@ const load = async (rel, tag) => {
 
 const S = await load('src/lib/soundtrack.ts', 'soundtrack');
 const V = await load('src/lib/video.ts', 'video');
+const I = await load('src/lib/intake.ts', 'intake');
 
 let checks = 0;
 const ok = (cond, msg) => { checks++; assert.ok(cond, msg); };
@@ -89,13 +90,14 @@ const MIMES = [
   'application/pdf', 'application/octet-stream', 'text/plain',
 ];
 
-// Exactly `ingestFiles`'s three predicates, in its order.
-const bucketOf = (f) => {
-  if (S.isAudioFile(f)) return 'music';
-  if (V.isVideoFile(f)) return 'video';
-  if ((f.type || '').startsWith('image/')) return 'picture';
-  return 'rejected';
-};
+// THE SHIPPED LADDER, not a copy of it. This was three inline predicates
+// re-spelled here, which measured a paraphrase of `ingestFiles` rather than
+// `ingestFiles` — the exact drift this repo has filed twice (`lib/level.ts` I5:
+// the gain read `t.muted ? 0 : 1` in one emitter and `wanted ? 1 : 0` in the
+// other, and only the copy was under test). `lib/intake.ts` now owns the order
+// of these tests, so the sweep asks IT. `'any'` is the intent every path here
+// has always used; the music button's intent is swept in intake.invariants.mjs.
+const bucketOf = (f) => I.routeIntake(f, 'any');
 
 let pairs = 0;
 let musicRows = 0;

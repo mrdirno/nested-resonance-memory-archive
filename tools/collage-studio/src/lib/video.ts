@@ -1085,8 +1085,17 @@ export const formatTimecode = (seconds: number): string => {
 
 const VIDEO_EXT = /\.(mp4|m4v|mov|qt|webm|mkv|avi|ogv|ogg|3gp|3g2|mpg|mpeg|ts|m2ts)$/i;
 
-/** Route a picked/dropped file. Some .mov arrive with an EMPTY MIME type. */
-export const isVideoFile = (file: File): boolean =>
+/**
+ * Route a picked/dropped file. Some .mov arrive with an EMPTY MIME type.
+ *
+ * The parameter is STRUCTURAL rather than `File` — it reads two strings and a
+ * `File` satisfies the shape, so nothing at any call site changes. It is widened
+ * so `lib/intake.ts` (which owns the bucket ladder) and the sweeps can ask the
+ * question about a `{ name, type }` pair without minting a blob, exactly as
+ * `soundtrack.isAudioFile` already allows. The sweep was ALREADY doing this and
+ * only got away with it because types are erased at runtime.
+ */
+export const isVideoFile = (file: { name: string; type: string }): boolean =>
   file.type.startsWith('video/') || (!file.type && VIDEO_EXT.test(file.name));
 
 export interface DecodeHint {

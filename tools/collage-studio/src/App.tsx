@@ -33,6 +33,8 @@ import { Template } from './lib/templates';
 import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
 import { isVideoFile, formatTimecode, openClip, revokeFrames, type ExtractedFrame } from './lib/video';
 import { isAudioFile, type SoundtrackSpec } from './lib/soundtrack';
+import { splitIntake, type IntakeIntent } from './lib/intake';
+import { planEviction, describeEviction } from './lib/evict';
 import { detectBeat, beatSchedule, beatLabel, BEAT_ANALYSE_SEC, isSynced, type BeatGrid, type SyncId } from './lib/beat';
 import { turnHoldSec } from './lib/turn';
 import { paceRate } from './lib/pace';
@@ -263,6 +265,30 @@ export default function App() {
   const [lastRecipe, setLastRecipe] = useState<string | undefined>(undefined);
 
   const [lockedCells, setLockedCells] = useState<Map<number, string>>(new Map());
+
+  /**
+   * THE FRAGMENT UNDER YOUR THUMB IN FULL BLEED — index into `layoutItems`, or
+   * null when nothing is armed.
+   *
+   * From the field: *"when full mode is active if I click a box or segment there
+   * should be ability to remove that from the group of images displayed or
+   * videos."* You maximize to COMPARE, which is exactly when you find the one
+   * photograph wrecking every roll — and the only way to get rid of it was to
+   * leave full bleed, Clear the whole pool and re-import everything minus one.
+   *
+   * WHY A TAP ARMS INSTEAD OF ACTING. A fragment now has TWO things that can be
+   * done to it, and a bare tap cannot mean both. Outside full bleed the tap
+   * still toggles the pin, byte for byte — that is the shipped gesture and an
+   * e2e drives it. Inside full bleed the tap shows what is possible, which is
+   * literally what was asked for ("there should be ABILITY to remove"), and it
+   * also puts a LABEL on a pin control that until now no one could discover
+   * except by pressing the picture and seeing what happened.
+   *
+   * It clears on leaving full bleed and whenever the partition changes: an index
+   * into a layout that has been replaced points at a different fragment, and a
+   * remove button floating over the wrong one is the worst bug this feature has.
+   */
+  const [armedCell, setArmedCell] = useState<number | null>(null);
   /**
    * UNDO — what is behind the composition on screen, and what is ahead of it.
    * Reported from the field: rolling the dice in full bleed to compare layouts
@@ -275,6 +301,16 @@ export default function App() {
 
   const [layoutItems, setLayoutItems] = useState<LayoutItem[]>([]);
   const [isLayoutComputing, setIsLayoutComputing] = useState(false);
+
+  /**
+   * A CELL INDEX IS ONLY MEANINGFUL AGAINST THE PARTITION IT WAS TAKEN FROM.
+   * Roll, remix, shuffle or change the count while a fragment is armed and index
+   * 7 is now somewhere else entirely — so the arming does not survive a new
+   * layout, or leaving full bleed. Cheap, and it forecloses the one bug that
+   * would make this feature worse than not having it: a Remove button sitting
+   * over a picture other than the one it would delete.
+   */
+  useEffect(() => { setArmedCell(null); }, [layoutItems, maximized, shuffledIndices]);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   /**
@@ -1522,18 +1558,30 @@ export default function App() {
    */
   const videoJobRef = useRef<Promise<void>>(Promise.resolve());
 
-  /** Single intake for the picker AND drop. Pictures go in. Videos go in. There
-   *  is no third case and nothing is asked. */
-  const ingestFiles = (list: File[]) => {
+  /**
+   * Single intake for the picker AND drop. Pictures go in. Videos go in. Music
+   * goes under. The one thing that is asked is WHICH BUTTON was pressed.
+   *
+   * THE WISH (collage well, improve, about_tool=upload): *"Be able to add music
+   * or sound without the video. Right now if you use a video for the sound or
+   * import audio from video it just imports video… if you're importing audio it
+   * should not display the video."*
+   *
+   * All three file buttons fired one `onChange` that landed here, so this
+   * function forgot which one it was and routed on the FILE ALONE: press "Add
+   * music", hand it a `.mov`, and `isVideoFile` said "video" — correctly, for a
+   * question nobody asked. You asked for a sound and got a rectangle.
+   *
+   * The ladder itself now lives in `lib/intake.ts` (swept over
+   * extension x MIME x intent), because it was ALSO re-spelled inside
+   * `tests/unit/soundtrack.invariants.mjs`, and a rule written twice is the
+   * drift this repo has already filed two scars about.
+   */
+  const ingestFiles = (list: File[], intent: IntakeIntent = 'any') => {
       if (!list.length) return;
-      // EXACTLY ONE BUCKET EACH. `isAudioFile` and `isVideoFile` are written to
-      // be disjoint (the ambiguous containers — .mp4, .webm, .ogg — belong to
-      // video), and the music filter runs first so the reject count below stays
-      // the honest "none of the three".
-      const music = list.filter(isAudioFile);
-      const videos = list.filter(f => !isAudioFile(f) && isVideoFile(f));
-      const pics = list.filter(f => !isAudioFile(f) && !isVideoFile(f) && f.type.startsWith('image/'));
-      const rejected = list.length - videos.length - pics.length - music.length;
+      // EXACTLY ONE BUCKET EACH — now by construction rather than by three
+      // filters that had to stay disjoint by hand.
+      const { music, video: videos, picture: pics, rejected } = splitIntake(list, intent);
 
       const counted = pics.length + videos.length;
       if (counted > 0) beginIngest(counted, `Adding ${counted} item${counted === 1 ? '' : 's'}…`);
@@ -1550,7 +1598,14 @@ export default function App() {
               .then(async () => { for (const v of videos) await autoIngestVideo(v); })
               .catch(() => { /* each clip already flashed its own notice */ });
       }
-      if (rejected > 0) flashNotice(`${rejected} unsupported file(s) ignored — images, video and music only.`);
+      // THE REFUSAL NAMES THE INTENT IT REFUSED UNDER. Under 'music' the only
+      // thing that can be rejected is a picture, and telling that person
+      // "images, video and music only" would list the very thing they just
+      // handed over — a message that reads as a bug in the app rather than as a
+      // wrong button.
+      if (rejected.length > 0) flashNotice(intent === 'music'
+          ? `${rejected.length} file(s) ignored — the music button takes sound or a video to take the sound from.`
+          : `${rejected.length} unsupported file(s) ignored — images, video and music only.`);
   };
 
   /**
@@ -1701,10 +1756,17 @@ export default function App() {
       setBeatGrid(null);
   };
 
+  /**
+   * The intent is carried by the BUTTON, not guessed from the file. It arrives
+   * on the input's own `data-intake` attribute so there is exactly one handler
+   * and exactly one place that says which input means what — a second handler
+   * would be a second copy of this function drifting from the first.
+   */
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files ? Array.from(e.target.files) : [];
+    const intent: IntakeIntent = e.target.dataset.intake === 'music' ? 'music' : 'any';
     e.target.value = '';
-    ingestFiles(list);
+    ingestFiles(list, intent);
   };
 
   /**
@@ -1757,6 +1819,78 @@ export default function App() {
           durationSec: source.duration,
           frameCount: landed.length,
       }]);
+  };
+
+  /**
+   * THE STATE HALF OF A HISTORY ENTRY, for the two changes that take assets OUT
+   * of the pool: Clear, and evicting one source.
+   *
+   * It was written out inline inside `handleClear`, and the second caller is
+   * exactly how a 25-field literal starts drifting: one of them gains `sync` and
+   * the other does not, and a restored entry silently loses a setting. One copy,
+   * two callers.
+   */
+  const poolSnapshotState = (): AppState => ({
+      version: "1.0",
+      mode: activeTab,
+      layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync },
+      style: { background: bgColor, look },
+      title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined,
+  });
+
+  /**
+   * THROW ONE SOURCE OUT OF THE POOL — the fragment you are pointing at.
+   *
+   * THE WISH (collage well, improve, about_tool=upload): *"when full mode is
+   * active if I click a box or segment there should be ability to remove that
+   * from the group of images displayed or videos."*
+   *
+   * WHAT LEAVES is decided by `lib/evict.ts` and nothing else (swept over 400
+   * pools): a photograph leaves alone, a frame of a clip takes the whole clip
+   * and its other frames with it, because `assignSources` already defines a
+   * video as ONE source however many frames came out of it — and evicting a
+   * single poster would put the clip you just deleted back on screen at the next
+   * roll, wearing a different second.
+   *
+   * IT IS RECOVERABLE, and not through the rail's Undo: that Undo restores
+   * COMPOSITIONS (`compositionHistory` holds a code and the pins, never the
+   * pool), so an eviction it "restored" would come back with the asset still
+   * gone — worse than no undo at all, because it would look like one. The pool
+   * before the removal goes where `handleClear` already puts it: the session
+   * History in Advanced, which restores images.
+   */
+  const evictSource = (cellIndex: number) => {
+      if (recorderRef.current?.isRecording) { flashNotice('Stop the take before removing a source.'); return; }
+      const imgIdx = shuffledIndices[cellIndex];
+      const target = imgIdx === undefined || imgIdx < 0 ? undefined : images[imgIdx];
+      const plan = planEviction(images, clips, target?.id);
+      // An empty plan is a cell holding nothing, or a `shuffledIndices` entry
+      // that went stale under a re-layout. Silence is the right answer to both.
+      if (plan.count === 0) { setArmedCell(null); return; }
+
+      addToHistory(poolSnapshotState(), images, previewUrl || undefined);
+
+      const gone = new Set(plan.imageIds);
+      if (plan.clipIds.length) {
+          for (const id of plan.clipIds) {
+              const c = clips.find(x => x.id === id);
+              if (c) { try { URL.revokeObjectURL(c.url); } catch { /* already gone */ } }
+          }
+          setClips(prev => prev.filter(c => !plan.clipIds.includes(c.id)));
+      }
+      setImages(prev => prev.filter(a => !gone.has(a.id)));
+      // A lock pins a CELL to an ASSET ID. Leaving a pin that names a departed
+      // asset is not inert: `handleRemix` carries every pin onto the new layout
+      // and the assignment pass re-reads them forever, so a pool of ten could
+      // still be dragging pins for photographs deleted an hour ago.
+      setLockedCells(prev => {
+          let touched = false;
+          const next = new Map(prev);
+          prev.forEach((imgId, cell) => { if (gone.has(imgId)) { next.delete(cell); touched = true; } });
+          return touched ? next : prev;
+      });
+      setArmedCell(null);
+      flashNotice(describeEviction(plan));
   };
 
   /** Drop a clip back to stills: frees its decoder and its file, keeps its frames. */
@@ -1816,8 +1950,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
-      addToHistory(state, images, previewUrl || undefined);
+      addToHistory(poolSnapshotState(), images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
       for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
@@ -2585,16 +2718,74 @@ export default function App() {
                        the clicks that land on it. */}
                    <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}>
                        {layoutItems.map((item, i) => {
-                           const isLocked = lockedCells.has(i); const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+                           const isLocked = lockedCells.has(i); const isArmed = maximized && armedCell === i; const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
                            return (
-                               <g key={i} onClick={() => toggleLock(i)} className="group cursor-pointer">
+                               // OUTSIDE full bleed the tap is the shipped gesture, byte for
+                               // byte: it pins. INSIDE it, a fragment has two things that can
+                               // be done to it and one tap cannot mean both — so the tap ARMS
+                               // and the puck below says which. Tapping the armed one again
+                               // puts it away.
+                               <g key={i} onClick={() => (maximized ? setArmedCell(prev => (prev === i ? null : i)) : toggleLock(i))} className="group cursor-pointer">
                                    <path d={d} fill="transparent" stroke="transparent" />
-                                   <path d={d} fill="none" stroke={isLocked ? '#facc15' : 'white'} strokeWidth={isLocked ? 4 : 2} className={`transition-all ${isLocked ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`} />
+                                   <path d={d} fill="none" stroke={isArmed ? '#34d399' : isLocked ? '#facc15' : 'white'} strokeWidth={isArmed ? 5 : isLocked ? 4 : 2} className={`transition-all ${isArmed || isLocked ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`} />
                                    {isLocked && (() => { const c = getCentroid(item.path); return ( <foreignObject x={c.x - 12} y={c.y - 12} width="24" height="24"><div className="bg-black/50 p-1 rounded-full backdrop-blur flex items-center justify-center w-full h-full"><Lock size={12} className="text-yellow-400" /></div></foreignObject> ); })()}
                                </g>
                            );
                        })}
                    </svg>
+                   {/* WHAT CAN BE DONE TO THE FRAGMENT YOU TAPPED — full bleed only.
+                       HTML rather than a `foreignObject`, because the SVG is a
+                       1200-unit space scaled to whatever the art box measures, and a
+                       tap target defined in those units is 44 px on exactly one
+                       screen size. These are CSS pixels, so the 44 px law holds at
+                       320 and at 2560 alike. The art box is sized to the artwork's
+                       own aspect (`artFit`), so the viewBox is NOT letterboxed inside
+                       it and a centroid maps straight to a percentage. */}
+                   {maximized && armedCell !== null && layoutItems[armedCell] && (() => {
+                       const idx = armedCell;
+                       const imgIdx = shuffledIndices[idx];
+                       const target = imgIdx === undefined || imgIdx < 0 ? undefined : images[imgIdx];
+                       const plan = planEviction(images, clips, target?.id);
+                       // A fragment holding nothing has nothing to pin and nothing to
+                       // throw away. Showing two dead buttons over it would be the
+                       // inert-control defect this repo has already been filed for.
+                       if (plan.count === 0) return null;
+                       const H = PREVIEW_H(aspect, PREVIEW_W);
+                       const c = getCentroid(layoutItems[idx].path);
+                       // Kept whole against the edges: a puck half off the artwork is
+                       // clipped by the band, and the button you cannot reach is the
+                       // one over the fragment at the corner.
+                       const PUCK = 108;
+                       const clampPx = (v: number, size: number) => (size > PUCK + 12 ? Math.min(Math.max(v, PUCK / 2 + 6), size - PUCK / 2 - 6) : size / 2);
+                       const left = artFit ? `${clampPx((c.x / PREVIEW_W) * artFit.w, artFit.w)}px` : `${(c.x / PREVIEW_W) * 100}%`;
+                       const top = artFit ? `${clampPx((c.y / H) * artFit.h, artFit.h)}px` : `${(c.y / H) * 100}%`;
+                       const isLocked = lockedCells.has(idx);
+                       const what = plan.isClip ? (plan.label || 'this clip') : (plan.label || 'this picture');
+                       return (
+                           <div
+                               data-testid="cell-actions"
+                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-1 rounded-2xl border border-white/20 bg-black/80 backdrop-blur px-1.5 py-1.5 shadow-2xl"
+                               style={{ left, top }}
+                           >
+                               <button
+                                   data-testid="cell-lock"
+                                   onClick={() => toggleLock(idx)}
+                                   title={isLocked ? 'Unpin this fragment' : 'Pin this fragment — it keeps this picture through a remix'}
+                                   aria-label={isLocked ? 'Unpin this fragment' : 'Pin this fragment'}
+                                   className={`w-11 h-11 rounded-xl flex items-center justify-center active:scale-95 transition ${isLocked ? 'text-yellow-400 bg-yellow-400/15 hover:bg-yellow-400/25' : 'text-gray-200 hover:bg-white/10'}`}
+                               >{isLocked ? <Unlock size={18} /> : <Lock size={18} />}</button>
+                               <button
+                                   data-testid="cell-remove"
+                                   onClick={() => evictSource(idx)}
+                                   title={plan.isClip && plan.count > 1
+                                       ? `Remove ${what} — and its ${plan.count} frames`
+                                       : `Remove ${what} from the pool`}
+                                   aria-label={`Remove ${what} from the pool`}
+                                   className="w-11 h-11 rounded-xl text-red-400 hover:bg-red-500/20 flex items-center justify-center active:scale-95 transition"
+                               ><X size={18} /></button>
+                           </div>
+                       );
+                   })()}
                </div>
                {/* FULL BLEED: art, and one thumb-reachable bar. The three
                    buttons here are the ones you are maximized IN ORDER to use —
@@ -2687,7 +2878,7 @@ export default function App() {
                    ><Film size={18} /></button>
                    <button
                      onClick={() => musicInputRef.current?.click()}
-                     title={soundtrack ? `Music: ${soundtrack.name} — pick another to replace it` : 'Add music — it plays under the collage and lands in the export'}
+                     title={soundtrack ? `Music: ${soundtrack.name} — pick another to replace it` : 'Add music — or a video to take the sound from, without its pictures'}
                      aria-label={soundtrack ? 'Replace the music' : 'Add music'}
                      className={`w-11 h-11 rounded bg-[#111] border flex items-center justify-center transition-colors shadow-lg ${
                        soundtrack
@@ -2776,8 +2967,21 @@ export default function App() {
       <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" className="hidden" onChange={onFileInputChange} />
       <input ref={videoInputRef} type="file" multiple accept="video/*,.mov,.mp4,.m4v,.webm" className="hidden" onChange={onFileInputChange} />
       {/* `audio/*` plus the spellings some pickers refuse to match on type
-          alone. Not `multiple`: one track is the job. */}
-      <input ref={musicInputRef} type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.flac,.opus,.oga" className="hidden" onChange={onFileInputChange} />
+          alone — AND the video containers, because THAT is the wish: *"if you
+          use a video for the sound … it should not display the video"*. Without
+          `video/*` here the desktop picker greys the clip out and the fix is
+          unreachable from a Mac; with it, `data-intake="music"` takes the sound
+          and leaves the pictures. `audio/*` stays FIRST: three e2e suites find
+          this input by `accept*="audio"`.
+          Not `multiple`: one track is the job. */}
+      <input
+        ref={musicInputRef}
+        type="file"
+        data-intake="music"
+        accept="audio/*,video/*,.mp3,.m4a,.aac,.wav,.flac,.opus,.oga,.mov,.mp4,.m4v,.webm"
+        className="hidden"
+        onChange={onFileInputChange}
+      />
     </div>
   );
 }
