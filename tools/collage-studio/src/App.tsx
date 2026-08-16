@@ -2567,6 +2567,7 @@ export default function App() {
                        soundtrack={soundtrack}
                        onRemoveSoundtrack={removeSoundtrack}
                        onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
+                       onSoundtrackLevel={(level) => setSoundtrack((prev) => (prev ? { ...prev, level } : prev))}
                        /* THE RANGE. `undefined` is "the whole track" and is
                           stored as undefined rather than as [0, duration] —
                           absent means the default everywhere in this app, and

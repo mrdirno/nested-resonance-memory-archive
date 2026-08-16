@@ -101,6 +101,7 @@
  * `clip-${Date.now()}-${seq}` / `vid-…`, so the leading `__` is unreachable.
  */
 import { normaliseWindow, type ClipWindow } from './clipWindow';
+import { mixGain } from './level';
 
 export const SOUNDTRACK_ID = '__soundtrack__';
 
@@ -122,6 +123,13 @@ export interface SoundtrackSpec {
   durationSec: number;
   /** THE USER'S INTENT: "this music is part of the piece". Absent means NO. */
   muted?: boolean;
+  /**
+   * HOW LOUD IT SITS — a multiplier, absent meaning FULL (`lib/level.ts`). It is
+   * a SEPARATE field from `muted` and not the bottom of one scale, because
+   * `muted` is intent and is load-bearing in four other places; this is what the
+   * sound does when it is not muted. `mixGain` composes the two.
+   */
+  level?: number;
   /**
    * THE RANGE — seconds into the song. ABSENT MEANS THE WHOLE TRACK, never "keep
    * what is there" (this project has a scar with that exact name), which is also
@@ -199,6 +207,12 @@ export const isAudioFile = (file: { name: string; type: string }): boolean => {
  * `loop` is always true (music laps under a take that outruns it, which is what
  * every clip in this app already does) and `rate` is always 1 (video-length sync
  * scales a clip's sound to match its rate-scaled PICTURE; music has none).
+ *
+ * THE GAIN IS `mixGain` AND NOT A SECOND OPINION ABOUT WHAT A LEVEL MEANS. It
+ * read `t.muted ? 0 : 1` here while `describeAudioSources` read `wanted ? 1 : 0`
+ * over there — two spellings of one rule, harmless while the rule is a boolean,
+ * and exactly how two emitters of the same row drift apart the moment it stops
+ * being one. Invariant I5 holds them together.
  */
 export const soundtrackSource = (t: SoundtrackSpec | null | undefined): SoundtrackSource | null => {
   if (!t || !t.url) return null;
@@ -210,7 +224,7 @@ export const soundtrackSource = (t: SoundtrackSpec | null | undefined): Soundtra
     // silence per lap.
     span: 0,
     loop: true,
-    gain: t.muted ? 0 : 1,
+    gain: mixGain(!t.muted, t.level),
     rate: 1,
     // PASSED THROUGH, NOT RESOLVED. The mixer resolves them against the decoded
     // buffer; resolving them here against `durationSec` would be the second copy

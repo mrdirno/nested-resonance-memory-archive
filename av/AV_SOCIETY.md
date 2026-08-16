@@ -4148,3 +4148,22 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   reply"* from framing gets nothing on any other trade's write-up — **the same defect this cycle
   fixed, one layer out.** That is the named next rung. Storefront unchanged — no new tool, no new
   trade. https://mrdirno.github.io/nested-resonance-memory-archive/commons/tips.html
+- `2026-08-15` — **[AXIS:COLLAGE] EVERY GAIN IN COLLAGE STUDIO WAS A BOOLEAN WEARING A NUMBER'S
+  CLOTHES** · **before:** the only two answers to "how loud is the music under the clips" were ALL
+  and NOTHING — three call sites each wrote a hard `1` into a field already typed `number`
+  (`describeAudioSources`: `wanted ? 1 : 0`, `soundtrackSource`: `t.muted ? 0 : 1`, `applyMutes`:
+  `audible ? 1 : 0`) · **after:** THE LEVEL — `lib/level.ts`, a roster of five at −6 dB a step
+  (100% → a 6% bed) on the sheet the trim and the speed already share, one `mixGain` both row
+  emitters call, and one `livePath` that makes applying the level twice (element volume × the gain
+  node it feeds — 25% would render as 6%) unrepresentable rather than merely fixed. Mute untouched
+  and still owns 0. **Measured by decoding the exported MP4 and dividing one tone by another in the
+  same file** — the true-peak limiter scales every sample by one scalar, so it cancels out of a
+  ratio and nothing else: **music/clip 1.2912 → 0.3227 = 0.2499× (12.0 dB down)** against a nominal
+  12.04, with the clip's own 440 Hz bin identical (0.08502) in both exports; the clip path measured
+  on its own separate route at **0.2481×**. BACKPORT RIDER fired IN-TREE and found a live defect one
+  cycle old: `emitStatus` de-dupes on a hand-enumerated signature, and both `level` AND `moving`
+  (C159's drift-row gate) were missing from it — the value reached the file and the room while the
+  control read back stale. NOTE FOR THE NEXT BUMP: C159 was also a COLLAGE cycle and logged only in
+  `tools/collage-studio/COLLAGE_EVOLUTION.md`, so the axis parser could not see it and reported WELL
+  as stalest while the well was dry. Collage cycles get a line HERE too, from now on.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

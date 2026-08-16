@@ -410,6 +410,28 @@ or re-documenting an existing capability is DD, not delivery.
   1.900s -> 4.900s over 3 s of wall clock with the canvas hash IDENTICAL at both
   ends (the control — if anything were drawing, the clock would have run for the
   old reason), and 0.000s -> 0.000s with the one line reverted.
+  THE LEVEL — how loud each source sits in the mix. Every gain in this app was a
+  BOOLEAN WEARING A NUMBER'S CLOTHES (`describeAudioSources` emitted
+  `wanted ? 1 : 0`, `soundtrackSource` emitted `t.muted ? 0 : 1`, `applyMutes`
+  wrote `audible ? 1 : 0`), so "how loud is the music under the clips" had two
+  answers: ALL and NOTHING. `lib/level.ts` is one roster of five (-6 dB a step,
+  exact halvings, 100% down to a 6% bed), one `mixGain(wanted, level)` that BOTH
+  row emitters now call so a clip and the music cannot hold two opinions about
+  what a level means, and one `livePath` for the room. Mute is untouched and
+  still owns 0: a level is what the sound does when it is NOT muted, so the
+  speaker button stays one control for one fact. The roster rides the sheet the
+  trim and the speed already share, which is where a per-SOURCE question belongs
+  and which is why the dock's one-line scroll row gained nothing but a badge.
+  `mixSources` changed by NOT ONE LINE — it already multiplied by `src.gain` —
+  which is the same sentence THE SOUNDTRACK earned for the same reason.
+  Measured at the artifact by DIVIDING ONE TONE BY ANOTHER IN THE SAME FILE (the
+  true-peak limiter scales every sample by one scalar, so it cancels out of a
+  ratio and out of nothing else): music/clip 1.2912 -> 0.3227 = **0.2499x, 12.0
+  dB down** against a nominal 12.04, with the clip's own 440 Hz bin reading
+  0.08502 in BOTH exports — the control moved the source it names and nothing
+  else. The clip path travels a different route (Stage-only lifetime,
+  `describeAudioSources` instead of `soundtrackSource`) so it is measured
+  separately: A/B 0.7183 -> 0.1782 = 0.2481x.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -746,10 +768,44 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       riding under it, and it needed nothing new from this rung: the decode it
       analyses is the same `decodeAudioData` the mixer does, at 8 kHz mono
       because tempo survives losing every frequency detail.
+      **VOLUME PER SOURCE IS NOW SHIPPED** — see THE LEVEL in CURRENT STATE. The
+      thing this list asked for by name, and the shape of the answer was decided
+      by a fact the entry did not contain: every gain in the app was already a
+      `number`, so the feature was not "add a level", it was "stop writing 1 into
+      the number you have". Three call sites, one of them (`mixSources`) needing
+      no edit at all.
       Still owed on this rung: an ASYMMETRIC fade (in and out are one control
       today, which is one job and the right first cut, but a long tail under a
-      short head is what people actually reach for), volume per source, ducking,
-      and — now that a grid exists — snapping the TRIM to it.
+      short head is what people actually reach for), DUCKING, and — now that a
+      grid exists — snapping the TRIM to it.
+- [ ] **A LEVEL IS SET BY HAND; DUCKING IS THE ONE PEOPLE ACTUALLY WANT.** "Turn
+      the music down" is what somebody asks for, and what they MEAN is "turn it
+      down while the clips are talking". THE LEVEL makes the ask expressible for
+      the first time and answers the static half of it; the moving half needs the
+      clip's ENVELOPE, which means analysing a decode the live path does not have
+      — the same `decodeAudioData` THE BEAT already does at 8 kHz mono, which is
+      the seam to build it on rather than a new one. The honest first cut is
+      probably not a compressor at all: it is a per-lap gain the offline mixer
+      already knows how to schedule, because `audioSchedule` emits one node per
+      lap and a node takes an `AudioParam`.
+- [ ] **A LEVEL DOES NOT TRAVEL, in a code OR in a project file** — the same
+      sentence, word for word, that the trim, the speed and the music itself
+      already carry, and it is now the FOURTH per-source fact in that state. The
+      code's boundary is right and does not move (a code is a recipe somebody
+      else opens with their own sources). The PROJECT FILE's is not: a project is
+      reopened with the same files by the same person, and it silently drops four
+      things they set. Four instances of one gap is the point at which the fix is
+      one `SourceState` the project writes and reads, not a fifth entry here.
+- [ ] **THE LEVEL IS BEHIND A BUTTON THE TRIM DISABLES.** The roster lives on the
+      sheet the trim button opens, and that button is `disabled` until the source
+      is longer than `MIN_WINDOW_SEC` and while the app is `busy`. So a clip too
+      short to cut cannot be quietened either, and neither can anything during a
+      render. Correct for a TRIM (a sheet opened against a zero-width axis is two
+      handles that do nothing) and wrong for a LEVEL, which has no length
+      precondition at all. It is the cost of putting a second question behind one
+      door and it is small today — 0.15 s of video is not a real clip — but the
+      door's condition should be the union of what is behind it, not the first
+      thing that was.
 - [~] **Speed** — part-shipped as **THE SPEED**: one multiplier per clip, five
       chips (0.25× / 0.5× / 1× / 2× / 4×) on the clip's own sheet beside the
       trim, `lib/speed.ts`. The rung's own note was right on both counts — it IS
@@ -1137,6 +1193,40 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C160-A-CHANGE-DETECTOR-THAT-ENUMERATES-FIELDS-SWALLOWS-EVERY-FIELD-
+  ADDED-AFTER-IT.** `Stage.emitStatus` skips the React push when a hand-built
+  signature string is unchanged — the right idea (the loop calls it every frame),
+  with a list of fields spelled out by hand. `level` was not in the list, so the
+  Stage held the new value, the export rendered it, the room played it, and the
+  chip row read back the OLD one: press a level, nothing moves. It fails
+  SILENTLY, in ONE DIRECTION (write-through works, read-back is frozen), which is
+  precisely the shape that reads as "the button is broken" rather than as "the
+  status is stale". Caught by `level.spec.ts` L2 — an `aria-pressed` assertion,
+  not a render check, because the render was fine.
+  **AND IT HAD ALREADY EATEN A FIELD.** `moving` — THE DRIFT ROW's own gate,
+  shipped ONE CYCLE EARLIER — was missing from the same list, so a status where
+  only the drift changed could not reach the strip. Two for two: every field
+  added to `StageStatus` since the signature was written had fallen through it.
+  Both are in the list now, which is the cheap fix; the real one is a structural
+  digest over the object, and it is its own rung.
+  The general shape: **a manually-maintained mirror of a growing type is a defect
+  with a delay fuse.** This project has three of them — this signature, the
+  duplicated `SoundtrackSpec` shape in `VideoStage`'s props (also fixed this
+  cycle, also one field behind), and `SoundtrackSource` vs `OfflineAudioSource`
+  (which is the one that is DELIBERATE and has a sweep asserting the two agree —
+  the difference being that it is checked).
+- **SCAR-C160-THE-NOISE-FLOOR-IS-A-PROPERTY-OF-THE-FILE-NOT-OF-THE-HARNESS.**
+  L3's first bound copied `soundtrack.spec` T2's "a muted tone must be under
+  `control * 4`", and failed at 3.6x — on a take where the music was 732x down
+  from unmuted and 567x below the clip it sat under. T2's bound is right THERE:
+  its collage is photographs, so muting the only source means the mixer writes no
+  audio track at all and the control is measured over digital silence. L3 keeps a
+  440 Hz clip sounding, so the file is a real AAC encode and EVERY empty bin
+  carries that encode's quantisation noise, the 5000 Hz control included. The
+  yardstick moved and the tone did not. **A control bin is only a floor for the
+  file it was measured in** — bound against the SOURCE the quiet one is supposed
+  to be under, which is the same ratio-not-absolute rule the rest of the suite is
+  built on, and which the limiter makes mandatory anyway.
 - **SCAR-C159-A-MUTATION-HARNESS-THAT-RESTORES-FROM-GIT-DELETES-THE-WORK-IT-IS-
   TESTING.** The battery for the drift row applied one edit to `takeMap.ts`, ran
   the sweep, and restored with `git checkout -- src/lib/takeMap.ts`. That
@@ -4634,4 +4724,54 @@ frontier. Today's ceiling is tomorrow's floor.
   trim+speed+video-audio-export+export-integrity+visual-regression 18/18;
   `tsc` and `vite build` clean. Scar filed: a mutation harness that restores
   with `git checkout --` deletes the uncommitted work it exists to grade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C160 — 2026-08-15 · [AXIS:COLLAGE] THE LEVEL — every gain in this app was a
+  boolean wearing a number's clothes** (well read UNSCOPED first: 0 new, 0
+  building, 23 shipped, 2 declined — no wish to claim; LIVE STATE: no trades
+  owed; `av/AV_SOCIETY.md`'s last COLLAGE tag is 2026-08-12, one line older than
+  the WELL tag the bump flagged, so COLLAGE is the true stalest axis and WELL is
+  unclaimable). The Audio rung has asked for `volume per source` by name since
+  THE SOUNDTRACK shipped. BEFORE → AFTER, measured by DECODING THE EXPORTED MP4.
+  **THE SHAPE WAS DECIDED BY A FACT THE RUNG DID NOT CONTAIN**: every gain was
+  already a `number`, so the work was not "add a level", it was "stop writing 1
+  into the number you have" — `mixSources` changed by NOT ONE LINE, exactly as
+  THE SOUNDTRACK did and for the same reason.
+  `lib/level.ts`: one roster of five (-6 dB a step, exact halvings, 100% to a 6%
+  bed), one `mixGain(wanted, level)` that BOTH row emitters call — they had been
+  spelling one boolean rule two ways (`wanted ? 1 : 0` and `t.muted ? 0 : 1`),
+  which is fine while it is a boolean and is how two emitters of one row drift
+  the moment it is not — and one `livePath`, whose whole job is that the level be
+  applied EXACTLY ONCE: an element's `volume` and the gain node it feeds are in
+  SERIES, so writing it to both renders 25% as 6%. I2 pins `node * element ===
+  effective` in both branches, which makes that bug unrepresentable rather than
+  fixed. MUTE IS UNTOUCHED and still owns 0.
+  PROOF AT THE ARTIFACT, and the design of the measurement is the point: the
+  true-peak limiter scales every sample by ONE scalar, so absolute energy is
+  partly its answer and the RATIO between two tones in one file is the user's
+  alone. **music/clip 1.2912 → 0.3227 = 0.2499x, 12.0 dB down** against a nominal
+  12.04 — with the clip's own 440 Hz bin reading 0.08502 in BOTH exports, so the
+  control moved the source it names and nothing else. The clip path is a
+  different route (Stage-only lifetime, `describeAudioSources`) and is measured
+  separately rather than argued from the music: **A/B 0.7183 → 0.1782 =
+  0.2481x**. A muted track at 6% sits 568x under the clip.
+  BACKPORT RIDER: fired IN-TREE, and it found a live defect one cycle old.
+  `emitStatus` de-dupes on a hand-enumerated signature; `level` was missing from
+  it (the level wrote through to the file and the room while the chip read back
+  the old value), and so was `moving` — THE DRIFT ROW's own gate from C159. Two
+  for two: every field added to `StageStatus` since that line was written had
+  fallen through it. Both in now, scar filed. Same class, same cycle: the
+  duplicated `SoundtrackSpec` shape in `VideoStage`'s props was also one field
+  behind and is now the type itself. No trade page touched, so no cross-trade
+  sweep applied.
+  PROOF: 10 new invariants (I1–I8 incl. the pre-level oracle, 4,019 coercion
+  probes and 2,448 live-path settings); 26/26 unit sweeps; e2e 5/5 on the new
+  suite (two full offline renders and a division, plus the 320/360/390/430
+  mobile law with five 44 px chips inside a sheet that already holds a trim
+  strip, two range handles and a speed roster — zero overflow at every width),
+  and 27/27 regression across soundtrack 6/6, take-strip+playhead 8/8,
+  video-audio-export+mobile-watertight 11/11, speed 2/2, fade 2/2; `tsc` and
+  `vite build` clean. Second scar filed: a control bin is a floor only for the
+  file it was measured in — L3's first bound copied a threshold from a suite
+  whose file was digital silence and failed at 3.6x on a tone that was 732x down.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

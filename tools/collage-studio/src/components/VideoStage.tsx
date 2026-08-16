@@ -54,8 +54,10 @@ import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
 import { SPEEDS, safeSpeed, isSped, speedLabel, screenLength, NATURAL_SPEED } from '../lib/speed';
+import { LEVELS, safeLevel, isQuieted, levelLabel, levelDb } from '../lib/level';
 import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
+  type SoundtrackSpec,
 } from '../lib/soundtrack';
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TurnSchedule } from '../lib/turn';
@@ -155,7 +157,10 @@ export interface VideoStageProps {
    * THE SOUNDTRACK — music under the collage, handed straight to the Stage,
    * which holds it as a clip with no picture. Null means no music.
    */
-  soundtrack?: { url: string; name: string; durationSec: number; muted?: boolean; inSec?: number; outSec?: number } | null;
+  /** THE TYPE ITSELF, not a hand-copied shape of it. This was spelled out inline
+   *  and had already drifted one field behind `SoundtrackSpec` by the time the
+   *  level was added — a structural copy that compiles is the quietest kind. */
+  soundtrack?: SoundtrackSpec | null;
   /**
    * THE MUSIC'S RANGE moved. `undefined` means the whole track — the same
    * "absent is the default" the clip trims and `normaliseWindow` both use, so
@@ -171,6 +176,8 @@ export interface VideoStageProps {
   /** The music's INTENT changed. The parent owns it; the Stage is re-fed from
    *  it whenever a Stage is (re)built. */
   onSoundtrackMuted?: (muted: boolean) => void;
+  /** The parent owns the track, so it owns the level too — see `setTrackLevel`. */
+  onSoundtrackLevel?: (level: number) => void;
   /**
    * The WHOLE asset pool, used for one thing: the trim sheet's filmstrip.
    *
@@ -265,10 +272,26 @@ const TrimSheet: React.FC<{
    */
   speed?: number;
   onSpeed?: (rate: number) => void;
+  /**
+   * THE LEVEL — present for BOTH a clip and the music, and that symmetry is the
+   * decision. Unlike the speed above, a level asks the same question of a song
+   * and of a clip's own sound ("how loud does this sit against the others") and
+   * has the same answer, so a sheet that offered it to only one of them would be
+   * hiding the control on the source people most want it for.
+   */
+  level?: number;
+  onLevel?: (level: number) => void;
+  /** This source's sound is currently OUT of the piece. The level row stays live
+   *  (setting where it will sit when you put it back is a real thing to do) and
+   *  says so, rather than going disabled and looking broken. */
+  muted?: boolean;
   /** True when a video-length-sync mode is matching lengths — see the note the
    *  sheet then shows, and `lib/videoSync`'s header for why it must be said. */
   syncing?: boolean;
-}> = ({ name, span, frames, value, onChange, onClose, credit, speed, onSpeed, syncing }) => {
+}> = ({
+  name, span, frames, value, onChange, onClose, credit, speed, onSpeed,
+  level, onLevel, muted, syncing,
+}) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
   // A step fine enough to land on a beat, coarse enough that a thumb can hit it.
@@ -538,6 +561,66 @@ const TrimSheet: React.FC<{
           </div>
         )}
 
+        {/* THE LEVEL — how loud this source sits in the mix. It is on THIS sheet
+            for the reason the speed is: the questions on here are about the
+            SOURCE, and the dock chip row is a one-line horizontal scroll on a
+            phone that already carries a name, a trim, a speaker and an X.
+            THE READOUT SAYS WHAT THE FILE GETS, not what the chip is: a level is
+            a RATIO and the limiter is what makes it one (lib/level.ts), so
+            "12 dB under everything else" is the true sentence and "quieter" is
+            not — with one audible source there is nothing to be under, and the
+            sentence changes to say so. */}
+        {onLevel && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <Volume2 size={12} className="text-emerald-400 shrink-0" />
+              <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 uppercase shrink-0">Level</span>
+              <div className="flex-1" />
+              <span
+                className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
+                data-testid="level-readout"
+              >
+                {muted
+                  ? 'sound is out of the piece'
+                  : isQuieted(level)
+                    ? `${levelDb(level)} dB under the rest`
+                    : 'as loud as the file is'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1" role="group" aria-label={`Level for ${name}`}>
+              {LEVELS.map((l) => {
+                const on = safeLevel(level) === l.level;
+                return (
+                  <button
+                    key={l.id}
+                    type="button"
+                    onClick={() => onLevel(l.level)}
+                    title={l.title}
+                    aria-pressed={on}
+                    data-testid={`level-${l.id}`}
+                    className={`flex-1 min-w-0 h-11 rounded-lg text-[10px] font-black tabular-nums tracking-wide transition-colors ${
+                      on
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/60'
+                        : 'text-gray-400 border border-white/10 hover:text-white hover:bg-white/10'
+                    }`}
+                  >{l.label}</button>
+                );
+              })}
+            </div>
+            {/* SAY IT WHILE IT CANNOT BE HEARD. The row stays live on a muted
+                source — you are setting where it lands when you put it back —
+                and a control that provably changes nothing right now, saying
+                nothing about that, is the inert-control defect this component is
+                scarred by four times over. */}
+            {muted && (
+              <p className="text-[9px] tracking-wide text-gray-500 leading-relaxed">
+                This sound is muted, so nothing changes yet — the speaker button
+                puts it back in at this level.
+              </p>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           <span
             className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
@@ -580,6 +663,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, move, beat, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
+  onSoundtrackLevel,
   onSoundtrackWindow,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -854,13 +938,20 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    *  lane — the one length a chip, a slider or a ruler can draw against before
    *  anything has been decoded (`soundtrack.soundtrackWindow`). */
   const trackDur = soundtrack?.durationSec ?? 0;
+  /** THE LEVEL, as a primitive, for the same reason the range is two of them —
+   *  and it is what makes a rebuilt Stage come back at the level the user set
+   *  rather than at 100% (`stage.setSoundtrackLevel`'s note). */
+  const trackLevel = soundtrack?.level;
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
     stage.setSoundtrack(trackUrl
-      ? { url: trackUrl, name: trackName, muted: trackMuted, inSec: trackIn, outSec: trackOut }
+      ? {
+          url: trackUrl, name: trackName, muted: trackMuted, level: trackLevel,
+          inSec: trackIn, outSec: trackOut,
+        }
       : null);
-  }, [stageGen, trackUrl, trackName, trackMuted, trackIn, trackOut]);
+  }, [stageGen, trackUrl, trackName, trackMuted, trackLevel, trackIn, trackOut]);
 
   // --- transport -------------------------------------------------------------
 
@@ -1192,6 +1283,29 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     onSoundtrackMuted?.(wanted);
   }, [onSoundtrackMuted]);
 
+  /** A CLIP'S LEVEL — the Stage alone, exactly like `setClipMuted`: a clip's
+   *  audio intent has never had a copy in the parent, so a level must not start
+   *  one. It reads back off `status.clips[].level`. */
+  const setClipLevel = useCallback((clipId: string, level: number) => {
+    stageRef.current?.setClipLevel(clipId, level);
+  }, []);
+
+  /**
+   * THE MUSIC'S LEVEL — BOTH, for `toggleTrackSound`'s reason and no other. The
+   * Stage call is what the room and the next export hear; the parent is told
+   * because the parent OWNS the track, and a Stage that is rebuilt is re-fed
+   * from that prop — a level that lived only in the Stage would come back at
+   * 100% the first time anything remounted it.
+   *
+   * NO GESTURE CLAUSE HERE, unlike the mute above. Turning a level down never
+   * needs to start audio, and turning it up cannot: the level is what the sound
+   * does when it is already in the piece, so there is nothing to resume.
+   */
+  const setTrackLevel = useCallback((level: number) => {
+    stageRef.current?.setSoundtrackLevel(level);
+    onSoundtrackLevel?.(level);
+  }, [onSoundtrackLevel]);
+
   /**
    * THE SIZE LADDER, RE-PROBED WHEN THE SHAPE CHANGES.
    *
@@ -1403,6 +1517,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           const t = trims[c.id];
           const win = normaliseWindow(c.durationSec, t?.inSec, t?.outSec);
           const sped = isSped(speeds[c.id]);
+          // OFF THE STAGE ROW, not off React state — `setClipLevel` writes to the
+          // clip record beside its mute and nothing here mirrors it.
+          const clipLevel = st?.level;
+          const quieted = isQuieted(clipLevel);
           return (
             <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
               <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
@@ -1421,10 +1539,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
               <button
                 onClick={() => setTrimming(c.id)}
                 disabled={busy || !(c.durationSec > MIN_WINDOW_SEC)}
-                title={win.full && !sped
-                  ? `Trim ${c.name} — pick the part that plays and how fast it runs (${secs(c.durationSec)})`
+                title={win.full && !sped && !quieted
+                  ? `Trim ${c.name} — pick the part that plays, how fast it runs and how loud it sits (${secs(c.durationSec)})`
                   : `${c.name}: playing ${secs(win.inSec)}→${secs(win.outSec)} of ${secs(c.durationSec)}`
-                    + (sped ? ` at ${speedLabel(speeds[c.id])}` : '')}
+                    + (sped ? ` at ${speedLabel(speeds[c.id])}` : '')
+                    + (quieted ? `, ${levelDb(clipLevel)} dB down` : '')}
                 aria-label={`Trim ${c.name}`}
                 className={`h-11 min-w-[2.75rem] px-2 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
                   win.full && !sped
@@ -1441,6 +1560,16 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                     className="text-[9px] font-black tabular-nums"
                     data-testid={`clip-speed-badge-${c.id}`}
                   >{speedLabel(speeds[c.id])}</span>
+                )}
+                {/* THE LEVEL BADGE, on the same button as the trim and the speed
+                    because it is set on the same sheet. Absent at 100% — a badge
+                    that renders for every clip is not a badge, which is the rule
+                    the speed badge beside it already states. */}
+                {quieted && (
+                  <span
+                    className="text-[9px] font-black tabular-nums"
+                    data-testid={`clip-level-badge-${c.id}`}
+                  >{levelLabel(clipLevel)}</span>
                 )}
               </button>
               <button
@@ -1534,6 +1663,15 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   {!w.full && (
                     <span className="text-[9px] font-black tabular-nums" data-testid="track-range">
                       {soundtrackRangeLabel(soundtrack)}
+                    </span>
+                  )}
+                  {/* HOW LOUD THE MUSIC SITS, on the chip. This is the badge that
+                      earns its width: "the music is too loud" is the one audio
+                      edit everybody makes, so the answer belongs where you can
+                      see it without opening anything. */}
+                  {isQuieted(trackRow.level) && (
+                    <span className="text-[9px] font-black tabular-nums" data-testid="track-level">
+                      {levelLabel(trackRow.level)}
                     </span>
                   )}
                 </button>
@@ -1768,6 +1906,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           onChange={onSoundtrackWindow}
           onClose={() => setTrimming(null)}
           credit="Picking the part of the song that plays was wished for by an anonymous Collage user."
+          level={trackRow?.level}
+          muted={!trackRow?.wantsAudio}
+          onLevel={setTrackLevel}
         />
       )}
 
@@ -1801,6 +1942,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             onClose={() => setTrimming(null)}
             speed={speeds[c.id]}
             onSpeed={(rate) => setSpeed(c.id, rate)}
+            // OFF THE STAGE, not off React state — the level is a live edit that
+            // lives on the clip record beside its mute, and a second copy here
+            // would be a second thing to keep true. `clipRows` IS that record.
+            level={clipRows.find((r) => r.id === c.id)?.level}
+            muted={!clipRows.find((r) => r.id === c.id)?.wantsAudio}
+            onLevel={(v) => setClipLevel(c.id, v)}
             // Only ever true with 2+ clips, because that is the only time the
             // sync control is offered at all — a single clip is its own
             // reference and a stretch mode is a no-op on it.

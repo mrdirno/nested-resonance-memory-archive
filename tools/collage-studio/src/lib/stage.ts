@@ -52,6 +52,7 @@ import {
   type ClipWindow, type WindowedPlayback,
 } from './clipWindow';
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
+import { livePath, mixGain, safeLevel, FULL_LEVEL } from './level';
 import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
 import { lapAdjust, resumeOriginMs } from './playhead';
 import {
@@ -232,6 +233,13 @@ export interface StageClipStatus {
   /** The per-clip mute FLAG (what `setClipMuted` sets). */
   muted: boolean;
   /**
+   * HOW LOUD IT SITS when it is not muted — what `setClipLevel` set, always a
+   * `safeLevel` (`lib/level.ts`). The UI reads its chip row back off THIS rather
+   * than off React state, for the reason `muted` does: a level is a live edit on
+   * the Stage, and a second copy in the component is a second thing to keep true.
+   */
+  level: number;
+  /**
    * THE USER'S INTENT: "this clip's sound is part of the piece" — `!muted`,
    * and nothing else.
    *
@@ -281,7 +289,11 @@ export interface StageStatus {
    * exactly what they mean on a clip — intent vs the speakers — and a chip wired
    * to the wrong one is the bug written up on `StageClipStatus.wantsAudio`.
    */
-  soundtrack: { name: string; muted: boolean; wantsAudio: boolean; audible: boolean; broken: boolean } | null;
+  soundtrack: {
+    name: string; muted: boolean; wantsAudio: boolean; audible: boolean; broken: boolean;
+    /** How loud the music sits when it is not muted (`lib/level.ts`). */
+    level: number;
+  } | null;
   capturing: boolean;
   /**
    * IS THE COMPOSITION ROLLING? Not "are any clips playing" — that was the
@@ -436,6 +448,13 @@ interface ClipRecord {
   outSec: number | undefined;
   playbackRate: number;
   muted: boolean;
+  /**
+   * HOW LOUD IT SITS when it is not muted (`lib/level.ts`). A LIVE EDIT held only
+   * here, exactly like `muted` and for exactly its reason: `syncClips` deliberately
+   * does not re-apply either onto an existing clip, so neither survives a scene
+   * rebuild by luck — they survive because they never travel in `StageClipInput`.
+   */
+  level: number;
   /** The one element, created on admission and reused forever after. */
   el: HTMLVideoElement | null;
   /** Admitted (owns a decoder). */
@@ -972,6 +991,13 @@ export class Stage {
     source: MediaElementAudioSourceNode | null;
     gain: GainNode | null;
     muted: boolean;
+    /**
+     * HOW LOUD THE MUSIC SITS (`lib/level.ts`). UNLIKE a clip's, this one is fed
+     * from the spec on every `setSoundtrack` — the parent OWNS the track, and a
+     * level that lived only here would come back at full the first time the Stage
+     * was rebuilt, which is the note already written on `setSoundtrack`'s mute.
+     */
+    level: number;
     broken: boolean;
     /** THE RANGE. Absent means the whole track, and costs the watchdog one branch. */
     inSec: number | undefined;
@@ -2992,6 +3018,11 @@ export class Stage {
       outSec: input.outSec,
       playbackRate: finiteOr(input.playbackRate, 1),
       muted: input.muted !== false,
+      // NOT read from `input`, and that is the decision. A level is a live edit
+      // like the mute beside it, and `syncClips` never re-applies either onto an
+      // existing clip — so putting it on `StageClipInput` would let every scene
+      // rebuild (a trim drag, a speed change) silently reset it to full.
+      level: FULL_LEVEL,
       el: null,
       live: false,
       wantPlay: true,
@@ -3519,6 +3550,42 @@ export class Stage {
   }
 
   /**
+   * HOW LOUD ONE CLIP SITS (`lib/level.ts`). Independent of the mute beside it,
+   * and deliberately so: a level is what the sound does when it is NOT muted, so
+   * this never unmutes and never touches the monitor. Setting a level on a muted
+   * clip is a legitimate thing to do — you are saying where it will sit when you
+   * put it back — and a call that "helpfully" unmuted would make that unsayable.
+   *
+   * It reaches the FILE through `describeAudioSources` and the ROOM through
+   * `applyMutes`, which is the same pair of doors `setClipMuted` uses; there is
+   * no third path, and that is what keeps the export and the preview agreeing.
+   */
+  setClipLevel(clipId: string, level: number): void {
+    const target = this.clips.get(clipId);
+    if (!target) return;
+    const next = safeLevel(level);
+    if (Object.is(target.level, next)) return;
+    target.level = next;
+    this.applyMutes();
+    this.emitStatus();
+  }
+
+  /**
+   * HOW LOUD THE MUSIC SITS. The Stage half of the pair — the caller MUST also
+   * tell the parent, exactly as `toggleTrackSound` does for the mute, because the
+   * parent owns the track and a rebuilt Stage is re-fed from that prop.
+   */
+  setSoundtrackLevel(level: number): void {
+    const t = this.track;
+    if (!t) return;
+    const next = safeLevel(level);
+    if (Object.is(t.level, next)) return;
+    t.level = next;
+    this.applyMutes();
+    this.emitStatus();
+  }
+
+  /**
    * THE SOUNDTRACK — music under the collage. Pass null to remove it.
    *
    * A soundtrack is A CLIP WITH NO PICTURE: it gets the same element → source →
@@ -3538,7 +3605,10 @@ export class Stage {
    * project is scarred by, reintroduced through the one door built to avoid it.
    */
   setSoundtrack(
-    spec: { url: string; name?: string; muted?: boolean; inSec?: number; outSec?: number } | null,
+    spec: {
+      url: string; name?: string; muted?: boolean; level?: number;
+      inSec?: number; outSec?: number;
+    } | null,
   ): void {
     if (this.destroyed) return;
     const url = spec?.url || '';
@@ -3547,6 +3617,12 @@ export class Stage {
     if (this.track && this.track.url === url) {
       this.track.name = spec?.name || this.track.name;
       this.track.muted = !!spec?.muted;
+      // THE LEVEL IS ONE OF THE CHEAP FIELDS, for the reason the range is: the
+      // chip writes it to the Stage and to the parent in the same handler, and
+      // the parent's copy arrives back here on the same url a task later. A
+      // same-url path that ignored it would take the new level, drop it, and
+      // leave the room and the export disagreeing about how loud the music is.
+      this.track.level = safeLevel(spec?.level);
       this.track.inSec = spec?.inSec;
       this.track.outSec = spec?.outSec;
       this.applyMutes();
@@ -3561,7 +3637,7 @@ export class Stage {
     this.disposeSoundtrack();
     this.track = {
       url, name: spec?.name || 'music', el: null, source: null, gain: null,
-      muted: !!spec?.muted, broken: false,
+      muted: !!spec?.muted, level: safeLevel(spec?.level), broken: false,
       inSec: spec?.inSec, outSec: spec?.outSec,
     };
     const doc = this.doc;
@@ -3756,30 +3832,41 @@ export class Stage {
     if (first) first.muted = false;
   }
 
+  /**
+   * WHAT EVERY AUDIO SOURCE IS DOING RIGHT NOW, in two numbers per source.
+   *
+   * THE LEVEL IS APPLIED EXACTLY ONCE and `lib/level.ts` decides where, because
+   * the element's `volume` and the gain node it feeds are IN SERIES — the note
+   * three lines down about `muted` gating the graph is the same fact — so a level
+   * written into both would render 25% as 6%. `livePath` returns the pair and
+   * invariant I2 pins their product; nothing here re-derives it.
+   */
   private applyMutes(): void {
     const t = this.track;
     if (t) {
       // No `live` term: a soundtrack holds no VIDEO decoder, so the realtime
       // admission budget has nothing to say about it.
       const audible = this.soundOn && !t.muted && !t.broken;
-      if (t.gain) { try { t.gain.gain.value = audible ? 1 : 0; } catch { /* ignore */ } }
+      const p = livePath(audible, t.level, !!t.gain);
+      if (t.gain) { try { t.gain.gain.value = p.node; } catch { /* ignore */ } }
       const el = t.el;
       if (el) {
         el.muted = !audible;
-        el.volume = audible ? 1 : 0;
+        el.volume = p.element;
       }
     }
     this.clips.forEach((c) => {
       const audible = this.soundOn && !c.muted && c.live && !c.broken;
+      const p = livePath(audible, c.level, !!c.gain);
       if (c.gain) {
-        try { c.gain.gain.value = audible ? 1 : 0; } catch { /* ignore */ }
+        try { c.gain.gain.value = p.node; } catch { /* ignore */ }
       }
       const el = c.el;
       if (!el) return;
       // The element's own `muted` still gates the signal entering the WebAudio
       // graph, so it is the real switch; the gain node is the mixer on top.
       el.muted = !audible;
-      el.volume = audible ? 1 : 0;
+      el.volume = p.element;
       // The `muted` ATTRIBUTE is left in place on purpose: it is what iOS reads
       // for autoplay eligibility, and removing it buys nothing at runtime.
     });
@@ -3881,7 +3968,8 @@ export class Stage {
    *    recomputed it from `duration` the two timelines would each round the
    *    epsilon their own way and drift apart, and A/V drift is invisible in
    *    review — it only shows up in the finished file.
-   *  - `gain` is the user's INTENT (`!muted`), NOT `applyMutes()`'s `audible`.
+   *  - `gain` is the user's INTENT (`!muted`) TIMES THE LEVEL, NOT `applyMutes()`'s
+   *    `audible`.
    *    It used to mirror `audible` exactly, and that was the bug that made
    *    exports silent. `audible` is a statement about the SPEAKERS, so it also
    *    carries two conditions that have no meaning for a file being written:
@@ -3935,7 +4023,7 @@ export class Stage {
       // rate mirrors seekClipTo's video scaling so the export's sound tracks the
       // rate-scaled picture (video-length sync); 1 in LOOP mode leaves it unchanged.
       out.push({
-        id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0,
+        id: c.id, url: c.url, span, loop: c.loop, gain: mixGain(wanted, c.level),
         rate: c.playbackRate > 0 ? c.playbackRate : 1,
         inSec: c.inSec, outSec: c.outSec,
       });
@@ -3952,6 +4040,7 @@ export class Stage {
         ? {
             url: this.track.url, name: this.track.name, durationSec: 0,
             muted: this.track.muted,
+            level: this.track.level,
             // The RANGE travels; the LENGTH does not. `durationSec: 0` above is
             // still the whole of DECISION 1 — see DECISION 1b for why a window
             // makes keeping it zero more load-bearing rather than less.
@@ -4129,6 +4218,7 @@ export class Stage {
         live: c.live,
         playing,
         muted: c.muted,
+        level: c.level,
         wantsAudio: !c.muted && !c.broken,
         audible: this.soundOn && !c.muted && c.live && !c.broken,
         ready: c.ready,
@@ -4182,6 +4272,7 @@ export class Stage {
               this.soundOn,
             ),
             broken: this.track.broken,
+            level: this.track.level,
           }
         : null,
       capturing: this.capturing,
@@ -4214,16 +4305,37 @@ export class Stage {
   }
 
   /** Emitted on change only, deduped, and never from inside the draw. */
+  /**
+   * PUSH THE STATUS, BUT ONLY WHEN IT CHANGED — the loop calls this every frame,
+   * and an unconditional `onStatus` is a React render per frame.
+   *
+   * THE SIGNATURE IS A HAND-WRITTEN LIST OF FIELDS, AND THAT IS ITS DEFECT: any
+   * field added to `StageStatus` after this line was written is invisible to it,
+   * so the Stage holds the new value and the UI never hears about it. It fails
+   * SILENTLY and it fails in one direction only — the control writes through to
+   * the render and the export, and only the READ-BACK is stuck, which is exactly
+   * the shape that looks like "the button does nothing".
+   *
+   * Caught by `level.spec.ts` L2 on the level, which is the second field to fall
+   * in: `moving` (THE DRIFT ROW, one cycle earlier) was already missing, so the
+   * drift lane could fail to appear on a status where nothing else moved. Both
+   * are in the list now. Anything added to `StageStatus` from here on must be
+   * added here too if a control reads it back — the cheap fix is what this
+   * comment is for; the real one is a structural digest and it is its own rung.
+   */
   private emitStatus(): void {
     if (!this.onStatus || this.destroyed) return;
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
       s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
-      s.rolling + '|' + s.turning + '|' + s.parked + '|' +
-      (s.soundtrack ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken : '-');
+      s.rolling + '|' + s.turning + '|' + s.moving + '|' + s.parked + '|' +
+      (s.soundtrack
+        ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken + ':' + s.soundtrack.level
+        : '-');
     for (let i = 0; i < s.clips.length; i++) {
       const c = s.clips[i];
-      sig += '~' + c.id + ':' + c.state + ':' + c.playing + ':' + c.muted + ':' + c.ready + ':' + c.fragments;
+      sig += '~' + c.id + ':' + c.state + ':' + c.playing + ':' + c.muted + ':' + c.level +
+        ':' + c.ready + ':' + c.fragments;
     }
     if (sig === this.statusSig) return;
     this.statusSig = sig;
