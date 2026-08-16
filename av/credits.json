@@ -140,6 +140,16 @@
       "wished_date": "2026-08-13",
       "shipped_date": "2026-08-13",
       "shipped_commit": "8afe08fe"
+    },
+    {
+      "tool_name": "Collage Studio — the music button takes a video's SOUND without its pictures, and a fragment can be thrown out of the pool from full bleed",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-16",
+      "shipped_date": "2026-08-16",
+      "shipped_commit": "d2e5de42"
     }
   ]
 }

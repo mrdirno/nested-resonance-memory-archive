@@ -34,6 +34,11 @@ or re-documenting an existing capability is DD, not delivery.
   focus and the twist ONLY, so a colour sort can be re-rolled without losing the
   layout you just found; in the dock under the dice and in the full-bleed rail,
   which now wraps 4/3 below 390px to hold its seventh 44px target;
+  INTENT-AWARE INTAKE — the MUSIC button takes a video for its SOUND and leaves
+  its pictures out (`lib/intake.ts`, swept over extension x MIME x intent);
+  EVICTION — in full bleed a tap arms a fragment and offers pin or REMOVE, and
+  removing takes the whole SOURCE (a clip leaves with all its frames,
+  `lib/evict.ts`);
   TWIST — 5 per-fragment rotation modes (the picture leans, the tiling does not),
   reaching all four render paths through the one geometry function they share;
   ONE LAYOUT — every render path (preview, Stage, video, raster export, SVG)
@@ -2542,6 +2547,35 @@ multi-agent audit for non-trivial changes.
   Caught by running the suite against PRODUCTION rather than treating a green
   localhost run as the ship gate.
 
+- **SCAR-C127-A-ROUTER-THAT-ASKS-THE-OBJECT-CANNOT-HEAR-THE-VERB.**
+  Three file buttons — add anything, add video, add MUSIC — all fired one
+  `onChange` that called `ingestFiles(list)`, so routing was a total function of
+  the FILE and the app could not know which button was pressed. Press "Add
+  music", hand it a `.mov`, and `isVideoFile` answered *video* — correctly, for
+  a question nobody asked — and the clip landed in the collage as a rectangle.
+  Nothing in the ladder was wrong; the ladder was answering the wrong question.
+  **The general shape: when the same input can mean two things depending on WHICH
+  CONTROL the person reached for, the control's intent is part of the input.
+  Adding a fourth predicate is the wrong fix — "what kind of file is this" has
+  one answer and "what did this person ask for" has another, and only the second
+  one can be wrong.** The second half of the same defect was in the picker
+  itself: `accept="audio/*,…"` greyed the video out before any routing ran, so
+  even a perfect ladder was unreachable from a desktop. A rule that lives in two
+  places (the router AND the `accept` list) is only fixed when both agree.
+
+- **SCAR-C128-AN-UNDO-THAT-CANNOT-RESTORE-THE-THING-IS-WORSE-THAN-NO-UNDO.**
+  Eviction removes assets, and the full-bleed rail has an Undo two buttons away
+  from where it happens — so wiring the removal to `pushHistory` was the obvious
+  move and would have been a lie: `compositionHistory` holds a share code and
+  the pins, never the pool, so the "undone" state would come back with the
+  photograph still gone. A control that appears to reverse an action and does
+  not is strictly worse than one that never offered, because the person stops
+  looking for the real way back. It writes to the SESSION history `handleClear`
+  already uses — the one that carries `images` — and the rail's Undo was left
+  alone. **The general shape: before wiring a destructive action to an existing
+  undo, check what that undo actually stores. Two histories in one app is not a
+  bug; assuming they are the same one is.**
+
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
 the next tier (pro effects, AI-assisted editing, collaboration) becomes the
@@ -4774,4 +4808,44 @@ frontier. Today's ceiling is tomorrow's floor.
   `vite build` clean. Second scar filed: a control bin is a floor only for the
   file it was measured in — L3's first bound copied a threshold from a suite
   whose file was digital silence and failed at 3.6x on a tone that was 732x down.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-16 · **[AXIS:WELL] THE MUSIC BUTTON TAKES A VIDEO'S SOUND AND LEAVES
+  ITS PICTURES · AND A FRAGMENT CAN BE THROWN OUT FROM FULL BLEED** — from wish
+  `86c34aa3` (kind=improve, about_tool=upload), read UNSCOPED first and found in
+  `--status building`: a previous cycle claimed it, wrote `lib/intake.ts` and
+  widened `isVideoFile`, then died before wiring, sweeping or shipping. Finished
+  rather than re-claimed, which is what the stranded-`building` sweep is for.
+  *"Be able to add music or sound without the video. Right now if you use a video
+  for the sound or import audio from video it just imports video… if you're
+  importing audio it should not display the video. Also when full mode is active
+  if I click a box or segment there should be ability to remove that from the
+  group of images displayed or videos."* **before → after**: (1) all three file
+  buttons fired one `onChange`, so routing read the FILE and never the BUTTON —
+  a `.mov` picked with MUSIC became a rectangle in the collage; now `lib/intake.ts`
+  owns the ladder and takes the button's INTENT, the music input's `accept`
+  carries the video containers (without them the desktop picker greys the clip
+  out and the fix is unreachable), and a picture handed to that button is refused
+  ALOUD instead of quietly added. `'any'` is byte-identical to what shipped, and
+  that is a measurement over the whole extension × MIME cross product, not a
+  hope. (2) full bleed had a button for throwing away EVERYTHING and none for
+  throwing away ONE; now a tap ARMS a fragment and a 2×44px puck offers pin or
+  remove, with `lib/evict.ts` deciding what leaves — a photograph alone, a frame
+  of a clip taking the whole clip and its other frames, because `assignSources`
+  already defines a video as ONE source. Outside full bleed the tap still pins,
+  byte for byte. **BACKPORT rider FIRED, and found nothing to carry:** 0 of 105
+  trade pages have a file intake, so the intent-blind routing class cannot occur
+  there; the per-item-removal class is already carried by the trade list tools
+  that need it (`.rm`, itself the product of an earlier backport). The remaining
+  ~96 fixed-roster pages were NOT audited one by one for an extensible list
+  lacking a removal — that is the named next rung, not a swept-clean claim.
+  PROOF: 2 new sweeps (intake 17,527 assertions over 2,160 file × intent rows and
+  400 splits; evict 64,258 over 400 pools and 3,070 targets) and 29/29 unit
+  sweeps; a new e2e suite 10/10 **against the LIVE deploy**, including a Goertzel
+  read of the decoded export — 440 Hz at 2,032× the control out of a collage of
+  two photographs, which have no other way to make a sound — and the
+  320/360/390/430 mobile law with both 44px targets whole over the artwork;
+  75/75 regression across roll-code 20, undo 21, soundtrack 6, level 5,
+  source-count 7, take-strip 5, video-audio 4, playhead 3, speed 2, fade 2;
+  `tsc` and `vite build` clean. Two scars filed (C127 a router that asks the
+  object cannot hear the verb; C128 an undo that cannot restore the thing).
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

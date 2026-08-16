@@ -333,6 +333,15 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
           giving the artwork the room were wished for by an anonymous Collage user.
         </p>
 
+        {/* CREDIT, AND THE ONLY PLACE THIS IS WRITTEN DOWN FOR A READER. In full
+            bleed there is artwork and one rail — no room for a sentence — so the
+            instruction for the gesture lives here, beside the wish that built the
+            view it happens in. Another anonymous Collage user. See credits.json. */}
+        <p className="ui-caption ui-label--dim mt-1">
+          In full bleed, tap a fragment to pin it or throw its picture out of the pool — wished for by
+          an anonymous Collage user.
+        </p>
+
         <span className="ui-label mt-1">Background</span>
         <div className="ui-grid-5">
           <button

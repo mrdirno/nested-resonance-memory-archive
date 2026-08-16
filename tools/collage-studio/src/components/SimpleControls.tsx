@@ -509,6 +509,13 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
                       ? `${Math.round(beatGrid.bpm)} BPM. Snap the cuts to it.`
                       : `${Math.round(beatGrid.bpm)} BPM \u2014 cutting ${beatsLabel(beatBeats)}.`}
           </p>
+          {/* CREDIT ON THE PAGE, next to the thing they asked for. It doubles as
+              the only place the capability is stated: the music button's own
+              tooltip does not exist on a phone. See av/credits.json. */}
+          <p className="ui-credit">
+            The music button also takes a video \u2014 it keeps the sound and leaves the pictures out.
+            Wished for by an anonymous Collage user.
+          </p>
         </div>
       )}
 
