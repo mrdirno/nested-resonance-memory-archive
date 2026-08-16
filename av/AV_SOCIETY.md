@@ -2763,6 +2763,41 @@ coordination meeting has a different agenda every time and still reports deltas.
 one-instance exception stays at one instance. **A rider that fires is not a rider that ships:
 sweeping the class is mandatory, and finding nothing to fix is a valid result.**
 
+### 2026-08-16 — THE INSTRUCTION THAT SAID "NEVER HALT" NAMED ITSELF THE ONLY REASON TO STOP
+`emitValidation` composes an author's `halt` line with a fixed tail: *"That is the ONLY
+reason to stop and ask me a question."* The tail was written for a halt that names a
+condition (*"Only if the input does not say which room this is"*) and it reads correctly
+there. **Nine of the 86 `halt` fields on disk say the opposite** — they open *"Never halt"* —
+and three of those nine are in the SHARED library, so the composed line shipped on all
+eleven trades: `- Never halt. That is the ONLY reason to stop and ask me a question.`
+Measured against a golden snapshot: **34 of 225 blocks, every trade.** That line is the one
+instruction deciding whether a man in a truck gets his report back or gets interrogated, and
+a model resolving a contradiction on it is guessing.
+**WHY NOTHING CAUGHT IT.** Both halves were individually correct and every structural check
+passed: the block carried all eleven headings, the family was legal, the continuity rule
+matched, every omit line arrived. Nothing was asserting anything about the *composed string*,
+because the template half is in the engine and the other half is in eleven data files, and no
+gate had ever read them joined. **It was found by reading the artefact the page emits, not
+the code that emits it** — printed, read line by line, on a cycle that was building something
+else entirely. The tail now stands down when the author already said it harder, and
+`docspec-config.mjs` asserts the pair can never co-occur (proved by restoring the tail: 3
+failures on `av` alone).
+**THE CLASS, so it is not re-learned: a fixed sentence CONCATENATED onto author-written text
+is an unchecked claim about what that text says.** Every place the engines do it — and they
+do it in the VALIDATION tail, in the omitted-line follow-up and in SECONDARY REQUESTS — is a
+place where a well-written config can produce a self-contradicting instruction. Gate the
+JOINED string, never the two halves.
+
+### 2026-08-16 — EVERY CONTROL PRESENT, REACHABLE AND 44px, AND THE FLOW STILL WRONG
+THE DESK's "add another" button lives on the picked card, which sits BELOW the library in the
+DOM. Tapping it opened the library ABOVE and scrolled him there — so the only way back out
+was a button under fifteen document rows he had to scroll past. **Three gates said green and
+all three were right:** nothing overflowed, the control was 44px, `elementFromPoint` returned
+it. Reachability is not findability, and no measurement we own can tell the difference.
+Caught by looking at a screenshot of the real page at 390px. The count and the way out now
+sit at the top of the list, where the decision is being made. **A gate proves a control
+exists; only eyes prove the order the controls are in.**
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4167,3 +4202,55 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `tools/collage-studio/COLLAGE_EVOLUTION.md`, so the axis parser could not see it and reported WELL
   as stalest while the well was dry. Collage cycles get a line HERE too, from now on.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- `2026-08-16` — **[AXIS:DOCS]** **NOBODY KEEPS A CUSTOM GPT PER DOCUMENT, SO THE SETUP THAT
+  COVERED ONE NOW COVERS EVERY ONE HE WRITES** · **before:** `shared/docspec.js` emitted an
+  instruction block for exactly ONE document, on all eleven trades, for two months. A lead
+  writes a daily every day, an incident report four times a year and a delay letter when he
+  has to — and nobody maintains three Gems. He sets up the daily; the other two stay
+  unwritten. The page shipped a real answer to a third of the job. · **after:** **THE DESK** —
+  up to six documents in one block. The split was stated in this engine's own header on day
+  one and never acted on ("Ten of those eleven are IDENTICAL for a plumber's back-charge
+  notice and an AV daily"): eight blocks emitted ONCE at the top, six emitted WHOLE per
+  document, repeated on purpose because an AI that jumps to one document's section has to
+  find everything that section needs inside it. **THE ROUTER IS THE LOAD-BEARING HALF** —
+  given three formats and one dump a model does not pick wrong, it BLENDS, so his own first
+  line beats anything inferred, `aka` (already in the library for search) gives it the words
+  he says out loud, exactly one question back is allowed, and blending and multi-output are
+  forbidden by name. Per-document recipients, per-document continuity, the mixed chat rule
+  named per document in the setup steps, and the page states the block's CHARACTER COUNT
+  rather than quoting an instruction-length limit for somebody else's product (§SAFETY: we do
+  not ship authoritative data we do not have). **THE REFACTOR WAS PROVED BEFORE IT WAS
+  WRITTEN.** Extracting emitters out of the shipped composer is exactly the change that
+  quietly rewords a sentence, so 225 states — all 170 library documents and all 55
+  custom-path states across 11 trades — were captured from the SHIPPED engine first:
+  **225/225 byte-identical** after, block, setup steps and bar alike. **READING THE EMITTED
+  BLOCK THEN FOUND A DEFECT LIVE ON EVERY TRADE** (§SCARS 2026-08-16): the VALIDATION tail
+  was welded onto the nine `halt` fields that say *"Never halt"*, three of them SHARED —
+  `- Never halt. That is the ONLY reason to stop and ask me a question.` on **34 of 225
+  blocks, all 11 trades**. Fixed and measured: 191 blocks unchanged, 34 changed by exactly
+  that one line, steps unchanged everywhere. **BACKPORT RIDER FIRED — swept, not assumed:**
+  the engine is shared so all 11 write-up pages take both changes in one edit; the `halt`
+  class was re-derived from disk (9 of 86 fields, listed in the scar) rather than trusted
+  from the trade in hand. **GATES, EACH PROVED BY NEGATIVE CONTROL:** NEW
+  `tools/toolkit-gates/docspec-desk.mjs` — 11 trades, 0 failing, **green local AND re-run
+  GREEN AGAINST PRODUCTION** — goldens against itself IN-RUN so there is no fixture to rot
+  (pick A, pick B, build the desk, take B out, and A's block must return BYTE FOR BYTE; each
+  document's spine, checks and continuity rule inside the desk must be its own solo block's,
+  byte for byte), plus shared-blocks-exactly-once, per-document-exactly-N, continuity correct
+  INSIDE each section, the cap, and the mixed chat step — proved by making extras inherit the
+  primary's continuity (caught, the 2026-08-11 class) and by emitting DEFAULTS per document
+  (caught) · `docspec-config.mjs` **181 checks, 0 failing, live too**, now asserting the halt
+  line cannot argue with itself (proved by restoring the tail: 3 failures on `av`) ·
+  `mobile-watertight.mjs` grew the reveal **'a desk of four, mid-add'**, the only state where
+  the extras list, its × buttons, the character-count caution and the "✓ in this setup" row
+  label are all on glass at once, driven with the four LONGEST names each trade has —
+  **108 pages × 320/360/390/430 × default and bumped, 0 failing**, proved by injecting
+  min-width on a desk row and watching it fail at three widths · `no-third-party` 108 pages,
+  0 requests. **EYES ON THE REAL PAGE CAUGHT WHAT NO GATE COULD** (§SCARS 2026-08-16):
+  entering add mode put the only "Done" control below fifteen library rows. The live page was
+  then driven end to end on **hvac** at 390 and 320 — three documents, router correct,
+  per-document recipients correct, zero page errors. Storefront: no new tool, but the
+  `Write-Up Setup` note on all 11 trades in `persona500/src/data/fieldToolkits.ts` now names
+  the capability (P5 pushes that repo).
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html
