@@ -57,6 +57,12 @@ for (const f of ['commons/commons.js', 'commons/names.js', 'commons/gear.js', 'c
 const NAMES = w.COMMONS_NAMES || [];
 const GEAR = w.COMMONS_GEAR || [];
 const TRADES = (w.COMMONS_TRADES || []).map((t) => t.slug).filter((s) => s !== 'universal');
+/* THE SURFACE LIST IS PARSED OUT OF THE SHIPPED ENGINE, never typed here. It was
+ * typed here — twice — and that is how the hand-off went two days without being
+ * driven anywhere but the gear list. A hand-written copy of a list that already
+ * exists is a scar with a date on it; this book has three of them. */
+const SURFACES = (w.COMMONS_SURFACES || []).filter((s) => s.href && s.data && s.rows);
+if (SURFACES.length < 2) { console.error('FAIL: commons.js exports no surface list'); process.exit(1); }
 
 if (!NAMES.length) { console.error('FAIL: names.js defined no rows'); process.exit(1); }
 if (typeof w.Commons?.aka !== 'function') { console.error('FAIL: commons.js exports no alias join'); process.exit(1); }
@@ -150,41 +156,77 @@ if (!probes.length) {
   await page.fill('#q', '');
 }
 
-/* 3a-ii. THE HAND-OFF. The index can only route to objects THIS surface carries,
- * and the gear list is tools — cable ties and wire connectors are consumables and
- * have no row on it. Found live on the shipped page: "zap strap" dropped "zap" as
- * noise, matched "strap" by infix, came back at full coverage, and the page said
- * "Matches: Wire strippers" with total confidence. So every alias belonging to a
- * names row that the gear list CANNOT answer must produce the hand-off instead of
- * a confident wrong hit. Derived from the data, same as the probes above. */
-const gearIds = new Set(GEAR.map((g) => g.id));
-const gearNames = new Set(GEAR.map((g) => norm(g.n.replace(/\(.*?\)/g, ' ').split(',')[0])));
-const orphans = NAMES.filter((r) => !gearIds.has(r.id) && !gearNames.has(norm(r.n)));
+/* 3a-ii. THE HAND-OFF — ON EVERY SURFACE, NOT JUST THE ONE IT WAS BORN ON.
+ *
+ * The index can only route to an object THIS surface carries, and the gear list
+ * is tools — cable ties and wire connectors are consumables and have no row on
+ * it. Found live on the shipped page: "zap strap" dropped "zap" as noise, matched
+ * "strap" by infix, came back at full coverage, and the page said "Matches: Wire
+ * strippers" with total confidence. So every alias belonging to a names row a
+ * surface CANNOT answer must produce the hand-off instead of a confident wrong
+ * hit — or a dead end, which is the same failure being quiet about it.
+ *
+ * WHY THIS LOOPS NOW (§SCARS 2026-08-16). This block drove index.html and nothing
+ * else, so it graded the hand-off on the one surface that needed it least. The
+ * tips page never loaded names.js at all — deliberately, on a real measurement
+ * (the index JOINS on an object's generic name, a tip is a sentence, and 0 of 147
+ * tips carry one, so the join is worth exactly nothing there and still is). That
+ * call was right when it was made and became wrong the day the hand-off landed in
+ * the shared engine, because the hand-off needs NO join: it routes the reader to
+ * the table instead of enriching the row. The zero join is precisely what makes
+ * tips the surface most likely to be handed a word it cannot answer, and it was
+ * the only one with no way out — 404 words the commons knows, dead on arrival,
+ * while the gear list next door routed every one of them.
+ *
+ * A gate that drives one surface cannot see that, so this one derives its
+ * surfaces from COMMONS_SURFACES and its haystack from each surface's own rows.
+ * Surface #4 is covered the day it lands, with no edit here. */
 let handoffProbes = 0;
-for (const r of orphans.slice(0, 24)) {
-  const word = (r.a || [])[0] && r.a[0].n;
-  if (!word || gearHay.includes(norm(word))) continue;
-  await page.fill('#q', word);
-  const titles = await page.locator('.sechead h2').allTextContents();
-  handoffProbes++;
-  /* A word may belong to several objects — "mud ring" and "plumber's tape" each
-   * name two — and there the honest hand-off is BOTH, not a picked side. So the
-   * gate asks that the page handed off, not that it handed off to one row. */
-  const ambiguous = NAMES.filter((x) => (x.a || []).some((al) => norm(al.n) === norm(word))).length > 1;
-  const want = ambiguous ? /things go by that/i : new RegExp('^he means ' + r.n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i');
-  if (!titles.some((t) => want.test(t.trim()))) {
-    fail(`handoff: "${word}" is a ${r.n} and the gear list carries no such row, but it answered with ${titles.join(' / ')} instead of handing him to the name table`);
-  } else ok();
-}
-await page.fill('#q', '');
+for (const s of SURFACES) {
+  /* names.html IS the table — commons.js disables the hand-off there on purpose,
+   * because sending a man from the name table to the name table is not routing. */
+  if (s.href === 'names.html') continue;
+  const rows = w[s.rows] || [];
+  const ids = new Set(rows.map((g) => g.id));
+  const plain = new Set(rows.map((g) => norm(String(g.n || '').replace(/\(.*?\)/g, ' ').split(',')[0])));
+  const hay = norm(rows.map((g) => `${g.n || ''} ${g.w || ''} ${g.o || ''}`).join(' '));
+  const orphans = NAMES.filter((r) => !ids.has(r.id) && !plain.has(norm(r.n)));
 
-/* A word the whole commons has never heard must NOT produce a hand-off — that
- * would be a guess wearing a certainty the page has not earned. */
-await page.fill('#q', 'qwertyuiop');
-if ((await page.locator('.sechead h2').allTextContents()).some((t) => /he means/i.test(t))) {
-  fail('handoff: fired on a word nothing in the commons knows — a guess is not a hand-off');
-} else ok();
-await page.fill('#q', '');
+  await page.goto(`${BASE}/commons/${s.href}`);
+  await page.waitForSelector('.chip');
+  let probedHere = 0;
+  for (const r of orphans) {
+    if (probedHere >= 24) break;
+    const word = (r.a || [])[0] && r.a[0].n;
+    if (!word || hay.includes(norm(word))) continue;
+    await page.fill('#q', word);
+    const titles = await page.locator('.sechead h2').allTextContents();
+    probedHere++; handoffProbes++;
+    /* A word may belong to several objects — "mud ring" and "plumber's tape" each
+     * name two — and there the honest hand-off is BOTH, not a picked side. So the
+     * gate asks that the page handed off, not that it handed off to one row. */
+    const ambiguous = NAMES.filter((x) => (x.a || []).some((al) => norm(al.n) === norm(word))).length > 1;
+    const want = ambiguous ? /things go by that/i : new RegExp('^he means ' + r.n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i');
+    if (!titles.some((t) => want.test(t.trim()))) {
+      fail(`handoff: on ${s.href}, "${word}" is a ${r.n} and this surface carries no such row, but it answered with ${titles.join(' / ') || 'nothing'} instead of handing him to the name table`);
+    } else ok();
+  }
+  if (!probedHere) {
+    fail(`handoff: ${s.href} produced no hand-off probe — a surface that can answer every word in the name table is not a thing that happens, so this is a surface that never loaded the index`);
+  }
+
+  /* A word the whole commons has never heard must NOT produce a hand-off — that
+   * would be a guess wearing a certainty the page has not earned. Asserted per
+   * surface, because the restraint is the other half of the claim. */
+  await page.fill('#q', 'qwertyuiop');
+  if ((await page.locator('.sechead h2').allTextContents()).some((t) => /he means|things go by that/i.test(t))) {
+    fail(`handoff: ${s.href} fired on a word nothing in the commons knows — a guess is not a hand-off`);
+  } else ok();
+  await page.fill('#q', '');
+}
+
+await page.goto(`${BASE}/commons/index.html`);
+await page.waitForSelector('.chip');
 
 /* 3b. a word in NOTHING still never dead-ends (find.js rule 2, honestly labelled) */
 await page.fill('#q', 'qwertyuiop');
@@ -243,7 +285,9 @@ if (lines.length && !/they might say/.test(doc)) {
 } else ok();
 
 /* ── 5. mobile-watertight, with the box in play ────────────────────────────── */
-for (const surface of ['index.html', 'tips.html', 'names.html']) {
+/* Derived, for the same reason the hand-off loop above is: this list was typed
+ * out here, and a typed copy of COMMONS_SURFACES is how a surface ships ungraded. */
+for (const surface of SURFACES.map((s) => s.href)) {
   for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 780 });
     await page.goto(`${BASE}/commons/${surface}`);
@@ -274,7 +318,7 @@ if (pageErrors.length) fail(`page errors: ${pageErrors.slice(0, 3).join(' | ')}`
 
 await browser.close();
 
-console.log(`${checked} checks · ${probes.length} routing probes derived from the data · ${NAMES.length} name rows`);
+console.log(`${checked} checks · ${probes.length} routing probes · ${handoffProbes} hand-off probes across ${SURFACES.length - 1} surface(s) · ${NAMES.length} name rows — all derived from the data`);
 if (fails.length) {
   console.error(`\nFAIL — ${fails.length}:`);
   fails.forEach((f) => console.error('  ✗ ' + f));

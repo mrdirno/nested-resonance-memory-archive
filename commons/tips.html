@@ -77,11 +77,25 @@
 <script src="../shared/find.js"></script>
 <script src="commons.js"></script>
 <script src="tips.js"></script>
-<!-- names.js is deliberately NOT loaded here. The alias index joins on an object
-     name, and a tip is a sentence — measured before the tag went in: 0 of 135
-     tips carry an object's generic name, so the index would route nothing and
-     the script would be a claim with no work behind it. The box above searches
-     the 135 tips themselves, which is what a list this long was missing. -->
+<!-- THE ALIAS INDEX, AND THE MEASUREMENT THAT USED TO KEEP IT OUT.
+     This tag was deliberately absent, on a real number: the index JOINS on an
+     object's generic name, a tip is a sentence, and 0 of 135 tips carry one. That
+     measurement still holds — re-measured 2026-08-16 at 0 of 147, so names.js adds
+     no alias to any row on this page and never will.
+     It was still the wrong call, because the join is no longer the only thing
+     names.js does. The hand-off landed later, in the shared engine, and it needs
+     NO join: when a man types a word this surface cannot answer, it tells him what
+     the word means and sends him to the table that owns it. That made the omission
+     silently wrong the day it shipped — the comment below the tag went on reading
+     as current justification for a decision a later change had invalidated.
+     And the cost lands hardest HERE. A zero join is exactly what makes this the
+     surface most likely to be asked a word it cannot answer, and it was the only
+     one with no way out: "marrette", "stinger", "snake", "zap strap" — 404 words
+     the commons knows — each got "Nothing on this page goes by that" and a dead
+     end, while the gear list next door routed all of them.
+     The engine still refuses to guess: a word nothing in the commons has heard
+     hands off to nothing. See commons.js §THE HAND-OFF. -->
+<script src="names.js"></script>
 <script>
 /* `surface` stays "commons" — the SAME key the gear list uses, deliberately.
  * `trade` is the surface key in the one shared queue, and every tool that counts

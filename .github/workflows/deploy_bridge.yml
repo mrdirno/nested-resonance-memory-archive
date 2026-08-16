@@ -367,6 +367,47 @@ jobs:
             console.log(`commons join: ${joined.length}/${w.COMMONS_GEAR.length} gear rows findable by a word that is not on the gear list`);
           ' || exit 1
 
+          # ...AND THE GATE ABOVE COUNTS THE DATA, NOT THE ARTIFACT (§SCARS 2026-08-16).
+          #
+          # It loads all four files into ONE synthetic window, so names.js is always
+          # present by construction and it can never see a real PAGE that omits the
+          # script tag. tips.html omitted it for two days and every check above was
+          # green: the file was in the artifact, the join counted, the surface list
+          # resolved. The claim "every commons surface searches through the index"
+          # was false on a third of them and nothing could tell.
+          #
+          # The omission was deliberate and well-reasoned when it was made — the
+          # index JOINS on an object's generic name, a tip is a sentence, and 0 of
+          # 147 tips carry one, so the join is worth nothing there and still is. It
+          # went wrong when the HAND-OFF landed in the shared engine, because the
+          # hand-off needs NO join: it routes a man who typed a word this surface
+          # cannot answer to the table that owns it. The zero join is exactly what
+          # makes tips the surface most likely to be asked one, and it was the only
+          # one with no way out — 404 words the commons knows, 11 dead-ending and
+          # 13 answered CONFIDENTLY WRONG ("Teflon tape" matched a tip about tape).
+          #
+          # So assert the tag on the real page, with comments stripped: the reason
+          # this hid in review is that tips.html *mentioned* names.js, in a comment
+          # explaining why it was absent. A grep would have passed.
+          node -e '
+            const fs = require("fs");
+            const D = "HELIOS-BRIDGE/dist/commons/";
+            const w = {};
+            (new Function("window", fs.readFileSync(D + "commons.js", "utf8")))(w);
+            let bad = 0;
+            for (const s of (w.COMMONS_SURFACES || [])) {
+              const html = fs.readFileSync(D + s.href, "utf8").replace(/<!--[\s\S]*?-->/g, "");
+              const srcs = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(m => m[1]);
+              for (const dep of ["names.js", s.data]) {
+                if (!srcs.includes(dep)) {
+                  console.error(`FAIL: ${s.href} does not load ${dep}. Every commons surface searches THROUGH the alias index — a surface without it answers a word the commons knows with a dead end or a confident wrong row.`);
+                  bad++;
+                }
+              }
+            }
+            process.exit(bad ? 1 : 0);
+          ' || exit 1
+
           # EVERY COMMONS SURFACE IS OFFERED FROM EVERY OTHER ONE. commons.js
           # renders the rail from ONE list, so a surface added there with no file
           # behind it is a dead link on every commons page at once — the same shape
