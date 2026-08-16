@@ -150,6 +150,16 @@
       "wished_date": "2026-08-16",
       "shipped_date": "2026-08-16",
       "shipped_commit": "d2e5de42"
+    },
+    {
+      "tool_name": "Collage Studio — a fade at the edges of the audio range you picked, every time it comes round",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-16",
+      "shipped_date": "2026-08-16",
+      "shipped_commit": "PENDING"
     }
   ]
 }

@@ -143,6 +143,31 @@ or re-documenting an existing capability is DD, not delivery.
   LENGTH (same state, same bar, same lifetime) and therefore rides in no dice
   roll, no composition code and no project file, because a fade is a fact about
   a render and a code is a recipe somebody else opens with their own music;
+  THE RANGE FADE — the cut you chose stops arriving as a click. THE FADE above
+  fades the SUMMED MIX at the take's two ends and is structurally incapable of
+  reaching a splice in the middle: a music range shorter than the take LAPS, so a
+  10 s chorus under a 30 s take spliced hard at 10 s and 20 s with no control
+  anywhere in the app. `lib/windowFade.ts` is ONE envelope per SOURCE, in SOURCE
+  time — silence at the window's IN point, full level through the middle, silence
+  again where the sound runs out — and because it is a fact about the WINDOW it
+  repeats every lap, which is the point, because the splice does too. It is
+  `fade.ts`'s envelope, not a new one (`windowFadeGainAt` is `fadeGainAt` with the
+  LAP as its take), so there is one curve in the app and the sweep can hold both
+  emitters to it: the mixer schedules `mixWindowRamps` on a gain node it puts in
+  series with the source's level, the monitor schedules `liveWindowRamps` from the
+  element's own clock, and 3.19 M sampled instants assert both read back through
+  `rampGainAt` as the envelope of the position `schedulePositionAt` models. THE
+  CLAMP IS A QUARTER where the take fade's is a half, and that is the decision the
+  judge panel turned on: a take plays ONCE so a triangle is a worst case, while a
+  WINDOW laps, so the same clamp makes a short loop a tremolo. A quarter keeps at
+  least half of every lap at full level. THE ROSTER'S SHORT END (0.1 s) is the
+  feature: a splice click is a sub-10 ms discontinuity and a "fade the range"
+  gesture is 0.5–2 s, so offering only the long end cures a click by cutting a hole
+  in the music at every wrap. The OUT edge is `audibleEnd`, never `outSec`, or the
+  control would do nothing on exactly the clips whose splice is harshest. It is
+  offered for the music AND for a clip's own sound — the LEVEL's precedent, not the
+  SPEED's — on the sheet where the range is chosen, which is where it was wished
+  for. Unlike the take fade it is PRE-LIMITER by construction and says so;
   THE PLAYHEAD — the take has a clock you can SEE and DRAG. Six cycles of
   time-domain work (the move, the trim window, the music range, the lap
   schedule, the fade) had shipped without one of them being observable without
@@ -779,10 +804,25 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `number`, so the feature was not "add a level", it was "stop writing 1 into
       the number you have". Three call sites, one of them (`mixSources`) needing
       no edit at all.
+      **A FADE AT THE RANGE EDGES IS NOW SHIPPED** — see THE RANGE FADE in
+      CURRENT STATE. Named as NOT SHIPPED in the same cycle that shipped the audio
+      range, and then wished for verbatim from the field ("Need to be able to add
+      fade even when selecting clip range for audio"), which is the second time
+      this book's own owed-list has been read back to it by a user. The shape was
+      decided by a 3-lens judge panel that split on the one question that mattered
+      — every lap, or once — and the split RESOLVED rather than being voted
+      through: the two lenses arguing every-lap were right that a once-only fade
+      duplicates the take chip and leaves every intermediate splice clicking, and
+      the lens arguing against was right that 0.25–1 s dips at every wrap sound
+      broken. What survives both is every-lap WITH a 0.1 s roster entry and a
+      quarter-lap clamp. A panel is worth casting when its disagreement is
+      load-bearing; here it moved the roster and the clamp, not the decision.
       Still owed on this rung: an ASYMMETRIC fade (in and out are one control
       today, which is one job and the right first cut, but a long tail under a
-      short head is what people actually reach for), DUCKING, and — now that a
-      grid exists — snapping the TRIM to it.
+      short head is what people actually reach for), a CROSSFADE at the lap join
+      (a fade to silence is the honest first cut and an overlap is the better
+      one — it needs two nodes and a period the picture also has to agree with),
+      DUCKING, and — now that a grid exists — snapping the TRIM to it.
 - [ ] **A LEVEL IS SET BY HAND; DUCKING IS THE ONE PEOPLE ACTUALLY WANT.** "Turn
       the music down" is what somebody asks for, and what they MEAN is "turn it
       down while the clips are talking". THE LEVEL makes the ask expressible for
@@ -1198,6 +1238,33 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C161-A-BOTTOM-PINNED-SHEET-LOSES-ITS-HEAD-NOT-ITS-FOOT.** The mobile
+  law says nothing is clipped and the confirm button is reachable, so the first
+  version of the range-fade e2e asserted exactly that: `Done` has a box, is 44px,
+  and sits inside the viewport. It passed **with the height bound deliberately
+  removed**. `TrimSheet`'s panel lives in a `fixed inset-0` host with
+  `items-end`, so an over-tall sheet does not push its footer off the bottom —
+  it pushes its HEADER off the top, at a negative `y` the page cannot scroll back
+  to because the host is fixed. The assertion was aimed at the one end that
+  cannot go missing. Fixed by asserting BOTH ends (`Close trim` and `Done`) after
+  `scrollIntoViewIfNeeded`, and by adding a LANDSCAPE probe (568×320): at 430×932
+  a fourth roster row fits with room to spare, so a portrait-only sweep cannot
+  see the defect it exists to prevent. The mutant then died at
+  `y=-166.6`. **General shape: when a container pins one edge, the overflow
+  assertion belongs on the OTHER edge — and a viewport sweep that only varies
+  WIDTH cannot see a height defect at all.**
+- **SCAR-C162-A-PHASE-THAT-WRAPS-FOR-A-SOURCE-THAT-DOES-NOT.** `lapEdges` was
+  extracted out of `audioSchedule`'s straddle branch so the fade and the lap
+  schedule could not disagree about where a lap begins. The extracted line was
+  `(at * r) % L` verbatim — correct in the branch it came from, which only runs
+  when `p.loop`, and wrong the moment a second caller asked it about a
+  NON-looping source, which holds at its OUT point instead of coming round. It
+  would have put a fade-in in the middle of a clip parked at its end, for any
+  `startAt > 0`. Latent today (nothing sets `startAt`), found by writing the
+  invariant `phase === sourceTimeAt(p, at) - inSec` rather than by running
+  anything. **General shape: extracting a formula out of a branch inherits the
+  branch's precondition silently. Tie the extracted function to the older
+  formula it must agree with, not to the caller it came from.**
 - **SCAR-C160-A-CHANGE-DETECTOR-THAT-ENUMERATES-FIELDS-SWALLOWS-EVERY-FIELD-
   ADDED-AFTER-IT.** `Stage.emitStatus` skips the React push when a hand-built
   signature string is unchanged — the right idea (the loop calls it every frame),
@@ -4848,4 +4915,51 @@ frontier. Today's ceiling is tomorrow's floor.
   source-count 7, take-strip 5, video-audio 4, playhead 3, speed 2, fade 2;
   `tsc` and `vite build` clean. Two scars filed (C127 a router that asks the
   object cannot hear the verb; C128 an undo that cannot restore the thing).
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-16 · **[AXIS:WELL] THE RANGE FADE — the cut you chose stops arriving
+  as a click** (well read UNSCOPED across all trades first: 1 new, 0 stranded in
+  `building`; it was the only wish, so the stalest-axis signal INTERFACE yielded
+  to it — a wish outranks every roadmap). before→after: **a music range shorter
+  than the take spliced hard at every wrap, with no control anywhere in the app →
+  one roster row on the sheet where the range is chosen eases that source in at
+  its IN point and out where its sound stops, every time it comes round.** Wished
+  for verbatim: *"Need to be able to add fade even when selecting clip range for
+  audio"* — which is, word for word, the hole this book named as NOT SHIPPED in
+  the cycle that shipped the audio range. THE PANEL (3 lenses: a working editor,
+  an audio engineer, a product skeptic) came back 3/3 BUILD_WITH_CHANGES (6/6/7)
+  and split 2:1 on the only question that mattered — every lap, or once. It
+  RESOLVED rather than being voted through: the majority were right that a
+  once-only fade duplicates the take chip and leaves every intermediate splice
+  clicking, and the dissenter was right that 0.25–1s dips at every wrap sound
+  broken rather than edited. What survives both is every-lap WITH a 0.1s roster
+  entry (a de-click, inaudible as a dip) and a QUARTER-lap clamp where the take
+  fade's is a half — a take plays once so a triangle is a worst case, a window
+  laps so the same clamp is tremolo. `lib/windowFade.ts` is `fade.ts`'s envelope
+  with the LAP as its take, so there is still exactly one curve in this app; the
+  mixer schedules it on a gain node in SERIES with the source's level and the
+  monitor schedules it from the element's own clock, because the frame loop is
+  demand-driven (a still collage with a soundtrack draws nothing at all) and a
+  per-frame write would park mid-ramp. The OUT edge is `audibleEnd`, never
+  `outSec`. **PROOF:** a new unit sweep — 3.85M assertions over 480 clip cases,
+  3.19M sampled instants asserting BOTH emitters read back through `rampGainAt`
+  as the envelope of the position `schedulePositionAt` models — with 6/6 injected
+  mutants dying on the assertion written for them; a new e2e 3/3 reading the
+  DECODED EXPORT, whose measured envelope is
+  `01357899999999998642113578999999999986421135789999999999864211357999999999998642113`
+  against a control take that reads `2999...9` — four joins at 0.06–0.25 of peak
+  where the control reads 0.99, and every lap MIDDLE still at full level (the
+  assertion that fails if anyone widens the clamp). Plateau ratio faded/flat
+  0.997, so the limiter did not rescale the export. 30/30 unit sweeps, 40 e2e
+  green across soundtrack 6, trim 9, level 5, fade 4, video-audio 4, playhead 3,
+  speed 2, mobile-watertight 7; `tsc` and `vite build` clean. Two scars filed
+  (C161 a bottom-pinned sheet loses its head not its foot — the mobile assertion
+  passed with the height bound removed; C162 a phase that wraps for a source that
+  does not). **BACKPORT rider FIRED, and found nothing to carry:** the class was
+  "an overlay with no height bound whose controls can go off-screen"; swept all
+  105 trade pages across 11 trades — every modal goes through
+  `shared/toolkit.js`'s `.av-modal` (`align-items:flex-start` + `overflow-y:auto`
+  on the OVERLAY, which is the correct pattern) or `shared/feedback.js`'s sheet
+  (`max-height:min(92vh,100%);overflow:auto`), and the one page the grep flagged
+  (`av/consumables.html`) is a bottom dock and a clipboard-fallback textarea, not
+  a sheet. 0 of 105 carry the class.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

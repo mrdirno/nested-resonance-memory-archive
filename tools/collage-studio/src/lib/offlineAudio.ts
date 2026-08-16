@@ -56,6 +56,7 @@
 import { demuxAacTrack, toAudioSpecificConfig } from './mp4AudioDemux';
 import { normaliseWindow, audioSchedule } from './clipWindow';
 import { applyFade, fadeSpan } from './fade';
+import { mixWindowRamps } from './windowFade';
 
 // =============================================================================
 // TYPES
@@ -86,6 +87,11 @@ export interface OfflineAudioSource {
    *  knows how long the DECODED AUDIO actually is. */
   inSec?: number;
   outSec?: number;
+  /** THE RANGE FADE — the user's REQUESTED length in SOURCE seconds, unclamped
+   *  (`lib/windowFade.ts` owns the clamp, as `lib/fade.ts` owns the take's).
+   *  Absent or 0 is OFF, and OFF wires no extra node at all, so an export with it
+   *  off is the graph this module has always built. */
+  fadeSec?: number;
 }
 
 export interface EncodedAudioRecord {
@@ -512,6 +518,37 @@ const mixSources = async (
       gain.gain.value = src.gain;
       gain.connect(ctx.destination);
 
+      /**
+       * THE RANGE FADE — A SECOND GAIN, IN SERIES, AND ONLY WHEN IT IS ASKED FOR.
+       *
+       * `node -> env -> gain -> destination`. The level stays a `.value` on
+       * `gain` and the envelope is automation on `env`, so ONE writer owns each
+       * param. Here that is merely tidy — the graph is built once and nothing
+       * writes again — but the LIVE graph has the same shape for a reason that is
+       * not tidy at all (`applyMutes` writes the level from eight call sites
+       * while the envelope is being re-armed), and one mental model across the
+       * two timelines is the thing this project keeps having to re-buy.
+       *
+       * With the fade OFF `mixWindowRamps` returns nothing, no node is created,
+       * and the graph is byte-for-byte the one that shipped.
+       */
+      let sink: AudioNode = gain;
+      const ramps = mixWindowRamps(
+        { window, loop: src.loop, rate: src.rate ?? 1 },
+        startAt, seconds, buf.duration, src.fadeSec ?? 0,
+      );
+      if (ramps.length) {
+        const env = ctx.createGain();
+        // The mix starts at the context's time 0, and every `when` above is in
+        // that same output clock — the one `audioSchedule` hands `node.start`.
+        env.gain.setValueAtTime(ramps[0].value, 0);
+        for (let i = 1; i < ramps.length; i++) {
+          env.gain.linearRampToValueAtTime(ramps[i].value, ramps[i].when);
+        }
+        env.connect(gain);
+        sink = env;
+      }
+
       // ONE LAP'S FAILURE IS THAT LAP'S SILENCE, not the clip's. With a single
       // node per clip the outer catch was the whole story; a schedule can be
       // hundreds of nodes, and letting one bad `start` throw past them would
@@ -533,7 +570,7 @@ const mixSources = async (
         try {
           const node = ctx.createBufferSource();
           node.buffer = buf;
-          node.connect(gain);
+          node.connect(sink);
           node.playbackRate.value = s.playbackRate;
           if (s.loop) {
             node.loop = true;

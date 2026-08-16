@@ -54,6 +54,7 @@ import {
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
 import { livePath, mixGain, safeLevel, FULL_LEVEL } from './level';
 import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
+import { audibleLength, liveWindowRamps, safeFade, windowFadeSpan } from './windowFade';
 import { lapAdjust, resumeOriginMs } from './playhead';
 import {
   rasterBudgetPx, readDeviceSignals, createSignalCache, createRasterLedger, scaleForBudget, rasterDims,
@@ -240,6 +241,13 @@ export interface StageClipStatus {
    */
   level: number;
   /**
+   * THE RANGE FADE, in SOURCE seconds (`lib/windowFade.ts`). 0 is OFF. Read back
+   * off the Stage for the same reason `level` is: it is a live edit that lives on
+   * the clip record, and a second copy in the component is a second thing to keep
+   * true.
+   */
+  fade: number;
+  /**
    * THE USER'S INTENT: "this clip's sound is part of the piece" — `!muted`,
    * and nothing else.
    *
@@ -293,6 +301,10 @@ export interface StageStatus {
     name: string; muted: boolean; wantsAudio: boolean; audible: boolean; broken: boolean;
     /** How loud the music sits when it is not muted (`lib/level.ts`). */
     level: number;
+    /** THE RANGE FADE, in SOURCE seconds (`lib/windowFade.ts`). 0 is OFF. The
+     *  parent owns the value; this is the Stage's copy, and it is in the status
+     *  signature so a change to it can reach React at all (SCAR-C160). */
+    fade: number;
   } | null;
   capturing: boolean;
   /**
@@ -487,6 +499,26 @@ interface ClipRecord {
   posterScale: number;
   source: MediaElementAudioSourceNode | null;
   gain: GainNode | null;
+  /**
+   * THE RANGE FADE'S OWN GAIN, in series BEFORE `gain` — `lib/windowFade.ts`.
+   *
+   * TWO NODES BECAUSE THERE ARE TWO WRITERS. `gain` carries the LEVEL and is
+   * written as a `.value` from `applyMutes`, which runs on every mute, level,
+   * admission and soundtrack change; the envelope is AUTOMATION, re-armed at
+   * every lap. A `.value` write against a scheduled ramp is discarded on some
+   * engines and honoured on others, so one param with both writers is the LEVEL
+   * chip and the FADE row silently fighting. One writer per param instead.
+   *
+   * It is built unconditionally even though the fade defaults to OFF: the live
+   * graph is created once, at element creation, and `createMediaElementSource`
+   * may be called only ONCE per element ever — so a node added later cannot be
+   * added at all. At gain exactly 1 it is an IEEE-754 multiply by 1.0, i.e.
+   * bit-identical to not being there.
+   */
+  env: GainNode | null;
+  /** THE RANGE FADE, in SOURCE seconds. 0 is OFF. A LIVE EDIT like `level`:
+   *  never read from `StageClipInput`, or every scene rebuild would reset it. */
+  fadeSec: number;
   onEvent: ((e: Event) => void) | null;
   index: number;
 }
@@ -1002,6 +1034,11 @@ export class Stage {
     /** THE RANGE. Absent means the whole track, and costs the watchdog one branch. */
     inSec: number | undefined;
     outSec: number | undefined;
+    /** THE RANGE FADE and its own gain node — see `ClipRecord.env`. Fed from the
+     *  spec on every `setSoundtrack`, like the level, because the parent owns
+     *  the track. */
+    fadeSec: number;
+    env: GainNode | null;
   } | null = null;
   private soundOn = false;
   private needsGesture = false;
@@ -1744,6 +1781,11 @@ export class Stage {
     if (target === null) return false;
     try { el.currentTime = target; } catch { return false; }
     clip.lastTime = -1;                                 // force a repaint
+    // A WRAP IS THE START OF A NEW LAP, so the envelope restarts with it. Armed
+    // HERE rather than from the tick, because this is the one place that knows a
+    // lap boundary just happened — and it costs nothing on the clips (all of
+    // them, by default) whose fade is off.
+    if (clip.fadeSec > 0) this.armWindowFade(clip);
     return true;
   }
 
@@ -2983,6 +3025,9 @@ export class Stage {
             // THIS frame, not on the next lap — otherwise moving the handle looks
             // like it did nothing for however long the old window had left.
             this.enforceWindow(existing);
+            // AND THE ENVELOPE MOVES WITH THE WINDOW, for the reason the music's
+            // same-url door states: both edges are defined by the range.
+            if (existing.fadeSec > 0) this.armWindowFade(existing);
           }
         }
         continue;
@@ -3045,6 +3090,8 @@ export class Stage {
       posterScale: 1,
       source: null,
       gain: null,
+      env: null,
+      fadeSec: 0,
       onEvent: null,
       index,
     };
@@ -3272,6 +3319,9 @@ export class Stage {
         // already outside the window — are made here rather than guessed earlier.
         this.applyLoopMode(clip);
         this.enforceWindow(clip);
+        // THE DURATION IS ALSO THE FIRST MOMENT THE ENVELOPE IS REAL: it is
+        // clamped against the window, which is resolved against the span.
+        if (clip.fadeSec > 0) this.armWindowFade(clip);
         this.markDirty();
         return;
       }
@@ -3282,6 +3332,9 @@ export class Stage {
           clip.ready = true;
           this.emitStatus();
         }
+        // Same re-anchor the music does on `play`: the audio clock ran while the
+        // element was paused, so the envelope is re-issued from its real position.
+        if (e.type === 'playing' && clip.fadeSec > 0) this.armWindowFade(clip);
         this.capturePoster(clip, false);
         if (this.needsGesture && !el.paused) { this.needsGesture = false; this.emitStatus(); }
         this.markDirty();
@@ -3560,6 +3613,116 @@ export class Stage {
    * `applyMutes`, which is the same pair of doors `setClipMuted` uses; there is
    * no third path, and that is what keeps the export and the preview agreeing.
    */
+  /**
+   * ARM THE RANGE FADE on one source, from where its element ACTUALLY IS.
+   *
+   * IT SCHEDULES; IT NEVER WRITES PER FRAME, and that is the whole design
+   * (`lib/windowFade.ts`, and the same reason `applyTakeFade` schedules on the
+   * master). The frame loop here is demand-driven — "nothing playing and nothing
+   * dirty -> NO rAF is rescheduled" — and a still collage with a soundtrack and
+   * no clips draws nothing at all, so an envelope written per tick would park
+   * mid-ramp and stay there; a background tab throttles rAF to zero and does the
+   * same. Automation runs on the audio clock, which does not stop when the
+   * picture does. It is also the only way to get a 0.1 s ramp at all: `timeupdate`
+   * fires every ~250 ms, so a per-event write would be a two-step staircase.
+   *
+   * RE-ARMED, NOT ACCUMULATED. Every call cancels and re-issues from the current
+   * position, so the element's clock is the authority and drift cannot build up.
+   * `setValueAtTime` at `now` takes the value THIS module computes for that
+   * position rather than reading the param back, which is what makes a re-arm
+   * continuous on every engine.
+   *
+   * THE ONE DIVERGENCE FROM THE EXPORT, said out loud: the mixer clamps the
+   * envelope against the DECODED audio length and this clamps against the
+   * ELEMENT's duration, so on a clip whose audio track is shorter than its video
+   * the export fades the sound out where it really ends and the monitor simply
+   * lets it stop. Reading the true audio length here would mean decoding the file
+   * to arm a control — the second decoder the trim sheet already refused for a
+   * waveform.
+   */
+  private armFadeOn(
+    el: HTMLMediaElement | null,
+    env: GainNode | null,
+    fadeSec: number,
+    inSec: number | undefined,
+    outSec: number | undefined,
+    rate: number,
+    span: number,
+  ): void {
+    const ctx = this.audioCtx;
+    if (!env || !ctx) return;
+    const now = ctx.currentTime;
+    const reset = (): void => {
+      try { env.gain.cancelScheduledValues(now); env.gain.value = 1; } catch { /* ignore */ }
+    };
+    if (!el || !(fadeSec > 0) || !(span > 0)) { reset(); return; }
+    const w = normaliseWindow(span, inSec, outSec);
+    const len = audibleLength(w);
+    const ramps = liveWindowRamps(
+      el.currentTime, w.inSec, len, windowFadeSpan(fadeSec, len), rate,
+    );
+    if (!ramps.length) { reset(); return; }
+    try {
+      env.gain.cancelScheduledValues(now);
+      env.gain.setValueAtTime(ramps[0].value, now);
+      for (let i = 1; i < ramps.length; i++) {
+        env.gain.linearRampToValueAtTime(ramps[i].value, now + ramps[i].when);
+      }
+    } catch { /* an engine that refuses the schedule leaves the level alone */ }
+  }
+
+  /** The clip half. `spanOf` is the same length the trim watchdog holds it to. */
+  private armWindowFade(clip: ClipRecord): void {
+    if (!clip.env) return;
+    this.armFadeOn(
+      clip.el, clip.env, clip.fadeSec, clip.inSec, clip.outSec,
+      clip.playbackRate > 0 ? clip.playbackRate : 1, this.spanOf(clip),
+    );
+  }
+
+  /** The music half. The span is the ELEMENT's own duration, exactly as
+   *  `enforceTrackWindow` resolves it — each timeline against the length that is
+   *  true for it (`lib/soundtrack.ts` DECISION 1b). */
+  private armTrackFade(): void {
+    const t = this.track;
+    if (!t || !t.env) return;
+    const d = t.el?.duration;
+    this.armFadeOn(
+      t.el, t.env, t.fadeSec, t.inSec, t.outSec, 1,
+      Number.isFinite(d) && (d as number) > 0 ? (d as number) : 0,
+    );
+  }
+
+  /**
+   * THE RANGE FADE on one clip — the Stage alone, exactly like `setClipLevel`.
+   * It reaches the FILE through `describeAudioSources` and the ROOM through the
+   * envelope node, which is the same pair of doors the level uses.
+   */
+  setClipFade(clipId: string, fadeSec: number): void {
+    const target = this.clips.get(clipId);
+    if (!target) return;
+    const next = safeFade(fadeSec);
+    if (Object.is(target.fadeSec, next)) return;
+    target.fadeSec = next;
+    this.armWindowFade(target);
+    this.emitStatus();
+  }
+
+  /**
+   * THE MUSIC'S RANGE FADE. The Stage half of the pair — the caller MUST also
+   * tell the parent, exactly as the level does, because the parent owns the
+   * track and a rebuilt Stage is re-fed from that prop.
+   */
+  setSoundtrackFade(fadeSec: number): void {
+    const t = this.track;
+    if (!t) return;
+    const next = safeFade(fadeSec);
+    if (Object.is(t.fadeSec, next)) return;
+    t.fadeSec = next;
+    this.armTrackFade();
+    this.emitStatus();
+  }
+
   setClipLevel(clipId: string, level: number): void {
     const target = this.clips.get(clipId);
     if (!target) return;
@@ -3607,7 +3770,7 @@ export class Stage {
   setSoundtrack(
     spec: {
       url: string; name?: string; muted?: boolean; level?: number;
-      inSec?: number; outSec?: number;
+      inSec?: number; outSec?: number; fadeSec?: number;
     } | null,
   ): void {
     if (this.destroyed) return;
@@ -3625,11 +3788,21 @@ export class Stage {
       this.track.level = safeLevel(spec?.level);
       this.track.inSec = spec?.inSec;
       this.track.outSec = spec?.outSec;
+      // THE FADE IS A CHEAP FIELD TOO, and for the range's exact reason: the row
+      // writes it here and to the parent in one handler, and the parent's copy
+      // arrives back on the same url a task later. Dropping it would leave the
+      // monitor on the old envelope and the export on the new one.
+      this.track.fadeSec = safeFade(spec?.fadeSec);
       this.applyMutes();
       // The window may have moved the playhead OUT of the new range — enforce at
       // the moment the fact exists rather than waiting for the next frame, which
       // on a still composition with no clips may be a while.
       this.enforceTrackWindow();
+      // AND THE ENVELOPE MOVES WITH THE WINDOW. Both edges are defined by the
+      // range, so a drag that does not re-arm leaves a fade sitting on the OLD
+      // in/out until the next lap — visible as the music dipping in the middle
+      // of nowhere.
+      this.armTrackFade();
       this.emitStatus();
       return;
     }
@@ -3639,6 +3812,7 @@ export class Stage {
       url, name: spec?.name || 'music', el: null, source: null, gain: null,
       muted: !!spec?.muted, level: safeLevel(spec?.level), broken: false,
       inSec: spec?.inSec, outSec: spec?.outSec,
+      fadeSec: safeFade(spec?.fadeSec), env: null,
     };
     const doc = this.doc;
     const host = this.ensureHost();
@@ -3672,7 +3846,16 @@ export class Stage {
     // well, so a range under a moving composition is held to the frame instead of
     // to the event's ~250 ms.
     el.addEventListener('timeupdate', () => {
-      if (this.track && this.track.el === el) this.enforceTrackWindow();
+      if (!this.track || this.track.el !== el) return;
+      this.enforceTrackWindow();
+      // RE-ANCHOR THE ENVELOPE ON THE ELEMENT'S OWN HEARTBEAT. The schedule is
+      // already correct to the end of the lap; re-issuing it from the true
+      // position four times a second is what keeps the audio clock and the media
+      // clock from drifting apart over a long track, and it is what re-arms the
+      // fade after the element's NATIVE loop wraps without `liveWrapTarget`
+      // having anything to say (an untrimmed track). Costs one branch when the
+      // fade is off, which is the default.
+      if (this.track.fadeSec > 0) this.armTrackFade();
     });
     // THE TAKE'S CLOCK, ON THE TWO EDGES ONLY.
     //
@@ -3684,7 +3867,14 @@ export class Stage {
     // a second clock, which is the divergence this file keeps filing scars
     // about. `pause` also arrives when the element is torn down, which is what
     // makes disposing the music close the clock without its own line.
-    const pulse = () => { if (this.track && this.track.el === el) this.pulseClock(); };
+    const pulse = () => {
+      if (!this.track || this.track.el !== el) return;
+      this.pulseClock();
+      // Resuming from a pause: the automation kept running on the audio clock
+      // while the media clock stood still, so it is re-issued from where the
+      // element actually is rather than from where the schedule thinks it got to.
+      if (this.track.fadeSec > 0) this.armTrackFade();
+    };
     el.addEventListener('play', pulse);
     el.addEventListener('playing', pulse);
     el.addEventListener('pause', pulse);
@@ -3698,13 +3888,18 @@ export class Stage {
         const src = this.audioCtx.createMediaElementSource(el);
         const gain = this.audioCtx.createGain();
         gain.gain.value = 0;
-        src.connect(gain);
+        const env = this.audioCtx.createGain();
+        env.gain.value = 1;
+        src.connect(env);
+        env.connect(gain);
         gain.connect(this.masterGain);
         this.track.source = src;
         this.track.gain = gain;
+        this.track.env = env;
       } catch {
         this.track.source = null;
         this.track.gain = null;
+        this.track.env = null;
       }
     }
 
@@ -3772,6 +3967,7 @@ export class Stage {
     );
     if (target === null) return false;
     try { el.currentTime = target; } catch { return false; }
+    if (t.fadeSec > 0) this.armTrackFade();
     return true;
   }
 
@@ -3789,6 +3985,7 @@ export class Stage {
       try { el.remove(); } catch { /* ignore */ }
     }
     try { t.gain?.disconnect(); } catch { /* ignore */ }
+    try { t.env?.disconnect(); } catch { /* ignore */ }
     try { t.source?.disconnect(); } catch { /* ignore */ }
     // AND THE CLOCK IT WAS HOLDING OPEN. The element's own `pause` fires here,
     // but this method nulls `this.track` BEFORE pausing, so the listener's
@@ -3879,15 +4076,22 @@ export class Stage {
       const src = this.audioCtx.createMediaElementSource(el);
       const gain = this.audioCtx.createGain();
       gain.gain.value = 0;
-      src.connect(gain);
+      // src -> env (automation) -> gain (level) -> master. See `ClipRecord.env`.
+      const env = this.audioCtx.createGain();
+      env.gain.value = 1;
+      src.connect(env);
+      env.connect(gain);
       gain.connect(this.masterGain);
       clip.source = src;
       clip.gain = gain;
+      clip.env = env;
+      this.armWindowFade(clip);
     } catch {
       // No graph for this clip: it still plays through the element's own output,
       // it just cannot contribute audio to a recording.
       clip.source = null;
       clip.gain = null;
+      clip.env = null;
     }
   }
 
@@ -4007,11 +4211,11 @@ export class Stage {
    */
   describeAudioSources(): {
     id: string; url: string; span: number; loop: boolean; gain: number; rate: number;
-    inSec?: number; outSec?: number;
+    inSec?: number; outSec?: number; fadeSec?: number;
   }[] {
     const out: {
       id: string; url: string; span: number; loop: boolean; gain: number; rate: number;
-      inSec?: number; outSec?: number;
+      inSec?: number; outSec?: number; fadeSec?: number;
     }[] = [];
     this.clips.forEach((c) => {
       if (!c.url) return;
@@ -4026,6 +4230,10 @@ export class Stage {
         id: c.id, url: c.url, span, loop: c.loop, gain: mixGain(wanted, c.level),
         rate: c.playbackRate > 0 ? c.playbackRate : 1,
         inSec: c.inSec, outSec: c.outSec,
+        // THE FADE TRAVELS WITH THE RANGE it is about. The mixer clamps it
+        // against the DECODED length, which is the only length that is true of
+        // the sound rather than of the container.
+        fadeSec: c.fadeSec > 0 ? c.fadeSec : undefined,
       });
     });
     // THE SOUNDTRACK IS ONE MORE SOURCE, and the only row here whose `span` is
@@ -4045,6 +4253,7 @@ export class Stage {
             // still the whole of DECISION 1 — see DECISION 1b for why a window
             // makes keeping it zero more load-bearing rather than less.
             inSec: this.track.inSec, outSec: this.track.outSec,
+            fadeSec: this.track.fadeSec,
           }
         : null,
     );
@@ -4219,6 +4428,7 @@ export class Stage {
         playing,
         muted: c.muted,
         level: c.level,
+        fade: c.fadeSec,
         wantsAudio: !c.muted && !c.broken,
         audible: this.soundOn && !c.muted && c.live && !c.broken,
         ready: c.ready,
@@ -4273,6 +4483,7 @@ export class Stage {
             ),
             broken: this.track.broken,
             level: this.track.level,
+            fade: this.track.fadeSec,
           }
         : null,
       capturing: this.capturing,
@@ -4330,12 +4541,17 @@ export class Stage {
       s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
       s.rolling + '|' + s.turning + '|' + s.moving + '|' + s.parked + '|' +
       (s.soundtrack
-        ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken + ':' + s.soundtrack.level
+        ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken + ':' + s.soundtrack.level + ':' + s.soundtrack.fade
         : '-');
     for (let i = 0; i < s.clips.length; i++) {
       const c = s.clips[i];
+      // `fade` IS IN THE SIGNATURE, and SCAR-C160 is the whole reason this line
+      // is not one field shorter: the last per-clip fact added to the status row
+      // (`level`) was left out of this hand-built list, so the Stage held the new
+      // value, the export rendered it and the control never moved. A field on the
+      // row that is not in the signature is a control that reads back stale.
       sig += '~' + c.id + ':' + c.state + ':' + c.playing + ':' + c.muted + ':' + c.level +
-        ':' + c.ready + ':' + c.fragments;
+        ':' + c.fade + ':' + c.ready + ':' + c.fragments;
     }
     if (sig === this.statusSig) return;
     this.statusSig = sig;
@@ -4409,8 +4625,10 @@ export class Stage {
       try { el.remove(); } catch { /* ignore */ }
     }
     try { clip.gain?.disconnect(); } catch { /* ignore */ }
+    try { clip.env?.disconnect(); } catch { /* ignore */ }
     try { clip.source?.disconnect(); } catch { /* ignore */ }
     clip.gain = null;
+    clip.env = null;
     clip.source = null;
     clip.el = null;
     clip.onEvent = null;

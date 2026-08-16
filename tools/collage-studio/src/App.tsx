@@ -2701,6 +2701,10 @@ export default function App() {
                        onRemoveSoundtrack={removeSoundtrack}
                        onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
                        onSoundtrackLevel={(level) => setSoundtrack((prev) => (prev ? { ...prev, level } : prev))}
+                       /* THE RANGE FADE, held here for the level's reason: App
+                          owns the track, so a value that lived only in the Stage
+                          would come back OFF the first time one was rebuilt. */
+                       onSoundtrackFade={(fadeSec) => setSoundtrack((prev) => (prev ? { ...prev, fadeSec } : prev))}
                        /* THE RANGE. `undefined` is "the whole track" and is
                           stored as undefined rather than as [0, duration] —
                           absent means the default everywhere in this app, and

@@ -138,6 +138,13 @@ export interface SoundtrackSpec {
    */
   inSec?: number;
   outSec?: number;
+  /**
+   * THE RANGE FADE — how long this track eases in at IN and out at where its
+   * sound stops, in SOURCE seconds. It rides beside the range because it is a
+   * fact ABOUT the range (`lib/windowFade.ts`), and absent means OFF for the
+   * same reason absent means the whole track above.
+   */
+  fadeSec?: number;
 }
 
 /**
@@ -156,6 +163,8 @@ export interface SoundtrackSource {
   /** The range, passed straight through. Absent on an untrimmed track. */
   inSec?: number;
   outSec?: number;
+  /** The range fade, passed straight through. Absent when it is off. */
+  fadeSec?: number;
 }
 
 /**
@@ -231,6 +240,10 @@ export const soundtrackSource = (t: SoundtrackSpec | null | undefined): Soundtra
     // of a window this project keeps only one of.
     inSec: t.inSec,
     outSec: t.outSec,
+    // AND THE FADE WITH THEM, for the same reason: `windowFade` clamps it
+    // against the DECODED length, which is the only one that is true of the
+    // sound rather than of the container.
+    fadeSec: t.fadeSec,
   };
 };
 

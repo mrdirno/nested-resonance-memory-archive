@@ -227,8 +227,51 @@ export const effectiveLength = (p: WindowedPlayback): number => {
  * the lap defect. `audioPlan` bounds the node with it; `audioSchedule` decides
  * whether the clip straddles with it. Same number, one definition.
  */
-const audibleEnd = (w: ClipWindow, spanLimit?: number): number =>
+export const audibleEnd = (w: ClipWindow, spanLimit?: number): number =>
   finite(spanLimit) && spanLimit > 0 ? Math.min(w.outSec, spanLimit) : w.outSec;
+
+/**
+ * WHEN THIS SOURCE COMES ROUND — the lap arithmetic, named once.
+ *
+ * IT IS EXPORTED BECAUSE IT HAS A SECOND CALLER, which is this project's own
+ * trigger for extracting an engine rather than forking one. `audioSchedule`
+ * below has always needed it; `lib/windowFade.ts` needs the same boundaries to
+ * put a fade at them, and a fade whose lap edges are computed from a second copy
+ * of `firstBoundary + k * lapOut` is a fade that drifts off the splice it exists
+ * to soften — which is the exact defect the header of this file was written
+ * about. One definition, two readers, no second opinion.
+ *
+ * `phase` is SOURCE seconds already spent inside the window when the mix begins;
+ * `period` and `first` are OUTPUT seconds, because that is the clock both the
+ * mixer's `when` and the frame loop count in.
+ */
+export interface LapEdges {
+  /** SOURCE seconds already elapsed inside the window at output `startAt`. */
+  phase: number;
+  /** OUTPUT seconds per lap. 0 when this source never comes round. */
+  period: number;
+  /** OUTPUT time of the first window restart at or after the mix's start. */
+  first: number;
+  /** False when the source does not lap: not looping, or a window too short to
+   *  wrap stably (the same 0.01 s floor `audioPlan` refuses a loop region at). */
+  loops: boolean;
+}
+
+export const lapEdges = (p: WindowedPlayback, startAt: number): LapEdges => {
+  const r = safeRate(p.rate);
+  const L = p.window.length;
+  const at = finite(startAt) && startAt > 0 ? startAt : 0;
+  const period = L / r;
+  const loops = !!p.loop && L > 0.01 && period > 0 && Number.isFinite(period);
+  // `phase` IS `sourceTimeAt` MINUS THE IN POINT, and it is spelled the same way
+  // here — modulo when the source comes round, clamped when it runs out and
+  // holds. Reading the modulo for a NON-looping source would put a fade in the
+  // middle of a clip that is parked at its OUT point. Asserted against
+  // `sourceTimeAt` rather than argued.
+  const raw = p.loop ? (at * r) % L : Math.min(at * r, L);
+  const phase = finite(raw) && raw >= 0 ? raw : 0;
+  return { phase, period: loops ? period : 0, first: loops ? (L - phase) / r : 0, loops };
+};
 
 export const audioPlan = (
   p: WindowedPlayback,
@@ -427,8 +470,12 @@ export const audioSchedule = (
   const lo = p.window.inSec;
   const hiA = audibleEnd(p.window, spanLimit);
   const lenA = hiA - lo;                   // source seconds this clip actually has
-  const L = p.window.length;               // source seconds the PICTURE laps over
-  const lapOut = L / r;                    // output seconds per picture lap
+  // THE LAP ARITHMETIC IS `lapEdges`', not this branch's, since the fade became
+  // its second reader. `edges.loops` is the same conjunction this test spelled
+  // inline (`L > 0.01 && lapOut > 0 && finite(lapOut)`), so the branch condition
+  // — and with it every export — is unchanged.
+  const edges = lapEdges(p, startAt);
+  const lapOut = edges.period;             // output seconds per picture lap
 
   /**
    * THE STRADDLE IS DECIDED ON THE WINDOW, NOT ON WHETHER `audioPlan` CHOSE TO
@@ -445,17 +492,14 @@ export const audioSchedule = (
   const straddles = p.loop
     && lenA > 0
     && hiA < p.window.outSec
-    && L > 0.01
-    && lapOut > 0 && Number.isFinite(lapOut);
+    && edges.loops;
   if (!straddles) return one();
 
   const dur = finite(seconds) && seconds > 0 ? seconds : 0;
-  const at = finite(startAt) && startAt > 0 ? startAt : 0;
   // Where the PICTURE sits inside its lap at the mix's first sample — the same
   // `% L` the frame loop walks, and the number `audioPlan` had to compute as
   // `% lenA` because that was the only period its single node could express.
-  const raw = (at * r) % L;
-  const ph = finite(raw) && raw >= 0 ? raw : 0;
+  const ph = edges.phase;
 
   const starts: AudioStart[] = [];
   const push = (when: number, offset: number, duration: number) => {
@@ -470,7 +514,7 @@ export const audioSchedule = (
   // Every later lap, timed ABSOLUTELY off the first boundary rather than by
   // adding `lapOut` to the previous one, so a thousand laps cannot accumulate a
   // thousand roundings.
-  const firstBoundary = (L - ph) / r;
+  const firstBoundary = edges.first;
   let truncated = false;
   for (let k = 0; ; k++) {
     const when = firstBoundary + k * lapOut;

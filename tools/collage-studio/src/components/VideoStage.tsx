@@ -37,7 +37,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
-  AlertTriangle, Loader2, Scissors, RotateCcw, Music, Gauge,
+  AlertTriangle, Loader2, Scissors, RotateCcw, Music, Gauge, Waves,
 } from 'lucide-react';
 
 import { createStage, type Stage, type StageStatus, type StageClipInput, type StageTurnInput } from '../lib/stage';
@@ -54,6 +54,9 @@ import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
 import { SPEEDS, safeSpeed, isSped, speedLabel, screenLength, NATURAL_SPEED } from '../lib/speed';
+import {
+  WINDOW_FADE_ROSTER, windowFadeLabel, windowFadeSpan, safeFade,
+} from '../lib/windowFade';
 import { LEVELS, safeLevel, isQuieted, levelLabel, levelDb } from '../lib/level';
 import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
@@ -75,6 +78,10 @@ type SpeedMap = Record<string, number | undefined>;
 
 /** Seconds, one decimal, no trailing noise — the field readout, not a timecode. */
 const secs = (n: number): string => `${n.toFixed(1)}s`;
+/** The same, for lengths that can legitimately be under a tenth of a second:
+ *  a range fade clamped against a 0.2 s window is 0.05 s, and `secs` would
+ *  render that as `0.0s` — a readout that reads as "nothing happens". */
+const fsecs = (n: number): string => (n < 0.1 ? `${n.toFixed(2)}s` : `${n.toFixed(1)}s`);
 
 /** Button copy for the video-length-sync control (shown with 2+ clips). */
 const CLIP_LENGTH_LABEL: Record<ClipLengthMode, { short: string; aria: string; title: string }> = {
@@ -178,6 +185,9 @@ export interface VideoStageProps {
   onSoundtrackMuted?: (muted: boolean) => void;
   /** The parent owns the track, so it owns the level too — see `setTrackLevel`. */
   onSoundtrackLevel?: (level: number) => void;
+  /** …and the range fade with it, for the same reason: it rides beside the range
+   *  in `SoundtrackSpec`, and a Stage rebuilt without it would come back at OFF. */
+  onSoundtrackFade?: (fadeSec: number) => void;
   /**
    * The WHOLE asset pool, used for one thing: the trim sheet's filmstrip.
    *
@@ -281,6 +291,22 @@ const TrimSheet: React.FC<{
    */
   level?: number;
   onLevel?: (level: number) => void;
+  /**
+   * THE RANGE FADE — present for BOTH, and for the LEVEL's reason rather than
+   * the SPEED's. "Soften the edges of this window" is the same question with the
+   * same answer for a song and for a clip's own sound: both loop through the same
+   * `audioSchedule`, both splice at the same hard discontinuity. Offering it only
+   * to the music would leave a 4 s clip lapping seven times under a 30 s take
+   * clicking six times with no control anywhere.
+   *
+   * IT IS ON THIS SHEET BECAUSE IT IS ABOUT THE RANGE, not about the take. The
+   * take bar's FADE chip fades the summed mix at the take's two ends and cannot
+   * reach a splice at second 10 — this one is a fact about the window, so it
+   * lives where the window is chosen. That is also, word for word, what was
+   * wished for.
+   */
+  fade?: number;
+  onFade?: (fadeSec: number) => void;
   /** This source's sound is currently OUT of the piece. The level row stays live
    *  (setting where it will sit when you put it back is a real thing to do) and
    *  says so, rather than going disabled and looking broken. */
@@ -290,7 +316,7 @@ const TrimSheet: React.FC<{
   syncing?: boolean;
 }> = ({
   name, span, frames, value, onChange, onClose, credit, speed, onSpeed,
-  level, onLevel, muted, syncing,
+  level, onLevel, fade, onFade, muted, syncing,
 }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
@@ -377,7 +403,12 @@ const TrimSheet: React.FC<{
         aria-label={`Trim ${name}`}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={onKeyDown}
-        className="w-full sm:max-w-lg bg-[#0e0e0e] border-t sm:border border-white/15 sm:rounded-2xl p-4 pb-6 sm:pb-4 flex flex-col gap-3"
+        /* IT SCROLLS, and that is a ship gate rather than a nicety. The sheet had
+           no height bound at all: strip + two sliders + speed + level + fade on a
+           320x568 phone runs past the viewport and takes the Close button with
+           it — the covered-button class this component already carries a scar
+           for, one row of controls away from happening again. */
+        className="w-full sm:max-w-lg max-h-[88vh] overflow-y-auto overscroll-contain bg-[#0e0e0e] border-t sm:border border-white/15 sm:rounded-2xl p-4 pb-6 sm:pb-4 flex flex-col gap-3"
       >
         <div className="flex items-center gap-2 min-w-0">
           <Scissors size={13} className="text-emerald-400 shrink-0" />
@@ -621,6 +652,73 @@ const TrimSheet: React.FC<{
           </div>
         )}
 
+        {/* THE RANGE FADE — "add fade even when selecting clip range for audio",
+            from the field, and it is the same roster row the two controls above
+            are rather than the take bar's cycling chip: the bar cycles because it
+            is 320px starved, and a modal is not.
+
+            THE READOUT IS THE HALF THAT MAKES IT HONEST. `windowFadeSpan` clamps
+            to a QUARTER of the range — a window LAPS, so the take fade's half
+            would make a short loop a triangle wave rather than a fade — and a
+            roster whose entries silently collapse into each other on a short
+            range is the inert-control defect this file is scarred by. So the row
+            says what you will actually get, in the same "of clip · on screen"
+            vocabulary the speed readout above already uses. */}
+        {onFade && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <Waves size={12} className="text-emerald-400 shrink-0" />
+              <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 uppercase shrink-0">Fade</span>
+              <div className="flex-1" />
+              <span
+                className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
+                data-testid="window-fade-readout"
+              >
+                {(() => {
+                  const req = safeFade(fade);
+                  if (!(req > 0)) return 'starts and ends at full level';
+                  const f = windowFadeSpan(req, w.length);
+                  const on = screenLength(f, speed);
+                  const clamped = f < req - 1e-9;
+                  const head = clamped ? `${fsecs(req)} → ${fsecs(f)}, a quarter of the range` : `${fsecs(f)} in and out`;
+                  return safeSpeed(speed) === NATURAL_SPEED ? head : `${head} · ${fsecs(on)} on screen`;
+                })()}
+              </span>
+            </div>
+            <div className="flex items-center gap-1" role="group" aria-label={`Fade for ${name}`}>
+              {WINDOW_FADE_ROSTER.map((sec) => {
+                const on = safeFade(fade) === sec;
+                return (
+                  <button
+                    key={sec}
+                    type="button"
+                    onClick={() => onFade(sec)}
+                    title={sec > 0
+                      ? `Ease ${name} up over ${sec}s from the IN point and back down at the end of the range — every time it comes round.`
+                      : `${name} starts and stops at full level.`}
+                    aria-pressed={on}
+                    data-testid={`window-fade-${sec}`}
+                    className={`flex-1 min-w-0 h-11 rounded-lg text-[10px] font-black tabular-nums tracking-wide transition-colors ${
+                      on
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/60'
+                        : 'text-gray-400 border border-white/10 hover:text-white hover:bg-white/10'
+                    }`}
+                  >{windowFadeLabel(sec)}</button>
+                );
+              })}
+            </div>
+            {/* THE SHORT ENTRY IS A DIFFERENT JOB FROM THE LONG ONES, and saying
+                so is what stops 1s being picked for a loop that then dips every
+                lap. One sentence, only when it is switched on. */}
+            {safeFade(fade) > 0 && (
+              <p className="text-[9px] tracking-wide text-gray-500 leading-relaxed">
+                This happens every time the range comes round — 0.1s just softens
+                the join, longer is an edit you will hear.
+              </p>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           <span
             className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
@@ -664,6 +762,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, move, beat, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackLevel,
+  onSoundtrackFade,
   onSoundtrackWindow,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -942,16 +1041,19 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    *  and it is what makes a rebuilt Stage come back at the level the user set
    *  rather than at 100% (`stage.setSoundtrackLevel`'s note). */
   const trackLevel = soundtrack?.level;
+  /** THE RANGE FADE, as a primitive, for the range's exact reason — it rides in
+   *  the same spec and a Stage rebuilt without it comes back at OFF. */
+  const trackFade = soundtrack?.fadeSec;
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
     stage.setSoundtrack(trackUrl
       ? {
           url: trackUrl, name: trackName, muted: trackMuted, level: trackLevel,
-          inSec: trackIn, outSec: trackOut,
+          inSec: trackIn, outSec: trackOut, fadeSec: trackFade,
         }
       : null);
-  }, [stageGen, trackUrl, trackName, trackMuted, trackLevel, trackIn, trackOut]);
+  }, [stageGen, trackUrl, trackName, trackMuted, trackLevel, trackIn, trackOut, trackFade]);
 
   // --- transport -------------------------------------------------------------
 
@@ -1290,6 +1392,14 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     stageRef.current?.setClipLevel(clipId, level);
   }, []);
 
+  /** A CLIP'S RANGE FADE — the Stage alone, for `setClipLevel`'s reason exactly:
+   *  it is a live edit on the clip record and it reads back off
+   *  `status.clips[].fade`, so a copy in React state would be a second thing to
+   *  keep true. */
+  const setClipFade = useCallback((clipId: string, fadeSec: number) => {
+    stageRef.current?.setClipFade(clipId, fadeSec);
+  }, []);
+
   /**
    * THE MUSIC'S LEVEL — BOTH, for `toggleTrackSound`'s reason and no other. The
    * Stage call is what the room and the next export hear; the parent is told
@@ -1305,6 +1415,14 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     stageRef.current?.setSoundtrackLevel(level);
     onSoundtrackLevel?.(level);
   }, [onSoundtrackLevel]);
+
+  /** THE MUSIC'S RANGE FADE — BOTH, for the level's reason: the parent owns the
+   *  track, and a fade that lived only in the Stage would come back OFF the first
+   *  time anything remounted it. */
+  const setTrackFade = useCallback((fadeSec: number) => {
+    stageRef.current?.setSoundtrackFade(fadeSec);
+    onSoundtrackFade?.(fadeSec);
+  }, [onSoundtrackFade]);
 
   /**
    * THE SIZE LADDER, RE-PROBED WHEN THE SHAPE CHANGES.
@@ -1905,10 +2023,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             : undefined}
           onChange={onSoundtrackWindow}
           onClose={() => setTrimming(null)}
-          credit="Picking the part of the song that plays was wished for by an anonymous Collage user."
+          credit="Picking the part of the song that plays, and fading it in and out at the edges of that part, were both wished for by anonymous Collage users."
           level={trackRow?.level}
           muted={!trackRow?.wantsAudio}
           onLevel={setTrackLevel}
+          fade={soundtrack.fadeSec}
+          onFade={setTrackFade}
         />
       )}
 
@@ -1948,6 +2068,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             level={clipRows.find((r) => r.id === c.id)?.level}
             muted={!clipRows.find((r) => r.id === c.id)?.wantsAudio}
             onLevel={(v) => setClipLevel(c.id, v)}
+            // OFF THE STAGE for the level's reason, through the same row.
+            fade={clipRows.find((r) => r.id === c.id)?.fade}
+            onFade={(v) => setClipFade(c.id, v)}
             // Only ever true with 2+ clips, because that is the only time the
             // sync control is offered at all — a single clip is its own
             // reference and a stretch mode is a no-op on it.
