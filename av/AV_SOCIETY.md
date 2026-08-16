@@ -797,6 +797,54 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
    gets the wrong OBJECT walked over to you, which is a different failure from not knowing the
    word. *"Say snake on a mixed job and that is what walks over."* The gate enforces all of it
    mechanically, digits included.
+2b. **JOB WORDS — a fourth surface for the words that are NOT objects. PANEL-REJECTED
+   2026-08-16, and the ballot's own worked example is what killed it.** The observation
+   underneath is correct and worth keeping: `names.js` is object-first by rail, so it
+   structurally cannot hold *rough-in · top-out · dry-in · punch list · backcharge · T&M ·
+   RFI · submittal · as-built · closeout · retainage · short-shipped · back-order*. The
+   proposed surface was not that observation. Three lenses scored it **2 / 3 / 5** and all
+   three refused it, on three independent grounds:
+   - **IT IS THE FOURTH IMPLEMENTATION OF A SOLVED PROBLEM.** `shared/docspec.js` already
+     carries `aka` for most of that word list, per trade, in production — *RFI* in `gc/docs.js`
+     and `electrical/docs.js`, *punch list reply* in `framing/docs.js`, *backcharge* in
+     `electrical/docs.js`, *closeout* in five trades, *change order* and *turnover* universal
+     in `shared/docspec.js`. It is the identical feature and **more capable**, because it hands
+     back the document's instruction block instead of a link to start over on another page.
+     The genuine residual is *top-out · retainage · short-shipped* — zero hits tree-wide.
+     **That is four rows, not a surface.**
+   - **THE ROUTING TABLE WAS ASSERTED, NOT MEASURED.** Its headline example routed *closeout →
+     `total-package`*. `total-package` is the **compensation comparison** tool — *"two offers,
+     two shapes... see the real gap before you answer the email"* — on all eleven trades. There
+     is no closeout tool; closeout is a document type inside `write-up`. A routing claim that
+     points its lead case at the wrong building is a list with links glued on, which is the
+     precise objection this axis has already survived once.
+   - **THREE WORDS CANNOT SHIP AT ALL, AND NOT BECAUSE OF WORD COUNT.** `lien` is definitionally
+     useless without a filing deadline, and statutory deadlines are a named forbidden class.
+     `liquidated damages` cannot be explained without enforceability, which is contract law.
+     `backcharge` was already banned as *content* twice, independently, by two trades that had
+     never spoken — `av/items.js` (*"NO money, no backcharge, no 'who eats it'"*) and
+     `framing/docs.js` (*"no backcharge language"*). And the protective rail — *"explain the
+     word, never the procedure, never a number, never a deadline"* — **is not mechanically
+     enforceable**: "check your state's lien deadline before you wait too long" carries no
+     digit, no currency, no banned unit, and passes every gate that can be written for it. By
+     the rule this book already applies to photos, a protection that cannot be enforced by
+     shipped code scores as if it does not exist.
+   **The re-pitch condition, falsifiable and small:** three-to-five words with zero coverage
+   anywhere, added to an **existing** surface, attempted only after the cross-trade hole below
+   is closed. Not a fourth surface, and not until that has been tried.
+   **THE HOLE THE PANEL FOUND INSTEAD, and the named next rung on this axis:**
+   `shared/docspec.js` is **trade-siloed by construction**. Every `write-up.html` loads its own
+   trade's `docs.js` and nothing else, and `docspec.js` reads one global (`window.TRADE_DOCS`),
+   so an AV tech who only knows *"punch list reply"* from a framing background gets nothing —
+   that alias lives in `framing/docs.js` and is invisible on every other trade's page. **That is
+   the same defect this cycle fixed one layer out**, and it is the same failure `names.js`'s own
+   header names as its reason to exist: a man gets handed a word by somebody from another trade.
+   The commons solved it (`commons.js` §THE HAND-OFF, *"Every trade searched, not just the one
+   you picked — you heard it off somebody else"*); `docspec.js` never got the same treatment,
+   despite being the older and more heavily used system. Fix it the way the commons did — a
+   lightweight cross-reference on the graceful-failure path, off the same `shared/find.js` —
+   never by loading ten trades' `TRADE_DOCS` onto every page.
+
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
    not a tutorial; what is left is an EXPLAINER (what a thing is and why it exists), which is
@@ -1429,6 +1477,33 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A COMMENT THAT WAS TRUE WHEN IT WAS WRITTEN GOES ON READING AS PERMISSION (2026-08-16).**
+  `commons/tips.html` did not load `names.js`, and the tag was absent **deliberately, on a
+  real measurement** written in a comment right where the tag would go: the alias index JOINS
+  on an object's generic name, a tip is a sentence, and 0 of 147 tips carry one — so the join
+  is worth exactly nothing there, and re-measuring today it still is. That call was correct
+  the day it was made. It became wrong the day the HAND-OFF landed in the shared engine,
+  because the hand-off needs NO join: it routes a man who typed a word this surface cannot
+  answer to the table that owns it. Nobody re-read the comment, because the comment read as a
+  current decision rather than as a decision with an expiry.
+  **The cost fell hardest on the surface with the best excuse.** A zero join is precisely what
+  makes tips the surface most likely to be handed a word it cannot answer, and it was the only
+  one with no way out. 404 words the commons knows — measured on the shipped page, 24 probes:
+  **11 dead-ended** ("Nothing on this page goes by that" for *stinger*, *snake*, *Channellocks*,
+  *lav*) and **13 came back CONFIDENTLY WRONG** — *"Teflon tape"* matched a tip about tape and
+  the page said **Matches**, which is the exact `zap strap → Wire strippers` failure the
+  hand-off was built to kill, replayed on the surface the fix never reached.
+  **THE RULE: a claim quantified over "every surface" is asserted on every surface, or it is
+  asserted on none.** The deploy counted the join by loading all four data files into ONE
+  synthetic window, where `names.js` is present by construction — so it could never see a real
+  PAGE that omits the script tag, and every check stayed green for two days. `commons-names.mjs`
+  drove the hand-off on `index.html` only, which graded it on the one surface that needed it
+  least. Both now derive from `COMMONS_SURFACES`, and the deploy asserts the tag **on the real
+  page with comments stripped** — because the reason this survived review is that `tips.html`
+  *mentioned* `names.js`, in the comment explaining its absence. **A grep would have passed.**
+  Verified firing on this exact defect and nothing else: 24/24 fail against the shipped page,
+  0/24 against the fix, with the other 326 checks green in both states.
 
 - **A MEASUREMENT THAT MOVES WITH THE DEFECT CANNOT MEASURE THE DEFECT (2026-08-15).**
   The nav dropdown was running off the right edge of the glass, so the runtime clamped it
@@ -4031,3 +4106,45 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   inverse run case, both write-in exemptions, Clear and start-from-last. Storefront: one
   line in `masonry`'s `tools[]` in `fieldToolkits.ts` — P5 pushes it.
   https://mrdirno.github.io/nested-resonance-memory-archive/masonry/yard-call.html
+
+- `2026-08-16` — **[AXIS:COMMONS] THE COMMENT EXPLAINING WHY THE TAG WAS ABSENT IS THE REASON
+  A GREP NEVER CAUGHT IT** · **before:** `commons/tips.html` did not load `names.js`, so on one
+  of three commons surfaces the alias index was dead and the cross-surface HAND-OFF never fired
+  once. The omission was **deliberate and well-argued**, in a comment sitting exactly where the
+  tag would go: the index JOINS on an object's generic name, a tip is a sentence, and 0 of 147
+  tips carry one — re-measured this cycle, still 0, that half was never wrong. It became wrong
+  the day the hand-off landed in the shared engine, because the hand-off needs **no join**: it
+  routes a man who typed a word this surface cannot answer to the table that owns it. **The zero
+  join is precisely what makes tips the surface most likely to be handed such a word, and it was
+  the only one with no way out.** Measured on the shipped page, 24 probes over the 404 words the
+  commons knows: **11 dead-ended** (*stinger · snake · Channellocks · lav* → "Nothing on this
+  page goes by that") and **13 came back CONFIDENTLY WRONG** — *"Teflon tape"* matched a tip
+  about tape and the page said **Matches**, the exact `zap strap → Wire strippers` failure the
+  hand-off exists to kill, replayed on the surface the fix never reached · **after:** all three
+  surfaces route; *marrette* → **He Means Twist-on wire connector**, *snake* → **Three Things Go
+  By That**, and `qwertyuiop` still hands off to nothing, because a guess is not a hand-off.
+  **THE GATES WERE GREEN FOR TWO DAYS AND COULD NOT HAVE BEEN OTHERWISE:** the deploy counted the
+  join by loading all four data files into **one synthetic window**, where `names.js` is present
+  by construction, so it could never see a real PAGE missing the tag; `commons-names.mjs` drove
+  the hand-off on `index.html` alone, grading it on the surface that needed it least. Both now
+  derive from `COMMONS_SURFACES` — surface #4 is covered the day it lands with no edit — and the
+  deploy asserts the tag **on the real page with comments stripped**, because `tips.html` *did*
+  mention `names.js`: in the comment explaining its absence. **A grep would have passed.**
+  Fired 24/24 against the shipped page, 0/24 against the fix, other 326 checks green in both.
+  **BACKPORT RIDER: FIRED, and it found one more.** A repo-wide sweep for the same class —
+  a shared engine reading a `window.X` a page must supply — cleared every other consumer
+  (`AV_TOOLS`, `TOOLKIT_TOOLS`, `TOOLKIT_TRADE`, `TRADE_DOCS`, `FEEDBACK`); the sweep's *own*
+  first verdict was a false negative, because it substring-matched `names.js` inside the comment,
+  which is the defect wearing the shape of the instrument. Inside `commons-names.mjs` the same
+  rot had a second instance — the mobile block's typed `['index.html','tips.html','names.html']`
+  — now derived too. `commons-bag.mjs` was already clean. **THE PANEL REJECTED THE BALLOT AGAIN
+  AND KILLED MY OWN CANDIDATE WITH MY OWN EXAMPLE:** three lenses scored a fourth "JOB WORDS"
+  surface **2 / 3 / 5** — most of that word list already ships as `docspec.js` `aka` entries per
+  trade; three words (`lien`, `liquidated damages`, `backcharge`) cannot ship at all, the last of
+  them already banned as content twice by two trades that never spoke; and the ballot's headline
+  routing example, *closeout → `total-package`*, **points at the compensation-comparison tool**.
+  Written into §THE COMMONS as rung 2b with a falsifiable re-pitch condition, along with the hole
+  the panel found instead: `shared/docspec.js` is trade-siloed, so a man who knows *"punch list
+  reply"* from framing gets nothing on any other trade's write-up — **the same defect this cycle
+  fixed, one layer out.** That is the named next rung. Storefront unchanged — no new tool, no new
+  trade. https://mrdirno.github.io/nested-resonance-memory-archive/commons/tips.html
