@@ -4336,4 +4336,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   is restocked at the shop, there is no truck arriving at a site, so a job picker there is
   ceremony), as was `plumbing/supply-house-order.html`, which forks a different mechanism
   (`Draft.fields`/`Draft.keep`) and is the named remainder.
+  **LIVE-VERIFIED, all 5 pages on the real URL** after the deploy went green: `window.JobCard`
+  present (the module reached the artifact), the fresh state renders exactly one dashed
+  affordance and no label, a gate code typed on job A reaches the **copied document**, a new
+  job opens **empty**, **neither of job A's answers appears in job B's copied document**,
+  switching back restores, 0 page errors. A 200 is not a render and a render is not a feature;
+  this drove the job the page claims.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/pull-list.html
