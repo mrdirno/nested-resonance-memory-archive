@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Extra Work Tag — Flooring Field Toolkit</title>
+<meta name="description" content="Prep is where the margin lives and it never gets written down. Write the tag before you spread glue — who told you, why it's outside your number, crew and material as counts, and what is NOT in this tag.">
+<meta name="apple-mobile-web-app-title" content="Extra Work Tag">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Flooring · Lead → whoever told you</span>
+    <h1>Extra Work Tag</h1>
+    <p class="lede">Ground it, skimmed it, filled the joints, pulled cutback, undercut fourteen jambs, moved a fridge nobody moved, or stood in the corridor because the room wasn't clear? Write the tag the day it happened — who told you, what you were told to do, why it's outside your number, and the part everybody argues about in April: what is NOT in this tag. Sixty days from now it's covered up and nobody can see what you were kneeling on.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or anything pre-1978, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the tag</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* FLOORING EXTRA WORK TAG — the directed-work ticket, shipped as a CONFIG of
+ * shape #2's engine (shared/note.js — see av/AV_SOCIETY.md §THE THREE SHAPES).
+ * There is no CSS in this file, no DOM building, no state, no persistence and no
+ * document assembly: the engine owns all of it. This file owns the WORDS, which
+ * is the half an engine must never own — the note's whole value is that it
+ * speaks one trade's language.
+ *
+ * THE PRUNE MERGED "PREP TICKET" INTO THIS RUNG rather than shipping it beside
+ * it, and the reason is §THE GATE: prep extras are already a LIST, so counted
+ * ticked lines beat a second narrative ticket aimed at the same man on the same
+ * day. Eleven kits already ship this rung; what makes it this trade's is `why`,
+ * which is entirely prep and access rather than a change anybody drew.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.flooring.tmtag.v1",
+    docName: "EXTRA WORK TAG",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this tag? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Tag started",
+
+    // The job, the where and the day ride on the SECOND line, never stacked onto
+    // the heading with three em-dashes. Findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Northgate Medical — 2nd floor", docSkip: true }
+        ]
+      },
+      {
+        title: "Who told you",
+        tone: "loud",
+        docHead: "WHO TOLD ME",
+        why: "Signed by the super before you roll is the old way and it still works — but the name, the time and where he stood is what actually holds up.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who told you", options: T.roles, docLabel: "Told by" },
+          { id: "who", kind: "text", label: "His name", hint: "— \"the super told me\" is not a name", ph: "Dave R — GC super", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How he gave it to you", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
+          { id: "where", kind: "text", label: "Where", hint: "— room, corridor, unit, elevation", ph: "Corridor 2A, rooms 214 to 220", docLabel: "Where" }
+        ]
+      },
+      {
+        title: "What you were told to do",
+        docHead: "WHAT YOU TOLD ME TO DO",
+        why: "Your words, plainly, the way you'd say it standing there — so the man reading it in April recognises the day instead of reading a category.",
+        fields: [
+          { id: "did", kind: "area", rows: 2, label: "What you were told to do", hint: "— plainly, the way you'd say it", ph: "grind and skim the whole corridor — the slab came to us with ridges and dried mud from the drywall crew, and the plank was telegraphing every one of them on the first two rooms" },
+          { id: "why", kind: "ticks", subhead: "Why it's outside my number", label: "", docLabel: "WHY IT'S OUTSIDE MY NUMBER", options: T.why }
+        ]
+      },
+      {
+        title: "What is NOT in this tag",
+        tone: "loud",
+        docHead: "WHAT'S NOT IN THIS TAG",
+        why: "The line nobody writes and everybody argues about in April. Name it the day it happened and it stops being a back-charge.",
+        fields: [
+          { id: "notin", kind: "ticks", options: T.notin },
+          { id: "pics", kind: "seg", label: "Pics", hint: "— shot before it got covered", options: T.pics, docLabel: "Pics" }
+        ]
+      },
+      {
+        title: "Crew and material",
+        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Crew and hours", addLabel: "+ Another crew line", docLabel: "CREW",
+            cols: [
+              { id: "cls", kind: "select", label: "Class", options: T.classes },
+              { id: "men", kind: "stepper", label: "Men", ph: "men" },
+              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " h" }
+            ]
+          },
+          {
+            id: "mats", kind: "rows", label: "Material — off the truck / job stock", addLabel: "+ Another material line", docLabel: "MATERIAL",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "9 bags leveler · 2 pails adhesive · 4 diamond cups · 1 roll seam tape · 22 lf stair nose" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "M. Vela — 209-555-0148", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vela Floor Covering", docLabel: "Company" }
+        ]
+      },
+    ],
+
+    closing: [
+      "Nothing on here is priced and there's no number on it — your log owns the number, the office owns the price.",
+      "If that's what you told me to do, reply YES. If any of it's wrong, tell me what's wrong and I'll fix it before it goes any further, because after it's covered nobody can see it."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " man" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Tag started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -32,7 +32,7 @@
  *
  *   node tools/toolkit-gates/reconcile-join.mjs
  */
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
@@ -111,17 +111,44 @@ function reply(items, { job = 'Building C', from = 'Sparky — Volt EC', groupBy
 /* ── 1. THE VERDICT VOCABULARY, READ OFF THE SHIPPED PAGE ──────────────────── */
 console.log('verdict vocabulary — answer-back\'s ladder must be fully classified');
 {
+  /* THE GATE WAS MATCHING ON SOURCE SHAPE AND HAD SILENTLY STOPPED DOING ITS
+     JOB (found standing up trade #13). It read `var ANSWERS = [...]` with a
+     regex; a later cycle made the ladder per-trade — `var ANSWERS = (A.answers
+     && A.answers.length === 4) ? A.answers.slice() : [...]` — and the regex
+     stopped matching. The `ok(!!m)` went red, which looks like one failure, but
+     everything real was inside `if (m)`: the classification checks this section
+     EXISTS to run were not running at all. Exactly the class §SCARS already
+     records one layer down — matching on words means a gate stops testing the
+     day somebody improves the wording — so this now reads the FALLBACK literal
+     out of the page AND every trade's own declared ladder out of its items.js,
+     both derived from disk, and classifies all of them. */
   const ab = readFileSync(ROOT + 'av/answer-back.html', 'utf8');
-  const m = /var ANSWERS = \[([^\]]+)\]/.exec(ab);
-  ok(!!m, 'answer-back.html still declares var ANSWERS = [...]');
+  const m = /var ANSWERS = [\s\S]{0,120}?\[([^\]]+)\]/.exec(ab);
+  ok(!!m, 'answer-back.html still declares the four default rungs inline');
+  const ladders = [];
   if (m) {
-    const rungs = m[1].split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
-    ok(rungs.length >= 3, `read ${rungs.length} rungs off the page`, rungs.join(' / '));
+    ladders.push({ from: 'av/answer-back.html (default)', rungs: m[1].split(',').map(s => s.trim().replace(/^["']|["']$/g, '')) });
+  }
+  /* A trade that renames the ladder in its own vocabulary is exactly the case
+     that must not go unclassified, and it is the one the old regex could never
+     have seen even when it matched. */
+  for (const dir of readdirSync(ROOT, { withFileTypes: true })) {
+    if (!dir.isDirectory()) continue;
+    const items = ROOT + dir.name + '/items.js';
+    if (!existsSync(items)) continue;
+    const w = {};
+    try { new Function('window', readFileSync(items, 'utf8'))(w); } catch { continue; }
+    const own = w.TOOLKIT_ANSWER && w.TOOLKIT_ANSWER.answers;
+    if (Array.isArray(own) && own.length) ladders.push({ from: dir.name + '/items.js', rungs: own });
+  }
+  ok(ladders.length >= 1, `read ${ladders.length} ladder(s) off disk`, ladders.map(l => l.from).join(' · '));
+  for (const { from, rungs } of ladders) {
+    ok(rungs.length >= 3, `${from}: read ${rungs.length} rungs`, rungs.join(' / '));
     for (const rung of rungs) {
       const key = R.norm(rung);
       ok(Object.prototype.hasOwnProperty.call(R.VERDICTS, key),
-        `"${rung}" is classified in reconcile.js VERDICTS`,
-        `normalises to "${key}" — add it, or every answer on 7 trades reads as "didn't say yes or no"`);
+        `"${rung}" (${from}) is classified in reconcile.js VERDICTS`,
+        `normalises to "${key}" — add it, or every answer on that trade reads as "didn't say yes or no"`);
     }
   }
 }

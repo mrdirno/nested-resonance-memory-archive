@@ -423,7 +423,12 @@ window.COMMONS_GEAR = [
      and by whether he can still find them after a rain and a scraper pass. The
      4-gas monitor is on this list and it is the one row on the whole commons
      that says out loud what it does NOT do. */
-  { id: "marking-paint", n: "Marking paint in a colour the locators didn't use, and a spare case", t: ["sitework"],
+  /* WAS `marking-paint`, WHICH concrete AND gc ALREADY OWNED — two different
+     rows under one id since trade #12 shipped. The bag keys picks by id, so a
+     man who ticked one was silently carrying both and could remove neither;
+     `commons-bag.mjs` has been failing on it and nothing in CI runs that gate.
+     Swept while standing up trade #13, along with the same class in gear.js. */
+  { id: "marking-paint-locates", n: "Marking paint in a colour the locators didn't use, and a spare case", t: ["sitework"],
     w: "You white-line your dig before you call it in, then re-mark it every time the rain takes it. Paint over somebody's locate marks and the next man digs to the wrong line." },
   { id: "pin-flags", n: "Pin flags, whiskers and flagging tape", t: ["sitework"],
     w: "Paint washes off and gets scraped away. A flag stands up out of the mud, and a stub nobody flagged is two hours of hand digging in three months." },
@@ -444,6 +449,35 @@ window.COMMONS_GEAR = [
   { id: "test-plugs", n: "Test plug set and a fat marker", t: ["sitework"],
     w: "Cap and mark every open end at quitting time. A rock in the line at four o'clock is a mandrel that won't pull in three weeks." },
   { id: "gas-monitor", n: "4-gas monitor", t: ["sitework"],
-    w: "You carry your own and you bump-test it. It does not make the entry call for you — the competent person on site does, in front of the actual hole, and no page ever will." }
-];
+    w: "You carry your own and you bump-test it. It does not make the entry call for you — the competent person on site does, in front of the actual hole, and no page ever will." },
 
+  /* ---- flooring: trade #13 -----------------------------------------------
+     Written for the crew that arrives after everybody else has demobbed. Half
+     this list is here because a floor mechanic spends his day KNEELING, and the
+     other half is because his whole trade is decided by what the substrate is
+     doing — which is why the straightedge and his own meter are on it and no
+     number they read is anywhere in this program. */
+  { id: "knee-pads", n: "Knee pads you can actually wear all day", t: ["flooring"],
+    w: "You are on your knees eight hours. The cheap ones slide, cut off the circulation behind your knee, and you take them off by ten — which is how guys end up needing a surgeon at fifty." },
+  /* NOT `hook-blades` — roofing already owns that id, and the bag keys picks BY
+     ID, so a second row under the same id ticks both and lets you remove
+     neither (the defect this cycle found sitting on `marking-paint`). Same
+     tool, genuinely different advice: the roofer's point is the tip finding his
+     deck, the floor guy's is that a dull blade shows at every seam. */
+  { id: "hook-blade-change", n: "Hook blades, and more of them than you think", t: ["flooring"],
+    w: "A dull blade tears the backing instead of cutting it, and a torn cut shows at every seam. Change it far more often than feels reasonable — the blade is the cheapest thing on the job." },
+  { id: "straightedge", n: "A long straightedge you trust", t: ["flooring", "concrete"],
+    w: "Lay it on the slab before you agree to a start date. What you can see under it is the argument, and once you have covered it nobody can ever see it again." },
+  { id: "own-meter", n: "Your own moisture meter, and your own probes", t: ["flooring"],
+    w: "Somebody else's number over the phone is not a reading. Take your own, photograph the meter with the room in the frame, and write down where you stood — the slab cannot be re-tested once it is covered." },
+  { id: "floor-roller", n: "A floor roller, sectioned so you can carry it", t: ["flooring"],
+    w: "The bond happens under the roller, not under the trowel. A one-piece roller is the tool you leave in the van, and a floor that never got rolled is a callback with your name on it." },
+  { id: "undercut-saw", n: "Undercut saw", t: ["flooring"],
+    w: "Every jamb, every casing, every door stop. Cutting the floor to fit the trim instead of the trim to fit the floor is what makes a job look like it was done by somebody's cousin." },
+  { id: "tapping-block", n: "Tapping block, pull bar and spacers", t: ["flooring"],
+    w: "The last row is where you find out the wall is not straight. Beat a plank with a scrap of the plank and you own the damaged edge you just made." },
+  { id: "seam-kit", n: "Seam iron, tape and sealer — the whole kit, together", t: ["flooring"],
+    w: "An unsealed seam is a callback, not a style choice, and the one job you left the sealer at the shop is the one with a seam down the middle of a corridor." },
+  { id: "layout-chalk", n: "Chalk line, and chalk in a colour that comes back up", t: ["flooring"],
+    w: "Red chalk under a light-coloured floor telegraphs through and stays there. Blue or white, and snap the line for the field before you open the first box." }
+];

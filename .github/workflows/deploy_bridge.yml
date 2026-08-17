@@ -28,6 +28,7 @@ on:
       - 'concrete/**'
       - 'masonry/**'
       - 'sitework/**'
+      - 'flooring/**'
       # the commons — the human layer, shared by every trade and owned by none
       - 'commons/**'
       # The network manifest is staged from the repo root below, so it needs its
@@ -121,7 +122,7 @@ jobs:
           # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
           # a slug with no dir fails the build instead of silently 404ing the site.
           cp -R shared/. HELIOS-BRIDGE/dist/shared/
-          TRADES="av plumbing electrical hvac low-voltage gc framing roofing creative concrete masonry sitework"
+          TRADES="av plumbing electrical hvac low-voltage gc framing roofing creative concrete masonry sitework flooring"
           # Each `run:` block is its OWN shell, so a later step cannot see this
           # variable — publish it to the job env so the assert step below checks
           # exactly the list that was staged, from ONE definition.

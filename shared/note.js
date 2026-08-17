@@ -492,6 +492,20 @@
         }
       };
       var f = el("div", "f span2");
+      /* data-f, SAME AS EVERY OTHER BUILDER — and this was the one that never
+       * had it. wrapField() sets it for the eight kinds that go through it, and
+       * buildTicks and buildRows set it inline because they build their own
+       * wrapper; buildImpact builds its own wrapper too and was the only one
+       * that forgot. It stayed invisible for a reason worth writing down: NO
+       * CONFIG ON ANY OF THE THIRTEEN TRADES HAD EVER DECLARED kind:"impact".
+       * The engine's loudest field — the one §THE THREE SHAPES says the whole
+       * document exists for — shipped unexecuted, while gc/weather-day.html and
+       * hvac/repair-recommendation.html each hand-rolled their own .impact div
+       * beside it. So note-live-fields.mjs, which drives a page BY THIS
+       * ATTRIBUTE, could not have tested an impact field even if one existed.
+       * Found standing up trade #13, whose pinned tool is the first live use.
+       * (§SCARS — a gate that cannot see a field is not covering it.) */
+      if (def.id) f.setAttribute("data-f", def.id);
       f.appendChild(box);
       return f;
     }

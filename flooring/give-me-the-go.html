@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Give Me The Go — Flooring Field Toolkit</title>
+<meta name="description" content="The slab isn't ready and the super says put it in. Write it down before you spread glue: what you're standing on, what you measured, what your own instructions require, what it costs to sit — and the one ask that ends it. Give me the go in writing, or tell me who's fixing it and by when.">
+<meta name="apple-mobile-web-app-title" content="Give Me The Go">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Flooring · you → the man telling you to lay it</span>
+    <h1>Give Me The Go</h1>
+    <p class="lede">The slab reads wet. Or the heat has never run, the material never sat in the space, the joints were never filled, or the schedule says one thing and the plan hatches another — and the super says put it in, we hand over Friday. Once you spread glue that substrate is sealed forever and it is somebody else's ninety-day-old mistake that you now own. This is the last hour anybody can still see it. Write down what you're standing on, what you measured, what your own instructions require and what it costs you to sit — and end it the only way it ends: <b>give me the go in writing, or tell me who's fixing it and by when.</b></p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>This page never says ready, and it never says no.</b> It sets no moisture limit, no flatness tolerance, no acclimation window and no temperature — it prints <i>your</i> reading beside <i>the limit you typed off your own pail</i> and lets the two of them sit next to each other, because those limits are your mill's and your adhesive maker's and they disagree with each other. Whether it can go down is your call with your instructions in your hand, and if the spec calls for an independent agency's test then that report is theirs, not this. <b>If it's 9x9s, black mastic or anything pre-1978, stop</b> — you don't say what it is on here and neither does anybody else until the owner's survey does.
+  </div>
+
+  <p class="credit">&#10022; Sent this and got asked for something it didn't have? Wish it better &mdash; it gets built, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the letter</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* GIVE ME THE GO — the pinned tool, and the reason this trade is on the rack.
+ * A CONFIG of shape #2's engine (shared/note.js). No CSS, no DOM building, no
+ * state, no document assembly here: the engine owns all of it and this file owns
+ * the WORDS.
+ *
+ * FIVE PANEL PROPOSALS COLLAPSED INTO THIS ONE PAGE — "Can't Lay On That",
+ * "Floor's Not Ready", "Before I Glue", "Going Over It" and "Give Me The Go" —
+ * the largest convergence the roster exercise produced, and the 20-year prune
+ * merged all five rather than shipping four near-neighbours. It is named for the
+ * ASK, not the condition, deliberately: "the floor's not ready" is a complaint,
+ * and the same sentence with "give me the go in writing" on the end of it is a
+ * document. That difference is the whole product.
+ *
+ * FIRST LIVE USE OF kind:"impact" IN THE PROGRAM. The engine has shipped
+ * buildImpact since shape #2 was extracted, note.css has styled `.impact` the
+ * whole time, and not one config on twelve trades ever declared it — two pages
+ * hand-rolled their own instead. It is used here because this is the document
+ * §THE THREE SHAPES describes when it says "ordered short fields, ONE OF WHICH
+ * IS THE IMPACT LINE EVERYONE OMITS". Standing it up surfaced a real defect in
+ * that path (a missing data-f on the wrapper, so no gate could drive it); that
+ * is fixed in the engine, for every trade, in the same cycle.
+ *
+ * WHAT THIS PAGE MAY NEVER DO, and it is stricter than anything else on the
+ * rack. It supplies NO number he is judged against — no RH, no calcium chloride,
+ * no pH, no flatness tolerance, no acclimation period, no temperature or
+ * humidity range — and it never prints the words pass, fail, ready, acceptable
+ * or safe to install. It prints HIS reading next to the limit HE typed off HIS
+ * own pail. It does not create or number an RFI (the GC's system owns that log),
+ * never restates a warranty or declares one void, never generates a mill claim,
+ * and never characterises old resilient goods or black cutback as safe or as
+ * containing anything. The whole page is a man refusing to make that call alone.
+ */
+(function () {
+  "use strict";
+
+  /* HIS OWN WORDS FOR WHAT HE IS STANDING ON. Not a condition assessment and not
+     a defect list — a picker so the sentence he was going to type badly at 7am
+     arrives typed well, and so the super reads the same noun the mechanic said. */
+  var STUCK = [
+    { name: "The slab is reading wet",
+      sub: "and my own instructions have a number on them that this is not under." },
+    { name: "It's never been tested",
+      sub: "nobody has put a probe in it, and I'm being asked to cover it anyway." },
+    { name: "The heat has never run",
+      sub: "or it runs in the day and goes off at night, which is not the building running." },
+    { name: "The material hasn't sat in the space",
+      sub: "it came off a cold truck into a cold building and it's being opened the same morning." },
+    { name: "The joints, cracks and core holes are open",
+      sub: "nothing is filled, and every one of them reads through the finished floor." },
+    { name: "It's not flat enough to lay on",
+      sub: "there's daylight under the straightedge and nobody has ground or skimmed it." },
+    { name: "There's still adhesive or cutback on it",
+      sub: "the old goods came up and what was under them is still there." },
+    { name: "It's curling or lifting at the joints",
+      sub: "you can feel it under a straightedge before you can see it." },
+    { name: "There's curing compound, sealer or something on it",
+      sub: "something got put on this slab and nobody wrote down what." },
+    { name: "The wet trades aren't finished overhead",
+      sub: "paint, texture or drywall still to come over the floor I'm being asked to lay." },
+    { name: "The room isn't clear",
+      sub: "trades in it, material stacked on it, or a lift parked in the middle of it." },
+    { name: "The schedule and the plan don't agree",
+      sub: "the finish schedule says one product for this room and the drawing hatches another." },
+    { name: "I don't know which way it goes or where the seam lands",
+      sub: "and that's a decision somebody makes once and everybody lives with." },
+    { name: "It might be the old stuff",
+      sub: "9x9s, black mastic, or something pre-1978 — we stopped and nobody has touched it." }
+  ];
+
+  /* WHAT USUALLY GETS LEFT OFF. The forget-list is the half of shape #2 that
+     turns a complaint into a document: it names the things that will be argued
+     about in April and asks about them today, while somebody can still answer. */
+  var FORGOT = [
+    { name: "Who's grinding, skimming or pouring", sub: "and whether that's in my number or somebody else's" },
+    { name: "Who fills the joints, cracks and core holes" },
+    { name: "Who's paying for the moisture testing", sub: "and whether the spec wants an independent agency" },
+    { name: "Whose scope mitigation is", sub: "if it comes to that — it is not in mine unless it says so" },
+    { name: "Who undercuts the jambs and pulls the doors" },
+    { name: "Who moves the furniture, the appliances and the racking" },
+    { name: "Who protects it after I leave", sub: "and with what, and for how long" },
+    { name: "Who does the final clean", sub: "and what they're putting on it" },
+    { name: "What happens to my material while this sits", sub: "it's already in your building and it's already opened" },
+    { name: "Whether the date moves", sub: "because my crew is booked and the next window isn't next week" }
+  ];
+
+  Note.mount({
+    key: "toolkit.flooring.givemethego.v1",
+    docName: "BEFORE THIS FLOOR GOES DOWN",
+    copiedLabel: "Copied. Go send it — today, not tonight.",
+    clearConfirm: "Clear this letter? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Letter started",
+
+    /* Job and room ride on the second line, and the DATE rides with them —
+       unlike Getting In, this document is about a morning that already happened,
+       so it dates itself the way every other record on the rack does. */
+    subline: function (get, u) {
+      return [get("site"), get("area"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job and the room",
+        why: "So it's findable in somebody's inbox in April, and so nobody can say later it was about a different area.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Northgate Medical — 2nd floor", docSkip: true },
+          { id: "area", kind: "text", label: "Room / area", hint: "— his name for it, off the door", ph: "Corridor 2A, rooms 210 to 224", docSkip: true },
+          { id: "sf", kind: "text", label: "How much of it", hint: "— what's held up, not the whole job", ph: "3,400 of the 5,100 scheduled", docLabel: "How much is held up" },
+          { id: "goods", kind: "text", label: "What's going down", hint: "— your words, off your own submittal", ph: "glue-down LVP", docLabel: "What's going down" }
+        ]
+      },
+      {
+        title: "What I'm stuck on",
+        tone: "loud",
+        docHead: "WHAT I'M STUCK ON",
+        why: "Tick what's actually true this morning. Everything else on this page hangs off these lines, and the man reading it decides in about four seconds whether to keep reading.",
+        fields: [
+          { id: "stuck", kind: "ticks", options: STUCK },
+          { id: "saw", kind: "area", rows: 2, label: "In your own words", hint: "— what you're looking at, plainly", ph: "the whole east half is dark and cold to the hand, and the two probes we set Friday are still climbing. the drywall crew washed tools in the corridor and nobody has ground any of it off.", docLabel: "What I'm looking at" }
+        ]
+      },
+      {
+        title: "What I measured",
+        docHead: "WHAT I MEASURED — MY READINGS, MY METER, MY DATE",
+        why: "Once glue is spread this slab can never be tested again, and a phone photo of a meter face with no room and no date is worth nothing the day a seam lifts. Put the location on every line. This page never says what a reading means.",
+        fields: [
+          {
+            id: "reads", kind: "rows", label: "Readings", addLabel: "+ Another reading", docLabel: "READINGS",
+            cols: [
+              { id: "loc", kind: "text", wide: true, label: "Where", ph: "Rm 214 — centre, probe 3" },
+              { id: "how", kind: "select", label: "How", options: [
+                "In-situ RH probe", "Calcium chloride", "Surface meter", "Pin meter — wood", "pH", "Straightedge", "Visual only"
+              ] },
+              { id: "val", kind: "text", label: "It read", ph: "what the meter said" }
+            ]
+          },
+          { id: "when", kind: "clock", label: "When you took them", hint: "— stamps itself when you start", docLabel: "Taken" },
+          { id: "limit", kind: "area", rows: 2, label: "What MY instructions require", hint: "— typed off your own pail and the sheet in the box, word for word",
+            ph: "off the adhesive pail and the mill's install instructions in the carton — type what yours actually say",
+            docLabel: "WHAT MY OWN INSTRUCTIONS REQUIRE (typed off my pail and the sheet in the box — not this page's number, and not anybody else's)" },
+          { id: "tester", kind: "text", label: "If somebody else tested it", hint: "— who, and when you'll have the report", ph: "or leave it blank — these are mine", docLabel: "Independent testing" }
+        ]
+      },
+      {
+        title: "What it costs to sit",
+        docHead: "WHAT THIS COSTS WHILE IT SITS",
+        why: "This is the line everybody leaves off, and it is the only line on the page that makes anybody move today. A consequence with no clock on it is a shrug.",
+        fields: [
+          {
+            id: "impact", kind: "impact",
+            label: "What it costs to sit",
+            hint: "Say it in numbers he can picture: how many men, how much material, and what moves if this waits. The chips are a jog — your own sentence after them is what he believes.",
+            rows: 3,
+            ph: "four of us are standing in the corridor, 180 boxes are already in the building and opened, and my next window after Thursday is the 9th",
+            chipHint: "Tap to add:",
+            chips: [
+              "my crew is on the job today",
+              "the material is already here and opened",
+              "we're booked out after this week",
+              "this pushes the handover",
+              "I'll have to demobilise and come back",
+              "the next window I have is"
+            ],
+            clock: [
+              { v: "Need to know today", docToken: "answer needed today", hot: true },
+              { v: "Before we start Monday", docToken: "answer needed before Monday" },
+              { v: "This week", docToken: "answer needed this week" }
+            ],
+            docLabel: "WHAT THIS COSTS WHILE IT SITS"
+          }
+        ]
+      },
+      {
+        title: "The things nobody's said yet",
+        docHead: "STILL NOT SAID — AND SOMEBODY HAS TO SAY IT",
+        why: "Every one of these gets argued about in April. Asking today, in writing, is the difference between a question and a back-charge.",
+        fields: [
+          { id: "forgot", kind: "ticks", options: FORGOT }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "to", kind: "text", label: "Who you're sending it to", hint: "— name, and what he is", ph: "Dave R — GC super", docLabel: "To" },
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "M. Vela — 209-555-0148", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vela Floor Covering", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    /* THE CLOSING IS FIXED AND IT IS THE POINT. Every panel independently wrote
+       some version of this sentence and the prune called it the highest-dollar
+       unwritten line in interior finishes. It offers him BOTH doors — proceed in
+       writing, or fix it and tell me who — because a refusal with only one door
+       is the thing that gets a floor guy replaced instead of answered. And it
+       never states a consequence, a legal effect or a warranty position: it says
+       what he will and will not do, which is the only thing he actually owns. */
+    closing: [
+      "I'm not covering it on a conversation. Either give me the go in writing — that you want it laid over what's written above, as it is today — or tell me who's fixing it and by when, and I'll work to that date.",
+      "Once the glue is down nobody gets this slab back, and there's no way to show anybody what was under it. That's the whole reason this is in writing instead of a phone call."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.reads || []).filter(function (r) { return r && (r.loc || r.val); }).length;
+      if (n) return n + " reading" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Letter started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

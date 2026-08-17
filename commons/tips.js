@@ -599,6 +599,38 @@ window.COMMONS_TIPS = [
     w: "Backfill is the first gate on three other trades' ladders and nobody but you ever announces it. Two days is enough for them to show up. Two hours isn't." },
   { id: "walk-the-ditch-with-a-light", t: ["sitework"],
     n: "Walk the ditch with a light before you push, with the men who were actually in it.",
-    w: "Tools, ladders, pumps and blocks get buried, and the man who lost it will swear it was out." }
-];
+    w: "Tools, ladders, pumps and blocks get buried, and the man who lost it will swear it was out." },
 
+  /* ---- flooring: trade #13 -----------------------------------------------
+     Every one of these is a thing that costs a floor guy the whole job rather
+     than an hour, because he is the only trade whose work permanently seals
+     somebody else's mistake. Not one of them carries a number: what the reading
+     has to be is on his pail and in his carton, and it is not ours to say. */
+  { id: "read-it-yourself", t: ["flooring"],
+    n: "Take your own readings, and get the room in the photo.",
+    w: "A picture of a meter face is worth nothing later. Room, date, where you stood, what you used — because the day a seam lifts, that slab is under a floor and can never be tested again." },
+  { id: "one-dye-lot", t: ["flooring"],
+    n: "Check the run number on every pallet before you open the second one.",
+    w: "Two lots in one corridor is a shade line you will see for the life of the building, and it is never the mill's fault by the time anybody notices." },
+  { id: "let-it-sit", t: ["flooring"],
+    n: "Material sits in the space it is going into, on the floor, with the building running.",
+    w: "Not on the dock, not in the corridor, not in the van. How long and at what conditions is on your own instructions — but material that came off a cold truck this morning is not ready no matter what the schedule says." },
+  { id: "nine-by-nines", t: ["flooring"],
+    n: "9x9s or black mastic — you stop, and you do not decide what it is.",
+    w: "You do not scrape it, sand it or guess. It is the owner's survey and somebody else's licence, and the only thing you put in writing is that you stopped and told them." },
+  { id: "shoot-the-slab", t: ["flooring", "concrete"],
+    n: "Photograph the substrate before you cover it.",
+    w: "The moment the glue is down, the only evidence of what was under it is your phone. Every dispute about a floor is really a dispute about the thing under the floor." },
+  { id: "get-it-in-writing", t: ["flooring"],
+    n: "Told to lay it anyway? Get the go in writing before you spread glue.",
+    w: "Not a text saying 'go ahead' with no context — a reply to a message that says what you were standing on and what you measured. Ninety days later you are the only company still on the hook." },
+  { id: "answer-the-punch", t: ["flooring", "framing"],
+    n: "Never answer a punch list with 'we'll take care of it'.",
+    w: "That sentence accepts all forty lines, including the four that are somebody else's damage and the three that are not defects. Answer it line by line, in their order, with their numbers." },
+  { id: "attic-stock-now", t: ["flooring"],
+    n: "Put the attic stock on the original order.",
+    w: "It is in the spec, it is never in the takeoff, and by close-out the run is gone. Then it is your shortage argument and your money." },
+  { id: "protect-and-photo", t: ["flooring"],
+    n: "Cover it before you leave, and photograph the cover.",
+    w: "Everything that happens on that floor after you drive away is yours until you can show it was not. Whoever is coming back in with carts and ladders is coming back in whether anybody told you or not." }
+];

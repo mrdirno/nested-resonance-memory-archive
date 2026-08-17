@@ -58,12 +58,29 @@
    * files, so a gate asserts it rather than a comment hoping for the best —
    * tools/toolkit-gates/reconcile-join.mjs reads answer-back's ANSWERS array off
    * disk and fails if any rung lands here unclassified. */
+  /* THE LADDER IS PER-TRADE NOW, AND THIS MAP HAD NOT BEEN TOLD. answer-back
+   * reads POSITIONS, never words — [0] is the promise that wants a date, [1] is
+   * already settled, [2] is declined, [3] is blocked on the other side — so a
+   * trade may say all four in its own vocabulary. `creative` did, and not one of
+   * its four rungs was classified here, which made every answer a creative sent
+   * read to the requester as "he didn't say yes or no": the exact silent failure
+   * the classification exists to prevent. It survived because
+   * reconcile-join.mjs read this ladder off the page with a regex that a later,
+   * correct refactor stopped matching — a gate failing on its own wrapper while
+   * quietly running none of its real checks. Both are fixed in the same cycle;
+   * the gate now derives every trade's ladder off disk, so the NEXT trade that
+   * renames a rung fails the gate instead of failing a stranger. */
   var VERDICTS = {
     "will do": "yes",
     "in already": "in",
     "cant": "no",
     "cannot": "no",
-    "need to know": "ask"
+    "need to know": "ask",
+    // creative/items.js — same four positions, the trade's own words.
+    "doing it": "yes",
+    "already in": "in",
+    "thats an extra": "no",   // [2] is DECLINED: not committed under this list
+    "need from you": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score

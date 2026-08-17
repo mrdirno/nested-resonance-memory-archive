@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Before It Goes Down — Flooring Field Toolkit</title>
+<meta name="description" content="Everything that has to be off, set, moved or owned before you open a section — and before you cover one. Who owes it, where it is, and the gate it has to beat.">
+<meta name="apple-mobile-web-app-title" content="Before It Goes Down">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Flooring · you → everybody who owes you something in this room</span>
+    <h1 id="title">Before It Goes Down</h1>
+    <p class="lede" id="lede">Everything that has to be out, off, on, patched, undercut or decided before you can start — and before you glue. Who owes it, which room, and the gate it has to beat.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> set and <i>your</i> own installation instructions. This page sets no moisture limit, no flatness tolerance, no acclimation window, no temperature and no product data &mdash; verify all of it against your own submittal and the instructions in the box. It's an ask, not an approved detail, and <b>nothing on it authorizes anybody to do extra work.</b>
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Off which drawing</label><input type="text" id="hOff" placeholder="the sheet and revision" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so he can call you at the wall" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">The drawing and its revision is the whole argument &mdash; naming the sheet you took this off is the difference between a request the other foreman works to and one he re-walks with you next week.</p>
+  </section>
+
+  <section class="card">
+    <h2>What you need, and where</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Set the room once &mdash; it carries. Then it's pick the thing, pick the size, <b>Add</b>. The first time you pick something we tick the gate it usually has to beat; change it and yours sticks.</p>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="who" class="on">Who</button>
+        <button type="button" data-g="area">Where</button>
+        <button type="button" data-g="by">When</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">Tap a row when he commits to it, tap it again when you've <b>seen it in</b>. The pencil opens it to fix a detail, flag it as blocking, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; one walk, one message each</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Send to</span>
+      <div class="seg" id="segWho"></div>
+    </div>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Still open</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">Pick a trade and you get <b>his list only</b> &mdash; nobody has to read somebody else's items to find his own. <b>Still open</b> is the follow-up you send on Thursday. The spreadsheet copy is the whole list with a tab between the columns, and it's also your backup: this lives in this browser on this phone, so send yourself that copy at the end of a big walk.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the Field Toolkit. Asking for something that isn't on the list, or aiming at a trade that isn't there? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+  <p class="credit">&#10022; <b>Walk it</b> &mdash; the one-row-at-a-time pass you make with your hands full &mdash; was wished into existence by an anonymous AV tech.</p>
+
+  <footer class="foot">
+    <span id="footName">Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script src="../shared/reconcile.js"></script>
+<script>
+/* THE CROSS-BOUNDARY REQUEST — the first tool in the toolkit whose output leaves
+ * the company that made it (av/AV_SOCIETY.md §THE INTERFACE). Every tool before
+ * this one served ONE person sending something UP his own chain: his PM, his
+ * office, his super. The friction on a real job is not there. It is at the
+ * boundary — what the AV guy needs from the electrician, what the electrician
+ * needs from the floor crew, what nobody asks for until the glue is down.
+ *
+ * Nobody builds here because a cross-boundary document belongs to no single
+ * company's software, which is exactly why it is worth building.
+ *
+ * THIS PAGE IS A CONFIG. shared/rowlog.js owns the state, the grouping, the
+ * persistence, the document assembly and the copy; shared/rowlog.css owns every
+ * pixel; this file owns the WORDS and av/items.js owns the trade's vocabulary.
+ * Five other trades run the same two files with their own words.
+ *
+ * THE ONE THING THAT MAKES IT AN INTERFACE TOOL AND NOT A SECOND CHECKLIST:
+ * NEEDED-BEFORE. A cross-boundary ask has a deadline that belongs to somebody
+ * ELSE'S schedule. Ask for a back box the day after the board goes up and the
+ * answer is a change order and a patch; ask for a sleeve after the pour and the
+ * answer is a core bit. Every other field on here describes the ask. That one
+ * decides whether the ask is worth anything, so it is a first-class axis: you can
+ * group the whole list by it and read your own walk as a countdown.
+ *
+ * AND THE SECOND: ONE WALK, N MESSAGES. He walks the floor once and comes back
+ * with items for three different companies. Sending all of them one list is how
+ * every one of them ignores it. So SEND TO narrows the document to a single
+ * receiver, and the head addresses him by name.
+ *
+ * WHAT IT REFUSES TO BE (§THE SYSTEM OF RECORD): not an RFI — the GC numbers
+ * those in his own system and ours would be a second number nobody honours. Not
+ * a change order, not a submittal, not a permit, not a design. It is scoped to
+ * WHAT YOU SEND HIM, and the document says so in its own last line.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var R = window.TOOLKIT_ROUGHIN || { who: [], asks: [], milestones: [] };
+  var KEY = "toolkit." + (TRADE.slug || "av") + ".rough-in-request.v1";
+
+  var WHO = R.who || [], ASKS = R.asks || [], MILES = R.milestones || [];
+
+  function lookup(list, v) {
+    for (var i = 0; i < list.length; i++) if (list[i].v === v) return list[i];
+    return null;
+  }
+  function labelOf(list, v) { var x = lookup(list, v); return x ? x.label : (v || ""); }
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* Page copy comes from the trade's own vocabulary file — the title, the lede
+     and the closing sentence are the half a foreman notices, and a super who
+     reads somebody else's trade voice knows in one line that it wasn't written
+     for him. */
+  if (R.toolName) {
+    $("#title").textContent = R.toolName;
+    document.title = R.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (R.lede) $("#lede").textContent = R.lede;
+  if (R.eyebrow) $("#eyebrow").textContent = R.eyebrow;
+  if (R.warn) $("#warn").innerHTML = R.warn;
+  if (R.offHint) $("#offHint").textContent = R.offHint;
+  if (R.phJob) $("#hJob").placeholder = R.phJob;
+  if (R.phOff) $("#hOff").placeholder = R.phOff;
+  if (R.phFrom) $("#hFrom").placeholder = R.phFrom;
+  if (R.phArea) {
+    var la = document.querySelector('[data-learn="area"]'); if (la) la.placeholder = R.phArea;
+  }
+  if (R.areaLabel) {
+    var al = document.querySelector('label[for="rl_area"]');
+    if (al) al.childNodes[0].nodeValue = R.areaLabel + " ";
+  }
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* ── the receiver ─────────────────────────────────────────────────────────
+     Only the trades actually ON the list get a button. A row of six receivers
+     when he has asks for two is six ways to send the wrong man the wrong list. */
+  var sendTo = "";
+  /* THE ENGINE RENDERS ONCE INSIDE mount(), WHICH IS BEFORE `rl` EXISTS — and
+     docHead, onChange and this all run in that first render. Reading `rl` there
+     throws, the page script dies at mount, and what SHIPS is a page whose engine
+     works perfectly while every word this file owns is dead: no document, no
+     receiver buttons, no listeners. It fails silently and it looks fine.
+     (§SCARS — the first instance guards exactly this and it is why.) */
+  function rowsNow() { return rl ? rl.rows() : []; }
+  function receiversOnList() {
+    var seen = {}, out = [];
+    rowsNow().forEach(function (r) { if (r.values.who) seen[r.values.who] = 1; });
+    WHO.forEach(function (w) { if (seen[w.v]) out.push(w); });
+    return out;
+  }
+  function paintSendTo() {
+    var box = $("#segWho"); if (!box) return;
+    var list = receiversOnList();
+    if (sendTo && !list.filter(function (w) { return w.v === sendTo; }).length) sendTo = "";
+    box.innerHTML = '<button type="button" data-w="" class="' + (sendTo ? "" : "on") + '">Everyone</button>'
+      + list.map(function (w) {
+        return '<button type="button" data-w="' + w.v + '"' + (sendTo === w.v ? ' class="on"' : "") + ">" + w.label + "</button>";
+      }).join("");
+    box.parentNode.style.display = list.length > 1 ? "" : "none";
+  }
+  function receiverLabel() {
+    if (sendTo) return labelOf(WHO, sendTo);
+    var list = receiversOnList();
+    return list.length === 1 ? list[0].label : "";   // one receiver = address him anyway
+  }
+  function applyFilters() {
+    var f = [];
+    if (sendTo) f.push("who:" + sendTo);
+    var s = $("#segScope").querySelector("button.on");
+    if (s && s.getAttribute("data-f")) f.push(s.getAttribute("data-f"));
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "item", nounPlural: "items", groupNoun: "group", groupNounPlural: "groups",
+    ungroupedLabel: "NOT SET",
+    emptyText: "Nothing on the list yet. Walk the room and add the first thing you need from somebody else.",
+
+    /* The ladder is about HIM, not about you: blank means he hasn't answered,
+       and the top of the ladder is you having laid eyes on it. Two taps over the
+       life of the request, and the tally turns into the chase list. */
+    statusKey: "status", statusOrder: ["Committed", "In"],
+    flagKey: "flag", flagValues: ["Blocking us", "Changed"],
+    groupOptions: [
+      { key: "who", label: "Who" },
+      { key: "area", label: "Where" },
+      { key: "by", label: "When" }
+    ],
+
+    /* TWO INDEPENDENT SCOPES ON ONE LIST, and needing both at once is the normal
+       case: "still open, for the electrician" is Thursday's message. */
+    filters: [{
+      v: "open", label: "still open",
+      emptyText: "Every item on this list is in. Nothing open.",
+      test: function (v) { return v.status !== "In"; }
+    }].concat(WHO.map(function (w) {
+      return { v: "who:" + w.v, label: "for " + w.label, test: function (v) { return v.who === w.v; } };
+    })),
+
+    fields: [
+      { key: "ask", label: "What you need", input: "select", lead: true, required: true,
+        neutral: "Pick one", options: ASKS },
+      { key: "who", label: "Who you're asking", input: "chips", sticky: true, wide: true },
+      { key: "area", label: "Room / area", input: "learn", sticky: true, placeholder: "CR-204 — then it's a button",
+        emptyHint: "Type the room off the drawing and it becomes a button for the rest of the walk." },
+      { key: "spec", label: "Size / type", input: "learn", wide: true, placeholder: "or type your own",
+        emptyHint: "Pick what you need above and the usual sizes show up here." },
+      { key: "place", label: "Height / run", input: "text",
+        placeholder: "60 AFF · or: to the ceiling above the rack" },
+      { key: "by", label: "Needed before", input: "chips", sticky: true, wide: true },
+      { key: "status", label: "Where it's at", input: "chips" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything that won't fit above — what's in the way, what it feeds, who else is in that wall" }
+    ],
+
+    /* THE ASK GATES THE SIZES. The presets are the phrasings a man would have
+       typed, never a number this page asserts — and his own typed values are
+       merged in, so the third time he needs something we never listed it is a
+       button like everything else. */
+    optionsFor: function (key, cur, learned) {
+      if (key === "who") return WHO;
+      if (key === "by") return MILES;
+      if (key === "status") return ["Committed", "In"];
+      if (key === "spec") {
+        var a = lookup(ASKS, cur.ask);
+        var out = (a && a.specs ? a.specs.slice() : []);
+        (learned || []).forEach(function (v) { if (out.indexOf(v) === -1) out.push(v); });
+        return out;
+      }
+      return null;
+    },
+
+    /* WHO and WHEN are stored as slugs, so without this the other man opens a
+       message headed "EC" and "ROCK". The heading is the first thing he reads. */
+    groupName: function (value, key) {
+      if (key === "who") return labelOf(WHO, value);
+      if (key === "by") return labelOf(MILES, value);
+      return value;
+    },
+
+    rowMain: function (v) {
+      var a = labelOf(ASKS, v.ask) || "(nothing picked)";
+      return v.spec ? a + " — " + v.spec : a;
+    },
+    rowSub: function (v) {
+      return joinDots([v.area, v.place, labelOf(MILES, v.by), labelOf(WHO, v.who), v.note]);
+    },
+
+    /* ── THE WALK ────────────────────────────────────────────
+       THE LIST IS COMPOSED SITTING DOWN AND VERIFIED WALKING, and only the
+       first of those had a surface. Forty grouped rows on a 390px phone, read
+       at arm's length with a light in the other hand and gloves on, is a
+       pinch-zoom and a lost place. So: the same rows, one at a time, in type
+       you can read without stopping, behind two targets you can hit with a
+       knuckle — and it runs off the keyboard alone, which is the only input
+       model a screen with no pointer has.
+
+       IT WALKS WHAT THE FILTERS ALREADY SAY. "Still open, for the electrician"
+       is Thursday morning and needs no new control; the button names the set
+       it is about to walk, because walking a different list than the one he
+       filtered is the same class of lie as counting rows the document does not
+       contain (§SCARS).
+
+       IT ADDS NO NEW DOCUMENT, ON PURPOSE. It makes the one this page already
+       sends TRUE — "still open" is only worth sending if somebody laid eyes on
+       the list today, and the walk IS that act. So the end of it does exactly
+       one thing: puts the page on STILL OPEN and takes him to the message. */
+    walk: (function () {
+      var w = R.walk || {};                 // a trade may say it in its own words
+      return {
+        label: w.label || "Walk it",
+        allLabel: w.allLabel || "the whole list",
+        emptyScope: w.emptyScope || "nothing in this scope",
+        advance: w.advance || "It's in",
+        hold: w.hold || "Not yet",
+        blankLabel: w.blankLabel || "not committed",
+        noteKey: "note",
+        notePlaceholder: w.notePlaceholder || "what's in the way",
+        endTitle: w.endTitle || "That's the walk",
+        endDone: w.endDone || "are in",
+        endOpen: w.endOpen || "still open",
+        doneLabel: w.doneLabel || "What's still open",
+        closeLabel: w.closeLabel || "Back to the list",
+        onDone: function () {
+          var seg = $("#segScope"), open = seg.querySelector('button[data-f="open"]');
+          if (open) {
+            [].forEach.call(seg.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === open); });
+            applyFilters();
+          }
+          /* CENTRE, never "start": this page wears a sticky nav, and a card
+             scrolled to the top of the viewport is a card with its heading
+             under the bar (§SCARS — the sticky nav eats what it lands on). */
+          seg.scrollIntoView({ block: "center" });
+          /* AND SEND FOCUS WHERE THE EYES WENT. The walk hands focus back to the
+             launcher it was opened from, which is now a screen above — so a man
+             on a keyboard would finish the walk and find his cursor somewhere he
+             can't see. `preventScroll` keeps the scroll we just chose. */
+          var copy = document.querySelector("#copyBtn");
+          if (copy) { try { copy.focus({ preventScroll: true }); } catch (e) { copy.focus(); } }
+        }
+      };
+    })(),
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first — this gets
+       pulled up in October by a super searching his mail for "Building C", not
+       for the name of our tool. It degrades: no job, no leading separator. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var to = receiverLabel();
+      var subject = to
+        ? String(R.docSubjectWith || "what we need from {to}").replace("{to}", to)
+        : String(R.docSubject || "what we need before it closes");
+      var out = [joinDash([job, subject, c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (to) out.push("To: " + to);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Off: " + off);
+      out.push("");
+
+      var open = rowsNow().filter(function (r) { return r.values.status !== "In"; }).length;
+      var line = c.shown + (c.shown === 1 ? " item" : " items");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      out.push(line.toUpperCase());
+      if (!c.filters.length && open && open !== c.total) out.push("Still open: " + open + " of " + c.total);
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ITEM, spaced middots, empties dropped, and the axis the list
+       is grouped by is dropped from the line because it is already the heading.
+       No padded columns: they look square in the preview and arrive as mush in a
+       proportional font on the other man's phone. */
+    docRow: function (v) {
+      var g = rl ? rl.group() : "who";
+      return joinDots([
+        g === "area" ? null : v.area,
+        labelOf(ASKS, v.ask),
+        v.spec,
+        v.place,
+        g === "by" ? null : labelOf(MILES, v.by),
+        g === "who" ? null : labelOf(WHO, v.who),
+        v.status === "In" ? "IN" : (v.status || "")
+      ].concat([v.note]));
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([v.area, labelOf(ASKS, v.ask), r.flag, labelOf(MILES, v.by), v.note]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES, shape #2's lesson carried
+       across): a document the receiver cannot reply to is a document he files.
+       Then the double-check line, which also says out loud what this is NOT. */
+    docFoot: function () {
+      var off = $("#hOff").value.trim();
+      return (R.closing || "Reply on this one with anything you can't hit and I'll re-walk it with you.")
+        + "\n" + "These are our locations off " + (off || "our drawings")
+        + " — check them against your own set before you rough anything in. This isn't an RFI or a change order and it doesn't authorize extra work.";
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + (R.docSubject || "rough-in needed") + ", " + c.total
+        + " items, " + c.today + (off ? ", off " + off : "")
+        + " — picked by hand off our drawings, verify before anybody roughs it in. Not an RFI, not a change order.";
+    },
+    tsvColumns: [
+      { label: "Who", key: "who", value: function (v) { return labelOf(WHO, v.who); } },
+      { label: "Room / area", key: "area" },
+      { label: "What's needed", key: "ask", value: function (v) { return labelOf(ASKS, v.ask); } },
+      { label: "Size / type", key: "spec" },
+      { label: "Height / run", key: "place" },
+      { label: "Needed before", key: "by", value: function (v) { return labelOf(MILES, v.by); } },
+      { label: "Where it's at", key: "status" },
+      { label: "Flag", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    /* AND THE RECONCILE CARD FOLLOWS THE LIST. Its report is a photograph, and
+       he walks the job with it open — settling a row by hand while the card
+       still offers it. Rebuilt on every change so the two cannot disagree. */
+    onChange: function () { paintSendTo(); syncCarry(); if (rc && rc.refresh) rc.refresh(); }
+  });
+
+  /* ── the ask's usual gate ─────────────────────────────────────────────────
+     A DEFAULT IS A CLAIM (§SCARS), so this one only ever fills a field that is
+     EMPTY and never overwrites a pick. Pick "sleeve" on a blank form and the
+     "before the pour" chip lights up; his own answer sticks from then on, because
+     both fields carry. The chip is visibly lit before he presses Add — it is a
+     suggestion he can see, not a value the tool slipped into the document. */
+  var askSel = document.querySelector('[data-k="ask"]');
+  if (askSel) askSel.addEventListener("change", function () {
+    var a = lookup(ASKS, askSel.value);
+    // The sizes belonged to the LAST pick; carrying them onto this one would put
+    // a back-box spec on a conduit line.
+    var sp = document.querySelector('[data-k="spec"]'); if (sp) sp.value = "";
+    var sl = document.querySelector('[data-learn="spec"]'); if (sl) sl.value = "";
+    if (a) {
+      ["who", "by"].forEach(function (k) {
+        var el = document.querySelector('[data-k="' + k + '"]');
+        if (el && !el.value && a[k]) el.value = a[k];
+      });
+    }
+    if (window.RowLog) rl.render();
+    repaintChips();
+    syncCarry();
+  });
+
+  /* The engine repaints its own chips on a select change; these two are hidden
+     inputs the engine wrote to directly, so their chip rows need the nudge. */
+  function repaintChips() {
+    ["who", "by", "spec", "status"].forEach(function (k) {
+      var box = document.querySelector('[data-chips="' + k + '"]'); if (!box) return;
+      var cur = (document.querySelector('[data-k="' + k + '"]') || {}).value || "";
+      [].forEach.call(box.querySelectorAll(".rl-chip"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-v") === cur);
+      });
+    });
+  }
+
+  /* Everything carries, so once there are rows the bar is: pick the thing, Add.
+     The summary keeps what's carrying visible without eight controls on screen. */
+  function syncCarry() {
+    var el = $("#carrySum"); if (!el) return;
+    var g = function (k) { var x = document.querySelector('[data-k="' + k + '"]'); return x ? x.value : ""; };
+    var s = joinDots([labelOf(WHO, g("who")), g("area"), labelOf(MILES, g("by"))]);
+    el.textContent = s ? "— carrying: " + s : "";
+  }
+
+  (function collapsePickers() {
+    var grid = document.querySelector("#bar .rl-grid"); if (!grid) return;
+    var d = document.createElement("details");
+    d.className = "more"; d.id = "pickers"; d.open = true;
+    var s = document.createElement("summary");
+    s.innerHTML = 'The details <span id="carrySum"></span>';
+    d.appendChild(s);
+    grid.parentNode.insertBefore(d, grid);
+    d.appendChild(grid);
+  })();
+  $("#bar").addEventListener("change", syncCarry);
+  $("#bar").addEventListener("click", function () { setTimeout(syncCarry, 0); });
+  $("#bar").addEventListener("input", syncCarry);
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+  $("#segWho").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-w]"); if (!b) return;
+    sendTo = b.getAttribute("data-w") || "";
+    paintSendTo(); applyFilters();
+  });
+
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    sendTo = "";
+    rl.clearAll();
+    paintSendTo(); applyFilters();
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  rl.restore();
+  paintSendTo();
+  syncCarry();
+
+  /* ── THE THIRD MESSAGE — his answer, laid back over the list that asked for it
+     (shared/reconcile.js, av/AV_SOCIETY.md §THE INTERFACE §THE RETURN LEG).
+
+     The loop shipped in two halves and stopped one message short: this page
+     asks, `answer-back.html` answers, and then the man who asked sits with the
+     reply in one hand and this list on the other screen, tapping rows one at a
+     time. Twenty asks come back as one message and he ticks the eight he can
+     find — and never notices the three the other man said nothing at all about,
+     which are the only three that matter, because silence is not a no.
+
+     IT IS AN INTAKE, NOT A FOURTH PAGE: the rows are already here, and a second
+     copy of a list is a second version of the truth. Nothing moves until he taps
+     the button, every pair is on the glass before he does, and the tick stops at
+     COMMITTED — `In` is this page's word for HE LAID EYES ON IT, and a text
+     message is not eyes. */
+  var rc = window.Reconcile ? Reconcile.mount({
+    after: $("#list").closest(".card"),
+    rows: function () { return rl.rows(); },
+
+    /* EVERY FORM THE LINE COULD HAVE TAKEN. docRow drops whichever axis the
+       list was grouped by, because that axis is the heading above it — so the
+       row he is holding reads one of four ways and this page cannot know which
+       walk it was copied on. Offer all four and the round trip through
+       answer-back (which stores his counterpart's ask verbatim, and never
+       re-phrases it) comes home as an EXACT match instead of a guess. */
+    matchText: function (v) {
+      var a = labelOf(ASKS, v.ask), w = labelOf(WHO, v.who), m = labelOf(MILES, v.by);
+      return [
+        joinDots([v.area, a, v.spec, v.place, m, w, v.note]),
+        joinDots([v.area, a, v.spec, v.place, m, v.note]),
+        joinDots([a, v.spec, v.place, m, w, v.note]),
+        joinDots([v.area, a, v.spec, v.place, w, v.note])
+      ];
+    },
+    /* THE ROW HAS TO BE IDENTIFIABLE ON ITS OWN LINE. The list can render two
+       rows as "Back box" and let the sub-line separate them, because they sit
+       under a heading and next to each other. Here each one is being matched
+       against somebody else's sentence, and two identical labels in a pairing
+       is the one place a man cannot check our work. */
+    label: function (v) {
+      var a = labelOf(ASKS, v.ask) || "(nothing picked)";
+      return joinDots([v.area, v.spec ? a + " — " + v.spec : a, v.place]);
+    },
+    /* The label already carries WHERE and WHAT. What a row nobody answered needs
+       beside it is the two things that decide what you do about it: the gate it
+       has to beat, and who owes it. */
+    sub: function (v) { return joinDots([labelOf(MILES, v.by), labelOf(WHO, v.who)]); },
+
+    /* A ROW WITH ANY ANSWER ON IT IS NOT NEWS. `He never mentioned these` is
+       about the asks still sitting at nothing — a row already committed or
+       already seen in does not become a grievance because this reply skipped
+       it. */
+    settled: function (v) { return !!v.status; },
+
+    /* ONE WALK, N MESSAGES — so one REPLY is one receiver's. If every row he
+       answered belongs to one trade, the unanswered block narrows to that
+       trade and names him; otherwise it stays whole. Reporting the GC's items
+       as `the electrician never mentioned these` is the page inventing a
+       grievance out of a filter it forgot to apply. */
+    scopeOf: function (v) { return v.who || ""; },
+    scopeName: function (k) { return labelOf(WHO, k); },
+
+    commitKey: "status",
+    commitLabel: "Committed",
+    onApply: function (ids) {
+      return rl.applyValues(ids.map(function (id) {
+        return { id: id, values: { status: "Committed" } };
+      }));
+    },
+    words: R.reconcile || null
+  }) : null;
+
+  if (rl.count()) { var p = $("#pickers"); if (p) p.open = false; }
+})();
+</script>
+</body>
+</html>

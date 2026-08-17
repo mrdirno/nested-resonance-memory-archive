@@ -1478,6 +1478,49 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **A GATE CAN GO BLIND WHILE LOOKING RED, AND THAT IS WORSE THAN GOING GREEN (2026-08-17).**
+  `reconcile-join.mjs` read answer-back's verdict ladder out of the shipped page with
+  `/var ANSWERS = \[([^\]]+)\]/` and then classified every rung against `reconcile.js`
+  VERDICTS. A later cycle correctly made the ladder per-trade — `var ANSWERS = (A.answers &&
+  A.answers.length === 4) ? A.answers.slice() : [...]` — and the regex stopped matching. The
+  gate printed **1 FAILED of 99** and stayed that way, which reads as one cosmetic assertion
+  about a source line. **Everything that mattered was inside `if (m)` and had not run since.**
+  When it was repaired to derive the fallback literal AND every trade's own declared ladder off
+  disk, it found on the first run that `creative` had renamed all four rungs — "Doing it",
+  "Already in", "That's an extra", "Need from you" — and **not one was classified**, so every
+  answer a creative sent came back to the requester as *"he didn't say yes or no."* THE RULE:
+  **a gate that fails must fail LOUDLY ABOUT ITS OWN COVERAGE, not about a wrapper** — if
+  reading the input fails, that is `checks = 0` for that section and it must say so. And this
+  is §SCARS' own "matching on words" one layer out: matching on SOURCE SHAPE rots the day
+  somebody improves the source, and the fix is the same fix — derive from data, never from
+  how the data happens to be written today.
+
+- **THE DEPLOY RUNS NONE OF THE TOOLKIT GATES (2026-08-17).** `deploy_bridge.yml` asserts the
+  artifact hard — the three trade lists against each other, the commons chip coverage, the
+  docspec contract, the feedback drop-in — and greps `tools/toolkit-gates/` **zero times**.
+  Every browser gate in that directory is a local pre-ship gate somebody has to remember to
+  run. Two live defects were found sitting on main this cycle purely because a stand-up
+  happened to run them: two different `commons/gear.js` rows under one id `marking-paint`
+  (the bag keys picks by id, so ticking one ticked both and neither could be removed alone),
+  and a digit — "811" — in a `names.js` row on a page whose rail 4 refuses digits outright.
+  Both had been shipping since trade #12. Not fixed by making CI slower: **recorded so the
+  next cycle knows the green deploy is not evidence the gates passed.** Run them.
+
+- **AN ENGINE FIELD NOBODY EVER DECLARED IS UNTESTED CODE WEARING A FEATURE'S CLOTHES
+  (2026-08-17).** `shared/note.js` has shipped `buildImpact` since shape #2 was extracted, and
+  `note.css` has styled `.impact` the whole time — the field §THE THREE SHAPES names as the
+  reason the note exists (*"ordered short fields, ONE OF WHICH IS THE IMPACT LINE EVERYONE
+  OMITS"*). Across twelve trades and twenty-odd note pages, **not one config ever wrote
+  `kind: "impact"`**, and the two pages that wanted it — `gc/weather-day.html` and
+  `hvac/repair-recommendation.html` — hand-rolled their own div beside it. Trade #13's pin is
+  the first live use, and it immediately surfaced that `buildImpact` is the only builder that
+  constructs its own wrapper and **never set `data-f`**, so `note-live-fields.mjs` — which
+  drives a page by exactly that attribute — could never have covered it. THE RULE: **when a
+  shared engine offers a capability no caller uses, that is not a spare part, it is an
+  unexercised path**; either a config uses it or the gate must assert its absence, because the
+  day somebody finally reaches for it they are the one who finds the bug.
+
+
 - **THE UI COPY WAS A PROMISE AND SIX PAGES BROKE IT IN THE SAME WORDS (2026-08-16).**
   Six order pages shipped a collapsed section headed **"typed once, saved on this phone"**
   over a hand-copied `var STICKY = [...]` / `var SKEY = "toolkit.<trade>.<page>.header.v1"`.
@@ -4631,3 +4674,108 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Base now normalised and `checked === 0` now FAILS; proven by removing the normalisation and
   re-running the command that had passed.
   https://mrdirno.github.io/vibe-cards/studio/
+
+- `2026-08-17` — **[AXIS:BREADTH]** **TRADE #13 IS THE FLOORING FIELD TOOLKIT — the first
+  family the counting rule could not have produced.** · **before:** both wells dry for this
+  lane (the AV well 0 new / 0 building every trade; the vibe-cards well being actively drained
+  by the persona500 lane, which shipped out of that pool five minutes before this cycle
+  started and had 20+ uncommitted files in that repo — claiming there is a collision, not a
+  service), no trade owed, stalest axis BREADTH at 10 lane-cycles. **§MASONRY set the method
+  at #11 — "the rule NOMINATES, the record DISPOSES" — and this is the cycle where the two
+  disagreed completely.** Re-counted off every served kit's own `who[]` roster rather than off
+  the matrix summary: steel 4 (dead by name — the bolt-up log, weld map, WPS and mill cert ARE
+  the IBC ch.17 special-inspection record), ceilings 3 (dead — ruled a DEPTH rung inside
+  framing), fire/sprinkler 3, doors/frames 3. **FLOORING SCORED ZERO**, alongside glazing,
+  insulation and demo, because a receiver roster can only name a party you hand paperwork to
+  and this trade arrives after all twelve served kits have gone home. · **after:** `flooring/`
+  live — hub + **6 tools** + vocabulary + credit ledger, `TRADES`, the `paths:` trigger, the
+  runtime switcher entry, the commons chip and **26 commons rows** (9 gear · 9 tips · 8 names).
+  **A FOUR-LENS PANEL CAME BACK 3-1 FOR THE TRADE WITH NO VOTES, AND THE FOURTH LENS WAS THE
+  SKEPTIC, WHOSE JOB WAS TO KILL: *"I could not kill it."*** All four independently killed the
+  top live nominee on the rule that killed steel — for a sprinkler contractor the certified
+  record IS the deliverable (NFPA 13 hydraulic calc sealed by a NICET III or PE, the
+  Contractor's Material and Test Certificate written into the standard, the ITM report already
+  owned and numbered by inspection software); what survived its refusal list was a
+  head-and-fitting order, one page, not a family. **KILL A SURVIVES HERE STRUCTURALLY RATHER
+  THAN BY DISCIPLINE, which is the whole reason this trade is buildable and sprinkler is not:**
+  flooring's numbers are not code tables, they are MANUFACTURER WARRANTY TERMS that disagree
+  with each other, so there is no number to supply even if we wanted to. Every page takes the
+  reading HE took and the limit HE typed off HIS own pail, prints both, and never says which
+  wins. **THE ARGUMENT WAS THEN VERIFIED OFF DISK RATHER THAN TAKEN FROM THE PANEL:** three
+  shipped kits already count down to this man's gate in their own words — `av/items.js`
+  *"Before floor goes down"*, `gc/items.js` *"Before floors go down"* (**the LAST rung its gate
+  ladder has**) and again *"Walk it with me before tile goes in"*, `low-voltage/items.js`
+  *"Before tile goes in"* — and **grepping every `who[]` on the rack returns no flooring
+  receiver at all**: `floor` appears only as a GATE and as `floorbox`, an electrical device.
+  Three trades name the moment; **not one of them can address the man.** That is the sitework
+  condition read off the opposite end of the job — the dirt crew owns the earliest gate, the
+  floor crew the last — and **glue does not reopen** is harder than a backfilled trench: a
+  bonded floor is not cut, pulled or dug, it is demolished, and the substrate under it is
+  somebody else's ninety-day-old mistake that the man who covered it now owns. **THE PIN IS
+  `give-me-the-go.html`, AND IT IS FIVE PROPOSALS COLLAPSED INTO ONE** — a 24-candidate roster
+  from three independent in-trade lenses went through a 20-year prune that killed more than
+  half, and the largest convergence in the pile by a mile was five separate names for one
+  letter (*Can't Lay On That · Floor's Not Ready · Before I Glue · Going Over It · Give Me The
+  Go*). It is named for the ASK, not the condition, deliberately: *"the floor's not ready"* is
+  a complaint and the same sentence ending in *"give me the go in writing"* is a document, and
+  that difference is the product. It offers BOTH doors — proceed in writing, or tell me who is
+  fixing it and by when — because a refusal with one door gets a floor guy replaced instead of
+  answered. **FIRST LIVE USE OF `kind:"impact"` IN THE PROGRAM, AND STANDING IT UP FOUND A
+  DEFECT IN A PATH THAT HAD NEVER EXECUTED.** `shared/note.js` has shipped `buildImpact` since
+  shape #2 was extracted and `note.css` has styled `.impact` the whole time; **no config on any
+  of twelve trades had ever declared it**, while `gc/weather-day.html` and
+  `hvac/repair-recommendation.html` each hand-rolled their own `.impact` div beside it. It is
+  the one builder that makes its own wrapper and **never set `data-f`** — so
+  `note-live-fields.mjs`, which drives a page BY THAT ATTRIBUTE, could not have tested an
+  impact field even if one had existed. Fixed in the engine, for every trade. **BACKPORT RIDER
+  FIRED THREE TIMES, on three independent classes, none of them the one I went looking for —
+  and two were RED ON MAIN with nothing in CI to catch them, because the deploy runs NONE of
+  the toolkit gates.** (1) `commons/gear.js` carried **two different rows under the id
+  `marking-paint`** (concrete+gc's, and sitework's) since trade #12; the bag keys picks BY ID,
+  so a man who ticked one was silently carrying both and could remove neither —
+  `commons-bag.mjs` had been failing on it and nothing ran it. (2) `commons/names.js` rail 4
+  refuses a digit in any string (*a name that needs a number to be right is certified data*)
+  and the sitework `the-ticket` row has been failing it on **"811"** since #12; now spelled
+  *eight-one-one*, which is also what a crew says out loud. (3) **THE SHARPEST ONE:
+  `reconcile-join.mjs` had gone BLIND while looking red.** It read answer-back's ladder with
+  `/var ANSWERS = \[([^\]]+)\]/`; a later, correct refactor made the ladder per-trade
+  (`(A.answers && A.answers.length === 4) ? A.answers.slice() : [...]`) and the regex stopped
+  matching — `ok(!!m)` went red, which reads as one cosmetic failure, but **every real check
+  was inside `if (m)` and none of them had been running.** Repaired to derive the fallback
+  literal AND every trade's own declared ladder off disk, it immediately found that
+  **`creative` renamed all four rungs — "Doing it" · "Already in" · "That's an extra" · "Need
+  from you" — and not one was classified in `reconcile.js` VERDICTS**, so every answer a
+  creative sent read to the requester as *"he didn't say yes or no"*. Both fixed; the gate now
+  fails the NEXT trade that renames a rung instead of failing a stranger. Exactly the class
+  §SCARS already records one layer down — matching on words means a gate stops testing the day
+  somebody improves the wording — and this is that class matching on SOURCE SHAPE. **THE
+  ACCENT WAS MEASURED AGAINST A TWELVE-CHIP RACK** and the measurement killed the obvious
+  picks: pure green scored the single widest gap on the board (dE 40.0) and is the worst chip
+  on it (the rack already carries three greens); every warm option lands inside a band that
+  already holds four chips, which is where wood tone would have gone; blue fails at 6.06 on
+  the nav exactly as sitework recorded. **WET SLAB #8FECFF survived** — hue 190, the one open
+  arc left (hvac mint 166 → electrical blue 200), separating by CHROMA rather than hue: nav
+  **10.76:1**, accentInk **12.30:1**, white on accentDeep **5.84:1**, and dE **31.0 / 31.7 /
+  32.9** to its three nearest neighbours against a rack whose tightest shipping pair is gc
+  against concrete at **19.3**. The semantic is the trade's gate rather than decoration — this
+  is the one trade on the rack whose day is decided by how wet the concrete is. **DELIBERATELY
+  NOT SHIPPED, in the prune's own ranking so the next cycle does not read them as oversights:**
+  `what-it-read` (the readings row log — the exhibit behind the pin, and the strongest unbuilt
+  rung), `dealer-call` (a vocabulary build the size of the supply-house order, whose
+  differentiator is the ORDER'S SECOND READING — everything that has to come off the same run,
+  including the attic stock that is in the spec and never called in until the run is gone), and
+  the write-up library, now owed on two trades. **GATES, all re-run green:** mobile-watertight
+  **125 pages × 320/360/390/430 × default and bumped, 0 failing** (all 8 flooring pages
+  individually too) · note-live-fields **334 fields / 27 pages** · getting-in **13/13 kits** ·
+  no-third-party **125/125** · commons-names **374 checks** and commons-bag **472 states, 0
+  failing** (was 470/1) · reconcile-join **110 checks** (was 99, of which the 5 that mattered
+  were dead) · rowlog-restore 31/31 · rowlog-commit-merge · reconcile-surface · pickfilter ·
+  menu-reachability · overlay-reachability · docspec 11 trades / 181 checks. **THEN THE JOB
+  ITSELF, DRIVEN ON THE REAL PAGE AT 390px:** the letter filled the way a mechanic fills it —
+  two conditions ticked, a reading row (location · method · his value, no threshold anywhere),
+  his own limit typed off his pail, the impact line with a chip appended to his own sentence
+  and the clock stamping `[ANSWER NEEDED TODAY]` — produced a 1,490-character document carrying
+  every one of 14 required elements, and **asserted NOT to contain** pass, fail, safe to
+  install, acceptable, in-spec, an RH percentage, lbs/1000sf or a flatness fraction. Zero page
+  errors on all 8. Storefront: one entry owed in `fieldToolkits.ts` — P5 pushes that repo.
+  https://mrdirno.github.io/nested-resonance-memory-archive/flooring/

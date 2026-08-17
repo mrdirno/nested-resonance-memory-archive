@@ -809,7 +809,12 @@ window.COMMONS_NAMES = [
   { id: "the-ticket", n: "The ticket", t: ["sitework"],
     o: "The one-call locate ticket: a number, a day it starts and a day it dies, all three owned by the centre that issued it.",
     a: [{ n: "the locate", by: "crews, meaning both the ticket and the paint", k: "say" },
-        { n: "811", by: "US crews, after the number they ring", k: "reg" },
+        /* SPELLED, NOT DIALLED. `commons-names.mjs` rail 4 refuses a digit in any
+           string on this page — a name that needs a number to be right is
+           certified data — and this row has been failing it since trade #12
+           shipped, because nothing in CI runs that gate. Spelling it is also
+           what a crew actually says out loud. */
+        { n: "eight-one-one", by: "US crews, after the number they ring", k: "reg" },
         { n: "dial before you dig", by: "Australian and New Zealand hands", k: "reg" },
         { n: "the one-call", by: "supers and the paperwork", k: "sup" }],
     no: "A permit, and not your paperwork. Nobody on your crew opens one, renews one, or gets to say a mark is still good." },
@@ -835,6 +840,53 @@ window.COMMONS_NAMES = [
     o: "The wire buried with non-metallic pipe so a locator can find it later, with a tail brought up where somebody can clip on to it.",
     a: [{ n: "locate wire", by: "utility crews", k: "say" },
         { n: "tracer", by: "everybody, once it is in the ditch", k: "say" }],
-    no: "Detectable warning tape. Tape is a warning to a bucket that has already got close; wire is the only one of the two a locator can actually read." }
-];
+    no: "Detectable warning tape. Tape is a warning to a bucket that has already got close; wire is the only one of the two a locator can actually read." },
 
+  /* ---- flooring: trade #13 -----------------------------------------------
+     The flooring counter is where an outsider gets caught fastest, because half
+     this trade is still bought by the square YARD and the other half by the box.
+     Every row here is a word that changes what lands on the truck. */
+  { id: "cushion", n: "Cushion", t: ["flooring"],
+    o: "The layer that goes under stretched-in carpet, before the carpet does.",
+    a: [{ n: "pad", by: "most of the US, and every homeowner", k: "reg" },
+        { n: "underlay", by: "the UK, Ireland, Australia and New Zealand", k: "reg" },
+        { n: "rebond", by: "the counter, for the common bonded-foam kind", k: "sup" }],
+    no: "Underlayment. Underlayment is the hard sheet or membrane that goes under a hard-surface floor; cushion is soft and it goes under carpet." },
+  { id: "broadloom", n: "Broadloom", t: ["flooring"],
+    o: "Carpet that comes off a wide roll and gets cut to fit, as against carpet tile.",
+    a: [{ n: "roll goods", by: "the trade and the warehouse", k: "sup" },
+        { n: "wall-to-wall", by: "homeowners and retail", k: "reg" }],
+    no: "Carpet tile — modular squares laid loose or on a release adhesive. The two are ordered, priced and cut on completely different logic, and broadloom is bought by the square YARD in a trade that quotes everything else in feet." },
+  { id: "topset-base", n: "Topset base", t: ["flooring"],
+    o: "The strip of rubber or vinyl at the bottom of the wall that goes on AFTER the floor, sitting on top of it.",
+    a: [{ n: "cove base", by: "most of the trade, for the kind with a toe on it", k: "say" },
+        { n: "wall base", by: "the spec and the architect", k: "reg" },
+        { n: "four-inch", by: "the counter, because that is the height everybody orders", k: "sup" }],
+    no: "Wood or MDF baseboard, which the carpenter sets before you get there and which you cut in to. Ask for base without saying topset and you can get either." },
+  { id: "cutback", n: "Cutback", t: ["flooring"],
+    o: "The old black asphaltic adhesive left stuck to the slab when old resilient flooring comes up.",
+    a: [{ n: "black mastic", by: "most of the trade", k: "say" },
+        { n: "the old glue", by: "everybody on site", k: "say" }],
+    no: "Something you decide about. Under old tile of a certain age it is the tell, and there the word stops being a vocabulary question: you stop, you notify, you do not scrape it, and you do not say what is in it. That is the owner's survey and a licensed contractor's job." },
+  { id: "self-leveler", n: "Self-leveler", t: ["flooring", "concrete"],
+    o: "A pourable cementitious product that finds its own level over a slab that is out of flat.",
+    a: [{ n: "SLU", by: "the trade and the submittal", k: "sup" },
+        { n: "mud", by: "some crews, for anything poured on a floor", k: "say" }],
+    no: "Patch, skim or feather — hand-troweled fixes for a local low spot. Three different products at three different prices, so 'leveling the floor' on a ticket means nothing and gets paid like nothing." },
+  { id: "stair-nose", n: "Stair nose", t: ["flooring"],
+    o: "The shaped piece that finishes the front edge of a tread where the floor turns down a step.",
+    a: [{ n: "nosing", by: "the spec and the submittal", k: "reg" },
+        { n: "bullnose", by: "some crews and most homeowners", k: "say" }],
+    no: "A reducer or a T-molding, which are transitions between two floors on the same level. Stair parts are the line that gets left off an order and they are the longest to get back." },
+  { id: "power-stretcher", n: "Power stretcher", t: ["flooring"],
+    o: "The long lever tool that stretches stretched-in carpet across a room and holds it while it is hooked onto the tack strip.",
+    a: [{ n: "the stretcher", by: "everybody on the crew", k: "say" },
+        { n: "knee kicker", by: "people who think it is the same tool", k: "reg" }],
+    no: "A knee kicker. A kicker positions and a stretcher stretches, and carpet installed with a kicker alone ripples by spring — which comes back as a workmanship claim, not a tool argument." },
+  { id: "tack-strip", n: "Tack strip", t: ["flooring"],
+    o: "The thin wood strip with angled pins nailed around the perimeter that holds stretched-in carpet down.",
+    a: [{ n: "tackless", by: "the trade and the counter — because it replaced tacks", k: "sup" },
+        { n: "gripper", by: "the UK and Ireland", k: "reg" },
+        { n: "smoothedge", by: "Australia and New Zealand", k: "reg" }],
+    no: "Anything you use with glue-down carpet, which has no strip at all. And despite the name it is covered in pins, so it is the one thing on this list you never sweep up by hand." }
+];
