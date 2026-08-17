@@ -170,6 +170,17 @@ own paperwork/communication friction. Mechanics:
   config (name · slug · palette · registry) rather than fork it — one runtime, many
   trades — and stage each `<trade>/` into the Pages artifact + assert it, exactly as
   `av/` is. A top-level trades hub lists them.
+- **AND THE SITE-ROOT REGISTRY, WHICH THIS LIST DID NOT NAME EITHER (found at trade #13).**
+  `HELIOS-BRIDGE/components/UIComponents.tsx` carries the TOOLS list the site root renders,
+  and a trade staged into the artifact with no entry there is a whole toolkit nothing at the
+  root links to. The deploy asserts it — *"trade 'X' is staged but has NO entry in the
+  site-root TOOLS registry"* — and it caught flooring on its first push, which is the assert
+  working and this checklist failing. **That makes FOUR lists a trade has to join and one
+  directory it has to be: `TRADES` + the `paths:` trigger in the workflow, the runtime's own
+  `TRADES` array in `shared/toolkit.js`, `COMMONS_TRADES` with real rows behind it, and this
+  one.** Every one of them is asserted in CI, so none of them can rot silently — but a
+  checklist that omits one still costs a red deploy, and this is the second time that omission
+  has been the story of a stand-up.
 - **AND THE COMMONS, IN THE SAME CYCLE — this list not naming it is how the hole got
   dug twice.** A new trade is not a directory, it is a MEMBERSHIP: `commons/commons.js`
   `COMMONS_TRADES` gets the chip, and `commons/gear.js` + `commons/tips.js` get rows

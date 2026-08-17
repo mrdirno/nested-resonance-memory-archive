@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -350,6 +350,24 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew who owns the earliest gate on the job — before we close it first: run by run, what is in the ditch, what is still open, who has been told and the time the dirt goes back, sent as one message to everybody with something in it. Nothing on it is a slope, a soil class, a lift, a proctor or a locate; the trench protection and the compaction spec belong to the people who engineer them.',
     icon: <Tractor size={18} />,
+  },
+  {
+    // TRADE #13. THE FOURTH LIST, and §TRADE EXPANSION did not name it either —
+    // the same omission that let framing ship with no commons chip is why the
+    // deploy asserts this one: a trade staged into the artifact with no entry
+    // HERE is a whole toolkit nothing at the site root links to. The assert
+    // caught it on the first push of this trade, which is the assert working.
+    //
+    // Ruler, and the sibling rule holds: an icon is the gear the trade carries,
+    // never the thing it builds. Plank and tile ARE what it builds; the
+    // STRAIGHTEDGE is the one tool on the van that decides whether the day
+    // happens, because what you can see under it is the whole argument this kit
+    // exists to send — and once the floor is over it, nobody can see it again.
+    name: 'Flooring Field Toolkit',
+    href: './flooring/',
+    tag: 'field',
+    blurb: 'Isomorphed to the last trade in the building, and the only one whose work permanently seals somebody else\u2019s mistake \u2014 give me the go first: the slab reads wet or the heat never ran and the super says put it in, so what you are standing on, what you measured, what your own instructions require and what it costs to sit go out in one letter that ends give me the go in writing or tell me who is fixing it. It supplies no moisture number, no flatness tolerance, no acclimation window and no product data, and it never says ready, acceptable or safe to install: your reading prints beside the limit you typed off your own pail.',
+    icon: <Ruler size={18} />,
   },
 ];
 
