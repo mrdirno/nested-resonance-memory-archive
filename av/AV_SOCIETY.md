@@ -2835,6 +2835,23 @@ Caught by looking at a screenshot of the real page at 390px. The count and the w
 sit at the top of the list, where the decision is being made. **A gate proves a control
 exists; only eyes prove the order the controls are in.**
 
+### 2026-08-16 — AN INVENTORY THAT READS THE DISK CANNOT SEE AN UNSHIPPED TRADE
+A whole toolkit — `sitework/`, a hub and six tools — was built, and every count on this
+lane called it SERVED. The live URL was a **404**. The dir was never `git add`ed, and
+neither were the four edits that name it: the workflow's `TRADES` list, the `paths:`
+trigger, the runtime's kit switcher, the commons chip. **The artifact IS the site**, so a
+trade that exists only in a working tree is a trade nobody can open, and the bump's LIVE
+STATE line reported twelve trades and 89 tools because it reads the DISK. It was wrong by
+a whole trade and could not have been anything else: a disk-derived inventory measures
+what was WRITTEN, and shipping is a different verb. Nothing failed — no red deploy, no
+broken gate, no error anywhere — because nothing ran. **The failure mode of an unstaged
+ship is silence, and silence reads identically to success on every instrument that does
+not fetch the URL.** The BACKPORT half of the same batch was stranded with it: eleven
+hubs' favourite star was the trade accent on near-white (masonry's #B9EE1B is unreadable
+there), fixed on all twelve and live on none. Standing rule, and it is one line: **before
+claiming any axis, `curl` the live URL of the last thing this lane says it shipped.** A
+count is not a ship; a 200 is not a render; a render is not a feature.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4343,3 +4360,24 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   switching back restores, 0 page errors. A 200 is not a render and a render is not a feature;
   this drove the job the page claims.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/pull-list.html
+- `2026-08-16` — [AXIS:BREADTH] **TRADE #12 IS ACTUALLY LIVE: the Sitework Field Toolkit.**
+  Before: `sitework/` — hub, 6 tools, items vocabulary, credit ledger — sat UNCOMMITTED on
+  disk while every disk-derived count called it served and the URL returned **404**; the
+  workflow's `TRADES` list, the `paths:` trigger, `shared/toolkit.js`'s switcher entry, the
+  commons chip and its 35 commons rows (11 gear · 14 tips · 10 names) were all stranded in
+  the same unstaged batch. After: committed by pathspec, deploy green, **all 8 pages 200 and
+  rendering**. `HELIOS-BRIDGE/App.tsx` was deliberately left out — its working-tree change
+  imports an untracked component and staging it would have failed the vite build and taken
+  the whole deploy, and this trade, down with it. **BACKPORT RIDER FIRED** — the favourite
+  star's ON state was the trade accent on near-white across the rack; each hub now carries a
+  `--deep` token (its own colour taken down to something legible) on `--tint`, swept and
+  **verified live on all 12 hubs**, sitework included. **LIVE-VERIFIED at the artifact:** 8
+  pages × 320/360/390/430px — 0 horizontal scroll, 0 overflow, 0 tap target under 44px, 0
+  console errors; then the job itself on the LIVE URL — two runs logged into *Before We
+  Close It* produce the quitting-time message with the "nobody touches" block, the
+  when-the-dirt-goes-back line and the refusal paragraph, and an electrician's pasted list
+  parses into 3 answerable rows in *What I'll Leave Open*. Storefront entry made TRUE in
+  persona500 `fieldToolkits.ts` (accent `#FFDDA3` identical to `trade.js`, 6 tools,
+  match tokens MEASURED against all 1,027 persona ids — `grading` and `operator` killed for
+  hitting sports personas). P5 owns pushing that repo.
+  https://mrdirno.github.io/nested-resonance-memory-archive/sitework/
