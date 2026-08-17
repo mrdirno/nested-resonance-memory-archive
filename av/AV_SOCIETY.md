@@ -2852,6 +2852,48 @@ there), fixed on all twelve and live on none. Standing rule, and it is one line:
 claiming any axis, `curl` the live URL of the last thing this lane says it shipped.** A
 count is not a ship; a 200 is not a render; a render is not a feature.
 
+### 2026-08-17 — A MIGRATION GATE THAT SEEDS ITS OWN FIXTURE TESTS THE SHAPE IT IMAGINED
+`jobcard-scope.mjs` has asserted "nobody loses a gate code on the way in" since the day the
+card shipped, and it asserted it by WRITING the legacy record itself:
+`localStorage.setItem(legacyKey, JSON.stringify(seed))` — a flat id→value bag. That is what
+the six hand-rolled pages wrote, and all six passed honestly. Point the same gate at a page
+whose header was kept by `shared/draft.js` and it still passes — while every saved answer on
+that phone is dropped, because `Draft.keep`'s only writer stores `{v, s}` and `adopt()` read
+`old[id]` at the top level, found nothing, and declined **silently**. Green gate, empty card,
+no error, and the man has no reason to look. **A fixture the gate invents tests the gate's
+belief about the page. Seed what the PAGE actually writes — and when a codebase has more
+than one persistence shape, seed EVERY shape and name it in the failure.** Proved by
+disabling the unwrap: the flat seed stayed green and the draft-wrapped seed reported the
+account, the PO and his name+cell all coming back empty. The same hole stands open for any
+future card on `av/consumables.html` or `av/report-builder.html`, the two other `Draft`
+headers — which is why the fix went into the module and the gate, not into the page.
+
+### 2026-08-17 — REPLACING A MANUAL GUARD TURNS IT INTO A FOOT-GUN, AND ONLY EYES SAW IT
+`shared/dropoff.js` shipped sticky with its own guard: a line reading *"filled in for
+&lt;job&gt;"* and a button reading *"different job — clear this"*. Correct, while it was the
+only guard there was. The moment the block became per-job, both inverted. The button now
+destroys the answers of the job he is standing on — the exact thing the change was made to
+protect — and the staleness line can no longer fire on a stale job at all, only on a
+**rename**: he fixes a typo in the job name and the block tells him his gate code belongs to
+somebody else. A false alarm on the one control whose entire value is being believed.
+**Every gate passed** — the leak gate, the reload gate, the mobile gate, the third-party
+gate — because all of them test behaviour and neither of these is a behaviour. Both are
+CLAIMS, printed on the glass. Screenshotting the real page at 390px is what found them.
+**The rule: when an automatic guard replaces a manual one, the manual one is not redundant,
+it is WRONG — its words are now a lie and its action is now damage. Retire it in the same
+change, or it outlives the problem it was for.** Same class as the `<summary>` on
+`hvac/truck-stock.html` that promised "typed once, saved on this phone" about two fields
+that had just stopped being saved on the phone.
+
+### 2026-08-17 — THE GATE ENROLLED A PAGE ON THE STRENGTH OF A COMMENT
+`jobcard-scope.mjs` finds its pages with `src.includes('shared/jobcard.js')`. The header fix
+on `hvac/truck-stock.html` — a page that deliberately has NO job card, because a van is
+restocked at the shop — was explained in a comment naming the module it was deliberately not
+using. The gate enrolled the page and failed it for not rendering a chip it must never have.
+Cheap to spot and worth the line, because the failure mode is not always this loud: a
+substring that appears in PROSE is not evidence of a CAPABILITY. **Match on the call
+(`JobCard.mount`), not on the mention.**
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4381,3 +4423,55 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   match tokens MEASURED against all 1,027 persona ids — `grading` and `operator` killed for
   hitting sports personas). P5 owns pushing that repo.
   https://mrdirno.github.io/nested-resonance-memory-archive/sitework/
+
+- `2026-08-17` — **[AXIS:BACKPORT]** **THE PAGE HOLDING THE ONLY REAL GATE CODE WAS THE ONE
+  STILL GUARDING IT WITH A BUTTON HE HAS TO REMEMBER TO PRESS.** The well was dry (0 new, 0
+  building, all trades) and no family is owed, so the stalest axis governed — and the
+  previous cycle had named this cycle's work itself: five order pages got `shared/jobcard.js`
+  and `plumbing/supply-house-order.html` was left as "the named remainder", because it forks
+  `Draft.fields`/`Draft.keep`. **The remainder was bigger than the fork.** The gate code on
+  that page is not in the header at all — it is in the `shared/dropoff.js` block, sticky
+  since it shipped, keyed to the PHONE, guarded by a notice and a manual clear button: the
+  exact shape the foreman panel killed three days later when it designed the card. Mounting
+  the card alone would have swapped the account and the PO and left the gate code sitting
+  there — a page that LOOKS job-aware while the one answer a truck is dispatched on stays
+  per-phone, which `jobcard-scope.mjs` already calls strictly worse than the sticky header it
+  replaced. **So: both, or neither.** `shared/dropoff.js` now takes a key per JOB (`rekey`,
+  saving the job he is leaving before loading the one he arrives at); **job #1 keeps the
+  original key, so no phone with a saved gate code is migrated at all**; under a card it
+  drops the "filled in for &lt;job&gt;" line and re-words its clear button (§SCARS ×2).
+  **A 3-lens panel (a two-job plumber · a supply-house counterman · a skeptic told to kill
+  it) moved two scopes I had wrong:** `fAcct` rides the JOB here — alone among the six pages
+  with a card, because none of the others send anything to a counter that BILLS, and the
+  counterman priced it, *"a GC-furnished job billed to THEIR account, a warranty pull kept
+  off billable job cost, service kept apart from new-construction — several times a week"* —
+  and `fPick` rides THE ORDER, where the tech put it (*"whoever's free to run the counter
+  today, not last month's name"*). The skeptic returned BUILD-NARROWER on three conditions
+  and independently found the `{v,s}` adoption hole; all three were already in the tree, and
+  its fourth objection — that a page must not run `Draft.keep` beside the card, since the
+  card assigns `el.value` and fires no event — is why the parallel writer was **deleted**,
+  not left running. **`hvac/truck-stock.html` still gets no card** (a van is restocked at the
+  shop; both field lenses re-confirmed the picker is ceremony there) — **but the picker was
+  never the only fix, and skipping the page skipped the bug**: `fHow` and `fCharge` were
+  sticky forever, so a will-call from a fortnight ago and last month's Warranty code printed
+  onto today's restock. The tech found his *"at 6:40 with a hot call waiting on a contactor
+  sitting on a shelf nobody sent anywhere."* Both now ride the list by the `pull-list`
+  mechanism verbatim — default pre-captured, `touched` including them, restored on reload,
+  reset by Clear — and the `<summary>` promising "typed once, saved on this phone" changed
+  with the code. **BACKPORT RIDER FIRED:** swept all 12 trades for the class. 5 pages already
+  carried the card, 2 fixed here, `hvac/repair-recommendation` clean (`fBy`/`fCo` are both
+  device), `av/cable-list` clean (header rides the list, `fFinish` device-keyed under its own
+  key), `av/consumables` deliberately left (its only sticky value is the job NAME, in a box
+  at the top of the glass — no secret behind a drawer) and named as the remainder. Gates:
+  `jobcard-scope` **PASS 6** — extended so the drop-off ids are leak-tested (they are not
+  `f`-fields and scope-derivation cannot see them) and so it seeds **both** legacy shapes;
+  **proved by injecting the leak, 12 failures**, and by disabling the unwrap, 3 more —
+  `order-live-header` **OK 8** · `dropoff-block` **OK** · `no-third-party` **116 pages, 0
+  requests** · `mobile-watertight` **PASS** both changed pages. **LIVE-VERIFIED on the real
+  URL:** job A's PO, account, gate code and signer all reach the counter's document; job B
+  opens **empty** on all four with his name+cell kept; **none of job A's four appears in job
+  B's copied document**; switching back restores all four; it survives a reload; truck-stock
+  keeps a changed how/charge across a reload and Clear puts both back and they stay back; 0
+  page errors. Storefront: no new tool, the plumbing note in `fieldToolkits.ts` now names the
+  capability (P5 pushes that repo).
+  https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html
