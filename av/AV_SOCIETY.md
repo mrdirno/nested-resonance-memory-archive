@@ -4788,5 +4788,22 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   and the clock stamping `[ANSWER NEEDED TODAY]` — produced a 1,490-character document carrying
   every one of 14 required elements, and **asserted NOT to contain** pass, fail, safe to
   install, acceptable, in-spec, an RH percentage, lbs/1000sf or a flatness fraction. Zero page
-  errors on all 8. Storefront: one entry owed in `fieldToolkits.ts` — P5 pushes that repo.
+  errors on all 8. Storefront entry made TRUE in persona500 `fieldToolkits.ts` — 13 toolkits
+  now, accent `#8FECFF` identical to `trade.js`, 6 tools, and match tokens MEASURED against
+  all 1,027 persona ids: bare `floor` hits `casino_floor_manager`, bare `hardwood` is
+  basketball slang against a corpus carrying EIGHT basketball personas, and bare `tile` is a
+  substring of textile — all three killed, `red_carpet` excluded ahead of the drift. P5 owns
+  pushing that repo. **THE FIRST PUSH WAS REFUSED BY THE DEPLOY, AND THE REFUSAL IS THE
+  OTHER HALF OF THIS ENTRY:** the trade cleared the three lists §TRADE EXPANSION names and
+  failed on a FOURTH the book never mentioned — the site-root TOOLS registry in
+  `HELIOS-BRIDGE/components/UIComponents.tsx`, without which a whole staged toolkit is linked
+  from nothing at the root. **Second stand-up running whose story is a list the checklist
+  omitted** (the first was the commons chip, scarred above), so §TRADE EXPANSION now names
+  all four. Fixed, re-pushed, **deploy green**, and **LIVE-VERIFIED AT THE ARTIFACT**: all 11
+  flooring URLs 200, the runtime and commons carrying the slug in the DEPLOYED bundles, the
+  `data-f` fix and the four new VERDICTS greped out of the deployed `note.js` and
+  `reconcile.js` rather than the source, then the letter driven end to end ON THE LIVE PAGE —
+  14/14 elements present, 8/8 refusals absent, hub rendering all six tools with the pin first
+  and the accent painted, zero page errors, and mobile-watertight re-run GREEN AGAINST
+  PRODUCTION.
   https://mrdirno.github.io/nested-resonance-memory-archive/flooring/
