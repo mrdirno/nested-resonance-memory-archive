@@ -65,9 +65,14 @@
     '.do-chip{font:inherit;font-size:13px;line-height:1.2;min-height:44px;padding:8px 11px;cursor:pointer;',
     '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#5D656E);',
     '  display:inline-flex;align-items:center;text-align:left}',
-    '.do-chip.on{background:var(--tint,#F1F1EC);border-color:var(--flag,#5D656E);color:var(--ink,#12161A);font-weight:600;',
-    '  box-shadow:inset 0 0 0 1px var(--flag,#5D656E)}',
-    '.do-chip:focus-visible{outline:2px solid var(--flag,#5D656E);outline-offset:2px}',
+    /* DRAWN IN `--deep`, for the reason measured and written out in full at the
+     * same rule in shared/jobcard.js: the accent is picked against the DARK nav,
+     * so it is a light colour, and this chip is on WHITE — 1.30–2.28:1 on eleven
+     * of the twelve trades, and the twelfth (plumbing, 3.58) is the only trade
+     * this block had ever shipped on, which is why the defect survived. */
+    '.do-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#5D656E));color:var(--ink,#12161A);font-weight:600;',
+    '  box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#5D656E))}',
+    '.do-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#5D656E));outline-offset:2px}',
     '.do-when{display:flex;gap:6px;align-items:center;flex-wrap:wrap}',
     /* 44px on the clock, not the 38px the text fields inherit: this one is a
        discrete tap target with a stepper inside it, and it is the control a man

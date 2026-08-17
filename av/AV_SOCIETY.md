@@ -2894,6 +2894,40 @@ Cheap to spot and worth the line, because the failure mode is not always this lo
 substring that appears in PROSE is not evidence of a CAPABILITY. **Match on the call
 (`JobCard.mount`), not on the mention.**
 
+### 2026-08-17 — THE LIT STATE WAS DRAWN IN A COLOUR MEASURED AGAINST A DIFFERENT BACKGROUND
+`.jc-chip.on` and `.do-chip.on` — the SELECTED job chip and the selected delivery chip —
+drew their border and their inset ring in `var(--flag)`, the trade accent. Every accent on
+this rack is chosen and measured against the DARK NAV at a 7:1 bar, which makes it a LIGHT
+colour **by construction**; both chips are drawn on WHITE. Measured accent-against-white on
+all twelve trades: **eleven land between 1.30:1 and 2.28:1**, and against the grey line the
+lit state replaces (`--line #BABEB6`) the swap is 1.01–1.45:1 — a hue change with no
+luminance step at all. The tint behind it adds 1.07–1.19:1. The whole lit state was resting
+on bolder text. **The twelfth trade is plumbing at 3.58:1, and plumbing was the only trade
+`shared/dropoff.js` had ever shipped on** — the one adopter was the one case that worked,
+which is why four months of eyes on it found nothing.
+Two lessons, and the second is the transferable one. First: a token's contrast is a property
+of a PAIR, and carrying a token from the surface it was measured on to a different surface
+carries none of the measurement with it. Second: **a shared component with ONE adopter has
+not been tested, it has been sampled once** — the fix and its 11 failures only appeared when
+a twelfth trade with the most extreme accent on the board mounted the same block.
+Fixed in both shared modules as `var(--deep, var(--flag, …))` — `--deep` is the token every
+trade already ships and it measures **5.21–8.46:1** against white on all twelve, so one
+two-line change carried it to every trade at once instead of twelve page-local overrides.
+The first draft WAS a page-local override on the new page, and deleting it was the fix.
+Gated: `jobcard-scope.mjs` now asserts the lit chip against the unlit chip beside it at a
+3:1 bar, **proved by reverting the shared rule — 6 of 7 job-card pages fail, plumbing passes.**
+
+### 2026-08-17 — A GATE THAT FAILS ON SILENCE HAS NO WORD FOR "THERE WAS NOTHING TO ADOPT"
+`jobcard-scope.mjs` fails any page whose `JobCard.mount` declares no `legacyKey`, and it is
+right to: the check exists because a migration that silently declines loses a gate code a
+foreman has had saved since June, and OMISSION is exactly how that goes missing. Then a page
+was born WITH a card — no predecessor, nothing at an older key, nothing to lose — and the
+gate had no way to hear that. The wrong fixes were both available and both bad: invent a
+fake legacy key to satisfy the check, or teach the gate to guess which pages are new.
+**The escape is an EXPLICIT `legacyKey: null` in the source, where a reviewer reads the claim
+in the diff — and silence still fails.** A default that fails closed keeps its value only if
+the exception has to be *stated*, never inferred.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4475,3 +4509,50 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   page errors. Storefront: no new tool, the plumbing note in `fieldToolkits.ts` now names the
   capability (P5 pushes that repo).
   https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html
+
+- `2026-08-17` — **[AXIS:DEPTH] THE THINNEST TRADE ON THE RACK GOT THE PAGE ITS OWN REGISTRY
+  HAD NAMED, AND BUILDING IT PROVED A SHARED CONTROL HAD BEEN UNREADABLE ON ELEVEN TRADES** ·
+  `sitework/what-goes-in.html` — **12 trades / 89 tools → 12 trades / 90 tools**, sitework
+  6 → 7. Well empty (0 new, 0 building), breadth debt paid, DEPTH stalest by 9 lane-cycles;
+  sitework had exactly ONE trade-specific tool and `sitework/tools.js` named THE MATERIAL
+  CALL in its own source as one of two rungs it was deliberately not building yet. **The
+  tenth instance of shape #1: 78 items over eight sections** — the largest picker on the rack
+  (`pickfilter` gate) — pipe by the JOINT or the FOOT, fittings, structures BY THE MARK,
+  stone by the TON or the LOAD, and the section that costs a re-dig: fabric, tape and tracer
+  by the ROLL. **The differentiator was not the shape and not the size ladder.** It is that
+  this order's SECOND READING is the list of what gets BURIED — derived from the item data
+  (`ditch: true`), never tapped, only a WRITE-IN carries the tick because a line he typed is
+  a sentence only he can classify — ending on *"once it's backfilled it doesn't come back
+  out."* Every other order page on the rack is short a line and somebody drives to the
+  counter; short a line here is a re-dig. Masonry's RUN mechanism was **stolen rather than
+  re-derived** per the private record's instruction, as the TIE-IN — flag + header
+  passthrough + the call-out when one exists without the other, **including the inverse case
+  masonry's own first draft dropped on the floor**. The delivery half took `shared/dropoff.js`
+  (chips, per-job key, the ask-not-a-booking line) instead of hand-rolling seven fields the
+  way the page built the day after that engine was extracted did. **BACKPORT RIDER FIRED, and
+  it was the bigger half of the cycle:** building for the palest accent on the board exposed
+  that `.jc-chip.on` and `.do-chip.on` drew the SELECTED state's border and ring in
+  `var(--flag)` — a token measured against the DARK NAV, therefore light by construction,
+  drawn on WHITE. Measured across all twelve trades: **eleven between 1.30:1 and 2.28:1**,
+  the border swap carrying 1.01–1.45:1 against the grey it replaces and the tint 1.07–1.19:1
+  — the lit state was resting on bolder text alone, on the control that answers WHICH JOB AM
+  I WRITING A GATE CODE INTO. **Plumbing at 3.58:1 is the twelfth, and plumbing was the only
+  trade the drop-off block had ever shipped on.** Fixed once in each shared module as
+  `var(--deep, var(--flag, …))` — 5.21–8.46:1 on all twelve — instead of twelve page-local
+  overrides; the first draft's page-local override was DELETED and its removal is what proves
+  the shared fix. Gates: `jobcard-scope` **PASS 7**, extended with a lit-vs-unlit chip
+  assertion at a 3:1 bar and **proved by reverting the shared rule — 6 of 7 pages fail** — and
+  taught that an explicit `legacyKey: null` is how a page born with a card says it has no
+  predecessor, while silence still fails · `order-live-header` **OK 9** (15 header controls,
+  11 in the document) · `dropoff-block` **OK 2** · `pickfilter` **OK 10, 130 assertions** ·
+  `mobile-watertight` **117 pages, 0 failing** · `no-third-party` clean. **VERIFIED AT THE
+  ARTIFACT, 64 assertions on the real page:** the job driven end to end at 390px — a bare
+  `20` printing as `20 joints` and a bare `1` as `1 ea` while a pasted line goes exactly as
+  written, the buried list carrying pipe + fitting + the ticked write-in, the tie-in block
+  carrying what's in the ground, three defect questions naming only catalogue rows and never
+  the write-in, the glass-only pair question staying off the message, the clipboard matching
+  the preview byte for byte, all of it surviving a reload, and a will-call carrying **no gate
+  code** — plus 320/360/390/430px populated and with the OS text size bumped, and zero page
+  errors. Storefront: entry added to `fieldToolkits.ts`, contract rebuilt (**12 trades, 90
+  tools**) and `--check` in sync; P5 pushes that repo.
+  https://mrdirno.github.io/nested-resonance-memory-archive/sitework/what-goes-in.html

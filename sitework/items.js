@@ -561,3 +561,341 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It's a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a lane closure, a fire watch or a utility shutdown is theirs to issue and theirs to number — this page just tells them it's coming and asks how they want it run. And check your contract before you send it: plenty of them say you don't talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── THE MATERIAL CALL (shape #1 — shared/checklist-request.js) ─────────────
+ * The TENTH instance of checklist → a request, and `sitework/tools.js` shipped
+ * this trade naming it as one of the two rungs it was deliberately NOT building
+ * yet: "a VOCABULARY BUILD the size of the supply-house order and the yard call
+ * — units of issue that are not interchangeable, a fittings vocabulary per
+ * material, and structures that arrive by mark."  That is what this block is.
+ * Masonry's yard call set the bar it has to clear and stated it in one line: a
+ * man who calls in an order off a list that is MISSING a line stops opening the
+ * list.  Half an order page is worse than none.
+ *
+ * WHAT THIS TRADE'S ORDER HAS THAT NO SIBLING'S DOES:
+ *
+ *  1. IT GOES IN A HOLE THAT DOES NOT REOPEN.  Every other order page on the
+ *     rack is short a line and somebody drives to the counter.  Short a line
+ *     here and the choice is stand the crew down or bury the job without it —
+ *     and `trade.js` already wrote the test: "a wall can be cut, a ceiling can
+ *     be pulled", a backfilled trench is DUG AGAIN.  So the buried lines are
+ *     marked in the DATA (`ditch: true`), and the page gathers them into a
+ *     second reading the counter cannot skim past.  Tracer wire and detectable
+ *     tape are the two cheapest lines in this whole file and the two that cost
+ *     the most to leave off, because there is no adding them later at any price.
+ *
+ *  2. THE TIE-IN.  Masonry's page proved the RUN mechanism — a per-line flag,
+ *     a header passthrough, and a call-out when one exists without the other —
+ *     and the private record's instruction was that the next order page should
+ *     STEAL it rather than re-derive it.  Its isomorph here is the tie-in: a
+ *     fitting that lands on somebody else's forty-year-old pipe has to match
+ *     what is actually in the ground, which is cast, clay, AC, DI or PVC and is
+ *     not always what the as-built says.  The wrong transition coupling does not
+ *     cost a trip, it costs the shutdown.
+ *
+ *  3. THE UNIT OF ISSUE, third instance and lifted verbatim.  Pipe leaves by
+ *     the JOINT or by the FOOT and those are two different trucks; stone by the
+ *     TON or the LOAD; fabric, tape and tracer by the ROLL; a frame and cover
+ *     and an accessory pack by the SET.  A bare number gets the yard's own word
+ *     attached to it and anything he wrote in words is left exactly as he wrote
+ *     it — the tool never re-counts a man's order.
+ *
+ * NOTHING SPEC'D, and this file's refusal list at the top governs every line
+ * below it without exception.  No pipe class, no pressure class, no wall
+ * thickness, no gauge, no bedding or backfill class, no cover, no separation, no
+ * thrust block, no test pressure, no compaction, no sling rating, and NOTHING
+ * about trench protection in any form.  Where a spec decides it, the line says
+ * so and holds an empty box.  Every size on this page is a NOMINAL DIAMETER he
+ * read off his own plan and nothing else.
+ */
+(function () {
+  "use strict";
+
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would
+   * be the tool choosing for him; a printed value nobody picked would be the
+   * tool putting words in his message. */
+  function n(q) { return "— " + q + " —"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+
+  /* WHERE IT GOES, and it is not a floor and not a side of a building. A dirt
+   * job has no building yet. Pipe wants STRINGING along the run so the crew
+   * handles it once; structures want to land inside the boom's reach of the
+   * hole they drop into; stone wants to be somewhere a loader can get a bucket
+   * into without crossing the open trench. A load put down in the wrong place
+   * on a dirt job is not carried twice — it is picked up with a machine, which
+   * is a man and an hour. */
+  var DROPS = ["String it along the run",
+               "Next to the hole — as close as the boom gets",
+               "Stockpile / laydown",
+               "On the haul-road side, clear of the run",
+               "At the gate — we'll move it",
+               "By the trailer",
+               "In the yard — we're picking this one up",
+               "Split it — see the note"];
+  function where() { return ax("Where", [n("where does it go")].concat(DROPS), true); }
+
+  /* NOMINAL DIAMETER OFF HIS OWN PLAN. Not a class, not a wall thickness, not a
+   * pressure rating, not a cover. Two ladders because a 3/4 in service tap and a
+   * 42 in storm run are not on the same list, and one combined ladder would be
+   * the wall of options §THE GATE forbids. */
+  var MAIN = ["4 in", "6 in", "8 in", "10 in", "12 in", "15 in", "18 in", "21 in",
+              "24 in", "30 in", "36 in", "42 in", "48 in",
+              "Bigger — see the note", "More than one size — see the note"];
+  var SVC = ["3/4 in", "1 in", "1-1/4 in", "1-1/2 in", "2 in", "3 in", "4 in", "6 in",
+             "More than one size — see the note"];
+  function dia() { return ax("Size", [n("what size")].concat(MAIN)); }
+  function svc() { return ax("Size", [n("what size")].concat(SVC)); }
+
+  /* The one flag that repeats: this piece lands on somebody else's pipe. */
+  function tie() { return [{ k: "tie", label: "Ties into what's already in" }]; }
+
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.mat = {
+    drops: DROPS,
+
+    cats: [
+      {
+        id: "call",
+        name: "What are you calling in?",
+        docName: "The call",
+        hint: "Paste your whole list if you keep one — one line each. Count it the way you say it: 20 joint, 300 ft, 4 ton, 2 roll. Then set where it goes on the heavy stuff, and tick anything that's going in the hole.",
+        writein: true,
+        items: []
+      },
+
+      {
+        id: "pipe",
+        name: "Pipe",
+        docName: "Pipe",
+        hint: "By the JOINT or by the FOOT — say which, because twenty joints and twenty feet are two different trucks. The class, the wall and the joint are off YOUR plan; type them in the note. This page doesn't pick one.",
+        items: [
+          { n: "Gravity sewer pipe — PVC", sub: "BY THE JOINT — SAY THE CLASS AND THE LAYING LENGTH OFF YOUR PLAN", unit: "joint", ditch: true,
+            notePlaceholder: "the class, the joint and the laying length your plan calls for — gasketed or solvent",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Storm pipe — dual-wall corrugated HDPE", sub: "BY THE JOINT — SAY PERFORATED OR SOLID, AND HOW THE ENDS GO TOGETHER", unit: "joint", ditch: true,
+            notePlaceholder: "perforated or solid, and what you want on the ends",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Storm pipe — reinforced concrete", sub: "BY THE JOINT — SAY THE CLASS AND THE JOINT OFF YOUR PLAN, AND WHAT'S SETTING IT", unit: "joint", ditch: true,
+            notePlaceholder: "the class and the joint off your plan — and say what's on site to set it",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Storm pipe — corrugated metal", sub: "BY THE JOINT — SAY THE GAUGE AND THE COATING OFF YOUR PLAN, AND THE BANDS WITH IT", unit: "joint", ditch: true,
+            notePlaceholder: "gauge, coating and how many bands",
+            ax: [dia(), where()] },
+          { n: "Water main — PVC pressure pipe", sub: "BY THE JOINT — SAY THE PRESSURE CLASS OFF YOUR PLAN", unit: "joint", ditch: true,
+            notePlaceholder: "the pressure class off your plan — this page doesn't pick one",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Water main — ductile iron", sub: "BY THE JOINT — SAY THE CLASS AND THE LINING OFF YOUR PLAN", unit: "joint", ditch: true,
+            notePlaceholder: "class, lining, and push-on or mechanical joint",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "HDPE — fused", sub: "BY THE JOINT OR THE COIL — SAY WHO'S FUSING IT AND WHOSE MACHINE IS COMING", unit: "joint", ditch: true,
+            notePlaceholder: "who fuses it, whose machine, and when it lands",
+            ax: [dia(), where()] },
+          { n: "Service line — poly tubing", sub: "BY THE COIL — SAY THE ROLL LENGTH", unit: "coil", ditch: true,
+            flags: tie(), ax: [svc(), where()] },
+          { n: "Service line — copper", sub: "BY THE COIL OR THE STICK", unit: "coil", ditch: true,
+            flags: tie(), ax: [svc(), where()] },
+          { n: "Underdrain / perforated pipe", sub: "BY THE JOINT — SAY SOCKED OR BARE", unit: "joint", ditch: true,
+            notePlaceholder: "socked or bare, and which way the holes face",
+            ax: [dia(), where()] },
+          { n: "Sleeve / casing pipe", sub: "BY THE JOINT OR BY THE FOOT — SAY WHAT'S GOING THROUGH IT", unit: "joint", ditch: true,
+            notePlaceholder: "what runs through it, and the spacers and end seals if you want them",
+            ax: [dia(), where()] },
+          { n: "Conduit for the site electrical", sub: "BY THE STICK — IF IT'S IN YOUR SCOPE. IF IT ISN'T, SAY WHOSE IT IS", unit: "stick", ditch: true,
+            notePlaceholder: "whose scope it is, and whether the sweeps and glue come with it",
+            ax: [svc(), where()] }
+        ]
+      },
+
+      {
+        id: "fit",
+        name: "Fittings, gaskets & lube",
+        docName: "Fittings, gaskets & lube",
+        hint: "The line that stops a crew is never the pipe — it's the one fitting. And nothing goes together without gaskets and lube, which is the thing nobody puts on the list. Tick TIES INTO on anything landing on pipe that's already in the ground, and say what that is in the header.",
+        items: [
+          { n: "Bends", sub: "EACH — SAY THE DEGREE AND WHAT'S ON EACH END", unit: "ea", ditch: true,
+            notePlaceholder: "the degree, and bell/spigot or MJ on each end",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Wyes", sub: "EACH — SAY THE SIZE ON THE BRANCH TOO", unit: "ea", ditch: true,
+            notePlaceholder: "branch size and which way it turns",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Tees", sub: "EACH — SAY THE SIZE ON THE BRANCH TOO", unit: "ea", ditch: true,
+            notePlaceholder: "branch size and what's on the branch end",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Reducers / increasers", sub: "EACH — SAY BOTH SIZES", unit: "ea", ditch: true,
+            notePlaceholder: "both sizes, in the order the flow goes",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Couplings", sub: "EACH — SAY IF IT'S JOINING TWO OF THE SAME OR TWO DIFFERENT THINGS", unit: "ea", ditch: true,
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Transition / shielded coupling", sub: "EACH — THE ONE FOR TYING INTO SOMETHING THAT ISN'T WHAT YOU'RE LAYING. SAY WHAT'S ON BOTH SIDES", unit: "ea", ditch: true,
+            notePlaceholder: "what's on each side — cast, clay, AC, DI, PVC — and the size of each",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Caps & plugs", sub: "EACH — FOR THE END YOU'RE STOPPING AT AND FOR THE TEST", unit: "ea", ditch: true,
+            ax: [dia(), where()] },
+          { n: "Mechanical joint accessory packs", sub: "BY THE SET — GLAND, GASKET, BOLTS. A JOINT WITHOUT ONE IS A JOINT YOU CAN'T MAKE", unit: "set", ditch: true,
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Restraint / retainer glands", sub: "EACH — SAY WHAT IT'S GOING ON", unit: "ea", ditch: true,
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Gaskets", sub: "BY THE SET, AND ORDER SPARES — THEY GET CUT, THEY GET DROPPED IN THE MUD AND THEY GET LOST", unit: "set", ditch: true,
+            notePlaceholder: "what pipe they're for, and how many spares",
+            ax: [dia()] },
+          { n: "Pipe lube", sub: "BY THE BUCKET — COUNT IT. NOBODY HAS EVER ORDERED ENOUGH OF THIS", unit: "ea", ditch: true },
+          { n: "Solvent cement & primer", sub: "BY THE CAN — SAY THE SIZE OF CAN AND WHAT IT'S FOR", unit: "ea", ditch: true },
+          { n: "Saddles / tapping tee", sub: "EACH — SAY WHAT PIPE IT'S GOING ON, NOT WHAT YOU WISH IT WAS", unit: "ea", ditch: true,
+            notePlaceholder: "what the existing pipe actually is, and its outside diameter if you've got it",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Boots for the structure connection", sub: "EACH — THE PIECE THAT MAKES THE PIPE-TO-STRUCTURE JOINT. ONE PER PIPE, PER STRUCTURE", unit: "ea", ditch: true,
+            notePlaceholder: "which structure, and how many pipes come into it",
+            ax: [dia()] }
+        ]
+      },
+
+      {
+        id: "str",
+        name: "Structures, castings & valves",
+        docName: "Structures, castings & valves",
+        hint: "BY THE MARK off your plan — MH-4, CB-7, DI-2. A structure ordered as \"a manhole\" is a structure somebody guessed at. And the barrel and the casting are two orders that don't always come on the same truck.",
+        items: [
+          { n: "Manhole — base & barrel", sub: "BY THE MARK — SAY THE DEPTH TO INVERT OFF YOUR PLAN AND WHICH KNOCKOUTS", unit: "ea", ditch: true,
+            notePlaceholder: "the mark off your plan, depth to invert, and which pipes come in at what angle",
+            ax: [dia(), where()] },
+          { n: "Manhole cone / top slab", sub: "EACH — SAY WHICH ONE OFF YOUR PLAN", unit: "ea", ditch: true,
+            ax: [dia(), where()] },
+          { n: "Grade rings / adjustment", sub: "EACH — COUNT THEM. THIS IS THE LINE THAT GETS FORGOTTEN AND IT'S THE ONE THAT SETS THE RIM", unit: "ea", ditch: true,
+            notePlaceholder: "how much you're making up, in your own words",
+            ax: [where()] },
+          { n: "Frame & cover", sub: "BY THE SET — SAY WHAT'S CAST IN THE LID: SEWER, STORM, WATER, DRAIN", unit: "set",
+            notePlaceholder: "what's cast in the lid, and whether it's bolted",
+            ax: [where()] },
+          { n: "Catch basin / inlet", sub: "BY THE MARK", unit: "ea", ditch: true,
+            notePlaceholder: "the mark off your plan, and which pipes come into it",
+            ax: [dia(), where()] },
+          { n: "Grate / inlet casting", sub: "BY THE SET — SAY WHICH ONE, AND WHETHER IT SITS IN A CURB OR IN A FIELD", unit: "set",
+            ax: [where()] },
+          { n: "Area drain / yard box", sub: "EACH", unit: "ea", ditch: true, ax: [dia(), where()] },
+          { n: "Cleanout & frame", sub: "EACH — AT GRADE, WHERE YOUR PLAN SHOWS IT", unit: "ea", ditch: true,
+            ax: [svc(), where()] },
+          { n: "Gate valve", sub: "EACH — SAY THE ENDS OFF YOUR PLAN", unit: "ea", ditch: true,
+            notePlaceholder: "the ends off your plan, and which way it opens if the owner cares",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Valve box & lid", sub: "BY THE SET — THE BOX AND THE LID ARE TWO PARTS AND ONE OF THEM ALWAYS SHOWS UP MISSING", unit: "set", ditch: true,
+            ax: [where()] },
+          { n: "Hydrant assembly", sub: "EACH — SAY WHAT'S IN THE ASSEMBLY AND WHAT ISN'T", unit: "ea", ditch: true,
+            notePlaceholder: "shoe, barrel, valve, boot — say what's included and what you're ordering separately",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Tapping sleeve & valve", sub: "BY THE SET — FOR THE TIE-IN. SAY WHAT THE EXISTING MAIN ACTUALLY IS", unit: "set", ditch: true,
+            notePlaceholder: "what the existing main is and its outside diameter — and who's making the tap",
+            flags: tie(), ax: [dia(), where()] },
+          { n: "Corp stop, curb stop & box", sub: "EACH — SAY THE SIZE AND WHAT THE MAIN IS", unit: "ea", ditch: true,
+            flags: tie(), ax: [svc(), where()] },
+          { n: "Meter box", sub: "EACH — SAY WHOSE STANDARD IT'S TO. THAT'S THEIRS TO APPROVE, NOT OURS", unit: "ea", ditch: true,
+            ax: [where()] }
+        ]
+      },
+
+      {
+        id: "rock",
+        name: "Stone, sand & fill",
+        docName: "Stone, sand & fill",
+        hint: "By the TON or by the YARD, and they are not the same number — say which one you mean. If it's coming off a particular pit, say so; if somebody else is hauling it, say who.",
+        items: [
+          { n: "Bedding stone", sub: "BY THE TON — SAY THE SIZE YOUR PLAN CALLS FOR. THIS PAGE DOESN'T PICK ONE", unit: "ton", ditch: true,
+            notePlaceholder: "the size off your plan, in your own words",
+            ax: [where()] },
+          { n: "Backfill material over the pipe", sub: "BY THE TON — OFF YOUR PLAN AND YOUR GEOTECH, NOT OFF THIS PAGE", unit: "ton", ditch: true,
+            notePlaceholder: "what your plan calls for — this page doesn't specify it",
+            ax: [where()] },
+          { n: "Drain rock", sub: "BY THE TON", unit: "ton", ditch: true, ax: [where()] },
+          { n: "Sand", sub: "BY THE TON OR THE YARD — SAY WHICH", unit: "ton", ditch: true, ax: [where()] },
+          { n: "Crushed base", sub: "BY THE TON — SAY THE SPEC OFF YOUR PLAN", unit: "ton", ax: [where()] },
+          { n: "Import fill", sub: "BY THE LOAD OR THE YARD — SAY WHERE IT'S COMING FROM AND WHO'S TESTING IT", unit: "load", ditch: true,
+            notePlaceholder: "the source, and who's taking the samples",
+            ax: [where()] },
+          { n: "Riprap", sub: "BY THE TON — SAY THE SIZE OFF YOUR PLAN", unit: "ton", ax: [where()] },
+          { n: "Bagged mix for a collar", sub: "BY THE BAG", unit: "bag", ditch: true, ax: [where()] },
+          { n: "Cold patch / temporary surfacing", sub: "BY THE TON OR THE BAG — FOR WHAT YOU'RE PUTTING BACK BEFORE YOU LEAVE TONIGHT", unit: "ton",
+            ax: [where()] }
+        ]
+      },
+
+      {
+        id: "wrap",
+        name: "Fabric, tape & tracer",
+        docName: "Fabric, tape & tracer",
+        hint: "By the ROLL — and this is the section that costs a re-dig. Tracer wire and detectable tape are the two cheapest lines on the whole call and the only two you cannot add once the dirt is back.",
+        items: [
+          { n: "Detectable warning tape", sub: "BY THE ROLL — SAY THE COLOUR FOR WHAT'S UNDER IT, AND THE FOOTAGE ON A ROLL", unit: "roll", ditch: true,
+            notePlaceholder: "what it's going over, the colour, and the footage per roll",
+            ax: [where()] },
+          { n: "Tracer wire", sub: "BY THE ROLL — AND THE SPLICES AND ACCESS BOXES WITH IT. A WIRE NOBODY CAN GET A SIGNAL ONTO IS A WIRE YOU DIDN'T INSTALL", unit: "roll", ditch: true,
+            notePlaceholder: "the gauge and jacket off your plan, and the footage per roll",
+            ax: [where()] },
+          { n: "Tracer splice kits & connectors", sub: "COUNT THEM — ONE PER SPLICE PLUS THE ONES YOU'LL DROP", unit: "ea", ditch: true },
+          { n: "Tracer access boxes", sub: "EACH — THE END THAT MAKES THE WIRE WORTH INSTALLING", unit: "ea", ditch: true, ax: [where()] },
+          { n: "Marker balls / markers", sub: "EACH — SAY WHAT UTILITY THEY'RE FOR", unit: "ea", ditch: true },
+          { n: "Filter fabric / geotextile", sub: "BY THE ROLL — SAY WOVEN OR NON-WOVEN AND THE ROLL WIDTH", unit: "roll", ditch: true,
+            notePlaceholder: "woven or non-woven, and the roll width and length",
+            ax: [where()] },
+          { n: "Geogrid", sub: "BY THE ROLL — SAY THE ROLL SIZE", unit: "roll", ditch: true, ax: [where()] },
+          { n: "Silt fence", sub: "BY THE ROLL — AND THE STAKES WITH IT", unit: "roll", ax: [where()] },
+          { n: "Erosion blanket / wattle", sub: "BY THE ROLL — SAY THE LENGTH AND THE STAPLES", unit: "roll", ax: [where()] },
+          { n: "Inlet protection", sub: "EACH — ONE FOR EVERY STRUCTURE YOU JUST SET", unit: "ea", ax: [where()] },
+          { n: "Poly & concrete washout", sub: "BY THE ROLL — SAY WHAT SIZE", unit: "roll", ax: [where()] },
+          { n: "Marker posts", sub: "BY THE BUNDLE — SAY THE COLOUR AND WHAT GOES ON THE DECAL", unit: "bundle", ax: [where()] }
+        ]
+      },
+
+      {
+        id: "crew",
+        name: "What the crew needs to put it in",
+        docName: "What the crew needs to put it in",
+        hint: "Half a call is the half nobody writes down. Pipe on the ground with nothing to cut it, lube it or shoot grade with is a morning gone and a machine sitting.",
+        items: [
+          { n: "Pipe saw + blades", sub: "SAY WHAT YOU'RE CUTTING — THE BLADE FOR DUCTILE ISN'T THE BLADE FOR PVC",
+            notePlaceholder: "what you're cutting, and how many blades" },
+          { n: "Laser, grade rod, bench", sub: "SAY WHAT'S COMING AND WHOSE IT IS", ax: [where()] },
+          { n: "Marking paint & keel", sub: "BY THE CASE — SAY THE COLOUR", unit: "ea" },
+          { n: "Shovels, bars, tampers", sub: "COUNTS ONLY" },
+          { n: "Compactor — jumping jack or plate", sub: "SAY DELIVERED OR YOU'RE PICKING IT UP. HOW IT'S RUN IS OFF YOUR OWN PLAN AND YOUR GEOTECH, NOT OFF THIS PAGE",
+            notePlaceholder: "which one, when it lands and when it leaves", ax: [where()] },
+          { n: "Pump & hose for the water", sub: "SAY THE HOSE LENGTH AND WHERE IT'S DISCHARGING — THAT PART IS SOMEBODY'S PERMIT, NOT OURS",
+            notePlaceholder: "size, hose length, and where it goes — and who owns that permission", ax: [where()] },
+          { n: "Fuel & DEF", sub: "SAY WHAT AND HOW MUCH" },
+          { n: "Chokers, slings, lift hooks", sub: "FOR THE STRUCTURES — SAY WHAT YOU'RE PICKING. THE RATING IS OFF THE TAG ON THE SLING, NEVER OFF THIS PAGE",
+            notePlaceholder: "what you're picking, and how many legs" },
+          { n: "Road plates", sub: "COUNTS ONLY — SAY WHAT THEY'RE COVERING AND WHO'S SETTING THEM", unit: "ea", ax: [where()] },
+          { n: "Cones, barricades, signs", sub: "COUNTS ONLY — THE TRAFFIC PLAN IS SOMEBODY'S TO NUMBER AND IT ISN'T THIS PAGE", ax: [where()] },
+          { n: "Poly & sandbags for overnight", sub: "COUNTS ONLY", ax: [where()] },
+          { n: "Water for the dust", sub: "SAY WHO'S BRINGING IT AND HOW OFTEN" }
+        ]
+      },
+
+      {
+        id: "back",
+        name: "What goes back, and what you're picking up",
+        docName: "What goes back, and what you're picking up",
+        hint: "The half of the call that's worth money and never gets made. Pipe you didn't lay, empty reels and the plates still sitting on the road are all somebody's deposit and all of it is on your job.",
+        items: [
+          { n: "Take the leftover pipe back", sub: "SAY ROUGHLY HOW MANY JOINTS AND WHETHER ANY OF IT'S BEEN CUT", unit: "joint" },
+          { n: "Take the empty pallets and reels back", sub: "COUNTS ONLY", unit: "ea" },
+          { n: "Pick up the plates", sub: "WHEN THE ROAD'S BACK — SAY WHEN THAT IS" },
+          { n: "Pick up the compactor / the pump", sub: "WHEN YOU'RE DONE WITH IT" },
+          { n: "Credit the fittings we didn't open", sub: "SAY WHAT'S STILL IN THE BOX — AN OPENED BOX ISN'T GOING BACK" }
+        ]
+      }
+    ],
+
+    /* A pasted line gets the same controls as a picked one. The DITCH flag is on
+     * the write-in and NOT on the picked rows, and that asymmetry is deliberate:
+     * a catalogue line already knows whether it gets buried (`ditch` on the item,
+     * above), but a line he typed is a sentence only he can classify. It is
+     * OFFERED, never demanded — masonry's page wrote the rule that a write-in is
+     * his sentence and not our row, and a page that scolds a man for not
+     * classifying his own note is a page he stops pasting into. */
+    writeinAx: [where()],
+    writeinFlags: [{ k: "ditch", label: "Goes in the ditch" }]
+  };
+})();

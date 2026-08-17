@@ -183,6 +183,13 @@ for (const { rel, trade, src } of list) {
     fail(rel, 'JobCard.mount declares a `fresh:` scope — order-live-header.mjs killed that scope, see shared/jobcard.js');
   }
   const legacyKey = (src.match(/legacyKey:\s*"([^"]+)"/) || [])[1] || null;
+  /* A PAGE BORN WITH A JOB CARD HAS NOTHING TO ADOPT, and until this it could not
+   * say so — the branch at the bottom fails any page without a legacyKey, which
+   * is the right default (silence is how a real migration goes missing) and the
+   * wrong verdict for a page that never had a sticky header to lose. So the
+   * escape is an EXPLICIT `legacyKey: null`, in the source, in the diff, where a
+   * reviewer sees the claim being made. OMISSION still fails. */
+  const noPredecessor = /legacyKey:\s*null\b/.test(src);
 
   const ctx = await browser.newContext({ viewport: { width: 390, height: 780 } });
   await ctx.addInitScript(STUB);
@@ -277,6 +284,38 @@ for (const { rel, trade, src } of list) {
     for (const id of PER.concat(Object.keys(blockA))) {
       if (back[id] !== want[id]) fail(rel, `#${id} came back as "${back[id]}" instead of "${want[id]}" after switching to the other job and back`);
     }
+
+    /* ── AND HE CAN SEE WHICH ONE IS LIT ──────────────────────────────────
+     * Every assertion above this one is about WHERE an answer is stored. This
+     * one is about whether the man can tell which store he is writing into,
+     * and until 2026-08-17 the answer on eleven of twelve trades was "barely".
+     * `.jc-chip.on` drew its border and inset ring in `--flag`, the trade
+     * ACCENT — a colour picked and measured against the DARK nav, therefore
+     * light by construction, on a chip that is drawn on WHITE. Measured: 1.30:1
+     * (sitework) to 2.28:1 (electrical) on eleven trades, and against the grey
+     * it replaces the swap carried no luminance step at all. The whole lit
+     * state was resting on bolder text. On the one control whose answers are a
+     * gate code and a PO, that is a wrong-job write waiting to happen.
+     * Asserted here against the UNLIT chip's own background rather than a
+     * hardcoded white, so a trade that restyles the rack still has to clear it.
+     * Verified by reverting the shared rule to `--flag`: 11 pages fail. */
+    const litRead = await page.evaluate(() => {
+      const on = document.querySelector('#jobcard .jc-chip.on');
+      const off = document.querySelector('#jobcard .jc-chip:not(.on)');
+      if (!on || !off) return null;
+      const num = s => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const lum = ([r, g, b]) => {
+        const c = [r, g, b].map(v => v / 255).map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const cr = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+      const cs = getComputedStyle(on);
+      return { border: cs.borderTopColor, ratio: cr(num(cs.borderTopColor), num(getComputedStyle(off).backgroundColor)) };
+    });
+    if (!litRead) fail(rel, 'could not find a lit and an unlit job chip side by side');
+    else if (litRead.ratio < 3) {
+      fail(rel, `the LIT job chip's border is ${litRead.border} — only ${litRead.ratio.toFixed(2)}:1 against the unlit chip beside it (bar 3:1). He cannot see which job he is writing a gate code into`);
+    }
   }
 
   /* ── it survives a reload ─────────────────────────────────────────────── */
@@ -323,8 +362,10 @@ for (const { rel, trade, src } of list) {
       }
       await c2.close();
     }
+  } else if (noPredecessor) {
+    console.log(` ${rel}  legacyKey: null — declared as a page with no sticky header to adopt`);
   } else {
-    fail(rel, 'no legacyKey declared — a page that had a sticky header must adopt it or the foreman loses it');
+    fail(rel, 'no legacyKey declared — a page that had a sticky header must adopt it or the foreman loses it. A page born with a card declares `legacyKey: null` and says so');
   }
 
   /* THE BLOCK COUNT IS PRINTED, not just asserted. An assertion that quietly

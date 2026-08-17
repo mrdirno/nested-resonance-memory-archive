@@ -14,19 +14,24 @@
  *
  * WHAT THIS KIT DELIBERATELY SHIPPED WITHOUT, so the next cycle does not read
  * the gap as an oversight:
- *   - THE MATERIAL CALL (pipe, fittings, structures, rock, bedding sand, fabric,
- *     tape and tracer, plates). It is the ninth instance of shape #1 and it is a
- *     VOCABULARY BUILD the size of the supply-house order and the yard call —
- *     units of issue that are not interchangeable (joints, each, ton, yard,
- *     roll, bundle), a fittings vocabulary per material, and structures that
- *     arrive by mark. Masonry's yard call is the record on this: half an order
- *     list is worse than none, because a man who calls one in off a list missing
- *     a line stops opening the list.
+ *   - ~~THE MATERIAL CALL~~ — SHIPPED 2026-08-17 as `what-goes-in.html`, the
+ *     tenth instance of shape #1 and the vocabulary build this note said it was:
+ *     69 lines over seven sections, six units of issue that are not
+ *     interchangeable, a fittings vocabulary per material, and structures that
+ *     arrive by mark. WHAT THE BUILD LEARNED, kept instead of a checkmark: the
+ *     differentiator was not the shape and not the size ladder, it was that the
+ *     ORDER'S SECOND READING is the list of what gets BURIED — derived from the
+ *     item data (`ditch`), never tapped — because every other order page on the
+ *     rack is short a line and somebody drives to the counter, and short a line
+ *     here is a re-dig. Masonry's RUN mechanism was stolen rather than
+ *     re-derived, as the tie-in, INCLUDING the inverse case its first draft
+ *     dropped. Both generalise to any trade whose order is consumed
+ *     irreversibly.
  *   - THE WRITE-UP LIBRARY (docs.js). Its own document-spec vocabulary build,
  *     and shared/docspec.js has a contract the deploy asserts — a half-written
- *     library fails it, correctly.
- * Both are the strongest unbuilt rungs in this kit. Neither is a fork of
- * anything: they are configs of engines that already ship.
+ *     library fails it, correctly. It is now the strongest unbuilt rung in this
+ *     kit, and this is the ONLY trade of twelve without a write-up page. Not a
+ *     fork of anything: a config of an engine that already ships.
  *
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
@@ -42,6 +47,19 @@ window.TOOLKIT_TOOLS = [
     chip: "#FFDDA3",
     audience: "Foreman → super / EC / plumber / gas / LV",
     pinned: true
+  },
+  {
+    // THE MATERIAL CALL, and it is the second rung this kit ships because it is
+    // the one a dirt foreman opens most days. Everything else here is a message
+    // he sends when something happens; this is the one he sends because it is
+    // three o'clock.
+    name: "What Goes In The Ground",
+    href: "what-goes-in.html",
+    desc: "Tomorrow's pipe, fittings, structures, stone, tape and tracer — off a list instead of off your memory. Count it the way you say it: 20 joint, 4 ton, 2 roll. Everything that gets buried comes out at the bottom of the message on its own, because a short count anywhere else is a trip to the counter and a short count here is a re-dig.",
+    // Its own step on this kit's ladder — the other six are #FFDDA3 / #F2C97F /
+    // #E0B368 / #CFA96B / #8A6718 / #7A5A16 and this sits in the one gap left.
+    chip: "#B98F42",
+    audience: "Foreman → the yard / the pipe supplier"
   },
   {
     name: "Before We Dig",

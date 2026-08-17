@@ -113,9 +113,31 @@
     '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#5D656E);',
     '  display:inline-flex;align-items:center;text-align:left;max-width:100%;white-space:normal;',
     '  overflow-wrap:anywhere}',
-    '.jc-chip.on{background:var(--tint,#F1F1EC);border-color:var(--flag,#5D656E);color:var(--ink,#12161A);',
-    '  font-weight:600;box-shadow:inset 0 0 0 1px var(--flag,#5D656E)}',
-    '.jc-chip:focus-visible{outline:2px solid var(--flag,#5D656E);outline-offset:2px}',
+    /* THE LIT CHIP IS DRAWN IN `--deep`, NOT `--flag`, AND THE NUMBERS ARE WHY.
+     * This rule read `border-color:var(--flag)` + the same colour as an inset
+     * ring for its whole life. `--flag` is the trade ACCENT, and every accent on
+     * this rack is picked and measured against the DARK NAV (bar 7:1) — which
+     * makes it, by construction, a LIGHT colour, and this chip is drawn on
+     * WHITE. Measured accent-against-white across all twelve trades: masonry
+     * 1.37 · sitework 1.30 · gc 1.51 · hvac 1.65 · av 1.74 · creative 1.84 ·
+     * concrete 1.91 · framing 2.01 · low-voltage 2.01 · roofing 2.05 ·
+     * electrical 2.28 — and plumbing 3.58. ELEVEN OF TWELVE under 3:1, and the
+     * twelfth is the only trade the sibling block shipped on, which is exactly
+     * why nobody caught it. Against the grey it replaces (--line #BABEB6) the
+     * swap is 1.01–1.45:1 on those eleven: a hue change with no luminance step
+     * at all, invisible in sun, on a dirty screen, or to anyone with a colour
+     * vision deficiency. The tint behind it adds 1.07–1.19:1. So the lit state
+     * was resting on darker, bolder TEXT alone.
+     * That is not cosmetic on THIS control. This chip is WHICH JOB AM I ON, and
+     * the answers behind it are a gate code and a PO. `--deep` is the token
+     * every trade already ships for the dark half of its accent and it measures
+     * 5.21–8.46:1 against white on all twelve — a real luminance step, in the
+     * trade's own colour, with no new token and no per-trade fork. The fallback
+     * chain keeps a page that somehow ships without `--deep` exactly where it
+     * was. */
+    '.jc-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#5D656E));color:var(--ink,#12161A);',
+    '  font-weight:600;box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#5D656E))}',
+    '.jc-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#5D656E));outline-offset:2px}',
     '.jc-new{border-style:dashed}',
     '.jc-lab{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;',
     '  color:var(--muted,#5D656E);margin:0 0 6px;display:block}',
