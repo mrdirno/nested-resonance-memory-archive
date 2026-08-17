@@ -34,7 +34,14 @@ const require = createRequire(new URL('../collage-studio/package.json', import.m
 const { chromium } = require('playwright');
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
-const BASE = process.argv[2] || 'file://' + ROOT;
+/* THE TRAILING SLASH IS LOAD-BEARING, so it is not left to whoever types the
+ * command. Pages are joined as BASE + page with a repo-relative path, so a base
+ * pasted without it builds `…/nested-resonance-memory-archiveav/index.html` —
+ * every page 404s, every page reports no Tools menu, and this gate then printed
+ * PASS over ZERO checks. Measured exactly that on 2026-08-17: "0 page x viewport
+ * checks over 0 toolkit pages (117 page(s) carry no Tools menu)", exit 0, while
+ * the menu was live and working on all twelve trades. */
+const BASE = (process.argv[2] || 'file://' + ROOT).replace(/\/*$/, '/');
 
 // Every dir that declares a trade, plus the commons — derived from disk so a new
 // trade is covered the day it lands, with no edit here.
@@ -145,6 +152,22 @@ console.log(`base: ${BASE}`);
 if (fails.length) {
   console.log(`\n${fails.length} FAILURE(S):`);
   fails.forEach(f => console.log('  FAIL ' + f));
+  process.exit(1);
+}
+/* ZERO CHECKS IS NOT A PASS. A gate whose finding-list is empty because it never
+ * looked reports exactly like one that looked everywhere and found nothing, and
+ * this one did: a base URL missing its slash skipped all 117 pages and printed
+ * the green line below with `tightest clearance: Infinitypx (undefined)` — a
+ * number that is unreachable when any page is measured, and was sitting in the
+ * output being ignored. The same silence arrives from a renamed selector or a
+ * timeout too short for a slow host, and both are worth failing on. Anything
+ * that legitimately has no menu is already counted in `skipped`, so the only
+ * state this rejects is having measured NOTHING. */
+if (!checked) {
+  console.log(`\nFAIL — 0 checks ran. ${PAGES.length} page(s) were found and every one of them ` +
+              `reported no Tools menu, so nothing was measured and there is nothing to pass.`);
+  console.log(`  Usually the base URL: pages are fetched as BASE + a repo-relative path, ` +
+              `so check ${BASE} actually serves ${BASE}${PAGES[0] || 'av/index.html'} .`);
   process.exit(1);
 }
 console.log(`PASS — the last row of the Tools menu is reachable everywhere, including under the iOS ` +

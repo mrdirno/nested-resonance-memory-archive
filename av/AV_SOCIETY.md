@@ -2957,6 +2957,25 @@ it.** The rails had solved this already by sitting ON the dock rather than at th
 fix now uses their offset and closes any raised sheet, because one sheet at a time is a rule
 this app already enforced among its rails and had never applied to its bar.
 
+### 2026-08-17 — THE GATE PRINTED PASS OVER ZERO CHECKS, AND THE GIVEAWAY WAS IN ITS OWN OUTPUT
+Found by running `menu-reachability.mjs` against the live site during the backport sweep and
+pasting the base URL **without its trailing slash**. Pages are fetched as `BASE + page` with
+a repo-relative path, so every URL became `…/nested-resonance-memory-archiveav/index.html`,
+every page 404'd, every page reported no Tools menu — and the gate printed
+`0 page x viewport checks over 0 toolkit pages (117 page(s) carry no Tools menu)`, then
+**PASS, exit 0**. With the slash: **798 checks over 114 pages, PASS, tightest clearance
+15.5px at masonry/answer-back.html @320x480.** Same command, same site, same day; the only
+difference between measuring everything and measuring nothing was one character, and the
+green line was identical. The tell was already being printed and ignored:
+`tightest clearance: Infinitypx (undefined)` — a value that cannot survive a single real
+measurement. **An empty finding-list from a gate that never looked is indistinguishable from
+one that looked everywhere, unless the gate refuses to pass on zero.** Fixed twice over:
+the base is normalised so the slash cannot be forgotten, and `checked === 0` now FAILS with
+the malformed URL printed in the message. Pages that legitimately carry no menu are already
+counted in `skipped`, so the only state rejected is having measured NOTHING — which also
+covers a renamed selector and a host too slow for the 120ms settle. Proven by removing the
+normalisation and re-running the exact command that had passed: it now fails.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
