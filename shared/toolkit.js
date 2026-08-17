@@ -795,8 +795,14 @@
         title: k.hint
       }, [k.label]);
     });
+    /* THE QUESTION IS ALREADY ANSWERED, so the label says so. A bare "What kind
+     * of wish is this?" reads as a question the reader has to answer before
+     * moving on — and one of the three is ALWAYS lit before the sheet opens
+     * (setKind(DEFAULT_KIND) below; improve on a tool page, new_tool on a hub).
+     * A pre-answered question that looks unanswered stops people just as hard
+     * as a real one. Naming it "already picked" costs a line of copy. */
     var kindToggle = h("div", { class: "av-field" }, [
-      h("label", {}, ["What kind of wish is this?"]),
+      h("label", {}, ["What kind of wish is this? ", h("i", {}, ["(already picked — change it if it's wrong)"])]),
       h("div", { class: "av-idtoggle" }, kindBtns)
     ]);
 
@@ -829,7 +835,14 @@
     var aboutPicked = "";
     aboutSel.addEventListener("change", function () { aboutPicked = aboutSel.value; });
 
-    var titleLabel   = h("label", {}, [COPY.new_tool.titleLabel]);
+    /* The title's "(optional)" has to survive setKind() rewriting the words in
+     * front of it, and setKind writes with textContent — which wipes children.
+     * So the changing part is a TEXT NODE we keep a handle on and the promise
+     * is a sibling element that nothing rewrites. Marking it inside all three
+     * COPY strings instead would state the same thing in three places, and a
+     * fourth kind would ship without it. */
+    var titleText    = document.createTextNode(COPY.new_tool.titleLabel + " ");
+    var titleLabel   = h("label", {}, [titleText, h("i", {}, ["(optional — we'll name it from your wish)"])]);
     var purposeLabel = h("label", {}, [COPY.new_tool.purposeLabel]);
 
     function setKind(v) {
@@ -847,7 +860,7 @@
           + "<li><b>Fewer steps</b> — it makes a real task faster; it never adds work.</li></ul>"
           + "<div class='av-test'>The test: would you actually use it to send something to your boss, PM, or techs? If yes, wish for it.</div>"
         : "");
-      titleLabel.textContent = c.titleLabel;
+      titleText.nodeValue = c.titleLabel + " ";
       purposeLabel.textContent = c.purposeLabel;
       // A tool must exist before it can be improved or reported broken.
       aboutRow.style.display = (v === "new_tool" || !TOOLS.length) ? "none" : "";
@@ -905,8 +918,18 @@
       kindToggle,
       aboutRow,
       h("p", { class: "av-err", role: "alert" }),
-      h("div", { class: "av-field" }, [titleLabel, h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
+      /* THE SENTENCE COMES FIRST, and it is the only box that has to be filled.
+       * It used to sit under a name field the person had to invent, so the
+       * first thing the well asked of someone who already knew what he wanted
+       * was to stop and title it. The order is the ask: land in the box that
+       * matters, type the thing, send.
+       *
+       * `required` is gone from the name — the form carries `novalidate`, so it
+       * never blocked anything, but it told a screen reader this field was
+       * mandatory when onSubmit is the only thing that decides, and onSubmit no
+       * longer refuses on it. See deriveTitle() for where the name comes from. */
       h("div", { class: "av-field" }, [purposeLabel, h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: TRADE.wishPurposeHint })]),
+      h("div", { class: "av-field" }, [titleLabel, h("input", { name: "tool_title", type: "text", maxlength: "200", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
       h("div", { class: "av-actions" }, [
         h("button", { type: "submit", class: "av-send" }, ["Make the wish"]),
         h("button", { type: "button", class: "av-cancel", onclick: closeWell }, ["Cancel"])
@@ -944,7 +967,9 @@
     if (seed && seed !== wellKind && resetWellKind) resetWellKind(seed);
     modal.classList.add("av-open");
     document.documentElement.style.overflow = "hidden";
-    var first = form.querySelector('[name="tool_title"]'); if (first) setTimeout(function () { first.focus(); }, 30);
+    // The cursor lands in the ONE box that has to be filled. It used to land in
+    // the name field, which put the caret on the optional half of the form.
+    var first = form.querySelector('[name="tool_purpose"]'); if (first) setTimeout(function () { first.focus(); }, 30);
   }
   function closeWell() { if (modal) { modal.classList.remove("av-open"); document.documentElement.style.overflow = ""; } }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeWell(); closeMenu(); } });
@@ -986,22 +1011,72 @@
 
   function showErr(msg) { errBox.textContent = msg; errBox.style.display = "block"; }
 
+  /* ONE BOX IS THE WHOLE ASK — and a name is DERIVED from a wish, never DEMANDED
+   * before it. Operator, reading this form: "every wish it better aspect in the
+   * tool kit is like hyper specific that to me is annoying and friction packed —
+   * you're telling me if something asks for something you cant generally
+   * understand what they want better? that makes no sense to me."
+   *
+   * The queue had already said the same thing in data. Across the well's own
+   * backups — 27 wishes, every trade, everything ever sent — 21 of the 27 "tool
+   * names" run six words or longer, 20 run eight or longer, the median is 11
+   * words and 14 pass 60 characters. NOT ONE is three words or fewer. Nobody was
+   * naming a tool. They wrote their sentence in the name box and then wrote it
+   * again underneath, because the form asked for two things and they had one.
+   *
+   * So the form asks for the one thing and works the rest out. Anything reading
+   * "the cable numbers keep coming out wrong on the labels" can name it, sort
+   * it, and usually tell which page it is about; a man on a ladder cannot be
+   * asked to do that first. Deriving costs the six lines below. Demanding costs
+   * the wish — and a wish that was never sent is not recoverable by any gate,
+   * queue or grader downstream. This is the funnel the whole program runs on.
+   *
+   * NOTHING DOWNSTREAM MOVES: tool_title is still sent on every row, still the
+   * same column, still the string `av_wishing_well.py --claim` prints to name a
+   * wish. Only where it is filled in changed. */
+  function deriveTitle(text) {
+    var s = String(text || "").replace(/\s+/g, " ").trim();
+    // 72 characters is the queue's own habit, not a taste: the median live title
+    // is 11 words and 14 of 27 already run past 60, so this shortens almost
+    // nothing anyone actually wrote. Cut on a word boundary — a title sliced
+    // mid-word reads as corruption in a queue listing, and a row that looks
+    // corrupt gets skipped rather than built.
+    if (s.length <= 72) return s;
+    var cut = s.slice(0, 72), sp = cut.lastIndexOf(" ");
+    if (sp > 32) cut = cut.slice(0, sp);
+    return cut.replace(/[\s,;:.\-]+$/, "") + "…";
+  }
+
   function onSubmit(e) {
     e.preventDefault();
     errBox.style.display = "none";
     var fd = new FormData(form);
     if ((fd.get("website") || "").trim()) { doneUI(); return; } // honeypot tripped — pretend success
-    var title = (fd.get("tool_title") || "").trim();
+    var typed = (fd.get("tool_title") || "").trim();
     var purpose = (fd.get("tool_purpose") || "").trim();
-    if (title.length < 3) { showErr("Give the tool a short name (a few characters)."); return; }
-    if (purpose.length < 10) { showErr("Add a line on what it should do — what you'd use it for."); return; }
-    // One tap, and it is the difference between an actionable report and a note
-    // nobody can act on: a bug or an improvement has to name the tool it is about.
+    /* SIX CHARACTERS, and this is now the ONLY thing a person can be refused on.
+     * The shortest wish in the live queue a human could act on is "Stop asking
+     * for frames period" — 29 characters, five words, entirely clear; the next
+     * is 29 as well. A floor set five times under the shortest real thing anyone
+     * has ever sent can catch an empty box or a slipped keystroke and nothing
+     * else, which is all a floor is for. The pair it replaces (three characters
+     * of NAME and ten of PURPOSE) turned a person who had already written his
+     * sentence away, twice. */
+    if (purpose.length < 6) { showErr("Tell us what you'd want — one sentence is plenty."); return; }
+    /* The old three-character test now CHOOSES instead of REFUSING: too little
+     * to name a row by, so the row gets its name from the wish. Same number,
+     * same judgement about what is too short to be a name — nobody is turned
+     * away by it. Whatever the person did type always wins; we only fill a gap. */
+    var title = typed.length >= 3 ? typed : deriveTitle(purpose);
+    /* WHICH TOOL, IF WE KNOW IT. A tool page answers this from the page the
+     * wisher is standing on, so on the path where it matters most it is already
+     * filled. It used to be a refusal ("Which tool should be better?"), which
+     * could only fire on a hub, only AFTER the whole wish was typed, and asked
+     * the person to find in a dropdown the thing his sentence usually says out
+     * loud. An unlabelled wish is a wish and a grader can read it; a wish
+     * abandoned at a dropdown is nothing at all. Sent null, as new_tool always
+     * has been — the column is nullable and every reader already handles it. */
     var aboutTool = (fd.get("about_tool") || "").trim();
-    if (wellKind !== "new_tool" && TOOLS.length && !aboutTool) {
-      showErr(wellKind === "bug" ? "Which tool is giving you the wrong thing?" : "Which tool should be better?");
-      return;
-    }
     if (!CFG_READY) { showErr("The wishing well is live on the published site — this looks like a local or preview copy."); return; }
 
     var payload = {
