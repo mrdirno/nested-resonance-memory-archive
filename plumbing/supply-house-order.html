@@ -136,6 +136,15 @@ ul.items{list-style:none;margin:0;padding:0}
   </header>
 
   <div class="head">
+    <!-- THE JOB CARD, and this page needed it worst of the eight. The gate code
+         below lives in the drop-off block, which has been sticky since it shipped
+         and guarded by a line of text and a button he has to remember to press.
+         A counterman put the account on the same list — a GC-furnished job, a
+         warranty pull and his own T&M all bill to different numbers in the same
+         morning — so the account travels with the job here, which it does not on
+         the five pages that have no counter. Tapping a chip swaps the account,
+         the PO and the whole delivery block below. -->
+    <div id="jobcard"></div>
     <div class="hgrid">
       <div class="f"><label>Job / address <i>(the counter searches on it in October)</i></label><input id="fJob" type="text" placeholder="1420 Market St — 3rd floor" autocomplete="off"></div>
       <!-- NAME AND CELL IN ONE FIELD. This asked for "your name" for four months
@@ -215,6 +224,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/draft.js"></script>
 <script src="../shared/dropoff.js"></script>
+<script src="../shared/jobcard.js"></script>
 <script src="../shared/find.js"></script>
 <script src="../shared/pickfilter.js"></script>
 <script>
@@ -387,6 +397,11 @@ ul.items{list-style:none;margin:0;padding:0}
     mount: "dropoff",
     key: "toolkit.plumbing.supplyHouseOrder.dropoff.v1",
     jobField: "fJob",
+    /* THE BLOCK IS KEYED PER JOB HERE (see the job card below): it drops the
+       "filled in for <job>" line, which can now only fire on a rename, and it
+       words its own clear button for a page where a different job has its own
+       block. */
+    perJob: true,
     onChange: function(){ refresh(); }
   });
   function modeUI(){
@@ -519,11 +534,15 @@ ul.items{list-style:none;margin:0;padding:0}
       [].forEach.call(list.querySelectorAll(".i-qty"),  function(q){ q.value = 1; });
       [].forEach.call(list.querySelectorAll(".i-note"), function(x){ x.value = ""; });
       /* The delivery call is an answer about THIS order, so the next one starts at
-         will-call/today rather than inheriting last week's Tuesday. Job, name and
-         account are not: they live in the sticky record and Clear never touches them. */
+         will-call/today rather than inheriting last week's Tuesday — and who is
+         walking in to collect it is the same kind of answer, which is why it moved
+         off the sticky record and onto this list. The job, the account, the PO and
+         his own name are not: they belong to the job card and to the device, and
+         Clear never touches either. */
       setSeg("segMode", "Will-call");
       setSeg("segWhen", "Today");
       document.getElementById("fDate").value = "";
+      document.getElementById("fPick").value = "";
       modeUI();
     }
     if (draft) draft.clear(wipe); else wipe();
@@ -609,9 +628,10 @@ ul.items{list-style:none;margin:0;padding:0}
           });
         if (rows.length) cats[cat.id] = rows;
       });
-      var head = { mode: mode, when: when, date: document.getElementById("fDate").value };
+      var head = { mode: mode, when: when, date: document.getElementById("fDate").value,
+                   pick: document.getElementById("fPick").value };
       var touched = Object.keys(cats).length
-        || head.mode !== "Will-call" || head.when !== "Today" || head.date;
+        || head.mode !== "Will-call" || head.when !== "Today" || head.date || head.pick;
       // NULL IS THE ONLY WAY THE RECORD IS DROPPED — an object here on an
       // untouched page makes Clear un-clearable (§SCARS "clear must actually clear").
       return touched ? { cats: cats, head: head } : null;
@@ -619,6 +639,7 @@ ul.items{list-style:none;margin:0;padding:0}
     apply: function(st){
       var h = st.head || {};
       if (h.date) document.getElementById("fDate").value = h.date;
+      if (h.pick) document.getElementById("fPick").value = h.pick;
       if (h.mode) setSeg("segMode", h.mode);
       if (h.when) setSeg("segWhen", h.when);
       Object.keys(st.cats || {}).forEach(function(id){
@@ -653,27 +674,69 @@ ul.items{list-style:none;margin:0;padding:0}
      Clear resets it. The field is outside #list; nothing else watches it. */
   document.getElementById("fDate").addEventListener("change", function(){ draft.save(); });
 
-  /* ── JOB, NAME AND ACCOUNT ARE STICKY, AND THAT IS WHY THEY GET THEIR OWN ───
-   * A plumber is on one job for a week, his name never changes, and the account
-   * number is the shop's. Folding them into the order draft made two things wrong
-   * at once: Clear could not actually clear (a touched header rewrote the record a
-   * quarter-second after the wipe — caught by the gate, which reads STORAGE and
-   * not the screen), and clearing an order would have cost him three fields he had
-   * already typed. Separate record, never touched by Clear — the same split the
-   * engine's pages already ship as their sticky header. */
-  var sticky = Draft.fields(["fJob", "fBy", "fAcct", "fPO", "fPick"]);
-  var stickyDraft = Draft.keep({
-    key: "toolkit.plumbing.supplyHouseOrder.header.v1",
-    snapshot: sticky.snapshot,
-    apply: sticky.apply
+  /* ── THE JOB CARD REPLACED THE STICKY HEADER ───────────────────────────────
+   * What stood here kept the job, the name, the account, the PO and the pickup
+   * name in ONE record that Clear never touched, under a comment that read "a
+   * plumber is on one job for a week". That is true, and it is not the same
+   * claim as "a plumber has one job". Two lenses took the same list apart the
+   * same way without reading each other:
+   *
+   *   THE COUNTER — "several times a week: a GC-furnished job where the sub is
+   *   told put it on THEIR account, a warranty pull that must not land on
+   *   billable job cost, a service account kept apart from new-construction.
+   *   Treating the account as one sticky default for the phone is a mistake."
+   *   THE TECH — "fPick is whoever's free to run the counter today, not last
+   *   month's name, and it shouldn't be in that array at all."
+   *
+   * So the job, the ACCOUNT and the PO ride the JOB — and the account is the one
+   * scope this page does not share with the five that already have a card, none
+   * of which send anything to a counter that bills. His name and cell ride the
+   * DEVICE, because that is him. "Who's picking it up" rides THIS ORDER, next to
+   * mode/when/date in the draft where the tech put it: it is coupled to
+   * will-call, and Clear is the one action that means "different order". The old
+   * key is adopted once, so nobody loses what he typed in June. */
+  var DKEY = "toolkit.plumbing.supplyHouseOrder.dropoff.v1";
+  /* JOB #1 KEEPS THE ORIGINAL KEY. Every phone that has ever filled in the
+   * delivery block holds a record under that exact name, and the first card is
+   * the job it was filled in for — so the adoption costs no write and loses no
+   * gate code. Only a SECOND job needs a name of its own. */
+  function dropKey(j){ return (!j || j.id === "j1") ? DKEY : DKEY + "." + j.id; }
+
+  var jc = JobCard.mount({
+    mount: "jobcard",
+    trade: "plumbing",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fAcct", "fPO"],
+    device: ["fBy"],
+    legacyKey: "toolkit.plumbing.supplyHouseOrder.header.v1",
+    onApply: function(){ syncJob(); }
   });
+
+  /* THE DELIVERY BLOCK FOLLOWS THE CHIP. Without this the card would swap the
+   * account and the PO and leave the gate code, the stair and who signs sitting
+   * there from the other job: a card that LOOKS job-aware while the one answer a
+   * truck is dispatched on stays per-phone. That is strictly worse than the
+   * sticky header it replaced, which at least never claimed to know. */
+  function syncJob(){
+    if (drop) drop.rekey(dropKey(jc ? jc.current() : null));
+    refresh();
+  }
+  syncJob();   // `jc` is bound after mount, so the first apply could not know the id
+
   /* AND THEY REDRAW. The job, the name and the account are all PRINTED in the
-     block below labelled "what the counter gets", and until this line that block
-     did not move while he typed them: the copy button rebuilt the text fresh so
-     the counter got the right thing, but the one thing he reads before sending
-     showed the last job he was on. The sticky watcher already fires on input and
-     change for all three; it just wasn't telling the page. */
-  sticky.watch(function(){ stickyDraft.save(); refresh(); });
+     block below labelled "what the counter gets", and until this was wired that
+     block did not move while he typed them: the copy button rebuilt the text
+     fresh so the counter got the right thing, but the one thing he reads before
+     sending showed the last job he was on. The card watches its own fields for
+     the SAVE; the redraw is the page's and stays here — and fPick is on this
+     list too, because it is in the document and no longer in the card. */
+  ["fJob", "fBy", "fAcct", "fPO", "fPick"].forEach(function(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", refresh);
+    el.addEventListener("change", refresh);
+  });
 
   /* YESTERDAY'S ORDER. "Half of tomorrow's order is today's order" — and Clear
      now removes write-ins outright, so the undo ships in the same change: the

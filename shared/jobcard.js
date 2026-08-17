@@ -186,6 +186,24 @@
       try { old = JSON.parse(raw); } catch (e) { return false; }
       if (!old || typeof old !== 'object') return false;
 
+      /* THE OTHER SHAPE THIS CODEBASE WRITES. Six pages hand-rolled the sticky
+       * header as a flat bag of field ids, which is what the lines below read.
+       * A page that kept the same header through shared/draft.js wrapped it —
+       * {v:1, s:{fJob:"…", fPO:"…"}} — so a flat read finds nothing, adopt()
+       * returns false, and a PO he has had saved since spring is dropped on his
+       * first load of the new build. Silently: he does not get an error, he gets
+       * an empty box, and the only man who notices is the one whose order goes
+       * out without the number his office needs.
+       *
+       * So the unwrap lives HERE and not in a per-page shim, because a shim is
+       * the fork this module was extracted to stop. The guard is exact rather
+       * than hopeful — the top level holds NONE of the ids we came for, and `s`
+       * is an object — so a flat bag that happens to carry an `s` key is never
+       * mistaken for a wrapper. */
+      var want = PER.concat(DEV).concat(NAME ? [NAME] : []);
+      var flat = want.some(function (id) { return old[id] != null; });
+      if (!flat && old.s && typeof old.s === 'object') old = old.s;
+
       DEV.forEach(function (id) { if (old[id]) store.device[id] = old[id]; });
 
       var f = {}, any = false;

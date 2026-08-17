@@ -123,7 +123,15 @@
       '<div class="head">'
       + '<p class="do-head"><b>How the truck gets in and where it lands</b>'
       + '<span id="' + id('for') + '"></span>'
-      + '<button type="button" class="do-clear" id="' + id('clr') + '" hidden>different job &mdash; clear this</button></p>'
+      /* THE OLD GUARD, WORDED FOR THE PAGE IT IS ON. Without a job card this
+       * button is the only fix a stale gate code has, and "different job" is
+       * exactly what it means. With one, the words are a lie — a different job
+       * has its own block now — and the button becomes a foot-gun: he taps it on
+       * the job he is standing on and destroys the answers that are correct.
+       * Same escape hatch, honest label. */
+      + '<button type="button" class="do-clear" id="' + id('clr') + '" hidden>'
+      + (cfg.perJob ? 'clear this job&rsquo;s answers' : 'different job &mdash; clear this')
+      + '</button></p>'
       + '<div class="hgrid">'
       + AX.map(function (a) {
           return '<div class="f' + (a.wide ? ' span2' : '') + '"><label>' + esc(a.label) + '</label>'
@@ -163,12 +171,25 @@
     var TEXT = ['nb', 'where', 'gate', 'meet', 'sign'];
     var state = { land: '', off: '', win: '', call: '', nb: '', where: '', gate: '', meet: '', sign: '', job: '' };
 
+    /* THE KEY IS A VARIABLE, and rule #4 above is the reason. This block was
+     * built sticky because its answers are the same all year — and then guarded
+     * against the one failure that makes sticky dangerous with a line of text and
+     * a button he has to press. shared/jobcard.js was written three days later
+     * on exactly that lesson, and its panel threw the button out: a foreman
+     * one-handed off a ladder at 6am does not read a notice and does not press a
+     * clear button, and the string compare behind the notice cannot fire when he
+     * types "warehouse" out of habit at the downtown job. So a page that has a
+     * job card hands this block a key PER JOB, the answers travel with the job
+     * that owns them, and the guard becomes the tap he was making anyway. A page
+     * without one passes a single key and nothing changes for it. */
+    var KEY = cfg.key;
+
     function save() {
       var any = AX.concat([{ k: 'call' }]).some(function (a) { return state[a.k]; })
         || TEXT.some(function (k) { return state[k]; });
       try {
-        if (any) localStorage.setItem(cfg.key, JSON.stringify({ v: 1, s: state }));
-        else localStorage.removeItem(cfg.key);
+        if (any) localStorage.setItem(KEY, JSON.stringify({ v: 1, s: state }));
+        else localStorage.removeItem(KEY);
       } catch (e) {}
       paint();
       if (cfg.onChange) cfg.onChange();
@@ -183,7 +204,14 @@
       el.clr.hidden = !any;
       var now = cfg.jobField ? (document.getElementById(cfg.jobField) || {}).value : '';
       now = (now || '').trim();
-      if (any && state.job && now && state.job !== now) {
+      /* THE STALENESS LINE IS OFF UNDER A JOB CARD, and not because it is
+       * redundant — because it becomes WRONG. Per-job keys mean the name stamped
+       * on this record is this job's own earlier name, so the only way the
+       * compare can fire is a RENAME: he fixes a typo, and the block tells him
+       * his gate code was filled in for a different job. A false alarm on the
+       * one control whose whole value is being believed. The chip he tapped is
+       * the guard now (shared/jobcard.js: the picker IS the guard). */
+      if (!cfg.perJob && any && state.job && now && state.job !== now) {
         el['for'].textContent = 'filled in for ' + state.job;
       } else {
         el['for'].textContent = '';
@@ -223,26 +251,52 @@
       el[k].addEventListener('change', function () { state[k] = el[k].value; stamp(); save(); });
     });
 
-    try {
-      var raw = localStorage.getItem(cfg.key);
-      if (raw) {
-        var p = JSON.parse(raw);
-        if (p && p.s) {
-          Object.keys(state).forEach(function (k) { if (p.s[k] != null) state[k] = p.s[k]; });
-          TEXT.forEach(function (k) { el[k].value = state[k] || ''; });
-          [].forEach.call(host.querySelectorAll('.do-chips'), function (box) {
-            var k = box.getAttribute('data-ax');
-            [].forEach.call(box.querySelectorAll('.do-chip'), function (c) {
-              c.classList.toggle('on', c.getAttribute('data-v') === state[k]);
-            });
-          });
+    /* PAINT THE GLASS FROM `state`, ALWAYS — never only the keys a record
+     * happens to carry. On the way in those are the same thing; on a job switch
+     * it is the whole difference, because the answers the OTHER job never gave
+     * have to come off the screen rather than linger under a lit chip. */
+    function dress() {
+      TEXT.forEach(function (k) { el[k].value = state[k] || ''; });
+      [].forEach.call(host.querySelectorAll('.do-chips'), function (box) {
+        var k = box.getAttribute('data-ax');
+        [].forEach.call(box.querySelectorAll('.do-chip'), function (c) {
+          c.classList.toggle('on', c.getAttribute('data-v') === state[k]);
+        });
+      });
+    }
+
+    function load() {
+      try {
+        var raw = localStorage.getItem(KEY);
+        if (raw) {
+          var p = JSON.parse(raw);
+          if (p && p.s) {
+            Object.keys(state).forEach(function (k) { if (p.s[k] != null) state[k] = p.s[k]; });
+          }
         }
-      }
-    } catch (e) {}
+      } catch (e) {}
+      dress();
+    }
+
+    load();
     paint();
 
     return {
       show: function (on) { host.classList.toggle('on', !!on); },
+      /* SWITCHING JOBS. The page calls this from the job card's onApply, so what
+       * is on the glass always belongs to the chip that is lit. The ORDER is the
+       * safety property, and it is the one shared/jobcard.js already uses: save
+       * the job he is LEAVING first, or the job he arrives at inherits whatever
+       * was still in the boxes — which is the leak, wearing the fix's clothes. */
+      rekey: function (k) {
+        if (!k || k === KEY) return;
+        save();
+        KEY = k;
+        Object.keys(state).forEach(function (n) { state[n] = ''; });
+        load();
+        paint();
+        if (cfg.onChange) cfg.onChange();
+      },
       /* The block as it reads in the sent document. Empty when he has said
        * nothing — a heading with nothing under it is noise in a message somebody
        * has to read at 6am. */

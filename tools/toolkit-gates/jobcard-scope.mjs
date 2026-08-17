@@ -66,7 +66,16 @@ function pages() {
   for (const t of trades) {
     for (const f of readdirSync(join(ROOT, t)).filter(f => f.endsWith('.html')).sort()) {
       const src = readFileSync(join(ROOT, t, f), 'utf8');
-      if (src.includes('shared/jobcard.js')) out.push({ rel: `${t}/${f}`, trade: t, src });
+      /* A MENTION IS NOT A MOUNT, and this gate learned that by enrolling a page
+       * on the strength of a COMMENT. hvac/truck-stock.html deliberately has no
+       * job card — a van is restocked at the shop, there is no job to pick — and
+       * the day its header was fixed the fix was explained in a comment naming
+       * shared/jobcard.js, which is all the old test looked for. It then failed
+       * the page for not rendering a chip it was never supposed to have. So the
+       * script has to be LOADED and the module has to be CALLED. */
+      if (src.includes('shared/jobcard.js') && src.includes('JobCard.mount')) {
+        out.push({ rel: `${t}/${f}`, trade: t, src });
+      }
     }
   }
   return ONLY ? out.filter(p => p.rel === ONLY) : out;
@@ -123,6 +132,43 @@ async function fillHeader(page, tag) {
   }, tag);
 }
 
+/* THE ANSWERS THAT ARE NOT `f`-FIELDS, and on one page they are the only ones
+ * that matter. shared/dropoff.js renders its own block under its own `do-` ids
+ * and prints the GATE CODE — the most job-specific thing this program ever
+ * holds, and the reason the module exists. Those ids are not in the card's
+ * store, so scope-derivation cannot see them: a leak check that reads only the
+ * house `f` convention would call the page clean while last month's gate code
+ * rides out on today's order to a different address. So anything the page
+ * renders that reaches job A's document is looked for in job B's, whoever
+ * rendered it. A page with no such block returns nothing and asserts nothing. */
+async function reveal(page) {
+  const on = () => page.evaluate(() => {
+    const h = document.getElementById('dropoff');
+    return !!(h && h.classList.contains('on'));
+  });
+  if (!(await page.$('#dropoff'))) return false;
+  if (await on()) return true;
+  for (const b of await page.$$('.seg button, .seg [data-v]')) {
+    try { await b.click(); } catch (e) { continue; }
+    if (await on()) return true;
+  }
+  return on();
+}
+async function fillBlocks(page, tag) {
+  return page.evaluate(t => {
+    const put = {};
+    document.querySelectorAll('#dropoff input[type="text"], #dropoff textarea').forEach(el => {
+      if (!el.id) return;
+      const v = `Z${t}_${el.id.replace(/[^A-Za-z0-9]/g, '')}Z`;
+      el.value = v;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      put[el.id] = v;
+    });
+    return put;
+  }, tag);
+}
+
 const fails = [];
 const fail = (p, m) => fails.push(`${p}  ${m}`);
 
@@ -162,6 +208,8 @@ for (const { rel, trade, src } of list) {
 
   const KEY = `toolkit.${trade}.jobcard.v1`;
   const putA = await fillHeader(page, 'A');
+  const hasBlock = await reveal(page);
+  const blockA = hasBlock ? await fillBlocks(page, 'A') : {};
   await page.waitForTimeout(60);
 
   const store = await page.evaluate(k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }, KEY);
@@ -177,6 +225,10 @@ for (const { rel, trade, src } of list) {
   const docA = await copied(page);
   const visible = PER.filter(id => docA.includes(putA[id]));
   if (!visible.length) fail(rel, 'not one per-job field reaches the sent document — the card is guarding nothing');
+  const blockVisible = Object.keys(blockA).filter(id => docA.includes(blockA[id]));
+  if (hasBlock && !blockVisible.length) {
+    fail(rel, 'the drop-off block is on the page and nothing typed into it reached the document — the leak test below would prove nothing');
+  }
 
   /* ── a new job starts EMPTY ───────────────────────────────────────────── */
   const newBtn = await page.$('#jobcard .jc-new');
@@ -188,35 +240,42 @@ for (const { rel, trade, src } of list) {
     const o = {};
     ids.forEach(id => { const el = document.getElementById(id); o[id] = el ? el.value : null; });
     return o;
-  }, PER.concat(DEV));
+  }, PER.concat(DEV).concat(Object.keys(blockA)));
   for (const id of PER) {
     if (afterNew[id]) fail(rel, `#${id} still reads "${afterNew[id]}" on a brand-new job — a new job must start empty`);
   }
   for (const id of DEV) {
     if (afterNew[id] !== putA[id]) fail(rel, `#${id} is a device field and was cleared by starting a new job (now "${afterNew[id]}")`);
   }
+  for (const id of Object.keys(blockA)) {
+    if (afterNew[id]) fail(rel, `#${id} still reads "${afterNew[id]}" on a brand-new job — the drop-off block did not follow the chip, so the gate code belongs to the last job`);
+  }
 
   /* ── and job A's answers never reach job B's document ─────────────────── */
+  await reveal(page);
   const docB = await copied(page);
-  for (const id of visible) {
-    if (docB.includes(putA[id])) fail(rel, `#${id} from the first job is in the SECOND job's sent document — the cards leak`);
+  for (const id of visible.concat(blockVisible)) {
+    const v = putA[id] || blockA[id];
+    if (docB.includes(v)) fail(rel, `#${id} from the first job is in the SECOND job's sent document — the cards leak`);
   }
 
   /* ── switching back restores ──────────────────────────────────────────── */
   await fillHeader(page, 'B');
+  if (hasBlock) await fillBlocks(page, 'B');
   await page.waitForTimeout(60);
   const chips = await page.$$('#jobcard .jc-chip[data-j]');
   if (chips.length < 2) fail(rel, `only ${chips.length} job chip(s) after starting a second job`);
   else {
     await chips[0].click();
     await page.waitForTimeout(60);
+    const want = Object.assign({}, putA, blockA);
     const back = await page.evaluate(ids => {
       const o = {};
       ids.forEach(id => { const el = document.getElementById(id); o[id] = el ? el.value : null; });
       return o;
-    }, PER);
-    for (const id of PER) {
-      if (back[id] !== putA[id]) fail(rel, `#${id} came back as "${back[id]}" instead of "${putA[id]}" after switching to the other job and back`);
+    }, PER.concat(Object.keys(blockA)));
+    for (const id of PER.concat(Object.keys(blockA))) {
+      if (back[id] !== want[id]) fail(rel, `#${id} came back as "${back[id]}" instead of "${want[id]}" after switching to the other job and back`);
     }
   }
 
@@ -235,28 +294,46 @@ for (const { rel, trade, src } of list) {
 
   /* ── nobody loses a gate code on the way in ───────────────────────────── */
   if (legacyKey) {
-    const c2 = await browser.newContext({ viewport: { width: 390, height: 780 } });
-    await c2.addInitScript(STUB);
     const seed = {};
     PER.concat(DEV).forEach(id => { seed[id] = `ZOLD_${id}Z`; });
-    await c2.addInitScript(([k, v]) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }, [legacyKey, seed]);
-    const p2 = await c2.newPage();
-    await p2.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
-    await p2.waitForSelector('#jobcard .jc-chip', { state: 'attached', timeout: 5000 }).catch(() => {});
-    const got = await p2.evaluate(ids => {
-      const o = {};
-      ids.forEach(id => { const el = document.getElementById(id); o[id] = el ? el.value : null; });
-      return o;
-    }, PER.concat(DEV));
-    for (const id of PER.concat(DEV)) {
-      if (got[id] !== seed[id]) fail(rel, `the old key ${legacyKey} held #${id}="${seed[id]}" and the job card came up with "${got[id]}" — a migration that loses a saved answer`);
+
+    /* BOTH SHAPES THIS CODEBASE EVER WROTE A STICKY HEADER IN, and the second one
+     * is here because seeding only the first is how this gate returned green over
+     * a page that lost every saved answer. Six pages hand-rolled the flat bag —
+     * localStorage.setItem(SKEY, JSON.stringify({fJob:"…"})). The pages that kept
+     * the same header through shared/draft.js got its wrapper for free, because
+     * Draft.keep's only writer stores {v, s} — so a flat read finds nothing, the
+     * adoption quietly declines, and the man opens a blank card. The gate has to
+     * write what the PAGE writes, and the page it was first written against
+     * happened to be one of the six. */
+    for (const [shape, record] of [['flat', seed], ['draft-wrapped', { v: 1, s: seed }]]) {
+      const c2 = await browser.newContext({ viewport: { width: 390, height: 780 } });
+      await c2.addInitScript(STUB);
+      await c2.addInitScript(([k, v]) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }, [legacyKey, record]);
+      const p2 = await c2.newPage();
+      await p2.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
+      await p2.waitForSelector('#jobcard .jc-chip', { state: 'attached', timeout: 5000 }).catch(() => {});
+      const got = await p2.evaluate(ids => {
+        const o = {};
+        ids.forEach(id => { const el = document.getElementById(id); o[id] = el ? el.value : null; });
+        return o;
+      }, PER.concat(DEV));
+      for (const id of PER.concat(DEV)) {
+        if (got[id] !== seed[id]) fail(rel, `a ${shape} record at the old key ${legacyKey} held #${id}="${seed[id]}" and the job card came up with "${got[id]}" — a migration that loses a saved answer`);
+      }
+      await c2.close();
     }
-    await c2.close();
   } else {
     fail(rel, 'no legacyKey declared — a page that had a sticky header must adopt it or the foreman loses it');
   }
 
-  console.log(` ${rel}  ${PER.length} per-job, ${DEV.length} device, ${visible.length} of them in the document`);
+  /* THE BLOCK COUNT IS PRINTED, not just asserted. An assertion that quietly
+   * covers nothing reads exactly like an assertion that passed — and the block
+   * ids are the ones a leak would actually be measured in on the one page that
+   * has them, so "0 in the document" on a page with a drop-off block is the
+   * gate telling you it is lying. */
+  console.log(` ${rel}  ${PER.length} per-job, ${DEV.length} device, ${visible.length} of them in the document`
+    + (hasBlock ? `  ·  drop-off block: ${Object.keys(blockA).length} field(s), ${blockVisible.length} in the document` : ''));
 }
 
 await browser.close();

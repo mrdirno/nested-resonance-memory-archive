@@ -184,7 +184,11 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>Where to leave it, who to bill &mdash; typed once, saved on this phone</summary>
+      <!-- THE SUMMARY HAD TO CHANGE WITH THE CODE. It said "typed once, saved on
+           this phone" about all three, and two of them stopped being that in the
+           same edit — a disclosure line that describes the old behaviour is a
+           worse lie than no line, because he trusts it and stops checking. -->
+      <summary>Where to leave it, who to bill &mdash; the drop spot sticks, the rest is this order</summary>
       <div class="hgrid">
         <div class="f span2"><label>Where to leave it if I'm not there</label><textarea id="fDrop" rows="2" placeholder="My shelf by the roll-up · or with dispatch — text me and I'll come get it"></textarea></div>
         <div class="f"><label>Charge to</label>
@@ -264,8 +268,29 @@ ul.items{list-style:none;margin:0;padding:0}
   /* ── STICKY HEADER ────────────────────────────────────────────────────────
    * The answers that are the same every week for the life of a truck. They live
    * on the device and Clear does not touch them — clearing the LIST must never
-   * cost him his truck number at 6:15 in the morning. */
-  var STICKY = ["fTruck", "fBy", "fHow", "fDrop", "fCharge"];
+   * cost him his truck number at 6:15 in the morning.
+   *
+   * TWO OF THEM WERE NEVER THAT, and they sat in this list from the day the page
+   * shipped. shared/jobcard.js took the same defect off five order pages on
+   * 2026-08-16 and this page was deliberately left out of THAT change — a van is
+   * restocked at the shop, there is no job to pick, and a chip row here is the
+   * ceremony §THE STRICT BAR forbids. The picker was the wrong fix for it. It was
+   * not the only fix, and skipping the page skipped the bug:
+   *
+   *   fHow — the tech, on his own week: "Had 'how I'm getting it' still sitting on
+   *   'meet me at the job' from a delivery two weeks back. Told the guys I'd swing
+   *   by the shop myself, nobody at the shop knew different because the page never
+   *   asked again, and I found out at 6:40 with a hot call waiting on a contactor
+   *   that was sitting on a shelf nobody sent anywhere."
+   *   fCharge — the counter: "last week's Warranty pull silently defaults onto this
+   *   week's plain truck-stock replenishment." A billing decision, remembered
+   *   forever, printed as though he made it today.
+   *
+   * Neither becomes a third scope: order-live-header.mjs killed blank-on-load,
+   * because a field printed in the document has to survive a reload. They ride THE
+   * LIST — saved with it, restored with it, put back to the page's own default by
+   * Clear, which is the one action that means "this is a different order". */
+  var STICKY = ["fTruck", "fBy", "fDrop"];
   var SKEY = "toolkit.hvac.truckStock.header.v1";
   (function loadSticky() {
     var s = {};
@@ -281,6 +306,19 @@ ul.items{list-style:none;margin:0;padding:0}
     var el = $(id);
     if (el) { el.addEventListener("input", saveSticky); el.addEventListener("change", saveSticky); }
   });
+
+  /* THE OPTIONS THE PAGE SHIPPED AS ITS DEFAULTS, read before anything restores
+   * over them — that is what Clear has to put back and what "untouched" means.
+   * A <select> can only hold an option it has, so a value saved when the list
+   * was different is dropped rather than landing on option zero and printing a
+   * plan he never picked. */
+  var HOW0 = $("fHow") ? $("fHow").value : "";
+  var CHG0 = $("fCharge") ? $("fCharge").value : "";
+  function setSel(id, v) {
+    var s = $(id);
+    if (!s || !v) return;
+    if ([].some.call(s.options, function (o) { return o.value === v; })) s.value = v;
+  }
 
   var when = "Today";
   function whenText() {
@@ -342,8 +380,10 @@ ul.items{list-style:none;margin:0;padding:0}
     notePlaceholder: "e.g. the number off the old one, what's on the plate, which bin it lives in",
     watch: ["fTruck", "fBy", "fFor", "fNotes", "fDate", "fDrop", "fWO"],
     persistExtra: function () {
-      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked, wo: $("fWO").value };
-      var touched = x.forr || x.notes || x.date || x.wo || x.when !== "Today" || x.hot;
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked, wo: $("fWO").value,
+                how: $("fHow") ? $("fHow").value : "", chg: $("fCharge") ? $("fCharge").value : "" };
+      var touched = x.forr || x.notes || x.date || x.wo || x.when !== "Today" || x.hot
+                 || x.how !== HOW0 || x.chg !== CHG0;
       return touched ? x : null;
     },
     onRestoreExtra: function (x) {
@@ -352,11 +392,15 @@ ul.items{list-style:none;margin:0;padding:0}
       $("fDate").value = x.date || "";
       $("fWO").value = x.wo || "";
       $("fHot").checked = !!x.hot;
+      setSel("fHow", x.how);
+      setSel("fCharge", x.chg);
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
       ["fFor", "fNotes", "fDate", "fWO"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
+      if ($("fHow")) $("fHow").value = HOW0;
+      if ($("fCharge")) $("fCharge").value = CHG0;
       seg("segWhen", "Today");
       showLast();
     },
