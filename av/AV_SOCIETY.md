@@ -4624,5 +4624,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   **all twelve trades live at 320 and 390px**: inside the glass everywhere, no sideways
   scroll, first link hit-testable, worst margin 8px on electrical/low-voltage. Nothing to
   carry back: `sizeMenu()` already clamps that left edge and `menu-reachability.mjs` already
-  guards it. The debt ran the other way, and this cycle paid it.
+  guards it. The debt ran the other way, and this cycle paid it. **The sweep did turn up one
+  thing:** running that gate live with the base URL missing its trailing slash printed
+  `0 page x viewport checks over 0 toolkit pages` and then **PASS, exit 0** — with the slash,
+  798 checks over 114 pages, tightest clearance 15.5px at `masonry/answer-back.html @320x480`.
+  Base now normalised and `checked === 0` now FAILS; proven by removing the normalisation and
+  re-running the command that had passed.
   https://mrdirno.github.io/vibe-cards/studio/
