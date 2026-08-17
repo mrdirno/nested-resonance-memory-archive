@@ -36,7 +36,8 @@ window.COMMONS_TRADES = [
   { slug: "roofing",     short: "Roofing",      name: "Roofing",              color: "#FF93C9" },
   { slug: "creative",    short: "Creative",     name: "Creative / Video",     color: "#EDA5FF" },
   { slug: "concrete",    short: "Concrete",     name: "Concrete & Rebar",     color: "#2DD758" },
-  { slug: "masonry",     short: "Masonry",      name: "Masonry & Brick",      color: "#B9EE1B" }
+  { slug: "masonry",     short: "Masonry",      name: "Masonry & Brick",      color: "#B9EE1B" },
+  { slug: "sitework",    short: "Sitework",     name: "Sitework & Underground", color: "#FFDDA3" }
 ];
 
 /* The surfaces of the commons, in reading order. The nav dropdown on every page

@@ -414,5 +414,36 @@ window.COMMONS_GEAR = [
   { id: "grinder-shroud-vac", n: "Grinder with a dust shroud and vac, and spare blades", t: ["masonry", "concrete"],
     w: "Grinding out is the repair and the dust is what gets you shut down on an occupied building. Joints eat blades faster than anybody budgets." },
   { id: "wash-down-kit", n: "Wash-down kit — brushes, barrel and a pump sprayer", t: ["masonry"],
-    w: "Cleaning is a scheduled operation, not a broom at the end. Whatever you wash with, try it on the panel first — the wall you learn on is the wall you own." }
+    w: "Cleaning is a scheduled operation, not a broom at the end. Whatever you wash with, try it on the panel first — the wall you learn on is the wall you own." },
+
+  /* ---- sitework: trade #12 -----------------------------------------------
+     THE ONLY BAG ON THIS RACK WHERE HALF THE GEAR IS FOR MARKING THE GROUND
+     rather than working it. A dirt hand's day is decided by whether the right
+     things are painted, flagged, staked and written on before a bucket moves,
+     and by whether he can still find them after a rain and a scraper pass. The
+     4-gas monitor is on this list and it is the one row on the whole commons
+     that says out loud what it does NOT do. */
+  { id: "marking-paint", n: "Marking paint in a colour the locators didn't use, and a spare case", t: ["sitework"],
+    w: "You white-line your dig before you call it in, then re-mark it every time the rain takes it. Paint over somebody's locate marks and the next man digs to the wrong line." },
+  { id: "pin-flags", n: "Pin flags, whiskers and flagging tape", t: ["sitework"],
+    w: "Paint washes off and gets scraped away. A flag stands up out of the mud, and a stub nobody flagged is two hours of hand digging in three months." },
+  { id: "lath-keel-hatchet", n: "Lath, keel and a hatchet", t: ["sitework"],
+    w: "You reset more stakes than the surveyor ever does, and whatever isn't written on the lath gets remembered wrong." },
+  { id: "probe-rod", n: "Probe rod", t: ["sitework"],
+    w: "Feels for the top of a pipe, the top of rock and the soft spot before the bucket finds it for you." },
+  { id: "sharpshooter", n: "Sharpshooter and a round point", t: ["sitework"],
+    w: "Every machine job ends with a man in the hole with a shovel, and hand work near a live line needs one that cuts rather than one that pushes." },
+  { id: "digging-bar", n: "Digging bar", t: ["sitework"],
+    w: "Roots, rock and pry work the hoe can't do without breaking something more expensive than the bar." },
+  { id: "grade-rod", n: "Grade rod, and a cut stick you cut yourself", t: ["sitework"],
+    w: "Every argument about grade ends the second somebody puts a rod on it — and yours is the one you trust in a ditch at half four." },
+  { id: "laser-receiver", n: "Laser receiver and a pocket of batteries", t: ["sitework"],
+    w: "A dead receiver stops the whole run, the rover dies mid-afternoon, and there is never a spare on the job." },
+  { id: "gasket-lube", n: "Gasket lube, spare gaskets and a clean rag", t: ["sitework"],
+    w: "A dry gasket rolls, and a rolled gasket is a failed test three weeks later that nobody can explain." },
+  { id: "test-plugs", n: "Test plug set and a fat marker", t: ["sitework"],
+    w: "Cap and mark every open end at quitting time. A rock in the line at four o'clock is a mandrel that won't pull in three weeks." },
+  { id: "gas-monitor", n: "4-gas monitor", t: ["sitework"],
+    w: "You carry your own and you bump-test it. It does not make the entry call for you — the competent person on site does, in front of the actual hole, and no page ever will." }
 ];
+

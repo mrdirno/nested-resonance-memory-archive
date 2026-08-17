@@ -1,0 +1,563 @@
+/* SITEWORK FIELD TOOLKIT — THE TRADE'S VOCABULARY.
+ *
+ * `trade.js` = IDENTITY + COPY · `tools.js` = REGISTRY · this file = the WORDS.
+ * Categories, option lists, ask lines, ladders. Nothing here is a runtime and
+ * nothing here is a number we supply.
+ *
+ * WHERE THESE WORDS CAME FROM. Three independent in-trade lenses — a mass-ex and
+ * grading foreman, an underground utility foreman, and a GC super who ran
+ * electrical for ten years and whose own conduit lives in the ditch — each wrote
+ * this trade's vocabulary with no sight of the others, and a 20-year dirt hand
+ * was then told to kill about a third. The convergence is the finding: all three
+ * produced the SAME gate ladder with backfill at its centre, and all three named
+ * rock, water, unsuitables, an unmarked line, standby and a re-dig as the six
+ * things that put a dirt crew outside its contract. Those six are the top of
+ * `tag.why` because three witnesses put them there, not because they read well.
+ *
+ * THE REFUSAL IS THE DESIGN, and in this trade it is stricter than anywhere else
+ * on the rack. Nothing in this file is:
+ *   · a soil class, a slope, a bench, a shore, a shield, a setback, a depth
+ *     threshold, or any word that could be read as "safe to enter";
+ *   · a compaction spec — no proctor, no lift as a value, no moisture, no passes;
+ *   · a bedding or backfill class, a cover depth, a separation distance, a
+ *     thrust block, a test pressure or a test duration;
+ *   · a locate, a ticket number, or any claim that a mark is current or correct.
+ * Every one of those is a place where the honest tool structures what the USER
+ * states off his own plan, spec, geotech report or utility notes. A later cycle
+ * that adds one is not filling a gap; it is the defect this file was built to
+ * refuse. Men die in trenches, and the number is engineered off a soil that a
+ * page on a phone has never seen.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+/* ── THE EXTRA WORK TAG (shape #2 — shared/note.js) ────────────────────────
+ * Who directed it, what came up, why it is outside the contract, and the line
+ * everybody argues about later: what is NOT in this tag. Counts only — men,
+ * hours, loads and material as quantities. No rates, no totals, and no signature
+ * line, because a copy-paste block cannot be signed and a dirt foreman spots it
+ * instantly.
+ *
+ * DIFFERING SITE CONDITIONS IS THIS TRADE'S WHOLE EXTRA-WORK STORY, which is why
+ * this list looks nothing like the mason's. Rock, water, unsuitables and a line
+ * nobody marked are not "changes" anybody directed — they are what the ground
+ * turned out to be, and the tag exists to put a date and a witness on them the
+ * day they were still visible. Once the dirt is back, nobody can see what he was
+ * standing in.
+ */
+window.TOOLKIT_ITEMS.tag = {
+  roles: [
+    "GC superintendent",
+    "Our own general super",
+    "GC project manager",
+    "Our PM or the office",
+    "Another trade's foreman in our ditch",
+    "The surveyor or the engineer's rep on site",
+    "Owner's rep or construction manager",
+    "Builder's field super (tract or custom home)",
+    "Homeowner",
+    "Utility owner's inspector on site",
+    "Jurisdiction inspector on site"
+  ],
+  how: [
+    { v: "Face to face at the ditch" },
+    { v: "Text message" },
+    { v: "Phone call" },
+    { v: "Told to me at the morning huddle" },
+    { v: "Radio on the site channel" },
+    { v: "Email" },
+    { v: "Marked-up set handed to me in the field" },
+    { v: "Paint or stakes changed on the ground" },
+    { v: "A different trade told me he'd cleared it" }
+  ],
+  /* WHY IT IS OUTSIDE THE CONTRACT. Every line is a CONDITION he picks, not a
+     characterisation of anybody, and not one of them puts a price, a cause or a
+     verdict on the page. The first six are the ones all three panels wrote. */
+  "why": [
+    {
+      "name": "Rock — the bucket quit going down",
+      "sub": "Had to work it with something that isn't what we bid, or go at it a different way, to get to the bottom we were given."
+    },
+    {
+      "name": "Water in the hole",
+      "sub": "Pumped it, hauled it wet, worked it twice, or dried it back before anything could go in."
+    },
+    {
+      "name": "Unsuitables — it wouldn't hold",
+      "sub": "Wet, mucky or trashy dirt that would not stand up. Told to dig it out and put something back, or told to work it anyway."
+    },
+    {
+      "name": "A line in the ground nobody marked",
+      "sub": "Not on the plan and not in the paint. Stopped, hand dug to find it, stood by, or worked around it."
+    },
+    {
+      "name": "The marks were off",
+      "sub": "Dug where the paint said and it was not there — or it was, and not where it was shown. Hand digging and time nobody bid."
+    },
+    {
+      "name": "Old work nobody told us about",
+      "sub": "Slab, footing, tank, debris or an abandoned line in our dig that was not on anything we bid."
+    },
+    {
+      "name": "Bottom kept going down",
+      "sub": "Dug past what the set showed us to get to what somebody on site called for."
+    },
+    {
+      "name": "Standing while another outfit got out of our ditch",
+      "sub": "Crew and iron on site, waiting on somebody else to finish in the hole we were manned for."
+    },
+    {
+      "name": "Held it open for a test, a shot or a look",
+      "sub": "Ready to close and told to leave it while somebody else got here — a surveyor, a lab, an inspector, an owner."
+    },
+    {
+      "name": "Re-dug a run we had already closed",
+      "sub": "Dirt was back in and somebody's work was not. Opened it up again on a say-so."
+    },
+    {
+      "name": "Grade or layout moved after we built to it",
+      "sub": "Stakes gone, offsets changed, or a new set landed after we had already worked to the first one."
+    },
+    {
+      "name": "Dirt in or dirt out nobody bid",
+      "sub": "Import hauled in or spoil hauled off that was not in the scope, or a stockpile moved twice because the plan for it changed."
+    },
+    {
+      "name": "Access or the haul route changed after we mobed",
+      "sub": "Different gate, longer haul, plates, a detour or hours we did not have when we priced the move-in."
+    },
+    {
+      "name": "Told to work the weather",
+      "sub": "Keep going, pump it, tarp it, or come back on a day we had called off."
+    }
+  ],
+  /* WHAT IS NOT IN THIS TAG. The line everybody argues about later, and the
+     reason the tag survives being read by an office: it says out loud what it is
+     not. Three panels independently wrote the lab, the surveyor and the locate
+     ticket into this list — in this trade, the documents that surround the work
+     all belong to somebody else, and saying so is what keeps this one usable. */
+  "notin": [
+    {
+      "name": "Not a price",
+      "sub": "Hours, loads and counts only. No rate, no total, no dollar figure anywhere on it."
+    },
+    {
+      "name": "Not a change order and not a claim",
+      "sub": "This says we were directed and what it took. It becomes a change when the offices paper it, and entitlement is their letter, not the foreman's."
+    },
+    {
+      "name": "Not the lab's report",
+      "sub": "Density, moisture and soils are their gauge and their number. We write that we stood by; we never write whether it passed."
+    },
+    {
+      "name": "Not the surveyor's as-built",
+      "sub": "He shoots it, he stamps it and he numbers it. All we say is what we could not cover until he did."
+    },
+    {
+      "name": "Not a locate and not a ticket",
+      "sub": "The one-call centre owns that number and owns its clock. Nothing here renews one, clears one, or says a mark is good."
+    },
+    {
+      "name": "Not a call on whether the hole was safe to be in",
+      "sub": "That is the competent person, on site, in person, in front of the actual soil. It is not a line on a phone and it is not on this tag."
+    },
+    {
+      "name": "Not a design change",
+      "sub": "Bottom, bedding, box, slope, backfill — none of it gets decided here. Anything about the design goes up through the GC on their form."
+    },
+    {
+      "name": "Not a damage claim",
+      "sub": "A line that got hit goes on the utility's own paper, right then, through their process. It does not ride on this."
+    },
+    {
+      "name": "Not the environmental paper",
+      "sub": "Contaminated or regulated material rides on its own manifest with its own people, and we do not retype what is printed on it."
+    },
+    {
+      "name": "Not the GC's daily",
+      "sub": "They keep theirs and number it. This is ours and it stands on its own."
+    },
+    {
+      "name": "Not a finding of cause",
+      "sub": "We write what we dug and who told us to dig it. Why something failed, settled or was where it was is a call other people make."
+    },
+    {
+      "name": "Not a safety or incident report",
+      "sub": "Injuries, near misses and equipment go on their own paper, right then, through the proper channel."
+    },
+    {
+      "name": "Not turnover or acceptance",
+      "sub": "Signing that you were told isn't accepting the work, releasing anybody, or agreeing it's done."
+    }
+  ],
+  /* THE CLASSIFICATIONS. OPERATOR and PIPELAYER are both on this list and it is
+     not a courtesy — the man in the machine and the man in the ditch are
+     different classifications doing different work at the same moment, and a tag
+     that cannot name them cannot count who actually stood. */
+  "classes": [
+    "— class",
+    "OPERATOR",
+    "PIPELAYER",
+    "LABORER",
+    "FOREMAN",
+    "TRUCK DRIVER",
+    "GRADE CHECKER",
+    "APPRENTICE"
+  ],
+  "pics": [
+    {
+      "v": "In this message — shot before we covered it"
+    },
+    {
+      "v": "None"
+    }
+  ]
+};
+
+/* ── BEFORE WE DIG (shape #3 — shared/rowlog.js) ───────────────────────────
+ * THE ASK HALF OF THE BOUNDARY, and it is DELIBERATELY SHORT.
+ *
+ * THE PRUNE KILLED THIS PAGE OUTRIGHT and the kill was half right, so half of it
+ * was taken. Its argument, verbatim: "Two broadcast tools on one kit and neither
+ * gets used — a crew learns one page or none, and the one that matters is the
+ * one nobody else can write." What it was actually objecting to was DUPLICATION:
+ * the first cut of this list carried eight asks gated at `backfill` — your
+ * conduit in, your stubs capped, the shot before I cover, sleeves through the
+ * footing, somebody standing here when it goes back — and every one of those is
+ * the pinned tool's job, said to everybody at once instead of one outfit at a
+ * time. They were cut, not reworded.
+ *
+ * So the two documents on this kit have DISJOINT jobs and share no line:
+ *   before-we-close.html  — what YOU need out of MY hole, before it shuts.
+ *   this page             — what I need from YOU before the machine starts.
+ * Every ask below is gated at `mobe`, `dig`, `pipe` or `tiein`. If a later cycle
+ * adds one gated at `backfill`, it has re-opened the exact overlap the prune
+ * killed the page for.
+ *
+ * THE MILESTONES ARE THIS TRADE'S OWN LADDER, not the GC's, and they are the
+ * prune's nine — merged from three independent panels that each wrote the same
+ * spine. Three shipped kits (electrical, plumbing, gc) open their own ladder
+ * with the SEVENTH rung on this one.
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "Before We Dig",
+  eyebrow: "Sitework · you → everybody who owes you something before the machine starts",
+  lede: "Everything that has to be called in, marked, staked, delivered, cleared or decided before you break ground. Who owes it, where it is, and the gate it has to beat. One walk, one message each.",
+  docSubject: "Before we dig — what I need out of your outfit",
+  docSubjectWith: "Before we dig — what I need from {to}",
+  closing: "That's my list before we start. If a line on here is wrong, or there's something out there you know about that I don't, hit me back today — everything on this list is cheap this week and expensive the morning the machine is sitting on it.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> set. This page slopes nothing, benches nothing, shores nothing, classes no soil, beds nothing, compacts nothing and locates nothing &mdash; and it doesn't know what the plans, the geotech report, the utility owner, the engineer of record or the AHJ require. Verify all of it against your own approved set, and whether a hole can be worked in is the competent person's call on site, in front of the actual soil, not a page's. It's an ask, not an approved detail, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The sheet, the profile and its revision is the whole argument — naming what you took it off is the difference between a request the other foreman works to and one he re-walks with you the morning you're supposed to be digging.",
+  phJob: "Willow Creek — Phase 2",
+  phOff: "C-401 rev 3",
+  phFrom: "Ray T — Delgado Excavating",
+  phArea: "SS main, MH-3 to MH-4",
+  areaLabel: "Run / line / area",
+  who: [
+    { v: "gc", label: "GC super" },
+    { v: "survey", label: "Surveyor / layout" },
+    { v: "elec", label: "Electrician" },
+    { v: "plumb", label: "Plumber / mechanical" },
+    { v: "lv", label: "Low-voltage / comms" },
+    { v: "gas", label: "Gas / utility owner" },
+    { v: "conc", label: "Concrete / flatwork" },
+    { v: "lab", label: "Testing lab / geotech" },
+    { v: "sprink", label: "Fire / sprinkler contractor" },
+    { v: "land", label: "Landscape / irrigation" },
+    { v: "paving", label: "Paving / base" },
+    { v: "owner", label: "Owner / owner's vendor" },
+    { v: "supply", label: "Supplier / yard" }
+  ],
+  milestones: [
+    { v: "mobe", label: "Before we roll in" },
+    { v: "strip", label: "Before we strip" },
+    { v: "cut", label: "Before we cut" },
+    { v: "dig", label: "Before we open ground" },
+    { v: "pipe", label: "Before pipe goes in" },
+    { v: "tiein", label: "Before we tie in" },
+    { v: "backfill", label: "Before we backfill" },
+    { v: "bluetop", label: "Before we blue-top" },
+    { v: "demob", label: "Before the hoe leaves" }
+  ],
+  asks: [
+    { v: "locates", label: "The locates, and who called them", who: "gc", by: "dig", specs: [
+      "Tell me who called the ticket and when, and get me the copy — I am not digging off a mark somebody says is out there.",
+      "Private lines are not on a public ticket. Site lighting, irrigation, the owner's old feed, anything behind the meter — who is locating those, and when?",
+      "If a mark and the plan disagree, that comes to me before the machine does, not while I am sitting on it.",
+      "Tell me what you want potholed and who is standing there when I do it."
+    ] },
+    { v: "layout", label: "Layout, control and the bench", who: "survey", by: "dig", specs: [
+      "Give me the control and the benchmark you want me working off, and tell me which set they came from.",
+      "Stakes, offsets and the cut sheet in my hand before the machine tracks off the trailer — an offset I have to guess at is a re-dig.",
+      "If the alignment moved on the last set, tell me before I open ground, not after.",
+      "Tell me who is re-shooting it when my stakes get run over, because they will."
+    ] },
+    { v: "plan", label: "The set I am actually digging to", who: "gc", by: "dig", specs: [
+      "Confirm the sheet and the revision. A superseded profile costs a day and a saw cut, and it has happened to everybody.",
+      "Anything on this run dimensioned to something not built yet, flag it now.",
+      "If there is a soils report or a geotech recommendation I am supposed to be working to, I want the copy in my hand rather than a sentence about it.",
+      "Tell me who answers a question at seven in the morning when the ground is not what the sheet says."
+    ] },
+    { v: "strip", label: "What comes off, and what stays", who: "gc", by: "strip", specs: [
+      "Once the topsoil is off, anything staked, fenced, growing or sitting there is gone. Walk it with me and say what stays.",
+      "Tell me where the topsoil goes and whether you want it back — that is a pile that sits somewhere for months.",
+      "Trees, fence, irrigation, a neighbour's line: if it is protected, it gets flagged by whoever cares about it, today.",
+      "Anything you need at OLD grade — a shot, a photo, a tie — get it before we cut, because after that it does not exist."
+    ] },
+    { v: "spoil", label: "Where the spoil goes and where the import lands", who: "gc", by: "mobe", specs: [
+      "Say the stockpile location and say it once — a pile moved twice is a day of a machine's life.",
+      "Tell me what is coming off this site and what is coming in, and who is paying attention to which.",
+      "If any of it is suspect, tell me before it is on a truck — that material has its own paper and its own people.",
+      "Somewhere the trucks can turn around without going through somebody's finished work."
+    ] },
+    { v: "access", label: "The route in, the gate and the hours", who: "gc", by: "mobe", specs: [
+      "A lowboy needs a gate, a turn and something to sit on. Tell me which entrance and how early it is open.",
+      "Overhead is the one nobody thinks about until a boom is under it — tell me what is over my haul route.",
+      "Who owns the traffic control, the plates and the closure if I am working in a public way? That is yours to number, not mine.",
+      "Tell me who else is working over or under me that week so we are not both there."
+    ] },
+    { v: "water", label: "Where the water goes", who: "gc", by: "dig", specs: [
+      "Tell me the discharge point you are giving me and who cleared it, because a hole takes water whether anybody planned for it or not.",
+      "If there is a filter, a bag or a tank I am supposed to be using, tell me before I need it and not while it is running.",
+      "Tell me who owns the stormwater paper and who walks it, because that inspection is on their form and their name is on it, not mine.",
+      "If we are dewatering, say who is watching what it does to everybody else's hole."
+    ] },
+    { v: "material", label: "Pipe, structures and castings on site", who: "supply", by: "pipe", specs: [
+      "On the ground and staged before I open it, by mark, and tell me what is actually on the truck versus what ships that week.",
+      "Castings and rings with the structures, not a week behind them — I am not sitting on an open hole waiting on a lid.",
+      "If a piece came damaged or is the wrong mark, I would rather lose it on the ground than in the ditch.",
+      "Tell me where you are setting it, because a load dropped wherever the truck stopped gets moved by the crew that was meant to be laying."
+    ] },
+    { v: "shutdown", label: "The shutdown and who loses service", who: "gc", by: "tiein", specs: [
+      "Say the day and the window, and say who loses water, flow or power while we are in there.",
+      "Everybody affected has to be told by somebody with the authority to tell them — that is not the man in the ditch.",
+      "Tell me who is turning the valve or pulling the plug, because it is not going to be me on my own.",
+      "If it slides, I need to know before my crew and my pump are sitting on it."
+    ] }
+  ]
+};
+
+/* ── WHAT I'LL LEAVE OPEN (shape #3 — the RETURN LEG) ──────────────────────
+ * The mirror. Three served kits ship a page that sends this crew a list; this is
+ * the page he answers it on. The one field that makes it this trade's rather
+ * than a reskin is the WHEN: a yes on this document carries the TIME the dirt
+ * goes back, because that is the only number the other man can plan around.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "What I'll Leave Open",
+  eyebrow: "Sitework · them → you → back",
+  lede: "The electrician or the plumber sent you a list of what has to be in this trench before it closes — conduit, stubs, sleeves, a marked-up plan typed out. Line it up, give each one a yes, a no or a question, and put the TIME on every yes. Then send back one answer he can work to.",
+  docSubject: "what I'll leave open",
+  closing: "That's the yes, the no, and the time. Anything I flagged I need a location or an answer on before we get there. I can leave any of it open while it's open, and none of it after the dirt goes back — tell me the time you need and I'll hold it.",
+  phJob: "Willow Creek — Phase 2",
+  phTo: "Danny — EC foreman",
+  phFrom: "Ray T — Delgado Excavating",
+  phOff: "E-101 rev 2",
+  paste: "Willow Creek Phase 2 — site duct bank — Aug 16\n\nJob: Willow Creek Phase 2\nFrom: Danny — EC foreman\n\nMH-3 to MH-4 · our 4in duct bank is in the same ditch, needs to stay open till Thursday\nAt the building · two stubs coming up inside the footprint, marked in orange\nAcross the drive · tracer wire tail has to come up where we can clip on it\nSouth pad · empty conduit for site lighting — needs string in it before you cover"
+};
+
+/* ── BEFORE WE CLOSE IT (shape #3 — the pinned tool) ───────────────────────
+ * THE ONE DOCUMENT ON THIS JOB NOBODY ELSE CAN WRITE. electrical/items.js,
+ * plumbing/items.js and gc/items.js have each been telling a whole trade to
+ * count down to "before backfill" since those kits shipped, and nothing anywhere
+ * publishes the time. This does.
+ *
+ * THE INVERSE-CLAIM GUARD, inherited from masonry and sharper here: a list that
+ * names the runs nobody may touch will be read as clearing the runs it did not
+ * name. So the `touches` axis has NO "it's fine" value, a blank means he said
+ * nothing, and the document footer says so in words the page does not let you
+ * configure away.
+ *
+ * AND THE HARDER GUARD, WHICH IS THIS TRADE'S ALONE: not one value on `touches`
+ * is a permission. Every one of them is a refusal or a come-ask-me with a
+ * handback. There is no "shored", no "sloped", no "OK to enter" and there never
+ * may be — the man who decides a trench can be entered is the competent person
+ * standing in front of the actual soil, and no chip on a phone can be that.
+ */
+window.TOOLKIT_DITCH = {
+  toolName: "Before We Close It",
+  eyebrow: "Sitework · you → everybody with something in the ditch",
+  lede: "Run by run at quitting time: what's open, what's in it, what's holding it, and the time the dirt goes back. Tap each run up the ladder and send one message. Three other trades have been counting down to your backfill since the job started — this is the first page that gives them the time.",
+  docSubject: "before we close it",
+
+  /* THE LADDER, and it does NOT wrap: a run does not go back to not-dug, and the
+     pencil is the correction path. "Shot" sits before "backfilled" on purpose —
+     it is the last thing that has to happen while the ditch is still a ditch,
+     and it is the one everybody forgets until the closeout meeting. */
+  states: [
+    { v: "notdug", label: "Not dug yet" },
+    { v: "open", label: "Open — dug to grade" },
+    { v: "pipe", label: "Pipe / conduit in" },
+    { v: "tied", label: "Tied in" },
+    { v: "tested", label: "Tested" },
+    { v: "shot", label: "Shot — as-built taken" },
+    { v: "backfilled", label: "Backfilled" },
+    { v: "graded", label: "Graded out" },
+    { v: "off", label: "Off it" }
+  ],
+  /* STILL OPEN runs from OPEN to short of BACKFILLED — there is a hole in the
+     ground and the dirt has not gone back. That is what four other outfits are
+     racing, and it is declared here ONCE, by value, so the header count, the
+     filter and the footer call-out can never disagree. */
+  openFrom: "open",
+  openTo: "backfilled",
+
+  /* WHAT IS IN THE DITCH — the seed list for a learn axis, never a closed set.
+     A receiver reading "storm + EC duct" knows instantly that his water line is
+     not in that one, which is the whole reason this axis exists. */
+  ins: [
+    { v: "storm", label: "Storm" },
+    { v: "san", label: "Sanitary" },
+    { v: "water", label: "Water" },
+    { v: "fire", label: "Fire main" },
+    { v: "gas", label: "Gas" },
+    { v: "primary", label: "Electric — primary" },
+    { v: "secondary", label: "Electric — secondary / site lighting" },
+    { v: "duct", label: "EC duct bank" },
+    { v: "comms", label: "Comms / innerduct" },
+    { v: "irr", label: "Irrigation" },
+    { v: "drain", label: "Roof drain / area drain" },
+    { v: "sleeves", label: "Sleeves only" },
+    { v: "cut", label: "Nothing — it's a cut" }
+  ],
+
+  holds: [
+    { v: "going", label: "Nothing — we're going" },
+    { v: "locate", label: "Locates or the ticket" },
+    { v: "marks", label: "Marks don't match the ground" },
+    { v: "rock", label: "Rock" },
+    { v: "water", label: "Water in the hole" },
+    { v: "unsuit", label: "Unsuitables — it won't hold" },
+    { v: "unknown", label: "Something down there nobody marked" },
+    { v: "trade", label: "Another outfit's work in it" },
+    { v: "shot", label: "Waiting on the shot" },
+    { v: "lab", label: "Waiting on the lab to stand here" },
+    { v: "insp", label: "Waiting on an inspection" },
+    { v: "material", label: "Pipe, structures or castings short" },
+    { v: "grade", label: "A grade or an alignment nobody's answered" },
+    { v: "layout", label: "Stakes or layout" },
+    { v: "shutdown", label: "The shutdown or the tie-in window" },
+    { v: "access", label: "Access, plates or traffic control" },
+    { v: "spoil", label: "Nowhere to put the spoil" },
+    { v: "weather", label: "Weather" },
+    { v: "iron", label: "Machine down" },
+    { v: "men", label: "Manpower" }
+  ],
+
+  /* WHAT NOBODY TOUCHES. Every value is a REFUSAL or a NOTICE WITH A HANDBACK.
+     Not one of them is a permission, a depth, a slope, a class, a duration or a
+     clearance. THERE IS DELIBERATELY NO "it's fine" AND NO "safe to enter" VALUE
+     ON THIS AXIS — if a later cycle adds one, that is the defect this page was
+     designed around and not a tidy-up. */
+  touches: [
+    { v: "open", label: "It's open — nobody drives it or crosses it" },
+    { v: "edge", label: "Stay off the edge and off the spoil side" },
+    { v: "exposed", label: "There's a line exposed in it — nobody swings near it" },
+    { v: "nobody", label: "Nobody in this trench but my crew — come see me" },
+    { v: "plates", label: "The plates and the fence are ours — call before anybody moves one" },
+    { v: "pump", label: "The pump stays running — don't switch it off" },
+    { v: "notshot", label: "Not shot yet — don't cover any of it" },
+    { v: "notdone", label: "Not tied in yet — nothing gets used" },
+    { v: "stakes", label: "Don't pull the stakes or the offsets" },
+    { v: "nostack", label: "Don't stack or set anything on this ground" }
+  ],
+
+  nexts: [
+    { v: "dig", label: "Keep digging it" },
+    { v: "pipe", label: "Lay pipe in it" },
+    { v: "tie", label: "Tie it in" },
+    { v: "test", label: "Test it" },
+    { v: "shoot", label: "Get it shot" },
+    { v: "close", label: "Put the dirt back" },
+    { v: "grade", label: "Grade it out" },
+    { v: "trade", label: "Waiting on another outfit" },
+    { v: "mat", label: "Waiting on material" },
+    { v: "none", label: "Nothing on it tomorrow" }
+  ],
+
+  flags: ["Closing it in the morning", "Nobody goes near it"],
+
+  phJob: "Willow Creek — Phase 2",
+  phFrom: "Ray — Delgado Excavating",
+  phNum: "(209) 555-0148",
+
+  closing: "That's where the dirt got to today, in my words. Anything listed as held is stopped on somebody else — ring me and I'll tell you what it's stopped on, because a date doesn't help a man whose conduit has to be in before the machine starts.",
+  open: "Anything of yours that has to be in one of those — conduit, pipe, a stub, a sleeve, tracer, a shot, a photo — get it in or ring me before that time. Once it's closed and rolled it isn't a phone call, it's an excavator, and it's a brand new trench through work that's already in.",
+  /* NOT CONFIGURABLE IN SPIRIT: the second sentence is the inverse-claim guard,
+     the third is the money/quantity refusal, and the first is the one that keeps
+     a man out of a hole this page has no business talking about. All three print
+     on every document. */
+  warn: "<b>Nothing on this page classes a soil, slopes, benches, shores or shields a trench, or says a trench is safe to enter or to work in.</b> A run not named here is a run I have said nothing about. No count on it is a quantity in place, a percent complete or a price, and nothing on it is a locate, an as-built or a compaction record."
+};
+
+/* ── GETTING IN (shape #2) ─────────────────────────────────────────────────
+ * The one boundary in the program where the receiver is not another trade, and
+ * the only one where being wrong leaves a crew and a load standing at a locked
+ * gate. For this trade the load is a lowboy with a machine on it, which is the
+ * most expensive thing in the program to leave sitting.
+ *
+ * Every heads-up option ends in a QUESTION aimed back at whoever owns the
+ * process — they are handbacks, not statuses. If a later cycle rewrites one into
+ * "dig permit obtained", that is the defect, not a tidy-up.
+ */
+window.TOOLKIT_GETIN = {
+  toolName: "Getting In",
+  eyebrow: "Sitework · you → whoever holds the keys",
+  lede: "You need a lowboy, a machine and a truck onto ground somebody else locks — and then you need somewhere to put the spoil for a fortnight. Send the ask that gets a yes before the float is loaded: the route in, the gate, where the pile goes, who's coming, and the heads-up that keeps an excavator sitting outside a fence on a Monday morning.",
+  docName: "ACCESS REQUEST",
+
+  run: [
+    { v: "Just that day" },
+    { v: "A couple of days" },
+    { v: "A week or two" },
+    { v: "Ongoing — I'll flag changes" }
+  ],
+
+  need: [
+    { name: "Gate unlocked", sub: "nobody has to stay" },
+    { name: "Somebody to let us in", sub: "meet us, open it, done" },
+    { name: "An escort the whole time" },
+    { name: "Badges at the desk", sub: "for the names below" },
+    { name: "The route in", sub: "wide enough for a lowboy and a truck, and a turn at the end of it" },
+    { name: "What's overhead on that route", sub: "a boom or a raised bed finds it before I do" },
+    { name: "Where the spoil goes", sub: "somewhere it can sit for the length of the job without being moved twice" },
+    { name: "Where the import lands", sub: "and whether a truck can get to it in the wet" },
+    { name: "Somewhere to park the iron overnight", sub: "and whether it's yours to say or the neighbours'" },
+    { name: "Water on site", sub: "for dust, and where we're allowed to draw it" },
+    { name: "Where the water goes", sub: "if the hole makes any — tell me the discharge point you're giving me" },
+    { name: "Somewhere to wash out", sub: "a spot you're okay with, and who hauls it off" },
+    { name: "Nobody there — we'll lock up behind us" },
+    { name: "Us off the alarm for the window", sub: "iron moving in before anyone's normally there" },
+    { name: "Tell me who gets our COI", sub: "if it isn't already on file" }
+  ],
+
+  heads: [
+    { name: "It'll be loud, and it starts early", sub: "a machine and trucks from first light — say the word and we'll move the window" },
+    { name: "There'll be dust", sub: "we run water on it — tell me what's downwind, what your intakes are, and what you want covered" },
+    { name: "The ground will shake a bit", sub: "trucks and a machine near the building — tell me what's sensitive and who owns it" },
+    { name: "There'll be an open hole on your property", sub: "nobody but my crew goes in it or near the edge, and the barricade stays where I put it — who do you want that told to?" },
+    { name: "A lowboy is coming in and it can't back up far", sub: "tell me the entrance you want it using before it's on the street outside" },
+    { name: "There'll be a pile of dirt for a while", sub: "tell me where it can sit and whether anything is going to be parked next to it" },
+    { name: "Trucks will track dirt onto the road", sub: "we'll sweep it — tell me if there's a rule about that here and who enforces it" },
+    { name: "We may need something powered down or a valve turned", sub: "tell me who owns that switch and what notice they need. It isn't us" },
+    { name: "We'll be in and out of a public way", sub: "tell me who owns the closure and the permit for it — that's yours to number, not ours" },
+    { name: "Something we dig up may need somebody else's people", sub: "if it's regulated material it rides on its own paper — tell me who you'd call" }
+  ],
+
+  phSite: "Bishop Ranch 3",
+  phRoom: "North lot — behind the loading dock",
+  phHow: "south gate off Camino, past the dock, straight onto the lot",
+  phScope: "trenching the new service run — machine, truck and a crew of four",
+  phLoud: "machine and trucks from 7am, done mid-afternoon",
+  phTo: "Ray — property manager",
+  phMe: "Ray T — 209-555-0148",
+  phCo: "Delgado Excavating",
+
+  closing: [
+    "This is an ask, not a booking — nothing rolls until you reply. Wrong day? Tell me which one works and we'll take it.",
+    "Saying yes: tell me the window you're actually giving us, where the pile can sit, and who's meeting us — and if nobody is, how we get in and how we lock up behind us."
+  ],
+
+  warn: "<b>It's a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a lane closure, a fire watch or a utility shutdown is theirs to issue and theirs to number — this page just tells them it's coming and asks how they want it run. And check your contract before you send it: plenty of them say you don't talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
+};

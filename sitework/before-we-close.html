@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Before We Close It &mdash; Sitework Field Toolkit</title>
+<meta name="description" content="Run by run at quitting time: what&rsquo;s open, what&rsquo;s in it, what&rsquo;s holding it, and the time the dirt goes back. Three trades open their own countdown with your backfill — this is the page that gives them the time.">
+<meta name="apple-mobile-web-app-title" content="Before We Close It">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Sitework &middot; you &rarr; everybody with something in the ditch</span>
+    <h1 id="title">Before We Close It</h1>
+    <p class="lede" id="lede">Run by run at quitting time: what&rsquo;s open, what&rsquo;s holding it, and the time the dirt goes back. One message before you&rsquo;re off the machine.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Nothing on this page classes a soil, slopes, benches, shores or shields a trench, or says a trench is safe to enter or to work in.</b> A run not named here is a run I have said nothing about.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Willow Creek — Phase 2" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring at six" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Three fields and no fourth. No &ldquo;sent to&rdquo;, because this one message goes to everybody at once &mdash; the EC, the plumber, the gas man, the low-voltage outfit, the surveyor and the super all need the same sentence.</p>
+  </section>
+
+  <section class="card">
+    <h2>Where each run got to</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the run once &mdash; it carries, and it becomes a button. Then it&rsquo;s pick where it got to, pick what&rsquo;s holding it, put the time the dirt goes back, <b>Add</b>. <b>Tap a row</b> to move it one rung up the ladder &mdash; that is the whole end-of-day job: tap each run up to where it actually got.</p>
+  </section>
+
+  <section class="card">
+    <h2>The job tonight</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="state" class="on">Where it got to</button>
+        <button type="button" data-g="hold">What&rsquo;s holding it</button>
+        <button type="button" data-g="run">Run</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="nocourse" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row to change what&rsquo;s holding it, put the closing time on, flag it, or delete it. A row flagged <b>Closing it in the morning</b> or <b>Nobody goes near it</b> lands in its own block at the top of the message &mdash; those are the ones that get read first.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; while the ditch is still open</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="stillopen" >Still open</button>
+        <button type="button" data-f="held">Held on somebody else</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Still open</b> is the message the electrician, the plumber and the gas man actually need &mdash; those are the runs they can still get into, and the time is how long they have. <b>Held on somebody else</b> is the super&rsquo;s copy. <b>Everything</b> is tomorrow&rsquo;s first move and your own record of the day. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser on this phone.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Sitework Field Toolkit. A rung your crew calls something else, or a run you can&rsquo;t record? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Sitework Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* BEFORE WE CLOSE IT — trade #12's signature tool, and the one document on this
+ * job that nobody else can write.
+ *
+ * WHY IT EXISTS, AND THE EVIDENCE IS ON DISK IN THIS REPO. Three shipped kits
+ * open their own gate ladder with this crew's day:
+ *   electrical/items.js  { v: "backfill", ... }   1st of 7
+ *   plumbing/items.js    { v: "backfill", ... }   1st of 8
+ *   gc/items.js          { v: "backfill", ... }   1st of 7
+ * Three whole trades have been telling their crews to count down to a moment
+ * that NOTHING ANYWHERE PUBLISHES. The dirt foreman knows it — he is the man who
+ * closes it — and today it leaves the job as a phone call nobody wrote down, or
+ * it does not leave at all.
+ *
+ * IT IS A CONFIG ON SHAPE #3. shared/rowlog.js owns state, grouping,
+ * persistence, document assembly and copy; shared/rowlog.css owns every pixel;
+ * this file owns the WORDS and the document, and the vocabulary is in items.js.
+ * The page to read next to this one is masonry/wheres-the-wall.html — the same
+ * animal one gate later, and the differences below are deliberate, not drift.
+ *
+ * WHAT THIS PAGE CARRIES THAT ITS SIBLING REFUSES: A CLOCK, per row. The mason
+ * carries no time on purpose, because his answer is a COURSE and a date is what
+ * the other man already has and cannot use. Here the answer IS the time: "the
+ * dirt goes back Thursday first thing" is the whole product, and a run with no
+ * time on it is the row that helps nobody. It is his words, never a picker and
+ * never a stamp — a page that stamped "closes in 14 hours" would be asserting a
+ * schedule he did not commit to.
+ *
+ * THE LADDER DOES NOT WRAP. A run does not go back to not dug, and the pencil is
+ * the correction path. There is no two-button walk here for the same reason the
+ * mason has none: one knuckle must not be able to claim a run was dug, laid,
+ * tested, shot, closed and rolled.
+ *
+ * THE INVERSE-CLAIM GUARD, INHERITED AND SHARPENED. A document that names the
+ * runs nobody may touch WILL be read as clearing the runs it did not name. So
+ * the touch axis has no "it's fine" value at all (items.js), a blank means he
+ * said nothing, and both the warn box and the document footer say so in words
+ * this file does not let you configure away.
+ *
+ * AND THE REFUSAL THAT MATTERS MOST IN THIS TRADE: nothing on this page classes
+ * a soil, slopes, benches, shores or shields anything, and no value on any axis
+ * may ever be read as "safe to enter". Every protection line in items.js is a
+ * REFUSAL or a COME-ASK-ME with a handback, never a permission. If a later cycle
+ * adds an "OK to enter" chip, that is the defect this page was designed around
+ * and not a tidy-up.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var W = window.TOOLKIT_DITCH || {};
+
+  var STATES  = (W.states   || []).map(function (s) { return s.label; });
+  var HOLDS   = (W.holds    || []).map(function (s) { return s.label; });
+  var TOUCHES = (W.touches  || []).map(function (s) { return s.label; });
+  var NEXTS   = (W.nexts    || []).map(function (s) { return s.label; });
+  var INS     = (W.ins      || []).map(function (s) { return s.label; });
+  var KEY = "toolkit." + (TRADE.slug || "sitework") + ".ditch.v1";
+
+  /* ── THE TWO PREDICATES, DECLARED ONCE, BY VALUE ────────────────────────────
+     §SCARS 2026-08-09, "the summary counted rows the document did not contain":
+     a predicate copied into three places is three places to disagree. Both of
+     these are built by matching the config's `v` keys against its own labels, so
+     a later cycle can reword any label on the page without silently changing
+     which runs the electrician is told he can still get into.
+
+     STILL OPEN runs from OPEN to short of BACKFILLED — there is a hole in the
+     ground and the dirt has not gone back. That is precisely what four other
+     outfits are racing, and it is the header count, the "still open" filter and
+     the footer call-out, all off this one function. */
+  function idxOf(v) {
+    var n = -1;
+    (W.states || []).forEach(function (s, i) { if (s.v === v) n = i; });
+    return n;
+  }
+  var OPEN_FROM = idxOf(W.openFrom || "open");
+  var OPEN_TO   = idxOf(W.openTo || "backfilled");
+  function stateIdx(label) { return STATES.indexOf(label); }
+  function stillOpen(v) {
+    var i = stateIdx(v.state);
+    return i >= 0 && OPEN_FROM >= 0 && OPEN_TO >= 0 && i >= OPEN_FROM && i < OPEN_TO;
+  }
+  /* GOING is the one hold value that is not a hold. Same treatment: read off the
+     `v` key, never off the words, so "Nothing — we're going" can be reworded. */
+  var GOING = {};
+  (W.holds || []).forEach(function (s) { if (s.v === "going") GOING[s.label] = 1; });
+  function held(v) { return !!v.hold && !GOING[v.hold]; }
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* THE PAGE NEVER EDITS A VALUE IT DID NOT AUTHOR (the roofing scar: "IT /
+     server room" arrived as the pronoun "it"). A value carrying an all-caps run
+     — SS, EC, MH, RCP — passes through untouched; only ordinary prose is
+     softened for sentence flow. */
+  function soften(s) {
+    s = String(s == null ? "" : s);
+    return /[A-Z]{2,}/.test(s) ? s : s.toLowerCase();
+  }
+
+  if (W.toolName) {
+    $("#title").textContent = W.toolName;
+    document.title = W.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (W.lede) $("#lede").textContent = W.lede;
+  if (W.eyebrow) $("#eyebrow").textContent = W.eyebrow;
+  if (W.warn) $("#warn").innerHTML = W.warn;
+  if (W.phJob) $("#hJob").placeholder = W.phJob;
+  if (W.phFrom) $("#hFrom").placeholder = W.phFrom;
+  if (W.phNum) $("#hTel").placeholder = W.phNum;
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* The engine renders once inside mount(), which is before `rl` exists, and
+     docHead / docFoot / onChange all run in that first render. Reading `rl`
+     there throws and the page ships looking perfect with every word this file
+     owns dead (§SCARS). Everything that touches rows goes through here. */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "run", nounPlural: "runs", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NOT SAID",
+    emptyText: "Nothing logged yet. Put in the first run — which one it is, where it got to, and when the dirt goes back.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: STATES[STATES.length - 1],
+    flagKey: "flag", flagValues: W.flags || ["Closing it in the morning", "Nobody goes near it"],
+
+    groupOptions: [
+      { key: "state", label: "Where it got to" },
+      { key: "hold",  label: "What's holding it" },
+      { key: "run",   label: "Run" }
+    ],
+
+    /* Blocks read in LADDER ORDER when grouped by state, so the same job never
+       arrives arranged differently depending on which run he tapped first.
+       Grouped by what is HOLDING it, the runs that are stopped lead and
+       "nothing — we're going" is pushed to the bottom: the runs that are not
+       held are not the ones anybody opens this message to read. */
+    groupSort: function (a, b, key) {
+      if (key === "state") {
+        var ia = STATES.indexOf(a), ib = STATES.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "hold") {
+        var pa = GOING[a] ? 1 : 0, pb = GOING[b] ? 1 : 0;
+        if (pa !== pb) return pa - pb;
+        var ja = HOLDS.indexOf(a), jb = HOLDS.indexOf(b);
+        return (ja < 0 ? 99 : ja) - (jb < 0 ? 99 : jb);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "stillopen", label: "still open",
+      emptyText: "Nothing on here is open. Every run is closed up.",
+      test: function (v) { return stillOpen(v); }
+    }, {
+      v: "held", label: "held on somebody else",
+      emptyText: "Nothing on here is held. Every run is going.",
+      test: function (v) { return held(v); }
+    }],
+
+    fields: [
+      { key: "run", label: "Run / line / station", input: "learn", lead: true, required: true, sticky: true,
+        placeholder: "SS main MH-3 to MH-4 — then it's a button",
+        emptyHint: "Name it the way your crew and the plans do — line, structure to structure, or the gridline. It becomes a button." },
+      { key: "state", label: "Where it got to", input: "select", required: true,
+        placeholder: "— where it ended up" },
+      /* THE SIGNATURE FIELD OF THE WHOLE KIT, and it ships NAKED. He types "in
+         the morning" or "Thu 7am" and it becomes a chip, so the next run closing
+         at the same time is one tap. The placeholder carries NO TIME — a seeded
+         hour is an hour we asserted, and this is the one number four other
+         outfits will plan their morning around. */
+      { key: "when", label: "When the dirt goes back", input: "learn", wide: true,
+        placeholder: "the way you'd say it out loud",
+        emptyHint: "First thing, after lunch, Thursday, as soon as he's out — your words. It becomes a button, so the next run closing then is one tap." },
+      /* WHAT IS IN THE DITCH, and it is a LEARN axis rather than a picker
+         because a trench is rarely one thing — "storm + EC duct" is a normal
+         answer and a select cannot say it. Seeded from items.js so the common
+         payloads are one tap, and everything he types joins the list. */
+      { key: "in", label: "What's in it", input: "learn", wide: true,
+        placeholder: "storm — or storm + EC duct",
+        emptyHint: "What is actually lying in that ditch. Tap the common ones or type it — it becomes a button." },
+      { key: "hold", label: "What's holding it", input: "chips", wide: true },
+      { key: "touch", label: "What nobody touches", input: "chips", wide: true },
+      { key: "next", label: "Next move", input: "chips", wide: true },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the man reading this at six needs" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "in") {
+      /* Seed + what he has typed, deduped and in seed order first: the payload
+         list is a starting vocabulary, never a closed one. */
+      var out = INS.slice();
+      (learned || []).forEach(function (x) { if (out.indexOf(x) === -1) out.push(x); });
+      return out;
+    }
+      if (key === "hold")  return HOLDS;
+      if (key === "touch") return TOUCHES;
+      if (key === "next")  return NEXTS;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.run, v.state]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.when, v.in, v.hold, v.touch, v.next, v.note]); },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first, so tonight's
+       message and February's argument surface on the same search.
+       THEN THE COUNT, AND IT IS NOT THE TOTAL: how many runs are still open and
+       how many are held on somebody else. A header that leads with "7 runs" when
+       four of them are still open to the electrician has buried the only number
+       anybody opened this for. Counted over the rows this copy actually
+       CONTAINS, never over the whole log. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, W.docSubject || "before we close it", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("stillopen") > -1 && !stillOpen(r.values)) return false;
+        if (c.filters.indexOf("held") > -1 && !held(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var open = src.filter(stillOpen);
+      var hl = src.filter(held);
+      var line = c.shown + (c.shown === 1 ? " run" : " runs");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+
+      /* A COUNT THAT MERELY RESTATES THE FILTER IS NOISE (§SCARS, masonry): under
+         a filter every shown row satisfies it by definition, so the matching
+         count is dropped and the OTHER one is kept. */
+      var onStillOpen = c.filters.indexOf("stillopen") > -1;
+      var onHeld = c.filters.indexOf("held") > -1;
+      if (!onStillOpen) line += " · " + (open.length ? open.length + " still open" : "nothing still open");
+      if (hl.length && !onHeld) line += " · " + hl.length + " held on somebody else";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER RUN, reading the way he says it out loud. The axis the list is
+       grouped by is dropped from the line because it is already the heading. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "state";
+      var head = joinDots([g === "run" ? null : v.run, g === "state" ? null : v.state]);
+      var tail = [];
+      /* HIS TIME, VERBATIM. The page never converts it, never turns it into a
+         date and never puts a clock next to it that he did not type. */
+      if (v.when) tail.push(v.when);
+      if (v.in) tail.push(soften(v.in));
+      if (g !== "hold" && v.hold) tail.push(soften(v.hold));
+      if (v.next) tail.push(soften(v.next));
+      if (v.touch) tail.push(soften(v.touch));
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.run, v.state, v.when, v.hold]);
+    },
+
+    /* THE FOOTER IS WHERE THIS PAGE EARNS ITS PLACE, and both blocks in it are
+       drawn from the WHOLE LOG rather than the filtered copy — on purpose, and
+       it is the one place this page departs from its own scoping rule. Dropping
+       a "nobody drives this" notice because the sender happened to tap a filter
+       is a safety defect, not a tidier document. To keep that from contradicting
+       the body above it, the heading SAYS SO whenever a filter is on. */
+    docFoot: function (c) {
+      var out = [];
+      var scoped = !!(c && c.filters && c.filters.length);
+      var all = rowsNow().map(function (r) { return r.values; });
+
+      var touch = all.filter(function (v) { return !!v.touch; });
+      if (touch.length) {
+        out.push("NOBODY TOUCHES THESE — ring me first, don't work it out yourselves"
+          + (scoped ? " (every run on my log, not just the ones above)" : "") + ":");
+        touch.forEach(function (v) {
+          out.push("  · " + joinDash([joinDots([v.run, v.state]), soften(v.touch)]));
+        });
+        out.push("");
+      }
+
+      var open = all.filter(stillOpen);
+      if (open.length) {
+        /* THE RUN AND ITS TIME ARE JOINED BY A DASH, THE RUNS BY A DOT — the
+           masonry scar: one separator for both produced a line with four items
+           and no way to tell where a run ends. */
+        out.push("STILL OPEN, AND WHEN THE DIRT GOES BACK" + (scoped ? " (every run on my log)" : "") + ": "
+          + open.map(function (v) { return joinDash([v.run, v.when]); }).join(" · ") + ".");
+        out.push(W.open || "Anything of yours that has to be in one of those — conduit, pipe, tracer, a stub, a shot — get it in or ring me before that time. Once it's closed and rolled it isn't a phone call, it's an excavator.");
+        out.push("");
+      }
+
+      out.push(W.closing || "That's where the dirt got to today, in my words.");
+      /* THE REFUSAL, and the middle sentence is the inverse-claim guard. It
+         prints on every copy of every document this page makes. */
+      out.push("Nothing on this page classes a soil, slopes, benches, shores or shields a trench, or says a trench is safe to enter or to work in. A run not named here is a run I have said nothing about. No count on it is a quantity in place, a percent complete or a price, and nothing on it is a locate, an as-built or a compaction record.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim();
+      return (job ? job + " — " : "") + "open trench log, " + c.total
+        + (c.total === 1 ? " run, " : " runs, ") + c.today
+        + " — recorded by hand at quitting time. Not a certification, nothing classed, sloped, shored or compacted by the page, no locate and no as-built, and no count on it is a quantity in place or a percent complete.";
+    },
+    tsvColumns: [
+      { label: "Run / line", key: "run" },
+      { label: "Where it got to", key: "state" },
+      { label: "Dirt goes back", key: "when" },
+      { label: "What's in it", key: "in" },
+      { label: "What's holding it", key: "hold" },
+      { label: "Nobody touches", key: "touch" },
+      { label: "Next move", key: "next" },
+      { label: "Flagged", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || f || t) ? { job: j, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || "";
+      $("#hFrom").value = x.from || "";
+      $("#hTel").value = x.tel || "";
+    },
+    onChange: function () { paintNoWhen(); }
+  });
+
+  /* THE TIME IS THE WHOLE POINT, so an open run with no time on it is the one
+     row that helps nobody — it tells four outfits there is a hole and not how
+     long they have. Counted and asked about IN THE UI where he can fix it, and
+     deliberately never printed: publishing "3 of these have no time on them"
+     invites the receiver to argue the record instead of acting on it. */
+  function paintNoWhen() {
+    var el = $("#nocourse"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return stillOpen(r.values) && !String(r.values.when || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " run" + (n === 1 ? "" : "s") + " open with no time on "
+      + (n === 1 ? "it" : "them") + ".</b> That is the number the other three trades are counting to &mdash; open the pencil and put it on before you send it.";
+  }
+
+  /* The learn axes borrow the identifier keyboard, which exists so a phone
+     cannot destroy a device tag. "MH-3 to MH-4" is not a device tag and must not
+     arrive as MH-3 TO MH-4; "first thing" must not be autocapitalised either. */
+  ["run", "when", "in"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one. This log is the only record of where the job
+     got to today and it lives in one browser on one phone. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    paintNoWhen();
+  });
+
+  /* A keystroke in the header has to reach BOTH the preview and the saved copy.
+     There is no rl.refresh() — render() repaints and schedulePersist() saves. */
+  ["#hJob", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE RUNS LAST, after applyFilters is wired. A page that forgets it looks
+     perfect on a fresh load and silently drops the whole log every time the
+     phone is backgrounded. */
+  rl.restore();
+  applyFilters();
+  paintNoWhen();
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -331,6 +331,25 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew two other toolkits already count their own day down to — where the wall\'s at first: wall by wall at quitting time, the course each one got to, which cells are still open and what nobody touches, sent as one message. Nothing on it is braced, rated, sized or spaced; the course is his own words and every engineered question is handed back.',
     icon: <BrickWall size={18} />,
+  },
+  {
+    // TRADE #12, and the first promoted with the original build order exhausted.
+    // BACKFILL is position #1 on THREE shipped gate ladders — electrical,
+    // plumbing and GC each open their own milestone list with the dirt going
+    // back — and nothing on the job publishes the date. The man on the machine
+    // is the only one who has it. A trench that has been backfilled is not cut,
+    // pulled or cored like a wall or a lid; it is dug again, and everything in
+    // it that was right the first time comes out with it.
+    //
+    // Tractor, and the sibling rule HOLDS here rather than bending as it did at
+    // #11: an icon is the gear the trade carries, and this trade's gear is the
+    // machine. Construction was rejected — on a rack where every kit is a
+    // construction trade, the generic construction glyph identifies nobody.
+    name: 'Sitework Field Toolkit',
+    href: './sitework/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew who owns the earliest gate on the job — before we close it first: run by run, what is in the ditch, what is still open, who has been told and the time the dirt goes back, sent as one message to everybody with something in it. Nothing on it is a slope, a soil class, a lift, a proctor or a locate; the trench protection and the compaction spec belong to the people who engineer them.',
+    icon: <Tractor size={18} />,
   },
 ];
 

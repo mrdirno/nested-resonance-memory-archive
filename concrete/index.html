@@ -12,7 +12,7 @@
 <style>
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--flag:#2DD758;--tint:#E3F8E9;
+  --muted:#5D656E;--flag:#2DD758;--tint:#E3F8E9;--deep:#12742B;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -60,7 +60,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
    one trade and leaves its siblings behind is half a fix. */
 .cardfav{position:absolute;top:7px;right:7px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:44px;height:44px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1;padding:0}
 .cardfav:hover{border-color:var(--flag);color:var(--muted)}
-.cardfav.on{color:var(--flag);border-color:var(--flag);background:#FDF0F7}
+.cardfav.on{color:var(--deep);border-color:var(--flag);background:var(--tint)}
 .toolwrap .tool-top{padding-right:46px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
 .tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
