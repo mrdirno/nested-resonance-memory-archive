@@ -2928,6 +2928,35 @@ fake legacy key to satisfy the check, or teach the gate to guess which pages are
 in the diff — and silence still fails.** A default that fails closed keeps its value only if
 the exception has to be *stated*, never inferred.
 
+### 2026-08-17 — A MOBILE GATE THAT MEASURES THE PAGE AT REST HAS NEVER OPENED A PANEL
+Vibe Cards' `verify_mobile.mjs` — a fresh implementation of THIS toolkit's watertight gate,
+credited as such in its own header — reported `/studio/` green at 320/360/390/430 the whole
+time two of that app's controls did nothing on a phone. It was not wrong. It measures the
+page **at rest**, and both defects existed only in a state it never enters: "Start from a
+template" focused a `<select>` sitting in a rail that is a *sheet*, down and `display:none`,
+so `focus()` landed on nothing, `showPicker()` threw, and the ping animated a border with no
+pixels behind it — the element measured **0×0**; and the wish popover was `position:absolute
+right:0` inside a wrapper the width of its own button, correct against a desktop bar pinned
+to the right edge and **186px off the left** of a 390px phone. A panel is only wrong once it
+is OPENED. **This toolkit already knew that** — `menu-reachability.mjs` and
+`overlay-reachability.mjs` are exactly this check, and the sweep this cycle confirms
+`.av-drop` lands inside the glass on all twelve trades at 320 and 390 with its first link
+answering `elementFromPoint`. The capability existed and did not travel to the sibling app,
+which is L3177 pointed the other way: **we re-derived a gate we already own, in a repo that
+had copied everything about it except the part that catches this.**
+
+### 2026-08-17 — ON THE SCREEN IS NOT THE SAME AS REACHABLE, AND A SCREENSHOT CANNOT TELL THEM APART
+The first cut of that fix pinned both popovers to the bottom edge of the viewport. Rect
+inside the viewport: yes, at all four widths, both engines. The **Send** button was
+underneath the phone dock, and then underneath a raised rail's scrim — correctly sized,
+fully painted, and the tap that submits a wish would instead have dismissed it and discarded
+what was typed. A screenshot showed a working panel. What caught it was
+`document.elementFromPoint` on the button's centre asserting the hit is the button:
+**the only honest question is whether the finger reaches the element or something on top of
+it.** The rails had solved this already by sitting ON the dock rather than at the edge; the
+fix now uses their offset and closes any raised sheet, because one sheet at a time is a rule
+this app already enforced among its rails and had never applied to its bar.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4556,3 +4585,25 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   errors. Storefront: entry added to `fieldToolkits.ts`, contract rebuilt (**12 trades, 90
   tools**) and `--check` in sync; P5 pushes that repo.
   https://mrdirno.github.io/nested-resonance-memory-archive/sitework/what-goes-in.html
+
+- **[AXIS:WELL] 2026-08-17 — Card Studio, reachable on a phone.** Two wishes, same defect
+  reported 95 minutes apart, both served. *Before:* "Start from a template" pointed at a
+  `<select>` inside a sheet that is down — measured **0×0**, and `showPicker()` does not
+  exist on the engine the report came from; the wish popover opened at **L-186** on a 390px
+  screen, and the Open menu at L-62 with it. *After:* the button raises the Card sheet
+  through the same `openSheet()` the dock calls and scrolls the picker into view; both
+  popovers are viewport-pinned bottom sheets lifted clear of the keyboard and sitting on the
+  dock; opening either closes a raised rail so its scrim cannot swallow **Send**. **Proof:**
+  new standing harness `tools/verify_phone_reach.mjs` — **24 findings** on the shipped code
+  at `96b231b`, **0** on HEAD, **0 against the live site**, WebKit *and* Chromium at
+  320/360/390/430, asserting `elementFromPoint` on Send and not just its rect; the repo's own
+  `verify_mobile.mjs` still watertight on every page and `verify.mjs` 15/15. Recorded as a
+  claim/could-have-failed/observed/limits entry in that repo's `docs/EVALS.md` §5 — with the
+  wish text **removed** on a follow-up commit, because quoting it published queue contents
+  the standard that repo ships says to keep private. **BACKPORT rider: FIRED** — swept the
+  same class (`.av-drop`, the one absolutely-positioned panel in `shared/toolkit.js`) across
+  **all twelve trades live at 320 and 390px**: inside the glass everywhere, no sideways
+  scroll, first link hit-testable, worst margin 8px on electrical/low-voltage. Nothing to
+  carry back: `sizeMenu()` already clamps that left edge and `menu-reachability.mjs` already
+  guards it. The debt ran the other way, and this cycle paid it.
+  https://mrdirno.github.io/vibe-cards/studio/
