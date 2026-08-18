@@ -192,6 +192,21 @@ export default function App() {
   // code as a roster INDEX, so a default that is a rounding error off the roster
   // cannot round-trip through its own code.
   const [aspect, setAspect] = useState(ASPECT_ROSTER[1]);
+  /**
+   * THE FRAME HOLD — while on, the dice keeps the shape of frame on screen.
+   *
+   * Wished for (wishing well, collage): *"Tide pool is sick I like them. Maybe
+   * good idea to lock aspect ratio too as a toggle."* Chasing a recipe means
+   * pressing the dice again and again, and every press re-dealt the canvas
+   * shape too — measured 12 for 12 on a roster of seven frames.
+   *
+   * `diceRoll.ts` has carried the idea since the locks shipped — `RollLock`,
+   * "the slot-machine hold" — with no caller ever passing it. This is that
+   * hold's first surface, for the one parameter somebody asked for. A
+   * preference about FUTURE rolls, the same class as `lockedCells`: it rides
+   * neither the composition code, nor saved projects, nor history.
+   */
+  const [holdFrame, setHoldFrame] = useState(false);
   const [gutter, setGutter] = useState(0.005);
   const [entropy, setEntropy] = useState(0.5);
   // COMPOSITION — which photo lands in which fragment, what each fragment
@@ -976,6 +991,10 @@ export default function App() {
    * Locked fragments are released: a roll that kept them would have to graft
    * them onto a layout with a different topology, and `handleRemix` already
    * exists for exactly that "keep what I chose" intent.
+   *
+   * THE FRAME HOLD is the one opt-out: with `holdFrame` on, the roll keeps the
+   * shape of frame on screen and re-deals everything else. See the state's
+   * own note.
    */
   const handleDice = () => {
     // Every press of this button used to destroy the picture before it. Record
@@ -1002,7 +1021,13 @@ export default function App() {
     setLayoutMode(roll.layout);
     setCount(roll.count);
     setEntropy(roll.entropy);
-    setAspect(roll.aspect);
+    // THE FRAME HOLD lands HERE, not in `rollDice({ locks: ['aspect'] })`: the
+    // engine's lock copies `previous.aspect`, which is the last ROLL — but the
+    // Canvas chips may have re-set the frame since, and the `aspect` state is
+    // the one truth of what is on screen. Skipping the setter also leaves the
+    // roll's rnd stream untouched, so a held roll and a free roll differ in
+    // nothing but the frame — and OFF stays byte-identical to the old dice.
+    if (!holdFrame) setAspect(roll.aspect);
     setGutter(roll.gutter);
     setBgColor(roll.bg);
     // `zoom` is DERIVED from density here, not stored — so the roll does not
@@ -2817,21 +2842,33 @@ export default function App() {
                        is a law, the air between them is not, and neither is the
                        row count.
 
-                       So the pill is capped at four targets wide below 390px and
-                       wraps — which lands the split exactly where it should be:
-                       the four that MAKE a picture on one row, the three that
-                       navigate between pictures on the next. `max-w` is
-                       border-box, so 206 = 4x44 + 3x4 gap + 12 padding + 2
-                       border, and the fifth button cannot fit however the gap
-                       rounds. Above 390 the whole rail is one row again. */}
-                   <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-0.5 min-[360px]:gap-1 max-w-[206px] min-[390px]:max-w-none rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
-                     <button data-testid="rail-dice" onClick={handleDice} title="Roll the dice — a whole new composition" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                       So the pill wraps — and the EIGHTH button (the frame
+                       hold) re-derived where: capped at five targets wide below
+                       430px, which keeps the split where it belongs: the five
+                       that MAKE a picture on one row — the hold rides beside
+                       the dice it modifies — the three that navigate between
+                       pictures on the next. `max-w` is border-box, so 250 =
+                       5x44 + 4x4 gap + 12 padding + 2 border, and the sixth
+                       button cannot fit however the gap rounds. From 430px one
+                       row again — 9 flex items (8 buttons plus the separator's
+                       1px and its 4 of margin), so 8 gaps: 352 + 32 + 5 + 12 +
+                       2 = 403 in the pill, + the band's 24 of padding = 427,
+                       3 to spare. The ninth button re-derives from HERE. */}
+                   <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-0.5 min-[360px]:gap-1 max-w-[250px] min-[430px]:max-w-none rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
+                     <button data-testid="rail-dice" onClick={handleDice} title={holdFrame ? 'Roll the dice — a new composition in the frame you kept' : 'Roll the dice — a whole new composition'} aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                     {/* THE FRAME HOLD — a toggle in a row of actions, pressed
+                         = held. It sits beside the dice because it is a claim
+                         about the dice: this rail is where you roll repeatedly
+                         to compare, and every press used to re-shape the
+                         canvas too. Same state as the dock chip — the fix
+                         lands on both. */}
+                     <button data-testid="rail-hold-frame" onClick={() => setHoldFrame(h => !h)} aria-pressed={holdFrame} title={holdFrame ? 'Frame held — the dice keeps this shape. Tap to let it roll again.' : 'Keep this shape of frame (aspect ratio) when the dice rolls'} aria-label="Keep the frame shape when the dice rolls" className={`w-11 h-11 rounded-xl flex items-center justify-center hover:bg-white/10 active:scale-95 transition ${holdFrame ? 'text-emerald-300 bg-white/10' : 'text-gray-200'}`}>{holdFrame ? <Lock size={18} /> : <Unlock size={18} />}</button>
                      {/* THE COLOUR DICE — wished for FROM THIS RAIL: you maximize
                          to compare, and the one roll that keeps the shape you
                          just found had no button anywhere near your thumb. */}
                      <button data-testid="rail-colour-dice" onClick={handleColourDice} title="Roll the colour sort and the crop — keeps your layout" aria-label="Roll the colour sort and the crop, keeping the layout" className="w-11 h-11 rounded-xl text-amber-300 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Palette size={19} /></button>
-                     <button onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
-                     <button onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
+                     <button data-testid="rail-shuffle" onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
+                     <button data-testid="rail-remix" onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
                      {/* UNDO lives HERE because this is where the wish came from:
                          you maximize to roll repeatedly and compare, and every
                          roll used to destroy the one before it. Disabled rather
@@ -2935,7 +2972,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

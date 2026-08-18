@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
-  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy, Type, X,
+  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, Unlock, ImagePlus, Dices, Copy, Type, X,
   Undo2, Redo2, Palette
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
@@ -35,6 +35,14 @@ interface SimpleControlsProps {
    * on both. See `lib/dealRoll.ts`.
    */
   onColourDice?: () => void;
+  /**
+   * THE FRAME HOLD — while on, the dice keeps the shape of frame and re-deals
+   * everything else. A preference about future rolls (`holdFrame` in App.tsx),
+   * so it rides neither the code nor a project; the same toggle sits in the
+   * full-bleed rail — the fix lands on both.
+   */
+  holdFrame?: boolean;
+  onHoldFrame?: (h: boolean) => void;
   /** Name of the recipe the last roll came from, for the readout. */
   lastRecipe?: string;
   /** UNDO — step back to the composition before the last roll/shuffle/remix/code. */
@@ -124,7 +132,7 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice, onColourDice,
-  lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
+  holdFrame = false, onHoldFrame, lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
   look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn,
@@ -249,19 +257,24 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
         </div>
       )}
 
-      {/* ---- DICE: the fastest route to something you did not expect -------- */}
+      {/* ---- DICE: the fastest route to something you did not expect --------
+          The title and subtitle tell the truth per state: claiming "shape of
+          frame" while the hold below pins it would be the button appearing to
+          have done something it did not. ---------------------------------- */}
       {onDice && (
         <button
           disabled={!hasImages}
           onClick={onDice}
           className="ui-dice"
           data-testid="dock-dice"
-          title="Roll a whole composition — layout, fragments, chaos, shape of frame, gutter and colour, all at once."
+          title={holdFrame
+            ? 'Roll a whole composition — layout, fragments, chaos, gutter and colour. The frame keeps its shape while the hold is on.'
+            : 'Roll a whole composition — layout, fragments, chaos, shape of frame, gutter and colour, all at once.'}
         >
           <Dices size={20} />
           <span className="ui-dice__text">
             <b>Roll the dice</b>
-            <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
+            <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : holdFrame ? 'A new composition in the frame you kept' : 'A whole new composition, all at once'}</i>
           </span>
         </button>
       )}
@@ -291,6 +304,39 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           av/credits.json is permanent, but nobody reads a JSON file. */}
       {onColourDice && hasImages && (
         <p className="ui-credit">The colour dice was wished for by an anonymous Collage user.</p>
+      )}
+
+      {/* ---- THE FRAME HOLD: pin the shape, keep rolling --------------------
+          Wished for: "Tide pool is sick I like them. Maybe good idea to lock
+          aspect ratio too as a toggle." Under the two dice because it is a
+          claim about them: chasing a recipe means rolling again and again,
+          and every press used to re-deal the shape of frame too — six of
+          seven, on a roster of seven. OFF by default: until you pin it, the
+          dice keeps its all-at-once promise exactly as it was. ------------ */}
+      {onHoldFrame && hasImages && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips">
+            <button
+              type="button"
+              className="ui-chip ui-chip--mini"
+              data-active={holdFrame}
+              onClick={() => onHoldFrame(!holdFrame)}
+              title={holdFrame
+                ? 'On — the dice keeps this shape of frame. Tap to let it roll again.'
+                : 'Keep the current shape of frame (aspect ratio) when the dice rolls. Everything else still rolls.'}
+              aria-pressed={holdFrame}
+              data-testid="dock-hold-frame"
+            >{holdFrame ? <Lock size={12} /> : <Unlock size={12} />}<span>Keep frame shape</span></button>
+          </div>
+          <p className="ui-caption">
+            {holdFrame
+              ? 'Held. The dice rolls everything but the shape of frame.'
+              : 'Found a frame you like? Pin it, and the dice rolls everything else.'}
+          </p>
+          {/* CREDIT ON THE PAGE, next to the thing they asked for — the ledger
+              in av/credits.json is permanent, but nobody reads a JSON file. */}
+          <p className="ui-credit">The frame hold was wished for by an anonymous Collage user.</p>
+        </div>
       )}
 
       {/* ---- UNDO: the roll you liked, brought back -------------------------
