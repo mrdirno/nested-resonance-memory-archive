@@ -1,175 +1,185 @@
 {
-  "ledger": "AV Field Toolkit — Wall of Wishes. APPEND-ONLY public credit ledger: every tool built from a wish credits the person who wished it, permanently. The immutability IS git history — this file is committed to a public repo, hash-chained, forked, and archived, so a credit can never be quietly erased. NEVER rewrite or remove an entry; only append. Anonymous wishers are credited as 'an anonymous AV <role>'.",
-  "credits": [
-    {
-      "tool_name": "Cable & Adapter List",
-      "tool_href": "cable-list.html",
-      "wisher": "Aldrin Payopay",
-      "company": null,
-      "role": "tech",
-      "wished_date": "2026-08-04",
-      "shipped_date": "2026-08-04",
-      "shipped_commit": "4e3820e4"
-    },
-    {
-      "tool_name": "Collage Studio — every video plays in the export",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-08",
-      "shipped_date": "2026-08-08",
-      "shipped_commit": "4f0ae962"
-    },
-    {
-      "tool_name": "Collage Studio — a dropped video loads and loops instead of being taken apart for frames",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-08",
-      "shipped_date": "2026-08-08",
-      "shipped_commit": "480ba233"
-    },
-    {
-      "tool_name": "Collage Studio — the artwork gets the room (full bleed, and controls capped at half the screen)",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-08",
-      "shipped_date": "2026-08-08",
-      "shipped_commit": "27687480"
-    },
-    {
-      "tool_name": "Collage Studio — a video just loads and loops, and nothing asks about frames",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-08",
-      "shipped_date": "2026-08-08",
-      "shipped_commit": "f305ee48"
-    },
-    {
-      "tool_name": "Collage Studio — the render no longer asks for every photo at full resolution at once",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-09",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "ce35b8d1"
-    },
-    {
-      "tool_name": "Collage Studio — undo, so the roll you liked comes back",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-09",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "dafb616d"
-    },
-    {
-      "tool_name": "Collage Studio — the export stopped reporting soft photos as full quality",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": null,
-      "company": null,
-      "role": "Collage user",
-      "wished_date": "2026-08-10",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "1b16c643"
-    },
-    {
-      "tool_name": "Collage Studio — pick the part of the song that plays (music in/out range)",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-09",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "a19e5338"
-    },
-    {
-      "tool_name": "Collage Studio — the colour dice (roll the colour sort and the crop, keep the layout)",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-09",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "b8ce1f00"
-    },
-    {
-      "tool_name": "The Tools menu stops at the glass — the bottom of it is reachable on a phone",
-      "tool_href": "consumables.html",
-      "wisher": "an anonymous AV tech",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-10",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "41d4fda7"
-    },
-    {
-      "tool_name": "Walk it — verify the list one row at a time, with your hands full",
-      "tool_href": "rough-in-request.html",
-      "wisher": "an anonymous AV tech",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-09",
-      "shipped_date": "2026-08-10",
-      "shipped_commit": "914cf37e"
-    },
-    {
-      "tool_name": "Total Package — what the job is actually worth, yours next to theirs",
-      "tool_href": "total-package.html",
-      "wisher": "an anonymous AV hand",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-12",
-      "shipped_date": "2026-08-12",
-      "shipped_commit": "dee60988"
-    },
-    {
-      "tool_name": "Wish it better — the well opens on the page you're standing on (all nine trades)",
-      "tool_href": "total-package.html",
-      "wisher": "an anonymous AV user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-13",
-      "shipped_date": "2026-08-13",
-      "shipped_commit": "8afe08fe"
-    },
-    {
-      "tool_name": "Collage Studio — the music button takes a video's SOUND without its pictures, and a fragment can be thrown out of the pool from full bleed",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-16",
-      "shipped_date": "2026-08-16",
-      "shipped_commit": "d2e5de42"
-    },
-    {
-      "tool_name": "Collage Studio — a fade at the edges of the audio range you picked, every time it comes round",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
-      "wisher": "an anonymous Collage user",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-16",
-      "shipped_date": "2026-08-16",
-      "shipped_commit": "f1d25ab4"
-    },
-    {
-      "tool_name": "T&M Tag — todo en español (EN/ES on the page, bilingual document)",
-      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html",
-      "wisher": "an anonymous GC hand",
-      "company": null,
-      "role": null,
-      "wished_date": "2026-08-17",
-      "shipped_date": "2026-08-18",
-      "shipped_commit": "aac2c88d"
-    }
-  ]
+ "ledger": "AV Field Toolkit — Wall of Wishes. APPEND-ONLY public credit ledger: every tool built from a wish credits the person who wished it, permanently. The immutability IS git history — this file is committed to a public repo, hash-chained, forked, and archived, so a credit can never be quietly erased. NEVER rewrite or remove an entry; only append. Anonymous wishers are credited as 'an anonymous AV <role>'.",
+ "credits": [
+  {
+   "tool_name": "Cable & Adapter List",
+   "tool_href": "cable-list.html",
+   "wisher": "Aldrin Payopay",
+   "company": null,
+   "role": "tech",
+   "wished_date": "2026-08-04",
+   "shipped_date": "2026-08-04",
+   "shipped_commit": "4e3820e4"
+  },
+  {
+   "tool_name": "Collage Studio — every video plays in the export",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-08",
+   "shipped_date": "2026-08-08",
+   "shipped_commit": "4f0ae962"
+  },
+  {
+   "tool_name": "Collage Studio — a dropped video loads and loops instead of being taken apart for frames",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-08",
+   "shipped_date": "2026-08-08",
+   "shipped_commit": "480ba233"
+  },
+  {
+   "tool_name": "Collage Studio — the artwork gets the room (full bleed, and controls capped at half the screen)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-08",
+   "shipped_date": "2026-08-08",
+   "shipped_commit": "27687480"
+  },
+  {
+   "tool_name": "Collage Studio — a video just loads and loops, and nothing asks about frames",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-08",
+   "shipped_date": "2026-08-08",
+   "shipped_commit": "f305ee48"
+  },
+  {
+   "tool_name": "Collage Studio — the render no longer asks for every photo at full resolution at once",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-09",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "ce35b8d1"
+  },
+  {
+   "tool_name": "Collage Studio — undo, so the roll you liked comes back",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-09",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "dafb616d"
+  },
+  {
+   "tool_name": "Collage Studio — the export stopped reporting soft photos as full quality",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": null,
+   "company": null,
+   "role": "Collage user",
+   "wished_date": "2026-08-10",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "1b16c643"
+  },
+  {
+   "tool_name": "Collage Studio — pick the part of the song that plays (music in/out range)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-09",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "a19e5338"
+  },
+  {
+   "tool_name": "Collage Studio — the colour dice (roll the colour sort and the crop, keep the layout)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-09",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "b8ce1f00"
+  },
+  {
+   "tool_name": "The Tools menu stops at the glass — the bottom of it is reachable on a phone",
+   "tool_href": "consumables.html",
+   "wisher": "an anonymous AV tech",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-10",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "41d4fda7"
+  },
+  {
+   "tool_name": "Walk it — verify the list one row at a time, with your hands full",
+   "tool_href": "rough-in-request.html",
+   "wisher": "an anonymous AV tech",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-09",
+   "shipped_date": "2026-08-10",
+   "shipped_commit": "914cf37e"
+  },
+  {
+   "tool_name": "Total Package — what the job is actually worth, yours next to theirs",
+   "tool_href": "total-package.html",
+   "wisher": "an anonymous AV hand",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-12",
+   "shipped_date": "2026-08-12",
+   "shipped_commit": "dee60988"
+  },
+  {
+   "tool_name": "Wish it better — the well opens on the page you're standing on (all nine trades)",
+   "tool_href": "total-package.html",
+   "wisher": "an anonymous AV user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-13",
+   "shipped_date": "2026-08-13",
+   "shipped_commit": "8afe08fe"
+  },
+  {
+   "tool_name": "Collage Studio — the music button takes a video's SOUND without its pictures, and a fragment can be thrown out of the pool from full bleed",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-16",
+   "shipped_date": "2026-08-16",
+   "shipped_commit": "d2e5de42"
+  },
+  {
+   "tool_name": "Collage Studio — a fade at the edges of the audio range you picked, every time it comes round",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-16",
+   "shipped_date": "2026-08-16",
+   "shipped_commit": "f1d25ab4"
+  },
+  {
+   "tool_name": "T&M Tag — todo en español (EN/ES on the page, bilingual document)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html",
+   "wisher": "an anonymous GC hand",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-17",
+   "shipped_date": "2026-08-18",
+   "shipped_commit": "aac2c88d"
+  },
+  {
+   "tool_name": "Collage Studio — Shuffle that switches the photos up under every arrangement, colour matching kept",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-18",
+   "shipped_date": "2026-08-18",
+   "shipped_commit": "3f76ee8b"
+  }
+ ]
 }
