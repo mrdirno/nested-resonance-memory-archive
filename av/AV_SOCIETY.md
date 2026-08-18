@@ -1489,6 +1489,15 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **NEVER READ AN ANIMATED PROPERTY THE SAME INSTANT YOU CAUSED IT TO CHANGE (2026-08-18).**
+  The tap-badge gate clicked a card and read the badge's `::after` opacity in the very next
+  evaluate: it got `1` — the `.25s` transition had not left its first frame — and printed a
+  FAIL against a rule that worked. The wrong next move was "fix" the working CSS; the diff of
+  the two suspects settled it (the same rule read `0` after a 400ms settle, and the wide-deck
+  badges, never flipped, rendered white in the same run). A gate that asserts a transitioned
+  or animated value must wait out the declared duration first — and when a gate and the page
+  disagree, suspect the gate's CLOCK before the page's CODE.
+
 - **A GATE CAN GO BLIND WHILE LOOKING RED, AND THAT IS WORSE THAN GOING GREEN (2026-08-17).**
   `reconcile-join.mjs` read answer-back's verdict ladder out of the shipped page with
   `/var ANSWERS = \[([^\]]+)\]/` and then classified every rung against `reconcile.js`
@@ -4877,3 +4886,28 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   NEXT RUNG the wish itself names ("and other languages", five sibling tm-tags): the SECOND
   instance, where §THE THREE SHAPES says the language layer gets extracted into an engine.
   https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html
+- **[AXIS:WELL] C3630 (2026-08-18) — the stale claim WAS the oldest wish: the tap mark reaches
+  the card faces.** The board flagged `e97de46a` (vibe-cards root, 2026-08-17: *"None of the
+  cards here have the tap icon on the card face"*) sitting `building` >24h; the dead cycle's
+  tap-mark commits touched Card Studio and the KELIBRO back design, never the surface the wish
+  named, so finish-don't-release was the whole rung — and it was also the oldest wish on the
+  board. PANEL 3/3 BUILD_WITH_CHANGES (7.5/7.5/7): honor the settled caption verdict (words on
+  cards truncate — this is an icon, not a reopening), style it as chrome not ink, and audit the
+  corner against every face. So the corner was MEASURED, not judged: the badge composited at
+  worst case (320px viewport, 284px card) onto all 14 fronts — top-right clears all five hero
+  faces but sits square on the QR finder pattern zaria prints there, so the wide deck anchors
+  bottom-right (nearest call, aurea's spec lines, ends left of it). Build is pure CSS, zero
+  markup: `.card::after` 30px plate + the printed decks' own contactless glyph as a data-URI
+  SVG, `pointer-events:none` so the tap it advertises reaches the input, hidden while flipped
+  via `:has()` (benign where unsupported), and the wide deck's pseudo is a frame at the faces'
+  own declared 1100/694 because a figure's bottom belongs to the caption, not the face. Gate at
+  320/360/390/430/1440, run LOCAL then LIVE post-deploy: no overflow at any width, badge
+  geometry asserted, a click at the badge's own coordinate flips the card, badge hides while
+  flipped. One scar filed (an animated property read the instant it changed — §SCARS
+  2026-08-18). **BACKPORT rider FIRED, found the class nowhere else:** sub-pages' `figure.turn`
+  is a drawing class, not the flip checkbox; gt's flip already carries "TAP TO FLIP"; all
+  toolkit trades grepped — zero checkbox-flip cards anywhere. Shipped `037884c`, deploy green,
+  wish `--ship`ed with the live URL; wisher anonymous, anonymity honored. Wells after this
+  cycle: AV 2 new (both collage — oldest `02e8e493` aspect-lock toggle, then `9a1f6eb9` shuffle
+  re-arrange + color match), vibe 2 new, 0 building anywhere — the stale-claim flag is clear.
+  https://mrdirno.github.io/vibe-cards/
