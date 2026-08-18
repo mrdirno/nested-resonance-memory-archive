@@ -3030,6 +3030,22 @@ counted in `skipped`, so the only state rejected is having measured NOTHING — 
 covers a renamed selector and a host too slow for the 120ms settle. Proven by removing the
 normalisation and re-running the exact command that had passed: it now fails.
 
+### 2026-08-17 — THE COMMENT THAT DOCUMENTED THE BUTTON CLOSED ITSELF AND TOOK THE HANDLER WITH IT
+
+The /gt/ card's wish script carried a block comment quoting the Content-Range header
+value `*/0` — and `*/` is `*/` wherever it appears, so the comment ended mid-sentence,
+the leftover prose was parsed as code, the SyntaxError killed the whole IIFE, and the
+button a printed card points at did nothing when tapped. GT-001 had ZERO wishes ever;
+every deploy was green; the wisher's report ("I hit the button and nothing happens")
+was the first signal, ~2 months in. Worse: the first diagnosis blamed the visible
+suspect — a silent `length<2` guard — and only extracting the script for a routine
+`node --check` exposed the real killer. TWO laws: (1) prose inside a block comment is
+CODE the moment it contains `*/` — write `*\/`; (2) a page's inline scripts must be
+PARSE-GATED at build time (vibe-cards: `build_site.py::check_page_scripts`, HTMLParser
+extraction — regex extraction false-positives on minified React whose strings contain
+`"<script><\/script>"`). The archive is clean (125 pages, 117 blocks checked) and its
+gates should grow the same check the day a new inline script lands.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4807,3 +4823,21 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   and the accent painted, zero page errors, and mobile-watertight re-run GREEN AGAINST
   PRODUCTION.
   https://mrdirno.github.io/nested-resonance-memory-archive/flooring/
+
+- **[AXIS:WELL] C3628 (2026-08-17) — three wishes served at the root cause, and the WISH BOARD stands up.**
+  Vibe well: GT "nothing happens" (0d71fdc9) root-caused to a `*/0` comment-terminator killing the
+  whole wish IIFE — fixed; the silent `length<2` guard now SPEAKS on all 19 vibe-cards pages
+  ("Escriba su deseo primero." / "Type your wish first."); stale "seven cards" (2a895681 + 598ae99c)
+  fixed AND harnessed — counts sit in `data-count` spans a build gate re-derives from
+  CARD_REGISTRY.md, and a second gate `node --check`s every inline script on every page so a dead
+  handler can never deploy green again. All verified LIVE at 390px (handler alive, nudge visible,
+  "nine" stated, no h-scroll), deploy green, wishes shipped with notes. BACKPORT RIDER FIRED both
+  directions: vibe 19/19 pages patched; archive swept 125 pages / 117 inline blocks — clean (its
+  toolkit.js already refuses visibly). OPERATOR DIRECTIVE (2026-08-17, mid-cycle): wish process
+  standardized — new `/Volumes/dual/_vault/automation/scripts/wish_board.py` reads ALL THREE sinks
+  (av_tool_requests + vibe_card_wishes + persona500 community_posts) oldest-first with ages and
+  stale-claim flags, wired into the collage + persona500 directives and the wishitbetter
+  {wish_queue} slot (live at next operator-app relaunch; render-proof green, template delta 0).
+  First board read: 61 waiting, oldest 930h, 33 society wishes NO bump had ever seen — the rot the
+  operator called, measured. persona500.com full-DD fleet (8 scouts) landed; revamp follows it.
+  https://mrdirno.github.io/vibe-cards/gt/
