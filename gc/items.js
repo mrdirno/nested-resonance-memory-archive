@@ -397,6 +397,70 @@ window.TOOLKIT_ITEMS.tag = {
   ]
 };
 
+/* ── THE SAME VOCABULARY, EN ESPAÑOL (wish 2026-08-17: "Todo en Español para los
+ * Latinos", tm-tag.html) ───────────────────────────────────────────────────────
+ * US-jobsite Spanish, not textbook: vale, cuadrilla, mayordomo (the foreman —
+ * NEVER the superintendent, who stays "el súper"), tablaroca, rociadores. Usted
+ * register throughout — this document goes UP the chain.
+ *
+ * SHAPE: every entry carries its own `en` twin, so the page can translate a
+ * saved pick when the language flips WITHOUT pairing two lists by index — an
+ * index pairing is drift with a delay on it. `en` must equal the string in
+ * TOOLKIT_ITEMS.tag above, verbatim; a mismatch fails soft (the pick survives
+ * untranslated, the document still prints).
+ *
+ * THE DOCUMENT STAYS READABLE AT THE TOP OF THE CHAIN (the panel's one binding
+ * change, all three lenses): in Spanish mode the page prints picked options as
+ * "ES (EN)" — composed FROM these pairs — because a T&M tag outlives the text
+ * thread: pay apps, CO backup, the AP clerk in March. The crew classes carry
+ * the pairing inside the token itself, so the select and the document agree.  */
+window.TOOLKIT_ITEMS.tag_es = {
+  "roles": [
+    { "es": "CM", "en": "CM" },
+    { "es": "Rep del dueño", "en": "Owner's rep" },
+    { "es": "El PM de ellos", "en": "Their PM" },
+    { "es": "Arquitecto / EOR", "en": "Architect / EOR" },
+    { "es": "Inspector / AHJ", "en": "Inspector / AHJ" },
+    { "es": "Otra persona", "en": "Somebody else" }
+  ],
+  "how": [
+    { "es": "De palabra — este vale es el papel", "en": "Verbal — this tag is the paper" },
+    { "es": "Por teléfono", "en": "Phone" },
+    { "es": "Usted lo mandó — se lo reenvío", "en": "You sent it — I'll forward it" }
+  ],
+  "why": [
+    { "es": "No está en los planos del contrato", "en": "Not on the contract drawings" },
+    { "es": "Respuesta de RFI / ASI / boletín después del buyout", "en": "RFI answer / ASI / bulletin after buyout" },
+    { "es": "Planos vs. existente — conflicto en campo", "en": "Plans vs. existing — field conflict" },
+    { "es": "Imprevisto", "sub": "enterrado, escondido, as-builts mal", "en": "Unforeseen" },
+    { "es": "Extra del dueño — lo pidió ahí mismo", "en": "Owner add — asked for it on the spot" },
+    { "es": "El inspector / AHJ nos obligó", "en": "AHJ / inspector made us" },
+    { "es": "Trabajando alrededor de otro prime / proveedor del dueño", "en": "Working around another prime / owner's vendor" },
+    { "es": "Usted dijo OT / más cuadrilla para sostener la fecha", "en": "You said OT / extra crew to hold the date" }
+  ],
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "SUPER", "en": "SUPER" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "CARP", "en": "CARP" },
+    { "es": "LAB", "en": "LAB" },
+    { "es": "OPER", "en": "OPER" },
+    { "es": "APRENDIZ (APPR)", "en": "APPR" },
+    { "es": "SUB — ELEC", "en": "SUB — ELEC" },
+    { "es": "SUB — MECÁNICO (MECH)", "en": "SUB — MECH" },
+    { "es": "SUB — PLOMERÍA (PLUMB)", "en": "SUB — PLUMB" },
+    { "es": "SUB — ROCIADORES (FIRE SPRINK)", "en": "SUB — FIRE SPRINK" },
+    { "es": "SUB — CONCRETO (CONC)", "en": "SUB — CONC" },
+    { "es": "SUB — ACERO (STEEL)", "en": "SUB — STEEL" },
+    { "es": "SUB — TABLAROCA (DRYWALL)", "en": "SUB — DRYWALL" },
+    { "es": "SUB — SITIO (SITE)", "en": "SUB — SITE" }
+  ],
+  "stands": [
+    { "es": "Terminado hoy", "en": "Done today" },
+    { "es": "Sigue — mañana otro vale", "en": "Still going — new tag tomorrow" }
+  ]
+};
+
 
 /* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
  *

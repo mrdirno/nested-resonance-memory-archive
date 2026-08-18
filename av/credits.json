@@ -160,6 +160,16 @@
       "wished_date": "2026-08-16",
       "shipped_date": "2026-08-16",
       "shipped_commit": "f1d25ab4"
+    },
+    {
+      "tool_name": "T&M Tag — todo en español (EN/ES on the page, bilingual document)",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html",
+      "wisher": "an anonymous GC hand",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-17",
+      "shipped_date": "2026-08-18",
+      "shipped_commit": null
     }
   ]
 }

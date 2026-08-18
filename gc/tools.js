@@ -30,7 +30,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "T&M Tag",
     href: "tm-tag.html",
-    desc: "Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record.",
+    desc: "Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record. En español también.",
     chip: "#2C6E1B",
     audience: "Super → CM / Owner's rep"
   },

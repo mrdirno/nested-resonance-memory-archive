@@ -3046,6 +3046,18 @@ extraction — regex extraction false-positives on minified React whose strings 
 `"<script><\/script>"`). The archive is clean (125 pages, 117 blocks checked) and its
 gates should grow the same check the day a new inline script lands.
 
+### 2026-08-18 — TRANSLATE ON THE WAY IN, NEVER ON THE WAY OUT
+The toolkit's first bilingual page (gc/tm-tag.html) flips language by reload, and its
+first build translated the saved picks BEFORE calling location.reload(). Every free-text
+field survived the flip and every picked label arrived untranslated — because the note
+engine flushes on pagehide/visibilitychange, both of which fire DURING the reload, so
+the exit flush re-persisted the untranslated state on top of the remapped draft a
+millisecond after the remap wrote it. The e2e caught it; a screenshot never would have —
+the ES page and the EN page each looked perfect alone. The fix is a direction, not a
+patch: a page that rewrites its own persisted draft around a reload must do it AT BOOT
+of the NEXT load, where nothing else is still writing — and a boot-side remap is
+idempotent (same-tongue picks pass through), which an exit-side one can never be.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -4841,3 +4853,27 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   First board read: 61 waiting, oldest 930h, 33 society wishes NO bump had ever seen — the rot the
   operator called, measured. persona500.com full-DD fleet (8 scouts) landed; revamp follows it.
   https://mrdirno.github.io/vibe-cards/gt/
+
+- **[AXIS:WELL] C3629 (2026-08-18) — "Todo en Español para los Latinos": the toolkit's first bilingual tool.**
+  Oldest wish across both wells (gc · improve · tm-tag.html) served end to end. EN/ES chips on the
+  plate (first visit follows the phone's language, the pick is remembered), the whole UI en español
+  de obra — vale, cuadrilla, MAYORDOMO for the foreman and never for the súper, tablaroca — and the
+  assembled document BILINGUAL by design: the judge panel (3/3 BUILD-WITH-CHANGES — field lens ·
+  receiver lens · strict skeptic) bound that a tag outlives its text thread (pay apps, CO backup,
+  the AP clerk in March), so ES mode prints headings "ES / EN", picked options "ES (EN)", free text
+  as typed, and EN mode's document is byte-identical to before. Vocabulary rides in gc/items.js
+  `tag_es` with an en-twin on every entry (nothing paired by index); picks survive the flip both
+  directions, remapped AT BOOT (see the new scar — the exit flush overwrote the first attempt).
+  The note engine grew three additive, defaults-preserved params (copyFailLabel · rows rmLabel ·
+  tick doc). Independent native-register review: 4 fixes, all applied ("Su PM"/"Su nombre" usted
+  ambiguity, "verbal"-as-noun, "mano" calque). Gates: no-third-party PASS · note-live-fields 11/11
+  on the page and 334 fields / 27 pages full sweep PASS (BACKPORT RIDER: the engine additions are
+  proven no-ops for every sibling note page; no sibling carries a language layer yet — this is the
+  FIRST instance) · mobile-watertight PASS 320/360/390/430 + bumped text · ES e2e ALL GREEN (locale
+  default, bilingual doc, toggle round-trip, overflow at 4 widths, 44px chips, zero page errors).
+  Stale-claim sweep: AV well 0 building; the 20 building in vibe-cards belong to a LIVE sibling
+  lane (three commits the same evening) whose well is forward-only by design — nothing to release,
+  and the board's "15 STALE" is that lane's WIP, recorded here so the flag has an answer on disk.
+  NEXT RUNG the wish itself names ("and other languages", five sibling tm-tags): the SECOND
+  instance, where §THE THREE SHAPES says the language layer gets extracted into an engine.
+  https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html

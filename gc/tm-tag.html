@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>T&M Tag — GC & Site Super Toolkit</title>
-<meta name="description" content="Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record.">
+<meta name="description" content="Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record. También en español.">
 <meta name="apple-mobile-web-app-title" content="T&M Tag">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,21 +15,28 @@
 <div class="wrap">
 
   <header class="plate">
-    <span class="eyebrow">GC · Super → CM / owner's rep</span>
-    <h1>T&M Tag</h1>
-    <p class="lede">You got directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, and the crew and hours it took today. Your log owns the number; this is the field record of what you were told.</p>
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">GC · Super → CM / owner's rep</span>
+      <div class="langtog" role="group" aria-label="Language / Idioma">
+        <button type="button" id="lang-en" aria-pressed="true">EN</button>
+        <button type="button" id="lang-es" aria-pressed="false">ES</button>
+      </div>
+    </div>
+    <h1 id="h1">T&M Tag</h1>
+    <p class="lede" id="lede">You got directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, and the crew and hours it took today. Your log owns the number; this is the field record of what you were told.</p>
   </header>
 
   <div id="form"></div>
 
-  <p class="section-label">What you send</p>
+  <p class="section-label" id="whatlabel">What you send</p>
   <div class="preview" id="preview"></div>
 
-  <div class="warn">
+  <div class="warn" id="warn">
     <b>One extra, one day, one tag — tomorrow gets its own.</b> No number on this one: your CO log owns the number, and this is the field record of what you were told and what it took, not the CO. Nothing is priced and there's no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail.
   </div>
 
-  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+  <p class="credit" id="wishline">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+  <p class="credit" id="creditby">&#10022; The Spanish on this page was wished into existence by an anonymous GC hand.</p>
 
 </div>
 
@@ -45,112 +52,246 @@
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/note.js"></script>
 <script>
-/* GC T&M TAG — the directed-work ticket, shipped as a CONFIG of shape #2's engine
- * (shared/note.js, extracted this cycle at the second instance — see
- * av/AV_SOCIETY.md §THE THREE SHAPES). There is no CSS in this file, no DOM
- * building, no state, no persistence and no document assembly: the engine owns
- * all of it. This file owns the WORDS, which is the half an engine must never
- * own — the note's whole value is that it speaks one trade's language.
+/* GC T&M TAG — the directed-work ticket, a CONFIG of shape #2's engine
+ * (shared/note.js — see av/AV_SOCIETY.md §THE THREE SHAPES). No CSS here, no DOM
+ * building, no state, no document assembly: the engine owns all of it. This file
+ * owns the WORDS — and since the "Todo en Español" wish (2026-08-17, panel 3/3)
+ * it owns them TWICE, adjacently, through t(en, es): one word-source, two
+ * tongues, nothing paired by index and nothing that can drift apart.
+ *
+ * WHAT THE PANEL BOUND, and this file honors:
+ *  · UI fully Spanish in ES mode; the DOCUMENT stays readable at the TOP of the
+ *    chain — headings and labels print "ES / EN", picked options print
+ *    "ES (EN)". A tag outlives its text thread (pay apps, CO backup, the AP
+ *    clerk in March), and a receiver who can't read it breaks the reply-OK loop
+ *    the tool exists for. EN mode's document is byte-identical to before.
+ *  · What the man TYPES prints as he typed it, either mode — his words are his.
+ *  · The vocabulary is jobsite Spanish (gc/items.js TOOLKIT_ITEMS.tag_es):
+ *    vale, cuadrilla, MAYORDOMO for the foreman and never for the súper.
+ *
+ * THE TOGGLE RELOADS, on purpose. Re-mounting in place leaves the first mount's
+ * form/window listeners alive and both mounts persisting the same key — a race
+ * that only wins by accident of registration order. flush → store the choice →
+ * reload, and the saved picks translate through their en-twins ON BOOT (see
+ * remapDraft below for why never on the way out). Sticky name/company and the
+ * stamped clock ride through untouched.
  */
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.tag;
+  var ES = window.TOOLKIT_ITEMS.tag_es || {};
+  var KEY = "toolkit.gc.tmtag.v1";
+  var LANG_KEY = "toolkit.lang";
 
-  Note.mount({
-    key: "toolkit.gc.tmtag.v1",
-    docName: "T&M TAG — WORK YOU DIRECTED",
-    copiedLabel: "Copied. Go send it.",
-    clearConfirm: "Clear this tag? Your name and company stay.",
-    emptyLabel: "Nothing on it yet",
-    startedLabel: "Tag started",
+  function storedLang() {
+    try { var v = localStorage.getItem(LANG_KEY); if (v === "es" || v === "en") return v; } catch (e) {}
+    return "";
+  }
+  /* First visit follows the phone: an ES-set phone opens en español, an EN phone
+   * never sees the toggle move. After that the chip's own pick rules. */
+  var L = storedLang() || (((navigator.language || "").toLowerCase().indexOf("es") === 0) ? "es" : "en");
+  function t(en, es) { return L === "es" ? es : en; }
+
+  /* ── ES options, derived from the paired vocabulary — the "ES (EN)" the
+   *    document prints is composed HERE, from each entry's own en-twin. ──── */
+  function opt(p) {
+    return (p.en !== p.es) ? { v: p.es, doc: p.es + " (" + p.en + ")" } : { v: p.es };
+  }
+  function tick(p) {
+    var base = p.sub ? (p.es + " — " + p.sub) : p.es;
+    var o = { name: p.es, doc: (p.en !== p.es) ? (base + " (" + p.en + ")") : base };
+    if (p.sub) o.sub = p.sub;
+    return o;
+  }
+  var V = L === "es" ? {
+    roles: (ES.roles || []).map(opt),
+    how: (ES.how || []).map(opt),
+    why: (ES.why || []).map(tick),
+    classes: (ES.classes || []).map(function (p) { return p.es; }),
+    stands: (ES.stands || []).map(opt)
+  } : {
+    roles: T.roles, how: T.how, why: T.why, classes: T.classes, stands: T.stands
+  };
+
+  /* ── page chrome outside the engine's mount — swapped before it renders ── */
+  var CHROME = {
+    title: t("T&M Tag — GC & Site Super Toolkit", "Vale T&M — GC & Site Super Toolkit"),
+    eyebrow: t("GC · Super → CM / owner's rep", "GC · Súper → CM / rep del dueño"),
+    h1: t("T&M Tag", "Vale T&M"),
+    lede: t(
+      "You got directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, and the crew and hours it took today. Your log owns the number; this is the field record of what you were told.",
+      "Le ordenaron hacer algo que no está en el contrato. Déjelo en papel antes de salir del portón — quién lo ordenó, qué hicieron y dónde, y la cuadrilla y horas que tomó hoy. Su bitácora es dueña del número; este es el registro de campo de lo que le dijeron."),
+    whatlabel: t("What you send", "Lo que manda"),
+    warn: t(
+      "<b>One extra, one day, one tag — tomorrow gets its own.</b> No number on this one: your CO log owns the number, and this is the field record of what you were told and what it took, not the CO. Nothing is priced and there's no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail.",
+      "<b>Un extra, un día, un vale — mañana tiene el suyo.</b> Sin número en este: su registro de CO es dueño del número, y este es el registro de campo de lo que le ordenaron y lo que tomó, no el CO. El vale sale en los dos idiomas — usted lo lee, y el CM también — y lo que usted escribe sale tal como lo escribió. Nada tiene precio y no hay línea de firma: un bloque pegado no se puede firmar, y la respuesta con su hora es el rastro de papel."),
+    wishline: t(
+      "✦ Something on here in the wrong order, or missing the line your office always asks for? Wish for it — it gets fixed, and you get the credit.",
+      "✦ ¿Algo en el orden equivocado, o falta la línea que su oficina siempre pide? Pídalo — se arregla, y usted se lleva el crédito."),
+    creditby: t(
+      "✦ The Spanish on this page was wished into existence by an anonymous GC hand.",
+      "✦ El español de esta página lo hizo realidad el deseo de un compañero GC anónimo."),
+    clear: t("Clear", "Borrar"),
+    copy: t("Copy the tag", "Copiar el vale")
+  };
+  function put(id, s) { var n = document.getElementById(id); if (n) n.textContent = s; }
+  document.documentElement.lang = L;
+  document.title = CHROME.title;
+  put("eyebrow", CHROME.eyebrow); put("h1", CHROME.h1); put("lede", CHROME.lede);
+  put("whatlabel", CHROME.whatlabel);
+  document.getElementById("warn").innerHTML = CHROME.warn;
+  put("wishline", CHROME.wishline); put("creditby", CHROME.creditby);
+  put("clear", CHROME.clear); put("copy", CHROME.copy);
+  document.getElementById("lang-en").classList.toggle("on", L === "en");
+  document.getElementById("lang-es").classList.toggle("on", L === "es");
+  document.getElementById("lang-en").setAttribute("aria-pressed", L === "en" ? "true" : "false");
+  document.getElementById("lang-es").setAttribute("aria-pressed", L === "es" ? "true" : "false");
+
+  /* ── the flip: translate saved picks through their en-twins ON THE WAY IN,
+   *    never on the way out. The engine flushes on pagehide/visibilitychange —
+   *    which fire DURING location.reload() — so anything remapped before the
+   *    reload gets overwritten by the exit flush a millisecond later (caught by
+   *    the e2e, picks arriving untranslated). Remapping at boot is idempotent:
+   *    picks already in this language pass through untouched, and a half-written
+   *    draft from the other tongue arrives translated. Free text, the stamp and
+   *    sticky ride as-is. ── */
+  function pairMap(to) {
+    var m = {};
+    ["roles", "how", "why", "classes", "stands"].forEach(function (k) {
+      (ES[k] || []).forEach(function (p) {
+        if (p.en === p.es) return;
+        if (to === "es") m[p.en] = p.es; else m[p.es] = p.en;
+      });
+    });
+    return m;
+  }
+  function remapDraft(to) {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { s = null; }
+    if (!s) return;
+    var m = pairMap(to);
+    ["role", "how", "stands"].forEach(function (id) {
+      if (typeof s[id] === "string" && m[s[id]]) s[id] = m[s[id]];
+    });
+    if (s.why && s.why.map) s.why = s.why.map(function (nm) { return m[nm] || nm; });
+    if (s.crew && s.crew.map) s.crew = s.crew.map(function (r) { if (r && m[r.cls]) r.cls = m[r.cls]; return r; });
+    try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  remapDraft(L);
+
+  var api = Note.mount({
+    key: KEY,
+    docName: t("T&M TAG — WORK YOU DIRECTED", "VALE T&M — TRABAJO QUE USTED ORDENÓ / T&M TAG"),
+    copiedLabel: t("Copied. Go send it.", "Copiado. Mándelo."),
+    copyFailLabel: t("Select it and copy", "Selecciónelo y cópielo"),
+    clearConfirm: t("Clear this tag? Your name and company stay.", "¿Borrar este vale? Su nombre y compañía se quedan."),
+    emptyLabel: t("Nothing on it yet", "Todavía no hay nada"),
+    startedLabel: t("Tag started", "Vale empezado"),
 
     // The job, the where and the day ride on the SECOND line, never stacked onto
     // the heading with three em-dashes. Findable by search, readable on a phone.
     subline: function (get, u) {
-      return [get("site"), u.today()].filter(Boolean).join("  \u00b7  ");
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
     },
 
     sections: [
       {
-        title: "The job",
-        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        title: t("The job", "La obra"),
+        why: t("So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+               "Para que aparezca en un inbox en ocho semanas, y para que se amarre a una línea del contrato en vez de a una discusión."),
         fields: [
-          { id: "site", kind: "text", label: "Job", hint: "\u2014 the way everybody says it", ph: "Riverside Med OB", docSkip: true }
+          { id: "site", kind: "text", label: t("Job", "Obra"), hint: t("— the way everybody says it", "— como todos la llaman"), ph: "Riverside Med OB", docSkip: true }
         ]
       },
       {
-        title: "Who directed it",
+        title: t("Who directed it", "Quién lo ordenó"),
         tone: "loud",
-        docHead: "WHO DIRECTED IT",
-        why: "A verbal with a name, a time and a place on it is the whole reason this tag exists. Without the name, eight weeks out the answer is nobody.",
+        docHead: t("WHO DIRECTED IT", "QUIÉN LO ORDENÓ / WHO DIRECTED IT"),
+        why: t("A verbal with a name, a time and a place on it is the whole reason this tag exists. Without the name, eight weeks out the answer is nobody.",
+               "Una orden de palabra con nombre, hora y lugar es la razón entera de este vale. Sin el nombre, en ocho semanas la respuesta es nadie."),
         fields: [
-          { id: "role", kind: "pick", label: "Who directed it", options: T.roles, docLabel: "Directed by" },
-          { id: "who", kind: "text", label: "Their name", hint: "— the one line you can't rebuild later", ph: "Dana W., CM", docLabel: "Name" },
-          { id: "how", kind: "seg", label: "How", options: T.how, docLabel: "How" },
-          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" }
+          { id: "role", kind: "pick", label: t("Who directed it", "Quién lo ordenó"), options: V.roles, docLabel: t("Directed by", "Ordenado por / Directed by") },
+          { id: "who", kind: "text", label: t("Their name", "El nombre de quien lo ordenó"), hint: t("— the one line you can't rebuild later", "— la línea que no se puede reconstruir después"), ph: "Dana W., CM", docLabel: t("Name", "Nombre / Name") },
+          { id: "how", kind: "seg", label: t("How", "Cómo"), options: V.how, docLabel: t("How", "Cómo / How") },
+          { id: "when", kind: "clock", label: t("When", "Cuándo"), hint: t("— stamps itself when you start", "— se estampa solo cuando empieza"), ph: t("stamps itself when you start", "se estampa solo al empezar"), nowLabel: t("Now", "Ahora"), docLabel: t("When", "Cuándo / When") }
         ]
       },
       {
-        title: "What we did, and where",
-        docHead: "WHAT WE DID, AND WHERE",
-        why: "Where it happened does as much work as what happened — an area and a gridline ties it to a schedule activity instead of to an argument.",
+        title: t("What we did, and where", "Qué hicimos, y dónde"),
+        docHead: t("WHAT WE DID, AND WHERE", "QUÉ HICIMOS, Y DÓNDE / WHAT WE DID, AND WHERE"),
+        why: t("Where it happened does as much work as what happened — an area and a gridline ties it to a schedule activity instead of to an argument.",
+               "El dónde trabaja tanto como el qué — un área y un eje lo amarran a una actividad del cronograma en vez de a una discusión."),
         fields: [
-          { id: "did", kind: "area", rows: 2, label: "What we did, and where", hint: "— area, level, gridline", ph: "hand-dug and re-routed 40 lf of storm around the abandoned duct bank — Area C, gridline 8, below slab" },
-          { id: "why", kind: "ticks", subhead: "Outside contract because", label: "", docLabel: "OUTSIDE CONTRACT BECAUSE", options: T.why }
+          { id: "did", kind: "area", rows: 2, label: t("What we did, and where", "Qué hicimos, y dónde"), hint: t("— area, level, gridline", "— área, nivel, eje"), ph: t("hand-dug and re-routed 40 lf of storm around the abandoned duct bank — Area C, gridline 8, below slab", "excavamos a mano y desviamos 40 pies de pluvial alrededor del banco de ductos abandonado — Área C, eje 8, bajo losa") },
+          { id: "why", kind: "ticks", subhead: t("Outside contract because", "Fuera de contrato porque"), label: "", docLabel: t("OUTSIDE CONTRACT BECAUSE", "FUERA DE CONTRATO PORQUE / OUTSIDE CONTRACT BECAUSE"), options: V.why }
         ]
       },
       {
-        title: "Crew and hours today",
-        docHead: "WHAT IT TOOK TODAY — QUANTITIES ONLY, NO PRICING",
+        title: t("Crew and hours today", "Cuadrilla y horas de hoy"),
+        docHead: t("WHAT IT TOOK TODAY — QUANTITIES ONLY, NO PRICING", "QUÉ TOMÓ HOY — SOLO CANTIDADES, SIN PRECIOS / QUANTITIES ONLY, NO PRICING"),
         fields: [
           {
-            id: "crew", kind: "rows", label: "Crew today", addLabel: "+ Another crew line", docLabel: "CREW TODAY",
+            id: "crew", kind: "rows", label: t("Crew today", "Cuadrilla de hoy"), addLabel: t("+ Another crew line", "+ Otra línea de cuadrilla"), rmLabel: t("Take this line off", "Quitar esta línea"), docLabel: t("CREW TODAY", "CUADRILLA DE HOY / CREW TODAY"),
             cols: [
-              { id: "cls", kind: "select", label: "Class", options: T.classes },
-              { id: "men", kind: "stepper", label: "Men", ph: "men" },
-              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " HRS" }
+              { id: "cls", kind: "select", label: t("Class", "Clase"), options: V.classes },
+              { id: "men", kind: "stepper", label: t("Men", "Hombres"), ph: t("men", "homb") },
+              { id: "hrs", kind: "stepper", label: t("Hours", "Horas"), ph: "hrs", docSuffix: " HRS" }
             ]
           },
           {
-            id: "eq", kind: "rows", label: "Equipment and material", addLabel: "+ Another line", docLabel: "EQUIPMENT + MATERIAL",
+            id: "eq", kind: "rows", label: t("Equipment and material", "Equipo y material"), addLabel: t("+ Another line", "+ Otra línea"), rmLabel: t("Take this line off", "Quitar esta línea"), docLabel: t("EQUIPMENT + MATERIAL", "EQUIPO + MATERIAL / EQUIPMENT + MATERIAL"),
             cols: [
-              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
-              { id: "what", kind: "text", wide: true, label: "What", ph: "1 mini-ex — 4 hrs · 6 yd 3/4 rock · 40 lf 12in HDPE" }
+              { id: "qty", kind: "stepper", label: t("Qty", "Cant"), ph: t("qty", "cant") },
+              { id: "what", kind: "text", wide: true, label: t("What", "Qué"), ph: t("1 mini-ex — 4 hrs · 6 yd 3/4 rock · 40 lf 12in HDPE", "1 mini-ex — 4 hrs · 6 yd de grava 3/4 · 40 pies de HDPE de 12 in") }
             ]
           }
         ]
       },
       {
-        title: "Done, or still going",
+        title: t("Done, or still going", "¿Terminado, o sigue?"),
         tone: "loud",
-        docHead: "WHERE IT STANDS",
-        why: "One extra, one day, one tag — tomorrow gets its own.",
+        docHead: t("WHERE IT STANDS", "DÓNDE VA / WHERE IT STANDS"),
+        why: t("One extra, one day, one tag — tomorrow gets its own.", "Un extra, un día, un vale — mañana tiene el suyo."),
         fields: [
-          { id: "stands", kind: "seg", label: "Where it stands", options: T.stands, docLabel: "Where it stands" }
+          { id: "stands", kind: "seg", label: t("Where it stands", "Dónde va"), options: V.stands, docLabel: t("Where it stands", "Dónde va / Where it stands") }
         ]
       },
       {
-        title: "Who's sending it",
+        title: t("Who's sending it", "Quién lo manda"),
         tone: "grey",
-        why: "Typed once, saved on this phone, and Clear never touches it.",
+        why: t("Typed once, saved on this phone, and Clear never touches it.", "Se escribe una vez, se queda en este teléfono, y Borrar nunca lo toca."),
         fields: [
-          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "J. Alvarez — 925-555-0163", docLabel: "From" },
-          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Ridgeline Builders", docLabel: "Company" }
+          { id: "me", kind: "text", sticky: true, label: t("You", "Usted"), hint: t("— name + cell", "— nombre + celular"), ph: t("J. Alvarez — 925-555-0163", "J. Álvarez — 925-555-0163"), docLabel: t("From", "De / From") },
+          { id: "co", kind: "text", sticky: true, label: t("Company", "Compañía"), ph: "Ridgeline Builders", docLabel: t("Company", "Compañía / Company") }
         ]
       },
     ],
 
-    closing: [
+    closing: L === "es" ? [
+      "Sin número en este — su bitácora es dueña del número. Es mi registro de campo de lo que me ordenaron y lo que tomó, no el CO, y nada aquí tiene precio.\nNo number on this one — your log owns the number. My field record of what I was told and what it took, not the CO; nothing priced.",
+      "Responda OK si así lo vio, o dígame qué está mal y lo corrijo antes de que llegue a la oficina. Las fotos están en mi teléfono — dígame y se las mando.\nReply OK if that's how you saw it, or tell me what's off and I'll fix it before it goes to the office. Photos are on my phone — say the word."
+    ] : [
       "No number on this one — your log owns the number. This is my field record of what I was told and what it took, not the CO. Nothing on here is priced.",
       "Reply OK if that's how you saw it, or tell me what's off and I'll fix it before it goes to the office. Photos are on my phone — say the word and I'll send them."
     ],
 
     countLabel: function (get, s, touched) {
       var n = (s.crew || []).length;
-      if (n) return n + " crew line" + (n === 1 ? "" : "s") + " on it";
-      return touched ? "Tag started" : "Nothing on it yet";
+      if (n) return L === "es"
+        ? (n + (n === 1 ? " línea" : " líneas") + " de cuadrilla en el vale")
+        : (n + " crew line" + (n === 1 ? "" : "s") + " on it");
+      return touched ? t("Tag started", "Vale empezado") : t("Nothing on it yet", "Todavía no hay nada");
     }
   });
+
+  function switchLang(to) {
+    if (to === L) return;
+    if (api && api.flush) api.flush();
+    try { localStorage.setItem(LANG_KEY, to); } catch (e) {}
+    location.reload();
+  }
+  document.getElementById("lang-en").addEventListener("click", function () { switchLang("en"); });
+  document.getElementById("lang-es").addEventListener("click", function () { switchLang("es"); });
 })();
 </script>
 </body>

@@ -100,7 +100,7 @@
   /* Copy that survives a job site: the async Clipboard API needs a secure context,
    * and a browser on a site tablet behind a captive portal may not have one.
    * Failing silently there is the whole product broken. */
-  function copyText(text, btn, label) {
+  function copyText(text, btn, label, failLabel) {
     function flash(msg) {
       if (!btn) return;
       var was = btn.getAttribute("data-label") || btn.textContent;
@@ -116,7 +116,7 @@
       var ok = false;
       try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
       document.body.removeChild(ta);
-      flash(ok ? (label || "Copied. Go send it.") : "Select it and copy");
+      flash(ok ? (label || "Copied. Go send it.") : (failLabel || "Select it and copy"));
     }
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(text).then(function () { flash(label || "Copied. Go send it."); }, fallback);
@@ -387,6 +387,11 @@
             for (var i = 0; i < (def.options || []).length; i++) {
               var it = def.options[i];
               if ((typeof it === "string" ? it : it.name) === nm) {
+                /* `doc` on a tick option replaces the WHOLE printed line — same
+                   contract seg and pick have always had. First use: a bilingual
+                   page printing "ES (EN)" so the receiver up the chain can read
+                   what the sender ticked. Absent, nothing changes. */
+                if (it && typeof it === "object" && it.doc) return it.doc;
                 /* Same String.prototype.sub trap as buildTicks above — this is
                    the copy path, where it reached the client. */
                 return nm + (it && typeof it === "object" && it.sub ? " (" + it.sub + ")" : "");
@@ -590,7 +595,7 @@
         });
         var rm = el("button", "rm", "×");
         rm.type = "button";
-        rm.setAttribute("aria-label", "Take this line off");
+        rm.setAttribute("aria-label", def.rmLabel || "Take this line off");
         rm.addEventListener("click", function () {
           list.removeChild(r);
           if (!list.children.length) addRow();
@@ -891,7 +896,7 @@
     var copyBtn = byId(cfg.copy || "copy");
     if (copyBtn) {
       copyBtn.addEventListener("click", function () {
-        copyText(buildDoc(), copyBtn, cfg.copiedLabel);
+        copyText(buildDoc(), copyBtn, cfg.copiedLabel, cfg.copyFailLabel);
       });
     }
     var clearBtn = byId(cfg.clear || "clear");
