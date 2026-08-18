@@ -1238,6 +1238,25 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C163-A-SWEEP-THAT-AVOIDS-THE-SIZES-PEOPLE-UPLOAD-PROVES-THE-WRONG-POOL.**
+  The first Shuffle revival (e90d8a55) swept its re-deal at n=40 only, and the
+  re-deal was the IDENTITY at n ≤ 6 for every seed — the jitter window's floor
+  of 1 rank is an amplitude of ±0.5, which can never carry one rank past
+  another. Its own test was green while the button stayed dead at the sizes a
+  phone actually uploads, and the wish came back in exactly those words. The
+  law: when a control's behaviour depends on n, the sweep runs at the n the
+  USERS produce (2..13 for uploads), not the n that makes statistics easy.
+  §3b-small and §3b-small-exhaustive (2000 consecutive triggers, sizes 2..16)
+  now hold it; the old code dies on them with 41,632 assertion failures.
+- **SCAR-C164-A-GREEN-BATTERY-CAN-HIDE-AN-UNCAUGHT-ASSERT.** The soundtrack
+  sweep sat RED on HEAD since f1d25ab4 — the range-fade commit added `fadeSec`
+  to the mixer row and left the sweep's pinned field list stale — while that
+  cycle's log claimed 30/30 green. It stayed invisible because the failure was
+  an uncaught `assert.deepStrictEqual`, which prints no per-check ✗ line: any
+  detector that greps output patterns reads it as "no failures". The law:
+  a sweep's verdict is its EXIT CODE, never its output shape — and "run all
+  sweeps" belongs to every cycle's gate, not only to cycles that touched the
+  module.
 - **SCAR-C161-A-BOTTOM-PINNED-SHEET-LOSES-ITS-HEAD-NOT-ITS-FOOT.** The mobile
   law says nothing is clipped and the confirm button is reachable, so the first
   version of the range-fade e2e asserted exactly that: `Done` has a box, is 44px,
@@ -4962,4 +4981,46 @@ frontier. Today's ceiling is tomorrow's floor.
   (`max-height:min(92vh,100%);overflow:auto`), and the one page the grep flagged
   (`av/consumables.html`) is a bottom dock and a clipboard-fallback textarea, not
   a sheet. 0 of 105 carry the class.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-18 · **[AXIS:WELL] THE SECOND REVIVAL — Shuffle switches the photos
+  up at the sizes a phone uploads** (wells read UNSCOPED first: AV 2 new, vibe
+  4 new, 0 stranded in `building` in either; oldest lived in the AV well and
+  rank took the improve over the new_tool — the sibling aspect-lock wish stays
+  queued, ONE wish per cycle). Wished verbatim: *"When you upload multiple
+  images and you have a shuffle going for arrangement shuffle should switch the
+  photos up. But make sure your you're doing color matching too though."*
+  before→after: **under every colour arrangement, 0/200 presses changed
+  anything at 3–6 photos and 6% at 8 (measured on the shipped module — the
+  first revival's window floor of 1 rank is a ±0.5 amplitude that can never
+  cross two ranks) → every press re-deals at every n: jitter keeps its overtake
+  bound (floor 2), a seeded rotation of ≤3-rank blocks guarantees the movement,
+  n=2 alternates its only two deals, and a proof hatch makes "never the exact
+  ranking" hard for n ≥ 3 — displacement stays capped so the colour matching is
+  structural, not preserved by luck.** THE PANEL (3 lenses: visual artist,
+  determinism engineer, product skeptic) came back 3/3 BUILD_WITH_CHANGES
+  (6/6/7) and every demand landed or was RESOLVED with data: the skeptic's
+  small-n sweep and the artist's exhaustive-trigger sweep are §3b-small +
+  §3b-small-exhaustive; the artist's "scale the block down at small n" was
+  measured and REJECTED (b=2 tightens worst move 3→2 ranks and quarters the
+  deal space at n=6, 83→24 distinct — the dead feel back by another door); the
+  engineer's n=2 "always swap" fix would kill the button permanently after one
+  press (two deals: always-swap never changes again), so alternation stands —
+  the UX criterion is "the press changes the picture", not "≠ ranking".
+  **PROOF:** composition sweep green with the new sections (M-OLD, the shipped
+  code, dies with 41,632 failures; M2, a rotation-stripped floor-bump, with
+  9,807); 30/30 unit sweeps; 14/14 composition e2e incl. two new pixel tests —
+  the six-photo re-deal test FAILS on the old code (kill-proof run) — and 7/7
+  mobile-watertight; tsc + vite build clean; live-verified: bundle c9235da4 →
+  159737d2 and 4/4 shuffle e2e against the DEPLOYED site, desktop + Mobile
+  Chrome. Wisher credited in av/credits.json (anchor 3f76ee8b) and on the
+  Settings panel, anonymous as filed. Two scars filed (C163 a sweep that
+  avoids the sizes people upload; C164 a green battery hiding an uncaught
+  assert — the soundtrack sweep sat red on HEAD since f1d25ab4 and is fixed in
+  the same ship, with tone_b.mp4, referenced by three committed specs but
+  never committed, landed too). **BACKPORT rider FIRED, found nothing to
+  carry:** the class is "a variance/shuffle control that silently no-ops at
+  small input sizes"; swept all 13 trades' pages + shared/*.js for shuffle /
+  randomize / re-roll / dice controls — zero exist outside Collage Studio
+  (reconcile.js's "Dice" is the Sørensen–Dice coefficient). 0 of 13 trades
+  carry the class.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
