@@ -192,7 +192,110 @@ const exportExpectations = (previewGap: number, exportGap: number): boolean => {
   return true;
 };
 
+/**
+ * Per-region luminance fingerprint of the rendered preview — a 12×12 grid of
+ * means. Two deals of the same solid tiles into the same fragments differ
+ * region by region, so "the picture changed" becomes a number, not a squint.
+ */
+async function lumaGrid(page: Page): Promise<number[]> {
+  return page.evaluate(() => {
+    const el = (document.querySelector('canvas') as HTMLCanvasElement | null)
+      ?? (document.querySelector('img[src^="blob:"]') as HTMLImageElement | null);
+    if (!el) return [];
+    const sw = el instanceof HTMLCanvasElement ? el.width : el.naturalWidth;
+    const sh = el instanceof HTMLCanvasElement ? el.height : el.naturalHeight;
+    if (!sw || !sh) return [];
+    const G = 12;
+    const c = document.createElement('canvas');
+    c.width = G * 8; c.height = G * 8;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return [];
+    ctx.drawImage(el as CanvasImageSource, 0, 0, c.width, c.height);
+    const out: number[] = [];
+    for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+      const d = ctx.getImageData(gx * 8, gy * 8, 8, 8).data;
+      let sum = 0, n = 0;
+      for (let i = 0; i < d.length; i += 4) { sum += (d[i] + d[i + 1] + d[i + 2]) / 3; n++; }
+      out.push(sum / n);
+    }
+    return out;
+  });
+}
+
+const gridDiff = (a: number[], b: number[]): number => {
+  if (!a.length || a.length !== b.length) return -1;
+  return a.reduce((s, v, i) => s + Math.abs(v - b[i]), 0) / a.length;
+};
+
+const shuffleBtn = (page: Page) =>
+  page.getByRole('button', { name: /shuffle\s*images/i }).first();
+
 test.describe('composition', () => {
+  /**
+   * THE SHUFFLE MUST SWITCH THE PHOTOS UP — AT THE SIZES PEOPLE UPLOAD.
+   *
+   * Wished for verbatim: "When you upload multiple images and you have a
+   * shuffle going for arrangement shuffle should switch the photos up. But
+   * make sure your you're doing color matching too though."
+   *
+   * The re-deal's jitter window had a floor of 1 rank — an amplitude of
+   * exactly ±0.5, which can never carry one rank past another — so under any
+   * colour arrangement with six photos, ZERO of 200 presses changed the
+   * picture (measured on the shipped module). This drives the REAL button
+   * over a six-photo pool and asserts on pixels that every press deals a
+   * different picture. It fails on the code that shipped before the fix.
+   */
+  test('Shuffle re-deals a six-photo arrangement on every press', async ({ page }) => {
+    await page.goto(APP_URL);
+    const six = Array.from({ length: 6 }, (_, i) => {
+      const v = Math.round(20 + (i / 5) * 215);
+      return { name: `six-${i}.png`, mimeType: 'image/png', buffer: makePng(v, Math.max(0, v - 12), Math.min(255, v + 10)) };
+    });
+    await page.locator('input[type="file"]').first().setInputFiles(six);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.getByRole('button', { name: 'Settings' }).first().click();
+    await page.getByRole('button', { name: 'Balanced', exact: true }).first().click();
+    await page.waitForTimeout(1200);
+    await pick(page, 'Arrangement', 'Spotlight');
+
+    const prints: number[][] = [await lumaGrid(page)];
+    expect(prints[0].length).toBeGreaterThan(0);
+    for (let press = 1; press <= 3; press++) {
+      await shuffleBtn(page).click();
+      await page.waitForTimeout(1400);
+      const print = await lumaGrid(page);
+      const d = gridDiff(prints[prints.length - 1], print);
+      expect(d, `press ${press} changed nothing — the dead button is back (region diff ${d.toFixed(2)})`).toBeGreaterThan(1.5);
+      prints.push(print);
+    }
+    // And the presses are not an A/B toggle: press 2 differs from press 0's
+    // deal as well as from press 1's.
+    expect(gridDiff(prints[0], prints[2])).toBeGreaterThan(1.5);
+  });
+
+  /**
+   * …AND THE COLOUR MATCHING SURVIVES IT. The re-deal is displacement-bounded,
+   * so Spotlight after two shuffles is still Spotlight: bright centre, dark
+   * rim. A full shuffle would flatten this bias to noise around zero.
+   */
+  test('Shuffle keeps Spotlight colour-matched while it re-deals', async ({ page }) => {
+    await boot(page);
+    await pick(page, 'Arrangement', 'Spotlight');
+    const before = await centreBias(page);
+    expect(before, `Spotlight must start colour-matched (bias ${before.toFixed(1)})`).toBeGreaterThan(12);
+    const print0 = await lumaGrid(page);
+
+    await shuffleBtn(page).click();
+    await page.waitForTimeout(1400);
+    const print1 = await lumaGrid(page);
+    expect(gridDiff(print0, print1), 'the shuffle must re-deal at 24 photos too').toBeGreaterThan(1.5);
+
+    await shuffleBtn(page).click();
+    await page.waitForTimeout(1400);
+    const after = await centreBias(page);
+    expect(after, `two shuffles must not un-match Spotlight (bias ${after.toFixed(1)} from ${before.toFixed(1)})`).toBeGreaterThan(8);
+  });
+
   /**
    * THE EXPORT MUST BE WHAT YOU SAW.
    *

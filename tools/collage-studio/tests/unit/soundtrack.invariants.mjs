@@ -168,9 +168,12 @@ for (const durationSec of DURATIONS) {
 
       // THE SAME FIELD SET `describeAudioSources` emits for a clip. The window
       // is in it now — music has no picture to be trimmed against, but it does
-      // have a part you wanted, which is what a range on a song means.
+      // have a part you wanted, which is what a range on a song means. And the
+      // range fade rides with it: `fadeSec` joined the row when lib/windowFade
+      // landed, and OfflineAudioSource consumes it (offlineAudio.ts) — this
+      // list went stale in that commit and sat red on HEAD until noticed.
       assert.deepStrictEqual(
-        Object.keys(src).sort(), ['gain', 'id', 'inSec', 'loop', 'outSec', 'rate', 'span', 'url'],
+        Object.keys(src).sort(), ['fadeSec', 'gain', 'id', 'inSec', 'loop', 'outSec', 'rate', 'span', 'url'],
         'the mixer row must carry exactly the fields OfflineAudioSource requires',
       );
       checks++;

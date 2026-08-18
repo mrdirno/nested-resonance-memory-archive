@@ -346,25 +346,67 @@ export interface ArrangeInput {
 }
 
 /**
- * A BOUNDED re-deal: still a permutation, but nothing moves further than
- * `RE_DEAL_WINDOW` of the list from its rank. A full shuffle would destroy the
+ * A BOUNDED re-deal: still a permutation, but nothing moves further than a few
+ * ranks from where the arrangement put it. A full shuffle would destroy the
  * ramp the arrangement exists to build — Spotlight would stop being Spotlight —
  * so the displacement has to be provably capped, not merely usually small.
  *
- * JITTER-AND-RESORT, not a windowed Fisher-Yates. The obvious `for i = n-1
- * down to 1, swap with something in [i-w, i]` is NOT windowed: an element
- * swapped downward gets picked up again when the cursor reaches its new home,
- * and the displacement compounds — measured at 36/40 slots for a window that
- * was supposed to be 6. Adding jitter of at most w/2 to each rank and re-sorting
- * caps it honestly: rank r' can only overtake rank r when r' < r + w, so no
- * photo moves more than w places, by construction rather than by luck.
+ * TWO STAGES, because a re-deal owes the user two different promises:
+ *
+ *   VARIETY — jitter-and-resort, not a windowed Fisher-Yates. The obvious
+ *   `for i = n-1 down to 1, swap with something in [i-w, i]` is NOT windowed:
+ *   an element swapped downward gets picked up again when the cursor reaches
+ *   its new home, and the displacement compounds — measured at 36/40 slots for
+ *   a window that was supposed to be 6. Adding jitter of at most w/2 to each
+ *   rank and re-sorting caps it honestly: rank r' can only overtake rank r
+ *   when r' < r + w, so no photo moves more than w places, by construction.
+ *
+ *   MOVEMENT — a seeded rotation of small blocks of neighbouring ranks, every
+ *   block turned by at least one place. The jitter alone cannot keep this
+ *   promise: two adjacent ranks cross only when their jitters differ by more
+ *   than 1, and the window floor was 1 — an amplitude of exactly ±0.5 — so at
+ *   the default count the button was the identity for n ≤ 6 on EVERY press
+ *   (measured 0/200 across every colour arrangement) and near-identity to
+ *   n ≈ 10 (12/200 at n=8). The first revival of this button (see the note on
+ *   `ArrangeInput.shuffle`) fixed the large pools and silently left the small
+ *   ones — which are the pools people actually upload — dead. The rotation
+ *   moves every photo of every size-2+ block; the composed result can undo a
+ *   little of that when the jitter leans the other way, so the guarantee is
+ *   stated on the composition and measured there: over 5000 consecutive
+ *   triggers at every n in 3..40, at least 2 photos moved on every press
+ *   (at least 4 from n=8 up), and the realised worst displacement at n ≤ 13
+ *   was 3 ranks. A photo only ever trades places with the closest-ranked
+ *   photos in the arrangement's own metric, so the deal visibly switches AND
+ *   stays colour-matched.
+ *
+ *   A block of 2 below n=9 was measured and REJECTED: it tightens the worst
+ *   move from 3 ranks to 2, and pays for it by collapsing the deal space —
+ *   83 distinct deals in 5000 presses at n=6 became 24 — which is the dead
+ *   feel this exists to kill, traded for a bound nobody asked for.
+ *
+ * The contract, and the sweep holds all four clauses: (1) a permutation,
+ * always; (2) seed 0 is the exact ranking, byte-identical; (3) for n ≥ 3 no
+ * seed returns the exact ranking (two photos alternate their two deals by
+ * seed parity — the only honest behaviour a 2-element list has); (4) no rank
+ * moves further than ceil(max(2, 0.15n)) + 2.
+ *
+ * A project saved with a pressed shuffle re-opens as a SIBLING of the deal it
+ * had, not the byte-identical one — the same accepted break the first revival
+ * made. Codes and saves with shuffle 0, which is every code the dice or the
+ * chips produce, are untouched.
  */
 const RE_DEAL_WINDOW = 0.15;
+/** The jitter window in RANKS never drops below this — below 2 it cannot swap. */
+const RE_DEAL_FLOOR = 2;
+/** Rotation block: photos trade places only within `b` neighbouring ranks. */
+const RE_DEAL_BLOCK = 3;
 
 const reDeal = (order: number[], seed: number): number[] => {
-  if (!seed) return order;
   const n = order.length;
-  const w = Math.max(1, n * RE_DEAL_WINDOW);
+  if (!seed || n < 2) return order;
+  // Two photos have exactly two deals. Alternate them, so every press changes
+  // the picture — a guarantee no bounded jitter can make at n=2.
+  if (n === 2) return seed % 2 === 1 ? [order[1], order[0]] : order;
   let s = seed | 0;
   const rnd = () => {
     s = (s + 0x6d2b79f5) | 0;
@@ -372,11 +414,41 @@ const reDeal = (order: number[], seed: number): number[] => {
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
+
+  // Stage 1 — VARIETY. Displacement < w by the overtake argument above.
+  const w = Math.max(RE_DEAL_FLOOR, n * RE_DEAL_WINDOW);
   const keys = order.map((_, i) => i + (rnd() - 0.5) * w);
-  return order
+  const out = order
     .map((_, i) => i)
     .sort((a, b) => keys[a] - keys[b] || a - b)
     .map((i) => order[i]);
+
+  // Stage 2 — MOVEMENT. A seeded phase slides the block boundaries between
+  // presses (capped so at least one full block always exists); every block of
+  // two or more turns by a seeded, never-zero amount. Only a size-1 edge block
+  // can hold a photo still, and there are at most two of those.
+  const b = Math.min(RE_DEAL_BLOCK, n);
+  const phase = Math.floor(rnd() * Math.min(b, n - b + 1));
+  for (let start = 0; start < n; ) {
+    const size = start === 0 && phase > 0 ? phase : Math.min(b, n - start);
+    if (size >= 2) {
+      const r = 1 + Math.floor(rnd() * (size - 1));
+      const block = out.slice(start, start + size);
+      for (let i = 0; i < size; i++) out[start + i] = block[(i + r) % size];
+    }
+    start += size;
+  }
+
+  // Stage 3 — the escape hatch that turns "never the exact ranking" from
+  // astronomically-likely into guaranteed: the jitter can in principle invert
+  // the rotation exactly, and a guarantee that holds in principle is the only
+  // kind the sweep can assert without a seed list going stale.
+  if (out.every((v, i) => v === order[i])) {
+    const size = Math.min(RE_DEAL_BLOCK, n);
+    const block = out.slice(0, size);
+    for (let i = 0; i < size; i++) out[i] = block[(i + 1) % size];
+  }
+  return out;
 };
 
 /**

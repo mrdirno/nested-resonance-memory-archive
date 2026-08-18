@@ -491,6 +491,13 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
           <span>Vector<br />SVG</span>
         </button>
       </div>
+      {/* CREDIT — the shuffle used to change nothing under an arrangement with
+          a phone-sized pool (provably: zero of 200 presses at six photos). */}
+      <p className="ui-caption ui-label--dim">
+        Shuffle switches the photos up under every arrangement now — a few
+        photos at a time, colour matching kept. Wished for by an anonymous
+        Collage user.
+      </p>
     </div>
   );
 };

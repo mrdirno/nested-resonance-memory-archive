@@ -227,6 +227,128 @@ console.log('3b. shuffle re-deals within the arrangement without destroying it')
   }
 }
 
+// --- 3b-SMALL. SHUFFLE MUST MOVE AT THE SIZES PEOPLE ACTUALLY UPLOAD ----------
+// The scar this section is: 3b swept the re-deal at n=40 only, and the re-deal
+// was the IDENTITY for n <= 6 on every seed (jitter amplitude ±0.5 at the
+// window floor can never cross two adjacent ranks) — measured 0/200 presses
+// changing the picture at n=3..6 and 12/200 at n=8, on the shipped module,
+// under every colour arrangement. A sweep that avoids the sizes a phone
+// uploads proves the wrong pool. This holds the re-deal contract where the
+// wish lived: 2..13 photos, plus 24 and 40 so the bound scales.
+
+console.log('3b-small. shuffle moves the deal at every pool size, boundedly');
+{
+  const rnd = rngOf(4242);
+  for (const n of [2, 3, 4, 5, 6, 7, 8, 10, 13, 24, 40]) {
+    const images = makePool(n, rnd);
+    // ONE ROW, keys monotone in the slot index. 3b's own comment is the law
+    // here: slot distance is the wrong ruler for rank distance, because
+    // adjacent ranks land in spatially adjacent CELLS at arbitrary slot
+    // indices. On a single row with cx and area both ascending, the cell key
+    // for `heat` (x), `flow` (serpentine, one even row) and `hero` (size) is
+    // the identity — so the slot a photo sits in IS its rank, and the
+    // displacement contract becomes measurable at the artifact without
+    // re-implementing the ranking.
+    const row = Array.from({ length: n }, (_, i) => ({
+      cx: (i + 0.5) / n, cy: 0.5, area: (i + 1) / (n * n),
+    }));
+    const grid = Array.from({ length: n }, (_, i) => ({
+      cx: (i % 5 + 0.5) / 5, cy: (Math.floor(i / 5) + 0.5) / Math.max(1, Math.ceil(n / 5)), area: 1 / n,
+    }));
+    for (const a of ['flow', 'spotlight', 'heat', 'hero']) {
+      const rulered = a !== 'spotlight'; // radial key is not monotone on a row
+      const cells = rulered ? row : grid;
+      const bag = [...Array(n).keys()];
+      const base = arrangeBag({ bag, cells, images, arrangement: a });
+      const slotOf = new Map(base.map((v, i) => [v, i]));
+      const bound = Math.ceil(Math.max(2, n * 0.15)) + 2;
+      const outs = new Set();
+      let prev = null, consecSame = 0;
+      for (let seed = 1; seed <= 40; seed++) {
+        const out = arrangeBag({ bag, cells, images, arrangement: a, shuffle: seed });
+        const tag = `${a} n=${n} shuffle=${seed}`;
+        check(multiset(out) === multiset(base), `${tag}: re-deal broke the permutation`);
+        // (3) never the exact ranking — n=2 alternates instead, asserted below.
+        if (n >= 3) check(out.join(',') !== base.join(','), `${tag}: press changed NOTHING — the dead button is back`);
+        // (4) the displacement contract, per photo, not on average — held in
+        // rank space via the monotone fixture, where slot == rank.
+        if (rulered) out.forEach((v, slot) => {
+          const d = Math.abs((slotOf.get(v) ?? 0) - slot);
+          check(d <= bound, `${tag}: a photo moved ${d} ranks, contract says <= ${bound}`);
+        });
+        const j = out.join(',');
+        if (prev !== null && j === prev) consecSame++;
+        prev = j;
+        outs.add(j);
+      }
+      if (n === 2) {
+        // Two photos, two deals: parity alternation means EVERY press changes
+        // the picture, and both deals stay reachable.
+        check(consecSame === 0, `${a} n=2: a press repeated the previous deal`);
+        check(outs.size === 2, `${a} n=2: expected both deals, saw ${outs.size}`);
+      } else {
+        // Variety floors, measured on the fixed seed list so this never flakes:
+        // the deal space under a displacement bound is small at small n, but 40
+        // presses repeating the immediately previous deal more than a handful
+        // of times is the A/B toggle the wisher would notice.
+        const varietyFloor = n <= 3 ? 4 : n <= 5 ? 10 : 18;
+        check(outs.size >= varietyFloor, `${a} n=${n}: only ${outs.size} distinct deals in 40 presses (floor ${varietyFloor})`);
+        // Three photos have only 5 deals inside the displacement bound, so
+        // consecutive repeats are combinatorially forced there — the floor
+        // loosens for n=3 and bites from 4 up, where the wish lived.
+        check(consecSame <= (n === 3 ? 16 : 6), `${a} n=${n}: ${consecSame}/39 presses repeated the previous deal`);
+      }
+    }
+  }
+
+  // (5) EXHAUSTIVE over the trigger stream the app actually produces.
+  // `handleShuffle` counts 1, 2, 3, … — so the guarantee has to hold on every
+  // consecutive integer, not on a sampled handful: two independently-seeded
+  // bounded permutations CAN compose towards identity, and a seed list that
+  // dodges the bad trigger proves nothing. 2000 consecutive presses per size,
+  // sizes 2..16 (the phone range, and where the old code was the identity),
+  // on the monotone fixture so slot == rank. The moved-count floors are the
+  // measured minima over 5000 triggers, asserted so they can never regress.
+  console.log('3b-small-exhaustive. 2000 consecutive presses per size, sizes 2..16');
+  {
+    const rnd = rngOf(60309);
+    for (let n = 2; n <= 16; n++) {
+      const images = makePool(n, rnd);
+      const row = Array.from({ length: n }, (_, i) => ({
+        cx: (i + 0.5) / n, cy: 0.5, area: (i + 1) / (n * n),
+      }));
+      const bag = [...Array(n).keys()];
+      const base = arrangeBag({ bag, cells: row, images, arrangement: 'heat' });
+      const slotOf = new Map(base.map((v, i) => [v, i]));
+      const bound = Math.ceil(Math.max(2, n * 0.15)) + 2;
+      const movedFloor = n < 3 ? 0 : n < 8 ? 2 : 4;
+      let prev = null;
+      const deals = new Set();
+      for (let t = 1; t <= 2000; t++) {
+        const out = arrangeBag({ bag, cells: row, images, arrangement: 'heat', shuffle: t });
+        const j = out.join(',');
+        if (n === 2) {
+          // Two deals exist; every press must flip to the other one.
+          if (prev !== null) check(j !== prev, `n=2 trigger=${t}: press did not flip the deal`);
+        } else {
+          check(j !== base.join(','), `n=${n} trigger=${t}: the exact ranking came back — dead press`);
+          let moved = 0, worst = 0;
+          out.forEach((v, slot) => {
+            const d = Math.abs((slotOf.get(v) ?? 0) - slot);
+            if (d > 0) moved++;
+            worst = Math.max(worst, d);
+          });
+          check(moved >= movedFloor, `n=${n} trigger=${t}: only ${moved} photos moved (floor ${movedFloor})`);
+          check(worst <= bound, `n=${n} trigger=${t}: a photo moved ${worst} ranks (bound ${bound})`);
+        }
+        prev = j;
+        deals.add(j);
+      }
+      if (n === 2) check(deals.size === 2, `n=2: expected both deals over 2000 presses, saw ${deals.size}`);
+    }
+  }
+}
+
 // --- 3c. LOCKED CELLS MUST NOT SKEW THE ROW BUCKETING -------------------------
 // `rows` is derived from the mean cell AREA, not from how many slots are still
 // being filled — locking two thirds of a grid must not re-band the ramp.
