@@ -180,6 +180,16 @@
    "wished_date": "2026-08-18",
    "shipped_date": "2026-08-18",
    "shipped_commit": "3f76ee8b"
+  },
+  {
+   "tool_name": "Collage Studio — the frame hold (keep the shape of frame, roll everything else)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-18",
+   "shipped_date": "2026-08-18",
+   "shipped_commit": "32d19212"
   }
  ]
 }

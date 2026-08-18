@@ -1238,6 +1238,20 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C165-A-SPEC-THAT-ASSERTS-THE-GATE-BUT-NOT-THE-CLAIM.** The frame-hold
+  rail change widened the wrap cap (4 targets below 390 → 5 below 430) and its
+  F3b asserted everything the SHIP GATE demands — 44px law, viewport
+  containment, no sideways scroll — and nothing the CHANGE claims: the 5-makers
+  /3-navigators split rests on an exact-fit equality, so a silent regression to
+  a 4/4 split (a gap tweak, a rounding tie) would have passed every assertion.
+  The panel's mobile lens caught it pre-ship; F3b now asserts row membership by
+  y-coordinate (hold beside the dice, navigators wrapped below 430, one row at
+  430). Same lens found the wrap comment's one-row derivation 9px optimistic
+  (counted 7 gaps, dropped the separator) — the number the NINTH button will
+  re-derive from. The law: a geometry change carries a witness for its own
+  geometry, not only for the standing gate — the gate proves you broke nothing,
+  never that you built the thing; and a load-bearing derivation in a comment
+  gets re-added, not trusted, when the roster it counts changes.
 - **SCAR-C163-A-SWEEP-THAT-AVOIDS-THE-SIZES-PEOPLE-UPLOAD-PROVES-THE-WRONG-POOL.**
   The first Shuffle revival (e90d8a55) swept its re-deal at n=40 only, and the
   re-deal was the IDENTITY at n ≤ 6 for every seed — the jitter window's floor
@@ -5023,4 +5037,41 @@ frontier. Today's ceiling is tomorrow's floor.
   randomize / re-roll / dice controls — zero exist outside Collage Studio
   (reconcile.js's "Dice" is the Sørensen–Dice coefficient). 0 of 13 trades
   carry the class.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-18 · **[AXIS:WELL] THE FRAME HOLD — the dice keeps the shape you
+  found** (wells read UNSCOPED first: vibe 0 + 0 building, AV 1 new + 1
+  STRANDED in `building` — C3631 claimed the aspect-lock wish, built most of
+  it, and died with no commit and no book line; the building sweep is what
+  surfaced it, and this cycle finished that claim instead of claiming the new
+  concurrent-video wish — ONE wish per cycle, the concurrency wish is next).
+  Wished verbatim: *"Tide pool is sick I like them. Maybe good idea to lock
+  aspect ratio too as a toggle."* before→after: **every dice press re-dealt
+  the canvas shape (roster of seven — 12-for-12 measured pre-fix) with no way
+  to pin it → a "Keep frame shape" toggle, OFF by default, on both surfaces
+  the chase happens (dock chip under the dice, rail button beside it); held,
+  the dice re-rolls everything else and pins what is ON SCREEN — a hand-set
+  Canvas chip becomes the held value (F4) — and OFF stays byte-identical to
+  the old dice: `if (!holdFrame) setAspect(roll.aspect)`, NOT
+  `locks:['aspect']`, because RollLock copies the last ROLL and would snap
+  back over a hand-set frame, and skipping the setter leaves the rnd stream
+  untouched.** THE PANEL (3 lenses: wisher's advocate, state engineer, mobile
+  rail auditor) came back 3/3 SHIP_AS_IS (9/9/8) — zero blocking demands —
+  and all five advisories landed pre-ship: the wisher's own words "(aspect
+  ratio)" in both un-held tooltips; a constant rail aria-label (aria-pressed
+  carries the state — the flipping-label draft never deployed); the rail
+  comment's one-row arithmetic corrected (claimed 394+24, is 403+24=427 — 9
+  flex items, 8 gaps, the separator counts); rail-shuffle/rail-remix testids
+  into F3b's containment loop; two new witnesses (undo-under-hold in F1, and
+  the row-split geometry itself in F3b). **PROOF:** 30/30 unit sweeps (exit
+  codes, per C164); frame-hold e2e 5/5 + rail siblings colour-dice 9/9, undo
+  21/21, mobile-watertight 7/7; tsc + vite build clean; live-verified: bundle
+  159737d2 → 048c7ff3 and 5/5 frame-hold e2e against the DEPLOYED site.
+  Wisher credited in av/credits.json (anchor 32d19212) and on the dock chip,
+  anonymous as filed. Scar filed (C165 — a spec that asserts the gate but not
+  the claim). **BACKPORT rider FIRED, found nothing to carry:** class = "an
+  aria-pressed toggle whose accessible name flips with state"; swept all 13
+  trades + shared/*.js — every toggle carries a constant text name (EN/ES,
+  With-my-name/Anonymous, basis chips, favorite stars); the only flipping
+  aria-label was this cycle's own rail draft, fixed before it deployed. 0 of
+  13 trades carry the class.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
