@@ -1,601 +1,2166 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HELIOS | BRIDGE — THE LONG WATCH (one-shot)
+
+     Author:  Aldrin Payopay <aldrin.gdf@gmail.com>
+     Lineage: single-file descendant of the HELIOS-BRIDGE Vite app — content,
+              design and live engine in one page; zero network requests.
+     License: GPL-3.0-only
+     Source:  https://github.com/mrdirno/nested-resonance-memory-archive
+     ═══════════════════════════════════════════════════════════════════ -->
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>HELIOS | BRIDGE — Transcendental Dynamics</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#7C3AED',
-        secondary: '#EC4899',
-        tertiary: '#06B6D4',
-        success: '#10B981',
-        glass: 'rgba(255, 255, 255, 0.05)',
-        'glass-border': 'rgba(255, 255, 255, 0.1)',
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       AUTHORSHIP / CITATION METADATA — LOAD-BEARING, DO NOT STRIP.
+
+       This is a single-file page: a crawler that does not execute JavaScript
+       sees this <head> and the <noscript> block at the bottom of <body>, and
+       NOTHING ELSE.  Before this block existed, the entire published surface
+       of this archive contained no author name in any form, so citation
+       engines correctly applied the APA/MLA/Chicago fallback rule — "if the
+       author is not clearly listed in the publication metadata, begin the
+       citation with the title" — and the work was cited title-first, with no
+       human credited.
+
+       Four independent, redundant vocabularies each name the author below, so
+       no single parser gap can drop the attribution:
+         1. <meta name="author">          — the universal baseline
+         2. Dublin Core (DC.*)            — library / repository harvesters
+         3. Highwire Press (citation_*)   — Google Scholar's parser
+         4. schema.org JSON-LD            — Google, Bing, and LLM answer engines
+
+       This file has no build step; everything here ships verbatim as the
+       served bytes.
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <title>HELIOS | BRIDGE — Nested Resonance Memory — Aldrin Payopay</title>
+  <meta name="author" content="Aldrin Payopay" />
+  <meta name="description" content="Nested Resonance Memory (NRM) by Aldrin Payopay — a reality-compiler research archive testing whether cognition, physics, biology and society can be modelled by a single potential-minimization law (Budget-Constrained Perception, V = G − λC), together with Duality-Zero: inverse cymatics, active matter control, and the Information–Matter Isomorphism." />
+  <meta name="keywords" content="Nested Resonance Memory, NRM, Aldrin Payopay, Duality-Zero, Budget-Constrained Perception, Information-Matter Isomorphism, Inverse Cymatics, Reality Compiler, self-organizing systems, emergence" />
+  <meta name="copyright" content="Copyright (c) 2025-2026 Aldrin Payopay" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="canonical" href="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+  <link rel="author" href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html" />
+  <link rel="license" href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/LICENSE" />
+
+  <!-- Dublin Core — consumed by institutional repository and library harvesters -->
+  <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+  <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+  <meta name="DC.title" content="Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity" />
+  <meta name="DC.creator" content="Payopay, Aldrin" />
+  <meta name="DC.publisher" content="Persona500 LLC" />
+  <meta name="DC.date" content="2026-08-07" />
+  <meta name="DC.type" content="Software" />
+  <meta name="DC.format" content="text/html" />
+  <meta name="DC.language" content="en" />
+  <meta name="DC.identifier" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+  <meta name="DC.rights" content="Copyright (c) 2025-2026 Aldrin Payopay. Licensed GPL-3.0-only." />
+  <meta name="DCTERMS.rightsHolder" content="Aldrin Payopay" />
+  <meta name="DCTERMS.created" content="2025-10-25" />
+
+  <!-- Highwire Press tags — the exact vocabulary Google Scholar parses to build
+       an author-attributed citation record.  citation_author takes "Last, First". -->
+  <meta name="citation_title" content="Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity" />
+  <meta name="citation_author" content="Payopay, Aldrin" />
+  <meta name="citation_author_institution" content="Persona500 LLC" />
+  <meta name="citation_publication_date" content="2026/08/07" />
+  <meta name="citation_online_date" content="2025/10/25" />
+  <meta name="citation_technical_report_institution" content="Persona500 LLC" />
+  <meta name="citation_public_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+  <meta name="citation_abstract_html_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html" />
+  <meta name="citation_language" content="en" />
+  <meta name="citation_keywords" content="Nested Resonance Memory; Budget-Constrained Perception; Information-Matter Isomorphism; Inverse Cymatics; self-organizing systems" />
+  <!-- A citation_doi tag belongs here once a Zenodo DOI is minted. It is
+       deliberately absent rather than stubbed: citation_doi is one of the
+       highest-trust Highwire fields, and a placeholder that resolves to 404
+       is a demonstrably false field, which is worse than an absent one. An
+       absent field is incompleteness; a fabricated one invites a parser to
+       distrust the whole citation block. Note also that a commented-out
+       example is NOT safe here -- regex-based metadata extractors read the
+       served bytes, not the parsed DOM, so a stubbed identifier inside an
+       HTML comment is still harvestable. Write a real DOI or write nothing. -->
+
+  <!-- Open Graph / Twitter — what social and AI answer engines quote -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="HELIOS | BRIDGE — Nested Resonance Memory — Aldrin Payopay" />
+  <meta property="og:description" content="A reality-compiler research archive by Aldrin Payopay: Budget-Constrained Perception, the Information–Matter Isomorphism, and Duality-Zero." />
+  <meta property="og:url" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+  <meta property="og:site_name" content="Nested Resonance Memory Archive" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="article:author" content="Aldrin Payopay" />
+  <meta property="article:published_time" content="2025-10-25" />
+  <meta property="article:modified_time" content="2026-08-19" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HELIOS | BRIDGE — Nested Resonance Memory — Aldrin Payopay" />
+  <meta name="twitter:description" content="A reality-compiler research archive by Aldrin Payopay: Budget-Constrained Perception, the Information–Matter Isomorphism, and Duality-Zero." />
+
+  <!-- schema.org JSON-LD.  Every node in the graph resolves authorship to the
+       same stable Person @id, and that Person carries sameAs edges binding the
+       legal name to the GitHub handle "mrdirno" — the link that otherwise does
+       not exist anywhere on the open web. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author",
+        "name": "Aldrin Payopay",
+        "givenName": "Aldrin",
+        "familyName": "Payopay",
+        "alternateName": ["mrdirno", "1-shot-sprite"],
+        "email": "mailto:aldrin.gdf@gmail.com",
+        "jobTitle": "Independent Researcher",
+        "url": "https://persona500.com",
+        "affiliation": {
+          "@type": "Organization",
+          "@id": "https://persona500.com/#org",
+          "name": "Persona500 LLC",
+          "url": "https://persona500.com"
+        },
+        "sameAs": [
+          "https://github.com/mrdirno",
+          "https://github.com/mrdirno/nested-resonance-memory-archive",
+          "https://persona500.com",
+          "https://www.youtube.com/channel/UCrJi31TverIm2fU19zqjg3A"
+        ]
       },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
+      {
+        "@type": ["SoftwareSourceCode", "CreativeWork"],
+        "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work",
+        "name": "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity",
+        "alternateName": ["Nested Resonance Memory", "NRM", "Duality-Zero", "The Reality Compiler"],
+        "headline": "Nested Resonance Memory (NRM)",
+        "abstract": "An open research archive and computational framework investigating whether cognition, physics, biology and society can be modelled through a single potential-minimization law. Develops Budget-Constrained Perception (V = G - lambda*C) and the Information-Matter Isomorphism, and contains Duality-Zero, its reality-compiler implementation.",
+        "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "copyrightYear": "2025",
+        "maintainer": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "publisher": { "@id": "https://persona500.com/#org" },
+        "codeRepository": "https://github.com/mrdirno/nested-resonance-memory-archive",
+        "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+        "programmingLanguage": ["Python", "TypeScript", "JavaScript"],
+        "runtimePlatform": "Web",
+        "license": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+        "datePublished": "2025-10-25",
+        "dateModified": "2026-08-19",
+        "version": "7.0.0",
+        "inLanguage": "en",
+        "keywords": "Nested Resonance Memory, NRM, Budget-Constrained Perception, Information-Matter Isomorphism, Inverse Cymatics, Reality Compiler, self-organizing systems, emergence, active matter",
+        "citation": "Payopay, A. (2026). Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity [Computer software]. Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive"
       },
-      animation: {
-        'shimmer': 'shimmer 3s ease-in-out infinite',
-        'pulse-fast': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      },
-      keyframes: {
-        shimmer: {
-          '0%, 100%': { opacity: '0.8' },
-          '50%': { opacity: '1' },
+      {
+        "@type": "WebSite",
+        "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#website",
+        "name": "Nested Resonance Memory Archive",
+        "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+        "inLanguage": "en",
+        "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+        "about": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Favicon: inline SVG data URI — zero network requests. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20fill='%2304070B'/%3E%3Cpath%20d='M1%201h3M1%201v3M15%201h-3M15%201v3M1%2015h3M1%2015v-3M15%2015h-3M15%2015v-3'%20stroke='%232A3944'%20stroke-width='1'%20fill='none'/%3E%3Ccircle%20cx='8'%20cy='8'%20r='2.5'%20fill='%2364E8C6'/%3E%3C/svg%3E" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       THE LONG WATCH — design system.
+
+       One rule of light: only the particle field glows. Everything else is
+       thin, honest telemetry — six colors, one 1px stroke weight, two
+       system type stacks, zero network requests.
+
+       The page commits to its dark instrument look in every color scheme:
+       each surface and ink is painted explicitly, so prefers-color-scheme
+       has nothing to invert; color-scheme:dark keeps UA chrome (scrollbars,
+       form controls) in the hull's register.
+
+       Engine contract — the CSS side of it:
+         · --breath          per-frame mean |u| (0–1), written by the engine;
+                             bracket glow, rail glow and lamp glow scale on it.
+         · html.scrolled     set past the first viewport → the canvas dims to
+                             35% (2^−1.5 ≈ 0.354, hence the "VIEWPORT GAIN
+                             −1.5 EV" chip). Dimmed — never blurred, never
+                             paused.
+         · .vp-frame.bk-tick brackets extend 1px for one frame every 1,000th
+                             digit consumed (engine toggles the class).
+         · #probe            pointer-probe readout (Σv, Σs, phase) — engine
+                             unhides, positions and fills it from live arrays.
+         · #bootlog          ontogeny boot log — engine unhides and types it;
+                             under prefers-reduced-motion it prints static.
+         · html.io + .on     deck ontogeny — the engine adds html.io only when
+                             IntersectionObserver exists and motion is allowed;
+                             sections then surface with .on as they enter the
+                             watch. No-JS and reduced-motion decks render at
+                             rest.
+       ═══════════════════════════════════════════════════════════════════ */
+
+    :root {
+      /* palette — the only colors on the bridge */
+      --ground: #04070B;                        /* hull void — page ground  */
+      --panel:  #101820;                        /* raised panels            */
+      --panel-glass: rgba(16, 24, 32, 0.84);    /* panel floated over field */
+      --stroke: #2A3944;                        /* every stroke — 1px max   */
+      --ink:    #9FB3BE;                        /* prose and labels         */
+      --ink-dim: rgba(159, 179, 190, 0.7);      /* secondary telemetry (AA at 11px) */
+      --phos:   #64E8C6;                        /* phosphor — the single powered-on color */
+      --phos-glow: rgba(100, 232, 198, 0.5);
+      --amber:  #E8B84B;                        /* STATUS: OPEN + caveats   */
+
+      /* engine-written, 0–1 (stays 0 until the field computes it) */
+      --breath: 0;
+
+      /* type — system stacks only; no italics; nothing above 600 */
+      --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+      /* rhythm */
+      --hair: 1px solid var(--stroke);
+      --pad-edge: clamp(1rem, 3vw, 2rem);
+
+      color-scheme: dark;
+    }
+
+    /* ── base ─────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      background: var(--ground);
+      scrollbar-color: var(--stroke) var(--ground);
+    }
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      font-variant-numeric: tabular-nums;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: clip;
+    }
+    ::selection { background: rgba(100, 232, 198, 0.22); }
+    em { font-style: normal; font-weight: 600; }   /* no italics on the bridge */
+    [hidden] { display: none !important; }
+
+    a { color: var(--phos); text-decoration: none; }
+    a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    :focus-visible { outline: 1px solid var(--phos); outline-offset: 3px; }
+    button { font: inherit; color: inherit; letter-spacing: inherit; }
+
+    /* ── the field — fixed behind everything, exposed right of the deck ── */
+    #field-fallback {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(60% 80% at 72% 38%, rgba(100, 232, 198, 0.07), transparent 62%),
+        radial-gradient(42% 55% at 84% 74%, rgba(24, 46, 82, 0.35), transparent 72%),
+        radial-gradient(30% 40% at 60% 85%, rgba(100, 232, 198, 0.03), transparent 70%),
+        var(--ground);
+      transition: opacity 0.6s linear;
+    }
+    #field {
+      position: fixed; inset: 0; z-index: 1; display: block;
+      width: 100%; height: 100%;
+      cursor: crosshair;
+      transition: opacity 0.6s linear;
+    }
+    /* VIEWPORT GAIN −1.5 EV: 2^−1.5 ≈ 0.354 → 35% — dimmed, never blurred */
+    html.scrolled #field,
+    html.scrolled #field-fallback { opacity: 0.35; }
+
+    /* ── fixed HUD overlays ───────────────────────────────────────────── */
+    #gain-hud {
+      position: fixed; top: 0.9rem; right: 1rem; z-index: 5;
+      background: var(--panel-glass); border: var(--hair);
+      padding: 0.35rem 0.7rem;
+      color: var(--ink);
+      opacity: 0; transform: translateY(-6px); pointer-events: none;
+      transition: opacity 0.45s, transform 0.45s;
+    }
+    html.scrolled #gain-hud { opacity: 1; transform: none; }
+    /* Narrow phones: dock the gain chip below the figcap band so it never
+       overlaps caption text in the transition zone. */
+    @media (max-width: 480px) {
+      #gain-hud { top: auto; bottom: 0.9rem; transform: translateY(6px); }
+    }
+
+    #probe {
+      position: fixed; left: 0; top: 0; z-index: 5; pointer-events: none;
+      background: var(--panel-glass); border: var(--hair);
+      padding: 0.35rem 0.6rem;
+      white-space: pre; line-height: 1.55;
+      transform: translate(14px, 14px);
+    }
+    #probe .tval { color: var(--phos); }
+
+    #bootlog {
+      position: fixed; left: var(--pad-edge); bottom: 4.5rem; z-index: 6;
+      pointer-events: none;
+      white-space: pre; line-height: 1.7;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: var(--phos);
+      text-shadow: 0 0 8px rgba(100, 232, 198, 0.25);
+    }
+
+    /* ── type scale ───────────────────────────────────────────────────── */
+    .label {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .sec-idx {
+      font-family: var(--mono); font-size: 22px; font-weight: 600;
+      letter-spacing: 0.04em; color: var(--ink);
+      margin: 0 0 1.1rem;
+    }
+    .prose {
+      font-family: var(--sans); font-size: 16px; line-height: 1.65;
+      max-width: 68ch;
+    }
+    .amber { color: var(--amber); }
+    .tval  { color: var(--phos); }
+
+    .wordmark {
+      font-family: var(--mono); font-weight: 400; letter-spacing: 0.06em;
+      font-size: clamp(30px, 6vw, 76px); line-height: 1.05;
+      margin: 0.4rem 0 1.2rem; color: var(--ink);
+      text-shadow: 0 0 calc(var(--breath) * 18px) rgba(100, 232, 198, 0.18);
+    }
+
+    /* section dividers: the next 120 unread π digits, barely there */
+    .pi-divider {
+      font-family: var(--mono); font-size: 6px; line-height: 2.2;
+      letter-spacing: 0.22em; word-break: break-all;
+      opacity: 0.25; max-width: 68ch; user-select: none;
+    }
+
+    /* ── 00 / VIEWPORT — full-height HUD over the field ───────────────── */
+    #viewport {
+      position: relative; z-index: 2;
+      padding: var(--pad-edge) var(--pad-edge) 0;
+    }
+    .vp-frame {
+      --arm: 26px;
+      position: relative;
+      display: flex; flex-direction: column; gap: 1.75rem;
+      min-height: calc(100vh - 7rem);
+      min-height: calc(100svh - 7rem);
+      padding: clamp(1.1rem, 2.5vw, 2rem);
+    }
+    /* corner brackets: cold stroke beneath, phosphor breathing above */
+    .vp-frame::before, .vp-frame::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+        linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+        linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+        linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk));
+      background-position:
+        left top,    left top,
+        right top,   right top,
+        left bottom, left bottom,
+        right bottom, right bottom;
+      background-size:
+        var(--arm) 1px, 1px var(--arm),
+        var(--arm) 1px, 1px var(--arm),
+        var(--arm) 1px, 1px var(--arm),
+        var(--arm) 1px, 1px var(--arm);
+      background-repeat: no-repeat;
+    }
+    .vp-frame::before { --bk: var(--stroke); }
+    .vp-frame::after  { --bk: var(--phos); opacity: calc(var(--breath) * 0.6); }
+    .vp-frame.bk-tick { --arm: 27px; }   /* every 1,000th digit, one frame */
+
+    .vp-id { max-width: 46rem; }
+    .vp-id .sec-idx { margin-bottom: 1.5rem; }
+    .vp-byline { margin: 0 0 0.2rem; color: var(--ink); }
+    #one-law { margin: 0; }
+    #touch-hint { margin: 1.3rem 0 0; }
+
+    #telemetry {
+      display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem;
+      border: var(--hair); background: var(--panel-glass);
+      padding: 0.65rem 0.85rem;
+      align-self: flex-start;
+    }
+    #telemetry .tcell {
+      display: flex; gap: 0.7rem; align-items: baseline;
+      justify-content: space-between; min-width: 0;
+    }
+
+    #rail {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem;
+      border: var(--hair); background: var(--panel-glass);
+      padding: 0.55rem 0.8rem;
+      margin-top: auto;                 /* the rail holds the frame's floor */
+      box-shadow: 0 0 calc(var(--breath) * 14px) rgba(100, 232, 198, 0.18);
+    }
+    .lamp {
+      font: inherit; font-variant-numeric: tabular-nums;
+      background: none; border: var(--hair); color: var(--ink-dim);
+      padding: 0.25rem 0.65rem; min-width: 2.8rem; min-height: 2.25rem;
+      cursor: pointer;
+    }
+    .lamp:hover { color: var(--phos); }
+    .lamp[aria-pressed="true"] {
+      color: var(--phos);
+      box-shadow: inset 0 -2px 0 rgba(100, 232, 198, 0.4),
+                  0 0 calc(var(--breath) * 10px) rgba(100, 232, 198, 0.35);
+      text-shadow: 0 0 calc(var(--breath) * 9px) var(--phos-glow);
+    }
+    #ticker {
+      flex: 1 1 12rem; min-width: 0;
+      overflow: hidden; white-space: nowrap;
+      padding: 0 0.25rem;
+      -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent);
+      mask-image: linear-gradient(90deg, #000 82%, transparent);
+    }
+    #ticker-const  { color: var(--ink); }
+    #ticker-digits { color: var(--phos); opacity: 0.85; }
+    #ticker-cursor { color: var(--phos); animation: cursor-blink 1.06s steps(1, end) infinite; }
+    @keyframes cursor-blink { 50% { opacity: 0; } }
+    #reboot-ontogeny {
+      background: none; border: var(--hair); color: var(--ink);
+      padding: 0.45rem 0.75rem; min-height: 2.25rem; cursor: pointer;
+    }
+    #reboot-ontogeny:hover { color: var(--phos); }
+
+    #viewport .figcap { padding: 0.9rem clamp(1.1rem, 2.5vw, 2rem) 0; margin: 0; }
+    .figcap {
+      font-size: 11px; letter-spacing: 0.04em; line-height: 1.7;
+      color: var(--ink-dim); max-width: 68ch;
+    }
+
+    @media (min-width: 960px) {
+      .vp-frame {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+          "id   tele"
+          "id   ."
+          "rail rail";
+        column-gap: 3rem; align-items: start;
+      }
+      .vp-id { grid-area: id; }
+      #one-law { max-width: 52ch; }
+      #telemetry {
+        grid-area: tele; align-self: start;
+        flex-direction: column; align-items: stretch; gap: 0.45rem;
+        min-width: 16rem;
+      }
+      #rail { grid-area: rail; align-self: end; }
+    }
+
+    /* ── the deck — content scrolls in a narrow left column ───────────── */
+    #deck {
+      position: relative; z-index: 2;
+      max-width: 47rem;
+      padding: 3.5rem var(--pad-edge) 6rem;
+      display: flex; flex-direction: column; gap: 2.75rem;
+    }
+    main { display: flex; flex-direction: column; gap: 2.75rem; }
+    @media (min-width: 960px) {
+      #deck { padding-left: 4rem; padding-right: 2.5rem; }
+    }
+
+    /* ── 01 / THE SIGNAL ──────────────────────────────────────────────── */
+    .frameworks {
+      list-style: none; margin: 2rem 0 0; padding: 0;
+      border-top: var(--hair);
+    }
+    .frameworks li { border-bottom: var(--hair); padding: 1rem 0 1.1rem; }
+    .fw-name { display: block; margin-bottom: 0.45rem; }
+    .fw-claim {
+      font-family: var(--mono); font-size: 13px; line-height: 1.7;
+      max-width: 66ch; margin: 0 0 0.5rem;
+    }
+
+    #evidence { margin-top: 2.75rem; }
+    #evidence h3, .locker h3 {
+      margin: 0 0 0.75rem; font-weight: 400; color: var(--ink-dim);
+    }
+    .stats { list-style: none; margin: 0; padding: 0; border-top: var(--hair); }
+    .stats li { border-bottom: var(--hair); padding: 0.8rem 0 0.9rem; }
+    .stat-figure { display: block; margin-bottom: 0.3rem; }
+    .stat-meaning { display: block; max-width: 66ch; margin-bottom: 0.35rem; }
+
+    /* ── 02 / OPEN QUESTIONS — the watch log ──────────────────────────── */
+    .qlog {
+      list-style: none; margin: 1.6rem 0 0; padding: 0;
+      border-top: var(--hair);
+    }
+    .qlog li {
+      display: grid;
+      grid-template-columns: 4.5ch minmax(0, 1fr) auto;
+      grid-template-areas:
+        "code text   status"
+        "code ground status";
+      column-gap: 1rem; row-gap: 0.3rem;
+      align-items: baseline;
+      border-bottom: var(--hair);
+      padding: 0.85rem 0;
+    }
+    .q-code   { grid-area: code; color: var(--amber); }
+    .q-text   { grid-area: text; max-width: 62ch; }
+    /* the ground-tag reads as a specimen label: a pinned chip naming the
+       framework each question is mounted on */
+    .q-ground {
+      grid-area: ground; justify-self: start;
+      color: var(--ink-dim);
+      border: var(--hair); background: var(--panel-glass);
+      padding: 0.12rem 0.55rem 0.12rem 0.5rem;
+      margin-top: 0.15rem;
+    }
+    .q-ground::before {
+      content: ""; display: inline-block;
+      width: 3px; height: 3px; margin: 0 0.5rem 2px 0;
+      background: var(--stroke);                /* the specimen pin */
+    }
+    .qlog li:hover .q-ground::before { background: var(--amber); }
+    .q-status {
+      grid-area: status; justify-self: end; align-self: start;
+      color: var(--amber);
+      border: var(--hair); padding: 0.1rem 0.5rem;   /* the OPEN stamp */
+    }
+    @media (max-width: 640px) {
+      .qlog li {
+        grid-template-columns: 4ch minmax(0, 1fr);
+        grid-template-areas:
+          "code text"
+          "code ground"
+          "code status";
+      }
+      .q-status { justify-self: start; }
+    }
+
+    /* ── 03 / INSTRUMENT LOCKERS — rows, never cards ──────────────────── */
+    .locker { margin-top: 2.25rem; }
+    .locker:first-of-type { margin-top: 1.6rem; }
+    .rows { list-style: none; margin: 0; padding: 0; border-top: var(--hair); }
+    .row {
+      display: grid;
+      grid-template-columns: 5ch minmax(0, 1fr) auto 12px;
+      grid-template-areas:
+        "code name   tag    led"
+        "code clause clause led";
+      column-gap: 1rem; row-gap: 0.15rem;
+      align-items: baseline;
+      padding: 0.65rem 0 0.7rem;
+      border-bottom: var(--hair);
+      color: var(--ink);
+    }
+    .row .code { grid-area: code; color: var(--phos); }
+    .row .name { grid-area: name; }
+    .row .tag {
+      grid-area: tag; justify-self: end;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      border: var(--hair); padding: 0 0.45rem; color: var(--ink-dim);
+    }
+    .row .clause {
+      grid-area: clause; max-width: 64ch;
+      font-size: 12px; line-height: 1.65; color: var(--ink-dim);
+    }
+    .row .led {
+      grid-area: led; justify-self: end; align-self: center;
+      width: 3px; height: 3px; background: var(--stroke);
+    }
+    .row:hover, .row:focus-visible { text-decoration: none; }
+    .row:hover .name, .row:focus-visible .name { color: var(--phos); }
+    .row:hover .led, .row:focus-visible .led {
+      background: var(--phos);
+      box-shadow: 0 0 6px 1px var(--phos-glow);
+    }
+    .row:active .led { animation: led-flick 0.16s steps(2, jump-none) 1; }
+    @keyframes led-flick {
+      0%   { background: var(--phos); box-shadow: 0 0 6px 1px var(--phos-glow); }
+      50%  { background: var(--stroke); box-shadow: none; }
+      100% { background: var(--phos); box-shadow: 0 0 6px 1px var(--phos-glow); }
+    }
+
+    /* observation decks read first-class */
+    .locker-primary .row { padding: 0.85rem 0 0.9rem; }
+    .locker-primary .row .name { font-size: 14px; }
+
+    /* field toolkits: a denser two-column lattice on wide decks */
+    @media (min-width: 860px) {
+      #lockers-field .rows {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 2.25rem;
+      }
+      #lockers-field .row {
+        grid-template-columns: 5ch minmax(0, 1fr) auto 10px;
+        padding: 0.5rem 0 0.55rem;
+      }
+      #lockers-field .row .clause { font-size: 11px; }
+    }
+
+    /* ship's log stays quiet */
+    #lockers-meta .row { padding: 0.5rem 0 0.55rem; }
+
+    /* ── 04 / MANIFEST ────────────────────────────────────────────────── */
+    #manifest {
+      border: var(--hair); background: var(--panel-glass);
+      padding: 1.4rem clamp(1rem, 3vw, 1.75rem) 1.6rem;
+    }
+    #manifest .sec-idx { margin-bottom: 1.2rem; }
+    #manifest dl { margin: 0; }
+    #manifest dt { margin: 0.95rem 0 0; color: var(--ink-dim); }
+    #manifest dt:first-child { margin-top: 0; }
+    #manifest dd { margin: 0.2rem 0 0; max-width: 66ch; }
+    .cite-as { border-left: var(--hair); padding-left: 0.85rem; }
+
+    /* ── motion: the deck's own ontogeny — sections surface as they enter
+       the watch. Gated on html.io (added by the engine only when
+       IntersectionObserver exists and motion is allowed), so no-JS and
+       reduced-motion decks render everything at rest. Watch-log entries
+       print one after another; their stagger is set inline by the engine. */
+    html.io .reveal {
+      opacity: 0.02; transform: translateY(16px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    html.io .reveal.on { opacity: 1; transform: none; }
+    html.io .qlog li { opacity: 0; transition: opacity 0.55s ease-out; }
+    html.io .reveal.on .qlog li { opacity: 1; }
+
+    /* reduced motion: no animation anywhere; the engine renders one static
+       frame and prints the boot log static */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ── touch + small decks ──────────────────────────────────────────── */
+    @media (pointer: coarse) {
+      .lamp { min-width: 44px; min-height: 44px; }
+      #reboot-ontogeny { min-height: 44px; }
+    }
+    @media (max-width: 480px) {
+      :root { --pad-edge: 0.9rem; }
+      .vp-frame { gap: 1.4rem; }
+      #deck { padding-top: 2.75rem; }
+      .row { column-gap: 0.75rem; grid-template-columns: 4.5ch minmax(0, 1fr) auto 10px; }
+      #telemetry { gap: 0.35rem 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── (canvas) The field — fixed behind all content ─────────────────── -->
+  <div id="field-fallback" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+
+  <!-- ── Fixed HUD overlays — CSS owns their look; the engine flips their
+       flags and fills their text. ─────────────────────────────────────────── -->
+  <div id="gain-hud" class="label" aria-hidden="true">Viewport gain <span class="tval">−1.5&#8202;EV</span></div>
+  <div id="probe" class="label" aria-hidden="true" hidden></div>
+  <div id="bootlog" aria-hidden="true" hidden></div>
+
+  <!-- ── 00 / VIEWPORT — full-height HUD framed over the field ──────────── -->
+  <header id="viewport" aria-labelledby="viewport-idx">
+    <div class="vp-frame" id="vp-frame">
+
+      <div class="vp-id">
+        <p class="sec-idx" id="viewport-idx">00 / VIEWPORT</p>
+        <p class="label vp-byline">Aldrin Payopay — Nested Resonance Memory</p>
+        <h1 class="wordmark">HELIOS&#8202;|&#8202;BRIDGE</h1>
+
+        <p class="prose" id="one-law">
+          A framework under test: whether cognition, physics, biology and society
+          can be modelled by a single potential-minimization law — Budget-Constrained
+          Perception, <span class="tval">V&nbsp;=&nbsp;G&nbsp;−&nbsp;λC</span> —
+          where perceived value V is gain G discounted by the cost C of attending,
+          weighted by a budget constraint λ.
+        </p>
+        <p class="label amber" id="touch-hint">The field is live — touch it</p>
+      </div>
+
+      <!-- Telemetry strip: the engine writes every value here. Until it
+           does, each field reads STANDBY — no displayed number the
+           simulation didn't compute. (role=group, not a live region: these
+           values change five times a second.) -->
+      <div id="telemetry" role="group" aria-label="Live field telemetry">
+        <span class="tcell"><span class="label">N</span> <span class="tval" id="t-n">STANDBY</span></span>
+        <span class="tcell"><span class="label">FPS</span> <span class="tval" id="t-fps">STANDBY</span></span>
+        <span class="tcell"><span class="label">Digit cursor</span> <span class="tval" id="t-digits">STANDBY</span></span>
+        <span class="tcell"><span class="label">Σ energy</span> <span class="tval" id="t-energy">STANDBY</span></span>
+        <span class="tcell"><span class="label">Epoch</span> <span class="tval" id="t-epoch">STANDBY</span></span>
+        <span class="tcell"><span class="label">Clock</span> <span class="tval" id="t-clock">STANDBY</span></span>
+        <span class="tcell"><span class="label">Ontogeny</span> <span class="tval" id="t-stage">STANDBY</span></span>
+      </div>
+
+      <!-- Instrument rail: solo/mute lamps per constant + digit ticker with
+           consumption cursor. Backgrounded tab pauses both (engine contract).
+           Console grammar: click mutes/unmutes a channel; double-click or
+           Shift+click solos it (solo again to bring the console back up). -->
+      <div id="rail" aria-label="Instrument rail — constant channels. Click a lamp to mute or unmute; double-click or Shift+click to solo.">
+        <button class="lamp" id="lamp-pi"    aria-pressed="true" title="Click: mute · double-click or Shift+click: solo" aria-label="Channel π — click to mute or unmute, double-click to solo">π</button>
+        <button class="lamp" id="lamp-e"     aria-pressed="true" title="Click: mute · double-click or Shift+click: solo" aria-label="Channel e — click to mute or unmute, double-click to solo">e</button>
+        <button class="lamp" id="lamp-phi"   aria-pressed="true" title="Click: mute · double-click or Shift+click: solo" aria-label="Channel φ — click to mute or unmute, double-click to solo">φ</button>
+        <button class="lamp" id="lamp-sqrt2" aria-pressed="true" title="Click: mute · double-click or Shift+click: solo" aria-label="Channel √2 — click to mute or unmute, double-click to solo">√2</button>
+        <span id="ticker" aria-hidden="true"><span id="ticker-const">π</span> → <span id="ticker-digits">3.1415926535</span><span id="ticker-cursor">▮</span></span>
+        <button id="reboot-ontogeny" class="label">Reboot ontogeny</button>
+      </div>
+
+    </div>
+
+    <p class="figcap">
+      Fig.&nbsp;1. Interference field of up to 12,000 particles (live count in
+      the N telemetry cell) driven by the decimal expansions of π, e, φ, √2.
+      Constructive fringes brighten toward phosphor-white; destructive zones
+      with non-zero energy render as faint deep-blue "empty wells."
+    </p>
+  </header>
+
+  <div id="deck">
+
+    <div class="pi-divider" aria-hidden="true">897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095</div>
+
+    <main>
+
+      <!-- ── 01 / THE SIGNAL ─────────────────────────────────────────────── -->
+      <section id="signal" class="reveal" aria-labelledby="signal-idx">
+        <h2 class="sec-idx" id="signal-idx">01 / THE SIGNAL</h2>
+        <p class="prose">
+          This page is an instrument, not an argument. Behind this column, four
+          emitters — one per constant: π, e, φ, √2 — drive an interference field
+          whose every displayed number is computed live. The research it fronts
+          is a set of <em>frameworks for testing</em>, not proven theories:
+          whether fractal agents sustain complexity without settling into
+          equilibrium; whether perception reduces to a budget-constrained
+          potential; whether one persistence mathematics describes information
+          and matter alike. Each claim below links to the script, log, or
+          manuscript that grounds it. Where the evidence is thin, the entry is
+          stamped <span class="amber">STATUS: OPEN</span> and stays on the
+          watch log until it closes. Nothing here asks to be believed; it asks
+          to be checked.
+        </p>
+
+        <ul class="frameworks" aria-label="Frameworks under test">
+          <li>
+            <span class="fw-name label">Nested Resonance Memory (NRM)</span>
+            <p class="fw-claim">A framework for testing whether fractal agents with composition–decomposition dynamics and pattern memory can sustain self-organizing complexity without settling into equilibrium.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/papers/PAPER2_V3_MASTER_MANUSCRIPT.md" class="label">Evidence → Paper 2 manuscript</a>
+          </li>
+          <li>
+            <span class="fw-name label">Duality-Zero / Inverse Cymatics</span>
+            <p class="fw-claim">A framework for testing whether target interference patterns can be inverse-designed — solving backwards from a desired field to the phase delays that produce it.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/archive/experiments/cycle321_inverse_cymatics_ga.py" class="label">Evidence → cycle 321 experiment</a>
+          </li>
+          <li>
+            <span class="fw-name label">Information–Matter Isomorphism</span>
+            <p class="fw-claim">A framework for testing whether the same persistence and potential-minimization mathematics describes both informational structures and physical ones.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/docs/papers/THE_PHYSICS_OF_PERSISTENCE.md" class="label">Evidence → The Physics of Persistence</a>
+          </li>
+          <li>
+            <span class="fw-name label">Self-Giving Systems</span>
+            <p class="fw-claim">A framework for testing how certain systems bootstrap their own phase space and evaluation criteria, with persistence — not an external oracle — as the measure of success.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/archive/summaries/self-giving-systems-paper.md.md" class="label">Evidence → Self-Giving Systems paper</a>
+          </li>
+          <li>
+            <span class="fw-name label">Temporal Stewardship</span>
+            <p class="fw-claim">A framework for testing whether research outputs can deliberately encode methods and patterns in forms discoverable by future systems.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md" class="label">Evidence → Paper 3 manuscript</a>
+          </li>
+          <li>
+            <span class="fw-name label">Orthogonal Sum Dynamics (OSD)</span>
+            <p class="fw-claim">A framework for testing a two-sum field model in which the vector sum governs visibility (interference) while the scalar sum governs energy — including destructively interfering regions that retain non-zero energy.</p>
+            <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md" class="label">Evidence → OSD notes</a>
+          </li>
+        </ul>
+
+        <div class="pi-divider" aria-hidden="true">505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091</div>
+
+        <!-- Evidence strip: instrument readings from the archive itself. -->
+        <div id="evidence" aria-label="Readings — evidence strip">
+          <h3 class="label">Readings — What the archive can show</h3>
+          <ul class="stats">
+            <li>
+              <span class="stat-figure tval">124 domains fitted (Phases 1–261)</span>
+              <span class="stat-meaning">The archive's own count of distinct fields — from Planck-scale physics to ethics — in which V&nbsp;=&nbsp;G&nbsp;−&nbsp;λC has been fitted; the chapter-by-chapter walk-through is the Book of BCP, a working manuscript.</span>
+              <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/docs/philosophy/BOOK_OF_BCP.md" class="label">Source → Book of BCP</a>
+            </li>
+            <li>
+              <span class="stat-figure tval">3,000+ research cycles</span>
+              <span class="stat-meaning">Numbered experimental cycles logged in the repository — the linked log's latest entry is Cycle&nbsp;3009 — an auditable trail of the archive's autonomous research runs.</span>
+              <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/MOG_CYCLE_LOG.md" class="label">Source → cycle log</a>
+            </li>
+            <li>
+              <span class="stat-figure tval">4 papers drafted to submission-ready state</span>
+              <span class="stat-meaning">Papers 1, 2, 3 and 5D (computational expense as validation, energy-regulated population homeostasis, temporal stewardship, and pattern mining) are drafted with figures and references; arXiv endorsement is pending.</span>
+              <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/papers/compiled" class="label">Source → compiled papers</a>
+            </li>
+            <li>
+              <span class="stat-figure tval">82× faster settling time (in simulation)</span>
+              <span class="stat-meaning">Closed-loop PID feedback in the acoustic-levitation simulation — a linear-trap approximation of the Gorkov potential — reduced settling time 82-fold versus open-loop control, reproducible by running the linked script.</span>
+              <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/archive/experiments/cycle340_closed_loop_levitation.py" class="label">Source → cycle 340 script</a>
+            </li>
+            <li>
+              <span class="stat-figure tval">pip install bcp-perception</span>
+              <span class="stat-meaning">The BCP attention allocator is packaged as an installable Python library with its own test suite, so the core model can be run outside the archive.</span>
+              <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/bcp_lib/README.md" class="label">Source → bcp_lib</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="pi-divider" aria-hidden="true">456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305</div>
+
+      <!-- ── 02 / OPEN QUESTIONS ─────────────────────────────────────────── -->
+      <section id="questions" class="reveal" aria-labelledby="questions-idx">
+        <h2 class="sec-idx" id="questions-idx">02 / OPEN QUESTIONS</h2>
+        <p class="label">Watch log — each entry stays open until an experiment closes it</p>
+        <ol class="qlog">
+          <li>
+            <span class="q-code">Q-01</span>
+            <span class="q-text">Surveys already find mass where nothing shines; OSD predicts something sharper — do this field's own deep-blue wells hold scalar energy Σs while the vector sum Σv cancels, balancing what the emitters injected?</span>
+            <span class="q-ground label">OSD: empty wells</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-02</span>
+            <span class="q-text">If a cancelled signal keeps its energy, does a silenced gene network still draw measurable power — could we weigh a cell's dark matter on a calorimeter?</span>
+            <span class="q-ground label">OSD: empty wells, cell scale</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-03</span>
+            <span class="q-text">If damping at one scale becomes inertia one scale down, does a therapy that quiets a mind measurably stiffen its cells — and would we accept that trade?</span>
+            <span class="q-ground label">RES0X: fractal staircase</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-04</span>
+            <span class="q-text">If suppressed protest converts to physiological load, can we predict which organs of which citizens will carry it, and after what delay?</span>
+            <span class="q-ground label">RES0X: signal-to-load</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-05</span>
+            <span class="q-text">Has any system, at any scale, ever damped an oscillation to silence without paying in heat, mass, or sickness — one verified free lunch falsifies the entire conjecture?</span>
+            <span class="q-ground label">RES0X: free lunch falsifier</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-06</span>
+            <span class="q-text">If a belief doing navigational work transfers load to its holder when it fails, do adherents' physiological-load markers spike around datable public disconfirmations, in proportion to the navigation the belief carried?</span>
+            <span class="q-ground label">RES0X: policy-as-vehicle</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-07</span>
+            <span class="q-text">If patterns persist only in structured fields, could we diagnose a dying ecosystem earlier by detecting the moment its background noise turns statistically pure?</span>
+            <span class="q-ground label">Transcendental substrate: structure vs. noise</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-08</span>
+            <span class="q-text">If persistence is the only judge of success, what measurement distinguishes an organ from a tumor — and does the same test separate institutions from parasites?</span>
+            <span class="q-ground label">Self-Giving: success = persistence, no oracles</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-09</span>
+            <span class="q-text">If today's research logs become tomorrow's machine intuitions, which of our present errors are we training the future to experience as instincts — and could we audit for them now?</span>
+            <span class="q-ground label">Temporal Stewardship: non-linear causation</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+          <li>
+            <span class="q-code">Q-10</span>
+            <span class="q-text">When a cluster of agents bursts apart and later re-forms, does the memory live in the survivors or the field — would replacing every survivor still recover the pattern?</span>
+            <span class="q-ground label">NRM: composition-decomposition, pattern memory</span>
+            <span class="q-status label">Status: open</span>
+          </li>
+        </ol>
+      </section>
+
+      <div class="pi-divider" aria-hidden="true">488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381</div>
+
+      <!-- ── 03 / INSTRUMENT LOCKERS — enter the archive ─────────────────── -->
+      <nav id="archive" class="reveal" aria-labelledby="archive-idx">
+        <h2 class="sec-idx" id="archive-idx">03 / INSTRUMENT LOCKERS</h2>
+        <p class="label">Enter the archive — every locker opens in this hull or the repository</p>
+
+        <section class="locker locker-primary" id="lockers-genart" aria-label="Observation decks — generative art">
+          <h3 class="label">Observation decks</h3>
+          <ul class="rows">
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/collage/">
+                <span class="code">GA-01</span>
+                <span class="name">Collage Studio (GenArt Studio)</span>
+                <span class="tag">video</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Smart-crop generative compositor: drop images or pull video frames, and it composes salient regions onto a live canvas.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/collage-beta/">
+                <span class="code">GA-02</span>
+                <span class="name">Collage Beta (GenArt Studio)</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">The earlier build of the compositor, kept live for comparison.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/archive/">
+                <span class="code">GA-03</span>
+                <span class="name">Bridge Archive</span>
+                <span class="tag">500</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Five hundred standalone particle-interference variations of the bridge, each its own page.</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="locker" id="lockers-field" aria-label="Field toolkits">
+          <h3 class="label">Field toolkits</h3>
+          <p class="label" style="margin:0.4rem 0 0;">The same persistence mathematics, isomorphed to where work gets done — one browser toolkit per trade, each begun as a wish from someone in it.</p>
+          <ul class="rows">
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/av/">
+                <span class="code">FT-01</span>
+                <span class="name">AV Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Dead-practical browser tools for AV field work — consumables, cable and adapter lists, field-report setup.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/">
+                <span class="code">FT-02</span>
+                <span class="name">Plumbing Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">The toolkit isomorphed to plumbing — supply house orders in the counter's own language.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/electrical/">
+                <span class="code">FT-03</span>
+                <span class="name">Electrical Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to electrical — the pull list first, plus the forget-list of small stuff that stops a crew.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/hvac/">
+                <span class="code">FT-04</span>
+                <span class="name">HVAC/R Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to HVAC/R — the repair recommendation a tech sends from the roof, no second trip.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/low-voltage/">
+                <span class="code">FT-05</span>
+                <span class="name">Low-Voltage Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to low-voltage, security and fire — log every device as it hangs; hand the PM a clean schedule.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/gc/">
+                <span class="code">FT-06</span>
+                <span class="name">GC &amp; Site Super Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to whoever runs the job — the weather day first: what it stopped, what it cost, in one thumb-answerable message.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/framing/">
+                <span class="code">FT-07</span>
+                <span class="name">Framing &amp; Drywall Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the crew that closes the wall — the backing ledger: proof of what's behind the rock.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/roofing/">
+                <span class="code">FT-08</span>
+                <span class="name">Roofing Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the crew that owns dry-in — the tear-off release: who owns the call if it rains tonight.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/creative/">
+                <span class="code">FT-09</span>
+                <span class="name">Creative Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the one-person shoot-and-cut shop — answer the client's wall of notes, tag scope creep; nothing leaves the browser.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/concrete/">
+                <span class="code">FT-10</span>
+                <span class="name">Concrete Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the pour crew — before-the-pour: every sleeve, embed and pad other trades owe you, one message each.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/masonry/">
+                <span class="code">FT-11</span>
+                <span class="name">Masonry Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the mason — where the wall's at: course reached, open cells, and hands-off, sent as one message.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/sitework/">
+                <span class="code">FT-12</span>
+                <span class="name">Sitework Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the crew on the machine — before we close it: what's in the ditch and when the dirt goes back.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/flooring/">
+                <span class="code">FT-13</span>
+                <span class="name">Flooring Field Toolkit</span>
+                <span class="tag">field</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Isomorphed to the last trade in — give me the go in writing before the floor seals somebody else's mistake.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/commons/">
+                <span class="code">CM-01</span>
+                <span class="name">The Commons — What's In The Bag</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">The human layer shared by every trade: the gear the field actually reaches for — no brands, nothing sponsored.</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="locker" id="lockers-meta" aria-label="Ship's log — meta and source">
+          <h3 class="label">Ship's log</h3>
+          <ul class="rows">
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/">
+                <span class="code">MC-01</span>
+                <span class="name">Helios Bridge (Live)</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">The live particle-interference bridge itself — the site root everything else ships alongside.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html">
+                <span class="code">MC-02</span>
+                <span class="name">Citation Page</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">How to cite the Helios Bridge and the Nested Resonance Memory archive.</span>
+              </a>
+            </li>
+            <li>
+              <a class="row" href="https://github.com/mrdirno/nested-resonance-memory-archive">
+                <span class="code">MC-03</span>
+                <span class="name">GitHub Repository</span>
+                <span class="led" aria-hidden="true"></span>
+                <span class="clause">Source repository for the bridge, GenArt Studio, toolkits and the NRM research archive.</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </nav>
+
+      <div class="pi-divider" aria-hidden="true">830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271</div>
+
+    </main>
+
+    <!-- ── 04 / MANIFEST ─────────────────────────────────────────────────── -->
+    <footer id="manifest" class="reveal" aria-labelledby="manifest-idx">
+      <h2 class="sec-idx" id="manifest-idx">04 / MANIFEST</h2>
+      <dl>
+        <dt class="label">Author</dt>
+        <dd>Aldrin Payopay (GitHub: <a href="https://github.com/mrdirno">@mrdirno</a>) · Persona500 LLC — sole author, creator and copyright holder. Copyright © 2025–2026 Aldrin Payopay.</dd>
+
+        <dt class="label">License</dt>
+        <dd>GPL-3.0-only — <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/LICENSE">full text in the repository</a>.</dd>
+
+        <dt class="label">Repository</dt>
+        <dd><a href="https://github.com/mrdirno/nested-resonance-memory-archive">github.com/mrdirno/nested-resonance-memory-archive</a></dd>
+
+        <dt class="label">Cite as</dt>
+        <dd class="cite-as">Payopay, A. (2026). <em>Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity</em> [Computer software]. Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive — formats for BibTeX and others on the <a href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html">citation page</a>.</dd>
+
+        <dt class="label">Hull integrity</dt>
+        <dd class="tval">SELF-CONTAINED: 0 network requests · this file is the entire instrument.</dd>
+      </dl>
+    </footer>
+
+  </div><!-- /#deck -->
+
+  <!-- ── Attribution fallback for non-JS readers and crawlers ──────────── -->
+  <noscript>
+    <div style="position:relative;z-index:3;max-width:68ch;padding:1.5rem;font-family:system-ui,sans-serif;color:#9FB3BE;background:#101820;border:1px solid #2A3944;margin:1.5rem;">
+      <p>
+        Nested Resonance Memory (NRM) is a reality-compiler research archive by
+        Aldrin Payopay (GitHub: mrdirno) of Persona500 LLC. It tests whether
+        cognition, physics, biology and society can be modelled by a single
+        potential-minimization law — Budget-Constrained Perception
+        (V&nbsp;=&nbsp;G&nbsp;−&nbsp;λC) — together with the Information–Matter
+        Isomorphism and the Duality-Zero engine. Copyright © 2025–2026 Aldrin
+        Payopay, licensed GPL-3.0-only; source and citation formats at
+        <a href="https://github.com/mrdirno/nested-resonance-memory-archive" style="color:#64E8C6;">https://github.com/mrdirno/nested-resonance-memory-archive</a>.
+      </p>
+      <p>
+        JavaScript is off, so the particle field above stays dark — every link,
+        framework, open question and citation on this page still works without it.
+      </p>
+    </div>
+  </noscript>
+
+  <script>
+/* ═══════════════════════════════════════════════════════════════════════
+     HELIOS ENGINE — the living field.
+
+     Author: Aldrin Payopay <aldrin.gdf@gmail.com> · License: GPL-3.0-only
+
+     Physics ported from the original Helios Bridge engine (three.js build):
+       · DIGIT_SEQUENCES — 2500 verbatim decimal digits each of π, e, √2, φ
+       · getDigit()      — staggered lookup, stagger a=0 b=239 c=478,
+                           mapping φ / φ / π (the three mode digits m, n, p)
+       · WAVE_STRENGTH 2.5 · VELOCITY_DAMPING 0.98 · digit cursor over the
+         sequence; mode energy = (m² + n² + p²) / 3 scales the wave force.
+     Re-expressed here in 2D: four emitters on a golden-angle ring just
+     off-screen, one per constant; each consumed digit d sets that emitter's
+     phase offset d·π/5 plus a spatial/temporal frequency nudge. Particles
+     sample the superposed field — vector sum Σv drives brightness (phosphor
+     → white in constructive fringes), scalar sum Σs drives size and drift;
+     destructive zones with non-zero Σs render as faint deep-blue empty
+     wells. The pointer is a fifth, low-amplitude probe source (same math).
+
+     Honesty contract: no displayed number the simulation didn't compute.
+     ═══════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var doc = document, root = doc.documentElement;
+
+  /* ── ported constants ─────────────────────────────────────────────── */
+  var SEQUENCE_LENGTH = 2500;
+  var WAVE_STRENGTH = 2.5;
+  var VELOCITY_DAMPING = 0.98;
+  var STAGGER = { a: 0, b: 239, c: 478 };
+  var MAPPING = { a: 'phi', b: 'phi', c: 'pi' };
+  var DIGIT_SEQUENCES = {
+    pi: '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632788659361533818279682303019520353018529689957736225994138912497217752834791315155748572424541506959508295331168617278558890750983817546374649393192550604009277016711390098488240128583616035637076601047101819429555961989467678374494482553797747268471040475346462080466842590694912933136770289891521047521620569660240580381501935112533824300355876402474964732639141992726042699227967823547816360093417216412199245863150302861829745557067498385054945885869269956909272107975093029553211653449872027559602364806654991198818347977535663698074265425278625518184175746728909777727938000816470600161452491921732172147723501414419735685481613611573525521334757418494684385233239073941433345477624168625189835694855620992192221842725502542568876717904946016534668049886272327917860857843838279679766814541009538837863609506800642251252051173929848960841284886269456042419652850222106611863067442786220391949450471237137869609563643719172874677646575739624138908658326459958133904780275900994657640789512694683983525957098258226205224894077267194782684826014769909026401363944374553050682034962524517493996514314298091906592509372216964615157098583874105978859597729754989301617539284681382686838689427741559918559252459539594310499725246808459872736446958486538367362226260991246080512438843904512441365497627807977156914359977001296160894416948685558484063534220722258284886481584560285060168427394522674676788952521385225499546667278239864565961163548862305774564980355936345681743241125',
+    e: '7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354021234078498193343210681701210056278802351930332247450158539047304199577770935036604169973297250886876966403555707162268447162560798826517871341951246652010305921236677194325278675398558944896970964097545918569563802363701621120477427228364896134225164450781824423529486363721417402388934412479635743702637552944483379980161254922785092577825620926226483262779333865664816277251640191059004916449982893150566047258027786318641551956532442586982946959308019152987211725563475463964479101459040905862984967912874068705048958586717479854667757573205681288459205413340539220001137863009455606881667400169842055804033637953764520304024322566135278369511778838638744396625322498506549958862342818997077332761717839280349465014345588970719425863987727547109629537415211151368350627526023264847287039207643100595841166120545297030236472549296669381151373227536450988890313602057248176585118063036442812314965507047510254465011727211555194866850800368532281831521960037356252794495158284188294787610852639813955990067376482922443752871846245780361929819713991475644882626039033814418232625150974827987779964373089970388867782271383605772978824125611907176639465070633045279546618550966661856647097113444740160704626215680717481877844371436988218559670959102596862002353718588748569652200050311734392073211390803293634479727355955277349071783793421637012050054513263835440001863239914907054797780566978533580489669062951194324730995876552368128590413832411607226029983305353708761389396391779574540161372236187',
+    sqrt2: '4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478001569369176881852378684052287837629389214300655869568685964595155501644724509836896036887323114389415576651040883914292338113206052433629485317049915771756228549741438999188021762430965206564211827316726257539594717255934637238632261482742622208671155839599926521176252698917540988159348640083457085181472231814204070426509056532333398436457865796796519267292399875366617215982578860263363617827495994219403777753681426217738799194551397231274066898329989895386728822856378697749662519966583525776198939322845344735694794962952168891485492538904755828834526096524096542889394538646625744927556381964410316979833061852019379384940057156333720548068540575867999670121372239475821426306585132217408832382947287617393647467837431960001592188807347857617252211867490424977366929207311096369721608933708661156734585334833295254675851644710757848602463600834449114818587655554286455123314219926311332517970608436559704352856410087918500760361009159465670676883605571740076756905096136719401324935605240185999105062108163597726431380605467010293569971042425105781749531057255934984451126922780344913506637568747760283162829605532422426957534529028838768446429173282770888318087025339852338122749990812371892540726475367850304821591801886167108972869229201197599880703818543332536460211082299279293072871780799888099176741774108983060800326311816427988231171',
+    phi: '6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374847540880753868917521266338622235369317931800607667263544333890865959395829056383226613199282902678806752087668925017116962070322210432162695486262963136144381497587012203408058879544547492461856953648644492410443207713449470495658467885098743394422125448770664780915884607499887124007652170575179788341662562494075890697040002812104276217711177780531531714101170466659914669798731761356006708748071013179523689427521948435305678300228785699782977834784587822891109762500302696156170025046433824377648610283831268330372429267526311653392473167111211588186385133162038400522216579128667529465490681131715993432359734949850904094762132229810172610705961164562990981629055520852479035240602017279974717534277759277862561943208275051312181562855122248093947123414517022373580577278616008688382952304592647878017889921990270776903895321968198615143780314997411069260886742962267575605231727775203536139362107673893764556060605921658946675955190040055590895022953094231248235521221241544400647034056573479766397239494994658457887303962309037503399385621024236902513868041457799569812244574717803417312645322041639723213404444948730231541767689375210306873788034417009395440962795589867872320951242689355730970450959568440175551988192180206405290551893494759260073485228210108819464454422231889131929468962200230144377026992300780308526118075451928877050210968424936271359251876077788466583615023891349333312231053392321362431926372891067050339928226526355620902979864247275977256550861548754357482647181414512700060238901620777322449943530889990950168032811219432048196438767586331479857191139781539780747615077221175082694586393204565209896985556781410696837288405874610337810544439094368358358138113116899385557697548414914453415091295407005019477548616307542264172939468036731980586183391832859913039607201445595044977921207612478564591616083705949878600697018940988640076443617093341727091914336501371576601148038143062623805143211734815100559013456101180079050638142152709308588092875703450507808145458819906336129827981411745339273120809289727922213298064294687824274874017450554067787570832373109759151177629784432847479081765180977872684161176325038612112914368343767023503711163307258698832587103363222381098090121101989917684149175123313401527338438372345009347860497929459915822012581045982309255287212413704361491020547185549611808764265765110605458814756044317847985845397312863016254487611485'
+  };
+
+  /* getDigit — verbatim port of the staggered lookup. */
+  function getDigit(dimIndex, pos) {
+    var offset, seqKey;
+    if (dimIndex === 0) { offset = STAGGER.a; seqKey = MAPPING.a; }
+    else if (dimIndex === 1) { offset = STAGGER.b; seqKey = MAPPING.b; }
+    else { offset = STAGGER.c; seqKey = MAPPING.c; }
+    var staggeredPos = Math.max(0, (pos + offset) % SEQUENCE_LENGTH);
+    var seq = DIGIT_SEQUENCES[seqKey];
+    if (!seq) { return (staggeredPos + dimIndex) % 10; }
+    var code = seq.charCodeAt(staggeredPos % seq.length);
+    return (code >= 48 && code <= 57) ? code - 48 : 0;
+  }
+  function seqDigit(key, pos) {
+    var seq = DIGIT_SEQUENCES[key];
+    var code = seq.charCodeAt(((pos % seq.length) + seq.length) % seq.length);
+    return (code >= 48 && code <= 57) ? code - 48 : 0;
+  }
+
+  /* ── tuning (2D adaptation — every value here only shapes forces the
+        digit stream drives; none of it invents displayed numbers) ────── */
+  var TAU = Math.PI * 2;
+  var GOLDEN_ANGLE = 2.399963229728653;
+  var DIGITS_PER_SEC = 6;               /* fixed consumption rate, shown live */
+  var TUNE = 0.09;                      /* force scale for 2D integration     */
+  var ADVECT = 8;                       /* mild gradient advection            */
+  var MAX_V = 3.5;                      /* px/frame speed clamp               */
+  var WRAP_M = 40;                      /* soft toroidal margin               */
+  var FIB = [1, 2, 3, 5, 8, 13, 21];
+
+  /* ── DOM refs — every lookup guarded ──────────────────────────────── */
+  var canvas = $('field');
+  var fallback = $('field-fallback');
+  var vpFrame = $('vp-frame');
+  var probeEl = $('probe');
+  var bootlogEl = $('bootlog');
+  var tickerConst = $('ticker-const');
+  var tickerDigits = $('ticker-digits');
+  var rebootBtn = $('reboot-ontogeny');
+  var railEl = $('rail');
+  var teleEl = $('telemetry');
+  var vpId = doc.querySelector('.vp-id');
+  var figcap = doc.querySelector('#viewport .figcap');
+  var wordmark = doc.querySelector('.wordmark');
+  var tele = {
+    n: $('t-n'), fps: $('t-fps'), digits: $('t-digits'),
+    energy: $('t-energy'), epoch: $('t-epoch'),
+    clock: $('t-clock'), stage: $('t-stage')
+  };
+
+  var reducedMotion = false;
+  try {
+    reducedMotion = !!(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  } catch (e0) { reducedMotion = false; }
+
+  /* ── public shell (kept API-compatible with the stub) ─────────────── */
+  var HELIOS = {
+    palette: {
+      ground: '#04070B', panel: '#101820', stroke: '#2A3944',
+      ink: '#9FB3BE', phosphor: '#64E8C6', amber: '#E8B84B'
+    },
+    constants: ['pi', 'e', 'phi', 'sqrt2'],
+    reducedMotion: reducedMotion,
+    canvas: canvas,
+    telemetry: tele,
+    setTelemetry: function (key, value) {
+      var el = tele[key];
+      if (el) { el.textContent = value; }
+    },
+    setBreath: function (u) {
+      root.style.setProperty('--breath', String(u));
+    },
+    bootOntogeny: function () { startBoot(); },
+    rebootOntogeny: function () { startBoot(); },
+    pause: function () { pauseLoop(); },
+    resume: function () { resumeLoop(); }
+  };
+  window.HELIOS = HELIOS;
+
+  /* ── instrument-rail wiring — console grammar: click mutes/unmutes a
+     channel; double-click or Shift+click solos it. Soloing the channel
+     that is already alone brings the whole console back up. ──────────── */
+  function lampOn(c) {
+    var l = $('lamp-' + c);
+    return !l || l.getAttribute('aria-pressed') === 'true';
+  }
+  function setLamp(c, on) {
+    var l = $('lamp-' + c);
+    if (l) { l.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  }
+  function soloChannel(key) {
+    var alreadySolo = lampOn(key);
+    HELIOS.constants.forEach(function (c) {
+      if (c !== key && lampOn(c)) { alreadySolo = false; }
+    });
+    HELIOS.constants.forEach(function (c) {
+      setLamp(c, alreadySolo ? true : c === key);
+    });
+  }
+  HELIOS.constants.forEach(function (c) {
+    var lamp = $('lamp-' + c);
+    if (!lamp) { return; }
+    lamp.addEventListener('click', function (e) {
+      if (e.shiftKey) { soloChannel(c); return; }
+      setLamp(c, !lampOn(c));
+    });
+    lamp.addEventListener('dblclick', function () { soloChannel(c); });
+  });
+  var gainPending = false;
+  function updateGain() {
+    if (gainPending) { return; }
+    gainPending = true;
+    requestAnimationFrame(function () {
+      gainPending = false;
+      var dim = window.scrollY > window.innerHeight * 0.4;
+      root.classList.toggle('scrolled', dim);
+    });
+  }
+  window.addEventListener('scroll', updateGain, { passive: true });
+  updateGain();
+  doc.addEventListener('visibilitychange', function () {
+    if (doc.hidden) { HELIOS.pause(); } else { HELIOS.resume(); }
+  });
+  if (rebootBtn) {
+    rebootBtn.addEventListener('click', function () { HELIOS.rebootOntogeny(); });
+  }
+
+  /* ── deck ontogeny — the page body mirrors the field's boot: sections
+     surface as they enter the watch, and the watch-log entries print one
+     after another. Gated so no-JS, no-IntersectionObserver and
+     reduced-motion decks render everything at rest (see html.io CSS). ── */
+  if (!reducedMotion && 'IntersectionObserver' in window) {
+    var revealEls = doc.querySelectorAll('.reveal');
+    if (revealEls.length) {
+      root.classList.add('io');
+      var qItems = doc.querySelectorAll('.qlog li');
+      for (var qi = 0; qi < qItems.length; qi++) {
+        qItems[qi].style.transitionDelay = (qi * 70) + 'ms';
+      }
+      var secIO = new IntersectionObserver(function (entries) {
+        for (var ei = 0; ei < entries.length; ei++) {
+          if (entries[ei].isIntersecting) {
+            entries[ei].target.classList.add('on');
+            secIO.unobserve(entries[ei].target);
+          }
+        }
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      for (var ri = 0; ri < revealEls.length; ri++) { secIO.observe(revealEls[ri]); }
+    }
+  }
+
+  /* No canvas, no 2D context → the page stays honest: STANDBY telemetry,
+     gradient fallback, every link alive. */
+  var ctx = null;
+  if (canvas && canvas.getContext) {
+    try { ctx = canvas.getContext('2d', { alpha: false }); } catch (e1) { ctx = null; }
+  }
+  if (!ctx) { return; }
+
+  /* Let hover reach the exposed field through the hero frame's empty grid
+     space; interactive children stay clickable. */
+  var vpHeader = $('viewport');
+  if (vpHeader && vpFrame) {
+    vpHeader.style.pointerEvents = 'none';
+    [vpId, teleEl, railEl, figcap].forEach(function (el) {
+      if (el) { el.style.pointerEvents = 'auto'; }
+    });
+  }
+
+  /* ── viewport / DPR ───────────────────────────────────────────────── */
+  var W = 0, H = 0, DPR = 1, cx = 0, cy = 0;
+  var hyp = 1, ringR = 1, attL = 420, lamBase = 90;
+  function sizeCanvas() {
+    var w = window.innerWidth || 1, h = window.innerHeight || 1;
+    var oldW = W || w, oldH = H || h;
+    W = w; H = h; cx = w * 0.5; cy = h * 0.42;
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.max(1, Math.round(w * DPR));
+    canvas.height = Math.max(1, Math.round(h * DPR));
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    hyp = Math.sqrt(w * w + h * h);
+    ringR = hyp * 0.5 + 80;             /* just off-screen */
+    attL = hyp * 0.45;                  /* falloff length  */
+    lamBase = Math.min(140, Math.max(60, hyp / 24));
+    if (oldW !== w || oldH !== h) {
+      var sx = w / oldW, sy = h / oldH;
+      for (var i = 0; i < aliveN; i++) { px[i] *= sx; py[i] *= sy; }
+    }
+    for (var k = 0; k < 4; k++) { emitterRetune(emitters[k]); }
+    needsOpaqueClear = true;
+  }
+
+  /* ── particles ────────────────────────────────────────────────────── */
+  var coarse = false;
+  try {
+    coarse = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  } catch (e2) { coarse = false; }
+  var small = Math.min(window.innerWidth || 1024, window.innerHeight || 768) < 640;
+  var CAP = (coarse || small) ? 5000 : 12000;
+  var fullN = CAP;
+  var px = new Float32Array(CAP), py = new Float32Array(CAP);
+  var vx = new Float32Array(CAP), vy = new Float32Array(CAP);
+  var sz = new Float32Array(CAP);
+  var chan = new Uint8Array(CAP);
+  var aliveN = 0;
+
+  function spawn(x, y, c) {
+    if (aliveN >= CAP) { return aliveN - 1; }
+    var i = aliveN++;
+    px[i] = x; py[i] = y; vx[i] = 0; vy[i] = 0; chan[i] = c & 3; sz[i] = 1.4;
+    return i;
+  }
+  function seedUniform(n) {
+    while (aliveN < n && aliveN < CAP) {
+      spawn(Math.random() * W, Math.random() * H, aliveN & 3);
+    }
+  }
+
+  /* ── emitters — one per constant on a golden-angle ring ───────────── */
+  function mkEmitter(key, sym) {
+    return { key: key, sym: sym, x: 0, y: 0, d: 0,
+      amp: 1, ampT: 1, kw: TAU / 90, kwT: TAU / 90,
+      om: 0.7, omT: 0.7, ph: 0, phT: 0 };
+  }
+  var emitters = [
+    mkEmitter('pi', 'π'), mkEmitter('e', 'e'),
+    mkEmitter('phi', 'φ'), mkEmitter('sqrt2', '√2')
+  ];
+  var TICK_PREFIX = { pi: '3.', e: '2.', phi: '1.', sqrt2: '1.' };
+  function emitterRetune(em) {
+    var d = em.d;
+    em.phT = d * Math.PI / 5;                       /* phase offset d·π/5   */
+    em.omT = 0.7 * (1 + d * 0.06);                  /* temporal nudge       */
+    em.kwT = TAU / (lamBase * (1 - d * 0.03));      /* spatial nudge        */
+  }
+  var pointerSrc = { x: -9999, y: -9999, amp: 0, ampT: 0, kw: TAU / 110, om: 1.4, ph: 0 };
+
+  /* ── digit stream ─────────────────────────────────────────────────── */
+  var totalDigits = 0, cursor = 0, digitAcc = 0, digitTick = 0;
+  var mD = 0, nD = 0, pD = 0, modeEnergy = 0;
+  var forceMult = 0, forceMultT = 0;
+  var bkTickArmed = false;
+
+  function consumeDigit() {
+    totalDigits++;
+    cursor = totalDigits % SEQUENCE_LENGTH;
+    digitTick++;
+    mD = getDigit(0, totalDigits);
+    nD = getDigit(1, totalDigits);
+    pD = getDigit(2, totalDigits);
+    modeEnergy = mD * mD + nD * nD + pD * pD;
+    forceMultT = WAVE_STRENGTH * (modeEnergy / 3) * TUNE;
+    for (var k = 0; k < 4; k++) {
+      emitters[k].d = seqDigit(emitters[k].key, cursor);
+      emitterRetune(emitters[k]);
+    }
+    if (totalDigits % 1000 === 0 && vpFrame) {   /* micro: bracket breath */
+      vpFrame.classList.add('bk-tick');
+      bkTickArmed = true;
+    }
+    updateTicker();
+    if (tele.digits) {
+      tele.digits.textContent =
+        mD + '·' + nD + '·' + pD + ' @' + String(cursor).padStart(4, '0') +
+        ' · ' + DIGITS_PER_SEC + '/s';
+    }
+  }
+  function activeTickerEmitter() {
+    for (var k = 0; k < 4; k++) {
+      var lamp = $('lamp-' + emitters[k].key);
+      if (!lamp || lamp.getAttribute('aria-pressed') === 'true') { return emitters[k]; }
+    }
+    return emitters[0];
+  }
+  function updateTicker() {
+    if (!tickerDigits || !tickerConst) { return; }
+    var em = activeTickerEmitter();
+    var full = TICK_PREFIX[em.key] + DIGIT_SEQUENCES[em.key];
+    var end = Math.min(full.length, cursor + 2);
+    var start = Math.max(0, end - 40);
+    tickerConst.textContent = em.sym;
+    tickerDigits.textContent = full.slice(start, end);
+  }
+
+  /* ── field sampling (shared by particles and the probe) ───────────── */
+  var sN = 0;
+  var sX = new Float64Array(6), sY = new Float64Array(6), sA = new Float64Array(6);
+  var sK = new Float64Array(6), sT = new Float64Array(6);
+  function gatherSources(t) {
+    sN = 0;
+    for (var k = 0; k < 4; k++) {
+      var em = emitters[k];
+      if (em.amp > 0.01) {
+        sX[sN] = em.x; sY[sN] = em.y; sA[sN] = em.amp;
+        sK[sN] = em.kw; sT[sN] = t * em.om - em.ph; sN++;
+      }
+    }
+    if (pointerSrc.amp > 0.01) {
+      sX[sN] = pointerSrc.x; sY[sN] = pointerSrc.y; sA[sN] = pointerSrc.amp;
+      sK[sN] = pointerSrc.kw; sT[sN] = t * pointerSrc.om - pointerSrc.ph; sN++;
+    }
+  }
+  /* Probe readout: emitters only (the probe measures the field, it does
+     not read its own perturbation back). */
+  function fieldAt(x, y, t) {
+    var sv = 0, ss = 0, phase = 0, first = true;
+    for (var k = 0; k < 4; k++) {
+      var em = emitters[k];
+      if (em.amp <= 0.01) { continue; }
+      var dx = x - em.x, dy = y - em.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) + 1e-4;
+      var att = em.amp / (1 + dist / attL);
+      var th = dist * em.kw - t * em.om + em.ph;
+      if (first) { phase = ((th % TAU) + TAU) % TAU; first = false; }
+      var u = att * Math.sin(th);
+      sv += u; ss += u < 0 ? -u : u;
+    }
+    return { sv: sv, ss: ss, phase: phase };
+  }
+
+  /* ── color buckets (grouped fills — one path per style) ───────────── */
+  var NB = 16;
+  var bucketStyle = [];
+  var buckets = [];
+  (function buildBuckets() {
+    var i;
+    for (i = 0; i < NB; i++) {              /* phosphor → white ramp */
+      var f = i / (NB - 1), g = f * f;
+      var r = Math.round(100 + g * 135);
+      var gg = Math.round(232 + g * 23);
+      var b = Math.round(198 + g * 52);
+      var a = 0.05 + g * 0.5;
+      bucketStyle.push('rgba(' + r + ',' + gg + ',' + b + ',' + a.toFixed(3) + ')');
+    }
+    bucketStyle.push('rgba(30,52,96,0.10)');    /* 16: empty well, faint  */
+    bucketStyle.push('rgba(36,62,118,0.16)');   /* 17: empty well, deeper */
+    bucketStyle.push('rgba(100,232,198,0.50)'); /* 18: channel π          */
+    bucketStyle.push('rgba(100,184,232,0.45)'); /* 19: channel e          */
+    bucketStyle.push('rgba(232,184,75,0.40)');  /* 20: channel φ          */
+    bucketStyle.push('rgba(159,179,190,0.40)'); /* 21: channel √2         */
+    for (i = 0; i < bucketStyle.length; i++) { buckets.push([]); }
+  })();
+
+  /* ── ontogeny stage machine ───────────────────────────────────────── */
+  var STAGE_LABEL = ['00 · ZYGOTE', '01 · CLEAVAGE', '02 · DIFFERENTIATION',
+    '03 · GASTRULATION', '04 · HOMEOSTASIS'];
+  var booting = false, bootStart = 0, stage = 4, fibIdx = 0, lastDivTick = -1;
+  var spindles = [];                       /* {a, b, t0} — live endpoints */
+  var bootLines = [];                      /* {t, text|fn}               */
+  var bootlogVisible = false, bootlogHideAt = Infinity;
+  var uiPhase = 0;                         /* homeostasis UI birth steps */
+  var wmFull = wordmark ? wordmark.textContent : '';
+  var seenSession = false;
+  try { seenSession = sessionStorage.getItem('helios-ontogeny') === '1'; } catch (e3) {}
+
+  function fmtN(n) { return n.toLocaleString('en-US'); }
+  function updateFigcap() {
+    if (!figcap) { return; }
+    var t = figcap.textContent;
+    var staticPhrase = /of up to [\d,]+ particles \(live count in\s+the N telemetry cell\)/;
+    if (staticPhrase.test(t)) {
+      figcap.textContent = t.replace(staticPhrase, 'of ' + fmtN(fullN) + ' particles');
+    } else {
+      figcap.textContent = t.replace(/of [\d,]+ particles/, 'of ' + fmtN(fullN) + ' particles');
+    }
+  }
+
+  function mkBootLines() {
+    return [
+      { t: 0.05, fn: function () { return 'ONTOGENY 00 · ZYGOTE · N=1'; } },
+      { t: 0.85, fn: function () { return 'ONTOGENY 01 · CLEAVAGE · N=' + aliveN; } },
+      { t: 2.00, fn: function () { return 'ONTOGENY 02 · DIFFERENTIATION · N=' + aliveN; } },
+      { t: 2.25, fn: function () { return 'π  source array … resonating'; } },
+      { t: 2.55, fn: function () { return 'e  source array … resonating'; } },
+      { t: 2.85, fn: function () { return 'φ  source array … resonating'; } },
+      { t: 3.15, fn: function () { return '√2 source array … resonating'; } },
+      { t: 3.50, fn: function () { return 'ONTOGENY 03 · GASTRULATION · interference ON'; } },
+      { t: 5.00, fn: function () { return 'ONTOGENY 04 · HOMEOSTASIS · N=' + fmtN(aliveN); } }
+    ];
+  }
+  function renderBootlog(bt, typed) {
+    if (!bootlogEl || !bootlogVisible) { return; }
+    var out = '';
+    for (var i = 0; i < bootLines.length; i++) {
+      var ln = bootLines[i];
+      if (bt < ln.t) { break; }
+      var text = ln.fn();
+      if (typed) {
+        var chars = Math.max(0, Math.floor((bt - ln.t) * 60));
+        text = text.slice(0, chars);
+      }
+      out += text + '\n';
+    }
+    bootlogEl.textContent = out;
+  }
+
+  function hideBootUI() {
+    [vpId, teleEl, railEl, figcap].forEach(function (el) {
+      if (!el) { return; }
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+    });
+    if (railEl) { railEl.style.transform = 'translateY(12px)'; }
+    if (wordmark) { wordmark.textContent = ''; }
+    uiPhase = 0;
+  }
+  function growUI(bt) {
+    /* the hero fades in as the cell divides: opacity tracks boot time from
+       cleavage (0.8s) to full presence at gastrulation's end (5.0s), so the
+       page identity is literally born alongside the field */
+    if (!vpId || uiPhase > 0) { return; }
+    var o = (bt - 0.8) / 4.2;
+    if (o < 0) { o = 0; } else if (o > 1) { o = 1; }
+    vpId.style.opacity = (o * o).toFixed(3);
+  }
+  function birthUI(bt) {
+    /* UI born last — staggered, no hard cuts */
+    if (uiPhase === 0 && bt >= 5.0) {
+      uiPhase = 1;
+      if (vpId) { vpId.style.transition = 'opacity 0.8s linear'; vpId.style.opacity = '1'; }
+    }
+    if (wordmark && bt >= 5.0) {
+      var chars = Math.min(wmFull.length, Math.floor((bt - 5.0) * 24));
+      var cur = wmFull.slice(0, chars);
+      if (wordmark.textContent !== cur) { wordmark.textContent = cur; }
+    }
+    if (uiPhase === 1 && bt >= 5.3) {
+      uiPhase = 2;
+      if (teleEl) { teleEl.style.transition = 'opacity 0.6s linear'; teleEl.style.opacity = '1'; }
+    }
+    if (uiPhase === 2 && bt >= 5.5) {
+      uiPhase = 3;
+      if (railEl) {
+        railEl.style.transition = 'opacity 0.6s linear, transform 0.6s ease-out';
+        railEl.style.opacity = '1'; railEl.style.transform = 'none';
+      }
+    }
+    if (uiPhase === 3 && bt >= 5.7) {
+      uiPhase = 4;
+      if (figcap) { figcap.style.transition = 'opacity 0.8s linear'; figcap.style.opacity = '1'; }
+      if (wordmark) { wordmark.textContent = wmFull; }
+    }
+  }
+
+  function startBoot() {
+    if (reducedMotion) { staticFrame(true, true); return; }
+    booting = true; stage = 0; bootStart = simTime;
+    fibIdx = 0; lastDivTick = digitTick;
+    aliveN = 0; spindles.length = 0;
+    spawn(cx, cy, 0);
+    bootLines = mkBootLines();
+    bootlogVisible = true; bootlogHideAt = Infinity;
+    if (bootlogEl) { bootlogEl.hidden = false; bootlogEl.style.opacity = '1'; }
+    hideBootUI();
+    forceMult = 0;
+    needsOpaqueClear = true;
+    if (!running) { resumeLoop(); }
+  }
+
+  function divideCells(digit) {
+    if (fibIdx >= FIB.length - 1) { return; }
+    fibIdx++;
+    var target = FIB[fibIdx], oldCount = aliveN, j;
+    for (j = oldCount; j < target; j++) {
+      var parent = j % oldCount;
+      var ang = j * GOLDEN_ANGLE + digit * 0.3;
+      var r = (14 + fibIdx * 9) * (0.8 + Math.random() * 0.4);
+      var i = spawn(px[parent] + Math.cos(ang) * r, py[parent] + Math.sin(ang) * r, j & 3);
+      spindles.push({ a: parent, b: i, t0: simTime });
+    }
+  }
+
+  /* ── pointer probe ────────────────────────────────────────────────── */
+  var probeOn = false, probeX = 0, probeY = 0, lastProbeText = 0, lastPointerMove = -10;
+  var probeRows = null;
+  function buildProbe() {
+    if (!probeEl || probeRows) { return; }
+    probeEl.textContent = '';
+    var mk = function (label) {
+      var s = doc.createElement('span');
+      s.className = 'tval';
+      probeEl.appendChild(doc.createTextNode(label));
+      probeEl.appendChild(s);
+      return s;
+    };
+    var r1 = mk('PROBE  ');
+    probeEl.appendChild(doc.createTextNode('\nΣv '));
+    var r2 = doc.createElement('span'); r2.className = 'tval'; probeEl.appendChild(r2);
+    probeEl.appendChild(doc.createTextNode('  Σs '));
+    var r3 = doc.createElement('span'); r3.className = 'tval'; probeEl.appendChild(r3);
+    probeEl.appendChild(doc.createTextNode('\nφ  '));
+    var r4 = doc.createElement('span'); r4.className = 'tval'; probeEl.appendChild(r4);
+    probeEl.appendChild(doc.createTextNode(' rad'));
+    probeRows = { xy: r1, sv: r2, ss: r3, ph: r4 };
+  }
+  function updateProbe(now) {
+    if (!probeEl || !probeOn) { return; }
+    if (now - lastProbeText < 0.05) { return; }
+    lastProbeText = now;
+    buildProbe();
+    var f = fieldAt(probeX, probeY, simTime);
+    probeRows.xy.textContent =
+      'x' + String(Math.round(probeX)).padStart(4, '0') +
+      ' y' + String(Math.round(probeY)).padStart(4, '0');
+    probeRows.sv.textContent = (f.sv < 0 ? '−' : '+') + Math.abs(f.sv).toFixed(3);
+    probeRows.ss.textContent = '+' + f.ss.toFixed(3);
+    probeRows.ph.textContent = f.phase.toFixed(3);
+    probeEl.style.left = probeX + 'px';
+    probeEl.style.top = probeY + 'px';
+    var flipX = probeX > W - 190, flipY = probeY > H - 90;
+    probeEl.style.transform = 'translate(' +
+      (flipX ? 'calc(-100% - 14px)' : '14px') + ', ' +
+      (flipY ? 'calc(-100% - 14px)' : '14px') + ')';
+  }
+  window.addEventListener('pointermove', function (e) {
+    pointerSrc.x = e.clientX; pointerSrc.y = e.clientY;
+    pointerSrc.ampT = 0.35;
+    lastPointerMove = simTime;
+    probeX = e.clientX; probeY = e.clientY;
+    var over = e.target === canvas;
+    if (over !== probeOn) {
+      probeOn = over;
+      if (probeEl) { probeEl.hidden = !over; }
+    }
+    if (probeOn) { updateProbe(simTime); }
+  }, { passive: true });
+  window.addEventListener('pointerdown', function (e) {
+    pointerSrc.x = e.clientX; pointerSrc.y = e.clientY;
+    pointerSrc.ampT = 0.35;
+    lastPointerMove = simTime;
+  }, { passive: true });
+  doc.addEventListener('pointerleave', function () {
+    pointerSrc.ampT = 0;
+    probeOn = false;
+    if (probeEl) { probeEl.hidden = true; }
+  });
+  window.addEventListener('blur', function () { pointerSrc.ampT = 0; });
+
+  /* ── telemetry ────────────────────────────────────────────────────── */
+  var emaFps = 0, lastTeleAt = 0, clockSec = 0;
+  var meanAbsV = 0, meanSs = 0, breath = 0;
+  function fmtClock(s) {
+    var h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, ss = Math.floor(s) % 60;
+    return 'T+' + String(h).padStart(2, '0') + ':' +
+      String(m).padStart(2, '0') + ':' + String(ss).padStart(2, '0');
+  }
+  function pushTelemetry(now) {
+    if (now - lastTeleAt < 0.2) { return; }
+    lastTeleAt = now;
+    if (tele.n) { tele.n.textContent = fmtN(aliveN); }
+    if (tele.fps) { tele.fps.textContent = emaFps > 0 ? String(Math.round(emaFps)) : '…'; }
+    if (tele.energy) { tele.energy.textContent = meanSs.toFixed(3); }
+    if (tele.epoch) { tele.epoch.textContent = String(Math.floor(totalDigits / SEQUENCE_LENGTH)).padStart(2, '0'); }
+    if (tele.clock) { tele.clock.textContent = fmtClock(clockSec); }
+    if (tele.stage) { tele.stage.textContent = STAGE_LABEL[stage]; }
+  }
+
+  /* ── physics + render ─────────────────────────────────────────────── */
+  var needsOpaqueClear = true;
+  var adaptFrames = 0;
+
+  function physicsAndRender(dt, alphaBoost) {
+    var dt60 = dt * 60;
+    var damp = Math.pow(VELOCITY_DAMPING, dt60);
+    gatherSources(simTime);
+    var i, k, b;
+    for (b = 0; b < buckets.length; b++) { buckets[b].length = 0; }
+    var sumAbsV = 0, sumSs = 0;
+    var bt = booting ? simTime - bootStart : 99;
+    var waveRamp = 1;
+    if (booting) {
+      if (stage < 3) { waveRamp = 0; }
+      else if (stage === 3) {
+        var g = (bt - 3.5) / 1.5;
+        waveRamp = g <= 0 ? 0 : (g >= 1 ? 1 : g * g * (3 - 2 * g));
+      }
+    }
+    var F = forceMult * waveRamp;
+    var wavePhysics = F > 0.0005 && sN > 0;
+
+    for (i = 0; i < aliveN; i++) {
+      var x = px[i], y = py[i];
+      var sv = 0, ss = 0, gx = 0, gy = 0;
+
+      if (wavePhysics) {
+        for (k = 0; k < sN; k++) {
+          var dx = x - sX[k], dy = y - sY[k];
+          var dist = Math.sqrt(dx * dx + dy * dy) + 1e-4;
+          var att = sA[k] / (1 + dist / attL);
+          var th = dist * sK[k] - sT[k];
+          var sn = Math.sin(th), cs = Math.cos(th);
+          var u = att * sn;
+          sv += u; ss += u < 0 ? -u : u;
+          var gmag = att * cs * sK[k] / dist;
+          gx += gmag * dx; gy += gmag * dy;
+        }
+        vx[i] = (vx[i] + gx * F * dt60) * damp;
+        vy[i] = (vy[i] + gy * F * dt60) * damp;
+        /* scalar sum → drift; gradient → mild advection (fringes breathe) */
+        x += vx[i] * dt60 + gx * ADVECT * waveRamp + (Math.random() - 0.5) * ss * 0.35 * dt60;
+        y += vy[i] * dt60 + gy * ADVECT * waveRamp + (Math.random() - 0.5) * ss * 0.35 * dt60;
+        var v2 = vx[i] * vx[i] + vy[i] * vy[i];
+        if (v2 > MAX_V * MAX_V) {
+          var vs = MAX_V / Math.sqrt(v2);
+          vx[i] *= vs; vy[i] *= vs;
+        }
+      } else if (booting && stage === 2) {
+        /* differentiation: migrate toward this channel's emitter */
+        var em = emitters[chan[i]];
+        var mtx = cx + (em.x - cx) * 0.32, mty = cy + (em.y - cy) * 0.32;
+        vx[i] = (vx[i] + (mtx - x) * 1.2 * dt) * 0.92;
+        vy[i] = (vy[i] + (mty - y) * 1.2 * dt) * 0.92;
+        x += vx[i] * dt60 + (Math.random() - 0.5) * 0.8;
+        y += vy[i] * dt60 + (Math.random() - 0.5) * 0.8;
+      } else if (booting && stage <= 1) {
+        /* cleavage: brownian jitter + gentle mutual separation */
+        vx[i] = (vx[i] + (Math.random() - 0.5) * 0.12 * dt60) * 0.9;
+        vy[i] = (vy[i] + (Math.random() - 0.5) * 0.12 * dt60) * 0.9;
+        for (k = 0; k < aliveN; k++) {
+          if (k === i) { continue; }
+          var ddx = x - px[k], ddy = y - py[k];
+          var dd = ddx * ddx + ddy * ddy;
+          if (dd > 1 && dd < 324) {
+            var push = 0.5 * dt60 / Math.sqrt(dd);
+            vx[i] += ddx * push * 0.05; vy[i] += ddy * push * 0.05;
+          }
+        }
+        x += vx[i] * dt60; y += vy[i] * dt60;
+      }
+
+      /* soft toroidal bounds */
+      if (x < -WRAP_M) { x += W + 2 * WRAP_M; } else if (x > W + WRAP_M) { x -= W + 2 * WRAP_M; }
+      if (y < -WRAP_M) { y += H + 2 * WRAP_M; } else if (y > H + WRAP_M) { y -= H + 2 * WRAP_M; }
+      px[i] = x; py[i] = y;
+
+      sumAbsV += sv < 0 ? -sv : sv;
+      sumSs += ss;
+
+      /* bucket by local energy */
+      if (booting && stage <= 1) { continue; }        /* cell renderer below */
+      var useChannel = false;
+      if (booting && stage === 2) { useChannel = true; }
+      else if (booting && stage === 3) { useChannel = (i % 100) / 100 >= waveRamp; }
+      if (useChannel) {
+        sz[i] = 2.2;
+        buckets[18 + chan[i]].push(i);
+      } else {
+        var absV = sv < 0 ? -sv : sv;
+        sz[i] = 1 + Math.min(2.2, ss * 1.1);          /* scalar sum → size */
+        if (ss > 0.5 && absV < 0.18 * ss) {
+          buckets[ss > 1.0 ? 17 : 16].push(i);        /* empty well        */
+          sz[i] += 1.5;                               /* smudge, not spark */
+        } else {
+          b = Math.floor(absV * 13);
+          if (b > NB - 1) { b = NB - 1; }
+          buckets[b].push(i);
         }
       }
     }
+
+    if (aliveN > 0) {
+      meanAbsV = sumAbsV / aliveN;
+      meanSs = sumSs / aliveN;
+    } else { meanAbsV = 0; meanSs = 0; }
+    if (booting && stage < 3 && aliveN > 0) {
+      /* interference not yet on: sample the emitters' field honestly */
+      var probeN = Math.min(40, aliveN), acc = 0;
+      for (i = 0; i < probeN; i++) { acc += fieldAt(px[i], py[i], simTime).ss; }
+      meanSs = (acc / probeN) * (stage === 2 ? 0.5 : 0);
+      meanAbsV = 0;
+    }
+
+    /* ── draw ── */
+    ctx.globalCompositeOperation = 'source-over';
+    if (needsOpaqueClear) {
+      ctx.fillStyle = '#04070B';
+      ctx.fillRect(0, 0, W, H);
+      needsOpaqueClear = false;
+    } else {
+      ctx.fillStyle = 'rgba(4,7,11,0.45)';
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    if (booting && stage <= 1) { drawEmbryo(bt); }
+    else if (booting && stage === 2) { drawGraticule(1 - Math.min(1, (bt - 2.0) * 1.4)); }
+
+    if (probeOn) {
+      ctx.strokeStyle = 'rgba(100,232,198,0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(probeX - 14, probeY + 0.5); ctx.lineTo(probeX + 14, probeY + 0.5);
+      ctx.moveTo(probeX + 0.5, probeY - 14); ctx.lineTo(probeX + 0.5, probeY + 14);
+      ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = 'lighter';
+    if (alphaBoost && alphaBoost > 1) { ctx.globalAlpha = Math.min(1, alphaBoost * 0.5); }
+    for (b = 0; b < buckets.length; b++) {
+      var list = buckets[b];
+      if (!list.length) { continue; }
+      ctx.fillStyle = bucketStyle[b];
+      ctx.beginPath();
+      for (k = 0; k < list.length; k++) {
+        i = list[k];
+        var s = sz[i];
+        ctx.rect(px[i] - s * 0.5, py[i] - s * 0.5, s, s);
+      }
+      ctx.fill();
+    }
+    if (alphaBoost && alphaBoost > 1) {
+      ctx.globalAlpha = alphaBoost >= 3 ? 1 : 0.7;
+      for (b = 0; b < buckets.length; b++) {
+        var list2 = buckets[b];
+        if (!list2.length) { continue; }
+        ctx.fillStyle = bucketStyle[b];
+        ctx.beginPath();
+        for (k = 0; k < list2.length; k++) {
+          i = list2[k];
+          var s2 = sz[i];
+          ctx.rect(px[i] - s2 * 0.5, py[i] - s2 * 0.5, s2, s2);
+        }
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    ctx.globalCompositeOperation = 'source-over';
   }
-};
-</script>
-<style>
-body { margin:0; padding:0; overflow:hidden; background:radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%); color:white; -webkit-font-smoothing:antialiased; font-family:'Inter',sans-serif; }
-canvas { touch-action:none; }
-.glass-panel { background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.1); }
-::-webkit-scrollbar { width:0px; height:0px; }
-input[type=range] { -webkit-appearance:none; background:rgba(255,255,255,0.1); border-radius:4px; height:6px; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:20px; width:20px; border-radius:50%; background:#7C3AED; box-shadow:0 0 15px rgba(124,58,237,0.5); margin-top:-7px; }
-input[type=range]::-webkit-slider-runnable-track { height:6px; border-radius:4px; }
-</style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react/": "https://esm.sh/react@19.0.0/",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "three": "https://esm.sh/three@0.170.0",
-    "three/": "https://esm.sh/three@0.170.0/",
-    "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?external=react,react-dom,three",
-    "@react-three/drei": "https://esm.sh/@react-three/drei@9.117.3?external=react,react-dom,three,@react-three/fiber"
+
+  function drawGraticule(alpha) {
+    if (alpha <= 0) { return; }
+    ctx.strokeStyle = 'rgba(42,57,68,' + (alpha).toFixed(3) + ')';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 86, 0, TAU);
+    ctx.stroke();
   }
-}
-</script>
-</head>
-<body>
-<div id="root"></div>
-<script type="module">
-import React, { useState, useRef, useMemo, useEffect, createElement as h, Fragment } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
-import * as THREE from 'three';
 
-// ══════════════════════════════════════════════════════════
-// CONSTANTS
-// ══════════════════════════════════════════════════════════
-const SEQUENCE_LENGTH = 2500;
-const DIGIT_SEQUENCES = {
-  pi: '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632788659361533818279682303019520353018529689957736225994138912497217752834791315155748572424541506959508295331168617278558890750983817546374649393192550604009277016711390098488240128583616035637076601047101819429555961989467678374494482553797747268471040475346462080466842590694912933136770289891521047521620569660240580381501935112533824300355876402474964732639141992726042699227967823547816360093417216412199245863150302861829745557067498385054945885869269956909272107975093029553211653449872027559602364806654991198818347977535663698074265425278625518184175746728909777727938000816470600161452491921732172147723501414419735685481613611573525521334757418494684385233239073941433345477624168625189835694855620992192221842725502542568876717904946016534668049886272327917860857843838279679766814541009538837863609506800642251252051173929848960841284886269456042419652850222106611863067442786220391949450471237137869609563643719172874677646575739624138908658326459958133904780275900994657640789512694683983525957098258226205224894077267194782684826014769909026401363944374553050682034962524517493996514314298091906592509372216964615157098583874105978859597729754989301617539284681382686838689427741559918559252459539594310499725246808459872736446958486538367362226260991246080512438843904512441365497627807977156914359977001296160894416948685558484063534220722258284886481584560285060168427394522674676788952521385225499546667278239864565961163548862305774564980355936345681743241125',
-  e: '7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354021234078498193343210681701210056278802351930332247450158539047304199577770935036604169973297250886876966403555707162268447162560798826517871341951246652010305921236677194325278675398558944896970964097545918569563802363701621120477427228364896134225164450781824423529486363721417402388934412479635743702637552944483379980161254922785092577825620926226483262779333865664816277251640191059004916449982893150566047258027786318641551956532442586982946959308019152987211725563475463964479101459040905862984967912874068705048958586717479854667757573205681288459205413340539220001137863009455606881667400169842055804033637953764520304024322566135278369511778838638744396625322498506549958862342818997077332761717839280349465014345588970719425863987727547109629537415211151368350627526023264847287039207643100595841166120545297030236472549296669381151373227536450988890313602057248176585118063036442812314965507047510254465011727211555194866850800368532281831521960037356252794495158284188294787610852639813955990067376482922443752871846245780361929819713991475644882626039033814418232625150974827987779964373089970388867782271383605772978824125611907176639465070633045279546618550966661856647097113444740160704626215680717481877844371436988218559670959102596862002353718588748569652200050311734392073211390803293634479727355955277349071783793421637012050054513263835440001863239914907054797780566978533580489669062951194324730995876552368128590413832411607226029983305353708761389396391779574540161372236187',
-  sqrt2: '4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478001569369176881852378684052287837629389214300655869568685964595155501644724509836896036887323114389415576651040883914292338113206052433629485317049915771756228549741438999188021762430965206564211827316726257539594717255934637238632261482742622208671155839599926521176252698917540988159348640083457085181472231814204070426509056532333398436457865796796519267292399875366617215982578860263363617827495994219403777753681426217738799194551397231274066898329989895386728822856378697749662519966583525776198939322845344735694794962952168891485492538904755828834526096524096542889394538646625744927556381964410316979833061852019379384940057156333720548068540575867999670121372239475821426306585132217408832382947287617393647467837431960001592188807347857617252211867490424977366929207311096369721608933708661156734585334833295254675851644710757848602463600834449114818587655554286455123314219926311332517970608436559704352856410087918500760361009159465670676883605571740076756905096136719401324935605240185999105062108163597726431380605467010293569971042425105781749531057255934984451126922780344913506637568747760283162829605532422426957534529028838768446429173282770888318087025339852338122749990812371892540726475367850304821591801886167108972869229201197599880703818543332536460211082299279293072871780799888099176741774108983060800326311816427988231171',
-  phi: '6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374847540880753868917521266338622235369317931800607667263544333890865959395829056383226613199282902678806752087668925017116962070322210432162695486262963136144381497587012203408058879544547492461856953648644492410443207713449470495658467885098743394422125448770664780915884607499887124007652170575179788341662562494075890697040002812104276217711177780531531714101170466659914669798731761356006708748071013179523689427521948435305678300228785699782977834784587822891109762500302696156170025046433824377648610283831268330372429267526311653392473167111211588186385133162038400522216579128667529465490681131715993432359734949850904094762132229810172610705961164562990981629055520852479035240602017279974717534277759277862561943208275051312181562855122248093947123414517022373580577278616008688382952304592647878017889921990270776903895321968198615143780314997411069260886742962267575605231727775203536139362107673893764556060605921658946675955190040055590895022953094231248235521221241544400647034056573479766397239494994658457887303962309037503399385621024236902513868041457799569812244574717803417312645322041639723213404444948730231541767689375210306873788034417009395440962795589867872320951242689355730970450959568440175551988192180206405290551893494759260073485228210108819464454422231889131929468962200230144377026992300780308526118075451928877050210968424936271359251876077788466583615023891349333312231053392321362431926372891067050339928226526355620902979864247275977256550861548754357482647181414512700060238901620777322449943530889990950168032811219432048196438767586331479857191139781539780747615077221175082694586393204565209896985556781410696837288405874610337810544439094368358358138113116899385557697548414914453415091295407005019477548616307542264172939468036731980586183391832859913039607201445595044977921207612478564591616083705949878600697018940988640076443617093341727091914336501371576601148038143062623805143211734815100559013456101180079050638142152709308588092875703450507808145458819906336129827981411745339273120809289727922213298064294687824274874017450554067787570832373109759151177629784432847479081765180977872684161176325038612112914368343767023503711163307258698832587103363222381098090121101989917684149175123313401527338438372345009347860497929459915822012581045982309255287212413704361491020547185549611808764265765110605458814756044317847985845397312863016254487611485'
-};
-const PRIME_NUMBERS = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499];
-
-// ══════════════════════════════════════════════════════════
-// ENUMS
-// ══════════════════════════════════════════════════════════
-const SimulationMode = { STANDARD:'standard', CRYSTAL:'crystal', HARMONIC:'harmonic', TOPOLOGY:'topology' };
-const TranscendentalNumber = { PI:'pi', E:'e', SQRT2:'sqrt2', PHI:'phi' };
-
-// ══════════════════════════════════════════════════════════
-// PHYSICS CONSTANTS
-// ══════════════════════════════════════════════════════════
-const SIMULATION_EXTENT = 15;
-const WAVE_STRENGTH = 2.5;
-const VELOCITY_DAMPING = 0.98;
-const MAX_PARTICLES = 1000000;
-
-// ══════════════════════════════════════════════════════════
-// ICON COMPONENTS (SVG replacements for lucide-react)
-// ══════════════════════════════════════════════════════════
-const Icon = ({d, size=24, ...props}) => h('svg', {width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round',...props}, h('path',{d}));
-const SettingsIcon = (p) => h(Icon, {...p, d:'M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z'});
-const WavesIcon = (p) => h('svg', {width:p.size||24,height:p.size||24,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,className:p.className}, h('path',{d:'M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1'}), h('path',{d:'M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1'}), h('path',{d:'M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1'}));
-const FlaskIcon = (p) => h(Icon, {...p, d:'M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2 M8.5 2h7 M7 16h10'});
-const CameraIcon = (p) => h(Icon, {...p, d:'M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'});
-const PlayIcon = (p) => h(Icon, {...p, d:'M6 4l12 8-12 8V4z'});
-const PauseIcon = (p) => h(Icon, {...p, d:'M6 4h4v16H6zM14 4h4v16h-4z'});
-const RotateIcon = (p) => h(Icon, {...p, d:'M1 4v6h6 M23 20v-6h-6 M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15'});
-const EyeIcon = (p) => h(Icon, {...p, d:'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z'});
-const TimerIcon = (p) => h(Icon, {...p, d:'M12 6v6l4 2 M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'});
-const GridIcon = (p) => h(Icon, {...p, d:'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z'});
-
-// ══════════════════════════════════════════════════════════
-// BOUNDARY COMPONENT
-// ══════════════════════════════════════════════════════════
-function Boundary() {
-  const geo = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(SIMULATION_EXTENT*2, SIMULATION_EXTENT*2, SIMULATION_EXTENT*2)), []);
-  return h('lineSegments', null,
-    h('primitive', {object: geo, attach:'geometry'}),
-    h('lineBasicMaterial', {color:'#4A90E2', transparent:true, opacity:0.3})
-  );
-}
-
-// ══════════════════════════════════════════════════════════
-// PARTICLE SYSTEM
-// ══════════════════════════════════════════════════════════
-function ParticleSystem({ config, digitRefs }) {
-  const meshRef = useRef(null);
-  const velocitiesRef = useRef(null);
-  const currentPosRef = useRef(0);
-  const lastFrameTimeRef = useRef(0);
-
-  const initParticles = (pos, col, vel) => {
-    const gridSize = Math.ceil(Math.cbrt(MAX_PARTICLES));
-    const spacing = SIMULATION_EXTENT / gridSize;
-    const offset = SIMULATION_EXTENT / 2;
-    for (let i = 0; i < MAX_PARTICLES; i++) {
-      const x = (i % gridSize) * spacing - offset;
-      const y = (Math.floor(i / gridSize) % gridSize) * spacing - offset;
-      const z = Math.floor(i / (gridSize * gridSize)) * spacing - offset;
-      pos[i*3] = x + (Math.random()-0.5)*0.5;
-      pos[i*3+1] = y + (Math.random()-0.5)*0.5;
-      pos[i*3+2] = z + (Math.random()-0.5)*0.5;
-      col[i*3]=1; col[i*3+1]=1; col[i*3+2]=1;
-      vel[i*3]=0; vel[i*3+1]=0; vel[i*3+2]=0;
+  function drawEmbryo(bt) {
+    var i, p0 = Math.min(1, bt / 0.8);
+    /* 1px circular graticule draws itself in */
+    ctx.strokeStyle = '#2A3944';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 86, -Math.PI / 2, -Math.PI / 2 + p0 * TAU);
+    ctx.stroke();
+    for (i = 0; i < 12; i++) {
+      var a = i * TAU / 12;
+      if (a > p0 * TAU) { break; }
+      var aa = a - Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(aa) * 86, cy + Math.sin(aa) * 86);
+      ctx.lineTo(cx + Math.cos(aa) * 91, cy + Math.sin(aa) * 91);
+      ctx.stroke();
     }
-  };
+    /* hairline spindles between parent and child, fading */
+    for (i = spindles.length - 1; i >= 0; i--) {
+      var sp = spindles[i];
+      var age = simTime - sp.t0;
+      if (age > 0.6) { spindles.splice(i, 1); continue; }
+      ctx.strokeStyle = 'rgba(100,232,198,' + (0.4 * (1 - age / 0.6)).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.moveTo(px[sp.a], py[sp.a]);
+      ctx.lineTo(px[sp.b], py[sp.b]);
+      ctx.stroke();
+    }
+    /* cells */
+    var pulse = 1 + 0.25 * Math.sin(simTime * 6);
+    for (i = 0; i < aliveN; i++) {
+      var r = (aliveN === 1 ? 6 * pulse : 4);
+      ctx.fillStyle = 'rgba(100,232,198,0.10)';
+      ctx.beginPath(); ctx.arc(px[i], py[i], r * 2.6, 0, TAU); ctx.fill();
+      ctx.fillStyle = 'rgba(100,232,198,0.85)';
+      ctx.beginPath(); ctx.arc(px[i], py[i], r, 0, TAU); ctx.fill();
+    }
+  }
 
-  const { positions, colors, velocities } = useMemo(() => {
-    const pos = new Float32Array(MAX_PARTICLES * 3);
-    const col = new Float32Array(MAX_PARTICLES * 3);
-    const vel = new Float32Array(MAX_PARTICLES * 3);
-    initParticles(pos, col, vel);
-    return { positions: pos, colors: col, velocities: vel };
-  }, []);
-
-  useEffect(() => {
-    if (config.resetTrigger > 0) {
-      initParticles(positions, colors, velocities);
-      if (meshRef.current) {
-        meshRef.current.geometry.attributes.position.needsUpdate = true;
-        meshRef.current.geometry.attributes.color.needsUpdate = true;
+  /* ── stage progression + boot spawning ────────────────────────────── */
+  function stepBoot(dt) {
+    var bt = simTime - bootStart;
+    var newStage = bt < 0.8 ? 0 : bt < 2.0 ? 1 : bt < 3.5 ? 2 : bt < 5.0 ? 3 : 4;
+    stage = newStage;
+    growUI(bt);
+    if (stage === 1) {
+      /* divisions snap to digit ticks: 1→2→3→5→8→13→21 */
+      if (digitTick !== lastDivTick && fibIdx < FIB.length - 1) {
+        lastDivTick = digitTick;
+        divideCells(seqDigit('pi', cursor));
       }
     }
-  }, [config.resetTrigger]);
+    if (stage === 2) {
+      while (fibIdx < FIB.length - 1) { divideCells(seqDigit('pi', cursor)); }
+      var target2 = 21 + Math.floor((bt - 2.0) / 1.5 * 579);
+      while (aliveN < Math.min(600, target2)) {
+        var pIdx = Math.floor(Math.random() * aliveN);
+        spawn(px[pIdx] + (Math.random() - 0.5) * 60,
+              py[pIdx] + (Math.random() - 0.5) * 60, aliveN & 3);
+      }
+    }
+    if (stage === 3) {
+      var target3 = 600 + Math.floor((bt - 3.5) / 1.5 * (fullN - 600));
+      var burst = 0;
+      while (aliveN < Math.min(fullN, target3) && burst < 900) {
+        burst++;
+        if (Math.random() < 0.5 && aliveN > 0) {
+          var q = Math.floor(Math.random() * aliveN);
+          spawn(px[q] + (Math.random() - 0.5) * 90,
+                py[q] + (Math.random() - 0.5) * 90, aliveN & 3);
+        } else {
+          spawn(Math.random() * W, Math.random() * H, aliveN & 3);
+        }
+      }
+    }
+    if (stage === 4) {
+      while (aliveN < fullN) { spawn(Math.random() * W, Math.random() * H, aliveN & 3); }
+      birthUI(bt);
+      if (bt >= 6.0) {
+        booting = false;
+        bootlogHideAt = simTime + 1.6;
+        try { sessionStorage.setItem('helios-ontogeny', '1'); } catch (e4) {}
+        updateFigcap();
+      }
+    }
+    renderBootlog(bt, true);
+  }
 
-  useEffect(() => {
-    if (meshRef.current) meshRef.current.geometry.setDrawRange(0, config.particleCount);
-  }, [config.particleCount]);
+  /* ── main loop ────────────────────────────────────────────────────── */
+  var running = false, rafId = 0, lastTs = 0, simTime = 0;
 
-  useEffect(() => {
-    velocitiesRef.current = velocities;
-    currentPosRef.current = 0;
-  }, [velocities]);
+  function frame(ts) {
+    rafId = requestAnimationFrame(frame);
+    if (bkTickArmed && vpFrame) {          /* bracket held one frame only */
+      vpFrame.classList.remove('bk-tick');
+      bkTickArmed = false;
+    }
+    var dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    if (!(dt > 0) || dt > 0.05) { dt = 0.016; }
+    simTime += dt;
+    clockSec += dt;
+    var inst = 1 / dt;
+    emaFps = emaFps > 0 ? emaFps + (inst - emaFps) * 0.05 : inst;
 
-  const getDigit = (dimIndex, pos) => {
-    let offset = 0, seqKey = '';
-    if (dimIndex === 0) { offset = config.stagger.a; seqKey = config.mapping.a; }
-    else if (dimIndex === 1) { offset = config.stagger.b; seqKey = config.mapping.b; }
-    else { offset = config.stagger.c; seqKey = config.mapping.c; }
-    const staggeredPos = Math.max(0, (pos + offset) % SEQUENCE_LENGTH);
-    const seq = DIGIT_SEQUENCES[seqKey];
-    if (!seq) return (staggeredPos + dimIndex) % 10;
-    const digitChar = seq[staggeredPos % seq.length];
-    return parseInt(digitChar || '0');
-  };
+    /* fixed-rate digit consumption */
+    digitAcc += dt * DIGITS_PER_SEC;
+    while (digitAcc >= 1) { digitAcc -= 1; consumeDigit(); }
 
-  useFrame((state) => {
-    if (!meshRef.current || !velocitiesRef.current) return;
-    const now = state.clock.elapsedTime * 1000;
-    const posAttr = meshRef.current.geometry.attributes.position;
-    const colAttr = meshRef.current.geometry.attributes.color;
-    const pos = posAttr.array;
-    const cols = colAttr.array;
-    const vels = velocitiesRef.current;
+    /* emitters: golden-angle ring just off-screen, params eased */
+    var lam = 1 - Math.exp(-dt * 4);
+    var spin = simTime * 0.004;
+    for (var k = 0; k < 4; k++) {
+      var em = emitters[k];
+      var lampEl = $('lamp-' + em.key);
+      em.ampT = (!lampEl || lampEl.getAttribute('aria-pressed') === 'true') ? 1 : 0;
+      em.amp += (em.ampT - em.amp) * lam;
+      em.kw += (em.kwT - em.kw) * lam;
+      em.om += (em.omT - em.om) * lam;
+      em.ph += (em.phT - em.ph) * lam;
+      var ang = spin + k * GOLDEN_ANGLE;
+      em.x = cx + Math.cos(ang) * ringR;
+      em.y = cy + Math.sin(ang) * ringR;
+    }
+    if (simTime - lastPointerMove > 4) { pointerSrc.ampT = 0; }
+    pointerSrc.amp += (pointerSrc.ampT - pointerSrc.amp) * lam;
+    forceMult += (forceMultT - forceMult) * (1 - Math.exp(-dt * 2.5));
 
-    if (config.isPlaying && now - lastFrameTimeRef.current > (1000 / config.speed)) {
-      currentPosRef.current++;
-      lastFrameTimeRef.current = now;
-      if (digitRefs) {
-        const m = getDigit(0, currentPosRef.current);
-        const n = getDigit(1, currentPosRef.current);
-        const p = getDigit(2, currentPosRef.current);
-        const e = m*m + n*n + p*p;
-        if (digitRefs.m.current) digitRefs.m.current.innerText = m.toString();
-        if (digitRefs.n.current) digitRefs.n.current.innerText = n.toString();
-        if (digitRefs.p.current) digitRefs.p.current.innerText = p.toString();
-        if (digitRefs.pos.current) digitRefs.pos.current.innerText = currentPosRef.current.toLocaleString();
-        if (digitRefs.energy.current) digitRefs.energy.current.innerText = e.toString();
+    if (booting) { stepBoot(dt); }
+    else if (bootlogVisible && simTime > bootlogHideAt) {
+      bootlogVisible = false;
+      if (bootlogEl) { bootlogEl.hidden = true; }
+    }
+
+    physicsAndRender(dt, 0);
+
+    /* per-frame mean |u| → --breath */
+    var target = meanAbsV * 1.5;
+    if (target > 1) { target = 1; }
+    breath += (target - breath) * 0.06;
+    if (Math.abs(breath - lastBreathWritten) > 0.004) {
+      lastBreathWritten = breath;
+      HELIOS.setBreath(breath.toFixed(3));
+    }
+
+    /* adaptive N: degrade by measured FPS, always report true N */
+    if (!booting) {
+      adaptFrames++;
+      if (adaptFrames >= 120) {
+        adaptFrames = 0;
+        if (emaFps > 0 && emaFps < 45 && aliveN > 1500) {
+          aliveN = Math.max(1500, Math.floor(aliveN * 0.8));
+          fullN = aliveN;
+          updateFigcap();
+        }
       }
     }
 
-    const mDigit = getDigit(0, currentPosRef.current);
-    const nDigit = getDigit(1, currentPosRef.current);
-    const pDigit = getDigit(2, currentPosRef.current);
-    const energySum = mDigit*mDigit + nDigit*nDigit + pDigit*pDigit;
-    const standardizedMode = energySum / 3;
-    const waveNumber = Math.PI / SIMULATION_EXTENT;
-    const phaseM = (mDigit/9)*Math.PI;
-    const phaseN = (nDigit/9)*Math.PI;
-    const phaseP = (pDigit/9)*Math.PI;
+    if (probeOn) { updateProbe(simTime); }
+    pushTelemetry(simTime);
+  }
+  var lastBreathWritten = -1;
 
-    const activeMode = config.mode;
-    const { crystal, harmonic, topology } = config.extensions;
-    const isCrystal = activeMode === 'crystal';
-    const isHarmonic = activeMode === 'harmonic';
-    const isTopology = activeMode === 'topology';
-    const forceMultiplier = WAVE_STRENGTH * standardizedMode * config.amplitude;
+  function pauseLoop() {
+    if (!running) { return; }
+    running = false;
+    cancelAnimationFrame(rafId);
+  }
+  function resumeLoop() {
+    if (running || reducedMotion) { return; }
+    running = true;
+    lastTs = performance.now();
+    rafId = requestAnimationFrame(frame);
+  }
 
-    const getStrength = (val) => Math.pow(val, 4) * 20.0;
-    const sThreeFold = getStrength(crystal.threeFold);
-    const sSixFold = getStrength(crystal.sixFold);
-    const sLattice = getStrength(crystal.lattice);
-    const sComma = getStrength(harmonic.commaSpiral);
-    const sFifths = getStrength(harmonic.perfectFifths);
-    const sTrefoil = getStrength(topology.trefoil);
-    const sTorus = getStrength(topology.torus);
-    const sHopf = getStrength(topology.hopf);
-    const spiralPhase = currentPosRef.current * 0.0011;
-    const sCommaSin = sComma * Math.sin(spiralPhase);
-
-    for (let i = 0; i < config.particleCount; i++) {
-      const i3 = i * 3;
-      let x = pos[i3], y = pos[i3+1], z = pos[i3+2];
-      let forceX = 0, forceY = 0, forceZ = 0;
-
-      if (sThreeFold > 0) {
-        const r = Math.sqrt(x*x+y*y); const angle = Math.atan2(y,x);
-        const snap = Math.round(angle/2.0944)*2.0944;
-        forceX += (r*Math.cos(snap)-x)*sThreeFold; forceY += (r*Math.sin(snap)-y)*sThreeFold;
+  /* ── reduced motion: one honestly computed static frame ───────────── */
+  function staticFrame(reseed, showLog) {
+    if (reseed) { aliveN = 0; }
+    seedUniform(fullN);
+    stage = 4;
+    var subDt = 1 / 60;
+    for (var s = 0; s < 240; s++) {
+      if (s % 10 === 0) {
+        consumeDigit();
+        for (var k = 0; k < 4; k++) {      /* snap params — no easing */
+          var em = emitters[k];
+          em.amp = 1; em.kw = em.kwT; em.om = em.omT; em.ph = em.phT;
+          var ang = k * GOLDEN_ANGLE;
+          em.x = cx + Math.cos(ang) * ringR;
+          em.y = cy + Math.sin(ang) * ringR;
+        }
+        forceMult = forceMultT;
       }
-      if (sSixFold > 0) {
-        const r = Math.sqrt(x*x+y*y); const angle = Math.atan2(y,x);
-        const snap = Math.round(angle/1.0472)*1.0472;
-        forceX += (r*Math.cos(snap)-x)*sSixFold; forceY += (r*Math.sin(snap)-y)*sSixFold;
-      }
-      if (sLattice > 0) {
-        const a = SIMULATION_EXTENT/3;
-        forceX += (a*Math.round(x/a)-x)*sLattice; forceY += (a*0.866*Math.round(y/(a*0.866))-y)*sLattice;
-      }
-      if (sComma > 0) { forceX += y*sCommaSin; forceY += -x*sCommaSin; }
-      if (sFifths > 0) {
-        forceX += Math.sin(x*1.5*waveNumber)*sFifths;
-        forceY += Math.sin(y*1.5*waveNumber)*sFifths;
-        forceZ += Math.sin(z*1.5*waveNumber)*sFifths;
-      }
-      if (sTrefoil > 0) {
-        const t = Math.atan2(y,x)*0.15915; const s = SIMULATION_EXTENT*0.5; const t2 = t*6.283;
-        forceX += (s*(Math.sin(t2)+2*Math.sin(2*t2))-x)*sTrefoil;
-        forceY += (s*(Math.cos(t2)-2*Math.cos(2*t2))-y)*sTrefoil;
-        forceZ += (s*(-Math.sin(3*t2))-z)*sTrefoil;
-      }
-      if (sTorus > 0) {
-        const R = SIMULATION_EXTENT*0.6; const r = SIMULATION_EXTENT*0.25;
-        const theta = Math.atan2(y,x); const d = Math.sqrt(x*x+y*y);
-        const phi = Math.atan2(z,d-R); const tr = R+r*Math.cos(phi);
-        forceX += (tr*Math.cos(theta)-x)*sTorus; forceY += (tr*Math.sin(theta)-y)*sTorus;
-        forceZ += (r*Math.sin(phi)-z)*sTorus;
-      }
-
-      const wx = mDigit*x*waveNumber+phaseM;
-      const wy = nDigit*y*waveNumber+phaseN;
-      const wz = pDigit*z*waveNumber+phaseP;
-      const k = waveNumber * forceMultiplier * 0.1;
-      forceX += (mDigit*Math.sin(wx)*Math.cos(wy)*Math.cos(wz))*k;
-      forceY += (Math.cos(wx)*nDigit*Math.sin(wy)*Math.cos(wz))*k;
-      forceZ += (Math.cos(wx)*Math.cos(wy)*pDigit*Math.sin(wz))*k;
-
-      vels[i3] += forceX; vels[i3+1] += forceY; vels[i3+2] += forceZ;
-      vels[i3] *= VELOCITY_DAMPING; vels[i3+1] *= VELOCITY_DAMPING; vels[i3+2] *= VELOCITY_DAMPING;
-      x += vels[i3]; y += vels[i3+1]; z += vels[i3+2];
-
-      const d2 = x*x+y*y+z*z;
-      if (d2 > SIMULATION_EXTENT*SIMULATION_EXTENT) {
-        const scale = SIMULATION_EXTENT/Math.sqrt(d2);
-        x *= scale; y *= scale; z *= scale;
-        vels[i3] *= -0.5; vels[i3+1] *= -0.5; vels[i3+2] *= -0.5;
-      }
-      pos[i3] = x; pos[i3+1] = y; pos[i3+2] = z;
-
-      const brightness = config.quality * 0.7;
-      if (isCrystal) {
-        const an = (Math.atan2(y,x)+Math.PI)*0.15915;
-        cols[i3]=0.3+an*brightness; cols[i3+1]=0.2+(1-an)*brightness*0.8; cols[i3+2]=0.4+Math.abs(z/SIMULATION_EXTENT)*brightness;
-      } else if (isHarmonic) {
-        const ph = (x+y+z)*0.1;
-        cols[i3]=0.5+0.5*Math.sin(ph)*brightness; cols[i3+1]=0.5+0.5*Math.sin(ph+2.09)*brightness; cols[i3+2]=0.5+0.5*Math.sin(ph+4.18)*brightness;
-      } else if (isTopology) {
-        const r = Math.sqrt(x*x+y*y);
-        cols[i3]=0.3+(r/SIMULATION_EXTENT)*brightness; cols[i3+1]=0.3+Math.abs(Math.sin(Math.atan2(y,x)*3))*brightness; cols[i3+2]=0.3+Math.abs(z/SIMULATION_EXTENT)*brightness;
-      } else {
-        cols[i3]=0.3+Math.abs(Math.cos(mDigit*x*0.2))*brightness;
-        cols[i3+1]=0.2+Math.abs(Math.cos(nDigit*y*0.2))*brightness*0.8;
-        cols[i3+2]=0.4+Math.abs(Math.cos(pDigit*z*0.2))*brightness*0.9;
-      }
+      simTime += subDt;
+      needsOpaqueClear = true;             /* keep the warm-up invisible */
+      physicsAndRender(subDt, 0);
     }
-    posAttr.needsUpdate = true; colAttr.needsUpdate = true;
+    needsOpaqueClear = true;
+    physicsAndRender(subDt, 3);            /* single visible frame       */
+    HELIOS.setBreath(Math.min(1, meanAbsV * 1.5).toFixed(3));
+    if (tele.n) { tele.n.textContent = fmtN(aliveN); }
+    if (tele.fps) { tele.fps.textContent = 'HELD'; }
+    if (tele.energy) { tele.energy.textContent = meanSs.toFixed(3); }
+    if (tele.epoch) { tele.epoch.textContent = String(Math.floor(totalDigits / SEQUENCE_LENGTH)).padStart(2, '0'); }
+    if (tele.clock) { tele.clock.textContent = 'HELD'; }
+    if (tele.stage) { tele.stage.textContent = STAGE_LABEL[4] + ' · STATIC'; }
+    if (bootlogEl && showLog) {            /* boot log printed static    */
+      bootLines = mkBootLines();
+      bootlogVisible = true;
+      bootlogEl.hidden = false;
+      renderBootlog(99, false);
+      setTimeout(function () {
+        bootlogVisible = false;
+        bootlogEl.hidden = true;
+      }, 6000);
+    }
+    updateFigcap();
+    if (fallback) { fallback.style.opacity = '0'; }
+  }
+
+  /* ── ignition ─────────────────────────────────────────────────────── */
+  window.addEventListener('resize', function () {
+    sizeCanvas();
+    if (reducedMotion) { staticFrame(false, false); }
   });
+  sizeCanvas();
+  consumeDigit();                          /* the stream starts at once  */
 
-  const baseOpacity = 0.6 + (config.quality * 0.2);
-  const densityFactor = Math.sqrt(config.particleCount / 10000);
-  const opacity = Math.max(0.02, baseOpacity / densityFactor);
-  const size = 0.08 * Math.sqrt(50000 / config.particleCount) * config.quality;
-
-  return h('points', {ref: meshRef},
-    h('bufferGeometry', null,
-      h('bufferAttribute', {attach:'attributes-position', count:positions.length/3, array:positions, itemSize:3}),
-      h('bufferAttribute', {attach:'attributes-color', count:colors.length/3, array:colors, itemSize:3})
-    ),
-    h('pointsMaterial', {vertexColors:true, size, transparent:true, opacity, blending:THREE.AdditiveBlending, sizeAttenuation:true, depthWrite:false})
-  );
-}
-
-// ══════════════════════════════════════════════════════════
-// CAMERA CONTROLLER
-// ══════════════════════════════════════════════════════════
-function CameraController({ target, setTarget }) {
-  const { camera, controls } = useThree();
-  const vec = useMemo(() => new THREE.Vector3(), []);
-  useFrame(() => {
-    if (target) {
-      vec.set(...target.position);
-      camera.position.lerp(vec, 0.05);
-      if (controls) controls.target.lerp(new THREE.Vector3(...target.target), 0.05);
-      if (camera.position.distanceTo(vec) < 0.1) setTarget(null);
-    }
-  });
-  return h(OrbitControls, {enableDamping:true, dampingFactor:0.05, minDistance:1, maxDistance:100, onStart:() => setTarget(null)});
-}
-
-function ExposureController({ exposure }) {
-  const { gl } = useThree();
-  useFrame(() => { gl.toneMappingExposure = exposure; });
-  return null;
-}
-
-function ResponsiveCamera() {
-  const { camera, size } = useThree();
-  useEffect(() => {
-    const aspect = size.width / size.height;
-    camera.fov = aspect < 1 ? 100 : 60;
-    camera.updateProjectionMatrix();
-  }, [size, camera]);
-  return null;
-}
-
-// ══════════════════════════════════════════════════════════
-// UI COMPONENTS
-// ══════════════════════════════════════════════════════════
-function NavItem({ icon, label, active, onClick }) {
-  return h('button', {
-    onClick,
-    className: 'flex flex-col items-center justify-center w-[60px] h-[60px] rounded-2xl transition-all duration-300 ' + (active ? 'bg-primary text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110' : 'bg-glass text-white/70 hover:bg-white/10')
-  },
-    h('div', {className:'z-10 flex flex-col items-center'},
-      icon, h('span', {className:'text-[10px] font-bold uppercase tracking-wide mt-1'}, label)
-    )
-  );
-}
-
-function Panel({ title, subtitle, active, onClose, children, onResetParticles, onResetDefaults }) {
-  if (!active) return null;
-  return h('div', {className:'fixed bottom-[90px] left-0 md:left-10 right-0 md:right-auto md:w-[400px] w-full md:max-h-[calc(100vh-120px)] max-h-[60vh] glass-panel rounded-t-2xl md:rounded-2xl z-40 flex flex-col shadow-2xl'},
-    h('div', {className:'bg-black/80 backdrop-blur-xl p-5 border-b border-white/10 z-50 flex justify-between items-start rounded-t-2xl shrink-0'},
-      h('div', null,
-        h('h2', {className:'text-xl font-bold text-white tracking-tight'}, title),
-        h('p', {className:'text-xs text-white/60 font-medium'}, subtitle)
-      ),
-      h('div', {className:'flex items-center gap-2'},
-        onResetParticles && h('button', {onClick:onResetParticles, className:'p-2 rounded-lg bg-white/5 hover:bg-white/10 text-emerald-400'}, h(RotateIcon, {size:14})),
-        onResetDefaults && h('button', {onClick:onResetDefaults, className:'p-2 rounded-lg bg-white/5 hover:bg-white/10 text-rose-400'}, h(RotateIcon, {size:14})),
-        h('button', {onClick:onClose, className:'p-2 text-white/50 hover:text-white text-2xl leading-none ml-2'}, '\u00d7')
-      )
-    ),
-    h('div', {className:'p-5 space-y-6 overflow-y-auto flex-1 rounded-b-2xl'},
-      children,
-      h('div', {className:'mt-8 pt-6 border-t border-white/10 flex flex-col items-center gap-1 opacity-80'},
-        h('a', {href:'https://github.com/mrdirno/nested-resonance-memory-archive', target:'_blank', rel:'noopener noreferrer', className:'text-[10px] font-mono text-white tracking-widest hover:underline drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]'}, 'github.com/mrdirno/nested-resonance-memory-archive')
-      )
-    )
-  );
-}
-
-// ══════════════════════════════════════════════════════════
-// APP
-// ══════════════════════════════════════════════════════════
-function App() {
-  const [activePanel, setActivePanel] = useState(null);
-  const [cameraTarget, setCameraTarget] = useState(null);
-  const digitRefs = {
-    m: useRef(null), n: useRef(null), p: useRef(null), pos: useRef(null), energy: useRef(null)
-  };
-
-  const [config, setConfig] = useState({
-    particleCount: 350000, isPlaying: true, speed: 1, quality: 2.0, amplitude: 1.0, exposure: 3.0, contrast: 1.0,
-    mode: 'standard',
-    mapping: { a: 'phi', b: 'phi', c: 'pi' },
-    stagger: { a: 0, b: 239, c: 478 },
-    extensions: {
-      crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
-      harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
-      topology: { trefoil: 0, torus: 0, hopf: 0 }
-    },
-    cameraStats: { x:'0', y:'0', z:'0', dist:'25' },
-    resetTrigger: 0
-  });
-
-  const handleRange = (key, val) => setConfig(prev => ({ ...prev, [key]: val }));
-
-  // Build the app tree
-  return h('div', {className:'w-full h-screen relative overflow-hidden select-none'},
-
-    // 3D Canvas
-    h(Canvas, {camera:{position:[20,10,20], fov:60}, dpr:2, gl:{antialias:false, powerPreference:'high-performance', toneMapping:THREE.AgXToneMapping, toneMappingExposure:1.0}},
-      h('fog', {attach:'fog', args:['#000000', 10, 80]}),
-      h('ambientLight', {intensity:0.4, color:'#404080'}),
-      h('directionalLight', {position:[10,10,5], intensity:1, color:'#8A2BE2'}),
-      h(Stars, {radius:100, depth:50, count:5000, factor:4, saturation:0, fade:true, speed:1}),
-      h(Boundary),
-      h(ParticleSystem, {config, digitRefs}),
-      h(CameraController, {target:cameraTarget, setTarget:setCameraTarget}),
-      h(ExposureController, {exposure:config.exposure}),
-      h(ResponsiveCamera)
-    ),
-
-    // Header
-    h('div', {className:'fixed top-0 left-0 w-full h-[100px] flex flex-col items-center justify-center z-20 pointer-events-none bg-gradient-to-b from-black/90 to-transparent pt-2'},
-      h('h1', {className:'text-3xl md:text-4xl font-black uppercase tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]'},
-        'HELIOS ', h('span', {className:'text-white/30 font-light'}, '|'), ' BRIDGE'
-      ),
-      h('div', {className:'mt-2 pointer-events-auto'},
-        h('a', {href:'https://github.com/mrdirno/nested-resonance-memory-archive', target:'_blank', className:'text-xs md:text-sm font-mono font-bold tracking-widest text-white hover:text-white/80 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]'}, 'github.com/mrdirno/nested-resonance-memory-archive')
-      )
-    ),
-
-    // Controls Panel
-    h(Panel, {title:'System Controls', subtitle:'Configure potential field dynamics', active:activePanel==='controls', onClose:()=>setActivePanel(null),
-      onResetParticles:()=>setConfig(c=>({...c, resetTrigger:c.resetTrigger+1})),
-      onResetDefaults:()=>setConfig(c=>({...c, speed:1, quality:1, amplitude:1, exposure:0.5, particleCount:100000}))},
-      h('div', {className:'flex gap-3'},
-        h('button', {onClick:()=>setConfig(c=>({...c,isPlaying:!c.isPlaying})), className:'flex-1 py-4 rounded-xl font-bold text-sm text-white shadow-lg bg-gradient-to-br from-primary to-violet-700 flex items-center justify-center gap-2'},
-          config.isPlaying ? h(PauseIcon, {size:18}) : h(PlayIcon, {size:18}), config.isPlaying ? 'PAUSE' : 'RESUME'),
-        h('button', {onClick:()=>window.location.reload(), className:'flex-1 py-4 rounded-xl font-bold text-sm text-white shadow-lg bg-gradient-to-br from-secondary to-pink-600 flex items-center justify-center gap-2'},
-          h(RotateIcon, {size:18}), 'RELOAD')
-      ),
-      h('div', {className:'bg-white/5 p-3 rounded-xl border border-white/10'},
-        h('div', {className:'flex justify-between text-sm font-bold mb-2 text-white/80'},
-          h('span', {className:'flex items-center gap-2'}, h(TimerIcon, {size:14}), 'Phase Duration'),
-          h('span', {className:'font-mono text-primary'}, (1000/config.speed).toFixed(0)+' ms')
-        ),
-        h('input', {type:'range', min:16, max:3000, step:10, value:1000/config.speed, onChange:e=>handleRange('speed',1000/parseFloat(e.target.value)), className:'w-full'})
-      ),
-      h('div', {className:'bg-white/5 p-3 rounded-xl border border-white/10'},
-        h('div', {className:'flex justify-between text-sm font-bold mb-2 text-secondary'},
-          h('span', {className:'flex items-center gap-2'}, h(EyeIcon, {size:14}), 'Existence Threshold'),
-          h('span', {className:'font-mono'}, config.exposure.toFixed(2))
-        ),
-        h('input', {type:'range', min:0, max:3, step:0.05, value:config.exposure, onChange:e=>handleRange('exposure',parseFloat(e.target.value)), className:'w-full'})
-      ),
-      h('div', null,
-        h('div', {className:'flex justify-between text-sm font-semibold mb-2'}, h('span',null,'Particle Density'), h('span',{className:'text-primary font-mono'},config.particleCount.toLocaleString())),
-        h('input', {type:'range', min:10000, max:1000000, step:10000, value:config.particleCount, onChange:e=>handleRange('particleCount',parseInt(e.target.value)), className:'w-full'})
-      ),
-      h('div', null,
-        h('div', {className:'flex justify-between text-sm font-semibold mb-2'}, h('span',null,'Visual Quality'), h('span',{className:'text-primary font-mono'},config.quality.toFixed(1)+'x')),
-        h('input', {type:'range', min:0.1, max:2, step:0.1, value:config.quality, onChange:e=>handleRange('quality',parseFloat(e.target.value)), className:'w-full'})
-      ),
-      h('div', null,
-        h('div', {className:'flex justify-between text-sm font-semibold mb-2'}, h('span',null,'Field Amplitude'), h('span',{className:'text-primary font-mono'},config.amplitude.toFixed(1)+'x')),
-        h('input', {type:'range', min:0.1, max:100, step:0.1, value:config.amplitude, onChange:e=>handleRange('amplitude',parseFloat(e.target.value)), className:'w-full'})
-      ),
-      h('div', {className:'grid grid-cols-2 gap-3 pt-2'},
-        ...['standard','crystal','harmonic','topology'].map(mode =>
-          h('button', {key:mode, onClick:()=>setConfig(c=>({...c,mode})),
-            className:'py-3 rounded-xl text-xs font-bold uppercase border transition-all '+(config.mode===mode?'bg-success/20 border-success text-success':'bg-black/30 border-transparent text-white/60')}, mode)
-        )
-      )
-    ),
-
-    // Waves Panel
-    h(Panel, {title:'Potential Field', subtitle:'2500-digit sequences driving Ψ(r,t)', active:activePanel==='waves', onClose:()=>setActivePanel(null),
-      onResetParticles:()=>setConfig(c=>({...c,resetTrigger:c.resetTrigger+1})),
-      onResetDefaults:()=>setConfig(c=>({...c,mapping:{a:'phi',b:'phi',c:'pi'},stagger:{a:0,b:239,c:478}}))},
-      h('div', {className:'relative overflow-hidden rounded-xl bg-black/50 border border-white/10 p-4 font-mono text-sm leading-relaxed'},
-        h('div', {className:'absolute inset-0 bg-gradient-to-tr from-primary/20 via-secondary/20 to-tertiary/20 opacity-50 animate-pulse'}),
-        h('div', {className:'relative z-10 space-y-2'},
-          h('div', {className:'flex items-center gap-3'}, h('span',{className:'text-primary font-bold w-6'},'A:'), h('span',{ref:digitRefs.m, className:'bg-primary text-black font-bold px-2 rounded shadow-[0_0_10px_rgba(124,58,237,0.5)]'},'0')),
-          h('div', {className:'flex items-center gap-3'}, h('span',{className:'text-secondary font-bold w-6'},'B:'), h('span',{ref:digitRefs.n, className:'bg-secondary text-black font-bold px-2 rounded shadow-[0_0_10px_rgba(236,72,153,0.5)]'},'0')),
-          h('div', {className:'flex items-center gap-3'}, h('span',{className:'text-tertiary font-bold w-6'},'C:'), h('span',{ref:digitRefs.p, className:'bg-tertiary text-black font-bold px-2 rounded shadow-[0_0_10px_rgba(6,182,212,0.5)]'},'0'))
-        )
-      ),
-      h('div', {className:'bg-black/30 rounded-xl p-4 border border-white/5 space-y-4'},
-        h('div', {className:'text-sm font-bold text-tertiary mb-2'}, 'Transcendental Mapping'),
-        ...['a','b','c'].map(dim =>
-          h('div', {key:dim, className:'flex justify-between items-center'},
-            h('span', {className:'uppercase text-xs font-bold text-white/70'}, 'Dimension '+dim),
-            h('select', {value:config.mapping[dim], onChange:e=>setConfig(c=>({...c,mapping:{...c.mapping,[dim]:e.target.value}})), className:'bg-black border border-white/20 rounded px-3 py-1 text-xs text-white outline-none focus:border-primary'},
-              ...['pi','e','sqrt2','phi'].map(t => h('option', {key:t, value:t}, t.toUpperCase()))
-            )
-          )
-        )
-      ),
-      h('div', {className:'bg-black/30 rounded-xl p-4 border border-white/5'},
-        h('div', {className:'flex justify-between text-sm font-bold mb-2'}, h('span',null,'Prime Spacing'), h('span',{className:'text-primary'},config.stagger.b)),
-        h('input', {type:'range', min:0, max:PRIME_NUMBERS.length-1, onChange:e=>{const val=PRIME_NUMBERS[parseInt(e.target.value)]; setConfig(c=>({...c,stagger:{a:0,b:val,c:val*2}}));}, className:'w-full'}),
-        h('div', {className:'mt-4 grid grid-cols-2 gap-3 text-center'},
-          h('div', {className:'bg-white/5 rounded p-2'}, h('div',{className:'text-[10px] uppercase text-white/50'},'Total Energy'), h('div',{ref:digitRefs.energy, className:'text-xl font-mono font-bold text-secondary'},'0')),
-          h('div', {className:'bg-white/5 rounded p-2'}, h('div',{className:'text-[10px] uppercase text-white/50'},'Cycle Pos'), h('div',{ref:digitRefs.pos, className:'text-xl font-mono font-bold text-primary'},'0'))
-        )
-      )
-    ),
-
-    // Labs Panel
-    h(Panel, {title:'Research Labs', subtitle:'Advanced N-particle dynamics experiments', active:activePanel==='labs', onClose:()=>setActivePanel(null),
-      onResetParticles:()=>setConfig(c=>({...c,resetTrigger:c.resetTrigger+1})),
-      onResetDefaults:()=>setConfig(c=>({...c,extensions:{crystal:{threeFold:0,sixFold:0,lattice:0},harmonic:{commaSpiral:0,perfectFifths:0,equalTemp:0},topology:{trefoil:0,torus:0,hopf:0}}}))},
-      ...[ ['Crystallographic Symmetry','crystal',['3-Fold (120°) Symmetry','threeFold'],['6-Fold (60°) Symmetry','sixFold'],['Hexagonal Lattice','lattice']]
-      ].map(([title,group,...sliders]) =>
-        h('div', {key:group, className:'bg-black/30 p-4 rounded-xl border border-white/5 mb-4'},
-          h('div', {className:'text-tertiary font-bold text-sm mb-3'}, title),
-          ...sliders.map(([label,key]) =>
-            h('div', {key, className:'mb-2'},
-              h('div',{className:'flex justify-between text-xs mb-1'}, h('span',null,label), h('span',{className:'font-mono text-primary'},Math.round(config.extensions[group][key]*100)+'%')),
-              h('input', {type:'range', min:0, max:1, step:0.01, value:config.extensions[group][key],
-                onChange:e=>setConfig(c=>({...c,extensions:{...c.extensions,[group]:{...c.extensions[group],[key]:parseFloat(e.target.value)}}})), className:'w-full'})
-            )
-          )
-        )
-      ),
-      h('div', {className:'bg-black/30 p-4 rounded-xl border border-white/5 mb-4'},
-        h('div', {className:'text-secondary font-bold text-sm mb-3'}, 'Pythagorean Harmonics'),
-        ...[ ['Comma Spiral','commaSpiral'], ['Perfect Fifth Stack','perfectFifths'] ].map(([label,key]) =>
-          h('div', {key, className:'mb-2'},
-            h('div',{className:'flex justify-between text-xs mb-1'}, h('span',null,label), h('span',{className:'font-mono text-primary'},Math.round(config.extensions.harmonic[key]*100)+'%')),
-            h('input', {type:'range', min:0, max:1, step:0.01, value:config.extensions.harmonic[key],
-              onChange:e=>setConfig(c=>({...c,extensions:{...c.extensions,harmonic:{...c.extensions.harmonic,[key]:parseFloat(e.target.value)}}})), className:'w-full'})
-          )
-        )
-      ),
-      h('div', {className:'bg-black/30 p-4 rounded-xl border border-white/5'},
-        h('div', {className:'text-primary font-bold text-sm mb-3'}, 'Topological Forms'),
-        ...[ ['Trefoil Knot','trefoil',0.42], ['Toroidal Attractor','torus',1] ].map(([label,key,max]) =>
-          h('div', {key, className:'mb-2'},
-            h('div',{className:'flex justify-between text-xs mb-1'}, h('span',null,label), h('span',{className:'font-mono text-primary'},Math.round(config.extensions.topology[key]*100)+'%')),
-            h('input', {type:'range', min:0, max, step:0.01, value:config.extensions.topology[key],
-              onChange:e=>setConfig(c=>({...c,extensions:{...c.extensions,topology:{...c.extensions.topology,[key]:parseFloat(e.target.value)}}})), className:'w-full'})
-          )
-        )
-      )
-    ),
-
-    // Camera Panel
-    h(Panel, {title:'Camera Control', subtitle:'Navigate N-particle phase space', active:activePanel==='camera', onClose:()=>setActivePanel(null)},
-      h('div', {className:'grid grid-cols-2 gap-3 mb-6'},
-        ...[ ['Top View',[0,30,0.1]], ['Side View',[30,0,0]], ['Isometric',[20,20,20]], ['Core View',[0.1,0.1,0.1]] ].map(([label,pos]) =>
-          h('button', {key:label, onClick:()=>setCameraTarget({position:pos,target:[0,0,0]}), className:'p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition'}, label)
-        )
-      ),
-      h('button', {onClick:()=>setCameraTarget({position:[20,10,20],target:[0,0,0]}), className:'w-full py-4 rounded-xl font-bold text-sm text-white shadow-lg bg-gradient-to-br from-secondary to-pink-600'}, 'Reset Camera')
-    ),
-
-    // Navigation Bar
-    h('div', {className:'fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50'},
-      h(NavItem, {icon:h(SettingsIcon,{size:24}), label:'Control', active:activePanel==='controls', onClick:()=>setActivePanel(activePanel==='controls'?null:'controls')}),
-      h(NavItem, {icon:h(WavesIcon,{size:24}), label:'Fields', active:activePanel==='waves', onClick:()=>setActivePanel(activePanel==='waves'?null:'waves')}),
-      h(NavItem, {icon:h(FlaskIcon,{size:24}), label:'Labs', active:activePanel==='labs', onClick:()=>setActivePanel(activePanel==='labs'?null:'labs')}),
-      h(NavItem, {icon:h(CameraIcon,{size:24}), label:'Camera', active:activePanel==='camera', onClick:()=>setActivePanel(activePanel==='camera'?null:'camera')})
-    )
-  );
-}
-
-// ══════════════════════════════════════════════════════════
-// MOUNT
-// ══════════════════════════════════════════════════════════
-const root = createRoot(document.getElementById('root'));
-root.render(h(React.StrictMode, null, h(App)));
-</script>
+  if (reducedMotion) {
+    /* boot log prints static once per session; the field itself always draws */
+    staticFrame(true, !seenSession);
+    try { sessionStorage.setItem('helios-ontogeny', '1'); } catch (e5) {}
+    return;
+  }
+  if (fallback) { fallback.style.opacity = '0'; }
+  if (seenSession) {
+    /* once per session: skip morphogenesis, fade the mature field in */
+    seedUniform(fullN);
+    stage = 4;
+    forceMult = forceMultT;
+    updateFigcap();
+    canvas.style.opacity = '0';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { canvas.style.opacity = ''; });
+    });
+    resumeLoop();
+  } else {
+    startBoot();
+    resumeLoop();
+  }
+})();
+  </script>
 </body>
 </html>
