@@ -56,6 +56,7 @@ import { livePath, mixGain, safeLevel, FULL_LEVEL } from './level';
 import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
 import { audibleLength, liveWindowRamps, safeFade, windowFadeSpan } from './windowFade';
 import { lapAdjust, resumeOriginMs } from './playhead';
+import { planAdmission, pixelCost, judgeStall, settleStall, capsForSignals, type StallObservation, type AdmissionCandidate } from './admission';
 import {
   rasterBudgetPx, readDeviceSignals, createSignalCache, createRasterLedger, scaleForBudget, rasterDims,
 } from './rasterBudget';
@@ -217,11 +218,12 @@ export interface StageTurnInput {
 }
 
 export type StageClipState =
-  | 'live'            // admitted and decoding
-  | 'over-clip-cap'   // deferred: too many simultaneous decoders for this device
-  | 'over-pixel-cap'  // deferred: summed source pixels would blow the budget
-  | 'unused'          // no fragment in the current layout shows this clip
-  | 'error';          // the element reported a MediaError; showing stills for good
+  | 'live'               // admitted and decoding
+  | 'over-clip-cap'      // deferred: too many simultaneous decoders for this device
+  | 'over-pixel-cap'     // deferred: summed source pixels would pass the a-priori sanity ceiling
+  | 'over-measured-cap'  // deferred: summed source pixels would reach a load SEEN to stall this session
+  | 'unused'             // no fragment in the current layout shows this clip
+  | 'error';             // the element reported a MediaError; showing stills for good
 
 export interface StageClipStatus {
   id: string;
@@ -283,6 +285,13 @@ export interface StageStatus {
   deferredCount: number;
   maxLiveClips: number;
   maxLivePixels: number;
+  /**
+   * THE MEASURED CEILING — the lowest summed source-pixel load at which a
+   * decoder was SEEN to stall this session (`lib/admission.ts`); 0 until one
+   * is. Surfaced so a test or a dock can tell "deferred by a rule" from
+   * "deferred by a measurement".
+   */
+  measuredLivePixels: number;
   clips: StageClipStatus[];
   /**
    * Playback was refused or never advanced (iOS Low Power Mode blocks even MUTED
@@ -393,6 +402,36 @@ const STROKE_COLOR = '#000';
 const STROKE_RATIO = 0.001;
 /** How long after `play()` we check that `currentTime` actually moved. */
 const PLAY_PROBE_MS = 600;
+/**
+ * A FRESHLY ADMITTED DECODER GETS THIS LONG to present its first frame before a
+ * stall probe may count it — on the panel or in the dock. A 4K file handed over
+ * as a blob: URL can take most of a second to reach HAVE_CURRENT_DATA on a phone,
+ * and a probe that accused it in that window would evict a clip that was merely
+ * loading — the opposite of the wish this exists for (`lib/admission.ts`).
+ */
+const STALL_GRACE_MS = 3000;
+/**
+ * The FIRST probe after a `play()` waits longer than a re-probe: on a phone a
+ * cold 4K start — decoder session, first frame, surface allocation — can run
+ * most of a second past the resolved promise, and a 600 ms window would accuse
+ * exactly the clip the wish is about.
+ */
+const FIRST_PROBE_MS = 1000;
+/**
+ * How many times a probe re-arms on a SUBJECT that has no decoded frame yet (or
+ * is mid-seek) before it judges anyway: 5 × 600 ms = 3 s, the same grace.
+ */
+const MAX_PROBE_REARMS = 5;
+/**
+ * A 'stalled' verdict EVICTS, so it takes two in a row: the first is a strike
+ * that re-arms the probe, the second confirms. A GC hitch or a one-off frame
+ * gap lasts one window; a starved decoder lasts both.
+ */
+const STALL_STRIKES = 2;
+/** After a stall is settled and the plan re-cut, no probe judges for this long. */
+const STALL_COOLDOWN_MS = 1200;
+/** A plan that holds this long without a stall ends the EPISODE: the round counter starts over. */
+const STALL_EPISODE_MS = 10_000;
 /** Longest edge of the per-clip poster canvas (the "last good frame" safety net). */
 const POSTER_MAX_DIM = 480;
 /** Sub-frame tolerance for an offline seek — under half a 120 Hz frame. */
@@ -493,6 +532,16 @@ interface ClipRecord {
   frameDirty: boolean;
   rvfc: number;
   probe: number;
+  /** `view.performance.now()` at admission — the stall judge's grace clock. */
+  liveSince: number;
+  /** Probe re-arms on a subject with no decoded frame yet (bounded, `MAX_PROBE_REARMS`). */
+  probeRearms: number;
+  /** Consecutive 'stalled' verdicts on this clip (`STALL_STRIKES` confirm one). */
+  stallStrikes: number;
+  /** Frames presented, counted by requestVideoFrameCallback — the stall judge's primary signal. */
+  framesPresented: number;
+  /** MEDIA_ERR_DECODE retries spent (one is allowed while siblings are live — see the error handler). */
+  decodeRetries: number;
   /** Last good frame, kept so an evicted/errored clip never leaves a hole. */
   poster: HTMLCanvasElement | null;
   posterAt: number;
@@ -678,48 +727,40 @@ const signalsOnce = createSignalCache(readDeviceSignals);
 // -----------------------------------------------------------------------------
 
 /**
- * ONE 1080p STREAM. The unit the decode budget is denominated in.
- *
- * The pixel cap is a SECOND guard behind `maxLiveClips`, and its only job is to
- * stop a handful of oversized sources (4K, 8K) from costing what the clip count
- * alone says is affordable. Denominating it in streams rather than in a bare
- * pixel constant is what keeps the two guards from contradicting each other —
- * see the SCAR note in `detectStageCaps`.
- */
-const HD_STREAM_PIXELS = 1920 * 1080;   // 2,073,600
-
-/**
- * Measure the device rather than trusting a constant.
+ * Measure the device rather than trusting a constant — and where a constant is
+ * still needed, keep it a CEILING, not a verdict.
  *
  * The real constraint is hardware DECODE SESSIONS, not elements: iOS Safari
  * shares one H.264 pipeline per page and silently pauses the least-recently
- * touched element past ~3-4 concurrent 1080p streams; Android's MediaCodec pool
- * is system-wide and shared with every other app. There is no API that reports
- * either number, so this combines the only signals a page actually gets —
- * coarse pointer + UA family, core count, and device memory — and stays
- * deliberately pessimistic on mobile, because exceeding the cap fails SILENTLY.
+ * touched element past ~3-4 concurrent streams; Android's MediaCodec pool is
+ * system-wide and shared with every other app. There is no API that reports
+ * either number, so the COUNT cap combines the only signals a page actually
+ * gets — coarse pointer + UA family, core count, and device memory — and stays
+ * deliberately pessimistic on mobile, because exceeding it fails SILENTLY.
  *
- * SCAR — "only one video ever plays". `maxLivePixels` used to be a flat
- * 2_500_000 on mobile while `maxLiveClips` said 3. A 1080p clip is 2,073,600
- * pixels, so clip #1 was admitted (the `count > 0` escape in refreshAdmission
- * lets the first one in free) and clip #2 pushed the sum to 4,147,200 — over
- * the cap. EVERY second clip was deferred, on every phone, forever: the pixel
- * guard silently overrode the clip guard and pinned the real limit at ONE.
- * Desktop had the same shape with 4K sources (2 x 8,294,400 > 12,000,000).
+ * SCAR — "only one video ever plays" (twice). First, `maxLivePixels` was a flat
+ * 2_500_000 on mobile while `maxLiveClips` said 3: a 1080p clip is 2,073,600
+ * pixels, so clip #1 was admitted (the first is always let in) and clip #2 pushed
+ * the sum over the cap — EVERY second clip was deferred, on every phone. Fixed
+ * by denominating the cap in 1080p streams. Then the wish "Multiple videos
+ * should play back at the same time. Concurrency not just one" arrived, and the
+ * 3 × 1080p phone budget (6.2 Mpx) did the same thing to two phone-shot 4K clips
+ * (8.3 Mpx each): the first in, every other one refused, with a notice that read
+ * like a hardware fact. It was a constant.
  *
- * The cap now says what the comment above always claimed: N concurrent 1080p
- * streams. A 4K clip legitimately costs four of them and still degrades to
- * fewer simultaneous clips — that is a real hardware limit, not an accident.
+ * The numbers now live in `admission.capsForSignals` (pure, swept): the COUNT
+ * cap is unchanged; the PIXEL guard is a sanity ceiling denominated in 4K
+ * streams that only an 8K stack reaches a-priori; and behind it the Stage keeps
+ * a MEASURED ceiling — the lowest summed load at which a decoder was SEEN to
+ * stall this session (`onDecodeStall`) — so a phone that genuinely cannot hold
+ * two 4K decoders ends up where it was before, with the honest sentence, and a
+ * phone that can, plays both.
  */
 export const detectStageCaps = (view?: Window): StageCaps => {
   const w: Window | undefined = view ?? (typeof window !== 'undefined' ? window : undefined);
   if (!w) {
-    return {
-      maxLiveClips: 3,
-      maxLivePixels: 3 * HD_STREAM_PIXELS,
-      captureBackingWidth: 720,
-      mobile: true,
-    };
+    const c = capsForSignals({ mobile: true, cores: 4, memGb: 0 });
+    return { ...c, captureBackingWidth: 720, mobile: true };
   }
 
   const nav = w.navigator as Navigator & { deviceMemory?: number; maxTouchPoints?: number };
@@ -732,29 +773,13 @@ export const detectStageCaps = (view?: Window): StageCaps => {
   const mobile = iOS || android || coarse;
 
   const cores = typeof nav?.hardwareConcurrency === 'number' ? nav.hardwareConcurrency : 4;
-  const mem = typeof nav?.deviceMemory === 'number' ? nav.deviceMemory : mobile ? 3 : 8;
+  // 0 = NOT REPORTED (iOS and desktop Safari, Firefox): `capsForSignals` treats
+  // an unreported phone as no flagship and an unreported desktop as the middle
+  // tier, rather than guessing a number that reads like a measurement.
+  const mem = typeof nav?.deviceMemory === 'number' ? nav.deviceMemory : 0;
 
-  if (mobile) {
-    // 3 is the largest number that decodes on an iPhone in Low Power Mode with
-    // audio live on one of them. 4+ is a coin flip that fails without an error.
-    const maxLiveClips = cores >= 8 && mem >= 6 ? 4 : 3;
-    return {
-      maxLiveClips,
-      maxLivePixels: maxLiveClips * HD_STREAM_PIXELS,
-      captureBackingWidth: 720,
-      mobile: true,
-    };
-  }
-  const maxLiveClips = cores >= 8 ? 8 : cores >= 4 ? 6 : 4;
-  // Memory, not cores, is what a wall of decoded 4K frames actually exhausts —
-  // so a low-RAM desktop keeps its clip count and gives up pixel headroom.
-  const budgetStreams = mem >= 8 ? maxLiveClips : Math.min(maxLiveClips, 4);
-  return {
-    maxLiveClips,
-    maxLivePixels: budgetStreams * HD_STREAM_PIXELS,
-    captureBackingWidth: 1080,
-    mobile: false,
-  };
+  const c = capsForSignals({ mobile, cores, memGb: mem });
+  return { ...c, captureBackingWidth: mobile ? 720 : 1080, mobile };
 };
 
 // -----------------------------------------------------------------------------
@@ -1058,6 +1083,29 @@ export class Stage {
   private statusPending = false;
   /** Set from inside the draw (which must not allocate); serviced on the next tick. */
   private admissionPending = false;
+  /**
+   * THE MEASURED CEILING — the lowest summed source-pixel load at which a decoder
+   * was SEEN to stall this session (`admission.settleStall`). 0 until a stall is
+   * measured. Bypassed by the offline render exactly as the caps are.
+   */
+  private stallCeiling = 0;
+  private stallRounds = 0;
+  /**
+   * Bumped every time a stall is SETTLED. A probe armed under an older epoch
+   * measured a plan that no longer exists, so it re-arms instead of judging —
+   * otherwise three probes fired by one stall would spend three rounds on it.
+   */
+  private stallEpoch = 0;
+  /**
+   * Bumped whenever a re-plan CHANGES the live set or its load. A probe armed
+   * under an older plan measured a load that no longer exists — it re-arms
+   * rather than recording a stall at a number that was never live.
+   */
+  private admissionEpoch = 0;
+  /** `nowMs()` of the last settled stall — the cooldown and the episode clock. */
+  private lastStallAt = -Infinity;
+  /** Summed source pixels of the admitted set — what is ACTUALLY live after admit/evict. */
+  private livePixels = 0;
 
   // --- observers -------------------------------------------------------------
   private ro: ResizeObserver | null = null;
@@ -3039,6 +3087,7 @@ export class Stage {
     for (let i = 0; i < dead.length; i++) {
       this.disposeClip(dead[i]);
       this.clips.delete(dead[i].id);
+      this.resetStallMeasure();
     }
   }
 
@@ -3085,6 +3134,11 @@ export class Stage {
       frameDirty: false,
       rvfc: 0,
       probe: 0,
+      liveSince: 0,
+      probeRearms: 0,
+      stallStrikes: 0,
+      framesPresented: 0,
+      decodeRetries: 0,
       poster: null,
       posterAt: 0,
       posterScale: 1,
@@ -3102,34 +3156,38 @@ export class Stage {
    * pixels. Counted per UNIQUE CLIP, never per fragment: 30 fragments of one
    * clip cost ONE decoder, and that economy is what makes a cap of 3 livable.
    * Runs on scene / metadata / error changes only — never per frame.
+   *
+   * THE PLAN IS PURE (`admission.planAdmission`, swept by
+   * tests/unit/admission.invariants.mjs); this method only hands it numbers and
+   * acts on its rows. Evictions run BEFORE admissions so a decoder is released
+   * before the next one is requested — Safari holds a released decoder until
+   * `load()`, and on a stall re-plan the freed session is what the surviving
+   * clip needs to move again. The MEASURED ceiling is bypassed by the offline
+   * render exactly as the caps are: the file has no clock to keep up with.
    */
   private refreshAdmission(): void {
-    const ranked: ClipRecord[] = [];
-    this.clips.forEach((c) => { if (c.fragments > 0 && !c.broken) ranked.push(c); });
-    ranked.sort((a, b) => (b.area - a.area) || (a.index - b.index));
-
-    let count = 0;
-    let pixels = 0;
-    const nextLive: ClipRecord[] = [];
-
-    for (let i = 0; i < ranked.length; i++) {
-      const c = ranked[i];
-      const px = (c.vw > 0 ? c.vw * c.vh : (c.hintW > 0 ? c.hintW * c.hintH : 1_280_000));
-      let admit = this.liveEnabled;
-      let state: StageClipState = 'live';
-      if (!admit) {
-        state = 'unused';
-      } else if (count >= this.capsClips) {
-        admit = false; state = 'over-clip-cap';
-      } else if (this.capsPixels > 0 && count > 0 && pixels + px > this.capsPixels) {
-        admit = false; state = 'over-pixel-cap';
+    const candidates: AdmissionCandidate[] = [];
+    this.clips.forEach((c) => {
+      if (c.fragments > 0 && !c.broken) {
+        candidates.push({ id: c.id, area: c.area, index: c.index, pixels: pixelCost(c.vw, c.vh, c.hintW, c.hintH) });
       }
-      c.state = state;
-      if (admit) {
-        count++;
-        pixels += px;
+    });
+    const plan = planAdmission(
+      candidates,
+      { maxClips: this.capsClips, maxPixels: this.capsPixels, measuredCeiling: this.offline ? 0 : this.stallCeiling },
+      this.liveEnabled,
+    );
+
+    const nextLive: ClipRecord[] = [];
+    const toAdmit: ClipRecord[] = [];
+    for (let i = 0; i < plan.rows.length; i++) {
+      const row = plan.rows[i];
+      const c = this.clips.get(row.id);
+      if (!c) continue;
+      c.state = row.verdict;
+      if (row.verdict === 'live') {
         nextLive.push(c);
-        if (!c.live) this.admit(c);
+        if (!c.live) toAdmit.push(c);
       } else if (c.live) {
         this.evict(c);
       }
@@ -3141,12 +3199,44 @@ export class Stage {
       if (c.fragments === 0) { c.state = 'unused'; if (c.live) this.evict(c); }
     });
 
-    this.liveClips = nextLive;
+    for (let i = 0; i < toAdmit.length; i++) this.admit(toAdmit[i]);
+
+    // WHAT IS ACTUALLY LIVE, not what the plan asked for: `admit` can fail
+    // (no document, no element) and mark the clip broken, and a ceiling later
+    // recorded from the plan's sum would be in a currency the Stage does not
+    // decode.
+    const live: ClipRecord[] = [];
+    let px = 0;
+    for (let i = 0; i < nextLive.length; i++) {
+      const c = nextLive[i];
+      if (!c.live) continue;
+      live.push(c);
+      px += pixelCost(c.vw, c.vh, c.hintW, c.hintH);
+    }
+    let changed = live.length !== this.liveClips.length || px !== this.livePixels;
+    for (let i = 0; !changed && i < live.length; i++) changed = live[i] !== this.liveClips[i];
+    if (changed) this.admissionEpoch++;
+    this.liveClips = live;
+    this.livePixels = px;
     this.applyMutes();
+  }
+
+  /**
+   * THE EVIDENCE RETIRES WITH THE CLIP. A measured ceiling is a fact about a
+   * load this session carried; when a clip leaves the pool that load is gone
+   * and the fact with it — the next plan is measured afresh rather than
+   * inheriting a ceiling the remaining clips never earned. Adding a clip keeps
+   * the evidence (the load that failed still fails).
+   */
+  private resetStallMeasure(): void {
+    this.stallCeiling = 0;
+    this.stallRounds = 0;
+    this.lastStallAt = -Infinity;
   }
 
   private admit(clip: ClipRecord): void {
     clip.live = true;
+    clip.liveSince = this.nowMs();
     if (!clip.el) {
       const el = this.createVideo(clip);
       if (!el) { clip.live = false; clip.broken = true; clip.error = 'Video element unavailable'; return; }
@@ -3290,6 +3380,24 @@ export class Stage {
         // an error arriving on a non-live clip is our own doing, not the file's —
         // marking it broken there would permanently demote a healthy clip.
         if (!clip.live) return;
+        // A DECODE ERROR WITH SIBLINGS LIVE IS A BUDGET SIGNATURE FIRST. On a
+        // phone, a decoder the OS could not allocate surfaces as MEDIA_ERR_DECODE
+        // on a perfectly good file — and marking it broken deleted a healthy clip
+        // from the collage for the whole session. One retry, as a stall: release
+        // the decoder, lower the ceiling to the load that was live, re-plan, and
+        // re-admit it if it now fits. A second decode error on the same clip, or
+        // one with no sibling to share the budget with, is the file — broken, as
+        // before. Codes 2 (network) and 4 (not supported) never retry.
+        const code = el.error ? el.error.code : 0;
+        if (code === 3 && clip.decodeRetries < 1 && this.liveClips.length > 1 && !this.offline) {
+          clip.decodeRetries++;
+          const load = this.livePixels;
+          const top = this.liveClips[0];
+          const topPx = top ? pixelCost(top.vw, top.vh, top.hintW, top.hintH) : 1;
+          this.evict(clip);
+          this.onDecodeStall([clip.id], load, topPx);
+          return;
+        }
         clip.broken = true;
         clip.error = mediaErrorText(el);
         clip.state = 'error';
@@ -3415,6 +3523,7 @@ export class Stage {
       if (this.destroyed || !clip.live) return;
       // Cheapest possible signal: mark and re-arm. No draw happens here.
       clip.frameDirty = true;
+      clip.framesPresented++;
       // TRIM, ON THE VIDEO'S OWN CLOCK. The window is also held in `tick`, but
       // the tick is the COMPOSITOR's clock and a busy main thread can starve it
       // — measured as a clip running ~0.4s past its OUT point before the next
@@ -3455,6 +3564,7 @@ export class Stage {
     const el = clip.el;
     if (!el || !clip.live || !clip.wantPlay || clip.broken) return;
     if (!this.visible || !this.onScreen) { if (!this.capturing) return; }
+    clip.probeRearms = 0;
     let p: Promise<void> | undefined;
     try {
       p = el.play();
@@ -3469,18 +3579,172 @@ export class Stage {
     }
   }
 
+  private nowMs(): number {
+    const perf = this.view?.performance;
+    return perf && typeof perf.now === 'function' ? perf.now() : Date.now();
+  }
+
+  /**
+   * EVERY LIVE CLOCK, READ AT ONE INSTANT — the probe's baseline: the clip's
+   * presented-frame count (requestVideoFrameCallback), its clock, and whether it
+   * was SEATED (frames buffered past the current one, or live past the grace).
+   * Read for every live clip rather than the subject alone, because the verdict
+   * is comparative: a clip that is not advancing is a gesture problem only when
+   * nobody else is advancing either (`admission.judgeStall`).
+   */
+  private snapshotClocks(): Map<string, { t: number; frames: number; seated: boolean }> {
+    const snap = new Map<string, { t: number; frames: number; seated: boolean }>();
+    const now = this.nowMs();
+    this.clips.forEach((c) => {
+      const el = c.el;
+      if (!el || !c.live) return;
+      snap.set(c.id, {
+        t: el.currentTime,
+        frames: c.framesPresented,
+        seated: el.readyState >= 3 || (now - c.liveSince) >= STALL_GRACE_MS,
+      });
+    });
+    return snap;
+  }
+
+  /**
+   * THE PANEL, read against a baseline. A clip sits on it when it is live, wants
+   * to play, has not ended, was in the baseline, and was SEATED then — a decoder
+   * that is merely loading its first frame is neither a witness nor a defendant,
+   * and a clip admitted between arm and fire has no baseline and is excluded
+   * rather than counted frozen.
+   *
+   * `advanced` is the FACT, and the fact is FRAMES: requestVideoFrameCallback
+   * counts presented frames, and "a decoder produced frames" is literally the
+   * proposition a budget verdict is about — a clock can advance over a frozen
+   * picture when a decoder is reclaimed under it. Where no clip on the panel
+   * presented a frame (the callback is unsupported, or silent for every clip at
+   * once) the clock is the fallback, so a quiet callback can never turn a whole
+   * panel into 'blocked'. Either way a paused element never counts as advancing,
+   * and `paused` rides along: the judge treats it as permission, not budget.
+   */
+  private observeClocks(snap: Map<string, { t: number; frames: number; seated: boolean }>): StallObservation[] {
+    const rows: { c: ClipRecord; el: HTMLVideoElement; base: { t: number; frames: number; seated: boolean } }[] = [];
+    this.clips.forEach((c) => {
+      const el = c.el;
+      const base = snap.get(c.id);
+      if (!el || !base || !c.live) return;
+      rows.push({ c, el, base });
+    });
+    const framesMoved = (r: typeof rows[number]): boolean => r.c.framesPresented !== r.base.frames;
+    const clockMoved = (r: typeof rows[number]): boolean => r.el.readyState >= 2 && r.el.currentTime !== r.base.t;
+    const anyFrames = rows.some((r) => !r.el.paused && framesMoved(r));
+    const out: StallObservation[] = [];
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i];
+      const paused = r.el.paused;
+      const wantsPlay = r.c.wantPlay && !r.c.broken && !r.el.ended && r.base.seated;
+      const advanced = !paused && (anyFrames ? framesMoved(r) : clockMoved(r));
+      out.push({ id: r.c.id, wantsPlay, advanced, paused });
+    }
+    return out;
+  }
+
+  /**
+   * THE PROBE — armed when `play()` resolves, fired a window later. `paused ===
+   * false` is a claim; presented frames are the fact, and they are read for
+   * every live clip over the SAME window so the verdict can say WHICH failure
+   * this is (`admission.judgeStall`):
+   *   · `blocked` — the subject is paused, or nobody who wanted to play
+   *     advanced: a gesture, iOS Low Power Mode, an OS-wide pause → "Tap to
+   *     play", exactly as before.
+   *   · `stalled` — un-paused and frozen while others advanced: the decode
+   *     budget, a fact about THIS device under THIS load → a strike, and on the
+   *     second consecutive strike `onDecodeStall`.
+   *   · `fine` — it moved; clear the gesture notice if one was up.
+   * A probe does not judge while the page is hidden, off-screen, parked or
+   * rendering offline (the elements are paused on purpose — the wake path
+   * re-plays and re-arms); a subject with no decoded frame yet (or mid-seek)
+   * re-arms, bounded; a probe armed under an older plan or stall epoch re-arms
+   * too — the load it measured is gone; and inside the cooldown after a settle
+   * nothing judges at all.
+   */
   private armPlayProbe(clip: ClipRecord): void {
     if (clip.probe) this.view.clearTimeout(clip.probe);
     const el = clip.el;
     if (!el) return;
-    const t0 = el.currentTime;
+    const snap = this.snapshotClocks();
+    const stallEpoch = this.stallEpoch;
+    const planEpoch = this.admissionEpoch;
+    const loadAtArm = this.livePixels;
+    const top = this.liveClips.length > 0 ? this.liveClips[0] : null;
+    const topAtArm = top ? pixelCost(top.vw, top.vh, top.hintW, top.hintH) : 1;
+    const now = this.nowMs();
+    const cooldownLeft = Math.max(0, this.lastStallAt + STALL_COOLDOWN_MS - now);
+    const first = clip.probeRearms === 0 && clip.stallStrikes === 0;
+    const windowMs = Math.max(first ? FIRST_PROBE_MS : PLAY_PROBE_MS, cooldownLeft);
     clip.probe = this.view.setTimeout(() => {
       clip.probe = 0;
       const v = clip.el;
       if (!v || !clip.live || !clip.wantPlay || this.destroyed) return;
-      if (v.paused || v.currentTime === t0) this.flagGesture();
-      else if (this.needsGesture) { this.needsGesture = false; this.emitStatus(); }
-    }, PLAY_PROBE_MS);
+      if (this.offline || this.parked || !this.visible || !this.onScreen) return;
+      if (stallEpoch !== this.stallEpoch || planEpoch !== this.admissionEpoch) { this.armPlayProbe(clip); return; }
+      if ((v.readyState < 2 || v.seeking) && clip.probeRearms < MAX_PROBE_REARMS) {
+        clip.probeRearms++;
+        this.armPlayProbe(clip);
+        return;
+      }
+      const obs = this.observeClocks(snap);
+      const me = obs.find((o) => o.id === clip.id);
+      if (!me || !me.wantsPlay) {
+        // Not seated at the baseline (first frame still coming): nothing to
+        // judge yet, so measure again from a fresh baseline — bounded.
+        if (!v.ended && clip.probeRearms < MAX_PROBE_REARMS) { clip.probeRearms++; this.armPlayProbe(clip); }
+        return;
+      }
+      const judgement = judgeStall(obs, clip.id);
+      if (judgement.kind === 'blocked') {
+        clip.stallStrikes = 0;
+        this.flagGesture();
+      } else if (judgement.kind === 'stalled') {
+        clip.stallStrikes++;
+        if (clip.stallStrikes < STALL_STRIKES) { this.armPlayProbe(clip); return; }
+        clip.stallStrikes = 0;
+        this.onDecodeStall(judgement.stalled, loadAtArm, topAtArm);
+      } else {
+        clip.stallStrikes = 0;
+        if (me && me.advanced && this.needsGesture) { this.needsGesture = false; this.emitStatus(); }
+      }
+    }, windowMs);
+  }
+
+  /**
+   * A DECODER WAS SEEN TO STALL at load `stalledPixels` (the load that was live
+   * when the probe was ARMED — the plan has not changed since, or the probe
+   * would have re-armed instead of judging). Lower the measured ceiling to that
+   * load (`admission.settleStall` — past `MAX_STALL_ROUNDS` in one EPISODE it
+   * collapses to one decoder, so this can never loop the Stage; an episode ends
+   * when a plan holds `STALL_EPISODE_MS` without a stall), drop every pending
+   * probe (they measured the plan that just failed), re-plan — which evicts from
+   * the bottom of the ranking until the load is under the ceiling — and then
+   * NUDGE every stalled clip that survived: a pause/play round trip re-requests
+   * the decoder the eviction just freed, and re-arms its probe, which is the
+   * next round of the measurement.
+   */
+  private onDecodeStall(stalledIds: readonly string[], stalledPixels: number, topPixels: number): void {
+    if (this.offline || this.destroyed) return;
+    const now = this.nowMs();
+    if (now - this.lastStallAt > STALL_EPISODE_MS) this.stallRounds = 0;
+    this.stallRounds++;
+    this.lastStallAt = now;
+    this.stallCeiling = settleStall(this.stallCeiling, stalledPixels, this.stallRounds, topPixels);
+    this.stallEpoch++;
+    this.clips.forEach((c) => { if (c.probe) { this.view.clearTimeout(c.probe); c.probe = 0; } c.stallStrikes = 0; });
+    this.refreshAdmission();
+    for (let i = 0; i < stalledIds.length; i++) {
+      const c = this.clips.get(stalledIds[i]);
+      const el = c?.el;
+      if (!c || !el || !c.live || !c.wantPlay || c.broken) continue;
+      try { if (!el.paused) el.pause(); } catch { /* ignore */ }
+      this.tryPlay(c);
+    }
+    this.markDirty();
+    this.emitStatus();
   }
 
   private flagGesture(): void {
@@ -4449,10 +4713,17 @@ export class Stage {
       // on screen while the real cause went unlooked-at. If the sources are
       // simply too big, say THAT, because the user's lever is different: a
       // smaller clip, not fewer of them.
+      // …and keep the line SHORT: it renders in a 9px truncating span whose
+      // title is unreachable on touch, so on a phone the reason is the part
+      // that scrolls off. Each reason names the user's actual lever — fewer
+      // clips, smaller clips, or nothing (it is this device, measured).
+      const byMeasured = clips.some((c) => c.state === 'over-measured-cap');
       const byPixels = clips.some((c) => c.state === 'over-pixel-cap');
-      const reason = byPixels
-        ? 'these clips are too high-resolution to decode together'
-        : 'this device tops out at ' + this.capsClips;
+      const reason = byMeasured
+        ? "this device can't run them all"
+        : byPixels
+          ? 'too big — smaller clips would run'
+          : 'this device plays ' + this.capsClips + ' at a time';
       message = live + ' of ' + (live + deferred) + ' clips playing (' + reason +
         ') — the rest show their still frame';
     } else if (this.needsGesture && live > 0) {
@@ -4468,6 +4739,7 @@ export class Stage {
       deferredCount: deferred,
       maxLiveClips: this.capsClips,
       maxLivePixels: this.capsPixels,
+      measuredLivePixels: this.stallCeiling,
       clips,
       needsGesture: this.needsGesture,
       soundOn: this.soundOn,
@@ -4538,7 +4810,7 @@ export class Stage {
     if (!this.onStatus || this.destroyed) return;
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
-      s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
+      s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' + s.measuredLivePixels + '|' +
       s.rolling + '|' + s.turning + '|' + s.moving + '|' + s.parked + '|' +
       (s.soundtrack
         ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken + ':' + s.soundtrack.level + ':' + s.soundtrack.fade

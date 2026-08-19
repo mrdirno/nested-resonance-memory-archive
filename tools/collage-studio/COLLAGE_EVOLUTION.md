@@ -85,6 +85,20 @@ or re-documenting an existing capability is DD, not delivery.
   exported as a FROZEN STILL while `describeAudioSources` mixed its sound in
   regardless, so the file played audio over a picture that never moved; now the
   video matches the audio it was already carrying;
+  THE CONCURRENCY — every video you drop plays at once, on a phone too.
+  `lib/admission.ts` (pure, swept) owns WHO gets a decoder: the COUNT cap is
+  unchanged (phone 3 / Android flagship 4 / desktop 4-6-8), the PIXEL guard is
+  the count cap FILLED — two DCI-4K seats plus 1080p seats on a phone, 2-4 4K
+  seats on a desktop by reported memory — and behind it a MEASURED ceiling: the
+  lowest summed load at which a decoder was SEEN to stall this session. The
+  probe (`stage.armPlayProbe`) reads EVERY live clip's presented-frame count
+  over the same window and `judgeStall` says which failure it is — `blocked`
+  (paused, or nobody advancing: gesture / Low Power → "Tap to play"), `stalled`
+  (un-paused and frozen while a sibling moves → two strikes → `settleStall`
+  lowers the ceiling, re-plan, nudge, bounded at 4 rounds per episode with a
+  1.2 s cooldown and a floor of one decoder), or `fine`. Before: the pixel cap
+  was `count × 1080p` (phone 6.2 Mpx), so any 4K clip (8.3 Mpx) pinned a phone
+  to ONE playing clip with a notice that read like a hardware fact;
   THE POST — the exported SVG IS the project file. A composition code is a
   RECIPE and carries no pictures; the SVG already held both and could not be
   opened. `lib/svgProject.ts` is the one pure seam between the writer
@@ -1238,6 +1252,56 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **SCAR-C166-A-BUDGET-CONSTANT-THAT-READS-LIKE-A-HARDWARE-FACT.** The realtime
+  pixel cap was `maxLiveClips × 1080p` — a guess dressed as a measurement — and
+  on a phone it was 6.2 Mpx. A phone-shot 4K clip is 8.3 Mpx, so with ANY 4K
+  clip in the set the first was admitted (the first is always let in) and every
+  later clip refused — a 1080p one too, since 8.3 + 2.1 is also over — with the
+  notice "these clips are too high-resolution to decode together". Two videos
+  from the same phone the page was open on, and the app played one. This was
+  the SECOND time the same constant pinned the budget to one (the first: a flat
+  2,500,000 vs 1080p); re-denominating it in 1080p streams moved the cliff to 4K
+  and called it fixed. The law: a cap that refuses work must either be
+  denominated in the thing it rations WITH HEADROOM (DCI 4K, the largest frame
+  a camera labels 4K — `2 × UHD` let two UHD clips through on the boundary and
+  refused two 4096-wide ones with the wish's exact sentence), or be MEASURED on
+  the device (`settleStall`); and its notice must name the user's lever — fewer
+  clips, smaller clips, or "this device can't run them all" — never a rule
+  wearing a hardware costume. Sweep I9 now pins the pair that failed.
+- **SCAR-C167-A-PROBE-THAT-READS-ONE-CLIP-CANNOT-TELL-A-GESTURE-FROM-A-BUDGET.**
+  `armPlayProbe` read its own clip's clock and flagged "Tap to start playback"
+  on any stall — the wrong sentence for a decoder the OS starved, and a tap that
+  replays everything makes that one worse. The verdict is COMPARATIVE (every
+  live clip over the SAME window) and its vocabulary matters: a starved decoder
+  is UN-PAUSED and presents no frames; a PAUSED non-advancer is permission,
+  power or end-of-media (iOS Low Power on an incrementally admitted clip while
+  the tapped ones keep rolling — the panel's lens found the sequence). The
+  signal is PRESENTED FRAMES (requestVideoFrameCallback), not `currentTime`: a
+  clock advances over a frozen picture when a decoder is reclaimed under it,
+  and a short trim window wraps the clock back onto its baseline. Guards before
+  a verdict may EVICT: seated at the baseline (readyState ≥ 3 or 3 s live), not
+  ended, still wanted, visible + on-screen + not parked + not offline, two
+  consecutive strikes, a plan that did not change under the probe (epoch), a
+  cooldown after a settle, an episode bound on rounds, a floor of one decoder
+  on the ceiling, and MEDIA_ERR_DECODE with siblings live is one retry as a
+  stall before it is "broken". I12's Stage-vocabulary table pins each.
+- **SCAR-C168-A-MOTION-FIXTURE-WHOSE-MOTION-CAN-MISS-THE-CROP.** The first cut
+  of the concurrency e2e keyed each clip by hue and asserted its canvas region
+  CHANGED over 400 ms — with a single white bar sweeping the frame. A fragment
+  shows a CROP; when the bar was outside the crop for the whole window the clip
+  read "frozen for the person" while its decoder ran (0 of 6 changed, one run
+  in three). The fixtures are now white STRIPES at 50 % duty moving half a
+  period per 400 ms, so ANY crop flips field↔white between two samples; 6/6
+  consecutive runs green. The law: a pixel witness must move everywhere the
+  composition can look, or it measures the layout's luck, not playback.
+- **SCAR-C169-TWO-CYCLES-DIED-ON-ONE-CLAIM-WITH-NOTHING-COMMITTED.** C3633 claimed
+  the concurrency wish, wrote `lib/admission.ts`, an 81k-check sweep, the e2e,
+  six fixtures and three probes; C3634 refined the module and the sweep; neither
+  committed a byte or wrote a book line, so the well showed `building` for 20 h
+  and the third cycle re-derived the plan from a working tree. The law: a seam
+  that holds on its own (a pure module + its sweep) is COMMITTED the moment it
+  holds, before the wiring starts — a cycle that dies then leaves a foothold,
+  not a puzzle — and the `--status building` sweep is read FIRST every cycle.
 - **SCAR-C165-A-SPEC-THAT-ASSERTS-THE-GATE-BUT-NOT-THE-CLAIM.** The frame-hold
   rail change widened the wrap cap (4 targets below 390 → 5 below 430) and its
   F3b asserted everything the SHIP GATE demands — 44px law, viewport

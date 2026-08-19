@@ -458,6 +458,17 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
         A video just loads and loops — no frames, nothing to pick, nothing to set.
         Wished for by an anonymous Collage user.
       </p>
+      {/* CREDIT — the decoder budget used to be a constant that let ONE phone-shot
+          4K clip through and refused every clip after it, on every phone, with a
+          notice that read like a hardware fact. Now the budget is measured on
+          the device (`lib/admission.ts`), and the words below say what the
+          person asked for. Not on the notice line: that is transient, it
+          truncates, and it only shows when the device FAILED. */}
+      <p className="ui-caption ui-label--dim" data-testid="credit-concurrency">
+        Every video you drop plays at the same time — two phone 4K clips side by
+        side, not one. If this device can't run them all, it says so and shows
+        the rest as stills. Wished for by an anonymous Collage user.
+      </p>
 
       {/* ---- ACTIONS -------------------------------------------------------- */}
       <div className="ui-actionbar">
