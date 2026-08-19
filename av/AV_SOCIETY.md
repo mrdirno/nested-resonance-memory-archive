@@ -1038,13 +1038,33 @@ that reads as a contractual term, and *"if I spec his material I own his warrant
 this program's own rule. A **branch picker** — a page that names real distributor
 locations is impersonation with a shelf life.
 
-**WHERE INTERFACE GOES NEXT:** (1) mount the drop-off block on the four order pages that
-carry the typed half but not the ticks — `electrical/pull-list`, `low-voltage/consumables`,
-`hvac/truck-stock`, `framing/the-load`. **This is now the strongest unbuilt INTERFACE rung
-and it is an ENGINE job, not a mount:** `plumbing/supply-house-order.html` forks its own
-Delivery/Will-call mode and the block hangs off that, while the other seven order pages are
-pure `shared/checklist-request.js` configs and **that engine has no fulfilment axis at
-all**. There is nothing on them for `Dropoff.mount` to attach to. ~~(2) The sub → owner
+**WHERE INTERFACE GOES NEXT:** ~~(1) mount the drop-off block on the four order pages that
+carry the typed half but not the ticks~~ — **SHIPPED 2026-08-19, and NOT as this entry
+predicted.** It was never an engine job: the block mounts INSIDE the page's own "typed once,
+saved with this job" drawer, `bare`, and hides behind the page's existing `fHow` select
+(delivery → on; will-call / set-aside / restock → off and out of the document), or is
+declared always-on where a truck is always coming (`framing/the-load`, `masonry/yard-call`).
+What it WAS is a REPLACE, not a mount — the 2026-08-16 panel's line: six order pages already
+shipped the hand-rolled half (`fAccess` textarea + `fSigner`, and on two of them `fMeet`),
+and a block beside them is two gate boxes on one page. So the boxes LEFT those pages, the
+job card grew `carry:` (kept, never painted) + `stash()`, and the block seeds itself from
+what the card still holds — once, and a seeded record is written even when emptied, because
+a cleared block must never get its June gate code back. **The block itself is v2 now**, held
+to the receiving lens's three: driver lines first (gate → who to call when the gate's wrong
+→ the paperwork → where it lands → who signs; off-the-truck and the window after), the
+not-before control as the ONE clock printed on the gate line (the placeholder stopped
+teaching the double entry), and the PAPERWORK layer as multi-select chips that ASK the
+supply house rather than claim a status ("Tell me if our COI isn't on file with you yet" —
+the getting-in handback rule one level down, asserted ask-first by the gate). And a second
+LOAD CLASS: `load:"small"` swaps where-it-lands / how-it-lifts for one custody axis (handed
+off · left at a drop point · with the super · security) — "'Forklift on site' is not a real
+option for a box of J-hooks." **Six of the eight order pages now carry the block** (plumbing,
+sitework, electrical, low-voltage, framing, masonry). **Named remainder, by decision:**
+`concrete/mix-order` is NOT a flatbed — a ready-mix truck is chute / pump / washout and its
+"Getting in, staging and washout" textarea is the right shape until a concrete lens says
+otherwise; `hvac/truck-stock` is a van restocked at the shop (panel, do not mount); `av/consumables`
+and `av/cable-list` never carried a delivery half at all and get one only if a wish asks.
+The weight band on the heaviest piece stays OUT — still the operator's call. ~~(2) The sub → owner
 access / escort / badge request~~ — **SHIPPED 2026-08-15 as `<trade>/getting-in.html`, all
 ten kits; see §GETTING IN below.** (3) The long-lead **gear chase** the electrical
 lens proposed and which is a different document from an order: the same list sent six
@@ -1488,6 +1508,45 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A FIELD THAT SHIPS ON ONE PAGE WHILE ITS SIBLINGS CARRY THE HAND-ROLLED VERSION IS NOT
+  SHIPPED, IT IS A FORK WITH A BETTER HEADER (2026-08-19).** `shared/dropoff.js` landed on
+  plumbing on 2026-08-14 and sat for five days beside five order pages still printing
+  `fAccess`/`fSigner` free text — the exact class the rider exists for, and the roster's own
+  "single most concrete unbuilt thing". The rule: when a shared block REPLACES something, the
+  replace IS the ship; count the pages still carrying the old shape in the cycle-log line
+  and name each one taken or not taken by decision. And carry the old answers over — the
+  card keeps the boxes that left (`carry:`), the block seeds from them ONCE, and a seeded
+  record persists even empty, or clearing it resurrects the very text he just cleared
+  (caught by writing the gate before the page: 2 pages × 2 storage shapes, mutant-killed).
+
+- **A PLACEHOLDER TEACHES THE DOUBLE ENTRY (2026-08-19).** The gate line's example text read
+  "… no trucks in the alley before 7" under a control labelled *Not before* — so the block
+  printed `When: morning, not before 07:00` beneath a gate line that already said "before
+  7": two clocks for one fact, and a driver trusts the wrong one after an edit (the
+  receiving lens). If a control owns a fact, no example anywhere on the page may model that
+  fact in prose. The one clock now prints ON the gate line, and the gate asserts `When:`
+  never carries a time.
+
+- **A CHIP THAT CONTRADICTS A FIELD STILL PRINTED IS A CHIP THAT LIES LATER (2026-08-19).**
+  "Drop point — no signature needed" shipped in the first cut beside a sticky *Signs for it*
+  box still holding a name from a truck order in March — one message, two answers. The
+  foreman lens caught it before ship. A chip may not carry a claim that another field on the
+  same block answers; it says the place ("Left at a drop point") and the field says who signs.
+
+- **A TICK MUST ASK BEFORE IT STATES (2026-08-19, the handback rule one level down).** "COI on
+  file — tell me if it isn't" skims as "COI on file" — a status this page can never know,
+  wearing the ask as a tail. The skeptic's shape is the rule: the ask LEADS ("Tell me if our
+  COI isn't on file with you yet"), and `dropoff-block.mjs` fails any paperwork chip whose
+  status word precedes its "tell me". Same for "approved carriers": ask first.
+
+- **THE WATERTIGHT GATE HAD NEVER MEASURED THE BLOCK — THIRD INSTANCE OF THE CLASS
+  (2026-08-19).** The drop-off block lives inside a closed `<details>` on four pages and
+  behind a Delivery tap on two; `mobile-watertight.mjs` loads and leaves alone, so its twenty
+  chips, the 2-row textarea and the multi row were sized at 320px by nobody until a revealed
+  state was written (opens the drawer, walks the mode controls until `#dropoff` is on, lights
+  a multi chip). Proved by an injected 600px chip failing at 320 in that state and nowhere
+  else. When a shared block is MOUNTED somewhere new, ask which gates can SEE it there.
 
 - **NEVER READ AN ANIMATED PROPERTY THE SAME INSTANT YOU CAUSED IT TO CHANGE (2026-08-18).**
   The tap-badge gate clicked a card and read the badge's `::after` opacity in the very next
@@ -4911,3 +4970,54 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   cycle: AV 2 new (both collage — oldest `02e8e493` aspect-lock toggle, then `9a1f6eb9` shuffle
   re-arrange + color match), vibe 2 new, 0 building anywhere — the stale-claim flag is clear.
   https://mrdirno.github.io/vibe-cards/
+
+- `2026-08-19` — **[AXIS:INTERFACE] C3636 — THE BLOCK THAT SAT BESIDE THE BOXES IT WAS BUILT
+  TO REPLACE, FOR FIVE DAYS, AND WHAT A DRIVER READS AT 5:50AM.** Wells read UNSCOPED first:
+  AV 0 new / 0 building, vibe 0 / 0 (the 34 board items are all the society wall — P5's sink);
+  no family owed; stalest axis INTERFACE (13 lane-cycles). The book's own ranked remainder —
+  *"the single most concrete unbuilt thing on this whole file"* — was the order-page fulfilment
+  axis, re-cut by the 2026-08-16 panel into a REPLACE. **before:** `shared/dropoff.js` v1 on
+  ONE order page (plumbing, + sitework) while electrical/pull-list, low-voltage/consumables,
+  framing/the-load and masonry/yard-call still printed a hand-rolled `fAccess` textarea +
+  `fSigner` (+ `fMeet` on two) — a fork with a better header; the block's own document
+  printed `When: morning, not before 07:00` under a gate placeholder that read "no trucks
+  before 7" (two clocks for one fact); "Forklift on site / Boom or crane" offered to a box of
+  J-hooks; no paperwork line at all, so a driver with the exact right code sat an hour for a
+  COI; and `mobile-watertight` had never once sized the block (inside a closed drawer / behind
+  a Delivery tap). **after:** **`dropoff.js` v2** — driver lines first (gate → *gate's wrong or
+  nobody's there — call:* → *Before the gate:* → set it → who signs; off-the-truck and the
+  window after) · the not-before control as the ONE clock, printed on the gate line, the
+  placeholder no longer modelling a time · a multi-select PAPERWORK row whose every chip asks
+  the supply house before it states anything (*"Tell me if our COI isn't on file with you
+  yet"* · *"Tell me who's hauling — only approved carriers get in"* · sign-in · hard hat + vest
+  · orientation; "tick any that apply" on the glass) · `load:"small"` — one CUSTODY axis
+  (handed off · left at a drop point · with the super · security) in place of where-it-lands /
+  how-it-lifts · `bare` + `seed` · the gate line a 2-row textarea. **THE REPLACE:** the four
+  pages drop their boxes and mount the block per job behind the card — `shared/jobcard.js`
+  grew `carry:` (kept, never painted) + `stash()`, the block seeds ONCE from the June answers
+  and a seeded record persists even empty so a clear never resurrects them; shown off the
+  page's own `fHow` (delivery → on; will-call / set-aside / restock → out of the document) or
+  declared always-on where a truck is always coming (framing, masonry). **Six of eight order
+  pages carry the block.** NOT taken, by decision: concrete/mix-order (ready-mix is chute /
+  pump / washout — its own class) · hvac/truck-stock (a van is restocked at the shop, panel).
+  THE PANEL (dispatcher 8 · two-class foreman 7 · skeptic 6 — 3/3 BUILD_WITH_CHANGES) and
+  every BLOCKING demand landed before ship: "Left at a drop point" (the first wording
+  contradicted the signer box in the same message) · the textarea · ask-first COI · "Before
+  the gate", not "opens" · the two lead-time asks adjacent · paperwork printed right under
+  the call line (two of three moved it up) · the fifth custody chip that replaced no typing
+  cut · a HANDBACK assertion in the gate. The weight band stays OUT — operator's call. Gates,
+  all green: `dropoff-block` 6 pages (order · one clock · ask-first · multi row · seed in BOTH
+  storage shapes · cleared-stays-cleared; **4 injected mutants killed** — status-first COI,
+  a clock on `When:`, a pick-one multi row, a seed that re-applies) · `jobcard-scope` 7 ·
+  `order-live-header` 9 · `mobile-watertight` on all six pages at 320/360/390/430 × default
+  and bumped, WITH a new revealed state (drawer open, block on, a multi chip lit — proved by
+  an injected 600px chip failing at 320) · `no-third-party` 125 pages, 0 requests · eyes on the real page at
+  390 on electrical, low-voltage and masonry (two 4-line labels trimmed from what the
+  screenshot showed). **LIVE-VERIFIED against the deployed site:** all six files byte-
+  identical to HEAD, `dropoff-block.mjs https://…` 6/6 incl. the seed, `mobile-watertight`
+  LIVE 4/4, a yard call driven at 390 end to end, 0 page errors. Storefront: four notes in
+  `persona500/src/data/fieldToolkits.ts` now name the block (P5 pushes). Roster rung struck
+  with what was learned (not an engine rung; the placeholder was half the finding; the
+  paperwork line belongs with the gate). **BACKPORT RIDER FIRED** — the sweep IS the ship:
+  four siblings taken, two named not-taken. Five scars (§SCARS 2026-08-19).
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/pull-list.html
