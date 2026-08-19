@@ -190,6 +190,16 @@
    "wished_date": "2026-08-18",
    "shipped_date": "2026-08-18",
    "shipped_commit": "32d19212"
+  },
+  {
+   "tool_name": "Collage Studio — every video plays at once (a measured decoder budget: two phone 4K clips side by side, not one)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-18",
+   "shipped_date": "2026-08-19",
+   "shipped_commit": "0080f006"
   }
  ]
 }

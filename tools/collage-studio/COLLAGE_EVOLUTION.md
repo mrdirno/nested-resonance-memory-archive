@@ -5139,3 +5139,71 @@ frontier. Today's ceiling is tomorrow's floor.
   aria-label was this cycle's own rail draft, fixed before it deployed. 0 of
   13 trades carry the class.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-19 · **[AXIS:WELL] THE CONCURRENCY — every video you drop plays at
+  once, on a phone too** (wells read UNSCOPED first: AV 0 new + 1 STRANDED in
+  `building`, vibe 0 + 0; the stranded claim was the concurrency wish C3633 took
+  and C3634 kept — `lib/admission.ts`, an 81k-check sweep, the e2e and six
+  fixtures sat on disk with NOTHING committed and the Stage half-wired; this
+  cycle finished that claim — ONE wish per cycle, and a claim left in the well
+  outranks a new one). Wished verbatim: *"Multiple videos should play back at
+  the same time ando. Concurrency not just one."* before→after: **the realtime
+  pixel cap was `count × 1080p` (phone 6.2 Mpx), so any 4K clip (8.3 Mpx) let
+  ONE clip play on a phone — the first always admitted, every later one refused
+  with "too high-resolution to decode together", a rule in a hardware costume;
+  measured on the LIVE deploy: two 4K clips on an iPhone UA → 1 decoder → now
+  the budget is the count cap FILLED (two DCI-4K seats + 1080p seats on a phone,
+  2-4 4K seats on a desktop by REPORTED memory — unreported = middle tier, an
+  iPhone is never a flagship by construction) behind a MEASURED ceiling: the
+  probe reads every live clip's presented frames over one window and
+  `judgeStall` names the failure — paused or nobody moving = `blocked` (Tap to
+  play, as before); un-paused + frozen while a sibling moves = `stalled`, two
+  strikes, `settleStall` lowers the ceiling to the load that failed (floor: one
+  decoder), re-plan, nudge, 4 rounds per episode, 1.2 s cooldown, a
+  MEDIA_ERR_DECODE with siblings live gets one retry as a stall before it is
+  "broken"; the notice says the lever — "plays 3 at a time" / "too big — smaller
+  clips would run" / "this device can't run them all" — in ≤ 90 chars so it
+  survives the 9px truncating span.** THE PANEL (3 lenses: iOS media engineer,
+  state/invariants engineer, wisher's advocate) came back 3/3
+  BUILD_WITH_CHANGES (7/7/7) on the stranded design and every BLOCKING demand
+  landed: frames not clock as the signal (a clock advances over a frozen
+  picture), `paused` in the vocabulary (a starved decoder is un-paused; iOS
+  Low Power on an incremental admit is paused), arm-time load + plan epoch
+  (a probe that raced a re-plan recorded a stall at a load never live), seated
+  guard + grace + strikes + cooldown + episode reset + floor, DCI headroom
+  (`2 × UHD` refused two 4096-wide clips with the wish's sentence), the measured
+  verdict named in the status, `livePixels` from what is ACTUALLY live, I2
+  unconditional (a count cap of 0 seated nothing), junk pixels charged the
+  UNKNOWN rate, I7b verdict-justification, and the `* 0` vacuous I15 line
+  fixed. Resolved against the panel with data: the stalled clip is NOT
+  penalised in rank (the rank re-plan + nudge reaches the same seat count and
+  keeps the biggest picture moving); `paused ⇒ blocked` chosen over lens 1's
+  "OS-pause is a budget signature" because a muted inline video is never
+  session-interrupted on iOS and the LPM-incremental sequence is the one that
+  regresses the wisher's own phone. NOT built, named: frame-rate in
+  `pixelCost` (4K60 costs 2×), a ceiling reset on visibility return, a Stage
+  hook to force a stall (no headless engine starves a decoder, so the
+  `stalled → sentence (c)` path is pinned only at the pure seam). **PROOF:**
+  admission sweep 101,133 checks over I1–I15 + I7b + I13b, 8/8 injected
+  mutants dying on the assertion written for each (paused rule → I12; 2×UHD
+  phone ceiling → I9 DCI pair; floor → I13b; bound → I13; clamp → I2; junk → I14;
+  guard order → I7b; stalled-list → I12); 31/31 unit sweeps (exit codes);
+  concurrency e2e 3/3 on :5199 — three hue-keyed clips: 3 decoders unpaused,
+  3 clocks advancing, 3 canvas regions moving, and after 2.5 s of probes still 3
+  with no stall sentence; THE WISH test: two REAL 3840×2160 VP9 clips on an
+  iPhone UA both decode, both move, no "1 of 2" — which FAILS on the live
+  deploy ("Received: 1", the kill-proof) and passes here; 6/6 consecutive
+  green after the fixtures became stripes; regression video-collage 17/17,
+  video-audio 4/4, mobile-watertight 7/7, frame-hold 5/5, trim 9/9; tsc + vite
+  build clean; live-verified: bundle 048c7ff3 → 3092dc0f and 3/3 concurrency
+  e2e against the DEPLOYED site incl. the 4K pair. Wisher credited in
+  av/credits.json (anchor 0080f006) and on the Advanced panel, anonymous as
+  filed. Four scars filed (C166 a budget constant in a hardware costume; C167 a
+  one-clip probe cannot tell a gesture from a budget; C168 a motion fixture
+  whose motion can miss the crop; C169 two cycles died on one claim with
+  nothing committed). **BACKPORT rider FIRED, found nothing to carry:** class =
+  "a device/resource budget expressed as an unmeasured constant that refuses
+  work the device could do"; swept all 13 trades' pages + shared/*.js for
+  count/size/resource caps — none exist (no file counts, no size refusals, no
+  decoders; toolkit.js's maxima are CSS bounds measured per viewport, the
+  opposite pattern). 0 of 13 trades carry the class.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
