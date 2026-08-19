@@ -198,10 +198,16 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>Gate, who signs, cost code — typed once, saved with this job</summary>
+      <summary>How the truck gets in, who signs, cost code — typed once, saved with this job</summary>
+      <!-- THE DROP-OFF BLOCK (shared/dropoff.js) REPLACED the "How to get in"
+           textarea and the signer box that lived here — gate line, the one clock,
+           who the driver calls, where it lands and how it comes off, who signs,
+           and what the driver needs before the gate opens. Per job, via the card
+           above; shown only when the order is a delivery, because a will-call
+           carrying gate codes is the same lie in the other direction. What was
+           typed into the old boxes is seeded into it once (rule 9 in the module). -->
+      <div id="dropoff"></div>
       <div class="hgrid">
-        <div class="f span2"><label>How to get in</label><textarea id="fAccess" rows="2" placeholder="Gate 4 off Cedar, code 1180 — dock open till 2, call when you're 20 out"></textarea></div>
-        <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Danny T — 415-555-0199" autocomplete="off"></div>
         <div class="f"><label>Charge to</label>
           <select id="fCharge">
             <option>Job</option>
@@ -250,6 +256,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
 <script>
 /* PULL LIST — trade #3's first tool, and the FOURTH instance of shape #1
  * (av/AV_SOCIETY.md §THE THREE SHAPES: CHECKLIST → A REQUEST). Nothing about the
@@ -310,16 +317,58 @@ ul.items{list-style:none;margin:0;padding:0}
    *
    * So it rides THE LIST: saved with the draft, restored with it, and reset by
    * Clear — which is the one action that means "this is a different order". */
-  JobCard.mount({
+  var jc = JobCard.mount({
     mount: "jobcard",
     trade: "electrical",
     label: "Which job",
     nameField: "fJob",
-    perJob: ["fAccess", "fSigner", "fCharge", "fPO"],
+    perJob: ["fCharge", "fPO"],
+    /* THE TWO BOXES THAT LEFT THE PAGE. "How to get in" and "Signs for it" are
+     * the drop-off block's gate line and signer now (2026-08-19); the card keeps
+     * what was typed into them so the block can seed itself once. */
+    carry: ["fAccess", "fSigner"],
     device: ["fBy"],
     legacyKey: "toolkit.electrical.pullList.header.v1",
-    onApply: function () { if (api) api.refresh(); }
+    onApply: function () { syncJob(); }
   });
+
+  /* ── THE DROP-OFF BLOCK ───────────────────────────────────────────────────
+   * Six order pages shipped a free-text "how to get in" and a signer box, and
+   * the one page with the structured block (plumbing/supply-house-order) sat
+   * beside them for five days. The 2026-08-16 panel's receiving lens said what
+   * the free text could not carry: who the driver calls when the gate's wrong,
+   * the one clock, where it lands and how it comes off, and the paperwork a
+   * driver with the right code still sits an hour without. The block REPLACES
+   * the boxes — two gate boxes on one page is worse than none — and is keyed
+   * per job through the card, the way plumbing already does it. */
+  var DKEY = "toolkit.electrical.pullList.dropoff.v1";
+  function dropKey(j) { return (!j || j.id === "j1") ? DKEY : DKEY + "." + j.id; }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "truck",
+    perJob: true,
+    bare: true,
+    /* ONCE, FROM WHAT THE CARD STILL HOLDS: the gate code typed into the old
+       textarea in June is on the glass the first morning, not asked for again. */
+    seed: function () { return jc ? { gate: jc.stash("fAccess"), sign: jc.stash("fSigner") } : null; },
+    onChange: function () { if (api) api.refresh(); }
+  });
+  /* A DELIVERY IS THE ONLY ORDER A TRUCK READS. Will-call, set-aside and a
+     restock off his own truck have no gate to get through, and the block leaves
+     the document with them — the same rule plumbing's Delivery button keeps. */
+  function isDelivery() {
+    var v = $("fHow") ? $("fHow").value : "";
+    return v === "Deliver to site" || v === "Put it on the next truck";
+  }
+  function modeUI() { if (drop) drop.show(isDelivery()); }
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
+  if ($("fHow")) { $("fHow").addEventListener("change", modeUI); $("fHow").addEventListener("input", modeUI); }
+  modeUI();
   /* The option the page SHIPPED as its default, read before any draft restores
    * over it — that is what Clear has to put back, and what "untouched" means. */
   var HOW0 = $("fHow") ? $("fHow").value : "";
@@ -386,7 +435,7 @@ ul.items{list-style:none;margin:0;padding:0}
     // with "e.g. raintight, plenum, 90C" would ship every banned word through the
     // back door. Colour, length, floor, who it's for — nothing rated, nothing sized.
     notePlaceholder: "e.g. color, length, which floor, who it's for",
-    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fPO"],
     // Only the NON-sticky, per-list answers ride the list's own saved state. The
     // sticky header has its own key so Clear can wipe the list without costing
     // him the gate code.
@@ -402,12 +451,14 @@ ul.items{list-style:none;margin:0;padding:0}
       $("fDate").value = x.date || "";
       $("fHot").checked = !!x.hot;
       setHow(x.how);
+      modeUI();
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
       ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
       if ($("fHow")) $("fHow").value = HOW0;
+      modeUI();
       seg("segWhen", "Today");
       showLast();
     },
@@ -428,8 +479,7 @@ ul.items{list-style:none;margin:0;padding:0}
     },
     document: function (ctx) {
       var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
-      var notes = $("fNotes").value.trim(), access = $("fAccess").value.trim();
-      var signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
+      var notes = $("fNotes").value.trim(), po = $("fPO").value.trim();
 
       var out = "PULL LIST";
       if (job) out += " — " + job;
@@ -451,10 +501,11 @@ ul.items{list-style:none;margin:0;padding:0}
         out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
       });
 
-      out += "\n";
-      if (access) out += "\nGetting in: " + access;
-      if (signer) out += "\nSigns for it if I'm not there: " + signer;
-      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+      /* THE TRUCK'S HALF, only on a delivery (shared/dropoff.js): gate + the one
+         clock, who the driver calls, where it lands, who signs, off the truck,
+         the window, the paperwork, and the line that says it is an ask. */
+      if (drop && isDelivery()) out += drop.text();
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
 
       out += "\n\nThat's the list. If you're short on something, send what you've got and text me — "
            + "don't sub it out without asking. I'd rather hear it at 4 than find out at 7."

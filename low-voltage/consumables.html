@@ -183,10 +183,17 @@ ul.items{list-style:none;margin:0;padding:0}
     </div>
 
     <details class="more">
-      <summary>Where to drop it, who signs, cost code &mdash; typed once, saved with this job</summary>
+      <summary>How it gets in, who takes it, cost code &mdash; typed once, saved with this job</summary>
+      <!-- THE DROP-OFF BLOCK (shared/dropoff.js), SMALL-GOODS CLASS, replaced the
+           "Where to drop it" textarea and the signer box that lived here. A box of
+           J-hooks does not land and nothing lifts it — the axis is WHO TAKES
+           CUSTODY (handed off · a drop point · the super · security), with the
+           gate line, the one clock, who the driver calls, who signs and what the
+           driver needs before the gate opens. Per job via the card above; shown
+           only when the order is a delivery. What was typed into the old boxes is
+           seeded into it once (rule 9 in the module). -->
+      <div id="dropoff"></div>
       <div class="hgrid">
-        <div class="f span2"><label>Where to drop it</label><textarea id="fAccess" rows="2" placeholder="Dock off Cedar till 2, then gate 4 — call when you're 20 out, IDF 3 is badge-only"></textarea></div>
-        <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Marco — 415-555-0199" autocomplete="off"></div>
         <div class="f"><label>Charge to</label>
           <select id="fCharge">
             <option>Job</option>
@@ -235,6 +242,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
 <script>
 /* SHOP LIST — the SIXTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
  * SHAPES: CHECKLIST → A REQUEST), and the direct isomorph of av/consumables.html
@@ -274,16 +282,53 @@ ul.items{list-style:none;margin:0;padding:0}
    * decision, so it must not travel with the building — and it is printed in
    * the document, so tools/toolkit-gates/order-live-header.mjs requires it to
    * survive a reload. Saved with the draft, reset by Clear. */
-  JobCard.mount({
+  var jc = JobCard.mount({
     mount: "jobcard",
     trade: "low-voltage",
     label: "Which job",
     nameField: "fJob",
-    perJob: ["fAccess", "fSigner", "fCharge", "fPO"],
+    perJob: ["fCharge", "fPO"],
+    /* THE TWO BOXES THAT LEFT THE PAGE. "Where to drop it" and "Signs for it"
+     * are the drop-off block's gate line and signer now (2026-08-19); the card
+     * keeps what was typed into them so the block can seed itself once. */
+    carry: ["fAccess", "fSigner"],
     device: ["fBy"],
     legacyKey: "toolkit.lowvoltage.shopList.header.v1",
-    onApply: function () { if (api) api.refresh(); }
+    onApply: function () { syncJob(); }
   });
+
+  /* ── THE DROP-OFF BLOCK, SMALL-GOODS CLASS ────────────────────────────────
+   * The 2026-08-16 panel's receiving lens, on mounting the truck block here:
+   * "'Forklift on site' and 'Boom or crane' are not real options for a box of
+   * J-hooks." For small goods the axis is not how it lifts, it is who takes
+   * custody — and the dock-hours sentence this page was built around still
+   * has its textarea, because chips have no grammar for "then" or "unless".
+   * Keyed per job through the card, the way plumbing and electrical do it. */
+  var DKEY = "toolkit.lowvoltage.shopList.dropoff.v1";
+  function dropKey(j) { return (!j || j.id === "j1") ? DKEY : DKEY + "." + j.id; }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "small",
+    perJob: true,
+    bare: true,
+    seed: function () { return jc ? { gate: jc.stash("fAccess"), sign: jc.stash("fSigner") } : null; },
+    onChange: function () { if (api) api.refresh(); }
+  });
+  /* A DELIVERY IS THE ONLY ORDER A DRIVER READS. Will-call, set-aside and a
+     restock off his own van have no gate to get through. */
+  function isDelivery() {
+    var v = $("fHow") ? $("fHow").value : "";
+    return v === "Deliver to site" || v === "Put it on the next truck";
+  }
+  function modeUI() { if (drop) drop.show(isDelivery()); }
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
+  if ($("fHow")) { $("fHow").addEventListener("change", modeUI); $("fHow").addEventListener("input", modeUI); }
+  modeUI();
   var HOW0 = $("fHow") ? $("fHow").value : "";
   function setHow(v) {
     var s = $("fHow");
@@ -344,7 +389,7 @@ ul.items{list-style:none;margin:0;padding:0}
     // "e.g. plenum, riser, 4-hour" would ship a rated word through the back door.
     // Colour, length, which closet, who it's for — nothing rated, nothing sized.
     notePlaceholder: "color, length, which closet, who for",
-    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fPO"],
     persistExtra: function () {
       var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when,
                 hot: $("fHot").checked, how: $("fHow") ? $("fHow").value : "" };
@@ -357,12 +402,14 @@ ul.items{list-style:none;margin:0;padding:0}
       $("fDate").value = x.date || "";
       $("fHot").checked = !!x.hot;
       setHow(x.how);
+      modeUI();
       if (x.when) seg("segWhen", x.when);
     },
     onClear: function () {
       ["fFor", "fNotes", "fDate"].forEach(function (id) { $(id).value = ""; });
       $("fHot").checked = false;
       if ($("fHow")) $("fHow").value = HOW0;
+      modeUI();
       seg("segWhen", "Today");
       showLast();
     },
@@ -383,8 +430,7 @@ ul.items{list-style:none;margin:0;padding:0}
     },
     document: function (ctx) {
       var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
-      var notes = $("fNotes").value.trim(), access = $("fAccess").value.trim();
-      var signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
+      var notes = $("fNotes").value.trim(), po = $("fPO").value.trim();
 
       var out = "SHOP LIST";
       if (job) out += " — " + job;
@@ -404,10 +450,11 @@ ul.items{list-style:none;margin:0;padding:0}
         out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
       });
 
-      out += "\n";
-      if (access) out += "\nDropping it: " + access;
-      if (signer) out += "\nSigns for it if I'm not there: " + signer;
-      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+      /* THE DRIVER'S HALF, only on a delivery (shared/dropoff.js, small-goods
+         class): gate + the one clock, who he calls, who takes it, who signs,
+         the window, the paperwork, and the line that says it is an ask. */
+      if (drop && isDelivery()) out += drop.text();
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
 
       out += "\n\nThat's the list. Short on something, send what you've got and text me — "
            + "don't swap it for something else without asking, most of this has to match what's already in the wall."

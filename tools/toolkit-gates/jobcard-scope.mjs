@@ -152,6 +152,14 @@ async function reveal(page) {
     try { await b.click(); } catch (e) { continue; }
     if (await on()) return true;
   }
+  /* the engine-driven order pages reveal it off a header <select> (`fHow`) */
+  const sels = await page.$$eval('select[id^="f"]', els => els.filter(e => /^f[A-Z]/.test(e.id)).map(e => ({ id: e.id, opts: [...e.options].map(o => o.value) })));
+  for (const sel of sels) {
+    for (const v of sel.opts) {
+      try { await page.selectOption('#' + sel.id, v); } catch (e) { continue; }
+      if (await on()) return true;
+    }
+  }
   return on();
 }
 async function fillBlocks(page, tag) {

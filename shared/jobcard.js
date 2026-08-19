@@ -83,7 +83,8 @@
  *       mount: "jobcard",
  *       trade: "electrical",
  *       nameField: "fJob",                                  // labels the chip
- *       perJob: ["fAccess", "fSigner", "fCharge", "fPO"],
+ *       perJob: ["fCharge", "fPO"],
+ *       carry: ["fAccess", "fSigner"],   // boxes that LEFT the page — kept, never painted
  *       device: ["fBy"],
  *       legacyKey: "toolkit.electrical.pullList.header.v1",  // adopted once
  *       onApply: function () { api.refresh(); }              // repaint the preview
@@ -161,6 +162,14 @@
     var PER = (cfg.perJob || []).slice();
     var DEV = (cfg.device || []).slice();
     var NAME = cfg.nameField;
+    /* CARRIED, NOT PAINTED. A per-job answer whose box has LEFT the page — the
+     * hand-rolled "how to get in" textarea and the signer box that
+     * shared/dropoff.js replaced on 2026-08-19 — is still the man's gate code,
+     * typed in June. It is adopted from the legacy key and kept on the card like
+     * any other per-job field, but no element is written or read for it; the
+     * page hands it on through `stash()` to whatever took the box's place. A
+     * carried id that still has a live element is a page bug, not a feature. */
+    var CARRY = (cfg.carry || []).slice();
 
     if (!document.getElementById('jc-css')) {
       var st = document.createElement('style');
@@ -222,14 +231,14 @@
        * than hopeful — the top level holds NONE of the ids we came for, and `s`
        * is an object — so a flat bag that happens to carry an `s` key is never
        * mistaken for a wrapper. */
-      var want = PER.concat(DEV).concat(NAME ? [NAME] : []);
+      var want = PER.concat(CARRY).concat(DEV).concat(NAME ? [NAME] : []);
       var flat = want.some(function (id) { return old[id] != null; });
       if (!flat && old.s && typeof old.s === 'object') old = old.s;
 
       DEV.forEach(function (id) { if (old[id]) store.device[id] = old[id]; });
 
       var f = {}, any = false;
-      PER.forEach(function (id) { if (old[id]) { f[id] = old[id]; any = true; } });
+      PER.concat(CARRY).forEach(function (id) { if (old[id]) { f[id] = old[id]; any = true; } });
       var nm = (old[NAME] || '').trim();
       if (!nm && !any) return false;
 
@@ -412,7 +421,12 @@
       collect: collect,
       /* What the page needs when it wants to name the card in its own copy. */
       current: function () { var j = cur(); return j ? { id: j.id, name: j.name } : null; },
-      count: function () { return store.jobs.length; }
+      count: function () { return store.jobs.length; },
+      /* A per-job answer the CURRENT card still holds — including a carried one
+       * whose box has left the page. Read-only: the block that replaced the box
+       * seeds itself from this once (shared/dropoff.js rule 9) and the card is
+       * never the thing that forgets it. */
+      stash: function (id) { var j = cur(); return j && j.f && typeof j.f[id] === 'string' ? j.f[id] : ''; }
     };
   }
 
