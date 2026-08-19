@@ -188,17 +188,23 @@ ul.items{list-style:none;margin:0;padding:0}
         </div>
       </div>
       <div class="f" id="dateWrap" style="display:none"><label>On site by</label><input id="fDate" type="datetime-local"></div>
-      <div class="f span2"><label>Who's meeting the truck <i>(one name, one number &mdash; a load nobody meets goes back on the truck)</i></label><input id="fMeet" type="text" placeholder="Dave K — 503-555-0147, or Manny if I'm on the stage" autocomplete="off"></div>
       <div class="f span2"><label>What you're laying <i>(he reads this first &mdash; he'll catch what you forgot)</i></label><input id="fFor" type="text" placeholder="east elevation, grid 4 to 9 — leads up Thursday" autocomplete="off"></div>
       <div class="f span2"><label>Already on the wall <i>(the run, the lot, the ticket &mdash; anything that has to match)</i></label><input id="fRun" type="text" placeholder="off the first load's ticket — or the panel by the trailer" autocomplete="off"></div>
       <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Crew's standing without it</span></label>
     </div>
 
     <details class="more">
-      <summary>How the forks get in, who signs, cost code &mdash; typed once, saved with this job</summary>
+      <summary>How the forks get in, who meets it, who signs, cost code &mdash; typed once, saved with this job</summary>
+      <!-- THE DROP-OFF BLOCK (shared/dropoff.js) REPLACED three boxes: "How the
+           forks get in" and the signer box that lived here, and "Who's meeting the
+           truck" from the grid above — the block's own "who the driver calls when
+           the gate's wrong" line, printed right under the gate. A load is always
+           coming on this page, so the block is always on. Per job via the card;
+           what was typed into the old boxes is seeded into it once (rule 9 in the
+           module). If you already wrote the gate line for Getting In, paste the
+           same words. -->
+      <div id="dropoff"></div>
       <div class="hgrid">
-        <div class="f span2"><label>How the forks get in <i>(the line the whole load lands on \u2014 if you already wrote it for Getting In, paste the same words)</i></label><textarea id="fAccess" rows="3" placeholder="In off the north drive, gate 4 code 1180. Telehandler's on site. Keep the cubes off the east side — that's where the wall's going and the stage goes up Wednesday. Overhead line at the south corner, come round it."></textarea></div>
-        <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Manny — 503-555-0188" autocomplete="off"></div>
         <div class="f"><label>Charge to</label>
           <select id="fCharge">
             <option>Job</option>
@@ -252,6 +258,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
 <script>
 /* THE YARD CALL — the NINTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
  * SHAPES: CHECKLIST → A REQUEST) and the rung masonry/tools.js shipped naming as
@@ -324,16 +331,43 @@ ul.items{list-style:none;margin:0;padding:0}
    * run, the lot, the ticket, anything that has to match" is a fact about ONE
    * elevation of ONE building. Carried onto the next job it does not merely go
    * stale, it tells a yard to match a lot that is not there. */
-  JobCard.mount({
+  var jc = JobCard.mount({
     mount: "jobcard",
     trade: "masonry",
     label: "Which job",
     nameField: "fJob",
-    perJob: ["fMeet", "fRun", "fAccess", "fSigner", "fCharge", "fPO"],
+    perJob: ["fRun", "fCharge", "fPO"],
+    /* THE THREE BOXES THAT LEFT THE PAGE (2026-08-19): how the forks get in,
+     * who meets it and who signs are the drop-off block's gate line, call line
+     * and signer now; the card keeps what was typed so the block seeds once. */
+    carry: ["fMeet", "fAccess", "fSigner"],
     device: ["fBy"],
     legacyKey: "toolkit.masonry.yardCall.header.v1",
-    onApply: function () { if (api) api.refresh(); }
+    onApply: function () { syncJob(); }
   });
+
+  /* ── THE DROP-OFF BLOCK, ALWAYS ON ──────────────────────────────────────
+   * A yard truck is coming on every call, so there is no will-call mode to
+   * hide behind. Gate + the one clock, who the driver calls, where the cubes
+   * land and how they come off (forklift on site — the telehandler — or off
+   * the truck's own), who signs, the paperwork. Keyed per job via the card. */
+  var DKEY = "toolkit.masonry.yardCall.dropoff.v1";
+  function dropKey(j) { return (!j || j.id === "j1") ? DKEY : DKEY + "." + j.id; }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "truck",
+    perJob: true,
+    bare: true,
+    seed: function () { return jc ? { gate: jc.stash("fAccess"), meet: jc.stash("fMeet"), sign: jc.stash("fSigner") } : null; },
+    onChange: function () { if (api) api.refresh(); }
+  });
+  if (drop) drop.show(true);
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
 
   /* THE DEFAULT IS THE MORNING, and that is not a copy of framing's page. A
    * boom truck comes when the crane is free; a yard call is made in the
@@ -412,7 +446,7 @@ ul.items{list-style:none;margin:0;padding:0}
     // Which shape, which colour, which end of the building — what a mason and a
     // yard man actually argue about.
     notePlaceholder: "e.g. which shape, which colour, which end — and anything off your set that has to be right",
-    watch: ["fJob", "fBy", "fFor", "fMeet", "fRun", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    watch: ["fJob", "fBy", "fFor", "fRun", "fNotes", "fDate", "fPO"],
     persistExtra: function () {
       var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
       var touched = x.forr || x.notes || x.date || x.when !== "In the morning" || x.hot;
@@ -448,17 +482,17 @@ ul.items{list-style:none;margin:0;padding:0}
     },
     document: function (ctx) {
       var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
-      var meet = $("fMeet").value.trim(), notes = $("fNotes").value.trim(), run = $("fRun").value.trim();
-      var access = $("fAccess").value.trim(), signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
+      var notes = $("fNotes").value.trim(), run = $("fRun").value.trim(), po = $("fPO").value.trim();
 
       var out = "YARD CALL";
       if (job) out += " — " + job;
       out += "\nDate: " + ctx.today + "  ·  Need it: " + whenText();
       if (by) out += "\nFrom: " + by;
-      if (meet) out += "\nMeeting the truck: " + meet;
       if (forr) out += "\nLaying: " + forr;
       if ($("fHot").checked) out += "\n** CREW'S STANDING WITHOUT IT **";
-      if (access) out += "\n\nHOW THE FORKS GET IN:\n" + access;
+      /* THE TRUCK'S HALF, UP TOP where "HOW THE FORKS GET IN" always printed on
+         this page (shared/dropoff.js). */
+      if (drop) out += drop.text();
 
       if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
 
@@ -546,9 +580,7 @@ ul.items{list-style:none;margin:0;padding:0}
       var pairEl = $("pairs");
       if (pairEl) { pairEl.textContent = pair; pairEl.style.display = pair ? "" : "none"; }
 
-      out += "\n";
-      if (signer) out += "\nSigns for it if I'm not there: " + signer;
-      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
 
       out += "\n\nThat's the call. If you're short on anything, send what you've got and call me tonight — "
            + "don't sub a shape or a colour without asking, because it goes in a wall and it doesn't come back out. "

@@ -248,7 +248,7 @@
        * and its placeholder carries no time (rule 6): the clock is the control
        * under it, and an example that typed "before 7" here taught the double
        * entry the dispatcher named. */
-      + '<div class="f span2"><label>Gate / how the truck gets in <i>(the line the whole load lands on)</i></label>'
+      + '<div class="f span2"><label>Gate / how the ' + (LOAD === 'small' ? 'driver' : 'truck') + ' gets in <i>(the line the whole ' + (LOAD === 'small' ? 'order' : 'load') + ' lands on)</i></label>'
       /* A TEXTAREA, NOT A LINE: "Dock off Cedar till 2, then gate 4 — call when
        * you're 20 out, IDF 3 is badge-only" is a four-clause sentence, and the
        * box that replaced a 2-row textarea must not shrink the one answer the
@@ -257,9 +257,9 @@
       /* NOT BEFORE is its own control and not a chip, because it is the one answer
        * on this block that is a number: a truck at 6 when the gate opens at 7
        * blocks the street and gets sent away loaded. It is also the ONLY clock. */
-      + '<div class="f"><label>Not before <i>(the one clock on here &mdash; don&rsquo;t type it in the gate line too)</i></label><div class="do-when">'
+      + '<div class="f"><label>Not before <i>(the one clock on this block)</i></label><div class="do-when">'
       + '<input id="' + id('nb') + '" type="time" aria-label="Not before"></div></div>'
-      + '<div class="f"><label>Who\'s meeting it <i>(the driver calls this number if the gate\'s wrong &mdash; name + cell)</i></label>'
+      + '<div class="f"><label>Who\'s meeting it <i>(the driver calls this if the gate\'s wrong &mdash; name + cell)</i></label>'
       + '<input id="' + id('meet') + '" type="text" autocomplete="off" placeholder="Sal — 209-555-0166"></div>'
       /* THE PLACE CHIPS, THEN THE PLACE IN HIS OWN WORDS, ADJACENT. A chip can
        * say "upstairs"; only he can say "3rd east, off the north stair, not the

@@ -177,16 +177,21 @@ ul.items{list-style:none;margin:0;padding:0}
         </div>
       </div>
       <div class="f" id="dateWrap" style="display:none"><label>On site by</label><input id="fDate" type="datetime-local"></div>
-      <div class="f span2"><label>Who's meeting the truck <i>(one name, one number &mdash; a boom truck on the street with nobody to take it goes back loaded)</i></label><input id="fMeet" type="text" placeholder="Sal — 209-555-0166, or Hector if I'm on the deck" autocomplete="off"></div>
       <div class="f span2"><label>What it's for <i>(he reads this first &mdash; he'll catch your mistakes)</i></label><input id="fFor" type="text" placeholder="3rd floor east layout starts Thursday" autocomplete="off"></div>
       <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Crew's standing without it</span></label>
     </div>
 
     <details class="more">
-      <summary>How the truck gets in, who signs, cost code &mdash; typed once, saved with this job</summary>
+      <summary>How the truck gets in, who meets it, who signs, cost code &mdash; typed once, saved with this job</summary>
+      <!-- THE DROP-OFF BLOCK (shared/dropoff.js) REPLACED three boxes: "How it gets
+           in" and the signer box that lived here, and "Who's meeting the truck"
+           from the grid above — which is the block's own "who the driver calls
+           when the gate's wrong" line, printed second, right under the gate. A
+           boom truck is always coming on this page, so the block is always on.
+           Per job via the card; what was typed into the old boxes is seeded into
+           it once (rule 9 in the module). -->
+      <div id="dropoff"></div>
       <div class="hgrid">
-        <div class="f span2"><label>How it gets in <i>(the line the whole load lands on)</i></label><textarea id="fAccess" rows="3" placeholder="Boom off the north drive — 40 ft reach clears to 3rd. Window openings are out on the east elevation, 2nd and 3rd. Gate 4 code 1180, crane's on the south side till noon so come before 11."></textarea></div>
-        <div class="f"><label>Signs for it if I'm not there</label><input id="fSigner" type="text" placeholder="Hector — 209-555-0188" autocomplete="off"></div>
         <div class="f"><label>Charge to</label>
           <select id="fCharge">
             <option>Job</option>
@@ -235,6 +240,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/pickfilter.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
 <script>
 /* THE LOAD — the SEVENTH instance of shape #1 (av/AV_SOCIETY.md §THE THREE
  * SHAPES: CHECKLIST → A REQUEST), and the only order page in the program with a
@@ -274,16 +280,44 @@ ul.items{list-style:none;margin:0;padding:0}
    *
    * NO `fresh` LIST HERE: this page has no "how it gets here" select. A boom
    * truck is coming; that was never the question. */
-  JobCard.mount({
+  var jc = JobCard.mount({
     mount: "jobcard",
     trade: "framing",
     label: "Which job",
     nameField: "fJob",
-    perJob: ["fMeet", "fAccess", "fSigner", "fCharge", "fPO"],
+    perJob: ["fCharge", "fPO"],
+    /* THE THREE BOXES THAT LEFT THE PAGE (2026-08-19): how it gets in, who
+     * meets it and who signs are the drop-off block's gate line, call line and
+     * signer now; the card keeps what was typed so the block seeds itself once. */
+    carry: ["fMeet", "fAccess", "fSigner"],
     device: ["fBy"],
     legacyKey: "toolkit.framing.theLoad.header.v1",
-    onApply: function () { if (api) api.refresh(); }
+    onApply: function () { syncJob(); }
   });
+
+  /* ── THE DROP-OFF BLOCK, ALWAYS ON ──────────────────────────────────────
+   * A boom truck is coming; that was never the question — so unlike the order
+   * pages with a will-call, this block has no mode to hide behind and is on for
+   * every load. Gate + the one clock, who the driver calls, where it lands and
+   * how it comes off (boom, piggyback, forklift — the chips are this trade's),
+   * who signs, the paperwork. Keyed per job through the card. */
+  var DKEY = "toolkit.framing.theLoad.dropoff.v1";
+  function dropKey(j) { return (!j || j.id === "j1") ? DKEY : DKEY + "." + j.id; }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "truck",
+    perJob: true,
+    bare: true,
+    seed: function () { return jc ? { gate: jc.stash("fAccess"), meet: jc.stash("fMeet"), sign: jc.stash("fSigner") } : null; },
+    onChange: function () { if (api) api.refresh(); }
+  });
+  if (drop) drop.show(true);
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
 
   var when = "Today";
   function whenText() {
@@ -350,7 +384,7 @@ ul.items{list-style:none;margin:0;padding:0}
     // assembly. Which end, which opening, what not to block: the things a driver
     // and a foreman actually argue about.
     notePlaceholder: "e.g. which end, which opening, don't block the corridor — and the gauge or the length if it matters",
-    watch: ["fJob", "fBy", "fFor", "fMeet", "fNotes", "fDate", "fAccess", "fSigner", "fPO"],
+    watch: ["fJob", "fBy", "fFor", "fNotes", "fDate", "fPO"],
     persistExtra: function () {
       var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value, when: when, hot: $("fHot").checked };
       var touched = x.forr || x.notes || x.date || x.when !== "Today" || x.hot;
@@ -386,17 +420,18 @@ ul.items{list-style:none;margin:0;padding:0}
     },
     document: function (ctx) {
       var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
-      var meet = $("fMeet").value.trim(), notes = $("fNotes").value.trim();
-      var access = $("fAccess").value.trim(), signer = $("fSigner").value.trim(), po = $("fPO").value.trim();
+      var notes = $("fNotes").value.trim(), po = $("fPO").value.trim();
 
       var out = "THE LOAD";
       if (job) out += " — " + job;
       out += "\nDate: " + ctx.today + "  ·  Need it: " + whenText();
       if (by) out += "\nFrom: " + by;
-      if (meet) out += "\nMeeting the truck: " + meet;
       if (forr) out += "\nFor: " + forr;
       if ($("fHot").checked) out += "\n** CREW'S STANDING WITHOUT IT **";
-      if (access) out += "\n\nHOW IT GETS IN:\n" + access;
+      /* THE TRUCK'S HALF, UP TOP where "HOW IT GETS IN" always printed on this
+         page: gate + the one clock, who the driver calls, the paperwork, where
+         it lands, who signs, off the truck (shared/dropoff.js). */
+      if (drop) out += drop.text();
 
       if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
 
@@ -438,9 +473,7 @@ ul.items{list-style:none;margin:0;padding:0}
              + undropped.map(function (l) { return "- " + l.name; }).join("\n");
       }
 
-      out += "\n";
-      if (signer) out += "\nSigns for it if I'm not there: " + signer;
-      out += "\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
 
       out += "\n\nThat's the load. Every line says where it goes — put it where it says or we carry it twice, "
            + "and board on the wrong floor is a day gone. If you're short, send what you've got and call me tonight; "

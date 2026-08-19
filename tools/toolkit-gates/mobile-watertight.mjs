@@ -96,6 +96,15 @@ const ROWLOG = new Set(
 /* Duck-typed so it drops straight into `r.match.test('/' + page)` below. */
 const IS_ROWLOG = { test: (slashed) => ROWLOG.has(slashed.replace(/^\//, '')) };
 
+/* THE PAGES THAT MOUNT THE DROP-OFF BLOCK, read the same way. */
+const DROPOFF = new Set(
+  PAGES.filter(pg => {
+    try { return /shared\/dropoff\.js/.test(readFileSync(ROOT + pg, 'utf8')); }
+    catch { return false; }
+  }),
+);
+const IS_DROPOFF = { test: (slashed) => DROPOFF.has(slashed.replace(/^\//, '')) };
+
 /* THE NAV MENU IS SAMPLED, NOT SWEPT, AND THE SAMPLE IS NAMED SO IT IS NOT
  * MISTAKEN FOR COVERAGE. The dropdown is injected by the shared runtime and is
  * identical on every page of a trade but two things: the BRAND width (which
@@ -262,6 +271,41 @@ const REVEALS = [
       const pen = list.querySelector('.rl-pen, [data-act="edit"], button');
       if (!pen) return 'a logged row exposes no control to open';
       pen.click();
+      return null;
+    },
+  },
+  {
+    name: 'the delivery block open, a paperwork chip lit',
+    /* shared/dropoff.js v2 (2026-08-19) lives INSIDE the "typed once, saved
+       with this job" drawer on four order pages and behind a Delivery tap on
+       two more — so a page loaded and left alone never shows a single one of
+       its twenty chips, its 2-row gate textarea or the multi-select row. Same
+       class as every reveal above: measure the page a man uses. Generic — it
+       opens every drawer, walks the mode controls until #dropoff is on, then
+       lights the first chip of the multi row so a lit chip is what is sized. */
+    match: IS_DROPOFF,
+    run: () => {
+      document.querySelectorAll('details').forEach(d => { d.open = true; });
+      const host = document.getElementById('dropoff');
+      if (!host) return 'loads shared/dropoff.js and has no #dropoff host';
+      const on = () => host.classList.contains('on');
+      if (!on()) {
+        for (const b of document.querySelectorAll('.seg button')) { b.click(); if (on()) break; }
+      }
+      if (!on()) {
+        outer: for (const sel of document.querySelectorAll('select[id^="f"]')) {
+          if (!/^f[A-Z]/.test(sel.id)) continue;
+          for (const o of sel.options) {
+            sel.value = o.value;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            if (on()) break outer;
+          }
+        }
+      }
+      if (!on()) return 'no control reveals the drop-off block';
+      const chip = host.querySelector('.do-chips[data-multi] .do-chip') || host.querySelector('.do-chip');
+      if (!chip) return 'the block is on and has no chips';
+      chip.click();
       return null;
     },
   },

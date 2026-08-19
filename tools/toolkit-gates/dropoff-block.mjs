@@ -103,7 +103,12 @@ const NEVER = /\b(confirmed|booked|scheduled|granted|coordinated|signed off)\b/i
 const fails = [];
 const fail = (p, m) => fails.push(`${p}  ${m}`);
 
+/* A bare URL argument drives the DEPLOYED site instead of the working tree:
+ *   node tools/toolkit-gates/dropoff-block.mjs https://mrdirno.github.io/nested-resonance-memory-archive
+ * Which pages mount the block is still read off disk — the artifact is the repo. */
+const LIVE = (process.argv.slice(2).find(a => /^https?:\/\//.test(a)) || '').replace(/\/$/, '');
 const { s, port } = await serve();
+const BASE = LIVE || `http://127.0.0.1:${port}`;
 const browser = await chromium.launch();
 const list = pages();
 if (!list.length) { console.error('no page mounts shared/dropoff.js'); process.exit(1); }
@@ -112,7 +117,7 @@ for (const rel of list) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 780 } });
   await ctx.addInitScript(STUB);
   const page = await ctx.newPage();
-  await page.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
+  await page.goto(`${BASE}/${rel}`, { waitUntil: 'load' });
   await page.waitForSelector('#dropoff', { state: 'attached' });
 
   /* the banned-word pass, off what actually rendered */
@@ -214,11 +219,19 @@ for (const rel of list) {
   const paperLine = (blk.match(/^- Before the gate: (.*)$/m) || [])[1] || '';
   if (!paperLine.includes(' · ')) fail(rel, `two paperwork chips were ticked and the printed line is "${paperLine}" — not joined`);
 
-  /* the other half of the mode: it must leave the document entirely */
-  if (!await drive(false)) fail(rel, 'no control on the page ever HIDES the drop-off block — a will-call would carry gate codes');
-  doc = await copied(page);
-  for (const v of Object.values(typed)) {
-    if (doc.includes(v)) fail(rel, `"${v}" is a delivery answer and is still in the document after switching off delivery`);
+  /* the other half of the mode: it must leave the document entirely — UNLESS
+   * the page declares, in its source, that a truck is always coming
+   * (`drop.show(true)`: the lumber load, the yard call — there is no will-call
+   * to hide behind). Omission still fails; the claim has to be in the diff. */
+  const alwaysOn = /drop\.show\(true\)/.test(readFileSync(join(ROOT, rel), 'utf8'));
+  if (alwaysOn) {
+    if (!(await isOn())) fail(rel, 'declares drop.show(true) and the block is not on');
+  } else {
+    if (!await drive(false)) fail(rel, 'no control on the page ever HIDES the drop-off block — a will-call would carry gate codes');
+    doc = await copied(page);
+    for (const v of Object.values(typed)) {
+      if (doc.includes(v)) fail(rel, `"${v}" is a delivery answer and is still in the document after switching off delivery`);
+    }
   }
 
   /* it survives the job: real reload, then back into the delivery mode */
@@ -234,7 +247,7 @@ for (const rel of list) {
   if (back.meet !== typed['do-meet']) fail(rel, 'who is meeting the truck did not survive a reload');
   if (back.on !== picked.length) fail(rel, `${picked.length} chip(s) were ticked and ${back.on} came back after a reload`);
 
-  console.log(` ${rel}  ${opts.length} chips, ${picked.length} axes, block in and out of the document`);
+  console.log(` ${rel}  ${opts.length} chips, ${picked.length} axes, block ${alwaysOn ? 'always on (declared)' : 'in and out of the document'}`);
   await ctx.close();
 
   /* ── THE SEED (v2 rule 9) — only on a page that REPLACED its old boxes ────
@@ -251,25 +264,28 @@ for (const rel of list) {
   const legacyKey = (src.match(/legacyKey:\s*"([^"]+)"/) || [])[1];
   const dkey = (src.match(/var DKEY = "([^"]+)"/) || [])[1];
   if (!trade || !dkey) { fail(rel, 'declares carry: but no trade / DKEY could be read from the source — the seed cannot be exercised'); continue; }
-  const GATE = 'ZJUNEGATEZ off Elm, code 4411', SIGN = 'ZJUNESIGNZ 209-555-0101';
+  const GATE = 'ZJUNEGATEZ off Elm, code 4411', SIGN = 'ZJUNESIGNZ 209-555-0101', MEET = 'ZJUNEMEETZ 209-555-0102';
+  const carriesMeet = /fMeet/.test(carry);
   for (const shape of ['card', 'legacy']) {
     if (shape === 'legacy' && !legacyKey) continue;
     const c2 = await browser.newContext({ viewport: { width: 390, height: 780 } });
     await c2.addInitScript(STUB);
-    await c2.addInitScript(({ shape, trade, legacyKey, GATE, SIGN }) => {
+    await c2.addInitScript(({ shape, trade, legacyKey, GATE, SIGN, MEET }) => {
       if (shape === 'card') {
         localStorage.setItem(`toolkit.${trade}.jobcard.v1`, JSON.stringify({ v: 1, seq: 1, cur: 'j1', device: {},
-          jobs: [{ id: 'j1', name: 'June job', at: 1, f: { fAccess: GATE, fSigner: SIGN, fPO: '24-118' } }] }));
+          jobs: [{ id: 'j1', name: 'June job', at: 1, f: { fAccess: GATE, fSigner: SIGN, fMeet: MEET, fPO: '24-118' } }] }));
       } else {
-        localStorage.setItem(legacyKey, JSON.stringify({ fJob: 'June job', fAccess: GATE, fSigner: SIGN, fPO: '24-118' }));
+        localStorage.setItem(legacyKey, JSON.stringify({ fJob: 'June job', fAccess: GATE, fSigner: SIGN, fMeet: MEET, fPO: '24-118' }));
       }
-    }, { shape, trade, legacyKey, GATE, SIGN });
+    }, { shape, trade, legacyKey, GATE, SIGN, MEET });
     const pg = await c2.newPage();
-    await pg.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
+    await pg.goto(`${BASE}/${rel}`, { waitUntil: 'load' });
     await pg.waitForSelector('#dropoff', { state: 'attached' });
-    const got = await pg.evaluate(() => ({ gate: (document.getElementById('do-gate') || {}).value, sign: (document.getElementById('do-sign') || {}).value }));
+    const got = await pg.evaluate(() => ({ gate: (document.getElementById('do-gate') || {}).value, sign: (document.getElementById('do-sign') || {}).value, meet: (document.getElementById('do-meet') || {}).value }));
     if (got.gate !== GATE) fail(rel, `[${shape}] the gate code typed into the old box did not reach the block (gate reads ${JSON.stringify(got.gate)})`);
     if (got.sign !== SIGN) fail(rel, `[${shape}] the old signer did not reach the block (reads ${JSON.stringify(got.sign)})`);
+    if (carriesMeet && got.meet !== MEET) fail(rel, `[${shape}] "who's meeting the truck" left the grid and did not reach the block (reads ${JSON.stringify(got.meet)})`);
+    if (!carriesMeet && got.meet) fail(rel, `[${shape}] the block's meet field was seeded from nowhere (reads ${JSON.stringify(got.meet)})`);
     /* and it is in the document, through the replace */
     await pg.evaluate(() => { const t = document.querySelector('#list .item .tick'); if (t && !t.checked) { t.checked = true; t.dispatchEvent(new Event('change', { bubbles: true })); } });
     const onNow = () => pg.$eval('#dropoff', el => el.classList.contains('on'));
@@ -286,6 +302,8 @@ for (const rel of list) {
     if (!(await onNow())) fail(rel, `[${shape}] could not reveal the block to read the seeded document`);
     const d1 = await copied(pg);
     if (!d1.includes(GATE)) fail(rel, `[${shape}] the seeded gate code is on the glass and not in the sent document`);
+    if (carriesMeet && !d1.includes(MEET)) fail(rel, `[${shape}] the seeded "who's meeting" number is not in the sent document`);
+    if ((d1.match(/Meeting the truck:/g) || []).length) fail(rel, `[${shape}] the old "Meeting the truck:" line still prints beside the block's call line`);
     if ((d1.match(new RegExp('Signs for it if I\'m not there', 'g')) || []).length > 1) fail(rel, `[${shape}] "Signs for it" printed twice — the old line and the block both print`);
     /* clear, reload: it must NOT come back (the drawer the block lives in may be
        closed; open it the way a thumb would, then tap the real button) */
@@ -309,4 +327,4 @@ if (fails.length) {
   for (const f of fails) console.error('  ✗ ' + f);
   process.exit(1);
 }
-console.log(`\nOK — ${list.length} page(s) carry a drop-off block that shows where it belongs, prints what he ticked, and survives the job.`);
+console.log(`\nOK${LIVE ? ' (LIVE ' + LIVE + ')' : ''} — ${list.length} page(s) carry a drop-off block that shows where it belongs, prints what he ticked, and survives the job.`);
