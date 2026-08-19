@@ -89,8 +89,17 @@ export const Header: React.FC<HeaderProps> = ({
             every screen, including the empty state.
 
             Guarded on the global: in local dev the sibling ../shared/feedback.js
-            404s, so the button simply does nothing rather than throwing. */}
+            404s, so the button simply does nothing rather than throwing.
+
+            data-wish-well is the Wish It Better network's marker for "this element
+            opens a real wishing well" — a valueless attribute, invisible to the
+            user. The network sweep (mrdirno/vibe-cards tools/verify_pages_artifact.mjs)
+            refuses an https wish_channel whose page carries no such marker, and
+            /collage/wish-it-better.json now names THIS page as the channel. This
+            button is rendered at runtime, so index.html carries the same marker on
+            the well's static config for the sweep, which reads the document text. */}
         <button
+          data-wish-well
           onClick={() => (window as any).Feedback?.open('bug')}
           className="ui-btn ui-btn--quiet ui-btn--compact"
           title="Report a bug, wish it better, or ask for a feature — it goes straight to the loop that builds this"

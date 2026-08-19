@@ -148,8 +148,8 @@ jobs:
           cp -R commons/. HELIOS-BRIDGE/dist/commons/
           echo "staged commons"
 
-          # THE NETWORK MANIFEST — the one file on this site that a machine is
-          # entitled to guess. wish-it-better.json has been at the repo root and
+          # THE NETWORK MANIFESTS — the files on this site that a machine is
+          # entitled to guess. wish-it-better.json had been at the repo root and
           # committed since a8487909, and it 404'd at
           # https://mrdirno.github.io/nested-resonance-memory-archive/wish-it-better.json
           # for its whole life, because THE ARTIFACT IS THE SITE and the repo root
@@ -157,37 +157,42 @@ jobs:
           # Field Toolkit and Collage Studio — are addressed by the /av/ and
           # /collage/ URLs above, and a card or a crawler handed one of those gets
           # the URL and nothing else: no repo, no clone, no way to reach a file
-          # that exists only in a git tree.
+          # that exists only in a git tree. A chip carries ONE url with no way to
+          # walk up from it, so the manifest has to sit beside the page it opens.
           #
-          # ROOT IS NOT ENOUGH, AND THAT NEARLY SHIPPED AS THE WHOLE FIX. The
-          # network addresses those two projects by the URLs above — /av/ and
-          # /collage/ — not by this site's root, and a chip carries ONE url with
-          # no way to walk up from it. Staging only the artifact root would have
-          # left the obvious relative guess, <chip-url>wish-it-better.json, a 404
-          # on both, while the deploy went green and the commit claimed the fix.
-          # The seed project got away with root-only because its listed url IS
-          # its Pages root; this repo's are subpaths, so the copy follows the
-          # URLs the network actually lists.
-          #
-          # ONE SOURCE, N DERIVED COPIES, every one asserted byte-identical to it
-          # below. Hand-maintaining a second copy under HELIOS-BRIDGE/ would be
-          # the credits.json mistake again — a deploy-time artifact with no git
-          # history, free to drift from the thing it claims to mirror.
+          # SCOPE, decided 2026-08-19: ONE MANIFEST PER SURFACE THE NETWORK LISTS,
+          # plus the repo's own at the root. From 2026-08-13 to that date the ONE
+          # repo-root file was copied to /, /av/ and /collage/ and asserted
+          # byte-identical — the right shape for level and licence, which are
+          # properties of the repo, and the wrong one for ORIGIN (criterion 5 of
+          # the network): the toolkit and Collage Studio have different lineages,
+          # and a file copied to two urls can carry only one. The network sweep in
+          # mrdirno/vibe-cards (tools/verify_pages_artifact.mjs --network-registry)
+          # said exactly that: "shares one published manifest ... byte-identical
+          # copies of a single file, which can carry only ONE origin ... Criterion 5
+          # is unclosable for at least one of them until ... their repo publishes a
+          # per-surface manifest". So:
+          #   /wish-it-better.json         <- wish-it-better.json   (repo root: the repo's own)
+          #   /av/wish-it-better.json      <- av/wish-it-better.json (tracked; rides the trade copy above)
+          #   /collage/wish-it-better.json <- tools/collage-studio/public/wish-it-better.json (tracked; vite copies public/ into dist/)
+          # Each is TRACKED at its own source, so it has git history and an owner —
+          # the credits.json lesson, kept. NO FALLBACK COPY: a surface whose
+          # manifest is missing fails the build here rather than silently publishing
+          # the repo-scoped file under a project's url, which is the same drift this
+          # step used to forbid in the other direction. The `origin` in each
+          # per-surface file is kept byte-identical by hand to that project's entry
+          # in mrdirno/vibe-cards src/site/network.json, because the sweep compares
+          # the two; the root's origin is the repo's and is compared with nothing.
           test -f wish-it-better.json || { echo "MISSING: wish-it-better.json at the repo root"; exit 1; }
-          for dest in "" av/ collage/; do
-            d="HELIOS-BRIDGE/dist/$dest"
-            test -d "$d" || { echo "FAIL: cannot stage the network manifest into $d — that surface is not in the artifact"; exit 1; }
-            # FAIL CLOSED ON A SECOND MANIFEST. A per-surface manifest checked in
-            # under tools/collage-studio/public/ would land here from the vite
-            # build and this copy would silently overwrite it — one project's
-            # declared level replaced by another, with every gate green. The
-            # scope question (one repo-scoped manifest, or one per surface) is a
-            # decision, so the build refuses instead of picking a winner.
-            if [ -f "${d}wish-it-better.json" ] && ! cmp -s wish-it-better.json "${d}wish-it-better.json"; then
-              echo "FAIL: ${d}wish-it-better.json already exists and differs from the repo-root manifest — two manifests are in flight for one surface. Settle the scope (repo-scoped at the root, or one per surface) before either ships."; exit 1
+          cp wish-it-better.json HELIOS-BRIDGE/dist/wish-it-better.json
+          echo "staged network manifest: / (repo root)"
+          for dest in av/ collage/; do
+            f="HELIOS-BRIDGE/dist/${dest}wish-it-better.json"
+            test -f "$f" || { echo "FAIL: $f is not in the artifact — /$dest is a URL the network lists, and its manifest is tracked at its own source (av/wish-it-better.json, tools/collage-studio/public/wish-it-better.json); nothing is copied there from the root any more, by design"; exit 1; }
+            if cmp -s wish-it-better.json "$f"; then
+              echo "FAIL: $f is byte-identical to the repo-root manifest — a per-surface manifest declares its own surface (project, origin, wish_channel); the copy door is shut on purpose"; exit 1
             fi
-            cp wish-it-better.json "${d}wish-it-better.json"
-            echo "staged network manifest: /$dest"
+            echo "staged network manifest: /$dest (per-surface, tracked at its source)"
           done
 
       # The wishing well POSTs to Supabase with the PUBLIC anon key. It is
@@ -747,23 +752,28 @@ jobs:
             echo "  ok  collage/$a"
           done
 
-          # THE NETWORK MANIFEST IS PUBLISHED, PARSES, AND HAS NOT DRIFTED.
+          # THE NETWORK MANIFESTS ARE PUBLISHED, PARSE, AND SAY WHAT THEY CLAIM.
           #
           # Every other check in this step is DERIVED — it walks what the shipped
           # files reference and asserts each target exists. That derivation is
-          # structurally blind to this one file, and for a principled reason: a
-          # well-known path has no referrer, which is what well-known means. So it
-          # gets an assertion of its own or it gets nothing, and "nothing" is what
-          # it had while the file sat green at the repo root and 404'd on the web.
+          # structurally blind to these files, and for a principled reason: a
+          # well-known path has no referrer, which is what well-known means. So they
+          # get an assertion of their own or they get nothing, and "nothing" is what
+          # the root file had while it sat green at the repo root and 404'd on the web.
           #
-          # THREE failure modes, because only the first is obvious:
-          #   deleted     — the staging line above was dropped or renamed
-          #   drifted     — someone edited a copy under HELIOS-BRIDGE/ and the
-          #                 published level stopped matching the repo-root file,
-          #                 which is the failure that makes a declared level a lie
+          # FOUR failure modes, because only the first is obvious:
+          #   deleted     — a staging line above was dropped or renamed, or a
+          #                 per-surface file was removed at its source
+          #   collapsed   — a per-surface file is byte-identical to the root one:
+          #                 the copy door reopened and a project's url is publishing
+          #                 the repo's manifest as its own (the 2026-08-13..19 state)
           #   unparseable — a manifest that 200s and does not parse is worse than
           #                 a 404: a crawler reads a level off a file it cannot
           #                 read, and criterion 4 asks for parsing, not presence
+          #   mis-scoped  — a per-surface manifest whose wish_channel is not its own
+          #                 page, or whose origin is null: the null is a positive
+          #                 claim of no lineage, and the network refuses it for a
+          #                 listed project
           # Checked at EVERY surface the network addresses, not just the root —
           # a card carries one URL and cannot walk up from it, so a manifest that
           # is present at the root and absent beside the page the chip opens is
@@ -772,13 +782,18 @@ jobs:
             f="HELIOS-BRIDGE/dist/${dest}wish-it-better.json"
             test -f "$f" \
               || { echo "FAIL: $f is not in the artifact — /$dest is a URL the network lists, and it is all a card holder or a crawler ever gets; a manifest that exists only in the repo is invisible to both"; exit 1; }
-            cmp -s wish-it-better.json "$f" \
-              || { echo "FAIL: $f is not byte-identical to the repo-root original — one source, N derived copies, and these have drifted"; exit 1; }
+            if [ -n "$dest" ] && cmp -s wish-it-better.json "$f"; then
+              echo "FAIL: $f is byte-identical to the repo-root manifest — the per-surface file collapsed back into a copy of the repo's"; exit 1
+            fi
           done
+          cmp -s wish-it-better.json HELIOS-BRIDGE/dist/wish-it-better.json \
+            || { echo "FAIL: the root manifest in the artifact is not the repo-root original — one source for the root, and it drifted"; exit 1; }
           node -e '
             const fs = require("fs");
             /* NO APOSTROPHES IN THIS SCRIPT — see the docspec block above. */
             const SPEC = "wish-it-better/1.0";
+            const SITE = "https://mrdirno.github.io/nested-resonance-memory-archive/";
+            const seen = new Set();
             for (const dest of ["", "av/", "collage/"]) {
               const f = "HELIOS-BRIDGE/dist/" + dest + "wish-it-better.json";
               let m;
@@ -799,7 +814,20 @@ jobs:
                  hand to buy a better badge. */
               if (m.spec !== SPEC) { console.error("FAIL: " + f + " declares spec " + m.spec + ", not " + SPEC); process.exit(1); }
               if (!/^L[0-2]$/.test(m.level)) { console.error("FAIL: " + f + " declares level " + m.level + ", which is not one of L0/L1/L2"); process.exit(1); }
-              console.log("network manifest /" + dest + ": " + m.project + " " + m.level + " (" + m.spec + "), parses, byte-identical to repo root");
+              /* Three manifests, three projects. Two files naming the same
+                 project is the collapse above wearing a different byte. */
+              if (seen.has(m.project)) { console.error("FAIL: " + f + " names project " + m.project + ", which another manifest in this artifact already names"); process.exit(1); }
+              seen.add(m.project);
+              if (dest) {
+                /* A per-surface manifest speaks for ITS page: the wish channel is
+                   that page (the sweep opens it and looks for the data-wish-well
+                   marker), and origin is declared — null there is the claim that
+                   nothing upstream exists, which the network refuses for a listed
+                   project (vibe-cards tools/verify_pages_artifact.mjs, criterion 5). */
+                if (!m.wish_channel.startsWith(SITE + dest)) { console.error("FAIL: " + f + " declares wish_channel " + m.wish_channel + ", which is not this surface (" + SITE + dest + ")"); process.exit(1); }
+                if (typeof m.origin !== "string" || !m.origin.trim()) { console.error("FAIL: " + f + " declares no origin — a listed surface must say where it came from (criterion 5)"); process.exit(1); }
+              }
+              console.log("network manifest /" + dest + ": " + m.project + " " + m.level + " (" + m.spec + "), parses" + (dest ? ", per-surface, origin declared" : ", repo root, byte-identical to the original"));
             }
           ' || exit 1
 

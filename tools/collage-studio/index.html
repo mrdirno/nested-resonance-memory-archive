@@ -28,8 +28,17 @@
          '../shared/feedback.js' resolves against the document base, so the deployed
          page at /nested-resonance-memory-archive/collage/ loads the ONE shared copy
          at /nested-resonance-memory-archive/shared/feedback.js. In local dev it
-         simply 404s and the button is absent — the app is unaffected. -->
-    <script>
+         simply 404s and the button is absent — the app is unaffected.
+
+         data-wish-well on the script below: the Wish It Better network's marker
+         for "this page carries a real wishing well". /collage/wish-it-better.json
+         (tools/collage-studio/public/) names THIS page as its wish_channel, and the
+         network sweep in mrdirno/vibe-cards opens the page and reads the DOCUMENT
+         TEXT for the marker — it cannot see the Feedback button Header.tsx renders
+         at runtime (which carries the marker too). The well's presence in this
+         document IS this config + the loader, so the marker sits here. Valueless
+         attribute, nothing visible changes, vite leaves inline classic scripts alone. -->
+    <script data-wish-well>
       window.FEEDBACK = {
         surface: 'collage',
         name: 'Collage Studio',
