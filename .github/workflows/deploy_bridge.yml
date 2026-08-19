@@ -11,6 +11,7 @@ on:
     branches: [ main ]
     paths:
       - 'HELIOS-BRIDGE/**'
+      - 'HELIOS-02/**'
       - 'tools/collage-studio/**'
       - 'collage-beta/**'
       - 'HELIOS-BRIDGE-ARCHIVE/**'
@@ -115,6 +116,12 @@ jobs:
           mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/shared
           cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/
           cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
+
+          # HELIOS-02 — second-generation bridge page, one self-contained file.
+          # Served BESIDE the original at /HELIOS-02/; the root page is untouched.
+          rm -rf HELIOS-BRIDGE/dist/HELIOS-02
+          mkdir -p HELIOS-BRIDGE/dist/HELIOS-02
+          cp -R HELIOS-02/. HELIOS-BRIDGE/dist/HELIOS-02/
 
           # FIELD TOOLKITS — one runtime (shared/toolkit.js), many trades. Every
           # trade dir is a config (trade.js) + a registry (tools.js) + tool pages,
@@ -247,6 +254,7 @@ jobs:
           for f in index.html .nojekyll \
                    collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
+                   HELIOS-02/index.html \
                    archive/index.html \
                    shared/toolkit.js shared/feedback.js shared/find.js \
                    commons/index.html commons/gear.js commons/commons.js commons/commons.css \

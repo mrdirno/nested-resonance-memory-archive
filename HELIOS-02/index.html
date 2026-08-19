@@ -1,0 +1,3654 @@
+<!doctype html>
+<!--
+  HELIOS | BRIDGE 02 - THE BODY WAKES
+
+  HELIOS-02 — second-generation bridge, evolved from the HELIOS-BRIDGE
+  Vite app; same mathematics, new body.
+
+  Transcendental standing-wave resonance field.
+  One self-contained file: raw WebGL2 transform-feedback particle integrator
+  (1,000,000-slot ping-pong state buffers) with a canvas-2D fallback.
+  No CDN, no web fonts, no build step. Works from file:// and from
+  https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/
+
+  Physics ported verbatim from HELIOS-BRIDGE (same constants, same digit
+  sequences of pi / e / sqrt2 / phi, same analytic-gradient forces, same
+  integration order, same spherical boundary, same coloring laws).
+
+  The vessel carries its cockpit:
+  - Glass chrome: wordmark scrim, kaleidoscope capsule, four-tile dock
+    (FIELD / LABS / ARCHIVE / SYSTEM), one budding panel, telemetry strip.
+  - Every figure boots as an em-dash and ignites only after a real
+    measurement lands (frame clock, GPU readback of the live state buffer).
+  - Genome permalinks: the full field state serializes to a base64 URL hash
+    on every change; G or C copies it.
+  - Empty-Well Sonar: a pointer probe that rings well-indigo where the
+    local velocity vector-sum cancels while scalar energy persists.
+  - Ontogeny boot (cell, digit-paced cleavage, gastrulation, body) with a
+    typed specimen log; any input skips it; B replays it; reduced motion
+    crossfades straight to the mature body.
+
+  Author:     Aldrin Payopay <aldrin.gdf@gmail.com>
+  License:    GPL-3.0-only
+  Repository: https://github.com/mrdirno/nested-resonance-memory-archive
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>HELIOS | BRIDGE 02 — Nested Resonance Memory — Aldrin Payopay</title>
+<meta name="author" content="Aldrin Payopay">
+<meta name="description" content="HELIOS | BRIDGE 02 by Aldrin Payopay — the next-generation transcendental resonance bridge of the Nested Resonance Memory archive. A million-grain standing-wave field driven by the digits of pi, e, sqrt 2 and phi. Raw WebGL2, one self-contained file, zero dependencies.">
+<meta name="keywords" content="Nested Resonance Memory, NRM, Aldrin Payopay, HELIOS BRIDGE, Duality-Zero, transcendental substrate, standing waves, inverse cymatics, WebGL2, generative art">
+<meta name="copyright" content="Copyright (c) 2025-2026 Aldrin Payopay">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/">
+<link rel="author" href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html">
+<link rel="license" href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/LICENSE">
+
+<!-- Dublin Core - library / repository harvesters -->
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/">
+<meta name="DC.title" content="HELIOS | BRIDGE 02 — Nested Resonance Memory Transcendental Resonance Field">
+<meta name="DC.creator" content="Payopay, Aldrin">
+<meta name="DC.publisher" content="Persona500 LLC">
+<meta name="DC.date" content="2026-08-19">
+<meta name="DC.type" content="Software">
+<meta name="DC.format" content="text/html">
+<meta name="DC.language" content="en">
+<meta name="DC.identifier" content="https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/">
+<meta name="DC.rights" content="Copyright (c) 2025-2026 Aldrin Payopay. Licensed GPL-3.0-only.">
+<meta name="DCTERMS.rightsHolder" content="Aldrin Payopay">
+<meta name="DCTERMS.created" content="2026-08-19">
+<meta name="DCTERMS.isPartOf" content="https://mrdirno.github.io/nested-resonance-memory-archive/">
+
+<!-- Highwire Press - Google Scholar's parser -->
+<meta name="citation_title" content="HELIOS | BRIDGE 02 — Nested Resonance Memory Transcendental Resonance Field">
+<meta name="citation_author" content="Payopay, Aldrin">
+<meta name="citation_author_institution" content="Persona500 LLC">
+<meta name="citation_publication_date" content="2026/08/19">
+<meta name="citation_online_date" content="2026/08/19">
+<meta name="citation_technical_report_institution" content="Persona500 LLC">
+<meta name="citation_public_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/">
+<meta name="citation_abstract_html_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html">
+<meta name="citation_language" content="en">
+<meta name="citation_keywords" content="Nested Resonance Memory; transcendental substrate; standing waves; inverse cymatics; self-organizing systems">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="HELIOS | BRIDGE 02 — Nested Resonance Memory — Aldrin Payopay">
+<meta property="og:description" content="The next-generation transcendental resonance bridge: a million-grain standing-wave field driven by the digits of pi, e, sqrt 2 and phi. Raw WebGL2, one file, zero dependencies.">
+<meta property="og:url" content="https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/">
+<meta property="og:site_name" content="Nested Resonance Memory Archive">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Aldrin Payopay">
+<meta property="article:published_time" content="2026-08-19">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HELIOS | BRIDGE 02 — Nested Resonance Memory — Aldrin Payopay">
+<meta name="twitter:description" content="A million-grain standing-wave field driven by the digits of pi, e, sqrt 2 and phi — raw WebGL2, one self-contained file.">
+
+<!-- schema.org JSON-LD - authorship resolves to one stable Person @id -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author",
+      "name": "Aldrin Payopay",
+      "givenName": "Aldrin",
+      "familyName": "Payopay",
+      "alternateName": ["mrdirno"],
+      "email": "mailto:aldrin.gdf@gmail.com",
+      "jobTitle": "Independent Researcher",
+      "url": "https://persona500.com",
+      "affiliation": {
+        "@type": "Organization",
+        "@id": "https://persona500.com/#org",
+        "name": "Persona500 LLC",
+        "url": "https://persona500.com"
+      },
+      "sameAs": [
+        "https://github.com/mrdirno",
+        "https://github.com/mrdirno/nested-resonance-memory-archive",
+        "https://persona500.com"
+      ]
+    },
+    {
+      "@type": ["SoftwareSourceCode", "CreativeWork"],
+      "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/#work",
+      "name": "HELIOS | BRIDGE 02 — Nested Resonance Memory Transcendental Resonance Field",
+      "alternateName": ["HELIOS-02", "Helios Bridge 02"],
+      "headline": "HELIOS | BRIDGE 02",
+      "abstract": "A single-file, dependency-free WebGL2 instrument: one million particles integrated on the GPU under standing-wave forces whose mode numbers are read from the verbatim decimal digits of pi, e, sqrt 2 and phi. The next-generation bridge of the Nested Resonance Memory archive.",
+      "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+      "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+      "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+      "copyrightYear": "2026",
+      "maintainer": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+      "publisher": { "@id": "https://persona500.com/#org" },
+      "isPartOf": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work" },
+      "codeRepository": "https://github.com/mrdirno/nested-resonance-memory-archive",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/HELIOS-02/",
+      "programmingLanguage": ["JavaScript", "GLSL"],
+      "runtimePlatform": "Web",
+      "license": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+      "datePublished": "2026-08-19",
+      "dateModified": "2026-08-19",
+      "version": "2.0.0",
+      "inLanguage": "en",
+      "keywords": "Nested Resonance Memory, transcendental substrate, standing waves, inverse cymatics, WebGL2, self-organizing systems",
+      "citation": "Payopay, A. (2026). Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity [Computer software]. Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive"
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work",
+      "name": "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity",
+      "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+      "codeRepository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+    }
+  ]
+}
+</script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='27' fill='%230F0F23'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%23D946EF' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%237C3AED' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23EC4899'/%3E%3C/svg%3E">
+<style>
+  /* ================= tokens ================= */
+  :root {
+    --violet:  #7C3AED;
+    --pink:    #EC4899;
+    --cyan:    #06B6D4;
+    --emerald: #10B981;
+    --fuchsia: #D946EF;
+    --indigo:  #1E3A8A; /* reserved: Empty-Well Sonar only */
+    --t70: rgba(255,255,255,0.7);
+    --t60: rgba(255,255,255,0.6);
+    --t40: rgba(255,255,255,0.4);
+    --glassLum: 1; /* breathes 0.9-1.0 from the async sigma-s readback */
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  html, body { margin: 0; padding: 0; height: 100%; background: #000000; }
+  body {
+    background: radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%);
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--t70);
+  }
+  .mono { font-family: var(--mono); }
+  #field { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  #field:active { cursor: grabbing; }
+  #nogl { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: var(--t60); font: 13px/1.6 system-ui, sans-serif; text-align: center; padding: 24px; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--ac, var(--violet)); outline-offset: 2px; border-radius: 8px; }
+
+  /* ================= glass recipe ================= */
+  .glass {
+    background: rgba(255,255,255,0.05);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-color: rgb(255 255 255 / calc(0.1 * var(--glassLum)));
+    border-radius: 16px;
+    transition: background .2s ease, border-color .8s ease;
+  }
+  body.holding .glass,
+  body.holding #dock,
+  body.holding #capsule {
+    background: rgba(255,255,255,0.02);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .micro { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--t60); }
+
+  /* ================= header ================= */
+  #top {
+    position: fixed; top: 0; left: 0; right: 0; height: 72px; z-index: 20;
+    background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.4) 62%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  #top > * { pointer-events: auto; }
+  #brand { text-align: center; opacity: 0; translate: 0 -7px; transition: opacity .9s ease, translate .9s cubic-bezier(.22,1,.36,1); }
+  body.b-word #brand { opacity: 1; translate: 0 0; }
+  #wordmark {
+    font-weight: 800; letter-spacing: -0.03em; text-transform: uppercase;
+    font-size: 26px; line-height: 1.1; color: #FFFFFF;
+    text-shadow: 0 0 18px rgba(255,255,255,.55), 0 0 42px rgba(255,255,255,.22);
+  }
+  #wordmark .wp { color: var(--t40); font-weight: 300; margin: 0 .1em; }
+  #wordmark .gen { color: var(--fuchsia); font-size: 15px; vertical-align: .3em; margin-left: .25em; text-shadow: 0 0 14px rgba(217,70,239,.6); }
+  @keyframes wshim {
+    0%, 100% { text-shadow: 0 0 18px rgba(255,255,255,.55), 0 0 42px rgba(255,255,255,.22); }
+    50%      { text-shadow: 0 0 22px rgba(124,58,237,.95), 0 0 64px rgba(124,58,237,.5); }
+  }
+  #wordmark.shimmer { animation: wshim 1.2s ease; }
+  #repo { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--t40); text-decoration: none; margin-top: 2px; }
+  #repo:hover { color: var(--t70); }
+  #ticker {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    font-family: var(--mono); font-size: 14px; letter-spacing: .08em; text-align: right;
+    opacity: 0; transition: opacity .6s ease .3s;
+  }
+  body.b-word #ticker { opacity: 1; }
+  #ticker .tk { font-weight: 700; color: var(--t40); }
+  #ticker .tksep { color: var(--t40); margin: 0 .3em; font-weight: 300; }
+  #tickerLbl { display: block; font-size: 8px; letter-spacing: .22em; color: var(--t40); text-transform: uppercase; margin-top: 1px; }
+
+  /* ================= kaleido capsule ================= */
+  #capsule {
+    position: fixed; top: 108px; left: 50%; transform: translateX(-50%); z-index: 20;
+    max-width: min(94vw, 660px);
+    background: rgba(0,0,0,.4);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    border: 1px solid rgba(217,70,239,.2);
+    border-radius: 999px; padding: 4px;
+    opacity: 0; translate: 0 -10px;
+    transition: opacity .5s ease, translate .5s ease, background .2s ease;
+  }
+  body.b-capsule #capsule { opacity: 1; translate: 0 0; }
+  #capsuleScroll { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; }
+  #capsuleScroll::-webkit-scrollbar { display: none; }
+  .kpill {
+    --ac: var(--fuchsia);
+    flex: 0 0 auto; border: 0; background: transparent; color: var(--t60);
+    font: 600 12px/1 system-ui, sans-serif; padding: 8px 14px; border-radius: 999px;
+    cursor: pointer; transition: color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .kpill:hover { color: #fff; }
+  .kpill:hover:not([aria-pressed="true"]) { background: rgba(255,255,255,.08); }
+  .kpill:active:not([aria-pressed="true"]) { transform: scale(.94); }
+  .kpill[aria-pressed="true"] {
+    background: rgba(217,70,239,.9); color: #fff;
+    box-shadow: 0 0 20px rgba(217,70,239,.5); transform: scale(1.1);
+  }
+  /* born with the organism: each pill blooms in sequence once the capsule lands */
+  @keyframes bloom { from { opacity: 0; translate: 0 7px; } to { opacity: 1; translate: 0 0; } }
+  body:not(.b-capsule) .kpill { opacity: 0; }
+  body.b-capsule .kpill { animation: bloom .5s cubic-bezier(.22,1,.36,1) both; }
+  body.b-capsule .kpill:nth-child(2) { animation-delay: .06s; }
+  body.b-capsule .kpill:nth-child(3) { animation-delay: .12s; }
+  body.b-capsule .kpill:nth-child(4) { animation-delay: .18s; }
+  body.b-capsule .kpill:nth-child(5) { animation-delay: .24s; }
+  body.b-capsule .kpill:nth-child(6) { animation-delay: .30s; }
+
+  /* ================= dock + telemetry ================= */
+  #dockWrap { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; transform: translateY(110%); transition: transform .6s cubic-bezier(.22,1,.36,1); }
+  body.b-dock #dockWrap { transform: none; }
+  #telemetry {
+    display: flex; gap: 16px; align-items: center; height: 24px; padding: 0 14px;
+    overflow-x: auto; scrollbar-width: none; white-space: nowrap;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+    color: var(--t40); text-shadow: 0 1px 4px rgba(0,0,0,.85);
+    background: linear-gradient(0deg, rgba(0,0,0,.75), transparent);
+  }
+  #telemetry::-webkit-scrollbar { display: none; }
+  #telemetry b { font-weight: 400; color: var(--t40); margin-left: 5px; transition: color .5s ease; }
+  #telemetry b.lit { color: var(--t70); }
+  #telemetry b.lit.acc { color: var(--emerald); }
+  #telemetry .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 8px var(--emerald); margin-right: 5px; vertical-align: 1px; }
+  #dock {
+    height: 64px; display: flex; align-items: stretch; justify-content: center; gap: 10px;
+    background: rgba(255,255,255,0.05);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-color: rgb(255 255 255 / calc(0.1 * var(--glassLum)));
+    transition: background .2s ease;
+  }
+  .tile {
+    --ac: var(--violet);
+    width: 104px; margin: 7px 0; border: 0; border-radius: 12px; background: transparent;
+    color: var(--t60); cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    transition: color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .tile svg { width: 20px; height: 20px; }
+  .tile span { font-size: 10px; font-weight: 700; letter-spacing: .16em; }
+  .tile:hover { color: #fff; }
+  .tile:hover:not([aria-pressed="true"]) { background: rgba(255,255,255,.06); }
+  .tile:active:not([aria-pressed="true"]) { transform: scale(.95); }
+  .tile[aria-pressed="true"] {
+    color: #fff; background: rgba(124,58,237,.9);
+    box-shadow: 0 0 20px rgba(124,58,237,.5); transform: scale(1.1);
+  }
+  /* the four organs differentiate in sequence as the dock rises */
+  body:not(.b-dock) .tile { opacity: 0; }
+  body.b-dock .tile { animation: bloom .55s cubic-bezier(.22,1,.36,1) both .1s; }
+  body.b-dock .tile:nth-child(2) { animation-delay: .19s; }
+  body.b-dock .tile:nth-child(3) { animation-delay: .28s; }
+  body.b-dock .tile:nth-child(4) { animation-delay: .37s; }
+
+  /* ================= panel ================= */
+  #panel {
+    position: fixed; left: 16px; bottom: 100px; width: 368px; z-index: 25;
+    max-height: calc(100vh - 220px);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform-origin: 40px 100%;
+    transition: transform .13s cubic-bezier(.34,1.56,.64,1), opacity .13s ease, background .2s ease, border-color .8s ease;
+  }
+  #panel.closed { transform: scale(.86) translateY(16px); opacity: 0; pointer-events: none; }
+  #panelHead { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 6px; flex: 0 0 auto; }
+  #panelTitle { color: #fff; }
+  #panelClose { border: 0; background: transparent; color: var(--t60); font-size: 14px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  #panelClose:hover { color: #fff; }
+  #panel.glass { background: rgba(10,10,28,0.62); }
+  #panelBody { overflow-y: auto; padding: 0 12px 18px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent; }
+  #sheetHandle { display: none; }
+  .pane { display: none; }
+  .pane.on { display: block; }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 12px; margin-top: 10px;
+  }
+  .cardTitle { margin-bottom: 6px; }
+  .cap { font-size: 10px; line-height: 1.55; color: var(--t40); margin: 6px 0 0; }
+  .sigline { font-size: 9px; letter-spacing: .05em; color: var(--t40); margin: 14px 2px 8px; word-break: normal; overflow-wrap: anywhere; }
+  .sigline a { color: var(--t60); text-decoration: none; display: block; }
+  .sigline a:hover { color: var(--t70); }
+
+  /* ================= controls ================= */
+  .ctl { --ac: var(--violet); margin-top: 12px; }
+  .ctl:first-child { margin-top: 0; }
+  .ctl.pink    { --ac: var(--pink); }
+  .ctl.cyan    { --ac: var(--cyan); }
+  .ctl .row1 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .ctl label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--t60); }
+  .ctl output { font-family: var(--mono); font-size: 12px; color: var(--ac); text-align: right; min-width: 56px; flex: 0 0 auto; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; margin: 2px 0 0; padding: 0; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,.15); }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ac, var(--violet)); margin-top: -5px; border: 0; cursor: pointer;
+    box-shadow: 0 0 10px var(--ac, var(--violet));
+  }
+  input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,.15); }
+  input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--ac, var(--violet)); border: 0; cursor: pointer; box-shadow: 0 0 10px var(--ac, var(--violet)); }
+  .ticks { display: flex; justify-content: space-between; font-size: 9px; letter-spacing: .1em; color: var(--t40); text-transform: uppercase; }
+
+  .btn {
+    --ac: var(--violet);
+    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05);
+    color: var(--t70); border-radius: 10px; padding: 8px 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; transition: all .15s ease;
+  }
+  .btn:hover { color: #fff; border-color: rgba(255,255,255,.28); }
+  .btn[aria-pressed="true"] {
+    background: var(--ac); border-color: transparent; color: #fff;
+    box-shadow: 0 0 20px rgba(124,58,237,.5);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--ac) 50%, transparent);
+  }
+  .btn.full { display: block; width: 100%; text-align: center; }
+  .btn.small { margin-top: 10px; padding: 6px 10px; font-size: 9px; }
+  .btn.tiny { padding: 4px 8px; font-size: 9px; letter-spacing: .12em; }
+  .btn.tertiary { border-color: rgba(255,255,255,.08); background: transparent; color: var(--t40); }
+  .btn.tertiary:hover { color: var(--t70); }
+  .btn.accent { background: var(--violet); border-color: transparent; color: #fff; box-shadow: 0 0 20px rgba(124,58,237,.45); }
+  .btn.accent:hover { box-shadow: 0 0 26px rgba(124,58,237,.7); }
+  .seg { display: flex; gap: 6px; margin-top: 10px; }
+  .seg .btn { flex: 1 1 0; text-align: center; padding: 8px 4px; }
+  .seg.wrap { flex-wrap: wrap; }
+  .seg.wrap .btn { flex: 1 1 30%; }
+  .rowBtns { display: flex; gap: 6px; align-items: center; }
+  .tertiaryRow { justify-content: space-between; margin-top: 12px; }
+  @keyframes echo { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ac, #7C3AED) 85%, transparent); } 100% { box-shadow: 0 0 0 16px transparent; } }
+  .echo { animation: echo .45s ease-out; }
+
+  .chip {
+    --ac: var(--fuchsia);
+    display: inline-block; border: 1px solid rgba(217,70,239,.4); background: rgba(217,70,239,.12);
+    color: var(--fuchsia); border-radius: 999px; padding: 5px 12px; margin-top: 10px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .1em; cursor: pointer;
+  }
+  .chip b { color: #fff; font-weight: 700; }
+  .chip:hover { background: rgba(217,70,239,.24); }
+
+  /* labs */
+  .lab .labRow { display: flex; gap: 8px; align-items: center; }
+  .lab .labRow input[type=range] { flex: 1 1 auto; }
+  .chipTry {
+    flex: 0 0 auto; border: 1px solid rgba(255,255,255,.14); background: transparent;
+    color: var(--ac, var(--violet)); border-radius: 999px; padding: 3px 8px;
+    font-size: 8px; font-weight: 700; letter-spacing: .12em; cursor: pointer;
+  }
+  .chipTry:hover { border-color: var(--ac); }
+  .lab .row1 { align-items: center; }
+  .lab label { flex: 1 1 auto; }
+  .glyph { width: 22px; height: 22px; flex: 0 0 auto; color: var(--ac, var(--violet)); margin-right: 8px; }
+  .glyph .spin { animation: gspin 7s linear infinite; transform-origin: 50% 50%; transform-box: fill-box; }
+  .glyph .spinr { animation: gspin 10s linear infinite reverse; transform-origin: 50% 50%; transform-box: fill-box; }
+  .glyph .pulse { animation: gpulse 2.4s ease-in-out infinite; }
+  @keyframes gspin { to { transform: rotate(360deg); } }
+  @keyframes gpulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+  .groupTitle { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 2px; }
+
+  /* mode grid */
+  .modeGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .modeGrid .btn { text-align: left; padding: 9px 10px; }
+  .modeGrid .btn b { display: block; font-size: 10px; letter-spacing: .12em; }
+  .modeGrid .btn i { display: block; font-style: normal; font-weight: 400; font-size: 9px; letter-spacing: .02em; text-transform: none; color: var(--t40); margin-top: 3px; line-height: 1.4; }
+  .modeGrid .btn[aria-pressed="true"] i { color: rgba(255,255,255,.75); }
+
+  /* mapping */
+  .mapRow { display: flex; gap: 6px; margin-top: 8px; }
+  .mapCol { flex: 1 1 0; display: flex; flex-direction: column; gap: 4px; }
+  .mapCol select {
+    background: rgba(255,255,255,.06); color: #fff; border: 1px solid rgba(255,255,255,.14);
+    border-radius: 8px; padding: 6px 4px; font-family: var(--mono); font-size: 12px; text-align: center;
+  }
+  .liveGrid { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin-top: 10px; font-size: 10px; letter-spacing: .1em; color: var(--t40); }
+  .liveGrid b { font-weight: 400; text-align: right; color: var(--t70); }
+  .camPose { margin-top: 10px; font-size: 10px; line-height: 1.7; color: var(--t60); text-align: right; }
+
+  /* archive */
+  .acard { display: block; text-decoration: none; }
+  .acard:hover { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.07); }
+  .ahead { display: flex; align-items: center; gap: 8px; }
+  .aicon { width: 15px; height: 15px; flex: 0 0 auto; }
+  .aname { font-weight: 700; font-size: 13px; color: #fff; }
+  .atags { font-size: 8px; font-weight: 700; letter-spacing: .16em; color: var(--t40); text-transform: uppercase; margin-top: 4px; }
+  .ablurb { font-size: 11px; color: var(--t60); line-height: 1.5; margin: 5px 0 0; }
+  .apath { font-family: var(--mono); font-size: 9px; color: var(--t40); margin-top: 6px; word-break: break-all; }
+  .qcard .qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .qcard .qstatus { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; color: var(--emerald); }
+  .qcard .q { font-size: 11px; line-height: 1.55; color: var(--t70); margin: 7px 0 0; }
+  .qcard .qground { font-family: var(--mono); font-size: 9px; color: var(--t40); margin: 7px 0 0; line-height: 1.5; }
+
+  /* ================= toast / help / bootlog / sonar ================= */
+  #toast {
+    position: fixed; top: 156px; left: 50%; transform: translate(-50%, -8px); z-index: 60;
+    background: rgba(0,0,0,.68); border: 1px solid var(--violet); border-radius: 999px;
+    color: #fff; font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    padding: 8px 16px; opacity: 0; pointer-events: none;
+    box-shadow: 0 0 20px rgba(124,58,237,.5);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  #help { position: fixed; inset: 0; z-index: 70; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.5); }
+  #help.on { display: flex; }
+  #helpCard { width: min(92vw, 430px); max-height: 80vh; overflow-y: auto; padding: 16px 18px; }
+  .krow { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 11px; color: var(--t60); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .krow:last-child { border-bottom: 0; }
+  .krow kbd { font-family: var(--mono); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; padding: 1px 7px; color: #fff; font-size: 10px; margin-right: 4px; }
+  .krow .kv { font-family: var(--mono); color: var(--violet); font-size: 10px; text-align: right; }
+
+  #bootlog {
+    position: fixed; left: 16px; bottom: 108px; z-index: 15;
+    font-size: 11px; line-height: 1.8; letter-spacing: .06em; color: var(--t60);
+    text-shadow: 0 1px 6px rgba(0,0,0,.9); pointer-events: none; max-width: 76vw;
+    transition: opacity .8s ease;
+  }
+  #bootlog.off { opacity: 0; }
+  #bootlog .ln b { color: #fff; font-weight: 400; }
+  #bootlog .cursorBlock { display: inline-block; width: 7px; height: 11px; background: var(--t60); vertical-align: -1px; animation: gpulse 1s steps(2) infinite; }
+
+  #sonar { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
+  .ping {
+    position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%;
+    border: 2px solid var(--indigo);
+    box-shadow: 0 0 18px 4px rgba(30,58,138,.85), inset 0 0 8px rgba(30,58,138,.7);
+    animation: ping .9s ease-out forwards;
+  }
+  @keyframes ping { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(3.6); opacity: 0; } }
+  .wellchip {
+    position: absolute; pointer-events: auto; z-index: 13;
+    background: rgba(2,6,23,.82); border: 1px solid var(--indigo); border-radius: 10px;
+    box-shadow: 0 0 14px rgba(30,58,138,.6);
+    padding: 7px 9px; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--t70);
+    max-width: 240px;
+  }
+  .wellchip .wrow { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+  .wellchip button { border: 0; background: transparent; color: var(--t60); font-family: var(--mono); font-size: 9px; letter-spacing: .1em; cursor: pointer; padding: 2px 4px; }
+  .wellchip button:hover { color: #fff; }
+  .wellchip .plink { color: #8EA7F5; }
+
+  /* ================= chrome hidden ================= */
+  body.chrome-hidden #top, body.chrome-hidden #capsule, body.chrome-hidden #dockWrap,
+  body.chrome-hidden #panel, body.chrome-hidden #bootlog, body.chrome-hidden #toast {
+    opacity: 0 !important; pointer-events: none !important;
+  }
+
+  /* ================= boot instant (reduced motion / permalink / rerun) ================= */
+  body.b-instant #brand, body.b-instant #ticker, body.b-instant #capsule { transition-duration: .6s; }
+  body.b-instant #dockWrap { transition-duration: .6s; }
+
+  /* ================= mobile ================= */
+  @media (max-width: 767px) {
+    #repo { max-width: calc(100vw - 150px); margin-inline: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #capsule { max-width: 86vw; }
+    #telemetry { gap: 8px; padding: 0 8px; font-size: 9px; letter-spacing: .04em; }
+    /* phone keeps the honest minimum: N, FPS, sigma-s, and the containment badge */
+    #telemetry > span:nth-child(3), #telemetry > span:nth-child(4),
+    #telemetry > span:nth-child(5), #telemetry > span:nth-child(6) { display: none; }
+    #wordmark { font-size: 20px; }
+    #ticker { right: 10px; font-size: 12px; }
+    #capsuleScroll {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent);
+    }
+    #dock { gap: 2px; }
+    .tile { width: 84px; }
+    #panel {
+      left: 0; right: 0; bottom: 92px; width: auto; border-radius: 16px;
+      height: 30vh; max-height: 60vh; transform-origin: 50% 100%;
+    }
+    #panel.expanded { height: 60vh; }
+    #sheetHandle { display: block; flex: 0 0 auto; width: 88px; height: 28px; margin: 0 auto; cursor: grab; background: transparent; position: relative; touch-action: none; }
+    #sheetHandle::after { content: ''; position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 44px; height: 4px; border-radius: 999px; background: rgba(255,255,255,.25); }
+    #bootlog { bottom: 100px; font-size: 10px; }
+  }
+
+  /* ================= reduced motion ================= */
+  @media (prefers-reduced-motion: reduce) {
+    .glyph .spin, .glyph .spinr, .glyph .pulse, #bootlog .cursorBlock { animation: none !important; }
+    body.b-capsule .kpill, body.b-dock .tile { animation-duration: .01s !important; animation-delay: 0s !important; }
+    .kpill, .tile, .btn, #panel, #capsule, #dockWrap, #brand, #ticker { transition-duration: .01s !important; }
+    body.b-instant #brand, body.b-instant #ticker, body.b-instant #capsule, body.b-instant #dockWrap { transition-duration: .6s !important; }
+    .ping { animation-duration: .01s; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<canvas id="field"></canvas>
+<div id="sonar" aria-hidden="true"></div>
+<div id="nogl">This vessel needs a canvas. Neither WebGL2 nor 2D rendering is available in this browser.</div>
+
+<!-- ================= header: 72px scrim ================= -->
+<header id="top">
+  <div id="brand">
+    <div id="wordmark">HELIOS<span class="wp">|</span>BRIDGE<span class="gen">02</span></div>
+    <a id="repo" href="https://github.com/mrdirno/nested-resonance-memory-archive" rel="author">github.com/mrdirno/nested-resonance-memory-archive</a>
+  </div>
+  <div id="ticker" aria-label="Live digit triplet m, n, p">
+    <span class="tk" id="tkM">&mdash;</span><span class="tksep">&middot;</span><span class="tk" id="tkN">&mdash;</span><span class="tksep">&middot;</span><span class="tk" id="tkP">&mdash;</span>
+    <span id="tickerLbl">m&middot;n&middot;p</span>
+  </div>
+</header>
+
+<!-- ================= kaleido capsule ================= -->
+<nav id="capsule" aria-label="Kaleidoscope fold">
+  <div id="capsuleScroll">
+    <button class="kpill" data-kal="-1" aria-pressed="true" title="raw resonance field">Everything</button>
+    <button class="kpill" data-kal="0" aria-pressed="false" title="6-fold hexagonal">Metatron</button>
+    <button class="kpill" data-kal="1" aria-pressed="false" title="8-fold octagonal">Octopus</button>
+    <button class="kpill" data-kal="2" aria-pressed="false" title="4-fold square">Cubes</button>
+    <button class="kpill" data-kal="3" aria-pressed="false" title="3-fold triangular">Gasket</button>
+    <button class="kpill" data-kal="4" aria-pressed="false" title="curved organic">Spiral</button>
+  </div>
+</nav>
+
+<!-- ================= dock + telemetry ================= -->
+<div id="dockWrap">
+  <div id="telemetry" aria-label="Telemetry">
+    <span>N<b id="tN">&mdash;</b></span>
+    <span>FPS<b id="tFps">&mdash;</b></span>
+    <span>DPR<b id="tDpr">&mdash;</b></span>
+    <span>TIER<b id="tTier">&mdash;</b></span>
+    <span>CUR<b id="tCur">&mdash;</b></span>
+    <span>&Sigma;v<b id="tSv">&mdash;</b></span>
+    <span>&Sigma;s<b id="tSs">&mdash;</b></span>
+    <span><i class="dot" aria-hidden="true"></i>SELF-CONTAINED &middot; 0 REQUESTS</span>
+  </div>
+  <nav id="dock" aria-label="Command dock">
+    <button class="tile" id="tileField" data-panel="field" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 9c2.5-3.5 5.5-3.5 8 0s5.5 3.5 8 0 4-3 4-3"/><path d="M2 16c2.5-3.5 5.5-3.5 8 0s5.5 3.5 8 0 4-3 4-3"/></svg>
+      <span>FIELD</span>
+    </button>
+    <button class="tile" id="tileLabs" data-panel="labs" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v5.2L4.6 17.6A2 2 0 0 0 6.4 20.5h11.2a2 2 0 0 0 1.8-2.9L14 8.2V3"/><path d="M7.5 14.5h9"/></svg>
+      <span>LABS</span>
+    </button>
+    <button class="tile" id="tileArchive" data-panel="archive" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+      <span>ARCHIVE</span>
+    </button>
+    <button class="tile" id="tileSystem" data-panel="system" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>
+      <span>SYSTEM</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ================= the one budding panel ================= -->
+<section id="panel" class="glass closed" hidden aria-label="Control panel">
+  <div id="sheetHandle" aria-hidden="true"></div>
+  <div id="panelHead">
+    <h2 id="panelTitle" class="micro">FIELD</h2>
+    <button id="panelClose" aria-label="Close panel">&#10005;</button>
+  </div>
+  <div id="panelBody">
+
+    <!-- ============ FIELD ============ -->
+    <div class="pane" id="pane-field">
+      <button id="foldChip" class="chip" title="Cycle the kaleidoscope fold" aria-label="Active kaleidoscope fold; click to cycle">FOLD &middot; <b id="foldChipV">EVERYTHING</b></button>
+
+      <div class="card">
+        <div class="cardTitle micro">Transport</div>
+        <div class="rowBtns">
+          <button id="btnPlay" class="btn full" aria-pressed="true">PAUSE</button>
+        </div>
+        <div class="ctl">
+          <div class="row1"><label for="rDur">Phase Duration</label><output id="rDurV" for="rDur">&mdash;</output></div>
+          <input id="rDur" type="range" min="16" max="3000" step="10" value="1000">
+          <div class="ticks"><span>Fast (16ms)</span><span>Slow (3s)</span></div>
+        </div>
+        <div class="seg" role="group" aria-label="Speed presets">
+          <button class="btn spd" data-spd="1" aria-pressed="false">Slow</button>
+          <button class="btn spd" data-spd="5" aria-pressed="false">Fast</button>
+          <button class="btn spd" data-spd="15" aria-pressed="false">Ultra</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ctl pink">
+          <div class="row1"><label for="rExp">Existence Threshold</label><output id="rExpV" for="rExp">&mdash;</output></div>
+          <input id="rExp" type="range" min="0" max="3" step="0.05" value="3">
+          <div class="ticks"><span>Void</span><span>Reality</span><span>Overload</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle micro">Field Body</div>
+        <div class="ctl">
+          <div class="row1"><label for="rDen">Particle Density</label><output id="rDenV" for="rDen">&mdash;</output></div>
+          <input id="rDen" type="range" min="10000" max="1000000" step="10000" value="350000">
+        </div>
+        <div class="ctl">
+          <div class="row1"><label for="rQual">Visual Quality</label><output id="rQualV" for="rQual">&mdash;</output></div>
+          <input id="rQual" type="range" min="0.1" max="2" step="0.1" value="2">
+        </div>
+        <div class="ctl">
+          <div class="row1"><label for="rAmp">Field Amplitude</label><output id="rAmpV" for="rAmp">&mdash;</output></div>
+          <input id="rAmp" type="range" min="0.1" max="100" step="0.1" value="1">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle micro">Potential Field</div>
+        <div class="mapRow">
+          <div class="mapCol"><label class="micro" for="selA">Dim A</label>
+            <select id="selA"><option value="pi">&pi;</option><option value="e">e</option><option value="sqrt2">&radic;2</option><option value="phi" selected>&phi;</option></select></div>
+          <div class="mapCol"><label class="micro" for="selB">Dim B</label>
+            <select id="selB"><option value="pi">&pi;</option><option value="e">e</option><option value="sqrt2">&radic;2</option><option value="phi" selected>&phi;</option></select></div>
+          <div class="mapCol"><label class="micro" for="selC">Dim C</label>
+            <select id="selC"><option value="pi" selected>&pi;</option><option value="e">e</option><option value="sqrt2">&radic;2</option><option value="phi">&phi;</option></select></div>
+        </div>
+        <div class="ctl cyan">
+          <div class="row1"><label for="rPrime">Prime Spacing</label><output id="rPrimeV" for="rPrime">&mdash;</output></div>
+          <input id="rPrime" type="range" min="0" max="93" step="1" value="51">
+        </div>
+        <div class="liveGrid mono">
+          <span>DIGIT A</span><b id="fDigA">&mdash;</b>
+          <span>DIGIT B</span><b id="fDigB">&mdash;</b>
+          <span>DIGIT C</span><b id="fDigC">&mdash;</b>
+          <span>&Sigma; ENERGY</span><b id="fEnergy">&mdash;</b>
+          <span>CYCLE POS</span><b id="fCycle">&mdash;</b>
+        </div>
+        <button id="btnFieldsReset" class="btn small">Reset Field Map</button>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle micro">Camera</div>
+        <div class="seg wrap" role="group" aria-label="Camera presets">
+          <button class="btn camp" data-cam="top">Top</button>
+          <button class="btn camp" data-cam="side">Side</button>
+          <button class="btn camp" data-cam="iso">Iso</button>
+          <button class="btn camp" data-cam="core">Core</button>
+          <button class="btn camp" data-cam="reset">Reset</button>
+        </div>
+        <div class="camPose mono" id="camPose">EYE &mdash; &middot; &mdash; &middot; &mdash;<br>TGT &mdash; &middot; &mdash; &middot; &mdash;</div>
+      </div>
+    </div>
+
+    <!-- ============ LABS ============ -->
+    <div class="pane" id="pane-labs">
+      <div class="card">
+        <div class="cardTitle micro">Polarity</div>
+        <div class="seg" role="group" aria-label="Core wave polarity">
+          <button id="polPlus" class="btn" aria-pressed="true">+ Nodes</button>
+          <button id="polMinus" class="btn" aria-pressed="false">&minus; Anti-Nodes</button>
+        </div>
+        <p class="cap">Sign of the core wave force. Minus inverts the gradient and gathers the field at anti-nodes.</p>
+      </div>
+
+      <div class="card">
+        <div class="groupTitle" style="color:var(--cyan)">Crystal</div>
+        <div class="ctl cyan lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon class="spin" points="11,3.2 17.8,15 4.2,15"/></svg>
+            <label for="rThree">3-Fold (120&deg;) Symmetry</label><output id="rThreeV" for="rThree">0%</output>
+          </div>
+          <div class="labRow"><input id="rThree" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rThree" aria-label="Set 3-fold to 40 percent">TRY 40%</button></div>
+        </div>
+        <div class="ctl cyan lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon class="spinr" points="11,3 17.9,7 17.9,15 11,19 4.1,15 4.1,7"/></svg>
+            <label for="rSix">6-Fold (60&deg;) Symmetry</label><output id="rSixV" for="rSix">0%</output>
+          </div>
+          <div class="labRow"><input id="rSix" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rSix" aria-label="Set 6-fold to 40 percent">TRY 40%</button></div>
+        </div>
+        <div class="ctl cyan lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="currentColor" aria-hidden="true"><g class="pulse"><circle cx="5" cy="5" r="1.4"/><circle cx="11" cy="5" r="1.4"/><circle cx="17" cy="5" r="1.4"/><circle cx="8" cy="11" r="1.4"/><circle cx="14" cy="11" r="1.4"/><circle cx="5" cy="17" r="1.4"/><circle cx="11" cy="17" r="1.4"/><circle cx="17" cy="17" r="1.4"/></g></svg>
+            <label for="rLat">Hexagonal Lattice</label><output id="rLatV" for="rLat">0%</output>
+          </div>
+          <div class="labRow"><input id="rLat" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rLat" aria-label="Set lattice to 40 percent">TRY 40%</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="groupTitle" style="color:var(--pink)">Harmonic</div>
+        <div class="ctl pink lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path class="spin" d="M11 11a1.5 1.5 0 0 1 1.5 1.5A3 3 0 0 1 9.5 15.5 4.8 4.8 0 0 1 4.7 10.7 7 7 0 0 1 11.7 3.7 8.6 8.6 0 0 1 19.3 9"/></svg>
+            <label for="rComma">Comma Spiral (23.46 &cent;)</label><output id="rCommaV" for="rComma">0%</output>
+          </div>
+          <div class="labRow"><input id="rComma" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rComma" aria-label="Set comma spiral to 40 percent">TRY 40%</button></div>
+        </div>
+        <div class="ctl pink lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 8c3-5.4 6-5.4 9 0s6 5.4 9 0"/><path class="pulse" d="M2 15.5c2-3.6 4-3.6 6 0s4 3.6 6 0 4-3.6 6 0"/></svg>
+            <label for="rFifths">Perfect Fifth Stack</label><output id="rFifthsV" for="rFifths">0%</output>
+          </div>
+          <div class="labRow"><input id="rFifths" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rFifths" aria-label="Set perfect fifths to 40 percent">TRY 40%</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="groupTitle" style="color:var(--violet)">Topology</div>
+        <div class="ctl lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><g class="spin"><ellipse cx="11" cy="8" rx="4.5" ry="3.2"/><ellipse cx="8.2" cy="13" rx="4.5" ry="3.2" transform="rotate(120 8.2 13)"/><ellipse cx="13.8" cy="13" rx="4.5" ry="3.2" transform="rotate(240 13.8 13)"/></g></svg>
+            <label for="rTrefoil">Trefoil Knot</label><output id="rTrefoilV" for="rTrefoil">0%</output>
+          </div>
+          <div class="labRow"><input id="rTrefoil" type="range" min="0" max="0.42" step="0.01" value="0"><button class="chipTry" data-try="rTrefoil" aria-label="Set trefoil to 40 percent">TRY 40%</button></div>
+        </div>
+        <div class="ctl lab">
+          <div class="row1">
+            <svg class="glyph" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="11" cy="11" rx="8.5" ry="4.6"/><path class="pulse" d="M6.5 10.4c1.2 1.6 7.8 1.6 9 0M7.3 11.6c1.1-1.2 6.3-1.2 7.4 0"/></svg>
+            <label for="rTorus">Toroidal Attractor</label><output id="rTorusV" for="rTorus">0%</output>
+          </div>
+          <div class="labRow"><input id="rTorus" type="range" min="0" max="1" step="0.01" value="0"><button class="chipTry" data-try="rTorus" aria-label="Set torus to 40 percent">TRY 40%</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row1" style="display:flex;justify-content:space-between;align-items:center">
+          <span class="micro">Quick Load Presets</span>
+          <button id="lockBtn" class="btn tiny emerald" style="--ac:var(--emerald)" aria-pressed="false">Energy Lock</button>
+        </div>
+        <p class="cap" id="lockCap">Unlocked &mdash; presets set globals and the extension block.</p>
+        <div class="seg wrap" role="group" aria-label="Presets">
+          <button class="btn pre" data-pre="trinity">Holy Trinity</button>
+          <button class="btn pre" data-pre="entangled">Entangled 67</button>
+          <button class="btn pre" data-pre="atomic">Atomic</button>
+        </div>
+        <button id="btnZeroExt" class="btn small">Zero All Extensions</button>
+      </div>
+    </div>
+
+    <!-- ============ ARCHIVE ============ -->
+    <div class="pane" id="pane-archive">
+      <p class="cap">Twenty lockers of the archive &mdash; observation decks, field toolkits, and the ship's log. Every link leaves this vessel.</p>
+
+      <div class="cardTitle micro" style="margin-top:10px">Observation Decks</div>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/collage/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--fuchsia)" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><circle cx="8" cy="8" r="2.4"/></svg><span class="aname">Collage Studio</span></div>
+        <div class="atags">Deck &middot; Video &middot; GA-01</div>
+        <p class="ablurb">Smart-crop generative compositor: drop images or pull video frames, and it composes salient regions onto a live canvas.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/collage/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/collage-beta/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--fuchsia)" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><circle cx="8" cy="8" r="2.4"/></svg><span class="aname">Collage Beta</span></div>
+        <div class="atags">Deck &middot; Stills &middot; GA-02</div>
+        <p class="ablurb">The earlier build of the compositor, kept live for comparison.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/collage-beta/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/archive/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--fuchsia)" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><circle cx="8" cy="8" r="2.4"/></svg><span class="aname">Bridge Archive</span></div>
+        <div class="atags">Deck &middot; Pages &middot; 500</div>
+        <p class="ablurb">Five hundred standalone particle-interference variations of the bridge, each its own page.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/archive/</div>
+      </a>
+
+      <div class="cardTitle micro" style="margin-top:14px">Field Toolkits</div>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/av/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">AV Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-01</div>
+        <p class="ablurb">Dead-practical browser tools for AV field work &mdash; consumables, cable and adapter lists, field-report setup.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/av/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Plumbing Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-02</div>
+        <p class="ablurb">The toolkit isomorphed to plumbing &mdash; supply house orders in the counter's own language.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/plumbing/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/electrical/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Electrical Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-03</div>
+        <p class="ablurb">Isomorphed to electrical &mdash; the pull list first, plus the forget-list of small stuff that stops a crew.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/electrical/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/hvac/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">HVAC/R Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-04</div>
+        <p class="ablurb">Isomorphed to HVAC/R &mdash; the repair recommendation a tech sends from the roof, no second trip.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/hvac/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/low-voltage/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Low-Voltage Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-05</div>
+        <p class="ablurb">Isomorphed to low-voltage, security and fire &mdash; log every device as it hangs; hand the PM a clean schedule.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/low-voltage/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/gc/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">GC &amp; Site Super Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-06</div>
+        <p class="ablurb">Isomorphed to whoever runs the job &mdash; the weather day: what it stopped, what it cost, one thumb-answerable message.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/gc/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/framing/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Framing &amp; Drywall Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-07</div>
+        <p class="ablurb">Isomorphed to the crew that closes the wall &mdash; the backing ledger: proof of what's behind the rock.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/framing/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/roofing/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Roofing Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-08</div>
+        <p class="ablurb">Isomorphed to the crew that owns dry-in &mdash; the tear-off release: who owns the call if it rains tonight.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/roofing/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/creative/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Creative Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-09</div>
+        <p class="ablurb">Isomorphed to the one-person shoot-and-cut shop &mdash; answer the wall of notes, tag scope creep, in-browser.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/creative/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/concrete/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Concrete Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-10</div>
+        <p class="ablurb">Isomorphed to the pour crew &mdash; before-the-pour: every sleeve, embed and pad other trades owe you.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/concrete/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/masonry/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Masonry Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-11</div>
+        <p class="ablurb">Isomorphed to the mason &mdash; where the wall's at: course reached, open cells, hands-off, one message.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/masonry/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/sitework/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Sitework Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-12</div>
+        <p class="ablurb">Isomorphed to the crew on the machine &mdash; before we close it: what's in the ditch, when the dirt goes back.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/sitework/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/flooring/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--cyan)" stroke-width="1.5" aria-hidden="true"><polygon points="8,1.8 13.8,5.1 13.8,10.9 8,14.2 2.2,10.9 2.2,5.1"/></svg><span class="aname">Flooring Field Toolkit</span></div>
+        <div class="atags">Toolkit &middot; Browser &middot; FT-13</div>
+        <p class="ablurb">Isomorphed to the last trade in &mdash; the go in writing before the floor seals somebody else's mistake.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/flooring/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/commons/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="5.4" r="2.6"/><path d="M2.6 13.6a5.4 5.4 0 0 1 10.8 0"/></svg><span class="aname">The Commons &mdash; What's In The Bag</span></div>
+        <div class="atags">Commons &middot; Gear &middot; CM-01</div>
+        <p class="ablurb">The human layer shared by every trade: the gear the field actually reaches for &mdash; no brands, nothing sponsored.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/commons/</div>
+      </a>
+
+      <div class="cardTitle micro" style="margin-top:14px">Ship's Log</div>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2"/><path d="M5 6h6M5 8.6h6M5 11.2h3.6"/></svg><span class="aname">Helios Bridge (Live)</span></div>
+        <div class="atags">Log &middot; Live &middot; MC-01</div>
+        <p class="ablurb">The original particle-interference bridge &mdash; the site root this vessel ships alongside.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/</div>
+      </a>
+      <a class="card acard" href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2"/><path d="M5 6h6M5 8.6h6M5 11.2h3.6"/></svg><span class="aname">Citation Page</span></div>
+        <div class="atags">Log &middot; Cite &middot; MC-02</div>
+        <p class="ablurb">How to cite the Helios Bridge and the Nested Resonance Memory archive.</p>
+        <div class="apath">mrdirno.github.io/nested-resonance-memory-archive/citation.html</div>
+      </a>
+      <a class="card acard" href="https://github.com/mrdirno/nested-resonance-memory-archive">
+        <div class="ahead"><svg class="aicon" viewBox="0 0 16 16" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2"/><path d="M5 6h6M5 8.6h6M5 11.2h3.6"/></svg><span class="aname">GitHub Repository</span></div>
+        <div class="atags">Log &middot; Source &middot; MC-03</div>
+        <p class="ablurb">Source for the bridges, GenArt Studio, toolkits and the NRM research archive &mdash; including this file.</p>
+        <div class="apath">github.com/mrdirno/nested-resonance-memory-archive</div>
+      </a>
+
+      <button id="specToggle" class="btn small full" aria-pressed="false" aria-controls="specimenLog">Specimen Log &mdash; 5 Open Questions</button>
+      <div id="specimenLog" hidden>
+        <div class="card qcard">
+          <div class="qhead"><span class="micro">Specimen 01</span><span class="qstatus">STATUS: OPEN</span></div>
+          <p class="q">If 02 swaps its digit stream for a seeded PRNG mid-flight, do the grown organs' morphology and &Sigma; statistics measurably diverge &mdash; or is the transcendental substrate decorative?</p>
+          <p class="qground">GROUND &middot; Transcendental Substrate Hypothesis (docs/TRANSCENDENTAL_SUBSTRATE_HYPOTHESIS.md; Bridge Layer's PRNG-alternative note)</p>
+        </div>
+        <div class="card qcard">
+          <div class="qhead"><span class="micro">Specimen 02</span><span class="qstatus">STATUS: OPEN</span></div>
+          <p class="q">When one constant's lamp is muted, does its injected energy vanish from the &Sigma; ledger or re-land as measurable load on the three surviving channels?</p>
+          <p class="qground">GROUND &middot; RES0X Signal-to-Load (Unification Conjecture)</p>
+        </div>
+        <div class="card qcard">
+          <div class="qhead"><span class="micro">Specimen 03</span><span class="qstatus">STATUS: OPEN</span></div>
+          <p class="q">Booted from different seeds, does ontogeny converge on the same adult body &mdash; and if so, which layer chose that body: the substrate, the boot, or neither?</p>
+          <p class="qground">GROUND &middot; Self-Giving Systems (phase space self-definition)</p>
+        </div>
+        <div class="card qcard">
+          <div class="qhead"><span class="micro">Specimen 04</span><span class="qstatus">STATUS: OPEN</span></div>
+          <p class="q">At a million grains, do composition clusters nest with one size-ratio at every zoom &mdash; a staircase the drifting camera can descend without finding a bottom step?</p>
+          <p class="qground">GROUND &middot; NRM scale-invariance / RES0X Fractal Staircase</p>
+        </div>
+        <div class="card qcard">
+          <div class="qhead"><span class="micro">Specimen 05</span><span class="qstatus">STATUS: OPEN</span></div>
+          <p class="q">If permalinks persist only the states viewers choose to share, does that human selection become the field's de-facto oracle &mdash; success redefined by what gets forwarded?</p>
+          <p class="qground">GROUND &middot; Temporal Stewardship (training-data awareness) / Self-Giving evaluation-without-oracles</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SYSTEM ============ -->
+    <div class="pane" id="pane-system">
+      <div class="card">
+        <div class="cardTitle micro">Coloring Mode</div>
+        <div class="modeGrid" role="group" aria-label="Coloring mode">
+          <button class="btn modebtn" data-mode="standard" aria-pressed="false"><b>Standard</b><i>digit-keyed rgb straight from the wave</i></button>
+          <button class="btn modebtn" data-mode="crystal" aria-pressed="false" style="--ac:var(--cyan)"><b>Crystal</b><i>hue wound about the symmetry axis</i></button>
+          <button class="btn modebtn" data-mode="harmonic" aria-pressed="false" style="--ac:var(--pink)"><b>Harmonic</b><i>phase-shifted triad along x+y+z</i></button>
+          <button class="btn modebtn" data-mode="topology" aria-pressed="false"><b>Topology</b><i>radius &middot; winding &middot; height</i></button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle micro">Instruments</div>
+        <button id="sonarBtn" class="btn full" style="--ac:var(--indigo)" aria-pressed="false">Empty-Well Sonar</button>
+        <p class="cap">Probe the field with the pointer &mdash; well-indigo rings mark regions where &Sigma;v&asymp;0 while &Sigma;s&gt;0. Click to pin a well chip carrying a genome permalink.</p>
+        <button id="resBtn" class="btn full" aria-pressed="false" style="margin-top:8px">Pointer Resonance</button>
+        <p class="cap">Double-tap the field to ring a radial wave outward from that point.</p>
+      </div>
+
+      <div class="card">
+        <button id="copyBtn" class="btn full accent">Copy Genome</button>
+        <p class="cap mono" id="genomePeek">#g=&mdash;</p>
+        <div class="seg">
+          <button id="resetFieldBtn" class="btn" style="--ac:var(--emerald);color:var(--emerald)">Reset Field</button>
+          <button id="resetAllBtn" class="btn" style="--ac:var(--pink);color:var(--pink)">Reset All</button>
+        </div>
+        <p class="cap">RESET FIELD re-seeds the million-slot lattice. RESET ALL restores speed 1 &middot; quality 1 &middot; amplitude 1 &middot; threshold 0.9 &middot; 100,000 grains.</p>
+        <div class="rowBtns tertiaryRow">
+          <button id="reloadBtn" class="btn tiny tertiary">Reload</button>
+          <button id="helpBtn" class="btn tiny tertiary">? Shortcuts</button>
+        </div>
+      </div>
+
+      <p class="sigline mono">HELIOS-02 &middot; Aldrin Payopay &middot; GPL-3.0 &middot; <a href="https://github.com/mrdirno/nested-resonance-memory-archive" rel="author">github.com/mrdirno/nested-resonance-memory-archive</a></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= overlays ================= -->
+<div id="bootlog" class="mono" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="help" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div id="helpCard" class="glass">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="micro">Keyboard</span>
+      <button id="helpClose" class="btn tiny" aria-label="Close shortcuts">ESC</button>
+    </div>
+    <div class="krow"><span><kbd>SPACE</kbd> play / pause</span><span class="kv" id="kvPlay">&mdash;</span></div>
+    <div class="krow"><span><kbd>1&ndash;6</kbd> kaleidoscope fold</span><span class="kv" id="kvKal">&mdash;</span></div>
+    <div class="krow"><span><kbd>&larr;</kbd><kbd>&rarr;</kbd> phase duration</span><span class="kv" id="kvDur">&mdash;</span></div>
+    <div class="krow"><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> existence threshold</span><span class="kv" id="kvExp">&mdash;</span></div>
+    <div class="krow"><span><kbd>B</kbd> replay ontogeny</span><span class="kv" id="kvStage">&mdash;</span></div>
+    <div class="krow"><span><kbd>G</kbd> / <kbd>C</kbd> copy genome</span><span class="kv" id="kvCur">&mdash;</span></div>
+    <div class="krow"><span><kbd>R</kbd> reset field</span><span class="kv" id="kvN">&mdash;</span></div>
+    <div class="krow"><span><kbd>H</kbd> hide / show chrome</span><span class="kv"></span></div>
+    <div class="krow"><span><kbd>ESC</kbd> close panel or overlay</span><span class="kv"></span></div>
+    <div class="krow"><span><kbd>?</kbd> this card</span><span class="kv"></span></div>
+  </div>
+</div>
+
+<noscript>
+  <div style="position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;background:#000;color:rgba(255,255,255,.7);font:13px/1.7 system-ui,sans-serif;text-align:center;padding:24px">
+    <div style="max-width:60ch">
+      <strong>HELIOS | BRIDGE 02</strong> requires JavaScript &mdash; it is a live WebGL2 instrument, not a document.<br><br>
+      Author: Aldrin Payopay &middot; License: GPL-3.0 &middot;
+      <a style="color:#B79CF3" href="https://github.com/mrdirno/nested-resonance-memory-archive">github.com/mrdirno/nested-resonance-memory-archive</a><br>
+      Part of the Nested Resonance Memory (NRM) archive:
+      <a style="color:#B79CF3" href="https://mrdirno.github.io/nested-resonance-memory-archive/">mrdirno.github.io/nested-resonance-memory-archive</a>
+    </div>
+  </div>
+</noscript>
+<script>
+'use strict';
+/* =====================================================================
+   HELIOS-02 engine
+   Author: Aldrin Payopay <aldrin.gdf@gmail.com> - License: GPL-3.0
+   https://github.com/mrdirno/nested-resonance-memory-archive
+   ===================================================================== */
+
+/* ---------- Constants (ported verbatim from HELIOS-BRIDGE) ---------- */
+
+var SEQUENCE_LENGTH = 2500;
+
+/* Fractional digits of the four transcendental anchors: 2500 each,
+   copied verbatim from HELIOS-BRIDGE/constants.ts (DIGIT_SEQUENCES). */
+var DIGIT_SEQUENCES = {
+  pi: '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632788659361533818279682303019520353018529689957736225994138912497217752834791315155748572424541506959508295331168617278558890750983817546374649393192550604009277016711390098488240128583616035637076601047101819429555961989467678374494482553797747268471040475346462080466842590694912933136770289891521047521620569660240580381501935112533824300355876402474964732639141992726042699227967823547816360093417216412199245863150302861829745557067498385054945885869269956909272107975093029553211653449872027559602364806654991198818347977535663698074265425278625518184175746728909777727938000816470600161452491921732172147723501414419735685481613611573525521334757418494684385233239073941433345477624168625189835694855620992192221842725502542568876717904946016534668049886272327917860857843838279679766814541009538837863609506800642251252051173929848960841284886269456042419652850222106611863067442786220391949450471237137869609563643719172874677646575739624138908658326459958133904780275900994657640789512694683983525957098258226205224894077267194782684826014769909026401363944374553050682034962524517493996514314298091906592509372216964615157098583874105978859597729754989301617539284681382686838689427741559918559252459539594310499725246808459872736446958486538367362226260991246080512438843904512441365497627807977156914359977001296160894416948685558484063534220722258284886481584560285060168427394522674676788952521385225499546667278239864565961163548862305774564980355936345681743241125',
+  e: '7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354021234078498193343210681701210056278802351930332247450158539047304199577770935036604169973297250886876966403555707162268447162560798826517871341951246652010305921236677194325278675398558944896970964097545918569563802363701621120477427228364896134225164450781824423529486363721417402388934412479635743702637552944483379980161254922785092577825620926226483262779333865664816277251640191059004916449982893150566047258027786318641551956532442586982946959308019152987211725563475463964479101459040905862984967912874068705048958586717479854667757573205681288459205413340539220001137863009455606881667400169842055804033637953764520304024322566135278369511778838638744396625322498506549958862342818997077332761717839280349465014345588970719425863987727547109629537415211151368350627526023264847287039207643100595841166120545297030236472549296669381151373227536450988890313602057248176585118063036442812314965507047510254465011727211555194866850800368532281831521960037356252794495158284188294787610852639813955990067376482922443752871846245780361929819713991475644882626039033814418232625150974827987779964373089970388867782271383605772978824125611907176639465070633045279546618550966661856647097113444740160704626215680717481877844371436988218559670959102596862002353718588748569652200050311734392073211390803293634479727355955277349071783793421637012050054513263835440001863239914907054797780566978533580489669062951194324730995876552368128590413832411607226029983305353708761389396391779574540161372236187',
+  sqrt2: '4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478001569369176881852378684052287837629389214300655869568685964595155501644724509836896036887323114389415576651040883914292338113206052433629485317049915771756228549741438999188021762430965206564211827316726257539594717255934637238632261482742622208671155839599926521176252698917540988159348640083457085181472231814204070426509056532333398436457865796796519267292399875366617215982578860263363617827495994219403777753681426217738799194551397231274066898329989895386728822856378697749662519966583525776198939322845344735694794962952168891485492538904755828834526096524096542889394538646625744927556381964410316979833061852019379384940057156333720548068540575867999670121372239475821426306585132217408832382947287617393647467837431960001592188807347857617252211867490424977366929207311096369721608933708661156734585334833295254675851644710757848602463600834449114818587655554286455123314219926311332517970608436559704352856410087918500760361009159465670676883605571740076756905096136719401324935605240185999105062108163597726431380605467010293569971042425105781749531057255934984451126922780344913506637568747760283162829605532422426957534529028838768446429173282770888318087025339852338122749990812371892540726475367850304821591801886167108972869229201197599880703818543332536460211082299279293072871780799888099176741774108983060800326311816427988231171',
+  phi: '6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374847540880753868917521266338622235369317931800607667263544333890865959395829056383226613199282902678806752087668925017116962070322210432162695486262963136144381497587012203408058879544547492461856953648644492410443207713449470495658467885098743394422125448770664780915884607499887124007652170575179788341662562494075890697040002812104276217711177780531531714101170466659914669798731761356006708748071013179523689427521948435305678300228785699782977834784587822891109762500302696156170025046433824377648610283831268330372429267526311653392473167111211588186385133162038400522216579128667529465490681131715993432359734949850904094762132229810172610705961164562990981629055520852479035240602017279974717534277759277862561943208275051312181562855122248093947123414517022373580577278616008688382952304592647878017889921990270776903895321968198615143780314997411069260886742962267575605231727775203536139362107673893764556060605921658946675955190040055590895022953094231248235521221241544400647034056573479766397239494994658457887303962309037503399385621024236902513868041457799569812244574717803417312645322041639723213404444948730231541767689375210306873788034417009395440962795589867872320951242689355730970450959568440175551988192180206405290551893494759260073485228210108819464454422231889131929468962200230144377026992300780308526118075451928877050210968424936271359251876077788466583615023891349333312231053392321362431926372891067050339928226526355620902979864247275977256550861548754357482647181414512700060238901620777322449943530889990950168032811219432048196438767586331479857191139781539780747615077221175082694586393204565209896985556781410696837288405874610337810544439094368358358138113116899385557697548414914453415091295407005019477548616307542264172939468036731980586183391832859913039607201445595044977921207612478564591616083705949878600697018940988640076443617093341727091914336501371576601148038143062623805143211734815100559013456101180079050638142152709308588092875703450507808145458819906336129827981411745339273120809289727922213298064294687824274874017450554067787570832373109759151177629784432847479081765180977872684161176325038612112914368343767023503711163307258698832587103363222381098090121101989917684149175123313401527338438372345009347860497929459915822012581045982309255287212413704361491020547185549611808764265765110605458814756044317847985845397312863016254487611485'
+};
+
+var PRIME_NUMBERS = [
+  2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+  73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149,
+  151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229,
+  233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313,
+  317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+  421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499
+];
+
+var SIMULATION_EXTENT = 15;
+var WAVE_STRENGTH = 2.5;
+var VELOCITY_DAMPING = 0.98;
+var MAX_PARTICLES = 1000000;
+var WAVE_NUMBER = Math.PI / SIMULATION_EXTENT;
+
+/* ---------- Live configuration (app-boot defaults, authoritative) ---------- */
+
+var cfg = {
+  particleCount: 350000,
+  isPlaying: true,
+  speed: 1,
+  quality: 2.0,
+  amplitude: 1.0,
+  exposure: 0.9,
+  polarity: 1, /* chrome extension: sign of the core wave force (+1 nodes / -1 anti-nodes) */
+  contrast: 1.0, /* composite contrast about a 0.5 pivot; 1.0 = neutral (the original kept it unused) */
+  kaleidoMode: -1, /* -1 Everything | 0 Metatron | 1 Octopus | 2 Cubes | 3 Gasket | 4 Spiral */
+  resonance: false, /* pointer resonance pulse - off until the UI arrives */
+  mode: 'standard', /* 'standard' | 'crystal' | 'harmonic' | 'topology' */
+  mapping: { a: 'phi', b: 'phi', c: 'pi' },
+  stagger: { a: 0, b: 239, c: 478 },
+  extensions: {
+    crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+    harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+    topology: { trefoil: 0, torus: 0, hopf: 0 }
+  },
+  adaptive: true
+};
+
+/* ---------- Digit lookup (verbatim port, JS remainder quirk included) ---------- */
+
+function getDigit(dimIndex, pos) {
+  var offset = 0;
+  var seqKey = '';
+  if (dimIndex === 0) { offset = cfg.stagger.a; seqKey = cfg.mapping.a; }
+  else if (dimIndex === 1) { offset = cfg.stagger.b; seqKey = cfg.mapping.b; }
+  else { offset = cfg.stagger.c; seqKey = cfg.mapping.c; }
+
+  /* JS remainder (not true modulo) then max-clamp - port exactly. */
+  var staggeredPos = Math.max(0, (pos + offset) % SEQUENCE_LENGTH);
+  var seq = DIGIT_SEQUENCES[seqKey];
+  if (!seq) return (staggeredPos + dimIndex) % 10;
+  var digitChar = seq[staggeredPos % seq.length];
+  return parseInt(digitChar || '0');
+}
+
+/* ---------- Per-frame scalars (uniform for every particle this frame) ----------
+   One reused object: the frame loop allocates nothing. */
+
+var FS_OUT = {
+  m: 0, n: 0, p: 0, energySum: 0,
+  phaseM: 0, phaseN: 0, phaseP: 0, k: 0,
+  sThreeFold: 0, sSixFold: 0, sLattice: 0,
+  sComma: 0, sCommaSin: 0, sFifths: 0,
+  sTrefoil: 0, sTorus: 0, sHopf: 0
+};
+
+function frameScalars(cursor) {
+  var m = getDigit(0, cursor);
+  var n = getDigit(1, cursor);
+  var p = getDigit(2, cursor);
+
+  var energySum = m * m + n * n + p * p;
+  var standardizedMode = energySum / 3;
+
+  var phaseM = (m / 9) * Math.PI;
+  var phaseN = (n / 9) * Math.PI;
+  var phaseP = (p / 9) * Math.PI;
+
+  var forceMultiplier = WAVE_STRENGTH * standardizedMode * cfg.amplitude;
+  var k = WAVE_NUMBER * forceMultiplier * 0.1; /* 0.1 stability factor */
+  if (cfg.polarity < 0) k = -k; /* polarity flips only the core wave gradient */
+
+  /* Infinity-tail strength law: slider^4 * 20 */
+  function getStrength(v) { return Math.pow(v, 4) * 20.0; }
+  var ex = cfg.extensions;
+  var sThreeFold = getStrength(ex.crystal.threeFold);
+  var sSixFold = getStrength(ex.crystal.sixFold);
+  var sLattice = getStrength(ex.crystal.lattice);
+  var sComma = getStrength(ex.harmonic.commaSpiral);
+  var sFifths = getStrength(ex.harmonic.perfectFifths);
+  var sTrefoil = getStrength(ex.topology.trefoil);
+  var sTorus = getStrength(ex.topology.torus);
+  var sHopf = getStrength(ex.topology.hopf); /* computed but never used (fidelity) */
+
+  var spiralPhase = cursor * 0.0011;
+  var sCommaSin = sComma * Math.sin(spiralPhase);
+
+  var o = FS_OUT;
+  o.m = m; o.n = n; o.p = p;
+  o.energySum = energySum;
+  o.phaseM = phaseM; o.phaseN = phaseN; o.phaseP = phaseP;
+  o.k = k;
+  o.sThreeFold = sThreeFold; o.sSixFold = sSixFold; o.sLattice = sLattice;
+  o.sComma = sComma; o.sCommaSin = sCommaSin; o.sFifths = sFifths;
+  o.sTrefoil = sTrefoil; o.sTorus = sTorus; o.sHopf = sHopf;
+  return o;
+}
+
+/* ---------- Shared clock: digit-cursor advance (gated, one step max per frame) ---------- */
+
+var cursor = 0;
+var lastStepTime = 0;
+
+function advanceCursor(nowMs) {
+  if (cfg.isPlaying && nowMs - lastStepTime > (1000 / cfg.speed)) {
+    cursor++;
+    lastStepTime = nowMs;
+  }
+}
+
+/* ---------- Presence: reduced motion + session memory ---------- */
+
+var REDUCED_MOTION = false;
+try {
+  REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+} catch (e) {}
+
+function sessionGet(key) { try { return window.sessionStorage.getItem(key); } catch (e) { return null; } }
+function sessionSet(key, val) { try { window.sessionStorage.setItem(key, val); } catch (e) {} }
+
+/* ---------- Ontogeny: the field is born (once per session) ----------
+   Cell -> digit-snapped cleavage -> gastrulation -> homeostasis, all inside
+   the unchanged physics: a staged draw-count reveal plus a force ramp that
+   scales this frame's uniform scalars. Nothing about the integrator moves. */
+
+var ONTOGENY_MS = 4800; /* CELL 0-0.8s | CLEAVAGE 0.8-2.0s | GASTRULA 2.0-3.5s | BODY 3.5-4.8s */
+
+var ontogeny = {
+  active: false,
+  pending: !REDUCED_MOTION && sessionGet('helios02.ontogeny') !== 'ran',
+  start: -1,
+  t: 0,       /* birth clock: clamped frame deltas, so a stalled frame (tab
+                 switch, slow first composite) pauses the birth instead of
+                 leapfrogging it */
+  lastNow: 0,
+  stage: 'latent', /* latent | cell | cleavage | gastrula | body | homeostasis */
+  expoLift: 1.6, /* boot-only threshold lift so the embryo's few grains read on screen */
+  theta0: 0,
+  cleaveTimes: [],
+  seedFns: [] /* the live engine registers its germinal-ball seeder here */
+};
+if (!ontogeny.pending) ontogeny.stage = 'homeostasis'; /* born in an earlier visit */
+
+function ontogenyPlan() {
+  /* Digit-snapped cleavage: nine doubling times paced by the verbatim
+     digits of pi at the current cursor (digit+1 weights over 1200 ms). */
+  var seq = DIGIT_SEQUENCES.pi;
+  var w = [], total = 0, i;
+  for (i = 0; i < 9; i++) {
+    var d = parseInt(seq[(cursor + i) % SEQUENCE_LENGTH]) + 1;
+    w.push(d);
+    total += d;
+  }
+  var acc = 800;
+  ontogeny.cleaveTimes = [];
+  for (i = 0; i < 9; i++) {
+    acc += (w[i] / total) * 1200;
+    ontogeny.cleaveTimes.push(acc);
+  }
+}
+
+function fillBallData(arr, count, stride) {
+  /* Germinal ball: uniform sphere of radius 1.5 at the origin, velocities 0.
+     The ramped wave force then blows it outward into the mature nodal body -
+     gastrulation performed by the physics itself, not by keyframes. */
+  for (var i = 0; i < count; i++) {
+    var ux, uy, uz, l2;
+    do {
+      ux = Math.random() * 2 - 1;
+      uy = Math.random() * 2 - 1;
+      uz = Math.random() * 2 - 1;
+      l2 = ux * ux + uy * uy + uz * uz;
+    } while (l2 > 1 || l2 < 0.000001);
+    var rr = 1.5 * Math.cbrt(Math.random()) / Math.sqrt(l2);
+    var o = i * stride;
+    arr[o] = ux * rr;
+    arr[o + 1] = uy * rr;
+    arr[o + 2] = uz * rr;
+    arr[o + 3] = 0; arr[o + 4] = 0; arr[o + 5] = 0;
+  }
+}
+
+function ontogenySeed() {
+  for (var i = 0; i < ontogeny.seedFns.length; i++) ontogeny.seedFns[i]();
+}
+
+function ontogenyBegin(nowMs) {
+  ontogeny.active = true;
+  ontogeny.pending = false;
+  ontogeny.start = nowMs;
+  ontogeny.t = 0;
+  ontogeny.lastNow = nowMs;
+  ontogeny.stage = 'cell';
+  /* golden-angle dolly: one golden angle of sweep, ending exactly at the
+     canonical pose [20,10,20] */
+  ontogeny.theta0 = Math.atan2(20, 20) - 2.39996;
+  ontogenyPlan();
+}
+
+function effExposure() {
+  /* chrome-only boot deviation: the tone lift never touches physics */
+  return ontogeny.active ? ontogeny.expoLift : cfg.exposure;
+}
+function ontogenyFinish() {
+  if (!ontogeny.active && !ontogeny.pending) return;
+  ontogeny.active = false;
+  ontogeny.pending = false;
+  ontogeny.stage = 'homeostasis';
+  sessionSet('helios02.ontogeny', 'ran');
+}
+
+/* Returns this frame's drawn-particle cap and scales the frame scalars by
+   the force ramp. Mature state: cap = MAX_PARTICLES, scalars untouched. */
+function ontogenyTick(nowMs, fs) {
+  if (ontogeny.pending) ontogenyBegin(nowMs);
+  if (!ontogeny.active) return MAX_PARTICLES;
+
+  /* birth clock: each frame contributes at most 100 ms, so a long gap
+     between frames holds the embryo instead of skipping its stages */
+  var dt = nowMs - ontogeny.lastNow;
+  ontogeny.lastNow = nowMs;
+  ontogeny.t += Math.min(Math.max(dt, 0), 100);
+  var t = ontogeny.t;
+  if (t >= ONTOGENY_MS) {
+    ontogenyFinish();
+    return MAX_PARTICLES;
+  }
+
+  var n, ramp, i;
+  if (t < 800) {
+    ontogeny.stage = 'cell';
+    n = 420;
+    ramp = 0.05 + 0.04 * Math.sin(t * 0.006); /* the cell breathes */
+  } else if (t < 2000) {
+    ontogeny.stage = 'cleavage';
+    var splits = 0;
+    for (i = 0; i < ontogeny.cleaveTimes.length; i++) {
+      if (t >= ontogeny.cleaveTimes[i]) splits++;
+    }
+    n = 420 << splits; /* 420 -> ~215k in nine digit-paced doublings */
+    var u1 = (t - 800) / 1200;
+    ramp = 0.09 + 0.46 * (u1 * u1 * (3 - 2 * u1));
+  } else if (t < 3500) {
+    ontogeny.stage = 'gastrula';
+    var u2 = (t - 2000) / 1500;
+    var s2 = u2 * u2 * (3 - 2 * u2);
+    n = Math.round(215040 * Math.pow(Math.max(cfg.particleCount, 215040) / 215040, s2));
+    ramp = 0.55 + 0.45 * s2;
+  } else {
+    ontogeny.stage = 'body';
+    n = MAX_PARTICLES;
+    ramp = 1;
+  }
+
+  /* the force ramp scales every accumulated force uniformly */
+  fs.k *= ramp;
+  fs.sThreeFold *= ramp; fs.sSixFold *= ramp; fs.sLattice *= ramp;
+  fs.sComma *= ramp; fs.sCommaSin *= ramp; fs.sFifths *= ramp;
+  fs.sTrefoil *= ramp; fs.sTorus *= ramp;
+
+  /* golden-angle dolly: radius 9 -> 30 while sweeping one golden angle */
+  var p = Math.min(1, t / ONTOGENY_MS);
+  var e = p * p * (3 - 2 * p);
+  ontogeny.expoLift = 1.6 + (cfg.exposure - 1.6) * e;
+  cam.radius = 9 + 21 * e;
+  cam.theta = ontogeny.theta0 + 2.39996 * e;
+  cam.dTheta = 0;
+  cam.dPhi = 0;
+
+  return Math.max(1, n);
+}
+
+/* ---------- Pointer resonance: transient wave emitter (off by default) ----------
+   The pulse is the existing wave math made radial: F = grad of cos(k*r)
+   travelling outward, enveloped over 1.6 s. One extra uniform block. */
+
+var lastNow = 0; /* frame clock, written once per rendered frame */
+
+var pulse = { t0: -1, center: [0, 0, 0], k: 5 * WAVE_NUMBER, strength: 0.14, durMs: 1600 };
+
+function firePulse(x, y, z) {
+  var d = Math.hypot(x, y, z);
+  if (d > 12) { var s = 12 / d; x *= s; y *= s; z *= s; }
+  pulse.center[0] = x; pulse.center[1] = y; pulse.center[2] = z;
+  pulse.k = Math.max(1, getDigit(0, cursor)) * WAVE_NUMBER; /* ride the current digit */
+  pulse.t0 = lastNow;
+}
+
+var PULSE_OUT = { amp: 0, k: 1, phase: 0 }; /* reused: no frame-loop allocation */
+
+function pulseUniforms(nowMs) {
+  var o = PULSE_OUT;
+  var age = nowMs - pulse.t0;
+  if (pulse.t0 < 0 || age < 0 || age > pulse.durMs) {
+    if (age > pulse.durMs) pulse.t0 = -1;
+    o.amp = 0; o.k = 1; o.phase = 0;
+    return o;
+  }
+  var u = age / pulse.durMs;
+  o.amp = pulse.strength * Math.sin(u * Math.PI); /* rise and fall */
+  o.k = pulse.k;
+  o.phase = age * 0.012; /* outward travel */
+  return o;
+}
+
+/* ---------- Idle cinematic drift ---------- */
+
+var lastInputPerf = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+function noteInputSoft() { lastInputPerf = performance.now(); }
+
+function noteInput() {
+  lastInputPerf = performance.now();
+  cam.goal = null; /* any user input cancels a preset camera move */
+  if (ontogeny.active || ontogeny.pending) ontogenyFinish(); /* any input skips the boot */
+}
+
+function idleDrift(tAbs) {
+  if (REDUCED_MOTION || ontogeny.active) return;
+  var idle = tAbs - lastInputPerf;
+  if (idle < 20000) return;
+  var ease = Math.min(1, (idle - 20000) / 5000); /* drift fades in over 5 s */
+  cam.theta += 0.00045 * ease;
+  cam.phi += Math.sin(tAbs * 0.00008) * 0.00005 * ease;
+}
+
+/* ---------- Render laws ---------- */
+
+function pointOpacity() {
+  var baseOpacity = 0.6 + (cfg.quality * 0.2);
+  var densityFactor = Math.sqrt(cfg.particleCount / 10000);
+  return Math.max(0.02, baseOpacity / densityFactor);
+}
+
+function pointSizeWorld() {
+  return 0.08 * Math.sqrt(50000 / cfg.particleCount) * cfg.quality;
+}
+
+function modeIndex() {
+  if (cfg.mode === 'crystal') return 1;
+  if (cfg.mode === 'harmonic') return 2;
+  if (cfg.mode === 'topology') return 3;
+  return 0;
+}
+
+/* ---------- Tiny mat4 kit (column-major; optional out = zero frame allocs) ---------- */
+
+function perspectiveM(fovDeg, aspect, near, far, out) {
+  var m = out || new Float32Array(16);
+  var f = 1 / Math.tan(fovDeg * Math.PI / 360);
+  var nf = 1 / (near - far);
+  m[0] = f / aspect; m[1] = 0; m[2] = 0; m[3] = 0;
+  m[4] = 0; m[5] = f; m[6] = 0; m[7] = 0;
+  m[8] = 0; m[9] = 0; m[10] = (far + near) * nf; m[11] = -1;
+  m[12] = 0; m[13] = 0; m[14] = 2 * far * near * nf; m[15] = 0;
+  return m;
+}
+
+function lookAtM(eye, target, out) {
+  var m = out || new Float32Array(16);
+  var zx = eye[0] - target[0], zy = eye[1] - target[1], zz = eye[2] - target[2];
+  var zl = Math.hypot(zx, zy, zz) || 1;
+  zx /= zl; zy /= zl; zz /= zl;
+  /* up = (0,1,0); x = up cross z */
+  var xx = zz, xy = 0, xz = -zx;
+  var xl = Math.hypot(xx, xy, xz) || 1;
+  xx /= xl; xy /= xl; xz /= xl;
+  /* y = z cross x */
+  var yx = zy * xz - zz * xy;
+  var yy = zz * xx - zx * xz;
+  var yz = zx * xy - zy * xx;
+  m[0] = xx; m[1] = yx; m[2] = zx; m[3] = 0;
+  m[4] = xy; m[5] = yy; m[6] = zy; m[7] = 0;
+  m[8] = xz; m[9] = yz; m[10] = zz; m[11] = 0;
+  m[12] = -(xx * eye[0] + xy * eye[1] + xz * eye[2]);
+  m[13] = -(yx * eye[0] + yy * eye[1] + yz * eye[2]);
+  m[14] = -(zx * eye[0] + zy * eye[1] + zz * eye[2]);
+  m[15] = 1;
+  return m;
+}
+
+/* ---------- Orbit camera (hand-rolled; OrbitControls-style damping) ---------- */
+
+var IS_TOUCH = (typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
+
+var cam = {
+  radius: 30,                       /* |[20,10,20]| */
+  theta: Math.atan2(20, 20),        /* azimuth around Y */
+  phi: Math.acos(10 / 30),          /* polar from +Y */
+  target: [0, 0, 0],
+  dTheta: 0, dPhi: 0,
+  damping: IS_TOUCH ? 0.12 : 0.05,
+  rotateSpeed: IS_TOUCH ? 0.55 : 1,
+  zoomSpeed: IS_TOUCH ? 0.7 : 1,
+  minDist: IS_TOUCH ? 3 : 1,
+  maxDist: 100,
+  fov: 60,
+  goal: null /* {eye:[x,y,z], target:[x,y,z]} - preset move; any input cancels */
+};
+
+var CAM_EYE = [0, 0, 0]; /* reused scratch: read it before the next camEye() call */
+
+function camEye() {
+  var sp = Math.sin(cam.phi), cp = Math.cos(cam.phi);
+  var st = Math.sin(cam.theta), ct = Math.cos(cam.theta);
+  CAM_EYE[0] = cam.target[0] + cam.radius * sp * st;
+  CAM_EYE[1] = cam.target[1] + cam.radius * cp;
+  CAM_EYE[2] = cam.target[2] + cam.radius * sp * ct;
+  return CAM_EYE;
+}
+
+function camPoseFrom(eye, target) {
+  var dx = eye[0] - target[0], dy = eye[1] - target[1], dz = eye[2] - target[2];
+  var r = Math.hypot(dx, dy, dz) || 0.0001;
+  cam.radius = r;
+  cam.phi = Math.acos(Math.max(-1, Math.min(1, dy / r)));
+  cam.theta = Math.atan2(dx, dz);
+}
+
+function camUpdate() {
+  /* Preset move: lerp position and orbit target at 0.05 per frame until
+     within 0.1 (the original's OrbitControls glide); input clears cam.goal. */
+  if (cam.goal) {
+    var g = cam.goal;
+    var ce = camEye();
+    var ne = [ce[0] + (g.eye[0] - ce[0]) * 0.05,
+              ce[1] + (g.eye[1] - ce[1]) * 0.05,
+              ce[2] + (g.eye[2] - ce[2]) * 0.05];
+    var nt = [cam.target[0] + (g.target[0] - cam.target[0]) * 0.05,
+              cam.target[1] + (g.target[1] - cam.target[1]) * 0.05,
+              cam.target[2] + (g.target[2] - cam.target[2]) * 0.05];
+    cam.target = nt;
+    camPoseFrom(ne, nt);
+    cam.dTheta = 0; cam.dPhi = 0;
+    if (Math.hypot(ne[0] - g.eye[0], ne[1] - g.eye[1], ne[2] - g.eye[2]) < 0.1 &&
+        Math.hypot(nt[0] - g.target[0], nt[1] - g.target[1], nt[2] - g.target[2]) < 0.1) {
+      cam.target = [g.target[0], g.target[1], g.target[2]];
+      camPoseFrom(g.eye, g.target);
+      cam.goal = null;
+    }
+  }
+  cam.theta += cam.dTheta * cam.damping;
+  cam.phi += cam.dPhi * cam.damping;
+  cam.dTheta *= (1 - cam.damping);
+  cam.dPhi *= (1 - cam.damping);
+  var EPS = 0.01;
+  if (cam.phi < EPS) cam.phi = EPS;
+  if (cam.phi > Math.PI - EPS) cam.phi = Math.PI - EPS;
+  if (cam.radius < cam.minDist) cam.radius = cam.minDist;
+  if (cam.radius > cam.maxDist) cam.radius = cam.maxDist;
+}
+
+var canvas = document.getElementById('field');
+
+(function wireCamera() {
+  var pointers = new Map();
+  var pinchDist = 0;
+
+  function onDown(e) {
+    noteInput();
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (canvas.setPointerCapture) { try { canvas.setPointerCapture(e.pointerId); } catch (err) {} }
+    if (pointers.size === 2) {
+      var pts = Array.from(pointers.values());
+      pinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    }
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    noteInputSoft(); /* hover reclaims the camera from idle drift, nothing more */
+    if (!pointers.has(e.pointerId)) return;
+    var prev = pointers.get(e.pointerId);
+    var dx = e.clientX - prev.x;
+    var dy = e.clientY - prev.y;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (pointers.size === 1) {
+      var h = canvas.clientHeight || 1;
+      cam.dTheta -= 2 * Math.PI * dx / h * cam.rotateSpeed;
+      cam.dPhi -= 2 * Math.PI * dy / h * cam.rotateSpeed;
+    } else if (pointers.size === 2) {
+      var pts = Array.from(pointers.values());
+      var d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      if (pinchDist > 0 && d > 0) {
+        cam.radius *= Math.pow(pinchDist / d, cam.zoomSpeed);
+      }
+      pinchDist = d;
+    }
+  }
+
+  function onUp(e) {
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) pinchDist = 0;
+  }
+
+  canvas.addEventListener('pointerdown', onDown);
+  canvas.addEventListener('pointermove', onMove);
+  canvas.addEventListener('pointerup', onUp);
+  canvas.addEventListener('pointercancel', onUp);
+  canvas.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    noteInput();
+    var scale = Math.pow(0.95, cam.zoomSpeed);
+    if (e.deltaY < 0) cam.radius *= scale;
+    else if (e.deltaY > 0) cam.radius /= scale;
+  }, { passive: false });
+  window.addEventListener('keydown', noteInput);
+
+  /* Double-tap resonance: unproject the tap onto the ray's closest approach
+     to the origin, clamped inside the sphere, and ring the field there. */
+  canvas.addEventListener('dblclick', function (e) {
+    noteInput();
+    if (!cfg.resonance || ontogeny.active) return;
+    var w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
+    var ndcX = (e.clientX / w) * 2 - 1;
+    var ndcY = 1 - (e.clientY / h) * 2;
+    var eye = camEye();
+    var bx = eye[0] - cam.target[0], by = eye[1] - cam.target[1], bz = eye[2] - cam.target[2];
+    var bl = Math.hypot(bx, by, bz) || 1;
+    bx /= bl; by /= bl; bz /= bl; /* back = view +z */
+    var rx = bz, ry = 0, rz = -bx; /* right = up cross back */
+    var rl = Math.hypot(rx, ry, rz) || 1;
+    rx /= rl; ry /= rl; rz /= rl;
+    var ux = by * rz - bz * ry, uy = bz * rx - bx * rz, uz = bx * ry - by * rx; /* up = back cross right */
+    var tanF = Math.tan(cam.fov * Math.PI / 360);
+    var a = w / h;
+    var dx = -bx + rx * ndcX * tanF * a + ux * ndcY * tanF;
+    var dy = -by + ry * ndcX * tanF * a + uy * ndcY * tanF;
+    var dz = -bz + rz * ndcX * tanF * a + uz * ndcY * tanF;
+    var dl = Math.hypot(dx, dy, dz) || 1;
+    dx /= dl; dy /= dl; dz /= dl;
+    var tHit = Math.max(0, -(eye[0] * dx + eye[1] * dy + eye[2] * dz));
+    firePulse(eye[0] + dx * tHit, eye[1] + dy * tHit, eye[2] + dz * tHit);
+  });
+})();
+
+/* ---------- Public debug surface (for the coming UI iterations) ---------- */
+
+window.HELIOS02 = {
+  engine: 'boot',
+  n: 0,
+  fps: 0,
+  cursor: 0,
+  digits: { m: 0, n: 0, p: 0 },
+  energy: 0,
+  kaleido: -1,
+  stage: 'latent',
+  config: cfg,
+  camera: cam,
+  ontogeny: ontogeny,
+  reducedMotion: REDUCED_MOTION,
+  /* Kaleidoscope fold: -1 Everything | 0 Metatron | 1 Octopus | 2 Cubes | 3 Gasket | 4 Spiral */
+  setKaleido: function (mode) {
+    var m = Math.round(Number(mode));
+    if (!(m >= -1 && m <= 4)) m = -1;
+    cfg.kaleidoMode = m;
+    return m;
+  },
+  setExposure: function (v) {
+    var e = Number(v);
+    cfg.exposure = isFinite(e) ? Math.min(3, Math.max(0, e)) : cfg.exposure;
+    return cfg.exposure;
+  },
+  setContrast: function (v) {
+    var c = Number(v);
+    cfg.contrast = isFinite(c) ? Math.min(2.5, Math.max(0.25, c)) : cfg.contrast;
+    return cfg.contrast;
+  },
+  setResonance: function (on) { cfg.resonance = !!on; return cfg.resonance; },
+  cameraTo: function (eye, target) {
+    cam.goal = {
+      eye: [Number(eye[0]) || 0, Number(eye[1]) || 0, Number(eye[2]) || 0],
+      target: [Number(target[0]) || 0, Number(target[1]) || 0, Number(target[2]) || 0]
+    };
+  },
+  pulseAt: function (x, y, z) { firePulse(Number(x) || 0, Number(y) || 0, Number(z) || 0); },
+  rebootOntogeny: function () {
+    if (REDUCED_MOTION) return false; /* respect the visitor's motion preference */
+    try { window.sessionStorage.removeItem('helios02.ontogeny'); } catch (e) {}
+    ontogenySeed();
+    cam.target = [0, 0, 0];
+    cam.phi = Math.acos(10 / 30);
+    ontogeny.active = false;
+    ontogeny.start = -1;
+    ontogeny.stage = 'latent';
+    ontogeny.pending = true; /* begins on the next frame */
+    return true;
+  },
+  constants: {
+    SIMULATION_EXTENT: SIMULATION_EXTENT,
+    WAVE_STRENGTH: WAVE_STRENGTH,
+    VELOCITY_DAMPING: VELOCITY_DAMPING,
+    SEQUENCE_LENGTH: SEQUENCE_LENGTH,
+    MAX_PARTICLES: MAX_PARTICLES,
+    waveNumber: WAVE_NUMBER,
+    PRIME_NUMBERS: PRIME_NUMBERS
+  },
+  resetParticles: function () {} /* rebound by the active engine */
+};
+
+/* ---------- Sizing ---------- */
+
+var DPR = IS_TOUCH ? Math.min(window.devicePixelRatio || 1, 1.5) : 2;
+
+function fitCanvas() {
+  var w = window.innerWidth, h = window.innerHeight;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  var pw = Math.max(1, Math.round(w * DPR));
+  var ph = Math.max(1, Math.round(h * DPR));
+  if (canvas.width !== pw) canvas.width = pw;
+  if (canvas.height !== ph) canvas.height = ph;
+  cam.fov = (w / h < 1) ? 82 : 60; /* portrait widens fov */
+}
+
+/* ---------- FPS meter + step-down-only density guard ---------- */
+
+var fpsEMA = 0;
+var lastFrameMs = 0;
+var lastGuardMs = 0;
+var GUARD_TIERS = [1000000, 700000, 500000, 350000, 250000, 150000, 100000, 70000, 50000, 30000, 20000, 10000];
+
+function meterAndGuard(nowMs) {
+  if (lastFrameMs > 0) {
+    var dt = nowMs - lastFrameMs;
+    if (dt > 0 && dt < 1000) {
+      var inst = 1000 / dt;
+      fpsEMA = fpsEMA === 0 ? inst : fpsEMA * 0.92 + inst * 0.08;
+    }
+  }
+  lastFrameMs = nowMs;
+
+  /* Guard: warm up 6s, then step DOWN one tier per 2.5s while starved.
+     Never steps up, never lies about N. */
+  if (cfg.adaptive && nowMs > 6000 && nowMs - lastGuardMs > 2500 && fpsEMA > 0 && fpsEMA < 24) {
+    for (var i = 0; i < GUARD_TIERS.length; i++) {
+      if (GUARD_TIERS[i] < cfg.particleCount) {
+        cfg.particleCount = GUARD_TIERS[i];
+        lastGuardMs = nowMs;
+        window.HELIOS02.guardStepped = true; /* uiTick refreshes the density slider */
+        break;
+      }
+    }
+  }
+}
+
+/* Hidden tab: requestAnimationFrame stops on its own (the whole sim pauses);
+   on return, drop the stale frame gap so the FPS EMA never eats it. */
+document.addEventListener('visibilitychange', function () {
+  if (!document.hidden) lastFrameMs = 0;
+});
+
+function publishStats(fs, drawnN) {
+  var H = window.HELIOS02;
+  H.n = drawnN; /* particles actually alive this frame (ontogeny reveals fewer) */
+  H.fps = Math.round(fpsEMA * 10) / 10;
+  H.cursor = cursor;
+  H.digits.m = fs.m; H.digits.n = fs.n; H.digits.p = fs.p;
+  H.energy = fs.energySum;
+  H.kaleido = cfg.kaleidoMode;
+  H.stage = ontogeny.stage;
+}
+
+/* ---------- Lattice init (exact original: cbrt grid over ~[-7.5,+7.5], jitter +/-0.25) ---------- */
+
+function fillInitData(arr, count, stride) {
+  var gridSize = Math.ceil(Math.cbrt(count));
+  var spacing = SIMULATION_EXTENT / gridSize;
+  var offset = SIMULATION_EXTENT / 2;
+  for (var i = 0; i < count; i++) {
+    var x = (i % gridSize) * spacing - offset;
+    var y = (Math.floor(i / gridSize) % gridSize) * spacing - offset;
+    var z = Math.floor(i / (gridSize * gridSize)) * spacing - offset;
+    var o = i * stride;
+    arr[o] = x + (Math.random() - 0.5) * 0.5;
+    arr[o + 1] = y + (Math.random() - 0.5) * 0.5;
+    arr[o + 2] = z + (Math.random() - 0.5) * 0.5;
+    arr[o + 3] = 0; arr[o + 4] = 0; arr[o + 5] = 0; /* velocity */
+  }
+}
+
+/* =====================================================================
+   GLSL
+
+   FIDELITY: every physics constant and formula below is a verbatim port
+   of the HELIOS-BRIDGE reference loop - damping 0.98, WAVE_STRENGTH 2.5
+   (folded into u_k CPU-side), the slider^4 * 20 strength law, the crystal
+   snap literals 2.0944 / 1.0472, the lattice 0.866, the trefoil literals
+   0.15915 / 6.283, the harmonic color phases 2.09 / 4.18, the standard
+   color literal 0.2, integration order v+=F; v*=0.98; p+=v, and the R=15
+   spherical boundary (snap, v*=-0.5) tested AFTER the position update.
+
+   DELIBERATE DEVIATIONS (chrome, never physics) in this port:
+   - u_pulse*: opt-in pointer-resonance ring (radial cos-wave force under a
+     1.6 s envelope); amp is 0.0 unless the viewer double-taps with the
+     Pointer Resonance instrument armed.
+   - cfg.polarity: opt-in sign flip of u_k only (+ nodes / - anti-nodes);
+     defaults to +1, which is byte-identical to the original force.
+   - Composite pass: the fold shader also composites the CSS radial
+     backdrop (the original kept it behind a transparent canvas), applies
+     cfg.contrast about a 0.5 pivot (default 1.0 = neutral; the original
+     declared contrast but never used it) and a soft edge vignette.
+   - Point sprites: gl_PointSize = size * (H/2) / dist replicates the
+     reference renderer's fov-independent attenuation quirk; sprites are
+     radially masked (smoothstep on gl_PointCoord) and capped at 64 px --
+     the reference's square, uncapped sprites only ever rendered sub-pixel.
+   - Existence Threshold ships at 0.9 (reference default 3.0 assumed
+     tonemap-after-blend; applied per-fragment pre-blend it crushes the
+     additive field to white). The slider's full 0-3 range is unchanged.
+   - GPU integration runs in IEEE f32 (highp); the reference integrated in
+     JS f64. Formulas and constants are verbatim; individual trajectories
+     diverge numerically over long runs, field statistics do not.
+   - Ontogeny boot ramp: scales this frame's uniform force scalars for
+     4.8 s after birth; mature state multiplies by exactly 1.
+   ===================================================================== */
+
+var GLSL_UPDATE_VS = [
+'#version 300 es',
+'precision highp float;',
+'layout(location=0) in vec3 a_pos;',
+'layout(location=1) in vec3 a_vel;',
+'uniform float u_m, u_n, u_p;',
+'uniform float u_phaseM, u_phaseN, u_phaseP;',
+'uniform float u_k;',
+'uniform float u_sThree, u_sSix, u_sLattice;',
+'uniform float u_sComma, u_sCommaSin, u_sFifths;',
+'uniform float u_sTrefoil, u_sTorus;',
+'uniform vec3 u_pulseCenter;',
+'uniform float u_pulseK, u_pulsePhase, u_pulseAmp;',
+'out vec3 v_pos;',
+'out vec3 v_vel;',
+'const float EXTENT = 15.0;',
+'const float WAVE_NUMBER = 0.20943951023931953;', /* PI / 15 */
+'void main() {',
+'  float x = a_pos.x; float y = a_pos.y; float z = a_pos.z;',
+'  vec3 vel = a_vel;',
+'  float fx = 0.0; float fy = 0.0; float fz = 0.0;',
+   /* Crystal: 3-fold snap (literal 2.0944) */
+'  if (u_sThree > 0.0) {',
+'    float r = sqrt(x*x + y*y);',
+'    float ang = atan(y, x);',
+'    float snap = floor(ang / 2.0944 + 0.5) * 2.0944;',
+'    fx += (r * cos(snap) - x) * u_sThree;',
+'    fy += (r * sin(snap) - y) * u_sThree;',
+'  }',
+   /* Crystal: 6-fold snap (literal 1.0472) */
+'  if (u_sSix > 0.0) {',
+'    float r = sqrt(x*x + y*y);',
+'    float ang = atan(y, x);',
+'    float snap = floor(ang / 1.0472 + 0.5) * 1.0472;',
+'    fx += (r * cos(snap) - x) * u_sSix;',
+'    fy += (r * sin(snap) - y) * u_sSix;',
+'  }',
+   /* Crystal: hex lattice (literal 0.866; z untouched) */
+'  if (u_sLattice > 0.0) {',
+'    float a = EXTENT / 3.0;',
+'    float ni = floor(x / a + 0.5);',
+'    float nj = floor(y / (a * 0.866) + 0.5);',
+'    fx += (a * ni - x) * u_sLattice;',
+'    fy += (a * 0.866 * nj - y) * u_sLattice;',
+'  }',
+   /* Harmonic: comma spiral (sCommaSin premultiplied CPU-side) */
+'  if (u_sComma > 0.0) {',
+'    fx += y * u_sCommaSin;',
+'    fy += -x * u_sCommaSin;',
+'  }',
+   /* Harmonic: perfect fifths (ratio 1.5) */
+'  if (u_sFifths > 0.0) {',
+'    float ratio = 1.5;',
+'    fx += sin(x * ratio * WAVE_NUMBER) * u_sFifths;',
+'    fy += sin(y * ratio * WAVE_NUMBER) * u_sFifths;',
+'    fz += sin(z * ratio * WAVE_NUMBER) * u_sFifths;',
+'  }',
+   /* Topology: trefoil knot (literals 0.15915 and 6.283) */
+'  if (u_sTrefoil > 0.0) {',
+'    float t = atan(y, x) * 0.15915;',
+'    float s = EXTENT * 0.5;',
+'    float t2 = t * 6.283;',
+'    float kx = s * (sin(t2) + 2.0 * sin(2.0 * t2));',
+'    float ky = s * (cos(t2) - 2.0 * cos(2.0 * t2));',
+'    float kz = s * (-sin(3.0 * t2));',
+'    fx += (kx - x) * u_sTrefoil;',
+'    fy += (ky - y) * u_sTrefoil;',
+'    fz += (kz - z) * u_sTrefoil;',
+'  }',
+   /* Topology: toroidal attractor */
+'  if (u_sTorus > 0.0) {',
+'    float R = EXTENT * 0.6;',
+'    float r2 = EXTENT * 0.25;',
+'    float theta = atan(y, x);',
+'    float d = sqrt(x*x + y*y);',
+'    float phi = atan(z, d - R);',
+'    float tr = R + r2 * cos(phi);',
+'    fx += (tr * cos(theta) - x) * u_sTorus;',
+'    fy += (tr * sin(theta) - y) * u_sTorus;',
+'    fz += (r2 * sin(phi) - z) * u_sTorus;',
+'  }',
+   /* Pointer resonance: transient radial ring, the same wave family
+      (grad of cos(k*r)) travelling outward under a 1.6 s envelope */
+'  if (u_pulseAmp > 0.0) {',
+'    vec3 pd = vec3(x, y, z) - u_pulseCenter;',
+'    float pr = max(length(pd), 0.0001);',
+'    float pw = sin(pr * u_pulseK - u_pulsePhase) * u_pulseAmp;',
+'    fx += pd.x / pr * pw;',
+'    fy += pd.y / pr * pw;',
+'    fz += pd.z / pr * pw;',
+'  }',
+   /* Core wave force: F = -grad V, V = cos(wx)cos(wy)cos(wz) */
+'  float wx = u_m * x * WAVE_NUMBER + u_phaseM;',
+'  float wy = u_n * y * WAVE_NUMBER + u_phaseN;',
+'  float wz = u_p * z * WAVE_NUMBER + u_phaseP;',
+'  float cx = cos(wx); float cy = cos(wy); float cz = cos(wz);',
+'  float sx = sin(wx); float sy = sin(wy); float sz = sin(wz);',
+'  fx += (u_m * sx * cy * cz) * u_k;',
+'  fy += (cx * u_n * sy * cz) * u_k;',
+'  fz += (cx * cy * u_p * sz) * u_k;',
+   /* Semi-implicit Euler, exact order: v+=F; v*=0.98; p+=v */
+'  vel += vec3(fx, fy, fz);',
+'  vel *= 0.98;',
+'  vec3 pos = vec3(x, y, z) + vel;',
+   /* Spherical boundary AFTER position update: snap to R=15, v *= -0.5 */
+'  float d2 = dot(pos, pos);',
+'  if (d2 > EXTENT * EXTENT) {',
+'    pos *= EXTENT / sqrt(d2);',
+'    vel *= -0.5;',
+'  }',
+'  v_pos = pos;',
+'  v_vel = vel;',
+'  gl_Position = vec4(0.0, 0.0, 0.0, 1.0);',
+'}'
+].join('\n');
+
+var GLSL_UPDATE_FS = [
+'#version 300 es',
+'precision highp float;',
+'out vec4 o;',
+'void main() { o = vec4(1.0); }'
+].join('\n');
+
+/* AgX tone mapping (matrix formulation, matching the reference renderer)
+   + sRGB encode. Applied per fragment before blending, as the original does. */
+var GLSL_TONEMAP = [
+'const mat3 LINEAR_SRGB_TO_LINEAR_REC2020 = mat3(',
+'  vec3(0.6274, 0.0691, 0.0164),',
+'  vec3(0.3293, 0.9195, 0.0880),',
+'  vec3(0.0433, 0.0113, 0.8956));',
+'const mat3 LINEAR_REC2020_TO_LINEAR_SRGB = mat3(',
+'  vec3(1.6605, -0.1246, -0.0182),',
+'  vec3(-0.5876, 1.1329, -0.1006),',
+'  vec3(-0.0728, -0.0083, 1.1187));',
+'const mat3 AGX_INSET = mat3(',
+'  vec3(0.856627153315983, 0.137318972929847, 0.11189821299995),',
+'  vec3(0.0951212405381588, 0.761241990602591, 0.0767994186031903),',
+'  vec3(0.0482516061458583, 0.101439036467562, 0.811302368396859));',
+'const mat3 AGX_OUTSET = mat3(',
+'  vec3(1.1271005818144368, -0.1413297634984383, -0.14132976349843826),',
+'  vec3(-0.11060664309660323, 1.157823702216272, -0.11060664309660294),',
+'  vec3(-0.016493938717834573, -0.016493938717834257, 1.2519364065950405));',
+'vec3 agxContrast(vec3 x) {',
+'  vec3 x2 = x * x;',
+'  vec3 x4 = x2 * x2;',
+'  return + 15.5 * x4 * x2 - 40.14 * x4 * x + 31.96 * x4',
+'         - 6.868 * x2 * x + 0.4298 * x2 + 0.1191 * x - 0.00232;',
+'}',
+'vec3 agxToneMap(vec3 color, float exposure) {',
+'  color *= exposure;',
+'  color = LINEAR_SRGB_TO_LINEAR_REC2020 * color;',
+'  color = AGX_INSET * color;',
+'  color = max(color, vec3(1e-10));',
+'  color = log2(color);',
+'  color = (color - (-12.47393)) / (4.026069 - (-12.47393));',
+'  color = clamp(color, 0.0, 1.0);',
+'  color = agxContrast(color);',
+'  color = AGX_OUTSET * color;',
+'  color = pow(max(vec3(0.0), color), vec3(2.2));',
+'  color = LINEAR_REC2020_TO_LINEAR_SRGB * color;',
+'  return clamp(color, 0.0, 1.0);',
+'}',
+'vec3 linearToSRGB(vec3 c) {',
+'  c = clamp(c, 0.0, 1.0);',
+'  return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));',
+'}'
+].join('\n');
+
+var GLSL_POINTS_VS = [
+'#version 300 es',
+'precision highp float;',
+'layout(location=0) in vec3 a_pos;',
+'uniform mat4 u_proj;',
+'uniform mat4 u_view;',
+'uniform float u_m, u_n, u_p;',
+'uniform float u_brightness;',
+'uniform int u_mode;',
+'uniform float u_size;',      /* world units */
+'uniform float u_sizeScale;', /* px projection factor */
+'out vec3 v_col;',
+'out float v_fog;',
+'const float EXTENT = 15.0;',
+'const float PI = 3.141592653589793;',
+'void main() {',
+'  vec4 mv = u_view * vec4(a_pos, 1.0);',
+'  gl_Position = u_proj * mv;',
+'  float dist = max(-mv.z, 0.0001);',
+'  gl_PointSize = clamp(u_size * u_sizeScale / dist, 0.0, 64.0);',
+'  v_fog = clamp((dist - 10.0) / 70.0, 0.0, 1.0);', /* linear fog 10..80 to black */
+'  float x = a_pos.x; float y = a_pos.y; float z = a_pos.z;',
+'  vec3 c;',
+'  if (u_mode == 1) {', /* CRYSTAL */
+'    float ang = atan(y, x);',
+'    float an = (ang + PI) * 0.15915;',
+'    c = vec3(0.3 + an * u_brightness,',
+'             0.2 + (1.0 - an) * u_brightness * 0.8,',
+'             0.4 + abs(z / EXTENT) * u_brightness);',
+'  } else if (u_mode == 2) {', /* HARMONIC (literals 2.09 / 4.18) */
+'    float ph = (x + y + z) * 0.1;',
+'    c = vec3(0.5 + 0.5 * sin(ph) * u_brightness,',
+'             0.5 + 0.5 * sin(ph + 2.09) * u_brightness,',
+'             0.5 + 0.5 * sin(ph + 4.18) * u_brightness);',
+'  } else if (u_mode == 3) {', /* TOPOLOGY */
+'    float r = sqrt(x*x + y*y);',
+'    float th = atan(y, x);',
+'    c = vec3(0.3 + (r / EXTENT) * u_brightness,',
+'             0.3 + abs(sin(th * 3.0)) * u_brightness,',
+'             0.3 + abs(z / EXTENT) * u_brightness);',
+'  } else {', /* STANDARD (0.2 literal, unrelated to waveNumber) */
+'    c = vec3(0.3 + abs(cos(u_m * x * 0.2)) * u_brightness,',
+'             0.2 + abs(cos(u_n * y * 0.2)) * u_brightness * 0.8,',
+'             0.4 + abs(cos(u_p * z * 0.2)) * u_brightness * 0.9);',
+'  }',
+'  v_col = c;',
+'}'
+].join('\n');
+
+var GLSL_POINTS_FS = [
+'#version 300 es',
+'precision highp float;',
+'in vec3 v_col;',
+'in float v_fog;',
+'uniform float u_exposure;',
+'uniform float u_opacity;',
+'out vec4 outColor;',
+GLSL_TONEMAP,
+'void main() {',
+'  float pd = length(gl_PointCoord - 0.5);', /* round sprite: soft radial mask */
+'  float pm = smoothstep(0.5, 0.15, pd);',
+'  vec3 c = agxToneMap(v_col, u_exposure);',
+'  c = linearToSRGB(c);',
+'  c = mix(c, vec3(0.0), v_fog);',
+'  outColor = vec4(c * u_opacity * pm, u_opacity * pm);', /* premultiplied; additive blend */
+'}'
+].join('\n');
+
+var GLSL_LINES_VS = [
+'#version 300 es',
+'precision highp float;',
+'layout(location=0) in vec3 a_pos;',
+'uniform mat4 u_proj;',
+'uniform mat4 u_view;',
+'out float v_fog;',
+'void main() {',
+'  vec4 mv = u_view * vec4(a_pos, 1.0);',
+'  gl_Position = u_proj * mv;',
+'  v_fog = clamp((-mv.z - 10.0) / 70.0, 0.0, 1.0);',
+'}'
+].join('\n');
+
+var GLSL_LINES_FS = [
+'#version 300 es',
+'precision highp float;',
+'in float v_fog;',
+'uniform vec3 u_color;', /* linear */
+'uniform float u_opacity;',
+'uniform float u_exposure;',
+'out vec4 outColor;',
+GLSL_TONEMAP,
+'void main() {',
+'  vec3 c = agxToneMap(u_color, u_exposure);',
+'  c = linearToSRGB(c);',
+'  c = mix(c, vec3(0.0), v_fog);',
+'  outColor = vec4(c * u_opacity, u_opacity);', /* premultiplied over */
+'}'
+].join('\n');
+
+var GLSL_STARS_VS = [
+'#version 300 es',
+'precision highp float;',
+'layout(location=0) in vec3 a_pos;',
+'layout(location=1) in float a_size;',
+'layout(location=2) in float a_alpha;',
+'uniform mat4 u_proj;',
+'uniform mat4 u_view;',
+'uniform float u_dpr;',
+'out float v_alpha;',
+'void main() {',
+'  gl_Position = u_proj * u_view * vec4(a_pos, 1.0);',
+'  gl_PointSize = a_size * u_dpr;',
+'  v_alpha = a_alpha;',
+'}'
+].join('\n');
+
+var GLSL_STARS_FS = [
+'#version 300 es',
+'precision highp float;',
+'in float v_alpha;',
+'out vec4 o;',
+'void main() {',
+'  float d = length(gl_PointCoord - 0.5);',
+'  float a = v_alpha * smoothstep(0.5, 0.12, d);',
+'  o = vec4(vec3(a), a);', /* premultiplied white; additive */
+'}'
+].join('\n');
+
+var GLSL_QUAD_VS = [
+'#version 300 es',
+'precision highp float;',
+'out vec2 v_uv;',
+'void main() {',
+'  vec2 verts[3] = vec2[3](vec2(-1.0, -1.0), vec2(3.0, -1.0), vec2(-1.0, 3.0));',
+'  vec2 p = verts[gl_VertexID];',
+'  v_uv = p * 0.5 + 0.5;',
+'  gl_Position = vec4(p, 0.0, 1.0);',
+'}'
+].join('\n');
+
+/* Kaleidoscope composite: samples the already-rendered (tone-mapped) scene
+   texture with the ORIGINAL fold logic verbatim, then lays it over the
+   radial backdrop (the original kept that gradient in CSS behind a
+   transparent canvas - the fold never touched it, and neither does this),
+   then applies contrast and a soft vignette that keeps frame edges quiet. */
+var GLSL_COMP_FS = [
+'#version 300 es',
+'precision highp float;',
+'in vec2 v_uv;',
+'uniform sampler2D u_scene;',
+'uniform int u_mode;',     /* -1 Everything | 0 Metatron | 1 Octopus | 2 Cubes | 3 Gasket | 4 Spiral */
+'uniform float u_aspect;',
+'uniform float u_time;',   /* declared but unused in the fold body (ported quirk) */
+'uniform float u_spin;',   /* declared, always 0.0 - spin was removed as dizzying */
+'uniform float u_contrast;',
+'out vec4 o;',
+'const float PI = 3.141592653589793;',
+'void main() {',
+'  vec2 uv;',
+'  if (u_mode < 0) {',
+'    uv = v_uv;', /* Everything: raw resonance field */
+'  } else {',
+'    vec2 iso = (v_uv - 0.5) * 2.0;',
+     /* isotropic shorter-side units: the fold is a true circle on any aspect */
+'    if (u_aspect >= 1.0) { iso.x *= u_aspect; } else { iso.y /= u_aspect; }',
+'    float r = length(iso);',
+'    float ang = atan(iso.y, iso.x);',
+'    float sector = PI / 4.0;',
+'    if (u_mode == 0) { sector = PI / 3.0; }',
+'    else if (u_mode == 1) { sector = PI / 4.0; }',
+'    else if (u_mode == 2) { sector = PI / 2.0; }',
+'    else if (u_mode == 3) { sector = 2.0 * PI / 3.0; }',
+'    if (u_mode == 4) { ang += r * 4.0; }', /* Spiral: radius-proportional twist before the fold */
+'    ang = abs(mod(ang, sector) - sector * 0.5);', /* the angular fold */
+'    r = 1.0 - abs(mod(r, 2.0) - 1.0);', /* radial mirror ring: keeps every sample in-bounds */
+'    vec2 q = vec2(cos(ang), sin(ang)) * r;',
+'    if (u_aspect >= 1.0) { q.x /= u_aspect; } else { q.y *= u_aspect; }',
+'    uv = q * 0.5 + 0.5;',
+'  }',
+'  vec4 s = texture(u_scene, uv);',
+   /* radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%), unfolded */
+'  float t = clamp(length((v_uv - 0.5) * 2.0) / 1.4142135, 0.0, 1.0);',
+'  vec3 g = mix(vec3(0.05882353, 0.05882353, 0.13725490), vec3(0.0), t);',
+'  vec3 c = s.rgb + g * (1.0 - min(s.a, 1.0));', /* premultiplied scene over backdrop */
+'  c = max(vec3(0.0), (c - 0.5) * u_contrast + 0.5);',
+   /* soft vignette: protects future chrome legibility at the edges */
+'  vec2 vc = v_uv - 0.5;',
+'  float vig = 1.0 - 0.30 * smoothstep(0.72, 1.42, length(vc * 2.0));',
+'  vig *= 1.0 - 0.18 * smoothstep(0.86, 1.0, abs(vc.y) * 2.0);',
+'  o = vec4(c * vig, 1.0);',
+'}'
+].join('\n');
+
+/* =====================================================================
+   WebGL2 engine
+   ===================================================================== */
+
+function srgbChannelToLinear(v) {
+  return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+}
+
+function startWebGL2(gl) {
+  window.HELIOS02.engine = 'webgl2';
+
+  function compile(type, src) {
+    var sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      throw new Error('shader: ' + gl.getShaderInfoLog(sh));
+    }
+    return sh;
+  }
+
+  function link(vsSrc, fsSrc, tfVaryings) {
+    var prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsSrc));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsSrc));
+    if (tfVaryings) {
+      gl.transformFeedbackVaryings(prog, tfVaryings, gl.INTERLEAVED_ATTRIBS);
+    }
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      throw new Error('link: ' + gl.getProgramInfoLog(prog));
+    }
+    return prog;
+  }
+
+  function uniforms(prog, names) {
+    var u = {};
+    for (var i = 0; i < names.length; i++) u[names[i]] = gl.getUniformLocation(prog, names[i]);
+    return u;
+  }
+
+  /* --- Programs --- */
+  var progU = link(GLSL_UPDATE_VS, GLSL_UPDATE_FS, ['v_pos', 'v_vel']);
+  var uU = uniforms(progU, ['u_m', 'u_n', 'u_p', 'u_phaseM', 'u_phaseN', 'u_phaseP', 'u_k',
+    'u_sThree', 'u_sSix', 'u_sLattice', 'u_sComma', 'u_sCommaSin', 'u_sFifths', 'u_sTrefoil', 'u_sTorus',
+    'u_pulseCenter', 'u_pulseK', 'u_pulsePhase', 'u_pulseAmp']);
+
+  var progP = link(GLSL_POINTS_VS, GLSL_POINTS_FS, null);
+  var uP = uniforms(progP, ['u_proj', 'u_view', 'u_m', 'u_n', 'u_p', 'u_brightness', 'u_mode',
+    'u_size', 'u_sizeScale', 'u_exposure', 'u_opacity']);
+
+  var progL = link(GLSL_LINES_VS, GLSL_LINES_FS, null);
+  var uL = uniforms(progL, ['u_proj', 'u_view', 'u_color', 'u_opacity', 'u_exposure']);
+
+  var progS = link(GLSL_STARS_VS, GLSL_STARS_FS, null);
+  var uS = uniforms(progS, ['u_proj', 'u_view', 'u_dpr']);
+
+  var progC = link(GLSL_QUAD_VS, GLSL_COMP_FS, null);
+  var uC = uniforms(progC, ['u_scene', 'u_mode', 'u_aspect', 'u_time', 'u_spin', 'u_contrast']);
+
+  /* --- State buffers: 1M slots, interleaved pos(3)+vel(3), ping-pong --- */
+  var STRIDE = 6 * 4;
+  var initData = new Float32Array(MAX_PARTICLES * 6);
+  fillInitData(initData, MAX_PARTICLES, 6);
+
+  var stateBuf = [gl.createBuffer(), gl.createBuffer()];
+  for (var b = 0; b < 2; b++) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, stateBuf[b]);
+    gl.bufferData(gl.ARRAY_BUFFER, initData, gl.DYNAMIC_COPY);
+  }
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+  function makeUpdateVAO(buf) {
+    var vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, STRIDE, 0);
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 3, gl.FLOAT, false, STRIDE, 12);
+    gl.bindVertexArray(null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return vao;
+  }
+
+  function makeRenderVAO(buf) {
+    var vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, STRIDE, 0);
+    gl.bindVertexArray(null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return vao;
+  }
+
+  var updVAO = [makeUpdateVAO(stateBuf[0]), makeUpdateVAO(stateBuf[1])];
+  var renVAO = [makeRenderVAO(stateBuf[0]), makeRenderVAO(stateBuf[1])];
+  var src = 0;
+
+  window.HELIOS02.resetParticles = function () {
+    fillInitData(initData, MAX_PARTICLES, 6);
+    for (var b = 0; b < 2; b++) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, stateBuf[b]);
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, initData);
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  };
+
+  /* GPU readback of live particle state (interleaved pos.xyz + vel.xyz).
+     Debug / telemetry hook; stalls the pipeline, use sparingly. */
+  window.HELIOS02.readback = function (count, start) {
+    var c = Math.max(1, Math.min(count || 1000, MAX_PARTICLES));
+    var s = Math.max(0, Math.min((start | 0) || 0, MAX_PARTICLES - c));
+    var out = new Float32Array(c * 6);
+    gl.bindBuffer(gl.ARRAY_BUFFER, stateBuf[src]);
+    gl.getBufferSubData(gl.ARRAY_BUFFER, s * STRIDE, out);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return out;
+  };
+
+  /* --- Ontogeny seeding: overwrite both state buffers with the germinal
+     ball (initData is a scratch here; resetParticles refills it with the
+     canonical lattice, so nothing is lost). --- */
+  ontogeny.seedFns.push(function () {
+    fillBallData(initData, MAX_PARTICLES, 6);
+    for (var b2 = 0; b2 < 2; b2++) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, stateBuf[b2]);
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, initData);
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  });
+  if (ontogeny.pending) ontogenySeed();
+
+  /* --- Reduced motion: pre-warm the field so the first visible frame is
+     already mature (no birth animation, no lattice flash). --- */
+  function prewarm(steps) {
+    var fs0 = frameScalars(cursor);
+    gl.useProgram(progU);
+    gl.uniform1f(uU.u_m, fs0.m);
+    gl.uniform1f(uU.u_n, fs0.n);
+    gl.uniform1f(uU.u_p, fs0.p);
+    gl.uniform1f(uU.u_phaseM, fs0.phaseM);
+    gl.uniform1f(uU.u_phaseN, fs0.phaseN);
+    gl.uniform1f(uU.u_phaseP, fs0.phaseP);
+    gl.uniform1f(uU.u_k, fs0.k);
+    gl.uniform1f(uU.u_sThree, fs0.sThreeFold);
+    gl.uniform1f(uU.u_sSix, fs0.sSixFold);
+    gl.uniform1f(uU.u_sLattice, fs0.sLattice);
+    gl.uniform1f(uU.u_sComma, fs0.sComma);
+    gl.uniform1f(uU.u_sCommaSin, fs0.sCommaSin);
+    gl.uniform1f(uU.u_sFifths, fs0.sFifths);
+    gl.uniform1f(uU.u_sTrefoil, fs0.sTrefoil);
+    gl.uniform1f(uU.u_sTorus, fs0.sTorus);
+    gl.uniform3f(uU.u_pulseCenter, 0, 0, 0);
+    gl.uniform1f(uU.u_pulseK, 1);
+    gl.uniform1f(uU.u_pulsePhase, 0);
+    gl.uniform1f(uU.u_pulseAmp, 0);
+    gl.enable(gl.RASTERIZER_DISCARD);
+    var Nw = Math.max(1, Math.min(MAX_PARTICLES, Math.floor(cfg.particleCount)));
+    for (var s2 = 0; s2 < steps; s2++) {
+      var dstW = 1 - src;
+      gl.bindVertexArray(updVAO[src]);
+      gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, stateBuf[dstW]);
+      gl.beginTransformFeedback(gl.POINTS);
+      gl.drawArrays(gl.POINTS, 0, Nw);
+      gl.endTransformFeedback();
+      gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
+      src = dstW;
+    }
+    gl.disable(gl.RASTERIZER_DISCARD);
+    gl.bindVertexArray(null);
+  }
+  if (REDUCED_MOTION) prewarm(140);
+
+  /* --- Scene render target for the kaleidoscope composite --- */
+  var sceneTex = gl.createTexture();
+  var sceneFBO = gl.createFramebuffer();
+  var fboW = 0, fboH = 0;
+  function ensureSceneTarget(W2, H2) {
+    if (W2 === fboW && H2 === fboH) return;
+    fboW = W2; fboH = H2;
+    gl.bindTexture(gl.TEXTURE_2D, sceneTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, W2, H2, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, sceneFBO);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, sceneTex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  /* --- Boundary box: edges of a 30x30x30 cube, #4A90E2 @ 0.3 --- */
+  var E = SIMULATION_EXTENT;
+  var corners = [
+    [-E, -E, -E], [E, -E, -E], [E, E, -E], [-E, E, -E],
+    [-E, -E, E], [E, -E, E], [E, E, E], [-E, E, E]
+  ];
+  var edgeIdx = [0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7];
+  var boxData = new Float32Array(edgeIdx.length * 3);
+  for (var ei = 0; ei < edgeIdx.length; ei++) {
+    boxData[ei * 3] = corners[edgeIdx[ei]][0];
+    boxData[ei * 3 + 1] = corners[edgeIdx[ei]][1];
+    boxData[ei * 3 + 2] = corners[edgeIdx[ei]][2];
+  }
+  var boxVAO = gl.createVertexArray();
+  gl.bindVertexArray(boxVAO);
+  var boxBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, boxBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, boxData, gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+  gl.bindVertexArray(null);
+
+  var boxColorLinear = [
+    srgbChannelToLinear(0x4A / 255),
+    srgbChannelToLinear(0x90 / 255),
+    srgbChannelToLinear(0xE2 / 255)
+  ];
+
+  /* --- Starfield: 5000 points in a shell r in [100, 150] --- */
+  var STAR_COUNT = 5000;
+  var starData = new Float32Array(STAR_COUNT * 5);
+  for (var si = 0; si < STAR_COUNT; si++) {
+    var ux, uy, uz, len;
+    do {
+      ux = Math.random() * 2 - 1;
+      uy = Math.random() * 2 - 1;
+      uz = Math.random() * 2 - 1;
+      len = Math.hypot(ux, uy, uz);
+    } while (len < 0.0001 || len > 1);
+    var rr = 100 + Math.random() * 50;
+    var so = si * 5;
+    starData[so] = ux / len * rr;
+    starData[so + 1] = uy / len * rr;
+    starData[so + 2] = uz / len * rr;
+    starData[so + 3] = 0.8 + Math.random() * 2.2;  /* px size */
+    starData[so + 4] = 0.25 + Math.random() * 0.6; /* alpha */
+  }
+  var starVAO = gl.createVertexArray();
+  gl.bindVertexArray(starVAO);
+  var starBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, starBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, starData, gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 20, 0);
+  gl.enableVertexAttribArray(1);
+  gl.vertexAttribPointer(1, 1, gl.FLOAT, false, 20, 12);
+  gl.enableVertexAttribArray(2);
+  gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 20, 16);
+  gl.bindVertexArray(null);
+
+  var quadVAO = gl.createVertexArray(); /* attribute-less fullscreen triangle */
+
+  gl.disable(gl.DEPTH_TEST);
+  gl.disable(gl.CULL_FACE);
+
+  var t0 = -1;
+  var PROJ_M = new Float32Array(16); /* frame-loop scratch: zero allocations per frame */
+  var VIEW_M = new Float32Array(16);
+
+  function frame(tAbs) {
+    requestAnimationFrame(frame);
+    if (t0 < 0) t0 = tAbs;
+    var now = tAbs - t0;
+    lastNow = now;
+
+    fitCanvas();
+    meterAndGuard(now);
+    advanceCursor(now);
+    var fs = frameScalars(cursor);
+    var ontoCap = ontogenyTick(now, fs); /* scales fs by the force ramp while alive */
+    var pu = pulseUniforms(now);
+
+    var N = Math.max(1, Math.min(MAX_PARTICLES, Math.floor(cfg.particleCount)));
+    if (ontoCap < N) N = ontoCap;
+    publishStats(fs, N);
+
+    var dst = 1 - src;
+
+    /* ---- Update pass: transform feedback, exact per-particle program ---- */
+    gl.useProgram(progU);
+    gl.uniform1f(uU.u_m, fs.m);
+    gl.uniform1f(uU.u_n, fs.n);
+    gl.uniform1f(uU.u_p, fs.p);
+    gl.uniform1f(uU.u_phaseM, fs.phaseM);
+    gl.uniform1f(uU.u_phaseN, fs.phaseN);
+    gl.uniform1f(uU.u_phaseP, fs.phaseP);
+    gl.uniform1f(uU.u_k, fs.k);
+    gl.uniform1f(uU.u_sThree, fs.sThreeFold);
+    gl.uniform1f(uU.u_sSix, fs.sSixFold);
+    gl.uniform1f(uU.u_sLattice, fs.sLattice);
+    gl.uniform1f(uU.u_sComma, fs.sComma);
+    gl.uniform1f(uU.u_sCommaSin, fs.sCommaSin);
+    gl.uniform1f(uU.u_sFifths, fs.sFifths);
+    gl.uniform1f(uU.u_sTrefoil, fs.sTrefoil);
+    gl.uniform1f(uU.u_sTorus, fs.sTorus);
+    gl.uniform3f(uU.u_pulseCenter, pulse.center[0], pulse.center[1], pulse.center[2]);
+    gl.uniform1f(uU.u_pulseK, pu.k);
+    gl.uniform1f(uU.u_pulsePhase, pu.phase);
+    gl.uniform1f(uU.u_pulseAmp, pu.amp);
+
+    gl.bindVertexArray(updVAO[src]);
+    gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, stateBuf[dst]);
+    gl.enable(gl.RASTERIZER_DISCARD);
+    gl.beginTransformFeedback(gl.POINTS);
+    gl.drawArrays(gl.POINTS, 0, N);
+    gl.endTransformFeedback();
+    gl.disable(gl.RASTERIZER_DISCARD);
+    gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, null);
+    gl.bindVertexArray(null);
+
+    /* ---- Camera ---- */
+    idleDrift(tAbs);
+    camUpdate();
+    var eye = camEye();
+    var W = gl.drawingBufferWidth, H = gl.drawingBufferHeight;
+    var proj = perspectiveM(cam.fov, W / H, 0.1, 1000, PROJ_M);
+    var view = lookAtM(eye, cam.target, VIEW_M);
+
+    /* ---- Scene pass: into the composite's texture, transparent clear
+       (the radial backdrop lives in the composite, unfolded - exactly as
+       the original kept it in CSS behind a transparent canvas) ---- */
+    ensureSceneTarget(W, H);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, sceneFBO);
+    gl.viewport(0, 0, W, H);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.enable(gl.BLEND);
+
+    /* Stars: additive, premultiplied */
+    gl.blendFunc(gl.ONE, gl.ONE);
+    gl.useProgram(progS);
+    gl.uniformMatrix4fv(uS.u_proj, false, proj);
+    gl.uniformMatrix4fv(uS.u_view, false, view);
+    gl.uniform1f(uS.u_dpr, DPR);
+    gl.bindVertexArray(starVAO);
+    gl.drawArrays(gl.POINTS, 0, STAR_COUNT);
+
+    /* Boundary box: premultiplied over */
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    gl.useProgram(progL);
+    gl.uniformMatrix4fv(uL.u_proj, false, proj);
+    gl.uniformMatrix4fv(uL.u_view, false, view);
+    gl.uniform3f(uL.u_color, boxColorLinear[0], boxColorLinear[1], boxColorLinear[2]);
+    gl.uniform1f(uL.u_opacity, 0.3);
+    gl.uniform1f(uL.u_exposure, effExposure());
+    gl.bindVertexArray(boxVAO);
+    gl.drawArrays(gl.LINES, 0, 24);
+
+    /* Particles: additive, depthWrite off, fog to black, AgX + exposure */
+    gl.blendFunc(gl.ONE, gl.ONE);
+    gl.useProgram(progP);
+    gl.uniformMatrix4fv(uP.u_proj, false, proj);
+    gl.uniformMatrix4fv(uP.u_view, false, view);
+    gl.uniform1f(uP.u_m, fs.m);
+    gl.uniform1f(uP.u_n, fs.n);
+    gl.uniform1f(uP.u_p, fs.p);
+    gl.uniform1f(uP.u_brightness, cfg.quality * 0.7);
+    gl.uniform1i(uP.u_mode, modeIndex());
+    gl.uniform1f(uP.u_size, pointSizeWorld());
+    /* Original attenuation law: size * (deviceHeight/2) / dist - deliberately
+       fov-independent (ported quirk of the reference renderer). */
+    gl.uniform1f(uP.u_sizeScale, H * 0.5);
+    gl.uniform1f(uP.u_exposure, effExposure());
+    gl.uniform1f(uP.u_opacity, pointOpacity());
+    gl.bindVertexArray(renVAO[dst]);
+    gl.drawArrays(gl.POINTS, 0, N);
+    gl.bindVertexArray(null);
+
+    /* ---- Composite pass: kaleidoscope fold of the tone-mapped scene,
+       over the radial backdrop, plus contrast and vignette ---- */
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, W, H);
+    gl.disable(gl.BLEND);
+    gl.useProgram(progC);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, sceneTex);
+    gl.uniform1i(uC.u_scene, 0);
+    gl.uniform1i(uC.u_mode, cfg.kaleidoMode | 0);
+    gl.uniform1f(uC.u_aspect, W / H);
+    gl.uniform1f(uC.u_time, now * 0.001);
+    gl.uniform1f(uC.u_spin, 0.0);
+    gl.uniform1f(uC.u_contrast, cfg.contrast);
+    gl.bindVertexArray(quadVAO);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.bindVertexArray(null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    src = dst;
+  }
+
+  requestAnimationFrame(frame);
+}
+
+/* =====================================================================
+   Canvas-2D fallback: 10,000 particles, same physics, CPU integrated
+   ===================================================================== */
+
+function startFallback2D() {
+  /* Fallback-only deliberate deviation: linear exposure approximation
+     (the AgX polynomial runs only on the GPU path). */
+  window.HELIOS02.engine = 'canvas2d';
+  cfg.particleCount = 10000;
+  cfg.adaptive = false;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) {
+    document.getElementById('nogl').style.display = 'flex';
+    return;
+  }
+
+  var N2 = 10000;
+  var P = new Float32Array(N2 * 6);
+  fillInitData(P, N2, 6);
+
+  window.HELIOS02.resetParticles = function () { fillInitData(P, N2, 6); };
+  window.HELIOS02.readback = function (count, start) {
+    var c = Math.max(1, Math.min(count || 1000, N2));
+    var s = Math.max(0, Math.min((start | 0) || 0, N2 - c));
+    return P.slice(s * 6, (s + c) * 6);
+  };
+
+  ontogeny.seedFns.push(function () { fillBallData(P, N2, 6); });
+  if (ontogeny.pending) ontogenySeed();
+
+  /* Reduced motion: pre-warm to a mature frame. Extension forces are zero
+     at boot defaults, so the core wave alone settles the field. */
+  if (REDUCED_MOTION) {
+    var fsw = frameScalars(cursor);
+    var Ew = SIMULATION_EXTENT;
+    for (var w2 = 0; w2 < 140; w2++) {
+      for (var iw = 0; iw < N2; iw++) {
+        var ow = iw * 6;
+        var xw = P[ow], yw = P[ow + 1], zw = P[ow + 2];
+        var wxw = fsw.m * xw * WAVE_NUMBER + fsw.phaseM;
+        var wyw = fsw.n * yw * WAVE_NUMBER + fsw.phaseN;
+        var wzw = fsw.p * zw * WAVE_NUMBER + fsw.phaseP;
+        var cxw = Math.cos(wxw), cyw = Math.cos(wyw), czw = Math.cos(wzw);
+        P[ow + 3] = (P[ow + 3] + fsw.m * Math.sin(wxw) * cyw * czw * fsw.k) * VELOCITY_DAMPING;
+        P[ow + 4] = (P[ow + 4] + cxw * fsw.n * Math.sin(wyw) * czw * fsw.k) * VELOCITY_DAMPING;
+        P[ow + 5] = (P[ow + 5] + cxw * cyw * fsw.p * Math.sin(wzw) * fsw.k) * VELOCITY_DAMPING;
+        xw += P[ow + 3]; yw += P[ow + 4]; zw += P[ow + 5];
+        var dw = xw * xw + yw * yw + zw * zw;
+        if (dw > Ew * Ew) {
+          var scw = Ew / Math.sqrt(dw);
+          xw *= scw; yw *= scw; zw *= scw;
+          P[ow + 3] *= -0.5; P[ow + 4] *= -0.5; P[ow + 5] *= -0.5;
+        }
+        P[ow] = xw; P[ow + 1] = yw; P[ow + 2] = zw;
+      }
+    }
+  }
+
+  /* Static 2D star backdrop */
+  var stars2d = [];
+  for (var i = 0; i < 220; i++) stars2d.push([Math.random(), Math.random(), Math.random()]);
+
+  var t0 = -1;
+  var E = SIMULATION_EXTENT;
+  var PROJ_M = new Float32Array(16); /* frame-loop scratch: zero allocations per frame */
+  var VIEW_M = new Float32Array(16);
+  var VP_M = new Float32Array(16);
+
+  function frame(tAbs) {
+    requestAnimationFrame(frame);
+    if (t0 < 0) t0 = tAbs;
+    var now = tAbs - t0;
+
+    lastNow = now;
+    fitCanvas();
+    meterAndGuard(now);
+    advanceCursor(now);
+    var fs = frameScalars(cursor);
+    var ontoCap = ontogenyTick(now, fs);
+    var pu = pulseUniforms(now);
+    var N2eff = Math.min(N2, ontoCap);
+    publishStats(fs, N2eff);
+
+    idleDrift(tAbs);
+    camUpdate();
+    var eye = camEye();
+    var W = canvas.width, H = canvas.height;
+    var proj = perspectiveM(cam.fov, W / H, 0.1, 1000, PROJ_M);
+    var view = lookAtM(eye, cam.target, VIEW_M);
+
+    /* view-proj product, column-major */
+    var vp = VP_M;
+    for (var c = 0; c < 4; c++) {
+      for (var r = 0; r < 4; r++) {
+        vp[c * 4 + r] = proj[r] * view[c * 4] + proj[4 + r] * view[c * 4 + 1] + proj[8 + r] * view[c * 4 + 2] + proj[12 + r] * view[c * 4 + 3];
+      }
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    for (var s = 0; s < stars2d.length; s++) {
+      ctx.globalAlpha = 0.2 + stars2d[s][2] * 0.5;
+      ctx.fillRect(stars2d[s][0] * W, stars2d[s][1] * H, 1.5, 1.5);
+    }
+
+    var brightness = cfg.quality * 0.7;
+    var opacity = pointOpacity();
+    var sizeWorld = pointSizeWorld();
+    var sizeScale = H * 0.5; /* same fov-independent attenuation law */
+    var expF = cfg.exposure / 3;
+    var mode = modeIndex();
+
+    ctx.globalCompositeOperation = 'lighter';
+
+    for (var i2 = 0; i2 < N2eff; i2++) {
+      var o = i2 * 6;
+      var x = P[o], y = P[o + 1], z = P[o + 2];
+      var fx = 0, fy = 0, fz = 0;
+
+      if (fs.sThreeFold > 0) {
+        var r3 = Math.sqrt(x * x + y * y);
+        var a3 = Math.atan2(y, x);
+        var sn3 = Math.round(a3 / 2.0944) * 2.0944;
+        fx += (r3 * Math.cos(sn3) - x) * fs.sThreeFold;
+        fy += (r3 * Math.sin(sn3) - y) * fs.sThreeFold;
+      }
+      if (fs.sSixFold > 0) {
+        var r6 = Math.sqrt(x * x + y * y);
+        var a6 = Math.atan2(y, x);
+        var sn6 = Math.round(a6 / 1.0472) * 1.0472;
+        fx += (r6 * Math.cos(sn6) - x) * fs.sSixFold;
+        fy += (r6 * Math.sin(sn6) - y) * fs.sSixFold;
+      }
+      if (fs.sLattice > 0) {
+        var al = E / 3;
+        fx += (al * Math.round(x / al) - x) * fs.sLattice;
+        fy += (al * 0.866 * Math.round(y / (al * 0.866)) - y) * fs.sLattice;
+      }
+      if (fs.sComma > 0) {
+        fx += y * fs.sCommaSin;
+        fy += -x * fs.sCommaSin;
+      }
+      if (fs.sFifths > 0) {
+        fx += Math.sin(x * 1.5 * WAVE_NUMBER) * fs.sFifths;
+        fy += Math.sin(y * 1.5 * WAVE_NUMBER) * fs.sFifths;
+        fz += Math.sin(z * 1.5 * WAVE_NUMBER) * fs.sFifths;
+      }
+      if (fs.sTrefoil > 0) {
+        var tt = Math.atan2(y, x) * 0.15915;
+        var ss = E * 0.5;
+        var t2 = tt * 6.283;
+        fx += (ss * (Math.sin(t2) + 2 * Math.sin(2 * t2)) - x) * fs.sTrefoil;
+        fy += (ss * (Math.cos(t2) - 2 * Math.cos(2 * t2)) - y) * fs.sTrefoil;
+        fz += (ss * (-Math.sin(3 * t2)) - z) * fs.sTrefoil;
+      }
+      if (fs.sTorus > 0) {
+        var R = E * 0.6, rr = E * 0.25;
+        var th = Math.atan2(y, x);
+        var dd = Math.sqrt(x * x + y * y);
+        var ph2 = Math.atan2(z, dd - R);
+        var tr = R + rr * Math.cos(ph2);
+        fx += (tr * Math.cos(th) - x) * fs.sTorus;
+        fy += (tr * Math.sin(th) - y) * fs.sTorus;
+        fz += (rr * Math.sin(ph2) - z) * fs.sTorus;
+      }
+
+      if (pu.amp > 0) {
+        var pdx = x - pulse.center[0], pdy = y - pulse.center[1], pdz = z - pulse.center[2];
+        var prr = Math.max(Math.hypot(pdx, pdy, pdz), 0.0001);
+        var pw = Math.sin(prr * pu.k - pu.phase) * pu.amp;
+        fx += pdx / prr * pw;
+        fy += pdy / prr * pw;
+        fz += pdz / prr * pw;
+      }
+
+      var wx = fs.m * x * WAVE_NUMBER + fs.phaseM;
+      var wy = fs.n * y * WAVE_NUMBER + fs.phaseN;
+      var wz = fs.p * z * WAVE_NUMBER + fs.phaseP;
+      var cx = Math.cos(wx), cy = Math.cos(wy), cz = Math.cos(wz);
+      fx += (fs.m * Math.sin(wx) * cy * cz) * fs.k;
+      fy += (cx * fs.n * Math.sin(wy) * cz) * fs.k;
+      fz += (cx * cy * fs.p * Math.sin(wz)) * fs.k;
+
+      P[o + 3] = (P[o + 3] + fx) * VELOCITY_DAMPING;
+      P[o + 4] = (P[o + 4] + fy) * VELOCITY_DAMPING;
+      P[o + 5] = (P[o + 5] + fz) * VELOCITY_DAMPING;
+      x += P[o + 3]; y += P[o + 4]; z += P[o + 5];
+
+      var d2 = x * x + y * y + z * z;
+      if (d2 > E * E) {
+        var sc = E / Math.sqrt(d2);
+        x *= sc; y *= sc; z *= sc;
+        P[o + 3] *= -0.5; P[o + 4] *= -0.5; P[o + 5] *= -0.5;
+      }
+      P[o] = x; P[o + 1] = y; P[o + 2] = z;
+
+      /* project */
+      var CX = vp[0] * x + vp[4] * y + vp[8] * z + vp[12];
+      var CY = vp[1] * x + vp[5] * y + vp[9] * z + vp[13];
+      var CW = vp[3] * x + vp[7] * y + vp[11] * z + vp[15];
+      if (CW <= 0.001) continue;
+      var sxp = (CX / CW * 0.5 + 0.5) * W;
+      var syp = (1 - (CY / CW * 0.5 + 0.5)) * H;
+      if (sxp < -8 || sxp > W + 8 || syp < -8 || syp > H + 8) continue;
+
+      var viewZ = -(view[2] * x + view[6] * y + view[10] * z + view[14]);
+      var fog = Math.min(1, Math.max(0, (viewZ - 10) / 70));
+      var px = Math.max(1, sizeWorld * sizeScale / viewZ);
+
+      var cr, cg, cb;
+      if (mode === 1) {
+        var an = (Math.atan2(y, x) + Math.PI) * 0.15915;
+        cr = 0.3 + an * brightness; cg = 0.2 + (1 - an) * brightness * 0.8; cb = 0.4 + Math.abs(z / E) * brightness;
+      } else if (mode === 2) {
+        var ph3 = (x + y + z) * 0.1;
+        cr = 0.5 + 0.5 * Math.sin(ph3) * brightness;
+        cg = 0.5 + 0.5 * Math.sin(ph3 + 2.09) * brightness;
+        cb = 0.5 + 0.5 * Math.sin(ph3 + 4.18) * brightness;
+      } else if (mode === 3) {
+        var rt = Math.sqrt(x * x + y * y);
+        var tht = Math.atan2(y, x);
+        cr = 0.3 + (rt / E) * brightness;
+        cg = 0.3 + Math.abs(Math.sin(tht * 3)) * brightness;
+        cb = 0.3 + Math.abs(z / E) * brightness;
+      } else {
+        cr = 0.3 + Math.abs(Math.cos(fs.m * x * 0.2)) * brightness;
+        cg = 0.2 + Math.abs(Math.cos(fs.n * y * 0.2)) * brightness * 0.8;
+        cb = 0.4 + Math.abs(Math.cos(fs.p * z * 0.2)) * brightness * 0.9;
+      }
+      var fogK = (1 - fog) * expF;
+      var R8 = Math.min(255, Math.round(cr * 160 * fogK));
+      var G8 = Math.min(255, Math.round(cg * 160 * fogK));
+      var B8 = Math.min(255, Math.round(cb * 160 * fogK));
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle = 'rgb(' + R8 + ',' + G8 + ',' + B8 + ')';
+      ctx.fillRect(sxp - px * 0.5, syp - px * 0.5, px, px);
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+/* =====================================================================
+   Boot
+   ===================================================================== */
+
+(function boot() {
+  fitCanvas();
+  window.addEventListener('resize', fitCanvas);
+
+  var gl = null;
+  try {
+    gl = canvas.getContext('webgl2', {
+      antialias: false,
+      alpha: false,
+      depth: false,
+      stencil: false,
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: false
+    });
+  } catch (e) { gl = null; }
+
+  if (gl) {
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); }, false);
+    canvas.addEventListener('webglcontextrestored', function () { window.location.reload(); }, false);
+    try {
+      startWebGL2(gl);
+      return;
+    } catch (e) {
+      /* fall through to 2D */
+    }
+  }
+  startFallback2D();
+})();
+</script>
+<script>
+'use strict';
+/* =====================================================================
+   HELIOS-02 chrome - the cockpit grows in
+   Author: Aldrin Payopay <aldrin.gdf@gmail.com> - License: GPL-3.0
+   https://github.com/mrdirno/nested-resonance-memory-archive
+
+   Reads and writes the engine's exported surface (window.HELIOS02) plus
+   the shared top-level state (cfg, cam, cursor, DIGIT_SEQUENCES...).
+   No figure renders before its first real measurement: everything boots
+   as an em-dash and ignites when the frame clock / GPU readback lands.
+   ===================================================================== */
+(function () {
+  var H = window.HELIOS02;
+  if (!H) return;
+  function $(id) { return document.getElementById(id); }
+  var body = document.body;
+  var root = document.documentElement;
+
+  var KAL_NAMES = { '-1': 'EVERYTHING', '0': 'METATRON', '1': 'OCTOPUS', '2': 'CUBES', '3': 'GASKET', '4': 'SPIRAL' };
+  var CONST_LABEL = { pi: 'π', e: 'e', sqrt2: '√2', phi: 'φ' };
+  var CONST_COLOR = { pi: '#06B6D4', e: '#10B981', sqrt2: '#7C3AED', phi: '#EC4899' };
+
+  var ui = {
+    panel: null, energyLock: false, sonar: false, hidden: false,
+    armReload: 0, ignited: false, lum: 1,
+    ledger: { sv: NaN, ss: NaN }, ledgerTick: 0,
+    cloud: null, cloudN: 0
+  };
+
+  /* ---------- formatting ---------- */
+  function fmtInt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function tierLabel(n) { return n >= 1000000 ? '1M' : Math.round(n / 1000) + 'K'; }
+  function r2(v) { return Math.round(v * 100) / 100; }
+  function r3(v) { return Math.round(v * 1000) / 1000; }
+
+  /* ---------- genome: full state <-> base64url hash ---------- */
+  function b64e(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function b64d(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
+
+  function genomeObj() {
+    var ex = cfg.extensions;
+    return {
+      v: 2, n: cfg.particleCount, pl: cfg.isPlaying ? 1 : 0, ms: Math.round(1000 / cfg.speed),
+      q: r2(cfg.quality), a: r2(cfg.amplitude), e: r2(cfg.exposure), md: cfg.mode, pol: cfg.polarity,
+      mp: [cfg.mapping.a, cfg.mapping.b, cfg.mapping.c],
+      st: [cfg.stagger.a, cfg.stagger.b, cfg.stagger.c],
+      x: [r2(ex.crystal.threeFold), r2(ex.crystal.sixFold), r2(ex.crystal.lattice),
+          r2(ex.harmonic.commaSpiral), r2(ex.harmonic.perfectFifths),
+          r2(ex.topology.trefoil), r2(ex.topology.torus), r2(ex.topology.hopf)],
+      k: cfg.kaleidoMode, lk: ui.energyLock ? 1 : 0, so: ui.sonar ? 1 : 0, rs: cfg.resonance ? 1 : 0,
+      cur: H.cursor,
+      cm: [r2(cam.radius), r3(cam.theta), r3(cam.phi), r2(cam.target[0]), r2(cam.target[1]), r2(cam.target[2])]
+    };
+  }
+  function genomeHash() { return '#g=' + b64e(JSON.stringify(genomeObj())); }
+  function genomeURL() { return location.href.split('#')[0] + genomeHash(); }
+
+  var hashT = 0;
+  function hashWrite() {
+    var h = genomeHash();
+    try { history.replaceState(null, '', location.pathname + location.search + h); }
+    catch (e) { try { location.hash = h; } catch (e2) {} }
+    var peek = $('genomePeek');
+    if (peek) peek.textContent = h.length > 44 ? h.slice(0, 44) + '…' : h;
+  }
+  function hashSync() { clearTimeout(hashT); hashT = setTimeout(hashWrite, 250); }
+
+  function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d; }
+  var GOODMAP = ['pi', 'e', 'sqrt2', 'phi'];
+
+  function applyGenome(g) {
+    if (!g || typeof g !== 'object') return false;
+    cfg.particleCount = Math.round(num(g.n, 10000, 1000000, cfg.particleCount));
+    cfg.isPlaying = g.pl !== 0;
+    cfg.speed = 1000 / num(g.ms, 16, 3000, 1000);
+    cfg.quality = num(g.q, 0.1, 2, cfg.quality);
+    cfg.amplitude = num(g.a, 0.1, 100, cfg.amplitude);
+    cfg.exposure = num(g.e, 0, 3, cfg.exposure);
+    cfg.polarity = (Number(g.pol) < 0) ? -1 : 1;
+    if (['standard', 'crystal', 'harmonic', 'topology'].indexOf(g.md) >= 0) cfg.mode = g.md;
+    if (g.mp && g.mp.length === 3) {
+      if (GOODMAP.indexOf(g.mp[0]) >= 0) cfg.mapping.a = g.mp[0];
+      if (GOODMAP.indexOf(g.mp[1]) >= 0) cfg.mapping.b = g.mp[1];
+      if (GOODMAP.indexOf(g.mp[2]) >= 0) cfg.mapping.c = g.mp[2];
+    }
+    if (g.st && g.st.length === 3) {
+      cfg.stagger.a = Math.round(num(g.st[0], 0, 4998, 0));
+      cfg.stagger.b = Math.round(num(g.st[1], 0, 4998, 239));
+      cfg.stagger.c = Math.round(num(g.st[2], 0, 4998, 478));
+    }
+    if (g.x && g.x.length >= 8) {
+      var ex = cfg.extensions;
+      ex.crystal.threeFold = num(g.x[0], 0, 1, 0);
+      ex.crystal.sixFold = num(g.x[1], 0, 1, 0);
+      ex.crystal.lattice = num(g.x[2], 0, 1, 0);
+      ex.harmonic.commaSpiral = num(g.x[3], 0, 1, 0);
+      ex.harmonic.perfectFifths = num(g.x[4], 0, 1, 0);
+      ex.topology.trefoil = num(g.x[5], 0, 0.42, 0);
+      ex.topology.torus = num(g.x[6], 0, 1, 0);
+      ex.topology.hopf = num(g.x[7], 0, 1, 0);
+    }
+    H.setKaleido(num(g.k, -1, 4, -1));
+    ui.energyLock = !!g.lk;
+    ui.sonar = !!g.so;
+    cfg.resonance = !!g.rs;
+    if (isFinite(Number(g.cur)) && Number(g.cur) >= 0) { cursor = Math.floor(Number(g.cur)); }
+    if (g.cm && g.cm.length === 6) {
+      cam.goal = null;
+      cam.radius = num(g.cm[0], 1, 100, cam.radius);
+      cam.theta = num(g.cm[1], -1000, 1000, cam.theta);
+      cam.phi = num(g.cm[2], 0.01, Math.PI - 0.01, cam.phi);
+      cam.target = [num(g.cm[3], -50, 50, 0), num(g.cm[4], -50, 50, 0), num(g.cm[5], -50, 50, 0)];
+    }
+    return true;
+  }
+
+  function readHashGenome() {
+    var m = (location.hash || '').match(/g=([A-Za-z0-9_-]+)/);
+    if (!m) return null;
+    try { return JSON.parse(b64d(m[1])); } catch (e) { return null; }
+  }
+
+  /* ---------- toast + wordmark shimmer + key echo ---------- */
+  var toastT = 0;
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { t.classList.remove('show'); }, 1200);
+  }
+  function shimmer() {
+    var w = $('wordmark');
+    w.classList.remove('shimmer');
+    void w.offsetWidth;
+    w.classList.add('shimmer');
+  }
+  function echo(el) {
+    if (!el) return;
+    el.classList.remove('echo');
+    void el.offsetWidth;
+    el.classList.add('echo');
+  }
+  function visibleOr(el, fallback) { return (el && el.offsetParent) ? el : fallback; }
+
+  function copyGenome() {
+    hashWrite();
+    var url = genomeURL();
+    function ok() { toast('GENOME COPIED'); shimmer(); }
+    function fallback() {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        var did = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (did) ok(); else toast('COPY BLOCKED — LINK IS IN THE URL BAR');
+      } catch (e) { toast('COPY BLOCKED — LINK IS IN THE URL BAR'); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+
+  /* ---------- range binder ---------- */
+  var BINDS = {};
+  function bindRange(id, opt) {
+    var el = $(id), out = $(id + 'V');
+    function show(v) { if (out) out.textContent = opt.fmt ? opt.fmt(v) : String(v); }
+    opt.refresh = function () { var v = opt.get(); el.value = String(v); show(parseFloat(el.value)); };
+    el.addEventListener('input', function () {
+      var v = parseFloat(el.value);
+      opt.set(v);
+      show(v);
+      if (opt.after) opt.after(v);
+      hashSync();
+    });
+    opt.el = el;
+    BINDS[id] = opt;
+    opt.refresh();
+  }
+  function refreshAll() { for (var k in BINDS) BINDS[k].refresh(); syncButtons(); }
+
+  /* ---------- sync helpers ---------- */
+  function setPressed(el, on) { if (el) el.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  function each(sel, fn) { var l = document.querySelectorAll(sel); for (var i = 0; i < l.length; i++) fn(l[i]); }
+
+  function syncPlay() { var b = $('btnPlay'); b.textContent = cfg.isPlaying ? 'PAUSE' : 'PLAY'; setPressed(b, cfg.isPlaying); }
+  function syncSpeedSeg() { each('.spd', function (b) { setPressed(b, Math.abs(cfg.speed - parseFloat(b.getAttribute('data-spd'))) < 0.001); }); }
+  function syncModeGrid() { each('.modebtn', function (b) { setPressed(b, b.getAttribute('data-mode') === cfg.mode); }); }
+  function syncKal() {
+    each('.kpill', function (p) { setPressed(p, parseInt(p.getAttribute('data-kal'), 10) === cfg.kaleidoMode); });
+    $('foldChipV').textContent = KAL_NAMES[String(cfg.kaleidoMode)] || 'EVERYTHING';
+  }
+  function syncPol() { setPressed($('polPlus'), cfg.polarity > 0); setPressed($('polMinus'), cfg.polarity < 0); }
+  function syncLock() {
+    setPressed($('lockBtn'), ui.energyLock);
+    $('lockCap').textContent = ui.energyLock
+      ? 'Locked — presets touch only the extension block; globals hold steady.'
+      : 'Unlocked — presets set globals and the extension block.';
+  }
+  function syncToggles() { setPressed($('sonarBtn'), ui.sonar); setPressed($('resBtn'), cfg.resonance); }
+  function syncMaps() { $('selA').value = cfg.mapping.a; $('selB').value = cfg.mapping.b; $('selC').value = cfg.mapping.c; }
+  function syncButtons() { syncPlay(); syncSpeedSeg(); syncModeGrid(); syncKal(); syncPol(); syncLock(); syncToggles(); syncMaps(); }
+
+  /* ---------- panel management: one panel, budding from its tile ---------- */
+  var TILE = { field: 'tileField', labs: 'tileLabs', archive: 'tileArchive', system: 'tileSystem' };
+  function openPanel(name) {
+    if (ui.panel === name) { closePanel(); return; }
+    ui.panel = name;
+    each('.pane', function (p) { p.classList.toggle('on', p.id === 'pane-' + name); });
+    $('panelTitle').textContent = name.toUpperCase();
+    for (var k in TILE) setPressed($(TILE[k]), k === name);
+    var p = $('panel');
+    if (window.innerWidth >= 768) {
+      var t = $(TILE[name]).getBoundingClientRect();
+      var ox = Math.max(0, Math.min(368, t.left + t.width / 2 - 16));
+      p.style.transformOrigin = ox + 'px 100%';
+    } else {
+      p.style.transformOrigin = '';
+    }
+    p.hidden = false;
+    $('panelBody').scrollTop = 0;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { p.classList.remove('closed'); }); });
+  }
+  function closePanel() {
+    if (ui.panel === null) return;
+    ui.panel = null;
+    for (var k in TILE) setPressed($(TILE[k]), false);
+    var p = $('panel');
+    p.classList.add('closed');
+    setTimeout(function () { if (ui.panel === null) p.hidden = true; }, 160);
+  }
+  each('.tile', function (t) {
+    t.addEventListener('click', function () { openPanel(t.getAttribute('data-panel')); echo(t); });
+  });
+  $('panelClose').addEventListener('click', closePanel);
+
+  /* mobile bottom sheet: drag handle snaps 30vh <-> 60vh; tap toggles */
+  (function sheet() {
+    var h = $('sheetHandle'), p = $('panel');
+    var sy = 0, sh = 0, dragging = false;
+    h.addEventListener('pointerdown', function (e) {
+      dragging = true; sy = e.clientY; sh = p.getBoundingClientRect().height;
+      try { h.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    });
+    h.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var nh = sh + (sy - e.clientY);
+      p.style.height = Math.max(window.innerHeight * 0.16, Math.min(window.innerHeight * 0.6, nh)) + 'px';
+    });
+    function done(e) {
+      if (!dragging) return;
+      dragging = false;
+      var moved = Math.abs(sy - e.clientY);
+      var frac = p.getBoundingClientRect().height / window.innerHeight;
+      p.style.height = '';
+      if (moved < 6) { p.classList.toggle('expanded'); return; }
+      if (frac < 0.2) { p.classList.remove('expanded'); closePanel(); return; }
+      p.classList.toggle('expanded', frac > 0.45);
+    }
+    h.addEventListener('pointerup', done);
+    h.addEventListener('pointercancel', done);
+  })();
+
+  /* ---------- control bindings ---------- */
+  bindRange('rDur', {
+    get: function () { return Math.round(1000 / cfg.speed); },
+    set: function (v) { cfg.speed = 1000 / Math.max(16, v); },
+    fmt: function (v) { return Math.round(v) + ' MS'; },
+    after: syncSpeedSeg
+  });
+  bindRange('rExp', {
+    get: function () { return cfg.exposure; },
+    set: function (v) { cfg.exposure = v; },
+    fmt: function (v) { return v.toFixed(2); }
+  });
+  bindRange('rDen', {
+    get: function () { return cfg.particleCount; },
+    set: function (v) { cfg.particleCount = Math.round(v); },
+    fmt: fmtInt
+  });
+  bindRange('rQual', {
+    get: function () { return cfg.quality; },
+    set: function (v) { cfg.quality = v; },
+    fmt: function (v) { return v.toFixed(1) + '×'; }
+  });
+  bindRange('rAmp', {
+    get: function () { return cfg.amplitude; },
+    set: function (v) { cfg.amplitude = v; },
+    fmt: function (v) { return v.toFixed(1) + '×'; }
+  });
+  bindRange('rPrime', {
+    get: function () { var i = PRIME_NUMBERS.indexOf(cfg.stagger.b); return i >= 0 ? i : parseFloat($('rPrime').value); },
+    set: function (v) { var p = PRIME_NUMBERS[Math.round(v)] || 239; cfg.stagger = { a: 0, b: p, c: p * 2 }; },
+    fmt: function () { return String(cfg.stagger.b); }
+  });
+
+  function bindExt(id, get, set, modeSwitch) {
+    bindRange(id, {
+      get: get,
+      set: function (v) { set(v); if (v > 0 && modeSwitch) cfg.mode = modeSwitch; },
+      fmt: function (v) { return Math.round(v * 100) + '%'; },
+      after: syncModeGrid
+    });
+  }
+  var ex = cfg.extensions;
+  bindExt('rThree', function () { return ex.crystal.threeFold; }, function (v) { ex.crystal.threeFold = v; }, 'crystal');
+  bindExt('rSix', function () { return ex.crystal.sixFold; }, function (v) { ex.crystal.sixFold = v; }, 'crystal');
+  bindExt('rLat', function () { return ex.crystal.lattice; }, function (v) { ex.crystal.lattice = v; }, 'crystal');
+  bindExt('rComma', function () { return ex.harmonic.commaSpiral; }, function (v) { ex.harmonic.commaSpiral = v; }, 'harmonic');
+  bindExt('rFifths', function () { return ex.harmonic.perfectFifths; }, function (v) { ex.harmonic.perfectFifths = v; }, 'harmonic');
+  bindExt('rTrefoil', function () { return ex.topology.trefoil; }, function (v) { ex.topology.trefoil = v; }, null); /* trefoil never switches mode */
+  bindExt('rTorus', function () { return ex.topology.torus; }, function (v) { ex.topology.torus = v; }, 'topology');
+
+  each('.chipTry', function (c) {
+    c.addEventListener('click', function () {
+      var b = BINDS[c.getAttribute('data-try')];
+      if (!b) return;
+      b.set(0.4);
+      b.refresh();
+      syncModeGrid();
+      hashSync();
+      echo(c);
+    });
+  });
+
+  /* transport */
+  function togglePlay() { cfg.isPlaying = !cfg.isPlaying; syncPlay(); hashSync(); }
+  $('btnPlay').addEventListener('click', togglePlay);
+  each('.spd', function (b) {
+    b.addEventListener('click', function () {
+      cfg.speed = parseFloat(b.getAttribute('data-spd'));
+      BINDS.rDur.refresh();
+      syncSpeedSeg();
+      hashSync();
+      echo(b);
+    });
+  });
+
+  /* kaleido capsule + fold chip */
+  each('.kpill', function (p) {
+    p.addEventListener('click', function () {
+      H.setKaleido(parseInt(p.getAttribute('data-kal'), 10));
+      syncKal();
+      hashSync();
+    });
+  });
+  $('foldChip').addEventListener('click', function () {
+    var m = cfg.kaleidoMode + 1;
+    if (m > 4) m = -1;
+    H.setKaleido(m);
+    syncKal();
+    hashSync();
+    echo(this);
+  });
+
+  /* mapping + prime + fields reset */
+  function wireSel(id, key) {
+    $(id).addEventListener('change', function () { cfg.mapping[key] = this.value; hashSync(); });
+  }
+  wireSel('selA', 'a'); wireSel('selB', 'b'); wireSel('selC', 'c');
+  $('btnFieldsReset').addEventListener('click', function () {
+    cfg.mapping = { a: 'phi', b: 'phi', c: 'pi' };
+    cfg.stagger = { a: 0, b: 239, c: 478 };
+    syncMaps();
+    BINDS.rPrime.refresh();
+    hashSync();
+    echo(this);
+  });
+
+  /* camera presets (original poses, verbatim) */
+  var CAMS = {
+    top:   { e: [0, 30, 0.1],       t: [0, 0, 0] },
+    side:  { e: [30, 0, 0],         t: [0, 0, 0] },
+    iso:   { e: [20, 20, 20],       t: [0, 0, 0] },
+    core:  { e: [0.1, 0.1, 0.1],    t: [10, 10, 10] },
+    reset: { e: [20, 10, 20],       t: [0, 0, 0] }
+  };
+  each('.camp', function (b) {
+    b.addEventListener('click', function () {
+      var c = CAMS[b.getAttribute('data-cam')];
+      if (c) H.cameraTo(c.e, c.t);
+      echo(b);
+      hashSync();
+    });
+  });
+
+  /* polarity */
+  $('polPlus').addEventListener('click', function () { cfg.polarity = 1; syncPol(); hashSync(); echo(this); });
+  $('polMinus').addEventListener('click', function () { cfg.polarity = -1; syncPol(); hashSync(); echo(this); });
+
+  /* presets + energy lock */
+  var TRIN = { threeFold: 0.38, sixFold: 0.38, lattice: 0, commaSpiral: 0.23, perfectFifths: 0.26, trefoil: 0.24, torus: 0.67, hopf: 0 };
+  function applyExtBlock(x) {
+    ex.crystal.threeFold = x.threeFold; ex.crystal.sixFold = x.sixFold; ex.crystal.lattice = x.lattice;
+    ex.harmonic.commaSpiral = x.commaSpiral; ex.harmonic.perfectFifths = x.perfectFifths;
+    ex.topology.trefoil = x.trefoil; ex.topology.torus = x.torus; ex.topology.hopf = x.hopf;
+  }
+  function preset(name) {
+    if (name === 'trinity') {
+      if (!ui.energyLock) { cfg.particleCount = 330000; cfg.mode = 'harmonic'; cfg.speed = 1; cfg.amplitude = 33.3; }
+      applyExtBlock(TRIN);
+      H.setKaleido(3); /* Gasket - set even when locked (original behavior) */
+    } else if (name === 'entangled') {
+      if (!ui.energyLock) { cfg.particleCount = 67000; cfg.mode = 'harmonic'; cfg.speed = 15; }
+      applyExtBlock(TRIN);
+    } else if (name === 'atomic') {
+      if (!ui.energyLock) { cfg.speed = 5; cfg.exposure = 3.0; cfg.particleCount = 350000; cfg.quality = 2.0; cfg.amplitude = 12.0; cfg.mode = 'harmonic'; }
+      applyExtBlock({ threeFold: 0, sixFold: 0, lattice: 0, commaSpiral: 0, perfectFifths: 0, trefoil: 0, torus: 0, hopf: 0 });
+    }
+    refreshAll();
+    hashSync();
+    toast(name.toUpperCase() + ' LOADED');
+  }
+  each('.pre', function (b) { b.addEventListener('click', function () { preset(b.getAttribute('data-pre')); echo(b); }); });
+  $('lockBtn').addEventListener('click', function () { ui.energyLock = !ui.energyLock; syncLock(); hashSync(); });
+  $('btnZeroExt').addEventListener('click', function () {
+    applyExtBlock({ threeFold: 0, sixFold: 0, lattice: 0, commaSpiral: 0, perfectFifths: 0, trefoil: 0, torus: 0, hopf: 0 });
+    refreshAll();
+    hashSync();
+    echo(this);
+  });
+
+  /* mode grid */
+  each('.modebtn', function (b) {
+    b.addEventListener('click', function () { cfg.mode = b.getAttribute('data-mode'); syncModeGrid(); hashSync(); });
+  });
+
+  /* instruments */
+  $('sonarBtn').addEventListener('click', function () { ui.sonar = !ui.sonar; syncToggles(); hashSync(); });
+  $('resBtn').addEventListener('click', function () { cfg.resonance = !cfg.resonance; syncToggles(); hashSync(); });
+
+  /* system actions */
+  $('copyBtn').addEventListener('click', copyGenome);
+  $('resetFieldBtn').addEventListener('click', function () { H.resetParticles(); toast('FIELD RESET'); echo(this); });
+  $('resetAllBtn').addEventListener('click', function () {
+    /* original "Reset Defaults" semantics - intentionally different from boot defaults */
+    cfg.speed = 1; cfg.quality = 1; cfg.amplitude = 1; cfg.exposure = 0.9; cfg.particleCount = 100000;
+    refreshAll();
+    hashSync();
+    toast('DEFAULTS RESTORED');
+    echo(this);
+  });
+  $('reloadBtn').addEventListener('click', function () {
+    var b = this;
+    if (!ui.armReload) {
+      b.textContent = 'SURE? RELOAD';
+      ui.armReload = setTimeout(function () { ui.armReload = 0; b.textContent = 'RELOAD'; }, 2600);
+    } else {
+      window.location.reload();
+    }
+  });
+  $('specToggle').addEventListener('click', function () {
+    var log = $('specimenLog');
+    var open = log.hidden;
+    log.hidden = !open;
+    setPressed(this, open);
+  });
+
+  /* ---------- help overlay ---------- */
+  function updateHelp() {
+    $('kvPlay').textContent = cfg.isPlaying ? 'RUNNING' : 'PAUSED';
+    $('kvKal').textContent = KAL_NAMES[String(cfg.kaleidoMode)];
+    $('kvDur').textContent = Math.round(1000 / cfg.speed) + ' MS';
+    $('kvExp').textContent = cfg.exposure.toFixed(2);
+    $('kvStage').textContent = String(H.stage).toUpperCase();
+    $('kvCur').textContent = 'CURSOR ' + H.cursor;
+    $('kvN').textContent = 'N ' + fmtInt(H.n || cfg.particleCount);
+  }
+  function toggleHelp() {
+    var h = $('help');
+    h.classList.toggle('on');
+    if (h.classList.contains('on')) updateHelp();
+  }
+  $('helpBtn').addEventListener('click', toggleHelp);
+  $('helpClose').addEventListener('click', toggleHelp);
+  $('help').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('on'); });
+
+  /* ---------- keyboard surface ---------- */
+  window.addEventListener('keydown', function (e) {
+    var tag = (e.target && e.target.tagName || '').toLowerCase();
+    if (e.key === 'Escape') {
+      if ($('help').classList.contains('on')) $('help').classList.remove('on');
+      else if (ui.panel) closePanel();
+      return;
+    }
+    if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === ' ') {
+      e.preventDefault();
+      togglePlay();
+      echo(visibleOr($('btnPlay'), $('tileField')));
+    } else if (k >= '1' && k <= '6') {
+      H.setKaleido(parseInt(k, 10) - 2);
+      syncKal();
+      hashSync();
+      echo(document.querySelector('.kpill[aria-pressed="true"]'));
+    } else if (k === 'ArrowRight') {
+      e.preventDefault(); nudgeDur(-100);
+    } else if (k === 'ArrowLeft') {
+      e.preventDefault(); nudgeDur(100);
+    } else if (k === 'ArrowUp') {
+      e.preventDefault(); nudgeExp(0.05);
+    } else if (k === 'ArrowDown') {
+      e.preventDefault(); nudgeExp(-0.05);
+    } else if (k === 'b' || k === 'B') {
+      replayBoot();
+    } else if (k === 'c' || k === 'C' || k === 'g' || k === 'G') {
+      copyGenome();
+      echo(visibleOr($('copyBtn'), $('tileSystem')));
+    } else if (k === 'r' || k === 'R') {
+      H.resetParticles();
+      toast('FIELD RESET');
+      echo(visibleOr($('resetFieldBtn'), $('tileSystem')));
+    } else if (k === 'h' || k === 'H') {
+      ui.hidden = !ui.hidden;
+      body.classList.toggle('chrome-hidden', ui.hidden);
+    } else if (k === '?') {
+      toggleHelp();
+    }
+  });
+  function nudgeDur(d) {
+    var ms = Math.max(16, Math.min(3000, Math.round(1000 / cfg.speed) + d));
+    cfg.speed = 1000 / ms;
+    BINDS.rDur.refresh();
+    syncSpeedSeg();
+    hashSync();
+    echo(visibleOr($('rDur'), $('tileField')));
+  }
+  function nudgeExp(d) {
+    cfg.exposure = Math.max(0, Math.min(3, Math.round((cfg.exposure + d) * 100) / 100));
+    BINDS.rExp.refresh();
+    hashSync();
+    echo(visibleOr($('rExp'), $('tileField')));
+  }
+
+  /* ---------- slider-hold: chrome goes quiet ---------- */
+  document.addEventListener('pointerdown', function (e) {
+    var t = e.target;
+    if (t && t.tagName === 'INPUT' && t.type === 'range') body.classList.add('holding');
+  }, true);
+  function unhold() { body.classList.remove('holding'); }
+  document.addEventListener('pointerup', unhold, true);
+  document.addEventListener('pointercancel', unhold, true);
+
+  /* ---------- telemetry: em-dash until measured; sigma ledger via GPU readback ---------- */
+  var telemCells = ['tN', 'tFps', 'tDpr', 'tTier', 'tCur', 'tSv', 'tSs'];
+  function igniteTelemetry() {
+    if (ui.ignited) return;
+    ui.ignited = true;
+    for (var i = 0; i < telemCells.length; i++) {
+      (function (id, d) { setTimeout(function () { $(id).classList.add('lit'); }, d); })(telemCells[i], i * 90);
+    }
+  }
+  function ledgerTickFn() {
+    if (document.hidden) return;
+    if (H.engine === 'boot' || !(H.fps > 0)) return;
+    var alive = Math.max(1, Math.min(H.n || cfg.particleCount, 1000000));
+    var win = Math.min(24000, alive);
+    var span = Math.max(1, alive - win + 1);
+    var start = (ui.ledgerTick * 17137) % span; /* rotating window walks the whole buffer */
+    ui.ledgerTick++;
+    var d;
+    try { d = H.readback(win, start); } catch (e) { return; }
+    var svx = 0, svy = 0, svz = 0, ss = 0;
+    for (var i = 0; i < win; i++) {
+      var o = i * 6;
+      var vx = d[o + 3], vy = d[o + 4], vz = d[o + 5];
+      svx += vx; svy += vy; svz += vz;
+      ss += Math.sqrt(vx * vx + vy * vy + vz * vz);
+    }
+    ui.ledger = { sv: Math.sqrt(svx * svx + svy * svy + svz * svz) / win, ss: ss / win };
+    ui.cloud = d;
+    ui.cloudN = win;
+  }
+
+  /* ---------- ontogeny chrome: staged reveal + typed specimen log ---------- */
+  var bootDone = false, lastRank = -1;
+  var typerQ = [], typing = false;
+  function stageRank(s) { return { latent: 0, cell: 1, cleavage: 2, gastrula: 3, body: 4, homeostasis: 5 }[s] || 0; }
+  function logLine(text) {
+    var el = $('bootlog');
+    var ln = document.createElement('div');
+    ln.className = 'ln';
+    el.appendChild(ln);
+    while (el.children.length > 6) el.removeChild(el.firstChild);
+    typerQ.push({ el: ln, text: text, i: 0 });
+    if (!typing) typeStep();
+  }
+  function typeStep() {
+    typing = true;
+    var job = typerQ[0];
+    if (!job) { typing = false; return; }
+    job.i += 2;
+    job.el.textContent = job.text.slice(0, job.i);
+    if (job.i >= job.text.length) typerQ.shift();
+    setTimeout(typeStep, 24);
+  }
+  function bootTick() {
+    if (bootDone) return;
+    var r = stageRank(H.stage);
+    if (r === lastRank) return;
+    if (r >= 1 && lastRank < 1) {
+      body.classList.add('b-word');
+      var a = cfg.mapping.a, c = cfg.mapping.c;
+      logLine('SEED ' + CONST_LABEL[a] + ':' + DIGIT_SEQUENCES[a].slice(0, 10) + '… ' + CONST_LABEL[c] + ':' + DIGIT_SEQUENCES[c].slice(0, 10) + '…');
+      logLine('CELL · 420 GRAINS BREATHING · CURSOR ' + H.cursor);
+    }
+    if (r >= 2 && lastRank < 2) {
+      body.classList.add('b-capsule');
+      logLine('CLEAVAGE ×9 · DIGIT-PACED (π) · CHANNELS ' + CONST_LABEL[cfg.mapping.a] + '·' + CONST_LABEL[cfg.mapping.b] + '·' + CONST_LABEL[cfg.mapping.c]);
+    }
+    if (r >= 3 && lastRank < 3) {
+      body.classList.add('b-dock');
+      logLine('ORGANS · NODAL LATTICE · m·n·p ' + H.digits.m + '·' + H.digits.n + '·' + H.digits.p);
+    }
+    if (r >= 4 && lastRank < 4) {
+      logLine('BODY · N ' + fmtInt(H.n || cfg.particleCount) + ' · Σ ' + H.energy);
+    }
+    if (r >= 5) {
+      body.classList.add('b-word', 'b-capsule', 'b-dock');
+      logLine('HOMEOSTASIS · TELEMETRY LIVE · CURSOR ' + H.cursor);
+      bootDone = true;
+      setTimeout(function () { $('bootlog').classList.add('off'); }, 1800);
+    }
+    lastRank = r;
+  }
+  function replayBoot() {
+    if (REDUCED_MOTION) { toast('REDUCED MOTION — ONTOGENY SKIPPED'); return; }
+    closePanel();
+    var bl = $('bootlog');
+    bl.classList.remove('off');
+    while (bl.firstChild) bl.removeChild(bl.firstChild);
+    typerQ.length = 0;
+    bootDone = false;
+    lastRank = -1;
+    ui.ignited = false;
+    for (var i = 0; i < telemCells.length; i++) {
+      var el = $(telemCells[i]);
+      el.classList.remove('lit');
+      el.textContent = '—';
+    }
+    body.classList.remove('b-word', 'b-capsule', 'b-dock', 'b-instant');
+    H.rebootOntogeny();
+  }
+
+  /* ---------- empty-well sonar ---------- */
+  var probeLast = 0;
+  var prjScratch = { p: new Float32Array(16), v: new Float32Array(16), vp: new Float32Array(16), out: { vp: null, W: 0, H: 0 } };
+  function projectMatrix() {
+    var W = window.innerWidth, Hh = window.innerHeight;
+    var proj = perspectiveM(cam.fov, W / Hh, 0.1, 1000, prjScratch.p);
+    var view = lookAtM(camEye(), cam.target, prjScratch.v);
+    var vp = prjScratch.vp;
+    for (var c = 0; c < 4; c++) {
+      for (var r = 0; r < 4; r++) {
+        vp[c * 4 + r] = proj[r] * view[c * 4] + proj[4 + r] * view[c * 4 + 1] + proj[8 + r] * view[c * 4 + 2] + proj[12 + r] * view[c * 4 + 3];
+      }
+    }
+    var out = prjScratch.out;
+    out.vp = vp; out.W = W; out.H = Hh;
+    return out;
+  }
+  function wellAt(px, py) {
+    if (!ui.cloud) return null;
+    var m = projectMatrix(), vp = m.vp;
+    var R2 = 52 * 52;
+    var cnt = 0, svx = 0, svy = 0, svz = 0, ss = 0;
+    var d = ui.cloud, n = ui.cloudN;
+    for (var i = 0; i < n; i++) {
+      var o = i * 6, x = d[o], y = d[o + 1], z = d[o + 2];
+      var cw = vp[3] * x + vp[7] * y + vp[11] * z + vp[15];
+      if (cw <= 0.001) continue;
+      var sx = ((vp[0] * x + vp[4] * y + vp[8] * z + vp[12]) / cw * 0.5 + 0.5) * m.W;
+      var sy = (1 - ((vp[1] * x + vp[5] * y + vp[9] * z + vp[13]) / cw * 0.5 + 0.5)) * m.H;
+      var ddx = sx - px, ddy = sy - py;
+      if (ddx * ddx + ddy * ddy > R2) continue;
+      cnt++;
+      var vx = d[o + 3], vy = d[o + 4], vz = d[o + 5];
+      svx += vx; svy += vy; svz += vz;
+      ss += Math.sqrt(vx * vx + vy * vy + vz * vz);
+    }
+    if (cnt < 24) return null;
+    var sv = Math.sqrt(svx * svx + svy * svy + svz * svz);
+    return { sv: sv / cnt, ss: ss / cnt, cnt: cnt, well: (ss / cnt > 0.02) && (sv / Math.max(ss, 1e-9) < 0.3) };
+  }
+  function spawnPing(x, y) {
+    var s = $('sonar');
+    if (s.querySelectorAll('.ping').length > 5) return;
+    var p = document.createElement('div');
+    p.className = 'ping';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    s.appendChild(p);
+    setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 950);
+  }
+  function pinWell(x, y, res) {
+    var s = $('sonar');
+    var chips = s.querySelectorAll('.wellchip');
+    if (chips.length >= 4) s.removeChild(chips[0]);
+    var c = document.createElement('div');
+    c.className = 'wellchip';
+    c.style.left = Math.max(8, Math.min(x, window.innerWidth - 250)) + 'px';
+    c.style.top = Math.max(80, Math.min(y, window.innerHeight - 140)) + 'px';
+    var url = genomeURL();
+    c.innerHTML = '<div class="wrow"><span>EMPTY WELL</span><button class="x" aria-label="Dismiss">✕</button></div>' +
+      '<div>Σv ' + res.sv.toFixed(3) + ' · Σs ' + res.ss.toFixed(3) + ' · n ' + res.cnt + '</div>' +
+      '<div class="wrow"><button class="plink">COPY PERMALINK</button></div>';
+    c.querySelector('.x').addEventListener('click', function () { s.removeChild(c); });
+    c.querySelector('.plink').addEventListener('click', function () {
+      try {
+        navigator.clipboard.writeText(url).then(function () { toast('WELL PERMALINK COPIED'); }, function () { toast('COPY BLOCKED'); });
+      } catch (e2) { toast('COPY BLOCKED'); }
+    });
+    s.appendChild(c);
+  }
+  canvas.addEventListener('pointermove', function (e) {
+    if (!ui.sonar || ontogeny.active) return;
+    if (e.buttons) return;
+    var t = performance.now();
+    if (t - probeLast < 140) return;
+    probeLast = t;
+    var res = wellAt(e.clientX, e.clientY);
+    if (res && res.well) spawnPing(e.clientX, e.clientY);
+  });
+  var downPt = null;
+  canvas.addEventListener('pointerdown', function (e) { downPt = [e.clientX, e.clientY]; });
+  canvas.addEventListener('pointerup', function (e) {
+    if (!downPt) return;
+    var dx = e.clientX - downPt[0], dy = e.clientY - downPt[1];
+    downPt = null;
+    if (!ui.sonar || ontogeny.active) return;
+    if (dx * dx + dy * dy > 25) return;
+    var res = wellAt(e.clientX, e.clientY);
+    if (res && res.well) pinWell(e.clientX, e.clientY, res);
+  });
+
+  /* ---------- ui tick: live figures, breathing glass ---------- */
+  function uiTick() {
+    if (document.hidden) return; /* the sim is paused; the chrome rests too */
+    var live = H.fps > 0;
+    if (H.guardStepped) {
+      H.guardStepped = false;
+      if (typeof BINDS !== 'undefined' && BINDS.rDen) BINDS.rDen.refresh();
+    }
+    if (live) {
+      $('tkM').textContent = String(H.digits.m);
+      $('tkN').textContent = String(H.digits.n);
+      $('tkP').textContent = String(H.digits.p);
+      $('tkM').style.color = CONST_COLOR[cfg.mapping.a];
+      $('tkN').style.color = CONST_COLOR[cfg.mapping.b];
+      $('tkP').style.color = CONST_COLOR[cfg.mapping.c];
+    }
+    if (!ui.ignited && live) {
+      var bn = $('tN');
+      bn.classList.add('lit');
+      bn.textContent = fmtInt(H.n);
+    }
+    if (!ui.ignited && live && stageRank(H.stage) >= 4) igniteTelemetry();
+    if (ui.ignited && live) {
+      $('tN').textContent = fmtInt(H.n);
+      $('tFps').textContent = String(Math.round(H.fps));
+      $('tDpr').textContent = String(DPR);
+      $('tTier').textContent = tierLabel(cfg.particleCount);
+      $('tCur').textContent = String(H.cursor);
+      if (isFinite(ui.ledger.sv)) {
+        $('tSv').textContent = ui.ledger.sv.toFixed(3);
+        $('tSs').textContent = ui.ledger.ss.toFixed(3);
+      }
+    }
+    if (ui.panel === 'field' && live) {
+      $('fDigA').textContent = String(H.digits.m);
+      $('fDigB').textContent = String(H.digits.n);
+      $('fDigC').textContent = String(H.digits.p);
+      $('fDigA').style.color = CONST_COLOR[cfg.mapping.a];
+      $('fDigB').style.color = CONST_COLOR[cfg.mapping.b];
+      $('fDigC').style.color = CONST_COLOR[cfg.mapping.c];
+      $('fEnergy').textContent = String(H.energy);
+      $('fCycle').textContent = String(H.cursor);
+      var e2 = camEye();
+      $('camPose').innerHTML = 'EYE ' + e2[0].toFixed(1) + ' · ' + e2[1].toFixed(1) + ' · ' + e2[2].toFixed(1) +
+        '<br>TGT ' + cam.target[0].toFixed(1) + ' · ' + cam.target[1].toFixed(1) + ' · ' + cam.target[2].toFixed(1);
+    }
+    if ($('help').classList.contains('on')) updateHelp();
+    if (!REDUCED_MOTION) {
+      var target = isFinite(ui.ledger.ss) ? 0.9 + 0.1 * Math.max(0, Math.min(1, ui.ledger.ss / 0.6)) : 1;
+      ui.lum += (target - ui.lum) * 0.08;
+      root.style.setProperty('--glassLum', ui.lum.toFixed(3));
+    }
+    bootTick();
+  }
+
+  /* ---------- init ---------- */
+  var g0 = readHashGenome();
+  if (g0) {
+    /* a genome permalink presents its state directly - skip ontogeny */
+    if (ontogeny.pending || ontogeny.active) {
+      ontogeny.pending = false;
+      ontogeny.active = false;
+      ontogeny.stage = 'homeostasis';
+      try { sessionSet('helios02.ontogeny', 'ran'); } catch (e) {}
+      H.resetParticles();
+    }
+    applyGenome(g0);
+    refreshAll();
+  }
+  syncButtons();
+  var peek0 = genomeHash();
+  $('genomePeek').textContent = peek0.length > 44 ? peek0.slice(0, 44) + '…' : peek0;
+
+  /* ontogeny.stage is the engine's live truth; H.stage is only published
+     once frames run, so the init check must read the engine state directly */
+  if (stageRank(ontogeny.stage) >= 5) {
+    /* mature at load (reduced motion, permalink, or repeat visit): 600ms crossfade */
+    body.classList.add('b-instant', 'b-word', 'b-capsule', 'b-dock');
+    bootDone = true;
+    lastRank = 5;
+    $('bootlog').classList.add('off');
+  }
+
+  window.setInterval(uiTick, 120);
+  window.setInterval(ledgerTickFn, 700);
+
+  /* test / debug hooks */
+  H.genomeURL = genomeURL;
+  H.applyGenome = applyGenome;
+  H.uiState = ui;
+})();
+</script>
+</body>
+</html>
