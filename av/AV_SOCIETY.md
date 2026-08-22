@@ -1509,6 +1509,29 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **A NEW LIBRARY DOCUMENT COLLIDES WITH A SHIPPED TOOL, NOT JUST ANOTHER DOCUMENT
+  (2026-08-22).** flooring's `directed-to-proceed` write-up and the PINNED `give-me-the-go.html`
+  tool are one job with two front doors — a floor not ready per your own instructions and you
+  are told to install over it anyway. The author's own design comment proved the collision
+  check ran only against §SAFETY (the warranty-void edge) and the other library documents;
+  nobody asked whether a shipped TOOL already owned the trigger, even though its `aka` carried
+  "they said go". An adversarial panel's collision lens caught it. The rule: §THE GATE's "one
+  job per tool" is CROSS-SHAPE. When a `docs.js` document lands on a served trade, walk that
+  trade's `tools.js` and steer past any tool whose trigger it shares — the `delay-notice`→
+  `give-me-the-go` note is the template — the same way documents already steer past each other.
+
+- **A DEAD CYCLE'S HALF-BUILD AND A LIVE PEER BOTH READ AS "ALREADY TRACKED" — VERIFY THE
+  CONTENT, NOT `git status` (2026-08-22).** `flooring/write-up.html` and `sitework/write-up.html`
+  sat untracked since a cycle died between build and ship (no `docs.js`, a literal
+  `LEDE_PLACEHOLDER` on sitework) — the 2026-08-14 pattern, seen only because tree-before-well
+  looked. Mid-build a concurrent peer session in the same repo read the in-progress flooring
+  work as that orphan and briefly committed+reset it, so for one window `git ls-files` showed
+  `flooring/docs.js` TRACKED and `git status` showed it UNCHANGED while `ls` showed the 33KB
+  working file. The rule: after any git-state surprise on a shared repo, confirm the working
+  tree by GREPPING the file for the edits you made, never by trusting `git status` alone — and
+  split the work by message before committing (peer took sitework, this took flooring, zero
+  collision).
+
 - **A FIELD THAT SHIPS ON ONE PAGE WHILE ITS SIBLINGS CARRY THE HAND-ROLLED VERSION IS NOT
   SHIPPED, IT IS A FORK WITH A BETTER HEADER (2026-08-19).** `shared/dropoff.js` landed on
   plumbing on 2026-08-14 and sat for five days beside five order pages still printing
@@ -5021,3 +5044,43 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   paperwork line belongs with the gate). **BACKPORT RIDER FIRED** — the sweep IS the ship:
   four siblings taken, two named not-taken. Five scars (§SCARS 2026-08-19).
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/pull-list.html
+
+- `2026-08-22` — **[AXIS:DOCS]** **THE LAST TRADE IN THE BUILDING GOT THE WRITING IT DOES
+  MOST** · **before:** flooring shipped as trade #13 with six tools and no write-up page; the
+  DOCS axis had skipped it and sitework both, and flooring's own `tools.js` prune named the
+  debt ("owed on two trades"). Two trades of thirteen carried no `docs.js` at all, so the DOCS
+  capability — the axis the operator named by hand — was missing from the trade whose week is
+  writing letters about a slab that isn't ready. · **after:** `flooring/docs.js` +
+  `flooring/write-up.html` + one registry line (6→7 tools), **15 documents live.** FOUR are
+  trade-specific, each a panel proposal the prune had moved off the hub INTO the library
+  because a second docspec engine on one rack is the duplication the prune exists to catch:
+  *What My Number Doesn't Cover* (the exclusions, and the ASSUMPTIONS everyone drops — the omit
+  line), *The Prep Write-Up* (the PCO backup, written before the grind erases the evidence),
+  the **shading call that routes the appearance determination TO the mill instead of making
+  it**, and *You Told Me To Put It In Anyway* (the dated record of the directed override). All
+  eleven shared documents kept — `drop:[]`, like every construction sibling, verified against
+  disk (only non-construction creative ever dropped one) — and re-addressed to a floor.
+  **NOTHING GRADES A FLOOR:** the reading prints beside the limit off his own bucket and the
+  block never says which one wins — no moisture value, no flatness tolerance, no acclimation
+  window, no pass/fail, no defect ruling. A **4-lens adversarial panel** ran against the actual
+  emitted blocks and its **safety-leak lens came back EMPTY. IT CAUGHT TWO REAL DEFECTS,** both
+  fixed and re-verified against the live blocks (§SCARS 2026-08-22): `directed-to-proceed` was
+  a second front door onto the pinned `give-me-the-go.html` tool and now carries the steering
+  note the kit's own convention requires; the `handover` override was inheriting the shared
+  "keys, codes, manuals" facts and now declares flooring-native ones (attic stock, care info).
+  **BACKPORT RIDER FIRED — the class was a US-dialect break in EMITTED text.** The engine
+  itself shipped "authorised" and "characterisation" in the EXTRA WORK and incident spines of
+  every block on all 13 trades, so fixing only flooring's reminder would have SPLIT flooring's
+  own block. Swept `shared/docspec.js` (→ authorized / authorization / characterization /
+  characterize) plus the trade-local instances in roofing, framing, av (`behaviour`→behavior)
+  and masonry (one `colour` reminder-word); the intentional `colour -> color` dictation vocab
+  pairs were left untouched — flipping them is the identity-pair defect the voice lens exists
+  to catch. Gates, all re-run GREEN AGAINST PRODUCTION: **docspec-config 13 trades / 209 checks
+  / 0 failing** (16/0 against the live site, flooring 15 docs) · **docspec-desk holds** (the
+  engine edit goldened byte-for-byte in-run) · **mobile-watertight `flooring/write-up.html`
+  LIVE at 320/360/390/430 × default and bumped** · no external refs · the live page driven end
+  to end, each document picked and emitted (`directed-to-proceed` 12,484 chars). Storefront:
+  entry made true in `persona500/src/data/fieldToolkits.ts` (P5 pushes that repo). **Sitework,
+  the other owed trade, is a concurrent PEER session's this cycle — the split coordinated by
+  message, no collision.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/flooring/write-up.html
