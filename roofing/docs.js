@@ -122,7 +122,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "THE DECISION I NEED, AND BY WHEN",
-          "r": "One ask, with a date, and the date is real because the roof is open. What you need decided or authorised, who has to decide it, and what happens to the schedule and the exposure if the answer comes after that date. State it as a fact, never as a threat."
+          "r": "One ask, with a date, and the date is real because the roof is open. What you need decided or authorized, who has to decide it, and what happens to the schedule and the exposure if the answer comes after that date. State it as a fact, never as a threat."
         },
         {
           "h": "WHAT THIS DOCUMENT IS NOT",
@@ -156,7 +156,7 @@ window.TRADE_DOCS = {
       "sections": [
         {
           "h": "WHAT WE WERE TOLD, AND WHEN",
-          "r": "Their words, close to verbatim, with the date and who said it. Never a characterisation of the person and never the word \"claims\"."
+          "r": "Their words, close to verbatim, with the date and who said it. Never a characterization of the person and never the word \"claims\"."
         },
         {
           "h": "WHAT WE WENT AND CHECKED",
@@ -208,7 +208,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "WHAT WAS WALKED, BY WHOM",
-          "r": "Date, who was there, what was walked, and anything that was expected to be walked and was not. If a manufacturer's inspector or a consultant walked it, say so and say what they said only if you have it in writing — never characterise a verbal."
+          "r": "Date, who was there, what was walked, and anything that was expected to be walked and was not. If a manufacturer's inspector or a consultant walked it, say so and say what they said only if you have it in writing — never characterize a verbal."
         },
         {
           "h": "WHAT IS STILL OPEN",

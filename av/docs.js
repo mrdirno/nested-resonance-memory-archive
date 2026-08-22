@@ -61,7 +61,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "PICTURE — WHAT EACH DISPLAY DID",
-          "r": "Resolution and rate confirmed at each display, scaling behaviour, HDCP path, camera framing and presets, tracking behaviour, and the delay you actually saw on a live call. Observed behaviour only — never a datasheet claim written up as a test result."
+          "r": "Resolution and rate confirmed at each display, scaling behavior, HDCP path, camera framing and presets, tracking behavior, and the delay you actually saw on a live call. Observed behavior only — never a datasheet claim written up as a test result."
         },
         {
           "h": "CONTROL, NETWORK AND WHO OWNS THE ACCOUNT",
@@ -120,7 +120,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "HOW IT TURNS ON AND OFF, AND WHAT THE PANEL DOES",
-          "r": "What triggers power-on, occupancy or schedule behaviour, warm-up delays, the auto-shutdown timer and what resets it — state every deliberate delay so nobody logs it as a fault. Then the panel: what the user taps and what it actually commands underneath, and only for the controls that generate calls. A page-by-page dump of every button is a document nobody opens. Say a tech page or PIN-protected page exists; never print the PIN."
+          "r": "What triggers power-on, occupancy or schedule behavior, warm-up delays, the auto-shutdown timer and what resets it — state every deliberate delay so nobody logs it as a fault. Then the panel: what the user taps and what it actually commands underneath, and only for the controls that generate calls. A page-by-page dump of every button is a document nobody opens. Say a tech page or PIN-protected page exists; never print the PIN."
         },
         {
           "h": "COMBINE AND UNCOMBINE",
@@ -143,9 +143,9 @@ window.TRADE_DOCS = {
         "every source and where it lands",
         "power-on trigger and shutdown timer",
         "the panel controls that actually generate calls",
-        "combine and uncombine behaviour if it divides",
+        "combine and uncombine behavior if it divides",
         "what the room reaches on the network and who owns it",
-        "the behaviours that are intentional and look like faults",
+        "the behaviors that are intentional and look like faults",
         "who to call for what after warranty"
       ],
       "secondary": [

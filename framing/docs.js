@@ -73,7 +73,7 @@ window.TRADE_DOCS = {
         { "h": "WHAT THE CONDITION IS", "r": "Plainly: what was cut, opened, broken or dirtied, roughly how big, in what surface, and what stage that surface was at — bare board, taped, sanded, painted. Never guess at a cause and never name a man." },
         { "h": "WHAT IS IN IT OR AROUND IT", "r": "What was found in the opening — pipe, cable, duct, a device, nothing. This is how the condition gets attributed without accusing anybody: describe what is in the hole and let the reader draw the line." },
         { "h": "PHOTOS", "r": "State that photos are attached and what each one shows, with the room and a fixed reference in frame. Say if any surface was patched before the photo was taken." },
-        { "h": "WHAT HAPPENS NEXT AND WHAT IT NEEDS", "r": "What has to happen for the surface to be right again, in scope terms only — cut back, back it, patch, tape, sand, texture, prime — and who needs to authorise it. No hours, no rates, no totals, no backcharge language. If it is going to be an extra, say only that a tag will follow." },
+        { "h": "WHAT HAPPENS NEXT AND WHAT IT NEEDS", "r": "What has to happen for the surface to be right again, in scope terms only — cut back, back it, patch, tape, sand, texture, prime — and who needs to authorize it. No hours, no rates, no totals, no backcharge language. If it is going to be an extra, say only that a tag will follow." },
         { "h": "THE ASK", "r": "One named person, one decision, one date. Usually: tell us whose it is and whether to proceed." }
       ],
       "omit": [

@@ -130,7 +130,7 @@
       secondary: ["a short notification message to send with it", "a follow-up once the corrective action is done"],
       delta: false,
       spine: [
-        { h: "WHAT HAPPENED", r: "plain sequence with times and dates; facts only, no characterisation of people" },
+        { h: "WHAT HAPPENED", r: "plain sequence with times and dates; facts only, no characterization of people" },
         { h: "CONDITION FOUND", r: "what the state actually was when you got there, including anything already wrong" },
         { h: "WHAT WE DID", r: "the actions taken, in order, and what state it was left in" },
         { h: "EVIDENCE", r: "photos, readings, tags, names of witnesses — what exists and where it is" },
@@ -234,7 +234,7 @@
       id: "who",
       label: "Who said go ahead, and how",
       artefact: "a name",
-      line: "Who authorised it, when, and by what channel — verbal, call, text or email. A name with a time on it is the difference between a change order and a donation; \"they said it was fine\" is not one."
+      line: "Who authorized it, when, and by what channel — verbal, call, text or email. A name with a time on it is the difference between a change order and a donation; \"they said it was fine\" is not one."
     },
     {
       id: "before",
@@ -364,9 +364,9 @@
       from: "the lead on the job",
       to: "the GC and my PM",
       why: "The narrative that goes with the ticket. Prices are the office's job — this is the part that says why it is extra, which is the part that gets argued.",
-      omit: "Who authorised it, when, and by what channel — verbal, call, text, email. That one line is the difference between a change order and a donation.",
+      omit: "Who authorized it, when, and by what channel — verbal, call, text, email. That one line is the difference between a change order and a donation.",
       halt: "Only if the work being described is not stated at all.",
-      facts: ["what was asked for and by whom", "when it was authorised and how", "what the contract scope actually said", "what it displaced"],
+      facts: ["what was asked for and by whom", "when it was authorized and how", "what the contract scope actually said", "what it displaced"],
       secondary: ["a one-paragraph version to paste into the GC's change form"],
       note: "This is the narrative only — no prices, no rates, no hours priced out. The office owns the number."
     },
@@ -457,7 +457,7 @@
    */
   var PRINCIPLES = [
     "Density over volume. Every line carries operational information. No filler, no apologies, no restating the instructions back to me.",
-    "Forwardable tone. Write every line as if the person above me and the customer will both read it. When something is late or missing, state the facts, the dates and the impact, then make one specific ask. Never assign blame and never characterise people. (\"Requested 07/22, no response as of 07/29, holds the east rooms\" — not \"they are ignoring us.\")",
+    "Forwardable tone. Write every line as if the person above me and the customer will both read it. When something is late or missing, state the facts, the dates and the impact, then make one specific ask. Never assign blame and never characterize people. (\"Requested 07/22, no response as of 07/29, holds the east rooms\" — not \"they are ignoring us.\")",
     "Never invent data. If a number, time, quantity, name, model, reading or approval was not given to you, do not fabricate it and do not estimate it. Write <MISSING> and add retrieving it to the open items.",
     "Never judge a value. If I give you a reading, a measurement or a result, record it exactly as given with its units. Do not say whether it is in range, acceptable, passing or to code — that is not yours and it is not mine to guess either.",
     "Plain text only. No emojis, no markdown styling, no bold, no citation brackets, no reference markers. It has to paste clean into email, a text message and a chat app."
@@ -498,7 +498,7 @@
     { id: "judge", label: "Never call a reading good, bad, passing or to code", sub: "records what I measured, nothing more", on: true, locked: true },
     { id: "plain", label: "Plain text — no emojis, no markdown, no formatting", sub: "so it pastes clean into a text message", on: true },
     { id: "clientsafe", label: "Customer-safe wording", sub: "no internal blame, no other company named as at fault", on: true },
-    { id: "co", label: "Flag anything that smells like extra work", sub: "who asked, when, how it was authorised", on: true },
+    { id: "co", label: "Flag anything that smells like extra work", sub: "who asked, when, how it was authorized", on: true },
     { id: "short", label: "Keep it short — a screen, not a page", sub: "for the ones that get read on a phone", on: false },
     { id: "email", label: "Also give me a one-line subject and a two-line email body", sub: "for sending it on", on: false }
   ];
@@ -660,7 +660,7 @@
    * also telling him to run one chat per job and paste the last one in, which is
    * precisely how that corruption happens.
    *
-   * Re-familying it to a delta-false family would fix the behaviour by lying
+   * Re-familying it to a delta-false family would fix the behavior by lying
    * about what the document is — the card would call a confirming note "a record
    * of a thing that happened". So the family keeps the label and the spine, and
    * a document may say `standalone: true` to keep every fact every time. The
@@ -953,7 +953,7 @@
     L.push("EXTRA WORK — ISOLATE IT");
     L.push("");
     L.push("Anything in my input that is outside what we were originally there to do gets pulled into its own section, because it is billing evidence: work somebody else directed, materials used off another job, hours past the plan, a request that was not on the drawings, a substitution made to keep moving.");
-    L.push("For each one: what changed, who asked for it, when, and how it was authorised (verbal / call / text / email). If the authorisation is not in my input, write <MISSING> and add it to the open items. Never assume approval happened.");
+    L.push("For each one: what changed, who asked for it, when, and how it was authorized (verbal / call / text / email). If the authorization is not in my input, write <MISSING> and add it to the open items. Never assume approval happened.");
     L.push("Do not price anything. No rates, no totals, no hours priced out — the office owns the number, I own what happened.");
     L.push("");
   }

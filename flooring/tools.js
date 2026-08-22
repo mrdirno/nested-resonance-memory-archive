@@ -105,6 +105,20 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, travel, per diem — and put your real hours in, because a dollar an hour on a month you spent waiting on somebody else's building is a different dollar.",
     chip: "#0B5568",
     audience: "Installers · mechanics · leads · anybody weighing a move"
+  },
+  {
+    // The write-up library (shape #4, shared/docspec.js). Not a form that makes a
+    // document — a form that makes the AI SETUP that makes the document, forever.
+    // Four panel proposals live inside it as documents: the exclusions sheet, the
+    // prep write-up (PCO backup), the shading call, and the directed-to-proceed
+    // record — plus the day report and the eight shared write-ups a floor sub
+    // sends. It grades nothing: your reading prints beside your own limit and it
+    // never says which one wins.
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — what your number didn't cover, the prep that becomes the change order, the shading call somebody's calling a defect, the day they told you to put it in anyway, the day report, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dump the mess in the truck and get back something you can send. Never grades a reading, never calls a floor a defect — it writes down what you measured and what you did.",
+    chip: "#3FB8D8",
+    audience: "Lead → GC / dealer / office / customer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
