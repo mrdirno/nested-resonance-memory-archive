@@ -454,6 +454,43 @@ or re-documenting an existing capability is DD, not delivery.
   1.900s -> 4.900s over 3 s of wall clock with the canvas hash IDENTICAL at both
   ends (the control — if anything were drawing, the clock would have run for the
   old reason), and 0.000s -> 0.000s with the one line reverted.
+  THE DESK — the eight looks are now four axes anybody can move. `Grade` was
+  already five continuous numbers, so the engine did not move: the four
+  surfaces that paint still read ONE ordered pipeline out of `lib/grade.ts`.
+  What changed is what they are HANDED — a roster id OR the five numbers
+  themselves (`LookRef`), both structured-cloneable, so the second kind crosses
+  to the export worker's thread the way the title plan already did.
+  WARMTH IS BIPOLAR BECAUSE THE ROSTER ALREADY WAS. `sepia` and `hue` are not
+  two quantities a person has an opinion about; they are two halves of one
+  tonal decision, and the roster proves it — `warm` is sepia 0.30 unrotated,
+  `cool` is sepia 0.70 at 190deg, two points on one axis running through
+  untoned. So the desk is EXPOSURE / CONTRAST / COLOUR / WARMTH: four sliders
+  rather than five, and the fifth was never a control, it was a coordinate.
+  EVERY ONE OF THE EIGHT IS A POINT IN THIS SPACE, exactly. That is the
+  invariant the whole feature rests on — a person opens ADJUST to drag ONE
+  axis, so the other three must leave the picture where the preset put it.
+  `gradeFromDesk(deskFromGrade(g))` returns g field-for-field (`Object.is`) for
+  all eight, and at the artifact opening the desk on a graded collage moves the
+  worst channel by 0/255.
+  THE GRID IS ENFORCED ON THE WAY IN, and that is correctness rather than
+  tidiness. `num` is exact at six decimals BECAUSE a sepia term is a
+  three-decimal constant times an amount on the two-decimal `GRADE_GRID` — a
+  property of a roster written by hand. A desk COMPUTES its amounts (warmth
+  0.1 x 0.6 is 0.06000000000000001 in binary floating point), so unsnapped it
+  lands as a difference between the exported SVG and the exported JPEG of the
+  same collage. `snapDesk` is `snapRoll`'s argument one roster out: quantising
+  is only lossless if the state is already on the grid.
+  IT RIDES THE CODE AS THE FIRST OPTIONAL GROUP. Four axes, two base-36
+  characters each, present ONLY when an axis is off its preset — so a collage
+  on one of the eight still mints the exact 21-character group this codec has
+  minted since THE BEAT, and 22..28 belongs to no generation at all. That gap
+  is the feature: a desk code that lost characters in transit is refused by
+  `MINTED_GROUP_LENGTHS` rather than sliced into a shorter body that opens,
+  cleanly, as somebody else's collage.
+  THE DICE STILL DEAL A ROSTER, and therefore drop a custom grade — a roll is a
+  destructive composition event and is already on the undo stack, so the axes
+  come back with one press. Defending them there would leave the dice unable to
+  change the look at all, which is the one thing a die is for.
   THE LEVEL — how loud each source sits in the mix. Every gain in this app was a
   BOOLEAN WEARING A NUMBER'S CLOTHES (`describeAudioSources` emitted
   `wanted ? 1 : 0`, `soundtrackSource` emitted `t.muted ? 0 : 1`, `applyMutes`
@@ -685,13 +722,44 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       "no error case" is the error case for a string whose job is to survive
       chat clients. The fix is an exact-length check per generation, which is
       one line and a sweep arm.
-- [ ] **THE LOOK is a preset roster, not a grading desk.** Eight fixed grades is
-      the right first cut — a picker you have to scroll is a settings screen —
-      but `Grade` is already five continuous numbers, so exposing them as
-      sliders is a UI change rather than an engine change. The moment that
-      happens the two-decimal `GRADE_GRID` stops being a property of a
-      hand-written roster and has to be enforced on the way in, exactly as
-      `snapRoll` does for the composition sliders.
+- [x] **THE LOOK is a preset roster, not a grading desk → THE DESK.** CLOSED.
+      The entry was right about the engine (five numbers were already there; the
+      four surfaces did not change) and right about the trap — and the trap
+      turned out to be the load-bearing half, because the grid is WHY the SVG
+      and the JPEG are the same picture, not housekeeping. What it did not
+      predict is the shape of the control. Five numbers do not make five
+      sliders: `sepia` and `hue` are two halves of one tonal decision and the
+      roster was already using them that way (`warm` = sepia 0.30, `cool` =
+      sepia 0.70 at 190deg), so the desk is FOUR axes and warmth is bipolar.
+      Every one of the eight is a point in that space, bit for bit, which is
+      what makes opening the panel a no-op instead of a restatement. It also
+      turned the codec's first OPTIONAL group: 21 characters for a roster look,
+      29 with a desk, nothing minted between — and that gap refuses a truncated
+      desk code instead of reading a shorter generation out of it.
+      Original text: *"Eight fixed grades is the right first cut — a picker you
+      have to scroll is a settings screen — but `Grade` is already five
+      continuous numbers, so exposing them as sliders is a UI change rather
+      than an engine change. The moment that happens the two-decimal
+      `GRADE_GRID` stops being a property of a hand-written roster and has to be
+      enforced on the way in, exactly as `snapRoll` does for the composition
+      sliders."*
+- [ ] **THE DESK IS ONE GRADE FOR THE WHOLE COLLAGE, and the roster row above it
+      is now a SEED rather than a state.** Tapping a preset with a custom grade
+      in force replaces it outright, which is right — but it means the eight
+      chips answer "where did you start" and nothing shows you the way back to a
+      grade you liked except undo. The honest next cut is not more chips: it is
+      that a custom grade is a NAMEABLE thing, i.e. the same problem THE
+      COMPOSITION CODE already solved one level up, and the code already carries
+      the four axes. A "keep this grade" slot is a UI question, not an engine one.
+- [ ] **A DESK CANNOT REACH THE GRADES THE FIVE NUMBERS CAN EXPRESS.** `warmth`
+      collapses (`sepia`, `hue`) onto ONE axis through two roster points, so a
+      tone at 45deg — legal in `Grade`, reachable by a hand-edited project file
+      — has no desk that produces it. `deskFromGrade` answers `null` for those
+      rather than clamping to a plausible neighbour, and `deskForLook` falls
+      back to NO_DESK, so nothing in the app can currently arrive there. It
+      becomes real the day a template, an import or a LUT wants a tone this axis
+      does not pass through, and the answer then is a second axis (a TINT), not
+      a wider warmth.
 - [~] **Keyframes** — part-shipped as **THE MOVE**: POSITION and SCALE over
       time, per fragment, as a named roster rather than as hand-set keyframes.
       `lib/motion.ts` owns both halves — `movePhase` (a fragment's bearing, from
@@ -745,8 +813,9 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       LINEAR light, so the identical primitives with the identical numbers make
       the exported SVG a different picture from the exported JPEG. Measured:
       dropping that one attribute moves them up to **105.2/255** apart (mean
-      28.1/255). Still owed on this rung: user-set sliders rather than only
-      presets, per-fragment grades, LUT import, and a grade on the BACKGROUND
+      28.1/255). **USER-SET SLIDERS ARE NOW SHIPPED — see THE DESK in CURRENT
+      STATE, and the rung it closed above.** Still owed on this rung:
+      per-fragment grades, LUT import, and a grade on the BACKGROUND
       (deliberately excluded today — the frame colour comes out the colour you
       picked).
 - [~] **Audio** — part-shipped as **THE SOUNDTRACK**: music under the collage.
@@ -1252,6 +1321,50 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-08-23 (C3647) — A THRESHOLD MEASURED OFF A RANDOM DEAL
+`desk.spec` T2 asserted "the cool end must be cooler than the ungraded frame by
+5" and passed six times, then failed on the seventh: the base R-B of this
+fixture's own deal has been measured from **-16.8 to +9.7** across runs, because
+which of the ten tiles land where is the point of the app. The assertion was
+arithmetic about the DEAL wearing a claim about the GRADE.
+
+The mechanism is worth keeping, because it is not a test bug, it is a fact about
+colour: every other claim in that test is MULTIPLICATIVE on whatever the deal
+contains (saturate scales the chroma that is there, contrast scales the spread
+that is there), so a base offset cannot flip it. **A TONE is not.** A sepia
+washes the picture's own hues out before the rotation turns what is left, so
+`cool` lands near a fixed R-B whatever it started from — and on a deal that
+dealt itself blue, the cool end is LESS blue than the ungraded frame.
+
+The fix is to compare the two ENDS of the axis (invariant to the deal) plus the
+one absolute each direction can actually claim: warm is a SHIFT (a tone can only
+raise R-B), cool is an ABSOLUTE (its saturate runs first, so 9% of the picture's
+own cast survives to argue with the tone). And what is deliberately NOT asserted
+is written down beside them — at the roster's 30% tone, `warm`'s OUTPUT is not
+positive on a blue deal (measured -2.6 against a base of -16.8); the roster's
+warm is a lean, not a wash.
+
+**BACKPORT: `look.spec` T2 carried the identical pair and had been flaking on it
+since it was written.** Swept every e2e for the shape (`grep 'base[A-Za-z]* [-+]
+[0-9]'`); `twist.spec`'s base-relative bar is the same SHAPE and not the same
+class — darkness under twist is monotone in the deal — and is left alone.
+
+### 2026-08-23 (C3647) — A CONSTANT THAT SEVEN SWEEPS READ AS SOMETHING ELSE
+`MINTED_GROUP_MAX` was documented as "THE LENGTH THIS BUILD MINTS", and five
+sibling sweeps asserted their freshly-minted code against it. True for six
+generations, because every one of them added a field EVERY roll carries. THE
+DESK is the first OPTIONAL group, so "the newest generation" and "what this
+build mints for this roll" became two different numbers and all five sweeps went
+red at once with the same message.
+
+The temptation is to relax the assertions to `MINTED_GROUP_LENGTHS.has(len)`.
+That is a weaker claim about a real property and it would have hidden the next
+generation's mistake. The fix is to name the second fact in the CODEC —
+`MINTED_GROUP_PLAIN`, derived as the max minus the desk's own width — so the
+sweeps keep asserting exactly what they meant and adding a ninth generation
+still moves both together.
+
 - **SCAR-C166-A-BUDGET-CONSTANT-THAT-READS-LIKE-A-HARDWARE-FACT.** The realtime
   pixel cap was `maxLiveClips × 1080p` — a guess dressed as a measurement — and
   on a phone it was 6.2 Mpx. A phone-shot 4K clip is 8.3 Mpx, so with ANY 4K
@@ -5206,4 +5319,76 @@ frontier. Today's ceiling is tomorrow's floor.
   count/size/resource caps — none exist (no file counts, no size refusals, no
   decoders; toolkit.js's maxima are CSS bounds measured per viewport, the
   opposite pattern). 0 of 13 trades carry the class.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-23 · **[AXIS:COLLAGE] C3647 — THE DESK: eight looks were a picker, and
+  under them was a control nobody could reach.** **before:** the grade was a
+  roster of eight chips. "Make it a bit brighter" was unaskable — the nearest
+  answers were `punch` (which also adds 30% colour) or nothing — and `Grade` had
+  been five continuous numbers the whole time, reaching four render surfaces
+  through one ordered pipeline, with a UI that could only name eight points in
+  that space. **after:** an ADJUST door at the end of the row opens
+  **EXPOSURE / CONTRAST / COLOUR / WARMTH**, live on the preview, in the export
+  worker's own file, in the SVG's real `<filter>` primitives, and in the
+  composition code. **THE ENGINE DID NOT MOVE** — the four surfaces are handed a
+  roster id OR the five numbers (`LookRef`, structured-cloneable, so it crosses
+  to the worker thread like the title plan does), and there is still exactly one
+  pipeline in one file. **WARMTH IS BIPOLAR BECAUSE THE ROSTER ALREADY WAS:**
+  `sepia` and `hue` are two halves of one tonal decision, and `warm` (sepia 0.30,
+  unrotated) and `cool` (sepia 0.70 at 190deg) are two points on one axis through
+  untoned — so four sliders, not five, and the fifth was never a control, it was
+  a coordinate. **EVERY ONE OF THE EIGHT IS A POINT IN THIS SPACE, BIT FOR BIT**,
+  which is the invariant the feature rests on: a person opens the panel to drag
+  ONE axis, so opening it must not restate the other three. Measured at the
+  artifact — **worst channel delta 0/255** — and swept as `Object.is` equality
+  field by field. **THE GRID IS ENFORCED ON THE WAY IN AND THAT IS CORRECTNESS:**
+  `num`'s six-decimal exactness rests on amounts sitting on the two-decimal
+  `GRADE_GRID`, a property of a roster written by hand; a desk COMPUTES its
+  amounts (0.1 x 0.6 = 0.06000000000000001), and unsnapped that lands as a
+  difference between the exported SVG and the exported JPEG of the same collage.
+  **THE CODEC GREW ITS FIRST OPTIONAL GROUP:** eight characters present only when
+  an axis is off its preset, so a collage on one of the eight still mints the
+  exact 21-character group minted since THE BEAT — and 22..28 belongs to no
+  generation, so a desk code that lost characters is REFUSED rather than sliced
+  into a shorter body that opens cleanly as somebody else's collage.
+  **PROOF:** grade.invariants **71,095 checks / 0 failures** (1,812 reachable
+  desks on the grid AND inside the range CSS Filter Effects defines; the two
+  emitters denoting one transform to **2.2e-16** on grades that are on no roster;
+  the optional group; truncated desk codes refused) with **6 of 7 mutants dying
+  on the assertion written for each** — unsnapped sepia, a warmth constant out of
+  sepia's legal range, the roster no longer fitting the axis, COOL_HUE moved, the
+  group minted unconditionally, an absent desk materialised as a neutral one —
+  and the seventh SURVIVING is written down rather than papered over (scaling
+  WARM_SEPIA rescales the axis and changes no pixel: what is pinned is that the
+  roster FITS inside it, not the number). **31/31 unit sweeps, tsc clean, vite
+  build clean. desk.spec 12/12 AGAINST PRODUCTION** — opening the desk 0/255,
+  each axis moving its own statistic and no other (exposure luma 120->80 and
+  ->144, contrast spread 53->71, colour chroma 98->0.0, warmth R-B +26.6 vs
+  -22.9), the export WORKER's own file monochrome at chroma 0.0 against an
+  ungraded 93.1, the SVG and the canvas at **R-B -24.7 vs -24.7**, the code
+  round-tripping the axes and the pixels, and the panel watertight at
+  320/360/390/430 with nine chips and four 44px ranges. look.spec **12/12 against
+  production** too. **BACKPORT RIDER FIRED:** the class is *a threshold measured
+  off a RANDOM DEAL* — the desk's own axis test failed one run in eight on
+  `cool < base - 5`, because a TONE replaces a picture's cast rather than scaling
+  it. Swept every e2e for the shape: `look.spec` T2 carried the identical pair and
+  had been flaking on it since it was written; both now measure the two ENDS
+  against each other plus the one absolute each direction can claim, with what is
+  deliberately not asserted written beside them. `twist.spec`'s base-relative bar
+  is the same shape and NOT the same class (darkness under twist is monotone in
+  the deal) — swept, named, left alone. **SWEPT AND NOT FIXED:** svg-project
+  S1/S3/S8 time out on `filechooser` under Mobile Chrome — confirmed pre-existing
+  by stashing this work and reproducing it, so it is a harness defect on the
+  Open-a-project path and owed its own cycle. **THE CYCLE'S OTHER FINDING IS WHY
+  IT WAS A COLLAGE CYCLE AT ALL:** the bump named DEPTH as the stalest axis, "last
+  worked 14 lane-cycles ago", while DEPTH had shipped in each of the previous two
+  — `field_toolkit_directive.py` read `.read(400000)` of books that are
+  append-only and 472,507 chars long, so the newest ~15 cycle-log lines were
+  invisible. Fixed with one `read_book()` helper (the private roster's reader had
+  the identical cap) and a NEGATIVE CONTROL asserting the last tagged line on disk
+  reaches the parser; the corrected staleness is COLLAGE 22 / BACKPORT 15 /
+  BREADTH 12 / INTERFACE 6 / WELL 5 / DOCS 2 / COMMONS 1 / DEPTH 0. Scar in
+  av/AV_SOCIETY.md §SCARS — second failure of the same mechanism, second
+  mechanism, same reason: a blind reader's output looks exactly like a truthful
+  one. Storefront unchanged — no new tool and no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

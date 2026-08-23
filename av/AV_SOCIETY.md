@@ -1533,6 +1533,37 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-23 (C3647) — THE ANTI-FIXATION MECHANISM WENT BLIND AGAIN, THE OTHER WAY
+The bump's LIVE STATE told this cycle **"STALEST-AXIS SIGNAL = DEPTH — last
+worked 14 lane-cycle(s) ago"**. DEPTH had shipped in each of the two cycles
+immediately before it.
+
+`field_toolkit_directive.py` opened both books with `.read(400000)`. The books
+are APPEND-ONLY and §CYCLE LOG is the LAST section of each, so the day
+`av/AV_SOCIETY.md` crossed 400,000 characters the parser stopped seeing its
+newest lines — **and only its newest lines**. Measured at the fix: the file is
+472,507 chars (72,507 invisible, the last ~15 cycle-log entries) and
+`COLLAGE_EVOLUTION.md` had crossed too, at 401,166. The true staleness, once the
+whole file is read: **COLLAGE 22 cycles, BACKPORT 15, BREADTH 12, INTERFACE 6,
+WELL 5, DOCS 2, COMMONS 1, DEPTH 0.**
+
+This is the SECOND time this mechanism has failed, in the second way, for the
+same underlying reason both times: **a blind reader's output is indistinguishable
+from a truthful one.** In 2026-08-06 it read only one of the two books, so
+COLLAGE scored "never worked" forever and was picked every cycle. Today it reads
+both and TRUNCATES them, so the axis worked most recently reads as the one worked
+least. A mechanism whose whole job is to prevent fixation was generating one, in
+silence, in both directions.
+
+**A BYTE CAP ON A FILE THAT GROWS FOREVER IS A DEADLINE, NOT A GUARD.** The
+fix is `read_book()` (one helper, both readers — the private roster's reader had
+the identical cap and is 55KB today, i.e. the same failure with a later date on
+it) plus the NEGATIVE CONTROL the first fix never had: the check suite now
+asserts that the LAST tagged line physically present in each book is inside what
+`cycle_log_lines()` actually returns. A truncating reader passes every other
+check in that suite.
+
 Append here when a cycle finds one. Each is a rule, not a story.
 
 - **A BUILD THAT FINISHED ON DISK IS NOT A SHIP, AND ITS OWN COMMENT WILL TELL YOU IT WAS
