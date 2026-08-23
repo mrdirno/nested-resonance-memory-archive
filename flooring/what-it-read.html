@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What It Read — Flooring Field Toolkit</title>
+<meta name="description" content="Every moisture reading, by area, with the limit off your own pail printed beside it. The scrap of drywall goes in the dumpster and the slab gets glued — this is the one record still here ninety days later. TSV out, and it never passes or fails a number.">
+<meta name="apple-mobile-web-app-title" content="What It Read">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Flooring &middot; moisture readings &rarr; your file, the GC, the mill rep</span>
+    <h1 id="title">What It Read</h1>
+    <p class="lede" id="lede">Every reading, by area, with the limit off your own pail printed beside it. The scrap of drywall goes in the dumpster and the slab gets glued &mdash; this is the one record that&rsquo;s still here ninety days later. Copy it for a spreadsheet, so the rep and the super paste it into their sheet instead of squinting at a photo of a meter face.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Nothing on this page passes or fails a reading.</b> The limit beside each line is the number <i>you</i> read off <i>your</i> own product&rsquo;s label or the instructions in the box &mdash; not a threshold this page set. It sets no moisture limit, no tolerance and no acclimation window, approves no assembly, and is not a manufacturer&rsquo;s sign-off. It records what you read and what your own label allows, in your words. Once the floor is down the slab can&rsquo;t be read again &mdash; so double-check every number before you send this and before you cover anything.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Building B, 3rd floor" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hGoing">What&rsquo;s going down</label><input type="text" id="hGoing" placeholder="the floor system &mdash; in your words" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="goingHint">&ldquo;What&rsquo;s going down&rdquo; is your words, not a spec &mdash; glue-down LVP, sheet vinyl, engineered wood over the slab. It rides on the copy so the reading and the floor it&rsquo;s for stay together.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each reading</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the spot once &mdash; it becomes a button and it carries. Then it&rsquo;s the number off the meter, the limit off your pail, how you read it, <b>Add</b>. The meter, the limit and what it&rsquo;s for <b>carry to the next row</b>, because you take a run of readings with one meter off one bucket &mdash; change them only when they change.</p>
+  </section>
+
+  <section class="card">
+    <h2>The slab so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="area" class="on">Area</button>
+        <button type="button" data-g="meter">How read</button>
+        <button type="button" data-g="stage">This spot</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> when the floor goes down over that spot &mdash; it moves to <b>Covered</b>, the green edge, and that means the slab there is sealed and can&rsquo;t be read again. The pencil opens a row to fix a number, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the record that outlives the slab</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Still open slab</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Everything</b> is the whole exhibit &mdash; every reading you took, with the limit beside it, for your file and the mill rep. <b>Still open slab</b> is what isn&rsquo;t covered yet: the spots you can still go back and re-read. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup &mdash; this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Flooring Field Toolkit. A reading this page can&rsquo;t hold, or a meter it should name? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Flooring Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* WHAT IT READ — the moisture-reading log, and flooring's strongest unbuilt rung
+ * (flooring/tools.js §1). It is a CONFIG on shape #3 (shared/rowlog.js): the
+ * engine owns the state, the grouping, the persistence, the copy and the TSV
+ * round-trip; this file owns the WORDS and the document. No new engine, no fork.
+ *
+ * WHY THIS PAGE EXISTS. A floor mechanic tests the slab, writes the numbers on a
+ * scrap of drywall, and the scrap goes in the dumpster. What the rep gets is a
+ * phone photo of a meter face with no room, no date and no probe on it. Then the
+ * adhesive goes down and THAT SLAB CAN NEVER BE TESTED AGAIN — so ninety days
+ * later, when the floor cups and everyone is looking for who owns it, this log is
+ * the only artefact that still exists. It is the exhibit behind the pinned
+ * letter (give-me-the-go.html carries the readings for ONE morning; this carries
+ * them for a month), and the TSV is what lets the rep and the super paste it into
+ * their own sheet instead of squinting at handwriting.
+ *
+ * THE REFUSAL IS THE DESIGN, and it is the longest in the kit (flooring/trade.js).
+ * The reading is HIS number. The limit is the maximum HE read off HIS own pail or
+ * the mill's instructions. The page prints them side by side and DOES NO MATH ON
+ * THEM: no threshold, no tolerance, no acclimation window, and no pass / fail /
+ * ready / high / low / in-spec call in any wording, anywhere. There is no
+ * moisture number for us to supply even if we wanted to — the numbers are
+ * manufacturer warranty terms and they disagree with each other (one adhesive
+ * states one max RH, the next another, the mill's box overrides both). The whole
+ * product is the man refusing to make the call alone: he records what he measured
+ * and what his own label allows, and a human compares them.
+ *
+ * THE ONE STATE IS FACTUAL, NOT A VERDICT. The tap ladder has a single rung —
+ * Covered — and it means the floor is down over that spot: a physical fact about
+ * the slab, never a judgement of the number. Blank means open slab you can still
+ * go back and re-read. That is the only lifecycle transition moisture work has,
+ * and marking it is how the log tells you what you can still test.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var KEY = "toolkit." + (TRADE.slug || "flooring") + ".whatitread.v1";
+
+  /* The meters a floor hand actually reads a slab (or wood, or the air) with,
+     as PLAIN NAMES of what he did — not procedures, not standards, and not one
+     number. He picks one and it carries; if his isn't here it goes in the note,
+     and the credit line asks for it so the next cycle adds it. */
+  var METHODS = [
+    "Slab RH probe (in-situ)",
+    "Concrete surface meter",
+    "Calcium chloride (dome)",
+    "Wood moisture — pins",
+    "Wood moisture — pinless",
+    "Ambient RH + temp",
+    "Subfloor / panel meter"
+  ];
+
+  /* THE ONLY STATE, and it is a fact about the slab, not the reading: the floor
+     is down over it. Blank = still open slab. Declared by value so the predicate
+     and the filter never disagree with the chip. */
+  var COVERED = "Covered";
+  var STAGES = [COVERED];
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  function isOpen(v) { return v.stage !== COVERED; }
+
+  /* THE ENGINE RENDERS ONCE INSIDE mount(), BEFORE `rl` EXISTS (§SCARS), so
+     anything that reads rows during that first paint must tolerate no engine. */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "reading", nounPlural: "readings", groupNoun: "area", groupNounPlural: "areas",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing logged yet. Put in the first reading — the spot, the number off the meter, and the limit off your pail.",
+
+    /* THE ONE-RUNG LADDER: tap an open row to Covered. No statusWrap — a floor
+       that went down does not come back up, and Covered is a fact you settle,
+       not a step you undo by mistapping in the dark. */
+    statusKey: "stage", statusOrder: STAGES, statusDone: COVERED,
+
+    groupOptions: [
+      { key: "area", label: "Area" },
+      { key: "meter", label: "How read" },
+      { key: "stage", label: "This spot" }
+    ],
+
+    /* Grouped by area, the rooms read in the order he logged them. Grouped by
+       stage, the open slab he can still test leads and the covered rows sink. */
+    groupSort: function (a, b, key) {
+      if (key === "stage") {
+        var pa = a === COVERED ? 1 : 0, pb = b === COVERED ? 1 : 0;
+        return pa - pb;
+      }
+      if (key === "meter") {
+        var ia = METHODS.indexOf(a), ib = METHODS.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "open", label: "still open slab",
+      emptyText: "Every reading on here is on slab that's already covered. Nothing left to re-read.",
+      test: function (v) { return isOpen(v); }
+    }],
+
+    fields: [
+      { key: "area", label: "Where", input: "learn", lead: true, required: true, sticky: true,
+        placeholder: "Kitchen, east half — then it's a button",
+        emptyHint: "Name it the way your crew and the plans do. It becomes a button." },
+      /* NAKED BY DESIGN, same law as framing's height and roofing's count: no
+         unit forced, no example number, nothing normalised on the way out. He
+         types "82% RH" or "4.5 lb" or "12%" and it prints exactly that. */
+      { key: "reading", label: "What it read", input: "text", required: true,
+        placeholder: "the number off the meter — your unit" },
+      { key: "limit", label: "Limit off the pail", input: "text", sticky: true,
+        placeholder: "the max your adhesive / underlayment / mill allows — off the label" },
+      { key: "meter", label: "How you read it", input: "chips", sticky: true },
+      { key: "material", label: "What it's for", input: "text", sticky: true,
+        placeholder: "the adhesive, underlayment or floor this limit is for" },
+      { key: "stage", label: "This spot", input: "select",
+        placeholder: "— open slab; Covered when the floor's down" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "probe depth, dome time, meter serial, the day — anything" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "meter") return METHODS;
+      if (key === "stage") return STAGES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.area, v.reading ? "read " + v.reading : null]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.limit ? "limit " + v.limit : null, v.meter, v.material, v.note]); },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and names the JOB first, like every document
+       in this program, so today's readings and next quarter's argument surface
+       together when somebody searches the job. THEN A PLAIN COUNT — how many
+       readings across how many areas — and NEVER a verdict count. There is no
+       "3 over limit" line on this page, because the page does not know and will
+       not guess which number wins. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), going = $("#hGoing").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "moisture readings", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (going) out.push("Going down: " + going);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var areas = {};
+      src.forEach(function (v) { var a = String(v.area || "").trim(); if (a) areas[a] = 1; });
+      var na = Object.keys(areas).length;
+      var line = c.shown + (c.shown === 1 ? " reading" : " readings");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + na + (na === 1 ? " area" : " areas");
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER READING: where it is, what it read, and the limit off his own
+       pail right beside it — the two numbers a human compares, never the page.
+       The axis the list is grouped by is dropped from the line, it is the
+       heading. Every value is HIS, verbatim: the reading and the limit are not
+       softened or edited (they carry units and acronyms), the meter name keeps
+       its caps, and the only word lowercased is the plain state word. */
+    docRow: function (v) {
+      var g = rl ? rl.group() : "area";
+      var head = joinDots([g === "area" ? null : v.area, v.reading ? "read " + v.reading : null]);
+      var tail = [];
+      if (v.limit) tail.push("limit " + v.limit);
+      if (g !== "meter" && v.meter) tail.push(v.meter);
+      if (v.material) tail.push("for " + v.material);
+      if (g !== "stage" && v.stage) tail.push(String(v.stage).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    /* THE REFUSAL, OUT LOUD, at the foot — because a reading log that reads like
+       a clearance is the one that gets quoted back at you. */
+    docFoot: function () {
+      var out = [];
+      out.push("These are the readings I took and, on each line, the maximum off that product's own label or instructions — recorded by hand at the job, in my words.");
+      out.push("This page does no math on them: it sets no moisture limit, no tolerance and no acclimation window, it makes no pass / fail / ready / high / low call, and it is not a manufacturer's approval or a warranty. Check every number against your own submittal and the instructions in the box before anything gets covered — once the glue is down this slab can't be read again.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), going = $("#hGoing").value.trim();
+      return (job ? job + " — " : "") + "moisture reading log, " + c.total
+        + (c.total === 1 ? " reading, " : " readings, ") + c.today
+        + (going ? ", going down: " + going : "")
+        + " — recorded by hand. Each line is the reading taken and the limit off that product's own label. Not a certification; the page sets no limit and makes no pass/fail call.";
+    },
+    tsvColumns: [
+      { label: "Where", key: "area" },
+      { label: "What it read", key: "reading" },
+      { label: "Limit off the pail", key: "limit" },
+      { label: "How read", key: "meter" },
+      { label: "What it's for", key: "material" },
+      { label: "This spot", key: "stage" },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), g = $("#hGoing").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || g || f || t) ? { job: j, going: g, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hGoing").value = x.going || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    }
+  });
+
+  /* The learn axis borrows the identifier keyboard attributes, which exist so a
+     phone cannot destroy a device tag. "Kitchen, east half" is not a tag and it
+     does not want to arrive as KITCHEN, EAST HALF. */
+  ["area"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  /* ── the two segmented controls ──────────────────────────────────────────── */
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one. This log is the only record of a slab that no
+     longer exists, and it lives in one browser on one phone. Same arm-then-
+     confirm pattern every other page on this engine uses. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hGoing", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+  });
+
+  /* The header fields ride on every copy, so a keystroke has to reach BOTH the
+     preview and the saved copy — render() repaints, schedulePersist() saves, and
+     a page that calls only one shows a stale document or loses the job on reload. */
+  ["#hJob", "#hGoing", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). The engine does not
+     restore inside mount(); a page that forgets this looks perfect on a fresh
+     load and silently drops the whole log every time he backgrounds the phone. */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

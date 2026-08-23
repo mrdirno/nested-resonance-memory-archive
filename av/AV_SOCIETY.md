@@ -5246,3 +5246,29 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   single cause of all 3,161 remaining unhedged wrong answers, it lives in the engine all 16
   search surfaces share, and it is worth its own cycle.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+- `2026-08-22` — **[AXIS:DEPTH] C3644 — THE READING THAT OUTLIVES THE SLAB.**
+  `flooring/what-it-read.html` shipped — the moisture-reading log, a config on shape #3
+  (`shared/rowlog.js`), no new engine. Flooring **7 tools → 8**. A floor hand tests the
+  slab, writes the numbers on a scrap of drywall, the scrap goes in the dumpster — and once
+  the adhesive is down that slab can never be tested again, so ninety days later this log is
+  the only artefact left: the exhibit behind the pinned `give-me-the-go` letter, which
+  carries the readings for ONE morning while this carries them for a month. Per row: Where
+  (self-building) · What it read · Limit off the pail (sticky) · How/meter (sticky) · What
+  it's for (sticky) · Note; grouped by area with a count per area; TSV round-trip verified
+  **byte-identical** (rowlog-restore). THE REFUSAL, the longest in the kit and lifted
+  straight from `flooring/trade.js`'s charter: the reading is HIS number, the limit is what
+  HE read off HIS pail, the page prints them side by side and **does no math** — proven on a
+  real over-limit case, `read 82% RH — limit 75% RH`, where the page says nothing. No
+  threshold, no tolerance, no acclimation window, no pass/fail/ready/high/low in any wording.
+  THE ONE STATE IS A FACT, NOT A VERDICT: the tap ladder has a single rung, **Covered** (the
+  floor's down, the slab is sealed), because the engine ALWAYS renders the tap+chip and a
+  truly status-less config ships a dead tap — **the next readings-log builder (roofing
+  `what-we-found`, masonry `before-we-grout`) should adopt a factual rung, never omit
+  status.** Chosen by ROTATION, not taste: 5+ straight DOCS cycles tripped the K≥4
+  stalled-route rule, so the lane rotated to the stalest axis (DEPTH, cold 15 cycles) instead
+  of the `find.js` next-rung C3643 named. **BACKPORT RIDER: swept — no sibling bug-class to
+  carry** (a new DEPTH tool, not a fix); the reusable mechanisms (sticky meter/material,
+  reading-beside-limit, factual-not-verdict rung) are named here for the next row-log to
+  steal rather than re-derive. Gates green: mobile-watertight 4 widths default+bumped ·
+  no-third-party · rowlog-restore · rowlog-commit-merge · menu-reachability sweep · hub card
+  + nav link live. https://mrdirno.github.io/nested-resonance-memory-archive/flooring/what-it-read.html

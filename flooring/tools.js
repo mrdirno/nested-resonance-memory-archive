@@ -119,6 +119,21 @@ window.TOOLKIT_TOOLS = [
     desc: "The write-ups you put off — what your number didn't cover, the prep that becomes the change order, the shading call somebody's calling a defect, the day they told you to put it in anyway, the day report, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dump the mess in the truck and get back something you can send. Never grades a reading, never calls a floor a defect — it writes down what you measured and what you did.",
     chip: "#3FB8D8",
     audience: "Lead → GC / dealer / office / customer"
+  },
+  {
+    // Shape #3 (shared/rowlog.js), the strongest unbuilt rung in this kit's own
+    // prune (§1 above). The pinned letter carries the readings for one morning;
+    // this carries them for a month, and it is the only artefact that survives
+    // the glue. Meter, limit and material carry row to row; grouped by area with
+    // a count per area; the limit off his own pail beside every line; TSV out.
+    // Longest refusal list in the kit — no threshold ever, and no label: never
+    // pass, fail, high, low or in-spec. His number prints beside his own limit
+    // and a human compares them.
+    name: "What It Read",
+    href: "what-it-read.html",
+    desc: "Every moisture reading, by area, with the limit off your own pail beside each one. The scrap of drywall goes in the dumpster and the slab gets glued — this is the record still here ninety days later when the floor cups and everyone wants to know who owns it. Copy it for a spreadsheet. It never passes or fails a number: your reading prints beside your own limit and a human compares them.",
+    chip: "#1C93B0",
+    audience: "Lead / mechanic → your own file, the GC, the mill rep"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
