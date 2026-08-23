@@ -1,7 +1,7 @@
 import { LayoutItem } from '../types';
 import { ImageAsset } from '../types';
 import { TitlePlan, titlePlanFor, drawTitlePlan } from './title';
-import { cssFilterFor, type LookId } from './grade';
+import { cssFilterFor, type LookRef } from './grade';
 import { sampleMove, NO_MOVE } from './motion';
 
 export interface CropGeometry {
@@ -159,7 +159,7 @@ export const renderCanvas = async (
   /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null draws nothing. */
   titlePlan: TitlePlan | null = null,
   /** THE LOOK — the colour grade. `'none'` (the default) touches nothing. */
-  look: LookId | null = null,
+  look: LookRef | null = null,
 ): Promise<HTMLCanvasElement> => {
   const LOGICAL_W = width;
   const LOGICAL_H = width / aspect;

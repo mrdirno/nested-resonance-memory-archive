@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
   Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, Unlock, ImagePlus, Dices, Copy, Type, X,
-  Undo2, Redo2, Palette
+  Undo2, Redo2, Palette, SlidersHorizontal
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
-import { LOOKS, type LookId } from '../lib/grade';
+import { LOOKS, DESK_AXES, deskForLook, type Desk, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
 import { PACES, type PaceId } from '../lib/pace';
@@ -70,6 +70,11 @@ interface SimpleControlsProps {
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   look?: LookId;
   onLook?: (l: LookId) => void;
+  /** THE DESK — the four axes as they should read right now (see lib/grade.ts). */
+  desk?: Desk;
+  onDesk?: (d: Desk) => void;
+  /** True when those axes are off the preset's own — the row says CUSTOM. */
+  deskCustom?: boolean;
 
   /** THE MOVE — how the picture drifts inside its fragment. See lib/motion.ts. */
   move?: MoveId;
@@ -135,7 +140,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   holdFrame = false, onHoldFrame, lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
-  look = 'none', onLook, move = 'still', onMove, turn = 'hold', onTurn,
+  look = 'none', onLook, desk, onDesk, deskCustom = false, move = 'still', onMove, turn = 'hold', onTurn,
   pace = 'even', onPace,
   sync = 'off', onSync, beatGrid = null, beatBusy = false, beatBeats = 0, hasMusic = false
 }) => {
@@ -143,6 +148,14 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   // ---- THE COMPOSITION CODE --------------------------------------------------
   // Two jobs on one strip because they are two halves of one act: the code of
   // what is on screen (tap it to copy) and a box to put somebody else's in.
+  /**
+   * THE DESK, disclosed rather than docked. Four sliders is a settings screen
+   * if it is always on; behind one chip it is the ADJUST tab of every editor
+   * anybody has used. The open/closed state is UI-local on purpose — it is not
+   * part of the composition, it does not travel in a code and reopening the app
+   * should not put a panel back on the screen.
+   */
+  const [deskOpen, setDeskOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [pasted, setPasted] = React.useState('');
   const [rejected, setRejected] = React.useState(false);
@@ -392,18 +405,81 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
                 key={l.id}
                 type="button"
                 className="ui-chip ui-chip--mini"
-                data-active={(look ?? 'none') === l.id}
+                data-active={!deskCustom && (look ?? 'none') === l.id}
                 onClick={() => onLook(l.id)}
                 title={l.title}
-                aria-pressed={(look ?? 'none') === l.id}
+                aria-pressed={!deskCustom && (look ?? 'none') === l.id}
                 data-testid={`look-${l.id}`}
               >{l.label}</button>
             ))}
+            {/* THE DESK — the ninth chip, and the only one that is a DOOR rather
+                than a choice. It lights when the axes behind it are off the
+                preset, which is the one fact the eight chips can no longer
+                carry: a custom grade is not any of them. */}
+            {onDesk && (
+              <button
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={deskCustom}
+                aria-pressed={deskCustom}
+                aria-expanded={deskOpen}
+                onClick={() => setDeskOpen(o => !o)}
+                title="Set the grade by hand — exposure, contrast, colour, warmth."
+                data-testid="look-desk"
+              >
+                <SlidersHorizontal size={11} aria-hidden="true" />
+                <span>{deskCustom ? 'CUSTOM' : 'ADJUST'}</span>
+              </button>
+            )}
           </div>
+          {/* ---- THE DESK's four axes, disclosed ---------------------------
+              Every one of the eight looks above is a POINT in this space (the
+              sweep holds all eight to it, bit for bit), so opening this panel
+              never moves a pixel — it just shows you where the preset already
+              is. --------------------------------------------------------- */}
+          {deskOpen && onDesk && desk && (
+            <div className="ui-desk" data-testid="desk-panel">
+              {DESK_AXES.map(ax => {
+                const v = desk[ax.key];
+                const pct = (v - ax.min) / (ax.max - ax.min) * 100;
+                const read = ax.key === 'warmth'
+                  ? (v === 0 ? 'NEUTRAL' : v > 0 ? `WARM ${Math.round(v * 100)}%` : `COOL ${Math.round(-v * 100)}%`)
+                  : (v === ax.mid ? 'AS SHOT' : `${v > ax.mid ? '+' : ''}${Math.round((v - ax.mid) * 100)}%`);
+                return (
+                  <div className="ui-field" key={ax.key}>
+                    <div className="ui-field__head">
+                      <span className="ui-label">{ax.label}</span>
+                      <span className="ui-field__value" data-testid={`desk-read-${ax.key}`}>{read}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={ax.min} max={ax.max} step={0.01}
+                      value={v}
+                      onChange={e => onDesk({ ...desk, [ax.key]: parseFloat(e.target.value) })}
+                      style={{ ['--fill' as string]: `${pct}%` } as React.CSSProperties}
+                      aria-label={ax.label}
+                      title={ax.hint}
+                      data-testid={`desk-${ax.key}`}
+                    />
+                  </div>
+                );
+              })}
+              <button
+                type="button"
+                className="ui-chip ui-chip--mini ui-desk__reset"
+                disabled={!deskCustom}
+                onClick={() => onDesk(deskForLook(look))}
+                data-testid="desk-reset"
+                title="Back to the look you started from."
+              >BACK TO {String(look ?? 'none').toUpperCase()}</button>
+            </div>
+          )}
           <p className="ui-caption">
-            {(look ?? 'none') === 'none'
-              ? 'A colour grade on the photographs. The frame colour stays what you picked.'
-              : 'On the picture, the video and the SVG. It travels in the code.'}
+            {deskCustom
+              ? 'Your own grade. It travels in the code, exactly as the eight do.'
+              : (look ?? 'none') === 'none'
+                ? 'A colour grade on the photographs. The frame colour stays what you picked.'
+                : 'On the picture, the video and the SVG. It travels in the code.'}
           </p>
         </div>
       )}

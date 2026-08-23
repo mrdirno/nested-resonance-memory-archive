@@ -3,7 +3,7 @@ import { LayoutItem, createRng } from '../../lib/layout';
 import { ImageAsset, AppState } from '../../types';
 import { calculateSmartCrop } from '../../lib/renderer';
 import { TitlePlan, titlePlanFor, titlePlanToSvg } from '../../lib/title';
-import { svgFilterFor, svgFilterAttrFor, type LookId } from '../../lib/grade';
+import { svgFilterFor, svgFilterAttrFor, type LookRef } from '../../lib/grade';
 import { projectMetadata, metaForAsset, srcIdAttr } from '../../lib/svgProject';
 
 const blobToBase64 = async (url: string): Promise<string> => {
@@ -34,7 +34,7 @@ export const generateVectorExport = async (
   /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null emits nothing. */
   titlePlan: TitlePlan | null = null,
   /** THE LOOK — the colour grade, as real `<filter>` primitives. */
-  look: LookId | null = null,
+  look: LookRef | null = null,
   /**
    * THE SOURCE POOL, in POOL ORDER — what makes this file a project rather than
    * a picture. `orderedImages` above is the DRAWN permutation with the crop

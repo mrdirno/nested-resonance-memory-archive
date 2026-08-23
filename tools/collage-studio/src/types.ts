@@ -1,6 +1,6 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
-import type { LookId } from './lib/grade';
+import type { Desk, LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
 import type { PaceId } from './lib/pace';
@@ -184,6 +184,14 @@ export interface AppState {
      * existed, and absent means `none`, which is what those projects were.
      */
     look?: LookId;
+    /**
+     * THE DESK — the grade as four axes, when it is not one of the eight (see
+     * lib/grade.ts). Absent on every project saved before it existed, and absent
+     * means "the look above IS the grade", which is exactly what those projects
+     * were. A project file carries it where the composition CODE carries it too,
+     * for the same reason: it is part of the recipe, not a fact about a render.
+     */
+    adjust?: Desk;
   };
   /**
    * THE TITLE — the caption drawn over the finished collage. Absent on every

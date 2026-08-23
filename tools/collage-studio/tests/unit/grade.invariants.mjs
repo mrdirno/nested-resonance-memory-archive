@@ -54,11 +54,12 @@ const load = async (rel, tag) => {
 
 const G = await load('src/lib/grade.ts', 'grade');
 const RC = await load('src/lib/rollCode.ts', 'rollcode');
-// For `MINTED_GROUP_MAX` — the codec's own registry of the length it mints.
+// For `MINTED_GROUP_PLAIN` — the length this build mints for a roster look.
 const DICE = await load('src/lib/diceRoll.ts', 'dice');
 const {
   LOOKS, LOOK_IDS, NO_GRADE, gradeFor, gradeSteps, stepsForLook,
   cssFilterFor, svgFilterFor, svgFilterAttrFor, isNoOp, SVG_FILTER_ID, GRADE_GRID,
+  DESK_AXES, NO_DESK, snapDesk, snapGrade, gradeFromDesk, deskFromGrade, deskForLook, sameDesk,
 } = G;
 
 let checks = 0, failures = 0;
@@ -442,7 +443,7 @@ for (const id of LOOK_IDS) {
   // motion/turn carried the same number; THE PACE broke all three at once with
   // the same message. `MINTED_GROUP_MAX` is the codec's own registry of every
   // length it has ever emitted, so the next field updates one place.
-  const GROUP_LEN = DICE.MINTED_GROUP_MAX;
+  const GROUP_LEN = DICE.MINTED_GROUP_PLAIN;
   const code = RC.encodeState({ ...baseState, look: 'none' });
   const [a, b, c] = code.split('-');
   ok('I8c', b.length === GROUP_LEN, `the middle group must be ${GROUP_LEN} chars, got ${b.length}`);
@@ -519,6 +520,173 @@ for (const id of LOOK_IDS) {
 }
 ok('I9a', worstLinear > 0.05,
   `the sRGB pin must be load-bearing; linear evaluation differed by only ${(worstLinear * 255).toFixed(1)}/255`);
+
+// =============================================================================
+// I10 — THE DESK IS A GENERALISATION OF THE ROSTER, NOT A NEIGHBOUR OF IT
+//
+//   The desk exists so a person can move ONE axis. That is only safe if the
+//   other three leave the picture exactly where the preset put it — so every
+//   one of the eight looks must be a POINT in the desk's space, reached and
+//   returned bit for bit. "Close" is a different collage arriving under the
+//   same name, which is the `Math.max(0, indexOf(...))` scar in colour.
+// =============================================================================
+{
+  let offAxis = 0, drifted = 0;
+  for (const l of LOOKS) {
+    const d = deskFromGrade(l.grade);
+    if (!d) { offAxis++; fail('I10a', `${l.id} is not on the desk's four axes at all`); continue; }
+    const back = gradeFromDesk(d);
+    for (const k of Object.keys(l.grade)) {
+      checks++;
+      if (!Object.is(back[k], l.grade[k])) {
+        drifted++;
+        fail('I10a', `${l.id}.${k}: desk round trip gave ${back[k]}, roster says ${l.grade[k]}`);
+      }
+    }
+  }
+  ok('I10b', offAxis === 0 && drifted === 0,
+    `${LOOKS.length} looks: ${offAxis} off-axis, ${drifted} fields drifted`);
+
+  // The desk at rest IS the ungraded picture — by value, so `gradeSteps` drops
+  // every step and the whole no-op guarantee (an ungraded render runs the
+  // instruction stream it always ran) survives a desk nobody has touched.
+  const rest = gradeFromDesk(NO_DESK);
+  ok('I10c', gradeSteps(rest).length === 0 && cssFilterFor(rest) === 'none' && svgFilterFor(rest) === ''
+      && svgFilterAttrFor(rest) === '' && isNoOp(rest),
+    `a desk at rest must be a no-op, got css=${cssFilterFor(rest)} steps=${gradeSteps(rest).length}`);
+
+  // A LookRef of five numbers must resolve exactly as the id does — the four
+  // surfaces are handed one or the other and may not tell them apart.
+  let refDrift = 0;
+  for (const id of LOOK_IDS) {
+    checks++;
+    if (cssFilterFor(gradeFor(id)) !== cssFilterFor(id)) { refDrift++; fail('I10d', `${id}: grade-ref and id-ref emit different CSS`); }
+    checks++;
+    if (svgFilterFor(gradeFor(id)) !== svgFilterFor(id)) { refDrift++; fail('I10d', `${id}: grade-ref and id-ref emit different SVG`); }
+  }
+  ok('I10e', refDrift === 0, `${LOOK_IDS.length} looks resolve identically as an id and as a grade`);
+}
+
+// =============================================================================
+// I11 — EVERY REACHABLE DESK LANDS ON THE GRID `num` IS EXACT ON
+//
+//   `num` is lossless at six decimals BECAUSE a sepia term is a three-decimal
+//   constant times an amount on the two-decimal grid. The roster is on that
+//   grid by hand (I5e); a desk COMPUTES its amounts, so the grid has to be
+//   enforced on the way in or the SVG and the JPEG stop being the same picture.
+//   Swept over the whole reachable space at the slider's own step.
+// =============================================================================
+{
+  let offGrid = 0, notIdempotent = 0, worst = 0;
+  const onGrid = (v, g) => Math.abs(v * g - Math.round(v * g)) < 1e-9;
+  // Every axis at its own 0.01 detent, crossed against the others' extremes and
+  // midpoint — a full cross product is 10^8 and buys nothing the edges do not.
+  const probes = [];
+  for (const ax of DESK_AXES) {
+    const others = DESK_AXES.filter((o) => o.key !== ax.key);
+    for (const corner of [0, 1, 2]) {
+      const base = {};
+      for (const o of others) base[o.key] = [o.min, o.mid, o.max][corner];
+      for (let v = ax.min; v <= ax.max + 1e-9; v = Math.round((v + 0.01) * 1000) / 1000) {
+        probes.push({ ...base, [ax.key]: Math.round(v * 100) / 100 });
+      }
+    }
+  }
+  for (const d of probes) {
+    const snapped = snapDesk(d);
+    checks++;
+    if (!sameDesk(snapDesk(snapped), snapped)) { notIdempotent++; fail('I11a', `snapDesk is not idempotent at ${JSON.stringify(d)}`); }
+    const g = gradeFromDesk(d);
+    for (const [k, grid] of [['brightness', GRADE_GRID], ['contrast', GRADE_GRID], ['saturate', GRADE_GRID], ['sepia', GRADE_GRID], ['hue', 1]]) {
+      checks++;
+      if (!onGrid(g[k], grid)) { offGrid++; if (offGrid < 4) fail('I11a', `${k}=${g[k]} off the 1/${grid} grid from ${JSON.stringify(d)}`); }
+    }
+    // ...and the grid is not decoration: it is what makes the two emitters the
+    // same transform. Same evaluator as I6, on grades that are NOT on the roster.
+    const cssOps = parseCss(cssFilterFor(g));
+    const svgOps = parseSvg(svgFilterFor(g));
+    for (const px of SWATCHES.slice(0, 6)) {
+      const a = runOps(cssOps, px);
+      const b = runOps(svgOps, px);
+      const dd = Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[2] - b[2]));
+      if (dd > worst) worst = dd;
+      checks++;
+      if (!(dd <= 1e-9)) { fail('I11b', `custom grade ${JSON.stringify(g)}: css vs svg differ by ${dd}`); break; }
+    }
+  }
+  // AND INSIDE THE SPEC'S OWN RANGE. `sepia()` is defined on 0..1 and a browser
+  // CLAMPS above it; the evaluator in this file does not, so an amount over 1
+  // would make the two emitters agree HERE and disagree in a real canvas — the
+  // exact class of hole a from-the-spec evaluator exists to avoid. This is the
+  // check that pins the warmth constants to something other than taste: they
+  // may scale the axis, they may not push it out of the range CSS defines.
+  let outOfSpec = 0;
+  for (const d of probes) {
+    const g = gradeFromDesk(d);
+    checks++;
+    if (!(g.sepia >= 0 && g.sepia <= 1 && g.saturate >= 0 && g.brightness >= 0 && g.contrast >= 0
+          && g.hue >= 0 && g.hue < 360)) {
+      outOfSpec++;
+      if (outOfSpec < 3) fail('I11d', `${JSON.stringify(d)} -> ${JSON.stringify(g)} is outside the CSS range`);
+    }
+  }
+  ok('I11d', outOfSpec === 0, `${outOfSpec} reachable desks leave the range CSS Filter Effects defines`);
+  ok('I11c', offGrid === 0 && notIdempotent === 0,
+    `${probes.length} reachable desks: ${offGrid} off-grid values, ${notIdempotent} non-idempotent snaps`);
+  console.log(`I11 desk: ${probes.length} reachable desks, css vs svg worst channel delta ${worst.toExponential(2)}`);
+}
+
+// =============================================================================
+// I12 — A DESK RIDES THE CODE, AND A COLLAGE WITHOUT ONE MINTS WHAT IT ALWAYS DID
+//
+//   The second half is the back-compatibility rule this codec has kept through
+//   six generations, and the desk is the first field that could break it by
+//   being present-or-absent rather than always there.
+// =============================================================================
+{
+  const base = {
+    layoutMode: 'minimal', primitive: 'rect', count: 12, density: 1, entropy: 0.2,
+    aspect: 1, gutter: 0.005, bgColor: '#050505', seed: 1234,
+    arrangement: 'natural', focus: 'auto', twist: 'none', look: 'punch', adjust: null,
+    move: 'still', turn: 'hold', pace: 'even', sync: 'off', shuffle: 0, countOwned: false,
+  };
+  const plain = RC.encodeState(base);
+  ok('I12a', plain.split('-')[1].length === DICE.MINTED_GROUP_PLAIN,
+    `a collage on a roster look must still mint ${DICE.MINTED_GROUP_PLAIN} characters, got ${plain.split('-')[1].length}`);
+  ok('I12b', RC.decodeState(plain)?.adjust === null,
+    'a code with no desk group must decode to NO desk, not to a neutral one');
+
+  let bad = 0;
+  for (const l of LOOKS) {
+    for (const w of [-1, -0.35, 0, 0.1, 0.5, 1]) {
+      for (const e of [0.6, 0.99, 1, 1.37, 1.6]) {
+        const desk = snapDesk({ ...deskForLook(l.id), warmth: w, exposure: e });
+        const code = RC.encodeState({ ...base, look: l.id, adjust: desk });
+        const back = RC.decodeState(code);
+        checks++;
+        if (!back || !sameDesk(back.adjust, desk)) {
+          bad++;
+          if (bad < 4) fail('I12c', `${l.id} w=${w} e=${e}: round trip gave ${JSON.stringify(back?.adjust)}`);
+        }
+        checks++;
+        if (back && back.look !== l.id) { bad++; fail('I12c', `${l.id}: the look under the desk moved to ${back.look}`); }
+      }
+    }
+  }
+  ok('I12d', bad === 0, `${LOOKS.length * 30} desks survive the code round trip exactly`);
+
+  // A DESK CODE THAT LOST CHARACTERS IS REFUSED, never sliced into a shorter
+  // generation. 22..28 belongs to no generation, which is the whole reason the
+  // minted-length set is a SET.
+  const custom = RC.encodeState({ ...base, adjust: { exposure: 1.2, contrast: 1, colour: 1, warmth: 0 } });
+  const [h, mid, tail] = custom.split('-');
+  let survived = 0;
+  for (let cut = 1; cut <= 7; cut++) {
+    checks++;
+    if (RC.decodeState(`${h}-${mid.slice(0, mid.length - cut)}-${tail}`) !== null) survived++;
+  }
+  ok('I12e', survived === 0, `${survived} truncated desk codes opened as somebody else's collage`);
+}
 
 // =============================================================================
 // REPORT

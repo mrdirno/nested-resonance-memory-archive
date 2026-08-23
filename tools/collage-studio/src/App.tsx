@@ -22,7 +22,7 @@ import { isTurning, type TurnId } from './lib/turn';
 import { type PaceId } from './lib/pace';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
-import type { LookId } from './lib/grade';
+import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
 import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
 import type { AssetUrls } from './lib/session';
@@ -275,6 +275,27 @@ export default function App() {
   const [titleSize, setTitleSize] = useState<TitleSize>('md');
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   const [look, setLook] = useState<LookId>('none');
+  /**
+   * THE DESK — the grade as four axes, once the user has moved one off the
+   * preset. `null` means the look above IS the grade, which is every state this
+   * app could reach before the desk existed.
+   *
+   * IT IS NORMALISED, not merely stored: `applyDesk` writes `null` back the
+   * moment the axes match the preset's own, so "is this a custom grade" is one
+   * comparison rather than a flag that can disagree with the picture. That is
+   * what keeps the chip row honest (CUSTOM lights only when the pixels differ
+   * from the preset) and what keeps a code minted from an untouched desk
+   * byte-identical to the code this app has minted since THE BEAT.
+   */
+  const [adjust, setAdjust] = useState<Desk | null>(null);
+  /** The four axes as the sliders should show them: the desk, or the preset's. */
+  const deskShown = useMemo(() => adjust ?? deskForLook(look), [adjust, look]);
+  /** The grade actually in force — what every surface that paints is handed. */
+  const lookRef = useMemo<LookRef>(() => (adjust ? gradeFromDesk(adjust) : look), [adjust, look]);
+  const applyDesk = useCallback((next: Desk) => {
+    const snapped = snapDesk(next);
+    setAdjust(sameDesk(snapped, deskForLook(look)) ? null : snapped);
+  }, [look]);
   
   /** Name of the recipe the last dice roll drew from, shown in the readout. */
   const [lastRecipe, setLastRecipe] = useState<string | undefined>(undefined);
@@ -967,7 +988,7 @@ export default function App() {
        try {
          const orderedImages = orderedAssets;
          const orderedPreviews = orderedImages.map(img => img ? ({ ...img, src: img.previewSrc || img.src }) : img);
-         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, titlePlan, look);
+         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, titlePlan, lookRef);
          canvas.toBlob(blob => {
              if (previewUrl) URL.revokeObjectURL(previewUrl);
              if (blob) setPreviewUrl(URL.createObjectURL(blob));
@@ -976,7 +997,7 @@ export default function App() {
     };
     const t = setTimeout(runRender, 50);
     return () => clearTimeout(t);
-  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan, look]);
+  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan, lookRef]);
 
   const handleShuffle = () => { pushHistory(); setShuffleTrigger(prev => prev + 1); };
   /**
@@ -1045,6 +1066,12 @@ export default function App() {
     // same fragments graded differently is a different picture, and the point
     // of the button is a different picture.
     setLook(roll.look ?? 'none');
+    // AND IT DROPS A CUSTOM GRADE, because the dice deal a ROSTER and a roster
+    // pick is the whole point of a die. A roll is a destructive composition
+    // event like the shuffle and the remix, so it is already on the undo stack
+    // — the axes you set come back with one press rather than being defended
+    // here, which would make the dice unable to change the look at all.
+    setAdjust(roll.desk ?? null);
     // And the move is part of it for the third time and the same reason — a
     // collage that drifts is not the same picture as one that sits still.
     moveOwnedRef.current = true;   // a roll is a choice, even when it rolls STILL
@@ -1116,10 +1143,10 @@ export default function App() {
   // ===========================================================================
   const compositionCode = useMemo(() => encodeState({
     layoutMode, primitive, count, density, entropy, aspect, gutter,
-    bgColor, seed, arrangement, focus, twist, look, move, turn, pace, sync, shuffle: shuffleTrigger,
+    bgColor, seed, arrangement, focus, twist, look, adjust, move, turn, pace, sync, shuffle: shuffleTrigger,
     countOwned,
   }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
-       bgColor, seed, arrangement, focus, twist, look, move, turn, pace, sync, shuffleTrigger, countOwned]);
+       bgColor, seed, arrangement, focus, twist, look, adjust, move, turn, pace, sync, shuffleTrigger, countOwned]);
 
   /**
    * THE BEAT'S SCHEDULE — the turn's own hold, snapped to the music.
@@ -1181,6 +1208,10 @@ export default function App() {
     setGutter(s.gutter);
     setBgColor(s.bgColor);
     setLook(s.look);
+    // A code with no desk group is a code for one of the eight, so this CLEARS
+    // any custom grade on screen rather than leaving it layered under somebody
+    // else's recipe — an applied code is the whole composition or it is nothing.
+    setAdjust(s.adjust);
     setSeed(s.seed);
     setArrangement(s.arrangement);
     setFocus(s.focus);
@@ -1859,7 +1890,7 @@ export default function App() {
       version: "1.0",
       mode: activeTab,
       layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync },
-      style: { background: bgColor, look },
+      style: { background: bgColor, look, adjust: adjust ?? undefined },
       title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined,
   });
 
@@ -2016,6 +2047,9 @@ export default function App() {
       // ABSENT MEANS THE DEFAULT, never "keep what is on screen" — restoring a
       // snapshot that predates the title must not leave today's caption on it.
       setLook(item.state.style?.look ?? 'none');
+      // Same rule, one field along: a snapshot that predates THE DESK must not
+      // leave today's custom grade sitting on it.
+      setAdjust(item.state.style?.adjust ?? null);
       setTitleText(item.state.title?.text ?? '');
       setTitlePlace(item.state.title?.place ?? 'bl');
       setTitleSize(item.state.title?.size ?? 'md');
@@ -2095,7 +2129,11 @@ export default function App() {
                   fallbackSrc: img.previewSrc || img.src,
                   width: img.width, height: img.height, analysis: img.analysis,
               }) : null),
-              zoom, bgColor, titlePlan, look,
+              // THE GRADE, as the id OR the five numbers — see `LookRef`. A plain
+              // object crosses the structured clone the same way the title plan does,
+              // and the worker resolves it through the SAME `cssFilterFor` the preview
+              // called, so there is still exactly one pipeline in one file.
+              zoom, bgColor, titlePlan, look: lookRef,
           });
       });
   };
@@ -2274,12 +2312,12 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look, adjust: adjust ?? undefined }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
         // SVG is the project file, so it carries the pool that made it.
-        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, look, images);
+        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, lookRef, images);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
         setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 2000);
@@ -2290,7 +2328,7 @@ export default function App() {
   // and Clear (history) each described the project by writing this same literal
   // inline — three chances to drift, and the manifest is exactly where a silent
   // field-omission becomes a wrong answer on reopen. One source of truth now.
-  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
+  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look, adjust: adjust ?? undefined }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
 
   const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
 
@@ -2420,7 +2458,7 @@ export default function App() {
         const ld = loaded.state.layout;
         const ldOwned = ld.countOwned ?? true;
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -2582,7 +2620,7 @@ export default function App() {
     dirtyRef.current = true; // there is now work that isn't on disk
     const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
     return () => window.clearTimeout(t);
-  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
+  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, adjust, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
 
   // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
   // (large) blob is pulled only if the user actually taps Restore. The banner's
@@ -2711,7 +2749,7 @@ export default function App() {
                        zoom={zoom}
                        bgColor={bgColor}
                        titlePlan={titlePlan}
-                       look={look}
+                       look={lookRef}
                        turn={turnScene}
                        pace={pace}
                        move={move}
@@ -2972,7 +3010,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

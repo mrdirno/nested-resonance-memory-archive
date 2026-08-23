@@ -68,7 +68,7 @@ import { takeLength } from '../lib/playhead';
 import { cutPlan, driftPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
-import type { LookId } from '../lib/grade';
+import type { LookRef } from '../lib/grade';
 
 /** The user's raw trim points for one clip. Absent = the whole clip. */
 type TrimMap = Record<string, { inSec: number; outSec: number } | undefined>;
@@ -141,7 +141,7 @@ export interface VideoStageProps {
    * the surface both video recorders capture, so it is also the grade on the
    * delivered file rather than only on the picture on screen.
    */
-  look?: LookId | null;
+  look?: LookRef | null;
   /** Surfaced so the parent can show one consistent notice strip. */
   onNotice?: (msg: string) => void;
   /**

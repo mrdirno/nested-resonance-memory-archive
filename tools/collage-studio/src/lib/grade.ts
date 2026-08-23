@@ -171,8 +171,21 @@ const BY_ID: Record<string, Grade> = LOOKS.reduce(
  * (Contrast the layout index, where element zero is a completely different
  * construction and substituting it is the scar.)
  */
-export const gradeFor = (look: LookId | null | undefined): Grade =>
-  (look && BY_ID[look]) || NO_GRADE;
+export const gradeFor = (look: LookRef | null | undefined): Grade => {
+  if (look && typeof look === 'object') return snapGrade(look);
+  return (look && BY_ID[look]) || NO_GRADE;
+};
+
+/**
+ * WHAT A SURFACE IS HANDED — a roster id, or the five numbers themselves.
+ *
+ * THE DESK (below) makes a grade that is not on the roster, so the thing that
+ * travels to the four surfaces can no longer be an INDEX into a list of eight.
+ * It is either a name they can look up or the grade itself; both are
+ * structured-cloneable, which is what lets the second kind cross to the export
+ * worker's thread unchanged.
+ */
+export type LookRef = LookId | Grade;
 
 // =============================================================================
 // THE PIPELINE
@@ -216,7 +229,7 @@ export const gradeSteps = (g: Grade | null | undefined): GradeStep[] => {
   return out;
 };
 
-export const stepsForLook = (look: LookId | null | undefined): GradeStep[] =>
+export const stepsForLook = (look: LookRef | null | undefined): GradeStep[] =>
   gradeSteps(gradeFor(look));
 
 /**
@@ -252,6 +265,176 @@ const num = (n: number): string => {
 export const GRADE_GRID = 100;
 
 // =============================================================================
+// THE DESK — the eight looks, as four axes anybody can move
+// =============================================================================
+//
+// WHY FOUR AXES AND NOT FIVE SLIDERS
+//   `Grade` is five numbers, and the naive desk is five sliders. Two of them —
+//   `sepia` and `hue` — are not independent quantities a person has an opinion
+//   about; they are the two halves of ONE tonal decision, and the roster already
+//   proves it: `warm` is sepia 0.30 with no rotation and `cool` is sepia 0.70
+//   rotated to 190deg, which are two points on a single axis running through
+//   untoned. A slider marked "hue rotate" over a photograph is a party trick; a
+//   slider running COOL -> WARM is the control people actually reach for, and it
+//   is the one the roster was already using. So the desk is EXPOSURE, CONTRAST,
+//   COLOUR and WARMTH, and `warmth` is bipolar.
+//
+// THE PROOF THAT THE DESK IS A GENERALISATION AND NOT A REPLACEMENT
+//   Every one of the eight roster looks is exactly representable on these four
+//   axes, and `gradeFromDesk(deskFromGrade(g))` returns g field-for-field for
+//   all eight (`Object.is`, not "close"). That is the invariant that makes the
+//   desk safe to open on a graded collage: the first thing a user does is drag
+//   ONE axis, and every other axis must leave the picture exactly where the
+//   preset put it. A desk that only approximated the roster would silently
+//   restate your look the moment you touched it — the same class of defect as
+//   `Math.max(0, indexOf(...))` turning "not representable" into element zero.
+//
+// WHY EVERY DERIVED NUMBER IS SNAPPED, AND WHY THAT IS CORRECTNESS
+//   `num` above is exact at six decimals for a stated reason: a sepia term is a
+//   three-decimal constant times the amount plus a three-decimal constant, so an
+//   amount on the two-decimal `GRADE_GRID` yields at most five decimals. That
+//   argument is a property of the ROSTER being hand-written on the grid. The
+//   moment a desk computes an amount (warmth 0.1 x 0.6 is 0.06000000000000001
+//   in binary floating point) the guarantee is gone, and the cost is not
+//   cosmetic: it lands as a difference between the exported SVG and the exported
+//   JPEG of the same collage, which is the one thing this file exists to
+//   prevent. So the grid is enforced on the way IN — exactly as `snapRoll` does
+//   for the composition sliders, and for exactly the same reason: quantising is
+//   only lossless if the state is already on the grid.
+
+/** The four axes, as the quantities a person has an opinion about. */
+export interface Desk {
+  /** Exposure. 1 = as shot. -> `brightness` */
+  exposure: number;
+  /** The curve. 1 = as shot. -> `contrast` */
+  contrast: number;
+  /** How much colour there is. 1 = as shot, 0 = grey. -> `saturate` */
+  colour: number;
+  /** Bipolar tone. 0 = untoned, +1 = fully warm, -1 = fully cool. -> `sepia` + `hue` */
+  warmth: number;
+}
+
+/** The desk at rest. `gradeFromDesk(NO_DESK)` is `NO_GRADE`, so it is a no-op. */
+export const NO_DESK: Desk = { exposure: 1, contrast: 1, colour: 1, warmth: 0 };
+
+/**
+ * The two ends of the warmth axis, taken from the roster rather than invented:
+ * `warm` IS sepia 0.30 (warmth +0.5) and `cool` IS sepia 0.70 at 190deg
+ * (warmth -1). Changing either constant moves two shipped looks, which is why
+ * the round-trip invariant is swept rather than assumed.
+ */
+const WARM_SEPIA = 0.6;
+const COOL_SEPIA = 0.7;
+const COOL_HUE = 190;
+
+/**
+ * THE ROSTER OF AXES — the one list the UI, the codec and the sweep all read.
+ *
+ * `min`/`max` are the reachable range and `mid` is the value that means "as
+ * shot"; the codec's field width is derived from the range (see `diceRoll.ts`),
+ * so widening a range here is a change to the code format and the sweep says so.
+ */
+export const DESK_AXES: { key: keyof Desk; label: string; min: number; max: number; mid: number; hint: string }[] = [
+  { key: 'exposure', label: 'EXPOSURE', min: 0.6, max: 1.6, mid: 1, hint: 'Brighter or darker, overall.' },
+  { key: 'contrast', label: 'CONTRAST', min: 0.6, max: 1.6, mid: 1, hint: 'How far the darks and lights pull apart.' },
+  { key: 'colour',   label: 'COLOUR',   min: 0,   max: 2,   mid: 1, hint: 'All the way down is black and white.' },
+  { key: 'warmth',   label: 'WARMTH',   min: -1,  max: 1,   mid: 0, hint: 'Cool blue one way, golden the other.' },
+];
+
+const AXIS_BY_KEY = DESK_AXES.reduce((a, x) => { a[x.key] = x; return a; },
+  {} as Record<keyof Desk, typeof DESK_AXES[number]>);
+
+/** One value, clamped into its axis and put on the grid. */
+const snapAxis = (key: keyof Desk, v: number): number => {
+  const ax = AXIS_BY_KEY[key];
+  const n = typeof v === 'number' && Number.isFinite(v) ? v : ax.mid;
+  const c = Math.max(ax.min, Math.min(ax.max, n));
+  return Math.round(c * GRADE_GRID) / GRADE_GRID;
+};
+
+/** A desk, clamped and on the grid. Idempotent — the sweep holds it to that. */
+export const snapDesk = (d: Desk | null | undefined): Desk => {
+  const src = d || NO_DESK;
+  return {
+    exposure: snapAxis('exposure', src.exposure),
+    contrast: snapAxis('contrast', src.contrast),
+    colour: snapAxis('colour', src.colour),
+    warmth: snapAxis('warmth', src.warmth),
+  };
+};
+
+/** A grade on the grid. `hue` is whole degrees; the other four are 1/100ths. */
+export const snapGrade = (g: Grade | null | undefined): Grade => {
+  const src = g || NO_GRADE;
+  const q = (n: number, id: number) =>
+    (typeof n === 'number' && Number.isFinite(n) ? Math.round(n * GRADE_GRID) / GRADE_GRID : id);
+  return {
+    brightness: q(src.brightness, 1),
+    contrast: q(src.contrast, 1),
+    saturate: q(src.saturate, 1),
+    sepia: q(src.sepia, 0),
+    hue: Number.isFinite(src.hue) ? Math.round(src.hue) : 0,
+  };
+};
+
+/** The four axes, as the five numbers the pipeline understands. */
+export const gradeFromDesk = (d: Desk | null | undefined): Grade => {
+  const s = snapDesk(d);
+  const w = s.warmth;
+  const sepia = w === 0 ? 0
+    : Math.round(Math.abs(w) * (w > 0 ? WARM_SEPIA : COOL_SEPIA) * GRADE_GRID) / GRADE_GRID;
+  return {
+    brightness: s.exposure,
+    contrast: s.contrast,
+    saturate: s.colour,
+    sepia,
+    hue: w < 0 && sepia > 0 ? COOL_HUE : 0,
+  };
+};
+
+/**
+ * The five numbers, back to four axes — or `null` when they are not on them.
+ *
+ * `null` is the honest answer for a grade this desk cannot express (a
+ * hand-edited project file toned at 45deg, say). It is NOT reachable from
+ * anything this app mints: every grade in the app comes from the roster or from
+ * `gradeFromDesk`, and both are total here. Callers seed a desk with
+ * `deskForLook`, which falls back to `NO_DESK` rather than guessing.
+ */
+export const deskFromGrade = (g: Grade | null | undefined): Desk | null => {
+  const s = snapGrade(g);
+  let warmth: number;
+  if (s.sepia <= 0) {
+    // No tone at all. A rotation with nothing to rotate is off the axis.
+    if (s.hue !== 0) return null;
+    warmth = 0;
+  } else if (s.hue === 0) {
+    warmth = Math.round((s.sepia / WARM_SEPIA) * GRADE_GRID) / GRADE_GRID;
+  } else if (s.hue === COOL_HUE) {
+    warmth = -(Math.round((s.sepia / COOL_SEPIA) * GRADE_GRID) / GRADE_GRID);
+  } else {
+    return null;
+  }
+  const out = { exposure: s.brightness, contrast: s.contrast, colour: s.saturate, warmth };
+  // Off-axis by RANGE is as unrepresentable as off-axis by shape: clamping here
+  // would return a desk whose grade is a different picture from the one handed in.
+  const back = snapDesk(out);
+  return (back.exposure === out.exposure && back.contrast === out.contrast
+    && back.colour === out.colour && back.warmth === out.warmth) ? back : null;
+};
+
+/** The desk a roster look sits at. Total for all eight — asserted in the sweep. */
+export const deskForLook = (look: LookId | null | undefined): Desk =>
+  deskFromGrade(gradeFor(look)) || NO_DESK;
+
+/** Field-for-field equality, so "is this still the preset" is one call. */
+export const sameDesk = (a: Desk | null | undefined, b: Desk | null | undefined): boolean => {
+  if (!a || !b) return !a && !b;
+  return a.exposure === b.exposure && a.contrast === b.contrast
+    && a.colour === b.colour && a.warmth === b.warmth;
+};
+
+// =============================================================================
 // EMITTER 1 — CANVAS (preview, Stage, export worker)
 // =============================================================================
 
@@ -277,11 +460,11 @@ export const cssFilterForSteps = (steps: GradeStep[]): string => {
  * property of the PHOTOGRAPHS, not of the frame around them: the background is
  * a colour the user picked and a caption is not part of the picture.
  */
-export const cssFilterFor = (look: LookId | null | undefined): string =>
+export const cssFilterFor = (look: LookRef | null | undefined): string =>
   cssFilterForSteps(stepsForLook(look));
 
 /** True when this look draws exactly what an ungraded build draws. */
-export const isNoOp = (look: LookId | null | undefined): boolean =>
+export const isNoOp = (look: LookRef | null | undefined): boolean =>
   stepsForLook(look).length === 0;
 
 // =============================================================================
@@ -346,7 +529,7 @@ const svgPrimitive = (s: GradeStep): string => {
  * and the exported SVG is a different grade from the exported JPEG of the same
  * collage.
  */
-export const svgFilterFor = (look: LookId | null | undefined, id = SVG_FILTER_ID): string => {
+export const svgFilterFor = (look: LookRef | null | undefined, id = SVG_FILTER_ID): string => {
   const steps = stepsForLook(look);
   if (steps.length === 0) return '';
   return `<filter id="${id}" color-interpolation-filters="sRGB" `
@@ -356,5 +539,5 @@ export const svgFilterFor = (look: LookId | null | undefined, id = SVG_FILTER_ID
 };
 
 /** The attribute that hangs the filter on the collage group. `''` for no-op. */
-export const svgFilterAttrFor = (look: LookId | null | undefined, id = SVG_FILTER_ID): string =>
+export const svgFilterAttrFor = (look: LookRef | null | undefined, id = SVG_FILTER_ID): string =>
   (stepsForLook(look).length === 0 ? '' : ` filter="url(#${id})"`);

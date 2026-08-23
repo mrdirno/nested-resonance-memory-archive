@@ -308,8 +308,32 @@ test.describe('the look', () => {
     expect(meanChroma(seen.mono), 'mono must be colourless').toBeLessThan(6);
     expect(meanChroma(seen.noir), 'noir must be colourless').toBeLessThan(6);
     expect(contrastSpread(seen.noir), 'noir must steepen the curve').toBeGreaterThan(baseSpread + 2);
-    expect(warmth(seen.warm), 'warm must be warm').toBeGreaterThan(baseWarmth + 5);
-    expect(warmth(seen.cool), 'cool must be cool').toBeLessThan(baseWarmth - 5);
+    // WARM AND COOL ARE MEASURED AGAINST EACH OTHER, not against the ungraded
+    // frame — and that is a correction, not a weakening. Every other claim above
+    // is MULTIPLICATIVE on whatever the deal contains (saturate scales the
+    // chroma that is there, contrast scales the spread that is there), so a base
+    // offset cannot flip it. A TONE is not: sepia washes the picture's own hues
+    // out before the rotation turns what is left, so `cool` lands near a fixed
+    // R-B regardless of what it started from — and on a deal that dealt itself
+    // blue (this fixture's own base R-B has been measured from -9.7 to +9.7
+    // across runs, and the tail is wider) `cool < base - 5` is arithmetic about
+    // the RANDOM DEAL rather than about the grade. Caught in C3647 by the desk's
+    // own axis test failing on exactly this, one run in eight.
+    // The three claims below are each robust to the deal, and each for its own
+    // reason. `warm` is a 30% BLEND toward a matrix whose output R-B is positive
+    // for any input, so it can only raise R-B — measured at +14 over the
+    // ungraded frame on deals whose own cast ranged from -17 to +10, and that
+    // shift is the claim rather than a threshold. `cool` runs saturate 0.30
+    // BEFORE its tone, so only 9% of the picture's own cast survives to compete
+    // with a strong cool tone: its output is negative whatever it started from.
+    // And the two ends being far apart is a claim about the axis, not the deal.
+    // NOTE what is deliberately NOT asserted: that `warm`'s OUTPUT is positive.
+    // At 30% tone it is not, on a deal that dealt itself blue (measured -2.6
+    // against a base of -16.8) — the roster's warm is a lean, not a wash.
+    const warmCast = warmth(seen.warm), coolCast = warmth(seen.cool);
+    expect(warmCast - baseWarmth, 'warm must lean warm').toBeGreaterThan(5);
+    expect(coolCast, 'cool must land cool whatever it started from').toBeLessThan(0);
+    expect(warmCast - coolCast, 'warm and cool must be far apart').toBeGreaterThan(15);
 
     // AND NO TWO CHIPS MAY BE THE SAME GRADE. A roster with a duplicate looks
     // fine one chip at a time and is a broken picker.
@@ -427,9 +451,12 @@ test.describe('the look', () => {
 
       // Every chip is reachable and big enough for a thumb, and none of them
       // spills out of the dock that holds them.
+      // NINE since THE DESK: the eight looks and the ADJUST door beside them.
+      // The count is asserted rather than "at least eight" on purpose — a chip
+      // that quietly appears in this row is a chip nobody measured at 320px.
       const chips = page.locator('[data-testid^="look-"]');
       const n = await chips.count();
-      expect(n).toBe(8);
+      expect(n).toBe(9);
       const dock = await page.locator('.ui-looks').first().boundingBox();
       expect(dock).not.toBeNull();
       for (let i = 0; i < n; i++) {

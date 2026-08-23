@@ -36,7 +36,7 @@
 
 import type { LayoutMode, PrimitiveType } from '../types';
 import type { ArrangementId, FocusId, TwistId } from './composition';
-import type { LookId } from './grade';
+import type { Desk, LookId } from './grade';
 import type { MoveId } from './motion';
 import type { TurnId } from './turn';
 import type { PaceId } from './pace';
@@ -70,6 +70,18 @@ export interface CompositionState {
    * not the same collage, which is why that one stays out.
    */
   look: LookId;
+  /**
+   * THE DESK — the grade as four axes, when the user has moved one off the
+   * preset. `null` is the ordinary case and means the look above IS the grade.
+   *
+   * In the code for the reason the look is, only more so: a custom grade is the
+   * most recipe-shaped thing in the app — four numbers that describe a picture
+   * anybody can rebuild with their own photographs. Leaving it out would mint a
+   * code that decodes to the PRESET the user started from, which is a different
+   * picture arriving under the same name, silently. (Contrast the title and the
+   * fade, which are facts about YOUR render.)
+   */
+  adjust: Desk | null;
   /**
    * THE MOVE — how the picture drifts inside its fragment. In the code for the
    * same reason the look is: "these fragments, dealt this way, leaning this
@@ -128,6 +140,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   focus: s.focus,
   twist: s.twist,
   look: s.look,
+  desk: s.adjust,
   move: s.move,
   turn: s.turn,
   pace: s.pace,
@@ -152,6 +165,11 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   // described was ungraded — so the absence maps to `none` rather than to a
   // missing value the UI would have to defend against.
   look: r.look ?? 'none',
+  // Absent means "the look above is the grade" — every Roll built before this
+  // field existed described a collage on one of the eight, so the absence maps
+  // to `null` rather than to a neutral desk. The difference is not cosmetic: a
+  // materialised desk would show CUSTOM in the UI for a code that is a preset.
+  adjust: r.desk ?? null,
   // Absent means `still` — a Roll built before this field existed described a
   // collage that did not move, so the absence maps to the no-op rather than to
   // a missing value the UI would have to defend against.

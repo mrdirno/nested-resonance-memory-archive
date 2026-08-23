@@ -45,7 +45,7 @@ const load = async (rel, tag) => {
 const { PACE_IDS, PACES, paceRate, isPaced, paceTime } = await load('src/lib/pace.ts', 'pace');
 const { TURN_IDS, TURN_FADE_SEC, NO_TURN, turnAt, turnHoldSec } = await load('src/lib/turn.ts', 'turn');
 const { MOVE_IDS, MOVE_CYCLE_SEC, NO_MOVE, sampleMove } = await load('src/lib/motion.ts', 'motion');
-const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_MAX } = await load('src/lib/diceRoll.ts', 'dice');
+const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_PLAIN } = await load('src/lib/diceRoll.ts', 'dice');
 
 let failures = 0;
 const results = [];
@@ -324,7 +324,7 @@ const realAt = (id, t, rate) => turnAt(id, paceTime(rate, t));
       checked++;
       if (!back) { bad = `refused its own output: ${code}`; break; }
       if (back.pace !== p) { bad = `${p} came back as ${back.pace}`; break; }
-      if (code.split('-')[1].length !== MINTED_GROUP_MAX) { bad = `group is ${code.split('-')[1].length} characters, expected ${MINTED_GROUP_MAX}`; break; }
+      if (code.split('-')[1].length !== MINTED_GROUP_PLAIN) { bad = `group is ${code.split('-')[1].length} characters, expected ${MINTED_GROUP_PLAIN}`; break; }
       for (const k of ['layout', 'primitive', 'count', 'countOwned', 'entropy', 'aspect',
                        'gutter', 'zoom', 'bg', 'arrangement', 'focus', 'twist', 'look', 'move', 'turn', 'seed']) {
         if (JSON.stringify(back[k]) !== JSON.stringify(r[k] ?? back[k])) { bad = `field ${k} moved`; break; }
@@ -333,7 +333,7 @@ const realAt = (id, t, rate) => turnAt(id, paceTime(rate, t));
     }
     if (bad) break;
   }
-  ok(`I8  every pace survives the round trip in a ${MINTED_GROUP_MAX}-character group`, bad === null,
+  ok(`I8  every pace survives the round trip in a ${MINTED_GROUP_PLAIN}-character group`, bad === null,
     bad ?? `${checked} codes`);
 }
 

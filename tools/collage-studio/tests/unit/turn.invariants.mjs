@@ -45,7 +45,7 @@ const {
   turnAt, assignmentAt, isTurning, turnHoldSec, scatterStride,
 } = await load('src/lib/turn.ts', 'turn');
 
-const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_MAX } = await load('src/lib/diceRoll.ts', 'dice');
+const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_PLAIN } = await load('src/lib/diceRoll.ts', 'dice');
 
 let failures = 0;
 const results = [];
@@ -315,7 +315,7 @@ const rngOf = (seed) => {
     // DERIVED from the codec, never a literal — see the same note in
     // motion.invariants.mjs. THE PACE broke this line and its two siblings at
     // once, which is what a shared constant is for.
-    if (b.length !== MINTED_GROUP_MAX) { bad = `minted group length ${b.length}, expected ${MINTED_GROUP_MAX}`; break; }
+    if (b.length !== MINTED_GROUP_PLAIN) { bad = `minted group length ${b.length}, expected ${MINTED_GROUP_PLAIN}`; break; }
     const legacyBody = b.slice(0, 18);              // 15 fixed + owned + look + move
     const legacy = `${a}-${legacyBody}${checksum(a + legacyBody + c)}-${c}`.toUpperCase();
     const back = decodeRoll(legacy, '');

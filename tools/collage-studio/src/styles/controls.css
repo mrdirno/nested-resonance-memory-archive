@@ -962,6 +962,22 @@
   min-width: 0;
 }
 
+/* --- THE DESK (the LOOK row's four axes, disclosed) -----------------------
+   A stack rather than a grid: four labelled 44px ranges is exactly the shape
+   the Chaos field already has, and repeating it costs the reader nothing to
+   learn. `border-top` rather than a card, because the panel belongs to the chip
+   row above it and a second box would read as a second control.            */
+.ui-desk {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-1);
+}
+.ui-desk__reset { align-self: flex-start; }
+
 .ui-titler {
   display: flex;
   flex-direction: column;

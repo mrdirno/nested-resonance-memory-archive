@@ -70,7 +70,7 @@ import { GENERATORS, GENERATOR_BY_ID } from '../engine/geom/generators';
 import {
   ARRANGEMENT_IDS, FOCUS_IDS, TWIST_IDS, type ArrangementId, type FocusId, type TwistId,
 } from './composition';
-import { LOOK_IDS, type LookId } from './grade';
+import { LOOK_IDS, DESK_AXES, snapDesk, type LookId, type Desk } from './grade';
 import { MOVE_IDS, type MoveId } from './motion';
 import { TURN_IDS, type TurnId } from './turn';
 import { PACE_IDS, type PaceId } from './pace';
@@ -134,6 +134,22 @@ export interface Roll {
    * which is the tempo those rolls were written at.
    */
   pace?: PaceId;
+  /**
+   * THE DESK — the colour grade as four axes, when it is NOT one of the eight.
+   * See lib/grade.ts.
+   *
+   * `null`/absent is the ordinary case and means "the look named above is the
+   * grade", which is exactly what every Roll minted before this field existed
+   * described. Present means the user moved an axis off its preset, and then
+   * this is the grade in force and `look` is only where they started.
+   *
+   * IT IS IN THE CODE AND NOT IN THE DICE, for the reason the look IS in both:
+   * a grade is part of a recipe, so it has to travel — but the dice deal a
+   * ROSTER, and a roster pick is the whole point of a die. A roll therefore
+   * clears the desk (`handleDice`), which is a destructive composition event
+   * and is on the undo stack with the rest of them.
+   */
+  desk?: Desk | null;
   /**
    * THE BEAT — whether the cuts snap to the music's grid. See lib/beat.ts.
    *
@@ -836,6 +852,13 @@ export const snapRoll = (r: Roll): Roll => ({
   // The seed is the LAST field of the LAST group, so it is the one value that
   // may grow: `Date.now()` needs eight characters and MAX_SAFE_INTEGER ten.
   seed: Math.max(0, Math.round(r.seed)),
+  // THE SAME ARGUMENT AS `entropy` AND `gutter`, one roster out: the desk's four
+  // axes are quantised into two base-36 characters each on the way out, and
+  // quantising is only lossless if the state is already on the grid. `snapDesk`
+  // also CLAMPS to each axis's range, which is what keeps a hand-edited project
+  // from minting a code whose field overflows its width — the `count` scar,
+  // which is written out directly above this line.
+  desk: r.desk ? snapDesk(r.desk) : null,
 });
 
 /** 36^3 - 1: the largest fragment count three base-36 characters can hold. */
@@ -985,7 +1008,22 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  const body = mid + owned + look + move + turn + pace + sync;
+  /**
+   * THE DESK, as four fixed-width fields — and only when there IS one.
+   *
+   * Each axis travels as hundredths of its own range's offset from `min`, which
+   * is what keeps every axis inside two base-36 characters (the widest is
+   * `colour`, 0..2.00 = 0..200, against a 1,295 ceiling) while staying on the
+   * two-decimal grid `snapDesk` puts the state on. An ABSENT desk emits nothing
+   * at all, so a collage on one of the eight looks mints the exact 21-character
+   * group this codec has minted since THE BEAT — which is what makes the
+   * feature free for every code that does not use it.
+   */
+  const dk = r.desk ? snapDesk(r.desk) : null;
+  const desk = dk
+    ? DESK_AXES.map((ax) => fw(Math.round((dk[ax.key] - ax.min) * 100), 2)).join('')
+    : '';
+  const body = mid + owned + look + move + turn + pace + sync + desk;
   return `${head}-${body}${checksum(head + body + seed + extra)}-${seed}`.toUpperCase();
 };
 
@@ -1026,11 +1064,18 @@ const CHECK_LEN = 2;
 export const MINTED_GROUP_LENGTHS = new Set([
   16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN, 19 + CHECK_LEN, 20 + CHECK_LEN,
   21 + CHECK_LEN,
+  // THE DESK is the first generation to add more than one character: four axes,
+  // two base-36 characters each, so 21 -> 29 with nothing minted in between.
+  // That gap is a FEATURE of reading by length — 22..28 is a desk code that lost
+  // characters in transit, and the set refuses it instead of slicing a shorter
+  // body out of it and opening somebody else's collage.
+  29 + CHECK_LEN,
 ]);
 
 /**
- * THE LENGTH THIS BUILD MINTS — the newest generation, derived rather than
- * written down.
+ * THE LONGEST GROUP THIS BUILD MINTS — the newest generation, derived rather
+ * than written down. See `MINTED_GROUP_PLAIN` below for the length a collage
+ * on one of the eight looks actually gets: since THE DESK the two differ.
  *
  * Exported because three sibling sweeps (grade, motion, turn) each carried
  * their own literal for it, and adding THE PACE broke all three at once with
@@ -1041,6 +1086,25 @@ export const MINTED_GROUP_LENGTHS = new Set([
  * every sweep follows.
  */
 export const MINTED_GROUP_MAX = Math.max(...MINTED_GROUP_LENGTHS);
+
+/**
+ * THE LENGTH THIS BUILD MINTS FOR A COLLAGE ON ONE OF THE EIGHT LOOKS.
+ *
+ * Until THE DESK every generation added a field that EVERY roll carries, so
+ * "the newest generation" and "what this build mints" were one number and
+ * `MINTED_GROUP_MAX` was both. The desk is the first OPTIONAL group: present
+ * only when the user moved an axis off its preset, absent otherwise — which is
+ * what keeps a code for a roster look byte-identical to the code this app has
+ * minted since THE BEAT.
+ *
+ * So there are now two facts and they need two names. Five sibling sweeps
+ * (grade, motion, turn, pace, beat) assert "the code I just minted is the
+ * current generation" while minting rolls with no desk; this is the constant
+ * that claim is actually about. Derived from the max minus the desk's own
+ * width, so adding a ninth generation still moves both together.
+ */
+export const DESK_CHARS = DESK_AXES.length * 2;
+export const MINTED_GROUP_PLAIN = MINTED_GROUP_MAX - DESK_CHARS;
 const checksum = (body: string): string => {
   let h = 7;
   for (let i = 0; i < body.length; i++) {
@@ -1121,7 +1185,19 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // every code ever minted still decodes byte-identically.
     const hasSync = b.length >= 21 + CHECK_LEN;
     const syi = hasSync ? n(b.slice(20, 21)) : 0;
-    const bodyLen = hasSync ? 21 : hasPace ? 20 : hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
+    // THE DESK sits after the beat and before the checksum, entering the band by
+    // `>=` for exactly the reason the five fields above it do — but it is EIGHT
+    // characters rather than one, so the band it opens is 29 and 22..28 belong
+    // to no generation. A group in that gap is a damaged desk code and is
+    // refused by `MINTED_GROUP_LENGTHS` below rather than read as a shorter one.
+    const hasDesk = b.length >= 29 + CHECK_LEN;
+    const desk = hasDesk
+      ? snapDesk(DESK_AXES.reduce((acc, ax, i) => {
+          acc[ax.key] = ax.min + n(b.slice(21 + i * 2, 23 + i * 2)) / 100;
+          return acc;
+        }, {} as Desk))
+      : null;
+    const bodyLen = hasDesk ? 29 : hasSync ? 21 : hasPace ? 20 : hasTurn ? 19 : hasMove ? 18 : hasLook ? 17 : 16;
     if (b.length >= 16) {
       /**
        * A CHECKSUMMED GROUP IS ONE OF THE LENGTHS THIS PROJECT HAS MINTED, OR
@@ -1209,6 +1285,12 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       turn,
       pace,
       sync,
+      // ABSENT stays absent rather than becoming NO_DESK: a null desk means "the
+      // look above is the grade", and materialising a neutral desk would flip
+      // every legacy code from a roster look into a CUSTOM one that happens to
+      // paint the same pixels — the code would still open the right picture and
+      // the UI would lie about where it came from.
+      desk,
       seed,
     };
   } catch {

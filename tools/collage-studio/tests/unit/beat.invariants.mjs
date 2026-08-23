@@ -56,7 +56,7 @@ const {
 const { TURN_IDS, TURN_FADE_SEC, TURN_FADE_RATIO, NO_TURN, turnAt, turnHoldSec, turnFadeFor, MAX_TURN_INDEX } =
   await load('src/lib/turn.ts', 'turn');
 const { PACE_IDS, paceRate } = await load('src/lib/pace.ts', 'pace');
-const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_LENGTHS, MINTED_GROUP_MAX } =
+const { encodeRoll, decodeRoll, rollDice, MINTED_GROUP_LENGTHS, MINTED_GROUP_PLAIN } =
   await load('src/lib/diceRoll.ts', 'dice');
 
 let failures = 0;
@@ -499,9 +499,9 @@ const clicks = (bpm, seconds, { offset = 0, swingOffbeat = 0, noise = 0, seed = 
   // The group grew by exactly one, and the set knows it.
   const sample = encodeRoll({ ...rollDice({ rnd: r }), sync: 'beat' });
   const mid = sample.split('-')[1];
-  ok('I11b the minted group is MINTED_GROUP_MAX and the codec accepts its own output',
-    mid.length === MINTED_GROUP_MAX && MINTED_GROUP_LENGTHS.has(mid.length) && !!decodeRoll(sample),
-    `group ${mid.length}, max ${MINTED_GROUP_MAX}`);
+  ok('I11b the minted group is MINTED_GROUP_PLAIN and the codec accepts its own output',
+    mid.length === MINTED_GROUP_PLAIN && MINTED_GROUP_LENGTHS.has(mid.length) && !!decodeRoll(sample),
+    `group ${mid.length}, plain ${MINTED_GROUP_PLAIN}`);
 
   // EVERY EARLIER GENERATION STILL OPENS, BYTE-IDENTICALLY. Rebuilt by lopping
   // the trailing field characters off a freshly minted body and re-deriving the

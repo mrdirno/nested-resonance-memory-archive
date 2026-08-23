@@ -46,7 +46,7 @@ import { turnAt, assignmentAt, isTurning, NO_TURN, turnFadeFor, type TurnSchedul
 import { isMoving } from './motion';
 import { paceTime } from './pace';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
-import { cssFilterFor, type LookId } from './grade';
+import { cssFilterFor, type LookRef } from './grade';
 import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
   type ClipWindow, type WindowedPlayback,
@@ -156,7 +156,12 @@ export interface StageSceneInput {
    * is what both video recorders capture, so this is also the grade on the
    * delivered MP4/WebM.
    */
-  look?: LookId | null;
+  /**
+   * The grade: a roster id, or the five numbers themselves once THE DESK is in
+   * force. Both are structured-cloneable, which is what lets the second kind
+   * reach the export worker's thread unchanged.
+   */
+  look?: LookRef | null;
   /** Override the per-scene caps (defaults come from `StageOptions` / `detectStageCaps`). */
   maxLiveClips?: number;
   maxLivePixels?: number;

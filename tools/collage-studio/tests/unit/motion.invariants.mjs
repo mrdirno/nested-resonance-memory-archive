@@ -60,7 +60,7 @@ const {
 } = await load('src/lib/motion.ts', 'motion');
 
 const { calculateSmartCrop } = await load('src/lib/renderer.ts', 'renderer');
-const { encodeRoll, decodeRoll, rollDice, snapRoll, MINTED_GROUP_MAX } = await load('src/lib/diceRoll.ts', 'dice');
+const { encodeRoll, decodeRoll, rollDice, snapRoll, MINTED_GROUP_PLAIN } = await load('src/lib/diceRoll.ts', 'dice');
 
 let failures = 0;
 const results = [];
@@ -463,8 +463,8 @@ const anaFor = (twist, moveSpec) => ({
   let bad = null;
   // DERIVED from the codec, never a literal: this line carried `21`, its
   // siblings in grade/turn carried the same number, and THE PACE broke all
-  // three at once. `MINTED_GROUP_MAX` is what this build actually mints.
-  if (b.length !== MINTED_GROUP_MAX) bad ??= `expected a ${MINTED_GROUP_MAX}-character middle group, got ${b.length}`;
+  // three at once. `MINTED_GROUP_PLAIN` is what this build mints for a roll with no desk.
+  if (b.length !== MINTED_GROUP_PLAIN) bad ??= `expected a ${MINTED_GROUP_PLAIN}-character middle group, got ${b.length}`;
 
   // Rebuild the 19-character (pre-move) form by re-deriving its checksum the
   // way the old encoder did: over head + the 17 body characters + seed.
