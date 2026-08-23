@@ -843,18 +843,44 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
    **The re-pitch condition, falsifiable and small:** three-to-five words with zero coverage
    anywhere, added to an **existing** surface, attempted only after the cross-trade hole below
    is closed. Not a fourth surface, and not until that has been tried.
-   **THE HOLE THE PANEL FOUND INSTEAD, and the named next rung on this axis:**
-   `shared/docspec.js` is **trade-siloed by construction**. Every `write-up.html` loads its own
-   trade's `docs.js` and nothing else, and `docspec.js` reads one global (`window.TRADE_DOCS`),
-   so an AV tech who only knows *"punch list reply"* from a framing background gets nothing —
-   that alias lives in `framing/docs.js` and is invisible on every other trade's page. **That is
-   the same defect this cycle fixed one layer out**, and it is the same failure `names.js`'s own
-   header names as its reason to exist: a man gets handed a word by somebody from another trade.
-   The commons solved it (`commons.js` §THE HAND-OFF, *"Every trade searched, not just the one
-   you picked — you heard it off somebody else"*); `docspec.js` never got the same treatment,
-   despite being the older and more heavily used system. Fix it the way the commons did — a
-   lightweight cross-reference on the graceful-failure path, off the same `shared/find.js` —
-   never by loading ten trades' `TRADE_DOCS` onto every page.
+   ~~**THE HOLE THE PANEL FOUND INSTEAD, and the named next rung on this axis:**
+   `shared/docspec.js` is trade-siloed by construction … an AV tech who only knows "punch list
+   reply" from a framing background GETS NOTHING.~~ **STRUCK 2026-08-23, and struck with what it
+   taught rather than a checkmark.** Half of it shipped as `shared/docsindex.js`; the other half
+   was killed 3–0 by a judge panel, and BOTH halves corrected the rung as written:
+   - **"Gets nothing" was false.** 9,529 searches driven through the real box: **zero dead ends**
+     (§SCARS). `find.js` never returns nothing — the rung had been filed in the shape of the
+     commons tips surface it was isomorphed from, and that surface's defect did not survive the
+     crossing. The real one was a **confident wrong document**: 1,083 for a document his own
+     library was HOLDING, 512 of them unhedged.
+   - **WHAT SHIPPED — the pooled vocabulary, and the reason it is safe is the reason it is
+     small.** Eight documents live on all thirteen trades and every trade RENAMED them
+     (`delay-notice`: 7 names). `shared/docsindex.js` unions every name and `aka` anybody wrote
+     and adds them ONLY to trades that already carry that document, so it can never introduce a
+     document and the **57 single-trade documents can never push a word anywhere**. Rails: one
+     meaning rack-wide (engine's own normalizer), a near-name quarantine (`"not us"`/`"notes"`,
+     `"what we said"`/`"what we laid"`), 2+ carriers, and a deploy that regenerates and refuses a
+     diff. Result 1,083 → 36 · unhedged 512 → 23.
+   - **WHAT WAS REFUSED, on mechanism — the cross-trade HAND-OFF the rung above actually
+     describes.** Routing a man to the trade that owns a document his own kit does not carry
+     targets the bigger number (5,644) and was scored **5 / 1 / 2**. It cannot be built here,
+     and the reason is not taste: **every block introduces the reader in the OWNING trade's
+     words** — sitework's A Line Got Hit opens *"I am the foreman who was on the machine or in
+     the hole; we do sitework and underground utility work."* Today he gets a wrong document in
+     his own voice and rejects it in seconds; routed, he gets a plausible document in the wrong
+     voice that he asked for by name. Whether **this** man may author **this** document depends
+     on his licence and his subcontract, which a client-side static page will never hold. **The
+     re-pitch condition, falsifiable:** it becomes buildable the day a document declares itself
+     trade-neutral in its own data (an authored `portable` flag, not a derived one) AND the
+     ROUTER line stops naming the owning trade — until then the honest version is TEXT naming
+     the trade that writes it, never a link to the instrument.
+   - **THE NAMED NEXT RUNG IS ONE LAYER DOWN AGAIN, and it is not a COMMONS rung.**
+     `find.js` sets `mode = "exact"` when every LIVE query token was covered, **not when the
+     match was strong**, so a query matching only the `why` prose at weight 2 is handed over with
+     no *"Closest to"* on it. That single mechanism causes all **3,161** remaining unhedged wrong
+     answers on this surface, and it lives in the engine **all 16 search surfaces share** — the
+     commons three included. Two of the three panel lenses ranked fixing it ABOVE both halves of
+     this rung.
 
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
@@ -1508,6 +1534,46 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A BUILD THAT FINISHED ON DISK IS NOT A SHIP, AND ITS OWN COMMENT WILL TELL YOU IT WAS
+  (2026-08-23).** `sitework/docs.js` (40KB, 15 documents) and `sitework/write-up.html` were
+  written by a concurrent peer session at 13:07 and never committed. That session then wrote
+  into `sitework/tools.js`: *"SHIPPED 2026-08-22 … it closed the DOCS axis: thirteen trades,
+  thirteen libraries, none left owed."* The peer died before `git add`. Eleven hours later the
+  live URL was **404**, the book's previous entry said the axis had reached the last trade, and
+  the bump's own LIVE STATE line — which reads `tools.js` off DISK — counted **98 tools when the
+  artifact served 97**. Every instrument in the loop agreed with the file that was never pushed.
+  The rule: **a registry line is a claim about the artifact, so check it against the artifact.**
+  Sweep every trade's `tools.js` and curl every `href` against the live site — 13 trades, 98
+  pages, derived from disk, never a typed list. It is the only check that can see this class,
+  because the page, the registry, the gates and the book all live on the same side of the push.
+  Sweeping the wells for a dead cycle's CLAIM was already doctrine; a dead cycle's BUILD needed
+  its own instrument.
+
+- **THE ROSTER PREDICTED THE WRONG FAILURE MODE, AND THE PREDICTION WAS THE OLD FIX'S SHAPE
+  (2026-08-23).** The named next COMMONS rung read: *"`shared/docspec.js` is trade-siloed, so a
+  man who knows 'punch list reply' from framing GETS NOTHING on any other trade's write-up."*
+  Measured through the real search box, 733 unambiguous terms × 13 trades = **9,529 searches:
+  ZERO dead ends.** `shared/find.js` never returns nothing — that is rule 2 of its own header,
+  written eight days earlier. The rung had been filed in the shape of the surface it was
+  isomorphed FROM (the commons tips page, which really did dead-end), and the shape did not
+  survive the crossing. The real failure was the opposite and worse: a **confident wrong
+  document**. The rule: **a rung inherited from a sibling surface names a HYPOTHESIS, not a
+  defect — re-measure it on the surface you are about to change before you design the fix**,
+  because a fix aimed at a dead end does nothing about a confident answer.
+
+- **A NUMBER THAT IS A FUNCTION OF THE SCHEMA IS NOT A MEASUREMENT (2026-08-23).** This cycle
+  took "**70.6% of searches return a confidently wrong document**" to its own judge panel. The
+  refute lens killed it with arithmetic: 5,644 of the 6,727 misses are queries naming a document
+  the reader's trade does not carry, and that cell equals Σ(13 − k) over terms — **a closed form
+  in "57 of 69 documents live on one trade", computable without running a single search.** It
+  measures the library's SHAPE, not the search's quality, and it carried 84% of the claimed
+  failure mass. Worse, the label was wrong too: the page already prints *"Closest to …"* on an
+  approximate hit, so only **3,360** of the misses were handed over unhedged. The honest pair,
+  and the only two numbers this book should quote: the **in-library miss rate, 1,083 / 3,885 =
+  27.9%**, and its unhedged half, **512**. The rule: **before a headline number leaves a cycle,
+  ask what it would be if the code were perfect.** If it barely moves, it is describing the data
+  model, and the panel will find that faster than you will.
 
 - **A NEW LIBRARY DOCUMENT COLLIDES WITH A SHIPPED TOOL, NOT JUST ANOTHER DOCUMENT
   (2026-08-22).** flooring's `directed-to-proceed` write-up and the PINNED `give-me-the-go.html`
@@ -5084,3 +5150,99 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the other owed trade, is a concurrent PEER session's this cycle — the split coordinated by
   message, no collision.**
   https://mrdirno.github.io/nested-resonance-memory-archive/flooring/write-up.html
+
+- `2026-08-23` — **[AXIS:DOCS] C3643 — THE THIRTEENTH LIBRARY HAD BEEN FINISHED FOR ELEVEN
+  HOURS AND WAS 404** · **before:** the well was dry (0 new, 0 building, both wells) and no
+  family was owed, so the stalest axis governed. Step 0 of the ship loop found something else
+  first: `sitework/docs.js` + `sitework/write-up.html` sat UNCOMMITTED on disk from a peer
+  session that died at 13:07, and that session had already written *"SHIPPED 2026-08-22 … it
+  closed the DOCS axis: thirteen trades, thirteen libraries, none left owed"* into
+  `sitework/tools.js`. The previous cycle's own log entry says the same. **The live URL was
+  404**, and the bump's LIVE STATE line — which counts `tools.js` off disk — read **98 tools
+  while the artifact served 97** (§SCARS) · **after:** verified, gated and shipped: **15
+  documents, 4 written for this trade** — what was in the ditch when it closed, what was found
+  that is not on the plan, a line got hit, and the haul count in the unit it was counted in.
+  Not re-derived work; the peer's build, read, driven and proved before it was trusted.
+  **BACKPORT RIDER FIRED on the real class, which is not "docs" — it is a registry line making
+  a claim about an artifact nobody checked.** New sweep, derived from disk: every trade's
+  `tools.js`, every `href`, curled against the live site — **13 trades, 98 registry pages, 1
+  unreachable, and it was this one.** Re-run after the deploy: **98/98**. (One 503 mid-sweep was
+  GitHub Pages rate-limiting us, re-checked 3× at 200 — a transient is not a finding.) Gates,
+  all re-run GREEN AGAINST PRODUCTION: **docspec 1 trade / 16 checks / 0 failing** on the live
+  site, 13 trades / 213 checks locally · **mobile-watertight `sitework/write-up.html` live at
+  320/360/390/430 × default and bumped** · **no-third-party 127/127** · the live page driven end
+  to end at 390px as a foreman — searched *"a line got hit"*, picked it, copied **15,428 chars**,
+  the clock-minute-by-minute omit line present, zero page errors, zero overflow. Storefront:
+  entry made true in `persona500/src/data/fieldToolkits.ts` — sitework `tools[]` now 8, rack 98
+  (P5 pushes that repo).
+  https://mrdirno.github.io/nested-resonance-memory-archive/sitework/write-up.html
+
+- `2026-08-23` — **[AXIS:COMMONS] C3643 — EIGHT DOCUMENTS LIVE ON ALL THIRTEEN TRADES AND EVERY
+  TRADE RENAMED THEM** · **before:** COMMONS was the stalest axis (14 lane-cycles) and its next
+  rung was already named on disk: *"`shared/docspec.js` is trade-siloed, so a man who knows
+  'punch list reply' from framing gets nothing on any other trade's write-up."* **That prediction
+  was wrong and the measurement is the finding** (§SCARS): driven through the real search box,
+  733 unambiguous terms × 13 trades = **9,529 searches, ZERO dead ends** — `find.js` never
+  returns nothing. The failure is the opposite: **1,083 searches returned a DIFFERENT document
+  for one the reader's own library was holding**, and **512 of those carried no hedge at all**.
+  On the AV page, *"somebody got hurt"* → **Damage / Pre-Existing Condition Note**, presented as
+  an exact match. *"first aid"* → Turnover / Handover Summary. *"recordable"* → Daily Field
+  Report. The cause is structural: `delay-notice` goes by **7 different names** across the rack,
+  `daily-report` 6, `damage-found` 6, `handover` 6, `site-walk` 5 — and each trade's author wrote
+  his own `aka`, so every page knew **one man's words for a document thirteen men named** ·
+  **after:** `shared/docsindex.js`, the union of every name and `aka` anybody wrote, GENERATED
+  from the thirteen libraries and added to the search index of every trade that **already
+  carries that document id**. Live, on the real site: *"somebody got hurt"* → **Incident /
+  Near-Miss Report**, *"first aid"* → Incident / Near-Miss Report, *"recordable"* → Incident /
+  Near-Miss Report, *"we got held"* → Delay / We're Held Up Notice, each under a new heading —
+  **"Another trade's name for it"**, the commons name table's own *WHO SAYS IT* rule one floor
+  up, so a word that WORKS is never mistaken for the word to write down. Re-measured through the
+  same 9,529: **his own document found 2,802 → 3,849; wrong 1,083 → 36; the unhedged half 512 →
+  23.**
+  **THE PANEL KILLED THE OTHER HALF 3–0, AND IT WAS THE HALF WITH THE BIGGER NUMBER.** A
+  cross-trade HAND-OFF — route a man to the trade that owns the document he named — targeted
+  5,644 misses and scored **5 / 1 / 2**. The field lens: *"it takes me off my page… what am I
+  actually handed when I get there?"* The mechanism answers him and is why this is a refusal and
+  not a deferral: **every block introduces the reader in the OWNING trade's words** — sitework's
+  A Line Got Hit opens *"I am the foreman who was on the machine or in the hole; we do sitework
+  and underground utility work."* Today he gets a wrong document in his own voice and rejects it
+  in two seconds; routed, he gets a plausible document in the **wrong voice, that he asked for
+  by name**. The safety lens named the residue nobody can mechanise: whether **this** man may
+  author **this** document depends on his licence and his subcontract, and a client-side static
+  page will never hold either. And the refute lens showed the routing row would sit **above** a
+  correct local hit on exactly the 268 ambiguous terms. **Pooling survives precisely because it
+  cannot cross that line:** a term is only added to trades that already hold its document, so the
+  **57 single-trade documents can never push a word anywhere** and the entitlement question is
+  already settled by the document being on his page.
+  **THE COST, MEASURED AND NOT SMOOTHED AWAY:** cross-trade wrong answers presented as exact went
+  **2,848 → 3,138 (+290)** — a wider index reaches full token coverage on more of the documents
+  he does not carry. The refute lens predicted that direction and was right; the trade is 1,083
+  of his own down to 36 against 290 more mislabelled among documents that were already wrong.
+  **FOUR RAILS, ALL MECHANISMS:** (R1) a term is pooled only if it means ONE document across the
+  whole rack, folded through **the engine's own normalizer** — 34 refused; (R2) a **near-name
+  quarantine** drops any term within one edit of a term meaning a different document — 10 caught,
+  and they are real: **"not us" / "notes"**, **"what we said" / "what we laid"**, **"blocked" /
+  "locked"**, **"flash" / "clash"**. That rail costs honestly — *"what we said"* is one of the 36
+  still missing, and it stays missing; (R3) two or more trades must carry a document before any
+  word pools onto it; (R4) **the deploy regenerates the file from the staged libraries and
+  refuses a diff**, so the header's claim cannot rot. To make R4 possible without a browser in
+  CI, `shared/docspec.js` now **exports its verify surface BEFORE the mount and returns early
+  with no `document`** — the merge rule is read, never re-implemented.
+  **THE BLOCK IS UNTOUCHED, AND THAT IS ASSERTED, NOT ASSUMED:** `aka` also feeds the ROUTER line
+  a man pastes into his AI, so `pooled()` returns COPIES and `byId()` keeps reading the real
+  library — **docspec-desk holds byte-for-byte** and the live drive confirms no pooled word
+  reaches the block. **GATE: `tools/toolkit-gates/docs-pool.mjs` is new — 13 trades, 80 checks,
+  and PROVED RED BY FIVE MUTATIONS** before it was trusted (drop the `<script>` from one page ·
+  let `pooled()` mutate instead of copy · smuggle a single-trade document into the pool ·
+  un-quarantine `"notes"` · delete the heading). The deploy's two new asserts were each proved by
+  NEGATIVE CONTROL, including the `commons/tips.html` scar's own shape: with the tag replaced by
+  a comment mentioning the filename, **a plain grep still passes and the strip-then-grep fails.**
+  All green against production: **docs-pool 80/80 LIVE** · docspec **213/0** · **desk gate holds**
+  · mobile-watertight **13/13 write-up pages** at 320/360/390/430 default and bumped ·
+  no-third-party **127/127** · menu-reachability **868 checks / 124 pages**. Storefront unchanged
+  — no new tool, no new trade. **NAMED NEXT RUNG, with its mechanism:** `find.js` sets
+  `mode = "exact"` when every LIVE query token was covered, **not when the match was strong** —
+  so a query matching only the `why` prose at weight 2 is handed over unhedged. That is the
+  single cause of all 3,161 remaining unhedged wrong answers, it lives in the engine all 16
+  search surfaces share, and it is worth its own cycle.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
