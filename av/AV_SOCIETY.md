@@ -1534,6 +1534,30 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-23 (C3649) — THE WISH'S URL WAS THE WELL'S OWN HANDWRITING, AND TWO LENSES AND I READ IT AS A VISITOR
+The vibe-cards deck stamps `page_url: location.href + '#' + address` on every wish it sends, so
+whoever serves the wish can re-grow the picture the wisher was looking at. Wish `e6f1af4d` arrived
+carrying `deck/#fo|seed=4211|…`, and the proposal built a whole JS doorway to catch "visitors landing
+on that hash" — regex, hashchange, three engines' grammars, a kill-test with 29 assertions. Two judges
+scored it 8 and 6. The third grepped the well, found the stamp, and scored it 3: nobody had ever stood
+at that URL. The deck had never read its fragment, nothing printed points a `fo|` address at it, and
+the only place the string exists is the row in the queue. **A page_url in a wish is what the PAGE
+wrote, not where the PERSON was.** The AV well's `about_tool` / page fields are written the same way.
+Before reading any page_url as a landing, grep the SENDER for how the field is built. What shipped was
+the unanimous core — the static link that carries the address, the dead button fixed at its source,
+and a gate for the class — and the doorway is a dead branch in the deck's RING 4 with its trigger
+named. Cost of the misread if unjudged: stranger input parsed into an href, on a public page, for
+traffic that does not occur. K2 held because the panel is not ceremony.
+
+### 2026-08-23 (C3649) — A GATE THAT READS THE DIARY PASSES THE THING IT WAS WRITTEN FOR
+`tools/verify_fragments.mjs` (vibe-cards) resolves every `href="…#frag"` against the target page's
+ids. Its first run, on the build that still had the dead `../deck/#panel-fo` link, printed
+"every in-site fragment resolves." The deck's RING 2 change log — an HTML comment — says
+`id="panel-fo"` in prose, so the deleted section was "found." Comments, `<script>` and `<style>` are
+not places a fragment can land; the gate strips all three now. The lesson is the E1 discipline
+itself: run the new gate on the artifact that is KNOWN broken before trusting a green — the
+observation that had to fail, and did not, is the only thing that caught it.
+
 ### 2026-08-23 (C3647) — THE ANTI-FIXATION MECHANISM WENT BLIND AGAIN, THE OTHER WAY
 The bump's LIVE STATE told this cycle **"STALEST-AXIS SIGNAL = DEPTH — last
 worked 14 lane-cycle(s) ago"**. DEPTH had shipped in each of the two cycles
@@ -5326,3 +5350,31 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   real bar-growth, see the 08-23 scar) · no-third-party · pickfilter (61 items / 10 sections) ·
   order-live-header · jobcard-scope · dropoff-block · headless e2e 14/14.
   https://mrdirno.github.io/nested-resonance-memory-archive/roofing/order-the-load.html
+- **[AXIS:WELL] C3649 (2026-08-23) — the LEVIATHAN card carries card 010's address into the
+  endless scroll.** Wish `e6f1af4d` (vibe-cards well, anonymous, cast from the deck's LEVIATHAN
+  panel 24 min before RING 3 removed it): *"Needs a link to the endless scroll"*. 3-lens panel
+  BUILD-WITH-CHANGES ×3 (8/6/3); shipped the unanimous core, cut the split JS doorway (§SCARS).
+  **before:** the deck's rules-at-home LEVIATHAN card linked plain `persona500.com/leviathan` and
+  dropped all six numbers; it was the one home card of three with no address grammar;
+  `../leviathan/`'s "Fine-tune on the parametric deck" pointed at `#panel-fo`, an anchor deleted the
+  same day, and the artifact gate cannot see a fragment. **after:** grammar line
+  `fo|seed=N|h=N|n=N|crop=<name or 0-3>|vein=<name or 0-8>|cell=N` (both printed populations,
+  never normalised — the panel's one hard rule); first link = card 010's printed address on the
+  scroll, where the live engine grows that organism as band 0 in 3–4 s with no bad-address toast
+  (asserted in a real browser, screenshot in the cycle scratch); card page button = the sibling pair
+  `#rules-at-home` / "It is on the deck, and runs at home"; the well's page_url drops the page's own
+  fragment before stamping (a `#panel-gesica` arrival used to file two hashes); credit on the card,
+  no name because none was given. **BACKPORT RIDER FIRED:** swept every cross-page fragment on the
+  site for the class — 5 links, 1 dead (the one fixed) — and wrote `tools/verify_fragments.mjs` into
+  the Pages workflow so the class cannot pass green again; its first run PASSED the dead link (the
+  deck's RING 2 comment says `id="panel-fo"` in prose) and reads markup only now — E1 caught it
+  (§SCARS). Gates: fragments 62/62 · artifact gate complete (site + studio) · mobile gate watertight ·
+  deck card at 320/360/390/430 default + bumped text, card-page button followed for real, live engine
+  landing — 73/73 on the built site and 73/73 LIVE. Deploy run 32669527042 green; vibe-cards
+  `4bcb378`. Named for P5 (persona500 repo, not pushed from here): the engine pages' modal button
+  "Fine-tune on the parametric deck" (`cDeck` / `pDeck`) now opens a deck with no LEVIATHAN sliders —
+  relabel to the sibling pair and point at `#rules-at-home`; and wishes `85542441` / `f94c82f2` /
+  `a55f1234` ("doesn't open in Card Studio") sit inside P5's active handoff work (`45bcc6fc` +
+  `ca2e03d`, both today) — serve or fold them there, not here. Not built, trigger named: the deck
+  reading its own fragment (a live panel's `#gesica|…` setting its sliders) the day a deck URL with
+  an address shows up in a wish or a referrer. https://mrdirno.github.io/vibe-cards/deck/#rules-at-home
