@@ -27,11 +27,23 @@
  *     re-derived, as the tie-in, INCLUDING the inverse case its first draft
  *     dropped. Both generalise to any trade whose order is consumed
  *     irreversibly.
- *   - THE WRITE-UP LIBRARY (docs.js). Its own document-spec vocabulary build,
- *     and shared/docspec.js has a contract the deploy asserts — a half-written
- *     library fails it, correctly. It is now the strongest unbuilt rung in this
- *     kit, and this is the ONLY trade of twelve without a write-up page. Not a
- *     fork of anything: a config of an engine that already ships.
+ *   - ~~THE WRITE-UP LIBRARY~~ — SHIPPED 2026-08-22 as `docs.js` +
+ *     `write-up.html`, and it closed the DOCS axis: thirteen trades, thirteen
+ *     libraries, none left owed. Four documents nobody else on the rack can
+ *     hold — what was in the ditch when it closed, what was found that is not
+ *     on the plan, a line got hit, and the haul count in the unit it was
+ *     counted in — plus eight overrides on the shared eleven and `drop: []`.
+ *     WHAT THE BUILD LEARNED, kept instead of a checkmark: this trade's whole
+ *     differentiator is that IT CANNOT GO BACK AND LOOK. Every other kit writes
+ *     about something still standing; a compacted trench is dug again, so the
+ *     write-up made on the day IS the asset. That one fact set the shape of all
+ *     four — each halts as late as it possibly can, because a thin record beats
+ *     no record by more here than anywhere else on the job. The refusal list
+ *     trade.js called "not negotiable by a later cycle" was carried whole into
+ *     the block an AI reads: no trench geometry, no compaction figure, no
+ *     bedding class, no test pressure, no locate statement of any kind, and no
+ *     cause of anything. Not a fork of anything: a config of an engine that
+ *     already ships.
  *
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
@@ -95,6 +107,25 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, travel, per diem — and put your real hours in, because a dollar an hour on a spring you couldn't get in the ground is a different dollar.",
     chip: "#7A5A16",
     audience: "Operators · pipelayers · foremen · anybody weighing a move"
+  },
+  {
+    // The write-up library (shape #4, shared/docspec.js). Not a form that makes
+    // a document — a form that makes the AI SETUP that makes the document,
+    // forever. Four documents live inside it that no other kit on the rack can
+    // hold, because no other kit works on something that gets buried: what was
+    // in the ditch when it closed, what was found that isn't on the plan, a
+    // line got hit, and the haul count. It sets no number and calls no cause.
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — what was in the ditch before you put it back, the rock nobody drew, the morning a line got hit, what you hauled and how you counted it, the grade you left. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dump the mess in the truck and get back something you can send. Never sets a compaction number, never says a locate was good, never says why it settled — it writes down what you measured and what you did.",
+    /* The rack's tightest pair already shipping here is #8A6718/#7A5A16 at
+       CIELAB dE 7.3. This chip measures 12.0 from its nearest neighbour
+       (#CFA96B) — 1.6x more separated than the closest pair the ladder already
+       tolerates — and it fills the one real gap left between #CFA96B and
+       #B98F42. The first pick was #E0B368, which is "What I'll Leave Open"
+       exactly; two chips the same colour on one hub is no chip at all. */
+    chip: "#AD8B55",
+    audience: "Foreman → GC / engineer / office / utility owner"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
