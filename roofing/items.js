@@ -434,3 +434,294 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── THE MATERIAL ORDER (shape #1 — shared/checklist-request.js) ───────────
+ * The vocabulary for order-the-load.html. The TENTH instance of the checklist →
+ * request shape and ROOFING'S FIRST — every other material trade in the program
+ * calls its yard off a list; the roofer was still calling it off memory. Nothing
+ * here is decided by the page: he picks the line, he says the count, he says the
+ * colour off his own submittal. The two hard invariants at the top of this file
+ * bind every line below — no square footage figured, no fastener length or
+ * pattern or density, no R-value, no slope, no exposure, no uplift, no warranty
+ * term, and no brand as a word we print. Where a spec decides it, the line says
+ * so and holds an empty box.
+ *
+ * WHAT THIS ONE DOES THAT THE OTHER NINE DO NOT:
+ *
+ *  · THE UNIT LEAVES THE YARD WELDED TO THE NUMBER. Field goes by the SQUARE,
+ *    shingle by the BUNDLE, membrane and underlayment by the ROLL, edge metal by
+ *    the STICK, boots and vents EACH, nails and plates by the BOX, adhesive by the
+ *    PAIL, sealant by the TUBE, board by the BOARD. "3 shingle" and "3 square of
+ *    shingle" are two different trucks. Qty is free text because a roofer says
+ *    "three square" and "half a bundle"; a bare number gets his own word attached
+ *    and anything he wrote in words is left exactly as he wrote it.
+ *
+ *  · THE COLOUR / PROFILE / LOT IS THE ONE A SECOND ORDER CANNOT GUESS. Field,
+ *    cap and the metal that shows all come in a colour, and the colour moves lot
+ *    to lot. A re-supply that pulls a different lot puts a stripe on a finished
+ *    roof that no wash takes off — the roofing twin of the mason's run. It is a
+ *    FLAG on the lines it applies to and a passthrough field in the header, never
+ *    a lookup: we do not hold anybody's colour lots.
+ *
+ *  · WHERE IT LANDS IS ROOF OR GROUND, not which side of a building. A square set
+ *    on the wrong slope is a square carried up a ladder by hand. The axis is
+ *    roof-loaded (which slope) vs a ground drop — and "spread it, don't stack one
+ *    spot" is the roofer's own word to the driver, never this page rating a deck.
+ *
+ *  · THE ABSENT LINE IS A DRY-IN, NOT A CORRECTION. Field with no underlayment,
+ *    shingle with no starter or no cap, a roof with no edge metal, membrane with
+ *    nothing to fasten or bond it — those are the lines a roofer forgets and finds
+ *    out about at noon. They go on the GLASS as a question he answers by looking,
+ *    never in the message: the yard is not told a man's roof is short a course.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — every axis leads with one, written as the QUESTION, and the
+   * page drops any value starting with an em-dash. A pre-selected default would be
+   * the tool choosing for him; a printed value nobody picked would be the tool
+   * putting words in his order. */
+  function n(q) { return "— " + q + " —"; }
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  /* WHERE IT LANDS. Roof or ground — and if it's the roof, which slope, because a
+   * square on the wrong elevation is carried by hand. "Spread it, don't stack one
+   * spot" is HIS instruction to the driver; this page rates no deck and sets no
+   * load. Label key resolves to "whereitlands" — order-the-load.html reads it. */
+  var DROPS = ["On the roof — front / street slope", "On the roof — back slope",
+               "On the roof — the section we're on", "On the roof — at the ridge",
+               "On the roof — spread it, don't stack one spot",
+               "Ground — driveway / laydown", "Ground — around back",
+               "Ground — closest gate to the ladder", "Split it — see the note"];
+  function drop() { return ax("Where it lands", [n("roof or ground")].concat(DROPS), true); }
+  /* The one flag that repeats: this colour/lot has to match what is already on the
+   * roof. On field, on cap, on the metal and the vents that show. */
+  function matchLot() { return [{ k: "lot", label: "Colour / lot has to match the roof" }]; }
+
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.load = {
+    drops: DROPS,
+
+    cats: [
+      {
+        id: "list",
+        name: "What are you ordering?",
+        docName: "The order",
+        hint: "Paste your takeoff if you keep one — one line each. Count it the way you say it: 30 square, 12 roll, 4 boxes, a pail. Then set where it lands on the heavy stuff below.",
+        writein: true,
+        items: []
+      },
+
+      {
+        id: "field",
+        name: "Field — what goes down",
+        docName: "Field",
+        hint: "The roof itself, by the SQUARE or the ROLL. Say the colour and the profile off your submittal on anything that shows, and tick MATCH if it has to line up with what's already on the roof.",
+        items: [
+          { n: "Architectural / laminate shingle", sub: "BY THE SQUARE", unit: "sq",
+            flags: matchLot(), notePlaceholder: "colour and profile off the approved submittal, and the lot if you've got the ticket",
+            ax: [drop()] },
+          { n: "3-tab shingle", sub: "BY THE SQUARE", unit: "sq",
+            flags: matchLot(), notePlaceholder: "colour off the submittal",
+            ax: [drop()] },
+          { n: "Designer / luxury shingle", sub: "BY THE SQUARE — SAY THE BUNDLE COUNT, IT'S NOT ALWAYS THREE", unit: "sq",
+            flags: matchLot(), notePlaceholder: "colour and line off the submittal, and bundles per square",
+            ax: [drop()] },
+          { n: "Metal panel / standing-seam", sub: "BY THE PANEL — LENGTH AND COLOUR OFF YOUR ORDER, THIS PAGE WON'T CUT IT", unit: "panel",
+            flags: matchLot(), notePlaceholder: "colour, profile and the panel lengths off your order",
+            ax: [drop()] },
+          { n: "Tile — concrete or clay", sub: "BY THE SQUARE OR THE PIECE — SAY WHICH, AND THE PROFILE",
+            flags: matchLot(), notePlaceholder: "profile and colour off the submittal, and field vs trim pieces",
+            ax: [drop()] },
+          { n: "Wood shake / shingle", sub: "BY THE SQUARE OR THE BUNDLE — SAY WHICH, AND CEDAR OR THE TREATED KIND",
+            flags: matchLot(), notePlaceholder: "shake or shingle, cedar or fire-treated, and the grade off your set",
+            ax: [drop()] },
+          { n: "TPO / PVC membrane", sub: "BY THE ROLL — SAY THE COLOUR AND THE WIDTH, NOT THE THICKNESS", unit: "roll",
+            flags: matchLot(), notePlaceholder: "colour and width off your set — the thickness is the spec's, not this page's",
+            ax: [drop()] },
+          { n: "EPDM membrane", sub: "BY THE ROLL — SAY THE WIDTH", unit: "roll",
+            notePlaceholder: "width off your set, and black or the other one",
+            ax: [drop()] },
+          { n: "Mod-bit cap sheet", sub: "BY THE ROLL — SAY THE GRANULE COLOUR IF IT'S EXPOSED", unit: "roll",
+            flags: matchLot(), notePlaceholder: "colour if it shows, and torch, cold or self-adhered off your set",
+            ax: [drop()] },
+          { n: "Mod-bit / BUR base ply", sub: "BY THE ROLL", unit: "roll",
+            notePlaceholder: "which ply and how it attaches, off your set",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "underlay",
+        name: "Underlayment & leak barrier",
+        docName: "Underlayment & leak barrier",
+        hint: "What dries the deck in under the field. Nobody covers a roof without it — how much and where is off your set and the code, not off this page.",
+        items: [
+          { n: "Synthetic underlayment", sub: "BY THE ROLL", unit: "roll", ax: [drop()] },
+          { n: "Felt — 15 lb", sub: "BY THE ROLL", unit: "roll", ax: [drop()] },
+          { n: "Felt — 30 lb", sub: "BY THE ROLL", unit: "roll", ax: [drop()] },
+          { n: "Ice & water / leak barrier", sub: "BY THE ROLL — EAVES, VALLEYS, PENETRATIONS OFF YOUR SET", unit: "roll",
+            notePlaceholder: "where it goes is off your set and the code — this page just orders the roll",
+            ax: [drop()] },
+          { n: "Base sheet — mechanically attached", sub: "BY THE ROLL", unit: "roll", ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "starter",
+        name: "Starter, hip & ridge",
+        docName: "Starter, hip & ridge",
+        hint: "The first course and the last one. A shingle order with no starter and no cap is a re-trip to the yard by noon — tick MATCH on the cap, it's the same colour argument as the field.",
+        items: [
+          { n: "Starter strip", sub: "BY THE BUNDLE", unit: "bundle", ax: [drop()] },
+          { n: "Hip & ridge cap", sub: "BY THE BUNDLE — SAME COLOUR AS THE FIELD", unit: "bundle",
+            flags: matchLot(), notePlaceholder: "colour to match the field off the submittal",
+            ax: [drop()] },
+          { n: "Ridge cap — metal", sub: "BY THE STICK OR THE PIECE — COLOUR OFF YOUR ORDER", unit: "stick",
+            flags: matchLot(), notePlaceholder: "colour and length off your order",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "metal",
+        name: "Edge metal & flashing",
+        docName: "Edge metal & flashing",
+        hint: "Everything bent, cut or formed. What shows comes in a colour — tick MATCH on it. Sizes and gauges are off your set; this page carries what you write and sizes nothing.",
+        items: [
+          { n: "Drip edge", sub: "BY THE STICK — SAY THE FACE AND THE COLOUR", unit: "stick",
+            flags: matchLot(), notePlaceholder: "colour and face off your order — the gauge is the spec's",
+            ax: [drop()] },
+          { n: "Gravel stop / edge metal", sub: "BY THE STICK — LOW-SLOPE PERIMETER", unit: "stick",
+            flags: matchLot(), notePlaceholder: "profile and colour off your order",
+            ax: [drop()] },
+          { n: "Coping", sub: "BY THE STICK — LENGTH AND COLOUR OFF THE SHOP DRAWING", unit: "stick",
+            flags: matchLot(), notePlaceholder: "length, colour and the corners off the shop drawing",
+            ax: [drop()] },
+          { n: "Counter-flashing / reglet", sub: "BY THE STICK", unit: "stick",
+            notePlaceholder: "profile off your set", ax: [drop()] },
+          { n: "Step flashing", sub: "BY THE BOX OR THE BUNDLE — SAY WHICH",
+            notePlaceholder: "size off your set, and box or bundle", ax: [drop()] },
+          { n: "Valley metal", sub: "BY THE STICK — SAY W-VALLEY OR OPEN, AND COLOUR IF IT SHOWS", unit: "stick",
+            notePlaceholder: "profile, and colour if it's an open valley",
+            ax: [drop()] },
+          { n: "Pipe boots / jack flashing", sub: "EACH — SAY THE PIPE SIZE, THIS PAGE WON'T", unit: "ea",
+            notePlaceholder: "the pipe sizes you've got, and lead, rubber or the retrofit kind",
+            ax: [drop()] },
+          { n: "Pitch pan", sub: "EACH — SAY IF YOU NEED THE POURABLE FILLER TOO", unit: "ea",
+            ax: [drop()] },
+          { n: "Kickout / diverter flashing", sub: "EACH", unit: "ea", ax: [drop()] },
+          { n: "Termination bar", sub: "BY THE STICK — LOW-SLOPE", unit: "stick", ax: [drop()] },
+          { n: "Snow guard / snow rail", sub: "EACH OR BY THE STICK — SAY WHICH, AND COLOUR IF IT SHOWS",
+            flags: matchLot(), notePlaceholder: "the profile and the spacing off your set — this page won't lay them out",
+            ax: [drop()] },
+          { n: "Flat / coil stock", sub: "BY THE ROLL OR THE SHEET — SAY WHICH, AND THE COLOUR",
+            flags: matchLot(), notePlaceholder: "gauge and colour off your order — for the pieces you brake on site",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "fasten",
+        name: "Fasteners & plates",
+        docName: "Fasteners & plates",
+        hint: "How it stays on. The LENGTH, the pattern and the density are off your set and your uplift detail — name them in your words; this page won't put a number in your mouth.",
+        items: [
+          { n: "Coil nails", sub: "BY THE BOX — LENGTH OFF YOUR SET", unit: "bx",
+            notePlaceholder: "the length your set calls for, in your words — this page doesn't size it" },
+          { n: "Cap nails", sub: "BY THE BOX", unit: "bx",
+            notePlaceholder: "length off your set" },
+          { n: "Hand-drive roofing nails", sub: "BY THE BOX", unit: "bx",
+            notePlaceholder: "length off your set" },
+          { n: "Insulation / membrane screws", sub: "BY THE BOX — SAY THE DECK YOU'RE INTO", unit: "bx",
+            notePlaceholder: "length and the deck (steel, wood, concrete) — the pattern is off your set" },
+          { n: "Plates / insulation plates", sub: "BY THE BOX", unit: "bx" },
+          { n: "Cap staples", sub: "BY THE BOX", unit: "bx" }
+        ]
+      },
+
+      {
+        id: "acc",
+        name: "Adhesive, sealant & the rest",
+        docName: "Adhesive, sealant & the rest",
+        hint: "What bonds it, seals it and lets a man walk it. The stuff you're always one pail short of at four o'clock.",
+        items: [
+          { n: "Bonding adhesive", sub: "BY THE PAIL — MEMBRANE", unit: "pail",
+            notePlaceholder: "which one your membrane calls for — the wrong one is a warranty argument" },
+          { n: "Seam / cover tape", sub: "BY THE ROLL", unit: "roll" },
+          { n: "Lap / water cut-off sealant", sub: "BY THE TUBE", unit: "tube" },
+          { n: "Flashing cement / mastic", sub: "BY THE PAIL OR THE TUBE — SAY WHICH" },
+          { n: "Roof primer", sub: "BY THE PAIL", unit: "pail" },
+          { n: "Sealant / caulk", sub: "BY THE TUBE — SAY THE COLOUR IF IT SHOWS", unit: "tube",
+            notePlaceholder: "colour if it's exposed" },
+          { n: "Pourable pitch-pan filler", sub: "SAY HOW MANY POCKETS", unit: "ea" },
+          { n: "Cants", sub: "BY THE PIECE — LOW-SLOPE", unit: "ea", ax: [drop()] },
+          { n: "Walk pad / walkway", sub: "BY THE ROLL OR THE PIECE — SAY WHICH",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "iso",
+        name: "Insulation & board",
+        docName: "Insulation & board",
+        hint: "Low-slope. Thickness, R-value and the tapered slope are off your set and your tapered plan — this page orders the board and specs none of it.",
+        items: [
+          { n: "ISO board", sub: "BY THE BOARD — THICKNESS OFF YOUR SET, NOT AN R-VALUE", unit: "board",
+            notePlaceholder: "the thickness your set calls for, in your words — no R-value from this page",
+            ax: [drop()] },
+          { n: "Cover board", sub: "BY THE BOARD", unit: "board",
+            notePlaceholder: "which one your set calls for, and the thickness",
+            ax: [drop()] },
+          { n: "Tapered — a package off your plan", sub: "BY THE SQUARE — THE SLOPE IS YOUR TAPERED PLAN'S, NOT THIS PAGE'S",
+            notePlaceholder: "the tapered plan or the area — the slope and the layout come off that plan",
+            ax: [drop()] },
+          { n: "Recovery / fanfold board", sub: "BY THE BOARD OR THE BUNDLE — SAY WHICH", unit: "board",
+            ax: [drop()] }
+        ]
+      },
+
+      {
+        id: "vent",
+        name: "Ventilation",
+        docName: "Ventilation",
+        hint: "What lets it breathe. How much is off your set — this page counts the pieces, it doesn't figure the net free area.",
+        items: [
+          { n: "Ridge vent", sub: "BY THE STICK OR THE ROLL — SAY WHICH", unit: "stick",
+            notePlaceholder: "which kind, off your set", ax: [drop()] },
+          { n: "Box / turtle vents", sub: "EACH — SAY THE COLOUR IF IT SHOWS", unit: "ea",
+            flags: matchLot(), notePlaceholder: "colour if it's on a visible slope",
+            ax: [drop()] },
+          { n: "Off-ridge / low-profile vent", sub: "EACH", unit: "ea", ax: [drop()] },
+          { n: "Turbine", sub: "EACH", unit: "ea", ax: [drop()] },
+          { n: "Powered / solar vent", sub: "EACH", unit: "ea", ax: [drop()] },
+          { n: "Soffit / intake vent", sub: "BY THE PIECE — SAY THE LENGTH", unit: "ea",
+            notePlaceholder: "length, and colour if it shows" },
+          { n: "Gable vent", sub: "EACH — SAY THE COLOUR IF IT SHOWS", unit: "ea",
+            flags: matchLot(), notePlaceholder: "colour if it shows" }
+        ]
+      },
+
+      {
+        id: "deliver",
+        name: "The lift, and what goes back",
+        docName: "The lift, and what goes back",
+        hint: "The half of the order nobody makes. A boom window you didn't ask for is a crew standing on the ground, and empties on the lawn are a callback you gave yourself.",
+        items: [
+          { n: "Boom / conveyor / crane time", sub: "SAY WHEN YOU NEED IT AND HOW LONG",
+            notePlaceholder: "when it lands, how long, and who's flagging the ground" },
+          { n: "Ground protection / driveway plywood", sub: "IF THE TRUCK'S ON THE DRIVE" },
+          { n: "Take the empty pallets / cores back", sub: "SAY ROUGHLY HOW MANY", unit: "ea" },
+          { n: "Take the leftover material back", sub: "SAY WHAT IT IS AND IF IT'S BEEN RAINED ON" },
+          { n: "Dumpster / disposal", sub: "SAY THE SIZE AND WHEN — IF THE YARD HANDLES IT" }
+        ]
+      }
+    ],
+
+    /* A pasted line gets the same landing as a picked one — a write-in is where
+     * the odd item lands ("6 square of the discontinued colour"), and it is the
+     * line most likely to end up on the wrong slope if nobody says where it goes. */
+    writeinAx: [drop()]
+  };
+})();

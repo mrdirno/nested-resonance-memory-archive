@@ -25,6 +25,18 @@ window.TOOLKIT_TOOLS = [
     pinned: true
   },
   {
+    // ROOFING'S FIRST material order — the tenth instance of the checklist→request
+    // shape (av/AV_SOCIETY.md §THE THREE SHAPES). Every other material trade calls
+    // its yard off a list; the roofer was still calling it off memory. items.js
+    // owns the vocabulary, order-the-load.html owns the words and the two readings
+    // (the colour/lot match, and the dry-in questions on the glass).
+    name: "Order The Load",
+    href: "order-the-load.html",
+    desc: "Tomorrow's load called into the yard off a list, not off your memory — field by the square, membrane by the roll, edge metal by the stick, boots by the piece, and whether each lands on the roof or on the ground. Put a bare number in and the yard's own word comes with it; tick the colour that has to match the roof so the re-supply doesn't come back a different lot and stripe the slope.",
+    chip: "#9B2F5E",
+    audience: "Foreman / roofer → the supply house"
+  },
+  {
     name: "Before I Open It",
     href: "rough-in-request.html",
     desc: "Everything that has to be off, set, moved or owned before you open a section — and before you cover one. Every curb, sleeve, post and drain another outfit owes you, with the gate it has to beat. One walk, one message each.",

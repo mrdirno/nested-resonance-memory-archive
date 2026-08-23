@@ -3215,6 +3215,9 @@ patch: a page that rewrites its own persisted draft around a reload must do it A
 of the NEXT load, where nothing else is still writing — and a boot-side remap is
 idempotent (same-tongue picks pass through), which an exit-side one can never be.
 
+### 2026-08-23 — THE COPY-BUTTON WORD IS PART OF THE BAR GEOMETRY, AND A LONGER ONE OUTGREW A MEASURED THRESHOLD
+The fixed action bar hides its line-count label below a MEASURED width (`@media (max-width:356px)`), and that number was calibrated against masonry's "Copy the call" — a four-letter final word. Roofing's material order (`order-the-load.html`) shipped its first draft with the same bar carrying "Copy the **order**": one letter wider, ~8px more button, and at 360px — just above the 356 threshold — the count "Nothing on it yet" no longer fit beside the two buttons, wrapped to 46px, and grew the fixed bar 2px, which mobile-watertight (correctly) fails as a bar that GREW. The trap: the threshold reads like a property of the COUNT text, but it is a property of the WHOLE bar, and the copy word is a load-bearing input to it. Two ways out — match the proven four-letter word ("Copy the **load**") so the geometry is masonry's unchanged, or re-measure and move the threshold. Took the first; the word is roofing-true and the constant stays honest. LESSON: when you isomorph a page whose fixed-bar threshold was MEASURED, the button LABELS are part of what was measured — change the words and the number is no longer yours.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -5272,3 +5275,23 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   steal rather than re-derive. Gates green: mobile-watertight 4 widths default+bumped ·
   no-third-party · rowlog-restore · rowlog-commit-merge · menu-reachability sweep · hub card
   + nav link live. https://mrdirno.github.io/nested-resonance-memory-archive/flooring/what-it-read.html
+- `2026-08-23` — **[AXIS:DEPTH] Order The Load** shipped (`roofing/order-the-load.html`, + the
+  `load` block in `roofing/items.js`, + `roofing/tools.js`) — roofing's FIRST engine-A material
+  order and the TENTH instance of checklist→request: the every-job first tool that plumbing,
+  masonry, concrete, electrical, HVAC and AV all had and roofing lacked. Field by the square,
+  membrane by the roll, edge metal by the stick; the unit welded to a bare number; the
+  colour/lot MATCH (the roofing twin of the mason's run — a re-supply off a different lot
+  stripes a finished slope); rooftop-vs-ground landing; the dry-in questions (field with no
+  underlayment / starter / cap / edge, membrane with nothing to fasten or bond) on the GLASS,
+  never in the sent order. Cast a 3-lens adversarial panel (safety / field-voice /
+  document-logic) BEFORE ship — it killed a coverage figure ("3 bundles to the square") and a
+  stock length ("10 ft most yards") that broke roofing's zero-spec edge, a brand-adjacent
+  placeholder ("Weathered Wood" → generic), a silent wrong-unit guess on three "SAY WHICH"
+  lines (dropped the default unit, matching the Tile line that was already right), and a
+  stale-dry-in-pairs-after-Clear bug; all fixed, e2e re-verified 14/14. **BACKPORT RIDER
+  fired: swept every trade — flooring is the one remaining material trade with no engine-A
+  order (`give-me-the-go` / `what-it-read` are not it); named as the next DEPTH rung. No
+  bug-class to carry (new tool).** Gates: mobile-watertight 4 widths default+bumped (caught a
+  real bar-growth, see the 08-23 scar) · no-third-party · pickfilter (61 items / 10 sections) ·
+  order-live-header · jobcard-scope · dropoff-block · headless e2e 14/14.
+  https://mrdirno.github.io/nested-resonance-memory-archive/roofing/order-the-load.html
