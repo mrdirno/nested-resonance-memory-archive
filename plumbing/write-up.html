@@ -35,6 +35,13 @@
 <script src="docs.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/find.js"></script>
+<!-- The pooled vocabulary: every name and aka ANY trade wrote for a document
+     this trade already carries, so the search knows thirteen authors' words
+     for it and not one. GENERATED from the thirteen libraries and diffed by
+     the deploy. shared/docspec.js degrades to this trade's own words if it is
+     missing, which is exactly why the deploy asserts this tag on the real
+     page instead of trusting the convention. -->
+<script src="../shared/docsindex.js"></script>
 <script src="../shared/docspec.js"></script>
 </body>
 </html>

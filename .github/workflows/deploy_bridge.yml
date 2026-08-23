@@ -642,6 +642,39 @@ jobs:
             console.log(`docspec contract: ${n} document(s) across ${trades.length} trade(s) match the engine (families: ${FAM.join(", ")})`);
           '
 
+          # THE POOLED VOCABULARY IS A DERIVED FILE, SO THE DEPLOY DERIVES IT AGAIN.
+          # shared/docsindex.js is the union of every name and `aka` any of the
+          # thirteen trades wrote for a document, added to the search index of every
+          # trade that already carries that document — eight documents live on all
+          # thirteen kits and every trade RENAMED them (delay-notice goes by seven
+          # names), so without it a man searches ONE author's words for a document
+          # thirteen men named. Measured through the real box before it was built:
+          # 1,083 searches returned a DIFFERENT document for one the reader's own
+          # library was holding, 512 of them with no hedge at all.
+          #
+          # A generated artifact whose correctness claim lives in its own header is
+          # the scar this repo has already worn twice. One `aka` added to one trade's
+          # docs.js silently makes the file stale, and nothing on any page looks
+          # wrong. So it is REGENERATED HERE from the staged libraries, through the
+          # engine's own exported merge and the search engine's own normalizer, and
+          # ANY diff fails the build. There is no second copy of the rule to drift.
+          node tools/toolkit-gates/build-docsindex.mjs --check --root=HELIOS-BRIDGE/dist \
+            || { echo "FAIL: shared/docsindex.js is stale against the thirteen staged libraries"; exit 1; }
+
+          # ...and the tag, on the REAL page with comments stripped. shared/docspec.js
+          # reads window.DOCS_POOL and DEGRADES SILENTLY to the trade's own words when
+          # it is absent: the page returns 200, renders identically, and quietly stops
+          # knowing twelve other authors' vocabulary. This is the commons/tips.html
+          # scar exactly — a shared engine reading a window.X a page must supply — and
+          # that one survived a grep because the filename appeared in the comment
+          # EXPLAINING its absence. Hence the strip.
+          for wu in HELIOS-BRIDGE/dist/*/write-up.html; do
+            [ -e "$wu" ] || continue
+            perl -0pe 's/<!--.*?-->//gs' "$wu" | grep -q 'shared/docsindex.js' \
+              || { echo "FAIL: $wu does not load shared/docsindex.js — its search silently narrows to one author's words"; exit 1; }
+          done
+          echo "pooled vocabulary: in step with the staged libraries, and loaded on every write-up page"
+
           # FEEDBACK IS BUILT IN — the standard, asserted rather than remembered
           # (operator 2026-08-04: "make sure we have a solid scalable way of
           # addressing open item wishes/feedback for anything — standardize the

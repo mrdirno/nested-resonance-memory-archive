@@ -1273,8 +1273,49 @@
      on all eight trades. So did one typo, and a plural, 99% of the time.
      The index is built once — LIB does not change after load. */
   var IX = null;
+
+  /* THE POOLED VOCABULARY. Eight of these documents live on all thirteen trades
+     and every trade RENAMED them — `delay-notice` goes by seven names across the
+     rack — and each trade's author wrote his own `aka`, his record of what people
+     actually SAY for it. So the search on any one page knew ONE man's words for a
+     document thirteen men named. Measured through this box on the real pages, 733
+     unambiguous terms x 13 trades: 1,083 searches returned a DIFFERENT document
+     for one the reader's own library was holding, and 512 of those carried no
+     hedge at all — "somebody got hurt" handing back the Damage / Pre-Existing
+     Condition Note as an exact match, "first aid" handing back the Turnover
+     Summary.
+
+     shared/docsindex.js is the union of every name and `aka` anybody wrote,
+     GENERATED from these same thirteen libraries and diffed by the deploy. It is
+     added ONLY to documents the trade already carries, so this can never put a
+     document on a page that did not have it and never changes a block: the man
+     gets thirteen authors' words for his own shelf. It degrades to nothing if the
+     file is absent, and the deploy asserts the tag on the real page. */
+  function poolTerms(d) {
+    var P = window.DOCS_POOL, extra = P && P[d.id];
+    if (!extra || !extra.length || !window.Find) return [];
+    var have = {}, mine = [d.name].concat(d.aka || []), i;
+    for (i = 0; i < mine.length; i++) have[window.Find.norm(mine[i])] = 1;
+    return extra.filter(function (t) { return !have[window.Find.norm(t)]; });
+  }
+
+  /* Copies, never a mutation: library() hands back the live merged rows and
+     compose() reads `aka` to build the ROUTER line a man pastes into his AI.
+     Widening the SEARCH must not widen what the document tells him it is called. */
+  function pooled(lib) {
+    return lib.map(function (d) {
+      var extra = poolTerms(d);
+      if (!extra.length) return d;
+      var c = {}, k;
+      for (k in d) if (Object.prototype.hasOwnProperty.call(d, k)) c[k] = d[k];
+      c.aka = (d.aka || []).concat(extra);
+      c.poolOnly = extra;
+      return c;
+    });
+  }
+
   function findIx() {
-    if (!IX) IX = window.Find.index(library(), [
+    if (!IX) IX = window.Find.index(pooled(library()), [
       { get: function (d) { return d.name; }, w: 10, primary: true },
       { get: function (d) { return d.aka || []; }, w: 6 },
       { get: function (d) { return d.why || ""; }, w: 2 }
@@ -1306,6 +1347,14 @@
          reports which it handed back and the label says so out loud. */
       box.appendChild(grp(res.mode === "none" ? "Nothing matched that — closest three"
                                              : "Closest to “" + q + "”"));
+    } else if (poolHit(hits[0], q)) {
+      /* HE TYPED SOMEBODY ELSE'S WORD FOR HIS OWN DOCUMENT, and the page should
+         say so rather than let him think that is what his trade's page calls it.
+         The same rule the commons name table already holds one floor down: every
+         name carries WHO SAYS IT, so a word that works is never mistaken for the
+         word to write down. It is not a hedge — the document IS his and the match
+         IS exact — which is why it is a heading and not a "Closest to". */
+      box.appendChild(grp("Another trade's name for it"));
     }
     if (!hits.length) {
       box.appendChild(h("li", "none", "Use “not in the list” below — it still builds you a real one."));
@@ -1317,6 +1366,13 @@
     }
 
     function grp(t) { var li = h("li", "grp", t); return li; }
+    /* True only when the WHOLE query is a pooled name — the unambiguous case. A
+       partial or fuzzy overlap is not evidence about which vocabulary he used. */
+    function poolHit(d, query) {
+      if (!d || !d.poolOnly || !window.Find) return false;
+      var k = window.Find.norm(query);
+      return !!k && d.poolOnly.some(function (t) { return window.Find.norm(t) === k; });
+    }
     function row(d) {
       var mine = inDesk(d.id);
       var li = h("li", mine ? "on" : "");
@@ -1853,15 +1909,24 @@
     renderAll();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
-  else mount();
-
   /* THE VERIFY SURFACE. tools/toolkit-gates/docspec-config.mjs reads the FAMILIES
      and the merged LIBRARY out of the shipped engine rather than keeping its own
      copy of either — a gate that hardcodes the thing it is checking drifts from
-     it and then reports green on the day it matters. */
+     it and then reports green on the day it matters.
+
+     IT IS EXPORTED BEFORE THE MOUNT, AND THE MOUNT IS GUARDED, so the merge rule
+     can be read in plain node with a synthetic window and NO DOM. That is not
+     tidiness: shared/docsindex.js is a GENERATED artifact derived from this very
+     merge, and the only way its correctness claim cannot rot is for the deploy to
+     REGENERATE it from the staged files and refuse a diff. A deploy that needs a
+     browser to do that would not do it, and a generator that re-implemented the
+     merge would be the second copy of the rule this file already refuses to keep. */
   window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
                      omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
                      omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit,
-                     picked: picked, maxDocs: MAX_DOCS };
+                     picked: picked, maxDocs: MAX_DOCS, pooled: pooled, poolTerms: poolTerms };
+
+  if (typeof document === "undefined") return;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
+  else mount();
 })();
