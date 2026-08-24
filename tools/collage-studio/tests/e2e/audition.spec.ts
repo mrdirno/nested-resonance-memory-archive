@@ -46,12 +46,15 @@ const TAIL = 2.5;   // AUDITION_TAIL_SEC — pinned by tests/unit/audition.invar
 const SLOP = 0.6;
 
 /**
- * The one forgiven pageerror: WebKit races the app's own SW `reg.update()`
- * against THIS harness's unregister-service-workers boot step — an artifact of
- * the test rig, reproducible with the audition code absent. Nothing else is
- * forgiven (C164: a green run must not hide an uncaught assert).
+ * The one forgiven pageerror FAMILY: ServiceWorker lifecycle noise, in both of
+ * its harness-induced shapes — WebKit racing the app's own `reg.update()`
+ * against THIS rig's unregister-service-workers boot step, and (against the
+ * LIVE site) a pre-deploy worker updating into a just-replaced artifact
+ * ("Failed to update a ServiceWorker … Not found"). Both reproduce with the
+ * audition code absent; the app's PWA path treats update failure as non-fatal.
+ * Nothing else is forgiven (C164: a green run must not hide an uncaught assert).
  */
-const HARNESS_ERRORS = [/service worker registration/i];
+const HARNESS_ERRORS = [/service ?worker/i];
 const realErrors = (errors: string[]) =>
   errors.filter((m) => !HARNESS_ERRORS.some((re) => re.test(m)));
 
