@@ -210,6 +210,16 @@
    "wished_date": "2026-08-18",
    "shipped_date": "2026-08-19",
    "shipped_commit": "0080f006"
+  },
+  {
+   "tool_name": "Collage Studio — the trim handles play the cut like a DAW wheel (cut audition)",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+   "wisher": "an anonymous Collage user",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-24",
+   "shipped_date": "2026-08-24",
+   "shipped_commit": "e33de6c4"
   }
  ]
 }

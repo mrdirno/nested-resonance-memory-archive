@@ -49,6 +49,12 @@ or re-documenting an existing capability is DD, not delivery.
   a ruler instead of a filmstrip where there is no picture, and the same
   `clipWindow` formula on all three timelines; music also starts the collage
   DRIFTING when nobody has chosen a move;
+  CUT AUDITION — holding a trim handle plays that cut like a DAW wheel: the IN
+  handle loops the monitor ON the cut, the OUT handle plays the approach up to
+  it, looping until the handle is left (`lib/audition.ts` owns the sub-window;
+  `stage.setAudition` retargets the track's OWN element — no second decoder, no
+  double — solo and at unity through `applyMutes`' audibility terms, with the
+  range fade armed on the REAL window so the landing previews as it will ship);
   TRIM — per-clip in/out points with a filmstrip sheet, held by ONE
   output-time-to-source-time function (`lib/clipWindow.ts`) that the live
   element, the offline frame seek and the offline audio mix all ask, and coupled
@@ -5391,4 +5397,63 @@ frontier. Today's ceiling is tomorrow's floor.
   av/AV_SOCIETY.md §SCARS — second failure of the same mechanism, second
   mechanism, same reason: a blind reader's output looks exactly like a truthful
   one. Storefront unchanged — no new tool and no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-24 · **[AXIS:WELL] C3652 — THE CUT YOU CAN HEAR: the trim handles now
+  play like a DAW wheel.** From the well (oldest and only NEW wish across both
+  wells, anonymous, trade `collage`): "the audio ripping doesn't have a
+  playback… if you're at the front you play on the cut, if you're dragging the
+  back you play a few seconds before up to the cut, then loop again."
+  **before:** the TrimSheet dialed the soundtrack DEAF — video got a filmstrip,
+  audio got ruler marks, and the only way to hear a cut was to close the sheet
+  and play the piece. **after:** grabbing the IN handle loops the monitor ON
+  the cut (`[in, in+2.5s]` — one bar at 96 BPM, the tail's written rationale);
+  the OUT handle plays the approach (`[out-2.5s, out]`), the loop landing
+  exactly on the cut; release keeps it cycling, blur/Escape gives the room
+  back; a white playhead rides the strip at rAF rate through a ref, never a
+  render. **THE PANEL CHANGED THE BUILD, WHICH IS WHAT IT IS FOR:** three
+  judges (DAW-UX 7, engineering 6, adversarial 5 — unanimous AMEND) converged
+  independently on the same hole — a second `<audio>` on the same blob doubles
+  the exact source being judged, invisibly to Stage's decoder accounting — so
+  the shipped design RETARGETS THE TRACK'S OWN ELEMENT (`stage.setAudition`
+  swaps only which window `enforceTrackWindow` holds), which dissolved the
+  double, the second decoder, the blob-replace-while-open death (B's find;
+  `key={url}` remounts the sheet, the rebuilt track starts audition-null), AND
+  Judge A's fade demand for free: the envelope stays armed on the REAL window,
+  so the OUT audition hears the configured landing while the artificial edge
+  wraps hard, as DAW loops do. Audibility never touches intent: `applyMutes`
+  gains an audition term and a solo term (`soundOn`/`muted` unwritten — the
+  DECISION 2 split), gated on metadata so a probing track cannot blip its head,
+  and on `broken` so a dead blob degrades to a hidden playhead, not a lie.
+  **PROOF:** `audition.invariants` **16,654 checks / 0 failures** (edge pinned
+  `Object.is`-exact; containment; tail = min(2.5, range); the overlap band
+  `range < 2·tail` on purpose; wrap ≡ `liveWrapTarget` over the sub-window
+  INCLUDING a full trim window — the trap `full:false` steers around) with
+  **both mutants dying** (OUT-edge tail cut → 38 fails; `full` propagated →
+  1,544). **32/32 unit sweeps, tsc clean, vite build clean. audition.spec 22
+  green / 2 documented skips across all four engines** — the grab speaks, the
+  lap comes round on the cut, the approach ends AT it, Escape restores the
+  room muted, the replaced song recovers, watertight at 390 with the audition
+  rolling, and the keyboard path (Tab parks silent, first arrow speaks, blur
+  stops) proven on the Chromiums and SKIPPED on WebKit with the reason in the
+  skip: Tab reaches a range input there only under Full Keyboard Access, and
+  the pointer path drives the same arming code. Regressions: soundtrack 6/6,
+  trim 9/9 (sheet watertight 320/360/390/430). **SWEPT AND NOT FIXED:**
+  level.spec L5's decoded-file bound (0.4356 vs <0.42) fails IDENTICALLY on
+  the stashed pre-diff tree — pre-existing threshold drift in the family
+  look.spec T2 is already scarred for, owed its own cycle, not this one's
+  blame. **SCOPE HELD:** the clip sheet's audition is NAMED, not shipped — the
+  retarget mechanism would scrub the clip's PICTURE through the live collage,
+  which is a design decision owed its own panel, not a side effect of a prop
+  in scope (the speed's exact sentence). BACKPORT rider fired inside the app:
+  swept the trim surfaces for the deaf-dial class — the clip sheet carries it
+  (named above, next rung), the take-fade and level rows do not (they preview
+  through the live mix they configure). Storefront unchanged — capability
+  inside Collage Studio, no new tool, no new trade. Wish ccf452b3 claimed →
+  shipped; credit in av/credits.json AND in the sheet's own credit line,
+  anonymity honoured. Operator mid-cycle constraint (open-in-card-studio must
+  survive IG/LinkedIn in-app WebViews) relayed to P5 as fleet #15463 with the
+  URL-fragment-carrier shape spelled out — that class belongs to the live
+  card-studio session whose claims commits dee4922/8c9303d prove alive; the 16
+  cards `building` wishes were verified live and released NOTHING.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
