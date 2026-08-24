@@ -793,3 +793,61 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPR)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" }
+  ],
+  "how": [
+    { "es": "Me lo dijo en el recorrido", "en": "Told me on the walk" },
+    { "es": "Texto / correo", "en": "Text / email" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me entregó un plano marcado", "en": "Marked-up print handed to me" },
+    { "es": "Lo dijo en la junta del tráiler", "en": "Said it in the trailer meeting" }
+  ],
+  "notin": [
+    { "es": "Este vale es solo el corte", "sub": "no la tablaroca de contrato en ese muro", "en": "This tag is the cut-in only" },
+    { "es": "Parche, tape y lijado no incluidos", "sub": "después de que la gente de usted vuelva a pasar", "en": "Patch, tape and sand not included" },
+    { "es": "Sin horas de lift, andamio ni zancos", "sub": "a menos que esté abajo en la lista", "en": "No lift, scaffold or stilt time" },
+    { "es": "No el backing que ya estaba en la lista original", "en": "Not the backing already on the original list" },
+    { "es": "No el cierre del segundo lado — eso es contrato", "en": "Not the second-side close — that's contract" },
+    { "es": "Sin horas de espera para la cuadrilla que esperó", "en": "No stand-by hours for the crew that waited" },
+    { "es": "No es reclamo por retraso ni impacto al programa", "en": "Not a delay claim and not a schedule impact" },
+    { "es": "Sin acarreo de basura ni limpieza del tiradero de otro contratista", "en": "No scrap haul or cleanup for another trade's mess" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de cerrarlo", "en": "In this message — shot before we closed it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "Súper del GC", "en": "GC super" },
+    { "es": "Asistente del súper del GC / ingeniero de campo", "en": "GC assistant super / field engineer" },
+    { "es": "PM del GC", "en": "GC PM" },
+    { "es": "Nuestro GF o PM", "en": "Our GF or PM" },
+    { "es": "Rep del dueño / facilities", "en": "Owner's rep / facilities" },
+    { "es": "Arquitecto o ingeniero en campo", "en": "Architect or engineer in the field" },
+    { "es": "Mayordomo de otro contratista", "en": "Another trade's foreman" },
+    { "es": "Inspector", "en": "Inspector" }
+  ],
+  "why": [
+    { "es": "No está en mis planos", "en": "Not on my set" },
+    { "es": "Cambió el plano después de que lo armé", "en": "Drawing changed after I framed it" },
+    { "es": "Backing que nadie pidió antes de cerrar el muro", "sub": "ahora es un corte", "en": "Backing nobody asked for before the wall closed" },
+    { "es": "Hay trabajo de otro contratista en la línea de mi muro", "en": "Another trade's work is in my wall line" },
+    { "es": "Daño por otros — nosotros lo abrimos y lo cerramos", "en": "Damage by others — we opened and closed it" },
+    { "es": "Condiciones existentes", "sub": "no es lo que muestran los as-builts", "en": "Existing conditions" },
+    { "es": "El inspector no lo pasó como está dibujado", "en": "Inspector wouldn't pass it as drawn" },
+    { "es": "Me mandaron trabajar fuera de secuencia", "en": "Told to work out of sequence" },
+    { "es": "Lo dejamos abierto para alguien, y luego me mandaron cerrarlo de todos modos", "en": "Held for somebody, then told to close it anyway" }
+  ]
+};

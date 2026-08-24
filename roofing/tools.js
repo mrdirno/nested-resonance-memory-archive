@@ -46,7 +46,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Found it after tear-off? Write the tag standing on the open deck — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once the new roof is over it, the evidence is gone.",
+    desc: "Found it after tear-off? Write the tag standing on the open deck — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once the new roof is over it, the evidence is gone. En español también.",
     chip: "#C4426F",
     audience: "Foreman → super / PM"
   },

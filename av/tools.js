@@ -38,7 +38,7 @@ window.AV_TOOLS = [
   {
     name: "T&M Tag",
     href: "tm-tag.html",
-    desc: "Somebody put you on something that isn't yours. Tag it before you roll — whose call it was, what they had you do, why it isn't in our scope, and what it cost the room you were actually here for. No prices, no fake signature line.",
+    desc: "Somebody put you on something that isn't yours. Tag it before you roll — whose call it was, what they had you do, why it isn't in our scope, and what it cost the room you were actually here for. No prices, no fake signature line. En español también.",
     chip: "#7A5A05",
     audience: "Techs → GC super / PM / owner"
   },

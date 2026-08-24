@@ -28,7 +28,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "T&M Ticket",
     href: "tm-ticket.html",
-    desc: "Directed work that isn't on your prints. Ticket it before you pull off — who directed it, what you had us do, why it's an extra, men and hours by classification and ST/OT/DT. No rates, no totals, no fake signature line.",
+    desc: "Directed work that isn't on your prints. Ticket it before you pull off — who directed it, what you had us do, why it's an extra, men and hours by classification and ST/OT/DT. No rates, no totals, no fake signature line. En español también.",
     chip: "#0A5C87",
     audience: "Foreman → Super / GC PM"
   },

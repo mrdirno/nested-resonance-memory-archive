@@ -1398,3 +1398,76 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPRENTICE)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "ACABADOR (FINISHER)", "en": "FINISHER" },
+    { "es": "OPERADOR (OPERATOR)", "en": "OPERATOR" }
+  ],
+  "how": [
+    { "es": "En persona, en el colado", "en": "Face to face at the pour" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijo en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Planos marcados que me entregó en campo", "en": "Marked-up set handed to me in the field" },
+    { "es": "Estacas o pintura movidas en el terreno", "en": "Stakes or paint moved on the grade" },
+    { "es": "Nota dejada en la cimbra", "en": "Note left on the forms" },
+    { "es": "Orden por escrito de nuestra propia oficina", "en": "Written direction from our own office" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin ninguna cifra en dólares.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo documentan, y el derecho a cobrarlo lo pone la carta de la oficina, no el mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el ingeniero, ni cambio de diseño", "sub": "Todo lo del diseño sube por el GC en su formato. Nada de aquí aprueba mover acero, cambiar la mezcla, ni apartarse del juego de planos que trae en la mano.", "en": "Not a question for the engineer, and not a design change" },
+    { "es": "No es el ticket de la planta ni el reporte del laboratorio", "sub": "Los anexamos por los números que ya traen impresos. Nunca volvemos a escribir lo que dicen.", "en": "Not the plant's ticket or the lab's report" },
+    { "es": "No es el reporte del inspector", "sub": "Él escribe el suyo. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the inspector's report" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice quién tuvo la culpa", "sub": "Escribimos lo que vimos y lo que colamos. Quién causó qué es decisión de otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que corresponde.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se lo ordenaron no es aceptar el trabajo, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de taparlo", "en": "In this message — shot before we covered it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestra área", "en": "Another trade's foreman working in our footprint" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "El súper de campo del constructor (fraccionamiento o casa a la medida)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El súper del contratista de terracerías", "en": "Grading contractor's superintendent" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "El representante del dueño", "en": "Owner's rep" },
+    { "es": "El inspector de la ciudad en la obra", "en": "Jurisdiction inspector on site" }
+  ],
+  "why": [
+    { "es": "Terreno blando o mojado", "sub": "La tierra no aguantaba la cuadrilla, el acero ni la cimbra. Nos dijeron que le entráramos de todos modos, o que esperáramos mientras la trabajaban.", "en": "Soft or wet grade" },
+    { "es": "Parados mientras otro oficio terminaba estorbándonos", "sub": "Cuadrilla, bomba y camiones en la obra, esperando a que alguien más se saliera de nuestra área.", "en": "Standing while another trade finished in our way" },
+    { "es": "Sleeves y embeds tarde o mal", "sub": "Los sleeves, conduit, hold-downs o embeds de otro oficio llegaron cuando ya estábamos cimbrados y amarrados, o no cuadraban con lo que construimos. Hubo que abrir cimbra y acero otra vez.", "en": "Sleeves and embeds late or wrong" },
+    { "es": "Acero movido después de amarrado", "sub": "Nos dijeron que agregáramos, moviéramos, quitáramos o volviéramos a amarrar cuando la parrilla o el armado ya estaba hecho y revisado.", "en": "Steel moved after it was tied" },
+    { "es": "Trazo movido después de que construimos con él", "sub": "Líneas, offsets o niveles cambiaron después de que ya habíamos cimbrado con los primeros.", "en": "Layout moved after we built to it" },
+    { "es": "El fondo siguió bajando", "sub": "Excavamos más abajo de lo que marcaban los planos. Más concreto y más cimbra que la zapata del papel.", "en": "Bottom kept going down" },
+    { "es": "Roca", "sub": "No se pudo excavar con lo que hay en la obra. Cambió el fondo de la zapata, la pila o el grade beam.", "en": "Rock" },
+    { "es": "Concreto viejo del que nadie nos avisó", "sub": "Zapata, losa, muro o plancha metida en nuestra línea que no estaba en nada de lo que cotizamos.", "en": "Old concrete nobody told us about" },
+    { "es": "Línea en la zanja que nadie marcó", "sub": "Línea viva o muerta que encontramos nosotros. Se paró el trabajo, se excavó a mano, o le dimos la vuelta.", "en": "Line in the trench nobody marked" },
+    { "es": "Nos dijeron que le entráramos con el clima", "sub": "Seguirle, bombear el agua de la cimbra, taparlo, o regresar un día que ya habíamos cancelado.", "en": "Told to work the weather" },
+    { "es": "Cuidando protección que pidió alguien más", "sub": "Cobijas, plástico, arena, calor, sombra o barricada que pusimos, seguimos revisando y quitamos porque alguien lo dijo.", "en": "Babysitting protection somebody else called for" },
+    { "es": "No entraba el camión ni la pluma", "sub": "Lo llevamos en buggy, en carretilla o a mano, o un colado se volvió dos, porque el acceso cambió después de que nos instalamos.", "en": "Couldn't get the truck or the boom to it" },
+    { "es": "Demolición o recolado de trabajo ya colado", "sub": "Trabajo que ya habíamos colado y lo pisaron con equipo, lo cargaron, lo cortaron o lo destrozaron antes de que lo entregáramos.", "en": "Tear-out or re-pour of work we already placed" },
+    { "es": "Limpieza o volver a dar acabado detrás de alguien más", "sub": "Washout, lechada, lodo que arrastraron o material estibado que dejaron sobre nuestro acabado y nos dijeron que lo resolviéramos.", "en": "Cleanup or re-finish behind somebody else" }
+  ]
+};

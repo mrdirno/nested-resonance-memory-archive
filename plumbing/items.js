@@ -420,3 +420,55 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase (class)", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPRENTICE)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" }
+  ],
+  "how": [
+    { "es": "En persona, en el trabajo", "en": "Face to face at the work" },
+    { "es": "Por teléfono", "en": "On the phone" },
+    { "es": "Texto / correo", "en": "Text / email" },
+    { "es": "Orden de campo / plano marcado", "en": "Field order / marked print" }
+  ],
+  "notin": [
+    { "es": "Plafón / pared quedaron abiertos", "sub": "reponer y pintar no me toca", "en": "Ceiling / wall left open" },
+    { "es": "Losa coreada", "sub": "el parche no me toca", "en": "Slab cored" },
+    { "es": "Sleeve puesto — falta el firestop", "en": "Sleeve in — firestop still to do" },
+    { "es": "Todavía sin probar", "en": "Not tested yet" },
+    { "es": "Con tapón y aguantando — falta el trim", "en": "Capped and holding — still needs trim" },
+    { "es": "Hay que regresar para terminar", "en": "Needs a come-back to finish" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de cerrar", "en": "In this message — shot before we closed it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper", "en": "Super" },
+    { "es": "PM del GC", "en": "GC PM" },
+    { "es": "Dueño / inquilino", "en": "Owner / tenant" },
+    { "es": "Nuestro PM", "en": "Our PM" },
+    { "es": "Mayordomo de otro sub", "en": "Another sub's foreman" },
+    { "es": "Otra persona", "en": "Somebody else" }
+  ],
+  "why": [
+    { "es": "No está en mis planos", "en": "Not on my prints" },
+    { "es": "Cambio del dueño / inquilino después del rough-in", "en": "Owner / tenant change after rough" },
+    { "es": "Condiciones existentes", "sub": "no es lo que traen los as-builts", "en": "Existing conditions" },
+    { "es": "Lo existente podrido — hubo que cambiarlo para entroncar", "en": "Rotted existing — had to replace it to tie in" },
+    { "es": "Otro contratista estorbando — lo movimos o esperamos parados", "en": "Another trade in my way — moved it or stood by" },
+    { "es": "Daño de otros — lo arreglamos nosotros", "en": "Damage by others — we fixed it" },
+    { "es": "El inspector no lo pasó como está en el plano", "en": "Inspector wouldn't pass it as drawn" },
+    { "es": "Emergencia — fuga / drenaje principal tapado", "en": "Emergency — leak / main stopped up" }
+  ]
+};

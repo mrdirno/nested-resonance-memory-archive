@@ -44,7 +44,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Told to dig it deeper, re-set what somebody moved, or stand by while another trade finished? Write the tag before you place — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once it's covered, the evidence is under six inches of mud.",
+    desc: "Told to dig it deeper, re-set what somebody moved, or stand by while another trade finished? Write the tag before you place — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once it's covered, the evidence is under six inches of mud. En español también.",
     chip: "#0B5220",
     audience: "Foreman → super / PM"
   },

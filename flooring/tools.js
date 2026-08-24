@@ -88,7 +88,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Ground it, skimmed it, pulled cutback, undercut fourteen jambs, moved a fridge, or stood in the corridor because the room wasn't clear? Prep is where the whole margin lives and it's the work that never gets written down. Write the tag the day it happened — who told you, why it's outside your number, crew and material as counts, and what is NOT in this tag.",
+    desc: "Ground it, skimmed it, pulled cutback, undercut fourteen jambs, moved a fridge, or stood in the corridor because the room wasn't clear? Prep is where the whole margin lives and it's the work that never gets written down. Write the tag the day it happened — who told you, why it's outside your number, crew and material as counts, and what is NOT in this tag. En español también.",
     chip: "#2FA8C9",
     audience: "Lead → super / PM / the dealer who sold it"
   },

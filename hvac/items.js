@@ -822,3 +822,77 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "TÉCNICO (TECH)", "en": "TECH" },
+    { "es": "AYUDANTE (HELPER)", "en": "HELPER" },
+    { "es": "APRENDIZ (APPR)", "en": "APPRENTICE" }
+  ],
+  "found": [
+    { "es": "Comp aterrizado / rotor trabado", "en": "Comp's grounded / locked rotor" },
+    { "es": "Motor quemado", "sub": "ventilador del condensador o blower", "en": "Motor's shot" },
+    { "es": "Contactor / arrancador quemado", "en": "Contactor / starter burnt up" },
+    { "es": "Tiene fuga — le falta carga", "en": "It's leaking — low on charge" },
+    { "es": "La tarjeta está muerta — sin control", "en": "Board's dead — no control" },
+    { "es": "Drenaje tapado — agua en el plafón", "en": "Drain's plugged — water in the ceiling" },
+    { "es": "La caja se está calentando", "sub": "defrost o calentador de puerta", "en": "Box is warming" },
+    { "es": "No es seguro — lo tengo con lockout", "en": "It's unsafe — I've got it locked out" }
+  ],
+  "how": [
+    { "es": "Me lo dijo en el sitio", "en": "Told me on site" },
+    { "es": "Teléfono", "en": "Phone" },
+    { "es": "Texto", "en": "Text" },
+    { "es": "Correo", "en": "Email" }
+  ],
+  "refdir": [
+    { "es": "— para dónde", "en": "— which way" },
+    { "es": "Recuperado (Recovered)", "en": "Recovered" },
+    { "es": "Agregado (Added)", "en": "Added" }
+  ],
+  "refs": [
+    { "es": "— tipo", "en": "— type" },
+    { "es": "R-410A", "en": "R-410A" },
+    { "es": "R-454B", "en": "R-454B" },
+    { "es": "R-32", "en": "R-32" },
+    { "es": "R-448A", "en": "R-448A" },
+    { "es": "R-449A", "en": "R-449A" },
+    { "es": "R-404A", "en": "R-404A" },
+    { "es": "R-134a", "en": "R-134a" },
+    { "es": "R-22", "en": "R-22" },
+    { "es": "R-407C", "en": "R-407C" },
+    { "es": "R-513A", "en": "R-513A" },
+    { "es": "R-744 (CO2)", "en": "R-744 (CO2)" },
+    { "es": "R-717 (NH3)", "en": "R-717 (NH3)" }
+  ],
+  "right": [
+    { "es": "Está parada", "en": "It's down" },
+    { "es": "Sigue corriendo", "en": "Still running" },
+    { "es": "Corre, pero no aguanta", "en": "Running, won't hold" },
+    { "es": "Apagada y etiquetada — yo la apagué", "en": "Off and tagged — I shut it down" }
+  ],
+  "roles": [
+    { "es": "Contacto del sitio / gerente de tienda", "en": "Site contact / store mgr" },
+    { "es": "Facilities / ingeniero del edificio", "en": "Facilities / building eng" },
+    { "es": "El súper del GC", "en": "GC super" },
+    { "es": "Nuestro dispatch / gerente de servicio", "en": "Our dispatch / service mgr" },
+    { "es": "Dueño / inquilino", "en": "Owner / tenant" },
+    { "es": "Otra persona", "en": "Somebody else" }
+  ],
+  "why": [
+    { "es": "No está en el PM — esto es reparación", "en": "Not in the PM — this is a repair" },
+    { "es": "La WO no se escribió para esto", "en": "Not what the WO was written for" },
+    { "es": "Así estaba cuando llegamos", "en": "Was like that when we got here" },
+    { "es": "Otro oficio le anduvo moviendo", "en": "Another trade got into it" },
+    { "es": "Las partes de reparación no están en el contrato", "en": "Repair parts aren't in the agreement" },
+    { "es": "No puedo terminar lo que me mandaron a hacer hasta que esto quede", "en": "Can't finish what I was sent for till this is done" }
+  ]
+};

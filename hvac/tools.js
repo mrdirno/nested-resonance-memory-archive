@@ -28,7 +28,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "T&M Tag",
     href: "tm-tag.html",
-    desc: "Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number.",
+    desc: "Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number. En español también.",
     chip: "#0C7A66",
     audience: "Tech → Site contact / Service manager"
   },

@@ -814,3 +814,77 @@ window.TOOLKIT_GETIN = {
     writeinAx: [drop()]
   };
 })();
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPR)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "AYUDANTE (TENDER)", "en": "TENDER" },
+    { "es": "OPERADOR (OPERATOR)", "en": "OPERATOR" }
+  ],
+  "how": [
+    { "es": "En persona, en el muro", "en": "Face to face at the wall" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijeron en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Planos marcados que me entregaron en campo", "en": "Marked-up set handed to me in the field" },
+    { "es": "Marcas de pintura o crayón cambiadas en el muro", "en": "Paint or keel marks changed on the wall" },
+    { "es": "Nota dejada en el andamio", "en": "Note left on the stage" },
+    { "es": "Otro oficio me dijo que ya estaba autorizado", "en": "A different trade told me he'd cleared it" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin cifra en dólares en ninguna parte.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo ponen en papel, y el derecho a cobrarlo es carta de ellos, no del mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el ingeniero ni cambio de diseño", "sub": "Todo lo del diseño sube por el GC en su formato. Nada de aquí aprueba mover acero, cambiar un apoyo, cortar un muro ni apartarse de los planos que tiene en la mano.", "en": "Not a question for the engineer, and not a design change" },
+    { "es": "No decide el bracing ni libera nada", "sub": "Nada en este vale apuntala un muro, lo libera, ni dice que ya se le puede cargar, rellenar contra él o trabajar debajo. Eso es de ingeniería y lo decide alguien más.", "en": "Not a bracing decision and not a release" },
+    { "es": "No es el ticket del proveedor ni el reporte del laboratorio", "sub": "Los anexamos con los números que ya traen impresos. Nunca volvemos a escribir lo que dicen.", "en": "Not the supplier's ticket or the testing agency's report" },
+    { "es": "No es el registro del inspector especial", "sub": "Él escribe el de él y le pone número. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the special inspector's record" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el de ellos y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice la causa", "sub": "Escribimos qué pegamos y qué vimos. Por qué algo se cuarteó, se descascaró o se manchó lo deciden otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que toca.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que le dieron la orden no es aceptar el trabajo, liberar a nadie ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de pegar más arriba", "en": "In this message — shot before we laid past it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestro muro", "en": "Another trade's foreman working in our wall" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "Súper de campo del constructor (fraccionamiento o casa custom)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "El representante del dueño", "en": "Owner's rep" },
+    { "es": "El administrador de la propiedad o el ingeniero del edificio", "en": "Property manager or building engineer" },
+    { "es": "El inspector de la ciudad en la obra", "en": "Jurisdiction inspector on site" }
+  ],
+  "why": [
+    { "es": "Zapata o dowels no como en el plano", "sub": "Zapata alta, baja o fuera de línea, o los dowels fuera de las celdas. Nos dijeron que pegáramos de todos modos, o que nos esperáramos mientras alguien lo arreglaba.", "en": "Footing or dowels not as shown" },
+    { "es": "Parados mientras otro oficio se salía de nuestro muro", "sub": "Cuadrilla, mezcla y material en el piso, esperando a que otro terminara en el muro para el que ya teníamos la gente.", "en": "Standing while another trade got out of our wall" },
+    { "es": "Cajas, camisas o salidas tarde o mal", "sub": "El rough-in de otro llegó después de que ya habíamos pegado más arriba, o no coincidía con lo que nos marcaron. Muro abierto otra vez.", "en": "Boxes, sleeves or stubs late or wrong" },
+    { "es": "El hueco se movió cuando ya habíamos pegado hasta él", "sub": "Una puerta, una ventana, una rejilla o un knockout cayó en otro lado después de que construimos con el primer juego de planos.", "en": "Opening moved after we laid to it" },
+    { "es": "Se movió el trazo o una línea de control", "sub": "Líneas, offsets o niveles cambiaron después de que levantamos las maestras (leads) con los primeros.", "en": "Layout or a control line moved" },
+    { "es": "Marcos, lintels o precolados no estaban en la obra", "sub": "No se podía pegar más allá del hueco. La cuadrilla se movió, se esperó, o regresó en un segundo viaje.", "en": "Frames, lintels or precast not on site" },
+    { "es": "Nos dijeron que abriéramos algo que no está en nuestros planos", "sub": "Un hueco, un chase, un pocket o un knockout que agregaron en el muro después de pegado el tramo.", "en": "Told to cut in something that isn't on our drawings" },
+    { "es": "Tumbamos y volvimos a pegar lo que ya habíamos construido", "sub": "Muro que ya habíamos pegado se tumbó porque alguien lo dijo — no por nada malo en cómo se pegó.", "en": "Broke out and re-laid work we had already built" },
+    { "es": "Obra vieja de la que nadie nos avisó", "sub": "Muro, zapata, lintel o relleno existente en nuestra línea que no estaba en nada de lo que cotizamos.", "en": "Old work nobody told us about" },
+    { "es": "Nos dijeron que trabajáramos con el clima", "sub": "Seguir pegando, taparlo, destaparlo, o regresar un día que ya habíamos cancelado.", "en": "Told to work the weather" },
+    { "es": "Cuidando protección que otro pidió", "sub": "Lona, cobijas, plástico, calentones o barricada que pusimos, estuvimos revisando y quitamos porque alguien lo dijo.", "en": "Babysitting protection somebody else called for" },
+    { "es": "No se podía llegar con el material ni con el andamio", "sub": "A mano, re-estibado, o una subida se volvió dos porque el acceso o el izaje cambió después de que ya habíamos armado.", "en": "Couldn't get material or the stage to it" },
+    { "es": "Limpieza o volver a lavar detrás de otro", "sub": "Lodo, lechada, overspray, huellas o manchas que dejaron en una cara que ya habíamos lavado.", "en": "Cleanup or re-washing behind somebody else" },
+    { "es": "Nos dijeron que detuviéramos el muro para que otro lo revisara", "sub": "Nos quedamos cortos una hilada, o dejamos un tramo abierto, para que otro lo inspeccionara, fotografiara o trabajara ahí.", "en": "Told to hold the wall for somebody else's look" }
+  ]
+};

@@ -725,3 +725,65 @@ window.TOOLKIT_GETIN = {
     writeinAx: [drop()]
   };
 })();
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPR)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" }
+  ],
+  "how": [
+    { "es": "Me lo dijo en el techo", "en": "Told me on the roof" },
+    { "es": "Texto / correo", "en": "Text / email" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me entregó el plano del techo marcado", "en": "Marked-up roof plan handed to me" },
+    { "es": "Lo dijo en la junta del tráiler", "en": "Said it in the trailer meeting" }
+  ],
+  "notin": [
+    { "es": "Solo reparación del deck", "sub": "no el sistema de techo que va encima", "en": "Deck repair only" },
+    { "es": "Solo el cut-off temporal", "sub": "el tie-in permanente va aparte", "en": "Temporary cut-off only" },
+    { "es": "No el tear-off que ya está en el contrato", "en": "Not the tear-off already in contract" },
+    { "es": "Sin re-inspección ni recorrido de garantía después", "en": "No re-inspection or warranty walk after this" },
+    { "es": "Sin horas de grúa, malacate ni loader", "sub": "a menos que esté abajo en la lista", "en": "No crane, hoist or loader time" },
+    { "es": "Sin horas de espera de la cuadrilla que se quedó parada", "en": "No stand-by hours for the crew that waited" },
+    { "es": "Sin dumpster extra ni tirar lo que salió", "en": "No extra dumpster or disposal for what came off" },
+    { "es": "No es reclamo por atraso ni impacto al programa", "en": "Not a delay claim and not a schedule impact" },
+    { "es": "Sin protección interior, plafón ni tablaroca", "en": "No interior protection, ceiling or drywall work" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas en el deck abierto", "en": "In this message — shot on the open deck" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "Súper del GC", "en": "GC super" },
+    { "es": "PM del GC", "en": "GC PM" },
+    { "es": "Nuestro GF o PM", "en": "Our GF or PM" },
+    { "es": "Rep del dueño / administrador del edificio", "en": "Owner's rep / property manager" },
+    { "es": "Ingeniero del edificio", "en": "Building engineer" },
+    { "es": "Arquitecto, ingeniero o consultor de techos", "en": "Architect, engineer or roof consultant" },
+    { "es": "Rep de campo del fabricante", "en": "Manufacturer's field rep" },
+    { "es": "Dueño de la casa", "en": "Homeowner" },
+    { "es": "Mayordomo de otro contratista", "en": "Another trade's foreman" }
+  ],
+  "why": [
+    { "es": "No está en nuestro scope", "en": "Not in our scope" },
+    { "es": "Se encontró después del tear-off", "sub": "nadie lo podía ver cuando se cotizó", "en": "Found it after tear-off" },
+    { "es": "El deck salió malo abajo", "en": "Deck came up bad underneath" },
+    { "es": "Aislante mojado — más del allowance", "en": "Wet insulation — more than the allowance" },
+    { "es": "Una capa extra que nadie avisó", "en": "Extra layer nobody disclosed" },
+    { "es": "Condiciones existentes", "sub": "no lo que muestran los as-builts ni el plano del techo", "en": "Existing conditions" },
+    { "es": "Otro contratista dejó trabajo donde va mi techo", "en": "Another trade's work is on my roof line" },
+    { "es": "Daño de otros que tuvimos que reparar para seguir", "en": "Damage by others we had to repair to keep going" },
+    { "es": "Nos mandaron trabajar fuera de secuencia", "en": "Told to work out of sequence" },
+    { "es": "No nos dejaron subir al techo, y luego que repusiéramos el día", "en": "Held off the roof, then told to make the day up" },
+    { "es": "Cut-off de emergencia por agua — nos agarró la lluvia", "en": "Emergency water cut-off — weather moved on us" }
+  ]
+};

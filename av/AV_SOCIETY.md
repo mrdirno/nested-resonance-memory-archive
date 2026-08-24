@@ -1534,6 +1534,36 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-23 (C3650) — THE GATE ASSERTED THE FORMAT FROM MEMORY, AND THE ENGINE'S OWN COMPOSER DISAGREED
+The first full run of `lang-layer.mjs` failed 7 of 12 pages for "the ES (EN) composition did not
+reach the document" — and every one was a tick that carries a `sub`, which `Lang.tick` prints as
+"es — sub (en)", exactly as the first instance had for five days. The gate was written from the
+simplest case and it flagged the engine's documented behaviour. An assertion about a composed
+value is derived from the composer (or made by calling it), never from a remembered example; the
+fix was one line and the lesson is the class: when a gate fails on the data the engine was built
+for, suspect the gate first, on the evidence, before touching the engine.
+
+### 2026-08-23 (C3650) — A BAR LABEL IS GEOMETRY, AND TWO NATIVE JUDGES PASSED A STRING 2.5× WIDER THAN ITS BOX
+Every count label the panel returned was correct Spanish and none of them fit: the bar's count
+box is 94px at 390px (80 on electrical), "1 hombre en el vale" needs 147px, and gc's
+first-instance "1 línea de cuadrilla en el vale" needs 239px — it had shipped truncated to
+"1 LÍNEA DE C…" and nothing caught it, because the count is `text-overflow:ellipsis` by design
+and an ellipsis is neither overflow nor a clipped tap target, the only things the mobile gate
+measures. A translator sees words; a box sees pixels. A string that lives in a measured box gets
+a character budget in the brief (≤ 12 here) and a measurement before ship — and that
+measurement found the ENGLISH "Nothing on it yet" (131px) has never fit the box either (named
+remainder, C3650 cycle line).
+
+### 2026-08-23 (C3650) — A TRADE CLONED FROM ITS NEIGHBOUR KEPT THE NEIGHBOUR'S EXAMPLES, AND ONLY A TRANSLATOR NOTICED
+`sitework/tm-tag.html` was cloned from masonry's and four of its placeholders were still
+masonry's — "180 pc 8 in block · 14 bags mortar · 1 yd sand · 2 pc lintel", "third lift",
+"re-laid three courses" — on a page for a crew that lays pipe. It passed every gate for a week,
+because a placeholder is not in the document and no gate reads an example for trade sense. The
+Spanish it produced is what surfaced it: the trade judge would not put block on a sitework page.
+A page cloned from a sibling diffs its `ph:` lines against the sibling before it ships, and a
+long placeholder shared verbatim by two trades is a defect until proven a job name — the sweep
+is nine lines of Python and it found exactly those four and nothing else.
+
 ### 2026-08-23 (C3649) — THE WISH'S URL WAS THE WELL'S OWN HANDWRITING, AND TWO LENSES AND I READ IT AS A VISITOR
 The vibe-cards deck stamps `page_url: location.href + '#' + address` on every wish it sends, so
 whoever serves the wish can re-grow the picture the wisher was looking at. Wish `e6f1af4d` arrived
@@ -5089,8 +5119,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Stale-claim sweep: AV well 0 building; the 20 building in vibe-cards belong to a LIVE sibling
   lane (three commits the same evening) whose well is forward-only by design — nothing to release,
   and the board's "15 STALE" is that lane's WIP, recorded here so the flag has an answer on disk.
-  NEXT RUNG the wish itself names ("and other languages", five sibling tm-tags): the SECOND
-  instance, where §THE THREE SHAPES says the language layer gets extracted into an engine.
+  ~~NEXT RUNG the wish itself names ("and other languages", five sibling tm-tags): the SECOND
+  instance, where §THE THREE SHAPES says the language layer gets extracted into an engine.~~
+  → **SHIPPED C3650 (2026-08-23):** the layer is `shared/lang.js` and every directed-work tag on
+  all twelve trades speaks Spanish; gated by `tools/toolkit-gates/lang-layer.mjs`.
   https://mrdirno.github.io/nested-resonance-memory-archive/gc/tm-tag.html
 - **[AXIS:WELL] C3630 (2026-08-18) — the stale claim WAS the oldest wish: the tap mark reaches
   the card faces.** The board flagged `e97de46a` (vibe-cards root, 2026-08-17: *"None of the
@@ -5378,3 +5410,46 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `ca2e03d`, both today) — serve or fold them there, not here. Not built, trigger named: the deck
   reading its own fragment (a live panel's `#gesica|…` setting its sliders) the day a deck URL with
   an address shows up in a wish or a referrer. https://mrdirno.github.io/vibe-cards/deck/#rules-at-home
+
+- **[AXIS:BACKPORT] C3650 (2026-08-23) — THE TOOLKIT'S ONLY BILINGUAL TOOL WAS ONE PAGE OF ONE
+  TRADE; THE LANGUAGE LAYER IS AN ENGINE NOW AND THE TAG SPEAKS SPANISH ON ALL TWELVE.**
+  Wells: AV 0 new / 0 building; vibe-cards 3 building + 10 new — all thirteen are the operator's
+  live feedback to the standalone orchestrator (PID 16035, its log written the second I read it)
+  holding those claims on a dirty `vibe-cards` tree and staged `persona500` changes: nothing
+  claimed, nothing released, recorded so the board's flag has an answer on disk. No family owed
+  → stalest axis (BACKPORT, 17 cycles). **Before:** `gc/tm-tag.html` carried EN/ES inline
+  (C3629) — 1 of 100 tools; the other eleven directed-work tags were English only. **After:**
+  `shared/lang.js` (phone-follow default · one `toolkit.lang` key across trades, so a pick on the
+  plumbing tag lands the roofing tag en español · `t()` · "ES (EN)" option composition ·
+  boot-side draft remap PER KEY · toggle-by-reload · chrome swap), gc refactored onto it with its
+  EN document byte-identical, and eleven siblings wired mechanically — every literal →
+  `t(EN, ES)` with the EN half the ORIGINAL source literal; docName/docHead/docLabel compose
+  "ES / EN"; closing and count bilingual; the engine defaults the pages leaned on (clock
+  ph/nowLabel, rows rmLabel, copyFailLabel) named so ES carries them — plus `tag_es` twins in
+  eleven `items.js` (30–45 entries per trade). **THE PANEL PROPOSED, AND IT DISPOSED:** per trade
+  a bilingual foreman persona translated (11 agents), then two independent judges (native
+  register · trade vocabulary) returned fixes — 85 applied, 0 unmatched, 21 conflicts resolved
+  by rule (trade wins vocabulary, register wins prose). Eleven hub cards now say "En español
+  también." **GATED, AND THE GATE IS PERMANENT:** `tools/toolkit-gates/lang-layer.mjs` — EN
+  document identical to `git HEAD` under a frozen clock · an es-* phone opens en español and an
+  en-* phone does not move · ES document bilingual on the name, every head and the last option
+  of every vocabulary · the flip round-trips the draft EN→ES→EN through the twins · twins
+  complete and verbatim · no overflow in Spanish at 320/360/390/430 · chips ≥ 44px · zero page
+  errors — **PASS 12/12**; `note-live-fields` **334 fields / 27 pages PASS**; `mobile-watertight`
+  **PASS on all 12**; `no-third-party` **129 pages, 0 requests**. **BACKPORT RIDER FIRED, TWICE:**
+  (1) the trade judge translating sitework's examples found they were MASONRY's — four
+  placeholders cloned with the page and never made sitework's; a sweep of long placeholders
+  shared by two trades found exactly those four; fixed in both tongues (§SCARS). (2) The bar's
+  count label is geometry, not language: 94px at 390 (80 on electrical), the panel's
+  "1 hombre en el vale" needs 147px and gc's own "1 línea de cuadrilla en el vale" 239px —
+  truncated since the day it shipped, invisible to every gate; all twelve now carry ≤ 12-char
+  bar strings ("{n} hombres" · "Empezado" · "Nada aún") and read whole at 390 and 430 (§SCARS).
+  **NAMED REMAINDER, MEASURED:** the ENGLISH empty label "Nothing on it yet" needs 131px in that
+  119px box (97 on electrical) on a fresh note page at 390 — it has always read "NOTHING ON IT
+  Y…"; a program-wide ≤ 11-char label across the 27 note pages is the next BACKPORT rung. CUT:
+  `creative/thats-another-round` (a client-facing revision note, not jobsite Spanish — its own
+  register, its own panel). Storefront: no new tool or trade; the fieldToolkits.ts tag entries
+  stay true. Proof (tap ES on any of the twelve):
+  https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/tm-tag.html ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/tm-tag.html ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/tm-ticket.html

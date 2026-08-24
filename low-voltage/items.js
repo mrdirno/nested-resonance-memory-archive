@@ -616,3 +616,40 @@ window.TOOLKIT_GETIN = {
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
 
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "how": [
+    { "es": "Me lo dijo en la obra", "en": "Told me on site" },
+    { "es": "Teléfono", "en": "Phone" },
+    { "es": "Texto", "en": "Text" },
+    { "es": "Correo", "en": "Email" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC super" },
+    { "es": "Nuestro PM", "en": "Our PM" },
+    { "es": "El mayordomo de los eléctricos", "en": "The EC's foreman" },
+    { "es": "El IT del dueño", "en": "Owner's IT" },
+    { "es": "Otro sub", "en": "Another sub" },
+    { "es": "Otra persona", "en": "Somebody else" }
+  ],
+  "stands": [
+    { "es": "Terminado — no queda nada", "en": "Done — nothing left on it" },
+    { "es": "Temporal — hay que quitarlo después", "en": "Temp — has to come back out" },
+    { "es": "Hay que regresar a terminar — ya salimos de ese piso", "en": "Trip back to finish — we're off that floor" },
+    { "es": "Sigue parado — no se termina hasta que lo arreglen", "en": "Still stopped — can't finish till it's fixed" }
+  ],
+  "why": [
+    { "es": "No está en nuestros planos — usted lo pidió", "en": "Not on our prints — you asked for it" },
+    { "es": "Nos cerraron el plafón", "en": "Ceiling closed on us" },
+    { "es": "Sin plywood / sin backing", "en": "No ply / no backing" },
+    { "es": "Nada de rough-in", "sub": "sin tubería, sin caja, sin corriente", "en": "Nothing roughed in" },
+    { "es": "El IDF no está listo", "en": "IDF's not ready" },
+    { "es": "Otros nos arrancaron el cable / los J-hooks", "en": "Our cable / hooks torn out by others" }
+  ]
+};

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Extra Work Tag — Flooring Field Toolkit</title>
-<meta name="description" content="Prep is where the margin lives and it never gets written down. Write the tag before you spread glue — who told you, why it's outside your number, crew and material as counts, and what is NOT in this tag.">
+<meta name="description" content="Prep is where the margin lives and it never gets written down. Write the tag before you spread glue — who told you, why it's outside your number, crew and material as counts, and what is NOT in this tag. También en español.">
 <meta name="apple-mobile-web-app-title" content="Extra Work Tag">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,21 +15,28 @@
 <div class="wrap">
 
   <header class="plate">
-    <span class="eyebrow">Flooring · Lead → whoever told you</span>
-    <h1>Extra Work Tag</h1>
-    <p class="lede">Ground it, skimmed it, filled the joints, pulled cutback, undercut fourteen jambs, moved a fridge nobody moved, or stood in the corridor because the room wasn't clear? Write the tag the day it happened — who told you, what you were told to do, why it's outside your number, and the part everybody argues about in April: what is NOT in this tag. Sixty days from now it's covered up and nobody can see what you were kneeling on.</p>
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Flooring · Lead → whoever told you</span>
+      <div class="langtog" role="group" aria-label="Language / Idioma">
+        <button type="button" id="lang-en" aria-pressed="true">EN</button>
+        <button type="button" id="lang-es" aria-pressed="false">ES</button>
+      </div>
+    </div>
+    <h1 id="h1">Extra Work Tag</h1>
+    <p class="lede" id="lede">Ground it, skimmed it, filled the joints, pulled cutback, undercut fourteen jambs, moved a fridge nobody moved, or stood in the corridor because the room wasn't clear? Write the tag the day it happened — who told you, what you were told to do, why it's outside your number, and the part everybody argues about in April: what is NOT in this tag. Sixty days from now it's covered up and nobody can see what you were kneeling on.</p>
   </header>
 
   <div id="form"></div>
 
-  <p class="section-label">What you send</p>
+  <p class="section-label" id="whatlabel">What you send</p>
   <div class="preview" id="preview"></div>
 
-  <div class="warn">
+  <div class="warn" id="warn">
     <b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or anything pre-1978, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.
   </div>
 
-  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+  <p class="credit" id="wishline">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+  <p class="credit" id="creditby">&#10022; The Spanish on this page was wished into existence by an anonymous GC hand, and carried to every trade.</p>
 
 </div>
 
@@ -44,6 +51,7 @@
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/note.js"></script>
+<script src="../shared/lang.js"></script>
 <script>
 /* FLOORING EXTRA WORK TAG — the directed-work ticket, shipped as a CONFIG of
  * shape #2's engine (shared/note.js — see av/AV_SOCIETY.md §THE THREE SHAPES).
@@ -57,18 +65,54 @@
  * ticked lines beat a second narrative ticket aimed at the same man on the same
  * day. Eleven kits already ship this rung; what makes it this trade's is `why`,
  * which is entirely prep and access rather than a change anybody drew.
+ *
+ * THE LANGUAGE LAYER (2026-08-23): EN / ES through shared/lang.js — this file
+ * owns its words TWICE, adjacently, through t(en, es); the vocabulary's Spanish
+ * rides in items.js as tag_es with an en-twin on every entry. EN mode's
+ * document is byte-identical to before (gated: tools/toolkit-gates/lang-layer.mjs).
  */
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.tag;
+  var ES = window.TOOLKIT_ITEMS.tag_es || {};
+  var KEY = "toolkit.flooring.tmtag.v1";
+  var L = Lang.lang, t = Lang.t;
 
-  Note.mount({
-    key: "toolkit.flooring.tmtag.v1",
-    docName: "EXTRA WORK TAG",
-    copiedLabel: "Copied. Go send it.",
-    clearConfirm: "Clear this tag? Your name and company stay.",
-    emptyLabel: "Nothing on it yet",
-    startedLabel: "Tag started",
+  /* ── the trade's vocabulary in the tongue of the page: EN mode hands back
+   *    items.js untouched, ES mode composes "ES (EN)" from each en-twin ── */
+  var V = Lang.vocab(T, ES, { classes: "plain", how: "opt", notin: "tick", pics: "opt", roles: "opt", why: "tick" });
+
+  /* ── page chrome outside the engine's mount — swapped before it renders ── */
+  Lang.chrome({
+    title: t("Extra Work Tag — Flooring Field Toolkit", "Vale de extra — Flooring Field Toolkit"),
+    eyebrow: t("Flooring · Lead → whoever told you", "Pisos · Mayordomo → quien se lo ordenó"),
+    h1: t("Extra Work Tag", "Vale de extra"),
+    lede: t("Ground it, skimmed it, filled the joints, pulled cutback, undercut fourteen jambs, moved a fridge nobody moved, or stood in the corridor because the room wasn't clear? Write the tag the day it happened — who told you, what you were told to do, why it's outside your number, and the part everybody argues about in April: what is NOT in this tag. Sixty days from now it's covered up and nobody can see what you were kneeling on.", "¿Pulió la losa, le echó skim, llenó las juntas, raspó el cutback, les hizo undercut a catorce jambas, movió un refri que nadie movió, o se quedó parado en el pasillo porque el cuarto no estaba libre? Escriba el vale el mismo día que pasó — quién se lo ordenó, qué le dijeron que hiciera, por qué está fuera de su presupuesto, y la parte por la que todos pelean en abril: qué NO entra en este vale. En sesenta días ya está tapado y nadie puede ver sobre qué estaba usted hincado."),
+    whatlabel: t("What you send", "Lo que manda"),
+    warn: t("<b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or anything pre-1978, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.", "<b>Un extra, un día, un vale.</b> Sin precios, sin totales, sin precios unitarios y sin línea de firma — un bloque pegado no se puede firmar, y la respuesta con su hora y fecha es el respaldo. El vale no lleva número: la app del GC y el sistema del dealer son los dueños de los números de CO y PCO, y un número inventado es como le tumban un ticket. <b>Si son losetas de 9x9, mastique negro o cualquier cosa de antes de 1978, la única línea que va aquí es que usted paró y le avisó a alguien</b> — esta página no dice qué es, y el vale tampoco debe decirlo. El vale sale en los dos idiomas — usted lo lee, y el súper también — y lo que usted escribe sale tal como lo escribió."),
+    wishline: t("✦ Something on here in the wrong order, or missing the line your office always asks for? Wish for it — it gets fixed, and you get the credit.", "✦ ¿Algo en el orden equivocado, o falta la línea que su oficina siempre pide? Pídalo — se arregla, y usted se lleva el crédito."),
+    creditby: t("✦ The Spanish on this page was wished into existence by an anonymous GC hand, and carried to every trade.", "✦ El español de esta página lo hizo realidad el deseo de un compañero GC anónimo, y llegó a todos los oficios."),
+    clear: t("Clear", "Borrar"),
+    copy: t("Copy the tag", "Copiar el vale")
+  });
+
+  /* ── the flip: saved picks translate through their en-twins AT BOOT, never
+   *    on the way out (§SCARS 2026-08-18 — the engine's exit flush fires
+   *    during the reload and overwrites anything remapped before it) ── */
+  Lang.remapDraft(KEY, ES, {
+    singles: [{ id: "how", key: "how" }, { id: "pics", key: "pics" }, { id: "role", key: "roles" }],
+    lists: [{ id: "notin", key: "notin" }, { id: "why", key: "why" }],
+    rows: [{ id: "crew", col: "cls", key: "classes" }]
+  });
+
+  var api = Note.mount({
+    key: KEY,
+    docName: t("EXTRA WORK TAG", "VALE DE EXTRA / EXTRA WORK TAG"),
+    copiedLabel: t("Copied. Go send it.", "Copiado. Mándelo."),
+    copyFailLabel: t("Select it and copy", "Selecciónelo y cópielo"),
+    clearConfirm: t("Clear this tag? Your name and company stay.", "¿Borrar este vale? Su nombre y compañía se quedan."),
+    emptyLabel: t("Nothing on it yet", "Nada aún"),
+    startedLabel: t("Tag started", "Empezado"),
 
     // The job, the where and the day ride on the SECOND line, never stacked onto
     // the heading with three em-dashes. Findable by search, readable on a phone.
@@ -78,87 +122,96 @@
 
     sections: [
       {
-        title: "The job",
-        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        title: t("The job", "La obra"),
+        why: t("So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.", "Para que aparezca en un inbox en ocho semanas, y para que se amarre a una línea del contrato en vez de a una discusión."),
         fields: [
-          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Northgate Medical — 2nd floor", docSkip: true }
+          { id: "site", kind: "text", label: t("Job", "Obra"), hint: t("— the way everybody says it", "— como todos la llaman"), ph: t("Northgate Medical — 2nd floor", "Northgate Medical — segundo piso"), docSkip: true }
         ]
       },
       {
-        title: "Who told you",
+        title: t("Who told you", "Quién se lo ordenó"),
         tone: "loud",
-        docHead: "WHO TOLD ME",
-        why: "Signed by the super before you roll is the old way and it still works — but the name, the time and where he stood is what actually holds up.",
+        docHead: t("WHO TOLD ME", "QUIÉN ME LO ORDENÓ / WHO TOLD ME"),
+        why: t("Signed by the super before you roll is the old way and it still works — but the name, the time and where he stood is what actually holds up.", "Que el súper firme antes de que usted se vaya es a la antigua y todavía sirve — pero el nombre, la hora y dónde estaba parado es lo que de verdad aguanta."),
         fields: [
-          { id: "role", kind: "pick", label: "Who told you", options: T.roles, docLabel: "Told by" },
-          { id: "who", kind: "text", label: "His name", hint: "— \"the super told me\" is not a name", ph: "Dave R — GC super", docLabel: "Name" },
-          { id: "how", kind: "seg", label: "How he gave it to you", options: T.how, docLabel: "How" },
-          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
-          { id: "where", kind: "text", label: "Where", hint: "— room, corridor, unit, elevation", ph: "Corridor 2A, rooms 214 to 220", docLabel: "Where" }
+          { id: "role", kind: "pick", label: t("Who told you", "Quién se lo ordenó"), options: V.roles, docLabel: t("Told by", "Ordenado por / Told by") },
+          { id: "who", kind: "text", label: t("His name", "El nombre de quien lo ordenó"), hint: t("— \"the super told me\" is not a name", "— \"me lo dijo el súper\" no es un nombre"), ph: t("Dave R — GC super", "Dave R — súper del GC"), docLabel: t("Name", "Nombre / Name") },
+          { id: "how", kind: "seg", label: t("How he gave it to you", "Cómo se lo dio"), options: V.how, docLabel: t("How", "Cómo / How") },
+          { id: "when", kind: "clock", label: t("When", "Cuándo"), hint: t("— stamps itself when you start", "— se estampa solo cuando empieza"), docLabel: t("When", "Cuándo / When"), ph: t("stamps itself when you start", "se estampa solo al empezar"), nowLabel: t("Now", "Ahora") },
+          { id: "where", kind: "text", label: t("Where", "Dónde"), hint: t("— room, corridor, unit, elevation", "— cuarto, pasillo, unidad, elevación"), ph: t("Corridor 2A, rooms 214 to 220", "Pasillo 2A, cuartos 214 al 220"), docLabel: t("Where", "Dónde / Where") }
         ]
       },
       {
-        title: "What you were told to do",
-        docHead: "WHAT YOU TOLD ME TO DO",
-        why: "Your words, plainly, the way you'd say it standing there — so the man reading it in April recognises the day instead of reading a category.",
+        title: t("What you were told to do", "Qué le dijeron que hiciera"),
+        docHead: t("WHAT YOU TOLD ME TO DO", "QUÉ ME DIJO USTED QUE HICIERA / WHAT YOU TOLD ME TO DO"),
+        why: t("Your words, plainly, the way you'd say it standing there — so the man reading it in April recognises the day instead of reading a category.", "Sus palabras, sencillas, como usted lo diría ahí parado — para que el que lo lea en abril reconozca el día en vez de leer una categoría."),
         fields: [
-          { id: "did", kind: "area", rows: 2, label: "What you were told to do", hint: "— plainly, the way you'd say it", ph: "grind and skim the whole corridor — the slab came to us with ridges and dried mud from the drywall crew, and the plank was telegraphing every one of them on the first two rooms" },
-          { id: "why", kind: "ticks", subhead: "Why it's outside my number", label: "", docLabel: "WHY IT'S OUTSIDE MY NUMBER", options: T.why }
+          { id: "did", kind: "area", rows: 2, label: t("What you were told to do", "Qué le dijeron que hiciera"), hint: t("— plainly, the way you'd say it", "— sencillo, como usted lo diría"), ph: t("grind and skim the whole corridor — the slab came to us with ridges and dried mud from the drywall crew, and the plank was telegraphing every one of them on the first two rooms", "pulir y echar skim a todo el pasillo — la losa nos llegó con bordos y mud seco de la cuadrilla de tablaroca, y el plank marcaba cada uno en los primeros dos cuartos") },
+          { id: "why", kind: "ticks", subhead: t("Why it's outside my number", "Por qué está fuera de mi presupuesto"), label: "", docLabel: t("WHY IT'S OUTSIDE MY NUMBER", "POR QUÉ ESTÁ FUERA DE MI PRESUPUESTO / WHY IT'S OUTSIDE MY NUMBER"), options: V.why }
         ]
       },
       {
-        title: "What is NOT in this tag",
+        title: t("What is NOT in this tag", "Qué NO entra en este vale"),
         tone: "loud",
-        docHead: "WHAT'S NOT IN THIS TAG",
-        why: "The line nobody writes and everybody argues about in April. Name it the day it happened and it stops being a back-charge.",
+        docHead: t("WHAT'S NOT IN THIS TAG", "QUÉ NO ENTRA EN ESTE VALE / WHAT'S NOT IN THIS TAG"),
+        why: t("The line nobody writes and everybody argues about in April. Name it the day it happened and it stops being a back-charge.", "La línea que nadie escribe y por la que todos pelean en abril. Póngala el mismo día que pasó y deja de ser un back-charge."),
         fields: [
-          { id: "notin", kind: "ticks", options: T.notin },
-          { id: "pics", kind: "seg", label: "Pics", hint: "— shot before it got covered", options: T.pics, docLabel: "Pics" }
+          { id: "notin", kind: "ticks", options: V.notin },
+          { id: "pics", kind: "seg", label: t("Pics", "Fotos"), hint: t("— shot before it got covered", "— tomadas antes de que se tapara"), options: V.pics, docLabel: t("Pics", "Fotos / Pics") }
         ]
       },
       {
-        title: "Crew and material",
-        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        title: t("Crew and material", "Cuadrilla y material"),
+        docHead: t("WHAT IT TOOK — QUANTITIES ONLY, NO PRICING", "QUÉ TOMÓ — SOLO CANTIDADES, SIN PRECIOS / WHAT IT TOOK — QUANTITIES ONLY, NO PRICING"),
         fields: [
           {
-            id: "crew", kind: "rows", label: "Crew and hours", addLabel: "+ Another crew line", docLabel: "CREW",
+            id: "crew", kind: "rows", rmLabel: t("Take this line off", "Quitar esta línea"), label: t("Crew and hours", "Cuadrilla y horas"), addLabel: t("+ Another crew line", "+ Otra línea de cuadrilla"), docLabel: t("CREW", "CUADRILLA / CREW"),
             cols: [
-              { id: "cls", kind: "select", label: "Class", options: T.classes },
-              { id: "men", kind: "stepper", label: "Men", ph: "men" },
-              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " h" }
+              { id: "cls", kind: "select", label: t("Class", "Clase"), options: V.classes },
+              { id: "men", kind: "stepper", label: t("Men", "Hombres"), ph: t("men", "homb") },
+              { id: "hrs", kind: "stepper", label: t("Hours", "Horas"), ph: t("hrs", "hrs"), docSuffix: " h" }
             ]
           },
           {
-            id: "mats", kind: "rows", label: "Material — off the truck / job stock", addLabel: "+ Another material line", docLabel: "MATERIAL",
+            id: "mats", kind: "rows", rmLabel: t("Take this line off", "Quitar esta línea"), label: t("Material — off the truck / job stock", "Material — del camión / stock de la obra"), addLabel: t("+ Another material line", "+ Otra línea de material"), docLabel: t("MATERIAL", "MATERIAL / MATERIAL"),
             cols: [
-              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
-              { id: "what", kind: "text", wide: true, label: "What", ph: "9 bags leveler · 2 pails adhesive · 4 diamond cups · 1 roll seam tape · 22 lf stair nose" }
+              { id: "qty", kind: "stepper", label: t("Qty", "Cant"), ph: t("qty", "cant") },
+              { id: "what", kind: "text", wide: true, label: t("What", "Qué"), ph: t("9 bags leveler · 2 pails adhesive · 4 diamond cups · 1 roll seam tape · 22 lf stair nose", "9 sacos de leveler · 2 cubetas de adhesivo · 4 copas de diamante · 1 rollo de seam tape · 22 pies de stair nose") }
             ]
           }
         ]
       },
       {
-        title: "Who's sending it",
+        title: t("Who's sending it", "Quién lo manda"),
         tone: "grey",
-        why: "Typed once, saved on this phone, and Clear never touches it.",
+        why: t("Typed once, saved on this phone, and Clear never touches it.", "Se escribe una vez, se queda en este teléfono, y Borrar nunca lo toca."),
         fields: [
-          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "M. Vela — 209-555-0148", docLabel: "From" },
-          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vela Floor Covering", docLabel: "Company" }
+          { id: "me", kind: "text", sticky: true, label: t("You", "Usted"), hint: t("— name + cell", "— nombre + celular"), ph: t("M. Vela — 209-555-0148", "M. Vela — 209-555-0148"), docLabel: t("From", "De / From") },
+          { id: "co", kind: "text", sticky: true, label: t("Company", "Compañía"), ph: t("Vela Floor Covering", "Vela Floor Covering"), docLabel: t("Company", "Compañía / Company") }
         ]
       },
     ],
 
-    closing: [
+    closing: L === "es" ? [
+
+      "Nada de esto lleva precio y no trae número — el número lo pone la bitácora de ustedes, y el precio lo pone la oficina.\nNothing on here is priced and there's no number on it — your log owns the number, the office owns the price.",
+
+      "Si eso fue lo que usted me dijo que hiciera, conteste SÍ. Si algo está mal, dígame qué está mal y lo corrijo antes de que siga adelante, porque ya tapado nadie lo puede ver.\nIf that's what you told me to do, reply YES. If any of it's wrong, tell me what's wrong and I'll fix it before it goes any further, because after it's covered nobody can see it."
+
+    ] : [
       "Nothing on here is priced and there's no number on it — your log owns the number, the office owns the price.",
       "If that's what you told me to do, reply YES. If any of it's wrong, tell me what's wrong and I'll fix it before it goes any further, because after it's covered nobody can see it."
+
     ],
 
     countLabel: function (get, s, touched) {
       var n = (s.crew || []).length;
-      if (n) return n + " man" + (n === 1 ? "" : "s") + " on it";
-      return touched ? "Tag started" : "Nothing on it yet";
+      if (n) return L === "es" ? (n === 1 ? "{n} hombre" : "{n} hombres").replace("{n}", n) : (n + " man" + (n === 1 ? "" : "s") + " on it");
+      return touched ? t("Tag started", "Empezado") : t("Nothing on it yet", "Nada aún");
     }
   });
+
+  Lang.toggle(api);
 })();
 </script>
 </body>

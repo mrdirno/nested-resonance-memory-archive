@@ -24,7 +24,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "T&M Tag",
     href: "tm-tag.html",
-    desc: "Not on your prints? Write the tag before you roll — who told you, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Reads in the same order as the yellow copy so you're not writing the job twice.",
+    desc: "Not on your prints? Write the tag before you roll — who told you, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Reads in the same order as the yellow copy so you're not writing the job twice. En español también.",
     chip: "#7A3F12",
     audience: "Foreman → Super / PM"
   },

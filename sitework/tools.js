@@ -90,7 +90,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Hit rock, found a line nobody marked, hauled off material nobody said was bad, or stood by while another outfit got out of your ditch? Write the tag before the dirt goes back — who told you, what came up, why it's outside your contract, crew, iron and material as counts, and what is NOT in this tag.",
+    desc: "Hit rock, found a line nobody marked, hauled off material nobody said was bad, or stood by while another outfit got out of your ditch? Write the tag before the dirt goes back — who told you, what came up, why it's outside your contract, crew, iron and material as counts, and what is NOT in this tag. En español también.",
     chip: "#8A6718",
     audience: "Foreman → super / PM"
   },

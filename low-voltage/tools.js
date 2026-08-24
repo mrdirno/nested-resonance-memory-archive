@@ -37,7 +37,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "T&M Tag",
     href: "tm-tag.html",
-    desc: "Not on our prints, or the ceiling closed on us. Get it on a tag before you're off that floor — who told you, why it's an extra, where it stands, and the men and hours it burned. A heads-up you can reply to, not a claim.",
+    desc: "Not on our prints, or the ceiling closed on us. Get it on a tag before you're off that floor — who told you, why it's an extra, where it stands, and the men and hours it burned. A heads-up you can reply to, not a claim. En español también.",
     chip: "#9A3312",
     audience: "Tech / lead → GC super / our PM"
   },

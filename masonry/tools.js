@@ -64,7 +64,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Told to cut in an opening nobody drew, break out a lift and re-lay it, or stand by while another trade got out of your wall? Write the tag before you lay past it — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag.",
+    desc: "Told to cut in an opening nobody drew, break out a lift and re-lay it, or stand by while another trade got out of your wall? Write the tag before you lay past it — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. En español también.",
     chip: "#4C5F11",
     audience: "Foreman → super / PM"
   },

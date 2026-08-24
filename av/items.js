@@ -625,3 +625,63 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "did": [
+    { "es": "Colgamos / instalamos el equipo de ellos", "sub": "OFE", "en": "Hung / installed their own gear" },
+    { "es": "Pantalla extra + mount", "en": "Extra display + mount" },
+    { "es": "Jalamos otro cable", "en": "Pulled another cable" },
+    { "es": "Movimos un equipo después del rough-in", "en": "Moved a device after rough-in" },
+    { "es": "Cambio al programa de control", "en": "Control program change" },
+    { "es": "Contenido / playlist del signage", "en": "Signage content / playlist" },
+    { "es": "Lo metimos a la red de ellos", "sub": "puertos / VLAN", "en": "Got it on their network" },
+    { "es": "Firmware + actualizaciones", "en": "Firmware + updates" },
+    { "es": "Capacitación / walkthrough extra", "en": "Extra training / walkthrough" },
+    { "es": "Demo + sacar el equipo viejo", "en": "Demo + haul off the old gear" }
+  ],
+  "gear": [
+    { "es": "Lift / escalera de más de 12 pies", "en": "Lift / ladder over 12 ft" },
+    { "es": "Fuera de horario", "sub": "fuera de nuestra ventana normal", "en": "After hours" },
+    { "es": "Escolta / gafete / seguridad", "en": "Escort / badge / security" },
+    { "es": "Ventana del elevador de carga", "en": "Freight elevator window" },
+    { "es": "Core drill / anclas", "en": "Core drill / anchors" },
+    { "es": "Hay que regresar a terminarlo", "en": "Have to come back to finish it" }
+  ],
+  "how": [
+    { "es": "Me lo dijo en la obra", "en": "Told me on site" },
+    { "es": "Teléfono", "en": "Phone" },
+    { "es": "Texto", "en": "Text" },
+    { "es": "Correo", "en": "Email" }
+  ],
+  "left": [
+    { "es": "El cuarto funciona y se puede usar", "en": "Room's up and usable" },
+    { "es": "Temporal — funciona, no es final", "en": "Temp — works, not final" },
+    { "es": "El cuarto está caído hasta que regresemos", "en": "Room's down till we're back" },
+    { "es": "Equipo de ellos colgado + con corriente, no probado por nosotros", "en": "Their gear hung + powered, not tested by us" },
+    { "es": "Necesita a IT para que funcione", "en": "Needs IT before it'll work" }
+  ],
+  "shift": [
+    { "es": "— cuándo (when)", "en": "— when" },
+    { "es": "Horario normal (Reg hours)", "en": "Reg hours" },
+    { "es": "Noches (Nights)", "en": "Nights" },
+    { "es": "Fin de semana (Weekend)", "en": "Weekend" }
+  ],
+  "why": [
+    { "es": "No está en los planos de AV", "en": "Not on the AV drawings" },
+    { "es": "No está en el submittal aprobado", "en": "Not in the approved submittal" },
+    { "es": "Equipo de ellos, no lo suministramos nosotros", "sub": "OFE", "en": "Their gear, not our supply" },
+    { "es": "Ese cuarto no está en nuestro contrato", "en": "That room isn't in our contract" },
+    { "es": "Corriente / conduit", "sub": "alcance del eléctrico", "en": "Power / conduit" },
+    { "es": "Sin backing en la pared", "sub": "alcance del GC", "en": "No backing in the wall" },
+    { "es": "Red, puertos, VLAN", "sub": "alcance de IT del dueño", "en": "Network, ports, VLAN" },
+    { "es": "Agregado después del sign-off", "en": "Added after sign-off" },
+    { "es": "Retrabajo — daño de otro", "en": "Rework — somebody else's damage" }
+  ]
+};

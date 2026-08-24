@@ -38,7 +38,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Extra Work Tag",
     href: "tm-tag.html",
-    desc: "Told to do something that isn't yours? Write the tag before you roll — who said it and how, what you found, why it's outside contract, men and material as counts, and the line everybody argues about: what is NOT in this tag.",
+    desc: "Told to do something that isn't yours? Write the tag before you roll — who said it and how, what you found, why it's outside contract, men and material as counts, and the line everybody argues about: what is NOT in this tag. En español también.",
     chip: "#6B4FC4",
     audience: "Foreman → GC super / our PM"
   },

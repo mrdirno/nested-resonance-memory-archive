@@ -630,3 +630,55 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase (class)", "en": "— class" },
+    { "es": "OFICIAL (JW)", "en": "JW" },
+    { "es": "APRENDIZ (APP)", "en": "APP" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "MAYORDOMO GENERAL (GF)", "en": "GF" }
+  ],
+  "how": [
+    { "es": "Me lo dijo en la obra", "en": "Told me on site" },
+    { "es": "Llamada", "en": "Phone" },
+    { "es": "Texto", "en": "Text" },
+    { "es": "Correo", "en": "Email" }
+  ],
+  "roles": [
+    { "es": "El súper", "en": "Super" },
+    { "es": "PM / PE del GC", "en": "GC PM / PE" },
+    { "es": "El dueño / rep del inquilino", "en": "Owner / tenant rep" },
+    { "es": "Nuestro PM / GF", "en": "Our PM / GF" },
+    { "es": "El mayordomo de otro sub", "en": "Another sub's foreman" },
+    { "es": "Otra persona", "en": "Somebody else" }
+  ],
+  "shift": [
+    { "es": "— ST", "en": "— ST" },
+    { "es": "ST", "en": "ST" },
+    { "es": "OT", "en": "OT" },
+    { "es": "DT", "en": "DT" }
+  ],
+  "stands": [
+    { "es": "Lo terminamos", "en": "Finished it" },
+    { "es": "Regresamos — ticket nuevo mañana", "en": "Coming back — new ticket tomorrow" },
+    { "es": "Sigue detenido — hombres parados", "en": "Still stopped — men standing" }
+  ],
+  "why": [
+    { "es": "No está en los planos", "en": "Not on the prints" },
+    { "es": "Condiciones existentes", "sub": "no es lo que muestran los planos", "en": "Existing conditions" },
+    { "es": "Conflicto — ducto / tubería / sprinkler estorbando", "en": "Conflict — duct / pipe / sprinkler in our way" },
+    { "es": "Lo pidió el dueño / inquilino", "en": "Owner / tenant asked for it" },
+    { "es": "Lo cambió un RFI / ASI", "en": "RFI / ASI changed it" },
+    { "es": "Demo — trabajo ya instalado", "en": "Tear-out — work already in" },
+    { "es": "Nos regresaron cuando ya habíamos terminado", "en": "Sent us back after we were done" },
+    { "es": "Corriente temporal / luces temporales / conexión para el GC", "en": "Temp power / temp lights / GC hookup" }
+  ]
+};

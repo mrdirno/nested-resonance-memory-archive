@@ -51,6 +51,7 @@
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/note.js"></script>
+<script src="../shared/lang.js"></script>
 <script>
 /* GC T&M TAG — the directed-work ticket, a CONFIG of shape #2's engine
  * (shared/note.js — see av/AV_SOCIETY.md §THE THREE SHAPES). No CSS here, no DOM
@@ -69,52 +70,24 @@
  *  · The vocabulary is jobsite Spanish (gc/items.js TOOLKIT_ITEMS.tag_es):
  *    vale, cuadrilla, MAYORDOMO for the foreman and never for the súper.
  *
- * THE TOGGLE RELOADS, on purpose. Re-mounting in place leaves the first mount's
- * form/window listeners alive and both mounts persisting the same key — a race
- * that only wins by accident of registration order. flush → store the choice →
- * reload, and the saved picks translate through their en-twins ON BOOT (see
- * remapDraft below for why never on the way out). Sticky name/company and the
- * stamped clock ride through untouched.
+ * THE LANGUAGE LAYER LEFT THIS FILE on 2026-08-23, at the second instance, for
+ * shared/lang.js — the toggle-by-reload, the phone-follow default, the "ES (EN)"
+ * option composition and the boot-side draft remap all live there now, as a
+ * config every sibling tag mounts the same way. This page keeps only its WORDS.
  */
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.tag;
   var ES = window.TOOLKIT_ITEMS.tag_es || {};
   var KEY = "toolkit.gc.tmtag.v1";
-  var LANG_KEY = "toolkit.lang";
+  var L = Lang.lang, t = Lang.t;
 
-  function storedLang() {
-    try { var v = localStorage.getItem(LANG_KEY); if (v === "es" || v === "en") return v; } catch (e) {}
-    return "";
-  }
-  /* First visit follows the phone: an ES-set phone opens en español, an EN phone
-   * never sees the toggle move. After that the chip's own pick rules. */
-  var L = storedLang() || (((navigator.language || "").toLowerCase().indexOf("es") === 0) ? "es" : "en");
-  function t(en, es) { return L === "es" ? es : en; }
-
-  /* ── ES options, derived from the paired vocabulary — the "ES (EN)" the
-   *    document prints is composed HERE, from each entry's own en-twin. ──── */
-  function opt(p) {
-    return (p.en !== p.es) ? { v: p.es, doc: p.es + " (" + p.en + ")" } : { v: p.es };
-  }
-  function tick(p) {
-    var base = p.sub ? (p.es + " — " + p.sub) : p.es;
-    var o = { name: p.es, doc: (p.en !== p.es) ? (base + " (" + p.en + ")") : base };
-    if (p.sub) o.sub = p.sub;
-    return o;
-  }
-  var V = L === "es" ? {
-    roles: (ES.roles || []).map(opt),
-    how: (ES.how || []).map(opt),
-    why: (ES.why || []).map(tick),
-    classes: (ES.classes || []).map(function (p) { return p.es; }),
-    stands: (ES.stands || []).map(opt)
-  } : {
-    roles: T.roles, how: T.how, why: T.why, classes: T.classes, stands: T.stands
-  };
+  /* ── the trade's vocabulary in the tongue of the page: EN mode hands back
+   *    items.js untouched, ES mode composes "ES (EN)" from each en-twin ── */
+  var V = Lang.vocab(T, ES, { roles: "opt", how: "opt", why: "tick", classes: "plain", stands: "opt" });
 
   /* ── page chrome outside the engine's mount — swapped before it renders ── */
-  var CHROME = {
+  Lang.chrome({
     title: t("T&M Tag — GC & Site Super Toolkit", "Vale T&M — GC & Site Super Toolkit"),
     eyebrow: t("GC · Super → CM / owner's rep", "GC · Súper → CM / rep del dueño"),
     h1: t("T&M Tag", "Vale T&M"),
@@ -133,51 +106,16 @@
       "✦ El español de esta página lo hizo realidad el deseo de un compañero GC anónimo."),
     clear: t("Clear", "Borrar"),
     copy: t("Copy the tag", "Copiar el vale")
-  };
-  function put(id, s) { var n = document.getElementById(id); if (n) n.textContent = s; }
-  document.documentElement.lang = L;
-  document.title = CHROME.title;
-  put("eyebrow", CHROME.eyebrow); put("h1", CHROME.h1); put("lede", CHROME.lede);
-  put("whatlabel", CHROME.whatlabel);
-  document.getElementById("warn").innerHTML = CHROME.warn;
-  put("wishline", CHROME.wishline); put("creditby", CHROME.creditby);
-  put("clear", CHROME.clear); put("copy", CHROME.copy);
-  document.getElementById("lang-en").classList.toggle("on", L === "en");
-  document.getElementById("lang-es").classList.toggle("on", L === "es");
-  document.getElementById("lang-en").setAttribute("aria-pressed", L === "en" ? "true" : "false");
-  document.getElementById("lang-es").setAttribute("aria-pressed", L === "es" ? "true" : "false");
+  });
 
-  /* ── the flip: translate saved picks through their en-twins ON THE WAY IN,
-   *    never on the way out. The engine flushes on pagehide/visibilitychange —
-   *    which fire DURING location.reload() — so anything remapped before the
-   *    reload gets overwritten by the exit flush a millisecond later (caught by
-   *    the e2e, picks arriving untranslated). Remapping at boot is idempotent:
-   *    picks already in this language pass through untouched, and a half-written
-   *    draft from the other tongue arrives translated. Free text, the stamp and
-   *    sticky ride as-is. ── */
-  function pairMap(to) {
-    var m = {};
-    ["roles", "how", "why", "classes", "stands"].forEach(function (k) {
-      (ES[k] || []).forEach(function (p) {
-        if (p.en === p.es) return;
-        if (to === "es") m[p.en] = p.es; else m[p.es] = p.en;
-      });
-    });
-    return m;
-  }
-  function remapDraft(to) {
-    var s = null;
-    try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { s = null; }
-    if (!s) return;
-    var m = pairMap(to);
-    ["role", "how", "stands"].forEach(function (id) {
-      if (typeof s[id] === "string" && m[s[id]]) s[id] = m[s[id]];
-    });
-    if (s.why && s.why.map) s.why = s.why.map(function (nm) { return m[nm] || nm; });
-    if (s.crew && s.crew.map) s.crew = s.crew.map(function (r) { if (r && m[r.cls]) r.cls = m[r.cls]; return r; });
-    try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
-  }
-  remapDraft(L);
+  /* ── the flip: saved picks translate through their en-twins AT BOOT, never
+   *    on the way out (§SCARS 2026-08-18 — the engine's exit flush fires
+   *    during the reload and overwrites anything remapped before it) ── */
+  Lang.remapDraft(KEY, ES, {
+    singles: [{ id: "role", key: "roles" }, { id: "how", key: "how" }, { id: "stands", key: "stands" }],
+    lists: [{ id: "why", key: "why" }],
+    rows: [{ id: "crew", col: "cls", key: "classes" }]
+  });
 
   var api = Note.mount({
     key: KEY,
@@ -185,8 +123,8 @@
     copiedLabel: t("Copied. Go send it.", "Copiado. Mándelo."),
     copyFailLabel: t("Select it and copy", "Selecciónelo y cópielo"),
     clearConfirm: t("Clear this tag? Your name and company stay.", "¿Borrar este vale? Su nombre y compañía se quedan."),
-    emptyLabel: t("Nothing on it yet", "Todavía no hay nada"),
-    startedLabel: t("Tag started", "Vale empezado"),
+    emptyLabel: t("Nothing on it yet", "Nada aún"),
+    startedLabel: t("Tag started", "Empezado"),
 
     // The job, the where and the day ride on the SECOND line, never stacked onto
     // the heading with three em-dashes. Findable by search, readable on a phone.
@@ -278,20 +216,13 @@
     countLabel: function (get, s, touched) {
       var n = (s.crew || []).length;
       if (n) return L === "es"
-        ? (n + (n === 1 ? " línea" : " líneas") + " de cuadrilla en el vale")
+        ? (n + (n === 1 ? " línea" : " líneas"))
         : (n + " crew line" + (n === 1 ? "" : "s") + " on it");
-      return touched ? t("Tag started", "Vale empezado") : t("Nothing on it yet", "Todavía no hay nada");
+      return touched ? t("Tag started", "Empezado") : t("Nothing on it yet", "Nada aún");
     }
   });
 
-  function switchLang(to) {
-    if (to === L) return;
-    if (api && api.flush) api.flush();
-    try { localStorage.setItem(LANG_KEY, to); } catch (e) {}
-    location.reload();
-  }
-  document.getElementById("lang-en").addEventListener("click", function () { switchLang("en"); });
-  document.getElementById("lang-es").addEventListener("click", function () { switchLang("es"); });
+  Lang.toggle(api);
 })();
 </script>
 </body>

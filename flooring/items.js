@@ -382,3 +382,72 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It's an ask, not a booking.</b> This page has no channel back &mdash; it puts text on your clipboard and that is all it does. Nothing on it is a permit, a reservation or an approval, and every heads-up on it ends by handing the process back to whoever owns it, because the building owns and numbers all of that and we never will."
 };
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "Instalador (Mechanic / installer)", "en": "Mechanic / installer" },
+    { "es": "Ayudante (Helper)", "en": "Helper" },
+    { "es": "Mayordomo (Lead / foreman)", "en": "Lead / foreman" },
+    { "es": "Prep — pulidora o leveler (Prep hand — grinder or leveler)", "en": "Prep hand — grinder or leveler" },
+    { "es": "Demolición (Tear-out)", "en": "Tear-out" }
+  ],
+  "how": [
+    { "es": "En persona, en el cuarto", "en": "Face to face in the room" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijeron en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Plano de acabados marcado que me entregaron", "en": "Marked-up finish plan handed to me" },
+    { "es": "Una lista de punch que me entregaron", "en": "A punch-walk list I was handed" },
+    { "es": "El súper me dijo que siguiera y que él lo arreglaba", "en": "The super told me to keep going and he'd sort it" },
+    { "es": "Otro contratista me dijo que ya estaba autorizado", "en": "Another trade told me it had been cleared" }
+  ],
+  "notin": [
+    { "es": "Cualquier área que no sea la nombrada arriba", "en": "Anywhere but the area named above" },
+    { "es": "El material en sí", "sub": "a menos que una línea de arriba lo diga", "en": "The material itself" },
+    { "es": "Cualquier mitigación de humedad", "sub": "eso es un alcance aparte y un producto aparte", "en": "Any moisture mitigation" },
+    { "es": "La protección después de que nos vamos", "sub": "y quién lo tapa, y con qué", "en": "Protection after we leave" },
+    { "es": "Limpieza final, sellador o cera", "en": "Final clean, seal or wax" },
+    { "es": "Base, molduras y transiciones en esta área", "en": "Base, trim and transitions in this area" },
+    { "es": "Regresar a arreglar lo que alguien pise mañana", "en": "Coming back to fix what somebody walks on tomorrow" },
+    { "es": "Cualquier cosa que necesite otro cuarto", "en": "Anything a different room needs" }
+  ],
+  "pics": [
+    { "es": "Sí — antes de que se tapara", "en": "Yes — before it was covered" },
+    { "es": "Sí — y después", "en": "Yes — and after" },
+    { "es": "No", "en": "No" }
+  ],
+  "roles": [
+    { "es": "Súper del GC", "en": "GC superintendent" },
+    { "es": "PM del GC", "en": "GC project manager" },
+    { "es": "El dealer que vendió el trabajo", "en": "The dealer who sold the job" },
+    { "es": "Nuestro patrón o nuestro mayordomo", "en": "Our own owner or lead" },
+    { "es": "Súper de campo del builder (fraccionamiento o casa custom)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "Property manager o los de mantenimiento", "en": "Property manager or facilities" },
+    { "es": "Representante del dueño o construction manager", "en": "Owner's rep or construction manager" },
+    { "es": "El mayordomo de otro contratista en mi cuarto", "en": "Another trade's foreman in my room" },
+    { "es": "Diseñador o el representante de acabados del dueño", "en": "Designer or the owner's finish rep" },
+    { "es": "El inquilino o el gerente de la tienda", "en": "Tenant or the store manager" }
+  ],
+  "why": [
+    { "es": "Prep que nadie cotizó", "sub": "Pulir, shot blast, skim, llenar juntas y grietas, o un colado de self-leveler para dejar un piso que me entregaron tal como estaba listo para recibir mi material.", "en": "Prep nobody bid" },
+    { "es": "El piso viejo y lo que traía pegado", "sub": "Tear-out, y luego el adhesivo de abajo. Raspar cutback es un día que nadie cotiza, y en vinil viejo ya deja de ser decisión mía por completo.", "en": "Old goods and what was stuck to them" },
+    { "es": "Me ordenaron instalar encima de lecturas que yo reporté", "sub": "Lo escribí, me ordenaron seguir de todos modos, y este vale es la fecha en que pasó. Nada aquí dice qué significan las lecturas.", "en": "Told to go over readings I flagged" },
+    { "es": "El cuarto no estaba libre ese día", "sub": "Cuadrillas todavía adentro, material apilado en mi piso, un lift estacionado en medio, muebles que nadie movió. La cuadrilla se quedó parada, o regresó.", "en": "The room was not clear on the day" },
+    { "es": "Puertas, jambas y umbrales", "sub": "Hacer undercut, quitar y volver a colgar, saddles y transiciones en vanos que no estaban en mi alcance y me estorban.", "en": "Doors, jambs and thresholds" },
+    { "es": "Mover cosas de otros", "sub": "Muebles, electrodomésticos, fixtures, racks, archiveros, un piano. Se movió porque el piso no se podía poner rodeándolo.", "en": "Moving somebody else's things" },
+    { "es": "Más de lo que dibujó el plano", "sub": "Escalones de más, un clóset de más, un descanso, un cuarto que cambió de acabado, un quiebre que no está en la hoja con la que coticé.", "en": "More of it than the plan drew" },
+    { "es": "Material distinto al que coticé", "sub": "Una sustitución, un cambio de producto o un cambio de lote ordenado después de que entregué mi presupuesto. No es queja — es una fecha y un hecho.", "en": "Different material than I bid" },
+    { "es": "Reparar daño que ya estaba", "sub": "Daño de alguien más al subfloor o al trabajo ya puesto, que se tuvo que arreglar antes de que yo pudiera seguir.", "en": "Repairing damage that was already there" },
+    { "es": "Trabajar alrededor de ellos y no de corrido", "sub": "Por fases, de noche, fines de semana, medio pasillo a la vez, o en un espacio ocupado — los mismos pies cuadrados costando el doble de horas.", "en": "Working around them instead of through it" },
+    { "es": "Cargo por viaje — vine y no pude trabajar", "sub": "Cargué, manejé, lo caminé, no pude empezar. El día se fue, lo haya querido alguien o no.", "en": "Trip charge — I came and could not work" }
+  ]
+};

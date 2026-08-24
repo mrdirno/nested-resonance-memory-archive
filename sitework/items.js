@@ -899,3 +899,82 @@ window.TOOLKIT_GETIN = {
     writeinFlags: [{ k: "ditch", label: "Goes in the ditch" }]
   };
 })();
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español (2026-08-23). ─────
+ *
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase (class)", "en": "— class" },
+    { "es": "OPERADOR (OPERATOR)", "en": "OPERATOR" },
+    { "es": "TUBERO (PIPELAYER)", "en": "PIPELAYER" },
+    { "es": "PEÓN (LABORER)", "en": "LABORER" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "CHOFER (TRUCK DRIVER)", "en": "TRUCK DRIVER" },
+    { "es": "CHECADOR DE NIVEL (GRADE CHECKER)", "en": "GRADE CHECKER" },
+    { "es": "APRENDIZ (APPRENTICE)", "en": "APPRENTICE" }
+  ],
+  "how": [
+    { "es": "En persona, en la zanja", "en": "Face to face at the ditch" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijeron en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Planos marcados que me entregaron en campo", "en": "Marked-up set handed to me in the field" },
+    { "es": "Cambiaron la pintura o las estacas en el terreno", "en": "Paint or stakes changed on the ground" },
+    { "es": "Los de otra compañía me dijeron que ya estaba autorizado", "en": "A different trade told me he'd cleared it" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, viajes y cantidades. Sin tarifa, sin total y sin un solo dólar en ninguna parte.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos lo ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo ponen en papel, y el derecho a cobrarlo sale de la carta de ellos, no del mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es el reporte del laboratorio", "sub": "Densidad, humedad y suelos son el aparato de ellos y el número de ellos. Nosotros escribimos que estuvimos parados esperando; nunca escribimos si pasó o no.", "en": "Not the lab's report" },
+    { "es": "No es el as-built del topógrafo", "sub": "Él lo levanta, él lo sella y él le pone número. Nosotros solo decimos qué no pudimos tapar hasta que él vino.", "en": "Not the surveyor's as-built" },
+    { "es": "No es un locate ni un ticket", "sub": "El número y el plazo son del 811. Nada de aquí renueva un ticket, libera uno, ni dice que una marca esté buena.", "en": "Not a locate and not a ticket" },
+    { "es": "No es decisión de si la zanja era segura para meterse", "sub": "Eso es de la persona competente, en la obra, en persona, frente al suelo de verdad. No es una línea en un teléfono y no va en este vale.", "en": "Not a call on whether the hole was safe to be in" },
+    { "es": "No es un cambio de diseño", "sub": "Fondo, cama, caja, pendiente, relleno — nada de eso se decide aquí. Lo que sea de diseño sube por el GC en su formato.", "en": "Not a design change" },
+    { "es": "No es un reclamo por daño", "sub": "Una línea a la que le pegaron va en el papel de la compañía de servicios, ahí mismo, por su proceso. No va montada en esto.", "en": "Not a damage claim" },
+    { "es": "No es el papel ambiental", "sub": "El material contaminado o regulado va en su propio manifiesto con su propia gente, y nosotros no volvemos a escribir lo que ya viene impreso ahí.", "en": "Not the environmental paper" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No es un dictamen de causa", "sub": "Escribimos qué excavamos y quién nos ordenó excavarlo. Por qué algo falló, se asentó o estaba donde estaba, eso lo deciden otros.", "en": "Not a finding of cause" },
+    { "es": "No es un reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, ahí mismo, por el canal que toca.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se le avisó no es aceptar el trabajo, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de tapar", "en": "In this message — shot before we covered it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "Súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro súper general", "en": "Our own general super" },
+    { "es": "PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "Mayordomo de otro oficio en nuestra zanja", "en": "Another trade's foreman in our ditch" },
+    { "es": "El topógrafo o el representante del ingeniero en la obra", "en": "The surveyor or the engineer's rep on site" },
+    { "es": "Representante del dueño o el CM", "en": "Owner's rep or construction manager" },
+    { "es": "Súper de campo del builder (fraccionamiento o casa custom)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "Inspector de la compañía de servicios en la obra", "en": "Utility owner's inspector on site" },
+    { "es": "Inspector de la ciudad o del condado en la obra", "en": "Jurisdiction inspector on site" }
+  ],
+  "why": [
+    { "es": "Roca — el bote ya no bajó", "sub": "Tuvimos que trabajarla con algo que no cotizamos, o de otra manera, para llegar al fondo que nos dieron.", "en": "Rock — the bucket quit going down" },
+    { "es": "Agua en la zanja", "sub": "La bombeamos, la sacamos mojada, la trabajamos dos veces, o la dejamos secar antes de poder meter nada.", "en": "Water in the hole" },
+    { "es": "Material malo — no aguantaba", "sub": "Tierra mojada, lodosa o con basura que no se sostenía. Nos ordenaron sacarla y meter otra cosa, o trabajarla así como estaba.", "en": "Unsuitables — it wouldn't hold" },
+    { "es": "Una línea enterrada que nadie marcó", "sub": "No estaba en el plano ni en la pintura. Paramos, escarbamos a mano para hallarla, esperamos, o le sacamos la vuelta.", "en": "A line in the ground nobody marked" },
+    { "es": "Las marcas estaban mal", "sub": "Excavamos donde decía la pintura y no estaba — o estaba, pero no donde la marcaron. Escarbar a mano y tiempo que nadie cotizó.", "en": "The marks were off" },
+    { "es": "Obra vieja que nadie nos avisó", "sub": "Losa, zapata, tanque, escombro o una línea abandonada en nuestra excavación que no venía en nada de lo que cotizamos.", "en": "Old work nobody told us about" },
+    { "es": "El fondo siguió bajando", "sub": "Excavamos más abajo de lo que marcaban los planos para llegar a lo que alguien en la obra pidió.", "en": "Bottom kept going down" },
+    { "es": "Parados mientras otra compañía salía de nuestra zanja", "sub": "Cuadrilla y máquina en la obra, esperando a que otro terminara en la zanja para la que ya teníamos la gente.", "en": "Standing while another outfit got out of our ditch" },
+    { "es": "La dejamos abierta para una prueba, un levantamiento o una revisión", "sub": "Lista para tapar y nos dijeron que la dejáramos hasta que llegara alguien — el topógrafo, el laboratorio, un inspector, el dueño.", "en": "Held it open for a test, a shot or a look" },
+    { "es": "Volvimos a abrir un tramo que ya habíamos tapado", "sub": "La tierra ya estaba adentro y el trabajo de alguien no. Lo abrimos otra vez porque alguien lo dijo.", "en": "Re-dug a run we had already closed" },
+    { "es": "El nivel o el trazo cambió después de que ya lo habíamos hecho", "sub": "Estacas que ya no estaban, offsets cambiados, o un juego de planos nuevo que llegó cuando ya habíamos trabajado con el primero.", "en": "Grade or layout moved after we built to it" },
+    { "es": "Tierra que entró o salió sin cotizar", "sub": "Material de banco que se trajo o sobrante (spoils) que se sacó sin estar en el alcance, o un stockpile que se movió dos veces porque cambió el plan.", "en": "Dirt in or dirt out nobody bid" },
+    { "es": "El acceso o la ruta de acarreo cambió después de movilizarnos", "sub": "Otro portón, acarreo más largo, placas, un desvío u horas que no teníamos cuando cotizamos la movilización.", "en": "Access or the haul route changed after we mobed" },
+    { "es": "Nos ordenaron trabajar con mal tiempo", "sub": "Seguirle, bombear, tapar con lona, o regresar un día que ya habíamos cancelado.", "en": "Told to work the weather" }
+  ]
+};
