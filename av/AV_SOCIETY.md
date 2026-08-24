@@ -192,6 +192,18 @@ own paperwork/communication friction. Mechanics:
   deploy now refuses a chip carrying fewer than six rows written for it, so this can
   fail the build instead of failing a roofer; that gate is the floor, and seeding the
   trade properly is the job.
+- **AND THE THREE BOUNDARY PAGES, OR THE DEBT NAMED IN THE STAND-UP ENTRY — found
+  at trade #14.** A construction trade joins the boundary it was built to serve:
+  `rough-in-request` + `answer-back` + `getting-in`, each a config on the shared
+  engine, panel-cut in the trade's own words. Painting stood up 2026-08-24 with six
+  tools and none of the three — unnamed, so the only construction kit that could not
+  send an ask, answer a list or ask a building for a night looked complete on every
+  count. The deploy already asserts the ask⇒answer pair; `boundary-titles.mjs` now
+  asserts the page copies wear their own names in the two lines the runtime never
+  touches (<title> and the apple-title), and `answer-tapnote.mjs` asserts the tap
+  instructions say the words the trade's answers[] actually ships. A stand-up that
+  deliberately defers a boundary page writes the deferral into its cycle entry, the
+  way flooring's DOCS debt was named — an unnamed absence is how this hole got dug.
 - **Same bar, same safety, same ledger.** Every trade's tools face the identical
   "would a real &lt;trade&gt; pro use this to send their boss something, FAST?" test.
   The cross-trade demand DATA stays private (the moat); the pages stay open.
@@ -1533,6 +1545,42 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-24 (C3654) — A MEMBERSHIP THE CHECKLIST DOESN'T NAME IS THE COMMONS HOLE, DUG A THIRD TIME
+Painting stood up at C3653 with six tools, every gate green — and none of the three
+boundary pages, unnamed. The only construction kit that could not send an ask, answer a
+list or ask a building for a night looked complete on every count we run, because the
+counts count what exists. Framing joined with no commons chip; roofing joined with a chip
+and nothing behind it; painting joined outside the boundary: three different surfaces, one
+failure — §TRADE EXPANSION's checklist is the only place a stand-up learns what a trade IS,
+and a membership it does not name will be missing and invisible. The boundary pages are on
+the checklist now, with the rule that a deliberate deferral is WRITTEN into the stand-up
+entry the way flooring's DOCS debt was. An unnamed absence is not a decision, it is a hole.
+
+### 2026-08-24 (C3654) — A PAGE COPIED PER TRADE WEARS THE DONOR'S NAME IN THE LINES THE RUNTIME NEVER TOUCHES
+The boundary pages are one file copied per trade; the config swaps the on-page text at
+load, so a stand-up patches what a reader sees and skips what a TAB shows. Swept at C3654:
+sitework's rough-in wore MASONRY's <title> over CONCRETE's apple-title while its own config
+said "Before We Dig"; sitework's answer page wore masonry's title too; three trades'
+home-screen names said concrete's "What I'll Set"; flooring's getting-in description was
+concrete's truck-and-pump under a page about twelve-foot rolls and a freight lift. Nothing
+on the glass was wrong, so no eyes and no gate ever met the defect — it lived in bookmarks,
+tab bars and link previews. `boundary-titles.mjs` now derives the truth from each trade's
+own config and was proved red on the shipped sitework title before being trusted. The
+class, one sentence: the donor's name survives wherever the runtime doesn't reach.
+
+### 2026-08-24 (C3654) — AN ENGINE OPT-IN THAT ONLY ONE CONFIG EVER TOOK IS A PROMISE NOBODY CHECKS
+`answers[]` — the answer page's own trade-vocabulary override, positional by design — had
+exactly one taker (creative) since it was built. Flooring's page promised four trade rungs
+in its lede, its registry desc, its storefront note and the items.js design comment ("the
+two answers he never gets to give"), and shipped the default buttons for eleven days:
+the override was simply absent, so every consistency gate passed, because a gate can only
+check what exists and the lede's promise was the one witness no machine read. The half that
+is machine-checkable is now checked: `answer-tapnote.mjs` asserts the baked tap instructions
+say the words the config ships (proved red by injection), and `reconcile-join`'s vocabulary
+check — which already existed and caught all six new rungs before ship — closes the loop's
+far end, because a rung VERDICTS cannot classify turns a real answer into "didn't say yes
+or no" one page over. The ledes stay human-read; that is named here, not solved.
 
 ### 2026-08-24 (C3653) — A REQUIRED CHIP THAT STICKS IS A FIELD THAT CLEARS ITSELF
 `painting/coat-count.html` shipped its coat picker as `input:"chips", required:true, sticky:true`
@@ -5505,3 +5553,55 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   next BACKPORT rung). Deploy 32756016574 green + label follow-up. Named for P5: push the
   persona500 repo — `fieldToolkits.ts` now carries the painting entry (accent #29FF29, live:
   true, added 2026-08-24). https://mrdirno.github.io/nested-resonance-memory-archive/painting/
+
+- **[AXIS:INTERFACE] C3654 (2026-08-24) — THE FOURTEENTH TRADE JOINS THE BOUNDARY IT WAS BUILT
+  TO SERVE, AND THE SWEEP FINDS THE DONOR'S NAME IN EVERY LINE THE RUNTIME NEVER TOUCHES.**
+  Wells read UNSCOPED first: AV 0 new / 0 building, vibe 0 / 0 (the 31 board items are all the
+  society wall — P5's sink); no family owed; stalest axis INTERFACE. The roster's next rung is
+  the forward leg — but step 0 found the sharper hole ON DISK: painting stood up at C3653 with
+  none of the three boundary pages, unnamed — the only construction kit that could not send an
+  ask, answer a list, or ask a building for a night, while ten kits write "before paint" into
+  the very ladders it should stand behind. **before:** 14 trades / 106 tools, boundary on 13.
+  **after:** 14 of 14 on the boundary, 109 tools. THE PANEL (repaint lens · new-construction
+  lens · receiving desk → skeptic-disposer, 16 kills on the record): `rough-in-request.html`
+  **Before Paint** — 11 asks × 3-5 specs, an 8-rung ladder that STARTS AT THE SHAKER because
+  tint only turns one direction, and a lede that says the doorway refusal stays Not Ready's job;
+  `answer-back.html` **Walk Back** — answers[] = We'll hit it · Done already · Not paint · Need
+  the room, [2] and [3] split because they route differently on the receiving desk, and marks
+  after final point at the ding ledger's dates; `getting-in.html` — the smell and spray-fog
+  handbacks ("the panel on test, a head bagged and unbagged are your building's moves, not
+  ours. Tell me who makes them"). **BACKPORT RIDER FIRED, AND IT WAS THE BIGGER FIND — the
+  page-copy class, swept across all 14 kits:** sitework's rough-in wore MASONRY's `<title>`
+  over CONCRETE's apple-title against its own config saying "Before We Dig"; sitework's answer
+  page wore masonry's title too; THREE trades' home-screen names said concrete's "What I'll
+  Set"; flooring's getting-in description was concrete's truck-and-pump under a page about
+  twelve-foot rolls; and **flooring's Punch Back had promised four rungs its buttons never
+  shipped for eleven days** — `answers[]` had exactly one taker (creative) since it was built,
+  flooring's lede, registry desc, storefront note and items.js design comment all promised
+  "not mine · damage needs a ticket" over default Will-do/Can't buttons, and reconcile's
+  VERDICTS never knew the words, so such an answer pasted back read as "didn't say yes or no".
+  All fixed in the same cycle; the ruling kept "Will do" verbatim at [0] so the engine's own
+  no-date nag stays true. **TWO NEW GATES, EACH PROVED RED ON A SHIPPED DEFECT BEFORE BEING
+  TRUSTED:** `boundary-titles.mjs` (41 pages — the tab says what the trade's own config says;
+  red on sitework's real title, green after) · `answer-tapnote.mjs` (14 pages — the baked tap
+  instructions say the words answers[] ships; red on the injected default note). And two
+  existing gates earned their keep by refusing the first draft: `reconcile-join` rejected all
+  six unclassified rungs (VERDICTS now carries them), `getting-in.mjs` demanded the
+  grant-window ask painting's closing had dropped. GATES GREEN: getting-in 14/14 ·
+  answer-tapnote 14 · boundary-titles 41 · reconcile-join 120 · reconcile-surface ·
+  note-live-fields 376 fields/30 pages · menu-reachability 140 PASS · rowlog-restore 36/36 ·
+  rowlog-commit-merge · no-third-party 140/0 · mobile-watertight on all 4 changed pages at
+  320/360/390/430 × default+bumped locally AND the three new pages against the LIVE url.
+  **LIVE-VERIFIED, deploy 32782876603 green:** 14 files byte-identical to HEAD, then Walk Back
+  driven end to end on the real site at phone width — pasted the example walk, 8 lines lined
+  up with the header skipped, all four rungs tapped (the list re-groups by status, which is
+  why index-chasing fails and the job works), the promise dated through its chip + SAVE, the
+  no-day nag appeared in painting's own words and CLEARED the moment the day landed, and the
+  copied document carried the subject, the counts, both verbatim test lines, the date and the
+  ding-ledger closing. §TRADE EXPANSION now names boundary membership (a deferral must be
+  WRITTEN); §SCARS ×3. Storefront: painting 6→9 tools in `fieldToolkits.ts`, flooring's note
+  now says the buttons' words — P5 pushes that repo. Roster: rung recorded with what was
+  learned, painter edges + the PAINT gate ladder join the matrix; **the next INTERFACE rung
+  stays the forward leg** (nothing reads an access ask back the way answer-back reads a
+  rough-in ask), the owner's vendors behind it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/painting/rough-in-request.html
