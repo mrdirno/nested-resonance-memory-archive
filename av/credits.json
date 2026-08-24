@@ -172,6 +172,16 @@
    "shipped_commit": "aac2c88d"
   },
   {
+   "tool_name": "T&M Tag en español — carried to every trade (11 more tags: av · concrete · electrical · flooring · framing · hvac · low-voltage · masonry · plumbing · roofing · sitework), the language layer extracted to shared/lang.js",
+   "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/tm-tag.html",
+   "wisher": "an anonymous GC hand",
+   "company": null,
+   "role": null,
+   "wished_date": "2026-08-17",
+   "shipped_date": "2026-08-23",
+   "shipped_commit": "98c9bd31"
+  },
+  {
    "tool_name": "Collage Studio — Shuffle that switches the photos up under every arrangement, colour matching kept",
    "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
    "wisher": "an anonymous Collage user",
