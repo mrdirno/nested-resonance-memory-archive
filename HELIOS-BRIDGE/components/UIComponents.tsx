@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -368,6 +368,25 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the last trade in the building, and the only one whose work permanently seals somebody else\u2019s mistake \u2014 give me the go first: the slab reads wet or the heat never ran and the super says put it in, so what you are standing on, what you measured, what your own instructions require and what it costs to sit go out in one letter that ends give me the go in writing or tell me who is fixing it. It supplies no moisture number, no flatness tolerance, no acclimation window and no product data, and it never says ready, acceptable or safe to install: your reading prints beside the limit you typed off your own pail.',
     icon: <Ruler size={18} />,
+  },
+  {
+    // TRADE #14, and the first one found by the QUERY instead of the count.
+    // The ladder's own instruction at #14 was to ask FIRST whose gate is
+    // already written into other kits' vocabulary with no receiver behind it \u2014
+    // and "Before paint" is a literal gate value in av's ladder, "Before it
+    // goes to paint" in framing's, with paint words in TEN of thirteen kits.
+    // The four-lens panel then disposed unanimously over the count's nominee
+    // (doors, held for #15): nothing upstream numbers what a paint crew sends.
+    //
+    // PaintRoller, and the sibling rule holds: an icon is the gear the trade
+    // carries, never the thing it builds. The roller is the field painter's
+    // iron; the artist's palette is a different trade's glyph, and the walls
+    // this kit serves are nobody's canvas.
+    name: 'Painting Field Toolkit',
+    href: './painting/',
+    tag: 'field',
+    blurb: 'Isomorphed to the last trade through every room, whose first coat seals the substrate as accepted and whose finish every later ladder lands on \u2014 not ready first: walk the rooms before the crew sets up, name what stops paint in your own words with your readings beside your own limits, and send the two-button ask \u2014 fix it, or direct me in writing to coat it as it sits. It supplies no spread rate, no film build, no recoat time, no moisture threshold and no color, never says a surface was ready or a color matched, and the punch list and the finish schedule stay whoever\u2019s they already are.',
+    icon: <PaintRoller size={18} />,
   },
 ];
 

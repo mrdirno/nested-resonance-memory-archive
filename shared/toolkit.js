@@ -69,6 +69,7 @@
     { slug: "masonry",     name: "Masonry Field Toolkit",        short: "Masonry",    icon: "🧱", accent: "#B9EE1B" },
     { slug: "sitework",    name: "Sitework Field Toolkit",       short: "Sitework",   icon: "🚜", accent: "#FFDDA3" },
     { slug: "flooring",    name: "Flooring Field Toolkit",       short: "Flooring",   icon: "📏", accent: "#8FECFF" },
+    { slug: "painting",    name: "Painting Field Toolkit",       short: "Painting",   icon: "🖌️", accent: "#29FF29" },
     // NOT A TRADE — the commons, and the only entry here that is not a toolkit.
     // It rides this list on purpose: the six hubs each render "whoever is not me"
     // from it, so one line surfaces the human layer in every hub footer with zero

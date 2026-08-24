@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Ding Ledger — Painting Field Toolkit</title>
+<meta name="description" content="After final coat, every ladder and cart in the building lands on your finish — and without a date on each mark, every one of them is your punch item in April. Log the dings as you find them: room, what got hit, who was in it as you saw it, the fix it takes, photo, hours. Per-trade tallies, TSV out, counts not costs.">
+<meta name="apple-mobile-web-app-title" content="Ding Ledger">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Painting &middot; found after final &rarr; the super, your PM</span>
+    <h1 id="title">The Ding Ledger</h1>
+    <p class="lede" id="lede">You&rsquo;re the last trade through, so from final coat to turnover your finish is the one everybody else&rsquo;s work lands on &mdash; and without a date on each mark, every scuff in the building reads as a painting punch item. This is the ledger that ends that: each ding as a row, the day you found it, what was in the room when you did, the fix it actually takes &mdash; because a touch-up that flashes is a whole wall &mdash; and the hours as counts. Group it by who was in the room and the tallies write your PM&rsquo;s back-charge memo for him.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Observed, not accused &mdash; and counts, not costs.</b> &ldquo;Their scaffold was in it&rdquo; is a fact; &ldquo;they did it&rdquo; is an argument this page won&rsquo;t make for you, and <i>Unknown &mdash; found it</i> is an honest answer. There are no dollars on here: hours and material ride as counts, and your office owns the pricing. It feeds your PM&rsquo;s back-charge and shortens the GC&rsquo;s punch &mdash; it is not itself a back-charge, a punch list, or anybody&rsquo;s numbered record.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Marriott TI — 4th floor" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFinal">When final went on</label><input type="text" id="hFinal" placeholder="finals done 8/12 — the date the clock started" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="finalHint">&ldquo;When final went on&rdquo; is the whole argument: marks found after that date are dated after your work. The Walk After Final in the write-up library is the long-form baseline; this ledger is what you add to every day after it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each ding</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the room once &mdash; it becomes a button and it carries. When you found it, what got hit, who was in it <b>as you saw it</b>, and the fix it takes. <b>Add</b>. The room and who-was-in-it carry to the next row, because dings come in litters.</p>
+  </section>
+
+  <section class="card">
+    <h2>The building so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="seen" class="on">Who was in it</button>
+        <button type="button" data-g="room">Room</button>
+        <button type="button" data-g="state">Where it stands</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is logged, then <b>Sent</b> when it went to the super or your PM, then <b>Repaired</b> when your crew fixed it. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; grouped the way the argument goes</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not repaired yet</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">Grouped by <b>who was in it</b>, the per-group tallies are the counts your PM prices. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup &mdash; this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole ledger</button></div>
+  </section>
+
+  <p class="credit">Built for the Painting Field Toolkit. A mark your jobs collect that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Painting Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* THE DING LEDGER — the last-trade tax made billable, a CONFIG on shape #3
+ * (shared/rowlog.js). The engine owns the mechanics; this file owns the words.
+ *
+ * TWO LAWS SHAPE IT. OBSERVED, NOT ACCUSED: the who-column records what was IN
+ * the room when the mark was found — a fact the man can testify to — never an
+ * accusation the page put in his mouth, and Unknown is a first-class answer.
+ * And THE FIX IS FACTUAL: "Touch-up" vs "Whole wall — it'll flash" is a call
+ * about what the repair takes (a touch-up sits in the film different from the
+ * coat around it), never a fault verdict. Tallies are counts and hours; the
+ * office owns every dollar, and the GC's numbered punch list stays his — this
+ * runs the opposite direction.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.ding;
+  var KEY = "toolkit.painting.dingledger.v1";
+
+  var STATES = T.states;              /* ["Sent", "Repaired"] — blank = logged */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return v.state !== DONE; }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "ding", nounPlural: "dings", groupNoun: "trade", groupNounPlural: "trades",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing logged yet. Put in the first one — the room, what got hit, and who was in it when you found it.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "seen", label: "Who was in it" },
+      { key: "room", label: "Room" },
+      { key: "state", label: "Where it stands" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "seen") {
+        var ia = T.seen.indexOf(a), ib = T.seen.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var order = [""].concat(STATES);
+        var pa = order.indexOf(a), pb = order.indexOf(b);
+        return (pa < 0 ? 99 : pa) - (pb < 0 ? 99 : pb);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "open", label: "not repaired yet",
+      emptyText: "Everything on here is repaired. The walls are yours again — for now.",
+      test: function (v) { return isOpen(v); }
+    }],
+
+    fields: [
+      { key: "room", label: "Room / area", input: "learn", lead: true, required: true, sticky: true,
+        placeholder: "412, or: level 2 corridor — then it's a button",
+        emptyHint: "Name it the way the plans do. It becomes a button." },
+      { key: "found", label: "When you found it", input: "text", sticky: true,
+        placeholder: "this morning 7:10 — before anybody rolled in" },
+      { key: "what", label: "What got hit", input: "chips", required: true },
+      { key: "size", label: "How bad", input: "text",
+        placeholder: "palm-size — or: three of them, knee height" },
+      { key: "seen", label: "Who was in it — as you saw it", input: "chips", sticky: true },
+      { key: "fix", label: "The fix it takes", input: "chips" },
+      { key: "cost", label: "Hours + material", input: "text",
+        placeholder: "1 hr + a quart — counts, no dollars" },
+      { key: "photo", label: "Photo", input: "text",
+        placeholder: "shot it — frame has the door number in it" },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— logged; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "what was said, who came and looked, anything" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "what") return T.kinds;
+      if (key === "seen") return T.seen;
+      if (key === "fix") return T.fixes;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.room, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.found, v.seen, v.fix, v.cost, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), fin = $("#hFinal").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "dings found after final", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (fin) out.push("Finals went on: " + fin + " — every mark below is dated after my work");
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var rooms = {};
+      src.forEach(function (v) { var a = String(v.room || "").trim(); if (a) rooms[a] = 1; });
+      var nr = Object.keys(rooms).length;
+      var line = c.shown + (c.shown === 1 ? " ding" : " dings");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + nr + (nr === 1 ? " room" : " rooms");
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "seen";
+      var head = joinDots([g === "room" ? null : v.room, v.what, v.size]);
+      var tail = [];
+      if (v.found) tail.push("found " + v.found);
+      if (g !== "seen" && v.seen) tail.push(v.seen.toLowerCase());
+      if (v.fix) tail.push("fix: " + v.fix.toLowerCase());
+      if (v.cost) tail.push(v.cost);
+      if (v.photo) tail.push("photo: " + v.photo);
+      if (g !== "state" && v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Who-was-in-it is what I saw in the room when I found each mark — an observation, never a determination of who caused it, and Unknown means exactly that. Hours and material are counts; the office owns any pricing.");
+      out.push("This ledger feeds our PM's paperwork and shortens the punch walk. It is not a back-charge, not a punch list, and it numbers nothing — the GC's punch list stays the GC's.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), fin = $("#hFinal").value.trim();
+      return (job ? job + " — " : "") + "ding ledger, " + c.total
+        + (c.total === 1 ? " ding, " : " dings, ") + c.today
+        + (fin ? ", finals went on " + fin : "")
+        + " — recorded by hand. Who-was-in-it is observed, not a fault call; hours and material are counts, no pricing.";
+    },
+    tsvColumns: [
+      { label: "Room", key: "room" },
+      { label: "Found", key: "found" },
+      { label: "What got hit", key: "what" },
+      { label: "How bad", key: "size" },
+      { label: "Who was in it", key: "seen" },
+      { label: "Fix", key: "fix" },
+      { label: "Hours + material", key: "cost" },
+      { label: "Photo", key: "photo" },
+      { label: "Where it stands", key: "state" },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), fn = $("#hFinal").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || fn || f || t) ? { job: j, fin: fn, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hFinal").value = x.fin || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    }
+  });
+
+  ["room"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one — this ledger is the only dated record of
+     marks that are getting painted over, and it lives in one browser. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hFinal", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+  });
+
+  ["#hJob", "#hFinal", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

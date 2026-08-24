@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not Ready — Painting Field Toolkit</title>
+<meta name="description" content="The super says the rooms are ready and they never are. Walk it, name what stops paint in your own words — mud still soft, trades still in it, dings that aren't yours — put your readings beside your own limits, and send the two-button ask: fix it, or tell me in writing to coat it as it sits. Because the first coat makes it yours.">
+<meta name="apple-mobile-web-app-title" content="Not Ready">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Painting &middot; from the doorway, before the crew sets up</span>
+    </div>
+    <h1 id="h1">Not Ready</h1>
+    <p class="lede" id="lede">Ten trades on this rack write <em>before paint</em> into their own schedules &mdash; this is the answer back. Walk the rooms before the crew sets up and name what stops paint, in your words: the mud that&rsquo;s still soft, the trade that&rsquo;s still in it, the gouges that were there before you opened a can. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to coat it as it sits. Because the first coat makes every one of these conditions yours, forever, and this note is the record it wasn&rsquo;t.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, with your own readings beside limits off your own product data. It sets no moisture number, no temperature, no finish level and no &ldquo;ready&rdquo; bar, and it doesn&rsquo;t stop the job &mdash; it hands whoever runs the job the choice, on the record: clear it, or direct it coated as-is.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY — the pinned tool, and the reason this trade is on the rack.
+ * A CONFIG of shape #2's engine (shared/note.js): no CSS here, no DOM building,
+ * no state, no persistence, no document assembly — the engine owns all of it.
+ * This file owns the WORDS, which is the half an engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: commencement is acceptance. The moment the
+ * roller loads, whatever the wall carries becomes the painter's work — so the
+ * record of what the wall carried has to exist BEFORE the coat, and the choice
+ * (fix it / coat it anyway) has to be somebody else's, in writing. The stops
+ * list lives in items.js; every entry is a condition with the ASK riding under
+ * it, so the note reads as a list a super can clear by lunch, not a complaint.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.notready;
+  var KEY = "toolkit.painting.notready.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY FOR PAINT",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Walk started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox in April, when the argument is about which rooms and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Marriott TI — 4th floor, north wing", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana R. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The rooms",
+        docHead: "THE ROOMS",
+        why: "By the numbers on the plan, so his answer can name the same doors your crew is standing outside of.",
+        fields: [
+          { id: "rooms", kind: "area", rows: 2, label: "Which rooms / areas", hint: "— the plan's names, and the count", ph: "412 through 420, plus the elevator lobby — nine rooms" }
+        ]
+      },
+      {
+        title: "What stops paint",
+        tone: "loud",
+        docHead: "WHAT STOPS PAINT",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "sprinkler heads still down in 415 and 416 — ceiling can't get final till they're up" }
+        ]
+      },
+      {
+        title: "Your readings — if you took them",
+        docHead: "MY READINGS, MY LIMITS",
+        why: "Both numbers are yours: what your instrument read, and the limit off your own product data with the source named. The page supplies neither, and nobody here says which one wins — that's exactly what makes it hold up.",
+        fields: [
+          { id: "reading", kind: "text", label: "What your instrument read", hint: "— your unit, where, what time", ph: "18% on the pin meter — 412 west wall, 6:40" },
+          { id: "limit", kind: "text", label: "The limit off your own data", hint: "— and where it came from", ph: "my primer's data sheet says … — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or coated", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and when", ph: "5 painters staged for these rooms at 7:00 tomorrow" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving to the 3rd floor corridors — half a day of work left there" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "M. Osei — 415-555-0122", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Brightline Painting", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply FIX with who's fixing each one and when, and these rooms go back on my board the hour they're cleared.",
+      "Or reply PROCEED and we coat them as they sit — in writing, because the first coat makes every condition on this list mine, and this note is the record of what was under it.",
+      "Nothing here is a verdict on anybody's work — it's what I found, in my words, with my own readings beside my own limits."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Walk started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

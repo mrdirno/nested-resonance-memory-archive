@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Color Lock — Painting Field Toolkit</title>
+<meta name="description" content="Somebody picked a color standing in a hallway, and gallons get tinted on that sentence. Write it down while everyone still agrees it was said — who, standing where, the exact name, number, base and sheen, what schedule line it replaces — and get CONFIRMED in writing before the shaker runs. Tinted paint doesn&rsquo;t go back on the shelf.">
+<meta name="apple-mobile-web-app-title" content="Color Lock">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Painting &middot; the afternoon before the shaker runs</span>
+    </div>
+    <h1 id="h1">Color Lock</h1>
+    <p class="lede" id="lede">The most re-litigated sentence in this trade is a color picked standing in a hallway &mdash; acted on the same afternoon, on no schedule anywhere, and remembered three ways by three people the day the owner walks it. This writes it down while everyone still agrees it was said: who said it, the exact name, number, base and sheen <b>as they gave it</b>, what schedule line it replaces, and how much of the old one is already on the wall. One reply &mdash; CONFIRMED &mdash; and you tint. No reply, and the crew keeps working to the approved schedule.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It answers the schedule &mdash; it never rewrites it.</b> The color rides exactly as the person stated it and the schedule line it displaces is quoted from the approved schedule; this page never says a color matches anything, reads like anything, or equals anything across brands, and it carries no formula &mdash; the counter owns the formula, the schedule owns the intent. If any of the four words &mdash; name, number, base, sheen &mdash; wasn&rsquo;t given, it prints as missing instead of guessed.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A line your paint desk always asks for that isn&rsquo;t on here? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* COLOR LOCK — the day-before-the-gun confirmation, a CONFIG of shape #2's
+ * engine (shared/note.js). The engine owns the mechanics; this file owns the
+ * words. The docspec library's "Who Picked The Color" is this page's narrative
+ * sibling — that one reconstructs the verbal after the fact; this one gets the
+ * CONFIRMED before the tint. The impact line is the shaker: tinted gallons do
+ * not go back on the shelf, and the ask carries its own deadline because the
+ * store run has a clock on it.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.colorlock;
+  var KEY = "toolkit.painting.colorlock.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "COLOR LOCK — CONFIRM BEFORE WE TINT",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Note started",
+
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So the confirmation and the walls it covers stay findable together.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Alder Street lofts — level 2", docSkip: true }
+        ]
+      },
+      {
+        title: "Who gave the direction",
+        tone: "loud",
+        docHead: "WHO SAID IT",
+        why: "A color note with no name on it is a wish, and the schedule outranks a wish. If it came through somebody, name the chain — “the super, relaying the designer” is a different sentence from “the designer.”",
+        fields: [
+          { id: "src", kind: "pick", label: "Where it came from", options: T.whosaid, docLabel: "Source" },
+          { id: "who", kind: "text", label: "The name", hint: "— the person, not the title", ph: "L. Marchetti — designer", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When", ph: "stamps itself when you start", nowLabel: "Now" },
+          { id: "where", kind: "text", label: "Standing where / how it arrived", hint: "— the hallway, a text, a voicemail", ph: "in the level 2 corridor, pointing at the east wall", docLabel: "How" },
+          { id: "said", kind: "area", rows: 2, label: "The words, close as you can", ph: "“go one step lighter than this on all the corridors — same sheen”" }
+        ]
+      },
+      {
+        title: "The color, exactly as given",
+        tone: "loud",
+        docHead: "THE COLOR — AS GIVEN, NOT AS GUESSED",
+        why: "Four words the shaker needs: name, number, base, sheen. Any one not actually given prints as missing — a guessed base is how five wrong fives get made.",
+        fields: [
+          { id: "cname", kind: "text", label: "Color name + number", hint: "— as stated, letter for letter", ph: "the name and number they gave — exactly" },
+          { id: "cbase", kind: "text", label: "Base", hint: "— off the schedule or the last can, if given", ph: "as stated — or leave it and it prints as missing" },
+          { id: "csheen", kind: "text", label: "Sheen", hint: "— as stated", ph: "as stated — or leave it and it prints as missing" },
+          { id: "surfs", kind: "ticks", subhead: "What it goes on", label: "", docLabel: "GOES ON", options: T.surfaces },
+          { id: "rooms", kind: "text", label: "Which areas", hint: "— by the plan's names", ph: "corridors 201–214, both elevator lobbies" }
+        ]
+      },
+      {
+        title: "What it replaces",
+        docHead: "WHAT IT REPLACES",
+        why: "The half everybody omits, and the whole cost conversation: the schedule line being displaced, and how much of the old color is already on the wall.",
+        fields: [
+          { id: "sched", kind: "text", label: "The schedule line it displaces", hint: "— quoted off your dated copy", ph: "P-2 on the corridor walls, per the schedule dated on my set" },
+          { id: "applied", kind: "text", label: "Already on the wall in the old", hint: "— areas and coats, counts not dollars", ph: "two corridors already at final in the old color" },
+          { id: "stock", kind: "text", label: "Already tinted or on order", hint: "— gallons, where they sit", ph: "6 gal tinted, on the cart" }
+        ]
+      },
+      {
+        title: "The clock",
+        tone: "loud",
+        docHead: "THE CLOCK",
+        why: "The deadline is real because the store run is real — say when you tint, and what the crew does until the reply lands.",
+        fields: [
+          { id: "tintby", kind: "text", label: "When you need the yes", ph: "by 3:00 today — the store run is at 3:30" },
+          { id: "until", kind: "text", label: "Until then", ph: "crew keeps rolling the approved schedule on level 3" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "M. Osei — 415-555-0122", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Brightline Painting", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply CONFIRMED and we tint to the line above. Anything wrong, tell me which word is wrong — name, number, base or sheen — and nothing goes in the shaker till it's right.",
+      "No reply by the time on the clock and we keep working to the approved schedule — tinted paint doesn't go back on the shelf, and the schedule outranks a hallway sentence.",
+      "One more thing worth thirty seconds: any bulletin or ASI touching these rooms that my set doesn't show yet? Say so and I'll pull it before we tint."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.surfs || []).length;
+      if (n) return n + " surface" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Note started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

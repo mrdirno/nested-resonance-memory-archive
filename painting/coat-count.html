@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coat Count — Painting Field Toolkit</title>
+<meta name="description" content="The 3:30 diary that wins the March callback: every coat as a row — area, surface, which coat, product and color as your schedule prints them, the batch off the fives, gallons drawn, what your own meter read. The empties leave in the dumpster; this stays. TSV out, and it never says done, ready or approved.">
+<meta name="apple-mobile-web-app-title" content="Coat Count">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Painting &middot; the 3:30 diary &rarr; your file, the office, the callback</span>
+    <h1 id="title">Coat Count</h1>
+    <p class="lede" id="lede">Every coat as a row: where, which surface, which coat, what went on it &mdash; product and color as your schedule prints them &mdash; the batch number off the fives, the gallons drawn, and what your own meter read while it went on. The empties with the batch numbers leave in the dumpster tonight; this is what&rsquo;s still here in March when a wall flashes and somebody wants matching touch-up. Copy it for a spreadsheet and it pastes straight into the office&rsquo;s sheet.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>It counts coats &mdash; it never grades them.</b> There is no &ldquo;done&rdquo;, &ldquo;ready&rdquo; or &ldquo;approved&rdquo; on this page. The conditions on a row are what <i>your</i> instruments read, beside nothing &mdash; the page sets no limit and does no math on them. Product, color and sheen ride exactly as your schedule and your cans print them; this page picks none of them and holds no formula.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Marriott TI — 4th floor" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Each coat</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the area once &mdash; it becomes a button and it carries. The surface, the coat, the product and the batch <b>carry to the next row</b>, because a crew runs one product across a floor of rooms &mdash; change them only when they change.</p>
+  </section>
+
+  <section class="card">
+    <h2>The building so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="area" class="on">Area</button>
+        <button type="button" data-g="surface">Surface</button>
+        <button type="button" data-g="coat">Coat</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> when a later coat goes over it &mdash; it moves to <b>Recoated</b>: that film is under another one now, and the visible coat is a different row. Blank means it&rsquo;s still the coat you&rsquo;d touch up to. The pencil opens a row to fix a number, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the record that outlives the empties</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="visible">The visible coats</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Everything</b> is the whole diary &mdash; every coat, in order, for your file. <b>The visible coats</b> is what&rsquo;s on top right now: the touch-up map, with the product and batch beside each area. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup &mdash; this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Painting Field Toolkit. A column your office asks for that isn&rsquo;t on here? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Painting Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* COAT COUNT — the production diary, a CONFIG on shape #3 (shared/rowlog.js).
+ * The engine owns state, grouping, persistence, copy and TSV; this file owns
+ * the WORDS and the document.
+ *
+ * THE FLOORING LAW HOLDS (what-it-read, C3644): a row log needs a FACTUAL,
+ * non-verdict ladder, never statuslessness and never a judgement. The one
+ * rung here is RECOATED — a later coat went over this one, a physical fact
+ * about the wall. Blank = still the visible film, the one a touch-up has to
+ * match. That flip is also the second reading: filter to the visible coats
+ * and the log becomes the TOUCH-UP MAP — area by area, the product and batch
+ * that's on top — which is the entire March conversation, and the batch
+ * numbers' only life after the empties leave in the dumpster.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.coatcount;
+  var KEY = "toolkit.painting.coatcount.v1";
+
+  var RECOATED = "Recoated";
+  var STAGES = [RECOATED];
+  var COATS = T.coats;
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isVisible(v) { return v.state !== RECOATED; }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "coat", nounPlural: "coats", groupNoun: "area", groupNounPlural: "areas",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing logged yet. Put in the first coat — where, what surface, which coat, and what went on out of which cans.",
+
+    statusKey: "state", statusOrder: STAGES, statusDone: RECOATED,
+
+    groupOptions: [
+      { key: "area", label: "Area" },
+      { key: "surface", label: "Surface" },
+      { key: "coat", label: "Coat" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "coat") {
+        var ia = COATS.indexOf(a), ib = COATS.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      return 0;
+    },
+
+    filters: [{
+      v: "visible", label: "the visible coats",
+      emptyText: "Everything on here has been coated over. The visible film isn't logged yet.",
+      test: function (v) { return isVisible(v); }
+    }],
+
+    fields: [
+      { key: "area", label: "Where", input: "learn", lead: true, required: true, sticky: true,
+        placeholder: "412–416, or: level 2 corridors — then it's a button",
+        emptyHint: "Name it the way your crew and the plans do. It becomes a button." },
+      { key: "surface", label: "Surface", input: "chips", sticky: true },
+      /* NOT required, and that is the engine's own law surfacing: chips toggle,
+         so a required sticky chip dies under any driver (or thumb) that taps it
+         twice — the restore gate proved it at 2/3 rows. A coat-less row prints
+         honestly without the word. */
+      { key: "coat", label: "Which coat", input: "chips", sticky: true },
+      { key: "product", label: "What went on", input: "text", sticky: true,
+        placeholder: "product + color, as your schedule prints them" },
+      { key: "batch", label: "Batch off the fives", input: "text", sticky: true,
+        placeholder: "the number on the can — copy it before the empties go" },
+      { key: "gals", label: "Gallons drawn", input: "text",
+        placeholder: "how much it took — your unit" },
+      { key: "reading", label: "Your meter, if you read it", input: "text",
+        placeholder: "temp / RH / moisture — your instruments, your units" },
+      { key: "state", label: "This film", input: "select",
+        placeholder: "— visible; Recoated when the next coat's over it" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "who sprayed it, the wall that drank, anything" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "surface") return T.surfaces;
+      if (key === "coat") return COATS;
+      if (key === "state") return STAGES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.area, v.surface, v.coat]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.product, v.batch ? "batch " + v.batch : null, v.gals ? v.gals + " drawn" : null, v.reading, v.note]); },
+
+    /* LINE 1 IS AN INBOX SEARCH KEY — job first, then a plain count. Never a
+       verdict count: there is no "N rooms done" on this page, because "done"
+       is a word this page does not have. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "coat count", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("visible") > -1 && !isVisible(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var areas = {};
+      src.forEach(function (v) { var a = String(v.area || "").trim(); if (a) areas[a] = 1; });
+      var na = Object.keys(areas).length;
+      var line = c.shown + (c.shown === 1 ? " coat" : " coats");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + na + (na === 1 ? " area" : " areas");
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "area";
+      var head = joinDots([g === "area" ? null : v.area, g === "surface" ? null : v.surface, g === "coat" ? null : v.coat]);
+      var tail = [];
+      if (v.product) tail.push(v.product);
+      if (v.batch) tail.push("batch " + v.batch);
+      if (v.gals) tail.push(v.gals + " drawn");
+      if (v.reading) tail.push("read " + v.reading);
+      if (v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    /* THE SECOND READING — derived, never tapped: the visible film by area,
+       with the product and batch beside it. That pair is the touch-up map and
+       the O&M color record, and it only exists because the batch went on the
+       row the day the can was still on the job. */
+    docFoot: function (c) {
+      var out = [];
+      var vis = rowsNow().map(function (r) { return r.values; }).filter(isVisible);
+      var byArea = {};
+      vis.forEach(function (v) {
+        var a = String(v.area || "").trim() || "(area not said)";
+        (byArea[a] = byArea[a] || []).push(v);
+      });
+      var areas = Object.keys(byArea);
+      if (areas.length && c.filters.indexOf("visible") === -1) {
+        out.push("THE VISIBLE FILM — what a touch-up has to match, by area:");
+        areas.forEach(function (a) {
+          byArea[a].forEach(function (v) {
+            out.push("  " + joinDash([joinDots([a, v.surface, v.coat]), joinDots([v.product, v.batch ? "batch " + v.batch : null])]));
+          });
+        });
+        out.push("");
+      }
+      out.push("This is a count of coats and cans, recorded by hand at the job. It grades nothing: no line here means done, ready, approved or conforming, the readings are my own instruments' with no limit set against them, and product, color and sheen are carried exactly as my schedule and my cans print them.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim();
+      return (job ? job + " — " : "") + "coat count, " + c.total
+        + (c.total === 1 ? " coat, " : " coats, ") + c.today
+        + " — recorded by hand. Each line is one coat on one area: what went on, out of which batch, and what my own instruments read. Not a completion record; the page grades nothing and sets no limit.";
+    },
+    tsvColumns: [
+      { label: "Where", key: "area" },
+      { label: "Surface", key: "surface" },
+      { label: "Coat", key: "coat" },
+      { label: "What went on", key: "product" },
+      { label: "Batch", key: "batch" },
+      { label: "Gallons", key: "gals" },
+      { label: "My reading", key: "reading" },
+      { label: "This film", key: "state" },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || f || t) ? { job: j, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    }
+  });
+
+  ["area"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  /* TWO TAPS TO WIPE, never one — this diary is the only copy of numbers that
+     left in the dumpster, and it lives in one browser on one phone. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+  });
+
+  ["#hJob", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

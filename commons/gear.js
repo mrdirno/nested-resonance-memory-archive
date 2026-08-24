@@ -479,5 +479,36 @@ window.COMMONS_GEAR = [
   { id: "seam-kit", n: "Seam iron, tape and sealer — the whole kit, together", t: ["flooring"],
     w: "An unsealed seam is a callback, not a style choice, and the one job you left the sealer at the shop is the one with a seam down the middle of a corridor." },
   { id: "layout-chalk", n: "Chalk line, and chalk in a colour that comes back up", t: ["flooring"],
-    w: "Red chalk under a light-coloured floor telegraphs through and stays there. Blue or white, and snap the line for the field before you open the first box." }
+    w: "Red chalk under a light-coloured floor telegraphs through and stays there. Blue or white, and snap the line for the field before you open the first box." },
+
+  /* ---- painting: trade #14 -----------------------------------------------
+     THE BAG WHERE HALF THE GEAR EXISTS TO CATCH A MISTAKE WHILE IT IS STILL
+     WET. A run caught wet is a rag; found dry it is sand, prime and repaint —
+     so the rags ride by the case, the raking light runs the five-o'clock
+     inspection before the sun does, and the razor kit takes the tape line
+     back off the glass. Seeded by three-voice fan-out, curated at stand-up. */
+  { id: "five-in-one", n: "5-in-1", t: ["painting"],
+    w: "Opens cans, digs cracks, spreads patch, squeezes covers dry, seats lids — the tool your hand reaches for a hundred times a day without asking. Leave it home once and your hand spends the whole day telling you about it." },
+  { id: "sash-brush", n: "The angled sash nobody else touches", t: ["painting"],
+    w: "A new brush fights you; one washed and spun a hundred times lays the line right where you look. That's why it rides in its keeper away from the crew bucket, and why it doesn't get lent — to anybody." },
+  { id: "extension-pole", n: "Extension pole, one that locks tight", t: ["painting"],
+    w: "Half of what a green hand climbs a ladder for, you roll from the floor — and your shoulders are the ones still working in twenty years. The bargain pole that slips a quarter turn mid-stroke is how you learn why the old hands paid up." },
+  { id: "tape-two-widths", n: "Good tape, two widths", t: ["painting"],
+    w: "Wide for masking off, narrow for tight cuts and curves — and the delicate stuff for anything painted inside a month. Cheap tape bills you twice: once when the line bleeds, again when it pulls last week's finish off on the way out." },
+  { id: "rags-by-the-case", n: "Rags by the case, one damp in your back pocket", t: ["painting"],
+    w: "A run caught wet is a wipe; found dry it's sand, prime, repaint and a touch-up that flashes in low light. Buy them like they're free, because the day you start rationing rags the job starts showing it." },
+  { id: "wet-film-gauge", n: "Wet film gauge", t: ["painting"],
+    w: "The data sheet calls the build; the gauge tells you whether you're hitting it while the coat's still wet enough to fix. Your eye is free, and it flatters whoever's holding the gun — right up to the day another man's gauge reads your work." },
+  { id: "pot-hook", n: "Pot hook", t: ["painting"],
+    w: "Hangs the cut pot off the rung so one hand minds the ladder and the other runs the brush. Every crew that skips them has the same story, and it ends on the customer's carpet." },
+  { id: "strainers", n: "Strainers, a stack", t: ["painting"],
+    w: "Any can that's been opened before gets strained — no exceptions, no matter how clean it looks. The chunk you skip finds the tip mid-pass at the top of the ladder, or rides the roller into the middle of the biggest wall in the house." },
+  { id: "spinner", n: "Spinner", t: ["painting"],
+    w: "Ten seconds down inside an empty bucket and a washed cover's ready for tomorrow instead of stiff by Monday; brushes come back the same way. Pays for itself in covers the first month — and you only ever spin one outside the bucket once." },
+  { id: "razor-scraper", n: "Razor kit — scraper and a box of fresh blades", t: ["painting"],
+    w: "A fresh blade takes drips and overspray off glass like they never happened; a tired one scratches the customer's window into the punch list. It also scores every tape line before the pull, so the tape doesn't decide where your paint ends." },
+  { id: "canvas-drops", n: "Canvas drops, runners for the walk paths", t: ["painting"],
+    w: "Canvas drinks a drip and stays put; plastic slides under a ladder foot and keeps every drop wet all day for your boot to find. Cover the path from the door to the work, because the floor you didn't drop is the only part of the job the customer remembers." },
+  { id: "raking-light", n: "A light to rake the walls", t: ["painting"],
+    w: "Overhead light forgives everything; a hard light raked down the wall calls out the holidays, the flashed patch and the fat edge while there's still paint in the pot. The low sun through the customer's window runs the same inspection at five o'clock, whether you did or not." }
 ];
