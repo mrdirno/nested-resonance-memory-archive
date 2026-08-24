@@ -36,7 +36,7 @@
 </div>
 
 <div class="bar">
-  <span class="count" id="count">Nothing on it yet</span>
+  <span class="count" id="count">Nothing yet</span>
   <button type="button" id="clear">Clear</button>
   <button type="button" id="copy">Copy the note</button>
 </div>
@@ -66,8 +66,8 @@
     copiedLabel: "Copied. Go send it.",
     copyFailLabel: "Select it and copy",
     clearConfirm: "Clear this note? Your name and company stay.",
-    emptyLabel: "Nothing on it yet",
-    startedLabel: "Note started",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
 
     subline: function (get, u) {
       return [get("site"), u.today()].filter(Boolean).join("  ·  ");
@@ -146,8 +146,8 @@
 
     countLabel: function (get, s, touched) {
       var n = (s.surfs || []).length;
-      if (n) return n + " surface" + (n === 1 ? "" : "s") + " on it";
-      return touched ? "Note started" : "Nothing on it yet";
+      if (n) return n + " surface" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
     }
   });
 })();

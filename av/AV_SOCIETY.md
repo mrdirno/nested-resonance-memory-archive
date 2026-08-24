@@ -1534,6 +1534,18 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-24 (C3653) — A REQUIRED CHIP THAT STICKS IS A FIELD THAT CLEARS ITSELF
+`painting/coat-count.html` shipped its coat picker as `input:"chips", required:true, sticky:true`
+and the restore gate skipped the page at 2 of 3 rows: chips TOGGLE, and a sticky chip arrives at
+the next row already lit — so the one tap that fills every other field turns this one OFF, and
+the row is refused for missing the thing the tap just removed. No sibling carries the combo
+(swept all 13 the same cycle: zero `required` chips anywhere; the non-sticky variant on the ding
+ledger is safe because a cleared field can only be turned on). The class: `required` guards what
+a row must SAY; `sticky` preserves what a hand just DID; on a toggling control the two guards
+fight, and the machine driver that taps once per row is exactly a thumb in a glove. A chips
+field may be required or sticky, never both — and the gate that found it is the reason a new
+trade runs the whole battery before it ships, not after.
+
 ### 2026-08-23 (C3650) — THE GATE ASSERTED THE FORMAT FROM MEMORY, AND THE ENGINE'S OWN COMPOSER DISAGREED
 The first full run of `lang-layer.mjs` failed 7 of 12 pages for "the ES (EN) composition did not
 reach the document" — and every one was a tick that carries a `sub`, which `Lang.tick` prints as
@@ -5453,3 +5465,43 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/tm-tag.html ·
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/tm-tag.html ·
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/tm-ticket.html
+
+- **[AXIS:BREADTH] C3653 (2026-08-24) — THE FOURTEENTH TRADE WAS FOUND BY THE QUESTION, NOT THE
+  COUNT.** Flooring's own #14 instruction ran first: *whose gate is already written into other
+  kits' vocabulary with no receiver behind it* — and "Before paint" is a literal gate VALUE in
+  av's ladder, "Before it goes to paint" in framing's, with paint words in TEN of thirteen kits.
+  The who[] count nominated doors (3+hm to the painter's 2); a four-lens Workflow panel
+  (receiving · population · refusal · system-of-record, independent, scored) disposed UNANIMOUS
+  for painting, 86–90 against doors' 67–76 — doors held as #15 front-runner in the private
+  ladder, its #13 kill intact. Three blind in-trade voices (28 proposals) + an independent
+  14-item refusal pass + the 20-year prune kept SEVEN and stand-up shipped SIX:
+  `not-ready` (PINNED — the receiver behind ten countdowns; commencement is acceptance; the
+  two-button close: FIX with a when, or PROCEED in writing) · `store-call` (unit-of-issue on the
+  bare number, the batch as masonry's RUN with header passthrough AND the inverse case, sitework's
+  buried list isomorphed to THE SHAKER LIST, ends-on-absence on the glass) · `coat-count`
+  (flooring's factual-rung law — the one rung is RECOATED, and the visible-film filter IS the
+  touch-up map: batch-per-area outlives the empties) · `ding-ledger` (observed-never-accused
+  who-column with Unknown first-class; per-trade tallies feed the PM's back-charge as counts;
+  the fix call is Touch-up vs Whole-wall-it'll-flash, craft not fault) · `color-lock` (answers
+  THEIR numbered schedule, never re-authors it; CONFIRMED-or-keep-working, with the ASI absence
+  question) · `write-up.html` + `docs.js` AT STAND-UP — fourteenth trade, fourteenth library,
+  the DOCS axis never re-opened; own docs `coated-under-protest` / `walk-after-final` /
+  `who-picked-the-color`. The prune's seventh (`wet-area-notice`, with Spray Notice and the
+  Recoat Clock folded in) is the NAMED unbuilt rung in `painting/tools.js`, and the kit's ES debt
+  is named there too. Accent MEASURED, not picked: #29FF29 — the tape line — nav 10.64:1 (bar 7),
+  CIELAB dE 34.6 to its nearest neighbour, 1.8× the tightest shipped pair; lemon-white,
+  magenta-white and blue killed with numbers in trade.js. Commons MEMBERSHIP same cycle: 12 gear
+  + 12 tips + 10 names rows (three-agent fan-out, curated), chip live; all four CI lists joined;
+  storefront `fieldToolkits.ts` entry TRUE with corpus-measured match tokens (all precision-1 by
+  vacancy against 1,027 personas). **before:** 13 trades, the last trade through every room
+  unaddressed by name in ten kits. **after:** 14 trades / 106 registered tools, every gate green
+  — docspec 14 trades/228 checks · docs-pool 86 · commons 506 states · rowlogs 34/34 · menu 137
+  pages · notes 364 fields · desk 14 · LIVE mobile sweep 8/8 pages at 320/360/390/430
+  default+bumped, run twice (first live pass dropped two pages to CDN propagation; re-swept
+  stable green). **BACKPORT RIDER FIRED as a sweep:** the required+sticky+chips class (§SCARS)
+  searched across all thirteen siblings — zero instances; and C3650's named remainder was NOT
+  re-shipped — the two new note pages carry "Nothing yet"/"Started"/short counts, while the 27
+  legacy note pages still owe the program-wide ≤11-char label backport (unchanged, still the
+  next BACKPORT rung). Deploy 32756016574 green + label follow-up. Named for P5: push the
+  persona500 repo — `fieldToolkits.ts` now carries the painting entry (accent #29FF29, live:
+  true, added 2026-08-24). https://mrdirno.github.io/nested-resonance-memory-archive/painting/
