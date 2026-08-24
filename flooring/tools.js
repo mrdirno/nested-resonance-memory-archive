@@ -81,7 +81,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Punch Back",
     href: "answer-back.html",
-    desc: "You're last in, so every list on the job ends up on you. Paste theirs, answer every line in their order — mine and done, mine but it needs material and here's the lead time, not mine and here's whose, or that's damage and it needs a ticket instead of a punch item. Their numbers and their wording ride straight back, because their system owns the list.",
+    desc: "You're last in, so every list on the job ends up on you. Paste theirs, answer every line in their order — will do with a day on it, in already, not mine, or damage — needs a ticket instead of a punch item. Their numbers and their wording ride straight back, because their system owns the list.",
     chip: "#4FC8E6",
     audience: "Lead → GC super / builder / property manager"
   },

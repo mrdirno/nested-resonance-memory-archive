@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>What I&rsquo;ll Leave Open — Sitework Field Toolkit</title>
+<title>Walk Back — Painting Field Toolkit</title>
 <meta name="description" content="Somebody sent you a list of what they need from you. Paste it, tick what you'll hit and when, flag what you can't, and send one answer back instead of a text nobody can work to.">
-<meta name="apple-mobile-web-app-title" content="What I’ll Leave Open">
+<meta name="apple-mobile-web-app-title" content="Walk Back">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#242A31">
@@ -15,9 +15,9 @@
 <div class="wrap">
 
   <header class="plate">
-    <span class="eyebrow" id="eyebrow">Sitework &middot; them &rarr; you &rarr; back</span>
-    <h1 id="title">What I&rsquo;ll Leave Open</h1>
-    <p class="lede" id="lede">Somebody sent you a list of what has to be in this trench before it closes. Line it up, say what you&rsquo;ll leave open and until when, and send back one answer he can work to.</p>
+    <span class="eyebrow" id="eyebrow">Painting &middot; them &rarr; you &rarr; back</span>
+    <h1 id="title">Walk Back</h1>
+    <p class="lede" id="lede">The super, the designer or the property manager walked it and sent you a list. Paste the whole thing and go down it once &mdash; we&rsquo;ll hit it with a day on it, done already, not paint, or need the room &mdash; and send back one answer they can close items from, under their own numbers.</p>
   </header>
 
   <div class="warn" id="warn">
@@ -57,7 +57,7 @@
   <section class="card">
     <h2>Your answer, line by line</h2>
     <div id="bar"></div>
-    <p class="note" style="margin:10px 0 0"><b>Tap a row to answer it.</b> Once for <b>will do</b>, again for <b>in already</b>, again for <b>can&rsquo;t</b>, again for <b>need to know</b> &mdash; and once more clears it. The pencil is where you put the date, the reason you can&rsquo;t, or the question you need answered.</p>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row to answer it.</b> Once for <b>we&rsquo;ll hit it</b>, again for <b>done already</b>, again for <b>not paint</b>, again for <b>need the room</b> &mdash; and once more clears it. The pencil is where the day goes, whose mark it is, or what has to leave the room.</p>
   </section>
 
   <section class="card">
@@ -94,10 +94,10 @@
     <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
   </section>
 
-  <p class="credit">Built for the Sitework Field Toolkit. Got a list this page mangled, or an answer it won&rsquo;t let you give? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+  <p class="credit">Built for the Painting Field Toolkit. Got a list this page mangled, or an answer it won&rsquo;t let you give? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
 
   <footer class="foot">
-    <span id="footName">Sitework Field Toolkit</span>
+    <span id="footName">Painting Field Toolkit</span>
     <a href="index.html">All tools &rarr;</a>
     <a href="credits.html">Wall of Wishes &rarr;</a>
   </footer>
@@ -484,7 +484,7 @@
     var el = $("#nodate"); if (!el || !rl) return;
     var n = rl.rows().filter(function (r) { return r.values.status === ANSWERS[0] && !String(r.values.when || "").trim(); }).length;
     el.hidden = !n;
-    if (n) el.innerHTML = "<b>" + n + " will-do with no date on " + (n === 1 ? "it" : "them") + ".</b> That's the half of the answer he's actually waiting on — open the pencil and put a day on it.";
+    if (n) el.innerHTML = "<b>" + n + " marked we’ll hit it with no day on " + (n === 1 ? "it" : "them") + ".</b> That's the half of the answer he's actually waiting on — open the pencil and put a day on it.";
   }
 
   /* The learn axis borrows the identifier's keyboard attributes, which exist so a

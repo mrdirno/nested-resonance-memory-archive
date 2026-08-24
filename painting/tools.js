@@ -52,6 +52,20 @@ window.TOOLKIT_TOOLS = [
     pinned: true
   },
   {
+    name: "Before Paint",
+    href: "rough-in-request.html",
+    desc: "Ten kits on this board write 'before paint' into their own gate ladders; this is the painter standing behind the words. Walk the floor a week out and send everybody who owes you a wall their own list — walls sanded and walked, rooms cleared with a day on them, light, power, air, the schedule confirmed at its rev before the shaker runs — each ask against your own gate, one message per outfit. The doorway refusal is Not Ready; this page is how you never send it.",
+    chip: "#29FF29",
+    audience: "Foreman → GC super / every outfit that owes him a wall"
+  },
+  {
+    name: "Walk Back",
+    href: "answer-back.html",
+    desc: "The super blue-taped it, the property manager sent a photo list. Paste it whole and go down it once — we'll hit it with a day on it, done already, not paint, need the room — and send back one message under their own numbers their side can close from. Their wording rides back verbatim; marks after final coat point at the ding ledger's dates instead of the touch-up pass.",
+    chip: "#29FF29",
+    audience: "Foreman → GC super / property manager"
+  },
+  {
     name: "The Store Call",
     href: "store-call.html",
     desc: "The 6:30 text to the paint desk — your schedule's paint with sheen and base answered, the sundries off a list instead of off your memory, counted the way you say it: 2 gal, 1 five, a case. Everything the shaker touches gathers at the bottom where the desk can't skim past it, and anything that has to match what's up says so with the batch.",
@@ -78,6 +92,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Somebody picked a color standing in a hallway, and gallons get tinted on that sentence. Write it down while everyone still agrees it was said — who, the exact name, number, base and sheen as given, what schedule line it replaces, how much of the old is already up — and get CONFIRMED in writing before the shaker runs.",
     chip: "#29FF29",
     audience: "Foreman → designer / GC / owner"
+  },
+  {
+    name: "Getting In",
+    href: "getting-in.html",
+    desc: "Nights in a building that's full all day — the ask to whoever holds the keys: the door and the window, the lift, the washout, where paint sleeps between shifts, and the heads-ups that keep spray fog, paint smell and a wet wall from becoming the building's 2am problem. Every process the building owns comes back as a question aimed at its owner — the panel, the air and the alarm are theirs, and this page never pretends otherwise.",
+    chip: "#29FF29",
+    audience: "Foreman → property manager / building engineer"
   },
   {
     name: "Write-Up Setup",

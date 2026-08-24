@@ -80,7 +80,15 @@
     "doing it": "yes",
     "already in": "in",
     "thats an extra": "no",   // [2] is DECLINED: not committed under this list
-    "need from you": "ask"
+    "need from you": "ask",
+    // flooring/items.js — the punch-back rungs (answers[] landed 2026-08-24).
+    "not mine": "no",                // [2] declined: another trade's line
+    "damage needs a ticket": "ask",  // [3] blocked on their side: moves when the ticket does
+    // painting/items.js — the walk-back rungs, same four positions.
+    "well hit it": "yes",
+    "done already": "in",
+    "not paint": "no",               // [2] declined: another trade's work wearing paint
+    "need the room": "ask"           // [3] blocked on their side: moves the day the room clears
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score

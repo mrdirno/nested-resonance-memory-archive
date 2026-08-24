@@ -299,9 +299,10 @@ window.TOOLKIT_ROUGHIN = {
 window.TOOLKIT_ANSWER = {
   toolName: "Punch Back",
   eyebrow: "Flooring · them → you → back",
-  lede: "The super, the builder or the property manager walked it and sent you a list. Paste it, answer every line in their order — mine and done, mine but it needs material, not mine and here's whose, or that's damage and it needs a ticket — and send back one answer they can close items off.",
+  lede: "The super, the builder or the property manager walked it and sent you a list. Paste it, answer every line in their order — Will do, with a day on it, In already, Not mine, or Damage — needs a ticket — and send back one answer they can close items off.",
   docSubject: "punch list, answered",
-  closing: "That's every line on your list answered in your order and with your numbers. Anything I marked as needing material is a lead time, not a delay — tell me if you want it expedited. Anything I marked as damage happened after my work went in, and I'll write it up as a ticket rather than a punch item.",
+  answers: ["Will do", "In already", "Not mine", "Damage — needs a ticket"],
+  closing: "That's every line on your list answered in your order and with your numbers. Anything marked Will do carries a day — where that day is a material lead time, the pencil says so. Anything marked Damage — needs a ticket happened after my work went in, and it moves when your ticket does — it isn't a punch item.",
   phJob: "Northgate Medical — 2nd floor",
   phTo: "Dave R — GC super",
   phFrom: "Marco V — Vela Floor Covering",
