@@ -52,7 +52,8 @@ import {
 } from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
-import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
+import { normaliseWindow, MIN_WINDOW_SEC, type ClipWindow } from '../lib/clipWindow';
+import { auditionWindow, AUDITION_RESEEK_GAP_MS, type AuditionEdge } from '../lib/audition';
 import { SPEEDS, safeSpeed, isSped, speedLabel, screenLength, NATURAL_SPEED } from '../lib/speed';
 import {
   WINDOW_FADE_ROSTER, windowFadeLabel, windowFadeSpan, safeFade,
@@ -314,9 +315,24 @@ const TrimSheet: React.FC<{
   /** True when a video-length-sync mode is matching lengths — see the note the
    *  sheet then shows, and `lib/videoSync`'s header for why it must be said. */
   syncing?: boolean;
+  /**
+   * CUT AUDITION — hear the handle you are holding (lib/audition.ts; from the
+   * well: "you play on the cut… then loop again to dial things in quickly").
+   * Absent on a sheet whose source has no monitor to retarget — today the CLIP
+   * sheet: its element's PICTURE is the collage, and scrubbing that under the
+   * composition is its own decision, owed its own cycle rather than shipped as
+   * a side effect of a prop being in scope (the speed's exact sentence).
+   */
+  audition?: {
+    start: (edge: AuditionEdge, w: ClipWindow) => void;
+    move: (edge: AuditionEdge, w: ClipWindow) => void;
+    stop: () => void;
+    /** Playhead in source seconds, or null when nothing honest can be drawn. */
+    time: () => number | null;
+  };
 }> = ({
   name, span, frames, value, onChange, onClose, credit, speed, onSpeed,
-  level, onLevel, fade, onFade, muted, syncing,
+  level, onLevel, fade, onFade, muted, syncing, audition,
 }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
@@ -334,8 +350,80 @@ const TrimSheet: React.FC<{
   // the stored one. `normaliseWindow`'s repair is a last resort for values the
   // UI did not author (a restored project, the exported API) — never the routine
   // path for an ordinary drag.
-  const setIn = (v: number) => onChange({ inSec: Math.min(v, w.outSec - MIN_WINDOW_SEC), outSec: w.outSec });
-  const setOut = (v: number) => onChange({ inSec: w.inSec, outSec: Math.max(v, w.inSec + MIN_WINDOW_SEC) });
+  const setIn = (v: number) => {
+    const next = { inSec: Math.min(v, w.outSec - MIN_WINDOW_SEC), outSec: w.outSec };
+    onChange(next);
+    return next;
+  };
+  const setOut = (v: number) => {
+    const next = { inSec: w.inSec, outSec: Math.max(v, w.inSec + MIN_WINDOW_SEC) };
+    onChange(next);
+    return next;
+  };
+
+  /**
+   * THE AUDITION'S INTERACTION STATE — refs, not state, on purpose: arming and
+   * the playhead both live at input-event and rAF rate, and a sheet that
+   * re-renders per frame is the cost the strip's own painter refused.
+   *
+   * ARMED BY THE GESTURE, NEVER BY FOCUS ALONE: `start` unmutes and resumes an
+   * AudioContext, which engines honour only inside a real gesture — a
+   * `pointerdown` or a key actually pressed is one, the trap's synthetic
+   * `.focus()` is not. Tab parks on a handle silently; the first arrow speaks.
+   * Stopping rides blur AND unmount (Escape and the backdrop both unmount this
+   * sheet without blurring anything first).
+   */
+  const hotEdgeRef = useRef<AuditionEdge | null>(null);
+  const playheadRef = useRef<HTMLDivElement>(null);
+  const phRafRef = useRef(0);
+  const auditionRef = useRef(audition);
+  auditionRef.current = audition;
+  const spanRef = useRef(span);
+  spanRef.current = span;
+
+  const paintPlayhead = useRef(() => { /* replaced below */ });
+  paintPlayhead.current = () => {
+    const line = playheadRef.current;
+    const t = auditionRef.current?.time() ?? null;
+    const s = spanRef.current;
+    if (line) {
+      if (hotEdgeRef.current === null || t === null || !(s > 0)) {
+        line.style.opacity = '0';
+      } else {
+        line.style.opacity = '1';
+        line.style.left = `${(Math.max(0, Math.min(s, t)) / s) * 100}%`;
+      }
+    }
+    phRafRef.current = hotEdgeRef.current === null
+      ? 0
+      : requestAnimationFrame(() => paintPlayhead.current());
+  };
+
+  const arm = (edge: AuditionEdge) => {
+    const a = auditionRef.current;
+    if (!a) return;
+    const already = hotEdgeRef.current === edge;
+    hotEdgeRef.current = edge;
+    // Re-arming the same held edge must not reseek — a pointerdown fires on
+    // every grab, and grabbing the handle you are already hearing is not a
+    // request to start the loop over.
+    if (!already) a.start(edge, w);
+    if (!phRafRef.current) phRafRef.current = requestAnimationFrame(() => paintPlayhead.current());
+  };
+  const disarm = () => {
+    if (hotEdgeRef.current === null) return;
+    hotEdgeRef.current = null;
+    if (phRafRef.current) { cancelAnimationFrame(phRafRef.current); phRafRef.current = 0; }
+    if (playheadRef.current) playheadRef.current.style.opacity = '0';
+    auditionRef.current?.stop();
+  };
+  /** Unmount is a stop — the rAF cancelled BEFORE the stop, so no in-flight
+   *  frame reads a monitor the Stage is already restoring. */
+  useEffect(() => () => {
+    if (phRafRef.current) cancelAnimationFrame(phRafRef.current);
+    auditionRef.current?.stop();
+  }, []);
+  const AUDITION_KEYS = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
 
   /**
    * A REAL MODAL, because this one is not decoration.
@@ -498,6 +586,19 @@ const TrimSheet: React.FC<{
             style={{ left: `${pct(w.inSec)}%`, width: `${Math.max(0, pct(w.outSec) - pct(w.inSec))}%` }}
             aria-hidden="true"
           />
+          {/* THE AUDITION PLAYHEAD — where the loop actually is while a handle
+              is held, on the same time axis as everything above it. Painted by
+              REF at rAF rate: state here would re-render the whole sheet per
+              frame. Opacity-hidden whenever there is nothing honest to draw (no
+              audition offered, a broken blob, metadata still probing) — a
+              frozen line is a lie the ear immediately catches out. */}
+          <div
+            ref={playheadRef}
+            data-testid="audition-playhead"
+            className="absolute inset-y-0 w-0.5 bg-white pointer-events-none"
+            style={{ opacity: 0, left: '0%' }}
+            aria-hidden="true"
+          />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -505,7 +606,15 @@ const TrimSheet: React.FC<{
             <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 w-8 shrink-0">IN</span>
             <input
               type="range" min={0} max={span} step={step} value={w.inSec}
-              onChange={(e) => setIn(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const next = setIn(parseFloat(e.target.value));
+                if (hotEdgeRef.current === 'in') {
+                  auditionRef.current?.move('in', normaliseWindow(span, next.inSec, next.outSec));
+                }
+              }}
+              onPointerDown={() => arm('in')}
+              onKeyDown={(e) => { if (AUDITION_KEYS.includes(e.key)) arm('in'); }}
+              onBlur={() => { if (hotEdgeRef.current === 'in') disarm(); }}
               aria-label={`In point for ${name}`}
               /* `--fill` IS NOT OPTIONAL: the app's global range track is a
                  gradient stopped at `var(--fill, 50%)`, so a slider that never
@@ -522,7 +631,15 @@ const TrimSheet: React.FC<{
             <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 w-8 shrink-0">OUT</span>
             <input
               type="range" min={0} max={span} step={step} value={w.outSec}
-              onChange={(e) => setOut(parseFloat(e.target.value))}
+              onChange={(e) => {
+                const next = setOut(parseFloat(e.target.value));
+                if (hotEdgeRef.current === 'out') {
+                  auditionRef.current?.move('out', normaliseWindow(span, next.inSec, next.outSec));
+                }
+              }}
+              onPointerDown={() => arm('out')}
+              onKeyDown={(e) => { if (AUDITION_KEYS.includes(e.key)) arm('out'); }}
+              onBlur={() => { if (hotEdgeRef.current === 'out') disarm(); }}
               aria-label={`Out point for ${name}`}
               style={{ ['--fill' as string]: `${pct(w.outSec)}%` } as React.CSSProperties}
               className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
@@ -1033,6 +1150,37 @@ export const VideoStage: React.FC<VideoStageProps> = ({
      of the IN handle would reach the export and not the monitor. */
   const trackIn = soundtrack?.inSec;
   const trackOut = soundtrack?.outSec;
+  /**
+   * CUT AUDITION for the music — closures over the Stage so the sheet stays a
+   * dumb surface. `start` seeks unconditionally (grabbing the wheel plays the
+   * parked cut, and the stamp reset lets an immediate jump reseek at once);
+   * `move` reseeks only the IN handle, at most every AUDITION_RESEEK_GAP_MS —
+   * the onset is the information there, while the OUT handle's loop is already
+   * running toward its cut and the Stage watchdog wraps it, so a reseek would
+   * only stutter. Every seek goes through `stage.setAudition`: one owner.
+   */
+  const auditionStamp = useRef(0);
+  const trackAudition = useMemo(() => ({
+    start: (edge: AuditionEdge, w: ClipWindow) => {
+      const a = auditionWindow(edge, w);
+      auditionStamp.current = 0;
+      stageRef.current?.setAudition({ inSec: a.inSec, outSec: a.outSec, seekTo: a.inSec });
+    },
+    move: (edge: AuditionEdge, w: ClipWindow) => {
+      const a = auditionWindow(edge, w);
+      let seekTo: number | undefined;
+      if (edge === 'in') {
+        const now = performance.now();
+        if (now - auditionStamp.current >= AUDITION_RESEEK_GAP_MS) {
+          auditionStamp.current = now;
+          seekTo = a.inSec;
+        }
+      }
+      stageRef.current?.setAudition({ inSec: a.inSec, outSec: a.outSec, seekTo });
+    },
+    stop: () => stageRef.current?.setAudition(null),
+    time: () => stageRef.current?.auditionTime() ?? null,
+  }), []);
   /** The probed CONTAINER length, for the same reason and for THE STRIP's music
    *  lane — the one length a chip, a slider or a ruler can draw against before
    *  anything has been decoded (`soundtrack.soundtrackWindow`). */
@@ -2015,6 +2163,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           only one of these sheets can ever be open. */}
       {trimming === SOUNDTRACK_ID && !busy && soundtrack && onSoundtrackWindow && (
         <TrimSheet
+          /* A REPLACED SONG IS A NEW SHEET. `adoptSoundtrack` revokes the old
+             blob and swaps the spec WITHOUT nulling `soundtrack`, so this mount
+             guard stays true and the sheet would keep its interaction state —
+             a hot handle auditioning a url that no longer exists. The key makes
+             React do the dispose/rebuild, the same answer `stage.setSoundtrack`
+             gives the same problem. */
+          key={soundtrack.url}
           name={soundtrack.name}
           span={soundtrack.durationSec}
           frames={[]}
@@ -2023,7 +2178,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             : undefined}
           onChange={onSoundtrackWindow}
           onClose={() => setTrimming(null)}
-          credit="Picking the part of the song that plays, and fading it in and out at the edges of that part, were both wished for by anonymous Collage users."
+          audition={trackAudition}
+          credit="Picking the part of the song that plays, fading it at the edges of that part, and hearing the cut loop under your finger as you dial it were all wished for by anonymous Collage users."
           level={trackRow?.level}
           muted={!trackRow?.wantsAudio}
           onLevel={setTrackLevel}

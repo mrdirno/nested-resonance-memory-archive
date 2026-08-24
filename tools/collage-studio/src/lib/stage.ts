@@ -1069,7 +1069,22 @@ export class Stage {
      *  the track. */
     fadeSec: number;
     env: GainNode | null;
+    /**
+     * CUT AUDITION (`setAudition`) — while the trim sheet holds a handle, the
+     * range watchdog holds THIS sub-window instead of the range, and
+     * `applyMutes` opens the gate for it. NOT persisted, NOT status, NOT the
+     * range: `inSec`/`outSec` above stay the export's truth throughout, and a
+     * rebuilt track (new url) starts with this null — which is the replace-
+     * while-open recovery, not an omission.
+     */
+    audition: { inSec: number; outSec: number } | null;
   } | null = null;
+  /** The audition's own wrap pump — the ONE case the demand-driven frame loop
+   *  cannot cover: a STILL collage with music auditions with nothing drawing,
+   *  and `timeupdate`'s ~250 ms would overshoot the cut by a tenth of the loop
+   *  — playing exactly the material the user is cutting. Runs only while an
+   *  audition is armed; 0 when parked. */
+  private auditionRaf = 0;
   private soundOn = false;
   private needsGesture = false;
   private audioCtx: AudioContext | null = null;
@@ -4082,6 +4097,7 @@ export class Stage {
       muted: !!spec?.muted, level: safeLevel(spec?.level), broken: false,
       inSec: spec?.inSec, outSec: spec?.outSec,
       fadeSec: safeFade(spec?.fadeSec), env: null,
+      audition: null,
     };
     const doc = this.doc;
     const host = this.ensureHost();
@@ -4102,7 +4118,17 @@ export class Stage {
     el.addEventListener('error', () => {
       if (this.track && this.track.el === el) { this.track.broken = true; this.emitStatus(); }
     });
-    el.addEventListener('canplay', () => this.emitStatus());
+    el.addEventListener('canplay', () => {
+      // An audition can be armed BEFORE this element's clock is real — a song
+      // replaced while its trim sheet is open, with the handle still moving.
+      // `applyMutes` held the gate closed until now (no audible head-of-file at
+      // 0:00); open it and land the window the moment the metadata exists.
+      if (this.track && this.track.el === el && this.track.audition) {
+        this.applyMutes();
+        this.enforceTrackWindow();
+      }
+      this.emitStatus();
+    });
     // THE RANGE, HELD ON THE ELEMENT'S OWN CLOCK.
     //
     // A trimmed CLIP is held from `tick`, on the frames the compositor is already
@@ -4196,6 +4222,86 @@ export class Stage {
   }
 
   /**
+   * CUT AUDITION — the trim sheet is holding a handle, and the monitor should
+   * loop THAT cut's sub-window (lib/audition.ts) instead of the range.
+   *
+   * IT RETARGETS THE TRACK'S OWN ELEMENT rather than minting a second one, and
+   * that is the design, not thrift: a second `<audio>` on the same blob is a
+   * second decoder session (the pool iOS silently evicts decoders over), an
+   * out-of-phase DOUBLE of the exact source being judged, and a second copy of
+   * the range-hold logic to drift. This element already carries the fade
+   * envelope, the gain chain and the `liveWrapTarget` watchdog — audition
+   * swaps only which window the watchdog holds, and `applyMutes` opens the
+   * gate for it (solo, unity — see the note there).
+   *
+   * MUST BE CALLED INSIDE A USER GESTURE when starting: it resumes the
+   * AudioContext and `applyMutes` unmutes, both honoured only from one — the
+   * same contract `setClipMuted` documents. The sheet's pointer/key handlers
+   * are that gesture.
+   *
+   * `seekTo` is the explicit jump (the IN handle's "play ON the cut"); absent,
+   * the watchdog alone converges — which is the OUT handle's whole behaviour:
+   * playback keeps running toward the moving cut and wraps there. Either way
+   * every write to `currentTime` goes through this object and the watchdog —
+   * one owner, no second seeker to race.
+   */
+  setAudition(w: { inSec: number; outSec: number; seekTo?: number } | null): void {
+    const t = this.track;
+    if (!t) return;
+    if (!w) {
+      if (!t.audition) return;
+      t.audition = null;
+      if (this.auditionRaf) { cancelAnimationFrame(this.auditionRaf); this.auditionRaf = 0; }
+      this.applyMutes();
+      // The range pulls the playhead home at the moment the fact exists,
+      // exactly as `setSoundtrack`'s own window path does — on a still
+      // composition the next frame may be a while away.
+      this.enforceTrackWindow();
+      return;
+    }
+    t.audition = { inSec: w.inSec, outSec: w.outSec };
+    if (this.audioCtx && this.audioCtx.state === 'suspended') {
+      try { void this.audioCtx.resume(); } catch { /* ignore */ }
+    }
+    const el = t.el;
+    if (el) {
+      // The element autoplays muted from creation, but an export's `pauseAll`
+      // or an engine hiccup may have parked it — a paused audition is silence.
+      if (el.paused) { try { void el.play(); } catch { /* ignore */ } }
+      const d = el.duration;
+      if (w.seekTo !== undefined && Number.isFinite(w.seekTo)
+        && Number.isFinite(d) && d > 0) {
+        try { el.currentTime = Math.min(Math.max(0, w.seekTo), d); } catch { /* ignore */ }
+      }
+    }
+    this.applyMutes();
+    this.enforceTrackWindow();
+    this.armAuditionPump();
+  }
+
+  /** The audition playhead for the sheet's strip line, or null when there is
+   *  nothing honest to draw (no audition, a broken blob, metadata pending). */
+  auditionTime(): number | null {
+    const t = this.track;
+    const el = t?.el;
+    if (!t || !el || !t.audition || t.broken) return null;
+    const d = el.duration;
+    if (!Number.isFinite(d) || d <= 0) return null;
+    return el.currentTime;
+  }
+
+  private armAuditionPump(): void {
+    if (this.auditionRaf) return;
+    const pump = () => {
+      this.auditionRaf = 0;
+      if (this.destroyed || !this.track || !this.track.audition) return;
+      this.enforceTrackWindow();
+      this.auditionRaf = requestAnimationFrame(pump);
+    };
+    this.auditionRaf = requestAnimationFrame(pump);
+  }
+
+  /**
    * HOLD THE MUSIC INSIDE ITS RANGE. Returns true if it moved the playhead.
    *
    * The decision is `liveWrapTarget` — the same module the offline mix asks — so
@@ -4227,11 +4333,29 @@ export class Stage {
     if (!t || !el) return false;
     // UNTRIMMED IS FREE, and it is the overwhelmingly common case: one branch,
     // no `duration` read, no window allocated, no seek.
-    if (t.inSec === undefined && t.outSec === undefined) return false;
+    if (!t.audition && t.inSec === undefined && t.outSec === undefined) return false;
     const d = el.duration;
     if (!Number.isFinite(d) || d <= 0) return false;   // metadata has not landed
+    // THE AUDITION OVERRIDE — a held trim handle swaps WHICH window this
+    // watchdog holds (lib/audition.ts computed it); everything else — the fade
+    // armed on the REAL range below, the status, the export — still reads
+    // `t.inSec/outSec`, so audition previews the true envelope at the boundary
+    // being dialed and leaves no fingerprint anywhere else. Clamped to THIS
+    // element's clock by hand with `full` forced false: `normaliseWindow`
+    // would stamp a whole-file audition `full` and the wrap would never fire.
+    // This hand-built window is a steering signal for `liveWrapTarget` and is
+    // read by nothing else (the audition dialect lib/audition.ts documents).
+    const aud = t.audition;
+    let w: ClipWindow;
+    if (aud) {
+      const lo = Math.min(Math.max(0, aud.inSec), d);
+      const hi = Math.max(lo, Math.min(aud.outSec, d));
+      w = { inSec: lo, outSec: hi, length: hi - lo, full: false };
+    } else {
+      w = normaliseWindow(d, t.inSec, t.outSec);
+    }
     const target = liveWrapTarget(
-      { window: normaliseWindow(d, t.inSec, t.outSec), loop: true, rate: 1 },
+      { window: w, loop: true, rate: 1 },
       el.currentTime,
     );
     if (target === null) return false;
@@ -4241,6 +4365,8 @@ export class Stage {
   }
 
   private disposeSoundtrack(): void {
+    // The pump first, so no in-flight frame reads an element `load()` resets.
+    if (this.auditionRaf) { cancelAnimationFrame(this.auditionRaf); this.auditionRaf = 0; }
     const t = this.track;
     this.track = null;
     if (!t) return;
@@ -4312,8 +4438,23 @@ export class Stage {
     if (t) {
       // No `live` term: a soundtrack holds no VIDEO decoder, so the realtime
       // admission budget has nothing to say about it.
-      const audible = this.soundOn && !t.muted && !t.broken;
-      const p = livePath(audible, t.level, !!t.gain);
+      //
+      // THE AUDITION OVERRIDES AUDIBILITY, NEVER INTENT. While a trim handle
+      // is held (`setAudition`) the monitor must sound — that is the feature —
+      // even with the master sound off or this track's speaker out: both are
+      // statements about the MIX, and a cut audition is solo by definition.
+      // `soundOn` and `muted` are deliberately not written (audibility and
+      // intent are different fields — the exact split lib/soundtrack.ts
+      // DECISION 2 exists for), so closing the sheet restores the state the
+      // user left, through this same recompute. Gated on metadata so a track
+      // still probing cannot audibly play its head at 0:00, and on `broken`
+      // so a dead blob degrades to silence rather than to a frozen lie.
+      const ready = !!t.el && Number.isFinite(t.el.duration) && t.el.duration > 0;
+      const auditioning = !!t.audition && !t.broken && ready;
+      // Unity while auditioning: the level says how the music sits AGAINST the
+      // rest of the mix, and a solo audition has no rest of the mix.
+      const audible = auditioning || (this.soundOn && !t.muted && !t.broken);
+      const p = livePath(audible, auditioning ? FULL_LEVEL : t.level, !!t.gain);
       if (t.gain) { try { t.gain.gain.value = p.node; } catch { /* ignore */ } }
       const el = t.el;
       if (el) {
@@ -4321,8 +4462,12 @@ export class Stage {
         el.volume = p.element;
       }
     }
+    // AUDITION IS SOLO: while a cut is being dialed, every other source steps
+    // out of the room — through this same audibility recompute, never through
+    // anyone's `muted` intent, so stopping restores exactly what was playing.
+    const solo = !!this.track?.audition;
     this.clips.forEach((c) => {
-      const audible = this.soundOn && !c.muted && c.live && !c.broken;
+      const audible = !solo && this.soundOn && !c.muted && c.live && !c.broken;
       const p = livePath(audible, c.level, !!c.gain);
       if (c.gain) {
         try { c.gain.gain.value = p.node; } catch { /* ignore */ }
