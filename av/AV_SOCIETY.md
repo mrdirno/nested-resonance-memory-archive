@@ -1546,6 +1546,50 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-25 (C3657) — A TRUE-SOUNDING TOAST IS HOW A DEFECT SURVIVES A MONTH
+Card Studio's handoff said "Picture placed from persona500 - ready to print" while the
+picture rendered **0.00% visible** under a template's artwork. Every word was true: it
+WAS placed, it WAS full-card, it WAS ready to print. The element bookkeeping agreed —
+`x:0 y:0 w:85.6 h:53.98 fit:cover`, one element added, `S.sel` set, an ack posted. The
+only thing that disagreed was the card, and nothing measured the card. The rule this
+mints: **a message that reports an ACTION must be earned by the RESULT, not by the
+action succeeding.** Where a placement can land somewhere the eye cannot reach, the gate
+measures RENDERED PIXELS through the same renderer that prints — KILL-TEST 5 does, and
+the 0% it found had been shipping under a green message and a green KILL-TEST 1, which
+only ever ran against a blank face. A control case that cannot fail is not coverage.
+
+### 2026-08-25 (C3657) — "BOTTOM OF THE STACK" IS A RULE ABOUT TEXT, APPLIED TO EVERYTHING
+`placeFullCard` unshifted to index 0 with the comment "a full-card image dropped on top
+would hide the text." That reasoning is correct and it is *narrow*: it was written for a
+card carrying a NAME. Applied to a card carrying full-bleed ART it inverts — the picture
+is what gets hidden, and 47 of the shipped templates are exactly one opaque full-card
+image. A placement rule stated as a POSITION ("bottom") silently assumes what else is on
+the face; stated as a RELATION ("above anything that covers the card, below everything
+else") it holds in both worlds and reduces to the old behaviour when nothing covers. When
+a comment justifies a constant with one scenario, that is the scenario it was tested in —
+ask what the OTHER faces carry before trusting it.
+
+### 2026-08-25 (C3657) — A FIX THAT ACTIVATES A LATENT DEFECT IS HALF A FIX
+Making the picture visible was the whole ask, and it armed something that had been
+unreachable: the deck's fronts carry their tap-mark colour HARDCODED, each measured once
+by hand against its own baked artwork (leviathan-front ships `marks/tap-white.png` because
+its art is dark). Cover that art with an arbitrary photo and the measurement is stale — a
+white mark on a pale picture is a mark nobody can find. It could not fire before, because
+before, nothing ever actually changed what was visible. The rule: **when a fix makes a
+previously-dead path live, that path is part of the fix's blast radius and gets answered
+in the same change** — here `faceLum()` lifted out of `tapMarkElement` and `retintTapMarks()`
+re-measuring after every placement, with the mark hidden for the sample or it measures its
+own ink. A judge panel found this; the implementer had not.
+
+### 2026-08-25 (C3657) — A GATE THAT NEEDS THE FIX TO RUN CANNOT PROVE THE FIX
+KILL-TEST 5's strongest case sweeps every template carrying full-card art. Its first draft
+enumerated them by calling the app's own `coversCard()` — a function the fix INTRODUCES —
+so against pristine HEAD that case reported "0 templates" and failed for the wrong reason:
+not "the pictures were hidden" but "the helper does not exist." A red proof that fails
+because the harness cannot run is not a red proof. The predicate is now spelled out inside
+the test, and the same case reads all 47 templates at 0% against pristine and 47/47 clear
+against the fix. **A gate's discriminating case may not depend on the code it discriminates.**
+
 ### 2026-08-24 (C3655) — A GATE LEFT RED BY THE CYCLE THAT REDDENED IT GATES NOTHING
 Pangea's own killtest read 40/41 when C3655 picked it up — red since 45bcc6fc11 rewrote
 the modal's carry line ("Opens your picture in Card Studio, ready to print") without
@@ -5760,3 +5804,61 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the cut resolves in 0.4s. Wells after: AV 0/0, vibe 2 new (iOS input-zoom on the wish field;
   cropper black edges). NOTE: this lane pushed persona500 for a card-page fix — exactly one
   unpushed commit, zero behind, deploy-safety confirming no other pane's WIP in the staged set.
+
+- **[AXIS:WELL] C3657 (2026-08-25) — THE PICTURE ARRIVED, FILLED THE CARD, AND WAS
+  INVISIBLE (vibe wish 2ce53d86, LEVIATHAN-010, the oldest of two stale `building`
+  claims).** Both wells read 0 new, so claim order sent this cycle to the stale-claim
+  sweep, and the older claim was real unfinished work: *"when card opens on card studio
+  maybe refine the cropper or renderer so it re renders with no black edges? Or no edges
+  with entire faces full black or below threshold — sometimes the sample is large enough
+  to fill the card."* It was not the cropper. `placeFullCard()` unshifted the arriving
+  picture to index 0 — the BOTTOM of the face's element stack — reasoning, in its own
+  comment, that "a full-card image dropped on top would hide the text." True of text.
+  Not true of the **47 shipped templates that ARE one opaque full-card image at exactly
+  card size.** MEASURED through `drawFace`, the renderer that prints: blank face
+  **99.31%** of the card is the picture; `leviathan-front` **0.00%**; `leviathan-back`
+  **0.00%** with 24.95% of the card near-black; **all 47 art templates 0.00%**. What the
+  eye got was the template's own ink — a dark border ("black edges", 23.05% near-black
+  measured on the outer ring alone) and a baked QR plate ("entire faces full black").
+  Their last clause was the proof the picture was fine: it filled the card, nobody could
+  see it. THE RULE NOW, one function so it cannot drift (`placementFor`): *filled* —
+  nothing covers the card, bottom of the stack, byte for byte the old unshift so a name
+  still prints over a photo; *over-art* — a design's artwork is there, the picture goes
+  ON TOP and the artwork is KEPT; *replaced* — a picture we placed earlier (a `data:`
+  src, ours) is swapped in place. Over, not replacing, is deliberate: **this app has no
+  undo and `leviathan-back` bakes its scannable code into the artwork pixels** — deleting
+  that is unrecoverable, covering it is not. `coversCard()` reuses `bledElement`'s flush
+  test (T = 0.01 mm) and its rot exclusion; hidden, rotated, see-through and contain-fit
+  elements are not covers, an image with NO src IS one (the renderer paints an opaque
+  placeholder), and the scan runs top-down like `hitElement`'s. JUDGE PANEL: three
+  independent lenses, **6 / 6 / 5, unanimous BUILD WITH CHANGES** — every required change
+  landed, and the user-intent judge is why the design changed from replace to cover (it
+  found the baked QR and the no-undo trade), while the blast-radius judge found the
+  sibling. PROOF, LIVE at https://mrdirno.github.io/vibe-cards/studio/ (vibe-cards
+  `0d45310`, Pages deploy green): **16/16 driving the REAL door on live
+  persona500.com/leviathan into the live studio** — a real world arrives over the real
+  cross-origin handoff, lands on the card, and over `leviathan-back`'s plate the card
+  goes **24.95% → 0.18% near-black with 0% on the outer ring**. NEW **KILL-TEST 5**
+  (`card-studio-cover`, persona500 `c8c365018b`, beside kill-tests 1 and 4) measures
+  RENDERED PIXELS across blank / front / back / a hand-laid opaque rect /
+  text-must-stay-on-top / two handoffs running / **and every template carrying full-card
+  art** — **26/26 green, 47/47 clear; 17/26 against pristine, naming all 47 at 0%.**
+  KILL-TEST 1 still 8/8, `tools/verify.mjs` 16/16 with a new over-art/replace probe,
+  mobile gate watertight at 320/360/390/430, `node --check` clean, the 3 NUL cache-key
+  bytes intact. BACKPORT rider: **FIRED, twice.** `duplicateSel()` pushed its copy to the
+  top of the WHOLE face, so duplicating a full-card background jumped it in front of every
+  name, code and mark — the same "silently covering your work" shape inverted; now
+  `splice(i + 1)`. And the studio's toast rendered **160×107 at 320px — half the viewport,
+  six lines** — because `left:50%` puts the box's space at 50vw and shrink-to-fit means
+  `max-width:70vw` never binds; `width:max-content` gives **224×72**. That is the
+  IDENTICAL defect and the identical fix C3656 landed on persona500's generator toasts one
+  day earlier, unswept in the sibling repo until now. Also shipped this cycle: wish
+  **12183f06** (the Card Studio door) closed at last — held `building` by C3656 because
+  prod had not deployed, now **48/48 against production** with `DOOR_BASE=https://persona500.com`.
+  Credit: an anonymous Card Studio user, av/credits.json #23. Storefront: n/a — cards
+  lane, no fieldToolkits entry. Wells after: AV 0/0, vibe 0/0, zero stale claims.
+  **LEFT UNSERVED, named:** the wisher's *"below threshold"* is a separate persona500-side
+  rung. Leviathan card faces measure 30.6–78.9 mean luminance against shipped deck art at
+  59.7–76.9, so the darkest cuts really are darker than anything in the deck — this change
+  cannot help a picture that is itself dark, only one that was fine and hidden. Named as
+  its own rung, not folded in.
