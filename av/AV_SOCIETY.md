@@ -3378,6 +3378,69 @@ idempotent (same-tongue picks pass through), which an exit-side one can never be
 ### 2026-08-23 — THE COPY-BUTTON WORD IS PART OF THE BAR GEOMETRY, AND A LONGER ONE OUTGREW A MEASURED THRESHOLD
 The fixed action bar hides its line-count label below a MEASURED width (`@media (max-width:356px)`), and that number was calibrated against masonry's "Copy the call" — a four-letter final word. Roofing's material order (`order-the-load.html`) shipped its first draft with the same bar carrying "Copy the **order**": one letter wider, ~8px more button, and at 360px — just above the 356 threshold — the count "Nothing on it yet" no longer fit beside the two buttons, wrapped to 46px, and grew the fixed bar 2px, which mobile-watertight (correctly) fails as a bar that GREW. The trap: the threshold reads like a property of the COUNT text, but it is a property of the WHOLE bar, and the copy word is a load-bearing input to it. Two ways out — match the proven four-letter word ("Copy the **load**") so the geometry is masonry's unchanged, or re-measure and move the threshold. Took the first; the word is roofing-true and the constant stays honest. LESSON: when you isomorph a page whose fixed-bar threshold was MEASURED, the button LABELS are part of what was measured — change the words and the number is no longer yours.
 
+### 2026-08-25 — THE FALLBACK OPENED A TAB THAT WAS STRUCTURALLY INCAPABLE OF RECEIVING ANYTHING
+"Open in Card Studio" on bifurcata/leviathan/pangea was one compound guard —
+`if (cell && !busy && !batch) { var w = window.open(...); if (w) { ...handoff... } }` —
+and its own comment named the escape: "a blocked popup (w null) falls through to the
+anchor's href opening the studio - the fallback." But that anchor carries
+`rel="noopener"`. The tab it opens has **no `window.opener`**, so the sender can never
+postMessage into it and the studio can never announce readiness back: the fallback was a
+tab that is structurally incapable of doing the one job the door exists for. Blank
+forever, and — because the handler never reached `preventDefault` — no toast either. THREE
+legs fell through it, not one: no cell, a cut already in flight, and the blocked pop-up.
+The everyday leg is the middle one, because the door closes the modal the instant it is
+tapped: a hand that comes back for another world taps again while the first cut still
+holds `busySave`, and gets a second blank tab. Filed twice in three minutes by the same
+thumb ("this one didn't go to card studio but others did"; "it didn't take at first, then
+I exited, clicked it again and it took"). LESSON: a fallback is only a fallback if it can
+still do the job. `rel="noopener"` is not a detail of the anchor — it is a statement that
+this path can never carry a handoff, so every branch that lands on it must either be a
+branch where no handoff was wanted, or must speak.
+
+### 2026-08-25 — THE COMMENT SAID WE ANSWER THE READY PING, AND THE LISTENER ARMED AFTER THE RENDER
+The studio side had just fixed exactly this (`dee4922`: "the listener now arms at PARSE,
+top-level, before boot() is even called") and published the contract in its own comment:
+"On arm the studio posts a content-free {vibeReady:1} to its opener: today's senders
+ignore it; tomorrow's post the card on it instead of polling blind." The sender was then
+written to honour it — `if (ev.data.vibeReady) post();` — and documented it as field
+lesson one. It never fired. `window.addEventListener('message', onMsg)` sat inside
+`rd.onload`, i.e. after the FileReader, which is after the whole 2066×1319 WebGL cut. The
+studio's two ready pings land at parse (~0.5s) and boot-end (~1–3s); the sender's ears
+went on tens of seconds later. Both pings were missed on every handoff that ever ran, and
+the loop fell back to the blind 500ms poll the contract existed to retire. Same defect,
+same handshake, opposite side, written by the hand that had just fixed the first one.
+LESSON: a listener's ARM TIME is part of its contract. When you write "we answer X", the
+gate to write is "was the ear open when X was sent" — not "does a handler for X exist".
+
+### 2026-08-25 — I POKED A GLOBAL THAT DID NOT EXIST, AND THE GATE PASSED IDENTICALLY AGAINST BOTH BUILDS
+The first draft of the door gate entered the busy state by `page.evaluate(() => { window.busySave = true })`.
+These pages' JS lives inside `(function(){ ... })()`, so `busySave` is not a global: the
+assignment quietly minted a NEW property the page never reads, the tap took the happy
+path, and RED and GREEN printed byte-identical failures — a gate that told the two states
+apart in neither direction. The only thing that caught it was a fail-loud guard written on
+a hunch (`if (typeof window[f] !== 'boolean') return null` → the assertion printed `null`).
+A second draft then entered the busy state honestly, by tapping the door, reopening the
+modal and tapping again — and STILL tested nothing, because the cut resolves in about a
+second in this harness, so the second tap landed on an idle page. Only a synchronous
+double `.click()` in one gesture reproduces the state a thumb reaches. LESSON: a gate that
+reaches into internals is testing the internals it imagined. Drive the surface, and prove
+the RED before trusting the GREEN — a gate that fails the same way against both builds is
+not a red gate, it is a broken one.
+
+### 2026-08-25 — I WROTE THE MECHANISM INTO A COMMENT BEFORE I MEASURED IT
+Noticing that pangea's `#toast` lacked the `max-width:calc(100vw - 28px)` its two siblings
+carry, I shipped the cap plus a comment explaining that without it "a long line grows to
+the viewport PLUS its own 28px of padding and pushes the document wider than the screen at
+320px." Then I measured. `scrollWidth === clientWidth` at 320/360/390/430 on all three
+pages, pristine included: the box is centred with `left:50%` and shrink-to-fits, so its
+available width is the space from the 50% mark to the right edge — half the viewport — and
+it never gets near the cap. The cap I added was inert and the reason I gave for it was
+false. The real defect was the opposite one: at 320px a 122-character message rendered
+160px wide and TEN LINES tall on every page. The fix is `width:max-content` (ask for the
+line's true width, then let max-width clamp it): 160×161px → 292×82px, still no overflow.
+LESSON: a comment that explains a mechanism is a CLAIM, and this book's comments are read
+as fact by the next cycle. Measure first, or write nothing.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -5650,3 +5713,43 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   lane, no fieldToolkits entry. Wells after: AV 0/0, vibe 0/0. Next rungs named in the ship
   note: per-branch stream re-growth to lift the 4× cap (bifurcata-style endless descent),
   leaned fine-blades forked per clump, a zoom gate on the tap-modal.
+
+- **[AXIS:WELL] C3656 (2026-08-25) — THE CARD STUDIO DOOR STOPPED FAILING IN SILENCE
+  (wishes 64327a10 + 12183f06, both served, 12h old).** Two wishes three minutes apart from
+  one thumb: "this one didn't go to card studio but others did", and "it didn't take at
+  first, then I exited, clicked it again and it took — production grade fix so it will take
+  any time, same for other generators." One root cause, and it was in the SENDER, not the
+  studio the wishes named. "Open in Card Studio" on bifurcata/leviathan/pangea was one
+  compound guard — `if (cell && !busy && !batch) { var w = window.open(...); if (w) {...} }`
+  — whose own comment named the fall-through as "the fallback". But the anchor it falls
+  through to carries `rel="noopener"`: that tab has no `window.opener`, so the sender can
+  never postMessage into it. The fallback was a tab structurally incapable of the door's only
+  job, and because the handler never reached `preventDefault` it was also mute. THREE legs
+  land there; the everyday one is the SECOND TAP, because the door closes the modal the
+  instant it is tapped — come back for another world, tap again while the first cut still
+  holds `busySave`, get a second blank tab. Now every branch either hands the picture over or
+  speaks: a cut in flight → "one moment, then tap Open in Card Studio again" with the modal
+  LEFT OPEN so the retry is one tap; pop-up blocked → both recoveries named instead of a dead
+  tab; pangea's `exportGuard`-false leg got a voice too. SECOND DEFECT, same handshake: the
+  sender documented "the studio posts {vibeReady:1} … so we post on it instead of polling
+  blind" and never did — `addEventListener('message', onMsg)` sat inside `rd.onload`, after
+  the whole 2066×1319 cut, so both ready pings (parse ~0.5s, boot-end ~1–3s) were missed on
+  every handoff that ever ran. `postFaceToStudio` is now `armStudioHandoff(w)` at the click +
+  `handoffFace(h, blob)` when the cut lands, retry budget counting only ticks where a face
+  exists. PROOF: NEW **KILL-TEST 4** (`card-studio-door`) drives both silent legs through the
+  real UI on all three pages — **48/48 GREEN, 18/48 against pristine HEAD**, where the
+  blocked pop-up and the second tap each open a real blank tab (`defaultPrevented=false`,
+  `newTabs×1`, toast `""`). KILL-TEST 2 (real handoff) still 8/8; card-aspects OK on all
+  seven card pages; `node --check` clean on every inline block. Live at
+  https://persona500.com/bifurcata (deploy_commit 9809dea). BACKPORT rider: **FIRED** — the
+  door fix landed on all three generators in the same commit (the wish asked for it by name),
+  and a second class was swept with it: every toast was capped at HALF the viewport
+  (`left:50%` + shrink-to-fit means max-width never binds), so a 122-char message rendered
+  160×161px at 320px on all three; `width:max-content` gives 292×82px with
+  scrollWidth == clientWidth at 320/360/390/430. Storefront: n/a — cards lane, no
+  fieldToolkits entry. FOUR SCARS minted (§SCARS), two of them against my own gate: a first
+  draft poked `window.busySave` on pages whose JS is inside an IIFE and passed identically
+  against both builds, and a second entered the busy state by reopening the modal — too slow,
+  the cut resolves in 0.4s. Wells after: AV 0/0, vibe 2 new (iOS input-zoom on the wish field;
+  cropper black edges). NOTE: this lane pushed persona500 for a card-page fix — exactly one
+  unpushed commit, zero behind, deploy-safety confirming no other pane's WIP in the staged set.
