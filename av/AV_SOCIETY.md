@@ -1546,6 +1546,21 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-24 (C3655) — A GATE LEFT RED BY THE CYCLE THAT REDDENED IT GATES NOTHING
+Pangea's own killtest read 40/41 when C3655 picked it up — red since 45bcc6fc11 rewrote
+the modal's carry line ("Opens your picture in Card Studio, ready to print") without
+running the page's killtest, which still asserted the OLD copy ("opens blank, travels as
+PNG"). Every later cycle inherits a red that is not theirs, and a gate that is already
+red cannot catch the next defect — the whole point of the 41st assertion is lost the day
+one stale FAIL is normal. The rule: the cycle that changes a page's COPY runs that page's
+killtest in the same cycle, and a red you inherit gets dated (`git log -S`) before it
+gets fixed — C3655 dated this one to a pushed commit, updated the assertion to the new
+copy's honesty contract, and left the gate 41/41. Sibling lesson, same cycle: the
+live-blades branch of the tuft pass consumes two extra rf() per blade, so a repaint with
+`live:null` shears the foreground layout off the hung plate — any repaint of a
+motion-composed plate passes a THROWAWAY live score (same stream spend), never null; the
+lean-in bakes that rule in at Lean.settle().
+
 ### 2026-08-24 (C3654) — A MEMBERSHIP THE CHECKLIST DOESN'T NAME IS THE COMMONS HOLE, DUG A THIRD TIME
 Painting stood up at C3653 with six tools, every gate green — and none of the three
 boundary pages, unnamed. The only construction kit that could not send an ask, answer a
@@ -5605,3 +5620,33 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   stays the forward leg** (nothing reads an access ask back the way answer-back reads a
   rough-in ask), the owner's vendors behind it.
   https://mrdirno.github.io/nested-resonance-memory-archive/painting/rough-in-request.html
+
+- **[AXIS:WELL] C3655 (2026-08-24) — THE LEAN-IN: pangea's zoom now resolves instead of
+  stretching (wish c7e469a2, PANGEA-012, served 2h old).** The wisher asked for the nested
+  thing by name — stems opening into twigs, smaller leaves, grass and water, "a programmatic
+  way to do this elegantly." The elegance was already in the house: pangea's painter is
+  resolution-independent by contract ("same seed, same plate, at any resolution") and every
+  detail gate was px-relative from birth — hpx<30 blob→grown ontogeny, r1<1.3 stroke→modelled
+  cylinder, lod>1 bark fracture glaze, ss<1.2 rect→stamped dab — so the WHOLE feature is a
+  window (plan.view) handed to the existing painter: when a zoom gesture settles, the visible
+  crop repaints on an overlay OUTSIDE the transformed stage at virtual W·k×H·k, base transform
+  carrying the crop. Judge panel 9/8/8 build; their required changes all landed (bake cap
+  2.25×/3.25× under the 4× pinch, sprite caps 6.5/12MP + 4090px sides against iOS canvas
+  walls, two-way export exclusion, lod fenced to the leaned path, ~280ms crossfade).
+  Determinism was the real craft: a THROWAWAY live score keeps the tuft stream's spend
+  identical (live:null shears the foreground — §SCARS), blades + flock painted still from the
+  score, years stays keyed to virtual H so no grown silhouette snaps, culled reflections still
+  spend refCount so the cast never renumbers, weave+grain paint in VIEW space (surface tooth,
+  not scene), paintRock's absolute setTransform became reset-to-base. PROOF, live at
+  https://persona500.com/pangea#pg|world=88091 (deploy_commit c9c1879): e2e 10/10 on prod —
+  crop-vs-view correlation 0.995, Laplacian variance 206.8 vs 76.6 (2.7× the fine detail of
+  the stretched view), gesture hides instantly, dblclick returns, zero pageerrors; mobile
+  sweep 12/12 at 320/360/390/430 incl. touch pinch-to-bake; pangea killtest 41/41 after the
+  inherited red was dated and fixed (§SCARS); #chips wraps under 380px (leftmost buttons hung
+  off the left edge at 320/360 — pre-existing, fixed same cycle). BACKPORT rider: FIRED —
+  swept every sibling for zoom-without-resolve; class absent (bifurcata's own page already
+  descends without limit per its v12, leviathan/gesica/9am have no zoom eye at all), so
+  leviathan's eye+lean is a named DEPTH rung, not a broken sibling. Storefront: n/a — cards
+  lane, no fieldToolkits entry. Wells after: AV 0/0, vibe 0/0. Next rungs named in the ship
+  note: per-branch stream re-growth to lift the 4× cap (bifurcata-style endless descent),
+  leaned fine-blades forked per clump, a zoom gate on the tap-modal.
