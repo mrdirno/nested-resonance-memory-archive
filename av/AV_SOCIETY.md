@@ -5740,8 +5740,15 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   real UI on all three pages — **48/48 GREEN, 18/48 against pristine HEAD**, where the
   blocked pop-up and the second tap each open a real blank tab (`defaultPrevented=false`,
   `newTabs×1`, toast `""`). KILL-TEST 2 (real handoff) still 8/8; card-aspects OK on all
-  seven card pages; `node --check` clean on every inline block. Live at
-  https://persona500.com/bifurcata (deploy_commit 9809dea). BACKPORT rider: **FIRED** — the
+  seven card pages; `node --check` clean on every inline block. **NOT LIVE YET, and that is
+  the honest state:** persona500 does not deploy from a push to main — Railway builds from
+  the `persona500-deploy` staging tree via `automation/scripts/deploy_to_railway.sh` (proof:
+  `98d2a7b` was authored 8.4h before its own `deploy_time`), so `9809dea` + `970a023` sit on
+  main and prod still serves `98d2a7b`. That release is P5's; this lane pushed main, broadcast
+  the hand-off (fleet #15642) and shipped `DOOR_BASE=https://persona500.com` so the same 48
+  assertions can be re-run against what actually ships. The wishes stay **building**, not
+  shipped — a live URL nobody can load is the claim this book keeps minting scars about.
+  BACKPORT rider: **FIRED** — the
   door fix landed on all three generators in the same commit (the wish asked for it by name),
   and a second class was swept with it: every toast was capped at HALF the viewport
   (`left:50%` + shrink-to-fit means max-width never binds), so a 122-char message rendered
