@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Dealer Call — Flooring Field Toolkit</title>
+<link rel="stylesheet" href="../shared/pickfilter.css">
+<meta name="description" content="Tomorrow's goods called in off a list instead of off your memory — and everything that has to come off the same run gathered where the dealer can't skim past it, including the attic stock nobody calls in until the run is gone.">
+<meta name="apple-mobile-web-app-title" content="Dealer Call">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#8FECFF;--tint:#E6FAFF;--deep:#0E6E86;--flag-ink:#04222B;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
+   instead of fixing it and hides exactly the defect the pre-ship mobile gate is
+   there to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal}
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+/* 44px, MEASURED, NOT ASSUMED — the shape #1 sweep of 2026-08-14. Scoped off
+   checkbox/radio: a 44px checkbox is not a bigger target, it is a broken layout. */
+.f input:not([type=checkbox]):not([type=radio]),.f select,.f textarea{min-height:44px}
+.f textarea{resize:vertical;min-height:42px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer;min-height:44px}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+
+.hot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;cursor:pointer}
+.hot input{width:22px;height:22px;flex:none;accent-color:#C4342B;cursor:pointer}
+.hot span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:var(--muted)}
+.hot input:checked ~ span{color:#B0201A}
+.hot:has(input:checked){border-color:#C4342B;background:#FFF4F3}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+details.more>summary{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:14px;color:var(--deep);font-weight:700}
+details.more[open]>summary::before{content:"–"}
+details.more .hgrid{margin-top:9px}
+
+.lastwrap{margin:0 0 12px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+
+.jog{background:var(--steel);color:#EEF0EA;border-radius:2px;padding:11px 13px;margin:16px 0 12px}
+.jog b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:16px;display:block;color:var(--flag)}
+.jog span{display:block;font-size:12.5px;color:#B9BFC6;margin-top:2px}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+.cathint{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:#F4F5F1;border-bottom:1px solid var(--line)}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 90px;min-width:84px}
+.cfg .f.wide{flex:2 1 170px}
+/* Qty is FREE TEXT because a paint order leaves the store in six different units
+   on one list — 2 gal, 1 five, 3 qt, a case, a sleeve, a box. A number spinner
+   is a desk person's idea of how a cart is counted. */
+.cfg .f.qty{flex:0 0 100px;min-width:100px}
+/* THE SHEEN GETS ITS OWN COLOUR — it is the word the desk phones you back for,
+   and on a paint order a missing sheen is the whole callback. Selected off the
+   engine's own `data-k`: teaching the engine a new class to colour one trade's
+   axis would be a shared change made for one page. */
+.cfg select[data-k="sheen"]{border-color:var(--deep);background:var(--tint);font-weight:600}
+.cfg .f:has(select[data-k="sheen"]) label{color:var(--deep)}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+/* THE BATCH FLAG. The one tick on a line that a striped wall lives or dies on,
+   so it does not look like the others. */
+.cfg .flags{margin-top:2px}
+.cfg .flag{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px 4px 8px;border:1px solid var(--deep);
+  border-radius:2px;background:var(--tint);cursor:pointer;font-family:var(--cond);text-transform:uppercase;
+  letter-spacing:.04em;font-size:13.5px;font-weight:700;color:var(--deep)}
+.cfg .flag input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+
+.cat:first-of-type{border:2px solid var(--deep)}
+.cat:first-of-type h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
+.cat:first-of-type h2 .n{color:#C9EFC2}
+.cat:first-of-type .cathint{background:var(--tint);color:#0B3308;font-size:12.5px}
+.cat:first-of-type .addrow{background:var(--tint);padding:12px}
+.cat:first-of-type .wi-input{min-height:76px}
+.cat:first-of-type .addbtn{background:var(--deep);border-color:var(--deep)}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1;align-items:stretch}
+.addrow .wi-input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);resize:vertical;line-height:1.35}
+.addrow .wi-input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
+  min-height:44px;flex:none}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+/* THE COUNT GIVES UP BEFORE THE BUTTONS DO — measured on the sibling order page
+   at 320px. The count is a label; both buttons are the product. */
+@media (max-width:356px){ .bar .count{display:none} .bar #clear{margin-left:auto} }
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+/* The one question the page asks HIM rather than the desk. Sits above the block
+   he proofreads, in the trade's accent, and never travels with the message. */
+.pairs{margin:16px 0 0;padding:10px 12px;background:var(--tint);border:1px solid var(--deep);border-left:4px solid var(--deep);
+  border-radius:2px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.04em;font-size:15px;font-weight:700;color:#0B3308}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Flooring &middot; Field &rarr; Dealer</span>
+    <h1>The Dealer Call</h1>
+    <p class="lede">Tomorrow&rsquo;s goods, called in off a list instead of off your memory. Everything that has to come off the <i>same run</i> &mdash; the field material, the fills, the transitions, the stair parts &mdash; is gathered at the bottom of the message where the dealer can&rsquo;t skim past it, together with the attic stock nobody calls in until close-out, by which time the run is gone.</p>
+  </header>
+
+  <div class="head">
+    <!-- THE JOB CARD (shared/jobcard.js). The run, the account and the cost code
+         belong to a JOB, not to this phone. fRun is the most per-job field in the
+         program: carried onto the next job it does not go stale, it tells a
+         dealer to pull a lot that is not there. -->
+    <div id="jobcard"></div>
+    <div class="hgrid">
+      <div class="f span2"><label>Job / account it goes on <i>(the dealer finds you by the job on the account)</i></label><input id="fJob" type="text" placeholder="Riverbend TI — the Calloway Floors account" autocomplete="off"></div>
+      <div class="f"><label>Who's calling <i>(name + cell)</i></label><input id="fBy" type="text" placeholder="D. Whitfield — 415-555-0188" autocomplete="off"></div>
+      <div class="f"><label>Getting it</label>
+        <div class="seg" id="segMode">
+          <button type="button" class="on" data-v="Deliver it">Deliver it</button>
+          <button type="button" data-v="Will-call">Will-call</button>
+        </div>
+      </div>
+      <div class="f span2"><label>On the job by <i>(not the ship date &mdash; the day it&rsquo;s in the space)</i></label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="In the morning">In the AM</button>
+          <button type="button" data-v="Today">Today</button>
+          <button type="button" data-v="date">Pick a day&hellip;</button>
+        </div>
+      </div>
+      <div class="f span2" id="dateWrap" style="display:none"><label>On the job by <i>(&ldquo;it ships Tuesday&rdquo; is not this date)</i></label><input id="fDate" type="datetime-local"></div>
+      <div class="f span2" id="pickWrap" style="display:none"><label>Who's coming for it <i>(and when &mdash; whoever&rsquo;s driving today, not last month&rsquo;s name)</i></label><input id="fPick" type="text" placeholder="Marco, in the box truck — around 7" autocomplete="off"></div>
+      <div class="f span2"><label>What you're laying <i>(he reads this first and he&rsquo;ll catch what you forgot)</i></label><input id="fFor" type="text" placeholder="level 3 corridors and the two stairs — gluing Thursday" autocomplete="off"></div>
+      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Crew's standing on this</span></label>
+    </div>
+
+    <!-- THE RUN. Passthrough only — we hold nobody's lot numbers and this page
+         never looks one up. It is a header field because a run belongs to a JOB
+         and an ELEVATION, never to a line. -->
+    <div class="head" id="runbox" style="margin:12px 0 0;border-left-color:var(--deep);background:var(--tint)">
+      <div class="hgrid">
+        <div class="f span2"><label>The run <i>(dye lot, batch, lot &mdash; whatever&rsquo;s on the carton you&rsquo;ve already got, off the label and not from memory)</i></label><input id="fRun" type="text" placeholder="plank run 4471-B off the first drop — corridors are already down in it" autocomplete="off"></div>
+        <div class="f"><label>Attic stock</label>
+          <select id="fAttic">
+            <option>&mdash; nothing said &mdash;</option>
+            <option>On this order — off this run</option>
+            <option>Already have it</option>
+            <option>Not in my spec</option>
+          </select>
+        </div>
+        <!-- THE EXAMPLE STAYS INSIDE THE GOODS. It read "4 stair nose" for a day,
+             which items.js flatly contradicts ("nobody has ever been asked for
+             attic stock in stair nose"), and then "3 carton of the base", which
+             the run split then contradicted a second way — the sentence this
+             box feeds ends "off THIS run", and base is not on that run. -->
+        <div class="f" id="atticQtyWrap" style="display:none"><label>How much <i>(your number, your words)</i></label><input id="fAtticQty" type="text" placeholder="2 carton of the plank, 1 carton of the carpet tile" autocomplete="off"></div>
+      </div>
+    </div>
+
+    <details class="more">
+      <summary>Cost code &mdash; typed once, saved with this job</summary>
+      <div class="hgrid">
+        <div class="f"><label>Charge to</label>
+          <select id="fCharge">
+            <option>Job</option>
+            <option>T&amp;M / extra</option>
+            <option>Shop stock</option>
+          </select>
+        </div>
+        <div class="f"><label>PO / cost code <i>(if your office needs one)</i></label><input id="fPO" type="text" placeholder="26-118-09" autocomplete="off"></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- THE DROP-OFF (shared/dropoff.js). Shows only on a delivery: a will-call
+       carrying gate codes is a lie in the other direction. -->
+  <div id="dropoff"></div>
+
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last call</button>
+  </p>
+
+  <div class="head" style="border-left-color:var(--muted);margin-bottom:14px">
+    <div class="f"><label>Anything else &mdash; not material <i>(more calls die on a locked corridor than a short count)</i></label>
+      <input id="fNotes" type="text" placeholder="badge in at the loading dock, freight elevator's ours 7 to 9 · call me before you pull it if the run's short" autocomplete="off"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <!-- ON THE GLASS, NEVER IN THE MESSAGE. A guess about what a man MEANT to
+       order is his to answer, not the dealer's to read. -->
+  <p class="pairs" id="pairs" style="display:none"></p>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every carton, roll, pail, bag and colour on here is what <i>you</i> picked.</b> This page specs nothing and knows nothing about your job &mdash; no product, no colour, no coverage, no square feet per carton, no waste factor, and it has never converted a square foot into anything. It holds no lot numbers &mdash; the run is whatever <i>you</i> read off the carton in front of you, carried through untouched. It does no takeoff and it never says whether the material or the substrate is right. The counts are the numbers <i>you</i> decided; what a carton yields lives on your own submittal. Double-check it against your spec before you order &mdash; and count what comes off the truck before the driver leaves. It&rsquo;s a field request &mdash; not a purchase order, and there&rsquo;s no money on it.
+  </div>
+
+  <p class="credit">&#10022; Built off three flooring hands&rsquo; own morning calls. A line missing, or a part your dealer calls something else? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the call</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
+<script>
+/* THE DEALER CALL — the ELEVENTH instance of shape #1 (av/AV_SOCIETY.md §THE
+ * THREE SHAPES: CHECKLIST → A REQUEST), and the rung flooring/tools.js §2 named
+ * as the one it was deliberately not half-building. Nothing about the mechanism
+ * is here — it is all shared/checklist-request.js. This file owns the WORDS and
+ * the two readings; flooring/items.js owns the vocabulary.
+ *
+ * WHAT THIS ONE DOES THAT THE TEN BEFORE IT DO NOT:
+ *
+ *  1. THE SECOND READING IS THE RUN, AND IT IS DERIVED. masonry/yard-call.html
+ *     invented this mechanism as a TICK (`matchRun()`) because a mason has
+ *     genuine back-up wythe that matches nothing. This trade has no such line:
+ *     a plank carton, a stair nose, a T-mold and a coil of base in one area all
+ *     come off one run whether anybody ticks anything or not, and the shade
+ *     moves run to run. So the flag lives on the ITEM, and the block is read off
+ *     the data — sitework/what-goes-in.html's rule, verbatim: "asking a man to
+ *     classify forty lines he already classified by picking them is the ceremony
+ *     §THE GATE forbids." Only a WRITE-IN carries the tick, because a line he
+ *     typed is a sentence only he can classify.
+ *
+ *     THE INVERSE CASE IS CARRIED TOO, which masonry's first draft dropped and
+ *     sitework caught: run-bearing lines with no run typed, AND a run typed with
+ *     nothing on the call that comes off one. Both are a question to the dealer,
+ *     never a refusal — he is the last man who can catch it and every good one
+ *     does.
+ *
+ *  2. THE ATTIC STOCK, which is the half of the run reading that nobody else on
+ *     the rack has a reason to hold. It is in the spec, it is called in at
+ *     close-out, and by close-out the run is GONE — so a page that gathers the
+ *     run and says nothing about attic stock has done the easy half. It rides in
+ *     the same block, it is raised only when there is something run-bearing on
+ *     the call to raise it against, and the quantity is HIS words: this page has
+ *     never converted a square foot into a carton and does not start here.
+ *
+ *  3. THE DATE IS "ON THE JOB BY", NOT "READY BY". Every other order page on the
+ *     rack calls a counter that has the material on a shelf twenty minutes away.
+ *     This one calls a dealer who answers with a SHIP date off a mill, and the
+ *     gap between "it ships Tuesday" and "it's in the space Thursday" is the
+ *     whole argument. So the field, the label and the sent line all say ON THE
+ *     JOB, and the message says out loud that a ship date is not an answer.
+ *     Nothing here states an acclimation period, a temperature or a humidity
+ *     range — that is off his own submittal and this kit never holds it.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS.call;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ── the unit of issue ───────────────────────────────────────────────────
+   * The key lives on the item in items.js (the vocabulary); how it PRINTS lives
+   * here (the words). A bare number gets the dealer's own word attached; a
+   * number he wrote in his own words is left exactly as he wrote it, because a
+   * tool must never re-count a man's order. Left OFF every item whose unit
+   * genuinely varies — see the header note in items.js. */
+  var UNITS = { carton: ["carton", "carton"], bx: ["bx", "bx"], roll: ["roll", "rolls"],
+                pail: ["pail", "pails"], bag: ["bag", "bags"], bundle: ["bundle", "bundles"],
+                ea: ["ea", "ea"], pallet: ["pallet", "pallets"], can: ["can", "cans"],
+                kit: ["kit", "kits"], pair: ["pair", "pairs"], tube: ["tube", "tubes"],
+                unit: ["unit", "units"], sheet: ["sheet", "sheets"] };
+  var UNIT = {}, RUN = {}, ATTIC = {}, HOLDS = {}, GROUTED = {}, GROUT = {}, CAT = {};
+  D.cats.forEach(function (c) {
+    (c.items || []).forEach(function (i) {
+      CAT[i.n] = true;
+      if (i.unit) UNIT[i.n] = i.unit;
+      if (i.run) RUN[i.n] = i.run;
+      if (i.atticable) ATTIC[i.n] = true;
+      if (i.holds) HOLDS[i.n] = true;
+      if (i.grouted) GROUTED[i.n] = true;
+      if (i.grout) GROUT[i.n] = true;
+    });
+  });
+  function qtyOf(l) {
+    var q = (l.qty || "").trim();
+    if (!q) return "";
+    var u = UNITS[UNIT[l.name]];
+    if (!u || !/^[0-9]+(\.[0-9]+)?$/.test(q)) return q;   // his words stand
+    return q + " " + (parseFloat(q) === 1 ? u[0] : u[1]);
+  }
+
+  function seg(id, v) {
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+
+  /* ── THE JOB CARD ─────────────────────────────────────────────────────────
+   * fRun IS THE MOST PER-JOB FIELD IN THE PROGRAM, and this trade is the reason
+   * masonry wrote that sentence. A dye lot is a fact about ONE elevation of ONE
+   * building; carried onto the next job it does not merely go stale, it tells a
+   * dealer to pull a lot that is not there. The attic-stock call is per-job for
+   * the same reason — it is a line in THAT job's spec. */
+  var jc = JobCard.mount({
+    mount: "jobcard",
+    trade: "flooring",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fRun", "fAttic", "fAtticQty", "fCharge", "fPO"],
+    device: ["fBy"],
+    /* NOTHING TO ADOPT — this page was born with a card and a drop-off block, so
+     * there are no old header boxes to migrate and no pre-card store to read.
+     * Declared rather than omitted, because tools/toolkit-gates/jobcard-scope.mjs
+     * fails a page that is SILENT about its predecessor.
+     *
+     * IT SHIPPED FOR AN HOUR WITH masonry's MIGRATION WIRING COPIED ONTO IT —
+     * a `legacyKey` naming a store that has never existed, and fPick declared as
+     * something to carry across
+     * — and tools/toolkit-gates/dropoff-block.mjs caught it: a page that
+     * declares `carry:` is asserting old boxes moved into the block, so the gate
+     * seeds that migration and drives it. There was nothing to drive. Same class
+     * as §SCARS 2026-08-26 — a mechanism lifted off a sibling without the reason
+     * the sibling had it. `fPick` needs neither: it is a page field, held by
+     * persistExtra exactly as painting/store-call.html holds it. */
+    legacyKey: null,
+    onApply: function () { atticUI(); syncJob(); }
+  });
+
+  /* ── THE DROP-OFF — keyed per job through the card, shown only on Deliver. */
+  var DKEY = "toolkit.flooring.dealerCall.dropoff.v1";
+  function dropKey(j) { return DKEY + "." + ((j && j.id) || "j1"); }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "truck",
+    perJob: true,
+    onChange: function () { if (api) api.refresh(); }
+  });
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
+
+  var mode = "Deliver it";
+  function modeUI() {
+    if (drop) drop.show(mode === "Deliver it");
+    var pw = $("pickWrap");
+    if (pw) pw.style.display = (mode === "Will-call") ? "" : "none";
+  }
+
+  function atticUI() {
+    var v = $("fAttic").value;
+    $("atticQtyWrap").style.display = (v.indexOf("On this order") === 0) ? "" : "none";
+  }
+  $("fAttic").addEventListener("change", function () { atticUI(); if (api) api.refresh(); });
+
+  /* THE DEFAULT IS THE MORNING, and it means something different here than it
+   * does at a paint desk: a flooring crew that starts spreading at seven needs
+   * the goods IN THE SPACE, not on a truck leaving a warehouse. */
+  var when = "In the morning";
+  function whenText() {
+    if (when !== "date") return when === "Today" ? "today" : "in the morning";
+    var d = $("fDate").value;
+    if (!d) return "pick a day";
+    var p = d.split("T"), ymd = (p[0] || "").split("-"), hm = (p[1] || "").split(":");
+    if (ymd.length < 3) return "pick a day";
+    var dt = new Date(+ymd[0], +ymd[1] - 1, +ymd[2], +(hm[0] || 0), +(hm[1] || 0));
+    return "on the job by " + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+         + " " + dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  /* A NEUTRAL axis value (any option leading with an em-dash — items.js §THE
+   * NEUTRAL) means the line was never given that attribute, and a value nobody
+   * picked must never reach the dealer. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function axOf(l, k) { var v = l.ax && l.ax[k]; return none(v) ? "" : v; }
+
+  /* A WRITE-IN IS HIS SENTENCE, NOT OUR ROW. Every completeness check below is
+   * for CATALOGUE rows only — a man who typed "1 bx blades" and no unit has not
+   * forgotten anything.
+   *
+   * THE SIBLING PAGES DETECT THIS WITH `l.el.querySelector(".rm")` AND THAT IS A
+   * TRAP HERE, traced in shared/checklist-request.js:312 rather than guessed:
+   * the CLONE handler calls `itemHTML(def, cfg, true)`, so a cloned CATALOGUE
+   * row gets the same remove button a write-in has. On the sibling pages that
+   * costs nothing, because their run flag is a TICK the clone copies. On this
+   * page the run block is read off the DATA, and a cloned row read as a write-in
+   * would fall back to a `flags.run` that catalogue items do not have — so
+   * "+ another length" on a stair nose, which is the most natural thing anyone
+   * would ever add to this page, would silently drop that line out of the one
+   * block the page exists for. This page ships no clone button today; the defect
+   * is therefore LATENT, and §SCARS 2026-08-25 is about exactly that — a latent
+   * defect that a later, reasonable change activates. Keyed on the CATALOGUE
+   * instead, a clone is a catalogue row forever, and the one edge it introduces
+   * (a man types a line that exactly matches a catalogue name) resolves the way
+   * it should: he typed "Stair nose", it IS a stair nose, it joins the run. */
+  function isWriteIn(l) { return !CAT[l.name]; }
+  /* DERIVED for a catalogue line, TICKED for a write-in. See §1 in the header. */
+  /* Returns the FAMILY ("field" / "base"), not a yes.
+   *
+   * THE CONTROL HE WAS GIVEN WINS, and the data answers only where there is no
+   * control. Keying this on isWriteIn() instead left one real hole: type a
+   * write-in whose text exactly matches a catalogue line that is NOT run-bearing
+   * — "Grout" — tick the run box, and the tick was read off a catalogue row that
+   * has no run family, so the line silently left both blocks with his tick still
+   * showing. A row that HAS a run checkbox is answered by that checkbox; a row
+   * that has none (every catalogue line, and every CLONE of one) is answered by
+   * the data. A ticked write-in defaults to FIELD: the odd line a man types here
+   * is the border tile or the one moulding, never somebody else's base coil. */
+  function runFlagged(l) { return !!(l.el && l.el.querySelector('.i-flag[data-k="run"]')); }
+  function runs(l) {
+    if (runFlagged(l)) return (l.flags && l.flags.run) ? (RUN[l.name] || "field") : "";
+    return RUN[l.name] || "";
+  }
+  function attics(l) { return !isWriteIn(l) && !!ATTIC[l.name]; }
+
+  function line(l) {
+    var s = l.name, q = qtyOf(l);
+    if (q) s = q + " — " + s;
+    var bits = [];
+    ["width", "setit"].forEach(function (k) { var v = axOf(l, k); if (v) bits.push(v); });
+    if (bits.length) s += "  (" + bits.join(" · ") + ")";
+    if (l.note) s += "\n    " + l.note;
+    return s;
+  }
+
+  var api = ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.flooring.dealerCall.v1",
+    filterPlaceholder: "Filter — try “nose” or “pail”",
+    qtyText: true,
+    qtyDefault: "",
+    writeinTextarea: true,
+    writeinQtyDefault: "",
+    data: D.cats,
+    writeinAx: D.writeinAx,
+    writeinFlags: D.writeinFlags,
+    // How a floor hand already texts this, units and all — a placeholder that
+    // does not look like his own message does not get read.
+    writeinPlaceholder: "40 carton plank — the corridor colour off the submittal, SAME RUN as the first drop\n6 stair nose to match\n3 pail adhesive + 2 bx hook blades\n— one per line. Add them, then tick the run box where it's true.",
+    // Never seeds a number we do not hold: no colour, no run, no coverage.
+    notePlaceholder: "e.g. the colour / pattern off the approved submittal, and anything the dealer always asks back",
+    watch: ["fJob", "fBy", "fFor", "fRun", "fAtticQty", "fNotes", "fDate", "fCharge", "fPO", "fPick"],
+    persistExtra: function () {
+      /* fAttic IS NOT IN HERE, ON PURPOSE. It is a JobCard `perJob` field, and it
+       * was ALSO captured here for an hour — the only field on the rack sourced
+       * twice. JobCard.mount runs first and the engine's restore runs second, so
+       * the page-global copy could overwrite the correctly-scoped per-job answer
+       * with another job's. One field, one owner. */
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value,
+                when: when, mode: mode, pick: $("fPick").value, hot: $("fHot").checked };
+      var touched = x.forr || x.notes || x.date || x.pick || x.hot
+                 || x.when !== "In the morning" || x.mode !== "Deliver it";
+      return touched ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      $("fFor").value = x.forr || "";
+      $("fNotes").value = x.notes || "";
+      $("fDate").value = x.date || "";
+      $("fPick").value = x.pick || "";
+      $("fHot").checked = !!x.hot;
+      if (x.when) seg("segWhen", x.when);
+      if (x.mode) seg("segMode", x.mode);
+    },
+    onClear: function () {
+      ["fFor", "fNotes", "fDate", "fPick"].forEach(function (id) { $(id).value = ""; });
+      $("fHot").checked = false;
+      seg("segWhen", "In the morning");
+      seg("segMode", "Deliver it");
+      showLast();
+    },
+    segments: [
+      { key: "when", id: "segWhen", def: "In the morning", onChange: function (v) {
+          when = v;
+          $("dateWrap").style.display = (v === "date") ? "" : "none";
+        } },
+      { key: "mode", id: "segMode", def: "Deliver it", onChange: function (v) {
+          mode = v;
+          modeUI();
+        } }
+    ],
+    countLabel: function (n) {
+      return n ? n + " line" + (n === 1 ? "" : "s") + " on the call" : "Nothing on it yet";
+    },
+    onFlash: function (msg) {
+      var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+      b.setAttribute("data-label", was);
+      b.textContent = (msg === "Copied") ? "Copied. Go send it." : msg;
+      setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+    },
+    document: function (ctx) {
+      var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
+      var run = $("fRun").value.trim(), notes = $("fNotes").value.trim();
+      var pick = $("fPick").value.trim(), po = $("fPO").value.trim();
+      var attic = $("fAttic").value, atticQty = $("fAtticQty").value.trim();
+      var atticSaid = attic.charAt(0) !== "—";
+      var atticOn = attic.indexOf("On this order") === 0;
+
+      var out = "DEALER CALL";
+      if (job) out += " — " + job;
+      out += "\nDate: " + ctx.today + "  ·  " + mode + "  ·  On the job by: " + whenText();
+      if (by) out += "\nFrom: " + by;
+      if (mode === "Will-call" && pick) out += "\nComing for it: " + pick;
+      if (forr) out += "\nLaying: " + forr;
+      if ($("fHot").checked) out += "\n** CREW'S STANDING ON THIS **";
+      if (mode === "Deliver it" && drop) out += drop.text();
+
+      if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
+
+      if (!ctx.count) return out.trim() + "\n\n(nothing on it yet)";
+
+      ctx.sections.forEach(function (s) {
+        out += "\n\n" + (s.docName || s.name).toUpperCase() + "\n";
+        out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
+      });
+
+      /* ── THE SECOND READING ───────────────────────────────────────────────
+       * Everything that comes off one run, gathered where the man pulling it
+       * cannot miss it. This is the one block on the page that is not a
+       * convenience: a short count anywhere else is a trip to the counter, and a
+       * run change inside one area is a floor that gets pulled. */
+      var offRun = [], accRun = [], noQty = [], atticables = 0;
+      ctx.sections.forEach(function (s) {
+        s.lines.forEach(function (l) {
+          var fam = runs(l);
+          if (fam === "base") accRun.push(l); else if (fam) offRun.push(l);
+          if (attics(l)) atticables++;
+          if (!isWriteIn(l) && !qtyOf(l)) noQty.push(l.name);
+        });
+      });
+
+      if (offRun.length) {
+        out += "\n\n— — — ALL OF THIS HAS TO COME OFF ONE RUN — — —\n";
+        out += run
+          ? "Run / dye lot / batch: " + run + "\n"
+          : "Run: I haven't got the lot number in front of me — pull it all off ONE run and put the lot on the ticket.\n";
+        out += offRun.map(function (l) { return "- " + line(l); }).join("\n");
+        out += "\nIf any of it has to come off a different run, call me BEFORE you pull it."
+             + " Shade moves run to run and it doesn't come out of a floor.";
+
+        /* THE ATTIC STOCK, raised only against something that comes off a run. */
+        if (atticables) {
+          if (atticOn) {
+            out += "\n\nATTIC STOCK: " + (atticQty || "in the spec — say what you can send")
+                 + " — on THIS order, off THIS run.";
+          } else if (attic.indexOf("Already have it") === 0) {
+            out += "\n\nATTIC STOCK: already have it.";
+          } else if (attic.indexOf("Not in my spec") === 0) {
+            out += "\n\nATTIC STOCK: not in my spec.";
+          } else {
+            out += "\n\nATTIC STOCK: nothing said on this call. If it's in the spec it has to ride"
+                 + " on THIS order off THIS run — when I come back for it at close-out the run's gone.";
+          }
+        }
+      }
+
+      /* THE SECOND FAMILY. Base and its accessories match EACH OTHER, off a lot
+       * that is usually another maker's — see items.js §THE RUN IS NOT ONE RUN.
+       * Saying so is the difference between a counter who pulls one lot of base
+       * and a counter who goes looking for a plank lot number in the base book. */
+      if (accRun.length) {
+        out += "\n\n— — — AND THESE HAVE TO MATCH EACH OTHER — — —\n";
+        out += accRun.map(function (l) { return "- " + line(l); }).join("\n");
+        /* "NOT the run above" only when there IS a run above. On a call that is
+         * nothing but base and corners the field block never prints, and the
+         * sentence pointed at a paragraph the dealer was never sent. */
+        out += "\nBase and the accessories are usually not the same maker as the goods, so"
+             + (offRun.length ? " this is NOT the run above — pull" : " pull")
+             + " them all off ONE lot, put that lot on the ticket, and if"
+             + " there's already some on the job I'll match to what's up.";
+      }
+
+      /* WHAT IS MISSING FROM A LINE HE PICKED goes in the message, because the
+       * dealer can answer it. What he might not have picked AT ALL stays on the
+       * glass — see the #pairs note below. */
+      var ask = [];
+      if (noQty.length) ask.push(noQty.length + " line" + (noQty.length === 1 ? "" : "s")
+        + " with no count on " + (noQty.length === 1 ? "it" : "them")
+        + " (" + noQty.join(", ") + ") — send what makes sense and tell me what you sent.");
+      if (run && !offRun.length && !accRun.length) ask.push("I gave you a run and there's nothing on this call that comes off one"
+        + " — if I've missed the goods off the list, say so before you pull it.");
+      if (ask.length) {
+        out += "\n\nBEFORE YOU PULL IT — if any of this looks wrong to you, call me:\n";
+        out += ask.map(function (a) { return "- " + a; }).join("\n");
+      }
+
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+
+      out += "\n\nThat's the call. A ship date isn't an answer — I need it ON the job by the day above,"
+           + " in the space, or the crew's standing. If you're short on anything, send what you've got and"
+           + " call me tonight — and don't sub a colour or a run without asking, because it goes down"
+           + " and it doesn't come back up."
+           + "\nField request — not a PO, and there's no number on it.";
+
+      /* ON THE GLASS ONLY — never in what he sends. A guess about what a man
+       * MEANT to order is his to answer, not the dealer's to read: a floor hand
+       * who is glue-down Tuesday and floating Wednesday would be told he forgot
+       * something he did not forget, in a message his dealer reads. */
+      /* READ OFF THE DATA, NOT OFF THE NAME. The first cut of this block matched
+       * /tape/ and /tile/ against the item name and BOTH were wrong against this
+       * trade's own vocabulary — /tape/ caught masking and duct tape in
+       * SUNDRIES, so the "nothing to hold it down" nudge died silently in the
+       * exact case it exists for, and /tile/ caught CARPET TILE, so a carpet
+       * order got asked about grout. items.js carries `holds`, `grouted` and
+       * `grout` now, for the same reason it carries `run`. */
+      var seen = {};
+      ctx.sections.forEach(function (s) { s.lines.forEach(function (l) { seen[s.id] = true;
+        if (HOLDS[l.name]) seen.stuck = true;
+        if (GROUT[l.name]) seen.grout = true;
+        if (GROUTED[l.name]) seen.tile = true;
+      }); });
+      var hint = "";
+      if (seen.goods && !seen.stuck) hint = "Goods on the call and nothing to hold them down — floating, or is the adhesive already there?";
+      else if (seen.goods && !seen.trim) hint = "Goods on the call and nothing to finish the edges with — is the trim already on site?";
+      else if (seen.tile && !seen.grout) hint = "Tile and no grout — on purpose?";
+      else if (offRun.length && !run && !atticSaid) hint = "Nothing on this call says which run, and nothing says attic stock. Both are cheap now and gone at close-out.";
+      var pairEl = $("pairs");
+      if (pairEl) { pairEl.textContent = hint; pairEl.style.display = hint ? "" : "none"; }
+
+      return out.trim();
+    }
+  });
+
+  /* THE JOG. The picker is not a catalog and must never read like one. */
+  (function jog() {
+    var cats = document.querySelectorAll("#list .cat");
+    if (cats.length > 1) {
+      cats[1].insertAdjacentHTML("beforebegin",
+        '<div class="jog"><b>Count it the way the dealer sells it</b>'
+        + "<span>Where he sells it in a unit — carton, roll, pail, bag, bundle — the line says so, and a bare number gets that word attached to it; "
+        + "write it your own way and it goes exactly as you wrote it. Colour and pattern go in the note, off your approved submittal. "
+        + "Everything in GOODS and in the EDGES comes off a run, and the page gathers it at the bottom on its own — you don't tick anything for that. "
+        + "It's a jog, not a catalog: write in the rest.</span></div>");
+    }
+  })();
+
+  function showLast() {
+    $("lastwrap").style.display = api.hasLast() ? "" : "none";
+  }
+  $("last").addEventListener("click", function () {
+    api.restoreLast();
+    showLast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  atticUI();
+  modeUI();
+  showLast();
+})();
+</script>
+</body>
+</html>

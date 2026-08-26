@@ -452,3 +452,294 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "Cargo por viaje — vine y no pude trabajar", "sub": "Cargué, manejé, lo caminé, no pude empezar. El día se fue, lo haya querido alguien o no.", "en": "Trip charge — I came and could not work" }
   ]
 };
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * THE DEALER CALL — this trade's order vocabulary (shape #1, the ELEVENTH
+ * instance). `flooring/tools.js` §2 held this rung open with the reason written
+ * on it: "a vocabulary build the size of the supply-house order… half-building
+ * that is worse than not building it."
+ *
+ * TWO THINGS IN HERE ARE NOT IN THE OTHER TEN ORDER DATASETS:
+ *
+ *   `run: true` ON AN ITEM IS DERIVED, NOT TAPPED. masonry/items.js made the
+ *   same idea a CHECKBOX (`matchRun()`) because a mason genuinely has back-up
+ *   wythe that matches nothing. Flooring has no such line: a plank carton, a
+ *   stair nose and a T-mold in one area all come off one run whether or not
+ *   anybody ticks a box, and sitework/items.js already wrote why that has to be
+ *   read off the data — "asking a man to classify forty lines he already
+ *   classified by picking them is the ceremony §THE GATE forbids." Only a
+ *   WRITE-IN carries the tick, because a line he typed is a sentence only he
+ *   can classify.
+ *
+ *   `atticable: true` IS THE SECOND HALF OF THE SAME READING and it is what
+ *   makes this page this trade's rather than a supply-house form. Attic stock
+ *   is in the spec, it is called in at close-out, and by close-out the run is
+ *   gone — so the page raises it AT THE ORDER, once, as a question. It is on
+ *   the goods, not on the trim: nobody has ever been asked for attic stock in
+ *   stair nose.
+ *
+ * NOTHING HERE IS A NUMBER WE SUPPLY. No square feet per carton, no coverage,
+ * no spread rate, no trowel notch, no waste factor and no conversion of
+ * anything into anything. The `unit` key is the word the DEALER SELLS IN — it
+ * is attached to a bare number and never to his own words — and it is left OFF
+ * every line whose unit genuinely varies (solid wood by the carton or the
+ * bundle, base by the coil or the four-foot, broadloom cut or full roll),
+ * because a page that prints the wrong unit of issue orders the wrong truck.
+ *
+ * THAT RULE IS NOW MECHANICAL, because the first draft of this file BROKE IT SIX
+ * TIMES while stating it three paragraphs up: "Wedges / shims — BY THE BAG OR
+ * THE BUNDLE" carried `unit: "bag"`, so a bare 10 printed "10 bag" on a line
+ * whose own words say bundle is just as likely. THE RULE: if the first clause of
+ * a line's `sub` names two containers with an OR, that line carries NO unit —
+ * asserted in the page's own drive, so it cannot rot back.
+ * ───────────────────────────────────────────────────────────────────────────── */
+(function () {
+  "use strict";
+
+  function n(s) { return "— " + s + " —"; }
+  function ax(label, opts, wide) { return { k: label.toLowerCase().replace(/[^a-z]/g, ""), label: label, opts: opts, wide: !!wide }; }
+
+  /* WHERE IT LANDS. Not a side of a building — this trade is inside, and the
+   * only question that has ever mattered on a flooring delivery is WHICH FLOOR
+   * and whether it goes in the space or sits on the dock. A roll of broadloom
+   * that lands at the dock of a four-storey job is a second crew for a day. */
+  var DROPS = [
+    "Ground floor / the dock",
+    "Up — say which floor in the note",
+    "In the space it's going",
+    "Staging room / the room we're using",
+    "Garage",
+    "Job trailer / conex",
+    "Split it — see the note"
+  ];
+  function where() { return ax("Set it", [n("where it lands")].concat(DROPS), true); }
+
+  /* A SIZE LADDER, not product data — the width he ASKS FOR, the same class of
+   * vocabulary as plumbing's C×C/FIP ladder. Nothing here says what any roll
+   * yields, and this file does no roll-width math of any kind. */
+  function width() {
+    return ax("Width", [n("which width"), "12 ft", "15 ft", "13 ft 2 in", "6 ft", "6 ft 6 in",
+                        "Full roll — whatever it is", "Cut — say the length in the note"]);
+  }
+
+  var W = [where()];
+
+  /* THE RUN IS NOT ONE RUN, and the first draft of this file said it was.
+   * "A plank carton, a stair nose, a T-mold and a coil of base all come off one
+   * run" is true of the first three and FALSE of the fourth: on a commercial job
+   * the base is Roppe or Burke or Johnsonite, picked to COORDINATE by colour, and
+   * on a carpet or tile job it is guaranteed to be another maker because the
+   * mills do not make base at all. Printing it under the plank's lot number sends
+   * a counter hunting for that number in a catalogue it does not appear in.
+   *   FIELD — the goods and the mouldings the same mill wraps to go with them.
+   *           They come off the lot he reads off his own carton.
+   *   ACCESSORY — base, corners, cove cap, saddles, vents. These have a real
+   *           matching problem and it is a DIFFERENT one: every coil on the job
+   *           has to match every OTHER coil, off a lot he usually does not hold.
+   * Two blocks, two sentences, one field. */
+  function goods(name, sub, unit, extra) {
+    var o = { n: name, sub: sub, run: "field", atticable: true, ax: extra || W };
+    if (unit) o.unit = unit;
+    return o;
+  }
+  function trim(name, sub, unit, fam) {
+    var o = { n: name, sub: sub, run: fam || "field" };
+    if (unit) o.unit = unit;
+    return o;
+  }
+  /* THREE MORE KEYS THAT ARE READ OFF THE ITEM, for the same reason `run` is.
+   * The first draft of this page decided all three with REGEXES ON THE ITEM
+   * NAME, and both of the regexes were wrong against this very file — which is
+   * the argument for the data, made by the data:
+   *   /tape/  also matched "Masking / painter's tape" and "Duct tape" in
+   *           SUNDRIES, so a man with forty cartons of plank, a roll of masking
+   *           tape and NO adhesive was told nothing. The check died silently in
+   *           exactly the case it exists for.
+   *   /tile/  also matched "Carpet tile", which nobody has ever grouted, so a
+   *           carpet-tile order was asked "Tile and no grout — on purpose?" —
+   *           a page that does not know the trade, which is the FIELD-COOL bar
+   *           failing out loud.
+   * `holds` is what actually holds a floor DOWN — seam tape and seam sealer are
+   * not on it, because a seam is a joint and not a bond, and tackless IS, because
+   * a stretch-in carpet needs no adhesive and must not be nagged for one. */
+  function holds(o) { o.holds = true; return o; }
+  function grouted(o) { o.grouted = true; return o; }
+  function isgrout(o) { o.grout = true; return o; }
+
+  function plain(name, sub, unit, axes) {
+    var o = { n: name, sub: sub };
+    if (unit) o.unit = unit;
+    if (axes) o.ax = axes;
+    return o;
+  }
+
+  window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+
+  window.TOOLKIT_ITEMS.call = {
+    drops: DROPS,
+
+    /* A WRITE-IN IS HIS SENTENCE. It carries the run tick — and only the run
+     * tick — because the odd line he types ("the border tile off the lobby
+     * submittal") is exactly the one that has to match, and he is the only one
+     * who can say so. */
+    writeinFlags: [{ k: "run", label: "Has to come off the same run" }],
+    writeinAx: [where()],
+
+    cats: [
+      {
+        id: "call",
+        name: "What are you calling in?",
+        docName: "The call",
+        hint: "Paste your whole list if you keep one — one line each. Count it the way the dealer sells it: 40 carton, 3 rolls, 6 pails, 2 bags. Tick the run box on anything that has to match, then set the run and the day below.",
+        writein: true,
+        items: []
+      },
+
+      {
+        id: "goods",
+        name: "What's going on the floor",
+        docName: "Goods",
+        hint: "Everything in here comes off a run, and the page gathers it at the bottom on its own. Colour and pattern go in the note, off the approved submittal — this page holds nobody's colour names.",
+        items: [
+          goods("Plank — LVP / LVT", "BY THE CARTON — colour and pattern in the note, off the submittal", "carton"),
+          goods("Rigid core — SPC / WPC", "BY THE CARTON", "carton"),
+          goods("Laminate", "BY THE CARTON", "carton"),
+          goods("Engineered wood", "BY THE CARTON", "carton"),
+          goods("Solid hardwood", "SAY CARTON OR BUNDLE — species, width and grade in the note", null, W),
+          grouted(goods("Porcelain / ceramic tile", "BY THE CARTON — size and finish in the note", "carton")),
+          grouted(goods("Natural stone tile", "SAY CARTON, CRATE OR PALLET — a stone lot moves more than a tile lot does", null, W)),
+          goods("Carpet tile", "BY THE CARTON — colour and the lay direction in the note", "carton"),
+          goods("Broadloom carpet", "SAY THE WIDTH AND WHETHER IT'S A CUT OR THE ROLL", null, [width(), where()]),
+          goods("Sheet vinyl", "SAY THE WIDTH AND THE CUT", null, [width(), where()]),
+          goods("Sheet rubber / sport floor", "SAY THE WIDTH AND THE CUT", null, [width(), where()]),
+          goods("Entry / walk-off", "SAY THE SIZE AND WHETHER IT'S CUT TO THE WELL", null, W),
+          goods("VCT — vinyl composition tile", "BY THE CARTON — colour and pattern in the note", "carton"),
+          goods("Stair carpet / runner", "SAY THE WIDTH AND THE CUT", null, [width(), where()])
+        ]
+      },
+
+      {
+        id: "trim",
+        name: "The edges, the fills and the stairs",
+        docName: "Trim, fills and stair parts",
+        /* THE HALF THAT GETS FORGOTTEN, and the reason the page exists. A man
+         * orders forty cartons and calls the stair nose in three weeks later,
+         * off a run that is gone. */
+        hint: "The half nobody calls in with the goods. All of it has to come off the SAME run as the field material — order it now or it never matches.",
+        items: [
+          trim("Stair nose", "PER PIECE — say the length", "ea"),
+          trim("Stair tread", "PER PIECE", "ea"),
+          trim("Riser", "PER PIECE", "ea"),
+          trim("Stringer / skirt", "PER PIECE", "ea"),
+          trim("Reducer", "PER PIECE", "ea"),
+          trim("T-mold", "PER PIECE", "ea"),
+          trim("End cap / square nose", "PER PIECE", "ea"),
+          trim("Threshold / saddle", "PER PIECE — say the width of the opening in the note", "ea", "base"),
+          trim("Transition / edge profile", "PER PIECE — say the profile and the finish", "ea"),
+          trim("Quarter round / shoe", "SAY PIECES OR FOOTAGE — it goes exactly how you say it"),
+          trim("Wall base", "SAY COIL OR FOUR-FOOT, AND THE COLOUR", null, "base"),
+          trim("Base corners — inside / outside", "PER PIECE — say how many of each", "ea", "base"),
+          trim("Cove cap / cap strip", "SAY PIECES OR FOOTAGE", null, "base"),
+          trim("Vents / registers to match", "PER PIECE — say the duct size in the note", "ea", "base"),
+          /* WELD ROD IS RUN-BEARING AND IT IS NOT AN ADHESIVE. A welded seam in a
+           * hospital corridor is colour-matched rod off the sheet's own run — the
+           * page shipped sheet vinyl and sheet rubber for a day with no way to
+           * call the rod that closes them. */
+          trim("Weld rod / heat-weld rod", "BY THE COIL OR THE BOX — colour to match the sheet"),
+          trim("Filler / putty — matched", "PER TUBE OR TUB"),
+          trim("Trim / touch-up kit", "PER KIT", "kit")
+        ]
+      },
+
+      {
+        id: "stick",
+        name: "What holds it down",
+        docName: "Adhesive and fasteners",
+        hint: "Name the adhesive off the spec or off the last job — this page has no coverage rate, no spread rate and no opinion about which one goes with what.",
+        items: [
+          holds(plain("Adhesive", "BY THE PAIL — name it in the note", "pail")),
+          holds(plain("Pressure-sensitive adhesive", "BY THE PAIL", "pail")),
+          holds(plain("Epoxy / urethane adhesive", "BY THE UNIT — say A+B or a single", "unit")),
+          holds(plain("Spray adhesive", "BY THE CAN", "can")),
+          holds(plain("Double-face tape", "BY THE ROLL", "roll")),
+          plain("Seam tape", "BY THE ROLL", "roll"),
+          plain("Seam sealer", "BY THE TUBE OR THE BOTTLE"),
+          holds(plain("Tackless / tack strip", "BY THE BUNDLE", "bundle")),
+          holds(plain("Carpet staples", "BY THE BOX", "bx")),
+          holds(plain("Cleats / flooring nails", "BY THE BOX — say the length", "bx")),
+          /* NAIL-DOWN CLEATS DO NOT FASTEN A SHEET OF BACKER, and the category is
+           * called fasteners. */
+          holds(plain("Backer-board / underlayment screws", "BY THE BOX — say the length", "bx")),
+          holds(plain("Thin-set / mortar", "BY THE BAG — say modified or not, and the colour", "bag")),
+          isgrout(plain("Grout", "BY THE BAG — sanded or unsanded, and the colour, in the note", "bag")),
+          plain("Grout sealer", "BY THE BOTTLE OR THE JUG"),
+          plain("Silicone / colour-matched caulk", "BY THE TUBE — say the colour it has to match", "tube")
+        ]
+      },
+
+      {
+        id: "under",
+        name: "What goes under it",
+        docName: "Under it",
+        hint: "Prep and underlayment. Nothing here says what any of it is rated for, how thick it goes or how long it takes — that is off your own bag and your own submittal.",
+        items: [
+          plain("Underlayment / pad", "BY THE ROLL", "roll", W),
+          plain("Acoustic / sound mat", "BY THE ROLL", "roll", W),
+          plain("Moisture barrier film", "BY THE ROLL", "roll", W),
+          plain("Crack-isolation / uncoupling membrane", "BY THE ROLL", "roll", W),
+          plain("Cement board", "BY THE SHEET", "sheet", W),
+          plain("Underlayment panel / plywood", "BY THE SHEET — say the thickness", "sheet", W),
+          plain("Patch / skimcoat", "BY THE BAG", "bag", W),
+          plain("Self-leveler", "BY THE BAG", "bag", W),
+          plain("Primer", "BY THE PAIL OR THE JUG"),
+          plain("Moisture mitigation — 2-part system", "BY THE KIT OR THE UNIT — name it in the note, off your own spec"),
+          plain("Rosin / builder's paper", "BY THE ROLL", "roll")
+        ]
+      },
+
+      {
+        id: "sundry",
+        name: "What the crew burns through",
+        docName: "Sundries",
+        hint: "The jog, not a catalog — it is the short line on tape and blades that sends somebody back at ten in the morning.",
+        items: [
+          plain("Utility blades", "BY THE BOX", "bx"),
+          plain("Hook blades", "BY THE BOX", "bx"),
+          plain("Trowel", "SAY THE NOTCH YOU WANT — your call, off your own adhesive", "ea"),
+          plain("Mixing paddle", "EACH", "ea"),
+          plain("Buckets", "EACH", "ea"),
+          plain("Roller — say weight, and rent or buy", "EACH", "ea"),
+          plain("Kneeler board", "EACH", "ea"),
+          plain("Knee pads", "PER PAIR", "pair"),
+          plain("Chalk / chalk line", "EACH", "ea"),
+          plain("Spacers", "BY THE BAG — say the size", "bag"),
+          plain("Wedges / shims", "BY THE BAG OR THE BUNDLE"),
+          plain("Masking / painter's tape", "BY THE ROLL", "roll"),
+          plain("Duct tape", "BY THE ROLL", "roll"),
+          plain("Rags", "BY THE BOX OR THE BAG"),
+          plain("Sanding screen / paper", "BY THE BOX", "bx"),
+          plain("Undercut / jamb saw blade", "EACH", "ea"),
+          plain("Diamond blade — wet saw", "EACH — say the size", "ea"),
+          plain("Vacuum bags / filters", "BY THE BOX", "bx"),
+          plain("Ram board / floor protection", "BY THE ROLL", "roll", W),
+          plain("Contractor bags", "BY THE BOX", "bx"),
+          plain("Marker / silver pencil", "EACH", "ea")
+        ]
+      },
+
+      {
+        id: "back",
+        name: "What goes back on the same truck",
+        docName: "Going back",
+        hint: "Say it now and it rides back with the driver. Say it at close-out and it is a second trip and a restock argument.",
+        items: [
+          plain("Full unopened cartons back", "SAY HOW MANY AND OFF WHICH RUN — an open carton is not a return", "carton"),
+          plain("A roll to go back", "SAY THE WIDTH AND WHAT'S LEFT ON IT"),
+          plain("Pallets / empties", "SAY HOW MANY", "pallet"),
+          plain("Came wrong — going back", "SAY WHAT CAME AND WHAT IT WAS SUPPOSED TO BE")
+        ]
+      }
+    ]
+  };
+})();

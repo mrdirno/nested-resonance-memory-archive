@@ -29,18 +29,18 @@
  *      the readings for ONE morning, and the log is the different job of carrying
  *      them for a month. It also has the longest refusal list in the kit — no
  *      threshold ever, and no label: never pass, fail, high, low or in-spec.
- *   2. THE DEALER CALL (shape #1, shared/checklist-request.js) — the page he
- *      opens most days, and the one that ruins a corridor forever. Three panels
- *      wrote it independently. It is a vocabulary build the size of the
- *      supply-house order (roll goods, carpet tile, plank and sheet, adhesive,
- *      base and trim, sundries — each with colour and dye lot, will-call or
- *      delivered, and the day it has to be ON the job rather than shipped), and
- *      the thing that would make it this trade's page rather than a supply-house
- *      form is the ORDER'S SECOND READING: everything that has to come off the
- *      same run — fills, transitions, stair parts, and the attic stock that is in
- *      the spec and never called in until close-out, by which time the run is
- *      gone. Derived from the item data, never tapped. Half-building that is
- *      worse than not building it, which is why it is not here.
+ *   2. ~~THE DEALER CALL~~ — SHIPPED 2026-08-26 (`dealer-call.html`), and the
+ *      note it replaces said the thing that mattered: "half-building that is
+ *      worse than not building it." It was not half-built. 77 lines of trade
+ *      vocabulary across seven categories, and the ORDER'S SECOND READING is
+ *      DERIVED — `run: true` and `atticable: true` ride on the item in items.js,
+ *      so the run block gathers itself and the attic-stock question raises
+ *      itself against it. What the build LEARNED, which the spec did not
+ *      anticipate: masonry invented the run mechanism as a TICK and that was
+ *      right FOR MASONRY — a back-up wythe genuinely matches nothing. Copying
+ *      the tick here would have been the ceremony §THE GATE forbids, because
+ *      this trade has no line that comes off no run. A mechanism is stolen with
+ *      its REASON or it is stolen wrong.
  *   3. THE WRITE-UP LIBRARY (docs.js + write-up.html, shared/docspec.js). Its own
  *      document-spec vocabulary build, and the deploy asserts a contract that a
  *      half-written library correctly fails. Sitework shipped without it too and
@@ -66,6 +66,21 @@ window.TOOLKIT_TOOLS = [
     chip: "#8FECFF",
     audience: "Lead → GC super / builder / dealer",
     pinned: true
+  },
+  {
+    // SHAPE #1, and the page he opens most days. It shipped eleventh in the
+    // family and it is the only one whose SECOND READING is read off the item
+    // data rather than tapped: every line in GOODS and in the EDGES carries
+    // `run: true` in items.js, so the run block gathers itself. masonry made the
+    // same idea a checkbox because a mason has back-up wythe that matches
+    // nothing; this trade has no such line, and sitework already wrote the rule
+    // that decides it — a man who classified forty lines by PICKING them must
+    // not be asked to classify them again.
+    name: "The Dealer Call",
+    href: "dealer-call.html",
+    desc: "Tomorrow's goods off a list instead of off your memory — plank, roll goods, carpet tile, the adhesive, the prep and the blades, counted the way he sells them. Everything that has to come off the SAME run — the field material, the fills, the transitions, the stair parts — gathers itself at the bottom where he can't skim past it, with the attic stock nobody calls in until close-out, by which time the run is gone. And the date on it is the day it's ON the job, not the day it ships.",
+    chip: "#8FECFF",
+    audience: "Lead / installer → the dealer or the distributor"
   },
   {
     // The rung that closes a loop three other kits opened. av, gc and

@@ -182,6 +182,11 @@ const fail = (p, m) => fails.push(`${p}  ${m}`);
 
 const { s, port } = await serve();
 const browser = await chromium.launch();
+/* Per-page notes for the SELECT class this gate grew on 2026-08-26 — see the
+ * block that fills them, and §SCARS: fillHeader() skips selects on purpose
+ * (a marker string is not an option value), so the per-job selects were outside
+ * every assertion here while the summary line claimed otherwise. */
+const selNote = [];
 const list = pages();
 if (!list.length) { console.error('no page mounts shared/jobcard.js'); process.exit(1); }
 
@@ -245,6 +250,31 @@ for (const { rel, trade, src } of list) {
     fail(rel, 'the drop-off block is on the page and nothing typed into it reached the document — the leak test below would prove nothing');
   }
 
+  /* ── THE PER-JOB SELECTS, WHICH THIS GATE COULD NOT SEE ─────────────────
+   * `PER` is derived from the fields `fillHeader` typed into, and it types into
+   * text boxes — so every per-job <select> on the rack was outside this gate
+   * while its summary line said "a new job starts empty". It was not: a select
+   * is checked below with `if (afterNew[id])`, and a correctly RESET select is
+   * truthy ("Job"), so even inside PER that assertion could not have expressed
+   * the right thing. Both halves are why `shared/jobcard.js`'s setVal() shipped
+   * a leak on 9 pages — a new job kept the LAST job's charge code and printed it
+   * as its own (§SCARS 2026-08-26).
+   *
+   * EMPTY FOR A SELECT IS ITS DEFAULT, not "". Pick a non-default option on job
+   * A, start a new job, and the control must be back on the option the markup
+   * marks selected — option zero where the markup names none. */
+  const selPer = await page.evaluate(ids => ids.map(id => {
+    const el = document.getElementById(id);
+    if (!el || el.tagName !== 'SELECT') return null;
+    const def = (el.querySelector('option[selected]') || el.options[0] || {}).value;
+    const other = [...el.options].map(o => o.value).find(v => v !== def);
+    if (other == null) return null;
+    el.value = other;
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    return { id, def, other };
+  }).filter(Boolean), Object.keys(jobA.f || {}));
+  await page.waitForTimeout(80);
+
   /* ── a new job starts EMPTY ───────────────────────────────────────────── */
   const newBtn = await page.$('#jobcard .jc-new');
   if (!newBtn) { fail(rel, 'no "+ New job" control — a second job cannot be started'); await ctx.close(); continue; }
@@ -264,6 +294,21 @@ for (const { rel, trade, src } of list) {
   }
   for (const id of Object.keys(blockA)) {
     if (afterNew[id]) fail(rel, `#${id} still reads "${afterNew[id]}" on a brand-new job — the drop-off block did not follow the chip, so the gate code belongs to the last job`);
+  }
+  if (selPer.length) {
+    const nowSel = await page.evaluate(ids => {
+      const o = {};
+      ids.forEach(id => { const el = document.getElementById(id); o[id] = el ? el.value : null; });
+      return o;
+    }, selPer.map(s => s.id));
+    for (const s of selPer) {
+      if (nowSel[s.id] === s.other) {
+        fail(rel, `#${s.id} is a per-job SELECT and still reads "${s.other}" on a brand-new job — the last job's answer is on the glass and goes out as this job's own`);
+      } else if (nowSel[s.id] !== s.def) {
+        fail(rel, `#${s.id} landed on "${nowSel[s.id]}" on a brand-new job — a reset must be the option the markup marks selected ("${s.def}"), never a third value`);
+      }
+    }
+    selNote.push(`${rel.padEnd(34)} ${selPer.length} per-job select(s) reset to default on a new job`);
   }
 
   /* ── and job A's answers never reach job B's document ─────────────────── */
@@ -393,4 +438,5 @@ if (fails.length) {
   for (const f of fails) console.log('  ✗ ' + f);
   process.exit(1);
 }
-console.log(`\nPASS — ${list.length} page(s): jobs stay apart, a new job starts empty, nothing is lost on the way in.`);
+selNote.forEach(l => console.log(' ' + l));
+console.log(`\nPASS — ${list.length} page(s): jobs stay apart, a new job starts empty (text AND selects), nothing is lost on the way in.`);

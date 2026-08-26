@@ -270,8 +270,24 @@
       if (!el) return;
       /* A <select> can only hold an option it has. Carrying a value from a card
        * saved when the list was different would silently land on option zero,
-       * which prints a delivery method he never picked. */
+       * which prints a delivery method he never picked.
+       *
+       * THAT GUARD COULD NOT TELL "NO ANSWER" FROM "AN ANSWER THIS LIST CANNOT
+       * HOLD", AND BAILED ON BOTH — so switching to a job that has never
+       * answered this select LEFT THE PREVIOUS JOB'S ANSWER ON SCREEN, and it
+       * then rode into the sent document as that job's own answer. Found
+       * 2026-08-26 on `fAttic` (an affirmative attic-stock claim on a job the
+       * man never gave it for) and the same shape is live on `fCharge` on every
+       * order page that carries a card. An EMPTY value is not an unholdable
+       * value: it means reset, and reset means the option the markup marks
+       * selected — option zero only if the markup names none. The unholdable
+       * case still bails, which is what the original comment is about. */
       if (el.tagName === 'SELECT') {
+        if (v == null || v === '') {
+          var def = el.querySelector('option[selected]') || el.options[0];
+          if (def) el.value = def.value;
+          return;
+        }
         var ok = [].some.call(el.options, function (o) { return o.value === v; });
         if (!ok) return;
       }

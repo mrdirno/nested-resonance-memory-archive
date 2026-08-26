@@ -609,6 +609,30 @@ placeholder (a suggested number is a rate assertion wearing helper text); no for
 projection of any kind; no column ever labelled better, worse or recommended — the delta
 says MORE THAN and LESS THAN, because that is arithmetic and anything warmer is advice.
 
+**THE EVO LOOP'S STEP (a) HAS NEVER SHIPPED, AND THE REASON IS STRUCTURAL, NOT
+NEGLECT (measured 2026-08-26, C3673).** The directive has carried "INSTRUMENT
+anything that offers a CHOICE… record which variant was actually used, as an
+anonymous COUNT" on every bump since 2026-08-04. Twenty-two days later a grep for
+counting code across `av/*.js` and `shared/*.js` returns **nothing**, and the
+cycle logs contain no instrumented surface. The other steps HAVE fired — the
+2026-08-13 entry writes a falsifiable step-(c) prediction straight into the code —
+so it is step (a) alone that is stuck, and this is why: **a count on a
+self-contained client-side page has no sink.** §SAFETY forbids a server, an
+external API and a third-party CDN, so an anonymous tally lands in that one
+browser's `localStorage` and is never read by anybody. It is not a measurement;
+it is a number in a drawer on a phone.
+
+**THE ONE SINK THAT ALREADY EXISTS IS THE WELL.** `shared/toolkit.js` already
+posts to the wishing well when a user opts in, which is the only consented
+channel off these pages. A variant count could ride it as an explicit, opt-in
+line the wisher can see before it goes — never a silent beacon, which would
+violate the rail below and the trust the whole rack runs on. **Nobody should
+build that on a hunch; it is written here so the next cycle inherits the
+diagnosis instead of re-deriving the silence.** Until then, revealed preference
+on this rack is measurable only through what the WELL says, and stated
+preference is all we have — which is a limit worth knowing rather than a program
+worth pretending to run.
+
 **AND NO TELEMETRY, EVER, ON A PAGE THAT HOLDS A WAGE.** The evo loop instruments CHOICES
 between variants; a wage is not a variant. Every other tool's data is a cable spec or a
 punch item. This shape is exempt by design, the feedback path must never attach page state
@@ -1637,6 +1661,168 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-26 (C3673) — THE SAME MISTAKE, TWICE, IN ONE PAGE: masonry's MIGRATION WIRING ON A PAGE WITH NOTHING TO MIGRATE
+
+The scar below says a mechanism ported without its reason is ported wrong. Here is
+the *second* instance of it in the same file, and this one a GATE caught rather
+than a person. `flooring/dealer-call.html` shipped its first hour carrying
+masonry's job-card wiring verbatim: a **`legacyKey`** naming
+`toolkit.flooring.dealerCall.header.v1` — **a store that has never existed**,
+because this page was born today with the card and the drop-off block already in
+it — and a list of fields to **carry** across from old header boxes that were
+never on it.
+
+`tools/toolkit-gates/dropoff-block.mjs` reads the page's SOURCE for a carry
+declaration and treats it as a claim: *old boxes moved into the block.* It then
+seeds the pre-block storage shape and drives the migration. There was no
+migration to drive, so the block held no state, so its clear button stayed hidden,
+so the gate timed out on a click. **The failure message was about a button and the
+defect was about a claim.** `painting/store-call.html` — the sibling that was
+also born with a card — had already written the correct form and the reason:
+`legacyKey: null`, *"NOTHING TO ADOPT… declared rather than omitted, because
+jobcard-scope.mjs fails a page that is SILENT about its predecessor."*
+
+**AND THE COMMENT EXPLAINING THE FIX RE-TRIPPED THE GATE.** Writing
+`` `carry: ["fPick"]` `` into the apology comment put the exact string
+`carry: [` back in the source the gate greps. **A gate that reads source text
+cannot tell a confession from a declaration** — the sentence was rephrased. Worth
+knowing before the next page documents what it removed.
+
+### 2026-08-26 (C3673) — A NEW JOB INHERITED THE LAST JOB'S ANSWER ON NINE PAGES, AND THE FIRST TEST OF IT ACCUSED THE WRONG COMPONENT
+
+**THE BUG.** `shared/jobcard.js`'s `setVal()` guarded a `<select>` against a
+stored value its option list no longer has — a good guard, with its reason in the
+comment. But it **could not tell "no answer" from "an answer this list cannot
+hold", and bailed on both.** A new job's `f` is `{}`, so every per-job select was
+handed `undefined`, hit the guard, and **kept the previous job's selection on
+screen** — where it then rode into the sent document as the new job's own answer.
+Measured A/B on the real page: without the fix a fresh job reads *"On this order —
+off this run"* and *"Shop stock"*; with it, *"— nothing said —"* and *"Job"*. The
+engine's own line 66 states the invariant that was being broken: **"A NEW JOB
+STARTS EMPTY. That is the safety property."**
+
+**BACKPORT — 9 of the 10 job-card pages carry the class**, `fCharge` on concrete ·
+electrical · framing · low-voltage · masonry · painting · roofing · sitework, plus
+`fAttic` here. An empty value now resets to the option the markup marks selected
+(option zero only if none is named); the unholdable-value case still bails, which
+is what the original guard was for.
+
+**AND THE TEST WAS WRONG BEFORE THE CODE WAS RIGHT.** Driven with a Playwright
+`.click()`, "+ Another job" appeared to do **nothing** — no second job, no chip —
+on this page AND on painting, which reads exactly like a live engine defect on
+every card in the program, and was written up as one. It is not. The card's
+`collect()` calls `paint()`, which replaces `host.innerHTML`; a locator resolved a
+moment earlier is clicking a **detached node** and the handler never runs.
+Dispatching the click from inside the page creates the job correctly every time.
+**A test that drives a self-re-rendering control through a stale handle
+manufactures a product bug out of its own race** — and the near-miss here was
+reporting it, which would have sent a future cycle hunting a defect that is not
+there.
+
+### 2026-08-26 (C3673) — A MECHANISM STOLEN WITHOUT ITS REASON IS STOLEN WRONG, AND IT TOOK A FIELD HAND TO SAY SO
+
+The private record's instruction for `flooring/dealer-call.html` was verbatim:
+"steal masonry's RUN mechanism and sitework's buried-second-reading rather than
+re-deriving them." Both were stolen. **One of them was stolen wrong, and it was
+the half I was most confident about.**
+
+**WHAT WAS STOLEN RIGHT.** masonry made the run a **TICK** (`matchRun()`), and
+copying that would have been the ceremony §THE GATE forbids: a mason genuinely
+has back-up wythe that matches nothing, so his tick carries information; a floor
+hand has no line that comes off no run, so the same tick is forty taps that say
+what picking the line already said. `run` moved onto the ITEM, sitework's rule.
+That call was correct and the page is better for it.
+
+**WHAT WAS STOLEN WRONG.** The same confidence carried masonry's *sentence*
+across with the mechanism — "a plank carton, a stair nose, a T-mold and a coil of
+base in one area all come off one run" — and it went into the page header, into
+`items.js`, and into the block the whole page exists for. **A 20-year flooring
+lens killed the fourth item in that list in one line:** on a commercial job the
+base is Roppe or Burke or Johnsonite, picked to *coordinate by colour*, and on a
+carpet or tile job it is **guaranteed** to be another maker because the mills do
+not make base at all. Printing a coil of base under `Run / dye lot / batch:
+4471-B` sends a counter hunting for a plank lot number in the base catalogue.
+
+**63 GREEN ASSERTIONS AT THE ARTIFACT DID NOT SEE IT**, and could not have: every
+one of them asserted that the block gathered what the data said to gather. The
+data was wrong, so the gate was green on a wrong answer. **A gate proves the code
+matches the data; only somebody who has stood at the counter can say the data
+matches the world.**
+
+**THE FIX IS THE FINDING.** The run is not one run — it is one run PER PRODUCT
+FAMILY. `run: "field"` (26 lines: the goods and the mouldings the same mill wraps
+to go with them) and `run: "base"` (5 lines: base, corners, cove cap, saddles,
+vents — which have a real matching problem and it is a *different* one, every coil
+matching every other coil off a lot he usually does not hold). Two blocks, two
+sentences, one field. **The page is now right about something a supply-house form
+has never been right about**, and it got there by being wrong in public first.
+
+**THE RULE, for the next mechanism anybody lifts off a sibling trade:** port the
+MECHANISM and re-derive the CLAIM. The mechanism is code and it travels; the
+claim is about a trade and it does not.
+
+### 2026-08-26 (C3673) — THE RULE WAS IN THE FILE'S OWN HEADER AND THE FILE BROKE IT SIX TIMES
+
+`flooring/items.js` states, three paragraphs above the data: the `unit` key is
+"left OFF every line whose unit genuinely varies… because a page that prints the
+wrong unit of issue orders the wrong truck." **Six lines then carried one anyway**
+— `Wedges / shims` said *"BY THE BAG OR THE BUNDLE"* and carried `unit: "bag"`, so
+a bare 10 printed **"10 bag"** on a line whose own words say bundle is just as
+likely; the same on `Rags`, `Filler / putty`, `Seam sealer`, `Grout sealer` and
+`Primer`. Twelve lines in the file use the "X OR Y" phrasing and **six got it
+right and six got it wrong**, which is the signature of a rule that lives only in
+prose. A safety lens found them by reading the header and then reading the data.
+
+**A PROSE RULE IS A COIN FLIP AT SCALE.** The rule is now mechanical and asserted
+in the page's own drive: *if the first clause of a line's `sub` names two
+containers with an OR, that line carries NO unit.* Eight more lines were flattening
+a real container word to a generic `ea` (`BY THE CAN` → "2 ea", `PER PAIR` → "2 ea"
+— a dealer reading "2 ea" on knee pads ships one pair short) and now print `can`,
+`kit`, `pair`, `tube`, `unit`, `sheet`. **All 13 units in the data are driven at
+the artifact**, because masonry once shipped a line saying "BY THE SET" that its
+own table could not attach "set" to a number.
+
+### 2026-08-26 (C3673) — A REGEX ON AN ITEM NAME IS A CLASSIFIER NOBODY MAINTAINS
+
+The page's on-glass hints classified lines with `/tape/`, `/tile/` and `/grout/`
+against the item NAME. **Both of the interesting ones were already wrong against
+the very file they ran on**, on the day they were written:
+
+* `/tape/` also matched **"Masking / painter's tape"** and **"Duct tape"** in
+  SUNDRIES, so a man with forty cartons of plank, a roll of masking tape and **no
+  adhesive** was told nothing. The check died silently in the exact case it exists
+  for — a false NEGATIVE, the kind nobody ever reports.
+* `/tile/` also matched **"Carpet tile"**, which nobody has ever grouted, so a
+  carpet order got asked *"Tile and no grout — on purpose?"*. That is the
+  FIELD-COOL bar failing out loud: a page that does not know the trade.
+
+Both were found by grepping the regexes over the data rather than by reading them,
+and the fix is the page's own doctrine applied to itself: `holds`, `grouted` and
+`grout` are keys on the ITEM now, for the same reason `run` is. **The refinement
+that matters is in `holds`:** seam tape and seam sealer are NOT on it (a seam is a
+joint, not a bond) and tackless IS (a stretch-in carpet needs no adhesive and must
+not be nagged for one) — a distinction a regex on the word "tape" can never hold.
+
+### 2026-08-26 (C3673) — THE ENGINE MARKS A CLONE THE SAME WAY IT MARKS A WRITE-IN
+
+`shared/checklist-request.js:312` clones a row with `itemHTML(def, cfg, true)` —
+`removable: true` — so **a cloned CATALOGUE row gets the same `.rm` button a
+write-in has**, and every sibling order page detects write-ins with
+`l.el.querySelector(".rm")`. On those pages it costs nothing: their run flag is a
+tick the clone copies. On a page whose second reading is read off the DATA, a
+cloned row read as a write-in falls back to a `flags.run` catalogue items do not
+have — so **"+ another length" on a stair nose, the most natural thing anyone
+would ever add to this page, would silently drop that line out of the one block
+the page exists for.**
+
+This page ships no clone button, so the defect was **latent** — precisely §SCARS
+2026-08-25's class, *a fix that activates a latent defect*, seen from the other
+end: **a defect planted for a later, reasonable change to activate.** Keyed on
+catalogue membership (`!CAT[l.name]`) instead, a clone is a catalogue row forever,
+and the one edge it introduces resolves the way it should — he typed "Stair nose",
+it IS a stair nose, it joins the run. **Verified by injecting the engine's own
+clone button and driving it**, since the page has none to click.
 
 ### 2026-08-26 (C3661) — FOUR, AND THREE OF THEM ARE THE SAME SHAPE: THE GATE I WROTE COULD NOT SEE THE CLASS I BROKE
 
@@ -6491,3 +6677,70 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   commons-names 385/0, mobile 20/20 at 320/360/390/430 on the longest sentence the data can
   make. **Storefront unchanged — no new tool, no new trade.**
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+
+- **2026-08-26 (C3673) · [AXIS:DEPTH]** · **THE RUN IS NOT ONE RUN, AND THE PAGE SHIPPED
+  SAYING IT WAS** · **before:** flooring was one of only three trades on a fourteen-trade
+  rack with **no material list at all**, and by far the most order-heavy of the three;
+  `flooring/tools.js` §2 had held the rung open since 2026-08-17 with the reason written
+  on it — *"a vocabulary build the size of the supply-house order… half-building that is
+  worse than not building it"* · **after: THE DEALER CALL is live**
+  (`flooring/dealer-call.html`, flooring **8 → 9 tools**, rack **109 → 110**), the
+  **eleventh** instance of shape #1 and the first whose SECOND READING is **derived**:
+  `run` and `atticable` ride on the item in `items.js`, so the run block gathers itself
+  and the attic-stock question raises itself against it — **nobody ticks anything.**
+  **82 lines of trade vocabulary across seven categories, 31 of them run-bearing.**
+  **THE PANEL BROKE THE THESIS, NOT THE CODE.** Three lenses read the shipped artifact.
+  The field hand killed the sentence the mechanism was stolen with: a coil of **base** is
+  Roppe or Burke, coordinated by colour, and on a carpet or tile job **guaranteed** to be
+  another maker — so printing it under the plank's lot number sends a counter hunting for
+  a number that is not in the base catalogue. **63 green assertions could not see it,
+  because they proved the code matched the data and the data was wrong.** The run is now
+  **one run per product FAMILY** — `field` (26 lines) and `base` (5) — two blocks, two
+  sentences, one field. The same lens found **weld rod** missing (a welded seam in a
+  hospital corridor is colour-matched rod off the sheet's own run, on a page that shipped
+  sheet vinyl and sheet rubber) and **VCT** missing outright; both are in, with backer
+  screws, a moisture-mitigation kit and a wet-saw blade. The safety lens found the file
+  **breaking its own header rule six times** — `"BY THE BAG OR THE BUNDLE"` carrying
+  `unit: "bag"`, so a bare 10 printed *"10 bag"* — now mechanical and asserted. The
+  adversarial read found the on-glass hints classified by **regex on the item name**, and
+  both interesting regexes were already wrong against their own data: `/tape/` caught
+  masking tape (the *"nothing to hold them down"* nudge died silently in the exact case it
+  exists for) and `/tile/` caught **carpet tile** (asked about grout). Plus one **latent**
+  defect — `shared/checklist-request.js:312` gives a CLONED catalogue row the same `.rm`
+  marker a write-in has, so a future *"+ another length"* on a stair nose would have
+  dropped it out of the run block; keyed on catalogue membership now and **verified by
+  injecting the engine's own clone button**. Gates: **68 end-to-end assertions driving the
+  REAL page** (all 13 units rendered on a bare number, both run families, the write-in
+  tick, the clone, the inverse case, clipboard === preview), **mobile-watertight 141/141**
+  with the new page green at **320/360/390/430 on all 82 rows ticked plus an unbroken
+  78-character token**, order-live-header **12/12 order pages**, no-third-party **141/141**,
+  find-noise 329, find-honesty 6,492/0, commons-names 385, boundary-titles 41, dropoff-block
+  9/9, jobcard-scope **10/10 green and red-verified at 10 defects**, menu-reachability 966,
+  pickfilter 169/13.
+  **BACKPORT RIDER FIRED, AND IT WAS THE BIGGEST THING IN THE CYCLE.** Chasing the
+  double-sourced `fAttic` into `shared/jobcard.js` found `setVal()` unable to tell "no
+  answer" from "an answer this list cannot hold" — it bailed on both, so **a new job kept
+  the previous job's `<select>` on the glass and printed it as its own.** Swept off disk,
+  not assumed: **9 of the 10 job-card pages carry the class** — `fCharge` on concrete ·
+  electrical · framing · low-voltage · masonry · painting · roofing · sitework, plus
+  `fAttic` here. **`tools/toolkit-gates/jobcard-scope.mjs` was green through all of it
+  while its own summary read "a new job starts empty"**, for two reasons: `fillHeader()`
+  skips selects on purpose, so they were never in `PER`; and the assertion is
+  `if (afterNew[id])`, which a correctly RESET select fails anyway because "Job" is truthy.
+  The gate grew the class it could not see — empty for a select is the option the markup
+  marks SELECTED — and it is **RED-VERIFIED: reverting the one-line engine fix turns it
+  red with 10 defects across 9 pages**, `#fCharge` reading *"T&M / extra"* on a brand-new
+  job, a charge code from another job riding out on a material order. The page's other
+  three defects did NOT backport and that was checked, not assumed: the ten older order
+  pages carry the run as a TICK, so the clone marker costs them nothing, and the
+  unit-of-issue rule was swept across all twelve `"X OR Y"` lines **in this file**, which
+  is where that rule lives.
+  **A NEAR-MISS WORTH MORE THAN THE FIX:** driven through a Playwright locator,
+  *"+ Another job"* appeared to do **nothing** on this page AND on painting — which reads
+  as a live engine defect on every card in the program, and was written up as one before
+  it was checked. It is not. `collect()` calls `paint()`, which replaces `host.innerHTML`,
+  so the click lands on a **detached node**. Dispatched in-page it works every time. **The
+  test manufactured a product bug out of its own race, and reporting it would have sent a
+  future cycle hunting something that is not there.** **Storefront: one line added to flooring's `tools[]` in
+  `persona500/src/data/fieldToolkits.ts` — P5 pushes.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/flooring/dealer-call.html
