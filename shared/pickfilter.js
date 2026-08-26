@@ -156,11 +156,17 @@
     } else {
       label.setAttribute("aria-live", "polite");
     }
+    /* THIS LABEL QUOTES WHAT HE TYPED BACK AT HIM, so he decides how long its
+       longest word is. Set here rather than in pickfilter.css because half these
+       pages ADOPT their own #nomatch and never load that file — a 54-character
+       token pushed hvac/truck-stock 257px sideways at 320px wide, which is the
+       mobile law, not a nicety. */
+    label.style.overflowWrap = "anywhere";
 
     function items() { return arr(list.querySelectorAll(itemSel)); }
 
     /* ── the one pass everything goes through ─────────────────────────────── */
-    var mode = "all";
+    var mode = "all", drop = "";
     function apply() {
       var q = (input.value || "").trim();
       var pick = sel ? sel.value : "";
@@ -173,15 +179,23 @@
       });
 
       var show;
+      drop = "";
       if (!q) {
         show = pool; mode = pick ? "cat" : "all";
       } else {
         /* Indexed off the DOM and rebuilt per keystroke, not off the data —
          * write-ins and removed rows stay honest that way. */
+        /* THE RAW VALUE, NOT THE TRIMMED ONE, and the difference is one character
+               that decides a sentence. `norm()` strips trailing separators, so this
+               changes NOTHING about what matches — but shared/find.js reads the raw
+               query to tell "he is still typing this word" from "he finished it", and
+               a trimmed query can never say the second. Trimmed stays the display
+               value, because a heading that quotes his trailing space is a typo. */
         var res = window.Find.search(
           window.Find.index(pool.map(function (el) { return { el: el }; }),
-            [{ get: function (r) { return r.el.textContent; }, w: 1, primary: true }]), q);
+            [{ get: function (r) { return r.el.textContent; }, w: 1, primary: true }]), input.value);
         mode = res.mode === "all" ? (pick ? "cat" : "all") : res.mode;
+        drop = window.Find.dropped(res);
         show = res.hits.map(function (r) { return r.el; });
       }
 
@@ -204,10 +218,19 @@
 
       var narrowed = mode !== "all";
       if (check) check.style.display = narrowed ? "" : "none";
-      label.textContent = mode === "none"
+      /* THE THIRD REASON THIS LABEL EXISTS. It was built to say "closest" and
+         "nothing matched", and it was HIDDEN for the case that needed it most:
+         every word landed, the list narrowed, and one of his words had been
+         deleted on the way. On a parts list that word is normally the part —
+         type "3/4 EMT strap" where nothing is called EMT and you are looking at
+         straps, filtered, with nothing on screen saying so. The engine owns the
+         sentence (shared/find.js §ADMITTING WHAT WAS THROWN AWAY); this decides
+         only whether it rides alone or after one of the other two. */
+      var head = mode === "none"
         ? "Nothing matched that — closest three shown."
         : (mode === "relaxed" ? "Closest to “" + q + "” shown." : "");
-      label.style.display = (mode === "none" || mode === "relaxed") ? "block" : "none";
+      label.textContent = head + (head && drop ? " " : "") + drop;
+      label.style.display = label.textContent ? "block" : "none";
 
       /* `show` is the set that survived the filter — an undeclared `on` sat here
          and would have thrown a ReferenceError the first time any page passed an

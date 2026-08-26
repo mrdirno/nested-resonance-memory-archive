@@ -219,6 +219,9 @@
      the whole list, and the allocation is the only part of it that is not free.
      Single-threaded and read on the line after the call, so it cannot drift. */
   var TIER = T_NONE;
+  /* The query exactly as he typed it, for the one job the normalized copy cannot
+     do: hand a dropped word back in his own characters. */
+  var RAW = "";
 
   /* One query token against one indexed field. Exact > prefix > infix > fuzzy,
      and the tiers never overlap, so an approximate hit cannot outscore a real
@@ -256,6 +259,7 @@
     if (!query) {
       return { hits: rows.map(function (x) { return x.it; }), mode: "all", noise: [], q: "" };
     }
+    RAW = String(q || "");
     var qt = query.split(" "), qj = qt.join("");
 
     /* Per token, the best score any item can give it, and beside it the best
@@ -285,9 +289,27 @@
     var live = [];
     for (k = 0; k < qt.length; k++) if (noise.indexOf(qt[k]) === -1) live.push(k);
 
+    /* WHAT MAY BE NAMED OUT LOUD, which is not the same set as what was dropped.
+       The scorer already exempts the last token from strictness because it is the
+       word under his cursor (`need` above), and the sentence has to make the same
+       trade or it contradicts the engine it reports on: a token of one or two
+       characters can only match EXACTLY, so the first letter of every word after
+       the first is noise for one keystroke. Naming it makes the line appear on
+       "1/4 drill b" and vanish on "1/4 drill bi" — text flickering under his
+       thumb on essentially every two-word query, which is the default way this
+       box is used. So the trailing token is held back until a separator says he
+       is finished with it. The cost is honest and smaller: a last word that
+       really does match nothing goes unnamed until he types a space. */
+    var say = noise;
+    if (noise.length && qt.length > 1 && noise.indexOf(qt[qt.length - 1]) !== -1 &&
+        /[A-Za-z0-9]$/.test(RAW)) {
+      say = [];
+      for (k = 0; k < qt.length - 1; k++) if (noise.indexOf(qt[k]) !== -1) say.push(qt[k]);
+    }
+
     /* Every token was noise — the query has nothing to do with this library.
        Rule 2: hand back the closest three rather than an empty box. */
-    if (!live.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, q: query };
+    if (!live.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, noiseRaw: raws(say), q: query };
 
     var pw = fields[ix.primary].w;
     var scored = [];
@@ -317,7 +339,7 @@
       else if (qj.length >= 4 && p.j.indexOf(qj) !== -1) sc += pw * 0.9;
       scored.push({ it: rows[i].it, sc: sc, cover: cover, strong: strong, i: i });
     }
-    if (!scored.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, q: query };
+    if (!scored.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, noiseRaw: raws(say), q: query };
 
     var maxCover = 0;
     for (i = 0; i < scored.length; i++) if (scored[i].cover > maxCover) maxCover = scored[i].cover;
@@ -332,6 +354,7 @@
       hits: tier.map(function (x) { return x.it; }),
       mode: honest ? "exact" : "relaxed",
       noise: noise,
+      noiseRaw: raws(say),
       q: query
     };
   }
@@ -345,6 +368,89 @@
       for (var i = 0; i < w.length; i++) if (w[i] === query) return true;
     }
     return false;
+  }
+
+  /* ── ADMITTING WHAT WAS THROWN AWAY ──────────────────────────────────────
+   * Rule 1 drops a token that matches nothing in the library, and for
+   * "template" and "form" that is exactly right — he added a word a search box
+   * taught him to add. For a CONTENT word it is the search lying by omission:
+   * "AHJ nuisance letter" on the AV page keeps only `letter`, answers that, and
+   * says exact. Driven over 21,372 cross-surface searches, 3,631 came back
+   * exact having quietly dropped a word, and 3,409 of those kept HALF OR LESS
+   * of what he typed.
+   *
+   * THE SENTENCE LIVES HERE, WITH THE RULE THAT CAUSES IT. It shipped first as
+   * four inline lines in commons/commons.js and the other 26 surfaces that share
+   * this engine said nothing at all; a second copy is how the two drift, so
+   * there is one and the callers ask for it. Three things the inline copy got
+   * wrong and could not have seen alone, because one surface's data does not
+   * contain them:
+   *   · PLURAL. "nothing here uses that word" over three dropped words.
+   *   · DUPLICATES. "USB-A -> USB-B" drops `usb` twice and printed it twice.
+   *   · HIS CASE. He typed AHJ; the array holds the normalized `ahj`, and
+   *     handing back a mangled version of his own word is a weaker admission
+   *     than handing back the word. Recovered from the raw query, never
+   *     reconstructed, so what he sees is a slice of what he typed.
+   */
+  /* SEPARATORS, and everything else is part of a word. `norm()` keeps only
+     [a-z0-9], so it shreds an accented word — café indexes as `caf`, résumé as
+     `r` + `sum` — and this file ships beside a Spanish vocabulary block that two
+     trades authored on purpose (sitework/items.js, electrical/items.js §TAG_ES).
+     Handing that man back “caf” dressed up as the word he typed is worse than
+     handing him nothing, so a recovered token EXPANDS over anything that is not
+     a separator until it is the whole word again. A fraction is one thing a
+     tradesman types as one thing, so a slash between two digits is not a
+     separator either — otherwise "3/4 EMT strap" reports “3”, “4” and “EMT” and
+     buries the only word he would recognise under two bare digits. */
+  function isSep(str, i) {
+    var c = str.charAt(i);
+    if (!c) return true;
+    if (c === "/" && /[0-9]/.test(str.charAt(i - 1) || "") && /[0-9]/.test(str.charAt(i + 1) || "")) return false;
+    return /[\s!-\/:-@\[-`{-~]/.test(c);
+  }
+
+  function raws(noise) {
+    var seen = {}, out = [], i, k, t, at, a, b, w;
+    var low = RAW.toLowerCase();
+    for (i = 0; i < noise.length; i++) {
+      t = noise[i];
+      if (!t) continue;
+      at = -1;
+      /* The occurrence that is a whole word wins; failing that the first one,
+         because a token normalized out of a longer word is still inside it. */
+      for (k = low.indexOf(t); k !== -1; k = low.indexOf(t, k + 1)) {
+        if (at === -1) at = k;
+        if (isSep(RAW, k - 1) && isSep(RAW, k + t.length)) { at = k; break; }
+      }
+      if (at === -1) { w = t; }
+      else {
+        a = at; b = at + t.length;
+        while (a > 0 && !isSep(RAW, a - 1)) a--;
+        while (b < RAW.length && !isSep(RAW, b)) b++;
+        w = RAW.slice(a, b);
+      }
+      /* Deduped on what he SEES, not on the token: résumé shreds into two
+         tokens that both expand back to the one word, and naming it twice is
+         the defect this de-duplication exists to prevent. */
+      k = w.toLowerCase();
+      if (seen[k]) continue;
+      seen[k] = 1;
+      out.push(w);
+    }
+    return out;
+  }
+
+  /* The caller renders this; it never decides whether the answer was good. The
+     document IS usually what he asked for and the label is the label's job --
+     this only names what the engine deleted and lets him judge it. Silent on
+     "none", where the heading has already told him nothing matched and saying it
+     twice reads as a broken sentence. */
+  function dropped(res) {
+    if (!res || res.mode === "none" || res.mode === "all") return "";
+    var n = res.noiseRaw || res.noise || [];
+    if (!n.length) return "";
+    return "Ignored \u201C" + n.join("\u201D, \u201C") + "\u201D \u2014 nothing here uses " +
+           (n.length === 1 ? "that word." : "those words.");
   }
 
   /* The last resort. No first-character guard and a generous budget, because at
@@ -371,5 +477,6 @@
     return out.slice(0, n).map(function (x) { return x.it; });
   }
 
-  window.Find = { index: index, search: search, norm: norm, toks: toks, squash: squash, dist: dist };
+  window.Find = { index: index, search: search, norm: norm, toks: toks, squash: squash,
+                  dist: dist, dropped: dropped };
 })();

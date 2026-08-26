@@ -42,8 +42,20 @@
   color:var(--deep);margin-top:4px}
 .lib li.on button{background:var(--tint);box-shadow:inset 4px 0 0 var(--deep)}
 .lib .grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
-  background:#F2F3EF;padding:6px 12px;border-bottom:1px solid #E4E6E0}
+  background:#F2F3EF;padding:6px 12px;border-bottom:1px solid #E4E6E0;overflow-wrap:anywhere}
+/* ^ THE SAME CLASS, SWEPT: this heading prints “Closest to <what he typed>”, so
+   the length of its longest word is his to choose. A 41-character token pushed
+   every write-up page 29px sideways at 320 — found only because the dropped-word
+   sentence was being measured against the same test, on a page that was clean
+   with an empty search box. Three surfaces in this toolkit quote a query back;
+   all three break long words now. */
 .lib .none{padding:12px;font-size:13px;color:var(--muted)}
+/* THE WORDS THE SEARCH THREW AWAY. Same muted weight as .none because it is a
+   note and not an answer, but it is NOT an empty state and must not read as
+   one — it sits above a list of real results, so it gets the rule down its
+   left edge that says "this is about the list below". */
+.lib li.none[data-drop]{background:#F7F8F5;box-shadow:inset 3px 0 0 var(--line);
+  border-bottom:1px solid #E4E6E0;line-height:1.4;overflow-wrap:anywhere}
 
 /* THE PICKED DOCUMENT — a plate, not a row, because everything below it is
    tuned to this one choice and the page has to say so. */

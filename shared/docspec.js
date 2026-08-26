@@ -1428,7 +1428,13 @@
     box.innerHTML = "";
     var u = uses();
     var q = S.q.trim();
-    var res = window.Find.search(findIx(), q);
+    /* THE RAW VALUE, NOT THE TRIMMED ONE, and the difference is one character
+       that decides a sentence. `norm()` strips trailing separators, so this
+       changes NOTHING about what matches — but shared/find.js reads the raw
+       query to tell "he is still typing this word" from "he finished it", and
+       a trimmed query can never say the second. Trimmed stays the display
+       value, because a heading that quotes his trailing space is a typo. */
+    var res = window.Find.search(findIx(), S.q);
     var hits = res.hits.slice();
 
     if (!q || res.mode === "all") {
@@ -1455,6 +1461,25 @@
          word to write down. It is not a hedge — the document IS his and the match
          IS exact — which is why it is a heading and not a "Closest to". */
       box.appendChild(grp("Another trade's name for it"));
+    }
+    /* WHAT THE ENGINE DELETED, SAID OUT LOUD — and it has to sit ABOVE the rows,
+       because a man who reads the answer first has already decided. Rule 1
+       drops a token that names nothing in this library; on a document library
+       the surviving word is very often the generic half ("note", "letter",
+       "record") and the dropped half is what he was actually after — typing
+       "Inspection Note" here keeps `note`, hands back a note, and said EXACT.
+       This is not a hedge and it may not read as one: the heading above still
+       makes whatever claim it is entitled to make, and this only names the
+       words that never reached it. */
+    var drop = window.Find.dropped(res);
+    if (drop) {
+      /* class is exactly "none" and the marker is an ATTRIBUTE: every gate this
+         page already has finds the leading row by skipping `grp` and `none`, and
+         a third class name would have made this note look like a document to all
+         of them. */
+      var dl = h("li", "none", drop);
+      dl.setAttribute("data-drop", "1");
+      box.appendChild(dl);
     }
     if (!hits.length) {
       box.appendChild(h("li", "none", "Use “not in the list” below — it still builds you a real one."));

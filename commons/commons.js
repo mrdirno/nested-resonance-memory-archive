@@ -410,11 +410,16 @@ window.Commons = (function () {
       } else {
         note = "Every trade searched, not just the one you picked — you heard it off somebody else.";
       }
-      /* Only worth saying when something DID match: when nothing did, the title
-         already said so and repeating it back reads as a broken sentence. */
-      if (r.mode !== "none" && r.noise && r.noise.length) {
-        note += " Ignored “" + r.noise.join("”, “") + "” — nothing here uses that word.";
-      }
+      /* THE SENTENCE MOVED INTO shared/find.js (its §ADMITTING WHAT WAS THROWN
+         AWAY). It shipped HERE first and then stayed here alone: the other 26
+         surfaces loading the same engine dropped words in silence, 3,631 times
+         over a cross-surface sweep. The four lines that stood here also got
+         plural and repeated words wrong — neither of which this one surface's
+         data ever produces, which is the whole argument against a copy per
+         caller. Only worth saying when something DID match; the engine holds
+         that rule now. */
+      var drop = window.Find.dropped(r);
+      if (drop) note += (note ? " " : "") + drop;
       var out = [];
       var send = handoff(r.hits);
       if (send && send.length === 1) {

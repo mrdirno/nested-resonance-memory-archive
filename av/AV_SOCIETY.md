@@ -939,6 +939,52 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      result object (`DocSpec.findIx()` is exported for exactly this, so a gate never rebuilds
      the field spec beside it), and it returned **2,006 independently of the DOM sweep that
      returned 2,006** — two paths, one number.
+     **SHIPPED 2026-08-26 (C3661), and the rung was right about the mechanism and wrong about
+     the reason.** `Find.dropped(res)` now lives in `shared/find.js` — the file that decides
+     what to delete owns the sentence that admits it — and all three renderers call it, so
+     26 surfaces that said nothing now name the word. Re-driven at the DOM: **3,631 → 3,360
+     saying so (92.5%)**, the remaining 271 held back BY DESIGN (below), and **0 of 2,557**
+     searches that dropped nothing gained a sentence. Moving the sentence into the engine also
+     fixed three things the four inline lines in `commons.js` had wrong and could not have
+     seen alone, because one surface's data does not contain them: plural over two dropped
+     words, a word he repeated printed twice, and his own capitalisation (he types **AHJ**,
+     the array holds `ahj`). Gate `find-noise.mjs`, **318 checks over all 29 surfaces**, every
+     class red-verified.
+   - **THE RUNG'S OWN REASONING WAS FALSIFIED IN THE MEASURING, and the honest version is
+     smaller.** It said *"the document IS what he asked for and the extra word was chrome."*
+     Over 21,372 cross-surface searches, **3,409 of the 3,631 (93.9%) kept HALF OR LESS of
+     what he typed** — the survivor is normally the generic head noun (*note, letter, record,
+     strap*) and the deletion is the word that discriminates (*inspection, AHJ, nuisance,
+     EMT*), because a generic noun sits on many rows and a modifier sits on none. Rule 1 is
+     preferentially deleting the high-information token. **Cite that as the SHAPE of the
+     defect, never as an incidence rate** — the corpus is built to over-represent it, and on
+     its OWN page a surface drops nothing at all (920 of 923 own-name searches come back exact
+     with an empty `noise`), which is why the line is silent almost all the time.
+   - **THE NAMED NEXT RUNG — demote the LABEL, and the panel's own predicate is already dead.**
+     Three lenses scored it independently; **two voted to demote** and lens 2 gave the
+     predicate `noise.length > 0 && live.length <= noise.length` (live ≤ half). The falsifier
+     was run before the rung was written down, not after, and it is TWO numbers, not one:
+     against own-page item names the demote costs **0 of 920** — lens 1's stated fear that
+     *"Closest to becomes the app's normal voice"* is measurably false, because a man typing
+     his own page's name has no dropped word to demote on. But against **his own name plus the
+     word a search box taught him to add** (*template · form · sheet · example · pdf · blank ·
+     printable*, the exact class rule 1 exists for) it costs **72 of 1,838 (3.9%)**, and all 72
+     are the same shape: a ONE-WORD item name plus one chrome word, `live 1 / total 2`.
+     *"Washout template"* would be hedged. **That is the cure becoming the disease, and it
+     kills the ratio.** The discriminating fact is not how many words survived but whether the
+     survivors are a WHOLE NAME of the lead row: in *"Washout template"* the survivor is the
+     entire name and he added chrome; in *"Inspection Note"* the survivor is a fragment of
+     *Damage / Pre-Existing Condition Note* and he named a piece. **The engine already computes
+     this** — rule 4's `named()` asks exactly "did he type one of this item's names, whole?" —
+     so the rung is `honest = … && (noise.length === 0 || named(lead, liveQuery))`, and it must
+     ship with the 0/72 pair re-measured against it, plus `find-honesty.mjs` (6,492 checks) and
+     the *"Another trade's name for it"* heading, which lives in the same `else if` chain that
+     a demote would swallow.
+   - **THE RESIDUAL, named so it is not re-derived:** a hyphenated part designator still reports
+     in pieces — *"USB-A → USB-B"* prints `Ignored “USB”, “A”, “B”`. The fraction case was fixed
+     (a slash between two digits is not a separator, so *"3/4 EMT strap"* now prints `Ignored
+     “EMT”` and not two bare digits), but a hyphen is genuinely ambiguous — *Pre-Existing* is
+     two words and *USB-A* is one — and no rule that was tried tells them apart.
 
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
@@ -1591,6 +1637,40 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-26 (C3661) — FOUR, AND THREE OF THEM ARE THE SAME SHAPE: THE GATE I WROTE COULD NOT SEE THE CLASS I BROKE
+
+1. **A GATE THAT PRINTS A COUNT IS MAKING A CLAIM ABOUT COVERAGE.** `find-noise.mjs` printed
+   *"29 surfaces"* and ran **26**. Its commons adapter read `window.__FH_ROWS`, a global that
+   exists nowhere in this repository — `find-honesty.mjs` sets it for itself — so `names` came
+   back `[]`, the probe loop never entered, and three surfaces contributed **zero checks while
+   printing no skip line and no error.** Green on 208 checks. The fix is not the adapter, it is
+   class **N0**: a surface that ran no probe is a RED. Any gate that iterates a list must assert
+   it *reached* every item, because "no failures" and "no checks" render identically.
+
+2. **I ECHOED THE USER'S OWN WORD INTO THE LAYOUT AND HANDED HIM THE HORIZONTAL SCROLLBAR.**
+   The sentence quotes what he typed, so *he* chooses how long its longest word is. A
+   54-character token pushed `hvac/truck-stock` **257px sideways at 320px**. Anything that
+   prints a raw query needs `overflow-wrap:anywhere`, and the sweep for the class found it
+   **already live** in the `Closest to “…”` heading on all 14 write-up pages — a defect that had
+   shipped and was invisible because nobody had measured that page with a long word in the box.
+   Measuring a NEW thing found an OLD one; that is the argument for measuring at the artifact.
+
+3. **"HANDING BACK A SLICE OF WHAT HE TYPED" IS ONLY TRUE IF THE SLICE IS A WORD.** The recovery
+   step was written to show him his own capitalisation and it did — but `norm()` shreds an
+   accented word at the accent, so *café* became the token `caf`, and the page then said
+   `Ignored “caf”`, presenting a fragment **as if it had been deliberately recovered**. That is
+   worse than the mangled token alone, because it wears the authority of the fix. Found by the
+   lens that went and read `items.js` and noticed two trades ship Spanish vocabulary on purpose.
+   **A feature whose whole claim is honesty fails hardest when it is confidently half-right.**
+
+4. **THE FIX FOR THE FLICKER DEPENDED ON A SIGNAL EVERY CALLER WAS ALREADY DESTROYING.** Holding
+   back the word under his cursor needs to know when he finished it, and the only evidence is a
+   trailing separator — which `shared/docspec.js` and `shared/pickfilter.js` both `.trim()` away
+   before the engine ever sees the query. The rule was correct, tested green in a Node harness,
+   and was a **no-op on all 26 real pages**; the gate only caught it because N9 asserts the word
+   IS named after the separator, not merely that it is silent before. **An exemption gate that
+   only tests the silent half passes on a feature that is silent always.**
 
 ### 2026-08-26 (C3660) — THE PANEL SAW THE THING I HAD ALREADY DECIDED NOT TO CHASE
 MINERALIA-016 wished *"Needs to look real"* on the engine page. Five failures, and
@@ -6368,3 +6448,46 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   land as a pair:** the card faces at mrdirno.github.io/vibe-cards/mineralia/ are exports of
   THIS engine, so the deploy and a face regeneration have to ship together or the card's one
   claim — open the address and the same slice is cut again — stops being true.
+
+- **2026-08-26 (C3661) · [AXIS:COMMONS]** · **THE SEARCH DELETED ONE OF HIS WORDS 3,631 TIMES
+  AND ONLY ONE PAGE IN TWENTY-NINE EVER MENTIONED IT** · **before:** `shared/find.js` rule 1
+  drops any query token that matches nothing and answers with what is left; `commons/commons.js`
+  said so in four inline lines and **the other 26 surfaces said nothing at all**. Driven over
+  **21,372 cross-surface searches through the real boxes: 3,631 came back labelled `exact`
+  having quietly deleted a word**, and **3,409 of those (93.9%) kept HALF OR LESS of what was
+  typed** — *"Inspection Note"* on the AV page deletes *inspection*, keeps *note*, and hands
+  back the Damage / Pre-Existing Condition Note with no hedge on it · **after:** the sentence
+  moved INTO the engine that causes it (`Find.dropped(res)`) and all three renderers call it —
+  **3,631 → 3,360 now say so on the page (92.5%)**, `0 of 2,557` clean searches gained a
+  sentence, and the move fixed three defects the single inline copy structurally could not
+  see: plural over two words, a repeated word printed twice, and his own capitalisation.
+  **THE PANEL VOTED TO DEMOTE THE LABEL TOO AND THE FALSIFIER KILLED ITS PREDICATE.** Two of
+  three lenses said stop calling it `exact`; lens 2 gave `live <= half`. Measured: that costs
+  **0 of 920** against own-page names — so lens 1's fear that *"Closest to becomes the app's
+  normal voice"* is false — but **72 of 1,838** against a man's own item name plus *template ·
+  form · sheet · pdf*, and all 72 are `1 word kept of 2` on a one-word item name. *"Washout
+  template"* would be hedged: the cure becoming the disease. Not shipped; re-pitched in
+  §THE COMMONS on a predicate the engine already computes (rule 4's `named()` — did the
+  SURVIVORS spell a whole name, or a fragment?) with the 0/72 pair as its gate.
+  **THE ADVERSARIAL LENS FOUND TWO THINGS 231 GREEN CHECKS COULD NOT.** (1) `norm()` keeps only
+  `[a-z0-9]`, so *café* indexes as `caf` — and the recovery step then handed *"caf"* back
+  **dressed up as the word he typed**, on a toolkit that ships a Spanish vocabulary block two
+  trades wrote on purpose (`sitework/items.js`, `electrical/items.js` §TAG_ES). A recovered
+  token now expands over anything that is not a separator until it is the whole word again:
+  *café*, *résumé*, *compañía*. (2) A one-character token can only match EXACTLY, so the first
+  letter of every word after the first is noise for one keystroke — the line appeared on
+  *"1/4 drill b"* and vanished on *"1/4 drill bi"*, **text flickering under his thumb on the
+  default interaction**. The word under his cursor is now held back until a separator says he
+  finished it, which is the same exemption the scorer already makes, and **that fix exposed a
+  second bug: every renderer `.trim()`s the query, so the "he finished" signal never reached
+  the engine.** Both are now gate classes N8 and N9, red-verified on the exact draft the panel
+  read. **BACKPORT RIDER FIRED — the class is "a surface quotes his raw query into the layout",
+  and there are three.** Measuring the new sentence at 320px with a 54-character token pushed
+  `hvac/truck-stock` **257px sideways**; the sweep then found the same class **pre-existing and
+  live** in the `Closest to “…”` heading on **all 14 write-up pages** — 29px of horizontal
+  scroll at 320, on a page that is clean with an empty search box. All three break long words
+  now. Gates: **find-noise 318/318 over 29 surfaces (every class red-verified)**, find-honesty
+  6,492/0, docspec-say 2,978/0, docs-pool 86/0, pickfilter 156/0, commons-bag 506/0,
+  commons-names 385/0, mobile 20/20 at 320/360/390/430 on the longest sentence the data can
+  make. **Storefront unchanged — no new tool, no new trade.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
