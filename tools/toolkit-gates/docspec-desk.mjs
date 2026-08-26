@@ -159,6 +159,13 @@ function spineOf(text) {
   if (first === -1 || end === -1) return null;
   return text.slice(first, end);
 }
+/* The VALIDATION check list, whichever shape it is in — one comma-joined line or
+   one bullet per fact — read up to the bullet that always follows it. */
+function factsChunk(t) {
+  const m = String(t || '').match(/Before you write, check the input for:[\s\S]*?(?=\nWHEN SOMETHING ON THAT LIST|\n- No date given)/);
+  return m ? m[0] : null;
+}
+
 function chunk(text, head, until) {
   const a = text.indexOf(head);
   if (a === -1) return null;
@@ -272,8 +279,14 @@ for (const trade of TRADES) {
       const pairs = [
         ['OUTPUT FORMAT spine', spineOf(sec), spineOf(solo)],
         ['CONTINUITY', chunk(sec, '\nCONTINUITY\n', '\nVALIDATION\n'), chunk(solo, '\nCONTINUITY\n', '\nVALIDATION\n')],
-        ['the facts it checks for', (sec.match(/Before you write, check the input for: .*/) || [null])[0],
-                                    (solo.match(/Before you write, check the input for: .*/) || [null])[0]],
+        /* THE CHECK LIST IS A LIST NOW (2026-08-25), not one comma-joined line.
+           This pair used to read `check the input for: .*` — a single-line match
+           that silently stopped matching the moment the facts became bullets,
+           and reported "could not read it out of both blocks" on all 14 trades.
+           Anchored on the bullet that always follows instead, so it reads either
+           shape and keeps asserting the thing that matters: a document's checks
+           are byte-identical whether it rides alone or in a desk. */
+        ['the facts it checks for', factsChunk(sec), factsChunk(solo)],
       ];
       pairs.forEach(([what, inDesk, inSolo]) => {
         if (inDesk == null || inSolo == null) { bad.push(`${m.name}: could not read ${what} out of both blocks`); return; }

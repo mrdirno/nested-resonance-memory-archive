@@ -302,7 +302,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "WHAT I DID",
-          "r": "The work performed in order — what you isolated and where, what you cut, what you installed with size and material, what you tested and how, what you put back in service. Never \"repaired leak\" with no location on it."
+          "r": "The work performed in order — what you isolated and where, what you cut, what you installed with size and material, what you tested and how, what you put back in service. Never \"repaired leak\" with no location on it. Print every make and model exactly as the tech typed it, verbatim, including the model suffix; never suggest, substitute or complete one he did not give."
         },
         {
           "h": "WHAT'S STILL WRONG AND NOT INCLUDED",
@@ -325,7 +325,7 @@ window.TRADE_DOCS = {
         "Who reported it and their exact words",
         "Building, unit, floor, room, and the fixture or riser worked on",
         "Pipe size and material actually worked on",
-        "Parts installed — size, type, material, and the make and model exactly as the tech typed it off the box. The write-up prints what he typed, verbatim, including the model suffix; it never suggests, substitutes or completes one he didn't give",
+        "Parts installed — size, type, material, and the make and model exactly as you read it off the box",
         "Any readings the tech took (pressure, temperature, footage down the line) with units",
         "What came out of the line and where it is now",
         "Every valve touched and the position it was left in",

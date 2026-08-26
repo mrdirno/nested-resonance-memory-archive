@@ -526,6 +526,27 @@ tool's data rather than re-declare it:** `answer-back` offers its "when" chips o
 `TOOLKIT_ROUGHIN.milestones`, because two lists of the same trade's gates is one list that
 rots.
 
+### SHAPE #4 HAS TWO READERS, AND FOR THREE MONTHS IT ONLY SERVED ONE (2026-08-25)
+The block is written for the MACHINE and it is allowed to be dense — 9,500 characters a
+man pastes in once. But the setup is once and the DICTATION is every time, and the whole
+chain fails at the same place: he talks, and whatever he did not say comes back
+`<MISSING>`. Every document in the library already names what he has to say — `facts`,
+authored per document — and it was only ever emitted INTO the block, addressed to the AI.
+
+So shape #4 renders TWO artefacts off one authored library:
+
+  · **THE BLOCK** — for the model, pasted once, dense on purpose.
+  · **THE SAY-LIST** — for the man, on the page, read every time. Numbered, in the
+    trade's own words, with the omitted line as its last item and one control that
+    copies it to the group chat. It is the only part of this page that still works
+    when his AI does not.
+
+**THE RULE THIS SETTLES, and it is not about `facts`:** any field authored into one of
+these libraries whose only consumer is a machine is on the clock. Nobody proofreads a
+string nobody reads — three live defects were sitting in `facts` and every gate we had
+passed all three (§SCARS 2026-08-25 C3658). Either put it in front of a person, or gate
+its SHAPE and not just its presence. "It reaches the block" is not proofreading.
+
 ## THERE IS A FIFTH SHAPE, AND IT IS THE FIRST ONE THAT DOES NOT GO UP THE CHAIN
 Every shape above produces a document you send UP a chain — a request to your PM, a note
 to the super, a log for the O&M, an instruction block for your own AI. Shape #5 produces
@@ -1545,6 +1566,114 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-25 (C3658) — DATA WITH ONLY A MACHINE FOR A READER ROTS, AND NOTHING LOOKS AT IT
+`facts` is authored on every document in the library — 214 documents, 661 distinct
+strings — and for the whole life of this engine it reached exactly ONE reader: the
+model, inside VALIDATION, inside a 9,500-character block a man pastes into a Gem once
+and never opens again. No human being had cause to look at it after the day it was
+typed. Three separate defects were sitting in it, live, and the class is the same in
+all three: **a field nobody reads is a field nobody proofreads.**
+
+  1. **FIVE FRAMING DOCUMENTS AUTHOR NO `facts` AT ALL.** The block shipped
+     `Before you write, check the input for: .` — an empty check, on the one
+     instruction that decides whether his report comes back full of holes.
+  2. **A FACT MAY BE A SENTENCE, AND `.join(", ")` CANNOT CARRY ONE.** It held
+     while every author wrote short noun phrases and turned to mush the first time
+     one did not: `hvac/compressor-failure-report` emitted a 600-character run-on
+     where *"…amps at failure. Your numbers, nothing graded, What the oil…"* reads
+     as an instruction, then a fragment, then a new list item, inside one line.
+  3. **ONE FACT WAS ADDRESSED TO THE MODEL, NOT THE MAN.** `plumbing/service-writeup`
+     item six ended *"The write-up prints what he typed, verbatim … it never
+     suggests, substitutes or completes one he didn't give"* — an OUTPUT RULE
+     wearing the shape of a thing he says out loud.
+
+**EVERY EXISTING GATE PASSED ALL THREE.** `node --check` passes (valid JavaScript).
+The docspec gate passes (all eleven blocks present, non-empty, family legal, every
+`omit` line reaching the block). The mobile gate passes — a watertight layout around
+a broken sentence. A screenshot passes. Only a HUMAN READER catches these, and the
+program had arranged for there never to be one.
+
+**THE RULE.** Any authored field whose only consumer is a machine is on the clock.
+Either put it in front of a person on the page — which is what the say-list does, and
+which is how all three were found within minutes of it rendering — or gate its SHAPE,
+not just its presence. "It reaches the block" is not proofreading.
+
+### 2026-08-25 (C3658) — A GATE THAT COMPARES THE ENGINE TO ITSELF PROVES NOTHING
+The say-list gate's central claim, in its own header, was *"every line the card shows
+reaches the emitted block, and every fact the block checks reaches the card — the two
+readers see the SAME list."* It asserted this by reading `.say li` out of the DOM and
+comparing it to `window.DocSpec.factsOf(d)` called by the test. But the DOM was
+populated by `renderSay()` calling **that same function on that same input**, and
+`textContent` round-trips a string exactly — so the comparison could not fail short of
+a browser bug. The cue check was the same shape: `sayCue(d)` rendered, against
+`sayCue(d)` called. **Two of the gate's assertions were structurally incapable of
+failing, and the one check that did touch the emitted block compared bullet COUNT and
+never a single string.** A genuine divergence between what the card shows a man and
+what the block tells his AI to check for would have passed, green, silently.
+
+Found by an adversarial pass, not by the four negative controls that ran before it —
+because a negative control asks *"can this gate fail?"* and both of these could, on a
+defect injected into the shared function. **A tautology hides from its own negative
+control whenever the control edits the thing BOTH sides read.** The test is not "does
+it go red when I break the code"; it is "**do the two sides of this compare come from
+different places**". Now: the card's rendered DOM against the COMPOSED BLOCK TEXT, line
+by line, in order — two artefacts built by different code paths. Proved by rendering
+the card one character short of the block: 214 failing.
+
+### 2026-08-25 (C3658) — A GATE THAT FINDS A LINE BY HOW ITS AUTHORS START SENTENCES GOES BLIND SILENTLY
+The say-list gate located the halt bullet with `/- (?:Only|Never|The notes|He wants|Anything
+about it)[^\n]*/` — an alternation of the opening words the corpus happened to use. One
+author does not: `plumbing/service-writeup` opens *"Stop and ask on two things only:"*.
+That document's halt was never matched, so **both** halt assertions simply did not run on
+it — no failure, no skip message, nothing. The gate reported 21 doublings where the merged
+libraries hold 22.
+
+**A missed match is indistinguishable from a passed assertion**, which is the whole
+problem: the count printed in this book's own draft was wrong, twice, from two different
+readings — a source grep said 14 (it missed the shared library's per-trade overrides) and
+the gate said 21. The halt is structurally the SECOND of three bullets under
+`WHEN SOMETHING ON THAT LIST IS NOT IN MY INPUT:`, so it is now taken by POSITION, and the
+group's bullet count is itself asserted so the position cannot drift unnoticed. Rule:
+locate a line by its STRUCTURE, never by the words an author chose — and when a gate
+cannot find what it was told to check, that is a failure, not a silence.
+
+### 2026-08-25 (C3658) — SUPPRESSING A REPEATED VERB TOOK THE EXCLUSIVITY WITH IT
+Twenty-two halts already contain "stop and ask", so the engine appending *"That is the
+ONLY reason to stop and ask me a question."* made the bullet say it twice. The fix
+suppressed the tail whenever the author's own words carried the verb — which is
+lossless for **21 of the 22**, because they also say *"Only stop and ask if …"*.
+`gc/impact-notice` is the twenty-second: *"The notes are really about weather, or they
+already have dollars and day counts attached. Stop and ask — a weather day is its own
+notice, and a priced claim belongs to the PM and counsel."* Verb, two conditions, **no
+exclusivity**. Suppressing the tail there converted the one halt in the program that
+names two conditions into a licence to interrogate about anything.
+
+**The test was on the WORDS the author used; it had to be on what the sentence CLAIMS.**
+The tail now stands down only where the author already made the rule exclusive, and
+where he used the verb without it, exclusivity is supplied in words that do not repeat
+him. Two counts were wrong in the first draft's own comment as well — *fourteen across
+three trades*, from a source grep; the artifact says **twenty-two across four**, because
+the grep missed the shared library's per-trade overrides. **The block is the ground
+truth about the block, every time.**
+
+### 2026-08-25 (C3658) — THE GATE MEASURED ITS OWN SAFETY NET AND CALLED IT GREEN
+`factsOf()` was written with an asymmetric fallback: a document with no `facts` of its
+own inherits its FAMILY's, so a page served from a branch that skipped the gate still
+says something instead of emitting an empty check. Sound belt. Then the new gate's
+first negative control — delete framing's five `facts` back out, restoring EXACTLY the
+state that had been live — came back **GREEN, 1,940 checks, 0 failing.** The fallback
+caught the defect before any assertion could see it, and the gate's own header claimed
+"the gate refuses the empty case outright so the belt is never load-bearing." That
+sentence was false at the moment it was written.
+
+Same family as *A GATE LEFT RED BY THE CYCLE THAT REDDENED IT* (2026-08-24) and *A GATE
+THAT NEEDS THE FIX TO RUN CANNOT PROVE THE FIX* (2026-08-25, C3657), and worse in kind
+than either: this gate was green for the right-looking reason. **A belt written in the
+same cycle as its gate will hide the defect from the gate unless the gate is aimed
+UNDER it.** The assertion is now on `d.facts` — the authoring — not on `factsOf()`, the
+resolution. Rule: when a fix adds a fallback, the gate asserts the thing BEFORE the
+fallback, and the negative control deletes the authored data, not the fallback.
 
 ### 2026-08-25 (C3657) — A TRUE-SOUNDING TOAST IS HOW A DEFECT SURVIVES A MONTH
 Card Studio's handoff said "Picture placed from persona500 - ready to print" while the
@@ -5862,3 +5991,118 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   59.7–76.9, so the darkest cuts really are darker than anything in the deck — this change
   cannot help a picture that is itself dark, only one that was fine and hidden. Named as
   its own rung, not folded in.
+
+- `2026-08-25` — **[AXIS:DOCS] C3658 — THE LIST OF WHAT HE HAS TO SAY WAS ONLY EVER TOLD
+  TO THE MACHINE** · **before:** the well was dry on both sinks (0 new, 0 building) and no
+  family was owed, so the stalest axis governed. `facts` is authored on every document in the
+  library — **214 documents, 661 distinct strings, 4 characters to 240** — and it reached
+  exactly ONE reader: the model, inside VALIDATION, inside a 9,500-character block a man
+  pastes into a Gem **once** and never opens again. The person whose whole job is to SUPPLY
+  those facts was never shown them, and the engine's own instructions then bill him for it:
+  every fact he did not say comes back `<MISSING>`, and the omitted line — the field this
+  book calls the highest-value in the program — comes back `<MISSING>` **at the TOP of the
+  open items by design**, because nobody told him to say it while he was talking. · **after:**
+  **THE SAY-LIST**, on the picked card of all 14 write-up pages, from the same authored data
+  and nothing new: the document's own facts, NUMBERED (a man rattling eleven off in a truck
+  needs to know he is on 6 of 11), the family's continuity cue as the only addition — *"only
+  what CHANGED since the last one"* for a report on a rhythm, *"say it whole; whoever reads
+  this was not there"* for a record read years later, both compressions of the CONTINUITY
+  block the engine already emits — and the omitted line directly beneath in the red frame it
+  has always worn, NOT repeated, because it is the last thing to say. One control: **"Send
+  this to your guys"**, which copies the list as plain text a foreman pastes into the group
+  chat so three leads never open the page — **numbered there too, and the omitted lines keep
+  their own heading and their place at the end**, because a flat dash-list in a text message
+  throws away the red frame the card gives the highest-value field in the library.
+  **PUTTING IT IN FRONT OF A HUMAN FOUND THREE LIVE DEFECTS IN MINUTES** (§SCARS): five
+  framing documents author NO `facts`, so the block shipped **"check the input for: ."** — an
+  empty check; `.join(", ")` turned `hvac/compressor-failure-report` into a **600-character
+  run-on** where *"…amps at failure. Your numbers, nothing graded, What the oil…"* reads as an
+  instruction, a fragment and a new list item in one line; and the halt bullet **said "stop
+  and ask" twice** on **22 documents** across gc, hvac, low-voltage and plumbing, whose
+  authors had already written the verb — a count that took THREE readings to settle: a source
+  grep said 14 (it missed the shared library's per-trade overrides), the first gate said 21
+  (its halt matcher identified the line by an alternation of opening words and went blind,
+  silently, on the one author who opens *"Stop and ask on two things only:"*), and only a
+  matcher anchored on POSITION — the halt is the second of three bullets, always — agreed with
+  the merged libraries at **22**. All three fixed: framing's five authored from their
+  own sections, the check emitted one bullet per fact, the generic tail standing down for an
+  author who already used the verb — the mirror of the 2026-08-16 "Never halt" rule. Two
+  further finds the card exposed: my own change made the fact bullets typographically
+  identical to the three missing-input RULES beneath them, so those now carry their own stem
+  (**WHEN SOMETHING ON THAT LIST IS NOT IN MY INPUT:**) rather than one blank line a model
+  must infer a boundary from; and a mechanical addressee sweep of all 661 strings found
+  **exactly one** written at the model rather than the man — `plumbing/service-writeup`
+  item six carrying an OUTPUT RULE — split so the fact says what he supplies and the rule
+  moved to that document's own `WHAT I DID` section. **One instance in 214 documents is the
+  measurement:** the corpus is well-authored, and the rot was in the fields nothing read.
+  **THE NEGATIVE CONTROL CAUGHT MY OWN GATE** (§SCARS): first pass, deleting framing's five
+  `facts` back out — the state that had been live — left the gate **GREEN**, because
+  `factsOf()`'s family fallback rescued it before any assertion could see it, while the gate's
+  header claimed the belt was never load-bearing. Re-aimed UNDER the fallback, at `d.facts`
+  rather than `factsOf()`. **FOUR NEGATIVE CONTROLS THEN PROVED RED ON THE SHIPPED DEFECTS
+  BEFORE THE GATE WAS TRUSTED:** facts deleted → 5 failing · comma-join restored → 214 failing
+  · halt tail always appended → **21 failing, which is how the true count was found — a source
+  grep had said 14 and missed the shared library's overrides** · the cue crossed so a
+  stand-alone record is told "only what changed" → 158 failing · the copy un-numbered → 14
+  failing, because a list he reads numbered and sends un-numbered is two lists · the card
+  rendered one character short of the block → 214 failing · the card's cue crossed against the
+  block's CONTINUITY → 372 failing · the exclusivity dropped from `gc/impact-notice` → 1
+  failing · the custom path's seed disclosure removed → 70 failing · the halt tail
+  always appended → 22 failing, the reading that finally settled the count. **The two tautologies
+  survived the FIRST four controls**, because a negative control asks "can this gate fail" and
+  a tautology fails happily when you break the function BOTH sides read — the real test is
+  whether the two sides of a compare come from different places.
+  **BACKPORT RIDER FIRED — DERIVED MECHANICALLY, NOT ASSUMED.** The fix lives in the shared
+  engine, so all 14 trades take it in one change. The CLASS — *a required-input list the
+  runtime knows and the user never sees* — was then swept across every one of the 15 shared
+  modules by extracting each engine's config keys and diffing its emit-only sites against its
+  render sites: **`shared/docspec.js` is the only module in the program with emit-only keys at
+  all**, and of those, `halt`, `trade` and `vocab` are machine rules, leaving `facts` as the
+  single instance of the class. **Swept and NOT fixed, named so it is not lost:** `note` (62
+  documents — *"no money words, ever"*, *"this is not an inspection"*) and `secondary` are
+  also AI-only, but they are the ADJACENT class — rules about what the document must not
+  claim, enforced where enforcement belongs — not required inputs; and a foreman lens flagged
+  that nothing on the card distinguishes *"job name and number"* from *"circuit believed dead
+  or known live"* by weight, which needs authored severity the library does not carry.
+  **AN ADVERSARIAL FOREMAN LENS ON THE REAL SCREENSHOTS CHANGED THREE THINGS BEFORE SHIP:**
+  the sub-line said *"comes back marked `<MISSING>`"* — angle brackets read as a broken page to
+  someone who has never seen the token work, and **the screenshot path is real**, so the card's
+  first ten seconds are not spent on notation; the list was bulleted, now numbered; and the
+  control was *"Copy this list"* one screen above *"COPY INSTRUCTIONS"*, so a man on a ladder
+  sends his lead the whole AI setup block — renamed to say what it is FOR. The same lens
+  independently confirmed the plumbing item-six defect the addressee sweep had already found.
+  **AN ADVERSARIAL CODE PASS THEN FOUND FOUR MORE, INCLUDING A FALSE CLAIM IN MY OWN GATE'S
+  HEADER** (§SCARS ×2). **(i)** the halt suppression tested the author's WORDS, not what his
+  sentence CLAIMS: 21 of the 22 matching halts also say *"only"*, but `gc/impact-notice` uses
+  the verb with **two conditions and no exclusivity**, so dropping the tail there turned the
+  one halt in the program with two conditions into a licence to interrogate about anything —
+  the tail now stands down only where exclusivity is already stated, and is otherwise supplied
+  in words that do not repeat him. **(ii)** the gate's headline assertion — *"both readers see
+  the same list"* — compared `factsOf(d)` rendered against `factsOf(d)` called, **a tautology
+  that could not fail**, while the only check touching the block compared bullet COUNT and
+  never a string; it now compares the card's DOM against the COMPOSED BLOCK TEXT line by line,
+  two artefacts built by different code paths. **(iii)** the copied message ended in a
+  lowercase fragment — the cue's leading ellipsis was stripped for the copy, leaving *"and only
+  what CHANGED since the last one…"* with no antecedent in a message forwarded to somebody who
+  opens it cold; one source, two endings now. **(iv)** the CUSTOM path seeds its facts straight
+  off the family, so five generic lines rendered under a confident heading with **no disclosure**
+  — while the omission tick two controls over discloses exactly that class — and `library()`
+  never returns the custom document, so the gate was blind to the whole path. Both fixed, and
+  all five families are now asserted there.
+  **GATES:** new `tools/toolkit-gates/docspec-say.mjs` — **14 trades / 214 documents / 2,978
+  checks / 0 failing**, asserting card-DOM against composed-block text line by line, that no
+  document authors zero facts, that one fact never shares a line, that the halt never repeats
+  itself AND never loses its exclusivity, that the card's cue and the block's CONTINUITY agree
+  about the same document, that the custom path's five families each produce a different list
+  and each say they are a seed, and that the copy control ships what is on the card and not a
+  second block (driven through a stubbed clipboard, on the string, not on the button's
+  existence) · **docspec 14 trades / 228 checks / 0 failing** · **desk 14 trades / 0 failing**,
+  after its facts extractor was re-anchored — it had gone red on all 14, which is how the
+  format change was proved to reach the desk path · **mobile-watertight 140 pages ×
+  320/360/390/430 × default and bumped, 0 failing**, with a NEW `REVEALS` entry for the
+  say-list that derives each trade's worst document IN-PAGE (plumbing's eleven facts / 716
+  characters, electrical's fifteen) rather than hardcoding a roster that could rot ·
+  **no-third-party 140/140** · **menu-reachability green** · the custom path driven through
+  **all five families**, each producing its own say-list and its own cue, and the zero-omit
+  copy checked. Storefront unchanged — no new tool, no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/write-up.html

@@ -46,6 +46,13 @@ window.TRADE_DOCS = {
         { "h": "WHAT IS NOT IN THESE WALLS", "r": "Say it in one plain sentence: anything not on this list is not in that wall. Then name any area deliberately left open and who told us to leave it." },
         { "h": "WHAT WE NEED BACK", "r": "One named person, one action, one date. Usually: walk it before we close, or confirm this list against yours." }
       ],
+      "facts": [
+        "site, building, and exactly which areas this letter covers",
+        "the date each wall actually got closed",
+        "what went in, by room: what it's for, what you installed, how high off the floor and how wide — your numbers, as you say them",
+        "who asked for each one, and how the ask arrived",
+        "the asks that came with no size or no height, who you chased, and how many times"
+      ],
       "omit": [
         "the day each wall actually got covered — the date is the whole evidentiary point and it is the first thing left out",
         "which asks arrived with no height on them, and how many times we chased the number",
@@ -76,6 +83,13 @@ window.TRADE_DOCS = {
         { "h": "WHAT HAPPENS NEXT AND WHAT IT NEEDS", "r": "What has to happen for the surface to be right again, in scope terms only — cut back, back it, patch, tape, sand, texture, prime — and who needs to authorize it. No hours, no rates, no totals, no backcharge language. If it is going to be an extra, say only that a tag will follow." },
         { "h": "THE ASK", "r": "One named person, one decision, one date. Usually: tell us whose it is and whether to proceed." }
       ],
+      "facts": [
+        "site, building, floor, and the room or column line",
+        "the date it was found, and the date that area was last walked clean",
+        "what was cut or opened, roughly how big, in what surface, and what stage that surface was at",
+        "what is in the opening — pipe, cable, duct, a device, nothing",
+        "the photos you took and what each one shows"
+      ],
       "omit": [
         "the date that area was last walked clean — without it there is no before, only an after",
         "what was found inside the opening, which is the only attribution the letter can honestly make",
@@ -104,6 +118,13 @@ window.TRADE_DOCS = {
         { "h": "WHEN WE ASKED AND HOW", "r": "The dates we raised it, how — walk, text, email, the request list we sent — and what we were told. Nothing here is an accusation; it is a timeline." },
         { "h": "WHAT WE DID INSTEAD", "r": "Where the crew went, what we closed that we could, and what we resequenced to keep working. This is the section that separates a notice from an excuse, and it is the one most often left out." },
         { "h": "WHAT WE NEED DECIDED", "r": "One named person, one decision, one date. Usually: get the trade in by a day, or tell us to close it and accept the cut-ins. Say plainly that closing it early means a cut-in and a patch later — with no price attached to the sentence." }
+      ],
+      "facts": [
+        "the date, and which walls, lids or areas cannot close",
+        "what each one is waiting on, and which company owes it",
+        "the dates you raised it and how — walk, text, email, request list",
+        "where the crew went instead and what you did close",
+        "the one decision you need, from one named person, by one date"
       ],
       "omit": [
         "what the crew did instead — without it the letter reads as a crew standing around, which is the opposite of its purpose",
@@ -135,6 +156,13 @@ window.TRADE_DOCS = {
         { "h": "WHAT WE'D DO IF NOBODY TELLS US", "r": "The option that keeps the crew moving, stated as a proposal and clearly marked as needing a yes. Offering one is how a same-day answer happens; presenting it as a decision already made is how it becomes our liability." },
         { "h": "WHEN WE NEED IT", "r": "One named person, one answer, one time — usually today, because the crew is standing." }
       ],
+      "facts": [
+        "site, floor, room or column line, and the time of day you found it",
+        "the sheet numbers and revisions, and what each one shows at this location",
+        "what is actually there, in your own measurement",
+        "what you would do if nobody answers",
+        "who has to answer and by when — say if the crew is standing"
+      ],
       "omit": [
         "the sheet numbers and revisions, without which the question cannot be answered by anyone",
         "the field measurement, so the answer comes back based on the drawing that is already wrong",
@@ -163,6 +191,13 @@ window.TRADE_DOCS = {
         { "h": "WHAT WE DON'T", "r": "The specific items commonly assumed to be ours and are not, each in one line. Be concrete — this section is only useful when it names the actual arguments." },
         { "h": "GAPS WE FOUND IN THE DOCUMENTS", "r": "Places where the set is silent, contradicts itself, or assigns work to nobody. State the sheets, state what is missing, and ask who owns it. Never assert what the code or the standard requires." },
         { "h": "WHAT WE NEED TO AGREE BEFORE WE START", "r": "The handful of decisions that will otherwise become extras — cut and patch after others, backing with no size given, temp heat before finishing, protection of finished surfaces, scrap and access. One named person and one date for the lot." }
+      ],
+      "facts": [
+        "the drawings and revisions this letter is written against, and the date",
+        "what you carry, by area and by system",
+        "what you do not carry — the items people assume are yours",
+        "where the set is silent, contradicts itself, or assigns work to nobody",
+        "the decisions you need agreed before you start, and the date you need them by"
       ],
       "omit": [
         "the revision numbers of the documents the letter is written against, which is what makes an exclusion enforceable",

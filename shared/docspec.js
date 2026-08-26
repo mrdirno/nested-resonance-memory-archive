@@ -696,6 +696,55 @@
     return [];
   }
 
+  /* ── WHAT HE HAS TO SAY, WHICH IS THE HALF THAT WAS ONLY EVER TOLD TO THE AI ──
+   * (2026-08-25) `facts` is authored per document — 214 documents, 661 distinct
+   * strings — and until this cycle it reached exactly one reader: the model, in
+   * the VALIDATION block of a 9,500-character setup a man pastes into a Gem once
+   * and never opens again. The person whose job it is to SUPPLY those facts was
+   * never shown them. The engine's own instructions then bill him for it: every
+   * fact he did not say comes back <MISSING>, and the omitted line — the field
+   * this program is built around — comes back <MISSING> at the TOP of the open
+   * items BY DESIGN, because he was never told to say it while he was talking.
+   *
+   * So the same authored data now renders on the page as the say-list, and the
+   * only thing it adds is the continuity cue, which is the one thing that is
+   * true of the FAMILY rather than the document: a recurring report is worth
+   * what CHANGED, and a stand-alone record is read by somebody who was not
+   * there. Both sentences are compressions of the CONTINUITY block this engine
+   * already emits — no new claim, no new authored content.
+   *
+   * THE FALLBACK IS ASYMMETRIC, the same way famOf()'s is. A document with no
+   * facts of its own inherits its FAMILY's, because the failure it replaces
+   * shipped live: five framing documents author none, and the block read
+   * "Before you write, check the input for: ." — an empty check on the one
+   * instruction that decides whether his report comes back full of holes.
+   * Inheriting a family's five generic facts is worse than five authored ones
+   * and enormously better than nothing, and the gate refuses the empty case
+   * outright so the belt is never load-bearing.
+   */
+  function factsOf(d) {
+    var own = (d && d.facts) || [];
+    own = own.filter(function (x) { return typeof x === "string" && x.trim(); });
+    if (own.length) return own;
+    return (famOf(d).facts || []).slice();
+  }
+
+  /* TWO FORMS, ONE SOURCE. On the CARD the cue trails the list it belongs to, so
+     it opens with an ellipsis and continues the thought. In the COPY there is a
+     blank line before it and it is the last thing in a text message somebody
+     else opens cold — and the first draft simply stripped the "…", leaving a
+     forwarded message ending in a lowercase "and only what CHANGED…" with no
+     antecedent. A sentence that only parses when glued to the thing above it
+     cannot be sent on its own. Same words, two endings, one place to change. */
+  var CUES = {
+    delta: ["only what CHANGED since the last one — you do not have to re-say what already finished.",
+            "Only what CHANGED since the last one — you do not have to re-say what already finished."],
+    once:  ["say it whole. Whoever reads this was not there, and may be reading it years from now.",
+            "Say it whole. Whoever reads this was not there, and may be reading it years from now."]
+  };
+  function sayCue(d) { return "…and " + CUES[deltaOf(d) ? "delta" : "once"][0]; }
+  function sayCueSentence(d) { return CUES[deltaOf(d) ? "delta" : "once"][1]; }
+
   function spineOf(doc) {
     if (doc.sections && doc.sections.length) return doc.sections;
     return famOf(doc).spine;
@@ -915,7 +964,28 @@
   function emitValidation(L, d, onlyReason) {
     L.push("VALIDATION");
     L.push("");
-    L.push("Before you write, check the input for: " + (d.facts || []).join(", ") + ".");
+    /* ONE PER LINE, NOT COMMA-JOINED (2026-08-25). `facts` was authored as short
+       noun phrases and emitted with .join(", "), which held for the short ones
+       and turned to mush the moment an author wrote a SENTENCE. On the real page
+       hvac/compressor-failure-report emitted a 600-character run-on in which
+       "…amps at failure. Your numbers, nothing graded, What the oil and the acid
+       test showed…" reads as an instruction, a fragment and a new list item, all
+       inside one line. The corpus is the argument: 661 distinct fact strings
+       across 214 documents, from 4 characters to 240. A list is the only shape
+       that carries both, it is the shape emitOmit() already uses for exactly
+       this reason, and an AI cannot half-drop a bulleted item the way it can
+       drop a clause. */
+    var fx = factsOf(d);
+    L.push("Before you write, check the input for:");
+    fx.forEach(function (f) { L.push("- " + f); });
+    L.push("");
+    /* THE SECOND GROUP HAS TO SAY IT IS A DIFFERENT GROUP. Bulleting the facts
+       (above) made them look exactly like the three rules that follow, which are
+       not things to check for — they are what to DO about a thing that is not
+       there. One blank line is not a boundary a model can be relied on to read,
+       and "check the input for … - No date given: use today's date" is a list
+       with an instruction sitting in it. So the rules get their own stem. */
+    L.push("WHEN SOMETHING ON THAT LIST IS NOT IN MY INPUT:");
     L.push("- No date given: use today's date. If you cannot know today's date, write <MISSING: date> and flag it.");
     /* "NEVER HALT. THAT IS THE ONLY REASON TO STOP." Found 2026-08-16 by reading
        the block the page actually emits rather than the code that emits it. The
@@ -928,7 +998,35 @@
        guesses are the wrong half. An author who wrote "Never halt" already stated
        the rule harder than the generic tail does, so the tail stands down. */
     var halt = d.halt || "Only halt if the input does not say what the document is about.";
-    L.push("- " + halt + (/^\s*Never\s+halt\b/i.test(halt) ? "" : " " + onlyReason));
+    /* THE TAIL STANDS DOWN A SECOND WAY, BUT THE EXCLUSIVITY NEVER DOES
+       (2026-08-25). The 2026-08-16 rule above silences the tail for an author who
+       wrote "Never halt". Reading the real page found the mirror case: TWENTY-TWO
+       halts across gc, hvac, low-voltage and plumbing already contain the verb
+       ("Only stop and ask if …"), so the bullet shipped saying stop-and-ask twice
+       in one sentence, which reads as two rules to a model deciding whether to
+       interrogate a man in a truck.
+
+       The first draft of this suppressed the tail on the verb alone — and an
+       adversarial pass caught what that costs. TWENTY-ONE of the twenty-two also
+       say "only", so dropping the tail is lossless. `gc/impact-notice` does not:
+       "…Stop and ask — a weather day is its own notice, and a priced claim
+       belongs to the PM and counsel." Verb, condition, no EXCLUSIVITY — and
+       exclusivity is the whole reason the tail exists. Suppressing it there
+       silently converted the one halt in the program that names two conditions
+       into a licence to ask about anything.
+
+       So the test is on what the sentence CLAIMS, not on which words it uses:
+       the tail stands down only when the author has already made the rule
+       exclusive. Where he used the verb without the exclusivity, it is supplied
+       in words that do not repeat him. */
+    var saysStop = /\bstop and ask\b|\bask me\b/i.test(halt);
+    var saysOnly = /\bonly\b/i.test(halt);
+    var tail = "";
+    if (/^\s*Never\s+halt\b/i.test(halt)) tail = "";
+    else if (saysStop && saysOnly) tail = "";
+    else if (saysStop) tail = " That is the only thing you may come back to me about.";
+    else tail = " " + onlyReason;
+    L.push("- " + halt + tail);
     L.push("- Anything else missing: write the document anyway, put <MISSING> where the fact belongs, and list chasing it in the open items. A document with visible gaps is useful; a document that waits for me is not.");
     L.push("");
   }
@@ -1426,6 +1524,82 @@
     if (el.tuneCard) el.tuneCard.scrollIntoView({ block: "start" });
   }
 
+  /* ── THE SAY-LIST, ON THE PAGE ──────────────────────────────────────────
+   * The block goes into his AI once. THIS is what he looks at every time, so it
+   * is plain text he can read at arm's length on a dirty screen and copy to the
+   * three guys who also have to write one. No inputs, no ticks, nothing to
+   * operate — the whole shape is "say these, then talk".
+   *
+   * It sits ABOVE the omitted line on purpose and does not repeat it: the omit
+   * box directly below is the last item of this list, wearing the treatment it
+   * has always worn. Printing it twice would teach him the list is padding.
+   */
+  function renderSay(d) {
+    var box = h("div", "say");
+    var fx = factsOf(d);
+    box.appendChild(h("b", null, "Say this when you dump it"));
+    /* NO <MISSING> IN THIS SENTENCE. It was written here first, and a foreman
+       reading the card cold said the angle brackets read as a broken page, not
+       as English — he has never seen the token do its job yet. It earns itself
+       later, inside a finished document, where one look teaches it. And the
+       screenshot path is not hypothetical: this card gets sent to three leads
+       who never opened the page, so its first ten seconds cannot be spent on
+       notation. */
+    box.appendChild(h("p", "sub", "The block below sets your AI up once. This is the part you actually " +
+      "have to do — anything you skip comes back with a blank where the answer should be."));
+    /* NUMBERED, NOT BULLETED. Eleven dots is a stack you eyeball; eleven numbers
+       tell a man rattling this off in a truck that he is on 6 of 11. plumbing
+       carries eleven, electrical fifteen. */
+    var ul = h("ol", null);
+    fx.forEach(function (f) { ul.appendChild(h("li", null, f)); });
+    box.appendChild(ul);
+    box.appendChild(h("p", "cue", sayCue(d)));
+
+    /* SAY WHERE THESE CAME FROM ON THE CUSTOM PATH. current() seeds the custom
+       pseudo-document's `facts` straight off the FAMILY, so this list is what
+       every document of that kind needs — not a claim about HIS. The omission
+       tick two controls over already discloses exactly this ("Ticked from what
+       the other write-ups of this kind were missing. Yours may be different.")
+       and the say-list shipped the same boilerplate with a confident heading and
+       no such line. A seeded control that does not say it is a seed reads as a
+       verdict we do not have. */
+    if (d.id === "__custom") {
+      box.appendChild(h("p", "seedwhy", "These are what every " +
+        famOf(d).name.replace(/^A /, "").toLowerCase() + " needs. Yours will have more — say those too."));
+    }
+
+    /* The copy is the point of the control, not a convenience: a foreman with
+       three leads sends them this list, and none of them has to open the page.
+       It copies WHAT IS ON SCREEN plus the omitted line, because on paper the
+       omitted line is the last thing to say and the box below is only a box. */
+    var cp = h("button", "saycopy", "Send this to your guys");
+    cp.type = "button";
+    cp.addEventListener("click", function () {
+      /* NUMBERED HERE TOO, AND THE OMITTED LINES STAY MARKED. The card gives the
+         omitted line a red frame and its own heading; a flat dash-list in a text
+         message throws both away and buries the highest-value field of the whole
+         library among the routine ones. It keeps its heading and it keeps its
+         place — last, and numbered on from the facts, because it is not a
+         footnote, it is the thing to say. */
+      var n = 0;
+      var lines = ["Before you write the " + d.name + ", say:"];
+      fx.forEach(function (f) { lines.push(++n + ". " + f); });
+      var om = omitLines(d);
+      if (om.length) {
+        lines.push("");
+        lines.push(om.length > 1 ? "The ones everybody leaves out — say these too:"
+                                 : "The one everybody leaves out — say it too:");
+        om.forEach(function (o) { lines.push(++n + ". " + o); });
+      }
+      lines.push("");
+      lines.push(sayCueSentence(d));
+      var txt = lines.join("\n");
+      copyText(txt, cp, "Copied — paste it in the group chat");
+    });
+    box.appendChild(cp);
+    return box;
+  }
+
   function renderPicked() {
     var box = el.picked;
     box.innerHTML = "";
@@ -1449,6 +1623,8 @@
        to textContent joined them with commas — "…only an after,what was found
        inside the opening…" — which reads as one run-on sentence and buries the
        second and third lines, the exact opposite of what this block is for. */
+    box.appendChild(renderSay(d));
+
     var omits = omitLines(d);
     var o = h("div", "omit");
     o.appendChild(h("b", null, omits.length > 1 ? "The lines everyone leaves out"
@@ -1526,9 +1702,13 @@
        right default for a document he writes four times a year, but only if the
        page says so instead of letting him find out in the block. */
     box.appendChild(h("p", "seedwhy", extras.length
+      /* SAY WHOSE LIST IT IS, AND HOW TO GET ANOTHER ONE. The say-list (2026-08-25)
+         is the second thing on this page that belongs to the PRIMARY document
+         only, and a man with six in his desk has no reason to guess that picking
+         a different one is how he sees what to say for it. */
       ? "One block covers all " + picked().length + ". Your AI works out which one you want from what you " +
-        "say at the top of your dump. The tick list below tunes " + primary.name +
-        " — the others come with their full spine."
+        "say at the top of your dump. The say-list above and the tick list below are " + primary.name +
+        "'s — the others come with their full spine. Pick a different one to see what to say for it."
       : "Write more than one? Put them in the same block — you paste it in once and your AI covers all of them."));
     return box;
   }
@@ -1924,7 +2104,8 @@
   window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
                      omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
                      omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit,
-                     picked: picked, maxDocs: MAX_DOCS, pooled: pooled, poolTerms: poolTerms };
+                     picked: picked, maxDocs: MAX_DOCS, pooled: pooled, poolTerms: poolTerms,
+                     factsOf: factsOf, sayCue: sayCue, sayCueSentence: sayCueSentence };
 
   if (typeof document === "undefined") return;
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);

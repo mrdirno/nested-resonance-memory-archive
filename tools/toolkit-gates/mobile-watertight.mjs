@@ -185,6 +185,39 @@ const REVEALS = [
     },
   },
   {
+    name: 'the say-list, on the trade\'s longest one',
+    match: /\/write-up\.html$/,
+    /* THE SAY-LIST (2026-08-25) does not exist on load either — it appears when
+       a document is picked, which is the class that has now escaped this gate
+       twice (§SCARS 2026-08-15, the tick list that only exists after a tap). It
+       is a bulleted list of AUTHORED prose at 14px, and the corpus behind it
+       runs from 4 characters to 240 in a single item: plumbing/service-writeup
+       carries eleven facts totalling 716 characters, electrical/incident-report
+       carries fifteen. Those are the states worth measuring, not av's five.
+       DERIVED IN-PAGE, never a hardcoded roster — the worst document per trade
+       is whatever the library says it is today, so this cannot rot when an
+       author writes a longer one. */
+    run: () => {
+      if (!window.DocSpec || !window.DocSpec.factsOf) return 'no DocSpec on a write-up page';
+      const lib = window.DocSpec.library();
+      let worst = null, worstN = -1;
+      lib.forEach(d => {
+        const n = window.DocSpec.factsOf(d).join('').length;
+        if (n > worstN) { worstN = n; worst = d; }
+      });
+      if (!worst) return 'library rendered empty';
+      const btn = [...document.querySelectorAll('.lib button')]
+        .find(b => (b.querySelector('.nm') || {}).textContent === worst.name);
+      if (!btn) return 'no library row for ' + worst.name;
+      btn.click();
+      const say = document.querySelector('.say');
+      if (!say) return 'picking a document rendered no say-list';
+      if (!say.querySelector('li')) return 'the say-list rendered with no lines';
+      if (!say.querySelector('.saycopy')) return 'the say-list rendered with no copy control';
+      return null;
+    },
+  },
+  {
     name: 'a desk of four, mid-add',
     match: /\/write-up\.html$/,
     /* THE DESK (2026-08-16) is the widest thing on the page and none of it

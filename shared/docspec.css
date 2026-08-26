@@ -71,6 +71,27 @@
 .omit li{font-size:13px;color:#3A2321;line-height:1.4;margin:0 0 4px}
 .omit li:last-child{margin-bottom:0}
 
+/* ── THE SAY-LIST (2026-08-25) ────────────────────────────────────────────
+   The half of this page that gets read in a truck at 4pm, not at a desk. Bigger
+   type than anything else on the card on purpose: the block below is for the
+   machine and is allowed to be dense, this is for a man holding a phone with
+   one hand. It sits directly above the omitted line and does NOT repeat it —
+   the red box below IS the last item, and printing it twice teaches him the
+   list is padding. */
+.say{border:2px solid var(--deep);border-radius:2px;background:#fff;padding:10px 11px;margin:11px 0 0}
+.say b{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;
+  color:var(--deep);margin-bottom:3px}
+.say .sub{margin:0 0 7px;font-size:11.5px;line-height:1.35;color:var(--muted)}
+/* Two-digit room: electrical/incident-report carries fifteen. */
+.say ol{margin:0;padding-left:22px}
+.say li{font-size:14px;padding-left:2px;color:#23282C;line-height:1.4;margin:0 0 5px}
+.say li:last-child{margin-bottom:0}
+.say .cue{margin:8px 0 0;font-size:12.5px;line-height:1.4;color:#33383C;font-style:italic}
+.say .saycopy{margin-top:9px;min-height:44px;width:100%;font-family:var(--cond);text-transform:uppercase;
+  letter-spacing:.05em;font-size:12.5px;background:#fff;color:var(--deep);border:1px dashed var(--deep);
+  border-radius:2px;padding:0 12px;cursor:pointer}
+.say .saycopy:hover{background:var(--deep);color:#fff;border-style:solid}
+
 /* WHERE THE CUSTOM PATH'S TICKS CAME FROM. A seeded control that does not say
    it is a seed reads as a verdict about HIS document, which we do not have. */
 .seedwhy{margin:6px 0 0;font-size:11.5px;line-height:1.35;color:var(--muted)}
