@@ -6096,7 +6096,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   about the same document, that the custom path's five families each produce a different list
   and each say they are a seed, and that the copy control ships what is on the card and not a
   second block (driven through a stubbed clipboard, on the string, not on the button's
-  existence) · **docspec 14 trades / 228 checks / 0 failing** · **desk 14 trades / 0 failing**,
+  existence) — and **RE-RUN GREEN AGAINST PRODUCTION**, all 2,978 checks on the live site
+  after the deploy, plus an independent live sweep of all 14 trades driving each one's
+  WORST say-list end to end (card ≡ block line by line, numbered, the stem present, no empty
+  check, zero overflow, zero page errors) · **docspec 14 trades / 228 checks / 0 failing** · **desk 14 trades / 0 failing**,
   after its facts extractor was re-anchored — it had gone red on all 14, which is how the
   format change was proved to reach the desk path · **mobile-watertight 140 pages ×
   320/360/390/430 × default and bumped, 0 failing**, with a NEW `REVEALS` entry for the
