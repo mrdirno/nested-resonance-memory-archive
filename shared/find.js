@@ -31,7 +31,7 @@
  * tells him the document does not exist. Then it routes him into "not in the
  * list" — the custom path was never a niche, it was where search dumped people.
  *
- * THE FOUR RULES THIS ENGINE IS BUILT ON.
+ * THE FIVE RULES THIS ENGINE IS BUILT ON.
  *
  * 1. A TOKEN THAT MATCHES NOTHING IN THE WHOLE LIBRARY IS NOISE THE USER ADDED,
  *    NOT A REQUIREMENT THEY STATED. "template" and "form" are not in any
@@ -62,14 +62,76 @@
  *    full name and getting it second is the failure that survives every other
  *    fix — measured on gc/write-up.html, where "The Turnover Write-Up" ranked
  *    under "Warranty Callback Write-Up" because file order was the only order.
+ *    A NAME HE TYPED VERBATIM COUNTS WHEREVER IT IS WRITTEN, not only in the
+ *    primary field: `aka` is the authors' record of what people SAY, so an alias
+ *    typed whole is the same evidence as a title typed whole. It is tested
+ *    against each alias ON ITS OWN — never against the aliases joined — because
+ *    a query that straddles two of them ("notice held") is not a name anybody
+ *    wrote, and treating it as one is how a phrase bonus becomes a phrase lie.
  *
- * WHAT THE CALLER OWNS: its fields and their weights, and what it does with the
+ * 5. COVERAGE IS NOT CONFIDENCE — measured 2026-08-25, and it is why this file
+ *    was opened again. Rules 1-4 shipped a search that always answers, and then
+ *    10,738 searches driven through the real box on all fourteen trades found
+ *    the answer it gives when it should not: 3,838 of them handed back a
+ *    document the query did not name, WITH NO HEDGE ON IT — 3,615 of those a
+ *    document the reader's trade does not even carry. One line caused it. Mode
+ *    was set from COVERAGE — did every live token match *something* — and a
+ *    match is a match whether the token is the document's own title or one word
+ *    of its explanatory prose two fields down at weight 2. On the AV page, a
+ *    plumber's "gas shut off notice" came back as the Room Sign-Off
+ *    (Commissioning Write-Up) — an AV tech has no such document and never will
+ *    — presented as an exact match, and "failed inspection" as the Meeting
+ *    Failure / Outage Report. Both now say "Closest to".
+ *
+ *    So a match now carries a STRENGTH beside its score, and strength answers a
+ *    narrower question than the score does: DID HE NAME THIS THING? A token is
+ *    strong when it is a word of what the item is CALLED — its title, or an
+ *    alias somebody wrote for it — and he typed that word whole. A token is weak
+ *    when the engine reached for it: it changed his characters to get there
+ *    (fuzzy), found his letters buried inside other words (infix), read past the
+ *    end of a word he had already finished, or found the word only in a field
+ *    that DESCRIBES the item rather than names it. That last one is the caller's
+ *    own declaration and not a guess about weights — a field carrying
+ *    `about: true` says "this prose tells you what the thing is for", and a word
+ *    that lands only there has identified nothing.
+ *
+ *    THE ONE EXEMPTION, AND IT IS THE WORD UNDER THE CURSOR. A prefix counts as
+ *    strong on the LAST token only, because that is the word he is still typing
+ *    and half-typed is not the same as wrong. Anywhere else a prefix is the
+ *    engine reading past him: in "not our crack", "not" reaching "notes" is a
+ *    different word, not an unfinished one. Measured both ways over the corpus
+ *    below — strict everywhere leaves 1,907 confident wrong answers and turns
+ *    HALF of every keystroke into a "Closest to"; the exemption costs 99 of
+ *    those 10,738 searches and returns mid-typing to silence: 214 of 214
+ *    four-character queries exact, against 113 of 214 without it.
+ *
+ *    WHAT IT DID: unhedged wrong 3,838 → 2,006, and the document he was actually
+ *    looking for came up first 3,986 → 4,160 — with ZERO answers that were right
+ *    before and wrong after, and ZERO correct answers hedged. The label was the
+ *    target; the extra 174 are rule 4 finally reaching `aka` (below).
+ *    A NAME OR AN ALIAS TYPED AS ITS AUTHOR WROTE IT IS UNTOUCHED: 214/214
+ *    verbatim titles and 1,461/1,461 aliases still go out as exact. The five
+ *    perturbations this engine was built for still LEAD — plural 213/214, one
+ *    typo 205/205, joined 214/214 — and now go out saying "Closest to", which is
+ *    what they always were.
+ *
+ *    WHAT WAS TRIED AND CUT, because a theory that measures at zero is a finding.
+ *    Strength looked like it should also decide WHAT IS SHOWN — tier by strong
+ *    coverage first, so a document whose prose sweeps up three of his words
+ *    cannot hide the one actually named after two. It reads well and it earned
+ *    NOTHING: 4,160 right either way, and it made 56 more wrong answers
+ *    confident by narrowing the tier around a strong-but-wrong lead. Rule 2 is
+ *    unchanged. Strength decides what the answer is CALLED, not what it is.
+ *
+ * WHAT THE CALLER OWNS: its fields, their weights, whether a field NAMES the
+ * item or merely describes it (`about: true`), and what it does with the
  * `relaxed` / `none` modes — because the HONEST LABEL is the caller's UI. This
  * engine never silently pretends an approximate result is an exact one; it
  * always says which it handed back.
  *
  *   var ix = Find.index(items, [{ get: function (d) { return d.name; }, w: 10, primary: true },
- *                               { get: function (d) { return d.aka;  }, w: 6 }]);
+ *                               { get: function (d) { return d.aka;  }, w: 6 },
+ *                               { get: function (d) { return d.why;  }, w: 2, about: true }]);
  *   var r  = Find.search(ix, q);   //  { hits, mode: "exact"|"relaxed"|"none", noise }
  *
  * Load before any engine that searches. No dependencies, ES5, no network.
@@ -121,9 +183,15 @@
         var v = fd.get(it);
         var parts = (v === null || v === undefined) ? []
                   : (Object.prototype.toString.call(v) === "[object Array]" ? v : [v]);
-        var t = [], k;
-        for (k = 0; k < parts.length; k++) t = t.concat(toks(parts[k]));
-        return { t: t, j: t.join(""), n: parts.map(norm).join(" ") };
+        var t = [], k, np, whole = [];
+        for (k = 0; k < parts.length; k++) {
+          np = norm(parts[k]);
+          if (np) whole.push(np);
+          t = t.concat(toks(parts[k]));
+        }
+        /* `whole` keeps each part on its own — rule 4 asks whether he typed one
+           of these, and joining them first would invent names nobody wrote. */
+        return { t: t, j: t.join(""), n: whole.join(" "), whole: whole };
       });
       return { it: it, f: f };
     });
@@ -132,30 +200,42 @@
     return { rows: rows, fields: fields, primary: pi };
   }
 
+  /* Rule 5's ladder. The top rung is the only one where he supplied every
+     character of the item's own word; the rung below it is that word still being
+     typed, which counts on the last token and nowhere else. */
+  var T_NONE = 0, T_SOFT = 1, T_PAST = 2, T_PREFIX = 3, T_EXACT = 4;
+
+  /* The rung the last tokenScore() came back on. A module scratch rather than an
+     object returned per (token × row × field): this runs on every keystroke over
+     the whole list, and the allocation is the only part of it that is not free.
+     Single-threaded and read on the line after the call, so it cannot drift. */
+  var TIER = T_NONE;
+
   /* One query token against one indexed field. Exact > prefix > infix > fuzzy,
      and the tiers never overlap, so an approximate hit cannot outscore a real
      one no matter how the weights are set. */
   function tokenScore(tok, fi, w) {
     var t = fi.t, i, ft;
-    for (i = 0; i < t.length; i++) if (t[i] === tok) return w;
-    var best = 0;
+    TIER = T_NONE;
+    for (i = 0; i < t.length; i++) if (t[i] === tok) { TIER = T_EXACT; return w; }
+    var best = 0, bestTier = T_NONE;
     for (i = 0; i < t.length; i++) {
       ft = t[i];
       if (tok.length >= 2 && ft.length > tok.length && ft.indexOf(tok) === 0) {
-        if (w * 0.8 > best) best = w * 0.8;                  // typed a prefix
+        if (w * 0.8 > best) { best = w * 0.8; bestTier = T_PREFIX; }   // typed a prefix
       } else if (ft.length >= 3 && tok.length > ft.length && tok.indexOf(ft) === 0) {
-        if (w * 0.65 > best) best = w * 0.65;                // typed past the word
+        if (w * 0.65 > best) { best = w * 0.65; bestTier = T_PAST; }   // typed past the word
       }
     }
-    if (best) return best;
-    if (tok.length >= 3 && fi.j.indexOf(tok) !== -1) return w * 0.45;   // inside a word
+    if (best) { TIER = bestTier; return best; }
+    if (tok.length >= 3 && fi.j.indexOf(tok) !== -1) { TIER = T_SOFT; return w * 0.45; }  // inside a word
     var b = budget(tok);
     if (b) {
       for (i = 0; i < t.length; i++) {
         ft = t[i];
         if (ft.charAt(0) !== tok.charAt(0)) continue;
         var d = dist(tok, ft, b);
-        if (d <= b) return w * (0.62 - 0.16 * d);
+        if (d <= b) { TIER = T_SOFT; return w * (0.62 - 0.16 * d); }
       }
     }
     return 0;
@@ -169,21 +249,28 @@
     }
     var qt = query.split(" "), qj = qt.join("");
 
-    /* Per token, the best score any item can give it. Zero everywhere = rule 1:
-       the user added a word this library does not have. */
-    var per = [], noise = [];
+    /* Per token, the best score any item can give it, and beside it the best
+       STRENGTH — 2 when the token is a word of what the item is CALLED and he
+       typed it or its beginning, 1 when the engine had to reach, 0 for nothing.
+       The two are tracked separately on purpose: the score decides the order,
+       the strength decides what the answer is allowed to be CALLED. */
+    var per = [], str = [], noise = [];
     for (k = 0; k < qt.length; k++) {
-      var col = [], top = 0;
+      var col = [], scol = [], top = 0;
+      /* Mid-word only counts on the word he is still typing. */
+      var need = (k === qt.length - 1) ? T_PREFIX : T_EXACT;
       for (i = 0; i < rows.length; i++) {
-        var s = 0;
+        var s = 0, st = 0;
         for (var fx = 0; fx < fields.length; fx++) {
           var v = tokenScore(qt[k], rows[i].f[fx], fields[fx].w);
+          var sv = TIER === T_NONE ? 0 : (TIER >= need && !fields[fx].about ? 2 : 1);
           if (v > s) s = v;
+          if (sv > st) st = sv;
         }
-        col.push(s);
+        col.push(s); scol.push(st);
         if (s > top) top = s;
       }
-      per.push(col);
+      per.push(col); str.push(scol);
       if (!top) noise.push(qt[k]);
     }
     var live = [];
@@ -196,16 +283,17 @@
     var pw = fields[ix.primary].w;
     var scored = [];
     for (i = 0; i < rows.length; i++) {
-      var sc = 0, cover = 0;
+      var sc = 0, cover = 0, strong = 0;
       for (k = 0; k < live.length; k++) {
         var val = per[live[k]][i];
-        if (val > 0) { cover++; sc += val; }
+        if (val > 0) { cover++; sc += val; if (str[live[k]][i] === 2) strong++; }
       }
       if (!cover) continue;
       var p = rows[i].f[ix.primary];
-      if (p.n.indexOf(query) !== -1) sc += pw * (p.n === query ? 1.6 : 1.1);  // rule 4
+      if (p.n.indexOf(query) !== -1) sc += pw * (p.n === query ? 1.6 : 1.1);        // rule 4
+      else if (named(rows[i], query, fields, ix.primary)) sc += pw * 1.6;           // rule 4, any name
       else if (qj.length >= 4 && p.j.indexOf(qj) !== -1) sc += pw * 0.9;
-      scored.push({ it: rows[i].it, sc: sc, cover: cover, i: i });
+      scored.push({ it: rows[i].it, sc: sc, cover: cover, strong: strong, i: i });
     }
     if (!scored.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, q: query };
 
@@ -214,12 +302,27 @@
     var tier = scored.filter(function (x) { return x.cover === maxCover; });
     tier.sort(function (a, b) { return b.sc - a.sc || a.i - b.i; });
 
+    /* "exact" is a claim about the row he is looking at first. */
+    var lead = tier[0];
+    var honest = lead.cover === live.length && lead.strong === live.length;
+
     return {
       hits: tier.map(function (x) { return x.it; }),
-      mode: maxCover < live.length ? "relaxed" : "exact",
+      mode: honest ? "exact" : "relaxed",
       noise: noise,
       q: query
     };
+  }
+
+  /* Rule 4's other half: did he type one of this item's names, whole? Only
+     fields that NAME the item, only a whole part, never the parts joined. */
+  function named(row, query, fields, primary) {
+    for (var fx = 0; fx < fields.length; fx++) {
+      if (fx === primary || fields[fx].about) continue;
+      var w = row.f[fx].whole;
+      for (var i = 0; i < w.length; i++) if (w[i] === query) return true;
+    }
+    return false;
   }
 
   /* The last resort. No first-character guard and a generous budget, because at

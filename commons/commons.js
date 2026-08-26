@@ -193,8 +193,11 @@ window.Commons = (function () {
       ix = window.Find.index(ROWS, [
         { get: function (r) { return r.n; },      w: 10, primary: true },
         { get: function (r) { return akaOf(r); }, w: 8 },
-        { get: function (r) { return r.o || ""; }, w: 4 },
-        { get: function (r) { return r.w || ""; }, w: 3 }
+        /* The object clause and the why line DESCRIBE the row; they are not
+           names for it. Rule 5 in find.js: a query that only reaches these is
+           handed over as "Closest to", never as the thing he asked for. */
+        { get: function (r) { return r.o || ""; }, w: 4, about: true },
+        { get: function (r) { return r.w || ""; }, w: 3, about: true }
       ]);
     }
 

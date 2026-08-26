@@ -1416,7 +1416,9 @@
     if (!IX) IX = window.Find.index(pooled(library()), [
       { get: function (d) { return d.name; }, w: 10, primary: true },
       { get: function (d) { return d.aka || []; }, w: 6 },
-      { get: function (d) { return d.why || ""; }, w: 2 }
+      /* PROSE, NOT A NAME — rule 5. A word that lands only here has not
+         identified a document, so the answer goes out labelled "Closest to". */
+      { get: function (d) { return d.why || ""; }, w: 2, about: true }
     ]);
     return IX;
   }
@@ -2105,7 +2107,10 @@
                      omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
                      omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit,
                      picked: picked, maxDocs: MAX_DOCS, pooled: pooled, poolTerms: poolTerms,
-                     factsOf: factsOf, sayCue: sayCue, sayCueSentence: sayCueSentence };
+                     factsOf: factsOf, sayCue: sayCue, sayCueSentence: sayCueSentence,
+                     /* The REAL search index, so a gate can ask the engine what it did
+                        instead of rebuilding the field spec beside it and drifting. */
+                     findIx: findIx };
 
   if (typeof document === "undefined") return;
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);

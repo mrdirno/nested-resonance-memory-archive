@@ -907,13 +907,36 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      trade-neutral in its own data (an authored `portable` flag, not a derived one) AND the
      ROUTER line stops naming the owning trade — until then the honest version is TEXT naming
      the trade that writes it, never a link to the instrument.
-   - **THE NAMED NEXT RUNG IS ONE LAYER DOWN AGAIN, and it is not a COMMONS rung.**
-     `find.js` sets `mode = "exact"` when every LIVE query token was covered, **not when the
-     match was strong**, so a query matching only the `why` prose at weight 2 is handed over with
-     no *"Closest to"* on it. That single mechanism causes all **3,161** remaining unhedged wrong
-     answers on this surface, and it lives in the engine **all 16 search surfaces share** — the
-     commons three included. Two of the three panel lenses ranked fixing it ABOVE both halves of
-     this rung.
+   - ~~**THE NAMED NEXT RUNG IS ONE LAYER DOWN AGAIN, and it is not a COMMONS rung.**
+     `find.js` sets `mode = "exact"` when every LIVE query token was covered, not when the
+     match was strong.~~ **SHIPPED 2026-08-25 (C3659), and the rung was right about the
+     mechanism and low about the size.** It is **29** pages that share the engine, not 16, and
+     re-measured on fourteen trades the class is **3,838 of 10,738**, not 3,161. A match now
+     carries a STRENGTH beside its score — strong only when the token is a word of what the
+     item is CALLED and he typed it whole (a prefix counts on the last token, the word under
+     his cursor, and nowhere else) — and `mode` is a claim about the row he sees first.
+     **3,838 → 2,006 unhedged wrong, his own document first 3,986 → 4,160, zero regressions,
+     zero correct answers hedged.** The `about: true` field flag is the caller's own
+     declaration that a field DESCRIBES rather than NAMES; rule 4 also stopped ignoring `aka`,
+     which is where the 174 extra right answers came from. Gate `find-honesty.mjs`, 5,093
+     checks, every probe derived from the surface's own strings.
+   - **THE NAMED NEXT RUNG, and it is the other half of the same honesty:** rule 1 drops a
+     token that matches nothing in the library as noise the user added, which is right for
+     *"template"* and *"form"* and **silently wrong for a content word**. *"AHJ nuisance
+     letter"* on the AV page keeps only *letter*, answers that, and still says exact — and
+     that mechanism is **most of the 2,006 that remain** (1,925 of them are multi-word
+     queries). **THE SHAPE IS ALREADY BUILT AND SHIPPED, one floor down:** `commons/commons.js`
+     renders *Ignored "guard" — nothing here uses that word* off the `noise` array the engine
+     has always returned. `shared/docspec.js` and `shared/pickfilter.js` ignore it. The rung is
+     to carry that line to the other 26 surfaces — **not** to demote the answer, because the
+     document IS what he asked for and the extra word was chrome; the honest move is to name
+     what was dropped and let him judge it. **THE FALSIFIER WAS RUN BEFORE THE RUNG WAS
+     WRITTEN DOWN, not after: 1,707 of the 2,006 — 85.1% — carry a non-empty `noise`.**
+     *"answering the fire marshal"* keeps only *the*, drops *answering, fire, marshal*, and
+     returns the Service Call Write-Up as an exact match. Measured through the engine's own
+     result object (`DocSpec.findIx()` is exported for exactly this, so a gate never rebuilds
+     the field spec beside it), and it returned **2,006 independently of the DOM sweep that
+     returned 2,006** — two paths, one number.
 
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
@@ -1566,6 +1589,62 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-25 (C3659) — THE NUMBER WAS TRUE AND THE SENTENCE UNDER IT WAS NOT
+Three separate ways this cycle nearly shipped a false statement on the back of a real
+measurement. They are one class: **an aggregate licenses an aggregate claim and nothing
+smaller**, and every one of them was caught by a different instrument than the one that
+produced the number.
+
+  1. **THE EXAMPLE IN THE HEADER WAS A CASE THE CYCLE DID NOT FIX.** `shared/find.js`
+     was written with *"AHJ nuisance letter came back as the Damage / Pre-Existing
+     Condition Note, presented as an exact match"* as the illustrating defect. The
+     measurement said 3,838 unhedged wrong answers and the fix took them to 2,006, so
+     the sentence read as obviously covered. It is not: that query is in the **residual**
+     — its extra words are dropped by rule 1 as noise, and the one live word genuinely
+     names a document — so the shipped file would have pointed at its own defect and
+     called it fixed. Found by SCREENSHOTTING the real page at 390px to see the new
+     heading, and there was no heading. The replacement (*"gas shut off notice" → Room
+     Sign-Off (Commissioning Write-Up)* on the AV page) was pulled from the flipped set,
+     not from memory. **A worked example is a claim about ONE query and has to be
+     re-driven, even when the aggregate it illustrates is real.**
+  2. **A DATA-DERIVED GATE'S FIRST RED INDICTS THE PROBE, NOT THE CODE.**
+     `find-honesty.mjs` builds every probe out of the surface's own strings, which is what
+     makes it survive a row added next month — and its first run produced 19 failures of
+     which **16 were the probe being wrong**: `"meeting"` is an alias of the minutes AND a
+     word in the Toolbox Talk's title, so it names two rows and is evidence about the
+     label only; `"clmp meter"` deletes a character from a five-letter word, which leaves
+     four, which gets no fuzzy budget, so the token is dropped and the engine is being
+     asked a different question than the one written down; `"london philadelphia"` are
+     brick-trowel patterns in `commons/names.js`, and every commons surface searches
+     THROUGH that table, so they are names and not prose. Had the engine been "fixed"
+     to make those green it would have been bent to satisfy a bad question.
+     **The tell is that the failures cluster on the probe generator's assumptions, not on
+     the classes the defect predicts.** The three that were real all sat in C/D/E, which
+     is exactly where the negative control said they would be.
+  3. **THE THEORY THAT READS BEST CAN MEASURE AT ZERO, AND IT ALMOST SHIPPED.** The
+     obvious companion to the fix was to let strength decide WHAT IS SHOWN as well as what
+     it is called — tier by strong coverage first, so a document whose prose sweeps up
+     three of his words cannot hide the one actually named after two of them. It was
+     written, commented and working. Ablated: **4,160 right answers with it and 4,160
+     without**, and it made **56 more wrong answers confident** by narrowing the tier
+     around a strong-but-wrong lead. It is not in the shipped file. The same run killed a
+     second assumption: making a prefix weak EVERYWHERE scores better on complete queries
+     (1,907 vs 2,006) and turns **half of every keystroke into a "Closest to"** — 113 of
+     214 four-character queries hedged, against 214 of 214 clean with the last-token
+     exemption. **Neither of those was decidable by reading the code, and both were
+     decided in one run each.**
+  4. **THE NEGATIVE-CONTROL DANCE EATS ANY EDIT YOU MAKE WHILE IT IS RUNNING, and it ate
+     the fix for scar 1.** Proving a gate red means `cp fix backup && cp old engine && run
+     && cp backup engine` — and that last copy is a **time machine to whenever the backup
+     was taken**. The corrected worked example was written into the header AFTER the backup
+     and BEFORE a later ablation, so a routine restore silently put the false sentence back.
+     Caught by grepping the file for the string that was supposed to be in it, which is the
+     only reason it is not in this commit. **The rule: a restore-from-backup is a WRITE, so
+     re-verify the file after every one, and re-take the backup the moment the working file
+     changes.** Cheaper still — and what should have happened — swap the engine with `git
+     stash`/`git checkout` so the "backup" is the working tree itself and cannot go stale.
+
 
 ### 2026-08-25 (C3658) — DATA WITH ONLY A MACHINE FOR A READER ROTS, AND NOTHING LOOKS AT IT
 `facts` is authored on every document in the library — 214 documents, 661 distinct
@@ -6109,3 +6188,61 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   **all five families**, each producing its own say-list and its own cue, and the zero-omit
   copy checked. Storefront unchanged — no new tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/write-up.html
+- `2026-08-25` — **[AXIS:BACKPORT] C3659 — THE SEARCH SAID "THIS IS IT" 3,838 TIMES WHEN IT
+  MEANT "THIS IS THE CLOSEST I HAVE"** · **TAGGED BACKPORT ON PURPOSE, THOUGH THE RUNG CAME
+  OFF THE COMMONS LADDER:** the human layer — gear, tips, photos, guides — was not advanced by
+  a line, so COMMONS stays owed and the next cycle should still see it as stalest. What
+  happened instead is a single engine defect swept across **29 pages in one commit** ·
+  **before:** COMMONS was the stalest axis and its book already named the rung, one floor
+  down: *"`find.js` sets `mode = "exact"` when every LIVE query token was covered, not when
+  the match was strong."* Re-measured on fourteen trades through the real boxes — 767
+  unambiguous terms × 14 = **10,738 searches** — the class is bigger than the note said:
+  **3,838 answers handed over with no hedge on them**, 3,615 of those a document the reader's
+  trade **does not carry at all**. A plumber's *"gas shut off notice"* typed on the AV page
+  returned the **Room Sign-Off (Commissioning Write-Up)** as an exact match; *"failed
+  inspection"* returned the Meeting Failure / Outage Report. And it was 29 surfaces sharing
+  the engine, not the 16 on record · **after:** a match now carries a **STRENGTH** beside its
+  score, answering a narrower question than the score does — **did he NAME this thing?** Strong
+  means the token is a word of what the item is CALLED (its title, or an alias somebody wrote)
+  and he typed that word whole. Weak means the engine reached: it changed his characters
+  (fuzzy), found his letters buried inside other words (infix), read past a word he had
+  finished, or found the word only in a field the caller declared `about: true` — prose that
+  says what a thing is FOR and names nothing. `mode` is now a claim about **the row he sees
+  first**, and every caller already rendered the honest label, so the fix lands on all 29
+  surfaces with **no page change**. **UNHEDGED WRONG 3,838 → 2,006. His own document first
+  3,986 → 4,160. Zero answers right-before-and-wrong-after, zero correct answers hedged.**
+  **THE ONE EXEMPTION IS THE WORD UNDER THE CURSOR:** a prefix counts as strong on the LAST
+  token only, because half-typed is not the same as wrong. Measured both ways — strict
+  everywhere scores better on complete queries (1,907) and turns **half of every keystroke into
+  a "Closest to"** (113 of 214 four-character queries hedged); the exemption costs 99 of 10,738
+  and returns mid-typing to silence at **214 of 214**. **THE +174 CAME FROM SOMEWHERE ELSE:**
+  rule 4's phrase bonus had only ever looked at the PRIMARY field, so *"The Turnover Write-Up"*
+  — a name an author wrote, in `aka` — lost to the Service Call Write-Up on the AV page. It now
+  counts wherever a name is written, tested against **each alias on its own** and never against
+  the aliases joined, because a query straddling two of them is not a name anybody wrote.
+  **WHAT WAS CUT, and it is the finding:** letting strength also decide WHAT IS SHOWN (tier by
+  strong coverage first) was written, working and elegant — **4,160 right with it and 4,160
+  without**, and 56 more wrong answers made confident. Ablated out. Rule 2 is untouched.
+  **BACKPORT RIDER FIRED, and it is the shape of the whole cycle:** every `Find.index(` call in
+  the tree was swept in the same commit — `shared/docspec.js` (`why`), `commons/commons.js`
+  (the object clause and the why line, on all three commons surfaces) declared `about`;
+  `shared/pickfilter.js` has one field which IS the row's identity and correctly declares
+  nothing. **GATES: `tools/toolkit-gates/find-honesty.mjs` is new — 17 surfaces, 5,093 checks,
+  0 failing, every probe DERIVED from the surface's own strings so a row added next month is
+  tested the day it lands (A verbatim name · B authored alias · C a query of words that name
+  nothing on the surface · D one typo · E the spaces taken out · F the word under the cursor).
+  PROVED RED BY NEGATIVE CONTROL against the engine as it shipped: `C 0/667 · D 0/593 ·
+  E 0/668` — every prose, typo and joined-name query presented as exact — plus `B 1,852/1,933`,
+  which is rule 4's blind spot showing up as 81 aliases leading with the wrong row. `A 693/693`
+  and `F 539/539` are green on BOTH engines, which is what makes them a regression guard and
+  not decoration.** Also green: docspec-say **2,978/0** · docs-pool **86/0** · commons-names
+  **385** · commons-bag **506 states / 0** · pickfilter **12 pages / 156** · no-third-party
+  **140/140** · mobile-watertight, plus a targeted long-query sweep — the new heading echoes the
+  QUERY back, so a 62-character unbroken token was driven into all three box types at
+  320/360/390/430: **24 states, 0 overflowing**. Storefront unchanged — no new tool, no new
+  trade. **NAMED NEXT RUNG, with its falsifier already run:** rule 1 drops a token that matches
+  nothing as noise the user added, which is right for *"template"* and silently wrong for a
+  content word — **1,707 of the remaining 2,006 (85.1%) carry dropped words**, and
+  `commons/commons.js` already ships the answer (*Ignored "guard" — nothing here uses that
+  word*) while the other 26 surfaces throw `noise` away.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
