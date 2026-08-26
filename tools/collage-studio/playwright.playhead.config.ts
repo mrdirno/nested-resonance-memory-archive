@@ -15,6 +15,10 @@ import { defineConfig, devices } from '@playwright/test';
  * manufactured by the harness.
  */
 export default defineConfig({
+  // FAILS THE RUN if the URL is not this app. `reuseExistingServer` below
+  // attaches to whatever is already listening, so without this a squatter on
+  // the port takes the WHOLE suite green against a stranger. See the file.
+  globalSetup: './tests/globalSetup.ts',
   testDir: './tests/e2e',
   testMatch: /playhead\.spec\.ts$/,
   timeout: 300_000,

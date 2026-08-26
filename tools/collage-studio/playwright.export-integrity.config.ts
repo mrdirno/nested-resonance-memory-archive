@@ -13,6 +13,10 @@ import { defineConfig, devices } from '@playwright/test';
  * steps DOWN legitimately spends time on the tiers it rejects.
  */
 export default defineConfig({
+  // FAILS THE RUN if the URL is not this app. `reuseExistingServer` below
+  // attaches to whatever is already listening, so without this a squatter on
+  // the port takes the WHOLE suite green against a stranger. See the file.
+  globalSetup: './tests/globalSetup.ts',
   testDir: './tests/e2e',
   testMatch: /export-integrity\.spec\.ts$/,
   timeout: 240_000,

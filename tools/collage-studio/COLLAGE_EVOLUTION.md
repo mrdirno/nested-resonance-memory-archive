@@ -55,6 +55,13 @@ or re-documenting an existing capability is DD, not delivery.
   `stage.setAudition` retargets the track's OWN element — no second decoder, no
   double — solo and at unity through `applyMutes`' audibility terms, with the
   range fade armed on the REAL window so the landing previews as it will ship);
+  THE SWAP — the collage's drag-reorder: the armed fragment's third verb parks
+  it, the next tap on the canvas names its partner, and the two pictures trade
+  fragments (`lib/swap.ts`). It reaches every render path through the one seam
+  they share (`shuffledIndices` -> `orderedAssets`), the partition does not move
+  (focus, twist and lean are properties of the FRAGMENT), and it re-pins both
+  cells — which is the half that makes it survive a re-deal instead of being
+  undone by the next gutter nudge;
   TRIM — per-clip in/out points with a filmstrip sheet, held by ONE
   output-time-to-source-time function (`lib/clipWindow.ts`) that the live
   element, the offline frame seek and the offline audio mix all ask, and coupled
@@ -533,9 +540,15 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       **PLAYHEAD SCRUB IS NOW DONE TOO** — see THE PLAYHEAD in CURRENT STATE.
       It is the first timeline WIDGET in this app: a ruler over the take, a
       position that tracks the clock, and a drag that parks the whole
-      composition on any instant of it. Still owed on this rung: **drag-reorder**
-      and **split/cut**, which are direct manipulation of the SOURCES rather
-      than of the clock, and are their own increment.
+      composition on any instant of it.
+      **AND DRAG-REORDER IS DONE, IN THE GRAMMAR A COLLAGE HAS → THE SWAP.**
+      There is no timeline to drag along: the sources sit in FRAGMENTS, so
+      reordering them is trading two fragments' pictures. `lib/swap.ts` owns the
+      rule; the armed puck's third verb parks one fragment and the next tap on
+      the canvas names its partner. The entry was right that this is direct
+      manipulation of the SOURCES and right that it is its own increment; what
+      it did not predict is that HALF the work is not the transposition at all
+      (see THE SWAP'S SECOND HALF below). Still owed on this rung: **split/cut**.
 - [x] **ONE LAYOUT** — the preview's partition IS the export's. `computeLayout`
       now runs the generators once at a canonical basis (1200-space = `PREVIEW_W`
       = the Stage's `DEFAULT_LOGICAL_W`) and SCALES the result to whatever size
@@ -609,9 +622,44 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       is already an array of positioned lines. The generalisation is a LIST of
       plans, and the moment a second caption exists the placement roster stops
       being four chips and becomes a real position control.
-- [ ] **Drag-reorder, playhead scrub and split/cut** — the timeline WIDGET, the
+- [x] **Drag-reorder, playhead scrub and split/cut** — the timeline WIDGET, the
       remaining half of the timeline rung. Trim is a timing CONTRACT and is done;
-      these are direct manipulation and are their own increment.
+      these are direct manipulation and are their own increment. **TWO OF THE
+      THREE ARE NOW SHIPPED** (playhead scrub, then THE SWAP); split/cut is
+      carried forward on the timeline rung above.
+- [ ] **THE SWAP'S SECOND HALF IS THE PIN REWRITE, AND THAT IS THE GENERAL
+      LESSON, not a detail of this feature.** `shuffledIndices` is DERIVED — an
+      effect recomputes it from nine inputs, and `layoutItems` alone re-runs on a
+      gutter nudge, an entropy nudge, a mode change. So ANY direct manipulation
+      written only into the assignment has a shelf life measured in slider
+      touches, and the failure is not "it reverted": a pin already on one of the
+      two cells drags its old picture back and leaves HALF a trade, which is a
+      DUPLICATE on screen. The one state a re-deal honours is `lockedCells`, so
+      the swap re-pins both cells. Measured, not argued: the mutant that skips
+      the rewrite fails **162,521** of the sweep's assertions.
+      **THE OPEN QUESTION THIS LEAVES** is that pinning is now something a
+      gesture does to you rather than something you ask for. It is disclosed
+      (both fragments come back wearing the badge, and the notice says so the
+      first time) and it is undoable (a pin is one tap), but the honest next cut
+      is a WEAKER pin — "hold this until I re-roll" versus "hold this forever" —
+      which is a second kind of lock and therefore a real design decision, not a
+      flag.
+- [ ] **A SWAP CANNOT TRAVEL IN A COMPOSITION CODE.** It joins pinned fragments
+      and the title on the "in the app but not in the code" list, and for the
+      same structural reason the pins are on it: an arbitrary permutation of n
+      fragments is n! of information and a code is a fixed-length recipe. It
+      does travel in the PROJECT file and in the SVG's JSON_MANIFEST (both carry
+      the whole `AppState`, pins included), and — unlike an eviction — it is
+      recoverable through the rail's Undo, because a step records the code AND
+      the pins and the pins are where a swap lives. Undisclosed in the strip,
+      which is the honest gap, exactly as it is for pins.
+- [ ] **THE PENDING PILL SITS ON THE FRAGMENT IT PARKED, so on a small fragment
+      it covers the tap that would cancel.** Found by the WebKit and Mobile
+      Chrome runs of swap.spec T4 — a centre-of-fragment tap landed on the pill.
+      The guaranteed outs (the pill's own 44 px X, and Escape) are both there and
+      both tested, so this is a convenience that degrades rather than a trap; but
+      "the gesture the affordance covers" is a shape worth naming, because the
+      armed puck has the same geometry and will meet it again.
 - [~] **Transitions** — part-shipped as **THE TURN**: the cross-dissolve, the
       cut and (in `ripple`) the wipe, expressed in the grammar a collage has —
       between DEALS rather than between clips, because a mosaic shows every
@@ -1327,6 +1375,56 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-08-26 (C3675) — `--strictPort` PROTECTED THE WRONG RUN, AND THE SUITE WOULD HAVE GONE GREEN AGAINST A STRANGER
+
+`playwright.config.ts` already carried a long, correct comment: :5173 belongs to
+Persona 500, `reuseExistingServer` will happily attach to whatever is listening,
+so the port was moved to **:5199** and `--strictPort` was added. The hole was
+declared closed. It was not.
+
+`--strictPort` only protects the run that starts the server **first**. When
+something else is already on the port, Playwright does not start vite at all —
+it attaches. Measured this cycle: `/Volumes/dual/persona500` had vite on
+**:5199 --host**, and a run of the new swap spec spent four minutes per test
+waiting for a file input that does not exist. `curl` on the port answered
+`<title>Persona 500 | 1,022 AI Mentors & 1,070+ Tools</title>`.
+
+**A TIMEOUT IS THE LUCKY VERSION.** The dangerous version is a spec whose
+assertions are trivially true on a page that has none of this app's furniture —
+every `toHaveCount(0)`, every `not.toBeVisible()` — which is a whole suite
+reporting green about software it never loaded. The same class as
+SCAR-VERIFICATION-THEATRE, arriving through the door that decides WHICH APP the
+theatre is about.
+
+**THE FIX IS THE CLASS FIX, NOT A PER-SPEC GUARD.** `tests/globalSetup.ts` does
+one fetch before any browser starts and throws with the name of whatever
+answered; it is wired into **all 34** playwright configs, so it covers every
+spec at once instead of asking 39 files to remember. It also catches a
+`COLLAGE_BASE_URL` pointed at a Pages URL that 404s. Proven by firing it: the
+:5199 run now fails in seconds with `E2E TARGET IS NOT COLLAGE STUDIO … got:
+"Persona 500 | 1,022 AI Mentors & 1,070+ Tools"`.
+
+**AND THE PORT IS NOT THE LESSON.** Moving to :5202 would have reproduced this
+in a month. Asserting the identity of the thing on the other end of the URL is
+the lesson.
+
+### 2026-08-26 (C3675) — THE AFFORDANCE COVERED THE GESTURE IT DOCUMENTED
+
+The swap's pending pill is positioned on the centroid of the fragment it parked,
+and the code comment claimed "tapping the parked fragment again is CANCEL — the
+way out of a mis-tap". On WebKit and Mobile Chrome that tap lands on the PILL.
+Chromium desktop passed, because the fragment happened to be large enough for
+the element's centre to clear the pill — so a single-engine run would have
+shipped a documented gesture that does not exist on a phone.
+
+Not fixed by moving the pill (it belongs on the thing it is about) but by
+un-over-claiming: the guaranteed outs are the pill's own 44 px X and Escape,
+both now asserted, and the fragment tap is the convenience for a fragment with
+an edge showing. The TEST now finds a genuinely uncovered point and falls back
+to the X when there is none — so "the mode has a reachable exit" is measured,
+not assumed. **The armed puck has the same geometry and will meet this again.**
+
 
 ### 2026-08-23 (C3647) — A THRESHOLD MEASURED OFF A RANDOM DEAL
 `desk.spec` T2 asserted "the cool end must be cooler than the ungraded frame by
@@ -5456,4 +5554,58 @@ frontier. Today's ceiling is tomorrow's floor.
   URL-fragment-carrier shape spelled out — that class belongs to the live
   card-studio session whose claims commits dee4922/8c9303d prove alive; the 16
   cards `building` wishes were verified live and released NOTHING.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-26 · **[AXIS:COLLAGE] C3675 — THE SWAP: every composition control in
+  this app was GENERATIVE, and now one is not.** Wells read UNSCOPED first, both
+  dry (0 new, 0 `building`, no stale claim to release); breadth debt paid; the
+  stalest axis was COLLAGE at 11 lane-cycles, so the rung was chosen off the
+  ladder — **drag-reorder**, open since the timeline rung was written, and the
+  named "single biggest CapCut gap". **before → after:** after twenty rolls the
+  wall is right except for two fragments and there was no way to say *"that one
+  goes THERE"* — only PIN ("keep this one") and REMOVE ("lose this one"). Now the
+  armed puck has the missing third verb: park a fragment, tap its partner, they
+  trade. **A collage has no timeline to drag along, so the gesture is the one a
+  collage HAS**: the sources sit in fragments, so reordering them is trading two
+  fragments' pictures — the same move THE TURN made when it expressed transitions
+  between DEALS rather than between clips. **THE HALF THAT IS NOT OBVIOUS, and
+  it is most of the work:** `shuffledIndices` is DERIVED — an effect recomputes
+  it from nine inputs and `layoutItems` alone re-runs on a gutter nudge — so a
+  swap written only into the assignment has a shelf life measured in slider
+  touches, and the failure is not "it reverted": a pin already sitting on one of
+  the two cells drags its old picture back and leaves HALF a trade, which is a
+  DUPLICATE on screen. The only state a re-deal honours is `lockedCells`, so the
+  plan re-pins BOTH cells to what they now hold — disclosed by the badge that
+  already exists and by the notice, undoable in one tap. **PROOF:**
+  `swap.invariants` **676,701 assertions over 49,336 slot pairs / 0 failures**
+  (multiset preserved; exactly two positions move; order-independent; self-
+  inverse; every refusal inert AND said-or-silent by design; and I9, the REDEAL
+  invariant, which re-runs App.tsx's own lock step against the post-swap pins)
+  with **four mutants dead — the indices-only implementation fails 162,521**,
+  half-a-transposition 154,659, one-sided re-pin 110,494, pins-name-the-old-
+  picture 110,472. **AT THE ARTIFACT:** `swap.spec` **20/20 across chromium,
+  Mobile Chrome, Mobile Safari and webkit-desktop**, measured on PIXELS with
+  six solid tiles — the two colours change places with each other, every other
+  fragment is `<45` RGB from where it was, and T2 presses SHUFFLE (a full
+  re-deal of everything unpinned) and asserts the trade HOLDS while proving the
+  shuffle really re-dealt, so the assertion cannot be vacuous. 33/33 unit
+  sweeps, tsc clean, vite build clean; regressions intake-intent 10/10 (the
+  puck's own spec), undo 21/21, one-layout 4/4. **TWO SCARS, both from engines
+  rather than from reasoning.** (1) `--strictPort` protected the wrong run:
+  persona500's vite held **:5199**, `reuseExistingServer` attached to it, and
+  the suite would have gone green against a page with none of this app's
+  furniture — fixed as a CLASS in `tests/globalSetup.ts`, wired into **all 34**
+  playwright configs, and proven by firing it. (2) The pending pill sits on the
+  fragment it parked, so on WebKit and Mobile Chrome the "tap it again to
+  cancel" tap landed on the pill; chromium passed because the fragment was big
+  enough. Un-over-claimed rather than papered over — the X and Escape are the
+  guaranteed outs and are now asserted. **SWEPT AND NOT FIXED:**
+  composition.spec's crop-focus export test failed ONCE under 5-worker parallel
+  load (preview gap 3.7 vs a bar of 8) and passes 3/3 serially WITH this diff
+  present — pre-existing load sensitivity in that test, owed its own cycle, not
+  this one's blame. **BACKPORT rider FIRED** — the wrong-app hole was not
+  patched in the one spec that hit it but swept across every playwright config
+  in the tool (34 of 34), which is the same class the :5173 comment had already
+  half-seen. Storefront unchanged: a capability inside Collage Studio, no new
+  tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

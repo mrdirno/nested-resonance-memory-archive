@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -35,6 +35,7 @@ import { isVideoFile, formatTimecode, openClip, revokeFrames, type ExtractedFram
 import { isAudioFile, type SoundtrackSpec } from './lib/soundtrack';
 import { splitIntake, type IntakeIntent } from './lib/intake';
 import { planEviction, describeEviction } from './lib/evict';
+import { planSwap, describeSwap, canSwapFrom } from './lib/swap';
 import { detectBeat, beatSchedule, beatLabel, BEAT_ANALYSE_SEC, isSynced, type BeatGrid, type SyncId } from './lib/beat';
 import { turnHoldSec } from './lib/turn';
 import { paceRate } from './lib/pace';
@@ -326,6 +327,17 @@ export default function App() {
    */
   const [armedCell, setArmedCell] = useState<number | null>(null);
   /**
+   * THE SWAP'S SECOND TAP.
+   *
+   * A trade needs two fragments and a tap can only name one, so the Swap button
+   * parks the FIRST here and the next tap on the canvas names the second. Null
+   * means the canvas is doing what it has always done (arm, or pin outside full
+   * bleed); a number means every fragment is a destination and the next tap
+   * completes or cancels. Cleared by the same effect that clears the arming,
+   * for the same reason: a cell index outlives the partition it was taken from.
+   */
+  const [swapFrom, setSwapFrom] = useState<number | null>(null);
+  /**
    * UNDO — what is behind the composition on screen, and what is ahead of it.
    * Reported from the field: rolling the dice in full bleed to compare layouts
    * destroys the one before it, and there was no way back. See
@@ -346,7 +358,7 @@ export default function App() {
    * would make this feature worse than not having it: a Remove button sitting
    * over a picture other than the one it would delete.
    */
-  useEffect(() => { setArmedCell(null); }, [layoutItems, maximized, shuffledIndices]);
+  useEffect(() => { setArmedCell(null); setSwapFrom(null); }, [layoutItems, maximized, shuffledIndices]);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   /**
@@ -543,6 +555,12 @@ export default function App() {
   // Read through a ref: the key listener is bound once, on purpose.
   const canMaximizeRef = useRef(canMaximize);
   canMaximizeRef.current = canMaximize;
+  // The keydown handler is a mount-once effect, so Escape reads the pending
+  // trade the same way it reads everything else there: through a mirror.
+  const swapFromRef = useRef<number | null>(null);
+  swapFromRef.current = swapFrom;
+  /** A trade is pending. Full-bleed only, exactly like the arming it extends. */
+  const swapping = maximized && swapFrom !== null;
 
   /**
    * Put the caret on the control that REPLACED the one that just vanished.
@@ -625,7 +643,14 @@ export default function App() {
       // From here down the keys are plain characters, and ANY focused field
       // gets to keep them.
       if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
-      if (e.key === 'Escape') { setMaximized(false); return; }
+      if (e.key === 'Escape') {
+        // A pending trade is the innermost thing Escape can back out of, and
+        // backing out of it must NOT also drop full bleed — you cancel a
+        // mis-tap to try again, not to leave the room you are comparing in.
+        if (swapFromRef.current !== null) { setSwapFrom(null); return; }
+        setMaximized(false);
+        return;
+      }
       // Nothing to maximize with an empty pool — F used to hide the whole UI
       // and leave the drop target alone on a black page.
       if (e.key === 'f' || e.key === 'F') {
@@ -1949,6 +1974,72 @@ export default function App() {
       flashNotice(describeEviction(plan));
   };
 
+  /**
+   * THE SWAP — two fragments trade pictures.
+   *
+   * The ladder has named this since the timeline rung was opened
+   * ("drag-reorder … direct manipulation of the SOURCES rather than of the
+   * clock"). A collage has no timeline to drag along, so the gesture a collage
+   * has is a TRADE: the armed fragment's Swap button parks it, and the next tap
+   * on the canvas names its partner.
+   *
+   * WHAT MOVES is decided by `lib/swap.ts` and nothing else (675k assertions
+   * over 49k slot pairs, four mutants dead), and it is TWO things that have to
+   * agree:
+   *
+   *   1. the ASSIGNMENT — `shuffledIndices` is the one seam every render path
+   *      reads (`orderedAssets` → preview, Stage, video export, raster export,
+   *      SVG), so transposing two entries reaches all five and the partition
+   *      does not move: the fragment keeps its shape, focus, twist and lean,
+   *      because those are properties of the FRAGMENT, not of the photograph.
+   *
+   *   2. the PINS — and this is the half that is not obvious.
+   *      `shuffledIndices` is DERIVED: the assignment effect recomputes it from
+   *      nine inputs, and `layoutItems` alone re-runs on a gutter nudge. A swap
+   *      written only into the indices would be silently undone by the next
+   *      touch of any of them — and worse, a pin already sitting on one of the
+   *      two cells would drag its old picture back and leave HALF a trade,
+   *      which is a duplicate on screen. So both cells are re-pinned to what
+   *      they now hold, which is exactly what the assignment pass reads back.
+   *      The mutant that skips it fails 162,521 assertions in the sweep.
+   *
+   * IT IS RECOVERABLE through the rail's Undo, and that is not luck: a step
+   * records the composition code AND the pins (`liveSnapshot`), and the pins
+   * are where a swap lives. So Undo really does put the trade back — unlike an
+   * eviction, which the pool History has to carry instead.
+   */
+  const performSwap = (toCell: number) => {
+      const fromCell = swapFrom;
+      if (fromCell === null) return;
+      // Tapping the parked fragment again is CANCEL. It is NOT the only way out
+      // and must not be treated as one: the pending pill is positioned ON that
+      // fragment's centroid, so on a small fragment the pill covers the very
+      // area you would tap. Found by the WebKit and Mobile Chrome runs of
+      // swap.spec T4, where a centre-of-fragment tap landed on the pill instead.
+      // The guaranteed outs are the pill's own X (a 44 px target, right there)
+      // and Escape; this one is the convenience for a fragment big enough to
+      // have an edge showing.
+      if (toCell === fromCell) { setSwapFrom(null); return; }
+      if (recorderRef.current?.isRecording) { flashNotice('Stop the take before trading fragments.'); return; }
+
+      const plan = planSwap(images, shuffledIndices, Array.from(lockedCells.entries()), fromCell, toCell);
+      if (!plan.ok) {
+          // A refusal that a hand can cause is SAID; a stale cell index is
+          // silence, because the partition it named has already been replaced.
+          const why = describeSwap(plan);
+          if (why) flashNotice(why);
+          setSwapFrom(null);
+          return;
+      }
+
+      // One step for the pair, recorded before either half lands.
+      pushHistory();
+      setShuffledIndices(plan.indices);
+      setLockedCells(new Map(plan.locks));
+      setSwapFrom(null);
+      flashNotice(describeSwap(plan));
+  };
+
   /** Drop a clip back to stills: frees its decoder and its file, keeps its frames. */
   const removeClip = (id: string) => {
       setClips(prev => {
@@ -2786,15 +2877,31 @@ export default function App() {
                    <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}>
                        {layoutItems.map((item, i) => {
                            const isLocked = lockedCells.has(i); const isArmed = maximized && armedCell === i; const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+                           // A PENDING TRADE RE-POINTS EVERY FRAGMENT. While one is parked,
+                           // the canvas is not arming anything — every other fragment is a
+                           // destination and the parked one is the way out. That is why the
+                           // outline is drawn at full opacity rather than on hover: the
+                           // gesture is finished with a thumb, and a phone has no hover, so
+                           // "which of these can I tap" has to be VISIBLE.
+                           const isSwapSource = swapping && swapFrom === i;
+                           const isSwapTarget = swapping && swapFrom !== i;
                            return (
                                // OUTSIDE full bleed the tap is the shipped gesture, byte for
                                // byte: it pins. INSIDE it, a fragment has two things that can
                                // be done to it and one tap cannot mean both — so the tap ARMS
                                // and the puck below says which. Tapping the armed one again
-                               // puts it away.
-                               <g key={i} onClick={() => (maximized ? setArmedCell(prev => (prev === i ? null : i)) : toggleLock(i))} className="group cursor-pointer">
+                               // puts it away. And once Swap has parked a fragment, the tap
+                               // means the third thing: trade with this one.
+                               <g key={i} onClick={() => (swapping ? performSwap(i) : maximized ? setArmedCell(prev => (prev === i ? null : i)) : toggleLock(i))} className="group cursor-pointer">
                                    <path d={d} fill="transparent" stroke="transparent" />
-                                   <path d={d} fill="none" stroke={isArmed ? '#34d399' : isLocked ? '#facc15' : 'white'} strokeWidth={isArmed ? 5 : isLocked ? 4 : 2} className={`transition-all ${isArmed || isLocked ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`} />
+                                   <path
+                                     d={d}
+                                     fill="none"
+                                     stroke={isSwapSource || isSwapTarget ? '#38bdf8' : isArmed ? '#34d399' : isLocked ? '#facc15' : 'white'}
+                                     strokeWidth={isSwapSource ? 6 : isSwapTarget ? 3 : isArmed ? 5 : isLocked ? 4 : 2}
+                                     strokeDasharray={isSwapTarget ? '14 10' : undefined}
+                                     className={`transition-all ${isSwapSource ? 'opacity-100' : isSwapTarget ? 'opacity-70' : isArmed || isLocked ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`}
+                                   />
                                    {isLocked && (() => { const c = getCentroid(item.path); return ( <foreignObject x={c.x - 12} y={c.y - 12} width="24" height="24"><div className="bg-black/50 p-1 rounded-full backdrop-blur flex items-center justify-center w-full h-full"><Lock size={12} className="text-yellow-400" /></div></foreignObject> ); })()}
                                </g>
                            );
@@ -2822,12 +2929,46 @@ export default function App() {
                        // Kept whole against the edges: a puck half off the artwork is
                        // clipped by the band, and the button you cannot reach is the
                        // one over the fragment at the corner.
-                       const PUCK = 108;
+                       // WHETHER THERE IS ANYBODY TO TRADE WITH is asked of the
+                       // module that performs the trade (`canSwapFrom` calls
+                       // `planSwap`), never re-derived here — a rule spelled a
+                       // second time at the call site drifts from the rule the
+                       // tests measure, which is the bug this repo has written
+                       // down four times now.
+                       const tradeable = canSwapFrom(images, shuffledIndices, idx);
+                       // Kept whole against the edges: a puck half off the artwork is
+                       // clipped by the band, and the button you cannot reach is the
+                       // one over the fragment at the corner. The width is MEASURED,
+                       // not guessed — 44 px per verb plus the gaps and the padding —
+                       // and it has to grow with the third one or the clamp lets a
+                       // corner puck hang off the art.
+                       const PUCK = swapping ? 210 : tradeable ? 152 : 108;
                        const clampPx = (v: number, size: number) => (size > PUCK + 12 ? Math.min(Math.max(v, PUCK / 2 + 6), size - PUCK / 2 - 6) : size / 2);
                        const left = artFit ? `${clampPx((c.x / PREVIEW_W) * artFit.w, artFit.w)}px` : `${(c.x / PREVIEW_W) * 100}%`;
                        const top = artFit ? `${clampPx((c.y / H) * artFit.h, artFit.h)}px` : `${(c.y / H) * 100}%`;
                        const isLocked = lockedCells.has(idx);
                        const what = plan.isClip ? (plan.label || 'this clip') : (plan.label || 'this picture');
+                       // A PENDING TRADE TAKES THE PUCK OVER. It is the same
+                       // element in the same place — the fragment you parked —
+                       // so the thing you tapped stays the thing being talked
+                       // about, and there is exactly one way out of the mode
+                       // that does not also cost you full bleed.
+                       if (swapping) return (
+                           <div
+                               data-testid="cell-actions"
+                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-2xl border border-sky-400/40 bg-black/85 backdrop-blur pl-3 pr-1.5 py-1.5 shadow-2xl"
+                               style={{ left, top }}
+                           >
+                               <span data-testid="swap-pending" className="text-[13px] leading-tight text-sky-300 font-medium whitespace-nowrap">Tap another fragment</span>
+                               <button
+                                   data-testid="swap-cancel"
+                                   onClick={() => setSwapFrom(null)}
+                                   title="Cancel the trade"
+                                   aria-label="Cancel the trade"
+                                   className="w-11 h-11 shrink-0 rounded-xl text-gray-200 hover:bg-white/10 flex items-center justify-center active:scale-95 transition"
+                               ><X size={18} /></button>
+                           </div>
+                       );
                        return (
                            <div
                                data-testid="cell-actions"
@@ -2841,6 +2982,15 @@ export default function App() {
                                    aria-label={isLocked ? 'Unpin this fragment' : 'Pin this fragment'}
                                    className={`w-11 h-11 rounded-xl flex items-center justify-center active:scale-95 transition ${isLocked ? 'text-yellow-400 bg-yellow-400/15 hover:bg-yellow-400/25' : 'text-gray-200 hover:bg-white/10'}`}
                                >{isLocked ? <Unlock size={18} /> : <Lock size={18} />}</button>
+                               {tradeable && (
+                                 <button
+                                     data-testid="cell-swap"
+                                     onClick={() => setSwapFrom(idx)}
+                                     title={`Trade ${what} with another fragment`}
+                                     aria-label={`Trade ${what} with another fragment`}
+                                     className="w-11 h-11 rounded-xl text-sky-300 hover:bg-sky-400/20 flex items-center justify-center active:scale-95 transition"
+                                 ><ArrowLeftRight size={18} /></button>
+                               )}
                                <button
                                    data-testid="cell-remove"
                                    onClick={() => evictSource(idx)}

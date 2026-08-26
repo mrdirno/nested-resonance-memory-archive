@@ -14,6 +14,10 @@ import { defineConfig, devices } from '@playwright/test';
  * about.
  */
 export default defineConfig({
+  // FAILS THE RUN if the URL is not this app. `reuseExistingServer` below
+  // attaches to whatever is already listening, so without this a squatter on
+  // the port takes the WHOLE suite green against a stranger. See the file.
+  globalSetup: './tests/globalSetup.ts',
   testDir: './tests/e2e',
   testMatch: /soundtrack\.spec\.ts$/,
   timeout: 420_000,
