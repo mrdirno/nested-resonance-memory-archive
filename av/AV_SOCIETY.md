@@ -924,7 +924,7 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      token that matches nothing in the library as noise the user added, which is right for
      *"template"* and *"form"* and **silently wrong for a content word**. *"AHJ nuisance
      letter"* on the AV page keeps only *letter*, answers that, and still says exact — and
-     that mechanism is **most of the 2,006 that remain** (1,925 of them are multi-word
+     that mechanism is **most of the ~2,027 that remain** (1,925 of them are multi-word
      queries). **THE SHAPE IS ALREADY BUILT AND SHIPPED, one floor down:** `commons/commons.js`
      renders *Ignored "guard" — nothing here uses that word* off the `noise` array the engine
      has always returned. `shared/docspec.js` and `shared/pickfilter.js` ignore it. The rung is
@@ -6275,4 +6275,7 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   content word — **1,707 of the remaining ~2,027 (85%) carry dropped words**, and
   `commons/commons.js` already ships the answer (*Ignored "guard" — nothing here uses that
   word*) while the other 26 surfaces throw `noise` away.
+  **RE-RUN AGAINST PRODUCTION AFTER THE DEPLOY, not only on disk: find-honesty 6,492/0 and
+  docs-pool 86/0 on the live site, and the whole 10,738-search sweep re-driven through the
+  DEPLOYED pages returns 4,139 / 2,027 — the same two numbers the working tree gave.**
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
