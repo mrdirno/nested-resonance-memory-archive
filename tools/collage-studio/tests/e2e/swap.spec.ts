@@ -357,6 +357,44 @@ test.describe('THE SWAP — direct manipulation of the sources', () => {
     ).toHaveCount(0);
   });
 
+  test('T6 — UNDO really brings the pre-swap picture back, and REDO puts the trade on again', async ({ page }) => {
+    test.setTimeout(180_000);
+    await boot(page);
+    await enterFullBleed(page);
+
+    const before = await allColours(page);
+    const [a, b] = await pickPair(before);
+
+    const puck = await armCell(page, a);
+    await puck.getByTestId('cell-swap').click();
+    await cells(page).nth(b).click({ force: true });
+    await page.waitForTimeout(1200);
+    const traded = await allColours(page);
+    expect(dist(traded[a], before[b]), 'the trade must have landed first').toBeLessThan(45);
+
+    // A SWAP PUSHES A HISTORY STEP, so Undo has to actually reach it. It very
+    // nearly did not: a step restores the composition CODE and the PINS, and a
+    // swap changes neither of the code's fields — so every setter in
+    // `applyCompositionCode` writes back an identical value, React bails out of
+    // the re-render, and the assignment effect never recomputes. The pins would
+    // have reverted while the PICTURES stayed traded: an Undo that visibly does
+    // nothing, which is worse than no Undo at all because it looks like one.
+    await page.getByRole('button', { name: 'Undo the last composition change' }).click();
+    await page.waitForTimeout(1500);
+    const undone = await allColours(page);
+    expect(dist(undone[a], before[a]), `Undo must put fragment ${a}'s original picture back`).toBeLessThan(45);
+    expect(dist(undone[b], before[b]), `Undo must put fragment ${b}'s original picture back`).toBeLessThan(45);
+    for (let i = 0; i < before.length; i++) {
+      expect(dist(undone[i], before[i]), `Undo must restore the WHOLE deal (fragment ${i})`).toBeLessThan(45);
+    }
+
+    await page.getByRole('button', { name: 'Redo the composition change' }).click();
+    await page.waitForTimeout(1500);
+    const redone = await allColours(page);
+    expect(dist(redone[a], traded[a]), `Redo must put the trade back on at ${a}`).toBeLessThan(45);
+    expect(dist(redone[b], traded[b]), `Redo must put the trade back on at ${b}`).toBeLessThan(45);
+  });
+
   test('T5 — MOBILE-WATERTIGHT: the puck fits and stays tappable at every phone width, in both states', async ({ page }) => {
     test.setTimeout(240_000);
     for (const width of [320, 360, 390, 430]) {

@@ -346,6 +346,33 @@ export default function App() {
   const [history, setHistory] = useState<CompositionHistory>(emptyHistory);
   const [shuffledIndices, setShuffledIndices] = useState<number[]>([]); 
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
+  /**
+   * FORCE THE ASSIGNMENT TO RE-DERIVE ITSELF FROM THE PINS.
+   *
+   * Not a second shuffle: `shuffleTrigger` feeds the RNG and re-deals, this
+   * does not feed anything. It exists because the assignment is DERIVED from
+   * (pool, count, layout, aspect, seed, shuffle, arrangement) + the pins, and
+   * the PINS are not in that dependency list — deliberately, because toggling
+   * a pin is a preference about FUTURE rolls and must not disturb the deal on
+   * screen.
+   *
+   * That is exactly right for a pin and exactly wrong for an UNDO. A step
+   * restores the composition code AND the pins; a swap changes neither of the
+   * code's fields, so every setter in `applyCompositionCode` writes back an
+   * identical value, React bails out, the effect never runs — and Undo reverted
+   * the pins while leaving the PICTURES traded. Measured before it was fixed
+   * (swap.spec T6): 285 RGB away from the picture Undo claimed to restore. An
+   * Undo that visibly does nothing is worse than no Undo, because it looks like
+   * one.
+   *
+   * SAFE TO FIRE ON EVERY RESTORE, and that is why it is a nonce rather than a
+   * special case for swaps: the bag is seed-deterministic, so re-deriving with
+   * the same inputs reproduces the same deal exactly, and re-deriving with
+   * DIFFERENT pins reproduces the deal those pins imply — which is the thing
+   * being restored. The effect's own comment already prices it: "a recompute
+   * that changes nothing costs one O(n log n) pass on n <= ~300".
+   */
+  const [assignNonce, setAssignNonce] = useState(0);
 
   const [layoutItems, setLayoutItems] = useState<LayoutItem[]>([]);
   const [isLayoutComputing, setIsLayoutComputing] = useState(false);
@@ -849,7 +876,9 @@ export default function App() {
     // fragments' POSITIONS and AREAS, so the same bag lands differently the
     // moment the construction moves. The bag itself is seed-deterministic, so a
     // recompute that changes nothing costs one O(n log n) pass on n <= ~300.
-  }, [images, effectiveCount, layoutItems, aspect, seed, shuffleTrigger, arrangement]);
+    // `assignNonce` re-derives the assignment from the pins WITHOUT re-dealing —
+    // see its declaration. It is what makes Undo reach a swap.
+  }, [images, effectiveCount, layoutItems, aspect, seed, shuffleTrigger, arrangement, assignNonce]);
 
   /** The pool in draw order. Memoised because the live Stage rebuilds its whole
    *  draw list whenever this identity changes — a fresh array every render would
@@ -1297,6 +1326,11 @@ export default function App() {
     applyCompositionCode(s.code, false);
     setLockedCells(new Map(s.locks));
     setLastRecipe(s.recipe);
+    // The pins are half of what decides the deal and they are NOT a dependency
+    // of the assignment effect (a pin is a preference about future rolls). So a
+    // restore has to say "re-derive" out loud, or an undo whose code fields are
+    // unchanged — every swap — reverts the pins and leaves the pictures put.
+    setAssignNonce((n) => n + 1);
   };
 
   const canUndo = histCanUndo(history);
@@ -2003,10 +2037,15 @@ export default function App() {
    *      they now hold, which is exactly what the assignment pass reads back.
    *      The mutant that skips it fails 162,521 assertions in the sweep.
    *
-   * IT IS RECOVERABLE through the rail's Undo, and that is not luck: a step
-   * records the composition code AND the pins (`liveSnapshot`), and the pins
-   * are where a swap lives. So Undo really does put the trade back — unlike an
-   * eviction, which the pool History has to carry instead.
+   * IT IS RECOVERABLE through the rail's Undo — but that took a second fix, and
+   * the first version of this comment asserted it wrongly. A step records the
+   * composition code AND the pins, and the pins ARE where a swap lives; what
+   * that misses is that `applyCompositionCode` writes back identical values
+   * when only a swap has happened, React bails out, and the assignment effect
+   * never re-derives. The pins reverted and the pictures stayed traded — 285
+   * RGB from the picture Undo claimed to restore, measured by writing
+   * swap.spec T6 as a failing test first. `assignNonce` closes it; see its
+   * declaration. Unlike an eviction, which the pool History has to carry.
    */
   const performSwap = (toCell: number) => {
       const fromCell = swapFrom;

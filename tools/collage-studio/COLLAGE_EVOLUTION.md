@@ -650,9 +650,11 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       fragments is n! of information and a code is a fixed-length recipe. It
       does travel in the PROJECT file and in the SVG's JSON_MANIFEST (both carry
       the whole `AppState`, pins included), and — unlike an eviction — it is
-      recoverable through the rail's Undo, because a step records the code AND
-      the pins and the pins are where a swap lives. Undisclosed in the strip,
-      which is the honest gap, exactly as it is for pins.
+      recoverable through the rail's Undo — though only after `assignNonce`, and
+      the first version of this entry asserted it wrongly (see the scar: the
+      pins reverted and the pictures stayed traded, 285 RGB from the picture
+      Undo claimed to restore). Undisclosed in the strip, which is the honest
+      gap, exactly as it is for pins.
 - [ ] **THE PENDING PILL SITS ON THE FRAGMENT IT PARKED, so on a small fragment
       it covers the tap that would cancel.** Found by the WebKit and Mobile
       Chrome runs of swap.spec T4 — a centre-of-fragment tap landed on the pill.
@@ -1408,6 +1410,37 @@ spec at once instead of asking 39 files to remember. It also catches a
 **AND THE PORT IS NOT THE LESSON.** Moving to :5202 would have reproduced this
 in a month. Asserting the identity of the thing on the other end of the URL is
 the lesson.
+
+### 2026-08-26 (C3675) — AN UNDO THAT VISIBLY DID NOTHING, AND THE CLAIM WAS ALREADY WRITTEN DOWN
+
+The swap's first draft pushed a history step and the code comment said "IT IS
+RECOVERABLE through the rail's Undo, and that is not luck: a step records the
+composition code AND the pins, and the pins are where a swap lives." Every
+clause of that is true and the conclusion was false.
+
+`restoreSnapshot` calls `applyCompositionCode`, which writes `setCount`,
+`setSeed`, `setArrangement`, `setShuffleTrigger` — and a swap changes NONE of
+those. Identical values, so React bails out of the re-render, so the assignment
+effect never runs. The pins reverted; the PICTURES stayed traded. Measured
+before the fix, by writing the assertion first: **285 RGB** away from the
+picture Undo claimed to restore (swap.spec T6).
+
+**THE CLASS, and it is bigger than Undo.** The pin table is half of what decides
+the deal and is deliberately NOT a dependency of the assignment effect, because
+toggling a pin must not disturb the deal on screen. Any code path that changes
+pins and expects the picture to follow has this bug waiting for it.
+
+The fix is one nonce (`assignNonce`) bumped by `restoreSnapshot` and added to
+the effect's deps — NOT a special case for swaps, because it is safe to fire on
+every restore: the bag is seed-deterministic, so re-deriving with the same
+inputs reproduces the same deal exactly, and re-deriving with different pins
+reproduces the deal those pins imply, which is the thing being restored.
+undo.spec 21/21 unchanged, and source-count 7/7, dice-count 6/6, one-layout 4/4,
+roll-code 20/20, frame-hold 5/5 confirm the extra dep re-deals nothing.
+
+**THE LESSON IS THE ORDER.** The claim was in the commit, in the code and in
+the book before it was measured. Writing T6 as a FAILING test first is what
+turned a confident sentence into a defect.
 
 ### 2026-08-26 (C3675) — THE AFFORDANCE COVERED THE GESTURE IT DOCUMENTED
 
@@ -5583,15 +5616,16 @@ frontier. Today's ceiling is tomorrow's floor.
   invariant, which re-runs App.tsx's own lock step against the post-swap pins)
   with **four mutants dead — the indices-only implementation fails 162,521**,
   half-a-transposition 154,659, one-sided re-pin 110,494, pins-name-the-old-
-  picture 110,472. **AT THE ARTIFACT:** `swap.spec` **20/20 across chromium,
+  picture 110,472. **AT THE ARTIFACT:** `swap.spec` **24/24 across chromium,
   Mobile Chrome, Mobile Safari and webkit-desktop**, measured on PIXELS with
   six solid tiles — the two colours change places with each other, every other
   fragment is `<45` RGB from where it was, and T2 presses SHUFFLE (a full
   re-deal of everything unpinned) and asserts the trade HOLDS while proving the
-  shuffle really re-dealt, so the assertion cannot be vacuous. 33/33 unit
+  shuffle really re-dealt, so the assertion cannot be vacuous; T6 does the
+  same for Undo and Redo. 33/33 unit
   sweeps, tsc clean, vite build clean; regressions intake-intent 10/10 (the
-  puck's own spec), undo 21/21, one-layout 4/4. **TWO SCARS, both from engines
-  rather than from reasoning.** (1) `--strictPort` protected the wrong run:
+  puck's own spec), undo 21/21, one-layout 4/4. **THREE SCARS, none from reasoning
+  — two from engines, one from writing the assertion first.** (1) `--strictPort` protected the wrong run:
   persona500's vite held **:5199**, `reuseExistingServer` attached to it, and
   the suite would have gone green against a page with none of this app's
   furniture — fixed as a CLASS in `tests/globalSetup.ts`, wired into **all 34**
@@ -5599,7 +5633,17 @@ frontier. Today's ceiling is tomorrow's floor.
   fragment it parked, so on WebKit and Mobile Chrome the "tap it again to
   cancel" tap landed on the pill; chromium passed because the fragment was big
   enough. Un-over-claimed rather than papered over — the X and Escape are the
-  guaranteed outs and are now asserted. **SWEPT AND NOT FIXED:**
+  guaranteed outs and are now asserted. **(3) AND A THIRD, THE WORST, CAUGHT BY
+  WRITING THE ASSERTION BEFORE BELIEVING THE SENTENCE:** the commit, the code
+  comment and this book all said the swap was recoverable through Undo "and that
+  is not luck". `restoreSnapshot` writes back identical seed/count/arrangement/
+  shuffle after a swap, React bails out, the assignment never re-derives — Undo
+  reverted the PINS and left the PICTURES traded, **285 RGB** from what it
+  claimed to restore. Closed by `assignNonce`, a nonce on the assignment effect
+  bumped by every restore (safe on every path because the bag is seed-
+  deterministic), with swap.spec T6 as the guard; undo 21/21 unchanged, and
+  source-count 7/7, dice-count 6/6, one-layout 4/4, roll-code 20/20, frame-hold
+  5/5 confirm the extra dep re-deals nothing. **SWEPT AND NOT FIXED:**
   composition.spec's crop-focus export test failed ONCE under 5-worker parallel
   load (preview gap 3.7 vs a bar of 8) and passes 3/3 serially WITH this diff
   present — pre-existing load sensitivity in that test, owed its own cycle, not
