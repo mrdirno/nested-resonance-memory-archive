@@ -398,7 +398,15 @@ window.Commons = (function () {
       if (r.mode === "none") {
         note = "Nothing on this page goes by that. The closest words here:";
       } else if (r.mode === "relaxed") {
-        note = "Nothing matched all of that. Closest on the words that did:";
+        /* "relaxed" USED to mean only that some word of his did not land, so this
+           line said so. Since 2026-08-25 it also covers a lead the engine had to
+           REACH for — a typo it corrected, letters it found inside another word,
+           a hit that is only in the prose — where every word did land and
+           "nothing matched all of that" is simply false. One sentence has to be
+           true of both, so it says what is true of both: nothing here is called
+           this. The dropped words, when there are any, are named on the next line
+           by their own sentence rather than smuggled into this one. */
+        note = "Nothing here is called exactly that. Closest on what you typed:";
       } else {
         note = "Every trade searched, not just the one you picked — you heard it off somebody else.";
       }

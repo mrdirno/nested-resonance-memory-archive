@@ -915,10 +915,10 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      carries a STRENGTH beside its score — strong only when the token is a word of what the
      item is CALLED and he typed it whole (a prefix counts on the last token, the word under
      his cursor, and nowhere else) — and `mode` is a claim about the row he sees first.
-     **3,838 → 2,006 unhedged wrong, his own document first 3,986 → 4,160, zero regressions,
+     **3,838 → 2,027 unhedged wrong, his own document first 3,986 → 4,139, zero regressions,
      zero correct answers hedged.** The `about: true` field flag is the caller's own
      declaration that a field DESCRIBES rather than NAMES; rule 4 also stopped ignoring `aka`,
-     which is where the 174 extra right answers came from. Gate `find-honesty.mjs`, 5,093
+     which is where the 153 extra right answers came from. Gate `find-honesty.mjs`, 6,492
      checks, every probe derived from the surface's own strings.
    - **THE NAMED NEXT RUNG, and it is the other half of the same honesty:** rule 1 drops a
      token that matches nothing in the library as noise the user added, which is right for
@@ -932,6 +932,8 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      document IS what he asked for and the extra word was chrome; the honest move is to name
      what was dropped and let him judge it. **THE FALSIFIER WAS RUN BEFORE THE RUNG WAS
      WRITTEN DOWN, not after: 1,707 of the 2,006 — 85.1% — carry a non-empty `noise`.**
+     (Measured on the draft before rule 4 was re-laddered; the class did not move and the
+     total settled at 2,027.)
      *"answering the fire marshal"* keeps only *the*, drops *answering, fire, marshal*, and
      returns the Service Call Write-Up as an exact match. Measured through the engine's own
      result object (`DocSpec.findIx()` is exported for exactly this, so a gate never rebuilds
@@ -1644,6 +1646,32 @@ produced the number.
      re-verify the file after every one, and re-take the backup the moment the working file
      changes.** Cheaper still — and what should have happened — swap the engine with `git
      stash`/`git checkout` so the "backup" is the working tree itself and cannot go stale.
+  5. **AN HONEST LABEL OVER THE WRONG ROW IS THE SAME FAILURE IN A BETTER SUIT, AND THE
+     GATE COULD NOT SEE IT.** The first draft of the fix gave "he typed a whole ALIAS" the
+     same rule-4 bonus as "he typed the whole TITLE" — 1.6 — which put a nickname ABOVE a
+     title that says the word. On the AV page `damage` started answering with the **Incident
+     / Near-Miss Report** while the Damage / Pre-Existing Condition Note sat underneath it,
+     **labelled exact**, which is the precise failure the cycle was opened to kill. Nine
+     documents lost their own word; on the commons, `snake` — the word `commons.js` names as
+     the entire thesis of its hand-off — flipped off the Audio snake. **5,093 gate checks were
+     green over it, and so was a 10,738-query sweep**, because both measure whether the LABEL
+     is entitled and the corpus's own notion of "right" was already alias-shaped. Every probe
+     class A-F types a WHOLE STRING; a bonus inversion only shows when a SINGLE WORD is
+     claimed by a title on one row and a nickname on another. Found by an adversarial read
+     that was asked to break the diff rather than confirm it, and the second defect it found
+     was underneath the first: the title rung tested a RAW SUBSTRING, so `co` matched inside
+     "condition" and the Damage Note outranked the Change Write-Up whose nickname is literally
+     CO. **The fix is not a tuned constant** — the first attempt was, and the window between
+     the two failures was 1.3 to 1.5 wide, which is a fragility, not a fix. The title test now
+     matches at WORD BOUNDARIES, which is what a phrase bonus always meant, and the ladder is
+     ordered whole-title > the title says it > a nickname says it > spaces-out. **New probe
+     class G, 1,000+ checks: a word in THIS item's title and in no other item's title leads
+     THIS item, whatever else answers to it — verified red on that exact draft before it was
+     trusted.** The same read also found a `ReferenceError` waiting in `shared/pickfilter.js`
+     (`on.length`, `on` declared nowhere) that no page has triggered only because no page
+     passes `onChange` yet; fixed in the same commit. **The lesson is about the SHAPE of a
+     gate, not about a constant: a suite whose every probe is a whole authored string cannot
+     see a ranking rule, and "measured, gated and green" was true of all of it.**
 
 
 ### 2026-08-25 (C3658) — DATA WITH ONLY A MACHINE FOR A READER ROTS, AND NOTHING LOOKS AT IT
@@ -6209,13 +6237,13 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   finished, or found the word only in a field the caller declared `about: true` — prose that
   says what a thing is FOR and names nothing. `mode` is now a claim about **the row he sees
   first**, and every caller already rendered the honest label, so the fix lands on all 29
-  surfaces with **no page change**. **UNHEDGED WRONG 3,838 → 2,006. His own document first
-  3,986 → 4,160. Zero answers right-before-and-wrong-after, zero correct answers hedged.**
+  surfaces with **no page change**. **UNHEDGED WRONG 3,838 → 2,027. His own document first
+  3,986 → 4,139. Zero answers right-before-and-wrong-after, zero correct answers hedged.**
   **THE ONE EXEMPTION IS THE WORD UNDER THE CURSOR:** a prefix counts as strong on the LAST
   token only, because half-typed is not the same as wrong. Measured both ways — strict
   everywhere scores better on complete queries (1,907) and turns **half of every keystroke into
   a "Closest to"** (113 of 214 four-character queries hedged); the exemption costs 99 of 10,738
-  and returns mid-typing to silence at **214 of 214**. **THE +174 CAME FROM SOMEWHERE ELSE:**
+  and returns mid-typing to silence at **214 of 214**. **THE +153 CAME FROM SOMEWHERE ELSE, AND COLLECTING IT COST TWO DEFECTS OF ITS OWN:**
   rule 4's phrase bonus had only ever looked at the PRIMARY field, so *"The Turnover Write-Up"*
   — a name an author wrote, in `aka` — lost to the Service Call Write-Up on the AV page. It now
   counts wherever a name is written, tested against **each alias on its own** and never against
@@ -6227,10 +6255,12 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the tree was swept in the same commit — `shared/docspec.js` (`why`), `commons/commons.js`
   (the object clause and the why line, on all three commons surfaces) declared `about`;
   `shared/pickfilter.js` has one field which IS the row's identity and correctly declares
-  nothing. **GATES: `tools/toolkit-gates/find-honesty.mjs` is new — 17 surfaces, 5,093 checks,
+  nothing. **GATES: `tools/toolkit-gates/find-honesty.mjs` is new — 17 surfaces, 6,492 checks,
   0 failing, every probe DERIVED from the surface's own strings so a row added next month is
   tested the day it lands (A verbatim name · B authored alias · C a query of words that name
-  nothing on the surface · D one typo · E the spaces taken out · F the word under the cursor).
+  nothing on the surface · D one typo · E the spaces taken out · F the word under the cursor · G a word in THIS title and no other
+  title LEADS this row, whatever answers to it as a nickname — added after an adversarial
+  read found a lead flip A-F structurally cannot see, and verified red on that draft).
   PROVED RED BY NEGATIVE CONTROL against the engine as it shipped: `C 0/667 · D 0/593 ·
   E 0/668` — every prose, typo and joined-name query presented as exact — plus `B 1,852/1,933`,
   which is rule 4's blind spot showing up as 81 aliases leading with the wrong row. `A 693/693`
@@ -6242,7 +6272,7 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   320/360/390/430: **24 states, 0 overflowing**. Storefront unchanged — no new tool, no new
   trade. **NAMED NEXT RUNG, with its falsifier already run:** rule 1 drops a token that matches
   nothing as noise the user added, which is right for *"template"* and silently wrong for a
-  content word — **1,707 of the remaining 2,006 (85.1%) carry dropped words**, and
+  content word — **1,707 of the remaining ~2,027 (85%) carry dropped words**, and
   `commons/commons.js` already ships the answer (*Ignored "guard" — nothing here uses that
   word*) while the other 26 surfaces throw `noise` away.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html

@@ -105,15 +105,24 @@
  *    those 10,738 searches and returns mid-typing to silence: 214 of 214
  *    four-character queries exact, against 113 of 214 without it.
  *
- *    WHAT IT DID: unhedged wrong 3,838 → 2,006, and the document he was actually
- *    looking for came up first 3,986 → 4,160 — with ZERO answers that were right
+ *    WHAT IT DID: unhedged wrong 3,838 → 2,027, and the document he was actually
+ *    looking for came up first 3,986 → 4,139 — with ZERO answers that were right
  *    before and wrong after, and ZERO correct answers hedged. The label was the
- *    target; the extra 174 are rule 4 finally reaching `aka` (below).
+ *    target; the extra 153 are rule 4, which had two bugs of its own and gave
+ *    them both up under an adversarial read (see the ladder in the code).
  *    A NAME OR AN ALIAS TYPED AS ITS AUTHOR WROTE IT IS UNTOUCHED: 214/214
  *    verbatim titles and 1,461/1,461 aliases still go out as exact. The five
  *    perturbations this engine was built for still LEAD — plural 213/214, one
  *    typo 205/205, joined 214/214 — and now go out saying "Closest to", which is
  *    what they always were.
+ *
+ *    AND THE LABEL IS NOT THE ONLY THING THAT HAS TO BE TRUE. A word in an item's
+ *    TITLE outranks the same word used as somebody's nickname for a different
+ *    item — "damage" is the Damage Note even though the Incident Report answers
+ *    to it, "safety" is the Toolbox Talk / Safety Meeting Note even though the
+ *    Incident Report answers to that too. That is rule 4's ladder below, and it
+ *    is asserted per surface rather than reasoned about: an honest label over the
+ *    wrong row is a better-dressed version of the same failure.
  *
  *    WHAT WAS TRIED AND CUT, because a theory that measures at zero is a finding.
  *    Strength looked like it should also decide WHAT IS SHOWN — tier by strong
@@ -290,8 +299,21 @@
       }
       if (!cover) continue;
       var p = rows[i].f[ix.primary];
-      if (p.n.indexOf(query) !== -1) sc += pw * (p.n === query ? 1.6 : 1.1);        // rule 4
-      else if (named(rows[i], query, fields, ix.primary)) sc += pw * 1.6;           // rule 4, any name
+      /* RULE 4'S LADDER, AND EVERY RUNG OF IT IS LOAD-BEARING. He typed the whole
+         title > the title SAYS that word > a nickname says it > the spaces-out
+         form. Two things about this were wrong and each one cost real answers:
+           · the nickname rung was written at 1.6, the same as the whole title,
+             which put it ABOVE a title that says the word — "damage" on the AV
+             page answered with the Incident / Near-Miss Report while the Damage
+             Note sat underneath, labelled exact.
+           · the title rung tested `indexOf`, a RAW SUBSTRING, so "co" matched
+             inside "condition" and the Damage Note outranked the Change Write-Up
+             whose nickname is literally CO. A phrase bonus that fires on two
+             letters buried in a longer word is not evidence about a phrase, so
+             the test is now at word boundaries, which is what it always meant. */
+      if (p.n === query) sc += pw * 1.6;                                            // rule 4
+      else if ((" " + p.n + " ").indexOf(" " + query + " ") !== -1) sc += pw * 1.4;
+      else if (named(rows[i], query, fields, ix.primary)) sc += pw * 1.2;           // rule 4, any name
       else if (qj.length >= 4 && p.j.indexOf(qj) !== -1) sc += pw * 0.9;
       scored.push({ it: rows[i].it, sc: sc, cover: cover, strong: strong, i: i });
     }

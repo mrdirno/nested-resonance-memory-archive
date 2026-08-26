@@ -10,6 +10,8 @@
  * boxes: 3,838 of 10,738 searches handed back a document the query did not name
  * with no hedge on it. A plumber's "gas shut off notice" typed on the AV page
  * came back as the Room Sign-Off (Commissioning Write-Up), as an exact match.
+ * Fixed, that is 2,027 — and the fix's own first draft broke the ROW while it
+ * was correcting the LABEL, which is why class G below exists.
  *
  * WHAT THIS GATE ASSERTS, and every probe is DERIVED FROM THE SURFACE'S OWN DATA
  * so a row added next month is tested the day it lands:
@@ -28,10 +30,16 @@
  *   F  TYPING     a name truncated mid-word is the word under his cursor, not a
  *                 wrong word — it LEADS and is NOT hedged. The one exemption,
  *                 and the reason mid-typing is not a wall of "Closest to".
+ *   G  TITLE       a word in THIS item's title and in no other item's title leads
+ *                  THIS item, whatever else carries it as a nickname. Rule 4's
+ *                  phrase bonuses are the only thing holding that up, and A and B
+ *                  are both blind to their ordering — they type whole strings.
  *
  * C, D and E are RED against the engine as it shipped before this gate existed;
- * A, B and F are green on both and are here to catch the overcorrection.
- * Verified red by restoring the previous shared/find.js — not by argument.
+ * A, B and F are green on both and are here to catch the overcorrection. Verified
+ * red by restoring the previous shared/find.js — not by argument. G was added
+ * after an adversarial read found a lead flip that A through F structurally
+ * cannot see, and it was verified red on that exact draft before it was trusted.
  *
  *   node tools/toolkit-gates/find-honesty.mjs [base-url]
  *
@@ -118,7 +126,12 @@ const COMMONS = {
     const host = secs[secs.length - 1];
     if (!host) return { lead: '', hedged: false };
     const note = (host.querySelector('.secnote') || {}).textContent || '';
-    const hedged = /Nothing matched all of that/.test(note) || /Nothing on this page goes by that/.test(note);
+    /* The two sentences commons/commons.js writes for relaxed and for none. They
+       are matched by their own text on purpose: this gate is asserting what the
+       READER is told, so if that copy is rewritten the gate must be re-pointed at
+       the new words rather than quietly passing on a stale regex. */
+    const hedged = /Nothing here is called exactly that/.test(note) ||
+                   /Nothing on this page goes by that/.test(note);
     const nm = host.querySelector('li.item .nm');
     return { lead: nm ? (nm.textContent || '').replace(/\s+/g, ' ').trim() : '', hedged };
   }
@@ -187,6 +200,23 @@ function buildProbes(items, vocab) {
     it.aka.forEach(a => {
       if (!norm(a)) return;
       P.push({ cls: 'B', q: a, want: owners(a, false) === 1 ? it.key : null, hedged: false });
+    });
+
+    /* G — A TITLE OUTRANKS A NICKNAME. A word that appears in THIS item's title
+       and in no other item's title belongs to this item, however many other rows
+       carry it as an alias. Rule 4 hands out a phrase bonus per row and the sizes
+       of those bonuses are the only thing keeping that true: set the "he typed a
+       whole alias" bonus equal to the "he typed the whole title" one and the AV
+       page starts answering "damage" with the Incident / Near-Miss Report while
+       the Damage Note sits underneath it — labelled exact, because the LABEL was
+       right and the ROW was wrong. Neither A nor B can see that: A types the
+       whole title and B the whole alias, and a bonus inversion only shows when a
+       single word is claimed by both. */
+    nf && nf.split(' ').forEach(t => {
+      if (t.length < 4) return;
+      const mine = items.filter((o, j) => toks(o.name).indexOf(t) !== -1);
+      if (mine.length !== 1 || mine[0].key !== it.key) return;
+      P.push({ cls: 'G', q: t, want: it.key, hedged: false });
     });
 
     /* C — two words that live ONLY in this item's prose. Nothing on the surface

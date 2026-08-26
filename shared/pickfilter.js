@@ -209,7 +209,10 @@
         : (mode === "relaxed" ? "Closest to “" + q + "” shown." : "");
       label.style.display = (mode === "none" || mode === "relaxed") ? "block" : "none";
 
-      if (cfg.onChange) cfg.onChange({ mode: mode, narrowed: narrowed, shown: on.length, total: all.length });
+      /* `show` is the set that survived the filter — an undeclared `on` sat here
+         and would have thrown a ReferenceError the first time any page passed an
+         onChange, which no page does yet, which is exactly why it went unseen. */
+      if (cfg.onChange) cfg.onChange({ mode: mode, narrowed: narrowed, shown: show.length, total: all.length });
     }
 
     input.addEventListener("input", apply);
