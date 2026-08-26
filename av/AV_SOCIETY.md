@@ -6716,7 +6716,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   78-character token**, order-live-header **12/12 order pages**, no-third-party **141/141**,
   find-noise 329, find-honesty 6,492/0, commons-names 385, boundary-titles 41, dropoff-block
   9/9, jobcard-scope **10/10 green and red-verified at 10 defects**, menu-reachability 966,
-  pickfilter 169/13.
+  pickfilter 169/13. **RE-RUN GREEN AGAINST PRODUCTION — all 72 assertions re-driven
+  through the DEPLOYED page** (base pointed at the Pages origin, not the working tree),
+  because green on disk is not green on the artifact and this repo has a scar for exactly
+  that.
   **BACKPORT RIDER FIRED, AND IT WAS THE BIGGEST THING IN THE CYCLE.** Chasing the
   double-sourced `fAttic` into `shared/jobcard.js` found `setVal()` unable to tell "no
   answer" from "an answer this list cannot hold" — it bailed on both, so **a new job kept
