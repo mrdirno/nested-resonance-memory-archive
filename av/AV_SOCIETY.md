@@ -1791,6 +1791,14 @@ Two small fixes: the context now closes in a `finally` so a throw cannot leak it
 dead browser is relaunched and the page retried instead of ending the sweep. **A gate that
 stops early is worse than a gate that fails, because a fail gets read.**
 
+**VERIFIED, and the attribution is narrower than the fix.** The sweep now runs to the end:
+**152 pages at 320/360/390/430px in both text sizes, 0 failing**, including the 30 pages
+across plumbing, roofing and sitework it had never reached. It needed **zero relaunches**
+to do it — so on the evidence of one clean run the decisive change is the guaranteed
+context close, not the relaunch guard. The guard stays because it costs nothing and turns
+the remaining failure mode from a dead sweep into a named line, but it is not what fixed
+this and the book should not pretend it was.
+
 ### 2026-08-26 (C3673) — THE SAME MISTAKE, TWICE, IN ONE PAGE: masonry's MIGRATION WIRING ON A PAGE WITH NOTHING TO MIGRATE
 
 The scar below says a mechanism ported without its reason is ported wrong. Here is
@@ -7057,4 +7065,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   reproducibly before and after this cycle, leaving plumbing, roofing and sitework
   unmeasured behind a wall of PASS lines. Both fixed here. Storefront made true in the same
   cycle: 15/15 `getting-in` entries in `fieldToolkits.ts` carry the return leg (P5 pushes).
+  `mobile-watertight.mjs` now runs to the end — **152 pages at four widths in both text
+  sizes, 0 failing**, including the 30 pages it had never reached. And the answer layer's
+  own worst defect was caught before anyone met it: Clear wiped the ask and left the
+  answers standing, so a different building inherited the last one's man at the door — the
+  fix is asserted, and the assertion was proved to bite by removing the fix and watching it
+  fail. 781 checks green on production.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/getting-in.html
