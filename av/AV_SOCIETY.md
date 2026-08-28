@@ -192,6 +192,16 @@ own paperwork/communication friction. Mechanics:
   deploy now refuses a chip carrying fewer than six rows written for it, so this can
   fail the build instead of failing a roofer; that gate is the floor, and seeding the
   trade properly is the job.
+- **AND THE GENERATED INDEX, WHICH IS NOT A LIST YOU JOIN BUT AN ARTIFACT YOU
+  REBUILD — found at trade #15, by a red deploy.** `shared/docsindex.js` is
+  DERIVED from every trade's `docs.js`, and the deploy asserts it with
+  `build-docsindex.mjs --check`: *"shared/docsindex.js is stale against the
+  thirteen staged libraries."* A fifteenth library makes it stale by existing, so
+  a stand-up that writes a perfect `docs.js` and pushes still goes red. Run
+  `node tools/toolkit-gates/build-docsindex.mjs` (no flag) and commit the result.
+  The four lists above are things a trade JOINS; this is the first thing on the
+  checklist that has to be REGENERATED, which is exactly why it was the one that
+  got missed — every other item fails a grep, and this one only fails a rebuild.
 - **AND THE THREE BOUNDARY PAGES, OR THE DEBT NAMED IN THE STAND-UP ENTRY — found
   at trade #14.** A construction trade joins the boundary it was built to serve:
   `rough-in-request` + `answer-back` + `getting-in`, each a config on the shared
