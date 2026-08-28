@@ -25,7 +25,11 @@
  * its own row controls; asserted here so the next hand-forked page cannot
  * quietly stop being that lucky.
  *
- *   node tools/toolkit-gates/row-live-line.mjs
+ *   node tools/toolkit-gates/row-live-line.mjs [base-url]
+ *
+ * With a base-url it drives the DEPLOYED pages instead of a local server, which
+ * is the only run that proves the fix reached the artifact (§SCARS: the written
+ * fix has repeatedly failed to reach the bundle).
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -38,6 +42,8 @@ const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const MIME={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.webmanifest':'application/manifest+json','.png':'image/png'};
 const s=createServer((req,rq)=>{const rel=normalize(decodeURIComponent(req.url.split('?')[0])).replace(/^(\.\.[/\\])+/,'');const p=join(ROOT,rel);if(!p.startsWith(ROOT)||!existsSync(p)||statSync(p).isDirectory()){rq.writeHead(404);return rq.end('no');}rq.writeHead(200,{'content-type':MIME[extname(p)]||'application/octet-stream'});rq.end(readFileSync(p));});
 await new Promise(r=>s.listen(0,'127.0.0.1',r)); const port=s.address().port;
+const BASE=(process.argv.slice(2).find(a=>a.startsWith('http'))||'').replace(/\/$/,'');
+const urlOf=rel=>BASE?`${BASE}/${rel}`:`http://127.0.0.1:${port}/${rel}`;
 const trades=readdirSync(ROOT,{withFileTypes:true}).filter(d=>d.isDirectory()&&existsSync(join(ROOT,d.name,'tools.js'))).map(d=>d.name).sort();
 const pages=[];
 for(const t of trades) for(const f of readdirSync(join(ROOT,t)).filter(f=>f.endsWith('.html')).sort()){
@@ -49,7 +55,7 @@ for(const rel of pages){
   const ctx=await b.newContext({viewport:{width:390,height:800}});
   await ctx.addInitScript(()=>{window.__copied=null;Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:t=>{window.__copied=String(t);return Promise.resolve();}}});});
   const page=await ctx.newPage();
-  await page.goto(`http://127.0.0.1:${port}/${rel}`,{waitUntil:'load'});
+  await page.goto(urlOf(rel),{waitUntil:'load'});
   await page.waitForTimeout(500);
   const did=await page.evaluate(()=>{
     const t=document.querySelector('#list input.tick:not(:disabled)');
@@ -77,5 +83,6 @@ for(const rel of pages){
   await ctx.close();
 }
 await b.close(); s.close();
+if(BASE)console.log(`(driven against ${BASE})`);
 console.log(`\n${bad?`FAIL — ${bad} page(s) where the block disagrees with the message`:`OK — ${pages.length} order page(s): the block on the glass IS the message, down to the last count typed`}`);
 process.exit(bad?1:0);
