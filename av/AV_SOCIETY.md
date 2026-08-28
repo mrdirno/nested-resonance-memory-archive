@@ -7016,3 +7016,34 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   doors pages against production at 320/360/390/430 in both text sizes · the backport's
   `painting/total-package.html` 200 and watertight, so all fourteen construction kits carry
   it. https://mrdirno.github.io/nested-resonance-memory-archive/doors/
+
+- **2026-08-28 (C3675) · [AXIS:INTERFACE]** · **THE ACCESS BOUNDARY WAS SERVED IN ONE
+  DIRECTION FOR THIRTEEN DAYS, AND THE PANEL KILLED THE PAGE THE ROADMAP HAD RANKED.**
+  Both wells dry (0 new, 0 building, no stale claims) and no trade owed, so the stalest
+  axis governed. The private roster's one concrete INTERFACE rung was an answer page for
+  whoever RECEIVES an access ask; a four-lens panel (building engineer · GC super · the
+  foreman who sends these · a skeptic given the program's own rules as weapons) scored it
+  2 / 6 / 6 / 2 and killed it twice — the receiver is not our user and never will be (every
+  kit addresses this document to a building engineer, a chief engineer, a property manager,
+  a director of security or an owner's rep, the GC kit included, so "the super will use it"
+  is not an escape hatch), and an answer page exists to BE the grant that `getting-in.mjs`
+  bans the ask from producing. All four then converged on the shape the foreman described
+  before he was shown it. **before → after:** the ask sent, and whatever came back was a
+  text nobody could work to → `shared/whatcameback.js` mounted as an INTAKE on all fifteen
+  `getting-in.html` pages, two lines each, **zero new per-trade vocabulary** because the
+  rows ARE that trade's own `need`/`heads` ticks. Two ladders and the flagged one has no
+  affirmative rung ever; silence prints FIRST as `NOTHING SAID ABOUT THESE`; the window
+  they actually gave printed against the one we asked for, with a name at the door and a
+  cell; and the day-of check, because the page has no server and says so. New gate
+  `what-came-back.mjs`, 751 checks, **re-driven against the DEPLOYED pages after green —
+  15/15 clean on production**, every permitted line driven through its ENTIRE ladder, four
+  widths and the 44px floor. **BACKPORT RIDER FIRED, and it found two SHIPPED gates broken
+  — both silent rather than wrong:** `getting-in.mjs` printed "every permit hands back"
+  while running ZERO handback assertions on flooring and sitework (they write theirs as
+  "something powered down", "regulated material", "who owns the closure and the permit for
+  it"), so it now prints what it asserted per trade and fails on a zero; and
+  `mobile-watertight.mjs` — THE mobile ship gate — died three trades short of the end,
+  reproducibly before and after this cycle, leaving plumbing, roofing and sitework
+  unmeasured behind a wall of PASS lines. Both fixed here. Storefront made true in the same
+  cycle: 15/15 `getting-in` entries in `fieldToolkits.ts` carry the return leg (P5 pushes).
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/getting-in.html

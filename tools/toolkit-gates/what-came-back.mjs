@@ -130,7 +130,16 @@ const PERMITTED = (() => {
   return new RegExp(body, 'i');
 })();
 
-const { s, port } = await serve();
+/* RE-DRIVABLE AGAINST PRODUCTION. The ship loop's step 4 says a 200 is not a
+   render, so this gate takes a base: with TOOLKIT_BASE set it drives the DEPLOYED
+   pages and skips the local server entirely. Same 751 checks, against the artifact
+   the network actually serves.
+     TOOLKIT_BASE=https://mrdirno.github.io/nested-resonance-memory-archive \
+       node tools/toolkit-gates/what-came-back.mjs */
+const LIVE = (process.env.TOOLKIT_BASE || '').replace(/\/$/, '');
+const served = LIVE ? { s: { close() {} }, port: 0 } : await serve();
+const { s, port } = served;
+const BASE = LIVE || `http://127.0.0.1:${port}`;
 const browser = await chromium.launch();
 const trades = pages();
 if (!trades.length) { console.error('no trade ships getting-in.html'); process.exit(1); }
@@ -141,7 +150,7 @@ for (const t of trades) {
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', e => errs.push(e.message));
-  await page.goto(`http://127.0.0.1:${port}/${t}/getting-in.html`, { waitUntil: 'load' });
+  await page.goto(`${BASE}/${t}/getting-in.html`, { waitUntil: 'load', timeout: 45000 });
 
   ck();
   const mounted = await page.$('#wcbCard');
@@ -380,4 +389,4 @@ if (fails.length) {
   console.error('WHAT CAME BACK — FAILURES:\n' + fails.map(f => '  ' + f).join('\n'));
   process.exit(1);
 }
-console.log(`WHAT CAME BACK — ${trades.length} page(s) clean, ${checks} checks: silence is named, no permit ever gets a yes, every answer reaches the brief.`);
+console.log(`WHAT CAME BACK — ${trades.length} page(s) clean at ${BASE}, ${checks} checks: silence is named, no permit ever gets a yes, every answer reaches the brief.`);
