@@ -57,7 +57,8 @@ window.TRADE_DOCS = {
         "the day each wall actually got covered — the date is the whole evidentiary point and it is the first thing left out",
         "which asks arrived with no height on them, and how many times we chased the number",
         "the boundary sentence — a list with no 'anything not on here isn't in there' reads as a partial record and gets used as one"
-      ]
+      ],
+      "needs": [["when"], ["count", "notdone"], ["none"]],
     },
     {
       "id": "damage-reply",
@@ -94,7 +95,8 @@ window.TRADE_DOCS = {
         "the date that area was last walked clean — without it there is no before, only an after",
         "what was found inside the opening, which is the only attribution the letter can honestly make",
         "the sentence saying this is not a price and not a claim — its absence turns a condition report into a demand"
-      ]
+      ],
+      "needs": [["when", "before"], ["before"], ["none"]],
     },
     {
       "id": "held-up",
@@ -130,7 +132,8 @@ window.TRADE_DOCS = {
         "what the crew did instead — without it the letter reads as a crew standing around, which is the opposite of its purpose",
         "the date each area was first raised, which is the only thing that makes this a notice rather than a grievance",
         "the specific decision being asked for, so it gets filed instead of answered"
-      ]
+      ],
+      "needs": [["none"], ["when"], ["none"]],
     },
     {
       "id": "wont-fit",
@@ -167,7 +170,8 @@ window.TRADE_DOCS = {
         "the sheet numbers and revisions, without which the question cannot be answered by anyone",
         "the field measurement, so the answer comes back based on the drawing that is already wrong",
         "the time of day and what the crew is doing meanwhile, which is what makes it urgent instead of routine"
-      ]
+      ],
+      "needs": [["ref"], ["count"], ["when"]],
     },
     {
       "id": "precon-scope",
@@ -203,7 +207,8 @@ window.TRADE_DOCS = {
         "the revision numbers of the documents the letter is written against, which is what makes an exclusion enforceable",
         "the gaps section entirely — most scope letters list inclusions and exclusions and never say what the set failed to assign",
         "a date by which the open items need answering, so the letter is read once and never actioned"
-      ]
+      ],
+      "needs": [["ref"], ["notdone"], ["when"]],
     }
   ],
 

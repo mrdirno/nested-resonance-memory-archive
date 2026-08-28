@@ -73,6 +73,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The tape-measure number, and where you measured from. 'There isn't enough room' comes back as 'route as required' and you've lost two weeks. '2-1/8 in clear between the bottom of the duct and the top of the door frame, measured at column line C-4; the run needs 4 in' has exactly one answer. Measure it, type the number, and name the datum you pulled from.",
+      "needs": ["where", "count"],
       "halt": "Only if you can't say where it is — no room number, no grid lines, no level. A condition nobody can find is a phone call, not a document.",
       "facts": [
         "job name and number",
@@ -130,6 +131,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The deadline to disagree. Without a cut-off, silence means nothing and the email is just you talking to yourself. With one, silence is agreement, and everybody who has ever argued one of these knows it. Tie it to the moment the work actually starts — 'if that's not what you meant, tell me before we start Thursday morning' — never open-ended, never 'let me know'.",
+      "needs": ["when"],
       "halt": "Only if you can't name who said it. An unattributed instruction can't be confirmed to anybody — go get the name first.",
       "facts": [
         "job name and number",
@@ -195,6 +197,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The items on that card that AREN'T yours — named, one line each, with who has to clear them before anybody calls for a re-inspect. Everybody chases their own corrections and nobody chases the framer's, the painter's, or the GC's, so the second inspection fails on somebody else's item and it lands on your schedule anyway. The second failed re-inspect is the one that's on you.",
+      "needs": ["who", "notdone"],
       "halt": "Only if you can't say whether it passed, partially passed, or got corrections. That one word changes who reads this and what they do today.",
       "facts": [
         "job name and number",
@@ -262,6 +265,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Who stood there and watched it run. Everybody types 'startup complete.' Nine months later the lights sweep off over somebody's desk at 7 p.m. and the only question is whether anybody from the owner's side ever saw the sequence run in that room. Names, companies, the date, and which zones they actually walked — one line, and the argument is over before it starts.",
+      "needs": ["when", "who", "where"],
       "halt": "Only if you can't say which system and which area. Everything else gets written with <MISSING> in it and listed at the bottom to chase.",
       "facts": [
         "job name and number",
@@ -323,6 +327,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Where you COULDN'T work. Everybody types what they got done; almost nobody types 'level 3 west still had no ceiling grid, so I moved four men to the east rooms.' Nine months later the delay claim gets built off dailies, and a daily that only lists production is the GC's evidence that you were never impacted a single day. The lost area, what was in the way, whose work it was, and where the men went instead — same day, in your own words. Write it once, here, and write it well: the impact notice gets built by pasting this paragraph, not by typing it twice.",
+      "needs": ["who", "where", "notdone"],
       "halt": "Only if you can't tell which job and which date this is. Everything else gets written with <MISSING> in it and listed at the bottom to chase.",
       "facts": [
         "job name and number",
@@ -383,6 +388,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The date you FIRST said something out loud, and who you said it to. These get written after the third day of standing around, so they read like the problem started today — and the first answer back is always 'this is the first I'm hearing of it.' One line — 'I brought this up to you at the 7 a.m. huddle Tuesday and again Wednesday morning' — turns a complaint into a notice.",
+      "needs": ["when", "who"],
       "halt": "Only if you can't name the area and the date the hold-up started. If you can't name the other trade, write 'the crew hanging ceiling grid' and send it — never guess a company name onto paper.",
       "facts": [
         "job and specific area — level, grid lines, room",
@@ -444,6 +450,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The contract basis — the sheet number, revision and date that shows what you were SUPPOSED to install. Without it the whole write-up reads as your opinion that it's an extra, and a PM who was never on site kills it in one line. 'E4.02 rev 2 dated 3/14 shows one 3/4 conduit to the pump; we were directed to run three and add a disconnect' is unarguable. 'This wasn't on our prints' is a conversation. If you don't have the sheet in front of you, say so — never guess a number onto paper.",
+      "needs": ["ref", "when"],
       "halt": "Only if nobody actually directed the work. If you can't name a person, a date and how he told you, stop and go get that — an extra with no direction on it is a gift.",
       "facts": [
         "job, area, date and time of the direction",
@@ -506,6 +513,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Whether the circuit was proven dead — by whom, with which meter, on which conductors, at what time — and whose lock was on it, applied by whom and when. That one sentence is the entire investigation. State it as fact or state plainly that it's unknown; never fill it in from what usually happens. Leave it out and somebody who wasn't there fills it in later, and it never gets filled in your favor.",
+      "needs": ["when", "who"],
       "halt": "Only if the notes read like it's still happening — somebody hurt, somebody exposed, a scene nobody has made safe. Then it says: handle that and call the office, the write-up waits five minutes. Everything else gets written with <MISSING> and a chase list.",
       "facts": [
         "job name and number",
@@ -572,6 +580,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The line that says your work was complete and inspected or walked and accepted, on a date, before it got hit. Everybody writes 'they broke my conduit.' The fight in April is never about who broke it — it's 'prove it was in, and prove it was right.' One dated sentence plus the photo you took before it was covered ends that argument before it starts. If it was rough and unprotected, say that too; a straight story survives a lot longer than a convenient one.",
+      "needs": ["when", "before"],
       "halt": "Only if the notes don't say whether the damaged work is still energized or hanging open. That answer changes what he does in the next five minutes, and the note can wait five minutes.",
       "facts": [
         "job name and number",
@@ -633,6 +642,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What you COULDN'T check, and why. Couldn't shut it down, tenant occupied, panel locked, no access, no prints, no lift, nobody could find the key. Literally nobody types this half, and it is the one that protects you when the same gear fails in November and it is the return trip you already sold. One line per item, with the reason and what it would take to get at it next time.",
+      "needs": ["notdone"],
       "halt": "Only if the notes don't say what condition you left the site in — something energized, opened up, or a dead-front off. Say that first; the write-up can wait a minute, an open panel can't.",
       "facts": [
         "site name and address",

@@ -55,6 +55,7 @@ window.TRADE_DOCS = {
       "why": "The only record of what the roof looked like on the day water was coming in. It is read months later by somebody deciding whether to repair or replace, and sometimes by somebody deciding who pays.",
       "note": "Narrative only. If the customer has their own service-ticket number, this goes with it — their ticket is theirs and we do not retype it.",
       "omit": "WHERE IT SHOWED UP INSIDE, separately from where you found it up top. They are almost never the same place, and the write-up that only names the roof spot is the one that gets read next year as proof you fixed the wrong thing.",
+      "needs": ["where"],
       "halt": "Never halt. If water is actively coming in, write what is known, mark the rest <MISSING>, and send it — a late leak report is worse than an incomplete one.",
       "facts": ["date and time you were on it", "the address and which roof area", "where it showed up inside", "what you found up top", "what you did today and whether it is temporary"],
       "sections": [
@@ -105,6 +106,7 @@ window.TRADE_DOCS = {
       "why": "It is the only window there will ever be. Once the new roof is over it, the evidence is gone and the conversation about who pays is unwinnable.",
       "note": "This is the FIELD RECORD that substantiates a change request — it is not the change order. The GC's log owns the number and our office owns the price.",
       "omit": "THE COUNT AND THE LOCATION, area by area, and the date you found each one. \"There was a lot of wet insulation\" is not a claim anybody can price. Six areas with squares and grid lines is.",
+      "needs": ["when", "where", "count"],
       "halt": "Only if this is the first one in the thread and there is no job or address at all.",
       "facts": ["date found", "the job and which roof area or slope", "what came up and how much of it", "what it stops you doing", "who you told and when"],
       "sections": [
@@ -151,6 +153,7 @@ window.TRADE_DOCS = {
       "why": "Somebody has decided the water is your fault. This is the one document that has to be calm, dated, specific, and completely free of the word \"we\" as a defence.",
       "note": "Answer the accusation that was actually made, on the area it was made about. Do not tour the whole roof.",
       "omit": "WHAT YOU DID CHECK AND FIND, before the part where you say it is not yours. A reply that only denies reads as a brush-off; a reply that shows the walk, names the area, and then draws the boundary reads as a professional record.",
+      "needs": ["where"],
       "halt": "Never halt. If the facts are thin, write what you verified and mark the rest <MISSING> — a defensive letter that arrives three weeks late has already lost.",
       "facts": ["date you looked", "the area or slope in question", "what you were told the problem was", "what you actually found", "what part of it IS ours, if any"],
       "sections": [
@@ -199,6 +202,7 @@ window.TRADE_DOCS = {
       "why": "The day this goes out is the day the roof stops being a construction site and starts being somebody's building. Everything not written down here becomes your problem the first time somebody walks on it.",
       "note": "This is our field turnover. The manufacturer's warranty and any owner's acceptance form are theirs and are not retyped here — this goes with them.",
       "omit": "WHO IS ALLOWED ON THE ROOF NOW AND HOW THEY CALL YOU. Every finished roof gets walked on within a fortnight by somebody with a drill, and the turnover that never named a procedure is the one that turns into a warranty argument.",
+      "needs": ["who"],
       "halt": "Only if this is the first document in the thread and there is no job or address at all.",
       "facts": ["completion date", "the job and which roof areas are being turned over", "what is complete and what is not", "who walked it and when", "who to call before anybody goes on the roof"],
       "sections": [
@@ -232,10 +236,12 @@ window.TRADE_DOCS = {
      from the shared library (§THE THREE SHAPES). */
   "overrides": {
     "daily-report": {
-      "omit": "WHAT IS OPEN TONIGHT AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A roofing daily that does not say which sections are still open, what is temporarily holding the water, and what is in the space underneath is missing the only line anybody will look for at 2am when it starts raining."
+      "omit": "WHAT IS OPEN TONIGHT AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A roofing daily that does not say which sections are still open, what is temporarily holding the water, and what is in the space underneath is missing the only line anybody will look for at 2am when it starts raining.",
+      "needs": ["where", "notdone"],
     },
     "delay-notice": {
-      "omit": "THE WEATHER FACTS, dated and specific to this roof, and what you did with the crew. \"Rained out\" is not a delay notice. What came in, when, what it did to an open section, what you had to re-do or re-dry, whether the crew was sent home or moved, and what is still exposed because of it — that is the notice."
+      "omit": "THE WEATHER FACTS, dated and specific to this roof, and what you did with the crew. \"Rained out\" is not a delay notice. What came in, when, what it did to an open section, what you had to re-do or re-dry, whether the crew was sent home or moved, and what is still exposed because of it — that is the notice.",
+      "needs": ["when", "notdone"],
     }
   },
 

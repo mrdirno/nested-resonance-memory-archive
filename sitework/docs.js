@@ -105,6 +105,7 @@ window.TRADE_DOCS = {
       "why": "The only account of what was down there, written by the only crew that saw it. A wall can be cut and a ceiling can be pulled; a compacted trench is dug again, and everything in it that was right the first time comes out with it.",
       "note": "This records what was in the trench and who came and looked. It is not an inspection, it does not approve anybody's work, and it never states what a thing was supposed to be — no bedding class, no cover depth, no separation distance, no compaction figure. The plan, the spec and the geotech own those.",
       "omit": "WHO CAME AND LOOKED, AND WHO WAS INVITED AND DID NOT. Everybody writes what went in the ground. Almost nobody writes \"called Tuesday 06:40, walked 07:15 by the inspector and the plumber, the electrician was told twice and did not come\" — and that is the entire document a year later when somebody wants the trench opened.",
+      "needs": ["when", "who"],
       "halt": "Never halt. If it is already backfilled, write what is known, mark the rest <MISSING> and send it. Nothing in a closed trench can be re-observed, so a thin record beats no record by more here than anywhere else on the job.",
       "facts": [
         "the run, pinned at both ends by something findable in a year",
@@ -157,6 +158,7 @@ window.TRADE_DOCS = {
       "why": "The ground is the one part of this job nobody drew accurately. Written the day it is found and while the hole is still open it is a condition; written after it is covered it is an argument, and the evidence is under four feet of compacted fill.",
       "note": "This describes what was found and what was measured. It never classifies the material to a spec name, never states a soil class, and never calls the situation a differing site condition as a conclusion — describe it, say what the documents you were given show, and let the engineer and the geotech classify it. That restraint is what makes it hold up.",
       "omit": "WHAT IT IS COSTING WHILE IT SITS OPEN, and the date the answer is needed by. The machine and the crew standing, the run that cannot go in behind it, the fact that an open excavation is not a thing you leave indefinitely. A found condition with no clock on it reads as information and gets answered next week.",
+      "needs": ["when", "count"],
       "halt": "Only if there is no statement of what was actually found.",
       "facts": [
         "what was found, described plainly",
@@ -209,6 +211,7 @@ window.TRADE_DOCS = {
       "why": "The most expensive half hour on any dirt job, and the only version anybody will ever read is the one written the same day. Everything after this is other people reconstructing it from memory, and their memories will not agree with each other or with yours.",
       "note": "This records what was OBSERVED: the marks that were on the ground, what was exposed, what the crew was doing, and who was called at what time. It NEVER states that a locate was current, that a line was clear, that a mark was wrong, that anybody failed to mark, or what caused it. The facility owner and the one-call centre own every one of those. A sentence that assigns one is the sentence that gets read out loud later, and it will be read back to the man who wrote it.",
       "omit": "THE CLOCK, MINUTE BY MINUTE — struck at, crew clear at, owner notified at, emergency services at, GC at, our office at, who answered and what they said to do. Everybody writes what happened. Almost nobody writes the times, and the times are the only part of this that shows the response was right.",
+      "needs": ["when", "who"],
       "halt": "Never halt on missing detail. But if anybody is still at risk or a line is still live and open, this document is not the priority — make the calls, clear the area, and write it after.",
       "facts": [
         "the time it happened and the time the area was clear",
@@ -261,6 +264,7 @@ window.TRADE_DOCS = {
       "why": "Earthwork is paid on a number somebody else calculated, and the only number the crew owns is the one it counted on the day. Written daily it is a record. Reconstructed at the end of the month it is an estimate, and an estimate loses to a ticket every time.",
       "note": "State counts in the unit they were ACTUALLY counted in and never convert between units. No rates, no totals, no prices — the office owns the number. Haul tickets, scale tickets and pit tickets are referenced by their own numbers and never retyped; the hauler and the scale own their paper.",
       "omit": "WHERE IT CAME FROM AND WHERE IT WENT, by name — the pit, the spoil site, the stockpile and which one, the pile that got moved a second time. Volume with no origin and no destination cannot be checked by anybody, and double handling that is not written down on the day is work that was never done.",
+      "needs": ["where", "count"],
       "halt": "Never halt. Write the counts you have, mark the rest <MISSING>, and send it the same day — a partial count written today survives, and a complete one written Friday is a memory.",
       "facts": [
         "the date and the area worked",
@@ -307,12 +311,14 @@ window.TRADE_DOCS = {
       "name": "The Day Report",
       "from": "the foreman on the job",
       "to": "our office and the GC super",
-      "omit": "WHAT GOT CLOSED TODAY AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A dirt daily that does not say what went in the ground and what got backfilled over it is missing the only lines anybody comes back for — and unlike a wall or a ceiling, nobody can open it up and look."
+      "omit": "WHAT GOT CLOSED TODAY AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A dirt daily that does not say what went in the ground and what got backfilled over it is missing the only lines anybody comes back for — and unlike a wall or a ceiling, nobody can open it up and look.",
+      "needs": ["who", "where", "notdone"],
     },
     "delay-notice": {
       "name": "We're Standing",
       "to": "the GC super and our PM",
       "omit": "WHO AND WHAT ACTUALLY STOOD — the men by name and classification, the iron by piece, the trucks ordered and where they went — and what the crew would have been doing instead. \"We were down all morning\" with no names and no idled machines is a sentence nobody can check and nobody can act on.",
+      "needs": ["who", "count", "notdone"],
       "sections": [
         {
           "h": "The hold and the clock",
@@ -349,6 +355,7 @@ window.TRADE_DOCS = {
       "why": "A machine gets blamed for everything within a hundred feet of it. This is the note, written before the tracks move, that says which of it was already there.",
       "note": "This describes a condition and where it is. It never names who did it, never guesses a cause, and never states what it will cost to put right.",
       "omit": "THE TIMESTAMP AND WHERE THE PHOTOS LIVE, and the fact that it was sent BEFORE we started. A condition photographed on the day we mobilised is a record; the same photo produced in a back-charge meeting three weeks later is an argument.",
+      "needs": ["when", "before", "where"],
       "facts": [
         "the date and time found, and whether we had started yet",
         "exactly where — with a fixed reference in the frame",
@@ -391,6 +398,7 @@ window.TRADE_DOCS = {
       "why": "Somebody called because something moved after we left. What gets written here decides whether this is warranty work or a condition — and it gets written by a man standing on top of a trench he cannot see into.",
       "note": "Record the LAST DATE our crew was on that work and who has had the area since, and NEVER state a cause. He may say what he placed, when, and what he sees now. He may not be made to say why it settled, why it washed or why the lid sank — that determination belongs to the engineer and the geotech, and volunteering it in a callback note is how a repair becomes an admission.",
       "omit": "WHAT YOU DID NOT DO AND WHY — the part you could not get to, the thing you found that is outside this call, the area you could not see without opening it. Leave it out and you own it by silence.",
+      "needs": ["notdone"],
       "facts": [
         "what was reported, in their words",
         "what you found when you got there",
@@ -403,6 +411,7 @@ window.TRADE_DOCS = {
       "name": "The Walk Before We Move In",
       "to": "our office, estimating, and our PM",
       "omit": "ACCESS, THE HAUL ROUTE AND WHERE THE SPOIL GOES. It never makes the notes and it is what blows the schedule and the number both — how the iron gets on and off, what the route is and what is posted on it, what is overhead, where the crew parks, what hours we can run, what has to be escorted, and whether there is anywhere on this site to put a pile.",
+      "needs": ["when", "where"],
       "facts": [
         "date and site, and who walked it with you",
         "what is existing and standing that we have to work around",
@@ -416,6 +425,7 @@ window.TRADE_DOCS = {
       "to": "the GC super and whoever is following us",
       "why": "The next trade builds on what we left, and the first thing it will say is that the grade was wrong. This is the document that says what it was, to what reference, and when — before anybody else's equipment drives on it.",
       "omit": "WHAT IS STILL OPEN, KNOWN, WITH AN OWNER AND A DATE — and what will change if it sits. A grade handover that reads as if everything is finished converts every rut, every rain and every settlement after today into our warranty work.",
+      "needs": ["when", "who", "notdone"],
       "facts": [
         "what area is being handed over, pinned",
         "what it was left at and to what reference, as measured",
@@ -449,7 +459,8 @@ window.TRADE_DOCS = {
     "look-ahead": {
       "name": "What Has To Be True Before The Machine Moves",
       "to": "the GC and our PM",
-      "omit": "WHAT HAS TO BE TRUE BEFORE EACH ITEM CAN START — locates on the ground, the area released, layout shot, the permit issued, a place to put the spoil, the structure or the material delivered, the inspection made, the other trade out of our footprint. A look-ahead with no preconditions is a wish list, and on a dirt job every single item has at least one."
+      "omit": "WHAT HAS TO BE TRUE BEFORE EACH ITEM CAN START — locates on the ground, the area released, layout shot, the permit issued, a place to put the spoil, the structure or the material delivered, the inspection made, the other trade out of our footprint. A look-ahead with no preconditions is a wish list, and on a dirt job every single item has at least one.",
+      "needs": ["notdone"],
     }
   },
 

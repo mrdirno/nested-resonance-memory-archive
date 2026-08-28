@@ -57,6 +57,7 @@ window.TRADE_DOCS = {
       "why": "The only account of what went in, where it started and where it stopped, written by the man who was standing there. It gets read a year later by somebody looking at a crack, and by then everybody's memory has an opinion.",
       "note": "Ticket numbers and lab numbers are referenced, never retyped. The plant owns its ticket and the lab owns its report; this document points at them.",
       "omit": "Where the placement started and where it stopped, and what got left out on purpose — blockouts, pour strip, the bay that got deferred. Everybody writes the date. Almost nobody writes the line on the floor, so when a crack shows up months later there's nothing in the file that says whose pour it was even in.",
+      "needs": ["where", "notdone"],
       "halt": "Never halt. If the pour is still going, write what is known, mark the rest <MISSING>, and send it — a late pour record is worse than an incomplete one.",
       "facts": [
         "the date and the placement",
@@ -109,6 +110,7 @@ window.TRADE_DOCS = {
       "why": "The last look anybody gets at what is about to go under concrete. Half of what is in this document belongs to somebody else, and after the pour nobody can see any of it.",
       "note": "This records what was walked. It is not an inspection, it does not approve anybody's work, and it never states what a thing was supposed to be.",
       "omit": "The list of other people's work about to go under the concrete — sleeves, conduit, under-slab utilities, vapor barrier and its penetrations, embeds, hold-downs, anchor bolt templates, dowels, waterstop — and who walked it and told us it was set. Once it's covered it's gone, and \"you poured over my sleeve\" has no answer without that line.",
+      "needs": ["who"],
       "halt": "Only if the placement it covers is not stated at all.",
       "facts": [
         "the placement and the date",
@@ -161,6 +163,7 @@ window.TRADE_DOCS = {
       "why": "A conversation on a form deck becomes a record the same day or it becomes two people remembering it differently in November.",
       "note": "Narrative only. No rate, no total, no hours priced out — the tag carries the counts and the office owns the number.",
       "omit": "The line that says you asked for it in writing and what came back — \"I asked for written direction on the twelfth; as of this letter I still don't have it.\" Every one of these names who gave the direction. Almost none record the ask for paper and the silence after it, which is the whole reason the letter exists.",
+      "needs": ["when", "notdone"],
       "halt": "Only if there is no stated direction and no person who gave it.",
       "facts": [
         "who gave the direction and when",
@@ -214,6 +217,7 @@ window.TRADE_DOCS = {
       "why": "The hole is open for one afternoon. A condition nobody wrote down while it was open is a condition that never existed.",
       "note": "States what was seen and what the crew did. It never states a cause, never grades the material, and never says what the design should have been.",
       "omit": "The line that pins the condition to a place and a time while it was still open — footing mark, grid, station or address, what day and what hour, who saw it standing there, and that the crew stopped and called before covering it. A picture of mud with nothing in the frame to locate it proves nothing to anybody.",
+      "needs": ["when", "who", "where"],
       "halt": "Only if the condition itself is not described.",
       "facts": [
         "where — footing mark, grid, station or address",
@@ -267,6 +271,7 @@ window.TRADE_DOCS = {
       "why": "Everybody logs the weather day. Almost nobody logs the tending — the trips back at night and on the weekend to check it, re-lay it, pump it off and finally pull it — which is the part that costs a crew and never appears on anybody's paper.",
       "note": "Records what the crew saw and did. It never states whether the concrete was harmed, and it never grades what came out of it.",
       "omit": "The tending. The trips back at night, on the weekend and before shift to check it, re-lay it, pump it off, re-anchor it and finally pull it, and the men who made those trips. Everybody logs the weather day. Nobody logs the days of babysitting the cover, which is where the hours actually went.",
+      "needs": ["when", "who", "count"],
       "halt": "Never halt. Write the day, mark the rest <MISSING>, send it.",
       "facts": [
         "the date and what the weather did",
@@ -320,6 +325,7 @@ window.TRADE_DOCS = {
       "why": "Forms and shores stay up until the person who owns that call says otherwise, and meanwhile somebody is stacking material on a deck that is still holding itself up on posts.",
       "note": "This asks for a release. It never states that the concrete has reached anything, and it never sets its own date for a strip — that call belongs to whoever owns it on your job.",
       "omit": "What got set on the slab or deck before we were turned loose to strip — material stacked, stock landed, a lift rolled on, equipment traffic — who put it there and when. A deck loaded while it's still green and still shored is nobody's fault in the file unless somebody wrote down who put the load on it.",
+      "needs": ["when", "who"],
       "halt": "Only if it is not stated what is coming down or staying up.",
       "facts": [
         "what is coming down or staying up",
@@ -368,6 +374,7 @@ window.TRADE_DOCS = {
       "why": "A joint the drawing does not show now exists in the structure. Written that day it is a record; written when somebody finally asks, it is a reconstruction.",
       "note": "Records where the joint is and what happened. It never states whether the joint is acceptable, what treatment it needs, or who is responsible — those are the engineer's and the office's.",
       "omit": "The call log — who you called the minute the concrete stopped coming, what time, and what they said back — written down before the joint existed instead of rebuilt after. Every one of these names where the joint is. Almost none show the crew raised it while there was still time to keep it from being one.",
+      "needs": ["when", "who"],
       "halt": "Never halt. Write where it is and when it happened, mark the rest <MISSING>, and send it before you go home.",
       "facts": [
         "where the joint is",
@@ -416,6 +423,7 @@ window.TRADE_DOCS = {
       "why": "Somebody has put your name on something. The reply that wins is not the one that argues hardest about the crack — it is the one that establishes when the work left your hands and who has had it since.",
       "note": "States what was placed, what was seen, and when it left your hands. It never asserts what caused a crack and never says who pays — a concrete foreman cannot know the first and does not decide the second.",
       "omit": "The handoff line: the last date and hour our crew was on that work, what shape it was in when we walked, what protection we left, and who had the area after us. Everybody argues the crack and forgets to establish when the work left our hands — the only fact in the whole letter we actually own.",
+      "needs": ["when", "who", "before"],
       "halt": "Only if it is not stated what came in.",
       "facts": [
         "what came in and when you went and looked",
@@ -456,6 +464,7 @@ window.TRADE_DOCS = {
     "delay-notice": {
       "name": "We Got Held",
       "omit": "Who and what actually stood — the men by name and classification, the iron by piece, the pump and the trucks ordered and where they went — and what the crew would have been doing instead. \"We were held from morning to noon\" with no names and no idled equipment is a sentence nobody can check and nobody can act on.",
+      "needs": ["who", "count", "notdone"],
       "sections": [
         {
           "h": "The hold and the clock",
@@ -487,7 +496,8 @@ window.TRADE_DOCS = {
       ]
     },
     "daily-report": {
-      "omit": "WHAT WENT IN THE GROUND TODAY AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A concrete daily that does not say what was placed, where the placement started and stopped, and whose work went under it is missing the only lines anybody comes back for — and unlike a wall or a ceiling, nobody can open it up and look."
+      "omit": "WHAT WENT IN THE GROUND TODAY AND WHAT IS UNDER IT. Every other trade's daily can leave the day at \"we got this far\". A concrete daily that does not say what was placed, where the placement started and stopped, and whose work went under it is missing the only lines anybody comes back for — and unlike a wall or a ceiling, nobody can open it up and look.",
+      "needs": ["who", "where"],
     }
   },
   "drop": [],

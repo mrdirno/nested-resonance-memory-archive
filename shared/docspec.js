@@ -223,6 +223,97 @@
    * box is the only surface that does, which is one more reason it stays free
    * text and this stays ticks.
    */
+  /* ── THE ARTEFACT VOCABULARY — what actually SATISFIES an omitted line ──
+   * (2026-08-28)
+   *
+   * The five classes below each carry an `artefact` string, and for the whole
+   * life of this engine that string reached ONE surface: the tick list on the
+   * CUSTOM path — the path a man reaches when his document is NOT in the
+   * library. The 231 documents that ARE in the library, the ones everybody
+   * actually opens, printed their hand-written `omit` line and never once said
+   * what would satisfy it. Both readers were left to infer it, and both infer
+   * it wrong in the same direction:
+   *
+   *   · THE MODEL writes a fluent sentence on the topic. hvac/red-tag-notice
+   *     says "the time you shut it off and the name of the human you handed it
+   *     to"; what comes back is "the unit was taken out of service and the
+   *     property manager was notified." The heading is there, the sentence is
+   *     there, no <MISSING> anywhere — and the only two facts that survive a
+   *     dispute, the clock time and the name, are not in it. Nothing in this
+   *     engine ever told it that a sentence is not the artefact.
+   *   · THE MAN cannot see it either, and this is the harder half: he KNOWS he
+   *     handed it to Denise at 2:40, so he reads her name into a sentence that
+   *     does not contain it. A field foreman named this failure unprompted as
+   *     the one he cannot catch by eye, on the document where it costs the most.
+   *
+   * So the artefact stops being decoration on a tick list and becomes a
+   * DECLARED REQUIREMENT of every omitted line in the library — authored beside
+   * the line as `needs`, emitted to the model as a demand, and printed for the
+   * man in the red frame before he opens his mouth. §SHAPE #4 HAS TWO READERS
+   * wrote the rule three days before this: "any field authored into one of these
+   * libraries whose only consumer is a machine is on the clock."
+   *
+   * SEVEN, NOT FIVE, AND THE FORK IT SETTLES IS ON RECORD. The 2026-08-15 blind
+   * re-classification of the same corpus derived SEVEN classes and named the two
+   * extra: an undocumented CHANGE (the substitution, the setting left changed,
+   * the valve left non-normal — 10 of 80) and a quantified MEASUREMENT (a number,
+   * its unit, and the datum it was read from — 8 of 80). Both were refused, and
+   * the stated reason was that "seven ticks is the ten generic ones the rung
+   * forbade" — a decision about a TICK LIST, where every extra row is a row a man
+   * in a hurry has to read. This is not a tick list. Nothing here is ticked;
+   * `needs` is authored once by whoever writes the document. The constraint that
+   * capped the vocabulary at five was a UI constraint, and it has been silently
+   * governing a DATA vocabulary that has no UI. So the tick list stays at five,
+   * exactly as decided, and the authored vocabulary is seven — and re-counted
+   * over all 142 distinct omit lines on disk, `count` is the third most demanded
+   * artefact in the whole library. It was not a rounding error; it was invisible.
+   *
+   * AND `none` IS A REAL VALUE, NOT A FAILURE TO CLASSIFY. The 2026-08-15 cycle
+   * measured that 15% of the shipped lines name something no fixed class of
+   * missing FACT can express — av/theory-of-operation's "the design decisions
+   * that look like faults" is an omission of INTERPRETATION. Forcing those into
+   * a class would put a confident demand under a line that cannot satisfy it,
+   * which is the same lie as an empty check. They declare `none`, the block asks
+   * for the line without naming an artefact, and the card says so in words.
+   */
+  var ARTEFACTS = {
+    when:    { demand: "a date or a clock time", short: "the time",        miss: "the date or time" },
+    who:     { demand: "a name",                 short: "the name",        miss: "the name" },
+    before:  { demand: "a before-value",         short: "the before-value", miss: "what it was before" },
+    where:   { demand: "a location",             short: "the location",    miss: "where it is" },
+    count:   { demand: "a number with its unit", short: "the number",      miss: "the number" },
+    change:  { demand: "what you left changed",  short: "what changed",    miss: "what was changed" },
+    notdone: { demand: "a named gap",            short: "the named gap",   miss: "what was not done" },
+    /* THE EIGHTH, AND THE CORPUS FORCED IT THE SAME WAY THREE TIMES. A document
+       and its revision — the sheet, the bulletin, the proposal's scope line, the
+       packing list, the approved version a yes was given against. The 2026-08-15
+       blind pass hit it and filed it unreachable ("the sheet number and revision
+       a letter is written against, 4 of 26"); of the two blind passes run over
+       the full 142 this cycle, one pushed it into `none` and the other into
+       `where`. Both are wrong in opposite directions and the wrongness is
+       legible: a sheet number is the most concrete artefact in the whole corpus,
+       so `none` is a shrug — and "say the actual A LOCATION" under "the sheet
+       numbers and revisions" names the wrong kind of thing. Eight lines demand
+       it, and framing/wont-fit is the whole argument: "the sheet numbers and
+       revisions, WITHOUT WHICH THE QUESTION CANNOT BE ANSWERED BY ANYONE." */
+    ref:     { demand: "the document and its revision", short: "the document",
+                                                                              miss: "which document and revision" }
+  };
+
+  /* THE DEMAND, IN WORDS, FOR BOTH READERS FROM ONE PLACE. The card and the
+     block must never be able to name different artefacts for the same line —
+     that is the tautology trap the say-list gate fell into, so they call this. */
+  function demandOf(ids) {
+    var parts = [];
+    for (var i = 0; i < (ids || []).length; i++) {
+      var a = ARTEFACTS[ids[i]];
+      if (a && parts.indexOf(a.demand) < 0) parts.push(a.demand);
+    }
+    if (!parts.length) return "";
+    if (parts.length === 1) return parts[0];
+    return parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1];
+  }
+
   var OMIT_CLASSES = [
     {
       id: "when",
@@ -313,6 +404,7 @@
       to: "my PM and the office",
       why: "The one your PM forwards. Written badly it becomes an argument later; written right it is the record of every day you were there.",
       omit: "The field audible — the thing you changed on the fly to keep moving. Parts robbed from another room, an approved hour of overtime, a substitution, an owner ask that was never on the drawings. Nobody writes it down the day it happens, and three months later there is no paper for the change order.",
+      needs: ["who", "change"],
       halt: "Only if this is the first report in the thread and there is no job number or site at all.",
       facts: ["date", "job number / site", "who was on it and how many hours", "what finished", "what is blocked"],
       secondary: ["a weekly rollup from the dailies in this thread", "a short client-facing version with the internal detail stripped"]
@@ -326,6 +418,7 @@
       to: "safety and my PM",
       why: "Written once, read by people who were not there, sometimes years later. The only version that survives is the one written the same day.",
       omit: "The condition that was already wrong before you got there, and the time you first reported it. Without that line every incident reads as if it started with you.",
+      needs: ["when", "before"],
       halt: "Never halt. If someone was hurt, write what is known and mark everything else <MISSING> — a late report is worse than an incomplete one.",
       facts: ["date and time", "exact location", "who was involved and who witnessed it", "what was damaged or who was hurt", "who was notified and when"],
       secondary: ["a notification email to the GC or owner", "a follow-up once the corrective action is done"]
@@ -339,6 +432,7 @@
       to: "the GC super and my PM",
       why: "You walked into something already broken. This is the note that means it is not yours when somebody goes looking for who to charge.",
       omit: "The timestamp and where the photos live. A description with no photo reference and no date is worth nothing in a back-charge meeting.",
+      needs: ["when", "where"],
       halt: "Never halt.",
       facts: ["date and time found", "exact location", "what the condition is", "photos taken", "who you told and how"],
       secondary: ["a short email to the super with the photos attached"]
@@ -352,6 +446,7 @@
       to: "the GC and my PM",
       why: "The clock only starts when somebody is told in writing. This is that.",
       omit: "The date you FIRST asked. Everyone writes the delay; almost nobody writes 'requested 07/22, no response as of 07/29', which is the only part that establishes how long it has actually been sitting.",
+      needs: ["when"],
       halt: "Only if there is no stated thing you are waiting on.",
       facts: ["what you are waiting on", "who owes it", "the date you first asked", "what work is stopped", "the date you need it by"],
       secondary: ["a shorter version for a text message", "a follow-up that carries the original dates forward"]
@@ -365,6 +460,7 @@
       to: "the GC and my PM",
       why: "The narrative that goes with the ticket. Prices are the office's job — this is the part that says why it is extra, which is the part that gets argued.",
       omit: "Who authorized it, when, and by what channel — verbal, call, text, email. That one line is the difference between a change order and a donation.",
+      needs: ["when", "who"],
       halt: "Only if the work being described is not stated at all.",
       facts: ["what was asked for and by whom", "when it was authorized and how", "what the contract scope actually said", "what it displaced"],
       secondary: ["a one-paragraph version to paste into the GC's change form"],
@@ -379,6 +475,7 @@
       to: "dispatch and the customer",
       why: "The customer reads this and decides whether to pay for what comes next. It has to be honest, complete, and free of anything they cannot act on.",
       omit: "What you did NOT do and why — the part you could not get to, the thing you found that is outside this call. Leave it out and you own it by silence.",
+      needs: ["notdone"],
       halt: "Only if there is no statement of what the complaint was.",
       facts: ["the complaint as reported", "what you found", "what you did", "what it is doing now", "what still needs doing"],
       secondary: ["a customer-facing version with the internal notes stripped", "a quote request to the office for the recommended follow-up"]
@@ -392,6 +489,7 @@
       to: "the office and estimating",
       why: "Everything you noticed on site, in a form somebody who was not there can price, schedule or order from.",
       omit: "Access and conditions — where you park, what hours you can work, what has to be escorted, what is not built yet. It never makes the notes and it is what blows the schedule.",
+      needs: ["when", "where", "notdone"],
       halt: "Only if no site is identified.",
       facts: ["date and site", "who walked it with you", "what is existing", "what is not ready", "access and working hours"],
       secondary: ["a list of questions for the GC", "a short summary for estimating"]
@@ -405,6 +503,7 @@
       to: "the owner and their people",
       why: "The last document anyone reads, and the first one they blame. Written well it ends the job; written badly it brings you back for free.",
       omit: "The open items you are handing over KNOWN — with owner and date. A handover that reads as if everything is finished converts every leftover into warranty work.",
+      needs: ["when", "who", "notdone"],
       halt: "Only if the system or area being handed over is not identified.",
       facts: ["what is being handed over", "what was tested and by whom", "what is still open", "what was given to them (keys, codes, manuals, spares)", "who to call"],
       secondary: ["an owner-facing version", "a punch list of what is left"]
@@ -418,6 +517,7 @@
       to: "my PM and the office",
       why: "The one that stops the crew standing around next week. It is a request disguised as a schedule.",
       omit: "What has to be TRUE before each item can start — the other trade's work, the delivery, the inspection. A look-ahead with no preconditions is a wish list.",
+      needs: ["notdone"],
       halt: "Only if no period is stated.",
       facts: ["the period", "crew count expected", "what is planned in order", "what has to arrive", "what other trades have to finish first"],
       secondary: ["a manpower request for the office", "a coordination note for the GC"]
@@ -431,6 +531,7 @@
       to: "safety and the office",
       why: "Five minutes of talking that has to exist on paper. Nobody wants to write it; everybody wants it to exist when something happens.",
       omit: "What was raised BY the crew and what you did about it. A talk that records only what you said reads as a lecture and proves nothing about the site.",
+      needs: ["none"],
       halt: "Never halt.",
       facts: ["date", "topic", "who attended", "site conditions that day", "anything raised and what was done"],
       secondary: ["a month's talks rolled into one summary"]
@@ -444,6 +545,7 @@
       to: "everybody who was on it",
       why: "The version that goes out first becomes the truth. Send it the same day and it is yours.",
       omit: "Who was NOT there but is bound by it, and the date the notes go final if nobody objects. Without those two lines the notes are just your opinion of the meeting.",
+      needs: ["when", "who"],
       halt: "Only if no meeting date is given.",
       facts: ["date and who attended", "what was decided", "what was left open", "who owes what by when"],
       secondary: ["an action-items-only version for the crew"]
@@ -694,6 +796,37 @@
     }
     if (typeof o === "string" && o.trim()) return [o];
     return [];
+  }
+
+  /* ── WHAT SATISFIES EACH OF THOSE LINES ─────────────────────────────────
+   * `needs` MIRRORS THE SHAPE OF `omit`, and that is a contract the gate holds
+   * rather than a convention: a string omit takes a flat array of artefact ids,
+   * a list omit takes one array PER LINE, in the same order. Anything else and
+   * the demand under line two would describe line one — a confident sentence
+   * pointing at the wrong fact, which is worse than no sentence at all.
+   *
+   * IT RETURNS ONE ENTRY PER OMIT LINE, ALWAYS, so no caller has to index-guard.
+   * An unauthored line comes back `[]`, which every reader treats as "ask for
+   * the line, name no artefact" — the honest degrade, identical to `none`.
+   * That is a BELT, not a licence: tools/toolkit-gates/docspec-needs.mjs fails
+   * the build on a library document that authors `omit` without `needs`, for the
+   * reason the say-list gate learned the hard way — a gate that accepts its own
+   * fallback is measuring its safety net (§SCARS 2026-08-24).
+   */
+  function needsOf(d) {
+    var lines = omitLines(d);
+    var n = d && d.needs;
+    var out = [];
+    var perLine = Array.isArray(n) && n.length && Array.isArray(n[0]);
+    for (var i = 0; i < lines.length; i++) {
+      var row = perLine ? n[i] : (i === 0 && Array.isArray(n) ? n : null);
+      row = Array.isArray(row) ? row : [];
+      /* `none` is EXCLUSIVE and is not an artefact. It reaches here as an empty
+         demand, which is exactly what an unauthored line reaches here as — and
+         they are not the same thing to the GATE, which reads d.needs directly. */
+      out.push(row.filter(function (k) { return !!ARTEFACTS[k]; }));
+    }
+    return out;
   }
 
   /* ── WHAT HE HAS TO SAY, WHICH IS THE HALF THAT WAS ONLY EVER TOLD TO THE AI ──
@@ -1031,16 +1164,71 @@
     L.push("");
   }
 
+  /* WHAT TO WRITE WHEN THE ARTEFACT IS NOT IN HIS INPUT. Named per artefact
+     rather than as a bare <MISSING>, because the whole failure this closes is a
+     gap that reads as an answer: "<MISSING>" under a line demanding two things
+     does not say WHICH of the two is missing, and the man chasing it tomorrow
+     has to re-read the source line to find out. One token per artefact. */
+  /* The tokens alone, for the OUTPUT FORMAT placeholder, where the surrounding
+     sentence is already the instruction and a second one would not fit inside a
+     bracket the finished document has to read as a single field. */
+  function missTokens(ids) {
+    var toks = [];
+    for (var i = 0; i < (ids || []).length; i++) {
+      var a = ARTEFACTS[ids[i]];
+      if (a && toks.indexOf("<MISSING: " + a.miss + ">") < 0) toks.push("<MISSING: " + a.miss + ">");
+    }
+    return toks.length ? toks.join(" / ") : "<MISSING>";
+  }
+
+  function missClause(ids) {
+    var toks = [];
+    for (var i = 0; i < (ids || []).length; i++) {
+      var a = ARTEFACTS[ids[i]];
+      if (a && toks.indexOf("<MISSING: " + a.miss + ">") < 0) toks.push("<MISSING: " + a.miss + ">");
+    }
+    if (!toks.length) return "";
+    return "Where my input does not give you one, write " + toks.join(" / ") +
+           " against that part rather than writing around it.";
+  }
+
   /* A document may name more than one. Each gets its own bullet here AND its
      own bullet in the output format below, because the whole point of this
      block is that an AI cannot quietly drop the line nobody writes down —
      and a list folded into one paragraph is a list it can drop half of. */
-  function emitOmit(L, omits) {
+  function emitOmit(L, omits, needs) {
     L.push(omits.length > 1 ? "THE LINES EVERYONE LEAVES OUT — NEVER DROP THEM"
                             : "THE LINE EVERYONE LEAVES OUT — NEVER DROP IT");
     L.push("");
-    if (omits.length > 1) omits.forEach(function (o) { L.push("- " + o); });
-    else if (omits.length) L.push(omits[0]);
+    /* THE DEMAND RIDES WITH THE LINE IT BELONGS TO (2026-08-28). "Never drop it"
+       was the only instruction here, and a model does not drop it — it ANSWERS
+       it, fluently, with none of the facts in the answer. hvac/red-tag-notice
+       asks for "the time you shut it off and the name of the human you handed it
+       to" and gets back "the unit was taken out of service and the property
+       manager was notified": heading present, sentence present, no <MISSING>
+       anywhere, and both facts gone. So each line now states what would satisfy
+       it and what to write when the input does not carry it. A line whose
+       `needs` is `none` — the measured 15% whose omission is an interpretation
+       rather than a missing fact — gets no demand, because a confident artefact
+       demand under a line that cannot satisfy one is the empty check again. */
+    if (omits.length > 1) {
+      omits.forEach(function (o, i) {
+        L.push("- " + o);
+        var dm = demandOf((needs || [])[i]);
+        if (dm) L.push("  Not satisfied by a sentence about it: this one has to carry " + dm +
+                       ". " + missClause((needs || [])[i]));
+      });
+    } else if (omits.length) {
+      L.push(omits[0]);
+      var dm0 = demandOf((needs || [])[0]);
+      if (dm0) {
+        L.push("");
+        var many0 = ((needs || [])[0] || []).length > 1;
+        L.push("This is not satisfied by a sentence about it. It has to carry " + dm0 +
+               (many0 ? " — actual ones, out of my input. " : " — an actual one, out of my input. ") +
+               missClause((needs || [])[0]));
+      }
+    }
     L.push(omits.length > 1
       ? "Give each of these its own line in the finished document every single time. Where my input does not cover one, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it."
       : "Give this its own line in the finished document every single time. If my input does not cover it, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it.");
@@ -1085,8 +1273,18 @@
       L.push("=========================================");
       if (s.h === LOCKED[0].h) {
         if (omits.length) {
-          omits.forEach(function (o) {
-            L.push("- <" + shortOmit(o) + ". Write <MISSING> against it if I did not give it to you.>");
+          /* THE PLACEHOLDER NAMES THE ARTEFACT TOO (2026-08-28). This is the
+             half of the contract that ends up INSIDE the finished document, so
+             it is the last instruction standing between the demand and a fluent
+             sentence. `<MISSING>` alone was ambiguous under a line demanding two
+             things; the per-artefact token says which half is gone. */
+          var nd = needsOf(d);
+          omits.forEach(function (o, i) {
+            var dm = demandOf(nd[i]);
+            L.push("- <" + shortOmit(o) +
+              (dm ? " — carrying " + dm + ". Write " + missTokens(nd[i]) +
+                    " against whichever I did not give you."
+                  : ". Write <MISSING> against it if I did not give it to you.") + ">");
           });
         } else {
           L.push("- <the line everyone leaves out on this document. Write <MISSING> if I did not give it to you.>");
@@ -1171,7 +1369,7 @@
     emitInput(L, ctx.tradeName, false);
     emitContinuity(L, d);
     emitValidation(L, d, "That is the ONLY reason to stop and ask me a question.");
-    emitOmit(L, omits);
+    emitOmit(L, omits, needsOf(d));
     if (T("co")) emitExtraWork(L);
     emitReminders(L);
     emitOutputFormat(L, d, omits, ctx, true);
@@ -1273,7 +1471,7 @@
       L.push("");
       emitContinuity(L, d);
       emitValidation(L, d, "That is the ONLY reason to stop and ask me a question about this one.");
-      emitOmit(L, omits);
+      emitOmit(L, omits, needsOf(d));
       emitOutputFormat(L, d, omits, dctx, i === 0);
       emitSecondary(L, d, T);
       L.push("");
@@ -1616,7 +1814,15 @@
         lines.push("");
         lines.push(om.length > 1 ? "The ones everybody leaves out — say these too:"
                                  : "The one everybody leaves out — say it too:");
-        om.forEach(function (o) { lines.push(++n + ". " + o); });
+        /* THE DEMAND RIDES INTO THE GROUP CHAT TOO. Three leads get this
+           message and never open the page, so a list that names the line and
+           drops what satisfies it hands them the exact failure the demand
+           exists to close — a fluent sentence, and nothing in it. */
+        var cn = needsOf(d);
+        om.forEach(function (o, i) {
+          var dm = demandOf(cn[i]);
+          lines.push(++n + ". " + o + (dm ? "  (say the actual " + dm + " — not a sentence about it)" : ""));
+        });
       }
       lines.push("");
       lines.push(sayCueSentence(d));
@@ -1653,15 +1859,49 @@
     box.appendChild(renderSay(d));
 
     var omits = omitLines(d);
+    var nds = needsOf(d);
     var o = h("div", "omit");
     o.appendChild(h("b", null, omits.length > 1 ? "The lines everyone leaves out"
                                                 : "The line everyone leaves out"));
+    /* THE DEMAND, FOR THE MAN, BEFORE HE OPENS HIS MOUTH (2026-08-28). The line
+       itself has been on this card since the say-list shipped; what would
+       SATISFY it never has, on any of the 231 library documents — only on the
+       custom path nobody reaches. A foreman's own words for why the line alone
+       is not enough: he knows he handed it to Denise at 2:40, so he reads her
+       name into a sentence that does not contain it, every time. Naming the
+       artefact is the only thing that survives that. Same source as the block —
+       demandOf() — so the two readers can never be told different things. */
+    function demandRow(ids) {
+      var dm = demandOf(ids);
+      var r = h("p", "needs");
+      if (dm) {
+        /* THE STEM TAKES THE ARTICLE, BECAUSE THE DEMANDS CARRY ONE. First draft
+           read "Say the actual" and rendered "Say the actual a date or a clock
+           time, a name and …" on every card in the program — broken English on
+           the one line the whole library is built around, caught by looking at
+           the real page rather than by any assertion, because a gate comparing
+           the card against the block passes a stem that is wrong on BOTH.
+           "It has to carry" is also the block's own verb, so the two readers are
+           told the same thing in the same words. */
+        r.appendChild(h("span", "nk", "It has to carry"));
+        r.appendChild(document.createTextNode(" " + dm + " — not a sentence about it."));
+      } else {
+        r.appendChild(h("span", "nk nk-open", "In your own words"));
+        r.appendChild(document.createTextNode(" — no one fact settles this one."));
+      }
+      return r;
+    }
     if (omits.length > 1) {
       var oul = h("ul", null);
-      omits.forEach(function (t) { oul.appendChild(h("li", null, t)); });
+      omits.forEach(function (t, i) {
+        var li = h("li", null, t);
+        li.appendChild(demandRow(nds[i]));
+        oul.appendChild(li);
+      });
       o.appendChild(oul);
     } else if (omits.length) {
       o.appendChild(h("p", null, omits[0]));
+      o.appendChild(demandRow(nds[0]));
     } else {
       /* `omits[0] || ""` painted an EMPTY red box — a warning frame with nothing
          in it, which reads as a rendering failure. Unreachable while every
@@ -2130,6 +2370,10 @@
      merge would be the second copy of the rule this file already refuses to keep. */
   window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
                      omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose,
+                     /* The artefact half, exported so tools/toolkit-gates/docspec-needs.mjs
+                        reads the SHIPPED vocabulary and the SHIPPED resolver rather than
+                        keeping a second copy of either beside it. */
+                     artefacts: ARTEFACTS, needsOf: needsOf, demandOf: demandOf,
                      omitClasses: OMIT_CLASSES, famOmit: FAM_OMIT, shortOmit: shortOmit,
                      picked: picked, maxDocs: MAX_DOCS, pooled: pooled, poolTerms: poolTerms,
                      factsOf: factsOf, sayCue: sayCue, sayCueSentence: sayCueSentence,

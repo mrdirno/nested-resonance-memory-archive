@@ -71,6 +71,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The failed piece itself and where it is right now. Every one of these fights gets settled by the part — the split coupling, the burned fitting, the ring that never got crimped. If it went in the dumpster you've already lost the argument. Name who bagged it, when, what's written on the tag, and where it's sitting.",
+      "needs": ["when", "who", "where"],
       "halt": "Only stop and ask if the time the water was isolated is unknown or contradicted in the notes — every argument downstream hangs off that one number.",
       "facts": [
         "Building, floor, grid and room where it let go",
@@ -136,6 +137,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The depth from finish grade and the horizontal offset from the paint, measured with a tape while the line is still lying in the hole and with the tape in the frame. Nobody measures it — they call it in, take the chewing, and backfill. \"38 inches from finish grade, 6 foot 4 east of the nearest orange mark,\" with a photo of the tape, is usually the whole defense, and once the hole is closed there isn't one.",
+      "needs": ["where", "count"],
       "halt": "Only stop and ask if there is neither a locate ticket number nor a clear statement that no ticket existed — that single fact decides who pays.",
       "facts": [
         "Locate ticket number and the date it was called in",
@@ -200,6 +202,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The invert elevations at the tie-in points, off the rod, written into the letter. Everybody writes \"ready for cover\" and leaves the inverts on a markup that lives in a truck. When the next man comes to tie in and those numbers aren't in anybody's mail, the next version of that pipe is a jackhammer and it's on your bill.",
+      "needs": ["where", "count"],
       "halt": "Only stop and ask if the area boundary can't be identified — you cannot release \"some of the underground.\" Everything else gets a <MISSING>.",
       "facts": [
         "Building, grid or column lines, floors and rooms in the area being released",
@@ -260,6 +263,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The verbal direction. Every foreman gets told \"while you're in there, just run one over to the mop sink\" and it never makes the daily. Ninety days later there's no ticket, no question written and no line in the log — so it's free work. One sentence with who said it, their company, what time and what area, and it's provable.",
+      "needs": ["when", "who", "where"],
       "halt": "Only stop and ask if the date of the shift is missing or contradicted — a daily with the wrong date on it is worse than no daily. Everything else gets a <MISSING> placeholder.",
       "facts": [
         "Date of the shift",
@@ -318,6 +322,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The valve you left in a non-normal position. Half of all callbacks are \"a plumber was here and now the third floor has no hot water.\" If you throttled a balancing valve, left a shutoff closed, tagged out a heater or shut a branch to isolate — that valve, where it is and the position you left it in has to be its own sentence, or the return trip is free and it's your fault.",
+      "needs": ["where", "change"],
       "halt": "Stop and ask on two things only: whether the water was left ON or OFF when the tech drove away, and — if gas was involved at all — whether the appliances were relit or tagged out. Water off with nobody told is a callback; gas off with a pilot out and nobody told is a 2am phone call and the one thing on this call that can hurt somebody. Everything else takes a <MISSING>.",
       "facts": [
         "Date, time on site, time off",
@@ -378,6 +383,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The date the condition actually started, as separate from the date you're writing. Foremen write \"we've been held up in the east wing for a few weeks\" and hand the whole thing away — now the GC can argue you knew and sat on it. Put the start date in the first three lines and say plainly this is the first written notice of it.",
+      "needs": ["when"],
       "halt": "Only stop and ask if the date the condition began is unknown — everything in this letter hangs off that date.",
       "facts": [
         "Area and system affected: building, floor, grid, riser",
@@ -436,6 +442,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The rework you're about to eat twice. Everybody prices the new pipe and forgets the 40 feet of finished 4-inch that has to come back out, the wall that gets opened, the test you have to run again, the inspection you have to re-book and the day you lose waiting on it. Write the demo, the re-test and the re-inspection as their own lines or you're donating them.",
+      "needs": ["none"],
       "halt": "Only stop and ask if it isn't clear whether the work is on hold or already going ahead — the letter reads completely differently and it can't say both.",
       "facts": [
         "The added or changed work: location, system, sizes, quantities",
@@ -489,6 +496,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The date-stamped photos taken BEFORE your first day of work in that area — the stained ceiling tile, the rusted riser clamp, the cracked closet flange, the chipped lav that was already chipped — and the folder or album they live in, by its actual name, with who shot them and when. Nobody photographs the boring stuff on day one, and in month five the owner points at a stain you walked past forty times and it's yours. The letter is worth about a tenth of the photo behind it, so the letter has to say where the photo is.",
+      "needs": ["when", "who", "before", "where"],
       "halt": "Only stop and ask if the date you first had access to the area is unknown — the whole letter is a race between that date and the damage.",
       "facts": [
         "Area: building, floor, room, grid",
@@ -545,6 +553,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The sentence naming who operates and maintains the system from the in-service date forward. Everybody writes up the chlorination and skips that line — so when the building sits empty four months with dead legs and nobody flushing it, or a heater scales up on untreated water, it lands back on you. Name the date, name who took it, and say plainly that operating and maintaining it went with it.",
+      "needs": ["when", "who"],
       "halt": "Only stop and ask if both the in-service date and who accepted the system are unknown — that pair is the entire point of this letter.",
       "facts": [
         "Exact extent of the system: building, risers, floors, point of connection to termination",

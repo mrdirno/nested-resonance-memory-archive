@@ -73,6 +73,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What you could NOT test, and why. The far-end call you never placed because their side wasn't ready, the combine you never ran because the operable wall wasn't in, the room PC that never showed up. It gets left out because the report is supposed to look clean — then it fails in front of a VP and it's a warranty callback instead of their own open item. If it wasn't tested, it goes in by name.",
+      "needs": ["notdone"],
       "halt": "Only if you can't tell which room this is. Everything else gets <MISSING> and goes in the open items.",
       "facts": [
         "room name (drawings and client) and system type",
@@ -136,6 +137,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The design decisions that look like faults. The intentional delay, the local speaker muting on a call, the input that deliberately doesn't auto-switch because the client asked for that, the mic that gates, the display held on. Nobody writes them down, so by month two the help desk has logged them as defects and you're driving out under warranty to explain a feature.",
+      "needs": ["none"],
       "halt": "Only if this is a divisible or multi-mode room and you can't tell from what I gave you how it's meant to behave in each mode — describing the wrong combine logic is worse than describing none.",
       "facts": [
         "room name and capacity",
@@ -199,6 +201,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What changed in the days before it. The firmware push, the switch config change, the new laptop image, the certificate that rolled, the platform update that landed overnight, the room somebody power-cycled at night. Nobody asks both sides that question, so the write-up says intermittent and the same failure is back in a month. Ask both sides, and write the answer down even when it's \"nothing that we know of\".",
+      "needs": ["before", "change"],
       "halt": "Only if you can't tell from what I gave you whether the cause is confirmed or still a theory.",
       "facts": [
         "site, room, date and time of the event",
@@ -262,6 +265,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The stuff you couldn't get to. The ceiling tile you couldn't lift because the room was in use, the IDF nobody had a key for, the wall you never opened, the question nobody answered. It reads like an admission so nobody writes it — and three months later the mount lands on grouted block or the run is longer than bid and it's your money. One line each, with the name of who has to close it.",
+      "needs": ["who", "notdone"],
       "halt": "Only if you can't tell which physical room this is — no room name, number, floor or building. Everything else gets <MISSING> and a note on who has to fill it.",
       "facts": [
         "room name as the client says it AND as the drawings label it",
@@ -321,6 +325,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The last-known-good — what you changed and left changed. The trim you nudged, the preset you overwrote, the firmware you bumped, the reservation you added, the port you moved. Six weeks later nobody can tell the original fault from your fix, and the second truck roll gets eaten as warranty. Before value beside the after value, in the same sentence, every time.",
+      "needs": ["before", "change"],
       "halt": "Only if you can't tell whether this call is warranty, contract-covered or billable T&M — that one line decides who pays. Everything else gets <MISSING>.",
       "facts": [
         "site and room as the client names it",

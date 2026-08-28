@@ -95,6 +95,7 @@ window.TRADE_DOCS = {
       "why": "The message that goes out with every version. Sent well it ends the round; sent as “new cut attached” it starts a second thread about notes you already did.",
       "note": "This is the message, not the cut. It carries no price, and it never states how many rounds the deal has — that is the agreement talking, not this.",
       "omit": "THE NOTES YOU DIDN'T DO, and a one-line reason for each. Silence reads as agreement, so the note you quietly skipped comes back as a free round three weeks later — and the one you couldn't do because you are still waiting on something of theirs comes back as your fault.",
+      "needs": ["notdone"],
       "halt": "Only if no version or round is named at all — a cut note with no version on it is the exact confusion this document exists to end.",
       "facts": ["which version this is", "which round of notes it answers", "what changed", "what you did not do, and why", "what you are still waiting on"],
       "sections": [
@@ -142,6 +143,7 @@ window.TRADE_DOCS = {
       "why": "The only record of what came off the cards and where every copy went. It gets read on the day something is missing, and by then the cards are back in the camera.",
       "note": "It records what YOU did with the media. It never states what anything SHOULD be — how many copies, how long anything is kept, what a card can be trusted to hold — because that is the shop's own rule and the deal, not ours.",
       "omit": "EVERY COPY, NOT JUST THE ONE IN YOUR HAND — which drive, whose hands it is in, and where each one physically is. A media report that names one location is a record of a single point of failure, and it is the line everybody leaves out because on the day it feels obvious.",
+      "needs": ["who", "where"],
       "halt": "Only if no shoot day or job is named at all.",
       "facts": ["the date and the job", "every card or source, by its own label", "where each copy went", "what was verified, and how", "what has to be true before the cards get reused"],
       "sections": [
@@ -188,6 +190,7 @@ window.TRADE_DOCS = {
       "why": "The message you send within the hour of getting a yes. It is the only thing standing between “approved” and another round nobody is paying for.",
       "note": "It records the approval that was actually given. It never states how many rounds the deal has, what happens next time, or what anything costs — that is the agreement, and this document does not amend it.",
       "omit": "THE VERSION AND THE DATE THE YES WAS GIVEN AGAINST, and what was still open at that moment. An approval with no version on it approves whatever the next argument says it approved.",
+      "needs": ["ref", "when", "notdone"],
       "halt": "Only if no approval or decision is described at all.",
       "facts": ["the version approved", "who approved it, and when", "how it came — call, message, email, in the room", "what was still open at that moment", "what happens next, and by when"],
       "sections": [
@@ -234,6 +237,7 @@ window.TRADE_DOCS = {
       "why": "Somebody has to open your project cold and finish it. Everything you know that is not written down is about to become their problem, and then yours again on a phone call at nine at night.",
       "note": "It says where things are and what is missing. It never states what a license permits or whether anything can be reused somewhere else — that is on whoever bought it, and the question goes to them.",
       "omit": "WHAT IS NOT IN THE FOLDER. Fonts, plugins, the music, the stock, the graphics project the titles were built in, the file that lives in somebody's account rather than on the drive. A handover that lists what IS there reads complete, and it is the one that fails on a Friday afternoon.",
+      "needs": ["where", "notdone"],
       "halt": "Only if no project or job is identified at all.",
       "facts": ["the job and the current version", "where the media and the project files are", "what is missing from the folder", "what is still open", "who owns what"],
       "sections": [
@@ -296,6 +300,7 @@ window.TRADE_DOCS = {
       "why": "The message you send the same day as the kickoff call. It is the cheapest document in this library and it is the one that decides, months later, what counts as an extra.",
       "note": "It records what was said, in your words, and asks them to correct it. It is not the agreement: it sets no price, no rate and no number of rounds. If those were said on the call they belong in the deal, not in a recap you wrote afterwards.",
       "omit": "WHAT IS NOT INCLUDED, in the same message as what is. A recap that only lists what you are doing is a wish list; the line that stops the arguments is the short one naming the things a reasonable person will assume are in and are not.",
+      "needs": ["notdone"],
       "halt": "Only if no conversation or job is described at all.",
       "facts": ["the date of the call and who was on it", "what you are making", "what got decided", "what is not included", "the dates, and what has to arrive for them to hold"],
       "sections": [
@@ -363,6 +368,7 @@ window.TRADE_DOCS = {
       "to": "the producer, or the client who is paying for the day",
       "why": "The one your producer forwards, and the only record of what a day actually cost in time. Written on the day it is a fact; written on Friday it is a memory.",
       "omit": "THE AUDIBLE — the thing you changed on the day to keep the day moving. A location swapped, a lens you did not have, talent an hour late, a setup dropped to make the light. Nobody writes it down, and three weeks later there is no paper for why the cut does not match what was pitched.",
+      "needs": ["change"],
       "facts": ["the date and the job", "who was on it, and for how long", "what you got", "what you did not get, and why", "what is holding tomorrow"],
       "halt": "Only if this is the first one in the thread and there is no job or date at all.",
       "secondary": ["a wrap summary rolled up from every day on this shoot", "a shorter one you can send the client, with the internal detail taken out"]
@@ -382,6 +388,7 @@ window.TRADE_DOCS = {
       "to": "the producer, the venue or building contact, and the rental house if it is gear",
       "why": "You walked into something already broken — a wall, a floor, a lens, a light, a room somebody left wrecked. This is the note that means it is not yours when somebody goes looking for who pays.",
       "omit": "THE DATE, THE TIME, AND WHERE THE PHOTOS ARE. A description with no photo reference and no date on it is your word about a room, and it settles nothing on the day somebody asks who pays for it.",
+      "needs": ["when", "where"],
       "secondary": ["a short message to whoever owns the space or the gear, with the photos attached"]
     },
 
@@ -408,6 +415,7 @@ window.TRADE_DOCS = {
       "to": "the producer, the crew who have to shoot it, and whoever is booking it",
       "why": "Everything you noticed standing in the room, written so somebody who was not there can plan a day out of it.",
       "omit": "POWER, SOUND, ACCESS AND HOURS — where the outlets actually are, what you can hear from inside the room, how the gear gets in, and the hours you are genuinely allowed to be in there. It never makes the notes and it is the thing that kills the day.",
+      "needs": ["when", "where"],
       "halt": "Only if no location is identified.",
       "facts": ["the date and the place", "who showed you around, and who can let you in", "what is there and what you would have to bring", "what you can hear, and how it is lit", "the hours, and how the gear gets in"],
       "secondary": ["a list of questions to send back to whoever books it", "a short summary for whoever is planning the day"]
@@ -420,6 +428,7 @@ window.TRADE_DOCS = {
       "to": "the client, and whoever on their side has to put it somewhere",
       "why": "The last thing they read and the first thing they come back to. Written well it ends the job; sent as “files attached” it brings you back for free.",
       "omit": "WHAT IS NOT IN THIS DELIVERY, and what would have to happen to get it. A delivery that reads as if everything is finished turns every leftover into work you do for nothing.",
+      "needs": ["notdone"],
       "halt": "Only if what is being delivered is not identified at all.",
       "facts": ["what you are sending, item by item", "which version each one is", "where it is, and how long the link lives", "what is not included", "what is still open"],
       "secondary": ["a two-line message to send with the link", "a list of just what is still outstanding"]
@@ -432,6 +441,7 @@ window.TRADE_DOCS = {
       "to": "the producer, or the client who keeps asking",
       "why": "What is landing and when, sent before they ask. It is a request wearing a status update — the dates below only hold if the things underneath them arrive.",
       "omit": "WHAT HAS TO BE TRUE BEFORE EACH ITEM CAN START — the approval, the file, the person's time, the thing they still owe you. A status with no preconditions on it is a wish list, and the date slips with nobody having agreed to it.",
+      "needs": ["notdone"],
       "facts": ["the period", "what is landing, and when", "what each one is waiting on", "what is stopped", "what you need, and by when"],
       "secondary": ["just the list of what you need from them, as its own message", "a two-line version for the thread it gets asked in"]
     },

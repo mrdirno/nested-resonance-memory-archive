@@ -86,6 +86,7 @@ window.TRADE_DOCS = {
       "why": "The moment there is paint on it, the substrate cannot be read again — the mud, the moisture, the mill glaze and the meter reading are all under the coat. If the objection, the readings and the direction to proceed do not carry a date from BEFORE the coat, then in April the defect has one owner: the last trade that touched it.",
       "note": "This records what was observed, what was measured and who directed the work — it never says the surface failed, passed or was unfit. The readings are the ones HIS instruments took; the limits beside them are the ones off HIS OWN product data or spec, with the source named; and the direction is quoted, not characterised. Whether the surface was acceptable is exactly the question this document refuses to answer, and that refusal is what makes it hold up.",
       "omit": "THE READING BESIDE THE LIMIT, AND WHERE EACH ONE CAME FROM. Everybody writes \"the walls were still wet.\" Almost nobody writes \"my meter read <what it read> at three spots by the window, the data sheet in my hand says <what it says>, I showed the super at 9:40 and was told to keep rolling.\" The first is an opinion a lawyer eats; the second is two numbers, two sources and a name.",
+      "needs": ["who", "where", "count"],
       "halt": "Only if there is no statement of who directed the work to proceed — without the direction, this is a condition report, and the no-paint note already exists for that.",
       "facts": [
         "the areas, pinned so somebody can find them after the building is finished",
@@ -138,6 +139,7 @@ window.TRADE_DOCS = {
       "why": "After final coat the traffic reverses: every trade left in the building works AGAINST finished paint, and eight weeks later the walls carry every cart, ladder and door swing since. Without a dated record of what the finish looked like when the painters left it, every mark in the building reads as a painting punch item — and the touch-up truck, the mobilisation and the argument all land on the painter.",
       "note": "This is a condition record, not an acceptance. It never says punch complete, never says the work conforms, and never asks anybody to sign anything — it fixes WHAT the finish looked like and WHEN, names who saw it, and leaves acceptance to the people who own it. A pasted block cannot be signed, and the reply with its timestamp is the paper trail.",
       "omit": "WHO WAS INVITED TO WALK IT, AND WHO DID NOT COME. Everybody writes what rooms got finished. Almost nobody writes \"offered the walk Thursday 14:00, walked Friday 07:30 with the super's foreman, the flooring lead was told twice and did not come\" — and that is the entire document the day somebody's cart mark shows up in a hallway that was clean at final.",
+      "needs": ["when", "who"],
       "halt": "Never halt. If rooms are missing or nobody came, record what was walked, mark the rest <MISSING> and send it — a thin baseline dated today beats a complete one dated after the dings.",
       "facts": [
         "the areas walked, by floor and room, and the date and time of the walk",
@@ -190,6 +192,7 @@ window.TRADE_DOCS = {
       "why": "The most re-litigated verbal in this trade is a color or sheen changed by somebody standing in a hallway — acted on the same afternoon, invisible on every official schedule, and remembered three different ways by three different people the day the owner walks it. Gallons get tinted on that sentence. This writes the sentence down while everyone still agrees it was said.",
       "note": "This records a direction, never a judgment: name, number, base and sheen ride EXACTLY as the person stated them, the schedule line it replaces is quoted from the approved schedule, and the document never says the new color matches anything, reads the same as anything, or is equivalent to anything across brands. It also never carries a tint formula — the counter owns the formula, the schedule owns the intent.",
       "omit": "WHAT IT REPLACES, AND HOW MUCH OF THE OLD ONE IS ALREADY ON THE WALL. Everybody writes the new color down. Almost nobody writes \"this displaces P-3 on the level 2 corridors, two of which are already at final in the old color\" — and that sentence is the entire cost conversation, named on the day instead of discovered at the walk.",
+      "needs": ["count", "change"],
       "halt": "Only if there is no statement of who gave the direction. A color note with no name on it is a wish, and the schedule outranks a wish.",
       "facts": [
         "who gave the direction, standing where, when, and the words used",
@@ -226,12 +229,14 @@ window.TRADE_DOCS = {
       "name": "The Day Report",
       "from": "the lead on the job",
       "to": "our office and the GC super",
-      "omit": "WHAT GOT COATED, OVER WHAT, AND OUT OF WHICH CANS. Every other trade's daily can leave the day at \"we got this far\". A painting daily that does not say which areas took which coat, what they were coated over, and the product and batch off the fives is missing the lines the callback turns on — because once the next coat goes on, nobody can establish the layer order again. And the custody line nobody writes: which rooms were RELEASED to us today, and which we handed back."
+      "omit": "WHAT GOT COATED, OVER WHAT, AND OUT OF WHICH CANS. Every other trade's daily can leave the day at \"we got this far\". A painting daily that does not say which areas took which coat, what they were coated over, and the product and batch off the fives is missing the lines the callback turns on — because once the next coat goes on, nobody can establish the layer order again. And the custody line nobody writes: which rooms were RELEASED to us today, and which we handed back.",
+      "needs": ["who", "before", "where", "count"],
     },
     "delay-notice": {
       "name": "We're Rolling Nothing",
       "to": "the GC super and our PM",
       "omit": "THE ROOMS BY NAME, AND WHO OR WHAT WAS IN THEM. \"We couldn't get in\" is a sentence nobody can act on. \"Rooms 214 through 220 — the tapers' scaffold in 214 and 215, no color answer on the corridors, and my meter reading over my own limit in 218, source named\" is a list a super can clear by lunch.",
+      "needs": ["who", "where"],
       "sections": [
         {
           "h": "The hold and the clock",
@@ -253,11 +258,13 @@ window.TRADE_DOCS = {
     },
     "damage-found": {
       "name": "It Was Like That When We Got There",
-      "omit": "THE DATED PHOTO WITH SOMETHING FIXED IN FRAME, TAKEN BEFORE THE TAPE WENT UP. The gouge in the drywall, the scratched glass, the dented frame — found during mask-off and mentioned to nobody — becomes the painter's back-charge the day the tape comes down. A photo of the mark with a door number in frame, dated before the first coat, is the whole defence, and the walk that finds ten of them takes fifteen minutes."
+      "omit": "THE DATED PHOTO WITH SOMETHING FIXED IN FRAME, TAKEN BEFORE THE TAPE WENT UP. The gouge in the drywall, the scratched glass, the dented frame — found during mask-off and mentioned to nobody — becomes the painter's back-charge the day the tape comes down. A photo of the mark with a door number in frame, dated before the first coat, is the whole defence, and the walk that finds ten of them takes fifteen minutes.",
+      "needs": ["when", "where"],
     },
     "handover": {
       "name": "The Turnover",
-      "omit": "WHERE THE ATTIC STOCK PHYSICALLY IS, CAN BY CAN. Every turnover letter lists the colors. Almost none says \"four labeled gallons on the shelf in janitor 112, lids marked by room\" — and two years later the repaint quote starts with an archaeology project. Colors ride exactly as the approved schedule names them: name, number, base, sheen, by area — never a formula, and never a cross-brand equivalent."
+      "omit": "WHERE THE ATTIC STOCK PHYSICALLY IS, CAN BY CAN. Every turnover letter lists the colors. Almost none says \"four labeled gallons on the shelf in janitor 112, lids marked by room\" — and two years later the repaint quote starts with an archaeology project. Colors ride exactly as the approved schedule names them: name, number, base, sheen, by area — never a formula, and never a cross-brand equivalent.",
+      "needs": ["where", "count"],
     }
   },
 

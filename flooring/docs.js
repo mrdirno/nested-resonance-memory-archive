@@ -84,6 +84,7 @@ window.TRADE_DOCS = {
       "why": "The one page that decides, months later, what counts as an extra. Attached to the bid it is a clarification everyone signs off on; produced after the argument starts it is a defense nobody believes. It is the cheapest document in this library and the one that saves the most.",
       "note": "It states what my price is for and what it takes for granted, in plain words. It carries no price — the office owns the number — and it never states another party's spec: the flatness, the moisture limit and the schedule belong to the people who own them, and this sheet only says which ones my number assumed.",
       "omit": "THE ASSUMPTIONS, in the same page as the exclusions. An exclusion list names what I am not doing; the assumptions name what has to be TRUE for my price to hold — the slab ground and flat enough for my system, the room clear, the old goods gone, the building at temperature. It is the half everybody leaves off, and it is the half that turns into a change when the day arrives and none of it is done.",
+      "needs": ["notdone"],
       "halt": "Only if no scope of work or bid is described at all.",
       "facts": ["what my number covers", "what it excludes", "what it assumes is already done by others", "where an allowance is carried and what it is based on", "what turns into a change"],
       "sections": [
@@ -137,6 +138,7 @@ window.TRADE_DOCS = {
       "why": "Prep is where the whole margin lives and it is the work nobody writes down. This is the record of what the substrate was and what it took to make it installable — the backup behind the tag, written the day you did it. Grind it, skim it or glue over it and the before is demolished; a story told three weeks later is not evidence, and the day's write-up is.",
       "note": "It records what you found and what you did to it. It never states a moisture number, a flatness tolerance or whether the substrate was acceptable. You write the reading you took beside the limit off your own bucket or the mill's printed instructions, and you never say which one wins — that call is the reason this document, and this whole kit, exists.",
       "omit": "WHAT IT WAS LIKE BEFORE YOU TOUCHED IT — the condition of the substrate and the reading you took before anything changed, with where the photos live. Grinding, skimming or gluing over it demolishes the evidence, and the before-value written the same day is the only thing that still exists ninety days later when a bonded floor is somebody else's ninety-day-old mistake that you now own.",
+      "needs": ["before", "where"],
       "halt": "Only if no area or substrate is described at all.",
       "facts": ["the date and the area", "what the substrate was when you got there", "what your own instructions require of it", "what you did to it", "what it displaced — hours, schedule, another trade"],
       "sections": [
@@ -190,6 +192,7 @@ window.TRADE_DOCS = {
       "why": "Somebody points at the floor and says it looks wrong — a lighter run, a change where the light hits it, a direction that shows. This is the note that documents what was raised and what you actually did, the same day, so an appearance question does not become an installation-defect claim by silence. You do not grade the look here; you record it and send it to the people who own that call.",
       "note": "It records what was raised and how the floor was installed. It never calls the appearance a defect OR a characteristic, never says it is acceptable, and never quotes a mill's appearance criteria — whether it is a manufacturing trait or a defect is the mill rep's determination, and this document asks for it in writing rather than making it.",
       "omit": "WHEN IT WAS RAISED AND UNDER WHAT LIGHT — the date, the time of day, the lighting and the direction you were standing when it showed. Shading moves with the light and the angle, so a complaint with no conditions on it can be re-staged to look like anything; the record made on the day, under stated light, is the only fixed one.",
+      "needs": ["when", "where"],
       "halt": "Only if no floor, area or concern is described at all.",
       "facts": ["the date it was raised and by whom", "what they are seeing and where", "the conditions you observed it under", "how the material was installed", "what you are asking the mill rep for"],
       "sections": [
@@ -242,6 +245,7 @@ window.TRADE_DOCS = {
       "why": "You looked at what you were told to cover, it was not what your own instructions call for, you said so, and you were told to put it in anyway. This is the record that you raised it and were directed to proceed — written the same day, because once the floor is bonded the thing you covered is gone, and so is the argument, unless this exists.",
       "note": "It records what you found, what your own instructions require, that you raised it, and that you were directed to proceed. It never declares a warranty void, never says the floor will fail, and never grades the substrate. It states the honest half — what your instructions require and what you were told to do over it — which is the half that actually holds up. If the floor is not ready and you want the go-ahead in writing BEFORE you cover it, that is Give Me The Go (give-me-the-go.html) — it owns the not-ready-to-install case and ends in the ask. This is the record for AFTER you were directed to proceed over your objection and covered it anyway, the dated proof when the go will not come in writing. Keep the two apart or the kit has two doors onto one job.",
       "omit": "WHO DIRECTED YOU, WHEN, AND HOW — the name, the date and the channel of the go-ahead, plus the condition as it was before you covered it and where the photos live. \"They told me to\" with no name and no date on it is worth nothing; the direction with a name and a time on it is the whole document.",
+      "needs": ["when", "who", "before", "where"],
       "halt": "Only if no condition and no direction to proceed are described at all.",
       "facts": ["the date and area", "the condition you found", "what your own instructions require of it", "who directed you to proceed and how", "what you covered, and where the proof is"],
       "sections": [
@@ -299,6 +303,7 @@ window.TRADE_DOCS = {
       "from": "the lead mechanic on the job",
       "why": "The one your PM forwards, and the only record of what a day on this floor actually cost. Written on the day it is a fact; written on Friday it is a memory, and a memory does not back a change order.",
       "omit": "THE AUDIBLE, and on a floor the audible is almost always prep — the grind nobody scheduled, the skim that ate the morning, the material robbed from another area to keep laying, the hour of overtime to beat a pour. Nobody writes it down the day it happens, and three weeks later there is no paper for why the number moved.",
+      "needs": ["change"],
       "secondary": ["a weekly rollup from the dailies in this thread", "a short version for the GC with the internal detail stripped"]
     },
 
@@ -307,7 +312,8 @@ window.TRADE_DOCS = {
       "aka": ["damage", "pre-existing", "already cracked", "came in like this", "not us", "prior condition"],
       "to": "the GC super, my PM, and the dealer",
       "why": "You walked in to a substrate that was already wrong — cracked, contaminated, curling, oil-stained, or a slab somebody else poured and left. This is the note that means the condition under your floor is not yours when somebody goes looking for who pays, and you are the trade that seals it.",
-      "omit": "THE DATE AND WHERE THE PHOTOS ARE, and the reading you took before anything changed. You are about to cover this, so a description with no photo and no date is your word about a slab nobody can see any more — which settles nothing on the day somebody asks who owns the tear-out."
+      "omit": "THE DATE AND WHERE THE PHOTOS ARE, and the reading you took before anything changed. You are about to cover this, so a description with no photo and no date is your word about a slab nobody can see any more — which settles nothing on the day somebody asks who owns the tear-out.",
+      "needs": ["when", "before", "where"],
     },
 
     "delay-notice": {
@@ -330,7 +336,8 @@ window.TRADE_DOCS = {
       "to": "my PM, the dealer, and the customer",
       "why": "You went back to a floor that is already down and somebody is unhappy with — a lifted seam, a hollow spot, a plank that has moved, a gap that opened. This is the record of what you found and what you did about it, honest and complete.",
       "note": "It records what you found and what you did. It NEVER states the cause and never calls it a defect — whether a lifted seam is adhesive, substrate, the material or the site is the mill's and the testing agency's call, not the man on his knees, and \"caused by\" is a claim a callback note is not allowed to make. Route the cause to the mill; record the condition.",
-      "omit": "WHAT YOU DID NOT DO AND WHY, and the condition it was in when you got there before you touched it. The part you could not fix on this visit, the thing outside this callback, the reading from before — left out, you own it by silence, and on a floor already down there is no second look."
+      "omit": "WHAT YOU DID NOT DO AND WHY, and the condition it was in when you got there before you touched it. The part you could not fix on this visit, the thing outside this callback, the reading from before — left out, you own it by silence, and on a floor already down there is no second look.",
+      "needs": ["before", "notdone"],
     },
 
     "site-walk": {
@@ -338,7 +345,8 @@ window.TRADE_DOCS = {
       "aka": ["walk", "site visit", "survey", "pre-install walk", "went and looked", "field measure"],
       "to": "the office, estimating, and the dealer",
       "why": "Everything you noticed standing on the substrate, written so somebody who was not there can price it, schedule it and order the right material for it.",
-      "omit": "ACCESS, THE SUBSTRATE AND THE ROOM'S STATE — where a twelve-foot roll can actually get in, the freight lift and who holds the key, whether the room will be clear and at temperature, and what the slab looks like today. It never makes the notes and it is the thing that blows the day, because a floor van cannot improvise its way past a locked dock."
+      "omit": "ACCESS, THE SUBSTRATE AND THE ROOM'S STATE — where a twelve-foot roll can actually get in, the freight lift and who holds the key, whether the room will be clear and at temperature, and what the slab looks like today. It never makes the notes and it is the thing that blows the day, because a floor van cannot improvise its way past a locked dock.",
+      "needs": ["who", "before", "where"],
     },
 
     "handover": {
@@ -347,6 +355,7 @@ window.TRADE_DOCS = {
       "to": "the GC, the owner, and their facilities people",
       "why": "The last document anyone reads and the first one they blame. Written well it ends the job; sent as \"floors are done\" it brings you back for free on every scuff that was there when you left.",
       "omit": "THE ATTIC STOCK AND THE MAINTENANCE HANDOFF, alongside the open items. Where the leftover material and the spares physically are, what cleaner and what pad the floor takes, and what is still open with an owner and a date. A closeout that reads finished turns every future mark into your warranty.",
+      "needs": ["when", "who", "where", "notdone"],
       /* `facts` re-addressed too, not just the row-level fields — the shared list
          names "keys, codes, manuals" and "what was tested and by whom", which are
          a systems turnover, not a floor closeout. It only feeds the VALIDATION
@@ -360,7 +369,8 @@ window.TRADE_DOCS = {
       "aka": ["look ahead", "lookahead", "two week", "next week", "whats coming", "plan"],
       "to": "the GC and my PM",
       "why": "The one that stops the crew standing in a corridor next week. It is a request wearing a schedule — the dates below only hold if the rooms underneath them are ready.",
-      "omit": "WHAT HAS TO BE TRUE BEFORE EACH AREA CAN START — the slab ground and dry enough, the room cleared, the heat on, the other trades out, the material on site and conditioned. A look-ahead with no preconditions on it is a wish list, and the date slips with nobody having agreed to it."
+      "omit": "WHAT HAS TO BE TRUE BEFORE EACH AREA CAN START — the slab ground and dry enough, the room cleared, the heat on, the other trades out, the material on site and conditioned. A look-ahead with no preconditions on it is a wish list, and the date slips with nobody having agreed to it.",
+      "needs": ["notdone"],
     }
   },
 

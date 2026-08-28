@@ -218,6 +218,44 @@ const REVEALS = [
     },
   },
   {
+    name: 'the artefact demand, on the trade\'s heaviest omitted line',
+    match: /\/write-up\.html$/,
+    /* THE DEMAND (2026-08-28) is a THIRD state that only exists after a tap, and
+       it is NOT covered by the say-list reveal above: that one picks the document
+       with the longest `facts`, and the worst case here is a different document
+       entirely — the multi-omit ones, where every line in the red frame carries
+       its own mono badge and its own demand clause beneath it. framing ships five
+       such documents at three lines each, and six lines across the corpus demand
+       four artefacts at once ("a date or a clock time, a name, a location and a
+       before-value"), which is the longest string this row can ever hold.
+       DERIVED IN-PAGE off needsOf/demandOf, never a roster: a document authored
+       next month with five artefacts on four lines becomes the worst case the
+       day it lands, with nothing here to update. */
+    run: () => {
+      if (!window.DocSpec || !window.DocSpec.needsOf) return 'no artefact API on a write-up page';
+      const D = window.DocSpec;
+      const lib = D.library();
+      let worst = null, worstN = -1;
+      lib.forEach(d => {
+        const n = D.needsOf(d).reduce((a, row) => a + D.demandOf(row).length + 24, 0);
+        if (n > worstN) { worstN = n; worst = d; }
+      });
+      if (!worst) return 'library rendered empty';
+      const btn = [...document.querySelectorAll('.lib button')]
+        .find(b => (b.querySelector('.nm') || {}).textContent === worst.name);
+      if (!btn) return 'no library row for ' + worst.name;
+      btn.click();
+      const frame = document.querySelector('.omit');
+      if (!frame) return 'picking a document rendered no omitted-line frame';
+      const rows = frame.querySelectorAll('.needs');
+      if (!rows.length) return 'the omitted line rendered with no demand under it';
+      if (rows.length !== D.omitLines(worst).length) {
+        return 'the frame shows ' + rows.length + ' demand(s) for ' + D.omitLines(worst).length + ' line(s)';
+      }
+      return null;
+    },
+  },
+  {
     name: 'a desk of four, mid-add',
     match: /\/write-up\.html$/,
     /* THE DESK (2026-08-16) is the widest thing on the page and none of it

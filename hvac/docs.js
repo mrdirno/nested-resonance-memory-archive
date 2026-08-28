@@ -71,6 +71,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The time you shut it off and the name of the human you handed it to — title, phone or in person, plus anybody you tried and couldn't reach. A red tag with no time and no named person turns into 'we were never told' the second a tenant freezes, and if you closed the gas valve, write that you closed the gas valve.",
+      "needs": ["when", "who", "change"],
       "halt": "Only stop and ask if it isn't clear what you physically did to take it out of service — gas off, disconnect open, breaker off, locked — because that one sentence carries the whole document.",
       "facts": [
         "Building, address and the date",
@@ -131,6 +132,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Proof you fixed the CAUSE and not just the compressor: drier changed, lines flushed, metering device checked or replaced, contactor and electrical corrected, condenser cleaned, charge weighed in instead of gauged in — and what you deliberately left alone. Claims die on the sentence you didn't write; 'replaced compressor, evacuated, charged' with no drier in it reads to the desk like the next one is already coming.",
+      "needs": ["change", "notdone"],
       "halt": "Only stop and ask if there is no model and serial off the failed compressor at all, because the claim can't be filed without it.",
       "facts": [
         "Site, date and unit tag",
@@ -191,6 +193,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "One flat sentence saying whether the leak was REPAIRED or only LOCATED. Customers hear 'we fixed the leak' when you meant 'we topped it off until the coil comes in' — three weeks later the recharge is on your dime because nothing in writing said different.",
+      "needs": ["none"],
       "halt": "Only stop and ask if it isn't clear whether the leak was actually repaired or the system was just recharged, because the whole liability turns on which one this is.",
       "facts": [
         "Building, address, date, unit tag and refrigerant type off the plate",
@@ -252,6 +255,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The alarm history — when the box first alarmed against when a human actually called it in, whether the dialer or the monitoring was even working, and whether alarms had been silenced or setpoints widened. Loss claims live or die in that gap. If you don't write that it alarmed at 11pm and nobody called until 7am, the whole loss defaults onto the last man who touched the equipment, which is you.",
+      "needs": ["when", "count", "change"],
       "halt": "Only stop and ask if you have neither an arrival time nor a time it came back to temp, because an excursion write-up with no clock in it is useless to everybody who reads it.",
       "facts": [
         "Store, address and the date",
@@ -313,6 +317,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Outdoor ambient and the time of day beside every space temperature you wrote down, plus what was going on in the room — people, glass, lights, doors propped. '76 in the suite' proves nothing. '76 in the suite, 97 outside, 3:40pm, full sun, 22 people in an open plan' is the write-up that ends the callback cycle.",
+      "needs": ["when", "count"],
       "halt": "Only stop and ask if there is no measured space temperature at all, because a comfort complaint with no temperature in it is just an opinion.",
       "facts": [
         "Building, address, date, suite and tenant, and which unit or zone serves it",
@@ -369,6 +374,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Everything you could NOT verify that day and why — heat not run in July, economizer not proved with dead controls, no load to test against, drive not commissioned — plus what you'd need on a return trip to close each one. Silence reads as verified, and twelve months later the packed coil and the gone bearings become yours.",
+      "needs": ["notdone"],
       "halt": "Only stop and ask if you can't tell whether the unit was actually started and run or only powered up and looked at, because those are two different documents.",
       "facts": [
         "Job, address, unit tag, model and serial off the plate",
@@ -424,6 +430,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Who buys and changes the construction filters, how often, and who logs it — by name, not by company. Everybody agrees temp heat is fine and nobody names a filter owner. At turnover you're pulling packed filters and plugged blower wheels out of six units and eating a coil clean that was never in your number.",
+      "needs": ["who", "count"],
       "halt": "Only stop and ask if it isn't stated whether it will run on permanent or temporary power, because that one fact changes both the risk and the letter.",
       "facts": [
         "Job, address and the date",
@@ -477,6 +484,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What you did NOT do, and why — the part on order, the second unit you never opened, the roof hatch you couldn't get to, the check you couldn't finish because the store wouldn't let you shut the case down. The customer remembers the sentence you left out, and next trip it turns into the thing you missed.",
+      "needs": ["notdone"],
       "halt": "Only stop and ask if it isn't clear whether the unit was left running or left down, because everybody who reads this needs that in the first line.",
       "facts": [
         "Building, address and the date",

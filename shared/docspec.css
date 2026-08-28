@@ -83,6 +83,23 @@
 .omit li{font-size:13px;color:#3A2321;line-height:1.4;margin:0 0 4px}
 .omit li:last-child{margin-bottom:0}
 
+/* ── THE DEMAND (2026-08-28) ──────────────────────────────────────────────
+   What actually SATISFIES the omitted line, under the line it belongs to. It is
+   deliberately NOT another red sentence: the frame is already the alarm, and a
+   second block of the same weight inside it makes the line itself harder to
+   read, which is the one thing this card cannot afford. So it is a quiet
+   mono label and a normal-weight clause — the shape the rest of the kit uses
+   for "here is the rule", not for "look at this". 44px is not required: it is
+   not a control and never becomes one. */
+.omit .needs{margin:5px 0 0;font-size:12px;color:#6B4340;line-height:1.4}
+.omit li .needs{margin:3px 0 0}
+.omit .nk{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:#B0201A;background:#FFE7E4;border-radius:2px;padding:2px 5px;margin-right:5px;
+  white-space:nowrap}
+/* A line no fixed fact can settle says so in a different colour, because a red
+   badge over "in your own words" reads as a demand he is failing to meet. */
+.omit .nk-open{color:#5A4A47;background:#EFE9E7}
+
 /* ── THE SAY-LIST (2026-08-25) ────────────────────────────────────────────
    The half of this page that gets read in a truck at 4pm, not at a desk. Bigger
    type than anything else on the card on purpose: the block below is for the

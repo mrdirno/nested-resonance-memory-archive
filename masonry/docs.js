@@ -58,6 +58,7 @@ window.TRADE_DOCS = {
       "why": "The only account of what went into a wall, written by the man who was standing on it. Once it caps and grouts, nobody can open it up and look — so this is read a year later by somebody arguing about a box, a sleeve, an anchor or a lintel, and by then everybody's memory has an opinion.",
       "note": "Submittal numbers, delivery tickets and inspection reports are referenced, never retyped. The supplier owns his ticket, the lab owns its report; this document points at them.",
       "omit": "What of somebody else's work got built into this wall, and at what course. Everybody writes how far they got. Almost nobody writes that the electrician's boxes at grid 5 went in at the ninth course and which cells were left open for him — and that is the only line that answers \"you laid past my stub\" a month later, when the wall is grouted and the answer costs a core bit.",
+      "needs": ["who", "count"],
       "halt": "Never halt. If the lift is still going, write what is known, mark the rest <MISSING>, and send it — a late wall record is worse than an incomplete one.",
       "facts": [
         "the date and the wall",
@@ -106,6 +107,7 @@ window.TRADE_DOCS = {
       "why": "The last look anybody gets at what is in the cells. Half of what is in this document belongs to somebody else, and after the grout nobody can see any of it — the answer becomes a core bit through grout and rebar, and on a structural wall a call to the engineer before anybody starts a saw.",
       "note": "This records what was walked. It is not an inspection, it does not approve anybody's work, and it never states what a thing was supposed to be. The special inspector and the testing agency own their record; this is not it and must never be believed to be it.",
       "omit": "The list of other people's work about to be closed in — conduit up the cells, boxes, sleeves, stubs, embeds, anchors, dowels — and who walked it and told us it was set. Once the cells are full it is gone, and \"you grouted my cell\" has no answer without that line and the name of the man who cleared it.",
+      "needs": ["who"],
       "halt": "Only if the wall it covers is not named at all.",
       "facts": [
         "the wall and the lifts this covers",
@@ -155,6 +157,7 @@ window.TRADE_DOCS = {
       "why": "The condition you are standing in front of is not the condition on the set, and you are the last person who can say so before you build it in. A wall laid to a wrong dimension is not a punch item, it is a demolition.",
       "note": "This describes a condition and asks a question. It never proposes the fix, never states what the condition should be, and never says whose fault it is. What the drawings require belongs to the engineer of record and the architect.",
       "omit": "What work of yours is STOPPED and at what course, and what you will keep doing in the meantime. A notice that describes a bad footing and does not say \"I am stopped at the third course on the east elevation and I have moved two layers to the stair\" gets read as information rather than as something that has to be answered today.",
+      "needs": ["count", "notdone"],
       "halt": "Only if the condition itself is not described.",
       "facts": [
         "where it is, by wall and course",
@@ -203,6 +206,7 @@ window.TRADE_DOCS = {
       "why": "You cannot lay past an opening that isn't there, a lintel that hasn't shipped or a box that hasn't been marked. Said at the right course it costs somebody a phone call; said at the head course it costs a lift.",
       "note": "This says what you are waiting on and at what course you stop. It is not a delay claim, it puts no money on anything, and it does not say what it will cost.",
       "omit": "THE COURSE. Everybody writes what they are waiting on and everybody writes a date. The course is the only number that tells the other man how long he actually has — \"I stop at the head course and I am at eight foot\" is a deadline he can work to, and \"we need it soon\" is not.",
+      "needs": ["count"],
       "halt": "Only if what you are waiting on is not named.",
       "facts": [
         "the wall and the course you stop at",
@@ -251,6 +255,7 @@ window.TRADE_DOCS = {
       "why": "A wall that is standing but not finished is not somebody else's to load, to backfill against, to stack on, to hang from or to work under, and the man who laid it is the only one who knows which walls those are. Written the day you leave it, not the day something happens.",
       "note": "This states what is standing and what nobody does to it, and it hands every engineered question back. It never states a bracing height, a spacing, a wind figure, a distance, a duration or a release, and it never says a wall is safe. If somebody wants a wall released, that is the engineer of record's call and this document says so.",
       "omit": "WHO OWNS THE BRACING AND WHO IS ALLOWED TO MOVE IT. Every notice like this says the wall is unbraced. Almost none of them name the man on your crew whose call that is — so the framer who needs an aisle moves a brace at seven in the morning, and there was never anybody to ask.",
+      "needs": ["who"],
       "halt": "Only if no wall is identified.",
       "facts": [
         "which walls are standing and to what course",
@@ -301,6 +306,7 @@ window.TRADE_DOCS = {
       "why": "Somebody has pointed at a crack, a spall, a chipped arris or a stain on masonry and said it is yours. This is the record of what you actually found when you went and looked, written the same day, before the wall gets touched.",
       "note": "It records what was seen. It never states a cause, never grades the wall, and never says the work is acceptable or unacceptable. Cracking, spalling and staining in masonry have several causes, most of them owned by somebody else, and a foreman who is led into naming one has made his company's case for it.",
       "omit": "THE LAST DATE YOUR CREW WAS ON THAT WORK, AND WHO HAS HAD THE AREA SINCE. Everybody photographs the crack. Almost nobody writes the date they were last on it and the list of trades that have worked around it since — and without those two lines there is nothing at all between your company and the claim.",
+      "needs": ["when", "who"],
       "halt": "Only if the location is not stated.",
       "facts": [
         "the date you went and looked",
@@ -337,6 +343,7 @@ window.TRADE_DOCS = {
     "delay-notice": {
       "name": "We Got Held",
       "omit": "Who and what actually stood — the layers and tenders by name and classification, the stage and the forklift, the mud that was mixed and went off — and what the crew would have been doing instead. \"We were held from morning to noon\" with no names and nothing idled is a sentence nobody can check and nobody can act on.",
+      "needs": ["who", "count", "notdone"],
       "sections": [
         {
           "h": "The hold and the clock",
@@ -368,7 +375,8 @@ window.TRADE_DOCS = {
       ]
     },
     "daily-report": {
-      "omit": "THE COURSE EVERY WALL GOT TO, AND WHAT WENT INTO IT. Every other trade's daily can leave the day at \"we got this far\". A masonry daily that does not say the course each wall reached and whose work got built into it is missing the two lines anybody comes back for — and once the wall caps and grouts, nobody can open it up and look."
+      "omit": "THE COURSE EVERY WALL GOT TO, AND WHAT WENT INTO IT. Every other trade's daily can leave the day at \"we got this far\". A masonry daily that does not say the course each wall reached and whose work got built into it is missing the two lines anybody comes back for — and once the wall caps and grouts, nobody can open it up and look.",
+      "needs": ["who", "count"],
     }
   },
   "drop": [],

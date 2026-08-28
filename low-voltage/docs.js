@@ -65,6 +65,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The no-access list, one at a time — 'Unit 214, tenant would not open, 3/12, called twice' — instead of 'some units were inaccessible'. A year on, the device that failed is always the one nobody could reach, and a letter that says the building was inspected says you reached all of it.",
+      "needs": ["when", "where", "notdone"],
       "halt": "Only stop and ask if you cannot tell which building and which system the notes are about. Everything else, dates included, gets <MISSING>.",
       "facts": [
         "building name and address",
@@ -119,6 +120,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The panel's own event history, pulled and quoted — date, clock time and the point or zone exactly as it prints, one line per event. Everybody writes 'the customer says it trips at night.' The history is free, it is the only proof the alarms ever happened, and it rolls over and is gone the day somebody clears it.",
+      "needs": ["when", "where", "count"],
       "halt": "Only stop and ask if the notes never say whether these events were ALARMS, TROUBLES or SUPERVISORIES. That is three different letters and you cannot pick for him.",
       "facts": [
         "building name and address, and the span of dates",
@@ -178,6 +180,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Every other trade that has to be standing in the building on test day, named by trade and by company. Nobody writes 'the elevator mechanic has to be here', so recall never gets demonstrated, the walk fails, and it lands on the fire alarm contractor's card — a re-inspection and two weeks, for somebody else's man not being there.",
+      "needs": ["who"],
       "halt": "Only stop and ask if you cannot tell whether the pretest has actually been run or is still planned. Never write up a test that has not happened.",
       "facts": [
         "building name and address",
@@ -229,6 +232,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The items that are NOT ours — answered anyway, with the trade and the company that owns each one and who is answering it. An unanswered item on his list reads as 'not corrected' no matter whose scope it was, and the whole re-inspection gets pushed over somebody else's damper.",
+      "needs": ["who", "notdone"],
       "halt": "Only stop and ask if you do not have the inspector's own item numbers — without his numbering this cannot be answered against his list, and it is worth going and getting the notice. If it comes in as a phone photo, read the numbers off the photo and quote them as they sit: never re-sequence them, never tidy them up.",
       "facts": [
         "building name and address",
@@ -283,6 +287,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What got covered over today — the ceiling that closed, the wall that got rocked, the trench backfilled over our pathway — with the time and where the photo lives. Everything else on this report can be rebuilt next week. That cannot.",
+      "needs": ["when", "where"],
       "halt": "Only if this is the first report in the thread and there is no job number or site at all.",
       "facts": [
         "date",
@@ -333,6 +338,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The point you did not get to, and why — the locked tenant space, the hard lid nobody would open, the thing you found on another zone that is not on this ticket. Silence on it reads as 'he checked it and it was fine', and the next man inherits it as yours.",
+      "needs": ["notdone"],
       "halt": "Only if there is no statement of what the complaint was.",
       "facts": [
         "site, date, and the ticket number as dispatch wrote it",

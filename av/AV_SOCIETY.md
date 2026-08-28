@@ -408,6 +408,48 @@ a name, a place or a value. No tick list reaches that and neither would five fix
 sentences; the house-rules box is the only surface that does. That is the argument for
 keeping it free text and keeping this ticks.
 
+**AND SINCE 2026-08-28 EVERY LINE IN THE LIBRARY DECLARES WHAT WOULD SATISFY IT.** The
+five classes each carry an `artefact` string — "a date", "a name", "a before-value", "a
+location", "a named gap" — and for the whole life of this engine that string rendered at
+exactly ONE call site: the tick list on the CUSTOM path, the path a man reaches only when
+his document is not in the library. All 231 library documents printed their hand-written
+line and never said what would answer it. The failure that closes is not a dropped
+heading, it is a FLUENT SENTENCE: `hvac/red-tag-notice` asks for *"the time you shut it
+off and the name of the human you handed it to"* and gets back *"the unit was taken out of
+service and the property manager was notified"* — heading present, sentence present, no
+`<MISSING>` anywhere, both facts gone. **A working foreman named that as the one failure
+he cannot catch by eye, and said why: he KNOWS he handed it to Denise at 2:40, so he reads
+her name into a sentence that does not contain it.** So `needs` is authored beside `omit`
+on every document, shape-mirrored, emitted to the model as a demand with a per-artefact
+`<MISSING: the name>` token, and printed for the man in the red frame before he opens his
+mouth. §SHAPE #4 HAS TWO READERS had written the rule three days earlier: *any field
+authored into one of these libraries whose only consumer is a machine is on the clock.*
+
+**THE VOCABULARY IS EIGHT, AND THE TICK LIST IS STILL FIVE — the constraint that capped it
+was a UI constraint on a UI this data has never had.** The 2026-08-15 pass below derived
+SEVEN and refused the two extras because *"seven ticks is the ten generic ones the rung
+forbade"* — true of a tick list, where every row is a row a man in a hurry must read, and
+irrelevant to a field authored once by whoever writes the document. Re-counted over all
+142 distinct lines: `count` (a number with its unit) is demanded by **30** of them, fifth
+of eight. It was never a rounding error; it was invisible. **The eighth was forced by the
+corpus three separate times:** a DOCUMENT AND ITS REVISION — the sheet, the bulletin, the
+proposal's scope line, the packing list, the version a yes was given against. The
+2026-08-15 pass hit it and filed it unreachable (*"the sheet number and revision a letter
+is written against, 4 of 26"*); of the two blind passes run over the full 142 this cycle,
+one pushed it into `none` and the other into `where`, and both are legibly wrong — a sheet
+number is the most concrete artefact in the corpus, so `none` is a shrug, and *"say the
+actual A LOCATION"* under *"the sheet numbers and revisions"* names the wrong kind of
+thing. `framing/wont-fit` is the whole argument: *"the sheet numbers and revisions,
+WITHOUT WHICH THE QUESTION CANNOT BE ANSWERED BY ANYONE."*
+
+**THE SETTLED COUNTS over 142 distinct lines** (241 merged across 15 trades): `when` 63 ·
+`who` 52 · `where` 44 · `notdone` 41 · `count` 30 · `before` 16 · `change` 10 · `ref` 8 ·
+`none` 11. **A line may demand more than one and most do** — 50 demand one, 57 two, 29
+three, 6 four — which is itself the finding, because the omitted line that costs the most
+is almost never one fact. `none` at 11 of 142 (8%) is the honest floor, and it is a real
+value, not a failure to classify: forcing an interpretation-shaped omission into a fact
+class puts a confident demand under a line that cannot satisfy one.
+
 **A SECOND, INDEPENDENT CLASSIFICATION OF THE SAME 80 LINES WAS RUN WITHOUT SIGHT OF THE
 FIVE, AND IT DERIVED SEVEN** — and it is written down here because it AGREES on four of
 the five family seeds and DISAGREES on one, which is worth more than a confirmation. It
@@ -1743,6 +1785,45 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-28 (C3676) — A HARDCODED TRADE ROSTER DOES NOT FAIL WHEN A TRADE LANDS, IT GOES BLIND
+`tools/toolkit-gates/docspec-say.mjs` shipped with its roster typed out, at fourteen.
+`doors` landed as the fifteenth trade with a full write-up library, and this gate — the one
+whose entire job is reading the say-list on **every document of every trade** — never once
+ran on it. It kept printing a green summary with a number in it, and the number was the
+number of trades it had been told about, not the number on disk. Every sibling gate in the
+directory (`docspec-desk`, `docs-pool`, `find-noise`, `build-docsindex`) already derives
+from `readdirSync`; this was the one that did not. **A gate with a typed roster reports on
+what it was told, and its green is indistinguishable from coverage.** Fixed by derivation;
+the count moved 14 → 15, documents 214 → 231, checks 2,978 → 3,213, still 0 failing —
+doors was clean, which is exactly why nothing would ever have surfaced it.
+
+### 2026-08-28 (C3676) — THE FIRST DRAFT OF AN ASSERTION COMPARED VALUES WHERE THE DEFECT IS STRUCTURAL
+The new artefact gate asserts that a trade overriding a SHARED `omit` must not inherit the
+shared demand. First draft tested it by VALUE — *the omit moved and the needs did not* —
+and its first run went red on **fourteen documents that are all correct**: `creative`'s
+damage-found says *"THE DATE, THE TIME, AND WHERE THE PHOTOS ARE"* where the shared line
+says *"the timestamp and where the photos live"*, which is the same two artefacts in that
+trade's own words. **Two differently-worded lines demanding the same thing is the library
+working, not a leak.** The leak is that an override rewrites `omit` and never declares
+`needs` **as a key**, so `library()`'s key-by-key merge silently hands it a demand authored
+for the sentence it replaced — and every word on the page is well-formed. The test moved
+onto `Object.hasOwnProperty` against the raw `TRADE_DOCS.overrides` map, under the merge,
+and stays red for the mirror defect (a `needs` declared for an `omit` the override does not
+own). Deleting creative's one line proves it. The rule: **when a wrong value and a right
+value are indistinguishable, the assertion belongs on the KEY, not the value.**
+
+### 2026-08-28 (C3676) — A GATE COMPARING TWO READERS PASSES A STEM THAT IS WRONG ON BOTH
+The artefact demand renders in two places from one source, and the gate asserts the card's
+DOM carries the same string the block does. Green. The card read: **"Say the actual a date
+or a clock time, a name and what you left changed."** The demands are authored as noun
+phrases WITH their articles, because the block's sentence — *"it has to carry a date or a
+clock time"* — needs them; the card's stem prepended a second article and shipped broken
+English on the one line the whole library is built around, on every trade. **An
+agreement assertion cannot see an error the two sides share.** Caught by looking at the
+rendered frame at 390px, not by any check. The stem is now the block's own verb ("It has to
+carry"), so the two readers are told the same thing in the same words and the articles land
+once.
 
 ### 2026-08-28 (C3675) — A GATE THAT SAID "EVERY PERMIT HANDS BACK" WHILE ASSERTING NOTHING ON TWO TRADES
 
@@ -7072,3 +7153,101 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   fix is asserted, and the assertion was proved to bite by removing the fix and watching it
   fail. 781 checks green on production.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/getting-in.html
+- `2026-08-28` — **[AXIS:DOCS] C3676 — THE LINE THE WHOLE LIBRARY IS BUILT AROUND NEVER
+  SAID WHAT WOULD SATISFY IT** · **before:** both wells dry (AV 0 new / 0 building, vibe
+  0/0, no stale claims) and no family owed, so the stalest axis governed. `omit` is the
+  field this book calls the highest-value in the program, and it HAS always reached both
+  readers — the block and, since the say-list, the red frame on the card. What would
+  SATISFY it never did. The five omission classes each carry an `artefact` string ("a
+  date", "a name", "a before-value", "a location", "a named gap") and it rendered at
+  **exactly one call site in the whole engine**: the tick list on the CUSTOM path, the path
+  a man reaches only when his document is NOT in the library. All **231 library documents
+  printed their line and named nothing**. · **THE FAILURE IS NOT A DROPPED HEADING, IT IS A
+  FLUENT SENTENCE.** `hvac/red-tag-notice` asks for *"the time you shut it off and the name
+  of the human you handed it to"*; what comes back is *"the unit was taken out of service
+  and the property manager was notified"* — heading present, sentence present, **no
+  `<MISSING>` anywhere**, and the only two facts that survive a dispute are not in it.
+  Nothing in the engine ever told the model that a sentence is not the artefact. **A
+  working foreman named this unprompted as the one failure he cannot catch by eye, and said
+  why: he KNOWS he handed it to Denise at 2:40, so he reads her name into a sentence that
+  does not contain it — every time.** · **after:** `needs` is authored beside `omit` on
+  every document in the program, shape-mirrored (a string omit takes a flat list, a list
+  omit takes one list per line, in order), and it reaches **both** readers from one
+  resolver: the block gets *"This is not satisfied by a sentence about it. It has to carry
+  a date or a clock time and a name — actual ones, out of my input"* with a **per-artefact
+  `<MISSING: the name>` token** so a half-gap cannot come back as prose, the OUTPUT FORMAT
+  placeholder carries the same demand into the finished document, and the red frame on the
+  card carries it **before he opens his mouth** — which is where the GC lens independently
+  put it and where the foreman lens said the only value is. The group-chat copy carries it
+  too, because three leads get that message and never open the page.
+  **A FOUR-LENS PANEL KILLED THREE QUARTERS OF THE BUILD I PROPOSED, AND THE PART THAT
+  SURVIVED IS THE PART TWO OF THEM NAMED INDEPENDENTLY.** The proposal was a paste-back
+  checker on the returned document — missing headings · omitted line present · `<MISSING>`
+  harvest · forbidden-claim flags. **UNANIMOUS KILL on the heading check**: the block's own
+  OUTPUT FORMAT says *"leave out any section that is empty, except the last two"*, so a
+  checker flagging an absent spine heading punishes the AI for obeying us — and it is not an
+  edge, **all 231 documents are false-positive candidates**. **THREE OF FOUR KILLED THE
+  FORBIDDEN-CLAIM FLAGS AND THE ENGINE LENS MEASURED THEM DEAD: 151 of 231 documents
+  (65.4%) author no `note` at all**, 35 section rules contain a verdict word the engine
+  itself prints (`creative/sign-off-record` emits the heading *"WHAT'S IN THE VERSION THEY
+  APPROVED"*), and a verdict lexicon fires on **15%** of compliant content — while a
+  detector's silence is a clearance manufactured by an interface, on the one boundary the
+  notes hand to the engineer of record and the AHJ. The skeptic found the locked rail that
+  settles it: two toggles in this engine are `locked` and one of them is **"never call a
+  reading good, bad, passing or to code"**. A page shipping that rail cannot return a
+  verdict about verdicts. **Nothing built this cycle judges anything.**
+  **THE CLASSIFICATION WAS RUN BLIND, TWICE, AND THE DISAGREEMENT IS ON RECORD RATHER THAN
+  SMOOTHED AWAY: 142 distinct authored lines, exact agreement 96 (68%), overlapping 35
+  (25%), disjoint 11 (8%).** Settled counts: `when` 63 · `who` 52 · `where` 44 · `notdone`
+  41 · `count` 30 · `before` 16 · `change` 10 · `ref` 8 · `none` 11. **Most lines demand
+  more than one artefact** — 50 one, 57 two, 29 three, 6 four — which is the finding, because
+  the omitted line that costs the most is almost never one fact. **THE VOCABULARY IS EIGHT
+  AND THE TICK LIST IS STILL FIVE.** The 2026-08-15 pass derived seven and refused the two
+  extras because *"seven ticks is the ten generic ones the rung forbade"* — a constraint
+  about a TICK LIST that had been silently governing a DATA vocabulary with no tick list.
+  `count` is demanded by 30 of 142; it was never a rounding error, it was invisible. **The
+  EIGHTH was forced by the corpus three separate times**: a document and its revision — the
+  sheet, the bulletin, the packing list, the version a yes was given against. 2026-08-15
+  filed it unreachable (4 of 26); of this cycle's two blind passes one pushed it into
+  `none` and the other into `where`, both legibly wrong. `framing/wont-fit` is the argument:
+  *"the sheet numbers and revisions, WITHOUT WHICH THE QUESTION CANNOT BE ANSWERED BY
+  ANYONE."* `none` stays a real value at 11 of 142 — forcing an interpretation-shaped
+  omission into a fact class puts a confident demand under a line that cannot satisfy one.
+  **BACKPORT RIDER FIRED, and one half of it is a gate that had gone blind (§SCARS ×3).**
+  The engine is shared, so all 15 trades take the demand in one change; the 142 insertions
+  were driven off the settled classification rather than typed. Swept the gate directory for
+  the same class and found it: **`docspec-say.mjs` had its trade roster HARDCODED at
+  fourteen and had never once run on `doors`** — a typed roster does not fail when a trade
+  lands, it goes silently blind and prints a green number that is the number of trades it
+  was told about. Derived from disk; **14 → 15 trades, 214 → 231 documents, 2,978 → 3,213
+  checks, still 0 failing**, which is precisely why nothing would have surfaced it.
+  **THE NEW GATE'S FIRST ASSERTION WAS WRONG AND ITS FIRST RUN PROVED IT**: it compared the
+  override's `omit`/`needs` by VALUE and went red on 14 correct documents, because two
+  differently-worded lines demanding the same artefacts is the library working. Re-aimed at
+  the KEY, under `library()`'s merge, on the raw overrides map. **AND READING THE REAL PAGE
+  FOUND WHAT NO ASSERTION COULD**: the card's stem prepended a second article — *"Say the
+  actual a date or a clock time"* — and the card-vs-block agreement check passed it, because
+  an agreement assertion cannot see an error both sides share.
+  **GATES:** new `tools/toolkit-gates/docspec-needs.mjs` — **15 trades / 231 documents / 241
+  omit lines (24 declaring none) / 1,951 checks / 0 failing**, asserting that every document
+  authors `needs` OF ITS OWN read *under* the resolver's degrade, that the shape mirrors
+  `omit` line for line, that every id is in the SHIPPED vocabulary read off the engine, that
+  `none` is exclusive and renders as *"in your own words"* rather than an empty red demand,
+  that the card's DOM and the composed block name the same artefacts, that the per-artefact
+  `<MISSING: …>` tokens are the shipped ones, that an override rewriting `omit` declares its
+  own `needs`, and that the group-chat copy carries the demand — driven through a stubbed
+  clipboard, on the string. **SIX NEGATIVE CONTROLS, ALL PROVED RED**: a deleted `needs` →
+  1 failing · the card crossed against the block → 196 · `none` made non-exclusive → 1 · an
+  override stripped of `needs` → 1 · the demand dropped from the copy → 15 · the
+  per-artefact tokens collapsed back to a bare `<MISSING>` → 217. · **docspec-say 15 trades
+  / 231 documents / 3,213 checks / 0 failing** · **docspec 15 trades / 246 checks / 0
+  failing** · **desk 15 trades / 0 failing** · **no-third-party 152/152** ·
+  **mobile-watertight** grew a NEW `REVEALS` entry deriving each trade's heaviest demand
+  IN-PAGE off `needsOf`/`demandOf` — a different worst case from the say-list reveal, which
+  picks the longest `facts` — and the real frame driven at 390px on the single and the
+  three-line cases, 0 overflow. **NAMED NEXT RUNG, with the panel's narrowed form already on
+  record:** `note` is the mirror field — 69 authored prohibitions, **65.4% of documents carry
+  none**, and its only reader is a machine, which is the exact condition §SHAPE #4 HAS TWO
+  READERS puts on the clock. Print it for a person and give it its own imperative heading in
+  the block; do NOT grade against it. Storefront unchanged — no new tool, no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html

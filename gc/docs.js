@@ -70,6 +70,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What you would do if it were up to you. A question with nothing proposed behind it hands the architect something he can answer with another question, and the pair of them eat three weeks. Write the resolution you propose — offered for him to accept or reject, never as a decision already made — and it comes back in days.",
+      "needs": ["none"],
       "halt": "The notes are really a direction he was already given verbally, or he already built it and wants the RFI to cover him after the fact. Stop — that is a change write-up or a directed-work record, and dressing it up as a question is exactly what gets it denied.",
       "facts": [
         "sheet number AND its revision or bulletin, plus the spec section",
@@ -129,6 +130,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Every time you already asked, with its date and who you spoke to — the coordination meeting on the 3rd, the text on the 9th, the call on the 11th. A first-and-only letter reads like an ambush and the answer is always that nobody ever told them, which works, because there is nothing in the file behind it. That list is the entire reason the letter has teeth the day you supplement him.",
+      "needs": ["when", "who"],
       "halt": "He wants the letter to terminate the sub, or to name a back-charge amount. Stop — termination and the number belong to the office and counsel, and a super's letter that names either one gets his own company sued instead of the sub.",
       "facts": [
         "the sub's company, and the person's name it is addressed to",
@@ -190,6 +192,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "What the contract documents showed AT THIS LOCATION — the sheet and its revision, the geotech, the utility record — or that they showed nothing here at all. That one sentence is the whole reason this is a notice and not a work order, and it is the sentence everybody skips because they are busy photographing the pipe. Write what the paper showed here. Never conclude what it means.",
+      "needs": ["ref", "where"],
       "halt": "Anything about it reads live, pressurized, energized, or like a tank, a drum, or unknown material. Stop — that is an evacuate-and-call, not a document. Nobody types a notice before the utility and the safety director have been called.",
       "facts": [
         "date and clock time it was uncovered",
@@ -235,6 +238,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The idle half of the job. Every daily records what DID happen and never that the east half sat all day waiting on the electrician's rough — so when the schedule fight comes there is no entry to hang the day on, and no entry reads a year later as nothing happened. Name the crew, the area, the hours they stood and the one thing they were waiting on, on the day it happened.",
+      "needs": ["who", "where", "count", "notdone"],
       "halt": "The notes mention an injury, a near miss, property damage or a utility strike. Stop and say so — that never gets summarized inside a daily. It needs its own write-up, because a half-sentence in a daily becomes the exhibit.",
       "facts": [
         "job name and job number",
@@ -290,6 +294,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Witness names and cell numbers taken the same day, including the ones who don't work for you. The traveling hand who saw the whole thing is off the job by Friday and in another state, and every version of the story after that is second-hand. Get the names and the numbers before the crew leaves for the day.",
+      "needs": ["when", "who"],
       "halt": "Somebody left by ambulance, didn't come back, or lost a limb or an eye. Stop — call the safety director and the carrier and let them run it. Nothing gets drafted or sent before that call.",
       "facts": [
         "date and clock time",
@@ -346,6 +351,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The time. Everybody prices the labor and the material and then leaves the schedule line blank or writes \"no impact\" to look easy to work with. Write the schedule line the day it goes out — which activity it lands on and what it interrupts — and when it isn't known yet, write it anyway: \"time impact not yet known; we are not giving up time on this change.\"",
+      "needs": ["none"],
       "halt": "He wants the pricing itself — a number, a rate, a markup, a unit cost. Stop. We write the half that says why it is extra; the numbers come off the estimator's sheet and get pasted in.",
       "facts": [
         "who directed it: name, company, date, clock time, and written or verbal",
@@ -399,6 +405,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The date and clock time you first knew, and every time you raised it before this letter. Everybody writes what happened; almost nobody writes \"first seen 0715 Tuesday the 12th, raised with you on site the same morning, again in the Thursday meeting.\" Without those lines a notice written the same day still reads like it sat.",
+      "needs": ["when"],
       "halt": "The notes are really about weather, or they already have dollars and day counts attached. Stop and ask — a weather day is its own notice, and a priced claim belongs to the PM and counsel, not to something thumbed out in the truck.",
       "facts": [
         "the date and clock time first observed",
@@ -449,6 +456,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The one line saying whether you did that work as warranty, as chargeable, or as undetermined — written the day you did it. Roll a crew, fix it, say nothing about the basis, and you have answered the question for every other unit in the building; the next twenty calls come to you free. Even \"undetermined — we responded to protect the building and are reserving the question\" is an answer. HE states it. Nobody here decides coverage and nobody here quotes a term we were not handed.",
+      "needs": ["none"],
       "halt": "There's water running, no heat in freezing weather, an odor of gas, or anything else putting the building or the people in it at risk. Stop — make the calls and get somebody moving. It gets written up after the building is safe.",
       "facts": [
         "who called, their number, and the clock time of the call",
@@ -500,6 +508,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "Who owns the area between the walk and final — access, protection and damage. The space goes over, the owner's people and their vendors start working in it, and every mark on it after that lands back on your punch list because nobody wrote down the day it stopped being yours to protect. Name the date it changed hands, who has access after that, and who is responsible for what happens in it.",
+      "needs": ["when", "who"],
       "halt": "He wants this to stand as the certificate itself — substantial completion, beneficial occupancy, the C of O. Stop. Those get issued by other people on their own paper. This is the narrative of the walk and what went with it.",
       "facts": [
         "job and the area by the name the drawings give it",
@@ -543,6 +552,7 @@ window.TRADE_DOCS = {
         }
       ],
       "omit": "The date each open item was FIRST raised. Every set of minutes carries the item forward and re-stamps it with this week's date, so a thing that has been sitting since March reads two weeks old and nobody in the room ever sees how long it has actually been sitting. Carry the original date on every item, every week, until it closes.",
+      "needs": ["when"],
       "halt": "Only if it isn't clear which meeting this was or when it happened.",
       "facts": [
         "job name and job number",

@@ -71,6 +71,7 @@
  * you nothing about the other two hundred.
  */
 import { createRequire } from 'node:module';
+import { readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 const require = createRequire(new URL('../collage-studio/package.json', import.meta.url));
@@ -80,8 +81,22 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '../..');
 const BASE = process.env.TOOLKIT_BASE_URL || ('file://' + REPO);
 
-const TRADES = ['av', 'concrete', 'creative', 'electrical', 'flooring', 'framing', 'gc',
-                'hvac', 'low-voltage', 'masonry', 'painting', 'plumbing', 'roofing', 'sitework'];
+/* TRADES COME FROM DISK, NEVER FROM A LIST HERE (2026-08-28). This file shipped
+   with the roster typed out, at fourteen. `doors` landed as the fifteenth trade
+   with a full write-up library and this gate never once ran on it — a hardcoded
+   roster does not fail when a trade is added, it goes SILENTLY BLIND, and its
+   own green is the thing that hides it. Every sibling gate in this directory
+   (docspec-desk, docs-pool, find-noise, build-docsindex) already derives from
+   disk; this was the one that did not. The negative control is the roster
+   itself: delete a trade directory and the count drops. */
+const TRADES = readdirSync(REPO + '/', { withFileTypes: true })
+  .filter(d => d.isDirectory()
+            && existsSync(REPO + '/' + d.name + '/trade.js')
+            && existsSync(REPO + '/' + d.name + '/docs.js')
+            && existsSync(REPO + '/' + d.name + '/write-up.html'))
+  .map(d => d.name)
+  .sort();
+if (!TRADES.length) { console.error('FAIL: no trade with a write-up library found under ' + REPO); process.exit(1); }
 
 /* Runs INSIDE the page. Picks one document and reports what BOTH readers got. */
 const EXERCISE = (name) => {
