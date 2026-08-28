@@ -106,5 +106,26 @@ window.TOOLKIT_TOOLS = [
     desc: "The write-ups you put off — the wall you were told to coat anyway, the walk after final before the trades come back, who picked that color, the daily, the day you couldn't roll → dictate the mess at the tailgate, get back something the office can forward. Set up every one you write in a single block, and it never sets a number or says a surface was ready.",
     chip: "#29FF29",
     audience: "Lead → office / GC"
+  },
+  {
+    /* THE SPINE TOOL THAT IS NOT TRADE WORK, and the reason it is here at all:
+       every other construction kit on the rack shipped it and this one did not.
+       painting/tools.js names two deliberate omissions above — the wet area
+       notice and the language layer — and §TRADE EXPANSION's rule is that a
+       deferral gets WRITTEN DOWN. This one never was, which makes it a hole
+       rather than a decision, and the module-adoption grep is what found it:
+       painting loaded 10 of the 12 shared modules every sibling carries, and
+       `package` was one of the two missing. `lang` is the other and it is NOT
+       a hole — it rides on tm-tag.html across the other twelve trades and this
+       kit deliberately ships no tag page, so its ES debt is already recorded
+       above against Not Ready.
+
+       Deeper chip on purpose, the masonry convention: this is the one page in
+       the kit that is about the man rather than the wall. */
+    name: "Total Package",
+    href: "total-package.html",
+    desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, per diem — and put your real hours in, because a dollar an hour on a job you finished twice is a different dollar.",
+    chip: "#146C12",
+    audience: "Painters · sprayers · leads · anybody weighing a move"
   }
 ];

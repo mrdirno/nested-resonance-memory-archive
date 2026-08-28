@@ -945,5 +945,59 @@ window.COMMONS_NAMES = [
     o: "The unit film build is measured in — one thousandth of an inch — read wet with a notched gauge as you go and dry with a gauge once it's cured.",
     a: [{ n: "wet mils", by: "whoever's holding the gauge mid-pass", k: "say" },
         { n: "DFT", by: "the spec — dry film thickness, the number the inspector reads", k: "sup" }],
-    no: "Not a millimeter — not close — and hearing it metric turns every reading you call out into nonsense. The poly on the floor is measured in the same mils as the coat on the wall, so the word travels. The numbers never do: required build comes off the spec and the data sheet for that product, not off memory, and not off this card." }
+    no: "Not a millimeter — not close — and hearing it metric turns every reading you call out into nonsense. The poly on the floor is measured in the same mils as the coat on the wall, so the word travels. The numbers never do: required build comes off the spec and the data sheet for that product, not off memory, and not off this card." },
+
+  /* ---- doors & hardware: trade #15 ---------------------------------------
+     THE TRADE WHOSE WORDS ALL BELONG TO SOMEBODY ELSE ON THE SAME JOB. A slab
+     is the concrete crew's whole scope, a core is a hole the driller makes, a
+     strike is what an electrician does to a live conductor, and hand is the
+     word every one of these people uses to mean something ordinary. Each row
+     names the collision out loud, because the wrong reading sends a man to the
+     wrong opening with the wrong thing on his shoulder. */
+  { id: "door-hand", n: "Hand", t: ["doors"],
+    o: "Which side an opening is hinged on and which way the leaf swings, called by standing on one particular side of it — the single value that everything factory-machined into a leaf and a frame depends on.",
+    a: [{ n: "handing", by: "the counter, the order desk and every submittal", k: "sup" },
+        { n: "swing", by: "supers and other trades, loosely — swing alone does not say which side the hinges are on", k: "say" },
+        { n: "LH / RH / LHR / RHR", by: "how it is written on a tag, an order and a shop drawing", k: "sup" }],
+    no: "A hand is a man on the crew to everybody else on site, and \"send me a hand\" has never once meant a door. Worse inside the trade: hand is called from a fixed side of the opening, so two people standing on opposite sides of the same leaf will confidently give you opposite answers. Say where you were standing when you called it, every time — the bevel and the prep only go one way, and a leaf machined to the wrong hand is a leaf you bought twice." },
+  { id: "door-slab", n: "Slab", t: ["doors"],
+    o: "The door itself with nothing on it — no hinges, no lock, sometimes not even machined. The panel, before it becomes an opening.",
+    a: [{ n: "leaf", by: "the trade, on drawings and in a pair — the active leaf and the inactive leaf", k: "say" },
+        { n: "blank", by: "some shops, for one that has not been machined at all", k: "say" },
+        { n: "door", by: "everybody outside the trade, meaning the whole assembly", k: "say" }],
+    no: "The concrete crew's entire scope, on every job either of you have ever worked. \"The slabs are coming Thursday\" on a shared radio moves the wrong crew, and on a job with a pour that week it moves them urgently. Say door slab or say leaf, and never say slab alone where a concrete hand can hear you." },
+  { id: "door-core", n: "Core", t: ["doors"],
+    o: "The removable cylinder plug that carries the keyway — pulled and swapped with a control key, which is how a building goes from construction keys to the owner's keys in one pass.",
+    a: [{ n: "cylinder", by: "the counter and the submittal, though a cylinder is the housing and the core is what comes out of it", k: "sup" },
+        { n: "construction core", by: "everybody, for the temporary one that comes out at turnover", k: "say" },
+        { n: "IC / interchangeable core", by: "the order desk", k: "sup" }],
+    no: "A hole somebody drills, to every other trade in the building — the plumber cores a slab, the electrician cores a wall, and \"I need to pull a core\" means a wet saw and a shop vac to them and a control key to you. It is also the material inside a wood leaf, in the same conversation, which is why the trade says construction core or cylinder core out loud rather than just core." },
+  { id: "door-strike", n: "Strike", t: ["doors"],
+    o: "The piece let into the jamb that the latch or bolt lands in — the half of the latching that lives on the frame instead of on the leaf.",
+    a: [{ n: "keeper", by: "older hands and some regions", k: "say" },
+        { n: "strike plate", by: "the counter and everybody outside the trade", k: "sup" },
+        { n: "electric strike", by: "the trade and the access-control crew, for the powered kind", k: "say" }],
+    no: "What an electrician does to a live conductor, and what a union does to a job — both of which come up on a jobsite radio. Inside the trade the trap is different: filing a strike open makes a door catch today and hides why it wasn't catching, so \"just open the strike\" is advice that buries a hinge or a frame problem you will meet again." },
+  { id: "door-throat", n: "Throat", t: ["doors"],
+    o: "The dimension across the back of a frame that has to match the wall it wraps — the number that decides whether a frame fits the wall somebody actually built.",
+    a: [{ n: "jamb depth", by: "the order desk and the shop drawing", k: "sup" },
+        { n: "wall thickness", by: "supers and framers, loosely — the frame has to clear the finished wall, not the studs", k: "say" }],
+    no: "The narrow part of a duct fitting to a sheet-metal crew, and the inlet of a fixture to a plumber. And within one opening it is not one number: a frame can measure right at the head and wrong at the floor, so a single throat reading with no location on it is half an answer." },
+  { id: "door-dogging", n: "Dogging", t: ["doors"],
+    o: "Holding an exit device's push bar down so the latch stays retracted and the door pushes open freely, until somebody releases it.",
+    a: [{ n: "dogged down", by: "the trade and building engineers", k: "say" },
+        { n: "held retracted", by: "the submittal, for the powered version", k: "sup" }],
+    no: "Dogging a chain or a load is rigging, and dogging it means quitting early to most of the crew. Say the whole phrase — dog the device down. And whether a given opening is allowed to be dogged at all is not a field call and not in this table: that answer belongs to the people who run the building and the authority having jurisdiction." },
+  { id: "door-mullion", n: "Mullion", t: ["doors"],
+    o: "The upright between two leaves of a pair — on many openings a removable one that comes out with a key so something wide can go through, then goes back in.",
+    a: [{ n: "removable mullion", by: "the trade and the submittal, when it comes out", k: "sup" },
+        { n: "KR mullion", by: "the order desk", k: "sup" },
+        { n: "center post", by: "movers, building engineers and anybody who has taken one out", k: "say" }],
+    no: "A glazier's mullion is the vertical in a curtain wall or a storefront, fixed and structural and nothing to do with a pair of doors. On a job with both, \"pull the mullion\" means a two-minute job with a key to you and something nobody is doing to him." },
+  { id: "door-butt", n: "Butt", t: ["doors"],
+    o: "A hinge, in the trade's own word — two leaves and a pin, mortised into the leaf edge and the jamb.",
+    a: [{ n: "hinge", by: "everybody, including the trade half the time", k: "say" },
+        { n: "butt hinge", by: "the counter and the catalog", k: "sup" },
+        { n: "leaf", by: "the trade, for one half of the hinge — the same word it uses for the door", k: "say" }],
+    no: "The word collides inside the trade with itself, which is the trap worth knowing: leaf means the door on one line and half a hinge on the next, so \"shim the leaf\" and \"shim the hinge leaf\" are two entirely different jobs. Say hinge leaf when you mean the hinge." }
 ];

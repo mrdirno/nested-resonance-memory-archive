@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Came Off The Truck — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="A flatbed gets signed for in the time it takes to walk it. Count what landed against your own slip and send it the same afternoon — mark number, what came, what's wrong with it, and where you found it, because a dent found on the truck and a dent found three weeks later in the stack are two different conversations. Grouped by delivery, tallied, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Came Off The Truck">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Doors &middot; the tailgate &rarr; the distributor, the same afternoon</span>
+    <h1 id="title">Came Off The Truck</h1>
+    <p class="lede" id="lede">Two clocks start when the truck backs in. The driver leaves with the paperwork, and a delivery signed clean makes the dent your dent &mdash; and a frame or a special leaf is weeks out of the factory, not days, on a clock that started the morning it was supposed to be here. Count it against your own slip while the trailer is still there, put a row on anything short, wrong or beat up, and send it the same afternoon. Where you found it is its own field, because damage photographed on the trailer and damage found on day nine are two different conversations with two different people paying.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>A count, not a claim &mdash; and counts, not dollars.</b> Every row is what <i>you</i> counted against <i>your own</i> packing slip and <i>your own</i> order, both named at the top. Cartons are identified by opening number and by the supplier&rsquo;s own line number off the tag &mdash; no hardware set contents, no schedule, no keying, ever. Physical condition only: if a tag is gouged, painted over or missing, say so and stop, because what that <i>means</i> belongs to the manufacturer and the authority having jurisdiction, not to the man unloading a trailer at six in the morning. There are no prices on here; your office owns those.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Alder Creek Medical — 3rd floor TI" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Packing slip / order no.</label><input type="text" id="hOff" placeholder="packing list 88214 — against my PO 4471" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name both documents &mdash; the slip that came with the load and your own order. A shortage counted against a named slip is a fact the inside man can work from this afternoon; the same shortage described from memory is a phone call nobody can find in November. And whatever you wrote on the delivery receipt before the driver pulled the gate down, put it in a row here too.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each line</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Mark number once &mdash; it becomes a button and it carries. The delivery and where-you-found-it carry to the next row, because a bad load is never one line. Leave anything blank you didn&rsquo;t actually count: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The load so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="del" class="on">Delivery</button>
+        <button type="button" data-g="wrong">What&rsquo;s wrong with it</button>
+        <button type="button" data-g="state">Where it stands</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is counted, then <b>Sent</b> when it went to the distributor, then <b>Answered</b>, then <b>Replacement coming</b>, then <b>Landed</b> when it is actually on site. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes out this afternoon</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Still not answered</button>
+        <button type="button" data-f="issue">Only what&rsquo;s short or damaged</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what your office wants for the claim, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Doors &amp; Hardware Field Toolkit. Something a truck hands you that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Doors &amp; Hardware Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* CAME OFF THE TRUCK — a CONFIG on shape #3 (shared/rowlog.js): no CSS here,
+ * no DOM building, no state, no persistence, no document assembly. The engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY "WHERE YOU FOUND IT" IS ITS OWN FIELD, and not a note: it is the single
+ * fact that decides who pays. Damage photographed on the trailer before the
+ * gate came down is the carrier's conversation; the identical dent found in
+ * the stack on day nine is concealed damage and a completely different one;
+ * and a dent found when he went to hang it, three weeks in, is very often his
+ * own. Everybody writes down what was wrong. Almost nobody writes down where
+ * they were standing when they saw it, which is why it is a first-class
+ * column here instead of something he might remember to mention.
+ *
+ * WHAT IT REFUSES, and the reason the refusal sits in a data file rather than
+ * in a person's discipline: cartons are addressed by opening mark and by the
+ * SUPPLIER'S OWN line number off the tag. No hardware set contents, no
+ * schedule, no keying. And condition is PHYSICAL only — "tag gouged",
+ * "painted over", "missing" are things he can see; what any of that means for
+ * anything stamped on the material is the manufacturer's and the AHJ's call,
+ * and this page has no field that could hold that answer even if somebody
+ * wanted to type it.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.truck;
+  var KEY = "toolkit.doors.cameoffthetruck.v1";
+
+  var STATES = T.states;   /* ["Sent","Answered","Replacement coming","Landed"] — blank = counted */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function hasIssue(v) { return String(v.wrong || "").trim() !== ""; }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "line", nounPlural: "lines", groupNoun: "delivery", groupNounPlural: "deliveries",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing counted yet. Put in the first line — the mark, what came, and what's wrong with it.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "del", label: "Delivery" },
+      { key: "wrong", label: "What's wrong with it" },
+      { key: "state", label: "Where it stands" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "wrong") {
+        var ia = T.wrongs.indexOf(a), ib = T.wrongs.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var order = [""].concat(STATES);
+        var pa = order.indexOf(a), pb = order.indexOf(b);
+        return (pa < 0 ? 99 : pa) - (pb < 0 ? 99 : pb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "still not answered",
+        emptyText: "Every line on here has come back answered. Good — chase the dates.",
+        test: function (v) { return isOpen(v); } },
+      { v: "issue", label: "only what's short or damaged",
+        emptyText: "Nothing on here is short or damaged. That is a clean truck, and it is worth saying so.",
+        test: function (v) { return hasIssue(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "Opening / mark no.", input: "learn", lead: true, sticky: false,
+        placeholder: "214, or: 3C stair — then it's a button",
+        emptyHint: "The mark off the tag. Leave it blank for loose hardware that isn't tagged to an opening." },
+      { key: "del", label: "Which delivery", input: "learn", sticky: true,
+        placeholder: "8/26 flatbed — then it's a button" },
+      { key: "line", label: "Their line no. — off the tag", input: "text", sticky: false,
+        placeholder: "line 4 — copy it exactly as printed" },
+      { key: "what", label: "What it is", input: "chips", required: true },
+      { key: "count", label: "Counted / expected", input: "text",
+        placeholder: "22 of 26 — your count against their slip" },
+      { key: "wrong", label: "What's wrong with it", input: "chips" },
+      { key: "seen", label: "Where you found it", input: "chips", sticky: true },
+      { key: "photo", label: "Photo", input: "text",
+        placeholder: "shot it on the trailer — tag and a tape in the frame" },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— counted; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "what you wrote on the receipt, who signed, anything" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "what") return T.kinds;
+      if (key === "wrong") return T.wrongs;
+      if (key === "seen") return T.found;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.del, v.line, v.count, v.wrong, v.seen, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "what came off the truck", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Counted against: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("issue") > -1 && !hasIssue(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var bad = 0;
+      src.forEach(function (v) { if (hasIssue(v)) bad++; });
+      var line = c.shown + (c.shown === 1 ? " line" : " lines");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      if (bad) line += " · " + bad + " short or damaged";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "del";
+      var head = joinDots([v.mark, v.what, v.line ? "their " + v.line : null]);
+      var tail = [];
+      if (g !== "del" && v.del) tail.push(v.del);
+      if (v.count) tail.push("counted " + v.count);
+      if (g !== "wrong" && v.wrong) tail.push(v.wrong.toLowerCase());
+      if (v.seen) tail.push("found: " + v.seen.toLowerCase());
+      if (v.photo) tail.push("photo: " + v.photo);
+      if (g !== "state" && v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Every count above is mine, taken against the packing slip and the order named at the top, and every condition is what I could see. Marks and line numbers are copied off your own tags so we can point at the same piece.");
+      out.push("Nothing here states a rating, says whether any label is intact, or repeats a hardware set — where a tag is gouged, painted over or missing it is named as a condition and nothing more.");
+      out.push("There are no prices on this list. I need ship dates and tracking in writing for anything short or being replaced, and I need to know what you want done with the damaged pieces I'm holding.");
+      return out.join("\n");
+    }
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this is the only count that exists of what
+     actually came off that trailer, and the slip left with the driver. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

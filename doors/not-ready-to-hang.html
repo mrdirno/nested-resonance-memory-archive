@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not Ready To Hang — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="Frame's not grouted, floor's not in, wall's not painted, nothing landed at the electrified openings. Walk the openings before the cart comes off the truck, name what stops the hang in your own words, and send the two-button ask: fix it, or tell me in writing to hang it as it stands. Because a leaf hung to that gets adjusted twice and blamed once.">
+<meta name="apple-mobile-web-app-title" content="Not Ready To Hang">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Doors &middot; at the opening, before the cart comes off the truck</span>
+    </div>
+    <h1 id="h1">Not Ready To Hang</h1>
+    <p class="lede" id="lede">Five kits on this rack write doors into their own gate ladders &mdash; this is the answer back. Walk the openings before the cart comes off the truck and name what stops the hang, in your words: the frame that isn&rsquo;t grouted, the floor that isn&rsquo;t in, the wall nobody painted, the electrified opening with nothing landed at it. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to hang it as it stands. Because once a leaf is on and adjusted, everything wrong behind it reads as your work, and you are the one standing there with a screwdriver explaining it.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own tape and set beside what your own approved shop drawing says. It states no clearance, no undercut, no tolerance, no closer setting and no label value, it never says an opening is ready, and it doesn&rsquo;t stop the job &mdash; it hands whoever runs the job the choice, on the record: clear it, or direct it hung as it stands.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY — the pinned tool, and the reason this trade is on the rack.
+ * A CONFIG of shape #2's engine (shared/note.js): no CSS here, no DOM building,
+ * no state, no persistence, no document assembly — the engine owns all of it.
+ * This file owns the WORDS, which is the half an engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: commencement is acceptance. The moment the
+ * roller loads, whatever the wall carries becomes the painter's work — so the
+ * record of what the wall carried has to exist BEFORE the coat, and the choice
+ * (fix it / coat it anyway) has to be somebody else's, in writing. The stops
+ * list lives in items.js; every entry is a condition with the ASK riding under
+ * it, so the note reads as a list a super can clear by lunch, not a complaint.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.nothang;
+  var KEY = "toolkit.doors.notreadytohang.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY TO HANG",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox in April, when the argument is about which rooms and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Alder Creek Medical — 3rd floor TI", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana K. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The openings",
+        docHead: "THE OPENINGS",
+        why: "By the mark numbers on the plan, so his answer names the same openings your crew is standing at.",
+        fields: [
+          { id: "rooms", kind: "area", rows: 2, label: "Which openings / area", hint: "— the mark numbers, and the count", ph: "301 through 312 and both stair doors — fourteen openings" }
+        ]
+      },
+      {
+        title: "What stops the hang",
+        tone: "loud",
+        docHead: "WHAT STOPS THE HANG",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "304 and 306 frames are the other hand from my drawings — somebody has to say which is right" }
+        ]
+      },
+      {
+        title: "What you measured — if you measured it",
+        docHead: "WHAT I MEASURED, WHAT MY DRAWING SAYS",
+        why: "Both numbers are yours: what your tape read at the opening, and what your own approved shop drawing says beside it. The page supplies neither, and nobody here says which one wins — that is exactly what makes it hold up.",
+        fields: [
+          { id: "reading", kind: "text", label: "What your tape read", hint: "— where on the opening, and what time", ph: "throat at 304 measured 4-7/8 at the head — 6:40, with the super there" },
+          { id: "limit", kind: "text", label: "What your own drawing says", hint: "— and where it came from", ph: "my approved HM shop drawing sheet 3 says … — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or hung", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and when", ph: "two hangers and a hardware man staged for these openings at 7:00 tomorrow" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving to the 2nd floor stair doors — half a day of work left there" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "R. Tolliver — 559-555-0173", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vantage Door & Hardware", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply FIX with who's fixing each one and when, and these openings go back on my board the hour they're cleared.",
+      "Or reply PROCEED and we hang them as they stand — in writing, because once a leaf is on and adjusted, everything on this list reads as my work, and this note is the record of what was behind it.",
+      "Nothing here is a verdict on anybody's work — it's what I found, in my words, with anything I measured taken off my own tape and set beside my own approved drawing."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -670,5 +670,31 @@ window.COMMONS_TIPS = [
     w: "Raw mud pulls the finish in different from the painted wall around it, and the patch flashes through at the first low sun no matter how many coats ride over it. The one you skip is always at the end of a hallway with a window." },
   { id: "color-dries-on-the-wall", t: ["painting"],
     n: "Brush the color out on the actual wall and get it approved in that room's light before the first gallon spreads.",
-    w: "A chip in the hand and a wall at four o'clock are two different colors, and \"that's not what I picked\" always arrives after the second coat. A sample square and a yes in writing beats a whole-floor repaint." }
+    w: "A chip in the hand and a wall at four o'clock are two different colors, and \"that's not what I picked\" always arrives after the second coat. A sample square and a yes in writing beats a whole-floor repaint." },
+
+  /* ---- doors & hardware: trade #15 --------------------------------------- */
+  { id: "walk-the-hands", t: ["doors"],
+    n: "Walk every opening and read the hand off the frame that's actually in the wall before a carton gets opened.",
+    w: "Walls move, rooms swap, and the frame that got set is the other hand from the schedule you ordered against — plans get flipped in the field and nobody sends a memo. Catch it standing at the opening and it's a phone call; catch it with the lockset already bored into the leaf and you've bought a leaf and a lock, because the bevel and the prep only go one way." },
+  { id: "plug-the-preps", t: ["doors"],
+    n: "Tape and plug every prep, anchor hole and reinforcement in a hollow metal frame before the wall around it gets grouted.",
+    w: "Grout finds the hinge reinforcement, the strike box and the closer prep, and it sets in there like it was poured on purpose. Then you're digging cement out of tapped holes through an opening you can barely get a pick into, with the leaf leaning in the corridor, and the crew that poured it has been on another floor for a week." },
+  { id: "template-out-of-the-carton", t: ["doors"],
+    n: "Pull the paper template out of every carton and put it in your pocket before the boxes get broken down.",
+    w: "The prep locations for that exact device live on that sheet and nowhere else on the job — not on the plan, not on the schedule, not in the memory of the guy who did the last building with a different device. Cleanup flattens the boxes Friday, and a hole in a leaf doesn't move back." },
+  { id: "ask-the-floor-guy", t: ["doors"],
+    n: "Get the finished floor build-up at every opening from the flooring contractor before you cut the bottom off anything.",
+    w: "One corridor goes from bare slab to leveler, membrane and tile, and thresholds change it again at every exterior and every wet room. What you're cutting to is on your own approved submittal; what's actually going under that leaf is only in the floor guy's head, and the flooring package got value-engineered twice since the plan you're holding. A leaf cut short is a new leaf." },
+  { id: "set-off-the-benchmark", t: ["doors"],
+    n: "Set every frame off the level line the building was laid out from, never off the slab underneath it.",
+    w: "Slabs dip, and a run of frames each set plumb off its own patch of floor reads like a staircase from the far end of the corridor — heads stepping, every one a little different. It's invisible at any single opening, which is exactly how it survives to the owner's walk, and by then the frames are in the wall." },
+  { id: "cores-are-an-event", t: ["doors"],
+    n: "Make the permanent core swap its own scheduled event with somebody from the owner standing there, not something you squeeze in at the end of a day.",
+    w: "The second a core changes, every construction key in every trade's pocket is dead, and half of them find that out at seven the next morning at a door they've been using all month. Do it building-wide with the owner receiving the cores and the records in one handoff, or you spend a week as the only man on site who can open anything, and those calls come at night." },
+  { id: "read-the-gap-not-the-strike", t: ["doors"],
+    n: "When a leaf won't latch, read the gap down the entire strike edge before you put a file on the strike.",
+    w: "Filing the strike open makes it catch today and buries the reason — a hinge sitting proud, a jamb pulled in, a leaf in wind — and that reason keeps moving until the door drags and the strike you opened no longer holds it shut. The gap tells you which one you've got: even top to bottom is the strike, tight at one end is a hinge, touching the stop at one corner only is the frame telling you it's twisted." },
+  { id: "seal-the-cut-today", t: ["doors"],
+    n: "Seal any field cut on a wood leaf the same shift you make it.",
+    w: "A raw edge drinks whatever's in the air of a building that still has wet trades working in it, and the leaf answers by swelling or bowing about a week later, in a room nobody's opened since. How much comes off — and whether anything comes off that leaf at all — is on your own approved submittal and the maker's instructions, not on your eye at the opening." }
 ];

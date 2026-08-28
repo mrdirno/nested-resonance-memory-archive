@@ -88,7 +88,15 @@
     "well hit it": "yes",
     "done already": "in",
     "not paint": "no",               // [2] declined: another trade's work wearing paint
-    "need the room": "ask"           // [3] blocked on their side: moves the day the room clears
+    "need the room": "ask",          // [3] blocked on their side: moves the day the room clears
+    // doors/items.js — the punch-back rungs. [0] and [1] are shared with painting
+    // and [2] with flooring; only the fourth is new, and it is new because this
+    // trade needed a rung the other thirteen did not. An installer standing at an
+    // opening frequently CANNOT say yes: what is being asked for is a hardware or
+    // label question whose answer lives in the approved submittal and with the
+    // people who stamp it. That is not a refusal and it is not a commitment — it
+    // is an ask pointed at somebody else, which is exactly position [3].
+    "not my call": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score

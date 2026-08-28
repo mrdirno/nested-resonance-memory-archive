@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Punch Back — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="Somebody sent you a list of what they need from you. Paste it, tick what you'll hit and when, flag what you can't, and send one answer back instead of a text nobody can work to.">
+<meta name="apple-mobile-web-app-title" content="Punch Back">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Doors &middot; them &rarr; you &rarr; back</span>
+    <h1 id="title">Punch Back</h1>
+    <p class="lede" id="lede">The super, the architect or the owner&rsquo;s rep walked the openings and sent you a list. Paste the whole thing and go down it once &mdash; we&rsquo;ll hit it with a day on it, done already, not mine, or not my call &mdash; and send back one answer they can close items off, under their own numbers.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>What you tick here is a commitment.</b> Every line on this page came off <i>his</i> list &mdash; this page doesn&rsquo;t check it against the drawings, the code, the schedule or your contract, and it doesn&rsquo;t know whether the work is yours. Read each one before you answer it. <b>It&rsquo;s an answer, not a change order, there is no price on it, and nothing here changes anybody&rsquo;s scope.</b>
+  </div>
+
+  <section class="card">
+    <h2>What he sent you <span class="why">&mdash; paste it, we line it up</span></h2>
+    <details class="more" id="intake" open style="margin-top:0;border-top:0;padding-top:0">
+      <summary id="intakeSum">Paste his message</summary>
+      <p class="note" style="margin:10px 0 8px">Paste the whole thing &mdash; the header, the sign-off, all of it. One ask per line is all we keep, and we&rsquo;ll show you anything we skipped.</p>
+      <textarea id="bPaste" placeholder="Building C &mdash; what we need from you &mdash; Aug 9&#10;&#10;Job: Building C&#10;From: Rico &mdash; Acme AV&#10;&#10;CR-204 &middot; back box + mud ring &middot; 60 AFF &middot; before rock&#10;CR-204 &middot; conduit to the ceiling &middot; 1in &middot; before rock"></textarea>
+      <div class="outrow" style="margin:8px 0 0">
+        <button type="button" class="btn" id="bPasteGo">Line it up</button>
+      </div>
+      <p class="note" id="intakeMsg" style="margin:9px 0 0" hidden></p>
+      <details class="more" id="skipped" hidden>
+        <summary id="skippedSum">Show what we skipped</summary>
+        <pre class="plain" id="skippedList"></pre>
+        <button type="button" class="btn ghost" id="addSkipped">Add these too</button>
+      </details>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Who you&rsquo;re answering <span class="why">&mdash; typed once, rides on the message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTo">Who asked you</label><input type="text" id="hTo" placeholder="his name &mdash; his shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so he can call you at the wall" autocomplete="off"></div>
+      <div><label for="hOff">His list / drawing</label><input type="text" id="hOff" placeholder="the sheet and revision he sent" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Naming his sheet back to him is what stops the second conversation. If he sent it off a revision you don&rsquo;t have, that is its own answer and it belongs in the flagged block below.</p>
+  </section>
+
+  <section class="card">
+    <h2>Your answer, line by line</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row to answer it.</b> Once for <b>we&rsquo;ll hit it</b>, again for <b>done already</b>, again for <b>not mine</b>, again for <b>not my call</b> &mdash; and once more clears it. The pencil is where the day goes, whose work it actually is, or which submittal the answer lives in.</p>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="status" class="on">My answer</button>
+        <button type="button" data-g="when">When</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="nodate" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+  </section>
+
+  <section class="card">
+    <h2>Send it back <span class="why">&mdash; one answer, not six texts</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="owed">Still owed</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Still owed</b> is next week&rsquo;s version of the same message &mdash; what you committed to and haven&rsquo;t got in yet, without re-listing the ones that are done. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser on this phone.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the Doors &amp; Hardware Field Toolkit. Got a list this page mangled, or an answer it won&rsquo;t let you give? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Doors &amp; Hardware Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* THE RETURN LEG — the other half of the cross-boundary request, and the half
+ * nobody has built (av/AV_SOCIETY.md §THE INTERFACE).
+ *
+ * Every interface tool in this toolkit so far sends an ASK across a boundary:
+ * what I need from the electrician, what I need from the framer, what has to be
+ * in before I close the wall. The document those tools produce ends with a line
+ * asking the other man to reply. Then the reply itself is a text message with no
+ * structure — "yeah most of that's fine, the floor box is a problem, call me" —
+ * and every commitment in it is unfindable in October.
+ *
+ * So this page is the reply, and its whole job is one sentence: THESE SIX I CAN
+ * HIT AND HERE IS THE DATE, THIS ONE I CAN'T AND HERE IS WHY, THIS ONE I NEED
+ * SOMETHING BACK ON. Nothing else.
+ *
+ * WHY IT IS NOT A SECOND REQUEST PAGE. A request is composed — he walks the job
+ * and builds a list out of his own head. An answer is not composed, it is
+ * ANSWERED: the list already exists, somebody else wrote it, and the only thing
+ * this man adds is a verdict and a date per line. That inverts the whole
+ * interaction. Intake is a PASTE, not a picker; the lead field is not a
+ * vocabulary select but his counterpart's own words, kept verbatim; and the
+ * fast path is tapping down a list rather than adding to one.
+ *
+ * KEEPING HIS WORDS EXACTLY IS THE POINT, NOT A SHORTCUT. The moment we
+ * re-phrase what he asked for into our vocabulary, the two documents stop being
+ * about the same items and the reply cannot be laid beside the ask. So the
+ * pasted line is stored untouched (the engine's `pasteKey` lands it in a prose
+ * field, not the identifier axis, precisely so nothing uppercases or +1s it),
+ * and every word this page adds is on the other side of a dash.
+ *
+ * IT IS A CONFIG ON SHAPE #3. shared/rowlog.js owns the state, the grouping, the
+ * persistence, the document assembly and the copy; shared/rowlog.css owns every
+ * pixel; this file owns the WORDS; the trade's own gates come from the vocabulary
+ * file it already ships for the request. Six trades run this same page.
+ *
+ * WHAT IT REFUSES TO BE (§THE SYSTEM OF RECORD): not a change order, not a price,
+ * not a schedule submission, not an RFI answer. Money is the fastest way to make
+ * a foreman stop reading, and a number on a reply is a claim the office has to
+ * own. The document says all of that in its own last line.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var A = window.TOOLKIT_ANSWER || {};
+  /* The gates are the trade's own, and they already exist: the request page ships
+     them. Re-declaring them here would be two lists to keep in step and one of
+     them would rot. */
+  var MILES = (window.TOOLKIT_ROUGHIN && window.TOOLKIT_ROUGHIN.milestones) || [];
+  var KEY = "toolkit." + (TRADE.slug || "av") + ".answer-back.v1";
+
+  /* THE LADDER IS THE TRADE'S, AND POSITION IS MEANING. It was a literal here
+     until the ninth trade needed a rung no construction kit has ("that's an
+     extra"), and a page eight trades share may never be forked for a ninth
+     (av/AV_SOCIETY.md §THE THREE SHAPES). So the words come from the trade's own
+     vocabulary file and the page reads POSITIONS, never words: [0] is the
+     promise that wants a date on it, [1] is already settled, [2] is declined,
+     [3] is blocked on the other side. A trade that says nothing keeps exactly
+     the four rungs this page has always shipped. */
+  var ANSWERS = (A.answers && A.answers.length === 4) ? A.answers.slice()
+              : ["Will do", "In already", "Can't", "Need to know"];
+
+  /* ONE PREDICATE, TWO READERS. The scope filter hides rows from the BODY and
+     the head counts rows for the SUMMARY, and when those two disagree the
+     document contradicts itself in its own first paragraph — "1 in already"
+     printed above a list that deliberately does not contain it. So the rule for
+     what is still owed is written once and both of them ask it. */
+  function stillOwed(v) { return v.status !== ANSWERS[1] && v.status !== ANSWERS[2]; }
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* Page copy comes from the trade's own vocabulary file. A super who reads
+     somebody else's trade voice knows in one line it wasn't written for him. */
+  if (A.toolName) {
+    $("#title").textContent = A.toolName;
+    document.title = A.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (A.lede) $("#lede").textContent = A.lede;
+  if (A.eyebrow) $("#eyebrow").textContent = A.eyebrow;
+  if (A.warn) $("#warn").innerHTML = A.warn;
+  if (A.offHint) $("#offHint").textContent = A.offHint;
+  if (A.phJob) $("#hJob").placeholder = A.phJob;
+  if (A.phTo) $("#hTo").placeholder = A.phTo;
+  if (A.phFrom) $("#hFrom").placeholder = A.phFrom;
+  if (A.phOff) $("#hOff").placeholder = A.phOff;
+  if (A.paste) $("#bPaste").placeholder = A.paste;
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* ── the intake ───────────────────────────────────────────────────────────
+   * THE ONE INVARIANT: NEVER SILENTLY DROP AN ASK. A junk row costs one tap to
+   * delete. A dropped ask is a line he thinks he has an answer on and doesn't,
+   * discovered in October by two companies who both believe they are right.
+   *
+   * So every rule below fires only on a line that is STRUCTURALLY not an ask —
+   * a header field, a count, an ALL-CAPS group heading, our own disclaimer —
+   * and never on prose, because a hand-typed ask IS prose and there is no
+   * reliable way to tell one from a sentence about the weather. Anything the
+   * rules did drop is shown, with a button to put it back. The failure this
+   * page is allowed to have is one extra row; the failure it is not allowed to
+   * have is a missing one.
+   */
+  var HEAD_KEY = /^(job|to|from|cc|bcc|off|call me|still open|subject|date|sent|re|attn)\s*:/i;
+  var COUNT_LINE = /^\d+\s+(items?|rows?)\b/i;
+  var GROUP_HEAD = /[—-]\s*\d+\s+rows?\s*$/i;
+  var FLAG_HEAD = /^flagged\s*[—-]\s*\d+\s*$/i;
+  var RULE_LINE = /^[-=_·•*~]{3,}$/;
+  /* Only OUR OWN sign-off shapes, matched narrowly. A broad prose rule here
+     would eat "GC says that one is a change order", which is an ask with the
+     most important qualifier a man can put on it. */
+  var DISCLAIM = /(not an rfi|isn'?t an rfi|isn'?t a change order|not a change order|doesn'?t authori[sz]e|does not authori[sz]e|against your own set|before anybody roughs|verify (it|them|that) before)/i;
+
+  /* THE SIGN-OFF IS TWO LINES AND ONLY ONE OF THEM IS RECOGNISABLE. Our own
+     request documents close with a per-trade sentence ("anything you can't hit,
+     call me before you cover it") and THEN the disclaimer. The first is
+     arbitrary prose written by the trade — there is no pattern to match it on,
+     and a prose rule broad enough to catch it would eat hand-typed asks.
+     But the STRUCTURE is fixed: the closing block is emitted after a blank line
+     and runs to the end. So once a line proves the paste is one of our documents,
+     everything from that block's start is tail. Nothing is lost silently — the
+     tail lands in the skipped list with a button to put it back. */
+  function tailStart(lines) {
+    var hit = -1;
+    for (var i = 0; i < lines.length; i++) if (DISCLAIM.test(lines[i].trim())) { hit = i; break; }
+    if (hit < 0) return -1;
+    var j = hit;
+    while (j > 0 && lines[j - 1].trim() !== "") j--;
+    return j;
+  }
+
+  function lineUp(text) {
+    var raw = String(text || "").split(/\r?\n/);
+    var hasHead = raw.some(function (l) { return HEAD_KEY.test(l.trim()); });
+    var tail = tailStart(raw);
+    var kept = [], dropped = [], seenFirst = false;
+    raw.forEach(function (l, i) {
+      var t = l.trim();
+      if (!t) return;
+      if (tail >= 0 && i >= tail) { dropped.push(t); return; }
+      /* Line 1 of a message we generated is a subject built for an inbox search.
+         Only treated as one when the paste actually looks like a message. */
+      var first = !seenFirst; seenFirst = true;
+      /* `hasHead` is the signal "this paste is one of OUR documents", whose line
+         1 is a subject we built for an inbox search. Trade #9 pastes a CLIENT's
+         raw email, which carries a subject and no Job:/To: header, so this rule
+         never fired and the subject answered itself as if it were a note — in
+         the reply the client receives. `firstLineIsSubject` lets a trade say its
+         intake is somebody else's message rather than ours. The em-dash test is
+         the whole safety of it: a greeting ("Hi Sam,") has none and stays a row,
+         and a first note rarely leads with one. And nothing is LOST either way —
+         the line lands in the visible skipped list with a button to put it
+         back, which is the same place the other eight already send it. */
+      if (first && (hasHead || A.firstLineIsSubject) && t.indexOf(" — ") > -1) { dropped.push(t); return; }
+      if (HEAD_KEY.test(t) || COUNT_LINE.test(t) || GROUP_HEAD.test(t)
+        || FLAG_HEAD.test(t) || RULE_LINE.test(t) || DISCLAIM.test(t)) { dropped.push(t); return; }
+      /* A bullet carries no information and reads as a typo once the row is in a
+         list. His NUMBERING does carry information — "the one I can't hit is 3"
+         is how this conversation is actually had — so a leading number stays. */
+      kept.push(t.replace(/^[-–—•*]\s+/, ""));
+    });
+    return { kept: kept, dropped: dropped };
+  }
+
+  /* A DEFAULT IS A CLAIM (§SCARS) — so this only ever fills a field that is
+     EMPTY, only ever with a value HE typed, and always in an input he can see
+     and correct. His From is my To: that is the whole conversation flipping. */
+  function prefill(text) {
+    var lines = String(text || "").split(/\r?\n/);
+    function field(k) {
+      var re = new RegExp("^" + k + "\\s*:\\s*(.+)$", "i"), hit = null;
+      lines.some(function (l) { var m = re.exec(l.trim()); if (m) { hit = m[1].trim(); return true; } return false; });
+      return hit;
+    }
+    function set(sel, v) { var el = $(sel); if (el && !el.value.trim() && v) el.value = v; }
+    set("#hJob", field("job"));
+    set("#hTo", field("from"));
+    set("#hOff", field("off"));
+  }
+
+  var lastSkipped = [];
+  function say(msg) { var el = $("#intakeMsg"); el.innerHTML = msg; el.hidden = false; }
+
+  $("#bPasteGo").addEventListener("click", function () {
+    var raw = $("#bPaste").value;
+    if (!raw.trim()) { say("<b>Nothing pasted yet.</b> Paste his message in the box above, or add the first line by hand below."); return; }
+    var r = lineUp(raw);
+    var n = rl.addPasted(r.kept.join("\n"));
+    prefill(raw);
+    lastSkipped = r.dropped;
+    var sk = $("#skipped");
+    sk.hidden = !r.dropped.length;
+    if (r.dropped.length) {
+      $("#skippedList").textContent = r.dropped.join("\n");
+      $("#skippedSum").textContent = "Show the " + r.dropped.length + " line" + (r.dropped.length === 1 ? "" : "s") + " we skipped";
+    }
+    say("<b>" + n + " line" + (n === 1 ? "" : "s") + " lined up.</b>"
+      + (r.dropped.length ? " We skipped " + r.dropped.length + " that looked like his header and sign-off — check them if you want." : "")
+      + " Anything on the list that isn't an ask, open the pencil and delete it.");
+    if (n) { $("#bPaste").value = ""; $("#intake").open = false; }
+  });
+
+  $("#addSkipped").addEventListener("click", function () {
+    if (!lastSkipped.length) return;
+    var n = rl.addPasted(lastSkipped.join("\n"));
+    lastSkipped = [];
+    $("#skipped").hidden = true;
+    say("<b>Put " + n + " back on the list.</b>");
+  });
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "line", nounPlural: "lines", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NO ANSWER YET",
+    emptyText: "Nothing lined up yet. Paste what he sent you above, or type the first thing he asked for.",
+
+    /* His words land HERE, not in an identifier axis — see the header comment.
+       The ladder is the ANSWER, so it cycles rather than stopping, and the
+       settled rung is the one in the middle. */
+    pasteKey: "ask",
+    statusKey: "status", statusOrder: ANSWERS, statusWrap: true, statusDone: ANSWERS[1],
+    flagKey: "flag", flagValues: ["Not mine", "Not on my set"],
+
+    groupOptions: [
+      { key: "status", label: "My answer" },
+      { key: "when", label: "When" }
+    ],
+
+    /* THE BLOCKS READ IN LADDER ORDER, ALWAYS. What he's getting first, what
+       he isn't last — so the same reply never arrives arranged differently
+       depending on which line this man happened to answer first. */
+    groupSort: function (a, b, key) {
+      if (key !== "status") return 0;
+      var ia = ANSWERS.indexOf(a), ib = ANSWERS.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    },
+
+    /* NEXT WEEK'S MESSAGE IS NOT THIS WEEK'S. Once he has answered, the thing he
+       re-sends is what he still owes — not the ones already in, and not the ones
+       he already said no to, because re-sending a refusal reads as a new one. */
+    filters: [{
+      v: "owed", label: "still owed",
+      emptyText: "Nothing still owed on his list — everything you committed to is in.",
+      test: function (v) { return stillOwed(v); }
+    }],
+
+    fields: [
+      { key: "ask", label: "What he asked for", input: "text", lead: true, required: true, wide: true,
+        placeholder: "his line, in his words" },
+      { key: "status", label: "My answer", input: "chips" },
+      { key: "when", label: "When", input: "learn", sticky: true,
+        placeholder: "Thursday · with the crew Tuesday",
+        emptyHint: "Your own gates are the buttons. Type a day and it becomes one too." },
+      { key: "note", label: "Why not, or what you need to know", input: "text", wide: true,
+        placeholder: "why you can't hit it, or the question you need answered first" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "status") return ANSWERS;
+      if (key === "when") {
+        var out = MILES.map(function (m) { return m.label; });
+        (learned || []).forEach(function (v) { if (out.indexOf(v) === -1) out.push(v); });
+        return out;
+      }
+      return null;
+    },
+
+    rowMain: function (v) { return v.ask || "(nothing on this line)"; },
+    rowSub: function (v) { return joinDots([v.when, v.note]); },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first, exactly like the
+       request it answers — so the ask and the answer surface together when
+       somebody searches "Building C" in October. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var to = $("#hTo").value.trim();
+      var out = [joinDash([job, A.docSubject || "my answer on your list", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (to) out.push("To: " + to);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("On your list off " + off);
+      out.push("");
+
+      var line = c.shown + (c.shown === 1 ? " line" : " lines");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      /* Counted over the rows this copy actually CONTAINS — see stillOwed. */
+      var src = rl ? rl.rows() : [];
+      if (c.filters.indexOf("owed") > -1) src = src.filter(function (r) { return stillOwed(r.values); });
+      var seen = {};
+      src.forEach(function (r) { var v = r.values.status; if (v) seen[v] = (seen[v] || 0) + 1; });
+      var roll = ANSWERS.filter(function (a) { return seen[a]; })
+        .map(function (a) { return seen[a] + " " + a.toLowerCase(); });
+      var none = src.filter(function (r) { return !r.values.status; }).length;
+      if (none) roll.push(none + " not answered");
+      if (roll.length) line += " — " + roll.join(" · ");
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW: his words, then a dash, then mine. The dash is doing real
+       work — it is the seam between what he asked for and what I am committing
+       to, and without it a reader cannot tell which half is whose. The axis the
+       list is grouped by is dropped from the line because it is the heading. */
+    docRow: function (v) {
+      var g = rl ? rl.group() : "status";
+      var head = [v.ask];
+      if (g !== "status" && v.status) head.push(v.status.toUpperCase());
+      return joinDash([joinDots(head), joinDots([g === "when" ? null : v.when, v.note])]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.ask, v.status, v.note]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES): a document the receiver
+       cannot reply to is a document he files. Then the line that says out loud
+       what this is NOT — because an answer with no boundary on it is the one a
+       PM later reads as a scope agreement. */
+    docFoot: function () {
+      /* THE BOUNDARY SENTENCE IS THE TRADE'S TOO. It was a literal here until the
+         ninth trade, whose counterpart is a client rather than a GC — "change
+         order" and "scope" are the wrong register for a freelancer answering
+         notes, and being read as cold costs that user the client. Config with
+         the shipped wording as the default, so the eight construction kits
+         emit exactly the sentence they always did. */
+      return (A.closing || "That's my answer on everything you sent. Anything under CAN'T or NEED TO KNOW I need back from you before I can move on it — call me and I'll walk it with you.")
+        + "\n" + (A.docBoundary || "This is what I'm committing to off the list you sent me. There's no price on it, it isn't a change order, and it doesn't change anybody's scope. If it isn't on your list it isn't on mine.");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + (A.docSubject || "my answer on your list") + ", " + c.total
+        + " lines, " + c.today + (off ? ", off " + off : "")
+        + " — answered by hand off the list we were sent. No price on it, not a change order.";
+    },
+    tsvColumns: [
+      { label: "What he asked for", key: "ask" },
+      { label: "My answer", key: "status" },
+      { label: "When", key: "when" },
+      { label: "Flag", value: function (v, r) { return r.flag || ""; } },
+      { label: "Why / question", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim(), to = $("#hTo").value.trim();
+      return (j || o || f || t || to) ? { job: j, off: o, from: f, tel: t, to: to } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+      $("#hTo").value = x.to || "";
+    },
+    onChange: function () { paintNoDate(); }
+  });
+
+  /* THE LINE EVERYONE LEAVES OUT OF A REPLY IS THE DATE (§the doc library's
+     `omit` field, same lesson). "Yeah we'll get it" is not an answer anybody can
+     build a schedule on, and it is exactly what gets argued about later. So the
+     page counts the soft commitments and says so — in the UI, where he can fix
+     it, and NOT in the document, because publishing "3 of his 6 yesses are soft"
+     is his business to disclose and not ours to volunteer. */
+  function paintNoDate() {
+    /* onChange fires from inside mount(), which is before `rl` is assigned —
+       the shape that silently killed a page's whole script once already
+       (§SCARS). The post-mount call below is the one that paints. */
+    var el = $("#nodate"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) { return r.values.status === ANSWERS[0] && !String(r.values.when || "").trim(); }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " marked we’ll hit it with no day on " + (n === 1 ? "it" : "them") + ".</b> That's the half of the answer he's actually waiting on — open the pencil and put a day on it.";
+  }
+
+  /* The learn axis borrows the identifier's keyboard attributes, which exist so a
+     phone cannot destroy a device tag. "Thursday" is not a device tag and it does
+     not want to arrive as THURSDAY. */
+  (function unshoutWhen() {
+    var el = document.querySelector('[data-learn="when"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  })();
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setFilter(b.getAttribute("data-f") ? [b.getAttribute("data-f")] : []);
+  });
+
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel", "#hTo"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    $("#intake").open = true;
+    $("#intakeMsg").hidden = true;
+    $("#skipped").hidden = true;
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel", "#hTo"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  rl.restore();
+  paintNoDate();
+  if (rl.count()) $("#intake").open = false;
+})();
+</script>
+</body>
+</html>

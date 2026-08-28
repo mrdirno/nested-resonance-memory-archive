@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Before They Ship — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="Walk the openings with a tape before frames get welded and send the distributor what the field actually is — the hand it really swings, the wall you really have, the throat your tape read, what's in the way, and the gate each one has to beat. One row per opening, grouped by floor, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Before They Ship">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Doors &middot; the field &rarr; the distributor, before steel gets cut</span>
+    <h1 id="title">Before They Ship</h1>
+    <p class="lede" id="lede">Somebody ordered these openings off a drawing. You are the first person to stand in one with a tape, and everything you find that the drawing doesn&rsquo;t know &mdash; a wall that came out thicker than the throat you&rsquo;ve got, an opening that swings the other way in the field, a head that&rsquo;s low, something parked in the swing &mdash; is cheap today and a welded frame in three weeks. Walk them once, put a row on each one, and send the floor to whoever has to build them. Your tape, your words, and their opening numbers used as an address, not re-typed as a schedule.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Field readings, not a schedule.</b> Every figure on a row is what <i>your</i> tape read at <i>that</i> opening, and every word is yours. This page supplies no rough-opening dimension, no throat or jamb depth, no clearance or undercut, no tolerance, no anchor or grout requirement, no label value and no hardware set &mdash; your approved shop drawings and the people who stamp them own all of that. The architect&rsquo;s door schedule stays the architect&rsquo;s: the opening number here is how somebody finds the opening, never a second copy of his document. <b>Double-check it before you send it</b>, because it feeds an order.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Alder Creek Medical — 3rd floor TI" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you walked it against</label><input type="text" id="hOff" placeholder="approved HM shop drawings, sheet 3, rev 2" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the sheet and its rev. It is the difference between a list the inside man can work from and one installer&rsquo;s opinion he has to re-walk with you &mdash; and if he is holding a later rev than you are, that is its own answer and you want it today.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each opening</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Mark number once &mdash; it becomes a button and it carries. The floor and the gate carry to the next row too, because you walk a floor at a time. Leave anything blank you didn&rsquo;t measure: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The floor so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="floor" class="on">Floor / area</button>
+        <button type="button" data-g="gate">The gate it has to beat</button>
+        <button type="button" data-g="state">Where it stands</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is walked, then <b>Sent</b> when it went to the distributor, then <b>Confirmed</b> when they came back on it, then <b>Ordered</b>. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that pastes beside their order</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not confirmed yet</button>
+        <button type="button" data-f="issue">Only the ones with a find</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the inside man wants beside his own order, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole walk</button></div>
+  </section>
+
+  <p class="credit">Built for the Doors &amp; Hardware Field Toolkit. Something your openings hand you that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Doors &amp; Hardware Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* BEFORE THEY SHIP — the pinned tool, and the page that answers the objection
+ * which beat this trade at #13 and again at #14. A CONFIG on shape #3
+ * (shared/rowlog.js): no CSS here, no DOM building, no state, no persistence,
+ * no document assembly. The engine owns all of it. This file owns the WORDS.
+ *
+ * WHY IT IS CLEAN, stated once so a later cycle does not have to re-derive it:
+ * the architect's door schedule is owned and NUMBERED upstream, and copying it
+ * would be double entry — that is the kill this trade lost to twice. This page
+ * does not copy it. It carries readings the schedule does not hold and cannot:
+ * what a tape read at an opening that got built, on a day after the drawing was
+ * stamped. The mark number rides as an ADDRESS so two people can talk about the
+ * same opening. Address is clean; content would be dead.
+ *
+ * THE THREE FIELDS THAT EARN THE PAGE, in the order they cost money:
+ *   HAND — the single most expensive thing that comes back wrong, because it is
+ *     decided standing in the opening and the bevel and the prep only go one
+ *     way. Caught here it is a phone call; caught with the lockset already
+ *     bored it is a leaf and a lock.
+ *   THROAT — the frame has to fit the wall that actually got built, and the
+ *     wall that actually got built is not always the wall on the plan.
+ *   WHAT'S IN THE WAY — the finding no drawing can contain, because it is about
+ *     a building at a moment: something in the swing, no room for the leaf to
+ *     stand open, two floor finishes meeting under it.
+ * Every one of them is empty until he types it. The page never suggests a
+ * value, and `finds` is a list of THINGS HE MIGHT SAY, never of things that
+ * are true.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.openings;
+  var KEY = "toolkit.doors.beforetheyship.v1";
+
+  var STATES = T.states;               /* ["Sent","Confirmed","Ordered"] — blank = walked */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function hasFind(v) {
+    var f = String(v.finds || "").trim();
+    return f !== "" && f !== "Nothing in the way — it's clean";
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "opening", nounPlural: "openings", groupNoun: "floor", groupNounPlural: "floors",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing walked yet. Put in the first opening — the mark, the hand it actually swings, and the wall you actually have.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "floor", label: "Floor / area" },
+      { key: "gate", label: "The gate it has to beat" },
+      { key: "state", label: "Where it stands" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = T.gates.indexOf(a), ib = T.gates.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var order = [""].concat(STATES);
+        var pa = order.indexOf(a), pb = order.indexOf(b);
+        return (pa < 0 ? 99 : pa) - (pb < 0 ? 99 : pb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not confirmed yet",
+        emptyText: "Every opening on here has come back confirmed. Good — order against it.",
+        test: function (v) { return isOpen(v); } },
+      { v: "issue", label: "only the ones with a find",
+        emptyText: "Nothing on here has a find on it. That is a real answer and worth sending as one.",
+        test: function (v) { return hasFind(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "Opening / mark no.", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "304, or: 3C stair — then it's a button",
+        emptyHint: "The number on the plan. It becomes a button, and it's how you and the inside man point at the same door." },
+      { key: "floor", label: "Floor / area", input: "learn", sticky: true,
+        placeholder: "3rd floor north — then it's a button" },
+      { key: "hand", label: "The hand it actually swings", input: "chips", sticky: false },
+      { key: "wall", label: "The wall you actually have", input: "chips" },
+      { key: "throat", label: "Throat / jamb depth — what your tape read", input: "text",
+        placeholder: "read it at head, middle and floor — your number, your words" },
+      { key: "ro", label: "Rough opening — what your tape read", input: "text",
+        placeholder: "width x height as you measured it" },
+      { key: "finds", label: "What you found", input: "chips" },
+      { key: "gate", label: "The gate it has to beat", input: "chips", sticky: true },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— walked; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the inside man needs that the fields don't hold" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "hand") return T.hands;
+      if (key === "wall") return T.walls;
+      if (key === "finds") return T.finds;
+      if (key === "gate") return T.gates;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.hand]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.floor, v.wall, v.throat, v.finds, v.gate, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "openings walked in the field", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Walked against: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("issue") > -1 && !hasFind(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var fl = {}, nf = 0;
+      src.forEach(function (v) {
+        var a = String(v.floor || "").trim(); if (a) fl[a] = 1;
+        if (hasFind(v)) nf++;
+      });
+      var n = Object.keys(fl).length;
+      var line = c.shown + (c.shown === 1 ? " opening" : " openings");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " floor" : " floors");
+      if (nf) line += " · " + nf + " with a find";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "floor";
+      var head = joinDots([v.mark, g === "floor" ? null : v.floor, v.hand]);
+      var tail = [];
+      if (v.wall) tail.push("wall: " + v.wall.toLowerCase());
+      if (v.throat) tail.push("throat measured " + v.throat);
+      if (v.ro) tail.push("RO measured " + v.ro);
+      if (v.finds) tail.push(v.finds.toLowerCase());
+      if (g !== "gate" && v.gate) tail.push(v.gate.toLowerCase());
+      if (g !== "state" && v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Every dimension above is what my own tape read at that opening on the day I walked it, and every description is mine. Nothing here is a tolerance, a clearance, an undercut, a label value or a hardware set — my approved shop drawings and the people who stamp them own all of that.");
+      out.push("Opening numbers are used here so we can point at the same door. This is not a door schedule and it does not replace one; the schedule stays whoever's it already is.");
+      out.push("If the field and the drawing disagree on any line above, I need that settled by somebody who can settle it — before steel gets cut, not after.");
+      return out.join("\n");
+    }
+  });
+
+  /* THE JOB HEADER IS PART OF THE DOCUMENT, so a keystroke in it has to repaint
+     the preview AND get persisted — the same wiring every row-log page on the
+     rack uses. There is no refresh() on this engine; render() is the name. */
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this walk is the only record of what the
+     field actually is, it took a morning to collect, and it lives in one
+     browser on one phone. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

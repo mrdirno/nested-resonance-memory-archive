@@ -510,5 +510,30 @@ window.COMMONS_GEAR = [
   { id: "canvas-drops", n: "Canvas drops, runners for the walk paths", t: ["painting"],
     w: "Canvas drinks a drip and stays put; plastic slides under a ladder foot and keeps every drop wet all day for your boot to find. Cover the path from the door to the work, because the floor you didn't drop is the only part of the job the customer remembers." },
   { id: "raking-light", n: "A light to rake the walls", t: ["painting"],
-    w: "Overhead light forgives everything; a hard light raked down the wall calls out the holidays, the flashed patch and the fat edge while there's still paint in the pot. The low sun through the customer's window runs the same inspection at five o'clock, whether you did or not." }
+    w: "Overhead light forgives everything; a hard light raked down the wall calls out the holidays, the flashed patch and the fat edge while there's still paint in the pot. The low sun through the customer's window runs the same inspection at five o'clock, whether you did or not." },
+
+  /* ---- doors & hardware: trade #15 ---------------------------------------
+     THE BAG OF A TRADE WHOSE MISTAKES ARE ALL IRREVERSIBLE AND ALL SMALL. A
+     hole in a leaf does not move back, a prep filled with grout has to be dug
+     out through the opening, and a strike opened up with a grinder reads as a
+     shadow on that frame for the life of the building — so this bag runs heavy
+     on the things that make a cut land exactly where it was drawn, and on the
+     things that undo a mistake at file-and-shim scale before it becomes a new
+     leaf. Seeded at stand-up, curated against the refusal list. */
+  { id: "self-centering-bits", n: "Self-centering bits, in every screw size you actually drive", t: ["doors"],
+    w: "Drill a hinge pilot a hair off freehand and the screw drags the leaf sideways as it pulls down. You never see it at the hinge — you see it three hours later as a door that suddenly won't latch, and you go chase it at the strike where it isn't. Every hole these drill lands where the hardware says it lands, which is the only reason a set of butts pulls up flat." },
+  { id: "door-jack", n: "Door jack — the foot lift, and blocks for the rest", t: ["doors"],
+    w: "Hanging a leaf means holding a hundred-odd pounds at exactly pin height with both hands full of screws, and the man doing that on his boot toe eventually sets a prefinished edge down on a dropped screw. The lift holds it there and doesn't get tired. That chip isn't a touch-up, it's a new leaf, and the lead time belongs to whoever the super decides it belongs to." },
+  { id: "frame-spreader", n: "Adjustable jamb spreader (case strut)", t: ["doors"],
+    w: "A hollow metal frame is a spring until the wall holds it, and it will gladly take a set narrow while grout goes off or somebody screws a stud tight to it. Spread it, brace it, and read the throat at head, middle and floor before you walk away from the opening. Once the wall is around it, moving that jamb back means cutting the wall — and the alternative is grinding the leaf edge until it looks chewed." },
+  { id: "hinge-shims", n: "Hinge shims — cardboard, steel, and the snips to make more", t: ["doors"],
+    w: "A leaf that drags the stop or won't quite catch is usually a hinge problem wearing a strike problem's clothes, and the fix is paper-thin, behind one leaf of one hinge. Shim the wrong one and you close the gap at the top while you open it at the bottom, so read the whole edge before you pick. Without them your next move is pulling anchors on a frame that's already in the wall." },
+  { id: "tap-set", n: "Taps in the machine screw sizes, and a box of screws to match", t: ["doors"],
+    w: "The reinforcement behind a hinge or closer prep is sheet steel with a few threads in it, and it strips the first time somebody drives it with an impact. A tap chases those threads back or takes the hole up a size while you're standing there; the alternative is a sheet metal screw that holds fine until the door has swung a season and then lets a heavy leaf hang off what's left. Nobody sends a truck out for a stripped hole." },
+  { id: "hex-key-roll", n: "Hex keys in a roll — ball-ends, straights, and the odd security bits", t: ["doors"],
+    w: "Closers, exit devices, levers, holders and stops all fasten or adjust with something hex, and the sockets on the small stuff are shallow and soft. Put a ball-end in one on an angle and you round it out — then a whole device comes off the leaf and rides back to the shop over one ruined socket. The security bits are the ones the maker picked so the public can't turn them, which includes you if they're in the van." },
+  { id: "control-key-ring", n: "The control key, on its own ring, on you", t: ["doors"],
+    w: "It's the only thing that pulls a construction core, it is not the key that operates the lock, and it looks like every other piece of brass on the job. Hand it over with a stack of change keys and it lives in a super's drawer nobody can find in October, with every opening in the building waiting on it. Lost, it's a conversation with the manufacturer and a keying record, not a trip to the hardware store." },
+  { id: "strike-files", n: "Files — flat, half-round, and one fine enough to finish with", t: ["doors"],
+    w: "Half of what's on a door punch list is a hair off a strike lip or a frame edge a forklift found on the dock, and a grinder takes more than that before you've even heard it start. A file cuts where you're looking and stops when you stop. The strike somebody opened up with a grinder reads as a shadow on that frame for the life of the building, and every walk-through finds it." }
 ];

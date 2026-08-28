@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -387,6 +387,28 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the last trade through every room, whose first coat seals the substrate as accepted and whose finish every later ladder lands on \u2014 not ready first: walk the rooms before the crew sets up, name what stops paint in your own words with your readings beside your own limits, and send the two-button ask \u2014 fix it, or direct me in writing to coat it as it sits. It supplies no spread rate, no film build, no recoat time, no moisture threshold and no color, never says a surface was ready or a color matched, and the punch list and the finish schedule stay whoever\u2019s they already are.',
     icon: <PaintRoller size={18} />,
+  },
+  {
+    // TRADE #15, and the first one that had already LOST TWICE. Doors took one
+    // first-place vote at #13 and four keeps at #14, both times beaten by the
+    // same objection: the schedule and the hardware sets are owned and NUMBERED
+    // upstream. The #14 entry recorded that what it needed next was not another
+    // hearing but a kit concept that survives its own kill \u2014 every page scoped
+    // to what the INSTALLER SENDS. Four lenses re-ran it: two ranked it first,
+    // none killed it, and the two candidates it was tied with on receiver count
+    // (fire sprinkler, structural steel) were both ruled poisoned on the safety
+    // rail. It is the top BUILDABLE nominee on the rack, which is a different
+    // and better claim than the most-mentioned one.
+    //
+    // DoorClosed, and the sibling rule bends here by necessity: the hub is named
+    // for the SCOPE the bid package uses, because this trade may not have a job
+    // title its own people agree on \u2014 a recorded risk, not a solved one. The
+    // page-level chip is a screwdriver, which IS gear he carries.
+    name: 'Doors & Hardware Field Toolkit',
+    href: './doors/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew five other kits already name and none of them could reach \u2014 the man who sets the frames, hangs the leaves and puts the hardware on. Before they ship first: walk the openings with a tape before frames get welded and send the distributor what the field actually is, the hand it really swings and the wall you really have. It supplies no fire label value, no clearance or undercut, no closer setting, no hardware set and no keying, it never says an opening is complete or compliant, and the architect\u2019s door schedule stays his \u2014 an opening number here is an address, never a second copy of his document.',
+    icon: <DoorClosed size={18} />,
   },
 ];
 
