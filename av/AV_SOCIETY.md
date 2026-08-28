@@ -1281,6 +1281,67 @@ carry a sub that addresses HIM, and the words that make a permit sound satisfied
 outright. A later cycle rewriting one of those into *"fire alarm coordinated"* would look
 like a tidy-up and would be the defect.
 
+### THE RETURN LEG — shipped 2026-08-28 (C3675), and NOT as the page the roadmap predicted
+
+`shared/whatcameback.js`, mounted as an INTAKE on all fifteen `getting-in.html` pages —
+two lines added to one page file, **zero new per-trade vocabulary**, because the rows are
+not configured anywhere: they ARE this trade's `TOOLKIT_GETIN.need` and `.heads`, exactly
+as ticked. Untick an ask and its answer row goes with it.
+
+The private roster had ranked this rung as *"nothing yet reads an access ask back in the
+way `answer-back.html` reads a rough-in ask."* A four-lens panel (a building engineer, a
+GC super, the foreman who SENDS these, and a skeptic handed the program's own rules as
+weapons) **killed that build twice over**, and the two kills are worth keeping because
+they generalise to every future INTERFACE rung aimed off this toolkit's own population:
+
+- **THE ADOPTION KILL — the receiver is not our user and never will be.** Grep every
+  kit's `phTo`: building engineer, chief engineer, property manager, director of
+  security, owner's rep. Not one tradesman, and even the GC kit sends its copy to the
+  owner's rep. The building engineer's own words: *"I do not click links from
+  contractors I don't personally know, on the phone that's tied to my building's
+  systems."* He hits reply and types, in forty-five seconds. **Nobody outside this
+  toolkit's population has ever been asked to tap a button in this program, and that is
+  not an oversight — it is the load-bearing reason these tools get opened at all.**
+- **THE PERMIT KILL.** `getting-in.mjs` fails the build if the ask ever says "approved",
+  "confirmed", "granted". A receiver-side answer page exists precisely to BE the grant,
+  and a tick beside *"we have to touch the fire alarm"* is then an approval manufactured
+  by an interface instead of by the building's own numbered permit. The GC super's scar:
+  a one-word *"yeah that's fine"* meant to cover access got read as covering the torch
+  too, nobody called the alarm company, and the floor evacuated at eleven at night.
+
+All four lenses then converged, independently, on the same surviving shape — **it runs on
+our side, on the reply he ALREADY got by whatever channel he got it.** The foreman
+described the build before he was shown it: *"assume he keeps texting back 'yeah that's
+fine' forever, and build the tool on MY side instead. Not 'he said no' — 'he said nothing
+about the freight elevator.'"* That is `shared/reconcile.js`'s own best output — what he
+never mentioned — moved to the boundary where silence costs a crew at a locked door.
+
+**THE FOUR RULES IT SHIPPED UNDER, each demanded as BLOCKING by a lens:**
+
+1. **TWO LADDERS, NEVER ONE.** The logistics asks get a real answer ladder — *Got it ·
+   Already open · No · Not theirs* — and every flagged line naming a PERMITTED activity
+   gets a ladder with **no affirmative rung at all**: *They named who owns it · Not that
+   night*, and nothing else, ever. The most this page will ever record about hot work is
+   the name of the man who owns the process. A future cycle giving the flagged list a
+   "got it" rung to make it consistent with the other list would look like a tidy-up and
+   would be the defect. `tools/toolkit-gates/what-came-back.mjs` drives every permitted
+   line through its ENTIRE ladder and fails on any rung that reads as an affirmative.
+2. **SILENCE IS THE DEFAULT AND IT PRINTS FIRST.** An untapped row is not a no and not a
+   yes. `NOTHING SAID ABOUT THESE` leads the brief, above anything that reads like good
+   news, and carries the sentence that is the whole finding: *silence is not a yes.*
+3. **THE WINDOW THEY ACTUALLY GAVE, AND A NAME AT THE DOOR.** The receiving and sending
+   lenses named the same missing sentence without conferring. The brief opens with the
+   window they gave printed **against the one we asked for**, plus who will physically be
+   at that door and their cell. *"Five guys standing at a locked door because 'fine' got
+   treated as a real answer is the single most expensive failure in this whole exchange."*
+4. **AN ANSWER GOES STALE, AND THE PAGE CANNOT PING ANYBODY.** It has no server and never
+   pretends otherwise. What it does is know the answer is four days older than the night
+   and hand him **the day-of check** — the short message HE sends, listing only what is
+   still silent and what he was told to go chase.
+
+Nothing it emits is a permit, a booking or an approval, and the document says so every
+time it carries a flagged line. The gate bans the grant words from both documents.
+
 ### KILLED, AND STAYING KILLED
 
 **Lockout/tagout and confined space** — execution procedures with joint signatures and
@@ -1671,6 +1732,53 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-28 (C3675) — A GATE THAT SAID "EVERY PERMIT HANDS BACK" WHILE ASSERTING NOTHING ON TWO TRADES
+
+`tools/toolkit-gates/getting-in.mjs` enforces the HANDBACK RULE — any option naming a
+permitted activity must end in a question aimed at the man who owns the process — and it
+had been printing **"15 page(s) clean: every permit hands back"** while running **zero**
+handback assertions on flooring and sitework.
+
+The rule only fires on an option the `PERMITTED` regex classifies, and it classified none
+of theirs. Both trades write their permit lines in words the list never named: *"We need
+something **powered down**, moved or disconnected"* — the `\b` after `power` does not match
+`powered` — *"**regulated material** rides on its own paper"*, and *"who owns the closure
+and **the permit** for it"*. Both trades hand back correctly; the authors wrote them well.
+That is exactly what made it invisible: **the gate was never wrong, it was silent**, and a
+silent zero reads identically to a clean pass.
+
+It surfaced only because a NEW gate needed the same classification and reported those two
+trades as *untestable* rather than clean. **The fix is not the wider regex** (though it is
+wider now, and `permit`, `impairment`, `regulated material`, `panel on test`, `valve` and
+`closure` are in it). The fix is that the gate now PRINTS what it actually asserted, per
+trade — `av:5 · concrete:4 · creative:1 · … · flooring:1 · sitework:1` — and **fails on a
+zero**. A gate that finds nothing to check must say so out loud. This is the second time
+this program has been bitten by a gate quietly running none of its real checks; the first
+was `reconcile-join.mjs` failing on its own wrapper (C3654).
+
+**And the same trap caught the new gate on its first run**, which is why it is one scar and
+not two: `what-came-back.mjs` shipped with its own hardcoded THIRD copy of the rule it was
+checking, so it reported flooring and sitework untestable while the module classified them
+correctly. It now parses the test out of `shared/whatcameback.js` at run time. **A gate must
+never carry its own copy of the rule it is asserting.**
+
+### 2026-08-28 (C3675) — THE MOBILE SHIP GATE STOPPED THREE TRADES SHORT, AND THE OUTPUT LOOKED COMPLETE
+
+`mobile-watertight.mjs` is the gate the ship loop names as THE mobile ship gate. It opens a
+fresh browser context per page per width — around 600 across the toolkit — and somewhere
+past the thirteenth trade the browser went down under them. The run then died on
+`page.waitForTimeout: Target page, context or browser has been closed`, **three trades short
+of the end**: plumbing, roofing and sitework were never measured.
+
+It never reported a false pass — it crashed with a non-zero exit — but a wall of `PASS`
+lines ending without a summary is not something a person reads as *"the last three trades
+were not checked."* It was reproducible before and after this cycle's changes, at the same
+position, which is how it was identified as pre-existing rather than caused.
+
+Two small fixes: the context now closes in a `finally` so a throw cannot leak it, and a
+dead browser is relaunched and the page retried instead of ending the sweep. **A gate that
+stops early is worse than a gate that fails, because a fail gets read.**
 
 ### 2026-08-26 (C3673) — THE SAME MISTAKE, TWICE, IN ONE PAGE: masonry's MIGRATION WIRING ON A PAGE WITH NOTHING TO MIGRATE
 

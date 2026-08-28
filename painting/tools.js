@@ -96,7 +96,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "Nights in a building that's full all day — the ask to whoever holds the keys: the door and the window, the lift, the washout, where paint sleeps between shifts, and the heads-ups that keep spray fog, paint smell and a wet wall from becoming the building's 2am problem. Every process the building owns comes back as a question aimed at its owner — the panel, the air and the alarm are theirs, and this page never pretends otherwise.",
+    desc: "Nights in a building that's full all day — the ask to whoever holds the keys: the door and the window, the lift, the washout, where paint sleeps between shifts, and the heads-ups that keep spray fog, paint smell and a wet wall from becoming the building's 2am problem. Every process the building owns comes back as a question aimed at its owner — the panel, the air and the alarm are theirs, and this page never pretends otherwise. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#29FF29",
     audience: "Foreman → property manager / building engineer"
   },

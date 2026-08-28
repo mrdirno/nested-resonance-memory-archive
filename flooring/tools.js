@@ -110,7 +110,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "The ask you send whoever holds the keys — the day, the route a twelve-foot roll can actually take, the freight lift and who holds the key, somewhere the material can sit in the space it's going into, and the one nobody else on this rack has to ask for: the building at temperature days before you get there. It's an ask, not a booking, and it says so.",
+    desc: "The ask you send whoever holds the keys — the day, the route a twelve-foot roll can actually take, the freight lift and who holds the key, somewhere the material can sit in the space it's going into, and the one nobody else on this rack has to ask for: the building at temperature days before you get there. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#0E6E86",
     audience: "Flooring → GC / building engineer / property manager"
   },

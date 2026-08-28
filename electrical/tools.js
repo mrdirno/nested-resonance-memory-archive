@@ -63,7 +63,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "The ask you send the building engineer to get a crew into a locked gear room — the night, the rooms, who's coming, and the heads-up that keeps you from getting turned away at the door. It's an ask, not a booking, and it says so.",
+    desc: "The ask you send the building engineer to get a crew into a locked gear room — the night, the rooms, who's coming, and the heads-up that keeps you from getting turned away at the door. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B8860B",
     audience: "Electrical → building engineer / facilities / security"
   }

@@ -101,7 +101,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "Changing the doors on a building somebody else runs, while people are still in it — the ask to whoever holds the keys: the door and the hours, the freight, where leaves sleep between shifts, how many openings you're allowed to have apart at once, and who takes the cores at the end of the night. The alarm, the access system and the keys are theirs; every heads-up on this page ends by handing the process back to the man who owns it.",
+    desc: "Changing the doors on a building somebody else runs, while people are still in it — the ask to whoever holds the keys: the door and the hours, the freight, where leaves sleep between shifts, how many openings you're allowed to have apart at once, and who takes the cores at the end of the night. The alarm, the access system and the keys are theirs; every heads-up on this page ends by handing the process back to the man who owns it. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B7BEDC",
     audience: "Lead → property manager / building engineer"
   },

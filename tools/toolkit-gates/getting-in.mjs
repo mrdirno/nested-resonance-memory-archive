@@ -97,10 +97,11 @@ const BANNED = [
 
 /* Any option naming one of these has to hand the process back to the man who owns
    it — the sub must address HIM, not report a state of ours. */
-const PERMITTED = /\b(hot work|fire alarm|sprinkler|power|torch|solder|clinical|patient|roof access|kettle|asbestos)\b/i;
+const PERMITTED = /\b(hot work|fire alarm|sprinkler|power(ed)?[ -]?(down|off)?|torch|solder|clinical|patient|roof access|kettle|asbestos|regulated material|permit|impairment|panel on test|valve|closure)\b/i;
 const HANDBACK = /\b(tell me|tell us|your |you want|who |how you)/i;
 
 const fails = [];
+const perms = [];
 const fail = (p, m) => fails.push(`${p}  ${m}`);
 
 const { s, port } = await serve();
@@ -129,8 +130,20 @@ for (const rel of list) {
     name: (e.querySelector('.nm') || {}).textContent || '',
     sub: (e.querySelector('.sb') || {}).textContent || '',
   })));
+  /* A GATE THAT CHECKED NOTHING STILL SAID "CLEAN" (found 2026-08-28). The
+     handback rule only fires on an option this regex classifies, and for two
+     trades it classified none of them: flooring and sitework write their permit
+     lines as "something powered down" (the \b after `power` never matches
+     "powered"), "regulated material" and "who owns the closure and the permit
+     for it". Both trades hand back correctly — the authors wrote them well — but
+     this gate had been reporting "every permit hands back" across 15 pages while
+     running ZERO handback assertions on two of them, and nothing in the output
+     said so. The regex is widened; more importantly the COUNT is now printed per
+     trade, because the failure was never a wrong answer, it was a silent zero. */
+  let permCount = 0;
   for (const o of headOpts) {
     if (!PERMITTED.test(o.name)) continue;
+    permCount++;
     if (!o.sub) { fail(rel, `heads-up "${o.name}" names a permitted activity with no handback at all`); continue; }
     if (!HANDBACK.test(o.sub)) fail(rel, `heads-up "${o.name}" → "${o.sub}" reports a state instead of handing the process back`);
   }
@@ -199,6 +212,9 @@ for (const rel of list) {
     if (re.test(doc2)) fail(rel, `the message itself carries banned content — ${why}`);
   }
 
+  perms.push(`${rel.split('/')[0]}:${permCount}`);
+  if (!permCount) fail(rel, 'NOT ONE heads-up option on this trade is classified as a permitted activity, so the handback rule ran zero assertions here. Either this kit genuinely flags nothing permitted (say so in items.js), or the classifier does not know this trade\'s words for it — which is the defect that made two trades look clean for weeks.');
+
   /* ---- 7. IT SURVIVES THE JOB, AND CLEAR TAKES THE NAMES ------------------ */
   await page.reload({ waitUntil: 'load' });
   await page.waitForSelector('[data-f="need"]', { state: 'attached' });
@@ -223,3 +239,4 @@ if (fails.length) {
   process.exit(1);
 }
 console.log(`GETTING IN — ${list.length} page(s) clean: every answer reaches the message, every permit hands back, names clear.`);
+console.log(`  permitted-activity lines actually asserted, by trade: ${perms.join(' · ')}`);

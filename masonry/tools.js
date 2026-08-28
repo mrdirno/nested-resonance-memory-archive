@@ -78,7 +78,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "The ask you send whoever holds the gate — the day, the route in, where the cubes land, and the heads-up that keeps a load sitting at a locked gate on the forks. It's an ask, not a booking, and it says so.",
+    desc: "The ask you send whoever holds the gate — the day, the route in, where the cubes land, and the heads-up that keeps a load sitting at a locked gate on the forks. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#C6DE7C",
     audience: "Masonry → building engineer / facilities / property manager"
   },

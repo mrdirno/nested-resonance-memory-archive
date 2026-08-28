@@ -79,7 +79,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "The ask that gets you into a building's own security world — the night, the rooms, who's coming, and the heads-up the panel room needs before your work sets off what you're there to fix. It's an ask, not a booking, and it says so.",
+    desc: "The ask that gets you into a building's own security world — the night, the rooms, who's coming, and the heads-up the panel room needs before your work sets off what you're there to fix. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#2B6CB0",
     audience: "LV → building engineer / facilities / security"
   }

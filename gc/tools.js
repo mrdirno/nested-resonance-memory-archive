@@ -65,7 +65,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "One of your subs needs into space the owner locks. Send the ask that gets a yes on the first try — the night, the rooms, whose crew it is, what you need open, and the heads-up that stops them getting walked out at nine. It's an ask, not a booking, and it says so.",
+    desc: "One of your subs needs into space the owner locks. Send the ask that gets a yes on the first try — the night, the rooms, whose crew it is, what you need open, and the heads-up that stops them getting walked out at nine. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B4560F",
     audience: "GC → owner's rep / facilities / building engineer"
   }

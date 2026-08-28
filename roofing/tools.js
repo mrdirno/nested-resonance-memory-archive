@@ -74,7 +74,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "The ask you send whoever holds the keys to get a crew onto the roof — the hatch, the ladder, the lot for the truck, the hoist or crane window, and the heads-up that keeps everybody underneath clear. It's an ask, not a booking, and it says so.",
+    desc: "The ask you send whoever holds the keys to get a crew onto the roof — the hatch, the ladder, the lot for the truck, the hoist or crane window, and the heads-up that keeps everybody underneath clear. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#D6528E",
     audience: "Roofing → building engineer / facilities / property manager"
   }

@@ -40,7 +40,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "You need into a building somebody else locks. Send the ask that gets a yes on the first try — the day, the space, what you need open, who’s coming, and the heads-up that keeps a crew from getting walked before you’ve got the shot. It’s an ask, not a booking, and it says so.",
+    desc: "You need into a building somebody else locks. Send the ask that gets a yes on the first try — the day, the space, what you need open, who’s coming, and the heads-up that keeps a crew from getting walked before you’ve got the shot. It’s an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#C2660F",
     audience: "Shooter / producer → the venue or building manager"
   },

@@ -42,6 +42,7 @@
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/note.js"></script>
+<script src="../shared/whatcameback.js"></script>
 <script>
 /* GETTING IN — the INTERFACE rung that crosses the OWNER'S fence, and the first
  * tool in the program aimed at a party that is not another trade. Every word in
@@ -75,7 +76,7 @@
   if (w && G.warn) w.innerHTML = G.warn;
   document.title = G.toolName + " — " + (TR.name || "Field Toolkit");
 
-  Note.mount({
+  var NOTE = Note.mount({
     key: "toolkit." + (TR.slug || "av") + ".gettingin.v1",
     docName: G.docName,
     copiedLabel: "Copied. Go send it.",
@@ -203,6 +204,25 @@
       return touched ? "Ask started" : "Nothing on it yet";
     }
   });
+
+  /* THE RETURN LEG, and it is an INTAKE on this page rather than a page of its
+   * own — the law shared/reconcile.js was written under. The ask lives HERE; the
+   * answer is about THESE ticks. A second page would need its own copy of them,
+   * and a second copy of a list is a second version of the truth.
+   *
+   * It is also aimed at the man already holding this phone, not at the building.
+   * The 2026-08-28 panel killed a receiver-side answer page twice over: he does
+   * not click a contractor's link, and a page where he taps "yes" beside the fire
+   * alarm manufactures the permit this whole file was designed to refuse. What
+   * survived is the half only this page can compute — WHAT THEY NEVER ANSWERED. */
+  if (window.WhatCameBack) {
+    WhatCameBack.mount({
+      after: document.getElementById("warn"),
+      note: NOTE,
+      getin: G,
+      slug: TR.slug || "av",
+    });
+  }
 })();
 </script>
 </body>

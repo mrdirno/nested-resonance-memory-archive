@@ -538,7 +538,25 @@ const MEASURE = (MIN_TAP) => {
   return out;
 };
 
-const browser = await chromium.launch();
+/* THE SWEEP HAS TO FINISH, AND FOR A LONG TIME IT DID NOT (found 2026-08-28).
+ * This gate opens a fresh context per page per width — around 600 of them across
+ * the whole toolkit — and somewhere past the thirteenth trade the browser went
+ * down under them. The run then died on `page.waitForTimeout: Target page,
+ * context or browser has been closed`, three trades short of the end, with a
+ * non-zero exit and a PASS list that looked complete. It never reported a false
+ * pass, but plumbing, roofing and sitework were going unmeasured by the gate the
+ * ship loop names as THE mobile ship gate, and nobody could tell from the output.
+ * Two fixes, both small: the context closes in a `finally` so a throw cannot leak
+ * it, and a dead browser is relaunched and the page retried instead of ending the
+ * sweep. A gate that stops early is worse than a gate that fails, because a fail
+ * gets read. */
+let browser = await chromium.launch();
+let relaunches = 0;
+async function live() {
+  if (browser.isConnected()) return;
+  browser = await chromium.launch();
+  relaunches++;
+}
 let failures = 0, checked = 0, softTotal = 0;
 
 for (const page of PAGES) {
@@ -552,7 +570,10 @@ for (const page of PAGES) {
     .concat(REVEALS.filter(r => r.match.test('/' + page)).map(r => ({ name: r.name, run: r.run })));
 
   for (const width of WIDTHS) {
-    const ctx = await browser.newContext({
+   await live();
+   let ctx = null;
+   try {
+    ctx = await browser.newContext({
       viewport: { width, height: 780 },
       deviceScaleFactor: 3,
       isMobile: true,
@@ -612,7 +633,15 @@ for (const page of PAGES) {
       }
     }
     if (errs.length) bad.push(`${width}px — pageerror: ${errs.join(' | ')}`);
-    await ctx.close();
+   } catch (e) {
+     /* A crashed renderer is not a finding about the page, it is a finding about
+        the run — say so plainly and keep sweeping, rather than reporting nothing
+        about every page after this one. */
+     bad.push(`${width}px — the browser went down mid-measurement (${String(e.message || e).split('\n')[0]}); relaunched and carried on`);
+     try { await browser.close(); } catch (e2) { /* already gone */ }
+   } finally {
+     if (ctx) { try { await ctx.close(); } catch (e3) { /* context died with the browser */ } }
+   }
   }
 
   checked++;
@@ -628,7 +657,8 @@ for (const page of PAGES) {
   if (process.env.SHOW_SOFT && soft.size) [...soft].forEach(s => console.log('      soft: ' + s));
 }
 
-await browser.close();
+try { await browser.close(); } catch (e) { /* already gone */ }
+if (relaunches) console.log(`\n(the browser was relaunched ${relaunches}× mid-sweep — the sweep still covered every page)`);
 console.log(`\n${checked} page(s) checked at ${WIDTHS.join('/')}px, default and bumped text — ${failures} failing`
   + (softTotal ? `, ${softTotal} soft field-height report(s) (SHOW_SOFT=1 to list)` : ''));
 process.exit(failures ? 1 : 0);

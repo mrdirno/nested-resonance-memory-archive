@@ -66,7 +66,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Getting In",
     href: "getting-in.html",
-    desc: "You're the loudest crew this building will host, and the one that shows up with the most material behind it. Send the ask that gets a yes on the first try — the route in, where it stages, how loud and for how long, and the heads-up that keeps your name off the complaint list. It's an ask, not a booking, and it says so.",
+    desc: "You're the loudest crew this building will host, and the one that shows up with the most material behind it. Send the ask that gets a yes on the first try — the route in, where it stages, how loud and for how long, and the heads-up that keeps your name off the complaint list. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#C4632B",
     audience: "Framing → building engineer / facilities / security"
   }
