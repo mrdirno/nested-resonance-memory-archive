@@ -187,6 +187,7 @@ ul.items{list-style:none;margin:0;padding:0}
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/find.js"></script>
 <script src="../shared/pickfilter.js"></script>
+<script src="../shared/draft.js"></script>
 <script src="../shared/checklist-request.js"></script>
 <script>
 /* CABLE & ADAPTER LIST — a wish, served.
@@ -296,6 +297,52 @@ ul.items{list-style:none;margin:0;padding:0}
     if (b) b.click();
   }
 
+  /* ── HIS JOB AND HIS NAME ARE NOT PART OF THE ORDER ──────────────────────
+   * This page put fJob and fBy in the LIST record and wiped them in `onClear`,
+   * and it was the only order page on the rack that did. The sweep is on the
+   * record: every other page's Clear resets fFor / fNotes / fDate — answers
+   * about THIS order — and ten of them additionally declare `device: ["fBy"]`
+   * on their job card, which is shared/jobcard.js's own name for the scope it
+   * defines as "Requested by is him". So on twelve pages Clear costs him a
+   * date; here it cost him the jobsite AND his own name, every single order,
+   * one-handed off a lift.
+   *
+   * Clear does not mean "different job" and it does not mean "different man".
+   * It means "different order" — the exact line hvac/truck-stock.html already
+   * wrote for its own header, and the reason its Clear resets fFor/fNotes/fDate
+   * and leaves fTruck/fBy/fDrop standing.
+   *
+   * SEPARATE RECORD, NOT A LONGER `persistExtra`. Leaving them in the list
+   * record and merely dropping them from `onClear` looks equivalent and is not:
+   * Clear DROPS the list record outright (shared/draft.js `clear`), so the
+   * boxes would sit on the glass backed by nothing until his next keystroke
+   * re-saved them — close the tab in between and they are gone. Its own sibling
+   * av/consumables.html shipped the fix and wrote the argument: "Separate
+   * record, never touched by Clear."
+   *
+   * NO JOB CARD HERE, DELIBERATELY, AND A PANEL IS WHY (2026-08-28, four lenses
+   * — an AV lead running two jobs, an integrator's warehouse coordinator, an
+   * engine lens told to find what breaks, and a skeptic told to kill it; scored
+   * 7/6/4/3). A chip picker was the proposal and it does not survive its own
+   * gate: `tools/toolkit-gates/jobcard-scope.mjs` fails a mount whose `perJob`
+   * is empty, and NEITHER AV order page has a per-job answer — no PO, no cost
+   * code, no gate code, no signer. Tapping a chip would swap nothing, which is
+   * the ceremony §THE STRICT BAR forbids and the same reason hvac/truck-stock
+   * was left out of the 2026-08-16 migration. Two more findings are in §SCARS:
+   * `legacyKey: "toolkit.av.cableList.v1"` CANNOT adopt — that key is the
+   * engine's list record, `{v,cats,extra:{job,by,…}}`, renamed and nested,
+   * and adopt() reads only a flat id-bag or draft.js's `{v,s}` — and the card
+   * store is keyed per TRADE, so AV would be the first trade with two carded
+   * pages on one store and whichever page opened first would silently win the
+   * adoption. Neither is this page's bug to fix. */
+  var head = Draft.fields(["fJob", "fBy"]);
+  var headKeep = Draft.keep({
+    key: "toolkit.av.cableList.header.v1",
+    snapshot: head.snapshot,
+    apply: head.apply
+  });
+  head.watch(function () { headKeep.save(); });
+
   ChecklistRequest.mount({
     list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
     persistKey: "toolkit.av.cableList.v1",
@@ -306,23 +353,32 @@ ul.items{list-style:none;margin:0;padding:0}
     // forever — Clear has to actually clear.
     persistExtra: function () {
       var x = {
-        job: document.getElementById("fJob").value,
-        by: document.getElementById("fBy").value,
         date: document.getElementById("fDate").value,
         when: when, subs: subs
       };
-      var touched = x.job || x.by || x.date || x.when !== "Today" || x.subs !== "Or equal";
+      var touched = x.date || x.when !== "Today" || x.subs !== "Or equal";
       return touched ? x : null;
     },
     onRestoreExtra: function (x) {
-      document.getElementById("fJob").value = x.job || "";
-      document.getElementById("fBy").value = x.by || "";
+      /* NOTHING IS LOST ON THE WAY IN. A man who has had this page open since
+       * it shipped has his job and his name inside the LIST record, under the
+       * short keys the engine writes (`job`, `by`) — a shape no generic adopter
+       * can read, which is exactly why this carry is done HERE, where the engine
+       * has already decoded the record and handed it over. Once: only when the
+       * sticky record did not restore, and only into a box he has not filled. */
+      if (!headKeep.restored) {
+        var j = document.getElementById("fJob"), b = document.getElementById("fBy");
+        if (!j.value && x.job) j.value = x.job;
+        if (!b.value && x.by) b.value = x.by;
+        if (j.value || b.value) headKeep.flush();
+      }
       document.getElementById("fDate").value = x.date || "";
       if (x.when) seg("segWhen", x.when);
       if (x.subs) seg("segSub", x.subs);
     },
     onClear: function () {
-      ["fJob", "fBy", "fDate"].forEach(function (id) { document.getElementById(id).value = ""; });
+      /* THE JOB AND THE NAME SURVIVE IT — see the record above. */
+      document.getElementById("fDate").value = "";
       seg("segWhen", "Today");
       seg("segSub", "Or equal");
     },

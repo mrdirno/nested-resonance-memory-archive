@@ -225,6 +225,23 @@ ul.items{list-style:none;margin:0;padding:0}
 .lastbtn:hover{background:var(--tint)}
 .lastbtn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
 
+/* ---------- WHAT YOU SEND ----------
+ * The house block every other order page on the rack has shipped since the
+ * engine was extracted, and the one this page never got. It is not decoration:
+ * tools/toolkit-gates/order-live-header.mjs finds shape #1 pages by looking for
+ * #list + #preview + #copy + #clear, so for this page's whole life the gate
+ * named THE PREVIEW IS THE DOCUMENT counted twelve order pages, went green, and
+ * could not see the thirteenth — the only one with nothing on the glass at all.
+ * A gate cannot fail a page it cannot find; it just prints a smaller number.
+ * The rule is the same one the .preview block on av/cable-list.html ships:
+ * break-word, because a jobsite typed as one long unbroken string is the token
+ * that puts a horizontal scrollbar on a 320px phone (§MOBILE-WATERTIGHT). */
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;
+  font-family:var(--mono);font-size:12px;white-space:pre-wrap;word-break:break-word;
+  color:var(--ink);max-height:340px;overflow:auto}
+
 /* ---------- dock ---------- */
 .dock{
   position:fixed;left:0;right:0;bottom:0;background:var(--steel);
@@ -292,6 +309,9 @@ ul.items{list-style:none;margin:0;padding:0}
 
   <main id="list"></main>
   <p id="nomatch" aria-live="polite">No items match that filter.</p>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
 
 </div>
 
@@ -410,8 +430,38 @@ function refresh(){
   document.getElementById("count").textContent = String(total).padStart(2,"0");
   document.getElementById("countLabel").textContent = total === 1 ? "item needed" : "items needed";
   document.getElementById("copy").disabled = total === 0;
+  /* THE PREVIEW IS asText() ITSELF, NOT A SECOND RENDERER.
+   * Every other order page builds its preview and its clipboard text from the
+   * same config but through two paths, which is exactly why order-live-header
+   * has to exist: a field wired into one and not the other makes the block he
+   * PROOFREADS a generation stale, and the one thing he checks before sending
+   * is the one thing that lies. Here there is one function and the block is its
+   * output, so the two cannot drift — the gate's first assertion is true by
+   * construction rather than by inspection.
+   * And it is what makes the sticky jobsite honest. That box survives Clear on
+   * purpose (Clear means "different order", not "different job") but it also
+   * survives a WEEK, and until now nothing on the glass said so: he stood in the
+   * warehouse and sent CONSUMABLES NEEDED — <last week's job> to the counter,
+   * and it read exactly like a right order. It is on line one of the block now,
+   * above the first thing he ticked. */
+  var pv = document.getElementById("preview");
+  if (pv) pv.textContent = asText();
   if (draft) draft.save();
 }
+
+/* THE COUNT AND THE NOTE REPAINT TOO — and this page had never bound them.
+ * Ticking a line was the only thing that ever redrew anything here, because
+ * until this cycle there was nothing on the glass to redraw: the count in the
+ * dock only ever changed when a line went on or off. The moment the document
+ * went up, the last number he typed became the one thing that lied — driven at
+ * 390px, the block read "Wall Dogs x1" while the copy button sent "x8", because
+ * the tick that repainted came BEFORE the quantity he then typed into it. That
+ * is the same defect order-live-header.mjs was written for, one row lower down
+ * than it is allowed to look (it skips everything inside #list on purpose).
+ * Delegated, so write-in rows added later are covered by the same two lines. */
+document.addEventListener("input", e => {
+  if (e.target.closest("#list") && (e.target.classList.contains("qty") || e.target.classList.contains("note"))) refresh();
+});
 
 document.addEventListener("change", e => {
   if (e.target.classList.contains("tick")){
@@ -645,8 +695,17 @@ draft = Draft.keep({
    The fields are outside #list, so nothing else was going to notice them. */
 ["fReq","fNeedSel","fNeedDate"].forEach(id => {
   const e = document.getElementById(id);
-  e.addEventListener("input", () => draft.save());
-  e.addEventListener("change", () => draft.save());
+  /* refresh(), NOT draft.save() — and the gate is why. These three print on
+     line two of the document ("Requested: … · Need by: …") and for this page's
+     whole life they saved without re-rendering, because there was nothing on
+     the glass to re-render. The block exists now, so a header field that saves
+     without repainting is the exact defect order-live-header.mjs is for: the
+     copied text is right and the block he proofreads is a generation stale.
+     It failed on the first run of the gate that had never been able to see this
+     page. refresh() ends in draft.save(), so nothing is lost by going through
+     it. */
+  e.addEventListener("input", () => refresh());
+  e.addEventListener("change", () => refresh());
 });
 
 /* ── THE JOBSITE IS STICKY, AND THAT IS WHY IT GETS ITS OWN RECORD ───────────
@@ -663,7 +722,10 @@ const stickyDraft = Draft.keep({
   snapshot: sticky.snapshot,
   apply: sticky.apply
 });
-sticky.watch(() => stickyDraft.save());
+/* Two records and one repaint: the sticky one is his jobsite, the list one is
+   his order, and the block on the glass is both. Same finding as the three
+   above — the jobsite is line ONE of what he sends. */
+sticky.watch(() => { stickyDraft.save(); refresh(); });
 
 /* YESTERDAY'S LIST. Clear now removes write-ins outright, so the undo is part of
    the same change rather than a nicety: the only thing that destroys a list is

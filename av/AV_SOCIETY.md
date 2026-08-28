@@ -1786,6 +1786,70 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-08-28 (C3677) — A GATE THAT FINDS ITS PAGES BY SHAPE IS BLIND TO THE PAGE MISSING THE SHAPE
+The sibling of the scar below it, one layer down and harder to see, because there is no
+roster to audit. `tools/toolkit-gates/order-live-header.mjs` — the gate named THE PREVIEW
+IS THE DOCUMENT — finds shape #1 pages by probing for `#list` + `#preview` + `#copy` +
+`#clear`, and its header is proud of it: *"No per-page field list, no roster to update. A
+trade shipped next month is covered the day it lands."* It is also the reason the gate
+could never see `av/consumables.html`, **the only order page on the rack with no preview at
+all** — the one page whose defect was the exact thing being probed for. For its whole life
+the gate printed `OK — 12 order page(s)` and there were thirteen. **Its green was never a
+pass on that page; it was a smaller number, and nobody reads a number for what is missing
+from it.** Proved by control: deleting the new `#preview` drops the gate straight back to
+twelve and it still exits 0. **A discovery predicate that requires the feature under test
+cannot fail the page that lacks it.** The general form: when a gate finds its own subjects,
+the count it prints is an assertion too — print the denominator you expect, or find the
+subjects by something the defect cannot delete (here: a `#list` + `#copy` page IS an order
+page, whether or not it has a preview).
+
+### 2026-08-28 (C3677) — AN ASSERTION THAT WAS NEVER RUN AS A CONTROL IS A GUESS DRESSED AS A GATE
+The new "what Clear spares must survive a reload" half of `order-live-header.mjs` was
+written specifically to catch the cheap fix for `av/cable-list.html` — leave its job and its
+name in the LIST record and just stop wiping them in `onClear`. That mutation was applied on
+purpose and **the assertion went green.** `shared/draft.js` `clear` drops the record and the
+page's own refresh re-saves it a quarter-second later off the very fields Clear was meant to
+forget, so the values do come back. The reasoning was clean, the sentence in the comment was
+persuasive, and it was wrong — and **only running it against the thing it was supposed to
+catch found that out.** The real invariant was then MEASURED rather than argued: across all
+twelve other pages, everything spared by Clear lives in `toolkit.<trade>.jobcard.v1`, a
+`…dropoff.v1`, or the page's own `…header.v1` — **never in the list record**. That became
+clause 2, which fails the same mutation with 2 defects. **Write the control before the
+comment. A gate whose negative control has never been run has an unknown false-negative
+rate, and the comment above it is the most convincing thing in the file.**
+
+### 2026-08-28 (C3677) — shared/jobcard.js IS KEYED PER TRADE AND `adopt()` RUNS ONCE PER STORE, NOT ONCE PER PAGE
+Found by the judge panel, NOT fixed — recorded so the next mount does not walk into it.
+`KEY = 'toolkit.' + cfg.trade + '.jobcard.v1'`, and all eleven live mounts are eleven
+distinct trades, so one trade has always meant one carded page. `adopt()` runs only when
+`read()` returns nothing (jobcard.js:411) — **once, on whichever page of that trade is
+opened first.** The day any trade gets a SECOND carded page, the two mounts share one store
+and only one `legacyKey` is ever honoured: whichever page he opens first wins, and the other
+page's saved answers are dropped in silence, against the module's own written promise
+*"NOTHING IS LOST ON THE WAY IN."* Worse in the direction that ships damage: if the page
+that wins is the one holding a stale value, that stale value is promoted to job #1 and
+painted onto the sibling page too. The fix when it is needed is per-legacy-key adoption
+("has THIS key been adopted"), not "is the store empty" — and it is a change to a module
+eleven pages depend on, so it does not ride along with a mount. Two smaller traps in the
+same area, also from the panel: `legacyKey` is a SINGLE slot while a page can have several
+legacy keys (`av/cable-list.html` has three), and `adopt()` reads only a flat id-bag or
+draft.js's `{v,s}` — it **cannot** read `shared/checklist-request.js`'s list record, whose
+header lives under `.extra` with renamed short keys, so a `legacyKey` pointed at a
+`persistKey` compiles, runs, adopts nothing, and reports nothing.
+
+### 2026-08-28 (C3677) — A FIELD NOBODY BOUND, BECAUSE THERE WAS NOTHING ON THE GLASS TO REPAINT
+`av/consumables.html` bound no listener to `.qty` or `.note` — not a regression, a page that
+never needed one: the only readout was a count in the dock, and a count moves when a line
+goes on or off, never when a number inside it changes. **Putting the document on the glass
+created a defect that the same change also exposed**, and it exposed it in the worst
+possible place — the LAST thing he edits before Copy. Driven at 390px the block read
+`Wall Dogs x1` while the copy button sent `Wall Dogs x8`. The general form is worth keeping:
+**adding a live view to a page retroactively promotes every unbound input into a bug**, and
+the ones that bite are the ones edited last. New gate `row-live-line.mjs` covers the row half
+`order-live-header.mjs` skips by design; the other twelve pages were swept in the same cycle
+and are green, because the engine already re-renders on its own row controls.
+
+
 ### 2026-08-28 (C3676) — A HARDCODED TRADE ROSTER DOES NOT FAIL WHEN A TRADE LANDS, IT GOES BLIND
 `tools/toolkit-gates/docspec-say.mjs` shipped with its roster typed out, at fourteen.
 `doors` landed as the fifteenth trade with a full write-up library, and this gate — the one
@@ -7251,3 +7315,67 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   READERS puts on the clock. Print it for a person and give it its own imperative heading in
   the block; do NOT grade against it. Storefront unchanged — no new tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html
+- `2026-08-28` — **[AXIS:BACKPORT] C3677 — THE ONE ORDER PAGE THAT SHOWED HIM NOTHING, AND
+  THE GATE THAT COUNTED TWELVE INSTEAD OF FAILING.** · **before:** both wells dry (AV 0 new
+  / 0 building, vibe 0/0, no stale claims), no family owed, so the stalest axis governed and
+  it was BACKPORT. The order shape — `checklist-request` + `pickfilter` + `jobcard` +
+  `dropoff` — is the most-layered thing on the rack and runs on 13 pages across 13 trades.
+  Two of the thirteen are the AV kit, the kit this book calls the shipped quality bar, and
+  they are the two that never migrated. **`av/consumables.html` is the only order page in
+  the program with no `#preview` at all**: he ticks twenty lines, hits Copy, and finds out
+  what he sent when it is already in the group chat. And
+  `tools/toolkit-gates/order-live-header.mjs` — the gate whose name is THE PREVIEW IS THE
+  DOCUMENT — **printed `OK — 12 order page(s)` for that page's entire life**, because it
+  finds its subjects by probing for `#list` + `#preview` + `#copy` + `#clear` and the page
+  was missing the very thing being probed for (§SCARS ×4). ·
+  **A FOUR-LENS PANEL SCORED MY PROPOSAL 7/6/4/3 AND KILLED MOST OF IT.** The build I put up
+  was a JobCard mount on both AV pages. Unanimous kill on `device:["fReq"]` — **`fReq` is the
+  Requested DATE, not "requested by"**, and the page's own comment is the tombstone: *"a
+  saved copy would print Tuesday's date on Thursday's list — the one field where remembering
+  is the bug."* Three of four killed `legacyKey:"toolkit.av.cableList.v1"`: that key is the
+  engine's list record, `{v,cats,extra:{job,by,…}}`, renamed and nested, and `adopt()` reads
+  only a flat id-bag or draft.js's `{v,s}` — **a migration line that reads like it works and
+  adopts nothing.** And `jobcard-scope.mjs` fails a mount whose `perJob` is empty: **neither
+  AV page has a single per-job answer** — no PO, no cost code, no gate code, no signer — so
+  the chip would swap nothing, which is the ceremony §THE STRICT BAR forbids and the same
+  reason `hvac/truck-stock` was left out of the 2026-08-16 migration. **No job card shipped.**
+  The panel also found a defect in the MODULE that is not this page's to fix (§SCARS). ·
+  **after:** what two lenses named independently, shipped. (1) **`av/consumables.html` puts
+  the document on the glass** — the block is `asText()` itself, the same function the Copy
+  button hands to the clipboard, so the block and the message **cannot** drift; the gate's
+  first assertion is true by construction instead of by inspection. The sticky jobsite is
+  line one of it, which is the whole point: that box survives Clear correctly, but it also
+  survives a WEEK, and until now nothing said so. (2) **`av/cable-list.html` stops destroying
+  his job and his name.** Swept every order page: eleven reset `fFor`/`fNotes`/`fDate` and
+  ten additionally declare `device:["fBy"]` — **cable-list was the only one on the rack whose
+  Clear wiped `fJob` and `fBy`**, so he retyped the jobsite and his own name on every single
+  order, one-handed off a lift. They move to a record of their own, the mechanism its sibling
+  page already ships, with a one-time carry done where the engine hands the decoded record
+  over rather than through an adopter that cannot read it. ·
+  **THE GATE LEARNED THREE THINGS AND EVERY ONE WAS PROVED TO BITE.** It had never once
+  clicked Copy on a page with a line ticked — a header floating on its own — and one page
+  (correctly) disables Copy at zero lines. Ticking first enrolled the thirteenth page **and
+  strengthened the other twelve by ~40%**: fields proved in the document went concrete 7→11,
+  electrical 7→13, low-voltage 7→13, hvac 7→10, masonry 10→13. New clause: **whatever Clear
+  spares must survive a reload AND must not live in the record Clear just dropped** —
+  measured, not argued, across all twelve (they keep it in a `jobcard`, a `dropoff`, or their
+  own `header` key; never the list record). **The first version of that clause went GREEN
+  against the exact cheap fix it was written to catch**, which is how the second one exists
+  (§SCARS). New gate **`row-live-line.mjs`** for the row half `order-live-header` skips by
+  design — and it caught a live one on the first run: with the block up, `av/consumables`
+  bound nothing to `.qty` or `.note`, so the glass read `Wall Dogs x1` while the message said
+  `x8`. **BACKPORT RIDER FIRED on three classes and honestly reports two populations of
+  one:** Clear-destroys-a-device-field (cable-list alone), row-controls-never-repaint
+  (consumables alone, the engine already does it), and no-preview (consumables alone).
+  **GATES:** `order-live-header` **13 pages / 3 assertions / 0 failing** (was 12/2) ·
+  `row-live-line` **13/13** · `mobile-watertight` **152 pages, four widths, both text sizes,
+  0 failing**, both changed pages re-driven individually after the last edit ·
+  `no-third-party` **152/152**. **FIVE NEGATIVE CONTROLS, ALL PROVED:** `#preview` removed →
+  gate silently reports 12 · header repaint un-wired → 2 defects · the naive Clear fix →
+  2 defects under clause 2 (0 under clause 1, which is the scar) · row repaint un-wired →
+  block ≠ message · a fuller naive revert → 6. **NAMED NEXT RUNG:** per-legacy-key adoption
+  in `shared/jobcard.js` — the store is keyed per TRADE and `adopt()` runs once per store,
+  so the first trade to get a second carded page silently drops one page's saved answers.
+  Nothing on the rack triggers it today; everything does the day it does. Storefront
+  unchanged — no new tool, no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html

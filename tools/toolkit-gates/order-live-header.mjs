@@ -172,6 +172,31 @@ for (const rel of list) {
     return p && p.textContent.trim().length > 0;
   }, null, { timeout: 8000 });
 
+  /* A DOCUMENT NEEDS A BODY BEFORE A HEADER CAN BE PROVED TO REACH IT.
+   * This gate's whole method is clicking the page's own #copy button, and it
+   * had never once done that on a page with a line ticked — every sweep ran
+   * against a header floating on its own. That was survivable while every page
+   * copied an empty list, and av/consumables.html is the page that does not:
+   * it disables #copy at zero lines, correctly, because an order with nothing
+   * on it is not a message. A gate that cannot read that page's clipboard is a
+   * gate that cannot see the only order page on the rack with no preview at
+   * all — and it did not fail, it printed twelve.
+   * Ticking the first line is also the more honest test for the other twelve:
+   * a header field is in the document when it survives next to a real line, not
+   * when it is the only thing there. */
+  await page.evaluate(() => {
+    const t = document.querySelector('#list input.tick:not(:disabled)');
+    if (t && !t.checked) {
+      t.checked = true;
+      t.dispatchEvent(new Event('change', { bubbles: true }));
+      t.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+  await page.waitForFunction(() => {
+    const b = document.getElementById('copy');
+    return b && !b.disabled;
+  }, null, { timeout: 4000 });
+
   const cs = await controls(page);
   const inDoc = [];
   const found = new Set();
@@ -253,6 +278,118 @@ for (const rel of list) {
     }
   }
 
+  /* (3) CLEAR RESETS THE ORDER, NOT THE MAN — and whatever it spares must be
+   * backed by something. Clear is the only action on these pages that destroys
+   * work, and every page makes its own call about which boxes it spares: ten of
+   * them spare "Requested by" because shared/jobcard.js holds it in `device`
+   * scope, hvac/truck-stock spares its truck number, av/consumables spares the
+   * jobsite in a record of its own. This half does not second-guess any of
+   * that. It asserts the thing that is true whatever a page decides: a box
+   * still holding a value AFTER Clear has to still hold it after a reload.
+   *
+   * AND IT HAS A SECOND CLAUSE, BECAUSE THE FIRST ONE DOES NOT BITE ALONE —
+   * which was found by running it as a negative control rather than by reading
+   * it. The obvious cheap fix for av/cable-list was to leave its job and its
+   * name in the LIST record and simply stop wiping them in `onClear`. That was
+   * mutated in on purpose and this half went GREEN, because shared/draft.js
+   * `clear` drops the record and the page's own refresh re-saves it a quarter
+   * second later off the very fields Clear was supposed to forget. The values
+   * do come back after a reload. Clear just never actually clears.
+   *
+   * SO THE REAL INVARIANT IS WHERE THE SPARED VALUE LIVES, and every other page
+   * on the rack already obeys it — measured, not assumed: after Clear the
+   * surviving values sit in toolkit.<trade>.jobcard.v1, in a …dropoff.v1, or in
+   * a …header.v1 of the page's own, on all twelve. Never in the list record.
+   * A page that keeps them in the record Clear drops is the odd one out and
+   * resurrects a record that was meant to die. So: whatever Clear spares must
+   * survive a reload (clause 1) AND must not be sitting in the record Clear
+   * just acted on (clause 2). The `.last` slot is exempt by design — holding a
+   * copy of the list that just died is the whole job of shared/draft.js's
+   * yesterday-slot. */
+  if (inDoc.length) {
+    await page.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForFunction(() => {
+      const p = document.getElementById('preview');
+      return p && p.textContent.trim().length > 0;
+    }, null, { timeout: 8000 });
+    await page.evaluate(() => {
+      const t = document.querySelector('#list input.tick:not(:disabled)');
+      if (t && !t.checked) {
+        t.checked = true;
+        t.dispatchEvent(new Event('change', { bubbles: true }));
+        t.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+    await page.evaluate(fs => {
+      fs.forEach(({ id, kind, v }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (kind === 'toggle') el.checked = v; else el.value = v;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }, inDoc);
+    await page.waitForTimeout(500);
+    const kvBefore = await page.evaluate(() => {
+      const o = {}; Object.keys(localStorage).forEach(k => { o[k] = localStorage.getItem(k); }); return o;
+    });
+    await page.click('#clear');
+    await page.waitForTimeout(1200);
+    const kvAfter = await page.evaluate(() => {
+      const o = {}; Object.keys(localStorage).forEach(k => { o[k] = localStorage.getItem(k); }); return o;
+    });
+
+    const spared = await page.evaluate(fs => {
+      const out = [];
+      fs.forEach(({ id, kind, v }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const now = kind === 'toggle' ? el.checked : el.value;
+        if (now === v) out.push({ id, kind, v });   // Clear chose to spare it
+      });
+      return out;
+    }, inDoc);
+
+    if (spared.length) {
+      await page.reload({ waitUntil: 'load' });
+      await page.waitForFunction(() => {
+        const p = document.getElementById('preview');
+        return p && p.textContent.trim().length > 0;
+      }, null, { timeout: 8000 });
+      const back = await page.evaluate(fs => {
+        const out = {};
+        fs.forEach(({ id, kind }) => {
+          const el = document.getElementById(id);
+          out[id] = !el ? null : (kind === 'toggle' ? el.checked : el.value);
+        });
+        return out;
+      }, spared);
+      for (const f of spared) {
+        if (back[f.id] !== f.v) {
+          fail(rel, `#${f.id} survives Clear on the glass and not on the phone — it is still filled in after Clear but comes back ${JSON.stringify(back[f.id])} after a reload, so what Clear spared was never saved anywhere`);
+        }
+      }
+    }
+
+    /* clause 2 — the record Clear acted on is the one whose stored value moved
+     * across the click. Nothing a page spares may be found inside it. */
+    const touched = Object.keys(kvBefore)
+      .filter(k => !k.endsWith('.last'))
+      .filter(k => kvAfter[k] !== kvBefore[k]);
+    for (const k of touched) {
+      const now = kvAfter[k];
+      if (!now) continue;                       // dropped outright — the clean case
+      for (const f of spared) {
+        if (typeof f.v !== 'string' || !f.v) continue;
+        if (now.indexOf(f.v) !== -1) {
+          fail(rel, `#${f.id} is spared by Clear but lives in "${k}" — the record Clear just dropped, which then comes back re-saved from the fields it was meant to forget. Everything else on the rack keeps a spared field in a record of its own (a jobcard, a dropoff, a header key); this page resurrects the list record instead`);
+        }
+      }
+    }
+    console.log(`${' '}${rel}  Clear spared ${spared.length} of ${inDoc.length}`);
+  }
+
   console.log(`${fails.length ? ' ' : ' '}${rel}  ${cs.length} header control(s), ${inDoc.length} in the document`);
   await ctx.close();
 }
@@ -265,4 +402,4 @@ if (fails.length) {
   for (const f of fails) console.error('  ✗ ' + f);
   process.exit(1);
 }
-console.log(`\nOK — ${list.length} order page(s): everything in the document is on the glass and survives a reload.`);
+console.log(`\nOK — ${list.length} order page(s): everything in the document is on the glass, survives a reload, and whatever Clear spares is backed by a record.`);
