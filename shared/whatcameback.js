@@ -560,6 +560,35 @@
 
     if (!state.on) { state.on = todayISO(); fields.on.value = state.on; }
 
+    /* CLEAR HAS TO REACH THE ANSWER, and this is the defect the module's own
+       opening argument would have shipped with. The ask's Clear wipes the night,
+       the rooms and the ticks so a man can start the next job on the same phone.
+       The answers lived in their own key and survived it — so re-ticking the same
+       three asks for a DIFFERENT building brought back the last building's window,
+       the last building's man at the door, and last week's rung on every row. That
+       is precisely the second version of the truth this file refuses to be.
+       Bound after the engine's own handler so it runs second, and it re-reads the
+       ask rather than trusting the click: if the man cancelled the confirm, the
+       day is still there and nothing here moves. */
+    var clearBtn = document.getElementById("clear");
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+        setTimeout(function () {
+          if (clean(note.get("day")) || asked("need").length || asked("heads").length) return;
+          state.rows = {};
+          ["window", "who", "cell", "by", "reply"].forEach(function (k) {
+            state[k] = "";
+            if (fields[k]) fields[k].value = "";
+          });
+          paste.value = "";
+          state.on = todayISO();
+          fields.on.value = state.on;
+          save();
+          render();
+        }, 0);
+      });
+    }
+
     /* The ask page re-renders on every tick; the answer rows are its ticks, so
        this has to follow it. A MutationObserver on the ask's own lists is the
        only coupling that cannot go stale, because it watches the DOM the engine

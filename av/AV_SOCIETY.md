@@ -1342,6 +1342,17 @@ never mentioned — moved to the boundary where silence costs a crew at a locked
 Nothing it emits is a permit, a booking or an approval, and the document says so every
 time it carries a flagged line. The gate bans the grant words from both documents.
 
+**AND CLEAR HAS TO REACH THE ANSWER** — the defect this module's own opening argument
+would have shipped with. The ask's Clear wipes the night, the rooms and the ticks so a man
+starts the next job on the same phone; the answers lived in their own key and survived it,
+so re-ticking the same three asks for a DIFFERENT building brought back the last
+building's window, the last building's man at the door, and last week's rung on every row.
+That is exactly the second version of the truth the intake-not-a-page rule exists to
+refuse, arriving through the back door. The hook is bound after the engine's own handler
+and **re-reads the ask rather than trusting the click**, so a cancelled confirm moves
+nothing. Asserted, and the assertion was proved to bite by removing the fix and watching
+it fail on all five fields plus *"a re-ticked ask came back already answered."*
+
 ### KILLED, AND STAYING KILLED
 
 **Lockout/tagout and confined space** — execution procedures with joint signatures and

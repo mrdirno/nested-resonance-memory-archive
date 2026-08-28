@@ -361,6 +361,34 @@ for (const t of trades) {
     }
   }
 
+  /* ---- 6b. CLEAR REACHES THE ANSWER --------------------------------------
+     The ask's Clear exists so a man starts the next job on the same phone. If it
+     wipes the night and the ticks but leaves the answers, re-ticking the same
+     asks for a DIFFERENT building brings back the last building's window, the
+     last building's man at the door, and last week's rung on every row. */
+  await page.click('#clear');
+  await page.waitForTimeout(250);
+  ck();
+  const leftovers = await page.evaluate(() => ({
+    win: document.getElementById('wcbWin').value,
+    who: document.getElementById('wcbWho').value,
+    cell: document.getElementById('wcbCell').value,
+    by: document.getElementById('wcbBy').value,
+    rows: document.querySelectorAll('#wcbNeed li, #wcbHead li').length,
+  }));
+  for (const [k, v] of Object.entries(leftovers)) {
+    if (k === 'rows') { if (v) fail(t, `Clear left ${v} answer row(s) standing — the next job inherits the last building's answers`); continue; }
+    if (v) fail(t, `Clear left "${v}" in the answer's ${k} field — the next job inherits the last building's answer`);
+  }
+  /* And it must come back usable: re-tick one ask and the row returns BLANK. */
+  const boxes2 = await page.$$('[data-f="need"] li input');
+  await boxes2[needPick[0]].click();
+  await page.waitForTimeout(200);
+  ck();
+  const revived = await page.$$eval('#wcbNeed li .wcb-chip', e => e.map(x => x.textContent.trim()));
+  if (!revived.length) fail(t, 're-ticking an ask after Clear brought back no answer row at all');
+  else if (!/nothing said/i.test(revived[0])) fail(t, `after Clear, a re-ticked ask came back already answered "${revived[0]}" — the old answer outlived the ask it belonged to`);
+
   /* ---- 7. MOBILE-WATERTIGHT with the layer open and populated ------------- */
   for (const w of [320, 360, 390, 430]) {
     await page.setViewportSize({ width: w, height: 780 });
