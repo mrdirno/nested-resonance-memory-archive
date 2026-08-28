@@ -6340,7 +6340,16 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `mobile-watertight` found `getting-in.html` throwing `undefined.concat()` at all four
   widths on a config missing three keys — a blank page, in the commit, invisible to every
   gate that reads content. Storefront: doors is one new entry (P5 pushes) and painting one
-  new tool line. https://mrdirno.github.io/nested-resonance-memory-archive/doors/
+  new tool line. **AND THE DEPLOY WENT RED ANYWAY, on the one checklist item that is not a
+  list you join:** `shared/docsindex.js` is GENERATED from every trade's `docs.js` and the
+  deploy asserts it with `--check` — a fifteenth library makes it stale by existing.
+  Regenerated (15 trades · 13 poolable ids · 302 terms) and §TRADE EXPANSION now carries it,
+  with the reason it was the one that got missed: the other four memberships fail a grep,
+  and this one only fails a rebuild. VERIFIED LIVE after green: 15/15 doors URLs 200 · the
+  53-assertion drive re-run against the DEPLOYED pages, all green · mobile-watertight 10/10
+  doors pages against production at 320/360/390/430 in both text sizes · the backport's
+  `painting/total-package.html` 200 and watertight, so all fourteen construction kits carry
+  it. https://mrdirno.github.io/nested-resonance-memory-archive/doors/
 
 - **[AXIS:BREADTH] C3653 (2026-08-24) — THE FOURTEENTH TRADE WAS FOUND BY THE QUESTION, NOT THE
   COUNT.** Flooring's own #14 instruction ran first: *whose gate is already written into other
