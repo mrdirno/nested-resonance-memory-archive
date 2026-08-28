@@ -6263,94 +6263,6 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/tm-tag.html ·
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/tm-ticket.html
 
-- **[AXIS:BREADTH] C3674 (2026-08-27) — THE FIFTEENTH TRADE HAD ALREADY LOST TWICE, AND THE KILL
-  WAS AIMED AT THE WRONG COMPANY.** Both wells dry (0 new, 0 building, 30 shipped) and no family
-  owed, so the stalest axis governed: BREADTH, 11 lane-cycles cold. Ran the standing #15 method in
-  order — gate-vocabulary query first, who[] count beside it, shortlist INCLUDING the
-  count-invisible, panel disposes. The who[] re-tally: **doors 5 kits (flooring, framing,
-  low-voltage, masonry, painting) · fire sprinkler 5 · steel 4 · ceilings/grid 4 · millwork 4 ·
-  elevator 1** — and elevator, which the raw keyword scan had ranked FIRST at 16 mentions across 11
-  kits, collapsed to one: eleven of those kits mean the elevator as a *building object* ("freight
-  elevator's ours 7 to 9", "scuffs by the elevator, cart height"). **Mention count measures how
-  much other trades trip over your work, not how much mail you send** — the count-first instrument
-  was wrong again, the second cycle running. FOUR LENSES, and the first cast was MY error: I gave
-  them a shortlist with doors, ceilings and steel missing, and had to send the correction mid-flight.
-  **NOT UNANIMOUS, and the dissent is the record:** doors took #1 from the field-hand and the
-  doctrine lens, #9 from population (identity), unranked→last from boundary. Sprinkler took #1 from
-  boundary and #2 from the field hand — **both dissenting from the recorded #14 family-kill on the
-  same argument** (it conflated the trade's certified documents with its field mail, the way HVAC
-  ships an evac record and no charge chart) — and the doctrine lens, the only one that read the repo
-  and re-tallied the rosters itself, held the kill: hydraulic calcs sealed by a NICET III or PE, the
-  material-and-test certificate printed INSIDE the standard, ITM reports owned and numbered by
-  third-party portals. **POISONED at the centre, not the edge.** Steel took #1 on population and
-  died the same way (chapter 17 special-inspection record; the ban list names torque specs
-  outright). Ceilings took #2 on population and lost its own premise to BOTH lenses that examined
-  it — `concrete/trade.js` already wrote the sentence that settles it, *"a wall can be cut, A
-  CEILING CAN BE PULLED"* — and its 118,600 headcount is the COMBINED BLS drywall+ceiling-tile
-  code we already serve as framing. **Doors is the only candidate ranked #1 twice and vetoed by
-  none, and the highest one surviving the safety rail.** THE KILL IT HAD TO SURVIVE, and the test
-  that makes it checkable rather than a matter of taste: the schedule and the sets are the product
-  for the DISTRIBUTOR; for the INSTALLER the schedule is an input he RECEIVES. **We cross the
-  system of record only when our page becomes a second place the record lives** — (a) reproducing
-  the owner's content, (b) issuing a rival identifier, (c) built to be filed instead of his form.
-  Citing "Opening 101A" does none. **ADDRESS IS CLEAN. CONTENT IS DEAD.** The rack had already
-  written the three-party distinction down without noticing: masonry names "Hollow metal / door
-  supplier", framing "Doors & hardware", low-voltage "Door hardware". SHIPPED WHOLE — 8 tools:
-  `before-they-ship` (PINNED, row-log — the openings walked with a tape before frames are welded;
-  hand, wall, throat and what's in the way, none of it supplied, all of it his) · `rough-in-request`
-  → **Set It For Me**, which is where the INTERFACE lands: `low-voltage/items.js` ships `doorprep`
-  with `who: "doors"` — electric hinge, raceway in the leaf, frame prepped for the strike — an ask
-  aimed at a man who until now had nowhere to answer it · `answer-back` → **Punch Back**, whose
-  fourth rung is this trade's own: **"Not my call"**, because an installer frequently cannot say yes
-  at an opening · `came-off-the-truck` (row-log — and *where you found it* is a first-class column,
-  because a dent photographed on the trailer and one found on day nine are different conversations
-  with different people paying) · `not-ready-to-hang` · `getting-in` · `write-up` (6 documents,
-  17 total) · `total-package`. Commons joined on all THREE surfaces at 8 rows each (gear, tips,
-  names — the name table is where this trade is richest: slab, core, strike, throat, hand and
-  mullion all belong to somebody else on the same job). Accent **#B7BEDC**, primed hollow metal, and
-  the first chip in the ONE structurally empty band on a 15-chip rack: the raw dE winner was a fifth
-  pale pink (38.5) and repeating painting's recorded kill, so the sweep was re-run BAND-AWARE —
-  nav 7.87 · ink 10.29 · white-on-deep 10.78 · dE 28.9, honestly below painting's 34.6, and the
-  next stand-up should expect to argue for a new band rather than a better number. **GATES CAUGHT
-  TWO OF MY OWN ERRORS BEFORE SHIP:** `docspec-config` failed 4 of 6 documents because I handed the
-  writer a family vocabulary that does not exist (report/claim/log against the engine's five), and
-  a hand audit of the RowLog surface caught `rl.refresh()` and `rl.clear()` — neither is on the
-  engine — plus a missing `restore()`, the one §SCARS calls not optional. Also caught by sweep: a
-  localStorage key still namespaced `toolkit.painting.notready.v1`, which would have made two trades
-  share one saved note. **THE DEMERIT, WRITTEN AT STAND-UP so no later cycle rediscovers it: this
-  trade survives BY DISCIPLINE, NOT STRUCTURALLY.** Flooring's numbers are warranty terms that
-  disagree, so there is nothing to supply; here rated-assembly data sits at the centre and somebody
-  will eventually propose a label field. Low-voltage proves discipline-survival is possible on this
-  rack; it is just more expensive to hold. **AND THE RISK THAT IS NOT ABOUT DOCUMENTS:** two lenses
-  independently found this trade may have no name its people call themselves — in union markets he
-  is a carpenter out of a local, and framing already owns `carpenter`/`carpentry` in the storefront
-  match, so doors binds NARROWLY on six measured precision-1 tokens rather than double-binding every
-  framer. That is a measurement to take, not an argument won. BACKPORT RIDER FIRED — the
-  module-adoption grep (creative's own recorded lesson: run it before ranking anything) found
-  **painting at 10 of the 12 shared modules every sibling carries**, missing `package` and `lang`.
-  `lang` is NOT a hole — it rides on tm-tag across twelve trades and painting deliberately ships no
-  tag, already recorded. `package` was an UNNAMED absence, which §TRADE EXPANSION calls a hole, and
-  painting was the ONLY construction kit on the rack without Total Package: shipped, +1 registry
-  line, one per-trade sentence. THREE MORE GATES CAUGHT ME ON THE WAY OUT, all before push: `getting-in`
-  floors the ask at 8 needs and 8 heads and this kit shipped 7 and 6; `reconcile-join`
-  failed because **"Not my call" was a rung `shared/reconcile.js` could not classify** —
-  the exact far-end check the C3654 entry describes, firing on the one new rung this
-  trade added, and it is now VERDICTS position [3] (`ask`, because an answer that lives
-  with whoever stamps the submittal is an ask pointed elsewhere, not a refusal); and
-  `mobile-watertight` found `getting-in.html` throwing `undefined.concat()` at all four
-  widths on a config missing three keys — a blank page, in the commit, invisible to every
-  gate that reads content. Storefront: doors is one new entry (P5 pushes) and painting one
-  new tool line. **AND THE DEPLOY WENT RED ANYWAY, on the one checklist item that is not a
-  list you join:** `shared/docsindex.js` is GENERATED from every trade's `docs.js` and the
-  deploy asserts it with `--check` — a fifteenth library makes it stale by existing.
-  Regenerated (15 trades · 13 poolable ids · 302 terms) and §TRADE EXPANSION now carries it,
-  with the reason it was the one that got missed: the other four memberships fail a grep,
-  and this one only fails a rebuild. VERIFIED LIVE after green: 15/15 doors URLs 200 · the
-  53-assertion drive re-run against the DEPLOYED pages, all green · mobile-watertight 10/10
-  doors pages against production at 320/360/390/430 in both text sizes · the backport's
-  `painting/total-package.html` 200 and watertight, so all fourteen construction kits carry
-  it. https://mrdirno.github.io/nested-resonance-memory-archive/doors/
-
 - **[AXIS:BREADTH] C3653 (2026-08-24) — THE FOURTEENTH TRADE WAS FOUND BY THE QUESTION, NOT THE
   COUNT.** Flooring's own #14 instruction ran first: *whose gate is already written into other
   kits' vocabulary with no receiver behind it* — and "Before paint" is a literal gate VALUE in
@@ -6908,3 +6820,91 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   future cycle hunting something that is not there.** **Storefront: one line added to flooring's `tools[]` in
   `persona500/src/data/fieldToolkits.ts` — P5 pushes.**
   https://mrdirno.github.io/nested-resonance-memory-archive/flooring/dealer-call.html
+
+- **[AXIS:BREADTH] C3674 (2026-08-27) — THE FIFTEENTH TRADE HAD ALREADY LOST TWICE, AND THE KILL
+  WAS AIMED AT THE WRONG COMPANY.** Both wells dry (0 new, 0 building, 30 shipped) and no family
+  owed, so the stalest axis governed: BREADTH, 11 lane-cycles cold. Ran the standing #15 method in
+  order — gate-vocabulary query first, who[] count beside it, shortlist INCLUDING the
+  count-invisible, panel disposes. The who[] re-tally: **doors 5 kits (flooring, framing,
+  low-voltage, masonry, painting) · fire sprinkler 5 · steel 4 · ceilings/grid 4 · millwork 4 ·
+  elevator 1** — and elevator, which the raw keyword scan had ranked FIRST at 16 mentions across 11
+  kits, collapsed to one: eleven of those kits mean the elevator as a *building object* ("freight
+  elevator's ours 7 to 9", "scuffs by the elevator, cart height"). **Mention count measures how
+  much other trades trip over your work, not how much mail you send** — the count-first instrument
+  was wrong again, the second cycle running. FOUR LENSES, and the first cast was MY error: I gave
+  them a shortlist with doors, ceilings and steel missing, and had to send the correction mid-flight.
+  **NOT UNANIMOUS, and the dissent is the record:** doors took #1 from the field-hand and the
+  doctrine lens, #9 from population (identity), unranked→last from boundary. Sprinkler took #1 from
+  boundary and #2 from the field hand — **both dissenting from the recorded #14 family-kill on the
+  same argument** (it conflated the trade's certified documents with its field mail, the way HVAC
+  ships an evac record and no charge chart) — and the doctrine lens, the only one that read the repo
+  and re-tallied the rosters itself, held the kill: hydraulic calcs sealed by a NICET III or PE, the
+  material-and-test certificate printed INSIDE the standard, ITM reports owned and numbered by
+  third-party portals. **POISONED at the centre, not the edge.** Steel took #1 on population and
+  died the same way (chapter 17 special-inspection record; the ban list names torque specs
+  outright). Ceilings took #2 on population and lost its own premise to BOTH lenses that examined
+  it — `concrete/trade.js` already wrote the sentence that settles it, *"a wall can be cut, A
+  CEILING CAN BE PULLED"* — and its 118,600 headcount is the COMBINED BLS drywall+ceiling-tile
+  code we already serve as framing. **Doors is the only candidate ranked #1 twice and vetoed by
+  none, and the highest one surviving the safety rail.** THE KILL IT HAD TO SURVIVE, and the test
+  that makes it checkable rather than a matter of taste: the schedule and the sets are the product
+  for the DISTRIBUTOR; for the INSTALLER the schedule is an input he RECEIVES. **We cross the
+  system of record only when our page becomes a second place the record lives** — (a) reproducing
+  the owner's content, (b) issuing a rival identifier, (c) built to be filed instead of his form.
+  Citing "Opening 101A" does none. **ADDRESS IS CLEAN. CONTENT IS DEAD.** The rack had already
+  written the three-party distinction down without noticing: masonry names "Hollow metal / door
+  supplier", framing "Doors & hardware", low-voltage "Door hardware". SHIPPED WHOLE — 8 tools:
+  `before-they-ship` (PINNED, row-log — the openings walked with a tape before frames are welded;
+  hand, wall, throat and what's in the way, none of it supplied, all of it his) · `rough-in-request`
+  → **Set It For Me**, which is where the INTERFACE lands: `low-voltage/items.js` ships `doorprep`
+  with `who: "doors"` — electric hinge, raceway in the leaf, frame prepped for the strike — an ask
+  aimed at a man who until now had nowhere to answer it · `answer-back` → **Punch Back**, whose
+  fourth rung is this trade's own: **"Not my call"**, because an installer frequently cannot say yes
+  at an opening · `came-off-the-truck` (row-log — and *where you found it* is a first-class column,
+  because a dent photographed on the trailer and one found on day nine are different conversations
+  with different people paying) · `not-ready-to-hang` · `getting-in` · `write-up` (6 documents,
+  17 total) · `total-package`. Commons joined on all THREE surfaces at 8 rows each (gear, tips,
+  names — the name table is where this trade is richest: slab, core, strike, throat, hand and
+  mullion all belong to somebody else on the same job). Accent **#B7BEDC**, primed hollow metal, and
+  the first chip in the ONE structurally empty band on a 15-chip rack: the raw dE winner was a fifth
+  pale pink (38.5) and repeating painting's recorded kill, so the sweep was re-run BAND-AWARE —
+  nav 7.87 · ink 10.29 · white-on-deep 10.78 · dE 28.9, honestly below painting's 34.6, and the
+  next stand-up should expect to argue for a new band rather than a better number. **GATES CAUGHT
+  TWO OF MY OWN ERRORS BEFORE SHIP:** `docspec-config` failed 4 of 6 documents because I handed the
+  writer a family vocabulary that does not exist (report/claim/log against the engine's five), and
+  a hand audit of the RowLog surface caught `rl.refresh()` and `rl.clear()` — neither is on the
+  engine — plus a missing `restore()`, the one §SCARS calls not optional. Also caught by sweep: a
+  localStorage key still namespaced `toolkit.painting.notready.v1`, which would have made two trades
+  share one saved note. **THE DEMERIT, WRITTEN AT STAND-UP so no later cycle rediscovers it: this
+  trade survives BY DISCIPLINE, NOT STRUCTURALLY.** Flooring's numbers are warranty terms that
+  disagree, so there is nothing to supply; here rated-assembly data sits at the centre and somebody
+  will eventually propose a label field. Low-voltage proves discipline-survival is possible on this
+  rack; it is just more expensive to hold. **AND THE RISK THAT IS NOT ABOUT DOCUMENTS:** two lenses
+  independently found this trade may have no name its people call themselves — in union markets he
+  is a carpenter out of a local, and framing already owns `carpenter`/`carpentry` in the storefront
+  match, so doors binds NARROWLY on six measured precision-1 tokens rather than double-binding every
+  framer. That is a measurement to take, not an argument won. BACKPORT RIDER FIRED — the
+  module-adoption grep (creative's own recorded lesson: run it before ranking anything) found
+  **painting at 10 of the 12 shared modules every sibling carries**, missing `package` and `lang`.
+  `lang` is NOT a hole — it rides on tm-tag across twelve trades and painting deliberately ships no
+  tag, already recorded. `package` was an UNNAMED absence, which §TRADE EXPANSION calls a hole, and
+  painting was the ONLY construction kit on the rack without Total Package: shipped, +1 registry
+  line, one per-trade sentence. THREE MORE GATES CAUGHT ME ON THE WAY OUT, all before push: `getting-in`
+  floors the ask at 8 needs and 8 heads and this kit shipped 7 and 6; `reconcile-join`
+  failed because **"Not my call" was a rung `shared/reconcile.js` could not classify** —
+  the exact far-end check the C3654 entry describes, firing on the one new rung this
+  trade added, and it is now VERDICTS position [3] (`ask`, because an answer that lives
+  with whoever stamps the submittal is an ask pointed elsewhere, not a refusal); and
+  `mobile-watertight` found `getting-in.html` throwing `undefined.concat()` at all four
+  widths on a config missing three keys — a blank page, in the commit, invisible to every
+  gate that reads content. Storefront: doors is one new entry (P5 pushes) and painting one
+  new tool line. **AND THE DEPLOY WENT RED ANYWAY, on the one checklist item that is not a
+  list you join:** `shared/docsindex.js` is GENERATED from every trade's `docs.js` and the
+  deploy asserts it with `--check` — a fifteenth library makes it stale by existing.
+  Regenerated (15 trades · 13 poolable ids · 302 terms) and §TRADE EXPANSION now carries it,
+  with the reason it was the one that got missed: the other four memberships fail a grep,
+  and this one only fails a rebuild. VERIFIED LIVE after green: 15/15 doors URLs 200 · the
+  53-assertion drive re-run against the DEPLOYED pages, all green · mobile-watertight 10/10
+  doors pages against production at 320/360/390/430 in both text sizes · the backport's
+  `painting/total-package.html` 200 and watertight, so all fourteen construction kits carry
+  it. https://mrdirno.github.io/nested-resonance-memory-archive/doors/
