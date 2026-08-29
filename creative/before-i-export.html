@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Before I Export &mdash; Creative Field Toolkit</title>
+<link rel="stylesheet" href="../shared/pickfilter.css">
+<meta name="description" content="The last message before you hit render: what the cut already is, and the handful of things you need back first. Ask five, not fifteen — and stop finding out on Thursday.">
+<meta name="apple-mobile-web-app-title" content="Before I Export">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  /* FALLBACKS ONLY — shared/toolkit.js overwrites all four off creative/trade.js
+     at boot, which is why this page hardcodes no accent anywhere (the sibling
+     order page's recorded lesson: a page-local colour rule is a fork wearing a
+     fix's clothes). */
+  --flag:#EDA5FF;--flag-ink:#190022;--deep:#8B12B4;--tint:#F8EAFD;
+}
+/* NO overflow-x:hidden anywhere on this page, on purpose — it masks a horizontal
+   overflow instead of fixing it and hides exactly the defect the pre-ship mobile
+   gate exists to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);text-transform:uppercase;letter-spacing:.02em;font-size:30px;line-height:1.02;margin:0 0 7px}
+.lede{margin:0;font-size:13.5px;color:#C4CAD1;max-width:62ch}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--deep);border-radius:2px;padding:12px;margin-bottom:14px}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media (max-width:520px){ .hgrid{grid-template-columns:1fr} }
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f label{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.f label i{font-style:normal;text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:11px;color:#7A828B}
+.f input,.f select,.f textarea{font:inherit;font-size:16px;padding:9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px;width:100%;min-width:0}
+.f textarea{resize:vertical;min-height:44px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+
+.lastwrap{margin:0 0 12px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFEDF1;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+.cathint{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:#F5F3F7;border-bottom:1px solid var(--line)}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E6E3EA}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 90px;min-width:84px}
+.cfg .f.wide{flex:2 1 170px}
+.cfg input,.cfg select{padding:7px 8px;font-size:16px;min-height:44px}
+.note{width:100%}
+.cfg .flags{margin-top:2px}
+.cfg .flag{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px 4px 8px;border:1px solid var(--deep);
+  border-radius:2px;background:var(--tint);cursor:pointer;font-family:var(--cond);text-transform:uppercase;
+  letter-spacing:.04em;font-size:13.5px;font-weight:700;color:var(--deep)}
+.cfg .flag input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+
+/* THE ASK BLOCK IS THE ONE THAT COSTS SOMETHING, so it is the one that looks
+   different — everything above it is a statement and everything below it is
+   housekeeping. */
+.cat[data-id="need"]{border:2px solid var(--deep)}
+.cat[data-id="need"] h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
+.cat[data-id="need"] h2 .n{color:var(--tint)}
+.cat[data-id="need"] .cathint{background:var(--tint);color:#2A0034;font-size:12.5px}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F5F3F7;align-items:stretch}
+.addrow .wi-input{flex:1;min-width:0;font:inherit;font-size:16px;padding:9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);resize:vertical;line-height:1.35}
+.addrow .wi-input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
+  min-height:44px;flex:none}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+/* THE COUNT, ON THE GLASS AND NEVER IN THE MESSAGE. It is a question about how
+   many questions he is asking — printing it in the client's copy would be the
+   page narrating the user to his own client. */
+.pairs{margin:16px 0 0;padding:10px 12px;background:var(--tint);border:1px solid var(--deep);border-left:4px solid var(--deep);
+  border-radius:2px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.03em;font-size:15px;font-weight:700;color:#2A0034}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+/* THE COUNT TRUNCATES, IT NEVER WRAPS. Measured on this page at 360px: this
+   label carries two facts ("11 lines · 6 you're asking for") where every sibling
+   carries one, and left to wrap it took three lines and GREW the fixed bar from
+   66px to 112px — the exact failure the mobile gate calls out (a bar that grew).
+   Hiding it below 356px was the sibling's answer and is kept; between 356 and
+   390 the honest fix is to let the label give up characters, not the page give
+   up height. */
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+/* The count label gives up before either button does — measured on the sibling
+   order page at 320px, where it wrapped to three lines and GREW the fixed bar. */
+@media (max-width:356px){ .bar .count{display:none} .bar #clear{margin-left:auto} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Creative &middot; you &rarr; the client, before you render</span>
+    <h1>Before I Export</h1>
+    <p class="lede">The last message before you hit render. Say what the cut already is, ask for the handful of things that put you back in the timeline if they're wrong, and send it while the render is still ahead of you &mdash; not on Thursday, one answer at a time.</p>
+  </header>
+
+  <div class="head">
+    <div class="hgrid">
+      <div class="f span2"><label>What it is <i>(the job, the way they say it)</i></label><input id="fProj" type="text" placeholder="Northgate brand film" autocomplete="off"></div>
+      <div class="f"><label>Who you're asking</label><input id="fTo" type="text" placeholder="Dana — Northgate" autocomplete="off"></div>
+      <div class="f"><label>Which cut <i>(and the day it landed &mdash; they don&rsquo;t track your version numbers)</i></label><input id="fCut" type="text" placeholder="v3, the :60 — the one I sent Tuesday afternoon" autocomplete="off"></div>
+      <div class="f"><label>When you start the render <i>(what makes tonight matter)</i></label><input id="fWhen" type="text" placeholder="Thursday morning" autocomplete="off"></div>
+      <div class="f"><label>How to get you <i>(some clients are a voice note, not an email)</i></label><input id="fHow" type="text" placeholder="reply here, or call me — I'm around till six" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from the last one</button>
+  </p>
+
+  <main id="list"></main>
+
+  <!-- ON THE GLASS, NEVER IN THE MESSAGE. See the document builder. -->
+  <p class="pairs" id="pairs" style="display:none"></p>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every number on here is one you picked off your own timeline.</b> This page knows nothing about where it's going &mdash; no resolution, no bitrate, no codec, no file-size cap, no safe area, no platform's anything, and no opinion about what a licence lets you do or what a disclaimer has to say. If your client has a spec, theirs is the one that counts; ask for it and work to it. Nothing here has a price on it and nothing here changes what you agreed to. <b>Everything you type stays in this browser</b> &mdash; it saves on this device so you can come back to it, and it goes nowhere else.
+  </div>
+
+  <p class="credit">&#10022; A line here that isn't how you'd say it, or the one question that keeps costing you an evening? Wish it better &mdash; it gets built, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the message</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/find.js"></script>
+<script src="../shared/pickfilter.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script>
+/* BEFORE I EXPORT — the ELEVENTH instance of shape #1 (av/AV_SOCIETY.md §THE
+ * THREE SHAPES: CHECKLIST → A REQUEST) and the FIRST on a trade that is not
+ * construction. Nothing about the mechanism is in this file — it is
+ * shared/checklist-request.js and shared/pickfilter.js, the two engines this kit
+ * had never inherited. creative/items.js owns every word; this file owns the
+ * assembly and the two readings.
+ *
+ * WHAT THIS ONE DOES THAT THE TEN BEFORE IT DO NOT:
+ *
+ *  1. IT ARGUES WITH THE USER ABOUT THE LENGTH OF HIS OWN MESSAGE. Every sibling
+ *     order page is trying to get MORE lines onto a list: a supply house reads
+ *     lists for a living and a short one is a second trip. The receiver here is
+ *     a marketing manager with forty seconds who has not seen a frame, and the
+ *     field lens put the number on it — "a client answers five questions in one
+ *     reply. They do not answer fifteen." So the count line stops being a
+ *     progress meter and becomes a brake, and the block it counts is the ASK
+ *     alone. It never reaches the message: printing "that's a lot to ask" in the
+ *     client's copy would be the page narrating the user to his own client.
+ *
+ *  2. THE FIRST BLOCK IS STATEMENTS, NOT QUESTIONS. Asking a client what shape
+ *     he needs on the night of the render is a confession that you cut it
+ *     without knowing. So `got` says what the cut IS and invites a correction —
+ *     and every picker in it opens on an em-dash, because a pre-selected 16:9
+ *     would put a spec in his inbox that nobody chose and let the user proceed
+ *     on his client's silence. That is the deemed-acceptance defect this trade
+ *     already had to strip out once, moved from prose into a default (§SCARS,
+ *     A DEFAULT IS A CLAIM).
+ *
+ *  3. THE TWO HALVES OF THE DEADLINE NEVER PRINT APART. "I'm starting the render
+ *     Thursday morning" is a fact about the user's own week and it is what makes
+ *     answering tonight matter; on its own it reads as a cutoff. The line under
+ *     it — send it over afterwards and I'll pick it back up — is what keeps it a
+ *     statement instead of a consequence clause. The page emits them together or
+ *     not at all, and there is no third state.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS.beforeExport;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* The item definition behind a ticked row, by name. Same shape as the sibling
+     order page's UNIT/DITCH maps: the DATA carries what a line says, the page
+     carries how it is assembled. */
+  var SAY = {};
+  D.cats.forEach(function (c) {
+    (c.items || []).forEach(function (i) { SAY[i.n] = i; });
+  });
+
+  /* A NEUTRAL axis value — anything leading with an em-dash — means the row was
+     ticked and never answered. It must never reach the client as a picked value,
+     so the line falls back to the item's own `sayNo`. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function axOf(l) {
+    var k, v;
+    for (k in l.ax) { if (Object.prototype.hasOwnProperty.call(l.ax, k)) { v = l.ax[k]; break; } }
+    return none(v) ? "" : v;
+  }
+  function isWriteIn(l) { return !!(l.el && l.el.querySelector(".rm")); }
+
+  /* ONE LINE, THE WAY IT LANDS IN AN INBOX. A write-in is his own sentence and
+     is printed untouched — the rule masonry/yard-call.html wrote and every
+     shape-#1 page has held since. */
+  function line(l) {
+    if (isWriteIn(l)) return l.name;
+    var def = SAY[l.name] || {};
+    var v = axOf(l);
+    var t = (def.say && (v || def.say.indexOf("{v}") === -1)) ? def.say : (def.sayNo || def.say || l.name);
+    /* A note-shaped sentence with no note is not a sentence — fall back rather
+       than print "Still standing in and not final: ." */
+    if (t.indexOf("{note}") !== -1 && !l.note) t = def.sayNo || t.replace(/\{note\}/g, "").trim();
+    var out = t.replace(/\{v\}/g, v);
+    if (out.indexOf("{note}") !== -1) out = out.replace(/\{note\}/g, l.note);
+    else if (l.note) out += " — " + l.note;
+    return out;
+  }
+
+  /* THE ASK IS WHAT COSTS HIM A REPLY, and a write-in he flagged is an ask
+     wherever he typed it. */
+  function isAsk(l, secId) { return secId === "need" || (isWriteIn(l) && l.flags && l.flags.need); }
+
+  var api = ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.creative.beforeExport.v1",
+    filterPlaceholder: "Filter — try “logo” or “music”",
+    data: D.cats,
+    writeinTextarea: true,
+    writeinFlags: D.writeinFlags,
+    writeinPlaceholder: D.writeinPlaceholder,
+    notePlaceholder: "Note — anything you'd add in your own words",
+    watch: ["fProj", "fTo", "fCut", "fWhen", "fHow"],
+    persistExtra: function () {
+      var x = { proj: $("fProj").value, to: $("fTo").value, cut: $("fCut").value,
+                when: $("fWhen").value, how: $("fHow").value };
+      return (x.proj || x.to || x.cut || x.when || x.how) ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      $("fProj").value = x.proj || ""; $("fTo").value = x.to || "";
+      $("fCut").value = x.cut || ""; $("fWhen").value = x.when || "";
+      $("fHow").value = x.how || "";
+    },
+    onClear: function () {
+      ["fProj", "fTo", "fCut", "fWhen", "fHow"].forEach(function (id) { $(id).value = ""; });
+      showLast();
+    },
+    countLabel: function (n) {
+      if (!n) return "Nothing on it yet";
+      var asks = askCount();
+      return n + " line" + (n === 1 ? "" : "s") + (asks ? "  ·  " + asks + " you're asking for" : "");
+    },
+    onRefresh: function () { glass(); },
+    onFlash: function (msg) {
+      var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+      b.setAttribute("data-label", was);
+      b.textContent = (msg === "Copied") ? "Copied. Go send it." : msg;
+      setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+    },
+    document: function (ctx) {
+      var proj = $("fProj").value.trim(), to = $("fTo").value.trim(), cut = $("fCut").value.trim();
+      var when = $("fWhen").value.trim(), how = $("fHow").value.trim();
+
+      var out = "BEFORE I EXPORT";
+      if (proj) out += " — " + proj;
+      out += "\n" + ctx.today;
+      if (cut) out += "  ·  on " + cut;
+      if (to) out += "\nTo: " + to;
+
+      if (!ctx.count) return out + "\n\n(nothing on it yet)";
+
+      out += "\n\n" + D.opening;
+
+      /* The write-in section is re-routed rather than printed where it sits: a
+         line he flagged is an ask and belongs with the asks, and one he did not
+         is a statement. The heading a section shows on screen ("Anything else
+         you're holding for") is a prompt to HIM; ALSO is what a client reads. */
+      var extraAsk = [], extraAlso = [];
+      ctx.sections.forEach(function (s) {
+        if (s.id !== "mine") return;
+        s.lines.forEach(function (l) { (isAsk(l, s.id) ? extraAsk : extraAlso).push(l); });
+      });
+
+      ctx.sections.forEach(function (s) {
+        if (s.id === "mine") return;
+        var lines = s.lines.map(function (l) { return "- " + line(l); });
+        if (s.id === "need") lines = lines.concat(extraAsk.map(function (l) { return "- " + line(l); }));
+        out += "\n\n" + s.docName + "\n" + lines.join("\n");
+        if (s.id === "got") out += "\n(" + D.gotTail + ")";
+      });
+
+      /* An ask he typed with no catalogue ask ticked still has to reach him
+         under a heading, or it prints as an orphan under a statements block. */
+      var needSec = ctx.sections.filter(function (s) { return s.id === "need"; })[0];
+      if (!needSec && extraAsk.length) {
+        out += "\n\nWHAT I NEED FROM YOU\n"
+             + extraAsk.map(function (l) { return "- " + line(l); }).join("\n");
+      }
+      if (extraAlso.length) {
+        out += "\n\nALSO\n" + extraAlso.map(function (l) { return "- " + line(l); }).join("\n");
+      }
+
+      /* THE DEADLINE'S TWO HALVES — never one without the other. See §3 above. */
+      if (when) out += "\n\n" + D.renderLine.replace("{when}", when) + " " + D.renderTail;
+      if (how) out += "\n" + how;
+
+      return out;
+    }
+  });
+
+  /* ── THE SECOND READING: HOW MANY THINGS HE IS ASKING FOR ──────────────────
+   * Derived, on the glass, one line at a time, and never in the message. The
+   * thresholds are the panel's own numbers, not a round guess: the field lens
+   * put a client's answering capacity at about five in one reply, and the
+   * boundary lens put the sendable ceiling at about eight before the thing stops
+   * being a message and becomes a form. */
+  /* READ OFF THE DOM, NOT OFF THE ENGINE'S API. Building this page is what found
+   * the reason: the engine calls `countLabel` BEFORE it assembles the document,
+   * and `api` does not exist until mount() has returned — so a count that went
+   * through api.sections() threw on the engine's own first render and froze the
+   * preview at "(nothing on it yet)" while the list filled up behind it. The
+   * rows are the truth and they are already in the page. */
+  function checked(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+  function askCount() {
+    var n = checked('.cat[data-id="need"] .item.is-checked').length;
+    checked('.cat[data-id="mine"] .item.is-checked').forEach(function (li) {
+      var f = li.querySelector('.i-flag[data-k="need"]');
+      if (f && f.checked) n++;
+    });
+    return n;
+  }
+  function glass() {
+    var el = $("pairs"), n = askCount(), msg = "";
+    if (n > 8) {
+      msg = n + " questions before they've seen a frame — that's a form, not a message. "
+          + "Cut it to the ones that put you back in the timeline.";
+    } else if (n > 5) {
+      msg = "You're asking for " + n + ". Most people answer about five in one reply and go quiet on the rest — "
+          + "anything you can decide yourself, decide it.";
+    } else {
+      /* Only once the count is not the problem: the two lines whose whole value
+         is the specifics, ticked with the specifics left off. */
+      var loose = [];
+      checked('.cat[data-id="got"] .item.is-checked').forEach(function (li) {
+        var nm = li.querySelector(".name").textContent;
+        var note = li.querySelector(".i-note");
+        if (note && note.value.trim()) return;
+        if (nm === "What's still standing in") loose.push("which placeholders are still in it");
+        if (nm === "Everything I've got you down for") loose.push("what you've actually got them down for");
+      });
+      if (loose.length) msg = "Say " + loose.join(" and ") + " — a line that vague reads as final.";
+    }
+    el.textContent = msg;
+    el.style.display = msg ? "" : "none";
+  }
+
+  function showLast() {
+    var empty = !document.querySelectorAll(".item.is-checked").length;
+    $("lastwrap").style.display = (api.hasLast() && empty) ? "" : "none";
+  }
+  $("last").addEventListener("click", function () { api.restoreLast(); showLast(); });
+  showLast();
+  glass();
+})();
+</script>
+</body>
+</html>

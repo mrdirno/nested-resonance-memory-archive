@@ -51,9 +51,22 @@ window.TOOLKIT_TOOLS = [
     chip: "#1D6F63",
     audience: "Editor / shooter / producer → whoever has to read it"
   }
+  ,
+  {
+    name: "Before I Export",
+    href: "before-i-export.html",
+    desc: "The last message before you hit render. Say what the cut already is — shape, length, what's still standing in — then ask for the few things that put you back in the timeline if they're wrong: the spellings, the logo, the end card, the track, and anybody in it who's become a problem since you shot it. It counts your questions and tells you when you've asked too many to get an answer.",
+    chip: "#A61457",
+    audience: "Editor → the client, the night of the render"
+  }
   // The loop appends new tools here as it builds them from wishing-well requests.
-  // Next off the panel's ranked list (av/AV_SOCIETY.md §CREATIVE): Before I Export
-  // (checklist, the deliverable questions answered before the render). "Shoot Day
+  // NEXT, and it is the boundary lens's finding rather than the roster's: WHAT'S
+  // IN THE DROP, which §CREATIVE deferred as "a second output mode" of the page
+  // above. That was wrong in one word — it is not a second MODE, it is the other
+  // side of the render, addressed to a different moment: who signed, what's in
+  // the folder, and what is deliberately NOT in it. Same engine, its own page.
+  // Still owed after that: the PARTICIPANT half of Shoot Day Confirm (the "how
+  // the day goes" note to talent or a client coming to set) — "Shoot Day
   // Confirm" shipped above as GETTING IN instead — "confirm" is the exact defect
   // the page exists to prevent: a producer who believes he's confirmed a location
   // when he's only asked it. The 2026-08-13 safety lens's hard rails held through

@@ -400,12 +400,24 @@
           cat.writein ? (n ? n : "") : n + " / " + total;
       });
       var n = tickedCount();
+      /* THE DOCUMENT GOES ON THE GLASS BEFORE THE LABEL DOES, and the order is
+       * load-bearing rather than tidy. `countLabel` is caller code: the eleventh
+       * instance of this shape passes one that counts a subset of the ticked
+       * rows, and while it was being built it threw on the engine's own first
+       * render — which, with the label assembled first, aborted refresh() before
+       * the preview was ever written and left "(nothing on it yet)" on the glass
+       * while rows piled up behind it. That is precisely the failure
+       * tools/toolkit-gates/order-live-header.mjs exists to catch ("the block he
+       * PROOFREADS is a generation stale"), reached through a LABEL rather than
+       * through a header field. The document is the product and the count is
+       * chrome, so the product is written first: a caller bug in the chrome can
+       * no longer freeze the product. */
+      if (preview) preview.textContent = text();
       if (countEl) {
         countEl.textContent = cfg.countLabel
           ? cfg.countLabel(n)
           : (n ? n + " line" + (n === 1 ? "" : "s") + " on the list" : "Nothing on the list yet");
       }
-      if (preview) preview.textContent = text();
       if (cfg.onRefresh) cfg.onRefresh(n);
       schedulePersist();
     }

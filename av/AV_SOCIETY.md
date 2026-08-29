@@ -1731,11 +1731,23 @@ with revision rounds, and who is also their own producer.**
    one. The build also added the axis the roster did not name — **what each thing is
    holding up**, which the panel's field lens called the half of this message nobody
    writes and the half that gets it answered.
-4. **Before I Export** (checklist → request) — the deliverable questions answered before the
-   render. It wins by ASKING and never asserting. Ratios and frame rates are safe as *user
-   picks* (geometry and arithmetic the trade says out loud); codecs, bitrates, resolutions
-   and platform names are not. **Now the top unbuilt rung on this trade.**
-5. **Shoot Day Confirm** (checklist → request) — ⚠️ **HALF SHIPPED 2026-08-15** as
+4. **Before I Export** (checklist → request) — ✅ **SHIPPED 2026-08-29** as
+   `creative/before-i-export.html`, and the panel that graded it did not agree with the
+   roster or with itself. It wins by ASKING and never asserting — but the FRAME the roster
+   implied was killed by the field lens before a line was written: *"'What shape do you
+   need?' asked the night before a render tells a client you cut the whole thing without
+   knowing — that's not diligence, that's a confession."* The page therefore opens with
+   STATEMENTS (what the cut already is, every picker starting neutral) and asks only under a
+   second heading. The roster's own sorter — *does it decide the render* — was killed too:
+   it flagged fifteen of twenty-two, and *"fifteen of twenty-two flagged means nothing is
+   flagged."* The sorter that shipped is **do I have to open the project again.** **AND THE
+   ONE THE ROSTER GOT BACKWARDS:** *What's in the drop* was deferred here as *"a second
+   output mode, not a sixth page"* — the boundary lens showed that is wrong in one word. It
+   is not a second MODE; it is the other side of the render, addressed to a different
+   moment. **It is the next rung on this trade, as its own page on the same engine.**
+5. ~~**Shoot Day Confirm**~~ → see below; the participant half is still owed and now sits
+   behind *What's in the drop*.
+6. **Shoot Day Confirm** (checklist → request) — ⚠️ **HALF SHIPPED 2026-08-15** as
    `getting-in.html`, and the honest record is that it shipped the **venue half** — the ask
    that gets you into somebody else's building — not the whole rung. The half still unbuilt
    is the **participant-facing** one: the short "how the day goes" note to talent, a client
@@ -1744,7 +1756,7 @@ with revision rounds, and who is also their own producer.**
    or the next editor; nothing points at the person who has to SHOW UP. Survives ONLY
    because it is deliberately **not a call sheet** and must never grow into one;
    StudioBinder owns and numbers that document.
-6. **The Write-Up Setup** — ✅ **SHIPPED 2026-08-15** (`write-up.html` + `docs.js`), and it
+7. **The Write-Up Setup** — ✅ **SHIPPED 2026-08-15** (`write-up.html` + `docs.js`), and it
    was never on this list, which is the finding. The panel that built this roster was asked
    what to BUILD NEW and answered well; **nobody asked what this trade was OWED.** Creative
    shipped with two of the five document engines and ran live carrying three of twelve
@@ -1753,9 +1765,15 @@ with revision rounds, and who is also their own producer.**
    inherited. The check that finds it is mechanical and takes one command: grep every
    trade for every `shared/*.js` it loads and read the holes. **Run it before ranking
    anything, on every trade, forever.** This cycle took creative from 3 of 12 shared
-   modules to 5 (`docspec` and, riding with it, `find`). Still owed here: **`package`**
-   (the total-package bundle every other trade ships) and **`reconcile`**; `checklist-request`
-   and `pickfilter` land the day *Before I Export* ships.
+   modules to 5 (`docspec` and, riding with it, `find`). `checklist-request` and
+   `pickfilter` landed with *Before I Export* on 2026-08-29, taking this kit to **10 of the 12
+   shared modules**. **`package` IS NOT A HOLE HERE AND THAT IS NOW ON THE RECORD** rather
+   than rediscovered every sweep: Total Package is a WAGES-AND-FRINGES reckoning, and this
+   trade's own rails ban rate cards, day rates, kill fees and deposit splits outright — the
+   one absence on this kit with a reason, which is a decision, not a gap. `reconcile` is
+   already here (`notes-back`). What remains genuinely absent is construction furniture:
+   `jobcard`, `dropoff`, `holdtest`, `draft` — a freelancer has no job trailer, no gate code
+   and no test port.
 Deferred with reasons: *What's in the drop* (folds into Before I Export as a second output
 mode, not a sixth page) · *Turnover Sheet* (narrow — real only for a first job with a new
 finisher) · *Booking Confirm* (a different boundary — hiring, not client delivery, and one
@@ -1838,6 +1856,51 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-08-29 (C3679) — THE CHROME WAS ASSEMBLED BEFORE THE PRODUCT, SO A BUG IN A LABEL FROZE THE DOCUMENT
+`shared/checklist-request.js` built the bottom-bar count line and THEN the document:
+`countEl.textContent = cfg.countLabel(n)` ran a line above `preview.textContent = text()`.
+Both are caller code, and the eleventh instance of the shape passes a `countLabel` that
+counts a SUBSET of the ticked rows — which threw on the engine's own first render (the
+label ran through an `api` that mount() had not returned yet). The exception aborted
+`refresh()` one line before the preview was written, so the page sat there saying
+**"(nothing on it yet)"** with the list filling up behind it, and the only symptom was a
+document that never changed. That is precisely what
+`tools/toolkit-gates/order-live-header.mjs` exists to catch — *"the block he PROOFREADS is
+a generation stale"* — reached through a LABEL instead of through a header field, which is
+a door that gate does not watch. **The document is the product and the count is chrome, so
+the product is written first**; a caller bug in the chrome can no longer freeze the
+product. One line moved, thirteen sibling pages inherit it, and the page-side fix is the
+other half: read the ticked rows off the DOM rather than through an API that does not
+exist until after the first render.
+
+### 2026-08-29 (C3679) — THE GATE BLAMED THE BAR FOR A PANEL'S OWN CLIP EDGE, AND I NEARLY "FIXED" THE PAGE
+`tools/toolkit-gates/mobile-watertight.mjs` failed the new page at all four widths:
+*"UNREACHABLE, the fixed bar covers it"* on two trade chips in the Tools menu. Three things
+were true and only the third mattered. **(1) It was not a new defect.** That gate samples
+ONE tool page per trade and picks it ALPHABETICALLY (`files.find(f => f !== 'index.html')`
+over a sorted list), so a page beginning with **b** became the first `creative/` page ever
+measured with the menu open — `creative/getting-in.html` has carried the identical two rows
+since 2026-08-13. **A sample keyed on a filename re-draws itself every time a file is
+added, and the page that inherits the seat inherits the blame.** **(2) The fix I wrote
+first was a regression.** I bounded the dropdown's height by the fixed action bar — and
+then measured the stacking rather than assuming it: the nav is `z-index:40`, the bar is
+`30`, so **the panel already paints OVER the bar** and a probe inside the restored panel
+returns the panel's own grid, not the bar. The "fix" only shrank the menu by 64px and
+clipped MORE of it. Reverted to a zero-line diff. **(3) The real defect was in the gate.**
+Its coverage check probes an element's CENTRE with `elementFromPoint`, and at a scrolling
+panel's bottom edge a 44px row is painted for 21px with its centre one pixel past the clip
+— so the honest answer to *what is at that pixel* is whatever is behind the panel, and the
+verdict *"the bar covers it"* is a wrong reading of a true measurement. Driven to prove it:
+the row reports 749–793 against a panel box ending at 706, is not the element painted at
+its own centre, and after one `scrollIntoView` sits at 406–450 and hit-tests as itself. The
+check now skips a control only when THE PROBE POINT falls outside an ancestor that
+genuinely scrolls, and **the skip is red-verified rather than argued**: a control planted
+under the bar with no scrolling ancestor still fails at all four widths, in both states.
+**The general form: a gate that measures a POINT can be right about the pixel and wrong
+about the cause. Before changing the page, check whether the instrument is asking the
+question its verdict claims to answer** — and note that `menu-reachability.mjs` already
+owns that question properly and was green throughout (tightest clearance 15.5px).
 
 ### 2026-08-28 (C3677) — A GATE THAT FINDS ITS PAGES BY SHAPE IS BLIND TO THE PAGE MISSING THE SHAPE
 The sibling of the scar below it, one layer down and harder to see, because there is no
@@ -7521,3 +7584,69 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   this cycle.
   Storefront unchanged — no new tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+
+- `2026-08-29` — **[AXIS:DEPTH] C3679 — THE THINNEST KIT ON THE RACK GOT THE PAGE ITS OWN
+  REGISTRY HAD BEEN NAMING FOR SIXTEEN DAYS, AND THE PANEL DISAGREED WITH THE ROSTER, WITH
+  ITSELF, AND WITH ME.** Both wells dry (0 new, 0 building, 30 shipped, no stale claims) and
+  no family owed, so the stalest axis governed — and the bump still printed `WELL` a cycle
+  after `due_axis` learned to skip a dry one, so the axis was re-derived by hand off the log:
+  DEPTH, 6 lane-cycles cold. **The rung picked itself twice over:** creative is the thinnest
+  kit on a fifteen-trade rack (5 tools against a median of 8), `creative/tools.js` has
+  carried *"Next off the panel's ranked list: Before I Export"* in its footer since
+  2026-08-13, and §CREATIVE calls it *"now the top unbuilt rung on this trade."* **THREE
+  LENSES RAN BEFORE A LINE WAS WRITTEN AND NOT ONE OF THEM LEFT THE DRAFT STANDING.** The
+  field lens rebuilt the FRAME: a page that asks a client what shape he needs on the night of
+  the render *"tells him you cut the whole thing without knowing — that's not diligence,
+  that's a confession."* So block one is STATEMENTS and block two is the ask. It killed the
+  roster's own sorter too (*"fifteen of twenty-two flagged means nothing is flagged"*) and
+  replaced it with the one that costs money: **do I have to open the project again.** **THE
+  PANEL SPLIT, AND THE SPLIT IS THE RECORD.** The field lens's favourite block — *free
+  tonight, expensive next week*: a clean version, a no-music version, stills, a second shape
+  — was killed outright by the boundary lens, because the kit would be handing a freelancer a
+  warm, unpriced, WRITTEN offer of four extra renders to his own client, and the page next
+  door (*That's Another Round*) exists to clean exactly that up. **It won on the field lens's
+  own test**, which had killed *"do you need the project files?"* with *"that's a yes I never
+  priced, and this page can't carry a price"* and then failed to apply it one paragraph
+  later. What survives is `Everything I've got you down for` — the user stating what is
+  ALREADY in his deal, downstream of his own scope document instead of an offer of anything
+  new. The safety lens killed a closing line I had not noticed writing (*"anything that lands
+  after I render means doing it again"* — a consequence clause in a friendly hat) and caught
+  the deemed-acceptance defect this trade already stripped out once, **moved from prose into
+  a DEFAULT**: a shape picker shipping `16:9` pre-selected puts a spec in a client's inbox
+  that nobody chose. Every axis on the page now opens on an em-dash and every item carries a
+  `sayNo` for the row ticked and never answered. **WHAT THE PAGE DOES THAT THE TEN SHAPE-#1
+  PAGES BEFORE IT DO NOT: it argues with the user about the length of his own message.** Every
+  sibling is trying to get MORE lines onto a list, because a supply house reads lists for a
+  living; the receiver here is a marketing manager with forty seconds who has not seen a
+  frame. Past five asks the glass says most people answer about five and go quiet on the
+  rest; past eight it says this is a form, not a message. **The count never reaches the
+  client** — printing it would be the page narrating the user to his own client. **BACKPORT
+  RIDER FIRED, ON THE ENGINE AND ON AN INSTRUMENT, BOTH FOUND BY BUILDING:** `countLabel` was
+  assembled a line BEFORE the document, so caller code in the CHROME could freeze the PRODUCT
+  — the preview sat at *"(nothing on it yet)"* while the list filled up. One line moved in
+  `shared/checklist-request.js`; **all 14 shape-#1 pages inherit it and `order-live-header`
+  re-ran green on every one** (14 pages, everything in the document on the glass and surviving
+  a reload). And `mobile-watertight` failed the new page on two menu rows: **not a new defect
+  — that gate samples one tool page per trade ALPHABETICALLY, so a page beginning with "b"
+  became the first `creative/` page ever measured with the menu open**, and getting-in has
+  carried the same rows since 2026-08-13. **My first fix was a regression and the stacking
+  order caught it** (nav z-40 paints OVER the z-30 bar; the panel was never covered) —
+  reverted to a zero-line diff, and the real fix went into the GATE, which was probing a row's
+  centre one pixel past a scrolling panel's clip edge and blaming the bar for it.
+  Red-verified, not argued: a control planted under the bar with no scrolling ancestor still
+  fails at four widths in both states. **The module sweep this cycle also RETIRED a standing
+  hole rather than paying it:** `package` is not owed on creative — Total Package is a
+  wages-and-fringes reckoning and this trade's rails ban rate cards, day rates, kill fees and
+  deposit splits outright, which makes it the one absence with a reason. **GATES GREEN:**
+  47/47 on a live drive of the real page (neutral axes never leak a placeholder, a
+  note-shaped line with no note falls back instead of printing a stub, the flagged write-in
+  routes into the ask and counts against it, the clipboard equals the block he proofread,
+  everything survives a reload) · mobile-watertight **8/8 creative pages** at 320/360/390/430
+  in both text sizes · order-live-header **14 order pages** · pickfilter **14 pages / 182** ·
+  menu-reachability **1,050 checks / 150 pages** · no-third-party **153/153** · find-honesty
+  **8,472 / 0 failing** · find-noise **352, N0–N9 all ok** (was 341 — the new tool's own rows).
+  Storefront: one line added to `creative`'s `tools[]` in `fieldToolkits.ts`, parse-verified,
+  P5 pushes it. **NAMED NEXT RUNG:** *What's in the drop*, as its OWN page rather than the
+  "second output mode" §CREATIVE deferred it as — the other side of the render, addressed to
+  a different moment: who signed, what is in the folder, and what is deliberately not in it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/creative/before-i-export.html

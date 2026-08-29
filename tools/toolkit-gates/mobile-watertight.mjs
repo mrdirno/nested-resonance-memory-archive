@@ -547,6 +547,40 @@ const MEASURE = (MIN_TAP) => {
     // bar still covers HERE is covered permanently.
     window.scrollTo(0, document.documentElement.scrollHeight);
     const atBottom = Math.abs(window.scrollY + window.innerHeight - document.documentElement.scrollHeight) < 2;
+    /* A CONTROL SCROLLED OUT OF A PANEL IS NOT A CONTROL UNDER THE BAR, and the
+       difference is one the hit test cannot make on its own. The nav's Tools
+       menu is a scrolling panel: rows past its clipped edge still report a
+       rect — often a rect that lands in the bar's band — while being painted
+       nowhere at all — or, at the panel's own bottom edge, a row is painted
+       for half its height with its CENTRE one pixel past the clip — so
+       elementFromPoint at that centre honestly returns whatever is behind the
+       panel and this check honestly reached the wrong verdict. Measured on
+       creative/before-i-export.html, which is a new page but not a new defect:
+       this gate samples ONE tool page per trade and picks it ALPHABETICALLY, so
+       a page beginning with "b" became the first creative page ever measured
+       with the menu open, and creative/getting-in.html has carried the same two
+       rows since 2026-08-13. The rows are one panel-scroll away — verified by
+       driving it: "⚡Electrical" reports 749–793 while the panel's box ends at
+       706, is not the element painted at its own centre, and after one
+       scrollIntoView sits at 406–450 and hit-tests as itself. And the question
+       it looked like it was asking already belongs to a gate that answers it
+       properly: tools/toolkit-gates/menu-reachability.mjs walks the menu's LAST
+       row at every width and is green (tightest clearance 15.5px). Nothing that
+       is actually on the glass gets skipped: it is the PROBE POINT — the exact
+       pixel the hit test asks about — that has to fall outside an ancestor which
+       genuinely scrolls (scrollHeight > clientHeight). A control sitting under
+       the bar on an ordinary page has no such ancestor and still fails, which is
+       red-verified rather than argued. */
+    const probeOutsidePanel = (el, cx, cy) => {
+      for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+        const cs = getComputedStyle(a);
+        if (!/auto|scroll/.test(cs.overflowY + cs.overflowX)) continue;
+        if (a.scrollHeight <= a.clientHeight + 1 && a.scrollWidth <= a.clientWidth + 1) continue;
+        const b = a.getBoundingClientRect();
+        if (cx < b.left || cx > b.right || cy < b.top || cy > b.bottom) return true;
+      }
+      return false;
+    };
     if (atBottom) {
       document.querySelectorAll(CONTROLS).forEach(el => {
         if (bar.contains(el)) return;
@@ -554,6 +588,7 @@ const MEASURE = (MIN_TAP) => {
         if (r.width === 0 || r.height === 0) return;
         const cy = r.top + r.height / 2, cx = r.left + r.width / 2;
         if (cy < 0 || cy > window.innerHeight) return;            // still above the glass
+        if (probeOutsidePanel(el, cx, cy)) return;                // the panel's own clip edge, not the bar
         const hit = document.elementFromPoint(cx, cy);
         if (hit && bar.contains(hit)) {
           out.covered.push({

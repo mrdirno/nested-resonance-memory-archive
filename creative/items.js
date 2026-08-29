@@ -379,3 +379,286 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+/* ── BEFORE I EXPORT (shape #1 — shared/checklist-request.js) ───────────────
+ * The top unbuilt rung on this trade since the panel ranked it (av/AV_SOCIETY.md
+ * §CREATIVE #4), and the page that finally brings this kit the two engines it
+ * never inherited: `checklist-request` and `pickfilter`.
+ *
+ * THREE LENSES RAN BEFORE A LINE WAS WRITTEN AND THEY DID NOT AGREE. The
+ * disagreement is the record, and the synthesis is in the file:
+ *
+ *  1. IT IS DECLARATIVE, NOT A QUIZ (field lens). "What shape do you need?"
+ *     asked the night before a render tells a client you cut the whole thing
+ *     without knowing — "that's not diligence, that's a confession." Every line
+ *     in the first block says what the cut IS and invites a correction. That is
+ *     NOT the deemed-acceptance clause this trade already had to strip out once
+ *     (§SCARS): "I'll work to it as written if I don't hear back" manufactures
+ *     agreement out of silence; "here's what I've got, tell me if it's wrong"
+ *     is a man showing his work. Nothing on this page says what silence means.
+ *
+ *  2. THE SORTER IS NOT "DOES IT DECIDE THE RENDER" — IT IS DO I HAVE TO OPEN
+ *     THE PROJECT AGAIN. The first draft flagged fifteen of twenty-two as
+ *     urgent, killed outright: "fifteen of twenty-two flagged means nothing is
+ *     flagged."
+ *
+ *  3. THE BATCH BLOCK IS DEAD, and this is where the panel split. The field
+ *     lens called a "free tonight, expensive next week" block — a clean
+ *     version, a no-music version, stills, a second shape — "the most
+ *     persuasive thing I could put in front of a client." The boundary lens
+ *     killed all four on one sentence: a page in this kit would be handing a
+ *     freelancer a warm, unpriced, WRITTEN offer of four extra renders to his
+ *     own client, and the kit next door already ships That's Another Round to
+ *     clean that up. THE BOUNDARY LENS WON ON THE FIELD LENS'S OWN TEST — the
+ *     field lens killed "do you need the project files?" with "that's a yes I
+ *     never priced, and this page can't carry a price", and then did not apply
+ *     that same test to the batch block. Consistency disposed. What survives of
+ *     the insight is `deal` below: the user states what he already has the
+ *     client down for, which is downstream of his own scope document rather
+ *     than an offer of anything new.
+ *
+ *  4. EVERY PICKER STARTS NEUTRAL (safety lens, and it is this program's own
+ *     §SCARS law A DEFAULT IS A CLAIM wearing new clothes). A shape picker
+ *     shipping 16:9 pre-selected would put a spec in the client's inbox that
+ *     nobody chose and let the user proceed on their silence — the banned
+ *     deemed-acceptance defect, moved out of prose and into a default. So every
+ *     axis opens on an em-dash value and every item carries `sayNo`, the
+ *     sentence for the line he ticked but never answered.
+ *
+ * WHAT THE PANEL KILLED, so no later cycle resurrects it: frame rate AS A
+ * QUESTION (nobody outside post chooses between 29.97 and 30 — it lives here as
+ * a STATED fact, never an ask) · "separate cut or a crop of the wide" (your
+ * call, not theirs) · mix notes (unanswerable in the abstract; only works pinned
+ * to a timecode, which makes it a note — and Notes Back owns notes) · "when do
+ * you need it in hand" (asking that the night before a render advertises that
+ * you are unmanaged) · CUTDOWNS and SOURCE FILES / THE PROJECT ARCHIVE (both are
+ * a yes nobody priced, and ownership of the project is a contract term) · WHERE
+ * IT'S GOING UP (its only function is to derive a platform's spec, which is the
+ * standing kill for this trade).
+ *
+ * WHAT THE PANEL ADDED, none of it on the roster: the SPEC SHEET question, which
+ * outranks every other line here because it retires six of them whenever the
+ * client actually has one, and citing somebody's document crosses nothing ·
+ * every other word on screen — the stat, the date, the ®, the capitalization a
+ * brand team is precious about, "the single most common re-export in my actual
+ * year" · a person or a product in the cut that has since become a problem,
+ * which is not a re-render but a RE-CUT · anything on screen that is correct
+ * today and not SETTLED · the user's own placeholders, "the only one I can't get
+ * wrong for lack of information" · and whoever is drawing a caption on top of
+ * the picture afterwards. That last one stays inside the rails precisely because
+ * it is THEIR overlay, never a platform's safe area, which we do not know.
+ *
+ * SAFETY, unchanged and load-bearing: no platform, no resolution, no bitrate, no
+ * codec, no safe area, no file-size cap, no licence or usage term, no price, no
+ * brand name as data, no count of rounds. Ratios and frame rates appear ONLY as
+ * a value the USER picked off his own timeline. The legal-shaped line asks the
+ * client for THEIR wording and says outright that wording it is not ours.
+ */
+window.TOOLKIT_ITEMS.beforeExport = {
+  /* Sentences, not labels. `say` is what lands in the client's inbox with {v}
+     replaced by what he picked; `sayNo` is the same line for a row he ticked and
+     never answered; the note he types is appended after an em-dash. This file
+     owns the words, the page owns the assembly — the boundary every sibling
+     holds. */
+  cats: [
+    {
+      id: "got",
+      name: "What I've got right now",
+      docName: "WHAT I'VE GOT RIGHT NOW",
+      chip: "#8B12B4",
+      hint: "Statements, not questions — this is what comes out of the render if nobody says otherwise. It's the half that makes you look like you're driving.",
+      items: [
+        {
+          n: "The shape", sub: "aspect", noQty: true,
+          ax: [{ k: "v", label: "I've got it as", wide: true,
+                 opts: ["— haven't said", "16:9", "9:16", "1:1", "4:5", "2.39:1", "another one — it's below"],
+                 def: "— haven't said" }],
+          say: "Shape — I've got it as {v}. If you need another shape as well, tell me tonight and it comes out of the same pass.",
+          sayNo: "Shape — tell me what shape or shapes you need and I'll set it before I render.",
+          notePlaceholder: "the shape, if it isn't in the list"
+        },
+        {
+          n: "How long it runs", noQty: true,
+          ax: [{ k: "v", label: "right now it's", wide: true,
+                 opts: ["— haven't said", "cut to length", "running a little long", "not locked yet"],
+                 def: "— haven't said" }],
+          say: "Length — right now it's {v}. If it has to hit a number, tell me the number and I'll cut to it.",
+          sayNo: "Length — if it has to hit a number, tell me the number and I'll cut to it.",
+          notePlaceholder: "the runtime you've got — 1:42"
+        },
+        {
+          n: "Frame rate", sub: "said, not asked", noQty: true,
+          ax: [{ k: "v", label: "it's", wide: true,
+                 opts: ["— haven't said", "23.976", "24", "25", "29.97", "30", "50", "59.94", "60",
+                        "matching what I shot", "another one — it's below"],
+                 def: "— haven't said" }],
+          say: "Frame rate — it's {v}. Saying it out loud in case that's a problem on your end.",
+          sayNo: "Frame rate — I'll keep it where I shot it unless you tell me otherwise on your end.",
+          notePlaceholder: "the rate, if it isn't in the list"
+        },
+        {
+          n: "What's still standing in", sub: "the XX and the temp", noQty: true,
+          say: "Still standing in and not final: {note}. Those are mine to swap out — I'm telling you so you don't read them as finished.",
+          sayNo: "There are still one or two placeholders in the cut. They're mine to swap out before it goes anywhere.",
+          notePlaceholder: "the XX on the end card, the temp stat at 0:22, the scratch voice-over"
+        },
+        {
+          n: "Head and tail", noQty: true,
+          say: "Front and back: {note}. Say if you want it different.",
+          sayNo: "Front and back are the way I've been cutting them. Say if you want either different.",
+          notePlaceholder: "2s black up top, no slate, ends on the end card"
+        },
+        {
+          n: "Everything I've got you down for", sub: "off your own deal, not an offer", noQty: true,
+          say: "What I've got you down for: {note}. If there's something in the deal I've missed, tonight is when it's cheap — it comes off the same evening.",
+          sayNo: "Say if there's anything else in the deal I should be cutting alongside this one — tonight is when it's cheap.",
+          notePlaceholder: "the :60 and a vertical, plus a clean version"
+        }
+      ]
+    },
+    {
+      id: "need",
+      name: "What I need back first",
+      docName: "WHAT I NEED FROM YOU",
+      chip: "#A61457",
+      hint: "The ones that put you back in the timeline if they're wrong. Keep this block short — five is about what anyone answers in one reply.",
+      items: [
+        {
+          n: "Your spec sheet, if there is one", sub: "retires half of this list", noQty: true,
+          say: "If you've got a spec sheet, brand guidelines or a delivery sheet on your side, send me that and I'll work to it — it answers most of what's below in one go.",
+          notePlaceholder: "who'd have it on their end"
+        },
+        {
+          n: "Names and titles, spelled out", noQty: true,
+          say: "The names and titles on screen — send them spelled the way they should read, even if you've sent them before. I'd rather retype than re-render.",
+          notePlaceholder: "which ones you're unsure of"
+        },
+        {
+          n: "Every other word on screen", sub: "the stat · the date · the ™", noQty: true,
+          say: "Everything else that's written on screen — the stat, the date, the price, the product name, the ® or ™, and the capitalization your side cares about. One block of text, exactly as it goes out.",
+          notePlaceholder: "where the words are — 0:22 stat, the end card"
+        },
+        {
+          n: "The logo", noQty: true,
+          say: "The logo — is the one I've got the current one? If there's a newer file, send it before I render.",
+          notePlaceholder: "which one you gave me, or where it sits"
+        },
+        {
+          n: "The end card", noQty: true,
+          say: "The end card — what goes on it, spelled out: the address, the handle, the phone number, whatever's meant to be there.",
+          notePlaceholder: "what you've got on it now"
+        },
+        {
+          n: "Anything your side has to put on screen", sub: "a legal line · a credit", noQty: true,
+          say: "If there's a line your side needs on screen — a legal line, a disclaimer, a credit — send me the exact wording and where it sits, and I'll set it word for word as you send it. I'm not the one to tell you whether you need one or what it should say.",
+          notePlaceholder: "who'd know on their end"
+        },
+        {
+          n: "The music", noQty: true,
+          ax: [{ k: "v", label: "the track in it is", wide: true,
+                 opts: ["— haven't said", "mine", "a placeholder", "the one you sent"],
+                 def: "— haven't said" }],
+          say: "The music — the track in the cut right now is {v}. Is that the one you want in the final, or are you sending me one? If you're sending one, send the file and anything that has to appear on screen with it, and I'll use exactly what you send.",
+          sayNo: "The music — is the track that's in the cut now the one you want in the final, or are you sending me one? If you're sending one, send the file and anything that has to appear on screen with it, and I'll use exactly what you send.",
+          notePlaceholder: "the track, if it has a name you'd know"
+        },
+        {
+          n: "Captions", noQty: true,
+          ax: [{ k: "v", label: "I'd give you", wide: true,
+                 opts: ["— tell me", "a separate file", "them burned into the picture", "both", "none"],
+                 def: "— tell me" }],
+          say: "Captions — I'd give you {v}. Tell me if you want it another way, and if it's a separate file, tell me the format you want and I'll deliver it that way.",
+          sayNo: "Captions — burned into the picture, a separate file, or none? If it's a separate file, tell me the format you want and I'll deliver it that way.",
+          notePlaceholder: "anything about how they're worded"
+        },
+        {
+          n: "Anyone or anything in it that's a problem now", sub: "a re-cut, not a re-render", noQty: true,
+          say: "Is anybody or anything in this cut a problem now — someone who's left, a product that changed, a sign or somebody else's box in the background? That one isn't a re-render, it's a re-cut, so it's worth two minutes of your time tonight.",
+          notePlaceholder: "anything you're already wondering about"
+        },
+        {
+          n: "Anything on screen that isn't settled", sub: "settled, not just correct", noQty: true,
+          say: "Anything on screen that isn't settled yet — a link that's being changed, a price waiting on a sign-off, a date, a title somebody's about to be promoted out of? Correct today and wrong Friday costs the same as wrong.",
+          notePlaceholder: "what you know is in motion"
+        },
+        {
+          n: "Anyone drawing on top of it", sub: "captions · stickers · a frame", noQty: true,
+          say: "If your side is putting anything over the picture afterwards — a caption, a sticker, a frame — tell me roughly where, so I don't park a title underneath it.",
+          notePlaceholder: "who's doing that on their end"
+        }
+      ]
+    },
+    {
+      id: "out",
+      name: "When it goes out",
+      docName: "WHEN IT GOES OUT",
+      chip: "#C2660F",
+      hint: "None of this holds up the render. It holds up the handoff, which is the other way to lose a day.",
+      items: [
+        {
+          n: "Who gives the final okay", noQty: true,
+          say: "Who's the final okay on this? I'd rather send it to the right person than find out afterwards.",
+          notePlaceholder: "who you think it is"
+        },
+        {
+          n: "Anyone else who should see it first", noQty: true,
+          say: "If anyone else needs to see it before it goes out, tell me who and I'll build them into the time.",
+          note: false
+        },
+        {
+          n: "What to call the file", noQty: true,
+          say: "How you want the file named — if your side has a way of naming these, send it and I'll match it.",
+          notePlaceholder: "what you'd call it"
+        },
+        {
+          n: "Where you want it", noQty: true,
+          say: "Where you want it and who else should get it — tell me where to put it and it lands there.",
+          notePlaceholder: "where it should land"
+        }
+      ]
+    },
+    {
+      id: "mine",
+      name: "Anything else you're holding for",
+      docName: "ALSO",
+      chip: "#1D6F63",
+      hint: "Your own line, in your own words. One per line — tick the flag on the ones you actually need answered.",
+      writein: true,
+      items: []
+    }
+  ],
+
+  /* A write-in is HIS sentence — masonry/yard-call.html wrote that rule and it
+     holds here, so no axes are bolted to a line he typed. The one tick it
+     carries is the one thing the page cannot derive: whether it is a statement
+     or an ask, which is what decides the block it prints under and whether it
+     counts against the ask. */
+  writeinFlags: [
+    { k: "need", label: "I need this one back" }
+  ],
+
+  phProj: "Northgate brand film",
+  phTo: "Dana — Northgate",
+  phCut: "v3, the :60 — the one I sent Tuesday afternoon",
+  phWhen: "Thursday morning",
+  phHow: "reply here, or call me — I'm around till six",
+
+  writeinPlaceholder: "Anything else — one per line.\ne.g. the approved copy for the 0:22 card\nPriya's new headshot, the one from the offsite",
+
+  /* THE OPENING, and it is the safety lens's, near-verbatim. A bare list of
+     requirements with no framing "is the single most client-losing artefact this
+     page can produce" — and asking for an explicit "doesn't apply" lowers the
+     pressure without ever converting silence into agreement. */
+  opening: "Here's what I need from you before I render. Answer what you can — if something doesn't apply, just tell me it doesn't and I'll leave it out.",
+  gotTail: "If anything up there is wrong, tell me and I'll change it before I render — that's why I'm sending it now.",
+
+  /* THE TWO HALVES OF THE DEADLINE, AND THEY NEVER PRINT APART. The field lens
+     asked for the second half — "a deadline with nothing behind it is a wish" —
+     and the safety lens killed the first draft of the sentence that followed it
+     ("anything that lands after I render means doing it again") as a consequence
+     clause wearing a friendly hat. Stating when you start is a fact about your
+     own week; the line under it is what stops it reading as a cutoff, so the
+     page emits them together or not at all. */
+  renderLine: "I'm starting the render {when}.",
+  renderTail: "If something changes after that, send it over and I'll pick it back up — I'm asking now in case it's already on your mind."
+};
