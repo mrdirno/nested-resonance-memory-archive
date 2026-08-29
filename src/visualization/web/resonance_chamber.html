@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resonance Chamber</title>
+<meta name="description" content="GPU particle simulation of standing-wave eigenmodes in a cubic cavity, sequenced by the digits of mathematical constants.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ================================================================
+   Resonance Chamber — instrument-style UI
+   Committed dark design: the additive-blended particle field needs a
+   dark ground, so every color is painted explicitly.
+   ================================================================ */
+:root {
+  --ink:        #070B11;   /* page ground */
+  --panel:      rgba(13, 19, 29, 0.92);
+  --panel-soft: rgba(20, 28, 42, 0.75);
+  --well:       rgba(5, 8, 13, 0.65);
+  --line:       #1E2A3C;
+  --line-soft:  #16202F;
+  --text:       #DCE5F0;
+  --muted:      #7E8CA0;
+  --faint:      #4A566B;
+  --accent:     #3FD3B4;   /* phosphor teal */
+  --accent-ink: #052B23;
+  --accent-dim: rgba(63, 211, 180, 0.14);
+  --amber:      #DFAE4F;   /* energy / secondary data */
+  --danger:     #E06C6C;
+  --radius:     10px;
+  --font-ui:    'IBM Plex Sans', 'Segoe UI', -apple-system, sans-serif;
+  --font-data:  'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-ui);
+  background: var(--ink);
+  color: var(--text);
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  font-size: 14px;
+}
+#stage {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #0B1220 0%, #070B11 70%);
+  touch-action: none;
+  cursor: grab;
+}
+#stage:active { cursor: grabbing; }
+button { font-family: inherit; color: inherit; }
+:is(button, select, input):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------- Top instrument bar ---------------- */
+.topbar {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px;
+  background: linear-gradient(to bottom, rgba(7,11,17,0.88), rgba(7,11,17,0));
+  z-index: 60;
+  pointer-events: none;
+  flex-wrap: wrap;
+}
+.topbar > * { pointer-events: auto; }
+.brand { display: flex; align-items: baseline; gap: 9px; text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+.brand-name { font-weight: 700; font-size: 15px; letter-spacing: 0.02em; }
+.brand-sub {
+  font-size: 10.5px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.14em;
+}
+.readouts {
+  display: flex; gap: 2px; margin-left: auto;
+  background: var(--well);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 4px 6px;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+.readout { padding: 2px 9px; text-align: right; min-width: 62px; }
+.readout + .readout { border-left: 1px solid var(--line-soft); }
+.readout-label {
+  display: block; font-size: 9px; color: var(--faint);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  font-family: var(--font-ui); font-weight: 600;
+}
+.readout-value { font-size: 13px; color: var(--text); white-space: nowrap; }
+.readout-value.accent { color: var(--accent); }
+.readout-value.amber { color: var(--amber); }
+.top-actions { display: flex; gap: 8px; }
+.icon-btn {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.icon-btn:hover { border-color: var(--accent); }
+.icon-btn svg { width: 15px; height: 15px; fill: var(--text); }
+.icon-btn.primary { background: var(--accent); border-color: var(--accent); }
+.icon-btn.primary svg { fill: var(--accent-ink); }
+
+/* ---------------- Tab rail ---------------- */
+.rail {
+  position: fixed; z-index: 70;
+  display: flex; gap: 4px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  left: 50%; transform: translateX(-50%);
+  bottom: max(10px, env(safe-area-inset-bottom));
+}
+.rail-tab {
+  border: none; background: transparent;
+  color: var(--muted);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 9px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.rail-tab svg { width: 16px; height: 16px; fill: currentColor; }
+.rail-tab:hover { color: var(--text); }
+.rail-tab[aria-expanded="true"] { background: var(--accent-dim); color: var(--accent); }
+
+/* ---------------- Panels ---------------- */
+.panel {
+  position: fixed; z-index: 65;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  left: 0; right: 0;
+  bottom: 0;
+  max-height: min(62vh, 540px);
+  border-radius: 14px 14px 0 0;
+  transform: translateY(105%);
+  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0.25, 1);
+  padding-bottom: 74px; /* clear the rail */
+  visibility: hidden;
+}
+.panel.open { transform: translateY(0); visibility: visible; }
+@media (min-width: 900px) {
+  .panel {
+    left: auto; right: 12px; top: 62px; bottom: 12px;
+    width: 360px; max-height: none;
+    border-radius: 14px;
+    transform: translateX(calc(100% + 24px));
+    padding-bottom: 16px;
+  }
+  .panel.open { transform: translateX(0); }
+  .rail { left: auto; right: 12px; transform: none; }
+}
+.panel-head {
+  position: sticky; top: 0; z-index: 2;
+  padding: 15px 18px 12px;
+  background: linear-gradient(to bottom, var(--panel) 75%, transparent);
+}
+.panel-title { font-size: 15px; font-weight: 700; }
+.panel-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.panel-body { padding: 2px 18px 18px; display: flex; flex-direction: column; gap: 18px; }
+
+.group { display: flex; flex-direction: column; gap: 10px; }
+.group-label {
+  font-size: 10px; font-weight: 700; color: var(--faint);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  padding-bottom: 4px; border-bottom: 1px solid var(--line-soft);
+}
+
+/* ---------------- Controls ---------------- */
+.btn {
+  padding: 10px 14px;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn:hover { border-color: var(--accent); }
+.btn svg { width: 13px; height: 13px; fill: currentColor; }
+.btn.solid { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.ghost-danger:hover { border-color: var(--danger); color: var(--danger); }
+.btn-row { display: flex; gap: 8px; }
+.btn-row .btn { flex: 1; }
+
+.slider-row { display: flex; flex-direction: column; gap: 7px; }
+.slider-head { display: flex; justify-content: space-between; align-items: baseline; }
+.slider-name { font-size: 13px; font-weight: 500; }
+.slider-val {
+  font-family: var(--font-data); font-size: 12px; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; border-radius: 2px;
+  background: var(--line);
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--ink);
+  box-shadow: 0 0 0 1px var(--accent);
+  transition: transform 0.12s;
+}
+input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.25); }
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); border: none;
+}
+.num-input, .select {
+  width: 100%; padding: 9px 11px;
+  background: var(--well);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+.select { font-family: var(--font-ui); cursor: pointer; }
+.select option { background: #0E1520; color: var(--text); }
+.num-input:focus, .select:focus { outline: none; border-color: var(--accent); }
+
+.switch-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 12px;
+  background: var(--well);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-size: 13px;
+}
+.switch-row:hover { border-color: var(--line); }
+.switch-row[aria-pressed="true"] { border-color: rgba(63, 211, 180, 0.4); }
+.switch-row .hint { color: var(--muted); font-size: 11px; display: block; margin-top: 1px; }
+.switch {
+  flex: none; width: 34px; height: 20px; border-radius: 10px;
+  background: var(--line); position: relative;
+  transition: background 0.18s;
+}
+.switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.18s, background 0.18s;
+}
+.switch-row[aria-pressed="true"] .switch { background: var(--accent); }
+.switch-row[aria-pressed="true"] .switch::after { transform: translateX(14px); background: var(--accent-ink); }
+
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button {
+  flex: 1 0 auto; min-width: 52px;
+  padding: 8px 6px;
+  background: var(--well);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  font-family: var(--font-data);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.seg button:hover { border-color: var(--accent); }
+.seg button[aria-pressed="true"] {
+  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+}
+
+/* ---------------- Digit tape ---------------- */
+.tape-block { display: flex; flex-direction: column; gap: 6px; }
+.tape {
+  background: var(--well);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 9px 10px;
+  font-family: var(--font-data);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  color: var(--faint);
+  letter-spacing: 0.18em;
+}
+.tape .cur {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: 4px;
+  padding: 1px 4px;
+  margin: 0 2px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tape-label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11px; color: var(--muted);
+}
+.tape-label b { color: var(--text); font-weight: 600; font-size: 12px; }
+.tape-label .cls { color: var(--faint); font-style: italic; }
+
+.axis-row { display: grid; grid-template-columns: 58px 1fr; gap: 8px; align-items: center; }
+.axis-tag {
+  font-family: var(--font-data); font-size: 12px; color: var(--muted);
+}
+
+/* ---------------- Stats grid ---------------- */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat {
+  background: var(--well);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 9px 10px;
+}
+.stat-k {
+  font-size: 9.5px; color: var(--faint); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.stat-v {
+  font-family: var(--font-data); font-size: 15px; margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- Overlays / modal ---------------- */
+.scrim {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(4, 6, 10, 0.72);
+  display: grid; place-items: center;
+  padding: 18px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.scrim.open { opacity: 1; pointer-events: auto; }
+.modal {
+  width: min(620px, 100%);
+  max-height: 84vh; overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 28px;
+}
+.modal h2 { font-size: 17px; margin-bottom: 4px; }
+.modal h3 {
+  font-size: 11px; color: var(--accent); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.13em;
+  margin: 20px 0 7px;
+}
+.modal p { font-size: 13.5px; line-height: 1.65; color: var(--muted); max-width: 62ch; }
+.modal p b { color: var(--text); font-weight: 600; }
+.modal .eq {
+  font-family: var(--font-data); font-size: 13.5px;
+  color: var(--text);
+  background: var(--well);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 12px 14px; margin: 8px 0;
+  overflow-x: auto; white-space: nowrap;
+}
+.modal .close { margin-top: 22px; width: 100%; }
+kbd {
+  font-family: var(--font-data); font-size: 11px;
+  background: var(--well); border: 1px solid var(--line);
+  border-bottom-width: 2px; border-radius: 5px;
+  padding: 1px 6px; color: var(--text);
+}
+.key-list { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+/* ---------------- Boot / error ---------------- */
+.boot {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--ink);
+  display: grid; place-items: center;
+  transition: opacity 0.45s;
+}
+.boot.done { opacity: 0; pointer-events: none; }
+.boot-inner { text-align: center; }
+.boot-ring {
+  width: 44px; height: 44px; margin: 0 auto 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.boot-text { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.fatal {
+  max-width: 420px; padding: 26px;
+  border: 1px solid var(--danger); border-radius: 14px;
+  background: var(--panel);
+}
+.fatal h2 { font-size: 15px; margin-bottom: 8px; }
+.fatal p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel, .scrim, .switch, .switch::after { transition: none; }
+}
+@media (max-width: 620px) {
+  .brand-sub { display: none; }
+  .top-actions { order: 2; margin-left: auto; }
+  .readouts { order: 3; width: 100%; justify-content: space-between; margin-left: 0; }
+  .readout { min-width: 0; flex: 1; padding: 2px 5px; }
+  .readout-value { font-size: 11.5px; }
+}
+</style>
+</head>
+<body>
+
+<div id="stage" aria-label="Particle simulation viewport"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-name">Resonance Chamber</span>
+    <span class="brand-sub">Standing-wave particle lab</span>
+  </div>
+  <div class="readouts" aria-live="off">
+    <div class="readout"><span class="readout-label">Step</span><span class="readout-value" id="ro-step">0</span></div>
+    <div class="readout"><span class="readout-label">Modes</span><span class="readout-value accent" id="ro-modes">–</span></div>
+    <div class="readout"><span class="readout-label">Energy</span><span class="readout-value amber" id="ro-energy">–</span></div>
+    <div class="readout"><span class="readout-label">Particles</span><span class="readout-value" id="ro-count">–</span></div>
+    <div class="readout"><span class="readout-label">FPS</span><span class="readout-value" id="ro-fps">–</span></div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn primary" id="btn-play" aria-label="Pause simulation" title="Play / pause (Space)">
+      <svg id="ic-pause" viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>
+      <svg id="ic-play" viewBox="0 0 16 16" style="display:none"><path d="M4 2l10 6-10 6z"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-info" aria-label="About this simulation" title="About (I)">
+      <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a1 1 0 110 2 1 1 0 010-2zm-1 3h2v5H7z"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Control panels">
+  <button class="rail-tab" data-panel="panel-sim" aria-expanded="false">
+    <svg viewBox="0 0 16 16"><path d="M1 8h3l2-5 4 10 2-5h3v1.5h-2l-3 7.5L6 5.5 5 8.5H1z"/></svg>
+    Simulation
+  </button>
+  <button class="rail-tab" data-panel="panel-seq" aria-expanded="false">
+    <svg viewBox="0 0 16 16"><path d="M1 3h14v2H1zm0 4h10v2H1zm0 4h14v2H1z"/></svg>
+    Sequence
+  </button>
+  <button class="rail-tab" data-panel="panel-ov" aria-expanded="false">
+    <svg viewBox="0 0 16 16"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7zM3.5 5.6v4.8L8 13l4.5-2.6V5.6L8 3z"/></svg>
+    Overlays
+  </button>
+  <button class="rail-tab" data-panel="panel-view" aria-expanded="false">
+    <svg viewBox="0 0 16 16"><path d="M8 3C4 3 1.3 6 0.5 8c0.8 2 3.5 5 7.5 5s6.7-3 7.5-5C14.7 6 12 3 8 3zm0 8a3 3 0 110-6 3 3 0 010 6z"/></svg>
+    View
+  </button>
+</nav>
+
+<!-- Simulation panel -->
+<section class="panel" id="panel-sim" aria-label="Simulation controls">
+  <div class="panel-head">
+    <div class="panel-title">Simulation</div>
+    <div class="panel-sub">Integrator, field strength, and rendering</div>
+  </div>
+  <div class="panel-body">
+    <div class="btn-row">
+      <button class="btn" id="btn-reseed">
+        <svg viewBox="0 0 16 16"><path d="M8 2a6 6 0 104.47 10L11 10.5A4 4 0 118 4v2.5L12 3 8 -0.5z"/></svg>
+        Re-seed particles
+      </button>
+      <button class="btn ghost-danger" id="btn-defaults">Restore defaults</button>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Sequencing</div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Step rate</span>
+          <span class="slider-val" id="val-rate">2.0 steps/s</span>
+        </div>
+        <input type="range" id="in-rate" min="-2" max="5" step="0.1" value="1" aria-label="Step rate">
+      </div>
+      <button class="switch-row" id="sw-smooth" aria-pressed="true">
+        <span>Smooth mode transitions
+          <span class="hint">Blend the field between consecutive digits</span></span>
+        <span class="switch"></span>
+      </button>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Physics</div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Field strength</span>
+          <span class="slider-val" id="val-field">1.00×</span>
+        </div>
+        <input type="range" id="in-field" min="-2" max="2" step="0.05" value="0" aria-label="Field strength, logarithmic">
+      </div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Damping</span>
+          <span class="slider-val" id="val-damp">2.5 /s</span>
+        </div>
+        <input type="range" id="in-damp" min="0.1" max="8" step="0.1" value="2.5" aria-label="Velocity damping">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Particles</div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Count</span>
+          <span class="slider-val" id="val-count">250,000</span>
+        </div>
+        <input type="range" id="in-count" min="3" max="6" step="0.01" value="5.39794" aria-label="Particle count, logarithmic">
+        <input type="number" class="num-input" id="in-count-num" min="1000" max="1000000" step="1000" value="250000" aria-label="Exact particle count">
+      </div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Render scale</span>
+          <span class="slider-val" id="val-quality">1.0×</span>
+        </div>
+        <input type="range" id="in-quality" min="0.4" max="2" step="0.1" value="1" aria-label="Render resolution scale">
+      </div>
+      <div class="slider-row">
+        <span class="slider-name">Color mapping</span>
+        <select class="select" id="in-color" aria-label="Particle color mapping">
+          <option value="0">Axis modes — RGB from per-axis field</option>
+          <option value="1">Speed — velocity magnitude</option>
+          <option value="2">Radial — distance and angle</option>
+          <option value="3">Phase — position sum interference</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sequence panel -->
+<section class="panel" id="panel-seq" aria-label="Digit sequence controls">
+  <div class="panel-head">
+    <div class="panel-title">Sequence</div>
+    <div class="panel-sub">Digits of irrational constants drive the mode numbers</div>
+  </div>
+  <div class="panel-body">
+    <div class="group" id="tapes">
+      <div class="group-label">Digit tape</div>
+      <div class="tape-block">
+        <div class="tape-label"><span><b>X</b> · <span id="tl-a">φ golden ratio</span></span><span class="cls" id="tc-a">algebraic</span></div>
+        <div class="tape" id="tape-a" aria-hidden="true"></div>
+      </div>
+      <div class="tape-block">
+        <div class="tape-label"><span><b>Y</b> · <span id="tl-b">φ golden ratio</span></span><span class="cls" id="tc-b">algebraic</span></div>
+        <div class="tape" id="tape-b" aria-hidden="true"></div>
+      </div>
+      <div class="tape-block">
+        <div class="tape-label"><span><b>Z</b> · <span id="tl-c">π pi</span></span><span class="cls" id="tc-c">transcendental</span></div>
+        <div class="tape" id="tape-c" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Constant per axis</div>
+      <div class="axis-row"><span class="axis-tag">X axis</span>
+        <select class="select" data-axis="a" id="const-a"></select></div>
+      <div class="axis-row"><span class="axis-tag">Y axis</span>
+        <select class="select" data-axis="b" id="const-b"></select></div>
+      <div class="axis-row"><span class="axis-tag">Z axis</span>
+        <select class="select" data-axis="c" id="const-c"></select></div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Number base</div>
+      <div class="seg" id="base-seg" role="group" aria-label="Number base"></div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        Expansions are recomputed exactly in the chosen base with big-integer
+        arithmetic, then digits are normalized to a common mode range.
+      </p>
+    </div>
+
+    <div class="group">
+      <div class="group-label">Axis offsets</div>
+      <div class="seg" role="group" aria-label="Offset mode">
+        <button id="off-auto" aria-pressed="true">Prime stride</button>
+        <button id="off-manual" aria-pressed="false">Manual</button>
+      </div>
+      <div id="auto-off">
+        <div class="slider-row">
+          <div class="slider-head">
+            <span class="slider-name">Stride</span>
+            <span class="slider-val" id="val-stride">239 (52nd prime)</span>
+          </div>
+          <input type="range" id="in-stride" min="0" max="90" step="1" value="51" aria-label="Prime stride index">
+        </div>
+        <p style="font-size:11.5px; color:var(--muted); line-height:1.5; margin-top:6px">
+          Y and Z start one and two prime strides into their sequences, which
+          decorrelates the three axes.
+        </p>
+      </div>
+      <div id="manual-off" style="display:none">
+        <div class="axis-row" style="margin-bottom:8px"><span class="axis-tag">X start</span>
+          <input type="number" class="num-input" id="off-a" min="0" step="1" value="0"></div>
+        <div class="axis-row" style="margin-bottom:8px"><span class="axis-tag">Y start</span>
+          <input type="number" class="num-input" id="off-b" min="0" step="1" value="239"></div>
+        <div class="axis-row"><span class="axis-tag">Z start</span>
+          <input type="number" class="num-input" id="off-c" min="0" step="1" value="478"></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label">State</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Step</div><div class="stat-v" id="st-step">0</div></div>
+        <div class="stat"><div class="stat-k">Digits</div><div class="stat-v" id="st-digits">–</div></div>
+        <div class="stat"><div class="stat-k">m²+n²+p²</div><div class="stat-v" id="st-energy">–</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Overlays panel -->
+<section class="panel" id="panel-ov" aria-label="Field overlay controls">
+  <div class="panel-head">
+    <div class="panel-title">Overlays</div>
+    <div class="panel-sub">Additional force terms layered on the base field</div>
+  </div>
+  <div class="panel-body">
+    <button class="switch-row" id="sw-guides" aria-pressed="true">
+      <span>Show guide geometry
+        <span class="hint">Draw reference curves and surfaces for active overlays</span></span>
+      <span class="switch"></span>
+    </button>
+    <div class="group">
+      <div class="group-label">Crystallographic</div>
+      <button class="switch-row" data-ov="c3" aria-pressed="false">
+        <span>3-fold symmetry <span class="hint">Attract toward 120° axial planes</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="c6" aria-pressed="false">
+        <span>6-fold symmetry <span class="hint">Attract toward 60° axial planes</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="lattice" aria-pressed="false">
+        <span>Hexagonal lattice <span class="hint">Attract toward hexagonal lattice sites</span></span>
+        <span class="switch"></span>
+      </button>
+    </div>
+    <div class="group">
+      <div class="group-label">Harmonic</div>
+      <button class="switch-row" data-ov="spiral" aria-pressed="false">
+        <span>Slow rotation <span class="hint">Oscillating tangential drift (Pythagorean comma rate)</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="fifths" aria-pressed="false">
+        <span>3:2 modulation <span class="hint">Secondary field at a perfect-fifth frequency ratio</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="equal" aria-pressed="false">
+        <span>2^(m/12) gain <span class="hint">Scale overlay forces by an equal-temperament ratio of the X digit</span></span>
+        <span class="switch"></span>
+      </button>
+    </div>
+    <div class="group">
+      <div class="group-label">Topological</div>
+      <button class="switch-row" data-ov="trefoil" aria-pressed="false">
+        <span>Trefoil knot <span class="hint">Attract toward a (2,3) torus knot curve</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="torus" aria-pressed="false">
+        <span>Torus shell <span class="hint">Confine toward a toroidal surface</span></span>
+        <span class="switch"></span>
+      </button>
+      <button class="switch-row" data-ov="hopf" aria-pressed="false">
+        <span>Axial swirl <span class="hint">Circulation about the z axis, Hopf-inspired</span></span>
+        <span class="switch"></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- View panel -->
+<section class="panel" id="panel-view" aria-label="Camera controls">
+  <div class="panel-head">
+    <div class="panel-title">View</div>
+    <div class="panel-sub">Drag to orbit · scroll or pinch to zoom</div>
+  </div>
+  <div class="panel-body">
+    <button class="switch-row" id="sw-orbit" aria-pressed="false">
+      <span>Auto-orbit <span class="hint">Slowly circle the chamber</span></span>
+      <span class="switch"></span>
+    </button>
+    <div class="group">
+      <div class="group-label">Presets</div>
+      <div class="btn-row">
+        <button class="btn cam-preset" data-cam="0,1.35,0.02,32">Top</button>
+        <button class="btn cam-preset" data-cam="0,0,0,32">Side</button>
+        <button class="btn cam-preset" data-cam="0.78,0.6,0,30">Isometric</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn cam-preset" data-cam="0.4,0.25,0,50">Far</button>
+        <button class="btn cam-preset" data-cam="0.2,0.15,0,6">Core</button>
+        <button class="btn cam-preset" data-cam="0.9,0.5,0,17">Edge</button>
+      </div>
+      <button class="btn" id="btn-cam-reset">Reset view</button>
+    </div>
+    <div class="group">
+      <div class="group-label">Camera</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Azimuth</div><div class="stat-v" id="cam-az">0°</div></div>
+        <div class="stat"><div class="stat-k">Elevation</div><div class="stat-v" id="cam-el">17°</div></div>
+        <div class="stat"><div class="stat-k">Distance</div><div class="stat-v" id="cam-d">25.0</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About modal -->
+<div class="scrim" id="info-scrim" role="dialog" aria-modal="true" aria-label="About this simulation">
+  <div class="modal">
+    <h2>Resonance Chamber</h2>
+    <p>A GPU particle simulation of standing waves in a cubic cavity, with the
+      wave's mode numbers sequenced by the digits of mathematical constants.</p>
+
+    <h3>The field</h3>
+    <div class="eq">Ψ(r) = cos(m·k·x + φₘ) · cos(n·k·y + φₙ) · cos(p·k·z + φₚ),&nbsp;&nbsp;k = π/L</div>
+    <p>A separable three-dimensional standing wave in a box of half-width
+      <b>L</b>. The integers <b>m, n, p</b> set how many spatial oscillations fit
+      along each axis — the same mode numbers that label eigenstates of a
+      particle in a box or the nodal patterns of a Chladni plate, extended to a
+      volume. Each phase is tied to its digit, φ = (d/9)·π.</p>
+
+    <h3>The dynamics</h3>
+    <div class="eq">a = −A·∇Ψ,&nbsp;&nbsp;v ← (v + a·dt)·e^(−γ·dt),&nbsp;&nbsp;x ← x + v·dt</div>
+    <p>Each particle accelerates down the gradient of Ψ, so the swarm collects
+      along the field's nodal structure. The gradient is evaluated
+      <b>analytically</b> (not by finite differences), and integration is
+      semi-implicit Euler with exponential damping, independent of frame rate.
+      All of it runs on the GPU: positions and velocities live in floating-point
+      textures updated by fragment shaders, which is what makes a million
+      particles interactive.</p>
+
+    <h3>The sequence</h3>
+    <p>Every step, each axis reads the next digit of its assigned constant —
+      <b>π</b> and <b>e</b> (transcendental), <b>√2</b> and <b>φ</b> (algebraic
+      irrationals) — from 2,500 verified decimal digits. The digit stream acts
+      as a deterministic, statistically uniform mode sequencer: the structure
+      you see is physics; the schedule is arithmetic. Axis offsets (prime-number
+      strides by default) decorrelate the three streams. In bases other than
+      ten, the fractional parts are re-expanded exactly with big-integer
+      arithmetic and digits are rescaled to a common mode range.</p>
+
+    <h3>Keyboard</h3>
+    <div class="key-list">
+      <span><kbd>Space</kbd></span><span>Play / pause</span>
+      <span><kbd>R</kbd></span><span>Re-seed particles</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd></span><span>Toggle panels</span>
+      <span><kbd>I</kbd></span><span>This dialog</span>
+      <span><kbd>Esc</kbd></span><span>Close panel or dialog</span>
+    </div>
+
+    <button class="btn solid close" id="btn-info-close">Close</button>
+  </div>
+</div>
+
+<!-- Boot -->
+<div class="boot" id="boot">
+  <div class="boot-inner" id="boot-inner">
+    <div class="boot-ring"></div>
+    <div class="boot-text">Preparing field</div>
+  </div>
+</div>
+
+<script>
+'use strict';
+(function () {
+
+/* ================================================================
+   Digit data — fractional parts, 2,500 decimal digits each,
+   verified against mpmath (mp.dps = 2620).
+   ================================================================ */
+const DEC = {
+  pi:    '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632788659361533818279682303019520353018529689957736225994138912497217752834791315155748572424541506959508295331168617278558890750983817546374649393192550604009277016711390098488240128583616035637076601047101819429555961989467678374494482553797747268471040475346462080466842590694912933136770289891521047521620569660240580381501935112533824300355876402474964732639141992726042699227967823547816360093417216412199245863150302861829745557067498385054945885869269956909272107975093029553211653449872027559602364806654991198818347977535663698074265425278625518184175746728909777727938000816470600161452491921732172147723501414419735685481613611573525521334757418494684385233239073941433345477624168625189835694855620992192221842725502542568876717904946016534668049886272327917860857843838279679766814541009538837863609506800642251252051173929848960841284886269456042419652850222106611863067442786220391949450471237137869609563643719172874677646575739624138908658326459958133904780275900994657640789512694683983525957098258226205224894077267194782684826014769909026401363944374553050682034962524517493996514314298091906592509372216964615157098583874105978859597729754989301617539284681382686838689427741559918559252459539594310499725246808459872736446958486538367362226260991246080512438843904512441365497627807977156914359977001296160894416948685558484063534220722258284886481584560285060168427394522674676788952521385225499546667278239864565961163548862305774564980355936345681743241125',
+  e:     '7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354021234078498193343210681701210056278802351930332247450158539047304199577770935036604169973297250886876966403555707162268447162560798826517871341951246652010305921236677194325278675398558944896970964097545918569563802363701621120477427228364896134225164450781824423529486363721417402388934412479635743702637552944483379980161254922785092577825620926226483262779333865664816277251640191059004916449982893150566047258027786318641551956532442586982946959308019152987211725563475463964479101459040905862984967912874068705048958586717479854667757573205681288459205413340539220001137863009455606881667400169842055804033637953764520304024322566135278369511778838638744396625322498506549958862342818997077332761717839280349465014345588970719425863987727547109629537415211151368350627526023264847287039207643100595841166120545297030236472549296669381151373227536450988890313602057248176585118063036442812314965507047510254465011727211555194866850800368532281831521960037356252794495158284188294787610852639813955990067376482922443752871846245780361929819713991475644882626039033814418232625150974827987779964373089970388867782271383605772978824125611907176639465070633045279546618550966661856647097113444740160704626215680717481877844371436988218559670959102596862002353718588748569652200050311734392073211390803293634479727355955277349071783793421637012050054513263835440001863239914907054797780566978533580489669062951194324730995876552368128590413832411607226029983305353708761389396391779574540161372236187',
+  sqrt2: '4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478001569369176881852378684052287837629389214300655869568685964595155501644724509836896036887323114389415576651040883914292338113206052433629485317049915771756228549741438999188021762430965206564211827316726257539594717255934637238632261482742622208671155839599926521176252698917540988159348640083457085181472231814204070426509056532333398436457865796796519267292399875366617215982578860263363617827495994219403777753681426217738799194551397231274066898329989895386728822856378697749662519966583525776198939322845344735694794962952168891485492538904755828834526096524096542889394538646625744927556381964410316979833061852019379384940057156333720548068540575867999670121372239475821426306585132217408832382947287617393647467837431960001592188807347857617252211867490424977366929207311096369721608933708661156734585334833295254675851644710757848602463600834449114818587655554286455123314219926311332517970608436559704352856410087918500760361009159465670676883605571740076756905096136719401324935605240185999105062108163597726431380605467010293569971042425105781749531057255934984451126922780344913506637568747760283162829605532422426957534529028838768446429173282770888318087025339852338122749990812371892540726475367850304821591801886167108972869229201197599880703818543332536460211082299279293072871780799888099176741774108983060800326311816427988231171',
+  phi:   '6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374847540880753868917521266338622235369317931800607667263544333890865959395829056383226613199282902678806752087668925017116962070322210432162695486262963136144381497587012203408058879544547492461856953648644492410443207713449470495658467885098743394422125448770664780915884607499887124007652170575179788341662562494075890697040002812104276217711177780531531714101170466659914669798731761356006708748071013179523689427521948435305678300228785699782977834784587822891109762500302696156170025046433824377648610283831268330372429267526311653392473167111211588186385133162038400522216579128667529465490681131715993432359734949850904094762132229810172610705961164562990981629055520852479035240602017279974717534277759277862561943208275051312181562855122248093947123414517022373580577278616008688382952304592647878017889921990270776903895321968198615143780314997411069260886742962267575605231727775203536139362107673893764556060605921658946675955190040055590895022953094231248235521221241544400647034056573479766397239494994658457887303962309037503399385621024236902513868041457799569812244574717803417312645322041639723213404444948730231541767689375210306873788034417009395440962795589867872320951242689355730970450959568440175551988192180206405290551893494759260073485228210108819464454422231889131929468962200230144377026992300780308526118075451928877050210968424936271359251876077788466583615023891349333312231053392321362431926372891067050339928226526355620902979864247275977256550861548754357482647181414512700060238901620777322449943530889990950168032811219432048196438767586331479857191139781539780747615077221175082694586393204565209896985556781410696837288405874610337810544439094368358358138113116899385557697548414914453415091295407005019477548616307542264172939468036731980586183391832859913039607201445595044977921207612478564591616083705949878600697018940988640076443617093341727091914336501371576601148038143062623805143211734815100559013456101180079050638142152709308588092875703450507808145458819906336129827981411745339273120809289727922213298064294687824274874017450554067787570832373109759151177629784432847479081765180977872684161176325038612112914368343767023503711163307258698832587103363222381098090121101989917684149175123313401527338438372345009347860497929459915822012581045982309255287212413704361491020547185549611808764265765110605458814756044317847985845397312863016254487611485'
+};
+const CONSTANTS = {
+  pi:    { symbol: 'π',  name: 'pi',            cls: 'transcendental' },
+  e:     { symbol: 'e',  name: 'Euler’s number', cls: 'transcendental' },
+  sqrt2: { symbol: '√2', name: 'root two',      cls: 'algebraic' },
+  phi:   { symbol: 'φ',  name: 'golden ratio',  cls: 'algebraic' }
+};
+const BASES = [2, 3, 6, 8, 10, 12, 16];
+const PRIMES = [
+  2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,
+  73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,
+  151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,
+  233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,
+  317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,
+  421,431,433,439,443,449,457,461,463,467,479,487,491,499
+];
+
+/* Exact base conversion of the fractional part via BigInt.
+   Digits beyond 2500·log_b(10) carry no information, so we stop there. */
+const digitCache = new Map();
+function digitsFor(constKey, base) {
+  const cacheKey = constKey + ':' + base;
+  let hit = digitCache.get(cacheKey);
+  if (hit) return hit;
+  const dec = DEC[constKey];
+  let out;
+  if (base === 10) {
+    out = new Uint8Array(dec.length);
+    for (let i = 0; i < dec.length; i++) out[i] = dec.charCodeAt(i) - 48;
+  } else {
+    const count = Math.floor(dec.length * Math.LN10 / Math.log(base)) - 4;
+    const denom = 10n ** BigInt(dec.length);
+    const b = BigInt(base);
+    let frac = BigInt(dec);
+    out = new Uint8Array(count);
+    for (let i = 0; i < count; i++) {
+      frac *= b;
+      out[i] = Number(frac / denom);
+      frac %= denom;
+    }
+  }
+  digitCache.set(cacheKey, out);
+  return out;
+}
+
+/* ================================================================
+   Persistent settings
+   ================================================================ */
+const STORE_KEY = 'resonance-chamber-v1';
+const DEFAULTS = {
+  particles: 250000,
+  stepsPerSec: 2,
+  smooth: true,
+  fieldExp: 0,          // field strength = 10^fieldExp
+  damping: 2.5,
+  quality: 1.0,
+  colorMode: 0,
+  base: 10,
+  constants: { a: 'phi', b: 'phi', c: 'pi' },
+  offsetMode: 'auto',
+  strideIndex: 51,
+  offsets: { a: 0, b: 239, c: 478 },
+  overlays: { c3:false, c6:false, lattice:false, spiral:false, fifths:false,
+              equal:false, trefoil:false, torus:false, hopf:false },
+  guides: true,
+  autoOrbit: false
+};
+function loadState() {
+  const s = JSON.parse(JSON.stringify(DEFAULTS));
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      for (const k of Object.keys(DEFAULTS)) {
+        if (!(k in saved)) continue;
+        if (typeof DEFAULTS[k] === 'object' && DEFAULTS[k] !== null) {
+          for (const kk of Object.keys(DEFAULTS[k])) {
+            if (kk in saved[k]) s[k][kk] = saved[k][kk];
+          }
+        } else if (typeof saved[k] === typeof DEFAULTS[k]) {
+          s[k] = saved[k];
+        }
+      }
+    }
+  } catch (e) { /* private mode or blocked storage: run on defaults */ }
+  s.particles = Math.min(1e6, Math.max(1000, Math.round(s.particles)));
+  if (!BASES.includes(s.base)) s.base = 10;
+  for (const ax of ['a','b','c']) {
+    if (!(s.constants[ax] in CONSTANTS)) s.constants[ax] = DEFAULTS.constants[ax];
+  }
+  return s;
+}
+let state = loadState();
+let saveTimer = 0;
+function saveState() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }, 250);
+}
+
+/* ================================================================
+   Simulation constants
+   ================================================================ */
+const EXTENT = 15;                  // box half-width L
+const FORCE_SCALE = 150;            // base field acceleration scale
+const RESTITUTION = 0.5;
+const MAX_TEX = 1024;               // 1024² = 1,048,576 particles
+
+/* ================================================================
+   Three.js setup
+   ================================================================ */
+const stage = document.getElementById('stage');
+let renderer, scene, camera;
+let floatType = null;
+
+function fatal(msg) {
+  const boot = document.getElementById('boot');
+  boot.classList.remove('done');
+  document.getElementById('boot-inner').innerHTML =
+    '<div class="fatal"><h2>Cannot start the simulation</h2><p>' + msg + '</p></div>';
+}
+
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
+} catch (e) {
+  fatal('WebGL is unavailable in this browser. The particle engine needs WebGL with floating-point render targets.');
+  return;
+}
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio * state.quality, 2.5));
+renderer.setClearColor(0x05080d, 1);
+renderer.autoClear = true;
+stage.appendChild(renderer.domElement);
+
+const gl = renderer.getContext();
+if (renderer.capabilities.isWebGL2) {
+  if (gl.getExtension('EXT_color_buffer_float')) floatType = THREE.FloatType;
+  else if (gl.getExtension('EXT_color_buffer_half_float')) floatType = THREE.HalfFloatType;
+} else {
+  if (gl.getExtension('OES_texture_float')) floatType = THREE.FloatType;
+  else if (gl.getExtension('OES_texture_half_float')) floatType = THREE.HalfFloatType;
+}
+if (floatType === null) {
+  fatal('This browser cannot render to floating-point textures, which the GPU physics engine requires.');
+  return;
+}
+
+scene = new THREE.Scene();
+camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
+
+/* Boundary box */
+{
+  const g = new THREE.EdgesGeometry(new THREE.BoxGeometry(EXTENT*2, EXTENT*2, EXTENT*2));
+  const m = new THREE.LineBasicMaterial({ color: 0x1e2a3c, transparent: true, opacity: 0.8 });
+  scene.add(new THREE.LineSegments(g, m));
+}
+
+/* ================================================================
+   GPGPU: position + velocity in ping-pong float textures
+   ================================================================ */
+const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const quadScene = new THREE.Scene();
+const quadGeo = new THREE.PlaneBufferGeometry(2, 2);
+const quadMesh = new THREE.Mesh(quadGeo, null);
+quadScene.add(quadMesh);
+
+function makeTarget(size) {
+  return new THREE.WebGLRenderTarget(size, size, {
+    minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter,
+    format: THREE.RGBAFormat, type: floatType,
+    depthBuffer: false, stencilBuffer: false
+  });
+}
+
+const copyMat = new THREE.ShaderMaterial({
+  uniforms: { src: { value: null } },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+  fragmentShader: 'uniform sampler2D src; varying vec2 vUv; void main(){ gl_FragColor = texture2D(src, vUv); }'
+});
+
+const SIM_COMMON = `
+  precision highp float;
+  varying vec2 vUv;
+  uniform sampler2D posTex;
+  uniform sampler2D velTex;
+  uniform float dt;
+`;
+
+const velMat = new THREE.ShaderMaterial({
+  uniforms: {
+    posTex: { value: null }, velTex: { value: null },
+    dt: { value: 1/60 },
+    damping: { value: state.damping },
+    amp: { value: 1 },
+    modesA: { value: new THREE.Vector3() },  // previous step
+    modesB: { value: new THREE.Vector3() },  // current step
+    phasesA: { value: new THREE.Vector3() },
+    phasesB: { value: new THREE.Vector3() },
+    blend: { value: 1 },
+    spiralPhase: { value: 0 },
+    equalGain: { value: 1 },
+    ovCrystal: { value: new THREE.Vector3() },   // c3, c6, lattice
+    ovHarmonic: { value: new THREE.Vector2() },  // spiral, fifths
+    ovTopo: { value: new THREE.Vector3() }       // trefoil, torus, hopf
+  },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+  fragmentShader: SIM_COMMON + `
+    uniform float damping, amp, blend, spiralPhase, equalGain;
+    uniform vec3 modesA, modesB, phasesA, phasesB;
+    uniform vec3 ovCrystal, ovTopo;
+    uniform vec2 ovHarmonic;
+    const float EXTENT = ${EXTENT.toFixed(1)};
+    const float PI = 3.14159265358979;
+    const float K = PI / EXTENT;
+
+    // Analytic gradient of Psi(r) = cos(m k x + a) cos(n k y + b) cos(p k z + c)
+    vec3 gradPsi(vec3 p, vec3 m, vec3 ph) {
+      vec3 arg = m * K * p + ph;
+      vec3 c = cos(arg);
+      vec3 s = sin(arg);
+      return -K * vec3(m.x * s.x * c.y * c.z,
+                       m.y * c.x * s.y * c.z,
+                       m.z * c.x * c.y * s.z);
+    }
+
+    vec3 snapForce(vec3 p, float fold, float gain) {
+      float ang = atan(p.y, p.x);
+      float r = length(p.xy);
+      float sector = 2.0 * PI / fold;
+      float snapped = floor(ang / sector + 0.5) * sector;
+      return vec3(r * cos(snapped) - p.x, r * sin(snapped) - p.y, 0.0) * gain;
+    }
+
+    void main() {
+      vec3 p = texture2D(posTex, vUv).xyz;
+      vec3 v = texture2D(velTex, vUv).xyz;
+
+      // Base standing-wave force, blended across the digit transition
+      vec3 g = mix(gradPsi(p, modesA, phasesA), gradPsi(p, modesB, phasesB), blend);
+      vec3 F = -amp * ${FORCE_SCALE.toFixed(1)} * g;
+
+      // ---- overlay forces ----
+      vec3 O = vec3(0.0);
+      if (ovCrystal.x > 0.5) O += snapForce(p, 3.0, 3.0);
+      if (ovCrystal.y > 0.5) O += snapForce(p, 6.0, 1.5);
+      if (ovCrystal.z > 0.5) {
+        float a = EXTENT / 3.0;
+        vec2 site = vec2(a * floor(p.x / a + 0.5), a * 0.866 * floor(p.y / (a * 0.866) + 0.5));
+        O.xy += (site - p.xy) * 0.8;
+      }
+      if (ovHarmonic.x > 0.5) {
+        float w = 3.0 * sin(spiralPhase);
+        O.xy += vec2(p.y, -p.x) * w * 0.2;
+      }
+      if (ovHarmonic.y > 0.5) {
+        O += sin(p * K * 1.5) * 4.0;
+      }
+      if (ovTopo.x > 0.5) {
+        float t = atan(p.y, p.x);
+        float sc = EXTENT * 0.5;
+        vec3 knot = sc * vec3(sin(t) + 2.0 * sin(2.0 * t),
+                              cos(t) - 2.0 * cos(2.0 * t),
+                              -sin(3.0 * t));
+        O += (knot - p) * 1.2;
+      }
+      if (ovTopo.y > 0.5) {
+        float R = EXTENT * 0.8, r = EXTENT * 0.3;
+        float th = atan(p.y, p.x);
+        float dc = length(p.xy);
+        float ph2 = atan(p.z, dc - R);
+        vec3 tp = vec3((R + r * cos(ph2)) * cos(th), (R + r * cos(ph2)) * sin(th), r * sin(ph2));
+        if (distance(p, tp) > r * 0.5) O += (tp - p) * 1.6;
+      }
+      if (ovTopo.z > 0.5) {
+        float hp = atan(p.y, p.x);
+        O.xy += vec2(-sin(hp), cos(hp)) * 2.5;
+      }
+      F += O * equalGain;
+
+      // Semi-implicit Euler with exponential damping (frame-rate independent)
+      v = (v + F * dt) * exp(-damping * dt);
+
+      // Predict wall crossings and reflect velocity
+      vec3 pn = p + v * dt;
+      if (abs(pn.x) > EXTENT) v.x = -v.x * ${RESTITUTION.toFixed(2)};
+      if (abs(pn.y) > EXTENT) v.y = -v.y * ${RESTITUTION.toFixed(2)};
+      if (abs(pn.z) > EXTENT) v.z = -v.z * ${RESTITUTION.toFixed(2)};
+
+      gl_FragColor = vec4(v, 1.0);
+    }
+  `
+});
+
+const posMat = new THREE.ShaderMaterial({
+  uniforms: {
+    posTex: { value: null }, velTex: { value: null },
+    dt: { value: 1/60 }
+  },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+  fragmentShader: SIM_COMMON + `
+    const float EXTENT = ${EXTENT.toFixed(1)};
+    void main() {
+      vec3 p = texture2D(posTex, vUv).xyz;
+      vec3 v = texture2D(velTex, vUv).xyz;
+      p = clamp(p + v * dt, vec3(-EXTENT), vec3(EXTENT));
+      gl_FragColor = vec4(p, 1.0);
+    }
+  `
+});
+
+/* ---------------- Particle render material ---------------- */
+const pointsMat = new THREE.ShaderMaterial({
+  uniforms: {
+    posTex: { value: null },
+    velTex: { value: null },
+    pointScale: { value: 1 },   // world-space point diameter
+    projScale: { value: 1 },    // drawingBufferHeight / (2 tan(fov/2))
+    opacity: { value: 0.4 },
+    colorMode: { value: state.colorMode },
+    modes: { value: new THREE.Vector3() }
+  },
+  vertexShader: `
+    uniform sampler2D posTex;
+    uniform sampler2D velTex;
+    uniform float pointScale;
+    uniform float projScale;
+    uniform float colorMode;
+    uniform vec3 modes;
+    attribute vec2 ref;
+    varying vec3 vColor;
+    const float EXTENT = ${EXTENT.toFixed(1)};
+    const float PI = 3.14159265358979;
+    void main() {
+      vec3 p = texture2D(posTex, ref).xyz;
+      vec3 v = texture2D(velTex, ref).xyz;
+
+      if (colorMode < 0.5) {
+        // Per-axis field influence
+        vec3 infl = abs(cos(modes * p * 3.0 / EXTENT));
+        vColor = vec3(0.30, 0.20, 0.40) + infl * vec3(0.70, 0.55, 0.62);
+      } else if (colorMode < 1.5) {
+        // Speed: deep blue -> teal -> amber -> white
+        float s = clamp(length(v) * 0.14, 0.0, 1.0);
+        vColor = mix(vec3(0.12, 0.22, 0.55), vec3(0.25, 0.83, 0.70), smoothstep(0.0, 0.45, s));
+        vColor = mix(vColor, vec3(0.95, 0.72, 0.32), smoothstep(0.45, 0.8, s));
+        vColor = mix(vColor, vec3(1.0), smoothstep(0.8, 1.0, s));
+      } else if (colorMode < 2.5) {
+        // Radial
+        float r = length(p.xy) / EXTENT;
+        float th = atan(p.y, p.x);
+        vColor = vec3(0.30 + r * 0.7,
+                      0.30 + abs(sin(th * 3.0)) * 0.7,
+                      0.30 + abs(p.z) / EXTENT * 0.7);
+      } else {
+        // Interference phase
+        float hp = (p.x + p.y + p.z) * 0.1;
+        vColor = 0.5 + 0.5 * vec3(sin(hp), sin(hp + 2.094), sin(hp + 4.189));
+      }
+
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_PointSize = clamp(pointScale * projScale / -mv.z, 1.0, 7.0);
+      gl_Position = projectionMatrix * mv;
+    }
+  `,
+  fragmentShader: `
+    precision highp float;
+    uniform float opacity;
+    varying vec3 vColor;
+    void main() {
+      float d = length(gl_PointCoord - 0.5) * 2.0;
+      float a = smoothstep(1.0, 0.15, d) * opacity;
+      gl_FragColor = vec4(vColor * a, a);
+    }
+  `,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  depthTest: false
+});
+
+/* ---------------- Particle system lifecycle ---------------- */
+let texSize = 0, posA, posB, velA, velB, points;
+
+function seedTexture(size) {
+  const data = new Float32Array(size * size * 4);
+  const n = size * size;
+  const grid = Math.ceil(Math.cbrt(n));
+  const spacing = (EXTENT * 1.8) / grid;
+  for (let i = 0; i < n; i++) {
+    const xi = i % grid;
+    const yi = Math.floor(i / grid) % grid;
+    const zi = Math.floor(i / (grid * grid));
+    const j = i * 4;
+    data[j]     = (xi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+    data[j + 1] = (yi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+    data[j + 2] = (zi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+    data[j + 3] = 1;
+  }
+  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function blit(srcTex, target) {
+  quadMesh.material = copyMat;
+  copyMat.uniforms.src.value = srcTex;
+  renderer.setRenderTarget(target);
+  renderer.render(quadScene, quadCam);
+  renderer.setRenderTarget(null);
+}
+
+function reseed() {
+  const seed = seedTexture(texSize);
+  blit(seed, posA); blit(seed, posB);
+  seed.dispose();
+  const zero = new THREE.DataTexture(new Float32Array(texSize * texSize * 4),
+    texSize, texSize, THREE.RGBAFormat, THREE.FloatType);
+  zero.needsUpdate = true;
+  blit(zero, velA); blit(zero, velB);
+  zero.dispose();
+}
+
+function buildParticles(count) {
+  const size = Math.min(MAX_TEX, Math.max(2, Math.ceil(Math.sqrt(count))));
+  const changed = size !== texSize;
+  texSize = size;
+  if (changed) {
+    for (const t of [posA, posB, velA, velB]) if (t) t.dispose();
+    posA = makeTarget(size); posB = makeTarget(size);
+    velA = makeTarget(size); velB = makeTarget(size);
+  }
+  reseed();
+
+  if (points) {
+    scene.remove(points);
+    points.geometry.dispose();
+  }
+  const geo = new THREE.BufferGeometry();
+  const refs = new Float32Array(count * 2);
+  for (let i = 0; i < count; i++) {
+    refs[i * 2]     = ((i % size) + 0.5) / size;
+    refs[i * 2 + 1] = (Math.floor(i / size) + 0.5) / size;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
+  geo.setAttribute('ref', new THREE.BufferAttribute(refs, 2));
+  points = new THREE.Points(geo, pointsMat);
+  points.frustumCulled = false;
+  scene.add(points);
+
+  updatePointScale();
+  document.getElementById('ro-count').textContent = fmtCount(count);
+}
+
+function updatePointScale() {
+  // World-space point diameter, thinned as counts rise so additive
+  // blending keeps a stable total exposure.
+  pointsMat.uniforms.pointScale.value =
+    Math.min(0.6, Math.max(0.04, 0.085 * Math.sqrt(3e5 / state.particles)));
+  pointsMat.uniforms.projScale.value =
+    renderer.domElement.height / (2 * Math.tan(camera.fov * Math.PI / 360));
+  pointsMat.uniforms.opacity.value =
+    Math.min(0.8, Math.max(0.3, 0.55 * Math.pow(3e5 / state.particles, 0.25)));
+}
+
+function simStep(dt) {
+  // velocity pass: read posA + velA, write velB
+  quadMesh.material = velMat;
+  velMat.uniforms.posTex.value = posA.texture;
+  velMat.uniforms.velTex.value = velA.texture;
+  velMat.uniforms.dt.value = dt;
+  renderer.setRenderTarget(velB);
+  renderer.render(quadScene, quadCam);
+
+  // position pass: read posA + velB, write posB
+  quadMesh.material = posMat;
+  posMat.uniforms.posTex.value = posA.texture;
+  posMat.uniforms.velTex.value = velB.texture;
+  posMat.uniforms.dt.value = dt;
+  renderer.setRenderTarget(posB);
+  renderer.render(quadScene, quadCam);
+  renderer.setRenderTarget(null);
+
+  [posA, posB] = [posB, posA];
+  [velA, velB] = [velB, velA];
+
+  pointsMat.uniforms.posTex.value = posA.texture;
+  pointsMat.uniforms.velTex.value = velA.texture;
+}
+
+/* ================================================================
+   Guide geometry
+   ================================================================ */
+const guideGroup = new THREE.Group();
+scene.add(guideGroup);
+
+function rebuildGuides() {
+  while (guideGroup.children.length) {
+    const c = guideGroup.children.pop();
+    if (c.geometry) c.geometry.dispose();
+    if (c.material) c.material.dispose();
+  }
+  guideGroup.visible = state.guides;
+  if (!state.guides) return;
+  const ov = state.overlays;
+
+  if (ov.c3 || ov.c6) {
+    const fold = ov.c6 ? 6 : 3;
+    for (let i = 0; i < fold; i++) {
+      const ang = i * Math.PI / (fold / 2);
+      const g = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(Math.cos(ang) * EXTENT, Math.sin(ang) * EXTENT, 0)
+      ]);
+      const m = new THREE.LineBasicMaterial({ color: 0x3fd3b4, transparent: true, opacity: 0.35 });
+      guideGroup.add(new THREE.Line(g, m));
+    }
+  }
+  if (ov.lattice) {
+    const a = EXTENT / 3;
+    const g = new THREE.SphereBufferGeometry(0.18, 8, 8);
+    const m = new THREE.MeshBasicMaterial({ color: 0xdfae4f, transparent: true, opacity: 0.5 });
+    for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) {
+      const x = a * (i + 0.5 * j), y = a * 0.866 * j;
+      if (Math.hypot(x, y) < EXTENT) {
+        const s = new THREE.Mesh(g, m);
+        s.position.set(x, y, 0);
+        guideGroup.add(s);
+      }
+    }
+  }
+  if (ov.trefoil) {
+    class Trefoil extends THREE.Curve {
+      getPoint(t) {
+        const p = t * Math.PI * 2, sc = EXTENT * 0.5;
+        return new THREE.Vector3(
+          sc * (Math.sin(p) + 2 * Math.sin(2 * p)),
+          sc * (Math.cos(p) - 2 * Math.cos(2 * p)),
+          sc * -Math.sin(3 * p));
+      }
+    }
+    const g = new THREE.TubeBufferGeometry(new Trefoil(), 128, 0.12, 6, true);
+    const m = new THREE.MeshBasicMaterial({ color: 0xdfae4f, transparent: true, opacity: 0.55 });
+    guideGroup.add(new THREE.Mesh(g, m));
+  }
+  if (ov.torus) {
+    const g = new THREE.TorusBufferGeometry(EXTENT * 0.8, EXTENT * 0.3, 12, 48);
+    const m = new THREE.MeshBasicMaterial({ color: 0x3fd3b4, transparent: true, opacity: 0.12, wireframe: true });
+    guideGroup.add(new THREE.Mesh(g, m));
+  }
+  if (ov.hopf) {
+    const g = new THREE.SphereBufferGeometry(EXTENT * 0.9, 24, 24);
+    const m = new THREE.MeshBasicMaterial({ color: 0x7e8ca0, transparent: true, opacity: 0.06, wireframe: true });
+    guideGroup.add(new THREE.Mesh(g, m));
+  }
+}
+
+/* ================================================================
+   Digit sequencing
+   ================================================================ */
+let step = 0;
+let stepAccum = 0;
+const AXES = ['a', 'b', 'c'];
+
+function offsetFor(axis) {
+  if (state.offsetMode === 'auto') {
+    const stride = PRIMES[state.strideIndex];
+    return axis === 'a' ? 0 : axis === 'b' ? stride : stride * 2;
+  }
+  return state.offsets[axis] | 0;
+}
+
+function digitAt(axis, s) {
+  const seq = digitsFor(state.constants[axis], state.base);
+  const idx = ((s + offsetFor(axis)) % seq.length + seq.length) % seq.length;
+  return seq[idx];
+}
+
+function modeOf(digit) { return digit * 9 / (state.base - 1); }
+
+function modesAt(s) {
+  return AXES.map(ax => modeOf(digitAt(ax, s)));
+}
+
+function pushModes() {
+  const prev = modesAt(step - 1);
+  const cur = modesAt(step);
+  velMat.uniforms.modesA.value.fromArray(prev);
+  velMat.uniforms.modesB.value.fromArray(cur);
+  velMat.uniforms.phasesA.value.fromArray(prev.map(m => m / 9 * Math.PI));
+  velMat.uniforms.phasesB.value.fromArray(cur.map(m => m / 9 * Math.PI));
+  pointsMat.uniforms.modes.value.fromArray(cur);
+  velMat.uniforms.equalGain.value = state.overlays.equal
+    ? Math.pow(2, Math.round(cur[0]) / 12) : 1;
+}
+
+/* ================================================================
+   HUD + tapes
+   ================================================================ */
+const $ = id => document.getElementById(id);
+const fmtCount = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M'
+  : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(n);
+const digitChar = d => d.toString(36).toUpperCase();
+
+function updateHud() {
+  const ds = AXES.map(ax => digitAt(ax, step));
+  const modes = ds.map(modeOf);
+  const e = modes[0] ** 2 + modes[1] ** 2 + modes[2] ** 2;
+  $('ro-step').textContent = step.toLocaleString();
+  $('ro-modes').textContent = ds.map(digitChar).join(' · ');
+  $('ro-energy').textContent = state.base === 10 ? Math.round(e) : e.toFixed(1);
+  $('st-step').textContent = step.toLocaleString();
+  $('st-digits').textContent = ds.map(digitChar).join(' ');
+  $('st-energy').textContent = state.base === 10 ? Math.round(e) : e.toFixed(1);
+}
+
+function updateTapes() {
+  const HALF = 11;
+  for (const ax of AXES) {
+    const el = $('tape-' + ax);
+    let html = '';
+    for (let i = -HALF; i <= HALF; i++) {
+      const d = digitChar(digitAt(ax, step + i));
+      html += i === 0 ? '<span class="cur">' + d + '</span>' : d;
+    }
+    el.innerHTML = html;
+  }
+}
+
+function updateTapeLabels() {
+  for (const ax of AXES) {
+    const c = CONSTANTS[state.constants[ax]];
+    $('tl-' + ax).textContent = c.symbol + ' ' + c.name;
+    $('tc-' + ax).textContent = c.cls;
+  }
+}
+
+/* ================================================================
+   Camera
+   ================================================================ */
+const cam = { az: 0, el: 0.3, dist: 25 };
+let camAnim = null;
+
+function applyCamera() {
+  const ce = Math.cos(cam.el);
+  camera.position.set(
+    Math.cos(cam.az) * ce * cam.dist,
+    Math.sin(cam.el) * cam.dist,
+    Math.sin(cam.az) * ce * cam.dist);
+  camera.lookAt(0, 0, 0);
+  $('cam-az').textContent = Math.round(cam.az * 180 / Math.PI) % 360 + '°';
+  $('cam-el').textContent = Math.round(cam.el * 180 / Math.PI) + '°';
+  $('cam-d').textContent = cam.dist.toFixed(1);
+}
+
+function flyTo(az, el, dist, ms) {
+  const from = { az: cam.az, el: cam.el, dist: cam.dist };
+  const t0 = performance.now();
+  camAnim = now => {
+    const t = Math.min(1, (now - t0) / ms);
+    const k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    cam.az = from.az + (az - from.az) * k;
+    cam.el = from.el + (el - from.el) * k;
+    cam.dist = from.dist + (dist - from.dist) * k;
+    applyCamera();
+    if (t >= 1) camAnim = null;
+  };
+}
+
+/* Pointer orbit with inertia */
+{
+  const el = renderer.domElement;
+  let dragging = false, lastX = 0, lastY = 0, moved = 0;
+  let velAz = 0, velEl = 0;
+  let pinchDist = 0;
+
+  el.addEventListener('pointerdown', e => {
+    if (e.isPrimary === false) return;
+    dragging = true; moved = 0;
+    lastX = e.clientX; lastY = e.clientY;
+    velAz = velEl = 0; camAnim = null;
+    el.setPointerCapture(e.pointerId);
+  });
+  el.addEventListener('pointermove', e => {
+    if (!dragging || e.isPrimary === false) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    moved += Math.abs(dx) + Math.abs(dy);
+    lastX = e.clientX; lastY = e.clientY;
+    cam.az += dx * 0.005;
+    cam.el = Math.max(-1.35, Math.min(1.35, cam.el + dy * 0.005));
+    velAz = dx * 0.005; velEl = dy * 0.005;
+    applyCamera();
+  });
+  el.addEventListener('pointerup', e => {
+    dragging = false;
+    if (moved < 6) closePanels();      // tap on empty canvas closes panels
+  });
+  el.addEventListener('pointercancel', () => { dragging = false; });
+
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    cam.dist = Math.max(4, Math.min(120, cam.dist * (1 + e.deltaY * 0.001)));
+    applyCamera();
+  }, { passive: false });
+
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      pinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+    }
+  }, { passive: true });
+  el.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && pinchDist > 0) {
+      const d = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+      cam.dist = Math.max(4, Math.min(120, cam.dist * pinchDist / d));
+      pinchDist = d;
+      applyCamera();
+    }
+  }, { passive: true });
+
+  // Inertia + auto-orbit, driven from the main loop
+  window.__camTick = dt => {
+    if (camAnim) { camAnim(performance.now()); return; }
+    if (dragging) return;
+    if (state.autoOrbit) { cam.az += dt * 0.12; applyCamera(); return; }
+    if (Math.abs(velAz) > 1e-4 || Math.abs(velEl) > 1e-4) {
+      cam.az += velAz; cam.el = Math.max(-1.35, Math.min(1.35, cam.el + velEl));
+      velAz *= 0.94; velEl *= 0.94;
+      applyCamera();
+    }
+  };
+}
+
+/* ================================================================
+   UI wiring
+   ================================================================ */
+let activePanel = null;
+function closePanels() {
+  if (!activePanel) return;
+  $(activePanel).classList.remove('open');
+  document.querySelector(`.rail-tab[data-panel="${activePanel}"]`).setAttribute('aria-expanded', 'false');
+  activePanel = null;
+}
+function togglePanel(id) {
+  const wasOpen = activePanel === id;
+  closePanels();
+  if (!wasOpen) {
+    $(id).classList.add('open');
+    document.querySelector(`.rail-tab[data-panel="${id}"]`).setAttribute('aria-expanded', 'true');
+    activePanel = id;
+  }
+}
+document.querySelectorAll('.rail-tab').forEach(tab =>
+  tab.addEventListener('click', () => togglePanel(tab.dataset.panel)));
+
+/* Play / pause */
+let playing = true;
+function setPlaying(on) {
+  playing = on;
+  $('ic-pause').style.display = on ? '' : 'none';
+  $('ic-play').style.display = on ? 'none' : '';
+  $('btn-play').setAttribute('aria-label', on ? 'Pause simulation' : 'Play simulation');
+}
+$('btn-play').addEventListener('click', () => setPlaying(!playing));
+
+/* Info modal */
+const scrim = $('info-scrim');
+function setInfo(open) { scrim.classList.toggle('open', open); }
+$('btn-info').addEventListener('click', () => setInfo(true));
+$('btn-info-close').addEventListener('click', () => setInfo(false));
+scrim.addEventListener('click', e => { if (e.target === scrim) setInfo(false); });
+
+/* Generic switch helper */
+function wireSwitch(el, get, set) {
+  el.setAttribute('aria-pressed', get() ? 'true' : 'false');
+  el.addEventListener('click', () => {
+    set(!get());
+    el.setAttribute('aria-pressed', get() ? 'true' : 'false');
+    saveState();
+  });
+}
+
+/* Simulation panel */
+$('btn-reseed').addEventListener('click', reseed);
+$('btn-defaults').addEventListener('click', () => {
+  try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+  state = loadState();
+  syncAllControls();
+  applyAllState();
+  reseed();
+});
+
+const rateFromSlider = v => Math.pow(2, v);           // 0.25 .. 32 steps/s
+const sliderFromRate = r => Math.log2(r);
+$('in-rate').addEventListener('input', e => {
+  state.stepsPerSec = rateFromSlider(parseFloat(e.target.value));
+  $('val-rate').textContent = state.stepsPerSec.toFixed(state.stepsPerSec < 1 ? 2 : 1) + ' steps/s';
+  saveState();
+});
+wireSwitch($('sw-smooth'), () => state.smooth, v => { state.smooth = v; });
+
+$('in-field').addEventListener('input', e => {
+  state.fieldExp = parseFloat(e.target.value);
+  const amp = Math.pow(10, state.fieldExp);
+  velMat.uniforms.amp.value = amp;
+  $('val-field').textContent = amp >= 10 ? amp.toFixed(0) + '×' : amp.toFixed(2) + '×';
+  saveState();
+});
+$('in-damp').addEventListener('input', e => {
+  state.damping = parseFloat(e.target.value);
+  velMat.uniforms.damping.value = state.damping;
+  $('val-damp').textContent = state.damping.toFixed(1) + ' /s';
+  saveState();
+});
+
+let rebuildTimer = 0;
+function setParticleCount(n, immediate) {
+  n = Math.max(1000, Math.min(1e6, Math.round(n)));
+  state.particles = n;
+  $('val-count').textContent = n.toLocaleString();
+  clearTimeout(rebuildTimer);
+  rebuildTimer = setTimeout(() => buildParticles(n), immediate ? 0 : 350);
+  saveState();
+}
+$('in-count').addEventListener('input', e => {
+  const n = Math.round(Math.pow(10, parseFloat(e.target.value)) / 1000) * 1000;
+  $('in-count-num').value = n;
+  setParticleCount(n);
+});
+$('in-count-num').addEventListener('change', e => {
+  const n = parseInt(e.target.value, 10);
+  if (!isNaN(n)) {
+    const c = Math.max(1000, Math.min(1e6, n));
+    e.target.value = c;
+    $('in-count').value = Math.log10(c);
+    setParticleCount(c);
+  }
+});
+
+$('in-quality').addEventListener('input', e => {
+  state.quality = parseFloat(e.target.value);
+  $('val-quality').textContent = state.quality.toFixed(1) + '×';
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio * state.quality, 2.5));
+  updatePointScale();
+  saveState();
+});
+$('in-color').addEventListener('change', e => {
+  state.colorMode = parseInt(e.target.value, 10);
+  pointsMat.uniforms.colorMode.value = state.colorMode;
+  saveState();
+});
+
+/* Sequence panel */
+for (const ax of AXES) {
+  const sel = $('const-' + ax);
+  sel.innerHTML = Object.entries(CONSTANTS).map(([k, c]) =>
+    `<option value="${k}">${c.symbol} — ${c.name} (${c.cls})</option>`).join('');
+  sel.addEventListener('change', e => {
+    state.constants[ax] = e.target.value;
+    updateTapeLabels(); updateTapes(); updateHud(); pushModes();
+    saveState();
+  });
+}
+
+const baseSeg = $('base-seg');
+baseSeg.innerHTML = BASES.map(b =>
+  `<button data-base="${b}" aria-pressed="false">${b === 2 ? 'binary' : b === 16 ? 'hex' : 'base ' + b}</button>`).join('');
+baseSeg.querySelectorAll('button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.base = parseInt(btn.dataset.base, 10);
+    syncBaseSeg();
+    updateTapes(); updateHud(); pushModes();
+    saveState();
+  }));
+function syncBaseSeg() {
+  baseSeg.querySelectorAll('button').forEach(b =>
+    b.setAttribute('aria-pressed', String(parseInt(b.dataset.base, 10) === state.base)));
+}
+
+function syncOffsetMode() {
+  $('off-auto').setAttribute('aria-pressed', String(state.offsetMode === 'auto'));
+  $('off-manual').setAttribute('aria-pressed', String(state.offsetMode === 'manual'));
+  $('auto-off').style.display = state.offsetMode === 'auto' ? '' : 'none';
+  $('manual-off').style.display = state.offsetMode === 'manual' ? '' : 'none';
+}
+$('off-auto').addEventListener('click', () => {
+  state.offsetMode = 'auto'; syncOffsetMode();
+  updateTapes(); updateHud(); pushModes(); saveState();
+});
+$('off-manual').addEventListener('click', () => {
+  state.offsetMode = 'manual'; syncOffsetMode();
+  updateTapes(); updateHud(); pushModes(); saveState();
+});
+$('in-stride').addEventListener('input', e => {
+  state.strideIndex = parseInt(e.target.value, 10);
+  const p = PRIMES[state.strideIndex];
+  $('val-stride').textContent = `${p} (${ordinal(state.strideIndex + 1)} prime)`;
+  updateTapes(); updateHud(); pushModes(); saveState();
+});
+for (const ax of AXES) {
+  $('off-' + ax).addEventListener('input', e => {
+    state.offsets[ax] = Math.max(0, parseInt(e.target.value, 10) || 0);
+    updateTapes(); updateHud(); pushModes(); saveState();
+  });
+}
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+/* Overlays panel */
+wireSwitch($('sw-guides'), () => state.guides, v => { state.guides = v; rebuildGuides(); });
+document.querySelectorAll('[data-ov]').forEach(el => {
+  const key = el.dataset.ov;
+  wireSwitch(el, () => state.overlays[key], v => {
+    state.overlays[key] = v;
+    pushOverlayUniforms(); rebuildGuides(); pushModes();
+  });
+});
+function pushOverlayUniforms() {
+  const o = state.overlays;
+  velMat.uniforms.ovCrystal.value.set(+o.c3, +o.c6, +o.lattice);
+  velMat.uniforms.ovHarmonic.value.set(+o.spiral, +o.fifths);
+  velMat.uniforms.ovTopo.value.set(+o.trefoil, +o.torus, +o.hopf);
+}
+
+/* View panel */
+wireSwitch($('sw-orbit'), () => state.autoOrbit, v => { state.autoOrbit = v; });
+document.querySelectorAll('.cam-preset').forEach(btn =>
+  btn.addEventListener('click', () => {
+    const [az, el, , d] = btn.dataset.cam.split(',').map(Number);
+    flyTo(az, Math.max(-1.35, Math.min(1.35, el)), d, 900);
+  }));
+$('btn-cam-reset').addEventListener('click', () => flyTo(0, 0.3, 25, 700));
+
+/* Keyboard */
+window.addEventListener('keydown', e => {
+  if (e.target.matches('input, select, textarea')) return;
+  switch (e.key) {
+    case ' ': e.preventDefault(); setPlaying(!playing); break;
+    case 'r': case 'R': reseed(); break;
+    case 'i': case 'I': setInfo(!scrim.classList.contains('open')); break;
+    case '1': togglePanel('panel-sim'); break;
+    case '2': togglePanel('panel-seq'); break;
+    case '3': togglePanel('panel-ov'); break;
+    case '4': togglePanel('panel-view'); break;
+    case 'Escape':
+      if (scrim.classList.contains('open')) setInfo(false);
+      else closePanels();
+      break;
+    case 'ArrowLeft':  cam.az -= 0.12; applyCamera(); break;
+    case 'ArrowRight': cam.az += 0.12; applyCamera(); break;
+    case 'ArrowUp':    cam.dist = Math.max(4, cam.dist * 0.94); applyCamera(); break;
+    case 'ArrowDown':  cam.dist = Math.min(120, cam.dist * 1.06); applyCamera(); break;
+  }
+});
+
+/* Sync all control widgets from state (used at boot and on restore) */
+function syncAllControls() {
+  $('in-rate').value = sliderFromRate(state.stepsPerSec);
+  $('val-rate').textContent = state.stepsPerSec.toFixed(state.stepsPerSec < 1 ? 2 : 1) + ' steps/s';
+  $('sw-smooth').setAttribute('aria-pressed', String(state.smooth));
+  $('in-field').value = state.fieldExp;
+  const amp = Math.pow(10, state.fieldExp);
+  $('val-field').textContent = amp >= 10 ? amp.toFixed(0) + '×' : amp.toFixed(2) + '×';
+  $('in-damp').value = state.damping;
+  $('val-damp').textContent = state.damping.toFixed(1) + ' /s';
+  $('in-count').value = Math.log10(state.particles);
+  $('in-count-num').value = state.particles;
+  $('val-count').textContent = state.particles.toLocaleString();
+  $('in-quality').value = state.quality;
+  $('val-quality').textContent = state.quality.toFixed(1) + '×';
+  $('in-color').value = String(state.colorMode);
+  for (const ax of AXES) {
+    $('const-' + ax).value = state.constants[ax];
+    $('off-' + ax).value = state.offsets[ax];
+  }
+  syncBaseSeg();
+  syncOffsetMode();
+  $('in-stride').value = state.strideIndex;
+  $('val-stride').textContent =
+    `${PRIMES[state.strideIndex]} (${ordinal(state.strideIndex + 1)} prime)`;
+  document.querySelectorAll('[data-ov]').forEach(el =>
+    el.setAttribute('aria-pressed', String(state.overlays[el.dataset.ov])));
+  $('sw-guides').setAttribute('aria-pressed', String(state.guides));
+  $('sw-orbit').setAttribute('aria-pressed', String(state.autoOrbit));
+}
+
+function applyAllState() {
+  velMat.uniforms.amp.value = Math.pow(10, state.fieldExp);
+  velMat.uniforms.damping.value = state.damping;
+  pointsMat.uniforms.colorMode.value = state.colorMode;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio * state.quality, 2.5));
+  pushOverlayUniforms();
+  rebuildGuides();
+  buildParticles(state.particles);
+  updateTapeLabels(); updateTapes(); updateHud(); pushModes();
+}
+
+/* ================================================================
+   Main loop
+   ================================================================ */
+let lastTime = performance.now();
+let fpsFrames = 0, fpsWindow = 0;
+let spiralClock = 0;
+let booted = false;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dtWall = Math.min((now - lastTime) / 1000, 0.5);
+  lastTime = now;
+  if (dtWall <= 0) return;
+  // Physics uses a clamped dt for stability; the sequencer keeps wall time
+  // so the digit schedule stays honest on slow frames.
+  const dtSim = Math.min(dtWall, 1 / 20);
+
+  window.__camTick(dtWall);
+
+  if (playing) {
+    // The sequencer runs on the simulation clock, so slow hardware sees the
+    // same structure per digit, only stretched in wall time.
+    stepAccum += dtSim * state.stepsPerSec;
+    if (stepAccum >= 1) {
+      const jump = Math.floor(stepAccum);
+      stepAccum -= jump;
+      step += jump;
+      pushModes();
+      updateTapes();
+      updateHud();
+    }
+    velMat.uniforms.blend.value = state.smooth
+      ? Math.min(1, stepAccum * Math.min(3, Math.max(1, state.stepsPerSec)))
+      : 1;
+
+    spiralClock += dtSim;
+    velMat.uniforms.spiralPhase.value = spiralClock * 0.55;
+
+    simStep(dtSim);
+  }
+
+  fpsFrames++;
+  fpsWindow += dtWall;
+  if (fpsWindow >= 0.5) {
+    $('ro-fps').textContent = Math.round(fpsFrames / fpsWindow);
+    fpsFrames = 0; fpsWindow = 0;
+  }
+
+  renderer.render(scene, camera);
+
+  if (!booted) {
+    booted = true;
+    document.getElementById('boot').classList.add('done');
+  }
+}
+
+/* ================================================================
+   Housekeeping
+   ================================================================ */
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  updatePointScale();
+});
+
+document.addEventListener('visibilitychange', () => {
+  // Skip time while hidden so dt stays sane
+  if (!document.hidden) lastTime = performance.now();
+});
+
+renderer.domElement.addEventListener('webglcontextlost', e => {
+  e.preventDefault();
+  fatal('The graphics context was lost. Reload the page to restart the simulation.');
+});
+
+/* Boot */
+applyCamera();
+syncAllControls();
+applyAllState();
+requestAnimationFrame(frame);
+
+})();
+</script>
+
+</body>
+</html>
