@@ -7488,6 +7488,18 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   commons-bag **530 states** · pickfilter **13 pages / 169** · docspec-needs **1,951** ·
   docspec-say **3,213** · docspec-desk **15 trades / 0** · lang-layer **12 pages** ·
   no-third-party **152/152** · mobile-watertight **152 pages, four widths, both text sizes**.
+  **AND RE-DRIVEN AGAINST THE DEPLOYED PAGES, which is the run that counts (C3677's scar):**
+  the live `shared/find.js` is byte-identical to HEAD, `find-honesty` **8,472/0** and
+  `find-noise` **341** both green on the live base, and **the whole 72,138-search measurement
+  returns the identical numbers off the artifact** — unhedged wrong 675, leads 41,194, own
+  7,417/7,417, chrome 7,064/7,064, mid-typing 14,762/21,017. The heading QUOTES what he typed
+  and rule 6 makes it appear more often, so a 55-character unbroken token was driven into it
+  on three surfaces at 320/360/390/430 live: `scrollWidth === clientWidth` at every width.
+  **THE PAIR IS VISIBLE ON ONE PAGE:** on live `av/write-up`, *"Damage / Pre-Existing
+  Condition Note template "* stays EXACT and names the dropped word, while *"damage note
+  template "* — same page, same dropped word, a PIECE of the name instead of the whole — now
+  says **Closest to**. And *"punch list reply"* on `gc/write-up`, a document GC's library does
+  not carry, went from a confident answer to a hedged one.
   **NAMED NEXT RUNG:** rule 6 only fires when rule 1 deleted something, and **322 of the 675
   remaining (47.7%) dropped nothing at all** — every word he typed is a word of some row's
   name here, at full strength, and no row is CALLED any of it (*"cut in"*, *"pipe wrenches"*
