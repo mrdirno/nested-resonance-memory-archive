@@ -31,7 +31,7 @@
  * tells him the document does not exist. Then it routes him into "not in the
  * list" — the custom path was never a niche, it was where search dumped people.
  *
- * THE FIVE RULES THIS ENGINE IS BUILT ON.
+ * THE SIX RULES THIS ENGINE IS BUILT ON.
  *
  * 1. A TOKEN THAT MATCHES NOTHING IN THE WHOLE LIBRARY IS NOISE THE USER ADDED,
  *    NOT A REQUIREMENT THEY STATED. "template" and "form" are not in any
@@ -131,6 +131,62 @@
  *    NOTHING: 4,160 right either way, and it made 56 more wrong answers
  *    confident by narrowing the tier around a strong-but-wrong lead. Rule 2 is
  *    unchanged. Strength decides what the answer is CALLED, not what it is.
+ *
+ * 6. COVERAGE OF WHAT SURVIVED IS NOT COVERAGE OF WHAT HE TYPED — measured
+ *    2026-08-28, and it is the other half of rule 5. Rule 5 stopped the engine
+ *    calling a match exact when it had REACHED for the words; rule 1 is still
+ *    free to DELETE one and then be graded on what is left. "Inspection Note" on
+ *    the AV page keeps `note`, answers with the Damage / Pre-Existing Condition
+ *    Note, and passes every clause above with a clean sheet, because `inspection`
+ *    was never in the arithmetic. Driven over 72,138 searches on all 31 surfaces
+ *    that load this file: 3,125 handed back a row the query did not name with no
+ *    hedge on it.
+ *
+ *    THE DISCRIMINATING FACT IS NOT HOW MANY WORDS SURVIVED. The predicate a
+ *    panel reached for first was `live.length <= noise.length` — half or less of
+ *    what he typed survived — and counting cannot tell the whole name of a thing
+ *    from a piece of one. It hedges "Washout template": a one-word row name plus
+ *    the word a search box taught him to add, which is the exact class rule 1
+ *    exists for. Measured, that predicate costs 371 of 7,064 name-plus-chrome
+ *    searches — the cure becoming the disease. The question is whether what
+ *    SURVIVED is a WHOLE NAME of the row he is being shown. In "Washout
+ *    template" the survivor is the entire name and the deletion was chrome; in
+ *    "Inspection Note" the survivor is a fragment of a longer name and the
+ *    deletion was the word that discriminates.
+ *
+ *    AND IT FIRES ON WHAT MAY BE SAID OUT LOUD, NOT ON EVERY DROPPED TOKEN.
+ *    A one-character token can only match exactly, so the first letter of every
+ *    word after the first is noise for one keystroke; the `say` block below
+ *    already holds that back from the sentence for exactly that reason, and the
+ *    label has to make the same trade or the two contradict each other. Firing
+ *    on raw `noise` instead costs 11,306 of 21,017 mid-typing keystrokes — 53.8%
+ *    of every word boundary flips the heading to "Closest to" and back, under his
+ *    thumb, on the default way this box is used. A word we will not NAME is not
+ *    a word we may HEDGE on; the moment a separator says he is finished with it,
+ *    we do both.
+ *
+ *    WHAT IT DID: unhedged wrong 3,125 -> 675. Diffed query by query rather than
+ *    totalled: 2,450 answers newly hedged and EVERY ONE OF THEM over a lead the
+ *    query had not named — zero right answers hedged. A name or an alias typed as
+ *    its author wrote it, 7,417/7,417 exact, unmoved. That name plus a search-box
+ *    word, 7,064/7,064 exact, unmoved. Mid-typing, 14,762 of 21,017 exact,
+ *    unmoved. And the LEAD ROW never moves — 41,194 correct leads before and
+ *    after, 0 right-to-wrong and 0 wrong-to-right, because rule 6 decides what
+ *    the answer is CALLED and never what it is.
+ *    `tools/toolkit-gates/find-honesty.mjs` classes H and J are that pair
+ *    standing on one surface: the same proven-absent word attached to a WHOLE
+ *    name (stays exact, class H) and to a FRAGMENT of one (hedges, class J). J is
+ *    0/108 against the engine before this change; H is 1,402/1,468 against the
+ *    counting predicate. Both red-verified by restoring the code, not argued.
+ *
+ *    AND RULE 6 IMMEDIATELY CAUGHT SOMETHING RULE 4 HAD BEEN HIDING. The ladder
+ *    was graded on the RAW query with the deleted word still in it, so it handed
+ *    out no phrase bonus at all the moment one word was dropped and the row
+ *    actually CALLED "Drywall lift" lost the lead on "Drywall lift template" to a
+ *    longer row that beat it on weight. An honest label pointed straight at it:
+ *    the heading went to "Closest to" and was RIGHT, because the row underneath
+ *    was wrong. Rule 4 now reads the same live query rule 6 does — under the same
+ *    separator gate, for the reason written beside it.
  *
  * WHAT THE CALLER OWNS: its fields, their weights, whether a field NAMES the
  * item or merely describes it (`about: true`), and what it does with the
@@ -260,7 +316,7 @@
       return { hits: rows.map(function (x) { return x.it; }), mode: "all", noise: [], q: "" };
     }
     RAW = String(q || "");
-    var qt = query.split(" "), qj = qt.join("");
+    var qt = query.split(" ");
 
     /* Per token, the best score any item can give it, and beside it the best
        STRENGTH — 2 when the token is a word of what the item is CALLED and he
@@ -311,6 +367,29 @@
        Rule 2: hand back the closest three rather than an empty box. */
     if (!live.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, noiseRaw: raws(say), q: query };
 
+    /* WHAT HE ACTUALLY ASKED FOR, once rule 1 has taken its cut. Rule 4's ladder
+       below and rule 6's label above both grade against THIS and not against the
+       raw query, and they have to agree or the page contradicts itself: the
+       ladder was reading `query` with the deleted word still in it, so "Drywall
+       lift template" matched no name, drew NO phrase bonus at all, and the row
+       actually CALLED "Drywall lift" lost the lead to a longer row that outscored
+       it on raw weight. Bare "Drywall lift" led correctly, so one dropped word
+       moved the answer — the exact thing tools/toolkit-gates/find-noise.mjs N7
+       forbids, sitting on rows N7 never probed. Found by rule 6's own gate: the
+       label went honest and the honesty pointed at the row. */
+    var liveQ = [], lqi;
+    for (lqi = 0; lqi < live.length; lqi++) liveQ.push(qt[live[lqi]]);
+    /* AND ONLY ONCE A SEPARATOR SAYS HE IS FINISHED WITH THE DROPPED WORD, which
+       is the same gate rule 6 stands on and it is not symmetry for its own sake.
+       Mid-word, the remainder of "the d" is the bare word `the`, and handing
+       rung 2 a single common word makes it fire on every title that happens to
+       contain it while a row answering through an alias gets nothing: measured,
+       149 mid-typing keystrokes changed which row led, all of them for the
+       worse. While the word is under his thumb the ladder reads what he typed,
+       exactly as it always has. */
+    var lq = say.length ? liveQ.join(" ") : query;
+    var lqj = say.length ? liveQ.join("") : qt.join("");
+
     var pw = fields[ix.primary].w;
     var scored = [];
     for (i = 0; i < rows.length; i++) {
@@ -333,10 +412,10 @@
              whose nickname is literally CO. A phrase bonus that fires on two
              letters buried in a longer word is not evidence about a phrase, so
              the test is now at word boundaries, which is what it always meant. */
-      if (p.n === query) sc += pw * 1.6;                                            // rule 4
-      else if ((" " + p.n + " ").indexOf(" " + query + " ") !== -1) sc += pw * 1.4;
-      else if (named(rows[i], query, fields, ix.primary)) sc += pw * 1.2;           // rule 4, any name
-      else if (qj.length >= 4 && p.j.indexOf(qj) !== -1) sc += pw * 0.9;
+      if (p.n === lq) sc += pw * 1.6;                                               // rule 4
+      else if ((" " + p.n + " ").indexOf(" " + lq + " ") !== -1) sc += pw * 1.4;
+      else if (named(rows[i], lq, fields, ix.primary)) sc += pw * 1.2;              // rule 4, any name
+      else if (lqj.length >= 4 && p.j.indexOf(lqj) !== -1) sc += pw * 0.9;
       scored.push({ it: rows[i].it, sc: sc, cover: cover, strong: strong, i: i });
     }
     if (!scored.length) return { hits: closest(ix, query, 3), mode: "none", noise: noise, noiseRaw: raws(say), q: query };
@@ -348,7 +427,38 @@
 
     /* "exact" is a claim about the row he is looking at first. */
     var lead = tier[0];
-    var honest = lead.cover === live.length && lead.strong === live.length;
+
+    /* RULE 6. COVERAGE OF WHAT SURVIVED IS NOT COVERAGE OF WHAT HE TYPED, and
+       that is the other half of the same honesty rule 5 started. Rule 1 deletes
+       a token that matches nothing here, and then the two clauses above ask
+       whether the lead covered THE SURVIVORS — so "Inspection Note" on the AV
+       page keeps `note`, answers it with the Damage / Pre-Existing Condition
+       Note, and every check it is put to comes back clean. He named a document
+       this library does not carry and was told he had an exact match.
+       Measured over 17,910 cross-surface searches on fifteen trades: 7,736 came
+       back having quietly deleted a word and 4,012 of those said EXACT.
+
+       THE DISCRIMINATING FACT IS NOT HOW MANY WORDS SURVIVED. A three-lens panel
+       reached for `live.length <= noise.length` and that predicate is dead: it
+       hedges "Washout template" — a ONE-WORD document name plus the word a
+       search box taught him to add — because it counts, and counting cannot tell
+       the whole name of a thing from a piece of one. The question is whether
+       what SURVIVED is a WHOLE NAME of the row he is being shown. In "Washout
+       template" the survivor is the entire name and the deletion was chrome; in
+       "Inspection Note" the survivor is a fragment of a longer name and the
+       deletion was the word that discriminates. The engine already knows how to
+       ask that — it is rule 4's `named()`, widened by one line to look at the
+       primary field too.
+
+       AND IT FIRES ON `say`, NOT ON `noise`, WHICH IS THE SAME TRADE THE
+       SENTENCE ALREADY MAKES. A one-character token can only match exactly, so
+       the first letter of every word after the first is noise for one keystroke:
+       demoting on it would flip the heading to "Closest to" on "damage n" and
+       back on "damage no", under his thumb, on the default way this box is used.
+       A word we will not NAME out loud is not a word we may HEDGE on, and the
+       moment a separator says he is finished with it we do both. */
+    var honest = lead.cover === live.length && lead.strong === live.length &&
+                 (!say.length || wholeName(rows[lead.i], lq, fields, ix.primary));
 
     return {
       hits: tier.map(function (x) { return x.it; }),
@@ -357,6 +467,17 @@
       noiseRaw: raws(say),
       q: query
     };
+  }
+
+  /* Rule 6's question, and rule 4's with the primary field put back. `named()`
+     below skips the primary because rule 4's ladder has already tested it two
+     rungs higher and a second bonus for the same evidence would double-count it.
+     Rule 6 is asking a different question — is this row CALLED that — and the
+     title is the first name a thing has. */
+  function wholeName(row, query, fields, primary) {
+    var w = row.f[primary].whole, i;
+    for (i = 0; i < w.length; i++) if (w[i] === query) return true;
+    return named(row, query, fields, primary);
   }
 
   /* Rule 4's other half: did he type one of this item's names, whole? Only

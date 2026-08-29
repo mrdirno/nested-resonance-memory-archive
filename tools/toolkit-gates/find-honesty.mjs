@@ -34,6 +34,20 @@
  *                  THIS item, whatever else carries it as a nickname. Rule 4's
  *                  phrase bonuses are the only thing holding that up, and A and B
  *                  are both blind to their ordering — they type whole strings.
+ *   H  CHROME     a WHOLE name plus a word this surface does not carry — the
+ *                 "washout template" case — LEADS its item and is NOT hedged.
+ *                 Rule 1 exists for that word; deleting it is not a reason to
+ *                 doubt the answer, and the note under the rows already says so.
+ *   J  FRAGMENT   a PIECE of a name plus the same proven-absent word IS hedged.
+ *                 He named part of a thing and a word that is nowhere here, and
+ *                 what came back is not what he asked for.
+ *
+ * H AND J ARE ONE PAIR AND THAT IS THE POINT. Same surface, same dropped word,
+ * one letter of difference in what survived — so nothing about the CHROME-ness
+ * of the deletion can explain the split, only WHOLENESS can. J is red against
+ * rule 5's engine (verified by restoring it, not by argument) and H is red
+ * against the predicate a panel reached for first, `live.length <= noise.length`,
+ * which counts words instead of asking whether they are a name: 371 of 7,064.
  *
  * C, D and E are RED against the engine as it shipped before this gate existed;
  * A, B and F are green on both and are here to catch the overcorrection. Verified
@@ -60,6 +74,11 @@ const TRADES = readdirSync(ROOT, { withFileTypes: true })
   .filter(d => d.isDirectory() && existsSync(ROOT + d.name + '/write-up.html'))
   .map(d => d.name).sort();
 
+/* The words a search box teaches people to add. Not a stopword list — this file
+   ships none and shared/find.js says why — but the class rule 1 was written for,
+   and every one of them is put to the ENGINE below before it is used. */
+const CHROME = ['template', 'form', 'sheet', 'example', 'pdf', 'blank', 'printable'];
+
 let checked = 0, failing = 0;
 const fail = (m) => { console.log('  FAIL  ' + m); failing++; };
 const ok = () => { checked++; };
@@ -68,6 +87,7 @@ const ok = () => { checked++; };
    written once and runs against a document library and a commons surface
    without knowing which it is. */
 const DOCSPEC = {
+  input: 'input[type=search][aria-label="Search documents"]',
   data: () => {
     if (!window.DocSpec) return null;
     return {
@@ -96,6 +116,7 @@ const DOCSPEC = {
 };
 
 const COMMONS = {
+  input: '#q',
   data: () => {
     const rows = window.__FH_ROWS;
     if (!rows || !rows.length) return null;
@@ -141,7 +162,9 @@ const COMMONS = {
 const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/^ +| +$/g, '');
 const toks = s => { const n = norm(s); return n ? n.split(' ') : []; };
 
-function buildProbes(items, vocab) {
+function buildProbes(items, vocab, extra) {
+  const absent = (extra && extra.absent) || [];
+  const frags = (extra && extra.frags) || [];
   /* Every word that is part of what SOMETHING on this surface is CALLED. A word
      outside this set can only be reached through an `about` field. */
   const named = new Set();
@@ -202,6 +225,20 @@ function buildProbes(items, vocab) {
       P.push({ cls: 'B', q: a, want: owners(a, false) === 1 ? it.key : null, hedged: false });
     });
 
+    /* H — THE WORD A SEARCH BOX TAUGHT HIM TO ADD, on a name he typed whole.
+       THE TRAILING SPACE IS LOAD-BEARING ON H AND J BOTH: while the last word is
+       still under his thumb the engine will neither name it nor hedge on it (the
+       `say` block in shared/find.js), so without the separator these two probes
+       ask a question rule 6 has deliberately declined to answer.
+       The engine proved these words land nowhere on this surface (see `absent`
+       below), so rule 1 deletes them and rule 6 has to decide whether that is a
+       reason to doubt the row. It is not: what survived is the entire name of
+       the thing he is looking at. */
+    if (nf) absent.forEach(w => {
+      if (nf.indexOf(w) !== -1) return;
+      P.push({ cls: 'H', q: it.name + ' ' + w + ' ', want: sole ? it.key : null, hedged: false });
+    });
+
     /* G — A TITLE OUTRANKS A NICKNAME. A word that appears in THIS item's title
        and in no other item's title belongs to this item, however many other rows
        carry it as an alias. Rule 4 hands out a phrase bonus per row and the sizes
@@ -228,6 +265,14 @@ function buildProbes(items, vocab) {
     }));
     if (prose.length >= 2) P.push({ cls: 'C', q: prose.slice(0, 2).join(' '), want: null, hedged: true });
   });
+
+  /* J — THE HALF HE LOST. One word of a name that nothing here is wholly CALLED,
+     plus the same proven-absent word H uses. Whatever leads, he did not name it:
+     he named a piece of it and a word this surface does not have. The row is not
+     asserted — only the label, which is the one thing rule 6 changes. */
+  frags.forEach(f => absent.forEach(w => {
+    P.push({ cls: 'J', q: f + ' ' + w + ' ', want: null, hedged: true });
+  }));
   return P;
 }
 
@@ -237,7 +282,47 @@ async function run(page, label, adapter, url, prep) {
   const got = await page.evaluate(adapter.data);
   if (!got || !got.items) { fail(label + ' — no data on the page (engine or data file missing)'); return; }
   const items = got.items;
-  const probes = buildProbes(items, got.vocab);
+  /* THE ENGINE PICKS THE WORDS, NOT THE GATE — the same rule find-noise.mjs
+     already runs on. "Not in a name" is the weaker condition, because prose
+     fields and a pooled alias index are in there too; mode "none" is the engine
+     itself reporting that every token of that query reached nothing. The
+     fragments come out of the index the page built, so a field nobody told this
+     gate about still counts. */
+  const extra = await page.evaluate(({ sel, chrome, own }) => {
+    const si = document.querySelector(sel);
+    if (!si || !window.Find) return { absent: [], frags: [] };
+    /* ONE KEYSTROKE BUILDS MORE THAN ONE INDEX. Every commons surface searches
+       its own rows AND the cross-page name table (commons/commons.js
+       `handoff.ix`), so taking "the index" means taking whichever happened to
+       run last — which on tips.html is the alias table, and every word this
+       gate then proved absent was proved absent from the wrong page. So all of
+       them are kept and the one holding THIS surface's first row is the one
+       used, which is a fact rather than an ordering assumption. */
+    const seen = [];
+    const real = window.Find.search;
+    window.Find.search = function (ix, q) { if (seen.indexOf(ix) === -1) seen.push(ix); return real.apply(this, arguments); };
+    si.value = 'zz'; si.dispatchEvent(new Event('input', { bubbles: true }));
+    window.Find.search = real;
+    si.value = ''; si.dispatchEvent(new Event('input', { bubbles: true }));
+    /* CONTAINS, not equals — shared/pickfilter.js indexes a row's whole <li>
+       text as its primary field, so a name is a substring of it, never the
+       string itself. Same rule in tools/toolkit-gates/find-noise.mjs. */
+    const holds = (ix) => !!own && ix.rows.some(r => r.f[ix.primary].whole.some(w => w.indexOf(own) !== -1));
+    const IX = seen.filter(holds)[0] || null;
+    if (!IX) return { absent: [], frags: [] };
+    const absent = chrome.filter(w => real(IX, w).mode === 'none');
+    /* Every string this surface is CALLED, exactly as the index holds it. */
+    const whole = new Set();
+    IX.rows.forEach(r => IX.fields.forEach((fd, fx) => {
+      if (!fd.about) r.f[fx].whole.forEach(x => x && whole.add(x));
+    }));
+    const frags = [];
+    IX.rows.forEach(r => r.f[IX.primary].whole.forEach(n => String(n).split(' ').forEach(t => {
+      if (t.length >= 4 && !whole.has(t) && frags.indexOf(t) === -1) frags.push(t);
+    })));
+    return { absent: absent.slice(0, 2), frags: frags.slice(0, 3) };
+  }, { sel: adapter.input, chrome: CHROME, own: norm(items[0] && items[0].name) });
+  const probes = buildProbes(items, got.vocab, extra);
   if (!probes.length) { fail(label + ' — built no probes'); return; }
   const byKey = {}; items.forEach(it => { byKey[it.key] = it.name; });
   const out = await page.evaluate(([probes, src]) => {

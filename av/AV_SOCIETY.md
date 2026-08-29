@@ -1036,7 +1036,43 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      defect, never as an incidence rate** — the corpus is built to over-represent it, and on
      its OWN page a surface drops nothing at all (920 of 923 own-name searches come back exact
      with an empty `noise`), which is why the line is silent almost all the time.
-   - **THE NAMED NEXT RUNG — demote the LABEL, and the panel's own predicate is already dead.**
+   - ~~**THE NAMED NEXT RUNG — demote the LABEL, and the panel's own predicate is already
+     dead.**~~ **SHIPPED 2026-08-28 (C3678) as RULE 6, and the rung was right about the
+     mechanism, right to kill the counting predicate, and WRONG about what to fire on.**
+     The predicate that shipped is `honest = … && (!say.length || wholeName(lead, liveQuery))`
+     — `say`, not `noise`, and the difference is 11,306 keystrokes. `say` is the engine's
+     existing hold-back for the word still under his thumb; firing on raw `noise` instead
+     demotes on the first letter of every word after the first, so the heading flips to
+     "Closest to" and back on **3,456 of 21,017** mid-typing queries against 14,762 with the
+     hold-back — text flickering under his thumb on the default way this box is used. A word
+     we will not NAME out loud is not a word we may HEDGE on. `wholeName` is rule 4's
+     `named()` with the primary field put back, because the title is the first name a thing
+     has. **Driven over 72,138 searches on all 31 surfaces that load the engine: unhedged
+     wrong 3,125 → 675.** Diffed query by query rather than totalled — **2,450 newly hedged,
+     every one over a lead the query had not named, ZERO right answers hedged** — and the
+     lead row never moved: 41,194 correct leads before and after, 0 right→wrong, 0
+     wrong→right. Good cases unmoved: verbatim name or alias **7,417/7,417**, that name plus
+     a search-box word **7,064/7,064**, mid-typing **14,762/21,017**.
+     **THE COUNTING PREDICATE IS DEAD ON THE FULL RACK, AND BIGGER THAN THE 72 THIS RUNG
+     PREDICTED:** `live.length <= noise.length` costs **371 of 7,064** name-plus-chrome
+     searches and 809 mid-typing ones. The rung was measured on 14 trades and one class of
+     surface; the rack is 31 surfaces and includes one-word gear names, where the cure is the
+     disease. **AND RULE 6 IMMEDIATELY CAUGHT WHAT RULE 4 HAD BEEN HIDING:** rule 4's phrase
+     ladder was graded on the RAW query with the deleted word still in it, so *"Drywall lift
+     template"* drew no phrase bonus at all and the row actually CALLED **Drywall lift** lost
+     the lead to a longer row that beat it on weight — one dropped word MOVING the answer,
+     which is exactly what `find-noise.mjs` N7 forbids, sitting on rows N7 never probed. The
+     honest label pointed at it: the heading went to "Closest to" and was RIGHT, because the
+     row underneath was wrong. Rule 4 now reads the same live query under the same separator
+     gate; ungated it cost **149 mid-typing leads** and that number is why the gate is there.
+     **THE GATE:** `find-honesty.mjs` **8,472 checks, 0 failing** (was 6,492), with two new
+     classes that are ONE PAIR — same surface, same proven-absent word, one attached to a
+     WHOLE name (H, stays exact) and one to a FRAGMENT of a name (J, hedges), so nothing about
+     the chrome-ness of the deletion can explain the split and only wholeness can. Both
+     red-verified by restoring code: **J 0/108** against the pre-change engine, **H
+     1,402/1,468** against the counting predicate.
+     ~~**the dead version, kept because the falsifier in it is the reason the shipped
+     predicate is shaped the way it is:**~~
      Three lenses scored it independently; **two voted to demote** and lens 2 gave the
      predicate `noise.length > 0 && live.length <= noise.length` (live ≤ half). The falsifier
      was run before the rung was written down, not after, and it is TWO numbers, not one:
@@ -1061,6 +1097,23 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      (a slash between two digits is not a separator, so *"3/4 EMT strap"* now prints `Ignored
      “EMT”` and not two bare digits), but a hyphen is genuinely ambiguous — *Pre-Existing* is
      two words and *USB-A* is one — and no rule that was tried tells them apart.
+   - **THE NAMED NEXT RUNG — rule 6 only fires when rule 1 DELETED something, and the same
+     lie is available with nothing deleted.** Of the **675** unhedged-wrong answers left after
+     rule 6, **322 (47.7%) are queries where the surface has no row called that at all** and
+     nothing was dropped: every word he typed IS a word of some row's name here, each one at
+     full strength, and no row is CALLED any of what he typed. *"cut in"* and *"pipe wrenches"*
+     on `av/write-up` come back as the Damage / Pre-Existing Condition Note, presented as an
+     exact match, with an empty `noise`. 497 of the 675 are multi-word. The shape of the fix is
+     obvious and that is exactly why it needs its falsifier run FIRST: dropping the `!say.length`
+     guard and asking `wholeName` on every query would hedge **class F** — the word under his
+     cursor, *"daily field repo"*, which is not a whole name and never will be — so the rung is
+     not "extend rule 6", it is **find the condition that separates a lead he has half-typed
+     from a lead he has not named at all**, and the number to beat is 322 hedged against 0 of
+     class F and 0 of the 14,762 mid-typing exacts. **A CAVEAT ON THE OTHER 353, so it is not
+     re-derived as a defect:** 136 of them are the measuring instrument, not the engine —
+     *"damage"* is scored WRONG because the harness credits the first row carrying the word and
+     the Damage Note carries it in its TITLE while the Incident Report carries it as a nickname,
+     which is the ordering `find-honesty.mjs` class G already asserts is correct.
 
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
@@ -7379,3 +7432,67 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Nothing on the rack triggers it today; everything does the day it does. Storefront
   unchanged — no new tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html
+
+- `2026-08-28` — **[AXIS:COMMONS] C3678 — THE PAGE DELETED THE WORD THAT DISCRIMINATES, THEN
+  GRADED ITSELF ON WHAT WAS LEFT.** · **before:** both wells dry (AV 0 new / 0 building, vibe
+  0/0, no stale claims) and no family owed, so WELL could not be served and the stalest axis
+  with work governed: COMMONS, last worked C3661, holding its own named next rung. `find.js`
+  rule 1 deletes a query token that matches nothing on a surface — right for *template* and
+  *form* — and then rules 2 and 5 ask whether the lead covered THE SURVIVORS. **"Inspection
+  Note" on the AV page keeps `note`, answers with the Damage / Pre-Existing Condition Note,
+  and passes every check anyone would write, because `inspection` was never in the
+  arithmetic.** Driven over **72,138 searches on all 31 surfaces that load the engine: 3,125
+  handed back a row the query did not name with no hedge on it.** · **after: RULE 6 — coverage
+  of what SURVIVED is not coverage of what he TYPED.** `honest = … && (!say.length ||
+  wholeName(lead, liveQuery))`. **3,125 → 675**, diffed query by query rather than totalled:
+  **2,450 newly hedged, every one over a lead the query had not named, ZERO right answers
+  hedged**, and the lead row never moved — 41,194 correct leads before and after, 0
+  right→wrong, 0 wrong→right, because rule 6 decides what the answer is CALLED and never what
+  it is. Good cases unmoved: verbatim name or alias **7,417/7,417** exact, that name plus a
+  search-box word **7,064/7,064**, mid-typing **14,762/21,017**. · **THE RUNG WAS RIGHT ABOUT
+  THE MECHANISM AND WRONG TWICE, AND BOTH CORRECTIONS ARE NUMBERS.** (1) It said fire on
+  `noise`; it fires on `say`. A one-character token can only match exactly, so the first
+  letter of every word after the first is noise for one keystroke — firing on raw `noise`
+  leaves **3,456 of 21,017** mid-typing queries unhedged against 14,762 with the hold-back,
+  which is the heading flipping to "Closest to" and back under his thumb on the default way
+  this box is used. The engine already declines to NAME that word out loud; a word we will not
+  name is not a word we may hedge on. (2) The panel's counting predicate `live.length <=
+  noise.length` was predicted to cost 72; on the full rack it costs **371 of 7,064** — the
+  rung was measured on 14 trades and one class of surface, and the rack has one-word gear
+  names where *"Washout template"* is the whole name plus chrome. · **RULE 6 IMMEDIATELY
+  CAUGHT WHAT RULE 4 HAD BEEN HIDING.** Rule 4's phrase ladder was graded on the RAW query
+  with the deleted word still in it, so *"Drywall lift template"* matched no name, drew NO
+  bonus at all, and the row actually CALLED **Drywall lift** lost the lead to a longer row
+  that beat it on weight — one dropped word MOVING the answer, the exact thing `find-noise`
+  N7 forbids, sitting on rows N7 never probed. The honest label is what pointed at it: the
+  heading went to "Closest to" and was RIGHT, because the row underneath was wrong. Rule 4 now
+  reads the same live query under the same separator gate; **ungated it cost 149 mid-typing
+  leads**, which is why the gate is there and not a symmetry argument. · **THE GATE, AND ITS
+  TWO NEW CLASSES ARE ONE PAIR:** `find-honesty.mjs` **8,472 checks / 0 failing** (was 6,492).
+  Same surface, same engine-proven-absent word, attached to a WHOLE name (**H** — stays exact)
+  and to a FRAGMENT of one (**J** — hedges), so nothing about the chrome-ness of the deletion
+  can explain the split and only wholeness can. Red-verified by restoring code, not argued:
+  **J 0/108** against the pre-change engine, **H 1,402/1,468** against the counting predicate.
+  · **BACKPORT RIDER FIRED — the same defect in the gate, not in a sibling trade.** Both
+  find-gates capture "the index" by monkey-patching `Find.search` on one keystroke and taking
+  whichever ran LAST. **A commons surface builds TWO** — its own rows and
+  `commons/commons.js`'s cross-page `handoff.ix` — so on `commons/tips.html` the gate was
+  proving words absent from the 135-row alias table while the page under test has 190 rows:
+  believed-absent `template, pdf, printable, example, report`, actually absent `pdf, example,
+  strap`. It was proving a probe word absent from a page it was not standing on. Both files
+  now keep every index seen and take the one holding this surface's own first name — CONTAINS,
+  not equals, because `shared/pickfilter.js` indexes a row's whole `<li>` text as its primary
+  field, and equality silently skipped all thirteen tap-to-tick lists (caught by firing it).
+  **GATES GREEN:** find-honesty **8,472/0** · find-noise **341, 31 surfaces, N0–N9 all ok**
+  (was 340 — one more, on the right index) · docs-pool **92/0** · commons-names **395** ·
+  commons-bag **530 states** · pickfilter **13 pages / 169** · docspec-needs **1,951** ·
+  docspec-say **3,213** · docspec-desk **15 trades / 0** · lang-layer **12 pages** ·
+  no-third-party **152/152** · mobile-watertight **152 pages, four widths, both text sizes**.
+  **NAMED NEXT RUNG:** rule 6 only fires when rule 1 deleted something, and **322 of the 675
+  remaining (47.7%) dropped nothing at all** — every word he typed is a word of some row's
+  name here, at full strength, and no row is CALLED any of it (*"cut in"*, *"pipe wrenches"*
+  on `av/write-up` → the Damage Note, exact, empty `noise`). Dropping the `!say.length` guard
+  would hedge class F, the word under his cursor, so the rung is to find the condition that
+  separates a lead he has HALF-TYPED from one he has NOT NAMED — 322 against 0 of class F.
+  Storefront unchanged — no new tool, no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html

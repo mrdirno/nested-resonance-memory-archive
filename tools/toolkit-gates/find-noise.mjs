@@ -171,12 +171,29 @@ for (const s of SURFACES) {
        carries only in a description would produce a false red. So the page's own
        index is captured off a real keystroke and asked directly: mode "none" is
        the engine reporting that every token reached nothing. */
-    let IX = null;
+    /* ONE KEYSTROKE BUILDS MORE THAN ONE INDEX, and taking whichever ran LAST
+       took the wrong one. Every commons surface searches its own rows AND the
+       cross-page name table (commons/commons.js `handoff.ix`), so on three of
+       the surfaces below every word this gate "proved absent" was proved absent
+       from the alias table instead of from the page under test — a probe word
+       that may be sitting in plain sight on the row being probed. Found
+       2026-08-28 while building find-honesty.mjs classes H and J on the same
+       capture, and swept into both files in the same cycle. All of them are kept
+       and the one holding THIS surface's own first name is the one used, which
+       is a fact about the index rather than an assumption about call order. */
+    const seen = [];
     const real = window.Find.search;
-    window.Find.search = function (ix, q) { IX = ix; return real.apply(this, arguments); };
+    window.Find.search = function (ix, q) { if (seen.indexOf(ix) === -1) seen.push(ix); return real.apply(this, arguments); };
     si.value = 'zz'; si.dispatchEvent(new Event('input', { bubbles: true }));
     window.Find.search = real;
     si.value = ''; si.dispatchEvent(new Event('input', { bubbles: true }));
+    const own = window.Find.norm((eval(ad.names) || [])[0] || '');
+    /* CONTAINS, not equals: shared/pickfilter.js indexes the whole <li> text as
+       its primary field, so the row's own name is a SUBSTRING of it and never the
+       string itself. Equality passed on the document libraries and the commons
+       and skipped all thirteen tap-to-tick lists. */
+    const holds = (ix) => !!own && ix.rows.some(r => r.f[ix.primary].whole.some(w => w.indexOf(own) !== -1));
+    const IX = seen.filter(holds)[0] || null;
     if (!IX) return { err: 'index not captured' };
 
     const absent = [];
