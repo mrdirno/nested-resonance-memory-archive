@@ -27,6 +27,17 @@ browser with WebGL support.
     drawn by the *absence* of field (total destructive interference).
   - **Potential wells**: `a = −A·∇Ψ` on the single product mode, so
     particles collect at field minima.
+- Collapse centers (feedback cycle, on by default): up to eight softened
+  point attractors (Plummer potentials with a tangential inflow term and a
+  Gaussian-tapered region of influence) whose spawn positions and masses
+  are drawn from the digit stream rather than a random generator. Mass
+  sets both strength and lifespan; at end of life the pole flips and a
+  traveling spherical blast shell launches, expanding at constant speed
+  with amplitude decaying as it spreads. Shells sweep through other
+  centers' territory, so standing field, collapses, and traveling waves
+  feed back on one another. Growth is modeled by age (not measured
+  accretion), and centers are external potentials, not self-gravitating
+  masses.
 - Dynamics: gradients evaluated analytically, semi-implicit Euler
   integration, exponential velocity damping, and reflecting box walls.
   Integration is frame-rate independent, and digit transitions morph the
