@@ -7506,5 +7506,18 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   on `av/write-up` → the Damage Note, exact, empty `noise`). Dropping the `!say.length` guard
   would hedge class F, the word under his cursor, so the rung is to find the condition that
   separates a lead he has HALF-TYPED from one he has NOT NAMED — 322 against 0 of class F.
+  **SIGNAL DUTY — the bump pointed at an empty room and I had to re-derive the answer by
+  hand.** `STALEST-AXIS SIGNAL = WELL … last worked 7 lane-cycle(s) ago` with both sinks at
+  0 new / 0 building: WELL sits in the staleness table like any other axis, so once it is
+  stalest it is named every bump until somebody wishes something. `due_axis()` now takes a
+  `well_dry` flag, `_lane_well_dry()` reads the board that is ALREADY fetched for the block
+  below it (one fenced subprocess, hard timeout, **any failure returns None and changes
+  nothing** — an unread board may never be reported as an empty one), and `new`-or-`building`
+  is what counts because a claim held by a dead cycle is work, not an empty well. Verified by
+  firing it: `due_axis(None) = WELL`, `due_axis(True) = DEPTH`. Paid for under THE PARTITION
+  — *"Breadth debt is paid, so the stalest-axis rule now governs"* was the template's own STEP
+  0b said twice, and is deleted from the directive. **Template 0 words** (2,053 / 2,081
+  ceiling, ALL TEMPLATES RENDER); directive 922 → **937**, +15 for a signal that was wrong
+  this cycle.
   Storefront unchanged — no new tool, no new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
