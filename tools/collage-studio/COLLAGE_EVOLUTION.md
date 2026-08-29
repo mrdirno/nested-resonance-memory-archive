@@ -526,6 +526,30 @@ or re-documenting an existing capability is DD, not delivery.
   else. The clip path travels a different route (Stage-only lifetime,
   `describeAudioSources` instead of `soundtrackSource`) so it is measured
   separately: A/B 0.7183 -> 0.1782 = 0.2481x.
+  THE REFRAME — the picture moves inside its fragment, by hand. Every crop this
+  app had ever drawn was decided FOR the user: `analysis.face` is a detector's
+  guess, `energy` is its fallback, THE FOCUS is five automatic rules and THE
+  MOVE nudges the anchor on a clock — and not one of them is a way of saying
+  *no, THAT part of THAT photograph*. So the most ordinary complaint anyone has
+  about a collage, **this one is cropped through his head**, had exactly two
+  answers here: re-roll the whole wall and hope, or throw the picture away.
+  `lib/reframe.ts` is pure and its contact with the geometry is ONE TERM at the
+  front of `calculateSmartCrop`'s anchor chain (`an.frame || an.face ||
+  an.energy || CENTRE`), so all four surfaces that produce pixels inherit it
+  without knowing it exists. **IT IS KEYED BY ASSET ID, NOT BY SLOT** — a frame
+  is a corrected FACE, so it belongs on the side of `turnResolve`'s own line
+  where the face and the colour already sit, and it therefore survives a
+  shuffle, a re-deal, a swap and a turn. Keyed by slot it would have been undone
+  by the next roll, and rolling is what this app is for. **THE STATE IS THE
+  CROP, so there is no state to carry**: `dragToFrame` reads the position off
+  the CLAMPED source rect the shipped crop function just returned rather than
+  off the previous anchor, which is what makes an edge release on the very next
+  pixel back instead of banking invisible travel. A LEAN ROTATES THE FINGER, not
+  the picture (the drag is rotated by -twist into the photograph's own axes; the
+  naive version sends it 37.5% off the finger's line at the roster's 22deg
+  ceiling). The way IN is the drag on the ARMED fragment — no mode, no fourth
+  verb — and the only button is RECENTRE, which appears solely on a picture
+  somebody actually moved.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -1342,6 +1366,64 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       would need an amplitude, and the only amplitude the compositor knows is
       `sampleMove`'s peak — which is per fragment.
 
+- [x] **THE CROP IS DECIDED FOR YOU AND THERE IS NO WAY TO SAY OTHERWISE ->
+      THE REFRAME.** CLOSED. Five automatic rules and a detector, and no hand.
+      See THE REFRAME in CURRENT STATE. It is also this app's FIRST free-form
+      drag: every other continuous control is a native `<input type="range">`,
+      which is why nothing else in the tree carries the defect below.
+- [ ] **A DRAG THAT READS ITS OWN STATE BACK IS LOSSY, and this is the general
+      lesson rather than a detail of the gesture.** The first version asked
+      `calculateSmartCrop` for the CURRENT crop on every `pointermove` and
+      applied the delta since the previous one. Pointer events fire faster than
+      React re-renders and `setFrames` is asynchronous, so runs of consecutive
+      moves read the SAME stale crop and each overwrote the last: a 600px drag
+      arrived as whatever its final 8px event asked for. Fixed by sampling the
+      crop ONCE at `pointerdown` and mapping the TOTAL displacement onto it —
+      legal precisely because `sw`/`sh`/`dw`/`dh`/`twist` are invariant under a
+      reframe, which is unit invariant I7. Any future free-form drag in this app
+      inherits the same trap and the same fix.
+- [ ] **A REFRAME DOES NOT TRAVEL — not in a code, not in a project file, not in
+      the SVG.** It joins pinned fragments, the swap and the title on the "in the
+      app but not in the code" list, and for the code it is the same structural
+      reason: a per-picture anchor is unbounded information and a code is a
+      fixed-length recipe. The PROJECT FILE is the different case and the honest
+      gap: `ProjectManifest` already persists each asset's `analysis`, so a frame
+      written into the pool asset would round-trip for free — and it cannot be,
+      because `computeLayout`'s effect depends on `images`, so mutating the pool
+      per drag frame would RE-DEAL THE WHOLE WALL on every pointermove. The fix
+      is to commit the frame into the pool on `pointerup` only, which is its own
+      increment and needs the re-deal question answered first.
+- [ ] **A REFRAME AT THE EDGE MAKES THE MOVE CLAMP.** `sampleMove` sizes its pan
+      from the room the ZOOM leaves and assumes the anchor is central enough for
+      the crop clamp to have nothing to do — which was true of every anchor the
+      app could produce before this. Drag a picture to the end of itself and the
+      drift now has nowhere to go on that axis, so a moving collage has one
+      fragment that stutters against its edge. Not measured this cycle; the
+      honest fix is to narrow the reframe band by the move's own reach when a
+      move is on, which couples two modules that are currently independent.
+- [ ] **THE RAIL COVERS THE BOTTOM OF THE ARTWORK, so a drag cannot START
+      there.** Found by the spec, not reasoned about: in full bleed the control
+      pill owns roughly the bottom 90px of the screen and takes the pointerdown,
+      so a fragment reaching the floor cannot be grabbed down there. Every
+      editor has a toolbar and this is the ordinary cost of one — filed because
+      it is the THIRD instance of "the affordance covers the gesture it
+      documents" (the pending pill, the verbs puck, now the rail), which makes
+      it a shape this app meets whenever it puts something over the canvas.
+- [ ] **THE REFRAME IS FULL-BLEED ONLY**, because arming is. Outside full bleed
+      a tap PINS, so a drag beginning as a tap would pin whatever it crossed;
+      scoping the gesture to the ARMED fragment is what keeps every shipped
+      gesture byte for byte and what lets `touch-action: none` be scoped to a
+      state with nothing to scroll. The cost is discoverability: the correction
+      is one tap further away than the complaint is.
+- [ ] **A CONTINUOUS COMPOSITION CONTROL RESTARTS THE TAKE.** `turnScene` is a
+      dependency of the Stage's scene effect and `setScene` resets
+      `moveOriginMs`, so anything that re-derives `orderedAssets` per event —
+      the gutter slider, the entropy slider, and now a reframe drag — restarts
+      the clock under the user's finger. Pre-existing and shipped, but a drag on
+      the ARTWORK is the first one where you are looking straight at it. The fix
+      is a re-pointable scene (`stage.setAssets`) rather than a rebuild, which
+      is the same shape as `setAudition`'s retarget.
+
 - [ ] **A DENSE LANE IS A HATCH AND SAYS NOTHING ABOUT HOW DENSE.** Past 48
       seams the lane draws one hatched bar; the exact count rides in the `title`
       and the `sr-only` sentence and nowhere a thumb can reach. Fine while it
@@ -1377,6 +1459,47 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-08-29 (C3680) — THE DRAG THAT READ ITS OWN STATE BACK, AND THE TEST THAT COULD NOT SEE IT
+Two bugs, one root, and the test found both because it measured PIXELS rather
+than asserting the handler ran.
+
+**THE APP BUG.** `moveReframe` computed the current crop from `orderedAssets` on
+every `pointermove` and applied the delta since the previous event. Pointer
+events fire faster than React commits and `setFrames` is asynchronous, so a run
+of consecutive moves all read the SAME crop and each overwrote the last: the
+drag delivered only its final event. `reframe.spec` T1 dragged the length of a
+photograph twice, both ways, and landed where it started. Fixed by sampling the
+crop ONCE at `pointerdown` and mapping the TOTAL displacement onto it — legal
+because a reframe leaves `sw`/`sh`/`dw`/`dh`/`twist` untouched, which is
+invariant I7 rather than an assumption.
+
+**THE INSTRUMENT BUG, and it hid the app bug for two runs.** The first tiles
+were BANDED (three flat colours). "Drag until the colour stops changing" is the
+only pass count that holds on a Pixel as well as on a desktop — and with bands
+the colour is constant while the crop moves INSIDE one, so the helper settled in
+the middle of a band and called it the end of the photograph. Gradients made
+every pixel of travel measurable and the settle became the clamp.
+
+**AND A THIRD, WHICH IS A REAL OVERLAP AND NOT A TEST ARTEFACT.** T1 failed on
+chromium and WebKit but passed on both phones, which is backwards for a touch
+gesture. The drag was starting at the bottom of a fragment that reached the
+floor of the screen — where the full-bleed RAIL owns the pointer and its pill
+takes the `pointerdown`. Third instance of "the affordance covers the gesture it
+documents" after the pending pill and the verbs puck; the puck and the pill both
+got the one-line class fix (`pointer-events-none` on the container, `auto` on the
+buttons, swap.spec 24/24 unchanged), the rail is filed on the ladder because a
+toolbar is allowed to take taps.
+
+**AND A FOURTH: EVERY READ WAS RACING THE PREVIEW.** The still preview is
+`renderCanvas` -> `toBlob` -> an object URL an `<img>` must load, so a colour read
+taken straight after a gesture is racing it. Serial runs hid it completely;
+under three parallel workers a drag looked like it did nothing twice in a row,
+which the settle test read as the end of the photograph. Every measurement in
+the spec now goes through `stableColour`, which polls until two reads 220ms
+apart agree. **The lesson is the general one: a spec that reads an async render
+must settle it, and a serial run is not evidence that it does.**
+
 
 ### 2026-08-26 (C3675) — `--strictPort` PROTECTED THE WRONG RUN, AND THE SUITE WOULD HAVE GONE GREEN AGAINST A STRANGER
 
@@ -5652,4 +5775,60 @@ frontier. Today's ceiling is tomorrow's floor.
   in the tool (34 of 34), which is the same class the :5173 comment had already
   half-seen. Storefront unchanged: a capability inside Collage Studio, no new
   tool, no new trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-29 · **[AXIS:COLLAGE] C3680 — THE REFRAME: the picture moves inside its
+  fragment, by hand.** Rung taken because both wells were EMPTY (toolkit 0 new /
+  0 building, vibe-cards 0 / 0) and no trade was owed, which left COLLAGE the
+  stalest actionable axis — starved since 2026-08-26 while seven toolkit cycles
+  ran. **before → after:** every crop this app had ever drawn was decided FOR
+  you — a face detector's guess, an energy fallback, five automatic focus rules,
+  a drift on a clock — so *"this one is cropped through his head"* had two
+  answers, re-roll the whole wall and hope, or throw the picture away. Now you
+  drag it. **THE WHOLE CONTACT WITH THE GEOMETRY IS ONE TERM** at the front of
+  `calculateSmartCrop`'s anchor chain, so the still preview, the live Stage
+  (which both video recorders capture and the offline render seeks), the export
+  worker and the SVG all inherit it without knowing it exists. **KEYED BY ASSET
+  ID, NOT BY SLOT** — a frame is a corrected FACE, so it sits on the side of
+  `turnResolve`'s own line where the face and the colour already are, and it
+  survives a shuffle, a re-deal, a swap and a turn; keyed by slot the next roll
+  would have undone it, and rolling is what this app is for. **THE STATE IS THE
+  CROP**: `dragToFrame` reads the position off the CLAMPED rect the shipped crop
+  function just returned rather than off the previous anchor, so an edge
+  releases on the very next pixel back instead of banking invisible travel.
+  **PROOF, unit:** `reframe.invariants` **12/12** — the picture follows the
+  finger to **1.01e-12 canvas units** over 5,557 unclamped drags across 5 cell
+  shapes x 5 image shapes x 4 zooms x 4 leans x 4 anchors x 9 drags; 14,400
+  crops never leave the photograph; 14,400 reframes leave the FRAGMENT
+  `Object.is`-identical; 4,162 round trips return to the start; 3,780 zero-slack
+  axes do not travel; 8,843 clamped drags bank nothing; and the rejected design
+  (no `-twist` rotation) is measured **37.5% off the finger's line**, not argued
+  about. **AT THE ARTIFACT:** `reframe.spec` **12/12 across chromium, Mobile
+  Chrome, Mobile Safari and webkit-desktop**, on PIXELS with gradient tiles — a
+  drag down reveals the TOP of the photograph and a drag up the BOTTOM, and the
+  spec IDENTIFIES ITS OWN SOURCE from those two readings rather than being told
+  the answer; every other fragment within 18 RGB; every fragment's box within
+  1.5px; Recentre appears only on a moved picture and restores to 22 RGB; and
+  the correction survives a SHUFFLE that is proven non-vacuous first.
+  **FOUR SCARS, all found by measuring rather than reasoning** — a drag that
+  read its own state back delivered only its last event; banded tiles let
+  "drag until it stops changing" stop mid-band; the full-bleed RAIL takes the
+  pointerdown at the floor of the screen (third instance of "the affordance
+  covers the gesture it documents"); and every colour read was racing an async
+  preview, which a serial run hid completely. **BACKPORT RIDER FIRED** — the
+  class fixed was the affordance/gesture overlap, and it was applied to BOTH
+  overlays that carry it, including the pending pill the scar was originally
+  filed against (`pointer-events-none` container, `pointer-events-auto` buttons);
+  the accumulate-from-origin fix has no sibling to reach because this is the
+  app's FIRST free-form drag — every other continuous control is a native
+  `<input type="range">`, which was checked rather than assumed. **GATES:** 34/34
+  unit sweeps · 40/40 e2e regression (swap 24, undo, intake-intent, one-layout,
+  look, project-roundtrip, svg-project) · 18/18 composition/desk/take-strip
+  serially · mobile-watertight 14/14 on both phone engines · tsc clean · vite
+  build clean. Storefront unchanged: a capability inside Collage Studio, no new
+  tool, no new trade. **NAMED NEXT RUNG:** commit the frame into the pool asset
+  on `pointerup` so a reframe travels in the project file and the SVG — the
+  manifest already persists `analysis`, and the only thing in the way is that
+  `computeLayout` depends on `images`, so the write has to happen once at the
+  end of the gesture rather than per frame.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

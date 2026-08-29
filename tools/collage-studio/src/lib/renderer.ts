@@ -123,7 +123,13 @@ export const calculateSmartCrop = (
     // (stage.ts kept a FALLBACK_ANALYSIS constant purely for this). A centred
     // anchor is what all of them substituted; it belongs here, once.
     const an = img.analysis || {};
-    const anchor = an.face || an.energy || CENTRE_ANCHOR;
+    // THE REFRAME goes at the FRONT of this chain and is the whole of that
+    // feature's contact with the geometry (lib/reframe.ts). A hand-set frame is
+    // a corrected FACE, so it overrides the detector, the focus roster's
+    // re-pointed face and the energy fallback alike — the one thing that beats
+    // an automatic guess is somebody saying where to look. Absent on every
+    // asset nobody has dragged, so the default path is the chain it always was.
+    const anchor = an.frame || an.face || an.energy || CENTRE_ANCHOR;
 
     // The move nudges the ANCHOR, not the finished rect: the clamp below is what
     // keeps the crop inside the image, and a pan applied after it would leave

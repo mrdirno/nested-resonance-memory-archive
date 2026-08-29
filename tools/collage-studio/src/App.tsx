@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -20,7 +20,8 @@ import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type 
 import { withMove, type MoveId } from './lib/motion';
 import { isTurning, type TurnId } from './lib/turn';
 import { type PaceId } from './lib/pace';
-import { renderCanvas } from './lib/renderer';
+import { renderCanvas, calculateSmartCrop } from './lib/renderer';
+import { withReframe, dragToFrame, type Frame } from './lib/reframe';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
@@ -326,6 +327,20 @@ export default function App() {
    * remove button floating over the wrong one is the worst bug this feature has.
    */
   const [armedCell, setArmedCell] = useState<number | null>(null);
+  /**
+   * THE REFRAME — hand-set crops, keyed by ASSET ID and never by slot.
+   *
+   * A frame is a property of the PHOTOGRAPH (see lib/reframe.ts), so it has to
+   * survive a shuffle, a re-deal, a swap and a turn — all four of which move
+   * pictures between fragments. Keyed by slot it would be undone by the next
+   * roll, and rolling is what this app is for.
+   *
+   * Deliberately NOT in `lockedCells`' family: a pin is a preference about
+   * FUTURE rolls and a frame is a correction to one picture, so a reframed
+   * fragment is not pinned and a re-deal is free to move it elsewhere with its
+   * correction intact.
+   */
+  const [frames, setFrames] = useState<Map<string, Frame>>(new Map());
   /**
    * THE SWAP'S SECOND TAP.
    *
@@ -905,10 +920,15 @@ export default function App() {
         const cell = b && b.w > 0 && b.h > 0
           ? { cx: (b.x + b.w / 2) / PREVIEW_W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (PREVIEW_W * H) }
           : null;
-        return withMove(withTwist(withFocus(images[idx], focus, slotSeed), twist, slotSeed, cell), move, cell);
+        // THE REFRAME goes INNERMOST — it is a fact about the photograph, so
+        // it is applied before the three decorations that are facts about the
+        // fragment. `withReframe` hands the same object back when nobody has
+        // dragged this picture, so the default path allocates nothing.
+        const raw = images[idx];
+        return withMove(withTwist(withFocus(withReframe(raw, raw ? frames.get(raw.id) : undefined), focus, slotSeed), twist, slotSeed, cell), move, cell);
       });
     },
-    [shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect],
+    [shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect, frames],
   );
 
   /**
@@ -953,8 +973,12 @@ export default function App() {
   const turnResolve = useCallback((slot: number, fromSlot: number) => {
     if (slot === fromSlot) return orderedAssets[slot] ?? null;
     const idx = shuffledIndices[fromSlot];
-    const img = images[idx];
-    if (!img) return null;
+    const raw = images[idx];
+    if (!raw) return null;
+    // The reframe travels with the picture, which is the whole reason it is
+    // keyed by asset id: a turn hands slot `slot` the photograph that belongs
+    // to `fromSlot`, and it must arrive wearing its own correction.
+    const img = withReframe(raw, frames.get(raw.id));
     const H = PREVIEW_W / aspect;
     const slotSeed = (seed ^ (slot * 2654435761)) | 0;
     const b = layoutItems[slot]?.bounds;
@@ -962,7 +986,7 @@ export default function App() {
       ? { cx: (b.x + b.w / 2) / PREVIEW_W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (PREVIEW_W * H) }
       : null;
     return withMove(withTwist(withFocus(img, focus, slotSeed), twist, slotSeed, cell), move, cell);
-  }, [orderedAssets, shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect]);
+  }, [orderedAssets, shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect, frames]);
 
   /** THE TURN needs at least two photographic fragments to exchange anything. */
   const turning = isTurning(turn) && images.length > 1;
@@ -1483,6 +1507,98 @@ export default function App() {
       noticeTimer.current = window.setTimeout(() => setNotice(null), 4000);
   };
   useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current); }, []);
+
+  // --- THE REFRAME'S GESTURE ------------------------------------------------
+  //
+  // DRAG THE ARMED FRAGMENT'S PICTURE. Arming already exists and already means
+  // "this is the fragment I am talking about", so the reframe needs no mode and
+  // no fourth verb on the puck to enter — only a Recentre verb to leave, and
+  // that one appears only on a picture somebody actually moved.
+  //
+  // WHY THE ARMED ONE AND NOT ANY FRAGMENT. Outside full bleed a tap PINS, and
+  // a drag that begins as a tap would pin whatever it passed over. Scoping the
+  // drag to the armed fragment keeps every shipped gesture byte for byte, and
+  // it is what lets `touch-action: none` be scoped too — the overlay only stops
+  // the page scrolling while something is armed, which only happens in full
+  // bleed, where there is nothing to scroll.
+  //
+  // A DRAG ACCUMULATES FROM ITS ORIGIN, and that is not a style choice.
+  //   The first version asked `calculateSmartCrop` for the CURRENT crop on every
+  //   pointermove and applied the delta since the last one. Pointer events fire
+  //   faster than React re-renders and `setFrames` is asynchronous, so several
+  //   consecutive moves read the SAME stale crop, each one overwriting the last:
+  //   a 600px drag arrived as whatever the final 8px event asked for. Measured,
+  //   not theorised — reframe.spec T1 dragged the length of a photograph twice
+  //   and landed one band from where it started.
+  //   So the crop is sampled ONCE at pointerdown and every move maps the TOTAL
+  //   displacement onto it. `sw`/`sh`/`dw`/`dh`/`twist` are invariant under a
+  //   reframe (that is invariant I7), so the crop taken at the start stays the
+  //   right basis for the whole gesture, and the clamp lands on the TOTAL —
+  //   which is what makes the edge release on the very first pixel back.
+  const REFRAME_SLOP = 5;
+  const reframeRef = useRef<{
+    pid: number; slot: number; id: string;
+    ox: number; oy: number; k: number;
+    crop: ReturnType<typeof calculateSmartCrop>;
+    size: { width: number; height: number };
+    moved: boolean;
+  } | null>(null);
+  /** A drag ends with a click on the same element; this eats exactly that one. */
+  const reframedRef = useRef(false);
+  const reframeHintRef = useRef(false);
+
+  const beginReframe = (e: React.PointerEvent<SVGGElement>, slot: number) => {
+    if (!maximized || armedCell !== slot) return;
+    const rect = e.currentTarget.ownerSVGElement?.getBoundingClientRect();
+    if (!rect || !(rect.width > 0) || !(rect.height > 0)) return;
+    const imgIdx = shuffledIndices[slot];
+    const id = imgIdx === undefined || imgIdx < 0 ? undefined : images[imgIdx]?.id;
+    if (!id) return;
+    // CLIENT PX -> THE 1200-UNIT BASIS the fragment boxes live in. `max` of the
+    // two ratios rather than either alone: `preserveAspectRatio` defaults to
+    // meet, so a viewBox that did not match its box would be letterboxed and
+    // one of the two ratios would be a lie.
+    const k = Math.max(PREVIEW_W / rect.width, PREVIEW_H(aspect, PREVIEW_W) / rect.height);
+    const asset = orderedAssets[slot];
+    const bounds = layoutItems[slot]?.bounds;
+    if (!asset || !bounds || !(asset.width > 0) || !(asset.height > 0)) return;
+    // AT REST, deliberately: `calculateSmartCrop`'s time argument is defaulted,
+    // where `sampleMove` answers `NO_MOVE` by reference. A drift is a fact about
+    // the TAKE; mapping the drag against a moving crop would make the identical
+    // gesture land somewhere different depending on which instant you grabbed.
+    const size = { width: asset.width, height: asset.height };
+    const crop = calculateSmartCrop(bounds, { ...size, analysis: asset.analysis }, zoom);
+    reframeRef.current = { pid: e.pointerId, slot, id, ox: e.clientX, oy: e.clientY, k, crop, size, moved: false };
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* capture is a convenience */ }
+  };
+
+  const moveReframe = (e: React.PointerEvent<SVGGElement>) => {
+    const st = reframeRef.current;
+    if (!st || st.pid !== e.pointerId) return;
+    const dxc = e.clientX - st.ox;
+    const dyc = e.clientY - st.oy;
+    if (!st.moved && Math.hypot(dxc, dyc) < REFRAME_SLOP) return;
+    st.moved = true;
+    const next = dragToFrame(st.crop, st.size, dxc * st.k, dyc * st.k);
+    setFrames(prev => { const m = new Map(prev); m.set(st.id, next); return m; });
+    e.preventDefault();
+  };
+
+  const endReframe = (e: React.PointerEvent<SVGGElement>) => {
+    const st = reframeRef.current;
+    if (!st || st.pid !== e.pointerId) return;
+    reframeRef.current = null;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
+    if (st.moved) reframedRef.current = true;
+  };
+
+  // Said ONCE per session, on the first arm: a gesture with no affordance is a
+  // gesture nobody finds, and a phone has no hover to teach it with.
+  useEffect(() => {
+    if (!maximized || armedCell === null || reframeHintRef.current) return;
+    reframeHintRef.current = true;
+    flashNotice('Drag the picture to move it inside its fragment.');
+  }, [maximized, armedCell]);
 
   // --- INGEST PROGRESS ------------------------------------------------------
   // Held in a ref as well as state because two selections can overlap: the
@@ -2143,7 +2259,7 @@ export default function App() {
       setClips([]); setStageOk(true);
       // The music is the user's file too, and its URL is owned here.
       removeSoundtrack();
-      setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setAvgColor(null);
+      setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setFrames(new Map()); setAvgColor(null);
       ownCount(false); // a fresh import after Clear auto-follows the upload count again
   };
 
@@ -2913,7 +3029,16 @@ export default function App() {
                    {/* Lock overlay. Stays click-through-able (each <g> is the
                        hit target); the Stage transport sits at z-40 so it wins
                        the clicks that land on it. */}
-                   <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}>
+                   <svg
+                     className="absolute inset-0 w-full h-full"
+                     viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}
+                     /* THE REFRAME needs the browser to stop treating a drag on
+                        the artwork as a scroll — but only while a fragment is
+                        armed, which is a full-bleed-only state with nothing to
+                        scroll. Outside that this attribute is absent and touch
+                        behaves exactly as it shipped. */
+                     style={armedCell !== null ? { touchAction: 'none' } : undefined}
+                   >
                        {layoutItems.map((item, i) => {
                            const isLocked = lockedCells.has(i); const isArmed = maximized && armedCell === i; const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
                            // A PENDING TRADE RE-POINTS EVERY FRAGMENT. While one is parked,
@@ -2931,7 +3056,24 @@ export default function App() {
                                // and the puck below says which. Tapping the armed one again
                                // puts it away. And once Swap has parked a fragment, the tap
                                // means the third thing: trade with this one.
-                               <g key={i} onClick={() => (swapping ? performSwap(i) : maximized ? setArmedCell(prev => (prev === i ? null : i)) : toggleLock(i))} className="group cursor-pointer">
+                               <g
+                                 key={i}
+                                 onClick={() => {
+                                   // A REFRAME ENDS IN A CLICK on this same
+                                   // element. Eating exactly that one is what
+                                   // stops a drag from also disarming the
+                                   // fragment you were just correcting.
+                                   if (reframedRef.current) { reframedRef.current = false; return; }
+                                   if (swapping) return performSwap(i);
+                                   if (maximized) return setArmedCell(prev => (prev === i ? null : i));
+                                   return toggleLock(i);
+                                 }}
+                                 onPointerDown={(e) => beginReframe(e, i)}
+                                 onPointerMove={moveReframe}
+                                 onPointerUp={endReframe}
+                                 onPointerCancel={endReframe}
+                                 className={`group ${isArmed && !swapping ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
+                               >
                                    <path d={d} fill="transparent" stroke="transparent" />
                                    <path
                                      d={d}
@@ -2975,13 +3117,23 @@ export default function App() {
                        // tests measure, which is the bug this repo has written
                        // down four times now.
                        const tradeable = canSwapFrom(images, shuffledIndices, idx);
+                       // THE REFRAME'S ONLY BUTTON, and it exists only on a
+                       // picture somebody moved: the way IN is the drag, so a
+                       // Reframe verb would be a control for a gesture that is
+                       // already available, while the way BACK has no gesture
+                       // at all. Absent on every fragment nobody has touched.
+                       const reframed = !!(target?.id && frames.has(target.id));
                        // Kept whole against the edges: a puck half off the artwork is
                        // clipped by the band, and the button you cannot reach is the
                        // one over the fragment at the corner. The width is MEASURED,
                        // not guessed — 44 px per verb plus the gaps and the padding —
                        // and it has to grow with the third one or the clamp lets a
                        // corner puck hang off the art.
-                       const PUCK = swapping ? 210 : tradeable ? 152 : 108;
+                       // MEASURED, not guessed: 44 px per verb plus the gaps
+                       // and the padding. Two verbs is 108 and three is 152, so
+                       // the fourth is 196 — and the clamp below needs the real
+                       // number or a corner puck hangs off the art.
+                       const PUCK = swapping ? 210 : 20 + 44 * (2 + (tradeable ? 1 : 0) + (reframed ? 1 : 0));
                        const clampPx = (v: number, size: number) => (size > PUCK + 12 ? Math.min(Math.max(v, PUCK / 2 + 6), size - PUCK / 2 - 6) : size / 2);
                        const left = artFit ? `${clampPx((c.x / PREVIEW_W) * artFit.w, artFit.w)}px` : `${(c.x / PREVIEW_W) * 100}%`;
                        const top = artFit ? `${clampPx((c.y / H) * artFit.h, artFit.h)}px` : `${(c.y / H) * 100}%`;
@@ -2995,7 +3147,14 @@ export default function App() {
                        if (swapping) return (
                            <div
                                data-testid="cell-actions"
-                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-2xl border border-sky-400/40 bg-black/85 backdrop-blur pl-3 pr-1.5 py-1.5 shadow-2xl"
+                               /* THE SAME CLASS FIX AS THE VERBS PUCK BELOW,
+                                  applied to the overlay the scar was actually
+                                  filed against: the pill sits ON the fragment
+                                  it parked, so on a small fragment it covered
+                                  the taps meant for the artwork. The container
+                                  no longer takes them; the X and the label do
+                                  not need to. */
+                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-2xl border border-sky-400/40 bg-black/85 backdrop-blur pl-3 pr-1.5 py-1.5 shadow-2xl pointer-events-none [&>button]:pointer-events-auto"
                                style={{ left, top }}
                            >
                                <span data-testid="swap-pending" className="text-[13px] leading-tight text-sky-300 font-medium whitespace-nowrap">Tap another fragment</span>
@@ -3011,7 +3170,17 @@ export default function App() {
                        return (
                            <div
                                data-testid="cell-actions"
-                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-1 rounded-2xl border border-white/20 bg-black/80 backdrop-blur px-1.5 py-1.5 shadow-2xl"
+                               /* pointer-events-none ON THE CONTAINER, auto on
+                                  the buttons. The puck sits at the fragment's
+                                  CENTROID — which is exactly where a thumb
+                                  reaches to drag the picture — so its 6px of
+                                  padding and its gaps were swallowing the
+                                  gesture they sit on top of. Same class as the
+                                  scar already filed against the pending pill
+                                  ("the affordance covered the gesture it
+                                  documented"); the verbs themselves still take
+                                  every tap that lands on them. */
+                               className="absolute z-[60] -translate-x-1/2 -translate-y-1/2 flex items-center gap-1 rounded-2xl border border-white/20 bg-black/80 backdrop-blur px-1.5 py-1.5 shadow-2xl pointer-events-none [&>button]:pointer-events-auto"
                                style={{ left, top }}
                            >
                                <button
@@ -3029,6 +3198,19 @@ export default function App() {
                                      aria-label={`Trade ${what} with another fragment`}
                                      className="w-11 h-11 rounded-xl text-sky-300 hover:bg-sky-400/20 flex items-center justify-center active:scale-95 transition"
                                  ><ArrowLeftRight size={18} /></button>
+                               )}
+                               {reframed && (
+                                 <button
+                                     data-testid="cell-recentre"
+                                     onClick={() => setFrames(prev => {
+                                       const m = new Map(prev);
+                                       if (target?.id) m.delete(target.id);
+                                       return m;
+                                     })}
+                                     title={`Recentre ${what} — back to the crop the app chose`}
+                                     aria-label="Recentre this picture"
+                                     className="w-11 h-11 rounded-xl text-emerald-300 hover:bg-emerald-400/20 flex items-center justify-center active:scale-95 transition"
+                                 ><Crosshair size={18} /></button>
                                )}
                                <button
                                    data-testid="cell-remove"

@@ -53,6 +53,14 @@ export interface PhotoLike {
      * the one function all four crop paths already share. Absent = square.
      */
     twist?: number;
+    /**
+     * THE REFRAME — a hand-set anchor in the photograph's own normalised
+     * coordinates, written by `reframe.withReframe` and read by
+     * `calculateSmartCrop` at the FRONT of the anchor chain. A property of the
+     * PHOTOGRAPH rather than of the slot, which is why it is keyed by asset id
+     * one level up and survives every re-deal. Absent = nobody has dragged it.
+     */
+    frame?: { x: number; y: number } | null;
   } | null;
 }
 
