@@ -82,6 +82,32 @@ const SOURCES: Array<[RGB, RGB]> = [
 const TOP = (s: number) => SOURCES[s][0];
 const BOTTOM = (s: number) => SOURCES[s][1];
 
+/**
+ * WHICH PHOTOGRAPH, AND HOW FAR DOWN IT — by projecting the reading onto each
+ * source's own gradient and keeping the best fit.
+ *
+ * Comparing to the ENDPOINT colour was the obvious instrument and it is the
+ * weak one: a crop parked at the top of a photograph is centred half a crop
+ * HEIGHT in, so a tall fragment reads measurably down the gradient and a fixed
+ * RGB threshold has to be loosened until it stops discriminating. The
+ * projection separates the two questions the assertion actually asks — WHICH
+ * source (the perpendicular residual, ~1 for the right one and >50 for any
+ * other) and WHERE ON IT (the parameter t) — so each can be given a tight bar.
+ */
+type Fit = { s: number; t: number; resid: number };
+function fitSource(c: RGB): Fit {
+  let best: Fit = { s: -1, t: 0, resid: Infinity };
+  SOURCES.forEach(([a, b], s) => {
+    const d: RGB = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+    const len2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2];
+    const raw = ((c[0] - a[0]) * d[0] + (c[1] - a[1]) * d[1] + (c[2] - a[2]) * d[2]) / len2;
+    const t = Math.max(0, Math.min(1, raw));
+    const resid = dist(c, [a[0] + d[0] * t, a[1] + d[1] * t, a[2] + d[2] * t]);
+    if (resid < best.resid) best = { s, t, resid };
+  });
+  return best;
+}
+
 const tiles = () => SOURCES.map(([t, b], i) => ({
   name: `grad-${i}.png`,
   mimeType: 'image/png',
@@ -206,11 +232,30 @@ async function armCell(page: Page, n: number) {
   return puck;
 }
 
-/** The roomiest fragment — the puck sits at a centroid and a tiny cell is all puck. */
+/**
+ * A FRAGMENT A DRAG CAN ACTUALLY START IN, both ways.
+ *
+ * Size alone is not the question and picking on size alone is what made this
+ * spec flaky: the seed is random per boot, so some runs handed the biggest cell
+ * to a fragment sitting on the floor of the screen — where the full-bleed rail
+ * owns the pointer — or to one so short that the puck covers every legal grab
+ * point. Both directions need a start point clear of the rail AND of the
+ * centroid, so that is what is measured before area is even considered.
+ */
+const RAIL_PX = 96;
 async function biggestCell(page: Page): Promise<number> {
   const boxes = await allBoxes(page);
-  let best = 0, area = -1;
-  boxes.forEach((b, i) => { const a = b[2] * b[3]; if (a > area) { area = a; best = i; } });
+  const vp = page.viewportSize() ?? { width: 1280, height: 720 };
+  let best = -1, area = -1;
+  boxes.forEach((b, i) => {
+    const [, y, w, h] = b;
+    const lo = y + 8;
+    const hi = Math.min(y + h - 8, vp.height - RAIL_PX);
+    if (hi - lo < 60 || h < 120) return;
+    const a = w * h;
+    if (a > area) { area = a; best = i; }
+  });
+  expect(best, 'no fragment is roomy enough to drag in — the partition is unusable').toBeGreaterThanOrEqual(0);
   return best;
 }
 
@@ -225,51 +270,65 @@ async function biggestCell(page: Page): Promise<number> {
  * CHANGING instead, which is the clamp announcing itself, and fails loudly if
  * it never settles.
  */
-async function dragPicture(page: Page, n: number, dir: -1 | 1, maxPasses = 20) {
+/**
+ * WHERE A DRAG CAN START, ranked FURTHEST-FROM-THE-CENTROID FIRST.
+ *
+ * Two things cover the artwork and both take the pointerdown: the PUCK, which
+ * sits on the centroid and is up to 196px wide, and the full-bleed RAIL, which
+ * owns the bottom ~96px of the screen. Neither can be reasoned around from a
+ * bounding box alone — a narrow fragment has no point at its own half-width
+ * that clears a 98px puck arm — so the helper below TRIES a point and moves on
+ * to the next when the grab did not take. That is also the honest model of the
+ * gesture: a user whose thumb lands on a button tries somewhere else.
+ */
+function grabPoints(box: { x: number; y: number; width: number; height: number },
+                    vp: { width: number; height: number }, dir: -1 | 1) {
+  const lo = box.y + 8;
+  const hi = Math.min(box.y + box.height - 8, vp.height - RAIL_PX);
+  const cx0 = box.x + box.width / 2;
+  const cy0 = box.y + box.height / 2;
+  const ys = dir > 0 ? [0.18, 0.08, 0.32, 0.45] : [0.82, 0.92, 0.68, 0.55];
+  const xs = [0.5, 0.08, 0.92, 0.25, 0.75];
+  const pts: Array<[number, number]> = [];
+  for (const fy of ys) for (const fx of xs) {
+    const y = Math.max(lo, Math.min(box.y + box.height * fy, hi));
+    pts.push([box.x + box.width * fx, y]);
+  }
+  return pts.sort((a, b) => Math.hypot(b[0] - cx0, b[1] - cy0) - Math.hypot(a[0] - cx0, a[1] - cy0));
+}
+
+async function dragPicture(page: Page, n: number, dir: -1 | 1, maxPasses = 24) {
   const start = await stableColour(page, n);
   let last = start;
   let settled = 0;
+  let ci = 0;
   for (let p = 0; p < maxPasses; p++) {
     const box = await cells(page).nth(n).boundingBox();
     if (!box) throw new Error(`fragment ${n} has no box`);
     const vp = page.viewportSize() ?? { width: 1280, height: 720 };
-    const cx0 = box.x + box.width / 2;
-    const cy0 = box.y + box.height / 2;
-    // WHERE A DRAG CAN ACTUALLY START, and both exclusions were measured here
-    // rather than reasoned about. (1) The full-bleed RAIL owns the bottom ~90px
-    // of the screen and its pill takes the pointerdown, so a fragment reaching
-    // the floor cannot be grabbed down there — a real overlap, not a test
-    // artefact. (2) The PUCK sits on the centroid. Start near the edge the drag
-    // comes from, clamped above the rail, and step aside horizontally if that
-    // clamp lands under the puck.
-    let sy = dir > 0 ? box.y + box.height * 0.18 : box.y + box.height * 0.82;
-    sy = Math.max(box.y + 8, Math.min(sy, box.y + box.height - 8));
-    sy = Math.max(box.y + 8, Math.min(sy, vp.height - 96));
-    let sx = cx0;
-    if (Math.abs(sy - cy0) < 44) {
-      sx = cx0 + Math.min(box.width / 2 - 8, 130) * (cx0 > vp.width / 2 ? -1 : 1);
-    }
+    const pts = grabPoints(box, vp, dir);
+    if (ci >= pts.length) throw new Error(`fragment ${n}: no point in it takes a drag`);
+    const [sx, sy] = pts[ci];
     const room = dir > 0 ? vp.height - sy - 4 : sy - 4;
     const dy = dir * Math.max(60, room);
     await page.mouse.move(sx, sy);
     await page.mouse.down();
     for (let i = 1; i <= 20; i++) await page.mouse.move(sx, sy + (dy * i) / 20);
     await page.mouse.up();
-    await page.waitForTimeout(420);
+    await page.waitForTimeout(300);
     const now = await stableColour(page, n);
     if (process.env.REFRAME_DEBUG) {
       const puck = await page.getByTestId('cell-actions').count();
-      console.log(`[cell ${n} drag ${dir > 0 ? 'down' : 'up'} pass ${p}] start=(${Math.round(sx)},${Math.round(sy)}) dy=${Math.round(dy)} colour=${now.map(Math.round)} puck=${puck}`);
+      console.log(`[cell ${n} drag ${dir > 0 ? 'down' : 'up'} pass ${p} pt${ci}] start=(${Math.round(sx)},${Math.round(sy)}) dy=${Math.round(dy)} colour=${now.map(Math.round)} puck=${puck}`);
     }
-    // A PASS THAT MOVED NOTHING, ON A PICTURE THAT HAS NOT MOVED AT ALL, is a
-    // gesture that did not land — never the clamp. Counting it as a settle is
-    // how the first version of this helper declared victory on a drag the app
-    // never received.
-    const stuckAtStart = dist(now, start) < 3;
-    if (dist(now, last) < 3 && !(stuckAtStart && p < 4)) {
-      settled++;
-      if (settled >= 2) { await page.waitForTimeout(300); return; }
-    } else settled = 0;
+    const moved = dist(now, last) >= 3;
+    if (moved) { settled = 0; last = now; continue; }
+    // A PASS THAT MOVED NOTHING on a picture that has not moved AT ALL is a
+    // grab that never landed, never the clamp. Try the next point before
+    // believing the photograph has run out.
+    if (dist(now, start) < 3) { ci++; last = now; continue; }
+    settled++;
+    if (settled >= 2) { await page.waitForTimeout(300); return; }
     last = now;
   }
   throw new Error(`fragment ${n} never reached the end of its photograph in ${maxPasses} passes`);
@@ -297,18 +356,14 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
     await dragPicture(page, target, -1);
     const afterUp = await stableColour(page, target);
 
-    // WHICH SOURCE IS THIS? The one whose two ENDS explain both readings.
-    const explains = SOURCES.map((_, s) => s).filter(
-      (s) => dist(afterDown, TOP(s)) < 55 && dist(afterUp, BOTTOM(s)) < 55,
-    );
-    expect(
-      explains.length,
-      `exactly one source must explain down=${afterDown.map(Math.round)} up=${afterUp.map(Math.round)}`,
-    ).toBe(1);
-
-    const s = explains[0];
-    expect(dist(afterDown, TOP(s)), 'dragging down must reveal the TOP of the photograph').toBeLessThan(55);
-    expect(dist(afterUp, BOTTOM(s)), 'dragging up must reveal the BOTTOM of the photograph').toBeLessThan(55);
+    // WHICH SOURCE IS THIS, AND WHERE ON IT? Asked of the readings themselves.
+    const fd = fitSource(afterDown);
+    const fu = fitSource(afterUp);
+    expect(fd.resid, `down=${afterDown.map(Math.round)} must lie on one source's gradient`).toBeLessThan(35);
+    expect(fu.resid, `up=${afterUp.map(Math.round)} must lie on one source's gradient`).toBeLessThan(35);
+    expect(fu.s, 'both ends must be the SAME photograph').toBe(fd.s);
+    expect(fd.t, 'dragging down must park at the TOP of the photograph').toBeLessThan(0.3);
+    expect(fu.t, 'dragging up must park at the BOTTOM of it').toBeGreaterThan(0.7);
     expect(dist(afterDown, afterUp), 'the two ends must be plainly different pictures').toBeGreaterThan(90);
 
     // AND NOTHING ELSE MOVED — the fragment stays exactly where it was...
@@ -370,9 +425,11 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
     await dragPicture(page, target, 1);
     const moved = await stableColour(page, target);
 
-    // Which source is showing its TOP band? That is the corrected one.
-    const s = SOURCES.map((_, i) => i).find((i) => dist(moved, TOP(i)) < 55);
-    expect(s, `the drag must have parked on a recognisable top band (${moved.map(Math.round)})`).not.toBeUndefined();
+    // Which photograph is parked at its top? That is the corrected one.
+    const fm = fitSource(moved);
+    expect(fm.resid, `the drag must land on a recognisable source (${moved.map(Math.round)})`).toBeLessThan(35);
+    expect(fm.t, 'and it must be parked at the top of it').toBeLessThan(0.3);
+    const s = fm.s;
 
     // SHUFFLE re-deals which picture sits in which fragment. Retried, because a
     // random permutation is free to be the identity and a vacuous re-deal would
@@ -390,10 +447,13 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
 
     // THE CLAIM: wherever that picture landed, it still shows its top band.
     const after = await allColours(page);
-    const found = after.some((c) => dist(c, TOP(s as number)) < 60);
+    const found = after.some((c) => {
+      const f = fitSource(c);
+      return f.s === s && f.resid < 35 && f.t < 0.35;
+    });
     expect(
       found,
-      `the corrected picture must still be showing ${TOP(s as number)} somewhere after the re-deal; saw ${JSON.stringify(after.map((c) => c.map(Math.round)))}`,
+      `source ${s} must still be parked at its top somewhere after the re-deal (top ${TOP(s)}); saw ${JSON.stringify(after.map((c) => c.map(Math.round)))}`,
     ).toBe(true);
   });
 });
