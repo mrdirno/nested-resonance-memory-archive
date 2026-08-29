@@ -1491,6 +1491,22 @@ got the one-line class fix (`pointer-events-none` on the container, `auto` on th
 buttons, swap.spec 24/24 unchanged), the rail is filed on the ladder because a
 toolbar is allowed to take taps.
 
+**AND THE SPEC'S OWN FIX FOR IT WAS STILL GUESSING.** Clamping the start point
+above the rail was not enough: the seed is random per boot, so the partition
+differs every run, and a NARROW fragment has no point at its own half-width that
+clears a 98px puck arm — so some runs still grabbed a button. `dragPicture` now
+TRIES a ranked list of points (furthest from the centroid first) and advances to
+the next when a pass moved nothing on a picture that has not moved at all, which
+is also the honest model of the gesture: a user whose thumb lands on a button
+tries somewhere else. And the IDENTIFICATION stopped comparing to endpoint
+colours — a weak discriminator, because a crop parked at the top of a photograph
+is centred half a crop HEIGHT into it — in favour of projecting each reading onto
+its source's own gradient: the perpendicular residual says WHICH photograph (~1
+for the right one, >50 for any other) and the parameter says WHERE ON IT, so
+both questions get a tight bar instead of one loose one. Green 12/12 twice in a
+row against the DEPLOYED page with all four engines in parallel, which is the
+run that had been flaking.
+
 **AND A FOURTH: EVERY READ WAS RACING THE PREVIEW.** The still preview is
 `renderCanvas` -> `toBlob` -> an object URL an `<img>` must load, so a colour read
 taken straight after a gesture is racing it. Serial runs hid it completely;
@@ -5804,13 +5820,15 @@ frontier. Today's ceiling is tomorrow's floor.
   axes do not travel; 8,843 clamped drags bank nothing; and the rejected design
   (no `-twist` rotation) is measured **37.5% off the finger's line**, not argued
   about. **AT THE ARTIFACT:** `reframe.spec` **12/12 across chromium, Mobile
-  Chrome, Mobile Safari and webkit-desktop**, on PIXELS with gradient tiles — a
-  drag down reveals the TOP of the photograph and a drag up the BOTTOM, and the
-  spec IDENTIFIES ITS OWN SOURCE from those two readings rather than being told
-  the answer; every other fragment within 18 RGB; every fragment's box within
+  Chrome, Mobile Safari and webkit-desktop — and 12/12 twice against the DEPLOYED
+  page**, on PIXELS with gradient tiles — a drag down reveals the TOP of the
+  photograph and a drag up the BOTTOM, and the spec IDENTIFIES ITS OWN SOURCE by
+  projecting each reading onto that source's own gradient (the residual says
+  WHICH photograph, the parameter says WHERE ON IT) rather than being told the
+  answer; every other fragment within 18 RGB; every fragment's box within
   1.5px; Recentre appears only on a moved picture and restores to 22 RGB; and
   the correction survives a SHUFFLE that is proven non-vacuous first.
-  **FOUR SCARS, all found by measuring rather than reasoning** — a drag that
+  **FIVE SCARS, all found by measuring rather than reasoning** — a drag that
   read its own state back delivered only its last event; banded tiles let
   "drag until it stops changing" stop mid-band; the full-bleed RAIL takes the
   pointerdown at the floor of the screen (third instance of "the affordance
