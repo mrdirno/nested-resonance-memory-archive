@@ -13,20 +13,32 @@ browser with WebGL support.
 
 ### The model
 
-- Field: `Ψ(r) = cos(m·k·x + φₘ)·cos(n·k·y + φₙ)·cos(p·k·z + φₚ)`, with
-  `k = π/L` — the separable standing-wave form whose integer mode numbers
-  `(m, n, p)` also label particle-in-a-box eigenstates and 3-D Chladni
-  nodal patterns.
+- Field: the exact eigenmodes of a spherical cavity of radius `R`,
+  `Ψ = jₗ(zₗₙ·r/R)·Pₗᵐ(cosθ)·cos(mφ − ωt)` — spherical Bessel × associated
+  Legendre × azimuthal, with quantum numbers `(n, l, m)` (the same labels
+  as electron orbitals and stellar oscillation modes) and mode energy
+  `z²ₗₙ`. Radial profiles are computed on the CPU by Miller's stable
+  downward recurrence (validated against mpmath: zeros < 4e-15 abs,
+  values < 2e-16) and streamed to the GPU as a lookup texture; angular
+  parts are evaluated per particle in the shader by Schmidt-normalized
+  Legendre recurrences (< 5e-16 rel). Optional azimuthal precession ω
+  rotates the mode.
 - Two field forms:
-  - **Chladni nodes** (default): the three cyclic permutations of
-    `(m, n, p)` are degenerate eigenmodes (equal energy `m²+n²+p²`), so
-    their superposition `S = ψ(m,n,p) − ψ(p,m,n) + ψ(n,p,m)` is itself an
-    exact eigenmode. Dynamics descend `∇S²`, driving particles onto the
-    curved 2-D surface `S = 0` — the three-dimensional analogue of sand
-    collecting on the nodal lines of a vibrating plate, i.e. structure
-    drawn by the *absence* of field (total destructive interference).
-  - **Potential wells**: `a = −A·∇Ψ` on the single product mode, so
-    particles collect at field minima.
+  - **Chladni nodes** (default): two degenerate azimuthal orders
+    (`m` and `l−m`) of the same `(n, l)` shell are superposed; dynamics
+    descend `∇S²`, driving particles onto the curved 2-D nodal surface
+    `S = 0` — sand-on-a-plate physics in a volume, structure drawn by the
+    *absence* of field (total destructive interference).
+  - **Potential wells**: `a = −A·∇Ψ` on the single `(n, l, m)` eigenmode.
+- Cosmology layer: a Hubble term (outward acceleration ∝ radius, so
+  damping yields `v ≈ H·r`), periodic **epoch zoom-outs** (the frame
+  rescales by ½; identical equations each epoch, inherited structure
+  persisting as relics across scales), magnetic Lorentz coupling
+  (background axial field plus per-center dipoles that flip with the
+  pole), and a choice of boundary topology: reflecting wall, or
+  **antipodal identification** — leaving through a point of the sphere
+  re-enters at its antipode, the construction that makes elliptic space
+  finite yet edgeless.
 - Collapse centers (feedback cycle, on by default): up to eight softened
   point attractors (Plummer potentials with a tangential inflow term and a
   Gaussian-tapered region of influence) whose spawn positions and masses

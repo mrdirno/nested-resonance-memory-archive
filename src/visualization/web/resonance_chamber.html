@@ -413,6 +413,9 @@ kbd {
 }
 @media (max-width: 620px) {
   .brand-sub { display: none; }
+  .rail-label { display: none; }
+  .rail-tab { padding: 12px 14px; }
+  .rail-tab svg { width: 19px; height: 19px; }
   .top-actions { order: 2; margin-left: auto; }
   .readouts { order: 3; width: 100%; justify-content: space-between; margin-left: 0; }
   .readout { min-width: 0; flex: 1; padding: 2px 5px; }
@@ -433,6 +436,7 @@ kbd {
     <div class="readout"><span class="readout-label">Step</span><span class="readout-value" id="ro-step">0</span></div>
     <div class="readout"><span class="readout-label">Modes</span><span class="readout-value accent" id="ro-modes">–</span></div>
     <div class="readout"><span class="readout-label">Energy</span><span class="readout-value amber" id="ro-energy">–</span></div>
+    <div class="readout"><span class="readout-label">Scale</span><span class="readout-value" id="ro-epoch">×1</span></div>
     <div class="readout"><span class="readout-label">Particles</span><span class="readout-value" id="ro-count">–</span></div>
     <div class="readout"><span class="readout-label">FPS</span><span class="readout-value" id="ro-fps">–</span></div>
   </div>
@@ -448,23 +452,98 @@ kbd {
 </header>
 
 <nav class="rail" aria-label="Control panels">
-  <button class="rail-tab" data-panel="panel-sim" aria-expanded="false">
+  <button class="rail-tab" data-panel="panel-sim" aria-expanded="false" aria-label="Simulation">
     <svg viewBox="0 0 16 16"><path d="M1 8h3l2-5 4 10 2-5h3v1.5h-2l-3 7.5L6 5.5 5 8.5H1z"/></svg>
-    Simulation
+    <span class="rail-label">Simulation</span>
   </button>
-  <button class="rail-tab" data-panel="panel-seq" aria-expanded="false">
+  <button class="rail-tab" data-panel="panel-seq" aria-expanded="false" aria-label="Sequence">
     <svg viewBox="0 0 16 16"><path d="M1 3h14v2H1zm0 4h10v2H1zm0 4h14v2H1z"/></svg>
-    Sequence
+    <span class="rail-label">Sequence</span>
   </button>
-  <button class="rail-tab" data-panel="panel-ov" aria-expanded="false">
+  <button class="rail-tab" data-panel="panel-ov" aria-expanded="false" aria-label="Overlays">
     <svg viewBox="0 0 16 16"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7zM3.5 5.6v4.8L8 13l4.5-2.6V5.6L8 3z"/></svg>
-    Overlays
+    <span class="rail-label">Overlays</span>
   </button>
-  <button class="rail-tab" data-panel="panel-view" aria-expanded="false">
+  <button class="rail-tab" data-panel="panel-cosmos" aria-expanded="false" aria-label="Cosmos">
+    <svg viewBox="0 0 16 16"><path d="M8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm7.2-1.8c.9 1 .1 2.9-1.8 4.9.1.8 0 1.7-.3 2.5 2.9-2.7 4.3-5.6 3.1-6.9-.6-.6-1.7-.7-3-.3.4.2.8.4 1.1.7.4-.1.7 0 .9.1zM.8 13.3c-.9-1-.1-2.9 1.8-4.9-.1-.8 0-1.7.3-2.5C0 8.6-1.4 11.5-.2 12.8c.6.6 1.7.7 3 .3-.4-.2-.8-.4-1.1-.7-.4.1-.7 0-.9-.1z"/></svg>
+    <span class="rail-label">Cosmos</span>
+  </button>
+  <button class="rail-tab" data-panel="panel-view" aria-expanded="false" aria-label="View">
     <svg viewBox="0 0 16 16"><path d="M8 3C4 3 1.3 6 0.5 8c0.8 2 3.5 5 7.5 5s6.7-3 7.5-5C14.7 6 12 3 8 3zm0 8a3 3 0 110-6 3 3 0 010 6z"/></svg>
-    View
+    <span class="rail-label">View</span>
   </button>
 </nav>
+
+<!-- Cosmos panel -->
+<section class="panel" id="panel-cosmos" aria-label="Cosmology controls">
+  <div class="panel-head">
+    <div class="panel-title">Cosmos</div>
+    <div class="panel-sub">Expansion, epochs, topology, and magnetism</div>
+  </div>
+  <div class="panel-body">
+    <div class="group">
+      <div class="group-label">Boundary topology</div>
+      <div class="seg" id="bound-seg" role="group" aria-label="Boundary topology">
+        <button data-bound="reflect" aria-pressed="true">Reflecting wall</button>
+        <button data-bound="wrap" aria-pressed="false">No edge</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        No edge: leaving through a point on the sphere re-enters at its
+        antipode — the identification that makes elliptic space edgeless.
+      </p>
+    </div>
+    <div class="group">
+      <div class="group-label">Expansion</div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Expansion rate</span>
+          <span class="slider-val" id="val-hubble">0.30</span>
+        </div>
+        <input type="range" id="in-hubble" min="0" max="3" step="0.05" value="0.3" aria-label="Expansion rate">
+      </div>
+      <button class="switch-row" id="sw-epoch" aria-pressed="true">
+        <span>Epoch zoom-outs
+          <span class="hint">Periodically rescale by ½ — earlier structure persists as relics while larger scales organize</span></span>
+        <span class="switch"></span>
+      </button>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Epoch length</span>
+          <span class="slider-val" id="val-epochlen">45 s</span>
+        </div>
+        <input type="range" id="in-epochlen" min="15" max="180" step="5" value="45" aria-label="Epoch length">
+      </div>
+    </div>
+    <div class="group">
+      <div class="group-label">Fields</div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Magnetic coupling</span>
+          <span class="slider-val" id="val-mag">0.60</span>
+        </div>
+        <input type="range" id="in-mag" min="0" max="3" step="0.05" value="0.6" aria-label="Magnetic coupling">
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        A background axial field plus a dipole on every collapse center —
+        moments flip with the pole, and the Lorentz force twists inflow
+        and ejecta without adding energy.
+      </p>
+      <button class="switch-row" id="sw-twist" aria-pressed="true">
+        <span>Rotating modes
+          <span class="hint">Azimuthal precession of the eigenmode — twist and asymmetry from m-order rotation</span></span>
+        <span class="switch"></span>
+      </button>
+    </div>
+    <div class="group">
+      <div class="group-label">State</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Epoch</div><div class="stat-v" id="cos-epoch">0</div></div>
+        <div class="stat"><div class="stat-k">Scale</div><div class="stat-v" id="cos-scale">×1</div></div>
+        <div class="stat"><div class="stat-k">Sim time</div><div class="stat-v" id="cos-time">0 s</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Simulation panel -->
 <section class="panel" id="panel-sim" aria-label="Simulation controls">
@@ -561,7 +640,7 @@ kbd {
 <section class="panel" id="panel-seq" aria-label="Digit sequence controls">
   <div class="panel-head">
     <div class="panel-title">Sequence</div>
-    <div class="panel-sub">Digits of irrational constants drive the mode numbers</div>
+    <div class="panel-sub">Digits set the cavity quantum numbers (n, l, m)</div>
   </div>
   <div class="panel-body">
     <div class="group" id="tapes">
@@ -633,7 +712,7 @@ kbd {
       <div class="stat-grid">
         <div class="stat"><div class="stat-k">Step</div><div class="stat-v" id="st-step">0</div></div>
         <div class="stat"><div class="stat-k">Digits</div><div class="stat-v" id="st-digits">–</div></div>
-        <div class="stat"><div class="stat-k">m²+n²+p²</div><div class="stat-v" id="st-energy">–</div></div>
+        <div class="stat"><div class="stat-k">Energy z²ₗₙ</div><div class="stat-v" id="st-energy">–</div></div>
       </div>
     </div>
   </div>
@@ -777,24 +856,44 @@ kbd {
       wave's mode numbers sequenced by the digits of mathematical constants.</p>
 
     <h3>The field</h3>
-    <div class="eq">Ψ(r) = cos(m·k·x + φₘ) · cos(n·k·y + φₙ) · cos(p·k·z + φₚ),&nbsp;&nbsp;k = π/L</div>
-    <p>A separable three-dimensional standing wave in a box of half-width
-      <b>L</b>. The integers <b>m, n, p</b> set how many spatial oscillations fit
-      along each axis — the same mode numbers that label eigenstates of a
-      particle in a box or the nodal patterns of a Chladni plate, extended to a
-      volume. Each phase is tied to its digit, φ = (d/9)·π.</p>
+    <div class="eq">Ψ(r,θ,φ) = jₗ(zₗₙ·r/R) · Pₗᵐ(cos θ) · cos(mφ − ωt)</div>
+    <p>The exact eigenmodes of a spherical cavity of radius <b>R</b>:
+      spherical Bessel functions jₗ set the radial shells (zₗₙ is the n-th
+      zero, so Ψ vanishes on the wall), associated Legendre functions Pₗᵐ set
+      the latitude bands, and cos(mφ) the azimuthal lobes. The quantum numbers
+      <b>(n, l, m)</b> are the same ones that label electron orbitals and the
+      acoustic oscillation modes of stars. Mode energy is z²ₗₙ in natural
+      units. A slow azimuthal precession ω (optional) makes the pattern
+      rotate — twist without breaking the eigenmode. The radial profiles are
+      computed on the CPU with a stable downward recurrence (validated against
+      arbitrary-precision references to ~10⁻¹⁵) and streamed to the GPU as a
+      lookup table; the angular parts are evaluated per particle in the
+      shader.</p>
 
     <h3>Chladni mode — structure from absence</h3>
-    <div class="eq">S(r) = ψ(m,n,p) − ψ(p,m,n) + ψ(n,p,m),&nbsp;&nbsp;a = −A·∇S²</div>
+    <div class="eq">S = jₗ·(P̃ₗᵐ·cos(mφ̃) − P̃ₗᵐ²·sin(m₂φ̃)),&nbsp;&nbsp;a = −A·∇S²</div>
     <p>On a vibrating plate, sand collects where the amplitude is
-      <b>zero</b> — the pattern is drawn by the places the wave is absent. This
-      mode reproduces that physics in a volume: the three cyclic permutations
-      of (m, n, p) are <b>degenerate</b> eigenmodes (they share the energy
-      m²+n²+p²), so their superposition S is itself an exact eigenmode, and
-      descending the gradient of S² drives every particle onto the curved 2-D
-      surface where S = 0 — the three-dimensional Chladni figure, the locus of
-      total destructive interference. Each digit step selects a new degenerate
-      family and the nodal surface reshapes.</p>
+      <b>zero</b> — the pattern is drawn by the places the wave is absent. Here
+      two degenerate azimuthal orders (m and l−m) of the same (n, l) shell are
+      superposed; S is still an exact eigenmode, and descending ∇S² drives
+      every particle onto the curved 2-D surface S = 0 — the spherical Chladni
+      figure, the locus of total destructive interference. Each digit step
+      selects a new mode and the nodal surface reshapes.</p>
+
+    <h3>Cosmos</h3>
+    <p><b>Expansion:</b> an outward acceleration proportional to radius which,
+      against damping, produces a Hubble-like flow v = H·r — collapse and
+      expansion compete, as they do in structure formation.
+      <b>Epochs:</b> at fixed intervals the frame rescales by ½ (a comoving
+      zoom-out). The field equations are identical in every epoch; only the
+      inherited structure differs — relics of earlier epochs persist as
+      compact knots while the same physics organizes the next, larger scale.
+      <b>Magnetism:</b> a background axial field plus a dipole on each
+      collapse center (moments flip with the pole); the Lorentz force
+      v × B twists inflows and ejecta without doing work.
+      <b>Topology:</b> the wall either reflects, or — in no-edge mode —
+      identifies antipodal points, the construction that makes elliptic space
+      finite yet edgeless.</p>
 
     <h3>Collapse centers</h3>
     <div class="eq">a = −w·G·r/(|r|²+ε²)^(3/2) → detonation → shell: a = A(R)·exp(−(|r|−R)²/σ²)·r̂</div>
@@ -835,7 +934,7 @@ kbd {
     <div class="key-list">
       <span><kbd>Space</kbd></span><span>Play / pause</span>
       <span><kbd>R</kbd></span><span>Re-seed particles</span>
-      <span><kbd>1</kbd>–<kbd>4</kbd></span><span>Toggle panels</span>
+      <span><kbd>1</kbd>–<kbd>5</kbd></span><span>Toggle panels</span>
       <span><kbd>I</kbd></span><span>This dialog</span>
       <span><kbd>Esc</kbd></span><span>Close panel or dialog</span>
     </div>
@@ -913,7 +1012,7 @@ function digitsFor(constKey, base) {
 /* ================================================================
    Persistent settings
    ================================================================ */
-const STORE_KEY = 'resonance-chamber-v1';
+const STORE_KEY = 'resonance-chamber-v2';
 const DEFAULTS = {
   particles: 250000,
   stepsPerSec: 2,
@@ -931,6 +1030,8 @@ const DEFAULTS = {
   overlays: { c3:false, c6:false, lattice:false, spiral:false, fifths:false,
               equal:false, trefoil:false, torus:false, hopf:false },
   centers: { on: true, count: 3, period: 24, gain: 1 },
+  cosmos: { boundary: 'reflect', hubble: 0.3, epoch: true, epochLen: 45,
+            mag: 0.6, twist: true },
   guides: true,
   autoOrbit: false
 };
@@ -958,6 +1059,10 @@ function loadState() {
   s.centers.count = Math.min(8, Math.max(1, Math.round(s.centers.count) || 3));
   s.centers.period = Math.min(90, Math.max(6, +s.centers.period || 24));
   s.centers.gain = Math.min(4, Math.max(0.1, +s.centers.gain || 1));
+  if (s.cosmos.boundary !== 'wrap') s.cosmos.boundary = 'reflect';
+  s.cosmos.hubble = Math.min(3, Math.max(0, +s.cosmos.hubble || 0));
+  s.cosmos.epochLen = Math.min(180, Math.max(15, +s.cosmos.epochLen || 45));
+  s.cosmos.mag = Math.min(3, Math.max(0, +s.cosmos.mag || 0));
   for (const ax of ['a','b','c']) {
     if (!(s.constants[ax] in CONSTANTS)) s.constants[ax] = DEFAULTS.constants[ax];
   }
@@ -975,11 +1080,86 @@ function saveState() {
 /* ================================================================
    Simulation constants
    ================================================================ */
-const EXTENT = 15;                  // box half-width L
-const FORCE_SCALE = 150;            // wells: acceleration scale on grad(Psi)
-const CHLADNI_SCALE = 110;          // Chladni: acceleration scale on S*grad(S)
+const EXTENT = 15;                  // cavity radius R
+const FORCE_SCALE = 130;            // wells: acceleration scale on grad(Psi)
+const CHLADNI_SCALE = 100;          // Chladni: acceleration scale on S*grad(S)
 const RESTITUTION = 0.5;
 const MAX_TEX = 1024;               // 1024² = 1,048,576 particles
+const RAD_N = 1024;                 // radial lookup resolution
+
+/* ================================================================
+   Spherical-cavity math (validated against mpmath to ~1e-15:
+   Bessel zeros <4e-15 abs, values <2e-16, Legendre <5e-16 rel).
+   The cavity eigenmodes are Psi = j_l(z_ln r/R) P_l^m(cos t) cos(m f),
+   with z_ln the n-th zero of j_l, so Psi vanishes on the wall.
+   ================================================================ */
+function sphj(l, x) {
+  if (x < 1e-9) return l === 0 ? 1 : 0;
+  const lmax = l + 16 + Math.ceil(x);
+  let jp1 = 0, j = 1e-30, target = 0;
+  for (let i = lmax; i >= 1; i--) {
+    const jm1 = ((2 * i + 1) / x) * j - jp1;
+    jp1 = j; j = jm1;
+    if (i - 1 === l) target = j;
+    if (Math.abs(j) > 1e20) { j *= 1e-20; jp1 *= 1e-20; target *= 1e-20; }
+  }
+  return target * ((Math.sin(x) / x) / j);
+}
+function sphjDeriv(l, x) {
+  if (x < 1e-9) return l === 1 ? 1 / 3 : 0;
+  if (l === 0) return -sphj(1, x);
+  return sphj(l - 1, x) - ((l + 1) / x) * sphj(l, x);
+}
+function besselZeros(l, count) {
+  const zeros = [];
+  let x0 = 0.1, f0 = sphj(l, x0);
+  for (let x = 0.15; x < 120 && zeros.length < count; x += 0.05) {
+    const f = sphj(l, x);
+    if (f0 !== 0 && Math.sign(f) !== Math.sign(f0)) {
+      let a = x0, b = x;
+      for (let i = 0; i < 60; i++) {
+        const mid = (a + b) / 2;
+        if (Math.sign(sphj(l, mid)) === Math.sign(sphj(l, a))) a = mid; else b = mid;
+      }
+      zeros.push((a + b) / 2);
+    }
+    x0 = x; f0 = f;
+  }
+  return zeros;
+}
+const L_MAX = 9, N_MAX = 6;
+const BESSEL_ZEROS = [];
+for (let l = 0; l <= L_MAX; l++) BESSEL_ZEROS.push(besselZeros(l, N_MAX));
+
+function schmidt(l, m) {
+  if (m === 0) return 1;
+  let f = 1;
+  for (let k = l - m + 1; k <= l + m; k++) f *= k;
+  return Math.sqrt(2 / f);
+}
+
+/* Radial profiles j_l(z r/R) and their r-derivative, normalized to peak 1,
+   cached per (l,n) and packed into a lookup texture per digit step. */
+const radialCache = new Map();
+function radialProfile(l, n) {
+  const key = l + ':' + n;
+  let hit = radialCache.get(key);
+  if (hit) return hit;
+  const z = BESSEL_ZEROS[l][n - 1];
+  const arr = new Float32Array(RAD_N * 2);
+  let peak = 1e-9;
+  for (let i = 0; i < RAD_N; i++) {
+    const r = ((i + 0.5) / RAD_N) * EXTENT;
+    const x = z * r / EXTENT;
+    const j = sphj(l, x);
+    arr[i * 2] = j;
+    arr[i * 2 + 1] = (z / EXTENT) * sphjDeriv(l, x);
+    peak = Math.max(peak, Math.abs(j));
+  }
+  for (let i = 0; i < RAD_N * 2; i++) arr[i] /= peak;
+  radialCache.set(key, arr);
+  return arr;
+}
 
 /* ================================================================
    Three.js setup
@@ -1023,11 +1203,13 @@ if (floatType === null) {
 scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
 
-/* Boundary box */
+/* Cavity boundary: a subtle wireframe sphere */
 {
-  const g = new THREE.EdgesGeometry(new THREE.BoxGeometry(EXTENT*2, EXTENT*2, EXTENT*2));
-  const m = new THREE.LineBasicMaterial({ color: 0x1e2a3c, transparent: true, opacity: 0.8 });
-  scene.add(new THREE.LineSegments(g, m));
+  const g = new THREE.SphereBufferGeometry(EXTENT, 48, 32);
+  const m = new THREE.MeshBasicMaterial({
+    color: 0x1e2a3c, wireframe: true, transparent: true, opacity: 0.1
+  });
+  scene.add(new THREE.Mesh(g, m));
 }
 
 /* ================================================================
@@ -1067,10 +1249,16 @@ const velMat = new THREE.ShaderMaterial({
     dt: { value: 1/60 },
     damping: { value: state.damping },
     amp: { value: 1 },
-    modesA: { value: new THREE.Vector3() },  // previous step
-    modesB: { value: new THREE.Vector3() },  // current step
-    phasesA: { value: new THREE.Vector3() },
-    phasesB: { value: new THREE.Vector3() },
+    uModeA: { value: new THREE.Vector4() },  // previous step: (l, m, m2, -)
+    uModeB: { value: new THREE.Vector4() },  // current step
+    uNormA: { value: new THREE.Vector2(1, 1) }, // Schmidt factors (m, m2)
+    uNormB: { value: new THREE.Vector2(1, 1) },
+    uTwist: { value: new THREE.Vector2() },  // rotation phase A, B
+    uRad: { value: null },                   // radial lookup (jA,djA,jB,djB)
+    uBoundary: { value: 0 },                 // 0 reflect, 1 antipodal wrap
+    uHubble: { value: 0 },
+    uMag: { value: 0 },
+    uRescale: { value: 1 },
     blend: { value: 1 },
     fieldForm: { value: 1 },                 // 0 = wells, 1 = Chladni nodes
     spiralPhase: { value: 0 },
@@ -1086,7 +1274,10 @@ const velMat = new THREE.ShaderMaterial({
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
   fragmentShader: SIM_COMMON + `
     uniform float damping, amp, blend, spiralPhase, equalGain, fieldForm;
-    uniform vec3 modesA, modesB, phasesA, phasesB;
+    uniform vec4 uModeA, uModeB;
+    uniform vec2 uNormA, uNormB, uTwist;
+    uniform sampler2D uRad;
+    uniform float uBoundary, uHubble, uMag, uRescale;
     uniform vec3 ovCrystal, ovTopo;
     uniform vec2 ovHarmonic;
     uniform vec4 uCenters[8];    // xyz position, w signed strength
@@ -1096,31 +1287,84 @@ const velMat = new THREE.ShaderMaterial({
     const float EXTENT = ${EXTENT.toFixed(1)};
     const float PI = 3.14159265358979;
     const float K = PI / EXTENT;
+    const float RADN = ${RAD_N.toFixed(1)};
 
-    // Psi(r) = cos(m k x + a) cos(n k y + b) cos(p k z + c), and its
-    // analytic gradient.
-    float psiVal(vec3 p, vec3 m, vec3 ph) {
-      vec3 c = cos(m * K * p + ph);
-      return c.x * c.y * c.z;
-    }
-    vec3 gradPsi(vec3 p, vec3 m, vec3 ph) {
-      vec3 arg = m * K * p + ph;
-      vec3 c = cos(arg);
-      vec3 s = sin(arg);
-      return -K * vec3(m.x * s.x * c.y * c.z,
-                       m.y * c.x * s.y * c.z,
-                       m.z * c.x * c.y * s.z);
+    // Radial profiles j_l(z r/R) and derivatives, precomputed on the CPU
+    // with a stable downward recurrence; manually lerped (float textures
+    // cannot rely on linear filtering everywhere).
+    vec4 radialAt(float r) {
+      float u = clamp(r / EXTENT, 0.0, 1.0) * (RADN - 1.0);
+      float i0 = floor(u);
+      vec4 a = texture2D(uRad, vec2((i0 + 0.5) / RADN, 0.5));
+      vec4 b = texture2D(uRad, vec2((min(i0 + 1.0, RADN - 1.0) + 0.5) / RADN, 0.5));
+      return mix(a, b, u - i0);
     }
 
-    // Chladni form: superpose the three cyclic permutations of (m,n,p) -
-    // degenerate eigenmodes sharing energy m^2+n^2+p^2 - and descend the
-    // gradient of S^2, so particles migrate to the nodal surface S = 0,
-    // the 3-D locus of destructive interference (sand-on-a-plate physics).
-    vec3 chladniForce(vec3 p, vec3 m) {
-      vec3 z = vec3(0.0);
-      float S = psiVal(p, m, z) - psiVal(p, m.zxy, z) + psiVal(p, m.yzx, z);
-      vec3  G = gradPsi(p, m, z) - gradPsi(p, m.zxy, z) + gradPsi(p, m.yzx, z);
-      return S * G;   // = grad(S^2) / 2
+    // Associated Legendre P_l^m(cos t) (Condon-Shortley sign dropped) and
+    // dP/dt, by the standard stable recurrences; l, m <= 9.
+    void legendreP(int l, int m, float ct, float st, out float P, out float dP) {
+      float pmm = 1.0;
+      for (int i = 1; i <= 9; i++) {
+        if (i > m) break;
+        pmm *= float(2 * i - 1) * st;
+      }
+      float plm = pmm;
+      float plm1 = 0.0;
+      if (l > m) {
+        float prev = pmm;
+        float cur = ct * float(2 * m + 1) * pmm;
+        for (int k = 2; k <= 9; k++) {
+          int LL = m + k;
+          if (LL > l) break;
+          float nxt = (ct * float(2 * LL - 1) * cur - float(LL + m - 1) * prev)
+                      / float(LL - m);
+          prev = cur; cur = nxt;
+        }
+        plm = cur; plm1 = prev;
+      }
+      P = plm;
+      dP = (float(l) * ct * plm - float(l + m) * plm1) / st;
+    }
+
+    // One spherical-harmonic term: value and Cartesian gradient of
+    // j_l(kr) * P_l^m(cos t) * cos(m f - phase).
+    void shTerm(vec3 pos, float r, float ct, float st, float phi,
+                int l, int m, float nrm, float jr, float djr, float phase,
+                out float val, out vec3 grad) {
+      float P, dP;
+      legendreP(l, m, ct, st, P, dP);
+      P *= nrm; dP *= nrm;
+      float a = float(m) * phi - phase;
+      float ca = cos(a), sa = sin(a);
+      val = jr * P * ca;
+      float Fr = djr * P * ca;
+      float Ft = (jr / r) * dP * ca;
+      float Fp = -(jr / (r * st)) * P * float(m) * sa;
+      float cp = cos(phi), sp = sin(phi);
+      vec3 er = pos / r;
+      vec3 et = vec3(ct * cp, -st, ct * sp);
+      vec3 ep = vec3(-sp, 0.0, cp);
+      grad = Fr * er + Ft * et + Fp * ep;
+    }
+
+    // Wells: descend grad(Psi) of the (n,l,m) eigenmode.
+    // Chladni: superpose two degenerate azimuthal orders (m, m2) of the
+    // same (n,l) shell and descend grad(S^2), driving particles onto the
+    // nodal surface S = 0 - destructive interference made visible.
+    vec3 cavityForce(vec3 pos, vec4 mode, vec2 nrm, float jr, float djr, float twist) {
+      float r = max(length(pos), 0.35);
+      float ct = clamp(pos.y / r, -1.0, 1.0);
+      float st = max(sqrt(1.0 - ct * ct), 1e-3);
+      float phi = atan(pos.z, pos.x);
+      int l = int(mode.x + 0.5);
+      float v1; vec3 g1;
+      shTerm(pos, r, ct, st, phi, l, int(mode.y + 0.5), nrm.x, jr, djr, twist, v1, g1);
+      if (fieldForm < 0.5) return -g1;
+      float v2; vec3 g2;
+      shTerm(pos, r, ct, st, phi, l, int(mode.z + 0.5), nrm.y, jr, djr,
+             twist + 1.5707963, v2, g2);
+      float S = v1 - v2;
+      return -(S * (g1 - g2));
     }
 
     vec3 snapForce(vec3 p, float fold, float gain) {
@@ -1135,15 +1379,12 @@ const velMat = new THREE.ShaderMaterial({
       vec3 p = texture2D(posTex, vUv).xyz;
       vec3 v = texture2D(velTex, vUv).xyz;
 
-      // Base standing-wave force, blended across the digit transition
-      vec3 F;
-      if (fieldForm < 0.5) {
-        vec3 g = mix(gradPsi(p, modesA, phasesA), gradPsi(p, modesB, phasesB), blend);
-        F = -amp * ${FORCE_SCALE.toFixed(1)} * g;
-      } else {
-        F = -amp * ${CHLADNI_SCALE.toFixed(1)} *
-            mix(chladniForce(p, modesA), chladniForce(p, modesB), blend);
-      }
+      // Base cavity eigenmode force, blended across the digit transition
+      vec4 rad = radialAt(length(p));
+      vec3 FA = cavityForce(p, uModeA, uNormA, rad.x, rad.y, uTwist.x);
+      vec3 FB = cavityForce(p, uModeB, uNormB, rad.z, rad.w, uTwist.y);
+      float fscale = fieldForm < 0.5 ? ${FORCE_SCALE.toFixed(1)} : ${CHLADNI_SCALE.toFixed(1)};
+      vec3 F = amp * fscale * mix(FA, FB, blend);
 
       // ---- overlay forces ----
       vec3 O = vec3(0.0);
@@ -1184,7 +1425,10 @@ const velMat = new THREE.ShaderMaterial({
       F += O * equalGain;
 
       // ---- collapse centers: softened central attraction with an
-      //      accretion swirl, then a traveling spherical blast shell ----
+      //      accretion swirl, then a traveling spherical blast shell.
+      //      Each center also carries a magnetic dipole moment that
+      //      flips with its pole. ----
+      vec3 B = vec3(0.0, 0.35, 0.0);               // background axial field
       for (int i = 0; i < 8; i++) {
         if (i >= uCenterCount) break;
         vec4 c = uCenters[i];
@@ -1195,26 +1439,46 @@ const velMat = new THREE.ShaderMaterial({
           float halo = exp(-r2 / 56.0);            // finite region of influence
           F += -c.w * 260.0 * halo * d * invR3;    // w > 0 attracts
           if (c.w > 0.0) {                          // spiral inflow
-            F += c.w * 90.0 * halo * cross(vec3(0.0, 0.0, 1.0), d) * invR3;
+            F += c.w * 90.0 * halo * cross(vec3(0.0, 1.0, 0.0), d) * invR3;
           }
+          vec3 rn = d * inversesqrt(r2);
+          vec3 mm = vec3(0.0, c.w * 6.0, 0.0);     // dipole flips with the pole
+          B += (3.0 * dot(mm, rn) * rn - mm) * invR3;
         }
-        float amp = uBlastAmp[i];
-        if (amp > 0.001) {
+        float bamp = uBlastAmp[i];
+        if (bamp > 0.001) {
           vec3 db = p - uBlasts[i].xyz;
-          float r = length(db) + 1e-4;
-          float shell = exp(-pow((r - uBlasts[i].w) / 1.7, 2.0));
-          F += (amp * shell / r) * db;              // outward push at the front
+          float rb = length(db) + 1e-4;
+          float shell = exp(-pow((rb - uBlasts[i].w) / 1.7, 2.0));
+          F += (bamp * shell / rb) * db;            // outward push at the front
         }
       }
+
+      // Cosmological expansion: outward acceleration proportional to
+      // comoving radius; with damping this yields a Hubble-like v = H r.
+      F += uHubble * p;
+
+      // Lorentz coupling: rotational only, does no work on the particle.
+      if (uMag > 0.001) F += uMag * 30.0 * cross(v, B);
+
+      float fmag = length(F);
+      if (fmag > 500.0) F *= 500.0 / fmag;
 
       // Semi-implicit Euler with exponential damping (frame-rate independent)
       v = (v + F * dt) * exp(-damping * dt);
 
-      // Predict wall crossings and reflect velocity
-      vec3 pn = p + v * dt;
-      if (abs(pn.x) > EXTENT) v.x = -v.x * ${RESTITUTION.toFixed(2)};
-      if (abs(pn.y) > EXTENT) v.y = -v.y * ${RESTITUTION.toFixed(2)};
-      if (abs(pn.z) > EXTENT) v.z = -v.z * ${RESTITUTION.toFixed(2)};
+      // Reflecting wall (wrap mode re-enters at the antipode in the
+      // position pass instead, so no reflection there).
+      if (uBoundary < 0.5) {
+        vec3 pn = p + v * dt;
+        float rn = length(pn);
+        if (rn > EXTENT) {
+          vec3 nrm2 = pn / rn;
+          float vr = dot(v, nrm2);
+          if (vr > 0.0) v -= (1.0 + ${RESTITUTION.toFixed(2)}) * vr * nrm2;
+        }
+      }
+      v *= uRescale;
 
       gl_FragColor = vec4(v, 1.0);
     }
@@ -1224,15 +1488,30 @@ const velMat = new THREE.ShaderMaterial({
 const posMat = new THREE.ShaderMaterial({
   uniforms: {
     posTex: { value: null }, velTex: { value: null },
-    dt: { value: 1/60 }
+    dt: { value: 1/60 },
+    uBoundary: { value: 0 },
+    uRescale: { value: 1 }
   },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
   fragmentShader: SIM_COMMON + `
+    uniform float uBoundary, uRescale;
     const float EXTENT = ${EXTENT.toFixed(1)};
     void main() {
       vec3 p = texture2D(posTex, vUv).xyz;
       vec3 v = texture2D(velTex, vUv).xyz;
-      p = clamp(p + v * dt, vec3(-EXTENT), vec3(EXTENT));
+      p += v * dt;
+      float r = length(p);
+      if (r > EXTENT) {
+        if (uBoundary < 0.5) {
+          p *= EXTENT / r;                       // reflecting wall
+        } else {
+          // Edgeless space: antipodal identification (elliptic topology).
+          // Leaving through a point on the sphere re-enters at its antipode.
+          float e = min(r - EXTENT, EXTENT * 0.5);
+          p = -p * ((EXTENT - e) / r);
+        }
+      }
+      p *= uRescale;
       gl_FragColor = vec4(p, 1.0);
     }
   `
@@ -1314,16 +1593,16 @@ let texSize = 0, posA, posB, velA, velB, points;
 function seedTexture(size) {
   const data = new Float32Array(size * size * 4);
   const n = size * size;
-  const grid = Math.ceil(Math.cbrt(n));
-  const spacing = (EXTENT * 1.8) / grid;
   for (let i = 0; i < n; i++) {
-    const xi = i % grid;
-    const yi = Math.floor(i / grid) % grid;
-    const zi = Math.floor(i / (grid * grid));
+    // uniform density in the ball: r ~ R * cbrt(u)
+    const r = EXTENT * 0.94 * Math.cbrt(Math.random());
+    const ct = 2 * Math.random() - 1;
+    const st = Math.sqrt(1 - ct * ct);
+    const ph = Math.random() * 2 * Math.PI;
     const j = i * 4;
-    data[j]     = (xi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
-    data[j + 1] = (yi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
-    data[j + 2] = (zi - grid / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+    data[j]     = r * st * Math.cos(ph);
+    data[j + 1] = r * ct;
+    data[j + 2] = r * st * Math.sin(ph);
     data[j + 3] = 1;
   }
   const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.FloatType);
@@ -1505,22 +1784,49 @@ function digitAt(axis, s) {
   return seq[idx];
 }
 
-function modeOf(digit) { return digit * 9 / (state.base - 1); }
-
-function modesAt(s) {
-  return AXES.map(ax => modeOf(digitAt(ax, s)));
+/* Digits -> cavity quantum numbers. X sets the radial index n (how many
+   nodal shells), Y the degree l (angular complexity), Z the order m
+   (azimuthal lobes, 0..l). Digits are normalized so every base spans the
+   same mode range. */
+function cavityModeAt(s) {
+  const u = ax => digitAt(ax, s) / (state.base - 1);
+  const n = 1 + Math.floor(u('a') * (N_MAX - 0.001));
+  const l = Math.floor(u('b') * (L_MAX + 0.999));
+  const m = Math.round(u('c') * l);
+  let m2 = l - m;
+  if (m2 === m && m > 0) m2 = m - 1;
+  const z = BESSEL_ZEROS[l][n - 1];
+  const omega = state.cosmos.twist ? (0.10 + 0.06 * m) * (n % 2 ? 1 : -1) : 0;
+  return { n, l, m, m2, z, omega };
 }
 
+const radData = new Float32Array(RAD_N * 4);
+const radTex = new THREE.DataTexture(radData, RAD_N, 1, THREE.RGBAFormat, THREE.FloatType);
+radTex.minFilter = THREE.NearestFilter;
+radTex.magFilter = THREE.NearestFilter;
+velMat.uniforms.uRad.value = radTex;
+
+let modeA = null, modeB = null;
+
 function pushModes() {
-  const prev = modesAt(step - 1);
-  const cur = modesAt(step);
-  velMat.uniforms.modesA.value.fromArray(prev);
-  velMat.uniforms.modesB.value.fromArray(cur);
-  velMat.uniforms.phasesA.value.fromArray(prev.map(m => m / 9 * Math.PI));
-  velMat.uniforms.phasesB.value.fromArray(cur.map(m => m / 9 * Math.PI));
-  pointsMat.uniforms.modes.value.fromArray(cur);
+  modeA = cavityModeAt(step - 1);
+  modeB = cavityModeAt(step);
+  velMat.uniforms.uModeA.value.set(modeA.l, modeA.m, modeA.m2, 0);
+  velMat.uniforms.uModeB.value.set(modeB.l, modeB.m, modeB.m2, 0);
+  velMat.uniforms.uNormA.value.set(schmidt(modeA.l, modeA.m), schmidt(modeA.l, modeA.m2));
+  velMat.uniforms.uNormB.value.set(schmidt(modeB.l, modeB.m), schmidt(modeB.l, modeB.m2));
+  const ra = radialProfile(modeA.l, modeA.n);
+  const rb = radialProfile(modeB.l, modeB.n);
+  for (let i = 0; i < RAD_N; i++) {
+    radData[i * 4]     = ra[i * 2];
+    radData[i * 4 + 1] = ra[i * 2 + 1];
+    radData[i * 4 + 2] = rb[i * 2];
+    radData[i * 4 + 3] = rb[i * 2 + 1];
+  }
+  radTex.needsUpdate = true;
+  pointsMat.uniforms.modes.value.set(modeB.l + 1, modeB.m + 1, modeB.n + 1);
   velMat.uniforms.equalGain.value = state.overlays.equal
-    ? Math.pow(2, Math.round(cur[0]) / 12) : 1;
+    ? Math.pow(2, modeB.l / 12) : 1;
 }
 
 /* ================================================================
@@ -1549,6 +1855,8 @@ function seedCenter(i, preAge) {
   const k = step + 17 + i * 31 + centerSpawns * 7;
   centerSpawns++;
   c.pos.set(centerCoord('a', k), centerCoord('b', k), centerCoord('c', k));
+  const rlen = c.pos.length();
+  if (rlen > EXTENT * 0.72) c.pos.multiplyScalar(EXTENT * 0.72 / rlen);
   c.mass = 0.4 + 1.1 * (digitAt('c', k + 3) / (state.base - 1));
   c.life = state.centers.period * (0.45 + 0.75 * c.mass);
   c.born = simTime - (preAge || 0) * c.life;
@@ -1618,6 +1926,43 @@ function updateCenters(dt) {
   updateCenterMarkers();
 }
 
+/* ================================================================
+   Cosmos: expansion, epoch zoom-outs, boundary topology, magnetism.
+   The Hubble term accelerates matter outward in proportion to radius;
+   every epoch the frame rescales by 1/2 (comoving zoom-out), so
+   structures built in earlier epochs persist as compact relics while
+   the same field equations organize the next, larger scale.
+   ================================================================ */
+let epochN = 0;
+let lastEpochT = 0;
+let pendingRescale = 1;
+
+function updateCosmos() {
+  const c = state.cosmos;
+  if (c.epoch && simTime - lastEpochT >= c.epochLen) {
+    lastEpochT = simTime;
+    epochN++;
+    pendingRescale = 0.5;
+    for (const cs of centerState) {
+      cs.pos.multiplyScalar(0.5);
+      cs.blastPos.multiplyScalar(0.5);
+      cs.blastR *= 0.5;
+    }
+    $('ro-epoch').textContent = '×' + Math.pow(2, epochN);
+    $('cos-epoch').textContent = epochN;
+    $('cos-scale').textContent = '×' + Math.pow(2, epochN);
+  }
+  velMat.uniforms.uHubble.value = c.hubble;
+  velMat.uniforms.uMag.value = c.mag;
+  velMat.uniforms.uBoundary.value = c.boundary === 'wrap' ? 1 : 0;
+  posMat.uniforms.uBoundary.value = c.boundary === 'wrap' ? 1 : 0;
+  velMat.uniforms.uRescale.value = pendingRescale;
+  posMat.uniforms.uRescale.value = pendingRescale;
+  if (modeA && modeB) {
+    velMat.uniforms.uTwist.value.set(modeA.omega * simTime, modeB.omega * simTime);
+  }
+}
+
 /* Center + shell markers */
 const centerGroup = new THREE.Group();
 scene.add(centerGroup);
@@ -1667,14 +2012,15 @@ const digitChar = d => d.toString(36).toUpperCase();
 
 function updateHud() {
   const ds = AXES.map(ax => digitAt(ax, step));
-  const modes = ds.map(modeOf);
-  const e = modes[0] ** 2 + modes[1] ** 2 + modes[2] ** 2;
+  const M = cavityModeAt(step);
+  const e = M.z * M.z;   // mode energy in units hbar^2/(2 mass R^2): E = z_ln^2
   $('ro-step').textContent = step.toLocaleString();
-  $('ro-modes').textContent = ds.map(digitChar).join(' · ');
-  $('ro-energy').textContent = state.base === 10 ? Math.round(e) : e.toFixed(1);
+  $('ro-modes').textContent = M.n + '\u00b7' + M.l + '\u00b7' + M.m;
+  $('ro-energy').textContent = Math.round(e);
+  $('ro-epoch').textContent = '\u00d7' + Math.pow(2, epochN);
   $('st-step').textContent = step.toLocaleString();
   $('st-digits').textContent = ds.map(digitChar).join(' ');
-  $('st-energy').textContent = state.base === 10 ? Math.round(e) : e.toFixed(1);
+  $('st-energy').textContent = Math.round(e);
 }
 
 function updateTapes() {
@@ -1858,10 +2204,10 @@ $('btn-defaults').addEventListener('click', () => {
 
 const FORM_HINTS = {
   chladni: 'Chladni: particles settle where the field is zero — the nodal ' +
-    'surfaces of a degenerate three-mode superposition, as sand does on a ' +
-    'vibrating plate.',
+    'surfaces of two superposed degenerate azimuthal orders of the same ' +
+    '(n, l) shell, as sand does on a vibrating plate.',
   wells: 'Wells: particles descend the field gradient and collect at the ' +
-    'minima of the single (m, n, p) standing wave.'
+    'extrema of the single (n, l, m) cavity eigenmode.'
 };
 const formSeg = $('form-seg');
 function syncFormSeg() {
@@ -2034,6 +2380,42 @@ function pushOverlayUniforms() {
   velMat.uniforms.ovTopo.value.set(+o.trefoil, +o.torus, +o.hopf);
 }
 
+/* Cosmos panel */
+const boundSeg = $('bound-seg');
+function syncBoundSeg() {
+  boundSeg.querySelectorAll('button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.bound === state.cosmos.boundary)));
+}
+boundSeg.querySelectorAll('button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.cosmos.boundary = btn.dataset.bound;
+    syncBoundSeg();
+    saveState();
+  }));
+$('in-hubble').addEventListener('input', e => {
+  state.cosmos.hubble = parseFloat(e.target.value);
+  $('val-hubble').textContent = state.cosmos.hubble.toFixed(2);
+  saveState();
+});
+wireSwitch($('sw-epoch'), () => state.cosmos.epoch, v => {
+  state.cosmos.epoch = v;
+  lastEpochT = simTime;
+});
+$('in-epochlen').addEventListener('input', e => {
+  state.cosmos.epochLen = parseInt(e.target.value, 10);
+  $('val-epochlen').textContent = state.cosmos.epochLen + ' s';
+  saveState();
+});
+$('in-mag').addEventListener('input', e => {
+  state.cosmos.mag = parseFloat(e.target.value);
+  $('val-mag').textContent = state.cosmos.mag.toFixed(2);
+  saveState();
+});
+wireSwitch($('sw-twist'), () => state.cosmos.twist, v => {
+  state.cosmos.twist = v;
+  pushModes();
+});
+
 /* View panel */
 wireSwitch($('sw-orbit'), () => state.autoOrbit, v => { state.autoOrbit = v; });
 document.querySelectorAll('.cam-preset').forEach(btn =>
@@ -2053,7 +2435,8 @@ window.addEventListener('keydown', e => {
     case '1': togglePanel('panel-sim'); break;
     case '2': togglePanel('panel-seq'); break;
     case '3': togglePanel('panel-ov'); break;
-    case '4': togglePanel('panel-view'); break;
+    case '4': togglePanel('panel-cosmos'); break;
+    case '5': togglePanel('panel-view'); break;
     case 'Escape':
       if (scrim.classList.contains('open')) setInfo(false);
       else closePanels();
@@ -2102,6 +2485,15 @@ function syncAllControls() {
   $('val-cent-period').textContent = state.centers.period + ' s';
   $('in-cent-gain').value = state.centers.gain;
   $('val-cent-gain').textContent = state.centers.gain.toFixed(1) + '×';
+  syncBoundSeg();
+  $('in-hubble').value = state.cosmos.hubble;
+  $('val-hubble').textContent = state.cosmos.hubble.toFixed(2);
+  $('sw-epoch').setAttribute('aria-pressed', String(state.cosmos.epoch));
+  $('in-epochlen').value = state.cosmos.epochLen;
+  $('val-epochlen').textContent = state.cosmos.epochLen + ' s';
+  $('in-mag').value = state.cosmos.mag;
+  $('val-mag').textContent = state.cosmos.mag.toFixed(2);
+  $('sw-twist').setAttribute('aria-pressed', String(state.cosmos.twist));
 }
 
 function applyAllState() {
@@ -2157,14 +2549,17 @@ function frame(now) {
 
     simTime += dtSim;
     updateCenters(dtSim);
+    updateCosmos();
 
     simStep(dtSim);
+    pendingRescale = 1;   // the epoch rescale applies for exactly one step
   }
 
   fpsFrames++;
   fpsWindow += dtWall;
   if (fpsWindow >= 0.5) {
     $('ro-fps').textContent = Math.round(fpsFrames / fpsWindow);
+    $('cos-time').textContent = Math.round(simTime) + ' s';
     fpsFrames = 0; fpsWindow = 0;
   }
 
@@ -2204,6 +2599,54 @@ requestAnimationFrame(frame);
 
 })();
 </script>
+
+<!-- ═══ RINGS · agent context, newest last · read before changing this file ═══
+RING 1 · 2026-08-29 · cube → cosmos
+WHAT CHANGED: Cartesian cos-product modes replaced by exact spherical-cavity
+eigenmodes j_l(z_ln r/R)·P_l^m(cosθ)·cos(mφ−ωt): CPU computes radial profiles
+by Miller downward recurrence into a 1024-texel lookup (validated vs mpmath:
+zeros <4e-15, values <2e-16), GPU evaluates Legendre recurrences per particle
+(Schmidt-normalized so all (l,m) forces are comparable). Chladni form now
+superposes degenerate azimuthal orders (m, l−m) of one (n,l) shell. Boundary
+is a sphere: reflecting wall, or antipodal identification ("no edge",
+elliptic-space construction). Added Hubble term (F = H·p → v ≈ H·r/γ), epoch
+zoom-outs (frame rescale ×½, relics persist across scales, same equations
+each epoch), magnetic Lorentz coupling (background axial + per-center dipoles
+that flip with the pole), rotating modes (azimuthal precession ω(m,n)), and a
+Cosmos panel with Scale readout. Digits now map to (n,l,m): n∈1..6, l∈0..9,
+m∈0..l.
+BANNED (obvious answers set aside first): keep cos-product field and just
+clamp to a sphere; fake expansion by moving only the camera; "magnetic" curl
+noise with no B field; periodic-cube (3-torus) wrap for no-edge; scale factor
+as a cosmetic label with no dynamics.
+DEAD BRANCHES: (1) full Miller recurrence for j_l inside the shader — lost:
+float32 downward recurrence risks overflow/underflow per fragment, and the
+radial function is 1-D so a CPU texture is exact and cheaper; (2) honest S³
+(3-sphere) topology via stereographic projection — lost: metric distortion
+misrepresents distances, which reads as a bug; antipodal identification keeps
+the metric honest inside the view; (3) measured accretion mass via GPU
+density reduction (mipmap readback) — lost: readback stalls the pipeline for
+a number only used to scale a lifetime; age-proxy keeps 60fps and is
+disclosed in the About dialog.
+KILL-TEST: strongest attack — GLSL Legendre/Bessel bugs are invisible (wrong
+field still looks "cosmic"). Survived by validating the exact recurrences
+line-for-line in JS against mpmath (1e-15 agreement) before porting, pinning
+zeros of j_0 to nπ and j_1 to 4.493409, and eyeballing l=2,m=0-style nodal
+cones in screenshots. Second attack — Hubble term piles matter on the wall;
+mitigated by epoch rescales pulling everything to r/2 and default H=0.3.
+Residual risk: pole clamp (sinθ≥1e-3) slightly blurs forces within ~0.06° of
+the axis; accepted.
+THE NON-OBVIOUS CHOICE: split the eigenfunction across processors by
+dimensionality — the unstable 1-D radial math in float64 on the CPU (as a
+streamed lookup), the stable 2-D angular math in float32 on the GPU. Each
+processor does only the math it can do exactly.
+OPEN QUESTIONS: Should blast shells reflect off (or wrap through) the
+boundary so detonations reverberate into standing waves of their own? Do
+relics from epoch k statistically imprint the collapse sites of epoch k+1
+(measurable memory across scales — the NRM claim)? At what (l,m) does the
+antipodal identification visibly conflict with odd-parity modes (Ψ(−r) =
+(−1)^l Ψ(r)) — and is that conflict itself worth visualizing?
+═══ end rings ═══ -->
 
 </body>
 </html>
