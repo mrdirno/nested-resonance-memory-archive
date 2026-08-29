@@ -39,6 +39,15 @@ browser with WebGL support.
   **antipodal identification** — leaving through a point of the sphere
   re-enters at its antipode, the construction that makes elliptic space
   finite yet edgeless.
+- Reverberation: blast shells echo — in reflect mode from the shell's
+  acoustic image source outside the sphere (the image-source method of
+  room acoustics), in no-edge mode by refocusing near the antipode of the
+  origin, as waves do in closed spaces; two generations at 65% strength.
+- Scenarios: five one-click experiment presets (Formation, Chladni study,
+  Orbitals, Magnetized, Closed universe) that restart the universe clocks
+  deterministically while keeping hardware-facing settings.
+- Sonification (opt-in): digit steps play their mode's eigenfrequency and
+  detonations land a low thump, via WebAudio behind a user gesture.
 - Collapse centers (feedback cycle, on by default): up to eight softened
   point attractors (Plummer potentials with a tangential inflow term and a
   Gaussian-tapered region of influence) whose spawn positions and masses

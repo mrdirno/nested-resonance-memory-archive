@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Resonance Chamber</title>
-<meta name="description" content="GPU particle simulation of standing-wave eigenmodes in a cubic cavity, sequenced by the digits of mathematical constants.">
+<meta name="description" content="GPU particle simulation of spherical-cavity eigenmodes with collapse, expansion, and reverberation, sequenced by the digits of mathematical constants.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
@@ -441,6 +441,10 @@ kbd {
     <div class="readout"><span class="readout-label">FPS</span><span class="readout-value" id="ro-fps">–</span></div>
   </div>
   <div class="top-actions">
+    <button class="icon-btn" id="btn-audio" aria-label="Enable sound" aria-pressed="false" title="Sound (A)">
+      <svg id="ic-snd-off" viewBox="0 0 16 16"><path d="M2 6v4h3l4 3V3L5 6H2zm10.7 2l2-2-1-1-2 2-2-2-1 1 2 2-2 2 1 1 2-2 2 2 1-1-2-2z"/></svg>
+      <svg id="ic-snd-on" viewBox="0 0 16 16" style="display:none"><path d="M2 6v4h3l4 3V3L5 6H2zm9 2c0-1.2-.7-2.3-1.7-2.8v5.6C10.3 10.3 11 9.2 11 8zm-1.7-6v1.6C11.2 4.2 12.5 6 12.5 8s-1.3 3.8-3.2 4.4V14c2.7-.7 4.7-3.1 4.7-6s-2-5.3-4.7-6z"/></svg>
+    </button>
     <button class="icon-btn primary" id="btn-play" aria-label="Pause simulation" title="Play / pause (Space)">
       <svg id="ic-pause" viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>
       <svg id="ic-play" viewBox="0 0 16 16" style="display:none"><path d="M4 2l10 6-10 6z"/></svg>
@@ -552,6 +556,20 @@ kbd {
     <div class="panel-sub">Integrator, field strength, and rendering</div>
   </div>
   <div class="panel-body">
+    <div class="group">
+      <div class="group-label">Scenarios</div>
+      <div class="seg" id="scenario-seg" role="group" aria-label="Scenario presets">
+        <button data-scn="formation">Formation</button>
+        <button data-scn="chladni">Chladni study</button>
+        <button data-scn="orbitals">Orbitals</button>
+        <button data-scn="magnet">Magnetized</button>
+        <button data-scn="closed">Closed universe</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        One-click experiment setups. Your particle count and render
+        settings are kept; everything else restarts clean.
+      </p>
+    </div>
     <div class="btn-row">
       <button class="btn" id="btn-reseed">
         <svg viewBox="0 0 16 16"><path d="M8 2a6 6 0 104.47 10L11 10.5A4 4 0 118 4v2.5L12 3 8 -0.5z"/></svg>
@@ -906,9 +924,20 @@ kbd {
       launches, expanding at constant speed with amplitude decaying as it
       spreads. Shells from one detonation sweep through the territory of other
       centers, so the standing eigenmode field, the collapses, and the
-      traveling waves feed back on one another. Growth is modeled by age
-      rather than by measured accretion, and the centers are external
-      potentials, not self-gravitating masses.</p>
+      traveling waves feed back on one another. And the walls answer:
+      in reflect mode each shell returns as an <b>echo</b> from its acoustic
+      image source outside the sphere; in no-edge mode the wavefront
+      <b>refocuses near the antipode</b> of its origin and re-expands, as
+      waves do in a closed space — two echo generations at 65% strength,
+      then silence. Growth is modeled by age rather than by measured
+      accretion, and the centers are external potentials, not
+      self-gravitating masses.</p>
+
+    <h3>Sound</h3>
+    <p>The cavity modes are acoustic modes, so the chamber can play itself:
+      enable sound (speaker button, or <b>A</b>) and each digit step sounds
+      its eigenfrequency — pitch follows the mode energy z²ₗₙ, a soft fifth
+      above for color — while every detonation lands a low thump.</p>
 
     <h3>The dynamics</h3>
     <div class="eq">a = −A·∇Ψ,&nbsp;&nbsp;v ← (v + a·dt)·e^(−γ·dt),&nbsp;&nbsp;x ← x + v·dt</div>
@@ -934,6 +963,7 @@ kbd {
     <div class="key-list">
       <span><kbd>Space</kbd></span><span>Play / pause</span>
       <span><kbd>R</kbd></span><span>Re-seed particles</span>
+      <span><kbd>A</kbd></span><span>Sound on / off</span>
       <span><kbd>1</kbd>–<kbd>5</kbd></span><span>Toggle panels</span>
       <span><kbd>I</kbd></span><span>This dialog</span>
       <span><kbd>Esc</kbd></span><span>Close panel or dialog</span>
@@ -1841,7 +1871,8 @@ let centerSpawns = 0;
 const centerState = Array.from({ length: 8 }, () => ({
   pos: new THREE.Vector3(), mass: 1, born: 0, life: 1,
   stage: 'accrete', stageT: 0, w: 0,
-  blastPos: new THREE.Vector3(), blastR: 0, blastAmp: 0, blastAmp0: 0
+  blastPos: new THREE.Vector3(), blastR: 0, blastAmp: 0, blastAmp0: 0,
+  blastGen: 0, blastMaxR: 0
 }));
 
 function centerCoord(axis, k) {
@@ -1871,7 +1902,64 @@ function initCenters() {
     centerState[i].blastAmp = 0;
     centerState[i].blastAmp0 = 0;
     centerState[i].blastR = 0;
+    centerState[i].blastGen = 0;
+    centerState[i].blastMaxR = 0;
   }
+}
+
+/* ================================================================
+   Sonification (opt-in). The cavity modes are acoustic modes, so the
+   chamber can play them: each digit step sounds its eigenfrequency
+   (pitch follows z_ln, with a soft fifth above), and every detonation
+   lands a low thump. Requires a click - browsers gate audio on gesture.
+   ================================================================ */
+let audioOn = false;
+let audioCtx = null, audioMaster = null;
+function ensureAudio() {
+  if (!audioCtx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    try {
+      audioCtx = new AC();
+      audioMaster = audioCtx.createGain();
+      audioMaster.gain.value = 0.14;
+      audioMaster.connect(audioCtx.destination);
+    } catch (e) { audioCtx = null; return false; }
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return true;
+}
+function playModeTone(M) {
+  if (!audioCtx || state.stepsPerSec > 16) return;
+  const t = audioCtx.currentTime;
+  const midi = 40 + ((M.z - 3.1) / 37) * 45;   // z in ~[3.1, 40] -> MIDI 40..85
+  const f = 440 * Math.pow(2, (midi - 69) / 12);
+  const dur = Math.min(2.2, Math.max(0.25, 0.9 / state.stepsPerSec));
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(0.5, t + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  const o1 = audioCtx.createOscillator();
+  o1.type = 'sine'; o1.frequency.value = f;
+  const o2 = audioCtx.createOscillator();
+  o2.type = 'sine'; o2.frequency.value = f * 1.5;
+  const g2 = audioCtx.createGain(); g2.gain.value = 0.25;
+  o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(audioMaster);
+  o1.start(t); o2.start(t);
+  o1.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+}
+function playThump(mass) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const o = audioCtx.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(70 + 30 * mass, t);
+  o.frequency.exponentialRampToValueAtTime(28, t + 0.5);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.9, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+  o.connect(g); g.connect(audioMaster);
+  o.start(t); o.stop(t + 0.75);
 }
 
 const sstep = (a, b, x) => {
@@ -1889,7 +1977,34 @@ function updateCenters(dt) {
     if (c.blastAmp0 > 0) {
       c.blastR += 9 * dt;
       c.blastAmp = c.blastAmp0 / (1 + 0.012 * c.blastR * c.blastR);
-      if (c.blastR > EXTENT * 3 || c.blastAmp < 0.02 * c.blastAmp0) {
+      // Reverberation: once the front has crossed the cavity, the wall
+      // answers. Reflecting wall -> an image source outside the sphere
+      // (the image-source method of room acoustics) sends the echo back
+      // in; no-edge wrap -> the wavefront refocuses near the antipode of
+      // its origin and re-expands, as waves do in a closed space. Two
+      // echo generations, each at 65% strength, then silence.
+      if (c.blastR >= EXTENT && c.blastGen < 2) {
+        const echoAmp = c.blastAmp * 0.65;
+        if (echoAmp > 4) {
+          c.blastGen++;
+          if (state.cosmos.boundary === 'wrap') {
+            c.blastPos.multiplyScalar(-1);
+            c.blastR = 0.5;
+            c.blastAmp0 = echoAmp;
+            c.blastMaxR = EXTENT * 2.2;
+          } else {
+            const d = Math.max(c.blastPos.length(), EXTENT * 0.15);
+            c.blastPos.multiplyScalar((EXTENT * EXTENT) / (d * d));
+            c.blastR = c.blastPos.length() - EXTENT + 0.5;
+            c.blastAmp0 = echoAmp * (1 + 0.012 * c.blastR * c.blastR);
+            c.blastMaxR = c.blastPos.length() + EXTENT;
+          }
+          c.blastAmp = echoAmp;
+        } else {
+          c.blastAmp0 = 0; c.blastAmp = 0;
+        }
+      }
+      if (c.blastR > c.blastMaxR || c.blastAmp < 3) {
         c.blastAmp0 = 0; c.blastAmp = 0;
       }
     }
@@ -1904,6 +2019,9 @@ function updateCenters(dt) {
         c.blastR = 0.5;
         c.blastAmp0 = 360 * g * c.mass;
         c.blastAmp = c.blastAmp0;
+        c.blastGen = 0;
+        c.blastMaxR = EXTENT * 3;
+        if (audioOn) playThump(c.mass);
       } else {
         c.w = g * c.mass * 2.0 * sstep(0, 0.1, tau) * (0.3 + 0.7 * tau);
       }
@@ -2192,6 +2310,75 @@ function wireSwitch(el, get, set) {
   });
 }
 
+/* Scenarios: curated experiment setups. Each is a patch on DEFAULTS;
+   hardware-facing choices (particle count, render scale, colors) are
+   kept from the current state. */
+const SCENARIOS = {
+  formation: {},
+  chladni: {
+    fieldForm: 'chladni', stepsPerSec: 0.5,
+    centers: { on: false },
+    cosmos: { hubble: 0, epoch: false, mag: 0, twist: false, boundary: 'reflect' }
+  },
+  orbitals: {
+    fieldForm: 'wells', stepsPerSec: 0.25, damping: 3,
+    centers: { on: false },
+    cosmos: { hubble: 0, epoch: false, mag: 0, twist: false, boundary: 'reflect' }
+  },
+  magnet: {
+    fieldForm: 'chladni', stepsPerSec: 1,
+    centers: { on: true, count: 4, gain: 1.2 },
+    cosmos: { hubble: 0.4, epoch: true, epochLen: 60, mag: 2.2, twist: true, boundary: 'reflect' }
+  },
+  closed: {
+    fieldForm: 'chladni', stepsPerSec: 2,
+    centers: { on: true, count: 5, gain: 1.2, period: 18 },
+    cosmos: { hubble: 1.1, epoch: true, epochLen: 30, mag: 0.8, twist: true, boundary: 'wrap' }
+  }
+};
+function deepPatch(dst, src) {
+  for (const k of Object.keys(src)) {
+    if (src[k] && typeof src[k] === 'object' && !Array.isArray(src[k])) {
+      deepPatch(dst[k], src[k]);
+    } else {
+      dst[k] = src[k];
+    }
+  }
+}
+function restartUniverse() {
+  step = 0; stepAccum = 0; simTime = 0; spiralClock = 0;
+  epochN = 0; lastEpochT = 0; centerSpawns = 0; pendingRescale = 1;
+  $('ro-epoch').textContent = '×1';
+  $('cos-epoch').textContent = '0';
+  $('cos-scale').textContent = '×1';
+}
+function applyScenario(key) {
+  const next = JSON.parse(JSON.stringify(DEFAULTS));
+  deepPatch(next, SCENARIOS[key] || {});
+  next.particles = state.particles;
+  next.quality = state.quality;
+  next.colorMode = state.colorMode;
+  next.guides = state.guides;
+  state = next;
+  restartUniverse();
+  syncAllControls();
+  applyAllState();
+  saveState();
+}
+document.querySelectorAll('#scenario-seg button').forEach(btn =>
+  btn.addEventListener('click', () => applyScenario(btn.dataset.scn)));
+
+/* Sound toggle */
+function setAudio(on) {
+  if (on && !ensureAudio()) return;
+  audioOn = on;
+  $('btn-audio').setAttribute('aria-pressed', String(on));
+  $('btn-audio').setAttribute('aria-label', on ? 'Mute sound' : 'Enable sound');
+  $('ic-snd-on').style.display = on ? '' : 'none';
+  $('ic-snd-off').style.display = on ? 'none' : '';
+}
+$('btn-audio').addEventListener('click', () => setAudio(!audioOn));
+
 /* Simulation panel */
 $('btn-reseed').addEventListener('click', reseed);
 $('btn-defaults').addEventListener('click', () => {
@@ -2431,6 +2618,7 @@ window.addEventListener('keydown', e => {
   switch (e.key) {
     case ' ': e.preventDefault(); setPlaying(!playing); break;
     case 'r': case 'R': reseed(); break;
+    case 'a': case 'A': setAudio(!audioOn); break;
     case 'i': case 'I': setInfo(!scrim.classList.contains('open')); break;
     case '1': togglePanel('panel-sim'); break;
     case '2': togglePanel('panel-seq'); break;
@@ -2539,6 +2727,7 @@ function frame(now) {
       pushModes();
       updateTapes();
       updateHud();
+      if (audioOn && modeB) playModeTone(modeB);
     }
     // Morph over the first quarter of each step, then rest on the pure
     // eigenmode so nodal structure has time to form.
@@ -2646,6 +2835,52 @@ relics from epoch k statistically imprint the collapse sites of epoch k+1
 (measurable memory across scales — the NRM claim)? At what (l,m) does the
 antipodal identification visibly conflict with odd-parity modes (Ψ(−r) =
 (−1)^l Ψ(r)) — and is that conflict itself worth visualizing?
+RING 2 · 2026-08-29 · reverberation, scenarios, sound
+WHAT CHANGED: blast shells now reverberate — in reflect mode an echo
+re-enters from the shell's acoustic image source outside the sphere (the
+image-source method of room acoustics: image at c·R²/|c|², clamped |c| ≥
+0.15R); in no-edge mode the wavefront refocuses near the antipode of its
+origin and re-expands, as waves do in closed spaces. Two echo generations
+at 65% strength, amplitude floor 3, per-shell travel budget (blastMaxR) so
+nothing rings forever. Added five one-click Scenarios (Formation, Chladni
+study, Orbitals, Magnetized, Closed universe) that patch DEFAULTS, keep
+hardware-facing settings (particles/quality/colors/guides), and restart
+the universe clocks deterministically. Added opt-in sonification: digit
+steps play their eigenfrequency (z_ln mapped to MIDI 40–85, sine + soft
+fifth), detonations land a pitch-dropping thump; gated on a user gesture,
+skipped above 16 steps/s. Fixed stale meta description (cubic → spherical).
+BANNED (obvious answers set aside first): full wave-equation solve on a
+grid for real reflections; spawning a new shell object per echo (slot
+growth); a persistent audio-on setting (autoplay policies make it a lie);
+screenshot/export button (script-driven saves are inert for artifact
+viewers, so it would look broken exactly where most people use it).
+DEAD BRANCHES: (1) exact reflected wavefront geometry off a sphere for an
+off-center source — lost: the true reflected front is a quartic surface;
+the image-source point approximates it well near the closest wall region
+and costs one vec4; (2) echo triggering at first wall contact (R_s = R −
+|c|) — lost: most of the shell is still inside and the overlap double-
+pushes particles; triggering at R_s = R lets the primary mostly clear;
+(3) Web MIDI / sample-based audio — lost: assets and permissions for a
+texture that two oscillators already provide.
+KILL-TEST: strongest attack — echo amp0 is rescaled by (1+0.012·r0²) to
+survive the radius-based decay law, which for a far image source could
+overflow into a super-loud echo; bounded because effective amplitude at
+re-entry is exactly 0.65× the parent's exit amplitude by construction, and
+the floor-3 cutoff kills the tail. Second attack — scenario switch while
+paused leaves stale uniforms; survived because applyAllState pushes modes,
+centers, cosmos and rebuilds particles unconditionally. Residual risk:
+audio node garbage at very high step rates; mitigated by the 16 steps/s
+gate.
+THE NON-OBVIOUS CHOICE: echoes reuse the parent's shell slot (generation
+counter) instead of allocating new shells — the reverberation budget is
+structural, so feedback can never run away no matter what settings a user
+finds.
+OPEN QUESTIONS: Should echo arrival at a center's halo trigger early
+detonation (acoustically induced collapse — a real mechanism in star
+formation)? Is the sonification more informative as pitch-per-mode or as
+actual beat frequencies between the two blended states during transitions?
+Could the Scenarios carry their own expected-outcome text, turning each
+preset into a stated, falsifiable prediction?
 ═══ end rings ═══ -->
 
 </body>
