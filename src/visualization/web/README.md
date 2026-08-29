@@ -17,9 +17,21 @@ browser with WebGL support.
   `k = π/L` — the separable standing-wave form whose integer mode numbers
   `(m, n, p)` also label particle-in-a-box eigenstates and 3-D Chladni
   nodal patterns.
-- Dynamics: `a = −A·∇Ψ` with the gradient evaluated analytically,
-  semi-implicit Euler integration, exponential velocity damping, and
-  reflecting box walls. Integration is frame-rate independent.
+- Two field forms:
+  - **Chladni nodes** (default): the three cyclic permutations of
+    `(m, n, p)` are degenerate eigenmodes (equal energy `m²+n²+p²`), so
+    their superposition `S = ψ(m,n,p) − ψ(p,m,n) + ψ(n,p,m)` is itself an
+    exact eigenmode. Dynamics descend `∇S²`, driving particles onto the
+    curved 2-D surface `S = 0` — the three-dimensional analogue of sand
+    collecting on the nodal lines of a vibrating plate, i.e. structure
+    drawn by the *absence* of field (total destructive interference).
+  - **Potential wells**: `a = −A·∇Ψ` on the single product mode, so
+    particles collect at field minima.
+- Dynamics: gradients evaluated analytically, semi-implicit Euler
+  integration, exponential velocity damping, and reflecting box walls.
+  Integration is frame-rate independent, and digit transitions morph the
+  field over the first quarter of each step so pure-eigenmode structure
+  has time to form.
 - Sequencing: each axis reads successive digits of its assigned constant
   (2,500 decimal digits per constant, verified against mpmath at
   2,620-digit precision). Prime-number strides decorrelate the three

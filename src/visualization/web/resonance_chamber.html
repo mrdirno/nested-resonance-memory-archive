@@ -500,6 +500,18 @@ kbd {
     <div class="group">
       <div class="group-label">Physics</div>
       <div class="slider-row">
+        <span class="slider-name">Field form</span>
+        <div class="seg" id="form-seg" role="group" aria-label="Field form">
+          <button data-form="chladni" aria-pressed="true">Chladni nodes</button>
+          <button data-form="wells" aria-pressed="false">Potential wells</button>
+        </div>
+        <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="form-hint">
+          Chladni: particles settle where the field is zero — the nodal
+          surfaces of a degenerate three-mode superposition, as sand does on
+          a vibrating plate.
+        </p>
+      </div>
+      <div class="slider-row">
         <div class="slider-head">
           <span class="slider-name">Field strength</span>
           <span class="slider-val" id="val-field">1.00×</span>
@@ -738,6 +750,18 @@ kbd {
       particle in a box or the nodal patterns of a Chladni plate, extended to a
       volume. Each phase is tied to its digit, φ = (d/9)·π.</p>
 
+    <h3>Chladni mode — structure from absence</h3>
+    <div class="eq">S(r) = ψ(m,n,p) − ψ(p,m,n) + ψ(n,p,m),&nbsp;&nbsp;a = −A·∇S²</div>
+    <p>On a vibrating plate, sand collects where the amplitude is
+      <b>zero</b> — the pattern is drawn by the places the wave is absent. This
+      mode reproduces that physics in a volume: the three cyclic permutations
+      of (m, n, p) are <b>degenerate</b> eigenmodes (they share the energy
+      m²+n²+p²), so their superposition S is itself an exact eigenmode, and
+      descending the gradient of S² drives every particle onto the curved 2-D
+      surface where S = 0 — the three-dimensional Chladni figure, the locus of
+      total destructive interference. Each digit step selects a new degenerate
+      family and the nodal surface reshapes.</p>
+
     <h3>The dynamics</h3>
     <div class="eq">a = −A·∇Ψ,&nbsp;&nbsp;v ← (v + a·dt)·e^(−γ·dt),&nbsp;&nbsp;x ← x + v·dt</div>
     <p>Each particle accelerates down the gradient of Ψ, so the swarm collects
@@ -845,6 +869,7 @@ const DEFAULTS = {
   particles: 250000,
   stepsPerSec: 2,
   smooth: true,
+  fieldForm: 'chladni', // 'wells' | 'chladni'
   fieldExp: 0,          // field strength = 10^fieldExp
   damping: 2.5,
   quality: 1.0,
@@ -879,6 +904,7 @@ function loadState() {
   } catch (e) { /* private mode or blocked storage: run on defaults */ }
   s.particles = Math.min(1e6, Math.max(1000, Math.round(s.particles)));
   if (!BASES.includes(s.base)) s.base = 10;
+  if (s.fieldForm !== 'wells' && s.fieldForm !== 'chladni') s.fieldForm = 'chladni';
   for (const ax of ['a','b','c']) {
     if (!(s.constants[ax] in CONSTANTS)) s.constants[ax] = DEFAULTS.constants[ax];
   }
@@ -897,7 +923,8 @@ function saveState() {
    Simulation constants
    ================================================================ */
 const EXTENT = 15;                  // box half-width L
-const FORCE_SCALE = 150;            // base field acceleration scale
+const FORCE_SCALE = 150;            // wells: acceleration scale on grad(Psi)
+const CHLADNI_SCALE = 110;          // Chladni: acceleration scale on S*grad(S)
 const RESTITUTION = 0.5;
 const MAX_TEX = 1024;               // 1024² = 1,048,576 particles
 
@@ -992,6 +1019,7 @@ const velMat = new THREE.ShaderMaterial({
     phasesA: { value: new THREE.Vector3() },
     phasesB: { value: new THREE.Vector3() },
     blend: { value: 1 },
+    fieldForm: { value: 1 },                 // 0 = wells, 1 = Chladni nodes
     spiralPhase: { value: 0 },
     equalGain: { value: 1 },
     ovCrystal: { value: new THREE.Vector3() },   // c3, c6, lattice
@@ -1000,7 +1028,7 @@ const velMat = new THREE.ShaderMaterial({
   },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
   fragmentShader: SIM_COMMON + `
-    uniform float damping, amp, blend, spiralPhase, equalGain;
+    uniform float damping, amp, blend, spiralPhase, equalGain, fieldForm;
     uniform vec3 modesA, modesB, phasesA, phasesB;
     uniform vec3 ovCrystal, ovTopo;
     uniform vec2 ovHarmonic;
@@ -1008,7 +1036,12 @@ const velMat = new THREE.ShaderMaterial({
     const float PI = 3.14159265358979;
     const float K = PI / EXTENT;
 
-    // Analytic gradient of Psi(r) = cos(m k x + a) cos(n k y + b) cos(p k z + c)
+    // Psi(r) = cos(m k x + a) cos(n k y + b) cos(p k z + c), and its
+    // analytic gradient.
+    float psiVal(vec3 p, vec3 m, vec3 ph) {
+      vec3 c = cos(m * K * p + ph);
+      return c.x * c.y * c.z;
+    }
     vec3 gradPsi(vec3 p, vec3 m, vec3 ph) {
       vec3 arg = m * K * p + ph;
       vec3 c = cos(arg);
@@ -1016,6 +1049,17 @@ const velMat = new THREE.ShaderMaterial({
       return -K * vec3(m.x * s.x * c.y * c.z,
                        m.y * c.x * s.y * c.z,
                        m.z * c.x * c.y * s.z);
+    }
+
+    // Chladni form: superpose the three cyclic permutations of (m,n,p) -
+    // degenerate eigenmodes sharing energy m^2+n^2+p^2 - and descend the
+    // gradient of S^2, so particles migrate to the nodal surface S = 0,
+    // the 3-D locus of destructive interference (sand-on-a-plate physics).
+    vec3 chladniForce(vec3 p, vec3 m) {
+      vec3 z = vec3(0.0);
+      float S = psiVal(p, m, z) - psiVal(p, m.zxy, z) + psiVal(p, m.yzx, z);
+      vec3  G = gradPsi(p, m, z) - gradPsi(p, m.zxy, z) + gradPsi(p, m.yzx, z);
+      return S * G;   // = grad(S^2) / 2
     }
 
     vec3 snapForce(vec3 p, float fold, float gain) {
@@ -1031,8 +1075,14 @@ const velMat = new THREE.ShaderMaterial({
       vec3 v = texture2D(velTex, vUv).xyz;
 
       // Base standing-wave force, blended across the digit transition
-      vec3 g = mix(gradPsi(p, modesA, phasesA), gradPsi(p, modesB, phasesB), blend);
-      vec3 F = -amp * ${FORCE_SCALE.toFixed(1)} * g;
+      vec3 F;
+      if (fieldForm < 0.5) {
+        vec3 g = mix(gradPsi(p, modesA, phasesA), gradPsi(p, modesB, phasesB), blend);
+        F = -amp * ${FORCE_SCALE.toFixed(1)} * g;
+      } else {
+        F = -amp * ${CHLADNI_SCALE.toFixed(1)} *
+            mix(chladniForce(p, modesA), chladniForce(p, modesB), blend);
+      }
 
       // ---- overlay forces ----
       vec3 O = vec3(0.0);
@@ -1587,6 +1637,27 @@ $('btn-defaults').addEventListener('click', () => {
   reseed();
 });
 
+const FORM_HINTS = {
+  chladni: 'Chladni: particles settle where the field is zero — the nodal ' +
+    'surfaces of a degenerate three-mode superposition, as sand does on a ' +
+    'vibrating plate.',
+  wells: 'Wells: particles descend the field gradient and collect at the ' +
+    'minima of the single (m, n, p) standing wave.'
+};
+const formSeg = $('form-seg');
+function syncFormSeg() {
+  formSeg.querySelectorAll('button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.form === state.fieldForm)));
+  $('form-hint').textContent = FORM_HINTS[state.fieldForm];
+  velMat.uniforms.fieldForm.value = state.fieldForm === 'chladni' ? 1 : 0;
+}
+formSeg.querySelectorAll('button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.fieldForm = btn.dataset.form;
+    syncFormSeg();
+    saveState();
+  }));
+
 const rateFromSlider = v => Math.pow(2, v);           // 0.25 .. 32 steps/s
 const sliderFromRate = r => Math.log2(r);
 $('in-rate').addEventListener('input', e => {
@@ -1768,6 +1839,7 @@ function syncAllControls() {
   $('in-quality').value = state.quality;
   $('val-quality').textContent = state.quality.toFixed(1) + '×';
   $('in-color').value = String(state.colorMode);
+  syncFormSeg();
   for (const ax of AXES) {
     $('const-' + ax).value = state.constants[ax];
     $('off-' + ax).value = state.offsets[ax];
@@ -1825,9 +1897,9 @@ function frame(now) {
       updateTapes();
       updateHud();
     }
-    velMat.uniforms.blend.value = state.smooth
-      ? Math.min(1, stepAccum * Math.min(3, Math.max(1, state.stepsPerSec)))
-      : 1;
+    // Morph over the first quarter of each step, then rest on the pure
+    // eigenmode so nodal structure has time to form.
+    velMat.uniforms.blend.value = state.smooth ? Math.min(1, stepAccum * 4) : 1;
 
     spiralClock += dtSim;
     velMat.uniforms.spiralPhase.value = spiralClock * 0.55;
