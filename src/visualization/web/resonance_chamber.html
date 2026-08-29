@@ -777,10 +777,17 @@ kbd {
         <input type="range" id="in-cent-gain" min="0.1" max="4" step="0.1" value="1" aria-label="Center force intensity">
       </div>
       <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
-        Spawn positions and masses come from the digit stream, not a random
-        generator. Mass sets both pull strength and lifespan — heavier
-        centers age longer before their poles flip.
+        Positions, masses, and traits come from the digit stream, not a
+        random generator. Centers drift under mutual gravity; two that meet
+        merge — traits cross over, the lineage generation climbs, the old
+        core stays embedded, and the coalescence radiates a chirp. Each
+        epoch, the heaviest survivor seeds a mirrored, mutated daughter.
       </p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Mergers</div><div class="stat-v" id="ln-merges">0</div></div>
+        <div class="stat"><div class="stat-k">Max lineage</div><div class="stat-v" id="ln-gen">0</div></div>
+        <div class="stat"><div class="stat-k">Heaviest</div><div class="stat-v" id="ln-mass">–</div></div>
+      </div>
     </div>
     <div class="group">
       <div class="group-label">Crystallographic</div>
@@ -932,6 +939,23 @@ kbd {
       then silence. Growth is modeled by age rather than by measured
       accretion, and the centers are external potentials, not
       self-gravitating masses.</p>
+
+    <h3>Lineage — heredity across scales</h3>
+    <p>Structure formation is hierarchical: when two collapsed objects meet
+      they don't erase each other — they <b>merge</b>, and the remnant carries
+      the progenitors' cores inside it as substructure. Here that becomes
+      heredity. Centers drift under mutual gravity; when two coalesce, the
+      heavier absorbs the lighter, heritable traits (swirl handedness,
+      magnetic polarity) <b>cross over</b> digit-deterministically, the
+      lineage generation climbs, the old core stays visibly embedded in the
+      remnant, and the coalescence radiates a burst — the chirp, as merging
+      compact objects do. At every epoch zoom-out the heaviest survivor seeds
+      a mirrored daughter at its antipode with a digit-mutated genome:
+      selection, replication, variation — one generation per epoch. A passing
+      blast front can also flip an accreting center's swirl and shock it
+      toward earlier collapse, the analogue of shock-triggered star
+      formation. Nothing here uses a random generator: every trait, merger
+      outcome, and mutation is a function of the digit stream.</p>
 
     <h3>Sound</h3>
     <p>The cavity modes are acoustic modes, so the chamber can play itself:
@@ -1297,6 +1321,7 @@ const velMat = new THREE.ShaderMaterial({
     ovHarmonic: { value: new THREE.Vector2() },  // spiral, fifths
     ovTopo: { value: new THREE.Vector3() },      // trefoil, torus, hopf
     uCenters: { value: Array.from({ length: 8 }, () => new THREE.Vector4()) },
+    uCenterAux: { value: Array.from({ length: 8 }, () => new THREE.Vector4(1, 1, 0, 0)) },
     uCenterCount: { value: 0 },
     uBlasts: { value: Array.from({ length: 8 }, () => new THREE.Vector4()) },
     uBlastAmp: { value: new Array(8).fill(0) }
@@ -1311,6 +1336,7 @@ const velMat = new THREE.ShaderMaterial({
     uniform vec3 ovCrystal, ovTopo;
     uniform vec2 ovHarmonic;
     uniform vec4 uCenters[8];    // xyz position, w signed strength
+    uniform vec4 uCenterAux[8];  // x swirl handedness, y magnetic polarity
     uniform int uCenterCount;
     uniform vec4 uBlasts[8];     // xyz origin, w shell radius
     uniform float uBlastAmp[8];  // shell amplitude (0 = inactive)
@@ -1468,11 +1494,13 @@ const velMat = new THREE.ShaderMaterial({
           float invR3 = 1.0 / (r2 * sqrt(r2));
           float halo = exp(-r2 / 56.0);            // finite region of influence
           F += -c.w * 260.0 * halo * d * invR3;    // w > 0 attracts
-          if (c.w > 0.0) {                          // spiral inflow
-            F += c.w * 90.0 * halo * cross(vec3(0.0, 1.0, 0.0), d) * invR3;
+          if (c.w > 0.0) {                          // spiral inflow, handed
+            F += c.w * 90.0 * uCenterAux[i].x * halo
+                 * cross(vec3(0.0, 1.0, 0.0), d) * invR3;
           }
           vec3 rn = d * inversesqrt(r2);
-          vec3 mm = vec3(0.0, c.w * 6.0, 0.0);     // dipole flips with the pole
+          // dipole flips with the pole AND carries heritable polarity
+          vec3 mm = vec3(0.0, c.w * 6.0 * uCenterAux[i].y, 0.0);
           B += (3.0 * dot(mm, rn) * rn - mm) * invR3;
         }
         float bamp = uBlastAmp[i];
@@ -1869,11 +1897,16 @@ function pushModes() {
 let simTime = 0;
 let centerSpawns = 0;
 const centerState = Array.from({ length: 8 }, () => ({
-  pos: new THREE.Vector3(), mass: 1, born: 0, life: 1,
+  pos: new THREE.Vector3(), vel: new THREE.Vector3(),
+  mass: 1, born: 0, life: 1,
   stage: 'accrete', stageT: 0, w: 0,
+  // heritable traits ("the genome"): swirl handedness, magnetic polarity,
+  // lineage generation, and whether an older core is embedded inside
+  spin: 1, mag: 1, gen: 0, merged: false, coolT: 0,
   blastPos: new THREE.Vector3(), blastR: 0, blastAmp: 0, blastAmp0: 0,
   blastGen: 0, blastMaxR: 0
 }));
+let mergeCount = 0, maxGen = 0;
 
 function centerCoord(axis, k) {
   const b = state.base;
@@ -1888,7 +1921,13 @@ function seedCenter(i, preAge) {
   c.pos.set(centerCoord('a', k), centerCoord('b', k), centerCoord('c', k));
   const rlen = c.pos.length();
   if (rlen > EXTENT * 0.72) c.pos.multiplyScalar(EXTENT * 0.72 / rlen);
+  c.vel.set(0, 0, 0);
   c.mass = 0.4 + 1.1 * (digitAt('c', k + 3) / (state.base - 1));
+  c.spin = digitAt('a', k + 5) % 2 ? 1 : -1;
+  c.mag = digitAt('b', k + 5) % 2 ? 1 : -1;
+  c.gen = 0;
+  c.merged = false;
+  c.coolT = simTime + 2;
   c.life = state.centers.period * (0.45 + 0.75 * c.mass);
   c.born = simTime - (preAge || 0) * c.life;
   c.stage = 'accrete';
@@ -1897,6 +1936,10 @@ function seedCenter(i, preAge) {
 
 function initCenters() {
   centerSpawns = 0;
+  mergeCount = 0;
+  maxGen = 0;
+  $('ln-merges').textContent = '0';
+  $('ln-gen').textContent = '0';
   for (let i = 0; i < 8; i++) {
     seedCenter(i, (i / Math.max(1, state.centers.count)) * 0.8);
     centerState[i].blastAmp = 0;
@@ -1947,6 +1990,20 @@ function playModeTone(M) {
   o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(audioMaster);
   o1.start(t); o2.start(t);
   o1.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+}
+function playChirp() {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const o = audioCtx.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(90, t);
+  o.frequency.exponentialRampToValueAtTime(520, t + 0.35);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(0.45, t + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+  o.connect(g); g.connect(audioMaster);
+  o.start(t); o.stop(t + 0.55);
 }
 function playThump(mass) {
   if (!audioCtx) return;
@@ -2032,14 +2089,107 @@ function updateCenters(dt) {
       if (e >= 1) seedCenter(i, 0);
     }
   }
+  if (on) {
+    const n = state.centers.count;
+    // ---- drift: centers feel each other's gravity and the expansion,
+    //      so hierarchical infall and close encounters actually happen ----
+    for (let i = 0; i < n; i++) {
+      const a = centerState[i];
+      if (Math.abs(a.w) < 0.01) continue;
+      let ax = 0, ay = 0, az = 0;
+      for (let j = 0; j < n; j++) {
+        if (j === i) continue;
+        const b = centerState[j];
+        if (Math.abs(b.w) < 0.01) continue;
+        const dx = b.pos.x - a.pos.x, dy = b.pos.y - a.pos.y, dz = b.pos.z - a.pos.z;
+        const r2 = dx * dx + dy * dy + dz * dz + 4;
+        const f = 25 * b.mass / (r2 * Math.sqrt(r2));
+        ax += dx * f; ay += dy * f; az += dz * f;
+      }
+      const H = state.cosmos.hubble * 0.3;
+      a.vel.x = (a.vel.x + (ax + H * a.pos.x) * dt) * Math.exp(-0.5 * dt);
+      a.vel.y = (a.vel.y + (ay + H * a.pos.y) * dt) * Math.exp(-0.5 * dt);
+      a.vel.z = (a.vel.z + (az + H * a.pos.z) * dt) * Math.exp(-0.5 * dt);
+      const sp = a.vel.length();
+      if (sp > 6) a.vel.multiplyScalar(6 / sp);
+      a.pos.addScaledVector(a.vel, dt);
+      const rr = a.pos.length();
+      if (rr > EXTENT * 0.9) {
+        const nx = a.pos.x / rr, ny = a.pos.y / rr, nz = a.pos.z / rr;
+        const vr = a.vel.x * nx + a.vel.y * ny + a.vel.z * nz;
+        if (vr > 0) {
+          a.vel.x -= 1.5 * vr * nx; a.vel.y -= 1.5 * vr * ny; a.vel.z -= 1.5 * vr * nz;
+        }
+        a.pos.multiplyScalar(EXTENT * 0.9 / rr);
+      }
+    }
+    // ---- mergers: two centers that meet coalesce. The heavier absorbs
+    //      the lighter, traits cross over digit-deterministically, the
+    //      lineage generation climbs, the old core stays embedded, and
+    //      the coalescence radiates a burst (the chirp). ----
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const A0 = centerState[i], B0 = centerState[j];
+        if (A0.stage !== 'accrete' || B0.stage !== 'accrete') continue;
+        if (A0.w < 0.05 || B0.w < 0.05) continue;
+        if (simTime < A0.coolT || simTime < B0.coolT) continue;
+        if (A0.pos.distanceTo(B0.pos) > 2.6) continue;
+        const A = A0.mass >= B0.mass ? A0 : B0;
+        const B = A0.mass >= B0.mass ? B0 : A0;
+        const mSum = A.mass + B.mass;
+        const k = step + 29 + centerSpawns;
+        A.pos.lerpVectors(A.pos, B.pos, B.mass / mSum);
+        A.vel.lerpVectors(A.vel, B.vel, B.mass / mSum);
+        A.mass = Math.min(1.9, A.mass + 0.75 * B.mass);
+        A.spin = digitAt('c', k) % 2 ? A.spin : B.spin;
+        A.mag = digitAt('a', k) % 2 ? A.mag : B.mag;
+        A.gen = Math.max(A.gen, B.gen) + 1;
+        A.merged = true;
+        A.life = state.centers.period * (0.45 + 0.75 * A.mass);
+        A.born = simTime - 0.55 * A.life;   // rejuvenated, but already grown
+        A.coolT = simTime + 5;
+        if (A.blastAmp0 <= 0) {
+          A.blastPos.copy(A.pos);
+          A.blastR = 0.4;
+          A.blastAmp0 = 600 * g * (A.mass * B.mass) / mSum;
+          A.blastAmp = A.blastAmp0;
+          A.blastGen = 2;                    // chirps don't echo
+          A.blastMaxR = EXTENT * 1.6;
+        }
+        mergeCount++;
+        maxGen = Math.max(maxGen, A.gen);
+        $('ln-merges').textContent = mergeCount;
+        $('ln-gen').textContent = maxGen;
+        if (audioOn) playChirp();
+        seedCenter(A0.mass >= B0.mass ? j : i, 0);   // fresh lineage in the slot
+      }
+    }
+    // ---- induced mutation: a passing blast front flips the swirl of an
+    //      accreting center and shocks it toward earlier collapse ----
+    for (let s = 0; s < 8; s++) {
+      const sh = centerState[s];
+      if (sh.blastAmp < 30) continue;
+      for (let i = 0; i < n; i++) {
+        const c = centerState[i];
+        if (i === s || c.stage !== 'accrete' || simTime < c.coolT) continue;
+        if (Math.abs(c.pos.distanceTo(sh.blastPos) - sh.blastR) < 1.7) {
+          c.spin = -c.spin;
+          c.born -= 0.12 * c.life;
+          c.coolT = simTime + 3;
+        }
+      }
+    }
+  }
   const uc = velMat.uniforms.uCenters.value;
   const ub = velMat.uniforms.uBlasts.value;
   const ua = velMat.uniforms.uBlastAmp.value;
+  const ux = velMat.uniforms.uCenterAux.value;
   for (let i = 0; i < 8; i++) {
     const c = centerState[i];
     uc[i].set(c.pos.x, c.pos.y, c.pos.z, c.w);
     ub[i].set(c.blastPos.x, c.blastPos.y, c.blastPos.z, c.blastR);
     ua[i] = on ? c.blastAmp : 0;
+    ux[i].set(c.spin, c.mag, c.gen, 0);
   }
   updateCenterMarkers();
 }
@@ -2063,8 +2213,41 @@ function updateCosmos() {
     pendingRescale = 0.5;
     for (const cs of centerState) {
       cs.pos.multiplyScalar(0.5);
+      cs.vel.multiplyScalar(0.5);
       cs.blastPos.multiplyScalar(0.5);
       cs.blastR *= 0.5;
+    }
+    // Replication at the zoom-out: the heaviest surviving center seeds a
+    // mirrored daughter at its antipode - a symmetric clone with a
+    // digit-mutated genome - into the lightest slot. Selection, heredity,
+    // and variation, one generation per epoch.
+    if (state.centers.on) {
+      const n = state.centers.count;
+      let h = -1, w = -1;
+      for (let i = 0; i < n; i++) {
+        const cs = centerState[i];
+        if (cs.stage === 'accrete' && (h < 0 || cs.mass > centerState[h].mass)) h = i;
+        if (w < 0 || cs.mass < centerState[w].mass) w = i;
+      }
+      if (h >= 0 && w >= 0 && w !== h) {
+        const P = centerState[h], D = centerState[w];
+        const k = step + 41 + centerSpawns;
+        centerSpawns++;
+        D.pos.copy(P.pos).multiplyScalar(-1);
+        D.vel.set(0, 0, 0);
+        D.mass = Math.min(1.9, P.mass * (0.8 + 0.4 * (digitAt('b', k) / (state.base - 1))));
+        D.spin = P.spin;
+        D.mag = digitAt('c', k) % 2 ? P.mag : -P.mag;
+        D.gen = P.gen + 1;
+        D.merged = P.merged;
+        D.life = state.centers.period * (0.45 + 0.75 * D.mass);
+        D.born = simTime;
+        D.stage = 'accrete';
+        D.w = 0;
+        D.coolT = simTime + 4;
+        maxGen = Math.max(maxGen, D.gen);
+        $('ln-gen').textContent = maxGen;
+      }
     }
     $('ro-epoch').textContent = '×' + Math.pow(2, epochN);
     $('cos-epoch').textContent = epochN;
@@ -2084,7 +2267,7 @@ function updateCosmos() {
 /* Center + shell markers */
 const centerGroup = new THREE.Group();
 scene.add(centerGroup);
-const centerMarkers = [], blastMarkers = [];
+const centerMarkers = [], blastMarkers = [], coreMarkers = [];
 for (let i = 0; i < 8; i++) {
   const cm = new THREE.Mesh(
     new THREE.IcosahedronBufferGeometry(0.5, 1),
@@ -2092,9 +2275,13 @@ for (let i = 0; i < 8; i++) {
   const bm = new THREE.Mesh(
     new THREE.SphereBufferGeometry(1, 20, 14),
     new THREE.MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0, color: 0xdfae4f }));
-  cm.visible = false; bm.visible = false;
-  centerGroup.add(cm); centerGroup.add(bm);
-  centerMarkers.push(cm); blastMarkers.push(bm);
+  // the embedded progenitor core, shown inside merged remnants
+  const km = new THREE.Mesh(
+    new THREE.IcosahedronBufferGeometry(0.22, 0),
+    new THREE.MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0.55, color: 0xdce5f0 }));
+  cm.visible = false; bm.visible = false; km.visible = false;
+  centerGroup.add(cm); centerGroup.add(bm); centerGroup.add(km);
+  centerMarkers.push(cm); blastMarkers.push(bm); coreMarkers.push(km);
 }
 function updateCenterMarkers() {
   const show = state.guides && state.centers.on;
@@ -2105,10 +2292,13 @@ function updateCenterMarkers() {
     const cm = centerMarkers[i], bm = blastMarkers[i];
     const active = i < state.centers.count && Math.abs(c.w) > 0.02;
     cm.visible = active;
+    const km = coreMarkers[i];
+    km.visible = active && c.merged;
     if (active) {
       cm.position.copy(c.pos);
       cm.scale.setScalar(0.4 + 0.45 * c.mass + 0.15 * Math.abs(c.w));
       cm.material.color.setHex(c.w >= 0 ? 0x3fd3b4 : 0xdfae4f);
+      if (km.visible) km.position.copy(c.pos);
     }
     const blasting = c.blastAmp0 > 0 && c.blastAmp > 0.01;
     bm.visible = blasting;
@@ -2749,6 +2939,11 @@ function frame(now) {
   if (fpsWindow >= 0.5) {
     $('ro-fps').textContent = Math.round(fpsFrames / fpsWindow);
     $('cos-time').textContent = Math.round(simTime) + ' s';
+    let heaviest = 0;
+    for (let i = 0; i < state.centers.count; i++) {
+      heaviest = Math.max(heaviest, centerState[i].mass);
+    }
+    $('ln-mass').textContent = state.centers.on ? heaviest.toFixed(2) : '–';
     fpsFrames = 0; fpsWindow = 0;
   }
 
@@ -2881,6 +3076,60 @@ formation)? Is the sonification more informative as pitch-per-mode or as
 actual beat frequencies between the two blended states during transitions?
 Could the Scenarios carry their own expected-outcome text, turning each
 preset into a stated, falsifiable prediction?
+RING 3 · 2026-08-29 · lineage: drift, mergers, heredity
+WHAT CHANGED: collapse centers became a population with heredity. They now
+move — mutual softened gravity (GC=25, soft 4, damping 0.5/s, speed cap 6,
+reflect at 0.9R) plus a 0.3× Hubble term — so hierarchical infall and close
+encounters actually occur; the fixed-position assumption from Ring 2's era
+silently precluded every merger. Two accreting centers within 2.6 units
+coalesce: heavier absorbs lighter (mass-weighted position/velocity, +75%
+of the lighter's mass, capped 1.9), traits cross over digit-
+deterministically (swirl handedness, magnetic polarity), generation =
+max+1, the remnant is flagged merged and shows an embedded progenitor-core
+marker, and the coalescence radiates a non-echoing burst (the chirp — also
+sonified as a rising 90→520 Hz sweep). The vacated slot reseeds as a fresh
+generation-0 lineage. At each epoch zoom-out the heaviest accreting center
+seeds a mirrored daughter at its antipode into the lightest slot with a
+digit-mutated mass and polarity (selection + replication + variation). A
+passing blast front flips an accreting center's swirl and advances its
+collapse (shock-triggered star formation analogue). New GPU uniform
+uCenterAux carries spin/mag per center into the swirl and dipole terms.
+Lineage stats (mergers, max generation, heaviest) live in the Overlays
+panel; counters reset with initCenters.
+BANNED (obvious answers set aside first): RNG-driven genetics (breaks the
+everything-from-the-digits contract); unbounded population growth on
+cloning (slots are fixed, clones displace the lightest); a full genome
+string with many loci (two expressed traits beat ten invisible ones);
+merger trees rendered as a UI graph (data without a decision).
+DEAD BRANCHES: (1) letting the lighter progenitor survive as an orbiting
+subhalo particle — lost: a second live object per merger doubles slot
+pressure and the embedded-core marker already tells the substructure
+story; (2) genome-dependent eigenmode preference (centers biasing the
+global field toward their l) — lost: the field is global, so one center's
+"gene" would overwrite everyone's physics — a trait must only affect its
+carrier; (3) cloning every center each epoch — lost: population is capped,
+so cloning all is cloning none (every slot overwritten); selecting the
+heaviest makes the epoch an actual selection event.
+KILL-TEST: strongest attack — merge cascade: A absorbs B, the reseeded B
+lands near A and immediately re-merges, ratcheting mass to cap every few
+seconds. Survived by per-center cooldowns (5s post-merge, 2s post-seed,
+4s post-clone) and digit-scattered respawn positions. Second attack —
+drift pushes all centers into one central blob (gravity always wins);
+survived because detonation death + antipodal cloning keep re-dispersing
+the population, and the speed cap keeps encounters resolvable at dt=50ms
+(cap 6 × 0.05 = 0.3 units per step << merge radius 2.6, so no tunneling).
+Residual risk: at count=1 no mergers can ever occur (population of one);
+accepted — the slider names the experiment.
+THE NON-OBVIOUS CHOICE: motion came before genetics. The genetic layer was
+requested; the kinematic layer was not — but without drift, mergers have
+probability ~zero and every inherited trait is dead code. The prerequisite
+the request didn't name was the actual work.
+OPEN QUESTIONS: Should lineage fitness feed back into physics — e.g. later
+generations detonating harder, so the universe's explosions evolve? Is
+there a measurable heredity signature in the particle field itself (do
+descendants of one lineage carve statistically similar wakes)? When two
+merged remnants merge, should both embedded cores persist (substructure
+recursion, memory depth > 1)?
 ═══ end rings ═══ -->
 
 </body>

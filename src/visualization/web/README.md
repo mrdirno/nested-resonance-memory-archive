@@ -48,6 +48,16 @@ browser with WebGL support.
   deterministically while keeping hardware-facing settings.
 - Sonification (opt-in): digit steps play their mode's eigenfrequency and
   detonations land a low thump, via WebAudio behind a user gesture.
+- Lineage: centers drift under mutual softened gravity, so hierarchical
+  infall and mergers occur. A coalescence crosses over heritable traits
+  (swirl handedness, magnetic polarity) digit-deterministically, raises
+  the lineage generation, keeps the progenitor core visibly embedded in
+  the remnant, and radiates a chirp burst. Each epoch zoom-out, the
+  heaviest survivor seeds a mirrored, digit-mutated daughter at its
+  antipode (selection + replication + variation); passing blast fronts
+  flip an accreting center's swirl and hasten its collapse
+  (shock-triggered formation analogue). Merger and generation stats are
+  shown in the Overlays panel.
 - Collapse centers (feedback cycle, on by default): up to eight softened
   point attractors (Plummer potentials with a tangential inflow term and a
   Gaussian-tapered region of influence) whose spawn positions and masses
