@@ -224,5 +224,66 @@ console.log("[5] mapping+physics");
   if (!mBad) ok("rendered physics measured: fundamentals on the recipes, decays track, pitch/damp bake");
 }
 
+/* ── suite 6: MIDI take writer (SMF type 1) ───────────────────────────────── */
+console.log("[6] midi");
+{
+  const midiJs = slice("/*MIDI-BEGIN*/", "/*MIDI-END*/");
+  globalThis.state = { tempo: 120 };
+  const G6 = eval(midiJs + "\n;({MIDIREC,midiLog,midiLogP,midiVlq,midiTake,MIDI_GM_RECIPE,MIDI_GM_LANE})");
+  /* VLQ */
+  const vlq = n => { const a = []; G6.midiVlq(a, n); return a; };
+  const vlqCases = [[0, [0]], [127, [0x7f]], [128, [0x81, 0x00]], [960, [0x87, 0x40]], [100000, [0x86, 0x8D, 0x20]]];
+  let vBad = 0;
+  vlqCases.forEach(([n, want]) => { const got = vlq(n);
+    if (got.length !== want.length || got.some((b, i) => b !== want[i])) { fail("vlq " + n + " → " + got); vBad++; } });
+  if (!vBad) ok("VLQ encoding exact");
+  /* GM coverage: every physics recipe has a drum note */
+  const missing = Object.keys(G2.LDR_RECIPE).filter(k => !G6.MIDI_GM_RECIPE[k]);
+  if (missing.length) fail("recipes without GM notes: " + missing.join(","));
+  else ok("25/25 recipes carry GM drum notes");
+  /* a synthetic take: melodic + drums + a tempo change (dice mid-take) */
+  G6.MIDIREC.on = true; G6.MIDIREC.ev = []; G6.MIDIREC.t0 = 0;
+  state.tempo = 120;
+  G6.midiLog({ cat: "LEAD" }, 60, 0.8, 0, 0.5);       /* t=0    ch0 */
+  G6.midiLogP("surdo", 1.0, 0);                        /* t=0    ch9 */
+  G6.midiLog({ cat: "LEAD" }, 64, 0.8, 1, 0.5);       /* t=1 → 960 ticks at 120 */
+  state.tempo = 60;
+  G6.midiLog({ cat: "LEAD" }, 67, 0.8, 2, 0.5);       /* t=2 → 1920 (still converts at 120) */
+  G6.midiLog({ cat: "LEAD" }, 69, 0.8, 3, 0.5);       /* t=3 → 1920+480 at 60bpm = 2400 */
+  G6.MIDIREC.on = false;
+  const u = G6.midiTake();
+  if (!u) { fail("midiTake returned null"); }
+  else {
+    const tag = (o, t) => String.fromCharCode(u[o], u[o+1], u[o+2], u[o+3]) === t;
+    if (!tag(0, "MThd")) fail("no MThd");
+    const fmt = (u[8] << 8) | u[9], ntrk = (u[10] << 8) | u[11], div = (u[12] << 8) | u[13];
+    if (fmt !== 1) fail("format " + fmt);
+    if (div !== 480) fail("division " + div);
+    if (ntrk !== 3) fail("tracks " + ntrk + " (want tempo + ch0 + ch9)");
+    /* walk tracks, verify declared lengths and count events */
+    let o = 14, tempoMetas = 0, on9 = 0, off9 = 0, on0 = 0, off0 = 0, walked = 0;
+    for (let k = 0; k < ntrk; k++) {
+      if (!tag(o, "MTrk")) { fail("track " + k + " header"); break; }
+      const len = (u[o+4] << 24) | (u[o+5] << 16) | (u[o+6] << 8) | u[o+7];
+      for (let i = o + 8; i < o + 8 + len - 2; i++) {
+        if (u[i] === 0xFF && u[i+1] === 0x51 && u[i+2] === 0x03) tempoMetas++;
+        if (u[i] === 0x99) on9++; if (u[i] === 0x89) off9++;
+        if (u[i] === 0x90) on0++; if (u[i] === 0x80) off0++;
+      }
+      o += 8 + len; walked++;
+    }
+    if (o !== u.length) fail("track lengths don't tile the file (" + o + " vs " + u.length + ")");
+    if (tempoMetas !== 2) fail("tempo metas " + tempoMetas + " (want initial + change)");
+    if (!(on9 === 1 && off9 === 1)) fail("drum on/off " + on9 + "/" + off9);
+    if (!(on0 === 4 && off0 === 4)) fail("keys on/off " + on0 + "/" + off0);
+    /* the tempo-map ticks: last event must land at 2400 */
+    const ticks = G6.MIDIREC.ev.map(e => e.tick);
+    if (ticks[2] !== 960 || ticks[3] !== 1920 || ticks[4] !== 2400)
+      fail("piecewise tempo ticks " + ticks.join(","));
+    if (walked === ntrk && o === u.length && tempoMetas === 2 && on9 === 1 && on0 === 4 &&
+        ticks[4] === 2400) ok("SMF-1 exact: headers, track tiling, tempo map (120→60), note pairing");
+  }
+}
+
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
 process.exit(errs ? 1 : 0);

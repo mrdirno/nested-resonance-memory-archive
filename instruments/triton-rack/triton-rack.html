@@ -1308,6 +1308,7 @@ function unreg(v){ const i=voiceList.indexOf(v); if(i<0) return; voiceList.splic
   activeVoices=Math.max(0,activeVoices-v.units); updVoiceUI(); }
 
 function spawnVoice(prog,note,vel,when,dur,dest){
+  if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLog==="function") midiLog(prog,note,vel,when,dur,dest);
   if(prog.cat==="DRUMS"){ drumHit(note,vel,when,prog.kit||"std"); return null; }
   const t=Math.max(when,ctx.currentTime), out=ctx.createGain(); out.gain.value=0;
   const isBP=prog.filter.type==="bp";
@@ -2546,6 +2547,7 @@ function drumHitP(name,vel,when,o){
     for(let k=o.roll;k>=1;k--)
       drumHitP(name,0.16+0.03*(o.roll-k),when-k*0.17*sd,{pitch:o.pitch,mute:o.mute,_g:1});
   }
+  if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLogP==="function") midiLogP(name,vel,when);
   const t=Math.max(when,ctx.currentTime);
   const layer=vel<0.55?0.4:vel<0.85?0.7:1.0;
   const buf=ldrBuf(name,layer,o.pitch||1,o.mute||1);
@@ -2946,6 +2948,78 @@ function dreamDice(){
   if(DREAM.on) DREAM.pending=p;
   else startWith(p,true);
 }
+/* ── MIDI take capture: every note the engines schedule during a recording,
+      written as SMF type 1 beside the WAV — the DAW inherits the arrangement ── */
+/*MIDI-BEGIN*/
+var MIDIREC={on:false,ev:[],t0:0};
+var MIDI_GM_LANE=[36,38,38,39,49,41,42,45,42,48,46,49]; /* kit lanes → GM drums */
+var MIDI_GM_RECIPE={congaL:64,congaM:63,congaH:62,bongoL:61,bongoH:60,
+  djembeB:64,djembeT:63,djembeS:62,timbL:66,timbH:65,agogoL:68,agogoH:67,
+  cowbell:56,clave:75,woodblk:76,guiro:74,cabasa:69,shaker:70,tamb:54,
+  triangle:81,surdo:36,talking:79,dunL:41,dunM:45,dunS:47};
+function midiLog(prog,note,vel,when,dur,dest){
+  if(!MIDIREC.on) return;
+  const t=(when||0)-MIDIREC.t0; if(t<-0.05) return;
+  let ch=0,n=note;
+  if(prog&&prog.cat==="DRUMS"){ ch=9; n=MIDI_GM_LANE[((note%12)+12)%12]; }
+  else if(typeof DREAM!=="undefined"&&DREAM.pans){
+    if(dest===DREAM.pans.bass) ch=1;
+    else if(dest===DREAM.pans.chord) ch=2;
+    else if(dest===DREAM.pans.lead) ch=3;
+  }
+  MIDIREC.ev.push({t:Math.max(0,t),ch,note:Math.max(0,Math.min(127,Math.round(n))),
+    vel:Math.max(1,Math.min(127,Math.round(vel*127))),
+    dur:dur||(ch===9?0.12:0.3),tempo:state.tempo});
+}
+function midiLogP(name,vel,when){
+  if(!MIDIREC.on) return;
+  const t=(when||0)-MIDIREC.t0; if(t<-0.05) return;
+  MIDIREC.ev.push({t:Math.max(0,t),ch:9,note:MIDI_GM_RECIPE[name]||77,
+    vel:Math.max(1,Math.min(127,Math.round(vel*127))),dur:0.12,tempo:state.tempo});
+}
+function midiVlq(arr,n){ n=Math.max(0,Math.round(n));
+  const b=[n&0x7f]; while((n>>=7)>0) b.push((n&0x7f)|0x80);
+  for(let i=b.length-1;i>=0;i--) arr.push(b[i]); }
+function midiStr(arr,s){ for(let i=0;i<s.length;i++) arr.push(s.charCodeAt(i)&0xff); }
+function midiTrackBytes(name,evs){ /* evs: [{tick,bytes:[...]}] sorted */
+  const a=[];
+  midiVlq(a,0); a.push(0xFF,0x03,name.length); midiStr(a,name);
+  let last=0;
+  evs.forEach(e=>{ midiVlq(a,e.tick-last); last=e.tick; e.bytes.forEach(b=>a.push(b)); });
+  midiVlq(a,0); a.push(0xFF,0x2F,0x00);
+  const out=[0x4D,0x54,0x72,0x6B,(a.length>>>24)&255,(a.length>>>16)&255,(a.length>>>8)&255,a.length&255];
+  return out.concat(a);
+}
+function midiTake(){
+  const ev=MIDIREC.ev.slice(); if(!ev.length) return null;
+  ev.sort((x,y)=>x.t-y.t);
+  const PPQ=480;
+  /* piecewise tempo map: elapsed seconds convert at the tempo in force */
+  let curBpm=ev[0].tempo||120, tick=0, lastT=ev[0].t;
+  const tempoEvs=[{tick:0,bpm:curBpm}];
+  ev.forEach(e=>{ tick+=(e.t-lastT)*(curBpm/60)*PPQ; lastT=e.t;
+    e.tick=Math.max(0,Math.round(tick));
+    if(e.tempo&&Math.abs(e.tempo-curBpm)>0.5){ curBpm=e.tempo; tempoEvs.push({tick:e.tick,bpm:curBpm}); }
+    e.durT=Math.max(12,Math.round(e.dur*(curBpm/60)*PPQ)); });
+  const NAMES=["KEYS","BASS","CHORDS","LEAD",null,null,null,null,null,"DRUMS"];
+  const chans=[...new Set(ev.map(e=>e.ch))].sort((a,b)=>a-b);
+  const tracks=[];
+  { const te=tempoEvs.map(t=>({tick:t.tick,bytes:[0xFF,0x51,0x03].concat((mpq=>[(mpq>>>16)&255,(mpq>>>8)&255,mpq&255])(Math.round(60000000/t.bpm)))}));
+    tracks.push(midiTrackBytes("TRITON x LUCKY DREAMER TAKE",te)); }
+  chans.forEach(ch=>{
+    const evs=[];
+    ev.filter(e=>e.ch===ch).forEach(e=>{
+      evs.push({tick:e.tick,bytes:[0x90|ch,e.note,e.vel]});
+      evs.push({tick:e.tick+e.durT,bytes:[0x80|ch,e.note,0]});
+    });
+    evs.sort((a,b)=>a.tick-b.tick);
+    tracks.push(midiTrackBytes(NAMES[ch]||("CH"+(ch+1)),evs));
+  });
+  const head=[0x4D,0x54,0x68,0x64,0,0,0,6,0,1,0,tracks.length,(PPQ>>8)&255,PPQ&255];
+  const total=head.concat(...tracks);
+  return new Uint8Array(total);
+}
+/*MIDI-END*/
 /* ── take recorder: taps the mix after the glue compressor, writes 24-bit WAV ── */
 const REC={on:false,l:[],r:[],node:null,t0:0,max:150,timer:null};
 function wavStereo24(l,r,sr){
@@ -2982,11 +3056,12 @@ function recToggle(){
       if(ctx.currentTime-REC.t0>REC.max) recStop(); };
   }
   REC.l=[]; REC.r=[]; REC.t0=ctx.currentTime; REC.on=true;
+  MIDIREC.on=true; MIDIREC.ev=[]; MIDIREC.t0=REC.t0;
   recUI(true);
   REC.timer=setInterval(()=>{ if(REC.on) recLblSet("● "+Math.floor(ctx.currentTime-REC.t0)+"s"); },500);
 }
 function recStop(){
-  REC.on=false; clearInterval(REC.timer);
+  REC.on=false; MIDIREC.on=false; clearInterval(REC.timer);
   recUI(false);
   const n=REC.l.reduce((a,c)=>a+c.length,0);
   if(n<ctx.sampleRate*0.5){ recLblSet("too short"); setTimeout(()=>recLblSet(""),1500); return; }
@@ -3000,6 +3075,13 @@ function recStop(){
   a.download="triton-dream-"+(DREAM.seed||"take")+".wav";
   document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); recLblSet(""); },3000);
+  /* the same take as MIDI — the DAW inherits the arrangement, not just the sound */
+  const mid=midiTake();
+  if(mid) setTimeout(()=>{ const ma=document.createElement("a");
+    ma.href=URL.createObjectURL(new Blob([mid],{type:"audio/midi"}));
+    ma.download="triton-dream-"+(DREAM.seed||"take")+".mid";
+    document.body.appendChild(ma); ma.click();
+    setTimeout(()=>{ URL.revokeObjectURL(ma.href); ma.remove(); },3000); },450);
 }
 function dreamDraw(rms,wav){
   const aura=document.getElementById("aura");
@@ -3191,4 +3273,11 @@ DEAD BRANCHES: (1) dream pads AND figure chips as two stacked 120px rows — los
 KILL-TEST: a real headless-Chromium harness now exists beside the node suite — it measures the touch law on live geometry (PLAY 160→60px at 380w, pads 120→45px), counts 7+51 tiles, presses PLAY and verifies conduction (bar advance, voices ≈31, readout format, LEDs on, 12 physics buffers cached, ZERO mapping fallbacks), dices mid-performance without dropping the transport, picks a figure tile and verifies the dream yields to the manual engine, records with mirrored UI, and asserts no horizontal page scroll and zero console errors. ALL GREEN, plus a screenshot reviewed by eye.
 THE NON-OBVIOUS CHOICE: the strip is one shelf, not two surfaces — dreams and figures are the same gesture (tap = it plays) because to a producer they are the same object: a starting point. The divider is the only taxonomy.
 OPEN QUESTIONS: (1) The transport row has dead space reserved at its right edge — HALF-DICE (Ring 7 Q2) is drawn there in the next session's mind; does the seed readout become a long-press crate handle (Ring 7 Q3) in the same gesture family? (2) The strip scrolls but doesn't remember its position per session — should the selected tile auto-center on load? (3) The browser harness can screenshot every bar of a 32-bar performance — is a visual regression reel worth its weight in the repo?
+RING 14 · 2026-08-30 · the take leaves as notes, not just sound
+WHAT CHANGED: Ring 7's first open question answered — RECORD now writes TWO files per take: the 24-bit WAV as before, and the same take as Standard MIDI File type 1, named by the same seed. Capture taps the two scheduling chokepoints, so nothing is transcribed after the fact — spawnVoice logs every melodic and kit-drum event (role-resolved by the conductor's own pan destinations: bass→ch2, chords→ch3, lead→ch4, keys→ch1, kit lanes→ch10 GM drums) and drumHitP logs every physics hit through a 25-entry recipe→GM map (surdo→36, congas→62-64, agogôs→67-68, clave→75, cáscara-cowbell→56, talking/cuíca→79 Open Cuica…). The writer is ~70 lines, zero dependencies: PPQ 480, a PIECEWISE TEMPO MAP (a dice mid-take that lands on a new tempo becomes a set-tempo meta at the right tick, so the DAW's bars stay true through the swap), VLQ deltas, one track per sounding channel plus the tempo track, note-off pairing with a 12-tick floor.
+BANNED (obvious answers set aside first): transcribing the WAV afterwards (onset detection to recover what we already knew); exporting at a fixed 120 with seconds-as-ticks (kills bar alignment, the one thing a DAW needs); format 0 single-track (mixing drums and chords into one lane loses the arrangement the capture preserved).
+DEAD BRANCHES: (1) capturing at playNote instead of spawnVoice — lost: playNote never sees the conductor (it schedules spawnVoice directly) or the physics hits; the chokepoints are the two functions that actually make sound. (2) One .zip holding wav+mid — lost: the zip writer lives in the export block and pulling it into the recorder couples two organs for a convenience the browser already gives (two downloads, 450 ms apart). (3) Logging note-offs from voice release timing — lost: the conductor schedules durations up front; releases are engine bookkeeping, and the written dur is the musical truth.
+KILL-TEST: suite [6] proves the writer byte-exact in Node — VLQ cases including multi-byte, MThd format/division, track lengths tiling the file to its last byte, tempo metas (initial + change), on/off pairing per channel, and the piecewise map converting 1 s at 120 to 960 ticks then 1 s at 60 to 480; plus GM coverage 25/25 recipes. End-to-end in headless Chromium: PLAY, record 3 s, stop — both downloads fired with matching seed names, and the saved .mid parsed back with 4 tracks and exactly as many note-ons as events captured.
+THE NON-OBVIOUS CHOICE: role from pan destinations. The conductor already labels its parts by where it points them in the stereo field — DREAM.pans.bass IS the bass bus — so the MIDI channels fall out of existing plumbing with zero new state.
+OPEN QUESTIONS: (1) The capture only runs while RECORD is lit — should a rolling 8-bar pre-roll buffer let a producer rescue the take they didn't know they were having? (2) Kit-lane ghosts under 0.16 vel export at their true velocities — do DAW drum maps want a velocity floor? (3) The .mid carries no program changes — should each channel declare a GM program guess so it sounds sane in a stock player?
 ═══ end rings ═══ -->
