@@ -113,6 +113,25 @@ const path = __dirname + "/triton-rack.html";
   if (!rep.on || rep.seed !== pin1.s) fail("crate replay seed " + rep.seed + " ≠ pinned " + pin1.s);
   else ok("crate: pinned #" + pin1.s + " replayed exactly (" + rep.fig + ")");
 
+  /* Bank B: WRITE on the unit — ENTER, dial a slot, ENTER */
+  await page.evaluate(() => { dreamStop(); state.mode = "PROG"; setProgram(12); });
+  await page.click("#entBtn");
+  const wr1 = await page.evaluate(() => lcd.textContent.indexOf("WRITE PROGRAM") >= 0);
+  if (!wr1) fail("ENTER did not open the write screen");
+  await page.click('#unit .btn.nav[data-nav="up"]');   /* dial to B001 */
+  await page.click("#entBtn");
+  await page.waitForTimeout(950);
+  const wr2 = await page.evaluate(() => ({ slot1: !!USER_BANK[1], id: USER_BANK[1] && USER_BANK[1].id,
+    curId: cur.id, chip: !!document.querySelector('.pchip[data-u="1"]'),
+    count: document.getElementById("bankCount").textContent }));
+  if (!wr2.slot1 || wr2.id !== "B001" || wr2.curId !== "B001") fail("write flow " + JSON.stringify(wr2));
+  else if (!wr2.chip || wr2.count !== "1") fail("written program not surfaced " + JSON.stringify(wr2));
+  else ok("Bank B: wrote " + wr2.id + " from the unit, chip + count live");
+  const bankJson = await page.evaluate(() => JSON.stringify({ v: 1, bank: USER_BANK }));
+  const wr3 = await page.evaluate(j => { const got = bankParse(j); return got && got[1] && got[1].id; }, bankJson);
+  if (wr3 !== "B001") fail("bank export/import round-trip: " + wr3);
+  else ok("Bank B: file round-trip holds");
+
   /* figure tile takes over: manual rhythm, dream stops */
   await page.evaluate(() => { document.querySelector('#ldrStrip .l4tile.fig[data-f="bembe"]').scrollIntoView(); });
   await page.click('#ldrStrip .l4tile.fig[data-f="bembe"]');

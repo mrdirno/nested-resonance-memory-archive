@@ -317,5 +317,34 @@ console.log("[6] midi");
   }
 }
 
+/* ── suite 7: User Bank B (validator + file round-trip) ──────────────────── */
+console.log("[7] bank B");
+{
+  const bankJs = slice("/*BANKB-BEGIN*/", "/*BANKB-END*/");
+  const G7 = eval(bankJs + "\n;({progValidate,bankParse})");
+  let bBad = 0;
+  [0, 15, 63, 99, 127].forEach(i => { if (!G7.progValidate(PROGRAMS[i])) { fail("real program " + i + " refused"); bBad++; } });
+  const mut1 = JSON.parse(JSON.stringify(PROGRAMS[5])); delete mut1.aEG;
+  if (G7.progValidate(mut1)) { fail("missing aEG accepted"); bBad++; }
+  const mut2 = JSON.parse(JSON.stringify(PROGRAMS[5])); mut2.filter.cutoff = "loud";
+  if (G7.progValidate(mut2)) { fail("string cutoff accepted"); bBad++; }
+  const mut3 = JSON.parse(JSON.stringify(PROGRAMS[5])); delete mut3.audition;
+  if (G7.progValidate(mut3)) { fail("missing audition accepted"); bBad++; }
+  const bank = new Array(16).fill(null);
+  bank[3] = JSON.parse(JSON.stringify(PROGRAMS[7]));
+  bank[9] = JSON.parse(JSON.stringify(PROGRAMS[40]));
+  const parsed = G7.bankParse(JSON.stringify({ v: 1, bank }));
+  if (!parsed || parsed.length !== 16 || parsed.filter(Boolean).length !== 2 ||
+      parsed[3].id !== "B003" || parsed[9].id !== "B009") { fail("bank round-trip"); bBad++; }
+  const dirty = new Array(20).fill(null);
+  dirty[0] = JSON.parse(JSON.stringify(PROGRAMS[1]));
+  dirty[2] = { name: "junk" };
+  dirty[17] = JSON.parse(JSON.stringify(PROGRAMS[2]));   /* beyond 16 — must drop */
+  const p2 = G7.bankParse(JSON.stringify({ v: 1, bank: dirty }));
+  if (!p2 || p2.length !== 16 || p2.filter(Boolean).length !== 1) { fail("dirty bank filter"); bBad++; }
+  if (G7.bankParse("]nope") !== null) { fail("garbage json accepted"); bBad++; }
+  if (!bBad) ok("real programs pass, mutants/junk/overflow refused, slot ids stamped");
+}
+
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
 process.exit(errs ? 1 : 0);

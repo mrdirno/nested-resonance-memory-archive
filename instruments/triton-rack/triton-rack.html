@@ -606,6 +606,14 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
       </div>
     </div>
     <div class="spec"><b>Play live right here</b><span>Plug a USB or Bluetooth MIDI keyboard into this device — Web MIDI picks it up automatically (status above the keys). Pitch bend (±2), mod wheel vibrato and the sustain pedal all work. The engine runs at your device's interactive latency, shown on the GLOBAL page.</span></div>
+    <div class="spec"><b>User Bank B</b><span>Sixteen slots for your own programs — edit any sound (PROG pages P1–P3), press ENTER on the unit, dial a slot, ENTER again. Written programs (<span id="bankCount">0</span>/16) appear in the Patches tab and export/import as a file, so your bank outlives the browser tab.</span>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button class="oct-btn" id="bankExp">Export Bank B → .json</button>
+        <button class="oct-btn" id="bankImp">Import Bank B…</button>
+        <span id="bankMsg" style="color:var(--text-dim);font-size:12px;"></span>
+        <input type="file" id="bankFile" accept=".json,application/json" style="display:none">
+      </div>
+    </div>
     <div class="spec"><b>Everything is in this file</b><span>All 128 programs and 16 combis are built into this one page — the Patches tab lists every sound, tappable. Nothing is downloaded to play; the zip exists only as a bonus for studio software.</span></div>
   </div>
   <p class="fine">DecentSampler is free at decentsamples.com (VST3 / AU / standalone, desktop and iOS). Everything in the zip is generated in your browser from this page's synthesis code — no Korg data inside, so the sounds are yours to use in your music.</p>
@@ -621,7 +629,8 @@ const state = {
   powered:false, test:false, mode:'PROG', page:0,
   progIdx:12, combiIdx:0, tempo:100, transpose:0, tune:0,
   arp:{on:false, patt:'UP', reso:'16', gate:0.72, oct:1, latch:false},
-  audition:false, compare:false, editIdx:0, volume:0.62, kbBase:48
+  audition:false, compare:false, editIdx:0, volume:0.62, kbBase:48,
+  write:false, wSlot:0, userSlot:null
 };
 let activeVoices=0, voiceList=[], keysDown=new Map(), physSet=new Set(), latchSet=new Set();
 let monoV=null, edits={}, pristine=null, cur=null;
@@ -1665,6 +1674,14 @@ function render(){
   if(state.test) return;
   let h="";
   const arpTxt=state.arp.on?"ARP:ON":"ARP:OFF";
+  if(state.mode==="PROG"&&state.write){
+    const t=USER_BANK[state.wSlot];
+    h+=`<span class="row"><span class="inv">WRITE PROGRAM</span></span>`;
+    h+=`<span class="row big">→ B${String(state.wSlot).padStart(3,"0")}  ${t?esc(t.name):"(empty slot)"}</span>`;
+    h+=`<span class="row">SOURCE: ${cur.id}  ${esc(cur.name)}</span>`;
+    h+=`<span class="row dim">DIAL:SLOT  ENTER:WRITE  EXIT:CANCEL</span>`;
+    lcd.innerHTML=h; return;
+  }
   if(state.mode==="PROG"){
     const names=["PLAY","EDIT","ARP","FX"];
     h+=`<span class="row"><span class="inv">PROG P${state.page}:${names[state.page]}</span>  ♩=${state.tempo}  ${arpTxt}</span>`;
@@ -1712,7 +1729,7 @@ function flashRow(msg){ if(!state.powered||state.test) return;
 /* ================= program / combi select ================= */
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function setProgram(i){
-  state.progIdx=(i+PROGRAMS.length)%PROGRAMS.length;
+  state.progIdx=(i+PROGRAMS.length)%PROGRAMS.length; state.userSlot=null;
   cur=clone(PROGRAMS[state.progIdx]); pristine=clone(PROGRAMS[state.progIdx]);
   state.compare=false; $("#cmpBtn").classList.remove("lit-a");
   state.tempo=cur.tempo||100; state.editIdx=0;
@@ -1728,6 +1745,49 @@ function setCombi(i){
   syncLeds(); applyFX(); render();
   if(typeof updatePatchChips==="function") updatePatchChips();
 }
+/* ── USER BANK B: 16 slots the player writes from the unit (PROG → ENTER) ── */
+/*BANKB-BEGIN*/
+var USER_BANK=new Array(16).fill(null);
+function progValidate(p){
+  if(!p||typeof p!=="object") return false;
+  if(typeof p.name!=="string"||!p.name) return false;
+  if(typeof p.cat!=="string") return false;
+  if(!p.filter||typeof p.filter.cutoff!=="number") return false;
+  if(!p.aEG||!p.fEG) return false;
+  if(!["a","d","s","r"].every(k=>typeof p.aEG[k]==="number"&&typeof p.fEG[k]==="number")) return false;
+  if(!p.lfo||typeof p.lfo.rate!=="number") return false;
+  if(!p.fx||!p.fx.delay) return false;
+  if(!Array.isArray(p.osc)&&!p.bell) return false;
+  if(!p.audition||!p.audition.ev||!p.audition.len) return false;
+  return true;
+}
+function bankParse(json){
+  try{
+    const o=JSON.parse(json);
+    const list=o&&Array.isArray(o.bank)? o.bank : null;
+    if(!list) return null;
+    const out=new Array(16).fill(null);
+    for(let i=0;i<16;i++){ const p=list[i];
+      if(p&&progValidate(p)){ out[i]=JSON.parse(JSON.stringify(p));
+        out[i].id="B"+String(i).padStart(3,"0"); } }
+    return out;
+  }catch(_){ return null; }
+}
+/*BANKB-END*/
+function setUserProgram(slot){
+  const u=USER_BANK[slot]; if(!u) return;
+  state.mode="PROG"; state.page=0; state.editIdx=0; state.userSlot=slot;
+  cur=clone(u); pristine=clone(u);
+  state.compare=false; $("#cmpBtn").classList.remove("lit-a");
+  state.tempo=cur.tempo||100;
+  if(cur.arpDefault){ Object.assign(state.arp,cur.arpDefault); } else { state.arp.on=false; }
+  latchSet.clear(); syncLeds(); applyFX(); render();
+  if(typeof updatePatchChips==="function") updatePatchChips();
+}
+function bankCountUI(){
+  const c=document.getElementById("bankCount");
+  if(c) c.textContent=USER_BANK.filter(Boolean).length;
+}
 function syncLeds(){
   $$(".btn.mode").forEach(b=>b.classList.toggle("lit",b.dataset.mode===state.mode));
   $("#arpBtn").classList.toggle("lit",state.arp.on);
@@ -1736,7 +1796,7 @@ function syncLeds(){
 /* ================= controls ================= */
 $$(".btn.mode").forEach(b=>b.addEventListener("click",()=>{
   if(!state.powered||state.test) return;
-  allNotesOff(); state.audition=false; state.mode=b.dataset.mode; state.page=0; state.editIdx=0;
+  allNotesOff(); state.audition=false; state.write=false; state.mode=b.dataset.mode; state.page=0; state.editIdx=0;
   if(state.mode==="PROG") setProgram(state.progIdx);
   else if(state.mode==="COMBI") setCombi(state.combiIdx);
   else { syncLeds(); render(); }
@@ -1755,14 +1815,29 @@ $("#menuBtn").addEventListener("click",()=>{ if(!state.powered||state.test) retu
   else flashRow("PAGES: PROG MODE ONLY"); });
 $("#exitBtn").addEventListener("click",()=>{
   if(state.test){ exitTest(); return; }
-  if(!state.powered) return; state.page=0; state.editIdx=0; render(); });
+  if(!state.powered) return;
+  if(state.write){ state.write=false; render(); return; }
+  state.page=0; state.editIdx=0; render(); });
 $("#entBtn").addEventListener("pointerdown",()=>{ entHeld=true; });
 window.addEventListener("pointerup",()=>{ entHeld=false; });
-$("#entBtn").addEventListener("click",()=>{ if(state.powered&&!state.test) flashRow("ENTER"); });
+$("#entBtn").addEventListener("click",()=>{
+  if(!state.powered||state.test) return;
+  if(state.mode!=="PROG"){ flashRow("WRITE: PROG MODE ONLY"); return; }
+  if(state.compare){ flashRow("COMPARE ON — EXIT FIRST"); return; }
+  if(!state.write){ state.write=true; state.wSlot=state.userSlot!=null? state.userSlot : 0; render(); return; }
+  const id="B"+String(state.wSlot).padStart(3,"0");
+  USER_BANK[state.wSlot]=Object.assign(clone(cur),{id});
+  state.write=false;
+  if(typeof buildPatchPane==="function") buildPatchPane();
+  bankCountUI();
+  setUserProgram(state.wSlot);
+  flashRow("WRITTEN → "+id);
+});
 $$(".btn.nav").forEach(b=>b.addEventListener("click",()=>{
   if(!state.powered||state.test) return; const d=b.dataset.nav;
   const ps=pageParams();
   if(d==="left"||d==="right"){
+    if(state.write) return;
     if(ps){ state.editIdx=(state.editIdx+(d==="right"?1:ps.length-1))%ps.length; render(); }
     else if(state.mode==="PROG"&&state.page===0) catJump(d==="right"?1:-1);
   } else {
@@ -1780,6 +1855,7 @@ function catJump(dir){
 }
 function dialStep(dir){
   if(!state.powered||state.test) return;
+  if(state.write){ state.wSlot=(state.wSlot+dir+16)%16; render(); return; }
   if(state.mode==="PROG"&&state.page===0){ setProgram(state.progIdx+dir); return; }
   if(state.mode==="COMBI"){ setCombi(state.combiIdx+dir); return; }
   const ps=pageParams();
@@ -2167,26 +2243,65 @@ function buildPatchPane(){
       html+='<button class="pchip" data-p="'+i+'"><b>'+p.id+'</b>'+p.name+'</button>'; });
     html+='</div>';
   });
+  html+='<div class="pcat">User Bank B · write from the unit: PROG → ENTER · '+USER_BANK.filter(Boolean).length+'/16</div><div class="prow">';
+  for(let i=0;i<16;i++){ const u=USER_BANK[i], bid="B"+String(i).padStart(3,"0");
+    html+= u? '<button class="pchip" data-u="'+i+'"><b>'+bid+'</b>'+u.name+'</button>'
+            : '<span class="pchip" style="opacity:.35;cursor:default"><b>'+bid+'</b>empty</span>'; }
+  html+='</div>';
   html+='<div class="pcat">Combinations · layered &amp; split · '+COMBIS.length+'</div><div class="prow">';
   COMBIS.forEach((c,i)=>{ html+='<button class="pchip combi" data-c="'+i+'"><b>'+c.id+'</b>'+c.name+'</button>'; });
   html+='</div>';
   host.innerHTML=html;
+  if(host._wired) return; host._wired=true;
   host.addEventListener("click",e=>{
     const b=e.target.closest(".pchip"); if(!b) return;
     if(state.test) return;
     if(!state.powered) quickBoot();
-    if(b.dataset.p!=null){ state.mode="PROG"; state.page=0; setProgram(+b.dataset.p); }
-    else { state.mode="COMBI"; setCombi(+b.dataset.c); }
+    if(b.dataset.u!=null){ setUserProgram(+b.dataset.u); }
+    else if(b.dataset.p!=null){ state.mode="PROG"; state.page=0; setProgram(+b.dataset.p); }
+    else if(b.dataset.c!=null){ state.mode="COMBI"; setCombi(+b.dataset.c); }
   });
 }
 function updatePatchChips(){
   document.querySelectorAll(".pchip").forEach(b=>{
-    const on = b.dataset.p!=null ? (state.mode==="PROG" && +b.dataset.p===state.progIdx)
-                                 : (state.mode==="COMBI" && +b.dataset.c===state.combiIdx);
+    let on=false;
+    if(b.dataset.u!=null) on = state.mode==="PROG" && state.userSlot===+b.dataset.u;
+    else if(b.dataset.p!=null) on = state.mode==="PROG" && state.userSlot==null && +b.dataset.p===state.progIdx;
+    else if(b.dataset.c!=null) on = state.mode==="COMBI" && +b.dataset.c===state.combiIdx;
     b.classList.toggle("on",on);
   });
 }
 buildPatchPane(); updatePatchChips();
+/* Bank B file I/O — the export pane's markup precedes the scripts, safe to bind now */
+(function(){
+  const exp=document.getElementById("bankExp"), imp=document.getElementById("bankImp"),
+        fi=document.getElementById("bankFile"), msg=document.getElementById("bankMsg");
+  const say=t=>{ if(msg){ msg.textContent=t; setTimeout(()=>{ if(msg.textContent===t) msg.textContent=""; },2600); } };
+  if(exp) exp.addEventListener("click",()=>{
+    if(!USER_BANK.some(Boolean)){ say("bank is empty — WRITE something first"); return; }
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([JSON.stringify({v:1,bank:USER_BANK},null,1)],{type:"application/json"}));
+    a.download="triton-user-bank-b.json";
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
+  });
+  if(imp&&fi){
+    imp.addEventListener("click",()=>fi.click());
+    fi.addEventListener("change",()=>{
+      const f=fi.files&&fi.files[0]; if(!f) return;
+      const rd=new FileReader();
+      rd.onload=()=>{ const got=bankParse(String(rd.result));
+        if(!got){ say("not a Bank B file"); fi.value=""; return; }
+        let n=0; got.forEach((p,i)=>{ if(p){ USER_BANK[i]=p; n++; } });
+        buildPatchPane(); updatePatchChips(); bankCountUI();
+        say(n? n+" program"+(n===1?"":"s")+" loaded into Bank B" : "file held no valid programs");
+        fi.value="";
+      };
+      rd.readAsText(f);
+    });
+  }
+  bankCountUI();
+})();
 </script>
 <script>
 "use strict";
@@ -3428,4 +3543,11 @@ DEAD BRANCHES: (1) writing the crate into the artifact file itself (Ring 7's ori
 KILL-TEST: suite [3] builds entries from real dreams and proves the validator refuses bad figures, non-drum kits, alien scales, unresolvable companions and missing seeds; crateParse filters a mixed file to its valid takes and returns null for garbage JSON; crateEntry round-trips through its own validator. In Chromium: pin mid-performance, DICE away to a different dream, tap the gold tile — the seed comes back exactly (#42521 in the run on record) with the pinned figure playing.
 THE NON-OBVIOUS CHOICE: the crate is tiles, not a menu — pinned takes sit in the same shelf as dreams and figures because to the thumb they are the same act: "start THIS." The strip has become the instrument's memory lane: presets the builder shipped, figures the tradition shipped, takes the player kept.
 OPEN QUESTIONS: (1) A crate tile replays into today's engine — if a future ring changes the physics, should entries carry the ring number they were pinned under, honesty for ears? (2) The .mid and .wav of a take share its seed name; should EXPORT CRATE optionally bundle the takes' MIDI files so the suitcase carries sound? (3) Twenty-four tiles of gold — at what count does the crate deserve its own shelf row with a filter?
+RING 17 · 2026-08-30 · Bank B — the workstation learns to keep what the player makes
+WHAT CHANGED: Ring 3/4's standing question answered — edits no longer die on program change. Sixteen USER BANK B slots, written FROM THE UNIT the way the hardware taught: edit any program on pages P1–P3, press ENTER → the LCD becomes a WRITE screen (target slot, its current occupant, the source program), dial to choose B000–B015, ENTER commits (EXIT cancels, mode changes cancel, COMPARE blocks with the same message the dial uses). Written programs land in a new Patches-tab row (with empty slots shown dark), select like any sound, audition, edit, re-write, and EXPORT the export tab writes triton-user-bank-b.json; import schema-checks EVERY program (progValidate: name, category, numeric filter/EG fields, LFO, FX, an oscillator stack or bell set, an audition riff) and stamps slot ids, so a corrupted or truncated file loads its valid programs and drops the rest — never a half-broken patch in a slot. The one-shot DecentSampler exporter renders B programs too, unchanged, because it always read `cur`.
+BANNED (obvious answers set aside first): a floating "SAVE" web button (the unit has a write workflow; a second idiom cheapens both); growing PROGRAMS to 144 (suite [1] pins the bank at 128, combis address it by index, and factory vs user is a real hardware distinction worth keeping); auto-saving edits in place (the TRITON's whole edit model is compare-and-commit).
+DEAD BRANCHES: (1) localStorage persistence — lost again for the same reason as the crate (constraint list + silent single-browser state); the bank is a file the player owns. (2) A rename dialog in the write screen — lost: a text input inside the LCD fiction breaks the panel (no QWERTY on a 2U rack); names travel with the source program, and the file is editable JSON for those who care. (3) Sentinel progIdx values (-1-slot) for user programs — lost: every consumer of progIdx would need to know the trick; a parallel userSlot field costs one line in three places and lies to no one.
+KILL-TEST: suite [7] — five real programs pass the validator; deleting aEG, stringifying cutoff, or dropping the audition riff each refuses; a 20-slot dirty file loads exactly its one valid program into 16 normalized slots; garbage JSON returns null, not an exception. In Chromium: the whole write flow by button — ENTER opens the write screen, nav dials to B001, ENTER commits; the chip appears, the count reads 1, cur.id becomes B001, and the exported JSON re-imports to the same slot.
+THE NON-OBVIOUS CHOICE: WRITE lives behind ENTER on the unit, not behind a web control — the feature's home decides its grammar, and this artifact's grammar is "the hardware is real." The browser parts (file I/O) live where browsers belong, on the Export tab.
+OPEN QUESTIONS: (1) Combis reference bank-A indices — should a future combi editor address B slots, and what happens to a combi whose B slot is overwritten? (2) The write screen shows the target's occupant but not a diff — is "what changed vs the factory sound" a page-P4 worth building? (3) Bank B + the crate + the DecentSampler zip are three exports — does a single "everything I made today" bundle earn its place?
 ═══ end rings ═══ -->
