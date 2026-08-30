@@ -139,6 +139,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;color:var(--text-dim);
   font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;}
 .tab.on{color:var(--gold);background:#1b1812;box-shadow:inset 0 -2px 0 var(--gold);}
+@media(max-width:520px){ .tabs{flex-wrap:wrap;} .tab{flex:1 1 32%;min-width:0;} }
 .pane{display:none;max-width:1000px;margin:0 auto;padding:16px 10px 8px;background:#12100c;
   border:1px solid var(--card-line);border-radius:0 0 12px 12px;}
 .pane.on{display:block;}
@@ -196,41 +197,71 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
              radial-gradient(700px 520px at 74% 70%, rgba(255,178,60,.4), transparent 60%);
   filter:blur(48px);transition:opacity .25s linear;animation:auraShift 46s ease-in-out infinite alternate;}
 @keyframes auraShift{from{transform:translate3d(-2%,0,0) scale(1);}to{transform:translate3d(2%,1%,0) scale(1.06);}}
+/* ═══ LUCKY DREAMER 4U — the producer's face (960×540 design px) ═══
+   Touch law: every interactive control ≥120 design px in its smallest
+   dimension (PLAY ≥160), so the worst-case phone scale ≈0.375 keeps ≥45 px. */
 #ldrScale{margin:16px auto 6px;}
-#ldru{width:960px;height:88px;position:relative;transform-origin:top left;
-  filter:drop-shadow(0 12px 22px rgba(0,0,0,.55));}
+#ldru{width:960px;height:540px;position:relative;transform-origin:top left;
+  filter:drop-shadow(0 16px 28px rgba(0,0,0,.55));}
 .ldru-face{position:absolute;inset:0 34px;border-radius:6px;
-  background:linear-gradient(180deg,#161b23,#0b0e13 70%,#07090c);
+  background:
+   radial-gradient(700px 260px at 50% 0%, rgba(60,140,190,.10), transparent 70%),
+   linear-gradient(180deg,#161b23,#0b0e13 62%,#07090c);
   box-shadow:inset 0 1px 0 rgba(140,190,220,.18), inset 0 -2px 5px rgba(0,0,0,.6), inset 0 0 0 1px rgba(60,80,100,.35);}
 .ldru-neon{position:absolute;left:34px;right:34px;top:0;height:2px;border-radius:2px;
   background:linear-gradient(90deg,#39d5ff,#ffb23c 70%,#39d5ff);opacity:.75;
   box-shadow:0 0 10px rgba(70,200,255,.5);}
-.ldru-brand{position:absolute;left:52px;top:22px;font-weight:800;font-size:17px;letter-spacing:.24em;
-  color:#d9eef8;text-shadow:0 0 12px rgba(80,200,255,.35);}
-.ldru-sub{position:absolute;left:53px;top:48px;font-size:8.5px;letter-spacing:.22em;color:#6f8496;text-transform:uppercase;}
-.scope-bezel{position:absolute;left:268px;top:13px;width:312px;height:62px;border-radius:5px;padding:4px;
-  background:#05070a;box-shadow:inset 0 2px 8px rgba(0,0,0,.9), 0 1px 0 rgba(140,190,220,.12);}
+.ldru-brand{position:absolute;left:56px;top:20px;font-weight:800;font-size:22px;letter-spacing:.26em;
+  color:#d9eef8;text-shadow:0 0 14px rgba(80,200,255,.35);}
+.ldru-sub{position:absolute;left:58px;top:52px;font-size:9px;letter-spacing:.24em;color:#6f8496;text-transform:uppercase;}
+#ldrReadout{position:absolute;right:56px;top:18px;width:400px;text-align:right;
+  font:700 13px/1.5 "SF Mono",ui-monospace,Menlo,Consolas,monospace;color:#8fd8f2;
+  letter-spacing:.08em;text-shadow:0 0 8px rgba(80,200,255,.25);}
+#dreamInfo{position:absolute;right:56px;top:40px;width:430px;text-align:right;font-size:10px;letter-spacing:.08em;
+  color:#7d95a8;text-transform:uppercase;line-height:1.4;max-height:16px;overflow:hidden;}
+.scope-bezel{position:absolute;left:52px;top:66px;width:856px;height:128px;border-radius:6px;padding:5px;
+  background:#05070a;box-shadow:inset 0 2px 10px rgba(0,0,0,.9), 0 1px 0 rgba(140,190,220,.12);}
 #dreamScope{width:100%;height:100%;display:block;}
-.ldru-sel{position:absolute;left:600px;top:16px;width:180px;background:#121820;border:1px solid #2b3a49;
-  color:#bfe0f2;border-radius:5px;font:700 11px/1 -apple-system,"Helvetica Neue",Arial,sans-serif;
-  padding:7px 8px;letter-spacing:.04em;}
-#dreamInfo{position:absolute;left:600px;top:46px;width:186px;font-size:9px;letter-spacing:.06em;
-  color:#7d95a8;text-transform:uppercase;line-height:1.35;max-height:30px;overflow:hidden;}
-#dreamDice{position:absolute;right:122px;top:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:17px;user-select:none;
+.l4pad{position:absolute;border-radius:50%;cursor:pointer;user-select:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aef0ff;
   background:radial-gradient(circle at 34% 28%, #1b2733, #0b1118 62%, #05080b 100%);
-  border:1px solid #2f4656;box-shadow:0 2px 6px rgba(0,0,0,.55), inset 0 1px 1px rgba(160,220,255,.14);
-  transition:transform .3s;}
-#dreamDice:active{transform:rotate(160deg) scale(.94);}
-#dreamPlay{position:absolute;right:50px;top:11px;width:64px;height:64px;border-radius:50%;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:22px;color:#aef0ff;user-select:none;
-  background:radial-gradient(circle at 34% 28%, #1b2733, #0b1118 62%, #05080b 100%);
-  border:1px solid #2f4656;
-  box-shadow:0 2px 8px rgba(0,0,0,.6), inset 0 1px 1px rgba(160,220,255,.15), 0 0 0 rgba(80,200,255,0);
+  border:1px solid #2f4656;box-shadow:0 3px 10px rgba(0,0,0,.6), inset 0 1px 1px rgba(160,220,255,.15);
   transition:box-shadow .25s, color .25s;}
-#dreamPlay:active{transform:translateY(1px);}
-#dreamPlay.live{color:#ffd77e;border-color:#5a4a20;
-  animation:playPulse 1.6s ease-in-out infinite;}
+.l4pad:active{transform:translateY(1px) scale(.985);}
+.l4pad .pico{font-size:34px;line-height:1;}
+.l4pad .plab{font-size:9px;letter-spacing:.22em;margin-top:7px;color:#6f8496;text-transform:uppercase;}
+#dreamPlay{left:586px;top:206px;width:160px;height:160px;}
+#dreamPlay .pico{font-size:46px;}
+#dreamPlay.live{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.6s ease-in-out infinite;}
+#dreamDice{left:428px;top:226px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
+#dreamDice:active{transform:rotate(160deg) scale(.94);}
+#ldrRec{left:270px;top:226px;width:120px;height:120px;color:#8fa2b3;}
+#ldrRec.rec{color:#ff5a4a;border-color:#6b241d;animation:recPulse 1s ease-in-out infinite;}
+#ldrRecLbl{position:absolute;left:250px;top:356px;width:160px;text-align:center;font-size:11px;
+  letter-spacing:.1em;color:#ff8f83;min-height:14px;}
+#ldrLeds{position:absolute;left:56px;top:224px;width:150px;}
+.l4led{display:flex;align-items:center;gap:10px;margin:10px 0;}
+.l4led i{width:12px;height:12px;border-radius:50%;background:#20303c;box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+  transition:background .15s, box-shadow .15s;}
+.l4led.on i{background:#57d6ff;box-shadow:0 0 10px rgba(87,214,255,.75);}
+.l4led.on.amber i{background:#ffb23c;box-shadow:0 0 10px rgba(255,178,60,.75);}
+.l4led span{font-size:9px;letter-spacing:.22em;color:#6f8496;text-transform:uppercase;}
+#ldrStrip{position:absolute;left:40px;top:390px;width:880px;height:134px;
+  display:flex;gap:10px;align-items:stretch;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding:2px 12px 6px;scrollbar-width:thin;}
+.l4tile{flex:0 0 auto;height:120px;border-radius:10px;cursor:pointer;user-select:none;
+  display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 14px;text-align:left;
+  background:linear-gradient(180deg,#131a22,#0a0e13);border:1px solid #263644;
+  box-shadow:0 2px 8px rgba(0,0,0,.45), inset 0 1px 0 rgba(160,220,255,.08);}
+.l4tile:active{transform:scale(.97);}
+.l4tile b{color:#bfe0f2;font-size:13px;letter-spacing:.04em;}
+.l4tile .tmeta{color:#5f7484;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;}
+.l4tile.dream{min-width:150px;background:linear-gradient(180deg,#141d2a,#0a0f16);}
+.l4tile.dream b{font-size:14px;}
+.l4tile.fig{min-width:132px;}
+.l4tile.on{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 14px rgba(87,214,255,.25);}
+.l4tile.live{border-color:#ffb23c;box-shadow:inset 0 0 0 1px #ffb23c, 0 0 14px rgba(255,178,60,.3);}
+.l4sep{flex:0 0 2px;height:120px;border-radius:2px;background:linear-gradient(180deg,transparent,#2b3a49,transparent);}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
   50%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 30px rgba(255,190,90,.65);}}
 .tab{transition:color .2s, box-shadow .2s, background .2s;}
@@ -252,6 +283,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   50%{box-shadow:0 6px 16px rgba(0,0,0,.5), 0 0 24px rgba(255,80,60,.75);}}
 #fabDice{transition:transform .35s, box-shadow .25s;}
 #fabDice.spin{transform:rotate(200deg) scale(.92);}
+#dreamDice.spin{transform:rotate(200deg) scale(.92);}
 #recLbl{font-size:10px;letter-spacing:.08em;color:#ff8f83;min-height:12px;text-shadow:0 1px 2px #000;}
 @media (prefers-reduced-motion: reduce){ .wire.hot{animation:none;} #aura{animation:none;} #dreamPlay.live{animation:none;} .fbtn.big.live{animation:none;} #fabRec.rec{animation:none;} }
 </style>
@@ -266,17 +298,27 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 </div>
 
 <div class="wrap"><div id="ldrScale"><div id="ldru">
-  <div class="ear l"><div class="screw" style="top:35px;"></div></div>
-  <div class="ear r"><div class="screw" style="top:35px;"></div></div>
+  <div class="ear l"><div class="screw s1"></div><div class="screw s2"></div></div>
+  <div class="ear r"><div class="screw s1"></div><div class="screw s2"></div></div>
   <div class="ldru-face"></div>
   <div class="ldru-neon"></div>
   <div class="ldru-brand">LUCKY&nbsp;DREAMER</div>
-  <div class="ldru-sub">CONDUCTOR&nbsp;1U&nbsp;·&nbsp;drives&nbsp;the&nbsp;TRITON&nbsp;below</div>
-  <div class="scope-bezel"><canvas id="dreamScope" width="300" height="52"></canvas></div>
-  <select id="dreamPreset" class="ldru-sel"></select>
+  <div class="ldru-sub">CONDUCTOR&nbsp;4U&nbsp;·&nbsp;drives&nbsp;the&nbsp;TRITON&nbsp;below</div>
+  <div id="ldrReadout">READY</div>
   <div id="dreamInfo">READY · press play</div>
-  <div id="dreamDice" title="New combination">🎲</div>
-  <div id="dreamPlay" title="Dream performance">▶</div>
+  <div class="scope-bezel"><canvas id="dreamScope" width="856" height="118"></canvas></div>
+  <div id="ldrLeds">
+    <div class="l4led" id="led-drums"><i></i><span>Drums</span></div>
+    <div class="l4led" id="led-bass"><i></i><span>Bass</span></div>
+    <div class="l4led" id="led-chord"><i></i><span>Chords</span></div>
+    <div class="l4led" id="led-lead"><i></i><span>Lead</span></div>
+  </div>
+  <div class="l4pad" id="ldrRec" title="Record a take (WAV)"><span class="pico">●</span><span class="plab">Record</span></div>
+  <div id="ldrRecLbl"></div>
+  <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
+  <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
+  <select id="dreamPreset" style="display:none"></select>
+  <div id="ldrStrip"></div>
 </div></div></div>
 
 <div class="wrap"><div id="unitScale"><div id="unit">
@@ -1892,7 +1934,7 @@ function fit(){ const w=Math.min(document.documentElement.clientWidth,1000)-20;
   unit.style.transform="scale("+s+")";
   unitScale.style.width=(960*s)+"px"; unitScale.style.height=(270*s)+"px";
   const L=document.getElementById("ldru"), LS=document.getElementById("ldrScale");
-  if(L&&LS){ L.style.transform="scale("+s+")"; LS.style.width=(960*s)+"px"; LS.style.height=(88*s)+"px"; } }
+  if(L&&LS){ L.style.transform="scale("+s+")"; LS.style.width=(960*s)+"px"; LS.style.height=(540*s)+"px"; } }
 window.addEventListener("resize",fit);
 buildKB(); fit(); render();
 </script>
@@ -2617,6 +2659,7 @@ function ldrChips(){
     const b=e.target.closest(".pchip.fig"); if(!b) return;
     LDR.fig=b.dataset.f;
     document.querySelectorAll(".pchip.fig").forEach(x=>x.classList.toggle("on",x===b));
+    if(typeof ldrSyncStripFig==="function") ldrSyncStripFig(LDR.fig);
     const wf=LDR_FIG[LDR.fig];
     if(wf) ldrWarm([LDR.fig].concat((wf.also||[]).slice(0,3)));
     ldrInfo();
@@ -2814,10 +2857,15 @@ function dreamScheduleBar(at,f,step,barLen){
       spawnVoice(PROGRAMS[P.lead],ladder[e.di],v,at+e.p*step,step*e.len,DREAM.pans.lead); });
   }
   ldrPulse(at); pulseAt(at);
-  const info=document.getElementById("dreamInfo");
-  if(info) setTimeout(()=>{ if(DREAM.on) info.textContent=
-    (DREAM.p.name||"DREAM")+" · "+sect+" "+((DREAM.bar%8)+1)+"/8 · ♩"+state.tempo+" · #"+DREAM.seed; },
-    Math.max(0,(at-ctx.currentTime)*1000));
+  const barNo=(DREAM.bar%8)+1, seedNo=DREAM.seed, nm=DREAM.p.name||"DREAM";
+  const parts={drums:true,bass:C.bass>0,chord:true,lead:C.lead>0&&DREAM.bar>=4};
+  setTimeout(()=>{ if(!DREAM.on) return;
+    const info=document.getElementById("dreamInfo");
+    if(info) info.textContent=nm+" · "+sect+" "+barNo+"/8 · ♩"+state.tempo+" · #"+seedNo;
+    const ro=document.getElementById("ldrReadout");
+    if(ro) ro.textContent="#"+seedNo+" · "+sect+" "+barNo+"/8 · ♩"+state.tempo;
+    ldr4Leds(parts,sect);
+  }, Math.max(0,(at-ctx.currentTime)*1000));
   DREAM._barLen=barLen; DREAM._barStart=at;
 }
 setInterval(()=>{
@@ -2836,6 +2884,10 @@ setInterval(()=>{
 function applyDream(p,mid){
   DREAM.p=p; DREAM.seed=p._seed!=null? p._seed : DREAM.seed;
   if(typeof ldrWarm==="function") ldrWarm([p.fig].concat(p.comps||[]));
+  const _sel=document.getElementById("dreamPreset");
+  if(_sel) document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>
+    x.classList.toggle("live",x.dataset.d===_sel.value));
+  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.remove("on"));
   DREAM.rng=mulberry(DREAM.seed||1);
   state.tempo=p.tempo;
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
@@ -2846,9 +2898,20 @@ function applyDream(p,mid){
 function setPlayUI(on){
   [["dreamPlay",on],["fabPlay",on]].forEach(([id,o])=>{
     const b=document.getElementById(id); if(!b) return;
-    b.classList.toggle("live",o); b.textContent=o?"■":"▶"; });
-  if(!on){ const i=document.getElementById("dreamInfo");
-    if(i) i.textContent="READY · press play"; }
+    b.classList.toggle("live",o);
+    const ico=b.querySelector(".pico"); (ico||b).textContent=o?"■":"▶"; });
+  if(!on){
+    const i=document.getElementById("dreamInfo"); if(i) i.textContent="READY · press play";
+    const ro=document.getElementById("ldrReadout"); if(ro) ro.textContent="READY";
+    ["led-drums","led-bass","led-chord","led-lead"].forEach(id=>{
+      const e=document.getElementById(id); if(e) e.classList.remove("on","amber"); });
+    document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.remove("live"));
+  }
+}
+function ldr4Leds(parts,sect){
+  [["led-drums",parts.drums],["led-bass",parts.bass],["led-chord",parts.chord],["led-lead",parts.lead]]
+    .forEach(([id,on])=>{ const e=document.getElementById(id); if(!e) return;
+      e.classList.toggle("on",!!on); e.classList.toggle("amber",sect==="BREAK"); });
 }
 function startWith(p,skipIntro){
   if(state.test) return;
@@ -2901,6 +2964,10 @@ function wavStereo24(l,r,sr){
   }
   return u;
 }
+function recUI(on){ ["fabRec","ldrRec"].forEach(id=>{ const b=document.getElementById(id);
+  if(b) b.classList.toggle("rec",on); }); }
+function recLblSet(t){ ["recLbl","ldrRecLbl"].forEach(id=>{ const e=document.getElementById(id);
+  if(e) e.textContent=t; }); }
 function recToggle(){
   if(REC.on){ recStop(); return; }
   if(state.test) return;
@@ -2915,17 +2982,15 @@ function recToggle(){
       if(ctx.currentTime-REC.t0>REC.max) recStop(); };
   }
   REC.l=[]; REC.r=[]; REC.t0=ctx.currentTime; REC.on=true;
-  const b=document.getElementById("fabRec"); if(b) b.classList.add("rec");
-  const lbl=document.getElementById("recLbl");
-  REC.timer=setInterval(()=>{ if(lbl&&REC.on) lbl.textContent="● "+Math.floor(ctx.currentTime-REC.t0)+"s"; },500);
+  recUI(true);
+  REC.timer=setInterval(()=>{ if(REC.on) recLblSet("● "+Math.floor(ctx.currentTime-REC.t0)+"s"); },500);
 }
 function recStop(){
   REC.on=false; clearInterval(REC.timer);
-  const b=document.getElementById("fabRec"); if(b) b.classList.remove("rec");
-  const lbl=document.getElementById("recLbl");
+  recUI(false);
   const n=REC.l.reduce((a,c)=>a+c.length,0);
-  if(n<ctx.sampleRate*0.5){ if(lbl){ lbl.textContent="too short"; setTimeout(()=>lbl.textContent="",1500);} return; }
-  if(lbl) lbl.textContent="saving…";
+  if(n<ctx.sampleRate*0.5){ recLblSet("too short"); setTimeout(()=>recLblSet(""),1500); return; }
+  recLblSet("saving…");
   const L=new Float32Array(n), R=new Float32Array(n); let o=0;
   REC.l.forEach((c,i)=>{ L.set(c,o); R.set(REC.r[i],o); o+=c.length; });
   REC.l=[]; REC.r=[];
@@ -2934,7 +2999,7 @@ function recStop(){
   a.href=URL.createObjectURL(new Blob([wav],{type:"audio/wav"}));
   a.download="triton-dream-"+(DREAM.seed||"take")+".wav";
   document.body.appendChild(a); a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); if(lbl) lbl.textContent=""; },3000);
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); recLblSet(""); },3000);
 }
 function dreamDraw(rms,wav){
   const aura=document.getElementById("aura");
@@ -2957,18 +3022,68 @@ function dreamDraw(rms,wav){
     g.fillRect(0,cv.height-3,cv.width*ph,3);
   }
 }
-(function(){
+/* ── the 4U strip: dream pads + the figure crate, one scrollable shelf ── */
+function ldrSyncStripFig(k){
+  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.toggle("on",x.dataset.f===k));
+  document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.remove("live"));
+}
+function ldrPickDream(i){
+  const sel=document.getElementById("dreamPreset"); if(sel) sel.value=String(i);
+  document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.toggle("live",+x.dataset.d===i));
+  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.remove("on"));
+  const base=DREAMS[i];
+  const rng=mulberry((Date.now()%2147483647)|1);
+  const p=base.surprise? dreamPickSurprise(rng) : JSON.parse(JSON.stringify(base));
+  startWith(p,DREAM.on);
+}
+function ldrPickFig(k){
+  if(!LDR_FIG[k]) return;
+  LDR.fig=k;
+  document.querySelectorAll(".pchip.fig").forEach(x=>x.classList.toggle("on",x.dataset.f===k));
+  ldrSyncStripFig(k);
+  if(typeof ldrWarm==="function") ldrWarm([k].concat((LDR_FIG[k].also||[]).slice(0,3)));
+  if(typeof ldrInfo==="function") ldrInfo();
+  if(DREAM.on) dreamStop();
+  ldrToggle(true);
+}
+function ldr4Build(){
+  const host=document.getElementById("ldrStrip"); if(!host) return;
+  let h="";
+  DREAMS.forEach((d,i)=>{ h+='<div class="l4tile dream" data-d="'+i+'"><b>'+
+    (d.surprise?"🎲 Surprise Me":d.name)+'</b><span class="tmeta">'+
+    (d.surprise?"new every time":"♩"+d.tempo+" · "+d.fig)+'</span></div>'; });
+  h+='<div class="l4sep"></div>';
+  Object.keys(LDR_FIG).forEach(k=>{ const f=LDR_FIG[k];
+    const v=f.verify==="transcribed"?"·t":f.verify==="derived"?"·d":"·?";
+    h+='<div class="l4tile fig" data-f="'+k+'"><b>'+k+'</b><span class="tmeta">'+
+    f.grid+'-pulse '+v+'</span></div>'; });
+  host.innerHTML=h;
+  host.addEventListener("click",e=>{
+    const dt=e.target.closest("#ldrStrip .l4tile.dream");
+    if(dt){ ldrPickDream(+dt.dataset.d); return; }
+    const ft=e.target.closest("#ldrStrip .l4tile.fig");
+    if(ft) ldrPickFig(ft.dataset.f);
+  });
+}
+function ldrConductorInit(){
+  /* the dock (#fab) renders BELOW the scripts — this init must wait for the DOM.
+     (The shipped 1U had this latent: fabPlay was null at script time, so the
+     dock's handlers and the preset-change listener never attached.) */
+  const on=(id,fn)=>{ const e=document.getElementById(id); if(e) e.addEventListener("click",fn); };
   const sel=document.getElementById("dreamPreset");
-  DREAMS.forEach((d,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=d.name; sel.appendChild(o); });
-  sel.value="0";
+  if(sel&&!sel.options.length){
+    DREAMS.forEach((d,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=d.name; sel.appendChild(o); });
+    sel.value="0";
+    sel.addEventListener("change",()=>{ if(DREAM.on) dreamStart(); });
+  }
   const toggle=()=>{ DREAM.on? dreamStop() : dreamStart(); };
-  document.getElementById("dreamPlay").addEventListener("click",toggle);
-  document.getElementById("fabPlay").addEventListener("click",toggle);
-  document.getElementById("dreamDice").addEventListener("click",dreamDice);
-  document.getElementById("fabDice").addEventListener("click",dreamDice);
-  document.getElementById("fabRec").addEventListener("click",recToggle);
-  sel.addEventListener("change",()=>{ if(DREAM.on) dreamStart(); });
-})();
+  on("dreamPlay",toggle); on("fabPlay",toggle);
+  on("dreamDice",dreamDice); on("fabDice",dreamDice);
+  on("fabRec",recToggle); on("ldrRec",recToggle);
+  ldr4Build();
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
+else ldrConductorInit();
 </script>
 <div id="fab">
   <div id="recLbl"></div>
@@ -3068,4 +3183,12 @@ DEAD BRANCHES: (1) asserting exact hit counts per figure per instrument — lost
 KILL-TEST: suite [5] was run against a deliberately broken map (one entry renamed) before being trusted — the in-file audit caught it at parse, the suite caught it twice more (count + route). The gate fails loudly in three places for one lie.
 THE NON-OBVIOUS CHOICE: the load-time audit ships in the artifact itself, not just in the test harness — a future session that edits LDR_MAP inside the file with no repo around still gets told, in its own console, exactly which hit stopped resolving.
 OPEN QUESTIONS: (1) Suite [5] measures buffers; nothing yet measures the SCHEDULE (that a bar of bembé actually lands 7 hits at the written pulses) — is a scheduler transcript worth a suite? (2) The DoD list is 13 routes — should every A-class mapping become a pinned route so provenance and test are one? (3) The stubbed-ctx trick makes the whole physics engine testable in Node — the synth engine (spawnVoice) never got the same treatment; port the stub?
+RING 13 · 2026-08-30 · the 4U — the conductor gets a face built for thumbs
+WHAT CHANGED: P1 (HANDOFF §5). The 1U strip is now a 4U flagship: 960×540 design px, same ears/screws/scale pipeline (fit() carries it with the TRITON). The face: brand row with a live mono READOUT (#seed · section · bar/8 · ♩tempo) and the dream info line; an 856×118 oscilloscope with the amber bar-phase strip; four PART LEDs (drums/bass/chords/lead) lit from what dreamScheduleBar actually schedules each bar, amber in breaks; three round transport pads — RECORD 120 with take timer, DICE 120, PLAY 160 — all honoring the touch law (every interactive control ≥120 design px ⇒ ≥45 px at worst-case phone scale); and THE STRIP — one horizontally scrolling shelf of 58 tiles: the 7 dreams as pads (name · ♩ · figure), a divider, then all 51 figures (name · grid · verify badge). Tap a dream = it plays, mid-performance swaps land on the bar line; tap a figure = the manual physics engine takes over; the Rhythm tab's browser and the 4U stay in sync both directions. The floating dock stays (the thumb's home when scrolled away); RECORD mirrors between dock and face. The <select> survives only as a hidden state carrier — the selector the user touches is pads, per the brief.
+FOUND & FIXED DOWN THE LADDER (pre-existing, both verified against the pristine upload in headless Chromium): (1) the conductor's init IIFE read #fab dock elements that render BELOW the scripts — null at script time, so THE SHIPPED DOCK'S HANDLERS AND THE PRESET-CHANGE LISTENER NEVER ATTACHED (the 1U play button worked only because it was wired one line before the throw). Init now waits for DOMContentLoaded and null-guards every hook. (2) The six-tab row overflowed a 380 px phone by 33 px (scrollWidth 413 in the baseline too) — tabs now wrap 3+3 under 520 px.
+BANNED (obvious answers set aside first): a second transport bar UI (Ring 6 already ruled: the conductor is a rack unit); shrinking the figure browser into a dropdown (the brief says chips, and a dropdown on a phone is a picker wheel, not an instrument); breaking the 1U out into a separate settings pane.
+DEAD BRANCHES: (1) dream pads AND figure chips as two stacked 120px rows — lost: 240px of tiles + 170 transport + 128 scope + header > 540; one scrolling shelf with a divider keeps every tile legal-size and the face 4U. (2) Per-hit LED flashes — lost: at 16 hits/bar the LEDs strobe into noise; per-bar part-state (what the scheduler actually booked) reads as arrangement, which is what the eyes wanted. (3) A canvas-drawn strip for GPU smoothness — lost: DOM tiles get scrolling, hit targets and accessibility free; the canvas bought nothing but code.
+KILL-TEST: a real headless-Chromium harness now exists beside the node suite — it measures the touch law on live geometry (PLAY 160→60px at 380w, pads 120→45px), counts 7+51 tiles, presses PLAY and verifies conduction (bar advance, voices ≈31, readout format, LEDs on, 12 physics buffers cached, ZERO mapping fallbacks), dices mid-performance without dropping the transport, picks a figure tile and verifies the dream yields to the manual engine, records with mirrored UI, and asserts no horizontal page scroll and zero console errors. ALL GREEN, plus a screenshot reviewed by eye.
+THE NON-OBVIOUS CHOICE: the strip is one shelf, not two surfaces — dreams and figures are the same gesture (tap = it plays) because to a producer they are the same object: a starting point. The divider is the only taxonomy.
+OPEN QUESTIONS: (1) The transport row has dead space reserved at its right edge — HALF-DICE (Ring 7 Q2) is drawn there in the next session's mind; does the seed readout become a long-press crate handle (Ring 7 Q3) in the same gesture family? (2) The strip scrolls but doesn't remember its position per session — should the selected tile auto-center on load? (3) The browser harness can screenshot every bar of a 32-bar performance — is a visual regression reel worth its weight in the repo?
 ═══ end rings ═══ -->
