@@ -1,11 +1,21 @@
 "use strict";
 /* 4U face smoke test in real headless Chromium: layout law, wiring, no console errors.
    Needs: npm i playwright-core + a Chromium (edit executablePath below). Run: node browser-tests.js */
-const { chromium } = require("playwright-core");
+let chromium;
+try { ({ chromium } = require("playwright-core")); }
+catch (e) {
+  try { ({ chromium } = require(require("path").join(process.cwd(), "node_modules", "playwright-core"))); }
+  catch (e2) { console.error("browser-tests: `npm i playwright-core` here or in your cwd first"); process.exit(2); }
+}
 const path = __dirname + "/triton-rack.html";
 (async () => {
+  const fs = require("fs");
+  const exe = process.env.CHROMIUM ||
+    ["/opt/pw-browsers/chromium-1194/chrome-linux/chrome", "/opt/pw-browsers/chromium"]
+      .find(p => { try { return fs.existsSync(p); } catch (_) { return false; } });
+  if (!exe) { console.error("browser-tests: no Chromium found — set CHROMIUM=/path/to/chrome"); process.exit(2); }
   const browser = await chromium.launch({
-    executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+    executablePath: exe,
     args: ["--autoplay-policy=no-user-gesture-required", "--no-sandbox", "--mute-audio"]
   });
   let errs = 0;
