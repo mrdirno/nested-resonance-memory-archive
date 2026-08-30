@@ -68,6 +68,8 @@ const path = __dirname + "/triton-rack.html";
     voices: activeVoices, engine: LDR.engine, fallbacks: LDR.fallbacks,
     bufs: LDR_BUFS.size, live: document.querySelectorAll("#ldrStrip .l4tile.dream.live").length }));
   if (!st1.on || !st1.powered) fail("PLAY did not start (on=" + st1.on + " powered=" + st1.powered + ")");
+  else if (st1.bar < 1) fail("transport on but bars not advancing (bar " + st1.bar + ")");
+  else if (st1.voices < 1) fail("transport on but nothing sounding");
   else ok("PLAY conducts · bar " + st1.bar + " · voices " + st1.voices);
   if (!/#\d+ · \w+ \d\/8 · ♩\d+/.test(st1.readout)) fail("readout: '" + st1.readout + "'");
   else ok("readout live: " + st1.readout);
@@ -79,12 +81,14 @@ const path = __dirname + "/triton-rack.html";
   else ok("physics engine live · " + st1.bufs + " buffers cached · 0 fallbacks");
   if (st1.live !== 1) fail("live dream tile count " + st1.live);
 
-  /* dice mid-performance: bar-quantized swap, still running */
+  /* dice mid-performance: bar-quantized swap applies, transport never drops */
   await page.click("#dreamDice");
-  await page.waitForTimeout(2200);
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
+  await page.waitForTimeout(200);
   const st2 = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed }));
   if (!st2.on) fail("DICE killed the performance");
-  else ok("DICE swaps seamlessly (seed " + st1.seed + " → " + st2.seed + ")");
+  else if (st2.seed === st1.seed) fail("DICE applied nothing (seed unchanged " + st2.seed + ")");
+  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ")");
 
   /* HALF-DICE: rhythm section survives, harmony re-rolls, lands on the bar */
   await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
@@ -110,10 +114,27 @@ const path = __dirname + "/triton-rack.html";
   await page.waitForTimeout(2600);
   await page.evaluate(() => document.querySelector('#ldrStrip .l4tile.crate').scrollIntoView({ inline: "center" }));
   await page.click('#ldrStrip .l4tile.crate[data-c="0"]');
-  await page.waitForTimeout(700);
+  await page.waitForFunction(s => DREAM.seed === s && !DREAM.pending, pin1.s, { timeout: 9000 });
   const rep = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed, fig: DREAM.p.fig }));
   if (!rep.on || rep.seed !== pin1.s) fail("crate replay seed " + rep.seed + " ≠ pinned " + pin1.s);
   else ok("crate: pinned #" + pin1.s + " replayed exactly (" + rep.fig + ")");
+
+  /* hostile crate import: name is HTML — must render inert */
+  const xss = await page.evaluate(async () => {
+    const payload = JSON.stringify({ v: 1, crate: [{ v: 1, seed: 1,
+      name: "<img src=x onerror=window.__xss=1>",
+      p: JSON.parse(JSON.stringify(DREAMS[0])) }] });
+    const got = crateParse(payload);
+    if (got && got.length) { LDR_CRATE.push(got[0]); ldr4Build(); }
+    await new Promise(r => setTimeout(r, 350));
+    const fired = !!window.__xss;
+    const img = !!document.querySelector("#ldrStrip .l4tile.crate img");
+    if (got && got.length) { LDR_CRATE.pop(); ldr4Build(); }
+    return { parsed: got ? got.length : -1, fired, img };
+  });
+  if (xss.parsed !== 1) fail("hostile crate entry did not parse as expected (" + xss.parsed + ")");
+  else if (xss.fired || xss.img) fail("XSS: imported crate name executed/rendered as HTML");
+  else ok("hostile crate name renders inert (escaped)");
 
   /* Bank B: WRITE on the unit — ENTER, dial a slot, ENTER */
   await page.evaluate(() => { dreamStop(); state.mode = "PROG"; setProgram(12); });
@@ -156,6 +177,15 @@ const path = __dirname + "/triton-rack.html";
   await page.click("#ldrRec");
   await page.waitForTimeout(300);
 
+  /* power-off stops the tape and disarms WRITE */
+  await page.evaluate(() => { recToggle(); state.write = true; });
+  await page.waitForTimeout(300);
+  const poff = await page.evaluate(() => { powerOff(); return { rec: REC.on, midi: MIDIREC.on, write: state.write }; });
+  if (poff.rec || poff.midi || poff.write) fail("powerOff left recorder/WRITE armed " + JSON.stringify(poff));
+  else ok("powerOff stops the take and disarms WRITE");
+  await page.evaluate(() => quickBoot());
+  await page.waitForTimeout(300);
+
   /* STRUM: factory default on Nylon Dream, cycles after CHORD, and sounds */
   const strum = await page.evaluate(() => {
     state.mode = "PROG"; setProgram(31);
@@ -169,16 +199,22 @@ const path = __dirname + "/triton-rack.html";
   else if (strum.afterChord !== "STRUM" || strum.wrap !== "UP") fail("STRUM cycle " + JSON.stringify(strum));
   else ok("STRUM: factory default + parameter cycle");
   const strumV = await page.evaluate(async () => {
+    /* isolate: stop the manual rhythm engine and let its tails die, so the
+       voices counted here are the strum's own */
+    LDR.on = false; allNotesOff();
+    await new Promise(r => setTimeout(r, 1600));
+    const s0 = arpStep, v0 = activeVoices;
     noteOn(60, .8); noteOn(64, .8); noteOn(67, .8);
     await new Promise(r => setTimeout(r, 700));
-    const v = activeVoices;
+    const v = activeVoices, steps = arpStep - s0;
     noteOff(60); noteOff(64); noteOff(67);
     state.arp.on = false; allNotesOff();
-    return v;
+    return { v0, v, steps };
   });
-  if (strumV < 1) fail("STRUM produced no voices");
-  else if (strumV > 70) fail("voice accounting leak: " + strumV + " active (cap is 62)");
-  else ok("STRUM plays (" + strumV + " voices mid-phrase, cap honored)");
+  if (strumV.steps < 1) fail("STRUM scheduler never stepped");
+  else if (strumV.v <= strumV.v0) fail("STRUM added no voices (before " + strumV.v0 + ", during " + strumV.v + ")");
+  else if (strumV.v > 70) fail("voice accounting leak: " + strumV.v + " active (cap is 62)");
+  else ok("STRUM plays (" + strumV.steps + " steps, " + strumV.v0 + "→" + strumV.v + " voices, cap honored)");
 
   /* audition improviser: two passes schedule, no errors */
   await page.evaluate(() => { setProgram(0); });

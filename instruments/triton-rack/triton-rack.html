@@ -1378,7 +1378,8 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     else{ src=ctx.createOscillator();
       if(w==="saw")src.type="sawtooth"; else if(w==="sq")src.type="square";
       else if(w==="tri")src.type="triangle"; else if(w==="sine")src.type="sine";
-      else src.setPeriodicWave(WAVES[w]);
+      else if(WAVES[w])src.setPeriodicWave(WAVES[w]);
+      else src.type="sawtooth"; /* unknown wave name (foreign import) degrades, never throws */
       const mult=Math.pow(2,octv||0);
       src.frequency.setValueAtTime(baseHz*mult,t);
       src.detune.setValueAtTime((det||0)+BENDC,t); lgP.connect(src.detune);
@@ -1544,6 +1545,7 @@ function playNote(n,v,when,dur,direct){
 }
 function noteOn(n,vel){
   if(state.test) return;
+  if(typeof exporting!=="undefined"&&exporting) return; /* the globals belong to the offline render */
   if(!state.powered) quickBoot();
   if(!state.powered) return;
   keyVis(n,true);
@@ -1674,7 +1676,7 @@ function updVoiceUI(){
 /* ================= LCD ================= */
 const NN=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 function noteName(n){ return NN[n%12]+(Math.floor(n/12)-1); }
-function esc(s){ return String(s); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
 function fmtHz(v){ return v>=1000? (v/1000).toFixed(1)+"k" : Math.round(v)+""; }
 const PPAGES={
  PROG:[null,
@@ -1765,7 +1767,11 @@ function setProgram(i){
   cur=clone(PROGRAMS[state.progIdx]); pristine=clone(PROGRAMS[state.progIdx]);
   state.compare=false; $("#cmpBtn").classList.remove("lit-a");
   state.tempo=cur.tempo||100; state.editIdx=0;
-  if(cur.arpDefault){ Object.assign(state.arp,cur.arpDefault); } else { state.arp.on=false; }
+  /* browsing sounds must not arm the arp under the conductor — the DREAM
+     watchdog stops on state.arp.on, so an arpDefault would silence the band */
+  const dreaming = typeof DREAM!=="undefined" && DREAM.on;
+  if(cur.arpDefault && !dreaming){ Object.assign(state.arp,cur.arpDefault); }
+  else if(!dreaming){ state.arp.on=false; }
   latchSet.clear(); syncLeds(); applyFX(); render();
   if(typeof updatePatchChips==="function") updatePatchChips();
 }
@@ -1782,15 +1788,22 @@ function setCombi(i){
 var USER_BANK=new Array(16).fill(null);
 function progValidate(p){
   if(!p||typeof p!=="object") return false;
-  if(typeof p.name!=="string"||!p.name) return false;
+  if(typeof p.name!=="string"||!p.name||p.name.length>48) return false;
   if(typeof p.cat!=="string") return false;
-  if(!p.filter||typeof p.filter.cutoff!=="number") return false;
+  if(typeof p.tempo!=="number"||!isFinite(p.tempo)) return false;
+  if(!p.filter||typeof p.filter.cutoff!=="number"||!isFinite(p.filter.cutoff)) return false;
   if(!p.aEG||!p.fEG) return false;
   if(!["a","d","s","r"].every(k=>typeof p.aEG[k]==="number"&&typeof p.fEG[k]==="number")) return false;
   if(!p.lfo||typeof p.lfo.rate!=="number") return false;
   if(!p.fx||!p.fx.delay) return false;
-  if(!Array.isArray(p.osc)&&!p.bell) return false;
-  if(!p.audition||!p.audition.ev||!p.audition.len) return false;
+  if(Array.isArray(p.osc)){
+    if(!p.osc.every(o=>o&&typeof o.w==="string"&&typeof o.lvl==="number"&&isFinite(o.lvl))) return false;
+    if(!p.osc.length&&!p.bell&&p.cat!=="DRUMS") return false;
+  } else if(p.bell){
+    if(!Array.isArray(p.bell)&&p.bell!==true) return false;
+    if(Array.isArray(p.bell)&&!p.bell.every(b=>Array.isArray(b)&&b.length>=3&&b.every(x=>typeof x==="number"&&isFinite(x)))) return false;
+  } else return false;
+  if(!p.audition||!Array.isArray(p.audition.ev)||typeof p.audition.len!=="number") return false;
   return true;
 }
 function bankParse(json){
@@ -1835,7 +1848,11 @@ $$(".btn.mode").forEach(b=>b.addEventListener("click",()=>{
 }));
 $("#arpBtn").addEventListener("click",()=>{ if(!state.powered||state.test) return;
   state.arp.on=!state.arp.on; latchSet.clear();
-  if(!state.arp.on){ physSet.forEach(n=>keyVis(n,false)); physSet.clear(); chordDone=true; }
+  if(state.arp.on){
+    /* the arp takes over held keys — release their sustained voices, or
+       noteOff's arpActive early-return strands them forever */
+    physSet.forEach(n=>{ while(keysDown.has(n)) releaseNote(n); });
+  } else { physSet.forEach(n=>keyVis(n,false)); physSet.clear(); chordDone=true; }
   syncLeds(); render(); });
 $("#audBtn").addEventListener("click",()=>{ if(!state.powered||state.test) return;
   state.audition=!state.audition; if(state.audition){ audLoopEnd=ctx.currentTime; } syncLeds(); render(); });
@@ -1989,22 +2006,29 @@ $$("#circ .blk").forEach(b=>b.addEventListener("click",()=>{
 /* ================= power / boot / test ================= */
 function hintPower(){ const p=$("#pwr");
   p.style.boxShadow="0 0 14px rgba(255,213,120,.9)"; setTimeout(()=>p.style.boxShadow="",450); }
-$("#pwr").addEventListener("click",()=>{ if(state.powered) powerOff(); else powerOn(entHeld); });
+/* ENTER+POWER: entHeld is cleared by the window pointerup that precedes the
+   click event, so arm the combo at the power button's pointerdown instead */
+let pwrArm=false;
+$("#pwr").addEventListener("pointerdown",()=>{ pwrArm=entHeld; });
+$("#pwr").addEventListener("click",()=>{ if(state.powered) powerOff(); else powerOn(pwrArm); pwrArm=false; });
 function relayClick(){ if(!ctx||!sum) return; const s=ctx.createBufferSource(); s.buffer=noiseBuf;
   const g=ctx.createGain(); g.gain.setValueAtTime(.12,ctx.currentTime);
   g.gain.setTargetAtTime(0,ctx.currentTime+.005,.01);
   s.connect(g); g.connect(sum); s.start(); s.stop(ctx.currentTime+.06); }
 function quickBoot(){
   if(state.powered) return;
-  bootTok++; state.powered=true;
+  if(typeof exporting!=="undefined"&&exporting) return; /* offline render owns ctx */
+  bootTok++; state.powered=true; state.write=false;
   $("#pwr").classList.add("on"); $("#pwrLed").classList.add("on");
   if(!ctx){ ctx=new AC({latencyHint:"interactive"}); buildGraph(); } else if(ctx.resume) ctx.resume();
   relayClick(); lcd.classList.remove("off");
   state.mode="PROG"; state.page=0; setProgram(state.progIdx);
 }
 function powerOn(test){
+  if(typeof exporting!=="undefined"&&exporting) return; /* offline render owns ctx */
   const tok=++bootTok;
-  state.powered=true; $("#pwr").classList.add("on"); $("#pwrLed").classList.add("on");
+  state.powered=true; state.write=false;
+  $("#pwr").classList.add("on"); $("#pwrLed").classList.add("on");
   if(!ctx){ ctx=new AC({latencyHint:"interactive"}); buildGraph(); } else if(ctx.resume) ctx.resume();
   relayClick();
   lcd.classList.remove("off");
@@ -2014,7 +2038,9 @@ function powerOn(test){
   setTimeout(()=>{ if(tok!==bootTok||!state.powered||state.test) return; render(); },950);
 }
 function powerOff(){
-  bootTok++; state.powered=false; state.test=false; state.audition=false;
+  bootTok++; state.powered=false; state.test=false; state.audition=false; state.write=false;
+  /* the tape stops with the unit: an armed take is saved, its timer cleared */
+  if(typeof REC!=="undefined"&&REC.on&&typeof recStop==="function") recStop();
   allNotesOff(); state.arp.on=false;
   $("#pwr").classList.remove("on"); $("#pwrLed").classList.remove("on");
   $$(".btn").forEach(b=>b.classList.remove("lit","lit-a"));
@@ -2219,7 +2245,9 @@ function readmeTxt(prog){ return [
 
 let exporting=false;
 async function exportCurrent(){
-  if(exporting) return; exporting=true;
+  if(exporting) return;
+  if(!state.powered) quickBoot(); /* the live graph must exist before the globals swap offline */
+  exporting=true;
   const btn=document.getElementById("expBtn"), bar=document.getElementById("expBarI"), log=document.getElementById("expLog");
   btn.disabled=true; bar.style.width="0%";
   const prog=(cur&&state.mode==="PROG")? JSON.parse(JSON.stringify(cur)) : JSON.parse(JSON.stringify(PROGRAMS[state.progIdx]));
@@ -2277,7 +2305,7 @@ function buildPatchPane(){
   });
   html+='<div class="pcat">User Bank B · write from the unit: PROG → ENTER · '+USER_BANK.filter(Boolean).length+'/16</div><div class="prow">';
   for(let i=0;i<16;i++){ const u=USER_BANK[i], bid="B"+String(i).padStart(3,"0");
-    html+= u? '<button class="pchip" data-u="'+i+'"><b>'+bid+'</b>'+u.name+'</button>'
+    html+= u? '<button class="pchip" data-u="'+i+'"><b>'+bid+'</b>'+esc(u.name)+'</button>'
             : '<span class="pchip" style="opacity:.35;cursor:default"><b>'+bid+'</b>empty</span>'; }
   html+='</div>';
   html+='<div class="pcat">Combinations · layered &amp; split · '+COMBIS.length+'</div><div class="prow">';
@@ -2713,7 +2741,8 @@ function drumHitP(name,vel,when,o){
   }
   if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLogP==="function") midiLogP(name,vel,when);
   const t=Math.max(when,ctx.currentTime);
-  const layer=vel<0.55?0.4:vel<0.85?0.7:1.0;
+  const lv=(o.layerVel!=null)? o.layerVel : vel;
+  const layer=lv<0.55?0.4:lv<0.85?0.7:1.0;
   const buf=ldrBuf(name,layer,o.pitch||1,o.mute||1);
   if(!buf) return false;
   const src=ctx.createBufferSource(); src.buffer=buf;
@@ -2732,7 +2761,7 @@ function drumHitP(name,vel,when,o){
 }
 /* play one hit through the physics engine; falls back to the kit lane map only
    if a figure is unmapped (counted — a silent fallback hid the old inaccuracy) */
-function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx){
+function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel){
   const r=ldrRoute(id,f,i);
   if(!r){ LDR.fallbacks++; return false; }
   if(r.kind==="lane"){
@@ -2740,7 +2769,9 @@ function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx){
       spawnVoice(PROGRAMS[kitIdx],48+r.lane,0.16+0.03*(r.roll-k),when-k*0.17*stepDur,null); }
     spawnVoice(PROGRAMS[kitIdx],48+r.lane,vel,when,null); return true;
   }
-  return drumHitP(r.name,vel,when,{pitch:r.pitch,mute:r.mute,roll:r.roll,stepDur});
+  /* layer selection follows the WRITTEN velocity so humanize breathes the gain
+     without flickering a hit across a baked-layer seam bar-to-bar */
+  return drumHitP(r.name,vel,when,{pitch:r.pitch,mute:r.mute,roll:r.roll,stepDur,layerVel:baseVel});
 }
 /* pre-render the buffers a set of figure ids will need (off the hit path) */
 function ldrWarm(ids){
@@ -2770,12 +2801,13 @@ function ldrHash(x){ const r=Math.sin(x*12.9898)*43758.5453; return r-Math.floor
 function ldrPlayFig(id,f,rot,at,stepDur,scale){
   f.hits.forEach((h,i)=>{
     const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid, when=at+pulse*stepDur;
-    let vel=Math.max(.15,Math.min(1,h[1]*scale));
+    const baseVel=Math.max(.15,Math.min(1,h[1]*scale));
+    let vel=baseVel;
     let jit=0;
     if(LDR.hum){ vel=Math.max(.15,Math.min(1,vel+(ldrHash(pulse*7+LDR.bar*13+i)-.5)*.08));
       jit=(ldrHash(pulse*3+LDR.bar*29)-.5)*.01; }
     if(LDR.mode==="KIT"){
-      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit)) return;
+      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit,baseVel)) return;
       spawnVoice(PROGRAMS[LDR.kit],48+ldrLane(id,f,i),vel,when+jit,null);
     } else {
       const held=(latchSet.size?[...latchSet]:(physSet.size?[...physSet]:[48,55,60,63])).sort((a,b)=>a-b);
@@ -2930,15 +2962,21 @@ function crateEntry(p,seed){
     p:JSON.parse(JSON.stringify(p)),at:Date.now()};
 }
 function crateValidate(e){
+  const own=(o,k)=>typeof k==="string"&&Object.prototype.hasOwnProperty.call(o,k);
+  const slot=i=>Number.isInteger(i)&&i>=0&&i<PROGRAMS.length;
   if(!e||typeof e!=="object") return false;
   if(typeof e.seed!=="number"||!isFinite(e.seed)) return false;
+  if(typeof e.name!=="string"||e.name.length>64) return false;
   const p=e.p; if(!p||typeof p!=="object") return false;
-  if(!LDR_FIG[p.fig]) return false;
-  if(!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
-  if(!PROGRAMS[p.bass]||!PROGRAMS[p.chord]||!PROGRAMS[p.lead]) return false;
-  if(!Array.isArray(p.prog)||!p.prog.length) return false;
-  if(!SCALES[p.scale]) return false;
-  if(!(p.comps||[]).every(c=>{ const r=ldrBase(c); return !!LDR_FIG[r.id]; })) return false;
+  if(!own(LDR_FIG,p.fig)) return false;
+  if(!slot(p.kit)||PROGRAMS[p.kit].cat!=="DRUMS") return false;
+  if(!slot(p.bass)||!slot(p.chord)||!slot(p.lead)) return false;
+  if(!Array.isArray(p.prog)||!p.prog.length||!p.prog.every(d=>Number.isInteger(d)&&d>=0&&d<=6)) return false;
+  if(!own(SCALES,p.scale)) return false;
+  if(typeof p.tempo!=="number"||!(p.tempo>=40&&p.tempo<=300)) return false;
+  if(typeof p.root!=="number"||!(p.root>=24&&p.root<=72)) return false;
+  if(!Array.isArray(p.comps||[])) return false;
+  if(!(p.comps||[]).every(c=>typeof c==="string"&&own(LDR_FIG,ldrBase(c).id))) return false;
   return true;
 }
 function crateParse(json){
@@ -3097,7 +3135,7 @@ function applyDream(p,mid){
     x.classList.toggle("live",x.dataset.d===_sel.value));
   document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.remove("on"));
   DREAM.rng=mulberry(DREAM.seed||1);
-  state.tempo=p.tempo;
+  state.tempo=(typeof p.tempo==="number"&&isFinite(p.tempo))? p.tempo : (state.tempo||100);
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
   DREAM.voic=null; DREAM.motif=null;
   DREAM.bar=mid? 4 : 0;
@@ -3210,8 +3248,10 @@ function midiTake(){
   const ev=MIDIREC.ev.slice(); if(!ev.length) return null;
   ev.sort((x,y)=>x.t-y.t);
   const PPQ=480;
-  /* piecewise tempo map: elapsed seconds convert at the tempo in force */
-  let curBpm=ev[0].tempo||120, tick=0, lastT=ev[0].t;
+  /* piecewise tempo map: elapsed seconds convert at the tempo in force.
+     lastT anchors at 0 = RECORD press, so the .mid keeps the take's lead-in
+     and lines up sample-accurate with the paired .wav in a DAW */
+  let curBpm=ev[0].tempo||120, tick=0, lastT=0;
   const tempoEvs=[{tick:0,bpm:curBpm}];
   ev.forEach(e=>{ tick+=(e.t-lastT)*(curBpm/60)*PPQ; lastT=e.t;
     e.tick=Math.max(0,Math.round(tick));
@@ -3332,7 +3372,8 @@ function ldrPickDream(i){
   const base=DREAMS[i];
   const rng=mulberry((Date.now()%2147483647)|1);
   const p=base.surprise? dreamPickSurprise(rng) : JSON.parse(JSON.stringify(base));
-  startWith(p,DREAM.on);
+  if(DREAM.on){ p._seed=(Date.now()%100000)|0; DREAM.pending=p; } /* bar-line handover, like DICE */
+  else startWith(p,false);
 }
 function ldrPickFig(k){
   if(!LDR_FIG[k]) return;
@@ -3363,13 +3404,14 @@ function cratePin(){
 function cratePlay(i){
   const e=LDR_CRATE[i]; if(!e) return;
   const p=JSON.parse(JSON.stringify(e.p)); p._seed=e.seed;
-  startWith(p,true);
+  if(DREAM.on) DREAM.pending=p; /* bar-line handover */
+  else startWith(p,true);
 }
 function ldr4Build(){
   const host=document.getElementById("ldrStrip"); if(!host) return;
   let h='<div class="l4tile pin" id="ldrPinTile"><b>★ Pin</b><span class="tmeta">save this take</span></div>';
   LDR_CRATE.forEach((e,i)=>{ h+='<div class="l4tile crate" data-c="'+i+'" title="tap = replay · hold = remove"><b>'+
-    e.name+'</b><span class="tmeta">pinned take</span></div>'; });
+    esc(e.name)+'</b><span class="tmeta">pinned take</span></div>'; });
   h+='<div class="l4sep"></div>';
   DREAMS.forEach((d,i)=>{ h+='<div class="l4tile dream" data-d="'+i+'"><b>'+
     (d.surprise?"🎲 Surprise Me":d.name)+'</b><span class="tmeta">'+
@@ -3590,4 +3632,18 @@ DEAD BRANCHES: (1) strum stagger as fixed 12 ms — lost: at 1/32 resolution the
 KILL-TEST: suite [3] holds audVary across 40 passes (bounded velocities and onsets, at most one echo, byte-deterministic per seed, different across seeds); the Chromium harness verifies Nylon Dream's STRUM default, the CHORD→STRUM→UP parameter cycle, a sounding strummed phrase, the improviser scheduling passes — and now asserts the voice cap (>70 active fails the build). The HALF-DICE harness step also learned to wait out a pending bar-line swap instead of racing it (a test flake, fixed in the test).
 THE NON-OBVIOUS CHOICE: the improviser varies the PERFORMANCE, not the score — audVary's output is never written back, so the riff in the bank stays the composer's, and determinism-per-pass means a listener can say "pass 7 was the good one" and mean something.
 OPEN QUESTIONS: (1) STRUM alternates by step parity — should consecutive identical chords instead alternate by STRUM COUNT so re-triggered chords rock back and forth even in CHORD-then-STRUM switching? (2) audVary echoes up an octave — plucked sounds might prefer a fifth; should the echo interval come from the patch category? (3) The ledger now counts exactly — is a voice-count trace worth drawing on the 4U scope's baseline?
+RING 19 · 2026-08-30 · the BREAK pass — six skeptics, seventeen confirmed cracks, all mended
+WHAT CHANGED: no new features — this ring is the attack Ring 4 of the engine schema demands, run at full depth: six independent review lenses (audio lifecycle, scheduling, UI state, file formats, ported physics, test honesty) swept the whole artifact, and every finding was then adversarially verified against the source by a separate skeptic before being believed. Seventeen confirmed (one high, thirteen medium, three low), zero refuted, all fixed at the root in this ring:
+· SECURITY — imported crate/bank names reached innerHTML raw, and the baseline's esc() was an identity function (String(s)); esc() now escapes for real, every imported name renders through it, and validators cap name lengths. A live hostile-import test drives an onerror payload through the parser and asserts it renders inert.
+· VALIDATORS — prototype-chain keys ("constructor", "__proto__") validated as figures/scales/programs (bare truthy lookups); hasOwnProperty + integer-range checks now; crate entries must carry sane tempo (40–300) and root; bank programs must carry finite tempo/cutoff, typed osc entries or numeric bell tables; the engine's addOsc degrades unknown wave names to sawtooth instead of throwing.
+· TRANSPORT — strip/crate taps mid-performance hard-restarted the band mid-bar (double-arrangement for up to a bar); they hand over on the bar line through DICE's pending slot now. Browsing to a program with an arpDefault while the conductor played silently killed it (the watchdog trips on arp.on); arpDefaults no longer arm under a running dream.
+· LIFE CYCLE — power-off left the tape rolling (frozen timer, takes spliced across power sessions) and left WRITE armed (next ENTER after reboot silently overwrote a slot); power transitions now stop the recorder and disarm WRITE. Enabling the arp over held keys stranded their sustained voices forever (noteOff's arp early-return); the toggle now releases held stacks. ENTER+POWER test mode was UNREACHABLE in the shipped baseline (window pointerup cleared entHeld before the click); the combo arms at the power button's pointerdown. Live input during a DecentSampler export was scheduled into the swapped-in OfflineAudioContext (silent live, baked into the pack's WAVs; before first power-on it wedged boot) — input, boot and power are gated while exporting, and export boots the live graph first.
+· FORMATS — the .mid takes dropped their lead-in (first event forced to tick 0), so they never lined up with the paired .wav; the tempo map now anchors at RECORD press, tested to the tick.
+· PHYSICS — humanize flickered hits across baked velocity-layer seams bar-to-bar; layer selection now follows the written velocity while the gain breathes.
+· TEST HONESTY — suite [4]'s green line was `errs === 0 || true` (the baseline's own tautology), suite [3]'s preset failures couldn't gate its summary, the browser STRUM check counted another engine's voices, and the harness printed numbers it never asserted; all four gates are real now (bar-advance, dice-seed-change, isolated strum voices, XSS, power-off disarm all assert).
+BANNED (obvious answers set aside first): shipping with "the tests are green" as the proof (the lens that found the tautologies is why); fixing findings without a failing check first where one was expressible; treating the XSS as theoretical because "who imports hostile JSON" (a shared crate file is the feature's whole point).
+DEAD BRANCHES: (1) sanitizing names at import time by stripping characters — lost: mutating user data corrupts round-trips; escape at RENDER, validate at import. (2) blocking all input during export via a modal — lost: a gate in noteOn/quickBoot/powerOn is three lines and leaves the page honest. (3) bar-quantizing crate/strip taps by disabling them mid-performance — lost: the pending slot already existed; reuse beats restriction.
+KILL-TEST: the fixes' own regression gates — node suites [0]–[7] plus the Chromium harness's 24 assertions, every one exercised in this ring's final run, ALL GREEN. The review itself: 23 agents, six find-lenses, seventeen verify-skeptics, zero findings taken on faith.
+THE NON-OBVIOUS CHOICE: the reviewers were told an empty findings list is a valid answer, and the verifiers were told to refute by default — the pass earns trust precisely because both directions were allowed to say no.
+OPEN QUESTIONS: (1) The MIDI take still starts capture at RECORD press, so notes SCHEDULED before the press (up to one bar of lookahead) are absent from the .mid though present in the .wav — a rolling pre-roll capture (Ring 14 Q1) would close the last gap. (2) The export-vs-live globals swap is now gated, but the deep fix — threading ctx/bus as parameters instead of globals — remains the honest refactor. (3) Six lenses found seventeen; what does the seventh lens (accessibility? memory ceilings on 4 GB phones?) find?
 ═══ end rings ═══ -->

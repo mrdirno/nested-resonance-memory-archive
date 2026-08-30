@@ -77,6 +77,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
 const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,dreamHalfCut,crateEntry,crateValidate,crateParse,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
+let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
   const f = LDR_FIG[d.fig]; if (!f) return fail(d.name + " fig");
@@ -85,7 +86,6 @@ G3.DREAMS.forEach(d => {
   if (PROGRAMS[d.kit].cat !== "DRUMS") fail(d.name + " kit");
   [d.bass, d.chord, d.lead].forEach(i => { if (!PROGRAMS[i]) fail(d.name + " prog " + i); });
 });
-let e3 = errs;
 for (const id in LDR_FIG) { const an = G3.figAnalysis(LDR_FIG[id]);
   if (!(an.skel.length >= 1 && an.skel.length <= 4)) fail("skel " + id);
   if (an.resp.length < 2) fail("resp " + id);
@@ -142,6 +142,12 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   const parsed = G3.crateParse(JSON.stringify({ v: 1, crate: [mk(), mk({ fig: "bad" }), mk({ kit: 3 })] }));
   if (!parsed || parsed.length !== 1) cBad++;
   if (G3.crateParse("{oops") !== null) cBad++;
+  if (G3.crateValidate(mk({ fig: "constructor" }))) cBad++;
+  if (G3.crateValidate(mk({ scale: "__proto__" }))) cBad++;
+  if (G3.crateValidate(mk({ bass: "constructor" }))) cBad++;
+  if (G3.crateValidate(mk({ tempo: undefined }))) cBad++;
+  if (G3.crateValidate(mk({ root: 999 }))) cBad++;
+  if (G3.crateValidate(Object.assign(mk(), { name: "y".repeat(80) }))) cBad++;
   const e = G3.crateEntry(G3.DREAMS[1], 777);
   if (!G3.crateValidate(e) || e.seed !== 777 || e.name.indexOf("#777") < 0) cBad++;
   if (cBad) fail("crate validate/parse: " + cBad);
@@ -168,6 +174,7 @@ if (errs === e3) ok("presets · figAnalysis(51) · motifs · 200 surprise seeds 
 
 /* ── suite 4: take recorder WAV ────────────────────────────────────── */
 console.log("[4] recorder");
+const e4 = errs;
 const G4 = eval(wavJs + "\n;({wavStereo24})");
 { const sr = 48000, n = 9600, l = new Float32Array(n), r = new Float32Array(n);
   for (let i = 0; i < n; i++) { l[i] = Math.sin(2 * Math.PI * 440 * i / sr) * .5; r[i] = Math.sin(2 * Math.PI * 660 * i / sr) * .5; }
@@ -179,7 +186,7 @@ const G4 = eval(wavJs + "\n;({wavStereo24})");
   if (dv.getUint16(34, true) !== 24) fail("wav bits");
   if (dv.getUint32(40, true) !== n * 6) fail("wav data len");
   if (u.length !== 44 + n * 6) fail("wav total len");
-  if (errs === 0 || true) ok("stereo 24-bit header + length exact");
+  if (errs === e4) ok("stereo 24-bit header + length exact");
 }
 
 /* ── suite 5: figure→instrument mapping + ported physics (P0 steps 1-3) ──── */
@@ -332,6 +339,13 @@ console.log("[6] midi");
     if (walked === ntrk && o === u.length && tempoMetas === 2 && on9 === 1 && on0 === 4 &&
         ticks[4] === 2400) ok("SMF-1 exact: headers, track tiling, tempo map (120→60), note pairing");
   }
+  /* lead-in silence must survive, so the .mid lines up with the paired .wav */
+  G6.MIDIREC.on = true; G6.MIDIREC.ev = []; G6.MIDIREC.t0 = 0; state.tempo = 120;
+  G6.midiLogP("clave", 0.8, 0.5);
+  G6.MIDIREC.on = false;
+  G6.midiTake();
+  if (G6.MIDIREC.ev[0].tick !== 480) fail("lead-in dropped: first tick " + G6.MIDIREC.ev[0].tick + " (want 480)");
+  else ok("lead-in preserved: 0.5 s of silence = 480 ticks @120");
 }
 
 /* ── suite 7: User Bank B (validator + file round-trip) ──────────────────── */
@@ -347,6 +361,10 @@ console.log("[7] bank B");
   if (G7.progValidate(mut2)) { fail("string cutoff accepted"); bBad++; }
   const mut3 = JSON.parse(JSON.stringify(PROGRAMS[5])); delete mut3.audition;
   if (G7.progValidate(mut3)) { fail("missing audition accepted"); bBad++; }
+  const mut4 = JSON.parse(JSON.stringify(PROGRAMS[5])); mut4.osc = [{ w: {}, lvl: 0.5 }];
+  if (G7.progValidate(mut4)) { fail("non-string osc wave accepted"); bBad++; }
+  const mut5 = JSON.parse(JSON.stringify(PROGRAMS[5])); delete mut5.tempo;
+  if (G7.progValidate(mut5)) { fail("missing tempo accepted"); bBad++; }
   const bank = new Array(16).fill(null);
   bank[3] = JSON.parse(JSON.stringify(PROGRAMS[7]));
   bank[9] = JSON.parse(JSON.stringify(PROGRAMS[40]));
