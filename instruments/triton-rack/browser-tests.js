@@ -86,6 +86,20 @@ const path = __dirname + "/triton-rack.html";
   if (!st2.on) fail("DICE killed the performance");
   else ok("DICE swaps seamlessly (seed " + st1.seed + " → " + st2.seed + ")");
 
+  /* HALF-DICE: rhythm section survives, harmony re-rolls, lands on the bar */
+  const preHalf = await page.evaluate(() => ({ fig: DREAM.p.fig, kit: DREAM.p.kit,
+    bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead }));
+  await page.click("#ldrHalf");
+  await page.waitForTimeout(3200);
+  const postHalf = await page.evaluate(() => ({ on: DREAM.on, fig: DREAM.p.fig, kit: DREAM.p.kit,
+    bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead, name: DREAM.p.name }));
+  if (!postHalf.on) fail("HALF-DICE stopped the transport");
+  else if (postHalf.fig !== preHalf.fig || postHalf.kit !== preHalf.kit) fail("HALF-DICE touched the rhythm section");
+  else if (!/half-cut$/.test(postHalf.name)) fail("HALF-DICE did not apply by the bar (name: " + postHalf.name + ")");
+  else ok("HALF-DICE: rhythm held (" + postHalf.fig + "), harmony re-rolled (" +
+    preHalf.bass + "/" + preHalf.chord + "/" + preHalf.lead + " → " +
+    postHalf.bass + "/" + postHalf.chord + "/" + postHalf.lead + ")");
+
   /* figure tile takes over: manual rhythm, dream stops */
   await page.evaluate(() => { document.querySelector('#ldrStrip .l4tile.fig[data-f="bembe"]').scrollIntoView(); });
   await page.click('#ldrStrip .l4tile.fig[data-f="bembe"]');

@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,dreamHalfCut,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
   const f = LDR_FIG[d.fig]; if (!f) return fail(d.name + " fig");
@@ -115,6 +115,21 @@ for (let sd = 1; sd <= 200; sd++) {
     if (!LDR_FIG[r.id] || LDR_FIG[r.id].grid !== LDR_FIG[p.fig].grid) fail("surprise comp " + sd + " " + c); });
 }
 for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " + b);
+{ let hBad = 0;
+  for (let sd = 1; sd <= 50; sd++) {
+    const base = JSON.parse(JSON.stringify(G3.DREAMS[sd % 6]));
+    const p = G3.dreamHalfCut(base, G3.mulberry(sd));
+    if (p.fig !== base.fig || JSON.stringify(p.comps) !== JSON.stringify(base.comps) ||
+        p.kit !== base.kit || p.tempo !== base.tempo || !!p.extraKick !== !!base.extraKick) hBad++;
+    if (!PROGRAMS[p.bass] || PROGRAMS[p.bass].cat !== "BASS" ||
+        !PROGRAMS[p.chord] || !PROGRAMS[p.lead] || !(p.prog && p.prog.length === 4)) hBad++;
+    if (!/ · half-cut$/.test(p.name)) hBad++;
+    const p2 = G3.dreamHalfCut(p, G3.mulberry(sd + 999));
+    if (/half-cut · half-cut/.test(p2.name)) hBad++;
+  }
+  if (hBad) fail("half-cut violations: " + hBad);
+  else ok("HALF-DICE: rhythm section held, harmony re-rolled, name idempotent (50 seeds)");
+}
 if (errs === e3) ok("presets · figAnalysis(51) · motifs · 200 surprise seeds · sections");
 
 /* ── suite 4: take recorder WAV ────────────────────────────────────── */

@@ -235,6 +235,9 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 #dreamPlay.live{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.6s ease-in-out infinite;}
 #dreamDice{left:428px;top:226px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
 #dreamDice:active{transform:rotate(160deg) scale(.94);}
+#ldrHalf{left:780px;top:226px;width:120px;height:120px;color:#9fd8c8;}
+#ldrHalf .pico{font-size:30px;}
+#ldrHalf.spin{transform:rotate(180deg) scale(.94);}
 #ldrRec{left:270px;top:226px;width:120px;height:120px;color:#8fa2b3;}
 #ldrRec.rec{color:#ff5a4a;border-color:#6b241d;animation:recPulse 1s ease-in-out infinite;}
 #ldrRecLbl{position:absolute;left:250px;top:356px;width:160px;text-align:center;font-size:11px;
@@ -317,6 +320,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <div id="ldrRecLbl"></div>
   <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
   <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
+  <div class="l4pad" id="ldrHalf" title="Keep the rhythm, re-roll harmony and melody"><span class="pico">◐</span><span class="plab">Half</span></div>
   <select id="dreamPreset" style="display:none"></select>
   <div id="ldrStrip"></div>
 </div></div></div>
@@ -2742,6 +2746,23 @@ function dreamPickSurprise(rng){
     chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:f.grid===16&&rng()<.3};
 }
 
+/* HALF-DICE core, pure: keep the rhythm section (figure, companions, kit,
+   tempo, extraKick), re-roll harmony and melody voices only */
+function dreamHalfCut(base,rng){
+  const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
+  const pick=a=>a[Math.floor(rng()*a.length)];
+  const PRGS=[[0,5,3,4],[0,3,5,4],[1,4,0,0],[0,5,6,4],[0,3,4,0],[0,0,5,6]];
+  const p=JSON.parse(JSON.stringify(base));
+  p.name=(String(base.name||"Dream").replace(/ · half-cut$/,""))+" · half-cut";
+  p.bass=pick(cat(["BASS"]));
+  p.chord=pick(cat(["PAD","VOX","ORGAN","KEYBOARD"]));
+  p.lead=pick(cat(["LEAD","BELL","PLUCK"]));
+  p.scale=rng()<.5?"minor":"major";
+  p.root=40+Math.floor(rng()*7);
+  p.prog=pick(PRGS);
+  p.chordStyle=rng()<.5?"pad":"stab";
+  return p;
+}
 /* ── the figure teaches the band: skeleton (anchors), response slots (gaps) ── */
 function figAnalysis(f){
   if(f._an) return f._an;
@@ -2947,6 +2968,16 @@ function dreamDice(){
   p._seed=(Date.now()%100000)|0;
   if(DREAM.on) DREAM.pending=p;
   else startWith(p,true);
+}
+function dreamHalfDice(){
+  const b=document.getElementById("ldrHalf");
+  if(b){ b.classList.add("spin"); setTimeout(()=>b.classList.remove("spin"),380); }
+  if(!DREAM.on||!DREAM.p){ dreamDice(); return; }
+  const rng=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
+  const p=dreamHalfCut(DREAM.p,rng);
+  p.tempo=state.tempo;            /* the groove keeps its clock */
+  p._seed=(Date.now()%100000)|0;  /* new seed = new motifs in the same gaps */
+  DREAM.pending=p;                /* lands on the bar line, like DICE */
 }
 /* ── MIDI take capture: every note the engines schedule during a recording,
       written as SMF type 1 beside the WAV — the DAW inherits the arrangement ── */
@@ -3161,6 +3192,7 @@ function ldrConductorInit(){
   const toggle=()=>{ DREAM.on? dreamStop() : dreamStart(); };
   on("dreamPlay",toggle); on("fabPlay",toggle);
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
+  on("ldrHalf",dreamHalfDice);
   on("fabRec",recToggle); on("ldrRec",recToggle);
   ldr4Build();
 }
@@ -3280,4 +3312,11 @@ DEAD BRANCHES: (1) capturing at playNote instead of spawnVoice — lost: playNot
 KILL-TEST: suite [6] proves the writer byte-exact in Node — VLQ cases including multi-byte, MThd format/division, track lengths tiling the file to its last byte, tempo metas (initial + change), on/off pairing per channel, and the piecewise map converting 1 s at 120 to 960 ticks then 1 s at 60 to 480; plus GM coverage 25/25 recipes. End-to-end in headless Chromium: PLAY, record 3 s, stop — both downloads fired with matching seed names, and the saved .mid parsed back with 4 tracks and exactly as many note-ons as events captured.
 THE NON-OBVIOUS CHOICE: role from pan destinations. The conductor already labels its parts by where it points them in the stereo field — DREAM.pans.bass IS the bass bus — so the MIDI channels fall out of existing plumbing with zero new state.
 OPEN QUESTIONS: (1) The capture only runs while RECORD is lit — should a rolling 8-bar pre-roll buffer let a producer rescue the take they didn't know they were having? (2) Kit-lane ghosts under 0.16 vel export at their true velocities — do DAW drum maps want a velocity floor? (3) The .mid carries no program changes — should each channel declare a GM program guess so it sounds sane in a stock player?
+RING 15 · 2026-08-30 · HALF-DICE — the surgical re-roll
+WHAT CHANGED: Ring 7's second open question answered. A fourth pad (◐ HALF, 120 px, in the transport space Ring 13 reserved for it) keeps the RHYTHM SECTION — figure, companions, kit, tempo, extraKick — and re-rolls everything harmonic: bass/chord/lead programs from their category pools, scale, root, progression, chord style, plus a fresh seed so the motif engine writes new melodies into the same gaps. The cut is a PURE function (dreamHalfCut) so the harness can hold it down; the pad wraps it with the live tempo (the groove keeps its clock even if the player nudged ♩ on the GLOBAL page) and lands it on the next bar line through the same pending slot DICE uses. HALF with nothing playing falls through to full DICE — a producer pressing it cold wants sound, not a no-op. Names accumulate honestly: "Son Nocturne · half-cut", idempotent on repeat cuts.
+BANNED (obvious answers set aside first): a modifier gesture on the existing DICE (long-press/double-tap — invisible, undiscoverable, and mobile browsers eat both); re-rolling in place without bar quantization (Ring 7 already ruled hard switches land on bars); a settings panel choosing which lanes lock (that is a mixer, not a dice).
+DEAD BRANCHES: (1) also re-rolling leadOct/chord voicing octaves — lost: octave jumps read as arrangement damage, not variation; the voice-leading engine already glides, let it. (2) Keeping the old seed for "same melody, new sounds" — lost: with the motif composed from chord tones, a new progression under the old contour lands on non-chord tones; harmony and melody re-roll together or the cut sounds broken. (3) HALF as a dock button — lost: the dock is the thumb's three essentials; refinements live on the face.
+KILL-TEST: suite [3] drives dreamHalfCut across 50 seeds and all six dreams — rhythm section byte-held, bass always a BASS program, progression always 4 degrees, name suffix idempotent. The Chromium harness presses ◐ mid-performance: transport never drops, figure and kit identical after the bar, bass/chord/lead provably different, name carries the cut.
+THE NON-OBVIOUS CHOICE: HALF-DICE re-seeds. The obvious reading ("keep everything but the sounds") would keep the motif; but the motif IS harmony — chord tones in the figure's gaps — so the honest half is rhythm vs. everything-tonal, and the seed belongs to the tonal half.
+OPEN QUESTIONS: (1) The other half — a dice that keeps harmony and re-rolls only the FIGURE (same key, new groove) — is one map lookup away; is a five-pad transport too many? (2) Should HALF pulse the chord/bass/lead LEDs amber for one bar so the eye sees which half moved? (3) Repeated halves drift ever farther from the named dream — should the readout track cut-depth (·2 ·3) so a take's lineage stays legible?
 ═══ end rings ═══ -->
