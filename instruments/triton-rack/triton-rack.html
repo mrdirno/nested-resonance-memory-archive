@@ -2440,6 +2440,24 @@ function ldrRoute(id,f,i){
   let pitch=m.pitch||1; if(m.altPitch) pitch*=m.altPitch[i%m.altPitch.length];
   return {kind:"perc",name:m.inst,pitch};
 }
+/* load-time audit, in the donor's figCheck discipline: every hit of every figure
+   must resolve to a recipe or a kit lane — a silent fallback is how the old
+   inaccuracy survived two passes. Runs at parse (pure); tests assert bad === 0. */
+function ldrMapCheck(){
+  const bad=[];
+  for(const id in LDR_FIG){ const f=LDR_FIG[id];
+    if(!LDR_MAP[id]){ bad.push(id+": no map entry"); continue; }
+    f.hits.forEach((h,i)=>{ const r=ldrRoute(id,f,i);
+      if(!r){ bad.push(id+" hit "+i+": unroutable"); return; }
+      if(r.kind==="perc"&&!LDR_RECIPE[r.name]) bad.push(id+" hit "+i+": unknown recipe "+r.name);
+      if(r.kind==="lane"&&!(r.lane>=0&&r.lane<=11)) bad.push(id+" hit "+i+": bad lane "+r.lane);
+    });
+  }
+  for(const id in LDR_MAP) if(!LDR_FIG[id]) bad.push("map names unknown figure "+id);
+  if(bad.length&&typeof console!=="undefined") console.error("EXB-LDR map audit:",bad);
+  return bad;
+}
+const LDR_MAP_BAD=ldrMapCheck();
 /* offline render of one recipe voice at one velocity layer (pitch/damp baked) */
 const LDR_BUFS=new Map();
 const LDR_LAYERS=[0.4,0.7,1.0];
@@ -3043,4 +3061,11 @@ DEAD BRANCHES: (1) live per-sample synthesis via ScriptProcessor — lost: one n
 KILL-TEST: a Node harness stubbed AudioContext and MEASURED the rendered buffers — DFT fundamentals: surdo 62.0, congaL 190.0, congaH 342, agogoH 780.5, clave 1250.0, dunL 78.0 Hz (all within tolerance of the recipes); T60s track recipe decay; primeira's 0.74× bakes 62→46.0 Hz exactly; campana 'n' damp measurably halves ring time; all 382 hits across 51 figures route (336 physics, 46 kit-lane), zero unroutable. tests.js stays ALL GREEN (the physics code lives inside the suite-2 eval slice, so its syntax is under test from this ring on).
 THE NON-OBVIOUS CHOICE: render offline, play as a sampler. The donor's math runs verbatim in a pure-JS loop into cached buffers, so the browser pays sampler prices at play time while the sound stays a physical model — and determinism (seeded per buffer) makes the engine measurable by tests, which the donor's own live engine never was.
 OPEN QUESTIONS: (1) The velocity layers quantize the strike nonlinearities — would a 5-layer set on just the slap-heavy voices (djembeS, congaH) buy audible realism? (2) The kit-lane figures (caixa, cavacha, pressRoll, marches) still speak TRITON — Ring 10's question 3 stands: breed kick/snare recipes from the donor's kit()/snare() constructors? (3) The buffers are mono with donor pan — the donor's played ensembles also breathe hum/timing; should HUMANIZE reach into the physics path too?
+RING 12 · 2026-08-30 · the gate — no hit may fall through silently again
+WHAT CHANGED: P0 step 3 (HANDOFF §4). Two layers of verification now stand between the mapping and regression. IN THE FILE: ldrMapCheck(), a load-time audit in the donor's figCheck discipline — every hit of every figure must resolve to a recipe or a kit lane at parse time, unknown recipes and out-of-range lanes are named, and the result (LDR_MAP_BAD) is exported state, not a console whisper. IN THE HARNESS: tests.js suite [5] — asserts 25 recipes, 51 map entries, the in-file audit empty, all 382 hits routed with zero fallback; pins THIRTEEN definition-of-done routes from the HANDOFF verbatim (primeira→surdo at 0.74×, terceira→the donor's congaL cutter, bembe's tone row on two agogô pitches, Son's campana a bell and its martillo bongo skin with the hembra on bongoL, the quinto slap on the slap recipe, the Big Four's cymbal on the crash lane, cáscara on the donor's cowbell…); and MEASURES the rendered physics through a stubbed AudioContext — DFT fundamentals against six recipes, T60 against written decays, the 0.74× pitch bake, the mute damp, and all four non-drum families rendering clean.
+BANNED (obvious answers set aside first): a test that re-reads figure-instrument-map.json and diffs it against LDR_MAP (two copies of truth drift; the in-file map is the one that plays, so it is the one under test — the JSON stays as provenance); snapshot-testing rendered buffers byte-for-byte (any legitimate constant fix would break every snapshot; physics is tested by MEASUREMENT, not bytes).
+DEAD BRANCHES: (1) asserting exact hit counts per figure per instrument — lost: it pins the catalog, not the mapping; the catalog is the donor's and may not be re-litigated by our tests. (2) Running the full 51×3-layer render matrix in CI — lost: ~40 s of DFT for no added claim; six voices with known distinct bodies (membrane low/mid, glock, wood ×2, dunun) cover every code path the other 19 share.
+KILL-TEST: suite [5] was run against a deliberately broken map (one entry renamed) before being trusted — the in-file audit caught it at parse, the suite caught it twice more (count + route). The gate fails loudly in three places for one lie.
+THE NON-OBVIOUS CHOICE: the load-time audit ships in the artifact itself, not just in the test harness — a future session that edits LDR_MAP inside the file with no repo around still gets told, in its own console, exactly which hit stopped resolving.
+OPEN QUESTIONS: (1) Suite [5] measures buffers; nothing yet measures the SCHEDULE (that a bar of bembé actually lands 7 hits at the written pulses) — is a scheduler transcript worth a suite? (2) The DoD list is 13 routes — should every A-class mapping become a pinned route so provenance and test are one? (3) The stubbed-ctx trick makes the whole physics engine testable in Node — the synth engine (spawnVoice) never got the same treatment; port the stub?
 ═══ end rings ═══ -->

@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-/* Self-contained verification for the TRITON × LuckyDreamer handoff.
+/* Self-contained verification for the TRITON × LuckyDreamer build.
    Usage: node tests.js [path-to-triton-rack.html]   (default: ./triton-rack.html)
-   Slices the artifact itself — no side files needed. Exit 0 = all green. */
+   Slices the artifact itself — no side files needed. Exit 0 = all green.
+   Suites: [0] whole-file syntax · [1] bank schema · [2] figure graft ·
+   [3] conductor · [4] WAV recorder · [5] figure→instrument mapping + the
+   ported LuckyDreamer physics, measured (fundamentals, decays, pitch bake). */
 "use strict";
 const fs = require("fs");
 const path = process.argv[2] || "./triton-rack.html";
@@ -49,7 +52,7 @@ if (!errs) ok("schema + combi targets valid");
 
 /* ── suite 2: figure graft ─────────────────────────────────────────── */
 console.log("[2] figures");
-const G2 = eval(ldrJs + "\n;({LDR_FIG,LDR_KITS,ldrBase,ldrLane})");
+const G2 = eval(ldrJs + "\n;({LDR_FIG,LDR_KITS,ldrBase,ldrLane,LDR_RECIPE,LDR_MAP,LDR_MAP_BAD,ldrRoute,ldrBuf,LDR_SLOTS})");
 const { LDR_FIG, LDR_KITS, ldrBase, ldrLane } = G2;
 if (Object.keys(LDR_FIG).length !== 51) fail("figures " + Object.keys(LDR_FIG).length); else ok("51 figures");
 LDR_KITS.forEach(i => { if (!PROGRAMS[i] || PROGRAMS[i].cat !== "DRUMS") fail("kit idx " + i); });
@@ -128,6 +131,97 @@ const G4 = eval(wavJs + "\n;({wavStereo24})");
   if (dv.getUint32(40, true) !== n * 6) fail("wav data len");
   if (u.length !== 44 + n * 6) fail("wav total len");
   if (errs === 0 || true) ok("stereo 24-bit header + length exact");
+}
+
+/* ── suite 5: figure→instrument mapping + ported physics (P0 steps 1-3) ──── */
+console.log("[5] mapping+physics");
+{
+  const { LDR_RECIPE, LDR_MAP, LDR_MAP_BAD, ldrRoute, ldrBuf } = G2;
+  if (!LDR_RECIPE || !LDR_MAP || !ldrRoute || !ldrBuf) fail("physics symbols missing from slice");
+  if (Object.keys(LDR_RECIPE).length !== 25) fail("recipes " + Object.keys(LDR_RECIPE).length);
+  if (Object.keys(LDR_MAP).length !== 51) fail("map entries " + Object.keys(LDR_MAP).length);
+  if (!LDR_MAP_BAD || LDR_MAP_BAD.length) fail("in-file map audit: " + (LDR_MAP_BAD || ["missing"]).join(" · "));
+  let perc = 0, lane = 0, un = 0;
+  for (const id in LDR_FIG) LDR_FIG[id].hits.forEach((h, i) => {
+    const r = ldrRoute(id, LDR_FIG[id], i);
+    if (!r) { un++; return; }
+    if (r.kind === "perc") { perc++; if (!LDR_RECIPE[r.name]) fail(id + "#" + i + " unknown recipe " + r.name); }
+    else { lane++; if (!(r.lane >= 0 && r.lane <= 11)) fail(id + "#" + i + " bad lane"); }
+  });
+  if (un) fail(un + " unroutable hits (silent fallback would fire)");
+  else ok("all hits route, no fallback · " + perc + " physics · " + lane + " kit-lane");
+  /* definition-of-done routes (HANDOFF §4) */
+  const rt = (id, i) => ldrRoute(id, LDR_FIG[id], i);
+  const dod = [
+    ["surdoPrimeira hits surdo at the donor's 46 Hz", () => { const r = rt("surdoPrimeira", 1); return r.name === "surdo" && Math.abs(r.pitch - 0.74) < 1e-9; }],
+    ["surdoSegunda hits surdo as written", () => rt("surdoSegunda", 0).name === "surdo"],
+    ["surdoTerceira takes the donor's congaL cutter", () => rt("surdoTerceira", 0).name === "congaL"],
+    ["tamborim carreteiro speaks woodblk", () => rt("tamborimCarreteiro", 0).name === "woodblk"],
+    ["ganza is the shaker", () => rt("ganza", 0).name === "shaker"],
+    ["caixa stays the wired kit snare (lane 2)", () => rt("caixa", 0).lane === 2],
+    ["bembe tone row lands on two agogo pitches", () => rt("bembe", 0).name === "agogoL" && rt("bembe", 1).name === "agogoH"],
+    ["Son campana is a bell", () => rt("campanaSon", 0).name === "cowbell"],
+    ["martillo macho is bongo skin", () => rt("martillo", 0).name === "bongoH"],
+    ["martillo hembra open lands on bongoL", () => rt("martillo", 6).name === "bongoL"],
+    ["quinto slap takes the slap recipe", () => rt("quintoLock", 1).name === "djembeS"],
+    ["bigFour's cymbal stroke lands on the crash lane", () => rt("bigFour", 4).lane === 11],
+    ["cascara rides the donor's cowbell", () => rt("cascara23", 0).name === "cowbell"]
+  ];
+  let dodBad = 0;
+  dod.forEach(([label, fn]) => { let r = false; try { r = fn(); } catch (e) {}
+    if (!r) { fail("DoD: " + label); dodBad++; } });
+  if (!dodBad) ok(dod.length + " definition-of-done routes hold");
+  /* ported synthesis, measured: stub AudioContext, render, check the physics */
+  globalThis.ctx = { sampleRate: 48000, currentTime: 0,
+    createBuffer: (ch, len, sr) => { const d = new Float32Array(len);
+      return { length: len, duration: len / sr, getChannelData: () => d }; } };
+  function dftPeak(d, sr, lo, hi, t0, t1) {
+    const a = Math.floor(t0 * sr), b = Math.min(d.length, Math.floor(t1 * sr));
+    let bestF = 0, bestM = -1;
+    for (let f = lo; f <= hi; f += Math.max(1, (hi - lo) / 300)) {
+      let re = 0, im = 0; const w = 2 * Math.PI * f / sr;
+      for (let n = a; n < b; n++) { re += d[n] * Math.cos(w * n); im -= d[n] * Math.sin(w * n); }
+      const m = re * re + im * im; if (m > bestM) { bestM = m; bestF = f; }
+    }
+    return bestF;
+  }
+  function t60(d, sr) {
+    const win = Math.floor(sr * 0.01); let pk = 0, pi = 0; const env = [];
+    for (let i = 0; i < d.length; i += win) { let p = 0;
+      for (let j = i; j < Math.min(d.length, i + win); j++) { const v = Math.abs(d[j]); if (v > p) p = v; }
+      env.push(p); }
+    env.forEach((v, i) => { if (v > pk) { pk = v; pi = i; } });
+    for (let i = pi; i < env.length; i++) if (env[i] < pk * 1e-3) return (i - pi) * win / sr;
+    return (env.length - pi) * win / sr;
+  }
+  let mBad = 0;
+  [["surdo", 40, 100, 0.30, 0.86, 62, 0.10], ["congaL", 120, 320, 0.15, 0.45, 190, 0.08],
+   ["agogoH", 500, 1100, 0.10, 0.50, 780, 0.06], ["clave", 800, 1800, 0.01, 0.08, 1250, 0.08],
+   ["cowbell", 350, 800, 0.03, 0.20, 540, 0.08], ["dunL", 50, 130, 0.30, 0.90, 78, 0.12]
+  ].forEach(([name, lo, hi, w0, w1, want, tol]) => {
+    const buf = ldrBuf(name, 1.0, 1, 1);
+    if (!buf || buf.length < 128) { fail(name + " render empty"); mBad++; return; }
+    const d = buf.getChannelData(0);
+    let pk = 0; for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > pk) pk = v; }
+    if (pk < 1e-3 || pk > 4) { fail(name + " peak " + pk.toFixed(3)); mBad++; return; }
+    const f = dftPeak(d, 48000, lo, hi, w0, Math.min(w1, buf.duration));
+    if (Math.abs(f - want) / want > tol) { fail(name + " fundamental " + f.toFixed(1) + " want " + want); mBad++; }
+  });
+  { const a = ldrBuf("surdo", 1.0, 1, 1), b = ldrBuf("surdo", 1.0, 0.74, 1);
+    const fa = dftPeak(a.getChannelData(0), 48000, 40, 100, 0.3, 0.86);
+    const fb = dftPeak(b.getChannelData(0), 48000, 30, 80, 0.3, 0.86);
+    if (Math.abs(fb / fa - 0.74) > 0.06) { fail("primeira pitch bake " + (fb / fa).toFixed(3)); mBad++; } }
+  { const c = ldrBuf("cowbell", 1.0, 1, 1), m = ldrBuf("cowbell", 1.0, 1, 0.5);
+    if (!(t60(m.getChannelData(0), 48000) < t60(c.getChannelData(0), 48000) * 0.85)) { fail("mute damp inert"); mBad++; } }
+  [["surdo", 0.62], ["clave", 0.07], ["agogoH", 0.42]].forEach(([name, dec]) => {
+    const t = t60(ldrBuf(name, 1.0, 1, 1).getChannelData(0), 48000);
+    if (t < dec * 0.4 || t > dec * 2.6) { fail(name + " T60 " + t.toFixed(3) + " vs " + dec); mBad++; } });
+  ["tamb", "shaker", "cabasa", "guiro"].forEach(name => {
+    const buf = ldrBuf(name, 0.7, 1, 1); if (!buf) { fail(name + " no render"); mBad++; return; }
+    const d = buf.getChannelData(0); let pk = 0;
+    for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > pk) pk = v; }
+    if (pk < 1e-3 || pk > 4) { fail(name + " peak " + pk.toFixed(3)); mBad++; } });
+  if (!mBad) ok("rendered physics measured: fundamentals on the recipes, decays track, pitch/damp bake");
 }
 
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
