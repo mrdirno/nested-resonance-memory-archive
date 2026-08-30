@@ -371,7 +371,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 <div class="pane" id="pane-rhythm">
   <div class="ldr-board">
     <h3>EXB-LDR · LuckyDreamer Rhythm Board — installed in slot 1</h3>
-    <div class="sub">A rhythm engine grafted from the LuckyDreamer artifact: 51 bell timelines and grooves, each carrying where it comes from and how much to trust the transcription (·t transcribed · ·d derived · ·? uncertain). Pick a figure, press start. KIT mode plays it on any drum kit; MELODIC mode makes the figure play whatever chord you hold on the keys (nothing held = it brings its own). ENSEMBLE adds the figure's documented companion parts. Tempo follows the unit's ♩ on the GLOBAL page. The big PLAY on the Lucky Dreamer 1U above uses this same board to conduct full band arrangements on its own.</div>
+    <div class="sub">A rhythm engine grafted from the LuckyDreamer artifact: 51 bell timelines and grooves, each carrying where it comes from and how much to trust the transcription (·t transcribed · ·d derived · ·? uncertain). Pick a figure, press start. The default voice is LDR PHYSICS — the donor's own percussion models (agogôs, congas, surdos, claves, timbales, shakers…), ported number-for-number, with every figure routed to the instrument it was written for; choose a TRITON kit instead for the classic lane sound. MELODIC mode makes the figure play whatever chord you hold on the keys (nothing held = it brings its own). ENSEMBLE adds the figure's documented companion parts. Tempo follows the unit's ♩ on the GLOBAL page. The big PLAY on the Lucky Dreamer 1U above uses this same board to conduct full band arrangements on its own.</div>
     <div class="ldr-controls">
       <button class="oct-btn" id="ldrStart" style="font-size:13px;padding:9px 16px;">▶ START</button>
       <select id="ldrMode"><option value="KIT">KIT mode</option><option value="MELODIC">MELODIC mode</option></select>
@@ -2132,7 +2132,402 @@ buildPatchPane(); updatePatchChips();
 "use strict";
 /* ===== EXB-LDR: rhythm board grafted from luckydreamer_3.html ===== */
 const LDR_FIG={"bembe":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[5,0.55],[7,0.55],[9,0.82],[11,0.55]],"role":"bell","from":"Ewe and Yoruba, West Africa, and the whole Cuban 6/8 repertoire — Agbadza and Agbekor of the Anlo-Ewe of the Volta Region and southern Ghana coast; the guataca in Cuban batá, bembé and palo","verify":"transcribed","src":["JONES","PRESS","AGAWU","CHERN","COLL","ALEN","TOU05","TOU05b"],"tone":["L","H","H","H","H","H","H"],"iv":"2212221","dynVerify":"derived","also":["ashanti+3","bemba7+10","bondo+8","tambu+7","yoruba+5","bembe2+1","guaguaColumbia+5"]},"ashanti":{"grid":12,"hits":[[0,1],[2,0.68],[3,0.82],[5,0.55],[7,0.55],[8,0.68],[10,0.68]],"role":"bell","from":"Ashanti and Akan peoples of Ghana; the Bemba of northern Zimbabwe (hand-clapped, or two axe-blades struck together); the Dunumba rhythm of Guinea","verify":"transcribed","src":["PRESS","NKET","JONES","HALL","TOU05","TOU05b"],"iv":"2122122","dynVerify":"derived","also":["bembe-3","bemba7+7","bondo+5","tambu+4","yoruba+2","bembe2+10","guaguaColumbia+2"]},"bemba7":{"grid":12,"hits":[[0,1],[2,0.68],[3,0.82],[5,0.55],[7,0.55],[9,0.82],[10,0.68]],"role":"bell","from":"the Bemba of northern Zimbabwe, struck on axe blades; in Cuba the bell of the Sarabanda rhythm of the Palo Monte cult","verify":"transcribed","src":["PRESS","TOU05","TOU05b"],"iv":"2122212","dynVerify":"derived","also":["bembe-10","ashanti-7","bondo+10","tambu+9","yoruba+7","bembe2+3","guaguaColumbia+7"]},"bondo":{"grid":12,"hits":[[0,1],[1,0.55],[3,0.82],[5,0.55],[7,0.55],[8,0.68],[10,0.68]],"role":"bell","from":"the Bondo bell pattern of the Aka of Central Africa, played with metal strips — Arom’s fieldwork","verify":"transcribed","src":["AROM","TOU05","TOU05b"],"iv":"1222122","dynVerify":"derived","also":["bembe-8","ashanti-5","bemba7-10","tambu+11","yoruba+9","bembe2+5","guaguaColumbia+9"]},"tambu":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[6,0.88],[7,0.55],[9,0.82],[11,0.55]],"role":"bell","from":"Curaçao — the Tambú, originally a drum and an iron metallophone called the heru; the Muselemeka timeline of Central Africa; common in West Africa and Haiti, where it carries Yanvalou, Zepaule, Camberto and Mahi","verify":"transcribed","src":["ROSAL","PRESS","DWOR","TOU05","TOU05b"],"iv":"2221221","dynVerify":"derived","also":["bembe-7","ashanti-4","bemba7-9","bondo-11","yoruba+10","bembe2+6","guaguaColumbia+10"]},"yoruba":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[5,0.55],[7,0.55],[9,0.82],[10,0.68]],"role":"bell","from":"Yoruba sacred music of Nigeria (also called konkonkolo, and the Omele); a Babenzele pattern of Central Africa; a Mende pattern of Sierra Leone; the palitos of Cuban rumba columbia","verify":"transcribed","src":["PRESS","AGAWU","ALEN","TOU05","TOU05b"],"iv":"2212212","dynVerify":"derived","also":["bembe-5","ashanti-2","bemba7-7","bondo-9","tambu-10","bembe2+8","guaguaColumbia"]},"bembe2":{"grid":12,"hits":[[0,1],[1,0.55],[3,0.82],[5,0.55],[6,0.88],[8,0.68],[10,0.68]],"role":"bell","from":"Cuba — the second bell of the bembé, played on a low-pitched bell against the guataca; also a hand-clapping pattern in Ghana, southern Africa and Tanzania","verify":"transcribed","src":["PRESS","TOU05","TOU05b"],"tone":["L","L","L","L","L","L","L"],"iv":"1221222","dynVerify":"derived","also":["bembe-1","ashanti-10","bemba7-3","bondo-5","tambu-6","yoruba-8","guaguaColumbia+4"]},"tonada":{"grid":12,"hits":[[0,1],[2,0.68],[3,0.82],[5,0.55],[6,0.88],[8,0.68],[10,0.68]],"role":"bell","from":"Cuba — the tonada, Andalusian voice against African percussion; the bèlè (bel-air) of Martinique; the Ashanti of Ghana and the Akan in Adowa music; the Mandiani rhythm of Guinea","verify":"transcribed","src":["ALEN","NKET","PRESS","HALL","TOU05"],"iv":"2121222","dynVerify":"derived","also":["asaadua+4","soli+6"]},"asaadua":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[6,0.88],[7,0.55],[9,0.82],[10,0.68]],"role":"bell","from":"processional music of the Akan of central western Ghana, played on the dawuro (atoke) — a hollow boat-shaped iron bell; the Kakilambé and Sokou rhythms of Guinea","verify":"transcribed","src":["HART","HALL","TOU05"],"iv":"2221212","dynVerify":"derived","also":["tonada-4","soli+2"]},"soli":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[6,0.88],[8,0.68],[9,0.82],[11,0.55]],"role":"bell","from":"the Soli rhythm of West Africa (Malinké initiation music) — of Soli’s three bell patterns this seven-stroke one is the most used; identical to the al-ramal of Safī al-Dīn, Arab-Persian, 13th century","verify":"transcribed","src":["HALL","WRIGHT","TOU05"],"iv":"2222121","dynVerify":"derived","also":["tonada-6","asaadua-2"]},"sorsonet":{"grid":12,"hits":[[0,1],[1,0.55],[2,0.68],[4,0.68],[6,0.88],[8,0.68],[10,0.68]],"role":"bell","from":"the Baga people of the Boké region, coastal Guinea — Sorsonet is a masked spirit, danced a few times a year by an initiate","verify":"transcribed","src":["HALL","ARAFAN","TOU05"],"iv":"1122222","dynVerify":"derived","also":["kitaab+8"]},"kitaab":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[6,0.88],[8,0.68],[9,0.82],[10,0.68]],"role":"bell","from":"kitaab al-adwaar — Arab-Persian, from the rhythm books of Safī al-Dīn, 13th century Baghdad","verify":"transcribed","src":["WRIGHT","TOU05"],"iv":"2222112","dynVerify":"derived","also":["sorsonet-8"]},"venda":{"grid":12,"hits":[[0,1],[3,0.82],[5,0.55],[8,0.68],[10,0.68]],"role":"bell","from":"a Venda clapping pattern from a South African children’s song; played by the Aka of the Central African Republic, and in Aka, Gbaya and Nzakara repertoire","verify":"transcribed","src":["PRESS","AROM","CHEM","TOU05","TOU05b"],"iv":"32322","dynVerify":"derived","also":["columbia+9","bemba5+7","fumeFume+4","salve+2","clave68+4","claveColumbia+9","quintoColumbia+5"]},"columbia":{"grid":12,"hits":[[0,1],[2,0.68],[5,0.55],[7,0.55],[9,0.82]],"role":"bell","from":"Cuba — the columbia, and the bell of the Abakuá rhythm; also the Chakacha dance of Kenya","verify":"transcribed","src":["ALEN","TOU05","TOU05b"],"iv":"23223","dynVerify":"derived","also":["venda-9","bemba5+10","fumeFume+7","salve+5","clave68+7","claveColumbia","quintoColumbia+8"]},"bemba5":{"grid":12,"hits":[[0,1],[3,0.82],[5,0.55],[7,0.55],[10,0.68]],"role":"bell","from":"the Bemba bell pattern of northern Zimbabwe; also the Macedonian dance Ibraim Odža Oro","verify":"transcribed","src":["PRESS","TOU05","TOU05b"],"iv":"32232","dynVerify":"derived","also":["venda-7","columbia-10","fumeFume+9","salve+7","clave68+9","claveColumbia+2","quintoColumbia+10"]},"fumeFume":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[7,0.55],[9,0.82]],"role":"bell","from":"the Ewe dance Abuteni; the kple music of the Ga people of Accra; the Congo rhythm of Cuba; a clapping pattern across West, Central and East Africa — Jones’s \"African signature\"","verify":"transcribed","src":["JONES","NKET","ALEN","LONDON","TOU05","TOU05b"],"iv":"22323","dynVerify":"derived","also":["venda-4","columbia-7","bemba5-9","salve+10","clave68","claveColumbia+5","quintoColumbia+1"]},"salve":{"grid":12,"hits":[[0,1],[2,0.68],[5,0.55],[7,0.55],[10,0.68]],"role":"bell","from":"the Salve of the Dominican Republic, in the Canto de Vela for the Virgin Mary; a Tuareg pattern of the Sahara; the Moroccan Al Kudám","verify":"transcribed","src":["FARQ","TOU05","TOU05b"],"iv":"23232","dynVerify":"derived","also":["venda-2","columbia-5","bemba5-7","fumeFume-10","clave68+2","claveColumbia+7","quintoColumbia+3"]},"adenkum":{"grid":12,"hits":[[0,1],[2,0.68],[4,0.68],[7,0.55],[9,0.82],[10,0.68]],"role":"bell","from":"the Adenkum rhythm of the Akan of Ghana, played on the dawuro bell","verify":"transcribed","src":["TOU05"],"iv":"223212","dynVerify":"derived"},"cuban8":{"grid":12,"hits":[[0,1],[1,0.55],[3,0.82],[5,0.55],[6,0.88],[8,0.68],[9,0.82],[10,0.68]],"role":"bell","from":"Cuba — the eight-note ternary bell pattern recorded by Fernando Ortiz in La Clave","verify":"transcribed","src":["ORTIZ","TOU05"],"iv":"12212112","dynVerify":"derived"},"marchTwoBeat":{"grid":16,"hits":[[0,0.95,"B"],[4,0.78,"B"],[8,0.85,"B"],[12,0.78,"B"]],"role":"support","from":"the New Orleans marching and brass-band beat that Buddy Bolden’s Big Four departed from — Wynton Marsalis’s account in Ken Burns, \"Jazz\" (PBS, 2000) defines the Big Four against it","verify":"derived","src":["MARSALIS","BOLDEN"],"also":["surdoPrimeira","surdoSegunda","surdoTerceira+3","maculele"]},"habanera":{"grid":16,"hits":[[0,0.95],[3,0.48],[4,0.78],[6,0.62],[8,0.85],[11,0.48],[12,0.78],[14,0.62]],"role":"bell","from":"the habanera / contradanza cell of nineteenth-century Cuba, carried into New Orleans and named by Wynton Marsalis as the second half of the Big Four; the tresillo is its more basic form","verify":"transcribed","src":["MARSALIS"]},"bigFour":{"grid":16,"hits":[[0,0.95,"B"],[4,0.78,"B"],[8,0.85,"B"],[11,0.48,"B"],[12,1,"C"],[14,0.62,"B"]],"role":"support","from":"Buddy Bolden, New Orleans c.1895-1907 — the Big Four, per Wynton Marsalis in Ken Burns, \"Jazz\" (PBS, 2000): the first syncopated bass-drum pattern to deviate from the standard on-the-beat march, whose second half is the habanera; accent on beat four per Musicians Institute’s second-line groove lesson","verify":"derived","src":["MARSALIS","BOLDEN","MI"]},"pressRoll":{"grid":16,"hits":[[2,0.3,"R"],[4,0.85,"A"],[10,0.32,"R"],[12,0.95,"A"]],"role":"response","from":"the New Orleans brass-band press roll — Warren \"Baby\" Dodds is its named exponent; in funeral processions the snare strainer is thrown off, giving the high tom sound the tradition asks for","verify":"uncertain","src":["DODDS","MI"]},"gogoConga":{"grid":16,"hits":[[0,0.95,"O"],[3,0.9,"S"],[6,0.62,"O"],[9,0.48,"O"],[12,0.78,"O"]],"role":"support","from":"Gregory Gerran, congas, on Chuck Brown & the Soul Searchers, \"Bustin’ Loose\" (1978), Washington DC — per the Drummer Cafe lesson transcription of the track","verify":"uncertain","src":["DCAFE","BROWN"],"also":["claveBossa+10"]},"cavacha":{"grid":16,"hits":[[0,0.95],[1,0.22],[2,0.22],[3,0.85],[4,0.22],[5,0.22],[6,0.85],[7,0.22],[8,0.22],[9,0.85],[10,0.22],[11,0.22],[12,0.85],[13,0.22],[14,0.22],[15,0.22]],"role":"support","from":"Meridjo Belobi, drummer of Zaïko Langa Langa, Kinshasa — the cavacha, c.1971-73, played on snare or hi-hat with ghosted sixteenths over a bass drum on every beat; the dance swept East and Central Africa through Zaïko and Orchestra Shama Shama recordings from 1973","verify":"uncertain","src":["BELOBI","WIKI"],"also":["marchaConga","martillo","campanaSon","caixa","tamborimCarreteiro","ganza"]},"clave68":{"grid":12,"hits":[[0,0.95],[2,0.82],[4,0.85],[7,0.9],[9,0.82]],"role":"bell","from":"Afro-Cuban 6/8 — bembé and the toques de santo; catalogued as Fume-Fume by Godfried Toussaint, “Classification and Phylogenetic Analysis of African Ternary Rhythm Timelines”, McGill SOCS TR (2005), §3.2, citing Ewe Abuteni and Ga kple usage","verify":"transcribed","also":["venda-4","columbia-7","bemba5-9","fumeFume","salve-2","claveColumbia+5","quintoColumbia+1"]},"claveColumbia":{"grid":12,"hits":[[0,0.95],[2,0.8],[5,0.88],[7,0.9],[9,0.8]],"role":"bell","from":"rumba columbia, Cuba — Matanzas and Havana; Toussaint (2005) §3.2 names and prints this pattern, which is the triple-pulse form of the rumba clave (NECKLACES.rumba32)","verify":"transcribed","also":["venda-9","columbia","bemba5-2","fumeFume-5","salve-7","clave68-5","quintoColumbia+8"]},"claveBossa":{"grid":16,"hits":[[0,0.7],[3,0.55],[6,0.62],[10,0.66],[13,0.55]],"role":"bell","from":"bossa nova, Rio de Janeiro, c.1958-63 — the snare-rim figure of the studio drummers around Jobim and João Gilberto; Toussaint, “The Rhythm that Conquered the World” (Percussive Notes), gives its interval sequence as [3-3-4-3-3]","verify":"transcribed","also":["gogoConga-10"]},"telecoteco":{"grid":16,"hits":[[0,0.95],[2,0.6],[4,0.75],[7,0.9],[9,0.6],[11,0.8],[13,0.7]],"role":"bell","from":"samba carioca — the Estácio paradigm, after Carlos Sandroni, Feitiço Decente: transformações do samba no Rio de Janeiro 1917-1933 (Zahar, 2001); the tamborim cell called teleco-teco or feijão com arroz, documented in the baterias of Imperatriz Leopoldinense and Mocidade by Marianne Zeh (ANPPOM XVI, 2006)","verify":"transcribed","also":["telecotecoUp+8","cuica"]},"telecotecoUp":{"grid":16,"hits":[[1,0.6],[3,0.8],[5,0.7],[8,0.95],[10,0.6],[12,0.75],[15,0.9]],"role":"bell","from":"samba carioca — the “up side” of the teleco-teco, the entry that begins with a sixteenth rest (Zeh, ANPPOM XVI 2006; the two sides are standard bateria vocabulary)","verify":"derived","also":["telecoteco-8","cuica+8"]},"partidoAlto":{"grid":16,"hits":[[2,0.6],[4,0.85],[7,0.9],[10,0.6],[12,0.85],[15,0.9]],"role":"bell","from":"samba de partido-alto, Rio de Janeiro — the pandeiro/hand figure of the roda (Candeia, Martinho da Vila, Zeca Pagodinho); accents on the second beat and the last sixteenth of the first are the one point Brazilian sources agree on","verify":"uncertain"},"palitoGuaguanco":{"grid":16,"hits":[[0,0.9],[2,0.55],[3,0.8],[5,0.6],[7,0.85],[9,0.55],[11,0.6],[12,0.8],[14,0.6]],"role":"bell","from":"rumba guaguancó, Havana — the palito pattern struck on the guagua/catá; the timbale cáscara descends directly from it, a lineage stated in the standard Afro-Cuban percussion literature and by working players","verify":"uncertain","also":["cascara23+15"]},"guaguaColumbia":{"grid":12,"hits":[[0,0.95],[2,0.65],[4,0.8],[5,0.6],[7,0.85],[9,0.7],[10,0.6]],"role":"bell","from":"rumba columbia, Cuba — the seven-stroke bell in the rotation Toussaint (2005) §2.5 names Yoruba (Bettermann: Omele) and reports “is also used in Cuba with the Columbia rhythm”","verify":"transcribed","also":["bembe-5","ashanti-2","bemba7-7","bondo-9","tambu-10","yoruba","bembe2-4"]},"quintoLock":{"grid":16,"hits":[[1,0.72,"O"],[4,0.95,"S"],[7,0.78,"O"],[11,0.95,"S"],[13,0.72,"O"]],"role":"lead","from":"rumba guaguancó and yambú, Cuba — the quinto lock as codified by David Peñalosa, Rumba Quinto (Bembe Books, 2010): a son clave displaced to begin on the first offbeat, played as an alternating tone/slap dyad","verify":"transcribed"},"quintoColumbia":{"grid":12,"hits":[[1,0.72,"O"],[3,0.95,"S"],[5,0.78,"O"],[8,0.95,"S"],[10,0.72,"O"]],"role":"lead","from":"rumba columbia, Cuba — the triple-pulse quinto lock, a displaced ternary son clave beginning on the first offbeat (Peñalosa, Rumba Quinto, 2010)","verify":"uncertain","also":["venda-5","columbia-8","bemba5-10","fumeFume-1","salve-3","clave68-1","claveColumbia-8"]},"salidorGuaguanco":{"grid":16,"hits":[[0,0.85,"B"],[3,0.8,"B"],[6,0.95,"O"],[8,0.6,"O"],[12,0.8,"B"],[14,0.95,"O"]],"role":"support","from":"rumba guaguancó, Matanzas style — the sparse two-drum salidor as transcribed by rumberos in the mycongaplace.com “Matanzas-style guaguancó” thread; the same thread records that the strokes fall between the duple and triple grids","verify":"uncertain"},"marchaConga":{"grid":16,"hits":[[0,0.3,"H"],[1,0.24,"T"],[2,0.85,"S"],[3,0.24,"T"],[4,0.3,"H"],[5,0.24,"T"],[6,0.95,"O"],[7,0.88,"O"],[8,0.3,"H"],[9,0.24,"T"],[10,0.85,"S"],[11,0.24,"T"],[12,0.3,"H"],[13,0.24,"T"],[14,0.95,"O"],[15,0.88,"O"]],"role":"support","from":"Cuban son / salsa — the one-drum conga marcha of the conjunto, the open tones landing on the last offbeats of each two-beat cycle (the ponche); the standard part behind every son montuno since the 1940s","verify":"transcribed","also":["cavacha","martillo","campanaSon","caixa","tamborimCarreteiro","ganza"]},"tumbaoDos":{"grid":16,"hits":[[3,0.82,"B"],[6,0.95,"O"],[14,0.9,"O"],[15,0.85,"O"]],"role":"support","from":"Cuban conjunto conga playing — the tumba’s part in the two-drum tumbao: the bombo on clave’s second stroke, the ponche, and the two tones preceding the three-side; the vocabulary Carlos “Patato” Valdés’s generation standardised","verify":"transcribed"},"martillo":{"grid":16,"hits":[[0,0.7,"mS"],[1,0.3,"mT"],[2,0.62,"mO"],[3,0.26,"mB"],[4,0.7,"mS"],[5,0.3,"mT"],[6,0.95,"hO"],[7,0.26,"mB"],[8,0.7,"mS"],[9,0.3,"mT"],[10,0.62,"mO"],[11,0.26,"mB"],[12,0.7,"mS"],[13,0.3,"mT"],[14,0.95,"hO"],[15,0.26,"mB"]],"role":"support","from":"Cuban son — the bongocero’s martillo; stroke order (open slap / fingers / open tone / thumb, with the hembra open tone on the seventh of eight) per DRUM! Magazine and X8 Drums, which agree independently on the hembra placement","verify":"transcribed","also":["cavacha","marchaConga","campanaSon","caixa","tamborimCarreteiro","ganza"]},"campanaSon":{"grid":16,"hits":[[0,0.95,"M"],[1,0.34,"n"],[2,0.82,"M"],[3,0.3,"n"],[4,0.86,"M"],[5,0.34,"n"],[6,0.82,"M"],[7,0.3,"n"],[8,0.92,"M"],[9,0.34,"n"],[10,0.82,"M"],[11,0.3,"n"],[12,0.86,"M"],[13,0.34,"n"],[14,0.82,"M"],[15,0.3,"n"]],"role":"bell","from":"Cuban son montuno / salsa — the bongó bell (campana) taken up in the montuno, the practice formalised in Arsenio Rodríguez’s conjunto in the 1940s","verify":"transcribed","also":["cavacha","marchaConga","martillo","caixa","tamborimCarreteiro","ganza"]},"campanaMambo":{"grid":16,"hits":[[0,0.95,"M"],[2,0.7,"n"],[3,0.75,"n"],[4,0.88,"M"],[6,0.7,"n"],[7,0.75,"n"],[8,0.92,"M"],[10,0.7,"n"],[11,0.75,"n"],[12,0.88,"M"],[14,0.7,"n"],[15,0.75,"n"]],"role":"bell","from":"Cuban mambo / salsa — the timbalero’s mambo bell; the role is documented everywhere and the exact figure is player-specific (Tito Puente’s and Manny Oquendo’s differ), so this is the common reading and not a transcription of either","verify":"uncertain"},"cascara23":{"grid":16,"hits":[[1,0.55],[2,0.85],[4,0.85],[6,0.6],[8,0.9],[10,0.6],[11,0.8],[13,0.6],[15,0.62]],"role":"bell","from":"Cuban son / salsa — the timbale cáscara, struck on the shell, in its 2-3 orientation; the figure itself comes from the rumba palito (see palitoGuaguanco)","verify":"derived","also":["palitoGuaguanco-15"]},"abanico":{"grid":16,"hits":[[0,1,"O"],[12,0.9,"R"],[13,0.32,"b"],[14,0.45,"b"],[15,0.62,"b"]],"role":"lead","from":"Cuban timbal playing — the abanico that opens a section: rim shot, buzz, arrival; universal in salsa timbal vocabulary since the charanga and conjunto era","verify":"derived"},"surdoPrimeira":{"grid":16,"hits":[[0,0.28,"M"],[4,1,"O"],[8,0.26,"M"],[12,0.96,"O"]],"role":"support","from":"Rio de Janeiro escolas de samba — the surdo de primeira (marcação); the instrument is credited to the Estácio sambistas of Deixa Falar, c.1928 (Sérgio Cabral, As Escolas de Samba do Rio de Janeiro, 1996)","verify":"transcribed","also":["marchTwoBeat","surdoSegunda","surdoTerceira+3","maculele"]},"surdoSegunda":{"grid":16,"hits":[[0,0.88,"O"],[4,0.3,"M"],[8,0.92,"O"],[12,0.28,"M"]],"role":"response","from":"Rio de Janeiro escolas de samba — the surdo de segunda (resposta), answering the primeira’s beat two with an open stroke on beat one","verify":"transcribed","also":["marchTwoBeat","surdoPrimeira","surdoTerceira+3","maculele"]},"surdoTerceira":{"grid":16,"hits":[[3,0.6,"O"],[7,0.85,"O"],[11,0.6,"O"],[15,0.9,"O"]],"role":"lead","from":"Rio de Janeiro escolas de samba — the surdo de terceira / cortador, the improvising surdo that cuts across the primeira-segunda pair; this is the common anticipation shape, not any one bateria’s part","verify":"uncertain","also":["marchTwoBeat-3","surdoPrimeira-3","surdoSegunda-3","maculele+1"]},"caixa":{"grid":16,"hits":[[0,0.6],[1,0.3],[2,0.36],[3,0.88],[4,0.58],[5,0.3],[6,0.36],[7,0.88],[8,0.62],[9,0.3],[10,0.36],[11,0.88],[12,0.58],[13,0.3],[14,0.36],[15,0.9]],"role":"support","from":"Rio de Janeiro escolas de samba — the caixa (snare) of the bateria; the accent on the sixteenth anticipating each beat is the documented samba accent, shared with the ganzá and chocalho","verify":"transcribed","also":["cavacha","marchaConga","martillo","campanaSon","tamborimCarreteiro","ganza"]},"tamborimCarreteiro":{"grid":16,"hits":[[0,0.72,"d"],[1,0.5,"d"],[2,0.55,"d"],[3,0.88,"v"],[4,0.7,"d"],[5,0.5,"d"],[6,0.55,"d"],[7,0.9,"v"],[8,0.72,"d"],[9,0.5,"d"],[10,0.55,"d"],[11,0.88,"v"],[12,0.7,"d"],[13,0.5,"d"],[14,0.55,"d"],[15,0.92,"v"]],"role":"lead","from":"Rio de Janeiro escolas de samba — the carreteiro played with the virada, the drum turned against the stick’s upstroke; techniques “3 e 1” and “2 e 1” documented in the baterias of Imperatriz Leopoldinense and Mocidade Independente de Padre Miguel by Marianne Zeh, ANPPOM XVI (2006)","verify":"transcribed","also":["cavacha","marchaConga","martillo","campanaSon","caixa","ganza"]},"ganza":{"grid":16,"hits":[[0,0.55],[1,0.32],[2,0.4],[3,0.8],[4,0.52],[5,0.32],[6,0.4],[7,0.8],[8,0.56],[9,0.32],[10,0.4],[11,0.8],[12,0.52],[13,0.32],[14,0.4],[15,0.82]],"role":"shaker","from":"Rio de Janeiro escolas de samba — the ganzá/chocalho, dividing each beat in four and accenting the sixteenth that anticipates the next beat","verify":"transcribed","also":["cavacha","marchaConga","martillo","campanaSon","caixa","tamborimCarreteiro"]},"cuica":{"grid":16,"hits":[[0,0.8],[2,0.5],[4,0.62],[7,0.85],[9,0.5],[11,0.7],[13,0.6]],"role":"response","from":"Rio de Janeiro escolas de samba — the cuíca playing the teleco-teco cell, per Marianne Zeh (ANPPOM XVI, 2006): the figure is used “não apenas na escola de samba... como também em outros instrumentos como cuíca”","verify":"derived","also":["telecoteco","telecotecoUp-8"]},"maculele":{"grid":16,"hits":[[0,0.72],[4,0.7],[8,0.72],[12,1]],"role":"bell","from":"maculelê, Santo Amaro da Purificação, Bahia — the grimas (paired sticks) of the dancers, three strokes at belt height and the fourth struck at face level; the dance was recovered and staged by Mestre Popó from 1943","verify":"uncertain","also":["marchTwoBeat","surdoPrimeira","surdoSegunda","surdoTerceira-1"]}};
-const LDR={on:false,fig:null,mode:"KIT",kit:15,ens:false,hum:false,next:0,bar:0};
+/* ═══ EXB-LDR PHYSICS — the donor's percussion engine, ported number-for-number ═══
+   Source: luckydreamer_3.html — TunedDrum L4229, MetalVoice L4157, ShakeVoice L4307,
+   ModalBank L1270, MODES L1329, Reson L682, SVF L603, OnePole L585, AD L960,
+   Sat L2115, Transient L2183, DCBlock L575, satSoft L824, makeRng L513,
+   PERC_RECIPE L4548, PERC_SAG L4545, perc patch bank L5106, 'metal' spectrum L2391,
+   wtMip L2436, sag enable for played ensembles L18971.
+   Each recipe voice renders OFFLINE through the exact donor sample loop into a
+   cached mono buffer (3 velocity layers; pitch/damp variants baked); playback is
+   one BufferSource per hit. Accuracy is inherited, not re-approximated. */
+const LDR_TAU=Math.PI*2, LDR_DEN=1e-20;
+function ldrClamp(x,a,b){ return x<a?a:x>b?b:x; }
+function ldrMakeRng(seed){
+  let a=seed>>>0,b=0x9e3779b9,c=0x243f6a88,d=0xb7e15162;
+  for(let i=0;i<12;i++){ a=(a+0x6d2b79f5)>>>0;
+    let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61);
+    b=(b^((t^(t>>>14))>>>0))>>>0; const s=b; b=c; c=d; d=s; }
+  return function(){ a|=0;b|=0;c|=0;d|=0;
+    let t=(((a+b)|0)+d)|0; d=(d+1)|0; a=b^(b>>>9); b=(c+(c<<3))|0;
+    c=(c<<21)|(c>>>11); c=(c+t)|0; return (t>>>0)/4294967296; };
+}
+function ldrSatSoft(x){ if(x<-3)return -1; if(x>3)return 1; const x2=x*x; return x*(27+x2)/(27+9*x2); }
+function LDCBlock(sr){ this.x1=0; this.y1=0; this.R=1-LDR_TAU*12/sr; }
+LDCBlock.prototype.tick=function(x){ const y=x-this.x1+this.R*this.y1+LDR_DEN; this.x1=x; this.y1=y; return y; };
+function LOnePole(sr){ this.sr=sr; this.s=0; this.G=0.1; this.setHz(1000); }
+LOnePole.prototype.setHz=function(hz){ const g=Math.tan(Math.PI*ldrClamp(hz,1,this.sr*0.49)/this.sr); this.G=g/(1+g); };
+LOnePole.prototype.lp=function(x){ const v=(x-this.s)*this.G, y=v+this.s; this.s=y+v+LDR_DEN; return y; };
+LOnePole.prototype.reset=function(){ this.s=0; };
+function LSVF(sr){ this.sr=sr; this.ic1=0; this.ic2=0; this.g=0.1; this.k=1;
+  this.a1=0; this.a2=0; this.a3=0; this.lp=0; this.bp=0; this.hp=0; this.set(1000,0.707); }
+LSVF.prototype.set=function(hz,q){ this.g=Math.tan(Math.PI*ldrClamp(hz,5,this.sr*0.492)/this.sr);
+  this.k=1/Math.max(0.05,q); this.a1=1/(1+this.g*(this.g+this.k)); this.a2=this.g*this.a1; this.a3=this.g*this.a2; };
+LSVF.prototype.tick=function(x){ const v3=x-this.ic2, v1=this.a1*this.ic1+this.a2*v3,
+  v2=this.ic2+this.a2*this.ic1+this.a3*v3;
+  this.ic1=2*v1-this.ic1+LDR_DEN; this.ic2=2*v2-this.ic2+LDR_DEN;
+  this.lp=v2; this.bp=v1; this.hp=x-this.k*v1-v2; return v2; };
+function LReson(sr){ this.sr=sr; this.y1=0; this.y2=0; this.a1=0; this.a2=0; this.amp=1; this.ampC=1; }
+LReson.prototype.set=function(hz,t60){ const f=ldrClamp(hz,0.5,this.sr*0.495), w=LDR_TAU*f/this.sr;
+  let r=Math.exp(-6.9077553/(Math.max(0.0005,t60)*this.sr)); if(r>0.9999995)r=0.9999995;
+  this.a1=2*r*Math.cos(w); this.a2=-r*r; this.amp=Math.sin(w); this.ampC=Math.sin(w)*(1-r); };
+LReson.prototype.tick=function(x){ const y=this.a1*this.y1+this.a2*this.y2+x+LDR_DEN;
+  this.y2=this.y1; this.y1=y; return y; };
+LReson.prototype.reset=function(){ this.y1=0; this.y2=0; };
+function LAD(sr){ this.sr=sr; this.v=0; this.up=false; this.aC=0; this.dC=0; this.on=false; }
+LAD.prototype.set=function(a,d){ this.aC=Math.exp(-1.7917595/(Math.max(0.00005,a)*this.sr));
+  this.dC=Math.exp(-6.9077553/(Math.max(0.0005,d)*this.sr)); return this; };
+LAD.prototype.trig=function(){ this.v=0; this.up=true; this.on=true; };
+LAD.prototype.ff=function(m){ if(!this.on||m<=0) return;
+  if(this.up){ const la=Math.log(this.aC);
+    const need=la<0? Math.ceil(Math.log(0.2/Math.max(1e-9,1.2-this.v))/la) : 0;
+    if(m<need){ this.v=1.2+(this.v-1.2)*Math.pow(this.aC,m); return; }
+    this.v=1; this.up=false; m-=need; if(m<=0) return; }
+  this.v*=Math.pow(this.dC,m); if(this.v<1e-5){ this.v=0; this.on=false; } };
+LAD.prototype.tick=function(){ if(!this.on) return 0;
+  if(this.up){ this.v=1.2+(this.v-1.2)*this.aC; if(this.v>=1){ this.v=1; this.up=false; } }
+  else { this.v*=this.dC; if(this.v<1e-5){ this.v=0; this.on=false; } }
+  return this.v; };
+function LModalBank(sr,n){ this.sr=sr; this.n=n;
+  this.a1=new Float64Array(n); this.a2=new Float64Array(n);
+  this.y1=new Float64Array(n); this.y2=new Float64Array(n);
+  this.amp=new Float64Array(n); this.gain=new Float64Array(n); this.active=0; }
+LModalBank.prototype.setModes=function(f0,ratios,gains,t60s,decayScale){
+  let k=0; const ny=this.sr*0.47, ds=decayScale===undefined?1:decayScale;
+  for(let i=0;i<ratios.length&&k<this.n;i++){ const f=f0*ratios[i];
+    if(f>=ny||f<1) continue; const w=LDR_TAU*f/this.sr;
+    let r=Math.exp(-6.9077553/(Math.max(0.0005,t60s[i]*ds)*this.sr)); if(r>0.9999995)r=0.9999995;
+    this.a1[k]=2*r*Math.cos(w); this.a2[k]=-r*r;
+    this.amp[k]=Math.sin(w); this.gain[k]=gains[i]; k++; }
+  this.active=k; return this; };
+LModalBank.prototype.tick=function(x){ let s=0;
+  const a1=this.a1,a2=this.a2,y1=this.y1,y2=this.y2,am=this.amp,g=this.gain,N=this.active;
+  for(let i=0;i<N;i++){ const y=a1[i]*y1[i]+a2[i]*y2[i]+x*am[i]+LDR_DEN;
+    y2[i]=y1[i]; y1[i]=y; s+=y*g[i]; }
+  return s; };
+LModalBank.prototype.reset=function(){ for(let i=0;i<this.n;i++){ this.y1[i]=0; this.y2[i]=0; } };
+LModalBank.prototype.energy=function(){ let e=0; for(let i=0;i<this.active;i++) e+=this.y1[i]*this.y1[i]; return e; };
+const LDR_MODES={
+  drumhead:{r:[1,1.594,2.136,2.296,2.653,2.918,3.156,3.501],g:[1,0.6,0.4,0.36,0.25,0.2,0.15,0.1],d:[1,0.7,0.55,0.5,0.4,0.34,0.28,0.22]},
+  wood:{r:[1,2.57,4.9,8.1],g:[1,0.6,0.3,0.15],d:[1,0.55,0.3,0.18]},
+  glock:{r:[1,2.758,5.404,8.933,13.34,18.64],g:[1,0.5,0.28,0.14,0.07,0.04],d:[1,0.62,0.4,0.26,0.17,0.1]}
+};
+function LSat(sr){ this.sr=sr; this.dc=new LDCBlock(sr); this.lp=new LOnePole(sr); this.lp.setHz(sr*0.42);
+  this.mode=0; this.drive=1; this.bias=0.18; this.mix=1;
+  this.inSq=1e-6; this.outSq=1e-6; this.aG=Math.exp(-1/(0.3*sr)); this.g=1; }
+LSat.prototype.set=function(mode,drive,bias,mix){ this.mode=mode; this.drive=Math.max(0.05,drive);
+  this.bias=bias===undefined?0.18:bias; this.mix=mix===undefined?1:mix;
+  if(this.mode===1) this.lp.setHz(ldrClamp(this.sr*0.42/(1+0.55*(this.drive-1)),2200,this.sr*0.45)); };
+LSat.prototype.shape=function(x){ const d=x*this.drive;
+  if(this.mode===0) return ldrSatSoft((d+this.bias*d*d)*0.86);
+  return ldrSatSoft(d); };
+LSat.prototype.tick=function(x){ let y=this.shape(x);
+  if(this.mode===1) y=this.lp.lp(y);
+  y=this.dc.tick(y);
+  const a=this.aG;
+  this.inSq=x*x+(this.inSq-x*x)*a+LDR_DEN; this.outSq=y*y+(this.outSq-y*y)*a+LDR_DEN;
+  if(this.outSq>1e-9){ const want=Math.sqrt(this.inSq/this.outSq);
+    this.g+=(ldrClamp(want,0.12,8)-this.g)*0.0015; }
+  y*=this.g; return this.mix>=1? y : x+(y-x)*this.mix; };
+function LTransient(sr){ this.fa=Math.exp(-1/(0.0012*sr)); this.sa=Math.exp(-1/(0.035*sr));
+  this.fr=Math.exp(-1/(0.045*sr)); this.sr_=Math.exp(-1/(0.22*sr));
+  this.f=0; this.s=0; this.atk=0; this.sus=0; }
+LTransient.prototype.set=function(atk,sus){ this.atk=atk; this.sus=sus; };
+LTransient.prototype.tick=function(x){ const a=x<0?-x:x;
+  this.f=a>this.f? a+(this.f-a)*this.fa : a+(this.f-a)*this.fr;
+  this.s=a>this.s? a+(this.s-a)*this.sa : a+(this.s-a)*this.sr_;
+  const d=this.f-this.s;
+  let g=1+this.atk*d*3.2+this.sus*(this.s-this.f*0.5)*2.2;
+  if(g<0.15)g=0.15; else if(g>3)g=3; return x*g; };
+/* the 'metal' band-limited wavetable (tamb) — donor spectrum, additive per mip */
+const LDR_WTM=[];
+function ldrMetalMip(m){
+  if(LDR_WTM[m]) return LDR_WTM[m];
+  const N=2048, maxH=Math.min(N/2-1,Math.max(1,Math.floor(1024/Math.pow(2,m))));
+  const tbl=new Float32Array(N+1);
+  for(let n=1;n<=maxH;n++){
+    const a=(n===1||n===2||n===3||n===5||n===7||n===11)? 1/Math.sqrt(n) : 0.06/n;
+    if(a<1e-5) continue;
+    const w=LDR_TAU*n/N;
+    for(let i=0;i<N;i++) tbl[i]+=a*Math.sin(w*i);
+  }
+  let peak=1e-9; for(let i=0;i<N;i++){ const v=Math.abs(tbl[i]); if(v>peak)peak=v; }
+  const g=0.98/peak; for(let i=0;i<N;i++) tbl[i]*=g;
+  tbl[N]=tbl[0]; LDR_WTM[m]=tbl; return tbl;
+}
+function ldrWtMip(hz,sr){ const top=sr*0.45, maxH=top/Math.max(1,hz);
+  const m=Math.ceil(Math.log2(1024/Math.max(1,maxH))); return m<0?0:m>=10?9:m; }
+/* ── the three voice families, donor render loops verbatim ── */
+function LTunedDrum(sr,rng){ this.sr=sr; this.rng=rng;
+  this.head=new LModalBank(sr,8); this.shell=new LReson(sr);
+  this.bendE=new LAD(sr); this.slapE=new LAD(sr); this.slapF=new LSVF(sr);
+  this.sf=new LOnePole(sr); this.dc=new LDCBlock(sr);
+  this.sat=new LSat(sr); this.tr=new LTransient(sr);
+  this.strike=0; this.strikeN=0; this.strikeTot=1; this.vel=1; this.on=false; this.p=null; }
+LTunedDrum.prototype.set=function(p){ this.p=p;
+  const m=LDR_MODES[p.body]||LDR_MODES.drumhead;
+  this.head.setModes(p.hz,m.r,m.g,m.d,p.decay);
+  this.shell.set(ldrClamp(p.shellHz,40,this.sr*0.4),p.shellDec);
+  this.bendE.set(0.0002,p.bendAmt>0?(p.sagTime||0.42):(p.bendTime||0.03));
+  this.slapF.set(ldrClamp(p.slapHz||2600,500,this.sr*0.44),1.1);
+  this.slapE.set(0.0001,p.slapDec||0.02);
+  this.sat.set(0,p.drive||1.2,0.22,1);
+  this.tr.set(p.punch||0,0);
+  this.baseHz=p.hz; };
+LTunedDrum.prototype.trig=function(vel,bendMul){ const p=this.p;
+  this.vel=ldrClamp(vel,0.04,1.3); this.on=true;
+  this.curMul=bendMul||1;
+  this.sagN=p.bendAmt>0?1:0;
+  this.sagD=(p.bendAmt||0)*(0.3+0.8*this.vel*this.vel);
+  const hz=this.baseHz*this.curMul*(p.bendAmt>0?1+this.sagD:1);
+  const m=LDR_MODES[p.body]||LDR_MODES.drumhead;
+  this.head.setModes(hz,m.r,m.g,m.d,p.decay);
+  this.head.reset(); this.shell.reset();
+  this.bendE.trig(); this.slapE.trig();
+  this.sf.reset();
+  this.sf.setHz(ldrClamp(320+9000*p.hard*(0.35+0.65*this.vel),160,this.sr*0.45));
+  const ct=p.contact*(1-0.3*this.vel);
+  this.strikeN=this.strikeTot=Math.max(2,Math.floor(this.sr*ct));
+  this.strike=this.vel*p.hit*(Math.PI*0.5)/this.strikeN; };
+LTunedDrum.prototype.busy=function(){ return this.on; };
+LTunedDrum.prototype.render=function(out,off,n){ const p=this.p, rng=this.rng;
+  for(let i=0;i<n;i++){
+    if(this.sagN){
+      if((this.sagN&15)===0){ this.bendE.ff(16);
+        const sag=this.sagD*this.bendE.v, m2=LDR_MODES[p.body]||LDR_MODES.drumhead;
+        this.head.setModes(this.baseHz*this.curMul*(1+sag),m2.r,m2.g,m2.d,p.decay);
+        if(!this.bendE.on||sag<0.002) this.sagN=0; }
+      if(this.sagN) this.sagN++; }
+    let x=0;
+    if(this.strikeN>0){ const ct=(this.strikeTot-this.strikeN)/this.strikeTot;
+      x=this.sf.lp(this.strike*Math.sin(Math.PI*ct)); this.strikeN--; }
+    let y=this.head.tick(x);
+    if(p.shellMix>0) y+=this.shell.tick(y*this.shell.ampC)*p.shellMix;
+    if(p.slapLvl>0){ this.slapF.tick(rng()*2-1); y+=this.slapF.bp*this.slapE.tick()*p.slapLvl*this.vel*2; }
+    out[off+i]+=this.dc.tick(this.tr.tick(this.sat.tick(y)))*p.gain;
+  }
+  if(this.head.energy()<1e-13&&this.strikeN<=0&&!this.slapE.on) this.on=false; };
+function LMetalVoice(sr,rng){ this.sr=sr; this.rng=rng;
+  this.ph=new Float32Array(6); this.dt=new Float32Array(6); this.tbl=[];
+  this.env=new LAD(sr); this.bp=new LSVF(sr); this.hp=new LSVF(sr);
+  this.noiseE=new LAD(sr); this.dc=new LDCBlock(sr); this.sat=new LSat(sr);
+  this.vel=1; this.on=false; this.p=null;
+  for(let i=0;i<6;i++) this.ph[i]=rng(); }
+LMetalVoice.prototype.set=function(p){ this.p=p;
+  const rat=[1,1.4471,1.6170,1.9265,2.5028,2.6637];
+  for(let i=0;i<6;i++){ const f=p.hz*0.5*rat[i];
+    this.dt[i]=f/this.sr; this.tbl[i]=ldrMetalMip(ldrWtMip(f,this.sr)); }
+  this.bp.set(ldrClamp(p.bpHz,700,this.sr*0.45),p.bpQ||1.2);
+  this.hp.set(ldrClamp(p.hpHz,700,this.sr*0.46),0.7);
+  this.env.set(0.00012,p.dec);
+  this.noiseE.set(0.0002,p.noiseDec||p.dec);
+  this.sat.set(1,p.drive||1,0,1); };
+LMetalVoice.prototype.trig=function(vel){ this.vel=ldrClamp(vel,0.04,1.3); this.on=true;
+  this.env.trig(); this.noiseE.trig(); };
+LMetalVoice.prototype.busy=function(){ return this.on; };
+LMetalVoice.prototype.render=function(out,off,n){ const p=this.p, v=this.vel, ph=this.ph, dt=this.dt, tbl=this.tbl;
+  for(let i=0;i<n;i++){ let s=0;
+    for(let k=0;k<6;k++){ const x=ph[k]*2048, j=x|0, f=x-j, t=tbl[k];
+      s+=t[j]+(t[j+1]-t[j])*f;
+      ph[k]+=dt[k]; if(ph[k]>=1) ph[k]-=1; }
+    s*=0.166;
+    if(p.noiseLvl>0) s+=(this.rng()*2-1)*p.noiseLvl*this.noiseE.tick();
+    this.bp.tick(s); this.hp.tick(this.bp.bp);
+    const y=this.hp.hp*this.env.tick()*v;
+    out[off+i]+=this.dc.tick(this.sat.tick(y))*p.gain; }
+  if(!this.env.on&&!this.noiseE.on) this.on=false; };
+function LShakeVoice(sr,rng){ this.sr=sr; this.rng=rng;
+  this.rng2=ldrMakeRng((rng()*4294967296)>>>0);
+  this.bp=new LSVF(sr); this.bp2=new LSVF(sr);
+  this.env=new LAD(sr); this.env2=new LAD(sr); this.dc=new LDCBlock(sr);
+  this.vel=1; this.on=false; this.p=null; this.tick2=0; }
+LShakeVoice.prototype.set=function(p){ this.p=p;
+  this.bp.set(ldrClamp(p.hz,400,this.sr*0.45),p.q||1.4);
+  this.bp2.set(ldrClamp(p.hz*(p.hz2||1.8),400,this.sr*0.46),(p.q||1.4)*0.7);
+  this.env.set(p.atk||0.0009,p.dec);
+  this.env2.set(p.atk||0.0009,p.dec*0.7); };
+LShakeVoice.prototype.trig=function(vel){ this.vel=ldrClamp(vel,0.04,1.3); this.on=true;
+  this.env.trig();
+  this.tick2=this.p.rebound>0? Math.floor(this.sr*this.p.rebound) : -1; };
+LShakeVoice.prototype.busy=function(){ return this.on; };
+LShakeVoice.prototype.render=function(out,off,n){ const p=this.p, rng=this.rng, v=this.vel;
+  for(let i=0;i<n;i++){
+    if(this.tick2===0){ this.env2.trig(); this.tick2=-1; } else if(this.tick2>0) this.tick2--;
+    this.bp.tick(rng()*2-1); this.bp2.tick(this.rng2()*2-1);
+    const y=this.bp.bp*this.env.tick()+this.bp2.bp*this.env2.tick()*(p.reboundLvl||0.5);
+    out[off+i]+=this.dc.tick(y)*v*p.gain*2.2; }
+  if(!this.env.on&&!this.env2.on&&this.tick2<0) this.on=false; };
+/* ── the donor's physics tables, verbatim (PERC_RECIPE L4548, PERC_SAG L4545) ── */
+const LDR_RECIPE={
+ congaL:{kind:"drum",hz:190,body:"drumhead",decay:0.34,shellHz:300,shellDec:0.07,shellMix:0.3,hard:0.42,hit:0.9,contact:0.0016,slapHz:1800,slapDec:0.012,slapLvl:0.18,drive:1.5,punch:0.5},
+ congaM:{kind:"drum",hz:260,body:"drumhead",decay:0.26,shellHz:420,shellDec:0.06,shellMix:0.3,hard:0.48,hit:0.9,contact:0.0013,slapHz:2200,slapDec:0.012,slapLvl:0.22,drive:1.5,punch:0.55},
+ congaH:{kind:"drum",hz:340,body:"drumhead",decay:0.2,shellHz:560,shellDec:0.05,shellMix:0.28,hard:0.62,hit:0.85,contact:0.001,slapHz:2900,slapDec:0.011,slapLvl:0.34,drive:1.6,punch:0.6},
+ bongoL:{kind:"drum",hz:430,body:"drumhead",decay:0.13,shellHz:700,shellDec:0.035,shellMix:0.22,hard:0.7,hit:0.8,contact:0.0008,slapHz:3400,slapDec:0.009,slapLvl:0.3,drive:1.5,punch:0.7},
+ bongoH:{kind:"drum",hz:620,body:"drumhead",decay:0.1,shellHz:980,shellDec:0.03,shellMix:0.2,hard:0.78,hit:0.78,contact:0.0007,slapHz:4200,slapDec:0.008,slapLvl:0.34,drive:1.5,punch:0.75},
+ djembeB:{kind:"drum",hz:92,body:"drumhead",decay:0.5,shellHz:150,shellDec:0.1,shellMix:0.42,hard:0.3,hit:1.15,contact:0.0026,slapHz:900,slapDec:0.02,slapLvl:0.1,drive:1.7,punch:0.55},
+ djembeT:{kind:"drum",hz:240,body:"drumhead",decay:0.24,shellHz:380,shellDec:0.055,shellMix:0.3,hard:0.52,hit:0.9,contact:0.0012,slapHz:2400,slapDec:0.012,slapLvl:0.2,drive:1.5,punch:0.6},
+ djembeS:{kind:"drum",hz:380,body:"drumhead",decay:0.12,shellHz:620,shellDec:0.03,shellMix:0.2,hard:0.9,hit:0.75,contact:0.0006,slapHz:4600,slapDec:0.014,slapLvl:0.62,drive:1.8,punch:0.85},
+ timbL:{kind:"drum",hz:300,body:"drumhead",decay:0.16,shellHz:520,shellDec:0.04,shellMix:0.24,hard:0.82,hit:0.9,contact:0.0007,slapHz:3800,slapDec:0.01,slapLvl:0.3,drive:1.6,punch:0.8},
+ timbH:{kind:"drum",hz:420,body:"drumhead",decay:0.13,shellHz:700,shellDec:0.035,shellMix:0.22,hard:0.88,hit:0.88,contact:0.0006,slapHz:4400,slapDec:0.01,slapLvl:0.34,drive:1.6,punch:0.85},
+ surdo:{kind:"drum",hz:62,body:"drumhead",decay:0.62,shellHz:110,shellDec:0.14,shellMix:0.5,hard:0.24,hit:0.62,contact:0.0032,slapHz:700,slapDec:0.02,slapLvl:0.06,drive:1.8,punch:0.45},
+ dunL:{kind:"drum",hz:78,body:"drumhead",decay:0.72,shellHz:132,shellDec:0.16,shellMix:0.46,hard:0.34,hit:0.9,contact:0.0022,slapHz:900,slapDec:0.018,slapLvl:0.1,drive:1.7,punch:0.5},
+ dunM:{kind:"drum",hz:150,body:"drumhead",decay:0.44,shellHz:240,shellDec:0.1,shellMix:0.4,hard:0.5,hit:0.95,contact:0.0014,slapHz:1500,slapDec:0.015,slapLvl:0.16,drive:1.6,punch:0.6},
+ dunS:{kind:"drum",hz:225,body:"drumhead",decay:0.3,shellHz:360,shellDec:0.07,shellMix:0.34,hard:0.62,hit:0.9,contact:0.001,slapHz:2200,slapDec:0.012,slapLvl:0.2,drive:1.5,punch:0.68},
+ talking:{kind:"drum",hz:200,body:"drumhead",decay:0.3,shellHz:330,shellDec:0.06,shellMix:0.3,hard:0.5,hit:0.95,contact:0.0012,slapHz:2200,slapDec:0.012,slapLvl:0.2,drive:1.5,punch:0.6},
+ agogoL:{kind:"drum",hz:560,body:"glock",decay:0.5,shellHz:900,shellDec:0.03,shellMix:0,hard:0.92,hit:0.5,contact:0.0004,slapHz:5000,slapDec:0.006,slapLvl:0.12,drive:1.3,punch:0.6},
+ agogoH:{kind:"drum",hz:780,body:"glock",decay:0.42,shellHz:1200,shellDec:0.025,shellMix:0,hard:0.94,hit:0.48,contact:0.00035,slapHz:5600,slapDec:0.006,slapLvl:0.12,drive:1.3,punch:0.6},
+ cowbell:{kind:"drum",hz:540,body:"wood",decay:0.24,shellHz:800,shellDec:0.02,shellMix:0,hard:0.95,hit:0.55,contact:0.0004,slapHz:4200,slapDec:0.005,slapLvl:0.14,drive:1.4,punch:0.7},
+ clave:{kind:"drum",hz:1250,body:"wood",decay:0.07,shellHz:2000,shellDec:0.012,shellMix:0,hard:0.98,hit:0.5,contact:0.00025,slapHz:6000,slapDec:0.004,slapLvl:0.16,drive:1.3,punch:0.9},
+ woodblk:{kind:"drum",hz:900,body:"wood",decay:0.05,shellHz:1500,shellDec:0.01,shellMix:0,hard:0.96,hit:0.5,contact:0.0003,slapHz:5200,slapDec:0.004,slapLvl:0.14,drive:1.3,punch:0.9},
+ triangle:{kind:"drum",hz:3200,body:"glock",decay:2.6,shellHz:5000,shellDec:0.02,shellMix:0,hard:0.99,hit:0.24,contact:0.0002,slapHz:8000,slapDec:0.004,slapLvl:0.1,drive:1.1,punch:0.4},
+ tamb:{kind:"metal",hz:5200,bpHz:6200,bpQ:0.7,hpHz:3400,dec:0.16,noiseLvl:0.55,noiseDec:0.13,drive:1.2,wave:"metal"},
+ shaker:{kind:"shake",hz:5200,hz2:1.7,q:1.5,dec:0.055,atk:0.0011,rebound:0.028,reboundLvl:0.42},
+ cabasa:{kind:"shake",hz:4000,hz2:2.1,q:1.1,dec:0.045,atk:0.0008,rebound:0.021,reboundLvl:0.55},
+ guiro:{kind:"shake",hz:2200,hz2:2.4,q:2.2,dec:0.11,atk:0.004,rebound:0.05,reboundLvl:0.7}
+};
+const LDR_SAG={congaL:0.35,congaM:0.35,congaH:0.35,bongoL:0.5,bongoH:0.5,djembeB:0,djembeT:0.6,djembeS:0.3,timbL:0.8,timbH:0.8,surdo:1.2,talking:1,dunL:0.8,dunM:0.5,dunS:0.3};
+/* reference set: donor latinP (tune 1, decay 1, drive 1.15) with the played-ensemble
+   head sag enabled (donor L18971: bendAmt 0.18 when hum >= 0.6 — every Latin/African
+   style that uses these voices is a played ensemble) */
+const LDR_PATCH={tune:1,decay:1,drive:1.15,bendAmt:0.18};
+const LDR_SLOTS=["congaL","congaM","congaH","bongoL","bongoH","djembeB","djembeT","djembeS","timbL","timbH","agogoL","agogoH","clave","cowbell","shaker","cabasa","tamb","guiro","woodblk","triangle","surdo","talking","dunL","dunM","dunS"];
+/* figure → instrument map (P0 step 1; provenance in figure-instrument-map.json + Ring 10).
+   inst = recipe voice · lane = TRITON kit lane (kit-native figures) · tones = tone-row split ·
+   strokes = per-token route (inst/lane reroute, mute = decay ×, roll = crush graces, pitch ×) */
+const LDR_MAP={
+ bembe:{tones:{L:"agogoL",H:"agogoH"},cls:"B"}, ashanti:{inst:"agogoH",cls:"A"},
+ bemba7:{inst:"agogoH",cls:"B"}, bondo:{inst:"agogoH",cls:"B"}, tambu:{inst:"cowbell",cls:"C"},
+ yoruba:{inst:"agogoH",cls:"B"}, bembe2:{inst:"agogoL",cls:"A"}, tonada:{inst:"agogoH",cls:"B"},
+ asaadua:{inst:"agogoH",cls:"B"}, soli:{inst:"agogoH",cls:"A"}, sorsonet:{inst:"agogoH",cls:"A"},
+ kitaab:{inst:"agogoH",cls:"C"}, venda:{inst:"clave",cls:"C"}, columbia:{inst:"cowbell",cls:"B"},
+ bemba5:{inst:"agogoH",cls:"B"}, fumeFume:{inst:"agogoH",cls:"A"}, salve:{inst:"agogoH",cls:"B"},
+ adenkum:{inst:"agogoH",cls:"B"}, cuban8:{inst:"cowbell",cls:"B"}, clave68:{inst:"clave",cls:"C"},
+ claveColumbia:{inst:"clave",cls:"C"}, guaguaColumbia:{inst:"woodblk",cls:"B"},
+ marchTwoBeat:{lane:0,cls:"A"}, habanera:{inst:"woodblk",cls:"C"},
+ bigFour:{lane:0,strokes:{C:{lane:11}},cls:"A"},
+ pressRoll:{lane:2,strokes:{R:{lane:2,roll:3}},cls:"A"},
+ gogoConga:{inst:"congaM",strokes:{S:{inst:"congaH"}},cls:"B"}, cavacha:{lane:2,cls:"B"},
+ claveBossa:{inst:"woodblk",cls:"C"}, telecoteco:{inst:"woodblk",cls:"A"},
+ telecotecoUp:{inst:"woodblk",cls:"A"}, partidoAlto:{inst:"woodblk",cls:"B"},
+ palitoGuaguanco:{inst:"woodblk",cls:"B"},
+ quintoLock:{inst:"congaH",strokes:{S:{inst:"djembeS"}},cls:"C"},
+ quintoColumbia:{inst:"congaH",strokes:{S:{inst:"djembeS"}},cls:"C"},
+ salidorGuaguanco:{inst:"congaL",strokes:{B:{mute:0.6}},cls:"C"},
+ marchaConga:{inst:"congaM",cls:"A"}, tumbaoDos:{inst:"congaL",cls:"C"},
+ martillo:{inst:"bongoH",strokes:{hO:{inst:"bongoL"}},cls:"B"},
+ campanaSon:{inst:"cowbell",strokes:{n:{mute:0.5}},cls:"B"},
+ campanaMambo:{inst:"cowbell",strokes:{n:{mute:0.5}},cls:"B"},
+ cascara23:{inst:"cowbell",cls:"A"},
+ abanico:{inst:"timbH",strokes:{R:{inst:"timbH",roll:3},b:{mute:0.5}},cls:"C"},
+ surdoPrimeira:{inst:"surdo",pitch:0.74,strokes:{M:{mute:0.25}},cls:"A"},
+ surdoSegunda:{inst:"surdo",strokes:{M:{mute:0.25}},cls:"A"},
+ surdoTerceira:{inst:"congaL",cls:"A"},
+ caixa:{lane:2,cls:"A"}, tamborimCarreteiro:{inst:"woodblk",cls:"A"},
+ ganza:{inst:"shaker",cls:"A"},
+ cuica:{inst:"talking",altPitch:[1.22,0.9],cls:"C"},
+ maculele:{inst:"clave",cls:"C"}
+};
+/* resolve one hit of one figure to its voice — pure, shared by player, warm-up and tests */
+function ldrRoute(id,f,i){
+  const b=ldrBase(id).id, m=LDR_MAP[b]; if(!m||!f||!f.hits[i]) return null;
+  const tok=f.hits[i][2];
+  if(f.tone&&f.tone[i]&&m.tones){ const n=m.tones[f.tone[i]];
+    if(n) return {kind:"perc",name:n,pitch:m.pitch||1}; }
+  if(tok&&m.strokes&&m.strokes[tok]){ const s=m.strokes[tok];
+    if(s.lane!=null&&s.inst==null) return {kind:"lane",lane:s.lane,roll:s.roll};
+    return {kind:"perc",name:s.inst||m.inst,pitch:(s.pitch||1)*(m.pitch||1),mute:s.mute,roll:s.roll}; }
+  if(m.lane!=null) return {kind:"lane",lane:m.lane};
+  let pitch=m.pitch||1; if(m.altPitch) pitch*=m.altPitch[i%m.altPitch.length];
+  return {kind:"perc",name:m.inst,pitch};
+}
+/* offline render of one recipe voice at one velocity layer (pitch/damp baked) */
+const LDR_BUFS=new Map();
+const LDR_LAYERS=[0.4,0.7,1.0];
+function ldrPatched(name,pitchMul,muteMul){
+  const base=LDR_RECIPE[name]; if(!base) return null;
+  const q={}; for(const k in base) q[k]=base[k];
+  const P=LDR_PATCH;
+  if(q.hz) q.hz*=P.tune*(pitchMul||1);
+  if(q.shellHz) q.shellHz*=P.tune*(pitchMul||1);
+  if(q.decay) q.decay*=P.decay*(muteMul||1);
+  if(q.dec) q.dec*=P.decay*(muteMul||1);
+  if(q.drive) q.drive*=P.drive;
+  if(base.kind==="drum") q.bendAmt=P.bendAmt*(LDR_SAG[name]||0);
+  q.gain=1;
+  return q;
+}
+function ldrSeed(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function ldrBuf(name,layer,pitchMul,muteMul){
+  if(!ctx) return null;
+  const key=name+"|"+layer+"|"+(pitchMul||1).toFixed(3)+"|"+(muteMul||1);
+  let b=LDR_BUFS.get(key); if(b) return b;
+  const q=ldrPatched(name,pitchMul,muteMul); if(!q) return null;
+  const sr=ctx.sampleRate, rng=ldrMakeRng(ldrSeed(key));
+  let v;
+  if(q.kind==="drum"){ v=new LTunedDrum(sr,rng); v.set(q); v.trig(layer); }
+  else if(q.kind==="metal"){ v=new LMetalVoice(sr,rng); v.set(q); v.trig(layer); }
+  else { v=new LShakeVoice(sr,rng); v.set(q); v.trig(layer); }
+  const cap=Math.ceil(sr*Math.min(9,((q.decay||q.dec||0.3)*4)+(q.rebound||0)+0.4));
+  const out=new Float32Array(cap);
+  let n=0; while(n<cap&&v.busy()){ const len=Math.min(2048,cap-n); v.render(out,n,len); n+=len; }
+  let end=n-1; while(end>64&&Math.abs(out[end])<1e-4) end--;
+  const len=Math.min(n,end+Math.min(2400,Math.max(0,n-end)))||64;
+  b=ctx.createBuffer(1,Math.max(64,len),sr);
+  b.getChannelData(0).set(out.subarray(0,b.length));
+  LDR_BUFS.set(key,b);
+  return b;
+}
+const LDR_LVL=0.6; /* the donor's perc bus gain (patch bank L5109-5113 gain ≈ 0.6) */
+function ldrPan(name){ const i=LDR_SLOTS.indexOf(name); return i<0?0:((i%5)-2)*0.22; }
+function drumHitP(name,vel,when,o){
+  if(!ctx||!LDR_RECIPE[name]) return false;
+  o=o||{};
+  if(o.roll&&!o._g){ const sd=o.stepDur||0.12;
+    for(let k=o.roll;k>=1;k--)
+      drumHitP(name,0.16+0.03*(o.roll-k),when-k*0.17*sd,{pitch:o.pitch,mute:o.mute,_g:1});
+  }
+  const t=Math.max(when,ctx.currentTime);
+  const layer=vel<0.55?0.4:vel<0.85?0.7:1.0;
+  const buf=ldrBuf(name,layer,o.pitch||1,o.mute||1);
+  if(!buf) return false;
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const g=ctx.createGain(); g.gain.value=(vel/layer)*LDR_LVL*(o.gain||1);
+  src.connect(g);
+  const pn=ldrPan(name);
+  if(pn&&ctx.createStereoPanner){ const p=ctx.createStereoPanner(); p.pan.value=pn;
+    g.connect(p); p.connect(drumOut()); }
+  else g.connect(drumOut());
+  src.start(t); src.stop(t+buf.duration+0.05);
+  const v={units:1,t,killed:false};
+  v.kill=()=>{ if(!v.killed){ v.killed=true; unreg(v); } };
+  v.release=v.kill; regVoice(v,1);
+  setTimeout(v.kill,Math.max(400,buf.duration*1000)+((t-ctx.currentTime)*1000)+120);
+  return true;
+}
+/* play one hit through the physics engine; falls back to the kit lane map only
+   if a figure is unmapped (counted — a silent fallback hid the old inaccuracy) */
+function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx){
+  const r=ldrRoute(id,f,i);
+  if(!r){ LDR.fallbacks++; return false; }
+  if(r.kind==="lane"){
+    if(r.roll){ for(let k=r.roll;k>=1;k--)
+      spawnVoice(PROGRAMS[kitIdx],48+r.lane,0.16+0.03*(r.roll-k),when-k*0.17*stepDur,null); }
+    spawnVoice(PROGRAMS[kitIdx],48+r.lane,vel,when,null); return true;
+  }
+  return drumHitP(r.name,vel,when,{pitch:r.pitch,mute:r.mute,roll:r.roll,stepDur});
+}
+/* pre-render the buffers a set of figure ids will need (off the hit path) */
+function ldrWarm(ids){
+  if(!ctx) return;
+  const keys=[];
+  ids.forEach(a=>{ const rb=ldrBase(a), f=LDR_FIG[rb.id]; if(!f) return;
+    f.hits.forEach((h,i)=>{ const r=ldrRoute(rb.id,f,i);
+      if(r&&r.kind==="perc") LDR_LAYERS.forEach(L=>{
+        const k=[r.name,L,r.pitch||1,r.mute||1].join("§");
+        if(!keys.some(x=>x.k===k)) keys.push({k,r,L}); }); }); });
+  keys.forEach((x,j)=>setTimeout(()=>{ try{ ldrBuf(x.r.name,x.L,x.r.pitch||1,x.r.mute||1); }catch(e){} },j*24));
+}
+const LDR={on:false,fig:null,mode:"KIT",kit:15,engine:"phys",ens:false,hum:false,next:0,bar:0,fallbacks:0};
 const LDR_KITS=[15,62,63,116,117,118];
 function ldrBase(id){ const m=id.match(/^(.+?)([+-]\d+)$/); return m? {id:m[1],rot:+m[2]} : {id,rot:0}; }
 function ldrLane(id,f,i){
@@ -2154,6 +2549,7 @@ function ldrPlayFig(id,f,rot,at,stepDur,scale){
     if(LDR.hum){ vel=Math.max(.15,Math.min(1,vel+(ldrHash(pulse*7+LDR.bar*13+i)-.5)*.08));
       jit=(ldrHash(pulse*3+LDR.bar*29)-.5)*.01; }
     if(LDR.mode==="KIT"){
+      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit)) return;
       spawnVoice(PROGRAMS[LDR.kit],48+ldrLane(id,f,i),vel,when+jit,null);
     } else {
       const held=(latchSet.size?[...latchSet]:(physSet.size?[...physSet]:[48,55,60,63])).sort((a,b)=>a-b);
@@ -2203,6 +2599,8 @@ function ldrChips(){
     const b=e.target.closest(".pchip.fig"); if(!b) return;
     LDR.fig=b.dataset.f;
     document.querySelectorAll(".pchip.fig").forEach(x=>x.classList.toggle("on",x===b));
+    const wf=LDR_FIG[LDR.fig];
+    if(wf) ldrWarm([LDR.fig].concat((wf.also||[]).slice(0,3)));
     ldrInfo();
     if(!LDR.on) ldrToggle(true);
   });
@@ -2218,9 +2616,13 @@ function ldrToggle(force){
 }
 (function(){
   const ks=document.getElementById("ldrKit");
+  const po=document.createElement("option"); po.value="phys";
+  po.textContent="LDR PHYSICS · donor engine"; ks.appendChild(po);
   LDR_KITS.forEach(i=>{ const o=document.createElement("option"); o.value=i; o.textContent=PROGRAMS[i].id+" "+PROGRAMS[i].name; ks.appendChild(o); });
-  ks.value=String(LDR.kit);
-  ks.addEventListener("change",()=>{ LDR.kit=+ks.value; });
+  ks.value="phys";
+  ks.addEventListener("change",()=>{
+    if(ks.value==="phys"){ LDR.engine="phys"; }
+    else { LDR.engine="kit"; LDR.kit=+ks.value; } });
   const md=document.getElementById("ldrMode");
   md.addEventListener("change",()=>{ LDR.mode=md.value; });
   document.getElementById("ldrStart").addEventListener("click",()=>ldrToggle());
@@ -2235,7 +2637,7 @@ function ldrToggle(force){
   const xl=document.getElementById("exbLine");
   if(xl) xl.textContent="EXB 1: LDR RHYTHM ENGINE ✓ · SLOTS 2–8 EMPTY";
   if(typeof BLOCK_INFO!=="undefined"&&BLOCK_INFO.exb){
-    BLOCK_INFO.exb[1]+=" Slot 1 is now occupied: the EXB-LDR board, a rhythm engine grafted from a sibling artifact. It carries 51 documented bell timelines and grooves — each with its origin and a trust level — and can drive any of the drum kits or play your held chord in its rhythm (Rhythm tab).";
+    BLOCK_INFO.exb[1]+=" Slot 1 is now occupied: the EXB-LDR board, a rhythm engine grafted from a sibling artifact. It carries 51 documented bell timelines and grooves — each with its origin and a trust level — plus the donor's own percussion physics: 25 modelled instruments (modal membranes, wood, bell metal, shaken voices) rendered through the LuckyDreamer synthesis math, so each figure sounds on the instrument it was written for. It can also drive any of the TRITON drum kits, or play your held chord in its rhythm (Rhythm tab).";
   }
 })();
 </script>
@@ -2337,7 +2739,9 @@ function dreamPans(){
 }
 function ldrPlayFigK(id,f,rot,at,step,scale,kit){
   f.hits.forEach((h,i)=>{ const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
-    spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),Math.max(.15,Math.min(1,h[1]*scale)),at+pulse*step,null); });
+    const vel=Math.max(.15,Math.min(1,h[1]*scale)), when=at+pulse*step;
+    if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when,step,kit)) return;
+    spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),vel,when,null); });
 }
 function dreamScheduleBar(at,f,step,barLen){
   const P=DREAM.p, rng=DREAM.rng, an=figAnalysis(f);
@@ -2413,6 +2817,7 @@ setInterval(()=>{
 },40);
 function applyDream(p,mid){
   DREAM.p=p; DREAM.seed=p._seed!=null? p._seed : DREAM.seed;
+  if(typeof ldrWarm==="function") ldrWarm([p.fig].concat(p.comps||[]));
   DREAM.rng=mulberry(DREAM.seed||1);
   state.tempo=p.tempo;
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
@@ -2631,4 +3036,11 @@ DEAD BRANCHES: (1) bembe's H strokes on cowbell per the Cuban ensemble — lost:
 KILL-TEST: a validator walked every figure's every hit token against the map — no hit in the catalog is unroutable, no route names a recipe that doesn't exist, no figure is missing or stray; the map is committed only with tests.js green beside it.
 THE NON-OBVIOUS CHOICE: evidence classes in the data. When a mapping is later judged by ear, the class says what kind of argument it rests on — an A entry is the donor's hand and should not move; a C entry is reasoning and is the first place to look.
 OPEN QUESTIONS: (1) surdoTerceira on congaL is the donor's hand (A) but 190 Hz is a fourth surdo's world away from 62 — will the ear accept the donor's own register jump? (2) The map records WHAT plays; the recipes' patch discipline (donor setPatch tunes the SET, not the voice) suggests a per-figure patch layer — one pitch offset, one decay scale — is that the 4U's macro knob? (3) Five figures stay on kit lanes because no bass-drum/snare recipe exists — should a sixth recipe family (kick/snare/hat) be bred from the donor's kit() and snare() constructors so physics mode covers all 51?
+RING 11 · 2026-08-30 · the physics port — LuckyDreamer's drummer moves into the rack
+WHAT CHANGED: P0 steps 2 of 3 (HANDOFF §4). The EXB-LDR block now carries the donor's percussion engine ported number-for-number: ModalBank (Fletcher & Rossing mode tables — drumhead/wood/glock), TunedDrum (velocity-squared Duffing head sag at control rate 16, half-sine strike through the TPT hardness lowpass, shell Reson at ampC, velocity-scaled slap noise, tube Sat with RMS auto-gain, bounded Transient shaper), MetalVoice (six band-limited wavetable partials, the donor's 'metal' spectrum, per-oscillator mips), ShakeVoice (two independent noise streams, the rebound stroke arriving `rebound` seconds late at 0.7×Q), plus SVF/OnePole/Reson/AD/DCBlock/satSoft/sfc32-RNG — every constant traceable to a donor line, anchors in the header comment. All 25 PERC_RECIPE instruments + PERC_SAG + the played-ensemble sag enable (bendAmt 0.18, donor L18971) + latinP reference set. Voices render OFFLINE through the exact donor sample loop into cached mono buffers (3 velocity layers; figure pitch and stroke damping baked at render, so decay math stays as written); playback is one BufferSource + per-slot donor pan formula. drumHitP()/ldrVoiceP()/ldrRoute() route every hit through Ring 10's map — tone rows split L/H, stroke tokens reroute (martillo hO→bongoL, quinto S→djembeS), 'M' mutes damp the set, press/abanico 'R' expands to the donor's 3-grace crush, the Big Four's 'C' lands on the crash lane. The rhythm tab's kit selector now defaults to LDR PHYSICS with the six TRITON kits as alternates; the Dream Conductor's figure and companions ride the same router, so Rio Sunrise plays surdos at 46 Hz — the donor's own batucada kick pitch — not toms. Buffers pre-warm off the hit path on figure select and dream start.
+BANNED (obvious answers set aside first): approximating the recipes with Web Audio oscillator/filter gestures (that is re-approximation, the exact thing HANDOFF forbids); playbackRate repitching (warps decay times — pitch is baked into the modal math instead); rendering per-hit in real time on the audio thread.
+DEAD BRANCHES: (1) live per-sample synthesis via ScriptProcessor — lost: one node per voice at 32-hit bars melts phones, and the recorder already owns the one ScriptProcessor this file tolerates. (2) Porting the donor's perc BUS (busSat → ParaComp → gain) — lost: the TRITON's progBus already provides the room (drive/comp/EQ dressed per program), and two mastering chains in series is two rooms; the donor's bus gain 0.6 survives as LDR_LVL. (3) One render per velocity — lost: velocity reaches sag depth, strike brightness, contact length and slap level nonlinearly, but three layers with gain interpolation is transparent at ±20% and keeps the cache at ≤9 buffers per figure.
+KILL-TEST: a Node harness stubbed AudioContext and MEASURED the rendered buffers — DFT fundamentals: surdo 62.0, congaL 190.0, congaH 342, agogoH 780.5, clave 1250.0, dunL 78.0 Hz (all within tolerance of the recipes); T60s track recipe decay; primeira's 0.74× bakes 62→46.0 Hz exactly; campana 'n' damp measurably halves ring time; all 382 hits across 51 figures route (336 physics, 46 kit-lane), zero unroutable. tests.js stays ALL GREEN (the physics code lives inside the suite-2 eval slice, so its syntax is under test from this ring on).
+THE NON-OBVIOUS CHOICE: render offline, play as a sampler. The donor's math runs verbatim in a pure-JS loop into cached buffers, so the browser pays sampler prices at play time while the sound stays a physical model — and determinism (seeded per buffer) makes the engine measurable by tests, which the donor's own live engine never was.
+OPEN QUESTIONS: (1) The velocity layers quantize the strike nonlinearities — would a 5-layer set on just the slap-heavy voices (djembeS, congaH) buy audible realism? (2) The kit-lane figures (caixa, cavacha, pressRoll, marches) still speak TRITON — Ring 10's question 3 stands: breed kick/snare recipes from the donor's kit()/snare() constructors? (3) The buffers are mono with donor pan — the donor's played ensembles also breathe hum/timing; should HUMANIZE reach into the physics path too?
 ═══ end rings ═══ -->
