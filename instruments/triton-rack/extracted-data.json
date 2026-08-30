@@ -1,0 +1,2996 @@
+{
+ "percussion": {
+  "KIT_SLOTS": [
+   "kick",
+   "snare",
+   "hatC",
+   "hatO",
+   "clap",
+   "tomL",
+   "tomM",
+   "tomH",
+   "rim",
+   "ride",
+   "shake",
+   "crash"
+  ],
+  "PERC_SLOTS": [
+   "congaL",
+   "congaM",
+   "congaH",
+   "bongoL",
+   "bongoH",
+   "djembeB",
+   "djembeT",
+   "djembeS",
+   "timbL",
+   "timbH",
+   "agogoL",
+   "agogoH",
+   "clave",
+   "cowbell",
+   "shaker",
+   "cabasa",
+   "tamb",
+   "guiro",
+   "woodblk",
+   "triangle",
+   "surdo",
+   "talking",
+   "dunL",
+   "dunM",
+   "dunS"
+  ],
+  "PERC_SAG": {
+   "congaL": 0.35,
+   "congaM": 0.35,
+   "congaH": 0.35,
+   "bongoL": 0.5,
+   "bongoH": 0.5,
+   "djembeB": 0,
+   "djembeT": 0.6,
+   "djembeS": 0.3,
+   "timbL": 0.8,
+   "timbH": 0.8,
+   "surdo": 1.2,
+   "talking": 1,
+   "dunL": 0.8,
+   "dunM": 0.5,
+   "dunS": 0.3
+  },
+  "PERC_RECIPE": {
+   "congaL": {
+    "kind": "drum",
+    "hz": 190,
+    "body": "drumhead",
+    "decay": 0.34,
+    "shellHz": 300,
+    "shellDec": 0.07,
+    "shellMix": 0.3,
+    "hard": 0.42,
+    "hit": 0.9,
+    "contact": 0.0016,
+    "slapHz": 1800,
+    "slapDec": 0.012,
+    "slapLvl": 0.18,
+    "drive": 1.5,
+    "punch": 0.5
+   },
+   "congaM": {
+    "kind": "drum",
+    "hz": 260,
+    "body": "drumhead",
+    "decay": 0.26,
+    "shellHz": 420,
+    "shellDec": 0.06,
+    "shellMix": 0.3,
+    "hard": 0.48,
+    "hit": 0.9,
+    "contact": 0.0013,
+    "slapHz": 2200,
+    "slapDec": 0.012,
+    "slapLvl": 0.22,
+    "drive": 1.5,
+    "punch": 0.55
+   },
+   "congaH": {
+    "kind": "drum",
+    "hz": 340,
+    "body": "drumhead",
+    "decay": 0.2,
+    "shellHz": 560,
+    "shellDec": 0.05,
+    "shellMix": 0.28,
+    "hard": 0.62,
+    "hit": 0.85,
+    "contact": 0.001,
+    "slapHz": 2900,
+    "slapDec": 0.011,
+    "slapLvl": 0.34,
+    "drive": 1.6,
+    "punch": 0.6
+   },
+   "bongoL": {
+    "kind": "drum",
+    "hz": 430,
+    "body": "drumhead",
+    "decay": 0.13,
+    "shellHz": 700,
+    "shellDec": 0.035,
+    "shellMix": 0.22,
+    "hard": 0.7,
+    "hit": 0.8,
+    "contact": 0.0008,
+    "slapHz": 3400,
+    "slapDec": 0.009,
+    "slapLvl": 0.3,
+    "drive": 1.5,
+    "punch": 0.7
+   },
+   "bongoH": {
+    "kind": "drum",
+    "hz": 620,
+    "body": "drumhead",
+    "decay": 0.1,
+    "shellHz": 980,
+    "shellDec": 0.03,
+    "shellMix": 0.2,
+    "hard": 0.78,
+    "hit": 0.78,
+    "contact": 0.0007,
+    "slapHz": 4200,
+    "slapDec": 0.008,
+    "slapLvl": 0.34,
+    "drive": 1.5,
+    "punch": 0.75
+   },
+   "djembeB": {
+    "kind": "drum",
+    "hz": 92,
+    "body": "drumhead",
+    "decay": 0.5,
+    "shellHz": 150,
+    "shellDec": 0.1,
+    "shellMix": 0.42,
+    "hard": 0.3,
+    "hit": 1.15,
+    "contact": 0.0026,
+    "slapHz": 900,
+    "slapDec": 0.02,
+    "slapLvl": 0.1,
+    "drive": 1.7,
+    "punch": 0.55
+   },
+   "djembeT": {
+    "kind": "drum",
+    "hz": 240,
+    "body": "drumhead",
+    "decay": 0.24,
+    "shellHz": 380,
+    "shellDec": 0.055,
+    "shellMix": 0.3,
+    "hard": 0.52,
+    "hit": 0.9,
+    "contact": 0.0012,
+    "slapHz": 2400,
+    "slapDec": 0.012,
+    "slapLvl": 0.2,
+    "drive": 1.5,
+    "punch": 0.6
+   },
+   "djembeS": {
+    "kind": "drum",
+    "hz": 380,
+    "body": "drumhead",
+    "decay": 0.12,
+    "shellHz": 620,
+    "shellDec": 0.03,
+    "shellMix": 0.2,
+    "hard": 0.9,
+    "hit": 0.75,
+    "contact": 0.0006,
+    "slapHz": 4600,
+    "slapDec": 0.014,
+    "slapLvl": 0.62,
+    "drive": 1.8,
+    "punch": 0.85
+   },
+   "timbL": {
+    "kind": "drum",
+    "hz": 300,
+    "body": "drumhead",
+    "decay": 0.16,
+    "shellHz": 520,
+    "shellDec": 0.04,
+    "shellMix": 0.24,
+    "hard": 0.82,
+    "hit": 0.9,
+    "contact": 0.0007,
+    "slapHz": 3800,
+    "slapDec": 0.01,
+    "slapLvl": 0.3,
+    "drive": 1.6,
+    "punch": 0.8
+   },
+   "timbH": {
+    "kind": "drum",
+    "hz": 420,
+    "body": "drumhead",
+    "decay": 0.13,
+    "shellHz": 700,
+    "shellDec": 0.035,
+    "shellMix": 0.22,
+    "hard": 0.88,
+    "hit": 0.88,
+    "contact": 0.0006,
+    "slapHz": 4400,
+    "slapDec": 0.01,
+    "slapLvl": 0.34,
+    "drive": 1.6,
+    "punch": 0.85
+   },
+   "surdo": {
+    "kind": "drum",
+    "hz": 62,
+    "body": "drumhead",
+    "decay": 0.62,
+    "shellHz": 110,
+    "shellDec": 0.14,
+    "shellMix": 0.5,
+    "hard": 0.24,
+    "hit": 0.62,
+    "contact": 0.0032,
+    "slapHz": 700,
+    "slapDec": 0.02,
+    "slapLvl": 0.06,
+    "drive": 1.8,
+    "punch": 0.45
+   },
+   "dunL": {
+    "kind": "drum",
+    "hz": 78,
+    "body": "drumhead",
+    "decay": 0.72,
+    "shellHz": 132,
+    "shellDec": 0.16,
+    "shellMix": 0.46,
+    "hard": 0.34,
+    "hit": 0.9,
+    "contact": 0.0022,
+    "slapHz": 900,
+    "slapDec": 0.018,
+    "slapLvl": 0.1,
+    "drive": 1.7,
+    "punch": 0.5
+   },
+   "dunM": {
+    "kind": "drum",
+    "hz": 150,
+    "body": "drumhead",
+    "decay": 0.44,
+    "shellHz": 240,
+    "shellDec": 0.1,
+    "shellMix": 0.4,
+    "hard": 0.5,
+    "hit": 0.95,
+    "contact": 0.0014,
+    "slapHz": 1500,
+    "slapDec": 0.015,
+    "slapLvl": 0.16,
+    "drive": 1.6,
+    "punch": 0.6
+   },
+   "dunS": {
+    "kind": "drum",
+    "hz": 225,
+    "body": "drumhead",
+    "decay": 0.3,
+    "shellHz": 360,
+    "shellDec": 0.07,
+    "shellMix": 0.34,
+    "hard": 0.62,
+    "hit": 0.9,
+    "contact": 0.001,
+    "slapHz": 2200,
+    "slapDec": 0.012,
+    "slapLvl": 0.2,
+    "drive": 1.5,
+    "punch": 0.68
+   },
+   "talking": {
+    "kind": "drum",
+    "hz": 200,
+    "body": "drumhead",
+    "decay": 0.3,
+    "shellHz": 330,
+    "shellDec": 0.06,
+    "shellMix": 0.3,
+    "hard": 0.5,
+    "hit": 0.95,
+    "contact": 0.0012,
+    "slapHz": 2200,
+    "slapDec": 0.012,
+    "slapLvl": 0.2,
+    "drive": 1.5,
+    "punch": 0.6
+   },
+   "agogoL": {
+    "kind": "drum",
+    "hz": 560,
+    "body": "glock",
+    "decay": 0.5,
+    "shellHz": 900,
+    "shellDec": 0.03,
+    "shellMix": 0,
+    "hard": 0.92,
+    "hit": 0.5,
+    "contact": 0.0004,
+    "slapHz": 5000,
+    "slapDec": 0.006,
+    "slapLvl": 0.12,
+    "drive": 1.3,
+    "punch": 0.6
+   },
+   "agogoH": {
+    "kind": "drum",
+    "hz": 780,
+    "body": "glock",
+    "decay": 0.42,
+    "shellHz": 1200,
+    "shellDec": 0.025,
+    "shellMix": 0,
+    "hard": 0.94,
+    "hit": 0.48,
+    "contact": 0.00035,
+    "slapHz": 5600,
+    "slapDec": 0.006,
+    "slapLvl": 0.12,
+    "drive": 1.3,
+    "punch": 0.6
+   },
+   "cowbell": {
+    "kind": "drum",
+    "hz": 540,
+    "body": "wood",
+    "decay": 0.24,
+    "shellHz": 800,
+    "shellDec": 0.02,
+    "shellMix": 0,
+    "hard": 0.95,
+    "hit": 0.55,
+    "contact": 0.0004,
+    "slapHz": 4200,
+    "slapDec": 0.005,
+    "slapLvl": 0.14,
+    "drive": 1.4,
+    "punch": 0.7
+   },
+   "clave": {
+    "kind": "drum",
+    "hz": 1250,
+    "body": "wood",
+    "decay": 0.07,
+    "shellHz": 2000,
+    "shellDec": 0.012,
+    "shellMix": 0,
+    "hard": 0.98,
+    "hit": 0.5,
+    "contact": 0.00025,
+    "slapHz": 6000,
+    "slapDec": 0.004,
+    "slapLvl": 0.16,
+    "drive": 1.3,
+    "punch": 0.9
+   },
+   "woodblk": {
+    "kind": "drum",
+    "hz": 900,
+    "body": "wood",
+    "decay": 0.05,
+    "shellHz": 1500,
+    "shellDec": 0.01,
+    "shellMix": 0,
+    "hard": 0.96,
+    "hit": 0.5,
+    "contact": 0.0003,
+    "slapHz": 5200,
+    "slapDec": 0.004,
+    "slapLvl": 0.14,
+    "drive": 1.3,
+    "punch": 0.9
+   },
+   "triangle": {
+    "kind": "drum",
+    "hz": 3200,
+    "body": "glock",
+    "decay": 2.6,
+    "shellHz": 5000,
+    "shellDec": 0.02,
+    "shellMix": 0,
+    "hard": 0.99,
+    "hit": 0.24,
+    "contact": 0.0002,
+    "slapHz": 8000,
+    "slapDec": 0.004,
+    "slapLvl": 0.1,
+    "drive": 1.1,
+    "punch": 0.4
+   },
+   "tamb": {
+    "kind": "metal",
+    "hz": 5200,
+    "bpHz": 6200,
+    "bpQ": 0.7,
+    "hpHz": 3400,
+    "dec": 0.16,
+    "noiseLvl": 0.55,
+    "noiseDec": 0.13,
+    "drive": 1.2,
+    "wave": "metal"
+   },
+   "shaker": {
+    "kind": "shake",
+    "hz": 5200,
+    "hz2": 1.7,
+    "q": 1.5,
+    "dec": 0.055,
+    "atk": 0.0011,
+    "rebound": 0.028,
+    "reboundLvl": 0.42
+   },
+   "cabasa": {
+    "kind": "shake",
+    "hz": 4000,
+    "hz2": 2.1,
+    "q": 1.1,
+    "dec": 0.045,
+    "atk": 0.0008,
+    "rebound": 0.021,
+    "reboundLvl": 0.55
+   },
+   "guiro": {
+    "kind": "shake",
+    "hz": 2200,
+    "hz2": 2.4,
+    "q": 2.2,
+    "dec": 0.11,
+    "atk": 0.004,
+    "rebound": 0.05,
+    "reboundLvl": 0.7
+   }
+  }
+ },
+ "figures": {
+  "bembe": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     11,
+     0.55
+    ]
+   ],
+   "role": "bell",
+   "from": "Ewe and Yoruba, West Africa, and the whole Cuban 6/8 repertoire — Agbadza and Agbekor of the Anlo-Ewe of the Volta Region and southern Ghana coast; the guataca in Cuban batá, bembé and palo",
+   "verify": "transcribed",
+   "src": [
+    "JONES",
+    "PRESS",
+    "AGAWU",
+    "CHERN",
+    "COLL",
+    "ALEN",
+    "TOU05",
+    "TOU05b"
+   ],
+   "tone": [
+    "L",
+    "H",
+    "H",
+    "H",
+    "H",
+    "H",
+    "H"
+   ],
+   "iv": "2212221",
+   "dynVerify": "derived",
+   "also": [
+    "ashanti+3",
+    "bemba7+10",
+    "bondo+8",
+    "tambu+7",
+    "yoruba+5",
+    "bembe2+1",
+    "guaguaColumbia+5"
+   ]
+  },
+  "ashanti": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "Ashanti and Akan peoples of Ghana; the Bemba of northern Zimbabwe (hand-clapped, or two axe-blades struck together); the Dunumba rhythm of Guinea",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "NKET",
+    "JONES",
+    "HALL",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "2122122",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-3",
+    "bemba7+7",
+    "bondo+5",
+    "tambu+4",
+    "yoruba+2",
+    "bembe2+10",
+    "guaguaColumbia+2"
+   ]
+  },
+  "bemba7": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Bemba of northern Zimbabwe, struck on axe blades; in Cuba the bell of the Sarabanda rhythm of the Palo Monte cult",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "2122212",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-10",
+    "ashanti-7",
+    "bondo+10",
+    "tambu+9",
+    "yoruba+7",
+    "bembe2+3",
+    "guaguaColumbia+7"
+   ]
+  },
+  "bondo": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0.55
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Bondo bell pattern of the Aka of Central Africa, played with metal strips — Arom’s fieldwork",
+   "verify": "transcribed",
+   "src": [
+    "AROM",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "1222122",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-8",
+    "ashanti-5",
+    "bemba7-10",
+    "tambu+11",
+    "yoruba+9",
+    "bembe2+5",
+    "guaguaColumbia+9"
+   ]
+  },
+  "tambu": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     11,
+     0.55
+    ]
+   ],
+   "role": "bell",
+   "from": "Curaçao — the Tambú, originally a drum and an iron metallophone called the heru; the Muselemeka timeline of Central Africa; common in West Africa and Haiti, where it carries Yanvalou, Zepaule, Camberto and Mahi",
+   "verify": "transcribed",
+   "src": [
+    "ROSAL",
+    "PRESS",
+    "DWOR",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "2221221",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-7",
+    "ashanti-4",
+    "bemba7-9",
+    "bondo-11",
+    "yoruba+10",
+    "bembe2+6",
+    "guaguaColumbia+10"
+   ]
+  },
+  "yoruba": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "Yoruba sacred music of Nigeria (also called konkonkolo, and the Omele); a Babenzele pattern of Central Africa; a Mende pattern of Sierra Leone; the palitos of Cuban rumba columbia",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "AGAWU",
+    "ALEN",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "2212212",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-5",
+    "ashanti-2",
+    "bemba7-7",
+    "bondo-9",
+    "tambu-10",
+    "bembe2+8",
+    "guaguaColumbia"
+   ]
+  },
+  "bembe2": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0.55
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuba — the second bell of the bembé, played on a low-pitched bell against the guataca; also a hand-clapping pattern in Ghana, southern Africa and Tanzania",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "TOU05",
+    "TOU05b"
+   ],
+   "tone": [
+    "L",
+    "L",
+    "L",
+    "L",
+    "L",
+    "L",
+    "L"
+   ],
+   "iv": "1221222",
+   "dynVerify": "derived",
+   "also": [
+    "bembe-1",
+    "ashanti-10",
+    "bemba7-3",
+    "bondo-5",
+    "tambu-6",
+    "yoruba-8",
+    "guaguaColumbia+4"
+   ]
+  },
+  "tonada": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuba — the tonada, Andalusian voice against African percussion; the bèlè (bel-air) of Martinique; the Ashanti of Ghana and the Akan in Adowa music; the Mandiani rhythm of Guinea",
+   "verify": "transcribed",
+   "src": [
+    "ALEN",
+    "NKET",
+    "PRESS",
+    "HALL",
+    "TOU05"
+   ],
+   "iv": "2121222",
+   "dynVerify": "derived",
+   "also": [
+    "asaadua+4",
+    "soli+6"
+   ]
+  },
+  "asaadua": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "processional music of the Akan of central western Ghana, played on the dawuro (atoke) — a hollow boat-shaped iron bell; the Kakilambé and Sokou rhythms of Guinea",
+   "verify": "transcribed",
+   "src": [
+    "HART",
+    "HALL",
+    "TOU05"
+   ],
+   "iv": "2221212",
+   "dynVerify": "derived",
+   "also": [
+    "tonada-4",
+    "soli+2"
+   ]
+  },
+  "soli": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     11,
+     0.55
+    ]
+   ],
+   "role": "bell",
+   "from": "the Soli rhythm of West Africa (Malinké initiation music) — of Soli’s three bell patterns this seven-stroke one is the most used; identical to the al-ramal of Safī al-Dīn, Arab-Persian, 13th century",
+   "verify": "transcribed",
+   "src": [
+    "HALL",
+    "WRIGHT",
+    "TOU05"
+   ],
+   "iv": "2222121",
+   "dynVerify": "derived",
+   "also": [
+    "tonada-6",
+    "asaadua-2"
+   ]
+  },
+  "sorsonet": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0.55
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Baga people of the Boké region, coastal Guinea — Sorsonet is a masked spirit, danced a few times a year by an initiate",
+   "verify": "transcribed",
+   "src": [
+    "HALL",
+    "ARAFAN",
+    "TOU05"
+   ],
+   "iv": "1122222",
+   "dynVerify": "derived",
+   "also": [
+    "kitaab+8"
+   ]
+  },
+  "kitaab": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "kitaab al-adwaar — Arab-Persian, from the rhythm books of Safī al-Dīn, 13th century Baghdad",
+   "verify": "transcribed",
+   "src": [
+    "WRIGHT",
+    "TOU05"
+   ],
+   "iv": "2222112",
+   "dynVerify": "derived",
+   "also": [
+    "sorsonet-8"
+   ]
+  },
+  "venda": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "a Venda clapping pattern from a South African children’s song; played by the Aka of the Central African Republic, and in Aka, Gbaya and Nzakara repertoire",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "AROM",
+    "CHEM",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "32322",
+   "dynVerify": "derived",
+   "also": [
+    "columbia+9",
+    "bemba5+7",
+    "fumeFume+4",
+    "salve+2",
+    "clave68+4",
+    "claveColumbia+9",
+    "quintoColumbia+5"
+   ]
+  },
+  "columbia": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuba — the columbia, and the bell of the Abakuá rhythm; also the Chakacha dance of Kenya",
+   "verify": "transcribed",
+   "src": [
+    "ALEN",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "23223",
+   "dynVerify": "derived",
+   "also": [
+    "venda-9",
+    "bemba5+10",
+    "fumeFume+7",
+    "salve+5",
+    "clave68+7",
+    "claveColumbia",
+    "quintoColumbia+8"
+   ]
+  },
+  "bemba5": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Bemba bell pattern of northern Zimbabwe; also the Macedonian dance Ibraim Odža Oro",
+   "verify": "transcribed",
+   "src": [
+    "PRESS",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "32232",
+   "dynVerify": "derived",
+   "also": [
+    "venda-7",
+    "columbia-10",
+    "fumeFume+9",
+    "salve+7",
+    "clave68+9",
+    "claveColumbia+2",
+    "quintoColumbia+10"
+   ]
+  },
+  "fumeFume": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ]
+   ],
+   "role": "bell",
+   "from": "the Ewe dance Abuteni; the kple music of the Ga people of Accra; the Congo rhythm of Cuba; a clapping pattern across West, Central and East Africa — Jones’s \"African signature\"",
+   "verify": "transcribed",
+   "src": [
+    "JONES",
+    "NKET",
+    "ALEN",
+    "LONDON",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "22323",
+   "dynVerify": "derived",
+   "also": [
+    "venda-4",
+    "columbia-7",
+    "bemba5-9",
+    "salve+10",
+    "clave68",
+    "claveColumbia+5",
+    "quintoColumbia+1"
+   ]
+  },
+  "salve": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Salve of the Dominican Republic, in the Canto de Vela for the Virgin Mary; a Tuareg pattern of the Sahara; the Moroccan Al Kudám",
+   "verify": "transcribed",
+   "src": [
+    "FARQ",
+    "TOU05",
+    "TOU05b"
+   ],
+   "iv": "23232",
+   "dynVerify": "derived",
+   "also": [
+    "venda-2",
+    "columbia-5",
+    "bemba5-7",
+    "fumeFume-10",
+    "clave68+2",
+    "claveColumbia+7",
+    "quintoColumbia+3"
+   ]
+  },
+  "adenkum": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     0.68
+    ],
+    [
+     4,
+     0.68
+    ],
+    [
+     7,
+     0.55
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "the Adenkum rhythm of the Akan of Ghana, played on the dawuro bell",
+   "verify": "transcribed",
+   "src": [
+    "TOU05"
+   ],
+   "iv": "223212",
+   "dynVerify": "derived"
+  },
+  "cuban8": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0.55
+    ],
+    [
+     3,
+     0.82
+    ],
+    [
+     5,
+     0.55
+    ],
+    [
+     6,
+     0.88
+    ],
+    [
+     8,
+     0.68
+    ],
+    [
+     9,
+     0.82
+    ],
+    [
+     10,
+     0.68
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuba — the eight-note ternary bell pattern recorded by Fernando Ortiz in La Clave",
+   "verify": "transcribed",
+   "src": [
+    "ORTIZ",
+    "TOU05"
+   ],
+   "iv": "12212112",
+   "dynVerify": "derived"
+  },
+  "marchTwoBeat": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95,
+     "B"
+    ],
+    [
+     4,
+     0.78,
+     "B"
+    ],
+    [
+     8,
+     0.85,
+     "B"
+    ],
+    [
+     12,
+     0.78,
+     "B"
+    ]
+   ],
+   "role": "support",
+   "from": "the New Orleans marching and brass-band beat that Buddy Bolden’s Big Four departed from — Wynton Marsalis’s account in Ken Burns, \"Jazz\" (PBS, 2000) defines the Big Four against it",
+   "verify": "derived",
+   "src": [
+    "MARSALIS",
+    "BOLDEN"
+   ],
+   "also": [
+    "surdoPrimeira",
+    "surdoSegunda",
+    "surdoTerceira+3",
+    "maculele"
+   ]
+  },
+  "habanera": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     3,
+     0.48
+    ],
+    [
+     4,
+     0.78
+    ],
+    [
+     6,
+     0.62
+    ],
+    [
+     8,
+     0.85
+    ],
+    [
+     11,
+     0.48
+    ],
+    [
+     12,
+     0.78
+    ],
+    [
+     14,
+     0.62
+    ]
+   ],
+   "role": "bell",
+   "from": "the habanera / contradanza cell of nineteenth-century Cuba, carried into New Orleans and named by Wynton Marsalis as the second half of the Big Four; the tresillo is its more basic form",
+   "verify": "transcribed",
+   "src": [
+    "MARSALIS"
+   ]
+  },
+  "bigFour": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95,
+     "B"
+    ],
+    [
+     4,
+     0.78,
+     "B"
+    ],
+    [
+     8,
+     0.85,
+     "B"
+    ],
+    [
+     11,
+     0.48,
+     "B"
+    ],
+    [
+     12,
+     1,
+     "C"
+    ],
+    [
+     14,
+     0.62,
+     "B"
+    ]
+   ],
+   "role": "support",
+   "from": "Buddy Bolden, New Orleans c.1895-1907 — the Big Four, per Wynton Marsalis in Ken Burns, \"Jazz\" (PBS, 2000): the first syncopated bass-drum pattern to deviate from the standard on-the-beat march, whose second half is the habanera; accent on beat four per Musicians Institute’s second-line groove lesson",
+   "verify": "derived",
+   "src": [
+    "MARSALIS",
+    "BOLDEN",
+    "MI"
+   ]
+  },
+  "pressRoll": {
+   "grid": 16,
+   "hits": [
+    [
+     2,
+     0.3,
+     "R"
+    ],
+    [
+     4,
+     0.85,
+     "A"
+    ],
+    [
+     10,
+     0.32,
+     "R"
+    ],
+    [
+     12,
+     0.95,
+     "A"
+    ]
+   ],
+   "role": "response",
+   "from": "the New Orleans brass-band press roll — Warren \"Baby\" Dodds is its named exponent; in funeral processions the snare strainer is thrown off, giving the high tom sound the tradition asks for",
+   "verify": "uncertain",
+   "src": [
+    "DODDS",
+    "MI"
+   ]
+  },
+  "gogoConga": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95,
+     "O"
+    ],
+    [
+     3,
+     0.9,
+     "S"
+    ],
+    [
+     6,
+     0.62,
+     "O"
+    ],
+    [
+     9,
+     0.48,
+     "O"
+    ],
+    [
+     12,
+     0.78,
+     "O"
+    ]
+   ],
+   "role": "support",
+   "from": "Gregory Gerran, congas, on Chuck Brown & the Soul Searchers, \"Bustin’ Loose\" (1978), Washington DC — per the Drummer Cafe lesson transcription of the track",
+   "verify": "uncertain",
+   "src": [
+    "DCAFE",
+    "BROWN"
+   ],
+   "also": [
+    "claveBossa+10"
+   ]
+  },
+  "cavacha": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     1,
+     0.22
+    ],
+    [
+     2,
+     0.22
+    ],
+    [
+     3,
+     0.85
+    ],
+    [
+     4,
+     0.22
+    ],
+    [
+     5,
+     0.22
+    ],
+    [
+     6,
+     0.85
+    ],
+    [
+     7,
+     0.22
+    ],
+    [
+     8,
+     0.22
+    ],
+    [
+     9,
+     0.85
+    ],
+    [
+     10,
+     0.22
+    ],
+    [
+     11,
+     0.22
+    ],
+    [
+     12,
+     0.85
+    ],
+    [
+     13,
+     0.22
+    ],
+    [
+     14,
+     0.22
+    ],
+    [
+     15,
+     0.22
+    ]
+   ],
+   "role": "support",
+   "from": "Meridjo Belobi, drummer of Zaïko Langa Langa, Kinshasa — the cavacha, c.1971-73, played on snare or hi-hat with ghosted sixteenths over a bass drum on every beat; the dance swept East and Central Africa through Zaïko and Orchestra Shama Shama recordings from 1973",
+   "verify": "uncertain",
+   "src": [
+    "BELOBI",
+    "WIKI"
+   ],
+   "also": [
+    "marchaConga",
+    "martillo",
+    "campanaSon",
+    "caixa",
+    "tamborimCarreteiro",
+    "ganza"
+   ]
+  },
+  "clave68": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     2,
+     0.82
+    ],
+    [
+     4,
+     0.85
+    ],
+    [
+     7,
+     0.9
+    ],
+    [
+     9,
+     0.82
+    ]
+   ],
+   "role": "bell",
+   "from": "Afro-Cuban 6/8 — bembé and the toques de santo; catalogued as Fume-Fume by Godfried Toussaint, “Classification and Phylogenetic Analysis of African Ternary Rhythm Timelines”, McGill SOCS TR (2005), §3.2, citing Ewe Abuteni and Ga kple usage",
+   "verify": "transcribed",
+   "also": [
+    "venda-4",
+    "columbia-7",
+    "bemba5-9",
+    "fumeFume",
+    "salve-2",
+    "claveColumbia+5",
+    "quintoColumbia+1"
+   ]
+  },
+  "claveColumbia": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     2,
+     0.8
+    ],
+    [
+     5,
+     0.88
+    ],
+    [
+     7,
+     0.9
+    ],
+    [
+     9,
+     0.8
+    ]
+   ],
+   "role": "bell",
+   "from": "rumba columbia, Cuba — Matanzas and Havana; Toussaint (2005) §3.2 names and prints this pattern, which is the triple-pulse form of the rumba clave (NECKLACES.rumba32)",
+   "verify": "transcribed",
+   "also": [
+    "venda-9",
+    "columbia",
+    "bemba5-2",
+    "fumeFume-5",
+    "salve-7",
+    "clave68-5",
+    "quintoColumbia+8"
+   ]
+  },
+  "claveBossa": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.7
+    ],
+    [
+     3,
+     0.55
+    ],
+    [
+     6,
+     0.62
+    ],
+    [
+     10,
+     0.66
+    ],
+    [
+     13,
+     0.55
+    ]
+   ],
+   "role": "bell",
+   "from": "bossa nova, Rio de Janeiro, c.1958-63 — the snare-rim figure of the studio drummers around Jobim and João Gilberto; Toussaint, “The Rhythm that Conquered the World” (Percussive Notes), gives its interval sequence as [3-3-4-3-3]",
+   "verify": "transcribed",
+   "also": [
+    "gogoConga-10"
+   ]
+  },
+  "telecoteco": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     2,
+     0.6
+    ],
+    [
+     4,
+     0.75
+    ],
+    [
+     7,
+     0.9
+    ],
+    [
+     9,
+     0.6
+    ],
+    [
+     11,
+     0.8
+    ],
+    [
+     13,
+     0.7
+    ]
+   ],
+   "role": "bell",
+   "from": "samba carioca — the Estácio paradigm, after Carlos Sandroni, Feitiço Decente: transformações do samba no Rio de Janeiro 1917-1933 (Zahar, 2001); the tamborim cell called teleco-teco or feijão com arroz, documented in the baterias of Imperatriz Leopoldinense and Mocidade by Marianne Zeh (ANPPOM XVI, 2006)",
+   "verify": "transcribed",
+   "also": [
+    "telecotecoUp+8",
+    "cuica"
+   ]
+  },
+  "telecotecoUp": {
+   "grid": 16,
+   "hits": [
+    [
+     1,
+     0.6
+    ],
+    [
+     3,
+     0.8
+    ],
+    [
+     5,
+     0.7
+    ],
+    [
+     8,
+     0.95
+    ],
+    [
+     10,
+     0.6
+    ],
+    [
+     12,
+     0.75
+    ],
+    [
+     15,
+     0.9
+    ]
+   ],
+   "role": "bell",
+   "from": "samba carioca — the “up side” of the teleco-teco, the entry that begins with a sixteenth rest (Zeh, ANPPOM XVI 2006; the two sides are standard bateria vocabulary)",
+   "verify": "derived",
+   "also": [
+    "telecoteco-8",
+    "cuica+8"
+   ]
+  },
+  "partidoAlto": {
+   "grid": 16,
+   "hits": [
+    [
+     2,
+     0.6
+    ],
+    [
+     4,
+     0.85
+    ],
+    [
+     7,
+     0.9
+    ],
+    [
+     10,
+     0.6
+    ],
+    [
+     12,
+     0.85
+    ],
+    [
+     15,
+     0.9
+    ]
+   ],
+   "role": "bell",
+   "from": "samba de partido-alto, Rio de Janeiro — the pandeiro/hand figure of the roda (Candeia, Martinho da Vila, Zeca Pagodinho); accents on the second beat and the last sixteenth of the first are the one point Brazilian sources agree on",
+   "verify": "uncertain"
+  },
+  "palitoGuaguanco": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.9
+    ],
+    [
+     2,
+     0.55
+    ],
+    [
+     3,
+     0.8
+    ],
+    [
+     5,
+     0.6
+    ],
+    [
+     7,
+     0.85
+    ],
+    [
+     9,
+     0.55
+    ],
+    [
+     11,
+     0.6
+    ],
+    [
+     12,
+     0.8
+    ],
+    [
+     14,
+     0.6
+    ]
+   ],
+   "role": "bell",
+   "from": "rumba guaguancó, Havana — the palito pattern struck on the guagua/catá; the timbale cáscara descends directly from it, a lineage stated in the standard Afro-Cuban percussion literature and by working players",
+   "verify": "uncertain",
+   "also": [
+    "cascara23+15"
+   ]
+  },
+  "guaguaColumbia": {
+   "grid": 12,
+   "hits": [
+    [
+     0,
+     0.95
+    ],
+    [
+     2,
+     0.65
+    ],
+    [
+     4,
+     0.8
+    ],
+    [
+     5,
+     0.6
+    ],
+    [
+     7,
+     0.85
+    ],
+    [
+     9,
+     0.7
+    ],
+    [
+     10,
+     0.6
+    ]
+   ],
+   "role": "bell",
+   "from": "rumba columbia, Cuba — the seven-stroke bell in the rotation Toussaint (2005) §2.5 names Yoruba (Bettermann: Omele) and reports “is also used in Cuba with the Columbia rhythm”",
+   "verify": "transcribed",
+   "also": [
+    "bembe-5",
+    "ashanti-2",
+    "bemba7-7",
+    "bondo-9",
+    "tambu-10",
+    "yoruba",
+    "bembe2-4"
+   ]
+  },
+  "quintoLock": {
+   "grid": 16,
+   "hits": [
+    [
+     1,
+     0.72,
+     "O"
+    ],
+    [
+     4,
+     0.95,
+     "S"
+    ],
+    [
+     7,
+     0.78,
+     "O"
+    ],
+    [
+     11,
+     0.95,
+     "S"
+    ],
+    [
+     13,
+     0.72,
+     "O"
+    ]
+   ],
+   "role": "lead",
+   "from": "rumba guaguancó and yambú, Cuba — the quinto lock as codified by David Peñalosa, Rumba Quinto (Bembe Books, 2010): a son clave displaced to begin on the first offbeat, played as an alternating tone/slap dyad",
+   "verify": "transcribed"
+  },
+  "quintoColumbia": {
+   "grid": 12,
+   "hits": [
+    [
+     1,
+     0.72,
+     "O"
+    ],
+    [
+     3,
+     0.95,
+     "S"
+    ],
+    [
+     5,
+     0.78,
+     "O"
+    ],
+    [
+     8,
+     0.95,
+     "S"
+    ],
+    [
+     10,
+     0.72,
+     "O"
+    ]
+   ],
+   "role": "lead",
+   "from": "rumba columbia, Cuba — the triple-pulse quinto lock, a displaced ternary son clave beginning on the first offbeat (Peñalosa, Rumba Quinto, 2010)",
+   "verify": "uncertain",
+   "also": [
+    "venda-5",
+    "columbia-8",
+    "bemba5-10",
+    "fumeFume-1",
+    "salve-3",
+    "clave68-1",
+    "claveColumbia-8"
+   ]
+  },
+  "salidorGuaguanco": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.85,
+     "B"
+    ],
+    [
+     3,
+     0.8,
+     "B"
+    ],
+    [
+     6,
+     0.95,
+     "O"
+    ],
+    [
+     8,
+     0.6,
+     "O"
+    ],
+    [
+     12,
+     0.8,
+     "B"
+    ],
+    [
+     14,
+     0.95,
+     "O"
+    ]
+   ],
+   "role": "support",
+   "from": "rumba guaguancó, Matanzas style — the sparse two-drum salidor as transcribed by rumberos in the mycongaplace.com “Matanzas-style guaguancó” thread; the same thread records that the strokes fall between the duple and triple grids",
+   "verify": "uncertain"
+  },
+  "marchaConga": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.3,
+     "H"
+    ],
+    [
+     1,
+     0.24,
+     "T"
+    ],
+    [
+     2,
+     0.85,
+     "S"
+    ],
+    [
+     3,
+     0.24,
+     "T"
+    ],
+    [
+     4,
+     0.3,
+     "H"
+    ],
+    [
+     5,
+     0.24,
+     "T"
+    ],
+    [
+     6,
+     0.95,
+     "O"
+    ],
+    [
+     7,
+     0.88,
+     "O"
+    ],
+    [
+     8,
+     0.3,
+     "H"
+    ],
+    [
+     9,
+     0.24,
+     "T"
+    ],
+    [
+     10,
+     0.85,
+     "S"
+    ],
+    [
+     11,
+     0.24,
+     "T"
+    ],
+    [
+     12,
+     0.3,
+     "H"
+    ],
+    [
+     13,
+     0.24,
+     "T"
+    ],
+    [
+     14,
+     0.95,
+     "O"
+    ],
+    [
+     15,
+     0.88,
+     "O"
+    ]
+   ],
+   "role": "support",
+   "from": "Cuban son / salsa — the one-drum conga marcha of the conjunto, the open tones landing on the last offbeats of each two-beat cycle (the ponche); the standard part behind every son montuno since the 1940s",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "martillo",
+    "campanaSon",
+    "caixa",
+    "tamborimCarreteiro",
+    "ganza"
+   ]
+  },
+  "tumbaoDos": {
+   "grid": 16,
+   "hits": [
+    [
+     3,
+     0.82,
+     "B"
+    ],
+    [
+     6,
+     0.95,
+     "O"
+    ],
+    [
+     14,
+     0.9,
+     "O"
+    ],
+    [
+     15,
+     0.85,
+     "O"
+    ]
+   ],
+   "role": "support",
+   "from": "Cuban conjunto conga playing — the tumba’s part in the two-drum tumbao: the bombo on clave’s second stroke, the ponche, and the two tones preceding the three-side; the vocabulary Carlos “Patato” Valdés’s generation standardised",
+   "verify": "transcribed"
+  },
+  "martillo": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.7,
+     "mS"
+    ],
+    [
+     1,
+     0.3,
+     "mT"
+    ],
+    [
+     2,
+     0.62,
+     "mO"
+    ],
+    [
+     3,
+     0.26,
+     "mB"
+    ],
+    [
+     4,
+     0.7,
+     "mS"
+    ],
+    [
+     5,
+     0.3,
+     "mT"
+    ],
+    [
+     6,
+     0.95,
+     "hO"
+    ],
+    [
+     7,
+     0.26,
+     "mB"
+    ],
+    [
+     8,
+     0.7,
+     "mS"
+    ],
+    [
+     9,
+     0.3,
+     "mT"
+    ],
+    [
+     10,
+     0.62,
+     "mO"
+    ],
+    [
+     11,
+     0.26,
+     "mB"
+    ],
+    [
+     12,
+     0.7,
+     "mS"
+    ],
+    [
+     13,
+     0.3,
+     "mT"
+    ],
+    [
+     14,
+     0.95,
+     "hO"
+    ],
+    [
+     15,
+     0.26,
+     "mB"
+    ]
+   ],
+   "role": "support",
+   "from": "Cuban son — the bongocero’s martillo; stroke order (open slap / fingers / open tone / thumb, with the hembra open tone on the seventh of eight) per DRUM! Magazine and X8 Drums, which agree independently on the hembra placement",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "marchaConga",
+    "campanaSon",
+    "caixa",
+    "tamborimCarreteiro",
+    "ganza"
+   ]
+  },
+  "campanaSon": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95,
+     "M"
+    ],
+    [
+     1,
+     0.34,
+     "n"
+    ],
+    [
+     2,
+     0.82,
+     "M"
+    ],
+    [
+     3,
+     0.3,
+     "n"
+    ],
+    [
+     4,
+     0.86,
+     "M"
+    ],
+    [
+     5,
+     0.34,
+     "n"
+    ],
+    [
+     6,
+     0.82,
+     "M"
+    ],
+    [
+     7,
+     0.3,
+     "n"
+    ],
+    [
+     8,
+     0.92,
+     "M"
+    ],
+    [
+     9,
+     0.34,
+     "n"
+    ],
+    [
+     10,
+     0.82,
+     "M"
+    ],
+    [
+     11,
+     0.3,
+     "n"
+    ],
+    [
+     12,
+     0.86,
+     "M"
+    ],
+    [
+     13,
+     0.34,
+     "n"
+    ],
+    [
+     14,
+     0.82,
+     "M"
+    ],
+    [
+     15,
+     0.3,
+     "n"
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuban son montuno / salsa — the bongó bell (campana) taken up in the montuno, the practice formalised in Arsenio Rodríguez’s conjunto in the 1940s",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "marchaConga",
+    "martillo",
+    "caixa",
+    "tamborimCarreteiro",
+    "ganza"
+   ]
+  },
+  "campanaMambo": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.95,
+     "M"
+    ],
+    [
+     2,
+     0.7,
+     "n"
+    ],
+    [
+     3,
+     0.75,
+     "n"
+    ],
+    [
+     4,
+     0.88,
+     "M"
+    ],
+    [
+     6,
+     0.7,
+     "n"
+    ],
+    [
+     7,
+     0.75,
+     "n"
+    ],
+    [
+     8,
+     0.92,
+     "M"
+    ],
+    [
+     10,
+     0.7,
+     "n"
+    ],
+    [
+     11,
+     0.75,
+     "n"
+    ],
+    [
+     12,
+     0.88,
+     "M"
+    ],
+    [
+     14,
+     0.7,
+     "n"
+    ],
+    [
+     15,
+     0.75,
+     "n"
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuban mambo / salsa — the timbalero’s mambo bell; the role is documented everywhere and the exact figure is player-specific (Tito Puente’s and Manny Oquendo’s differ), so this is the common reading and not a transcription of either",
+   "verify": "uncertain"
+  },
+  "cascara23": {
+   "grid": 16,
+   "hits": [
+    [
+     1,
+     0.55
+    ],
+    [
+     2,
+     0.85
+    ],
+    [
+     4,
+     0.85
+    ],
+    [
+     6,
+     0.6
+    ],
+    [
+     8,
+     0.9
+    ],
+    [
+     10,
+     0.6
+    ],
+    [
+     11,
+     0.8
+    ],
+    [
+     13,
+     0.6
+    ],
+    [
+     15,
+     0.62
+    ]
+   ],
+   "role": "bell",
+   "from": "Cuban son / salsa — the timbale cáscara, struck on the shell, in its 2-3 orientation; the figure itself comes from the rumba palito (see palitoGuaguanco)",
+   "verify": "derived",
+   "also": [
+    "palitoGuaguanco-15"
+   ]
+  },
+  "abanico": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     1,
+     "O"
+    ],
+    [
+     12,
+     0.9,
+     "R"
+    ],
+    [
+     13,
+     0.32,
+     "b"
+    ],
+    [
+     14,
+     0.45,
+     "b"
+    ],
+    [
+     15,
+     0.62,
+     "b"
+    ]
+   ],
+   "role": "lead",
+   "from": "Cuban timbal playing — the abanico that opens a section: rim shot, buzz, arrival; universal in salsa timbal vocabulary since the charanga and conjunto era",
+   "verify": "derived"
+  },
+  "surdoPrimeira": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.28,
+     "M"
+    ],
+    [
+     4,
+     1,
+     "O"
+    ],
+    [
+     8,
+     0.26,
+     "M"
+    ],
+    [
+     12,
+     0.96,
+     "O"
+    ]
+   ],
+   "role": "support",
+   "from": "Rio de Janeiro escolas de samba — the surdo de primeira (marcação); the instrument is credited to the Estácio sambistas of Deixa Falar, c.1928 (Sérgio Cabral, As Escolas de Samba do Rio de Janeiro, 1996)",
+   "verify": "transcribed",
+   "also": [
+    "marchTwoBeat",
+    "surdoSegunda",
+    "surdoTerceira+3",
+    "maculele"
+   ]
+  },
+  "surdoSegunda": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.88,
+     "O"
+    ],
+    [
+     4,
+     0.3,
+     "M"
+    ],
+    [
+     8,
+     0.92,
+     "O"
+    ],
+    [
+     12,
+     0.28,
+     "M"
+    ]
+   ],
+   "role": "response",
+   "from": "Rio de Janeiro escolas de samba — the surdo de segunda (resposta), answering the primeira’s beat two with an open stroke on beat one",
+   "verify": "transcribed",
+   "also": [
+    "marchTwoBeat",
+    "surdoPrimeira",
+    "surdoTerceira+3",
+    "maculele"
+   ]
+  },
+  "surdoTerceira": {
+   "grid": 16,
+   "hits": [
+    [
+     3,
+     0.6,
+     "O"
+    ],
+    [
+     7,
+     0.85,
+     "O"
+    ],
+    [
+     11,
+     0.6,
+     "O"
+    ],
+    [
+     15,
+     0.9,
+     "O"
+    ]
+   ],
+   "role": "lead",
+   "from": "Rio de Janeiro escolas de samba — the surdo de terceira / cortador, the improvising surdo that cuts across the primeira-segunda pair; this is the common anticipation shape, not any one bateria’s part",
+   "verify": "uncertain",
+   "also": [
+    "marchTwoBeat-3",
+    "surdoPrimeira-3",
+    "surdoSegunda-3",
+    "maculele+1"
+   ]
+  },
+  "caixa": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.6
+    ],
+    [
+     1,
+     0.3
+    ],
+    [
+     2,
+     0.36
+    ],
+    [
+     3,
+     0.88
+    ],
+    [
+     4,
+     0.58
+    ],
+    [
+     5,
+     0.3
+    ],
+    [
+     6,
+     0.36
+    ],
+    [
+     7,
+     0.88
+    ],
+    [
+     8,
+     0.62
+    ],
+    [
+     9,
+     0.3
+    ],
+    [
+     10,
+     0.36
+    ],
+    [
+     11,
+     0.88
+    ],
+    [
+     12,
+     0.58
+    ],
+    [
+     13,
+     0.3
+    ],
+    [
+     14,
+     0.36
+    ],
+    [
+     15,
+     0.9
+    ]
+   ],
+   "role": "support",
+   "from": "Rio de Janeiro escolas de samba — the caixa (snare) of the bateria; the accent on the sixteenth anticipating each beat is the documented samba accent, shared with the ganzá and chocalho",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "marchaConga",
+    "martillo",
+    "campanaSon",
+    "tamborimCarreteiro",
+    "ganza"
+   ]
+  },
+  "tamborimCarreteiro": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.72,
+     "d"
+    ],
+    [
+     1,
+     0.5,
+     "d"
+    ],
+    [
+     2,
+     0.55,
+     "d"
+    ],
+    [
+     3,
+     0.88,
+     "v"
+    ],
+    [
+     4,
+     0.7,
+     "d"
+    ],
+    [
+     5,
+     0.5,
+     "d"
+    ],
+    [
+     6,
+     0.55,
+     "d"
+    ],
+    [
+     7,
+     0.9,
+     "v"
+    ],
+    [
+     8,
+     0.72,
+     "d"
+    ],
+    [
+     9,
+     0.5,
+     "d"
+    ],
+    [
+     10,
+     0.55,
+     "d"
+    ],
+    [
+     11,
+     0.88,
+     "v"
+    ],
+    [
+     12,
+     0.7,
+     "d"
+    ],
+    [
+     13,
+     0.5,
+     "d"
+    ],
+    [
+     14,
+     0.55,
+     "d"
+    ],
+    [
+     15,
+     0.92,
+     "v"
+    ]
+   ],
+   "role": "lead",
+   "from": "Rio de Janeiro escolas de samba — the carreteiro played with the virada, the drum turned against the stick’s upstroke; techniques “3 e 1” and “2 e 1” documented in the baterias of Imperatriz Leopoldinense and Mocidade Independente de Padre Miguel by Marianne Zeh, ANPPOM XVI (2006)",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "marchaConga",
+    "martillo",
+    "campanaSon",
+    "caixa",
+    "ganza"
+   ]
+  },
+  "ganza": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.55
+    ],
+    [
+     1,
+     0.32
+    ],
+    [
+     2,
+     0.4
+    ],
+    [
+     3,
+     0.8
+    ],
+    [
+     4,
+     0.52
+    ],
+    [
+     5,
+     0.32
+    ],
+    [
+     6,
+     0.4
+    ],
+    [
+     7,
+     0.8
+    ],
+    [
+     8,
+     0.56
+    ],
+    [
+     9,
+     0.32
+    ],
+    [
+     10,
+     0.4
+    ],
+    [
+     11,
+     0.8
+    ],
+    [
+     12,
+     0.52
+    ],
+    [
+     13,
+     0.32
+    ],
+    [
+     14,
+     0.4
+    ],
+    [
+     15,
+     0.82
+    ]
+   ],
+   "role": "shaker",
+   "from": "Rio de Janeiro escolas de samba — the ganzá/chocalho, dividing each beat in four and accenting the sixteenth that anticipates the next beat",
+   "verify": "transcribed",
+   "also": [
+    "cavacha",
+    "marchaConga",
+    "martillo",
+    "campanaSon",
+    "caixa",
+    "tamborimCarreteiro"
+   ]
+  },
+  "cuica": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.8
+    ],
+    [
+     2,
+     0.5
+    ],
+    [
+     4,
+     0.62
+    ],
+    [
+     7,
+     0.85
+    ],
+    [
+     9,
+     0.5
+    ],
+    [
+     11,
+     0.7
+    ],
+    [
+     13,
+     0.6
+    ]
+   ],
+   "role": "response",
+   "from": "Rio de Janeiro escolas de samba — the cuíca playing the teleco-teco cell, per Marianne Zeh (ANPPOM XVI, 2006): the figure is used “não apenas na escola de samba... como também em outros instrumentos como cuíca”",
+   "verify": "derived",
+   "also": [
+    "telecoteco",
+    "telecotecoUp-8"
+   ]
+  },
+  "maculele": {
+   "grid": 16,
+   "hits": [
+    [
+     0,
+     0.72
+    ],
+    [
+     4,
+     0.7
+    ],
+    [
+     8,
+     0.72
+    ],
+    [
+     12,
+     1
+    ]
+   ],
+   "role": "bell",
+   "from": "maculelê, Santo Amaro da Purificação, Bahia — the grimas (paired sticks) of the dancers, three strokes at belt height and the fourth struck at face level; the dance was recovered and staged by Mestre Popó from 1943",
+   "verify": "uncertain",
+   "also": [
+    "marchTwoBeat",
+    "surdoPrimeira",
+    "surdoSegunda",
+    "surdoTerceira-1"
+   ]
+  }
+ },
+ "sambaStyleExcerpt": "    origin: 'Rio — the batucada of the escolas: surdos as the heartbeat, caixa sixteenths, tamborim’s telecoteco; rhythm carried from Angola and Congo',\n    tempo: [124, 140], beats: 4, div: 4,\n    kit: 'batucadaK', sub: null, perc: 'afroP', aux: 'brightP',\n    swing: 60, hum: 0.9, humanT: 0.008, limb: { perc: 2, snare: 3 },\n    climate: { light: 0.65, weight: 0.6, motion: 0.85, space: 0.35, grit: 0.4, age: 0.15, order: 0.55 },\n    gens: {\n      kick: { pat: 'surdo1', adds: [], addP: 0, dropP: 0 },\n      snare: { caixa: 1, accents: [0, 3, 6, 10, 13] },\n      hat: { rate: 2, gapP: 0.5, open: [], rollP: 0 },\n      perc: [['surdo', [[0, 0.8], [8, 0.8], [16, 0.8], [24, 0.8]], 1],\n             ['congaL', [[6, 0.6], [7, 0.65], [14, 0.6], [22, 0.6], [23, 0.65], [30, 0.6]], 1],\n             ['woodblk', [[0, 0.7], [3, 0.65], [6, 0.7], [10, 0.65], [13, 0.7], [16, 0.7], [19, 0.65], [22, 0.7], [26, 0.65], [29, 0.7]], 1],\n             ['agogoH', [[0, 0.55], [5, 0.5], [8, 0.55], [11, 0.5], [16, 0.55], [21, 0.5], [24, 0.55], [27, 0.5]]]],\n      aux: [['shaker', [[0, 0.4], [1, 0.35], [2, 0.4], [3, 0.35], [4, 0.4], [5, 0.35], [6, 0.4], [7, 0.35],\n                        [8, 0.4], [9, 0.35], [10, 0.4], [11, 0.35], [12, 0.4], [13, 0.35], [14, 0.4], [15, 0.35],\n                        [16, 0.4], [17, 0.35], [18, 0.4], [19, 0.35], [20, 0.4], [21, 0.35], [22, 0.4], [23, 0.35],\n"
+}
