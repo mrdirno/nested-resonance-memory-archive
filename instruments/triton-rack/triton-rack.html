@@ -263,6 +263,11 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 .l4tile.dream b{font-size:14px;}
 .l4tile.fig{min-width:132px;}
 .l4tile.on{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 14px rgba(87,214,255,.25);}
+.l4tile.pin{min-width:120px;border-color:#4a4326;background:linear-gradient(180deg,#1d1a10,#0e0c07);}
+.l4tile.pin b{color:#e8d089;}
+.l4tile.crate{min-width:150px;border-color:#5a4a20;background:linear-gradient(180deg,#1e1910,#0f0c07);}
+.l4tile.crate b{color:#ffd77e;font-size:12px;}
+.l4tile.crate .tmeta{color:#8a7748;}
 .l4tile.live{border-color:#ffb23c;box-shadow:inset 0 0 0 1px #ffb23c, 0 0 14px rgba(255,178,60,.3);}
 .l4sep{flex:0 0 2px;height:120px;border-radius:2px;background:linear-gradient(180deg,transparent,#2b3a49,transparent);}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
@@ -592,6 +597,14 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
     </div>
   </div>
   <div class="spec-grid">
+    <div class="spec"><b>Producer's crate</b><span>Takes pinned with ★ on the Lucky Dreamer face (<span id="crateCount">0</span> pinned) replay note-for-note by seed. The crate lives in this session; carry it between sessions as a file.</span>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button class="oct-btn" id="crateExp">Export crate → .json</button>
+        <button class="oct-btn" id="crateImp">Import crate…</button>
+        <span id="crateMsg" style="color:var(--text-dim);font-size:12px;"></span>
+        <input type="file" id="crateFile" accept=".json,application/json" style="display:none">
+      </div>
+    </div>
     <div class="spec"><b>Play live right here</b><span>Plug a USB or Bluetooth MIDI keyboard into this device — Web MIDI picks it up automatically (status above the keys). Pitch bend (±2), mod wheel vibrato and the sustain pedal all work. The engine runs at your device's interactive latency, shown on the GLOBAL page.</span></div>
     <div class="spec"><b>Everything is in this file</b><span>All 128 programs and 16 combis are built into this one page — the Patches tab lists every sound, tappable. Nothing is downloaded to play; the zip exists only as a bonus for studio software.</span></div>
   </div>
@@ -2763,6 +2776,31 @@ function dreamHalfCut(base,rng){
   p.chordStyle=rng()<.5?"pad":"stab";
   return p;
 }
+/* ── the producer's crate: pinned takes, replayable by seed, portable as JSON ── */
+var LDR_CRATE=[];
+function crateEntry(p,seed){
+  return {v:1,seed:seed|0,name:(String(p.name||"Dream").slice(0,40))+" #"+(seed|0),
+    p:JSON.parse(JSON.stringify(p)),at:Date.now()};
+}
+function crateValidate(e){
+  if(!e||typeof e!=="object") return false;
+  if(typeof e.seed!=="number"||!isFinite(e.seed)) return false;
+  const p=e.p; if(!p||typeof p!=="object") return false;
+  if(!LDR_FIG[p.fig]) return false;
+  if(!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
+  if(!PROGRAMS[p.bass]||!PROGRAMS[p.chord]||!PROGRAMS[p.lead]) return false;
+  if(!Array.isArray(p.prog)||!p.prog.length) return false;
+  if(!SCALES[p.scale]) return false;
+  if(!(p.comps||[]).every(c=>{ const r=ldrBase(c); return !!LDR_FIG[r.id]; })) return false;
+  return true;
+}
+function crateParse(json){
+  try{ const o=JSON.parse(json);
+    const list=Array.isArray(o)? o : (o&&Array.isArray(o.crate)? o.crate : null);
+    if(!list) return null;
+    return list.filter(crateValidate).slice(0,24);
+  }catch(_){ return null; }
+}
 /* ── the figure teaches the band: skeleton (anchors), response slots (gaps) ── */
 function figAnalysis(f){
   if(f._an) return f._an;
@@ -2941,7 +2979,7 @@ function startWith(p,skipIntro){
   if(!state.powered) quickBoot();
   LDR.on=false; const lb=document.getElementById("ldrStart"); if(lb) lb.textContent="▶ START";
   state.audition=false; state.arp.on=false; if(typeof syncLeds==="function") syncLeds();
-  p._seed=(Date.now()%100000)|0;
+  if(p._seed==null) p._seed=(Date.now()%100000)|0; /* crate replays carry their own seed */
   applyDream(p,!!skipIntro);
   DREAM.next=0; DREAM.on=true; setPlayUI(true);
 }
@@ -3159,9 +3197,33 @@ function ldrPickFig(k){
   if(DREAM.on) dreamStop();
   ldrToggle(true);
 }
+function crateCountUI(){
+  const cc=document.getElementById("crateCount"); if(cc) cc.textContent=LDR_CRATE.length;
+}
+function cratePin(){
+  if(!DREAM.p||DREAM.seed==null){
+    const ro=document.getElementById("ldrReadout");
+    if(ro&&!DREAM.on){ const old=ro.textContent; ro.textContent="NOTHING TO PIN — PLAY FIRST";
+      setTimeout(()=>{ if(!DREAM.on) ro.textContent=old; },1400); }
+    return;
+  }
+  if(LDR_CRATE.length>=24) LDR_CRATE.shift();
+  LDR_CRATE.push(crateEntry(DREAM.p,DREAM.seed));
+  ldr4Build();
+  const t=document.getElementById("ldrPinTile");
+  if(t){ t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),500); }
+}
+function cratePlay(i){
+  const e=LDR_CRATE[i]; if(!e) return;
+  const p=JSON.parse(JSON.stringify(e.p)); p._seed=e.seed;
+  startWith(p,true);
+}
 function ldr4Build(){
   const host=document.getElementById("ldrStrip"); if(!host) return;
-  let h="";
+  let h='<div class="l4tile pin" id="ldrPinTile"><b>★ Pin</b><span class="tmeta">save this take</span></div>';
+  LDR_CRATE.forEach((e,i)=>{ h+='<div class="l4tile crate" data-c="'+i+'" title="tap = replay · hold = remove"><b>'+
+    e.name+'</b><span class="tmeta">pinned take</span></div>'; });
+  h+='<div class="l4sep"></div>';
   DREAMS.forEach((d,i)=>{ h+='<div class="l4tile dream" data-d="'+i+'"><b>'+
     (d.surprise?"🎲 Surprise Me":d.name)+'</b><span class="tmeta">'+
     (d.surprise?"new every time":"♩"+d.tempo+" · "+d.fig)+'</span></div>'; });
@@ -3171,10 +3233,23 @@ function ldr4Build(){
     h+='<div class="l4tile fig" data-f="'+k+'"><b>'+k+'</b><span class="tmeta">'+
     f.grid+'-pulse '+v+'</span></div>'; });
   host.innerHTML=h;
+  crateCountUI();
+  if(host._wired) return; host._wired=true;
+  let lpTimer=null, lpFired=false;
+  host.addEventListener("pointerdown",e=>{
+    const ct=e.target.closest(".l4tile.crate"); if(!ct) return;
+    lpFired=false;
+    lpTimer=setTimeout(()=>{ lpFired=true;
+      LDR_CRATE.splice(+ct.dataset.c,1); ldr4Build(); },600);
+  });
+  ["pointerup","pointercancel"].forEach(ev=>host.addEventListener(ev,()=>clearTimeout(lpTimer)));
   host.addEventListener("click",e=>{
-    const dt=e.target.closest("#ldrStrip .l4tile.dream");
+    if(e.target.closest("#ldrPinTile")){ cratePin(); return; }
+    const ct=e.target.closest(".l4tile.crate");
+    if(ct){ if(lpFired){ lpFired=false; return; } cratePlay(+ct.dataset.c); return; }
+    const dt=e.target.closest(".l4tile.dream");
     if(dt){ ldrPickDream(+dt.dataset.d); return; }
-    const ft=e.target.closest("#ldrStrip .l4tile.fig");
+    const ft=e.target.closest(".l4tile.fig");
     if(ft) ldrPickFig(ft.dataset.f);
   });
 }
@@ -3194,6 +3269,33 @@ function ldrConductorInit(){
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
   on("ldrHalf",dreamHalfDice);
   on("fabRec",recToggle); on("ldrRec",recToggle);
+  on("crateExp",()=>{
+    const msg=document.getElementById("crateMsg");
+    if(!LDR_CRATE.length){ if(msg){ msg.textContent="crate is empty — pin a take first"; setTimeout(()=>msg.textContent="",2000);} return; }
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([JSON.stringify({v:1,crate:LDR_CRATE},null,1)],{type:"application/json"}));
+    a.download="lucky-dreamer-crate.json";
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
+  });
+  on("crateImp",()=>{ const f=document.getElementById("crateFile"); if(f) f.click(); });
+  const cf=document.getElementById("crateFile");
+  if(cf) cf.addEventListener("change",()=>{
+    const msg=document.getElementById("crateMsg");
+    const file=cf.files&&cf.files[0]; if(!file) return;
+    const rd=new FileReader();
+    rd.onload=()=>{ const got=crateParse(String(rd.result));
+      if(!got){ if(msg) msg.textContent="not a crate file"; setTimeout(()=>{if(msg)msg.textContent="";},2500); cf.value=""; return; }
+      const seen=new Set(LDR_CRATE.map(e=>e.seed+"|"+e.name));
+      let added=0;
+      got.forEach(e=>{ if(LDR_CRATE.length<24&&!seen.has(e.seed+"|"+e.name)){ LDR_CRATE.push(e); added++; } });
+      ldr4Build();
+      if(msg) msg.textContent=added+" take"+(added===1?"":"s")+" imported"+(got.length>added?" ("+(got.length-added)+" skipped)":"");
+      setTimeout(()=>{ if(msg) msg.textContent=""; },3000);
+      cf.value="";
+    };
+    rd.readAsText(file);
+  });
   ldr4Build();
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
@@ -3319,4 +3421,11 @@ DEAD BRANCHES: (1) also re-rolling leadOct/chord voicing octaves — lost: octav
 KILL-TEST: suite [3] drives dreamHalfCut across 50 seeds and all six dreams — rhythm section byte-held, bass always a BASS program, progression always 4 degrees, name suffix idempotent. The Chromium harness presses ◐ mid-performance: transport never drops, figure and kit identical after the bar, bass/chord/lead provably different, name carries the cut.
 THE NON-OBVIOUS CHOICE: HALF-DICE re-seeds. The obvious reading ("keep everything but the sounds") would keep the motif; but the motif IS harmony — chord tones in the figure's gaps — so the honest half is rhythm vs. everything-tonal, and the seed belongs to the tonal half.
 OPEN QUESTIONS: (1) The other half — a dice that keeps harmony and re-rolls only the FIGURE (same key, new groove) — is one map lookup away; is a five-pad transport too many? (2) Should HALF pulse the chord/bass/lead LEDs amber for one bar so the eye sees which half moved? (3) Repeated halves drift ever farther from the named dream — should the readout track cut-depth (·2 ·3) so a take's lineage stays legible?
+RING 16 · 2026-08-30 · the crate — good takes get names, and a suitcase
+WHAT CHANGED: Ring 7's third open question answered. The strip's first tile is now ★ PIN: press it during a performance and the whole take — every dream parameter plus its seed — snapshots into the PRODUCER'S CRATE, appearing as a gold tile beside it. Tap a crate tile and the take replays note-for-note (startWith now respects a carried seed instead of always stamping a fresh one — the one-line change that makes determinism usable); hold it ~0.6 s to remove. The crate caps at 24, evicts oldest, and travels: EXPORT/IMPORT on the Export tab writes and reads lucky-dreamer-crate.json, with every imported entry SCHEMA-CHECKED (figure exists, kit is a drum program, voices are real programs, scale is real, companions resolve through the rotation grammar) and duplicates skipped — a corrupt or foreign file degrades to "0 imported", never to a broken tile.
+BANNED (obvious answers set aside first): localStorage (the constraints list forbids it in artifacts, and a crate that silently lives in one browser is a crate you lose); pinning by long-press on the seed readout (an invisible gesture on a non-interactive label, exactly what the touch law exists to prevent); storing only the seed (a seed replays nothing without the parameters it seeded).
+DEAD BRANCHES: (1) writing the crate into the artifact file itself (Ring 7's original sketch) — lost: a web page cannot rewrite its own file, and the honest equivalent — "download a new copy of the whole 260 KB artifact per pin" — costs the user a file-management chore per favorite; a 2 KB sidecar they explicitly export when they care is the producer-shaped trade, and the schema check keeps the transplant safe. (2) An ✕ button on each crate tile — lost: a sub-target inside a 120 px tile breaks the touch law; hold-to-remove keeps one target per tile. (3) Rebinding listeners on every strip rebuild — lost before shipping: delegation wires once (the rebuild-leak was caught in review, not in the field).
+KILL-TEST: suite [3] builds entries from real dreams and proves the validator refuses bad figures, non-drum kits, alien scales, unresolvable companions and missing seeds; crateParse filters a mixed file to its valid takes and returns null for garbage JSON; crateEntry round-trips through its own validator. In Chromium: pin mid-performance, DICE away to a different dream, tap the gold tile — the seed comes back exactly (#42521 in the run on record) with the pinned figure playing.
+THE NON-OBVIOUS CHOICE: the crate is tiles, not a menu — pinned takes sit in the same shelf as dreams and figures because to the thumb they are the same act: "start THIS." The strip has become the instrument's memory lane: presets the builder shipped, figures the tradition shipped, takes the player kept.
+OPEN QUESTIONS: (1) A crate tile replays into today's engine — if a future ring changes the physics, should entries carry the ring number they were pinned under, honesty for ears? (2) The .mid and .wav of a take share its seed name; should EXPORT CRATE optionally bundle the takes' MIDI files so the suitcase carries sound? (3) Twenty-four tiles of gold — at what count does the crate deserve its own shelf row with a filter?
 ═══ end rings ═══ -->

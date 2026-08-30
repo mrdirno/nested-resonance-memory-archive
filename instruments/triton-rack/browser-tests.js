@@ -100,6 +100,19 @@ const path = __dirname + "/triton-rack.html";
     preHalf.bass + "/" + preHalf.chord + "/" + preHalf.lead + " → " +
     postHalf.bass + "/" + postHalf.chord + "/" + postHalf.lead + ")");
 
+  /* crate: pin the current take, dice away, replay it note-for-note by seed */
+  const pin1 = await page.evaluate(() => { const s = DREAM.seed; cratePin();
+    return { s, n: LDR_CRATE.length, tile: !!document.querySelector('#ldrStrip .l4tile.crate') }; });
+  if (pin1.n !== 1 || !pin1.tile) fail("pin did not crate the take " + JSON.stringify(pin1));
+  await page.click("#dreamDice");
+  await page.waitForTimeout(2600);
+  await page.evaluate(() => document.querySelector('#ldrStrip .l4tile.crate').scrollIntoView({ inline: "center" }));
+  await page.click('#ldrStrip .l4tile.crate[data-c="0"]');
+  await page.waitForTimeout(700);
+  const rep = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed, fig: DREAM.p.fig }));
+  if (!rep.on || rep.seed !== pin1.s) fail("crate replay seed " + rep.seed + " ≠ pinned " + pin1.s);
+  else ok("crate: pinned #" + pin1.s + " replayed exactly (" + rep.fig + ")");
+
   /* figure tile takes over: manual rhythm, dream stops */
   await page.evaluate(() => { document.querySelector('#ldrStrip .l4tile.fig[data-f="bembe"]').scrollIntoView(); });
   await page.click('#ldrStrip .l4tile.fig[data-f="bembe"]');

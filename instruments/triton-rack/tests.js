@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,dreamHalfCut,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,dreamHalfCut,crateEntry,crateValidate,crateParse,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
   const f = LDR_FIG[d.fig]; if (!f) return fail(d.name + " fig");
@@ -129,6 +129,23 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   }
   if (hBad) fail("half-cut violations: " + hBad);
   else ok("HALF-DICE: rhythm section held, harmony re-rolled, name idempotent (50 seeds)");
+}
+{ const mk = over => { const base = JSON.parse(JSON.stringify(G3.DREAMS[2]));
+    Object.assign(base, over || {}); return { v: 1, seed: 12345, name: "x", p: base, at: 0 }; };
+  let cBad = 0;
+  if (!G3.crateValidate(mk())) cBad++;
+  if (G3.crateValidate(mk({ fig: "nope" }))) cBad++;
+  if (G3.crateValidate(mk({ kit: 0 }))) cBad++;
+  if (G3.crateValidate(mk({ scale: "dorian" }))) cBad++;
+  if (G3.crateValidate(mk({ comps: ["nope+3"] }))) cBad++;
+  if (G3.crateValidate({ v: 1, name: "x", p: JSON.parse(JSON.stringify(G3.DREAMS[2])) })) cBad++;
+  const parsed = G3.crateParse(JSON.stringify({ v: 1, crate: [mk(), mk({ fig: "bad" }), mk({ kit: 3 })] }));
+  if (!parsed || parsed.length !== 1) cBad++;
+  if (G3.crateParse("{oops") !== null) cBad++;
+  const e = G3.crateEntry(G3.DREAMS[1], 777);
+  if (!G3.crateValidate(e) || e.seed !== 777 || e.name.indexOf("#777") < 0) cBad++;
+  if (cBad) fail("crate validate/parse: " + cBad);
+  else ok("crate: entries validate, imports filter corrupt takes, garbage JSON refused");
 }
 if (errs === e3) ok("presets · figAnalysis(51) · motifs · 200 surprise seeds · sections");
 
