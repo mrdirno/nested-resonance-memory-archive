@@ -87,10 +87,12 @@ const path = __dirname + "/triton-rack.html";
   else ok("DICE swaps seamlessly (seed " + st1.seed + " → " + st2.seed + ")");
 
   /* HALF-DICE: rhythm section survives, harmony re-rolls, lands on the bar */
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
   const preHalf = await page.evaluate(() => ({ fig: DREAM.p.fig, kit: DREAM.p.kit,
     bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead }));
   await page.click("#ldrHalf");
-  await page.waitForTimeout(3200);
+  await page.waitForFunction(() => !DREAM.pending, { timeout: 9000 });
+  await page.waitForTimeout(250);
   const postHalf = await page.evaluate(() => ({ on: DREAM.on, fig: DREAM.p.fig, kit: DREAM.p.kit,
     bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead, name: DREAM.p.name }));
   if (!postHalf.on) fail("HALF-DICE stopped the transport");
@@ -153,6 +155,39 @@ const path = __dirname + "/triton-rack.html";
   else ok("record: 4U pad and dock mirror");
   await page.click("#ldrRec");
   await page.waitForTimeout(300);
+
+  /* STRUM: factory default on Nylon Dream, cycles after CHORD, and sounds */
+  const strum = await page.evaluate(() => {
+    state.mode = "PROG"; setProgram(31);
+    const patt0 = state.arp.patt, on0 = state.arp.on;
+    state.arp.patt = "CHORD"; PPAGES.PROG[2][0].set(1); const afterChord = state.arp.patt;
+    PPAGES.PROG[2][0].set(1); const wrap = state.arp.patt;
+    state.arp.patt = patt0;
+    return { patt0, on0, afterChord, wrap };
+  });
+  if (strum.patt0 !== "STRUM" || !strum.on0) fail("Nylon Dream STRUM default " + JSON.stringify(strum));
+  else if (strum.afterChord !== "STRUM" || strum.wrap !== "UP") fail("STRUM cycle " + JSON.stringify(strum));
+  else ok("STRUM: factory default + parameter cycle");
+  const strumV = await page.evaluate(async () => {
+    noteOn(60, .8); noteOn(64, .8); noteOn(67, .8);
+    await new Promise(r => setTimeout(r, 700));
+    const v = activeVoices;
+    noteOff(60); noteOff(64); noteOff(67);
+    state.arp.on = false; allNotesOff();
+    return v;
+  });
+  if (strumV < 1) fail("STRUM produced no voices");
+  else if (strumV > 70) fail("voice accounting leak: " + strumV + " active (cap is 62)");
+  else ok("STRUM plays (" + strumV + " voices mid-phrase, cap honored)");
+
+  /* audition improviser: two passes schedule, no errors */
+  await page.evaluate(() => { setProgram(0); });
+  await page.click("#audBtn");
+  await page.waitForTimeout(1200);
+  const audOn = await page.evaluate(() => ({ on: state.audition, v: activeVoices, pass: audPass }));
+  await page.click("#audBtn");
+  if (!audOn.on || audOn.pass < 1) fail("audition improviser inert " + JSON.stringify(audOn));
+  else ok("audition improviser live (pass " + audOn.pass + ")");
 
   /* mobile scale: fit() keeps physical touch targets >= 44px */
   await page.setViewportSize({ width: 380, height: 800 });

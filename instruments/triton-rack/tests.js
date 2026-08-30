@@ -147,6 +147,23 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   if (cBad) fail("crate validate/parse: " + cBad);
   else ok("crate: entries validate, imports filter corrupt takes, garbage JSON refused");
 }
+{ const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
+  const A = eval(audJs + "\n;({audVary})");
+  const riff = { len: 8, ev: [[0, 60, .5, .8], [1, 64, .5, .7], [2, 67, .5, .9], [3, 72, 1, .6]] };
+  let aBad = 0;
+  for (let p = 1; p <= 40; p++) {
+    const ev = A.audVary(riff, G3.mulberry(7919 * p + 1));
+    if (ev.length < 4 || ev.length > 5) aBad++;
+    ev.forEach(e => { if (e[0] < 0 || e[3] < 0.1 - 1e-9 || e[3] > 1 + 1e-9) aBad++; });
+  }
+  const a1 = JSON.stringify(A.audVary(riff, G3.mulberry(8)));
+  const a2 = JSON.stringify(A.audVary(riff, G3.mulberry(8)));
+  const a3 = JSON.stringify(A.audVary(riff, G3.mulberry(9)));
+  if (a1 !== a2) aBad++;
+  if (a1 === a3) aBad++;
+  if (aBad) fail("audition improviser: " + aBad + " violations");
+  else ok("audition improviser: bounded, deterministic per pass, different across passes");
+}
 if (errs === e3) ok("presets · figAnalysis(51) · motifs · 200 surprise seeds · sections");
 
 /* ── suite 4: take recorder WAV ────────────────────────────────────── */

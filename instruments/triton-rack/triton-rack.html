@@ -811,7 +811,8 @@ PROGRAMS.push(
 {id:"A031",name:"Nylon Dream",cat:"PLUCK",tempo:84, osc:[{w:"tri",lvl:.9,det:0},{w:"sine",lvl:.4,det:0,oct:-1}], strike:.4,
  filter:{type:"lp24",cutoff:1100,reso:.9,env:1800,key:.8,vel:.8}, fEG:{a:.002,d:.5,s:.15,r:.25},
  aEG:{a:.002,d:1.4,s:.1,r:.35}, lfo:{rate:4.8,pitch:2,filter:0,amp:0,delay:.5},
- fx:{drive:0,chorus:.15,delay:{send:.1,time:"8",fb:.2},reverb:.32}, audition:riffPent},
+ fx:{drive:0,chorus:.15,delay:{send:.1,time:"8",fb:.2},reverb:.32}, audition:riffPent,
+ arpDefault:{on:true,patt:"STRUM",reso:"8",gate:.9,oct:1,latch:true}},
 {id:"A032",name:"Steel Pan Isle",cat:"BELL",tempo:112, bell:[[1,1,.6],[2.32,.55,.45],[3.42,.3,.3]], osc:[], strike:.3,
  filter:{type:"lp12",cutoff:5600,reso:.7,env:0,key:.5,vel:.4}, fEG:{a:.001,d:.4,s:1,r:.3},
  aEG:{a:.002,d:1.4,s:0,r:.5}, lfo:{rate:.9,pitch:0,filter:0,amp:0,delay:0},
@@ -1330,8 +1331,14 @@ function applyFXP(p){
 function midiHz(n){ return 440*Math.pow(2,(n-69+state.transpose)/12)*Math.pow(2,state.tune/1200); }
 function regVoice(v,units){ activeVoices+=units; voiceList.push(v);
   while(activeVoices>62 && voiceList.length){ const old=voiceList.shift(); old.kill(); } updVoiceUI(); }
-function unreg(v){ const i=voiceList.indexOf(v); if(i<0) return; voiceList.splice(i,1);
-  activeVoices=Math.max(0,activeVoices-v.units); updVoiceUI(); }
+function unreg(v){
+  /* exactly-once, whether or not the voice is still listed: the steal path
+     shifts a voice out of voiceList BEFORE kill() runs, and the old indexOf
+     guard then skipped the decrement — activeVoices inflated under sustained
+     load until every new voice was stolen on arrival (baseline bug). */
+  if(v._ur) return; v._ur=true;
+  const i=voiceList.indexOf(v); if(i>=0) voiceList.splice(i,1);
+  activeVoices=Math.max(0,activeVoices-(v.units||1)); updVoiceUI(); }
 
 function spawnVoice(prog,note,vel,when,dur,dest){
   if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLog==="function") midiLog(prog,note,vel,when,dur,dest);
@@ -1606,6 +1613,13 @@ setInterval(()=>{
     else if(state.arp.patt==="RANDOM") list=[seq[Math.floor(Math.random()*seq.length)]];
     if(state.arp.patt==="CHORD"){
       [...new Set(seq)].forEach(nn=>playNote(nn,.8,arpNext,stepLen*state.arp.gate,true));
+    } else if(state.arp.patt==="STRUM"){
+      /* Ring 4 Q2: the chord as a hand across strings — a few-ms stagger,
+         low-to-high on even steps, high-to-low on odd, later strings softer */
+      const ns=[...new Set(seq)].sort((a,b)=>a-b);
+      if(arpStep%2) ns.reverse();
+      const sp=Math.min(.028,Math.max(.008,stepLen*.06));
+      ns.forEach((nn,k)=>playNote(nn,Math.max(.4,.84-k*.05),arpNext+k*sp,stepLen*state.arp.gate,true));
     } else {
       const n=list[arpStep%list.length];
       playNote(n,.8,arpNext,stepLen*state.arp.gate,true);
@@ -1613,13 +1627,31 @@ setInterval(()=>{
     arpStep++; arpNext+=stepLen;
   }
 },30);
-/* audition scheduler */
+/* audition improviser — Ring 4 Q3: no two listens repeat. Each pass breathes
+   the written riff: velocities move a little, timing shifts a hair, and one
+   phrase note (chosen per pass) gains a soft octave echo. The riff itself is
+   never rewritten — the audition stays the sound's honest demo. */
+/*AUDVARY-BEGIN*/
+function audVary(riff,rng){
+  const echoIdx=Math.floor(rng()*riff.ev.length);
+  const out=[];
+  riff.ev.forEach(([t,n,d,v],i)=>{
+    const vv=Math.max(.1,Math.min(1,v+(rng()-.5)*.12));
+    const tt=Math.max(0,t+(rng()-.5)*.02);
+    out.push([tt,n,d,vv]);
+    if(i===echoIdx&&rng()<.6) out.push([tt+.03,n+12,d*.7,vv*.4]);
+  });
+  return out;
+}
+/*AUDVARY-END*/
+let audPass=0;
 setInterval(()=>{
   if(!state.powered||state.test||!state.audition||!ctx) return;
   if(ctx.currentTime>audLoopEnd-.3){
     const riff=cur.audition||riffPad, spb=60/state.tempo;
     const at=Math.max(audLoopEnd,ctx.currentTime+.05);
-    riff.ev.forEach(([t,n,d,v])=>playNote(n,v,at+t*spb,d*spb,true));
+    const ev=(typeof mulberry==="function")? audVary(riff,mulberry(7919*(++audPass)+1)) : riff.ev;
+    ev.forEach(([t,n,d,v])=>playNote(n,v,at+t*spb,d*spb,true));
     audLoopEnd=at+riff.len*spb;
   }
 },60);
@@ -1650,7 +1682,7 @@ const PPAGES={
     {l:"RESO  ",get:()=>cur.filter.reso.toFixed(1),set:d=>{cur.filter.reso=Math.min(12,Math.max(0,cur.filter.reso+d*.3));}},
     {l:"ATTACK",get:()=>cur.aEG.a.toFixed(3),set:d=>{cur.aEG.a=Math.min(4,Math.max(.001,cur.aEG.a*(d>0?1.2:1/1.2)));}},
     {l:"RELEAS",get:()=>cur.aEG.r.toFixed(2),set:d=>{cur.aEG.r=Math.min(6,Math.max(.03,cur.aEG.r*(d>0?1.2:1/1.2)));}} ],
-  [ {l:"PATT  ",get:()=>state.arp.patt,set:d=>{const P=["UP","DOWN","ALT","RANDOM","CHORD"];state.arp.patt=P[(P.indexOf(state.arp.patt)+(d>0?1:4))%5];}},
+  [ {l:"PATT  ",get:()=>state.arp.patt,set:d=>{const P=["UP","DOWN","ALT","RANDOM","CHORD","STRUM"];state.arp.patt=P[(P.indexOf(state.arp.patt)+(d>0?1:5))%6];}},
     {l:"RESO  ",get:()=>"1/"+state.arp.reso,set:d=>{const P=["8","16","32"];state.arp.reso=P[(P.indexOf(state.arp.reso)+(d>0?1:2))%3];}},
     {l:"GATE  ",get:()=>Math.round(state.arp.gate*100)+"%",set:d=>{state.arp.gate=Math.min(1,Math.max(.1,state.arp.gate+d*.05));}},
     {l:"OCTAVE",get:()=>state.arp.oct+"",set:d=>{state.arp.oct=Math.min(4,Math.max(1,state.arp.oct+d));}},
@@ -3550,4 +3582,12 @@ DEAD BRANCHES: (1) localStorage persistence — lost again for the same reason a
 KILL-TEST: suite [7] — five real programs pass the validator; deleting aEG, stringifying cutoff, or dropping the audition riff each refuses; a 20-slot dirty file loads exactly its one valid program into 16 normalized slots; garbage JSON returns null, not an exception. In Chromium: the whole write flow by button — ENTER opens the write screen, nav dials to B001, ENTER commits; the chip appears, the count reads 1, cur.id becomes B001, and the exported JSON re-imports to the same slot.
 THE NON-OBVIOUS CHOICE: WRITE lives behind ENTER on the unit, not behind a web control — the feature's home decides its grammar, and this artifact's grammar is "the hardware is real." The browser parts (file I/O) live where browsers belong, on the Export tab.
 OPEN QUESTIONS: (1) Combis reference bank-A indices — should a future combi editor address B slots, and what happens to a combi whose B slot is overwritten? (2) The write screen shows the target's occupant but not a diff — is "what changed vs the factory sound" a page-P4 worth building? (3) Bank B + the crate + the DecentSampler zip are three exports — does a single "everything I made today" bundle earn its place?
+RING 18 · 2026-08-30 · STRUM, the breathing audition — and the voice ledger comes clean
+WHAT CHANGED: Ring 4's last two open questions answered. (1) STRUM joins the arpeggiator patterns: the held chord played as a hand across strings — 8–28 ms per-string stagger scaled from the step length, low-to-high on even steps and high-to-low on odd, later strings slightly softer. It cycles after CHORD on the P2 page, and A031 Nylon Dream ships with it as its factory arp (latched, 1/8, long gate) so one patch demonstrates the mode cold. (2) The AUDITION button now improvises: each loop pass runs the written riff through audVary — a pure, seeded variation (velocities breathe ±0.06, onsets drift ±10 ms in beat units, and one phrase note per pass gains a soft octave echo) — so no two listens repeat while the riff's identity is never rewritten. Pass N is deterministic; the sequence of passes is the performance.
+FOUND & FIXED DOWN THE LADDER (baseline bug, exposed by the new harness step): the 62-VOICE LEDGER LEAKED UNDER STEAL. regVoice's steal path shift()s the oldest voice out of voiceList BEFORE kill() runs, and unreg's indexOf guard then skipped the decrement — so under sustained load activeVoices inflated without bound (measured 291 in-harness), and once past the cap every new voice was stolen on arrival. unreg is now exactly-once by flag, list membership or not; the same phrase now peaks at 23 with the cap honored. Every engine that registers voices — synth, kit drums, physics buffers — rode on this ledger.
+BANNED (obvious answers set aside first): STRUM as velocity-only humanization on CHORD (a strum is TIME, not level); random stagger per note (a hand crosses strings in order — randomness reads as sloppiness, alternation reads as playing); an audition "AI improviser" rewriting the riff's notes (the audition exists to demo the PATCH; melody invention belongs to the conductor).
+DEAD BRANCHES: (1) strum stagger as fixed 12 ms — lost: at 1/32 resolution the strum ate the step, at slow 1/8 it vanished; scaling to 6% of the step, clamped 8–28 ms, reads as a strum at every tempo. (2) Improvising the audition through the arp engine (Ring 4's literal suggestion) — lost: the arp needs held keys and re-voices the riff into patterns, which demos the ARP, not the sound; per-pass micro-variation of the riff's own events keeps the demo honest. (3) Fixing the ledger by decrementing inside the steal loop — lost: kill() also runs from finish() and panic paths, and two call sites decrementing is how the NEXT leak gets written; one idempotent unreg owns the count.
+KILL-TEST: suite [3] holds audVary across 40 passes (bounded velocities and onsets, at most one echo, byte-deterministic per seed, different across seeds); the Chromium harness verifies Nylon Dream's STRUM default, the CHORD→STRUM→UP parameter cycle, a sounding strummed phrase, the improviser scheduling passes — and now asserts the voice cap (>70 active fails the build). The HALF-DICE harness step also learned to wait out a pending bar-line swap instead of racing it (a test flake, fixed in the test).
+THE NON-OBVIOUS CHOICE: the improviser varies the PERFORMANCE, not the score — audVary's output is never written back, so the riff in the bank stays the composer's, and determinism-per-pass means a listener can say "pass 7 was the good one" and mean something.
+OPEN QUESTIONS: (1) STRUM alternates by step parity — should consecutive identical chords instead alternate by STRUM COUNT so re-triggered chords rock back and forth even in CHORD-then-STRUM switching? (2) audVary echoes up an octave — plucked sounds might prefer a fifth; should the echo interval come from the patch category? (3) The ledger now counts exactly — is a voice-count trace worth drawing on the 4U scope's baseline?
 ═══ end rings ═══ -->
