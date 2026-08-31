@@ -3210,6 +3210,10 @@ function presetValidate(e){
      typeof ch.roman==="string"&&ch.roman.length>0&&ch.roman.length<8);
   if(!p.prog.every(okCh)) return false;
   if(p.hum!=null&&!(typeof p.hum==="number"&&p.hum>=0&&p.hum<=1.5)) return false;
+  if(p.format!=null&&["loop","arc","song"].indexOf(p.format)<0) return false;
+  if(p.bseed!=null&&!(Number.isInteger(p.bseed)&&p.bseed>=0&&p.bseed<=1e9)) return false;
+  if(p.lseed!=null&&!(Number.isInteger(p.lseed)&&p.lseed>=0&&p.lseed<=1e9)) return false;
+  if(["muteBass","muteChord","muteLead"].some(k=>p[k]!=null&&typeof p[k]!=="boolean")) return false;
   return true;
 }
 function presetParse(json){
@@ -3218,6 +3222,90 @@ function presetParse(json){
     if(!Array.isArray(o)) return [];
     return o.filter(presetValidate).slice(0,8);
   }catch(_){ return []; }
+}
+
+/* ── THE SONG AVATAR (round 4): a track is BUILT like a character — five
+   trait slots, each with prebuilt options the engine wears together:
+     0 THE DRUMMER  — a human tradition, transcribed (figure+band+kit+clock)
+     1 THE LOW END  — key, register, the bass voice
+     2 THE CHANGES  — a named progression + the chord voice
+     3 THE VOICE    — the lead instrument + its hook DNA
+     4 THE SHAPE    — how the song moves (loop / arc / song)
+   Everything already equipped keeps looping; a candidate swaps in ON THE
+   BAR; keeping a pick advances the slot. Pure functions here; the face
+   drives them. ── */
+const TRAITS=["THE DRUMMER","THE LOW END","THE CHANGES","THE VOICE","THE SHAPE"];
+function candDrums(rng){
+  /* prebuilt players first: the curated dream identities carry a tradition's
+     figure, companions, kit, tempo and humanity; the wildcard breeds one */
+  if(rng()<.7){
+    const pool=DREAMS.filter(d=>!d.surprise);
+    const d=pool[Math.floor(rng()*pool.length)];
+    return {kind:"drums",name:d.name,desc:LDR_FIG[d.fig].grid+"-pulse "+d.fig+" · ♩"+d.tempo,
+      fig:d.fig,comps:d.comps.slice(),kit:d.kit,tempo:d.tempo,hum:d.hum!=null?d.hum:.8,
+      extraKick:!!d.extraKick,seed:1+Math.floor(rng()*99999)};
+  }
+  const s=dreamPickSurprise(rng);
+  return {kind:"drums",name:"Wild: "+s.fig,desc:LDR_FIG[s.fig].grid+"-pulse · ♩"+s.tempo,
+    fig:s.fig,comps:s.comps,kit:s.kit,tempo:s.tempo,hum:s.hum,
+    extraKick:!!s.extraKick,seed:1+Math.floor(rng()*99999)};
+}
+const TH_NOTE=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+function candBass(rng){
+  const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
+  const basses=cat(["BASS"]);
+  const root=40+Math.floor(rng()*10), scale=rng()<.55?"minor":"major";
+  const bass=basses[Math.floor(rng()*basses.length)];
+  return {kind:"bass",name:TH_NOTE[((root%12)+12)%12]+" "+scale,
+    desc:PROGRAMS[bass].name,root,scale,bass,bseed:1+Math.floor(rng()*99999)};
+}
+function candChords(rng,bassC){
+  const scale=bassC?bassC.scale:"minor";
+  const pool=PROG_BANK.filter(b=>b.scale===scale);
+  const bp=pool[Math.floor(rng()*pool.length)];
+  const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
+  const chs=cat(["PAD","VOX","ORGAN","KEYBOARD"]);
+  const chord=chs[Math.floor(rng()*chs.length)];
+  return {kind:"chords",name:bp.name,desc:PROGRAMS[chord].name,
+    prog:bp.prog,progName:bp.name,chord,chordStyle:rng()<.5?"pad":"stab"};
+}
+function candLead(rng){
+  const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
+  const lds=cat(["LEAD","BELL","PLUCK"]);
+  const lead=lds[Math.floor(rng()*lds.length)];
+  const lseed=1+Math.floor(rng()*99999);
+  return {kind:"lead",name:PROGRAMS[lead].name,
+    desc:"hook #"+lseed%1000,lead,leadOct:12,lseed};
+}
+const FORMATS=[
+  {kind:"shape",format:"loop",name:"LOOP",desc:"head-nod — one groove, forever"},
+  {kind:"shape",format:"arc", name:"ARC", desc:"builds, breaks, breathes"},
+  {kind:"shape",format:"song",name:"SONG",desc:"the full journey — lifts and drops"}];
+function candFor(stage,rng,kept){
+  if(stage===0) return candDrums(rng);
+  if(stage===1) return candBass(rng);
+  if(stage===2) return candChords(rng,kept&&kept[1]);
+  if(stage===3) return candLead(rng);
+  return null; /* shape hands are FORMATS verbatim */
+}
+/* compose a playable dream from the equipped traits + the candidate being
+   tried on; unfilled future slots are MUTED, never faked */
+function composeP(kept,cur,stage){
+  const eq=i=> (i===stage&&cur)? cur : kept[i];
+  const dr=eq(0), ba=eq(1), ch=eq(2), ld=eq(3), fm=eq(4);
+  if(!dr) return null;
+  const p={name:dr.name+(ch?" × "+ch.progName:""),
+    fig:dr.fig,comps:dr.comps,kit:dr.kit,tempo:dr.tempo,hum:dr.hum,extraKick:!!dr.extraKick,
+    scale:ba?ba.scale:"minor",root:ba?ba.root:45,bass:ba?ba.bass:48,
+    prog:ch?ch.prog:[0],progName:ch?ch.progName:(ba?"root vamp":""),
+    chord:ch?ch.chord:36,chordStyle:ch?ch.chordStyle:"pad",
+    lead:ld?ld.lead:32,leadOct:ld?ld.leadOct:12,
+    muteBass:!ba,muteChord:!ch,muteLead:!ld,
+    _seed:dr.seed};
+  if(ba&&ba.bseed!=null) p.bseed=ba.bseed;
+  if(ld&&ld.lseed!=null) p.lseed=ld.lseed;
+  if(fm) p.format=fm.format; else p._building=true;
+  return p;
 }
 
 /* ── THE THEORY BAR (Improvisator's cheat sheet, live): the key, the
@@ -3253,12 +3341,17 @@ function theoryData(p){
 function theoryRender(){
   const host=document.getElementById("thProg"), k=document.getElementById("thKey");
   if(!host||!k) return;
-  const p=DREAM.p;
-  if(!p){ k.textContent="\u2014"; host.innerHTML="";
-    const n=document.getElementById("thNow"); if(n) n.textContent="press play"; return; }
-  const cells=theoryData(p);
+  const p=DREAM.p, n=document.getElementById("thNow"), pn=document.getElementById("thProgName");
+  if(!p){ k.textContent="\u2014"; host.innerHTML=""; if(pn) pn.textContent="";
+    if(n) n.textContent="press play"; return; }
+  /* the bar only claims what the avatar has: no key before the low end,
+     no changes before the changes */
+  if(p.muteBass){ k.textContent="\u2014"; host.innerHTML=""; if(pn) pn.textContent="";
+    if(n) n.textContent="drums first"; return; }
   k.textContent=TH_NN[((p.root%12)+12)%12]+" "+(p.scale==="minor"?"MINOR":"MAJOR");
-  const pn=document.getElementById("thProgName");
+  if(p.muteChord){ host.innerHTML=""; if(pn) pn.textContent="";
+    if(n) n.textContent="key set \u00b7 changes next"; return; }
+  const cells=theoryData(p);
   if(pn) pn.textContent=p.progName||"";
   host.innerHTML=cells.map((c,i)=>'<div class="thCell" data-i="'+i+'"><b>'+c.roman+
     '</b><span>'+c.name+'</span><small>'+c.tones+'</small></div>').join("");
@@ -3396,8 +3489,14 @@ function bassMake(seed,an,grid){
 
 const DREAM={on:false,seed:0,rng:Math.random,p:null,bar:0,chordBar:0,next:0,pans:null,
   voic:null,hook:null,bcell:null,pending:null,_barLen:0,_barStart:0,_stepSec:.15};
-function sectFor(bar){ if(bar<4) return "INTRO";
-  const S=["GROOVE","GROOVE","LIFT","GROOVE","BREAK","LIFT","GROOVE","GROOVE"];
+function sectFor(bar){
+  const p=typeof DREAM!=="undefined"?DREAM.p:null;
+  if(p&&p._building) return bar<1?"INTRO":"GROOVE"; /* auditioning: steady groove, nothing drops out under a try-on */
+  if(bar<4) return "INTRO";
+  if(p&&p.format==="loop") return "GROOVE";
+  const S=p&&p.format==="song"
+    ? ["GROOVE","LIFT","GROOVE","LIFT","BREAK","GROOVE","LIFT","LIFT"]
+    : ["GROOVE","GROOVE","LIFT","GROOVE","BREAK","LIFT","GROOVE","GROOVE"];
   return S[Math.floor((bar-4)/8)%S.length]; }
 const SECT_CFG={
  INTRO:{comps:0,bass:.6,lead:0,mainVel:.9,padVel:.42},
@@ -3473,8 +3572,8 @@ function dreamScheduleBar(at,f,step,barLen){
   /* bass — THE CELL: onsets and degrees drawn once per dream against the
      figure's skeleton; the harmony moves under a line that keeps its name.
      Chromatic approach into the change; octave pop on the turnaround. */
-  if(C.bass>0){
-    if(!DREAM.bcell) DREAM.bcell=bassMake(DREAM.seed||1,an,f.grid);
+  if(C.bass>0&&!P.muteBass){
+    if(!DREAM.bcell) DREAM.bcell=bassMake(P.bseed!=null?P.bseed:(DREAM.seed||1),an,f.grid);
     const bc=DREAM.bcell;
     const nF=sect==="INTRO"? Math.min(2,bc.fires.length) : bc.fires.length;
     for(let i=0;i<nF;i++){
@@ -3494,21 +3593,23 @@ function dreamScheduleBar(at,f,step,barLen){
   }
   /* chords — pads breathe whole bars and ROLL like a hand across keys;
      stabs sit on the skeleton, each with its own wrist */
-  if(P.chordStyle==="pad"||sect==="BREAK"){
-    const zc=bandZ("chord",bt(0),rng), roll=.005+.007*rng();
-    tones.forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv(C.padVel*zc.gain),
-      at+Math.max(0,zc.dt+i*roll),barLen*.97,DREAM.pans.chord));
-  } else {
-    const slots=an.density>0.6? an.skel.slice(0,3) : an.skel;
-    slots.forEach(p=>{ const v=an.hm[p]||.8, zs=bandZ("chord",bt(p),rng), roll=.003+.003*rng();
-      tones.slice(0,3).forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv((.5+.28*v)*zs.gain),
-        at+p*step+zs.dt+i*roll,step*1.6,DREAM.pans.chord)); });
+  if(!P.muteChord){
+    if(P.chordStyle==="pad"||sect==="BREAK"){
+      const zc=bandZ("chord",bt(0),rng), roll=.005+.007*rng();
+      tones.forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv(C.padVel*zc.gain),
+        at+Math.max(0,zc.dt+i*roll),barLen*.97,DREAM.pans.chord));
+    } else {
+      const slots=an.density>0.6? an.skel.slice(0,3) : an.skel;
+      slots.forEach(p=>{ const v=an.hm[p]||.8, zs=bandZ("chord",bt(p),rng), roll=.003+.003*rng();
+        tones.slice(0,3).forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv((.5+.28*v)*zs.gain),
+          at+p*step+zs.dt+i*roll,step*1.6,DREAM.pans.chord)); });
+    }
   }
   /* lead — THE HOOK: stated, varied, answered, cadenced. Drawn once per
      seed, developed per phrase, never re-rolled; cells carry rests and the
      cadence voice-leads into the coming chord. */
-  if(C.lead>0&&DREAM.bar>=4){
-    if(!DREAM.hook) DREAM.hook=hookMake(DREAM.seed||1,f.grid);
+  if(C.lead>0&&DREAM.bar>=4&&!P.muteLead){
+    if(!DREAM.hook) DREAM.hook=hookMake(P.lseed!=null?P.lseed:(DREAM.seed||1),f.grid);
     const hb=hookBar(DREAM.hook,phraseBar%4,sect);
     const br=mulberry(((DREAM.seed||1)^0x1EAD^(DREAM.bar*2654435761))>>>0);
     let cell=hb.cell;

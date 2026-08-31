@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake,LOCKS,lockMerge,presetValidate,presetParse})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake,LOCKS,lockMerge,presetValidate,presetParse,TRAITS,candDrums,candBass,candChords,candLead,FORMATS,candFor,composeP,DREAM})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -267,6 +267,54 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   if (G3.hv(1.7) !== 1 || G3.hv(-2) !== .05) { fail("hv clamp"); cBad++; }
   if (!cBad) ok("the drummer's clock: keyed 1/f wander (lag-1 " + lag1(w1).toFixed(2) +
     "), kit tight / lead free (sd ×" + (sd(leadO) / sd(kitO)).toFixed(2) + "), ±⅓-step cap, hum=0 = machine");
+}
+{ /* the song avatar: five trait slots, prebuilt pieces, composed honestly */
+  let aBad = 0;
+  if (!(Array.isArray(G3.TRAITS) && G3.TRAITS.length === 5)) { fail("five traits, no more"); aBad++; }
+  for (let s = 1; s <= 40; s++) {
+    const d = G3.candDrums(G3.mulberry(s));
+    if (!LDR_FIG[d.fig] || PROGRAMS[d.kit].cat !== "DRUMS" || !(d.tempo >= 40 && d.tempo <= 300) ||
+        !(d.seed >= 1) || !d.name) { fail("drummer card " + s + " invalid"); aBad++; }
+    d.comps.forEach(c => { const r = ldrBase(c);
+      if (!LDR_FIG[r.id] || LDR_FIG[r.id].grid !== LDR_FIG[d.fig].grid) { fail("drummer comps " + s); aBad++; } });
+    const b = G3.candBass(G3.mulberry(s * 7 + 1));
+    if (!(b.root >= 40 && b.root <= 49) || PROGRAMS[b.bass].cat !== "BASS" || !SCALES_OK(b.scale)) { fail("bass card " + s); aBad++; }
+    const c = G3.candChords(G3.mulberry(s * 13 + 2), b);
+    const bk = G3.PROG_BANK.find(x => x.name === c.progName);
+    if (!bk || bk.scale !== b.scale || bk.prog !== c.prog || !PROGRAMS[c.chord]) { fail("chords card " + s + " off the bank"); aBad++; }
+    const l = G3.candLead(G3.mulberry(s * 17 + 3));
+    if (!PROGRAMS[l.lead] || !(l.lseed >= 1)) { fail("lead card " + s); aBad++; }
+  }
+  function SCALES_OK(x){ return x === "minor" || x === "major"; }
+  if (!(G3.FORMATS.length === 3 && G3.FORMATS.every(f => ["loop", "arc", "song"].includes(f.format)))) { fail("formats"); aBad++; }
+  const d1 = JSON.stringify(G3.candDrums(G3.mulberry(9))), d2 = JSON.stringify(G3.candDrums(G3.mulberry(9)));
+  if (d1 !== d2) { fail("cards not deterministic per stream"); aBad++; }
+  /* composition: honest mutes, kept overrides, the drummer is the clock */
+  const kd = G3.candDrums(G3.mulberry(4)), kb = G3.candBass(G3.mulberry(5)),
+        kc = G3.candChords(G3.mulberry(6), kb), kl = G3.candLead(G3.mulberry(7));
+  const p0 = G3.composeP([null,null,null,null,null], kd, 0);
+  if (!(p0.muteBass && p0.muteChord && p0.muteLead && p0._building && p0._seed === kd.seed &&
+        p0.fig === kd.fig)) { fail("stage-0 compose " + JSON.stringify({m:p0.muteBass,b:p0._building})); aBad++; }
+  const p1 = G3.composeP([kd,null,null,null,null], kb, 1);
+  if (!(!p1.muteBass && p1.muteChord && p1.root === kb.root && p1.bseed === kb.bseed &&
+        p1.fig === kd.fig && p1._seed === kd.seed)) { fail("stage-1 compose"); aBad++; }
+  const p2 = G3.composeP([kd,kb,null,null,null], kc, 2);
+  if (!(!p2.muteChord && p2.muteLead && p2.progName === kc.progName && p2.root === kb.root)) { fail("stage-2 compose"); aBad++; }
+  const pF = G3.composeP([kd,kb,kc,kl,G3.FORMATS[1]], null, 5);
+  if (!(pF && !pF.muteBass && !pF.muteChord && !pF.muteLead && pF.format === "arc" && !pF._building &&
+        pF.lseed === kl.lseed && G3.presetValidate({name:"t",seed:kd.seed,p:JSON.parse(JSON.stringify(pF))})))
+    { fail("full compose not keepable"); aBad++; }
+  if (G3.composeP([null,null,null,null,null], null, 1) !== null) { fail("compose without a drummer"); aBad++; }
+  /* the shape governs the sections; auditioning holds a steady groove */
+  const keep = G3.DREAM.p;
+  G3.DREAM.p = { _building: true };
+  if (G3.sectFor(9) !== "GROOVE" || G3.sectFor(30) !== "GROOVE") { fail("building must hold GROOVE"); aBad++; }
+  G3.DREAM.p = { format: "loop" };
+  if (G3.sectFor(9) !== "GROOVE" || G3.sectFor(37) !== "GROOVE") { fail("loop shape"); aBad++; }
+  G3.DREAM.p = { format: "song" };
+  for (let b = 0; b < 120; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) { fail("song shape invalid at bar " + b); aBad++; }
+  G3.DREAM.p = keep;
+  if (!aBad) ok("the song avatar: 5 trait slots, valid prebuilt cards (drummers/low end/changes/voice), honest mutes, drummer = clock, shapes govern sections");
 }
 { /* locks: surgical halves; presets: hostile-file law */
   let lBad = 0;
