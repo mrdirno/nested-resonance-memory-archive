@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-08-31, rings 1–31 in `triton-rack.html`.
+**As of:** 2026-08-31, rings 1–32 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -20,11 +20,20 @@ itself carrying presets). Round 4 (ring 31) executed the fourth verdict:
 *"the layering doesn't make sense… follow the process — drums first…
 reinvent the dice roll for the AI age… build the song like an avatar, the
 pieces are prebuilt, the engine seamlessly combines them… less clicks."* —
-THE SONG AVATAR: five trait slots (THE DRUMMER · THE LOW END · THE CHANGES ·
-THE VOICE · THE SHAPE), three dealt candidates per trait, tap to hear on the
-bar / tap the lit card to keep, the next trait deals itself; the rail is the
-avatar and any filled slot remixes live; the whole TRITON rack folds behind
-one "⚙ engine room" link.
+THE SONG AVATAR: five trait slots, three dealt candidates per trait, tap to
+hear on the bar / tap the lit card to keep, the next trait deals itself; the
+rail is the avatar and any filled slot remixes live; the whole TRITON rack
+folds behind one "⚙ engine room" link. Round 5 (ring 32) executed the fifth
+verdict: *"think like a producer… counterpoint instead of chords…
+embellishments… a 2U rack space should populate under the player… dynamic
+headroom… patching as dice/next/previous, never a list… an actual open
+source library of human playing, quantized to any key any scale — the most
+important part."* — THE PHRASE LIBRARY (mined from Groove MIDI CC-BY 4.0 and
+OpenScore String Quartets CC0, judged by a 29-agent court, every phrase
+re-verified against raw sources), THE COUNTER and THE EMBELLISH replacing
+chords and lead, the groove field, the 2U rack shelf, and take-logged
+dynamic headroom. Traits now: THE DRUMMER · THE LOW END · THE COUNTER ·
+THE EMBELLISH · THE SHAPE.
 
 ---
 
@@ -35,6 +44,7 @@ one "⚙ engine room" link.
 | `triton-rack.html` | The instrument (self-contained, no CDN/fetch/localStorage). The face is **THE SONG AVATAR** (round 4): a track is built like a game character — five trait slots (THE DRUMMER · THE LOW END · THE CHANGES · THE VOICE · THE SHAPE), the engine deals three prebuilt candidates per trait (curated dream identities + wildcard breeds; keys and bass voices; scale-matched named progressions; hook DNAs; loop/arc/song), tap a card to hear it swap in **on the bar** under everything kept, tap the lit card to keep it and the next trait deals itself; unfilled slots are muted, never faked; the rail is the avatar and tapping a filled slot remixes that trait live; a song stands in as few as five taps. Under the fold (one "⚙ engine room" link): the full Korg TRITON-Rack recreation — 128 programs + 16 user Bank B slots, 16 combis, Web MIDI in (hardware keyboards are first-class — the unit boots from a MIDI note, with a one-tap audio nudge for the autoplay law), DecentSampler export, EXB-LDR board with the donor's **ported percussion physics** (25 PERC_RECIPE voices) and 51 figures routed instrument-to-instrument, the **theory bar** (key, named progression, Roman numerals, the sounding chord — honest at every build stage), the 12-progression bank, the drummer's correlated clock + hook/bass cell engines, the mix rack + master chain. **THE TAKE** rolls from the moment anything plays and SAVE bounces it offline through the same engine into a normalized 24-bit WAV + SMF-1 with the player on a YOU track; ★ KEEP writes the standing song into a working copy of the file itself (the copy boots with the avatar rail rebuilt, remixable). Rings at tail. |
 | `luckydreamer_3.html` | The first donor, byte-identical to the original upload. Reference and ground truth. **Do not modify it.** |
 | `dreamdrummer_21.html` | The third donor (round 3), byte-identical to the upload. Source of the correlated human-timing science, the structural-consistency doctrine, the mix architecture, and the locks grammar (extraction: Ring 26). **Do not modify it.** |
+| `mine/` | The phrase-library pipeline (round 5): SMF + MusicXML parsers (no deps), LDRP1 pack/unpack, extractors for Groove MIDI (CC-BY 4.0) and OpenScore String Quartets (CC0), structural pre-filter, the judges' decoder, the raw-source fidelity gate, the assembler and injector. See `mine/README.md` — the library is re-runnable and extensible. |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
 | `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
@@ -122,6 +132,36 @@ one "⚙ engine room" link.
    stage-4 hands (FORMATS verbatim) light the KEPT format, not card 0. Both
    gated in the harness alongside the full build walkthrough.
 
+## 3d. Round 5 in five cuts (ring 32)
+
+1. **The library** (`mine/` holds the whole pipeline + court verdicts).
+   Open human-performance corpora fetched and license-verified, parsed by
+   no-deps SMF/MusicXML readers, sliced to ~163k candidates, packed into
+   LDRP1 (drums keep the player's per-event deviation; lines are
+   semitones-from-tonic — any key, any scale), pre-filtered to 858, judged
+   by a 26-judge + 3-auditor court (256 named picks; nine parser
+   convictions fixed, picks re-bound to the corrected extraction), and
+   every embedded phrase re-derived from its raw source at a rediscovered
+   window offset: **222/222 pass** — 116 grooves · 20 fills · 25 bass ·
+   41 counters · 20 licks, 66KB packed.
+2. **The producer traits.** THE COUNTER replaces block chords: a sparse
+   human counter-line leaves the middle open for a vocalist; the chord is
+   one soft roll at section pivots. THE EMBELLISH replaces the lead: short
+   gestures at phrase ends, voice-led into the coming change, silence
+   otherwise.
+3. **The groove field.** A library drummer's per-step median deviation
+   becomes the timing field the melodic parts ride; the paired style-matched
+   FILL takes the whole bar at phrase ends and wherever `sectFor` turns —
+   the song moves on the finishes.
+4. **The rack shelf.** Every kept trait materializes as a 2U unit under the
+   conductor: name, voice, ‹ › walks the voice drawer, ◇ deals another take
+   straight into the song on the bar, live meter per strip (analyser taps in
+   `mkStrip`). Patching is never a list.
+5. **Dynamic headroom.** `mixStageFor(n)` — deterministic trims from the
+   active-part count (low end yields least, limiter drive eases) — applied
+   at the bar a part lands and logged into the take as `mix` events, so the
+   offline bounce replays the exact console moves.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -150,6 +190,14 @@ the map are the donor's hand: do not move them on taste.
 
 ## 6. Open edges (from the rings, for the next bench)
 
+- FiloBass (48 pro jazz bass transcriptions) and GuitarSet (human comping +
+  solos), both CC-BY 4.0, were blocked by the build bench's egress policy
+  (zenodo.org). The `mine/` pipeline is ready for them (Ring 32).
+- The groove field rides per-step medians; the full bar-by-bar deviation
+  series is in the data — should the band follow the drummer bar-by-bar?
+  (Ring 32)
+- Dealer learning: phrases carry the court's tags; should kept choices
+  weight future hands? (Rings 31/32)
 - Promotion: the verdict asked for "promoting the tracks that sound the
   dopest, like playlisting" — KEEP holds 8; should kept songs rank, and
   should the dealer learn from what gets kept? (Ring 31)

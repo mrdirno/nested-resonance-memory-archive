@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake,LOCKS,lockMerge,presetValidate,presetParse,TRAITS,candDrums,candBass,candChords,candLead,FORMATS,candFor,composeP,DREAM})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake,LOCKS,lockMerge,presetValidate,presetParse,TRAITS,candDrums,candBass,candChords,candLead,FORMATS,candFor,composeP,DREAM,PHRASES,PHRASE_IDX,phrasePick,ldrpUnpackDrum,ldrpUnpackMel,ldrpGrooveField,ldrpFitScale,LDRP2KIT,LDRP_LANES})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -315,6 +315,84 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   for (let b = 0; b < 120; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) { fail("song shape invalid at bar " + b); aBad++; }
   G3.DREAM.p = keep;
   if (!aBad) ok("the song avatar: 5 trait slots, valid prebuilt cards (drummers/low end/changes/voice), honest mutes, drummer = clock, shapes govern sections");
+}
+{ /* round 5 — the phrase library: LDRP decode, scale-fit, groove field,
+     library-backed cards, preset law over phrase refs, headroom staging */
+  let rBad = 0;
+  const A36 = "0123456789abcdefghijklmnopqrstuvwxyz";
+  const e1 = v => A36[Math.max(0, Math.min(35, Math.round(v)))];
+  const e2 = v => A36[(v / 36) | 0] + A36[v % 36];
+  const packD = evs => evs.map(e => e2(e.step) + e1(e.dev * 36 + 18) + G3.LDRP_LANES[e.lane] + e1(e.vel * 35)).join("");
+  const packM = evs => evs.map(e => e2(e.step) + e2(e.deg + 24) + e1(Math.min(35, e.dur * 4)) + e1(e.vel * 35)).join("");
+  /* decode round-trip within encoder quanta */
+  const dIn = [{step:0,dev:.11,lane:0,vel:.9},{step:4,dev:-.14,lane:3,vel:.3},{step:33,dev:.02,lane:1,vel:1}];
+  const dOut = G3.ldrpUnpackDrum(packD(dIn));
+  dIn.forEach((e,i)=>{ const u=dOut[i];
+    if (!(u && u.step===e.step && u.lane===e.lane && Math.abs(u.dev-e.dev)<1/36 && Math.abs(u.vel-e.vel)<1/34))
+      { fail("drum decode "+i); rBad++; } });
+  const mIn = [{step:0,deg:0,dur:1,vel:.7},{step:6,deg:-5,dur:.5,vel:.55},{step:30,deg:14,dur:2,vel:.8}];
+  const mOut = G3.ldrpUnpackMel(packM(mIn));
+  mIn.forEach((e,i)=>{ const u=mOut[i];
+    if (!(u && u.step===e.step && u.deg===e.deg && Math.abs(u.dur-e.dur)<.26 && Math.abs(u.vel-e.vel)<1/34))
+      { fail("mel decode "+i); rBad++; } });
+  /* scale-fit: in-scale stays; chromatics fold IN; octaves preserved */
+  const MINOR=[0,2,3,5,7,8,10];
+  if (G3.ldrpFitScale(3,MINOR)!==3 || G3.ldrpFitScale(15,MINOR)!==15) { fail("fitScale identity"); rBad++; }
+  const f4=G3.ldrpFitScale(4,MINOR); /* major third folds to a minor-scale tone */
+  if (MINOR.indexOf(((f4%12)+12)%12)<0) { fail("fitScale fold"); rBad++; }
+  const f16=G3.ldrpFitScale(16,MINOR);
+  if (!(f16>=12&&f16<24&&MINOR.indexOf(f16-12)>=0)) { fail("fitScale octave"); rBad++; }
+  /* groove field: per-step medians, nulls where the player never lands */
+  const gf=G3.ldrpGrooveField([{step:0,dev:.1},{step:0,dev:.3},{step:0,dev:.2},{step:5,dev:-.1}],16);
+  if (!(Math.abs(gf[0]-.2)<1e-9 && Math.abs(gf[5]+.1)<1e-9 && gf[3]===null)) { fail("groove field"); rBad++; }
+  /* a synthetic library lights the lib branches of every candidate */
+  const baseLen=G3.PHRASES.length;
+  G3.PHRASES.push(
+    {n:"Test Pocket",k:"dr",b:2,s:"funk",bpm:96,dm:"drummer1",src:"t:dr",tg:[],e:packD(dIn)},
+    {n:"Test Fill",k:"dr",b:1,fl:1,s:"funk",bpm:96,dm:"drummer1",src:"t:fl",tg:[],e:packD(dIn.slice(0,2))},
+    {n:"Test Low",k:"bs",b:2,md:"minor",cp:"T",src:"t:bs",tg:[],e:packM(mIn)},
+    {n:"Test Counter",k:"cp",b:2,md:"minor",cp:"T",src:"t:cp",tg:[],e:packM(mIn)},
+    {n:"Test Lick",k:"em",b:2,md:"minor",cp:"T",src:"t:em",tg:[],e:packM(mIn.slice(0,2))});
+  G3.PHRASE_IDX.dr.push(baseLen); G3.PHRASE_IDX.fill.push(baseLen+1);
+  G3.PHRASE_IDX.bs.push(baseLen+2); G3.PHRASE_IDX.cp.push(baseLen+3); G3.PHRASE_IDX.em.push(baseLen+4);
+  let libD=null, libB=null, libC=null, libL=null;
+  for (let s=1; s<=80 && !(libD&&libB&&libC&&libL); s++) {
+    const d=G3.candDrums(G3.mulberry(s*3)); if (d.dlib!=null&&!libD) libD=d;
+    const b=G3.candBass(G3.mulberry(s*5)); if (b.blib!=null&&!libB) libB=b;
+    if (b.scale==="minor"){ const c=G3.candChords(G3.mulberry(s*7),b); if (c.clib!=null&&!libC) libC=c; }
+    const l=G3.candLead(G3.mulberry(s*11)); if (l.elibs&&!libL) libL=l;
+  }
+  if (!libD||!(LDR_FIG[libD.fig]&&LDR_FIG[libD.fig].grid===16&&libD.comps.length===0&&libD.hum===1))
+    { fail("library drummer card"); rBad++; }
+  if (!libD||G3.PHRASES[libD.dlib].k!=="dr") { fail("dlib kind"); rBad++; }
+  if (!libB||G3.PHRASES[libB.blib].k!=="bs") { fail("blib kind"); rBad++; }
+  if (libB&&libB.scale==="minor"&&G3.PHRASES[libB.blib].md!=="minor") { fail("blib mode-match when the mode bucket exists"); rBad++; }
+  if (!libC||libC.chordStyle!=="counter"||G3.PHRASES[libC.clib].k!=="cp") { fail("counter card"); rBad++; }
+  if (!libL||!libL.elibs.every(i=>G3.PHRASES[i].k==="em")) { fail("embellish bag"); rBad++; }
+  /* the refs ride composeP into a keepable preset; hostile refs are refused */
+  if (libD&&libB&&libC&&libL) {
+    const pL=G3.composeP([libD,libB,libC,libL,G3.FORMATS[0]],null,5);
+    if (!(pL.dlib===libD.dlib&&pL.blib===libB.blib&&pL.clib===libC.clib&&
+          JSON.stringify(pL.elibs)===JSON.stringify(libL.elibs))) { fail("lib refs through composeP"); rBad++; }
+    const ent=JSON.parse(JSON.stringify({name:"t",seed:1,p:pL}));
+    if (!G3.presetValidate(ent)) { fail("lib preset validates"); rBad++; }
+    const evil=JSON.parse(JSON.stringify(ent)); evil.p.dlib=libB.blib; /* kind mismatch */
+    if (G3.presetValidate(evil)) { fail("kind-mismatched dlib accepted"); rBad++; }
+    const oob=JSON.parse(JSON.stringify(ent)); oob.p.elibs=[99999];
+    if (G3.presetValidate(oob)) { fail("out-of-range elib accepted"); rBad++; }
+  }
+  G3.PHRASES.length=baseLen;
+  G3.PHRASE_IDX.dr.pop(); G3.PHRASE_IDX.fill.pop(); G3.PHRASE_IDX.bs.pop(); G3.PHRASE_IDX.cp.pop(); G3.PHRASE_IDX.em.pop();
+  /* dynamic headroom: pure staging table — more parts, more headroom */
+  const mixJs = slice("function mixStageFor", "function mixApplyStage");
+  const stageFor = eval(mixJs + "\n;mixStageFor");
+  let prevC=1;
+  for (let n=1;n<=5;n++){ const st=stageFor(n);
+    if (!(st.chord>0&&st.chord<=prevC+1e-9&&st.bass>0&&st.lead>0&&st.lim>0&&st.lim<=2/3+1e-3))
+      { fail("stage table at n="+n); rBad++; }
+    prevC=st.chord; }
+  if (!(stageFor(5).chord<stageFor(1).chord && stageFor(5).lim<stageFor(2).lim)) { fail("staging never yields headroom"); rBad++; }
+  if (!rBad) ok("round 5: LDRP decodes within quanta, scale-fit folds chromatics, groove field medians, library cards + preset law over phrase refs, headroom staging table");
 }
 { /* locks: surgical halves; presets: hostile-file law */
   let lBad = 0;

@@ -132,13 +132,15 @@ const path = __dirname + "/triton-rack.html";
 
   /* behavior: PLAY powers + conducts; readout goes live */
   await page.click("#dreamPlay");
+  /* a library drummer plays kit-role events; a curated one perc-role — both are drums */
   await page.waitForFunction(() => typeof DREAM !== "undefined" && DREAM.on && DREAM.bar >= 2 &&
-    TAKE.ev.filter(e => e.role === "perc").length >= 10, { timeout: 25000 });
+    TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length >= 10, { timeout: 25000 });
   await page.waitForTimeout(250);
   const st1 = await page.evaluate(() => ({
     on: DREAM.on, powered: state.powered, seed: DREAM.seed, bar: DREAM.bar,
     readout: document.getElementById("ldrReadout").textContent,
     voices: activeVoices, engine: LDR.engine, fallbacks: LDR.fallbacks,
+    lib: DREAM.p && DREAM.p.dlib != null,
     bufs: LDR_BUFS.size }));
   if (!st1.on || !st1.powered) fail("PLAY did not start (on=" + st1.on + " powered=" + st1.powered + ")");
   else if (st1.bar < 1) fail("transport on but bars not advancing (bar " + st1.bar + ")");
@@ -148,8 +150,9 @@ const path = __dirname + "/triton-rack.html";
   else ok("readout live: " + st1.readout);
   if (st1.engine !== "phys") fail("engine not phys: " + st1.engine);
   if (st1.fallbacks) fail(st1.fallbacks + " mapping fallbacks fired");
-  if (st1.bufs < 3) fail("physics buffers not rendering (" + st1.bufs + ")");
-  else ok("physics engine live · " + st1.bufs + " buffers cached · 0 fallbacks");
+  /* a LIBRARY drummer plays kit voices, not LDR physics — buffers come later */
+  if (!st1.lib && st1.bufs < 3) fail("physics buffers not rendering (" + st1.bufs + ")");
+  else ok((st1.lib ? "library take live · " : "physics engine live · ") + st1.bufs + " buffers cached · 0 fallbacks");
 
   /* stage 0 — THE DRUMMER: three prebuilt players dealt, one live, honest mutes */
   const stg0 = await page.evaluate(() => ({ stage: BUILD.stage,
@@ -163,20 +166,33 @@ const path = __dirname + "/triton-rack.html";
   else if (stg0.thKey !== "—" || stg0.thNow !== "drums first") fail("theory bar invents a key at the drum stage ('" + stg0.thKey + "'/'" + stg0.thNow + "')");
   else ok("stage 0: three drummers dealt, one live, future traits muted, theory honest");
 
+  /* the clock probe measures the FIGURE engine — make sure a curated (not
+     library) drummer is live; the library path has its own probe later */
+  await page.evaluate(() => {
+    for (let t = 0; t < 12; t++) {
+      const i = BUILD.hand.findIndex(c => c && c.dlib == null);
+      if (i >= 0) { if (i !== BUILD.live) auditionCard(i); return; }
+      dreamDice();
+    }
+  });
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.p.dlib == null, undefined, { timeout: 25000 });
+  const tSwap = await page.evaluate(() => ctx.currentTime - TAKE.t0);
   /* the clock on the tape: correlated, not white — grid-aware, humanity-aware.
-     Wait for enough FIGURE-lane tape first: a sparse 4-hit figure needs bars */
-  await page.waitForFunction(() => {
-    const P = TAKE.ev.filter(e => e.role === "perc" && (e.ln ? e.ln === "fig" : true) && e.vel >= 0.3);
+     Wait for enough FIGURE-lane tape first (after any drummer swap — earlier
+     events belong to another figure and tempo): a sparse figure needs bars */
+  await page.waitForFunction(t0 => {
+    const P = TAKE.ev.filter(e => e.t > t0 && e.role === "perc" && (e.ln ? e.ln === "fig" : true) && e.vel >= 0.3);
     return P.length >= 10;
-  }, { timeout: 30000 }).catch(() => {});
-  const clk = await page.evaluate(() => {
+  }, tSwap, { timeout: 40000 }).catch(() => {});
+  const clk = await page.evaluate(t0 => {
     const f = LDR_FIG[DREAM.p.fig];
     const step = (60 / state.tempo) / (f.grid / 4);
     /* one limb, one wave: the main figure rides the kit-wave, companions the
        perc-wave; a shared recipe NAME interleaves both waves under one name
        and reads anti-correlated — so measure the figure lane (ln tag) alone */
-    const tagged = TAKE.ev.filter(e => e.role === "perc" && e.ln === "fig");
-    const all = tagged.length ? tagged : TAKE.ev.filter(e => e.role === "perc");
+    const fresh = TAKE.ev.filter(e => e.t > t0);
+    const tagged = fresh.filter(e => e.role === "perc" && e.ln === "fig");
+    const all = tagged.length ? tagged : fresh.filter(e => e.role === "perc");
     const byName = {};
     all.forEach(e => { (byName[e.name] = byName[e.name] || []).push(e); });
     const P = (Object.values(byName).sort((a, b) => b.length - a.length)[0] || [])
@@ -192,7 +208,7 @@ const path = __dirname + "/triton-rack.html";
     dev.forEach(x => d1 += (x - m) * (x - m));
     return { n: P.length, hum: DREAM.p.hum, sdMs: sd * 1000,
       maxMs: Math.max(...dev.map(Math.abs)) * 1000, lag1: d1 ? n1 / d1 : 0 };
-  });
+  }, tSwap);
   if (clk.n < 8) fail("too few figure hits to measure the clock (" + clk.n + ")");
   else if (!(clk.sdMs >= 0 && clk.sdMs < 14)) fail("clock breadth off: sd " + clk.sdMs.toFixed(2) + "ms");
   else if (!(clk.maxMs < 60)) fail("clock outlier " + clk.maxMs.toFixed(1) + "ms");
@@ -265,14 +281,19 @@ const path = __dirname + "/triton-rack.html";
     for (let i = 1; i < L.length; i++) if (L[i].t - L[i - 1].t > beat * 1.2) gaps++;
     const drums = TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length;
     return { stage: BUILD.stage, n: L.length, gaps, drums, hook: !!DREAM.hook,
+      elibs: !!(DREAM.p && DREAM.p.elibs && DREAM.p.elibs.length),
       contour: DREAM.hook && DREAM.hook.contour };
   });
-  if (hk.stage !== 3 || !hk.hook) fail("THE VOICE stage broken " + JSON.stringify(hk));
+  /* trait 3 speaks one of two ways: the curated HOOK engine, or a library
+     EMBELLISH bag (round 5) — gestures at phrase ends, silence otherwise */
+  if (hk.stage !== 3 || (!hk.hook && !hk.elibs)) fail("THE EMBELLISH stage broken " + JSON.stringify(hk));
   /* one bar of one cell (4 notes) legitimately has no internal phrase gap —
-     require a breath only once the line is long enough to owe one */
-  else if (hk.n >= 5 && hk.gaps < 1) fail("the lead never breathes (0 rests across " + hk.n + " notes)");
+     require a breath only once a HOOK line is long enough to owe one
+     (a gesture bag breathes by construction: silence surrounds each lick) */
+  else if (hk.hook && !hk.elibs && hk.n >= 5 && hk.gaps < 1) fail("the lead never breathes (0 rests across " + hk.n + " notes)");
   else if (hk.n > hk.drums) fail("lead outruns the drums — arpeggiator behavior (" + hk.n + " vs " + hk.drums + ")");
-  else ok("THE VOICE: the hook speaks — " + hk.n + " notes, " + hk.gaps + " breaths, contour '" + hk.contour + "'");
+  else ok("THE EMBELLISH: " + (hk.elibs ? "library gestures speak sparsely" : "the hook speaks") +
+    " — " + hk.n + " notes, " + hk.gaps + " breaths" + (hk.contour ? ", contour '" + hk.contour + "'" : ""));
   await keepLive();                       /* -> stage 4, the shape */
   const stg4 = await page.evaluate(() => ({ stage: BUILD.stage,
     names: BUILD.hand.map(c => c.format).join("|"), live: BUILD.live }));
@@ -334,6 +355,94 @@ const path = __dirname + "/triton-rack.html";
   else ok("shape jump lights the kept format (card " + (shape.live + 1) + ")");
   await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
   await page.waitForFunction(() => BUILD.stage === 5 && !DREAM.pending, { timeout: 12000 });
+
+  /* round 5 — THE RACK SHELF: kept traits materialize as 2U units; patching
+     is dice/prev/next on the unit, never a list */
+  const rack = await page.evaluate(() => ({
+    units: document.querySelectorAll("#rackShelf .rku").length,
+    meters: document.querySelectorAll("#rackShelf canvas.rkmeter").length,
+    labels: [...document.querySelectorAll("#rackShelf .rklab")].map(x => x.textContent) }));
+  if (rack.units !== 4 || rack.meters !== 4) fail("rack shelf wrong " + JSON.stringify(rack));
+  else if (rack.labels[2] !== "THE COUNTER" || rack.labels[3] !== "THE EMBELLISH")
+    fail("rack labels " + JSON.stringify(rack.labels));
+  else ok("the rack shelf: 4 kept traits as 2U units with meters (" + rack.labels.join(" · ") + ")");
+  const rkOps = await page.evaluate(() => {
+    const bass0 = BUILD.kept[1].bass, name2 = BUILD.kept[2].name;
+    document.querySelector('.rku[data-slot="1"] .rkbtn[data-act="next"]').click();
+    document.querySelector('.rku[data-slot="2"] .rkbtn.rkroll').click();
+    return { bass0, name2, bass1: BUILD.kept[1].bass, name2b: BUILD.kept[2].name,
+      pend: !!DREAM.pending, on: DREAM.on };
+  });
+  await page.waitForFunction(() => !DREAM.pending, { timeout: 15000 });
+  const rkAfter = await page.evaluate(() => ({ pBass: DREAM.p.bass, pOn: DREAM.on,
+    catOk: PROGRAMS[BUILD.kept[1].bass].cat === "BASS" }));
+  if (rkOps.bass1 === rkOps.bass0 || !rkAfter.catOk) fail("rack voice ‹›  did not move within the drawer " + JSON.stringify(rkOps));
+  else if (rkOps.name2b === rkOps.name2) fail("rack ◇ dealt the same take");
+  else if (!rkOps.on || !rkAfter.pOn || rkAfter.pBass !== rkOps.bass1) fail("rack patch not live on the bar " + JSON.stringify(rkAfter));
+  else ok("rack patching: ‹› walked the bass drawer, ◇ re-dealt the counter, all on the bar");
+  /* round 5 — DYNAMIC HEADROOM: the console re-staged as parts stacked, the
+     move rides the tape, and the full band carries less per-role gain */
+  const stage = await page.evaluate(() => ({
+    mixEvs: TAKE.ev.filter(e => e.role === "mix").length,
+    lastS: (TAKE.ev.filter(e => e.role === "mix").slice(-1)[0] || {}).s,
+    chordIn: MIX.chord.in.gain.value,
+    want: mixStageFor(4).chord }));
+  if (stage.mixEvs < 2) fail("headroom staging never logged to the tape (" + stage.mixEvs + ")");
+  else if (!stage.lastS || Math.abs(stage.lastS.chord - stage.want) > 1e-6)
+    fail("full-band stage wrong " + JSON.stringify(stage.lastS));
+  else if (!(stage.chordIn < 0.78)) fail("chord strip not re-staged (gain " + stage.chordIn.toFixed(3) + ")");
+  else ok("dynamic headroom: " + stage.mixEvs + " console moves on the tape · chord strip at " +
+    stage.chordIn.toFixed(2) + " under the full band");
+
+  /* round 5 — THE LIBRARY: mined human playing, embedded with provenance */
+  const lib = await page.evaluate(() => ({ n: PHRASES.length,
+    dr: PHRASE_IDX.dr.length, fill: PHRASE_IDX.fill.length,
+    bs: PHRASE_IDX.bs.length, cp: PHRASE_IDX.cp.length, em: PHRASE_IDX.em.length,
+    srcOk: PHRASES.every(p => /^(groove-midi:|openscore-quartets:)/.test(p.src)),
+    named: PHRASES.every(p => p.n && p.n.length >= 3),
+    decodable: PHRASES.every(p => (p.k === "dr" ? ldrpUnpackDrum(p.e) : ldrpUnpackMel(p.e)).length > 0) }));
+  if (lib.n < 150 || !lib.dr || !lib.fill || !lib.bs || !lib.cp || !lib.em) fail("library thin " + JSON.stringify(lib));
+  else if (!lib.srcOk || !lib.named || !lib.decodable) fail("library provenance/naming/decode holes " + JSON.stringify(lib));
+  else ok("the library: " + lib.n + " human phrases embedded (" + lib.dr + " grooves · " + lib.fill +
+    " fills · " + lib.bs + " bass · " + lib.cp + " counters · " + lib.em + " licks), every src labeled");
+  /* a library-led song: groove field on, counter sparse, embellish mostly silence */
+  const libSong = await page.evaluate(() => {
+    const r = mulberry(4242);
+    let d = null; for (let k = 0; k < 300 && (!d || d.dlib == null); k++) d = candDrums(r);
+    let b = null; for (let k = 0; k < 300 && (!b || b.blib == null); k++) b = candBass(r);
+    let c = null; for (let k = 0; k < 600 && (!c || c.clib == null); k++) c = candChords(r, b);
+    let l = null; for (let k = 0; k < 300 && (!l || !l.elibs); k++) l = candLead(r);
+    if (!d || d.dlib == null || b.blib == null || c.clib == null || !l.elibs) return { bad: true };
+    BUILD.kept = [d, b, c, l, FORMATS[0]]; BUILD.stage = 5; BUILD.hand = []; BUILD.live = -1;
+    const p = composeP(BUILD.kept, null, 5);
+    if (DREAM.on) { DREAM.pending = p; } else startWith(p, true);
+    builderRender(); rackRender();
+    return { name: PHRASES[d.dlib].n, style: PHRASES[d.dlib].s, fill: d.flib != null };
+  });
+  if (libSong.bad) fail("library cards would not deal");
+  else ok("library song standing: " + libSong.name + " (" + libSong.style + ")" + (libSong.fill ? " with a paired fill" : ""));
+  await page.waitForFunction(() => !DREAM.pending && DREAM.gfield, undefined, { timeout: 25000 });
+  const t0lib = await page.evaluate(() => ({ n: TAKE.ev.length, t: ctx.currentTime }));
+  await page.waitForFunction(t0 =>
+    TAKE.ev.filter(e => e.role === "kit" && e.t > (t0.t - TAKE.t0)).length > 40, t0lib, { timeout: 90000 });
+  const libTape = await page.evaluate(t0 => {
+    const beat = 60 / state.tempo;
+    const bars = Math.max(1, (ctx.currentTime - t0.t) / (beat * 4));
+    const since = e => e.t > (t0.t - TAKE.t0);
+    const kitN = TAKE.ev.filter(e => e.role === "kit" && since(e)).length;
+    const chordN = TAKE.ev.filter(e => e.role === "chord" && since(e)).length;
+    const leadN = TAKE.ev.filter(e => e.role === "lead" && since(e)).length;
+    return { gf: !!DREAM.gfield, bars: +bars.toFixed(1), kitPerBar: +(kitN / bars).toFixed(1),
+      chordPerBar: +(chordN / bars).toFixed(1), leadPerBar: +(leadN / bars).toFixed(1) };
+  }, t0lib);
+  if (!libTape.gf) fail("groove field missing under a library drummer");
+  else if (libTape.kitPerBar < 6) fail("library drums too thin (" + libTape.kitPerBar + "/bar)");
+  else if (libTape.chordPerBar > 7) fail("the counter is not sparse (" + libTape.chordPerBar + "/bar — no space left for a vocalist)");
+  else if (libTape.leadPerBar > 3.5) fail("embellishments crowd the song (" + libTape.leadPerBar + "/bar)");
+  else ok("the library band on tape: " + libTape.kitPerBar + " drum hits/bar · counter " +
+    libTape.chordPerBar + "/bar · licks " + libTape.leadPerBar + "/bar — the middle stays open");
+  /* the library song stays LIVE: the handoff, bounce and KEEP tests below
+     now run against a library-backed dream — presets carry phrase refs */
 
   /* figure chip mid-dream: transport hands off, the tape keeps rolling (BREAK fix) */
   await page.evaluate(() => document.body.classList.add("engineOpen"));
@@ -465,8 +574,20 @@ const path = __dirname + "/triton-rack.html";
        for it to actually run, or .value reads a frozen 1.0 forever */
     const ctA = ctx.currentTime;
     for (let w = 0; w < 100 && ctx.currentTime - ctA < .05; w++) await new Promise(r => setTimeout(r, 30));
+    /* Chromium freezes a SILENT subtree's params — the duck only matters when
+       the chords carry signal, so probe with a quiet pad sounding through the
+       chord strip (the honest scenario) */
+    const pn = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain();
+    pn.connect(MIX.chord.in);
+    spawnVoice(PROGRAMS[36], 60, .3, ctx.currentTime + .02, 6, pn);
+    await new Promise(r => setTimeout(r, 200));
     /* the poll can miss a ~60ms dip if the main thread hiccups right there —
-       the duck itself is deterministic, so give the MEASUREMENT three swings */
+       the duck itself is deterministic, so give the MEASUREMENT three swings.
+       Instrumented: count mixDuck arrivals, and if the wire stays flat try a
+       DIRECT param schedule to split "call lost" from "param dead". */
+    let duckCalls = 0;
+    const origDuck = mixDuck;
+    mixDuck = function (a, b) { duckCalls++; return origDuck(a, b); };
     let dipped = 1; const ct0 = ctx.currentTime;
     for (let att = 0; att < 3 && !(dipped < .95); att++) {
       drumHitP("surdo", 1, ctx.currentTime + .10, {});
@@ -476,12 +597,27 @@ const path = __dirname + "/triton-rack.html";
         await new Promise(r => setTimeout(r, 8));
       }
     }
-    return { wired, dipped, state: ctx.state, ctAdv: +(ctx.currentTime - ct0).toFixed(2) };
+    mixDuck = origDuck;
+    let directDip = null;
+    if (!(dipped < .95)) {
+      const g = MIX.chord.duck.gain;
+      try { g.setTargetAtTime(.5, ctx.currentTime + .05, .004); g.setTargetAtTime(1, ctx.currentTime + .4, .11); } catch (_) {}
+      directDip = 1;
+      const t1 = performance.now();
+      while (performance.now() - t1 < 900) {
+        directDip = Math.min(directDip, g.value);
+        await new Promise(r => setTimeout(r, 8));
+      }
+      try { g.cancelScheduledValues(0); g.setValueAtTime(1, ctx.currentTime); } catch (_) {}
+    }
+    return { wired, dipped, state: ctx.state, ctAdv: +(ctx.currentTime - ct0).toFixed(2),
+      duckCalls, directDip: directDip == null ? undefined : +directDip.toFixed(3),
+      mctx: MIX._ctx === ctx, dOn: DREAM.on, lOn: LDR.on };
   });
   if (!duck2.wired) fail("mix rack lost after the bounce restore " + JSON.stringify(duck2));
   else if (!(duck2.dipped < .95) && duck2.ctAdv < 1)
     fail("render clock stalled after the bounce — duck unmeasurable " + JSON.stringify(duck2));
-  else if (!(duck2.dipped < .95)) fail("duck dead after the bounce (gain " + duck2.dipped.toFixed(3) + ", clock ran " + duck2.ctAdv + "s)");
+  else if (!(duck2.dipped < .95)) fail("duck dead after the bounce " + JSON.stringify(duck2));
   else ok("mix rack + duck survive the bounce restore (dip " + duck2.dipped.toFixed(2) + ")");
 
   /* KEEP: the file saves a copy of ITSELF carrying the dream — then that copy
@@ -524,11 +660,13 @@ const path = __dirname + "/triton-rack.html";
         await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 30000 });
         const play2 = await page2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
           name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook,
+          elibs: !!(DREAM.p && DREAM.p.elibs && DREAM.p.elibs.length),
           rail: document.querySelectorAll("#traitRail .trSlot.done").length,
           stage: BUILD.stage }));
         const kept = await page.evaluate(() => PRESETS[0] && PRESETS[0].seed);
-        if (!play2.on || play2.seed !== kept || !play2.hook)
-          fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ", hook " + play2.hook + ")");
+        /* a library song carries an EMBELLISH bag instead of a drawn hook */
+        if (!play2.on || play2.seed !== kept || (!play2.hook && !play2.elibs))
+          fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ", hook " + play2.hook + ", elibs " + play2.elibs + ")");
         else if (play2.rail !== 5 || play2.stage !== 5)
           fail("kept copy's avatar rail not rebuilt (" + play2.rail + " slots, stage " + play2.stage + ")");
         else ok("KEEP: the file rewrote itself — copy boots clean, chip replays seed #" +
