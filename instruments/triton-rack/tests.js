@@ -23,7 +23,7 @@ const scripts = [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 let dataJs = s.slice(s.indexOf("/* riff helpers */"), s.indexOf(");", s.lastIndexOf("COMBIS.push(")) + 2);
 const ldrJs = slice("const LDR_FIG=", "function ldrHash");
 const dreamJs = slice("function mulberry", "function dreamPans");
-const wavJs = slice("function wavStereo24", "function recToggle");
+const wavJs = slice("function wavStereo24", "function ldrDownload");
 
 /* ── suite 0: whole-file syntax ────────────────────────────────────── */
 console.log("[0] syntax");
@@ -285,7 +285,7 @@ console.log("[6] midi");
 {
   const midiJs = slice("/*MIDI-BEGIN*/", "/*MIDI-END*/");
   globalThis.state = { tempo: 120 };
-  const G6 = eval(midiJs + "\n;({MIDIREC,midiLog,midiLogP,midiVlq,midiTake,MIDI_GM_RECIPE,MIDI_GM_LANE})");
+  const G6 = eval(midiJs + "\n;({TAKE,takeStart,takeStop,takeLog,takeLogP,takeClose,takeToMidiEvents,midiVlq,midiTake,MIDI_GM_RECIPE,MIDI_GM_LANE})");
   /* VLQ */
   const vlq = n => { const a = []; G6.midiVlq(a, n); return a; };
   const vlqCases = [[0, [0]], [127, [0x7f]], [128, [0x81, 0x00]], [960, [0x87, 0x40]], [100000, [0x86, 0x8D, 0x20]]];
@@ -297,17 +297,27 @@ console.log("[6] midi");
   const missing = Object.keys(G2.LDR_RECIPE).filter(k => !G6.MIDI_GM_RECIPE[k]);
   if (missing.length) fail("recipes without GM notes: " + missing.join(","));
   else ok("25/25 recipes carry GM drum notes");
-  /* a synthetic take: melodic + drums + a tempo change (dice mid-take) */
-  G6.MIDIREC.on = true; G6.MIDIREC.ev = []; G6.MIDIREC.t0 = 0;
+  /* a synthetic take: player + drums + a tempo change (dice mid-take) */
+  globalThis.ctx = globalThis.ctx || { currentTime: 0 };
+  ctx.currentTime = 0;
+  G6.takeStart();
   state.tempo = 120;
-  G6.midiLog({ cat: "LEAD" }, 60, 0.8, 0, 0.5);       /* t=0    ch0 */
-  G6.midiLogP("surdo", 1.0, 0);                        /* t=0    ch9 */
-  G6.midiLog({ cat: "LEAD" }, 64, 0.8, 1, 0.5);       /* t=1 → 960 ticks at 120 */
+  G6.takeLog({ cat: "LEAD" }, 60, 0.8, 0, 0.5);        /* t=0    you */
+  G6.takeLogP("surdo", 1.0, 0, {});                     /* t=0    perc→ch9 */
+  G6.takeLog({ cat: "LEAD" }, 64, 0.8, 1, 0.5);        /* t=1 → 960 ticks at 120 */
   state.tempo = 60;
-  G6.midiLog({ cat: "LEAD" }, 67, 0.8, 2, 0.5);       /* t=2 → 1920 (still converts at 120) */
-  G6.midiLog({ cat: "LEAD" }, 69, 0.8, 3, 0.5);       /* t=3 → 1920+480 at 60bpm = 2400 */
-  G6.MIDIREC.on = false;
-  const u = G6.midiTake();
+  G6.takeLog({ cat: "LEAD" }, 67, 0.8, 2, 0.5);        /* t=2 → 1920 (still converts at 120) */
+  G6.takeLog({ cat: "LEAD" }, 69, 0.8, 3, 0.5);        /* t=3 → 1920+480 at 60bpm = 2400 */
+  /* a HELD note: logged open, patched on release with the real duration */
+  G6.takeLog({ cat: "KEYBOARD" }, 72, 0.8, 3.2, null);
+  ctx.currentTime = 3.95;
+  G6.takeClose(72);
+  const held = G6.TAKE.ev[G6.TAKE.ev.length - 1];
+  if (!(held.dur > 0.7 && held.dur < 0.8)) fail("held-note duration not patched: " + held.dur);
+  else ok("held player note closes with its true duration (" + held.dur.toFixed(2) + "s)");
+  G6.takeStop();
+  const mapped = G6.takeToMidiEvents(G6.TAKE.ev);
+  const u = G6.midiTake(mapped);
   if (!u) { fail("midiTake returned null"); }
   else {
     const tag = (o, t) => String.fromCharCode(u[o], u[o+1], u[o+2], u[o+3]) === t;
@@ -315,14 +325,16 @@ console.log("[6] midi");
     const fmt = (u[8] << 8) | u[9], ntrk = (u[10] << 8) | u[11], div = (u[12] << 8) | u[13];
     if (fmt !== 1) fail("format " + fmt);
     if (div !== 480) fail("division " + div);
-    if (ntrk !== 3) fail("tracks " + ntrk + " (want tempo + ch0 + ch9)");
+    if (ntrk !== 3) fail("tracks " + ntrk + " (want tempo + YOU + drums)");
     /* walk tracks, verify declared lengths and count events */
-    let o = 14, tempoMetas = 0, on9 = 0, off9 = 0, on0 = 0, off0 = 0, walked = 0;
+    let o = 14, tempoMetas = 0, meterMetas = 0, progCh = 0, on9 = 0, off9 = 0, on0 = 0, off0 = 0, walked = 0;
     for (let k = 0; k < ntrk; k++) {
       if (!tag(o, "MTrk")) { fail("track " + k + " header"); break; }
       const len = (u[o+4] << 24) | (u[o+5] << 16) | (u[o+6] << 8) | u[o+7];
       for (let i = o + 8; i < o + 8 + len - 2; i++) {
         if (u[i] === 0xFF && u[i+1] === 0x51 && u[i+2] === 0x03) tempoMetas++;
+        if (u[i] === 0xFF && u[i+1] === 0x58 && u[i+2] === 0x04) meterMetas++;
+        if (u[i] === 0xC0) progCh++;
         if (u[i] === 0x99) on9++; if (u[i] === 0x89) off9++;
         if (u[i] === 0x90) on0++; if (u[i] === 0x80) off0++;
       }
@@ -330,21 +342,25 @@ console.log("[6] midi");
     }
     if (o !== u.length) fail("track lengths don't tile the file (" + o + " vs " + u.length + ")");
     if (tempoMetas !== 2) fail("tempo metas " + tempoMetas + " (want initial + change)");
+    if (meterMetas !== 1) fail("meter meta missing (donor writer carries 4/4)");
+    if (progCh !== 1) fail("GM preview program changes " + progCh + " (want 1 on the YOU track)");
     if (!(on9 === 1 && off9 === 1)) fail("drum on/off " + on9 + "/" + off9);
-    if (!(on0 === 4 && off0 === 4)) fail("keys on/off " + on0 + "/" + off0);
-    /* the tempo-map ticks: last event must land at 2400 */
-    const ticks = G6.MIDIREC.ev.map(e => e.tick);
+    if (!(on0 === 5 && off0 === 5)) fail("player on/off " + on0 + "/" + off0);
+    const ticks = mapped.map(e => e.tick);
     if (ticks[2] !== 960 || ticks[3] !== 1920 || ticks[4] !== 2400)
       fail("piecewise tempo ticks " + ticks.join(","));
-    if (walked === ntrk && o === u.length && tempoMetas === 2 && on9 === 1 && on0 === 4 &&
-        ticks[4] === 2400) ok("SMF-1 exact: headers, track tiling, tempo map (120→60), note pairing");
+    if (walked === ntrk && o === u.length && tempoMetas === 2 && meterMetas === 1 &&
+        progCh === 1 && on9 === 1 && on0 === 5 && ticks[4] === 2400)
+      ok("SMF-1 exact: headers, tiling, tempo map (120→60), meter, GM preview, note pairing");
   }
   /* lead-in silence must survive, so the .mid lines up with the paired .wav */
-  G6.MIDIREC.on = true; G6.MIDIREC.ev = []; G6.MIDIREC.t0 = 0; state.tempo = 120;
-  G6.midiLogP("clave", 0.8, 0.5);
-  G6.MIDIREC.on = false;
-  G6.midiTake();
-  if (G6.MIDIREC.ev[0].tick !== 480) fail("lead-in dropped: first tick " + G6.MIDIREC.ev[0].tick + " (want 480)");
+  ctx.currentTime = 0;
+  G6.takeStart(); state.tempo = 120;
+  G6.takeLogP("clave", 0.8, 0.5, {});
+  G6.takeStop();
+  const m2 = G6.takeToMidiEvents(G6.TAKE.ev);
+  G6.midiTake(m2);
+  if (m2[0].tick !== 480) fail("lead-in dropped: first tick " + m2[0].tick + " (want 480)");
   else ok("lead-in preserved: 0.5 s of silence = 480 ticks @120");
 }
 

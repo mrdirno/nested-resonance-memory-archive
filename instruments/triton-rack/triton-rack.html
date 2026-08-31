@@ -238,10 +238,10 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 #ldrHalf{left:780px;top:226px;width:120px;height:120px;color:#9fd8c8;}
 #ldrHalf .pico{font-size:30px;}
 #ldrHalf.spin{transform:rotate(180deg) scale(.94);}
-#ldrRec{left:270px;top:226px;width:120px;height:120px;color:#8fa2b3;}
-#ldrRec.rec{color:#ff5a4a;border-color:#6b241d;animation:recPulse 1s ease-in-out infinite;}
-#ldrRecLbl{position:absolute;left:250px;top:356px;width:160px;text-align:center;font-size:11px;
-  letter-spacing:.1em;color:#ff8f83;min-height:14px;}
+#ldrSave{left:270px;top:226px;width:120px;height:120px;color:#9fe0b3;}
+#ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
+#ldrSaveLbl{position:absolute;left:210px;top:356px;width:240px;text-align:center;font-size:11px;
+  letter-spacing:.1em;color:#ffd77e;min-height:14px;}
 #ldrLeds{position:absolute;left:56px;top:224px;width:150px;}
 .l4led{display:flex;align-items:center;gap:10px;margin:10px 0;}
 .l4led i{width:12px;height:12px;border-radius:50%;background:#20303c;box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
@@ -285,15 +285,12 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 .fbtn:active{transform:scale(.93);}
 .fbtn.big{width:68px;height:68px;font-size:25px;}
 .fbtn.big.live{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.6s ease-in-out infinite;}
-#fabRec{font-size:15px;color:#8fa2b3;}
-#fabRec.rec{color:#ff5a4a;border-color:#6b241d;animation:recPulse 1s ease-in-out infinite;}
-@keyframes recPulse{0%,100%{box-shadow:0 6px 16px rgba(0,0,0,.5), 0 0 10px rgba(255,80,60,.4);}
-  50%{box-shadow:0 6px 16px rgba(0,0,0,.5), 0 0 24px rgba(255,80,60,.75);}}
+#fabSave{font-size:17px;color:#9fe0b3;}
+#fabSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
 #fabDice{transition:transform .35s, box-shadow .25s;}
 #fabDice.spin{transform:rotate(200deg) scale(.92);}
 #dreamDice.spin{transform:rotate(200deg) scale(.92);}
-#recLbl{font-size:10px;letter-spacing:.08em;color:#ff8f83;min-height:12px;text-shadow:0 1px 2px #000;}
-@media (prefers-reduced-motion: reduce){ .wire.hot{animation:none;} #aura{animation:none;} #dreamPlay.live{animation:none;} .fbtn.big.live{animation:none;} #fabRec.rec{animation:none;} }
+@media (prefers-reduced-motion: reduce){ .wire.hot{animation:none;} #aura{animation:none;} #dreamPlay.live{animation:none;} .fbtn.big.live{animation:none;} #fabSave.busy{animation:none;} #ldrSave.busy{animation:none;} }
 </style>
 </head>
 <body>
@@ -321,8 +318,8 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
     <div class="l4led" id="led-chord"><i></i><span>Chords</span></div>
     <div class="l4led" id="led-lead"><i></i><span>Lead</span></div>
   </div>
-  <div class="l4pad" id="ldrRec" title="Record a take (WAV)"><span class="pico">●</span><span class="plab">Record</span></div>
-  <div id="ldrRecLbl"></div>
+  <div class="l4pad" id="ldrSave" title="Save the take — WAV + MIDI, offline-rendered"><span class="pico">⤓</span><span class="plab">Save</span></div>
+  <div id="ldrSaveLbl"></div>
   <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
   <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
   <div class="l4pad" id="ldrHalf" title="Keep the rhythm, re-roll harmony and melody"><span class="pico">◐</span><span class="plab">Half</span></div>
@@ -633,6 +630,7 @@ const state = {
   write:false, wSlot:0, userSlot:null
 };
 let activeVoices=0, voiceList=[], keysDown=new Map(), physSet=new Set(), latchSet=new Set();
+let VOICE_CAP=62; /* raised temporarily by the offline bounce, where stealing would truncate the mix */
 let monoV=null, edits={}, pristine=null, cur=null;
 let BENDC=0, MODW=0, SUS=false; const SUSSET=new Set();
 
@@ -1330,7 +1328,7 @@ function applyFXP(p){
 }
 function midiHz(n){ return 440*Math.pow(2,(n-69+state.transpose)/12)*Math.pow(2,state.tune/1200); }
 function regVoice(v,units){ activeVoices+=units; voiceList.push(v);
-  while(activeVoices>62 && voiceList.length){ const old=voiceList.shift(); old.kill(); } updVoiceUI(); }
+  while(activeVoices>VOICE_CAP && voiceList.length){ const old=voiceList.shift(); old.kill(); } updVoiceUI(); }
 function unreg(v){
   /* exactly-once, whether or not the voice is still listed: the steal path
      shifts a voice out of voiceList BEFORE kill() runs, and the old indexOf
@@ -1341,7 +1339,7 @@ function unreg(v){
   activeVoices=Math.max(0,activeVoices-(v.units||1)); updVoiceUI(); }
 
 function spawnVoice(prog,note,vel,when,dur,dest){
-  if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLog==="function") midiLog(prog,note,vel,when,dur,dest);
+  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLog==="function") takeLog(prog,note,vel,when,dur,dest);
   if(prog.cat==="DRUMS"){ drumHit(note,vel,when,prog.kit||"std"); return null; }
   const t=Math.max(when,ctx.currentTime), out=ctx.createGain(); out.gain.value=0;
   const isBP=prog.filter.type==="bp";
@@ -1576,6 +1574,7 @@ function noteOn(n,vel){
   stk.push({refs}); pulseAt(ctx.currentTime);
 }
 function releaseNote(n){
+  if(typeof takeClose==="function") takeClose(n);
   const stk=keysDown.get(n);
   if(stk&&stk.length){
     const rec=stk.pop();
@@ -1593,6 +1592,7 @@ function noteOff(n){
   releaseNote(n);
 }
 function allNotesOff(){
+  if(typeof TAKE!=="undefined"&&typeof takeClose==="function") for(const k in TAKE.open) takeClose(+k);
   keysDown.forEach(stk=>stk.forEach(rec=>rec.refs.forEach(v=>v&&v.release&&v.release())));
   keysDown.clear(); physSet.clear(); latchSet.clear(); SUSSET.clear(); chordDone=true; monoV=null;
   voiceList.slice().forEach(v=>v.kill&&v.kill());
@@ -1600,6 +1600,7 @@ function allNotesOff(){
 }
 /* arp scheduler */
 setInterval(()=>{
+  if(typeof exporting!=="undefined"&&exporting) return;
   if(!arpActive()){ arpStep=0; arpNext=0; return; }
   const held = state.arp.latch? [...latchSet] : [...physSet];
   if(!held.length){ arpStep=0; return; }
@@ -1648,6 +1649,7 @@ function audVary(riff,rng){
 /*AUDVARY-END*/
 let audPass=0;
 setInterval(()=>{
+  if(typeof exporting!=="undefined"&&exporting) return;
   if(!state.powered||state.test||!state.audition||!ctx) return;
   if(ctx.currentTime>audLoopEnd-.3){
     const riff=cur.audition||riffPad, spb=60/state.tempo;
@@ -2039,8 +2041,9 @@ function powerOn(test){
 }
 function powerOff(){
   bootTok++; state.powered=false; state.test=false; state.audition=false; state.write=false;
-  /* the tape stops with the unit: an armed take is saved, its timer cleared */
-  if(typeof REC!=="undefined"&&REC.on&&typeof recStop==="function") recStop();
+  /* the tape pauses with the unit; the take stays saveable after reboot */
+  if(typeof takeStop==="function") takeStop();
+  if(typeof LDR!=="undefined") LDR.on=false;
   allNotesOff(); state.arp.on=false;
   $("#pwr").classList.remove("on"); $("#pwrLed").classList.remove("on");
   $$(".btn").forEach(b=>b.classList.remove("lit","lit-a"));
@@ -2739,7 +2742,8 @@ function drumHitP(name,vel,when,o){
     for(let k=o.roll;k>=1;k--)
       drumHitP(name,0.16+0.03*(o.roll-k),when-k*0.17*sd,{pitch:o.pitch,mute:o.mute,_g:1});
   }
-  if(typeof MIDIREC!=="undefined"&&MIDIREC.on&&typeof midiLogP==="function") midiLogP(name,vel,when);
+  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogP==="function")
+    takeLogP(name,vel,when,{pitch:o.pitch,mute:o.mute,layerVel:o.layerVel});
   const t=Math.max(when,ctx.currentTime);
   const lv=(o.layerVel!=null)? o.layerVel : vel;
   const layer=lv<0.55?0.4:lv<0.85?0.7:1.0;
@@ -2822,6 +2826,7 @@ function ldrPulse(at){ const ms=Math.max(0,(at-ctx.currentTime)*1000);
   setTimeout(()=>{["w-exb","b-exb1"].forEach(x=>{const e=document.getElementById(x);
     if(e){e.classList.add("hot"); setTimeout(()=>e.classList.remove("hot"),260);}});},ms); }
 setInterval(()=>{
+  if(typeof exporting!=="undefined"&&exporting) return;
   if(!LDR.on||!state.powered||state.test||!ctx||!LDR.fig) return;
   const f=LDR_FIG[LDR.fig]; if(!f) return;
   const spb=60/state.tempo, stepDur=f.grid===12? spb/3 : spb/4, barLen=f.grid*stepDur;
@@ -2869,9 +2874,12 @@ function ldrToggle(force){
   if(want&&!LDR.fig) return;
   if(want){ if(state.test) return; if(!state.powered) quickBoot();
     LDR.on=true; LDR.next=0; LDR.bar=0;
+    if(typeof takeStart==="function") takeStart();
     document.getElementById("ldrStart").textContent="■ STOP";
     flashRow("RHY: "+LDR.fig);
-  } else { LDR.on=false; document.getElementById("ldrStart").textContent="▶ START"; }
+  } else { LDR.on=false;
+    if(typeof takeStop==="function"&&!(typeof DREAM!=="undefined"&&DREAM.on)) takeStop();
+    document.getElementById("ldrStart").textContent="▶ START"; }
 }
 (function(){
   const ks=document.getElementById("ldrKit");
@@ -3115,6 +3123,7 @@ function dreamScheduleBar(at,f,step,barLen){
   DREAM._barLen=barLen; DREAM._barStart=at;
 }
 setInterval(()=>{
+  if(typeof exporting!=="undefined"&&exporting) return;
   if(!DREAM.on) return;
   if(!state.powered||state.test){ dreamStop(true); return; }
   if(LDR.on||state.audition||state.arp.on){ dreamStop(); return; }
@@ -3164,9 +3173,10 @@ function startWith(p,skipIntro){
   if(!state.powered) quickBoot();
   LDR.on=false; const lb=document.getElementById("ldrStart"); if(lb) lb.textContent="▶ START";
   state.audition=false; state.arp.on=false; if(typeof syncLeds==="function") syncLeds();
-  if(p._seed==null) p._seed=(Date.now()%100000)|0; /* crate replays carry their own seed */
+  if(p._seed==null) p._seed=(Date.now()%100000)|0;
   applyDream(p,!!skipIntro);
   DREAM.next=0; DREAM.on=true; setPlayUI(true);
+  takeStart(); /* a fresh take begins with the transport; dice mid-flight continues it */
 }
 function dreamStart(){
   const sel=document.getElementById("dreamPreset");
@@ -3177,6 +3187,7 @@ function dreamStart(){
 }
 function dreamStop(silent){
   DREAM.on=false; DREAM.pending=null; setPlayUI(false);
+  takeStop();
   if(!silent&&state.powered&&cur) applyFX();
 }
 function dreamDice(){
@@ -3202,34 +3213,73 @@ function dreamHalfDice(){
   p._seed=(Date.now()%100000)|0;  /* new seed = new motifs in the same gaps */
   DREAM.pending=p;                /* lands on the bar line, like DICE */
 }
-/* ── MIDI take capture: every note the engines schedule during a recording,
-      written as SMF type 1 beside the WAV — the DAW inherits the arrangement ── */
+/* ── THE TAKE: from the moment PLAY (or a figure) starts, everything the
+      engines schedule AND everything the player performs — screen keys or a
+      hardware MIDI keyboard — rolls into one log with musical timing. SAVE
+      bounces that log offline through the very same engine (the donor's
+      three-door philosophy: the mix sample-for-sample, the score with the
+      groove ridden along, one press). No arming, no tape to forget. ── */
 /*MIDI-BEGIN*/
-var MIDIREC={on:false,ev:[],t0:0};
+var TAKE={on:false,t0:0,ev:[],open:{}};
 var MIDI_GM_LANE=[36,38,38,39,49,41,42,45,42,48,46,49]; /* kit lanes → GM drums */
 var MIDI_GM_RECIPE={congaL:64,congaM:63,congaH:62,bongoL:61,bongoH:60,
   djembeB:64,djembeT:63,djembeS:62,timbL:66,timbH:65,agogoL:68,agogoH:67,
   cowbell:56,clave:75,woodblk:76,guiro:74,cabasa:69,shaker:70,tamb:54,
   triangle:81,surdo:36,talking:79,dunL:41,dunM:45,dunS:47};
-function midiLog(prog,note,vel,when,dur,dest){
-  if(!MIDIREC.on) return;
-  const t=(when||0)-MIDIREC.t0; if(t<-0.05) return;
-  let ch=0,n=note;
-  if(prog&&prog.cat==="DRUMS"){ ch=9; n=MIDI_GM_LANE[((note%12)+12)%12]; }
-  else if(typeof DREAM!=="undefined"&&DREAM.pans){
-    if(dest===DREAM.pans.bass) ch=1;
-    else if(dest===DREAM.pans.chord) ch=2;
-    else if(dest===DREAM.pans.lead) ch=3;
-  }
-  MIDIREC.ev.push({t:Math.max(0,t),ch,note:Math.max(0,Math.min(127,Math.round(n))),
-    vel:Math.max(1,Math.min(127,Math.round(vel*127))),
-    dur:dur||(ch===9?0.12:0.3),tempo:state.tempo});
+/* GM preview programs per role — a DAW should sound sane before any plugin */
+var MIDI_GM_ROLE={you:0,bass:38,chord:89,lead:80};
+function takeStart(){ if(!ctx) return; TAKE.on=true; TAKE.t0=ctx.currentTime; TAKE.ev=[]; TAKE.open={}; }
+function takeStop(){ TAKE.on=false;
+  if(ctx) for(const k in TAKE.open){ const e=TAKE.open[k].pop(); if(e&&e.dur==null) e.dur=Math.max(.05,ctx.currentTime-TAKE.t0-e.t); }
+  TAKE.open={}; }
+function takeTrim(){ /* rolling cap: keep the last ~8 minutes / 40k events */
+  if(TAKE.ev.length>40000) TAKE.ev.splice(0,TAKE.ev.length-30000);
+  const last=TAKE.ev.length? TAKE.ev[TAKE.ev.length-1].t : 0;
+  if(last>480){ const cut=last-480; TAKE.ev=TAKE.ev.filter(e=>e.t>=cut); TAKE.ev.forEach(e=>e.t-=cut); TAKE.t0+=cut; }
 }
-function midiLogP(name,vel,when){
-  if(!MIDIREC.on) return;
-  const t=(when||0)-MIDIREC.t0; if(t<-0.05) return;
-  MIDIREC.ev.push({t:Math.max(0,t),ch:9,note:MIDI_GM_RECIPE[name]||77,
-    vel:Math.max(1,Math.min(127,Math.round(vel*127))),dur:0.12,tempo:state.tempo});
+function takeLog(prog,note,vel,when,dur,dest){
+  if(!TAKE.on) return;
+  if(typeof exporting!=="undefined"&&exporting) return; /* the bounce replays — never re-log */
+  const t=(when||0)-TAKE.t0; if(t<-0.05) return;
+  let role="you";
+  if(prog&&prog.cat==="DRUMS") role="kit";
+  else if(typeof DREAM!=="undefined"&&DREAM.pans){
+    if(dest===DREAM.pans.bass) role="bass";
+    else if(dest===DREAM.pans.chord) role="chord";
+    else if(dest===DREAM.pans.lead) role="lead";
+  }
+  const e={t:Math.max(0,t),role,prog,note,vel,dur:dur!=null?dur:(role==="kit"?0.12:null),tempo:state.tempo};
+  TAKE.ev.push(e);
+  if(e.dur==null){ (TAKE.open[note]=TAKE.open[note]||[]).push(e); } /* human hold — patched on release */
+  takeTrim();
+}
+function takeLogP(name,vel,when,o){
+  if(!TAKE.on) return;
+  if(typeof exporting!=="undefined"&&exporting) return;
+  const t=(when||0)-TAKE.t0; if(t<-0.05) return;
+  o=o||{};
+  TAKE.ev.push({t:Math.max(0,t),role:"perc",name,vel,dur:0.12,tempo:state.tempo,
+    pitch:o.pitch||1,mute:o.mute||1,layerVel:o.layerVel});
+  takeTrim();
+}
+function takeClose(note){
+  if(!ctx||!TAKE.open[note]||!TAKE.open[note].length) return;
+  const e=TAKE.open[note].pop();
+  if(e&&e.dur==null) e.dur=Math.max(.05,ctx.currentTime-TAKE.t0-e.t);
+}
+/* the take as writer-ready MIDI events: role → channel, drums → GM notes */
+function takeToMidiEvents(evs){
+  const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9};
+  return evs.map(e=>{
+    let n;
+    if(e.role==="perc") n=MIDI_GM_RECIPE[e.name]||77;
+    else if(e.role==="kit") n=MIDI_GM_LANE[((e.note%12)+12)%12];
+    else n=e.note;
+    return {t:e.t,ch:CH[e.role]!=null?CH[e.role]:0,role:e.role,
+      note:Math.max(0,Math.min(127,Math.round(n))),
+      vel:Math.max(1,Math.min(127,Math.round(e.vel*127))),
+      dur:e.dur!=null?e.dur:0.3,tempo:e.tempo};
+  });
 }
 function midiVlq(arr,n){ n=Math.max(0,Math.round(n));
   const b=[n&0x7f]; while((n>>=7)>0) b.push((n&0x7f)|0x80);
@@ -3244,12 +3294,12 @@ function midiTrackBytes(name,evs){ /* evs: [{tick,bytes:[...]}] sorted */
   const out=[0x4D,0x54,0x72,0x6B,(a.length>>>24)&255,(a.length>>>16)&255,(a.length>>>8)&255,a.length&255];
   return out.concat(a);
 }
-function midiTake(){
-  const ev=MIDIREC.ev.slice(); if(!ev.length) return null;
+function midiTake(evIn){
+  const ev=(evIn||[]).slice(); if(!ev.length) return null;
   ev.sort((x,y)=>x.t-y.t);
   const PPQ=480;
   /* piecewise tempo map: elapsed seconds convert at the tempo in force.
-     lastT anchors at 0 = RECORD press, so the .mid keeps the take's lead-in
+     lastT anchors at 0 = the take's start, so the .mid keeps its lead-in
      and lines up sample-accurate with the paired .wav in a DAW */
   let curBpm=ev[0].tempo||120, tick=0, lastT=0;
   const tempoEvs=[{tick:0,bpm:curBpm}];
@@ -3257,18 +3307,27 @@ function midiTake(){
     e.tick=Math.max(0,Math.round(tick));
     if(e.tempo&&Math.abs(e.tempo-curBpm)>0.5){ curBpm=e.tempo; tempoEvs.push({tick:e.tick,bpm:curBpm}); }
     e.durT=Math.max(12,Math.round(e.dur*(curBpm/60)*PPQ)); });
-  const NAMES=["KEYS","BASS","CHORDS","LEAD",null,null,null,null,null,"DRUMS"];
+  const NAMES=["YOU","BASS","CHORDS","LEAD",null,null,null,null,null,"DRUMS"];
   const chans=[...new Set(ev.map(e=>e.ch))].sort((a,b)=>a-b);
   const tracks=[];
   { const te=tempoEvs.map(t=>({tick:t.tick,bytes:[0xFF,0x51,0x03].concat((mpq=>[(mpq>>>16)&255,(mpq>>>8)&255,mpq&255])(Math.round(60000000/t.bpm)))}));
+    /* meter meta so DAW bars line up (donor's writer carries it too) */
+    te.unshift({tick:0,bytes:[0xFF,0x58,0x04,4,2,24,8]});
     tracks.push(midiTrackBytes("TRITON x LUCKY DREAMER TAKE",te)); }
   chans.forEach(ch=>{
     const evs=[];
+    if(ch!==9){
+      /* GM preview program (donor idiom): a stock player resembles the take */
+      const role=(ev.find(e=>e.ch===ch)||{}).role;
+      const gm=MIDI_GM_ROLE[role]!=null?MIDI_GM_ROLE[role]:0;
+      evs.push({tick:0,ord:0,bytes:[0xC0|ch,gm&0x7F]});
+    }
     ev.filter(e=>e.ch===ch).forEach(e=>{
-      evs.push({tick:e.tick,bytes:[0x90|ch,e.note,e.vel]});
-      evs.push({tick:e.tick+e.durT,bytes:[0x80|ch,e.note,0]});
+      evs.push({tick:e.tick,ord:2,bytes:[0x90|ch,e.note,e.vel]});
+      evs.push({tick:e.tick+e.durT,ord:1,bytes:[0x80|ch,e.note,0]});
     });
-    evs.sort((a,b)=>a.tick-b.tick);
+    /* at one tick: offs before ons, so a retrigger is never a stuck note */
+    evs.sort((a,b)=>a.tick-b.tick||(a.ord||0)-(b.ord||0));
     tracks.push(midiTrackBytes(NAMES[ch]||("CH"+(ch+1)),evs));
   });
   const head=[0x4D,0x54,0x68,0x64,0,0,0,6,0,1,0,tracks.length,(PPQ>>8)&255,PPQ&255];
@@ -3276,8 +3335,9 @@ function midiTake(){
   return new Uint8Array(total);
 }
 /*MIDI-END*/
-/* ── take recorder: taps the mix after the glue compressor, writes 24-bit WAV ── */
-const REC={on:false,l:[],r:[],node:null,t0:0,max:150,timer:null};
+/* ── SAVE: bounce the take offline through the very engine that played it —
+      the donor's export stack applied to a performance (no ScriptProcessor,
+      no realtime tap; the mix is computed sample-exact, faster than life) ── */
 function wavStereo24(l,r,sr){
   const n=l.length, len=44+n*6, u=new Uint8Array(len), dv=new DataView(u.buffer);
   function str(o,x){ for(let i=0;i<x.length;i++) u[o+i]=x.charCodeAt(i); }
@@ -3294,50 +3354,69 @@ function wavStereo24(l,r,sr){
   }
   return u;
 }
-function recUI(on){ ["fabRec","ldrRec"].forEach(id=>{ const b=document.getElementById(id);
-  if(b) b.classList.toggle("rec",on); }); }
-function recLblSet(t){ ["recLbl","ldrRecLbl"].forEach(id=>{ const e=document.getElementById(id);
-  if(e) e.textContent=t; }); }
-function recToggle(){
-  if(REC.on){ recStop(); return; }
-  if(state.test) return;
-  if(!state.powered) quickBoot();
-  if(!REC.node){
-    REC.node=ctx.createScriptProcessor(4096,2,2);
-    const z=ctx.createGain(); z.gain.value=0;
-    (window._mixTap||master).connect(REC.node); REC.node.connect(z); z.connect(ctx.destination);
-    REC.node.onaudioprocess=e=>{ if(!REC.on) return;
-      REC.l.push(new Float32Array(e.inputBuffer.getChannelData(0)));
-      REC.r.push(new Float32Array(e.inputBuffer.getChannelData(1)));
-      if(ctx.currentTime-REC.t0>REC.max) recStop(); };
-  }
-  REC.l=[]; REC.r=[]; REC.t0=ctx.currentTime; REC.on=true;
-  MIDIREC.on=true; MIDIREC.ev=[]; MIDIREC.t0=REC.t0;
-  recUI(true);
-  REC.timer=setInterval(()=>{ if(REC.on) recLblSet("● "+Math.floor(ctx.currentTime-REC.t0)+"s"); },500);
-}
-function recStop(){
-  REC.on=false; MIDIREC.on=false; clearInterval(REC.timer);
-  recUI(false);
-  const n=REC.l.reduce((a,c)=>a+c.length,0);
-  if(n<ctx.sampleRate*0.5){ recLblSet("too short"); setTimeout(()=>recLblSet(""),1500); return; }
-  recLblSet("saving…");
-  const L=new Float32Array(n), R=new Float32Array(n); let o=0;
-  REC.l.forEach((c,i)=>{ L.set(c,o); R.set(REC.r[i],o); o+=c.length; });
-  REC.l=[]; REC.r=[];
-  const wav=wavStereo24(L,R,ctx.sampleRate);
+function ldrDownload(data,mime,name){
   const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([wav],{type:"audio/wav"}));
-  a.download="triton-dream-"+(DREAM.seed||"take")+".wav";
-  document.body.appendChild(a); a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); recLblSet(""); },3000);
-  /* the same take as MIDI — the DAW inherits the arrangement, not just the sound */
-  const mid=midiTake();
-  if(mid) setTimeout(()=>{ const ma=document.createElement("a");
-    ma.href=URL.createObjectURL(new Blob([mid],{type:"audio/midi"}));
-    ma.download="triton-dream-"+(DREAM.seed||"take")+".mid";
-    document.body.appendChild(ma); ma.click();
-    setTimeout(()=>{ URL.revokeObjectURL(ma.href); ma.remove(); },3000); },450);
+  a.href=URL.createObjectURL(new Blob([data],{type:mime}));
+  a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
+}
+function setSaveUI(t){
+  const e=document.getElementById("ldrSaveLbl"); if(e) e.textContent=t||"";
+  ["fabSave","ldrSave"].forEach(id=>{ const b=document.getElementById(id);
+    if(b) b.classList.toggle("busy",!!t&&t.indexOf("RENDER")===0); });
+}
+function _graphSnap(){ return {ctx,master,sum,analyser,progBus,shaper,dWet,dDry,post,
+  cSend,dSend,rSend,chIn,dlyIn,dlyL,dlyR,fbA,fbB,convo,noiseBuf,WAVES,
+  mixTap:window._mixTap,vl:voiceList,av:activeVoices,cap:VOICE_CAP}; }
+function _graphRestore(S){ ctx=S.ctx; master=S.master; sum=S.sum; analyser=S.analyser;
+  progBus=S.progBus; shaper=S.shaper; dWet=S.dWet; dDry=S.dDry; post=S.post;
+  cSend=S.cSend; dSend=S.dSend; rSend=S.rSend; chIn=S.chIn; dlyIn=S.dlyIn; dlyL=S.dlyL;
+  dlyR=S.dlyR; fbA=S.fbA; fbB=S.fbB; convo=S.convo; noiseBuf=S.noiseBuf; WAVES=S.WAVES;
+  window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap; }
+async function exportTake(){
+  if(typeof exporting!=="undefined"&&exporting) return;
+  if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
+  exporting=true; setSaveUI("RENDERING TAKE…");
+  await new Promise(r=>setTimeout(r,30));
+  const wasOn=TAKE.on;
+  if(wasOn) takeStop();               /* close held notes at the bounce point */
+  const evs=TAKE.ev.map(e=>Object.assign({},e));
+  evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; });
+  const end=evs.reduce((a,e)=>Math.max(a,e.t+(e.dur||0)),0)+2.5;
+  const sr=ctx.sampleRate;
+  const S=_graphSnap();
+  let buf=null, err=null;
+  try{
+    const oc=new OfflineAudioContext(2,Math.max(sr,Math.ceil(end*sr)),sr);
+    ctx=oc; buildGraph();
+    applyFXP(DREAM.p? PROGRAMS[DREAM.p.chord] : (cur||PROGRAMS[0]));
+    voiceList=[]; activeVoices=0; VOICE_CAP=1024;
+    const mk=p=>{ const n=oc.createStereoPanner?oc.createStereoPanner():oc.createGain();
+      if(n.pan) n.pan.value=p; n.connect(progBus); return n; };
+    const pans={bass:mk(0),chord:mk(-.24),lead:mk(.24)};
+    evs.forEach(e=>{
+      if(e.role==="perc") drumHitP(e.name,e.vel,e.t,{pitch:e.pitch,mute:e.mute,layerVel:e.layerVel,_g:1});
+      else spawnVoice(e.prog||cur||PROGRAMS[0],e.note,e.vel,e.t,e.dur,
+        e.role==="bass"?pans.bass:e.role==="chord"?pans.chord:e.role==="lead"?pans.lead:null);
+    });
+    buf=await oc.startRendering();
+  }catch(ex){ err=ex; }
+  finally{ _graphRestore(S); try{ if(state.powered&&cur) applyFX(); }catch(_){ } }
+  if(wasOn) TAKE.on=true;             /* keep taping the ongoing performance */
+  if(err||!buf){ exporting=false; setSaveUI("RENDER FAILED"); setTimeout(()=>setSaveUI(""),2500);
+    if(typeof console!=="undefined") console.error("SAVE:",err); return; }
+  const name="triton-dream-"+(DREAM.seed||"take");
+  /* mastering trim: the glue compressor still lets transients past 0 dBFS,
+     and a clipped bounce is not the mix — normalize to -0.2 dB when hot */
+  const L=buf.getChannelData(0), R=buf.getChannelData(1);
+  let pk=0; for(let i=0;i<L.length;i++){ const a=Math.abs(L[i]), b=Math.abs(R[i]);
+    if(a>pk)pk=a; if(b>pk)pk=b; }
+  if(pk>0.98){ const g=0.98/pk; for(let i=0;i<L.length;i++){ L[i]*=g; R[i]*=g; } }
+  ldrDownload(wavStereo24(L,R,sr),"audio/wav",name+".wav");
+  const mid=midiTake(takeToMidiEvents(evs));
+  if(mid) setTimeout(()=>ldrDownload(mid,"audio/midi",name+".mid"),450);
+  exporting=false;
+  setSaveUI("SAVED · WAV + MIDI"); setTimeout(()=>setSaveUI(""),2600);
 }
 function dreamDraw(rms,wav){
   const aura=document.getElementById("aura");
@@ -3457,7 +3536,7 @@ function ldrConductorInit(){
   on("dreamPlay",toggle); on("fabPlay",toggle);
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
   on("ldrHalf",dreamHalfDice);
-  on("fabRec",recToggle); on("ldrRec",recToggle);
+  on("fabSave",exportTake); on("ldrSave",exportTake);
   on("crateExp",()=>{
     const msg=document.getElementById("crateMsg");
     if(!LDR_CRATE.length){ if(msg){ msg.textContent="crate is empty — pin a take first"; setTimeout(()=>msg.textContent="",2000);} return; }
@@ -3491,8 +3570,7 @@ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded"
 else ldrConductorInit();
 </script>
 <div id="fab">
-  <div id="recLbl"></div>
-  <div class="fbtn" id="fabRec" title="Record a take (WAV)">●</div>
+  <div class="fbtn" id="fabSave" title="Save the take — WAV + MIDI">⤓</div>
   <div class="fbtn" id="fabDice" title="New combination">🎲</div>
   <div class="fbtn big" id="fabPlay" title="Play / stop">▶</div>
 </div>
@@ -3646,4 +3724,11 @@ DEAD BRANCHES: (1) sanitizing names at import time by stripping characters — l
 KILL-TEST: the fixes' own regression gates — node suites [0]–[7] plus the Chromium harness's 24 assertions, every one exercised in this ring's final run, ALL GREEN. The review itself: 23 agents, six find-lenses, seventeen verify-skeptics, zero findings taken on faith.
 THE NON-OBVIOUS CHOICE: the reviewers were told an empty findings list is a valid answer, and the verifiers were told to refute by default — the pass earns trust precisely because both directions were allowed to say no.
 OPEN QUESTIONS: (1) The MIDI take still starts capture at RECORD press, so notes SCHEDULED before the press (up to one bar of lookahead) are absent from the .mid though present in the .wav — a rolling pre-roll capture (Ring 14 Q1) would close the last gap. (2) The export-vs-live globals swap is now gated, but the deep fix — threading ctx/bus as parameters instead of globals — remains the honest refactor. (3) Six lenses found seventeen; what does the seventh lens (accessibility? memory ceilings on 4 GB phones?) find?
+RING 20 · 2026-08-31 · the tape becomes a score — SAVE bounces the take through the engine
+WHAT CHANGED: the user's verdict accepted in full — the ScriptProcessor recorder was the crappier variant of what the donor already solved, and it is gone. In its place, the donor's export philosophy applied to a PERFORMANCE: from the moment PLAY (or a figure) starts, THE TAKE rolls by itself — every note the conductor schedules, every physics hit, and everything the player performs on the screen keys or a hardware MIDI keyboard, with held-note durations patched in on release. One SAVE press bounces that log OFFLINE through the very same engine (globals swapped to an OfflineAudioContext, full FX graph rebuilt inside it, voice cap raised to 1024 so stealing cannot truncate the mix, schedulers gated so the live band pauses for the seconds the render takes, then resumes) — out come a normalized 24-bit WAV (−0.2 dB trim when transients pass 0 dBFS) and an SMF that now carries the donor's writer manners: meter meta, GM preview programs per role (a stock player resembles the take), off-before-on ordering so retriggers never stick, the player's part on its own YOU track, and every groove offset exactly as heard. No arming, no tape to forget, no realtime tap, no 150-second ceiling.
+BANNED (obvious answers set aside first): keeping ScriptProcessor but "improving" it (deprecated, realtime-fragile, and the donor's comment says it plainly: the mix should be computed, not captured); MediaRecorder (lossy, Ring 7 already killed it); exporting only the deterministic score and dropping the player's notes (the user named human playing as the point).
+DEAD BRANCHES: (1) rendering the WAV from the seed alone (donor-literal: regrow the world) — lost: a seed regrows the ENGINE's half but not the human's; the take log is the only witness of the performance, so the log, not the seed, is the source of truth for a bounce. (2) A Worker-hosted renderer like the donor's — lost: the donor ships its engine as strings into a Worker because its render is minutes of stems; a performance bounce is seconds, and the globals-swap machinery (Ring 2's renderNote) already existed and is now guarded. (3) Zipping wav+mid into one file — lost: the zip writer lives in the DecentSampler organ and two plain files in the browser's download shelf are simpler than one archive nobody asked for.
+KILL-TEST: node suite [6] rewritten for the pipeline — held-note duration patching (0.75 s measured), role→channel mapping, meter meta, GM preview program, tempo map 120→60 to the tick, lead-in preserved; the Chromium harness jams a real note over the running figure, presses SAVE, and reads the downloads back: 1.9 MB RIFF/WAVE at 0.98 FS peak (normalize proven — it measured 1.00 clipped before the trim landed), MThd with a YOU track and 15 note-ons, transport and tape alive after the bounce, power-off pausing the tape without destroying the saveable take.
+THE NON-OBVIOUS CHOICE: the take never stops being a take — SAVE closes held notes, bounces, then re-opens the same tape, so a producer can save at bar 32 and keep playing to bar 64 and save again, each bounce a superset of the last. The tape is the session, not a mode.
+OPEN QUESTIONS: (1) The bounce replays kit-lane events at CURRENT transpose/tune — should the log freeze those per event? (2) The donor's encodeWav takes an rng for TPDF dither; at 24-bit the quantization floor is −144 dB and the trim made it moot, but is dither owed on principle? (3) The pans for bass/chords/lead are rebuilt at fixed positions in the bounce — when per-dream stereo staging arrives, the log will need to carry pan.
 ═══ end rings ═══ -->

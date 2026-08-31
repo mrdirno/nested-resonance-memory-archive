@@ -22,6 +22,8 @@ const path = __dirname + "/triton-rack.html";
   const fail = m => { console.log("  ✗ " + m); errs++; };
   const ok = m => console.log("  ✓ " + m);
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
+  const downloads = [];
+  page.on("download", d => downloads.push(d));
   const consoleErrs = [];
   page.on("console", m => { if (m.type() === "error") consoleErrs.push(m.text()); });
   page.on("pageerror", e => consoleErrs.push("pageerror: " + e.message));
@@ -31,7 +33,7 @@ const path = __dirname + "/triton-rack.html";
   /* layout: 4U dimensions + touch law at design scale */
   const dims = await page.evaluate(() => {
     const u = document.getElementById("ldru");
-    const ids = ["dreamPlay", "dreamDice", "ldrRec"];
+    const ids = ["dreamPlay", "dreamDice", "ldrSave"];
     const r = {};
     ids.forEach(id => { const e = document.getElementById(id);
       r[id] = e ? { w: e.offsetWidth, h: e.offsetHeight } : null; });
@@ -47,7 +49,7 @@ const path = __dirname + "/triton-rack.html";
   else ok("4U face 960x540");
   if (dims.pads.dreamPlay.w < 160 || dims.pads.dreamPlay.h < 160) fail("PLAY under 160: " + JSON.stringify(dims.pads.dreamPlay));
   else ok("PLAY " + dims.pads.dreamPlay.w + "px");
-  ["dreamDice", "ldrRec"].forEach(id => {
+  ["dreamDice", "ldrSave"].forEach(id => {
     const p = dims.pads[id];
     if (!p || p.w < 120 || p.h < 120) fail(id + " under touch law: " + JSON.stringify(p));
     else ok(id + " " + p.w + "px"); });
@@ -166,23 +168,54 @@ const path = __dirname + "/triton-rack.html";
   else ok("figure tile takes over: bembe on the physics engine");
   if (st3.onTile !== 1) fail("figure tile highlight count " + st3.onTile);
 
-  /* record 1s take: UI mirrors */
-  await page.click("#ldrRec");
+  /* SAVE: jam a note over the running figure, bounce offline, verify both files */
+  await page.evaluate(async () => { noteOn(72, .85); await new Promise(r => setTimeout(r, 420)); noteOff(72); });
+  await page.waitForTimeout(400);
+  const takeInfo = await page.evaluate(() => ({ n: TAKE.ev.length, on: TAKE.on,
+    you: TAKE.ev.filter(e => e.role === "you").length,
+    youDur: (TAKE.ev.find(e => e.role === "you") || {}).dur }));
+  if (takeInfo.n < 5 || takeInfo.you < 1 || !takeInfo.on) fail("take log thin " + JSON.stringify(takeInfo));
+  else if (!(takeInfo.youDur > 0.2 && takeInfo.youDur < 1.5)) fail("player note duration not captured: " + takeInfo.youDur);
+  else ok("take rolls: " + takeInfo.n + " events, player note held " + takeInfo.youDur.toFixed(2) + "s");
+  const dl0 = downloads.length;
+  await page.click("#ldrSave");
+  await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
+  await page.waitForFunction(() => !exporting, { timeout: 60000 });
   await page.waitForTimeout(900);
-  const recOn = await page.evaluate(() => ({ on: REC.on,
-    pad: document.getElementById("ldrRec").classList.contains("rec"),
-    fab: document.getElementById("fabRec").classList.contains("rec") }));
-  if (!recOn.on || !recOn.pad || !recOn.fab) fail("record UI not mirrored " + JSON.stringify(recOn));
-  else ok("record: 4U pad and dock mirror");
-  await page.click("#ldrRec");
-  await page.waitForTimeout(300);
+  const newDls = downloads.slice(dl0);
+  const wavD = newDls.find(d => d.suggestedFilename().endsWith(".wav"));
+  const midD = newDls.find(d => d.suggestedFilename().endsWith(".mid"));
+  if (!wavD || !midD) fail("SAVE downloads missing: " + JSON.stringify(newDls.map(d => d.suggestedFilename())));
+  else {
+    const os = require("os"), fs = require("fs"), pj = require("path").join;
+    const wp = pj(os.tmpdir(), "tr-take.wav"), mp = pj(os.tmpdir(), "tr-take.mid");
+    await wavD.saveAs(wp); await midD.saveAs(mp);
+    const w = fs.readFileSync(wp), m = fs.readFileSync(mp);
+    let peak = 0;
+    for (let i = 44; i < Math.min(w.length - 3, 44 + 48000 * 6 * 8); i += 3) {
+      let v = (w[i] | (w[i + 1] << 8) | (w[i + 2] << 16)); if (v & 0x800000) v -= 0x1000000;
+      const a = Math.abs(v); if (a > peak) peak = a;
+    }
+    const okWav = w.slice(0, 4).toString() === "RIFF" && w.slice(8, 12).toString() === "WAVE" && w.length > 150000;
+    const hasYou = m.includes(Buffer.from("YOU"));
+    let ons = 0; for (let i = 0; i < m.length - 2; i++) if ((m[i] & 0xF0) === 0x90 && m[i + 2] > 0) ons++;
+    if (!okWav) fail("bounced WAV malformed/short (" + w.length + " bytes)");
+    else if (peak < 80000) fail("bounced WAV is near-silent (peak " + peak + " of 8388607)");
+    else if (m.slice(0, 4).toString() !== "MThd" || !hasYou || ons < 3)
+      fail("bounced MIDI bad (MThd:" + m.slice(0, 4) + " YOU:" + hasYou + " ons:" + ons + ")");
+    else ok("SAVE bounce: WAV " + (w.length / 1024 | 0) + " KB (peak " + (peak / 8388607).toFixed(2) +
+      " FS) + MIDI with YOU track (" + ons + " note-ons)");
+  }
+  const still = await page.evaluate(() => ({ ldr: LDR.on, take: TAKE.on }));
+  if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
+  else ok("transport and tape survive the bounce");
 
-  /* power-off stops the tape and disarms WRITE */
-  await page.evaluate(() => { recToggle(); state.write = true; });
-  await page.waitForTimeout(300);
-  const poff = await page.evaluate(() => { powerOff(); return { rec: REC.on, midi: MIDIREC.on, write: state.write }; });
-  if (poff.rec || poff.midi || poff.write) fail("powerOff left recorder/WRITE armed " + JSON.stringify(poff));
-  else ok("powerOff stops the take and disarms WRITE");
+  /* power-off disarms WRITE and pauses the tape */
+  await page.evaluate(() => { state.write = true; powerOff(); });
+  const poff = await page.evaluate(() => ({ write: state.write, take: TAKE.on, kept: TAKE.ev.length }));
+  if (poff.write || poff.take) fail("powerOff left WRITE/tape armed " + JSON.stringify(poff));
+  else if (poff.kept < 5) fail("powerOff destroyed the saveable take");
+  else ok("powerOff disarms WRITE, pauses the tape, keeps the take saveable");
   await page.evaluate(() => quickBoot());
   await page.waitForTimeout(300);
 
