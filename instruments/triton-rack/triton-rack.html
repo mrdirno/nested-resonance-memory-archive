@@ -258,6 +258,20 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 #ldrMidiHint{position:absolute;left:56px;top:366px;width:180px;font-size:9.5px;color:#587082;
   line-height:1.7;letter-spacing:.08em;text-transform:uppercase;}
 #ldrMidiHint b{color:#8fb8cf;}
+/* locks live on the surfaces they lock: tap the key card, tap the title */
+.thKey{cursor:pointer;}
+.thKey.locked{border-color:#c9a84c;box-shadow:inset 0 0 0 1px #c9a84c;}
+.thKey.locked b::after{content:" 🔒";font-size:10px;}
+#dreamInfo{cursor:pointer;}
+#dreamInfo.locked{color:#e8cf8e;}
+#ldrKeep{position:absolute;right:52px;top:200px;min-width:64px;height:26px;line-height:26px;
+  text-align:center;font-size:10px;letter-spacing:.14em;color:#8f7a3f;cursor:pointer;
+  border:1px solid #4a3f22;border-radius:7px;background:linear-gradient(180deg,#171310,#0d0b08);}
+#ldrKeep:hover{color:#e8cf8e;border-color:#8a6d1e;}
+#ldrPresets{position:absolute;left:52px;top:514px;width:856px;height:24px;display:flex;gap:6px;overflow:hidden;}
+.pchip4{flex:0 0 auto;height:22px;line-height:22px;padding:0 10px;border-radius:6px;font-size:9.5px;
+  letter-spacing:.08em;color:#c9b273;background:#161209;border:1px solid #4a3f22;cursor:pointer;}
+.pchip4:hover{border-color:#8a6d1e;color:#ffe9a8;}
 /* the one browser law a hardware keyboard can't satisfy alone: audio needs a tap */
 #audioNudge{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:99;display:none;
   background:#2a2412;border:1px solid #8a6d1e;color:#ffd77e;font-size:12px;letter-spacing:.08em;
@@ -301,6 +315,9 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 
 <div id="audioNudge">🔊 tap anywhere once — the browser opens audio on a touch</div>
 
+<!-- presets a saved copy of this file carries; a fresh file carries none -->
+<script type="application/json" id="tritonPresets">[]</script>
+
 <div class="wrap"><div id="ldrScale"><div id="ldru">
   <div class="ear l"><div class="screw s1"></div><div class="screw s2"></div></div>
   <div class="ear r"><div class="screw s1"></div><div class="screw s2"></div></div>
@@ -320,6 +337,8 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <div id="ldrSaveLbl"></div>
   <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
   <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
+  <div id="ldrKeep" title="Keep this dream — the file saves a copy of itself carrying it">★ KEEP</div>
+  <div id="ldrPresets"></div>
 </div></div></div>
 
 <div class="wrap"><div id="unitScale"><div id="unit">
@@ -3000,6 +3019,7 @@ function ldrToggle(force){
 }
 (function(){
   const ks=document.getElementById("ldrKit");
+  ks.innerHTML=""; /* idempotent under a KEEP-serialized reboot */
   const po=document.createElement("option"); po.value="phys";
   po.textContent="LDR PHYSICS · donor engine"; ks.appendChild(po);
   LDR_KITS.forEach(i=>{ const o=document.createElement("option"); o.value=i; o.textContent=PROGRAMS[i].id+" "+PROGRAMS[i].name; ks.appendChild(o); });
@@ -3141,6 +3161,54 @@ function dreamPickSurprise(rng){
     tempo:f.grid===12? 92+Math.floor(rng()*18) : 96+Math.floor(rng()*40),
     chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:kick16,
     hum:f.grid===12? .95 : (kick16? .18 : .55+.35*rng())};
+}
+
+/* ── LOCKS (the third donor's law: locks + one big roll). A lock is
+   surgical: DICE re-rolls only the unlocked half. key = the harmony's
+   identity; rhythm = the groove's. ── */
+const LOCKS={key:false,rhythm:false};
+function lockMerge(pNew,pCur,locks){
+  if(!pCur||!locks) return pNew;
+  const p=pNew;
+  if(locks.key){ ["scale","root","prog","progName","chordStyle"].forEach(k=>{
+    if(pCur[k]!==undefined) p[k]=pCur[k]; else delete p[k]; }); }
+  if(locks.rhythm){ ["fig","comps","kit","tempo","extraKick","hum"].forEach(k=>{
+    if(pCur[k]!==undefined) p[k]=pCur[k]; else delete p[k]; }); }
+  if(locks.key&&locks.rhythm) p.name=(pCur.name||"dream")+" · resounded";
+  else if(locks.key) p.name=(p.name||"dream")+" · in "+(pCur.progName||"the same key");
+  else if(locks.rhythm) p.name=(pCur.name||"dream")+" · rechorded";
+  return p;
+}
+/* ── PRESETS a saved copy of the FILE carries. Hostile-file law: everything
+   is validated before it plays and every name renders escaped. ── */
+function presetValidate(e){
+  if(!e||typeof e!=="object") return false;
+  if(typeof e.name!=="string"||!e.name||e.name.length>48) return false;
+  if(!Number.isInteger(e.seed)||e.seed<0||e.seed>1e9) return false;
+  const p=e.p;
+  if(!p||typeof p!=="object") return false;
+  if(!LDR_FIG[p.fig]) return false;
+  if(!Array.isArray(p.comps)||p.comps.length>4||!p.comps.every(c=>typeof c==="string"&&c.length<40)) return false;
+  if(!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
+  if(![p.bass,p.chord,p.lead].every(i=>Number.isInteger(i)&&PROGRAMS[i])) return false;
+  if(!SCALES[p.scale]) return false;
+  if(!Number.isInteger(p.root)||p.root<24||p.root>72) return false;
+  if(typeof p.tempo!=="number"||!isFinite(p.tempo)||p.tempo<40||p.tempo>300) return false;
+  if(!Array.isArray(p.prog)||p.prog.length<1||p.prog.length>16) return false;
+  const okCh=ch=> (typeof ch==="number"&&Number.isInteger(ch)&&ch>=0&&ch<=6) ||
+    (ch&&typeof ch==="object"&&Number.isInteger(ch.r)&&ch.r>=0&&ch.r<=11&&
+     Array.isArray(ch.iv)&&ch.iv.length===4&&ch.iv.every(v=>Number.isInteger(v)&&v>=-12&&v<=24)&&
+     typeof ch.roman==="string"&&ch.roman.length>0&&ch.roman.length<8);
+  if(!p.prog.every(okCh)) return false;
+  if(p.hum!=null&&!(typeof p.hum==="number"&&p.hum>=0&&p.hum<=1.5)) return false;
+  return true;
+}
+function presetParse(json){
+  try{
+    const o=JSON.parse(json);
+    if(!Array.isArray(o)) return [];
+    return o.filter(presetValidate).slice(0,8);
+  }catch(_){ return []; }
 }
 
 /* ── THE THEORY BAR (Improvisator's cheat sheet, live): the key, the
@@ -3517,6 +3585,7 @@ function dreamDice(){
   if(rng()<.5){ const ci=Math.floor(rng()*(DREAMS.length-1));
     p=JSON.parse(JSON.stringify(DREAMS[ci])); }
   else { p=dreamPickSurprise(rng); }
+  p=lockMerge(p,DREAM.p,LOCKS);   /* locks hold their half through the roll */
   p._seed=(Date.now()%100000)|0;
   if(DREAM.on) DREAM.pending=p;
   else startWith(p,true);
@@ -3765,6 +3834,65 @@ function dreamDraw(rms,wav){
     g.fillRect(0,cv.height-3,cv.width*ph,3);
   }
 }
+/* ── KEEP: the file reconfigures itself. A kept dream is written into the
+   presets block and the page serializes a WORKING COPY of its own document —
+   rings included (they live after </html> as document-level comment nodes,
+   which outerHTML drops; the serializer walks document.childNodes to carry
+   the history). Every boot-time builder is idempotent, so the copy boots
+   clean from its serialized DOM. ── */
+let PRESETS=[];
+function presetRender(){
+  const host=document.getElementById("ldrPresets"); if(!host) return;
+  host.innerHTML=PRESETS.map((e,i)=>'<button class="pchip4" data-k="'+i+'">★ '+esc(e.name)+'</button>').join("");
+}
+function presetInit(){
+  const tag=document.getElementById("tritonPresets");
+  PRESETS=tag? presetParse(tag.textContent||"[]") : [];
+  presetRender();
+  const host=document.getElementById("ldrPresets");
+  if(host&&!host._wired){ host._wired=true;
+    host.addEventListener("click",e=>{
+      const b=e.target.closest(".pchip4"); if(!b) return;
+      const en=PRESETS[+b.dataset.k]; if(!en) return;
+      const p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed;
+      startWith(p,false);
+    });
+  }
+}
+function keepSerialize(presets){
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelectorAll(".on,.lit,.lit-a,.live,.rec,.busy,.hot,.dn,.locked").forEach(e=>
+    e.classList.remove("on","lit","lit-a","live","rec","busy","hot","dn","locked"));
+  const q=s=>clone.querySelector(s);
+  const lcd2=q("#lcd"); if(lcd2){ lcd2.classList.add("off"); lcd2.innerHTML=""; }
+  ["#dreamPlay","#fabPlay"].forEach(s=>{ const b=q(s); if(!b) return;
+    const ic=b.querySelector(".pico"); (ic||b).textContent="▶"; });
+  const tp=q("#thProg"); if(tp) tp.innerHTML="";
+  const tk=q("#thKey"); if(tk) tk.textContent="—";
+  const tn=q("#thNow"); if(tn) tn.textContent="press play";
+  const pn2=q("#thProgName"); if(pn2) pn2.textContent="";
+  const ro=q("#ldrReadout"); if(ro) ro.textContent="READY";
+  const di=q("#dreamInfo"); if(di) di.textContent="READY · press play";
+  const sl=q("#ldrSaveLbl"); if(sl) sl.textContent="";
+  const ms=q("#midiStat"); if(ms) ms.textContent="WEB MIDI: checking…";
+  const pj=q("#tritonPresets");
+  if(pj) pj.textContent=JSON.stringify(presets).replace(/</g,"\\u003c");
+  let html="<!DOCTYPE html>\n"+clone.outerHTML;
+  document.childNodes.forEach(n=>{ if(n.nodeType===8) html+="\n<!--"+n.data+"-->"; });
+  return html;
+}
+function keepPreset(){
+  if(!DREAM.p){ flashRow("PLAY FIRST — NOTHING TO KEEP"); return; }
+  const p=JSON.parse(JSON.stringify(DREAM.p)); delete p._seed;
+  const name=((p.name||"dream").slice(0,34)+" #"+(DREAM.seed||0)).slice(0,48);
+  PRESETS.push({name,seed:DREAM.seed||1,p});
+  PRESETS=PRESETS.slice(-8);
+  const live=document.getElementById("tritonPresets");
+  if(live) live.textContent=JSON.stringify(PRESETS).replace(/</g,"\\u003c");
+  presetRender();
+  ldrDownload(keepSerialize(PRESETS),"text/html","triton-rack.html");
+  flashRow("KEPT — the file saved a copy of itself");
+}
 function ldrConductorInit(){
   /* the dock (#fab) renders BELOW the scripts — this init must wait for the DOM.
      (The shipped 1U had this latent: fabPlay was null at script time, so the
@@ -3774,6 +3902,17 @@ function ldrConductorInit(){
   on("dreamPlay",toggle); on("fabPlay",toggle);
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
   on("fabSave",exportTake); on("ldrSave",exportTake);
+  on("ldrKeep",keepPreset);
+  /* locks live on the surfaces they lock */
+  const kcard=document.querySelector(".thKey");
+  if(kcard) kcard.addEventListener("click",()=>{ LOCKS.key=!LOCKS.key;
+    kcard.classList.toggle("locked",LOCKS.key);
+    flashRow(LOCKS.key?"KEY LOCKED — DICE KEEPS THE HARMONY":"KEY FREE"); });
+  const dinfo=document.getElementById("dreamInfo");
+  if(dinfo) dinfo.addEventListener("click",()=>{ LOCKS.rhythm=!LOCKS.rhythm;
+    dinfo.classList.toggle("locked",LOCKS.rhythm);
+    flashRow(LOCKS.rhythm?"RHYTHM LOCKED — DICE KEEPS THE GROOVE":"RHYTHM FREE"); });
+  presetInit();
   if(typeof theoryRender==="function") theoryRender();
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
@@ -4007,4 +4146,11 @@ DEAD BRANCHES: (1) DynamicsCompressor-as-limiter at the end — lost: its auto-m
 KILL-TEST: the harness (34 assertions, ALL GREEN) — mix rack wired (drumOut lands on the kit strip), the duck measured dipping to 0.70 and recovering past 0.985 (probed post-boot after cache-warming the surdo: the miss renders SYNCHRONOUSLY and long enough to eat the whole measurement window — two probe rewrites died learning that); the bounce read back from the download at −17.1 dBFS RMS, crest 15.7 dB, peaks capped; every prior gate re-run green. PLAY's checkpoint became condition-driven (bars + take events, not a fixed 2.5 s) after a slow run exposed the race.
 THE NON-OBVIOUS CHOICE: the duck is SCHEDULED, not detected. Every real sidechain is a detector chasing a signal it already knows about — here the engine knows every kick before it happens, so the duck is written into the automation timeline like a note, which makes it deterministic per seed, free of detector lag, and bit-identical between live playback and the offline master.
 OPEN QUESTIONS: (1) The strips are static — should section tension breathe them (BREAK opens the HPs, LIFT adds air) the way the donor's climate dresses its strips per world? (2) The bounce targets −17 dBFS RMS with one gain — is a two-stage master (gain into the cubic ceiling, donor-style KHOT ×2) worth the louder-but-denser trade for the "banger" ask? (3) The YOU keys still bypass the strips to progBus — should the player get a fifth strip, or is the raw TRITON voice the point?
+RING 29 · 2026-08-31 · locks that hold, and a file that keeps itself
+WHAT CHANGED: the user's last two verdicts answered. (1) LOCKS — "no way of locking style or rhythm, every dice loses context": the third donor's law (locks + one big roll) lands on the face WITHOUT new controls — the locks live on the surfaces they lock. Tap the theory bar's KEY CARD: the harmony locks (scale, root, progression, name, chord style) and the card wears an amber ring and a padlock; tap the TITLE line: the groove locks (figure, companions, kit, tempo, kick, humanity). DICE stays one button — lockMerge() surgically re-rolls only the unlocked half and names the child honestly ("Maculelê Fire · in backdoor ♭VII"). (2) KEEP — "save presets… the file has to be able to reconfigure itself": a ★ KEEP button bakes the current dream + seed into a presets JSON block and the page serializes A WORKING COPY OF ITS OWN DOCUMENT — the browser downloads a new triton-rack.html that carries the kept dreams as chips on its face (tap a chip: that exact world plays, same seed, same hook, same take-able band). The serializer walks document.childNodes because the RINGS live after </html> as document-level comments that outerHTML silently drops — a kept copy carries its whole history or it is not a copy. The clone is scrubbed to a powered-off state (LCD off, transport idle, theory bar at rest, no lit classes), presets JSON escapes "<" as < so no name can ever close the script tag, and every boot-time DOM builder was audited idempotent (one appender — the kit select — fixed). Loaded presets pass the same hostile-file law as Bank B: full structural validation (figure exists, kit is drums, scale/root/tempo/prog bounded, spec chords checked), cap of 8, names escaped at render.
+BANNED (obvious answers set aside first): localStorage (the constraint list forbids it, it dies per-browser, and the user asked for the FILE to carry the state — the file now does, literally); a separate preset-file import/export (the crate again — ring 21 buried it; a file that reconfigures itself needs no sidecar); lock buttons as new pads (the face just fought for its quiet; state lives on the thing it describes).
+DEAD BRANCHES: (1) keeping a pristine source string in a comment for serialization — lost: doubles the file forever to dodge a solvable problem; idempotent inits + a scrubbed clone boot clean, and the harness proves it. (2) locks stored inside KEEP presets — lost: a lock is session steering, not a dream's identity; a replayed preset arrives free. (3) prompt() for preset names — lost: no dialogs in the donor grammar; the dream already has a name and the seed makes it unique.
+KILL-TEST: node suite [3] — lockMerge surgical both ways (key holds scale/root/prog through a full roll while fig/kit move; rhythm holds fig/kit/tempo while harmony moves; no-lock identity), presetValidate refusing eight mutant families (alien figure/scale, tempo 999, 64-char name, negative seed, out-of-range spec chord, non-drum kit, hostile comps), presetParse filtering a mixed hostile array and capping at 8. Chromium (36 assertions ALL GREEN): key lock armed by tap, held through a live DICE (scale/root/prog byte-identical, name suffixed), released by tap; KEEP pressed mid-figure — the downloaded copy VERIFIED: presets block + rings present, then BOOTED in a second page (zero console errors, powered off, LCD off, kit select NOT doubled, one chip) and its chip replayed the exact kept seed.
+THE NON-OBVIOUS CHOICE: the file is the preset format. Every export before this shipped a sidecar (bank JSON, crate JSON — dead); the user's phrasing ("the file has to reconfigure itself") named the design nobody defaults to because outerHTML is "lossy" — but lossy only where state leaked into the DOM, and that leak list is finite, auditable, and now tested. The instrument's save file is the instrument.
+OPEN QUESTIONS: (1) Eight presets cap the row — should a ninth KEEP evict oldest (donor crate law) or refuse with words? (It silently evicts today — is that honest enough?) (2) A kept copy of a kept copy compounds scrub passes — the harness proves one generation; what does generation five look like? (3) Should KEEP also bake the CURRENT take (as a data-URI .mid inside the file) so a kept banger carries its own performance?
 ═══ end rings ═══ -->

@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake,LOCKS,lockMerge,presetValidate,presetParse})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -267,6 +267,39 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   if (G3.hv(1.7) !== 1 || G3.hv(-2) !== .05) { fail("hv clamp"); cBad++; }
   if (!cBad) ok("the drummer's clock: keyed 1/f wander (lag-1 " + lag1(w1).toFixed(2) +
     "), kit tight / lead free (sd ×" + (sd(leadO) / sd(kitO)).toFixed(2) + "), ±⅓-step cap, hum=0 = machine");
+}
+{ /* locks: surgical halves; presets: hostile-file law */
+  let lBad = 0;
+  const cur = JSON.parse(JSON.stringify(G3.DREAMS[0]));   /* Bembé Rising */
+  const nu0 = JSON.parse(JSON.stringify(G3.DREAMS[2]));   /* Son Nocturne */
+  const kMerged = G3.lockMerge(JSON.parse(JSON.stringify(nu0)), cur, { key: true, rhythm: false });
+  if (!(kMerged.scale === cur.scale && kMerged.root === cur.root &&
+        JSON.stringify(kMerged.prog) === JSON.stringify(cur.prog) && kMerged.fig === nu0.fig &&
+        kMerged.kit === nu0.kit)) { fail("key lock leaks: " + JSON.stringify({ s: kMerged.scale, f: kMerged.fig })); lBad++; }
+  const rMerged = G3.lockMerge(JSON.parse(JSON.stringify(nu0)), cur, { key: false, rhythm: true });
+  if (!(rMerged.fig === cur.fig && rMerged.kit === cur.kit && rMerged.tempo === cur.tempo &&
+        rMerged.scale === nu0.scale && rMerged.root === nu0.root)) { fail("rhythm lock leaks"); lBad++; }
+  const free = G3.lockMerge(JSON.parse(JSON.stringify(nu0)), cur, { key: false, rhythm: false });
+  if (free.fig !== nu0.fig || free.scale !== nu0.scale) { fail("no-lock merge mutated the roll"); lBad++; }
+  /* presets */
+  const mkP = () => ({ name: "take one", seed: 42, p: JSON.parse(JSON.stringify(G3.DREAMS[0])) });
+  if (!G3.presetValidate(mkP())) { fail("real preset refused"); lBad++; }
+  const bads = [
+    (e => { e.p.fig = "notafigure"; return e; })(mkP()),
+    (e => { e.p.scale = "phrygian"; return e; })(mkP()),
+    (e => { e.p.tempo = 999; return e; })(mkP()),
+    (e => { e.name = "x".repeat(64); return e; })(mkP()),
+    (e => { e.seed = -3; return e; })(mkP()),
+    (e => { e.p.prog = [{ r: 99, iv: [0, 4, 7, 10], roman: "?" }]; return e; })(mkP()),
+    (e => { e.p.kit = 0; return e; })(mkP()),
+    (e => { e.p.comps = ["<img onerror=x>", 2]; return e; })(mkP()),
+  ];
+  bads.forEach((b, i) => { if (G3.presetValidate(b)) { fail("hostile preset " + i + " accepted"); lBad++; } });
+  const mixedJson = JSON.stringify([mkP(), bads[0], mkP(), "junk"]);
+  if (G3.presetParse(mixedJson).length !== 2) { fail("presetParse filter"); lBad++; }
+  if (G3.presetParse("not json").length !== 0) { fail("presetParse garbage"); lBad++; }
+  if (G3.presetParse(JSON.stringify(Array.from({ length: 12 }, mkP))).length !== 8) { fail("presetParse cap"); lBad++; }
+  if (!lBad) ok("locks are surgical (key holds harmony, rhythm holds groove); presets validate, filter hostiles, cap at 8");
 }
 { const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
   const A = eval(audJs + "\n;({audVary})");

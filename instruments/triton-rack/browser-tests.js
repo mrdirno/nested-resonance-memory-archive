@@ -224,6 +224,25 @@ const path = __dirname + "/triton-rack.html";
   else if (hk.n > hk.drums) fail("lead outruns the drums — arpeggiator behavior (" + hk.n + " vs " + hk.drums + ")");
   else ok("the hook speaks: " + hk.n + " lead notes, " + hk.gaps + " breaths, contour '" + hk.contour + "'");
 
+  /* locks: tap the key card, roll the dice — the harmony holds, by law */
+  await page.click(".thKey");
+  const lockOn = await page.evaluate(() => ({ k: LOCKS.key,
+    lit: document.querySelector(".thKey").classList.contains("locked"),
+    scale: DREAM.p.scale, root: DREAM.p.root, prog: JSON.stringify(DREAM.p.prog) }));
+  if (!lockOn.k || !lockOn.lit) fail("key lock did not arm " + JSON.stringify(lockOn));
+  await page.click("#dreamDice");
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
+  await page.waitForTimeout(150);
+  const lockRoll = await page.evaluate(() => ({ scale: DREAM.p.scale, root: DREAM.p.root,
+    prog: JSON.stringify(DREAM.p.prog), name: DREAM.p.name }));
+  if (lockRoll.scale !== lockOn.scale || lockRoll.root !== lockOn.root || lockRoll.prog !== lockOn.prog)
+    fail("key lock leaked through DICE: " + JSON.stringify(lockRoll));
+  else if (!/· in /.test(lockRoll.name)) fail("locked roll not named as such: " + lockRoll.name);
+  else ok("key lock: DICE rolled the band, the harmony held (" + lockRoll.scale + "/" + lockRoll.root + ")");
+  await page.click(".thKey");
+  const lockOff = await page.evaluate(() => LOCKS.key || document.querySelector(".thKey").classList.contains("locked"));
+  if (lockOff) fail("key lock did not release");
+
   /* figure chip mid-dream: transport hands off, the tape keeps rolling (BREAK fix) */
   await page.click('.tab[data-pane="rhythm"]');
   await page.waitForTimeout(150);
@@ -340,6 +359,52 @@ const path = __dirname + "/triton-rack.html";
   const still = await page.evaluate(() => ({ ldr: LDR.on, take: TAKE.on }));
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
   else ok("transport and tape survive the bounce");
+
+  /* KEEP: the file saves a copy of ITSELF carrying the dream — then that copy
+     must boot clean and play its preset */
+  const kitOpts = await page.evaluate(() => document.getElementById("ldrKit").options.length);
+  const dlK = downloads.length;
+  await page.click("#ldrKeep");
+  await page.waitForTimeout(1200);
+  const keepD = downloads.slice(dlK).find(d => d.suggestedFilename().endsWith(".html"));
+  if (!keepD) fail("KEEP produced no file");
+  else {
+    const os2 = require("os"), fs2 = require("fs"), pj2 = require("path").join;
+    const kp = pj2(os2.tmpdir(), "tr-kept.html");
+    await keepD.saveAs(kp);
+    const src = fs2.readFileSync(kp, "utf8");
+    const hasPreset = /"seed":\s*\d+/.test(src) && src.indexOf('id="tritonPresets"') >= 0;
+    const hasRings = src.indexOf("═══ end rings ═══") >= 0;
+    if (!hasPreset || !hasRings) fail("kept copy incomplete (preset " + hasPreset + ", rings " + hasRings + ")");
+    else {
+      const page2 = await browser.newPage({ viewport: { width: 1100, height: 900 } });
+      const errs2 = [];
+      page2.on("console", m => { if (m.type() === "error") errs2.push(m.text()); });
+      page2.on("pageerror", e => errs2.push("pageerror: " + e.message));
+      await page2.goto("file://" + kp);
+      await page2.waitForTimeout(800);
+      const boot2 = await page2.evaluate(() => ({
+        presets: typeof PRESETS !== "undefined" ? PRESETS.length : -1,
+        chips: document.querySelectorAll("#ldrPresets .pchip4").length,
+        kitOpts: document.getElementById("ldrKit").options.length,
+        powered: state.powered, lcdOff: document.getElementById("lcd").classList.contains("off") }));
+      const real2 = errs2.filter(e => !/Web MIDI|requestMIDIAccess|favicon/.test(e));
+      if (boot2.presets !== 1 || boot2.chips !== 1) fail("kept copy lost its preset " + JSON.stringify(boot2));
+      else if (boot2.kitOpts !== kitOpts) fail("kept copy doubled its kit options (" + boot2.kitOpts + " vs " + kitOpts + ")");
+      else if (boot2.powered || !boot2.lcdOff) fail("kept copy boots powered-on " + JSON.stringify(boot2));
+      else if (real2.length) fail("kept copy console: " + real2.slice(0, 3).join(" | "));
+      else {
+        await page2.click("#ldrPresets .pchip4");
+        await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 1, { timeout: 20000 });
+        const play2 = await page2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
+          name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook || DREAM.bar < 5 }));
+        const kept = await page.evaluate(() => PRESETS[0] && PRESETS[0].seed);
+        if (!play2.on || play2.seed !== kept) fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ")");
+        else ok("KEEP: the file rewrote itself — copy boots clean, chip replays seed #" + play2.seed + " (" + play2.name + ")");
+      }
+      await page2.close();
+    }
+  }
 
   /* power-off disarms WRITE, pauses the tape, resets controllers, clears the nudge */
   await page.evaluate(() => { state.write = true; _midiInject([0xB0, 64, 127]); ctxEnsure(true); powerOff(); });
