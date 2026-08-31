@@ -770,5 +770,84 @@ console.log("[8] dd22 kits");
   if (!dBad) ok("fidelity gate + merge + physics (808 tail, choke, pan, determinism) + preset law + deal");
 }
 
+/* ── suite 9: DD22 style engine (cycle 37) — 17 drum languages, realized ── */
+console.log("[9] dd22 styles");
+{
+  let sBad = 0;
+  const ddJs = slice("/*DD22-BEGIN*/", "const LOCKS={");
+  const G9 = eval(ddJs + "\n;({DD22})");
+  const D = G9.DD22;
+  const bell = LDR_FIG.bembe.hits;
+  if (D.KSTYLE_KEYS.length !== 17) { fail("style count " + D.KSTYLE_KEYS.length); sBad++; }
+  /* every style's kit must exist on the shelf */
+  D.KSTYLE_KEYS.forEach(k => { const dk = D.STYLE2KIT[k];
+    if (!dk || D.KIT_NAMES.indexOf(dk) < 0) { fail(k + " has no shelf kit"); sBad++; } });
+  /* every plan: zones/vels bounded, perc names are REAL ported physics */
+  const recipes = G2.LDR_RECIPE;
+  D.KSTYLE_KEYS.forEach(k => {
+    const pl = D.kRealize(k, G3.mulberry(42), bell);
+    if (!pl || !(pl.grid === 16 || pl.grid === 12)) { fail(k + " grid"); sBad++; return; }
+    pl.kit.forEach(e => {
+      if (!(e.zone >= 0 && e.zone <= 11 && e.vel > 0 && e.vel <= 1.3 &&
+            e.step > -1 && e.step < 2 * pl.grid + 1)) { fail(k + " kit event out of law"); sBad++; } });
+    pl.perc.forEach(e => {
+      if (!recipes[e.name]) { fail(k + " perc name '" + e.name + "' has no physics"); sBad++; } });
+    pl.sub.forEach(e => {
+      if (!(e.note >= -24 && e.note <= 24 && e.dur > 0)) { fail(k + " sub event out of law"); sBad++; } });
+  });
+  /* deterministic per seed */
+  { const a = JSON.stringify(D.kRealize("trap", G3.mulberry(7), bell)),
+        b = JSON.stringify(D.kRealize("trap", G3.mulberry(7), bell));
+    if (a !== b) { fail("realizer not deterministic"); sBad++; } }
+  /* dembow's law: the cell loops verbatim — every canonical kick step
+     present, no adds (varying it un-writes the genre) */
+  { const pl = D.kRealize("dembow", G3.mulberry(3), bell);
+    const want = D.KPAT.dembowKick.map(h => h[0]).join(",");
+    const got = pl.kit.filter(e => e.zone === 0).map(e => e.step).join(",");
+    if (got !== want) { fail("dembow kick varied (" + got + ")"); sBad++; } }
+  /* the swing is IN the steps: house at MPC 56 moves only the 2nd 16th of
+     each 8th pair, by (56-50)*0.04 = 0.24 steps */
+  { const pl = D.kRealize("house", G3.mulberry(5), bell);
+    const hats = pl.kit.filter(e => e.zone === 6 || e.zone === 10);
+    const swung = hats.filter(e => Math.abs(e.step % 1 - 0.24) < 1e-9);
+    const straightOdd = hats.filter(e => e.step % 2 === 1);
+    if (!swung.length) { fail("house hats not swung"); sBad++; }
+    if (straightOdd.length) { fail("house 2nd-16th hat left on the grid"); sBad++; } }
+  /* drill's signature: slides happen, and they glide between DIFFERENT notes */
+  { let slides = 0, dup = 0;
+    for (let sd = 1; sd <= 30; sd++) {
+      const pl = D.kRealize("drill", G3.mulberry(sd * 13), bell);
+      let prev = null;
+      pl.sub.forEach(e => { if (e.slide) { slides++; if (prev && prev.note === e.note) dup++; } prev = e; });
+    }
+    if (!slides) { fail("drill never slides in 30 seeds"); sBad++; }
+    if (dup) { fail("slide between identical notes"); sBad++; } }
+  /* fills: the cut empties, the roll accelerates toward the arrival */
+  { if (D.kFill("cut", G3.mulberry(1), 16) !== null) { fail("cut fill not a cut"); sBad++; }
+    const r = D.kFill("rolls32", G3.mulberry(1), 16);
+    for (let i = 1; i < r.length; i++) if (r[i].vel <= r[i - 1].vel) { fail("roll not a crescendo"); sBad++; break; }
+    const t = D.kFill("toms", G3.mulberry(1), 16);
+    if (!(t[0].slot === 9 && t[t.length - 1].slot === 5)) { fail("tom fill not descending"); sBad++; } }
+  /* the deal: style cards appear, name their lineage, validate as presets */
+  { let styled = 0; const seen = new Set(); let firstCard = null;
+    for (let sd = 1; sd <= 200; sd++) { const d = G3.candDrums(G3.mulberry(sd * 7 + 1));
+      if (d.dsty != null) { styled++;
+        if (D.KSTYLE_KEYS.indexOf(d.dsty) < 0) { fail("unknown style " + d.dsty); sBad++; break; }
+        if (d.dkit !== D.STYLE2KIT[d.dsty]) { fail("style card wears wrong kit"); sBad++; break; }
+        seen.add(d.dsty); if (!firstCard) firstCard = d; } }
+    if (!(styled > 15)) { fail("style cards too rare (" + styled + "/200)"); sBad++; }
+    if (seen.size < 8) { fail("style draw not spread (" + seen.size + ")"); sBad++; }
+    if (firstCard) {
+      const p = G3.composeP([firstCard, null, null, null, { kind: "shape", format: "loop" }], null, 5);
+      if (!p || p.dsty !== firstCard.dsty) { fail("composeP drops dsty"); sBad++; }
+      else {
+        if (!G3.presetValidate({ name: "t", seed: 1, p: JSON.parse(JSON.stringify(p)) })) { fail("style preset refused"); sBad++; }
+        const bad = JSON.parse(JSON.stringify(p)); bad.dsty = "polka";
+        if (G3.presetValidate({ name: "t", seed: 1, p: bad })) { fail("unknown dsty accepted"); sBad++; }
+      }
+    } }
+  if (!sBad) ok("17 languages realize (zones/physics/sub in law) · dembow verbatim · MPC swing in the steps · drill slides · fills · deal + preset law");
+}
+
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
 process.exit(errs ? 1 : 0);

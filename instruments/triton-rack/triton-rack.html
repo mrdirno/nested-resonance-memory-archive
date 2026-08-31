@@ -4801,6 +4801,567 @@ var DD_KITBANK = (function () {
                busComp: 0.55, busDrive: 1.4, busLow: 2.4, busHigh: 1.0, gain: 0.434 }
   };
 })();
+/* —— dd22 slice: rhythm-metric (donor L4862-4887) —— */
+function metricWeights(steps, beats) {
+  var w = new Float32Array(steps), div = steps / beats;
+  for (var i = 0; i < steps; i++) {
+    if (i === 0) { w[i] = 1; continue; }
+    /* level = how deep the binary (or ternary) subdivision has to go */
+    var lvl = 0, span = steps;
+    while (span > 1) {
+      var half = span / 2;
+      if (Math.abs(i % span) < 1e-9) break;
+      if (Math.abs((i % span) - half) < 1e-9) break;
+      span = half; lvl++;
+      if (span < 1) break;
+    }
+    /* on-beat positions rank above every offbeat regardless of depth */
+    var onBeat = Math.abs(i % div) < 1e-9;
+    var beatIdx = Math.round(i / div);
+    var base;
+    if (onBeat) {
+      /* beat 3 of four outranks beats 2 and 4 — the half-bar is a real event */
+      base = (beats % 2 === 0 && beatIdx === beats / 2) ? 0.78 : 0.56;
+    } else if (Math.abs((i % div) - div / 2) < 1e-9) base = 0.30;   /* the "and" */
+    else base = 0.14;                                               /* everything finer */
+    w[i] = base;
+  }
+  return w;
+}
+/* —— dd22 slice: grooves-grammar (donor L5726-6258) —— */
+/*<<<KNOCK-SEAM:knock/k05-grooves.js>>>*/
+/* ═══════════════════════════════════════════════════════════════════════════
+   KNOCK · K3 THE GRAMMARS
+   Seventeen drum languages, written down. Patterns and grooves are nobody's
+   property — you cannot own a rhythm, only a recording of one — so these are
+   the real figures, PLAYED here by synthesized drums, with the lineage named
+   on every style. What IS ours is the grammar around each figure: which
+   ornaments a style allows, what its fills are, when it drops out, and how
+   its clock breathes.
+
+   Feel numbers are measured, not vibed (research pass, 2026-08-26):
+   · MPC swing (Roger Linn's own math): only the 2nd 16th of each 8th pair is
+     delayed, by (swing%-50)/100 x (30000/bpm) ms. In this engine's units the
+     delay is in STEPS: swingSteps = (pct-50) * 0.04.
+   · Funky Drummer: beat 2 lags ~2.8% of a beat, beat 3 ~1.8%, beat 4 barely
+     (Freeman & Lacey 2002); lateness is forgiven, earliness reads as error
+     (Fruhauf 2013). The limb tables lean late, never early, except hats.
+   · Ghost notes sit at 0.3-0.45 of the accent velocity (-12..-18dB).
+   · Dilla: the KICK is the erratic voice — snare and hats hold the grid
+     while kicks anticipate by MPC-tick multiples (~7ms at 96bpm).
+   · Dual swing (Frane 2017): a break can carry hats at 1.2:1 while the kick
+     swings 1.5:1 — so swing here is PER LANE (kickSwing overrides).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+function kswing(pct) { return (pct - 50) * 0.04; }
+
+/* ── the canonical figures ─────────────────────────────────────────────────
+   Two-bar cells on a 32-slot 16th grid (12/8 styles use 24 slots), stored as
+   [step, velocity] pairs. Each carries its source in the comment — grammar,
+   credited. */
+var KPAT = {
+  /* the Bay slap: near-empty drum field, claps answering the 808 (the 808
+     line itself lives in the sub grammar below) */
+  hyphyKick:  [[0, 0.9], [3, 0.7], [10, 0.75], [16, 0.9], [19, 0.7], [26, 0.75], [29, 0.6], [30, 0.65]],
+  /* crunk — Lil Jon's stomp: the boom on one, the pickup into the next bar */
+  crunkKick:  [[0, 1], [7, 0.7], [16, 1], [22, 0.65], [24, 0.7]],
+  /* New Orleans bounce, after the Showboys' "Drag Rap" (the Triggerman):
+     tresillo chain with the doubled pickup into the beat-four snare */
+  trigKick:   [[0, 0.95], [3, 0.75], [6, 0.8], [10, 0.85], [11, 0.8], [16, 0.95], [19, 0.75], [22, 0.8], [26, 0.85], [27, 0.8]],
+  /* electro / Miami bass, after "Planet Rock": 1, a-of-2, and-of-3 */
+  miamiKick:  [[0, 0.95], [7, 0.8], [10, 0.85], [16, 0.95], [23, 0.8], [26, 0.85]],
+  /* dembow — Bobby Digital's riddim for Shabba Ranks: kick every beat and
+     the 3+3+2 snare, looped VERBATIM; varying it un-writes the genre */
+  dembowKick: [[0, 0.95], [4, 0.85], [8, 0.92], [12, 0.85], [16, 0.95], [20, 0.85], [24, 0.92], [28, 0.85]],
+  dembowSn:   [[3, 0.85], [6, 0.8], [11, 0.85], [14, 0.8], [19, 0.85], [22, 0.8], [27, 0.85], [30, 0.8]],
+  /* UK drill: the migrating snare — beat 3 of bar one, beat 4 of bar two */
+  drillKick:  [[0, 0.9], [6, 0.8], [9, 0.75], [16, 0.9], [22, 0.8], [27, 0.75]],
+  drillSn:    [[8, 0.95], [28, 0.95]],
+  /* trap: sparse tresillo-leaning kick under a half-time snare */
+  trapKick:   [[0, 0.95], [7, 0.75], [10, 0.8], [16, 0.95], [23, 0.75], [25, 0.7]],
+  /* footwork/juke: the 3+3+2 doubled, traded against a four-floor bar */
+  footKickA:  [[0, 0.9], [3, 0.8], [6, 0.85], [8, 0.8], [11, 0.85], [14, 0.8], [16, 0.9], [19, 0.8], [22, 0.85], [24, 0.8], [27, 0.85], [30, 0.8]],
+  footKickB:  [[0, 0.9], [4, 0.85], [8, 0.9], [12, 0.85], [16, 0.9], [20, 0.85], [24, 0.9], [28, 0.85]],
+  /* DC go-go — Chuck Brown's pocket: 1, and-of-2, and-of-3, swung */
+  gogoKick:   [[0, 0.95], [6, 0.8], [10, 0.85], [16, 0.95], [22, 0.8], [26, 0.85]],
+  /* second line — the street beat: two bars, and the BIG FOUR lands the
+     phrase (beat 4 of bar two, bass drum and cymbal together) */
+  lineKick:   [[0, 0.9], [7, 0.75], [10, 0.8], [16, 0.9], [23, 0.75], [28, 1.0]],
+  /* the Amen grammar (played, never sampled): ride on 8ths, the kick
+     doublet, snares on the backbeats with the syncopated answers */
+  amenKick:   [[0, 0.95], [2, 0.8], [10, 0.85], [11, 0.85], [16, 0.95], [18, 0.8], [26, 0.85], [27, 0.85]],
+  amenSn:     [[4, 0.95], [7, 0.7], [9, 0.3], [12, 0.95], [15, 0.3], [20, 0.95], [23, 0.7], [25, 0.3], [28, 0.95], [31, 0.3]],
+  /* amapiano: the restrained four-floor under the log drum */
+  pianoKick:  [[0, 0.7], [8, 0.65], [16, 0.7], [24, 0.65]],
+  /* funk sixteenth kick, James Brown school */
+  funkKick:   [[0, 0.95], [7, 0.7], [10, 0.8], [16, 0.95], [20, 0.6], [26, 0.8]],
+  /* boom bap: the head-nod displacement */
+  bapKick:    [[0, 0.95], [7, 0.7], [10, 0.75], [16, 0.95], [17, 0.5], [23, 0.7], [26, 0.75]],
+  /* samba batucada (16 slots = two 2/4 bars): the surdo family */
+  surdo1:     [[4, 1.0], [12, 1.0], [20, 1.0], [28, 1.0]],          /* marcação: beat two */
+  surdo2:     [[0, 0.8], [8, 0.8], [16, 0.8], [24, 0.8]],          /* the answer */
+  surdo3:     [[6, 0.6], [7, 0.7], [14, 0.65], [22, 0.6], [23, 0.7], [30, 0.65]],  /* the cutter */
+  telecoteco: [[0, 0.7], [3, 0.65], [6, 0.7], [10, 0.65], [13, 0.7], [16, 0.7], [19, 0.65], [22, 0.7], [26, 0.65], [29, 0.7]]
+};
+
+/* 12/8 figures on a 24-slot grid (two bars of 12) — the bell family lives in
+   06-rhythm's BELLS_12; these are the ensemble around it */
+var KPAT12 = {
+  dununba: [[0, 0.95], [3, 0.75], [6, 0.85], [9, 0.75], [12, 0.95], [15, 0.75], [18, 0.85], [21, 0.75]],
+  sangban: [[5, 0.75], [11, 0.8], [17, 0.75], [23, 0.8]],
+  kenkeni: [[1, 0.5], [2, 0.55], [4, 0.5], [5, 0.55], [7, 0.5], [8, 0.55], [10, 0.5], [11, 0.55],
+            [13, 0.5], [14, 0.55], [16, 0.5], [17, 0.55], [19, 0.5], [20, 0.55], [22, 0.5], [23, 0.55]],
+  /* djembe accompaniment: bass-tone-tone-slap conversation */
+  djembe:  [[0, 0.85, 'B'], [2, 0.6, 'T'], [3, 0.65, 'T'], [5, 0.8, 'S'], [6, 0.85, 'B'], [8, 0.6, 'T'], [9, 0.65, 'T'], [11, 0.8, 'S'],
+            [12, 0.85, 'B'], [14, 0.6, 'T'], [15, 0.65, 'T'], [17, 0.8, 'S'], [18, 0.85, 'B'], [20, 0.6, 'T'], [21, 0.65, 'T'], [23, 0.8, 'S']]
+};
+
+/* ── ornament: a figure, kept alive ────────────────────────────────────────
+   The canonical cell is sacred; the ADDS around it are the drummer. Draws
+   come from the lane's own stream, per 2-bar phrase, so the dice invariants
+   hold by construction. `lock` styles (dembow) allow nothing. */
+function kOrnament(base, rng, opt) {
+  opt = opt || {};
+  var out = [], i;
+  for (i = 0; i < base.length; i++) {
+    if (opt.dropP && rChance(rng, opt.dropP) && base[i][0] % 8 !== 0) continue;
+    out.push({ step: base[i][0], vel: base[i][1] * (0.94 + 0.12 * rng()) });
+  }
+  var adds = opt.adds || [];
+  for (i = 0; i < adds.length; i++)
+    if (rChance(rng, opt.addP || 0.22))
+      out.push({ step: adds[i], vel: (opt.addVel || 0.55) * (0.85 + 0.3 * rng()) });
+  out.sort(function (a, b) { return a.step - b.step; });
+  return out;
+}
+
+/* ── hats ──────────────────────────────────────────────────────────────────
+   rate 1 = 16ths, 2 = 8ths. Accent scheme rides the metric weights; rolls
+   subdivide the step before a target and crescendo into it (trap's written
+   accelerando); the open hat lifts into the beat it precedes. */
+function kHats(steps, beats, rng, o) {
+  var w = metricWeights(steps, beats), out = [], div = steps / beats;
+  var rate = o.rate || 2;
+  for (var i = 0; i < steps; i += rate) {
+    if (o.gapP && rChance(rng, o.gapP)) continue;
+    var acc = (i % div === 0) ? 1 : (i % (div / 2) === 0 ? (o.offAcc || 0.6) : 0.35);
+    var nxt = (i + rate) % steps;
+    if (o.rollP && w[nxt] >= 0.5 && rChance(rng, o.rollP)) {
+      var n = rPick(rng, o.rollDivs || [2, 3, 4]);
+      for (var k = 0; k < n; k++)
+        out.push({ step: i + rate * k / n, vel: clamp((0.3 + 0.4 * acc) * (0.5 + 0.6 * k / Math.max(1, n - 1)), 0.08, 1), slot: 2 });
+    } else {
+      out.push({ step: i, vel: clamp(0.32 + 0.42 * acc + (rng() - 0.5) * 0.1, 0.1, 0.95), slot: 2 });
+    }
+  }
+  var opens = o.open || [];
+  for (var q = 0; q < opens.length; q++) {
+    if (o.openP !== undefined && !rChance(rng, o.openP)) continue;
+    for (var h = out.length - 1; h >= 0; h--) if (out[h].step === opens[q]) out.splice(h, 1);
+    out.push({ step: opens[q], vel: 0.55 + 0.25 * rng(), slot: 3 });
+  }
+  return out;
+}
+
+/* ── the ghost floor ───────────────────────────────────────────────────────
+   Quiet snare taps in the weak positions between backbeats — most of what a
+   listener calls feel. Velocity 0.3-0.45 of the accent, per the measured
+   funk ratio. */
+function kGhosts(steps, beats, rng, taken, count) {
+  var w = metricWeights(steps, beats), out = [];
+  for (var g = 0; g < count; g++) {
+    var cands = [], ws = [];
+    for (var s = 0; s < steps; s++) {
+      if (taken[s]) continue;
+      cands.push(s); ws.push(0.08 + (1 - w[s]) * 0.9);
+    }
+    if (!cands.length) break;
+    var st = rWeighted(rng, cands, ws);
+    taken[st] = 1;
+    out.push({ step: st, vel: 0.1 + 0.13 * rng(), slot: 1 });
+  }
+  return out;
+}
+
+/* ── rolls ─────────────────────────────────────────────────────────────────
+   The military burst (crunk transitions, bounce roll-bars, second-line press
+   chatter): a run of 16ths or 32nds with a crescendo, resolving ON the next
+   strong beat — a fill is an acceleration toward an arrival. */
+function kRoll(start, lenSteps, perStep, velLo, velHi, slot) {
+  var out = [], n = Math.max(1, Math.round(lenSteps * perStep));
+  for (var i = 0; i < n; i++) {
+    var t = i / Math.max(1, n - 1);
+    out.push({ step: start + i / perStep, vel: velLo + (velHi - velLo) * t, slot: slot === undefined ? 1 : slot });
+  }
+  return out;
+}
+
+/* ── the 808 line ──────────────────────────────────────────────────────────
+   The sub grammar: where the boom lands, what note it takes, when it slides.
+   Notes are semitone offsets from the tonic's sub-octave root; the pool is
+   the minor-pentatonic bass vocabulary every one of these traditions
+   actually uses (root heavy, b7 below, b3, 5, octave). Slide times follow
+   the measured practice: ~1 step reads natural, 2-3 steps is the drill
+   signature. Research: drill slides land their glide ON a kick hit. */
+function kSubLine(steps2, rng, o, tonicMidi) {
+  var out = [], i;
+  var starts = o.steps, prevNote = tonicMidi;
+  for (i = 0; i < starts.length; i++) {
+    var st = starts[i][0], p = starts[i][1];
+    if (!rChance(rng, p)) continue;
+    var off = rWeighted(rng, o.notes, o.noteW);
+    var note = clamp(tonicMidi + off, o.reg[0], o.reg[1]);
+    var nxt = i + 1 < starts.length ? starts[i + 1][0] : steps2;
+    var gap = Math.max(0.5, nxt - st);
+    var dur = clamp(gap * (o.longFrac || 0.92), 0.5, o.maxDur || 8);
+    var ev = { step: st, vel: clamp(0.8 + 0.2 * rng(), 0.5, 1), note: note, dur: dur };
+    if (o.slideP && out.length && rChance(rng, o.slideP)) {
+      /* a slide continues the PREVIOUS note into this one: same circuit,
+         pitch gliding, envelope still falling — so it must differ in pitch */
+      if (note === prevNote) { off = off >= 7 ? off - 5 : off + 5; note = clamp(tonicMidi + off, o.reg[0], o.reg[1]); ev.note = note; }
+      ev.slide = clamp(gap * 0.5, o.slideMin || 0.8, o.slideMax || 3);
+    }
+    prevNote = note;
+    out.push(ev);
+  }
+  return out;
+}
+
+/* ── percussion & aux ensembles ────────────────────────────────────────────
+   Fixed plans per style — an ensemble that re-rolls its instruments every
+   bar is a random number generator with congas (RING 1's law, kept). Each
+   entry: [slotName, patternPairs, always?] on the style's 2-bar grid. */
+function kPlanHits(plan, steps2, rng, tens) {
+  var out = [];
+  for (var j = 0; j < plan.length; j++) {
+    var e = plan[j], pat = e[1];
+    for (var i = 0; i < pat.length; i++) {
+      if (!e[2] && !rChance(rng, 0.55 + 0.4 * tens)) continue;
+      out.push({ step: pat[i][0] % steps2, vel: pat[i][1] * (0.85 + 0.3 * rng()), perc: e[0], bend: pat[i][2] });
+    }
+  }
+  out.sort(function (a, b) { return a.step - b.step; });
+  return out;
+}
+
+/* ═══ THE STYLES ═══════════════════════════════════════════════════════════
+   Every entry names its lineage — using a tradition's grammar without saying
+   whose grammar it is would be taking credit for someone else's mathematics.
+   swing values are MPC percentages through kswing(); hum/limb are the human
+   clock (06-rhythm); machine genres stay machines on purpose. */
+var KSTYLES = {
+
+  knock: { label: 'Hyphy', place: 'the Bay',
+    origin: 'the Bay Area — hyphy, Mac Dre’s generation: the 808 IS the bassline, the drum field stays empty enough to go dumb in',
+    tempo: [92, 110], beats: 4, div: 4,
+    kit: 'knockK', sub: 'sub808', perc: null, aux: 'brightP',
+    swing: 0, hum: 0.18, humanT: 0.002, limb: {},
+    climate: { light: 0.45, weight: 0.85, motion: 0.5, space: 0.22, grit: 0.4, age: 0.75, order: 0.8 },
+    gens: {
+      kick: { pat: 'hyphyKick', adds: [14, 30], addP: 0.2, dropP: 0.12 },
+      snare: { clapAt: [4, 12, 20, 28], clapVel: 0.95, rim: [7, 23], rimP: 0.25 },
+      hat: { rate: 2, gapP: 0.22, open: [14, 30], openP: 0.4, rollP: 0.08 },
+      sub: { steps: [[0, 1], [3, 0.6], [6, 0.55], [10, 0.7], [16, 1], [19, 0.6], [22, 0.5], [26, 0.7], [29, 0.45]],
+        notes: [0, 3, 5, 7, 10, 12, -2], noteW: [8, 1.5, 1.5, 2, 1.5, 2, 1.2],
+        reg: [24, 38], longFrac: 0.95, maxDur: 8, slideP: 0.08, slideMin: 0.8, slideMax: 1.6 },
+      aux: [['shaker', [[2, 0.4], [10, 0.4], [18, 0.4], [26, 0.4]]]]
+    },
+    fill: 'cut', dropout: 0.5 },
+
+  crunk: { label: 'Crunk', place: 'Atlanta',
+    origin: 'Atlanta and Memphis — crunk, Lil Jon’s stomp: the boom on one, claps stacked like a marching band, rolls as transitions',
+    tempo: [72, 88], beats: 4, div: 4,
+    kit: 'crunkK', sub: 'subBoom', perc: null, aux: 'deepP',
+    swing: 0, hum: 0.2, humanT: 0.002, limb: {},
+    climate: { light: 0.3, weight: 0.95, motion: 0.42, space: 0.3, grit: 0.55, age: 0.8, order: 0.85 },
+    gens: {
+      kick: { pat: 'crunkKick', adds: [12, 28], addP: 0.18, dropP: 0 },
+      snare: { at: [8, 24], vel: 0.95, clapAt: [8, 24], clapVel: 0.9, flam: 0.028, roll32: 0.55 },
+      hat: { rate: 1, gapP: 0.04, offAcc: 0.55, open: [], rollP: 0.05 },
+      sub: { steps: [[0, 1], [10, 0.35], [16, 1], [22, 0.4], [26, 0.3]],
+        notes: [0, 0, 10, 12, 5], noteW: [8, 4, 1.5, 1.2, 1.3],
+        reg: [22, 34], longFrac: 0.96, maxDur: 10, slideP: 0.05, slideMin: 1, slideMax: 2 },
+      aux: [['cowbell', [[0, 0.5]]]]
+    },
+    fill: 'rolls32', dropout: 0.3 },
+
+  bounce: { label: 'Bounce', place: 'New Orleans',
+    origin: 'New Orleans bounce — the Triggerman, after the Showboys’ “Drag Rap”: the tresillo kick chain, the bells, and a roll-bar answering every few bars',
+    tempo: [95, 106], beats: 4, div: 4,
+    kit: 'bounceK', sub: 'sub808', perc: null, aux: 'brightP',
+    swing: 0, hum: 0.15, humanT: 0.002, limb: {},
+    climate: { light: 0.55, weight: 0.75, motion: 0.7, space: 0.25, grit: 0.45, age: 0.75, order: 0.85 },
+    gens: {
+      kick: { pat: 'trigKick', adds: [14], addP: 0.15, dropP: 0.06 },
+      snare: { at: [4, 12, 20, 28], vel: 0.9, rollBarP: 0.3 },
+      hat: { rate: 1, gapP: 0.06, open: [], rollP: 0.06 },
+      sub: { steps: [[0, 0.9], [3, 0.5], [6, 0.6], [10, 0.6], [16, 0.9], [19, 0.5], [22, 0.6], [26, 0.6]],
+        notes: [0, 0, 5, 7, 12], noteW: [8, 3, 1.5, 1.5, 1.5],
+        reg: [26, 38], longFrac: 0.9, maxDur: 4, slideP: 0 },
+      /* the bells — the part everyone whistles */
+      aux: [['agogoH', [[0, 0.7], [6, 0.6], [11, 0.65], [16, 0.7], [22, 0.6], [27, 0.65]], 1],
+            ['agogoL', [[3, 0.6], [10, 0.55], [19, 0.6], [26, 0.55]], 1],
+            ['cowbell', [[8, 0.5], [24, 0.5]]]]
+    },
+    fill: 'rollbar', dropout: 0.25 },
+
+  miami: { label: 'Miami bass', place: 'Miami',
+    origin: 'Miami bass and electro — the 808 kick with its decay wide open as the bass note, cowbell as the hook, after “Planet Rock”’s school',
+    tempo: [120, 138], beats: 4, div: 4,
+    kit: 'miamiK', sub: 'subMiami', perc: null, aux: 'brightP',
+    swing: 0, hum: 0.12, humanT: 0.001, limb: {},
+    climate: { light: 0.65, weight: 0.7, motion: 0.75, space: 0.28, grit: 0.4, age: 0.85, order: 0.9 },
+    gens: {
+      kick: { pat: 'miamiKick', adds: [13, 29], addP: 0.2, dropP: 0 },
+      snare: { at: [4, 12, 20, 28], vel: 0.9, clapAt: [4, 12, 20, 28], clapVel: 0.6 },
+      hat: { rate: 1, gapP: 0.05, offAcc: 0.6, open: [14, 30], openP: 0.6, rollP: 0.1, rollDivs: [2, 4] },
+      sub: { steps: [[0, 0.95], [4, 0.5], [7, 0.8], [10, 0.8], [14, 0.4], [16, 0.95], [20, 0.5], [23, 0.8], [26, 0.8], [30, 0.5]],
+        notes: [0, 0, 12, 7, 5], noteW: [7, 3, 2.5, 1.5, 1.2],
+        reg: [26, 40], longFrac: 0.85, maxDur: 3, slideP: 0 },
+      aux: [['cowbell', [[2, 0.6], [6, 0.6], [10, 0.6], [14, 0.6], [18, 0.6], [22, 0.6], [26, 0.6], [30, 0.6]], 1],
+            ['congaH', [[5, 0.5], [21, 0.5]]]]
+    },
+    fill: 'toms', dropout: 0.2 },
+
+  dembow: { label: 'Dembow', place: 'Kingston → San Juan',
+    origin: 'the dembow — Bobby Digital’s riddim for Shabba Ranks, reggaetón’s spine: the cell loops verbatim; varying it un-writes the genre',
+    tempo: [88, 100], beats: 4, div: 4,
+    kit: 'latinK', sub: 'sub808', perc: 'latinP', aux: null,
+    swing: 0, hum: 0.12, humanT: 0.001, limb: {},
+    climate: { light: 0.6, weight: 0.7, motion: 0.68, space: 0.3, grit: 0.35, age: 0.7, order: 0.95 },
+    gens: {
+      kick: { pat: 'dembowKick', adds: [], addP: 0, dropP: 0 },
+      snare: { pat: 'dembowSn' },
+      hat: { rate: 2, gapP: 0.08, open: [], rollP: 0 },
+      sub: { steps: [[0, 0.9], [8, 0.7], [16, 0.9], [24, 0.7]],
+        notes: [0, 0, 5, 7], noteW: [8, 3, 1.5, 1.5],
+        reg: [26, 38], longFrac: 0.9, maxDur: 4, slideP: 0 },
+      perc: [['timbH', [[3, 0.6], [6, 0.55], [11, 0.6], [14, 0.55], [19, 0.6], [22, 0.55], [27, 0.6], [30, 0.55]], 1],
+             ['shaker', [[2, 0.4], [6, 0.4], [10, 0.4], [14, 0.4], [18, 0.4], [22, 0.4], [26, 0.4], [30, 0.4]]]]
+    },
+    fill: null, dropout: 0.15 },
+
+  drill: { label: 'Drill', place: 'Chicago → London',
+    origin: 'drill, Chicago to London — the migrating snare (beat 3, then beat 4) and the 808 written as a sliding countermelody',
+    tempo: [138, 146], beats: 4, div: 4,
+    kit: 'drillK', sub: 'subDrill', perc: null, aux: 'deepP',
+    swing: 0, hum: 0.12, humanT: 0.001, limb: {},
+    climate: { light: 0.25, weight: 0.85, motion: 0.6, space: 0.35, grit: 0.5, age: 0.9, order: 0.9 },
+    gens: {
+      kick: { pat: 'drillKick', adds: [13, 20], addP: 0.22, dropP: 0.08 },
+      snare: { pat: 'drillSn' },
+      hat: { rate: 2, gapP: 0.1, open: [], rollP: 0.3, rollDivs: [2, 3] },
+      sub: { steps: [[0, 0.95], [6, 0.75], [9, 0.6], [12, 0.5], [16, 0.95], [22, 0.75], [27, 0.6]],
+        notes: [0, 3, 7, 12, 10, 5], noteW: [6, 2.5, 2, 1.8, 1.2, 1.2],
+        reg: [24, 38], longFrac: 0.95, maxDur: 6, slideP: 0.5, slideMin: 1.2, slideMax: 3 },
+      aux: [['woodblk', [[3, 0.45], [11, 0.45], [19, 0.45], [27, 0.45]]],
+            ['clave', [[6, 0.4], [22, 0.4]]]]
+    },
+    fill: 'stutter', dropout: 0.35 },
+
+  trap: { label: 'Trap', place: 'Atlanta',
+    origin: 'Atlanta trap — the half-time snare, hats rolled in shifting divisions, the tuned sub with space used as an instrument',
+    tempo: [130, 150], beats: 4, div: 4,
+    kit: 'trapTop', sub: 'sub808', perc: null, aux: 'deepP',
+    swing: 0, hum: 0.12, humanT: 0.001, limb: {},
+    climate: { light: 0.35, weight: 0.85, motion: 0.55, space: 0.4, grit: 0.4, age: 0.9, order: 0.9 },
+    gens: {
+      kick: { pat: 'trapKick', adds: [13, 29], addP: 0.25, dropP: 0.1 },
+      snare: { at: [8, 24], vel: 0.95, clapAt: [8, 24], clapVel: 0.55 },
+      hat: { rate: 2, gapP: 0.06, open: [22], openP: 0.35, rollP: 0.35, rollDivs: [2, 3, 4, 6] },
+      sub: { steps: [[0, 1], [7, 0.6], [10, 0.65], [16, 1], [23, 0.6], [25, 0.5]],
+        notes: [0, 3, 5, 7, 10, 12], noteW: [7, 1.8, 1.5, 2, 1.4, 1.6],
+        reg: [24, 38], longFrac: 0.95, maxDur: 7, slideP: 0.22, slideMin: 1, slideMax: 2.2 },
+      aux: [['rim', []]]
+    },
+    fill: 'stutter', dropout: 0.4 },
+
+  foot: { label: 'Footwork', place: 'Chicago',
+    origin: 'Chicago footwork — RP Boo and DJ Rashad’s generation: the 3+3+2 kick traded against a four-floor bar, toms arguing in triplets',
+    tempo: [155, 165], beats: 4, div: 4,
+    kit: 'footK', sub: 'subMiami', perc: null, aux: 'brightP',
+    swing: 0, hum: 0.12, humanT: 0.001, limb: {},
+    climate: { light: 0.5, weight: 0.7, motion: 0.85, space: 0.3, grit: 0.45, age: 0.85, order: 0.85 },
+    gens: {
+      kick: { patAB: ['footKickA', 'footKickB'], adds: [], addP: 0, dropP: 0.05 },
+      snare: { clapAt: [4, 12, 20, 28], clapVel: 0.85, shiftP: 0.3, shiftTo: [3, 11, 19, 27] },
+      hat: { rate: 2, gapP: 0.3, open: [], rollP: 0 },
+      sub: { steps: [[0, 0.8], [6, 0.5], [8, 0.6], [16, 0.8], [22, 0.5], [24, 0.6]],
+        notes: [0, 0, 12], noteW: [7, 3, 2],
+        reg: [26, 40], longFrac: 0.8, maxDur: 3, slideP: 0 },
+      tomTrips: 0.5,
+      aux: [['rim', [[7, 0.4], [23, 0.4]]]]
+    },
+    fill: 'toms', dropout: 0.4 },
+
+  gogo: { label: 'Go-go', place: 'Washington DC',
+    origin: 'DC go-go — Chuck Brown’s pocket: the kick figure everyone claps to, congas answering in the gaps, and it never stops',
+    tempo: [88, 102], beats: 4, div: 4,
+    kit: 'gogoK', sub: null, perc: 'latinP', aux: 'handP',
+    swing: 62, kickSwing: 62, hum: 1.1, humanT: 0.01,
+    limb: { snare: 6, hatC: -1, perc: 3 },
+    climate: { light: 0.55, weight: 0.6, motion: 0.65, space: 0.35, grit: 0.5, age: 0.35, order: 0.6 },
+    gens: {
+      kick: { pat: 'gogoKick', adds: [13, 29], addP: 0.3, dropP: 0.05 },
+      snare: { at: [4, 12, 20, 28], vel: 0.92, ghosts: 5 },
+      hat: { rate: 2, gapP: 0.12, open: [14], openP: 0.3, rollP: 0 },
+      perc: [['congaM', [[5, 0.7], [13, 0.75], [21, 0.7], [29, 0.75]], 1],
+             ['congaL', [[7, 0.6], [23, 0.6]], 1],
+             ['congaH', [[15, 0.65], [31, 0.65]]],
+             ['cowbell', [[0, 0.6], [3, 0.55], [6, 0.6], [8, 0.55], [11, 0.6], [14, 0.55],
+                          [16, 0.6], [19, 0.55], [22, 0.6], [24, 0.55], [27, 0.6], [30, 0.55]], 1]],
+      aux: [['timbL', [[10, 0.55], [26, 0.55]]], ['timbH', [[15, 0.6], [31, 0.6]]],
+            ['tamb', [[4, 0.5], [12, 0.5], [20, 0.5], [28, 0.5]]]]
+    },
+    fill: 'toms', dropout: 0.1 },
+
+  line: { label: 'Second line', place: 'New Orleans',
+    origin: 'the New Orleans second line — the street beat of the brass-band parades: the bass drum’s tresillo, the snare’s press-roll chatter, and the Big Four',
+    tempo: [92, 108], beats: 4, div: 4,
+    kit: 'lineK', sub: null, perc: 'handP', aux: 'brightP',
+    swing: 60, kickSwing: 64, hum: 1.25, humanT: 0.012,
+    limb: { snare: 7, kick: 2, hatC: -2 },
+    climate: { light: 0.6, weight: 0.55, motion: 0.6, space: 0.4, grit: 0.5, age: 0.15, order: 0.5 },
+    gens: {
+      kick: { pat: 'lineKick', adds: [3, 19, 21], addP: 0.3, dropP: 0.08, bigFour: 28 },
+      snare: { at: [4, 12, 20, 28], vel: 0.9, ghosts: 7, pressP: 0.4 },
+      hat: { rate: 2, gapP: 0.3, open: [], rollP: 0 },
+      perc: [['tamb', [[4, 0.55], [12, 0.55], [20, 0.55], [28, 0.6]], 1],
+             ['woodblk', [[6, 0.45], [22, 0.45]]]],
+      aux: [['cowbell', [[0, 0.5], [10, 0.5], [16, 0.5], [26, 0.5]]]]
+    },
+    fill: 'rolls16', dropout: 0.1 },
+
+  jungle: { label: 'Jungle', place: 'London',
+    origin: 'London jungle — the Amen grammar, played not sampled: the kick doublet, the displaced third-bar snare, and a sub that drops under the phrase',
+    tempo: [160, 174], beats: 4, div: 4,
+    kit: 'jungleK', sub: 'subJungle', perc: null, aux: 'brightP',
+    swing: 52, hum: 0.35, humanT: 0.004, limb: { snare: 2 },
+    climate: { light: 0.45, weight: 0.75, motion: 0.9, space: 0.4, grit: 0.55, age: 0.8, order: 0.7 },
+    gens: {
+      kick: { pat: 'amenKick', adds: [], addP: 0, dropP: 0.06 },
+      snare: { pat: 'amenSn', displace3: 1, crash4: 10 },
+      hat: { rate: 2, gapP: 0.08, open: [], rollP: 0, ride: 1 },
+      sub: { steps: [[0, 0.85]], phraseGap: 2,
+        notes: [0, 0, 10, 7], noteW: [7, 3, 1.5, 1.5],
+        reg: [24, 34], longFrac: 1, maxDur: 12, slideP: 0 },
+      aux: [['shaker', [[2, 0.4], [6, 0.4], [10, 0.4], [14, 0.4], [18, 0.4], [22, 0.4], [26, 0.4], [30, 0.4]]]]
+    },
+    fill: 'chop', dropout: 0.3 },
+
+  piano: { label: 'Amapiano', place: 'South Africa',
+    origin: 'amapiano, South Africa — the log drum: a tuned percussive bass that bounces between the kick hits and carries both the low end and the groove',
+    tempo: [108, 116], beats: 4, div: 4,
+    kit: 'pianoK', sub: 'subLog', perc: 'brightP', aux: null,
+    swing: 53, hum: 0.3, humanT: 0.003, limb: {},
+    climate: { light: 0.6, weight: 0.6, motion: 0.6, space: 0.55, grit: 0.3, age: 0.75, order: 0.8 },
+    gens: {
+      kick: { pat: 'pianoKick', adds: [], addP: 0, dropP: 0.2 },
+      snare: { clapAt: [12, 28], clapVel: 0.7, rim: [6, 22], rimP: 0.5 },
+      hat: { rate: 2, gapP: 0.2, open: [], rollP: 0 },
+      /* the log line avoids the kick's four-floor on purpose — it bounces
+         BETWEEN the hits (research: never on them) */
+      sub: { steps: [[1, 0.6], [4, 0.7], [7, 0.75], [9, 0.6], [12, 0.7], [13, 0.65], [17, 0.6], [20, 0.7], [23, 0.75], [25, 0.6], [28, 0.7], [30, 0.6]],
+        notes: [0, 3, 7, 12, 10], noteW: [5, 2, 2.5, 1.8, 1.4],
+        reg: [31, 45], longFrac: 0.7, maxDur: 2, slideP: 0 },
+      perc: [['shaker', [[0, 0.45], [2, 0.4], [4, 0.45], [6, 0.4], [8, 0.45], [10, 0.4], [12, 0.45], [14, 0.4],
+                         [16, 0.45], [18, 0.4], [20, 0.45], [22, 0.4], [24, 0.45], [26, 0.4], [28, 0.45], [30, 0.4]], 1],
+             ['cabasa', [[3, 0.35], [11, 0.35], [19, 0.35], [27, 0.35]]]]
+    },
+    fill: null, dropout: 0.3 },
+
+  batucada: { label: 'Batucada', place: 'Rio de Janeiro',
+    origin: 'Rio — the batucada of the escolas: surdos as the heartbeat, caixa sixteenths, tamborim’s telecoteco; rhythm carried from Angola and Congo',
+    tempo: [124, 140], beats: 4, div: 4,
+    kit: 'batucadaK', sub: null, perc: 'afroP', aux: 'brightP',
+    swing: 60, hum: 0.9, humanT: 0.008, limb: { perc: 2, snare: 3 },
+    climate: { light: 0.65, weight: 0.6, motion: 0.85, space: 0.35, grit: 0.4, age: 0.15, order: 0.55 },
+    gens: {
+      kick: { pat: 'surdo1', adds: [], addP: 0, dropP: 0 },
+      snare: { caixa: 1, accents: [0, 3, 6, 10, 13] },
+      hat: { rate: 2, gapP: 0.5, open: [], rollP: 0 },
+      perc: [['surdo', [[0, 0.8], [8, 0.8], [16, 0.8], [24, 0.8]], 1],
+             ['congaL', [[6, 0.6], [7, 0.65], [14, 0.6], [22, 0.6], [23, 0.65], [30, 0.6]], 1],
+             ['woodblk', [[0, 0.7], [3, 0.65], [6, 0.7], [10, 0.65], [13, 0.7], [16, 0.7], [19, 0.65], [22, 0.7], [26, 0.65], [29, 0.7]], 1],
+             ['agogoH', [[0, 0.55], [5, 0.5], [8, 0.55], [11, 0.5], [16, 0.55], [21, 0.5], [24, 0.55], [27, 0.5]]]],
+      aux: [['shaker', [[0, 0.4], [1, 0.35], [2, 0.4], [3, 0.35], [4, 0.4], [5, 0.35], [6, 0.4], [7, 0.35],
+                        [8, 0.4], [9, 0.35], [10, 0.4], [11, 0.35], [12, 0.4], [13, 0.35], [14, 0.4], [15, 0.35],
+                        [16, 0.4], [17, 0.35], [18, 0.4], [19, 0.35], [20, 0.4], [21, 0.35], [22, 0.4], [23, 0.35],
+                        [24, 0.4], [25, 0.35], [26, 0.4], [27, 0.35], [28, 0.4], [29, 0.35], [30, 0.4], [31, 0.35]], 1],
+            ['guiro', [[4, 0.5], [12, 0.5], [20, 0.5], [28, 0.5]]],
+            ['timbH', [[7, 0.5], [15, 0.55], [23, 0.5], [31, 0.55]]]]
+    },
+    fill: 'toms', dropout: 0.12 },
+
+  bell: { label: 'Bell cycle', place: 'West Africa',
+    origin: 'the West African 12/8 ensemble — the seven-stroke bell as the timeline, dunun family underneath, djembe conversation on top; the beat is measured against the bell',
+    tempo: [116, 138], beats: 4, div: 3,
+    kit: 'afroK', sub: null, perc: 'afroP', aux: 'handP',
+    swing: 0, hum: 1.0, humanT: 0.009, limb: { perc: 2 },
+    climate: { light: 0.6, weight: 0.55, motion: 0.7, space: 0.4, grit: 0.35, age: 0.05, order: 0.5 },
+    gens: {
+      kick: { pat12: 'dununba' },
+      snare: { none: 1 },
+      hat: { none: 1 },
+      perc: [['agogoH', 'BELL', 1],
+             ['congaL', 'sangban', 1],
+             ['woodblk', 'kenkeni', 1]],
+      aux: [['DJEMBE', 'djembe', 1],
+            ['shaker', [[0, 0.4], [2, 0.35], [4, 0.4], [6, 0.35], [8, 0.4], [10, 0.35],
+                        [12, 0.4], [14, 0.35], [16, 0.4], [18, 0.35], [20, 0.4], [22, 0.35]], 1]]
+    },
+    fill: 'djembe', dropout: 0.1 },
+
+  house: { label: 'House', place: 'Chicago',
+    origin: 'Chicago house — the four-on-the-floor, open hats breathing on every offbeat; disco distilled at the Warehouse',
+    tempo: [120, 128], beats: 4, div: 4,
+    kit: 'houseK', sub: null, perc: 'latinP', aux: null,
+    swing: 56, hum: 0.25, humanT: 0.002, limb: {},
+    climate: { light: 0.65, weight: 0.65, motion: 0.8, space: 0.4, grit: 0.35, age: 0.8, order: 0.85 },
+    gens: {
+      kick: { pat: 'dembowKick', adds: [], addP: 0, dropP: 0 },
+      snare: { clapAt: [4, 12, 20, 28], clapVel: 0.8, ghosts: 2 },
+      hat: { rate: 1, gapP: 0.05, offAcc: 0.75, open: [2, 6, 10, 14, 18, 22, 26, 30], openP: 0.9, rollP: 0 },
+      perc: [['congaM', [[2, 0.5], [5, 0.45], [10, 0.5], [18, 0.5], [21, 0.45], [26, 0.5]]],
+             ['shaker', [[1, 0.35], [3, 0.35], [5, 0.35], [7, 0.35], [9, 0.35], [11, 0.35], [13, 0.35], [15, 0.35],
+                         [17, 0.35], [19, 0.35], [21, 0.35], [23, 0.35], [25, 0.35], [27, 0.35], [29, 0.35], [31, 0.35]]]]
+    },
+    fill: 'toms', dropout: 0.25 },
+
+  bap: { label: 'Boom bap', place: 'New York',
+    origin: 'New York boom bap — the golden-era head-nod: a fat backbeat, the kick arguing with the grid the way the MPC’s shift-timing let it',
+    tempo: [86, 96], beats: 4, div: 4,
+    kit: 'boombap', sub: 'sub808', perc: null, aux: 'handP',
+    swing: 56, kickSwing: 60, hum: 0.8, humanT: 0.006,
+    limb: { snare: 8, hatC: -1 }, dilla: 1,
+    climate: { light: 0.4, weight: 0.75, motion: 0.5, space: 0.35, grit: 0.6, age: 0.55, order: 0.65 },
+    gens: {
+      kick: { pat: 'bapKick', adds: [5, 21, 30], addP: 0.28, dropP: 0.1 },
+      snare: { at: [4, 12, 20, 28], vel: 0.95, ghosts: 3 },
+      hat: { rate: 2, gapP: 0.1, open: [14, 30], openP: 0.3, rollP: 0 },
+      sub: { steps: [[0, 0.8], [7, 0.4], [10, 0.5], [16, 0.8], [23, 0.4], [26, 0.5]],
+        notes: [0, 0, 10, 7, 3], noteW: [8, 3, 1.4, 1.4, 1.2],
+        reg: [26, 38], longFrac: 0.85, maxDur: 4, slideP: 0 },
+      aux: [['shaker', [[2, 0.35], [10, 0.35], [18, 0.35], [26, 0.35]]]]
+    },
+    fill: 'chop', dropout: 0.2 },
+
+  funk: { label: 'Funk break', place: 'the one',
+    origin: 'the funk break — James Brown’s school: leave the downbeat alone, put the truth in the sixteenths, and most of them are ghosts',
+    tempo: [96, 108], beats: 4, div: 4,
+    kit: 'funkK', sub: null, perc: 'handP', aux: null,
+    swing: 54, kickSwing: 60, hum: 1.15, humanT: 0.01,
+    limb: { snare: 5, hatC: -2, kick: 1 },
+    climate: { light: 0.55, weight: 0.6, motion: 0.7, space: 0.3, grit: 0.55, age: 0.25, order: 0.55 },
+    gens: {
+      kick: { pat: 'funkKick', adds: [3, 13, 19, 29], addP: 0.3, dropP: 0.1 },
+      snare: { at: [4, 12, 20, 28], vel: 0.95, ghosts: 8 },
+      hat: { rate: 1, gapP: 0.08, offAcc: 0.7, open: [14, 30], openP: 0.5, rollP: 0 },
+      perc: [['congaM', [[1, 0.4], [5, 0.45], [7, 0.4], [13, 0.45], [17, 0.4], [21, 0.45], [23, 0.4], [29, 0.45]]]]
+    },
+    fill: 'rolls16', dropout: 0.15 }
+};
+var KSTYLE_KEYS = Object.keys(KSTYLES);
 
 /* ═══ adapted glue — NOT donor code (everything above this line is sliced
    verbatim from dreamdrummer_22.html by mine/dd22_port.js) ═══
@@ -4846,8 +5407,108 @@ function renderHit(name, slot, vel, sr){
   var len=Math.max(64, Math.min(n, end+800));
   return { L:L.slice(0,len), R:R.slice(0,len) };
 }
+/* ═══ the style engine (round 7, cycle 37) — adapted glue over the donor's
+   grammar data. The CELLS (KPAT/KPAT12) and the STYLES (gens, swing, feel
+   numbers, lineage) are the donor's, verbatim above; kRealize() walks them
+   with this file's helpers into one deterministic 2-bar plan on TRITON kit
+   zones + this file's LDR_RECIPE percussion names + an abstract 808 line
+   (semitone offsets, re-rooted to the song at play time — any key, any
+   scale, the round-5 law). Swing is baked into the step values per the
+   donor's measured MPC math: only the 2nd 16th of each 8th pair moves, and
+   the kick may carry its own ratio (dual swing, Frane 2017). */
+var STYLE2KIT = { knock:"hyphyK", crunk:"trapK", bounce:"hyphyK", miami:"trapK",
+  dembow:"latinK", drill:"trapK", trap:"trapK", foot:"houseK", gogo:"ewf",
+  line:"afroK", jungle:"neptune", piano:"softK", batucada:"afroK",
+  bell:"afroK", house:"houseK", bap:"boombap", funk:"ewf" };
+function kRealize(styleKey, rng, bellHits){
+  var st = KSTYLES[styleKey]; if (!st) return null;
+  var g = st.gens, steps2 = st.div === 3 ? 24 : 32, beats2 = st.beats * 2;
+  var out = { grid: steps2/2, kit: [], sub: [], perc: [],
+    subReg: g.sub ? g.sub.reg : null, subGap: g.sub ? (g.sub.phraseGap||0) : 0,
+    hum: st.hum, fill: st.fill, label: st.label, place: st.place };
+  /* swing:0 in the style data flags a MACHINE (the donor: "machine genres
+     stay machines on purpose") — it is NOT MPC 0%, which kswing() would
+     read as minus two steps */
+  var sw = st.swing ? kswing(st.swing) : 0;
+  var swK = (st.kickSwing !== undefined && st.kickSwing) ? kswing(st.kickSwing) : sw;
+  var sfor = function(stp,lane){ var s2=lane==="kick"?swK:sw;
+    return (Math.round(stp)%2===1)? stp+s2 : stp; };
+  var kp = g.kick.pat12? KPAT12[g.kick.pat12] :
+           g.kick.patAB? KPAT[g.kick.patAB[rng()<.5?0:1]] : KPAT[g.kick.pat];
+  if (kp) kOrnament(kp, rng, g.kick).forEach(function(e){
+    out.kit.push({ step:sfor(e.step,"kick"), vel:e.vel, zone:0 }); });
+  if (g.kick.bigFour!==undefined) out.kit.push(   /* bass drum and cymbal together */
+    { step:g.kick.bigFour, vel:1, zone:0 }, { step:g.kick.bigFour, vel:.7, zone:4 });
+  var taken = {};
+  out.kit.forEach(function(e){ taken[Math.round(e.step)]=1; });
+  var sn = g.snare||{};
+  if (sn.pat && KPAT[sn.pat]) KPAT[sn.pat].forEach(function(h){
+    out.kit.push({ step:sfor(h[0],"snare"), vel:h[1], zone:1 }); taken[h[0]]=1; });
+  (sn.at||[]).forEach(function(s){ out.kit.push({ step:sfor(s,"snare"), vel:sn.vel||.9, zone:1 }); taken[s]=1; });
+  (sn.clapAt||[]).forEach(function(s,i){
+    var stp=(sn.shiftP&&sn.shiftTo&&rChance(rng,sn.shiftP))? sn.shiftTo[i] : s;
+    out.kit.push({ step:sfor(stp,"snare"), vel:sn.clapVel||.8, zone:3 }); taken[stp]=1; });
+  (sn.rim||[]).forEach(function(s){ if(!sn.rimP||rChance(rng,sn.rimP))
+    out.kit.push({ step:sfor(s,"snare"), vel:.5+.2*rng(), zone:2 }); });
+  if (sn.caixa) KPAT.telecoteco.forEach(function(h){
+    out.kit.push({ step:sfor(h[0],"snare"), vel:h[1]*.8, zone:1 }); });
+  if (sn.ghosts) kGhosts(steps2, beats2, rng, taken, sn.ghosts).forEach(function(e){
+    out.kit.push({ step:e.step, vel:e.vel, zone:1 }); });
+  var ht = g.hat||{};
+  if (!ht.none) kHats(steps2, beats2, rng, ht).forEach(function(e){
+    out.kit.push({ step:sfor(e.step,"hat"), vel:e.vel, zone:e.slot===3?10:6 }); });
+  /* the 808 line, stored as OFFSETS: re-rooted to the song's tonic at play
+     time, clamped back into the style's register there */
+  if (g.sub && g.sub.steps){
+    var abs = {}; for (var q in g.sub) abs[q]=g.sub[q]; abs.reg=[-24,24];
+    out.sub = kSubLine(steps2, rng, abs, 0);
+  }
+  var plan = [];
+  (g.perc||[]).concat(g.aux||[]).forEach(function(e){
+    var pat = e[1];
+    if (typeof pat === "string" && pat !== "BELL") pat = KPAT12[pat] || KPAT[pat] || [];
+    if (e[0]==="rim"){ (pat||[]).forEach(function(h){ if(e[2]||rChance(rng,.6))
+      out.kit.push({ step:h[0], vel:h[1], zone:2 }); }); return; }
+    if (e[0]==="DJEMBE"){ (pat||[]).forEach(function(h){
+      var nm = h[2]==="B"?"djembeB":h[2]==="S"?"djembeS":"djembeT";
+      if (e[2]||rChance(rng,.7)) out.perc.push({ step:h[0], vel:h[1]*(0.85+0.3*rng()), name:nm }); });
+      return; }
+    if (pat==="BELL"){ /* the timeline: the host hands in its own bembe bell */
+      (bellHits||[]).forEach(function(h){
+        out.perc.push({ step:h[0], vel:h[1], name:"agogoH" });
+        out.perc.push({ step:h[0]+steps2/2, vel:h[1]*.94, name:"agogoH" }); });
+      return; }
+    plan.push([e[0], pat, e[2]]);
+  });
+  kPlanHits(plan, steps2, rng, 0.5).forEach(function(e){
+    out.perc.push({ step:e.step, vel:e.vel, name:e.perc, bend:e.bend }); });
+  out.kit.sort(function(a,b){ return a.step-b.step; });
+  out.perc.sort(function(a,b){ return a.step-b.step; });
+  return out;
+}
+/* phrase-end fills by the style's own device — adapted from the donor's fill
+   grammar: every fill is an acceleration toward an arrival (kRoll's law),
+   landing ON the next downbeat. 'cut' returns null: the field empties. */
+function kFill(type, rng, perBar){
+  if (type==="cut") return null;
+  if (type==="rolls32") return kRoll(perBar-4, 4, 2, .25, .95, 1);
+  if (type==="rollbar") return kRoll(0, perBar, 1, .2, .9, 1);
+  if (type==="rolls16") return kRoll(perBar-4, 4, 1, .25, .9, 1);
+  if (type==="stutter") return kRoll(perBar-2, 2, 2, .5, .9, 0);
+  var out=[], i;
+  if (type==="toms"){ var z=[9,7,5];
+    for (i=0;i<6;i++) out.push({ step:perBar-6+i, vel:.55+.07*i, slot:z[Math.floor(i/2)] }); }
+  else if (type==="chop") [[perBar-6,.9],[perBar-5,.3],[perBar-3,.85],[perBar-2,.4],[perBar-1,.7]]
+    .forEach(function(p){ out.push({ step:p[0], vel:p[1], slot:1 }); });
+  else if (type==="djembe") for (i=0;i<6;i++)
+    out.push({ step:perBar-6+i, vel:.5+.08*i, perc:i%3===2?"djembeS":"djembeT" });
+  return out;
+}
 return { KIT_NAMES:KIT_NAMES, KIT_SLOTS:KIT_SLOTS, KITBANK:DD_KITBANK,
-         kitPatch:kitPatch, renderHit:renderHit, Kit:Kit, makeRng:makeRng, tables:tables };
+         kitPatch:kitPatch, renderHit:renderHit, Kit:Kit, makeRng:makeRng, tables:tables,
+         KPAT:KPAT, KPAT12:KPAT12, KSTYLES:KSTYLES, KSTYLE_KEYS:KSTYLE_KEYS,
+         STYLE2KIT:STYLE2KIT, kRealize:kRealize, kFill:kFill, kswing:kswing,
+         metricWeights:metricWeights };
 })();
 /*DD22-END*/
 /* ── DD22 PLAYBACK (round 7): DreamDrummer's kits, loadable on the TRITON.
@@ -4938,6 +5599,53 @@ function kitZone(kitIdx,zone,vel,when,baseVel){
   if(P&&P.dkit&&typeof ddHit==="function"&&ddHit(P.dkit,zone,vel,when,{layerVel:baseVel})) return;
   spawnVoice(PROGRAMS[kitIdx],48+zone,vel,when,null);
 }
+/* ── the 808 LINE (cycle 37): "the kick is the bassline" — a style's sub
+   grammar plays the DD22 kick buffer RETUNED per note (playbackRate is
+   pitch on a baked hit), gated to the written duration, gliding on slides.
+   Carries the low end only while no bass trait is standing. ── */
+function takeLogD8(kit,midi,vel,when,dur,slide,fromMidi){
+  if(!TAKE.on) return;
+  if(typeof exporting!=="undefined"&&exporting) return;
+  const t=(when||0)-TAKE.t0; if(t<-0.05) return;
+  TAKE.ev.push({t:Math.max(0,t),role:"dd8",kit,note:midi,vel,dur,slide:slide||0,
+    from:fromMidi!=null?fromMidi:undefined,tempo:state.tempo});
+  takeTrim();
+}
+function ddSub(kitName,midi,vel,when,durSec,slideSec,fromMidi,o){
+  if(!ctx||typeof DD22==="undefined") return false;
+  o=o||{};
+  const sr=ctx.sampleRate;
+  let layer=null,bd=9;
+  for(const l of DD_LAYERS){ if(DD_BUFS.has(ddKeyB(kitName,0,l,sr))){
+    const d=Math.abs(l-1.15); if(d<bd){ bd=d; layer=l; } } }
+  if(layer==null) return false;
+  const pair=DD_BUFS.get(ddKeyB(kitName,0,layer,sr));
+  if(!pair.buf||pair.sr!==sr){ const b=ctx.createBuffer(2,pair.L.length,sr);
+    b.getChannelData(0).set(pair.L); b.getChannelData(1).set(pair.R); pair.buf=b; pair.sr=sr; }
+  const t=Math.max(when,ctx.currentTime);
+  if(!o._q) takeLogD8(kitName,midi,vel,when,durSec,slideSec,fromMidi);
+  const baseHz=DD22.kitPatch(kitName).kick.hz;
+  const rateFor=m=>Math.max(.4,Math.min(2.5,(440*Math.pow(2,(m-69)/12))/baseHz));
+  const src=ctx.createBufferSource(); src.buffer=pair.buf;
+  const rate=rateFor(midi);
+  if(slideSec&&fromMidi!=null&&fromMidi!==midi){
+    /* the drill signature: the glide continues the PREVIOUS note into this
+       one — same circuit, envelope still falling */
+    src.playbackRate.setValueAtTime(rateFor(fromMidi),t);
+    src.playbackRate.exponentialRampToValueAtTime(rate,t+Math.max(.05,slideSec));
+  } else src.playbackRate.value=rate;
+  const g=ctx.createGain();
+  g.gain.setValueAtTime((vel/layer)*DD_LVL*.9,t);
+  g.gain.setTargetAtTime(0,t+Math.max(.08,durSec),.03);   /* gate to the written length, no click */
+  src.connect(g); g.connect(drumOut());
+  const end=t+Math.max(.08,durSec)+.25;
+  src.start(t); src.stop(Math.min(end,t+pair.buf.duration/Math.min(1,rate)+.3));
+  const v={units:1,t,killed:false};
+  v.kill=()=>{ if(!v.killed){ v.killed=true; unreg(v); } };
+  v.release=v.kill; regVoice(v,1);
+  setTimeout(v.kill,(end-ctx.currentTime)*1000+150);
+  return true;
+}
 const LOCKS={key:false,rhythm:false};
 function lockMerge(pNew,pCur,locks){
   if(!pCur||!locks) return pNew;
@@ -4980,6 +5688,7 @@ function presetValidate(e){
   if(["muteBass","muteChord","muteLead"].some(k=>p[k]!=null&&typeof p[k]!=="boolean")) return false;
   if(p.verb!=null&&!(Number.isInteger(p.verb)&&p.verb>=0&&p.verb<=100)) return false;
   if(p.dkit!=null&&!(typeof p.dkit==="string"&&DD_KIT_NAMES.indexOf(p.dkit)>=0)) return false;
+  if(p.dsty!=null&&!(typeof p.dsty==="string"&&typeof DD22!=="undefined"&&DD22.KSTYLE_KEYS.indexOf(p.dsty)>=0)) return false;
   /* library phrase refs must point INTO this file's library, kind-correct */
   const libOk=(v,kinds)=>v==null||(Number.isInteger(v)&&PHRASES[v]&&kinds.indexOf(PHRASES[v].k)>=0);
   if(!libOk(p.dlib,["dr"])||!libOk(p.flib,["dr"])) return false;
@@ -5084,6 +5793,21 @@ function candDrums(rng){
       tempo:Math.max(64,Math.min(160,g.bpm||100)),hum:1,extraKick:false,
       dlib:gi,flib:fi!=null?fi:undefined,dkit:dkit||undefined,seed:1+Math.floor(rng()*99999)};
   }
+  /* DreamDrummer's 17 drum languages (round 7): the canonical cells with the
+     grammar around them — ornaments, ghosts, hat rolls, the 808 line — on a
+     DD22 kit. The draw is unconditional so the stream position never moves. */
+  const sv=rng();
+  if(typeof DD22!=="undefined"&&DD22.KSTYLE_KEYS&&sv<.5){
+    const ks=DD22.KSTYLE_KEYS, sk=ks[Math.floor(rng()*ks.length)], st=DD22.KSTYLES[sk];
+    const cat=PROGRAMS.map((p,i)=>({p,i})).filter(x=>x.p.cat==="DRUMS").map(x=>x.i);
+    const fig16=Object.keys(LDR_FIG).find(k=>LDR_FIG[k].grid===16);
+    const dk=DD22.STYLE2KIT[sk];
+    return {kind:"drums",name:st.label+" · "+st.place,
+      desc:st.origin.split("—")[0].trim()+" · ♩"+Math.round((st.tempo[0]+st.tempo[1])/2)+(dk?" · DD·"+dk.toUpperCase():""),
+      fig:fig16,comps:[],kit:cat[Math.floor(rng()*cat.length)],
+      tempo:Math.round((st.tempo[0]+st.tempo[1])/2),hum:Math.min(1.5,st.hum),extraKick:false,
+      dsty:sk,dkit:dk||undefined,seed:1+Math.floor(rng()*99999)};
+  }
   /* curated dream identities: a tradition's figure, companions, kit, clock */
   if(rng()<.7){
     const pool=DREAMS.filter(d=>!d.surprise);
@@ -5183,6 +5907,7 @@ function composeP(kept,cur,stage){
   if(dr&&dr.dlib!=null) p.dlib=dr.dlib;
   if(dr&&dr.flib!=null) p.flib=dr.flib;
   if(dr&&dr.dkit) p.dkit=dr.dkit;
+  if(dr&&dr.dsty) p.dsty=dr.dsty;
   if(ba&&ba.blib!=null) p.blib=ba.blib;
   if(ch&&ch.clib!=null) p.clib=ch.clib;
   if(ld&&ld.elibs&&ld.elibs.length) p.elibs=ld.elibs.slice();
@@ -5445,7 +6170,62 @@ function dreamScheduleBar(at,f,step,barLen){
     const v=DREAM.gfield[((DREAM.bar%2)*16+Math.round(p))%DREAM.gfield.length];
     return v==null?0:v*step*.8; };
   const phraseBar=(DREAM.bar-4)%8;
-  if(P.dlib!=null&&PHRASES[P.dlib]){
+  if(P.dsty&&typeof DD22!=="undefined"&&DD22.KSTYLES&&DD22.KSTYLES[P.dsty]){
+    /* a DreamDrummer LANGUAGE (round 7): the canonical 2-bar cell realized
+       once per dream — ornaments, ghosts, hat rolls, the ensemble, the 808
+       line — swung by the donor's measured MPC math, played on TRITON zones
+       so the DD22 kit (or any TRITON kit) carries it */
+    const dkey=P.dsty+"|"+(P._seed||1);
+    if(!DREAM.dplan||DREAM.dplanKey!==dkey){
+      DREAM.dplan=DD22.kRealize(P.dsty,mulberry((((P._seed||1)*2654435761)>>>0)||1),
+        LDR_FIG.bembe?LDR_FIG.bembe.hits:[]);
+      DREAM.dplanKey=dkey;
+    }
+    const pl=DREAM.dplan;
+    if(pl){
+      const perBar=pl.grid, stepD=step*f.grid/perBar, off=(DREAM.bar%2)*perBar;
+      const useFill=pl.fill&&DREAM.bar>=4&&sect!=="INTRO"&&
+        ((phraseBar%4===3)||sectFor(DREAM.bar+1)!==sect);
+      const fe=useFill?DD22.kFill(pl.fill,mulberry(((P._seed||1)^DREAM.bar)||1),perBar):undefined;
+      const cutTail=useFill&&fe===null? perBar-Math.max(2,Math.round(perBar/8)) : 1e9;
+      pl.kit.forEach(e=>{
+        const p0=e.step-off;
+        if(p0<-.5||p0>=perBar-.5) return;
+        if(p0>=cutTail) return;                                /* the cut IS the fill */
+        if(sect==="BREAK"&&e.zone!==0) return;                 /* dropout: the boom stays */
+        if(fe&&p0>=perBar-6&&(e.zone===1||e.zone===6||e.zone===10)) return; /* the fill owns the pocket */
+        const wv=Math.min(1.25,e.vel*(C.mainVel||1));
+        kitZone(P.kit,e.zone,hv(wv),at+p0*stepD+humK(p0*f.grid/perBar),e.vel);
+      });
+      if(fe) fe.forEach(e=>{
+        const t0=at+e.step*stepD;
+        if(e.perc){ drumHitP(e.perc,hv(e.vel),t0,{stepDur:stepD}); return; }
+        kitZone(P.kit,e.slot,hv(e.vel),t0,e.vel);
+      });
+      if(sect!=="BREAK") pl.perc.forEach(e=>{
+        const p0=e.step-off;
+        if(p0<-.5||p0>=perBar-.5) return;
+        drumHitP(e.name,hv(e.vel*.9),at+p0*stepD+humC(p0*f.grid/perBar),{stepDur:stepD});
+      });
+      /* the 808 line carries the low end only while no bass trait stands —
+         once THE LOW END is kept, the kick goes back to being a kick */
+      if(pl.sub&&pl.sub.length&&P.muteBass&&P.dkit&&
+         !(pl.subGap&&Math.floor(DREAM.bar/2)%(pl.subGap+1)!==0)){
+        let prev=null;
+        pl.sub.forEach(e=>{
+          const p0=e.step-off;
+          if(p0<-.5||p0>=perBar-.5){ prev=e; return; }
+          const reg=pl.subReg||[24,38];
+          const root=Math.max(reg[0],Math.min(reg[1],(P.root||45)-12));
+          const midi=Math.max(reg[0],Math.min(reg[1],root+e.note));
+          const from=prev&&e.slide? Math.max(reg[0],Math.min(reg[1],root+prev.note)) : null;
+          ddSub(P.dkit,midi,hv(e.vel),at+p0*stepD,e.dur*stepD,
+            e.slide?e.slide*stepD:0,from);
+          prev=e;
+        });
+      }
+    }
+  } else if(P.dlib!=null&&PHRASES[P.dlib]){
     /* a real session drummer's take: the groove as played; the paired FILL
        takes the whole bar at phrase ends AND wherever the arrangement turns —
        the song moves on the ends and finishes */
@@ -5468,7 +6248,7 @@ function dreamScheduleBar(at,f,step,barLen){
     const z=bandZ("kit",bt(pl),rng);
     kitZone(P.kit,0,hv(.95*z.gain),at+pl*step+z.dt,.95); });
   }
-  if(DREAM.bar>=4&&sect!=="BREAK"&&P.dlib==null){
+  if(DREAM.bar>=4&&sect!=="BREAK"&&P.dlib==null&&!P.dsty){
     if(phraseBar%8===7) [[f.grid-4,2,.55],[f.grid-3,7,.68],[f.grid-2,5,.8],[f.grid-1,3,.95]].forEach(([pl,ln,v])=>{
       const z=bandZ("perc",bt(pl),rng);
       kitZone(P.kit,ln,hv(v*z.gain),at+pl*step+z.dt,v); });
@@ -5764,7 +6544,7 @@ function keptFromP(p,seed){
     {kind:"drums",name:(p.name||"drums").split(" × ")[0],desc:p.fig,fig:p.fig,comps:p.comps,
      kit:p.kit,tempo:p.tempo,hum:p.hum,extraKick:!!p.extraKick,seed:seed||p._seed||1,
      dlib:p.dlib!=null?p.dlib:undefined,flib:p.flib!=null?p.flib:undefined,
-     dkit:p.dkit||undefined},
+     dkit:p.dkit||undefined,dsty:p.dsty||undefined},
     p.muteBass?null:{kind:"bass",name:p.blib!=null&&PHRASES[p.blib]?PHRASES[p.blib].n:TH_NOTE[((p.root%12)+12)%12]+" "+p.scale,
      desc:PROGRAMS[p.bass].name,
      root:p.root,scale:p.scale,bass:p.bass,bseed:p.bseed!=null?p.bseed:1,
@@ -5974,7 +6754,7 @@ function takeLogMix(when,s){
 }
 /* the take as writer-ready MIDI events: role → channel, drums → GM notes */
 function takeToMidiEvents(evs){
-  const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9,dd:9};
+  const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9,dd:9,dd8:1};
   return evs.filter(e=>e.role!=="mix").map(e=>{
     let n;
     if(e.role==="perc") n=MIDI_GM_RECIPE[e.name]||77;
@@ -6124,6 +6904,7 @@ async function exportTake(){
     evs.forEach(e=>{
       if(e.role==="mix"){ if(typeof mixApplyStage==="function") mixApplyStage(e.s,e.t); return; }
       if(e.role==="dd"){ ddHit(e.kit,e.zone,e.vel,e.t,{_q:1}); return; } /* the kick keys the duck inside ddHit, exactly like the room */
+      if(e.role==="dd8"){ ddSub(e.kit,e.note,e.vel,e.t,e.dur,e.slide,e.from!=null?e.from:null,{_q:1}); return; }
       if(e.role==="perc"){
         /* _g suppresses the duck (it marks grace notes) — the bounce must
            duck exactly like the room did, so key it here (round-5 BREAK) */
