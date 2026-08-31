@@ -94,7 +94,7 @@ const path = __dirname + "/triton-rack.html";
   if (th1.cells !== th1.prog || th1.cells < 2) fail("theory cells " + th1.cells + " ≠ prog " + th1.prog);
   else if (!/^[A-G]#? (MAJOR|MINOR)$/.test(th1.key)) fail("theory key: '" + th1.key + "'");
   else if (th1.now !== 1) fail("theory 'now' highlight count " + th1.now);
-  else if (!/^now [A-G]#?(maj7|m7♭5|mMaj7|m7|7|\+)? · [A-G]/.test(th1.thNow)) fail("theory now text: '" + th1.thNow + "'");
+  else if (!/^now [A-G]#?(maj7|m7♭5|mMaj7|m7|dim7|sus4|7|\+|m)? · [A-G]/.test(th1.thNow)) fail("theory now text: '" + th1.thNow + "'");
   else ok("theory bar live: " + th1.key + " · " + th1.romans.join("–") + " · " + th1.thNow);
 
   /* dice mid-performance: bar-quantized swap applies, transport never drops */
@@ -103,11 +103,15 @@ const path = __dirname + "/triton-rack.html";
   await page.waitForTimeout(200);
   const st2 = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
     cells: document.querySelectorAll("#thProg .thCell").length, prog: DREAM.p.prog.length,
-    key: document.getElementById("thKey").textContent }));
+    key: document.getElementById("thKey").textContent,
+    pn: document.getElementById("thProgName").textContent,
+    pnWant: DREAM.p.progName || "" }));
   if (!st2.on) fail("DICE killed the performance");
   else if (st2.seed === st1.seed) fail("DICE applied nothing (seed unchanged " + st2.seed + ")");
   else if (st2.cells !== st2.prog) fail("theory bar stale after DICE (" + st2.cells + " cells vs prog " + st2.prog + ")");
-  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key + ")");
+  else if (st2.pn !== st2.pnWant) fail("progression name mismatch: '" + st2.pn + "' vs '" + st2.pnWant + "'");
+  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key +
+    (st2.pn ? " · " + st2.pn : "") + ")");
 
   /* Bank B: WRITE on the unit — ENTER, dial a slot, ENTER */
   await page.evaluate(() => { dreamStop(); state.mode = "PROG"; setProgram(12); });

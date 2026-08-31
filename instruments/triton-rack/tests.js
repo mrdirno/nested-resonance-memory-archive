@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -108,15 +108,21 @@ for (const id in LDR_FIG) { const an = G3.figAnalysis(LDR_FIG[id]);
     m.forEach(e => { if (e.p < 0 || e.p >= f.grid || e.di < 0 || e.di > 6) fail("motif bounds " + id); });
   }
 });
-for (let sd = 1; sd <= 200; sd++) {
-  const p = G3.dreamPickSurprise(G3.mulberry(sd));
-  if (!LDR_FIG[p.fig] || PROGRAMS[p.kit].cat !== "DRUMS") fail("surprise " + sd);
-  p.comps.forEach(c => { const r = ldrBase(c);
-    if (!LDR_FIG[r.id] || LDR_FIG[r.id].grid !== LDR_FIG[p.fig].grid) fail("surprise comp " + sd + " " + c); });
+{ let sBad = 0;
+  for (let sd = 1; sd <= 200; sd++) {
+    const p = G3.dreamPickSurprise(G3.mulberry(sd));
+    if (!LDR_FIG[p.fig] || PROGRAMS[p.kit].cat !== "DRUMS") fail("surprise " + sd);
+    p.comps.forEach(c => { const r = ldrBase(c);
+      if (!LDR_FIG[r.id] || LDR_FIG[r.id].grid !== LDR_FIG[p.fig].grid) fail("surprise comp " + sd + " " + c); });
+    const bk = G3.PROG_BANK.find(b => b.name === p.progName);
+    if (!bk || bk.prog !== p.prog || bk.scale !== p.scale) sBad++;
+  }
+  if (sBad) fail("surprise progressions not drawn from the bank (" + sBad + "/200)");
+  else ok("DICE draws named progressions from the bank, scale-matched (200 seeds)");
 }
 for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " + b);
 { let tBad = 0;
-  const VALID = ["", "maj7", "7", "m7", "m7\u266d5", "mMaj7", "+"];
+  const VALID = ["", "maj7", "7", "m7", "m7\u266d5", "dim7", "mMaj7", "+", "m", "sus4"];
   G3.DREAMS.filter(d => !d.surprise).forEach(d => {
     const cells = G3.theoryData(d);
     if (cells.length !== d.prog.length) { fail("theory cells " + d.name); tBad++; }
@@ -134,6 +140,59 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   if (G3.romanFor(0, "minor") !== "i" || G3.romanFor(4, "major") !== "V" ||
       G3.romanFor(6, "major") !== "vii\u00b0") { fail("roman numerals wrong"); tBad++; }
   if (!tBad) ok("theory bar: romans + chord spelling (Am7 / G7 / Cmaj7 / Bm7\u266d5) across all dreams");
+}
+{ /* the progression bank \u2014 every entry structurally sound, the set functionally honest */
+  let pBad = 0;
+  const isSpec = ch => ch && typeof ch === "object" && Number.isInteger(ch.r) && ch.r >= 0 && ch.r <= 11 &&
+    Array.isArray(ch.iv) && ch.iv.length === 4 && ch.iv.every((v, i) => Number.isInteger(v) && (i === 0 || v > ch.iv[i - 1])) &&
+    typeof ch.roman === "string" && ch.roman.length > 0;
+  G3.PROG_BANK.forEach(b => {
+    if (!b.name || ["major", "minor"].indexOf(b.scale) < 0) { fail("bank entry " + b.name); pBad++; }
+    if (!Array.isArray(b.prog) || b.prog.length < 4) { fail("bank prog short " + b.name); pBad++; }
+    b.prog.forEach(ch => {
+      if (typeof ch === "number" ? !(Number.isInteger(ch) && ch >= 0 && ch <= 6) : !isSpec(ch))
+        { fail("bank chord " + b.name + " " + JSON.stringify(ch)); pBad++; }
+    });
+  });
+  const majN = G3.PROG_BANK.filter(b => b.scale === "major").length;
+  const minN = G3.PROG_BANK.filter(b => b.scale === "minor").length;
+  if (majN < 4 || minN < 4) { fail("bank pools thin: " + majN + " major / " + minN + " minor"); pBad++; }
+  const blues = G3.PROG_BANK.find(b => b.name === "12-bar blues");
+  if (!blues || blues.prog.length !== 12 ||
+      !blues.prog.every(ch => isSpec(ch) && ch.iv.join() === "0,4,7,10"))
+    { fail("12-bar blues must be 12 bars of dominants"); pBad++; }
+  /* the harmonic-minor V7: a chord the scale doesn't own, spelled and voiced right */
+  const sp = G3.chordSpecFor("minor", { r: 7, iv: G3.TH_IV.d7, roman: "V7" }, 45);
+  if (sp.tones.join() !== "52,56,59,62" || sp.roman !== "V7") { fail("V7 spec tones " + sp.tones.join()); pBad++; }
+  const lb = G3.labelTones(sp.tones);
+  if (lb.name !== "E7" || lb.tones !== "E G# B D") { fail("V7 label " + lb.name + " / " + lb.tones); pBad++; }
+  /* named progressions realize to their textbook changes in A minor / C major */
+  const names = (scale, root, prog) => G3.theoryData({ scale, root, prog }).map(c => c.name).join(" ");
+  const bank = n => G3.PROG_BANK.find(b => b.name === n).prog;
+  if (names("minor", 45, bank("andalusian")) !== "Am7 G7 Fmaj7 E7")
+    { fail("andalusian: " + names("minor", 45, bank("andalusian"))); pBad++; }
+  if (names("minor", 45, bank("minor ii-V-i")) !== "Bm7\u266d5 E7 Am7 Am7")
+    { fail("minor ii-V-i: " + names("minor", 45, bank("minor ii-V-i"))); pBad++; }
+  if (names("minor", 45, bank("dorian vamp")) !== "Am7 D7 Am7 D7")
+    { fail("dorian vamp: " + names("minor", 45, bank("dorian vamp"))); pBad++; }
+  if (names("major", 48, bank("jazz ii-V-I")) !== "Dm7 G7 Cmaj7 Cmaj7")
+    { fail("jazz ii-V-I: " + names("major", 48, bank("jazz ii-V-I"))); pBad++; }
+  /* the upgraded dream carries the cadence */
+  const gua = G3.DREAMS.find(d => d.name === "Guaguanc\u00f3 Deep");
+  if (!gua || gua.progName !== "andalusian" || !isSpec(gua.prog[3]) || gua.prog[3].roman !== "V7")
+    { fail("Guaguanc\u00f3 Deep should cadence on a real V7"); pBad++; }
+  /* voice leading stays smooth through borrowed chords (24 bars of blues) */
+  { let prev = null, moved = 0, n = 0;
+    for (let bar = 0; bar < 24; bar++) {
+      const t = G3.chordSpecFor("major", blues.prog[bar % 12], 55).tones;
+      const v = G3.voiceLead(t, prev, 49, 77);
+      for (let i = 1; i < v.length; i++) if (v[i] <= v[i - 1]) { pBad++; }
+      if (prev) { moved += v.reduce((a, x, i) => a + Math.abs(x - prev[Math.min(i, prev.length - 1)]), 0) / v.length; n++; }
+      prev = v;
+    }
+    if (moved / n > 5) { fail("blues voice motion " + (moved / n).toFixed(2)); pBad++; }
+  }
+  if (!pBad) ok("progression bank: " + G3.PROG_BANK.length + " named changes (blues 12 bars of dominants, andalusian Am7 G7 Fmaj7 E7, minor ii-V-i, dorian) \u2014 specs sound, voices lead");
 }
 { const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
   const A = eval(audJs + "\n;({audVary})");

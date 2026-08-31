@@ -241,11 +241,13 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 .thKey{flex:0 0 178px;border-radius:8px;background:linear-gradient(180deg,#101820,#090e13);
   border:1px solid #263644;display:flex;flex-direction:column;justify-content:center;padding:0 14px;gap:4px;}
 .thKey b{color:#bfe0f2;font-size:15px;letter-spacing:.08em;}
+.thKey i{color:#6f93aa;font-size:9.5px;font-style:normal;letter-spacing:.1em;text-transform:uppercase;min-height:11px;}
 .thKey span{color:#5f7484;font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
 #thProg{flex:1;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
-.thCell{flex:1 1 0;min-width:46px;border-radius:8px;background:linear-gradient(180deg,#0f151c,#080c10);
+.thCell{flex:1 1 0;min-width:44px;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,#0f151c,#080c10);
   border:1px solid #1e2b37;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  transition:border-color .18s, box-shadow .18s;}
+  transition:border-color .18s, box-shadow .18s, flex-grow .25s;}
+.thCell.now{flex-grow:2.4;}
 .thCell b{color:#7d95a8;font-size:16px;letter-spacing:.02em;font-weight:700;}
 .thCell span{color:#4d6273;font-size:9.5px;letter-spacing:.06em;}
 .thCell small{color:#3d4f5e;font-size:8px;letter-spacing:.08em;display:none;}
@@ -303,7 +305,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <div id="dreamInfo">READY · press play</div>
   <div class="scope-bezel"><canvas id="dreamScope" width="856" height="148"></canvas></div>
   <div id="ldrTheory">
-    <div class="thKey"><b id="thKey">—</b><span id="thNow">press play</span></div>
+    <div class="thKey"><b id="thKey">—</b><i id="thProgName"></i><span id="thNow">press play</span></div>
     <div id="thProg"></div>
   </div>
   <div id="ldrMidiHint"><b>MIDI keyboard:</b> plug in &amp; play along — the theory bar shows your key, and your notes join the take.</div>
@@ -2892,17 +2894,48 @@ const SCALES={minor:[0,2,3,5,7,8,10],major:[0,2,4,5,7,9,11]};
 function chordTones(scale,deg,root){ const sc=SCALES[scale];
   return [0,2,4,6].map(k=>root+sc[(deg+k)%7]+12*Math.floor((deg+k)/7)); }
 
+/* ── THE PROGRESSION BANK — Improvisator's chord-progression cheat sheet as a
+   working part. A chord is a diatonic degree (number) or a SPEC {r,iv,roman}:
+   semitone offset from the key root + interval stack — how borrowed chords
+   (the harmonic-minor V7, the ♭VII backdoor, blues dominants) enter a key
+   that doesn't own them. In major the diatonic V is already a dominant 7th,
+   so specs only appear where functional harmony leaves the scale. ── */
+const TH_IV={M:[0,4,7,12],m:[0,3,7,12],d7:[0,4,7,10],maj7:[0,4,7,11],m7:[0,3,7,10],h7:[0,3,6,10]};
+function thX(r,q,roman){ return {r,iv:TH_IV[q],roman}; }
+const PROG_BANK=[
+ {name:"doo-wop",scale:"major",prog:[0,5,3,4]},
+ {name:"axis",scale:"major",prog:[0,4,5,3]},
+ {name:"jazz ii-V-I",scale:"major",prog:[1,4,0,0]},
+ {name:"pachelbel",scale:"major",prog:[0,4,5,2,3,0,3,4]},
+ {name:"backdoor ♭VII",scale:"major",prog:[0,thX(10,"M","♭VII"),3,0]},
+ {name:"12-bar blues",scale:"major",prog:[
+   thX(0,"d7","I7"),thX(5,"d7","IV7"),thX(0,"d7","I7"),thX(0,"d7","I7"),
+   thX(5,"d7","IV7"),thX(5,"d7","IV7"),thX(0,"d7","I7"),thX(0,"d7","I7"),
+   thX(7,"d7","V7"),thX(5,"d7","IV7"),thX(0,"d7","I7"),thX(7,"d7","V7")]},
+ {name:"andalusian",scale:"minor",prog:[0,6,5,thX(7,"d7","V7")]},
+ {name:"minor ii-V-i",scale:"minor",prog:[1,thX(7,"d7","V7"),0,0]},
+ {name:"aeolian vamp",scale:"minor",prog:[0,5,2,6]},
+ {name:"epic minor",scale:"minor",prog:[0,6,5,6]},
+ {name:"harmonic pull",scale:"minor",prog:[0,3,thX(7,"d7","V7"),0]},
+ {name:"dorian vamp",scale:"minor",prog:[thX(0,"m7","i7"),thX(5,"d7","IV7"),thX(0,"m7","i7"),thX(5,"d7","IV7")]}
+];
+function chordSpecFor(scale,ch,root){
+  if(typeof ch==="number")
+    return {tones:chordTones(scale,ch,root),roman:romanFor(ch,scale)};
+  return {tones:ch.iv.map(v=>root+ch.r+v),roman:ch.roman};
+}
+
 const DREAMS=[
 {name:"Bembé Rising",fig:"bembe",comps:["yoruba","tambu","guaguaColumbia"],kit:63,bass:48,chord:36,lead:32,
  scale:"minor",root:45,prog:[0,5,3,4],tempo:96,chordStyle:"pad",leadOct:12},
 {name:"Rio Sunrise",fig:"tamborimCarreteiro",comps:["surdoPrimeira","surdoSegunda","caixa","ganza"],kit:15,bass:48,chord:30,lead:78,
  scale:"major",root:43,prog:[0,3,4,0],tempo:104,chordStyle:"stab",leadOct:12},
 {name:"Son Nocturne",fig:"campanaSon",comps:["martillo","tumbaoDos","cascara23"],kit:63,bass:99,chord:19,lead:47,
- scale:"major",root:41,prog:[1,4,0,0],tempo:92,chordStyle:"stab",leadOct:12},
+ scale:"major",root:41,prog:[1,4,0,0],progName:"jazz ii-V-I",tempo:92,chordStyle:"stab",leadOct:12},
 {name:"Trance Portal",fig:"cavacha",comps:["marchaConga","ganza"],kit:62,bass:103,chord:39,lead:54,
  scale:"minor",root:45,prog:[0,5,6,4],tempo:138,chordStyle:"pad",leadOct:12,extraKick:true},
 {name:"Guaguancó Deep",fig:"palitoGuaguanco",comps:["salidorGuaguanco","quintoLock","marchaConga"],kit:63,bass:8,chord:5,lead:68,
- scale:"minor",root:43,prog:[0,3,5,4],tempo:98,chordStyle:"pad",leadOct:12},
+ scale:"minor",root:43,prog:[0,6,5,thX(7,"d7","V7")],progName:"andalusian",tempo:98,chordStyle:"pad",leadOct:12},
 {name:"Maculelê Fire",fig:"maculele",comps:["surdoPrimeira","surdoSegunda","surdoTerceira"],kit:15,bass:100,chord:22,lead:81,
  scale:"minor",root:40,prog:[0,0,5,6],tempo:112,chordStyle:"stab",leadOct:12},
 {name:"Surprise Me",surprise:true}
@@ -2914,10 +2947,11 @@ function dreamPickSurprise(rng){
     .map(r=>r.id+(r.rot? (r.rot>0? "+"+r.rot : String(r.rot)) : ""));
   const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
   const pick=a=>a[Math.floor(rng()*a.length)];
-  const PRGS=[[0,5,3,4],[0,3,5,4],[1,4,0,0],[0,5,6,4],[0,3,4,0],[0,0,5,6]];
+  const scale=rng()<.5?"minor":"major";
+  const bp=pick(PROG_BANK.filter(b=>b.scale===scale));
   return {name:"Surprise",fig,comps,kit:pick(LDR_KITS),
     bass:pick(cat(["BASS"])),chord:pick(cat(["PAD","VOX","ORGAN","KEYBOARD"])),lead:pick(cat(["LEAD","BELL","PLUCK"])),
-    scale:rng()<.5?"minor":"major",root:40+Math.floor(rng()*7),prog:pick(PRGS),
+    scale,root:40+Math.floor(rng()*7),prog:bp.prog,progName:bp.name,
     tempo:f.grid===12? 92+Math.floor(rng()*18) : 96+Math.floor(rng()*40),
     chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:f.grid===16&&rng()<.3};
 }
@@ -2930,21 +2964,27 @@ function romanFor(deg,scale){
   const MAJ=["I","ii","iii","IV","V","vi","vii\u00b0"],MIN=["i","ii\u00b0","III","iv","v","VI","VII"];
   return (scale==="minor"?MIN:MAJ)[((deg%7)+7)%7];
 }
-function chordLabel(scale,deg,root){
-  const t=chordTones(scale,deg,root);
+function labelTones(t){
   const pc=((t[0]%12)+12)%12, th=t[1]-t[0], fi=t[2]-t[0], se=t[3]-t[0];
   let q="";
   if(th===4&&fi===7&&se===11) q="maj7";
   else if(th===4&&fi===7&&se===10) q="7";
   else if(th===3&&fi===7&&se===10) q="m7";
   else if(th===3&&fi===6&&se===10) q="m7\u266d5";
+  else if(th===3&&fi===6&&se===9) q="dim7";
   else if(th===3&&fi===7&&se===11) q="mMaj7";
   else if(th===4&&fi===8) q="+";
+  else if(th===4&&fi===7) q="";
+  else if(th===3&&fi===7) q="m";
+  else if(th===5&&fi===7) q="sus4";
   return {name:TH_NN[pc]+q, tones:t.map(n=>TH_NN[((n%12)+12)%12]).join(" ")};
 }
+function chordLabel(scale,deg,root){ return labelTones(chordTones(scale,deg,root)); }
 function theoryData(p){
-  return (p&&p.prog?p.prog:[]).map(deg=>Object.assign({roman:romanFor(deg,p.scale)},
-    chordLabel(p.scale,deg,p.root)));
+  return (p&&p.prog?p.prog:[]).map(ch=>{
+    const s=chordSpecFor(p.scale,ch,p.root);
+    return Object.assign({roman:s.roman},labelTones(s.tones));
+  });
 }
 function theoryRender(){
   const host=document.getElementById("thProg"), k=document.getElementById("thKey");
@@ -2954,6 +2994,8 @@ function theoryRender(){
     const n=document.getElementById("thNow"); if(n) n.textContent="press play"; return; }
   const cells=theoryData(p);
   k.textContent=TH_NN[((p.root%12)+12)%12]+" "+(p.scale==="minor"?"MINOR":"MAJOR");
+  const pn=document.getElementById("thProgName");
+  if(pn) pn.textContent=p.progName||"";
   host.innerHTML=cells.map((c,i)=>'<div class="thCell" data-i="'+i+'"><b>'+c.roman+
     '</b><span>'+c.name+'</span><small>'+c.tones+'</small></div>').join("");
 }
@@ -3031,9 +3073,8 @@ function dreamScheduleBar(at,f,step,barLen){
   const P=DREAM.p, rng=DREAM.rng, an=figAnalysis(f);
   const sect=sectFor(DREAM.bar), C=SECT_CFG[sect];
   const L=P.prog.length;
-  const deg=P.prog[DREAM.bar%L], nextDeg=P.prog[(DREAM.bar+1)%L];
-  const base=chordTones(P.scale,deg,P.root+12);
-  const nextBase=chordTones(P.scale,nextDeg,P.root+12);
+  const base=chordSpecFor(P.scale,P.prog[DREAM.bar%L],P.root+12).tones;
+  const nextBase=chordSpecFor(P.scale,P.prog[(DREAM.bar+1)%L],P.root+12).tones;
   const tones=voiceLead(base,DREAM.voic,P.root+6,P.root+34); DREAM.voic=tones;
   const bassRoot=Math.max(26,base[0]-12), nextBassRoot=Math.max(26,nextBase[0]-12);
   /* drums — the figure as written, companions by section */
@@ -3571,4 +3612,11 @@ DEAD BRANCHES: (1) theory bar as a scrolling chord ticker (upcoming chords slidi
 KILL-TEST: node suite [3] gates the theory engine directly — romanFor across both modes (vii° included), chordLabel spelling Am7 / G7 / Cmaj7 / Bm7♭5 from real dream progressions, theoryData length = progression length for all six dreams; the Chromium harness asserts the face carries NO strip/HALF/REC/select, the theory bar idles at "press play", goes live with key + romans + exactly one lit NOW cell tracking the bar ("A MINOR · i–VI–iv–v · now Am7 · A C E G" in the run on record), re-renders on DICE, and the Rhythm-tab chips still take the transport; the Bank-B hostile-name import now carries the XSS watch the crate test used to hold. Both suites ALL GREEN.
 THE NON-OBVIOUS CHOICE: subtraction needed a replacement, not a void — the strip's 856×84 px became the theory bar's exact footprint, because the space a producer's eye already visits is where the cheat sheet earns its keep. The face lost six controls and gained zero: information in, options out.
 OPEN QUESTIONS: (1) The progressions are still each dream's hardcoded 4 degrees — a real progression bank (ii-V-I, 12-bar, Andalusian…) with per-style pools is the next cut, and the theory bar is already its display. (2) The engine's parts play metronome-honest — where does the human feel (timing/velocity breath, per-style swing) enter so the exported MIDI reads played, not programmed? (3) A hardware keyboard on a fresh page can play before any tap — the AudioContext resume path needs a hand the hint doesn't yet give.
+RING 22 · 2026-08-31 · the progression bank — functional harmony enters the machine
+WHAT CHANGED: the theory bar stops narrating hardcoded degrees and starts drawing from a PROGRESSION BANK — twelve named changes a working player actually reaches for: doo-wop, Axis, jazz ii-V-I, Pachelbel, the backdoor ♭VII, a full 12-bar blues (twelve bars, all dominants), and in minor the Andalusian cadence, minor ii-V-i, Aeolian and epic vamps, the harmonic pull, a Dorian i7–IV7 vamp. The representation is the cut that made it possible: a chord is a diatonic degree (number, as before) OR a SPEC {r,iv,roman} — semitone offset from the key root plus an interval stack — which is exactly how borrowed chords enter a key that doesn't own them. In major, no spec is needed for V7 (the diatonic seventh on V IS dominant — the scale gives it away); minor is where the specs earn their keep: natural minor's v is minor, so the Andalusian and ii-V-i carry a spec'd major-third V7, the leading tone the scale withholds. DICE now rolls a NAMED progression scale-matched from the bank (the key card shows the name), Guaguancó Deep cadences on a real V7 (Am7 · G7 · Fmaj7 · E7 shape), Son Nocturne's changes are labeled the jazz ii-V-I they always were, and the sounding cell in the bar GROWS (flex transition) to show its spelled tones. Everything downstream — voice leading, bass roots, the motif ladder, the MIDI take — realizes specs through one function (chordSpecFor), so a blues chorus voice-leads as smoothly as a diatonic vamp (measured 2.4 st average motion).
+BANNED (obvious answers set aside first): a chord-symbol PARSER ("Cmaj7"→tones — string formats invite typos and localization pain; data stays data); progressions as opaque tone arrays (loses the Roman-numeral teaching the bar exists for); modulation/key changes in v1 of the bank (a progression that changes key needs the voice-leading engine to know about pivot chords — a future ring, honestly deferred).
+DEAD BRANCHES: (1) extending SCALES with harmonic/melodic minor and keeping chords diatonic — lost: the harmonic-minor scale would bend the MOTIF engine's every note (the ♯7 colors melody lines that should stay natural-minor), when the actual musical fact is one chord borrowing one tone; the spec scopes the borrowing to the chord. (2) quality-override objects {deg,q} — lost: they still can't say ♭VII (a root the scale lacks), so the root offset had to come anyway; one representation beats two. (3) upgrading all six dreams to bank progressions — lost: the dreams are curated identities and four of their progressions ARE their sound; only Guaguancó (whose rumba ancestry is literally Andalusian) and Son Nocturne (already ii-V-I) told the truth louder with the upgrade.
+KILL-TEST: suite [3] — every bank entry structurally validated (degrees 0–6 or specs with ascending 4-interval stacks and Roman labels), both pools ≥4 deep, the blues pinned to 12 bars of [0,4,7,10], chordSpecFor's V7 in A minor pinned to tones 52-56-59-62 labeled "E7 · E G# B D", four named progressions realized to their textbook changes by name, Guaguancó's cadence chord asserted spec'd, 200 surprise seeds all drawing scale-matched named progressions from the bank, and 24 bars of blues voice-led under 5 st average motion. The Chromium harness asserts the key card's progression name mirrors DREAM.p.progName after DICE and the cell count tracks any prog length (12-bar blues included). Both suites ALL GREEN.
+THE NON-OBVIOUS CHOICE: major keys got no spec'd V7 because they never needed one — the insight that shaped the whole representation is that functional harmony is mostly ALREADY in the scale, and the bank's job is only to name what's there (romans, labels) and borrow what isn't (specs). The smallest possible theory engine is a naming layer plus an escape hatch.
+OPEN QUESTIONS: (1) Humanization next (Ring 21 Q2) — the changes now read like a player's; the timing should too. (2) The blues' 12-bar harmonic cycle beats against the 8-bar section phrasing (LIFT can land mid-chorus) — should prog length steer sectFor's phrase length? (3) Secondary dominants (V7/x) are one spec away each — does the bank want a "tension" dial that inserts them on the fly?
 ═══ end rings ═══ -->
