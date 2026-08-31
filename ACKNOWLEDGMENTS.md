@@ -57,6 +57,18 @@ Tools are acknowledged. Only people are authors.
 
 ---
 
+## Third-party code
+
+| Origin | Author | License | Where it lives here |
+|--------|--------|---------|---------------------|
+| SoundHack spectral engine (windows, fold-rotate STFT, phase vocoder, spectral mutation, AddSynth) | Tom Erbe (algorithms in `Mutate.c` by Larry Polansky) | MIT | `nrm_core/soundhack_spectral.py` — a faithful NumPy port; original C archived at [soundhack-x-NRM-Archive-](https://github.com/mrdirno/soundhack-x-NRM-Archive-) |
+
+The port file keeps its MIT license (see its header); everything built on
+top of it (`nrm_core/soundhack_bridge.py`) is GPL-3.0 with the rest of
+this repository. See `docs/SOUNDHACK_NRM_BRIDGE.md`.
+
+---
+
 ## How to cite this work
 
 See [CITATION.cff](CITATION.cff), or the rendered formats at
