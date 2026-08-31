@@ -327,8 +327,12 @@ body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
 #audioNudge.on{display:block;animation:playPulse 1.2s ease-in-out infinite;}
 #ldrSave{left:488px;top:400px;width:120px;height:120px;color:#9fe0b3;}
 #ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
-#ldrSaveLbl{position:absolute;left:764px;top:472px;width:148px;font-size:9px;
-  letter-spacing:.08em;color:#ffd77e;min-height:12px;}
+#ldrSaveLbl{position:absolute;left:764px;top:472px;width:170px;font-size:9px;
+  letter-spacing:.08em;color:#ffd77e;min-height:12px;line-height:1.7;}
+.dlchip{display:inline-block;margin:2px 4px 0 0;padding:2px 8px;border-radius:9px;cursor:pointer;
+  border:1px solid #3f5a45;background:linear-gradient(180deg,#16211a,#0c120e);
+  color:#9fe0b3;text-decoration:none;font-size:9px;letter-spacing:.1em;}
+.dlchip:hover{border-color:#9fe0b3;color:#c8f5d6;}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
   50%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 30px rgba(255,190,90,.65);}}
 .tab{transition:color .2s, box-shadow .2s, background .2s;}
@@ -4344,10 +4348,23 @@ function ldrDownload(data,mime,name){
   const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([data],{type:mime}));
   a.download=name; document.body.appendChild(a); a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
+  /* a big WAV can still be streaming to disk long after the click — revoking
+     at 3s aborted slow saves (round-5 fix: the save was broken) */
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },300000);
+}
+/* the last bounce stays on the face as TAP-TO-DOWNLOAD chips: a real tap is
+   a user gesture, so the files come through even where the browser blocks
+   programmatic downloads (phones, Safari, Chrome's multi-download prompt) */
+let SAVE_OUT=null;
+function saveChips(){
+  const e=document.getElementById("ldrSaveLbl"); if(!e||!SAVE_OUT) return;
+  e.innerHTML='SAVED — <a class="dlchip" download="'+SAVE_OUT.name+'.wav" href="'+SAVE_OUT.wavUrl+'">⤓ WAV</a>'+
+    (SAVE_OUT.midUrl? ' <a class="dlchip" download="'+SAVE_OUT.name+'.mid" href="'+SAVE_OUT.midUrl+'">⤓ MIDI</a>' : "");
 }
 function setSaveUI(t){
-  const e=document.getElementById("ldrSaveLbl"); if(e) e.textContent=t||"";
+  const e=document.getElementById("ldrSaveLbl");
+  if(e){ if(!t&&SAVE_OUT&&typeof saveChips==="function") saveChips(); /* a clear falls back to the last bounce's chips */
+    else e.textContent=t||""; }
   ["fabSave","ldrSave"].forEach(id=>{ const b=document.getElementById(id);
     if(b) b.classList.toggle("busy",!!t&&t.indexOf("RENDER")===0); });
 }
@@ -4365,6 +4382,10 @@ async function exportTake(){
   if(typeof exporting!=="undefined"&&exporting) return;
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
   exporting=true; setSaveUI("RENDERING TAKE…");
+  /* a long take renders for a while — tick the label so it never reads as frozen */
+  const _rt0=Date.now();
+  const _rtick=setInterval(()=>{ if(typeof exporting!=="undefined"&&exporting)
+    setSaveUI("RENDERING TAKE… "+Math.round((Date.now()-_rt0)/1000)+"s"); },1000);
   await new Promise(r=>setTimeout(r,30));
   const wasOn=TAKE.on;
   if(wasOn) takeStop();               /* close held notes at the bounce point */
@@ -4402,7 +4423,7 @@ async function exportTake(){
   /* keep taping the ongoing performance — unless a STOP or a fresh PLAY touched
      the tape while the render was in flight (their word beats our snapshot) */
   if(wasOn&&TAKE.gen===tgen) TAKE.on=true;
-  exporting=false;
+  exporting=false; clearInterval(_rtick);
   if(typeof offFlush==="function") offFlush();     /* releases queued during the render */
   if(typeof unregFlush==="function") unregFlush(); /* live voices that ended mid-render settle the ledger now */
   if(err||!buf){ setSaveUI("RENDER FAILED"); setTimeout(()=>setSaveUI(""),2500);
@@ -4420,10 +4441,19 @@ async function exportTake(){
      peak; pull a hot one down to the ceiling — one gain, no pumping */
   const g=Math.min(pk>1e-6? .98/pk : 1, Math.max(1, rms>1e-6? .14/rms : 1));
   if(Math.abs(g-1)>.02){ for(let i=0;i<L.length;i++){ L[i]*=g; R[i]*=g; } }
-  ldrDownload(wavStereo24(L,R,sr),"audio/wav",name+".wav");
+  const wavBytes=wavStereo24(L,R,sr);
   const mid=midiTake(takeToMidiEvents(evs));
-  if(mid) setTimeout(()=>ldrDownload(mid,"audio/midi",name+".mid"),450);
-  setSaveUI("SAVED · WAV + MIDI"); setTimeout(()=>setSaveUI(""),2600);
+  /* stash the bounce behind persistent chips FIRST, then attempt the
+     convenience auto-download — if the browser eats it, the chips remain */
+  if(SAVE_OUT){ try{ URL.revokeObjectURL(SAVE_OUT.wavUrl); if(SAVE_OUT.midUrl) URL.revokeObjectURL(SAVE_OUT.midUrl); }catch(_){ } }
+  SAVE_OUT={ name,
+    wavUrl:URL.createObjectURL(new Blob([wavBytes],{type:"audio/wav"})),
+    midUrl:mid? URL.createObjectURL(new Blob([mid],{type:"audio/midi"})) : null };
+  saveChips();
+  const auto=(url,fn)=>{ const a=document.createElement("a"); a.href=url; a.download=fn;
+    document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),4000); };
+  auto(SAVE_OUT.wavUrl,name+".wav");
+  if(SAVE_OUT.midUrl) setTimeout(()=>auto(SAVE_OUT.midUrl,name+".mid"),450);
 }
 function dreamDraw(rms,wav){
   const aura=document.getElementById("aura");
@@ -4821,4 +4851,11 @@ DEAD BRANCHES: (1) FiloBass and GuitarSet (both CC-BY, both wanted) — lost to 
 KILL-TEST: node [0]–[7] green including a round-5 block (LDRP decode within quanta, scale-fit folding chromatics octave-true, groove-field medians, library-backed cards, the preset law refusing kind-mismatched or out-of-range phrase refs, headroom staging monotone). The browser harness green END TO END with the library resident: 222 phrases decode with provenance intact; a forced library song stands with groove field on and the tape showing ~25 drum hits/bar against ≤5 counter notes and ≤2 licks — the middle stays open; the rack's ‹ ›/◇ patch the live song on the bar; 13 console moves ride the tape with the chord strip measurably re-staged; the KEEP copy replays a LIBRARY song (phrase refs validate in the copy) with the rail rebuilt. One Heisenbug died on the way: the post-bounce duck probe flaked for two rounds because Chromium freezes a SILENT subtree's AudioParams — the duck was never dead, the strip just had no signal; the probe now sounds a quiet pad through the strip (the only scenario where a duck matters) and the flake is gone.
 THE NON-OBVIOUS CHOICE: the counterpoint source is chamber music on purpose — string-quartet inner voices are the centuries-old craft of "a singable line that stays out of another line's way," which is precisely the producer's make-space-for-the-vocalist problem, and those editions are CC0. The verdict asked for open-source human playing; the deepest open corpus of voice-leaving-space happens to be 200 years old.
 OPEN QUESTIONS: (1) FiloBass and GuitarSet are one un-blocked network away — the extractors are written; who runs them first? (2) The groove field rides per-step medians; the full bar-by-bar deviation series is in the data — should the band follow the drummer bar-by-bar rather than by template? (3) The court named and tagged every phrase; the dealer still deals uniformly — should kept choices weight future hands toward their tags? (4) KEEP copies carry the whole library — should KEEP offer a traveling-light copy holding only the phrases the song uses?
+RING 33 · 2026-08-31 · the save that answers a report of "broken"
+WHAT CHANGED: the operator reported "the save is broken." Five headless flows could not crack it (quick save, full-song save, immediate re-save, library-song save with full-band audio in every segment, save inside a KEEP copy — all rendered, all downloaded, WAV and SMF valid), which localized the break to what headless Chromium cannot feel: REAL browsers' download policy. The engine fired the .mid as a SECOND programmatic download 450ms after the .wav, long after the button gesture — Chrome answers that with a "download multiple files?" permission prompt (deny once and saves look dead forever), and phone/Safari engines silently drop late non-gesture downloads entirely. Worse, every blob URL was revoked THREE SECONDS after the click — a long take's 50-150MB WAV can still be streaming to disk then, and a revoked URL aborts the save mid-write. Four fixes, all additive: (1) the bounce now STAYS ON THE FACE as tap-to-download chips (⤓ WAV · ⤓ MIDI) — a real tap is a real user gesture, which no platform blocks; the auto-download still fires first as a convenience, and if the browser eats it the chips remain; (2) blob URLs live five minutes (and the chips' own URLs persist until the next bounce replaces them); (3) a long render ticks its elapsed seconds on the label ("RENDERING TAKE… 12s") so a two-minute offline bounce of a long jam never reads as frozen — a library-dense take renders near 1.4× realtime because kit phrases spawn full synth voices, not cached buffers; (4) any label clear falls back to the last bounce's chips instead of blank, so the way back to the files never disappears.
+BANNED (obvious answers set aside first): zipping wav+mid into one download (kills the drag-a-wav-into-the-DAW flow and adds an unzip step to dodge a prompt the chips dissolve anyway); replacing auto-download with chips-only (Chrome users lose the one-tap save that already worked); assuming the report meant the engine and rewriting the bounce (the bounce was measured healthy — full-band RMS in all ten segments — before a single delivery line changed).
+DEAD BRANCHES: (1) reproducing the exact failure before fixing — lost: headless Chromium auto-accepts downloads, so the failing policies are unreachable from this bench; the fix covers every download-policy failure mode at once, which beats guessing which one the operator hit. (2) prompting the user to allow multiple downloads via an instructional label — lost: a settings errand shoved onto the player; the chips make the permission question moot. (3) revoking blob URLs on a "download finished" event — lost: the anchor-click API exposes no completion signal; a generous timer plus chip-held URLs is the honest approximation.
+KILL-TEST: node [0]–[7] green; the full harness green including two new gates — after the bounce the face must hold exactly two blob-backed chips named .wav/.mid, and TAPPING a chip must produce a real download. The KEEP path inherits the five-minute revoke.
+THE NON-OBVIOUS CHOICE: treat "broken" as a verdict about DELIVERY, not rendering — the failure a user reports lives where their platform differs from the test bench, so the fix makes the artifact indifferent to download policy instead of tuned to one browser's.
+OPEN QUESTIONS: (1) Should SAVE also offer the WAV at 16-bit/44.1k for phone players that choke on 24-bit? (2) A library-dense render at 1.4× realtime is the price of full synth voices per kit hit — pre-render the 12 kit zones per program into buffers (the physics engine already proved the pattern) and the bounce could drop under 0.3×? (3) Should the chips carry the take's bar count and duration so the face reads like a tape box?
 ═══ end rings ═══ -->

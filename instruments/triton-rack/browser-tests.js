@@ -563,6 +563,22 @@ const path = __dirname + "/triton-rack.html";
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
   else ok("transport and tape survive the bounce");
 
+  /* round-5 save fix: the bounce stays on the face as tap-to-download chips —
+     a real gesture beats blocked programmatic downloads on every platform */
+  const chips = await page.evaluate(() => {
+    const a = [...document.querySelectorAll("#ldrSaveLbl a.dlchip")];
+    return { n: a.length, blob: a.every(x => x.href.startsWith("blob:")),
+      names: a.map(x => x.getAttribute("download")), out: !!SAVE_OUT };
+  });
+  if (chips.n !== 2 || !chips.blob || !chips.out) fail("save chips missing " + JSON.stringify(chips));
+  else if (!/\.wav$/.test(chips.names[0]) || !/\.mid$/.test(chips.names[1])) fail("save chip names wrong " + JSON.stringify(chips.names));
+  else ok("the bounce waits on the face: ⤓ WAV · ⤓ MIDI chips, tap to download");
+  const dlChip = downloads.length;
+  await page.click("#ldrSaveLbl a.dlchip");
+  await page.waitForTimeout(900);
+  if (downloads.length <= dlChip) fail("tapping a save chip downloaded nothing");
+  else ok("chip tap re-downloads the take (" + downloads[downloads.length - 1].suggestedFilename() + ")");
+
   /* the duck must survive the bounce's MIX swap-and-restore (surdo cached now;
      the figure engine is quieted so the poll loop isn't starved) */
   const duck2 = await page.evaluate(async () => {
