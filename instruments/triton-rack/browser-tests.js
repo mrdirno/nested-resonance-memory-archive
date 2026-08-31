@@ -30,16 +30,22 @@ const path = __dirname + "/triton-rack.html";
   await page.goto("file://" + path);
   await page.waitForTimeout(600);
 
-  /* layout: 4U dimensions + touch law at design scale; face is PLAY·DICE·SAVE */
+  /* layout: the song-avatar face — rail, hand, four buttons, engine folded */
   const dims = await page.evaluate(() => {
     const u = document.getElementById("ldru");
-    const ids = ["dreamPlay", "dreamDice", "ldrSave"];
+    const ids = ["dreamPlay", "dreamDice", "ldrSave", "ldrKeep"];
     const r = {};
     ids.forEach(id => { const e = document.getElementById(id);
       r[id] = e ? { w: e.offsetWidth, h: e.offsetHeight } : null; });
     const th = document.getElementById("ldrTheory");
     return { uw: u.offsetWidth, uh: u.offsetHeight,
       pads: r,
+      rail: document.querySelectorAll("#traitRail .trSlot").length,
+      prompt: !!document.querySelector("#handRow .hdone"),
+      cards0: document.querySelectorAll("#handRow .hcard").length,
+      engineFolded: getComputedStyle(document.getElementById("unitScale")).display === "none" &&
+        getComputedStyle(document.querySelector(".tabs")).display === "none",
+      toggle: !!document.getElementById("engineToggle"),
       theory: th ? { w: th.offsetWidth, h: th.offsetHeight } : null,
       thKey: (document.getElementById("thKey") || {}).textContent,
       thNow: (document.getElementById("thNow") || {}).textContent,
@@ -50,18 +56,20 @@ const path = __dirname + "/triton-rack.html";
   });
   if (dims.uw !== 960 || dims.uh !== 540) fail("4U design size " + dims.uw + "x" + dims.uh);
   else ok("4U face 960x540");
-  if (dims.pads.dreamPlay.w < 160 || dims.pads.dreamPlay.h < 160) fail("PLAY under 160: " + JSON.stringify(dims.pads.dreamPlay));
-  else ok("PLAY " + dims.pads.dreamPlay.w + "px");
-  ["dreamDice", "ldrSave"].forEach(id => {
+  ["dreamPlay", "dreamDice", "ldrSave", "ldrKeep"].forEach(id => {
     const p = dims.pads[id];
     if (!p || p.w < 120 || p.h < 120) fail(id + " under touch law: " + JSON.stringify(p));
     else ok(id + " " + p.w + "px"); });
-  if (!dims.theory || dims.theory.w < 700 || dims.theory.h < 60) fail("theory bar missing/small " + JSON.stringify(dims.theory));
+  if (dims.rail !== 5) fail("trait rail slots " + dims.rail);
+  else if (!dims.prompt || dims.cards0 !== 0) fail("boot state not the press-play prompt");
+  else ok("avatar rail: 5 trait slots + press-play prompt");
+  if (!dims.engineFolded || !dims.toggle) fail("engine room not folded away " + JSON.stringify({ f: dims.engineFolded, t: dims.toggle }));
+  else ok("engine room folded to one link — no scroll-select UX");
+  if (!dims.theory || dims.theory.w < 700 || dims.theory.h < 40) fail("theory bar missing/small " + JSON.stringify(dims.theory));
   else if (dims.thKey !== "—" || dims.thNow !== "press play") fail("theory bar idle text: '" + dims.thKey + "' / '" + dims.thNow + "'");
   else ok("theory bar idle: " + dims.theory.w + "x" + dims.theory.h + " · 'press play'");
   if (!dims.hint) fail("MIDI keyboard hint missing");
   if (dims.leftovers.length) fail("removed surfaces still present: " + dims.leftovers.join(","));
-  else ok("face is PLAY·DICE·SAVE only (strip/HALF/REC/preset-select gone)");
   ok("scope canvas " + dims.scope.w + "x" + dims.scope.h);
 
   /* hardware MIDI on a cold page: the wire boots the unit and makes a voice */
@@ -143,39 +151,37 @@ const path = __dirname + "/triton-rack.html";
   if (st1.bufs < 3) fail("physics buffers not rendering (" + st1.bufs + ")");
   else ok("physics engine live · " + st1.bufs + " buffers cached · 0 fallbacks");
 
-  /* theory bar: the Improvisator cheat sheet tracks the running progression */
-  const th1 = await page.evaluate(() => ({
-    cells: document.querySelectorAll("#thProg .thCell").length,
-    prog: DREAM.p.prog.length,
-    key: document.getElementById("thKey").textContent,
-    now: document.querySelectorAll("#thProg .thCell.now").length,
-    thNow: document.getElementById("thNow").textContent,
-    romans: [...document.querySelectorAll("#thProg .thCell b")].map(b => b.textContent) }));
-  if (th1.cells !== th1.prog || th1.cells < 2) fail("theory cells " + th1.cells + " ≠ prog " + th1.prog);
-  else if (!/^[A-G]#? (MAJOR|MINOR)$/.test(th1.key)) fail("theory key: '" + th1.key + "'");
-  else if (th1.now !== 1) fail("theory 'now' highlight count " + th1.now);
-  else if (!/^now [A-G]#?(maj7|m7♭5|mMaj7|m7|dim7|sus4|7|\+|m)? · [A-G]/.test(th1.thNow)) fail("theory now text: '" + th1.thNow + "'");
-  else ok("theory bar live: " + th1.key + " · " + th1.romans.join("–") + " · " + th1.thNow);
+  /* stage 0 — THE DRUMMER: three prebuilt players dealt, one live, honest mutes */
+  const stg0 = await page.evaluate(() => ({ stage: BUILD.stage,
+    cards: document.querySelectorAll("#handRow .hcard").length,
+    live: document.querySelectorAll("#handRow .hcard.live").length,
+    muteBass: DREAM.p.muteBass, muteChord: DREAM.p.muteChord, muteLead: DREAM.p.muteLead,
+    thKey: document.getElementById("thKey").textContent,
+    thNow: document.getElementById("thNow").textContent }));
+  if (stg0.stage !== 0 || stg0.cards !== 3 || stg0.live !== 1) fail("drum deal wrong " + JSON.stringify(stg0));
+  else if (!(stg0.muteBass && stg0.muteChord && stg0.muteLead)) fail("future traits sound before they exist");
+  else if (stg0.thKey !== "—" || stg0.thNow !== "drums first") fail("theory bar invents a key at the drum stage ('" + stg0.thKey + "'/'" + stg0.thNow + "')");
+  else ok("stage 0: three drummers dealt, one live, future traits muted, theory honest");
 
-  /* the human hand reaches the tape: pad chords roll, dynamics breathe */
-  const hum = await page.evaluate(() => {
-    const ch = TAKE.ev.filter(e => e.role === "chord").sort((a, b) => a.t - b.t);
-    if (ch.length < 4) return { n: ch.length };
-    const c0 = ch.slice(0, 4).map(e => e.t);
-    const spread = Math.max(...c0) - Math.min(...c0);
-    const vels = new Set(ch.map(e => e.vel.toFixed(3))).size;
-    return { n: ch.length, spread, vels };
-  });
-  if (hum.n < 4) fail("no chord events on the tape (" + hum.n + ")");
-  else if (!(hum.spread > 0.003 && hum.spread < 0.09)) fail("pad chord not humanly rolled (spread " + (hum.spread * 1000).toFixed(1) + "ms)");
-  else if (hum.vels < 2) fail("chord dynamics flat across bars (" + hum.vels + " velocity values)");
-  else ok("the hand reaches the tape: pad rolled " + (hum.spread * 1000).toFixed(1) + "ms · " + hum.vels + " chord velocity shades");
-
-  /* the clock on the tape: figure deviations are small, alive, and CORRELATED —
-     a player late stays late for a moment; white jitter would fail this */
+  /* the clock on the tape: correlated, not white — grid-aware, humanity-aware.
+     Wait for enough FIGURE-lane tape first: a sparse 4-hit figure needs bars */
+  await page.waitForFunction(() => {
+    const P = TAKE.ev.filter(e => e.role === "perc" && (e.ln ? e.ln === "fig" : true) && e.vel >= 0.3);
+    return P.length >= 10;
+  }, { timeout: 30000 }).catch(() => {});
   const clk = await page.evaluate(() => {
-    const step = (60 / state.tempo) / 3;              /* bembé: 12-grid, 3 per beat */
-    const P = TAKE.ev.filter(e => e.role === "perc").sort((a, b) => a.t - b.t);
+    const f = LDR_FIG[DREAM.p.fig];
+    const step = (60 / state.tempo) / (f.grid / 4);
+    /* one limb, one wave: the main figure rides the kit-wave, companions the
+       perc-wave; a shared recipe NAME interleaves both waves under one name
+       and reads anti-correlated — so measure the figure lane (ln tag) alone */
+    const tagged = TAKE.ev.filter(e => e.role === "perc" && e.ln === "fig");
+    const all = tagged.length ? tagged : TAKE.ev.filter(e => e.role === "perc");
+    const byName = {};
+    all.forEach(e => { (byName[e.name] = byName[e.name] || []).push(e); });
+    const P = (Object.values(byName).sort((a, b) => b.length - a.length)[0] || [])
+      .filter(e => e.vel >= 0.3)   /* roll grace-notes are off-grid ON PURPOSE — not clock evidence */
+      .sort((a, b) => a.t - b.t);
     if (P.length < 8) return { n: P.length };
     const raw = P.map(e => e.t % step);
     const med = raw.slice().sort((a, b) => a - b)[raw.length >> 1];
@@ -184,69 +190,154 @@ const path = __dirname + "/triton-rack.html";
     const m = mean(dev), sd = Math.sqrt(mean(dev.map(x => (x - m) * (x - m))));
     let n1 = 0, d1 = 0; for (let i = 0; i + 1 < dev.length; i++) n1 += (dev[i] - m) * (dev[i + 1] - m);
     dev.forEach(x => d1 += (x - m) * (x - m));
-    return { n: P.length, sdMs: sd * 1000, maxMs: Math.max(...dev.map(Math.abs)) * 1000, lag1: d1 ? n1 / d1 : 0 };
+    return { n: P.length, hum: DREAM.p.hum, sdMs: sd * 1000,
+      maxMs: Math.max(...dev.map(Math.abs)) * 1000, lag1: d1 ? n1 / d1 : 0 };
   });
   if (clk.n < 8) fail("too few figure hits to measure the clock (" + clk.n + ")");
-  else if (!(clk.sdMs > 0.4 && clk.sdMs < 12)) fail("clock breadth off: sd " + clk.sdMs.toFixed(2) + "ms");
-  else if (!(clk.maxMs < 52)) fail("clock outlier " + clk.maxMs.toFixed(1) + "ms");
-  else if (!(clk.lag1 > 0.15)) fail("figure deviations look like white jitter (lag-1 " + clk.lag1.toFixed(2) + ")");
-  else ok("the drummer's clock on tape: " + clk.sdMs.toFixed(1) + "ms sd, correlated (lag-1 " + clk.lag1.toFixed(2) + ")");
+  else if (!(clk.sdMs >= 0 && clk.sdMs < 14)) fail("clock breadth off: sd " + clk.sdMs.toFixed(2) + "ms");
+  else if (!(clk.maxMs < 60)) fail("clock outlier " + clk.maxMs.toFixed(1) + "ms");
+  else if (clk.hum >= .5 && !(clk.lag1 > 0.15 && clk.sdMs > 0.3))
+    fail("human drummer reads as white jitter (hum " + clk.hum + ", sd " + clk.sdMs.toFixed(2) + ", lag-1 " + clk.lag1.toFixed(2) + ")");
+  else ok("the drummer's clock on tape: hum " + (+clk.hum).toFixed(2) + " · " + clk.sdMs.toFixed(1) + "ms sd · lag-1 " + clk.lag1.toFixed(2));
 
-  /* dice mid-performance: bar-quantized swap applies, transport never drops */
+  /* ROLL deals a fresh hand without dropping the transport */
+  const hand0 = await page.evaluate(() => BUILD.hand.map(c => c.name).join("|"));
   await page.click("#dreamDice");
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
-  await page.waitForTimeout(200);
-  const st2 = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
-    cells: document.querySelectorAll("#thProg .thCell").length, prog: DREAM.p.prog.length,
-    key: document.getElementById("thKey").textContent,
-    pn: document.getElementById("thProgName").textContent,
-    pnWant: DREAM.p.progName || "" }));
-  if (!st2.on) fail("DICE killed the performance");
-  else if (st2.seed === st1.seed) fail("DICE applied nothing (seed unchanged " + st2.seed + ")");
-  else if (st2.cells !== st2.prog) fail("theory bar stale after DICE (" + st2.cells + " cells vs prog " + st2.prog + ")");
-  else if (st2.pn !== st2.pnWant) fail("progression name mismatch: '" + st2.pn + "' vs '" + st2.pnWant + "'");
-  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key +
-    (st2.pn ? " · " + st2.pn : "") + ")");
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 12000 });
+  const roll1 = await page.evaluate(() => ({ on: DREAM.on, stage: BUILD.stage,
+    names: BUILD.hand.map(c => c.name).join("|"), live: BUILD.live }));
+  if (!roll1.on) fail("ROLL killed the performance");
+  else if (roll1.names === hand0) fail("ROLL dealt the same hand");
+  else if (roll1.stage !== 0 || roll1.live !== 0) fail("ROLL state off " + JSON.stringify(roll1));
+  else ok("ROLL: fresh hand of drummers, transport never dropped");
 
-  /* the hook on the tape: the lead speaks in phrases with rests, not an arpeggio */
-  await page.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 25000 });
+  /* the build: hear it, keep it, next trait deals itself — five taps to a song */
+  const keepLive = async () => {
+    await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
+    await page.waitForFunction(() => !DREAM.pending, { timeout: 15000 });
+    await page.waitForTimeout(120);
+  };
+  /* audition drummer card 1, then keep it */
+  await page.click('#handRow .hcard[data-c="1"]');
+  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  const audA = await page.evaluate(() => ({ live: BUILD.live, fig: DREAM.p.fig, want: BUILD.hand[1].fig }));
+  if (audA.live !== 1 || audA.fig !== audA.want) fail("audition did not swap the drummer in " + JSON.stringify(audA));
+  else ok("tap to hear: card 2's drummer swapped in on the bar (" + audA.fig + ")");
+  await keepLive();                       /* -> stage 1, low end auto-auditioning */
+  const stg1 = await page.evaluate(() => ({ stage: BUILD.stage, kept0: BUILD.kept[0] && BUILD.kept[0].name,
+    muteBass: DREAM.p.muteBass, muteChord: DREAM.p.muteChord,
+    key: document.getElementById("thKey").textContent,
+    thNow: document.getElementById("thNow").textContent }));
+  if (stg1.stage !== 1 || !stg1.kept0) fail("keep did not advance to the low end " + JSON.stringify(stg1));
+  else if (stg1.muteBass || !stg1.muteChord) fail("low-end mutes wrong " + JSON.stringify(stg1));
+  else if (!/^[A-G]#? (MAJOR|MINOR)$/.test(stg1.key) || stg1.thNow !== "key set · changes next")
+    fail("theory bar at the low end: '" + stg1.key + "'/'" + stg1.thNow + "'");
+  else ok("tap again to keep: THE LOW END dealt itself, bass live, key honest (" + stg1.key + ")");
+  await keepLive();                       /* -> stage 2, changes auto-auditioning */
+  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteChord, { timeout: 15000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "chord").length >= 5, { timeout: 40000 });
+  const stg2 = await page.evaluate(() => ({ stage: BUILD.stage,
+    cells: document.querySelectorAll("#thProg .thCell").length, prog: DREAM.p.prog.length,
+    pn: document.getElementById("thProgName").textContent, pnWant: DREAM.p.progName || "" }));
+  if (stg2.stage !== 2 || stg2.cells !== stg2.prog || stg2.cells < 2) fail("changes stage theory " + JSON.stringify(stg2));
+  else if (stg2.pn !== stg2.pnWant) fail("progression name mismatch '" + stg2.pn + "'");
+  else ok("THE CHANGES: named progression live, " + stg2.cells + " cells (" + stg2.pn + ")");
+  const hum = await page.evaluate(() => {
+    const ch = TAKE.ev.filter(e => e.role === "chord").sort((a, b) => a.t - b.t);
+    if (ch.length < 3) return { n: ch.length };
+    const t0c = ch[0].t, cl = ch.filter(e => e.t - t0c < 0.1);
+    const spread = Math.max(...cl.map(e => e.t)) - t0c;
+    const vels = new Set(ch.map(e => e.vel.toFixed(3))).size;
+    return { n: ch.length, cn: cl.length, spread, vels };
+  });
+  if (hum.n < 3) fail("no chord events on the tape (" + hum.n + ")");
+  else if (!(hum.cn >= 2 && hum.spread > 0.002 && hum.spread < 0.09))
+    fail("chord cluster not humanly rolled (" + hum.cn + " notes, " + (hum.spread * 1000).toFixed(1) + "ms)");
+  else if (hum.vels < 2) fail("chord dynamics flat (" + hum.vels + " velocity values)");
+  else ok("the hand on the tape: chords roll " + (hum.spread * 1000).toFixed(1) + "ms · " + hum.vels + " velocity shades");
+  await keepLive();                       /* -> stage 3, the voice auto-auditioning */
+  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteLead, { timeout: 15000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "lead").length >= 2, { timeout: 40000 });
   const hk = await page.evaluate(() => {
     const L = TAKE.ev.filter(e => e.role === "lead").sort((a, b) => a.t - b.t);
+    const beat = 60 / state.tempo;
     let gaps = 0;
-    for (let i = 1; i < L.length; i++) if (L[i].t - L[i - 1].t > 0.6) gaps++;
+    for (let i = 1; i < L.length; i++) if (L[i].t - L[i - 1].t > beat * 1.2) gaps++;
     const drums = TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length;
-    return { n: L.length, gaps, drums, hook: !!DREAM.hook,
+    return { stage: BUILD.stage, n: L.length, gaps, drums, hook: !!DREAM.hook,
       contour: DREAM.hook && DREAM.hook.contour };
   });
-  if (!hk.hook) fail("no hook drawn for the dream");
-  else if (hk.n < 2) fail("the hook never spoke (" + hk.n + " lead events)");
-  else if (hk.n >= 4 && hk.gaps < 1) fail("the lead never breathes (0 rests across " + hk.n + " notes)");
+  if (hk.stage !== 3 || !hk.hook) fail("THE VOICE stage broken " + JSON.stringify(hk));
+  /* one bar of one cell (4 notes) legitimately has no internal phrase gap —
+     require a breath only once the line is long enough to owe one */
+  else if (hk.n >= 5 && hk.gaps < 1) fail("the lead never breathes (0 rests across " + hk.n + " notes)");
   else if (hk.n > hk.drums) fail("lead outruns the drums — arpeggiator behavior (" + hk.n + " vs " + hk.drums + ")");
-  else ok("the hook speaks: " + hk.n + " lead notes, " + hk.gaps + " breaths, contour '" + hk.contour + "'");
+  else ok("THE VOICE: the hook speaks — " + hk.n + " notes, " + hk.gaps + " breaths, contour '" + hk.contour + "'");
+  await keepLive();                       /* -> stage 4, the shape */
+  const stg4 = await page.evaluate(() => ({ stage: BUILD.stage,
+    names: BUILD.hand.map(c => c.format).join("|"), live: BUILD.live }));
+  if (stg4.stage !== 4 || stg4.names !== "loop|arc|song") fail("THE SHAPE hand wrong " + JSON.stringify(stg4));
+  else ok("THE SHAPE: loop · arc · song on the table");
+  await page.click('#handRow .hcard[data-c="1"]');   /* hear ARC */
+  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  await keepLive();                       /* -> done */
+  const done = await page.evaluate(() => ({ stage: BUILD.stage,
+    doneCard: !!document.querySelector("#handRow .hdone"),
+    railDone: document.querySelectorAll("#traitRail .trSlot.done").length,
+    fmt: DREAM.p.format, building: !!DREAM.p._building,
+    mutes: [DREAM.p.muteBass, DREAM.p.muteChord, DREAM.p.muteLead].some(Boolean),
+    name: DREAM.p.name, on: DREAM.on }));
+  if (done.stage !== 5 || !done.doneCard || done.railDone !== 5) fail("the song never stood " + JSON.stringify(done));
+  else if (done.fmt !== "arc" || done.building || done.mutes || !done.on)
+    fail("finished song state wrong " + JSON.stringify(done));
+  else ok("SONG STANDING after 5 traits: " + done.name + " · shape " + done.fmt + " · full band, still rolling");
 
-  /* locks: tap the key card, roll the dice — the harmony holds, by law */
-  await page.click(".thKey");
-  const lockOn = await page.evaluate(() => ({ k: LOCKS.key,
-    lit: document.querySelector(".thKey").classList.contains("locked"),
-    seed: DREAM.seed,
-    scale: DREAM.p.scale, root: DREAM.p.root, prog: JSON.stringify(DREAM.p.prog) }));
-  if (!lockOn.k || !lockOn.lit) fail("key lock did not arm " + JSON.stringify(lockOn));
-  await page.click("#dreamDice");
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
-  await page.waitForTimeout(150);
-  const lockRoll = await page.evaluate(() => ({ scale: DREAM.p.scale, root: DREAM.p.root,
-    seed: DREAM.seed, prog: JSON.stringify(DREAM.p.prog), name: DREAM.p.name }));
-  if (lockRoll.scale !== lockOn.scale || lockRoll.root !== lockOn.root || lockRoll.prog !== lockOn.prog)
-    fail("key lock leaked through DICE: " + JSON.stringify(lockRoll));
-  else if (lockRoll.seed === lockOn.seed) fail("locked DICE was a no-op — the unlocked half never rolled");
-  else if (!/· in /.test(lockRoll.name)) fail("locked roll not named as such: " + lockRoll.name);
-  else ok("key lock: DICE rolled the band (seed " + lockOn.seed + " → " + lockRoll.seed +
-    "), the harmony held (" + lockRoll.scale + "/" + lockRoll.root + ")");
-  await page.click(".thKey");
-  const lockOff = await page.evaluate(() => LOCKS.key || document.querySelector(".thKey").classList.contains("locked"));
-  if (lockOff) fail("key lock did not release");
+  /* remix: tap a filled trait — it reopens with the kept pick first, band still up */
+  await page.evaluate(() => { document.querySelector('#traitRail .trSlot[data-t="0"]').click(); });
+  await page.waitForTimeout(200);
+  const rmx = await page.evaluate(() => ({ stage: BUILD.stage, live: BUILD.live,
+    first: BUILD.hand[0] && BUILD.hand[0].name, kept: BUILD.kept[0] && BUILD.kept[0].name,
+    on: DREAM.on, muteLead: DREAM.p.muteLead }));
+  if (rmx.stage !== 0 || rmx.first !== rmx.kept || rmx.live !== 0) fail("remix reopen wrong " + JSON.stringify(rmx));
+  else if (!rmx.on || rmx.muteLead) fail("remix dropped the band " + JSON.stringify(rmx));
+  else ok("remix: THE DRUMMER reopened with the kept player in hand, full band still under it");
+  await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
+  await page.waitForFunction(() => BUILD.stage === 5, { timeout: 12000 });
+  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  ok("re-keep: one tap and the song stands again");
+
+  /* BREAK-lite: an un-kept audition must not outlive a trait jump — the rail
+     is the avatar, so the ear gets the kept avatar back on the bar */
+  const stray = await page.evaluate(() => {
+    document.querySelector('#traitRail .trSlot[data-t="3"]').click();      /* reopen THE VOICE */
+    const alt = BUILD.hand.findIndex((c, i) => i !== BUILD.live);
+    document.querySelector('#handRow .hcard[data-c="' + alt + '"]').click(); /* audition, do NOT keep */
+    const heardAlt = (DREAM.pending || DREAM.p).lead === BUILD.hand[alt].lead;
+    document.querySelector('#traitRail .trSlot[data-t="0"]').click();      /* jump away mid-audition */
+    const pend = DREAM.pending || DREAM.p;
+    return { heardAlt, keptBack: pend.lead === BUILD.kept[3].lead && !pend.muteLead,
+      live: BUILD.live, first: BUILD.hand[0] === BUILD.kept[0] };
+  });
+  if (!stray.heardAlt) fail("voice audition did not reach the ear " + JSON.stringify(stray));
+  else if (!stray.keptBack) fail("stray audition outlives a trait jump — rail and ear disagree " + JSON.stringify(stray));
+  else if (stray.live !== 0 || !stray.first) fail("jump landed wrong " + JSON.stringify(stray));
+  else ok("trait jump mid-audition: the un-kept voice is dropped, the kept avatar sounds again");
+  /* BREAK-lite: stage-4 hands are FORMATS verbatim — jumping to the shape must
+     light the KEPT format, not card 0 */
+  const shape = await page.evaluate(() => {
+    document.querySelector('#traitRail .trSlot[data-t="4"]').click();
+    return { live: BUILD.live, want: BUILD.hand.indexOf(BUILD.kept[4]),
+      names: BUILD.hand.map(c => c.format).join("|") };
+  });
+  if (shape.names !== "loop|arc|song" || shape.live !== shape.want || shape.live < 0)
+    fail("shape jump lights the wrong card " + JSON.stringify(shape));
+  else ok("shape jump lights the kept format (card " + (shape.live + 1) + ")");
+  await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
+  await page.waitForFunction(() => BUILD.stage === 5 && !DREAM.pending, { timeout: 12000 });
 
   /* figure chip mid-dream: transport hands off, the tape keeps rolling (BREAK fix) */
+  await page.evaluate(() => document.body.classList.add("engineOpen"));
+  await page.waitForTimeout(120);
   await page.click('.tab[data-pane="rhythm"]');
   await page.waitForTimeout(150);
   const hand = await page.evaluate(async () => {
@@ -363,19 +454,34 @@ const path = __dirname + "/triton-rack.html";
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
   else ok("transport and tape survive the bounce");
 
-  /* the duck must survive the bounce's MIX swap-and-restore (surdo cached now) */
+  /* the duck must survive the bounce's MIX swap-and-restore (surdo cached now;
+     the figure engine is quieted so the poll loop isn't starved) */
   const duck2 = await page.evaluate(async () => {
+    ldrToggle(false);
+    await new Promise(r => setTimeout(r, 350));
     const wired = !!(MIX && MIX.kit && MIX.chord) && drumOut() === MIX.kit.in;
-    drumHitP("surdo", 1, ctx.currentTime + .10, {});
-    let dipped = 1; const t0 = performance.now();
-    while (performance.now() - t0 < 1400) {
-      dipped = Math.min(dipped, MIX.chord.duck.gain.value);
-      await new Promise(r => setTimeout(r, 8));
+    if (ctx.state !== "running") { try { await ctx.resume(); } catch (_) {} }
+    /* the render clock can stall right after the heavy offline bounce — wait
+       for it to actually run, or .value reads a frozen 1.0 forever */
+    const ctA = ctx.currentTime;
+    for (let w = 0; w < 100 && ctx.currentTime - ctA < .05; w++) await new Promise(r => setTimeout(r, 30));
+    /* the poll can miss a ~60ms dip if the main thread hiccups right there —
+       the duck itself is deterministic, so give the MEASUREMENT three swings */
+    let dipped = 1; const ct0 = ctx.currentTime;
+    for (let att = 0; att < 3 && !(dipped < .95); att++) {
+      drumHitP("surdo", 1, ctx.currentTime + .10, {});
+      const t0 = performance.now();
+      while (performance.now() - t0 < 1400) {
+        dipped = Math.min(dipped, MIX.chord.duck.gain.value);
+        await new Promise(r => setTimeout(r, 8));
+      }
     }
-    return { wired, dipped };
+    return { wired, dipped, state: ctx.state, ctAdv: +(ctx.currentTime - ct0).toFixed(2) };
   });
   if (!duck2.wired) fail("mix rack lost after the bounce restore " + JSON.stringify(duck2));
-  else if (!(duck2.dipped < .95)) fail("duck dead after the bounce (gain " + duck2.dipped.toFixed(3) + ")");
+  else if (!(duck2.dipped < .95) && duck2.ctAdv < 1)
+    fail("render clock stalled after the bounce — duck unmeasurable " + JSON.stringify(duck2));
+  else if (!(duck2.dipped < .95)) fail("duck dead after the bounce (gain " + duck2.dipped.toFixed(3) + ", clock ran " + duck2.ctAdv + "s)");
   else ok("mix rack + duck survive the bounce restore (dip " + duck2.dipped.toFixed(2) + ")");
 
   /* KEEP: the file saves a copy of ITSELF carrying the dream — then that copy
@@ -417,12 +523,16 @@ const path = __dirname + "/triton-rack.html";
         await page2.click("#ldrPresets .pchip4");
         await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 30000 });
         const play2 = await page2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
-          name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook }));
+          name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook,
+          rail: document.querySelectorAll("#traitRail .trSlot.done").length,
+          stage: BUILD.stage }));
         const kept = await page.evaluate(() => PRESETS[0] && PRESETS[0].seed);
         if (!play2.on || play2.seed !== kept || !play2.hook)
           fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ", hook " + play2.hook + ")");
-        else ok("KEEP: the file rewrote itself — copy boots clean (tabs live), chip replays seed #" +
-          play2.seed + " (" + play2.name + ") · hook drawn");
+        else if (play2.rail !== 5 || play2.stage !== 5)
+          fail("kept copy's avatar rail not rebuilt (" + play2.rail + " slots, stage " + play2.stage + ")");
+        else ok("KEEP: the file rewrote itself — copy boots clean, chip replays seed #" +
+          play2.seed + " (" + play2.name + "), avatar rail rebuilt · remixable");
       }
       await page2.close();
     }

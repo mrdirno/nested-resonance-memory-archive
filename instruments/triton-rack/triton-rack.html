@@ -217,9 +217,8 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 #ldrReadout{position:absolute;right:56px;top:18px;width:400px;text-align:right;
   font:700 13px/1.5 "SF Mono",ui-monospace,Menlo,Consolas,monospace;color:#8fd8f2;
   letter-spacing:.08em;text-shadow:0 0 8px rgba(80,200,255,.25);}
-#dreamInfo{position:absolute;right:56px;top:40px;width:430px;text-align:right;font-size:10px;letter-spacing:.08em;
-  color:#7d95a8;text-transform:uppercase;line-height:1.4;max-height:16px;overflow:hidden;}
-.scope-bezel{position:absolute;left:52px;top:66px;width:856px;height:158px;border-radius:6px;padding:5px;
+#dreamInfo{display:none;} /* the rail and the readout carry it now */
+.scope-bezel{position:absolute;left:52px;top:44px;width:856px;height:96px;border-radius:6px;padding:5px;
   background:#05070a;box-shadow:inset 0 2px 10px rgba(0,0,0,.9), 0 1px 0 rgba(140,190,220,.12);}
 #dreamScope{width:100%;height:100%;display:block;}
 .l4pad{position:absolute;border-radius:50%;cursor:pointer;user-select:none;
@@ -230,57 +229,80 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 .l4pad:active{transform:translateY(1px) scale(.985);}
 .l4pad .pico{font-size:34px;line-height:1;}
 .l4pad .plab{font-size:9px;letter-spacing:.22em;margin-top:7px;color:#6f8496;text-transform:uppercase;}
-#dreamPlay{left:586px;top:342px;width:160px;height:160px;}
-#dreamPlay .pico{font-size:46px;}
+#dreamPlay{left:352px;top:400px;width:120px;height:120px;}
+#dreamPlay .pico{font-size:36px;}
 #dreamPlay.live{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.6s ease-in-out infinite;}
-#dreamDice{left:428px;top:362px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
+#dreamDice{left:216px;top:400px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
 #dreamDice:active{transform:rotate(160deg) scale(.94);}
 /* the theory bar — Improvisator's cheat sheet, live: key, progression in
    Roman numerals, the sounding chord lit with its tones spelled out */
-#ldrTheory{position:absolute;left:52px;top:238px;width:856px;height:84px;display:flex;gap:8px;}
+#ldrTheory{position:absolute;left:52px;top:340px;width:856px;height:50px;display:flex;gap:8px;}
 .thKey{flex:0 0 178px;border-radius:8px;background:linear-gradient(180deg,#101820,#090e13);
-  border:1px solid #263644;display:flex;flex-direction:column;justify-content:center;padding:0 14px;gap:4px;}
-.thKey b{color:#bfe0f2;font-size:15px;letter-spacing:.08em;}
-.thKey i{color:#6f93aa;font-size:9.5px;font-style:normal;letter-spacing:.1em;text-transform:uppercase;min-height:11px;}
-.thKey span{color:#5f7484;font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
+  border:1px solid #263644;display:flex;flex-direction:column;justify-content:center;padding:0 12px;gap:3px;overflow:hidden;}
+.thKey b{color:#bfe0f2;font-size:12px;letter-spacing:.08em;white-space:nowrap;}
+.thKey i{color:#6f93aa;font-size:9.5px;font-style:normal;letter-spacing:.08em;text-transform:uppercase;min-height:11px;white-space:nowrap;}
+.thKey span{color:#5f7484;font-size:9px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
 #thProg{flex:1;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
 .thCell{flex:1 1 0;min-width:44px;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,#0f151c,#080c10);
   border:1px solid #1e2b37;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   transition:border-color .18s, box-shadow .18s, flex-grow .25s;}
 .thCell.now{flex-grow:2.4;}
-.thCell b{color:#7d95a8;font-size:16px;letter-spacing:.02em;font-weight:700;}
-.thCell span{color:#4d6273;font-size:9.5px;letter-spacing:.06em;}
-.thCell small{color:#3d4f5e;font-size:8px;letter-spacing:.08em;display:none;}
+.thCell b{color:#7d95a8;font-size:13px;letter-spacing:.02em;font-weight:700;}
+.thCell span{color:#4d6273;font-size:8.5px;letter-spacing:.05em;}
+.thCell small{color:#3d4f5e;font-size:7px;letter-spacing:.06em;display:none;}
 .thCell.now{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 16px rgba(87,214,255,.28);}
 .thCell.now b{color:#aef0ff;}
 .thCell.now span{color:#8fd8f2;}
 .thCell.now small{display:block;color:#57a8c9;}
-#ldrMidiHint{position:absolute;left:56px;top:366px;width:180px;font-size:9.5px;color:#587082;
-  line-height:1.7;letter-spacing:.08em;text-transform:uppercase;}
+#ldrMidiHint{position:absolute;left:764px;top:404px;width:148px;font-size:8.5px;color:#587082;
+  line-height:1.65;letter-spacing:.07em;text-transform:uppercase;}
 #ldrMidiHint b{color:#8fb8cf;}
-/* locks live on the surfaces they lock: tap the key card, tap the title */
-.thKey{cursor:pointer;}
-.thKey.locked{border-color:#c9a84c;box-shadow:inset 0 0 0 1px #c9a84c;}
-.thKey.locked b::after{content:" 🔒";font-size:10px;}
-#dreamInfo{cursor:pointer;}
-#dreamInfo.locked{color:#e8cf8e;}
-#ldrKeep{position:absolute;right:52px;top:200px;min-width:64px;height:26px;line-height:26px;
-  text-align:center;font-size:10px;letter-spacing:.14em;color:#8f7a3f;cursor:pointer;
-  border:1px solid #4a3f22;border-radius:7px;background:linear-gradient(180deg,#171310,#0d0b08);}
-#ldrKeep:hover{color:#e8cf8e;border-color:#8a6d1e;}
-#ldrPresets{position:absolute;left:52px;top:514px;width:856px;height:24px;display:flex;gap:6px;overflow:hidden;}
-.pchip4{flex:0 0 auto;height:22px;line-height:22px;padding:0 10px;border-radius:6px;font-size:9.5px;
-  letter-spacing:.08em;color:#c9b273;background:#161209;border:1px solid #4a3f22;cursor:pointer;}
+/* ── THE SONG AVATAR: trait rail + the dealt hand ── */
+#traitRail{position:absolute;left:52px;top:148px;width:856px;height:30px;display:flex;gap:6px;}
+.trSlot{flex:1;border-radius:6px;background:#0b1016;border:1px solid #1c2833;display:flex;
+  flex-direction:column;justify-content:center;padding:0 10px;cursor:pointer;overflow:hidden;}
+.trSlot b{color:#4d6273;font-size:7.5px;letter-spacing:.14em;}
+.trSlot span{color:#7d95a8;font-size:9px;letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.trSlot.done{border-color:#3f5a2e;} .trSlot.done span{color:#a5d68f;}
+.trSlot.cur{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff;}
+.trSlot.cur b{color:#8fd8f2;}
+#handRow{position:absolute;left:52px;top:184px;width:856px;height:148px;display:flex;gap:12px;}
+.hcard{flex:1;border-radius:12px;background:radial-gradient(circle at 30% 20%,#151d26,#0a0f15 70%);
+  border:1px solid #24384a;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;cursor:pointer;padding:0 14px;text-align:center;transition:border-color .2s, box-shadow .2s;}
+.hcard b{color:#cfe6f5;font-size:16px;letter-spacing:.04em;}
+.hcard span{color:#5f7484;font-size:10px;letter-spacing:.06em;}
+.hcard em{font-style:normal;color:#44586a;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;}
+.hcard.live{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 20px rgba(87,214,255,.25);}
+.hcard.live b{color:#aef0ff;} .hcard.live em{color:#57d6ff;}
+.hcard:active{transform:scale(.985);}
+.hdone{flex:1;border-radius:12px;background:radial-gradient(circle at 30% 20%,#1a1a10,#0d0c06 70%);
+  border:1px solid #4a3f22;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;padding:0 40px;text-align:center;}
+.hdone b{color:#ffe9a8;font-size:18px;letter-spacing:.05em;}
+.hdone span{color:#8f7a3f;font-size:10px;letter-spacing:.06em;line-height:1.8;}
+/* the engine room: the full TRITON rack folds away until asked for */
+#engineToggleWrap{max-width:1000px;margin:4px auto 10px;text-align:center;}
+#engineToggle{color:#5f7484;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  text-decoration:none;border-bottom:1px dotted #33475a;cursor:pointer;}
+#engineToggle:hover{color:#9fc4da;}
+body:not(.engineOpen) #unitScale,body:not(.engineOpen) .keys-shell,
+body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
+#ldrKeep{left:624px;top:400px;width:120px;height:120px;color:#e8cf8e;}
+#ldrKeep .pico{font-size:32px;}
+#ldrPresets{position:absolute;left:52px;top:526px;width:856px;height:12px;display:flex;gap:6px;overflow:visible;}
+.pchip4{flex:0 0 auto;height:18px;line-height:18px;padding:0 9px;border-radius:5px;font-size:8.5px;
+  letter-spacing:.07em;color:#c9b273;background:#161209;border:1px solid #4a3f22;cursor:pointer;position:relative;top:-8px;}
 .pchip4:hover{border-color:#8a6d1e;color:#ffe9a8;}
 /* the one browser law a hardware keyboard can't satisfy alone: audio needs a tap */
 #audioNudge{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:99;display:none;
   background:#2a2412;border:1px solid #8a6d1e;color:#ffd77e;font-size:12px;letter-spacing:.08em;
   padding:9px 16px;border-radius:9px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);}
 #audioNudge.on{display:block;animation:playPulse 1.2s ease-in-out infinite;}
-#ldrSave{left:270px;top:362px;width:120px;height:120px;color:#9fe0b3;}
+#ldrSave{left:488px;top:400px;width:120px;height:120px;color:#9fe0b3;}
 #ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
-#ldrSaveLbl{position:absolute;left:210px;top:496px;width:240px;text-align:center;font-size:11px;
-  letter-spacing:.1em;color:#ffd77e;min-height:14px;}
+#ldrSaveLbl{position:absolute;left:764px;top:472px;width:148px;font-size:9px;
+  letter-spacing:.08em;color:#ffd77e;min-height:12px;}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
   50%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 30px rgba(255,190,90,.65);}}
 .tab{transition:color .2s, box-shadow .2s, background .2s;}
@@ -327,19 +349,23 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <div class="ldru-sub">CONDUCTOR&nbsp;4U&nbsp;·&nbsp;drives&nbsp;the&nbsp;TRITON&nbsp;below</div>
   <div id="ldrReadout">READY</div>
   <div id="dreamInfo">READY · press play</div>
-  <div class="scope-bezel"><canvas id="dreamScope" width="856" height="148"></canvas></div>
+  <div class="scope-bezel"><canvas id="dreamScope" width="856" height="86"></canvas></div>
+  <div id="traitRail"></div>
+  <div id="handRow"></div>
   <div id="ldrTheory">
     <div class="thKey"><b id="thKey">—</b><i id="thProgName"></i><span id="thNow">press play</span></div>
     <div id="thProg"></div>
   </div>
-  <div id="ldrMidiHint"><b>MIDI keyboard:</b> plug in &amp; play along — the theory bar shows your key, and your notes join the take.</div>
+  <div class="l4pad" id="dreamDice" title="Deal a fresh hand for this trait"><span class="pico">🎲</span><span class="plab">Roll</span></div>
+  <div class="l4pad" id="dreamPlay" title="Play / pause"><span class="pico">▶</span><span class="plab">Play</span></div>
   <div class="l4pad" id="ldrSave" title="Save the take — WAV + MIDI, offline-rendered"><span class="pico">⤓</span><span class="plab">Save</span></div>
+  <div class="l4pad" id="ldrKeep" title="Keep — the file saves a copy of itself carrying this song"><span class="pico">★</span><span class="plab">Keep</span></div>
+  <div id="ldrMidiHint"><b>MIDI keys:</b> plug in &amp; play along — your notes join the take.</div>
   <div id="ldrSaveLbl"></div>
-  <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
-  <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
-  <div id="ldrKeep" title="Keep this dream — the file saves a copy of itself carrying it">★ KEEP</div>
   <div id="ldrPresets"></div>
 </div></div></div>
+
+<div id="engineToggleWrap"><a id="engineToggle">⚙ engine room — the TRITON rack, patches &amp; keys</a></div>
 
 <div class="wrap"><div id="unitScale"><div id="unit">
   <div class="ear l"><div class="screw s1"></div><div class="screw s2"></div></div>
@@ -2880,7 +2906,7 @@ function drumHitP(name,vel,when,o){
       drumHitP(name,0.16+0.03*(o.roll-k),when-k*0.17*sd,{pitch:o.pitch,mute:o.mute,_g:1});
   }
   if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogP==="function")
-    takeLogP(name,vel,when,{pitch:o.pitch,mute:o.mute,layerVel:o.layerVel});
+    takeLogP(name,vel,when,{pitch:o.pitch,mute:o.mute,layerVel:o.layerVel,ln:o.ln});
   const t=Math.max(when,ctx.currentTime);
   if((name==="surdo"||name==="dunL"||name==="dunM")&&vel>.45&&!o._g&&typeof mixDuck==="function")
     mixDuck(t,Math.min(1,vel));                    /* the low drums key the duck */
@@ -2904,7 +2930,7 @@ function drumHitP(name,vel,when,o){
 }
 /* play one hit through the physics engine; falls back to the kit lane map only
    if a figure is unmapped (counted — a silent fallback hid the old inaccuracy) */
-function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel){
+function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel,tag){
   const r=ldrRoute(id,f,i);
   if(!r){ LDR.fallbacks++; return false; }
   if(r.kind==="lane"){
@@ -2914,7 +2940,7 @@ function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel){
   }
   /* layer selection follows the WRITTEN velocity so humanize breathes the gain
      without flickering a hit across a baked-layer seam bar-to-bar */
-  return drumHitP(r.name,vel,when,{pitch:r.pitch,mute:r.mute,roll:r.roll,stepDur,layerVel:baseVel});
+  return drumHitP(r.name,vel,when,{pitch:r.pitch,mute:r.mute,roll:r.roll,stepDur,layerVel:baseVel,ln:tag});
 }
 /* pre-render the buffers a set of figure ids will need (off the hit path) */
 function ldrWarm(ids){
@@ -2941,7 +2967,7 @@ function ldrLane(id,f,i){
   return ({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]!=null?({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]:2;
 }
 function ldrHash(x){ const r=Math.sin(x*12.9898)*43758.5453; return r-Math.floor(r); }
-function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn){
+function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn,tag){
   f.hits.forEach((h,i)=>{
     const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
     const when=at+pulse*stepDur+(humFn?humFn(pulse):0);
@@ -2951,7 +2977,7 @@ function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn){
     if(LDR.hum){ vel=Math.max(.15,Math.min(1,vel+(ldrHash(pulse*7+LDR.bar*13+i)-.5)*.08));
       jit=(ldrHash(pulse*3+LDR.bar*29)-.5)*.01; }
     if(LDR.mode==="KIT"){
-      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit,baseVel)) return;
+      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit,baseVel,tag)) return;
       spawnVoice(PROGRAMS[LDR.kit],48+ldrLane(id,f,i),vel,when+jit,null);
     } else {
       const held=(latchSet.size?[...latchSet]:(physSet.size?[...physSet]:[48,55,60,63])).sort((a,b)=>a-b);
@@ -3357,9 +3383,11 @@ function theoryRender(){
     '</b><span>'+c.name+'</span><small>'+c.tones+'</small></div>').join("");
 }
 function theoryNow(idx){
+  const p=DREAM.p;
+  if(!p||p.muteChord) return; /* no changes yet \u2014 the bar must not invent them */
   document.querySelectorAll("#thProg .thCell").forEach(x=>x.classList.toggle("now",+x.dataset.i===idx));
-  const p=DREAM.p, n=document.getElementById("thNow");
-  if(p&&n){ const c=theoryData(p)[idx];
+  const n=document.getElementById("thNow");
+  if(n){ const c=theoryData(p)[idx];
     if(c) n.textContent="now "+c.name+" \u00b7 "+c.tones; }
 }
 /* ── the figure teaches the band: skeleton (anchors), response slots (gaps) ── */
@@ -3522,11 +3550,11 @@ function dreamPans(){
     n.connect((MIX&&MIX._ctx===ctx&&MIX[role])? MIX[role].in : progBus); return n; }
   DREAM.pans={bass:mk(0,"bass"),chord:mk(-.24,"chord"),lead:mk(.24,"lead")};
 }
-function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn){
+function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn,tag){
   f.hits.forEach((h,i)=>{ const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
     const vel=Math.max(.15,Math.min(1,h[1]*scale));
     const when=at+pulse*step+(humFn?humFn(pulse):0);
-    if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when,step,kit)) return;
+    if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when,step,kit,undefined,tag)) return;
     spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),vel,when,null); });
 }
 function dreamScheduleBar(at,f,step,barLen){
@@ -3554,9 +3582,9 @@ function dreamScheduleBar(at,f,step,barLen){
      the whole band breathes together, so the timeline stays the reference */
   const humK=p=>humanTime(DREAM.seed||1,"kit",bt(p),step,humP);
   const humC=p=>humanTime(DREAM.seed||1,"perc",bt(p),step,humP);
-  ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK);
+  ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK,"fig");
   if(C.comps){ P.comps.forEach(a=>{ const r=ldrBase(a), g=LDR_FIG[r.id];
-    if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit,humC); }); }
+    if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit,humC,"comp"); }); }
   if(P.extraKick&&f.grid===16&&sect!=="BREAK") [0,4,8,12].forEach(pl=>{
     const z=bandZ("kit",bt(pl),rng);
     spawnVoice(PROGRAMS[P.kit],48,hv(.95*z.gain),at+pl*step+z.dt,null); });
@@ -3685,13 +3713,107 @@ function startWith(p,skipIntro){
   DREAM.next=0; DREAM.on=true; setPlayUI(true);
   takeStart(); /* a fresh take begins with the transport; dice mid-flight continues it */
 }
-function dreamStart(){
-  /* PLAY resumes the current dream's recipe with a fresh seed, or opens the
-     first curated dream cold; DICE is the only chooser — the donor's grammar */
-  const p=DREAM.p? JSON.parse(JSON.stringify(DREAM.p)) : JSON.parse(JSON.stringify(DREAMS[0]));
-  delete p._seed;
-  startWith(p,false);
+/* ── THE BUILDER — the song avatar's state machine. Tap a card to hear it
+   swap in on the bar; tap the lit card to keep it and the next trait deals
+   itself. The rail is the avatar; tap any filled slot to remix that trait
+   under everything else, live. ── */
+const BUILD={stage:0,kept:[null,null,null,null,null],hand:[],live:-1};
+function deal(){
+  const r=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
+  BUILD.hand=[]; BUILD.live=-1;
+  if(BUILD.stage===4){ BUILD.hand=FORMATS.slice(); }
+  else if(BUILD.stage>=0&&BUILD.stage<4){
+    const seen=new Set();
+    if(BUILD.kept[BUILD.stage]){ BUILD.hand.push(BUILD.kept[BUILD.stage]); seen.add(BUILD.kept[BUILD.stage].name); }
+    let guard=0;
+    while(BUILD.hand.length<3&&guard++<50){
+      const c=candFor(BUILD.stage,r,BUILD.kept);
+      if(c&&!seen.has(c.name)){ seen.add(c.name); BUILD.hand.push(c); }
+    }
+  }
+  builderRender();
 }
+function auditionCard(i){
+  const c=BUILD.hand[i]; if(!c) return;
+  const p=composeP(BUILD.kept,c,BUILD.stage); if(!p) return;
+  BUILD.live=i;
+  if(DREAM.on) DREAM.pending=p; else startWith(p,true);
+  builderRender();
+}
+function keepCard(){
+  if(BUILD.live<0||!BUILD.hand[BUILD.live]) return;
+  BUILD.kept[BUILD.stage]=BUILD.hand[BUILD.live];
+  /* advance to the FIRST UNFILLED trait — so a remixed trait keeps in one
+     tap and the song stands right back up */
+  const nextEmpty=BUILD.kept.findIndex(k=>!k);
+  if(nextEmpty<0){
+    BUILD.stage=5;
+    const p=composeP(BUILD.kept,null,5);
+    if(p){ if(DREAM.on) DREAM.pending=p; else startWith(p,true); }
+    builderRender();
+    flashRow("YOUR SONG IS STANDING — SAVE · KEEP · REMIX");
+  } else {
+    BUILD.stage=nextEmpty; deal(); if(BUILD.hand.length) auditionCard(0);
+  }
+}
+function traitJump(s){
+  if(s<0||s>4) return;
+  if(!BUILD.kept[s]&&s!==BUILD.stage) return; /* only filled slots reopen */
+  /* an un-kept audition must not outlive the jump: the rail shows the kept
+     avatar, so the ear gets the kept avatar back on the bar */
+  const stray=BUILD.live>=0&&BUILD.hand[BUILD.live]&&BUILD.hand[BUILD.live]!==BUILD.kept[BUILD.stage];
+  BUILD.stage=s; deal();
+  /* stage-4 hands are FORMATS verbatim, not kept-first — find the kept card */
+  BUILD.live=BUILD.kept[s]? Math.max(0,BUILD.hand.indexOf(BUILD.kept[s])) : -1;
+  if(stray&&DREAM.on){ const p=composeP(BUILD.kept,null,BUILD.stage); if(p) DREAM.pending=p; }
+  builderRender();
+}
+function builderRender(){
+  const rail=document.getElementById("traitRail"), row=document.getElementById("handRow");
+  if(!rail||!row) return;
+  rail.innerHTML=TRAITS.map((t,i)=>{
+    const k=BUILD.kept[i];
+    const cls="trSlot"+(i===BUILD.stage&&BUILD.stage<5?" cur":"")+(k?" done":"");
+    const val=k? esc(k.name) : (i===BUILD.stage&&BUILD.stage<5? "choosing…" : "—");
+    return '<div class="'+cls+'" data-t="'+i+'"><b>'+t+'</b><span>'+val+'</span></div>';
+  }).join("");
+  if(BUILD.stage===5){
+    const nm=DREAM.p? esc(DREAM.p.name||"your track") : "your track";
+    row.innerHTML='<div class="hdone"><b>'+nm+'</b><span>your song is standing — ⤓ SAVE the take (WAV + MIDI) · ★ KEEP writes it into a copy of this file · tap any trait above to remix it live · play your MIDI keys over it</span></div>';
+    return;
+  }
+  row.innerHTML=BUILD.hand.map((c,i)=>{
+    const live=i===BUILD.live;
+    return '<div class="hcard'+(live?" live":"")+'" data-c="'+i+'"><b>'+esc(c.name)+'</b><span>'+
+      esc(c.desc||"")+'</span><em>'+(live?"live — tap again to keep":"tap to hear")+'</em></div>';
+  }).join("")||'<div class="hdone"><b>press play</b><span>the engine deals three drummers — tap one to hear it, tap it again to keep it; four more traits and your song is standing</span></div>';
+}
+function builderStart(){
+  if(BUILD.stage===5){
+    if(!DREAM.on){ const p=composeP(BUILD.kept,null,5); if(p) startWith(p,true); }
+    builderRender(); return;
+  }
+  if(!BUILD.hand.length) deal();
+  auditionCard(BUILD.live>=0?BUILD.live:0);
+}
+/* rebuild the avatar rail from a full preset — a replayed keep is remixable */
+function keptFromP(p,seed){
+  BUILD.kept=[
+    {kind:"drums",name:(p.name||"drums").split(" × ")[0],desc:p.fig,fig:p.fig,comps:p.comps,
+     kit:p.kit,tempo:p.tempo,hum:p.hum,extraKick:!!p.extraKick,seed:seed||p._seed||1},
+    p.muteBass?null:{kind:"bass",name:TH_NOTE[((p.root%12)+12)%12]+" "+p.scale,desc:PROGRAMS[p.bass].name,
+     root:p.root,scale:p.scale,bass:p.bass,bseed:p.bseed!=null?p.bseed:1},
+    p.muteChord?null:{kind:"chords",name:p.progName||"changes",desc:PROGRAMS[p.chord].name,
+     prog:p.prog,progName:p.progName||"",chord:p.chord,chordStyle:p.chordStyle},
+    p.muteLead?null:{kind:"lead",name:PROGRAMS[p.lead].name,desc:"hook",lead:p.lead,
+     leadOct:p.leadOct||12,lseed:p.lseed!=null?p.lseed:1},
+    p.format? FORMATS.find(f=>f.format===p.format)||null : null];
+  BUILD.stage=BUILD.kept.findIndex(k=>!k);
+  if(BUILD.stage<0) BUILD.stage=5;
+  BUILD.hand=[]; BUILD.live=-1;
+  if(BUILD.stage<5) deal(); else builderRender();
+}
+function dreamStart(){ builderStart(); }
 function dreamStop(silent){
   DREAM.on=false; DREAM.pending=null; setPlayUI(false);
   takeStop();
@@ -3701,15 +3823,11 @@ function dreamStop(silent){
 function dreamDice(){
   ["dreamDice","fabDice"].forEach(id=>{ const b=document.getElementById(id);
     if(b){ b.classList.add("spin"); setTimeout(()=>b.classList.remove("spin"),380); } });
-  const rng=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
-  let p;
-  if(rng()<.5){ const ci=Math.floor(rng()*(DREAMS.length-1));
-    p=JSON.parse(JSON.stringify(DREAMS[ci])); }
-  else { p=dreamPickSurprise(rng); }
-  p=lockMerge(p,DREAM.p,LOCKS);   /* locks hold their half through the roll */
-  p._seed=(Date.now()%100000)|0;
-  if(DREAM.on) DREAM.pending=p;
-  else startWith(p,true);
+  /* ROLL deals a fresh hand for the trait in play; a finished song remixes
+     through the rail, so ROLL reopens the last trait there */
+  if(BUILD.stage===5){ BUILD.stage=4; }
+  deal();
+  if(DREAM.on&&BUILD.hand.length) auditionCard(0);
 }
 /* ── THE TAKE: from the moment PLAY (or a figure) starts, everything the
       engines schedule AND everything the player performs — screen keys or a
@@ -3763,7 +3881,7 @@ function takeLogP(name,vel,when,o){
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
   o=o||{};
   TAKE.ev.push({t:Math.max(0,t),role:"perc",name,vel,dur:0.12,tempo:state.tempo,
-    pitch:o.pitch||1,mute:o.mute||1,layerVel:o.layerVel});
+    pitch:o.pitch||1,mute:o.mute||1,layerVel:o.layerVel,ln:o.ln});
   takeTrim();
 }
 function takeClose(note){
@@ -3981,7 +4099,8 @@ function presetInit(){
       /* mid-performance a chip hands off on the bar line — the direct start
          wiped the rolling take (BREAK r3, same law as the figure chips) */
       if(DREAM.on) DREAM.pending=p;
-      else startWith(p,false);
+      else startWith(p,true);
+      if(typeof keptFromP==="function") keptFromP(p,en.seed); /* the rail becomes this song — remixable */
     });
   }
 }
@@ -4032,16 +4151,25 @@ function ldrConductorInit(){
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
   on("fabSave",exportTake); on("ldrSave",exportTake);
   on("ldrKeep",keepPreset);
-  /* locks live on the surfaces they lock */
-  const kcard=document.querySelector(".thKey");
-  if(kcard) kcard.addEventListener("click",()=>{ LOCKS.key=!LOCKS.key;
-    kcard.classList.toggle("locked",LOCKS.key);
-    flashRow(LOCKS.key?"KEY LOCKED — DICE KEEPS THE HARMONY":"KEY FREE"); });
-  const dinfo=document.getElementById("dreamInfo");
-  if(dinfo) dinfo.addEventListener("click",()=>{ LOCKS.rhythm=!LOCKS.rhythm;
-    dinfo.classList.toggle("locked",LOCKS.rhythm);
-    flashRow(LOCKS.rhythm?"RHYTHM LOCKED — DICE KEEPS THE GROOVE":"RHYTHM FREE"); });
+  /* the hand and the rail — tap to hear, tap the lit card to keep, tap a
+     filled trait to remix it live */
+  const hr=document.getElementById("handRow");
+  if(hr) hr.addEventListener("click",e=>{
+    const c=e.target.closest(".hcard"); if(!c) return;
+    const i=+c.dataset.c;
+    if(i===BUILD.live) keepCard(); else auditionCard(i);
+  });
+  const tr=document.getElementById("traitRail");
+  if(tr) tr.addEventListener("click",e=>{
+    const s=e.target.closest(".trSlot"); if(s) traitJump(+s.dataset.t);
+  });
+  const et=document.getElementById("engineToggle");
+  if(et) et.addEventListener("click",e=>{ e.preventDefault();
+    document.body.classList.toggle("engineOpen");
+    et.textContent=document.body.classList.contains("engineOpen")?
+      "⚙ close the engine room":"⚙ engine room — the TRITON rack, patches & keys"; });
   presetInit();
+  builderRender();
   if(typeof theoryRender==="function") theoryRender();
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
@@ -4294,4 +4422,11 @@ DEAD BRANCHES: (1) giving rest3 its own cadence-aware slice per cell shape — l
 KILL-TEST: all nine fixes proven in the same run — node suites [0]–[7] green; the 37-assertion harness green including the three NEW gates (locked DICE must move the seed; the duck must dip after the bounce restore; the kept copy must boot with live tabs and a drawn hook). The review: 17 agents, five find-lenses, twelve verify-skeptics, zero findings taken on faith.
 THE NON-OBVIOUS CHOICE: the same crime convicted three times (the wiped take: ring 19's export, ring 25's figure chips, now preset chips) is not three bugs — it is one missing invariant, "only the bar line changes the transport," that each new entry point must inherit. The fix that matters is the pattern now written HERE, where the next session reads before adding entry point number four.
 OPEN QUESTIONS: (1) Should startWith itself become bar-line-aware (one guarded entry instead of per-caller pending discipline)? (2) The kept copy's tab state now survives — should KEEP also keep the chosen kit/mode selections (the refuted LDR-mode finding was refuted on impact, not on truth)? (3) Three donors in one file: what would the fourth donor —a real player's MIDI takes, as the user first suggested — teach that the math hasn't?
+RING 31 · 2026-08-31 · the song avatar — the dice reinvented as curation
+WHAT CHANGED: the fourth verdict answered: "the layering doesn't make sense… follow the process — drums first, then melody, chords, song format… reinvent the dice roll concept for the AI age; all the human has to do is curate and come in with fresh ears; the dopest human played drummers are pre-built, they start building off the best and piecing together; the engine seamlessly crafts them together, no fluff, no friction, less clicks; nobody wants to select by scrolling up and down screens" — and, mid-build, the sharper image: "think of how kids choose their avatar characteristics in a game. Build the song like an avatar; the pieces are prebuilt; the engine seamlessly combines them in a musical way." So the face stopped being an instrument you configure and became a CHARACTER BUILDER. Five trait slots: THE DRUMMER · THE LOW END · THE CHANGES · THE VOICE · THE SHAPE. The engine deals THREE prebuilt candidates per trait — curated dream identities and wildcard breeds for drummers; keys, registers and bass voices for the low end; scale-matched named progressions for the changes; hook DNAs for the voice; loop/arc/song for the shape. Tap a card: it swaps in ON THE BAR under everything already kept. Tap the lit card: kept — and the next trait deals itself and auditions its first card unasked, so the song never stops sounding. The rail is the avatar: tap any filled slot and that trait reopens with the kept card in the hand, remixable under the standing song; the keep rule is "advance to the FIRST UNFILLED trait," so a remix re-keeps in ONE tap and forward-build and remix are the same gesture. A song stands in as few as five taps. Unfilled future slots are MUTED, never faked (muteBass/muteChord/muteLead — the theory bar says "drums first" instead of inventing an Am7 from a placeholder), each trait carries its own seed (the drummer's seed IS the world clock; bseed/lseed ride the preset through KEEP), and the whole TRITON rack — tabs, programs, keys — folds behind one "⚙ engine room" link. KEEP and preset chips rebuild the rail from a replayed preset, so a kept song comes back remixable — and a half-built keep round-trips too (mutes validate; a shapeless build holds a steady groove rather than guessing sections). The BREAK-lite convicted two honesty cracks, both fixed and gated: an un-kept audition outlived a trait jump (the rail showed the kept avatar while the ear heard the stray — the jump now hands the kept song back on the bar), and stage-4 hands (FORMATS verbatim, not kept-first) lit card 0 as "live" even when the kept shape was elsewhere (the jump now lights the KEPT card).
+BANNED (obvious answers set aside first): sampling external MIDI files into the artifact (ring 26's law stands — rights unclear, self-containment absolute; "prebuilt by human players" is honored by the 51 transcribed traditions and the curated identities, the human-timing science embedded as math); persisting the old browse-the-banks UX beside the builder (the verdict was explicit — the engine room is a fold-away for the curious, not a second front door); locks as separate UI (the STAGES are the locks now — everything kept is locked by construction; the lock engine stays as tested capacity, unwired from the face).
+DEAD BRANCHES: (1) wrapping the rack in a real container element for the fold — lost: the export pane's div stays open into the script blocks, so tree surgery risks the KEEP serializer; a body-class CSS fold moves nothing and the copy still round-trips. (2) keepCard advancing stage+1 always — lost: re-keeping a remixed trait then marched the whole build again (the harness caught it as a 30-second hang); first-unfilled is one rule covering both flows. (3) waiting silently after a keep for the human to pick — lost: auto-auditioning the next trait's first card is the "no friction" the verdict demanded. (4) measuring the drummer's clock across all percussion — lost twice: interleaved instruments mix two smooth per-role waves into apparent anti-correlation, and same-recipe NAMES interleave the figure's kit-wave with a companion's perc-wave under one name; the take now carries a lane tag (fig/comp) and the probe rides the figure lane alone, where a fixed-drummer trace reads +5.9→−4.5 ms of silk.
+KILL-TEST: node [0]–[7] green — suite [3] grew the avatar block (40 seeds of card validity: drummer figures grid-matched to their companions, bass roots in the playable octave on BASS programs, progressions bank-matched to the kept scale, composeP honest about mutes and null without a drummer, shapes governing sections). The harness was rebuilt around the walkthrough and runs ALL GREEN back-to-back: deal → hear → keep across all five traits with the theory bar honest at every stage, the clock measured on the figure lane of the rolling tape, chords rolled by the hand, the hook breathing, remix + one-tap re-keep, the two BREAK-lite gates, a mastered bounce, the duck surviving the restore (with a render-clock stall guard so the probe fails honestly), and the KEEP copy booting with the rail rebuilt.
+THE NON-OBVIOUS CHOICE: the dice survived — as the dealer. DICE no longer rolls a world; it re-deals the trait in play (at a standing song it reopens THE SHAPE). The reinvention the verdict asked for is not a smarter random — it is moving the human from the slot machine's lever to the A&R chair: the engine proposes three against everything kept, the human hears and points. Curation IS the instrument now, which is why the build is also the lock system: you cannot lose what you chose, because choosing is the only way anything enters.
+OPEN QUESTIONS: (1) Promotion — the verdict said "promoting the tracks that sound the dopest, kind of like playlisting": KEEP holds 8; should kept songs rank (stars? play counts?), and should the DEALER learn, weighting future hands toward what this human keeps? (2) A full five-lens court on the builder (rings 19/25/30 style) is owed next round — this ring shipped on a BREAK-lite. (3) Is three the right hand size at phone scale, and does a long-press deserve "re-deal just this trait"? (4) The engine room still holds everything — which single dial (humanity? tempo?) has earned a place on the avatar face itself?
 ═══ end rings ═══ -->

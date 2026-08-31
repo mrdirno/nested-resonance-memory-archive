@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-08-31, rings 1–30 in `triton-rack.html`.
+**As of:** 2026-08-31, rings 1–31 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -16,7 +16,15 @@ from sources with human timing… mixing and mastering is terrible… no way of
 locking style or rhythm… the file has to reconfigure itself."* — the
 drummer's correlated clock, the hook/bass cell engines, the mix rack + master
 chain, locks on the dice, and KEEP (the file serializes a working copy of
-itself carrying presets).
+itself carrying presets). Round 4 (ring 31) executed the fourth verdict:
+*"the layering doesn't make sense… follow the process — drums first…
+reinvent the dice roll for the AI age… build the song like an avatar, the
+pieces are prebuilt, the engine seamlessly combines them… less clicks."* —
+THE SONG AVATAR: five trait slots (THE DRUMMER · THE LOW END · THE CHANGES ·
+THE VOICE · THE SHAPE), three dealt candidates per trait, tap to hear on the
+bar / tap the lit card to keep, the next trait deals itself; the rail is the
+avatar and any filled slot remixes live; the whole TRITON rack folds behind
+one "⚙ engine room" link.
 
 ---
 
@@ -24,13 +32,13 @@ itself carrying presets).
 
 | file | what it is |
 |---|---|
-| `triton-rack.html` | The instrument (self-contained, no CDN/fetch/localStorage). Korg TRITON-Rack recreation: 128 programs + 16 user Bank B slots, 16 combis, Web MIDI in (hardware keyboards are first-class — the unit boots from a MIDI note, with a one-tap audio nudge for the autoplay law), DecentSampler export, EXB-LDR board with the donor's **ported percussion physics** (25 PERC_RECIPE voices) and 51 figures routed instrument-to-instrument, Dream Conductor with a **4U face reduced to the donor's grammar**: PLAY · DICE · SAVE, a scope, and the **theory bar** (Improvisator homage: key, named progression, Roman numerals, the sounding chord spelled out). A **progression bank** of 12 named changes (blues, Andalusian, ii-V-I…) with spec chords for borrowed harmony; the band plays through **the human hand** (per-part feel, rolled chords, deterministic per seed); **THE TAKE** rolls from the moment anything plays and SAVE bounces it offline through the same engine into a normalized 24-bit WAV + SMF-1 with the player on a YOU track. Rings at tail. |
+| `triton-rack.html` | The instrument (self-contained, no CDN/fetch/localStorage). The face is **THE SONG AVATAR** (round 4): a track is built like a game character — five trait slots (THE DRUMMER · THE LOW END · THE CHANGES · THE VOICE · THE SHAPE), the engine deals three prebuilt candidates per trait (curated dream identities + wildcard breeds; keys and bass voices; scale-matched named progressions; hook DNAs; loop/arc/song), tap a card to hear it swap in **on the bar** under everything kept, tap the lit card to keep it and the next trait deals itself; unfilled slots are muted, never faked; the rail is the avatar and tapping a filled slot remixes that trait live; a song stands in as few as five taps. Under the fold (one "⚙ engine room" link): the full Korg TRITON-Rack recreation — 128 programs + 16 user Bank B slots, 16 combis, Web MIDI in (hardware keyboards are first-class — the unit boots from a MIDI note, with a one-tap audio nudge for the autoplay law), DecentSampler export, EXB-LDR board with the donor's **ported percussion physics** (25 PERC_RECIPE voices) and 51 figures routed instrument-to-instrument, the **theory bar** (key, named progression, Roman numerals, the sounding chord — honest at every build stage), the 12-progression bank, the drummer's correlated clock + hook/bass cell engines, the mix rack + master chain. **THE TAKE** rolls from the moment anything plays and SAVE bounces it offline through the same engine into a normalized 24-bit WAV + SMF-1 with the player on a YOU track; ★ KEEP writes the standing song into a working copy of the file itself (the copy boots with the avatar rail rebuilt, remixable). Rings at tail. |
 | `luckydreamer_3.html` | The first donor, byte-identical to the original upload. Reference and ground truth. **Do not modify it.** |
 | `dreamdrummer_21.html` | The third donor (round 3), byte-identical to the upload. Source of the correlated human-timing science, the structural-consistency doctrine, the mix architecture, and the locks grammar (extraction: Ring 26). **Do not modify it.** |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
-| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
-| `browser-tests.js` | Headless-Chromium harness (`npm i playwright-core`; finds Chromium at `/opt/pw-browsers/...` or `CHROMIUM=` env): layout law, the simplified face, hardware-MIDI cold boot + nudge law + pedal/bend through `window._midiInject`, live conduction with zero mapping fallbacks, theory bar tracking (idle → live → after DICE), the human hand measured on the rolling tape, Bank B write flow + hostile-name XSS, Rhythm-tab figure pick, a full SAVE bounce read back from the downloads (WAV peak + MThd + YOU track), power-off law, STRUM, improviser, voice-cap assertion, phone-scale, zero console errors. Screenshots `4u-face.png`. |
+| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
+| `browser-tests.js` | Headless-Chromium harness (`npm i playwright-core`; finds Chromium at `/opt/pw-browsers/...` or `CHROMIUM=` env): layout law, the avatar face (rail + hand + four buttons + engine-room fold), hardware-MIDI cold boot + nudge law + pedal/bend through `window._midiInject`, **the full build walkthrough** (deal → hear → keep across all five traits with the theory bar honest at each stage, the drummer's clock measured on the figure lane of the rolling tape, chords rolled by the hand, the hook breathing, remix + one-tap re-keep, trait-jump honesty probes), figure chip mid-dream handoff, Bank B write flow + hostile-name XSS, a full SAVE bounce read back from the downloads (WAV peak/RMS/crest + MThd + YOU track), duck survival after the bounce restore, KEEP copy booted and replayed with the rail rebuilt, power-off law, STRUM, improviser, voice-cap assertion, phone-scale, zero console errors. Screenshots `4u-face.png`. |
 
 ## 2. What the accuracy fix settled (P0, rings 10–12; unchanged)
 
@@ -91,6 +99,29 @@ itself carrying presets).
    (worst: preset chip mid-dream wiped the take; KEEP's scrub blanked the tab
    panes), all fixed at the root; 3 refuted and recorded.
 
+## 3c. Round 4 in five cuts (ring 31)
+
+1. **The avatar core.** Pure functions first: candidate generators per trait
+   (candDrums/candBass/candChords/candLead + FORMATS), `composeP()` wearing
+   the kept traits together with honest mutes for unfilled slots, per-part
+   seeds (the drummer's seed IS the world clock; bseed/lseed ride the
+   preset), shape→section laws (`_building` holds a steady groove).
+2. **The DEAL face.** Trait rail + three-card hand replace all browsing:
+   tap to hear (bar-line swap), tap the lit card to keep, next trait deals
+   itself and auditions card 0 unasked. Keep advances to the FIRST UNFILLED
+   trait, so remixing a filled slot re-keeps in one tap.
+3. **The fold.** The entire TRITON rack (tabs, programs, keys) hides behind
+   one "⚙ engine room" link — a body-class CSS fold, no DOM surgery, so the
+   KEEP serializer still round-trips.
+4. **The figure lane.** A `ln` tag ("fig"/"comp") threads the main figure vs
+   companions through the take log — same-recipe-name collisions had
+   interleaved the kit-wave and perc-wave under one name and read the
+   drummer's correlated clock as anti-correlated white.
+5. **BREAK-lite + gates.** Un-kept auditions no longer outlive a trait jump
+   (the rail is the avatar — the ear gets the kept song back on the bar);
+   stage-4 hands (FORMATS verbatim) light the KEPT format, not card 0. Both
+   gated in the harness alongside the full build walkthrough.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -119,6 +150,13 @@ the map are the donor's hand: do not move them on taste.
 
 ## 6. Open edges (from the rings, for the next bench)
 
+- Promotion: the verdict asked for "promoting the tracks that sound the
+  dopest, like playlisting" — KEEP holds 8; should kept songs rank, and
+  should the dealer learn from what gets kept? (Ring 31)
+- A full five-lens BREAK court on the builder (like rings 19/25/30) is owed
+  next round; ring 31 shipped with a BREAK-lite only (Ring 31).
+- Hand size: is 3 cards right at phone scale? Long-press to re-deal one
+  trait? (Ring 31)
 - Enharmonic spelling: the theory bar spells sharps-only (A#maj7 where a flat
   key wants B♭maj7); a per-key table would read like the book (Ring 24).
 - Swing, done honestly: the FIGURE must swing first and the band lean on it —
