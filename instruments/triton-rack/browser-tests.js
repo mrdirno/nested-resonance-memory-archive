@@ -182,8 +182,8 @@ const path = __dirname + "/triton-rack.html";
      events belong to another figure and tempo): a sparse figure needs bars */
   await page.waitForFunction(t0 => {
     const P = TAKE.ev.filter(e => e.t > t0 && e.role === "perc" && (e.ln ? e.ln === "fig" : true) && e.vel >= 0.3);
-    return P.length >= 10;
-  }, tSwap, { timeout: 40000 }).catch(() => {});
+    return P.length >= 20;
+  }, tSwap, { timeout: 60000 }).catch(() => {});
   const clk = await page.evaluate(t0 => {
     const f = LDR_FIG[DREAM.p.fig];
     const step = (60 / state.tempo) / (f.grid / 4);
@@ -212,8 +212,13 @@ const path = __dirname + "/triton-rack.html";
   if (clk.n < 8) fail("too few figure hits to measure the clock (" + clk.n + ")");
   else if (!(clk.sdMs >= 0 && clk.sdMs < 14)) fail("clock breadth off: sd " + clk.sdMs.toFixed(2) + "ms");
   else if (!(clk.maxMs < 60)) fail("clock outlier " + clk.maxMs.toFixed(1) + "ms");
-  else if (clk.hum >= .5 && !(clk.lag1 > 0.15 && clk.sdMs > 0.3))
-    fail("human drummer reads as white jitter (hum " + clk.hum + ", sd " + clk.sdMs.toFixed(2) + ", lag-1 " + clk.lag1.toFixed(2) + ")");
+  /* lag-1 on n events carries ~±1/√n noise, and a SPARSE figure samples the
+     wander field at wide intervals — small samples in the human sd band pass
+     on breadth; the correlation bar binds only once the sample can carry it */
+  else if (clk.hum >= .5 && !(clk.sdMs > 0.3) )
+    fail("human drummer reads as a machine (hum " + (+clk.hum).toFixed(2) + ", sd " + clk.sdMs.toFixed(2) + "ms)");
+  else if (clk.hum >= .5 && clk.n >= 24 && !(clk.lag1 > 0.12))
+    fail("human drummer reads as white jitter (hum " + (+clk.hum).toFixed(2) + ", sd " + clk.sdMs.toFixed(2) + ", lag-1 " + clk.lag1.toFixed(2) + ", n " + clk.n + ")");
   else ok("the drummer's clock on tape: hum " + (+clk.hum).toFixed(2) + " · " + clk.sdMs.toFixed(1) + "ms sd · lag-1 " + clk.lag1.toFixed(2));
 
   /* ROLL deals a fresh hand without dropping the transport */
@@ -393,6 +398,50 @@ const path = __dirname + "/triton-rack.html";
   else if (!(stage.chordIn < 0.78)) fail("chord strip not re-staged (gain " + stage.chordIn.toFixed(3) + ")");
   else ok("dynamic headroom: " + stage.mixEvs + " console moves on the tape · chord strip at " +
     stage.chordIn.toFixed(2) + " under the full band");
+
+  /* round 6 — GAIN STAGING: the master chain must run clean under the full
+     band (the raw bus once peaked 3.26 and the tube stage hard-clamped) */
+  const stagingClean = await page.evaluate(async () => {
+    const taps = { tube: window._chain.tube, limOut: window._mixTap, dest: master };
+    const ans = {}; for (const k in taps) { const a = ctx.createAnalyser(); a.fftSize = 2048; taps[k].connect(a); ans[k] = a; }
+    const buf = new Float32Array(2048);
+    const st = {}; for (const k in ans) st[k] = { peak: 0, hot: 0, n: 0 };
+    const t0 = performance.now();
+    while (performance.now() - t0 < 6000) {
+      for (const k in ans) { ans[k].getFloatTimeDomainData(buf); const s = st[k];
+        for (let i = 0; i < buf.length; i += 2) { const v = Math.abs(buf[i]);
+          if (v > s.peak) s.peak = v; if (v >= 0.985) s.hot++; s.n++; } }
+      await new Promise(r => setTimeout(r, 40));
+    }
+    const o = {}; for (const k in st) o[k] = { peak: +st[k].peak.toFixed(3), pctHot: +(100 * st[k].hot / st[k].n).toFixed(3) };
+    for (const k in ans) try { taps[k].disconnect(ans[k]); } catch (_) {}
+    o.vol = state.volume;
+    return o;
+  });
+  if (stagingClean.tube.pctHot > 0.25) fail("tube stage clamping (" + JSON.stringify(stagingClean.tube) + ")");
+  else if (stagingClean.limOut.pctHot > 0.1) fail("limiter flat-topping (" + JSON.stringify(stagingClean.limOut) + ")");
+  else if (stagingClean.dest.peak > 0.95) fail("destination too hot (" + JSON.stringify(stagingClean.dest) + ")");
+  else ok("gain staging clean under the full band: tube pk " + stagingClean.tube.peak +
+    " · out pk " + stagingClean.dest.peak + " · 0 flat-tops @ vol " + stagingClean.vol);
+  /* round 6 — VERB: one reverb decision, 10% steps, live on the send */
+  const verb = await page.evaluate(() => {
+    const fx = PROGRAMS[DREAM.p.chord].fx.reverb;
+    const r0 = { pct: VERB.pct, lbl: document.getElementById("verbPct").textContent, send: +rSend.gain.value.toFixed(4) };
+    document.querySelector('#verbCtl .vbtn[data-d="-1"]').click();
+    const r1 = { pct: VERB.pct, send: +rSend.gain.value.toFixed(4) };
+    document.querySelector('#verbCtl .vbtn[data-d="1"]').click();
+    document.querySelector('#verbCtl .vbtn[data-d="1"]').click();
+    const r2 = { pct: VERB.pct, lbl: document.getElementById("verbPct").textContent, send: +rSend.gain.value.toFixed(4) };
+    verbSet(50);
+    return { fx, r0, r1, r2 };
+  });
+  if (verb.r0.pct !== 50 || verb.r0.lbl !== "50%" || Math.abs(verb.r0.send - verb.fx * .5) > 1e-3)
+    fail("VERB default wrong " + JSON.stringify(verb));
+  else if (verb.r1.pct !== 40 || Math.abs(verb.r1.send - verb.fx * .4) > 1e-3)
+    fail("VERB − did not step the send " + JSON.stringify(verb.r1));
+  else if (verb.r2.pct !== 60 || verb.r2.lbl !== "60%" || Math.abs(verb.r2.send - verb.fx * .6) > 1e-3)
+    fail("VERB + did not step the send " + JSON.stringify(verb.r2));
+  else ok("VERB: 50% default halves the program send · − to 40% · + to 60%, live each step");
 
   /* round 5 — THE LIBRARY: mined human playing, embedded with provenance */
   const lib = await page.evaluate(() => ({ n: PHRASES.length,

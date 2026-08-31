@@ -325,6 +325,15 @@ body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
   background:#2a2412;border:1px solid #8a6d1e;color:#ffd77e;font-size:12px;letter-spacing:.08em;
   padding:9px 16px;border-radius:9px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);}
 #audioNudge.on{display:block;animation:playPulse 1.2s ease-in-out infinite;}
+#verbCtl{position:absolute;left:52px;top:430px;width:140px;height:60px;border-radius:10px;
+  background:linear-gradient(180deg,#141920,#0b0e13);border:1px solid #263041;
+  display:flex;align-items:center;justify-content:center;gap:8px;}
+#verbCtl .vbtn{width:26px;height:26px;border-radius:50%;cursor:pointer;user-select:none;
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:#9fc4da;
+  background:radial-gradient(circle at 34% 30%,#232a34,#11151c 70%);border:1px solid #333c4c;}
+#verbCtl .vbtn:hover{border-color:#57d6ff;color:#aef0ff;}
+#verbCtl b{min-width:38px;text-align:center;font-size:13px;color:#cfe6f5;letter-spacing:.04em;}
+#verbCtl .vlab{position:absolute;bottom:4px;font-size:7px;letter-spacing:.28em;color:#5d6f80;}
 #ldrSave{left:488px;top:400px;width:120px;height:120px;color:#9fe0b3;}
 #ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
 #ldrSaveLbl{position:absolute;left:764px;top:472px;width:170px;font-size:9px;
@@ -386,6 +395,7 @@ body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
     <div class="thKey"><b id="thKey">—</b><i id="thProgName"></i><span id="thNow">press play</span></div>
     <div id="thProg"></div>
   </div>
+  <div id="verbCtl" title="Reverb — scales every voice's verb send, 10% steps"><span class="vbtn" data-d="-1">−</span><b id="verbPct">50%</b><span class="vbtn" data-d="1">+</span><span class="vlab">VERB</span></div>
   <div class="l4pad" id="dreamDice" title="Deal a fresh hand for this trait"><span class="pico">🎲</span><span class="plab">Roll</span></div>
   <div class="l4pad" id="dreamPlay" title="Play / pause"><span class="pico">▶</span><span class="plab">Play</span></div>
   <div class="l4pad" id="ldrSave" title="Save the take — WAV + MIDI, offline-rendered"><span class="pico">⤓</span><span class="plab">Save</span></div>
@@ -1352,16 +1362,23 @@ function buildGraph(){
   const glue=ctx.createDynamicsCompressor();
   glue.threshold.value=-13; glue.knee.value=8; glue.ratio.value=3; glue.attack.value=.010; glue.release.value=.18;
   const tube=ctx.createWaveShaper(); tube.curve=satCurve(1.25); tube.oversample="2x";
-  master = ctx.createGain(); master.gain.value = state.volume;
-  const limPre=ctx.createGain(); limPre.gain.value=2/3;
+  master = ctx.createGain(); master.gain.value = state.volume*.95;
+  const limPre=ctx.createGain(); limPre.gain.value=MIX_LIM_BASE;
   const lim=ctx.createWaveShaper(); lim.curve=limitCurve(); lim.oversample="4x";
   analyser = ctx.createAnalyser(); analyser.fftSize=512;
-  sum.connect(tiltLo); tiltLo.connect(air); air.connect(tiltHi);
+  /* GAIN STAGING (round 6, measured): the raw bus peaked at 3.26 — the
+     compressors sat 30dB past threshold and the tube waveshaper was driven
+     beyond its curve domain, where WebAudio hard-clamps (audible clipping).
+     A bus trim puts the chain in its intended range, and the VOLUME knob
+     moved POST-limiter so it can never change saturation depth. */
+  const busTrim=ctx.createGain(); busTrim.gain.value=MIX_BUS_TRIM;
+  sum.connect(busTrim); busTrim.connect(tiltLo); tiltLo.connect(air); air.connect(tiltHi);
   tiltHi.connect(dryG); tiltHi.connect(para); para.connect(paraWet);
   dryG.connect(glueIn); paraWet.connect(glueIn);
-  glueIn.connect(glue); glue.connect(tube); tube.connect(master);
-  master.connect(limPre); limPre.connect(lim); lim.connect(ctx.destination);
+  glueIn.connect(glue); glue.connect(tube); tube.connect(limPre);
+  limPre.connect(lim); lim.connect(master); master.connect(ctx.destination);
   window._mixTap=lim;
+  window._chain={busTrim,para,glue,tube,limPre,lim}; /* tuning taps — measurement, not audio */
   sum.connect(analyser);
   /* reverb */
   convo = ctx.createConvolver(); convo.buffer = makeIR(2.6,2.4);
@@ -1442,10 +1459,12 @@ function mixDuckReset(){
    analyser), ramped at the bar the part lands, and LOGGED INTO THE TAKE so
    the offline bounce restages identically. Stacking never squashes the
    master; the low end gives up the least. ── */
+const MIX_BUS_TRIM=.42;  /* bus → master-chain drive (round 6, measured: raw bus peaked 3.26) */
+const MIX_LIM_BASE=.85;  /* limiter drive at 1-2 parts; staged down as the band stacks */
 function mixStageFor(n){ /* n = active roles incl. drums, 1..5 */
   const f=[1,1,.96,.9,.845,.8][Math.max(1,Math.min(5,n))];
   return { bass:+(.95*Math.pow(f,.6)).toFixed(4), chord:+(.8*f).toFixed(4),
-    lead:+(.9*f).toFixed(4), lim:+((2/3)*(1-.05*Math.max(0,Math.min(3,n-2)))).toFixed(4) };
+    lead:+(.9*f).toFixed(4), lim:+(MIX_LIM_BASE*(1-.05*Math.max(0,Math.min(3,n-2)))).toFixed(4) };
 }
 function mixApplyStage(s,when){
   if(!MIX||MIX._ctx!==ctx||!s) return;
@@ -1470,7 +1489,10 @@ function applyFXP(p){
   shaper.curve=driveCurve(Math.max(.02,fx.drive));
   dWet.gain.value=fx.drive>0?Math.min(1,fx.drive*1.4):0;
   dDry.gain.value=fx.drive>0?1-Math.min(.7,fx.drive):1;
-  cSend.gain.value=fx.chorus; rSend.gain.value=fx.reverb;
+  /* VERB (round 6): one global scaler over every program's reverb send —
+     100% = the program as written, default 50% (the verdict: too much verb) */
+  cSend.gain.value=fx.chorus;
+  rSend.gain.value=fx.reverb*((typeof VERB!=="undefined"?VERB.pct:50)/100);
   dSend.gain.value=fx.delay.send;
   const dt=delayBeats(fx.delay.time);
   dlyL.delayTime.setTargetAtTime(dt,ctx.currentTime,.05);
@@ -2108,12 +2130,12 @@ function knobRotor(el){ const rot=document.createElement("div");
   vk.addEventListener("pointermove",e=>{ if(sy===null) return;
     state.volume=Math.min(1,Math.max(0,sv+(sy-e.clientY)/140));
     setA(state.volume*270-135);
-    if(master&&ctx) master.gain.setTargetAtTime(state.volume,ctx.currentTime,.03); });
+    if(master&&ctx) master.gain.setTargetAtTime(state.volume*.95,ctx.currentTime,.03); });
   window.addEventListener("pointerup",()=>{ sy=null; });
   vk.addEventListener("wheel",e=>{ e.preventDefault();
     state.volume=Math.min(1,Math.max(0,state.volume+(e.deltaY>0?-.05:.05)));
     setA(state.volume*270-135);
-    if(master&&ctx) master.gain.setTargetAtTime(state.volume,ctx.currentTime,.03); },{passive:false});
+    if(master&&ctx) master.gain.setTargetAtTime(state.volume*.95,ctx.currentTime,.03); },{passive:false});
 })();
 /* ================= keyboard ================= */
 const kb=$("#kb"); const ptrMap=new Map(); const keyEls=new Map();
@@ -3302,6 +3324,7 @@ function presetValidate(e){
   if(p.bseed!=null&&!(Number.isInteger(p.bseed)&&p.bseed>=0&&p.bseed<=1e9)) return false;
   if(p.lseed!=null&&!(Number.isInteger(p.lseed)&&p.lseed>=0&&p.lseed<=1e9)) return false;
   if(["muteBass","muteChord","muteLead"].some(k=>p[k]!=null&&typeof p[k]!=="boolean")) return false;
+  if(p.verb!=null&&!(Number.isInteger(p.verb)&&p.verb>=0&&p.verb<=100)) return false;
   /* library phrase refs must point INTO this file's library, kind-correct */
   const libOk=(v,kinds)=>v==null||(Number.isInteger(v)&&PHRASES[v]&&kinds.indexOf(PHRASES[v].k)>=0);
   if(!libOk(p.dlib,["dr"])||!libOk(p.flib,["dr"])) return false;
@@ -3953,6 +3976,7 @@ function applyDream(p,mid){
   /* the groove field: a library drummer's per-step timing leads the band */
   DREAM.gfield=(p.dlib!=null&&PHRASES[p.dlib])?
     ldrpGrooveField(ldrpUnpackDrum(PHRASES[p.dlib].e),PHRASES[p.dlib].b*16) : null;
+  if(p.verb!=null&&typeof verbSet==="function") verbSet(p.verb); /* a kept song keeps its verb */
   state.tempo=(typeof p.tempo==="number"&&isFinite(p.tempo))? p.tempo : (state.tempo||100);
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
   DREAM.voic=null; DREAM.hook=null; DREAM.bcell=null;
@@ -4172,6 +4196,17 @@ function rackDraw(){
     g.fillStyle=grd; g.fillRect(10,cv.height-4-h,cv.width-20,h);
   });
 }
+/* ── VERB (round 6): the producer's one reverb decision — a global scaler
+   over every program's verb send, 10% steps, carried by presets ── */
+const VERB={pct:50};
+function verbSet(p){
+  VERB.pct=Math.max(0,Math.min(100,Math.round(p/10)*10));
+  const el=document.getElementById("verbPct"); if(el) el.textContent=VERB.pct+"%";
+  if(ctx){
+    if(typeof DREAM!=="undefined"&&DREAM.p) applyFXP(PROGRAMS[DREAM.p.chord]);
+    else if(typeof cur!=="undefined"&&cur) applyFX();
+  }
+}
 function dreamStart(){ builderStart(); }
 function dreamStop(silent){
   DREAM.on=false; DREAM.pending=null; setPlayUI(false);
@@ -4377,7 +4412,7 @@ function _graphRestore(S){ ctx=S.ctx; master=S.master; sum=S.sum; analyser=S.ana
   dlyR=S.dlyR; fbA=S.fbA; fbB=S.fbB; convo=S.convo; noiseBuf=S.noiseBuf; WAVES=S.WAVES;
   MIX=S.MIX; window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap;
   /* a knob turned DURING the render wrote to the offline master — resync (BREAK r3) */
-  try{ if(master&&ctx) master.gain.setTargetAtTime(state.volume,ctx.currentTime,.03); }catch(_){ } }
+  try{ if(master&&ctx) master.gain.setTargetAtTime(state.volume*.95,ctx.currentTime,.03); }catch(_){ } }
 async function exportTake(){
   if(typeof exporting!=="undefined"&&exporting) return;
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
@@ -4533,6 +4568,7 @@ function keepSerialize(presets){
 function keepPreset(){
   if(!DREAM.p){ flashRow("PLAY FIRST — NOTHING TO KEEP"); return; }
   const p=JSON.parse(JSON.stringify(DREAM.p)); delete p._seed;
+  p.verb=VERB.pct; /* the verb decision is part of the song */
   const name=((p.name||"dream").slice(0,34)+" #"+(DREAM.seed||0)).slice(0,48);
   PRESETS.push({name,seed:DREAM.seed||1,p});
   PRESETS=PRESETS.slice(-8);
@@ -4569,6 +4605,12 @@ function ldrConductorInit(){
     else rackCycle(slot,b.dataset.act==="next"?1:-1);
   });
   if(typeof rackRender==="function") rackRender(); /* idempotent — a KEEP copy re-renders its serialized shelf */
+  const vc=document.getElementById("verbCtl");
+  if(vc) vc.addEventListener("click",e=>{
+    const b=e.target.closest(".vbtn"); if(!b) return;
+    verbSet(VERB.pct+10*(+b.dataset.d));
+  });
+  verbSet(VERB.pct); /* re-sync the label a KEEP copy may have serialized mid-ride */
   const tr=document.getElementById("traitRail");
   if(tr) tr.addEventListener("click",e=>{
     const s=e.target.closest(".trSlot"); if(s) traitJump(+s.dataset.t);
@@ -4858,4 +4900,11 @@ DEAD BRANCHES: (1) reproducing the exact failure before fixing — lost: headles
 KILL-TEST: node [0]–[7] green; the full harness green including two new gates — after the bounce the face must hold exactly two blob-backed chips named .wav/.mid, and TAPPING a chip must produce a real download. The KEEP path inherits the five-minute revoke.
 THE NON-OBVIOUS CHOICE: treat "broken" as a verdict about DELIVERY, not rendering — the failure a user reports lives where their platform differs from the test bench, so the fix makes the artifact indifferent to download policy instead of tuned to one browser's.
 OPEN QUESTIONS: (1) Should SAVE also offer the WAV at 16-bit/44.1k for phone players that choke on 24-bit? (2) A library-dense render at 1.4× realtime is the price of full synth voices per kit hit — pre-render the 12 kit zones per program into buffers (the physics engine already proved the pattern) and the bounce could drop under 0.3×? (3) Should the chips carry the take's bar count and duration so the face reads like a tape box?
+RING 34 · 2026-08-31 · the chain measured — clipping convicted, and one verb decision
+WHAT CHANGED: the sixth verdict: "your gain stage still needs to be optimized… there is clipping rn. Just do more research into that" and "there's a lot of reverb — simple button, less verb / more verb, 10% increments." Research meant MEASUREMENT: four analyser taps down the master chain under a full library band produced the conviction — the raw mix bus peaked at 3.26 (+10 dB over full scale, 7.8% of samples ≥0.97), which drove the parallel compressor ~30 dB past threshold, and the TUBE waveshaper past its curve domain, where WebAudio HARD-CLAMPS the signal (the tap showed the tube's output overshooting its own theoretical ceiling by 16% — oversampling filters ringing off flat-tops). That flat-topping was the audible clipping; the destination itself never exceeded 0.62. Two structural fixes: (1) a BUS TRIM (0.42, a named constant beside the limiter drive) seats the whole chain in its intended range — after it, measured again: chain input 1.33 peak, compressors working 2-4 dB, tube peak 1.05 with 0.01% of samples ≥0.97 (a transient kiss, which is what a tube stage is for), limiter catching peaks with ZERO flat-topping, destination 0.59 peak / clean at default volume; (2) the VOLUME knob moved POST-limiter (capped ×0.95) so it scales the finished signal and can never again change saturation depth — drive is set by design constants and the take-logged headroom staging only, whose limiter base is now the shared MIX_LIM_BASE. And VERB: one global scaler over every program's reverb send — a −/+ pill on the face in 10% steps, 100% = the program as written, DEFAULT 50% (the verdict says today's amount is too much, so half is the new normal), applied live on each step, identical in the offline bounce, carried by presets and KEEP copies, validated by the preset law.
+BANNED (obvious answers set aside first): turning the master volume down and calling it fixed (the knob was pre-limiter — it changed drive, not the defect; and the default was already 0.62 while the chain clipped internally); a brickwall lookahead limiter rewrite (the cubic ceiling is fine when fed correctly — the DRIVE was the defect); a full reverb panel (decay, pre-delay, damping — the verdict asked for one decision, less or more; every extra knob is a tax on the face); normalizing the convolver IR by hand (ConvolverNode already normalizes — measured, not assumed).
+DEAD BRANCHES: (1) per-role auto-levelling from analyser followers — lost again for the same reason as ring 32's headroom design: a live follower cannot replay offline-identically; deterministic constants + staged trims can. (2) scaling rOut instead of the sends for VERB — lost: the send is per-program truth (a pad asks for more verb than a bass BY DESIGN); scaling the send preserves the programs' relative intent, scaling the return would flatten it. (3) treating the clock probe's lag-1 failure as an engine regression — lost on statistics: lag-1 over n events carries ±1/√n noise and a sparse figure samples the wander field at wide intervals; the probe now demands n≥24 before the correlation bar binds, with breadth (sd in the human band) carrying small samples — the mechanism itself was re-proven at lag-1 0.55-0.86 repeatedly.
+KILL-TEST: node [0]–[7] green (the staging table now evals against the shared MIX_LIM_BASE); the full harness green including two new gates measured on the LIVE graph under the standing full band — the tube stage must show ≤0.25% samples ≥0.985 and the destination must stay under 0.95 peak (the clipping can never silently return), and the VERB pill must move the actual send: 50% default = half the program's write, − steps to 40%, + to 60%, label and gain in lockstep. Before/after numbers in this ring are from the same 18-second full-band measurement protocol, volume 0.62, both runs.
+THE NON-OBVIOUS CHOICE: the fix made the instrument QUIETER at the destination (0.59 peak vs 0.62) while making it sound louder-capable — clean headroom with an honest volume knob beats a hotter number through a clamped waveshaper. Loudness for the shipped WAV was never at stake: the bounce normalizes to −17 dBFS RMS regardless; what the chain owes the listener is linearity until the ceiling, and now it delivers exactly that.
+OPEN QUESTIONS: (1) VERB scales the shared send — should the COUNTER get its own drier default than pads (space for a vocalist is also a reverb decision)? (2) The tube kiss at 1.05 peak is musical; should MIX_BUS_TRIM ride the headroom staging too, easing another 1-2 dB under a 5-part band? (3) The measurement protocol (four taps, 18s, hot-sample fractions) earned its keep twice — should it ship as a mine/-style script so the next tuning round starts from numbers?
 ═══ end rings ═══ -->

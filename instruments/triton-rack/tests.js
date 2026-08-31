@@ -384,11 +384,12 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   G3.PHRASES.length=baseLen;
   G3.PHRASE_IDX.dr.pop(); G3.PHRASE_IDX.fill.pop(); G3.PHRASE_IDX.bs.pop(); G3.PHRASE_IDX.cp.pop(); G3.PHRASE_IDX.em.pop();
   /* dynamic headroom: pure staging table — more parts, more headroom */
-  const mixJs = slice("function mixStageFor", "function mixApplyStage");
+  const mixJs = slice("const MIX_BUS_TRIM", "function mixApplyStage");
   const stageFor = eval(mixJs + "\n;mixStageFor");
+  const limBase = eval(mixJs + "\n;MIX_LIM_BASE");
   let prevC=1;
   for (let n=1;n<=5;n++){ const st=stageFor(n);
-    if (!(st.chord>0&&st.chord<=prevC+1e-9&&st.bass>0&&st.lead>0&&st.lim>0&&st.lim<=2/3+1e-3))
+    if (!(st.chord>0&&st.chord<=prevC+1e-9&&st.bass>0&&st.lead>0&&st.lim>0&&st.lim<=limBase+1e-3))
       { fail("stage table at n="+n); rBad++; }
     prevC=st.chord; }
   if (!(stageFor(5).chord<stageFor(1).chord && stageFor(5).lim<stageFor(2).lim)) { fail("staging never yields headroom"); rBad++; }
