@@ -165,6 +165,23 @@ const path = __dirname + "/triton-rack.html";
   else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key +
     (st2.pn ? " · " + st2.pn : "") + ")");
 
+  /* figure chip mid-dream: transport hands off, the tape keeps rolling (BREAK fix) */
+  await page.click('.tab[data-pane="rhythm"]');
+  await page.waitForTimeout(150);
+  const hand = await page.evaluate(async () => {
+    const n0 = TAKE.ev.length, t0 = TAKE.t0;
+    const chip = document.querySelector('.pchip.fig[data-f="yoruba"]');
+    chip.scrollIntoView(); chip.click();
+    await new Promise(r => setTimeout(r, 900));
+    return { n0, t0, n1: TAKE.ev.length, t1: TAKE.t0,
+      dream: DREAM.on, ldr: LDR.on, take: TAKE.on, fig: LDR.fig };
+  });
+  if (hand.dream || !hand.ldr || hand.fig !== "yoruba" || !hand.take) fail("figure handoff broken " + JSON.stringify(hand));
+  else if (hand.n1 < hand.n0 || hand.t1 !== hand.t0) fail("figure pick wiped the rolling take (" + hand.n0 + "→" + hand.n1 + ")");
+  else ok("figure chip mid-dream: transport hands off, tape keeps rolling (" + hand.n0 + "→" + hand.n1 + " events)");
+  await page.evaluate(() => { ldrToggle(false); });
+  await page.waitForTimeout(200);
+
   /* Bank B: WRITE on the unit — ENTER, dial a slot, ENTER */
   await page.evaluate(() => { dreamStop(); state.mode = "PROG"; setProgram(12); });
   await page.click("#entBtn");
@@ -259,12 +276,16 @@ const path = __dirname + "/triton-rack.html";
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
   else ok("transport and tape survive the bounce");
 
-  /* power-off disarms WRITE and pauses the tape */
-  await page.evaluate(() => { state.write = true; powerOff(); });
-  const poff = await page.evaluate(() => ({ write: state.write, take: TAKE.on, kept: TAKE.ev.length }));
+  /* power-off disarms WRITE, pauses the tape, resets controllers, clears the nudge */
+  await page.evaluate(() => { state.write = true; _midiInject([0xB0, 64, 127]); ctxEnsure(true); powerOff(); });
+  const poff = await page.evaluate(() => ({ write: state.write, take: TAKE.on, kept: TAKE.ev.length,
+    sus: SUS, bend: BENDC, armed: !!ctxEnsure._armed,
+    nudge: document.getElementById("audioNudge").classList.contains("on") }));
   if (poff.write || poff.take) fail("powerOff left WRITE/tape armed " + JSON.stringify(poff));
   else if (poff.kept < 5) fail("powerOff destroyed the saveable take");
-  else ok("powerOff disarms WRITE, pauses the tape, keeps the take saveable");
+  else if (poff.sus || poff.bend !== 0) fail("controller state survived the power cycle " + JSON.stringify(poff));
+  else if (poff.nudge || poff.armed) fail("powerOff left the audio nudge armed " + JSON.stringify(poff));
+  else ok("powerOff disarms WRITE + nudge, resets controllers, keeps the take saveable");
   await page.evaluate(() => quickBoot());
   await page.waitForTimeout(300);
 

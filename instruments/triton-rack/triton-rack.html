@@ -1313,16 +1313,26 @@ function applyFXP(p){
   fbA.gain.value=fx.delay.fb; fbB.gain.value=fx.delay.fb;
 }
 function midiHz(n){ return 440*Math.pow(2,(n-69+state.transpose)/12)*Math.pow(2,state.tune/1200); }
-function regVoice(v,units){ activeVoices+=units; voiceList.push(v);
+function regVoice(v,units){ v._off=(typeof exporting!=="undefined"&&exporting);
+  activeVoices+=units; voiceList.push(v);
   while(activeVoices>VOICE_CAP && voiceList.length){ const old=voiceList.shift(); old.kill(); } updVoiceUI(); }
+let UNREGQ=[];
 function unreg(v){
   /* exactly-once, whether or not the voice is still listed: the steal path
      shifts a voice out of voiceList BEFORE kill() runs, and the old indexOf
      guard then skipped the decrement — activeVoices inflated under sustained
      load until every new voice was stolen on arrival (baseline bug). */
   if(v._ur) return; v._ur=true;
+  /* the ledger a voice settles must be the ledger it was registered on (BREAK:
+     offline-bounce voices' deferred timers were decrementing the LIVE count) */
+  const exp=(typeof exporting!=="undefined"&&exporting);
+  if(v._off&&!exp) return;                 /* offline straggler after restore: live ledger untouched */
+  if(!v._off&&exp){ UNREGQ.push(v); return; } /* live voice ending mid-render: settle after restore */
   const i=voiceList.indexOf(v); if(i>=0) voiceList.splice(i,1);
   activeVoices=Math.max(0,activeVoices-(v.units||1)); updVoiceUI(); }
+function unregFlush(){ UNREGQ.splice(0).forEach(v=>{
+  const i=voiceList.indexOf(v); if(i>=0) voiceList.splice(i,1);
+  activeVoices=Math.max(0,activeVoices-(v.units||1)); }); updVoiceUI(); }
 
 function spawnVoice(prog,note,vel,when,dur,dest){
   if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLog==="function") takeLog(prog,note,vel,when,dur,dest);
@@ -1429,7 +1439,9 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     f1.frequency.setTargetAtTime(Math.max(80,cutEff*.5),tr,r/3);
     finish(tr+r*4+.15); };
   v.kill=()=>{ if(v.killed) return; v.killed=true; v.released=true; unreg(v);
-    const n0=ctx.currentTime; out.gain.cancelScheduledValues(n0);
+    /* never clamp the stop before the note's own start — a stolen voice that
+       hasn't sounded yet still gets its onset instead of silent erasure */
+    const n0=Math.max(ctx.currentTime,t); out.gain.cancelScheduledValues(n0);
     out.gain.setTargetAtTime(0.0001,n0,.02);
     stops.forEach(s=>{try{s.stop(n0+.12);}catch(e){}});
     setTimeout(()=>{try{out.disconnect();}catch(e){}},250); };
@@ -1570,14 +1582,20 @@ function releaseNote(n){
   }
   if(keysDown.has(n)||physSet.has(n)) keyVis(n,true);
 }
+let OFFQ=[];
 function noteOff(n){
+  /* during a bounce the globals belong to the offline render — a release now
+     would schedule against the wrong clock; queue it, flush after restore */
+  if(typeof exporting!=="undefined"&&exporting){ if(OFFQ.indexOf(n)<0) OFFQ.push(n); return; }
   keyVis(n,false);
   physSet.delete(n); if(physSet.size===0) chordDone=true;
   if(arpActive()) return;
   if(SUS){ SUSSET.add(n); return; }
   releaseNote(n);
 }
+function offFlush(){ OFFQ.splice(0).forEach(n=>noteOff(n)); }
 function allNotesOff(){
+  if(typeof exporting!=="undefined"&&exporting) return; /* the globals belong to the offline render */
   if(typeof TAKE!=="undefined"&&typeof takeClose==="function") for(const k in TAKE.open) takeClose(+k);
   keysDown.forEach(stk=>stk.forEach(rec=>rec.refs.forEach(v=>v&&v.release&&v.release())));
   keysDown.clear(); physSet.clear(); latchSet.clear(); SUSSET.clear(); chordDone=true; monoV=null;
@@ -2023,18 +2041,32 @@ function ctxEnsure(force){
   const stuck=force||(ctx&&ctx.state==="suspended");
   if(!stuck){ if(nud) nud.classList.remove("on"); return; }
   if(nud) nud.classList.add("on");
+  /* a resume() already in flight (quickBoot after power-off) settles async —
+     the state edge, not a tap, is what clears the banner then */
+  if(ctx&&!ctx._nudgeWatch&&ctx.addEventListener){ ctx._nudgeWatch=true;
+    ctx.addEventListener("statechange",()=>{
+      if(ctx&&ctx.state==="running"&&nud) nud.classList.remove("on"); }); }
   if(ctxEnsure._armed) return; ctxEnsure._armed=true;
-  const kick=()=>{
-    window.removeEventListener("pointerdown",kick,true);
-    window.removeEventListener("keydown",kick,true);
+  ctxEnsure._kick=()=>{
+    window.removeEventListener("pointerdown",ctxEnsure._kick,true);
+    window.removeEventListener("keydown",ctxEnsure._kick,true);
     ctxEnsure._armed=false;
     const done=()=>{ if(nud) nud.classList.remove("on"); };
-    if(ctx&&ctx.state==="suspended"&&ctx.resume) ctx.resume().then(done,done);
+    if(state.powered&&ctx&&ctx.state==="suspended"&&ctx.resume) ctx.resume().then(done,done);
     else done();
   };
-  window.addEventListener("pointerdown",kick,true);
-  window.addEventListener("keydown",kick,true);
+  window.addEventListener("pointerdown",ctxEnsure._kick,true);
+  window.addEventListener("keydown",ctxEnsure._kick,true);
 }
+/* power-off owns the cleanup: no stray listener may resume a unit that is off */
+ctxEnsure.disarm=function(){
+  if(ctxEnsure._armed&&ctxEnsure._kick){
+    window.removeEventListener("pointerdown",ctxEnsure._kick,true);
+    window.removeEventListener("keydown",ctxEnsure._kick,true);
+  }
+  ctxEnsure._armed=false;
+  const nud=document.getElementById("audioNudge"); if(nud) nud.classList.remove("on");
+};
 function powerOn(test){
   if(typeof exporting!=="undefined"&&exporting) return; /* offline render owns ctx */
   const tok=++bootTok;
@@ -2054,11 +2086,14 @@ function powerOff(){
   /* the tape pauses with the unit; the take stays saveable after reboot */
   if(typeof takeStop==="function") takeStop();
   if(typeof LDR!=="undefined") LDR.on=false;
+  /* controller state does not survive a power cycle */
+  SUS=false; SUSSET.clear(); BENDC=0; MODW=0; if(typeof OFFQ!=="undefined") OFFQ.length=0;
   allNotesOff(); state.arp.on=false;
   $("#pwr").classList.remove("on"); $("#pwrLed").classList.remove("on");
   $$(".btn").forEach(b=>b.classList.remove("lit","lit-a"));
   lcd.classList.add("off"); lcd.innerHTML="";
   if(ctx&&ctx.suspend) ctx.suspend();
+  if(typeof ctxEnsure==="function"&&ctxEnsure.disarm) ctxEnsure.disarm();
 }
 function runTest(tok){
   const lines=["TRITON-Rack  << TEST MODE >>","ENTER+5:FULL  +4:SIMM  +9:VER","FULL TEST RUNNING…"];
@@ -2125,17 +2160,22 @@ function latMs(){ if(!ctx) return "—"; const t=(ctx.baseLatency||0)+(ctx.outpu
   },()=>stat("WEB MIDI: permission blocked"));
   function onMsg(e){
     const d=e.data; if(!d||d.length<2) return; const cmd=d[0]&0xF0;
-    if(cmd===0x90 && d[2]>0){ noteOn(d[1],Math.max(.08,d[2]/127));
+    /* MIDI data bytes are 7-bit by spec; mask so injected/corrupt bytes can
+       never put an invalid note into the engine or the SMF writer */
+    const b1=d[1]&0x7F, b2=d.length>2? (d[2]&0x7F) : 0;
+    if(cmd===0x90 && b2>0){ noteOn(b1,Math.max(.08,b2/127));
       if(typeof ctxEnsure==="function") ctxEnsure(); }
-    else if(cmd===0x80 || (cmd===0x90 && d[2]===0)) noteOff(d[1]);
+    else if(cmd===0x80 || (cmd===0x90 && b2===0)) noteOff(b1);
     else if(cmd===0xB0){
-      if(d[1]===64){ const on=d[2]>=64;
-        if(SUS&&!on){ SUS=false; SUSSET.forEach(n=>{ while(keysDown.has(n)&&!physSet.has(n)) releaseNote(n); }); SUSSET.clear(); }
+      if(b1===64){ const on=b2>=64;
+        if(SUS&&!on){ SUS=false;
+          if(typeof exporting!=="undefined"&&exporting){ SUSSET.forEach(n=>{ if(OFFQ.indexOf(n)<0) OFFQ.push(n); }); SUSSET.clear(); }
+          else { SUSSET.forEach(n=>{ while(keysDown.has(n)&&!physSet.has(n)) releaseNote(n); }); SUSSET.clear(); } }
         else SUS=on; }
-      else if(d[1]===1){ MODW=d[2]/127; if(!ctx) return;
+      else if(b1===1){ MODW=b2/127; if(!ctx) return;
         voiceList.forEach(v=>{ if(v.lgP&&v.lfoP!=null) v.lgP.gain.setTargetAtTime(v.lfoP+MODW*35,ctx.currentTime,.05); }); }
-      else if(d[1]===120||d[1]===123){ allNotesOff(); } }
-    else if(cmd===0xE0){ BENDC=(((d[2]<<7)|d[1])-8192)/8192*200; if(!ctx) return;
+      else if(b1===120||b1===123){ allNotesOff(); } }
+    else if(cmd===0xE0){ BENDC=(((b2<<7)|b1)-8192)/8192*200; if(!ctx) return;
       voiceList.forEach(v=>{ if(v.oscs) v.oscs.forEach(o=>{ if(o.src.detune)
         o.src.detune.setTargetAtTime((o.det||0)+BENDC,ctx.currentTime,.01); }); }); }
   }
@@ -2887,8 +2927,12 @@ function ldrToggle(force){
   const want = force!=null? force : !LDR.on;
   if(want&&!LDR.fig) return;
   if(want){ if(state.test) return; if(!state.powered) quickBoot();
+    /* hand the transport off from the dream WITHOUT restarting the tape — the
+       take that began at PLAY keeps rolling (BREAK: the chip used to wipe it) */
+    if(typeof DREAM!=="undefined"&&DREAM.on){ DREAM.on=false; DREAM.pending=null;
+      if(typeof setPlayUI==="function") setPlayUI(false); }
     LDR.on=true; LDR.next=0; LDR.bar=0;
-    if(typeof takeStart==="function") takeStart();
+    if(typeof takeStart==="function"&&!(typeof TAKE!=="undefined"&&TAKE.on)) takeStart();
     document.getElementById("ldrStart").textContent="■ STOP";
     flashRow("RHY: "+LDR.fig);
   } else { LDR.on=false;
@@ -3082,7 +3126,7 @@ function makeMotif(an,grid,rng){
     return {p, di:Math.max(0,Math.min(6,di)), len:i===pick.length-1?2.2:1.4}; });
 }
 
-const DREAM={on:false,seed:0,rng:Math.random,p:null,bar:0,next:0,pans:null,
+const DREAM={on:false,seed:0,rng:Math.random,p:null,bar:0,chordBar:0,next:0,pans:null,
   voic:null,motif:null,pending:null,_barLen:0,_barStart:0};
 function sectFor(bar){ if(bar<4) return "INTRO";
   const S=["GROOVE","GROOVE","LIFT","GROOVE","BREAK","LIFT","GROOVE","GROOVE"];
@@ -3125,8 +3169,11 @@ function dreamScheduleBar(at,f,step,barLen){
   const P=DREAM.p, rng=DREAM.rng, an=figAnalysis(f);
   const sect=sectFor(DREAM.bar), C=SECT_CFG[sect];
   const L=P.prog.length;
-  const base=chordSpecFor(P.scale,P.prog[DREAM.bar%L],P.root+12).tones;
-  const nextBase=chordSpecFor(P.scale,P.prog[(DREAM.bar+1)%L],P.root+12).tones;
+  /* the harmonic cycle has its own counter: a freshly applied progression of
+     ANY length starts on its tonic even when the arrangement skips the intro
+     (BREAK: DREAM.bar=4 opened a 12-bar blues at bar 5) */
+  const base=chordSpecFor(P.scale,P.prog[DREAM.chordBar%L],P.root+12).tones;
+  const nextBase=chordSpecFor(P.scale,P.prog[(DREAM.chordBar+1)%L],P.root+12).tones;
   const tones=voiceLead(base,DREAM.voic,P.root+6,P.root+34); DREAM.voic=tones;
   const bassRoot=Math.max(26,base[0]-12), nextBassRoot=Math.max(26,nextBase[0]-12);
   /* drums — the figure as written, companions by section */
@@ -3153,7 +3200,8 @@ function dreamScheduleBar(at,f,step,barLen){
     spawnVoice(PROGRAMS[P.bass],bassRoot,hv(.95*z1.gain),at+s0*step+z1.dt,(nextAnchor-s0)*step*.9,DREAM.pans.bass);
     if(C.bass>=1&&an.skel[2]!=null){ const z2=humanFeel("bass",rng);
       spawnVoice(PROGRAMS[P.bass],rng()<.6? bassRoot : bassRoot+7,hv(.8*z2.gain),at+an.skel[2]*step+z2.dt,step*1.5,DREAM.pans.bass); }
-    if(nextBassRoot!==bassRoot||rng()<.4){ const z3=humanFeel("bass",rng);
+    const approach=rng()<.4; /* drawn unconditionally — the rng stream position must not depend on where the chords change */
+    if(nextBassRoot!==bassRoot||approach){ const z3=humanFeel("bass",rng);
       spawnVoice(PROGRAMS[P.bass],Math.max(24,nextBassRoot-1),hv(.68*z3.gain),at+(f.grid-1)*step+z3.dt,step*.9,DREAM.pans.bass); }
   }
   /* chords — pads breathe whole bars and ROLL like a hand across keys;
@@ -3182,7 +3230,7 @@ function dreamScheduleBar(at,f,step,barLen){
   }
   ldrPulse(at); pulseAt(at);
   const barNo=(DREAM.bar%8)+1, seedNo=DREAM.seed, nm=DREAM.p.name||"DREAM";
-  const chordIdx=DREAM.bar%L;
+  const chordIdx=DREAM.chordBar%L;
   setTimeout(()=>{ if(!DREAM.on) return;
     const info=document.getElementById("dreamInfo");
     if(info) info.textContent=nm+" · "+sect+" "+barNo+"/8 · ♩"+state.tempo+" · #"+seedNo;
@@ -3203,7 +3251,7 @@ setInterval(()=>{
     const f=LDR_FIG[DREAM.p.fig]; if(!f){ dreamStop(); return; }
     const spb=60/state.tempo, step=f.grid===12? spb/3 : spb/4, barLen=f.grid*step;
     dreamScheduleBar(DREAM.next,f,step,barLen);
-    DREAM.next+=barLen; DREAM.bar++;
+    DREAM.next+=barLen; DREAM.bar++; DREAM.chordBar++;
   }
 },40);
 function applyDream(p,mid){
@@ -3213,7 +3261,8 @@ function applyDream(p,mid){
   state.tempo=(typeof p.tempo==="number"&&isFinite(p.tempo))? p.tempo : (state.tempo||100);
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
   DREAM.voic=null; DREAM.motif=null;
-  DREAM.bar=mid? 4 : 0;
+  DREAM.bar=mid? 4 : 0;      /* the arrangement may skip the intro… */
+  DREAM.chordBar=0;          /* …but the progression always starts on its tonic */
   if(typeof theoryRender==="function") theoryRender();
   flashRow("DREAM: "+(p.name||"?").toUpperCase());
 }
@@ -3270,7 +3319,7 @@ function dreamDice(){
       three-door philosophy: the mix sample-for-sample, the score with the
       groove ridden along, one press). No arming, no tape to forget. ── */
 /*MIDI-BEGIN*/
-var TAKE={on:false,t0:0,ev:[],open:{}};
+var TAKE={on:false,t0:0,ev:[],open:{},gen:0};
 var MIDI_GM_LANE=[36,38,38,39,49,41,42,45,42,48,46,49]; /* kit lanes → GM drums */
 var MIDI_GM_RECIPE={congaL:64,congaM:63,congaH:62,bongoL:61,bongoH:60,
   djembeB:64,djembeT:63,djembeS:62,timbL:66,timbH:65,agogoL:68,agogoH:67,
@@ -3278,14 +3327,20 @@ var MIDI_GM_RECIPE={congaL:64,congaM:63,congaH:62,bongoL:61,bongoH:60,
   triangle:81,surdo:36,talking:79,dunL:41,dunM:45,dunS:47};
 /* GM preview programs per role — a DAW should sound sane before any plugin */
 var MIDI_GM_ROLE={you:0,bass:38,chord:89,lead:80};
-function takeStart(){ if(!ctx) return; TAKE.on=true; TAKE.t0=ctx.currentTime; TAKE.ev=[]; TAKE.open={}; }
-function takeStop(){ TAKE.on=false;
+function takeStart(){ if(!ctx) return; TAKE.gen++; TAKE.on=true; TAKE.t0=ctx.currentTime; TAKE.ev=[]; TAKE.open={}; }
+function takeStop(){ TAKE.gen++; TAKE.on=false;
   if(ctx) for(const k in TAKE.open){ const e=TAKE.open[k].pop(); if(e&&e.dur==null) e.dur=Math.max(.05,ctx.currentTime-TAKE.t0-e.t); }
   TAKE.open={}; }
 function takeTrim(){ /* rolling cap: keep the last ~8 minutes / 40k events */
   if(TAKE.ev.length>40000) TAKE.ev.splice(0,TAKE.ev.length-30000);
   const last=TAKE.ev.length? TAKE.ev[TAKE.ev.length-1].t : 0;
-  if(last>480){ const cut=last-480; TAKE.ev=TAKE.ev.filter(e=>e.t>=cut); TAKE.ev.forEach(e=>e.t-=cut); TAKE.t0+=cut; }
+  if(last>480){ const cut=last-480;
+    /* a still-open hold must survive the trim: clamp its onset to the boundary
+       so the object TAKE.open points at stays in TAKE.ev for its takeClose */
+    const openSet=new Set();
+    for(const k in TAKE.open) TAKE.open[k].forEach(e=>openSet.add(e));
+    TAKE.ev.forEach(e=>{ if(e.t<cut&&openSet.has(e)) e.t=cut; });
+    TAKE.ev=TAKE.ev.filter(e=>e.t>=cut); TAKE.ev.forEach(e=>e.t-=cut); TAKE.t0+=cut; }
 }
 function takeLog(prog,note,vel,when,dur,dest){
   if(!TAKE.on) return;
@@ -3430,6 +3485,7 @@ async function exportTake(){
   await new Promise(r=>setTimeout(r,30));
   const wasOn=TAKE.on;
   if(wasOn) takeStop();               /* close held notes at the bounce point */
+  const tgen=TAKE.gen;                /* restore only if nothing touches the tape meanwhile */
   const evs=TAKE.ev.map(e=>Object.assign({},e));
   evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; });
   const end=evs.reduce((a,e)=>Math.max(a,e.t+(e.dur||0)),0)+2.5;
@@ -3440,7 +3496,7 @@ async function exportTake(){
     const oc=new OfflineAudioContext(2,Math.max(sr,Math.ceil(end*sr)),sr);
     ctx=oc; buildGraph();
     applyFXP(DREAM.p? PROGRAMS[DREAM.p.chord] : (cur||PROGRAMS[0]));
-    voiceList=[]; activeVoices=0; VOICE_CAP=1024;
+    voiceList=[]; activeVoices=0; VOICE_CAP=1e9; /* no steal offline — a render has no realtime pressure, and a steal would erase notes */
     const mk=p=>{ const n=oc.createStereoPanner?oc.createStereoPanner():oc.createGain();
       if(n.pan) n.pan.value=p; n.connect(progBus); return n; };
     const pans={bass:mk(0),chord:mk(-.24),lead:mk(.24)};
@@ -3452,8 +3508,13 @@ async function exportTake(){
     buf=await oc.startRendering();
   }catch(ex){ err=ex; }
   finally{ _graphRestore(S); try{ if(state.powered&&cur) applyFX(); }catch(_){ } }
-  if(wasOn) TAKE.on=true;             /* keep taping the ongoing performance */
-  if(err||!buf){ exporting=false; setSaveUI("RENDER FAILED"); setTimeout(()=>setSaveUI(""),2500);
+  /* keep taping the ongoing performance — unless a STOP or a fresh PLAY touched
+     the tape while the render was in flight (their word beats our snapshot) */
+  if(wasOn&&TAKE.gen===tgen) TAKE.on=true;
+  exporting=false;
+  if(typeof offFlush==="function") offFlush();     /* releases queued during the render */
+  if(typeof unregFlush==="function") unregFlush(); /* live voices that ended mid-render settle the ledger now */
+  if(err||!buf){ setSaveUI("RENDER FAILED"); setTimeout(()=>setSaveUI(""),2500);
     if(typeof console!=="undefined") console.error("SAVE:",err); return; }
   const name="triton-dream-"+(DREAM.seed||"take");
   /* mastering trim: the glue compressor still lets transients past 0 dBFS,
@@ -3465,7 +3526,6 @@ async function exportTake(){
   ldrDownload(wavStereo24(L,R,sr),"audio/wav",name+".wav");
   const mid=midiTake(takeToMidiEvents(evs));
   if(mid) setTimeout(()=>ldrDownload(mid,"audio/midi",name+".mid"),450);
-  exporting=false;
   setSaveUI("SAVED · WAV + MIDI"); setTimeout(()=>setSaveUI(""),2600);
 }
 function dreamDraw(rms,wav){
@@ -3693,4 +3753,16 @@ DEAD BRANCHES: (1) resuming inside noteOn for every source — lost: screen-key 
 KILL-TEST: the Chromium harness's new steps — cold-boot by wire (powered + context + audible voice, nudge agreeing with ctx.state), ctxEnsure(true) forcing the armed path and one synthetic pointerdown clearing and disarming it, pedal/bend byte-exact through _midiInject, and the take/SAVE chain fed entirely by wire bytes. Both suites ALL GREEN; the run on record diced into F MAJOR · pachelbel with all eight cells live.
 THE NON-OBVIOUS CHOICE: the fix is a banner, not cleverness. Every technical dodge around autoplay policy is either against the platform's rules or silently broken next release; the robust engineering is one truthful sentence shown at exactly the right moment, and machinery that makes the single permitted gesture count.
 OPEN QUESTIONS: (1) Note names spell sharps-only (A#maj7 where a flat key wants B♭maj7) — per-key enharmonic spelling is a small table away and the theory bar would read like the book. (2) Hardware velocity curves vary wildly — does the YOU track want a gentle velocity remap, or is raw truth the producer's preference? (3) MIDI clock in (0xF8) could sync the conductor's tempo to a DAW — the wire already carries it; is that the bridge worth building next?
+RING 25 · 2026-08-31 · the second BREAK — five skeptics, eleven confirmed cracks, all mended
+WHAT CHANGED: no new features — the round-2 subsystems (rings 20–24) put under the same adversarial review ring 19 gave round 1: five independent lenses (take/bounce lifecycle, UI-removal orphans, harmony correctness, humanize/scheduling/ledger, MIDI wire & gesture law), every finding then verified against the source by a separate skeptic told to refute by default. Twelve findings verified: ELEVEN CONFIRMED, one refuted (a claimed theory-bar race the skeptic disproved structurally — the scheduler's pending-swap and a bar's display timeout are separated by a full bar, not the 220 ms the claim needed), and the orphans lens found the ring-21 removals clean. All eleven fixed at the root in this ring:
+· THE TAPE (high) — a figure chip pressed mid-dream ran takeStart() synchronously and WIPED the whole rolling take before the watchdog could blink; the chip now hands the transport off (dream out, figure in) and only starts a fresh tape when none is rolling — proven live: 66 events before the chip, 73 after, same t0.
+· THE TAPE (cont.) — a STOP pressed while the offline render was in flight was silently un-done by SAVE's trailing restore (the user's word lost to a stale snapshot); the tape now carries a generation counter and SAVE re-arms only if nothing touched it meanwhile. takeTrim's 8-minute window could orphan a still-held note out of the log while TAKE.open kept pointing at it; open holds now clamp to the boundary and survive.
+· THE LEDGER — offline-bounce voices' deferred cleanup timers fired after the globals swap restored and decremented the LIVE voice count toward the floor; every voice is now stamped with the ledger it registered on, offline stragglers no-op, and live voices that end mid-render settle in a queue flushed after restore. The offline steal itself could silently erase not-yet-sounded notes (kill clamped to currentTime, before their start): kills now land at-or-after the note's own onset, and the render runs uncapped — an offline context has no realtime pressure to steal for.
+· THE WIRE — CC 120/123 (all-notes-off) and note-off/sustain-lift had no exporting gate, so a pedal lift or panic during a bounce scheduled against the offline clock and could kill the render's own voices; allNotesOff is gated like noteOn always was, and releases during a bounce queue and flush the moment the live graph returns. SUS/bend/mod survived power cycles (a latched pedal from before power-off silently sustained the next session); controllers reset at the power boundary. The audio nudge's armed tap-listener outlived powerOff and would silently resume a powered-off unit's context on any tap; power-off now owns a disarm, and the kick refuses to resume an unpowered unit.
+· THE CHANGES — DICE applies mid-flight at arrangement bar 4, which for a 4-bar progression lands on the tonic by accident (4%4=0) but opened a 12-bar blues at bar 5 and Pachelbel at cell 4; the harmonic cycle now has its own counter that starts every freshly-applied progression on its tonic while the arrangement still skips the intro. The bass approach-tone draw short-circuited the rng only on chord-change bars, tying the feel stream's position to where the harmony moves; the draw is unconditional now.
+BANNED (obvious answers set aside first): trusting the first BREAK's clean bill for code written after it (rings 20–24 never faced ring 19's court); fixing the take-wipe by disabling the chips during a dream (reuse-beats-restriction died in ring 19 and stays dead); an exporting guard sprinkled at every caller instead of gating the shared mutator once (allNotesOff) — enumeration is how the NEXT caller gets forgotten.
+DEAD BRANCHES: (1) restoring TAKE.on by re-checking DREAM.on at restore ("is the band still playing?") — lost: a fresh PLAY during the render would pass that test with a brand-new tape the restore would then corrupt; the generation counter says "did ANYTHING touch the tape", which is the actual question. (2) queueing note-offs by force-clearing keysDown during export — lost: mutating input state to dodge a clock bug corrupts the state the flush needs. (3) VOICE_CAP=4096 offline ("bigger headroom") — lost: any finite cap is a guess about take density; the honest number for a context with no realtime constraint is none.
+KILL-TEST: the harness grew the two live regressions (figure-chip handoff preserving the tape mid-dream; power-off resetting SUS/bend, disarming the nudge and its listener) and every prior gate re-ran: node suites [0]–[7] and all 31 browser assertions ALL GREEN. The review itself: 17 agents, five find-lenses, twelve verify-skeptics, zero findings taken on faith, one refuted and recorded.
+THE NON-OBVIOUS CHOICE: the handoff keeps the dream's FX room instead of restoring the browsed program's (what dreamStop does) — the tape is still rolling across the handoff, and a reverb lurch mid-take would be a lie in the bounce's ancestry; the room belongs to the performance, not the menu.
+OPEN QUESTIONS: (1) The queued note-offs flush after restore with their release timed "now" — a fraction late against the take's truth; should the queue stamp intended release times and backdate the durations? (2) unreg's cross-ledger guard fixes the count, but the deep fix remains threading ctx/bus as parameters (ring 19 Q2, still standing, twice paid now). (3) What does a third BREAK lens-set find that these ten lenses across two rounds did not?
 ═══ end rings ═══ -->
