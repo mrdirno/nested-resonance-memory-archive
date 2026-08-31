@@ -30,19 +30,22 @@ const path = __dirname + "/triton-rack.html";
   await page.goto("file://" + path);
   await page.waitForTimeout(600);
 
-  /* layout: 4U dimensions + touch law at design scale */
+  /* layout: 4U dimensions + touch law at design scale; face is PLAY·DICE·SAVE */
   const dims = await page.evaluate(() => {
     const u = document.getElementById("ldru");
     const ids = ["dreamPlay", "dreamDice", "ldrSave"];
     const r = {};
     ids.forEach(id => { const e = document.getElementById(id);
       r[id] = e ? { w: e.offsetWidth, h: e.offsetHeight } : null; });
-    const tiles = [...document.querySelectorAll("#ldrStrip .l4tile")];
+    const th = document.getElementById("ldrTheory");
     return { uw: u.offsetWidth, uh: u.offsetHeight,
-      pads: r, tiles: tiles.length,
-      dreamTiles: document.querySelectorAll("#ldrStrip .l4tile.dream").length,
-      figTiles: document.querySelectorAll("#ldrStrip .l4tile.fig").length,
-      tileMin: Math.min(...tiles.map(t => Math.min(t.offsetWidth, t.offsetHeight))),
+      pads: r,
+      theory: th ? { w: th.offsetWidth, h: th.offsetHeight } : null,
+      thKey: (document.getElementById("thKey") || {}).textContent,
+      thNow: (document.getElementById("thNow") || {}).textContent,
+      hint: !!document.getElementById("ldrMidiHint"),
+      leftovers: ["ldrStrip", "ldrHalf", "ldrRec", "dreamPreset"]
+        .filter(id => document.getElementById(id)),
       scope: (c => ({ w: c.width, h: c.height }))(document.getElementById("dreamScope")) };
   });
   if (dims.uw !== 960 || dims.uh !== 540) fail("4U design size " + dims.uw + "x" + dims.uh);
@@ -53,90 +56,58 @@ const path = __dirname + "/triton-rack.html";
     const p = dims.pads[id];
     if (!p || p.w < 120 || p.h < 120) fail(id + " under touch law: " + JSON.stringify(p));
     else ok(id + " " + p.w + "px"); });
-  if (dims.dreamTiles !== 7) fail("dream tiles " + dims.dreamTiles);
-  if (dims.figTiles !== 51) fail("figure tiles " + dims.figTiles);
-  if (dims.tileMin < 120) fail("tile min dimension " + dims.tileMin);
-  if (dims.dreamTiles === 7 && dims.figTiles === 51 && dims.tileMin >= 120)
-    ok("strip: 7 dream pads + 51 figure tiles, all >=120px");
+  if (!dims.theory || dims.theory.w < 700 || dims.theory.h < 60) fail("theory bar missing/small " + JSON.stringify(dims.theory));
+  else if (dims.thKey !== "—" || dims.thNow !== "press play") fail("theory bar idle text: '" + dims.thKey + "' / '" + dims.thNow + "'");
+  else ok("theory bar idle: " + dims.theory.w + "x" + dims.theory.h + " · 'press play'");
+  if (!dims.hint) fail("MIDI keyboard hint missing");
+  if (dims.leftovers.length) fail("removed surfaces still present: " + dims.leftovers.join(","));
+  else ok("face is PLAY·DICE·SAVE only (strip/HALF/REC/preset-select gone)");
   ok("scope canvas " + dims.scope.w + "x" + dims.scope.h);
 
-  /* behavior: PLAY powers + conducts; readout and LEDs go live */
+  /* behavior: PLAY powers + conducts; readout goes live */
   await page.click("#dreamPlay");
   await page.waitForTimeout(2500);
   const st1 = await page.evaluate(() => ({
     on: DREAM.on, powered: state.powered, seed: DREAM.seed, bar: DREAM.bar,
     readout: document.getElementById("ldrReadout").textContent,
-    drums: document.getElementById("led-drums").classList.contains("on"),
     voices: activeVoices, engine: LDR.engine, fallbacks: LDR.fallbacks,
-    bufs: LDR_BUFS.size, live: document.querySelectorAll("#ldrStrip .l4tile.dream.live").length }));
+    bufs: LDR_BUFS.size }));
   if (!st1.on || !st1.powered) fail("PLAY did not start (on=" + st1.on + " powered=" + st1.powered + ")");
   else if (st1.bar < 1) fail("transport on but bars not advancing (bar " + st1.bar + ")");
   else if (st1.voices < 1) fail("transport on but nothing sounding");
   else ok("PLAY conducts · bar " + st1.bar + " · voices " + st1.voices);
   if (!/#\d+ · \w+ \d\/8 · ♩\d+/.test(st1.readout)) fail("readout: '" + st1.readout + "'");
   else ok("readout live: " + st1.readout);
-  if (!st1.drums) fail("drums LED dark during performance");
-  else ok("part LEDs live");
   if (st1.engine !== "phys") fail("engine not phys: " + st1.engine);
   if (st1.fallbacks) fail(st1.fallbacks + " mapping fallbacks fired");
   if (st1.bufs < 3) fail("physics buffers not rendering (" + st1.bufs + ")");
   else ok("physics engine live · " + st1.bufs + " buffers cached · 0 fallbacks");
-  if (st1.live !== 1) fail("live dream tile count " + st1.live);
+
+  /* theory bar: the Improvisator cheat sheet tracks the running progression */
+  const th1 = await page.evaluate(() => ({
+    cells: document.querySelectorAll("#thProg .thCell").length,
+    prog: DREAM.p.prog.length,
+    key: document.getElementById("thKey").textContent,
+    now: document.querySelectorAll("#thProg .thCell.now").length,
+    thNow: document.getElementById("thNow").textContent,
+    romans: [...document.querySelectorAll("#thProg .thCell b")].map(b => b.textContent) }));
+  if (th1.cells !== th1.prog || th1.cells < 2) fail("theory cells " + th1.cells + " ≠ prog " + th1.prog);
+  else if (!/^[A-G]#? (MAJOR|MINOR)$/.test(th1.key)) fail("theory key: '" + th1.key + "'");
+  else if (th1.now !== 1) fail("theory 'now' highlight count " + th1.now);
+  else if (!/^now [A-G]#?(maj7|m7♭5|mMaj7|m7|7|\+)? · [A-G]/.test(th1.thNow)) fail("theory now text: '" + th1.thNow + "'");
+  else ok("theory bar live: " + th1.key + " · " + th1.romans.join("–") + " · " + th1.thNow);
 
   /* dice mid-performance: bar-quantized swap applies, transport never drops */
   await page.click("#dreamDice");
   await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
   await page.waitForTimeout(200);
-  const st2 = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed }));
+  const st2 = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
+    cells: document.querySelectorAll("#thProg .thCell").length, prog: DREAM.p.prog.length,
+    key: document.getElementById("thKey").textContent }));
   if (!st2.on) fail("DICE killed the performance");
   else if (st2.seed === st1.seed) fail("DICE applied nothing (seed unchanged " + st2.seed + ")");
-  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ")");
-
-  /* HALF-DICE: rhythm section survives, harmony re-rolls, lands on the bar */
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
-  const preHalf = await page.evaluate(() => ({ fig: DREAM.p.fig, kit: DREAM.p.kit,
-    bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead }));
-  await page.click("#ldrHalf");
-  await page.waitForFunction(() => !DREAM.pending, { timeout: 9000 });
-  await page.waitForTimeout(250);
-  const postHalf = await page.evaluate(() => ({ on: DREAM.on, fig: DREAM.p.fig, kit: DREAM.p.kit,
-    bass: DREAM.p.bass, chord: DREAM.p.chord, lead: DREAM.p.lead, name: DREAM.p.name }));
-  if (!postHalf.on) fail("HALF-DICE stopped the transport");
-  else if (postHalf.fig !== preHalf.fig || postHalf.kit !== preHalf.kit) fail("HALF-DICE touched the rhythm section");
-  else if (!/half-cut$/.test(postHalf.name)) fail("HALF-DICE did not apply by the bar (name: " + postHalf.name + ")");
-  else ok("HALF-DICE: rhythm held (" + postHalf.fig + "), harmony re-rolled (" +
-    preHalf.bass + "/" + preHalf.chord + "/" + preHalf.lead + " → " +
-    postHalf.bass + "/" + postHalf.chord + "/" + postHalf.lead + ")");
-
-  /* crate: pin the current take, dice away, replay it note-for-note by seed */
-  const pin1 = await page.evaluate(() => { const s = DREAM.seed; cratePin();
-    return { s, n: LDR_CRATE.length, tile: !!document.querySelector('#ldrStrip .l4tile.crate') }; });
-  if (pin1.n !== 1 || !pin1.tile) fail("pin did not crate the take " + JSON.stringify(pin1));
-  await page.click("#dreamDice");
-  await page.waitForTimeout(2600);
-  await page.evaluate(() => document.querySelector('#ldrStrip .l4tile.crate').scrollIntoView({ inline: "center" }));
-  await page.click('#ldrStrip .l4tile.crate[data-c="0"]');
-  await page.waitForFunction(s => DREAM.seed === s && !DREAM.pending, pin1.s, { timeout: 9000 });
-  const rep = await page.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed, fig: DREAM.p.fig }));
-  if (!rep.on || rep.seed !== pin1.s) fail("crate replay seed " + rep.seed + " ≠ pinned " + pin1.s);
-  else ok("crate: pinned #" + pin1.s + " replayed exactly (" + rep.fig + ")");
-
-  /* hostile crate import: name is HTML — must render inert */
-  const xss = await page.evaluate(async () => {
-    const payload = JSON.stringify({ v: 1, crate: [{ v: 1, seed: 1,
-      name: "<img src=x onerror=window.__xss=1>",
-      p: JSON.parse(JSON.stringify(DREAMS[0])) }] });
-    const got = crateParse(payload);
-    if (got && got.length) { LDR_CRATE.push(got[0]); ldr4Build(); }
-    await new Promise(r => setTimeout(r, 350));
-    const fired = !!window.__xss;
-    const img = !!document.querySelector("#ldrStrip .l4tile.crate img");
-    if (got && got.length) { LDR_CRATE.pop(); ldr4Build(); }
-    return { parsed: got ? got.length : -1, fired, img };
-  });
-  if (xss.parsed !== 1) fail("hostile crate entry did not parse as expected (" + xss.parsed + ")");
-  else if (xss.fired || xss.img) fail("XSS: imported crate name executed/rendered as HTML");
-  else ok("hostile crate name renders inert (escaped)");
+  else if (st2.cells !== st2.prog) fail("theory bar stale after DICE (" + st2.cells + " cells vs prog " + st2.prog + ")");
+  else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key + ")");
 
   /* Bank B: WRITE on the unit — ENTER, dial a slot, ENTER */
   await page.evaluate(() => { dreamStop(); state.mode = "PROG"; setProgram(12); });
@@ -157,16 +128,37 @@ const path = __dirname + "/triton-rack.html";
   if (wr3 !== "B001") fail("bank export/import round-trip: " + wr3);
   else ok("Bank B: file round-trip holds");
 
-  /* figure tile takes over: manual rhythm, dream stops */
-  await page.evaluate(() => { document.querySelector('#ldrStrip .l4tile.fig[data-f="bembe"]').scrollIntoView(); });
-  await page.click('#ldrStrip .l4tile.fig[data-f="bembe"]');
+  /* hostile bank import: slot name is HTML — must render inert in the patch pane */
+  const bxss = await page.evaluate(async () => {
+    const keep = USER_BANK[1];
+    const entry = JSON.parse(JSON.stringify(keep));
+    entry.name = "<img src=x onerror=window.__bx=1>";
+    const bank = []; bank[1] = entry;
+    const got = bankParse(JSON.stringify({ v: 1, bank }));
+    if (!got || !got[1]) return { parsed: false };
+    USER_BANK[1] = got[1]; buildPatchPane();
+    await new Promise(r => setTimeout(r, 350));
+    const fired = !!window.__bx;
+    const img = !!document.querySelector('#patchList .pchip[data-u="1"] img');
+    USER_BANK[1] = keep; buildPatchPane(); updatePatchChips();
+    return { parsed: true, fired, img };
+  });
+  if (!bxss.parsed) fail("hostile bank entry did not parse (validator over-rejects)");
+  else if (bxss.fired || bxss.img) fail("XSS: imported Bank B name executed/rendered as HTML");
+  else ok("hostile Bank B name renders inert (escaped)");
+
+  /* figure pick from the Rhythm pane: manual physics engine takes the transport */
+  await page.click('.tab[data-pane="rhythm"]');
+  await page.waitForTimeout(200);
+  await page.evaluate(() => { document.querySelector('.pchip.fig[data-f="bembe"]').scrollIntoView(); });
+  await page.click('.pchip.fig[data-f="bembe"]');
   await page.waitForTimeout(1500);
   const st3 = await page.evaluate(() => ({ dream: DREAM.on, ldr: LDR.on, fig: LDR.fig,
-    onTile: document.querySelectorAll("#ldrStrip .l4tile.fig.on").length }));
+    onChip: document.querySelectorAll(".pchip.fig.on").length }));
   if (st3.dream) fail("dream still on after figure pick");
   if (!st3.ldr || st3.fig !== "bembe") fail("figure engine not running: " + JSON.stringify(st3));
-  else ok("figure tile takes over: bembe on the physics engine");
-  if (st3.onTile !== 1) fail("figure tile highlight count " + st3.onTile);
+  else ok("Rhythm pane figure pick: bembe on the physics engine");
+  if (st3.onChip !== 1) fail("figure chip highlight count " + st3.onChip);
 
   /* SAVE: jam a note over the running figure, bounce offline, verify both files */
   await page.evaluate(async () => { noteOn(72, .85); await new Promise(r => setTimeout(r, 420)); noteOff(72); });

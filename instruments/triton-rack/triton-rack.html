@@ -219,7 +219,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   letter-spacing:.08em;text-shadow:0 0 8px rgba(80,200,255,.25);}
 #dreamInfo{position:absolute;right:56px;top:40px;width:430px;text-align:right;font-size:10px;letter-spacing:.08em;
   color:#7d95a8;text-transform:uppercase;line-height:1.4;max-height:16px;overflow:hidden;}
-.scope-bezel{position:absolute;left:52px;top:66px;width:856px;height:128px;border-radius:6px;padding:5px;
+.scope-bezel{position:absolute;left:52px;top:66px;width:856px;height:158px;border-radius:6px;padding:5px;
   background:#05070a;box-shadow:inset 0 2px 10px rgba(0,0,0,.9), 0 1px 0 rgba(140,190,220,.12);}
 #dreamScope{width:100%;height:100%;display:block;}
 .l4pad{position:absolute;border-radius:50%;cursor:pointer;user-select:none;
@@ -230,46 +230,36 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 .l4pad:active{transform:translateY(1px) scale(.985);}
 .l4pad .pico{font-size:34px;line-height:1;}
 .l4pad .plab{font-size:9px;letter-spacing:.22em;margin-top:7px;color:#6f8496;text-transform:uppercase;}
-#dreamPlay{left:586px;top:206px;width:160px;height:160px;}
+#dreamPlay{left:586px;top:342px;width:160px;height:160px;}
 #dreamPlay .pico{font-size:46px;}
 #dreamPlay.live{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.6s ease-in-out infinite;}
-#dreamDice{left:428px;top:226px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
+#dreamDice{left:428px;top:362px;width:120px;height:120px;transition:transform .3s, box-shadow .25s, color .25s;}
 #dreamDice:active{transform:rotate(160deg) scale(.94);}
-#ldrHalf{left:780px;top:226px;width:120px;height:120px;color:#9fd8c8;}
-#ldrHalf .pico{font-size:30px;}
-#ldrHalf.spin{transform:rotate(180deg) scale(.94);}
-#ldrSave{left:270px;top:226px;width:120px;height:120px;color:#9fe0b3;}
+/* the theory bar — Improvisator's cheat sheet, live: key, progression in
+   Roman numerals, the sounding chord lit with its tones spelled out */
+#ldrTheory{position:absolute;left:52px;top:238px;width:856px;height:84px;display:flex;gap:8px;}
+.thKey{flex:0 0 178px;border-radius:8px;background:linear-gradient(180deg,#101820,#090e13);
+  border:1px solid #263644;display:flex;flex-direction:column;justify-content:center;padding:0 14px;gap:4px;}
+.thKey b{color:#bfe0f2;font-size:15px;letter-spacing:.08em;}
+.thKey span{color:#5f7484;font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
+#thProg{flex:1;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
+.thCell{flex:1 1 0;min-width:46px;border-radius:8px;background:linear-gradient(180deg,#0f151c,#080c10);
+  border:1px solid #1e2b37;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  transition:border-color .18s, box-shadow .18s;}
+.thCell b{color:#7d95a8;font-size:16px;letter-spacing:.02em;font-weight:700;}
+.thCell span{color:#4d6273;font-size:9.5px;letter-spacing:.06em;}
+.thCell small{color:#3d4f5e;font-size:8px;letter-spacing:.08em;display:none;}
+.thCell.now{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 16px rgba(87,214,255,.28);}
+.thCell.now b{color:#aef0ff;}
+.thCell.now span{color:#8fd8f2;}
+.thCell.now small{display:block;color:#57a8c9;}
+#ldrMidiHint{position:absolute;left:56px;top:366px;width:180px;font-size:9.5px;color:#587082;
+  line-height:1.7;letter-spacing:.08em;text-transform:uppercase;}
+#ldrMidiHint b{color:#8fb8cf;}
+#ldrSave{left:270px;top:362px;width:120px;height:120px;color:#9fe0b3;}
 #ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
-#ldrSaveLbl{position:absolute;left:210px;top:356px;width:240px;text-align:center;font-size:11px;
+#ldrSaveLbl{position:absolute;left:210px;top:496px;width:240px;text-align:center;font-size:11px;
   letter-spacing:.1em;color:#ffd77e;min-height:14px;}
-#ldrLeds{position:absolute;left:56px;top:224px;width:150px;}
-.l4led{display:flex;align-items:center;gap:10px;margin:10px 0;}
-.l4led i{width:12px;height:12px;border-radius:50%;background:#20303c;box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
-  transition:background .15s, box-shadow .15s;}
-.l4led.on i{background:#57d6ff;box-shadow:0 0 10px rgba(87,214,255,.75);}
-.l4led.on.amber i{background:#ffb23c;box-shadow:0 0 10px rgba(255,178,60,.75);}
-.l4led span{font-size:9px;letter-spacing:.22em;color:#6f8496;text-transform:uppercase;}
-#ldrStrip{position:absolute;left:40px;top:390px;width:880px;height:134px;
-  display:flex;gap:10px;align-items:stretch;overflow-x:auto;overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;padding:2px 12px 6px;scrollbar-width:thin;}
-.l4tile{flex:0 0 auto;height:120px;border-radius:10px;cursor:pointer;user-select:none;
-  display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 14px;text-align:left;
-  background:linear-gradient(180deg,#131a22,#0a0e13);border:1px solid #263644;
-  box-shadow:0 2px 8px rgba(0,0,0,.45), inset 0 1px 0 rgba(160,220,255,.08);}
-.l4tile:active{transform:scale(.97);}
-.l4tile b{color:#bfe0f2;font-size:13px;letter-spacing:.04em;}
-.l4tile .tmeta{color:#5f7484;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;}
-.l4tile.dream{min-width:150px;background:linear-gradient(180deg,#141d2a,#0a0f16);}
-.l4tile.dream b{font-size:14px;}
-.l4tile.fig{min-width:132px;}
-.l4tile.on{border-color:#57d6ff;box-shadow:inset 0 0 0 1px #57d6ff, 0 0 14px rgba(87,214,255,.25);}
-.l4tile.pin{min-width:120px;border-color:#4a4326;background:linear-gradient(180deg,#1d1a10,#0e0c07);}
-.l4tile.pin b{color:#e8d089;}
-.l4tile.crate{min-width:150px;border-color:#5a4a20;background:linear-gradient(180deg,#1e1910,#0f0c07);}
-.l4tile.crate b{color:#ffd77e;font-size:12px;}
-.l4tile.crate .tmeta{color:#8a7748;}
-.l4tile.live{border-color:#ffb23c;box-shadow:inset 0 0 0 1px #ffb23c, 0 0 14px rgba(255,178,60,.3);}
-.l4sep{flex:0 0 2px;height:120px;border-radius:2px;background:linear-gradient(180deg,transparent,#2b3a49,transparent);}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
   50%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 30px rgba(255,190,90,.65);}}
 .tab{transition:color .2s, box-shadow .2s, background .2s;}
@@ -311,20 +301,16 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <div class="ldru-sub">CONDUCTOR&nbsp;4U&nbsp;·&nbsp;drives&nbsp;the&nbsp;TRITON&nbsp;below</div>
   <div id="ldrReadout">READY</div>
   <div id="dreamInfo">READY · press play</div>
-  <div class="scope-bezel"><canvas id="dreamScope" width="856" height="118"></canvas></div>
-  <div id="ldrLeds">
-    <div class="l4led" id="led-drums"><i></i><span>Drums</span></div>
-    <div class="l4led" id="led-bass"><i></i><span>Bass</span></div>
-    <div class="l4led" id="led-chord"><i></i><span>Chords</span></div>
-    <div class="l4led" id="led-lead"><i></i><span>Lead</span></div>
+  <div class="scope-bezel"><canvas id="dreamScope" width="856" height="148"></canvas></div>
+  <div id="ldrTheory">
+    <div class="thKey"><b id="thKey">—</b><span id="thNow">press play</span></div>
+    <div id="thProg"></div>
   </div>
+  <div id="ldrMidiHint"><b>MIDI keyboard:</b> plug in &amp; play along — the theory bar shows your key, and your notes join the take.</div>
   <div class="l4pad" id="ldrSave" title="Save the take — WAV + MIDI, offline-rendered"><span class="pico">⤓</span><span class="plab">Save</span></div>
   <div id="ldrSaveLbl"></div>
   <div class="l4pad" id="dreamDice" title="New combination"><span class="pico">🎲</span><span class="plab">Dice</span></div>
   <div class="l4pad" id="dreamPlay" title="Dream performance"><span class="pico">▶</span><span class="plab">Play</span></div>
-  <div class="l4pad" id="ldrHalf" title="Keep the rhythm, re-roll harmony and melody"><span class="pico">◐</span><span class="plab">Half</span></div>
-  <select id="dreamPreset" style="display:none"></select>
-  <div id="ldrStrip"></div>
 </div></div></div>
 
 <div class="wrap"><div id="unitScale"><div id="unit">
@@ -594,15 +580,6 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
     </div>
   </div>
   <div class="spec-grid">
-    <div class="spec"><b>Producer's crate</b><span>Takes pinned with ★ on the Lucky Dreamer face (<span id="crateCount">0</span> pinned) replay note-for-note by seed. The crate lives in this session; carry it between sessions as a file.</span>
-      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-        <button class="oct-btn" id="crateExp">Export crate → .json</button>
-        <button class="oct-btn" id="crateImp">Import crate…</button>
-        <span id="crateMsg" style="color:var(--text-dim);font-size:12px;"></span>
-        <input type="file" id="crateFile" accept=".json,application/json" style="display:none">
-      </div>
-    </div>
-    <div class="spec"><b>Play live right here</b><span>Plug a USB or Bluetooth MIDI keyboard into this device — Web MIDI picks it up automatically (status above the keys). Pitch bend (±2), mod wheel vibrato and the sustain pedal all work. The engine runs at your device's interactive latency, shown on the GLOBAL page.</span></div>
     <div class="spec"><b>User Bank B</b><span>Sixteen slots for your own programs — edit any sound (PROG pages P1–P3), press ENTER on the unit, dial a slot, ENTER again. Written programs (<span id="bankCount">0</span>/16) appear in the Patches tab and export/import as a file, so your bank outlives the browser tab.</span>
       <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <button class="oct-btn" id="bankExp">Export Bank B → .json</button>
@@ -2862,7 +2839,6 @@ function ldrChips(){
     const b=e.target.closest(".pchip.fig"); if(!b) return;
     LDR.fig=b.dataset.f;
     document.querySelectorAll(".pchip.fig").forEach(x=>x.classList.toggle("on",x===b));
-    if(typeof ldrSyncStripFig==="function") ldrSyncStripFig(LDR.fig);
     const wf=LDR_FIG[LDR.fig];
     if(wf) ldrWarm([LDR.fig].concat((wf.also||[]).slice(0,3)));
     ldrInfo();
@@ -2946,53 +2922,46 @@ function dreamPickSurprise(rng){
     chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:f.grid===16&&rng()<.3};
 }
 
-/* HALF-DICE core, pure: keep the rhythm section (figure, companions, kit,
-   tempo, extraKick), re-roll harmony and melody voices only */
-function dreamHalfCut(base,rng){
-  const cat=c=>PROGRAMS.map((p,i)=>({p,i})).filter(x=>c.includes(x.p.cat)).map(x=>x.i);
-  const pick=a=>a[Math.floor(rng()*a.length)];
-  const PRGS=[[0,5,3,4],[0,3,5,4],[1,4,0,0],[0,5,6,4],[0,3,4,0],[0,0,5,6]];
-  const p=JSON.parse(JSON.stringify(base));
-  p.name=(String(base.name||"Dream").replace(/ · half-cut$/,""))+" · half-cut";
-  p.bass=pick(cat(["BASS"]));
-  p.chord=pick(cat(["PAD","VOX","ORGAN","KEYBOARD"]));
-  p.lead=pick(cat(["LEAD","BELL","PLUCK"]));
-  p.scale=rng()<.5?"minor":"major";
-  p.root=40+Math.floor(rng()*7);
-  p.prog=pick(PRGS);
-  p.chordStyle=rng()<.5?"pad":"stab";
-  return p;
+/* ── THE THEORY BAR (Improvisator's cheat sheet, live): the key, the
+   progression in Roman numerals, the sounding chord spelled out — so a
+   player at a MIDI keyboard always knows what to reach for ── */
+const TH_NN=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+function romanFor(deg,scale){
+  const MAJ=["I","ii","iii","IV","V","vi","vii\u00b0"],MIN=["i","ii\u00b0","III","iv","v","VI","VII"];
+  return (scale==="minor"?MIN:MAJ)[((deg%7)+7)%7];
 }
-/* ── the producer's crate: pinned takes, replayable by seed, portable as JSON ── */
-var LDR_CRATE=[];
-function crateEntry(p,seed){
-  return {v:1,seed:seed|0,name:(String(p.name||"Dream").slice(0,40))+" #"+(seed|0),
-    p:JSON.parse(JSON.stringify(p)),at:Date.now()};
+function chordLabel(scale,deg,root){
+  const t=chordTones(scale,deg,root);
+  const pc=((t[0]%12)+12)%12, th=t[1]-t[0], fi=t[2]-t[0], se=t[3]-t[0];
+  let q="";
+  if(th===4&&fi===7&&se===11) q="maj7";
+  else if(th===4&&fi===7&&se===10) q="7";
+  else if(th===3&&fi===7&&se===10) q="m7";
+  else if(th===3&&fi===6&&se===10) q="m7\u266d5";
+  else if(th===3&&fi===7&&se===11) q="mMaj7";
+  else if(th===4&&fi===8) q="+";
+  return {name:TH_NN[pc]+q, tones:t.map(n=>TH_NN[((n%12)+12)%12]).join(" ")};
 }
-function crateValidate(e){
-  const own=(o,k)=>typeof k==="string"&&Object.prototype.hasOwnProperty.call(o,k);
-  const slot=i=>Number.isInteger(i)&&i>=0&&i<PROGRAMS.length;
-  if(!e||typeof e!=="object") return false;
-  if(typeof e.seed!=="number"||!isFinite(e.seed)) return false;
-  if(typeof e.name!=="string"||e.name.length>64) return false;
-  const p=e.p; if(!p||typeof p!=="object") return false;
-  if(!own(LDR_FIG,p.fig)) return false;
-  if(!slot(p.kit)||PROGRAMS[p.kit].cat!=="DRUMS") return false;
-  if(!slot(p.bass)||!slot(p.chord)||!slot(p.lead)) return false;
-  if(!Array.isArray(p.prog)||!p.prog.length||!p.prog.every(d=>Number.isInteger(d)&&d>=0&&d<=6)) return false;
-  if(!own(SCALES,p.scale)) return false;
-  if(typeof p.tempo!=="number"||!(p.tempo>=40&&p.tempo<=300)) return false;
-  if(typeof p.root!=="number"||!(p.root>=24&&p.root<=72)) return false;
-  if(!Array.isArray(p.comps||[])) return false;
-  if(!(p.comps||[]).every(c=>typeof c==="string"&&own(LDR_FIG,ldrBase(c).id))) return false;
-  return true;
+function theoryData(p){
+  return (p&&p.prog?p.prog:[]).map(deg=>Object.assign({roman:romanFor(deg,p.scale)},
+    chordLabel(p.scale,deg,p.root)));
 }
-function crateParse(json){
-  try{ const o=JSON.parse(json);
-    const list=Array.isArray(o)? o : (o&&Array.isArray(o.crate)? o.crate : null);
-    if(!list) return null;
-    return list.filter(crateValidate).slice(0,24);
-  }catch(_){ return null; }
+function theoryRender(){
+  const host=document.getElementById("thProg"), k=document.getElementById("thKey");
+  if(!host||!k) return;
+  const p=DREAM.p;
+  if(!p){ k.textContent="\u2014"; host.innerHTML="";
+    const n=document.getElementById("thNow"); if(n) n.textContent="press play"; return; }
+  const cells=theoryData(p);
+  k.textContent=TH_NN[((p.root%12)+12)%12]+" "+(p.scale==="minor"?"MINOR":"MAJOR");
+  host.innerHTML=cells.map((c,i)=>'<div class="thCell" data-i="'+i+'"><b>'+c.roman+
+    '</b><span>'+c.name+'</span><small>'+c.tones+'</small></div>').join("");
+}
+function theoryNow(idx){
+  document.querySelectorAll("#thProg .thCell").forEach(x=>x.classList.toggle("now",+x.dataset.i===idx));
+  const p=DREAM.p, n=document.getElementById("thNow");
+  if(p&&n){ const c=theoryData(p)[idx];
+    if(c) n.textContent="now "+c.name+" \u00b7 "+c.tones; }
 }
 /* ── the figure teaches the band: skeleton (anchors), response slots (gaps) ── */
 function figAnalysis(f){
@@ -3112,13 +3081,13 @@ function dreamScheduleBar(at,f,step,barLen){
   }
   ldrPulse(at); pulseAt(at);
   const barNo=(DREAM.bar%8)+1, seedNo=DREAM.seed, nm=DREAM.p.name||"DREAM";
-  const parts={drums:true,bass:C.bass>0,chord:true,lead:C.lead>0&&DREAM.bar>=4};
+  const chordIdx=DREAM.bar%L;
   setTimeout(()=>{ if(!DREAM.on) return;
     const info=document.getElementById("dreamInfo");
     if(info) info.textContent=nm+" · "+sect+" "+barNo+"/8 · ♩"+state.tempo+" · #"+seedNo;
     const ro=document.getElementById("ldrReadout");
     if(ro) ro.textContent="#"+seedNo+" · "+sect+" "+barNo+"/8 · ♩"+state.tempo;
-    ldr4Leds(parts,sect);
+    if(typeof theoryNow==="function") theoryNow(chordIdx);
   }, Math.max(0,(at-ctx.currentTime)*1000));
   DREAM._barLen=barLen; DREAM._barStart=at;
 }
@@ -3139,15 +3108,12 @@ setInterval(()=>{
 function applyDream(p,mid){
   DREAM.p=p; DREAM.seed=p._seed!=null? p._seed : DREAM.seed;
   if(typeof ldrWarm==="function") ldrWarm([p.fig].concat(p.comps||[]));
-  const _sel=document.getElementById("dreamPreset");
-  if(_sel) document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>
-    x.classList.toggle("live",x.dataset.d===_sel.value));
-  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.remove("on"));
   DREAM.rng=mulberry(DREAM.seed||1);
   state.tempo=(typeof p.tempo==="number"&&isFinite(p.tempo))? p.tempo : (state.tempo||100);
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
   DREAM.voic=null; DREAM.motif=null;
   DREAM.bar=mid? 4 : 0;
+  if(typeof theoryRender==="function") theoryRender();
   flashRow("DREAM: "+(p.name||"?").toUpperCase());
 }
 function setPlayUI(on){
@@ -3158,15 +3124,9 @@ function setPlayUI(on){
   if(!on){
     const i=document.getElementById("dreamInfo"); if(i) i.textContent="READY · press play";
     const ro=document.getElementById("ldrReadout"); if(ro) ro.textContent="READY";
-    ["led-drums","led-bass","led-chord","led-lead"].forEach(id=>{
-      const e=document.getElementById(id); if(e) e.classList.remove("on","amber"); });
-    document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.remove("live"));
+    document.querySelectorAll("#thProg .thCell").forEach(x=>x.classList.remove("now"));
+    const tn=document.getElementById("thNow"); if(tn) tn.textContent="press play";
   }
-}
-function ldr4Leds(parts,sect){
-  [["led-drums",parts.drums],["led-bass",parts.bass],["led-chord",parts.chord],["led-lead",parts.lead]]
-    .forEach(([id,on])=>{ const e=document.getElementById(id); if(!e) return;
-      e.classList.toggle("on",!!on); e.classList.toggle("amber",sect==="BREAK"); });
 }
 function startWith(p,skipIntro){
   if(state.test) return;
@@ -3179,10 +3139,10 @@ function startWith(p,skipIntro){
   takeStart(); /* a fresh take begins with the transport; dice mid-flight continues it */
 }
 function dreamStart(){
-  const sel=document.getElementById("dreamPreset");
-  const base=DREAMS[+sel.value];
-  const seedRng=mulberry((Date.now()%2147483647)|1);
-  const p=base.surprise? dreamPickSurprise(seedRng) : JSON.parse(JSON.stringify(base));
+  /* PLAY resumes the current dream's recipe with a fresh seed, or opens the
+     first curated dream cold; DICE is the only chooser — the donor's grammar */
+  const p=DREAM.p? JSON.parse(JSON.stringify(DREAM.p)) : JSON.parse(JSON.stringify(DREAMS[0]));
+  delete p._seed;
   startWith(p,false);
 }
 function dreamStop(silent){
@@ -3194,24 +3154,13 @@ function dreamDice(){
   ["dreamDice","fabDice"].forEach(id=>{ const b=document.getElementById(id);
     if(b){ b.classList.add("spin"); setTimeout(()=>b.classList.remove("spin"),380); } });
   const rng=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
-  const sel=document.getElementById("dreamPreset");
   let p;
   if(rng()<.5){ const ci=Math.floor(rng()*(DREAMS.length-1));
-    p=JSON.parse(JSON.stringify(DREAMS[ci])); if(sel) sel.value=String(ci); }
-  else { p=dreamPickSurprise(rng); if(sel) sel.value=String(DREAMS.length-1); }
+    p=JSON.parse(JSON.stringify(DREAMS[ci])); }
+  else { p=dreamPickSurprise(rng); }
   p._seed=(Date.now()%100000)|0;
   if(DREAM.on) DREAM.pending=p;
   else startWith(p,true);
-}
-function dreamHalfDice(){
-  const b=document.getElementById("ldrHalf");
-  if(b){ b.classList.add("spin"); setTimeout(()=>b.classList.remove("spin"),380); }
-  if(!DREAM.on||!DREAM.p){ dreamDice(); return; }
-  const rng=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
-  const p=dreamHalfCut(DREAM.p,rng);
-  p.tempo=state.tempo;            /* the groove keeps its clock */
-  p._seed=(Date.now()%100000)|0;  /* new seed = new motifs in the same gaps */
-  DREAM.pending=p;                /* lands on the bar line, like DICE */
 }
 /* ── THE TAKE: from the moment PLAY (or a figure) starts, everything the
       engines schedule AND everything the player performs — screen keys or a
@@ -3439,132 +3388,16 @@ function dreamDraw(rms,wav){
     g.fillRect(0,cv.height-3,cv.width*ph,3);
   }
 }
-/* ── the 4U strip: dream pads + the figure crate, one scrollable shelf ── */
-function ldrSyncStripFig(k){
-  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.toggle("on",x.dataset.f===k));
-  document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.remove("live"));
-}
-function ldrPickDream(i){
-  const sel=document.getElementById("dreamPreset"); if(sel) sel.value=String(i);
-  document.querySelectorAll("#ldrStrip .l4tile.dream").forEach(x=>x.classList.toggle("live",+x.dataset.d===i));
-  document.querySelectorAll("#ldrStrip .l4tile.fig").forEach(x=>x.classList.remove("on"));
-  const base=DREAMS[i];
-  const rng=mulberry((Date.now()%2147483647)|1);
-  const p=base.surprise? dreamPickSurprise(rng) : JSON.parse(JSON.stringify(base));
-  if(DREAM.on){ p._seed=(Date.now()%100000)|0; DREAM.pending=p; } /* bar-line handover, like DICE */
-  else startWith(p,false);
-}
-function ldrPickFig(k){
-  if(!LDR_FIG[k]) return;
-  LDR.fig=k;
-  document.querySelectorAll(".pchip.fig").forEach(x=>x.classList.toggle("on",x.dataset.f===k));
-  ldrSyncStripFig(k);
-  if(typeof ldrWarm==="function") ldrWarm([k].concat((LDR_FIG[k].also||[]).slice(0,3)));
-  if(typeof ldrInfo==="function") ldrInfo();
-  if(DREAM.on) dreamStop();
-  ldrToggle(true);
-}
-function crateCountUI(){
-  const cc=document.getElementById("crateCount"); if(cc) cc.textContent=LDR_CRATE.length;
-}
-function cratePin(){
-  if(!DREAM.p||DREAM.seed==null){
-    const ro=document.getElementById("ldrReadout");
-    if(ro&&!DREAM.on){ const old=ro.textContent; ro.textContent="NOTHING TO PIN — PLAY FIRST";
-      setTimeout(()=>{ if(!DREAM.on) ro.textContent=old; },1400); }
-    return;
-  }
-  if(LDR_CRATE.length>=24) LDR_CRATE.shift();
-  LDR_CRATE.push(crateEntry(DREAM.p,DREAM.seed));
-  ldr4Build();
-  const t=document.getElementById("ldrPinTile");
-  if(t){ t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),500); }
-}
-function cratePlay(i){
-  const e=LDR_CRATE[i]; if(!e) return;
-  const p=JSON.parse(JSON.stringify(e.p)); p._seed=e.seed;
-  if(DREAM.on) DREAM.pending=p; /* bar-line handover */
-  else startWith(p,true);
-}
-function ldr4Build(){
-  const host=document.getElementById("ldrStrip"); if(!host) return;
-  let h='<div class="l4tile pin" id="ldrPinTile"><b>★ Pin</b><span class="tmeta">save this take</span></div>';
-  LDR_CRATE.forEach((e,i)=>{ h+='<div class="l4tile crate" data-c="'+i+'" title="tap = replay · hold = remove"><b>'+
-    esc(e.name)+'</b><span class="tmeta">pinned take</span></div>'; });
-  h+='<div class="l4sep"></div>';
-  DREAMS.forEach((d,i)=>{ h+='<div class="l4tile dream" data-d="'+i+'"><b>'+
-    (d.surprise?"🎲 Surprise Me":d.name)+'</b><span class="tmeta">'+
-    (d.surprise?"new every time":"♩"+d.tempo+" · "+d.fig)+'</span></div>'; });
-  h+='<div class="l4sep"></div>';
-  Object.keys(LDR_FIG).forEach(k=>{ const f=LDR_FIG[k];
-    const v=f.verify==="transcribed"?"·t":f.verify==="derived"?"·d":"·?";
-    h+='<div class="l4tile fig" data-f="'+k+'"><b>'+k+'</b><span class="tmeta">'+
-    f.grid+'-pulse '+v+'</span></div>'; });
-  host.innerHTML=h;
-  crateCountUI();
-  if(host._wired) return; host._wired=true;
-  let lpTimer=null, lpFired=false;
-  host.addEventListener("pointerdown",e=>{
-    const ct=e.target.closest(".l4tile.crate"); if(!ct) return;
-    lpFired=false;
-    lpTimer=setTimeout(()=>{ lpFired=true;
-      LDR_CRATE.splice(+ct.dataset.c,1); ldr4Build(); },600);
-  });
-  ["pointerup","pointercancel"].forEach(ev=>host.addEventListener(ev,()=>clearTimeout(lpTimer)));
-  host.addEventListener("click",e=>{
-    if(e.target.closest("#ldrPinTile")){ cratePin(); return; }
-    const ct=e.target.closest(".l4tile.crate");
-    if(ct){ if(lpFired){ lpFired=false; return; } cratePlay(+ct.dataset.c); return; }
-    const dt=e.target.closest(".l4tile.dream");
-    if(dt){ ldrPickDream(+dt.dataset.d); return; }
-    const ft=e.target.closest(".l4tile.fig");
-    if(ft) ldrPickFig(ft.dataset.f);
-  });
-}
 function ldrConductorInit(){
   /* the dock (#fab) renders BELOW the scripts — this init must wait for the DOM.
      (The shipped 1U had this latent: fabPlay was null at script time, so the
      dock's handlers and the preset-change listener never attached.) */
   const on=(id,fn)=>{ const e=document.getElementById(id); if(e) e.addEventListener("click",fn); };
-  const sel=document.getElementById("dreamPreset");
-  if(sel&&!sel.options.length){
-    DREAMS.forEach((d,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=d.name; sel.appendChild(o); });
-    sel.value="0";
-    sel.addEventListener("change",()=>{ if(DREAM.on) dreamStart(); });
-  }
   const toggle=()=>{ DREAM.on? dreamStop() : dreamStart(); };
   on("dreamPlay",toggle); on("fabPlay",toggle);
   on("dreamDice",dreamDice); on("fabDice",dreamDice);
-  on("ldrHalf",dreamHalfDice);
   on("fabSave",exportTake); on("ldrSave",exportTake);
-  on("crateExp",()=>{
-    const msg=document.getElementById("crateMsg");
-    if(!LDR_CRATE.length){ if(msg){ msg.textContent="crate is empty — pin a take first"; setTimeout(()=>msg.textContent="",2000);} return; }
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob([JSON.stringify({v:1,crate:LDR_CRATE},null,1)],{type:"application/json"}));
-    a.download="lucky-dreamer-crate.json";
-    document.body.appendChild(a); a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
-  });
-  on("crateImp",()=>{ const f=document.getElementById("crateFile"); if(f) f.click(); });
-  const cf=document.getElementById("crateFile");
-  if(cf) cf.addEventListener("change",()=>{
-    const msg=document.getElementById("crateMsg");
-    const file=cf.files&&cf.files[0]; if(!file) return;
-    const rd=new FileReader();
-    rd.onload=()=>{ const got=crateParse(String(rd.result));
-      if(!got){ if(msg) msg.textContent="not a crate file"; setTimeout(()=>{if(msg)msg.textContent="";},2500); cf.value=""; return; }
-      const seen=new Set(LDR_CRATE.map(e=>e.seed+"|"+e.name));
-      let added=0;
-      got.forEach(e=>{ if(LDR_CRATE.length<24&&!seen.has(e.seed+"|"+e.name)){ LDR_CRATE.push(e); added++; } });
-      ldr4Build();
-      if(msg) msg.textContent=added+" take"+(added===1?"":"s")+" imported"+(got.length>added?" ("+(got.length-added)+" skipped)":"");
-      setTimeout(()=>{ if(msg) msg.textContent=""; },3000);
-      cf.value="";
-    };
-    rd.readAsText(file);
-  });
-  ldr4Build();
+  if(typeof theoryRender==="function") theoryRender();
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
 else ldrConductorInit();
@@ -3731,4 +3564,11 @@ DEAD BRANCHES: (1) rendering the WAV from the seed alone (donor-literal: regrow 
 KILL-TEST: node suite [6] rewritten for the pipeline — held-note duration patching (0.75 s measured), role→channel mapping, meter meta, GM preview program, tempo map 120→60 to the tick, lead-in preserved; the Chromium harness jams a real note over the running figure, presses SAVE, and reads the downloads back: 1.9 MB RIFF/WAVE at 0.98 FS peak (normalize proven — it measured 1.00 clipped before the trim landed), MThd with a YOU track and 15 note-ons, transport and tape alive after the bounce, power-off pausing the tape without destroying the saveable take.
 THE NON-OBVIOUS CHOICE: the take never stops being a take — SAVE closes held notes, bounces, then re-opens the same tape, so a producer can save at bar 32 and keep playing to bar 64 and save again, each bounce a superset of the last. The tape is the session, not a mode.
 OPEN QUESTIONS: (1) The bounce replays kit-lane events at CURRENT transpose/tune — should the log freeze those per event? (2) The donor's encodeWav takes an rng for TPDF dither; at 24-bit the quantization floor is −144 dB and the trim made it moot, but is dither owed on principle? (3) The pans for bass/chords/lead are rebuilt at fixed positions in the bounce — when per-dream stereo staging arrives, the log will need to carry pan.
+RING 21 · 2026-08-31 · the face goes quiet — PLAY, DICE, SAVE, and a cheat sheet
+WHAT CHANGED: the user's second verdict accepted in full — the 4U face had grown a control surface (7 dream tiles + 51 figure tiles + crate row + HALF pad + part LEDs + a preset select) when the donor's whole grammar is one big ROLL and a save. All of it is gone from the face: the strip, the crate and its import/export card, HALF-DICE, the LEDs, the hidden select. What remains is the donor's three verbs — PLAY (start a dream), DICE (roll a new one), SAVE (take the wav+mid home) — and ONE informational surface where the strip was: THE THEORY BAR, an homage to Improvisator's cheat sheet. A key card (root + mode), the running progression as Roman-numeral cells, and on every bar line the sounding chord lights up with its name and its spelled tones ("now Am7 · A C E G") — so a player at a MIDI keyboard always knows what to reach for, which is the point of the whole machine: the pattern plays, the human plays along, the take keeps both. A small printed hint says exactly that. The figures didn't die — they moved home to the Rhythm tab where their 51 chips always lived; the face is for performing, the tabs are for browsing.
+BANNED (obvious answers set aside first): hiding the strip behind a disclosure toggle (a hidden surface is still a surface, and its code still rots); keeping HALF-DICE because it tested well (the user's bar is fewer options, and a producer who wants a variation presses DICE again); replacing the LEDs with a smaller meter (information that answers no player question is decoration).
+DEAD BRANCHES: (1) theory bar as a scrolling chord ticker (upcoming chords sliding left) — lost: a static row the eye can rest on IS the cheat sheet; motion is for the scope. (2) Note names on the screen keyboard keys instead of a bar (label C-E-G on the keys to press) — lost: it teaches key positions, not harmony, and dies the moment a hardware keyboard is the controller. (3) Keeping the crate data model while dropping its tiles ("maybe a menu later") — lost: Ring 16's own law says the crate is tiles or nothing; stripped of its gesture it is dead weight, and the take (wav+mid, seed in the filename) is the keeper that survives.
+KILL-TEST: node suite [3] gates the theory engine directly — romanFor across both modes (vii° included), chordLabel spelling Am7 / G7 / Cmaj7 / Bm7♭5 from real dream progressions, theoryData length = progression length for all six dreams; the Chromium harness asserts the face carries NO strip/HALF/REC/select, the theory bar idles at "press play", goes live with key + romans + exactly one lit NOW cell tracking the bar ("A MINOR · i–VI–iv–v · now Am7 · A C E G" in the run on record), re-renders on DICE, and the Rhythm-tab chips still take the transport; the Bank-B hostile-name import now carries the XSS watch the crate test used to hold. Both suites ALL GREEN.
+THE NON-OBVIOUS CHOICE: subtraction needed a replacement, not a void — the strip's 856×84 px became the theory bar's exact footprint, because the space a producer's eye already visits is where the cheat sheet earns its keep. The face lost six controls and gained zero: information in, options out.
+OPEN QUESTIONS: (1) The progressions are still each dream's hardcoded 4 degrees — a real progression bank (ii-V-I, 12-bar, Andalusian…) with per-style pools is the next cut, and the theory bar is already its display. (2) The engine's parts play metronome-honest — where does the human feel (timing/velocity breath, per-style swing) enter so the exported MIDI reads played, not programmed? (3) A hardware keyboard on a fresh page can play before any tap — the AudioContext resume path needs a hand the hint doesn't yet give.
 ═══ end rings ═══ -->

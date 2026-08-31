@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,dreamHalfCut,crateEntry,crateValidate,crateParse,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -115,43 +115,25 @@ for (let sd = 1; sd <= 200; sd++) {
     if (!LDR_FIG[r.id] || LDR_FIG[r.id].grid !== LDR_FIG[p.fig].grid) fail("surprise comp " + sd + " " + c); });
 }
 for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " + b);
-{ let hBad = 0;
-  for (let sd = 1; sd <= 50; sd++) {
-    const base = JSON.parse(JSON.stringify(G3.DREAMS[sd % 6]));
-    const p = G3.dreamHalfCut(base, G3.mulberry(sd));
-    if (p.fig !== base.fig || JSON.stringify(p.comps) !== JSON.stringify(base.comps) ||
-        p.kit !== base.kit || p.tempo !== base.tempo || !!p.extraKick !== !!base.extraKick) hBad++;
-    if (!PROGRAMS[p.bass] || PROGRAMS[p.bass].cat !== "BASS" ||
-        !PROGRAMS[p.chord] || !PROGRAMS[p.lead] || !(p.prog && p.prog.length === 4)) hBad++;
-    if (!/ · half-cut$/.test(p.name)) hBad++;
-    const p2 = G3.dreamHalfCut(p, G3.mulberry(sd + 999));
-    if (/half-cut · half-cut/.test(p2.name)) hBad++;
-  }
-  if (hBad) fail("half-cut violations: " + hBad);
-  else ok("HALF-DICE: rhythm section held, harmony re-rolled, name idempotent (50 seeds)");
-}
-{ const mk = over => { const base = JSON.parse(JSON.stringify(G3.DREAMS[2]));
-    Object.assign(base, over || {}); return { v: 1, seed: 12345, name: "x", p: base, at: 0 }; };
-  let cBad = 0;
-  if (!G3.crateValidate(mk())) cBad++;
-  if (G3.crateValidate(mk({ fig: "nope" }))) cBad++;
-  if (G3.crateValidate(mk({ kit: 0 }))) cBad++;
-  if (G3.crateValidate(mk({ scale: "dorian" }))) cBad++;
-  if (G3.crateValidate(mk({ comps: ["nope+3"] }))) cBad++;
-  if (G3.crateValidate({ v: 1, name: "x", p: JSON.parse(JSON.stringify(G3.DREAMS[2])) })) cBad++;
-  const parsed = G3.crateParse(JSON.stringify({ v: 1, crate: [mk(), mk({ fig: "bad" }), mk({ kit: 3 })] }));
-  if (!parsed || parsed.length !== 1) cBad++;
-  if (G3.crateParse("{oops") !== null) cBad++;
-  if (G3.crateValidate(mk({ fig: "constructor" }))) cBad++;
-  if (G3.crateValidate(mk({ scale: "__proto__" }))) cBad++;
-  if (G3.crateValidate(mk({ bass: "constructor" }))) cBad++;
-  if (G3.crateValidate(mk({ tempo: undefined }))) cBad++;
-  if (G3.crateValidate(mk({ root: 999 }))) cBad++;
-  if (G3.crateValidate(Object.assign(mk(), { name: "y".repeat(80) }))) cBad++;
-  const e = G3.crateEntry(G3.DREAMS[1], 777);
-  if (!G3.crateValidate(e) || e.seed !== 777 || e.name.indexOf("#777") < 0) cBad++;
-  if (cBad) fail("crate validate/parse: " + cBad);
-  else ok("crate: entries validate, imports filter corrupt takes, garbage JSON refused");
+{ let tBad = 0;
+  const VALID = ["", "maj7", "7", "m7", "m7\u266d5", "mMaj7", "+"];
+  G3.DREAMS.filter(d => !d.surprise).forEach(d => {
+    const cells = G3.theoryData(d);
+    if (cells.length !== d.prog.length) { fail("theory cells " + d.name); tBad++; }
+    cells.forEach(c => {
+      const mm = c.name.match(/^([A-G]#?)(.*)$/);
+      if (!mm || VALID.indexOf(mm[2]) < 0) { fail("chord name " + c.name); tBad++; }
+      if (c.tones.split(" ").length !== 4) { fail("tones " + c.tones); tBad++; }
+      if (!c.roman) tBad++;
+    });
+  });
+  if (G3.chordLabel("minor", 0, 45).name !== "Am7") { fail("A minor i should spell Am7"); tBad++; }
+  if (G3.chordLabel("major", 4, 36).name !== "G7") { fail("C major V should spell G7"); tBad++; }
+  if (G3.chordLabel("major", 0, 48).name !== "Cmaj7") { fail("C major I should spell Cmaj7"); tBad++; }
+  if (G3.chordLabel("major", 6, 48).name !== "Bm7\u266d5") { fail("C major vii should spell Bm7\u266d5"); tBad++; }
+  if (G3.romanFor(0, "minor") !== "i" || G3.romanFor(4, "major") !== "V" ||
+      G3.romanFor(6, "major") !== "vii\u00b0") { fail("roman numerals wrong"); tBad++; }
+  if (!tBad) ok("theory bar: romans + chord spelling (Am7 / G7 / Cmaj7 / Bm7\u266d5) across all dreams");
 }
 { const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
   const A = eval(audJs + "\n;({audVary})");
