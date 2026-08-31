@@ -102,9 +102,31 @@ const path = __dirname + "/triton-rack.html";
   else if (!(ped.bend > 90 && ped.bend < 110)) fail("pitch bend path " + ped.bend);
   else ok("sustain pedal + pitch bend ride the hardware wire");
 
+  /* the mix rack: strips wired, and the kick keys a real duck (probed in the
+     quiet just after boot — figure warm-renders would eat the window later) */
+  const duck = await page.evaluate(async () => {
+    const wired = !!(MIX && MIX.kit && MIX.bass && MIX.chord && MIX.lead) && drumOut() === MIX.kit.in;
+    drumHitP("surdo", 1, 0, {});     /* cache-warm: the miss renders synchronously */
+    await new Promise(r => setTimeout(r, 150));
+    drumHitP("surdo", 1, ctx.currentTime + .10, {});
+    let dipped = 1; const t0 = performance.now();
+    while (performance.now() - t0 < 1400) {
+      dipped = Math.min(dipped, MIX.chord.duck.gain.value);
+      await new Promise(r => setTimeout(r, 8));
+    }
+    await new Promise(r => setTimeout(r, 600));
+    return { wired, dipped, back: MIX.chord.duck.gain.value };
+  });
+  if (!duck.wired) fail("mix rack not wired " + JSON.stringify(duck));
+  else if (!(duck.dipped < .95)) fail("the kick does not duck the chords (gain " + duck.dipped.toFixed(3) + ")");
+  else if (!(duck.back > .985)) fail("the duck never recovers (gain " + duck.back.toFixed(3) + ")");
+  else ok("mix rack: 4 role strips + kick-keyed duck (dip " + duck.dipped.toFixed(2) + " → back " + duck.back.toFixed(3) + ")");
+
   /* behavior: PLAY powers + conducts; readout goes live */
   await page.click("#dreamPlay");
-  await page.waitForTimeout(2500);
+  await page.waitForFunction(() => typeof DREAM !== "undefined" && DREAM.on && DREAM.bar >= 2 &&
+    TAKE.ev.filter(e => e.role === "perc").length >= 10, { timeout: 25000 });
+  await page.waitForTimeout(250);
   const st1 = await page.evaluate(() => ({
     on: DREAM.on, powered: state.powered, seed: DREAM.seed, bar: DREAM.bar,
     readout: document.getElementById("ldrReadout").textContent,
@@ -294,20 +316,26 @@ const path = __dirname + "/triton-rack.html";
     const wp = pj(os.tmpdir(), "tr-take.wav"), mp = pj(os.tmpdir(), "tr-take.mid");
     await wavD.saveAs(wp); await midD.saveAs(mp);
     const w = fs.readFileSync(wp), m = fs.readFileSync(mp);
-    let peak = 0;
+    let peak = 0, sq = 0, ns = 0;
     for (let i = 44; i < Math.min(w.length - 3, 44 + 48000 * 6 * 8); i += 3) {
       let v = (w[i] | (w[i + 1] << 8) | (w[i + 2] << 16)); if (v & 0x800000) v -= 0x1000000;
       const a = Math.abs(v); if (a > peak) peak = a;
+      const x = v / 8388607; sq += x * x; ns++;
     }
+    const rms = Math.sqrt(sq / Math.max(1, ns));
+    const rmsDb = 20 * Math.log10(Math.max(1e-9, rms));
+    const crest = 20 * Math.log10(Math.max(1e-9, (peak / 8388607) / Math.max(1e-9, rms)));
     const okWav = w.slice(0, 4).toString() === "RIFF" && w.slice(8, 12).toString() === "WAVE" && w.length > 150000;
     const hasYou = m.includes(Buffer.from("YOU"));
     let ons = 0; for (let i = 0; i < m.length - 2; i++) if ((m[i] & 0xF0) === 0x90 && m[i + 2] > 0) ons++;
     if (!okWav) fail("bounced WAV malformed/short (" + w.length + " bytes)");
     else if (peak < 80000) fail("bounced WAV is near-silent (peak " + peak + " of 8388607)");
+    else if (!(rmsDb > -24 && rmsDb < -8)) fail("master loudness off target: RMS " + rmsDb.toFixed(1) + " dBFS");
+    else if (!(crest > 4 && crest < 20)) fail("master crest factor off: " + crest.toFixed(1) + " dB");
     else if (m.slice(0, 4).toString() !== "MThd" || !hasYou || ons < 3)
       fail("bounced MIDI bad (MThd:" + m.slice(0, 4) + " YOU:" + hasYou + " ons:" + ons + ")");
-    else ok("SAVE bounce: WAV " + (w.length / 1024 | 0) + " KB (peak " + (peak / 8388607).toFixed(2) +
-      " FS) + MIDI with YOU track (" + ons + " note-ons)");
+    else ok("SAVE bounce mastered: peak " + (peak / 8388607).toFixed(2) + " FS · RMS " + rmsDb.toFixed(1) +
+      " dBFS · crest " + crest.toFixed(1) + " dB + MIDI with YOU track (" + ons + " note-ons)");
   }
   const still = await page.evaluate(() => ({ ldr: LDR.on, take: TAKE.on }));
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));

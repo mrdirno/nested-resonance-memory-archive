@@ -605,7 +605,7 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 /* ================= TRITON-Rack recreation — data ================= */
 const AC = window.AudioContext || window.webkitAudioContext;
 let ctx=null, master=null, sum=null, analyser=null;
-let progBus=null, shaper=null, dWet=null, dDry=null, post=null;
+let progBus=null, shaper=null, dWet=null, dDry=null, post=null, MIX=null;
 let cSend=null, dSend=null, rSend=null, chIn=null, dlyIn=null, dlyL=null, dlyR=null, fbA=null, fbB=null, convo=null;
 let noiseBuf=null, WAVES={};
 const state = {
@@ -1248,19 +1248,43 @@ function buildWaves(){
 function makeIR(sec,decay){ const len=Math.floor(ctx.sampleRate*sec), b=ctx.createBuffer(2,len,ctx.sampleRate);
   for(let c=0;c<2;c++){ const d=b.getChannelData(c);
     for(let i=0;i<len;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay); } } return b; }
+/* the third donor's two ceilings: a near-tanh tube stage and the cubic
+   soft limiter (x − 4/27·x³ — unity input already leans −1.4 dB into it) */
+function satSoft(x){ if(x<-3) return -1; if(x>3) return 1; const x2=x*x; return x*(27+x2)/(27+9*x2); }
+function satCurve(k){ const n=2048, c=new Float32Array(n), m=Math.abs(satSoft(k))||1;
+  for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=satSoft(x*k)/m; } return c; }
+function limitCurve(){ const n=4096, c=new Float32Array(n);
+  for(let i=0;i<n;i++){ const x=(i/(n-1)*2-1)*1.5;
+    c[i]= x<-1.5? -1 : x>1.5? 1 : x-(4/27)*x*x*x; } return c; }
 function driveCurve(a){ const n=1024, c=new Float32Array(n), k=a*60+1;
   for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(k*x)/Math.tanh(k); } return c; }
 
 function buildGraph(){
   sum = ctx.createGain();
-  const eqL=ctx.createBiquadFilter(); eqL.type="lowshelf"; eqL.frequency.value=95; eqL.gain.value=1.5;
-  const eqM=ctx.createBiquadFilter(); eqM.type="peaking"; eqM.frequency.value=1200; eqM.Q.value=.8; eqM.gain.value=0;
-  const eqH=ctx.createBiquadFilter(); eqH.type="highshelf"; eqH.frequency.value=8200; eqH.gain.value=1.5;
+  /* ── MASTER (third donor's chain, in native nodes): tilt EQ → air →
+     parallel comp (crushed copy folded under the dry) → glue → tube sat →
+     level → cubic soft-limit ceiling ── */
+  const tiltLo=ctx.createBiquadFilter(); tiltLo.type="lowshelf"; tiltLo.frequency.value=110; tiltLo.gain.value=1.2;
+  const air=ctx.createBiquadFilter(); air.type="peaking"; air.frequency.value=520; air.Q.value=.7; air.gain.value=1.6;
+  const tiltHi=ctx.createBiquadFilter(); tiltHi.type="highshelf"; tiltHi.frequency.value=2800; tiltHi.gain.value=2.2;
+  const para=ctx.createDynamicsCompressor();
+  para.threshold.value=-24; para.knee.value=6; para.ratio.value=5; para.attack.value=.003; para.release.value=.12;
+  const paraWet=ctx.createGain(); paraWet.gain.value=.32;
+  const dryG=ctx.createGain(); dryG.gain.value=1;
+  const glueIn=ctx.createGain();
+  const glue=ctx.createDynamicsCompressor();
+  glue.threshold.value=-13; glue.knee.value=8; glue.ratio.value=3; glue.attack.value=.010; glue.release.value=.18;
+  const tube=ctx.createWaveShaper(); tube.curve=satCurve(1.25); tube.oversample="2x";
   master = ctx.createGain(); master.gain.value = state.volume;
-  const comp = ctx.createDynamicsCompressor();
-  comp.threshold.value=-12; comp.knee.value=22; comp.ratio.value=5; comp.attack.value=.004; comp.release.value=.22;
+  const limPre=ctx.createGain(); limPre.gain.value=2/3;
+  const lim=ctx.createWaveShaper(); lim.curve=limitCurve(); lim.oversample="4x";
   analyser = ctx.createAnalyser(); analyser.fftSize=512;
-  sum.connect(eqL); eqL.connect(eqM); eqM.connect(eqH); eqH.connect(master); master.connect(comp); comp.connect(ctx.destination); window._mixTap=comp;
+  sum.connect(tiltLo); tiltLo.connect(air); air.connect(tiltHi);
+  tiltHi.connect(dryG); tiltHi.connect(para); para.connect(paraWet);
+  dryG.connect(glueIn); paraWet.connect(glueIn);
+  glueIn.connect(glue); glue.connect(tube); tube.connect(master);
+  master.connect(limPre); limPre.connect(lim); lim.connect(ctx.destination);
+  window._mixTap=lim;
   sum.connect(analyser);
   /* reverb */
   convo = ctx.createConvolver(); convo.buffer = makeIR(2.6,2.4);
@@ -1295,7 +1319,38 @@ function buildGraph(){
   cSend=ctx.createGain(); dSend=ctx.createGain(); rSend=ctx.createGain();
   post.connect(sum); post.connect(cSend); cSend.connect(chIn);
   post.connect(dSend); dSend.connect(dlyIn); post.connect(rSend); rSend.connect(convo);
+  /* ── ROLE STRIPS (third donor's kStrip, in native nodes): each dream role
+     gets HP discipline, a tone shelf set, and a DUCK gain the kick keys —
+     inserted BEFORE the shared program insert so the room stays one room ── */
+  function mkStrip(hpHz,lsF,lsG,pkF,pkQ,pkG,hsF,hsG,drive,trim){
+    const inG=ctx.createGain(); inG.gain.value=trim!=null?trim:1;
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=hpHz; hp.Q.value=.6;
+    const lo=ctx.createBiquadFilter(); lo.type="lowshelf"; lo.frequency.value=lsF; lo.gain.value=lsG;
+    const mid=ctx.createBiquadFilter(); mid.type="peaking"; mid.frequency.value=pkF; mid.Q.value=pkQ; mid.gain.value=pkG;
+    const hi=ctx.createBiquadFilter(); hi.type="highshelf"; hi.frequency.value=hsF; hi.gain.value=hsG;
+    const duck=ctx.createGain();
+    let n=inG; [hp,lo,mid,hi].forEach(x=>{ n.connect(x); n=x; });
+    if(drive){ const sh=ctx.createWaveShaper(); sh.curve=satCurve(drive); sh.oversample="2x"; n.connect(sh); n=sh; }
+    n.connect(duck); duck.connect(progBus);
+    return {in:inG,duck};
+  }
+  MIX={ _ctx:ctx,
+    kit:  mkStrip(28, 70, 1.8, 300, .9, -1.4, 5200, 2.6, 0,   1.0),
+    bass: mkStrip(24, 60, 2.6, 260, 1,  -1.6, 2500, 1.4, 1.5, .95),
+    chord:mkStrip(90, 180, -.5, 400, 1, -1.2, 6500, 1.5, 0,   .8),
+    lead: mkStrip(140,240, -.8, 900, 1,  -.5, 6500, 2.2, 0,   .9)};
   noiseBuf = makeNoise(); buildWaves();
+}
+/* the sidechain WebAudio never shipped: the kick keys scheduled gain dips —
+   deterministic, and it renders identically offline (thr/depth per donor) */
+function mixDuck(when,depth){
+  if(!MIX||MIX._ctx!==ctx) return;
+  const t=Math.max(when,ctx.currentTime), d=Math.max(0,Math.min(1,depth));
+  [["chord",.30],["lead",.22],["bass",.14]].forEach(([r,k])=>{
+    const g=MIX[r].duck.gain;
+    g.setTargetAtTime(1-k*d,t,.004);
+    g.setTargetAtTime(1,t+.035,.11);
+  });
 }
 function delayBeats(code){ const b=60/state.tempo;
   return code==="16"?b/4: code==="8"?b/2: code==="4d"?b*0.75: b/2; }
@@ -1453,10 +1508,11 @@ function spawnVoice(prog,note,vel,when,dur,dest){
   return v;
 }
 /* ---- drums ---- */
-function drumOut(){ return progBus; }
+function drumOut(){ return (MIX&&MIX._ctx===ctx)? MIX.kit.in : progBus; }
 function drumHit(note,vel,when,kit){
   kit=kit||"std";
   const t=Math.max(when,ctx.currentTime), k=((note%12)+12)%12, o=drumOut();
+  if(k===0&&vel>.5&&typeof mixDuck==="function") mixDuck(t,vel*.9); /* the kick keys the duck */
   const v={units:1,t,killed:false};
   v.kill=()=>{ if(!v.killed){ v.killed=true; unreg(v); } };
   v.release=v.kill; regVoice(v,1);
@@ -2800,6 +2856,8 @@ function drumHitP(name,vel,when,o){
   if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogP==="function")
     takeLogP(name,vel,when,{pitch:o.pitch,mute:o.mute,layerVel:o.layerVel});
   const t=Math.max(when,ctx.currentTime);
+  if((name==="surdo"||name==="dunL"||name==="dunM")&&vel>.45&&!o._g&&typeof mixDuck==="function")
+    mixDuck(t,Math.min(1,vel));                    /* the low drums key the duck */
   const lv=(o.layerVel!=null)? o.layerVel : vel;
   const layer=lv<0.55?0.4:lv<0.85?0.7:1.0;
   const buf=ldrBuf(name,layer,o.pitch||1,o.mute||1);
@@ -3281,9 +3339,10 @@ function bandZ(role,beat,rng){
 function hv(v){ return Math.max(.05,Math.min(1,v)); }
 function dreamPans(){
   if(DREAM.pans||!ctx) return;
-  function mk(p){ const n=ctx.createStereoPanner?ctx.createStereoPanner():ctx.createGain();
-    if(n.pan) n.pan.value=p; n.connect(progBus); return n; }
-  DREAM.pans={bass:mk(0),chord:mk(-.24),lead:mk(.24)};
+  function mk(p,role){ const n=ctx.createStereoPanner?ctx.createStereoPanner():ctx.createGain();
+    if(n.pan) n.pan.value=p;
+    n.connect((MIX&&MIX._ctx===ctx&&MIX[role])? MIX[role].in : progBus); return n; }
+  DREAM.pans={bass:mk(0,"bass"),chord:mk(-.24,"chord"),lead:mk(.24,"lead")};
 }
 function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn){
   f.hits.forEach((h,i)=>{ const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
@@ -3621,13 +3680,13 @@ function setSaveUI(t){
     if(b) b.classList.toggle("busy",!!t&&t.indexOf("RENDER")===0); });
 }
 function _graphSnap(){ return {ctx,master,sum,analyser,progBus,shaper,dWet,dDry,post,
-  cSend,dSend,rSend,chIn,dlyIn,dlyL,dlyR,fbA,fbB,convo,noiseBuf,WAVES,
+  cSend,dSend,rSend,chIn,dlyIn,dlyL,dlyR,fbA,fbB,convo,noiseBuf,WAVES,MIX,
   mixTap:window._mixTap,vl:voiceList,av:activeVoices,cap:VOICE_CAP}; }
 function _graphRestore(S){ ctx=S.ctx; master=S.master; sum=S.sum; analyser=S.analyser;
   progBus=S.progBus; shaper=S.shaper; dWet=S.dWet; dDry=S.dDry; post=S.post;
   cSend=S.cSend; dSend=S.dSend; rSend=S.rSend; chIn=S.chIn; dlyIn=S.dlyIn; dlyL=S.dlyL;
   dlyR=S.dlyR; fbA=S.fbA; fbB=S.fbB; convo=S.convo; noiseBuf=S.noiseBuf; WAVES=S.WAVES;
-  window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap; }
+  MIX=S.MIX; window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap; }
 async function exportTake(){
   if(typeof exporting!=="undefined"&&exporting) return;
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
@@ -3647,9 +3706,10 @@ async function exportTake(){
     ctx=oc; buildGraph();
     applyFXP(DREAM.p? PROGRAMS[DREAM.p.chord] : (cur||PROGRAMS[0]));
     voiceList=[]; activeVoices=0; VOICE_CAP=1e9; /* no steal offline — a render has no realtime pressure, and a steal would erase notes */
-    const mk=p=>{ const n=oc.createStereoPanner?oc.createStereoPanner():oc.createGain();
-      if(n.pan) n.pan.value=p; n.connect(progBus); return n; };
-    const pans={bass:mk(0),chord:mk(-.24),lead:mk(.24)};
+    const mk=(p,role)=>{ const n=oc.createStereoPanner?oc.createStereoPanner():oc.createGain();
+      if(n.pan) n.pan.value=p;
+      n.connect((MIX&&MIX._ctx===ctx&&MIX[role])? MIX[role].in : progBus); return n; };
+    const pans={bass:mk(0,"bass"),chord:mk(-.24,"chord"),lead:mk(.24,"lead")};
     evs.forEach(e=>{
       if(e.role==="perc") drumHitP(e.name,e.vel,e.t,{pitch:e.pitch,mute:e.mute,layerVel:e.layerVel,_g:1});
       else spawnVoice(e.prog||cur||PROGRAMS[0],e.note,e.vel,e.t,e.dur,
@@ -3670,9 +3730,15 @@ async function exportTake(){
   /* mastering trim: the glue compressor still lets transients past 0 dBFS,
      and a clipped bounce is not the mix — normalize to -0.2 dB when hot */
   const L=buf.getChannelData(0), R=buf.getChannelData(1);
-  let pk=0; for(let i=0;i<L.length;i++){ const a=Math.abs(L[i]), b=Math.abs(R[i]);
-    if(a>pk)pk=a; if(b>pk)pk=b; }
-  if(pk>0.98){ const g=0.98/pk; for(let i=0;i<L.length;i++){ L[i]*=g; R[i]*=g; } }
+  let pk=0, ms=0; const stride=4;
+  for(let i=0;i<L.length;i++){ const a=Math.abs(L[i]), b=Math.abs(R[i]);
+    if(a>pk)pk=a; if(b>pk)pk=b;
+    if(i%stride===0) ms+=L[i]*L[i]+R[i]*R[i]; }
+  const rms=Math.sqrt(ms/(2*Math.ceil(L.length/stride)));
+  /* mastering: lift a quiet bounce toward −17 dBFS RMS, never past −0.2 dB
+     peak; pull a hot one down to the ceiling — one gain, no pumping */
+  const g=Math.min(pk>1e-6? .98/pk : 1, Math.max(1, rms>1e-6? .14/rms : 1));
+  if(Math.abs(g-1)>.02){ for(let i=0;i<L.length;i++){ L[i]*=g; R[i]*=g; } }
   ldrDownload(wavStereo24(L,R,sr),"audio/wav",name+".wav");
   const mid=midiTake(takeToMidiEvents(evs));
   if(mid) setTimeout(()=>ldrDownload(mid,"audio/midi",name+".mid"),450);
@@ -3934,4 +4000,11 @@ DEAD BRANCHES: (1) re-drawing the hook each phrase for "freshness" — lost: the
 KILL-TEST: node suite [3] — wander keyed/deterministic/bounded with lag-1 0.98; humanTime capped at ⅓ step, lead floating 1.38× freer than the kit, hum=0 bit-exactly machine; velocity breath bounded and correlated; hook deterministic per seed, Q≠A, every cell ordered/bounded/breathing, realized notes on the chord map (ladder ∪ color ∪ cadence±1), cadence targets verified IN the next chord, BREAK fragments; bass cell deterministic, figure-anchored, pool-constrained, opens home 83%. Chromium: the clock measured correlated on the live tape (lag-1 0.63), the hook speaking in phrases with 3 breaths and fewer notes than the drums — the literal negation of an arpeggiator. Both suites ALL GREEN, 33 browser assertions.
 THE NON-OBVIOUS CHOICE: the figure joined the humans. Ring 23 froze the timeline as "the machine reference"; the donor's ensemble model showed the deeper truth — the reference is not a metronome, it is the STRONGEST COUPLING to a shared human clock. Everything breathes together; nothing drifts apart; the bell still leads.
 OPEN QUESTIONS: (1) The hook's cells are hand-written vocabulary — should each TRADITION (son, bembé, samba) get its own cell dialect keyed off the figure family, the way LDR_MAP keys instruments? (2) The cadence leads from below only — upper approaches (and enclosures) are one branch away; when? (3) The chords still comp on the raw skeleton each bar — does a comp CELL (anticipation into the change, montuno-style) close the last "programmed" tell?
+RING 28 · 2026-08-31 · the mix earns its console — strips, a duck, a master chain
+WHAT CHANGED: the user's "your mixing and mastering is terrible" answered with the third donor's console, translated to native WebAudio. (1) ROLE STRIPS — the flat everything-into-one-bus mix is gone: each dream role now passes its own channel strip (donor kStrip values) before the shared program insert — kit: HP 28, low shelf +1.8 dB@70, 300 Hz −1.4, presence +2.6 dB@5.2k · bass: HP 24, +2.6 dB@60, 260 Hz −1.6, tape-curve saturation (drive 1.5) · chords: HP 90 (pads out of the bass's room), −1.2@400, trimmed to 0.8 — pads EAT mixes and now they can't · lead: HP 140, +2.2 dB@6.5k. One room still: the strips sit before progBus so the program-dressed reverb/delay stays a single space. (2) THE DUCK — the sidechain WebAudio never shipped, built the deterministic way: every kick-class hit (kit lane kick, surdo, dunun) schedules gain dips on the chord/lead/bass strips (−30%/−22%/−14%, 4 ms in, 110 ms release from +35 ms) — sample-accurate, seed-deterministic, and it renders identically in the offline bounce because the same schedule-time code runs there. Measured live: dip to 0.70, recovery to 1.000. (3) THE MASTER — the single stock compressor replaced by the donor's chain in native nodes: tilt-lo (+1.2 dB@110) → air (+1.6 dB@520, Q .7) → tilt-hi (+2.2 dB@2.8k) → PARALLEL comp (−24 dB thr, 5:1, 3 ms, folded under the dry at 0.32) → glue (−13 dB, 3:1, 10 ms/180 ms, knee 8) → tube stage (near-tanh, drive 1.25) → level → the donor's cubic soft ceiling x−(4/27)x³ (unity already leans −1.4 dB into it), 4× oversampled. (4) MASTERED BOUNCES — SAVE now measures the render and applies one clean gain: lift toward −17 dBFS RMS, never past −0.2 dB peak, pull down only when hot — no pumping, no surprise clipping. Measured: −17.1 dBFS RMS, crest 15.7 dB, peak 0.85–0.98 across runs.
+BANNED (obvious answers set aside first): porting the donor's per-sample DSP classes (wrong substrate — the ARCHITECTURE and numbers port, the nodes are native); a real-time analyser-driven auto-leveller for live playback (the donor's own Leveller needs 20–60 s to converge and a live instrument cannot wait — the bounce gets the measured version instead, where the whole take is known); per-role reverb sends (two send racks is two rooms; ring-24-era law, still standing).
+DEAD BRANCHES: (1) DynamicsCompressor-as-limiter at the end — lost: its auto-makeup and program-dependent release pump on full-band material; the donor's static cubic ceiling is phase-clean, deterministic, and renders identically offline. (2) A separate perc strip — lost: perc and kit share one physics bus (drumHitP has no role signal at hit time), and splitting it meant threading role labels through the whole drum path for −0.8 dB of shelf difference; one drum strip, honest. (3) Sidechain via AnalyserNode envelope follower — lost: needs a render-thread tap that OfflineAudioContext handles differently, breaking bounce parity; scheduled dips are bit-identical in both worlds.
+KILL-TEST: the harness (34 assertions, ALL GREEN) — mix rack wired (drumOut lands on the kit strip), the duck measured dipping to 0.70 and recovering past 0.985 (probed post-boot after cache-warming the surdo: the miss renders SYNCHRONOUSLY and long enough to eat the whole measurement window — two probe rewrites died learning that); the bounce read back from the download at −17.1 dBFS RMS, crest 15.7 dB, peaks capped; every prior gate re-run green. PLAY's checkpoint became condition-driven (bars + take events, not a fixed 2.5 s) after a slow run exposed the race.
+THE NON-OBVIOUS CHOICE: the duck is SCHEDULED, not detected. Every real sidechain is a detector chasing a signal it already knows about — here the engine knows every kick before it happens, so the duck is written into the automation timeline like a note, which makes it deterministic per seed, free of detector lag, and bit-identical between live playback and the offline master.
+OPEN QUESTIONS: (1) The strips are static — should section tension breathe them (BREAK opens the HPs, LIFT adds air) the way the donor's climate dresses its strips per world? (2) The bounce targets −17 dBFS RMS with one gain — is a two-stage master (gain into the cubic ceiling, donor-style KHOT ×2) worth the louder-but-denser trade for the "banger" ask? (3) The YOU keys still bypass the strips to progBus — should the player get a fifth strip, or is the raw TRITON voice the point?
 ═══ end rings ═══ -->
