@@ -228,17 +228,20 @@ const path = __dirname + "/triton-rack.html";
   await page.click(".thKey");
   const lockOn = await page.evaluate(() => ({ k: LOCKS.key,
     lit: document.querySelector(".thKey").classList.contains("locked"),
+    seed: DREAM.seed,
     scale: DREAM.p.scale, root: DREAM.p.root, prog: JSON.stringify(DREAM.p.prog) }));
   if (!lockOn.k || !lockOn.lit) fail("key lock did not arm " + JSON.stringify(lockOn));
   await page.click("#dreamDice");
   await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
   await page.waitForTimeout(150);
   const lockRoll = await page.evaluate(() => ({ scale: DREAM.p.scale, root: DREAM.p.root,
-    prog: JSON.stringify(DREAM.p.prog), name: DREAM.p.name }));
+    seed: DREAM.seed, prog: JSON.stringify(DREAM.p.prog), name: DREAM.p.name }));
   if (lockRoll.scale !== lockOn.scale || lockRoll.root !== lockOn.root || lockRoll.prog !== lockOn.prog)
     fail("key lock leaked through DICE: " + JSON.stringify(lockRoll));
+  else if (lockRoll.seed === lockOn.seed) fail("locked DICE was a no-op — the unlocked half never rolled");
   else if (!/· in /.test(lockRoll.name)) fail("locked roll not named as such: " + lockRoll.name);
-  else ok("key lock: DICE rolled the band, the harmony held (" + lockRoll.scale + "/" + lockRoll.root + ")");
+  else ok("key lock: DICE rolled the band (seed " + lockOn.seed + " → " + lockRoll.seed +
+    "), the harmony held (" + lockRoll.scale + "/" + lockRoll.root + ")");
   await page.click(".thKey");
   const lockOff = await page.evaluate(() => LOCKS.key || document.querySelector(".thKey").classList.contains("locked"));
   if (lockOff) fail("key lock did not release");
@@ -360,6 +363,21 @@ const path = __dirname + "/triton-rack.html";
   if (!still.ldr || !still.take) fail("bounce killed the transport " + JSON.stringify(still));
   else ok("transport and tape survive the bounce");
 
+  /* the duck must survive the bounce's MIX swap-and-restore (surdo cached now) */
+  const duck2 = await page.evaluate(async () => {
+    const wired = !!(MIX && MIX.kit && MIX.chord) && drumOut() === MIX.kit.in;
+    drumHitP("surdo", 1, ctx.currentTime + .10, {});
+    let dipped = 1; const t0 = performance.now();
+    while (performance.now() - t0 < 1400) {
+      dipped = Math.min(dipped, MIX.chord.duck.gain.value);
+      await new Promise(r => setTimeout(r, 8));
+    }
+    return { wired, dipped };
+  });
+  if (!duck2.wired) fail("mix rack lost after the bounce restore " + JSON.stringify(duck2));
+  else if (!(duck2.dipped < .95)) fail("duck dead after the bounce (gain " + duck2.dipped.toFixed(3) + ")");
+  else ok("mix rack + duck survive the bounce restore (dip " + duck2.dipped.toFixed(2) + ")");
+
   /* KEEP: the file saves a copy of ITSELF carrying the dream — then that copy
      must boot clean and play its preset */
   const kitOpts = await page.evaluate(() => document.getElementById("ldrKit").options.length);
@@ -387,20 +405,24 @@ const path = __dirname + "/triton-rack.html";
         presets: typeof PRESETS !== "undefined" ? PRESETS.length : -1,
         chips: document.querySelectorAll("#ldrPresets .pchip4").length,
         kitOpts: document.getElementById("ldrKit").options.length,
+        tabOn: !!document.querySelector(".tab.on") && !!document.querySelector(".pane.on"),
         powered: state.powered, lcdOff: document.getElementById("lcd").classList.contains("off") }));
       const real2 = errs2.filter(e => !/Web MIDI|requestMIDIAccess|favicon/.test(e));
       if (boot2.presets !== 1 || boot2.chips !== 1) fail("kept copy lost its preset " + JSON.stringify(boot2));
       else if (boot2.kitOpts !== kitOpts) fail("kept copy doubled its kit options (" + boot2.kitOpts + " vs " + kitOpts + ")");
+      else if (!boot2.tabOn) fail("kept copy boots with no active tab/pane — the lower UI is blank");
       else if (boot2.powered || !boot2.lcdOff) fail("kept copy boots powered-on " + JSON.stringify(boot2));
       else if (real2.length) fail("kept copy console: " + real2.slice(0, 3).join(" | "));
       else {
         await page2.click("#ldrPresets .pchip4");
-        await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 1, { timeout: 20000 });
+        await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 30000 });
         const play2 = await page2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
-          name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook || DREAM.bar < 5 }));
+          name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook }));
         const kept = await page.evaluate(() => PRESETS[0] && PRESETS[0].seed);
-        if (!play2.on || play2.seed !== kept) fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ")");
-        else ok("KEEP: the file rewrote itself — copy boots clean, chip replays seed #" + play2.seed + " (" + play2.name + ")");
+        if (!play2.on || play2.seed !== kept || !play2.hook)
+          fail("kept preset replays wrong world (" + play2.seed + " vs " + kept + ", hook " + play2.hook + ")");
+        else ok("KEEP: the file rewrote itself — copy boots clean (tabs live), chip replays seed #" +
+          play2.seed + " (" + play2.name + ") · hook drawn");
       }
       await page2.close();
     }

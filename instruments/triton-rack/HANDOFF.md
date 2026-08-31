@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-08-31, rings 1–24 (+25 pending in `triton-rack.html`).
+**As of:** 2026-08-31, rings 1–30 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -8,10 +8,15 @@ is the merge law (Ring 5).
 
 Round 1 (rings 1–19) executed the original brief: P0 mapping accuracy, the 4U
 face, MIDI/WAV export, crate, Bank B, STRUM, a full BREAK pass. Round 2
-(rings 20–24) executed the operator's verdict on it: *"too many options…
-lucky dreamer already has export… just the triton, the dreamer, a dice roll
-and export… the pattern and human playing MIDI files is what makes the tool
-special… music theory (Improvisator)… external MIDI keyboard."*
+(rings 20–25) executed the operator's simplification verdict (PLAY·DICE·SAVE,
+theory bar, progression bank, hardware MIDI, second BREAK). Round 3
+(rings 26–30) executed the third verdict with a THIRD DONOR (DreamDrummer,
+committed beside LuckyDreamer): *"sounds like a typical arpeggiator… take
+from sources with human timing… mixing and mastering is terrible… no way of
+locking style or rhythm… the file has to reconfigure itself."* — the
+drummer's correlated clock, the hook/bass cell engines, the mix rack + master
+chain, locks on the dice, and KEEP (the file serializes a working copy of
+itself carrying presets).
 
 ---
 
@@ -20,7 +25,8 @@ special… music theory (Improvisator)… external MIDI keyboard."*
 | file | what it is |
 |---|---|
 | `triton-rack.html` | The instrument (self-contained, no CDN/fetch/localStorage). Korg TRITON-Rack recreation: 128 programs + 16 user Bank B slots, 16 combis, Web MIDI in (hardware keyboards are first-class — the unit boots from a MIDI note, with a one-tap audio nudge for the autoplay law), DecentSampler export, EXB-LDR board with the donor's **ported percussion physics** (25 PERC_RECIPE voices) and 51 figures routed instrument-to-instrument, Dream Conductor with a **4U face reduced to the donor's grammar**: PLAY · DICE · SAVE, a scope, and the **theory bar** (Improvisator homage: key, named progression, Roman numerals, the sounding chord spelled out). A **progression bank** of 12 named changes (blues, Andalusian, ii-V-I…) with spec chords for borrowed harmony; the band plays through **the human hand** (per-part feel, rolled chords, deterministic per seed); **THE TAKE** rolls from the moment anything plays and SAVE bounces it offline through the same engine into a normalized 24-bit WAV + SMF-1 with the player on a YOU track. Rings at tail. |
-| `luckydreamer_3.html` | The donor, byte-identical to the original upload. Reference and ground truth. **Do not modify it.** |
+| `luckydreamer_3.html` | The first donor, byte-identical to the original upload. Reference and ground truth. **Do not modify it.** |
+| `dreamdrummer_21.html` | The third donor (round 3), byte-identical to the upload. Source of the correlated human-timing science, the structural-consistency doctrine, the mix architecture, and the locks grammar (extraction: Ring 26). **Do not modify it.** |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
 | `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
@@ -63,6 +69,27 @@ special… music theory (Improvisator)… external MIDI keyboard."*
 5. **Ring 24 — the hardware wire.** A MIDI note boots the unit; the suspended-
    context trap gets a one-tap nudge (`ctxEnsure`); `window._midiInject`
    drives the exact controller wire, so the harness plays bytes, not stubs.
+
+## 3b. Round 3 in five cuts (rings 26–30)
+
+1. **Ring 26 — the third donor read.** DreamDrummer extracted by five lenses:
+   correlated clock (wander fields, ensemble coupling, limb means), structure-
+   not-search consistency, per-lane dice streams + locks, the full mix chain,
+   persistence (none self-reconfiguring — that design is ours).
+2. **Ring 27 — the arpeggiator dies.** The drummer's clock (keyed 1/f, every
+   role coupled, per-dream humanity dial, figure at coupling 1.0), the HOOK
+   engine (Q/A/B cells with rests, contour, color, voice-led cadences), the
+   bass CELL (skeleton-gated onsets, chord-relative pool, intent windows).
+3. **Ring 28 — the mix earns its console.** Role strips, the scheduled duck
+   (kick-keyed gain dips — deterministic, offline-identical), the master
+   chain (tilt/air EQ, parallel comp, glue, tube, cubic ceiling), mastered
+   bounces (−17 dBFS RMS target, peak-capped).
+4. **Ring 29 — locks + KEEP.** Tap the key card / the title to lock harmony /
+   groove through DICE; ★ KEEP writes the current dream into the presets
+   block and the file downloads a WORKING COPY OF ITSELF (rings included).
+5. **Ring 30 — third BREAK.** Five lenses, 12 findings verified: 9 confirmed
+   (worst: preset chip mid-dream wiped the take; KEEP's scrub blanked the tab
+   panes), all fixed at the root; 3 refuted and recorded.
 
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 

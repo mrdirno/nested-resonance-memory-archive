@@ -1371,6 +1371,13 @@ function mixDuck(when,depth){
     g.setTargetAtTime(1,t+.035,.11);
   });
 }
+/* transport stops flush the duck's automation backlog — hours of scheduled
+   dips would otherwise accumulate on the params forever */
+function mixDuckReset(){
+  if(!MIX||MIX._ctx!==ctx) return;
+  ["chord","lead","bass"].forEach(r=>{ const g=MIX[r].duck.gain;
+    try{ g.cancelScheduledValues(0); g.setValueAtTime(1,ctx.currentTime); }catch(_){ } });
+}
 function delayBeats(code){ const b=60/state.tempo;
   return code==="16"?b/4: code==="8"?b/2: code==="4d"?b*0.75: b/2; }
 function applyFX(){ applyFXP(cur); }
@@ -3015,6 +3022,7 @@ function ldrToggle(force){
     flashRow("RHY: "+LDR.fig);
   } else { LDR.on=false;
     if(typeof takeStop==="function"&&!(typeof DREAM!=="undefined"&&DREAM.on)) takeStop();
+    if(typeof mixDuckReset==="function"&&!(typeof DREAM!=="undefined"&&DREAM.on)) mixDuckReset();
     document.getElementById("ldrStart").textContent="▶ START"; }
 }
 (function(){
@@ -3174,9 +3182,10 @@ function lockMerge(pNew,pCur,locks){
     if(pCur[k]!==undefined) p[k]=pCur[k]; else delete p[k]; }); }
   if(locks.rhythm){ ["fig","comps","kit","tempo","extraKick","hum"].forEach(k=>{
     if(pCur[k]!==undefined) p[k]=pCur[k]; else delete p[k]; }); }
-  if(locks.key&&locks.rhythm) p.name=(pCur.name||"dream")+" · resounded";
-  else if(locks.key) p.name=(p.name||"dream")+" · in "+(pCur.progName||"the same key");
-  else if(locks.rhythm) p.name=(pCur.name||"dream")+" · rechorded";
+  const stem=s=>String(s||"dream").split(" · ")[0]; /* suffixes never stack */
+  if(locks.key&&locks.rhythm) p.name=stem(pCur.name)+" · resounded";
+  else if(locks.key) p.name=stem(p.name)+" · in "+(pCur.progName||"the same key");
+  else if(locks.rhythm) p.name=stem(pCur.name)+" · rechorded";
   return p;
 }
 /* ── PRESETS a saved copy of the FILE carries. Hostile-file law: everything
@@ -3298,19 +3307,19 @@ function voiceLead(tones,prev,lo,hi){
 const LEAD_CELLS={
  12:[
   [{p:0,l:2,s:0},{p:3,l:1.4,s:1},{p:5,l:2.2,s:0},{p:8,l:2.8,s:2}],
-  [{p:2,l:1.4,s:0},{p:4,l:1.2,s:1},{p:7,l:4.2,s:0}],
+  [{p:2,l:1.4,s:0},{p:4,l:1.2,s:1},{p:7,l:3.2,s:0},{p:11,l:1,s:2}],
   [{p:0,l:1.2,s:0},{p:1,l:1.2,s:1},{p:3,l:2.6,s:0},{p:10,l:1.6,s:2}],
   [{p:6,l:1.4,s:1},{p:8,l:1.2,s:0},{p:10,l:1.8,s:2}],
-  [{p:0,l:5.5,s:0}],
-  [{p:4,l:1.1,s:0},{p:6,l:1.1,s:1},{p:8,l:1.1,s:0},{p:10,l:2.2,s:1}]
+  [{p:0,l:5.5,s:0},{p:9,l:1.4,s:2}],
+  [{p:4,l:1.1,s:0},{p:6,l:1.1,s:1},{p:8,l:1.1,s:0},{p:10,l:2.2,s:2}]
  ],
  16:[
   [{p:0,l:2,s:0},{p:3,l:1.6,s:1},{p:6,l:2,s:0},{p:11,l:3.5,s:2}],
-  [{p:2,l:1.6,s:0},{p:4,l:1.4,s:1},{p:8,l:5,s:0}],
+  [{p:2,l:1.6,s:0},{p:4,l:1.4,s:1},{p:8,l:4.4,s:0},{p:14,l:1.4,s:2}],
   [{p:0,l:1.4,s:0},{p:7,l:3.4,s:1},{p:14,l:1.6,s:2}],
   [{p:8,l:1.2,s:1},{p:10,l:1.2,s:0},{p:12,l:1.2,s:1},{p:14,l:1.8,s:2}],
-  [{p:0,l:7,s:0}],
-  [{p:4,l:1.2,s:0},{p:6,l:1.2,s:1},{p:10,l:1.4,s:0},{p:13,l:2.4,s:1}]
+  [{p:0,l:7,s:0},{p:12,l:1.6,s:2}],
+  [{p:4,l:1.2,s:0},{p:6,l:1.2,s:1},{p:10,l:1.4,s:0},{p:13,l:2.4,s:2}]
  ]};
 const CONTOURS={arch:t=>Math.sin(t*Math.PI),fall:t=>1-t,rise:t=>t,
   pendulum:t=>.5+.5*Math.sin(t*Math.PI*2)};
@@ -3332,8 +3341,10 @@ function hookBar(hook,phraseBar,sect){
     case 0: return {cell:q,dev:"state"};
     case 1: return {cell:q,dev:"vary"};
     case 2: return {cell:a,dev:"answer"};
-    default: return hook.rest3&&!useB? {cell:a.slice(0,Math.max(1,a.length-1)),dev:"cadence"}
-                                     : {cell:a,dev:"cadence"};
+    default: /* rest3 breathes by dropping a MIDDLE note — the trailing
+                approach tone is the cadence and must survive (BREAK r3) */
+      return hook.rest3&&!useB&&a.length>2? {cell:[a[0]].concat(a.slice(2)),dev:"cadence"}
+                                          : {cell:a,dev:"cadence"};
   }
 }
 function hookRealize(ev,tones,nextTones,hook){
@@ -3421,6 +3432,13 @@ function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn){
 }
 function dreamScheduleBar(at,f,step,barLen){
   const P=DREAM.p, rng=DREAM.rng, an=figAnalysis(f);
+  /* every 64 bars, re-anchor the duck params: bounds the automation backlog
+     of a long unbroken run without touching an audible transition (BREAK r3) */
+  if(DREAM.bar>0&&DREAM.bar%64===0&&DREAM.bar!==DREAM._duckFlushed&&MIX&&MIX._ctx===ctx){
+    DREAM._duckFlushed=DREAM.bar;
+    ["chord","lead","bass"].forEach(r=>{ const g=MIX[r].duck.gain;
+      try{ g.cancelScheduledValues(ctx.currentTime); g.setValueAtTime(1,ctx.currentTime); }catch(_){ } });
+  }
   const sect=sectFor(DREAM.bar), C=SECT_CFG[sect];
   const L=P.prog.length;
   /* the harmonic cycle has its own counter: a freshly applied progression of
@@ -3558,6 +3576,7 @@ function setPlayUI(on){
 function startWith(p,skipIntro){
   if(state.test) return;
   if(!state.powered) quickBoot();
+  DREAM.pending=null; /* a fresh start supersedes any dice still queued (BREAK r3) */
   LDR.on=false; const lb=document.getElementById("ldrStart"); if(lb) lb.textContent="▶ START";
   state.audition=false; state.arp.on=false; if(typeof syncLeds==="function") syncLeds();
   if(p._seed==null) p._seed=(Date.now()%100000)|0;
@@ -3575,6 +3594,7 @@ function dreamStart(){
 function dreamStop(silent){
   DREAM.on=false; DREAM.pending=null; setPlayUI(false);
   takeStop();
+  if(typeof mixDuckReset==="function") mixDuckReset();
   if(!silent&&state.powered&&cur) applyFX();
 }
 function dreamDice(){
@@ -3755,7 +3775,9 @@ function _graphRestore(S){ ctx=S.ctx; master=S.master; sum=S.sum; analyser=S.ana
   progBus=S.progBus; shaper=S.shaper; dWet=S.dWet; dDry=S.dDry; post=S.post;
   cSend=S.cSend; dSend=S.dSend; rSend=S.rSend; chIn=S.chIn; dlyIn=S.dlyIn; dlyL=S.dlyL;
   dlyR=S.dlyR; fbA=S.fbA; fbB=S.fbB; convo=S.convo; noiseBuf=S.noiseBuf; WAVES=S.WAVES;
-  MIX=S.MIX; window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap; }
+  MIX=S.MIX; window._mixTap=S.mixTap; voiceList=S.vl; activeVoices=S.av; VOICE_CAP=S.cap;
+  /* a knob turned DURING the render wrote to the offline master — resync (BREAK r3) */
+  try{ if(master&&ctx) master.gain.setTargetAtTime(state.volume,ctx.currentTime,.03); }catch(_){ } }
 async function exportTake(){
   if(typeof exporting!=="undefined"&&exporting) return;
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
@@ -3855,14 +3877,20 @@ function presetInit(){
       const b=e.target.closest(".pchip4"); if(!b) return;
       const en=PRESETS[+b.dataset.k]; if(!en) return;
       const p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed;
-      startWith(p,false);
+      /* mid-performance a chip hands off on the bar line — the direct start
+         wiped the rolling take (BREAK r3, same law as the figure chips) */
+      if(DREAM.on) DREAM.pending=p;
+      else startWith(p,false);
     });
   }
 }
 function keepSerialize(presets){
   const clone=document.documentElement.cloneNode(true);
-  clone.querySelectorAll(".on,.lit,.lit-a,.live,.rec,.busy,.hot,.dn,.locked").forEach(e=>
-    e.classList.remove("on","lit","lit-a","live","rec","busy","hot","dn","locked"));
+  clone.querySelectorAll(".on,.lit,.lit-a,.live,.rec,.busy,.hot,.dn,.locked").forEach(e=>{
+    /* tab/pane "on" is structural navigation, not a transient indicator —
+       scrubbing it blanked the whole lower UI on reboot (BREAK r3) */
+    if(e.classList.contains("tab")||e.classList.contains("pane")) return;
+    e.classList.remove("on","lit","lit-a","live","rec","busy","hot","dn","locked"); });
   const q=s=>clone.querySelector(s);
   const lcd2=q("#lcd"); if(lcd2){ lcd2.classList.add("off"); lcd2.innerHTML=""; }
   ["#dreamPlay","#fabPlay"].forEach(s=>{ const b=q(s); if(!b) return;
@@ -4153,4 +4181,16 @@ DEAD BRANCHES: (1) keeping a pristine source string in a comment for serializati
 KILL-TEST: node suite [3] — lockMerge surgical both ways (key holds scale/root/prog through a full roll while fig/kit move; rhythm holds fig/kit/tempo while harmony moves; no-lock identity), presetValidate refusing eight mutant families (alien figure/scale, tempo 999, 64-char name, negative seed, out-of-range spec chord, non-drum kit, hostile comps), presetParse filtering a mixed hostile array and capping at 8. Chromium (36 assertions ALL GREEN): key lock armed by tap, held through a live DICE (scale/root/prog byte-identical, name suffixed), released by tap; KEEP pressed mid-figure — the downloaded copy VERIFIED: presets block + rings present, then BOOTED in a second page (zero console errors, powered off, LCD off, kit select NOT doubled, one chip) and its chip replayed the exact kept seed.
 THE NON-OBVIOUS CHOICE: the file is the preset format. Every export before this shipped a sidecar (bank JSON, crate JSON — dead); the user's phrasing ("the file has to reconfigure itself") named the design nobody defaults to because outerHTML is "lossy" — but lossy only where state leaked into the DOM, and that leak list is finite, auditable, and now tested. The instrument's save file is the instrument.
 OPEN QUESTIONS: (1) Eight presets cap the row — should a ninth KEEP evict oldest (donor crate law) or refuse with words? (It silently evicts today — is that honest enough?) (2) A kept copy of a kept copy compounds scrub passes — the harness proves one generation; what does generation five look like? (3) Should KEEP also bake the CURRENT take (as a data-URI .mid inside the file) so a kept banger carries its own performance?
+RING 30 · 2026-08-31 · the third BREAK — five skeptics, nine confirmed cracks, all mended
+WHAT CHANGED: no new features — rings 26–29 put under the same court rings 19 and 25 sat: five lenses (timing/phrase engines, mix rack, KEEP serialization, locks/state machine, test honesty), twelve findings verified by refute-by-default skeptics. NINE CONFIRMED, three refuted and recorded (the preset-chips-bypass-locks claim was ruled the file's own documented design; the LDR-mode round-trip and hook-count claims died on trace — one skeptic proved BREAK sections literally unreachable in the tested window). All nine fixed at the root this ring, plus two pre-BREAK finds of my own (rhythm-locked roll names stacked "· rechorded · rechorded" — suffixes now derive from the stem; and the first duck-backlog insurance at transport stops):
+· THE CADENCE (the hook's whole point) — half the lead cells carried NO approach-tone slot, and the rest3 "breathing" variant dropped the LAST event, which is exactly where the cadence lives: a hook could go its whole life never voice-leading into a change. Every cell now carries a trailing s:2, and rest3 breathes by dropping a MIDDLE note.
+· THE TAPE (again, third time this lesson) — a preset chip clicked mid-performance called startWith() directly: hard transport cut and takeStart() wiping the rolling take, the exact crime the figure chips were convicted of in ring 25. Chips now hand off through DREAM.pending on the bar line. And a dice still queued in pending silently overrode a just-clicked preset — startWith() now clears pending, the one reconfiguring entry point that didn't.
+· KEEP — the class scrub stripped "on" from the tab/pane navigation, so every kept copy booted with the entire lower instrument BLANK (no active pane; only a click would resurrect it). Navigation state is structural, not a transient indicator; the scrub now knows the difference, and the harness asserts a kept copy boots with a live pane.
+· THE MIX — a volume knob turned during a bounce wrote to the offline master and was lost on restore (resynced from state.volume now); the duck's automation backlog grew unbounded through a long unbroken run (re-anchored every 64 bars at a quiet instant, flushed at stops).
+· THE SUITE — the locked-DICE test could pass a DICE that did nothing (asserts the seed moved now); the duck was never re-verified after the bounce swaps and restores MIX (a second probe now proves the restore); the KEEP round-trip computed the replayed hook and then never looked at it (load-bearing now: the copy must draw its hook by bar 6).
+BANNED (obvious answers set aside first): trusting rings 26–29 because rings 19 and 25 came back clean (every round's new code faces its own court — this round proved why, three rounds running); fixing the cadence by weighting hookMake toward the cells that had one (the missing capacity was the defect, not the draw); exempting "cosmetic" findings like name-stacking (a name IS the product in a tool whose faces are words).
+DEAD BRANCHES: (1) giving rest3 its own cadence-aware slice per cell shape — lost: one rule (never drop the tail) covers every cell forever; per-cell logic is how the NEXT cell ships broken. (2) flushing the duck backlog on every bar — lost: canceling automation mid-recovery pins gains at dipped values; every 64 bars at the scheduling seam is inaudible and bounds the list to a few hundred events. (3) making preset chips honor LOCKS "for consistency" — lost, and the skeptic agreed: a chip is a total, deliberate recall of a kept world; merging locks into it would corrupt the very thing KEEP promised to preserve.
+KILL-TEST: all nine fixes proven in the same run — node suites [0]–[7] green; the 37-assertion harness green including the three NEW gates (locked DICE must move the seed; the duck must dip after the bounce restore; the kept copy must boot with live tabs and a drawn hook). The review: 17 agents, five find-lenses, twelve verify-skeptics, zero findings taken on faith.
+THE NON-OBVIOUS CHOICE: the same crime convicted three times (the wiped take: ring 19's export, ring 25's figure chips, now preset chips) is not three bugs — it is one missing invariant, "only the bar line changes the transport," that each new entry point must inherit. The fix that matters is the pattern now written HERE, where the next session reads before adding entry point number four.
+OPEN QUESTIONS: (1) Should startWith itself become bar-line-aware (one guarded entry instead of per-caller pending discipline)? (2) The kept copy's tab state now survives — should KEEP also keep the chosen kit/mode selections (the refuted LDR-mode finding was refuted on impact, not on truth)? (3) Three donors in one file: what would the fourth donor —a real player's MIDI takes, as the user first suggested — teach that the math hasn't?
 ═══ end rings ═══ -->
