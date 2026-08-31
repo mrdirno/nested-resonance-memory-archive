@@ -134,13 +134,13 @@ const path = __dirname + "/triton-rack.html";
   await page.click("#dreamPlay");
   /* a library drummer plays kit-role events; a curated one perc-role — both are drums */
   await page.waitForFunction(() => typeof DREAM !== "undefined" && DREAM.on && DREAM.bar >= 2 &&
-    TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length >= 10, { timeout: 25000 });
+    TAKE.ev.filter(e => e.role === "perc" || e.role === "kit" || e.role === "dd").length >= 10, { timeout: 25000 });
   await page.waitForTimeout(250);
   const st1 = await page.evaluate(() => ({
     on: DREAM.on, powered: state.powered, seed: DREAM.seed, bar: DREAM.bar,
     readout: document.getElementById("ldrReadout").textContent,
     voices: activeVoices, engine: LDR.engine, fallbacks: LDR.fallbacks,
-    lib: DREAM.p && DREAM.p.dlib != null,
+    lib: DREAM.p && (DREAM.p.dlib != null || DREAM.p.dsty != null),
     bufs: LDR_BUFS.size }));
   if (!st1.on || !st1.powered) fail("PLAY did not start (on=" + st1.on + " powered=" + st1.powered + ")");
   else if (st1.bar < 1) fail("transport on but bars not advancing (bar " + st1.bar + ")");
@@ -170,12 +170,13 @@ const path = __dirname + "/triton-rack.html";
      library) drummer is live; the library path has its own probe later */
   await page.evaluate(() => {
     for (let t = 0; t < 12; t++) {
-      const i = BUILD.hand.findIndex(c => c && c.dlib == null);
+      /* dsty players swing on purpose (MPC math) — they are not clock evidence */
+      const i = BUILD.hand.findIndex(c => c && c.dlib == null && c.dsty == null);
       if (i >= 0) { if (i !== BUILD.live) auditionCard(i); return; }
       dreamDice();
     }
   });
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.p.dlib == null, undefined, { timeout: 25000 });
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.p.dlib == null && !DREAM.p.dsty, undefined, { timeout: 25000 });
   const tSwap = await page.evaluate(() => ctx.currentTime - TAKE.t0);
   /* the clock on the tape: correlated, not white — grid-aware, humanity-aware.
      Wait for enough FIGURE-lane tape first (after any drummer swap — earlier
@@ -284,7 +285,7 @@ const path = __dirname + "/triton-rack.html";
     const beat = 60 / state.tempo;
     let gaps = 0;
     for (let i = 1; i < L.length; i++) if (L[i].t - L[i - 1].t > beat * 1.2) gaps++;
-    const drums = TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length;
+    const drums = TAKE.ev.filter(e => e.role === "perc" || e.role === "kit" || e.role === "dd").length;
     return { stage: BUILD.stage, n: L.length, gaps, drums, hook: !!DREAM.hook,
       elibs: !!(DREAM.p && DREAM.p.elibs && DREAM.p.elibs.length),
       contour: DREAM.hook && DREAM.hook.contour };
@@ -472,13 +473,14 @@ const path = __dirname + "/triton-rack.html";
   else ok("library song standing: " + libSong.name + " (" + libSong.style + ")" + (libSong.fill ? " with a paired fill" : ""));
   await page.waitForFunction(() => !DREAM.pending && DREAM.gfield, undefined, { timeout: 25000 });
   const t0lib = await page.evaluate(() => ({ n: TAKE.ev.length, t: ctx.currentTime }));
+  /* a library drummer may wear a DD22 kit — its hits log as "dd", same drums */
   await page.waitForFunction(t0 =>
-    TAKE.ev.filter(e => e.role === "kit" && e.t > (t0.t - TAKE.t0)).length > 40, t0lib, { timeout: 90000 });
+    TAKE.ev.filter(e => (e.role === "kit" || e.role === "dd") && e.t > (t0.t - TAKE.t0)).length > 40, t0lib, { timeout: 90000 });
   const libTape = await page.evaluate(t0 => {
     const beat = 60 / state.tempo;
     const bars = Math.max(1, (ctx.currentTime - t0.t) / (beat * 4));
     const since = e => e.t > (t0.t - TAKE.t0);
-    const kitN = TAKE.ev.filter(e => e.role === "kit" && since(e)).length;
+    const kitN = TAKE.ev.filter(e => (e.role === "kit" || e.role === "dd") && since(e)).length;
     const chordN = TAKE.ev.filter(e => e.role === "chord" && since(e)).length;
     const leadN = TAKE.ev.filter(e => e.role === "lead" && since(e)).length;
     return { gf: !!DREAM.gfield, bars: +bars.toFixed(1), kitPerBar: +(kitN / bars).toFixed(1),
@@ -684,6 +686,122 @@ const path = __dirname + "/triton-rack.html";
     fail("render clock stalled after the bounce — duck unmeasurable " + JSON.stringify(duck2));
   else if (!(duck2.dipped < .95)) fail("duck dead after the bounce " + JSON.stringify(duck2));
   else ok("mix rack + duck survive the bounce restore (dip " + duck2.dipped.toFixed(2) + ")");
+
+  /* ── DD22 (round 7): a DreamDrummer language on a DreamDrummer kit, live ──
+     Force a knock/hyphyK drummer alone (no bass kept, so the 808 line carries
+     the low end), verify: buffers bake off the hit path, kit hits land as
+     role "dd" through the kit strip, the 808 line logs "dd8", the limiter
+     stays inside the round-6 ceiling, and the drums drawer walks the shelf. */
+  await page.evaluate(() => {
+    dreamStop(true);
+    const cat = PROGRAMS.map((p, i) => ({ p, i })).filter(x => x.p.cat === "DRUMS").map(x => x.i);
+    const fig16 = Object.keys(LDR_FIG).find(k => LDR_FIG[k].grid === 16);
+    window._ddCard = { kind: "drums", name: "Hyphy · the Bay", desc: "probe", fig: fig16,
+      comps: [], kit: cat[0], tempo: 100, hum: .18, extraKick: false,
+      dsty: "knock", dkit: "hyphyK", seed: 777 };
+    const p = composeP([window._ddCard, null, null, null, { kind: "shape", format: "loop" }], null, 5);
+    startWith(p, true);
+  });
+  await page.waitForFunction(() => DREAM.on && DREAM.p && DREAM.p.dsty === "knock" && DREAM.bar >= 2, undefined, { timeout: 25000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "dd").length >= 6, undefined, { timeout: 40000 })
+    .catch(() => {});
+  const dd1 = await page.evaluate(async () => {
+    /* peak at the kit strip AND at the limiter while the language plays */
+    const anK = MIX.kit.an;
+    const anL = ctx.createAnalyser(); anL.fftSize = 2048;
+    window._chain.lim.connect(anL);
+    const bK = new Uint8Array(anK.fftSize), bL = new Uint8Array(anL.fftSize);
+    let pkK = 0, pkL = 0;
+    const t0 = performance.now();
+    while (performance.now() - t0 < 2600) {
+      anK.getByteTimeDomainData(bK); anL.getByteTimeDomainData(bL);
+      for (let i = 0; i < bK.length; i++) { const v = Math.abs(bK[i] - 128) / 128; if (v > pkK) pkK = v; }
+      for (let i = 0; i < bL.length; i++) { const v = Math.abs(bL[i] - 128) / 128; if (v > pkL) pkL = v; }
+      await new Promise(r => setTimeout(r, 12));
+    }
+    try { window._chain.lim.disconnect(anL); } catch (_) {}
+    const dd = TAKE.ev.filter(e => e.role === "dd");
+    const d8 = TAKE.ev.filter(e => e.role === "dd8");
+    const kitFall = TAKE.ev.filter(e => e.role === "kit");
+    const bufs = []; DD_BUFS.forEach((v, k) => bufs.push(k));
+    const zones = [...new Set(dd.map(e => e.zone))].sort((a, b) => a - b);
+    /* the writer: dd → GM drums ch10, the 808 line → the bass channel */
+    const mev = takeToMidiEvents(TAKE.ev);
+    const gm = mev.filter(e => e.role === "dd" && e.ch === 9).length;
+    const bch = mev.filter(e => e.role === "dd8" && e.ch === 1).length;
+    return { on: DREAM.on, bar: DREAM.bar, dd: dd.length, d8: d8.length, kitFall: kitFall.length,
+      bufs: bufs.length, zones, pkK: +pkK.toFixed(3), pkL: +pkL.toFixed(3),
+      gm, bch, muteBass: DREAM.p.muteBass,
+      warmDone: Object.keys(DD_WARM).some(k => k.indexOf("hyphyK") === 0 && DD_WARM[k].done) };
+  });
+  if (!dd1.on) fail("DD probe: dream not running " + JSON.stringify(dd1));
+  else if (dd1.dd < 6) fail("DD kit hits not landing (dd " + dd1.dd + ", fallback kit " + dd1.kitFall + ", bufs " + dd1.bufs + ")");
+  else if (!dd1.bufs) fail("no DD buffers baked");
+  else if (!(dd1.pkK > 0.02)) fail("DD kit silent at the strip (pk " + dd1.pkK + ")");
+  else if (!(dd1.pkL < 0.99)) fail("DD kit breaks the round-6 ceiling (lim pk " + dd1.pkL + ")");
+  else ok("DD22 live: " + dd1.dd + " dd hits (zones " + dd1.zones.join("/") + ") · " + dd1.bufs +
+    " buffers · strip pk " + dd1.pkK + " · lim pk " + dd1.pkL);
+  if (!dd1.muteBass) fail("DD probe composed a bass from nothing");
+  else if (dd1.d8 < 1) fail("the 808 line never fired with the low end open (d8 " + dd1.d8 + ")");
+  else if (!dd1.bch) fail("808 line missing from the bass channel in the writer");
+  else ok("the 808 line carries the low end: " + dd1.d8 + " dd8 notes → MIDI ch2 (" + dd1.bch + "), kit → GM ch10 (" + dd1.gm + ")");
+
+  /* the drums drawer spans the shelf: ‹ › walk TRITON kits AND DD kits */
+  const drawer = await page.evaluate(() => {
+    const kept0 = BUILD.kept[0];
+    BUILD.kept[0] = window._ddCard;
+    rackRender();
+    const shown = (document.querySelector('#rackShelf .rku[data-slot="0"] .rkvoice') || {}).textContent;
+    rackCycle(0, 1);
+    const next = BUILD.kept[0].dkit;
+    for (let i = 0; i < 40 && BUILD.kept[0].dkit; i++) rackCycle(0, 1); /* walk off the shelf end */
+    const backToTriton = !BUILD.kept[0].dkit && PROGRAMS[BUILD.kept[0].kit].cat === "DRUMS";
+    rackCycle(0, -1);
+    const wrapBack = BUILD.kept[0].dkit;
+    BUILD.kept[0] = kept0; rackRender();
+    return { shown, next, backToTriton, wrapBack };
+  });
+  if (drawer.shown !== "DD·HYPHYK") fail("rack does not show the DD kit (" + drawer.shown + ")");
+  else if (drawer.next !== "boombap") fail("› did not walk the shelf (" + drawer.next + ")");
+  else if (!drawer.backToTriton) fail("shelf end did not wrap to the TRITON kits");
+  else if (drawer.wrapBack !== "cine") fail("‹ did not wrap back onto the shelf (" + drawer.wrapBack + ")");
+  else ok("drums drawer: ‹ › one ring over TRITON kits + DD shelf (DD·HYPHYK → boombap → … → TRITON → ‹ cine)");
+
+  /* the bounce replays dd + dd8 through the same engine */
+  const dlDD = downloads.length;
+  await page.click("#ldrSave");
+  await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
+  await page.waitForFunction(() => !exporting, { timeout: 90000 });
+  await page.waitForTimeout(900);
+  const ddSave = await page.evaluate(() => ({
+    lbl: document.getElementById("ldrSaveLbl").textContent,
+    wavs: 0 }));
+  const ddWav = downloads.slice(dlDD).find(d => /\.wav$/.test(d.suggestedFilename()));
+  if (!ddWav || /FAILED/.test(ddSave.lbl)) fail("DD bounce failed (" + ddSave.lbl + ")");
+  else {
+    const os3 = require("os"), fs3 = require("fs"), pj3 = require("path").join;
+    const wp = pj3(os3.tmpdir(), "tr-dd.wav");
+    await ddWav.saveAs(wp);
+    const buf = fs3.readFileSync(wp);
+    /* 24-bit stereo: scan frames for a real signal */
+    let pk = 0; const dataAt = buf.indexOf("data") + 8;
+    for (let i = dataAt; i + 2 < buf.length; i += 3 * 7) {
+      const v = ((buf[i + 2] << 16) | (buf[i + 1] << 8) | buf[i]) << 8 >> 8;
+      const a = Math.abs(v / 8388608); if (a > pk) pk = a;
+    }
+    if (!(pk > 0.02)) fail("DD bounce is silence (pk " + pk.toFixed(4) + ")");
+    else if (!(pk <= 1)) fail("DD bounce clips (pk " + pk.toFixed(3) + ")");
+    else ok("DD bounce renders the language offline: " + ddWav.suggestedFilename() + " · pk " + pk.toFixed(2));
+  }
+
+  /* hand the stage back to the full song before KEEP, then stop the dream —
+     the baseline enters KEEP with the conductor off (powerOff never clears
+     DREAM.on, and a live flag makes setProgram skip arp defaults later) */
+  await page.evaluate(() => { const p = composeP(BUILD.kept, null, 5); if (p) startWith(p, true); });
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.bar >= 1, undefined, { timeout: 20000 });
+  await page.waitForFunction(() => TAKE.ev.length >= 10, undefined, { timeout: 30000 }).catch(() => {});
+  await page.evaluate(() => dreamStop(true));
+  await page.waitForTimeout(200);
 
   /* KEEP: the file saves a copy of ITSELF carrying the dream — then that copy
      must boot clean and play its preset */

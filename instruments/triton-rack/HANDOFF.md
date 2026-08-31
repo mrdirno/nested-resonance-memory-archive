@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-08-31, rings 1–32 in `triton-rack.html`.
+**As of:** 2026-08-31, rings 1–35 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -33,7 +33,24 @@ OpenScore String Quartets CC0, judged by a 29-agent court, every phrase
 re-verified against raw sources), THE COUNTER and THE EMBELLISH replacing
 chords and lead, the groove field, the 2U rack shelf, and take-logged
 dynamic headroom. Traits now: THE DRUMMER · THE LOW END · THE COUNTER ·
-THE EMBELLISH · THE SHAPE.
+THE EMBELLISH · THE SHAPE. Round 6 (rings 33–34) executed the sixth verdict
+by MEASUREMENT: the clipping was convicted at the tube waveshaper (raw bus
+peaked 3.26; WebAudio hard-clamps past the curve domain) and fixed
+structurally (MIX_BUS_TRIM 0.42; volume moved post-limiter), the SAVE
+delivery hardened into persistent ⤓WAV/⤓MIDI chips, and VERB shipped — one
+−/+ pill scaling every program's reverb send in 10% steps, default 50%.
+Round 7 (rings 35, this round) absorbed a FOURTH DONOR (`dreamdrummer_22.html`):
+*"load the sounds from dream drummer onto the Korg triton"* and *"could just
+port the entire library over"* — the DD22 KIT ENGINE (all six drum voices +
+the 11-kit bank, sliced verbatim-by-construction by `mine/dd22_port.js`, a
+byte-compare fidelity gate in suite [8]), DD kits playable on every drummer
+card via baked velocity layers through one `kitZone()` door with the TRITON
+kit as per-hit fallback, the drums drawer one ring over TRITON + DD kits —
+and the donor's SEVENTEEN DRUM LANGUAGES (KPAT cells + full style grammars,
+verbatim) realized per-dream into dealable style drummers with MPC-math
+swing, ghost floors, phrase-end fills, ensembles on this file's ported
+percussion physics, and the 808 line ("the kick is the bassline") re-rooted
+to any key and carrying the low end until a bass trait stands.
 
 ---
 
@@ -44,7 +61,8 @@ THE EMBELLISH · THE SHAPE.
 | `triton-rack.html` | The instrument (self-contained, no CDN/fetch/localStorage). The face is **THE SONG AVATAR** (round 4): a track is built like a game character — five trait slots (THE DRUMMER · THE LOW END · THE CHANGES · THE VOICE · THE SHAPE), the engine deals three prebuilt candidates per trait (curated dream identities + wildcard breeds; keys and bass voices; scale-matched named progressions; hook DNAs; loop/arc/song), tap a card to hear it swap in **on the bar** under everything kept, tap the lit card to keep it and the next trait deals itself; unfilled slots are muted, never faked; the rail is the avatar and tapping a filled slot remixes that trait live; a song stands in as few as five taps. Under the fold (one "⚙ engine room" link): the full Korg TRITON-Rack recreation — 128 programs + 16 user Bank B slots, 16 combis, Web MIDI in (hardware keyboards are first-class — the unit boots from a MIDI note, with a one-tap audio nudge for the autoplay law), DecentSampler export, EXB-LDR board with the donor's **ported percussion physics** (25 PERC_RECIPE voices) and 51 figures routed instrument-to-instrument, the **theory bar** (key, named progression, Roman numerals, the sounding chord — honest at every build stage), the 12-progression bank, the drummer's correlated clock + hook/bass cell engines, the mix rack + master chain. **THE TAKE** rolls from the moment anything plays and SAVE bounces it offline through the same engine into a normalized 24-bit WAV + SMF-1 with the player on a YOU track; ★ KEEP writes the standing song into a working copy of the file itself (the copy boots with the avatar rail rebuilt, remixable). Rings at tail. |
 | `luckydreamer_3.html` | The first donor, byte-identical to the original upload. Reference and ground truth. **Do not modify it.** |
 | `dreamdrummer_21.html` | The third donor (round 3), byte-identical to the upload. Source of the correlated human-timing science, the structural-consistency doctrine, the mix architecture, and the locks grammar (extraction: Ring 26). **Do not modify it.** |
-| `mine/` | The phrase-library pipeline (round 5): SMF + MusicXML parsers (no deps), LDRP1 pack/unpack, extractors for Groove MIDI (CC-BY 4.0) and OpenScore String Quartets (CC0), structural pre-filter, the judges' decoder, the raw-source fidelity gate, the assembler and injector. See `mine/README.md` — the library is re-runnable and extensible. |
+| `dreamdrummer_22.html` | The fourth donor (round 7), byte-identical to the upload. Source of the DD22 kit engine (six drum voices, the 11-kit bank, Kit-as-a-bus) and the 17-style pattern library (KPAT cells + grammars + measured feel numbers), all sliced verbatim by `mine/dd22_port.js` (extraction: Ring 35). **Do not modify it.** |
+| `mine/` | The phrase-library pipeline (round 5): SMF + MusicXML parsers (no deps), LDRP1 pack/unpack, extractors for Groove MIDI (CC-BY 4.0) and OpenScore String Quartets (CC0), structural pre-filter, the judges' decoder, the raw-source fidelity gate, the assembler and injector. See `mine/README.md` — the library is re-runnable and extensible. Round 7 adds `mine/dd22_port.js`: the DD22 verbatim slicer/injector (23 line-ranged donor slices → the `/*DD22-BEGIN*/…/*DD22-END*/` block; re-run it after donor-slice changes; suite [8] byte-compares). |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
 | `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
@@ -162,6 +180,52 @@ THE EMBELLISH · THE SHAPE.
    at the bar a part lands and logged into the take as `mix` events, so the
    offline bounce replays the exact console moves.
 
+## 3e. Round 6 in three cuts (rings 33–34)
+
+1. **The clipping, measured.** Four analyser taps under a full band: the raw
+   mix bus peaked 3.26 and drove the tube waveshaper past its curve domain,
+   where WebAudio hard-clamps (flat-tops + oversampling ring). Fix:
+   `MIX_BUS_TRIM` 0.42 seats the chain; the VOLUME knob moved post-limiter.
+   Two standing harness gates: tube ≤0.25% samples ≥0.985; destination <0.95.
+2. **SAVE delivery.** Persistent ⤓WAV/⤓MIDI chips on the face (a second
+   programmatic download is blocked in real browsers; blob revoke now 300 s),
+   with a render ticker.
+3. **VERB.** One −/+ pill, 10% steps, default 50%, scaling every program's
+   reverb send; carried by presets and KEEP; identical in the bounce.
+
+## 3f. Round 7 in five cuts (ring 35)
+
+1. **The DD22 kit engine, verbatim by construction.** `mine/dd22_port.js`
+   slices 23 exact line ranges from `dreamdrummer_22.html` (atoms · studio
+   bus · ModalBank+MODES · wavetables · KickVoice/SnareVoice/MetalVoice/
+   TunedDrum/ShakeVoice/ClapVoice · Kit-as-a-bus · the 11-kit bank ·
+   metricWeights · the whole k05 grammar) into the `DD22` IIFE between
+   markers; the only transform is a 2-line rewrap. Suite [8] REBUILDS the
+   block from the donor and byte-compares — the port cannot rot invisibly.
+2. **DD kits on every drummer.** Velocity-layered stereo buffers baked off
+   the hit path (`ddWarm`, core hits first), played through `ddHit` → the
+   kit strip (meters/duck/headroom see them), hat choke kept at play time,
+   `kitZone()` the single door with the TRITON kit as per-hit fallback.
+   Cards carry `dkit`; the drums drawer is ONE ring over TRITON + DD kits;
+   presets/KEEP validate and carry it; takes log role `dd`, GM-mapped in
+   the MIDI, replayed in the bounce (kick keys the duck).
+3. **The 17 languages.** KPAT/KPAT12 cells + full style grammars sliced
+   verbatim; `kRealize()` (glue) walks them into one deterministic 2-bar
+   plan — kit events on TRITON zones, ensembles on this file's LDR_RECIPE
+   physics, the Bell cycle riding this file's own bembe figure, MPC-math
+   swing baked into step values (swing:0 = machine, NOT MPC 0% — ring 35's
+   conviction), ghost floors, phrase-end fills, BREAK dropout.
+4. **The 808 line.** Style sub grammars stored as semitone offsets,
+   re-rooted to the song's tonic at play time, played on the DD22 kick
+   buffer retuned via playbackRate with drill slides gliding between
+   different notes; carries the low end only while no bass trait stands;
+   role `dd8` on the tape → bass channel in the MIDI → replayed offline.
+5. **Gates.** Node suites [8]/[9] (fidelity, merge law, measured 808/choke/
+   pan physics, dembow-verbatim, swing math, preset law, deal spread);
+   harness: a forced knock/hyphyK dream lands dd hits with the limiter
+   inside the round-6 ceiling, the drawer walks the shelf and wraps, the
+   bounce renders the language, `DD_LVL` measured down to 1.0.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -203,6 +267,13 @@ the map are the donor's hand: do not move them on taste.
   should the dealer learn from what gets kept? (Ring 31)
 - A full five-lens BREAK court on the builder (like rings 19/25/30) is owed
   next round; ring 31 shipped with a BREAK-lite only (Ring 31).
+- The 808 line yields to a kept bass — a dealable "THE 808" low-end card
+  would let hyphy keep its bassline by choice (Ring 35).
+- trapK/hyphyK kicks carry `tuned:1` — plain kick hits still land at patch
+  pitch; per-key baked kicks would finish the donor's intent (Ring 35).
+- The donor's k06 fill engine and the KSNARE_POOL/KHAT_POOL per-style
+  alternate architectures stayed behind with the knock kit bank — liftable
+  next bench (Ring 35).
 - Hand size: is 3 cards right at phone scale? Long-press to re-deal one
   trait? (Ring 31)
 - Enharmonic spelling: the theory bar spells sharps-only (A#maj7 where a flat
