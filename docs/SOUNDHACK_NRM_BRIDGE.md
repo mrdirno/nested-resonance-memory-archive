@@ -1,7 +1,7 @@
 # SoundHack × NRM Bridge
 
 **Modules:** `nrm_core/soundhack_spectral.py`, `nrm_core/soundhack_bridge.py`
-**Tests:** `tests/test_soundhack_spectral.py`, `tests/test_soundhack_bridge.py` (44 tests)
+**Tests:** `tests/test_soundhack_spectral.py`, `tests/test_soundhack_bridge.py` (51 tests)
 **Companion archive:** [soundhack-x-NRM-Archive-](https://github.com/mrdirno/soundhack-x-NRM-Archive-)
 (Tom Erbe's SoundHack C source, MIT; the crossover map lives there as
 `python/CROSSOVER_MAP.md`)
@@ -17,7 +17,7 @@ composition operator NRM was missing.
 
 ## The four couplings
 
-### 1. Audio as a reality anchor (Gate 2.6)
+### 1. Audio as a reality anchor (toward Gate 2.6)
 
 `TranscendentalBridge.reality_to_phase` reads exactly three keys:
 `cpu_percent`, `memory_percent`, `disk_percent`, each in [0, 100]. That
@@ -105,27 +105,34 @@ stdlib) and mirrored byte-identically in the SoundHack archive as
 
 ## Verification
 
-- 44 tests in the maintained suite (`pytest tests/`), pinning window
-  coefficients, kernel math, round-trip identity, the one-hop `ShiftOut`
-  pre-roll, contract ranges, determinism under seeds, and the two
+- 51 tests in the maintained suite (run them with
+  `pytest tests/test_soundhack_spectral.py tests/test_soundhack_bridge.py`;
+  two unrelated legacy Helios tests abort a bare `pytest tests/` at
+  collection), pinning window coefficients, kernel math, round-trip
+  identity, the one-hop `ShiftOut` pre-roll and the `ShiftIn` validSamples
+  countdown, contract ranges, determinism under seeds, and the two
   integration loops above.
-- Differential test against the original C: `Math/FFT.c` and
-  `Math/Windows.c` from the SoundHack archive compile on modern gcc; the
-  compiled `RealFFT` matches `conj(np.fft.rfft())` in SoundHack's packed
-  layout at float32 precision (~1.6e-7 relative), the round trip is
-  identity (~4.8e-7), and all seven windows match (~4e-7).
+- Differential tests against the original C, compiled with gcc from the
+  SoundHack archive: `RealFFT` matches `conj(np.fft.rfft())` in the
+  packed layout at float32 precision (~1.6e-7 relative) with round-trip
+  identity (~4.8e-7); all seven windows match (~4e-7); `FindBestRatio`
+  matches on 78 (window, scale) cases including its mismatched-pair and
+  fallback exits; `PhaseInterpolate` with phase locking matches over
+  multi-frame random input (~7e-6 rad).
 
 ## Provenance
 
 Original C: SoundHack, © Tom Erbe (MIT License). Mutation algorithms:
-Larry Polansky (Leonardo Music Journal / CMJ 16(4), 1992). Port and
+Larry Polansky — morphological mutation functions (Polansky & McKinney,
+Proc. ICMC 1991); L. Polansky & T. Erbe, "Spectral Mutation in
+SoundHack," Computer Music Journal 20(1): 92–101, 1996. Port and
 bridge: Aldrin Payopay. The port file is MIT (matching its source
 material); the bridge module is GPL-3.0 with the rest of this repository.
 
 <!-- ═══ RINGS · agent context, newest last · read before changing this file ═══
 RING 1 · 2026-08-31 · cross-pollination session 1
 WHAT CHANGED: first bridge between this repo and soundhack-x-NRM-Archive-.
-Port (soundhack_spectral) + adapters (soundhack_bridge) + 44 tests + this
+Port (soundhack_spectral) + adapters (soundhack_bridge) + 51 tests + this
 doc; mirror + CLI + CROSSOVER_MAP.md + README on the SoundHack side.
 BANNED: doc-only cross-links; generic modernization port; generic
 sonification; ctypes bindings; audio-as-RNG-seed.
@@ -134,9 +141,13 @@ Doctrine); porting Convolve first (metaphor, not isomorphism); wiring
 into legacy src/fractal CompositionEngine (unused by the swarm loop;
 nrm_core is the tested surface).
 KILL-TEST: "the port agrees with notes, not with the C" — killed by
-compiling the archive's actual FFT.c/Windows.c and matching at float32
-precision. Residual: Mutate.c frame loop verified behaviorally (omega
-extremes reproduce source/target through the full chain), not compiled.
+compiling the archive's actual FFT.c/Windows.c/FindBestRatio/
+PhaseInterpolate and matching at float32 precision; a 4-lens adversarial
+review then found and fixed 5 real fidelity divergences (ShiftIn same-
+block countdown, FindBestRatio loop exits, locking's in-place neighbor
+read, AddSynth hard cut, table-B parity). Residual: Mutate.c's frame
+loop verified behaviorally (omega extremes reproduce source/target
+through the full chain), not compiled.
 THE NON-OBVIOUS CHOICE: Polansky mutation as NRM's missing composition
 operator (omega = resonance), not NRM as a modulation source for effects.
 OPEN QUESTIONS: drive FractalSwarm coupling_strength from audio flux and

@@ -35,8 +35,25 @@ mirrored byte-identically in two repositories:
 
 Original C source: SoundHack, Copyright (c) Tom Erbe (MIT License,
 https://github.com/tomerbe -- archived at soundhack-x-NRM-Archive-).
-Mutation algorithms: Larry Polansky, "Morphological Metrics" /
-mutation functions (Leonardo Music Journal, CMJ 16(4) 1992).
+Mutation algorithms: Larry Polansky -- morphological mutation functions
+(Polansky & McKinney, Proc. ICMC 1991); L. Polansky & T. Erbe, "Spectral
+Mutation in SoundHack," Computer Music Journal 20(1): 92-101, 1996.
+
+Deliberate deviations from the C (everything else is faithful, verified
+against the compiled originals where they build):
+- numpy rfft/irfft replace the packed RealFFT (differential-tested
+  equivalent); float64 replaces float32 except where truncation semantics
+  matter (find_best_ratio reproduces the C's mixed float/double math).
+- The RNG is a seedable random.Random instead of C rand(); phase A of
+  pick_mutate_table draws once per slot, and its count-correction loop
+  breaks a potential stall deterministically (see its docstring).
+- The processing chain is mono (no stereo j-buffer aliasing).
+- OscillatorBank is generalized to arbitrary partials: a silent partial
+  snaps its stored frequency to the incoming target frequency rather
+  than an FFT-bin frequency.
+- spectral_mutate clamps a truncated-to-zero target hop to 1 sample;
+  the C would silently never read the target stream (leaving it all
+  zeros) in that pathological case.
 
 This port: MIT License (matching the source material).
 Port author: Aldrin Payopay <aldrin.gdf@gmail.com>
@@ -201,9 +218,18 @@ def wrap_pm_pi(x: np.ndarray) -> np.ndarray:
     """C-faithful phase wrap: while (x > pi) x -= 2pi; while (x < -pi) x += 2pi.
 
     Keeps values already in [-pi, pi] untouched (both endpoints included),
-    matching the strict inequalities of the original while-loops.
+    matching the strict inequalities of the original while-loops. The bulk
+    of the reduction is done in closed form (the exact fixed point of the
+    loops), so arbitrarily large inputs wrap in O(1) instead of one period
+    per iteration; a final loop pass absorbs any floating-point edge.
     """
     x = np.array(x, dtype=float)
+    over = x > math.pi
+    if np.any(over):
+        x[over] -= TWO_PI * np.ceil((x[over] - math.pi) / TWO_PI)
+    under = x < -math.pi
+    if np.any(under):
+        x[under] += TWO_PI * np.ceil((-x[under] - math.pi) / TWO_PI)
     while np.any(x > math.pi):
         x = np.where(x > math.pi, x - TWO_PI, x)
     while np.any(x < -math.pi):
@@ -276,31 +302,40 @@ class _SlidingInput:
     """
 
     def __init__(self, signal: np.ndarray, window_size: int, decimation: int):
+        if not 0 < decimation <= window_size:
+            raise ValueError(
+                f"decimation must be in 1..window_size, got {decimation}")
         self.signal = np.asarray(signal, dtype=float)
         self.window_size = window_size
         self.decimation = decimation
         self.buf = np.zeros(window_size)
         self.pos = 0
         self.valid = window_size
-        self._eof = False
 
     def shift_in(self) -> bool:
-        """Advance one hop; returns True while the stream is still valid."""
+        """Advance one hop; returns True while the stream is still valid.
+
+        Mirrors the C exactly: once a short read sets validSamples below
+        windowSize, no further samples are read, the buffer is zero-padded
+        from validSamples up, and validSamples is decremented by the hop
+        ON THAT SAME CALL and on every call after (so the short-read block
+        itself is the first of the countdown).
+        """
         d = self.decimation
-        self.buf[:-d] = self.buf[d:]
-        chunk = self.signal[self.pos:self.pos + d]
-        self.pos += d
-        n = len(chunk)
-        tail = self.buf[self.window_size - d:]
-        tail[:n] = chunk
-        tail[n:] = 0.0
-        if not self._eof:
-            if n < d:
-                self._eof = True
+        self.buf[:-d] = self.buf[d:] if d < self.window_size else 0.0
+        if self.valid == self.window_size:
+            chunk = self.signal[self.pos:self.pos + d]
+            self.pos += d
+            n = len(chunk)
+            self.buf[self.window_size - d:self.window_size - d + n] = chunk
+            if n != d:
                 self.valid = self.window_size - d + n
-        else:
+        if self.valid < self.window_size:
+            self.buf[self.valid:] = 0.0
             self.valid -= d
-        return self.valid > 0
+            if self.valid <= 0:
+                return False
+        return True
 
 
 def stft_analyze(signal: np.ndarray, points: int = 1024,
@@ -315,6 +350,9 @@ def stft_analyze(signal: np.ndarray, points: int = 1024,
     where amps/phases have shape (num_frames, points//2 + 1) and info holds
     the windows and pointers needed for an exact resynthesis.
     """
+    if points < 8:
+        raise ValueError("points must be at least 8 (the C dialog offers "
+                         "64..8192)")
     if window_size is None:
         window_size = points
     if decimation is None:
@@ -386,44 +424,72 @@ def stft_resynthesize(amps: np.ndarray, phases: np.ndarray,
 
 def find_best_ratio(scale_factor: float, window_size: int
                     ) -> Tuple[int, int, float]:
-    """FindBestRatio(): integer hop pair within 0.4% of scale_factor.
+    """FindBestRatio(): the C's exact integer hop-pair search.
 
     Returns (decimation, interpolation, achieved_ratio); both hops capped
-    at window_size // 8.
+    at window_size // 8. Reproduces the original for-loop verbatim,
+    including its quirks (all verified against the compiled C on 78
+    (window_size, scale_factor) cases):
+
+    - percentError enters at 2.0; a pair within 0.4% (error < 1.004)
+      breaks with a CONSISTENT pair;
+    - the loop CONDITION exits at error <= 1.01, but only AFTER the
+      post-body hop decrement, so those exits return a MISMATCHED pair
+      (the hop decremented once past the pair that satisfied the test);
+    - when the scanned hop reaches 1, the fallback resets it to the
+      maximum, then the post-body decrement still fires, landing on
+      max_hop - 1 paired with a hop computed from max_hop;
+    - the arithmetic mixes float32 and double exactly as the C does
+      (float testScale/percentError, double scaleFactor).
     """
+    if scale_factor <= 0:
+        raise ValueError("scale_factor must be positive")
+    f32 = np.float32
     max_hop = window_size // 8
+    if max_hop < 1:
+        raise ValueError("window_size must be at least 8")
     decimation = interpolation = max_hop
     if scale_factor > 1.0:
-        interpolation = max_hop
-        while interpolation > 1:
-            decimation = int(interpolation / scale_factor)
-            if decimation == 0:
-                interpolation -= 1
-                continue
-            test = float(interpolation) / decimation
-            err = max(test, scale_factor) / min(test, scale_factor)
-            if err < 1.004:
+        while True:
+            decimation = int(float(f32(interpolation)) / scale_factor)
+            if decimation != 0:
+                test = float(f32(f32(interpolation) / f32(decimation)))
+                pe = float(f32(test / scale_factor)) if test > scale_factor \
+                    else float(f32(scale_factor / test))
+            else:
+                pe = math.inf
+            if pe < 1.004:
                 break
+            if interpolation == 1:
+                interpolation = max_hop
+                decimation = int(float(f32(max_hop)) / scale_factor)
+                pe = 1.0
             interpolation -= 1
-        if interpolation <= 1:
-            interpolation = max_hop
-            decimation = int(max_hop / scale_factor)
-    elif scale_factor < 1.0:
-        decimation = max_hop
-        while decimation > 1:
-            interpolation = int(decimation * scale_factor)
-            if interpolation == 0:
-                decimation -= 1
-                continue
-            test = float(interpolation) / decimation
-            err = max(test, scale_factor) / min(test, scale_factor)
-            if err < 1.004:
+            if not (pe > 1.01):
                 break
+    elif scale_factor < 1.0:
+        while True:
+            interpolation = int(decimation * scale_factor)
+            if interpolation != 0:
+                test = float(f32(f32(interpolation) / f32(decimation)))
+                pe = float(f32(test / scale_factor)) if test > scale_factor \
+                    else float(f32(scale_factor / test))
+            else:
+                pe = math.inf
+            if pe < 1.004:
+                break
+            if decimation == 1:
+                decimation = max_hop
+                interpolation = int(decimation * scale_factor)
+                pe = 1.0
             decimation -= 1
-        if decimation <= 1:
-            decimation = max_hop
-            interpolation = int(max_hop * scale_factor)
-    return decimation, interpolation, float(interpolation) / decimation
+            if not (pe > 1.01):
+                break
+    if decimation != 0:
+        achieved = float(f32(f32(interpolation) / f32(decimation)))
+    else:
+        achieved = math.inf
+    return decimation, interpolation, achieved
 
 
 class PhaseInterpolator:
@@ -454,11 +520,17 @@ class PhaseInterpolator:
                 new_phase[b] = self.last_phase_out[b]
                 continue
             if self.phase_locking:
+                # The C reads polarSpectrum in place, so the low neighbor's
+                # phase slot already holds bin b-1's OUTPUT phase (equal to
+                # last_phase_out[b-1] in both the normal and amp==0 paths),
+                # while lastPhaseIn[b-1] holds its current INPUT phase (or a
+                # stale one if amp[b-1]==0). Reproduced exactly.
                 max_amplitude = 0.0
                 pd = 0.0
                 if b > 1:
                     max_amplitude = amp[b - 1]
-                    pd = ((phase[b - 1] - self.last_phase_in[b - 1])
+                    pd = ((self.last_phase_out[b - 1]
+                           - self.last_phase_in[b - 1])
                           - self.phase_per_band)
                 if amp[b] > max_amplitude:
                     max_amplitude = amp[b]
@@ -682,7 +754,9 @@ class MutationEngine:
             dec_a = pick_mutate_table(omega, spec.band_persistence,
                                       self.half_points,
                                       self.small_decision_a, self.rng)
-        if mt == LCMIUIM:
+        if mt in (LCMIUIM, LCMUUIM):
+            # The C picks table B for LCMUUIM too, though its math never
+            # reads it -- kept for RNG-stream and table-state parity.
             dec_b = pick_mutate_table(omega, spec.band_persistence,
                                       self.half_points,
                                       self.small_decision_b, self.rng)
@@ -776,6 +850,9 @@ def spectral_mutate(source: np.ndarray, target: np.ndarray,
     The output begins one hop before input time zero (see
     stft_resynthesize).
     """
+    if points < 8:
+        raise ValueError("points must be at least 8 (the C dialog offers "
+                         "64..8192)")
     window_size = points
     half_points = points // 2
     interpolation = decimation = window_size // 8
@@ -799,6 +876,8 @@ def spectral_mutate(source: np.ndarray, target: np.ndarray,
     omega_seq = None
     if not np.isscalar(spec.omega):
         omega_seq = np.asarray(spec.omega, dtype=float)
+        if len(omega_seq) == 0:
+            raise ValueError("spec.omega sequence must be non-empty")
 
     in_pointer = -window_size
     f_in_pointer = -window_size
@@ -875,7 +954,10 @@ class OscillatorBank:
         increments = np.asarray(freqs_cycles, dtype=float) * SINE_TABLE_SIZE
         s = np.arange(interp)
         for b in range(self.num_partials):
-            if amps[b] == 0.0 and self.last_amp[b] == 0.0:
+            if amps[b] == 0.0:
+                # C: a silent target amplitude skips the sample loop
+                # entirely -- hard cut to silence, oscillator phase frozen.
+                self.last_amp[b] = 0.0
                 self.last_freq[b] = increments[b]
                 continue
             amp_inc = (amps[b] - self.last_amp[b]) / interp
@@ -883,11 +965,12 @@ class OscillatorBank:
             freq_ramp = self.last_freq[b] + freq_inc * s
             addr = self.address[b] + np.concatenate(
                 ([0.0], np.cumsum(freq_ramp[:-1])))
-            addr_wrapped = np.mod(addr, SINE_TABLE_SIZE)
+            addr_idx = np.mod(addr, SINE_TABLE_SIZE).astype(int) \
+                % SINE_TABLE_SIZE
             amp_ramp = self.last_amp[b] + amp_inc * s
-            output += amp_ramp * _SINE_TABLE[addr_wrapped.astype(int)]
-            self.address[b] = math.fmod(
-                self.address[b] + freq_ramp.sum(), SINE_TABLE_SIZE)
+            output += amp_ramp * _SINE_TABLE[addr_idx]
+            self.address[b] = (self.address[b] + freq_ramp.sum()) \
+                % SINE_TABLE_SIZE
             self.last_amp[b] = amps[b]
             self.last_freq[b] = increments[b]
         return output

@@ -151,7 +151,9 @@ class AudioEntropy:
     """
 
     def __init__(self, signal: np.ndarray, frame_size: int = 1024):
-        sig = np.asarray(signal, dtype=np.float64)
+        # Canonical little-endian bytes so the stream is identical across
+        # host byte orders.
+        sig = np.asarray(signal, dtype="<f8")
         self._frames = [sig[i:i + frame_size].tobytes()
                         for i in range(0, max(len(sig), 1), frame_size)]
         self._counter = 0
@@ -161,7 +163,9 @@ class AudioEntropy:
         data = frame + struct.pack(">Q", self._counter)
         self._counter += 1
         digest = hashlib.sha256(data).digest()
-        return int.from_bytes(digest[:8], "big") / 2 ** 64
+        # Top 53 bits / 2**53 is exact in float64 and strictly < 1.0
+        # (a plain /2**64 can round up to exactly 1.0).
+        return (int.from_bytes(digest[:8], "big") >> 11) / 2 ** 53
 
     def get_choice(self, options: list):
         return options[int(self.get_float() * len(options))]
@@ -204,6 +208,14 @@ def mutate_series(source: Sequence[float], target: Sequence[float],
             return x
         half = wrap_period / 2.0
         out = np.array(x, dtype=float)
+        over = out > half
+        if np.any(over):
+            out[over] -= wrap_period * np.ceil((out[over] - half)
+                                               / wrap_period)
+        under = out < -half
+        if np.any(under):
+            out[under] += wrap_period * np.ceil((-out[under] - half)
+                                                / wrap_period)
         while np.any(out > half):
             out = np.where(out > half, out - wrap_period, out)
         while np.any(out < -half):
@@ -278,8 +290,9 @@ class SwarmSonifier:
 
     Each agent is one partial of a SoundHack oscillator bank:
     - amplitude follows the agent's energy (normalized by `energy_scale`);
-    - frequency follows the agent's phase velocity, mapped so that one
-      full phase cycle per NRM tick lands at `base_freq_hz`.
+    - frequency follows the agent's phase velocity: a velocity of
+      1 rad/tick lands at `base_freq_hz` (so the swarm's intrinsic
+      0.1 rad/tick renders at base_freq_hz / 10).
 
     One NRM tick = one AddSynth frame of `interpolation` output samples,
     with the bank's own linear amp/freq interpolation smoothing between
@@ -299,12 +312,13 @@ class SwarmSonifier:
         """One NRM tick -> `interpolation` audio samples.
 
         phase_velocities are in radians per tick (as FractalAgent stores
-        velocity); energy is clipped at energy_scale for unit amplitude.
+        velocity); 1 rad/tick renders at base_freq_hz. Energy is clipped
+        at energy_scale for unit amplitude.
         """
         amps = np.clip(np.asarray(energies, dtype=float)
                        / self.energy_scale, 0.0, 1.0)
-        cycles_per_tick = np.asarray(phase_velocities, dtype=float) / TWO_PI
-        freqs_hz = np.abs(cycles_per_tick) * self.base_freq_hz * TWO_PI
+        freqs_hz = np.abs(np.asarray(phase_velocities, dtype=float)) \
+            * self.base_freq_hz
         freqs_cycles = np.clip(freqs_hz / self.sample_rate, 0.0, 0.5)
         return self.bank.synthesize_frame(amps, freqs_cycles)
 

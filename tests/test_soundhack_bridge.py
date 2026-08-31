@@ -61,11 +61,15 @@ def test_adapter_feeds_legacy_transcendental_bridge(tmp_path):
     TranscendentalBridge with zero bridge changes."""
     src_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), '..', 'src'))
+    saved_path = list(sys.path)
     sys.path.insert(0, src_path)
     try:
         from bridge.transcendental_bridge import TranscendentalBridge
     finally:
-        sys.path.remove(src_path)
+        # Wholesale restore: the legacy module itself prepends src/ to
+        # sys.path at import, which would otherwise leak a top-level
+        # 'core' package into the rest of the pytest session.
+        sys.path[:] = saved_path
 
     bridge = TranscendentalBridge(workspace_path=str(tmp_path))
     adapter = AudioRealityAdapter(_tone(0.05) * np.linspace(0, 1, 16384))
@@ -121,6 +125,15 @@ def test_mutate_series_omega_extremes():
     assert np.allclose(mutate_series(src, tgt, USIM, omega=1.0), tgt)
 
 
+def test_mutate_series_huge_deltas_wrap_fast():
+    # Unwrapped trajectories accumulate thousands of radians; the wrap
+    # must be closed-form, not one period per iteration.
+    a = np.linspace(0, 1e7, 50)
+    b = np.linspace(1e7, 0, 50)
+    out = mutate_series(a, b, USIM, omega=0.5, wrap_period=2 * np.pi)
+    assert np.all(np.abs(out) <= np.pi + 1e-9)
+
+
 def test_mutate_series_wrap_period_keeps_phases_bounded():
     rng = np.random.default_rng(4)
     a = np.mod(np.cumsum(0.3 * rng.standard_normal(300)), 2 * np.pi)
@@ -172,8 +185,10 @@ def test_compose_nrm_core_agent_trajectories():
     composed, omegas = compose_trajectories(traj1, traj2, mutation_type=LCM)
     assert len(composed) == 100
     assert np.all((composed >= 0) & (composed < 2 * np.pi))
-    # Kuramoto coupling drives resonance up over the run.
-    assert np.mean(omegas[-20:]) >= np.mean(omegas[:20]) - 0.2
+    # Kuramoto coupling (K=2.0, dt=0.1, 100 steps) synchronizes the pair:
+    # with this seed the run ends fully phase-locked.
+    assert np.mean(omegas[-20:]) >= np.mean(omegas[:20])
+    assert np.mean(omegas[-20:]) > 0.99
 
 
 # --- SwarmSonifier: population -> audio -> re-analysis --------------------
