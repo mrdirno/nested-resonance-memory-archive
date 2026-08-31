@@ -97,6 +97,20 @@ const path = __dirname + "/triton-rack.html";
   else if (!/^now [A-G]#?(maj7|m7♭5|mMaj7|m7|dim7|sus4|7|\+|m)? · [A-G]/.test(th1.thNow)) fail("theory now text: '" + th1.thNow + "'");
   else ok("theory bar live: " + th1.key + " · " + th1.romans.join("–") + " · " + th1.thNow);
 
+  /* the human hand reaches the tape: pad chords roll, dynamics breathe */
+  const hum = await page.evaluate(() => {
+    const ch = TAKE.ev.filter(e => e.role === "chord").sort((a, b) => a.t - b.t);
+    if (ch.length < 4) return { n: ch.length };
+    const c0 = ch.slice(0, 4).map(e => e.t);
+    const spread = Math.max(...c0) - Math.min(...c0);
+    const vels = new Set(ch.map(e => e.vel.toFixed(3))).size;
+    return { n: ch.length, spread, vels };
+  });
+  if (hum.n < 4) fail("no chord events on the tape (" + hum.n + ")");
+  else if (!(hum.spread > 0.003 && hum.spread < 0.09)) fail("pad chord not humanly rolled (spread " + (hum.spread * 1000).toFixed(1) + "ms)");
+  else if (hum.vels < 2) fail("chord dynamics flat across bars (" + hum.vels + " velocity values)");
+  else ok("the hand reaches the tape: pad rolled " + (hum.spread * 1000).toFixed(1) + "ms · " + hum.vels + " chord velocity shades");
+
   /* dice mid-performance: bar-quantized swap applies, transport never drops */
   await page.click("#dreamDice");
   await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });

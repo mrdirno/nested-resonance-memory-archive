@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,humanFeel,FEEL,hv})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -193,6 +193,32 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
     if (moved / n > 5) { fail("blues voice motion " + (moved / n).toFixed(2)); pBad++; }
   }
   if (!pBad) ok("progression bank: " + G3.PROG_BANK.length + " named changes (blues 12 bars of dominants, andalusian Am7 G7 Fmaj7 E7, minor ii-V-i, dorian) \u2014 specs sound, voices lead");
+}
+{ /* the human hand: bounded, part-biased, part-differentiated, deterministic */
+  let hBad = 0;
+  const draw = (part, seed, n) => { const r = G3.mulberry(seed);
+    const out = []; for (let i = 0; i < n; i++) out.push(G3.humanFeel(part, r)); return out; };
+  ["bass", "chord", "lead", "fill", "kick"].forEach(p => {
+    draw(p, 11, 500).forEach(z => {
+      if (Math.abs(z.dt) > .04) { fail(p + " dt out of hand range: " + z.dt); hBad++; }
+      if (z.gain < .6 - 1e-9 || z.gain > 1.4 + 1e-9) { fail(p + " gain " + z.gain); hBad++; }
+    });
+  });
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) * (x - m)))); };
+  const bassDt = draw("bass", 7, 2000).map(z => z.dt);
+  const chordDt = draw("chord", 7, 2000).map(z => z.dt);
+  const leadDt = draw("lead", 7, 2000).map(z => z.dt);
+  if (!(mean(bassDt) < 0)) { fail("bass should sit ahead of the beat"); hBad++; }
+  if (!(mean(chordDt) > 0 && mean(leadDt) > 0)) { fail("chord/lead should lay back"); hBad++; }
+  if (!(sd(leadDt) > sd(bassDt) * 1.3)) { fail("lead should be looser than bass (" +
+    sd(leadDt).toFixed(4) + " vs " + sd(bassDt).toFixed(4) + ")"); hBad++; }
+  const d1 = JSON.stringify(draw("lead", 42, 50)), d2 = JSON.stringify(draw("lead", 42, 50)),
+        d3 = JSON.stringify(draw("lead", 43, 50));
+  if (d1 !== d2) { fail("feel not deterministic per seed"); hBad++; }
+  if (d1 === d3) { fail("feel ignores the seed"); hBad++; }
+  if (G3.hv(1.7) !== 1 || G3.hv(-2) !== .05) { fail("hv clamp"); hBad++; }
+  if (!hBad) ok("the human hand: ±40ms bounded, bass ahead / chords+lead in the pocket, lead loosest, deterministic per seed");
 }
 { const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
   const A = eval(audJs + "\n;({audVary})");
