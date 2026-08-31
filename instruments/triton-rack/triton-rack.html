@@ -3019,8 +3019,8 @@ function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel,tag){
   if(!r){ LDR.fallbacks++; return false; }
   if(r.kind==="lane"){
     if(r.roll){ for(let k=r.roll;k>=1;k--)
-      spawnVoice(PROGRAMS[kitIdx],48+r.lane,0.16+0.03*(r.roll-k),when-k*0.17*stepDur,null); }
-    spawnVoice(PROGRAMS[kitIdx],48+r.lane,vel,when,null); return true;
+      kitZone(kitIdx,r.lane,0.16+0.03*(r.roll-k),when-k*0.17*stepDur,.2); }
+    kitZone(kitIdx,r.lane,vel,when,baseVel); return true;
   }
   /* layer selection follows the WRITTEN velocity so humanize breathes the gain
      without flickering a hit across a baked-layer seam bar-to-bar */
@@ -3284,6 +3284,1660 @@ function dreamPickSurprise(rng){
 /* ── LOCKS (the third donor's law: locks + one big roll). A lock is
    surgical: DICE re-rolls only the unlocked half. key = the harmony's
    identity; rhythm = the groove's. ── */
+/*DD22-BEGIN*/
+/* ═══ DD22 KIT ENGINE — dreamdrummer_22's drum kits, loadable on the
+   TRITON (round 7). Sliced VERBATIM from the byte-identical donor in
+   this directory by mine/dd22_port.js; the fidelity gate in tests.js
+   re-derives every slice from the donor and byte-compares. One IIFE so
+   donor globals never touch this file's. ═══ */
+const DD22=(function(){
+"use strict";
+/* —— dd22 slice: atoms-numbers (donor L446-460) —— */
+var TAU = Math.PI * 2;
+
+/* ── numbers ───────────────────────────────────────────────────────────── */
+function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function dbToGain(db) { return Math.pow(10, db / 20); }
+function gainToDb(g) { return 20 * Math.log10(Math.max(1e-12, g)); }
+/* MIDI 69 = A4 = 440Hz. Kept as the ONLY place pitch becomes frequency so a
+   tuning change is one edit, not a search. */
+function mtof(m, a4) { return (a4 || 440) * Math.pow(2, (m - 69) / 12); }
+function ftom(f, a4) { return 69 + 12 * Math.log2(f / (a4 || 440)); }
+
+/* Denormal guard. Cheap: adding a tiny alternating offset costs one add and
+   keeps IIR tails out of the subnormal range where some CPUs stall hard. */
+var DENORM = 1e-20;
+/* —— dd22 slice: atoms-rng (donor L462-500) —— */
+/* ── deterministic randomness ──────────────────────────────────────────────
+   Every world in this engine must regrow identically from its seed, on any
+   machine, in the worklet and in an offline render alike. Math.random() can
+   never appear below this line. sfc32 is small, fast and passes PractRand;
+   the splitmix64-ish seeding spreads a single integer across four words. */
+function makeRng(seed) {
+  var a = seed >>> 0, b = 0x9e3779b9, c = 0x243f6a88, d = 0xb7e15162;
+  for (var i = 0; i < 12; i++) {
+    /* mix the seed in before any value is drawn, else nearby seeds correlate */
+    a = (a + 0x6d2b79f5) >>> 0;
+    var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    b = (b ^ ((t ^ (t >>> 14)) >>> 0)) >>> 0;
+    var s = b; b = c; c = d; d = s;
+  }
+  return function rng() {
+    a |= 0; b |= 0; c |= 0; d |= 0;
+    var t = (((a + b) | 0) + d) | 0;
+    d = (d + 1) | 0;
+    a = b ^ (b >>> 9);
+    b = (c + (c << 3)) | 0;
+    c = (c << 21) | (c >>> 11);
+    c = (c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  };
+}
+/* helpers that read like intent at the call site */
+function rInt(rng, n) { return Math.floor(rng() * n) % n; }
+function rRange(rng, a, b) { return a + (b - a) * rng(); }
+function rPick(rng, arr) { return arr[Math.floor(rng() * arr.length) % arr.length]; }
+function rChance(rng, p) { return rng() < p; }
+/* weighted pick over parallel arrays — the workhorse of every generator above */
+function rWeighted(rng, items, weights) {
+  var s = 0, i;
+  for (i = 0; i < weights.length; i++) s += weights[i];
+  if (s <= 0) return items[0];
+  var t = rng() * s;
+  for (i = 0; i < weights.length; i++) { t -= weights[i]; if (t <= 0) return items[i]; }
+  return items[items.length - 1];
+}
+/* —— dd22 slice: atoms-dcblock (donor L524-534) —— */
+/* ── DC blocker ────────────────────────────────────────────────────────────
+   y[n] = x[n] - x[n-1] + R*y[n-1].  R near 1 puts the corner near DC.
+   Nonlinear stages (tanh on an asymmetric wave, reed tables, rectifiers) all
+   emit DC; unblocked it eats headroom silently and shows up only as a limiter
+   that never opens. */
+function DCBlock(sr) { this.x1 = 0; this.y1 = 0; this.R = 1 - TAU * 12 / sr; }
+DCBlock.prototype.tick = function (x) {
+  var y = x - this.x1 + this.R * this.y1 + DENORM;
+  this.x1 = x; this.y1 = y; return y;
+};
+DCBlock.prototype.reset = function () { this.x1 = 0; this.y1 = 0; };
+/* —— dd22 slice: atoms-onepole (donor L536-550) —— */
+/* ── one-pole filters (TPT / trapezoidal, zero-delay) ──────────────────────
+   g = tan(pi*fc/sr) is the bilinear prewarp: it makes the digital corner land
+   on the analog corner instead of drifting flat near Nyquist. */
+function OnePole(sr) { this.sr = sr; this.s = 0; this.G = 0.1; this.setHz(1000); }
+OnePole.prototype.setHz = function (hz) {
+  var g = Math.tan(Math.PI * clamp(hz, 1, this.sr * 0.49) / this.sr);
+  this.G = g / (1 + g);
+};
+OnePole.prototype.lp = function (x) {
+  var v = (x - this.s) * this.G, y = v + this.s;
+  this.s = y + v + DENORM;
+  return y;
+};
+OnePole.prototype.hp = function (x) { return x - this.lp(x); };
+OnePole.prototype.reset = function () { this.s = 0; };
+/* —— dd22 slice: atoms-svf (donor L552-579) —— */
+/* ── state variable filter (Zavalishin TPT, zero-delay) ────────────────────
+   Three outputs from one solve, self-oscillates cleanly at high Q, and stays
+   stable when the cutoff is swept at audio rate — which is the whole point:
+   an envelope on a naive biquad blows up, and that blow-up is the reason so
+   much browser audio ends up with static filters and a "MIDI" flatness. */
+function SVF(sr) {
+  this.sr = sr; this.ic1 = 0; this.ic2 = 0;
+  this.g = 0.1; this.k = 1; this.a1 = 0; this.a2 = 0; this.a3 = 0;
+  this.lp = 0; this.bp = 0; this.hp = 0;
+  this.set(1000, 0.707);
+}
+SVF.prototype.set = function (hz, q) {
+  this.g = Math.tan(Math.PI * clamp(hz, 5, this.sr * 0.492) / this.sr);
+  this.k = 1 / Math.max(0.05, q);
+  this.a1 = 1 / (1 + this.g * (this.g + this.k));
+  this.a2 = this.g * this.a1;
+  this.a3 = this.g * this.a2;
+};
+SVF.prototype.tick = function (x) {
+  var v3 = x - this.ic2;
+  var v1 = this.a1 * this.ic1 + this.a2 * v3;
+  var v2 = this.ic2 + this.a2 * this.ic1 + this.a3 * v3;
+  this.ic1 = 2 * v1 - this.ic1 + DENORM;
+  this.ic2 = 2 * v2 - this.ic2 + DENORM;
+  this.lp = v2; this.bp = v1; this.hp = x - this.k * v1 - v2;
+  return v2;
+};
+SVF.prototype.reset = function () { this.ic1 = this.ic2 = 0; this.lp = this.bp = this.hp = 0; };
+/* —— dd22 slice: atoms-biquad (donor L581-629) —— */
+/* ── RBJ biquad ────────────────────────────────────────────────────────────
+   Fixed-coefficient work only (fixed EQ curves, formant shells). Anything
+   swept belongs in an SVF. Direct Form I: two more adds, far better numerical
+   behaviour with 32-bit-ish coefficient error at low corner frequencies. */
+function Biquad() { this.b0 = 1; this.b1 = 0; this.b2 = 0; this.a1 = 0; this.a2 = 0; this.x1 = 0; this.x2 = 0; this.y1 = 0; this.y2 = 0; }
+Biquad.prototype.tick = function (x) {
+  var y = this.b0 * x + this.b1 * this.x1 + this.b2 * this.x2 - this.a1 * this.y1 - this.a2 * this.y2 + DENORM;
+  this.x2 = this.x1; this.x1 = x; this.y2 = this.y1; this.y1 = y;
+  return y;
+};
+Biquad.prototype.reset = function () { this.x1 = this.x2 = this.y1 = this.y2 = 0; };
+Biquad.prototype.norm = function (b0, b1, b2, a0, a1, a2) {
+  this.b0 = b0 / a0; this.b1 = b1 / a0; this.b2 = b2 / a0;
+  this.a1 = a1 / a0; this.a2 = a2 / a0; return this;
+};
+Biquad.prototype.peak = function (sr, hz, q, dbGain) {
+  var A = Math.pow(10, dbGain / 40), w = TAU * clamp(hz, 5, sr * 0.49) / sr;
+  var cw = Math.cos(w), al = Math.sin(w) / (2 * Math.max(0.05, q));
+  return this.norm(1 + al * A, -2 * cw, 1 - al * A, 1 + al / A, -2 * cw, 1 - al / A);
+};
+Biquad.prototype.lowShelf = function (sr, hz, dbGain) {
+  var A = Math.pow(10, dbGain / 40), w = TAU * clamp(hz, 5, sr * 0.49) / sr;
+  var cw = Math.cos(w), sw = Math.sin(w), S = 1;
+  var al = sw / 2 * Math.sqrt((A + 1 / A) * (1 / S - 1) + 2), tsa = 2 * Math.sqrt(A) * al;
+  return this.norm(A * ((A + 1) - (A - 1) * cw + tsa), 2 * A * ((A - 1) - (A + 1) * cw), A * ((A + 1) - (A - 1) * cw - tsa),
+    (A + 1) + (A - 1) * cw + tsa, -2 * ((A - 1) + (A + 1) * cw), (A + 1) + (A - 1) * cw - tsa);
+};
+Biquad.prototype.highShelf = function (sr, hz, dbGain) {
+  var A = Math.pow(10, dbGain / 40), w = TAU * clamp(hz, 5, sr * 0.49) / sr;
+  var cw = Math.cos(w), sw = Math.sin(w), S = 1;
+  var al = sw / 2 * Math.sqrt((A + 1 / A) * (1 / S - 1) + 2), tsa = 2 * Math.sqrt(A) * al;
+  return this.norm(A * ((A + 1) + (A - 1) * cw + tsa), -2 * A * ((A - 1) + (A + 1) * cw), A * ((A + 1) + (A - 1) * cw - tsa),
+    (A + 1) - (A - 1) * cw + tsa, 2 * ((A - 1) - (A + 1) * cw), (A + 1) - (A - 1) * cw - tsa);
+};
+Biquad.prototype.bandpass = function (sr, hz, q) {
+  var w = TAU * clamp(hz, 5, sr * 0.49) / sr, cw = Math.cos(w), sw = Math.sin(w);
+  var al = sw / (2 * Math.max(0.05, q));
+  return this.norm(al, 0, -al, 1 + al, -2 * cw, 1 - al);
+};
+Biquad.prototype.highpass = function (sr, hz, q) {
+  var w = TAU * clamp(hz, 5, sr * 0.49) / sr, cw = Math.cos(w), sw = Math.sin(w);
+  var al = sw / (2 * Math.max(0.05, q));
+  return this.norm((1 + cw) / 2, -(1 + cw), (1 + cw) / 2, 1 + al, -2 * cw, 1 - al);
+};
+Biquad.prototype.lowpass = function (sr, hz, q) {
+  var w = TAU * clamp(hz, 5, sr * 0.49) / sr, cw = Math.cos(w), sw = Math.sin(w);
+  var al = sw / (2 * Math.max(0.05, q));
+  return this.norm((1 - cw) / 2, 1 - cw, (1 - cw) / 2, 1 + al, -2 * cw, 1 - al);
+};
+/* —— dd22 slice: atoms-reson (donor L631-665) —— */
+/* ── two-pole resonator ────────────────────────────────────────────────────
+   The unit of every modal instrument in this engine: bars, bells, membranes,
+   drum shells, the bridged-T drum circuit. Poles placed by decay time rather
+   than Q, because a physical mode is specified by how long it rings, and T60
+   survives a pitch change where a Q does not. */
+function Reson(sr) {
+  this.sr = sr; this.y1 = 0; this.y2 = 0; this.a1 = 0; this.a2 = 0; this.amp = 1; this.ampC = 1;
+}
+Reson.prototype.set = function (hz, t60) {
+  var f = clamp(hz, 0.5, this.sr * 0.495);
+  var w = TAU * f / this.sr;
+  /* r^(sr*t60) = 10^-3  ->  r = 10^(-3/(sr*t60)) */
+  var r = Math.exp(-6.9077553 / (Math.max(0.0005, t60) * this.sr));
+  if (r > 0.9999995) r = 0.9999995;
+  this.a1 = 2 * r * Math.cos(w);
+  this.a2 = -r * r;
+  /* TWO normalisations, because a mode is driven two different ways and one
+     constant cannot serve both:
+       amp  — STRUCK. The impulse response of this filter peaks at 1/sin(w),
+              so sin(w) in makes a peak of 1 out, whatever the decay time.
+       ampC — BLOWN/BOWED/SCRAPED. Under continuous drive the steady gain is
+              1/(1-r), so a long mode would build without limit; the extra
+              (1-r) holds a 6-second cymbal mode at the same level as a
+              60-millisecond one.
+     Getting this wrong is silent: struck modes normalised the continuous way
+     come out ~80dB down and read as "the synth is broken". */
+  this.amp = Math.sin(w);
+  this.ampC = Math.sin(w) * (1 - r);
+};
+Reson.prototype.tick = function (x) {
+  var y = this.a1 * this.y1 + this.a2 * this.y2 + x + DENORM;
+  this.y2 = this.y1; this.y1 = y;
+  return y;
+};
+Reson.prototype.reset = function () { this.y1 = this.y2 = 0; };
+/* —— dd22 slice: atoms-sat-curves (donor L775-790) —— */
+/* ── saturation ────────────────────────────────────────────────────────────
+   Odd-symmetric, C1-continuous, cheaper than tanh and with a slightly softer
+   knee — which is the useful difference on a filter drive. */
+function satSoft(x) {
+  if (x < -3) return -1; if (x > 3) return 1;
+  var x2 = x * x;
+  return x * (27 + x2) / (27 + 9 * x2);
+}
+/* asymmetric: a tube/transformer bias. Emits DC by construction — every user
+   of this must sit in front of a DCBlock, and they do. */
+function satAsym(x, bias) {
+  var b = bias === undefined ? 0.12 : bias;
+  return satSoft(x + b) - satSoft(b);
+}
+/* hard-ish ceiling for the master: nothing above may exceed 1.0 */
+function satLimit(x) { return x < -1.5 ? -1 : x > 1.5 ? 1 : x - (4 / 27) * x * x * x; }
+/* —— dd22 slice: atoms-ad (donor L914-950) —— */
+function AD(sr) { this.sr = sr; this.v = 0; this.up = false; this.aC = 0; this.dC = 0; this.on = false; }
+AD.prototype.set = function (a, d) {
+  this.aC = Math.exp(-1.7917595 / (Math.max(0.00005, a) * this.sr));
+  this.dC = Math.exp(-6.9077553 / (Math.max(0.0005, d) * this.sr));
+  return this;
+};
+AD.prototype.trig = function () { this.v = 0; this.up = true; this.on = true; };
+/* Fast-forward m SAMPLES in one call — the drum voices' analogue of
+   ADSR.tickN, for re-striking a long drum (an 808 boom rings for seconds)
+   at the level it would have had, so a transport crossfade landing mid-boom
+   does not re-attack the hit it is resuming. Closed form per segment:
+   attack needs ln(0.2/(1.2-v))/ln(aC)... solved as samples-to-arrival, then
+   the remainder decays as dC^m. */
+AD.prototype.ff = function (m) {
+  if (!this.on || m <= 0) return;
+  if (this.up) {
+    /* samples until v reaches 1 (attack aims at 1.2, arrives at 1) */
+    var la = Math.log(this.aC);
+    var need = la < 0 ? Math.ceil(Math.log(0.2 / Math.max(1e-9, 1.2 - this.v)) / la) : 0;
+    if (m < need) { this.v = 1.2 + (this.v - 1.2) * Math.pow(this.aC, m); return; }
+    this.v = 1; this.up = false; m -= need;
+    if (m <= 0) return;
+  }
+  this.v *= Math.pow(this.dC, m);
+  if (this.v < 1e-5) { this.v = 0; this.on = false; }
+};
+AD.prototype.tick = function () {
+  if (!this.on) return 0;
+  if (this.up) {
+    this.v = 1.2 + (this.v - 1.2) * this.aC;
+    if (this.v >= 1) { this.v = 1; this.up = false; }
+  } else {
+    this.v *= this.dC;
+    if (this.v < 1e-5) { this.v = 0; this.on = false; }
+  }
+  return this.v;
+};
+/* —— dd22 slice: atoms-pan-fft (donor L985-1018) —— */
+/* ── stereo placement ──────────────────────────────────────────────────────
+   Constant-power: a part panned hard is as loud as one in the centre, so an
+   arrangement's balance does not change when its width does. */
+function panL(p) { return Math.cos((clamp(p, -1, 1) * 0.5 + 0.5) * Math.PI * 0.5); }
+function panR(p) { return Math.sin((clamp(p, -1, 1) * 0.5 + 0.5) * Math.PI * 0.5); }
+
+/* ── radix-2 complex FFT ───────────────────────────────────────────────────
+   Build-time only: it exists so a band-limited wavetable can be made from its
+   harmonic recipe in one transform instead of one sine call per partial per
+   sample. Summing a 1024-harmonic table directly costs seconds; this costs
+   milliseconds, and on an audio thread that difference is the difference
+   between a page that plays and a page that stalls before its first note. */
+function fftInPlace(re, im, inverse) {
+  var n = re.length, i, j = 0, k, t;
+  for (i = 0; i < n - 1; i++) {
+    if (i < j) { t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    k = n >> 1; while (k <= j) { j -= k; k >>= 1; } j += k;
+  }
+  for (var len = 2; len <= n; len <<= 1) {
+    var ang = (inverse ? TAU : -TAU) / len, wr = Math.cos(ang), wi = Math.sin(ang), h = len >> 1;
+    for (i = 0; i < n; i += len) {
+      var cr = 1, ci = 0;
+      for (k = 0; k < h; k++) {
+        var ur = re[i + k], ui = im[i + k];
+        var vr = re[i + k + h] * cr - im[i + k + h] * ci;
+        var vi = re[i + k + h] * ci + im[i + k + h] * cr;
+        re[i + k] = ur + vr; im[i + k] = ui + vi;
+        re[i + k + h] = ur - vr; im[i + k + h] = ui - vi;
+        var ncr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = ncr;
+      }
+    }
+  }
+  if (inverse) { var s = 1 / n; for (i = 0; i < n; i++) { re[i] *= s; im[i] *= s; } }
+}
+/* —— dd22 slice: atoms-fastmath (donor L1032-1044) —— */
+var CR = 16;                                   /* control-rate block, samples */
+
+var SIN_N = 4096, SIN_M = SIN_N - 1;
+var SIN_T = new Float32Array(SIN_N + 1);
+(function () { for (var i = 0; i <= SIN_N; i++) SIN_T[i] = Math.sin(TAU * i / SIN_N); })();
+/* phase in TURNS, any real value. Linear interpolation on 4096 points leaves
+   under -110dB of error — below the noise floor of anything downstream. */
+function fsin(p) {
+  var x = p * SIN_N, i = Math.floor(x), f = x - i;
+  i &= SIN_M;
+  return SIN_T[i] + (SIN_T[i + 1] - SIN_T[i]) * f;
+}
+function fcos(p) { return fsin(p + 0.25); }
+/* —— dd22 slice: organelles-modal (donor L1222-1304) —— */
+function ModalBank(sr, n) {
+  /* FLAT TYPED ARRAYS, not an array of Reson objects. This is the hottest
+     loop in the engine — every mallet, drum, bell and cymbal runs through it
+     — and an array of objects costs a pointer chase and a property lookup per
+     mode per sample. The same arithmetic over Float64Arrays profiled about
+     three times faster; the resonator maths below is identical to Reson's,
+     kept in step by the shared T60 formula. */
+  this.sr = sr; this.n = n;
+  this.a1 = new Float64Array(n); this.a2 = new Float64Array(n);
+  this.y1 = new Float64Array(n); this.y2 = new Float64Array(n);
+  this.amp = new Float64Array(n); this.gain = new Float64Array(n);
+  this.active = 0; this.cont = false;
+}
+/* ratios[], gains[], t60s[] relative; f0 in Hz. Modes above Nyquist are
+   DROPPED, not folded — an aliased mode is a wrong note, not a colour. */
+ModalBank.prototype.setModes = function (f0, ratios, gains, t60s, decayScale) {
+  var k = 0, ny = this.sr * 0.47, ds = decayScale === undefined ? 1 : decayScale;
+  for (var i = 0; i < ratios.length && k < this.n; i++) {
+    var f = f0 * ratios[i];
+    if (f >= ny || f < 1) continue;
+    var w = TAU * f / this.sr;
+    var r = Math.exp(-6.9077553 / (Math.max(0.0005, t60s[i] * ds) * this.sr));
+    if (r > 0.9999995) r = 0.9999995;
+    this.a1[k] = 2 * r * Math.cos(w);
+    this.a2[k] = -r * r;
+    /* struck: sin(w) in gives a peak of 1 out. Driven: the extra (1-r) holds
+       a six-second cymbal mode at the level of a sixty-millisecond one. */
+    this.amp[k] = this.cont ? Math.sin(w) * (1 - r) : Math.sin(w);
+    this.gain[k] = gains[i];
+    k++;
+  }
+  this.active = k;
+  return this;
+};
+ModalBank.prototype.setDrive = function (continuous) { this.cont = !!continuous; return this; };
+ModalBank.prototype.tick = function (x) {
+  var s = 0, a1 = this.a1, a2 = this.a2, y1 = this.y1, y2 = this.y2;
+  var am = this.amp, g = this.gain, N = this.active;
+  for (var i = 0; i < N; i++) {
+    var y = a1[i] * y1[i] + a2[i] * y2[i] + x * am[i] + DENORM;
+    y2[i] = y1[i]; y1[i] = y;
+    s += y * g[i];
+  }
+  return s;
+};
+ModalBank.prototype.reset = function () {
+  for (var i = 0; i < this.n; i++) { this.y1[i] = 0; this.y2[i] = 0; }
+};
+ModalBank.prototype.energy = function () {
+  var e = 0, y1 = this.y1;
+  for (var i = 0; i < this.active; i++) e += y1[i] * y1[i];
+  return e;
+};
+
+/* ── mode tables ───────────────────────────────────────────────────────────
+   Measured/derived ratios for real bodies. Sources are the standard acoustics
+   results: Fletcher & Rossing for bars, bells and membranes. These are facts
+   about shapes, not anybody's product — which is exactly why an instrument
+   built on them is free to sell. */
+var MODES = {
+  /* deep-arch tuned bar: the undercut pulls partial 2 to 4x and 3 to 10x */
+  marimba:  { r: [1, 3.99, 10.65, 17.9, 26.5], g: [1, 0.30, 0.11, 0.05, 0.02], d: [1, 0.42, 0.22, 0.13, 0.08] },
+  /* aluminium bar, shallower arch, and a far longer decay - vibraphone */
+  vibes:    { r: [1, 3.98, 10.75, 19.6, 30.0], g: [1, 0.24, 0.09, 0.04, 0.02], d: [1, 0.55, 0.34, 0.2, 0.12] },
+  /* untuned rectangular steel bar: the free-free beam series */
+  glock:    { r: [1, 2.758, 5.404, 8.933, 13.34, 18.64], g: [1, 0.5, 0.28, 0.14, 0.07, 0.04], d: [1, 0.62, 0.4, 0.26, 0.17, 0.1] },
+  /* church bell: hum an octave below, the minor-third tierce is the famous one */
+  bell:     { r: [0.5, 1, 1.19, 1.5, 2.0, 2.5, 2.66, 3.0, 4.1], g: [0.7, 1, 0.75, 0.6, 0.5, 0.3, 0.28, 0.2, 0.1], d: [1, 0.9, 0.7, 0.55, 0.4, 0.3, 0.26, 0.2, 0.14] },
+  /* tubular bell: strike note is a MISSING fundamental heard from 2:3:4 */
+  tube:     { r: [2, 3, 4.2, 5.4, 6.8, 8.2], g: [1, 0.85, 0.6, 0.4, 0.25, 0.15], d: [1, 0.85, 0.7, 0.55, 0.4, 0.3] },
+  /* ideal circular membrane, Bessel zeros, air-loaded (timpani-like) */
+  drumhead: { r: [1, 1.594, 2.136, 2.296, 2.653, 2.918, 3.156, 3.501], g: [1, 0.6, 0.4, 0.36, 0.25, 0.2, 0.15, 0.1], d: [1, 0.7, 0.55, 0.5, 0.4, 0.34, 0.28, 0.22] },
+  /* timpani proper: the kettle tunes the first modes toward a harmonic series */
+  timpani:  { r: [1, 1.5, 2.0, 2.44, 2.9, 3.6], g: [1, 0.8, 0.55, 0.35, 0.2, 0.12], d: [1, 0.8, 0.6, 0.45, 0.3, 0.2] },
+  /* struck glass / crotale: dense, high, long */
+  glass:    { r: [1, 2.32, 4.25, 6.63, 9.38, 12.4], g: [1, 0.55, 0.35, 0.2, 0.12, 0.07], d: [1, 0.8, 0.65, 0.5, 0.38, 0.28] },
+  /* wood block / claves: short, few, very damped */
+  wood:     { r: [1, 2.57, 4.9, 8.1], g: [1, 0.6, 0.3, 0.15], d: [1, 0.55, 0.3, 0.18] },
+  /* steel string body coupling - the guitar top's low air+plate modes */
+  body:     { r: [1, 1.72, 2.55, 3.4, 4.6, 6.1], g: [1, 0.72, 0.5, 0.36, 0.24, 0.15], d: [1, 0.75, 0.6, 0.45, 0.32, 0.22] },
+  /* a metal plate/cymbal seed: deliberately irrational, no ratio repeats */
+  plate:    { r: [1, 1.41, 1.73, 2.24, 2.65, 3.16, 3.87, 4.36, 5.1, 5.83], g: [1, 0.9, 0.85, 0.8, 0.75, 0.7, 0.6, 0.55, 0.45, 0.4], d: [1, 0.95, 0.92, 0.88, 0.85, 0.8, 0.75, 0.7, 0.62, 0.55] }
+};
+/* —— dd22 slice: studio-comp (donor L1953-1994) —— */
+/* ── compressor ────────────────────────────────────────────────────────────
+   Feed-forward, log-domain, with a separate sidechain input so the kick can
+   duck the pads — the single most load-bearing move in modern arrangement.
+   Detector is peak with a program-dependent release (two time constants), so
+   it neither pumps on a bass note nor pins on a snare. */
+function Comp(sr) {
+  this.sr = sr; this.env = 0; this.env2 = 0; this.gr = 1;
+  this.thr = -18; this.ratio = 4; this.kneeDb = 6;
+  this.aC = Math.exp(-1 / (0.006 * sr)); this.rC = Math.exp(-1 / (0.12 * sr));
+  this.rC2 = Math.exp(-1 / (0.6 * sr)); this.makeup = 1; this.mix = 1;
+};
+Comp.prototype.set = function (thrDb, ratio, atkMs, relMs, kneeDb) {
+  this.thr = thrDb; this.ratio = Math.max(1, ratio);
+  this.aC = Math.exp(-1 / (Math.max(0.05, atkMs) * 0.001 * this.sr));
+  this.rC = Math.exp(-1 / (Math.max(5, relMs) * 0.001 * this.sr));
+  this.rC2 = Math.exp(-1 / (Math.max(5, relMs) * 0.004 * this.sr));
+  this.kneeDb = kneeDb === undefined ? 6 : kneeDb;
+};
+Comp.prototype.compute = function (det) {
+  var a = Math.abs(det);
+  this.env = a > this.env ? a + (this.env - a) * this.aC : a + (this.env - a) * this.rC;
+  this.env2 = a > this.env2 ? a + (this.env2 - a) * this.aC : a + (this.env2 - a) * this.rC2;
+  var e = Math.max(this.env, this.env2 * 0.7);
+  var db = gainToDb(e);
+  var over = db - this.thr, gdb = 0;
+  var k = this.kneeDb;
+  if (over > k * 0.5) gdb = -(over - over / this.ratio);
+  else if (over > -k * 0.5) {
+    /* quadratic soft knee: continuous slope at both hinges */
+    var t = over + k * 0.5;
+    gdb = -((1 - 1 / this.ratio) * t * t) / (2 * k);
+  }
+  this.gr = dbToGain(gdb);
+  return this.gr;
+};
+Comp.prototype.tickStereo = function (l, r, sc, outv) {
+  var g = this.compute(sc === undefined ? Math.max(Math.abs(l), Math.abs(r)) : sc);
+  var m = this.makeup;
+  outv[0] = (l * g * m) * this.mix + l * (1 - this.mix);
+  outv[1] = (r * g * m) * this.mix + r * (1 - this.mix);
+  return outv;
+};
+/* —— dd22 slice: studio-sat-transient (donor L2050-2153) —— */
+/* ── saturation, properly ──────────────────────────────────────────────────
+   Three characters, and the difference between them is which harmonics they
+   make, which is the whole reason "warm" and "harsh" are different words.
+
+     TUBE  asymmetric — strong 2nd harmonic. The 2nd is an octave, so it reads
+           as fullness rather than as distortion. This is what "warm" means.
+     TAPE  symmetric with a soft knee and high-frequency loss that grows with
+           level — 3rd harmonic plus a gentle darkening under load, which is
+           why loud tape sounds thicker rather than brighter.
+     FUZZ  hard, odd, bright. Used deliberately and sparingly.
+
+   Every one of them is followed by a DC blocker, because asymmetry emits DC
+   by construction and unblocked DC quietly eats the headroom the limiter was
+   supposed to be protecting. */
+var SAT_TUBE = 0, SAT_TAPE = 1, SAT_FUZZ = 2;
+function Sat(sr) {
+  this.sr = sr; this.dc = new DCBlock(sr);
+  this.lp = new OnePole(sr); this.lp.setHz(sr * 0.42);
+  this.mode = SAT_TUBE; this.drive = 1; this.bias = 0.18; this.mix = 1;
+  this.comp = 1;
+  /* AUTO-GAIN, measured rather than computed. A saturator's output level
+     depends on the input level as well as the drive, so a single static
+     correction is right at exactly one input amplitude and wrong everywhere
+     else — the first version measured +4.9dB at a level it had not been
+     normalised for, which makes "more drive" a volume knob and every A/B
+     comparison a lie. Two slow RMS followers and a ratio fix it at any
+     level. The follower is deliberately slow (300ms): faster and it starts
+     undoing the compression that is half the point of saturating. */
+  this.inSq = 1e-6; this.outSq = 1e-6;
+  this.aG = Math.exp(-1 / (0.3 * sr));
+  this.g = 1;
+}
+Sat.prototype.set = function (mode, drive, bias, mix) {
+  this.mode = mode; this.drive = Math.max(0.05, drive);
+  this.bias = bias === undefined ? 0.18 : bias;
+  this.mix = mix === undefined ? 1 : mix;
+  /* Output is normalised by what the curve does to a full-scale input, so
+     turning drive up changes the TIMBRE and not the level. Without this the
+     "more drive" knob is a volume knob and every comparison is a lie. */
+  if (this.mode === SAT_TAPE) this.lp.setHz(clamp(this.sr * 0.42 / (1 + 0.55 * (this.drive - 1)), 2200, this.sr * 0.45));
+};
+Sat.prototype.shape = function (x) {
+  var d = x * this.drive;
+  if (this.mode === SAT_TUBE) {
+    /* TUBE. A tube's character is the SECOND harmonic dominating, because the
+       second is an octave and the ear files an octave under "fuller" rather
+       than under "dirtier". Getting there needs an even-order generator, and
+       the obvious candidate is not one: x*|x| has half-wave antisymmetry
+       (f(t+pi) = -f(t)), so its series contains only ODD harmonics — measured
+       at -149dB of second, which is to say none at all, from a term written
+       specifically to make it.
+       x*x is the even generator: sin^2 = (1 - cos 2t)/2, a DC offset and a
+       second harmonic and nothing else. The DC goes out in the blocker below;
+       the second stays, and it grows with level exactly as a valve's does, so
+       quiet passages stay clean and loud ones bloom. The soft clip after it
+       supplies the odd orders in the smaller amount a valve actually makes. */
+    return satSoft((d + this.bias * d * d) * 0.86);
+  }
+  if (this.mode === SAT_TAPE) return satSoft(d);
+  return d < -1 ? -1 : d > 1 ? 1 : d * (1.5 - 0.5 * d * d);
+};
+Sat.prototype.tick = function (x) {
+  var y = this.shape(x);
+  if (this.mode === SAT_TAPE) y = this.lp.lp(y);
+  y = this.dc.tick(y);
+  var a = this.aG;
+  this.inSq = x * x + (this.inSq - x * x) * a + DENORM;
+  this.outSq = y * y + (this.outSq - y * y) * a + DENORM;
+  if (this.outSq > 1e-9) {
+    var want = Math.sqrt(this.inSq / this.outSq);
+    this.g += (clamp(want, 0.12, 8) - this.g) * 0.0015;
+  }
+  y *= this.g;
+  return this.mix >= 1 ? y : x + (y - x) * this.mix;
+};
+
+/* ── transient shaper ──────────────────────────────────────────────────────
+   Attack and sustain as separate controls, from the DIFFERENCE between a fast
+   and a slow envelope follower: on a hit the fast one leaps ahead of the slow
+   one, and that gap IS the transient. It needs no threshold and no knowledge
+   of level, so it works identically on a quiet ghost note and a full hit —
+   which is precisely what a compressor cannot do, and why "punch" is not
+   something you get by compressing harder. */
+function Transient(sr) {
+  this.fa = Math.exp(-1 / (0.0012 * sr));
+  this.sa = Math.exp(-1 / (0.035 * sr));
+  this.fr = Math.exp(-1 / (0.045 * sr));
+  this.sr_ = Math.exp(-1 / (0.22 * sr));
+  this.f = 0; this.s = 0; this.atk = 0; this.sus = 0;
+}
+Transient.prototype.set = function (atk, sus) { this.atk = atk; this.sus = sus; };
+Transient.prototype.tick = function (x) {
+  var a = x < 0 ? -x : x;
+  this.f = a > this.f ? a + (this.f - a) * this.fa : a + (this.f - a) * this.fr;
+  this.s = a > this.s ? a + (this.s - a) * this.sa : a + (this.s - a) * this.sr_;
+  var d = this.f - this.s;
+  /* Bounded on purpose. An unbounded shaper is a level control wearing a
+     different name: at gain 6 the first version raised a hit by 13dB, which
+     is not punch, it is just louder, and it takes the headroom the limiter
+     needed. Three is enough to hear and small enough to stay a shape. */
+  var g = 1 + this.atk * d * 3.2 + this.sus * (this.s - this.f * 0.5) * 2.2;
+  if (g < 0.15) g = 0.15; else if (g > 3) g = 3;
+  return x * g;
+};
+/* —— dd22 slice: studio-eq3 (donor L2155-2173) —— */
+/* ── three-band channel EQ ─────────────────────────────────────────────────
+   A low shelf, a swept bell and a high shelf: enough to seat a part in a mix
+   and not so much that the generator can build something unusable. Fixed
+   coefficients, so biquads are the right tool. */
+function EQ3(sr) {
+  this.sr = sr; this.lo = new Biquad(); this.mid = new Biquad(); this.hi = new Biquad();
+  this.on = 0;
+  this.set(120, 0, 900, 1, 0, 6000, 0);
+}
+EQ3.prototype.set = function (loHz, loDb, midHz, midQ, midDb, hiHz, hiDb) {
+  this.lo.lowShelf(this.sr, loHz, loDb);
+  this.mid.peak(this.sr, midHz, midQ, midDb);
+  this.hi.highShelf(this.sr, hiHz, hiDb);
+  this.on = (loDb !== 0 || midDb !== 0 || hiDb !== 0) ? 1 : 0;
+};
+EQ3.prototype.tick = function (x) {
+  if (!this.on) return x;
+  return this.hi.tick(this.mid.tick(this.lo.tick(x)));
+};
+/* —— dd22 slice: studio-paracomp (donor L2230-2253) —— */
+/* ── parallel compression ──────────────────────────────────────────────────
+   Compress a copy hard and add it under the original, rather than compressing
+   the original at all. The peaks keep their shape — nothing is pulled down —
+   and the quiet parts come UP, which is what "it goes harder" actually means
+   on a record. Squashing the source instead makes it louder and smaller. */
+function ParaComp(sr) {
+  this.c = new Comp(sr);
+  this.c.set(-28, 8, 1.2, 90, 3);
+  this.amount = 0; this.o = [0, 0];
+  this.sat = new Sat(sr); this.sat.set(SAT_TUBE, 1.6, 0.1, 1);
+}
+ParaComp.prototype.set = function (amount, thrDb, ratio, atkMs, relMs) {
+  this.amount = clamp(amount, 0, 1.4);
+  this.c.set(thrDb === undefined ? -28 : thrDb, ratio === undefined ? 8 : ratio,
+    atkMs === undefined ? 1.2 : atkMs, relMs === undefined ? 90 : relMs, 3);
+};
+ParaComp.prototype.tick = function (l, r, out) {
+  if (this.amount <= 0.001) { out[0] = l; out[1] = r; return out; }
+  var g = this.c.compute(l > r ? (l < 0 ? -l : l) : (r < 0 ? -r : r));
+  var a = this.amount;
+  out[0] = l + this.sat.tick(l * g) * a;
+  out[1] = r + this.sat.tick(r * g) * a;
+  return out;
+};
+/* —— dd22 slice: keys-wavetables (donor L2320-2392) —— */
+/* ── shared wavetable set ──────────────────────────────────────────────────
+   Band-limited tables, one octave-spaced mip per waveform. Built once for the
+   whole engine, not per voice: a voice that builds its own tables costs a
+   note-on of tens of milliseconds, which is a hole in the beat.
+   Every table is generated from a HARMONIC RECIPE — the amplitude of partial
+   n — so the waveform's spectrum is stated, not sampled from anything. */
+var WT_SIZE = 2048, WT_MIPS = 10;
+function wtRecipe(name) {
+  switch (name) {
+    case 'saw':    return function (n) { return 1 / n; };
+    case 'square': return function (n) { return n % 2 ? 1 / n : 0; };
+    case 'tri':    return function (n) { return n % 2 ? (((n - 1) / 2) % 2 ? -1 : 1) / (n * n) : 0; };
+    /* a reedy, hollow set — the odd series with a formant-like bump at 5-9 */
+    case 'reed':   return function (n) { return (n % 2 ? 1 / n : 0.18 / n) * (1 + 1.6 * Math.exp(-Math.pow((n - 7) / 4, 2))); };
+    /* glassy: only the low odd partials plus a high shelf of quiet ones */
+    case 'glass':  return function (n) { return n <= 3 ? 1 / n : 0.22 / (n * n) * (n % 2 ? 1 : 0.4); };
+    /* vocal-ish: two spectral peaks where F1/F2 of an /a/ would sit */
+    case 'voice':  return function (n) { return (1 / n) * (0.35 + Math.exp(-Math.pow((n - 3) / 2.0, 2)) + 0.7 * Math.exp(-Math.pow((n - 9) / 4.0, 2))); };
+    /* bell-ish inharmonic-flavoured: emphasise 2,3,5,7 and starve the rest */
+    case 'metal':  return function (n) { return (n === 1 || n === 2 || n === 3 || n === 5 || n === 7 || n === 11) ? 1 / Math.sqrt(n) : 0.06 / n; };
+    /* deep organ-flavoured: 1,2,4,8 only — the octave drawbars */
+    case 'sine8':  return function (n) { return (n === 1) ? 1 : (n === 2) ? 0.5 : (n === 4) ? 0.25 : (n === 8) ? 0.12 : 0; };
+    /* pulse-narrow: the classic 25% duty spectrum */
+    case 'pulse4': return function (n) { return Math.abs(Math.sin(n * Math.PI * 0.25)) / n; };
+    /* digital/PCM bite: alternating strong odd partials up high */
+    case 'digi':   return function (n) { return (1 / Math.pow(n, 0.72)) * (n % 3 === 0 ? 0.25 : 1) * (n > 20 ? 0.5 : 1); };
+    default:       return function (n) { return 1 / n; };
+  }
+}
+var WT_NAMES = ['saw', 'square', 'tri', 'reed', 'glass', 'voice', 'metal', 'sine8', 'pulse4', 'digi'];
+function buildWavetables() {
+  var set = {};
+  for (var w = 0; w < WT_NAMES.length; w++) {
+    var name = WT_NAMES[w], amp = wtRecipe(name), mips = [];
+    for (var m = 0; m < WT_MIPS; m++) {
+      /* mip m covers notes whose fundamental is under sr/(2*maxH); halving the
+         harmonic count each octave is exactly the band limit that keeps a
+         table from aliasing when it is played an octave higher */
+      var maxH = Math.min(WT_SIZE / 2 - 1, Math.max(1, Math.floor(1024 / Math.pow(2, m))));
+      var tbl = new Float32Array(WT_SIZE + 1), peak = 1e-9, i, n;
+      /* One inverse transform per mip, not one sine call per partial per
+         sample. The recipe IS the spectrum: partial n is a pure sine term, so
+         it goes in as a conjugate-symmetric imaginary pair and comes out as
+         the waveform. Direct additive fill of these ten tables measured 5.5
+         seconds — on the audio thread that is a stall before the first note. */
+      var re = new Float64Array(WT_SIZE), im = new Float64Array(WT_SIZE);
+      for (n = 1; n <= maxH; n++) {
+        var a = amp(n);
+        if (a === 0 || Math.abs(a) < 1e-5) continue;
+        im[n] = -a * 0.5; im[WT_SIZE - n] = a * 0.5;
+      }
+      fftInPlace(re, im, true);
+      for (i = 0; i < WT_SIZE; i++) tbl[i] = re[i] * WT_SIZE;
+      for (i = 0; i < WT_SIZE; i++) if (Math.abs(tbl[i]) > peak) peak = Math.abs(tbl[i]);
+      var g = 0.98 / peak;
+      for (i = 0; i < WT_SIZE; i++) tbl[i] *= g;
+      tbl[WT_SIZE] = tbl[0];        /* guard sample: one branch fewer per read */
+      mips.push(tbl);
+    }
+    set[name] = mips;
+  }
+  return set;
+}
+/* mip index for a fundamental: each step up is an octave */
+function wtMip(hz, sr) {
+  var top = sr * 0.45, maxH = top / Math.max(1, hz);
+  var m = Math.ceil(Math.log2(1024 / Math.max(1, maxH)));
+  return m < 0 ? 0 : m >= WT_MIPS ? WT_MIPS - 1 : m;
+}
+function wtRead(tbl, phase) {
+  var x = phase * WT_SIZE, i = x | 0, f = x - i;
+  return tbl[i] + (tbl[i + 1] - tbl[i]) * f;
+}
+/* —— dd22 slice: drums-voices (donor L3161-3777) —— */
+/*<<<KNOCK-SEAM:src/03b-drums.js>>>*/
+/* ═══════════════════════════════════════════════════════════════════════════
+   LUCKY SOUNDS · L2b DRUMS THAT GO
+   The measurement that started this file: the old kick had its 80-160Hz band
+   sixty-six to seventy-seven decibels below its sub. That is not a quiet
+   body, that is NO body — a sine at fifty hertz with a tick on the front.
+   It is why it read as a video game. You cannot equalise a band that has
+   nothing in it, so the fix is here, at the source.
+
+   A kick that hits is FOUR sounds arriving together, and each one is doing a
+   different job on a different speaker:
+     SUB    40-60Hz, the part you feel. Inaudible on a phone.
+     BODY   80-160Hz, the part you hear as weight. This is the one that was
+            missing, and it is the whole difference between thump and beep.
+     KNOCK  180-400Hz, a fast resonant ping — the beater against the head.
+            This is what makes a kick cut through a dense mix.
+     CLICK  2-5kHz, a few milliseconds of noise. On a laptop speaker this is
+            the ONLY part of a kick that survives, which is why records that
+            translate always have one.
+   Then saturation, because a 50Hz sine has no harmonics and a small speaker
+   can only reproduce a fundamental it can reach — the second and third are
+   what a laptop plays when it cannot play the first, and the ear rebuilds the
+   missing fundamental from them.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── kick ─────────────────────────────────────────────────────────────────── */
+function KickVoice(sr, rng) {
+  this.sr = sr; this.rng = rng;
+  this.subP = 0; this.bodyP = 0;
+  this.subE = new AD(sr); this.bodyE = new AD(sr); this.pitchE = new AD(sr);
+  this.knock = new Reson(sr); this.knockE = new AD(sr);
+  this.clickE = new AD(sr); this.clickF = new SVF(sr);
+  this.sat = new Sat(sr); this.tr = new Transient(sr);
+  this.hp = new OnePole(sr); this.hp.setHz(24);
+  this.dc = new DCBlock(sr);
+  this.vel = 1; this.on = false; this.knockHit = 0;
+  /* the playable 808: a per-hit pitch (hzCur/hzTgt) and a slide between
+     hits. `pitched` stays false until a caller hands trig() a frequency, so
+     a kit that never plays notes renders through the exact old arithmetic. */
+  this.pitched = false; this.hzCur = 0; this.hzTgt = 0; this.glideK = 0;
+  /* harmonic restoration (the psychoacoustic-bass trick, at the source):
+     synthesized 2nd/3rd partials tracking the glided fundamental. A phone
+     speaker cannot play 40Hz; it CAN play 80 and 120, and the ear rebuilds
+     the missing fundamental from the series (residue pitch). Levels default
+     to 0, so every existing kit is byte-identical. */
+  this.h2P = 0; this.h3P = 0; this.hE = new AD(sr);
+  this.p = null;
+}
+KickVoice.prototype.set = function (p) {
+  this.p = p;
+  this.subE.set(0.0006, p.subDec);
+  this.bodyE.set(0.0004, p.bodyDec);
+  this.pitchE.set(0.0002, p.bendTime);
+  this.knock.set(clamp(p.knockHz, 90, 900), p.knockDec);
+  this.knockE.set(0.0002, p.knockDec);
+  this.clickE.set(0.00008, p.clickDec);
+  this.clickF.set(clamp(p.clickHz, 700, this.sr * 0.44), 1.1);
+  this.sat.set(SAT_TUBE, p.drive, 0.34, 1);
+  this.tr.set(p.punch, 0);
+  this.hE.set(0.0006, p.hDec || p.subDec * 0.85);
+  this.pitched = false; this.hzCur = p.hz; this.hzTgt = p.hz; this.glideK = 0;
+};
+/* trig(vel)                — the drum, exactly as always.
+   trig(vel, hz)            — the drum AT this pitch: a tuned 808 playing a line.
+   trig(vel, hz, slideSec)  — the 808 SLIDE: while the voice still rings, the
+   pitch glides to hz over slideSec and the envelopes are NOT retriggered —
+   the note continues, which is what the original machine does when the next
+   trigger arrives before the decay ends (its resonator re-excites from
+   current state rather than resetting), and what every 808 bassline since
+   has used as a playing technique. */
+KickVoice.prototype.trig = function (vel, hz, slideSec) {
+  if (hz !== undefined && slideSec > 0 && this.on) {
+    this.pitched = true;
+    this.hzTgt = hz;
+    this.glideK = Math.pow(hz / Math.max(1e-3, this.hzCur), 1 / Math.max(1, slideSec * this.sr));
+    return;
+  }
+  this.vel = clamp(vel, 0.05, 1.3); this.on = true;
+  if (hz !== undefined) { this.pitched = true; this.hzCur = hz; this.hzTgt = hz; this.glideK = 0; }
+  /* phase reset to a quarter turn: a sine started at zero spends its first
+     milliseconds inaudible, which throws away the transient the whole voice
+     is built around */
+  this.subP = 0.25; this.bodyP = 0.25; this.h2P = 0.25; this.h3P = 0.25;
+  this.subE.trig(); this.bodyE.trig(); this.pitchE.trig();
+  this.knockE.trig(); this.clickE.trig(); this.knockHit = 1;
+  this.hE.trig();
+};
+/* fast-forward a hit by m samples — a transport crossfade landing mid-boom
+   re-strikes the drum, then matures it to the level the boom would have had,
+   so resuming a note never reads as a second hit */
+KickVoice.prototype.mature = function (m) {
+  this.subE.ff(m); this.bodyE.ff(m); this.pitchE.ff(m);
+  this.knockE.ff(m); this.clickE.ff(m); this.hE.ff(m);
+  this.knockHit = 0;
+  if (!this.subE.on && !this.bodyE.on && !this.knockE.on && !this.clickE.on) this.on = false;
+};
+KickVoice.prototype.busy = function () { return this.on; };
+KickVoice.prototype.render = function (out, n) {
+  var p = this.p, sr = this.sr, v = this.vel;
+  var f0 = this.pitched ? this.hzCur : p.hz, bend = p.bend, sub = p.subLvl, body = p.bodyLvl;
+  var kn = p.knockLvl, cl = p.clickLvl, rng = this.rng;
+  var h2 = p.h2Lvl || 0, h3 = p.h3Lvl || 0;
+  var fold = p.fold || 0;
+  var gk = this.glideK;
+  for (var i = 0; i < n; i++) {
+    var pe = this.pitchE.tick();
+    if (gk !== 0) {
+      /* the slide: exponential glide (equal cents per sample) toward hzTgt */
+      f0 = this.hzCur * gk;
+      if ((gk > 1 && f0 >= this.hzTgt) || (gk < 1 && f0 <= this.hzTgt)) { f0 = this.hzTgt; gk = this.glideK = 0; }
+      this.hzCur = f0;
+    }
+    /* one pitch envelope drives BOTH oscillators, so the sub and the body
+       stay an octave apart through the whole sweep and read as one drum */
+    var f = f0 * (1 + bend * pe * v);
+    this.subP += f / sr; if (this.subP >= 1) this.subP -= 1;
+    this.bodyP += f * p.bodyRatio / sr; if (this.bodyP >= 1) this.bodyP -= 1;
+    var s = fsin(this.subP) * this.subE.tick() * sub;
+    var b = fsin(this.bodyP) * this.bodyE.tick() * body;
+    /* the WAVEFOLD (optional, default-inert): Buchla's west-coast move on
+       the BODY alone — sin(g*x) folds a decaying sine into an odd-harmonic
+       family that grows with fold depth, while the sub underneath stays a
+       clean fundamental (the multiband saturation rule, done structurally).
+       At body amplitudes ~1 and g <= 5 every product sits far below
+       Nyquist, so no anti-aliasing is owed. */
+    if (fold > 0) b = Math.sin(b * (1 + 4 * fold)) * (1 + 0.35 * fold);
+    if (h2 > 0 || h3 > 0) {
+      /* the synthesized series rides the same glide, so a slide stays one
+         note; its own envelope lets the top of the boom fade before the sub */
+      this.h2P += f * 2 / sr; if (this.h2P >= 1) this.h2P -= 1;
+      this.h3P += f * 3 / sr; if (this.h3P >= 1) this.h3P -= 1;
+      var he = this.hE.tick();
+      b += fsin(this.h2P) * he * h2 + fsin(this.h3P) * he * h3;
+    }
+    var k = 0;
+    if (kn > 0) {
+      var kx = 0;
+      if (this.knockHit) { kx = v * 2.2; this.knockHit = 0; }
+      k = this.knock.tick(kx * this.knock.amp) * this.knockE.tick() * kn;
+    }
+    var c = 0;
+    if (cl > 0) {
+      /* A bandpass at Q=1.1 passes only about a quarter of the noise driving
+         it, so the layer measured eight times quieter than the sub's own
+         attack leakage — present, and completely inaudible under it. The
+         click has to be able to STAND OUT above 1.5kHz, because on a laptop
+         speaker it is the only part of a kick that survives at all. */
+      this.clickF.tick(rng() * 2 - 1);
+      c = this.clickF.bp * this.clickE.tick() * cl * 9;
+    }
+    var y = (s + b + k + c) * v;
+    y = this.sat.tick(y);
+    y = this.tr.tick(y);
+    out[i] += this.hp.hp(this.dc.tick(y)) * p.gain;
+  }
+  if (!this.subE.on && !this.bodyE.on && !this.knockE.on && !this.clickE.on) this.on = false;
+};
+
+/* ── snare ─────────────────────────────────────────────────────────────────
+   Four layers again, and the same lesson: a snare is not a noise burst with a
+   tone under it. BOTTOM is the weight (a short 90Hz thump nobody names but
+   everybody misses), BODY is the two tuned head modes, CRACK is a narrow band
+   of noise around 2kHz that lasts twenty milliseconds and is the entire
+   reason a snare cuts, and WIRES is the rattle.
+
+   The wires are the part that was wrong (WORK-QUEUE 2). They were a noise
+   source through one bandpass — and the SAME noise sample the crack read, so
+   the two layers were one signal wearing two filters, which no real snare
+   is. A snare's buzz is ~40 helical wires striking the bottom head: a
+   many-body IMPACT process with pitch structure. So the wires are now a bank
+   of eight short, randomly detuned resonators, struck by a random impact
+   process whose density follows the head's own motion — the re-strike and
+   the buzz decay a real snare has — and the crack and the wires each read a
+   PRIVATE noise stream, so nothing tracks anything sample for sample.
+
+   Velocity reaches the timbre, and in the right direction: measured before
+   this rebuild, a soft hit had MORE high-frequency share than a hard one on
+   all twelve kits (the saturator's low harmonics grow faster than anything
+   else). A harder hit now engages more wires, strikes them more densely and
+   lifts the crack band, which is what a stick actually does. */
+var SNARE_NW = 8;
+function SnareVoice(sr, rng) {
+  this.sr = sr; this.rng = rng;
+  /* one draw from the shared stream seeds the voice's private streams — the
+     crack and the wires must never read the same sample */
+  var sd = (rng() * 4294967296) >>> 0;
+  this.rngC = makeRng(sd);
+  this.rngW = makeRng((sd ^ 0x9e3779b9) >>> 0);
+  this.detSeed = (sd ^ 0x51ed270b) >>> 0;
+  /* the snappy layer's own noise — derived from the same one draw, so the
+     voice still consumes exactly one shared draw to build */
+  this.rngS = makeRng((sd ^ 0x2545f491) >>> 0);
+  this.a = new Reson(sr); this.b = new Reson(sr);
+  this.bodyE = new AD(sr); this.hit = 0;
+  /* the three optional anatomies (all default-inert — a patch without them
+     is the voice that shipped):
+     · contact: the strike as a SHAPED push (seconds of half-sine) instead
+       of a one-sample delta. A delta into two static resonators is the
+       physics of a stick on a woodblock — which is exactly what the flat
+       version sounded like;
+     · drop/dropTime: the HEAD SAG — a membrane detunes under the hit and
+       recovers (the 808's twin bridged-T partials sag the same way; a
+       static-pitch body reads as a block, a sagging one as a drum);
+     · snapLvl/snapDec/snapHP: the SNAPPY — broadband high-passed noise
+       with its own envelope, the layer that glues body to wires (the 808's
+       own third circuit). The narrow crack alone reads as a rim shank. */
+  this.strikeN = 0; this.strikeTot = 1; this.strikeAmp = 0;
+  this.dropN = 0; this.dropTot = 1; this.dropPhase = 0;
+  this.snapE = new AD(sr); this.snapHPF = new OnePole(sr);
+  this.bottomP = 0; this.bottomE = new AD(sr);
+  this.crackF = new SVF(sr); this.crackE = new AD(sr);
+  this.wires = [];
+  for (var i = 0; i < SNARE_NW; i++) this.wires.push(new Reson(sr));
+  this.wireHP = new OnePole(sr); this.wireE = new AD(sr);
+  this.wAct = SNARE_NW; this.wIdx = 0;
+  this.sat = new Sat(sr); this.tr = new Transient(sr);
+  this.dc = new DCBlock(sr); this.hp = new OnePole(sr); this.hp.setHz(60);
+  this.vel = 1; this.on = false; this.p = null;
+}
+SnareVoice.prototype.set = function (p) {
+  this.p = p;
+  this.a.set(p.hz, p.bodyDec);
+  this.b.set(p.hz * p.ratio2, p.bodyDec * 0.7);
+  this.bodyE.set(0.0004, p.bodyDec);
+  this.bottomE.set(0.0006, p.bottomDec);
+  /* crackQ (default 1.3): the crack's whole personality in one number — low
+     Q is a broad SNAP, high Q is a ringing CRACK. crack2Hz/crack2Lvl add a
+     second band (default off): dual-band snap is how a clap-adjacent or
+     metallic snare reads. All optional; a patch without them is the exact
+     voice that shipped. */
+  this.crackF.set(clamp(p.crackHz, 600, this.sr * 0.44), p.crackQ || 1.3);
+  this.crackE.set(0.00012, p.crackDec);
+  if (p.crack2Lvl > 0) {
+    this.crackF2 = this.crackF2 || new SVF(this.sr);
+    this.crackF2.set(clamp(p.crack2Hz || p.crackHz * 1.9, 600, this.sr * 0.45), (p.crackQ || 1.3) * 0.8);
+  }
+  /* the bank: spread from wireLo x the wire frequency to (wireLo+wireSpan) x
+     it, each wire detuned by wireDet and decaying at its own rate. The three
+     shape numbers (defaults = the shipped 0.52 / 1.1 / 0.11) are where a
+     rattle's COLOR lives: a narrow tight span is a crisp studio bed, a wide
+     detuned one is a loose parade drum. A fresh stream from a stored seed,
+     so calling set() twice tunes the same wires the same way. */
+  var dr = makeRng(this.detSeed);
+  var base = clamp(p.wireHz, 900, this.sr * 0.42);
+  var wLo = p.wireLo === undefined ? 0.52 : p.wireLo;
+  var wSpan = p.wireSpan === undefined ? 1.1 : p.wireSpan;
+  var wDet = p.wireDet === undefined ? 0.11 : p.wireDet;
+  this.wScale = this.wScale || new Float32Array(SNARE_NW);
+  for (var i = 0; i < SNARE_NW; i++) {
+    var span = wLo + wSpan * (i / (SNARE_NW - 1));
+    var det = 1 + (dr() * 2 - 1) * wDet;
+    var t60 = p.wireDec * (0.55 + 0.9 * dr());
+    this.wires[i].set(clamp(base * span * det, 700, this.sr * 0.45), t60);
+    /* energy-normalise the strike: a wire that rings four times longer is
+       struck at half the amplitude, so the bank's loudness follows wireLvl
+       and not whichever decay the patch happened to pick — without this the
+       twelve kits came back between +13 and +35dB of their old levels */
+    this.wScale[i] = 1 / Math.sqrt(Math.max(1, t60 * this.sr / 13.8));
+  }
+  this.wireHP.setHz(clamp(p.wireHz * 0.35, 200, this.sr * 0.4));
+  this.wireE.set(0.0007, p.wireDec);
+  if (p.snapLvl > 0) {
+    this.snapE.set(0.00018, p.snapDec || 0.08);
+    this.snapHPF.setHz(clamp(p.snapHP || 1800, 400, this.sr * 0.42));
+  }
+  this.sat.set(SAT_TUBE, p.drive, 0.28, 1);
+  this.tr.set(p.punch, 0);
+};
+SnareVoice.prototype.trig = function (vel) {
+  this.vel = clamp(vel, 0.05, 1.3); this.on = true;
+  this.bottomP = 0.25;
+  this.a.reset(); this.b.reset();
+  var vc0 = clamp(this.vel, 0, 1);
+  if (this.p.contact > 0) {
+    /* equal ENERGY to the old delta, spread over the contact window, so the
+       twelve calibrated kits keep their levels: sum(sin^2) over N ~ N/2 */
+    this.strikeN = this.strikeTot = Math.max(2, Math.round(this.sr * this.p.contact * (1 - 0.25 * vc0)));
+    this.strikeAmp = this.vel * 1.8 * Math.sqrt(2 / this.strikeTot);
+    this.hit = 0;
+  } else { this.hit = 1; this.strikeN = 0; }
+  if (this.p.drop > 0) {
+    this.dropN = this.dropTot = Math.max(16, Math.round(this.sr * (this.p.dropTime || 0.04)));
+    var f0 = this.p.hz * (1 + this.p.drop);
+    this.a.set(f0, this.p.bodyDec); this.b.set(f0 * this.p.ratio2, this.p.bodyDec * 0.7);
+  }
+  /* a harder stick: more wires in play, and the crack band shifts up */
+  this.wAct = 3 + Math.round((SNARE_NW - 3) * clamp(this.vel, 0, 1));
+  this.crackF.set(clamp(this.p.crackHz * (0.82 + 0.42 * clamp(this.vel, 0, 1)), 600, this.sr * 0.44), this.p.crackQ || 1.3);
+  /* the wire bank is NOT reset: a re-strike lands on wires still ringing,
+     which is exactly what a roll sounds like on a real drum */
+  this.bodyE.trig(); this.bottomE.trig(); this.crackE.trig(); this.wireE.trig();
+  if (this.p.snapLvl > 0) this.snapE.trig();
+};
+SnareVoice.prototype.busy = function () { return this.on; };
+SnareVoice.prototype.render = function (out, n) {
+  var p = this.p, sr = this.sr, v = this.vel;
+  var rngC = this.rngC, rngW = this.rngW, wires = this.wires;
+  var snap = p.snapLvl || 0;
+  for (var i = 0; i < n; i++) {
+    var x = 0;
+    if (this.hit) { x = v * 1.8; this.hit = 0; }
+    else if (this.strikeN > 0) {
+      var ct = (this.strikeTot - this.strikeN) / this.strikeTot;
+      x = this.strikeAmp * fsin(ct * 0.5);
+      this.strikeN--;
+    }
+    /* the head sags under the hit and recovers — retuned at control rate,
+       which a resonator's coefficients can afford */
+    if (this.dropN > 0) {
+      if ((this.dropN & 15) === 0) {
+        var df = p.hz * (1 + p.drop * this.dropN / this.dropTot);
+        this.a.set(df, p.bodyDec); this.b.set(df * p.ratio2, p.bodyDec * 0.7);
+      }
+      this.dropN--;
+      if (this.dropN === 0) { this.a.set(p.hz, p.bodyDec); this.b.set(p.hz * p.ratio2, p.bodyDec * 0.7); }
+    }
+    /* velocity TILTS the spectrum the way a stick does: the crack grows
+       faster than the body, or the saturator's low harmonics win and a hard
+       hit comes out duller than a soft one — which is what this voice
+       measured before the tilt, on all twelve kits */
+    var vc = clamp(v, 0, 1);
+    var bd = (this.a.tick(x * this.a.amp) + this.b.tick(x * this.b.amp) * 0.6) * this.bodyE.tick()
+      * p.bodyLvl * (1.16 - 0.34 * vc);
+    this.bottomP += p.bottomHz / sr; if (this.bottomP >= 1) this.bottomP -= 1;
+    var bt = fsin(this.bottomP) * this.bottomE.tick() * p.bottomLvl;
+    /* one noise draw feeds both crack bands — same burst, two formants (a
+       clap works the same way); the rng draw count cannot move (the render
+       draw witness pins it) */
+    var nz = rngC() * 2 - 1;
+    this.crackF.tick(nz);
+    var cr;
+    if (this.crackF2 && p.crack2Lvl > 0) {
+      this.crackF2.tick(nz);
+      cr = (this.crackF.bp * p.crackLvl + this.crackF2.bp * p.crack2Lvl) * this.crackE.tick() * 5.5 * (0.44 + 0.95 * vc);
+    } else cr = this.crackF.bp * this.crackE.tick() * p.crackLvl * 5.5 * (0.44 + 0.95 * vc);
+    /* the impact process: strike density follows the head's own motion, so
+       the buzz breathes with the drum instead of being pasted on */
+    var drive = (this.wireE.tick() * 0.75 + this.bodyE.v * 0.45) * (0.4 + 0.8 * v);
+    /* rate and amplitude are separate knobs on purpose: the rate is CAPPED so
+       the process stays a rattle (an impact every sample is just noise with
+       extra steps), and with strike amplitude ∝ 1/sqrt(t60) the bank's RMS
+       comes out ∝ sqrt(rate) alone — independent of how long the patch lets
+       its wires ring, which is what kept twelve kits within one calibration */
+    var exc = 0, wi = -1;
+    if (rngW() < clamp(drive * 0.45, 0, 0.42)) {
+      wi = this.wIdx = (this.wIdx + 1) % this.wAct;
+      exc = (rngW() * 2 - 1) * (0.5 + 0.7 * rngW()) * Math.min(drive, 1.2) * 2.2 * this.wScale[this.wIdx];
+    }
+    var wsum = 0;
+    for (var k = 0; k < SNARE_NW; k++) wsum += wires[k].tick(k === wi ? exc * wires[k].amp : 0);
+    var wr = this.wireHP.hp(wsum * 0.6) * p.wireLvl * 1.7;
+    var y = (bd + bt + cr + wr) * v;
+    y = this.tr.tick(this.sat.tick(y));
+    /* the snappy sums POST-saturation, the way the classic machines mix
+       their noise circuit at the output: inside the tube it was measured
+       compressed to +0.7dB of nothing; out here it stays transparent */
+    if (snap > 0)
+      y += this.snapHPF.hp(this.rngS() * 2 - 1) * this.snapE.tick() * snap * 3.2 * v * (0.5 + 0.85 * vc);
+    out[i] += this.hp.hp(this.dc.tick(y)) * p.gain;
+  }
+  if (!this.bodyE.on && !this.crackE.on && !this.wireE.on && !this.bottomE.on) this.on = false;
+};
+
+/* ── metallic cluster (hats, cymbals) ──────────────────────────────────────
+   Six square oscillators at fixed inharmonic ratios is the analog circuit and
+   it is the right sound — but a square at 11kHz has its third harmonic at
+   34kHz, which at 44.1k folds straight back down into the audible band. That
+   fold is the "tingy" ring: measured on the old hat as nearly ten decibels
+   more energy above 8kHz than below it, most of it aliased garbage that
+   moves the wrong way when you change the tuning.
+   Reading the band-limited square TABLE at the mip for each oscillator's own
+   pitch keeps every partial under Nyquist by construction. Same circuit, same
+   ratios, no fold. */
+var HAT_RATIOS2 = [1, 1.4471, 1.6170, 1.9265, 2.5028, 2.6637];
+function MetalVoice(sr, rng, tables) {
+  this.sr = sr; this.rng = rng; this.T = tables;
+  this.ph = new Float32Array(6); this.dt = new Float32Array(6); this.tbl = [];
+  this.env = new AD(sr); this.bp = new SVF(sr); this.hp = new SVF(sr);
+  this.noiseE = new AD(sr); this.dc = new DCBlock(sr);
+  this.sat = new Sat(sr);
+  this.vel = 1; this.on = false; this.p = null; this.chokeF = 1; this.choking = false;
+  for (var i = 0; i < 6; i++) this.ph[i] = rng();
+}
+MetalVoice.prototype.set = function (p) {
+  this.p = p;
+  /* the six ratios ARE the metal: the stock set is the classic analog hat
+     circuit, but a patch may bring its own — tighter, near-harmonic ratios
+     ring like a bell, wider irrational ones trash out. Optional; the stock
+     table is the default and byte-identical. */
+  var rat = p.ratios || HAT_RATIOS2;
+  for (var i = 0; i < 6; i++) {
+    var f = p.hz * 0.5 * rat[i];
+    this.dt[i] = f / this.sr;
+    this.tbl[i] = this.T[p.wave || 'square'][wtMip(f, this.sr)];
+  }
+  this.bp.set(clamp(p.bpHz, 700, this.sr * 0.45), p.bpQ || 1.2);
+  this.hp.set(clamp(p.hpHz, 700, this.sr * 0.46), 0.7);
+  this.env.set(0.00012, p.dec);
+  this.noiseE.set(0.0002, p.noiseDec || p.dec);
+  this.sat.set(SAT_TAPE, p.drive || 1, 0, 1);
+};
+MetalVoice.prototype.trig = function (vel, dec) {
+  this.vel = clamp(vel, 0.04, 1.3); this.on = true;
+  this.chokeF = 1; this.choking = false;
+  if (dec !== undefined) { this.env.set(0.00012, dec); this.noiseE.set(0.0002, dec); }
+  this.env.trig(); this.noiseE.trig();
+};
+MetalVoice.prototype.choke = function () { this.choking = true; };
+MetalVoice.prototype.busy = function () { return this.on; };
+MetalVoice.prototype.render = function (out, n) {
+  var p = this.p, v = this.vel, ph = this.ph, dt = this.dt, tbl = this.tbl;
+  for (var i = 0; i < n; i++) {
+    var s = 0;
+    for (var k = 0; k < 6; k++) {
+      var x = ph[k] * WT_SIZE, j = x | 0, f = x - j;
+      var t = tbl[k];
+      s += t[j] + (t[j + 1] - t[j]) * f;
+      ph[k] += dt[k]; if (ph[k] >= 1) ph[k] -= 1;
+    }
+    s *= 0.166;
+    if (p.noiseLvl > 0) s += (this.rng() * 2 - 1) * p.noiseLvl * this.noiseE.tick();
+    this.bp.tick(s); this.hp.tick(this.bp.bp);
+    var y = this.hp.hp * this.env.tick() * v;
+    if (this.choking) { this.chokeF *= 0.9988; if (this.chokeF < 1e-4) this.on = false; y *= this.chokeF; }
+    out[i] += this.dc.tick(this.sat.tick(y)) * p.gain;
+  }
+  if (!this.env.on && !this.noiseE.on) this.on = false;
+};
+
+/* ── tuned drum (toms, timbales, congas, bongos, djembe, surdo) ────────────
+   A membrane on a shell. What makes each of them a different instrument is
+   not the pitch — it is the mode set, the pitch bend, and how much hand there
+   is in the sound. A conga slap is the same membrane as a conga open tone
+   with a different strike filter and a shorter gate; a talking drum is a tom
+   with a bend you can play. */
+function TunedDrum(sr, rng) {
+  this.sr = sr; this.rng = rng;
+  this.head = new ModalBank(sr, 8);
+  this.shell = new Reson(sr);
+  this.bendE = new AD(sr); this.slapE = new AD(sr); this.slapF = new SVF(sr);
+  this.sf = new OnePole(sr); this.dc = new DCBlock(sr);
+  this.sat = new Sat(sr); this.tr = new Transient(sr);
+  this.strike = 0; this.strikeN = 0; this.strikeTot = 1;
+  this.vel = 1; this.on = false; this.p = null; this.muteF = 1; this.muting = false;
+}
+TunedDrum.prototype.set = function (p) {
+  this.p = p;
+  var m = MODES[p.body] || MODES.drumhead;
+  this.head.setModes(p.hz, m.r, m.g, m.d, p.decay);
+  this.shell.set(clamp(p.shellHz, 40, this.sr * 0.4), p.shellDec);
+  this.bendE.set(0.0002, p.bendAmt > 0 ? (p.sagTime || 0.42) : (p.bendTime || 0.03));
+  this.slapF.set(clamp(p.slapHz || 2600, 500, this.sr * 0.44), 1.1);
+  this.slapE.set(0.0001, p.slapDec || 0.02);
+  this.sat.set(SAT_TUBE, p.drive || 1.2, 0.22, 1);
+  this.tr.set(p.punch || 0, 0);
+  this.baseHz = p.hz;
+};
+TunedDrum.prototype.trig = function (vel, bendMul) {
+  var p = this.p;
+  this.vel = clamp(vel, 0.04, 1.3); this.on = true;
+  this.muteF = 1; this.muting = false;
+  /* the head SAG (optional, default-inert): bendE has been triggered on
+     every hit since this voice existed and never read — a membrane detunes
+     under the strike and recovers, and the envelope for it was already
+     here. bendAmt > 0 starts the modes sharp and lets render() ease them
+     home at control rate (velocity deepens the sag, as tension does). */
+  this.curMul = bendMul || 1;
+  this.sagN = p.bendAmt > 0 ? 1 : 0;
+  /* depth scales with velocity SQUARED — tension modulation is a Duffing
+     hardening (df/f proportional to amplitude^2; Kirby & Sandler 2021
+     measured the monotonic growth across 13 velocity layers) */
+  this.sagD = (p.bendAmt || 0) * (0.3 + 0.8 * this.vel * this.vel);
+  var hz = this.baseHz * this.curMul * (p.bendAmt > 0 ? 1 + this.sagD : 1);
+  var m = MODES[p.body] || MODES.drumhead;
+  this.head.setModes(hz, m.r, m.g, m.d, p.decay);
+  this.head.reset(); this.shell.reset();
+  this.bendE.trig(); this.slapE.trig();
+  this.sf.reset();
+  this.sf.setHz(clamp(320 + 9000 * p.hard * (0.35 + 0.65 * this.vel), 160, this.sr * 0.45));
+  var ct = p.contact * (1 - 0.3 * this.vel);
+  this.strikeN = this.strikeTot = Math.max(2, Math.floor(this.sr * ct));
+  this.strike = this.vel * p.hit * (Math.PI * 0.5) / this.strikeN;
+};
+TunedDrum.prototype.mute = function () { this.muting = true; };
+TunedDrum.prototype.busy = function () { return this.on; };
+TunedDrum.prototype.render = function (out, n) {
+  var p = this.p, rng = this.rng;
+  for (var i = 0; i < n; i++) {
+    if (this.sagN) {
+      if ((this.sagN & 15) === 0) {
+        this.bendE.ff(16);
+        var sag = this.sagD * this.bendE.v;
+        var m2 = MODES[p.body] || MODES.drumhead;
+        this.head.setModes(this.baseHz * this.curMul * (1 + sag), m2.r, m2.g, m2.d, p.decay);
+        if (!this.bendE.on || sag < 0.002) this.sagN = 0;
+      }
+      if (this.sagN) this.sagN++;
+    }
+    var x = 0;
+    if (this.strikeN > 0) {
+      var ct = (this.strikeTot - this.strikeN) / this.strikeTot;
+      x = this.sf.lp(this.strike * fsin(ct * 0.5));
+      this.strikeN--;
+    }
+    var y = this.head.tick(x);
+    if (p.shellMix > 0) y += this.shell.tick(y * this.shell.ampC) * p.shellMix;
+    if (p.slapLvl > 0) { this.slapF.tick(rng() * 2 - 1); y += this.slapF.bp * this.slapE.tick() * p.slapLvl * this.vel * 2; }
+    if (this.muting) { this.muteF *= 0.9975; if (this.muteF < 1e-4) this.on = false; y *= this.muteF; }
+    out[i] += this.dc.tick(this.tr.tick(this.sat.tick(y))) * p.gain;
+  }
+  if (this.head.energy() < 1e-13 && this.strikeN <= 0 && !this.slapE.on) this.on = false;
+};
+
+/* ── shaken and scraped ────────────────────────────────────────────────────
+   Shakers, cabasas, guiros, maracas. Not a drum at all: a cloud of small
+   collisions. Modelled as noise through a resonant band with a two-phase
+   envelope, because a shaker's sound is the ACCELERATION of the hand — the
+   forward stroke and the return are different lengths, which is why a real
+   shaker has a rhythm inside each hit and a noise burst does not. */
+function ShakeVoice(sr, rng) {
+  this.sr = sr; this.rng = rng;
+  /* two resonant bands fed ONE sample stream sound like one filter — the
+     return stroke gets its own stream (WORK-QUEUE 2.3) */
+  this.rng2 = makeRng((rng() * 4294967296) >>> 0);
+  this.bp = new SVF(sr); this.bp2 = new SVF(sr);
+  this.env = new AD(sr); this.env2 = new AD(sr);
+  this.dc = new DCBlock(sr); this.delay = 0;
+  this.vel = 1; this.on = false; this.p = null; this.tick2 = 0;
+}
+ShakeVoice.prototype.set = function (p) {
+  this.p = p;
+  this.bp.set(clamp(p.hz, 400, this.sr * 0.45), p.q || 1.4);
+  this.bp2.set(clamp(p.hz * (p.hz2 || 1.8), 400, this.sr * 0.46), (p.q || 1.4) * 0.7);
+  this.env.set(p.atk || 0.0009, p.dec);
+  this.env2.set(p.atk || 0.0009, p.dec * 0.7);
+};
+ShakeVoice.prototype.trig = function (vel) {
+  this.vel = clamp(vel, 0.04, 1.3); this.on = true;
+  this.env.trig();
+  /* the return stroke, a few milliseconds behind and quieter */
+  this.tick2 = this.p.rebound > 0 ? Math.floor(this.sr * this.p.rebound) : -1;
+};
+ShakeVoice.prototype.busy = function () { return this.on; };
+ShakeVoice.prototype.render = function (out, n) {
+  var p = this.p, rng = this.rng, v = this.vel;
+  for (var i = 0; i < n; i++) {
+    if (this.tick2 === 0) { this.env2.trig(); this.tick2 = -1; } else if (this.tick2 > 0) this.tick2--;
+    this.bp.tick(rng() * 2 - 1); this.bp2.tick(this.rng2() * 2 - 1);
+    var y = this.bp.bp * this.env.tick() + this.bp2.bp * this.env2.tick() * (p.reboundLvl || 0.5);
+    out[i] += this.dc.tick(y) * v * p.gain * 2.2;
+  }
+  if (!this.env.on && !this.env2.on && this.tick2 < 0) this.on = false;
+};
+
+/* ── clap ──────────────────────────────────────────────────────────────────
+   Three fast bursts and a tail, because a hand clap is many hands slightly
+   out of time and the flam IS the sound. Spacing that is exactly regular
+   reads as a machine; a little scatter reads as a room full of people.
+
+   Each burst is now a discrete IMPACT — an impulse plus its own short noise
+   — with its own band centre, through a few milliseconds of comb, because a
+   clap without a room is a clap in an anechoic chamber and nobody has heard
+   one (WORK-QUEUE 2.4). The voice reads a private stream so that three
+   claps into one kit do not share their scatter with anything else. */
+function ClapVoice(sr, rng) {
+  this.sr = sr; this.rng = rng;
+  this.rng2 = makeRng((rng() * 4294967296) >>> 0);
+  this.bp = new SVF(sr); this.hp = new OnePole(sr);
+  this.e = new AD(sr); this.tail = new AD(sr);
+  this.burst = 0; this.count = 0; this.imp = 0; this.dc = new DCBlock(sr);
+  /* the small room: ~6ms of comb, allocated once */
+  this.cLen = Math.max(8, Math.round(sr * 0.0061));
+  this.comb = new Float32Array(this.cLen); this.ci = 0;
+  this.vel = 1; this.on = false; this.p = null;
+}
+ClapVoice.prototype.set = function (p) {
+  this.p = p;
+  this.bp.set(clamp(p.hz, 500, this.sr * 0.44), p.q || 1.6);
+  this.hp.setHz(clamp(p.hz * 0.4, 200, this.sr * 0.4));
+  this.tail.set(0.0012, p.tailDec);
+};
+ClapVoice.prototype.trig = function (vel) {
+  this.vel = clamp(vel, 0.04, 1.3); this.on = true;
+  this.e.set(0.00012, 0.0055); this.e.trig();
+  /* bursts (default 3, the classic circuit): 2 reads as a tight pair of
+     hands, 5-6 as a crowd. Optional; absent means the shipped clap. */
+  this.count = this.p.bursts ? clamp(Math.round(this.p.bursts), 1, 8) : 3;
+  this.imp = 1;
+  this.burst = Math.floor(this.sr * (this.p.spread * (0.8 + 0.4 * this.rng2())));
+};
+ClapVoice.prototype.busy = function () { return this.on; };
+ClapVoice.prototype.render = function (out, n) {
+  var p = this.p, rng2 = this.rng2, v = this.vel;
+  for (var i = 0; i < n; i++) {
+    if (this.count > 0) {
+      if (--this.burst <= 0) {
+        this.e.trig(); this.count--; this.imp = 1;
+        /* every pair of hands is a slightly different pair of hands */
+        this.bp.set(clamp(p.hz * (0.9 + 0.2 * rng2()), 500, this.sr * 0.44), p.q || 1.6);
+        this.burst = Math.floor(this.sr * (p.spread * (0.8 + 0.4 * rng2())));
+        if (this.count === 0) this.tail.trig();
+      }
+    }
+    var x = (rng2() * 2 - 1) * (this.e.tick() + this.tail.tick() * p.tailLvl);
+    if (this.imp) { x += 1.7; this.imp = 0; }
+    this.bp.tick(x);
+    var y = this.hp.hp(this.bp.bp);
+    /* the room */
+    var cr = this.comb[this.ci];
+    this.comb[this.ci] = y + cr * 0.38;
+    this.ci = (this.ci + 1) % this.cLen;
+    y = y * 0.78 + cr * 0.5;
+    out[i] += this.dc.tick(y) * v * p.gain * 3.4;
+  }
+  if (!this.e.on && !this.tail.on && this.count <= 0) this.on = false;
+};
+
+/* —— dd22 slice: kits-slots (donor L3795-3795) —— */
+var KIT_SLOTS = ['kick', 'snare', 'hatC', 'hatO', 'clap', 'tomL', 'tomM', 'tomH', 'rim', 'ride', 'shake', 'crash'];
+/* —— dd22 slice: kits-kit (donor L3800-3891) —— */
+/* ── the drum kit ─────────────────────────────────────────────────────────── */
+function Kit(sr, rng, tables) {
+  this.sr = sr; this.rng = rng;
+  this.kick = new KickVoice(sr, rng);
+  this.snare = new SnareVoice(sr, rng);
+  this.hatC = new MetalVoice(sr, rng, tables);
+  this.hatO = new MetalVoice(sr, rng, tables);
+  this.ride = new MetalVoice(sr, rng, tables);
+  this.crash = new MetalVoice(sr, rng, tables);
+  this.clap = new ClapVoice(sr, rng);
+  this.shake = new ShakeVoice(sr, rng);
+  this.toms = [new TunedDrum(sr, rng), new TunedDrum(sr, rng), new TunedDrum(sr, rng)];
+  this.rim = new TunedDrum(sr, rng);
+  this.v = [this.kick, this.snare, this.hatC, this.hatO, this.clap,
+            this.toms[0], this.toms[1], this.toms[2], this.rim, this.ride, this.shake, this.crash];
+  this.pl = new Float32Array(12); this.pr = new Float32Array(12); this.lvl = new Float32Array(12);
+  this.tmp = new Float32Array(4096);
+  this.bus = new ParaComp(sr);
+  this.busSat = new Sat(sr);
+  this.busEQ = new EQ3(sr);
+  this.o = [0, 0];
+  this.kickOut = 0;
+  this.p = null;
+}
+Kit.prototype.setPatch = function (p) {
+  this.p = p;
+  this.kick.set(p.kick); this.snare.set(p.snare);
+  this.hatC.set(p.hatC); this.hatO.set(p.hatO);
+  this.ride.set(p.ride); this.crash.set(p.crash);
+  this.clap.set(p.clap); this.shake.set(p.shake);
+  for (var i = 0; i < 3; i++) this.toms[i].set(p.toms[i]);
+  this.rim.set(p.rim);
+  for (i = 0; i < 12; i++) {
+    this.lvl[i] = p.lvl[i];
+    this.pl[i] = panL(p.pan[i]); this.pr[i] = panR(p.pan[i]);
+  }
+  this.bus.set(p.busComp, -26, 7, 1.1, p.busRel || 95);
+  this.busSat.set(SAT_TUBE, p.busDrive, 0.26, 1);
+  this.busEQ.set(90, p.busLow, 420, 1.1, p.busMid, 7000, p.busHigh);
+};
+Kit.prototype.prepare = function () {};
+/* Whether any drum is still ringing. The kit's BUS (EQ, saturator, parallel
+   compressor) runs per sample whether or not a drum sounded, so without this
+   a song carrying four idle kits pays four bus chains for silence. */
+Kit.prototype.busy = function () {
+  for (var s = 0; s < 12; s++) if (this.v[s].busy()) return true;
+  return false;
+};
+Kit.prototype.trig = function (slot, vel, hz, slideSec) {
+  if (slot < 0 || slot > 11) return;
+  /* a closed hat chokes an open one: the same pair of cymbals cannot be in
+     two states, and that choke is most of what makes a hat pattern groove */
+  if (slot === 2 && this.hatO.busy()) this.hatO.choke();
+  var v = this.v[slot];
+  if (v === this.kick) v.trig(vel, hz, slideSec);   /* the playable 808: pitch and slide reach ONLY the kick */
+  else if (v === this.hatC) v.trig(vel, this.p.hatC.dec);
+  else if (v === this.hatO) v.trig(vel, this.p.hatO.dec);
+  else v.trig(vel);
+};
+/* fast-forward one slot's last hit by m samples — see KickVoice.mature */
+Kit.prototype.mature = function (slot, m) {
+  if (slot < 0 || slot > 11) return;
+  var v = this.v[slot];
+  if (v && v.mature) v.mature(m);
+};
+Kit.prototype.render = function (L, R, n) {
+  var tmp = this.tmp;
+  if (tmp.length < n) tmp = this.tmp = new Float32Array(n * 2);
+  var i, s, sl = 0, sr_ = 0;
+  var bl = 0, br = 0;
+  /* everything into one pair first, so the bus works on the KIT and not on
+     each drum in isolation */
+  var accL = this.accL, accR = this.accR;
+  if (!accL || accL.length < n) { accL = this.accL = new Float32Array(n * 2); accR = this.accR = new Float32Array(n * 2); }
+  for (i = 0; i < n; i++) { accL[i] = 0; accR[i] = 0; }
+  for (s = 0; s < 12; s++) {
+    var v = this.v[s];
+    if (!v.busy()) continue;
+    for (i = 0; i < n; i++) tmp[i] = 0;
+    v.render(tmp, n);
+    var gl = this.lvl[s] * this.pl[s], gr = this.lvl[s] * this.pr[s];
+    for (i = 0; i < n; i++) { var x = tmp[i]; accL[i] += x * gl; accR[i] += x * gr; }
+    if (s === 0) { var k = 0; for (i = 0; i < n; i++) { var a = tmp[i] < 0 ? -tmp[i] : tmp[i]; if (a > k) k = a; } this.kickOut = k; }
+  }
+  var o = this.o, g = this.p.gain;
+  for (i = 0; i < n; i++) {
+    var l = this.busEQ.tick(accL[i]), r = this.busEQ.tick(accR[i]);
+    l = this.busSat.tick(l); r = this.busSat.tick(r);
+    this.bus.tick(l, r, o);
+    L[i] += o[0] * g; R[i] += o[1] * g;
+  }
+};
+/* —— dd22 slice: patches-kitbank (donor L4298-4438) —— */
+var DD_KITBANK = (function () {
+  function kick(hz, o) {
+    var k = { hz: hz, bend: 2.2, bendTime: 0.035, bodyRatio: 2.0,
+      subLvl: 1.0, subDec: 0.34, bodyLvl: 0.62, bodyDec: 0.14,
+      knockHz: 240, knockDec: 0.028, knockLvl: 0.30,
+      clickHz: 2900, clickDec: 0.0035, clickLvl: 0.53,
+      /* synthesized 2nd/3rd partials (KickVoice harmonic restoration) — off
+         by default; keep hDec <= subDec or the tail outlives the busy check */
+      h2Lvl: 0, h3Lvl: 0, hDec: 0.28,
+      drive: 1.9, punch: 0.55, gain: 1 };
+    for (var q in o) k[q] = o[q]; return k;
+  }
+  function snare(hz, o) {
+    var s = { hz: hz, ratio2: 1.62, bodyDec: 0.10, bodyLvl: 0.7,
+      bottomHz: 92, bottomDec: 0.045, bottomLvl: 0.32,
+      crackHz: 2100, crackDec: 0.022, crackLvl: 0.62,
+      wireHz: 4200, wireDec: 0.13, wireLvl: 0.5,
+      drive: 1.7, punch: 0.5, gain: 1 };
+    for (var q in o) s[q] = o[q]; return s;
+  }
+  function metal(hz, dec, o) {
+    var m = { hz: hz, bpHz: hz * 0.9, bpQ: 1.1, hpHz: hz * 1.25, dec: dec,
+      noiseLvl: 0.12, noiseDec: dec * 0.6, drive: 1.15, wave: 'square', gain: 1 };
+    for (var q in o) m[q] = o[q]; return m;
+  }
+  function tom(hz, dec, o) {
+    var t = { hz: hz, body: 'drumhead', decay: dec, shellHz: hz * 2.4, shellDec: dec * 0.22,
+      shellMix: 0.34, hard: 0.5, hit: 1.05, contact: 0.0018, slapHz: 2400, slapDec: 0.012,
+      slapLvl: 0.1, drive: 1.5, punch: 0.5, gain: 1 };
+    for (var q in o) t[q] = o[q]; return t;
+  }
+  var base = {
+    kick: kick(52), snare: snare(196),
+    hatC: metal(7600, 0.05), hatO: metal(7600, 0.42),
+    ride: metal(4600, 1.5, { bpQ: 0.6, noiseLvl: 0.2 }),
+    crash: metal(3800, 2.4, { bpQ: 0.45, noiseLvl: 0.35, hpHz: 2600 }),
+    clap: { hz: 1300, q: 1.5, spread: 0.0095, tailDec: 0.16, tailLvl: 0.42, gain: 1 },
+    shake: { hz: 5600, hz2: 1.7, q: 1.5, dec: 0.055, atk: 0.001, rebound: 0.026, reboundLvl: 0.4, gain: 1 },
+    toms: [tom(104, 0.42), tom(142, 0.36), tom(190, 0.30)],
+    rim: { hz: 1750, body: 'wood', decay: 0.05, shellHz: 2800, shellDec: 0.012, shellMix: 0,
+      hard: 0.96, hit: 0.6, contact: 0.0003, slapHz: 5200, slapDec: 0.004, slapLvl: 0.2,
+      drive: 1.4, punch: 0.9, gain: 1 },
+    lvl: [1.0, 0.82, 0.36, 0.34, 0.5, 0.55, 0.55, 0.55, 0.42, 0.34, 0.28, 0.3],
+    pan: [0, -0.06, 0.26, 0.28, -0.18, -0.36, 0.04, 0.4, 0.22, 0.34, 0.44, -0.42],
+    busComp: 0.45, busDrive: 1.35, busLow: 1.5, busMid: -1.2, busHigh: 1.8, busRel: 95,
+    gain: 0.72
+  };
+  return { _base: base,
+    /* tight, dry, hard front — the click carries it on a small speaker */
+    neptune: { kick: kick(50, { bend: 1.6, bendTime: 0.022, subDec: 0.26, bodyLvl: 0.72, bodyDec: 0.11,
+                 knockHz: 300, knockLvl: 0.44, clickLvl: 0.82, clickHz: 3400, drive: 2.3, punch: 0.8 }),
+               snare: snare(210, { bodyDec: 0.075, crackHz: 2500, crackDec: 0.016, crackLvl: 0.78,
+                 wireDec: 0.085, wireLvl: 0.42, punch: 0.8, drive: 2.0 }),
+               hatC: metal(8800, 0.032, { hpHz: 9500 }), hatO: metal(8800, 0.24),
+               busComp: 0.55, busDrive: 1.55, busHigh: 2.6, busMid: -2.0, gain: 0.471 },
+    /* deep sub, long tail, everything else small around it */
+    timb:    { kick: kick(44, { bend: 2.8, bendTime: 0.05, subDec: 0.72, subLvl: 1.1, bodyLvl: 0.44,
+                 bodyDec: 0.16, knockHz: 200, knockLvl: 0.26, clickLvl: 0.43, drive: 2.1 }),
+               snare: snare(188, { bodyDec: 0.09, bottomLvl: 0.42, crackHz: 1900, crackLvl: 0.68,
+                 wireDec: 0.1, wireLvl: 0.38, drive: 1.9 }),
+               hatC: metal(9600, 0.026, { hpHz: 10400, noiseLvl: 0.2 }), hatO: metal(9600, 0.2),
+               busComp: 0.5, busDrive: 1.45, busLow: 2.6, busHigh: 2.0, gain: 0.471 },
+    /* live room funk: warm, wide, a real ride */
+    ewf:     { kick: kick(58, { bend: 1.9, subDec: 0.24, bodyLvl: 0.78, bodyDec: 0.18, knockHz: 260,
+                 knockLvl: 0.36, clickLvl: 0.48, drive: 1.7, punch: 0.6 }),
+               snare: snare(220, { bodyDec: 0.13, bodyLvl: 0.78, crackHz: 2200, crackLvl: 0.6,
+                 wireDec: 0.18, wireLvl: 0.62, drive: 1.6 }),
+               hatC: metal(7000, 0.055), hatO: metal(7000, 0.5),
+               ride: metal(4200, 2.0, { bpQ: 0.55, noiseLvl: 0.26 }),
+               lvl: [0.94, 0.86, 0.4, 0.4, 0.42, 0.6, 0.6, 0.6, 0.4, 0.48, 0.3, 0.34],
+               busComp: 0.62, busDrive: 1.45, busLow: 1.0, busMid: -0.6, busHigh: 1.4, gain: 0.446 },
+    /* long 808-flavoured sub with a crisp top */
+    trapK:   { kick: kick(42, { bend: 3.4, bendTime: 0.055, subDec: 1.05, subLvl: 1.15, bodyLvl: 0.36,
+                 bodyDec: 0.14, knockLvl: 0.22, clickLvl: 0.62, clickHz: 3800, drive: 2.4, tuned: 1 }),
+               snare: snare(240, { bodyDec: 0.055, bodyLvl: 0.4, bottomLvl: 0.2, crackHz: 3000,
+                 crackDec: 0.012, crackLvl: 0.85, wireDec: 0.055, wireLvl: 0.3, punch: 0.9, drive: 2.1 }),
+               hatC: metal(10500, 0.02, { hpHz: 11000, noiseLvl: 0.25 }), hatO: metal(10500, 0.16),
+               busComp: 0.4, busDrive: 1.5, busLow: 3.0, busHigh: 3.0, gain: 0.484 },
+    /* THE SLAP — Bay Area hyphy / crunk: the kick is the bassline. A long
+       tuned 808-family sub (the world builder retunes hz to the song's
+       tonic — see tuneKick in 08-world), driven hard so the harmonics
+       carry it on a phone speaker while the fundamental moves the car;
+       a fat crunk snare, claps big enough to answer it, glassy hats. */
+    hyphyK:  { kick: kick(46, { bend: 2.6, bendTime: 0.045, subDec: 1.35, subLvl: 1.25, bodyLvl: 0.5,
+                 bodyDec: 0.2, knockHz: 185, knockLvl: 0.34, clickLvl: 0.7, clickHz: 3200,
+                 drive: 2.8, punch: 0.7, tuned: 1 }),
+               snare: snare(200, { bodyDec: 0.12, bodyLvl: 0.85, bottomLvl: 0.4, crackHz: 2400,
+                 crackDec: 0.02, crackLvl: 0.9, wireDec: 0.16, wireLvl: 0.55, drive: 2.3, punch: 0.85 }),
+               clap: { hz: 1250, q: 1.4, spread: 0.011, tailDec: 0.22, tailLvl: 0.55, gain: 1 },
+               hatC: metal(9800, 0.024, { hpHz: 10500, noiseLvl: 0.22 }), hatO: metal(9800, 0.2),
+               lvl: [1.1, 0.9, 0.34, 0.32, 0.7, 0.55, 0.55, 0.55, 0.42, 0.34, 0.28, 0.3],
+               busComp: 0.5, busDrive: 1.7, busLow: 3.2, busMid: -1.0, busHigh: 2.4, gain: 0.47 },
+    /* dusty, saturated, big-shouldered */
+    boombap: { kick: kick(56, { bend: 1.7, subDec: 0.3, bodyLvl: 0.85, bodyDec: 0.2, knockHz: 220,
+                 knockLvl: 0.4, clickLvl: 0.38, drive: 2.6, punch: 0.6 }),
+               snare: snare(184, { bodyDec: 0.14, bodyLvl: 0.9, bottomLvl: 0.46, crackHz: 1800,
+                 crackDec: 0.03, crackLvl: 0.7, wireDec: 0.2, wireLvl: 0.6, drive: 2.4 }),
+               hatC: metal(6400, 0.048, { drive: 1.4 }), hatO: metal(6400, 0.4),
+               busComp: 0.8, busDrive: 1.9, busLow: 1.8, busMid: -0.4, busHigh: 0.4, gain: 0.446 },
+    /* live acoustic, tuned toms, room */
+    afroK:   { kick: kick(64, { bend: 1.5, subDec: 0.2, bodyLvl: 0.8, bodyDec: 0.2, knockHz: 280,
+                 knockLvl: 0.34, clickLvl: 0.43, drive: 1.5 }),
+               snare: snare(230, { bodyDec: 0.15, bodyLvl: 0.85, crackLvl: 0.5, wireDec: 0.2,
+                 wireLvl: 0.68, drive: 1.4 }),
+               toms: [tom(96, 0.5), tom(132, 0.44), tom(178, 0.38)],
+               hatC: metal(6800, 0.06), hatO: metal(6800, 0.55),
+               lvl: [0.9, 0.84, 0.42, 0.44, 0.36, 0.66, 0.66, 0.66, 0.4, 0.4, 0.34, 0.36],
+               busComp: 0.5, busDrive: 1.3, busLow: 0.6, busHigh: 1.2, gain: 0.434 },
+    /* bright, dry, snappy — timbale-adjacent */
+    latinK:  { kick: kick(60, { bend: 1.6, subDec: 0.18, bodyLvl: 0.7, bodyDec: 0.13, knockLvl: 0.38,
+                 clickLvl: 0.58, drive: 1.5 }),
+               snare: snare(260, { bodyDec: 0.07, crackHz: 2700, crackDec: 0.014, crackLvl: 0.72,
+                 wireDec: 0.08, wireLvl: 0.4, punch: 0.75 }),
+               hatC: metal(8200, 0.04), hatO: metal(8200, 0.3),
+               busComp: 0.42, busDrive: 1.3, busLow: 0.4, busHigh: 2.2, gain: 0.446 },
+    /* four-on-the-floor: click forward, sub controlled */
+    houseK:  { kick: kick(52, { bend: 1.4, bendTime: 0.018, subDec: 0.3, bodyLvl: 0.66, bodyDec: 0.1,
+                 knockHz: 320, knockLvl: 0.3, clickHz: 4200, clickLvl: 0.95, drive: 2.2, punch: 0.85 }),
+               snare: snare(230, { bodyDec: 0.06, crackHz: 2600, crackLvl: 0.66, wireDec: 0.09, wireLvl: 0.44 }),
+               hatC: metal(9000, 0.03), hatO: metal(9000, 0.3),
+               lvl: [1.0, 0.66, 0.44, 0.46, 0.5, 0.4, 0.4, 0.4, 0.36, 0.32, 0.34, 0.3],
+               busComp: 0.5, busDrive: 1.5, busLow: 1.8, busHigh: 2.2, gain: 0.471 },
+    /* quiet, warm, brushed — for a ballad that has drums at all */
+    softK:   { kick: kick(58, { bend: 1.3, subDec: 0.22, subLvl: 0.8, bodyLvl: 0.6, bodyDec: 0.16,
+                 knockLvl: 0.2, clickLvl: 0.24, drive: 1.2, punch: 0.3 }),
+               snare: snare(212, { bodyDec: 0.12, bodyLvl: 0.6, crackLvl: 0.3, wireDec: 0.22,
+                 wireLvl: 0.7, drive: 1.15, punch: 0.25 }),
+               hatC: metal(6200, 0.07, { noiseLvl: 0.3 }), hatO: metal(6200, 0.6),
+               lvl: [0.78, 0.7, 0.4, 0.42, 0.3, 0.5, 0.5, 0.5, 0.36, 0.42, 0.3, 0.3],
+               busComp: 0.3, busDrive: 1.1, busLow: 0.2, busHigh: 0.6, gain: 0.397 },
+    /* enormous and slow — for a cinematic world */
+    cine:    { kick: kick(46, { bend: 2.4, bendTime: 0.06, subDec: 0.9, bodyLvl: 0.7, bodyDec: 0.32,
+                 knockHz: 190, knockLvl: 0.3, clickLvl: 0.34, drive: 1.8 }),
+               snare: snare(170, { bodyDec: 0.24, bodyLvl: 0.9, bottomLvl: 0.5, crackLvl: 0.44,
+                 wireDec: 0.32, wireLvl: 0.55, drive: 1.5 }),
+               toms: [tom(70, 0.9), tom(96, 0.8), tom(130, 0.7)],
+               crash: metal(3200, 4.0, { bpQ: 0.4, noiseLvl: 0.45, hpHz: 2200 }),
+               lvl: [1.0, 0.9, 0.3, 0.32, 0.4, 0.75, 0.75, 0.75, 0.34, 0.34, 0.24, 0.5],
+               busComp: 0.55, busDrive: 1.4, busLow: 2.4, busHigh: 1.0, gain: 0.434 }
+  };
+})();
+
+/* ═══ adapted glue — NOT donor code (everything above this line is sliced
+   verbatim from dreamdrummer_22.html by mine/dd22_port.js) ═══
+   kitPatch() mirrors the donor's getPatch() clone/merge logic exactly, minus
+   the family lookup and the TONE_TRIM axis (keys-only in the donor).
+   renderHit() bakes ONE hit of one kit slot offline through the kit's own
+   bus (EQ → tube → parallel compression), exactly as the donor mixes it —
+   the same bake-to-buffer pattern the round-3 perc port (ldrBuf) proved. */
+var KIT_NAMES = ["neptune","timb","ewf","trapK","hyphyK","boombap","afroK","latinK","houseK","softK","cine"];
+function cloneVal(v){
+  if (Array.isArray(v)) { var a=[]; for (var i=0;i<v.length;i++) a.push(cloneVal(v[i])); return a; }
+  if (v && typeof v === "object") { var o={}; for (var k in v) o[k]=cloneVal(v[k]); return o; }
+  return v;
+}
+function kitPatch(name){
+  var base = DD_KITBANK._base, p = DD_KITBANK[name] || {}, out = {}, k;
+  for (k in base) out[k] = cloneVal(base[k]);
+  for (k in p) {
+    if (p[k] && typeof p[k] === "object" && !Array.isArray(p[k]) && out[k] && typeof out[k] === "object" && !Array.isArray(out[k])) {
+      for (var q in p[k]) out[k][q] = cloneVal(p[k][q]);
+    } else out[k] = cloneVal(p[k]);
+  }
+  return out;
+}
+var _tables = null;
+function tables(){ return _tables || (_tables = buildWavetables()); }
+function seedFor(s){ var h=2166136261; for (var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function renderHit(name, slot, vel, sr){
+  var kit = new Kit(sr, makeRng(seedFor(name+"|"+slot+"|"+vel)), tables());
+  kit.setPatch(kitPatch(name));
+  kit.trig(slot, vel);
+  var cap = Math.ceil(sr*4.5), N=512;
+  var L=new Float32Array(cap), R=new Float32Array(cap), n=0;
+  var lb=new Float32Array(N), rb=new Float32Array(N);
+  while (n<cap){
+    var m=Math.min(N,cap-n), i;
+    for (i=0;i<m;i++){ lb[i]=0; rb[i]=0; }
+    kit.render(lb,rb,m);
+    L.set(lb.subarray(0,m),n); R.set(rb.subarray(0,m),n); n+=m;
+    if (!kit.busy()) break;
+  }
+  var end=n-1; while (end>64 && Math.abs(L[end])<1e-4 && Math.abs(R[end])<1e-4) end--;
+  var len=Math.max(64, Math.min(n, end+800));
+  return { L:L.slice(0,len), R:R.slice(0,len) };
+}
+return { KIT_NAMES:KIT_NAMES, KIT_SLOTS:KIT_SLOTS, KITBANK:DD_KITBANK,
+         kitPatch:kitPatch, renderHit:renderHit, Kit:Kit, makeRng:makeRng, tables:tables };
+})();
+/*DD22-END*/
+/* ── DD22 PLAYBACK (round 7): DreamDrummer's kits, loadable on the TRITON.
+   Baked velocity layers per kit slot (the ldrBuf pattern), lazily warmed off
+   the hit path; hits route through the kit strip so meters, duck and the
+   headroom stage see them like any drum. A drummer card carries `dkit` (a
+   DD22 kit name); the TRITON kit stays the per-hit fallback until layers
+   land, so no hit is ever silently lost. ── */
+const DD_KIT_NAMES=["neptune","timb","ewf","trapK","hyphyK","boombap","afroK","latinK","houseK","softK","cine"];
+const DD_LAYERS=[0.5,0.85,1.15];      /* donor Kit.trig clamps vel .04..1.3 */
+/* TRITON kit zone → DD22 kit slot (zones per LDRP2KIT/MIDI_GM_LANE):
+   0 kick · 1 snare · 2 rim · 3 clap · 4 crash · 5 tomL · 6 hatC · 7 tomM ·
+   8 pedal-hat(→hatC, softer) · 9 tomH · 10 hatO · 11 ride */
+const DD_ZONE2SLOT=[0,1,8,4,11,5,2,6,2,7,3,9];
+const DD_LVL=1.35;  /* strip-level parity with the TRITON kit path (measured in the browser harness) */
+const DD_BUFS=new Map();               /* "kit|slot|layer|sr" → {L,R,buf} */
+const DD_WARM={};                      /* kit → {q:[..]|null,done:bool} */
+const DD_OPEN={ctx:null,g:null,t:0};   /* the sounding open hat, for the choke */
+function ddKeyB(kit,slot,layer,sr){ return kit+"|"+slot+"|"+layer+"|"+sr; }
+function ddBake(kit,slot,layer,sr){
+  const key=ddKeyB(kit,slot,layer,sr);
+  let p=DD_BUFS.get(key);
+  if(!p){ p=DD22.renderHit(kit,slot,layer,sr); DD_BUFS.set(key,p); }
+  return p;
+}
+/* warm a kit's buffers OFF the hit path: the core hits (kick/snare/hats/clap
+   at the middle layer) in the first slice, everything else two hits per
+   macrotask — a hyphyK kick bakes ~1.5s of 808 and must never stall a bar */
+function ddWarm(kit){
+  if(!ctx||DD_KIT_NAMES.indexOf(kit)<0||typeof DD22==="undefined") return;
+  const sr=ctx.sampleRate, st=DD_WARM[kit+"|"+sr]||(DD_WARM[kit+"|"+sr]={q:null,done:false});
+  if(st.done||st.q) return;
+  st.q=[];
+  [[0,.85],[1,.85],[2,.85],[3,.85],[4,.85]].forEach(([s,l])=>st.q.push([s,l]));
+  for(let s=0;s<12;s++) DD_LAYERS.forEach(l=>{ if(!(s<5&&l===0.85)) st.q.push([s,l]); });
+  const tick=()=>{ let n=0;
+    while(st.q&&st.q.length&&n<2){ const [s,l]=st.q.shift(); ddBake(kit,s,l,sr); n++; }
+    if(st.q&&st.q.length) setTimeout(tick,0); else { st.done=true; st.q=null; } };
+  setTimeout(tick,0);
+}
+function takeLogD(kit,zone,vel,when){
+  if(!TAKE.on) return;
+  if(typeof exporting!=="undefined"&&exporting) return;
+  const t=(when||0)-TAKE.t0; if(t<-0.05) return;
+  TAKE.ev.push({t:Math.max(0,t),role:"dd",kit,zone,vel,dur:0.12,tempo:state.tempo});
+  takeTrim();
+}
+function ddHit(kitName,zone,vel,when,o){
+  if(!ctx||typeof DD22==="undefined") return false;
+  o=o||{};
+  const slot=DD_ZONE2SLOT[((zone%12)+12)%12], sr=ctx.sampleRate;
+  const pedal=zone===8;
+  /* layer selection follows the WRITTEN velocity (layerVel) so humanize
+     breathes the gain without flickering across a baked-layer seam */
+  const ddVel=Math.max(.2,Math.min(1.25,(o.layerVel!=null?o.layerVel:vel)*1.15*(pedal?0.75:1)));
+  let layer=null,bd=9;
+  for(const l of DD_LAYERS){ if(DD_BUFS.has(ddKeyB(kitName,slot,l,sr))){
+    const d=Math.abs(l-ddVel); if(d<bd){ bd=d; layer=l; } } }
+  if(layer==null) return false;                 /* not baked yet — TRITON covers */
+  const pair=DD_BUFS.get(ddKeyB(kitName,slot,layer,sr));
+  const t=Math.max(when,ctx.currentTime);
+  if(zone===0&&vel>.5&&!o._g&&typeof mixDuck==="function") mixDuck(t,vel*.9); /* the kick keys the duck, like drumHit */
+  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogD==="function"&&!o._q) takeLogD(kitName,zone,vel,when);
+  if(!pair.buf||pair.sr!==sr){ const b=ctx.createBuffer(2,pair.L.length,sr);
+    b.getChannelData(0).set(pair.L); b.getChannelData(1).set(pair.R); pair.buf=b; pair.sr=sr; }
+  const src=ctx.createBufferSource(); src.buffer=pair.buf;
+  const g=ctx.createGain();
+  g.gain.value=(Math.max(.2,Math.min(1.25,vel*1.15*(pedal?0.75:1)))/layer)*DD_LVL*(o.gain||1);
+  src.connect(g); g.connect(drumOut());
+  /* a closed (or pedal) hat chokes an open one — the donor's Kit.trig rule,
+     kept at play time because the buffers are baked in isolation */
+  if(DD_OPEN.ctx!==ctx){ DD_OPEN.ctx=ctx; DD_OPEN.g=null; }
+  if(slot===2&&DD_OPEN.g&&DD_OPEN.t<=t){
+    try{ DD_OPEN.g.gain.setTargetAtTime(0,t,0.019); }catch(_){ } DD_OPEN.g=null; }
+  if(slot===3){ DD_OPEN.g=g; DD_OPEN.t=t; }
+  src.start(t); src.stop(t+pair.buf.duration+0.05);
+  const v={units:1,t,killed:false};
+  v.kill=()=>{ if(!v.killed){ v.killed=true; unreg(v); } };
+  v.release=v.kill; regVoice(v,1);
+  setTimeout(v.kill,Math.max(400,pair.buf.duration*1000)+((t-ctx.currentTime)*1000)+120);
+  return true;
+}
+/* every scheduled kit-lane hit passes here: a card wearing a DD22 kit plays
+   the DreamDrummer sound, anything else (or a not-yet-baked slot) plays the
+   TRITON kit program — the fallback is per hit, never per song */
+function kitZone(kitIdx,zone,vel,when,baseVel){
+  const P=(typeof DREAM!=="undefined"&&DREAM.p)?DREAM.p:null;
+  if(P&&P.dkit&&typeof ddHit==="function"&&ddHit(P.dkit,zone,vel,when,{layerVel:baseVel})) return;
+  spawnVoice(PROGRAMS[kitIdx],48+zone,vel,when,null);
+}
 const LOCKS={key:false,rhythm:false};
 function lockMerge(pNew,pCur,locks){
   if(!pCur||!locks) return pNew;
@@ -3325,6 +4979,7 @@ function presetValidate(e){
   if(p.lseed!=null&&!(Number.isInteger(p.lseed)&&p.lseed>=0&&p.lseed<=1e9)) return false;
   if(["muteBass","muteChord","muteLead"].some(k=>p[k]!=null&&typeof p[k]!=="boolean")) return false;
   if(p.verb!=null&&!(Number.isInteger(p.verb)&&p.verb>=0&&p.verb<=100)) return false;
+  if(p.dkit!=null&&!(typeof p.dkit==="string"&&DD_KIT_NAMES.indexOf(p.dkit)>=0)) return false;
   /* library phrase refs must point INTO this file's library, kind-correct */
   const libOk=(v,kinds)=>v==null||(Number.isInteger(v)&&PHRASES[v]&&kinds.indexOf(PHRASES[v].k)>=0);
   if(!libOk(p.dlib,["dr"])||!libOk(p.flib,["dr"])) return false;
@@ -3420,10 +5075,14 @@ function candDrums(rng){
     const fi=phrasePick("fill",rng,p=>(p.s||"").split("/")[0]===fam);
     const cat=PROGRAMS.map((p,i)=>({p,i})).filter(x=>x.p.cat==="DRUMS").map(x=>x.i);
     const fig16=Object.keys(LDR_FIG).find(k=>LDR_FIG[k].grid===16);
-    return {kind:"drums",name:g.n,desc:(g.s||"take")+" · played take · ♩"+(g.bpm||100),
+    /* the kit draw is UNCONDITIONAL so the stream position never depends on
+       the shelf; 55/11 divides evenly, so each DD22 kit is equally likely */
+    const dv=rng();
+    const dkit=dv<.55? DD_KIT_NAMES[Math.floor(dv*100)%DD_KIT_NAMES.length] : null;
+    return {kind:"drums",name:g.n,desc:(g.s||"take")+" · played take · ♩"+(g.bpm||100)+(dkit?" · DD·"+dkit.toUpperCase():""),
       fig:fig16,comps:[],kit:cat[Math.floor(rng()*cat.length)],
       tempo:Math.max(64,Math.min(160,g.bpm||100)),hum:1,extraKick:false,
-      dlib:gi,flib:fi!=null?fi:undefined,seed:1+Math.floor(rng()*99999)};
+      dlib:gi,flib:fi!=null?fi:undefined,dkit:dkit||undefined,seed:1+Math.floor(rng()*99999)};
   }
   /* curated dream identities: a tradition's figure, companions, kit, clock */
   if(rng()<.7){
@@ -3523,6 +5182,7 @@ function composeP(kept,cur,stage){
   /* the library rides the preset: phrase indices are stable within this file */
   if(dr&&dr.dlib!=null) p.dlib=dr.dlib;
   if(dr&&dr.flib!=null) p.flib=dr.flib;
+  if(dr&&dr.dkit) p.dkit=dr.dkit;
   if(ba&&ba.blib!=null) p.blib=ba.blib;
   if(ch&&ch.clib!=null) p.clib=ch.clib;
   if(ld&&ld.elibs&&ld.elibs.length) p.elibs=ld.elibs.slice();
@@ -3772,6 +5432,7 @@ function dreamScheduleBar(at,f,step,barLen){
   const tones=voiceLead(base,DREAM.voic,P.root+6,P.root+34); DREAM.voic=tones;
   const bassRoot=Math.max(26,base[0]-12), nextBassRoot=Math.max(26,nextBase[0]-12);
   DREAM._stepSec=step;
+  if(P.dkit&&typeof ddWarm==="function") ddWarm(P.dkit); /* bake off the hit path; TRITON covers until layers land */
   const bt=p=>DREAM.bar*4+p/(f.grid/4);
   const humP=P.hum!=null?P.hum:.7;
   /* drums — the figure as written rides the drummer's clock at coupling 1.0:
@@ -3795,8 +5456,9 @@ function dreamScheduleBar(at,f,step,barLen){
     const off=useFill?0:(DREAM.bar%(ph.b||2))*16;
     evs.forEach(e=>{
       if(e.step<off||e.step>=off+16) return;
-      const v=hv(Math.max(.12,e.vel)*(useFill?1:C.mainVel));
-      spawnVoice(PROGRAMS[P.kit],48+LDRP2KIT[e.lane],v,at+(e.step-off+e.dev)*step,null);
+      const wv=Math.max(.12,e.vel)*(useFill?1:C.mainVel);
+      const v=hv(wv);
+      kitZone(P.kit,LDRP2KIT[e.lane],v,at+(e.step-off+e.dev)*step,wv);
     });
   } else {
   ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK,"fig");
@@ -3804,15 +5466,15 @@ function dreamScheduleBar(at,f,step,barLen){
     if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit,humC,"comp"); }); }
   if(P.extraKick&&f.grid===16&&sect!=="BREAK") [0,4,8,12].forEach(pl=>{
     const z=bandZ("kit",bt(pl),rng);
-    spawnVoice(PROGRAMS[P.kit],48,hv(.95*z.gain),at+pl*step+z.dt,null); });
+    kitZone(P.kit,0,hv(.95*z.gain),at+pl*step+z.dt,.95); });
   }
   if(DREAM.bar>=4&&sect!=="BREAK"&&P.dlib==null){
     if(phraseBar%8===7) [[f.grid-4,2,.55],[f.grid-3,7,.68],[f.grid-2,5,.8],[f.grid-1,3,.95]].forEach(([pl,ln,v])=>{
       const z=bandZ("perc",bt(pl),rng);
-      spawnVoice(PROGRAMS[P.kit],48+ln,hv(v*z.gain),at+pl*step+z.dt,null); });
+      kitZone(P.kit,ln,hv(v*z.gain),at+pl*step+z.dt,v); });
     else if(phraseBar%4===3) [[f.grid-2,7,.6],[f.grid-1,2,.75]].forEach(([pl,ln,v])=>{
       const z=bandZ("perc",bt(pl),rng);
-      spawnVoice(PROGRAMS[P.kit],48+ln,hv(v*z.gain),at+pl*step+z.dt,null); });
+      kitZone(P.kit,ln,hv(v*z.gain),at+pl*step+z.dt,v); });
   }
   /* bass — THE CELL: onsets and degrees drawn once per dream against the
      figure's skeleton; the harmony moves under a line that keeps its name.
@@ -4027,6 +5689,9 @@ function deal(){
       if(c&&!seen.has(c.name)){ seen.add(c.name); BUILD.hand.push(c); }
     }
   }
+  /* a dealt drummer wearing a DD22 kit starts baking NOW, before the tap —
+     by audition time the core hits are usually in the rack */
+  if(typeof ddWarm==="function") BUILD.hand.forEach(c=>{ if(c&&c.dkit) ddWarm(c.dkit); });
   builderRender();
 }
 function auditionCard(i){
@@ -4098,7 +5763,8 @@ function keptFromP(p,seed){
   BUILD.kept=[
     {kind:"drums",name:(p.name||"drums").split(" × ")[0],desc:p.fig,fig:p.fig,comps:p.comps,
      kit:p.kit,tempo:p.tempo,hum:p.hum,extraKick:!!p.extraKick,seed:seed||p._seed||1,
-     dlib:p.dlib!=null?p.dlib:undefined,flib:p.flib!=null?p.flib:undefined},
+     dlib:p.dlib!=null?p.dlib:undefined,flib:p.flib!=null?p.flib:undefined,
+     dkit:p.dkit||undefined},
     p.muteBass?null:{kind:"bass",name:p.blib!=null&&PHRASES[p.blib]?PHRASES[p.blib].n:TH_NOTE[((p.root%12)+12)%12]+" "+p.scale,
      desc:PROGRAMS[p.bass].name,
      root:p.root,scale:p.scale,bass:p.bass,bseed:p.bseed!=null?p.bseed:1,
@@ -4141,11 +5807,14 @@ function rackReroll(slot){
   const r=mulberry(((Date.now()^(Math.random()*0x7fffffff))>>>0)|1);
   const same=c=>c.name===k.name&&c.dlib===k.dlib&&c.blib===k.blib&&c.clib===k.clib&&
     JSON.stringify(c.elibs||null)===JSON.stringify(k.elibs||null);
+  /* dkit deliberately not in same(): ◇ deals another TAKE — the kit shelf
+     is ‹ ›'s axis, and it is carried onto the new take below */
   let c=null;
   for(let t=0;t<15;t++){ const d=candFor(slot,r,BUILD.kept); if(d&&!same(d)){ c=d; break; } }
   if(!c) return; /* the drawer genuinely has one card — nothing to deal */
   if(rackVoiceField(c.kind)&&rackVoiceField(k.kind)===rackVoiceField(c.kind)&&k[rackVoiceField(k.kind)]!=null)
     c[rackVoiceField(c.kind)]=k[rackVoiceField(k.kind)]; /* new phrase, SAME voice — the dice rolls the playing, ‹ › roll the patch */
+  if(c.kind==="drums"){ if(k.dkit) c.dkit=k.dkit; else delete c.dkit; } /* the DD22 shelf rides the voice, not the take */
   BUILD.kept[slot]=c;
   rackApply();
 }
@@ -4153,6 +5822,16 @@ function rackCycle(slot,dir){
   const k=BUILD.kept[slot]; if(!k) return;
   const f=rackVoiceField(k.kind); if(!f) return;
   const list=rackCatFor(k.kind); if(!list.length) return;
+  if(k.kind==="drums"){
+    /* the drums drawer spans the TRITON kits AND the DreamDrummer kits
+       (round 7) — one ring, walked with the same two buttons */
+    const n=list.length+DD_KIT_NAMES.length;
+    const cur=k.dkit? list.length+Math.max(0,DD_KIT_NAMES.indexOf(k.dkit)) : Math.max(0,list.indexOf(k.kit));
+    const ni=(cur+dir+n)%n;
+    if(ni<list.length){ delete k.dkit; k.kit=list[ni]; }
+    else { k.dkit=DD_KIT_NAMES[ni-list.length]; if(typeof ddWarm==="function") ddWarm(k.dkit); }
+    rackApply(); return;
+  }
   const i=Math.max(0,list.indexOf(k[f]));
   k[f]=list[(i+dir+list.length)%list.length];
   if(k.kind!=="drums") k.desc=PROGRAMS[k[f]].name;
@@ -4164,7 +5843,8 @@ function rackRender(){
   for(let i=0;i<4;i++){
     const k=BUILD.kept[i]; if(!k) continue;
     const f=rackVoiceField(k.kind);
-    const vname=(f&&PROGRAMS[k[f]])? PROGRAMS[k[f]].name : "";
+    const vname=(k.kind==="drums"&&k.dkit)? "DD·"+k.dkit.toUpperCase() :
+      (f&&PROGRAMS[k[f]])? PROGRAMS[k[f]].name : "";
     rows.push('<div class="rku" data-slot="'+i+'">'+
       '<span class="rklab">'+esc(TRAITS[i])+'</span>'+
       '<b class="rkname">'+esc(k.name)+'</b>'+
@@ -4294,10 +5974,11 @@ function takeLogMix(when,s){
 }
 /* the take as writer-ready MIDI events: role → channel, drums → GM notes */
 function takeToMidiEvents(evs){
-  const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9};
+  const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9,dd:9};
   return evs.filter(e=>e.role!=="mix").map(e=>{
     let n;
     if(e.role==="perc") n=MIDI_GM_RECIPE[e.name]||77;
+    else if(e.role==="dd") n=MIDI_GM_LANE[((e.zone%12)+12)%12];
     else if(e.role==="kit") n=MIDI_GM_LANE[((e.note%12)+12)%12];
     else n=e.note;
     return {t:e.t,ch:CH[e.role]!=null?CH[e.role]:0,role:e.role,
@@ -4442,6 +6123,7 @@ async function exportTake(){
     const pans={bass:mk(0,"bass"),chord:mk(-.24,"chord"),lead:mk(.24,"lead")};
     evs.forEach(e=>{
       if(e.role==="mix"){ if(typeof mixApplyStage==="function") mixApplyStage(e.s,e.t); return; }
+      if(e.role==="dd"){ ddHit(e.kit,e.zone,e.vel,e.t,{_q:1}); return; } /* the kick keys the duck inside ddHit, exactly like the room */
       if(e.role==="perc"){
         /* _g suppresses the duck (it marks grace notes) — the bounce must
            duck exactly like the room did, so key it here (round-5 BREAK) */

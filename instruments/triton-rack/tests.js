@@ -672,5 +672,103 @@ console.log("[7] bank B");
   if (!bBad) ok("real programs pass, mutants/junk/overflow refused, slot ids stamped");
 }
 
+/* ── suite 8: DD22 kit port (round 7) — fidelity gate + measured physics ── */
+console.log("[8] dd22 kits");
+{
+  let dBad = 0;
+  /* THE FIDELITY GATE: rebuild the whole DD22 block from the byte-identical
+     donor with the same manifest and require the artifact to embed it EXACTLY.
+     Any hand edit inside the block, any donor drift, any manifest slip fails
+     here — the port stays verbatim by construction, provably. */
+  let port = null;
+  try { port = require("./mine/dd22_port.js"); } catch (e) { fail("dd22_port.js loads: " + e.message); dBad++; }
+  if (port) {
+    try {
+      const donor = fs.readFileSync(__dirname + "/dreamdrummer_22.html", "utf8");
+      const block = port.buildBlock(donor);
+      if (s.indexOf(block) < 0) { fail("embedded DD22 block is NOT the donor-derived block"); dBad++; }
+      else ok(port.MANIFEST.length + " donor slices byte-identical in the artifact (" + block.length + " bytes)");
+    } catch (e) { fail("fidelity gate: " + e.message); dBad++; }
+  }
+  const ddJs = slice("/*DD22-BEGIN*/", "const LOCKS={");
+  const G8 = eval(ddJs + "\n;({DD22,DD_KIT_NAMES,DD_ZONE2SLOT,DD_LAYERS})");
+  const D = G8.DD22;
+  /* one shelf, three copies, zero drift */
+  const bankKeys = Object.keys(D.KITBANK).filter(k => k !== "_base").sort().join(",");
+  if (G8.DD_KIT_NAMES.slice().sort().join(",") !== bankKeys ||
+      D.KIT_NAMES.join(",") !== G8.DD_KIT_NAMES.join(","))
+    { fail("kit name lists disagree with the bank"); dBad++; }
+  else ok(G8.DD_KIT_NAMES.length + " kits: " + G8.DD_KIT_NAMES.join(" "));
+  /* zone map: 12 zones, all land on real slots, the core drums where they must */
+  const Z = G8.DD_ZONE2SLOT;
+  if (Z.length !== 12 || !Z.every(v => Number.isInteger(v) && v >= 0 && v <= 11)) { fail("zone map shape"); dBad++; }
+  if (Z[0] !== 0 || Z[1] !== 1 || Z[6] !== 2 || Z[10] !== 3 || Z[8] !== 2 || Z[3] !== 4 || Z[2] !== 8)
+    { fail("core zone routing (kick/snare/hats/clap/rim)"); dBad++; }
+  if (new Set(Z).size < 10) { fail("zone map collapses slots"); dBad++; }
+  /* deep-merge: preset states only what it changes, the base fills the rest,
+     arrays replace whole, the base object never mutates */
+  const baseKnock = D.KITBANK._base.kick.knockHz;
+  const tp = D.kitPatch("trapK"), hp = D.kitPatch("hyphyK"), af = D.kitPatch("afroK");
+  if (tp.kick.bend !== 3.4 || tp.kick.knockHz !== 240 || tp.kick.tuned !== 1) { fail("trapK merge"); dBad++; }
+  if (hp.clap.tailDec !== 0.22 || hp.lvl[4] !== 0.7) { fail("hyphyK merge"); dBad++; }
+  if (af.toms.length !== 3 || af.toms[0].hz !== 96 || af.toms[0].decay !== 0.5) { fail("afroK toms merge"); dBad++; }
+  if (D.KITBANK._base.kick.knockHz !== baseKnock || D.KITBANK._base.toms[0].hz === 96)
+    { fail("merge mutated the base"); dBad++; }
+  /* measured physics at 44.1k — the numbers, not the vibes */
+  const sr = 44100;
+  const pk = h => { let p = 0; for (let i = 0; i < h.L.length; i++) { const v = Math.max(Math.abs(h.L[i]), Math.abs(h.R[i])); if (v > p) p = v; } return p; };
+  const tail = (h, t) => { const a = Math.floor(t * sr); let e = 0, n = 0;
+    for (let i = a; i < Math.min(a + 4410, h.L.length); i++) { e += h.L[i] * h.L[i]; n++; } return n ? Math.sqrt(e / n) : 0; };
+  const finite = h => { for (let i = 0; i < h.L.length; i++) if (!isFinite(h.L[i]) || !isFinite(h.R[i])) return false; return true; };
+  const nk = D.renderHit("neptune", 0, 1, sr), tk = D.renderHit("trapK", 0, 1, sr);
+  if (!finite(nk) || !finite(tk)) { fail("kick render NaN"); dBad++; }
+  if (!(pk(nk) > 0.3 && pk(nk) < 1.45)) { fail("neptune kick peak " + pk(nk).toFixed(3)); dBad++; }
+  if (!(tail(tk, 0.5) > 5e-3)) { fail("trapK 808 has no 0.5s tail (" + tail(tk, 0.5).toExponential(1) + ")"); dBad++; }
+  if (!(tail(nk, 0.5) < 1e-3)) { fail("neptune kick rings like an 808"); dBad++; }
+  if (!(tk.L.length > nk.L.length * 2)) { fail("trapK sub not longer than neptune"); dBad++; }
+  const hc = D.renderHit("houseK", 2, 0.85, sr), ho = D.renderHit("houseK", 3, 0.85, sr);
+  if (!(hc.L.length < ho.L.length)) { fail("closed hat outlives open hat"); dBad++; }
+  /* stereo: the kit pans its lanes — a tomH buffer must actually lean */
+  const th = D.renderHit("neptune", 7, 0.85, sr);
+  { let el = 0, er = 0; for (let i = 0; i < th.L.length; i++) { el += th.L[i] * th.L[i]; er += th.R[i] * th.R[i]; }
+    if (!(er > el * 1.1)) { fail("tomH pan not in the buffer"); dBad++; } }
+  /* the choke rule survives the port: a closed hat silences the open one */
+  { const kit = new D.Kit(sr, D.makeRng(7), D.tables());
+    kit.setPatch(D.kitPatch("ewf"));
+    kit.trig(3, 0.9);
+    if (!kit.v[3].busy()) { fail("open hat not busy after trig"); dBad++; }
+    kit.trig(2, 0.9);
+    if (!kit.v[3].choking) { fail("closed hat does not choke the open hat"); dBad++; } }
+  /* determinism: the bake is seeded — same request, same samples */
+  { const a = D.renderHit("boombap", 1, 0.85, sr), b = D.renderHit("boombap", 1, 0.85, sr);
+    let same = a.L.length === b.L.length;
+    if (same) for (let i = 0; i < a.L.length; i += 7) if (a.L[i] !== b.L[i]) { same = false; break; }
+    if (!same) { fail("bake not deterministic"); dBad++; } }
+  /* preset law: dkit must name a shelf kit or the preset is refused */
+  { const kd = G3.candDrums(G3.mulberry(4)), kb = G3.candBass(G3.mulberry(5)),
+      kc = G3.candChords(G3.mulberry(6), kb), kl = G3.candLead(G3.mulberry(7));
+    const base = G3.composeP([kd, kb, kc, kl, { kind: "shape", format: "loop" }], null, 5);
+    const mk = d => { const p = JSON.parse(JSON.stringify(base)); if (d !== undefined) p.dkit = d; else delete p.dkit; return { name: "t", seed: 1, p }; };
+    if (!G3.presetValidate(mk())) { fail("dkit-less preset refused"); dBad++; }
+    if (!G3.presetValidate(mk("hyphyK"))) { fail("valid dkit refused"); dBad++; }
+    if (G3.presetValidate(mk("nope"))) { fail("unknown dkit accepted"); dBad++; }
+    if (G3.presetValidate(mk(5))) { fail("numeric dkit accepted"); dBad++; } }
+  /* the deal: library drummers draw DD kits deterministically and evenly-ish */
+  { const seen = new Set(); let withKit = 0, lib = 0;
+    for (let sd = 1; sd <= 160; sd++) { const d = G3.candDrums(G3.mulberry(sd));
+      if (d.dlib == null) continue; lib++;
+      if (d.dkit != null) { withKit++;
+        if (G8.DD_KIT_NAMES.indexOf(d.dkit) < 0) { fail("card drew unknown kit " + d.dkit); dBad++; break; }
+        seen.add(d.dkit);
+        if (d.desc.indexOf("DD·") < 0) { fail("dkit card hides its kit in desc"); dBad++; break; } } }
+    if (!(lib > 20 && withKit > lib * 0.3 && withKit < lib * 0.8)) { fail("dkit draw rate off (" + withKit + "/" + lib + ")"); dBad++; }
+    if (seen.size < 6) { fail("kit draw not spread (" + seen.size + " kits)"); dBad++; }
+    const c = G3.candDrums(G3.mulberry(11));
+    if (c.dkit) { const p = G3.composeP([c, null, null, null, null], null, 5, true);
+      const p2 = G3.composeP([c, null, null, null, null], null, 1);
+      if (p2 && p2.dkit !== c.dkit) { fail("composeP drops dkit"); dBad++; } } }
+  if (!dBad) ok("fidelity gate + merge + physics (808 tail, choke, pan, determinism) + preset law + deal");
+}
+
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
 process.exit(errs ? 1 : 0);
