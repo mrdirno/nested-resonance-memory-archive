@@ -258,6 +258,11 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
 #ldrMidiHint{position:absolute;left:56px;top:366px;width:180px;font-size:9.5px;color:#587082;
   line-height:1.7;letter-spacing:.08em;text-transform:uppercase;}
 #ldrMidiHint b{color:#8fb8cf;}
+/* the one browser law a hardware keyboard can't satisfy alone: audio needs a tap */
+#audioNudge{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:99;display:none;
+  background:#2a2412;border:1px solid #8a6d1e;color:#ffd77e;font-size:12px;letter-spacing:.08em;
+  padding:9px 16px;border-radius:9px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);}
+#audioNudge.on{display:block;animation:playPulse 1.2s ease-in-out infinite;}
 #ldrSave{left:270px;top:362px;width:120px;height:120px;color:#9fe0b3;}
 #ldrSave.busy{color:#ffd77e;border-color:#5a4a20;animation:playPulse 1.2s ease-in-out infinite;}
 #ldrSaveLbl{position:absolute;left:210px;top:496px;width:240px;text-align:center;font-size:11px;
@@ -293,6 +298,8 @@ h1,h2,h3{font-weight:600;letter-spacing:.02em;}
   <h1>KORG TRITON-Rack</h1>
   <p>Expandable HI Module/Sampler · circuits and sound, wired together</p>
 </div>
+
+<div id="audioNudge">🔊 tap anywhere once — the browser opens audio on a touch</div>
 
 <div class="wrap"><div id="ldrScale"><div id="ldru">
   <div class="ear l"><div class="screw s1"></div><div class="screw s2"></div></div>
@@ -2004,6 +2011,29 @@ function quickBoot(){
   if(!ctx){ ctx=new AC({latencyHint:"interactive"}); buildGraph(); } else if(ctx.resume) ctx.resume();
   relayClick(); lcd.classList.remove("off");
   state.mode="PROG"; state.page=0; setProgram(state.progIdx);
+  ctxEnsure();
+}
+/* A hardware MIDI note can boot the unit, but a MIDI message is not a "user
+   gesture" to the browser: the fresh AudioContext stays SUSPENDED and the rack
+   looks alive while making no sound. ctxEnsure watches for that state, shows
+   the one honest instruction, and arms a one-tap resume. force=true drives the
+   armed path without a suspended ctx (the test seam). */
+function ctxEnsure(force){
+  const nud=document.getElementById("audioNudge");
+  const stuck=force||(ctx&&ctx.state==="suspended");
+  if(!stuck){ if(nud) nud.classList.remove("on"); return; }
+  if(nud) nud.classList.add("on");
+  if(ctxEnsure._armed) return; ctxEnsure._armed=true;
+  const kick=()=>{
+    window.removeEventListener("pointerdown",kick,true);
+    window.removeEventListener("keydown",kick,true);
+    ctxEnsure._armed=false;
+    const done=()=>{ if(nud) nud.classList.remove("on"); };
+    if(ctx&&ctx.state==="suspended"&&ctx.resume) ctx.resume().then(done,done);
+    else done();
+  };
+  window.addEventListener("pointerdown",kick,true);
+  window.addEventListener("keydown",kick,true);
 }
 function powerOn(test){
   if(typeof exporting!=="undefined"&&exporting) return; /* offline render owns ctx */
@@ -2013,6 +2043,7 @@ function powerOn(test){
   if(!ctx){ ctx=new AC({latencyHint:"interactive"}); buildGraph(); } else if(ctx.resume) ctx.resume();
   relayClick();
   lcd.classList.remove("off");
+  ctxEnsure();
   if(test){ state.test=true; runTest(tok); return; }
   state.mode="PROG"; state.page=0; setProgram(state.progIdx);
   lcd.innerHTML=`<span class="row big">  TRITON Rack</span><span class="row">  Expandable HI Module/Sampler</span><span class="row dim">  system boot…</span>`;
@@ -2082,15 +2113,20 @@ function latMs(){ if(!ctx) return "—"; const t=(ctx.baseLatency||0)+(ctx.outpu
 (function(){
   const statEl=document.getElementById("midiStat");
   function stat(t){ if(statEl) statEl.textContent=t; }
+  /* every hardware byte enters through onMsg; _midiInject drives the same wire
+     (virtual keyboards, tests) — defined before the availability check so the
+     wire exists even where Web MIDI doesn't */
+  window._midiInject=function(bytes){ onMsg({data:Uint8Array.from(bytes)}); };
   if(!navigator.requestMIDIAccess){ stat("WEB MIDI: not in this browser — keys below still play"); return; }
   navigator.requestMIDIAccess({sysex:false}).then(acc=>{
     function hook(){ let n=0; acc.inputs.forEach(inp=>{ n++; inp.onmidimessage=onMsg; });
-      stat(n? "WEB MIDI: "+n+" controller connected — power on and play" : "WEB MIDI: ready — plug in a controller"); }
+      stat(n? "WEB MIDI: "+n+" controller connected — just play (it powers on for you)" : "WEB MIDI: ready — plug in a controller"); }
     hook(); acc.onstatechange=hook;
   },()=>stat("WEB MIDI: permission blocked"));
   function onMsg(e){
     const d=e.data; if(!d||d.length<2) return; const cmd=d[0]&0xF0;
-    if(cmd===0x90 && d[2]>0) noteOn(d[1],Math.max(.08,d[2]/127));
+    if(cmd===0x90 && d[2]>0){ noteOn(d[1],Math.max(.08,d[2]/127));
+      if(typeof ctxEnsure==="function") ctxEnsure(); }
     else if(cmd===0x80 || (cmd===0x90 && d[2]===0)) noteOff(d[1]);
     else if(cmd===0xB0){
       if(d[1]===64){ const on=d[2]>=64;
@@ -3650,4 +3686,11 @@ DEAD BRANCHES: (1) one feel draw per bar shared by all parts — lost: a band wh
 KILL-TEST: suite [3] draws 500 feels per part and pins the bounds (±40 ms, gain 0.6–1.4), the biases by sign over 2000 draws (bass mean < 0, chord/lead > 0), the looseness ordering (lead sd > 1.3× bass sd), determinism (seed 42 twice = byte-equal, seed 43 differs), and the velocity clamp. The Chromium harness reads the rolling tape mid-performance and asserts the first pad chord spread 3–90 ms (measured 31.3 ms) with ≥2 velocity shades across bars — proof the hand reaches the take, which Ring 20's tests already prove reaches the .mid tick-exactly. Both suites ALL GREEN.
 THE NON-OBVIOUS CHOICE: the tight thing is the human thing. The obvious humanization jitters everything; the studied one knows a rhythm section's timekeeper plays MORE exactly than a machine-shy amateur would, and the feel lives in how the band leans on that certainty — ahead on the bass, behind on the keys, loose on the horn.
 OPEN QUESTIONS: (1) The lead's motif velocity already had rng breath — now two breaths stack (bounded, but is the composite still shaped right at BREAK dynamics?). (2) A per-dream feel scale (Son laid back vs Trance driving) is one multiplier away — earned, or another option the face just banished? (3) When the figure-swings ring arrives, the hand needs a swing-aware grid to lean against — does figAnalysis carry it?
+RING 24 · 2026-08-31 · the hardware wire — a MIDI keyboard is a first-class player
+WHAT CHANGED: the user's standing ask ("play the sounds using an external MIDI keyboard… using html") hardened from works-if-you-know-the-trick to works, period. The one genuine browser trap: a hardware note CAN boot the unit (noteOn → quickBoot builds the AudioContext), but a MIDI message is NOT a user gesture under autoplay policy — the fresh context stays SUSPENDED, the rack lights up, and nothing sounds. Now ctxEnsure() watches for exactly that state after every boot path and every hardware note-on: it shows one honest instruction (a fixed banner: "tap anywhere once — the browser opens audio on a touch") and arms a one-tap resume on window pointerdown/keydown, capture-phase, self-disarming, with the banner clearing whether resume succeeds or the context was never stuck. Second: every hardware byte now enters through one seam — window._midiInject(bytes) drives the exact onMsg wire the controller uses (defined before the availability check, so virtual keyboards work even where Web MIDI doesn't). The harness stopped simulating players by calling noteOn() and now PLAYS THE WIRE: a cold-page 0x90 boots the unit and makes a voice; sustain (0xB0/64), pitch bend (0xE0, pinned to +100 cents at d2=96) and the nudge law all assert; the SAVE take's YOU note arrives as MIDI bytes and still lands on the YOU track with its held duration. The MIDI status line now says what's true: "just play (it powers on for you)".
+BANNED (obvious answers set aside first): auto-resuming audio from the MIDI handler and hoping (Chrome refuses resume() without activation — shipping a silent maybe is the bug with extra steps); a modal overlay demanding a click before anything works (the donor's grammar is zero ceremony; the banner only appears in the one state where the browser forces a hand); polling ctx.state on a timer (the state only changes at boot and at gesture — watch those edges, not the clock).
+DEAD BRANCHES: (1) resuming inside noteOn for every source — lost: screen-key noteOn already runs inside a real gesture where ctx.resume() in quickBoot works; only the hardware path needs the watcher, and scoping it there keeps the hot path clean. (2) putting the nudge inside the 4U face markup — lost in the same edit that wrote it: the face container is CSS-scaled, and position:fixed inside a transformed ancestor anchors to the transform, not the viewport; the banner lives at body level. (3) a "MIDI learn" mapping layer (CCs to knobs) — lost: the ask is play-along; mapping is a mixer's feature, and the face just finished shedding options.
+KILL-TEST: the Chromium harness's new steps — cold-boot by wire (powered + context + audible voice, nudge agreeing with ctx.state), ctxEnsure(true) forcing the armed path and one synthetic pointerdown clearing and disarming it, pedal/bend byte-exact through _midiInject, and the take/SAVE chain fed entirely by wire bytes. Both suites ALL GREEN; the run on record diced into F MAJOR · pachelbel with all eight cells live.
+THE NON-OBVIOUS CHOICE: the fix is a banner, not cleverness. Every technical dodge around autoplay policy is either against the platform's rules or silently broken next release; the robust engineering is one truthful sentence shown at exactly the right moment, and machinery that makes the single permitted gesture count.
+OPEN QUESTIONS: (1) Note names spell sharps-only (A#maj7 where a flat key wants B♭maj7) — per-key enharmonic spelling is a small table away and the theory bar would read like the book. (2) Hardware velocity curves vary wildly — does the YOU track want a gentle velocity remap, or is raw truth the producer's preference? (3) MIDI clock in (0xF8) could sync the conductor's tempo to a DAW — the wire already carries it; is that the bridge worth building next?
 ═══ end rings ═══ -->

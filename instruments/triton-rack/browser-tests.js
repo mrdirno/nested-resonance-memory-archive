@@ -64,6 +64,44 @@ const path = __dirname + "/triton-rack.html";
   else ok("face is PLAY·DICE·SAVE only (strip/HALF/REC/preset-select gone)");
   ok("scope canvas " + dims.scope.w + "x" + dims.scope.h);
 
+  /* hardware MIDI on a cold page: the wire boots the unit and makes a voice */
+  const mi0 = await page.evaluate(async () => {
+    window._midiInject([0x90, 60, 96]);
+    await new Promise(r => setTimeout(r, 250));
+    const s = { powered: state.powered, ctx: !!ctx, ctxState: ctx ? ctx.state : "none",
+      voices: activeVoices, nudge: document.getElementById("audioNudge").classList.contains("on") };
+    window._midiInject([0x80, 60, 0]);
+    return s;
+  });
+  if (!mi0.powered || !mi0.ctx) fail("MIDI note did not boot the unit " + JSON.stringify(mi0));
+  else if (mi0.voices < 1) fail("MIDI note made no voice (" + mi0.voices + ")");
+  else ok("hardware MIDI boots the unit cold (ctx " + mi0.ctxState + ", " + mi0.voices + " voice)");
+  if (mi0.nudge !== (mi0.ctxState === "suspended")) fail("audio nudge disagrees with ctx.state " + JSON.stringify(mi0));
+
+  /* the suspended-audio law: nudge shows, one tap anywhere clears it */
+  const nud = await page.evaluate(async () => {
+    ctxEnsure(true);
+    const on1 = document.getElementById("audioNudge").classList.contains("on");
+    document.body.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+    await new Promise(r => setTimeout(r, 250));
+    return { on1, on2: document.getElementById("audioNudge").classList.contains("on"),
+      armed: !!ctxEnsure._armed };
+  });
+  if (!nud.on1 || nud.on2 || nud.armed) fail("suspended-audio nudge arm/clear broken " + JSON.stringify(nud));
+  else ok("audio nudge: shows while stuck, one tap clears and disarms");
+
+  /* pedal, bend and panic ride the same wire */
+  const ped = await page.evaluate(() => {
+    _midiInject([0xB0, 64, 127]); const a = SUS;
+    _midiInject([0xB0, 64, 0]);   const b = SUS;
+    _midiInject([0xE0, 0, 96]);   const bend = BENDC;
+    _midiInject([0xE0, 0, 64]);
+    return { a, b, bend };
+  });
+  if (!(ped.a === true && ped.b === false)) fail("sustain pedal path " + JSON.stringify(ped));
+  else if (!(ped.bend > 90 && ped.bend < 110)) fail("pitch bend path " + ped.bend);
+  else ok("sustain pedal + pitch bend ride the hardware wire");
+
   /* behavior: PLAY powers + conducts; readout goes live */
   await page.click("#dreamPlay");
   await page.waitForTimeout(2500);
@@ -178,15 +216,16 @@ const path = __dirname + "/triton-rack.html";
   else ok("Rhythm pane figure pick: bembe on the physics engine");
   if (st3.onChip !== 1) fail("figure chip highlight count " + st3.onChip);
 
-  /* SAVE: jam a note over the running figure, bounce offline, verify both files */
-  await page.evaluate(async () => { noteOn(72, .85); await new Promise(r => setTimeout(r, 420)); noteOff(72); });
+  /* SAVE: jam a note from the MIDI wire over the running figure, bounce, verify */
+  await page.evaluate(async () => { _midiInject([0x90, 72, 108]);
+    await new Promise(r => setTimeout(r, 420)); _midiInject([0x80, 72, 0]); });
   await page.waitForTimeout(400);
   const takeInfo = await page.evaluate(() => ({ n: TAKE.ev.length, on: TAKE.on,
     you: TAKE.ev.filter(e => e.role === "you").length,
     youDur: (TAKE.ev.find(e => e.role === "you") || {}).dur }));
   if (takeInfo.n < 5 || takeInfo.you < 1 || !takeInfo.on) fail("take log thin " + JSON.stringify(takeInfo));
   else if (!(takeInfo.youDur > 0.2 && takeInfo.youDur < 1.5)) fail("player note duration not captured: " + takeInfo.youDur);
-  else ok("take rolls: " + takeInfo.n + " events, player note held " + takeInfo.youDur.toFixed(2) + "s");
+  else ok("take rolls: " + takeInfo.n + " events, hardware-wire note held " + takeInfo.youDur.toFixed(2) + "s");
   const dl0 = downloads.length;
   await page.click("#ldrSave");
   await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
