@@ -149,6 +149,27 @@ const path = __dirname + "/triton-rack.html";
   else if (hum.vels < 2) fail("chord dynamics flat across bars (" + hum.vels + " velocity values)");
   else ok("the hand reaches the tape: pad rolled " + (hum.spread * 1000).toFixed(1) + "ms · " + hum.vels + " chord velocity shades");
 
+  /* the clock on the tape: figure deviations are small, alive, and CORRELATED —
+     a player late stays late for a moment; white jitter would fail this */
+  const clk = await page.evaluate(() => {
+    const step = (60 / state.tempo) / 3;              /* bembé: 12-grid, 3 per beat */
+    const P = TAKE.ev.filter(e => e.role === "perc").sort((a, b) => a.t - b.t);
+    if (P.length < 8) return { n: P.length };
+    const raw = P.map(e => e.t % step);
+    const med = raw.slice().sort((a, b) => a - b)[raw.length >> 1];
+    const dev = raw.map(x => { let d = x - med; if (d > step / 2) d -= step; if (d < -step / 2) d += step; return d; });
+    const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+    const m = mean(dev), sd = Math.sqrt(mean(dev.map(x => (x - m) * (x - m))));
+    let n1 = 0, d1 = 0; for (let i = 0; i + 1 < dev.length; i++) n1 += (dev[i] - m) * (dev[i + 1] - m);
+    dev.forEach(x => d1 += (x - m) * (x - m));
+    return { n: P.length, sdMs: sd * 1000, maxMs: Math.max(...dev.map(Math.abs)) * 1000, lag1: d1 ? n1 / d1 : 0 };
+  });
+  if (clk.n < 8) fail("too few figure hits to measure the clock (" + clk.n + ")");
+  else if (!(clk.sdMs > 0.4 && clk.sdMs < 12)) fail("clock breadth off: sd " + clk.sdMs.toFixed(2) + "ms");
+  else if (!(clk.maxMs < 52)) fail("clock outlier " + clk.maxMs.toFixed(1) + "ms");
+  else if (!(clk.lag1 > 0.15)) fail("figure deviations look like white jitter (lag-1 " + clk.lag1.toFixed(2) + ")");
+  else ok("the drummer's clock on tape: " + clk.sdMs.toFixed(1) + "ms sd, correlated (lag-1 " + clk.lag1.toFixed(2) + ")");
+
   /* dice mid-performance: bar-quantized swap applies, transport never drops */
   await page.click("#dreamDice");
   await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 9000 });
@@ -164,6 +185,22 @@ const path = __dirname + "/triton-rack.html";
   else if (st2.pn !== st2.pnWant) fail("progression name mismatch: '" + st2.pn + "' vs '" + st2.pnWant + "'");
   else ok("DICE swaps on the bar line (seed " + st1.seed + " → " + st2.seed + ") · theory follows (" + st2.key +
     (st2.pn ? " · " + st2.pn : "") + ")");
+
+  /* the hook on the tape: the lead speaks in phrases with rests, not an arpeggio */
+  await page.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 25000 });
+  const hk = await page.evaluate(() => {
+    const L = TAKE.ev.filter(e => e.role === "lead").sort((a, b) => a.t - b.t);
+    let gaps = 0;
+    for (let i = 1; i < L.length; i++) if (L[i].t - L[i - 1].t > 0.6) gaps++;
+    const drums = TAKE.ev.filter(e => e.role === "perc" || e.role === "kit").length;
+    return { n: L.length, gaps, drums, hook: !!DREAM.hook,
+      contour: DREAM.hook && DREAM.hook.contour };
+  });
+  if (!hk.hook) fail("no hook drawn for the dream");
+  else if (hk.n < 2) fail("the hook never spoke (" + hk.n + " lead events)");
+  else if (hk.n >= 4 && hk.gaps < 1) fail("the lead never breathes (0 rests across " + hk.n + " notes)");
+  else if (hk.n > hk.drums) fail("lead outruns the drums — arpeggiator behavior (" + hk.n + " vs " + hk.drums + ")");
+  else ok("the hook speaks: " + hk.n + " lead notes, " + hk.gaps + " breaths, contour '" + hk.contour + "'");
 
   /* figure chip mid-dream: transport hands off, the tape keeps rolling (BREAK fix) */
   await page.click('.tab[data-pane="rhythm"]');

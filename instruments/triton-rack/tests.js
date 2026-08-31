@@ -76,7 +76,7 @@ if (errs === e2) ok("lanes/pulses/vels valid · " + res + " ensemble refs resolv
 /* ── suite 3: conductor ────────────────────────────────────────────── */
 console.log("[3] conductor");
 Object.assign(globalThis, { LDR_FIG, LDR_KITS, ldrBase, ldrLane, PROGRAMS });
-const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,makeMotif,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,humanFeel,FEEL,hv})");
+const G3 = eval(dreamJs + "\n;({mulberry,chordTones,DREAMS,dreamPickSurprise,romanFor,chordLabel,theoryData,figAnalysis,voiceLead,sectFor,SECT_CFG,PROG_BANK,chordSpecFor,labelTones,TH_IV,hv,hash01,valueNoise1,wander,humanTime,humanVel,HUM_COUPLE,HUM_LOOSE,LEAD_CELLS,CONTOURS,hookMake,hookBar,hookRealize,bassMake})");
 let e3 = errs; /* snapshot BEFORE the preset checks, so their failures gate the summary */
 G3.DREAMS.forEach(d => {
   if (d.surprise) return;
@@ -100,14 +100,61 @@ for (const id in LDR_FIG) { const an = G3.figAnalysis(LDR_FIG[id]);
   const avg = moved / n;
   if (avg > 5) fail("voice motion " + avg.toFixed(2)); else ok("avg voice motion " + avg.toFixed(2) + " st (smooth)");
 }
-["bembe","campanaSon","claveBossa","cavacha","maculele","martillo"].forEach(id => {
-  const f = LDR_FIG[id], an = G3.figAnalysis(f);
-  for (let sd = 1; sd <= 50; sd++) {
-    const m = G3.makeMotif(an, f.grid, G3.mulberry(sd));
-    if (m.length < 1) fail("motif empty " + id);
-    m.forEach(e => { if (e.p < 0 || e.p >= f.grid || e.di < 0 || e.di > 6) fail("motif bounds " + id); });
+{ /* the hook: drawn once, Q≠A, cells breathe, notes on the chord map, cadences voice-led */
+  let hBad = 0;
+  for (const grid of [12, 16]) {
+    const h1 = G3.hookMake(42, grid), h2 = G3.hookMake(42, grid), h3 = G3.hookMake(43, grid);
+    if (JSON.stringify(h1) !== JSON.stringify(h2)) { fail("hook not deterministic (" + grid + ")"); hBad++; }
+    if (JSON.stringify(h1) === JSON.stringify(h3)) { fail("hook ignores seed (" + grid + ")"); hBad++; }
+    if (h1.qi === h1.ai) { fail("Q and A must differ"); hBad++; }
+    (G3.LEAD_CELLS[grid] || []).forEach((c, i) => {
+      const sound = c.reduce((a, e) => a + Math.min(e.l, grid - e.p), 0);
+      if (!(c.length <= 4 && sound <= grid * .72)) { fail("cell " + grid + "/" + i + " leaves no space (" + sound.toFixed(1) + ")"); hBad++; }
+      for (let k = 1; k < c.length; k++) if (c[k].p <= c[k - 1].p) { fail("cell order " + grid + "/" + i); hBad++; }
+      c.forEach(e => { if (e.p < 0 || e.p >= grid || e.l <= 0) { fail("cell bounds " + grid + "/" + i); hBad++; } });
+    });
+    const tones = G3.chordSpecFor("minor", 0, 57).tones, next = G3.chordSpecFor("minor", 4, 57).tones;
+    const out = G3.hookRealize(h1.q, tones, next, h1);
+    if (out.length !== h1.q.length) { fail("realize dropped notes"); hBad++; }
+    const map = new Set();
+    [0, 1, 2, 3].forEach(k => { map.add(tones[k]); map.add(tones[k] + 12); });
+    [tones[0] + h1.color, tones[0] + h1.color + 12].forEach(x => map.add(x));
+    out.forEach(e => {
+      const okN = map.has(e.note) || (e.cad != null && Math.abs(e.note - e.cad) === 1);
+      if (!okN) { fail("lead note off the map: " + e.note); hBad++; }
+      if (e.cad != null) {
+        const inNext = [0, 1, 2, 3].some(k => e.cad === next[k] || e.cad === next[k] + 12);
+        if (!inNext) { fail("cadence target " + e.cad + " not in the next chord"); hBad++; }
+      }
+    });
+    /* phrase grammar: BREAK fragments, bar2 answers with the other cell */
+    const b0 = G3.hookBar(h1, 0, "GROOVE"), b2 = G3.hookBar(h1, 2, "GROOVE"), bk = G3.hookBar(h1, 1, "BREAK");
+    if (b0.cell === b2.cell) { fail("answer bar re-states the question"); hBad++; }
+    if (!(bk.dev === "fragment" && bk.cell.length <= 2)) { fail("BREAK does not fragment"); hBad++; }
   }
-});
+  const cs = new Set(); for (let s = 1; s <= 40; s++) cs.add(G3.hookMake(s, 16).contour);
+  if (cs.size < 3) { fail("contour variety " + cs.size); hBad++; }
+  if (!hBad) ok("the hook: deterministic identity, Q≠A, cells ≤72% air-time, notes on the chord map, cadences voice-led, BREAK fragments");
+}
+{ /* the bass cell: figure-anchored, chord-relative pool, opens and resolves home */
+  let bBad = 0;
+  const f = LDR_FIG["bembe"], an = G3.figAnalysis(f);
+  const b1 = G3.bassMake(9, an, f.grid), b2 = G3.bassMake(9, an, f.grid);
+  if (JSON.stringify(b1) !== JSON.stringify(b2)) { fail("bass cell not deterministic"); bBad++; }
+  const POOL = [0, 7, 10, 12, 3, 5, -2];
+  let opens = 0, openHome = 0;
+  for (let s = 1; s <= 60; s++) {
+    const b = G3.bassMake(s, an, f.grid);
+    if (!(b.fires.length >= 1 && b.fires.length <= 6)) { fail("bass density " + b.fires.length); bBad++; }
+    if (b.fires[0] > f.grid * .25) { fail("bass never opens (seed " + s + ")"); bBad++; }
+    if (b.fires.length !== b.degs.length) { fail("bass cell shape"); bBad++; }
+    b.degs.forEach(d => { if (POOL.indexOf(d) < 0) { fail("bass degree " + d); bBad++; } });
+    for (let k = 1; k < b.fires.length; k++) if (b.fires[k] <= b.fires[k - 1]) { fail("bass order"); bBad++; }
+    b.fires.forEach((p, i) => { if (p < f.grid * .2) { opens++; if (b.degs[i] === 0) openHome++; } });
+  }
+  if (!(opens > 0 && openHome / opens >= .5)) { fail("open-home intent missing (" + openHome + "/" + opens + ")"); bBad++; }
+  if (!bBad) ok("the bass cell: deterministic, anchored on the figure, degrees in the pool, opens home " + (100 * openHome / opens | 0) + "%");
+}
 { let sBad = 0;
   for (let sd = 1; sd <= 200; sd++) {
     const p = G3.dreamPickSurprise(G3.mulberry(sd));
@@ -194,31 +241,32 @@ for (let b = 0; b < 200; b++) if (!G3.SECT_CFG[G3.sectFor(b)]) fail("section " +
   }
   if (!pBad) ok("progression bank: " + G3.PROG_BANK.length + " named changes (blues 12 bars of dominants, andalusian Am7 G7 Fmaj7 E7, minor ii-V-i, dorian) \u2014 specs sound, voices lead");
 }
-{ /* the human hand: bounded, part-biased, part-differentiated, deterministic */
-  let hBad = 0;
-  const draw = (part, seed, n) => { const r = G3.mulberry(seed);
-    const out = []; for (let i = 0; i < n; i++) out.push(G3.humanFeel(part, r)); return out; };
-  ["bass", "chord", "lead", "fill", "kick"].forEach(p => {
-    draw(p, 11, 500).forEach(z => {
-      if (Math.abs(z.dt) > .04) { fail(p + " dt out of hand range: " + z.dt); hBad++; }
-      if (z.gain < .6 - 1e-9 || z.gain > 1.4 + 1e-9) { fail(p + " gain " + z.gain); hBad++; }
-    });
-  });
+{ /* the drummer's clock: keyed, correlated, role-coupled, capped, hum-scaled */
+  let cBad = 0;
   const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
   const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) * (x - m)))); };
-  const bassDt = draw("bass", 7, 2000).map(z => z.dt);
-  const chordDt = draw("chord", 7, 2000).map(z => z.dt);
-  const leadDt = draw("lead", 7, 2000).map(z => z.dt);
-  if (!(mean(bassDt) < 0)) { fail("bass should sit ahead of the beat"); hBad++; }
-  if (!(mean(chordDt) > 0 && mean(leadDt) > 0)) { fail("chord/lead should lay back"); hBad++; }
-  if (!(sd(leadDt) > sd(bassDt) * 1.3)) { fail("lead should be looser than bass (" +
-    sd(leadDt).toFixed(4) + " vs " + sd(bassDt).toFixed(4) + ")"); hBad++; }
-  const d1 = JSON.stringify(draw("lead", 42, 50)), d2 = JSON.stringify(draw("lead", 42, 50)),
-        d3 = JSON.stringify(draw("lead", 43, 50));
-  if (d1 !== d2) { fail("feel not deterministic per seed"); hBad++; }
-  if (d1 === d3) { fail("feel ignores the seed"); hBad++; }
-  if (G3.hv(1.7) !== 1 || G3.hv(-2) !== .05) { fail("hv clamp"); hBad++; }
-  if (!hBad) ok("the human hand: ±40ms bounded, bass ahead / chords+lead in the pocket, lead loosest, deterministic per seed");
+  const lag1 = a => { const m = mean(a); let n = 0, d = 0;
+    for (let i = 0; i + 1 < a.length; i++) n += (a[i] - m) * (a[i + 1] - m);
+    for (const x of a) d += (x - m) * (x - m); return d ? n / d : 0; };
+  const w1 = [], w2 = [];
+  for (let b = 0; b < 256; b++) { w1.push(G3.wander(1234, b * .25)); w2.push(G3.wander(1234, b * .25)); }
+  if (JSON.stringify(w1) !== JSON.stringify(w2)) { fail("wander not keyed/deterministic"); cBad++; }
+  if (!w1.every(x => Math.abs(x) <= 3.05)) { fail("wander exceeds its bound"); cBad++; }
+  if (!(lag1(w1) > .8)) { fail("wander not correlated (lag-1 " + lag1(w1).toFixed(2) + ")"); cBad++; }
+  const off = role => { const o = []; for (let b = 0; b < 400; b++) o.push(G3.humanTime(77, role, b * .5, .15, 1)); return o; };
+  const kitO = off("kit"), leadO = off("lead"), bassO = off("bass");
+  [[kitO, "kit"], [leadO, "lead"], [bassO, "bass"]].forEach(([o, r]) => {
+    if (!o.every(x => Math.abs(x) <= .15 * .333 + 1e-9)) { fail(r + " clock exceeds a third of a step"); cBad++; } });
+  if (!(sd(leadO) > sd(kitO) * 1.25)) { fail("lead should float freer than the kit (" +
+    sd(leadO).toFixed(4) + " vs " + sd(kitO).toFixed(4) + ")"); cBad++; }
+  if (!(lag1(kitO) > .5)) { fail("kit clock not correlated (lag-1 " + lag1(kitO).toFixed(2) + ")"); cBad++; }
+  if (Math.abs(G3.humanTime(77, "kit", 10, .15, 0)) > 1e-12) { fail("hum=0 must be machine-tight"); cBad++; }
+  const v = []; for (let b = 0; b < 200; b++) v.push(G3.humanVel(77, "chord", b * .5, 1));
+  if (!v.every(x => x > .8 && x < 1.2)) { fail("velocity breath out of range"); cBad++; }
+  if (!(lag1(v) > .5)) { fail("velocity breath not correlated"); cBad++; }
+  if (G3.hv(1.7) !== 1 || G3.hv(-2) !== .05) { fail("hv clamp"); cBad++; }
+  if (!cBad) ok("the drummer's clock: keyed 1/f wander (lag-1 " + lag1(w1).toFixed(2) +
+    "), kit tight / lead free (sd ×" + (sd(leadO) / sd(kitO)).toFixed(2) + "), ±⅓-step cap, hum=0 = machine");
 }
 { const audJs = slice("/*AUDVARY-BEGIN*/", "/*AUDVARY-END*/");
   const A = eval(audJs + "\n;({audVary})");

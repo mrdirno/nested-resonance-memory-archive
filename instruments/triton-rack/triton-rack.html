@@ -2857,9 +2857,10 @@ function ldrLane(id,f,i){
   return ({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]!=null?({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]:2;
 }
 function ldrHash(x){ const r=Math.sin(x*12.9898)*43758.5453; return r-Math.floor(r); }
-function ldrPlayFig(id,f,rot,at,stepDur,scale){
+function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn){
   f.hits.forEach((h,i)=>{
-    const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid, when=at+pulse*stepDur;
+    const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
+    const when=at+pulse*stepDur+(humFn?humFn(pulse):0);
     const baseVel=Math.max(.15,Math.min(1,h[1]*scale));
     let vel=baseVel;
     let jit=0;
@@ -2970,6 +2971,52 @@ function ldrToggle(force){
 "use strict";
 /* ===== DREAM CONDUCTOR v2 — LuckyDreamer plays the TRITON, musically ===== */
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+/* ── THE DRUMMER'S CLOCK (DreamDrummer's timing science, ported) ──────────
+   Human timing deviations are long-range CORRELATED, not white (Hennig 2011):
+   a player 4ms late stays late for a while. One slow wander field is the
+   band's shared clock; every role follows it with a coupling that is the
+   ensemble hierarchy made numeric (Repp), plus its own looseness wave.
+   Keyed, not streamed — a pure function of (seed, beat), so any bar can be
+   evaluated in isolation and a diced band re-enters on the same performance. */
+function hash01(seed,i){
+  let h=(seed^(i*0x9E3779B1))>>>0;
+  h=Math.imul(h^(h>>>16),0x85EBCA6B)>>>0;
+  h=Math.imul(h^(h>>>13),0xC2B2AE35)>>>0;
+  h=(h^(h>>>16))>>>0;
+  return h/4294967296;
+}
+function valueNoise1(seed,x){
+  const i=Math.floor(x), f=x-i;
+  const a=hash01(seed,i)*2-1, b=hash01(seed,i+1)*2-1;
+  const u=f*f*(3-2*f);
+  return a+(b-a)*u;
+}
+function wander(seed,x){
+  return (0.62*valueNoise1(seed,x*0.0625)
+        + 0.28*valueNoise1((seed^0x68E31DA4)>>>0,x*0.25)
+        + 0.16*valueNoise1((seed^0xB5297A4D)>>>0,x))*2.87;
+}
+const HUM_CLOCK_MS=3.8;
+const HUM_COUPLE={kit:1,perc:.85,bass:.75,chord:.65,lead:.45};
+const HUM_LOOSE={kit:2.0,perc:2.4,bass:2.6,chord:3.6,lead:5.4};
+const HUM_LIMB={kit:0,perc:1,bass:-1,chord:3,lead:2};  /* placement MEANS, ms: chords lay back, bass pulls */
+const HUM_RID={kit:1,perc:3,bass:2,chord:4,lead:5};
+function humanTime(seed,role,beat,stepSec,hum){
+  if(!(hum>0)||!(stepSec>0)) return 0;
+  const clock=wander((seed^0x5EEDC10C)>>>0,beat)*HUM_CLOCK_MS;
+  const cpl=HUM_COUPLE[role]!==undefined?HUM_COUPLE[role]:.6;
+  const loose=HUM_LOOSE[role]!==undefined?HUM_LOOSE[role]:3.5;
+  const own=wander((seed^0x0BADCAFE^((HUM_RID[role]||6)*2246822519))>>>0,beat)*loose;
+  const ms=((clock*cpl+own)+(HUM_LIMB[role]||0))*hum;
+  const cap=stepSec*333;              /* a third of a step, in ms */
+  return Math.max(-cap,Math.min(cap,ms))/1000;
+}
+function humanVel(seed,role,beat,hum){
+  const depth=(hum>=.6?.13:.06)*.45;
+  const w=wander((seed^0x7EA7BEA7^((HUM_RID[role]||6)*2654435761))>>>0,beat);
+  return 1+Math.max(-2.2,Math.min(2.2,w))*depth;
+}
 const SCALES={minor:[0,2,3,5,7,8,10],major:[0,2,4,5,7,9,11]};
 function chordTones(scale,deg,root){ const sc=SCALES[scale];
   return [0,2,4,6].map(k=>root+sc[(deg+k)%7]+12*Math.floor((deg+k)/7)); }
@@ -3007,17 +3054,17 @@ function chordSpecFor(scale,ch,root){
 
 const DREAMS=[
 {name:"Bembé Rising",fig:"bembe",comps:["yoruba","tambu","guaguaColumbia"],kit:63,bass:48,chord:36,lead:32,
- scale:"minor",root:45,prog:[0,5,3,4],tempo:96,chordStyle:"pad",leadOct:12},
+ scale:"minor",root:45,prog:[0,5,3,4],tempo:96,hum:1.0,chordStyle:"pad",leadOct:12},
 {name:"Rio Sunrise",fig:"tamborimCarreteiro",comps:["surdoPrimeira","surdoSegunda","caixa","ganza"],kit:15,bass:48,chord:30,lead:78,
- scale:"major",root:43,prog:[0,3,4,0],tempo:104,chordStyle:"stab",leadOct:12},
+ scale:"major",root:43,prog:[0,3,4,0],tempo:104,hum:0.9,chordStyle:"stab",leadOct:12},
 {name:"Son Nocturne",fig:"campanaSon",comps:["martillo","tumbaoDos","cascara23"],kit:63,bass:99,chord:19,lead:47,
- scale:"major",root:41,prog:[1,4,0,0],progName:"jazz ii-V-I",tempo:92,chordStyle:"stab",leadOct:12},
+ scale:"major",root:41,prog:[1,4,0,0],progName:"jazz ii-V-I",tempo:92,hum:0.85,chordStyle:"stab",leadOct:12},
 {name:"Trance Portal",fig:"cavacha",comps:["marchaConga","ganza"],kit:62,bass:103,chord:39,lead:54,
- scale:"minor",root:45,prog:[0,5,6,4],tempo:138,chordStyle:"pad",leadOct:12,extraKick:true},
+ scale:"minor",root:45,prog:[0,5,6,4],tempo:138,hum:0.15,chordStyle:"pad",leadOct:12,extraKick:true},
 {name:"Guaguancó Deep",fig:"palitoGuaguanco",comps:["salidorGuaguanco","quintoLock","marchaConga"],kit:63,bass:8,chord:5,lead:68,
- scale:"minor",root:43,prog:[0,6,5,thX(7,"d7","V7")],progName:"andalusian",tempo:98,chordStyle:"pad",leadOct:12},
+ scale:"minor",root:43,prog:[0,6,5,thX(7,"d7","V7")],progName:"andalusian",tempo:98,hum:0.95,chordStyle:"pad",leadOct:12},
 {name:"Maculelê Fire",fig:"maculele",comps:["surdoPrimeira","surdoSegunda","surdoTerceira"],kit:15,bass:100,chord:22,lead:81,
- scale:"minor",root:40,prog:[0,0,5,6],tempo:112,chordStyle:"stab",leadOct:12},
+ scale:"minor",root:40,prog:[0,0,5,6],tempo:112,hum:0.9,chordStyle:"stab",leadOct:12},
 {name:"Surprise Me",surprise:true}
 ];
 function dreamPickSurprise(rng){
@@ -3029,11 +3076,13 @@ function dreamPickSurprise(rng){
   const pick=a=>a[Math.floor(rng()*a.length)];
   const scale=rng()<.5?"minor":"major";
   const bp=pick(PROG_BANK.filter(b=>b.scale===scale));
+  const kick16=f.grid===16&&rng()<.3;
   return {name:"Surprise",fig,comps,kit:pick(LDR_KITS),
     bass:pick(cat(["BASS"])),chord:pick(cat(["PAD","VOX","ORGAN","KEYBOARD"])),lead:pick(cat(["LEAD","BELL","PLUCK"])),
     scale,root:40+Math.floor(rng()*7),prog:bp.prog,progName:bp.name,
     tempo:f.grid===12? 92+Math.floor(rng()*18) : 96+Math.floor(rng()*40),
-    chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:f.grid===16&&rng()<.3};
+    chordStyle:rng()<.5?"pad":"stab",leadOct:12,extraKick:kick16,
+    hum:f.grid===12? .95 : (kick16? .18 : .55+.35*rng())};
 }
 
 /* ── THE THEORY BAR (Improvisator's cheat sheet, live): the key, the
@@ -3113,21 +3162,103 @@ function voiceLead(tones,prev,lo,hi){
     return best; });
   return out.sort((a,b)=>a-b);
 }
-function makeMotif(an,grid,rng){
-  const slots=an.resp.slice(0);
-  const take=Math.min(slots.length, an.density>0.6? 3 : 3+Math.floor(rng()*3));
-  const pick=[], stride=Math.max(1,Math.floor(slots.length/Math.max(1,take)));
-  for(let i=0;i<slots.length&&pick.length<take;i+=stride) pick.push(slots[i]);
-  if(an.skel[1]!=null&&rng()<.7&&pick.indexOf(an.skel[1])<0) pick.push(an.skel[1]);
-  pick.sort((a,b)=>a-b);
-  return pick.map((p,i)=>{ const t=i/Math.max(1,pick.length-1);
-    let di=Math.round(Math.sin(t*Math.PI)*3);
-    if(rng()<.3) di+=rng()<.5?-1:1;
-    return {p, di:Math.max(0,Math.min(6,di)), len:i===pick.length-1?2.2:1.4}; });
+/* ── THE HOOK ENGINE — the arpeggiator's replacement. A melody here is an
+   IDENTITY drawn once per seed (question cell, answer cell, contour, color),
+   then DEVELOPED across the phrase — stated, varied, answered, cadenced —
+   never re-rolled. Cells carry RESTS (a horn player breathes); approach
+   tones voice-lead INTO the next chord, so the line hears the harmony
+   coming instead of decorating the current one. s: 0=chord tone on the
+   contour · 1=color tone (9th/6th) · 2=approach into the NEXT chord. ── */
+const LEAD_CELLS={
+ 12:[
+  [{p:0,l:2,s:0},{p:3,l:1.4,s:1},{p:5,l:2.2,s:0},{p:8,l:2.8,s:2}],
+  [{p:2,l:1.4,s:0},{p:4,l:1.2,s:1},{p:7,l:4.2,s:0}],
+  [{p:0,l:1.2,s:0},{p:1,l:1.2,s:1},{p:3,l:2.6,s:0},{p:10,l:1.6,s:2}],
+  [{p:6,l:1.4,s:1},{p:8,l:1.2,s:0},{p:10,l:1.8,s:2}],
+  [{p:0,l:5.5,s:0}],
+  [{p:4,l:1.1,s:0},{p:6,l:1.1,s:1},{p:8,l:1.1,s:0},{p:10,l:2.2,s:1}]
+ ],
+ 16:[
+  [{p:0,l:2,s:0},{p:3,l:1.6,s:1},{p:6,l:2,s:0},{p:11,l:3.5,s:2}],
+  [{p:2,l:1.6,s:0},{p:4,l:1.4,s:1},{p:8,l:5,s:0}],
+  [{p:0,l:1.4,s:0},{p:7,l:3.4,s:1},{p:14,l:1.6,s:2}],
+  [{p:8,l:1.2,s:1},{p:10,l:1.2,s:0},{p:12,l:1.2,s:1},{p:14,l:1.8,s:2}],
+  [{p:0,l:7,s:0}],
+  [{p:4,l:1.2,s:0},{p:6,l:1.2,s:1},{p:10,l:1.4,s:0},{p:13,l:2.4,s:1}]
+ ]};
+const CONTOURS={arch:t=>Math.sin(t*Math.PI),fall:t=>1-t,rise:t=>t,
+  pendulum:t=>.5+.5*Math.sin(t*Math.PI*2)};
+function hookMake(seed,grid){
+  const r=mulberry((seed^0x400C)>>>0), cells=LEAD_CELLS[grid]||LEAD_CELLS[16];
+  const qi=Math.floor(r()*cells.length);
+  let ai=Math.floor(r()*(cells.length-1)); if(ai>=qi) ai++;
+  const keys=Object.keys(CONTOURS);
+  let bi=Math.floor(r()*cells.length); if(bi===qi) bi=(bi+1)%cells.length;
+  return {q:cells[qi],a:cells[ai],b:cells[bi],qi,ai,bi,
+    contour:keys[Math.floor(r()*keys.length)],
+    color:r()<.5?14:9, rest3:r()<.35};
+}
+function hookBar(hook,phraseBar,sect){
+  if(sect==="BREAK") return {cell:hook.q.slice(0,2),dev:"fragment"};
+  const useB=sect==="LIFT";
+  const q=useB?hook.b:hook.q, a=useB?hook.q:hook.a;
+  switch(((phraseBar%4)+4)%4){
+    case 0: return {cell:q,dev:"state"};
+    case 1: return {cell:q,dev:"vary"};
+    case 2: return {cell:a,dev:"answer"};
+    default: return hook.rest3&&!useB? {cell:a.slice(0,Math.max(1,a.length-1)),dev:"cadence"}
+                                     : {cell:a,dev:"cadence"};
+  }
+}
+function hookRealize(ev,tones,nextTones,hook){
+  const lad=[tones[0],tones[1],tones[2],tones[3],tones[0]+12,tones[1]+12,tones[2]+12];
+  const col=[tones[0]+hook.color,tones[0]+hook.color+12];
+  const f=CONTOURS[hook.contour]||CONTOURS.arch;
+  const n=ev.length, out=[];
+  for(let i=0;i<n;i++){
+    const e=ev[i], t=n>1?i/(n-1):.5, h=f(t);
+    if(e.s===2){
+      const anchor=lad[Math.round(h*(lad.length-1))];
+      let tgt=nextTones[0], bd=1e9;
+      for(let k=0;k<4;k++){ [nextTones[k],nextTones[k]+12].forEach(c=>{
+        const d=Math.abs(c-anchor); if(d<bd){bd=d;tgt=c;} }); }
+      out.push({p:e.p,l:e.l,note:tgt-1,cad:tgt});     /* leading tone from below */
+    } else if(e.s===1){
+      out.push({p:e.p,l:e.l,note:col[h>.55?1:0]});
+    } else {
+      out.push({p:e.p,l:e.l,note:lad[Math.round(h*(lad.length-1))]});
+    }
+  }
+  return out;
+}
+/* ── THE BASS CELL — the sub line's grammar from the third donor: candidate
+   onsets from the figure's own skeleton, degrees drawn ONCE against the
+   chord root (root heaviest), open-home and resolve-home intent windows;
+   the harmony moves under a line that keeps its identity. ── */
+function bassMake(seed,an,grid){
+  const r=mulberry((seed^0xBA55)>>>0);
+  const anchors=an.skel.slice(0,3);
+  const cands=anchors.map((p,i)=>[p,i===0?1:.85]);
+  const resp=an.resp.filter(p=>p>(anchors[0]||0));
+  const stride=Math.max(1,Math.floor(resp.length/3));
+  for(let i=0;i<resp.length&&cands.length<6;i+=stride) cands.push([resp[i],.45]);
+  cands.sort((a,b)=>a[0]-b[0]);
+  let fires=cands.filter(c=>r()<c[1]).map(c=>c[0]);
+  fires=fires.filter((p,i)=>fires.indexOf(p)===i);
+  if(!fires.length||fires[0]>grid*.25) fires.unshift(anchors[0]||0);
+  const POOL=[0,7,10,12,3,5,-2], W=[8,2,1.3,1.6,1.2,1.4,1];
+  const degs=fires.map(p=>{
+    if(p<grid*.2&&r()<.6) return 0;                       /* open home */
+    if(p>=grid*.78&&r()<.55) return r()<.6?0:12;          /* resolve home */
+    let s=W.reduce((a,b)=>a+b,0)*r(), k=0;
+    while(k<W.length-1&&s>W[k]){s-=W[k];k++;}
+    return POOL[k];
+  });
+  return {fires,degs};
 }
 
 const DREAM={on:false,seed:0,rng:Math.random,p:null,bar:0,chordBar:0,next:0,pans:null,
-  voic:null,motif:null,pending:null,_barLen:0,_barStart:0};
+  voic:null,hook:null,bcell:null,pending:null,_barLen:0,_barStart:0,_stepSec:.15};
 function sectFor(bar){ if(bar<4) return "INTRO";
   const S=["GROOVE","GROOVE","LIFT","GROOVE","BREAK","LIFT","GROOVE","GROOVE"];
   return S[Math.floor((bar-4)/8)%S.length]; }
@@ -3137,20 +3268,15 @@ const SECT_CFG={
  LIFT:{comps:1,bass:1,lead:1,mainVel:1,padVel:.5,leadUp:12},
  BREAK:{comps:0,bass:0,lead:.5,mainVel:.55,padVel:.5}
 };
-/* ── THE HUMAN HAND — deterministic per seed, applied at schedule time, so the
-   live sound, the rolling take, and the exported .mid all carry the same feel.
-   The percussion figure stays machine-tight on purpose: it is the ensemble's
-   clock (the bell does not breathe; the band breathes around it). ── */
-const FEEL={
-  bass:{sd:.006,bias:-.003,vb:.06},   /* sits a hair ahead — pulls the band */
-  chord:{sd:.010,bias:.006,vb:.08},   /* lays back into the pocket */
-  lead:{sd:.013,bias:.008,vb:.11},    /* loosest wrist on the stand */
-  fill:{sd:.007,bias:0,vb:.10},
-  kick:{sd:.004,bias:0,vb:.05}};
-function humanFeel(part,rng){
-  const F=FEEL[part]||FEEL.fill;
-  const g=(rng()+rng()+rng())-1.5, h=(rng()+rng()+rng())-1.5; /* ~gaussian, hard-bounded ±1.5 */
-  return {dt:F.bias+g*F.sd, gain:Math.max(.6,Math.min(1.4,1+h*F.vb))};
+/* ── THE HUMAN HAND v2 — one drummer's correlated clock (humanTime) plus a
+   small white motor residual, per role, deterministic per seed, applied at
+   schedule time so live sound, take, bounce and .mid all carry one feel. ── */
+function bandZ(role,beat,rng){
+  const P=DREAM.p||{}, hum=P.hum!=null?P.hum:.7, stepSec=DREAM._stepSec||.15;
+  const white=(rng()-.5)*2*(.002+.010*hum)*stepSec;
+  const dt=humanTime(DREAM.seed||1,role,beat,stepSec,hum)+white;
+  const gain=humanVel(DREAM.seed||1,role,beat,hum)*(0.965+.07*rng());
+  return {dt,gain:Math.max(.55,Math.min(1.45,gain))};
 }
 function hv(v){ return Math.max(.05,Math.min(1,v)); }
 function dreamPans(){
@@ -3159,9 +3285,10 @@ function dreamPans(){
     if(n.pan) n.pan.value=p; n.connect(progBus); return n; }
   DREAM.pans={bass:mk(0),chord:mk(-.24),lead:mk(.24)};
 }
-function ldrPlayFigK(id,f,rot,at,step,scale,kit){
+function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn){
   f.hits.forEach((h,i)=>{ const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
-    const vel=Math.max(.15,Math.min(1,h[1]*scale)), when=at+pulse*step;
+    const vel=Math.max(.15,Math.min(1,h[1]*scale));
+    const when=at+pulse*step+(humFn?humFn(pulse):0);
     if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when,step,kit)) return;
     spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),vel,when,null); });
 }
@@ -3176,57 +3303,80 @@ function dreamScheduleBar(at,f,step,barLen){
   const nextBase=chordSpecFor(P.scale,P.prog[(DREAM.chordBar+1)%L],P.root+12).tones;
   const tones=voiceLead(base,DREAM.voic,P.root+6,P.root+34); DREAM.voic=tones;
   const bassRoot=Math.max(26,base[0]-12), nextBassRoot=Math.max(26,nextBase[0]-12);
-  /* drums — the figure as written, companions by section */
-  ldrPlayFig(P.fig,f,0,at,step,C.mainVel);
+  DREAM._stepSec=step;
+  const bt=p=>DREAM.bar*4+p/(f.grid/4);
+  const humP=P.hum!=null?P.hum:.7;
+  /* drums — the figure as written rides the drummer's clock at coupling 1.0:
+     the whole band breathes together, so the timeline stays the reference */
+  const humK=p=>humanTime(DREAM.seed||1,"kit",bt(p),step,humP);
+  const humC=p=>humanTime(DREAM.seed||1,"perc",bt(p),step,humP);
+  ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK);
   if(C.comps){ P.comps.forEach(a=>{ const r=ldrBase(a), g=LDR_FIG[r.id];
-    if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit); }); }
+    if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit,humC); }); }
   if(P.extraKick&&f.grid===16&&sect!=="BREAK") [0,4,8,12].forEach(pl=>{
-    const z=humanFeel("kick",rng);
+    const z=bandZ("kit",bt(pl),rng);
     spawnVoice(PROGRAMS[P.kit],48,hv(.95*z.gain),at+pl*step+z.dt,null); });
   const phraseBar=(DREAM.bar-4)%8;
   if(DREAM.bar>=4&&sect!=="BREAK"){
     if(phraseBar%8===7) [[f.grid-4,2,.55],[f.grid-3,7,.68],[f.grid-2,5,.8],[f.grid-1,3,.95]].forEach(([pl,ln,v])=>{
-      const z=humanFeel("fill",rng);
+      const z=bandZ("perc",bt(pl),rng);
       spawnVoice(PROGRAMS[P.kit],48+ln,hv(v*z.gain),at+pl*step+z.dt,null); });
     else if(phraseBar%4===3) [[f.grid-2,7,.6],[f.grid-1,2,.75]].forEach(([pl,ln,v])=>{
-      const z=humanFeel("fill",rng);
+      const z=bandZ("perc",bt(pl),rng);
       spawnVoice(PROGRAMS[P.kit],48+ln,hv(v*z.gain),at+pl*step+z.dt,null); });
   }
-  /* bass — anchors from the skeleton, chromatic approach into the change */
+  /* bass — THE CELL: onsets and degrees drawn once per dream against the
+     figure's skeleton; the harmony moves under a line that keeps its name.
+     Chromatic approach into the change; octave pop on the turnaround. */
   if(C.bass>0){
-    const s0=an.skel[0]||0;
-    const nextAnchor=an.skel[1]!=null? an.skel[1] : Math.floor(f.grid/2);
-    const z1=humanFeel("bass",rng);
-    spawnVoice(PROGRAMS[P.bass],bassRoot,hv(.95*z1.gain),at+s0*step+z1.dt,(nextAnchor-s0)*step*.9,DREAM.pans.bass);
-    if(C.bass>=1&&an.skel[2]!=null){ const z2=humanFeel("bass",rng);
-      spawnVoice(PROGRAMS[P.bass],rng()<.6? bassRoot : bassRoot+7,hv(.8*z2.gain),at+an.skel[2]*step+z2.dt,step*1.5,DREAM.pans.bass); }
-    const approach=rng()<.4; /* drawn unconditionally — the rng stream position must not depend on where the chords change */
-    if(nextBassRoot!==bassRoot||approach){ const z3=humanFeel("bass",rng);
-      spawnVoice(PROGRAMS[P.bass],Math.max(24,nextBassRoot-1),hv(.68*z3.gain),at+(f.grid-1)*step+z3.dt,step*.9,DREAM.pans.bass); }
+    if(!DREAM.bcell) DREAM.bcell=bassMake(DREAM.seed||1,an,f.grid);
+    const bc=DREAM.bcell;
+    const nF=sect==="INTRO"? Math.min(2,bc.fires.length) : bc.fires.length;
+    for(let i=0;i<nF;i++){
+      const p0=bc.fires[i], deg=bc.degs[i];
+      const nxt=i+1<nF? bc.fires[i+1] : f.grid;
+      const z=bandZ("bass",bt(p0),rng);
+      const note=Math.max(24,Math.min(46,bassRoot+deg));
+      spawnVoice(PROGRAMS[P.bass],note,hv(.92*z.gain),at+p0*step+z.dt,
+        Math.max(step,(nxt-p0)*step*.85),DREAM.pans.bass);
+    }
+    const approach=rng()<.4; /* drawn unconditionally — stream position must not depend on the changes */
+    if(nextBassRoot!==bassRoot||approach){ const z3=bandZ("bass",bt(f.grid-1),rng);
+      spawnVoice(PROGRAMS[P.bass],Math.max(24,nextBassRoot-1),hv(.62*z3.gain),at+(f.grid-1)*step+z3.dt,step*.9,DREAM.pans.bass); }
+    const turn=rng()<.55; /* unconditional draw, same reason */
+    if(phraseBar%4===3&&DREAM.bar>=4&&turn){ const z4=bandZ("bass",bt(f.grid-2),rng);
+      spawnVoice(PROGRAMS[P.bass],Math.max(24,Math.min(46,bassRoot+12)),hv(.58*z4.gain),at+(f.grid-2)*step+z4.dt,step*.8,DREAM.pans.bass); }
   }
   /* chords — pads breathe whole bars and ROLL like a hand across keys;
      stabs sit on the skeleton, each with its own wrist */
   if(P.chordStyle==="pad"||sect==="BREAK"){
-    const zc=humanFeel("chord",rng), roll=.005+.007*rng();
+    const zc=bandZ("chord",bt(0),rng), roll=.005+.007*rng();
     tones.forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv(C.padVel*zc.gain),
       at+Math.max(0,zc.dt+i*roll),barLen*.97,DREAM.pans.chord));
   } else {
     const slots=an.density>0.6? an.skel.slice(0,3) : an.skel;
-    slots.forEach(p=>{ const v=an.hm[p]||.8, zs=humanFeel("chord",rng), roll=.003+.003*rng();
+    slots.forEach(p=>{ const v=an.hm[p]||.8, zs=bandZ("chord",bt(p),rng), roll=.003+.003*rng();
       tones.slice(0,3).forEach((n,i)=>spawnVoice(PROGRAMS[P.chord],n,hv((.5+.28*v)*zs.gain),
         at+p*step+zs.dt+i*roll,step*1.6,DREAM.pans.chord)); });
   }
-  /* lead — a motif in the figure's gaps, developed across the phrase */
+  /* lead — THE HOOK: stated, varied, answered, cadenced. Drawn once per
+     seed, developed per phrase, never re-rolled; cells carry rests and the
+     cadence voice-leads into the coming chord. */
   if(C.lead>0&&DREAM.bar>=4){
-    if(!DREAM.motif||phraseBar===0) DREAM.motif=makeMotif(an,f.grid,rng);
+    if(!DREAM.hook) DREAM.hook=hookMake(DREAM.seed||1,f.grid);
+    const hb=hookBar(DREAM.hook,phraseBar%4,sect);
+    const br=mulberry(((DREAM.seed||1)^0x1EAD^(DREAM.bar*2654435761))>>>0);
+    let cell=hb.cell;
+    if(hb.dev==="vary"&&cell.length>2&&br()<.4)
+      cell=cell.filter((e,i)=>i!==1+Math.floor(br()*(cell.length-1)));
     const up=(C.leadUp||0)+(sect==="BREAK"?-12:0);
-    const ladder=[base[0],base[1],base[2],base[3],base[0]+12,base[1]+12,base[2]+12].map(n=>n+P.leadOct+up);
-    let ev=DREAM.motif;
-    if(sect==="BREAK") ev=ev.slice(0,2);
-    else if(phraseBar%4===3){ ev=ev.slice(0,Math.max(2,ev.length-2))
-      .concat([{p:an.skel[an.skel.length-1],di:1,len:3}]); }
-    ev.forEach(e=>{ const v=(sect==="BREAK"?.42:.6)+.25*rng(), zl=humanFeel("lead",rng);
-      spawnVoice(PROGRAMS[P.lead],ladder[e.di],hv(v*zl.gain),at+e.p*step+zl.dt,step*e.len,DREAM.pans.lead); });
+    const notes=hookRealize(cell,base.map(x=>x+P.leadOct+up),nextBase.map(x=>x+P.leadOct+up),DREAM.hook);
+    notes.forEach(e=>{
+      const z=bandZ("lead",bt(e.p),br);
+      const v=hv(((hb.dev==="fragment"?.4:.56)+.18*br())*z.gain);
+      const l=(hb.dev==="cadence"&&e.cad!=null)? e.l*1.5 : e.l;
+      spawnVoice(PROGRAMS[P.lead],e.note,v,at+e.p*step+z.dt,step*l,DREAM.pans.lead);
+    });
   }
   ldrPulse(at); pulseAt(at);
   const barNo=(DREAM.bar%8)+1, seedNo=DREAM.seed, nm=DREAM.p.name||"DREAM";
@@ -3260,7 +3410,7 @@ function applyDream(p,mid){
   DREAM.rng=mulberry(DREAM.seed||1);
   state.tempo=(typeof p.tempo==="number"&&isFinite(p.tempo))? p.tempo : (state.tempo||100);
   dreamPans(); applyFXP(PROGRAMS[p.chord]);
-  DREAM.voic=null; DREAM.motif=null;
+  DREAM.voic=null; DREAM.hook=null; DREAM.bcell=null;
   DREAM.bar=mid? 4 : 0;      /* the arrangement may skip the intro… */
   DREAM.chordBar=0;          /* …but the progression always starts on its tonic */
   if(typeof theoryRender==="function") theoryRender();
@@ -3777,4 +3927,11 @@ DEAD BRANCHES: (1) treating the donor's GROOVES/grooveOffset table as the live e
 KILL-TEST: extraction only — the kill-tests land with the ports (rings 27+). The extraction itself was adversarially shaped: five independent lenses, verbatim-math mandate, and the two biggest claims (dead GROOVES table, no quality loop) were grep-verified, not assumed.
 THE NON-OBVIOUS CHOICE: the user pointed at open-source MIDI as the source of human timing; the donor pointed deeper — at the MEASUREMENTS behind why human timing sounds human (correlated clocks, participatory discrepancies, dual swing), already distilled into forty lines of pure math. Embedding the science beats embedding somebody's performance: it fits one file, it is seed-deterministic, and it plays in OUR grooves, not the source's.
 OPEN QUESTIONS: (1) The donor's hum dial is per-style — what is the honest hum for each LuckyDreamer dream (batucada ~0.9, bembé ~1.0, trance ~0.15)? (2) The sidechain has no native WebAudio node — scheduled gain-dip envelopes keyed on kick events work live AND offline; is 3.2× detector gain the right depth for our denser figures? (3) When KEEP makes the file rewrite itself, which init paths are not yet idempotent under a second boot from mutated DOM?
+RING 27 · 2026-08-31 · the arpeggiator dies — one clock, one hook, one cell
+WHAT CHANGED: the user's verdict on the lead ("sounds like a typical arpeggiator") answered at the root, with the third donor's science. THREE REPLACEMENTS: (1) TIMING — ring 23's iid gaussian hand is gone; the band now plays on THE DRUMMER'S CLOCK: a keyed three-octave value-noise field (pure function of seed and beat — any bar evaluable in isolation) drives one shared wander every role follows with the ensemble hierarchy as coupling (kit 1.0, perc .85, bass .75, chord .65, lead .45) plus each role's own looseness wave (kit 2.0 ms … lead 5.4 ms), per-role placement means, a per-dream HUMANITY DIAL (bembé 1.0, samba .9, son .85, trance .15 — machine grooves stay machines on purpose), and only a small white motor residual. The transcribed FIGURE now rides the same clock at coupling 1.0 — the revision of ring 23's "the bell does not breathe": in a real ensemble the bell breathes WITH the band, and because every part follows the same wander, it remains the reference. Measured on the live tape: 1.1 ms sd, lag-1 autocorrelation 0.63 — correlated drift, not jitter. (2) MELODY — makeMotif (the arpeggiator: one sin-arc over chord tones, same rhythm forever) replaced by THE HOOK ENGINE: an identity drawn once per seed — question cell, answer cell, B-cell, contour, color choice (9th/6th) — from a bank of twelve idiomatic cells per grid that carry RESTS (≤72% air-time enforced by test), developed across the phrase as stated → varied (weak-note drop, never the first) → answered (the other cell) → cadenced, where the cadence tone VOICE-LEADS into the coming chord (leading tone from below into the nearest tone of the next change — the line hears the harmony coming). LIFT flips to the B-cell; BREAK fragments the question. Per-bar draws come from KEYED streams (seed ^ bar), so nothing about the phrase depends on scheduler call order. (3) BASS — the third donor's sub-line grammar: a CELL drawn once per dream (onsets gated off the figure's own skeleton, degrees from a root-heavy chord-relative pool [0,7,10,12,3,5,-2] weighted 8:2:1.3:1.6:1.2:1.4:1), with the donor's intent windows — open-home (first 20% → chord root, p .6), resolve-home (last 22% → root/octave, p .55) — chromatic approach into every change, octave turnaround pop each 4th phrase-bar. The harmony moves under a line that keeps its name.
+BANNED (obvious answers set aside first): sampling open-source MIDI performances into the file (the user's pointer, honored by porting the MEASUREMENTS those performances embody — correlated clocks, participatory discrepancies — as forty lines of math instead of megabytes of somebody's take); a Markov/ML note model (starved at this scale, and unfalsifiable by test); making the lead denser to sound "generative" (the fix for arpeggiator-feel is SPACE and intent, not notes).
+DEAD BRANCHES: (1) re-drawing the hook each phrase for "freshness" — lost: the donor's whole consistency doctrine is identity + bounded variation; a hook that re-rolls is the arpeggiator again with extra steps. (2) humanizing via the shared DREAM.rng — lost: stream position would couple the feel to musical draw order (the exact defect the ring-25 BREAK found in the bass approach); every per-bar draw moved to keyed streams. (3) letting the figure keep zero clock (ring 23's law) — lost to the donor's own data: batucada ships at hum 0.9 in the reference engine because the tradition is HUMANS; the machine-tight figure was the right law only for machine genres, which now get it via hum≈0.15.
+KILL-TEST: node suite [3] — wander keyed/deterministic/bounded with lag-1 0.98; humanTime capped at ⅓ step, lead floating 1.38× freer than the kit, hum=0 bit-exactly machine; velocity breath bounded and correlated; hook deterministic per seed, Q≠A, every cell ordered/bounded/breathing, realized notes on the chord map (ladder ∪ color ∪ cadence±1), cadence targets verified IN the next chord, BREAK fragments; bass cell deterministic, figure-anchored, pool-constrained, opens home 83%. Chromium: the clock measured correlated on the live tape (lag-1 0.63), the hook speaking in phrases with 3 breaths and fewer notes than the drums — the literal negation of an arpeggiator. Both suites ALL GREEN, 33 browser assertions.
+THE NON-OBVIOUS CHOICE: the figure joined the humans. Ring 23 froze the timeline as "the machine reference"; the donor's ensemble model showed the deeper truth — the reference is not a metronome, it is the STRONGEST COUPLING to a shared human clock. Everything breathes together; nothing drifts apart; the bell still leads.
+OPEN QUESTIONS: (1) The hook's cells are hand-written vocabulary — should each TRADITION (son, bembé, samba) get its own cell dialect keyed off the figure family, the way LDR_MAP keys instruments? (2) The cadence leads from below only — upper approaches (and enclosures) are one branch away; when? (3) The chords still comp on the raw skeleton each bar — does a comp CELL (anticipation into the change, montuno-style) close the last "programmed" tell?
 ═══ end rings ═══ -->
