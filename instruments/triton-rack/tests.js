@@ -849,5 +849,129 @@ console.log("[9] dd22 styles");
   if (!sBad) ok("17 languages realize (zones/physics/sub in law) · dembow verbatim · MPC swing in the steps · drill slides · fills · deal + preset law");
 }
 
+/* ── suite 10: round 8 — the three-door save's pure parts, measured ─────── */
+console.log("[10] save doors + drive law");
+{
+  let rBad = 0;
+  /* zip round-trip: BOTH writers (house zipStore, donor encodeZipStore) must
+     be readable by the new store-only reader, byte-exact, CRC-verified */
+  const exJs = slice("/*EXPORT-UTILS-BEGIN*/", "/*EXPORT-UTILS-END*/");
+  const collected = [];
+  class FakeBlob { constructor(parts) { let len = 0;
+    const flat = parts.map(p => p instanceof Uint8Array ? p : new Uint8Array(p));
+    flat.forEach(p => len += p.length);
+    this.bytes = new Uint8Array(len); let o = 0;
+    flat.forEach(p => { this.bytes.set(p, o); o += p.length; }); } }
+  const G10 = (function (Blob) { return eval(exJs + "\n;({crc32:typeof crc32!=='undefined'?crc32:CRC_T&&null,zipStore,zipReadStore})"); })(FakeBlob);
+  /* eval sandbox note: zipStore closes over the local FakeBlob via the param name */
+  const enc = s => new TextEncoder().encode(s);
+  const projTxt = JSON.stringify([{ name: "t #1", seed: 1, p: {} }]);
+  {
+    const files = [{ name: "mix.wav", data: enc("RIFF-not-really") },
+      { name: "stems/drums.wav", data: enc("RIFF-d") },
+      { name: "project.json", data: enc(projTxt) }];
+    const wrote = (function () { const B = FakeBlob;
+      /* re-eval zipStore with Blob bound to the collector */
+      const f = new Function("files", "Blob", "crc32", exJs + "\n;return zipStore(files);");
+      return f(files, FakeBlob, null); })();
+    const bytes = wrote.bytes;
+    const rd = G10.zipReadStore(bytes);
+    if (!rd || Object.keys(rd).length !== 3) { fail("house zip round-trip lost entries"); rBad++; }
+    else if (new TextDecoder().decode(rd["project.json"]) !== projTxt) { fail("project.json bytes differ"); rBad++; }
+    else if (new TextDecoder().decode(rd["stems/drums.wav"]) !== "RIFF-d") { fail("stem bytes differ"); rBad++; }
+    /* hostiles: truncated, garbage, deflate-marked entries never crash, never lie */
+    if (G10.zipReadStore(bytes.subarray(0, 40)) !== null) { fail("truncated zip accepted"); rBad++; }
+    if (G10.zipReadStore(enc("PK\x03\x04 but nothing real here at all — junk")) !== null) { fail("garbage zip accepted"); rBad++; }
+    const bad = bytes.slice();               /* mark entry 0 as deflate in the central dir */
+    { const dv = new DataView(bad.buffer);
+      let eo = -1; for (let i = bad.length - 22; i >= 0; i--) if (dv.getUint32(i, true) === 0x06054b50) { eo = i; break; }
+      const cd = dv.getUint32(eo + 16, true); dv.setUint16(cd + 10, 8, true); }
+    const rd2 = G10.zipReadStore(bad);
+    if (rd2 && rd2["mix.wav"]) { fail("deflate entry silently 'decoded'"); rBad++; }
+  }
+  /* the donor writer's zips read back too (session zips are one family) */
+  {
+    const ddJs = slice("/*DD22-BEGIN*/", "const LOCKS={");
+    const D = eval(ddJs + "\n;DD22");
+    const buf = D.encodeZipStore([{ name: "a.txt", data: enc("alpha") }, { name: "b/c.bin", data: enc("beta") }]);
+    const rd = G10.zipReadStore(new Uint8Array(buf));
+    if (!rd || new TextDecoder().decode(rd["a.txt"]) !== "alpha" || new TextDecoder().decode(rd["b/c.bin"]) !== "beta")
+      { fail("donor-writer zip unreadable"); rBad++; }
+  }
+  /* the drive law, measured at the curve (round 8): reference parity at bus
+     0.5, saturation instead of endpoint clamping, and a musical k range */
+  {
+    const dJs = slice("const DRIVE_HEADROOM", "function buildGraph");
+    const G = eval(dJs + "\n;({DRIVE_HEADROOM,driveCurve})");
+    const curveAt = (c, bus) => { const x = bus * G.DRIVE_HEADROOM;   /* shaper input */
+      const i = Math.round((x + 1) / 2 * (c.length - 1)); return c[i]; };
+    const c2 = G.driveCurve(.2), c0 = G.driveCurve(.02), cMax = G.driveCurve(1);
+    if (Math.abs(curveAt(c2, .5) - .5) > .01) { fail("drive .2 not unity at reference bus .5 (" + curveAt(c2, .5).toFixed(3) + ")"); rBad++; }
+    if (Math.abs(curveAt(c0, .5) - .5) > .01) { fail("drive .02 not unity at reference"); rBad++; }
+    if (!(curveAt(c2, .3) < .55)) { fail("drive .2 still a clipper at bus .3 (" + curveAt(c2, .3).toFixed(3) + " — old law gave ~1.0)"); rBad++; }
+    if (!(Math.abs(c2[c2.length - 1]) < 1)) { fail("curve rails at the endpoint — clamp, not saturation"); rBad++; }
+    for (let i = 1; i < c2.length; i++) if (c2[i] < c2[i - 1]) { fail("curve not monotone"); rBad++; break; }
+    if (!(curveAt(cMax, 2) / curveAt(c0, 2) < .999)) { fail("k law dead — max drive saturates no harder than min"); rBad++; }
+    /* the endpoint clamp is survivable: a bus peak of 2 lands ON the curve */
+    if (!(curveAt(c2, 2) > curveAt(c2, 1.2))) { fail("headroom domain not covering bus 2"); rBad++; }
+  }
+  /* import range law: stock programs pass, runaways are refused */
+  {
+    const bankJs = slice("/*BANKB-BEGIN*/", "/*BANKB-END*/");
+    const GB = eval(bankJs + "\n;({progValidate})");
+    if (!GB.progValidate(PROGRAMS[5])) { fail("stock program refused by range law"); rBad++; }
+    const mut = k => { const m = JSON.parse(JSON.stringify(PROGRAMS[5])); k(m); return m; };
+    if (GB.progValidate(mut(m => m.fx.delay.fb = 1.2))) { fail("runaway delay fb accepted"); rBad++; }
+    if (GB.progValidate(mut(m => m.fx.drive = 2.5))) { fail("drive 2.5 accepted"); rBad++; }
+    if (GB.progValidate(mut(m => m.filter.reso = 30))) { fail("reso 30 accepted"); rBad++; }
+    if (GB.progValidate(mut(m => { if (m.osc && m.osc[0]) m.osc[0].lvl = 5; }))) { fail("osc lvl 5 accepted"); rBad++; }
+    let anyFb = 0; PROGRAMS.forEach(p => { if (p.fx && p.fx.delay && p.fx.delay.fb > .85) anyFb++; });
+    if (anyFb) { fail(anyFb + " stock programs exceed the fb range the law enforces"); rBad++; }
+    /* the ||0 bypass: an ABSENT fb used to validate as 0 while applyFXP
+       assigned undefined to an AudioParam (TypeError, half-staged FX) */
+    if (GB.progValidate(mut(m => delete m.fx.delay.fb))) { fail("absent fb accepted (||0 bypass)"); rBad++; }
+    if (GB.progValidate(mut(m => delete m.fx.drive))) { fail("absent drive accepted"); rBad++; }
+    if (GB.progValidate(mut(m => delete m.filter.reso))) { fail("absent reso accepted"); rBad++; }
+    if (GB.progValidate(mut(m => m.fx.delay.time = 4))) { fail("non-string delay time accepted"); rBad++; }
+  }
+  /* stem parity (round 8): one duck law and one mastering gain across every
+     pass, so the stems in a session zip sum back to its mix */
+  {
+    const sj = slice("/* every kick-class hit in the take", "async function renderPass");
+    const G = eval(sj + "\n;({duckKeysFor})");
+    const evs = [
+      { role: "dd", zone: 0, vel: .9, t: 0 },        /* DD kick — keys */
+      { role: "dd", zone: 0, vel: .3, t: .5 },       /* too soft — no key */
+      { role: "dd", zone: 6, vel: .9, t: .25 },      /* hat — no key */
+      { role: "kit", note: 48, vel: .9, t: 1 },      /* TRITON kick lane — keys */
+      { role: "kit", note: 50, vel: .9, t: 1.25 },   /* snare lane — no key */
+      { role: "perc", name: "surdo", vel: .8, t: 2 },/* low drum — keys */
+      { role: "perc", name: "clave", vel: .8, t: 2.5 },
+      { role: "bass", note: 40, vel: .9, t: 3 }];
+    const keys = G.duckKeysFor(evs);
+    if (keys.length !== 3) { fail("duck keys wrong (" + keys.length + " of 3): " + JSON.stringify(keys)); rBad++; }
+    else if (!(keys[0].t === 0 && keys[1].t === 1 && keys[2].t === 2)) { fail("duck key times wrong " + JSON.stringify(keys)); rBad++; }
+    else if (!keys.every(k => k.d > 0 && k.d <= 1)) { fail("duck key depth out of law"); rBad++; }
+    /* the keys derive from the WHOLE take, so a lane-only stem list yields
+       the same automation the mix has — that is the parity claim */
+    const bassOnly = evs.filter(e => e.role === "bass");
+    if (G.duckKeysFor(bassOnly).length !== 0) { fail("bass-only pass keys itself"); rBad++; }
+    const mj = slice("/* mastering trim: lift a quiet bounce", "/* the stem groups");
+    const wavStub = "function wavStereo24(L,R,sr){return {len:L.length,pk:L.reduce((a,x)=>Math.max(a,Math.abs(x)),0)};}\n";
+    const GM = eval(wavStub + mj + "\n;({masterize})");
+    const mk = (amp, n) => ({ sampleRate: 44100, length: n,
+      _c: [new Float32Array(n).fill(amp), new Float32Array(n).fill(amp)],
+      getChannelData(i) { return this._c[i]; } });
+    const loud = GM.masterize(mk(.30, 1000));          /* the mix */
+    const quiet = GM.masterize(mk(.02, 1000), loud.g); /* a sparse stem, mix's gain */
+    const quietSolo = GM.masterize(mk(.02, 1000));     /* what the old law did */
+    if (!(Math.abs(quiet.g - loud.g) < 1e-9)) { fail("stem did not take the mix's gain"); rBad++; }
+    else if (!(quietSolo.g > loud.g * 2)) { fail("solo-normalized stem is not the divergence the fix removes"); rBad++; }
+    else if (!(quiet.bytes.pk < quietSolo.bytes.pk * .5)) { fail("stem gain law has no audible effect"); rBad++; }
+  }
+  if (!rBad) ok("zip round-trip (both writers) + hostiles refused · drive law: unity at reference, saturates, ±2 domain · " +
+    "import ranges clamped (absent fields refused) · stem parity: one duck law, one mastering gain");
+}
+
 console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
 process.exit(errs ? 1 : 0);

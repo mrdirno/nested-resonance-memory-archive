@@ -61,12 +61,16 @@ const MANIFEST = [
   { name: "patches-kitbank",     a: 4298, b: 4438,
     head: "var DD_KITBANK = (function () {", tail: "})();" },
   { name: "rhythm-metric",       a: 4862, b: 4887 },
-  { name: "grooves-grammar",     a: 5726, b: 6258 }
+  { name: "grooves-grammar",     a: 5726, b: 6258 },
+  { name: "export-crc32",        a: 7354, b: 7368 },
+  { name: "export-zipstore",     a: 7501, b: 7534 }
 ];
 
 /* sanity anchors: the first line of each range must look like this (prefix
    match) — a donor edit that shifts lines fails loudly, never silently */
 const ANCHORS = {
+  "export-crc32": "/* ── CRC-32",
+  "export-zipstore": "/* ── ZIP, store-only",
   "rhythm-metric": "function metricWeights",
   "grooves-grammar": "/*<<<KNOCK-SEAM:knock/k05-grooves.js>>>*/",
   "atoms-numbers": "var TAU",
@@ -250,7 +254,7 @@ return { KIT_NAMES:KIT_NAMES, KIT_SLOTS:KIT_SLOTS, KITBANK:DD_KITBANK,
          kitPatch:kitPatch, renderHit:renderHit, Kit:Kit, makeRng:makeRng, tables:tables,
          KPAT:KPAT, KPAT12:KPAT12, KSTYLES:KSTYLES, KSTYLE_KEYS:KSTYLE_KEYS,
          STYLE2KIT:STYLE2KIT, kRealize:kRealize, kFill:kFill, kswing:kswing,
-         metricWeights:metricWeights };
+         metricWeights:metricWeights, crc32:crc32, encodeZipStore:encodeZipStore };
 `;
 
 function buildBlock(donorText) {
