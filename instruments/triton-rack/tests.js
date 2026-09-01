@@ -968,6 +968,55 @@ console.log("[10] save doors + drive law");
     if (!(Math.abs(quiet.g - loud.g) < 1e-9)) { fail("stem did not take the mix's gain"); rBad++; }
     else if (!(quietSolo.g > loud.g * 2)) { fail("solo-normalized stem is not the divergence the fix removes"); rBad++; }
     else if (!(quiet.bytes.pk < quietSolo.bytes.pk * .5)) { fail("stem gain law has no audible effect"); rBad++; }
+    /* a stem whose own peak beats the mix's must not be pushed into the
+       writer's clamp — the reported peak is PRE-clamp, so it can convict */
+    const hotStem = GM.masterize(mk(.9, 1000), loud.g);
+    if (!(hotStem.pk <= .98 + 1e-6)) { fail("hot stem clips at the mix's gain (pk " + hotStem.pk.toFixed(3) + ")"); rBad++; }
+    if (!(loud.pk > 0 && loud.pk <= .98 + 1e-6)) { fail("mix peak not reported/in law (" + loud.pk + ")"); rBad++; }
+  }
+  /* the insert is level-neutral: drive changes TIMBRE, not loudness (round 8).
+     The wet/dry law is READ OUT OF applyFXP — re-implementing it here would
+     test this file against itself and pass no matter what ships. */
+  {
+    const dJs = slice("const DRIVE_HEADROOM", "function buildGraph");
+    const G = eval(dJs + "\n;({DRIVE_HEADROOM,driveCurve})");
+    const fxJs = slice("function applyFXP(p,force)", "function midiHz");
+    const gainStub = () => ({ gain: { value: 0, setTargetAtTime() {} } });
+    const nodes = { shaper: { curve: null }, dWet: gainStub(), dDry: gainStub(),
+      cSend: gainStub(), rSend: gainStub(), dSend: gainStub(),
+      dlyL: { delayTime: { setTargetAtTime() {} } }, dlyR: { delayTime: { setTargetAtTime() {} } },
+      fbA: gainStub(), fbB: gainStub() };
+    const applyFXP = new Function("p", "force", "ctx", "shaper", "dWet", "dDry", "cSend", "rSend",
+      "dSend", "dlyL", "dlyR", "fbA", "fbB", "driveCurve", "delayBeats", "VERB", "VERB_PIN", "exporting",
+      fxJs.replace(/^function applyFXP\(p,force\)\s*\{/, "") .replace(/\}\s*$/, "") + "\nreturn {w:dWet.gain.value,d:dDry.gain.value};");
+    const readPair = a => applyFXP({ fx: { drive: a, reverb: .3, chorus: .2, delay: { fb: .3, send: .2, time: "8" } } },
+      false, { currentTime: 0 }, nodes.shaper, nodes.dWet, nodes.dDry, nodes.cSend, nodes.rSend, nodes.dSend,
+      nodes.dlyL, nodes.dlyR, nodes.fbA, nodes.fbB, G.driveCurve, () => .25, { pct: 50 }, null, false);
+    const wet = (a, bus) => { const c = G.driveCurve(a), x = bus * G.DRIVE_HEADROOM;
+      const i = Math.round((Math.max(-1, Math.min(1, x)) + 1) / 2 * (c.length - 1)); return c[i]; };
+    const insert = (a, bus) => { const pr = readPair(a); return pr.d * bus + pr.w * wet(a, bus); };
+    [0, .2, .28, .55, 1].forEach(a => {
+      const at = insert(a, .5), clean = insert(0, .5);
+      const dB = 20 * Math.log10(at / clean);
+      if (!(Math.abs(dB) < .35)) { fail("drive " + a + " is " + dB.toFixed(2) + " dB off clean at the reference bus"); rBad++; }
+    });
+    /* and it must still SATURATE — level-neutral must not mean transparent */
+    if (!(insert(1, 2) < insert(0, 2) * .8)) { fail("max drive does not compress the top"); rBad++; }
+  }
+  /* preset law: own-keys only, and the strings the engine flashes/splits */
+  {
+    const kd = G3.candDrums(G3.mulberry(4)), kb = G3.candBass(G3.mulberry(5)),
+      kc = G3.candChords(G3.mulberry(6), kb), kl = G3.candLead(G3.mulberry(7));
+    const base = G3.composeP([kd, kb, kc, kl, { kind: "shape", format: "loop" }], null, 5);
+    const mkP = f => { const p = JSON.parse(JSON.stringify(base)); f(p); return { name: "t", seed: 1, p }; };
+    if (!G3.presetValidate(mkP(() => {}))) { fail("real preset refused by the round-8 law"); rBad++; }
+    ["constructor", "toString", "__proto__", "hasOwnProperty"].forEach(k => {
+      if (G3.presetValidate(mkP(p => p.fig = k))) { fail("prototype key accepted as a figure: " + k); rBad++; }
+      if (G3.presetValidate(mkP(p => p.scale = k))) { fail("prototype key accepted as a scale: " + k); rBad++; }
+    });
+    if (G3.presetValidate(mkP(p => p.name = 42))) { fail("non-string song name accepted"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.name = "x".repeat(65)))) { fail("overlong song name accepted"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.chordStyle = "explode"))) { fail("unknown chordStyle accepted"); rBad++; }
   }
   if (!rBad) ok("zip round-trip (both writers) + hostiles refused · drive law: unity at reference, saturates, ±2 domain · " +
     "import ranges clamped (absent fields refused) · stem parity: one duck law, one mastering gain");

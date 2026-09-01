@@ -455,25 +455,37 @@ const path = __dirname + "/triton-rack.html";
     if (ctx.state !== "running") { try { await ctx.resume(); } catch (_) {} }
     const fb = new Float32Array(2048), fs = new Float32Array(2048);
     const mkAn = node => { const an = ctx.createAnalyser(); an.fftSize = 2048; node.connect(an); return an; };
-    const meas = async (anA, anB, ms) => {
-      let pkA = 0, pkB = 0, hotB = 0, nB = 0, rmsB = 0;
+    const meas = async (anA, anB, ms, domain) => {
+      let pkA = 0, pkB = 0, hotB = 0, nB = 0, rmsB = 0, overA = 0, nA = 0;
       const t0 = performance.now();
       while (performance.now() - t0 < ms) {
         anA.getFloatTimeDomainData(fb); anB.getFloatTimeDomainData(fs);
-        for (let i = 0; i < fb.length; i++) { const a = Math.abs(fb[i]); if (a > pkA) pkA = a; }
+        for (let i = 0; i < fb.length; i++) { const a = Math.abs(fb[i]); if (a > pkA) pkA = a;
+          /* past the curve's domain is where WebAudio clamps to the endpoint —
+             the actual clipping mechanism, counted at its own cause */
+          if (domain && a >= domain) overA++; nA++; }
         for (let i = 0; i < fs.length; i++) { const a = Math.abs(fs[i]); if (a > pkB) pkB = a;
           if (a >= .985) hotB++; nB++; rmsB += fs[i] * fs[i]; }
         await new Promise(r => setTimeout(r, 12));
       }
       return { pkA: +pkA.toFixed(3), pkB: +pkB.toFixed(3),
+        over: +(overA / Math.max(1, nA)).toFixed(5),
+        gainDb: +(20 * Math.log10(Math.max(1e-9, pkB) / Math.max(1e-9, pkA))).toFixed(2),
         hot: +(hotB / Math.max(1, nB)).toFixed(5), rms: +Math.sqrt(rmsB / Math.max(1, nB)).toFixed(4) };
     };
-    /* 1 — the fortissimo saw chord through the insert (Sforzando Brass, drive .2) */
+    /* 1 — the fortissimo saw chord through the insert (Sforzando Brass, drive .2).
+       Tap the insert's OUTPUT (post = wet+dry), not the shaper: the curve's
+       own reference normalization bounds the shaper at ~0.6 for any input,
+       so a "does it rail" check there can never fail — a rubber stamp. The
+       dry leg has no shaper, so post is the honest, unbounded node. */
     state.mode = "PROG"; setProgram(6); state.arp.on = false;
-    const anBus = mkAn(window._progTap.bus), anShp = mkAn(window._progTap.shaper);
+    const anBus = mkAn(window._progTap.bus), anShp = mkAn(window._progTap.post);
     [60, 64, 67].forEach(n => _midiInject([0x90, n, 127]));
     await new Promise(r => setTimeout(r, 300));
-    const chord = await meas(anBus, anShp, 2200);
+    /* the shaper sees bus*DRIVE_HEADROOM, so a bus past ±1/DRIVE_HEADROOM is
+       past the curve and gets endpoint-clamped — that IS the distortion.
+       Read the constant, never hardcode it: the gate must track the law. */
+    const chord = await meas(anBus, anShp, 2200, 1 / DRIVE_HEADROOM);
     [60, 64, 67].forEach(n => _midiInject([0x80, n, 0]));
     await new Promise(r => setTimeout(r, 500));
     /* 2 — the drive-0 saw pad under a latched STRUM: the master tube's turn */
@@ -489,11 +501,20 @@ const path = __dirname + "/triton-rack.html";
     return { chord, strum, voicesLeft: activeVoices };
   });
   if (!(saw.chord.pkA > 0.4)) fail("saw chord probe made no signal (bus pk " + saw.chord.pkA + ")");
-  else if (!(saw.chord.pkB < 0.98 && saw.chord.hot === 0))
-    fail("the insert still rails on a saw chord (shaper pk " + saw.chord.pkB + ", hot " + (saw.chord.hot * 100).toFixed(2) + "%)");
+  else if (saw.chord.over !== 0)
+    fail("the saw chord drives past the curve's domain — endpoint clamp, i.e. the old clipping (" +
+      (saw.chord.over * 100).toFixed(2) + "% of samples |bus|≥2)");
+  /* post is an unclamped SUM (the dry leg has no shaper), so a peak above 1
+     there is not clipping — busTrim and the master chain take it from here,
+     and round 6's gates already police that end. What post DOES prove is
+     the round-8 law: the insert must not INFLATE the signal (the old
+     clipper ran a saw chord +4.8 dB hot). Measure the ratio it passes. */
+  else if (!(saw.chord.gainDb > -3 && saw.chord.gainDb < 1.5))
+    fail("the insert is not level-neutral on a saw chord (" + saw.chord.gainDb.toFixed(2) +
+      " dB bus→post; the old clipper ran about +4.8)");
   else if (!(saw.chord.rms > 0.015)) fail("drive went dead — wet path silent (rms " + saw.chord.rms + ")");
-  else ok("saw chord clean through the insert: bus pk " + saw.chord.pkA + " → shaper pk " + saw.chord.pkB +
-    " · 0 rail samples · wet alive (rms " + saw.chord.rms + ")");
+  else ok("saw chord clean through the insert: bus pk " + saw.chord.pkA + " (0% past the curve domain) → post pk " +
+    saw.chord.pkB + " · " + saw.chord.gainDb.toFixed(2) + " dB, level-neutral · wet alive (rms " + saw.chord.rms + ")");
   if (!(saw.strum.pkA > 0.15)) fail("STRUM probe made no signal (tube-in pk " + saw.strum.pkA + ")");
   else if (!(saw.strum.hot <= 0.01))
     fail("saw pad STRUM still flat-tops the tube (" + (saw.strum.hot * 100).toFixed(2) + "% ≥.985)");
@@ -875,14 +896,21 @@ const path = __dirname + "/triton-rack.html";
         const a = Math.abs(v / 8388608); if (a > pk) pk = a; } return pk; };
     const mixPk = wavPk(entries["mix.wav"]);
     const stemPks = stems.map(n => wavPk(entries[n]));
+    /* the WRITER clamps, so a peak read back from the bytes can never exceed
+       full scale — a clip check there is vacuous. The engine reports its
+       PRE-clamp peaks; those are the honest numbers. */
+    const truePk = await page.evaluate(() => window._mastPk || {});
+    const overs = Object.keys(truePk).filter(k => truePk[k] > 0.999);
     if (!entries["mix.wav"] || !entries["take.mid"] || !pj) fail("session zip incomplete: " + names.join(", "));
     else if (stems.length < 2) fail("session zip has no stems (" + names.join(", ") + ")");
-    else if (!(mixPk > 0.02 && mixPk <= 1)) fail("session mix.wav bad (pk " + mixPk.toFixed(3) + ")");
-    else if (!stemPks.every(p => p > 0.005 && p <= 1)) fail("a stem is silent/clipped (" + stemPks.map(p => p.toFixed(3)).join("/") + ")");
+    else if (!(mixPk > 0.02)) fail("session mix.wav is silence (pk " + mixPk.toFixed(3) + ")");
+    else if (!stemPks.every(p => p > 0.005)) fail("a stem is silent (" + stemPks.map(p => p.toFixed(3)).join("/") + ")");
+    else if (overs.length) fail("clipped before the writer clamped it: " + overs.map(k => k + " " + truePk[k].toFixed(3)).join(", "));
+    else if (Object.keys(truePk).length < stems.length + 1) fail("engine did not report a peak per rendered file " + JSON.stringify(truePk));
     else if (entries["take.mid"].slice(0, 4).toString() !== "MThd") fail("session take.mid malformed");
     else if (!Array.isArray(pj) || !pj.length || pj[0].seed !== ddSeed) fail("project.json wrong (" + JSON.stringify(pj && pj[0] && pj[0].seed) + " vs " + ddSeed + ")");
     else ok("SESSION zip: " + stems.length + " stems (" + stems.map(s => s.slice(6, -4)).join("/") + ") + mix (pk " +
-      mixPk.toFixed(2) + ") + score + project.json (seed #" + pj[0].seed + ")");
+      mixPk.toFixed(2) + ", true pk " + (truePk["mix.wav"] || 0).toFixed(3) + ", none clipped pre-writer) + score + project.json (seed #" + pj[0].seed + ")");
   }
 
   /* THE ZIP COMES BACK: LOAD reads project.json out of the session zip,

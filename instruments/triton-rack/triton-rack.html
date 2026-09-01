@@ -1358,8 +1358,15 @@ function limitCurve(){ const n=4096, c=new Float32Array(n);
    reference bus level of 0.5 (one comfortable voice) so drive changes
    TIMBRE, not loudness — the round-6 auto-gain philosophy, computed at
    curve build instead of measured at runtime. */
-const DRIVE_HEADROOM=.5;   /* pre-shaper trim: curve domain becomes ±2 of bus level */
-function driveCurve(a){ const n=2048, c=new Float32Array(n), k=1+a*7;
+/* pre-shaper trim: the curve's domain covers ±1/DRIVE_HEADROOM of BUS level.
+   Note the transfer function in bus terms — tanh(k·bus)·S — does not depend
+   on this value at all; it only sets how much bus range fits inside the
+   table before WebAudio clamps to the endpoint. So widening it is free.
+   Measured at .5 (domain ±2): a fortissimo 3-note saw chord still put 0.06%
+   of samples past the edge — small, but that IS the old clipping mechanism,
+   so the domain goes to ±4, past even the round-6 full-band bus peak (3.26). */
+const DRIVE_HEADROOM=.25;
+function driveCurve(a){ const n=4096, c=new Float32Array(n), k=1+a*7;
   const S=.5/Math.tanh(k*.5);          /* unity at bus .5 — reference parity */
   for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(k*(x/DRIVE_HEADROOM))*S; } return c; }
 
@@ -1521,8 +1528,17 @@ function applyFXP(p,force){
      Only the exporter itself (force) may touch the swapped console. */
   if(typeof exporting!=="undefined"&&exporting&&!force) return;
   shaper.curve=driveCurve(Math.max(.02,fx.drive));
-  dWet.gain.value=fx.drive>0?Math.min(1,fx.drive*1.4):0;
-  dDry.gain.value=fx.drive>0?1-Math.min(.7,fx.drive):1;
+  /* the wet/dry pair is NORMALIZED (round 8): min(1,d*1.4)+1-min(.7,d) sums
+     to 1.08 at drive .2 and 1.30 at drive 1, so the curve's own reference
+     normalization bought unity and the mixer spent it — drive was still a
+     volume knob, just a quieter one. Dividing the pair by its sum makes
+     "drive changes TIMBRE, not loudness" true at the reference instead of
+     nearly true; character comes from k, never from level. */
+  const _w=fx.drive>0?Math.min(1,fx.drive*1.4):0;
+  const _d=fx.drive>0?1-Math.min(.7,fx.drive):1;
+  const _s=Math.max(1e-6,_w+_d);
+  dWet.gain.value=_w/_s;
+  dDry.gain.value=_d/_s;
   /* VERB (round 6): one global scaler over every program's reverb send —
      100% = the program as written, default 50% (the verdict: too much verb) */
   cSend.gain.value=fx.chorus;
@@ -1575,6 +1591,17 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     f.frequency.setValueAtTime(Math.max(60,cutEff*.8),t);
     f.frequency.linearRampToValueAtTime(peak,t+Math.max(.001,prog.fEG.a));
     f.frequency.setTargetAtTime(fsus,t+Math.max(.001,prog.fEG.a),Math.max(.02,prog.fEG.d/3)); });
+  /* round 8: a 3-osc saw stack summed 1.3-1.55 into the same VCA a single
+     .95 osc gets — saw programs were the hottest patches in the bank by
+     construction. Normalize only the EXCESS (sum>1): single-osc programs
+     keep their level, stacks stop being disproportionately hot. Computed
+     HERE, above the LFO, because the amp LFO writes the SAME gain param
+     additively — an unscaled tremolo depth against a scaled envelope
+     deepens the tremolo and can drive the gain NEGATIVE (polarity
+     inversion, not a dip). The LFO is a depth relative to the envelope, so
+     it rides the same normalization. */
+  const _lvlSum=(prog.bell||!prog.osc)? 1 : prog.osc.reduce((a,o)=>a+(o.lvl||0),0);
+  const _oscNorm=1/Math.max(1,_lvlSum);
   /* LFO */
   const lfo=ctx.createOscillator(); lfo.frequency.value=prog.lfo.rate;
   const lgP=ctx.createGain(), lgF=ctx.createGain(), lgA=ctx.createGain();
@@ -1582,7 +1609,7 @@ function spawnVoice(prog,note,vel,when,dur,dest){
   const ld=prog.lfo.delay||0;
   lgP.gain.linearRampToValueAtTime(prog.lfo.pitch+MODW*35,t+ld+.6);
   lgF.gain.linearRampToValueAtTime(prog.lfo.filter,t+ld+.6);
-  lgA.gain.linearRampToValueAtTime(prog.lfo.amp*.5,t+ld+.6);
+  lgA.gain.linearRampToValueAtTime(prog.lfo.amp*.5*_oscNorm,t+ld+.6);
   lfo.connect(lgP); lfo.connect(lgF); lfo.connect(lgA);
   lgF.connect(f1.frequency); if(!single) lgF.connect(f2.frequency);
   lgA.connect(out.gain); lfo.start(t); stops.push(lfo);
@@ -1604,12 +1631,6 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     src.connect(g); g.connect(f1); src.start(t); stops.push(src); units++;
     return src;
   }
-  /* round 8: a 3-osc saw stack summed 1.3-1.55 into the same VCA a single
-     .95 osc gets — saw programs were the hottest patches in the bank by
-     construction. Normalize only the EXCESS (sum>1): single-osc programs
-     keep their level, stacks stop being disproportionately hot. */
-  const _lvlSum=prog.bell||!prog.osc? 1 : prog.osc.reduce((a,o)=>a+(o.lvl||0),0);
-  const _oscNorm=1/Math.max(1,_lvlSum);
   if(prog.bell){
     (Array.isArray(prog.bell)?prog.bell:[[1,1,.9],[2.76,.6,.55],[5.40,.34,.32],[8.93,.18,.18]]).forEach(([r,l,dk])=>{
       const o=ctx.createOscillator(); o.type="sine"; o.frequency.setValueAtTime(baseHz*r,t);
@@ -1999,8 +2020,22 @@ function render(){
   }
   lcd.innerHTML=h;
 }
+/* the LCD row is an innerHTML sink, and round 8 gave it an untrusted feed:
+   a loaded project.json names its own songs, and applyDream flashes that
+   name. ESCAPE AT THE SINK — every caller is covered, forever, instead of
+   auditing each one. (An imported name also rides into a KEEP'd copy, so
+   an unescaped one would re-fire on every chip tap in the saved file.) */
 function flashRow(msg){ if(!state.powered||state.test) return;
-  lcd.innerHTML+=`<span class="row inv">${msg}</span>`; setTimeout(render,800); }
+  lcd.innerHTML+=`<span class="row inv">${esc(String(msg))}</span>`; setTimeout(render,800); }
+/* LOAD talks to a rack that may be COLD (the ⤒ chip sits on the always-on
+   conductor, and flashRow is silent when unpowered) — so its messages also
+   go to the save label, which is always visible */
+function notifyRow(msg){
+  flashRow(msg);
+  const e=document.getElementById("ldrSaveLbl");
+  if(e&&!document.getElementById("svMix")){ e.textContent=String(msg);
+    setTimeout(()=>{ if(e.textContent===String(msg)){ e.textContent=""; if(SAVE_OUT) saveChips(); } },3000); }
+}
 /* ================= program / combi select ================= */
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function setProgram(i){
@@ -2512,8 +2547,16 @@ function zipReadStore(u8){
     const method=dv.getUint16(o+10,true), csz=dv.getUint32(o+20,true),
       nl=dv.getUint16(o+28,true), el=dv.getUint16(o+30,true), cl=dv.getUint16(o+32,true),
       off=dv.getUint32(o+42,true);
+    /* the NAME is variable-length: without this the last entry could read
+       past the buffer and come back NUL-padded — a truncated entry silently
+       renamed instead of refused */
+    if(o+46+nl+el+cl>u8.length) return null;
     let nm=""; for(let i=0;i<nl;i++) nm+=String.fromCharCode(u8[o+46+i]);
-    if(method===0&&off+30<=u8.length){
+    /* the local header must BE a local header: the central directory's
+       offset is data, and a lying one pointed into a WAV payload, whose
+       bytes then parsed as name/extra lengths — the reader handed back
+       garbage as project.json instead of refusing it */
+    if(method===0&&off+30<=u8.length&&dv.getUint32(off,true)===0x04034b50){
       const lnl=dv.getUint16(off+26,true), lel=dv.getUint16(off+28,true);
       const a=off+30+lnl+lel;
       if(a+csz<=u8.length) out[nm]=u8.subarray(a,a+csz);
@@ -5847,11 +5890,19 @@ function presetValidate(e){
   if(!Number.isInteger(e.seed)||e.seed<0||e.seed>1e9) return false;
   const p=e.p;
   if(!p||typeof p!=="object") return false;
-  if(!LDR_FIG[p.fig]) return false;
+  /* OWN keys only: a bare bracket lookup on an object literal answers
+     truthy for "constructor", "toString", "__proto__" — a preset naming one
+     passed the law and then blew up inside the scheduler (round 8) */
+  const own=(o,k)=>typeof k==="string"&&Object.prototype.hasOwnProperty.call(o,k);
+  if(!own(LDR_FIG,p.fig)) return false;
+  /* the engine flashes p.name and keptFromP splits it — it must be a string */
+  if(p.name!=null&&(typeof p.name!=="string"||p.name.length>64)) return false;
+  if(p.progName!=null&&(typeof p.progName!=="string"||p.progName.length>64)) return false;
+  if(p.chordStyle!=null&&["pad","stab","counter"].indexOf(p.chordStyle)<0) return false;
   if(!Array.isArray(p.comps)||p.comps.length>4||!p.comps.every(c=>typeof c==="string"&&c.length<40)) return false;
   if(!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
   if(![p.bass,p.chord,p.lead].every(i=>Number.isInteger(i)&&PROGRAMS[i])) return false;
-  if(!SCALES[p.scale]) return false;
+  if(!own(SCALES,p.scale)) return false;
   if(!Number.isInteger(p.root)||p.root<24||p.root>72) return false;
   if(typeof p.tempo!=="number"||!isFinite(p.tempo)||p.tempo<40||p.tempo>300) return false;
   if(!Array.isArray(p.prog)||p.prog.length<1||p.prog.length>16) return false;
@@ -6583,8 +6634,17 @@ setInterval(()=>{
   if(LDR.on||state.audition||state.arp.on){ dreamStop(); return; }
   if(!DREAM.next||DREAM.next<ctx.currentTime) DREAM.next=ctx.currentTime+.08;
   while(DREAM.next<ctx.currentTime+.22){
-    if(DREAM.pending){ applyDream(DREAM.pending,true); DREAM.pending=null;
-      if(typeof mixAutoStage==="function") mixAutoStage(DREAM.next); }
+    if(DREAM.pending){
+      /* CONSUME FIRST (round 8): applyDream throwing left pending set, so the
+         40ms tick re-threw forever — the transport lit, nothing scheduled,
+         only a manual stop recovering. A song that cannot be applied is a
+         song that stops the transport, loudly, once. */
+      const pend=DREAM.pending; DREAM.pending=null;
+      try{ applyDream(pend,true);
+        if(typeof mixAutoStage==="function") mixAutoStage(DREAM.next);
+      }catch(ex){ if(typeof console!=="undefined") console.error("DREAM:",ex);
+        flashRow("SONG WOULD NOT LOAD"); dreamStop(); return; }
+    }
     const f=LDR_FIG[DREAM.p.fig]; if(!f){ dreamStop(); return; }
     const spb=60/state.tempo, step=f.grid===12? spb/3 : spb/4, barLen=f.grid*step;
     dreamScheduleBar(DREAM.next,f,step,barLen);
@@ -7210,20 +7270,24 @@ async function renderPass(evs,label,pct0,pct1,keys,fxProg){
    bytes and the gain used, so the mix can hand its gain to the stems. */
 function masterize(buf,useG){
   const L=buf.getChannelData(0), R=buf.getChannelData(1);
+  let pk=0, ms=0; const stride=4;
+  for(let i=0;i<L.length;i++){ const a=Math.abs(L[i]), b=Math.abs(R[i]);
+    if(a>pk)pk=a; if(b>pk)pk=b;
+    if(i%stride===0) ms+=L[i]*L[i]+R[i]*R[i]; }
+  const rms=Math.sqrt(ms/(2*Math.ceil(L.length/stride)));
   let g=useG;
-  if(g==null){
-    let pk=0, ms=0; const stride=4;
-    for(let i=0;i<L.length;i++){ const a=Math.abs(L[i]), b=Math.abs(R[i]);
-      if(a>pk)pk=a; if(b>pk)pk=b;
-      if(i%stride===0) ms+=L[i]*L[i]+R[i]*R[i]; }
-    const rms=Math.sqrt(ms/(2*Math.ceil(L.length/stride)));
-    g=Math.min(pk>1e-6? .98/pk : 1, Math.max(1, rms>1e-6? .14/rms : 1));
-  }
+  if(g==null) g=Math.min(pk>1e-6? .98/pk : 1, Math.max(1, rms>1e-6? .14/rms : 1));
+  /* a STEM takes the mix's gain — but a stem whose own peak beats the mix's
+     (a sparse drums stem often does) would then clip at the 24-bit writer,
+     which clamps silently. Cap at the ceiling: the stems stay in the mix's
+     relative balance, one of them just stops short of the rail. */
+  else if(pk>1e-6) g=Math.min(g,.98/pk);
   if(Math.abs(g-1)>.02){ for(let i=0;i<L.length;i++){ L[i]*=g; R[i]*=g; } }
-  return {bytes:wavStereo24(L,R,buf.sampleRate),g};
+  return {bytes:wavStereo24(L,R,buf.sampleRate),g,pk:pk*g};
 }
 /* the stem groups — every sounding lane of the take, the 808 line as its
    own stem (the donor demotes a tuned kit line to a bass track; same idea) */
+let _mastPk={};
 const STEM_GROUPS=[
   ["drums", e=>e.role==="kit"||e.role==="dd"],
   ["perc",  e=>e.role==="perc"],
@@ -7250,6 +7314,10 @@ async function exportTake(kind){
      between passes would otherwise render stems through a different console
      than the mix — one zip, internally inconsistent */
   VERB_PIN=(typeof VERB!=="undefined")?VERB.pct:50;
+  /* PRE-CLAMP peaks per rendered file: the 24-bit writer clamps, so bytes
+     read back can never exceed full scale and a clipping check on them is
+     vacuous. This is the honest number (measurement, not audio). */
+  _mastPk={}; window._mastPk=_mastPk;
   const fxProg=DREAM.p? PROGRAMS[DREAM.p.chord] : (cur||PROGRAMS[0]);
   const keys=duckKeysFor(evs);
   let wavBytes=null, mid=null, zipBlob=null, failed=false;
@@ -7267,13 +7335,16 @@ async function exportTake(kind){
       if(!mixBuf) failed=true;
       else{
         const m=masterize(mixBuf); wavBytes=m.bytes; mixG=m.g;
+        _mastPk["mix.wav"]=m.pk;
         mid=midiTake(takeToMidiEvents(evs));
       }
       for(let j=0;!failed&&j<groups.length;j++){
         const [nm,list]=groups[j];
         const b=await renderPass(list,"STEMS",Math.round((j+1)/jobs*100),Math.round((j+2)/jobs*100),keys,fxProg);
         if(!b){ failed=true; break; }
-        files.push({name:"stems/"+nm+".wav",data:masterize(b,mixG).bytes});
+        const sm=masterize(b,mixG);
+        files.push({name:"stems/"+nm+".wav",data:sm.bytes});
+        _mastPk["stems/"+nm+".wav"]=sm.pk;
       }
       if(!failed){
         files.push({name:"mix.wav",data:wavBytes});
@@ -7285,7 +7356,8 @@ async function exportTake(kind){
     } else {
       const buf=await renderPass(evs,"RENDERING",0,100,keys,fxProg);
       if(!buf) failed=true;
-      else{ wavBytes=masterize(buf).bytes; mid=midiTake(takeToMidiEvents(evs)); }
+      else{ const m=masterize(buf); wavBytes=m.bytes; _mastPk["mix.wav"]=m.pk;
+        mid=midiTake(takeToMidiEvents(evs)); }
     }
   }catch(ex){ failed=true; if(typeof console!=="undefined") console.error("SAVE:",ex); }
   VERB_PIN=null;
@@ -7349,19 +7421,29 @@ function presetRender(){
    project the donor's #address promises, as a file. ── */
 function projectApply(entries){
   /* the file READ is async — a render may have started since the picker */
-  if(typeof exporting!=="undefined"&&exporting){ flashRow("RENDERING — LOAD AGAIN AFTER"); return false; }
-  if(!entries||!entries.length){ flashRow("NO PROJECT IN FILE"); return false; }
-  entries.forEach(en=>{
-    if(!PRESETS.some(o=>o.seed===en.seed&&o.name===en.name)) PRESETS.push(en); });
-  PRESETS=PRESETS.slice(-8);
+  if(typeof exporting!=="undefined"&&exporting){ notifyRow("RENDERING — LOAD AGAIN AFTER"); return false; }
+  if(!entries||!entries.length){ notifyRow("NO PROJECT IN FILE"); return false; }
+  /* NON-DESTRUCTIVE (round 8): the rail's own songs live only in the user's
+     saved copy of this file — a loaded project must never evict them. New
+     entries fill the room that is left; the rest are counted, not silently
+     dropped. The first entry PLAYS either way. */
+  const fresh=entries.filter(en=>!PRESETS.some(o=>o.seed===en.seed&&o.name===en.name));
+  const room=Math.max(0,8-PRESETS.length);
+  const took=fresh.slice(0,room);
+  PRESETS=PRESETS.concat(took);
   const live=document.getElementById("tritonPresets");
   if(live) live.textContent=JSON.stringify(PRESETS).replace(/</g,"\\u003c");
   presetRender();
   const en=entries[0];
-  const p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed;
+  let p;
+  try{ p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed; }
+  catch(_){ notifyRow("NO PROJECT IN FILE"); return false; }
   if(DREAM.on) DREAM.pending=p; else startWith(p,true);
-  if(typeof keptFromP==="function") keptFromP(p,en.seed);
-  flashRow("PROJECT LOADED — "+(en.name||"").toUpperCase());
+  try{ if(typeof keptFromP==="function") keptFromP(p,en.seed); }
+  catch(ex){ if(typeof console!=="undefined") console.error("LOAD:",ex); }
+  const short=(en.name||"").slice(0,32);
+  notifyRow("PROJECT LOADED — "+short.toUpperCase()+
+    (fresh.length>took.length? " (RAIL FULL — "+(fresh.length-took.length)+" NOT PINNED)" : ""));
   return true;
 }
 function projectLoad(file){
@@ -7377,9 +7459,10 @@ function projectLoad(file){
         if(key) txt=new TextDecoder().decode(files[key]);
       } else txt=new TextDecoder().decode(u8);
       projectApply(txt? presetParse(txt) : []);
-    }catch(_){ flashRow("NO PROJECT IN FILE"); }
+    }catch(ex){ if(typeof console!=="undefined") console.error("LOAD:",ex);
+      notifyRow("NO PROJECT IN FILE"); }
   };
-  rd.onerror=()=>flashRow("NO PROJECT IN FILE");
+  rd.onerror=()=>notifyRow("COULD NOT READ THAT FILE");
   rd.readAsArrayBuffer(file);
 }
 function presetInit(){
@@ -7778,4 +7861,11 @@ BANNED (obvious answers set aside first): re-synthesizing "sounds like" DD kits 
 KILL-TEST: node suites [0]–[9] green — [8]: the fidelity gate (23 slices byte-identical), the deep-merge law (presets state only what they change, the base never mutates), MEASURED physics (trapK's 808 rings past 0.5s where neptune is silent; closed hat shorter than open; the choke rule survives; stereo pan baked into the buffers; the bake is seed-deterministic), the preset law over dkit, the deal spread; [9]: all 17 languages realize inside the law (zones 0–11, perc names all resolve to real physics, sub lines in register), dembow loops VERBATIM (varying it un-writes the genre), house hats land at +0.24 steps exactly (MPC 56), drill slides between different notes, fills behave, style cards validate. The full Chromium harness green end-to-end: a forced knock/hyphyK dream lands 23 dd hits through the kit strip with the limiter at 0.96 (round-6 ceiling holds), the 808 line logs dd8 and reaches the bass channel, the drawer walks DD·HYPHYK → boombap → … → TRITON → back onto the shelf, and the offline bounce renders the language (pk 0.58, not silence, not clipped).
 THE NON-OBVIOUS CHOICE: swing:0 in the donor's style data means MACHINE, not MPC-0% — kswing(0) is minus two steps, and reading it literally dragged every off-16th hat 2 steps early (one landed at step −1; suite [9] convicted it before any ear had to). The donor's own scheduler knows this implicitly; the port has to know it explicitly. Same shape as the round-6 lesson: the numbers are the donor's, but the CONTRACT around the numbers is the port's to honor. Second choice: DD_LVL trimmed to 1.0 after measurement (at 1.35 the strip clipped its analyser and the limiter sat at 0.98) — the donor masters its languages hot on purpose (KHOT 2.15), but this instrument's headroom law is round 6's, so DreamDrummer plays at TRITON stage discipline.
 OPEN QUESTIONS: (1) The 808 line yields to a kept bass — should there be a dealable "THE 808" low-end card instead, so hyphy keeps its bassline by choice rather than by absence? (2) trapK/hyphyK kicks carry tuned:1 — the donor retunes the KICK ITSELF to the song's tonic; the sub line does this via playbackRate, but plain kick hits still land at patch pitch. Worth baking per-key kicks? (3) The style fills are adapted, not sliced — the donor's k06 fill engine is entangled with its score builder, but its cut/roll grammar could be lifted verbatim next bench. (4) KSNARE_POOL/KHAT_POOL (per-style alternate snare/hat architectures) stayed behind with the knock kit bank — a second shelf axis if the drawer ever wants voices inside a kit.
+RING 36 · 2026-09-01 · the save stops the track and opens three doors; the saws convicted at the insert
+WHAT CHANGED: the eighth verdict, two parts. (1) "The offline render needs to stop the track before it saves… dream drummer gives you three options wav the midi or the entire project reloadable as a zip… investigate why it's holding up, concurrency issues etc, what's different about lucky dreamer vs the fast dream drummer." INVESTIGATED FIRST, in the donor's own source: DreamDrummer renders on a SECOND Engine instance inside a Worker (ensureWorker L8902, renderOffline L7164), which is exactly why it never stops — its live worklet is untouched. THIS file's bounce swaps the GLOBAL graph for an OfflineAudioContext, so the honest equivalent of the donor's isolation is a clean STOP, and that gap WAS the hold-up: before round 8 the transport was merely GATED, so audio already scheduled kept ringing over the render, pads sustained through it, the conductor lurched back in on completion, and every ungated UI writer — FX knob pages, program browse, VERB, the master volume knob, mod wheel, pitch bend, powerOff, the meter loop — wrote into the OFFLINE graph at whatever position the render had reached (a level step or a vibrato swell baked into the file, inaudible live). SAVE now calls transportStop() (dream, figure engine, arp, all notes off, duck flush, tape close, PLAY UI) and opens THE DONOR'S OWN MENU, translated: **MIX** (one WAV) · **SCORE** (MIDI, instant, no render at all) · **SESSION** (per-role stems + mix + score + project.json, one zip). Progress is real percent via OfflineAudioContext.suspend checkpoints (the donor ticks its label the same way from its worker's onProgress), with the elapsed-seconds ticker as the fallback face; the take survives the stop so a second door renders the same performance, and a fresh PLAY clears the offer so a stale chip can never kill a live song. THE ZIP RELOADS — and here the port EXCEEDS the donor, which has no zip reader at all (its reload is a base36 URL address plus a localStorage session; 0x04034b50 appears exactly once in 9,810 lines, in the writer): project.json carries the song in the PRESET LAW's own shape, a ⤒ LOAD chip reads it back through the same hostile-file gate the serialized presets use, merges the ★ rail, and stands the song up through the exact preset chip-tap path — the song regrows from its seed, which is what "reloadable" has to mean for a generative instrument. `zipReadStore` is the store-only central-directory reader `zipStore` never had; the donor's `crc32` and `encodeZipStore` joined the verbatim slice manifest (25 slices, still byte-compared). (2) "You have distorting saws… maybe there's some feedback stacking." NOT feedback: the ping-pong loop passes both fbA and fbB, so loop gain is fb² ≤ .38 for every stock program, and applyFXP is param-only — no re-connect stacking is possible. The defect was the PROGRAM INSERT: `driveCurve`'s k=a*60+1 makes tanh(13x) at the common drive .2 — a HARD CLIPPER flattening everything past |x|≈0.15 — fed by an UNTRIMMED voice bus that a 3-note saw chord drives to 2-4, mixed in at up to 40% wet. That is the identical disease round 6 convicted at the master tube, one stage up, whose fix (busTrim) sits AFTER the insert and therefore never protected it. Four structural fixes: a DRIVE_HEADROOM pre-trim so the curve's domain spans ±4 of bus level (a hot chord meets the CURVE, not the WebAudio endpoint clamp — and since the transfer function in bus terms, tanh(k·bus)·S, does not depend on that constant at all, widening the domain is free); k=1+a*7 so drive is a colour until you turn it up; the curve normalized at a reference bus of 0.5; AND the wet/dry pair normalized by its own sum, because the curve bought unity and the mixer was spending it — min(1,d·1.4)+1−min(.7,d) sums to 1.08 at drive .2 and 1.30 at drive 1, so drive stayed a volume knob, just a quieter one. Plus per-voice osc-stack normalization — a 3-osc saw summing 1.55 was hitting the same VCA a single .95 osc gets, which made saw programs the hottest patches in the bank by construction; the amp LFO rides that same normalization, because it writes the SAME gain param additively and an unscaled tremolo against a scaled envelope drove one stock patch's gain NEGATIVE (polarity inversion four times a second, not a dip).
+ALSO CLOSED, from a second adversarial pass over round 8's own diff: the LOAD door fed untrusted project.json names into the LCD's innerHTML — escaped AT THE SINK, so every caller past and future is covered, and it mattered doubly because an imported name rides into a KEEP'd copy and would re-fire on every chip tap there; `applyDream` throwing left `DREAM.pending` set, so the 40ms tick re-threw forever (transport lit, nothing scheduled, only a manual stop recovering) — the pending song is now CONSUMED before it is applied, and a song that cannot load stops the transport loudly, once; a loaded 8-entry project silently evicted every song on the ★ rail, which lives only in the user's own saved copy, so imports now fill the room that is left and report how many did not fit; LOAD's failures were routed through a channel that is silent on an unpowered rack, so a bad file gave zero feedback — they now also reach the save label, which is always visible; the master volume knob was the one graph-writer the first pass missed; the sampler-pack exporter got the drive law's matching pre-trim (without it every exported sample baked twice the saturation the instrument plays) and now heals its FX on the way out.
+BANNED (obvious answers set aside first): turning the saws down (the level was a SYMPTOM of a clipper — quieter clipping is still clipping); chasing the "feedback stacking" hypothesis on faith (measured first: fb² ≤ .38, and applyFXP never calls connect — the percept was polyphonic tails accumulating into two hard-clamping waveshapers, which grows over seconds exactly like feedback would); porting the donor's Worker architecture to keep the transport playing (its engine is a self-contained scalar loop that can be handed to a worker as source text — ours is a WebAudio node graph that cannot; the stop is the honest translation, not a lesser one); writing a DEFLATE zip (store-only is what the donor chose for the same reason: a format simple enough to write AND test from scratch); a project format of our own invention (the preset law already validates every field a song needs — a new schema would be a second thing to keep honest).
+KILL-TEST: node suites [0]–[10] green — [10] adds the zip round-trip through BOTH writers (house `zipStore` and the donor's `encodeZipStore`) read back byte-exact by `zipReadStore`, with hostile zips refused (truncated, garbage, deflate-marked, a lying local-header offset, an over-long name — a compressed or dishonest entry is skipped, never guessed at); the drive law READ OUT OF `applyFXP` itself (a re-implementation would test this file against itself and pass whatever ships) — level-neutral within 0.35 dB at the reference bus for every drive value, still compressing the top; the import range law (fb ≤ .85, drive/sends ≤ 1, reso ≤ 20, osc lvl ≤ 1.2, ABSENT fields refused — the old `||0` validated a copy the engine never uses while applyFXP assigned the raw undefined into an AudioParam); the preset law's OWN-KEY rule (a song naming `constructor`/`toString`/`__proto__` as its figure or scale used to pass a bare bracket lookup and then throw inside the scheduler); and the stem-parity laws (duck keys from the whole take, one mastering gain, a hot stem capped short of the writer's clamp). Every new gate was MUTATION-TESTED: the artifact was deliberately reverted and each gate confirmed to fire. The Chromium harness carries the live numbers — a fortissimo 3-note saw chord: bus pk 1.98, ZERO samples past the curve's domain, insert gain −2.22 dB (level-neutral; the old clipper ran +4.8), wet path alive at rms 0.37; a saw pad under latched STRUM: tube-in 1.127, 0.03% hot against the round-6 1% law; SAVE stops the track and opens three doors; the session zip carries 3 stems + mix + score + project.json, nothing clipped BEFORE the writer's clamp, and RELOADS its song (#777, knock) onto the ★ rail; the track stays stopped afterward with the take intact for a second door. Measured, drive .2 against a clean program at the same bus level: OLD +4.8 dB at bus 0.3 and +2.7 dB at 0.5 — drive was a volume knob AND a clipper; NEW 0.00 dB at the reference, exactly.
+THE NON-OBVIOUS CHOICE: a per-stem mastering gain is WRONG, and it took an adversarial pass to see it. The obvious build normalizes each stem the way it normalizes the mix — every file lands at a healthy level, every test passes, and the stems are useless: a sparse lead lifted 7× while the drums stay put no longer sums to anything resembling mix.wav. Stems now take the MIX's gain and the MIX's duck automation (derived once from the whole take, applied identically in every pass with in-pass keying muted), because a stem is that instrument's place in the record — if the stems cannot sum back to the mix, they are not stems, they are seven different mixes. Same reasoning made VERB and the FX program PINNED for the export's whole life. The deeper lesson landed on the TESTS: three round-8 gates were written, passed, and were WORTHLESS — the "does the insert rail" check tapped a node the curve's own normalization bounds at 0.6 (it could not fail for any signal), the session-zip clip checks read bytes the 24-bit writer had already clamped (clipping is exactly what the clamp erases), and the drive-law check re-derived the wet/dry math instead of reading it. A gate that cannot fail is worse than no gate: it reports safety. All three were rebuilt to measure the mechanism at its own cause — the fraction of bus samples past the curve's domain, the engine's PRE-clamp peak per rendered file, and the pair read straight out of `applyFXP` — and the first honest version immediately convicted 0.06% of samples still clipping, which widened the domain to ±4. The tests found the bug the tests were hiding.
+OPEN QUESTIONS: (1) The SESSION door renders one pass per lane — a seven-lane eight-minute take is eight full renders; worth a single pass with per-lane taps (one render, N recorders) if WebAudio's node budget allows? (2) project.json regrows the song from its seed but NOT the player's own performed notes (role "you" lives in the take, not the preset) — should a session zip carry the take itself so a reload replays the performance, not just the world? (3) The donor's #address (a base36 URL hash that regrows a beat anywhere) has no equivalent here; a KEEP copy is the whole file. A short shareable address for a song is a different door than any of these three. (4) `renderNote`'s pack export now carries the drive pre-trim, but the sampler pack still bypasses the DREAM strips and the master chain by design — is a pack of the same patch through the FULL chain a fourth door, or a different product?
 ═══ end rings ═══ -->

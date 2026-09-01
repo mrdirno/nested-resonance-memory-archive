@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-08-31, rings 1–35 in `triton-rack.html`.
+**As of:** 2026-09-01, rings 1–36 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -50,7 +50,16 @@ and the donor's SEVENTEEN DRUM LANGUAGES (KPAT cells + full style grammars,
 verbatim) realized per-dream into dealable style drummers with MPC-math
 swing, ghost floors, phrase-end fills, ensembles on this file's ported
 percussion physics, and the 808 line ("the kick is the bassline") re-rooted
-to any key and carrying the low end until a bass trait stands.
+to any key and carrying the low end until a bass trait stands. Round 8
+(ring 36) answered the eighth verdict — *"the offline render needs to stop
+the track before it saves… dream drummer gives you three options wav the
+midi or the entire project reloadable as a zip… investigate why it's
+holding up, concurrency issues… you have distorting saws… make sure your
+solutions are production grade"*: SAVE now STOPS the track and opens three
+doors (**MIX** · **SCORE** · **SESSION**), the session zip **reloads** its
+song through a ⤒ LOAD chip, the render's concurrency holes are closed, and
+the saw distortion was convicted at the program insert (a hard clipper —
+not feedback) and fixed structurally.
 
 ---
 
@@ -226,6 +235,43 @@ to any key and carrying the low end until a bass trait stands.
    inside the round-6 ceiling, the drawer walks the shelf and wraps, the
    bounce renders the language, `DD_LVL` measured down to 1.0.
 
+## 3g. Round 8 in five cuts (ring 36)
+
+1. **SAVE stops the track, then offers three doors.** `transportStop()`
+   (dream + figure engine + arp + all notes off + duck flush + tape close +
+   PLAY UI) runs before anything renders — the donor can keep playing only
+   because it renders on a second engine in a Worker; this file swaps the
+   GLOBAL graph, so the stop IS the equivalent. Doors: **MIX** (one WAV) ·
+   **SCORE** (MIDI, instant, no render) · **SESSION** (stems + mix + score +
+   project.json, one zip). Percent progress from `OfflineAudioContext.suspend`
+   checkpoints. The take survives the stop; a fresh PLAY clears the offer.
+2. **The session zip reloads.** `project.json` carries the song in the
+   preset law's shape; `zipReadStore` (store-only central-directory reader,
+   hostile by default) + a ⤒ LOAD chip read it back through
+   `presetParse`/`presetValidate` and stand it up via the preset chip-tap
+   path. Imports never evict the user's own ★ rail. The donor has NO zip
+   reader — this exceeds it.
+3. **Concurrency closed.** `exporting` now gates applyFXP (force flag for
+   the exporter), startWith, ldrToggle, powerOff, pulseAt, dreamPans, the
+   mod wheel, pitch bend, the meter rAF loop, wall-clock kill timers and the
+   volume knob; the render yields every 1024 events. Stems carry the mix's
+   OWN duck automation and mastering gain (capped so a hot stem cannot clip
+   the writer); VERB and the FX program are pinned for the whole export.
+4. **The saws, convicted at the insert.** Not feedback (loop gain fb² ≤ .38;
+   applyFXP never calls connect). `driveCurve`'s k=a·60+1 was a hard clipper
+   at the common drive .2, fed by an untrimmed bus. Fixed: a headroom
+   pre-trim (curve domain ±4 of bus), k=1+a·7, reference normalization at
+   bus 0.5, the wet/dry pair normalized by its own sum, and per-voice
+   osc-stack normalization (the amp LFO rides it too — it writes the same
+   gain param additively). Measured: 0.00 dB drive-vs-clean at the
+   reference, where the old law ran +4.8 dB at bus 0.3.
+5. **Three gates that could not fail were rebuilt.** The "does the insert
+   rail" check tapped a node the curve's own normalization bounds; the
+   session-zip clip checks read bytes the 24-bit writer had already clamped;
+   the drive-law check re-derived the math instead of reading `applyFXP`.
+   All three now measure the mechanism at its cause, and every new gate was
+   mutation-tested (revert the fix, confirm the gate fires).
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -274,6 +320,20 @@ the map are the donor's hand: do not move them on taste.
 - The donor's k06 fill engine and the KSNARE_POOL/KHAT_POOL per-style
   alternate architectures stayed behind with the knock kit bank — liftable
   next bench (Ring 35).
+- The SESSION door renders one pass per lane (a seven-lane take is eight
+  full renders). One pass with per-lane taps would be far faster if the
+  node budget allows (Ring 36).
+- `project.json` regrows the song from its seed but not the player's own
+  performed notes (role `you` lives in the take, not the preset) — should a
+  session zip carry the take itself? (Ring 36)
+- The donor's `#address` (a base36 URL hash that regrows a beat anywhere)
+  has no equivalent here; a short shareable address is a different door
+  from the three that now exist (Ring 36).
+- The insert is level-neutral at the reference bus but, like any saturator
+  mixed with dry, still runs +0.9 dB at bus 0.1 and −1.7 dB at bus 2 for
+  drive .2 — that IS drive's compression character, now centred rather than
+  bolted on as makeup. Worth a listening pass to confirm it reads as
+  character and not as a compressor (Ring 36).
 - Hand size: is 3 cards right at phone scale? Long-press to re-deal one
   trait? (Ring 31)
 - Enharmonic spelling: the theory bar spells sharps-only (A#maj7 where a flat
