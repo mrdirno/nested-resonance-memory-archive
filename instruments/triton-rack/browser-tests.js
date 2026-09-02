@@ -434,14 +434,24 @@ const path = __dirname + "/triton-rack.html";
     const comp = await page.evaluate(() => { const verb0 = VERB.pct; const a = songEvents(DREAM.p), b = songEvents(DREAM.p); window._verbHeld = VERB.pct === verb0;
       const key = e => [+e.t.toFixed(4), e.role, e.note != null ? e.note : (e.zone != null ? e.zone : e.name || ""), +(e.vel || 0).toFixed(4)].join("|");
       const same = a && b && a.evs.length === b.evs.length && a.evs.every((e, i) => key(e) === key(b.evs[i]));
-      return { ok: !!a, bars: a && a.bars, seconds: a && a.seconds, n: a && a.evs.length, format: a && a.format, same, want: songBars(DREAM.p),
+      /* ROUND 11 — THE ENDING: the last composed bar is the tonic on the one — kick+snare+crash, the bass root, the voicing — held past the bar line; no lead; the room's flag put back */
+      let end = null;
+      if (a) { const f = LDR_FIG[DREAM.p.fig], spb = 60 / a.tempo, step = f.grid === 12 ? spb / 3 : spb / 4, barLen = f.grid * step;
+        const t0 = .1 + (a.bars - 1) * barLen, last = a.evs.filter(e => e.t >= t0 - .005), ts = last.map(e => e.t), root = DREAM.p.root % 12;
+        const bassE = last.filter(e => e.role === "bass" || e.role === "dd8"), chordE = last.filter(e => e.role === "chord"), drumE = last.filter(e => e.role === "kit" || e.role === "dd");
+        end = { n: last.length, spread: ts.length ? +(Math.max(...ts) - Math.min(...ts)).toFixed(3) : null, drums: drumE.length, bass: bassE.length, chord: chordE.length, lead: last.some(e => e.role === "lead"),
+          bassWant: DREAM.p.muteBass ? 0 : 1, chordWant: DREAM.p.muteChord ? 0 : 3,
+          bassTonic: bassE.every(e => ((e.note - root) % 12 + 12) % 12 === 0), chordTonic: !chordE.length || chordE.some(e => ((e.note - root) % 12 + 12) % 12 === 0),
+          holdOk: bassE.concat(chordE).every(e => e.dur >= barLen), outroAfter: DREAM._outroAt }; }
+      return { ok: !!a, bars: a && a.bars, seconds: a && a.seconds, n: a && a.evs.length, format: a && a.format, same, want: songBars(DREAM.p), end,
         roles: a ? [...new Set(a.evs.map(e => e.role))] : [], takeLen: TAKE.ev.length, takeT0: TAKE.t0, dreamBar: DREAM.bar, on: DREAM.on }; });
     const verbHeld = await page.evaluate(() => window._verbHeld);
     if (!comp.ok || comp.bars !== comp.want || !(comp.n > comp.bars * 4)) fail("song composition wrong " + JSON.stringify(comp));
     else if (!verbHeld) fail("the composition moved the dialed VERB");
     else if (!comp.same) fail("the song composes differently twice");
     else if (comp.roles.includes("you")) fail("the song bounce carries the search (you-role events)");
-    else ok("the song composes DRY: " + comp.bars + " bars (" + comp.format + "), " + comp.n + " events, " + comp.seconds.toFixed(1) + " s, deterministic, roles " + comp.roles.join("/") + " — the live take untouched (" + comp.takeLen + " events)");
+    else if (!comp.end || comp.end.drums < 3 || comp.end.bass < comp.end.bassWant || comp.end.chord < comp.end.chordWant || comp.end.lead || !comp.end.bassTonic || !comp.end.chordTonic || !comp.end.holdOk || !(comp.end.spread <= .08) || comp.end.outroAfter != null) fail("the ending is wrong " + JSON.stringify(comp.end));
+    else ok("the song composes DRY: " + comp.bars + " bars (" + comp.format + "), " + comp.n + " events, " + comp.seconds.toFixed(1) + " s, deterministic, roles " + comp.roles.join("/") + " · ends on the one: " + comp.end.n + " events within " + Math.round(comp.end.spread * 1000) + " ms, tonic held — the live take untouched (" + comp.takeLen + " events)");
     await page.evaluate(() => { saveMenu(); });
     await page.waitForFunction(() => !!document.getElementById("svMix"), undefined, undefined, { timeout: 5000 }).catch(() => {});
     const dlS = downloads.length;

@@ -675,7 +675,9 @@ console.log("[8] dd22 kits");
      Any hand edit inside the block, any donor drift, any manifest slip fails
      here — the port stays verbatim by construction, provably. */
   let port = null;
-  try { port = require("./mine/dd22_port.js"); } catch (e) { fail("dd22_port.js loads: " + e.message); dBad++; }
+  const donorHere = fs.existsSync(__dirname + "/mine/dd22_port.js") && fs.existsSync(__dirname + "/dreamdrummer_22.html");
+  if (!donorHere) ok("fidelity gate SKIPPED — mine/dd22_port.js + dreamdrummer_22.html are not beside tests.js (a handoff-zip run; the repo carries them)");
+  else try { port = require("./mine/dd22_port.js"); } catch (e) { fail("dd22_port.js loads: " + e.message); dBad++; }
   if (port) {
     try {
       const donor = fs.readFileSync(__dirname + "/dreamdrummer_22.html", "utf8");
@@ -1142,7 +1144,40 @@ console.log("[13] song bounce");
   if (lists.length !== 2 || !lists.every(n => n === 8)) { fail("sectFor section lists changed (" + lists.join("/") + ") — SONG_BARS must follow"); rBad++; }
   if (G.SONG_BARS.song !== 4 + 8 * 8 || G.SONG_BARS.arc !== 4 + 8 * 8) { fail("SONG_BARS does not cover intro + every section once (" + JSON.stringify(G.SONG_BARS) + ")"); rBad++; }
   if (!(G.SONG_BARS.loop >= 20 && G.SONG_BARS.loop <= 68)) { fail("loop bounce length out of sense (" + G.SONG_BARS.loop + ")"); rBad++; }
-  if (G.songBars({ format: "nope" }) !== G.SONG_BARS.loop || G.songBars(null) !== G.SONG_BARS.loop) { fail("songBars has no default"); rBad++; }
+  if (G.songBars({ format: "nope" }) !== G.songBars({ format: "loop" }) || G.songBars(null) !== G.songBars({ format: "loop" })) { fail("songBars has no default"); rBad++; }
+  /* ROUND 11 — THE ENDING: one bar past the shape; only a composition arms it */
+  const G2 = eval(sj.slice(0, sj.indexOf("function songEvents")) + "\n;({END_BARS})");
+  if (!(G2.END_BARS >= 1 && G2.END_BARS <= 2)) { fail("END_BARS out of sense (" + G2.END_BARS + ")"); rBad++; }
+  if (G.songBars({ format: "song" }) !== G.SONG_BARS.song + G2.END_BARS || G.songBars({ format: "loop" }) !== G.SONG_BARS.loop + G2.END_BARS) { fail("songBars does not add the ending"); rBad++; }
+  const SF = eval("(function(){ const DREAM={p:null,_outroAt:null}; " + secJs + "; return {sectFor, set:v=>{ DREAM._outroAt=v; }, setP:p=>{ DREAM.p=p; }}; })()");
+  SF.setP({ format: "song" }); SF.set(null);
+  if ([...Array(300).keys()].some(b => SF.sectFor(b) === "END")) { fail("the room's conductor reaches END without _outroAt"); rBad++; }
+  SF.set(68);
+  if (SF.sectFor(68) !== "END" || SF.sectFor(69) !== "END" || SF.sectFor(67) === "END" || SF.sectFor(3) !== "INTRO" || SF.sectFor(67) !== "LIFT") { fail("END does not sit exactly at _outroAt (" + [67, 68, 69].map(SF.sectFor).join("/") + ")"); rBad++; }
+  SF.setP({ format: "loop" }); SF.set(36);
+  if (SF.sectFor(36) !== "END" || SF.sectFor(35) !== "GROOVE") { fail("a loop has no ending"); rBad++; }
+  const cfg = slice("const SECT_CFG={", "};");
+  if (!/END:\{comps:0,bass:1,lead:0/.test(cfg)) { fail("SECT_CFG has no END (comps 0 · bass 1 · lead 0)"); rBad++; }
+  const dsb = slice("function dreamScheduleBar(", "setInterval(()=>{");
+  const endBlk = dsb.slice(dsb.indexOf("if(isEnd){"), dsb.indexOf("DREAM._barLen=barLen; DREAM._barStart=at; return;"));
+  if (!endBlk || endBlk.length < 200) { fail("dreamScheduleBar has no END block that returns before the drums"); rBad++; }
+  else {
+    if (!/kitZone\(P\.kit,z,/.test(endBlk) || !/\[\[0,[.\d]+\],\[1,[.\d]+\],\[4,[.\d]+\]\]/.test(endBlk)) { fail("the ending hit is not kick+snare+crash on the one"); rBad++; }
+    if (!/spawnVoice\(PROGRAMS\[P\.bass\],bassRoot,[^;]*hold,DREAM\.pans\.bass\)/.test(endBlk)) { fail("the ending does not hold the bass root"); rBad++; }
+    if (!/tones\.forEach\(\(n,i\)=>spawnVoice\(PROGRAMS\[P\.chord\],n,[^;]*hold,DREAM\.pans\.chord\)\)/.test(endBlk)) { fail("the ending does not hold the tonic voicing"); rBad++; }
+    if (/PROGRAMS\[P\.lead\]/.test(endBlk)) { fail("the ending plays a lead"); rBad++; }
+    if (!/hold=barLen\*1\.\d+/.test(endBlk)) { fail("the ending's hold does not reach past the bar line"); rBad++; }
+    const drumsAfter = dsb.indexOf("if(P.dsty&&typeof DD22");
+    if (!(drumsAfter > dsb.indexOf("if(isEnd){"))) { fail("the END block sits after the drums — the last bar would still groove"); rBad++; }
+  }
+  if (!/const base=isEnd\? tonicBase : chordSpecFor/.test(dsb) || !/const nextBase=\(isEnd\|\|toEnd\)\? tonicBase : chordSpecFor/.test(dsb)) { fail("the ending is not the scale's I / the bar before does not hear it coming"); rBad++; }
+  if (!/chordSpecFor\(P\.scale,0,P\.root\+12\)\.tones/.test(dsb)) { fail("tonicBase is not degree 0 of the scale (prog[0] is not always I — jazz ii-V-I)"); rBad++; }
+  if (!/phraseBar%8===7\|\|toEnd\)/.test(dsb)) { fail("the figure path does not fill into the ending"); rBad++; }
+  const se11 = slice("function songEvents(p)", "function ddWarmDone(");
+  if (!/DREAM\._outroAt=N-END_BARS;/.test(se11) || !/outroAt:DREAM\._outroAt/.test(se11) || !/DREAM\._outroAt=S\.outroAt;/.test(se11)) { fail("songEvents does not arm/snapshot/restore _outroAt"); rBad++; }
+  const arms = [...s.matchAll(/DREAM\._outroAt=(?!null|S\.outroAt|N-END_BARS)/g)].length;
+  if (arms) { fail("something outside the composition arms _outroAt (" + arms + ")"); rBad++; }
+  if (!/DREAM\._outroAt=null; setPlayUI\(false\)/.test(slice("function dreamStop(silent)", "function dreamDraw") || slice("function dreamStop(silent)", "}\n"))) { fail("dreamStop does not clear _outroAt"); rBad++; }
   /* every hit path logs-then-returns when DRY, so a composition plays nothing */
   const sv = slice("function spawnVoice", "/* ---- drums ---- */");
   if (!/takeLog\(prog,note,vel,when,dur,dest\) : null;\s*\n\s*if\(typeof DRY!=="undefined"&&DRY\) return null;/.test(sv)) { fail("spawnVoice does not return DRY after logging"); rBad++; }
@@ -1179,7 +1214,7 @@ console.log("[13] song bounce");
   if (!/if\(!\(typeof DRY!=="undefined"&&DRY\)\) setTimeout\(\(\)=>\{ if\(!DREAM\.on\) return;/.test(s)) { fail("a composed bar arms the readout timer"); rBad++; }
   if (!/if\(!pp\.format\) pp\.format="loop";/.test(slice("function songEvents(p)", "function ddWarmDone("))) { fail("a shape-less song composes as an arc but is sized as a loop"); rBad++; }
   if (!/DREAM\.bar!==DREAM\._duckFlushed&&MIX&&MIX\._ctx===ctx&&!\(typeof DRY!=="undefined"&&DRY\)\)\{/.test(s)) { fail("a composition can flush the live duck automation"); rBad++; }
-  if (!rBad) ok("SONG_BARS follows sectFor (loop " + G.SONG_BARS.loop + " · arc/song " + G.SONG_BARS.song + ") · every hit path logs-and-returns DRY · doors bounce the song, JAM the take · composition restores the performance");
+  if (!rBad) ok("SONG_BARS follows sectFor (loop " + G.SONG_BARS.loop + " · arc/song " + G.SONG_BARS.song + " · +" + G2.END_BARS + " ending bar, armed only by the composition, the tonic on the one held) · every hit path logs-and-returns DRY · doors bounce the song, JAM the take · composition restores the performance");
 }
 
 /* ── suite 11: the take in the zip + the address (round 9) ─────────── */

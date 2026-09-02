@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-09-02, rings 1–38 in `triton-rack.html`.
+**As of:** 2026-09-02, rings 1–39 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -367,6 +367,27 @@ the take exactly as played.
    JAM-after-MIX, `takeStart` clearing the doors. No defect found; the
    fleet pass over that lens is still the honest gate and remains owed.
 
+## 3j. Round 11 — the ending (ring 39)
+
+1. **The composed song ends.** A section `END`, reachable only while
+   `DREAM._outroAt` is set; `songEvents` arms it at the last composed bar
+   and restores it, `dreamStop` clears it, the room's conductor never sets
+   it — the live jam still loops forever. `songBars` adds `END_BARS` (1):
+   a loop bounce is 37 bars, arc/song 69.
+2. **What the last bar plays.** `dreamScheduleBar` returns before the
+   drums on `END`: one clock for the band (the drummer's `bandZ` draw),
+   kick + snare + crash on the one, the bass root and the tonic voicing
+   held 1.25 bars into the tail, no lead; a "kick is the bassline"
+   language lands its 808 root instead. The tonic is degree 0 of the scale
+   (`prog[0]` is ii in the jazz pool). The bar before already hears it:
+   `nextBase` is the tonic there, so the bass walks into the root, the hook
+   cadences onto I, and the figure path's big fill fires into the ending.
+3. **Gates.** Node [13] (END laws, listed in ring 39) · harness: the
+   composed song's last bar is a handful of events within 80 ms of the
+   downbeat, three drums, the bass on the tonic, the voicing held ≥ a bar,
+   no lead, the flag null afterwards. Not yet fleet-verified — the
+   adversarial pass over this diff is owed, same as round 10's second lens.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -423,9 +444,10 @@ the map are the donor's hand: do not move them on taste.
   carrying keys played over the FINAL world into the song bounce means
   choosing which section of a 68-bar arrangement a 12-bar overdub lands in.
 - The loop bounce is 32 bars of groove by fiat; a loop's natural length is
-  the phrase library's own cycle × a few — worth deriving. The conductor has
-  an INTRO but no OUTRO: the song bounce stops on a bar line and rings out
-  through the tail (Ring 38).
+  the phrase library's own cycle × a few — worth deriving (Ring 38). The
+  ending is one bar whatever the tempo (Ring 39): a 64 bpm ballad holds
+  4.7 s, a 140 bpm loop 2.1 s — END_BARS could follow tempo; and a kit's
+  crash is one baked sample, so the crash's tail is shorter than the chord's.
 - The trait rail slots (12 px), VERB −/+ (10 px) and the rack ‹ › ◇ (18 px)
   still break the touch law at phone scale; the chips went first — the rest
   is a phone LAYOUT of the 4U, not a scale (Ring 37).
