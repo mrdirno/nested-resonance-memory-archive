@@ -121,6 +121,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, per diem — and put your real hours in, because a dollar an hour on a job where you hung every opening twice is a different dollar.",
     chip: "#2F3C63",
     audience: "Installers · hardware hands · leads · anybody weighing a move"
+  },
+  {
+    name: "The Long Pole",
+    href: "long-pole.html",
+    desc: "Frames, doors, hardware and glass in one list, with what each one holds up and the date it has to beat. One order number sits over four different shops on four different clocks — so the message asks ONE question, and it names which shop you are asking.",
+    chip: "#8A6A2F",
+    audience: "Lead / PM → the shop inside the house that has it"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

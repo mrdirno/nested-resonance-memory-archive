@@ -66,6 +66,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The ask you send the building engineer to get a crew into a locked gear room — the night, the rooms, who's coming, and the heads-up that keeps you from getting turned away at the door. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B8860B",
     audience: "Electrical → building engineer / facilities / security"
+  },
+  {
+    name: "The Long Pole",
+    href: "long-pole.html",
+    desc: "The gear that sets your date \u2014 the board, the transformers, the gen, the lighting package \u2014 in one list, with what each one holds up and the date it has to beat. Then one message that asks ONE question about the few lines it\u2019s about, instead of a sixth \u201cany update?\u201d that asks five and gets one of them answered.",
+    chip: "#1F7A6B",
+    audience: "PM / foreman \u2192 whoever owns the order"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

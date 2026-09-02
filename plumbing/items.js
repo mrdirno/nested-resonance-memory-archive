@@ -472,3 +472,111 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "Emergencia — fuga / drenaje principal tapado", "en": "Emergency — leak / main stopped up" }
   ]
 };
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * THE LONG POLE — plumbing (2026-09-01). A config on shape #3; the page file is
+ * the same shell electrical and HVAC ship, and the gate asserts no drift.
+ *
+ * This trade came third on the panel's order because it is nearly free after
+ * mechanical — same rep structure, same submittal gate, mostly a new items list.
+ * What is NOT free is the gate date: half this equipment has to be set before a
+ * slab pour or a wall closes, and after that it goes in through a wall somebody
+ * has to open again. So "the date it has to beat" is doing more work here than
+ * anywhere else on the rack, and the rough-in sheet — connection sizes,
+ * rough-in heights, the anchor pattern — is the cheap question, because it is
+ * sitting in his own approved file and it is what unblocks the layout.
+ * ───────────────────────────────────────────────────────────────────────────── */
+window.TOOLKIT_LONGPOLE = {
+  toolName: "The Long Pole",
+  eyebrow: "Plumbing · the equipment that sets your date → whoever owns the order",
+  lede: "The equipment that sets your date, in one list. Then <b>one message that asks one question</b> about the few lines it&rsquo;s actually about &mdash; instead of a sixth &ldquo;any update?&rdquo; that braids five questions and gets one of them answered.",
+
+  warn: "<b>This is your own note of what you are chasing and what you were last told &mdash; and that is all it is.</b> There is no money on it, no running count of anything, and no arithmetic: a dated list of the dates somebody gave you is a claim document, and this is not one. <b>Your submittal log, your PO and their order number all live somewhere else and this page does not compete with any of them</b> &mdash; their number rides on a line as an <i>address</i>, so he knows which job you mean before he goes looking. <b>It lives in this browser, on this device, and nowhere else</b>: nothing typed here is sent anywhere, which also means a new phone starts empty. The spreadsheet copy is your backup.",
+
+  poHint: "Your PO and their order number are an <b>address</b> &mdash; they tell him which of your jobs this is before he has to go look it up. They are not a record of anything; whatever your office runs on owns that.",
+
+  items: [
+    "The water heaters",
+    "The booster set",
+    "The pumps",
+    "The backflow preventers",
+    "The grease interceptor",
+    "The lift station",
+    "The mixing valves",
+    "The specialty fixtures",
+    "The sensor trim",
+    "Flush valves and carriers",
+    "The water softener",
+    "Cast roof drains",
+    "Trench drain and grates",
+    "The expansion tanks",
+    "The sand and oil separator",
+    "The neutralizing tank"
+  ],
+
+  asks: [
+    "Anything you still need from us",
+    "The rough-in sheet — connection sizes, heights and the anchor pattern",
+    "Whether you've got the approved set and released off it",
+    "A ship week we can plan around",
+    "How it comes and who offloads it",
+    "Whether you can hold it — we're not ready for it"
+  ],
+
+  states: ["Asked", "Nothing back", "They told me something", "It's here"],
+
+  holds: [
+    "The slab pour",
+    "Underground",
+    "Rough-in",
+    "Setting it in the room",
+    "Closing the wall",
+    "The rough inspection",
+    "Pressure test",
+    "Setting fixtures",
+    "Turning the water on",
+    "Trim-out",
+    "Final inspection",
+    "Turning it over"
+  ],
+
+  flags: ["This one first", "This is the one that moves the date"],
+
+  labItem: "What you're chasing",
+  labAsk: "What you need from him on this one",
+  labHolds: "What it holds up",
+  labGate: "The date it has to beat — or the one it must not beat",
+  labTold: "Last thing you were told — their words, and who said it",
+  labRef: "Their order number",
+  labWho: "Who you're asking",
+  groupAskLabel: "What you need",
+
+  docSubject: "the equipment I'm chasing",
+  poLabel: "Our PO",
+  docStoppingHead: "The ones actually stopping work",
+  docStoppingLede: "These are the ones that are actually stopping work — the rest I can live with for now.",
+  docOneThing: "Just the one thing this time, on",
+
+  opening: "Short list of the equipment I'm chasing on this job. Nothing here is a problem yet — I'd just rather none of it turn into the reason we slip.",
+
+  closing: "If any of these are stuck on your end, tell me which one and I'll work the schedule around it — half of this has to be in before something gets closed up, and it's a lot cheaper to know now than to open a wall for it later. And if you put out a status report on this job, put me on the list and I'll stop emailing you.",
+  docBoundary: "That's my own note of what I'm chasing and what I was last told, in my words. It isn't a claim, there's no day count on it, and nothing on it changes what we agreed.",
+
+  phJob: "Northgate MOB",
+  phPo: "the number on your end",
+  phFrom: "you / your shop",
+  phItem: "what it is — then it's a button",
+  phAsk: "— what you need on this one",
+  phGate: "“before the slab goes”· “before that wall closes”",
+  phTold: "“Rosa, 6/12 — week of the 18th”",
+  phRef: "so he doesn’t have to go look",
+  phWho: "the name on the order acknowledgment",
+
+  askNeutral: "— pick the one thing this message asks for",
+  askStopping: "The ones stopping work",
+  askAll: "Everything on the list — my own record",
+  askHintNone: "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.",
+  askHintPicked: "That is the whole message: one question, and the lines it's about. He answers one thing today instead of picking through five and going quiet.",
+
+  emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
+};

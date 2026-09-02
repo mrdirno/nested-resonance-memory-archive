@@ -682,3 +682,168 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "Corriente temporal / luces temporales / conexión para el GC", "en": "Temp power / temp lights / GC hookup" }
   ]
 };
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * THE LONG POLE — electrical (2026-09-01). A config on shape #3.
+ *
+ * The gear that sets the date, and ONE question about it. The page's own header
+ * carries what the four-lens panel changed; this file carries the vocabulary.
+ *
+ * THE ASK LIST IS ORDERED BY HOW FAST THE ANSWER COMES BACK, cheapest first, and
+ * that ordering is the whole intelligence of the page. The receiving desk — a
+ * distributor's project-management desk, answering with no idea we had this open
+ * — gave it unprompted: "he asks the expensive question when he needed the cheap
+ * one. Say 'pouring 10/14, need pad dims and weight on MSB-1' and you get it this
+ * afternoon. Say 'any update' and you wait three days for a paragraph." Dims and
+ * weight sit in his own file. A ship date does not — he has to go ask a factory
+ * and relay it back. The page cannot make him faster; it can stop a man spending
+ * three days waiting for a fact that was four minutes away.
+ *
+ * NO MANUFACTURER, DISTRIBUTOR, REP AGENCY OR BRANCH IS NAMED ANYWHERE IN THIS
+ * FILE, and none ever will be: a page that prints a real house on a document he
+ * sends is impersonation with a shelf life, and it turns his chase into a spec.
+ * Gated in tools/toolkit-gates/long-pole.mjs.
+ * ───────────────────────────────────────────────────────────────────────────── */
+window.TOOLKIT_LONGPOLE = {
+  toolName: "The Long Pole",
+  eyebrow: "Electrical · the gear that sets your date → whoever owns the order",
+  lede: "The gear that sets your date, in one list. Then <b>one message that asks one question</b> about the few lines it&rsquo;s actually about &mdash; instead of a sixth &ldquo;any update?&rdquo; that braids five questions and gets one of them answered.",
+
+  /* THE WARN NEVER TYPES THE WORDS IT BANS. The gate reads this file blind and
+     fires on a claim word wherever it finds one — and the first draft of this
+     block tripped it twice, disavowing two words by printing them. A rule that
+     has to exempt the sentence explaining the rule is a rule with a hole in it,
+     so the sentence changed instead of the gate. */
+  warn: "<b>This is your own note of what you are chasing and what you were last told &mdash; and that is all it is.</b> There is no money on it, no running count of anything, and no arithmetic: a dated list of the dates somebody gave you is a claim document, and this is not one. <b>Your submittal log, your PO and their order number all live somewhere else and this page does not compete with any of them</b> &mdash; their number rides on a line as an <i>address</i>, so he knows which job you mean before he goes looking. <b>It lives in this browser, on this device, and nowhere else</b>: nothing typed here is sent anywhere, which also means a new phone starts empty. The spreadsheet copy is your backup.",
+
+  poHint: "Your PO and their order number are an <b>address</b> &mdash; they tell him which of your four jobs this is before he has to go look it up. They are not a record of anything; whatever your office runs on owns that.",
+
+  /* WHAT YOU'RE CHASING. A jog, not a menu — the field is a write-in first and
+     these are taps underneath it. Every one is a thing that ships on a lead time
+     long enough to argue about, and not one of them is a thing you buy off a
+     shelf: a page that seeds "wire nuts" teaches a man this is the pull list. */
+  items: [
+    "The main switchboard",
+    "Switchgear — the sections",
+    "Distribution panels",
+    "Branch panels",
+    "Dry-type transformers",
+    "The generator",
+    "The ATS",
+    "The MCC",
+    "The lighting package",
+    "Lighting control panels",
+    "The odd-frame breakers",
+    "The fire pump controller",
+    "The CT cabinet and metering",
+    "Busway",
+    "The utility pull section",
+    "Feeder cable — the long lengths",
+    "The EV charging gear",
+    "The UPS"
+  ],
+
+  /* WHAT YOU NEED FROM HIM ON THIS ONE — the braid-breaker, and the axis the page
+     exists for. Six, ordered by how fast the answer comes back.
+
+     THE FIRST ONE IS FIRST FOR A REASON and both field lenses named it
+     independently: a large share of stalls are the vendor waiting on something
+     from OUR side — a colour selection, a field dimension, a signature, a credit
+     hold nobody phones you about — and nothing in the chase ever asks. It is the
+     same class as the `holds` line: the half nobody writes.
+
+     THE THIRD IS PHRASED AS A QUESTION ABOUT HIS OWN PROCESS, never as a status
+     we track. The architect owns approval and the GC's log owns the submittal
+     number; §THE SYSTEM OF RECORD says never compete with either. Asking a man
+     whether he has the approved set and released off it is a question. Recording
+     "APPROVED" in a box is a second submittal log, and it is dead on contact. */
+  asks: [
+    "Anything you still need from us",
+    "Dimensions and weight off the approved set",
+    "Whether you've got the approved set and released off it",
+    "A ship week we can plan the crew around",
+    "How it comes and who offloads it",
+    "Whether you can hold it — we're not ready for it"
+  ],
+
+  /* WHERE IT STANDS — four rungs, and EVERY ONE OF THEM IS SOMETHING HE DID OR
+     SOMETHING HE CAN SEE. This is the panel's sharpest correction and the reason
+     the roadmap's version would have shipped a defect. The proposed ladder was
+     ordered → submitted → approved → RELEASED → in fabrication → shipped: not one
+     of those middle rungs is a fact he holds. They are hearsay, third-hand and
+     weeks stale, and rendering "released" in confident type with a settled edge
+     is a clearance manufactured by an interface — the page telling him something
+     is true that it has no way to know.
+
+     So what the factory said lives in `told`, in THEIR words, with a name on it.
+     "Nothing back" earns its own rung because that is the fact that turns a chase
+     into a record, and it is a fact he owns: he asked, and nobody answered. */
+  states: ["Asked", "Nothing back", "They told me something", "It's here"],
+
+  /* WHAT IT HOLDS UP. Every entry is a piece of HIS OWN work or a gate on HIS
+     schedule — never a claim about anybody else's. */
+  holds: [
+    "The housekeeping pads",
+    "The pour",
+    "Setting the room",
+    "Getting the room closed in",
+    "Pulling feeders",
+    "Terminations",
+    "The rough inspection",
+    "Utility energization",
+    "Permanent power",
+    "Start-up and testing",
+    "Trim-out",
+    "Turning it over",
+    "The crane pick"
+  ],
+
+  /* FLAGS, and they are a separate toggle from the ladder on purpose: a thing can
+     be unanswered AND be the one that moves the date, and collapsing the two
+     loses which. Both are factual. Neither is a deadline threat, and neither
+     counts a day. */
+  flags: ["This one first", "This is the one that moves the date"],
+
+  labItem: "What you're chasing",
+  labAsk: "What you need from him on this one",
+  labHolds: "What it holds up",
+  labGate: "The date it has to beat",
+  labTold: "Last thing you were told — their words, and who said it",
+  labRef: "Their order number",
+  labWho: "Who you're asking",
+  groupAskLabel: "What you need",
+
+  docSubject: "the gear I'm chasing",
+  poLabel: "Our PO",
+  docStoppingHead: "The ones actually stopping work",
+  docStoppingLede: "These are the ones that are actually stopping work — the rest I can live with for now.",
+  docOneThing: "Just the one thing this time, on",
+
+  opening: "Short list of the gear I'm chasing on this job. Nothing here is a problem yet — I'd just rather none of it turn into the reason we slip.",
+
+  /* THE CLOSING ENDS IN AN OPTION, like every closing this program ships, and it
+     asks for the one thing a chase can actually get: which one is stuck, so he
+     can re-order his own month around it. The last line is the receiving desk's
+     own highest-value tip, and it is the only line on the page that tries to end
+     the chase instead of continuing it. */
+  closing: "If any of these are stuck on your end, tell me which one and I'll work the schedule around it — some of it I can take late and some of it I can't, and it's a lot cheaper to know now. And if you put out a status report on this job, put me on the list and I'll stop emailing you.",
+  docBoundary: "That's my own note of what I'm chasing and what I was last told, in my words. It isn't a claim, there's no day count on it, and nothing on it changes what we agreed.",
+
+  phJob: "Rosewood ES",
+  phPo: "the number on your end",
+  phFrom: "you / your shop",
+  phItem: "what it is — then it's a button",
+  phAsk: "— what you need on this one",
+  phGate: "“before the pads pour” · “not before the room’s closed in”",
+  phTold: "“Kelly, 6/12 — week of the 18th”",
+  phRef: "so he doesn’t have to go look",
+  phWho: "the name on the order acknowledgment",
+
+  askNeutral: "— pick the one thing this message asks for",
+  askStopping: "The ones stopping work",
+  askAll: "Everything on the list — my own record",
+  askHintNone: "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.",
+  askHintPicked: "That is the whole message: one question, and the lines it's about. He answers one thing today instead of picking through five and going quiet.",
+
+  emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
+};

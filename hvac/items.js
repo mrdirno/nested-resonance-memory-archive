@@ -896,3 +896,130 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "No puedo terminar lo que me mandaron a hacer hasta que esto quede", "en": "Can't finish what I was sent for till this is done" }
   ]
 };
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * THE LONG POLE — HVAC (2026-09-01). A config on shape #3; the page file is the
+ * same shell electrical ships and the gate asserts they have not drifted.
+ *
+ * THIS TRADE IS THE GENERALIZATION TEST, and it forced two things electrical's
+ * vocabulary does not have. A mechanical PM on the panel put it plainly: his gear
+ * rolls in a door on a pallet jack any Tuesday; this gear goes up by crane,
+ * shares that crane with steel and glazing, and has to land AFTER the curbs are
+ * set and BEFORE the roof is dried in and the screen wall goes up.
+ *
+ *   · "DO NOT SHIP BEFORE" IS AS LOAD-BEARING AS "MUST BE HERE BY". A unit that
+ *     arrives early is laydown storage, insurance and a second rig on six
+ *     thousand pounds. "Hold it, we're not ready" is a sentence a mechanical PM
+ *     says monthly and the roadmap's vocabulary had nowhere to put it. It is an
+ *     ASK here, and the date field takes both sides of it.
+ *   · START-UP IS ITS OWN LEAD TIME, separate from the unit's, and warranty does
+ *     not commence until it happens. It is its own question.
+ *
+ * The certified drawing is also a different animal from electrical's dims and
+ * weight: it unblocks four other trades at once — structural wants the rigging
+ * points, the roofer wants the curb, the electrician wants MCA/MOCP, and the
+ * fitter wants the connection sizes and locations. It stays ONE question because
+ * it is one document, and it sits second because it is usually in his own file.
+ * ───────────────────────────────────────────────────────────────────────────── */
+window.TOOLKIT_LONGPOLE = {
+  toolName: "The Long Pole",
+  eyebrow: "HVAC · the equipment that sets your date → the rep who owns the order",
+  lede: "The equipment that sets your date, in one list. Then <b>one message that asks one question</b> about the few lines it&rsquo;s actually about &mdash; instead of a sixth &ldquo;any update?&rdquo; that braids five questions and gets one of them answered.",
+
+  warn: "<b>This is your own note of what you are chasing and what you were last told &mdash; and that is all it is.</b> There is no money on it, no running count of anything, and no arithmetic: a dated list of the dates somebody gave you is a claim document, and this is not one. <b>Your submittal log, your PO and their order number all live somewhere else and this page does not compete with any of them</b> &mdash; their number rides on a line as an <i>address</i>, so he knows which job you mean before he goes looking. <b>It lives in this browser, on this device, and nowhere else</b>: nothing typed here is sent anywhere, which also means a new phone starts empty. The spreadsheet copy is your backup.",
+
+  poHint: "Your PO and their order number are an <b>address</b> &mdash; they tell him which of your jobs this is before he has to go look it up. They are not a record of anything; whatever your office runs on owns that.",
+
+  items: [
+    "The rooftop units",
+    "The chiller",
+    "The custom air handlers",
+    "The DOAS unit",
+    "The cooling tower",
+    "The boilers",
+    "The roof curbs",
+    "The VFDs",
+    "The controls package",
+    "Fire and smoke dampers",
+    "The energy recovery units",
+    "The pumps",
+    "The heat exchangers",
+    "The split systems",
+    "The louvers and wall caps",
+    "The exhaust fans",
+    "The VAV boxes"
+  ],
+
+  /* Seven questions, ordered by how fast the answer comes back. The last two are
+     this trade's, and neither exists on the electrical list. */
+  asks: [
+    "Anything you still need from us",
+    "The certified drawing — weight, rigging points, curb and connections",
+    "Whether you've got the approved set and released off it",
+    "A ship week we can plan the pick around",
+    "How it comes and who offloads it",
+    "Whether you can hold it — we're not ready for it",
+    "When your start-up tech can be here"
+  ],
+
+  /* Four rungs, every one of them something he did or something he can see. The
+     factory's word lives in `told`, with a name on it, and never here. */
+  states: ["Asked", "Nothing back", "They told me something", "It's here"],
+
+  holds: [
+    "Setting the curbs",
+    "The crane pick",
+    "Getting it on the roof",
+    "Dry-in",
+    "The screen wall",
+    "Piping it in",
+    "Ductwork at the unit",
+    "Power to it",
+    "The controls contractor",
+    "Start-up",
+    "Test and balance",
+    "The rough inspection",
+    "Closing the ceiling",
+    "Turning it over"
+  ],
+
+  flags: ["This one first", "This is the one that moves the date"],
+
+  labItem: "What you're chasing",
+  labAsk: "What you need from him on this one",
+  labHolds: "What it holds up",
+  labGate: "The date it has to beat — or the one it must not beat",
+  labTold: "Last thing you were told — their words, and who said it",
+  labRef: "Their order number",
+  labWho: "Who you're asking",
+  groupAskLabel: "What you need",
+
+  docSubject: "the equipment I'm chasing",
+  poLabel: "Our PO",
+  docStoppingHead: "The ones actually stopping work",
+  docStoppingLede: "These are the ones that are actually stopping work — the rest I can live with for now.",
+  docOneThing: "Just the one thing this time, on",
+
+  opening: "Short list of the equipment I'm chasing on this job. Nothing here is a problem yet — I'd just rather none of it turn into the reason we slip.",
+
+  closing: "If any of these are stuck on your end, tell me which one and I'll work the schedule around it — some of it I can take late, and some of it I genuinely cannot take early, because I've nowhere to put it and nothing to lift it with twice. And if you put out a status report on this job, put me on the list and I'll stop emailing you.",
+  docBoundary: "That's my own note of what I'm chasing and what I was last told, in my words. It isn't a claim, there's no day count on it, and nothing on it changes what we agreed.",
+
+  phJob: "Riverside MOB",
+  phPo: "the number on your end",
+  phFrom: "you / your shop",
+  phItem: "what it is — then it's a button",
+  phAsk: "— what you need on this one",
+  phGate: "“after the curbs, before dry-in” · “don’t ship before the roof’s on”",
+  phTold: "“Marcus, 6/12 — week of the 18th”",
+  phRef: "so he doesn’t have to go look",
+  phWho: "the name on the order acknowledgment",
+
+  askNeutral: "— pick the one thing this message asks for",
+  askStopping: "The ones stopping work",
+  askAll: "Everything on the list — my own record",
+  askHintNone: "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.",
+  askHintPicked: "That is the whole message: one question, and the lines it's about. He answers one thing today instead of picking through five and going quiet.",
+
+  emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
+};

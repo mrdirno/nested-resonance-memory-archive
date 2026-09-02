@@ -80,6 +80,13 @@ window.TOOLKIT_TOOLS = [
     desc: "You need onto a roof or into a room somebody else locks. Send the ask that gets a yes on the first try — the night, the spaces, what you need open, who's coming, and the heads-up that stops a crew getting turned around at the door. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B85C1F",
     audience: "HVAC → building engineer / facilities / security"
+  },
+  {
+    name: "The Long Pole",
+    href: "long-pole.html",
+    desc: "The equipment that sets your date — the units, the chiller, the curbs, the controls — in one list, with what each one holds up and the date it has to beat (or the one it must NOT beat, because a unit that lands early is storage and a second crane). Then one message that asks ONE question about the few lines it’s about.",
+    chip: "#8C5BD8",
+    audience: "PM / foreman → the rep who owns the order"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

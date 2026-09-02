@@ -376,9 +376,27 @@
        ledger worth keeping — everything NOT on it is not in that wall — and the
        boundary line, because a record of what we built is not an agreement to
        build more. */
-    docFoot: function () {
+    docFoot: function (c) {
+      /* STILL OPEN IS PART OF THE PREDICATE, and leaving it out was a defect that
+         shipped. This block's own sentence is "I can't put these in until
+         somebody gives me a number" — which is false the moment the piece is
+         COVERED, because it is in. A flag does not clear itself when the row is
+         covered, so a piece that was held in June and went in anyway kept asking
+         for its size forever. And with the document scoped to "not covered yet"
+         the leak was worse than wrong: the covered row was not in the body at
+         all, so the receiver got a demand for a number on a piece he could not
+         see on the list and could not argue with. Same class as the summary that
+         counted rows the document did not contain (§SCARS) — found by sweeping
+         this class across every filtered row log, 2026-09-01. */
+      var fk = (c && c.filters) || [];
       var held = rowsNow().filter(function (r) {
-        return r.flag && (!sendTo || r.values.who === sendTo);
+        if (!r.flag || !stillOpen(r.values)) return false;
+        if (sendTo && r.values.who !== sendTo) return false;
+        // ...and whatever scope the copy is under, so a later filter added to
+        // this page narrows the block with it instead of quietly outrunning it.
+        if (fk.indexOf("open") > -1 && !stillOpen(r.values)) return false;
+        if (fk.indexOf("held") > -1 && !isHeld(r.values, r)) return false;
+        return true;
       });
       var out = [];
       if (held.length) {

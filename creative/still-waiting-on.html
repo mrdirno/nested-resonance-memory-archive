@@ -339,10 +339,21 @@
        boundary line says out loud that this is not a bill. A chase that reads
        like an invoice is the one version of this message that costs the user the
        relationship it was written to protect. */
-    docFoot: function () {
+    docFoot: function (c) {
       var out = [];
-      var stopping = rowsNow().filter(function (r) { return isStopping(r.values); });
-      if (stopping.length > 1) {
+      /* SCOPED, AND ONLY WHEN IT PICKS SOME OUT. On the "the ones stopping work"
+         copy this block used to list exactly the rows already above it — the same
+         message printed twice, which reads as padding and teaches a client to
+         skim the part that matters. It earns its place when it is a strict subset
+         of what the copy contains, and disappears when it would only repeat it.
+         Swept in from the sibling that was built on this page's own shape. */
+      var scoped = rowsNow().filter(function (r) {
+        if (((c && c.filters) || []).indexOf("stopping") > -1) return isStopping(r.values);
+        if (((c && c.filters) || []).indexOf("waiting") > -1) return isWaiting(r.values);
+        return true;
+      });
+      var stopping = scoped.filter(function (r) { return isStopping(r.values); });
+      if (stopping.length > 1 && stopping.length < scoped.length) {
         out.push("THE ONES ACTUALLY STOPPING WORK:");
         stopping.forEach(function (r) {
           out.push("  · " + joinDash([r.values.item, "holds up " + soften(r.values.holds)]));

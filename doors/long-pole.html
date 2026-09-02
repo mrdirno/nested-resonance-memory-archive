@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Long Pole — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="Frames, doors, hardware and glass, in one list with what each one holds up and the date it has to beat. Then one message that asks ONE question about the few lines it's about — and it goes to the right shop inside the house.">
+<meta name="apple-mobile-web-app-title" content="The Long Pole">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Doors &amp; hardware &middot; what sets your date &rarr; the distributor who owns the order</span>
+    <h1 id="title">The Long Pole</h1>
+    <p class="lede" id="lede">What sets your date &mdash; frames, doors, hardware, glass &mdash; in one list. Then <b>one message that asks one question</b> about the few lines it&rsquo;s actually about.</p>
+  </header>
+
+  <div class="warn" id="warn"></div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Project</label><input type="text" id="hJob" placeholder="Rosewood ES" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hPo">Our PO / job no.</label><input type="text" id="hPo" placeholder="the number on your end" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your shop</label><input type="text" id="hFrom" placeholder="you / your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they should call back" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="poHint">Your PO and their order number are an <b>address</b> &mdash; they tell him which of your jobs this is before he has to go look. They are not a record of anything; whatever your office runs on owns that.</p>
+  </section>
+
+  <section class="card">
+    <h2>What you&rsquo;re chasing</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Type it, or tap one of the usual ones underneath &mdash; whatever you type becomes a button for next time. Then <b>Add</b>. <b>Tap a row</b> to move it along: <span id="ladderHint"></span></p>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="ask" class="on">What you need</button>
+        <button type="button" data-g="state">Where it stands</button>
+        <button type="button" data-g="holds">What it holds up</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="noholds" style="margin:8px 0 0" hidden></p>
+    <p class="note" id="noask" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row for their order number, what it holds up, the date it has to beat, and <b>the last thing you were told</b> &mdash; in their words, with who said it. A row flagged <b>This one first</b> or <b>This is what moves the date</b> lands in its own block at the top of the message.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; one question, not five</span></h2>
+
+    <div class="bararea" style="display:block">
+      <label class="lab" for="selAsk" style="margin:0 0 6px">This message asks</label>
+      <select id="selAsk"></select>
+    </div>
+    <p class="note" id="askHint"></p>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; that one is <b>yours</b>, not a message, and it is your backup if the phone goes in a puddle.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the <span id="creditKit">Doors &amp; Hardware Field Toolkit</span>. Something you always end up chasing that isn&rsquo;t in the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Doors &amp; Hardware Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* THE LONG POLE — the gear that sets your date, and ONE question about it.
+ * Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0
+ *
+ * A CONFIG ON SHAPE #3 (`shared/rowlog.js`). No new mechanism was built for this
+ * page and none should be: the engine already owns tap-to-advance, learned axes,
+ * grouping, named document filters, the delta, the TSV and the persistence. The
+ * four trades that ship this share ONE page file, differing only in <title> and
+ * the meta description; every word below comes out of `<trade>/items.js`.
+ *
+ * ── WHAT A FOUR-LENS PANEL CHANGED, and it changed the design, not the words ──
+ * The roadmap proposed a status ladder — ordered → submitted → approved →
+ * RELEASED → in fabrication → shipped — with a "what I'm asking for" axis. Three
+ * of the four lenses wanted the page. All four killed that ladder.
+ *
+ * 1. EVERY RUNG IS HIS OWN ACT OR HIS OWN EYES. "Released for production" is
+ *    hearsay, third-hand, weeks stale, and rendering it in confident type with a
+ *    settled edge is a clearance manufactured by an interface (§SCARS). What the
+ *    factory said lives in `told` — free text, in THEIR words, with a name on it
+ *    — and it is never a state, never parsed, never counted. `states` is gated
+ *    against factory verbs in `tools/toolkit-gates/long-pole.mjs`.
+ *
+ * 2. THE MESSAGE ASKS ONE QUESTION. The sending lens: "email six braids five
+ *    questions and the reader answers one — breaking the braid is the page's
+ *    whole job." The receiving desk, independently and with no idea we had this
+ *    open: "all five boxes ticked on all 40 lines is not an ask, it's a survey,
+ *    and it goes to the bottom." So `ask` is a per-row field AND the document
+ *    filter, and the question is the message's SPINE — printed once, at the top,
+ *    with the rows as its scope. The ask list is ordered by how fast the answer
+ *    comes back, cheapest first, because the receiving desk's highest-value line
+ *    was that a man asks the expensive question when he needed the cheap one.
+ *
+ * 3. `told` HOLDS ONE VALUE AND IS OVERWRITTEN, which is a DESIGN DECISION and
+ *    the answer to the panel's sharpest kill. A dated, formatted, repeatable
+ *    "here is what you told me and when", regenerated six times over four months,
+ *    is a delay-claim exhibit with a TSV export — and the program bans
+ *    backcharge-adjacent content outright. The receiving desk said what it costs:
+ *    "my answers get vaguer. 'Week of the 14th' becomes 'Q4, subject to factory
+ *    confirmation, no commitment.'" A field that holds ONE sentence cannot become
+ *    an exhibit, because there is no history in it to paste. If he needs that
+ *    record, his office's system owns it — §THE SYSTEM OF RECORD.
+ *
+ * 4. NO ARITHMETIC OF ANY KIND. No elapsed days, no overdue label, no
+ *    promised-vs-actual delta, and the date fields are never parsed — "before the
+ *    pads pour" is a legitimate answer and a picker cannot hold it. The word
+ *    "promised" appears nowhere; the receiving desk's word is what he was LAST
+ *    TOLD, and it is load-bearing.
+ *
+ * NOT HERE, and gated against: lead times, weights, dimensions or freight
+ * figures we did not watch a man type · any manufacturer, distributor or branch
+ * as a picker or a seed · a submittal number, sales-order number or schedule
+ * activity as CONTENT (an order number rides as an ADDRESS, the `before-they-ship`
+ * rule) · money, the word quote, and every claim word.
+ */
+(function () {
+  "use strict";
+  function $(s) { return document.querySelector(s); }
+
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var L = window.TOOLKIT_LONGPOLE || {};
+
+  var STATES = (L.states || []).slice();
+  var ASKS   = (L.asks   || []).slice();
+  var HOLDS  = (L.holds  || []).slice();
+  var SEEDS  = (L.items  || []).slice();
+  var KEY = "toolkit." + (TRADE.slug || "trade") + ".longpole.v1";
+
+  /* THE SETTLED RUNG IS DECLARED BY POSITION, never by matching a word — the same
+     law the answer ladder and `still-waiting-on` already run on. A predicate that
+     tests a string breaks the day somebody rewords the ladder, and what breaks
+     here is the difference between "I'm still chasing this" and "this is on the
+     job", inside a message to the man who sold it to you. */
+  var ON_SITE = STATES.length ? STATES[STATES.length - 1] : "";
+
+  function isOpen(v) { return v.state !== ON_SITE; }
+  function isStopping(v) { return isOpen(v) && !!String(v.holds || "").trim(); }
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* LOWERCASING DESTROYS AN ACRONYM and these four trades are nothing but —
+     MDP, ATS, kVA, RTU, DOAS, MCA, HM, ADA. Same law as every sibling: a value
+     carrying an all-caps run passes through untouched, and only ordinary prose
+     is softened for sentence flow. */
+  function soften(s) {
+    s = String(s == null ? "" : s);
+    return /[A-Z]{2,}/.test(s) ? s : s.toLowerCase();
+  }
+
+  if (L.toolName) {
+    $("#title").textContent = L.toolName;
+    document.title = L.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (L.lede) $("#lede").innerHTML = L.lede;
+  if (L.eyebrow) $("#eyebrow").textContent = L.eyebrow;
+  if (L.warn) $("#warn").innerHTML = L.warn;
+  if (L.poHint) $("#poHint").innerHTML = L.poHint;
+  if (L.phJob) $("#hJob").placeholder = L.phJob;
+  if (L.phPo) $("#hPo").placeholder = L.phPo;
+  if (L.phFrom) $("#hFrom").placeholder = L.phFrom;
+  if (TRADE.name) { $("#footName").textContent = TRADE.name; $("#creditKit").textContent = TRADE.name; }
+  if (L.groupAskLabel) $("#segGroup").querySelector('[data-g="ask"]').textContent = L.groupAskLabel;
+  $("#ladderHint").textContent = STATES.join(" → ") + ".";
+
+  /* The engine renders once inside mount(), before `rl` exists, and docHead and
+     the tally both run in that first render. Reading `rl` there throws and the
+     page ships looking perfect with every word this file owns dead (§SCARS). */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  /* WHICH QUESTION THIS COPY IS ASKING, read off the engine's own filter keys so
+     there is no second list to fall out of step with `ASK_FILTERS`. */
+  function askOf(filters) {
+    var k = (filters || []).filter(function (f) { return /^ask\d+$/.test(f); })[0];
+    return k ? ASKS[+k.slice(3)] : null;
+  }
+
+  /* THE ROWS THIS COPY ACTUALLY CONTAINS. The footer used to draw from every row
+     on the list, and the gate caught it on its first run: a message narrowed to
+     ONE question printed the other two questions' lines in its "stopping work"
+     block. That is the engine's own warning one layer out — a man must never read
+     somebody else's problem inside a message addressed to him — and it is the
+     §SCARS class of a summary counting rows the document does not contain. */
+  function scopedNow(filters) {
+    var ask = askOf(filters);
+    var src = rowsNow();
+    if (ask) return src.filter(function (r) { return r.values.ask === ask; });
+    if ((filters || []).indexOf("stopping") > -1) return src.filter(function (r) { return isStopping(r.values); });
+    return src;
+  }
+
+  /* ── THE ONE QUESTION ──────────────────────────────────────────────────────
+     The document filter IS the question, and the select leads with a neutral
+     option because A DEFAULT IS A CLAIM: the page does not get to decide which
+     question he is asking today. Until he picks one it shows him everything and
+     says, in the UI and not in the document, what the panel found — a message
+     that asks five questions gets one of them answered. */
+  var ASK_FILTERS = ASKS.map(function (a, i) {
+    return {
+      v: "ask" + i, label: a,
+      emptyText: "Nothing on your list needs that right now. Open the pencil on the rows you want to ask about and set what you need from him.",
+      test: function (v) { return v.ask === a; }
+    };
+  });
+
+  function buildAskSelect() {
+    var sel = $("#selAsk");
+    sel.innerHTML = "";
+    function opt(v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; sel.appendChild(o); }
+    opt("", L.askNeutral || "— pick the one thing this message asks for");
+    var live = {};
+    rowsNow().forEach(function (r) { if (r.values.ask) live[r.values.ask] = (live[r.values.ask] || 0) + 1; });
+    ASKS.forEach(function (a, i) {
+      if (!live[a]) return;
+      opt("ask" + i, a + "  (" + live[a] + ")");
+    });
+    opt("stopping", L.askStopping || "The ones stopping work");
+    opt("", L.askAll || "Everything on the list — my own record");
+    return sel;
+  }
+
+  function applyFilter() {
+    var v = $("#selAsk").value;
+    rl.setFilter(v ? [v] : []);
+    paintAskHint();
+  }
+
+  function paintAskHint() {
+    var el = $("#askHint"); if (!el) return;
+    var v = $("#selAsk") ? $("#selAsk").value : "";
+    el.innerHTML = v
+      ? (L.askHintPicked || "That is the whole message: one question, and the lines it is about. He answers one thing instead of picking through five.")
+      : (L.askHintNone || "<b>Pick one.</b> A message asking five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.");
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "thing", nounPlural: "things", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NOT SAID",
+    emptyText: L.emptyText || "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you need out of him on it.",
+
+    /* THE LADDER DOES NOT WRAP. A thing that is on the job is on the job, and a
+       stray second tap must never walk a row back to blank inside a message that
+       then chases a man for gear sitting in your own conex. The pencil is how you
+       correct it — the sibling law exactly. */
+    statusKey: "state", statusOrder: STATES, statusDone: ON_SITE,
+    flagKey: "flag", flagValues: L.flags || ["This one first", "This is the one that moves the date"],
+
+    groupOptions: [
+      { key: "ask", label: L.groupAskLabel || "What you need" },
+      { key: "state", label: "Where it stands" },
+      { key: "holds", label: "What it holds up" }
+    ],
+
+    /* Grouped by what he needs, the blocks read in the ask list's own order —
+       which is ordered by how fast the answer comes back — so the cheap questions
+       sit at the top of his own screen where he can see he could have them today. */
+    groupSort: function (a, b, key) {
+      if (key === "ask") {
+        var ia = ASKS.indexOf(a), ib = ASKS.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var ja = STATES.indexOf(a), jb = STATES.indexOf(b);
+        return (ja < 0 ? 99 : ja) - (jb < 0 ? 99 : jb);
+      }
+      if (key === "holds") {
+        var ka = HOLDS.indexOf(a), kb = HOLDS.indexOf(b);
+        return (ka < 0 ? 99 : ka) - (kb < 0 ? 99 : kb);
+      }
+      return 0;
+    },
+
+    filters: ASK_FILTERS.concat([{
+      v: "stopping", label: L.askStopping || "the ones stopping work",
+      emptyText: "Nothing you're chasing is stopping a specific piece of work yet. Open the pencil on a row and say what it holds up — that is the line that gets these answered.",
+      test: function (v) { return isStopping(v); }
+    }]),
+
+    fields: [
+      { key: "item", label: L.labItem || "What you're chasing", input: "learn", lead: true, required: true,
+        placeholder: L.phItem || "what it is — then it's a button",
+        emptyHint: "Call it what you call it on the phone. Whatever you type becomes a button." },
+      { key: "ask", label: L.labAsk || "What you need from him on this one", input: "select",
+        placeholder: L.phAsk || "— what you need on this one" },
+      { key: "state", label: "Where it stands", input: "select", required: true,
+        placeholder: "— where it stands" },
+      { key: "holds", label: L.labHolds || "What it holds up", input: "chips", wide: true },
+      /* NAKED BY DESIGN, both of them. No date picker, nothing computed off
+         either, and neither is ever parsed: "before the pads pour" and "not until
+         the roof is on" are the real answers and a picker cannot hold them. The
+         SECOND one is the field the sending lens does not have and the mechanical
+         lens named unprompted — a unit that lands early is laydown storage,
+         insurance and a second rig, so "do not ship before" is as load-bearing as
+         "must be here by". */
+      { key: "gate", label: L.labGate || "The date it has to beat", input: "text", wide: true,
+        placeholder: L.phGate || "“before the pads pour” · “not before the roof’s on”" },
+      { key: "told", label: L.labTold || "Last thing you were told — their words, and who said it", input: "text", wide: true,
+        placeholder: L.phTold || "“Kelly, 6/12 — week of the 18th”" },
+      { key: "ref", label: L.labRef || "Their order number", input: "text",
+        placeholder: L.phRef || "so he doesn’t have to go look" },
+      { key: "who", label: L.labWho || "Who you're asking", input: "text", sticky: true,
+        placeholder: L.phWho || "the name on the order acknowledgment" }
+    ],
+
+    /* THE SEED IS A JOG, NOT A MENU, and his own words come first — by week three
+       his vocabulary is better than ours. No manufacturer, no distributor and no
+       branch is named in any seed list anywhere in this page: naming a real house
+       on a document he sends is impersonation with a shelf life (§SCARS, the
+       branch picker). */
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "ask") return ASKS;
+      if (key === "holds") return HOLDS;
+      if (key === "item") {
+        var out = (learned || []).slice();
+        SEEDS.forEach(function (s) { if (out.indexOf(s) === -1) out.push(s); });
+        return out;
+      }
+      return null;
+    },
+
+    rowMain: function (v) { return v.item || "(nothing on this row)"; },
+    rowSub: function (v) {
+      return joinDots([
+        v.ask || null,
+        v.ref || null,
+        v.gate ? "needs to beat " + soften(v.gate) : null,
+        v.holds ? "holds up " + soften(v.holds) : null,
+        v.told ? "told: " + v.told : null,
+        v.who
+      ]);
+    },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the PROJECT first, like every
+       document in this program — so this thread and next month's argument surface
+       together when he searches the job.
+       THEN THE QUESTION, ALONE, IN CAPS, ABOVE THE LIST. That is the whole
+       invention: the question is the message's spine and the rows are only its
+       scope. A reader who opens this on a lock screen knows what is wanted before
+       he has read one line item. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), po = $("#hPo").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      /* THE QUESTION IS THE SUBJECT LINE. It sits where a man reads it — the
+         receiving desk said he approves and triages off a lock-screen preview,
+         and line 1 is the only line a preview is guaranteed to show. It is also
+         why the question is NOT repeated as a spine underneath: the engine
+         prints the ask as the block heading when he is grouped that way, and
+         "WHAT I NEED: X" immediately above "X — 3 ROWS" is the kind of
+         redundancy a real reader notices and a gate would happily have passed. */
+      var ask = askOf(c.filters);
+      var out = [joinDash([job, ask ? soften(ask) : (L.docSubject || "gear I'm chasing"), c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (po) out.push((L.poLabel || "Our PO") + ": " + po);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      out.push("");
+
+      /* Counted over the rows this copy actually CONTAINS, never the whole list —
+         a header that counts rows the body does not show contradicts the body it
+         sits on top of (§SCARS, the summary that counted rows the document did
+         not contain). */
+      if (ask) {
+        out.push((L.docOneThing || "Just the one thing this time, on")
+          + " " + c.shown + (c.shown === 1 ? " of these:" : " of these:"));
+      } else if ((c.filters || []).indexOf("stopping") > -1) {
+        out.push(L.docStoppingLede || "These are the ones actually stopping work.");
+      } else if (L.opening) {
+        out.push(L.opening);
+      }
+      out.push("");
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, the way he would say it out loud. The axis the list is
+       grouped by is dropped from the line because it is already the heading above
+       it, and the ASK is dropped whenever the question is already the spine —
+       printing it forty times is how a message becomes a survey. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "ask";
+      var picked = rl ? rl.filter().filter(function (f) { return /^ask\d+$/.test(f); })[0] : null;
+      var tail = [];
+      if (v.ref) tail.push(v.ref);
+      if (!picked && g !== "ask" && v.ask) tail.push(soften(v.ask));
+      if (g !== "state" && v.state && v.state !== ON_SITE) tail.push(soften(v.state));
+      if (v.state === ON_SITE && g !== "state") tail.push(soften(ON_SITE));
+      if (v.gate) tail.push("has to beat " + soften(v.gate));
+      if (g !== "holds" && v.holds) tail.push("holds up " + soften(v.holds));
+      if (v.told) tail.push("last I heard: " + v.told);
+      if (g !== "who" && v.who) tail.push("asked " + v.who);
+      return joinDash([v.item, joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.item, v.holds ? "holds up " + soften(v.holds) : null, v.gate ? "has to beat " + soften(v.gate) : null]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES). What is stopping work
+       leads the footer because that is what a man can act on today — then the
+       closing ends in an OPTION, and the boundary line says out loud what this is
+       not. A chase that reads like a claim letter is the one version of this
+       message that costs the user the relationship it was written to protect, and
+       the receiving desk was explicit about what it costs him: vaguer answers. */
+    docFoot: function (c) {
+      var out = [];
+      var scoped = scopedNow(c && c.filters);
+      var stopping = scoped.filter(function (r) { return isStopping(r.values); });
+      /* IT ONLY EARNS ITS PLACE WHEN IT IS A STRICT SUBSET. Once the message is
+         narrowed to one question, a "these are the ones stopping work" block
+         listing every line already above it is the same two rows printed twice —
+         which reads as padding and teaches a man to skim the part that matters.
+         It appears when it picks OUT some of them, and disappears when it would
+         only repeat the body. */
+      if (stopping.length > 1 && stopping.length < scoped.length) {
+        out.push((L.docStoppingHead || "The ones actually stopping work").toUpperCase() + ":");
+        stopping.forEach(function (r) {
+          out.push("  · " + joinDash([r.values.item, "holds up " + soften(r.values.holds)]));
+        });
+        out.push("");
+      }
+      if (L.closing) out.push(L.closing);
+      if (L.docBoundary) { out.push(""); out.push(L.docBoundary); }
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), po = $("#hPo").value.trim();
+      return (job ? job + " — " : "") + (L.docSubject || "gear I'm chasing") + ", " + c.total
+        + (c.total === 1 ? " thing, " : " things, ") + c.today
+        + (po ? ", " + (L.poLabel || "our PO") + " " + po : "")
+        + " — kept by hand, and it is my own note of what I was told. No price, no rate and no day count anywhere on it.";
+    },
+    tsvColumns: [
+      { label: "What I'm chasing", key: "item" },
+      { label: "What I need", key: "ask" },
+      { label: "Where it stands", key: "state" },
+      { label: "What it holds up", key: "holds" },
+      { label: "The date it has to beat", key: "gate" },
+      { label: "Last thing I was told", key: "told" },
+      { label: "Their order number", key: "ref" },
+      { label: "Who I'm asking", key: "who" },
+      { label: "Flagged", value: function (v, r) { return r.flag || ""; } }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), p = $("#hPo").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || p || f || t) ? { job: j, po: p, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hPo").value = x.po || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    onChange: function () { paintHolds(); paintAsk(); syncAskSelect(); }
+  });
+
+  /* THE LINE EVERYONE LEAVES OUT IS WHAT IT STOPS — asked IN THE UI where he can
+     fix it, and NOT in the document, because publishing "3 of these have no
+     impact recorded" invites the reader to argue the record instead of answering
+     it. Same law as the creative sibling and the roofing exposure count. */
+  function paintHolds() {
+    var el = $("#noholds"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return isOpen(r.values) && !String(r.values.holds || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " thing" + (n === 1 ? "" : "s") + " on here with nothing said about what "
+      + (n === 1 ? "it holds" : "they hold") + " up.</b> That is the half of this message people leave out, and it is the half that gets it answered — open the pencil and put it on before you send.";
+  }
+
+  /* AND THE ONE ONLY THIS PAGE CAN ASK. A row with no ask is a row that cannot
+     ride in any question, so it silently never gets sent — the exact failure the
+     page exists to stop, hiding inside the page. */
+  function paintAsk() {
+    var el = $("#noask"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return isOpen(r.values) && !String(r.values.ask || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " open row" + (n === 1 ? "" : "s") + " with nothing set under “" + (L.labAsk || "what you need from him") + "”.</b> "
+      + (n === 1 ? "That one rides in no question, so it never gets sent." : "Those ride in no question, so they never get sent.") + " Open the pencil and say what you actually need on " + (n === 1 ? "it" : "each") + ".";
+  }
+
+  function syncAskSelect() {
+    var sel = $("#selAsk"); if (!sel) return;
+    var keep = sel.value;
+    buildAskSelect();
+    var found = false;
+    [].forEach.call(sel.options, function (o) { if (o.value === keep) found = true; });
+    sel.value = found ? keep : "";
+    if (!found && keep) applyFilter();
+  }
+
+  /* The learn field borrows the identifier's keyboard attributes, which exist so
+     a phone cannot destroy a device tag. "MDP-1" wants those. "The big switchgear
+     lineup" does not want to arrive as THE BIG SWITCHGEAR LINEUP, so sentences
+     and autocorrect go back on — same fix the creative sibling needed. */
+  ["item"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#selAsk").addEventListener("change", applyFilter);
+
+  /* TWO TAPS TO WIPE, never one. This list is the only record of what you are
+     chasing and what you were told, it lives in one browser on one phone, and a
+     single mis-tap must not be able to destroy it. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hPo", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    $("#selAsk").value = "";
+    applyFilter();
+    paintHolds(); paintAsk(); syncAskSelect();
+  });
+
+  /* The header fields ride on every message, so a keystroke has to reach BOTH the
+     preview and the saved copy. There is no rl.refresh() — render() repaints and
+     schedulePersist() saves, and a page that calls only one of them either shows a
+     stale document or loses the job name on reload (§SCARS). */
+  ["#hJob", "#hPo", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST. The engine does not restore itself
+     inside mount() — a page that forgets this looks perfect on a fresh load and
+     silently drops the whole list every time the phone is backgrounded. */
+  rl.restore();
+  syncAskSelect();
+  applyFilter();
+  paintHolds();
+  paintAsk();
+})();
+</script>
+</body>
+</html>

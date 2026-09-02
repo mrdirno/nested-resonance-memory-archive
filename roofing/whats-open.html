@@ -374,11 +374,27 @@
        they are what somebody rings about — and then the refusal, out loud,
        because a status message that reads as a guarantee is the one that gets
        quoted back at you. */
-    docFoot: function () {
+    docFoot: function (c) {
       var out = [];
+      /* THIS BLOCK DELIBERATELY IGNORES THE SCOPE, and now it says so. Every
+         other block under a filtered list narrows to what the copy contains —
+         a man must never read somebody else's problem inside a message
+         addressed to him. A hazard list is the one place where the opposite is
+         right: if there is a hole over an occupied floor tonight it goes in the
+         message whether or not it matched the filter he happened to have on.
+         So it is the DISCLOSED branch of that rule, the way the masonry sibling
+         does it, and the heading carries the disclosure — a block naming lines
+         the reader cannot find above it, without saying why, is the defect this
+         rule exists to catch (§SCARS, and tools/toolkit-gates/foot-scope.mjs). */
       var exposed = rowsNow().filter(function (r) { return isExposed(r.values); });
+      var scoped = rowsNow().filter(function (r) {
+        var fk = (c && c.filters) || [];
+        if (fk.indexOf("exposed") > -1) return isExposed(r.values);
+        if (fk.indexOf("open") > -1) return isOpen(r.values);
+        return true;
+      });
       if (exposed.length) {
-        out.push("OPEN OVER SOMEBODY — ring me before anybody starts pulling ceiling:");
+        out.push("OPEN OVER SOMEBODY — every one on the roof tonight, not just the ones above. Ring me before anybody starts pulling ceiling:");
         exposed.forEach(function (r) {
           var v = r.values;
           out.push("  · " + joinDots([v.area, v.state])
@@ -387,7 +403,10 @@
         });
         out.push("");
       }
-      var temp = rowsNow().filter(function (r) {
+      /* ...but "everything ABOVE" has to be true of what is above. Counted over
+         the rows this copy actually contains, or the sentence fires off a row the
+         reader cannot see. */
+      var temp = scoped.filter(function (r) {
         return r.values.seal && !PERMANENT[r.values.seal] && isOpen(r.values);
       });
       if (temp.length) {

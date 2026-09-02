@@ -415,3 +415,123 @@ window.TOOLKIT_GETIN = {
     "Saying yes: tell me the window you're actually giving us, the door, who meets us the first night, where the leaves and cartons sit between nights, and how many openings you'll let us have apart at once — and the one that matters most, who receives the cores and the keys at the end of each night. If the answer on the alarm or the access system is a person, give me their name before our first night, not during it."
   ]
 };
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * THE LONG POLE — doors & hardware (2026-09-01). A config on shape #3.
+ *
+ * THE PANEL CALLED THIS THE STRONGEST YES OF THE FOUR, and for a reason that is
+ * this trade's alone: the "four different people inside one house" claim, which
+ * every other trade's version treats as one desk with four latencies, is here
+ * LITERALLY four shops — the hollow-metal detailer, the hardware writer, the
+ * wood plant and the glass shop — sitting under one order number and answering
+ * on four different clocks. So the ask is not a nicety on this kit; it is the
+ * routing, and asking the wrong shop is the whole reason email six exists.
+ *
+ * WHERE IT SITS BESIDE `before-they-ship.html`, and the boundary is worth
+ * writing down because the two pages are one letter apart in a hurry:
+ * `before-they-ship` is the FIELD MEASURE going out BEFORE anything is welded —
+ * your tape, your words, the hand it really swings. This page is what happens
+ * AFTER the order exists: the metal is somewhere and you need one fact back.
+ * The first is a measurement you are sending; the second is a question you are
+ * asking. Neither one numbers anything, and the architect's hardware schedule is
+ * still the architect's — this page holds no set numbers, no keying and no
+ * finish codes, because copying that schedule is the kill this trade lost to
+ * twice (§DOORS).
+ * ───────────────────────────────────────────────────────────────────────────── */
+window.TOOLKIT_LONGPOLE = {
+  toolName: "The Long Pole",
+  eyebrow: "Doors & hardware · what sets your date → the distributor who owns the order",
+  lede: "What sets your date &mdash; frames, doors, hardware, glass &mdash; in one list. Then <b>one message that asks one question</b> about the few lines it&rsquo;s actually about, so it lands on the right shop instead of the front desk.",
+
+  warn: "<b>This is your own note of what you are chasing and what you were last told &mdash; and that is all it is.</b> There is no money on it, no running count of anything, and no arithmetic: a dated list of the dates somebody gave you is a claim document, and this is not one. <b>The hardware schedule is the architect's, the set numbers are his, and the submittal log is the GC's</b> &mdash; none of them are copied here. Their order number rides on a line as an <i>address</i>, so he knows which job you mean before he goes looking. <b>It lives in this browser, on this device, and nowhere else</b>: nothing typed here is sent anywhere, which also means a new phone starts empty. The spreadsheet copy is your backup.",
+
+  poHint: "Your PO and their order number are an <b>address</b> &mdash; they tell him which of your jobs this is, and which of his four shops has it, before he goes looking. They are not a record of anything; whatever your office runs on owns that.",
+
+  items: [
+    "The hollow metal frames",
+    "The hollow metal doors",
+    "The wood doors",
+    "The hardware",
+    "The electrified hardware",
+    "The access control prep",
+    "The storefront",
+    "The aluminum frames",
+    "Fire-rated glass",
+    "The exit devices",
+    "The closers",
+    "The lite kits and louvers",
+    "Thresholds and weatherstrip",
+    "The borrowed lites",
+    "The coiling doors",
+    "The lead-lined openings"
+  ],
+
+  /* SIX QUESTIONS, AND ON THIS KIT THEY ARE THE ROUTING. The fourth one names
+     the shop out loud because that is the whole trick: one order number, four
+     shops, four clocks, and a man who asks the front desk for "an update" gets
+     the slowest of the four or none of them. */
+  asks: [
+    "Anything you still need from us — dimensions, the hand, the wall",
+    "Frame sizes and prep off the approved set",
+    "Whether you've got the approved sets and released off them",
+    "A ship week — and which of your shops it's sitting in",
+    "How it comes and who offloads it",
+    "Whether you can hold it — we've nowhere dry to put it"
+  ],
+
+  states: ["Asked", "Nothing back", "They told me something", "It's here"],
+
+  holds: [
+    "Setting frames",
+    "Closing the wall",
+    "Taping",
+    "Painting the frames",
+    "Hanging doors",
+    "The hardware install",
+    "Access control terminations",
+    "The fire marshal walk",
+    "The punch walk",
+    "Turning it over",
+    "The certificate of occupancy walk"
+  ],
+
+  flags: ["This one first", "This is the one that moves the date"],
+
+  labItem: "What you're chasing",
+  labAsk: "What you need from him on this one",
+  labHolds: "What it holds up",
+  labGate: "The date it has to beat — or the one it must not beat",
+  labTold: "Last thing you were told — their words, and who said it",
+  labRef: "Their order number",
+  labWho: "Who you're asking",
+  groupAskLabel: "What you need",
+
+  docSubject: "what I'm chasing",
+  poLabel: "Our PO",
+  docStoppingHead: "The ones actually stopping work",
+  docStoppingLede: "These are the ones that are actually stopping work — the rest I can live with for now.",
+  docOneThing: "Just the one thing this time, on",
+
+  opening: "Short list of what I'm chasing on this job. Nothing here is a problem yet — I'd just rather none of it turn into the reason we slip.",
+
+  closing: "If any of these are stuck on your end, tell me which one and I'll work the schedule around it — and if it's in a different shop than I think it is, say so and I'll ask the right person next time. If you put out a status report on this job, put me on the list and I'll stop emailing you.",
+  docBoundary: "That's my own note of what I'm chasing and what I was last told, in my words. It isn't a claim, there's no day count on it, and nothing on it changes what we agreed.",
+
+  phJob: "Rosewood ES",
+  phPo: "the number on your end",
+  phFrom: "you / your shop",
+  phItem: "what it is — then it's a button",
+  phAsk: "— what you need on this one",
+  phGate: "“before the walls close” · “not before we’re dried in”",
+  phTold: "“Lena, 6/12 — week of the 18th”",
+  phRef: "so he doesn’t have to go look",
+  phWho: "the name on the order acknowledgment",
+
+  askNeutral: "— pick the one thing this message asks for",
+  askStopping: "The ones stopping work",
+  askAll: "Everything on the list — my own record",
+  askHintNone: "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.",
+  askHintPicked: "That is the whole message: one question, and the lines it's about. He answers one thing today instead of picking through five and going quiet.",
+
+  emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
+};

@@ -1337,15 +1337,121 @@ otherwise; `hvac/truck-stock` is a van restocked at the shop (panel, do not moun
 and `av/cable-list` never carried a delivery half at all and get one only if a wish asks.
 The weight band on the heaviest piece stays OUT — still the operator's call. ~~(2) The sub → owner
 access / escort / badge request~~ — **SHIPPED 2026-08-15 as `<trade>/getting-in.html`, all
-ten kits; see §GETTING IN below.** (3) The long-lead **gear chase** the electrical
-lens proposed and which is a different document from an order: the same list sent six
-times over four months, with a first-class *what I'm asking for* axis (a ship date ·
-released · dimensions and weight · approved schedules · freight) because inside one
-distributor those route to four different people. The ask/answer loop itself stays closed.
+ten kits; see §GETTING IN below.** ~~(3) The long-lead **gear chase**~~ — **SHIPPED 2026-09-01 as
+`<trade>/long-pole.html` on four kits; see §THE LONG POLE below. And the entry above was
+wrong about the two things that mattered most, which is why the ship loop reads the roster
+before it builds and not after.** It ranked a *what I'm asking for* axis (ship date ·
+released · dimensions and weight · approved schedules · freight) and a status ladder to
+carry it. **A four-lens panel scored it 8 / 7 / 8 / 2 and killed the ladder unanimously**:
+*released*, *in fabrication* and *shipped* are not facts the user holds — they are
+hearsay, third-hand and weeks stale, and rendering one in confident type with a settled
+edge is a clearance manufactured by an interface. And the AXIS was right in its list and
+wrong in its framing: the sending lens — *"email six braids five questions and the reader
+answers one; breaking the braid is the page's whole job"* — and the RECEIVING desk,
+answering with no idea we had the page open — *"all five boxes ticked on all forty lines
+is not an ask, it's a survey, and it goes to the bottom"* — arrived at the same shape from
+opposite ends. It is not an axis you tick. **It is the message's spine, and the message
+carries exactly one of them.**
 (4) **The forward leg on the new boundary.** Ten trades can now ask a building for a night,
 and nothing reads the answer back the way `answer-back.html` reads a rough-in ask — the
 owner boundary is served in one direction only, and the GC's copy is the one that gets
 FORWARDED rather than sent.
+
+## THE LONG POLE — one question, and no rung of it is hearsay (2026-09-01)
+
+`<trade>/long-pole.html` on **electrical · HVAC · plumbing · doors** — one page file, four
+`TOOLKIT_LONGPOLE` configs, shape #3 (`shared/rowlog.js`), **no new mechanism**. The gear
+that sets your date, in one list; then one message that asks ONE question about the few
+lines it is actually about, instead of a sixth *"any update?"* that asks five and gets one
+of them answered.
+
+**THE PANEL IS THE ENTRY.** Four lenses, scored independently, no coordination: a
+commercial EC project manager (8), the project-management desk at a distributor answering
+from the RECEIVING end (7), a mechanical PM as the generalization lens (8), and a skeptic
+handed this book as weapons (2, KILL AS PROPOSED). Three of the four wanted the page. All
+four killed the design it was proposed with, and the skeptic was right about the half that
+would have shipped a defect.
+
+**1. EVERY RUNG IS HIS OWN ACT OR HIS OWN EYES.** The ladder is `Asked → Nothing back →
+They told me something → It's here`, and that is the whole correction. *Nothing back* earns
+its own rung because it is the fact that turns a chase into a record and it is a fact he
+owns — he asked, and nobody answered. What the factory said lives in `told`: free text,
+THEIR words, with a name on it, and it is never a state, never parsed, never counted. The
+same verbs are LEGAL in `asks`, because a question aimed back at the man who owns the
+process is §GETTING IN's handback rule one level down — *"have you got the approved set,
+and did you release off it?"* is a question; a box reading APPROVED is a second submittal
+log and dead on contact.
+
+**2. THE QUESTION IS THE SUBJECT LINE.** Not a spine printed above the list — LINE ONE, the
+only line a lock-screen preview is guaranteed to show, which is where the receiving desk
+said he triages from. `Rosewood ES — anything you still need from us — Sep 1, 2026`. Under
+it, *"Just the one thing this time, on 2 of these:"* and the two lines. The ask list is
+ordered by **how fast the answer comes back, cheapest first**, and that ordering is the
+page's only real intelligence — it came from the receiving desk unprompted: *"he asks the
+expensive question when he needed the cheap one. Say 'pouring 10/14, need pad dims and
+weight on MSB-1' and you get it this afternoon. Say 'any update' and you wait three days
+for a paragraph."* Dimensions and weight are in his own file. A ship date is not; he has to
+go ask a factory and relay it back.
+
+**AND THE FIRST QUESTION ON EVERY KIT IS THE ONE NOBODY WRITES: *anything you still need
+from us*.** Both field lenses named it independently — a large share of stalls are the
+vendor waiting on OUR colour selection, OUR field dimension, OUR signature, or a credit
+hold nobody phones about, and nothing in a chase ever asks. It is the same class as the
+`holds` line, and it is asserted as `asks[0]` by the gate.
+
+**3. `told` HOLDS ONE VALUE AND KEEPS NO HISTORY, and this is the sharpest thing the panel
+changed.** A dated, formatted, repeatable *"here is what you told me and when"*, regenerated
+six times over four months with a TSV export, is a delay-claim exhibit — and this program
+bans backcharge-adjacent content outright (two framing tools died on it). The receiving desk
+named the price the user pays for it: *"my answers get vaguer. 'Week of the 14th' becomes
+'Q4, subject to factory confirmation, no commitment.' You made the record look like
+discovery and you got worse information for it."* So the field is overwritten. **A field
+holding one sentence cannot become an exhibit, because there is no history in it to paste.**
+If he needs that record, his office's system owns it. The gate overwrites `told` and
+requires the previous value to be gone from the message, the spreadsheet copy AND storage.
+
+**THE RECEIVING DESK'S OWN WORD, AND IT IS LOAD-BEARING: *promised* is banned outright.**
+The field is what he was **last told**. Turning a window into a date, or *tracking* and
+*should* into *will*, is the thing that makes a chase a claim.
+
+**WHAT THE MECHANICAL LENS ADDED THAT ELECTRICAL COULD NOT SEE.** His gear rolls in a door
+on a pallet jack any Tuesday; HVAC's goes up by crane, shares that crane with steel and
+glazing, and has to land AFTER the curbs are set and BEFORE dry-in and the screen wall. So
+**"do not ship before" is as load-bearing as "must be here by"** — a unit that arrives early
+is laydown storage, insurance and a second rig on six thousand pounds — and *"hold it,
+we're not ready"* is a question a mechanical PM asks monthly that the roadmap's vocabulary
+had nowhere to put. Start-up is its own lead time and its own question, because warranty
+does not commence until it happens. Doors got the trade whose *"four different people inside
+one house"* is literal rather than a metaphor for four latencies — hollow-metal detailer,
+hardware writer, wood plant, glass shop, one order number, four clocks — so its fourth ask
+names the shop out loud.
+
+**WHERE IT SITS BESIDE `doors/before-they-ship.html`**, because the two are one letter apart
+in a hurry: *before-they-ship* is the FIELD MEASURE going out before anything is welded —
+your tape, your words, the hand it really swings. *The Long Pole* is what happens after the
+order exists: the metal is somewhere and you need one fact back. A measurement you are
+sending, versus a question you are asking.
+
+**FOUR TRADES AND NOT SIXTEEN, and the exclusions were unanimous where they mattered.** The
+EC lens and the mechanical lens independently produced the same list — electrical, HVAC,
+plumbing, doors YES; masonry small (cast stone and brick blend, a three-item list); av and
+low-voltage at half intensity, one PO rather than six sends; roofing, sitework, flooring a
+*material availability* variant with no release step; framing, concrete, painting NO
+(commodity, days out, or on a shelf); creative already served by `still-waiting-on`.
+**And GC gets it never, from both of them, unprompted: he OWNS and NUMBERS the procurement
+log, so a GC copy is the textbook double-entry death.** Landscape is a trap worth writing
+down — a specimen tree is a genuine six-to-twelve-MONTH hold, but the vocabulary is tagging,
+dig window and season, not release and freight. That is a different page or none.
+
+**KILLED AND STAYING KILLED:** any lead-time table (wrong for his manufacturer this quarter,
+and pasting it makes him look stupid to his own PM) · a manufacturer, distributor, rep
+agency or branch as a picker or a seed — impersonation with a shelf life, and it turns his
+chase into a spec · weights and dimensions of our own · a submittal number, PO or
+sales-order number as CONTENT (they ride as an ADDRESS, the `before-they-ship` rule) · any
+elapsed-day count, overdue label or promised-versus-actual delta, including parsing his own
+free-text dates · money and the word *quote*. All gated in
+`tools/toolkit-gates/long-pole.mjs`, **445 checks across four trades**.
+
 
 ## GETTING IN — the first tool aimed at a party that is not a trade (2026-08-15)
 
@@ -1868,6 +1974,62 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-01 (C3692) — A BLOCK UNDER A FILTERED LIST NAMED A ROW THE LIST DID NOT SHOW, ON A LIVE PAGE, FOR WEEKS
+`shared/rowlog.js` ships NAMED DOCUMENT FILTERS so a chase list can send a man only what is
+still open and only what is HIS. The engine's own blocks obey that scope, and its comment
+says why: *"a man must never read somebody else's problem inside a message addressed to
+him."* A page's OWN `docFoot` is the one place that discipline can be lost, because it is
+hand-written per page and the engine hands it the filter keys in `ctx` that it is free to
+ignore.
+
+**`framing/whats-in-the-wall.html` ignored them, and the drive that proved it took four
+minutes.** Scoped to *not covered yet*, the document printed `1 PIECE OF 2 — NOT COVERED
+YET` and one row — and then, underneath, **"STILL NEED FROM YOU — I can't put these in until
+somebody gives me a number"** naming a piece that was **Covered**. It was already in the
+wall. It was not in the body. The AV contractor reading it got a demand for a size on
+something buried, **with no line above it to argue with**. And a flag does not clear itself
+when a row goes in, so that piece had been asking for its size in every copy since the day
+it was covered.
+
+**The fix is two things and only one of them is the scope.** The block's own sentence — *"I
+can't put these in until somebody gives me a number"* — is FALSE for a covered row under any
+filter, so `stillOpen` belongs in the predicate regardless. Then the filters, so a filter
+added to that page later narrows the block with it instead of quietly outrunning it.
+
+**AND THE OPPOSITE CASE IS ALSO REAL, WHICH IS WHY THE RULE IS "SCOPE IT OR SAY SO."**
+`roofing/whats-open.html` prints **OPEN OVER SOMEBODY — ring me before anybody starts
+pulling ceiling** off every row on the roof. Narrowing a hazard list to whatever filter he
+happened to leave on is the worse failure, so that block keeps its reach and now carries the
+disclosure in its heading — *"every one on the roof tonight, not just the ones above"* —
+which is what `masonry/wheres-the-wall.html` has done since it shipped. Its neighbouring
+sentence, *"Everything **above** with a seal on it is TEMPORARY"*, was the part that had to
+narrow: a sentence about what is above has to be true of what is above.
+
+Gated at authoring time in `tools/toolkit-gates/foot-scope.mjs` — a page declaring
+`filters:` whose `docFoot` reaches for the whole row set must narrow it by the filters the
+engine handed it, or say so in the printed text. **6 filtered row logs, 2 were failing.**
+
+### 2026-09-01 (C3692) — THE GATE FIRED ON THE SENTENCE THAT EXPLAINED THE RULE, AND THE SENTENCE CHANGED
+`long-pole.mjs` reads each trade's config blind and fails on a claim word wherever it finds
+one. Its first run went red twice on `electrical/items.js` — the warn block was disavowing
+two banned words **by printing them**: *"no day count, no 'overdue'"* and *"a dated list of
+what somebody promised you is a claim document."* The tempting fix is an exemption for the
+warn block. **A rule that has to exempt the sentence explaining the rule is a rule with a
+hole in it**, and the hole is exactly the size of the next author who writes a paragraph
+about what the page does not do. The prose changed instead: *"no money on it, no running
+count of anything, and no arithmetic: a dated list of the dates somebody gave you is a claim
+document, and this is not one."* Same meaning, and the gate stays blind.
+
+### 2026-09-01 (C3692) — A BLOCK THAT REPEATS THE BODY IS PADDING, AND IT TEACHES A MAN TO SKIM
+Found on the new page's first real drive and swept straight back into the page it was copied
+from. `THE ONES ACTUALLY STOPPING WORK:` under a message already narrowed to one question
+listed **exactly the two rows above it** — the same message printed twice. The rule is that
+it earns its place when it is a STRICT SUBSET of what the copy contains, and disappears when
+it would only repeat it. `creative/still-waiting-on.html` had the same shape on its *"the
+ones stopping work"* scope, where the block was the entire body, and it was the page this
+one was built from.
+
 
 ### 2026-09-01 (C3681) — A HUB COPIED FROM A SIBLING KEEPS THE SIBLING'S COLOUR IN ITS :root, AND NOTHING ASSERTED IT FOR FIVE DAYS
 Every hub is stood up by copying a sibling's `index.html` and patching the lines somebody
@@ -7795,3 +7957,62 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   shows 17 chips and "Carson box" typed on the gear list hands off to "He means Valve box" · the
   site-root Tools panel lists the kit (the bundle carries ./landscape/ once, same as ./doors/).
   https://mrdirno.github.io/nested-resonance-memory-archive/landscape/
+
+- `2026-09-01` — **[AXIS:INTERFACE] C3692 — THE ROADMAP RANKED AN AXIS AND A LADDER; THE PANEL
+  KEPT THE AXIS, KILLED THE LADDER, AND THE LADDER WAS THE HALF THAT WOULD HAVE SHIPPED A
+  DEFECT** · **before:** both wells dry (AV 0 new / 0 building, vibe-cards 0/0, no stale
+  claims in either sink this lane draws from) and no family owed, so the stalest axis
+  governed — INTERFACE, 6 lane-cycles cold, with exactly one concrete rung left in the book's
+  own named remainder: the long-lead **gear chase**, confirmed unbuilt on disk (no
+  `gear|lead|chase|expedite|release|submit` page in any of the sixteen trades). The entry
+  ranked a *what I'm asking for* axis — ship date · released · dimensions and weight ·
+  approved schedules · freight — and a status ladder to carry it. · **A FOUR-LENS PANEL
+  SCORED IT 8 / 7 / 8 / 2 AND CHANGED THE DESIGN, NOT THE WORDS.** The commercial EC project
+  manager quoted his own sixth email verbatim, four months in, ending *"Please advise."* The
+  **receiving desk** — the project-management desk at a distributor, answering from the other
+  side with no idea we had the page open — gave the finding the whole build turns on: *"he
+  asks the expensive question when he needed the cheap one. Say 'pouring 10/14, need pad dims
+  and weight on MSB-1' and you get it this afternoon. Say 'any update' and you wait three
+  days for a paragraph."* The sending lens had reached the same shape from the opposite end:
+  *"email six braids five questions and the reader answers one — breaking the braid is the
+  page's whole job."* **The skeptic scored it 2 and killed the ladder, correctly**: *released*
+  and *in fabrication* are not facts the user holds, and rendering one in confident type with
+  a settled edge is a clearance manufactured by an interface. · **after:**
+  `<trade>/long-pole.html` on **electrical · HVAC · plumbing · doors** — one page file, four
+  `TOOLKIT_LONGPOLE` configs, shape #3, **no new mechanism**. The ladder is `Asked → Nothing
+  back → They told me something → It's here` and **every rung is his own act or his own
+  eyes**; what the factory said lives in `told`, their words with a name on it, never a
+  state. **The question is LINE ONE** — the subject line, the only line a lock-screen preview
+  is guaranteed to show, which is where the receiving desk said he triages — and the ask list
+  is ordered by how fast the answer comes back, cheapest first, which is the page's only real
+  intelligence. **`asks[0]` on every kit is *anything you still need from us***, the half
+  nobody writes, named independently by both field lenses. And **`told` holds one value and
+  keeps no history**, which is the answer to the panel's sharpest kill: a dated repeatable
+  "here is what you told me and when" with a TSV export is a delay-claim exhibit, and the
+  receiving desk priced it — *"my answers get vaguer"* — so a field holding one sentence
+  cannot become one. The word *promised* is banned outright; the field is what he was LAST
+  TOLD. HVAC forced **"do not ship before"** (early is laydown storage, insurance and a second
+  rig on six thousand pounds) and start-up as its own lead time; doors got the trade where
+  *four people inside one house* is literal — detailer, hardware writer, wood plant, glass
+  shop — so its fourth ask names the shop. **GC gets it never**, from both field lenses
+  unprompted: he owns and numbers the procurement log. · **BACKPORT RIDER FIRED, AND IT FOUND
+  A LIVE PAGE LYING TO A RECEIVER.** The defect the gate caught on the new page — a footer
+  drawing from every row while the body is filtered — was swept across every filtered row
+  log, and **`framing/whats-in-the-wall.html` had it in the worse direction**: scoped to *not
+  covered yet* it printed one row, then demanded a size for a piece that was **Covered**, in
+  the wall, and **not in the body at all**, so the AV contractor had no line above to argue
+  with. A flag does not clear when a row goes in, so it had been asking since the day it was
+  covered. `roofing/whats-open.html` was the same rule in the opposite direction — a hazard
+  list must NOT narrow — so it took the disclosure branch instead. `creative/still-waiting-on`
+  took the redundancy fix the new page taught. **6 filtered row logs, 2 were failing.** ·
+  **GATES:** new `long-pole.mjs` **445 checks over 4 trades, 0 failing** — the ladder checked
+  against factory verbs per trade, no real house named in any seed, every field found BY VALUE
+  in what the real Copy button put on the clipboard, the question proved to print ONCE as a
+  subject line and never per row, the excluded questions' lines proved ABSENT, `told`
+  overwritten and the previous value proved gone from the message, the spreadsheet copy AND
+  storage, Clear proved to take the header and the question with the list, and four widths
+  with the 44px floor. New `foot-scope.mjs` **7 checks, 2 were red**. `no-third-party`
+  **169/169**. `menu-reachability` **1,162 checks over 166 pages**, tightest clearance 15.5px.
+  `row-live-line` **14 order pages**. · **STOREFRONT:** 4 rows added to `fieldToolkits.ts`,
+  placement verified per-trade and the file re-parsed with esbuild — P5 pushes it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/long-pole.html
