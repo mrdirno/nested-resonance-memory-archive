@@ -30,6 +30,7 @@ Honesty checks carried alongside every number:
 Aldrin Payopay <aldrin.gdf@gmail.com> - GPL-3.0
 """
 import json
+import math
 import os
 import sys
 import numpy as np
@@ -115,7 +116,15 @@ def mass_check(d):
 def main(indir):
     runs = {}
     for fn in sorted(os.listdir(indir)):
-        if not fn.endswith('.json') or fn in ('analysis.json', 'verdict.json'):
+        if not fn.endswith('.json'):
+            continue
+        with open(os.path.join(indir, fn)) as fh:
+            head = json.load(fh)
+        # derived products live in the same directory; a run is what carries a mesh
+        if not isinstance(head, dict) or head.get('schema') != 'halo-memory-prereg/1':
+            continue
+        if not os.path.exists(os.path.join(indir, head['mesh_file'])):
+            print(f'  skipping {fn}: its mesh is missing', file=sys.stderr)
             continue
         d = load_run(os.path.join(indir, fn))
         runs.setdefault((d['params']['preset'], d['params']['selfgrav'],
@@ -140,6 +149,18 @@ def main(indir):
     return report
 
 
+def jsonable(o):
+    """NaN is not JSON (RFC 8259). An undefined epoch is written as null, so a
+    strict parser in any language can read the published result."""
+    if isinstance(o, float):
+        return None if math.isnan(o) or math.isinf(o) else o
+    if isinstance(o, dict):
+        return {k: jsonable(v) for k, v in o.items()}
+    if isinstance(o, list):
+        return [jsonable(v) for v in o]
+    return o
+
+
 if __name__ == '__main__':
     here = os.path.dirname(os.path.abspath(__file__))
     src = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
@@ -147,5 +168,5 @@ if __name__ == '__main__':
     rep = main(os.path.abspath(src))
     dst = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.abspath(src), 'analysis.json')
     with open(dst, 'w') as fh:
-        json.dump(rep, fh, indent=1)
+        json.dump(jsonable(rep), fh, indent=1, allow_nan=False)
     print(f'{len(rep)} runs analysed -> {dst}')
