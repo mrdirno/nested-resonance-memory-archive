@@ -353,6 +353,19 @@ the take exactly as played.
    deterministic twice, no `you` role, the live take untouched), MIX renders
    it to the composed length plus tail, JAM keeps the YOU track, five doors,
    LOAD restores the composed song.
+4. **The verify pass (round 10b).** Two skeptic lenses were cast over the
+   diff. The DRY-composition lens ran and convicted four things, all fixed:
+   the composition left `verbSet` on the live graph (now held and put
+   back), armed per-bar readout timers (gated), sized a shape-less song as
+   arc (defaults to loop), and could flush the live duck (gated). The
+   doors+gates lens died on the session limit twice; it was walked by hand
+   instead on 2026-09-02 — the export guard, the 40 ms bake poll under the
+   `exporting` gate (PLAY/LOAD/power refuse while it holds), the dead-worker
+   fallback (sync bake, 15 s cap), the empty-composition fallback (renamed
+   `-jam`, honestly), session LOAD → `applyDream` sets `DREAM.p` so MIX
+   recomposes the same song from the same seed, blob revocation across a
+   JAM-after-MIX, `takeStart` clearing the doors. No defect found; the
+   fleet pass over that lens is still the honest gate and remains owed.
 
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
