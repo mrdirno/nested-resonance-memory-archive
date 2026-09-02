@@ -16,9 +16,27 @@ Three test-only edits, never shipped:
 """
 import re
 import pathlib
+import subprocess
+import sys
 
 d = pathlib.Path(__file__).parent
-src = (d.parent.parent / 'HELIOS-BRIDGE-ARCHIVE' / 'HELIOS-V501-halo-resonance-chamber.html').read_text()
+REL = 'HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html'
+
+# --from-git <rev> builds the test page from a COMMITTED revision instead of the
+# working tree. An experiment whose test build came from an uncommitted tree is not
+# reproducible by anyone else, and it can silently inherit another lane's in-progress
+# edits -- which is how a stray <script> tag once made every run of the pre-registered
+# memory grid log a console error and fail its own validity gate.
+rev = None
+if '--from-git' in sys.argv:
+    rev = sys.argv[sys.argv.index('--from-git') + 1]
+if rev:
+    src = subprocess.run(['git', '-C', str(d.parent.parent), 'show', f'{rev}:{REL}'],
+                         capture_output=True, text=True, check=True).stdout
+    print(f'source: {REL} at {rev}')
+else:
+    src = (d.parent.parent / REL).read_text()
+    print(f'source: {REL} in the working tree')
 
 out, n = re.subn(r'<script src="https://cdnjs[^"]*three[^"]*"[^>]*></script>',
                  '<script src="three.min.js"></script>', src)

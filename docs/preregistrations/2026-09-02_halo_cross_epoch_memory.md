@@ -233,7 +233,7 @@ From a fresh clone, on a machine with a GPU that reports `EXT_color_buffer_float
 ```bash
 cd tests/halo
 npm init -y && npm i playwright@1 && npx playwright install chromium
-python3 make_test_page.py                 # builds rc-test.html (git-ignored)
+python3 make_test_page.py --from-git HEAD  # builds rc-test.html from a COMMIT (git-ignored)
 node memory_budget_identity.js --n=4194304 --lab   # must print PASS
 bash memory_prereg_grid.sh                # 60 runs, about 90 minutes
 python3 ../../experiments/halo/memory_prereg_analyze.py
@@ -266,6 +266,26 @@ verdict would be uninterpretable. Recurrence does **not** enter the decision rul
 cannot cause a pass or a failure; the rule is unchanged. The reason for adding it after
 registration is that it was requested by an adversarial reading of §3's rotation caveat, and it
 costs no new data — it is computed from meshes the protocol already exports.
+
+**2026-09-02, during data collection — the grid was restarted from zero, and why.** The first
+26 runs were discarded and the grid re-run. Cause: `make_test_page.py` built the headless test
+page from the *working tree*, which at the time carried another lane's uncommitted
+`<script src="/nested-resonance-memory-archive/shared/feedback.js">`. Under `file://` that path
+does not resolve, so Chromium logged one console error — `net::ERR_FILE_NOT_FOUND` — in every
+run. Gate 4 of §7 voids a run that logs a console error, so **every run was void**, on a
+resource that touches nothing in the physics or the instruments.
+
+The gate was **not** weakened. The defect was one layer down and was fixed there:
+`make_test_page.py` gained `--from-git <rev>`, so the confirmatory grid is built from a named
+commit rather than from whatever happens to be in the tree — which an experiment needs anyway
+to be reproducible by anyone else. `memory_prereg_grid.sh` now aborts on the first run that
+logs an error, instead of discovering after sixty runs that all of them are void. A clean boot
+was verified to log zero errors before the restart.
+
+The 26 discarded runs are kept, not deleted, under `data/results/halo/memory_prereg_voided/`.
+**Nothing in §5–§9 changed:** same grid, same seeds, same estimators, same gates, same decision
+rule. The cost was about 35 minutes of machine time and the benefit is that no reader has to
+take on trust that a logged error was harmless.
 
 **Also recorded, for the reader's benefit:** in the 262k dry-run pilot of §4 this control read
 +0.50 to +0.85 while its own independent-seed null read the same value to three decimals. That

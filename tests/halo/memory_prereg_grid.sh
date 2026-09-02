@@ -28,6 +28,15 @@ for p in $PRESETS; do for sg in $SGS; do for gl in $GLS; do for s in $SEEDS; do
   echo "=== [$total] $tag ==="
   if node memory_prereg_run.js --preset="$p" --sg="$sg" --gl="$gl" --seed="$s" \
        --epochs="$EPOCHS" --n="$N" --out="$OUT"; then
+    # Section 7 gate 4 voids a run that logs a page or console error. Stop the grid on
+    # the first one rather than discover after 60 runs that every one is void -- which
+    # is exactly what happened when the test page was built from a working tree
+    # carrying another lane's <script> tag (see the pre-registration, section 13).
+    if ! python3 -c "import json,sys; e=json.load(open(sys.argv[1]))['pageerrors']; sys.exit(1 if e else 0)" "$OUT/$tag.json"; then
+      echo "ABORT: $tag logged a page or console error; every run would be void under section 7."
+      python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['pageerrors'])" "$OUT/$tag.json"
+      exit 2
+    fi
     done_=$((done_+1))
   else
     failed=$((failed+1)); echo "FAILED: $tag"
