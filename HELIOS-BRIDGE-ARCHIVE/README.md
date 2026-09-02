@@ -64,3 +64,12 @@ Example: `HELIOS-V042-obsidian-interference.html`
 ### Quick Start
 
 Open `index.html` for the full gallery with all 500 variations, or open any individual HTML file directly.
+
+### Beyond the 500 — V501 · HALO
+
+`HELIOS-V501-halo-resonance-chamber.html` is not a point in the 5-axis variation space above. It is the Resonance
+Chamber at Ring 9 (code name HALO): a GPU particle laboratory in a spherical cavity whose eigenmodes are sequenced
+by the digits of π, e, √2 and φ, with self-gravity, an expanding background, a magnetic term stepped either as Euler
+(how every preset was found) or as the exact Boris rotation, and a Lab (press 7) that measures the chamber against
+its own claims — Lyapunov exponent, cross-epoch memory beside its two-back control, realized spectrum, force-ceiling
+share. Rings 1–9 are sealed in a comment at the end of the file. Self-contained: three.js from cdnjs, no build.

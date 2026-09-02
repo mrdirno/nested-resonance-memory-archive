@@ -2,8 +2,8 @@
 
 Tom, check this branch (`claude/repos-cross-pollination-ryxskr`) of the NRM archive.
 
-The Helios Bridge has a new iteration, **HELIOS-V021, code name HALO**, at
-`HELIOS-BRIDGE-ARCHIVE/HELIOS-V021-halo-resonance-chamber.html` (open it in a browser, press 7 for the Lab).
+The Helios Bridge has a new iteration, **HELIOS-V501, code name HALO**, at
+`HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` (open it in a browser, press 7 for the Lab).
 
 **What was upgraded: the Euler magnetic step.** Every preset so far integrated the v × B term with an explicit
 Euler kick, and that step injects energy at 55 × coupling² × dt per second. Two headline states turned out to be
