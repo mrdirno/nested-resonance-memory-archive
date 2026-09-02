@@ -153,6 +153,12 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
     </div>
   );
 };
+// This app no longer sits at the site root, so a link written as './x/' has to be
+// resolved against the root rather than against this page. SITE_ROOT is inlined
+// by vite.config.ts; a plain local build is served from the root and is unchanged.
+const SITE_ROOT: string = (import.meta as any).env.SITE_ROOT ?? './';
+const siteHref = (href: string): string => href.replace(/^\.\//, SITE_ROOT);
+
 /**
  * Other pages published alongside the bridge in the SAME Pages artifact.
  *
@@ -161,10 +167,13 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
  * without a staged directory is a link to a 404, which is exactly how the
  * collage tool went missing in the first place.
  *
- * hrefs are RELATIVE on purpose: the bridge is served from
- * /nested-resonance-memory-archive/, so './collage/' resolves correctly
- * without hardcoding the domain.
+ * hrefs are written against the SITE ROOT ('./collage/' means <root>/collage/)
+ * and go through siteHref() above, so they stay right wherever this app is
+ * served from, without hardcoding the domain.
  */
+// The site root is now the HALO page (HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html).
+// The registry the deploy checks is the Tools panel (section id="panel-tools") in that HALO page;
+// this list serves the classic bridge only, which is served from archive/classic/.
 const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: React.ReactNode }[] = [
   {
     name: 'Collage Studio',
@@ -462,7 +471,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           <a href="https://github.com/mrdirno/nested-resonance-memory-archive" target="_blank" rel="noopener noreferrer" className="text-xs md:text-sm font-mono font-bold tracking-widest text-white hover:text-white/80 transition-colors drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
             github.com/mrdirno/nested-resonance-memory-archive
           </a>
-          <a href="./archive/HELIOS-V501-halo-resonance-chamber.html" target="_blank" rel="noopener noreferrer" title="Open the Resonance Chamber (V501 · HALO) in a new tab" className="mt-1 text-[10px] md:text-xs font-mono font-bold tracking-widest text-tertiary hover:text-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
+          <a href={siteHref('./archive/HELIOS-V501-halo-resonance-chamber.html')} target="_blank" rel="noopener noreferrer" title="Open the Resonance Chamber (V501 · HALO) in a new tab" className="mt-1 text-[10px] md:text-xs font-mono font-bold tracking-widest text-tertiary hover:text-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
             V501 · HALO — RESONANCE CHAMBER ↗
           </a>
         </div>
@@ -692,7 +701,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
       >
         {/* V501 · HALO — the laboratory iteration of this bridge, its own page */}
         <a
-          href="./archive/HELIOS-V501-halo-resonance-chamber.html"
+          href={siteHref('./archive/HELIOS-V501-halo-resonance-chamber.html')}
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-start gap-3 w-full p-4 mb-4 rounded-xl bg-tertiary/10 border border-tertiary/30 hover:border-tertiary/60 hover:bg-tertiary/20 transition-colors active:scale-[0.99]"
@@ -899,7 +908,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           {TOOLS.map((t) => (
             <a
               key={t.href}
-              href={t.href}
+              href={siteHref(t.href)}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-start gap-3 w-full p-4 rounded-xl bg-black/30 border border-white/5 hover:border-tertiary/40 hover:bg-black/50 transition-colors active:scale-[0.99]"

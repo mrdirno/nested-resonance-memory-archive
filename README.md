@@ -40,34 +40,26 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 ## 🌐 THE BRIDGE (Live Interface)
 
-**Experience the system immediately in your browser.**
+**The Helios Bridge is HALO, a particle laboratory that measures its own claims, at [https://mrdirno.github.io/nested-resonance-memory-archive/](https://mrdirno.github.io/nested-resonance-memory-archive/).**
 
 **[👉 ENTER THE BRIDGE (Live Web App)](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
-[![The Bridge, as it runs today](data/figures/bridge_live_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/)
-*The Bridge in September 2026. The link under the title opens the newest iteration, HALO.*
+[![HALO with the Lab open](data/figures/halo_lab_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/)
+*HALO in September 2026. Press 7 for the Lab. Its tests are in `tests/halo/`, its falsifiers in `experiments/halo/`.*
 
 **Or watch the demonstration:**
 
-[![The Bridge Demo](data/figures/bridge_demo_thumbnail.jpeg)](https://youtu.be/flRHV7GuzUY)
-*Watch 1 minute of The Bridge*
+[![One minute of the classic bridge](data/figures/bridge_demo_thumbnail.jpeg)](https://youtu.be/flRHV7GuzUY)
+*This video shows the classic bridge (2025–2026). It is now archived at [archive/classic/](https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/).*
 
-This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
+What HALO does:
 
-*   **No installation required.**
-*   **Real-time OSD rendering.**
-*   **Interactive field compilation.**
-
-### HALO (V501) — the laboratory
-
-The newest iteration of the Bridge is built as an instrument, not a display. It runs up to 4 million
-particles in a spherical cavity on a fixed physics tick, lets you step the magnetic term as Euler or as
-the exact rotation, and carries a Lab panel that tests the page's own claims: a chaos meter, a memory
-test shown beside its control, and a spectrum. Two of its earlier claims are labelled failed on the page
-itself.
-
-[![HALO with the Lab open](data/figures/halo_lab_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html)
-*[Open HALO](https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html) and press 7 for the Lab. Its tests are in `tests/halo/`, its falsifiers in `experiments/halo/`.*
+*   **No installation required.** It runs in your browser, with up to 4 million particles.
+*   **A fixed physics tick.** The physics advances 20 times a second on every machine; the screen draws in between.
+*   **Euler or exact magnetic step.** Run the magnetic term the way every preset was found, or as the exact rotation, and compare the two.
+*   **The Lab.** Press 7. A chaos meter, a memory test shown beside its control, and a spectrum. The page tests its own claims, and two of its earlier claims are corrected in its own text.
+*   **Sacred geometry mode.** The classic bridge's symmetry, kept for play.
+*   **Every page of the archive one key away.** Press 8 for Tools.
 
 ---
 
@@ -86,7 +78,7 @@ itself.
 ## 🔭 OBSERVER LANES (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](nrm_core/helios/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](nrm_core/helios/) | [Orthogonal Sum Dynamics (OSD) Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [The Manifesto](THE_MANIFESTO.md) | [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md) | [Book of BCP (Draft)](docs/philosophy/BOOK_OF_BCP.md)
 
 ---

@@ -1,7 +1,9 @@
 name: Deploy Bridge UI to GitHub Pages
 
-# Publishes ONE Pages artifact containing two apps:
-#   HELIOS-BRIDGE/dist        -> /nested-resonance-memory-archive/
+# Publishes ONE Pages artifact. What lands where:
+#   HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html
+#                             -> /nested-resonance-memory-archive/                 (the site root: HALO)
+#   HELIOS-BRIDGE/dist/{index.html,assets/} -> /nested-resonance-memory-archive/archive/classic/  (the classic app; the other public files stay at the root)
 #   tools/collage-studio/dist -> /nested-resonance-memory-archive/collage/
 # The repo-root collage/ and collage-beta/ directories are NOT served and never
 # were -- only the artifact uploaded below reaches Pages.
@@ -73,7 +75,13 @@ jobs:
         run: npm ci
         working-directory: HELIOS-BRIDGE
 
+      # BRIDGE_BASE builds the classic app for the sub-path it is served from;
+      # the staging step below moves the built files there and puts the HALO
+      # page at the root. Without BRIDGE_BASE (a plain `npm run build`) the app
+      # still targets the site root, so local builds are unchanged.
       - name: Build (bridge)
+        env:
+          BRIDGE_BASE: /nested-resonance-memory-archive/archive/classic/
         run: |
           npm run build
           touch dist/.nojekyll
@@ -105,8 +113,11 @@ jobs:
 
           # The artifact IS the published site: anything not copied in here is a
           # 404, no matter that it exists at repo root. Every path staged below
-          # must have a matching entry in the TOOLS registry in
-          # HELIOS-BRIDGE/components/UIComponents.tsx, and vice versa.
+          # must have a matching entry in the front page's Tools panel (section
+          # id="panel-tools" in HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html,
+          # which is served as the site root), and vice versa. The classic app's
+          # TOOLS list in HELIOS-BRIDGE/components/UIComponents.tsx serves
+          # archive/classic/ only and is not the registry the deploy checks.
 
           # built app
           rm -rf HELIOS-BRIDGE/dist/collage
@@ -119,10 +130,28 @@ jobs:
           cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/
           cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
 
+          # THE SITE ROOT IS THE HALO PAGE; THE CLASSIC BRIDGE APP IS ARCHIVED UNDER IT.
+          # The build step compiled the classic app for archive/classic/ (BRIDGE_BASE),
+          # so its bundle URLs already point there; this moves the built files to
+          # match and puts its wasm beside them. It has to run AFTER the
+          # `rm -rf .../archive` + copy just above -- staged before them, the copy
+          # would wipe it and the deploy would go green with a 404 at
+          # /archive/classic/. The root page is a byte copy of the HALO page; that
+          # page names the root as its canonical URL, so the copy that stays in
+          # archive/ is not a duplicate to a crawler.
+          mkdir -p HELIOS-BRIDGE/dist/archive/classic
+          mv HELIOS-BRIDGE/dist/index.html HELIOS-BRIDGE/dist/assets HELIOS-BRIDGE/dist/archive/classic/
+          cp HELIOS-BRIDGE/dist/helios_physics.wasm HELIOS-BRIDGE/dist/archive/classic/helios_physics.wasm
+          cp HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html HELIOS-BRIDGE/dist/index.html
+          echo "staged classic app: archive/classic/; root page: HALO"
+
           # FIELD TOOLKITS — one runtime (shared/toolkit.js), many trades. Every
           # trade dir is a config (trade.js) + a registry (tools.js) + tool pages,
-          # so ADDING A TRADE IS ADDING ITS SLUG HERE and to the `paths:` trigger
-          # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
+          # so ADDING A TRADE IS ADDING ITS SLUG HERE, to the `paths:` trigger at
+          # the top of this file, and ONE link card written href="./<slug>/" in the
+          # Tools panel (section id="panel-tools") of the HALO page in
+          # HELIOS-BRIDGE-ARCHIVE/, which is served as the site root; the registry
+          # gate below fails the build without it. `test -d` keeps it fail-closed:
           # a slug with no dir fails the build instead of silently 404ing the site.
           cp -R shared/. HELIOS-BRIDGE/dist/shared/
           TRADES="av plumbing electrical hvac low-voltage gc framing roofing creative concrete masonry sitework flooring painting doors landscape"
@@ -259,6 +288,7 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
                    archive/index.html archive/HELIOS-V501-halo-resonance-chamber.html archive/HELIOS-V501-halo-og.jpg og-bridge.jpg \
+                   archive/classic/index.html archive/classic/helios_physics.wasm \
                    shared/toolkit.js shared/feedback.js shared/find.js \
                    commons/index.html commons/gear.js commons/commons.js commons/commons.css \
                    commons/tips.html commons/tips.js \
@@ -266,6 +296,41 @@ jobs:
                    av/index.html av/trade.js av/tools.js av/consumables.html av/credits.html av/report-builder.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
+
+          # THE ROOT IS THE HALO PAGE AND THE CLASSIC APP IS WHOLE UNDER IT.
+          # Two pages changed places in the staging step, and each can fail
+          # silently: a skipped root copy leaves the classic bundle's index.html
+          # at the root (a 200 that is the wrong page), and a classic index.html
+          # whose <script src> points at a bundle that was not moved with it is a
+          # 200 that renders nothing. Both are asserted on the artifact. The root
+          # page is read with its HTML comments stripped, once, and reused by the
+          # per-trade registry check below: the HALO page carries a long note
+          # block in a comment, and a path named there is not a link.
+          root_page="$(mktemp)"
+          perl -0pe 's/<!--.*?-->//gs' HELIOS-BRIDGE/dist/index.html > "$root_page"
+          grep -q 'id="panel-lab"' "$root_page" \
+            || { echo "FAIL: dist/index.html is not the HALO page (no id=\"panel-lab\") -- the root copy in the staging step was skipped or copied the wrong file"; exit 1; }
+          # The registry itself: the Tools panel section, cut out of the served root
+          # page so the trade gate below reads the panel and nothing else on the page.
+          tools_panel="$(mktemp)"
+          sed -n '/id="panel-tools"/,/<\/section>/p' "$root_page" > "$tools_panel"
+          test -s "$tools_panel" \
+            || { echo "FAIL: the served root page has no Tools panel (section id=\"panel-tools\") -- the registry itself is missing, not one entry"; exit 1; }
+          echo "TOOLS_PANEL=$tools_panel" >> "$GITHUB_ENV"
+          grep -q 'assets/index-' HELIOS-BRIDGE/dist/archive/classic/index.html \
+            || { echo "FAIL: archive/classic/index.html does not load a built bundle (no assets/index-*.js) -- the classic app was not moved intact"; exit 1; }
+          classic_src=$(grep -o -m1 'src="[^"]*assets/index-[^"]*"' HELIOS-BRIDGE/dist/archive/classic/index.html | sed 's/^src="//; s/"$//')
+          classic_base="/nested-resonance-memory-archive/archive/classic/"
+          case "$classic_src" in
+            "${classic_base}"assets/index-*.js) ;;
+            *) echo "FAIL: archive/classic/index.html loads its bundle from '$classic_src', not from under ${classic_base}assets/ -- BRIDGE_BASE was not applied at build time"; exit 1;;
+          esac
+          classic_bundle="HELIOS-BRIDGE/dist/archive/classic/${classic_src#"$classic_base"}"
+          test -f "$classic_bundle" \
+            || { echo "FAIL: archive/classic/index.html loads $classic_src, which is not in the artifact"; exit 1; }
+          grep -q 'archive/classic/helios_physics.wasm' "$classic_bundle" \
+            || { echo "FAIL: the classic bundle does not fetch its wasm from archive/classic/ -- SwarmWorker.ts must resolve it against the build-time base"; exit 1; }
+          echo "root is HALO; classic app at archive/classic/ loads ${classic_src#"$classic_base"} and its wasm"
 
           # THE COMMONS IS LINKED FROM EVERY TRADE'S NAV, so prove it works rather
           # than prove it exists. Its data file is the whole page — an index.html
@@ -538,15 +603,22 @@ jobs:
               echo "  $t/$href: $(wc -l < "$deps" | tr -d ' ') local asset(s) resolve"
             done < "$reg"
 
-            # BOTH HALVES, ENFORCED. UIComponents.tsx's own header states that a
-            # staged dir and a TOOLS entry are both required. Only one direction was
-            # ever checked. Plumbing shipped 2026-08-03 staged-but-unregistered, so
-            # the ONLY route to it on the whole site was a hand-wired link inside
-            # av/index.html — verified against the deployed bundle 2026-08-04:
-            # './av/' 1 hit, './plumbing/' 0 hits. Assert on the BUILT assets so this
-            # proves what actually ships, not what the source says.
-            grep -rqF "./$t/" HELIOS-BRIDGE/dist/assets/ \
-              || { echo "FAIL: trade '$t' is staged but has NO entry in the site-root TOOLS registry (HELIOS-BRIDGE/components/UIComponents.tsx) — it would be unreachable from the front page"; exit 1; }
+            # BOTH HALVES, ENFORCED. A staged dir and a front-page registry entry are
+            # both required. Only one direction was ever checked. Plumbing shipped
+            # 2026-08-03 staged-but-unregistered, so the ONLY route to it on the
+            # whole site was a hand-wired link inside av/index.html — verified
+            # against the deployed bundle 2026-08-04: './av/' 1 hit, './plumbing/'
+            # 0 hits. The front page is now the HALO page (a byte copy of
+            # HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html at
+            # dist/index.html), so the registry is its Tools panel
+            # (section id="panel-tools"); the classic app's TOOLS list in
+            # UIComponents.tsx serves archive/classic/ only. Assert on the SERVED
+            # root page, comments stripped, cut down to the Tools panel section
+            # ($tools_panel, made above), and on the exact link form href="./<slug>/",
+            # so this proves what ships: a path named in prose, a script comment or
+            # a link elsewhere on the page cannot stand in for the registry entry.
+            grep -qF "href=\"./$t/\"" "${TOOLS_PANEL:-$tools_panel}" \
+              || { echo "FAIL: trade '$t' is staged but has NO link in the front-page Tools panel (section id=\"panel-tools\" in HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html, served as the site root). Add one card there, written href=\"./<slug>/\" (that exact form is what this gate reads); without it the trade is unreachable from the front page"; exit 1; }
 
             # THE CROSS-BOUNDARY LOOP IS THREE MESSAGES AND ALL THREE ARE ONE PAGE
             # FILE COPIED PER TRADE. Loading a shared module is asserted above;

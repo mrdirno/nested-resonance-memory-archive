@@ -32,10 +32,12 @@ export const useSwarmWorker = (enabled: boolean = true) => {
         // 1. Load Wasm
         const loadWasm = async () => {
             try {
-                // Resolved against the page's base URL: the app is served under
-                // /nested-resonance-memory-archive/ on Pages, so a root-absolute
-                // '/helios_physics.wasm' was a 404 (an HTML page) on every load.
-                const response = await fetch(new URL('helios_physics.wasm', document.baseURI).href);
+                // Resolved against the base Vite built this app for (BASE_URL is
+                // inlined at build time): on the published site the app lives under
+                // archive/classic/ and the deploy copies the wasm beside it. A
+                // root-absolute '/helios_physics.wasm' was a 404 (an HTML page) on
+                // every load. tsconfig has no vite/client types, hence the cast.
+                const response = await fetch((import.meta as any).env.BASE_URL + 'helios_physics.wasm');
                 const bytes = await response.arrayBuffer();
                 const results = await WebAssembly.instantiate(bytes, {
                     env: {

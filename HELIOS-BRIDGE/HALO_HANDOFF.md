@@ -89,6 +89,10 @@ See §4a for the deploy facts as read from the repository on 2026-09-02, then fo
 - HALO is **V501**; the file name keeps the archive's `HELIOS-V{NNN}-` prefix (the archive's own convention is
   `{palette}-{forcefield}`, which does not apply to a page outside the 5-axis space) and is already on the branch
   at `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` (300,808 bytes).
+- **Note, 2026-09-02:** the site root now serves HALO — https://mrdirno.github.io/nested-resonance-memory-archive/ opens the
+  laboratory — and the classic app (the bridge of 2025–2026, built from `HELIOS-BRIDGE/` as above) is published
+  at `archive/classic/`, with its own title and address. The archive gallery lists both under "Beyond the 500"; the README's Bridge
+  section says the same.
 
 ### 4b. Steps (each one a commit you make locally; verify before the next)
 1. Confirm `git config user.name` / `user.email` are Aldrin's. Then `git checkout main && git pull` and merge

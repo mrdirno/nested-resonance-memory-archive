@@ -124,6 +124,46 @@ const path = require('path');
     await page.keyboard.press('Escape');
   }
 
+  // Tools panel (key 8): the other pages in the archive, every link relative and in a new tab
+  await page.keyboard.press('8');
+  await page.waitForTimeout(300);
+  const tools = await page.evaluate(() => {
+    const p = document.getElementById('panel-tools');
+    const links = p ? Array.from(p.querySelectorAll('a[href]')) : [];
+    return {
+      open: !!p && p.classList.contains('open') && getComputedStyle(p).visibility === 'visible',
+      hrefs: links.map(a => a.getAttribute('href')),
+      newTab: links.every(a => a.getAttribute('target') === '_blank' && /\bnoopener\b/.test(a.getAttribute('rel') || '')),
+      titled: links.every(a => a.textContent.trim().length > 10),
+    };
+  });
+  check('panel 8 (Tools) opens', tools.open);
+  check('Tools panel lists at least 21 pages', tools.hrefs.length >= 21, String(tools.hrefs.length));
+  check('every Tools link is a folder relative to the site root',
+    tools.hrefs.length > 0 && tools.hrefs.every(h => h.startsWith('./') && h.endsWith('/')),
+    tools.hrefs.filter(h => !(h.startsWith('./') && h.endsWith('/'))).join(' '));
+  const trades = ['av', 'plumbing', 'electrical', 'hvac', 'low-voltage', 'gc', 'framing', 'roofing',
+                  'creative', 'concrete', 'masonry', 'sitework', 'flooring', 'painting', 'doors', 'landscape'];
+  const missingPages = ['archive/classic', 'archive', 'collage', 'collage-beta', 'commons', ...trades]
+    .filter(s => !tools.hrefs.includes('./' + s + '/'));
+  check('Tools panel links every sibling page and all 16 trades', missingPages.length === 0, missingPages.join(' '));
+  check('every Tools link opens in a new tab (target _blank, rel noopener)', tools.newTab);
+  check('every Tools card has a title and a sentence', tools.titled);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('Escape closes the Tools panel',
+    await page.evaluate(() => !document.querySelector('.panel.open')));
+  // the keyboard help names the new key
+  await page.keyboard.press('i');
+  await page.waitForTimeout(300);
+  check('info dialog opens on I',
+    await page.evaluate(() => document.getElementById('info-scrim').classList.contains('open')));
+  const keyHelp = await page.textContent('#info-scrim .key-list');
+  check('keyboard help lists 8 - Tools', /8/.test(keyHelp) && /Tools/.test(keyHelp),
+    keyHelp.replace(/\s+/g, ' ').slice(0, 120));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+
   // sound on: bridge + Shepard default; must not throw
   await page.click('#btn-audio');
   await page.waitForTimeout(800);
@@ -429,6 +469,77 @@ const path = require('path');
     JSON.stringify(storedVase));
   await page.click('#vessel-seg button[data-vessel="off"]');
   await page.keyboard.press('Escape');
+
+  // --- sacred geometry: six folds at the top of the Overlays panel ---
+  // A fold changes the picture, never the swarm. The readback runs inside the
+  // animation frame right after the page has drawn (the drawing buffer is not
+  // preserved): the 64x64 corner is dark when off and shows a mirrored copy of
+  // the core when folded; top-to-bottom mirror pairs are exact for every fold
+  // but Spiral.
+  const sacredFrame = () => page.evaluate(() => new Promise(res => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const gl = window.__probe.renderer.getContext();
+      const W = gl.drawingBufferWidth, H = gl.drawingBufferHeight;
+      const px = new Uint8Array(W * H * 4);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, px);
+      const corner = [];
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+        const i = (y * W + x) * 4; corner.push(px[i] + px[i + 1] + px[i + 2]);
+      }
+      const grid = [];
+      for (let y = 0; y < H; y += 4) for (let x = 0; x < W; x += 4) {
+        const i = (y * W + x) * 4; grid.push(px[i] + px[i + 1] + px[i + 2]);
+      }
+      let flip = 0, n = 0;
+      for (let y = 0; y < H / 2; y += 3) for (let x = 0; x < W; x += 3) {
+        const a = (y * W + x) * 4, b = ((H - 1 - y) * W + x) * 4;
+        flip += Math.abs(px[a] - px[b]) + Math.abs(px[a + 1] - px[b + 1]) + Math.abs(px[a + 2] - px[b + 2]);
+        n++;
+      }
+      res({ W, H, corner, grid, flip: flip / (3 * n) });
+    }));
+  }));
+  const countChanged = (a, b) => { let d = 0; for (let i = 0; i < a.length; i++) if (Math.abs(a[i] - b[i]) > 12) d++; return d; };
+  const twoFrames = () => page.evaluate(() => new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res))));
+  await page.evaluate(() => { if (document.activeElement) document.activeElement.blur(); });
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('3');
+  await page.waitForTimeout(300);
+  check('sacred seg has six folds', (await page.$$('#sacred-seg button')).length === 6);
+  check('sacred starts off', (await page.evaluate(() => window.__probe.state.sacred)) === 'off');
+  const offFrame = await sacredFrame();
+  for (const mode of ['metatron', 'octopus', 'cubes', 'gasket', 'spiral']) {
+    const errsBefore = errors.length;
+    await page.click('#sacred-seg button[data-sacred="' + mode + '"]');
+    await twoFrames();
+    check('sacred ' + mode + ' sets the state',
+      (await page.evaluate(() => window.__probe.state.sacred)) === mode);
+    check('sacred ' + mode + ' is pressed',
+      (await page.getAttribute('#sacred-seg button[data-sacred="' + mode + '"]', 'aria-pressed')) === 'true');
+    const f = await sacredFrame();
+    const corner = countChanged(f.corner, offFrame.corner);
+    const frame = countChanged(f.grid, offFrame.grid) / f.grid.length;
+    check('sacred ' + mode + ' changes the picture', corner > 40 || frame > 0.01,
+      corner + ' corner pixels of 4096, ' + (100 * frame).toFixed(1) + '% of the frame');
+    if (mode !== 'spiral')
+      check('sacred ' + mode + ' is mirror-exact top to bottom', f.flip < 2,
+        'mean |diff| ' + f.flip.toFixed(3) + ' (off: ' + offFrame.flip.toFixed(3) + ')');
+    check('sacred ' + mode + ' throws nothing', errors.length === errsBefore,
+      errors.slice(errsBefore, errsBefore + 2).join(' | '));
+    if (mode === 'metatron') { await page.waitForTimeout(1200); await shot('13-sacred-metatron.png'); }
+  }
+  await page.waitForTimeout(450);   // saveState is debounced 250 ms
+  const sacredStored = await page.evaluate(() => {
+    try { return JSON.parse(localStorage.getItem('resonance-chamber-v2')).sacred; }
+    catch (e) { return null; }
+  });
+  check('sacred persisted', sacredStored === 'spiral', String(sacredStored));
+  await page.click('#sacred-seg button[data-sacred="off"]');
+  await twoFrames();
+  check('sacred off again', (await page.evaluate(() => window.__probe.state.sacred)) === 'off');
+  await page.keyboard.press('Escape');
+  // --- end sacred geometry ---
 
   // preset save / load round trip, including camera + step
   await page.keyboard.press('1');

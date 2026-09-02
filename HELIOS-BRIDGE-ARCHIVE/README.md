@@ -72,4 +72,8 @@ Chamber at Ring 9 (code name HALO): a GPU particle laboratory in a spherical cav
 by the digits of π, e, √2 and φ, with self-gravity, an expanding background, a magnetic term stepped either as Euler
 (how every preset was found) or as the exact Boris rotation, and a Lab (press 7) that measures the chamber against
 its own claims — Lyapunov exponent, cross-epoch memory beside its two-back control, realized spectrum, force-ceiling
-share. Rings 1–9 are sealed in a comment at the end of the file. Self-contained: three.js from cdnjs, no build.
+share. Rings 1–12 are sealed in a comment at the end of the file. Self-contained: three.js from cdnjs, no build.
+
+HALO is now the site's front page: https://mrdirno.github.io/nested-resonance-memory-archive/ opens it. The classic bridge, the
+visualizer that came before it, lives at `archive/classic/` on the published site
+(https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/), kept as it ran, at its own address.
