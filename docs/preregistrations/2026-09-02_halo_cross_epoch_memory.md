@@ -240,8 +240,11 @@ python3 ../../experiments/halo/memory_prereg_analyze.py
 ```
 
 Without a GPU the same grid runs under SwiftShader at 262,144 particles
-(`N=262144 bash memory_prereg_grid.sh`), which is a different point in the space and is
-reported as such, never as the confirmatory result.
+(`N=262144 bash memory_prereg_grid.sh`). Measured on this machine: 4 epochs in 25 s, so a
+24-epoch run is about 150 s and the 60-run grid about 2.5 hours on CPU alone. SwiftShader also
+reports `EXT_float_blend`, so the deposit target is full float there too and the saturation gate
+of §7 passes on the software path — but 262,144 particles is a different point in the space and
+is reported as such, never as the confirmatory result.
 
 The analysis reads only the exported meshes, so it can be re-run, and re-argued, without a GPU
 and without re-running the chamber.
