@@ -14,12 +14,22 @@ Control Law:
 
     where λ(e_buffer) = k / (ε + e_buffer)  [metabolic pressure]
 
+Usage:
+    python3 experiments/cycle2568_starving_philosopher.py [--out PATH]
+
+    The figure is written to data/figures/cycle2568_starving_philosopher.png
+    at the repository root (the folder is created if missing). Use --out to
+    write it somewhere else.
+
 Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 License: GPL-3.0
 Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 """
 
+import argparse
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # file output only; the demo needs no display window
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from typing import List, Tuple
@@ -436,8 +446,29 @@ def plot_results(log: dict, cfg: Config, output_path: str):
 # MAIN
 # ============================================================================
 
-def main():
+# The figure goes next to the code by default: <repository root>/data/figures/.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_OUTPUT_PATH = os.path.join(
+    REPO_ROOT, "data", "figures", "cycle2568_starving_philosopher.png")
+
+
+def parse_args(argv=None):
+    """Command-line options. There is only one: where to write the figure."""
+    parser = argparse.ArgumentParser(
+        description="CYCLE 2568: The Starving Philosopher - run the simulation "
+                    "and save the figure.")
+    parser.add_argument(
+        "--out", default=DEFAULT_OUTPUT_PATH,
+        help="Path of the PNG figure to write (parent folders are created). "
+             "Default: data/figures/cycle2568_starving_philosopher.png "
+             "in this repository.")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
     """Run experiment and generate output."""
+    args = parse_args(argv)
+
     print("=" * 70)
     print("CYCLE 2568: The Starving Philosopher")
     print("Demonstrating: Ignorance as Economically Optimal Strategy")
@@ -480,10 +511,9 @@ def main():
         print("\n✗ HYPOTHESIS NOT VALIDATED:")
         print("  Agent did not switch to coarser scale under scarcity.")
 
-    # Generate figure
-    output_dir = "/Volumes/dual/DUALITY-ZERO-V2/data/figures"
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, "cycle2568_starving_philosopher.png")
+    # Generate figure (default: data/figures/ at the repository root; see --out)
+    output_path = os.path.abspath(args.out)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     print(f"\nGenerating figure...")
     plot_results(log, cfg, output_path)

@@ -106,9 +106,10 @@ stdlib) and mirrored byte-identically in the SoundHack archive as
 ## Verification
 
 - 51 tests in the maintained suite (run them with
-  `pytest tests/test_soundhack_spectral.py tests/test_soundhack_bridge.py`;
-  two unrelated legacy Helios tests abort a bare `pytest tests/` at
-  collection), pinning window coefficients, kernel math, round-trip
+  `pytest tests/test_soundhack_spectral.py tests/test_soundhack_bridge.py`,
+  or run everything with `pytest tests/`; the two Helios test files skip
+  themselves when the libraries they need, such as OpenCV and Flask, are
+  not installed), pinning window coefficients, kernel math, round-trip
   identity, the one-hop `ShiftOut` pre-roll and the `ShiftIn` validSamples
   countdown, contract ranges, determinism under seeds, and the two
   integration loops above.

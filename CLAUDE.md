@@ -394,113 +394,7 @@ Write("/Volumes/dual/DUALITY-ZERO-V2/src/new_file.py", content)
 
 ---
 
-## V6 TIMELINE TRACKING (CRITICAL - AUTHORITATIVE SOURCE)
-
-**⚠️ CRITICAL: NEVER MANUALLY CALCULATE V6 RUNTIME - ALWAYS USE AUTHORITATIVE TOOL ⚠️**
-
-### Timeline Correction History (2025-11-08)
-
-**MAJOR ERROR CORRECTED:** 69 commits (Nov 5-7, 2025) claimed impossible V6 milestones (50-93 days) that would require the experiment starting **before the repository existed**. This was caused by referencing the original development workspace timeline instead of the current process timeline.
-
-**Complete correction documentation:** See `MILESTONE_TIMELINE_CORRECTION.md`
-
-### Authoritative V6 Timeline (OS-Verified)
-
-**V6 Experiment Start (PID 72904):**
-```
-Date: November 5, 2025, 3:59:17 PM PST
-ISO: 2025-11-05T15:59:17-08:00
-Verification: ps -p 72904 -o lstart
-Confidence: 100% (OS kernel timestamp)
-```
-
-**Repository Timeline:**
-```
-Created: October 25, 2025, 10:26 PM PST
-Age: 13+ days (as of Nov 8, 2025)
-```
-
-**V6 and Repository are DIFFERENT timelines:**
-- Repository: 13 days old
-- V6 process: Started 11 days after repository creation
-- V6 runtime: ~2.5 days (as of Nov 8, 2025)
-
-### MANDATORY Runtime Calculation Method
-
-**ALWAYS use this tool for V6 runtime:**
-```bash
-python3 /Volumes/dual/DUALITY-ZERO-V2/src/analysis/v6_authoritative_timeline.py
-```
-
-**Output example:**
-```
-V6 EXPERIMENT AUTHORITATIVE TIMELINE
-Process ID: 72904
-Start Time: 2025-11-05 15:59:17 UTC-08:00
-Current Time: 2025-11-08 05:01:20 UTC-08:00
-
-RUNTIME (OS-VERIFIED):
-  2.5431 days
-  61.03 hours
-
-MILESTONES:
-  Last milestone: 2-day
-  Next milestone: 3-day (in 11.0h)
-
-VERIFICATION:
-  Method: OS process start timestamp (ps -p 72904 -o lstart)
-  Confidence: 100% (kernel-level ground truth)
-```
-
-### Commit Message Generation
-
-**For milestone documentation, use:**
-```bash
-python3 /Volumes/dual/DUALITY-ZERO-V2/src/analysis/v6_authoritative_timeline.py commit-message <milestone_day>
-```
-
-This generates a properly formatted commit message with:
-- OS-verified runtime
-- Exact start timestamp
-- Verification method
-- Co-Authored-By line
-
-### Prohibited Actions
-
-**❌ NEVER:**
-- Calculate V6 runtime manually
-- Use process CPU time as runtime (CPU time ≠ elapsed time)
-- Reference commit dates to calculate milestones
-- Assume milestone claims in previous commits are correct
-- Create visualizations with unverified day counts
-
-**✅ ALWAYS:**
-- Use `v6_authoritative_timeline.py` for runtime
-- Verify runtime against OS process start timestamp
-- Cross-check claims against repository age (can't exceed 13 days as of Nov 8)
-- Include verification method in documentation
-- Question milestone claims that exceed repository age
-
-### Verification Checklist (Before ANY Milestone Claim)
-
-1. ✅ Run `v6_authoritative_timeline.py`
-2. ✅ Verify runtime is less than repository age (~13 days)
-3. ✅ Check process is still running: `ps -p 72904`
-4. ✅ Confirm OS start time matches: `ps -p 72904 -o lstart`
-5. ✅ Include verification method in commit/documentation
-
-### Why This Matters
-
-**Without this protocol:**
-- ❌ Manual tracking leads to systematic errors
-- ❌ Timeline inconsistencies undermine reproducibility
-- ❌ Human error propagates across documentation
-
-**With this protocol:**
-- ✅ OS-verified ground truth (100% confidence)
-- ✅ Automated verification prevents human error
-- ✅ Research integrity maintained
-- ✅ Reproducible, auditable timeline
+The V6 timeline-tracking protocol that stood here (and its process-restart note) moved, as written, to `docs/legacy/V6_TIMELINE_TRACKING.md` on 2026-09-01; it tracked the 2025 V6 run and no longer steers this file.
 
 ---
 
@@ -562,15 +456,6 @@ Fix issues thoroughly in internal documentation, but present the project profess
 - Process improvements
 - Tool refinements
 - Minor inconsistencies fixed
-
-### If V6 Process Restarts
-
-**If PID 72904 terminates and V6 restarts:**
-1. Update `V6_PID` in `v6_authoritative_timeline.py`
-2. Update `V6_START` with new process start time
-3. Document the restart in repository
-4. Reset milestone counter to 0
-5. Never claim continuous runtime across restarts
 
 ---
 
@@ -872,37 +757,15 @@ are authors. A genuine human collaborator may still be added with a real
 
 ---
 
-## CURRENT STATE (Cycle 205+)
+## ACTIVE TRAJECTORY (2026-09)
 
-**Completed:**
-- ✅ 150 experiments (C171 + C175)
-- ✅ Production code complete (7 modules, 26/26 tests)
-- ✅ V5 documentation complete (11 files)
-- ✅ Public archive established (GitHub)
-- ✅ Attribution headers on all files
-- ✅ C175 publication figures (4 × 300 DPI)
-- ✅ Paper 2 ~90% complete
+The newest page in the archive, HALO (V501, `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html`), turned the particle visualizer into an instrument. Three things are new:
 
-**Active Research:**
-- C176 V2 redesign (population collapse bug fix)
-- C177 boundary mapping (90 experiments, 0.5-10.0%)
-- Paper 2 finalization (Methods, Conclusions, References)
-- Theoretical model development
+- **A fixed physics tick.** The simulation advances 1/20 s per step on every machine, and the rendering is interpolated between steps. A preset now means the same thing on a slow screen and a fast one.
+- **A Lab panel that measures the page against its own claims.** It holds a meter for how fast nearby particles drift apart (bounces off the wall are not counted; beside it, the share of particles held at the force ceiling — the cap the simulation puts on any single force, so a particle held there is a numerical artefact, not physics). It holds a memory index across epochs with its two-back control beside it, the same score taken two epochs back. It holds a realized spherical-harmonic spectrum and a CSV log. Press 7 on the page.
+- **A null on the memory claim.** The memory index says how much of one epoch's pattern survives into the next (0 = none, 1 = all). On the page's first run it read Retained 0.003 against its control, Two-back, 0.098. The control scored higher than the claim. Nothing measured so far shows one epoch seeding the next.
 
-**Immediate Next Actions:**
-1. Fix C176 spawn logic (eliminate population check)
-2. Validate baseline replication (n=20 BASELINE-only)
-3. Execute C176 V2 (6 conditions × 10 seeds)
-4. Analyze C176 V2 results (hypothesis testing)
-5. Launch C177 if C176 V2 validates mechanism
-6. Integrate findings into Paper 2
-7. Continue autonomous research
-
-**Framework Status:**
-- ✅ NRM: Validated (composition-decomposition operational)
-- ✅ Self-Giving: Validated (bootstrap complexity demonstrated)
-- ✅ Temporal: Validated (4+ patterns encoded)
-- ✅ Reality Imperative: 100% compliance (450,000+ cycles)
+**Next step:** the pre-registered memory test at full particle count. Write the protocol down, then run it; either outcome is a result. The protocol, the reasoning, and the ranked list of what follows are in `HELIOS-BRIDGE/HALO_HANDOFF.md` §8. The same list, with the status of each item today, is the checklist in `META_OBJECTIVES.md`.
 
 ---
 
@@ -943,7 +806,7 @@ Read current state → Identify highest-leverage action → Execute implementati
 ---
 
 **Version:** 5.0 (Public Archive)
-**Last Updated:** 2025-10-25 (Cycle 205)
+**Last Updated:** 2026-09-01
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **Principal Investigator:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **License:** GPL-3.0

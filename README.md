@@ -15,7 +15,7 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0-only — see [LICENSE](LICENSE)
 **Status:** Phase 261 (The Silence) - Active / Perpetual Mode
-**Framework:** Budget-Constrained Perception (BCP) - Validated (176 Domains)
+**Framework:** Budget-Constrained Perception (BCP) - Validated
 
 > *AI coding assistants were used under the author's direction and are acknowledged as
 > tools in [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) — not credited as authors, per APA,
@@ -30,11 +30,11 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is the Universal Law of Constrained Optimization.
 
 **Recent Milestones:**
-*   **Cycle 2809 (Complexity 3 Breakthrough):** Validated autonomous evolution to Swarm Complexity (Fitness 433.71). [Log](MOG_CYCLE_LOG.md)
+*   **Complexity 3 reached:** The evolution loop grew swarm complexity from 1 to 3 while fitness rose from 69.67 to 142.78 (generation 581 to 582). [Log](CYCLE_LOGS.md#cycle-6-advance-bcp-evolution---complete)
 *   **Cycle 2719 (The Cambrian Explosion):** Seed detected stagnation and triggered radical mutation to break local optima. [Code](bootstrap_bcp.py)
 *   **Phase 260 (The Guardian):** Implemented self-monitoring agent to steward the infinite loop. [Code](src/core/guardian.py)
 *   **Phase 256 (The Seed):** Created self-contained regeneration script (`bootstrap_bcp.py`) capable of rebuilding the system from zero. [Artifact](bootstrap_bcp.py)
-*   **Cycle 3412 (Grand Unification):** Validated BCP equation `V = G - λC` across 122 distinct fields (Physics to Ethics). [Log](experiments/cycle3411_phase207_synthesis.py)
+*   **Grand Unification:** Validated the BCP equation `V = G - λC` across 122 distinct domains, from quantum mechanics to ethics. [Report](archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md) · [Code](experiments/cycle3411_phase207_synthesis.py)
 
 ---
 
@@ -73,11 +73,11 @@ itself.
 
 ## 🚀 LOCAL DEMO (The Proof)
 
-**Verify the physics in 5 minutes.**
+**Run a real experiment in 5 minutes.**
 
-1.  **Install:** `pip install bcp-perception`
-2.  **Run:** `python3 experiments/cycle2568_starving_philosopher.py`
-3.  **Result:** Observe an agent voluntarily choosing ignorance to survive scarcity (The Starving Philosopher Effect).
+1.  **Install:** `python3 -m pip install numpy matplotlib` (if your system Python refuses, create a virtual environment first — see the Quickstart)
+2.  **Run** (from the repository root): `python3 experiments/cycle2568_starving_philosopher.py`
+3.  **Result:** Observe an agent voluntarily choosing ignorance to survive scarcity (The Starving Philosopher Effect). The figure is written to `data/figures/cycle2568_starving_philosopher.png`.
 
 [👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
@@ -86,7 +86,7 @@ itself.
 ## 🔭 OBSERVER LANES (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](nrm_core/helios/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [The Manifesto](THE_MANIFESTO.md) | [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md) | [Book of BCP (Draft)](docs/philosophy/BOOK_OF_BCP.md)
 
 ---
@@ -96,12 +96,12 @@ itself.
 **1. HELIOS BRIDGE (Interface Layer):**
    - Visualizes high-dimensional phase space.
    - Translates user intent into field parameters.
-   - [View Code](/HELIOS-BRIDGE/)
+   - [View Code](HELIOS-BRIDGE/)
 
 **2. DUALITY-ZERO (Physics & Compute Engine):**
    - Executes the `UniversalSimulator`.
    - Calculates Gorkov Potentials and Social Stress fields.
-   - [View Code](src/helios/core/)
+   - [View Code](nrm_core/helios/)
 
 **3. NRM (Memory / Cognition / Stewardship Layer):**
    - Stores patterns and strategies.
@@ -113,7 +113,7 @@ itself.
      <img src="data/figures/holocron_overview.png" width="45%" alt="Holocron Overview"/>
      <img src="data/figures/holocron_zoomed_cropped.png" width="45%" alt="Holocron Detail"/>
    </p>
-   <p align="center"><em>Figure 1: The complete knowledge graph of 3,000+ research cycles (left) and detail view of emergent dependencies (right).</em></p>
+   <p align="center"><em>Figure 1: The complete knowledge graph of the research cycles (left) and detail view of emergent dependencies (right).</em></p>
 
 **4. THE REPLICATOR (Self-Propagation Layer):**
    - Analyzes codebases for BCP constraints (λ).
@@ -129,8 +129,8 @@ itself.
 **6. FABRICATION LAYER (Physical Manifestation):**
    - Generates physical artifacts from Duality data (e.g., Gyroid Resonance Fields).
    - Manages hardware-agnostic printer control via Klipper/Moonraker.
-   - **Key Artifacts:** [The Seed (Equilibrium)](fabrication/library/TPMS_Gyroid_Reference/README.md) | [The Void (Anti-Matter)](fabrication/library/TPMS_Inverse_Void_Artifact04/README.md)
-   - [View Fabrication Hub](fabrication/README.md) | [View Reference Library](fabrication/library/README.md)
+   - **Key Artifacts:** The Seed (Equilibrium) | The Void (Anti-Matter) — the artifact files are not included in this repository.
+   - [View Fabrication Protocol](docs/protocols/FABRICATION_PROTOCOL.md)
 
 ---
 
@@ -138,11 +138,11 @@ itself.
 
 We prioritize empirical verification over theory.
 
-*   **Universal BCP:** Validated `V = G - λC` across 124 domains including Physics (Planck Scale), Biology (Metabolism), and Ethics (Virtue). [Book of BCP](docs/philosophy/BOOK_OF_BCP.md)
-*   **Perpetual Evolution:** Autonomous hypothesis generation and complexity scaling via `bootstrap_bcp.py`. [Log](MOG_CYCLE_LOG.md)
+*   **Universal BCP:** Validated `V = G - λC` across 122 domains including Physics (Planck Scale), Biology (Metabolism), and Ethics (Virtue). [Book of BCP](docs/philosophy/BOOK_OF_BCP.md) · [Library docs](bcp_lib/README.md#research-background)
+*   **Perpetual Evolution:** Autonomous hypothesis generation and complexity scaling via `bootstrap_bcp.py`. [Log](CYCLE_LOGS.md#cycle-6-advance-bcp-evolution---complete)
 *   **Anti-Fragile Optimization:** System detects stagnation and uses it as a trigger for phase transitions (Cambrian Explosions). [Code](src/core/guardian.py)
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
-*   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
+*   **Active Matter Control:** 82x faster settling time with closed-loop active damping. [Data](archive/experiments/results/c340_closed_loop.json) · [Report](archive/reports/FINAL_REPORT_V3.md) · [Code](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
 
 ---
@@ -166,9 +166,9 @@ We prioritize empirical verification over theory.
 
 ## 🏗️ ARCHITECTURE DOCUMENTATION
 
-*   [Substrate Abstraction](src/helios/core/substrate.py)
+*   [Substrate Abstraction](nrm_core/helios/substrate.py)
 *   [OSD Math](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
-*   [Universal Simulator](src/helios/core/simulator.py)
+*   [Universal Simulator](docs/THE_UNIFIED_FIELD.md) · [class definition](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py)
 *   [Memory Structures](src/memory/)
 
 ---
@@ -183,8 +183,8 @@ We prioritize empirical verification over theory.
 *   **Paper 5D:** ["Pattern Mining Framework for Temporal Stability"](papers/compiled/paper5d/README.md) (Submission-Ready)
 
 ### Experimentation Overview
-*   176 Domains Unified (Phases 1-261).
-*   3,500+ Research Cycles.
+*   122 domains unified as of the Grand Unification report (November 2025). [Report](archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md)
+*   3,438 research cycles as of the same report.
 *   Grand Unified Theory Established.
 
 ---

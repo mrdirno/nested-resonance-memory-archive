@@ -9,8 +9,15 @@ import numpy as np
 # Add root to path
 sys.path.append(os.getcwd())
 
-from src.helios.api.server import app
-import src.helios.api.server as server_module
+# server.py calls exit(1) at import time when its web/camera/hardware
+# libraries are missing. pytest.importorskip cannot catch that SystemExit,
+# so catch it here and skip this module instead of aborting collection.
+try:
+    from src.helios.api.server import app
+    import src.helios.api.server as server_module
+except (ImportError, SystemExit):
+    pytest.skip("src.helios.api.server needs cv2, flask, flask_socketio and pyserial",
+                allow_module_level=True)
 
 @pytest.fixture
 def client(monkeypatch):

@@ -2,7 +2,7 @@
 **Time Required:** 5 Minutes
 **Role:** All Observers
 
-This guide provides the "Golden Path" to verify the core physics of the DUALITY-ZERO system.
+This guide is the "Golden Path": one command that runs a real experiment from this repository and writes a figure.
 
 ## 1. Prerequisites
 - **Python 3.9+**
@@ -16,43 +16,52 @@ This guide provides the "Golden Path" to verify the core physics of the DUALITY-
 git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
 cd nested-resonance-memory-archive
 
-# 2. (Optional) Create a virtual environment
+# 2. Create a virtual environment (optional, but some systems refuse to install packages without one)
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install dependencies
-pip install numpy
-# Note: Full system requires more deps, but the Golden Path only needs numpy.
+# 3. Install the two packages the demo needs
+python3 -m pip install numpy matplotlib
+# Note: the full system needs more (see requirements.txt). The Golden Path needs only these two.
 ```
 
-## 3. The Golden Path (Verify Physics)
+## 3. The Golden Path (Run the Experiment)
 
-Run the **OSD Physics Demo**. This script simulates the core ontological claim of the project: that "Dark Matter" is simply energy (Scalar Sum) that is invisible due to destructive interference (Vector Sum).
+Run **The Starving Philosopher**. Observe an agent voluntarily choosing ignorance to survive scarcity (The Starving Philosopher Effect).
+
+Run this from the repository root (the folder you moved into above):
 
 ```bash
-python3 archive/experiments/demo_osd_physics.py
+python3 experiments/cycle2568_starving_philosopher.py
 ```
 
 ### Expected Output
-You should see a clear comparison between **Constructive Interference** (Bright) and **Destructive Interference** (Invisible).
+The script prints its parameters, runs the simulation, and ends with a verdict and the path of the figure it wrote:
 
 ```text
---- CASE B: DESTRUCTIVE INTERFERENCE (Out of Phase) ---
-   Vector Sum (Amplitude): 0.00
-   Visibility (|V|^2):     0.00  (Invisible!)
-   Mass (Scalar Sum):      2.00  (Still Heavy)
+✓ HYPOTHESIS VALIDATED:
+  Agent voluntarily increased perceptual scale (became 'more ignorant')
+  under metabolic pressure to minimize computational potential.
 
-✅ PASS: Mass is Conserved.
-✅ PASS: Visibility Vanished.
+Generating figure...
+Figure saved: .../data/figures/cycle2568_starving_philosopher.png
+```
+
+The figure lands in `data/figures/cycle2568_starving_philosopher.png` inside the repository. To write it somewhere else, add `--out`:
+
+```bash
+python3 experiments/cycle2568_starving_philosopher.py --out my_figure.png
 ```
 
 ## 4. Next Steps
 
-Now that you have verified the physics engine, choose your path:
+Now that you have run your first experiment, choose your path:
 
-- **Observer A (Experimentalist):** Explore `experiments/` for more complex simulations.
-- **Observer B (Architect):** Read `docs/philosophy/ORTHOGONAL_SUBSTRATE_DYNAMICS.md`.
-- **Observer C (Steward):** Review `FINAL_REPORT.md`.
+- **Observer A (Experimentalist):** Explore [`experiments/`](../../experiments/) for more simulations.
+- **Observer B (Architect):** Read [Orthogonal Sum Dynamics](../philosophy/ORTHOGONAL_SUM_DYNAMICS.md).
+- **Observer C (Steward):** Read [The Manifesto](../../THE_MANIFESTO.md).
+
+An older demo of the interference physics (numpy only) was moved to [docs/legacy/QUICKSTART_OSD_DEMO.md](../legacy/QUICKSTART_OSD_DEMO.md). It still runs.
 
 ---
 *End of Quickstart.*

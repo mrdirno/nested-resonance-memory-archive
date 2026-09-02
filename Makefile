@@ -173,7 +173,7 @@ paper4: ## Run Paper 4 higher-order factorial experiments
 
 test: ## Run test suite
 	@echo "$(BLUE)Running tests...$(NC)"
-	pytest -v --cov=code --cov-report=term-missing || echo "$(YELLOW)⚠ Tests not yet configured$(NC)"
+	pytest -v
 	@echo "$(GREEN)✓ Tests complete$(NC)"
 
 test-quick: ## Run quick smoke tests

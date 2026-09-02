@@ -12,7 +12,14 @@ sys.path.append(os.getcwd())
 # server.py executes code at module level (rf_thread.start), which is fine.
 # But we want to verify the app logic.
 
-from src.helios.api.server import app
+# server.py calls exit(1) at import time when its web/camera/hardware
+# libraries are missing. pytest.importorskip cannot catch that SystemExit,
+# so catch it here and skip this module instead of aborting collection.
+try:
+    from src.helios.api.server import app
+except (ImportError, SystemExit):
+    pytest.skip("src.helios.api.server needs cv2, flask, flask_socketio and pyserial",
+                allow_module_level=True)
 
 @pytest.fixture
 def client():

@@ -21,3 +21,7 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/mrdirno/nested-resonance-memory-archive"
 "Bug Tracker" = "https://github.com/mrdirno/nested-resonance-memory-archive/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "bcp_lib/tests"]
+pythonpath = ["."]
