@@ -208,3 +208,76 @@ What is not yet there: the memory claim has no positive result anywhere; the col
 force ceiling and a 32³ mesh; the chamber's magnetic model omits the induced electric field a time-varying B
 requires; and no result has been checked by anyone outside this loop. The next level is not more features —
 it is a positive, pre-registered result on the memory claim at full particle count, or its retirement.
+
+## 8. What the main loop on macOS should pursue, and why it matters for NRM
+
+The archive is large and much of it predates what HALO can now measure. The leverage is not more pages;
+it is that the project's namesake claim finally has an instrument, a validated CPU twin, and a stability
+certificate. Ranked by information per hour for NRM itself:
+
+1. **Pre-register the memory test and run it at full count.** Nested resonance memory, as stated, means the
+   relics of one scale seed the next. The chamber's index says no at self-gravity ≤ 0.3, and where it says yes
+   (≥ 0.5) the two-back control says it is a bound object persisting, not an epoch imprinting the next. Write the
+   protocol down before running: 4.19 M particles, Spinning Chladni and the default preset, epoch 10 s, ≥ 20
+   epochs, self-gravity {0, 0.15, 0.3, 0.5, 0.8}, gain/loss {0, 0.5}, criterion "Retained − Two-back > 0.10 for
+   three consecutive epochs", CSV from the Lab as the record, one JSON per run in `data/results/`. Either outcome
+   is a result: a positive one is the first evidence for the claim in the project's own vocabulary; a null
+   retires the passive-relic version and leaves the honest survivor, "a self-bound object persists across
+   rescalings", which should then be said plainly in the README instead of the current wording.
+2. **Turn the two theorems and the Floquet machinery into principle cards.** The archive already keeps failure
+   cards (`src/tsf/.../PRIN-INVERSE-DESIGN-FAILURE.md` and kin). Two new ones write themselves from
+   `choreography/choreo4.py`: an axial field cannot confine like charges out of plane (the z-inertia is convex),
+   and a cyclic time-delay symmetry needs a drive periodic in the delay. The positive card is the bigger prize
+   for HELIOS: the permutation-map Newton shooting plus the exact monodromy is an inverse-design primitive —
+   given a drive, it returns a periodic matter configuration with a stability certificate (24 multipliers, a
+   million-cycle run). That is the "engineer matter via waveforms" goal with a proof attached, in a toy.
+3. **Audit the archive's magnetic family (V251–V300) with the port.** Those fifty pages carry a Lorentz term;
+   if it is an explicit Euler kick, some of their signature states are ceiling-bound integrator states like the
+   Razor Disc. `workers/numpy-ports/port2.py` and `disc_q1.py` do this in minutes per page. Whatever is found
+   goes into the archive README as a label, not a retraction — the same discipline as Spinning Chladni.
+4. **Refresh the front door to match what is measured.** README: keep the Bridge as the visualizer, put HALO
+   beside it as the laboratory with three measured numbers (threshold 0.45/0.6, memory 0.003 vs 0.098, disc
+   speed 86 predicted 88), and cut any sentence the Lab cannot back. `CLAUDE.md`'s "CURRENT STATE (Cycle 205+)"
+   block is thousands of cycles stale; replace it with the fixed tick, the instruments, the null, and the
+   pre-registered test above as the active trajectory. One `CYCLE_LOGS.md` entry per ring, in the Goal /
+   Action / Method / Result / Status / QN format the file already uses.
+5. **Test the OSD "empty wells" idea where it is cheap.** Matter pinned to nodal surfaces is invisible to the
+   field's vector sum but carries mass into the scalar sum; the chamber has both, so "does nodal matter
+   gravitate the figure?" is a page experiment: realized spectrum against self-gravity at matched settings,
+   with the ceiling share as the honesty check. Do it after 1, not before.
+6. **Harvest week, only if 1 or 2 lands:** a small `chamberlab` package (Boris/Euler steps, PM Poisson, Benettin
+   twins, memory index with its nulls, Floquet certificate) with > 90 % tests — the Library Release Doctrine
+   says publish when ripe, and ripe means a positive result to demonstrate on.
+
+Loop cadence: one ring per cycle; workers are the numpy ports (they report what they found, how sure, what
+would prove it wrong); the kill-test is the page at full particle count; ship = push to `halo/ring-9`, merge to
+`main` when a ring is sealed. Banned as obvious: rewriting the Bridge app in HALO's image, adding presets or
+variations, a paper before a positive result, a WebGPU port, filling cycle logs retroactively.
+
+<!-- ═══ RINGS · agent context, newest last · read before changing this file ═══
+RING 1 · 2026-09-02 · the handoff itself
+WHAT CHANGED: HALO packaged as HELIOS-V501 with its tests, ports, rings and
+the choreography pipeline; integration steps written against the deploy
+workflow and the archive gallery; §8 ranks what the macOS loop should do.
+BANNED: rewriting the Bridge app around HALO; pushing to main from the
+session; adding HALO to the 500-variation manifest; a paper.
+DEAD BRANCHES: (1) numbering HALO V021 from a truncated listing — the
+archive holds V001–V500 (lost, renumbered V501). (2) "the gallery index is
+generator-owned" — the checked-in index.html is a hand-polished page the
+generator's stale template would replace, so the rule is the opposite:
+never let the generator overwrite it. (3) "nothing was pushed" — the
+artifact, handoff, note and README section were on the branch by then.
+(4) the session-assigned branch name; renamed halo/ring-9 at the owner's
+word, the old remote branch outliving two cut-off delete pushes.
+KILL-TEST: three refuting lenses read the handoff against the repository;
+two returned six should-fix errors and one nit, all applied; the physics
+lens died on a rate limit, so the numbers in the note were checked by the
+author against the sealed ring, not by an independent reader.
+THE NON-OBVIOUS CHOICE: register HALO outside the manifest as a
+beyond-the-500 entry with a Tools-registry link and a deploy gate, rather
+than as variation 501 of a five-axis space it does not belong to.
+OPEN QUESTIONS: does the archive's magnetic family carry the Euler
+artifact class? What does the README look like once every sentence must
+cite a Lab number? Should the pre-registered memory protocol live in the
+repo before the run, as the project's first pre-registration?
+═══ end rings ═══ -->
