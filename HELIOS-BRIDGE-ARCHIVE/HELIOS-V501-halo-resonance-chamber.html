@@ -5904,6 +5904,47 @@ threshold follows the spin, the page has only checked the endpoints). A
 Poisson cost. And a strobe test of the interpolated renderer: does
 blending between ticks ever hide a structure that the ticks themselves
 resolve — a razor thinner than one tick's travel is the case to try.
+RING 10 · 2026-09-02 · the page meets the web
+WHAT CHANGED: (1) The two CSV exports (point cloud, Lab log) no longer
+assume the artifact viewer: saveTextFile() uses the viewer's downloads
+capability when it exists and otherwise a plain browser download (a Blob
+and an anchor), so Export works on GitHub Pages and from a local file
+instead of throwing "Cannot read properties of undefined (reading
+'use')". The failure strings are plain sentences. (2) three.js r128 from
+cdnjs carries a subresource-integrity hash (sha384, computed from the
+live CDN file, byte-identical to tests/three.min.js) and
+crossorigin=anonymous. (3) A favicon (inline SVG) and og:title /
+og:description / og:image, so the page stops logging a /favicon.ico 404
+on every load and gets a link preview. (4) The keyboard help names the
+Lab: "7 — Lab". (5) Published as HELIOS-V501 in the Helios Bridge archive
+(mrdirno.github.io/nested-resonance-memory-archive/archive/) and linked
+from the bridge's Tools registry, its Research Labs panel, the archive
+gallery and the README; the deploy fails if the file is missing. The
+headless suite (tests/halo/ in the repository) runs on macOS with the
+browser path taken from PW_CHROMIUM_PATH or Playwright's default.
+BANNED: making the exact rotation the default (the presets were found
+under Euler; ring 9); editing any earlier ring; bundling three.js into
+the file (600 KB more in a 300 KB page, and the archive's 500 pages load
+it the same way); a build step.
+DEAD BRANCHES: (1) A base tag or absolute URLs for the subpath: the page
+has zero relative paths, so nothing needed one. (2) Guarding only with
+typeof window.claude and keeping the "needs the artifact viewer" message:
+a stranger on Pages would still get no file. (3) Serving the og image
+from data/figures: the Pages artifact is only what the deploy copies in,
+and data/ is not copied; the image lives beside the page in the archive.
+KILL-TEST: the headless suite on macOS before this ring (tick 13/13,
+lab 22/22, smoke 95/95; SwiftShader, Playwright 1.62) and after it
+(tick 13/13, lab 23/23, smoke 95/95); the Pages copy opened in Chrome with the
+Lab on and both Export buttons pressed: a .csv lands in Downloads, no
+console error; the integrity hash re-derived from the CDN with openssl.
+THE NON-OBVIOUS CHOICE: keep the viewer path. The page still runs as a
+claude.ai artifact, where a download must go through the save prompt;
+the browser path is the fallback, not the replacement.
+OPEN QUESTIONS: whether the archive's other 500 pages want the same
+integrity attribute (same CDN file, same version): a one-line change
+each, or none, since a versioned cdnjs path has never changed under
+anyone. And whether the og image should be regenerated per ring, or
+stay the Lab as it looked when the page first met the web.
 ═══ end rings ═══ -->
 
 </body>
