@@ -47,11 +47,6 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 [![HALO with the Lab open](data/figures/halo_lab_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/)
 *HALO in September 2026. Press 7 for the Lab. Its tests are in `tests/halo/`, its falsifiers in `experiments/halo/`.*
 
-**Or watch the demonstration:**
-
-[![One minute of the classic bridge](data/figures/bridge_demo_thumbnail.jpeg)](https://youtu.be/flRHV7GuzUY)
-*This video shows the classic bridge (2025–2026). It is now archived at [archive/classic/](https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/).*
-
 What HALO does:
 
 *   **No installation required.** It runs in your browser, with up to 4 million particles.
