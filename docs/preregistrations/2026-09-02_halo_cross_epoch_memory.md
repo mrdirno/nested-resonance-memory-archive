@@ -251,4 +251,19 @@ and without re-running the chamber.
 ## 13. Deviations
 
 Any departure from §5–§9 is recorded in this section, with the date, what changed, and why,
-before the affected analysis is run. This section is empty at registration.
+before the affected analysis is run.
+
+**2026-09-02, after registration, before any confirmatory analysis was run — an addition, not
+a departure.** A positive control was added to §6 as a diagnostic: **Recurrence_k**, the same
+correlation between ρ_k and ρ_{k−1} with *no rescale map at all* (map factor 1, the full mesh),
+together with its own independent-seed null. It answers the one question a null cannot answer
+on its own: *can this estimator see a spatial correlation when one is certainly present?* If
+Recurrence is near zero, a null on Retained means only that the instrument is blind, and the
+verdict would be uninterpretable. Recurrence does **not** enter the decision rule of §8 and
+cannot cause a pass or a failure; the rule is unchanged. The reason for adding it after
+registration is that it was requested by an adversarial reading of §3's rotation caveat, and it
+costs no new data — it is computed from meshes the protocol already exports.
+
+**Also recorded, for the reader's benefit:** in the 262k dry-run pilot of §4 this control read
++0.50 to +0.85 while its own independent-seed null read the same value to three decimals. That
+is a pilot at a different particle count and is not the confirmatory result.

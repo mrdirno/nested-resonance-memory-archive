@@ -14,6 +14,8 @@ with no rotation search and no normalisation beyond the Pearson:
   RetainedM_k     Retained restricted to the SAME inner 8^3 block as TwoBack, so the
                   two arms differ only in epoch lag - the region-matched control the
                   page cannot display
+  Recurrence_k    corr(rho_k, rho_{k-1}) with NO rescale map (positive control): the
+                  estimator must score here, or a null on Retained means nothing
   SeedNull_k      corr(rho_k, rho'_{k-1}) against an independent seed's relic at the
                   same epoch and the same settings: what the estimator reads when
                   there is, by construction, nothing to remember
@@ -73,6 +75,13 @@ def series(mesh, other=None, rng=None):
         row = {'epoch': k + 1}
         if k >= 1:
             row['retained'], row['n_ret'] = corr(mesh[k], mesh[k - 1], 2)
+            # POSITIVE CONTROL (diagnostic, not in the decision rule): the same
+            # correlation with no rescale map at all - does the figure re-form where
+            # it was, in absolute coordinates? A near-zero here would mean the
+            # estimator cannot see a spatial correlation even when one is present,
+            # and would make a null on Retained uninterpretable. Its seed null says
+            # whether what it sees is memory or the figure both runs share.
+            row['recurrence'], row['n_rec'] = corr(mesh[k], mesh[k - 1], 1)
             row['retained_matched'], row['n_retm'] = corr(mesh[k], mesh[k - 1], 2, q=H // 4)
             if rng is not None:
                 sh = mesh[k - 1].ravel().copy()
@@ -81,6 +90,7 @@ def series(mesh, other=None, rng=None):
             if other is not None and k < len(other):
                 row['seed_null'], _ = corr(mesh[k], other[k - 1], 2)
                 row['seed_null_matched'], _ = corr(mesh[k], other[k - 1], 2, q=H // 4)
+                row['recurrence_null'], _ = corr(mesh[k], other[k - 1], 1)
         if k >= 2:
             row['twoback'], row['n_two'] = corr(mesh[k], mesh[k - 2], 4)
             if other is not None and k < len(other):
