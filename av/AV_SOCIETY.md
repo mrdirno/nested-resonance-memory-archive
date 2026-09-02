@@ -8016,3 +8016,52 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `row-live-line` **14 order pages**. · **STOREFRONT:** 4 rows added to `fieldToolkits.ts`,
   placement verified per-trade and the file re-parsed with esbuild — P5 pushes it.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/long-pole.html
+
+- **2026-09-02 (C3693) · [AXIS:WELL]** · **ONE DOT PER CARD RAN OUT OF PHONE.** The only
+  waiting wish in either well was anonymous, four words, from the Vibe Cards landing page's
+  own box after an Instagram bio-link tap: *"Fabel 5.1 just released revamp the space!"* A
+  **3-judge panel** ran independently. All three agreed on the MEANING — "the space" is that
+  landing page encountered cold — and all three scored their own *proposal* at CONFIDENCE 3,
+  which is the panel saying nobody knows what was wanted specifically. The adversary's veto
+  settled the tiebreak: **no restyle without a falsifiable pass/fail.** Neither of the other
+  two proposals had one (a 3D card flip; reordering the h1 above the deck — both logged as
+  next rungs with their falsifiers), so the build went to the defect I could measure. ·
+  **WHAT WAS BROKEN:** the deck pager drew one 44px dot per card, and the deck had grown to
+  15. Measured live at the four gate widths, as **rows the pager occupies**: 3 rows at 320,
+  360 and 390px, 2 at 430 — 150px of page — and `.arrow` is `display:none` outside
+  `(hover:hover)`, so **on a real phone those wrapped rows were the entire control**: 15
+  identical 7px marks you cannot aim at. The page's own CSS had predicted this and named the
+  trigger — *"card 008 will not reopen this"*. Card 016 did. · **THE FIX:** one row, forever
+  — an `<input type="range">` rail you can drag plus an `03/15` readout. Same width at 5
+  cards, at 15, at 60. It gives up sight-jumping (15 identical dots had already taken that)
+  and gives back a scrub, a **number the page had never stated**, one labelled control
+  instead of 15, arrow keys, and an `aria-valuetext` that names the card it rests on — so the
+  deck reads out *better* to a screen reader, not worse. **Two bugs found by DRIVING it, not
+  looking at it:** `scrollTo(behavior:'auto')` defers to CSS and `.deck` sets
+  `scroll-behavior:smooth`, so released at card 11 the reel was still passing card 2;
+  and painting on `change` read where the deck WAS, not where it was going, and dragged the
+  readout backwards. One settle per rack, 90ms after the deck last moved, owns it now. A
+  third, caught on the live page: the focus ring was drawn round the whole 44px × full-width
+  control in the card's own accent — Build Lab's red framed the rail like a rejected field —
+  so the halo moved to the thumb. · **THE ADVERSARY'S FIND, SHIPPED WITH IT:** `BUILD-LAB-001`
+  was published, registered, given a page and both faces, and **linked from nowhere** —
+  reachable only by already holding the printed card. `CARD_REGISTRY.md` step 5 calls `/lab/`
+  "the live proof" that nothing checks this. The dot row was *why* nobody added it: a 6th dot
+  was a 6th 44px target on a row already wrapping at 320px. It is now card 6 of 6 in the hero
+  deck, and the registry step is rewritten to say what is and is not gated. Also fixed: the
+  hero's first sentence printed at **x=0.0px** at every width while its neighbours sat at 18.0
+  and 19.5 — `header.hero` has no padding and that line was the only child not in a `.wrap`. ·
+  **GATES (E1 both ways):** `build_site.py` grows `data-count="deck"`, derived from the card
+  figures in the reel above it, not from the registry — **proved to fail** naming the deck when
+  the total is wrong. `verify_mobile.mjs` grows a pager check that bands controls by **vertical
+  overlap** (a rounded `top` calls a 44px slider beside a 12px line a wrap; the first version
+  did exactly that, and a child-level test could not see 15 buttons inside one `div` at all) —
+  **8 failures on the live page before, watertight on it after**, all four widths, every page.
+  · **BACKPORT RIDER FIRED, THREE CLASSES, ALL CLEAN:** wrapping control strip — no
+  `.pager`/`.dots` exists anywhere in the 16 trades, the defect is structurally absent;
+  orphaned page — **166 pages across 16 trades swept, 0 orphans** (the registry+hub pattern is
+  what prevents it, and is exactly what a hand-written deck lacks); gutter escape — **48 live
+  pages at 390px (every trade's hub plus two tools each), 0 flagged**. · **NOT DONE, NAMED:**
+  the vibe-cards well has no credits surface, so an anonymous wish is credited only in the
+  commit; `/gt/` is the remaining unlinked card and cannot take a slide until it has artwork.
+  https://mrdirno.github.io/vibe-cards/
