@@ -90,6 +90,21 @@ const check = (name, ok, info) => { if (ok) pass++; else fail++; console.log((ok
   check('two-back stat present', !!(await page.$('#lab-ret2')));
   await page.screenshot({ path: path.join(__dirname, 'shots', '81-tick-build.png') });
   check('no console/page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
+
+  // ring 11: a browser with nothing saved starts in Jellyfish from step 791
+  const fresh = await browser.newContext();
+  const fp = await fresh.newPage();
+  await fp.goto('file://' + path.resolve(__dirname, 'rc-test.html'));
+  await fp.waitForSelector('.boot.done', { timeout: 90000 });
+  const start = await fp.evaluate(() => { const P = window.__probe; const st = P.state; return {
+    particles: st.particles, step: P.step, form: st.fieldForm, exp: st.fieldExp, boundary: st.cosmos.boundary,
+    mag: st.cosmos.mag, helix: st.cosmos.helix, aniso: st.cosmos.aniso, user: st.cam.user,
+    label: (document.querySelector('#scenario-seg0 button[data-scn="jellyfish"]') || {}).textContent }; });
+  check('fresh browser starts in Jellyfish (1,000,000 particles, step 791, wells 10^1.25, wrap, coupling 0.4, helix 0.9, anisotropy 0.8, camera set)',
+    start.particles === 1000000 && start.step === 791 && start.form === 'wells' && start.exp === 1.25 && start.boundary === 'wrap'
+    && start.mag === 0.4 && start.helix === 0.9 && start.aniso === 0.8 && start.user === true, JSON.stringify(start));
+  check('the start button reads Jellyfish', start.label === 'Jellyfish', start.label);
+  await fresh.close();
   console.log(`\n${pass} passed, ${fail} failed`);
   await browser.close();
   process.exit(fail ? 1 : 0);

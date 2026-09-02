@@ -667,7 +667,11 @@ kbd {
   </div>
   <div class="panel-body">
     <div class="group">
-      <div class="group-label">Scenarios</div>
+      <div class="group-label">Where the page starts</div>
+      <div class="seg" id="scenario-seg0" role="group" aria-label="The starting state">
+        <button data-scn="jellyfish" aria-pressed="false">Jellyfish</button>
+      </div>
+      <div class="group-label" style="margin-top:6px">Scenarios</div>
       <div class="seg" id="scenario-seg" role="group" aria-label="Scenario presets">
         <button data-scn="formation">Formation</button>
         <button data-scn="chladni">Chladni study</button>
@@ -1532,6 +1536,7 @@ kbd {
       <span><kbd>A</kbd></span><span>Sound on / off</span>
       <span><kbd>1</kbd>–<kbd>7</kbd></span><span>Toggle panels</span>
       <span><kbd>7</kbd></span><span>Lab — the instruments (chaos meter, memory test, spectrum)</span>
+      <span><kbd>3</kbd></span><span>Scenarios — the page starts in Jellyfish; every other preset is one click</span>
       <span><kbd>I</kbd></span><span>This dialog</span>
       <span><kbd>Esc</kbd></span><span>Close panel or dialog</span>
     </div>
@@ -1707,12 +1712,14 @@ function sanitizeState(saved) {
   s.lab.on = !!s.lab.on;
   return s;
 }
+let freshStart = false;   // nothing saved in this browser: the page starts in Jellyfish (see startInJellyfish)
 function loadState() {
   let saved = {};
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) saved = JSON.parse(raw) || {};
-  } catch (e) { /* private mode or blocked storage: run on defaults */ }
+    else freshStart = true;
+  } catch (e) { freshStart = true; /* private mode or blocked storage: start fresh every time */ }
   return sanitizeState(saved);
 }
 let state = loadState();
@@ -3811,6 +3818,7 @@ function wireSwitch(el, get, set) {
    hardware-facing choices (particle count, render scale, colors) are
    kept from the current state. */
 const SCENARIO_HINTS = {
+  jellyfish: "The state this page starts in, found by hand and kept as found: a wells field at strength 10^1.25 with damping 3, in a box that wraps instead of reflecting, expanding at 1.2 with a zoom-out every 10 s, magnetic coupling 0.4 with twist, anisotropy 0.8 and helix 0.9, a million particles at about 1.2 digits per second, starting from step 791. Nothing about it has been measured yet; the Lab is one key away.",
   _default: '',
   formation: 'The full ecology: eigenmode field, collapsing black-hole centers, expansion, epochs.',
   chladni: 'Pure resonance. Slow steps, no centers, no expansion \u2014 the nodal surfaces alone.',
@@ -3842,6 +3850,7 @@ const SCENARIO_HINTS = {
   conveyor: "Wells at super-critical expansion: a reflecting boundary packs the matter onto the wall, while the wrapped one keeps a population circulating through the interior, because outflow re-enters at the antipode already heading inward.",
 };
 const SCENARIOS = {
+  jellyfish: {"fieldForm": "wells", "fieldExp": 1.25, "damping": 3, "stepsPerSec": 1.2311444133449163, "smooth": true, "base": 10, "constants": {"a": "phi", "b": "phi", "c": "phi"}, "strideIndex": 90, "offsetMode": "auto", "centers": {"on": false}, "cosmos": {"boundary": "wrap", "hubble": 1.2, "epoch": true, "epochLen": 10, "mag": 0.4, "twist": true, "aniso": 0.8, "helix": 0.9, "cascade": "out", "selfgrav": 0, "gainloss": 0}, "vessel": {"form": "off"}, "colorMode": 1, "particles": 1000000, "sound": {"voice": "bridge", "type": "lcm", "omega": 0.7, "omegaDigits": true, "register": -2, "level": 0.54, "pitchSpace": "shepard"}, "guides": false, "substeps": 1, "lorentz": "euler", "cam": [0.5849782369272978, 0.42037469190672155, 40.26430331961591]},
   formation: { centers: { on: true } },
   lacework: {"fieldForm": "chladni", "fieldExp": 0.25, "damping": 3.2, "stepsPerSec": 1, "smooth": true, "base": 12, "constants": {"a": "e", "b": "pi", "c": "e"}, "strideIndex": 91, "offsetMode": "auto", "cosmos": {"hubble": 0, "epoch": false, "mag": 0, "twist": false, "boundary": "reflect"}, "vessel": {"form": "off"}, "colorMode": 3, "particles": 2000000, "sound": {"voice": "bridge", "type": "usim", "omegaDigits": true, "register": -1, "level": 0.5, "pitchSpace": "shepard"}, "cam": [0.6, 0.45, 24]},
   strobe: {"fieldForm": "chladni", "fieldExp": 0.4, "damping": 6, "stepsPerSec": 5, "smooth": false, "base": 2, "constants": {"a": "pi", "b": "phi", "c": "pi"}, "strideIndex": 91, "offsetMode": "auto", "cosmos": {"hubble": 0, "epoch": false, "mag": 0, "twist": false, "boundary": "reflect"}, "vessel": {"form": "off"}, "colorMode": 1, "particles": 500000, "sound": {"voice": "steps", "register": 0, "level": 0.6}, "cam": [0, 0.15, 30]},
@@ -3930,8 +3939,22 @@ function applyScenario(key) {
   }
   saveState();
 }
-document.querySelectorAll('#scenario-seg button, #scenario-seg2 button, #scenario-seg3 button, #scenario-seg4 button').forEach(btn =>
+document.querySelectorAll('#scenario-seg0 button, #scenario-seg button, #scenario-seg2 button, #scenario-seg3 button, #scenario-seg4 button').forEach(btn =>
   btn.addEventListener('click', () => applyScenario(btn.dataset.scn)));
+
+/* The page starts in Jellyfish — the author's own state — from its own step 791, whenever nothing is
+   saved in this browser. A saved state always wins. On touch devices the same figure runs with the
+   page's default count, 250,000 particles: self-gravity is off in this state, so the count is a render
+   budget, not the physics. */
+const START_SCENARIO = 'jellyfish', START_STEP = 791, TOUCH_PARTICLES = 250000;
+function startInJellyfish() {
+  applyScenario(START_SCENARIO);
+  step = START_STEP;
+  let coarse = false;
+  try { coarse = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches); } catch (e) {}
+  if (coarse && state.particles > TOUCH_PARTICLES) { setParticleCount(TOUCH_PARTICLES, true); syncAllControls(); }
+  updateTapes(); updateHud();
+}
 
 /* Sound toggle */
 function setAudio(on) {
@@ -5207,6 +5230,7 @@ if (state.cam.user) {
 }
 syncAllControls();
 applyAllState();
+if (freshStart) startInJellyfish();
 requestAnimationFrame(frame);
 
 })();
@@ -5945,6 +5969,47 @@ integrity attribute (same CDN file, same version): a one-line change
 each, or none, since a versioned cdnjs path has never changed under
 anyone. And whether the og image should be regenerated per ring, or
 stay the Lab as it looked when the page first met the web.
+RING 11 · 2026-09-02 · the page starts in Jellyfish
+WHAT CHANGED: (1) A NEW STATE OF THE AUTHOR'S OWN, Jellyfish, kept as
+found: a wells field at strength 10^1.25 with damping 3, in a box that
+WRAPS instead of reflecting, expanding at 1.2 with a zoom-out every
+10 s, magnetic coupling 0.4 with twist, anisotropy 0.8 and helix 0.9,
+a million particles at 1.23 digits per second, step 791, camera at
+az 0.585 / el 0.420 / dist 40.3. It is the first preset outside the
+Spinning Chladni family with the wrap boundary, and the first in a
+wells field since Antipodal Conveyor. It sits in its own group at the
+top of the Scenarios panel, "Where the page starts". (2) THE START.
+When nothing is saved in this browser the page opens in Jellyfish
+from its own step: startInJellyfish() runs the same scenario path the
+buttons and the Lab experiments use, so the start is a preset, not a
+second copy of one. A saved state always wins. On touch devices the
+same figure runs with the page's default 250,000 particles: self-gravity
+is off here, so the count is a render budget, not the physics. (3) One
+test in tests/halo/tick_test.js opens a browser with nothing saved and
+reads the start state back through the probe; the probe exposes step.
+BANNED: putting the state into DEFAULTS (every reset and every sanitize
+fallback would change meaning for every preset); making the exact
+rotation the start (the state was found under Euler, like the family
+before it); a device rule that changes the physics rather than the
+count; any claim about what the figure IS before the Lab has measured
+it.
+DEAD BRANCHES: (1) The first paste was the Spinning Chladni state
+itself, and for an hour the name Jellyfish went onto that family; the
+corrected paste is a different state, and nothing of the rename
+survives: the family keeps its name and its key. (2) A full state
+literal applied with applyPreset at boot — a second copy of the
+scenario table that drifts. (3) Starting at step 0 — the figure the
+author saved is the one at step 791.
+KILL-TEST: the test build on macOS after this ring: tick 15/15, smoke
+95/95, lab 23/23; the served page in a clean Chrome context:
+1,000,000 particles, wells 10^1.25, wrap, HUD step 798 six seconds after boot, button "Jellyfish", no page errors; a second load in the same context keeps the saved state.
+THE NON-OBVIOUS CHOICE: the start is a scenario button like any other,
+so a visitor who wanders off can always come back to it with one click,
+and the page has no state that only boot can produce.
+OPEN QUESTIONS: what Jellyfish is, in the Lab's terms — its Lyapunov
+sign, whether the wrap boundary changes the ceiling share, what the
+spectrum says the wells field prescribes versus what is realized; and
+whether the Bridge app's own default should follow.
 ═══ end rings ═══ -->
 
 </body>

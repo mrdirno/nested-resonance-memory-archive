@@ -33,6 +33,7 @@ window.__probe = {
   DEFAULTS: DEFAULTS, deepPatch: deepPatch, applyPreset: applyPreset,
   renderer: renderer, reseed: reseed,
   get state() { return state; },
+  get step() { return step; },
   get simTime() { return simTime; },
   get texSize() { return texSize; },
   get posA() { return posA; },
