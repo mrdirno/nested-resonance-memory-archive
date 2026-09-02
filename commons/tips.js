@@ -696,5 +696,40 @@ window.COMMONS_TIPS = [
     w: "Filing the strike open makes it catch today and buries the reason — a hinge sitting proud, a jamb pulled in, a leaf in wind — and that reason keeps moving until the door drags and the strike you opened no longer holds it shut. The gap tells you which one you've got: even top to bottom is the strike, tight at one end is a hinge, touching the stop at one corner only is the frame telling you it's twisted." },
   { id: "seal-the-cut-today", t: ["doors"],
     n: "Seal any field cut on a wood leaf the same shift you make it.",
-    w: "A raw edge drinks whatever's in the air of a building that still has wet trades working in it, and the leaf answers by swelling or bowing about a week later, in a room nobody's opened since. How much comes off — and whether anything comes off that leaf at all — is on your own approved submittal and the maker's instructions, not on your eye at the opening." }
+    w: "A raw edge drinks whatever's in the air of a building that still has wet trades working in it, and the leaf answers by swelling or bowing about a week later, in a room nobody's opened since. How much comes off — and whether anything comes off that leaf at all — is on your own approved submittal and the maker's instructions, not on your eye at the opening." },
+
+  /* ---- landscape & irrigation: trade #16 ---------------------------------
+   EVERY ROW HERE IS SOMETHING THAT GETS BURIED BY SOMEBODY ELSE'S CREW. This
+   trade's mistakes are not made at the moment of the mistake — they are made
+   the day a form goes up, a truck dumps topsoil, or a cleanup crew flattens
+   the cartons, and they surface a season later on a finished site with the
+   owner standing on it. So the judgement in these tips is nearly all about
+   TIMING: say the thing, cut the thing, photograph the thing, or keep the
+   thing while it is still cheap, because the same fix after cover costs a core
+   drill, a lawn, or a plant nobody can prove the name of. No run times, no
+   depths, no rates: where a number belongs it comes off his own sheet. */
+  { id: "walk-the-sleeves", t: ["landscape"],
+    n: "Walk every crossing with the concrete foreman and paint your sleeve on the form before his crew sets a single stake.",
+    w: "Nobody's sheet shows your sleeve. It isn't on the concrete drawing, it isn't on the plumbing drawing, and the landscape sheet stops at the curb, so if it doesn't come out of your mouth at that form it does not exist. After the pour the choices are a core drill you pay for or a line that goes the long way around and shows up crooked in the sod forever." },
+  { id: "shoot-the-crossing", t: ["landscape"],
+    n: "Photograph every sleeve end before anybody covers it, with something in the frame that will still be standing next spring.",
+    w: "Your flag is gone the week the paving crew shows up and your stake goes with the topsoil. Shoot it against a column, a corner of the building, the end of a curb return — something with footings. The man hunting for that stub in November with a probe and a shovel is you, in a finished bed, with the owner watching, and the photo is the whole difference." },
+  { id: "read-the-common", t: ["landscape"],
+    n: "Ring out the common back to every valve before you blame a solenoid for a zone that won't come on.",
+    w: "One common feeds them all, so one nick from a trencher or one wire nut somebody put on dry in a wet box takes out zones that have nothing to do with each other. Chase it as a valve problem and you'll dig up three good valves before you find the splice. The pattern of what doesn't work tells you where the break is faster than any meter." },
+  { id: "flush-before-heads", t: ["landscape"],
+    n: "Flush every lateral out the open end until it runs clean before a single head goes on.",
+    w: "Everything the trench put in that pipe — grit, shavings, a chunk of the sod you cut, whatever the dog knocked in — goes straight to the smallest hole in the system, which is the nozzle. Skip it and you're pulling heads one at a time in front of the owner on a lawn you already fine-graded, and half of them come out with a wet knee and a stripped riser." },
+  { id: "heads-to-finish-grade", t: ["landscape"],
+    n: "Set every head to the grade the job is going to have, not to the dirt that's under your boot today.",
+    w: "Topsoil is still coming, sod has thickness, and the mulch in that bed is going in after you leave — so a head set to today's dirt ends up buried, and one set to yesterday's ends up standing proud where the mower finds it. Ask what's going on top before you glue the last one on. Digging heads back up is a day nobody pays you for." },
+  { id: "box-where-a-man-can-reach", t: ["landscape"],
+    n: "Put the valve box where a man can kneel and get both hands in it, and where nothing is going to grow over the lid.",
+    w: "The plan puts the box where the pipe is; the pipe doesn't have to hold a wrench. Tuck it in the lawn and the mower hits it every week until the lid is cracked and the top of the box is scalped. Bury it behind a shrub that's a hedge in two years and the next man cuts a hole in a finished bed to find it — and that man is usually you." },
+  { id: "keep-the-tag", t: ["landscape"],
+    n: "Take the tag off every plant and pot and keep it before the empties go in the dumpster.",
+    w: "The tag is the only thing on site that says what actually got planted, in the grower's own words, and it leaves with the cleanup crew on Friday. A season later the argument is whether the thing in the ground is the thing on the schedule, and everybody's memory is a guess. What you kept and photographed the day it landed is not a guess." },
+  { id: "water-the-day-it-lands", t: ["landscape"],
+    n: "Water everything the day it comes off the truck, not the day it goes in the ground.",
+    w: "Stock sits in staging while you wait on grade, on an answer, on the flatwork — and a pot in the wind on hot ground goes past saving without ever looking dead. It looks fine going in the hole and it dies later, on your warranty, in a bed you also planted. Whoever's on site last fills the tank and walks the staging." }
 ];

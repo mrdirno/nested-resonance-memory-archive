@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sub It Or Wait — Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="You can't get it. Their schedule line rides as an address, what the yard said rides in the yard's words, the two or three you can get ride the way you'd order them, and the date the answer has to land before the whole planting sequence moves. Approve one in writing under your own number, or tell me to wait. Nothing here is a design call.">
+<meta name="apple-mobile-web-app-title" content="Sub It Or Wait">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Landscape &middot; you &rarr; whoever owns the plant list</span>
+    </div>
+    <h1 id="h1">Sub It Or Wait</h1>
+    <p class="lede" id="lede">The yard doesn&rsquo;t have it. Not in that size, not this season, not under that name &mdash; and the bed it goes in is holding a hundred and forty other plants that are drinking your water while somebody decides. This is the ask, and it stays out of the design: their schedule line rides as an address so you&rsquo;re both pointing at the same plant, what the yard said rides in the yard&rsquo;s words, and what you <i>can</i> get rides the way you&rsquo;d order it. Then the date the answer has to land, and what moves if it doesn&rsquo;t. Approve one under your own number, or tell me to wait.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s an ask, not a substitution.</b> This page makes no plant call &mdash; it doesn&rsquo;t say a plant is equivalent, suitable or hardy, it supplies no size and no spec, and it reproduces no column of anybody&rsquo;s schedule; their line number rides here so two people can point at the same plant. Whatever gets approved gets approved on <i>their</i> submittal under <i>their</i> number, not on this note. The plant list stays whoever&rsquo;s it already is.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A line the yard says to you that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the ask</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* SUB IT OR WAIT — the substitution ASK, and the page that answers THEIR
+ * numbered schedule the way painting's Color Lock answers the finish
+ * schedule. A CONFIG of shape #2's engine (shared/note.js): no CSS here, no
+ * DOM building, no state, no persistence, no document assembly — the engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY IT IS CLEAN, stated once: the landscape architect's plant schedule is
+ * owned and NUMBERED upstream. This page does not copy it. It cites the line
+ * (sheet, key, the way their schedule says it) as an ADDRESS, carries what the
+ * yard said in the yard's words, and lists what he CAN get as he would order
+ * it — a fact about a nursery's stock, not a claim about a plant. It never
+ * says a substitute is equivalent, suitable or hardy. Address is clean; a
+ * verdict would be dead.
+ *
+ * AND THE LINE THAT MAKES IT GET ANSWERED: what waiting MOVES. A substitution
+ * that sits in an inbox for a fortnight is a bed that sits for a fortnight,
+ * and the sod behind the bed, and the walk behind the sod. That is the
+ * sentence a super reads first.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.subs;
+  var KEY = "toolkit.landscape.subitorwait.v1";
+
+  Note.mount({
+    key: KEY,
+    docName: "SUBSTITUTION ASK",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this ask? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    /* THE HEADING IS THE ASK. He reads this between two other jobs: a first
+       line that carries the date the answer has to land is a thread he opens
+       today, and a thread he has to open to find the date is one he answers
+       next week. The job rides on the second line. */
+    titleSuffix: function (get, u) {
+      var by = u.doc("by");
+      return by ? "answer by " + by : "";
+    },
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox in April, when the argument is about which bed and which plant.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Willow Creek — Phase 2, Building C", docSkip: true }
+        ]
+      },
+      {
+        title: "Who decides",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can approve it under their own number. “I told the job” is not a name, and the GC can't approve a plant.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who owns the plant list", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "M. Alvarez — landscape architect", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you called the yard", hint: "— stamps itself when you start", docLabel: "Called the yard", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The line I can't get",
+        docHead: "THE LINE I CAN'T GET",
+        why: "Their line, the way their schedule says it — sheet, key, the count — so it's an address and not a re-typed schedule. Then what the yard actually said, in the yard's words, because “they don't have it” gets argued and “sold out through fall, fifteens only” doesn't.",
+        fields: [
+          { id: "said", kind: "pick", label: "The short version", options: T.said, docLabel: "The yard says" },
+          {
+            id: "lines", kind: "rows", label: "Their lines", addLabel: "+ Another line",
+            cols: [
+              { id: "line", kind: "text", label: "Their line — sheet, key, count, the way the schedule says it", ph: "L-201 · key QUE-AGR · 6 ea" },
+              { id: "yard", kind: "text", wide: true, label: "What the yard said, in their words", ph: "sold out through fall — 15-gal only, 24-inch box in October" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "What I can get",
+        docHead: "WHAT I CAN GET",
+        why: "The plant and the size the way you'd order it, how many, and when — a fact about the yard's stock. You're not saying it's the same plant; you're saying it's on a truck.",
+        fields: [
+          {
+            id: "cans", kind: "rows", label: "What's on the yard", addLabel: "+ Another one",
+            cols: [
+              { id: "plant", kind: "text", wide: true, label: "The plant and the size, the way I'd order it", ph: "same species, 15-gal — or the cultivar the yard has in 24-inch box" },
+              { id: "avail", kind: "text", label: "How many, and when", ph: "6 now · 12 in three weeks" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "When the answer has to land",
+        tone: "loud",
+        docHead: "WHEN I NEED THE ANSWER",
+        why: "A date, not “soon” — and what moves if it doesn't come, because that sentence is the one the super reads first.",
+        fields: [
+          { id: "by", kind: "date", label: "Answer by", docSkip: true },
+          { id: "moves", kind: "pick", label: "What waiting moves", options: T.moves, docLabel: "If it waits" },
+          { id: "standing", kind: "text", label: "What's staged, and what it's holding", ph: "the rest of the west bed is on site and drinking my water — 140 plants waiting on 6 trees" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— of what the yard has, if you shot it", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "Ray T — 559-555-0173", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Sierra Landscape & Irrigation", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Approve one of these in writing under your own number, or tell me to wait — and if it's wait, tell me what I plant in the meantime and who's watering what's already in.",
+      "Nothing here is a design call: the plant list is yours. I'm telling you what the yard has, in the yard's words, and what waiting moves."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.lines || []).filter(function (r) { return r && (r.line || r.yard); }).length;
+      if (n) return n + " line" + (n === 1 ? "" : "s") + " on the ask";
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Water&rsquo;s Yours — Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="The day it's in and running, the water becomes somebody else's — who has the controller and where it is, what you set the clock to in your own words copied off the face, what's running and what isn't, and the ask: nobody kills the water or changes the clock without telling me, tell me the day it goes off for a freeze, who waters the days we're not here, and the date the maintenance clock starts off your own contract. The code goes by phone, never on the note.">
+<meta name="apple-mobile-web-app-title" content="Water’s Yours">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Landscape &middot; the day the water becomes somebody else&rsquo;s</span>
+    </div>
+    <h1 id="h1">Water&rsquo;s Yours</h1>
+    <p class="lede" id="lede">Everything you planted lives or dies on what they do with the water after you leave, and the day it&rsquo;s in and running is the day they own it. So write down who has the controller and where it is, what you set the clock to in your own words copied off the face, what&rsquo;s running and what isn&rsquo;t &mdash; and the ask: nobody kills the water or changes the clock without telling you, the day it goes off for a freeze, who waters the days you&rsquo;re not there, and the date the maintenance clock starts off <i>their</i> contract. It recommends nothing. It&rsquo;s what you set, written down so you both know.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a handback, not a schedule.</b> What&rsquo;s on it is what <i>you</i> set the clock to, copied off the face in your words &mdash; this page recommends no run time, no rate, no schedule and no seasonal adjustment, and it never will. The controller code is never on it: give it by phone. The water bill, the restrictions and the backflow test are theirs to run &mdash; the tester files that with the water purveyor, and nothing here is shaped like his form.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; Something the building always asks you at turnover that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the handback</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* WATER'S YOURS — the HANDBACK, and the one page in this kit that gets read in
+ * March by somebody who was not there in September. A CONFIG of shape #2's
+ * engine (shared/note.js): no CSS here, no DOM building, no state, no
+ * persistence, no document assembly — the engine owns all of it. This file
+ * owns the WORDS.
+ *
+ * THE LINE THIS PAGE IS BUILT AROUND, and the one every refusal on this hub
+ * points at: WHAT HE SET THE CLOCK TO, IN HIS WORDS, COPIED OFF THE FACE. It
+ * is a free-text area on purpose. The moment it became fields — days, start
+ * times, minutes per zone — this page would be a watering schedule with our
+ * name on it, and a watering schedule is an application rate wearing a hat.
+ * What he types is HIS statement of what he did; the page supplies nothing,
+ * suggests nothing and never says whether it is enough.
+ *
+ * AND THE CODE GOES BY PHONE. A copied message ends up in a group chat, and a
+ * controller code in a group chat is every valve on the property in the hands
+ * of whoever was forwarded it. The field asks who he GAVE it to and when, and
+ * the label says the rest.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.handover;
+  var KEY = "toolkit.landscape.watersyours.v1";
+
+  Note.mount({
+    key: KEY,
+    docName: "THE WATER'S YOURS",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this handback? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    /* THE DAY IT'S THEIRS RIDES IN THE TITLE — it is the one fact everybody
+       argues about in March. The job rides on the second line. */
+    titleSuffix: function (get, u) {
+      var d = u.doc("day");
+      return d ? "from " + d : "";
+    },
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox in March, when the argument is about who turned what off.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Willow Creek — Phase 2, Building C", docSkip: true }
+        ]
+      },
+      {
+        title: "Who's got it now",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that holds the water from here. “The building” is not a name, and the day it's theirs is a date, not “when we're done”.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who holds it from here", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Mara S — property manager", docLabel: "Name" },
+          { id: "day", kind: "date", label: "The day it's theirs", docSkip: true }
+        ]
+      },
+      {
+        title: "What's running",
+        docHead: "WHAT'S RUNNING",
+        why: "Which zones are on and which aren't, and why — a zone that's off for a reason nobody wrote down is a bed that dies with everybody sure it was watered.",
+        fields: [
+          { id: "running", kind: "pick", label: "Where it stands", options: T.running, docLabel: "State" },
+          { id: "off", kind: "area", rows: 2, label: "Zones still off, and why", hint: "— your words", ph: "zone 9 off — the valve's leaking and the replacement's on order; zone 12 off till the sod's rooted" }
+        ]
+      },
+      {
+        title: "The clock",
+        tone: "loud",
+        docHead: "THE CLOCK",
+        why: "Where it is, who has the key, and what you set it to — in your words, copied off the face. The code goes by phone, never on this note: a copied message ends up in a group chat.",
+        fields: [
+          { id: "where", kind: "text", label: "Where the controller is", ph: "inside the pump room, left of the panel" },
+          { id: "key", kind: "text", label: "Who has the key, and who you gave the code to", hint: "— the code itself goes by phone, never on here", ph: "gave the code to Mara by phone 9/14 — key's on the building's ring" },
+          { id: "set", kind: "area", rows: 3, label: "What you set it to — in your words, copied off the face", hint: "— what YOU set, not what anybody should", ph: "zones 1–6 on the tree program, 7–12 on the shrubs, drip on its own program — the days and times as they read on the face today" },
+          { id: "backflow", kind: "text", label: "Where the backflow is, and who's got the test", hint: "— the tester files it with the purveyor; it's theirs to schedule", ph: "east side of the building, in the cage — the owner's tester, due whenever the purveyor says" }
+        ]
+      },
+      {
+        title: "What you need from them",
+        tone: "loud",
+        docHead: "WHAT I NEED FROM YOU",
+        why: "Every one of these is a thing that kills a bed in a week. Tap only what you actually need.",
+        fields: [
+          { id: "asks", kind: "ticks", options: T.asks },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the sod by the drive gets walked on at lunch — a sign or a rope till it's rooted" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— of the clock face, so what you set is on the record", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, the number that rings when a head's on the wall", ph: "Ray T — 559-555-0173", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Sierra Landscape & Irrigation", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "The water is yours from here — I set it, and my warranty is on plants that get it. What's above is what I set, written down so we both know; it isn't a watering schedule I'm recommending, and the restrictions, the water bill and the backflow test are yours to run.",
+      "Reply with who holds the clock and who I call — a name and a number — and the date the maintenance clock starts off your contract."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.asks || []).length;
+      if (n) return n + " ask" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

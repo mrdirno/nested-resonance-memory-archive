@@ -535,5 +535,32 @@ window.COMMONS_GEAR = [
   { id: "control-key-ring", n: "The control key, on its own ring, on you", t: ["doors"],
     w: "It's the only thing that pulls a construction core, it is not the key that operates the lock, and it looks like every other piece of brass on the job. Hand it over with a stack of change keys and it lives in a super's drawer nobody can find in October, with every opening in the building waiting on it. Lost, it's a conversation with the manufacturer and a keying record, not a trip to the hardware store." },
   { id: "strike-files", n: "Files — flat, half-round, and one fine enough to finish with", t: ["doors"],
-    w: "Half of what's on a door punch list is a hair off a strike lip or a frame edge a forklift found on the dock, and a grinder takes more than that before you've even heard it start. A file cuts where you're looking and stops when you stop. The strike somebody opened up with a grinder reads as a shadow on that frame for the life of the building, and every walk-through finds it." }
+    w: "Half of what's on a door punch list is a hair off a strike lip or a frame edge a forklift found on the dock, and a grinder takes more than that before you've even heard it start. A file cuts where you're looking and stops when you stop. The strike somebody opened up with a grinder reads as a shadow on that frame for the life of the building, and every walk-through finds it." },
+
+  /* ---- landscape & irrigation: trade #16 ---------------------------------
+   THE BAG OF A MAN WHO BURIES HIS OWN WORK AND THEN HAS TO FIND IT AGAIN.
+   Everything this trade installs disappears the same week it goes in — under
+   backfill, under sod, under somebody else's flatwork — and the whole bag
+   splits along that fact: half of it makes a joint that will still be holding
+   when nobody can reach it, and half of it gets him back to a valve, a wire or
+   a stub after a finished lawn has closed over the top. Nothing here reads a
+   pressure and tells him what it ought to say, and nothing here sizes a pipe:
+   the design arrives on somebody else's sheet and this bag installs it.
+   Seeded at stand-up, curated against the refusal list. */
+  { id: "pipe-cutter-square", n: "Pipe cutter — the kind that leaves a square end", t: ["landscape"],
+    w: "A hacksaw wanders, and a joint that sits crooked in the fitting only touches on one side. It looks glued. It holds the day you charge it and lets go in July under finished sod, which is a trench through a lawn you already got paid for. Square the end and the fitting seats all the way round, every time, in a ditch, in the wet." },
+  { id: "primer-and-cement", n: "Primer and cement, and a dauber that isn't a stump", t: ["landscape"],
+    w: "The can that's been open since spring has a dauber like a paintbrush somebody left in the sun, and it lays down a ring that misses half the socket. A dry joint and a good one look identical from the top of the trench — you find out which one you made after the backfill is in and the sod's down. Buy the small cans and throw them out." },
+  { id: "valve-locator", n: "A locator that will find a valve and follow a wire", t: ["landscape"],
+    w: "Every job has a valve nobody boxed and a wire the trencher found, and neither one is where the as-built says. Without it you dig a lawn you just installed looking for a solenoid, by eye, in front of the owner. With it you put a signal on the common and walk to the thing. The plan is a drawing; the ground is the ground." },
+  { id: "valve-box-key", n: "Valve box key, on a lanyard", t: ["landscape"],
+    w: "Lids get run over, filled with dirt and grown into, and the one box you need is always the one at the far end with a shrub through the handle. A screwdriver in the slot walks the lid off; it also snaps a cold lid and turns a box into a hole in a finished bed. Keep the key on you, because the day you need it you're already lying in wet grass." },
+  { id: "hose-bib-gauge", n: "Pressure gauge, on a hose bib adapter", t: ["landscape"],
+    w: "What the site actually gives you is not what anybody told you in the trailer, and you want to know that the morning you charge it, not after the heads are in the ground. Screw it on, read it, write down where you read it and when — the number is yours and it goes on your own sheet, in your words. This kit will never tell you what it should say." },
+  { id: "quick-coupler-key", n: "Quick coupler key, and the swivel that goes with it", t: ["landscape"],
+    w: "There is no hose bib in the middle of a parking lot island, and the day the water gets turned on is the day everything already in the ground is thirsty. The key is how you get water out of your own mainline for a tank or a hose without cutting anything in. It's small, it's brass, and it walks — so it rides with you, not in the box." },
+  { id: "sod-knife", n: "Sod knife", t: ["landscape"],
+    w: "Sod goes down before the punch list and gets cut a dozen times after — for a head that ended up under it, a box lid, a valve you have to reach, an edge along the walk. Hack it with a shovel and the seam opens up brown in a week and the owner sees exactly one thing on that lawn. A knife takes a clean piece out and puts it back." },
+  { id: "rake-and-lute", n: "Landscape rake and a lute", t: ["landscape"],
+    w: "Rough grade is somebody else's word for done and it is never flat; the beds you plant into and the lawn people walk on get their shape from a man dragging them by hand. The lute pulls the high spots and floats the fill without windrowing rock into the middle of the bed, and the rake takes out what the dirt crew called clean. Your grade meets the walk or it doesn't." }
 ];

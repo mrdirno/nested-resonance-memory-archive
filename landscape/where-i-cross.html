@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Where I Cross — Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="Walk every place your pipe has to get under somebody else's concrete, paving or wall before it closes, and send it to whoever's pouring — where it crosses in your words, what's going through it, what it's under, the sleeve you're putting in off your own submittal, how far it sticks out, and the gate it has to beat. One row per crossing, grouped by area, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Where I Cross">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Landscape &middot; the field &rarr; whoever&rsquo;s pouring, before it closes</span>
+    <h1 id="title">Where I Cross</h1>
+    <p class="lede" id="lede">The drive, the walk, the curb, the patio, the wall footing &mdash; every one of them is going to sit on top of a pipe of yours, and every one of them is somebody else&rsquo;s work that closes on somebody else&rsquo;s day. The sleeve is the one thing on this job with no drawing, no number and no owner until somebody pays for a core drill. Walk the crossings once, put a row on each one, and send it to the man setting forms &mdash; where it crosses in your words, what&rsquo;s going through it, what you&rsquo;re putting in, how far it sticks out so he can find it, and the gate it has to beat. After the pour it&rsquo;s a bore, and it&rsquo;s your money.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>Your crossings, not a drawing.</b> Every row is a place <i>your</i> pipe wants to get through <i>his</i> work, in your words, and the sleeve on each row is what <i>you</i> are putting in off <i>your own</i> approved submittal. This page supplies no sleeve size, no cover depth, no separation from anybody else&rsquo;s line, no pipe size and no spec &mdash; your plans, your submittal and whoever stamps them own all of that. It&rsquo;s an ask to hold a spot in his work before it closes: not an RFI, not a change order, and it doesn&rsquo;t authorize anybody to do extra work. <b>Double-check it before you send it</b>, because a crossing you forgot is a saw cut you pay for.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Willow Creek — Phase 2, Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you walked it off</label><input type="text" id="hOff" placeholder="L-201 rev 2 and my approved irrigation submittal" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring from the form" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the sheet and its rev. It is the difference between a list the finisher can work from beside his own pour and one landscaper&rsquo;s opinion he has to re-walk with you &mdash; and if he is holding a later civil than you are, that is its own answer and you want it today.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each crossing</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the crossing once &mdash; it becomes a button and it carries. The area and the gate carry to the next row too, because you walk a bed at a time. Leave anything blank you didn&rsquo;t decide: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The walk so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="area" class="on">Bed / area</button>
+        <button type="button" data-g="under">What it&rsquo;s under</button>
+        <button type="button" data-g="gate">The gate it has to beat</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is walked, then <b>Sent</b> when it went to whoever&rsquo;s pouring, then <b>Confirmed</b> when they came back on it, then <b>In &mdash; I saw it</b> when it&rsquo;s in the ground and capped. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that pastes beside his pour</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not confirmed yet</button>
+        <button type="button" data-f="unmarked">Only the ones not marked</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the super wants beside his own pour schedule, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole walk</button></div>
+  </section>
+
+  <p class="credit">Built for the Landscape &amp; Irrigation Field Toolkit. Something a crossing hands you that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Landscape &amp; Irrigation Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* WHERE I CROSS — the pinned tool, and the page that could not exist on any
+ * other hub. A CONFIG on shape #3 (shared/rowlog.js): no CSS here, no DOM
+ * building, no state, no persistence, no document assembly. The engine owns
+ * all of it. This file owns the WORDS.
+ *
+ * WHY IT IS THE PINNED PAGE, stated once so a later cycle does not re-derive
+ * it: this trade's gate ladder is borrowed at both ends — "before the pour" is
+ * concrete's word, "before backfill" is sitework's — and sod can be pulled and
+ * a plant dug back out. The one irreversible gate he OWNS is the sleeve: the
+ * thing his pipe has to be INSIDE before somebody else's concrete closes over
+ * it. concrete/items.js already wrote his sentence ("driveway and flatwork
+ * sleeves — irrigation, gas, conduit — go in before I set forms") and had to
+ * aim it at the plumber, because the man whose sleeve that is had nowhere to
+ * answer from. This is the letter back.
+ *
+ * THE THREE FIELDS THAT EARN THE PAGE, in the order they cost money:
+ *   WHERE IT CROSSES — in his words, because the sleeve is on no drawing.
+ *   HOW FAR IT STICKS OUT — a sleeve a finisher cannot find is a sleeve that
+ *     gets kicked into the form and poured over. His number, his words.
+ *   THE GATE — "before you set forms" is a date on the other man's calendar
+ *     and "ASAP" is not.
+ * The sleeve itself is a LEARN axis: what he types off his own submittal
+ * becomes a button for the rest of the walk. The page never suggests a size.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.crossings;
+  var KEY = "toolkit.landscape.whereicross.v1";
+
+  var STATES = T.states;               /* ["Sent","Confirmed","In — I saw it"] — blank = walked */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function unmarked(v) {
+    var m = String(v.marked || "").trim();
+    return m === "" || m === "Not marked yet";
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "crossing", nounPlural: "crossings", groupNoun: "area", groupNounPlural: "areas",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing walked yet. Put in the first crossing — where it is in your words, what's going through it, and what it's under.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "area", label: "Bed / area" },
+      { key: "under", label: "What it's under" },
+      { key: "gate", label: "The gate it has to beat" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = T.gates.indexOf(a), ib = T.gates.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "under") {
+        var ua = T.unders.indexOf(a), ub = T.unders.indexOf(b);
+        return (ua < 0 ? 99 : ua) - (ub < 0 ? 99 : ub);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not confirmed yet",
+        emptyText: "Every crossing on here has come back confirmed. Good — be standing there when they form.",
+        test: function (v) { return isOpen(v); } },
+      { v: "unmarked", label: "only the ones not marked",
+        emptyText: "Every crossing on here is painted or flagged. That is the walk done right, and worth saying so.",
+        test: function (v) { return unmarked(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "The crossing — where, in your words", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "drive, east side — then it's a button",
+        emptyHint: "Your name for the spot. It becomes a button, and it's how you and the finisher point at the same place on a job with no drawing of it." },
+      { key: "area", label: "Bed / area", input: "learn", sticky: true,
+        placeholder: "west beds along the walk — then it's a button" },
+      { key: "carries", label: "What's going through it", input: "chips", sticky: false },
+      { key: "under", label: "What it's under", input: "chips" },
+      { key: "sleeve", label: "The sleeve you're putting in — off your own submittal", input: "learn", wide: true,
+        placeholder: "your size and material, your words — capped both ends",
+        emptyHint: "Type what you're putting in, the way your submittal says it, and it's a button for the rest of the walk. Nothing here suggests one." },
+      { key: "stick", label: "How far it sticks out past the edge", input: "text",
+        placeholder: "your number, your words — so he can find it after the base goes down" },
+      { key: "marked", label: "How you left it marked", input: "chips" },
+      { key: "gate", label: "The gate it has to beat", input: "chips", sticky: true },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— walked; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the finisher needs that the fields don't hold — what's in the way, whose line is next to it" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "carries") return T.carries;
+      if (key === "under") return T.unders;
+      if (key === "marked") return T.marked;
+      if (key === "gate") return T.gates;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.carries]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.area, v.under, v.sleeve, v.stick, v.marked, v.gate, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "where my pipe crosses your work", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Walked off: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("unmarked") > -1 && !unmarked(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var ar = {}, nu = 0;
+      src.forEach(function (v) {
+        var a = String(v.area || "").trim(); if (a) ar[a] = 1;
+        if (unmarked(v)) nu++;
+      });
+      var n = Object.keys(ar).length;
+      var line = c.shown + (c.shown === 1 ? " crossing" : " crossings");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " area" : " areas");
+      if (nu) line += " · " + nu + " not marked yet";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "area";
+      var head = joinDots([v.mark, g === "area" ? null : v.area, v.carries]);
+      var tail = [];
+      if (g !== "under" && v.under) tail.push("under the " + v.under.toLowerCase());
+      if (v.sleeve) tail.push("sleeve: " + v.sleeve);
+      if (v.stick) tail.push("sticks out " + v.stick);
+      if (v.marked) tail.push(v.marked.toLowerCase());
+      if (g !== "gate" && v.gate) tail.push(v.gate.toLowerCase());
+      if (v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Every crossing above is where my pipe wants to get through your work, in my words, and the sleeve on each row is what I'm putting in off my own approved submittal. Nothing here is a sleeve size, a cover depth, a separation or a spec — my plans and the people who stamp them own all of that.");
+      out.push("This is an ask to hold a spot in your work before it closes. It's not a drawing, not an RFI and not a change order, and it doesn't authorize anybody to do extra work.");
+      out.push("If a crossing lands in your steel or your forms, call me today and I'll move it — after the pour it's a core drill, and we both know whose day that costs.");
+      return out.join("\n");
+    }
+  });
+
+  /* THE JOB HEADER IS PART OF THE DOCUMENT, so a keystroke in it has to repaint
+     the preview AND get persisted — the same wiring every row-log page on the
+     rack uses. There is no refresh() on this engine; render() is the name. */
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this walk is the only record of where the
+     pipe wants to cross, it took a morning to collect, and it lives in one
+     browser on one phone. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

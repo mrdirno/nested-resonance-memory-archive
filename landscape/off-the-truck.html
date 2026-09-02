@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Off The Truck — Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="A nursery semi gets signed for in the time it takes to walk it. Count what landed against your own slip and send it the same afternoon — what the tag says, what's short, what's not what you ordered, what came rootbound or dry, and where you found it, because a broken leader seen on the trailer and one found in staging on day six are two different conversations. Grouped by delivery, tallied, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Off The Truck">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Landscape &middot; the tailgate &rarr; the yard, the same afternoon</span>
+    <h1 id="title">Off The Truck</h1>
+    <p class="lede" id="lede">Two clocks start when the semi backs in. The driver leaves with the paperwork, and a load signed clean makes every dead one your dead one &mdash; and a tree in the size you ordered is a season out of the grower, not a week, on a clock that started the morning it was supposed to be here. Count it against your own slip while the trailer is still there, put a row on anything short, wrong, rootbound or dry, and send it the same afternoon. Where you found it is its own field, because a broken leader seen on the trailer and one found in staging on day six are two different conversations with two different people paying.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>A count, not a claim &mdash; and counts, not dollars.</b> Every row is what <i>you</i> counted against <i>your own</i> packing slip and <i>your own</i> order, both named at the top, and what the tag says is copied off the tag. This page grades nothing to any standard, says nothing about what a plant is worth or why it looks the way it looks, and supplies no size, no spec and no substitute. Physical condition only: rootbound, broken, dry, dumped are things you can see from the tailgate, and what any of it means for the warranty is a different conversation. There are no prices on here; your office owns those.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Willow Creek — Phase 2, Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Packing slip / order no.</label><input type="text" id="hOff" placeholder="slip 20417 — against my order 1188" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one the yard rings" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name both documents &mdash; the slip that came with the load and your own order. A shortage counted against a named slip is a fact the yard can work from this afternoon; the same shortage described from memory is a phone call nobody can find in November. And whatever you wrote on the delivery receipt before the driver pulled out, put it in a row here too.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each line</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">What the tag says once &mdash; it becomes a button and it carries. The delivery and where-you-found-it carry to the next row, because a bad load is never one line. Leave anything blank you didn&rsquo;t actually count: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The load so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="del" class="on">Delivery</button>
+        <button type="button" data-g="wrong">What&rsquo;s wrong with it</button>
+        <button type="button" data-g="state">Where it stands</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is counted, then <b>Sent</b> when it went to the yard, then <b>Answered</b>, then <b>Replacement coming</b>, then <b>Landed</b> when it is actually on site. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes out this afternoon</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Still not answered</button>
+        <button type="button" data-f="issue">Only what&rsquo;s short or wrong</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what your office wants beside the invoice, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole log</button></div>
+  </section>
+
+  <p class="credit">Built for the Landscape &amp; Irrigation Field Toolkit. Something a truck hands you that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Landscape &amp; Irrigation Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* OFF THE TRUCK — a CONFIG on shape #3 (shared/rowlog.js): no CSS here, no
+ * DOM building, no state, no persistence, no document assembly. The engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY "WHERE YOU FOUND IT" IS ITS OWN FIELD, and not a note: it is the single
+ * fact that decides who pays. A broken leader photographed on the trailer
+ * before the driver left is the grower's conversation; the identical break
+ * found in staging on day six, after a week of wind and forklifts, is a
+ * completely different one; and a wilted plant found when he went to plant
+ * it, two weeks in, is very often his own water. Everybody writes down what
+ * was wrong. Almost nobody writes down where they were standing when they saw
+ * it, which is why it is a first-class column here instead of something he
+ * might remember to mention.
+ *
+ * WHAT IT REFUSES, and the reason the refusal sits in a data file rather than
+ * in a person's discipline: lines are addressed by WHAT THE TAG SAYS, copied
+ * off the tag, and by the slip. No grading standard — no caliper, rootball or
+ * height table decides whether a plant "is" the size on the tag; the row says
+ * what the tag says and what he counted, and stops. And condition is PHYSICAL
+ * only — "rootbound", "dry", "dumped" are things he can see; what any of that
+ * means for a warranty is somebody else's conversation, and this page has no
+ * field that could hold that answer even if somebody wanted to type it.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.truck;
+  var KEY = "toolkit.landscape.offthetruck.v1";
+
+  var STATES = T.states;   /* ["Sent","Answered","Replacement coming","Landed"] — blank = counted */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function hasIssue(v) { return String(v.wrong || "").trim() !== ""; }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "line", nounPlural: "lines", groupNoun: "delivery", groupNounPlural: "deliveries",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing counted yet. Put in the first line — what the tag says, what came, and what's wrong with it.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "del", label: "Delivery" },
+      { key: "wrong", label: "What's wrong with it" },
+      { key: "state", label: "Where it stands" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "wrong") {
+        var ia = T.wrongs.indexOf(a), ib = T.wrongs.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var order = [""].concat(STATES);
+        var pa = order.indexOf(a), pb = order.indexOf(b);
+        return (pa < 0 ? 99 : pa) - (pb < 0 ? 99 : pb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "still not answered",
+        emptyText: "Every line on here has come back answered. Good — chase the dates.",
+        test: function (v) { return isOpen(v); } },
+      { v: "issue", label: "only what's short or wrong",
+        emptyText: "Nothing on here is short or wrong. That is a clean truck, and it is worth saying so.",
+        test: function (v) { return hasIssue(v); } }
+    ],
+
+    fields: [
+      { key: "item", label: "What the tag says", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "the plant or the part, the way the slip says it — then it's a button",
+        emptyHint: "Copy it off the tag or the slip, not off the plan — the tag is what you're counting against." },
+      { key: "del", label: "Which delivery", input: "learn", sticky: true,
+        placeholder: "9/14 semi — Valley Growers — then it's a button" },
+      { key: "what", label: "What it is", input: "chips", required: true },
+      { key: "count", label: "Counted / on the slip", input: "text",
+        placeholder: "48 of 60 — your count against their slip" },
+      { key: "wrong", label: "What's wrong with it", input: "chips" },
+      { key: "seen", label: "Where you found it", input: "chips", sticky: true },
+      { key: "where", label: "Where it's sitting now", input: "text",
+        placeholder: "staged by the east gate, on the pallet, hose on it" },
+      { key: "photo", label: "Photo", input: "text",
+        placeholder: "shot it on the trailer — tag and the slip in the frame" },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— counted; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "what you wrote on the receipt, who signed, anything" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "what") return T.kinds;
+      if (key === "wrong") return T.wrongs;
+      if (key === "seen") return T.found;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.item, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.del, v.count, v.wrong, v.seen, v.where, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "what came off the truck", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Counted against: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("issue") > -1 && !hasIssue(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var bad = 0;
+      src.forEach(function (v) { if (hasIssue(v)) bad++; });
+      var line = c.shown + (c.shown === 1 ? " line" : " lines");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      if (bad) line += " · " + bad + " short or wrong";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "del";
+      var head = joinDots([v.item, v.what]);
+      var tail = [];
+      if (g !== "del" && v.del) tail.push(v.del);
+      if (v.count) tail.push("counted " + v.count);
+      if (g !== "wrong" && v.wrong) tail.push(v.wrong.toLowerCase());
+      if (v.seen) tail.push("found: " + v.seen.toLowerCase());
+      if (v.where) tail.push("sitting: " + v.where);
+      if (v.photo) tail.push("photo: " + v.photo);
+      if (g !== "state" && v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Every count above is mine, taken against the packing slip and the order named at the top, and every condition is what I could see at the tailgate. What the tag says is copied off the tag so we can point at the same plant.");
+      out.push("Nothing here grades anything to a standard, says what a plant is worth, or says why it looks the way it looks — rootbound, dry, broken and short are conditions, named as conditions and nothing more.");
+      out.push("There are no prices on this list. I need ship dates in writing for anything short or being replaced, and I need to know what you want done with what I'm holding — it's live, it's drinking my water, and it doesn't wait.");
+      return out.join("\n");
+    }
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this is the only count that exists of what
+     actually came off that trailer, and the slip left with the driver. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

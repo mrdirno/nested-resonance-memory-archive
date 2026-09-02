@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Total Package &mdash; Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="Put your own package next to theirs, line by line — wages, fringes and what comes back out — and copy the difference. Your figures, your phone, nothing sent anywhere.">
+<meta name="apple-mobile-web-app-title" content="Total Package">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+<link rel="stylesheet" href="../shared/package.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Landscape · yours vs theirs</span>
+    <h1>Total Package</h1>
+    <p class="lede">What the job is actually worth, line by line — wages, fringes, and what comes back out. Yours in one column, theirs in the other, and the difference in a message you can send.</p>
+  </header>
+
+  <div id="sheet"></div>
+
+  <p class="section-label">What you'd send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn"><b>The rate is not the package, and the hours are not a given.</b> Landscape work is bid by the yard and the plant count and paid by the hour, and the beds you plant twice &mdash; because the grade came after you, or the water never came on &mdash; cost the same either way. Put your real hours in below, because a dollar an hour on a job you dug up in July is a different dollar.</div>
+
+  <p class="credit">&#10022; Wished into existence by an anonymous AV hand, who asked for the trades to be able to
+  see what every agreement is actually worth. We can't publish anybody's agreement &mdash; but you can put yours
+  next to theirs here, and nothing you type leaves your phone.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/package.js"></script>
+<script>
+/* TOTAL PACKAGE — the first instance of shape #5, THE RECKONING
+ * (av/AV_SOCIETY.md §THE THREE SHAPES). This whole page is a CONFIG: no CSS of
+ * its own, no DOM building, no state, no arithmetic, no persistence, no document
+ * assembly. shared/package.js owns all of that; this file owns every WORD.
+ *
+ * WHERE IT CAME FROM: a wish asking for a consolidation of union agreement
+ * documents, per local, so the trades could see why each one gets what. We
+ * REFUSED the literal ask &mdash; wage tables, agreement text and jurisdiction
+ * maps are authoritative data we do not have and cannot verify, and a stale rate
+ * on a phone is worse than no rate (&sect;SAFETY). What survived the panel is the
+ * question underneath it: what is a package actually worth, and how does mine
+ * compare. Every figure on this page is one the user typed off his own stub.
+ *
+ * NOTHING TYPED HERE LEAVES THE DEVICE, and that is a stronger rule on this page
+ * than on any other in the kit, because what gets typed here is a person's pay:
+ *   &middot; no telemetry, no variant counter, no anonymous tally &mdash; the evo loop
+ *     instruments CHOICES between variants, and a wage is not a variant;
+ *   &middot; the feedback path must never attach page state to a report. shared/
+ *     feedback.js builds its payload from its own form fields only, and on this
+ *     page that is a rule rather than an implementation detail;
+ *   &middot; the draft is localStorage and nothing else.
+ *
+ * NO PROPER NOUNS IN THE SEED LIST. Not a union, not a contractor association,
+ * not a benefit fund, not a local number &mdash; only the CATEGORY names a stub
+ * already carries. Seeding one fund's real name would be a claim about which
+ * agreement he is under, and suggesting local numbers in the column field would
+ * compile the jurisdiction directory this project just refused to ship.
+ */
+Package.mount({
+  mount: "sheet",
+  preview: "preview",
+  count: "count",
+  copy: "copy",
+  clear: "clear",
+  key: "landscape-package-v1",
+  basis: "hr",
+  colHints: ["Mine", "Theirs"],
+  firstColLabel: "Yours",
+  otherColLabel: "The other one",
+  addColLabel: "\uFF0B Put another one beside it",
+  docTitle: "TOTAL PACKAGE",
+  docSub: "Landscape & Irrigation",
+  clearConfirm: "Wipe every figure off this sheet?",
+  groups: [
+      {
+          "key": "wages",
+          "name": "On the check",
+          "why": "Taxable, and it's the number everybody quotes. It is not the package.",
+          "lines": [
+              {
+                  "id": "base",
+                  "label": "Base wage",
+                  "sub": "whatever classification you're booked as"
+              },
+              {
+                  "id": "fore",
+                  "label": "Foreman / lead premium",
+                  "sub": "only the hours you actually hold it"
+              },
+              {
+                  "id": "shift",
+                  "label": "Shift differential",
+                  "sub": "swing, graveyard, off-hours"
+              },
+              {
+                  "id": "zone",
+                  "label": "Zone / travel pay",
+                  "sub": "if yours pays by the hour"
+              },
+              {
+                  "id": "piece",
+                  "label": "Production / piece bonus",
+                  "sub": "what you actually averaged, not the good week"
+              }
+          ],
+          "addLabel": "＋ Add a premium of your own",
+          "addPrompt": "What's the premium called? Put it in however it reads on your stub."
+      },
+      {
+          "key": "fringes",
+          "name": "Fringes",
+          "why": "Paid on your behalf, never hits the check, and it is most of the gap between two jobs.",
+          "lines": [
+              {
+                  "id": "hw",
+                  "label": "Health & welfare"
+              },
+              {
+                  "id": "pens",
+                  "label": "Pension",
+                  "sub": "the defined-benefit one, if you have both"
+              },
+              {
+                  "id": "ann",
+                  "label": "Annuity / defined contribution",
+                  "sub": "flat rate, or type a % if yours runs off gross"
+              },
+              {
+                  "id": "natl",
+                  "label": "National / supplemental fund",
+                  "sub": "whatever your stub calls the one that isn't the local's"
+              },
+              {
+                  "id": "train",
+                  "label": "Training / apprenticeship"
+              },
+              {
+                  "id": "vac",
+                  "label": "Vacation fund",
+                  "sub": "only if yours is funded on top — not if it comes out of your check"
+              }
+          ],
+          "addLabel": "＋ Add a fringe of your own",
+          "addPrompt": "What's the fund called? Put it in however it reads on your stub."
+      },
+      {
+          "key": "back",
+          "name": "What comes back out",
+          "why": "Deducted from your gross. Not part of the package — but it is part of your week.",
+          "lines": [
+              {
+                  "id": "dues",
+                  "label": "Working dues",
+                  "kind": "pct",
+                  "sub": "most run as a percent of gross"
+              },
+              {
+                  "id": "vacded",
+                  "label": "Vacation deduction",
+                  "sub": "if yours comes out of the check instead of on top"
+              }
+          ],
+          "addLabel": "＋ Add a deduction of your own",
+          "addPrompt": "What's the deduction called? Put it in however it reads on your stub."
+      },
+      {
+          "key": "aside",
+          "name": "On top, and kept out of the package",
+          "why": "Real money that isn't per-hour money. It prints on its own line and never gets added in.",
+          "lines": [
+              {
+                  "id": "diem",
+                  "label": "Per diem / subsistence",
+                  "kind": "aside",
+                  "unit": "a day"
+              },
+              {
+                  "id": "mile",
+                  "label": "Truck / mileage",
+                  "kind": "aside",
+                  "unit": "a day"
+              }
+          ],
+          "customKind": "aside",
+          "unit": "a day",
+          "addLabel": "＋ Add another one",
+          "addPrompt": "What's it called? It'll print by the day and stay out of the package."
+      }
+  ]
+});
+</script>
+</body>
+</html>

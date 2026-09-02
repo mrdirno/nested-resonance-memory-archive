@@ -999,5 +999,68 @@ window.COMMONS_NAMES = [
     a: [{ n: "hinge", by: "everybody, including the trade half the time", k: "say" },
         { n: "butt hinge", by: "the counter and the catalog", k: "sup" },
         { n: "leaf", by: "the trade, for one half of the hinge — the same word it uses for the door", k: "say" }],
-    no: "The word collides inside the trade with itself, which is the trap worth knowing: leaf means the door on one line and half a hinge on the next, so \"shim the leaf\" and \"shim the hinge leaf\" are two entirely different jobs. Say hinge leaf when you mean the hinge." }
+    no: "The word collides inside the trade with itself, which is the trap worth knowing: leaf means the door on one line and half a hinge on the next, so \"shim the leaf\" and \"shim the hinge leaf\" are two entirely different jobs. Say hinge leaf when you mean the hinge." },
+
+  /* ---- landscape & irrigation: trade #16 ---------------------------------
+   THE TRADE WHOSE EVERY WORD NEEDS ONE ADJECTIVE IN FRONT OF IT. Head, main,
+   lateral, sleeve, zone, box — not one of them is his, and every one of them
+   belongs to somebody who is standing on the same dirt with a radio. That is
+   why so many order names on this block start with the same word: it is not
+   padding, it is the fix. The rows are the collisions that move a crew, get a
+   bucket into somebody's service, or put a truckload of trees on the site when
+   he asked for enclosures. Nothing here is authority about the object — the
+   legend, the schedule and the submittal own that; this is evidence about the
+   word, and the word is the part nobody wrote down. */
+  { id: "irr-head", n: "Irrigation head", t: ["landscape"],
+    o: "The fitting at the end of a lateral that the water actually comes out of — it rises, it throws, and it drops back down when the zone shuts off.",
+    a: [{ n: "head", by: "the crew, all day, on the radio and on the plan", k: "say" },
+        { n: "sprinkler head", by: "supers, owners and everybody outside the trade — and the fire trade, meaning its own", k: "say" },
+        { n: "pop-up", by: "the crew and the counter, for the kind that comes up out of the turf", k: "say" },
+        { n: "rotor", by: "the counter and the legend, for the kind that turns as it throws", k: "sup" }],
+    no: "Say head alone in a building with a fire line going in and you have said sprinkler head to the one trade whose heads are somebody else's inspection — his foreman comes looking, or his crew stops. Head is the top of a bolt to every mechanic, the head of a run to a plumber, and the header over an opening to a framer. Say irrigation head the first time and use the crew word after." },
+  { id: "irr-mainline", n: "Irrigation mainline", t: ["landscape"],
+    o: "The line that stays under pressure from the point of connection out to the valves, whether anything is running or not.",
+    a: [{ n: "the main", by: "the crew, once everybody is past the meter", k: "say" },
+        { n: "pressure main", by: "the plan legend and the submittal", k: "sup" },
+        { n: "the charged line", by: "the crew, for the part that is live even at night", k: "say" }],
+    no: "The water main and the fire main are not yours, and neither one is what you mean. Say we're cutting into the main on a shared radio and the plumber hears the service to the building, the fire crew hears its own line, and somebody starts making calls about a shutdown nobody asked for. Say irrigation mainline, and say whose valve you are closing to do it." },
+  { id: "irr-lateral", n: "Irrigation lateral", t: ["landscape"],
+    o: "The pipe downstream of a valve that feeds the heads on one zone, live only while that zone is running.",
+    a: [{ n: "lateral", by: "the crew and the plan legend", k: "say" },
+        { n: "zone line", by: "the crew, when a plumber or a super is standing there", k: "say" },
+        { n: "branch line", by: "the counter and some submittals", k: "sup" }],
+    no: "To the underground crew and the plumber, a lateral is the sewer or the water service running from the building out to the street — so the lateral's in and stay off the lateral mean pipe you have never seen and did not install. Take that as yours on a dig and a bucket goes into somebody's service, and that call reaches the GC long before it gets back to you." },
+  { id: "irr-sleeve", n: "Irrigation sleeve", t: ["landscape"],
+    o: "An empty pipe set through or under somebody else's concrete, paving or wall so your line can cross it later without cutting anything.",
+    a: [{ n: "sleeve", by: "everybody, once it is in the ground", k: "say" },
+        { n: "duct", by: "crews in the UK, Ireland and Australia", k: "reg" },
+        { n: "the crossing", by: "the crew, meaning the whole detail rather than the pipe", k: "say" },
+        { n: "penetration", by: "GCs and project managers, for anything going through anything", k: "say" }],
+    no: "The plumber's and the electrician's cast-in sleeves are set off their own drawings by somebody who gets paid to set them. Yours is on no drawing at all. Ask the concrete foreman for a sleeve and he pictures theirs — in the wall, off their sheet — and your line is not in his scope, his count, or his memory an hour later. Name it as yours, in writing, and mark both ends." },
+  { id: "irr-zone", n: "Irrigation zone", t: ["landscape"],
+    o: "One valve and everything it waters — the unit the controller switches on and off, and the unit every complaint arrives in.",
+    a: [{ n: "station", by: "the controller face, the submittal and the counter", k: "sup" },
+        { n: "zone", by: "the crew and everybody who has ever complained about one", k: "say" },
+        { n: "valve", by: "the crew, using the hardware to mean the ground it feeds", k: "say" }],
+    no: "A zone is a thermostat and a damper to the HVAC crew, a piece of the panel to the fire alarm and access people, and a hydrozone on a sheet to the landscape architect. Zone four is out is a sentence four trades can act on, and three of them walk to the wrong panel before anybody asks what kind of zone you meant." },
+  { id: "irr-valve-box", n: "Valve box", t: ["landscape"],
+    o: "The buried enclosure with a lid that keeps dirt off a valve and lets a man get a hand and a wrench down to it.",
+    a: [{ n: "Carson box", by: "much of the western US — a brand that ate the category", k: "tm" },
+        { n: "valve chamber", by: "the UK and Ireland", k: "reg" },
+        { n: "the box", by: "the crew, once everybody knows which one", k: "say" },
+        { n: "enclosure", by: "the submittal and the counter", k: "sup" }],
+    no: "Box is an electrical box to the sparky, a meter box to the plumber, and at the nursery a box is a tree — a boxed specimen in a wooden crate, ordered by the size of the box. Ask the yard for boxes and trees show up on a truck; ask the electrician for a box and he brings you something that goes in a wall." },
+  { id: "irr-controller", n: "Irrigation controller", t: ["landscape"],
+    o: "The panel on the wall that decides which valve is open and when — the one thing on this job still working after everybody drives off.",
+    a: [{ n: "the clock", by: "the crew, always, on every job", k: "say" },
+        { n: "the timer", by: "owners, property managers and homeowners", k: "say" },
+        { n: "the retic controller", by: "Western Australia, where the whole system is the retic", k: "reg" },
+        { n: "the Rain Bird", by: "owners and managers, whoever actually built the one on the wall", k: "tm" }],
+    no: "A time clock is payroll to the super and a punch clock to everybody else, and the electrician's timer is the one running the site lighting — land your controller on that circuit and your zones follow his lights on and off. Say the irrigation controller when you ask for power, and say which breaker you are asking for." },
+  { id: "irr-pressure-gauge", n: "Pressure gauge", t: ["landscape"],
+    o: "A dial that reads the water pressure at whatever fitting you screwed it onto, and only there.",
+    a: [{ n: "the gauge", by: "the crew, once it is on and somebody is reading it", k: "say" },
+        { n: "test gauge", by: "the counter and the plumber", k: "sup" },
+        { n: "hose bib gauge", by: "the crew, for the one with the hose thread on it", k: "say" }],
+    no: "Gauges to an HVAC hand means the manifold set on his rig, and a test gauge to the plumber is one sitting on a line for an inspection he owns and you do not touch. The trap inside your own trade is smaller and worse: a reading with no place and no time on it is half an answer, because what you read at a hose bib is not what the same gauge reads at the point of connection. Write down where it was screwed on and when. What it ought to say is on nobody's card, including this one." }
 ];

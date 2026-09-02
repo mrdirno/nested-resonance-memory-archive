@@ -18,7 +18,7 @@
  * term meaning two different documents anywhere on the rack is excluded, and so
  * is any term within one edit of a term meaning a different document.
  *
- * 15 trades · 13 poolable document ids · 302 terms
+ * 16 trades · 13 poolable document ids · 302 terms
  * · 35 ambiguous term(s) refused · 10 quarantined as near-names
  */
 window.DOCS_POOL = {

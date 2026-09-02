@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not Ready To Plant — Landscape &amp; Irrigation Field Toolkit</title>
+<meta name="description" content="The grade's been driven on all winter, there's base rock and busted block in the beds, no topsoil, it won't drain, no water on site, nothing at the clock, your sleeves never went in and the flatwork's poured. Walk it before the truck comes, name what stops the planting in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to plant it as it sits. Because a plant that goes in that ground is your warranty claim.">
+<meta name="apple-mobile-web-app-title" content="Not Ready To Plant">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Landscape &middot; in the bed, before the truck comes</span>
+    </div>
+    <h1 id="h1">Not Ready To Plant</h1>
+    <p class="lede" id="lede">Three kits on this rack built you a chip and none of them could write you a line &mdash; this is the answer back. Walk the beds before the plant lands and name what stops the planting, in your words: the grade that&rsquo;s been driven on all winter, the base rock and the busted block in the top foot, the topsoil that never came, the water that isn&rsquo;t on, the sleeves nobody put in. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to plant it as it sits. Because a plant that goes into ground that wasn&rsquo;t ready dies on your warranty, and you are the one digging it out in July explaining it.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own level and set beside what your own plan sheet says. It states no slope, no grade requirement, no soil spec, no compaction number and no rate of anything, it never says a bed is ready, and it doesn&rsquo;t stop the job &mdash; it hands whoever runs the job the choice, on the record: clear it, or direct it planted as it sits.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY TO PLANT — the bed note, and the twin of painting's Not Ready and
+ * doors' Not Ready To Hang. A CONFIG of shape #2's engine (shared/note.js):
+ * no CSS here, no DOM building, no state, no persistence, no document
+ * assembly — the engine owns all of it. This file owns the WORDS, which is
+ * the half an engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: a plant that goes into ground that was not
+ * ready dies on HIS warranty. The moment the rootball is in, whatever the bed
+ * carried becomes the landscaper's — so the record of what the bed carried has
+ * to exist BEFORE the planting, and the choice (fix it / plant it anyway) has
+ * to be somebody else's, in writing. The stops list lives in items.js; every
+ * entry is a condition with the ASK riding under it, so the note reads as a
+ * list a super can clear by lunch, not a complaint.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.notready;
+  var KEY = "toolkit.landscape.notreadytoplant.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY TO PLANT",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox in April, when the argument is about which beds and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Willow Creek — Phase 2, Building C", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana K. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The beds",
+        docHead: "THE BEDS",
+        why: "By the names on the plan and the names the crew uses, so his answer names the same beds your truck is backing up to.",
+        fields: [
+          { id: "rooms", kind: "area", rows: 2, label: "Which beds / area", hint: "— the way the plan says it, and the count", ph: "west beds along the walk and the drive island — about 140 plants and the tree row" }
+        ]
+      },
+      {
+        title: "What stops the planting",
+        tone: "loud",
+        docHead: "WHAT STOPS THE PLANTING",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the drive island's a foot low against the curb — somebody has to say whether that's fill or a re-grade" }
+        ]
+      },
+      {
+        title: "What you measured — if you measured it",
+        docHead: "WHAT I MEASURED, WHAT MY PLAN SAYS",
+        why: "Both numbers are yours: what your level or your laser read in the bed, and what your own plan sheet says beside it. The page supplies neither, and nobody here says which one wins — that is exactly what makes it hold up.",
+        fields: [
+          { id: "reading", kind: "text", label: "What your level read", hint: "— where in the bed, and what time", ph: "laser at the drive island reads low against the curb at the north end — 6:40, with the super there" },
+          { id: "limit", kind: "text", label: "What your own plan says", hint: "— and which sheet", ph: "L-201 rev 2 grading callout for that bed says … — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or planted", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and what's on the truck", ph: "five of us and two loads of plant staged for these beds at 6:30 tomorrow — it's drinking my water while it waits" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving to the east lawn — sod's a day of work there" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "Ray T — 559-555-0173", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Sierra Landscape & Irrigation", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply FIX with who's fixing each one and when, and these beds go back on my board the day they're cleared.",
+      "Or reply PROCEED and we plant them as they sit — in writing, because a plant that goes into ground that wasn't ready dies on my warranty, and this note is the record of what was under it.",
+      "Nothing here is a verdict on anybody's work — it's what I found, in my words, with anything I measured taken off my own level and set beside my own plan."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

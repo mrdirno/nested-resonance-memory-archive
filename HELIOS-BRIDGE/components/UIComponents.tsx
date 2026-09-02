@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed, Sprout } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -409,6 +409,26 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew five other kits already name and none of them could reach \u2014 the man who sets the frames, hangs the leaves and puts the hardware on. Before they ship first: walk the openings with a tape before frames get welded and send the distributor what the field actually is, the hand it really swings and the wall you really have. It supplies no fire label value, no clearance or undercut, no closer setting, no hardware set and no keying, it never says an opening is complete or compliant, and the architect\u2019s door schedule stays his \u2014 an opening number here is an address, never a second copy of his document.',
     icon: <DoorClosed size={18} />,
+  },
+  {
+    // TRADE #16, and the first one the panel had to find OFF the rack. The
+    // who[] count and the gate-vocabulary query came back with nothing left
+    // standing below the safety rail, so the shortlist was written to include
+    // the COUNT-INVISIBLE \u2014 and four independent lenses (field hand, population,
+    // doctrine, boundary) put landscape first on all four, vetoed by none.
+    // Three shipped kits had already built this man a receiver chip (concrete,
+    // sitework, gc) and not one could write him a line; concrete's own pre-pour
+    // ask says his sentence for him and had to aim it at the plumber.
+    //
+    // Sprout, and the sibling rule bends the way masonry's brick bends it: an
+    // icon is the gear the trade carries, never the thing it builds \u2014 and the
+    // seedling is the MATERIAL that comes off the nursery truck by the hundred,
+    // tagged and counted against a slip, not the finished landscape.
+    name: 'Landscape & Irrigation Field Toolkit',
+    href: './landscape/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew three other kits already name and none of them could reach \u2014 the one that puts the pipe in, grades it, plants it and turns the clock on. Where I cross first: walk every place your pipe has to get under somebody else\u2019s concrete before it closes and send it to whoever\u2019s pouring, in your words, with the sleeve you\u2019re putting in off your own submittal. It supplies no run time, no rate, no pipe size, no backflow test and no plant call, it never says a landscape is established, and the plant list and the irrigation design stay whoever\u2019s they already are \u2014 a line off their schedule here is an address, never a second copy of their document.',
+    icon: <Sprout size={18} />,
   },
 ];
 

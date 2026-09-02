@@ -1244,8 +1244,25 @@
     L.push("");
   }
 
+  /* A REMINDER IS A STRING OR A {when, say} PAIR, and the emitter has to read
+     both. Fourteen libraries write the string form; doors (trade #15) wrote
+     the pair form — `{ when: "label", say: "…" }` — and for five days every
+     one of its reminders reached the pasted block as "- [object Object]",
+     found at trade #16's stand-up by the writer copying the doors shape. No
+     gate read the reminder lines. The pair form is the better one (the
+     trigger word is data, not prose), so it renders as "When <trigger> comes
+     up: <say>" and the string form is byte-identical to what it always was. */
+  function reminderLine(r) {
+    if (r && typeof r === "object") {
+      var w = String(r.when || "").trim(), say = String(r.say || "").trim();
+      if (w && say) return "When " + w + " comes up: " + say;
+      return say || w;
+    }
+    return String(r == null ? "" : r);
+  }
+
   function emitReminders(L) {
-    var rem = (LIB.reminders || []);
+    var rem = (LIB.reminders || []).map(reminderLine).filter(function (x) { return x; });
     if (!rem.length) return;
     L.push("PROTOCOL REMINDERS (trigger only when relevant — never nag)");
     L.push("");

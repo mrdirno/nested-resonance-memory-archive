@@ -211,6 +211,12 @@ for (const trade of TRADES) {
     } else {
       const missing = BLOCKS.filter(b => !r.block.includes(b));
       if (missing.length) bad.push('block is missing: ' + missing.join(', '));
+      /* AN OBJECT THAT REACHED THE BLOCK UNRENDERED. doors/docs.js wrote its
+         reminders as { when, say } pairs and the emitter read strings only, so
+         every one of them pasted into a man's AI as "- [object Object]" for
+         five days — the block was non-empty, carried all eleven headings and
+         passed this gate. A stringified object is never a sentence. */
+      if (/\[object Object\]/.test(r.block)) bad.push('the block carries "[object Object]" — a reminder or a field reached it unrendered');
       if (!r.block.includes(OMIT_HEAD)) bad.push('block carries no omitted-line section');
 
       const isDelta = r.block.includes(DELTA_TELL);

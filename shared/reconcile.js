@@ -96,7 +96,14 @@
     // label question whose answer lives in the approved submittal and with the
     // people who stamp it. That is not a refusal and it is not a commitment — it
     // is an ask pointed at somebody else, which is exactly position [3].
-    "not my call": "ask"
+    "not my call": "ask",
+    // landscape/items.js — the walk-back rungs. [0], [1] and [2] are shared
+    // with painting and doors; only the fourth is new. On a landscape punch a
+    // dying plant is very often the CLOCK talking — a zone that is off, a
+    // controller somebody changed, a restriction nobody passed on — and that
+    // answer lives with whoever holds the controller, not with the man holding
+    // the shovel. Not a refusal, not a commitment: an ask pointed elsewhere.
+    "its the water": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score
