@@ -176,7 +176,7 @@ const path = __dirname + "/triton-rack.html";
       dreamDice();
     }
   });
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.p.dlib == null && !DREAM.p.dsty, undefined, { timeout: 25000 });
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.p.dlib == null && !DREAM.p.dsty, undefined, undefined, { timeout: 25000 });
   const tSwap = await page.evaluate(() => ctx.currentTime - TAKE.t0);
   /* the clock on the tape: correlated, not white — grid-aware, humanity-aware.
      Wait for enough FIGURE-lane tape first (after any drummer swap — earlier
@@ -193,9 +193,12 @@ const path = __dirname + "/triton-rack.html";
        and reads anti-correlated — so measure the figure lane (ln tag) alone */
     const fresh = TAKE.ev.filter(e => e.t > t0);
     const tagged = fresh.filter(e => e.role === "perc" && e.ln === "fig");
-    const all = tagged.length ? tagged : fresh.filter(e => e.role === "perc");
+    /* a kit-lane figure (marchTwoBeat, caixa, cavacha…) logs as role kit, not
+       perc — the clock law holds on any lane, so measure whichever the figure rides */
+    const perc = fresh.filter(e => e.role === "perc"), kitL = fresh.filter(e => e.role === "kit");
+    const all = tagged.length ? tagged : (perc.length >= 8 ? perc : kitL);
     const byName = {};
-    all.forEach(e => { (byName[e.name] = byName[e.name] || []).push(e); });
+    all.forEach(e => { const k = e.name || ("kit" + e.note); (byName[k] = byName[k] || []).push(e); });
     const P = (Object.values(byName).sort((a, b) => b.length - a.length)[0] || [])
       .filter(e => e.vel >= 0.3)   /* roll grace-notes are off-grid ON PURPOSE — not clock evidence */
       .sort((a, b) => a.t - b.t);
@@ -225,7 +228,7 @@ const path = __dirname + "/triton-rack.html";
   /* ROLL deals a fresh hand without dropping the transport */
   const hand0 = await page.evaluate(() => BUILD.hand.map(c => c.name).join("|"));
   await page.click("#dreamDice");
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending, { timeout: 12000 });
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending, undefined, { timeout: 12000 });
   const roll1 = await page.evaluate(() => ({ on: DREAM.on, stage: BUILD.stage,
     names: BUILD.hand.map(c => c.name).join("|"), live: BUILD.live }));
   if (!roll1.on) fail("ROLL killed the performance");
@@ -236,12 +239,12 @@ const path = __dirname + "/triton-rack.html";
   /* the build: hear it, keep it, next trait deals itself — five taps to a song */
   const keepLive = async () => {
     await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
-    await page.waitForFunction(() => !DREAM.pending, { timeout: 15000 });
+    await page.waitForFunction(() => !DREAM.pending, undefined, { timeout: 15000 });
     await page.waitForTimeout(120);
   };
   /* audition drummer card 1, then keep it */
   await page.click('#handRow .hcard[data-c="1"]');
-  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  await page.waitForFunction(() => !DREAM.pending, undefined, { timeout: 12000 });
   const audA = await page.evaluate(() => ({ live: BUILD.live, fig: DREAM.p.fig, want: BUILD.hand[1].fig }));
   if (audA.live !== 1 || audA.fig !== audA.want) fail("audition did not swap the drummer in " + JSON.stringify(audA));
   else ok("tap to hear: card 2's drummer swapped in on the bar (" + audA.fig + ")");
@@ -256,8 +259,8 @@ const path = __dirname + "/triton-rack.html";
     fail("theory bar at the low end: '" + stg1.key + "'/'" + stg1.thNow + "'");
   else ok("tap again to keep: THE LOW END dealt itself, bass live, key honest (" + stg1.key + ")");
   await keepLive();                       /* -> stage 2, changes auto-auditioning */
-  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteChord, { timeout: 15000 });
-  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "chord").length >= 5, { timeout: 40000 });
+  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteChord, undefined, { timeout: 15000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "chord").length >= 5, undefined, { timeout: 40000 });
   const stg2 = await page.evaluate(() => ({ stage: BUILD.stage,
     cells: document.querySelectorAll("#thProg .thCell").length, prog: DREAM.p.prog.length,
     pn: document.getElementById("thProgName").textContent, pnWant: DREAM.p.progName || "" }));
@@ -278,8 +281,8 @@ const path = __dirname + "/triton-rack.html";
   else if (hum.vels < 2) fail("chord dynamics flat (" + hum.vels + " velocity values)");
   else ok("the hand on the tape: chords roll " + (hum.spread * 1000).toFixed(1) + "ms · " + hum.vels + " velocity shades");
   await keepLive();                       /* -> stage 3, the voice auto-auditioning */
-  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteLead, { timeout: 15000 });
-  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "lead").length >= 2, { timeout: 40000 });
+  await page.waitForFunction(() => DREAM.on && !DREAM.p.muteLead, undefined, { timeout: 15000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "lead").length >= 2, undefined, { timeout: 40000 });
   const hk = await page.evaluate(() => {
     const L = TAKE.ev.filter(e => e.role === "lead").sort((a, b) => a.t - b.t);
     const beat = 60 / state.tempo;
@@ -306,7 +309,7 @@ const path = __dirname + "/triton-rack.html";
   if (stg4.stage !== 4 || stg4.names !== "loop|arc|song") fail("THE SHAPE hand wrong " + JSON.stringify(stg4));
   else ok("THE SHAPE: loop · arc · song on the table");
   await page.click('#handRow .hcard[data-c="1"]');   /* hear ARC */
-  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  await page.waitForFunction(() => !DREAM.pending, undefined, { timeout: 12000 });
   await keepLive();                       /* -> done */
   const done = await page.evaluate(() => ({ stage: BUILD.stage,
     doneCard: !!document.querySelector("#handRow .hdone"),
@@ -329,8 +332,8 @@ const path = __dirname + "/triton-rack.html";
   else if (!rmx.on || rmx.muteLead) fail("remix dropped the band " + JSON.stringify(rmx));
   else ok("remix: THE DRUMMER reopened with the kept player in hand, full band still under it");
   await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
-  await page.waitForFunction(() => BUILD.stage === 5, { timeout: 12000 });
-  await page.waitForFunction(() => !DREAM.pending, { timeout: 12000 });
+  await page.waitForFunction(() => BUILD.stage === 5, undefined, { timeout: 12000 });
+  await page.waitForFunction(() => !DREAM.pending, undefined, { timeout: 12000 });
   ok("re-keep: one tap and the song stands again");
 
   /* BREAK-lite: an un-kept audition must not outlive a trait jump — the rail
@@ -360,7 +363,7 @@ const path = __dirname + "/triton-rack.html";
     fail("shape jump lights the wrong card " + JSON.stringify(shape));
   else ok("shape jump lights the kept format (card " + (shape.live + 1) + ")");
   await page.evaluate(() => { const c = document.querySelector("#handRow .hcard.live"); if (c) c.click(); });
-  await page.waitForFunction(() => BUILD.stage === 5 && !DREAM.pending, { timeout: 12000 });
+  await page.waitForFunction(() => BUILD.stage === 5 && !DREAM.pending, undefined, { timeout: 12000 });
 
   /* round 5 — THE RACK SHELF: kept traits materialize as 2U units; patching
      is dice/prev/next on the unit, never a list */
@@ -379,7 +382,7 @@ const path = __dirname + "/triton-rack.html";
     return { bass0, name2, bass1: BUILD.kept[1].bass, name2b: BUILD.kept[2].name,
       pend: !!DREAM.pending, on: DREAM.on };
   });
-  await page.waitForFunction(() => !DREAM.pending, { timeout: 15000 });
+  await page.waitForFunction(() => !DREAM.pending, undefined, { timeout: 15000 });
   const rkAfter = await page.evaluate(() => ({ pBass: DREAM.p.bass, pOn: DREAM.on,
     catOk: PROGRAMS[BUILD.kept[1].bass].cat === "BASS" }));
   if (rkOps.bass1 === rkOps.bass0 || !rkAfter.catOk) fail("rack voice ‹›  did not move within the drawer " + JSON.stringify(rkOps));
@@ -424,6 +427,39 @@ const path = __dirname + "/triton-rack.html";
   else if (stagingClean.dest.peak > 0.95) fail("destination too hot (" + JSON.stringify(stagingClean.dest) + ")");
   else ok("gain staging clean under the full band: tube pk " + stagingClean.tube.peak +
     " · out pk " + stagingClean.dest.peak + " · 0 flat-tops @ vol " + stagingClean.vol);
+  /* ROUND 10 — THE SONG, NOT THE SEARCH: MIX bounces the final selections
+     arranged from the top (intro + the shape's sections), not the take with
+     its auditioning; deterministic; the player's search notes stay out */
+  {
+    const comp = await page.evaluate(() => { const a = songEvents(DREAM.p), b = songEvents(DREAM.p);
+      const key = e => [+e.t.toFixed(4), e.role, e.note != null ? e.note : (e.zone != null ? e.zone : e.name || ""), +(e.vel || 0).toFixed(4)].join("|");
+      const same = a && b && a.evs.length === b.evs.length && a.evs.every((e, i) => key(e) === key(b.evs[i]));
+      return { ok: !!a, bars: a && a.bars, seconds: a && a.seconds, n: a && a.evs.length, format: a && a.format, same, want: songBars(DREAM.p),
+        roles: a ? [...new Set(a.evs.map(e => e.role))] : [], takeLen: TAKE.ev.length, takeT0: TAKE.t0, dreamBar: DREAM.bar, on: DREAM.on }; });
+    if (!comp.ok || comp.bars !== comp.want || !(comp.n > comp.bars * 4)) fail("song composition wrong " + JSON.stringify(comp));
+    else if (!comp.same) fail("the song composes differently twice");
+    else if (comp.roles.includes("you")) fail("the song bounce carries the search (you-role events)");
+    else ok("the song composes DRY: " + comp.bars + " bars (" + comp.format + "), " + comp.n + " events, " + comp.seconds.toFixed(1) + " s, deterministic, roles " + comp.roles.join("/") + " — the live take untouched (" + comp.takeLen + " events)");
+    await page.evaluate(() => { saveMenu(); });
+    await page.waitForFunction(() => !!document.getElementById("svMix"), undefined, undefined, { timeout: 5000 }).catch(() => {});
+    const dlS = downloads.length;
+    await page.click("#svMix");
+    await page.waitForFunction(() => exporting, undefined, { timeout: 5000 }).catch(() => {});
+    await page.waitForFunction(() => !exporting, undefined, { timeout: 300000 });
+    await page.waitForTimeout(900);
+    const sb = await page.evaluate(() => window._lastBounce);
+    const wavS = downloads.slice(dlS).find(d => d.suggestedFilename().endsWith(".wav"));
+    if (!sb || sb.src !== "song" || sb.youN !== 0) fail("MIX did not bounce the song " + JSON.stringify(sb));
+    else if (!wavS || /-jam/.test(wavS.suggestedFilename())) fail("song MIX produced no WAV (" + (wavS && wavS.suggestedFilename()) + ")");
+    else {
+      const os4 = require("os"), fs4 = require("fs"), pj4 = require("path").join;
+      const wp4 = pj4(os4.tmpdir(), "tr-song.wav"); await wavS.saveAs(wp4);
+      const w4 = fs4.readFileSync(wp4); const dataAt = w4.indexOf("data") + 8; const sr4 = w4.readUInt32LE(24); const secs = (w4.length - dataAt) / (3 * 2 * sr4); /* the WAV's own rate — this Chromium runs at 44.1 k */
+      if (!(secs >= sb.seconds && secs < sb.seconds + 12)) fail("song WAV length " + secs.toFixed(1) + " s vs composed " + sb.seconds + " s (+tail)");
+      else ok("MIX renders the SONG: " + sb.bars + " bars, " + secs.toFixed(1) + " s of WAV for " + sb.seconds.toFixed(1) + " s composed (" + wavS.suggestedFilename() + ")");
+    }
+  }
+
   /* round 6 — VERB: one reverb decision, 10% steps, live on the send */
   const verb = await page.evaluate(() => {
     const fx = PROGRAMS[DREAM.p.chord].fx.reverb;
@@ -548,7 +584,7 @@ const path = __dirname + "/triton-rack.html";
   });
   if (libSong.bad) fail("library cards would not deal");
   else ok("library song standing: " + libSong.name + " (" + libSong.style + ")" + (libSong.fill ? " with a paired fill" : ""));
-  await page.waitForFunction(() => !DREAM.pending && DREAM.gfield, undefined, { timeout: 25000 });
+  await page.waitForFunction(() => !DREAM.pending && DREAM.gfield, undefined, undefined, { timeout: 25000 });
   const t0lib = await page.evaluate(() => ({ n: TAKE.ev.length, t: ctx.currentTime }));
   /* a library drummer may wear a DD22 kit — its hits log as "dd", same drums */
   await page.waitForFunction(t0 =>
@@ -657,11 +693,11 @@ const path = __dirname + "/triton-rack.html";
      engine; ours swaps the graph — so it stops), then opens the three doors */
   await page.click("#ldrSave");
   const doors = await page.evaluate(() => ({ dream: DREAM.on, ldr: LDR.on, take: TAKE.on,
-    n: ["svMix", "svScore", "svSession", "svLink"].filter(id => !!document.getElementById(id)).length,
+    n: ["svMix", "svScore", "svSession", "svLink", "svJam"].filter(id => !!document.getElementById(id)).length,
     evs: TAKE.ev.length, arp: state.arp.on, voices: activeVoices }));
   if (doors.dream || doors.ldr || doors.take || doors.arp) fail("SAVE did not stop the track " + JSON.stringify(doors));
-  else if (doors.n !== 4) fail("the four doors did not open (" + doors.n + "/4)");
-  else ok("SAVE stops the track, keeps the take (" + doors.evs + " events), opens MIX · SCORE · SESSION · LINK");
+  else if (doors.n !== 5) fail("the five doors did not open (" + doors.n + "/5)");
+  else ok("SAVE stops the track, keeps the take (" + doors.evs + " events), opens MIX · SCORE · SESSION · LINK · JAM");
   /* round 9 (the performance lens): the render must instantiate voices in
      windows — count the voices standing when startRendering is called */
   await page.evaluate(() => { window._lazy = { atStart: -1, total: 0, last: TAKE.ev.reduce((m, e) => Math.max(m, e.t), 0),
@@ -673,10 +709,13 @@ const path = __dirname + "/triton-rack.html";
     const dp = drumHitP; drumHitP = function () { window._lazy.total++; return dp.apply(this, arguments); };
     const sr0 = OfflineAudioContext.prototype.startRendering;
     OfflineAudioContext.prototype.startRendering = function () { if (window._lazy.atStart < 0) window._lazy.atStart = window._lazy.total; return sr0.apply(this, arguments); }; });
-  await page.click("#svMix");
-  await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
-  await page.waitForFunction(() => !exporting, { timeout: 60000 });
+  await page.click("#svJam"); /* round 10: the as-played take is the JAM door; MIX is the song */
+  await page.waitForFunction(() => exporting, undefined, { timeout: 5000 }).catch(() => {});
+  await page.waitForFunction(() => !exporting, undefined, { timeout: 180000 });
   await page.waitForTimeout(900);
+  const jam = await page.evaluate(() => window._lastBounce);
+  if (!jam || jam.src !== "take" || !(jam.youN > 0)) fail("JAM did not bounce the take as played " + JSON.stringify(jam));
+  else ok("JAM bounces the take as played (" + jam.n + " events, " + jam.youN + " of them yours)");
   const lazy = await page.evaluate(() => window._lazy);
   if (!(lazy.total > 0) || lazy.atStart < 0) fail("lazy-render probe saw no render (" + JSON.stringify(lazy) + ")");
   else if (lazy.late > 0 && !(lazy.atStart <= lazy.total - lazy.late)) fail("the render instantiated voices past the first window before startRendering (" + lazy.atStart + " of " + lazy.total + ", " + lazy.late + " past the window, take " + lazy.last.toFixed(1) + " s)");
@@ -716,7 +755,7 @@ const path = __dirname + "/triton-rack.html";
           else if (hi === 0x80 || (hi === 0x90 && v === 0)) { if (open[ch + ":" + n]) open[ch + ":" + n]--; else unmatched++; } }
         for (const q in open) unmatched += open[q]; o = end; } }
     if (unmatched) fail("score has " + unmatched + " unmatched note-ons/offs (stuck notes)");
-    if (!okWav) fail("bounced WAV malformed/short (" + w.length + " bytes)");
+    if (!okWav) fail("bounced JAM WAV malformed/short (" + w.length + " bytes)");
     else if (peak < 80000) fail("bounced WAV is near-silent (peak " + peak + " of 8388607)");
     else if (!(rmsDb > -24 && rmsDb < -8)) fail("master loudness off target: RMS " + rmsDb.toFixed(1) + " dBFS");
     else if (!(crest > 4 && crest < 20)) fail("master crest factor off: " + crest.toFixed(1) + " dB");
@@ -819,8 +858,8 @@ const path = __dirname + "/triton-rack.html";
     const p = composeP([window._ddCard, null, null, null, { kind: "shape", format: "loop" }], null, 5);
     startWith(p, true);
   });
-  await page.waitForFunction(() => DREAM.on && DREAM.p && DREAM.p.dsty === "knock" && DREAM.bar >= 2, undefined, { timeout: 25000 });
-  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "dd").length >= 6, undefined, { timeout: 40000 })
+  await page.waitForFunction(() => DREAM.on && DREAM.p && DREAM.p.dsty === "knock" && DREAM.bar >= 2, undefined, undefined, { timeout: 25000 });
+  await page.waitForFunction(() => TAKE.ev.filter(e => e.role === "dd").length >= 6, undefined, undefined, { timeout: 40000 })
     .catch(() => {});
   const dd1 = await page.evaluate(async () => {
     /* peak at the kit strip AND at the limiter while the language plays */
@@ -957,8 +996,8 @@ const path = __dirname + "/triton-rack.html";
   const ddDoors = await page.evaluate(() => ({ dream: DREAM.on, sv: !!document.getElementById("svSession") }));
   if (ddDoors.dream || !ddDoors.sv) fail("session door not offered on a stopped track " + JSON.stringify(ddDoors));
   await page.click("#svSession");
-  await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
-  await page.waitForFunction(() => !exporting, { timeout: 180000 });
+  await page.waitForFunction(() => exporting, undefined, { timeout: 5000 }).catch(() => {});
+  await page.waitForFunction(() => !exporting, undefined, { timeout: 900000 });
   await page.waitForTimeout(900);
   const ddSave = await page.evaluate(() => ({ lbl: document.getElementById("ldrSaveLbl").textContent }));
   const ddZip = downloads.slice(dlDD).find(d => /-session\.zip$/.test(d.suggestedFilename()));
@@ -1046,20 +1085,20 @@ const path = __dirname + "/triton-rack.html";
       ok("take.json: " + tj.n + " events, roles " + roles.join("/") + ", bank programs by index");
       /* the wrong zip must not: LOAD the same zip while a DIFFERENT song plays → the take replaces the performance, stopped */
       await page.evaluate(() => { const p = composeP(BUILD.kept, null, 5); if (p) startWith(p, true); });
-      await page.waitForFunction(() => DREAM.on && TAKE.ev.length >= 4, undefined, { timeout: 20000 }).catch(() => {});
+      await page.waitForFunction(() => DREAM.on && TAKE.ev.length >= 4, undefined, undefined, { timeout: 20000 }).catch(() => {});
       await page.setInputFiles("#projFile", zipPath);
-      await page.waitForFunction(() => !DREAM.on && TAKE.ev.length > 0 && !!document.getElementById("svLink"), undefined, { timeout: 20000 }).catch(() => {});
+      await page.waitForFunction(() => !DREAM.on && TAKE.ev.length > 0 && !!document.getElementById("svLink"), undefined, undefined, { timeout: 20000 }).catch(() => {});
       const rs = await page.evaluate(() => ({ on: DREAM.on, takeOn: TAKE.on, n: TAKE.ev.length, seed: DREAM.seed,
         staged: !!(DREAM.staged && DREAM.staged._seed === DREAM.seed), pending: !!DREAM.pending,
-        doors: ["svMix", "svScore", "svSession", "svLink"].filter(id => !!document.getElementById(id)).length,
+        doors: ["svMix", "svScore", "svSession", "svLink", "svJam"].filter(id => !!document.getElementById(id)).length,
         chord: DREAM.p && DREAM.p.chord, lcd: (document.getElementById("lcd") || {}).textContent || "",
         progs: TAKE.ev.filter(e => e.prog).every(e => PROGRAMS.indexOf(e.prog) >= 0) }));
       if (rs.on || rs.takeOn || rs.pending) fail("restored take did not stop the transport " + JSON.stringify(rs));
       else if (rs.n !== tj.n || rs.seed !== ddSeed || !rs.staged) fail("take not restored under its song (" + JSON.stringify(rs) + ")");
-      else if (rs.doors !== 4) fail("doors not open on the restored take (" + rs.doors + ")");
+      else if (rs.doors !== 5) fail("doors not open on the restored take (" + rs.doors + ")");
       else if (!rs.progs) fail("restored events do not reference bank programs by identity");
       else {
-        ok("LOAD with take: stopped, " + rs.n + " events back under song #" + rs.seed + ", staged for PLAY, 4 doors open");
+        ok("LOAD with take: stopped, " + rs.n + " events back under song #" + rs.seed + ", staged for PLAY, 5 doors open");
         /* the SCORE door bounces the restored performance — instant, no render */
         const dlS = downloads.length;
         await page.click("#svScore"); await page.waitForTimeout(700);
@@ -1073,12 +1112,12 @@ const path = __dirname + "/triton-rack.html";
           doors: !!document.getElementById("svMix"), dsty: DREAM.p && DREAM.p.dsty }), genBefore);
         if (!pl.on || pl.seed !== ddSeed || pl.staged || !pl.takeOn || !pl.fresh || pl.doors) fail("PLAY did not regrow the staged song " + JSON.stringify(pl));
         else ok("PLAY regrows the staged song #" + pl.seed + " (" + pl.dsty + "): fresh take, doors cleared");
-        await page.waitForFunction(() => TAKE.ev.length >= 6, undefined, { timeout: 20000 }).catch(() => {});
+        await page.waitForFunction(() => TAKE.ev.length >= 6, undefined, undefined, { timeout: 20000 }).catch(() => {});
         /* THE LINK DOOR: the song's address into the URL bar */
         await page.click("#ldrSave");
-        await page.waitForFunction(() => !!document.getElementById("svLink"), undefined, { timeout: 5000 }).catch(() => {});
+        await page.waitForFunction(() => !!document.getElementById("svLink"), undefined, undefined, { timeout: 5000 }).catch(() => {});
         await page.click("#svLink");
-        await page.waitForFunction(() => /^#(p|j)=/.test(location.hash), undefined, { timeout: 5000 }).catch(() => {});
+        await page.waitForFunction(() => /^#(p|j)=/.test(location.hash), undefined, undefined, { timeout: 5000 }).catch(() => {});
         const lk = await page.evaluate(() => ({ hash: location.hash, lbl: (document.getElementById("ldrSaveLbl") || {}).textContent || "",
           staged: !!DREAM.staged, on: DREAM.on }));
         if (!/^#p=[A-Za-z0-9_-]+$/.test(lk.hash)) fail("LINK door wrote no address (" + lk.hash.slice(0, 24) + ")");
@@ -1099,7 +1138,7 @@ const path = __dirname + "/triton-rack.html";
     await pp.evaluate(() => { quickBoot(); const kd = candDrums(mulberry(3)), kb = candBass(mulberry(4)), kc = candChords(mulberry(5), kb), kl = candLead(mulberry(6));
       BUILD.kept = [kd, kb, kc, kl, FORMATS[0]]; BUILD.stage = 5; builderRender(); rackRender();
       const p = composeP(BUILD.kept, null, 5); startWith(p, true); });
-    await pp.waitForFunction(() => TAKE.ev.length > 6, undefined, { timeout: 15000 }).catch(() => {});
+    await pp.waitForFunction(() => TAKE.ev.length > 6, undefined, undefined, { timeout: 15000 }).catch(() => {});
     await pp.evaluate(() => { PRESETS = [1, 2, 3].map(i => ({ name: "kept song number " + i, seed: i, p: {} })); presetRender(); saveMenu(); });
     await pp.waitForTimeout(250);
     const ph = await pp.evaluate(() => {
@@ -1126,7 +1165,7 @@ const path = __dirname + "/triton-rack.html";
     const p2 = await browser.newPage({ viewport: { width: 1100, height: 900 } });
     const p2errs = []; p2.on("pageerror", e => p2errs.push(e.message));
     await p2.goto("file://" + path + addrHash);
-    await p2.waitForFunction(() => !!DREAM.staged, undefined, { timeout: 8000 }).catch(() => {});
+    await p2.waitForFunction(() => !!DREAM.staged, undefined, undefined, { timeout: 8000 }).catch(() => {});
     const st = await p2.evaluate(() => ({ staged: !!DREAM.staged, seed: DREAM.staged && DREAM.staged._seed, on: DREAM.on,
       chips: document.querySelectorAll("#ldrPresets .pchip4[data-k]").length, kept: !!BUILD.kept[0],
       lbl: (document.getElementById("ldrSaveLbl") || {}).textContent || "", powered: state.powered }));
@@ -1141,7 +1180,7 @@ const path = __dirname + "/triton-rack.html";
       else ok("ADDRESS: a fresh page regrows song #" + go.seed + " (" + go.dsty + ") on PLAY — the rail carries it, nothing played before the gesture");
       /* the regrow is CONTENT, not a seed: two replays of the same song (after
          the first run has baked its kit) must log the same events */
-      const snap = async () => { await p2.waitForFunction(() => TAKE.ev.length >= 24, undefined, { timeout: 30000 }).catch(() => {});
+      const snap = async () => { await p2.waitForFunction(() => TAKE.ev.length >= 24, undefined, undefined, { timeout: 30000 }).catch(() => {});
         return p2.evaluate(() => TAKE.ev.slice(0, 24).map(e => [+e.t.toFixed(3), e.role, e.note != null ? e.note : (e.zone != null ? e.zone : e.name || ""), +(e.vel || 0).toFixed(3), e.prog ? PROGRAMS.indexOf(e.prog) : -1].join("|"))); };
       await snap(); await p2.evaluate(() => dreamStop(true));
       await p2.click("#ldrPresets .pchip4[data-k]"); const r2 = await snap(); await p2.evaluate(() => dreamStop(true));
@@ -1173,9 +1212,9 @@ const path = __dirname + "/triton-rack.html";
       return { name: "<img src=x onerror=window.__pwned=3>", seed: 9191, p }; });
     { const px = await browser.newPage({ viewport: { width: 1100, height: 900 } }); const ex = []; px.on("pageerror", e => ex.push(e.message));
       await px.goto("file://" + path + "#j=" + b64u(JSON.stringify([hostileEntry])));
-      await px.waitForFunction(() => !!DREAM.staged, undefined, { timeout: 8000 }).catch(() => {});
+      await px.waitForFunction(() => !!DREAM.staged, undefined, undefined, { timeout: 8000 }).catch(() => {});
       await px.click("#dreamPlay");
-      await px.waitForFunction(() => DREAM.on && TAKE.ev.length > 3, undefined, { timeout: 20000 }).catch(() => {});
+      await px.waitForFunction(() => DREAM.on && TAKE.ev.length > 3, undefined, undefined, { timeout: 20000 }).catch(() => {});
       await px.evaluate(() => { document.body.classList.add("engineOpen"); render(); });
       const hx = await px.evaluate(() => ({ staged: DREAM.seed === 9191, pwned: window.__pwned || 0,
         imgs: document.querySelectorAll("img, b[onmouseover]").length,
@@ -1198,8 +1237,8 @@ const path = __dirname + "/triton-rack.html";
   await page.evaluate(() => { if (window._keptSnap) BUILD.kept = window._keptSnap.slice();
     builderRender(); rackRender();
     const p = composeP(BUILD.kept, null, 5); if (p) startWith(p, true); });
-  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.bar >= 1, undefined, { timeout: 20000 });
-  await page.waitForFunction(() => TAKE.ev.length >= 10, undefined, { timeout: 30000 }).catch(() => {});
+  await page.waitForFunction(() => DREAM.on && !DREAM.pending && DREAM.bar >= 1, undefined, undefined, { timeout: 20000 });
+  await page.waitForFunction(() => TAKE.ev.length >= 10, undefined, undefined, { timeout: 30000 }).catch(() => {});
   await page.evaluate(() => dreamStop(true));
   await page.waitForTimeout(200);
 
@@ -1246,7 +1285,7 @@ const path = __dirname + "/triton-rack.html";
            may also carry a loaded project up front, round 8) */
         await page2.evaluate(() => { const cs = document.querySelectorAll("#ldrPresets .pchip4[data-k]");
           cs[cs.length - 1].click(); });
-        await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 6, { timeout: 30000 });
+        await page2.waitForFunction(() => DREAM.on && DREAM.bar >= 6, undefined, { timeout: 30000 });
         const play2 = await page2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed,
           name: DREAM.p && DREAM.p.name, hook: !!DREAM.hook,
           elibs: !!(DREAM.p && DREAM.p.elibs && DREAM.p.elibs.length),

@@ -1130,6 +1130,52 @@ function smfWalk(u) {
   return r;
 }
 
+/* ── suite 13: the song, not the search (round 10) ─────────────────── */
+console.log("[13] song bounce");
+{
+  let rBad = 0;
+  /* the composed song's length is the shape's own section list */
+  const sj = slice("const SONG_BARS=", "async function exportTake(");
+  const G = eval(sj.slice(0, sj.indexOf("function songEvents")) + "\n;({SONG_BARS,songBars})");
+  const secJs = slice("function sectFor(bar)", "const SECT_CFG=");
+  const lists = [...secJs.matchAll(/\[("[A-Z]+",?)+\]/g)].map(m => m[0].split(",").length);
+  if (lists.length !== 2 || !lists.every(n => n === 8)) { fail("sectFor section lists changed (" + lists.join("/") + ") — SONG_BARS must follow"); rBad++; }
+  if (G.SONG_BARS.song !== 4 + 8 * 8 || G.SONG_BARS.arc !== 4 + 8 * 8) { fail("SONG_BARS does not cover intro + every section once (" + JSON.stringify(G.SONG_BARS) + ")"); rBad++; }
+  if (!(G.SONG_BARS.loop >= 20 && G.SONG_BARS.loop <= 68)) { fail("loop bounce length out of sense (" + G.SONG_BARS.loop + ")"); rBad++; }
+  if (G.songBars({ format: "nope" }) !== G.SONG_BARS.loop || G.songBars(null) !== G.SONG_BARS.loop) { fail("songBars has no default"); rBad++; }
+  /* every hit path logs-then-returns when DRY, so a composition plays nothing */
+  const sv = slice("function spawnVoice", "/* ---- drums ---- */");
+  if (!/takeLog\(prog,note,vel,when,dur,dest\) : null;\s*\n\s*if\(typeof DRY!=="undefined"&&DRY\) return null;/.test(sv)) { fail("spawnVoice does not return DRY after logging"); rBad++; }
+  const dh = slice("function ddHit(", "function kitZone(");
+  if (!/if\(typeof DRY!=="undefined"&&DRY\)\{ if\([^}]*takeLogD\(kitName,zone,vel,when,o\.layerVel\); return true; \}/.test(dh)) { fail("ddHit does not log-and-return DRY"); rBad++; }
+  const ds = slice("function ddSub(", "/*TAKE-CODEC-BEGIN*/");
+  if (!/if\(typeof DRY!=="undefined"&&DRY\)\{ if\(!o\._q\) takeLogD8\(/.test(ds)) { fail("ddSub does not log-and-return DRY"); rBad++; }
+  const dp = slice("function drumHitP(", "function ldrPlayFig(");
+  if (!/takeLogP\(name,vel,when,\{[^}]*\}\);\s*\n\s*if\(typeof DRY!=="undefined"&&DRY\) return true;/.test(dp)) { fail("drumHitP does not log-and-return DRY"); rBad++; }
+  if (!/if\(!\(typeof DRY!=="undefined"&&DRY\)\)\{ ldrPulse\(at\); pulseAt\(at\); \}/.test(s)) { fail("a composed bar still arms UI pulse timers"); rBad++; }
+  /* the doors: song by default, the jam on request, the score composes too */
+  const dr = slice("function doorsRender()", "function saveScoreOnly(");
+  if (!/on\("svMix",\(\)=>exportTake\("mix","song"\)\)/.test(dr) || !/on\("svSession",\(\)=>exportTake\("session","song"\)\)/.test(dr)) { fail("MIX/SESSION do not bounce the song"); rBad++; }
+  if (!/id="svJam"/.test(dr) || !/on\("svJam",\(\)=>exportTake\("mix","take"\)\)/.test(dr)) { fail("the jam (as played) is not one tap away"); rBad++; }
+  if (!/kind=kind\|\|"mix"; src=src\|\|"song";/.test(s)) { fail("exportTake does not default to the song"); rBad++; }
+  if (!/src=src\|\|"song";\s*\n\s*let evs=null;/.test(s)) { fail("the SCORE door does not compose the song"); rBad++; }
+  /* the composition restores what it touched */
+  const se = slice("function songEvents(p)", "function ddWarmDone(");
+  ["TAKE.ev=S.ev", "DREAM.rng=S.rng", "DREAM.pans=S.pans", "state.tempo=S.tempo", "DRY=false; DUCK_MUTE=false"].forEach(k => { if (se.indexOf(k) < 0) { fail("songEvents does not restore " + k); rBad++; } });
+  if (!/delete pp\._building/.test(se)) { fail("a try-on at SAVE time would bounce as a steady groove (the shape must apply)"); rBad++; }
+  /* a composition INSIDE an export must still reach the tape: every logger's
+     export gate yields to DRY (mutation-found: the first song bounce fell back
+     to the jam because exporting was already true) */
+  ["function takeLog(", "function takeLogP(", "function takeLogD(", "function takeLogD8(", "function takeLogMix("].forEach(fn => {
+    const i = s.indexOf(fn), body = s.slice(i, i + 500);
+    if (!/exporting&&!\(typeof DRY!=="undefined"&&DRY\)\) return( null)?;/.test(body)) { fail(fn + " export gate does not yield to DRY"); rBad++; } });
+  if (!/if\(!\(typeof DRY!=="undefined"&&DRY\)\) mixApplyStage\(s,when\);/.test(s)) { fail("a composition moves the live console"); rBad++; }
+  /* after an export the console heals to the STANDING song's chord program (verbSet's law), not the player's patch */
+  const heals = (s.match(/if\(state\.powered\)\{ if\(typeof DREAM!=="undefined"&&DREAM\.p\) applyFXP\(PROGRAMS\[DREAM\.p\.chord\]\); else if\(cur\) applyFX\(\); \}/g) || []).length;
+  if (heals < 2) { fail("export heal does not prefer the standing song (" + heals + " of 2 exits)"); rBad++; }
+  if (!rBad) ok("SONG_BARS follows sectFor (loop " + G.SONG_BARS.loop + " · arc/song " + G.SONG_BARS.song + ") · every hit path logs-and-returns DRY · doors bounce the song, JAM the take · composition restores the performance");
+}
+
 /* ── suite 11: the take in the zip + the address (round 9) ─────────── */
 console.log("[11] take codec + address");
 (async () => {

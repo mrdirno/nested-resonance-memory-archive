@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-09-02, rings 1–37 in `triton-rack.html`.
+**As of:** 2026-09-02, rings 1–38 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -68,7 +68,12 @@ COURT (all 128 programs measured; saturator headroom, the bell and formant
 laws, three programs re-voiced), THE TAKE IN THE ZIP (a session reloads as
 a re-renderable performance) and THE ADDRESS (a URL hash that regrows a
 song, through the one validator) — plus the face at phone scale, a 4×
-faster offline render and the kit bake off the main thread.
+faster offline render and the kit bake off the main thread. Round 10
+(ring 38) answered *"it's saving the search for sounds as well… it should
+just save the song, structured, of the final selected choices"*: the doors
+now bounce THE SONG — the final selections arranged from the top by the
+same conductor, composed DRY and rendered — and a fifth door, JAM, keeps
+the take exactly as played.
 
 ---
 
@@ -83,7 +88,7 @@ faster offline render and the kit bake off the main thread.
 | `mine/` | The phrase-library pipeline (round 5): SMF + MusicXML parsers (no deps), LDRP1 pack/unpack, extractors for Groove MIDI (CC-BY 4.0) and OpenScore String Quartets (CC0), structural pre-filter, the judges' decoder, the raw-source fidelity gate, the assembler and injector. See `mine/README.md` — the library is re-runnable and extensible. Round 7 adds `mine/dd22_port.js`: the DD22 verbatim slicer/injector (23 line-ranged donor slices → the `/*DD22-BEGIN*/…/*DD22-END*/` block; re-run it after donor-slice changes; suite [8] byte-compares). |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
-| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. · **[11] the take codec + the address** (nine roles round-trip, hostiles refused, the inflate cap stopping a bomb) · **[12] the bank court** (saturator headroom identity, the bandpass-on-sine law, bell/formant laws, lazy render + worker bake + tape laws by regex/sandbox); every round-9 gate mutation-tested |
+| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. · **[11] the take codec + the address** (nine roles round-trip, hostiles refused, the inflate cap stopping a bomb) · **[12] the bank court** (saturator headroom identity, the bandpass-on-sine law, bell/formant laws, lazy render + worker bake + tape laws by regex/sandbox); every round-9 gate mutation-tested · **[11] the take codec + the address** (round 9) · **[12] the bank court** (saturator headroom, bell/formant laws, the bandpass-on-sine data law) · **[13] the song bounce** (round 10: SONG_BARS follows sectFor, every hit path DRY, doors) |
 | `browser-tests.js` | Headless-Chromium harness (`npm i playwright-core`; finds Chromium at `/opt/pw-browsers/...` or `CHROMIUM=` env): layout law, the avatar face (rail + hand + four buttons + engine-room fold), hardware-MIDI cold boot + nudge law + pedal/bend through `window._midiInject`, **the full build walkthrough** (deal → hear → keep across all five traits with the theory bar honest at each stage, the drummer's clock measured on the figure lane of the rolling tape, chords rolled by the hand, the hook breathing, remix + one-tap re-keep, trait-jump honesty probes), figure chip mid-dream handoff, Bank B write flow + hostile-name XSS, a full SAVE bounce read back from the downloads (WAV peak/RMS/crest + MThd + YOU track), duck survival after the bounce restore, KEEP copy booted and replayed with the rail rebuilt, power-off law, STRUM, improviser, voice-cap assertion, phone-scale, zero console errors. Screenshots `4u-face.png`.; **round 9:** the whole-bank loudness probe, the phone-scale touch law, take.json in the zip + LOAD-with-take + PLAY regrows, LINK/ADDRESS in a fresh page (content-exact regrow, hostile hashes, a VALID song wearing hostile strings), the lazy render counted at startRendering, the kit bake off the main thread |
 
 ## 2. What the accuracy fix settled (P0, rings 10–12; unchanged)
@@ -328,6 +333,27 @@ faster offline render and the kit bake off the main thread.
    they leave the scaled 4U and become a CSS-pixel strip beneath it; a
    probe holds the law every run.
 
+## 3i. Round 10 in three cuts (ring 38)
+
+1. **The doors bounce the song.** `songEvents(p)` runs the ONE conductor
+   bar by bar against a scratch tape with `DRY` set — every hit path
+   (`spawnVoice`, `ddHit`, `ddSub`, `drumHitP`) logs and returns before
+   touching audio, UI pulse timers stay unarmed, the duck is muted — for a
+   4-bar INTRO plus the shape's section list once through (`SONG_BARS`:
+   arc/song 68, loop 36), then puts back everything it touched. MIX, SCORE
+   and SESSION render that composition; the SESSION zip's take.json is the
+   composed song, so LOAD restores a re-renderable song. The render awaits
+   the kit's bake first (the worker), and a DRY `ddHit` logs whether or not
+   the kit has baked, so the song never carries a fallback hit.
+2. **JAM keeps the take.** A fifth door bounces the performance exactly as
+   before (WAV + MIDI, `-jam`), with the player's own keys in it.
+3. **Gates.** Node suite [13] (SONG_BARS follows `sectFor`'s own lists,
+   every hit path proven to log-and-return DRY, the door wiring, the
+   restore). Harness: the song composes DRY in-page (bar count, density,
+   deterministic twice, no `you` role, the live take untouched), MIX renders
+   it to the composed length plus tail, JAM keeps the YOU track, five doors,
+   LOAD restores the composed song.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -380,7 +406,13 @@ the map are the donor's hand: do not move them on taste.
 - The take's `you` role survives a zip round-trip as a re-renderable
   performance; replaying it LIVE over the regrown band (an overdub track) is
   a new transport mode — the regrow is content-exact, so it is buildable
-  (Ring 37).
+  (Ring 37). The song bounce (Ring 38) leaves the player's keys to the JAM;
+  carrying keys played over the FINAL world into the song bounce means
+  choosing which section of a 68-bar arrangement a 12-bar overdub lands in.
+- The loop bounce is 32 bars of groove by fiat; a loop's natural length is
+  the phrase library's own cycle × a few — worth deriving. The conductor has
+  an INTRO but no OUTRO: the song bounce stops on a bar line and rings out
+  through the tail (Ring 38).
 - The trait rail slots (12 px), VERB −/+ (10 px) and the rack ‹ › ◇ (18 px)
   still break the touch law at phone scale; the chips went first — the rest
   is a phone LAYOUT of the 4U, not a scale (Ring 37).

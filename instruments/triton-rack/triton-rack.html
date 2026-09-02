@@ -1538,7 +1538,7 @@ function mixAutoStage(when){
   const p=DREAM.p;
   const n=1+(p.muteBass?0:1)+(p.muteChord?0:1)+(p.muteLead?0:1);
   const s=mixStageFor(n);
-  mixApplyStage(s,when);
+  if(!(typeof DRY!=="undefined"&&DRY)) mixApplyStage(s,when); /* a composition touches no console (round 10) */
   if(typeof takeLogMix==="function") takeLogMix(when,s);
 }
 function delayBeats(code){ const b=60/state.tempo;
@@ -1619,6 +1619,7 @@ const VOX_MAKEUP=2.5;
 const BELL_DEFAULT=[[1,1,.9],[2.76,.6,.55],[5.40,.34,.32],[8.93,.18,.18]]; /* ratio, level, decay share */
 function spawnVoice(prog,note,vel,when,dur,dest){
   const _tk=(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLog==="function")? takeLog(prog,note,vel,when,dur,dest) : null;
+  if(typeof DRY!=="undefined"&&DRY) return null; /* composed, not played (round 10) */
   if(prog.cat==="DRUMS"){ drumHit(note,vel,when,prog.kit||"std"); return null; }
   const t=Math.max(when,ctx.currentTime), out=ctx.createGain(); out.gain.value=0;
   const isBP=prog.filter.type==="bp";
@@ -2801,6 +2802,9 @@ function readmeTxt(prog){ return [
 ""].join("\n"); }
 
 let exporting=false;
+/* round 10: DRY — the conductor composes to the tape and plays nothing (the
+   hit paths log and return). The song bounce is composed this way. */
+let DRY=false;
 async function exportCurrent(){
   if(exporting) return;
   if(!state.powered) quickBoot(); /* the live graph must exist before the globals swap offline */
@@ -2850,7 +2854,8 @@ async function exportCurrent(){
      or knob turn during a pack export was swallowed and never re-applied,
      leaving the live console on the OLD program's FX. Heal on the way out,
      the same way the take bounce does. */
-  try{ if(state.powered&&cur) applyFX(); }catch(_){ }
+  /* the console heals to the STANDING song's chord program (verbSet's law), not the player's patch — a VERB tap after SAVE read a different send than the song had (round 10) */
+  try{ if(state.powered){ if(typeof DREAM!=="undefined"&&DREAM.p) applyFXP(PROGRAMS[DREAM.p.chord]); else if(cur) applyFX(); } }catch(_){ }
 }
 document.getElementById("expBtn").addEventListener("click",exportCurrent);
 
@@ -3304,6 +3309,7 @@ function drumHitP(name,vel,when,o){
   }
   if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogP==="function")
     takeLogP(name,vel,when,{pitch:o.pitch,mute:o.mute,layerVel:o.layerVel,ln:o.ln});
+  if(typeof DRY!=="undefined"&&DRY) return true; /* composed (round 10) */
   const t=Math.max(when,ctx.currentTime);
   if((name==="surdo"||name==="dunL"||name==="dunM")&&vel>.45&&!o._g&&typeof mixDuck==="function")
     mixDuck(t,Math.min(1,vel));                    /* the low drums key the duck */
@@ -5969,7 +5975,7 @@ function ddWarm(kit){
 }
 function takeLogD(kit,zone,vel,when,layerVel){
   if(!TAKE.on) return;
-  if(typeof exporting!=="undefined"&&exporting) return;
+  if(typeof exporting!=="undefined"&&exporting&&!(typeof DRY!=="undefined"&&DRY)) return; /* (round 10) */
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
   const e={t:Math.max(0,t),role:"dd",kit,zone,vel,dur:0.12,tempo:state.tempo};
   if(layerVel!=null) e.layerVel=layerVel; /* the WRITTEN velocity picks the baked layer — the bounce must pick the same one (round 9) */
@@ -5979,6 +5985,9 @@ function takeLogD(kit,zone,vel,when,layerVel){
 function ddHit(kitName,zone,vel,when,o){
   if(!ctx||typeof DD22==="undefined") return false;
   o=o||{};
+  /* DRY (round 10): the composed song logs the DD hit whether or not the kit
+     has baked — the render bakes first, so the song never carries a fallback */
+  if(typeof DRY!=="undefined"&&DRY){ if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogD==="function"&&!o._q) takeLogD(kitName,zone,vel,when,o.layerVel); return true; }
   const slot=DD_ZONE2SLOT[((zone%12)+12)%12], sr=ctx.sampleRate;
   const pedal=zone===8;
   /* layer selection follows the WRITTEN velocity (layerVel) so humanize
@@ -6028,7 +6037,7 @@ function kitZone(kitIdx,zone,vel,when,baseVel){
    Carries the low end only while no bass trait is standing. ── */
 function takeLogD8(kit,midi,vel,when,dur,slide,fromMidi){
   if(!TAKE.on) return;
-  if(typeof exporting!=="undefined"&&exporting) return;
+  if(typeof exporting!=="undefined"&&exporting&&!(typeof DRY!=="undefined"&&DRY)) return; /* (round 10) */
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
   TAKE.ev.push({t:Math.max(0,t),role:"dd8",kit,note:midi,vel,dur,slide:slide||0,
     from:fromMidi!=null?fromMidi:undefined,tempo:state.tempo});
@@ -6037,6 +6046,7 @@ function takeLogD8(kit,midi,vel,when,dur,slide,fromMidi){
 function ddSub(kitName,midi,vel,when,durSec,slideSec,fromMidi,o){
   if(!ctx||typeof DD22==="undefined") return false;
   o=o||{};
+  if(typeof DRY!=="undefined"&&DRY){ if(!o._q) takeLogD8(kitName,midi,vel,when,durSec,slideSec,fromMidi); return true; } /* composed (round 10) */
   const sr=ctx.sampleRate;
   let layer=null,bd=9;
   for(const l of DD_LAYERS){ if(DD_BUFS.has(ddKeyB(kitName,0,l,sr))){
@@ -6829,7 +6839,7 @@ function dreamScheduleBar(at,f,step,barLen){
       spawnVoice(PROGRAMS[P.lead],e.note,v,at+e.p*step+z.dt,step*l,DREAM.pans.lead);
     });
   }
-  ldrPulse(at); pulseAt(at);
+  if(!(typeof DRY!=="undefined"&&DRY)){ ldrPulse(at); pulseAt(at); } /* no UI timers for a composed bar (round 10) */
   const barNo=(DREAM.bar%8)+1, seedNo=DREAM.seed, nm=DREAM.p.name||"DREAM";
   const chordIdx=DREAM.chordBar%L;
   setTimeout(()=>{ if(!DREAM.on) return;
@@ -7221,7 +7231,7 @@ function takeProgFor(prog){
 }
 function takeLog(prog,note,vel,when,dur,dest){
   if(!TAKE.on) return null;
-  if(typeof exporting!=="undefined"&&exporting) return null; /* the bounce replays — never re-log */
+  if(typeof exporting!=="undefined"&&exporting&&!(typeof DRY!=="undefined"&&DRY)) return null; /* the bounce replays — never re-log; a DRY composition logs (round 10) */
   const t=(when||0)-TAKE.t0; if(t<-0.05) return null;
   let role="you";
   if(prog&&prog.cat==="DRUMS") role="kit";
@@ -7246,7 +7256,7 @@ function takeCloseEv(e){
 }
 function takeLogP(name,vel,when,o){
   if(!TAKE.on) return;
-  if(typeof exporting!=="undefined"&&exporting) return;
+  if(typeof exporting!=="undefined"&&exporting&&!(typeof DRY!=="undefined"&&DRY)) return; /* (round 10) */
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
   o=o||{};
   TAKE.ev.push({t:Math.max(0,t),role:"perc",name,vel,dur:0.12,tempo:state.tempo,
@@ -7262,7 +7272,7 @@ function takeClose(note){
    bounce replays the exact console moves (round 5) */
 function takeLogMix(when,s){
   if(!TAKE.on) return;
-  if(typeof exporting!=="undefined"&&exporting) return;
+  if(typeof exporting!=="undefined"&&exporting&&!(typeof DRY!=="undefined"&&DRY)) return; /* (round 10) */
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
   TAKE.ev.push({t:Math.max(0,t),role:"mix",s,tempo:state.tempo,dur:0});
   takeTrim();
@@ -7495,25 +7505,30 @@ function saveMenu(){
 }
 function doorsRender(){
   const e=document.getElementById("ldrSaveLbl"); if(!e) return;
-  e.innerHTML='SAVE — <a class="dlchip" id="svMix" title="the mix — one WAV">MIX</a>'+
-    '<a class="dlchip" id="svScore" title="the score — MIDI, instant">SCORE</a>'+
-    '<a class="dlchip" id="svSession" title="stems + mix + score + take + project.json, one reloadable zip">SESSION</a>'+
-    '<a class="dlchip" id="svLink" title="the song\u2019s address — a URL that regrows it anywhere">LINK</a>';
+  e.innerHTML='SAVE — <a class="dlchip" id="svMix" title="the SONG — final selections arranged from the top, one WAV">MIX</a>'+
+    '<a class="dlchip" id="svScore" title="the song\u2019s score — MIDI, instant">SCORE</a>'+
+    '<a class="dlchip" id="svSession" title="the song: stems + mix + score + take + project.json, one reloadable zip">SESSION</a>'+
+    '<a class="dlchip" id="svLink" title="the song\u2019s address — a URL that regrows it anywhere">LINK</a>'+
+    '<a class="dlchip" id="svJam" title="the JAM — the take exactly as played, the search included (WAV + MIDI)">JAM</a>';
   const on=(id,fn)=>{ const b=document.getElementById(id); if(b) b.addEventListener("click",fn); };
-  on("svMix",()=>exportTake("mix"));
-  on("svScore",saveScoreOnly);
-  on("svSession",()=>exportTake("session"));
+  on("svMix",()=>exportTake("mix","song"));
+  on("svScore",()=>saveScoreOnly("song"));
+  on("svSession",()=>exportTake("session","song"));
   on("svLink",shareLink);
+  on("svJam",()=>exportTake("mix","take"));
   if(typeof phoneFit==="function") phoneFit();
 }
 /* THE SCORE: the take as SMF-1, no render needed — instant, like the donor */
-function saveScoreOnly(){
+function saveScoreOnly(src){
   if(typeof exporting!=="undefined"&&exporting) return;
-  const evs=TAKE.ev.map(e=>Object.assign({},e));
-  evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; });
+  src=src||"song";
+  let evs=null;
+  if(src==="song"&&DREAM.p&&typeof songEvents==="function"){ const sg=songEvents(DREAM.p); if(sg&&sg.evs.length){ evs=sg.evs;
+    flashRow("SCORE — "+sg.bars+" BARS · "+sg.format.toUpperCase()+" · FINAL SELECTIONS"); } }
+  if(!evs){ src="take"; evs=TAKE.ev.map(e=>Object.assign({},e)); evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; }); }
   const mid=midiTake(takeToMidiEvents(evs));
   if(!mid){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
-  const name="triton-dream-"+(DREAM.seed||"take");
+  const name="triton-dream-"+(DREAM.seed||"take")+(src==="take"?"-jam":"");
   /* a stale bounce from ANOTHER take must not wear this take's name — and
      its blobs (a long WAV is ~1MB/s) must not leak when we drop them */
   if(SAVE_OUT&&SAVE_OUT.name!==name){
@@ -7653,20 +7668,74 @@ const STEM_GROUPS=[
   ["chords",e=>e.role==="chord"],
   ["lead",  e=>e.role==="lead"],
   ["you",   e=>e.role==="you"]];
-async function exportTake(kind){
+/* ── THE SONG, NOT THE SEARCH (round 10): the doors used to bounce the TAKE —
+   everything since PLAY, the auditioning included ("it's saving the search
+   for sounds as well"). They now bounce the SONG: the final selections,
+   arranged from the top by the same conductor — INTRO, then the shape's
+   sections — composed DRY (the hit paths log to a scratch tape and play
+   nothing; ~100 ms for 68 bars), then rendered offline like any take. The
+   performance as played stays one tap away (JAM). ── */
+const SONG_BARS={loop:36,arc:68,song:68}; /* 4-bar intro + the shape's 8 sections × 8 bars; a loop gets 32 bars of groove */
+function songBars(p){ return SONG_BARS[p&&p.format]||SONG_BARS.loop; }
+function songEvents(p){
+  if(!ctx||!p||typeof dreamScheduleBar!=="function") return null;
+  const f=LDR_FIG[p.fig]; if(!f) return null;
+  /* everything the composition touches, put back afterwards — the live take
+     (the jam) and the conductor's counters belong to the performance */
+  const S={ev:TAKE.ev,t0:TAKE.t0,on:TAKE.on,open:TAKE.open,
+    bar:DREAM.bar,chordBar:DREAM.chordBar,rng:DREAM.rng,voic:DREAM.voic,hook:DREAM.hook,bcell:DREAM.bcell,
+    next:DREAM.next,p:DREAM.p,seed:DREAM.seed,gfield:DREAM.gfield,pans:DREAM.pans,barLen:DREAM._barLen,
+    barStart:DREAM._barStart,duckFlushed:DREAM._duckFlushed,tempo:state.tempo};
+  let out=null;
+  DRY=true; DUCK_MUTE=true;
+  try{
+    TAKE.gen++; TAKE.on=true; TAKE.t0=0; TAKE.ev=[]; TAKE.open={};
+    const pp=JSON.parse(JSON.stringify(p)); pp._seed=(p._seed!=null)? p._seed : (DREAM.seed||1);
+    delete pp._building; /* the shape applies: this is the song, not a try-on */
+    applyDream(pp,false);
+    const spb=60/state.tempo, step=f.grid===12? spb/3 : spb/4, barLen=f.grid*step, N=songBars(pp);
+    mixAutoStage(.1);
+    for(let b=0;b<N;b++){ dreamScheduleBar(.1+b*barLen,f,step,barLen); DREAM.bar++; DREAM.chordBar++; }
+    const evs=TAKE.ev; evs.forEach(e=>{ if(e.dur==null) e.dur=.3; });
+    out={evs,bars:N,seconds:+(.1+N*barLen).toFixed(3),tempo:state.tempo,format:pp.format||"loop",seed:pp._seed};
+  }catch(ex){ if(typeof console!=="undefined") console.error("SONG:",ex); out=null; }
+  finally{
+    DRY=false; DUCK_MUTE=false;
+    TAKE.ev=S.ev; TAKE.t0=S.t0; TAKE.on=S.on; TAKE.open=S.open;
+    DREAM.bar=S.bar; DREAM.chordBar=S.chordBar; DREAM.rng=S.rng; DREAM.voic=S.voic; DREAM.hook=S.hook; DREAM.bcell=S.bcell;
+    DREAM.next=S.next; DREAM.p=S.p; DREAM.seed=S.seed; DREAM.gfield=S.gfield; DREAM.pans=S.pans; DREAM._barLen=S.barLen;
+    DREAM._barStart=S.barStart; DREAM._duckFlushed=S.duckFlushed; state.tempo=S.tempo;
+  }
+  return out;
+}
+/* the render must find the song's kit baked — the worker makes this ~1 s */
+function ddWarmDone(kit){
+  return new Promise(res=>{
+    if(!kit||!ctx||typeof ddWarm!=="function"||DD_KIT_NAMES.indexOf(kit)<0) return res();
+    ddWarm(kit); const key=kit+"|"+ctx.sampleRate, t0=Date.now();
+    (function w(){ const st=DD_WARM[key]; if((st&&st.done)||Date.now()-t0>15000) res(); else setTimeout(w,40); })();
+  });
+}
+async function exportTake(kind,src){
   if(typeof exporting!=="undefined"&&exporting) return;
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
   transportStop();                     /* idempotent — saveMenu stopped it already */
-  kind=kind||"mix";
+  kind=kind||"mix"; src=src||"song";
   exporting=true; setSaveUI("RENDERING 0%");
   /* elapsed-seconds ticker: the fallback face if suspend checkpoints refuse */
   const _rt0=Date.now();
   const _rtick=setInterval(()=>{ if(typeof exporting!=="undefined"&&exporting)
     setSaveUI((kind==="session"?"SESSION":"RENDERING")+"… "+Math.round((Date.now()-_rt0)/1000)+"s"); },4000);
   await new Promise(r=>setTimeout(r,30));
-  const evs=TAKE.ev.map(e=>Object.assign({},e));
-  evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; });
-  const name="triton-dream-"+(DREAM.seed||"take");
+  /* the SONG (final selections, from the top) by default; the JAM (as played) on request */
+  let evs, song=null;
+  if(src==="song"&&DREAM.p){ song=songEvents(DREAM.p); }
+  if(song&&song.evs.length){ evs=song.evs; flashRow("SONG — "+song.bars+" BARS · "+song.format.toUpperCase()+" · FINAL SELECTIONS");
+    await ddWarmDone(DREAM.p&&DREAM.p.dkit); }
+  else { src="take"; evs=TAKE.ev.map(e=>Object.assign({},e)); evs.forEach(e=>{ if(e.dur==null) e.dur=0.3; }); }
+  window._lastBounce={src,kind,n:evs.length,bars:song?song.bars:null,seconds:song?song.seconds:null,
+    roles:[...new Set(evs.map(e=>e.role))],youN:evs.filter(e=>e.role==="you").length}; /* measurement, not audio */
+  const name="triton-dream-"+(DREAM.seed||"take")+(src==="take"?"-jam":"");
   /* PINNED for the whole export (round 8): a verb tap or a program browse
      between passes would otherwise render stems through a different console
      than the mix — one zip, internally inconsistent */
@@ -7723,7 +7792,8 @@ async function exportTake(kind){
   }catch(ex){ failed=true; if(typeof console!=="undefined") console.error("SAVE:",ex); }
   VERB_PIN=null;
   exporting=false; clearInterval(_rtick);
-  try{ if(state.powered&&cur) applyFX(); }catch(_){ }
+  /* the console heals to the STANDING song's chord program (verbSet's law), not the player's patch — a VERB tap after SAVE read a different send than the song had (round 10) */
+  try{ if(state.powered){ if(typeof DREAM!=="undefined"&&DREAM.p) applyFXP(PROGRAMS[DREAM.p.chord]); else if(cur) applyFX(); } }catch(_){ }
   if(typeof offFlush==="function") offFlush();     /* releases queued during the render */
   if(typeof unregFlush==="function") unregFlush(); /* live voices that ended mid-render settle the ledger now */
   if(failed){ setSaveUI("RENDER FAILED"); setTimeout(()=>setSaveUI(""),2500); return; }
@@ -8358,4 +8428,10 @@ BANNED (obvious answers set aside first): a hand-packed base36 address codec lik
 KILL-TEST: node suites [0]–[12] green — [11] adds the take codec (all nine roles round-trip, bank programs by identity, foreign programs re-validated, 14 hostiles refused, out-of-range optional fields DROPPED not passed) and the address (deflate/base64url regrows the entry through the preset law; garbage, wrong kind, over-cap, prototype figure refused; the inflate bomb stopped BY THE CAP — the first version of that gate passed with the cap removed because JSON.parse choked on 4 MB of zeros, a mutation found it); [12] the bank court (saturator headroom: the transfer inside ±1 unchanged to 7e-4 and the knee continuing past 1; the bandpass-on-sine data law; the bell sqrt law and the formant makeup present where the voice is built); [10] widened: the WHOLE stock bank passes the widened import law and 14 hostile programs are refused (cat markup, tempo −120 and 1e308, arpDefault oct 1e9, NaN attack, sustain 40, detune 1e9…), comps/kit/leadOct/extraKick in the preset law, `esc(c.roman)` at the theory bar, the tick's try around dreamScheduleBar. Every gate was MUTATION-TESTED (revert the fix on a copy, confirm the gate fires; 15 mutants). The Chromium harness carries the live numbers: the bank court probe renders every non-drum program over its own window each run (median −10.5 dB momentary, floor −19.5, ceiling −5.0, VOX −9.5…−12.2, the four hottest triads flat-topping ≤.001%); the phone probe (390 px: 8 chips ≥ 65×44 px in a strip under the face, pads 46 px, nothing overlapping the shelf); take.json in the session zip (32 events, mix/dd/perc/dd8, programs by index); LOAD with a take: stopped, 32 events back under song #777, staged, 4 doors; the SCORE door bounces the restored take; PLAY regrows it (fresh take, doors cleared); LINK writes a 342-char address; a fresh page regrows #777 (knock) on PLAY with nothing played before the gesture; hostile addresses refused aloud; a VALID song wearing hostile strings (name, progName, p.name) reaches the rail, the LCD, the save label, the theory bar and the KEEP copy escaped, nothing fires; the regrow is CONTENT-exact — two replays of the addressed song log the same first 24 events (t, role, note, vel, program) — which took anchoring the tape's zero to the first downbeat with a fixed 100 ms lead-in (takeStart stamped t0 at the tap and the bar landed a tick later: exact in content, jittered 0-40 ms in time); the lazy render counted at startRendering (voices standing < voices total on a take longer than one window); a cold kit baked off the main thread (36 buffers, longest main-thread task 0 ms, samples bit-identical); the score walked as events with zero unmatched note-ons. The court's own probes re-run against the fixes: a .2 s note on a .55 s attack peaks at −24 dB at .25 s and ends at −∞ with no stop jump (was silent, then −12 dB held for 4.7 s); the tremolo tail after release is −∞ on every tremolo program (was −8.6 dB relative for r·4 s ending on a click); a release at 50% of the attack steps −35 dB in one sample (was −20 dB, i.e. a cut) and keeps its tail; the offline delay line reads .450 s from the first sample (was a 0→.45 sweep over 300 ms); the attacker's eight payloads: bank `cat` not parsed, wave "constructor" starts 3 / stops 3 / leaks 0, comps "constructor" refused at the rail, leadOct 1e9 refused, roman `<style>` escaped in the theory bar, tempo −120 refused.
 THE NON-OBVIOUS CHOICE: the court's blocker was not a bug in a function but in a TIMELINE — WebAudio's cancelScheduledValues(t) removes a linearRamp whose END is after t, and the envelope's ramp ends at the attack's end, so every release that landed inside an attack (a written duration shorter than a pad's swell, a staccato key on a string patch, a stolen voice) erased the ramp it was standing on: silence for the written length, then a swell to full that held; or a one-sample cut with no tail. The obvious fix is the API made for it, cancelAndHoldAtTime — and it was set aside, because the envelope is ANALYTIC: the value at any moment inside the attack is a line the instrument itself drew, so the hold is computed and re-scheduled as a partial ramp ending on that value, identically live and in the offline bounce, on every engine. The first version of that hold used setValueAtTime and was silent until the release point — cancelling the ramp event also erases the segment before it — which the court's own probe caught on the re-run (the tests found the bug the fix was hiding, again). The second lesson of the round is about gates: three of the new gates passed with their fixes reverted (the inflate cap — JSON.parse choked on the bomb first; the lazy render and the worker bake — a regex that says the code EXISTS is not a gate that says it RUNS), and each was rebuilt to measure the mechanism: the cap stopping the stream, the voices counted at startRendering, the worker answering with the same samples as the main thread and no task over the lookahead.
 OPEN QUESTIONS: (1) The trait rail slots (12 px), VERB −/+ (10 px) and the rack ‹ › ◇ (18 px) still break the touch law at phone scale — the chips were the rescue controls and went first; the rest is a phone LAYOUT of the 4U, not a scale, and wants its own round. (2) The address is 342 chars for a full song; the donor's beat is a dozen integers. A dictionary-primed deflate (the preset law's key names as a preset dictionary) would roughly halve it without a second schema — CompressionStream has no dictionary API, so it would mean an inline inflater, which is the second implementation the round refused. (3) The SESSION door still renders one pass per lane; lazy instantiation made each pass 4× faster, but one pass with N recorders is still the honest end state. (4) The take's `you` role now survives a zip round-trip as a re-renderable performance; replaying it LIVE over the regrown band (an overdub track) is a new transport mode — alignment between the take's clock and the regrown song's bar start is deterministic (the court measured 421/421 identical events) so it is buildable. (5) The bank court judged single notes at C4 vel 1; a court over the RANGE (C2–C6, vel .3–1) would find the programs whose filter key-tracking or velocity law drifts out of family at the ends — the bandpass trap was a range problem the C4 note only half-showed. (6) Bells now ride the sqrt partial law, measured into family; a listening pass on the mallets (marimba −17, toy piano −16) against the keys would settle whether the quiet end wants a program-level lift.
+RING 38 · 2026-09-02 · the song, not the search
+WHAT CHANGED: the tenth verdict — "it doesn't save the full session from the very beginning, just the final selections… right now it's saving the search for sounds as well and that's annoying… it should just save the song, structured, of the final selected choices." Correct, and the doors were doing exactly the wrong thing: MIX, SCORE and SESSION bounced THE TAKE — every bar since PLAY, the three-card auditions, the rack's ‹ › walks, the shape being tried on — because the take was the only thing the instrument had ever recorded. They now bounce THE SONG: the final selections (the song standing when SAVE was pressed, `DREAM.p`) arranged FROM THE TOP by the same conductor — a 4-bar INTRO, then the shape's own section list once through (arc/song: 8 sections × 8 bars = 68 bars; a loop: 32 bars of groove = 36) — composed DRY and then rendered offline like any take. DRY is one flag: the hit paths (spawnVoice, ddHit, ddSub, drumHitP) log to a scratch tape and RETURN before touching audio, the UI pulse timers stay unarmed, the duck is muted, and `songEvents(p)` runs the conductor bar by bar against that tape in ~100 ms, then puts back everything it touched (the live take, the conductor's counters and rng, the pans, the tempo). Because a DRY ddHit logs whether or not the kit has baked, the composed song never carries a TRITON fallback hit the way a cold live take can; the render awaits the kit's bake (the worker, ~1 s) before it starts. The score door composes the same way (instant); the SESSION zip's take.json now carries the composed song, so LOAD restores a re-renderable SONG. The performance as played — the search, your own keys over it — is not thrown away: a fifth door, JAM, bounces the take exactly as before (WAV + MIDI, named `-jam`). A try-on standing at SAVE time (a card lit but not kept) bounces as the song WITH the shape applied (`_building` cleared), because the ear heard that card and the verdict asked for the song's structure. One more law the song bounce exposed: after an export the console healed to the PLAYER's patch (round 8's exit), while verbSet applies the STANDING song's chord program — a VERB tap after SAVE read a send the song never had; both export exits now heal to the standing song, the player's patch only when no song stands.
+BANNED (obvious answers set aside first): trimming the take to "after the last change" (the search is not a prefix — the rack's ‹ › walks and re-deals interleave with the song, and a trim would keep whichever audition happened last); rendering the take with the audition events filtered out (an audition IS the song for its bars — there is nothing to filter, the world changed); a second conductor for the bounce (the composition runs the ONE conductor, so the bounce is the song the room would have played from the top with these selections — one grammar, one humanization, one seed); keeping the player's notes in the song bounce (they were played over a changing world at the take's timeline, not over this arrangement; the JAM keeps them where they belong); dropping the take bounce entirely (the search is sometimes the record — a lick over the build is a real take).
+KILL-TEST: node suite [13]: SONG_BARS follows sectFor's own section lists (the two 8-entry lists are read out of the source; intro + every section once = 68; a loop 36; a missing shape defaults to the loop length); every hit path is proven to log-and-RETURN under DRY by regex on the exact lines; a composed bar arms no UI pulse timers; MIX/SESSION bounce the song and JAM the take (the door wiring read out of doorsRender); exportTake defaults to the song; the score door composes; `songEvents` restores the live take, the rng, the pans and the tempo, and clears `_building`; every take logger's export gate yields to DRY and a composition moves no console — the first song bounce fell back to the jam because `exporting` was already true when it composed, which the in-page export probe caught before the harness did (nine mutants, all caught). And the harness itself was convicted: every long wait passed its options object in Playwright's ARGUMENT slot (`waitForFunction(fn,{timeout})`), so each ran on the 30 s default — invisible while renders took seconds, fatal once a song render took a minute; the 68-bar song is what found it. The Chromium harness: the song composes DRY in-page — the bar count equals `songBars(p)`, more than four events a bar, the same events twice (deterministic), no `you` role, and the live take untouched by the composition; MIX then renders that song and the WAV's length equals the composed length plus the tail; JAM bounces the take as played with the player's own notes in it (the YOU track survives in its MIDI); five doors open; LOAD of a session zip restores the composed song and reopens five doors.
+THE NON-OBVIOUS CHOICE: "just save the final selections" sounds like a filter over the tape — keep the last N bars, drop the audition events — and both filters are wrong in the same way: the world CHANGED under the tape, so no subset of what was played is the song. The song has to be PLAYED AGAIN from the top with the final world, and the instrument already owns a machine that does exactly that: the conductor. The cost of composing with it was one flag. DRY makes every hit path a logger — the same call graph, the same rng stream, the same humanization, the same section grammar — so the bounce is not a reconstruction of the song, it IS the song, as the room would have played it had you started PLAY with these five traits kept. That is also why the composition is deterministic and why LOAD, LINK and the bounce now agree: three doors, one world.
+OPEN QUESTIONS: (1) The player's own keys over the FINAL world could be carried into the song bounce by aligning the take's last-applied-song bar with the composition's matching section — buildable now that the tape's zero is a downbeat, but which section of a 68-bar arrangement should a 12-bar overdub land in? (2) The loop bounce is 32 bars of groove by fiat; a loop's natural length is the phrase library's own cycle (ph.b) × a few — worth deriving. (3) An "ending" — the conductor has INTRO but no OUTRO; the song bounce stops on a bar line and rings out through the tail. (4) The SESSION door renders five passes of a 68-bar song; the one-pass/N-recorder stems remain the honest end state (ring 36/37).
 ═══ end rings ═══ -->
