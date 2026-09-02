@@ -1,6 +1,6 @@
-# HALO — Helios Bridge iteration V021 · handoff for Claude Code on macOS
+# HALO — Helios Bridge iteration V501 · handoff for Claude Code on macOS
 
-**Code name:** HALO (Helios Adaptive Lab Object). **Artifact:** `chamber/HELIOS-V021-halo-resonance-chamber.html`,
+**Code name:** HALO (Helios Adaptive Lab Object). **Artifact:** `chamber/HELIOS-V501-halo-resonance-chamber.html`,
 a single self-contained page (three.js from cdnjs, no build step, ~290 KB) — the Resonance Chamber at Ring 9.
 **Live reference copy:** https://claude.ai/code/artifact/f81a4b50-694b-4580-9755-7639a4f001d0
 **Repository target:** `mrdirno/nested-resonance-memory-archive`, the Helios Bridge live pages
@@ -31,7 +31,7 @@ and the ones that failed are labelled as such (see §3).
 
 ```
 HANDOFF.md                         this file
-chamber/HELIOS-V021-halo-resonance-chamber.html   the artifact (rings 1–9 sealed in a comment at the end)
+chamber/HELIOS-V501-halo-resonance-chamber.html   the artifact (rings 1–9 sealed in a comment at the end)
 chamber/tests/                     headless Playwright suite (mk_test.py builds rc-test.html with a probe bridge — NEVER ship rc-test.html)
 chamber/patches/                   the write-at-end patch scripts that produced rings 8–9 (provenance only)
 chamber/shots/                     screenshots of the Lab panel and experiments
@@ -74,22 +74,36 @@ See §4a for the deploy facts as read from the repository on 2026-09-02, then fo
   each trade dir → `/<trade>/`, `commons/.` → `/commons/`.
 - Deploys run on push to **main** when a listed path changes (`HELIOS-BRIDGE/**`, `HELIOS-BRIDGE-ARCHIVE/**`, …).
   A file outside those paths never reaches Pages.
-- The archive already holds twenty iterations named `HELIOS-V001-…-interference.html` … `HELIOS-V020-…`;
-  HALO is **V021**, and its file name in this package already follows the pattern.
+- The archive holds **500** generated variations, `HELIOS-V001` … `HELIOS-V500` (50 palettes × 10 sequences ×
+  10 force fields × 10 behaviors × 10 UI themes, curated), plus `MANIFEST.json`, `index.html` (the gallery, which
+  inlines the manifest as a JS constant and filters by force field), `endless.html`, and `README.md`. All three
+  generated files are written by `generate_500_variations.mjs` at the repo root — hand edits to `index.html` are
+  lost if it is ever regenerated, so HALO is registered outside the 5-axis manifest, as a "beyond the 500" entry.
+- HALO is **V501**; the file name in this package follows the archive's `HELIOS-V{NNN}-{name}.html` pattern and
+  is already on the branch at `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html`.
 
 ### 4b. Steps (each one a commit you make locally; verify before the next)
 1. `git checkout main && git pull`, then confirm `git config user.name` / `user.email` are Aldrin's.
-2. Copy `chamber/HELIOS-V021-halo-resonance-chamber.html` to `HELIOS-BRIDGE-ARCHIVE/`.
+2. Copy `chamber/HELIOS-V501-halo-resonance-chamber.html` to `HELIOS-BRIDGE-ARCHIVE/`.
    Open it locally in a browser first (any static server; the page only needs cdnjs). Press 7 for the Lab.
-3. Link it from the bridge app the way earlier versions are linked (read `HELIOS-BRIDGE/App.tsx`,
-   `constants.ts`, `presets.ts` for the archive index / version list; add V021 with the label
-   "HALO — Resonance Chamber, Ring 9"). If the archive is only reachable by direct URL, that is fine:
-   the URL will be `https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V021-halo-resonance-chamber.html`.
+3. Register it in the archive gallery without touching the generated manifest: add one card above the grid in
+   `HELIOS-BRIDGE-ARCHIVE/index.html` (right after the `<div class="toolbar">…</div>` block) AND the same
+   markup in the index template inside `generate_500_variations.mjs`, so a regeneration keeps it:
+   ```html
+   <a class="card halo" href="HELIOS-V501-halo-resonance-chamber.html">
+     <div class="card-title">V501 · HALO — Resonance Chamber, Ring 9</div>
+     <div class="card-meta">Beyond the 500: a laboratory that measures its own claims — fixed tick, exact or Euler magnetic step, Lyapunov, memory with its control, spectrum. Press 7.</div>
+   </a>
+   ```
+   (Reuse the gallery's existing `.card` styles; `.halo` only needs a border color.) The archive `README.md`
+   already carries a "Beyond the 500" section on this branch. The bridge app itself (`HELIOS-BRIDGE/App.tsx`) has
+   no version list to extend; the archive is reached from the app's archive link. Direct URL after deploy:
+   `https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html`.
 4. README, under "THE BRIDGE (Live Interface)": one line, offer not shove, under the existing entry, e.g.
-   *"Newest iteration: HALO (V021) — a particle laboratory that measures its own claims: [open](…/archive/HELIOS-V021-halo-resonance-chamber.html)."*
+   *"Newest iteration: HALO (V501) — a particle laboratory that measures its own claims: [open](…/archive/HELIOS-V501-halo-resonance-chamber.html)."*
    No claim inflation: the page presents hypotheses as tests, and two of its own claims are labelled failed.
 5. `CYCLE_LOGS.md` (and `META_OBJECTIVES.md` if the cycle convention asks): one entry in the existing format
-   naming V021/HALO, the fixed tick, the Lab, and the four findings of §3 with their numbers.
+   naming V501/HALO, the fixed tick, the Lab, and the four findings of §3 with their numbers.
 6. `python3 automation/scripts/cleanup_repo.py` (root hygiene), `git status` review — no `fabrication/`, no
    `*.stl/*.obj/*.gcode/*.3mf`, no `rc-test.html`, no secrets — then commit and push to main.
    The deploy workflow triggers on the archive path; check the Actions run and the live URL.
@@ -108,7 +122,7 @@ See §4a for the deploy facts as read from the repository on 2026-09-02, then fo
 ```
 cd chamber/tests
 npm init -y >/dev/null && npm i playwright@1 && npx playwright install chromium
-python3 mk_test.py                  # builds rc-test.html from ../HELIOS-V021-halo-resonance-chamber.html (three.min.js is included here)
+python3 mk_test.py                  # builds rc-test.html from ../HELIOS-V501-halo-resonance-chamber.html (three.min.js is included here)
 node tick_test.js                   # fixed tick, interpolation, Boris toggle, float deposit — 13 checks, ~2 min
 node lab_test.js                    # instruments in three regimes — 26 checks, ~8 min
 node smoke.js                       # the whole UI — 95 checks, ~6 min
