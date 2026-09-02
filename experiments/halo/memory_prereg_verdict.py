@@ -116,9 +116,41 @@ def main(path):
     else:
         verdict = 'NULL'
 
+    # REPORTED ALONGSIDE, NOT A CHANGE TO THE RULE. Section 7 says a ceiling-bound or
+    # void condition "cannot support a positive"; the rule above lets such a condition
+    # push the WHOLE grid to INCONCLUSIVE even when every admissible condition is a
+    # clean null. Both readings are printed so a reader can see which is which.
+    adm = [c for c in cells if not c['void']]
+    adm_conditions = {}
+    for c in adm:
+        adm_conditions.setdefault((c['preset'], c['selfgrav'], c['gainloss']), []).append(c)
+    adm_pass = []
+    for key, group in sorted(adm_conditions.items()):
+        med = sorted(x['median_ceiling'] for x in group)[len(group) // 2]
+        if med >= CEILING_BOUND:
+            continue
+        need = 2 if len(group) >= 3 else len(group)
+        if sum(1 for x in group if x['fires']) >= need and \
+           sum(1 for x in group if x['fires_matched']) >= need:
+            adm_pass.append(key)
+    adm_cells = [c for c in adm if sorted(
+        x['median_ceiling'] for x in adm_conditions[(c['preset'], c['selfgrav'], c['gainloss'])]
+    )[len(adm_conditions[(c['preset'], c['selfgrav'], c['gainloss'])]) // 2] < CEILING_BOUND]
+    admissible = {
+        'conditions': len({(c['preset'], c['selfgrav'], c['gainloss']) for c in adm_cells}),
+        'cells': len(adm_cells),
+        'fired': sum(1 for c in adm_cells if c['fires']),
+        'fired_under_null': sum(1 for c in adm_cells if c['fires_null']),
+        'fired_matched': sum(1 for c in adm_cells if c['fires_matched']),
+        'fired_matched_under_null': sum(1 for c in adm_cells if c['fires_null_matched']),
+        'passing_conditions': adm_pass,
+        'verdict': 'NULL' if not adm_pass else 'POSITIVE-CANDIDATE',
+    }
+
     return {'verdict': verdict, 'cells': n, 'fired': k_real, 'fired_under_null': k_null,
             'null_firing_rate': p_null, 'p_value': p_value,
-            'passing_conditions': passing, 'blocked_conditions': blocked, 'table': cells}
+            'passing_conditions': passing, 'blocked_conditions': blocked,
+            'admissible_subset': admissible, 'table': cells}
 
 
 if __name__ == '__main__':
@@ -135,6 +167,11 @@ if __name__ == '__main__':
     for r in v['blocked_conditions']:
         print(f"  BLOCKED{r['condition']}  {r['fires']}/{r['seeds']} seeds  "
               f"({'ceiling-bound' if r['ceiling_bound'] else ''}{' void' if r['any_void'] else ''})")
+    a = v['admissible_subset']
+    print(f"  ADMISSIBLE SUBSET (not ceiling-bound, not void): {a['conditions']} conditions, "
+          f"{a['cells']} cells -> {a['verdict']}")
+    print(f"    as-displayed arm fired {a['fired']}, its null fired {a['fired_under_null']};  "
+          f"matched arm fired {a['fired_matched']}, its matched null fired {a['fired_matched_under_null']}")
     out = os.path.join(os.path.dirname(os.path.abspath(src)), 'verdict.json')
     json.dump(v, open(out, 'w'), indent=1)
     print('wrote', out)
