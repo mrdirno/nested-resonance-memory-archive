@@ -46,7 +46,9 @@ def load_run(js_path):
     k = d['mesh_count']
     if m.size != k * N ** 3:
         raise ValueError(f'{mesh_path}: {m.size} floats, expected {k * N ** 3}')
-    d['mesh'] = m.reshape(k, N, N, N).astype(np.float64)
+    # kept as float32: the source is float32, and 60 runs x 24 meshes at float64
+    # would cost about 380 MB for no precision gained. corr() promotes.
+    d['mesh'] = m.reshape(k, N, N, N)
     return d
 
 
@@ -60,8 +62,8 @@ def _blocks(f, q=None):
 
 def corr(rho, relic, f, q=None):
     cur, rel = _blocks(f, q)
-    a = rho[np.ix_(cur, cur, cur)].ravel()
-    b = relic[np.ix_(rel, rel, rel)].ravel()
+    a = rho[np.ix_(cur, cur, cur)].ravel().astype(np.float64)
+    b = relic[np.ix_(rel, rel, rel)].ravel().astype(np.float64)
     va, vb = a.var(), b.var()
     if va <= 0 or vb <= 0:
         return float('nan'), a.size
@@ -101,13 +103,13 @@ def series(mesh, other=None, rng=None):
 
 def mass_check(d):
     expected = d['params']['particles'] / 1024.0
-    sums = d['mesh'].sum(axis=(1, 2, 3))
+    sums = d['mesh'].sum(axis=(1, 2, 3), dtype=np.float64)   # the gate is 1e-3; accumulate in float64
     return {'expected_mass': expected,
             'measured_mass_min': float(sums.min()), 'measured_mass_max': float(sums.max()),
             'max_relative_loss': float(np.max(np.abs(sums - expected)) / expected),
             'saturated': bool(np.max(np.abs(sums - expected)) / expected > 1e-3),
-            'max_cell_particles': float(d['mesh'].max() * 1024.0),
-            'mean_cell_particles': float(d['mesh'].mean() * 1024.0)}
+            'max_cell_particles': float(d['mesh'].max()) * 1024.0,
+            'mean_cell_particles': float(d['mesh'].mean(dtype=np.float64)) * 1024.0}
 
 
 def main(indir):
