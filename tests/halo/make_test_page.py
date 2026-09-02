@@ -8,8 +8,11 @@ git-ignored: never publish it.
 Three test-only edits, never shipped:
   1. the CDN three.js tag -> the vendored local copy three.min.js
   2. a probe bridge on window.__probe just before the IIFE closes, so a
-     headless driver can set state and read the GPU position texture back
+     headless driver can set state, read the GPU position texture back, call the
+     Lab's own density readback and correlation, and report GL capabilities
   3. a window.__forceDt hook so a test can pin the wall-clock step
+  4. a window.__tickBudget hook so a test can raise the per-frame tick budget
+  5. a window.__simStop hook so a test can halt on an exact tick boundary
 """
 import re
 import pathlib
@@ -27,6 +30,24 @@ out, n = re.subn(r"const dtWall = Math\.min\(\(now - lastTime\) / 1000, 0\.5\);"
                  "const dtWall = window.__forceDt || Math.min((now - lastTime) / 1000, 0.5);", out)
 assert n == 1, f'dtWall hook matched {n} times'
 
+# 4. a per-frame physics-tick budget override so a headless driver can advance
+#    simulated time faster than wall clock. The tick is FIXED (TICK = 1/20 s) and
+#    simTick() takes no wall-clock argument, so raising the budget changes only how
+#    many ticks are issued per rendered frame, never what a tick does. Identity
+#    against the shipped budget is asserted by memory_budget_identity.js.
+out, n = re.subn(r"const budget = dtWall < 0\.07 \? 2 : 1;",
+                 "const budget = window.__tickBudget || (dtWall < 0.07 ? 2 : 1);", out)
+assert n == 1, f'tick budget hook matched {n} times'
+
+# 5. a simulated-time stop, checked BETWEEN ticks, so a driver can halt a run on
+#    an exact tick boundary rather than an unpredictable frame boundary. simTime
+#    is exactly (number of ticks) x TICK, so this makes tick counts reproducible.
+out, n = re.subn(r"while \(tickAccum >= TICK && ticks < budget\) \{ simTick\(\); tickAccum -= TICK; ticks\+\+; \}",
+                 "while (tickAccum >= TICK && ticks < budget && "
+                 "!(window.__simStop && simTime >= window.__simStop - 1e-9)) "
+                 "{ simTick(); tickAccum -= TICK; ticks++; }", out)
+assert n == 1, f'simStop hook matched {n} times'
+
 PROBE = """
 /* ---- test-only probe bridge (rc-test.html only; never shipped) ---- */
 window.__probe = {
@@ -41,6 +62,18 @@ window.__probe = {
   get pmPot() { return pmPotA; },
   PM: { N: PM_N, TX: PM_TX, TY: PM_TY, HALF: EXTENT * 1.02 },
   lab: lab, applyScenario: applyScenario, TICK: TICK,
+  labReadDensity: labReadDensity, labCorr: labCorr, PM_N: PM_N,
+  get epochN() { return epochN; },
+  caps: function () {
+    const g = renderer.getContext();
+    const d = g.getExtension('WEBGL_debug_renderer_info');
+    return { renderer: d ? g.getParameter(d.UNMASKED_RENDERER_WEBGL) : 'unknown',
+             float_blend: !!g.getExtension('EXT_float_blend'),
+             color_buffer_float: !!g.getExtension('EXT_color_buffer_float'),
+             pmWanted: pmType() === THREE.FloatType ? 'float' : 'half',
+             pmDensType: !pmDens ? 'unallocated' : (pmDens.texture.type === THREE.FloatType ? 'float' : 'half'),
+             posType: !posA ? 'unallocated' : (posA.texture.type === THREE.FloatType ? 'float' : 'half') };
+  },
   pointsMat: pointsMat, velMat: velMat,
   get tickAccum() { return tickAccum; },
   get lerpOK() { return lerpOK; },

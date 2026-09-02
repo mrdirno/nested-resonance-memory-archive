@@ -1,0 +1,24 @@
+{
+ "particles": 4194304,
+ "lab_on": true,
+ "seed": 20260902,
+ "target_ticks": 200,
+ "backend": "gpu",
+ "texture_type": "float",
+ "run_budget1": {
+  "ticks": 200,
+  "simTime": 10.000000000000007
+ },
+ "run_budget10": {
+  "ticks": 200,
+  "simTime": 10.000000000000007
+ },
+ "mode": "1 vs 10",
+ "compared_components": 786432,
+ "nonfinite": 0,
+ "max_abs_diff": 0,
+ "rms_diff": 0,
+ "ticks_match": true,
+ "pass": true,
+ "pageerrors": []
+}
