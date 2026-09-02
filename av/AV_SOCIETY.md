@@ -214,6 +214,18 @@ own paperwork/communication friction. Mechanics:
   instructions say the words the trade's answers[] actually ships. A stand-up that
   deliberately defers a boundary page writes the deferral into its cycle entry, the
   way flooring's DOCS debt was named — an unnamed absence is how this hole got dug.
+- **AND THE HUB'S `:root`, WHICH IS COPIED WITH THE SIBLING'S COLOUR IN IT — found at trade
+  #16, five days after trade #15 shipped wearing painting's green.** `--flag`, `--flag-ink`,
+  `--tint` and `--deep` in `<trade>/index.html` are the trade's accent pair from `trade.js`,
+  and the deploy now asserts `--flag` equals the accent per staged trade. Set all four before
+  the h1.
+- **AND THE PHRASES THE GATES READ OUT OF A CONFIG'S PROSE — found at trade #16.** Three gates
+  read a trade's own words by regex: `getting-in.mjs` wants "the window you're actually giving
+  us" in the closing and at least one heads-up naming a PERMITTED activity (valve · closure ·
+  power down · hot work · fire alarm …); `answer-tapnote.mjs` wants all four rungs verbatim in
+  the tap instruction; `boundary-titles.mjs` wants `<title>` and the apple-title to be the
+  config's `toolName`. Copy the sibling's sentence where a gate names one, then localize
+  around it — a paraphrase fails the build.
 - **Same bar, same safety, same ledger.** Every trade's tools face the identical
   "would a real &lt;trade&gt; pro use this to send their boss something, FAST?" test.
   The cross-trade demand DATA stays private (the moat); the pages stay open.
@@ -1856,6 +1868,45 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-01 (C3681) — A HUB COPIED FROM A SIBLING KEEPS THE SIBLING'S COLOUR IN ITS :root, AND NOTHING ASSERTED IT FOR FIVE DAYS
+Every hub is stood up by copying a sibling's `index.html` and patching the lines somebody
+remembers — the title, the h1, the lede, the folder link. The `:root` block carries
+`--flag`, `--tint` and `--deep`, and they are the sibling's. `doors/index.html` shipped at
+C3674 with painting's `#29FF29` on its well button, its eyebrow and its focus rings, and wore
+it until the trade #16 backport sweep compared every hub's `--flag` against its own
+`trade.js` accent: fifteen matched, doors did not. Nothing in the deploy read the hub's
+stylesheet; the trade's accent lived in one file and the hub's colour in another, and the
+two were only ever equal by hand. **FIX:** `doors/index.html` wears `#B7BEDC`, and
+`deploy_bridge.yml` asserts, per staged trade, that the hub's `--flag` hex equals the
+`trade.js` accent hex. **THE RULE:** a value that lives in two files is asserted equal or it
+is two values. §TRADE EXPANSION now names the `:root` block.
+
+### 2026-09-01 (C3681) — THE ENGINE READ REMINDERS AS STRINGS, A TRADE WROTE THEM AS PAIRS, AND THE PASTED BLOCK SAID "[object Object]" FOR FIVE DAYS
+`shared/docspec.js` emitted `PROTOCOL REMINDERS` with `"- " + r`. Fourteen libraries write
+reminders as strings. `doors/docs.js` wrote them as `{ when: "label", say: "…" }` — the
+better shape, the trigger word as data — and every one of doors' five reminders reached the
+block a man pastes into his AI as `- [object Object]`. The block was non-empty, carried all
+eleven headings, and passed `docspec-config`; the layout was watertight around it; no gate
+read a reminder line. Found by the C3681 docs writer copying the doors shape for landscape,
+who reported it instead of matching it silently. **FIX:** `reminderLine()` renders both
+forms ("When <trigger> comes up: <say>"), the string form byte-identical to before; and
+`docspec-config` fails any block carrying `[object Object]`. **THE CLASS:** a gate that asserts
+presence and length is satisfied by a stringified object — assert the one string that can
+only come from a bug.
+
+### 2026-09-01 (C3681) — TWO PHRASES THE GETTING-IN GATE READS BY REGEX WERE PARAPHRASED AT STAND-UP, AND THE PAGE FAILED ON BOTH
+`getting-in.mjs` asserts the closing asks him to state "the window you're actually giving
+us" (regex), and that at least ONE heads-up option classifies as a PERMITTED activity (hot
+work · fire alarm · sprinkler · power down · torch · valve · closure · …) so the handback
+rule runs at all — the comment on that check names flooring and sitework as the two trades
+that looked clean for weeks while it ran zero assertions. Landscape's copy said "the hours
+you're actually giving us" and named the water shutdown without the word VALVE; both failed.
+Neither is a defect in the page — they are a CONTRACT between a config's prose and a gate's
+vocabulary, and a paraphrase at stand-up breaks it silently. **FIX:** "the window you're
+actually giving us" verbatim; "the water will be off at the backflow valve while we work".
+**THE RULE FOR THE NEXT STAND-UP:** copy the sibling's sentence where a gate names one, then
+localize AROUND it. The gate's failure message quotes the phrase; read it before rewriting.
 
 ### 2026-08-29 (C3679) — THE CHROME WAS ASSEMBLED BEFORE THE PRODUCT, SO A BUG IN A LABEL FROZE THE DOCUMENT
 `shared/checklist-request.js` built the bottom-bar count line and THEN the document:
@@ -7650,3 +7701,97 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   "second output mode" §CREATIVE deferred it as — the other side of the render, addressed to
   a different moment: who signed, what is in the folder, and what is deliberately not in it.
   https://mrdirno.github.io/nested-resonance-memory-archive/creative/before-i-export.html
+
+- **[AXIS:BREADTH] C3681 (2026-09-01) — THE RACK RAN OUT OF TRADES BELOW THE SAFETY RAIL, AND THE
+  SIXTEENTH WAS THE FIRST ONE FOUND OFF IT — FIRST ON ALL FOUR LENSES, VETOED BY NONE.** Both wells
+  dry (0 new, 0 building in the AV well and the cards well), no family owed, so the stalest axis
+  governed: BREADTH, 6 lane-cycles cold. Ran the standing method in order and it came back EMPTY:
+  the gate-vocabulary query over fifteen kits finds no unserved family owning a gate other kits count
+  down to ("before tile goes in" is flooring, "before the ceiling closes" is framing, "before we
+  insulate" is one mention and killed); the who[] re-tally reads steel 7 · ceilings 5 · hm 2 · survey
+  2 · sprink 2 · mill 2 · owner 2 · singletons — every one killed, absorbed, or not a trade. **THE
+  COUNT NOMINATED NOBODY, so the shortlist was written to INCLUDE THE COUNT-INVISIBLE** (the roster's
+  own instruction since #14) and four independent lenses scored nine candidates: a field hand, a
+  population count, the doctrine lens that reads the record, and the boundary lens that reads every
+  shipped items.js. **LANDSCAPE & IRRIGATION took first on all four — 92 · 92 · 88 · 78 — vetoed by
+  none.** That has not happened on this rack before. FIRE SPRINKLER took its THIRD kill, and this one
+  is specific enough to stop a fourth hearing: the NFPA 13 material-and-test certificate's CONTENT is
+  printed inside the standard and the NFPA 25 ITM report is numbered inside a municipally-mandated
+  third-party portal — all three crossings in one document — and the residue after refusal is the
+  boundary pages every trade already ships, "the glazing verdict verbatim." Steel was vetoed twice
+  (its NAICS code is concrete's, rebar is served, ~10% micro-shop; the bolt-up log IS the ch.17
+  dataset) and the boundary lens found the 7-count merges TWO receivers, the erector and the
+  misc-metals welder. Survey vetoed (the product is a seal; "9 kits" collapsed to 3 under a targeted
+  grep). Crane vetoed three times ("a date has no inbox"). Restoration vetoed twice (the S500 drying
+  log is the standard's content, an Xactimate line and a claim-numbered platform record at once).
+  **WHY LANDSCAPE, kept so #17 does not re-derive it:** the count that nominated nobody had measured
+  him wrong — THREE shipped kits already built him a receiver chip with no ask behind it (concrete
+  `irr` "Irrigation / landscape", sitework `land` + `irr` in what-is-in-the-ditch, gc `landscape`),
+  and concrete/items.js carries HIS sleeve sentence — "driveway and flatwork sleeves — irrigation,
+  gas, conduit — go in before I set forms" — inside an ask aimed at the PLUMBER, because the man whose
+  sleeve that is had nowhere to answer from. Not an orphan ask; a MIS-ROUTED one: the doorprep gap one
+  step earlier. The largest unserved population on the board by an order of magnitude (install half
+  ~150-250k, nonemployer-dominant, no office — the painting profile), and the doctrine inverse:
+  NOTHING upstream numbers what the crew sends. Structural on system-of-record, discipline on
+  certified data — "strictly better ground than doors stood on, and doors shipped." SHIPPED WHOLE —
+  10 tools: `where-i-cross` (PINNED, row-log — every place his pipe has to get under somebody else's
+  concrete before it closes; the sleeve off HIS submittal as a learn axis, how far it sticks out,
+  marked, the gate; the only irreversible gate this trade OWNS, because "before the pour" is concrete's
+  word and "before backfill" is sitework's and a plant can be dug back out) · `rough-in-request`
+  → **Before We Plant** (13 asks · 10 receivers · 9 milestones) · `answer-back` → **Walk Back**,
+  whose fourth rung is this trade's own: **"It's the water"** — a dry plant is telling you about the
+  clock, not the planting, and that answer lives with whoever holds the controller (reconcile VERDICTS
+  position [3], `ask`) · `not-ready-to-plant` (12 stops, the two-button close) · `off-the-truck`
+  (what the tag says · where you found it) · `sub-it-or-wait` (their schedule line as an ADDRESS, the
+  yard's words, what he can get the way he'd order it — the Color Lock isomorph) · `waters-yours`
+  (the handback: what HE set the clock to, copied off the face as free text ON PURPOSE — the moment it
+  became fields it would be a watering schedule with our name on it; the code goes by phone, never on
+  the note) · `getting-in` · `write-up` (7 own documents, 18 in the library) · `total-package`.
+  Commons joined on all THREE surfaces at 8 rows each (five order names on the name table start with
+  "Irrigation", and the block says why: head, main, lateral, sleeve, zone, box — not one is his).
+  **THE NAME COLLISION IS A RULE:** twelve kits say "sprinkler" and mean fire; the brand word is
+  LANDSCAPE, the pages say heads, valves, mainline, laterals, drip, zones and the clock, and the hub
+  drive asserts the word is nowhere on the hub. Accent **#A1CB86**, a leaf in daylight — the sweep's
+  best numbers across the ENTIRE solid were the muted sage greens (dE 32.6, nav 7.86:1), and the
+  argument this time was CHROMA rather than a band: the first muted chip on a rack of fluorescent
+  ones, and the eye reads a sage leaf and a neon highlighter as two colours whatever the hue wheel
+  says. **THE HARD REFUSAL is 13 items** in trade.js, items.js and docs.js, and the most dangerous
+  page anybody will propose is named at stand-up: the spray log (the licensed applicator's state
+  record) — never. **GATES CAUGHT TWO OF MY OWN ERRORS BEFORE SHIP:** `getting-in` failed the landscape
+  copy twice — the closing said "the hours you're actually giving us" where the gate reads "the
+  window you're actually giving us" by regex, and not one heads-up classified as a permitted
+  activity until the water shutdown named the backflow VALVE (§SCARS). **BACKPORT RIDER FIRED, TWO
+  FINDS, BOTH FIVE DAYS OLD:** the hub-accent sweep (every hub's `:root --flag` against its trade.js
+  accent, 16 trades) found `doors/index.html` wearing painting's #29FF29 on its well button and
+  eyebrow since C3674 — fixed, and the deploy now asserts it per trade; and the docs writer, copying
+  the doors shape, found `shared/docspec.js` reads reminders as STRINGS only, so doors' five
+  `{when, say}` reminders had been reaching the pasted block as "- [object Object]" — the emitter now
+  renders both forms and `docspec-config` fails on a stringified object (§SCARS, both). FOUR
+  MEMBERSHIPS + THE REGENERATED INDEX: deploy TRADES + paths, `shared/toolkit.js` TRADES,
+  COMMONS_TRADES, the site-root TOOLS entry (Sprout — the seedling is this trade's brick), and
+  `shared/docsindex.js` regenerated to 16 trades · 302 terms. Storefront: one new entry in
+  `fieldToolkits.ts`, staged in persona500, P5 pushes; the storefront match binds NARROWLY
+  (`landscap`, `irrigation`, `irrigator`, `lawn_install`, `sod_install`, `hardscape`) and
+  deliberately excludes `sprinkler`, `gardener` and `groundskeeper`. VERIFIED AT THE ARTIFACT before
+  push: a 103-assertion drive that does each page's job (a crossing walked and read back off the
+  document, a short line counted, a stop ticked, a substitution lined up, a handback with what he set,
+  a pasted punch tapped four times to "It's the water"), mobile-watertight 12/12 pages at
+  320/360/390/430 in both text sizes, getting-in, what-came-back (833 checks), note-live-fields,
+  rowlog-restore, rowlog-commit-merge, reconcile-surface, reconcile-join (130), boundary-titles (47),
+  answer-tapnote (16), commons-names, commons-bag, docspec-config/needs/say/desk, docs-pool,
+  find-honesty, find-noise, menu- and overlay-reachability, no-third-party (165 pages, 0 requests).
+  **NAMED UNBUILT, at stand-up:** THE YARD ORDER (shape #1, deferred for the window, not doctrine —
+  it lights up four shared modules at once; painting/store-call is the page to isomorph) and THE ZONE
+  WALK (folded into Water's Yours and the library because a page that logs coverage zone by zone is
+  one wish from a coverage verdict — a judged call, not a gap). **THE DEMERITS, written down:** two
+  trades in one hat and the kit serves the install half only · a TRUE zero of who[] asks (chips, no
+  letters — the no-habit finding one size larger) · one engineered pressure point, and the first wish
+  will be "can it work out my run times" (permanently no) · the gate ladder borrowed at both ends.
+  Ten HALO-lane commits already on local main rode the push. VERIFIED LIVE after green (deploy
+  33588052530, build + deploy success): 18/18 landscape URLs 200 · the 103-assertion drive re-run
+  against the DEPLOYED pages, all green · mobile-watertight 12/12 pages against production ·
+  doors/index.html `--flag` reads #B7BEDC live and the well button paints rgb(183,190,220) · both
+  write-up libraries render their reminders with no "[object Object]" in the block · the commons
+  shows 17 chips and "Carson box" typed on the gear list hands off to "He means Valve box" · the
+  site-root Tools panel lists the kit (the bundle carries ./landscape/ once, same as ./doors/).
+  https://mrdirno.github.io/nested-resonance-memory-archive/landscape/
