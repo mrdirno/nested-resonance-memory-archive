@@ -10,7 +10,10 @@ a single self-contained page (three.js from cdnjs, no build step, ~290 KB) — t
 co-author trailers (repo `CLAUDE.md`, Zero-Leak and attribution sections). AI assistance is disclosed in
 `ACKNOWLEDGMENTS.md`, nowhere else.
 
-Nothing in this package was pushed. Integrate it from your machine so the commits are yours.
+Already on the branch `halo/ring-9` (not on `main`), under Aldrin's author field: the artifact, this handoff, the
+note for Tom, and the archive README's "Beyond the 500" section. Not in the repository: the tests, patch scripts,
+screenshots, choreography and worker ports in this package. Paths in §2, §5 and step 8 are relative to this
+off-repo package, not to the repository.
 
 ---
 
@@ -77,27 +80,39 @@ See §4a for the deploy facts as read from the repository on 2026-09-02, then fo
   A file outside those paths never reaches Pages.
 - The archive holds **500** generated variations, `HELIOS-V001` … `HELIOS-V500` (50 palettes × 10 sequences ×
   10 force fields × 10 behaviors × 10 UI themes, curated), plus `MANIFEST.json`, `index.html` (the gallery, which
-  inlines the manifest as a JS constant and filters by force field), `endless.html`, and `README.md`. All three
-  generated files are written by `generate_500_variations.mjs` at the repo root — hand edits to `index.html` are
-  lost if it is ever regenerated, so HALO is registered outside the 5-axis manifest, as a "beyond the 500" entry.
-- HALO is **V501**; the file name in this package follows the archive's `HELIOS-V{NNN}-{name}.html` pattern and
-  is already on the branch at `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html`.
+  inlines the manifest as a JS constant and filters by force field), `endless.html`, and `README.md`.
+  `generate_500_variations.mjs` at the repo root writes the 500 pages, `MANIFEST.json` and a simpler `index.html`;
+  the checked-in `index.html` (toolbar, search, force-field filters, `renderCards()`) is a hand-polished page that
+  the generator's stale template would REPLACE, not merely drop a card from — so regeneration must never
+  overwrite `index.html`. `endless.html` and `README.md` are hand-authored. HALO is registered outside the 5-axis
+  manifest, as a "beyond the 500" entry.
+- HALO is **V501**; the file name keeps the archive's `HELIOS-V{NNN}-` prefix (the archive's own convention is
+  `{palette}-{forcefield}`, which does not apply to a page outside the 5-axis space) and is already on the branch
+  at `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` (300,808 bytes).
 
 ### 4b. Steps (each one a commit you make locally; verify before the next)
-1. `git checkout main && git pull`, then confirm `git config user.name` / `user.email` are Aldrin's.
-2. Copy `chamber/HELIOS-V501-halo-resonance-chamber.html` to `HELIOS-BRIDGE-ARCHIVE/`.
-   Open it locally in a browser first (any static server; the page only needs cdnjs). Press 7 for the Lab.
-3. Register it in the archive gallery without touching the generated manifest: add one card above the grid in
-   `HELIOS-BRIDGE-ARCHIVE/index.html` (right after the `<div class="toolbar">…</div>` block) AND the same
-   markup in the index template inside `generate_500_variations.mjs`, so a regeneration keeps it:
+1. Confirm `git config user.name` / `user.email` are Aldrin's. Then `git checkout main && git pull` and merge
+   `halo/ring-9` into main (or cherry-pick its commits) — main does not yet have the artifact, the handoff, the
+   note or the README section.
+2. Verify `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` is present (300,808 bytes) and open it
+   locally in a browser (any static server; the page only needs cdnjs). Press 7 for the Lab.
+3. Register it in the archive gallery without touching the generated manifest: in
+   `HELIOS-BRIDGE-ARCHIVE/index.html`, between the `<div class="toolbar">…</div>` block and
+   `<div class="grid" id="grid">`, add a container with the toolbar's own metrics so it gets gutters (the body
+   has no padding), and a card that reuses the existing `.card`, `.card-title`, `.card-meta` styles:
    ```html
-   <a class="card halo" href="HELIOS-V501-halo-resonance-chamber.html">
-     <div class="card-title">V501 · HALO — Resonance Chamber, Ring 9</div>
-     <div class="card-meta">Beyond the 500: a laboratory that measures its own claims — fixed tick, exact or Euler magnetic step, Lyapunov, memory with its control, spectrum. Press 7.</div>
-   </a>
+   <div class="beyond" style="max-width:1400px;margin:0 auto 24px;padding:0 20px">
+     <a class="card halo" href="HELIOS-V501-halo-resonance-chamber.html">
+       <div class="card-title">V501 · HALO — Resonance Chamber, Ring 9</div>
+       <div class="card-meta">Beyond the 500: a laboratory that measures its own claims — fixed tick, exact or Euler magnetic step, Lyapunov, memory with its control, spectrum. Press 7.</div>
+     </a>
+   </div>
    ```
-   (Reuse the gallery's existing `.card` styles; `.halo` only needs a border color.) The archive `README.md`
-   already carries a "Beyond the 500" section on this branch.
+   Optionally hide `.beyond` inside `renderCards()` when `currentFilter !== 'all' || currentSearch`, so it does
+   not sit above the "NO MATCHING VARIATIONS" message. If the generator's index writer is kept at all, add the
+   same block just before `<div class="grid">` in `generateIndexHTML()` (`generate_500_variations.mjs`, ~line 646)
+   — but the safer move is to stop the generator from writing `index.html`. The archive `README.md` already
+   carries a "Beyond the 500" section on this branch.
    Then link it from the bridge itself: the Tools panel (bottom nav → Tools, "Other pages in the archive") is the
    app's one navigation registry, the `TOOLS` array in `HELIOS-BRIDGE/components/UIComponents.tsx` (its header
    comment says an entry AND a staged directory are both required). Add, after the "Bridge Archive" entry:
