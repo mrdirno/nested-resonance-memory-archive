@@ -96,18 +96,35 @@ See §4a for the deploy facts as read from the repository on 2026-09-02, then fo
    </a>
    ```
    (Reuse the gallery's existing `.card` styles; `.halo` only needs a border color.) The archive `README.md`
-   already carries a "Beyond the 500" section on this branch. The bridge app itself (`HELIOS-BRIDGE/App.tsx`) has
-   no version list to extend; the archive is reached from the app's archive link. Direct URL after deploy:
+   already carries a "Beyond the 500" section on this branch.
+   Then link it from the bridge itself: the Tools panel (bottom nav → Tools, "Other pages in the archive") is the
+   app's one navigation registry, the `TOOLS` array in `HELIOS-BRIDGE/components/UIComponents.tsx` (its header
+   comment says an entry AND a staged directory are both required). Add, after the "Bridge Archive" entry:
+   ```tsx
+   {
+     name: 'HALO — Resonance Chamber',
+     href: './archive/HELIOS-V501-halo-resonance-chamber.html',
+     tag: 'V501',
+     blurb: 'A particle laboratory that measures its own claims: fixed tick, exact or Euler magnetic step, Lyapunov, memory beside its control, spectrum. Press 7 for the Lab.',
+     icon: <FlaskConical size={18} />,
+   },
+   ```
+   (`FlaskConical` from lucide-react, imported at the top of the file like `Scissors` and `LayoutGrid`.)
+   Direct URL after deploy:
    `https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html`.
 4. README, under "THE BRIDGE (Live Interface)": one line, offer not shove, under the existing entry, e.g.
    *"Newest iteration: HALO (V501) — a particle laboratory that measures its own claims: [open](…/archive/HELIOS-V501-halo-resonance-chamber.html)."*
    No claim inflation: the page presents hypotheses as tests, and two of its own claims are labelled failed.
 5. `CYCLE_LOGS.md` (and `META_OBJECTIVES.md` if the cycle convention asks): one entry in the existing format
    naming V501/HALO, the fixed tick, the Lab, and the four findings of §3 with their numbers.
-6. `python3 automation/scripts/cleanup_repo.py` (root hygiene), `git status` review — no `fabrication/`, no
+6. Give the deploy a gate for it: in `.github/workflows/deploy_bridge.yml`, the "every published entry point
+   present" loop (near line 256) lists files that must exist in the artifact; add
+   `archive/HELIOS-V501-halo-resonance-chamber.html` to that list so a future regeneration or rename fails the
+   build instead of publishing a 404 behind the Tools link.
+7. `python3 automation/scripts/cleanup_repo.py` (root hygiene), `git status` review — no `fabrication/`, no
    `*.stl/*.obj/*.gcode/*.3mf`, no `rc-test.html`, no secrets — then commit and push to main.
-   The deploy workflow triggers on the archive path; check the Actions run and the live URL.
-7. Optional, same discipline: `choreography/choreo4.py` and its two logs belong under `src/experiments/`
+   The deploy workflow triggers on the archive and app paths; check the Actions run and the live URL.
+8. Optional, same discipline: `choreography/choreo4.py` and its two logs belong under `src/experiments/`
    or `analysis/` as a reproducible experiment (numpy; numba optional), with a `CYCLE_LOGS.md` line.
 
 ### 4c. What NOT to do
