@@ -1,6 +1,6 @@
 # HALO note (for Tom)
 
-Tom, check this branch (`claude/repos-cross-pollination-ryxskr`) of the NRM archive.
+Tom, check this branch (`halo/ring-9`) of the NRM archive.
 
 The Helios Bridge has a new iteration, **HELIOS-V501, code name HALO**, at
 `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` (open it in a browser, press 7 for the Lab).
