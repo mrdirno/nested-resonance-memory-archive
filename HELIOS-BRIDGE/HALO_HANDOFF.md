@@ -4,7 +4,8 @@
 a single self-contained page (three.js from cdnjs, no build step, ~290 KB) — the Resonance Chamber at Ring 9.
 **Live reference copy:** https://claude.ai/code/artifact/f81a4b50-694b-4580-9755-7639a4f001d0
 **Repository target:** `mrdirno/nested-resonance-memory-archive`, the Helios Bridge live pages
-(https://mrdirno.github.io/nested-resonance-memory-archive/).
+(https://mrdirno.github.io/nested-resonance-memory-archive/). **Branch carrying this package:** `halo/ring-9`
+(the artifact, this handoff and the note for Tom are committed there; merge to `main` publishes).
 **Author of record:** Aldrin Payopay <aldrin.gdf@gmail.com>. Commits carry exactly one author and no AI
 co-author trailers (repo `CLAUDE.md`, Zero-Leak and attribution sections). AI assistance is disclosed in
 `ACKNOWLEDGMENTS.md`, nowhere else.
