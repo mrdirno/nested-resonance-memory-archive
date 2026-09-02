@@ -44,6 +44,9 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 **[👉 ENTER THE BRIDGE (Live Web App)](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
+[![The Bridge, as it runs today](data/figures/bridge_live_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/)
+*The Bridge in September 2026. The link under the title opens the newest iteration, HALO.*
+
 **Or watch the demonstration:**
 
 [![The Bridge Demo](data/figures/bridge_demo_thumbnail.jpeg)](https://youtu.be/flRHV7GuzUY)
@@ -54,6 +57,17 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 *   **No installation required.**
 *   **Real-time OSD rendering.**
 *   **Interactive field compilation.**
+
+### HALO (V501) — the laboratory
+
+The newest iteration of the Bridge is built as an instrument, not a display. It runs up to 4 million
+particles in a spherical cavity on a fixed physics tick, lets you step the magnetic term as Euler or as
+the exact rotation, and carries a Lab panel that tests the page's own claims: a chaos meter, a memory
+test shown beside its control, and a spectrum. Two of its earlier claims are labelled failed on the page
+itself.
+
+[![HALO with the Lab open](data/figures/halo_lab_2026-09.jpg)](https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html)
+*[Open HALO](https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V501-halo-resonance-chamber.html) and press 7 for the Lab. Its tests are in `tests/halo/`, its falsifiers in `experiments/halo/`.*
 
 ---
 

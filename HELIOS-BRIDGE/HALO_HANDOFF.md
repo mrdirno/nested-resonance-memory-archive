@@ -172,7 +172,7 @@ python3 choreo4.py --N 256                  # 95 s: the specification as written
 python3 choreo4.py --N 256 --kz 1.0         # 95 s: the extension (axial spring) — the 3-D choreography
 ```
 
-## 6. Continuing the loop cycles (BUILD · BRANCH · BAN · BREAK · SHIP v2.1)
+## 6. Continuing the loop cycles (BUILD · BRANCH · BAN · BREAK · SHIP)
 
 Each cycle: ban the obvious answer first, branch the searches to workers who report *what I found / how
 sure / what would prove it wrong*, break the result on the page before shipping, ship a working artifact,
@@ -209,7 +209,7 @@ force ceiling and a 32³ mesh; the chamber's magnetic model omits the induced el
 requires; and no result has been checked by anyone outside this loop. The next level is not more features —
 it is a positive, pre-registered result on the memory claim at full particle count, or its retirement.
 
-## 8. What the main loop on macOS should pursue, and why it matters for NRM
+## 8. What the next agent should pursue, and why it matters for NRM
 
 The archive is large and much of it predates what HALO can now measure. The leverage is not more pages;
 it is that the project's namesake claim finally has an instrument, a validated CPU twin, and a stability

@@ -45,6 +45,14 @@
   .card-swatch{display:flex;gap:3px;margin-top:8px}
   .swatch{width:16px;height:4px;border-radius:2px}
 
+  /* Beyond the 500 — the one page outside the 5-axis space (V501 · HALO) */
+  .beyond{max-width:1400px;margin:0 auto 24px;padding:0 20px}
+  .beyond-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+  .card.halo{--card-primary:#00F3FF;--card-secondary:#FFD700;border-color:rgba(0,243,255,0.25)}
+  .card.halo::before{opacity:1}
+  .card.halo .card-title{font-size:17px}
+  .card-desc{font-size:12px;line-height:1.55;color:rgba(255,255,255,0.6);margin-bottom:10px;max-width:900px}
+
   /* Empty state */
   .empty{text-align:center;padding:80px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,0.2);letter-spacing:2px}
 
@@ -84,6 +92,24 @@
   <div class="count-badge" id="count-badge">500 shown</div>
 </div>
 
+<div class="beyond" id="beyond">
+  <div class="beyond-label">Beyond the 500</div>
+  <a href="HELIOS-V501-halo-resonance-chamber.html" class="card halo" target="_blank">
+    <div class="card-header">
+      <div class="card-id">V501 · HALO</div>
+      <div class="card-field">Laboratory</div>
+    </div>
+    <div class="card-title">Resonance Chamber — Ring 9</div>
+    <div class="card-desc">Not a point in the grid below. A particle laboratory (up to 4 million particles) with a fixed physics tick, a magnetic step you can run as Euler or as the exact rotation, and instruments that test the page’s own claims — a chaos meter, a memory test shown beside its control, a spectrum. Press 7 for the Lab.</div>
+    <div class="card-meta">
+      <span>π · e · √2 · φ</span>
+      <span>self-gravity</span>
+      <span>Euler / exact step</span>
+      <span>Lab · press 7</span>
+    </div>
+  </a>
+</div>
+
 <div class="grid" id="grid"></div>
 <div class="empty" id="empty" style="display:none">NO MATCHING VARIATIONS</div>
 <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
@@ -118,6 +144,8 @@ function renderCards() {
   const grid = document.getElementById('grid');
   const empty = document.getElementById('empty');
   const badge = document.getElementById('count-badge');
+  const beyond = document.getElementById('beyond');
+  if (beyond) beyond.style.display = (currentFilter === 'all' && !currentSearch) ? '' : 'none';
 
   const filtered = MANIFEST.variations.filter(v => {
     if (currentFilter !== 'all' && v.forceField !== currentFilter) return false;

@@ -187,6 +187,16 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     icon: <LayoutGrid size={18} />,
   },
   {
+    // V501 · HALO — the laboratory iteration of this bridge. Registered OUTSIDE the
+    // 500-variation manifest (it is not a point in that 5-axis space) and gated in
+    // deploy_bridge.yml's entry-point list so a rename fails the build, never a 404.
+    name: 'HALO — Resonance Chamber',
+    href: './archive/HELIOS-V501-halo-resonance-chamber.html',
+    tag: 'V501',
+    blurb: 'The newest bridge, built as a laboratory: up to 4 million particles in a spherical cavity, with instruments that test the page\u2019s own claims — a chaos meter, a memory test shown beside its control, a spectrum. Press 7 for the Lab.',
+    icon: <FlaskConical size={18} />,
+  },
+  {
     name: 'AV Field Toolkit',
     href: './av/',
     tag: 'field',
@@ -448,9 +458,12 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
         <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
           HELIOS <span className="text-white/30 font-light">|</span> BRIDGE
         </h1>
-        <div className="mt-2 pointer-events-auto">
+        <div className="mt-2 pointer-events-auto flex flex-col items-center">
           <a href="https://github.com/mrdirno/nested-resonance-memory-archive" target="_blank" rel="noopener noreferrer" className="text-xs md:text-sm font-mono font-bold tracking-widest text-white hover:text-white/80 transition-colors drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
             github.com/mrdirno/nested-resonance-memory-archive
+          </a>
+          <a href="./archive/HELIOS-V501-halo-resonance-chamber.html" target="_blank" rel="noopener noreferrer" title="Open the Resonance Chamber (V501 · HALO) in a new tab" className="mt-1 text-[10px] md:text-xs font-mono font-bold tracking-widest text-tertiary hover:text-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
+            V501 · HALO — RESONANCE CHAMBER ↗
           </a>
         </div>
       </div>
@@ -677,6 +690,23 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           }
         }))}
       >
+        {/* V501 · HALO — the laboratory iteration of this bridge, its own page */}
+        <a
+          href="./archive/HELIOS-V501-halo-resonance-chamber.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-start gap-3 w-full p-4 mb-4 rounded-xl bg-tertiary/10 border border-tertiary/30 hover:border-tertiary/60 hover:bg-tertiary/20 transition-colors active:scale-[0.99]"
+        >
+          <div className="shrink-0 mt-0.5 text-tertiary"><FlaskConical size={18} /></div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm text-white">Open the Resonance Chamber</span>
+              <span className="shrink-0 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-tertiary/20 text-tertiary">V501 · HALO</span>
+            </div>
+            <p className="text-xs text-white/60 leading-relaxed mt-1">The newest bridge, built as a laboratory: up to 4 million particles with instruments that test the page’s own claims. Opens in a new tab — press 7 for the Lab.</p>
+          </div>
+          <ExternalLink size={14} className="shrink-0 mt-1 text-white/30 group-hover:text-tertiary transition-colors" />
+        </a>
         {/* Presets Dropdown */}
         <div className="bg-white/5 p-3 rounded-xl border border-white/10 mb-4">
           <div className="flex justify-between items-center mb-2">

@@ -135,6 +135,9 @@ jobs:
             rm -rf "HELIOS-BRIDGE/dist/$t"
             mkdir -p "HELIOS-BRIDGE/dist/$t"
             cp -R "$t/." "HELIOS-BRIDGE/dist/$t/"
+            # Working notes (*.md) are not pages: they stay in the repository and
+            # are not served (av/AV_SOCIETY.md had been live verbatim, ~660 KB).
+            find "HELIOS-BRIDGE/dist/$t" -name '*.md' -delete
             echo "staged trade: $t"
           done
 
@@ -255,7 +258,7 @@ jobs:
           for f in index.html .nojekyll \
                    collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
-                   archive/index.html \
+                   archive/index.html archive/HELIOS-V501-halo-resonance-chamber.html archive/HELIOS-V501-halo-og.jpg og-bridge.jpg \
                    shared/toolkit.js shared/feedback.js shared/find.js \
                    commons/index.html commons/gear.js commons/commons.js commons/commons.css \
                    commons/tips.html commons/tips.js \

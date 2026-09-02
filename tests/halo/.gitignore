@@ -1,0 +1,6 @@
+# test build only — never publish (carries window.__probe)
+rc-test.html
+node_modules/
+package.json
+package-lock.json
+shots/

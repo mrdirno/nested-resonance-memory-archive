@@ -32,7 +32,10 @@ export const useSwarmWorker = (enabled: boolean = true) => {
         // 1. Load Wasm
         const loadWasm = async () => {
             try {
-                const response = await fetch('/helios_physics.wasm');
+                // Resolved against the page's base URL: the app is served under
+                // /nested-resonance-memory-archive/ on Pages, so a root-absolute
+                // '/helios_physics.wasm' was a 404 (an HTML page) on every load.
+                const response = await fetch(new URL('helios_physics.wasm', document.baseURI).href);
                 const bytes = await response.arrayBuffer();
                 const results = await WebAssembly.instantiate(bytes, {
                     env: {
@@ -44,7 +47,10 @@ export const useSwarmWorker = (enabled: boolean = true) => {
                 console.log("[Swarm] Wasm Engine Loaded.");
                 connectToCoordinator();
             } catch (err) {
-                console.error("[Swarm] Failed to load Wasm:", err);
+                // Known: the shipped wasm was built with wasm-bindgen and its JS glue is not
+                // part of this app, so the swarm engine stays offline in every build. A
+                // warning, not an error — the page runs fully without it.
+                console.warn("[Swarm] Physics engine not available in this build; running without the swarm.", err instanceof Error ? err.message : err);
             }
         };
 

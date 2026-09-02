@@ -1,0 +1,190 @@
+==============================================================================
+LAYER 1 - Boris pusher: energy conservation on an isolated two-body problem
+==============================================================================
+  E0 = 1.297477791520   (B0 = 3.0, w = 1.0, a = 0, 10^4 steps at each dt)
+  dt = 0.01     max|dE/E0| = 1.437e-05  fail
+  dt = 0.001    max|dE/E0| = 1.437e-07  fail
+  dt = 0.0001   max|dE/E0| = 3.618e-10  fail
+  dt = 1e-05    max|dE/E0| = 3.320e-13  PASS
+  Layer 1 VALIDATED: |dE/E0| < 1e-10 over 10^4 steps at dt = 1e-05
+  (working resolution N = 256 per period, ten periods: max|dE/E0| = 8.661e-05)
+
+  Tangent map check: analytic step Jacobian against central differences
+  max |J_analytic - J_fd| / max|J| = 1.06e-10   (VALIDATED)
+
+==============================================================================
+LAYER 2 - symmetry: what the specified force law allows
+==============================================================================
+  THEOREM 1 (see docstring): d^2 Iz/dt^2 >= 0 along every trajectory, so no
+  non-planar periodic orbit exists for any B parallel to z. Numerical witness
+  on a non-planar 4-body trajectory in the specified drive:
+    min over 4 periods of d^2 Iz/dt^2 = 5.315562e-01 (>= 0)   Iz(0) = 0.1800 -> Iz(T) = 1602.2188 (convex, non-periodic)
+  THEOREM 2: the delay must be a period of the drive.
+    max_t |B(t + T/4) - B(t)| = 4.242639 = sqrt(2) B0 != 0  -> the T/4 delay is inconsistent;
+    consistent Z4 choreography: delay tau = 2 pi / w (one drive period), period T = 4 tau.
+    All shooting below uses G(X) = S^-1 Phi_tau(X) - X, (S X)_k = X_{k+1}, with tau = 2 pi / w.
+
+==============================================================================
+LAYER 3/4 SELF-TEST - a known choreography: the rotating square in a constant field
+==============================================================================
+  B0 = 3.0, circumradius R = 1.0, slow branch: W = -0.3622605010 rad/s, tau = 4.3360960476, w = 4|W| = 1.4490420042
+  |G(X_analytic)| = 6.999e-04 (continuous orbit vs the discrete map, O(dt^2)); Newton polishes:
+      it  1  |G| = 6.534e-08  step 1
+      it  2  |G| = 4.188e-15  step 1
+  converged |G| = 4.188e-15 in 2 iterations
+  closure ||r1(T)-r1(0)|| + ||v1(T)-v1(0)|| = 7.283e-15
+  ||M - (S^-1 DPhi_tau)^4|| / ||M|| = 4.46e-15;  in-plane ||M M^-1 - I|| = 1.03e-12
+  block structure: in-plane 16x16, out-of-plane 8x8, cross-coupling 0.0e+00;  det M_xy = 1.000000000000 (the z block spans 1.4e+08: its small multipliers come from the exact inverse)
+  reciprocal pairing max_i min_j |lambda_i lambda_j - 1|: in-plane 2.31e-08, out-of-plane 1.13e-03
+  Floquet multipliers of the reference (sorted by modulus):
+    +0.0000000011 +0.0000000000i   |lambda|-1 = -1.000e+00   out-of-plane
+    +0.0000000432 +0.0000000000i   |lambda|-1 = -1.000e+00   out-of-plane
+    +0.0000000432 +0.0000000000i   |lambda|-1 = -1.000e+00   out-of-plane
+    +0.9978637998 +0.0000000000i   |lambda|-1 = -2.136e-03   out-of-plane
+    +1.0000000000 -0.0000004092i   |lambda|-1 = -4.352e-14   in-plane
+    +1.0000000000 +0.0000004092i   |lambda|-1 = -4.352e-14   in-plane
+    +0.7477385916 -0.6639932219i   |lambda|-1 = -1.910e-14   in-plane
+    +1.0000000000 +0.0000000000i   |lambda|-1 = +4.219e-15   in-plane
+    -0.7974277879 +0.6034143875i   |lambda|-1 = +5.773e-15   in-plane
+    -0.7974277879 -0.6034143875i   |lambda|-1 = +5.773e-15   in-plane
+    +0.4702962623 +0.8825085981i   |lambda|-1 = +1.465e-14   in-plane
+    +0.4702962623 -0.8825085981i   |lambda|-1 = +1.465e-14   in-plane
+    +0.7477385916 +0.6639932219i   |lambda|-1 = +1.532e-14   in-plane
+    +0.7477385916 -0.6639932219i   |lambda|-1 = +1.532e-14   in-plane
+    -0.1956044678 +0.9806828703i   |lambda|-1 = +1.932e-14   in-plane
+    -0.1956044678 -0.9806828703i   |lambda|-1 = +1.932e-14   in-plane
+    -0.1319140931 +0.9912611523i   |lambda|-1 = +2.309e-14   in-plane
+    -0.1319140931 -0.9912611523i   |lambda|-1 = +2.309e-14   in-plane
+    +1.0000000000 +0.0000000000i   |lambda|-1 = +1.870e-13   in-plane
+    +1.0000000231 +0.0000000000i   |lambda|-1 = +2.310e-08   in-plane
+    +1.0010060996 +0.0000000000i   |lambda|-1 = +1.006e-03   out-of-plane
+    +23122985.0778717846 +0.0000000000i   |lambda|-1 = +2.312e+07   out-of-plane
+    +23122985.0778719001 +0.0000000000i   |lambda|-1 = +2.312e+07   out-of-plane
+    +891890467.0439379215 +0.0000000000i   |lambda|-1 = +8.919e+08   out-of-plane
+  16 multipliers on the unit circle to 1e-5, 8 hyperbolic out-of-plane (Theorem 1 corollary)
+
+==============================================================================
+SEARCH A - the specification as written: non-planar seeds, zero-mean drive (a = 0)
+==============================================================================
+  seed 1: |G| 7.863e+00 -> 5.057e+00 after 4 accepted steps;  z-spread 0.300 -> 6.806e-02
+  seed 2: |G| 7.726e+00 -> 4.904e+00 after 3 accepted steps;  z-spread 0.360 -> 7.009e-02
+  seed 3: |G| 8.216e+00 -> 5.018e+00 after 4 accepted steps;  z-spread 0.420 -> 8.495e-02
+  seed 4: |G| 8.594e+00 -> 5.042e+00 after 5 accepted steps;  z-spread 0.480 -> 8.446e-02
+  no non-planar closure within 40 Newton steps from any seed (best |G| = 4.904e+00, seed 2), as Theorem 1 requires.
+  Jacobian at the best non-planar iterate (seed 2):
+  singular values of DG - I (24, descending):
+    1.534e+02 7.444e+01 6.755e+01 8.564e+00 4.336e+00 3.594e+00
+    2.676e+00 2.488e+00 2.364e+00 2.194e+00 1.166e+00 1.157e+00
+    1.122e+00 1.071e+00 9.064e-01 8.896e-01 8.790e-01 7.956e-01
+    7.956e-01 1.356e-01 1.271e-02 1.867e-14 4.995e-15 1.298e-15
+  rank-deficiency: 3 singular values below 1e-8 sigma_max; smallest 1.298e-15
+
+==============================================================================
+SEARCH B - planar Z4 choreography, homotopy from the constant field to the zero-mean drive
+==============================================================================
+  B(t) = B0 [a + (1 - a) cos(w t)], a: 1 -> 0, Newton at each a with the exact Jacobian.
+  Each rotating square (branch, radius) fixes its own delay and drive frequency w = 4|W|;
+  the scan below follows every one of them toward the zero-mean drive.
+    slow R = 0.7: no rotating square (field below the threshold for this radius)
+    a = 0.9500  converged |G| = 5.08e-15 in 4 steps;  max radius 1.0070, max speed 0.3351
+    a = 0.9000  converged |G| = 9.01e-13 in 3 steps;  max radius 1.0123, max speed 0.2971
+    a = 0.8500  converged |G| = 4.03e-13 in 3 steps;  max radius 1.0164, max speed 0.2467
+    a = 0.8000  converged |G| = 2.10e-13 in 3 steps;  max radius 1.0191, max speed 0.1778
+    a = 0.7500  converged |G| = 6.22e-15 in 4 steps;  max radius 1.0199, max speed 0.0781
+    a = 0.7000  converged |G| = 1.34e-14 in 4 steps;  max radius 1.0192, max speed 0.0820
+    a = 0.6500  converged |G| = 8.17e-15 in 4 steps;  max radius 1.0244, max speed 0.4082
+    a = 0.6000  failed (|G| = 9.06e-01 after 3 steps): halving the step to 0.025
+    a = 0.6250  converged |G| = 1.27e-14 in 4 steps;  max radius 1.0559, max speed 0.8117
+    a = 0.5875  failed (|G| = 1.30e+00 after 2 steps): halving the step to 0.01875
+    a = 0.6062  converged |G| = 2.15e-14 in 6 steps;  max radius 1.4211, max speed 2.2818
+    a = 0.5781  failed (|G| = 2.04e+00 after 2 steps): halving the step to 0.01406
+    a = 0.5922  failed (|G| = 1.12e+00 after 3 steps): halving the step to 0.007031
+    a = 0.5992  failed (|G| = 5.73e-01 after 2 steps): halving the step to 0.003516
+    a = 0.6027  failed (|G| = 2.49e-01 after 6 steps): halving the step to 0.001758
+    slow R = 1.0  W = -0.3623  w = 1.4490:  reaches a = 0.6062 (fold before a = 0.6027)
+    slow R = 1.5  W = -0.0976  w = 0.3906:  reaches a = 0.5562 (fold before a = 0.5527)
+    slow R = 2.0  W = -0.0404  w = 0.1616:  reaches a = 0.4991 (fold before a = 0.4962)
+    slow R = 3.0: reference did not close (|G| = 2.0e+00)
+    fast R = 0.7: no rotating square (field below the threshold for this radius)
+    fast R = 1.0  W = -2.6377  w = 10.5510:  reaches a = 0.8793 (fold before a = 0.8767)
+    fast R = 1.5  W = -2.9024  w = 11.6094:  reaches a = 0.9703 (fold before a = 0.9668)
+    fast R = 2.0  W = -2.9596  w = 11.8384:  reaches a = 0.9875 (fold before a = 0.9852)
+    fast R = 3.0  W = -2.9881  w = 11.9526:  reaches a = 0.9969 (fold before a = 0.9945)
+  furthest branch: slow R = 2.0 (w = 0.1616), a = 0.4991
+  every branch folds before a = 0 (best 0.4991): no planar Z4 choreography connected to a rotating
+  square exists in the specified zero-mean drive within this window.
+  Jacobian at the last converged orbit (a = 0.4991):
+  singular values of DG - I (24, descending):
+    6.983e+01 5.843e+01 5.843e+01 3.887e+01 8.321e+00 8.298e+00
+    8.042e+00 8.042e+00 8.040e+00 8.040e+00 7.923e+00 7.497e+00
+    3.464e-01 3.341e-01 3.240e-01 3.240e-01 1.393e-01 9.397e-02
+    9.397e-02 4.906e-02 5.067e-15 3.052e-15 4.630e-16 1.887e-16
+  Jacobian at the failed iterate (a = 0.4962, |G| = 3.65e+00):
+  singular values of DG - I (24, descending):
+    8.994e+01 7.021e+01 7.021e+01 3.887e+01 8.920e+00 8.803e+00
+    8.468e+00 8.468e+00 8.402e+00 8.402e+00 8.166e+00 7.658e+00
+    3.598e-01 3.598e-01 3.280e-01 3.112e-01 1.547e-01 1.109e-01
+    1.109e-01 6.064e-02 1.528e-03 4.329e-15 2.311e-15 8.697e-16
+
+==============================================================================
+LAYER 4 - monodromy and Floquet multipliers of the final orbit (a = 0.4991, k_z = 0.0)
+==============================================================================
+  OUTPUT 1 - initial state vectors r_k(0), v_k(0):
+  k=1  r = (+4.0034056305, -6.1276705845, +0.0000000000)   v = (+1.0275704419, +0.6713450464, +0.0000000000)
+  k=2  r = (-6.1276705846, -4.0034056304, +0.0000000000)   v = (+0.6713450464, -1.0275704419, +0.0000000000)
+  k=3  r = (-4.0034056305, +6.1276705847, +0.0000000000)   v = (-1.0275704419, -0.6713450464, +0.0000000000)
+  k=4  r = (+6.1276705846, +4.0034056305, +0.0000000000)   v = (-0.6713450464, +1.0275704419, +0.0000000000)
+  closure ||r1(T)-r1(0)|| + ||v1(T)-v1(0)|| = 1.674e-11   (< 1e-10)
+  in-plane ||M M^-1 - I|| = 2.65e-13;  det M_xy = 1.000000000000
+  reciprocal pairing: in-plane 5.76e-10, out-of-plane 7.08e-07
+  OUTPUT 2 - the 24 Floquet multipliers sorted by modulus:
+    +0.0003008987 +0.0000000000i   |lambda| = 0.0003008987   |lambda|-1 = -9.997e-01   out-of-plane
+    +0.0012647445 +0.0000000000i   |lambda| = 0.0012647445   |lambda|-1 = -9.987e-01   out-of-plane
+    +0.0012647445 +0.0000000000i   |lambda| = 0.0012647445   |lambda|-1 = -9.987e-01   out-of-plane
+    +0.9999980678 +0.0000000000i   |lambda| = 0.9999980678   |lambda|-1 = -1.932e-06   in-plane
+    +0.9999983172 +0.0000000000i   |lambda| = 0.9999983172   |lambda|-1 = -1.683e-06   out-of-plane
+    +0.9693646384 -0.2456261342i   |lambda| = 1.0000000000   |lambda|-1 = -5.551e-15   in-plane
+    +0.9693646384 +0.2456261342i   |lambda| = 1.0000000000   |lambda|-1 = -5.551e-15   in-plane
+    +0.9851807151 -0.1715195573i   |lambda| = 1.0000000000   |lambda|-1 = -2.665e-15   in-plane
+    +0.9851807151 +0.1715195573i   |lambda| = 1.0000000000   |lambda|-1 = -2.665e-15   in-plane
+    +0.9832653939 -0.1821789371i   |lambda| = 1.0000000000   |lambda|-1 = -2.442e-15   in-plane
+    +0.9832653939 +0.1821789371i   |lambda| = 1.0000000000   |lambda|-1 = -2.442e-15   in-plane
+    +0.9374115220 -0.3482235468i   |lambda| = 1.0000000000   |lambda|-1 = +0.000e+00   in-plane
+    +1.0000000000 +0.0000000000i   |lambda| = 1.0000000000   |lambda|-1 = +4.441e-16   in-plane
+    +0.9374115220 +0.3482235468i   |lambda| = 1.0000000000   |lambda|-1 = +3.553e-15   in-plane
+    +0.9374115220 -0.3482235468i   |lambda| = 1.0000000000   |lambda|-1 = +3.553e-15   in-plane
+    +0.8956454313 +0.4447687730i   |lambda| = 1.0000000000   |lambda|-1 = +1.044e-14   in-plane
+    +0.8956454313 -0.4447687730i   |lambda| = 1.0000000000   |lambda|-1 = +1.044e-14   in-plane
+    +0.8231607774 +0.5678083608i   |lambda| = 1.0000000000   |lambda|-1 = +1.465e-14   in-plane
+    +0.8231607774 -0.5678083608i   |lambda| = 1.0000000000   |lambda|-1 = +1.465e-14   in-plane
+    +1.0000019328 +0.0000000000i   |lambda| = 1.0000019328   |lambda|-1 = +1.933e-06   in-plane
+    +1.0000023903 +0.0000000000i   |lambda| = 1.0000023903   |lambda|-1 = +2.390e-06   out-of-plane
+    +790.6735142557 +0.0000000000i   |lambda| = 790.6735142557   |lambda|-1 = +7.897e+02   out-of-plane
+    +790.6735142557 +0.0000000000i   |lambda| = 790.6735142557   |lambda|-1 = +7.897e+02   out-of-plane
+    +3323.3777444074 +0.0000000000i   |lambda| = 3323.3777444074   |lambda|-1 = +3.322e+03   out-of-plane
+  in-plane modes: 16, max ||lambda|-1| = 1.933e-06  -> all within 1e-5 of the unit circle
+  out-of-plane modes: 8, max ||lambda|-1| = 3.322e+03  -> hyperbolic, as Theorem 1 corollary requires
+  all 24 within 1e-5 of the unit circle: False
+
+==============================================================================
+LAYER 5 - long run
+==============================================================================
+  1000000 drive cycles (256000000 Boris steps) in 27.0 s
+  max positional deviation from the choreography at cycle starts = 9.537e-01   (EXCEEDS 1e-4)
+  OUTPUT 3 - max |dE/E0| at the 1000000 cycle starts (the secular drift; the discrete orbit is exactly
+             periodic, so this is roundoff plus any instability) = 6.355e-11   (below 1e-8)
+             within-cycle excursion at N =   256 steps per drive period: 3.329e-05
+             within-cycle excursion at N =  1024 steps per drive period: 2.108e-06
+             within-cycle excursion at N =  4096 steps per drive period: 1.317e-07
+  deviation at 25/50/75/100% of the run: 2.76e-02  1.06e-01  6.22e-01  6.75e-02
+
+==============================================================================
+VERDICT
+==============================================================================
+  No Z4 choreography exists in the specified zero-mean drive along the branches searched;
+  the SVDs above are the divergence evidence the specification asks for.
+  No non-planar periodic orbit exists in the specified model (Theorem 1, witnessed numerically);
+  every planar one has hyperbolic out-of-plane modes, so "|lambda| = 1 for all 24 modes" is
+  unattainable with a purely repulsive z-dynamics. The minimal change that lifts both obstructions
+  is an axial confining force or a transverse field component; neither is in the specification.
+  total wall time 95.2 s
