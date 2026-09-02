@@ -1173,6 +1173,12 @@ console.log("[13] song bounce");
   /* after an export the console heals to the STANDING song's chord program (verbSet's law), not the player's patch */
   const heals = (s.match(/if\(state\.powered\)\{ if\(typeof DREAM!=="undefined"&&DREAM\.p\) applyFXP\(PROGRAMS\[DREAM\.p\.chord\]\); else if\(cur\) applyFX\(\); \}/g) || []).length;
   if (heals < 2) { fail("export heal does not prefer the standing song (" + heals + " of 2 exits)"); rBad++; }
+  /* the verify fleet's four: a composition leaves the dialed VERB alone (and restores it), arms no readout timers, sizes a shape-less song as the loop it is labelled, and never flushes the live duck */
+  if (!/verbSet==="function"&&!\(typeof DRY!=="undefined"&&DRY\)\) verbSet\(p\.verb\)/.test(s)) { fail("a DRY composition resets the VERB decision"); rBad++; }
+  if (!/verb:\(typeof VERB!=="undefined"\)\?VERB\.pct:null\}/.test(se) || !/VERB\.pct!==S\.verb&&typeof verbSet==="function"\) verbSet\(S\.verb\)/.test(slice("function songEvents(p)", "function ddWarmDone("))) { fail("songEvents does not restore the VERB decision"); rBad++; }
+  if (!/if\(!\(typeof DRY!=="undefined"&&DRY\)\) setTimeout\(\(\)=>\{ if\(!DREAM\.on\) return;/.test(s)) { fail("a composed bar arms the readout timer"); rBad++; }
+  if (!/if\(!pp\.format\) pp\.format="loop";/.test(slice("function songEvents(p)", "function ddWarmDone("))) { fail("a shape-less song composes as an arc but is sized as a loop"); rBad++; }
+  if (!/DREAM\.bar!==DREAM\._duckFlushed&&MIX&&MIX\._ctx===ctx&&!\(typeof DRY!=="undefined"&&DRY\)\)\{/.test(s)) { fail("a composition can flush the live duck automation"); rBad++; }
   if (!rBad) ok("SONG_BARS follows sectFor (loop " + G.SONG_BARS.loop + " · arc/song " + G.SONG_BARS.song + ") · every hit path logs-and-returns DRY · doors bounce the song, JAM the take · composition restores the performance");
 }
 

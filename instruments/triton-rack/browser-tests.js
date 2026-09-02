@@ -431,12 +431,14 @@ const path = __dirname + "/triton-rack.html";
      arranged from the top (intro + the shape's sections), not the take with
      its auditioning; deterministic; the player's search notes stay out */
   {
-    const comp = await page.evaluate(() => { const a = songEvents(DREAM.p), b = songEvents(DREAM.p);
+    const comp = await page.evaluate(() => { const verb0 = VERB.pct; const a = songEvents(DREAM.p), b = songEvents(DREAM.p); window._verbHeld = VERB.pct === verb0;
       const key = e => [+e.t.toFixed(4), e.role, e.note != null ? e.note : (e.zone != null ? e.zone : e.name || ""), +(e.vel || 0).toFixed(4)].join("|");
       const same = a && b && a.evs.length === b.evs.length && a.evs.every((e, i) => key(e) === key(b.evs[i]));
       return { ok: !!a, bars: a && a.bars, seconds: a && a.seconds, n: a && a.evs.length, format: a && a.format, same, want: songBars(DREAM.p),
         roles: a ? [...new Set(a.evs.map(e => e.role))] : [], takeLen: TAKE.ev.length, takeT0: TAKE.t0, dreamBar: DREAM.bar, on: DREAM.on }; });
+    const verbHeld = await page.evaluate(() => window._verbHeld);
     if (!comp.ok || comp.bars !== comp.want || !(comp.n > comp.bars * 4)) fail("song composition wrong " + JSON.stringify(comp));
+    else if (!verbHeld) fail("the composition moved the dialed VERB");
     else if (!comp.same) fail("the song composes differently twice");
     else if (comp.roles.includes("you")) fail("the song bounce carries the search (you-role events)");
     else ok("the song composes DRY: " + comp.bars + " bars (" + comp.format + "), " + comp.n + " events, " + comp.seconds.toFixed(1) + " s, deterministic, roles " + comp.roles.join("/") + " — the live take untouched (" + comp.takeLen + " events)");
@@ -866,15 +868,19 @@ const path = __dirname + "/triton-rack.html";
     const anK = MIX.kit.an;
     const anL = ctx.createAnalyser(); anL.fftSize = 2048;
     window._chain.lim.connect(anL);
-    const bK = new Uint8Array(anK.fftSize), bL = new Uint8Array(anL.fftSize);
-    let pkK = 0, pkL = 0;
+    /* float taps (round 10): the 8-bit analyser saturated at 127/128 = .992 and could
+       not tell the limiter's soft ceiling (.999 since the round-9 tube headroom) from a clamp;
+       the law is the round-6 one — no flat-tops at the limiter's output */
+    const bK = new Float32Array(anK.fftSize), bL = new Float32Array(anL.fftSize);
+    let pkK = 0, pkL = 0, hotL = 0, nL = 0;
     const t0 = performance.now();
     while (performance.now() - t0 < 2600) {
-      anK.getByteTimeDomainData(bK); anL.getByteTimeDomainData(bL);
-      for (let i = 0; i < bK.length; i++) { const v = Math.abs(bK[i] - 128) / 128; if (v > pkK) pkK = v; }
-      for (let i = 0; i < bL.length; i++) { const v = Math.abs(bL[i] - 128) / 128; if (v > pkL) pkL = v; }
+      anK.getFloatTimeDomainData(bK); anL.getFloatTimeDomainData(bL);
+      for (let i = 0; i < bK.length; i++) { const v = Math.abs(bK[i]); if (v > pkK) pkK = v; }
+      for (let i = 0; i < bL.length; i += 2) { const v = Math.abs(bL[i]); if (v > pkL) pkL = v; if (v >= .999) hotL++; nL++; }
       await new Promise(r => setTimeout(r, 12));
     }
+    const hotPctL = nL ? 100 * hotL / nL : 0;
     try { window._chain.lim.disconnect(anL); } catch (_) {}
     const dd = TAKE.ev.filter(e => e.role === "dd");
     const d8 = TAKE.ev.filter(e => e.role === "dd8");
@@ -886,7 +892,7 @@ const path = __dirname + "/triton-rack.html";
     const gm = mev.filter(e => e.role === "dd" && e.ch === 9).length;
     const bch = mev.filter(e => e.role === "dd8" && e.ch === 1).length;
     return { on: DREAM.on, bar: DREAM.bar, dd: dd.length, d8: d8.length, kitFall: kitFall.length,
-      bufs: bufs.length, zones, pkK: +pkK.toFixed(3), pkL: +pkL.toFixed(3),
+      bufs: bufs.length, zones, pkK: +pkK.toFixed(3), pkL: +pkL.toFixed(3), hotPctL: +hotPctL.toFixed(3),
       gm, bch, muteBass: DREAM.p.muteBass,
       warmDone: Object.keys(DD_WARM).some(k => k.indexOf("hyphyK") === 0 && DD_WARM[k].done) };
   });
@@ -894,7 +900,7 @@ const path = __dirname + "/triton-rack.html";
   else if (dd1.dd < 6) fail("DD kit hits not landing (dd " + dd1.dd + ", fallback kit " + dd1.kitFall + ", bufs " + dd1.bufs + ")");
   else if (!dd1.bufs) fail("no DD buffers baked");
   else if (!(dd1.pkK > 0.02)) fail("DD kit silent at the strip (pk " + dd1.pkK + ")");
-  else if (!(dd1.pkL < 0.99)) fail("DD kit breaks the round-6 ceiling (lim pk " + dd1.pkL + ")");
+  else if (!(dd1.pkL <= 1.0) || dd1.hotPctL > 0.1) fail("DD kit flat-tops the limiter (lim pk " + dd1.pkL + ", " + dd1.hotPctL.toFixed(3) + "% at the ceiling)");
   else ok("DD22 live: " + dd1.dd + " dd hits (zones " + dd1.zones.join("/") + ") · " + dd1.bufs +
     " buffers · strip pk " + dd1.pkK + " · lim pk " + dd1.pkL);
   if (!dd1.muteBass) fail("DD probe composed a bass from nothing");
