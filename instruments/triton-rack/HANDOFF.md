@@ -1,6 +1,6 @@
 # TRITON-Rack × LuckyDreamer — build state
 
-**As of:** 2026-09-01, rings 1–36 in `triton-rack.html`.
+**As of:** 2026-09-02, rings 1–37 in `triton-rack.html`.
 **Rule zero (unchanged):** both HTML files carry append-only ring/history blocks at
 their very end. **Read the rings first.** Never edit or delete a ring; append one
 per session. The donor keeps its own log format at its tail; both survive — that
@@ -59,7 +59,16 @@ solutions are production grade"*: SAVE now STOPS the track and opens three
 doors (**MIX** · **SCORE** · **SESSION**), the session zip **reloads** its
 song through a ⤒ LOAD chip, the render's concurrency holes are closed, and
 the saw distortion was convicted at the program insert (a hard clipper —
-not feedback) and fixed structurally.
+not feedback) and fixed structurally. Round 9 (ring 37) answered an open
+verdict — *"leave no stone unturned"* — with the four things the rings had
+been owing: THE FIVE-LENS BREAK COURT over the whole instrument (44
+findings, 3 blockers: the envelope hold, a stored XSS from a bank file,
+unvalidated fields into the conductor and the arp scheduler), THE BANK
+COURT (all 128 programs measured; saturator headroom, the bell and formant
+laws, three programs re-voiced), THE TAKE IN THE ZIP (a session reloads as
+a re-renderable performance) and THE ADDRESS (a URL hash that regrows a
+song, through the one validator) — plus the face at phone scale, a 4×
+faster offline render and the kit bake off the main thread.
 
 ---
 
@@ -74,8 +83,8 @@ not feedback) and fixed structurally.
 | `mine/` | The phrase-library pipeline (round 5): SMF + MusicXML parsers (no deps), LDRP1 pack/unpack, extractors for Groove MIDI (CC-BY 4.0) and OpenScore String Quartets (CC0), structural pre-filter, the judges' decoder, the raw-source fidelity gate, the assembler and injector. See `mine/README.md` — the library is re-runnable and extensible. Round 7 adds `mine/dd22_port.js`: the DD22 verbatim slicer/injector (23 line-ranged donor slices → the `/*DD22-BEGIN*/…/*DD22-END*/` block; re-run it after donor-slice changes; suite [8] byte-compares). |
 | `figure-instrument-map.json` | P0 provenance: all 51 figure→instrument assignments with evidence classes (A: donor voices the cell · B: donor voice tables · C: reasoned) and donor line anchors. The *playing* copy is `LDR_MAP` inside the artifact; this file is the argument for it. |
 | `extracted-data.json` | Donor physics + figure catalog + samba style excerpt, eval'd out of the donor (not retyped). |
-| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. |
-| `browser-tests.js` | Headless-Chromium harness (`npm i playwright-core`; finds Chromium at `/opt/pw-browsers/...` or `CHROMIUM=` env): layout law, the avatar face (rail + hand + four buttons + engine-room fold), hardware-MIDI cold boot + nudge law + pedal/bend through `window._midiInject`, **the full build walkthrough** (deal → hear → keep across all five traits with the theory bar honest at each stage, the drummer's clock measured on the figure lane of the rolling tape, chords rolled by the hand, the hook breathing, remix + one-tap re-keep, trait-jump honesty probes), figure chip mid-dream handoff, Bank B write flow + hostile-name XSS, a full SAVE bounce read back from the downloads (WAV peak/RMS/crest + MThd + YOU track), duck survival after the bounce restore, KEEP copy booted and replayed with the rail rebuilt, power-off law, STRUM, improviser, voice-cap assertion, phone-scale, zero console errors. Screenshots `4u-face.png`. |
+| `tests.js` | Node suite, no deps: `node tests.js`. Suites: [0] syntax · [1] bank schema · [2] figure graft · [3] conductor + theory engine + progression bank + human hand + **the song avatar** (40 seeds of card validity, composeP mute honesty, drummer-as-clock, shape→section laws) + audition improviser · [4] WAV writer · [5] mapping + **measured physics** (DFT fundamentals, T60s, pitch/damp bake, 13 pinned routes, zero-fallback sweep) · [6] take→SMF pipeline (held-note durations, tempo map, meter, GM preview, lead-in) · [7] Bank B validator/parser. · **[11] the take codec + the address** (nine roles round-trip, hostiles refused, the inflate cap stopping a bomb) · **[12] the bank court** (saturator headroom identity, the bandpass-on-sine law, bell/formant laws, lazy render + worker bake + tape laws by regex/sandbox); every round-9 gate mutation-tested |
+| `browser-tests.js` | Headless-Chromium harness (`npm i playwright-core`; finds Chromium at `/opt/pw-browsers/...` or `CHROMIUM=` env): layout law, the avatar face (rail + hand + four buttons + engine-room fold), hardware-MIDI cold boot + nudge law + pedal/bend through `window._midiInject`, **the full build walkthrough** (deal → hear → keep across all five traits with the theory bar honest at each stage, the drummer's clock measured on the figure lane of the rolling tape, chords rolled by the hand, the hook breathing, remix + one-tap re-keep, trait-jump honesty probes), figure chip mid-dream handoff, Bank B write flow + hostile-name XSS, a full SAVE bounce read back from the downloads (WAV peak/RMS/crest + MThd + YOU track), duck survival after the bounce restore, KEEP copy booted and replayed with the rail rebuilt, power-off law, STRUM, improviser, voice-cap assertion, phone-scale, zero console errors. Screenshots `4u-face.png`.; **round 9:** the whole-bank loudness probe, the phone-scale touch law, take.json in the zip + LOAD-with-take + PLAY regrows, LINK/ADDRESS in a fresh page (content-exact regrow, hostile hashes, a VALID song wearing hostile strings), the lazy render counted at startRendering, the kit bake off the main thread |
 
 ## 2. What the accuracy fix settled (P0, rings 10–12; unchanged)
 
@@ -272,6 +281,53 @@ not feedback) and fixed structurally.
    All three now measure the mechanism at its cause, and every new gate was
    mutation-tested (revert the fix, confirm the gate fires).
 
+## 3h. Round 9 in five cuts (ring 37)
+
+1. **The five-lens BREAK court, finally sat.** Five independent lenses
+   (producer · audio engineer · attacker · performance · correctness) over
+   the WHOLE instrument, each with a headless-Chromium probe kit, ranked
+   findings, adversarially verified, fixed down the ladder. The court's
+   blockers: a written duration shorter than a program's attack left the
+   note SILENT for its length then swelled and held (the dur path queued the
+   release before the ramp — `holdEnv` now holds the envelope analytically
+   at the release moment); Bank B `cat` reached the LCD innerHTML raw
+   (stored XSS from a bank file); `leadOct`/`comps`/`tempo`/`arpDefault`
+   were unvalidated on the way into the conductor and the arp scheduler
+   (a tick storm, a dead PLAY, a tab freeze). Every fix carries a gate and
+   every gate was mutation-tested.
+2. **The bank court.** All 128 programs rendered offline and measured
+   (single note through the insert, triads through the full chain, tube
+   input with the limiter/tube bypassed). Convicted: 60 of 120 programs
+   drove the master tube PAST its curve domain on a vel-1 triad from the
+   keyboard (the round-6 trim staged the dream mix, not the player) — every
+   saturator now wears the round-8 headroom law (`SAT_HEADROOM`, `mkSat`);
+   bells summed their partials into the VCA and were the hottest peaks in
+   the bank (the sqrt partial-sum law put the family's median on the bank's
+   median); every VOX formant program sat 8–10 dB under the bank
+   (`VOX_MAKEUP`); three programs were inaudible by construction (a Q 4–6
+   bandpass on a sine: −31 to −36 dB) and were re-voiced. Standing gates:
+   node suite [12] (headroom transfer identity, the bandpass-on-sine data
+   law, the bell/vox laws) and a harness probe that renders the whole bank
+   every run.
+3. **The take rides in the zip.** `take.json` (the take codec: programs by
+   bank index, foreign programs re-validated, every field ranged, 40k
+   events / 600 s caps) joins the session zip; LOAD of a zip with a take
+   comes back STOPPED under its song's console with the doors open — bounce
+   it again at another VERB, pull a stem you did not pull — and PLAY regrows
+   the song fresh. A bare project.json still stands the song up playing.
+4. **The address.** The donor's `#address`, for a song: the preset-law JSON
+   deflated and base64url'd into the URL hash, booting through the SAME
+   hostile-file gate as the presets tag and project.json (one schema, one
+   validator, one door — a hand-packed base36 codec would be a second
+   format to keep honest). An address STAGES its song on the rail; PLAY
+   starts it (the boot has no gesture). A LINK door writes it. Inflate bomb
+   capped, hostile hashes refused aloud.
+5. **The face at phone scale.** The court measured the ★ rail, ⤒ LOAD and
+   the door chips at 7–8 px on a 390 px phone — the file's own touch law
+   (≥45 px) broken by the controls that exist FOR phones. Below .62 scale
+   they leave the scaled 4U and become a CSS-pixel strip beneath it; a
+   probe holds the law every run.
+
 ## 4. Baseline bugs found and fixed along the way (rings 13, 18, 19; verified against the pristine upload)
 
 1. **The dock never worked** — init IIFE died on a null before wiring; waits
@@ -311,8 +367,6 @@ the map are the donor's hand: do not move them on taste.
 - Promotion: the verdict asked for "promoting the tracks that sound the
   dopest, like playlisting" — KEEP holds 8; should kept songs rank, and
   should the dealer learn from what gets kept? (Ring 31)
-- A full five-lens BREAK court on the builder (like rings 19/25/30) is owed
-  next round; ring 31 shipped with a BREAK-lite only (Ring 31).
 - The 808 line yields to a kept bass — a dealable "THE 808" low-end card
   would let hyphy keep its bassline by choice (Ring 35).
 - trapK/hyphyK kicks carry `tuned:1` — plain kick hits still land at patch
@@ -320,15 +374,24 @@ the map are the donor's hand: do not move them on taste.
 - The donor's k06 fill engine and the KSNARE_POOL/KHAT_POOL per-style
   alternate architectures stayed behind with the knock kit bank — liftable
   next bench (Ring 35).
-- The SESSION door renders one pass per lane (a seven-lane take is eight
-  full renders). One pass with per-lane taps would be far faster if the
-  node budget allows (Ring 36).
-- `project.json` regrows the song from its seed but not the player's own
-  performed notes (role `you` lives in the take, not the preset) — should a
-  session zip carry the take itself? (Ring 36)
-- The donor's `#address` (a base36 URL hash that regrows a beat anywhere)
-  has no equivalent here; a short shareable address is a different door
-  from the three that now exist (Ring 36).
+- The SESSION door still renders one pass per lane; lazy instantiation made
+  each pass 4× faster, but one pass with N recorders is the honest end state
+  (Rings 36/37).
+- The take's `you` role survives a zip round-trip as a re-renderable
+  performance; replaying it LIVE over the regrown band (an overdub track) is
+  a new transport mode — the regrow is content-exact, so it is buildable
+  (Ring 37).
+- The trait rail slots (12 px), VERB −/+ (10 px) and the rack ‹ › ◇ (18 px)
+  still break the touch law at phone scale; the chips went first — the rest
+  is a phone LAYOUT of the 4U, not a scale (Ring 37).
+- The address is 342 chars for a full song; a dictionary-primed deflate
+  would roughly halve it, but CompressionStream has no dictionary API and an
+  inline inflater is the second implementation the round refused (Ring 37).
+- The bank court judged C4 at vel 1; a court over the RANGE (C2–C6, vel
+  .3–1) would find the key-tracking and velocity-law drifts the single note
+  only half-showed (Ring 37).
+- A listening pass on the mallets under the sqrt partial law (marimba −17,
+  toy piano −16 dB momentary) against the keys (Ring 37).
 - The insert is level-neutral at the reference bus but, like any saturator
   mixed with dry, still runs +0.9 dB at bus 0.1 and −1.7 dB at bus 2 for
   drive .2 — that IS drive's compression character, now centred rather than

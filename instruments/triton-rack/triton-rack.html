@@ -344,6 +344,15 @@ body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
   border:1px solid #3f5a45;background:linear-gradient(180deg,#16211a,#0c120e);
   color:#9fe0b3;text-decoration:none;font-size:9px;letter-spacing:.1em;}
 .dlchip:hover{border-color:#9fe0b3;color:#c8f5d6;}
+/* round 9 (the court's producer lens, measured at 390 px): the ★ rail, ⤒ LOAD
+   and the ⤓/door chips rendered 7-8 px tall — the file's own touch law
+   (≥45 px) broken by the very controls that exist FOR phones. Below .62
+   scale they leave the scaled face and become a CSS-pixel strip beneath it:
+   fit() counter-scales them and grows the face's box to make room. */
+body.phone #ldrPresets{left:0;width:auto;height:auto;flex-wrap:wrap;gap:8px;padding:0 6px;} /* top set by fit(): under the save strip */
+body.phone .pchip4{height:44px;line-height:44px;font-size:13px;padding:0 16px;top:0;border-radius:10px;}
+body.phone #ldrSaveLbl{top:552px;left:0;width:auto;font-size:13px;line-height:1.5;padding:0 6px;}
+body.phone .dlchip{padding:12px 18px;font-size:13px;margin:6px 8px 0 0;border-radius:13px;}
 @keyframes playPulse{0%,100%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 14px rgba(255,190,90,.35);}
   50%{box-shadow:0 2px 8px rgba(0,0,0,.6), 0 0 30px rgba(255,190,90,.65);}}
 .tab{transition:color .2s, box-shadow .2s, background .2s;}
@@ -400,7 +409,7 @@ body:not(.engineOpen) .tabs,body:not(.engineOpen) .pane{display:none!important;}
   <div id="verbCtl" title="Reverb — scales every voice's verb send, 10% steps"><span class="vbtn" data-d="-1">−</span><b id="verbPct">50%</b><span class="vbtn" data-d="1">+</span><span class="vlab">VERB</span></div>
   <div class="l4pad" id="dreamDice" title="Deal a fresh hand for this trait"><span class="pico">🎲</span><span class="plab">Roll</span></div>
   <div class="l4pad" id="dreamPlay" title="Play / pause"><span class="pico">▶</span><span class="plab">Play</span></div>
-  <div class="l4pad" id="ldrSave" title="Save the take — WAV + MIDI, offline-rendered"><span class="pico">⤓</span><span class="plab">Save</span></div>
+  <div class="l4pad" id="ldrSave" title="Save — stops the track, then MIX (WAV) · SCORE (MIDI) · SESSION (stems + zip) · LINK (address)"><span class="pico">⤓</span><span class="plab">Save</span></div>
   <div class="l4pad" id="ldrKeep" title="Keep — the file saves a copy of itself carrying this song"><span class="pico">★</span><span class="plab">Keep</span></div>
   <div id="ldrMidiHint"><b>MIDI keys:</b> plug in &amp; play along — your notes join the take.</div>
   <div id="ldrSaveLbl"></div>
@@ -907,7 +916,7 @@ PROGRAMS.push(
  filter:{type:"lp24",cutoff:800,reso:.8,env:500,key:.4,vel:.3}, fEG:{a:1.1,d:2,s:.7,r:1.4},
  aEG:{a:1.1,d:2,s:.85,r:1.7}, lfo:{rate:.5,pitch:5,filter:0,amp:0,delay:.4},
  fx:{drive:0,chorus:.35,delay:{send:.08,time:"8",fb:.18},reverb:.6}, audition:riffHymn},
-{id:"A037",name:"Whisper Hum",cat:"VOX",tempo:60, osc:[{w:"tri",lvl:.7,det:0},{w:"noise",lvl:.06}], vox:{f1:260,f2:620,wob:60},
+{id:"A037",name:"Whisper Hum",cat:"VOX",tempo:60, osc:[{w:"tri",lvl:.25,det:0},{w:"noise",lvl:.02}], vox:{f1:260,f2:620,wob:60}, /* round 9: formants ON the fundamental — with the formant makeup this program ran +10 dB over the bank; trimmed at the source to −9.7 dB momentary, in family */
  filter:{type:"lp24",cutoff:700,reso:.7,env:300,key:.3,vel:.2}, fEG:{a:1.4,d:2,s:.8,r:1.6},
  aEG:{a:1.5,d:2,s:.85,r:2}, lfo:{rate:.35,pitch:3,filter:0,amp:.1,delay:.6},
  fx:{drive:0,chorus:.3,delay:{send:.08,time:"4d",fb:.2},reverb:.55}, audition:riffPad},
@@ -947,8 +956,8 @@ PROGRAMS.push(
  filter:{type:"lp24",cutoff:500,reso:1.2,env:3400,key:.6,vel:.9}, fEG:{a:.05,d:.5,s:.45,r:.2},
  aEG:{a:.04,d:.4,s:.82,r:.24}, lfo:{rate:5.2,pitch:4,filter:0,amp:0,delay:.5},
  fx:{drive:.15,chorus:.3,delay:{send:.06,time:"8",fb:.16},reverb:.24}, audition:riffBrass},
-{id:"A047",name:"Muted Cup",cat:"BRASS",tempo:92, osc:[{w:"sine",lvl:.8,det:0},{w:"sq",lvl:.2,det:0}],
- filter:{type:"bp",cutoff:900,reso:4,env:800,key:.6,vel:.6}, fEG:{a:.05,d:.5,s:.6,r:.2},
+{id:"A047",name:"Muted Cup",cat:"BRASS",tempo:92, osc:[{w:"sine",lvl:.55,det:0},{w:"sq",lvl:.14,det:0}],
+ filter:{type:"lp12",cutoff:1400,reso:3,env:600,key:.6,vel:.6}, fEG:{a:.05,d:.5,s:.6,r:.2},
  aEG:{a:.05,d:.4,s:.8,r:.25}, lfo:{rate:5,pitch:4,filter:0,amp:0,delay:.4},
  fx:{drive:.08,chorus:.1,delay:{send:.08,time:"8",fb:.2},reverb:.3}, audition:riffSoul},
 {id:"A048",name:"Sub Sine 88",cat:"BASS",tempo:90, osc:[{w:"sine",lvl:.95,det:0},{w:"tri",lvl:.2,det:0}],
@@ -1080,8 +1089,8 @@ PROGRAMS.push(
  filter:{type:"lp24",cutoff:1500,reso:1,env:1800,key:.8,vel:.8}, fEG:{a:.002,d:.4,s:.2,r:.2},
  aEG:{a:.002,d:1.2,s:.3,r:.25}, lfo:{rate:7,pitch:0,filter:0,amp:.5,delay:.05},
  fx:{drive:.05,chorus:.1,delay:{send:.08,time:"16",fb:.2},reverb:.3}, audition:riffPent},
-{id:"A077",name:"Bottle Blow",cat:"LEAD",tempo:92, osc:[{w:"sine",lvl:.85,det:0},{w:"noise",lvl:.14}],
- filter:{type:"bp",cutoff:800,reso:6,env:600,key:.7,vel:.5}, fEG:{a:.05,d:.4,s:.7,r:.2},
+{id:"A077",name:"Bottle Blow",cat:"LEAD",tempo:92, osc:[{w:"sine",lvl:.6,det:0},{w:"noise",lvl:.1}],
+ filter:{type:"lp12",cutoff:1800,reso:2.5,env:500,key:.7,vel:.5}, fEG:{a:.05,d:.4,s:.7,r:.2},
  aEG:{a:.06,d:.3,s:.85,r:.22}, lfo:{rate:5,pitch:5,filter:0,amp:.08,delay:.4},
  fx:{drive:0,chorus:.1,delay:{send:.12,time:"8",fb:.22},reverb:.35}, audition:riffPent},
 {id:"A078",name:"Pan Flute Air",cat:"LEAD",tempo:80, osc:[{w:"tri",lvl:.85,det:0},{w:"noise",lvl:.18}],
@@ -1255,7 +1264,7 @@ PROGRAMS.push(
  aEG:{a:0,d:0,s:1,r:.1}, lfo:{rate:1,pitch:0,filter:0,amp:0,delay:0},
  fx:{drive:0,chorus:.1,delay:{send:.12,time:"4d",fb:.3},reverb:.5}, audition:riffKit},
 {id:"A119",name:"Clav Wah Touch",cat:"KEYBOARD",tempo:102, osc:[{w:"sq",lvl:.6,det:0},{w:"saw",lvl:.45,det:4}], strike:.45,
- filter:{type:"bp",cutoff:800,reso:5,env:3200,key:.7,vel:1}, fEG:{a:.002,d:.28,s:.1,r:.14},
+ filter:{type:"lp12",cutoff:900,reso:5,env:3200,key:.7,vel:1}, fEG:{a:.002,d:.28,s:.1,r:.14},
  aEG:{a:.002,d:.32,s:.1,r:.14}, lfo:{rate:5,pitch:0,filter:0,amp:0,delay:0},
  fx:{drive:.18,chorus:.1,delay:{send:.04,time:"16",fb:.16},reverb:.14}, audition:riffFunk},
 {id:"A120",name:"Harpsi Bright 8",cat:"KEYBOARD",tempo:96, osc:[{w:"dwgs",lvl:.75,det:-2},{w:"sq",lvl:.35,det:3}], strike:.25,
@@ -1341,8 +1350,23 @@ function makeIR(sec,decay){ const len=Math.floor(ctx.sampleRate*sec), b=ctx.crea
 /* the third donor's two ceilings: a near-tanh tube stage and the cubic
    soft limiter (x − 4/27·x³ — unity input already leans −1.4 dB into it) */
 function satSoft(x){ if(x<-3) return -1; if(x>3) return 1; const x2=x*x; return x*(27+x2)/(27+9*x2); }
-function satCurve(k){ const n=2048, c=new Float32Array(n), m=Math.abs(satSoft(k))||1;
-  for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=satSoft(x*k)/m; } return c; }
+/* round 9 (the bank court, measured): 60 of 120 programs drove the master
+   tube PAST its curve's domain on a plain vel-1 triad from the keyboard
+   (input pk up to 1.42 — WebAudio hard-clamps beyond the curve, the same
+   disease rounds 6 and 8 convicted, at the third and last stage). The
+   round-6 bus trim staged the DREAM mix, whose roles pass strip trims; a
+   human-played chord reaches the bus untrimmed. The fix is the round-8 law
+   applied to every saturator: the curve's DOMAIN covers ±SAT_HEADROOM of
+   its input through a pre-trim, so a hot chord meets satSoft's own knee
+   (which continues smoothly to its asymptote) instead of the endpoint
+   clamp. Inside ±1 the transfer is byte-identical to before — this is not
+   a level change; n doubles to keep the curve's resolution. */
+const SAT_HEADROOM=2;
+function satCurve(k){ const n=4096, c=new Float32Array(n), m=Math.abs(satSoft(k))||1;
+  for(let i=0;i<n;i++){ const x=(i/(n-1)*2-1)*SAT_HEADROOM; c[i]=satSoft(x*k)/m; } return c; }
+/* a saturator with its headroom pre-trim: connect INTO .in, take FROM .sh */
+function mkSat(k){ const pre=ctx.createGain(); pre.gain.value=1/SAT_HEADROOM;
+  const sh=ctx.createWaveShaper(); sh.curve=satCurve(k); sh.oversample="2x"; pre.connect(sh); return {in:pre,sh}; }
 function limitCurve(){ const n=4096, c=new Float32Array(n);
   for(let i=0;i<n;i++){ const x=(i/(n-1)*2-1)*1.5;
     c[i]= x<-1.5? -1 : x>1.5? 1 : x-(4/27)*x*x*x; } return c; }
@@ -1365,7 +1389,7 @@ function limitCurve(){ const n=4096, c=new Float32Array(n);
    Measured at .5 (domain ±2): a fortissimo 3-note saw chord still put 0.06%
    of samples past the edge — small, but that IS the old clipping mechanism,
    so the domain goes to ±4, past even the round-6 full-band bus peak (3.26). */
-const DRIVE_HEADROOM=.25;
+const DRIVE_HEADROOM=.2; /* round 9: the bank court measured a 4-note vel-1 chord of the hottest EP at bus 4.51 — the domain is now ±5 */
 function driveCurve(a){ const n=4096, c=new Float32Array(n), k=1+a*7;
   const S=.5/Math.tanh(k*.5);          /* unity at bus .5 — reference parity */
   for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(k*(x/DRIVE_HEADROOM))*S; } return c; }
@@ -1385,7 +1409,7 @@ function buildGraph(){
   const glueIn=ctx.createGain();
   const glue=ctx.createDynamicsCompressor();
   glue.threshold.value=-13; glue.knee.value=8; glue.ratio.value=3; glue.attack.value=.010; glue.release.value=.18;
-  const tube=ctx.createWaveShaper(); tube.curve=satCurve(1.25); tube.oversample="2x";
+  const tubeS=mkSat(1.25), tube=tubeS.sh; /* round 9: domain ±2, see satCurve */
   master = ctx.createGain(); master.gain.value = state.volume*.95;
   const limPre=ctx.createGain(); limPre.gain.value=MIX_LIM_BASE;
   const lim=ctx.createWaveShaper(); lim.curve=limitCurve(); lim.oversample="4x";
@@ -1399,10 +1423,10 @@ function buildGraph(){
   sum.connect(busTrim); busTrim.connect(tiltLo); tiltLo.connect(air); air.connect(tiltHi);
   tiltHi.connect(dryG); tiltHi.connect(para); para.connect(paraWet);
   dryG.connect(glueIn); paraWet.connect(glueIn);
-  glueIn.connect(glue); glue.connect(tube); tube.connect(limPre);
+  glueIn.connect(glue); glue.connect(tubeS.in); tube.connect(limPre);
   limPre.connect(lim); lim.connect(master); master.connect(ctx.destination);
   window._mixTap=lim;
-  window._chain={busTrim,para,glue,tube,limPre,lim}; /* tuning taps — measurement, not audio */
+  window._chain={busTrim,para,glue,tube,tubeIn:tubeS.in,limPre,lim}; /* tuning taps — measurement, not audio */
   sum.connect(analyser);
   /* reverb */
   convo = ctx.createConvolver(); convo.buffer = makeIR(2.6,2.4);
@@ -1432,8 +1456,8 @@ function buildGraph(){
   progBus=ctx.createGain();
   shaper=ctx.createWaveShaper(); shaper.curve=driveCurve(.2); shaper.oversample="2x";
   dWet=ctx.createGain(); dDry=ctx.createGain(); post=ctx.createGain();
-  /* round 8: the headroom stage — the shaper's curve is built for ±2 of bus
-     level through this .5 trim, so a hot chord meets the CURVE, never the
+  /* round 8: the headroom stage — the shaper's curve is built for ±4 of bus
+     level through this .25 trim, so a hot chord meets the CURVE, never the
      WebAudio endpoint clamp (the round-6 busTrim law, applied to the insert) */
   const driveIn=ctx.createGain(); driveIn.gain.value=DRIVE_HEADROOM;
   progBus.connect(driveIn); driveIn.connect(shaper); shaper.connect(dWet); dWet.connect(post);
@@ -1453,7 +1477,7 @@ function buildGraph(){
     const hi=ctx.createBiquadFilter(); hi.type="highshelf"; hi.frequency.value=hsF; hi.gain.value=hsG;
     const duck=ctx.createGain();
     let n=inG; [hp,lo,mid,hi].forEach(x=>{ n.connect(x); n=x; });
-    if(drive){ const sh=ctx.createWaveShaper(); sh.curve=satCurve(drive); sh.oversample="2x"; n.connect(sh); n=sh; }
+    if(drive){ const S=mkSat(drive); n.connect(S.in); n=S.sh; } /* round 9: strip saturators wear the same headroom */
     n.connect(duck); duck.connect(progBus);
     const an=ctx.createAnalyser(); an.fftSize=256; duck.connect(an); /* rack-unit meter tap */
     return {in:inG,duck,an};
@@ -1546,14 +1570,33 @@ function applyFXP(p,force){
     : (typeof VERB!=="undefined"?VERB.pct:50))/100);
   dSend.gain.value=fx.delay.send;
   const dt=delayBeats(fx.delay.time);
-  dlyL.delayTime.setTargetAtTime(dt,ctx.currentTime,.05);
-  dlyR.delayTime.setTargetAtTime(dt,ctx.currentTime,.05);
+  /* on a FRESH context (every offline pass) the lines start at 0 s and a
+     glide swept the first hits' echoes from 0 to the beat time — the room
+     never did that (round 9) */
+  if(force||ctx.currentTime<.01){ dlyL.delayTime.setValueAtTime(dt,ctx.currentTime); dlyR.delayTime.setValueAtTime(dt,ctx.currentTime); }
+  else { dlyL.delayTime.setTargetAtTime(dt,ctx.currentTime,.05); dlyR.delayTime.setTargetAtTime(dt,ctx.currentTime,.05); }
   fbA.gain.value=fx.delay.fb; fbB.gain.value=fx.delay.fb;
 }
 function midiHz(n){ return 440*Math.pow(2,(n-69+state.transpose)/12)*Math.pow(2,state.tune/1200); }
 function regVoice(v,units){ v._off=(typeof exporting!=="undefined"&&exporting);
   activeVoices+=units; voiceList.push(v);
-  while(activeVoices>VOICE_CAP && voiceList.length){ const old=voiceList.shift(); old.kill(); } updVoiceUI(); }
+  /* steal order (round 9, the court): a RELEASED voice first, then the
+     oldest voice that has STARTED — never a note the conductor scheduled
+     for later in the bar. Under a four-part song half the ledger was future
+     notes, and shift() evicted what was sounding to admit them (5-15
+     steals a second at the cap). */
+  /* the cap is a cap on SOUNDING units: the conductor schedules a bar ahead,
+     so the ledger legitimately holds a bar of future notes on top of what
+     sounds — counting them against the cap is what pinned it at 62 */
+  while(voiceList.length>1){
+    const now=ctx?ctx.currentTime:0; let live=0;
+    for(const x of voiceList) if(!x.killed&&(x.t==null||x.t<=now)) live+=x.units||1;
+    if(live<=VOICE_CAP) break;
+    let i=voiceList.findIndex(x=>x!==v&&x.released&&!x.killed&&(x.t==null||x.t<=now));
+    if(i<0){ for(let k=0;k<voiceList.length;k++){ const x=voiceList[k]; if(x!==v&&!x.killed&&(x.t==null||x.t<=now)){ i=k; break; } } }
+    if(i<0) break;
+    voiceList.splice(i,1)[0].kill(); }
+  updVoiceUI(); }
 let UNREGQ=[];
 function unreg(v){
   /* exactly-once, whether or not the voice is still listed: the steal path
@@ -1572,15 +1615,20 @@ function unregFlush(){ UNREGQ.splice(0).forEach(v=>{
   const i=voiceList.indexOf(v); if(i>=0) voiceList.splice(i,1);
   activeVoices=Math.max(0,activeVoices-(v.units||1)); }); updVoiceUI(); }
 
+const VOX_MAKEUP=2.5;
+const BELL_DEFAULT=[[1,1,.9],[2.76,.6,.55],[5.40,.34,.32],[8.93,.18,.18]]; /* ratio, level, decay share */
 function spawnVoice(prog,note,vel,when,dur,dest){
-  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLog==="function") takeLog(prog,note,vel,when,dur,dest);
+  const _tk=(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLog==="function")? takeLog(prog,note,vel,when,dur,dest) : null;
   if(prog.cat==="DRUMS"){ drumHit(note,vel,when,prog.kit||"std"); return null; }
   const t=Math.max(when,ctx.currentTime), out=ctx.createGain(); out.gain.value=0;
   const isBP=prog.filter.type==="bp";
   const f1=ctx.createBiquadFilter(); f1.type=isBP?"bandpass":"lowpass";
-  const f2=ctx.createBiquadFilter(); f2.type="lowpass";
   const single = prog.filter.type!=="lp24";
-  f1.Q.value=prog.filter.reso; f2.Q.value=.5;
+  /* round 9 (the performance lens): the second pole and the LFO were built
+     for every voice — 4-5 dead nodes per voice on 50 of 122 programs, a
+     third of the render cost. Built only where the program uses them. */
+  const f2=single? null : ctx.createBiquadFilter(); if(f2){ f2.type="lowpass"; f2.Q.value=.5; }
+  f1.Q.value=prog.filter.reso;
   const stops=[], nodes=[];
   const baseHz=midiHz(note);
   const kt=Math.pow(2,(prog.filter.key||0)*(note-60)/12);
@@ -1595,24 +1643,41 @@ function spawnVoice(prog,note,vel,when,dur,dest){
      .95 osc gets — saw programs were the hottest patches in the bank by
      construction. Normalize only the EXCESS (sum>1): single-osc programs
      keep their level, stacks stop being disproportionately hot. Computed
-     HERE, above the LFO, because the amp LFO writes the SAME gain param
-     additively — an unscaled tremolo depth against a scaled envelope
-     deepens the tremolo and can drive the gain NEGATIVE (polarity
-     inversion, not a dip). The LFO is a depth relative to the envelope, so
-     it rides the same normalization. */
-  const _lvlSum=(prog.bell||!prog.osc)? 1 : prog.osc.reduce((a,o)=>a+(o.lvl||0),0);
-  const _oscNorm=1/Math.max(1,_lvlSum);
-  /* LFO */
-  const lfo=ctx.createOscillator(); lfo.frequency.value=prog.lfo.rate;
-  const lgP=ctx.createGain(), lgF=ctx.createGain(), lgA=ctx.createGain();
+     HERE, above the LFO, because (until round 9) the amp LFO wrote the SAME
+     gain param additively; it is now a multiplicative stage of its own. */
+  /* round 9 (the bank court, measured): bells summed their PARTIALS — 2.12
+     for the stock four — into the same VCA, and were the hottest peaks in
+     the bank by construction (10 of 12 over the master tube's domain on a
+     vel-1 triad). Partials decay at their own rates, so the onset sum
+     overstates what the ear integrates: the geometric mean of onset sum
+     and steady fundamental (the square root) put the bell family's median
+     on the bank's median (−11.5 vs −10.4 dB momentary); the full osc law
+     pushed the mallets 3 dB under the bank's first quartile. */
+  const _bellParts=prog.bell? (Array.isArray(prog.bell)?prog.bell:BELL_DEFAULT) : null;
+  const _lvlSum=_bellParts? _bellParts.reduce((a,b)=>a+(b[1]||0),0) : (!prog.osc? 1 : prog.osc.reduce((a,o)=>a+(o.lvl||0),0));
+  const _oscNorm=_bellParts? 1/Math.sqrt(Math.max(1,_lvlSum)) : 1/Math.max(1,_lvlSum);
+  /* LFO — only where it does something (pitch, filter, amp, a formant wobble, or the wheel already up) */
+  const trem=ctx.createGain(); trem.gain.value=1;
+  const needLFO=!!(prog.lfo.pitch||prog.lfo.filter||prog.lfo.amp||prog.vox||MODW>0);
+  let lfo=null, lgP=null, lgF=null, lgA=null;
+  if(needLFO){
+  lfo=ctx.createOscillator(); lfo.frequency.value=prog.lfo.rate;
+  lgP=ctx.createGain(); lgF=ctx.createGain(); lgA=ctx.createGain();
   lgP.gain.setValueAtTime(0,t); lgF.gain.setValueAtTime(0,t); lgA.gain.setValueAtTime(0,t);
   const ld=prog.lfo.delay||0;
   lgP.gain.linearRampToValueAtTime(prog.lfo.pitch+MODW*35,t+ld+.6);
   lgF.gain.linearRampToValueAtTime(prog.lfo.filter,t+ld+.6);
-  lgA.gain.linearRampToValueAtTime(prog.lfo.amp*.5*_oscNorm,t+ld+.6);
+  /* round 9 (the court): tremolo was ADDED to the envelope's own gain
+     param, so it outlived the release — every note of a tremolo program
+     kept pulsing at up to −9 dB for the whole tail and ended on a click at
+     a random LFO phase. It is now a second gain stage AFTER the envelope
+     (multiplicative), so the release silences it and no normalization is
+     needed to keep its polarity. */
+  lgA.gain.linearRampToValueAtTime(Math.min(.95,prog.lfo.amp*.5),t+ld+.6);
   lfo.connect(lgP); lfo.connect(lgF); lfo.connect(lgA);
   lgF.connect(f1.frequency); if(!single) lgF.connect(f2.frequency);
-  lgA.connect(out.gain); lfo.start(t); stops.push(lfo);
+  lgA.connect(trem.gain); lfo.start(t); stops.push(lfo);
+  }
   /* oscillators */
   const oscRefs=[]; let units=0;
   function addOsc(w,lvl,det,octv){
@@ -1621,18 +1686,18 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     else{ src=ctx.createOscillator();
       if(w==="saw")src.type="sawtooth"; else if(w==="sq")src.type="square";
       else if(w==="tri")src.type="triangle"; else if(w==="sine")src.type="sine";
-      else if(WAVES[w])src.setPeriodicWave(WAVES[w]);
+      else if(Object.prototype.hasOwnProperty.call(WAVES,w))src.setPeriodicWave(WAVES[w]);
       else src.type="sawtooth"; /* unknown wave name (foreign import) degrades, never throws */
       const mult=Math.pow(2,octv||0);
       src.frequency.setValueAtTime(baseHz*mult,t);
-      src.detune.setValueAtTime((det||0)+BENDC,t); lgP.connect(src.detune);
+      src.detune.setValueAtTime((det||0)+BENDC,t); if(lgP) lgP.connect(src.detune);
       oscRefs.push({src,mult,det:det||0}); }
     const g=ctx.createGain(); g.gain.value=lvl;
     src.connect(g); g.connect(f1); src.start(t); stops.push(src); units++;
     return src;
   }
   if(prog.bell){
-    (Array.isArray(prog.bell)?prog.bell:[[1,1,.9],[2.76,.6,.55],[5.40,.34,.32],[8.93,.18,.18]]).forEach(([r,l,dk])=>{
+    _bellParts.forEach(([r,l,dk])=>{
       const o=ctx.createOscillator(); o.type="sine"; o.frequency.setValueAtTime(baseHz*r,t);
       const g=ctx.createGain(); g.gain.setValueAtTime(0,t);
       g.gain.linearRampToValueAtTime(l*(.3+.7*vel),t+.003);
@@ -1662,46 +1727,69 @@ function spawnVoice(prog,note,vel,when,dur,dest){
     const pre=single?f1:f2; try{pre.disconnect(out);}catch(e){}
     const b1=ctx.createBiquadFilter(); b1.type="bandpass"; b1.frequency.value=vx.f1; b1.Q.value=7;
     const b2=ctx.createBiquadFilter(); b2.type="bandpass"; b2.frequency.value=vx.f2; b2.Q.value=7;
-    const g1=ctx.createGain(); g1.gain.value=.9; const g2=ctx.createGain(); g2.gain.value=.55;
-    const gd=ctx.createGain(); gd.gain.value=.12;
+    /* round 9 (the bank court, measured): the formant pair replaces a
+       filter that passes ~unity with two Q-7 bandpasses that pass one
+       harmonic each — every VOX program sat 8-10 dB under the bank's
+       median (−19.9 vs −10.4), inaudible as a chord bed under a kit, and
+       osc level could not fix it (the osc-stack law normalizes it away).
+       A formant needs its makeup: ×VOX_MAKEUP on the branch. */
+    const g1=ctx.createGain(); g1.gain.value=.9*VOX_MAKEUP; const g2=ctx.createGain(); g2.gain.value=.55*VOX_MAKEUP;
+    const gd=ctx.createGain(); gd.gain.value=.12*VOX_MAKEUP;
     const vg=ctx.createGain(); vg.gain.value=(vx.wob||140); lfo.connect(vg); vg.connect(b2.frequency);
     pre.connect(b1); b1.connect(g1); g1.connect(out);
     pre.connect(b2); b2.connect(g2); g2.connect(out);
     pre.connect(gd); gd.connect(out);
   }
-  out.connect(dest||progBus);
+  out.connect(trem); trem.connect(dest||progBus);
   /* amp EG */
   const pk=Math.min(1,.9*(0.25+0.75*vel))*_oscNorm;
   const a=Math.max(.001,prog.aEG.a);
   out.gain.setValueAtTime(0.0001,t);
   out.gain.linearRampToValueAtTime(pk,t+a);
   out.gain.setTargetAtTime(pk*prog.aEG.s,t+a,Math.max(.02,prog.aEG.d/3));
-  const v={units,note,t,killed:false,oscs:oscRefs,baseHz,lgP,lfoP:prog.lfo.pitch};
+  /* round 9 (the court's blocker): a linearRamp's event time is its END, so
+     cancelScheduledValues inside the attack erased the whole ramp — a
+     written duration shorter than the attack left the note SILENT for its
+     length, then swelled to full and held; a key released mid-attack cut
+     to nothing in one sample with no tail. The envelope is known
+     analytically, so the value at that moment is HELD there (deterministic
+     offline and live, no cancelAndHoldAtTime dependency), and the release
+     proceeds from it. */
+  const fA=Math.max(.001,prog.fEG.a), f0=Math.max(60,cutEff*.8);
+  const ampAt=tt=> tt>=t+a? null : 0.0001+(pk-0.0001)*Math.max(0,(tt-t)/a);
+  const cutAt=tt=> tt>=t+fA? null : f0+(peak-f0)*Math.max(0,(tt-t)/fA);
+  function holdEnv(tt){
+    /* cancel erases the ramp EVENT (its time is the ramp end), which would
+       leave the segment before tt flat at the start value — so the partial
+       ramp is re-scheduled to end at tt on the value it would have reached */
+    const g=ampAt(tt); out.gain.cancelScheduledValues(tt); if(g!=null) out.gain.linearRampToValueAtTime(g,tt);
+    const c=cutAt(tt); f1.frequency.cancelScheduledValues(tt); if(c!=null) f1.frequency.linearRampToValueAtTime(c,tt); }
+  const v={units,note,t,killed:false,oscs:oscRefs,baseHz,lgP,lfoP:prog.lfo.pitch,_take:_tk||null};
   function finish(st){ stops.forEach(s=>{try{s.stop(st);}catch(e){}});
     /* the stop() scheduling above IS the note-off and must always run;
        the wall-clock cleanup timer is skipped offline (render-clock times
        would spread thousands of no-op timers over real minutes — round 8) */
     if(v._off) return;
-    setTimeout(()=>{ if(!v.killed){v.killed=true; unreg(v);} try{out.disconnect();}catch(e){} },
+    setTimeout(()=>{ if(!v.killed){v.killed=true; unreg(v);} try{out.disconnect();}catch(e){} try{trem.disconnect();}catch(e){} },
       Math.max(0,(st-ctx.currentTime)*1000)+80); }
   v.release=(rt)=>{ if(v.released) return; v.released=true;
     const r=Math.max(.03,prog.aEG.r), tr=Math.max(rt||ctx.currentTime,ctx.currentTime);
-    out.gain.cancelScheduledValues(tr);
+    holdEnv(tr);
     out.gain.setTargetAtTime(0.0001,tr,r/4);
-    f1.frequency.cancelScheduledValues(tr);
     f1.frequency.setTargetAtTime(Math.max(80,cutEff*.5),tr,r/3);
-    finish(tr+r*4+.15); };
+    finish(tr+r*2+.15); }; /* 8 time constants (−69 dB), not 16: the ledger held every unit for seconds of silence (round 9) */
   v.kill=()=>{ if(v.killed) return; v.killed=true; v.released=true; unreg(v);
     /* never clamp the stop before the note's own start — a stolen voice that
        hasn't sounded yet still gets its onset instead of silent erasure */
-    const n0=Math.max(ctx.currentTime,t); out.gain.cancelScheduledValues(n0);
+    const n0=Math.max(ctx.currentTime,t); holdEnv(n0);
     out.gain.setTargetAtTime(0.0001,n0,.02);
     stops.forEach(s=>{try{s.stop(n0+.12);}catch(e){}});
-    setTimeout(()=>{try{out.disconnect();}catch(e){}},250); };
+    setTimeout(()=>{try{out.disconnect();}catch(e){} try{trem.disconnect();}catch(e){}},250); };
   if(dur!=null){ const tr=t+dur;
+    holdEnv(tr);
     out.gain.setTargetAtTime(0.0001,tr,Math.max(.03,prog.aEG.r)/4);
     f1.frequency.setTargetAtTime(Math.max(80,cutEff*.5),tr,Math.max(.03,prog.aEG.r)/3);
-    v.released=true; finish(tr+prog.aEG.r*4+.15); }
+    v.released=true; finish(tr+Math.max(.03,prog.aEG.r)*2+.15); }
   regVoice(v,units||1);
   return v;
 }
@@ -1714,7 +1802,7 @@ function drumHit(note,vel,when,kit){
   const v={units:1,t,killed:false};
   v.kill=()=>{ if(!v.killed){ v.killed=true; unreg(v); } };
   v.release=v.kill; regVoice(v,1);
-  setTimeout(v.kill,1400);
+  if(!(typeof exporting!=="undefined"&&exporting)) setTimeout(v.kill,1400); /* no wall-clock timers offline (round 9) */
   const g=ctx.createGain(); g.connect(o);
   function noise(){ const s=ctx.createBufferSource(); s.buffer=noiseBuf; return s; }
   function tone(f0,f1,dur,amp,type){ const os=ctx.createOscillator(); os.type=type||"sine";
@@ -1742,7 +1830,7 @@ function drumHit(note,vel,when,kit){
     os.frequency.setValueAtTime(ana?150:130,t);
     os.frequency.exponentialRampToValueAtTime(ana?38:44,t+(ana?.16:.11));
     g.gain.setValueAtTime(1.1*vel,t); g.gain.setTargetAtTime(0,t+.005,ana?.16:.09);
-    os.connect(g); os.start(t); os.stop(t+.6);
+    os.connect(g); os.start(t); os.stop(t+(ana?1.4:.6)); /* 8 time constants either way — the ana kick was cut at −32 dB (round 9) */
     const c=noise(), hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=1500;
     const cg=ctx.createGain(); cg.gain.setValueAtTime((ana?.18:.35)*vel,t); cg.gain.setTargetAtTime(0,t,.008);
     c.connect(hp); hp.connect(cg); cg.connect(o); c.start(t); c.stop(t+.05); }
@@ -1810,6 +1898,9 @@ function noteOn(n,vel){
       monoV.oscs.forEach(o=>{ o.src.frequency.cancelScheduledValues(now);
         o.src.frequency.setTargetAtTime(hz*o.mult,now,Math.max(.01,(cur.porta||.05))/3); });
       monoV.note=n;
+      /* legato: the tape closes the note that glided away and opens the one it landed on (round 9) */
+      if(typeof takeCloseEv==="function") takeCloseEv(monoV._take);
+      monoV._take=(typeof takeLog==="function"? takeLog(cur,n,vel,now,null) : null)||null;
       let gs=keysDown.get(n); if(!gs){ gs=[]; keysDown.set(n,gs); }
       gs.push({refs:[],mono:true}); keyVis(n,true); return;
     }
@@ -1826,14 +1917,13 @@ function noteOn(n,vel){
   stk.push({refs}); pulseAt(ctx.currentTime);
 }
 function releaseNote(n){
-  if(typeof takeClose==="function") takeClose(n);
   const stk=keysDown.get(n);
   if(stk&&stk.length){
     const rec=stk.pop();
     if(!stk.length) keysDown.delete(n);
-    if(rec.mono){ if(monoV&&monoV.note===n&&monoV.release){ monoV.release(); monoV=null; } }
-    else rec.refs.forEach(v=>v&&v.release&&v.release());
-  }
+    if(rec.mono){ if(monoV&&monoV.note===n&&monoV.release){ if(typeof takeCloseEv==="function") takeCloseEv(monoV._take); monoV.release(); monoV=null; } }
+    else rec.refs.forEach(v=>{ if(!v) return; if(typeof takeCloseEv==="function") takeCloseEv(v._take); if(v.release) v.release(); });
+  } else if(typeof takeClose==="function") takeClose(n); /* a release with no press on record closes by note, the old way */
   if(keysDown.has(n)||physSet.has(n)) keyVis(n,true);
 }
 let OFFQ=[];
@@ -1848,12 +1938,16 @@ function noteOff(n){
   releaseNote(n);
 }
 function offFlush(){ OFFQ.splice(0).forEach(n=>noteOff(n)); }
-function allNotesOff(){
+function allNotesOff(playerOnly){
   if(typeof exporting!=="undefined"&&exporting) return; /* the globals belong to the offline render */
-  if(typeof TAKE!=="undefined"&&typeof takeClose==="function") for(const k in TAKE.open) takeClose(+k);
+  if(typeof TAKE!=="undefined"&&typeof takeClose==="function") for(const k in TAKE.open){ let g=64; while(TAKE.open[k]&&TAKE.open[k].length&&g--) takeClose(+k); }
   keysDown.forEach(stk=>stk.forEach(rec=>rec.refs.forEach(v=>v&&v.release&&v.release())));
   keysDown.clear(); physSet.clear(); latchSet.clear(); SUSSET.clear(); chordDone=true; monoV=null;
-  voiceList.slice().forEach(v=>v.kill&&v.kill());
+  /* round 9 (the court): an octave shift or a mode button used to kill the
+     WHOLE ledger — the band went silent until the next bar line with PLAY
+     lit. Those are the player's gestures: they release the player's notes;
+     only the transport and the power switch kill the ledger. */
+  if(!playerOnly) voiceList.slice().forEach(v=>v.kill&&v.kill());
   $$("#kb .dn").forEach(k=>k.classList.remove("dn"));
 }
 /* arp scheduler */
@@ -1864,6 +1958,7 @@ setInterval(()=>{
   if(!held.length){ arpStep=0; return; }
   const spb=60/state.tempo;
   const stepLen=spb*(state.arp.reso==="16"?.25:state.arp.reso==="8"?.5:.125);
+  if(!(stepLen>=.005)||!(state.arp.oct>=1&&state.arp.oct<=4)){ arpStep=0; arpNext=0; return; } /* a step that cannot advance the clock is a spin (round 9) */
   if(!arpNext||arpNext<ctx.currentTime) arpNext=ctx.currentTime+.03;
   while(arpNext<ctx.currentTime+.16){
     const base=held.slice().sort((a,b)=>a-b), seq=[];
@@ -1983,7 +2078,7 @@ function render(){
     h+=`<span class="row"><span class="inv">PROG P${state.page}:${names[state.page]}</span>  ♩=${state.tempo}  ${arpTxt}</span>`;
     if(state.page===0){
       h+=`<span class="row big">${cur.id}  ${esc(cur.name)}</span>`;
-      h+=`<span class="row">CAT:${cur.cat}  VOICES:<span id="lcdV">${String(activeVoices).padStart(2,"0")}</span>/62 <span class="meter"><i id="lcdMeter"></i></span></span>`;
+      h+=`<span class="row">CAT:${esc(cur.cat)}  VOICES:<span id="lcdV">${String(activeVoices).padStart(2,"0")}</span>/62 <span class="meter"><i id="lcdMeter"></i></span></span>`;
       h+=`<span class="row dim">DIAL:PROG  ◀▶:CATEGORY  AUD:RIFF${state.compare?"  <span class='inv'>CMP</span>":""}</span>`;
     } else {
       const ps=pageParams(); const win=Math.max(0,Math.min(state.editIdx-1,ps.length-3));
@@ -2032,9 +2127,15 @@ function flashRow(msg){ if(!state.powered||state.test) return;
    go to the save label, which is always visible */
 function notifyRow(msg){
   flashRow(msg);
-  const e=document.getElementById("ldrSaveLbl");
-  if(e&&!document.getElementById("svMix")){ e.textContent=String(msg);
-    setTimeout(()=>{ if(e.textContent===String(msg)){ e.textContent=""; if(SAVE_OUT) saveChips(); } },3000); }
+  const e=document.getElementById("ldrSaveLbl"); if(!e) return;
+  /* round 9 (the court): with the SAVE doors up this used to say nothing
+     visible at all (a refused LOAD under the doors was silent). The
+     message takes the label for three seconds, then the doors return. */
+  const doors=!!document.getElementById("svMix");
+  e.textContent=String(msg);
+  setTimeout(()=>{ if(e.textContent!==String(msg)) return;
+    if(doors&&typeof doorsRender==="function"&&ctx&&TAKE.ev.length&&!(typeof exporting!=="undefined"&&exporting)) doorsRender();
+    else { e.textContent=""; if(SAVE_OUT) saveChips(); } },3000);
 }
 /* ================= program / combi select ================= */
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
@@ -2042,21 +2143,29 @@ function setProgram(i){
   state.progIdx=(i+PROGRAMS.length)%PROGRAMS.length; state.userSlot=null;
   cur=clone(PROGRAMS[state.progIdx]); pristine=clone(PROGRAMS[state.progIdx]);
   state.compare=false; $("#cmpBtn").classList.remove("lit-a");
-  state.tempo=cur.tempo||100; state.editIdx=0;
   /* browsing sounds must not arm the arp under the conductor — the DREAM
-     watchdog stops on state.arp.on, so an arpDefault would silence the band */
+     watchdog stops on state.arp.on, so an arpDefault would silence the band.
+     Round 9 (the court): nor may it set the SONG's tempo or swap the shared
+     insert/sends to the browsed patch — the conductor owns the console
+     while it plays; the player's patch only feeds spawnVoice. */
   const dreaming = typeof DREAM!=="undefined" && DREAM.on;
+  if(!dreaming) state.tempo=cur.tempo||100;
+  state.editIdx=0;
   if(cur.arpDefault && !dreaming){ Object.assign(state.arp,cur.arpDefault); }
   else if(!dreaming){ state.arp.on=false; }
-  latchSet.clear(); syncLeds(); applyFX(); render();
+  latchSet.clear(); syncLeds();
+  if(dreaming&&DREAM.p) applyFXP(PROGRAMS[DREAM.p.chord]); else applyFX();
+  render();
   if(typeof updatePatchChips==="function") updatePatchChips();
 }
 function setCombi(i){
   state.combiIdx=(i+COMBIS.length)%COMBIS.length;
   const c=COMBIS[state.combiIdx];
   cur=clone(PROGRAMS[c.timbres[0].p]); pristine=clone(cur);
-  state.tempo=cur.tempo||100; state.arp.on=false; latchSet.clear();
-  syncLeds(); applyFX(); render();
+  const dreaming = typeof DREAM!=="undefined" && DREAM.on;
+  if(!dreaming) state.tempo=cur.tempo||100;
+  state.arp.on=false; latchSet.clear();
+  syncLeds(); if(dreaming&&DREAM.p) applyFXP(PROGRAMS[DREAM.p.chord]); else applyFX(); render();
   if(typeof updatePatchChips==="function") updatePatchChips();
 }
 /* ── USER BANK B: 16 slots the player writes from the unit (PROG → ENTER) ── */
@@ -2089,11 +2198,35 @@ function progValidate(p){
      is a non-finite AudioParam write — a TypeError that aborts the FX
      apply half-staged. `||0` validated a copy the engine never uses. */
   const inR=(v,a,b)=>typeof v==="number"&&isFinite(v)&&v>=a&&v<=b;
+  const opt=(v,a,b)=>v==null||inR(v,a,b);
   if(!inR(p.fx.delay.fb,0,.85)||!inR(p.fx.delay.send,0,1)) return false;
-  if(typeof p.fx.delay.time!=="string") return false;
+  if(typeof p.fx.delay.time!=="string"||p.fx.delay.time.length>4) return false;
   if(!inR(p.fx.drive,0,1)||!inR(p.fx.reverb,0,1)||!inR(p.fx.chorus,0,1)) return false;
   if(!inR(p.filter.reso,0,20)) return false;
   if(Array.isArray(p.osc)&&!p.osc.every(o=>inR(o.lvl,0,1.2))) return false;
+  /* round 9 (the court's attacker): the law stopped at fx/reso/lvl. Every
+     field spawnVoice hands an AudioParam is now ranged — a NaN attack or a
+     1e9 detune threw HALF-BUILT (oscillators started, never stopped, never
+     on the ledger); a wave named "constructor" hit a bare bracket lookup;
+     a tempo of −120 or an arpDefault of oct 1e9 froze the tab in the arp
+     scheduler's while-loop on the first key. */
+  if(p.cat.length>16||p.name.length>48) return false;
+  if(!inR(p.tempo,40,300)) return false;
+  if(!["a","d","r"].every(k=>inR(p.aEG[k],0,20)&&inR(p.fEG[k],0,20))) return false;
+  if(!inR(p.aEG.s,0,1)||!inR(p.fEG.s,0,1)) return false;
+  if(!inR(p.lfo.rate,0,40)||!opt(p.lfo.pitch,0,1200)||!opt(p.lfo.filter,0,12000)||!opt(p.lfo.amp,0,1)||!opt(p.lfo.delay,0,20)) return false;
+  if(!inR(p.filter.cutoff,20,20000)||!opt(p.filter.env,0,16000)||!opt(p.filter.key,0,2)||!opt(p.filter.vel,0,2)) return false;
+  if(typeof p.filter.type!=="string"||["lp12","lp24","bp"].indexOf(p.filter.type)<0) return false;
+  if(Array.isArray(p.osc)&&!p.osc.every(o=>o.w.length<=16&&opt(o.det,-1200,1200)&&opt(o.oct,-4,4))) return false;
+  if(Array.isArray(p.bell)&&!p.bell.every(b=>inR(b[0],.05,40)&&inR(b[1],0,1.2)&&inR(b[2],0,4))) return false;
+  if(p.tine!=null&&!(p.tine&&typeof p.tine==="object"&&inR(p.tine.ratio,.05,40)&&inR(p.tine.lvl,0,1.2))) return false;
+  if(!opt(p.strike,0,1.2)||!opt(p.click,0,1.2)||!opt(p.porta,0,5)) return false;
+  if(p.vox!=null&&p.vox!==true&&!(typeof p.vox==="object"&&p.vox&&inR(p.vox.f1,50,8000)&&inR(p.vox.f2,50,8000)&&opt(p.vox.wob,0,4000))) return false;
+  if(p.mono!=null&&typeof p.mono!=="boolean") return false;
+  if(p.arpDefault!=null){ const d=p.arpDefault;
+    if(!d||typeof d!=="object"||typeof d.on!=="boolean"||typeof d.latch!=="boolean") return false;
+    if(["UP","DOWN","ALT","RANDOM","CHORD","STRUM"].indexOf(d.patt)<0||["8","16","32"].indexOf(d.reso)<0) return false;
+    if(!inR(d.gate,.1,1)||!Number.isInteger(d.oct)||d.oct<1||d.oct>4) return false; }
   return true;
 }
 function bankParse(json){
@@ -2131,7 +2264,7 @@ function syncLeds(){
 /* ================= controls ================= */
 $$(".btn.mode").forEach(b=>b.addEventListener("click",()=>{
   if(!state.powered||state.test) return;
-  allNotesOff(); state.audition=false; state.write=false; state.mode=b.dataset.mode; state.page=0; state.editIdx=0;
+  allNotesOff(true); state.audition=false; state.write=false; state.mode=b.dataset.mode; state.page=0; state.editIdx=0;
   if(state.mode==="PROG") setProgram(state.progIdx);
   else if(state.mode==="COMBI") setCombi(state.combiIdx);
   else { syncLeds(); render(); }
@@ -2287,7 +2420,7 @@ window.addEventListener("keydown",e=>{
 });
 window.addEventListener("keyup",e=>{ const k=e.key.toLowerCase();
   if(k in KMAP){ cDown.delete(k); noteOff(state.kbBase+12+KMAP[k]); } });
-function shiftOct(d){ allNotesOff(); state.kbBase=Math.min(72,Math.max(24,state.kbBase+12*d)); buildKB(); }
+function shiftOct(d){ allNotesOff(true); state.kbBase=Math.min(72,Math.max(24,state.kbBase+12*d)); buildKB(); }
 $("#octDn").addEventListener("click",()=>shiftOct(-1));
 $("#octUp").addEventListener("click",()=>shiftOct(1));
 /* ================= tabs + circuit + inspector ================= */
@@ -2381,6 +2514,9 @@ function powerOff(){
   /* the tape pauses with the unit; the take stays saveable after reboot */
   if(typeof takeStop==="function") takeStop();
   if(typeof LDR!=="undefined") LDR.on=false;
+  /* round 9: the 40 ms tick used to notice the power-off — a MIDI note re-powering inside that window kept the song playing with the tape stopped */
+  if(typeof DREAM!=="undefined"&&DREAM.on&&typeof dreamStop==="function") dreamStop(true);
+  { const lb=document.getElementById("ldrStart"); if(lb) lb.textContent="▶ START"; }
   /* controller state does not survive a power cycle */
   SUS=false; SUSSET.clear(); BENDC=0; MODW=0; if(typeof OFFQ!=="undefined") OFFQ.length=0;
   allNotesOff(); state.arp.on=false;
@@ -2434,7 +2570,19 @@ function fit(){ const w=Math.min(document.documentElement.clientWidth,1000)-20;
   unit.style.transform="scale("+s+")";
   unitScale.style.width=(960*s)+"px"; unitScale.style.height=(270*s)+"px";
   const L=document.getElementById("ldru"), LS=document.getElementById("ldrScale");
-  if(L&&LS){ L.style.transform="scale("+s+")"; LS.style.width=(960*s)+"px"; LS.style.height=(540*s)+"px"; }
+  if(L&&LS){ L.style.transform="scale("+s+")"; LS.style.width=(960*s)+"px";
+    /* round 9: at phone scale the chip rows leave the scaled face (body.phone) */
+    const phone=s<.62; document.body.classList.toggle("phone",phone);
+    /* the save strip first (the doors are what a phone reaches for after SAVE),
+       the ★ rail under it: positions are design px, rendered heights are CSS px
+       (the transforms cancel), so the rail's top is the strip's bottom in design space */
+    const strip=["ldrSaveLbl","ldrPresets"].map(id=>document.getElementById(id)).filter(Boolean);
+    let extra=0, y=552;
+    strip.forEach(e=>{ if(phone){ e.style.transform="scale("+(1/s)+")"; e.style.transformOrigin="0 0"; e.style.width=(w+8)+"px";
+        e.style.top=y+"px"; y+=e.offsetHeight/s+10/s;
+        extra=Math.max(extra,e.offsetTop*s+e.offsetHeight-540*s+10); }
+      else { e.style.transform=""; e.style.transformOrigin=""; e.style.width=""; e.style.top=""; } });
+    LS.style.height=(540*s+(phone?Math.max(0,extra):0))+"px"; }
   const RK=document.getElementById("rackShelf"), RS=document.getElementById("rackScale");
   if(RK&&RS){ RK.style.transform="scale("+s+")"; RS.style.width=(960*s)+"px";
     RS.style.height=(RK.offsetHeight*s)+"px"; } }
@@ -2450,7 +2598,10 @@ function latMs(){ if(!ctx) return "—"; const t=(ctx.baseLatency||0)+(ctx.outpu
 /* ---- Web MIDI in: notes, bend, mod wheel, sustain pedal ---- */
 (function(){
   const statEl=document.getElementById("midiStat");
-  function stat(t){ if(statEl) statEl.textContent=t; }
+  function stat(t){ if(statEl) statEl.textContent=t;
+    /* round 9: the face's invitation learns when the browser cannot honour it */
+    const h=document.getElementById("ldrMidiHint");
+    if(h&&/not in this browser|blocked/i.test(t)) h.textContent="MIDI keys: "+(/blocked/i.test(t)?"permission blocked — allow it to play along":"not in this browser (Chrome/Edge have Web MIDI)"); }
   /* every hardware byte enters through onMsg; _midiInject drives the same wire
      (virtual keyboards, tests) — defined before the availability check so the
      wire exists even where Web MIDI doesn't */
@@ -2653,6 +2804,7 @@ let exporting=false;
 async function exportCurrent(){
   if(exporting) return;
   if(!state.powered) quickBoot(); /* the live graph must exist before the globals swap offline */
+  if(typeof transportStop==="function") transportStop(); /* round 9: the ring-36 law for every render — nothing rings over it, PLAY does not lie lit */
   exporting=true;
   const btn=document.getElementById("expBtn"), bar=document.getElementById("expBarI"), log=document.getElementById("expLog");
   btn.disabled=true; bar.style.width="0%";
@@ -3192,7 +3344,7 @@ function ldrVoiceP(id,f,i,vel,when,stepDur,kitIdx,baseVel,tag){
 function ldrWarm(ids){
   if(!ctx) return;
   const keys=[];
-  ids.forEach(a=>{ const rb=ldrBase(a), f=LDR_FIG[rb.id]; if(!f) return;
+  ids.forEach(a=>{ const rb=ldrBase(a); if(!Object.prototype.hasOwnProperty.call(LDR_FIG,rb.id)) return; const f=LDR_FIG[rb.id];
     f.hits.forEach((h,i)=>{ const r=ldrRoute(rb.id,f,i);
       if(r&&r.kind==="perc") LDR_LAYERS.forEach(L=>{
         const k=[r.name,L,r.pitch||1,r.mute||1].join("§");
@@ -3213,18 +3365,26 @@ function ldrLane(id,f,i){
   return ({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]!=null?({bell:11,support:2,lead:7,response:5,shaker:6})[f.role]:2;
 }
 function ldrHash(x){ const r=Math.sin(x*12.9898)*43758.5453; return r-Math.floor(r); }
-function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn,tag){
+function ldrPlayFig(id,f,rot,at,stepDur,scale,humFn,tag,opt){
+  /* round 9 (the court): the conductor's main figure obeyed the engine
+     room's LDR.kit/mode/engine/hum — a KEEP'd song with kit 62 replayed its
+     kick and snare on A015, and a MELODIC toggle rewrote every future song.
+     Conducted, the figure plays the song's kit in KIT mode and the dream's
+     own humanization; the Rhythm pane keeps its toggles for manual play. */
+  const conducted=!!(opt&&opt.conducted);
+  const kit=(opt&&opt.kit!=null)? opt.kit : LDR.kit;
+  const kitMode=conducted||LDR.mode==="KIT", physics=conducted||LDR.engine!=="kit", hum=!conducted&&LDR.hum;
   f.hits.forEach((h,i)=>{
     const pulse=(((h[0]+rot)%f.grid)+f.grid)%f.grid;
     const when=at+pulse*stepDur+(humFn?humFn(pulse):0);
     const baseVel=Math.max(.15,Math.min(1,h[1]*scale));
     let vel=baseVel;
     let jit=0;
-    if(LDR.hum){ vel=Math.max(.15,Math.min(1,vel+(ldrHash(pulse*7+LDR.bar*13+i)-.5)*.08));
+    if(hum){ vel=Math.max(.15,Math.min(1,vel+(ldrHash(pulse*7+LDR.bar*13+i)-.5)*.08));
       jit=(ldrHash(pulse*3+LDR.bar*29)-.5)*.01; }
-    if(LDR.mode==="KIT"){
-      if(LDR.engine!=="kit" && ldrVoiceP(id,f,i,vel,when+jit,stepDur,LDR.kit,baseVel,tag)) return;
-      spawnVoice(PROGRAMS[LDR.kit],48+ldrLane(id,f,i),vel,when+jit,null);
+    if(kitMode){
+      if(physics && ldrVoiceP(id,f,i,vel,when+jit,stepDur,kit,baseVel,tag)) return;
+      spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),vel,when+jit,null);
     } else {
       const held=(latchSet.size?[...latchSet]:(physSet.size?[...physSet]:[48,55,60,63])).sort((a,b)=>a-b);
       let n;
@@ -5755,6 +5915,35 @@ function ddBake(kit,slot,layer,sr){
 /* warm a kit's buffers OFF the hit path: the core hits (kick/snare/hats/clap
    at the middle layer) in the first slice, everything else two hits per
    macrotask — a hyphyK kick bakes ~1.5s of 808 and must never stall a bar */
+/* round 9 (the court's performance lens): the cold kick+snare slice blocked
+   the main thread 465 ms — past the conductor's 220 ms lookahead, so the bar
+   after tapping a DD drummer stumbled. The donor bakes in a Worker; so do
+   we now: the DD22 block is pure JS sliced verbatim from the donor, so its
+   own source text (read back from this page's script) IS the worker. The
+   main thread only wraps the returned samples in AudioBuffers. If the worker
+   cannot be made (a locked-down page) the bake falls back to the main thread,
+   one hit per macrotask. */
+let DD_WK=null, DD_WK_JOBS={}, DD_WK_ID=0, DD_WK_DEAD=false;
+function ddWorker(){
+  if(DD_WK||DD_WK_DEAD) return DD_WK;
+  try{
+    if(typeof Worker==="undefined"||typeof Blob==="undefined"||typeof document==="undefined") throw new Error("no worker");
+    let src=null;
+    document.querySelectorAll("script").forEach(el=>{ const t=el.textContent||""; const a=t.indexOf("/*DD22-BEGIN*/"), b=t.indexOf("/*DD22-END*/");
+      if(a>=0&&b>a) src=t.slice(a,b+12); });
+    if(!src) throw new Error("no DD22 source");
+    const code=src+"\nself.onmessage=function(e){ var j=e.data; try{ var h=DD22.renderHit(j.kit,j.slot,j.layer,j.sr);"+
+      " self.postMessage({id:j.id,L:h.L,R:h.R},[h.L.buffer,h.R.buffer]); }catch(ex){ self.postMessage({id:j.id,err:String(ex&&ex.message||ex)}); } };";
+    const url=URL.createObjectURL(new Blob([code],{type:"text/javascript"}));
+    DD_WK=new Worker(url);
+    DD_WK.onmessage=e=>{ const m=e.data, job=DD_WK_JOBS[m.id]; if(!job) return; delete DD_WK_JOBS[m.id];
+      if(m.err){ job.fail(m.err); return; }
+      DD_BUFS.set(job.key,{L:m.L,R:m.R}); job.ok(); };
+    DD_WK.onerror=ev=>{ const jobs=DD_WK_JOBS; DD_WK_JOBS={}; DD_WK_DEAD=true; try{ DD_WK.terminate(); }catch(_){ } DD_WK=null;
+      for(const id in jobs) jobs[id].fail("worker error"); };
+  }catch(_){ DD_WK_DEAD=true; DD_WK=null; }
+  return DD_WK;
+}
 function ddWarm(kit){
   if(!ctx||DD_KIT_NAMES.indexOf(kit)<0||typeof DD22==="undefined") return;
   const sr=ctx.sampleRate, st=DD_WARM[kit+"|"+sr]||(DD_WARM[kit+"|"+sr]={q:null,done:false});
@@ -5762,16 +5951,29 @@ function ddWarm(kit){
   st.q=[];
   [[0,.85],[1,.85],[2,.85],[3,.85],[4,.85]].forEach(([s,l])=>st.q.push([s,l]));
   for(let s=0;s<12;s++) DD_LAYERS.forEach(l=>{ if(!(s<5&&l===0.85)) st.q.push([s,l]); });
-  const tick=()=>{ let n=0;
-    while(st.q&&st.q.length&&n<2){ const [s,l]=st.q.shift(); ddBake(kit,s,l,sr); n++; }
-    if(st.q&&st.q.length) setTimeout(tick,0); else { st.done=true; st.q=null; } };
-  setTimeout(tick,0);
+  const finish=()=>{ st.done=true; st.q=null; };
+  const sync=()=>{ /* fallback: one hit per macrotask — never two cold ones in one task */
+    if(!st.q||!st.q.length){ finish(); return; }
+    const [s,l]=st.q.shift(); ddBake(kit,s,l,sr);
+    if(st.q&&st.q.length) setTimeout(sync,0); else finish(); };
+  const next=()=>{
+    if(!st.q||!st.q.length){ finish(); return; }
+    const wk=ddWorker(); if(!wk){ sync(); return; }
+    const [s,l]=st.q.shift(), key=ddKeyB(kit,s,l,sr);
+    if(DD_BUFS.has(key)){ next(); return; }
+    const id=++DD_WK_ID;
+    DD_WK_JOBS[id]={key,ok:next,fail:()=>{ /* bake this one here, carry on */ try{ ddBake(kit,s,l,sr); }catch(_){ } if(DD_WK_DEAD) sync(); else next(); }};
+    try{ wk.postMessage({id,kit,slot:s,layer:l,sr}); }catch(_){ delete DD_WK_JOBS[id]; DD_WK_DEAD=true; sync(); }
+  };
+  setTimeout(next,0);
 }
-function takeLogD(kit,zone,vel,when){
+function takeLogD(kit,zone,vel,when,layerVel){
   if(!TAKE.on) return;
   if(typeof exporting!=="undefined"&&exporting) return;
   const t=(when||0)-TAKE.t0; if(t<-0.05) return;
-  TAKE.ev.push({t:Math.max(0,t),role:"dd",kit,zone,vel,dur:0.12,tempo:state.tempo});
+  const e={t:Math.max(0,t),role:"dd",kit,zone,vel,dur:0.12,tempo:state.tempo};
+  if(layerVel!=null) e.layerVel=layerVel; /* the WRITTEN velocity picks the baked layer — the bounce must pick the same one (round 9) */
+  TAKE.ev.push(e);
   takeTrim();
 }
 function ddHit(kitName,zone,vel,when,o){
@@ -5789,7 +5991,7 @@ function ddHit(kitName,zone,vel,when,o){
   const pair=DD_BUFS.get(ddKeyB(kitName,slot,layer,sr));
   const t=Math.max(when,ctx.currentTime);
   if(zone===0&&vel>.5&&!o._g&&typeof mixDuck==="function") mixDuck(t,vel*.9); /* the kick keys the duck, like drumHit */
-  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogD==="function"&&!o._q) takeLogD(kitName,zone,vel,when);
+  if(typeof TAKE!=="undefined"&&TAKE.on&&typeof takeLogD==="function"&&!o._q) takeLogD(kitName,zone,vel,when,o.layerVel);
   if(!pair.buf||pair.sr!==sr){ const b=ctx.createBuffer(2,pair.L.length,sr);
     b.getChannelData(0).set(pair.L); b.getChannelData(1).set(pair.R); pair.buf=b; pair.sr=sr; }
   const src=ctx.createBufferSource(); src.buffer=pair.buf;
@@ -5899,8 +6101,14 @@ function presetValidate(e){
   if(p.name!=null&&(typeof p.name!=="string"||p.name.length>64)) return false;
   if(p.progName!=null&&(typeof p.progName!=="string"||p.progName.length>64)) return false;
   if(p.chordStyle!=null&&["pad","stab","counter"].indexOf(p.chordStyle)<0) return false;
-  if(!Array.isArray(p.comps)||p.comps.length>4||!p.comps.every(c=>typeof c==="string"&&c.length<40)) return false;
-  if(!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
+  /* comps are figure ids with an optional rotation ("bembe+3") — own keys
+     of LDR_FIG on the same grid as the figure (round 9: "constructor"
+     passed the string check and threw inside ldrWarm from PLAY) */
+  if(!Array.isArray(p.comps)||p.comps.length>4||!p.comps.every(c=>typeof c==="string"&&c.length<40&&
+    own(LDR_FIG,ldrBase(c).id)&&LDR_FIG[ldrBase(c).id].grid===LDR_FIG[p.fig].grid)) return false;
+  if(!Number.isInteger(p.kit)||!PROGRAMS[p.kit]||PROGRAMS[p.kit].cat!=="DRUMS") return false;
+  if(p.leadOct!=null&&!(Number.isInteger(p.leadOct)&&p.leadOct>=-24&&p.leadOct<=36)) return false;
+  if(p.extraKick!=null&&typeof p.extraKick!=="boolean") return false;
   if(![p.bass,p.chord,p.lead].every(i=>Number.isInteger(i)&&PROGRAMS[i])) return false;
   if(!own(SCALES,p.scale)) return false;
   if(!Number.isInteger(p.root)||p.root<24||p.root>72) return false;
@@ -6190,7 +6398,7 @@ function theoryRender(){
     if(n) n.textContent="key set \u00b7 changes next"; return; }
   const cells=theoryData(p);
   if(pn) pn.textContent=p.progName||"";
-  host.innerHTML=cells.map((c,i)=>'<div class="thCell" data-i="'+i+'"><b>'+c.roman+
+  host.innerHTML=cells.map((c,i)=>'<div class="thCell" data-i="'+i+'"><b>'+esc(c.roman)+
     '</b><span>'+c.name+'</span><small>'+c.tones+'</small></div>').join("");
 }
 function theoryNow(idx){
@@ -6327,7 +6535,7 @@ function bassMake(seed,an,grid){
 }
 
 const DREAM={on:false,seed:0,rng:Math.random,p:null,bar:0,chordBar:0,next:0,pans:null,
-  voic:null,hook:null,bcell:null,pending:null,_barLen:0,_barStart:0,_stepSec:.15};
+  voic:null,hook:null,bcell:null,pending:null,staged:null,_barLen:0,_barStart:0,_stepSec:.15};
 function sectFor(bar){
   const p=typeof DREAM!=="undefined"?DREAM.p:null;
   if(p&&p._building) return bar<1?"INTRO":"GROOVE"; /* auditioning: steady groove, nothing drops out under a try-on */
@@ -6370,6 +6578,10 @@ function ldrPlayFigK(id,f,rot,at,step,scale,kit,humFn,tag){
     spawnVoice(PROGRAMS[kit],48+ldrLane(id,f,i),vel,when,null); });
 }
 function dreamScheduleBar(at,f,step,barLen){
+  /* library phrases are written on 16 steps; under a 12-pulse drummer their
+     steps 12-15 landed in the NEXT bar on the old chord (round 9, the court).
+     They now keep their shape inside the bar: 4 steps per beat over 3 pulses. */
+  const stepM=barLen/16;
   const P=DREAM.p, rng=DREAM.rng, an=figAnalysis(f);
   /* every 64 bars, re-anchor the duck params: bounds the automation backlog
      of a long unbroken run without touching an audible transition (BREAK r3) */
@@ -6450,8 +6662,10 @@ function dreamScheduleBar(at,f,step,barLen){
           const root=Math.max(reg[0],Math.min(reg[1],(P.root||45)-12));
           const midi=Math.max(reg[0],Math.min(reg[1],root+e.note));
           const from=prev&&e.slide? Math.max(reg[0],Math.min(reg[1],root+prev.note)) : null;
-          ddSub(P.dkit,midi,hv(e.vel),at+p0*stepD,e.dur*stepD,
-            e.slide?e.slide*stepD:0,from);
+          if(!ddSub(P.dkit,midi,hv(e.vel),at+p0*stepD,e.dur*stepD,
+            e.slide?e.slide*stepD:0,from))
+            /* not baked yet (a fresh boot's first bar): the song's bass program covers the note, as kitZone covers a hit (round 9) */
+            spawnVoice(PROGRAMS[P.bass],midi,hv(e.vel)*.9,at+p0*stepD,Math.max(.08,e.dur*stepD),DREAM.pans.bass);
           prev=e;
         });
       }
@@ -6472,7 +6686,7 @@ function dreamScheduleBar(at,f,step,barLen){
       kitZone(P.kit,LDRP2KIT[e.lane],v,at+(e.step-off+e.dev)*step,wv);
     });
   } else {
-  ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK,"fig");
+  ldrPlayFig(P.fig,f,0,at,step,C.mainVel,humK,"fig",{kit:P.kit,conducted:true});
   if(C.comps){ P.comps.forEach(a=>{ const r=ldrBase(a), g=LDR_FIG[r.id];
     if(g&&g.grid===f.grid) ldrPlayFigK(r.id,g,r.rot,at,step,.82,P.kit,humC,"comp"); }); }
   if(P.extraKick&&f.grid===16&&sect!=="BREAK") [0,4,8,12].forEach(pl=>{
@@ -6509,7 +6723,7 @@ function dreamScheduleBar(at,f,step,barLen){
       note=Math.max(24,Math.min(46,note));
       const z=bandZ("bass",bt(p0),rng);
       spawnVoice(PROGRAMS[P.bass],note,hv(Math.max(.3,e.vel)*.95*z.gain),
-        at+p0*step+gfs(p0)+z.dt,Math.max(step,e.dur*step*.9),DREAM.pans.bass);
+        at+p0*stepM+gfs(p0)+z.dt,Math.max(stepM,e.dur*stepM*.9),DREAM.pans.bass);
     });
   } else if(C.bass>0&&!P.muteBass){
     if(!DREAM.bcell) DREAM.bcell=bassMake(P.bseed!=null?P.bseed:(DREAM.seed||1),an,f.grid);
@@ -6548,7 +6762,7 @@ function dreamScheduleBar(at,f,step,barLen){
         note=Math.max(P.root+2,Math.min(P.root+36,note));
         const zs=bandZ("chord",bt(p0),rng);
         spawnVoice(PROGRAMS[P.chord],note,hv(Math.max(.25,e.vel)*.62*zs.gain),
-          at+p0*step+gfs(p0)+zs.dt,Math.max(step*.9,e.dur*step),DREAM.pans.chord);
+          at+p0*stepM+gfs(p0)+zs.dt,Math.max(stepM*.9,e.dur*stepM),DREAM.pans.chord);
       });
       /* the chord itself only PIVOTS: one soft roll where the section turns */
       if(phraseBar%4===0&&DREAM.bar>=4){
@@ -6595,7 +6809,7 @@ function dreamScheduleBar(at,f,step,barLen){
           const note=Math.max(reg-10,Math.min(reg+31,reg+ldrpFitScale(e.deg,ivs)+(i===evs.length-1?lean:0)));
           const z=bandZ("lead",bt(p0),er);
           spawnVoice(PROGRAMS[P.lead],note,hv(Math.max(.28,e.vel)*.6*z.gain),
-            at+p0*step+gfs(p0)+z.dt,Math.max(step*.8,e.dur*step),DREAM.pans.lead);
+            at+p0*stepM+gfs(p0)+z.dt,Math.max(stepM*.8,e.dur*stepM),DREAM.pans.lead);
         });
       }
     }
@@ -6632,7 +6846,16 @@ setInterval(()=>{
   if(!DREAM.on) return;
   if(!state.powered||state.test){ dreamStop(true); return; }
   if(LDR.on||state.audition||state.arp.on){ dreamStop(); return; }
-  if(!DREAM.next||DREAM.next<ctx.currentTime) DREAM.next=ctx.currentTime+.08;
+  if(!DREAM.next||DREAM.next<ctx.currentTime){
+    const fresh=!DREAM.next; DREAM.next=ctx.currentTime+.08;
+    /* round 9: the tape's zero IS the first downbeat. takeStart stamped
+       t0 at the tap and the first bar landed a tick later, so every replay
+       of the same song carried a different 0-40 ms lead-in — the regrow
+       was exact in content and jittered in time. */
+    if(fresh&&typeof TAKE!=="undefined"&&TAKE.on&&!TAKE.ev.some(e=>e.role!=="mix")){
+      /* a fixed 100 ms lead-in: the human hand plays the downbeat up to a third of a step EARLY, and the tape drops what lands before its zero */
+      const t0=DREAM.next-.1; TAKE.ev.forEach(e=>{ e.t=0; }); TAKE.t0=t0; } /* the console stage logged at the tap rides to the tape's zero — the tap-to-tick gap must not reach the tape */
+  }
   while(DREAM.next<ctx.currentTime+.22){
     if(DREAM.pending){
       /* CONSUME FIRST (round 8): applyDream throwing left pending set, so the
@@ -6647,11 +6870,16 @@ setInterval(()=>{
     }
     const f=LDR_FIG[DREAM.p.fig]; if(!f){ dreamStop(); return; }
     const spb=60/state.tempo, step=f.grid===12? spb/3 : spb/4, barLen=f.grid*step;
-    dreamScheduleBar(DREAM.next,f,step,barLen);
+    /* round 9: a throw here used to leave DREAM.next behind the clock, and the
+       40 ms tick re-scheduled the SAME bar forever (ledger pinned, no music) */
+    try{ dreamScheduleBar(DREAM.next,f,step,barLen); }
+    catch(ex){ if(typeof console!=="undefined") console.error("DREAM:",ex);
+      flashRow("SONG WOULD NOT PLAY"); dreamStop(); return; }
     DREAM.next+=barLen; DREAM.bar++; DREAM.chordBar++;
   }
 },40);
 function applyDream(p,mid){
+  if(!Number.isInteger(p.leadOct)) p.leadOct=12; /* the conductor adds it to every lead note */
   DREAM.p=p; DREAM.seed=p._seed!=null? p._seed : DREAM.seed;
   if(typeof ldrWarm==="function") ldrWarm([p.fig].concat(p.comps||[]));
   DREAM.rng=mulberry(DREAM.seed||1);
@@ -6680,10 +6908,11 @@ function setPlayUI(on){
   }
 }
 function startWith(p,skipIntro){
-  if(state.test) return;
-  if(typeof exporting!=="undefined"&&exporting) return; /* the render owns the graph; PLAY waits (round 8) */
+  if(state.test) return false;
+  if(typeof exporting!=="undefined"&&exporting){ if(typeof setSaveUI==="function") setSaveUI("RENDERING — PLAY AFTER"); return false; } /* the render owns the graph; the tap is answered, not queued (round 9) */
   if(!state.powered) quickBoot();
   DREAM.pending=null; /* a fresh start supersedes any dice still queued (BREAK r3) */
+  DREAM.staged=null;  /* …and any song an address or a restored take staged for PLAY (round 9) */
   LDR.on=false; const lb=document.getElementById("ldrStart"); if(lb) lb.textContent="▶ START";
   state.audition=false; state.arp.on=false; if(typeof syncLeds==="function") syncLeds();
   if(p._seed==null) p._seed=(Date.now()%100000)|0;
@@ -6691,6 +6920,7 @@ function startWith(p,skipIntro){
   DREAM.next=0; DREAM.on=true; setPlayUI(true);
   takeStart(); /* a fresh take begins with the transport; dice mid-flight continues it */
   if(typeof mixAutoStage==="function") mixAutoStage(ctx?ctx.currentTime+.05:0);
+  return true;
 }
 /* ── THE BUILDER — the song avatar's state machine. Tap a card to hear it
    swap in on the bar; tap the lit card to keep it and the next trait deals
@@ -6718,8 +6948,9 @@ function deal(){
 function auditionCard(i){
   const c=BUILD.hand[i]; if(!c) return;
   const p=composeP(BUILD.kept,c,BUILD.stage); if(!p) return;
+  /* a start the transport refuses (render in progress, TEST mode) must not light a card the ear never heard (round 9) */
+  if(DREAM.on) DREAM.pending=p; else if(startWith(p,true)!==true) return;
   BUILD.live=i;
-  if(DREAM.on) DREAM.pending=p; else startWith(p,true);
   builderRender();
 }
 function keepCard(){
@@ -6762,7 +6993,7 @@ function builderRender(){
   }).join("");
   if(BUILD.stage===5){
     const nm=DREAM.p? esc(DREAM.p.name||"your track") : "your track";
-    row.innerHTML='<div class="hdone"><b>'+nm+'</b><span>your song is standing — ⤓ SAVE the take (WAV + MIDI) · ★ KEEP writes it into a copy of this file · tap any trait above to remix it live · play your MIDI keys over it</span></div>';
+    row.innerHTML='<div class="hdone"><b>'+nm+'</b><span>your song is standing — ⤓ SAVE the take (mix · score · session zip · link) · ★ KEEP writes it into a copy of this file · tap any trait above to remix it live · play your MIDI keys over it</span></div>';
     return;
   }
   row.innerHTML=BUILD.hand.map((c,i)=>{
@@ -6911,7 +7142,13 @@ function verbSet(p){
     else if(typeof cur!=="undefined"&&cur) applyFX();
   }
 }
-function dreamStart(){ builderStart(); }
+function dreamStart(){
+  /* a STAGED song — from a #address or a reloaded session with its take —
+     is what PLAY starts; it needs the gesture the boot never had (round 9) */
+  if(DREAM.staged&&!DREAM.on){ const p=DREAM.staged; DREAM.staged=null;
+    try{ startWith(p,true); }catch(ex){ if(typeof console!=="undefined") console.error("DREAM:",ex); notifyRow("SONG WOULD NOT LOAD"); dreamStop(true); }
+    return; }
+  builderStart(); }
 function dreamStop(silent){
   DREAM.on=false; DREAM.pending=null; setPlayUI(false);
   takeStop();
@@ -6925,7 +7162,10 @@ function dreamDice(){
      through the rail, so ROLL reopens the last trait there */
   if(BUILD.stage===5){ BUILD.stage=4; }
   deal();
-  if(DREAM.on&&BUILD.hand.length) auditionCard(0);
+  /* stage-4 hands are FORMATS verbatim — reopening the shape auditions the
+     KEPT card, not card 0 (ROLL used to flip an arc to loop, round 9) */
+  const i=(BUILD.stage===4&&BUILD.kept[4])? Math.max(0,BUILD.hand.indexOf(BUILD.kept[4])) : 0;
+  if(DREAM.on&&BUILD.hand.length) auditionCard(i);
 }
 /* ── THE TAKE: from the moment PLAY (or a figure) starts, everything the
       engines schedule AND everything the player performs — screen keys or a
@@ -6941,7 +7181,7 @@ var MIDI_GM_RECIPE={congaL:64,congaM:63,congaH:62,bongoL:61,bongoH:60,
   cowbell:56,clave:75,woodblk:76,guiro:74,cabasa:69,shaker:70,tamb:54,
   triangle:81,surdo:36,talking:79,dunL:41,dunM:45,dunS:47};
 /* GM preview programs per role — a DAW should sound sane before any plugin */
-var MIDI_GM_ROLE={you:0,bass:38,chord:89,lead:80};
+var MIDI_GM_ROLE={you:0,bass:38,dd8:38,chord:89,lead:80};
 function takeStart(){ if(!ctx) return; TAKE.gen++; TAKE.on=true; TAKE.t0=ctx.currentTime; TAKE.ev=[]; TAKE.open={};
   /* a fresh performance wipes the take the save doors were offering — the
      doors must go with it, or a later tap kills the live song to bounce a
@@ -6955,7 +7195,9 @@ function takeStop(){ TAKE.gen++; TAKE.on=false;
 function takeTrim(){ /* rolling cap: keep the last ~8 minutes / 40k events */
   if(TAKE.ev.length>40000) TAKE.ev.splice(0,TAKE.ev.length-30000);
   const last=TAKE.ev.length? TAKE.ev[TAKE.ev.length-1].t : 0;
-  if(last>480){ const cut=last-480;
+  /* hysteresis (round 9): past the 8-minute mark this rewrote the WHOLE take
+     on every logged event — trim once per 30 s of tape instead */
+  if(last>480+30){ const cut=last-480;
     /* a still-open hold must survive the trim: clamp its onset to the boundary
        so the object TAKE.open points at stays in TAKE.ev for its takeClose */
     const openSet=new Set();
@@ -6963,10 +7205,24 @@ function takeTrim(){ /* rolling cap: keep the last ~8 minutes / 40k events */
     TAKE.ev.forEach(e=>{ if(e.t<cut&&openSet.has(e)) e.t=cut; });
     TAKE.ev=TAKE.ev.filter(e=>e.t>=cut); TAKE.ev.forEach(e=>e.t-=cut); TAKE.t0+=cut; }
 }
+/* round 9 (the court): the tape logged the LIVE working program by reference —
+   a knob turned after a note was played rewrote that note in the bounce and
+   in take.json. An unedited program rides as the bank object (identity, so
+   the codec writes an index); an edited one rides as ONE frozen copy per edit
+   generation, so the tape carries the patch as it was heard. */
+let _frozenProg={src:null,obj:null};
+function takeProgFor(prog){
+  if(typeof cur==="undefined"||prog!==cur) return prog;
+  const src=JSON.stringify(prog);
+  const stock=(typeof state!=="undefined"&&state.userSlot==null)? PROGRAMS[state.progIdx] : null;
+  if(stock&&JSON.stringify(stock)===src) return stock;
+  if(_frozenProg.src!==src) _frozenProg={src,obj:JSON.parse(src)};
+  return _frozenProg.obj;
+}
 function takeLog(prog,note,vel,when,dur,dest){
-  if(!TAKE.on) return;
-  if(typeof exporting!=="undefined"&&exporting) return; /* the bounce replays — never re-log */
-  const t=(when||0)-TAKE.t0; if(t<-0.05) return;
+  if(!TAKE.on) return null;
+  if(typeof exporting!=="undefined"&&exporting) return null; /* the bounce replays — never re-log */
+  const t=(when||0)-TAKE.t0; if(t<-0.05) return null;
   let role="you";
   if(prog&&prog.cat==="DRUMS") role="kit";
   else if(typeof DREAM!=="undefined"&&DREAM.pans){
@@ -6974,10 +7230,19 @@ function takeLog(prog,note,vel,when,dur,dest){
     else if(dest===DREAM.pans.chord) role="chord";
     else if(dest===DREAM.pans.lead) role="lead";
   }
-  const e={t:Math.max(0,t),role,prog,note,vel,dur:dur!=null?dur:(role==="kit"?0.12:null),tempo:state.tempo};
+  const e={t:Math.max(0,t),role,prog:takeProgFor(prog),note,vel,dur:dur!=null?dur:(role==="kit"?0.12:null),tempo:state.tempo};
   TAKE.ev.push(e);
   if(e.dur==null){ (TAKE.open[note]=TAKE.open[note]||[]).push(e); } /* human hold — patched on release */
   takeTrim();
+  return e;
+}
+/* round 9 (the court): a hold is closed by the VOICE that carried it. Keyed by
+   note number, a COMBI's layers (one voice per timbre, transposed) closed one
+   layer per release and rang until STOP in the bounce, the score and take.json. */
+function takeCloseEv(e){
+  if(!ctx||!e||e.dur!=null) return;
+  e.dur=Math.max(.05,ctx.currentTime-TAKE.t0-e.t);
+  const l=TAKE.open[e.note]; if(l){ const i=l.indexOf(e); if(i>=0) l.splice(i,1); if(!l.length) delete TAKE.open[e.note]; }
 }
 function takeLogP(name,vel,when,o){
   if(!TAKE.on) return;
@@ -7002,6 +7267,76 @@ function takeLogMix(when,s){
   TAKE.ev.push({t:Math.max(0,t),role:"mix",s,tempo:state.tempo,dur:0});
   takeTrim();
 }
+/*TAKE-CODEC-BEGIN*/
+/* ── THE TAKE IN THE ZIP (round 9): a session zip carries the PERFORMANCE,
+   not only the world that regrows. take.json is the take log in a file
+   shape — programs by bank index (a foreign Bank-B program rides inline and
+   must pass the same range law an imported bank does), every field the
+   bounce replays, nothing else. LOAD restores it as a STOPPED take: the
+   doors reopen on the performance (bounce it again at another VERB, pull a
+   stem you did not pull), and PLAY regrows the song fresh, wiping the take
+   exactly as any new performance does (the round-8 law). ── */
+const TAKE_ROLES=["you","bass","chord","lead","kit","perc","dd","dd8","mix"];
+const TAKE_MAX_EV=40000, TAKE_MAX_SEC=600;
+function takeSerialize(evs){
+  const out=[];
+  (evs||[]).forEach(e=>{
+    if(!e||TAKE_ROLES.indexOf(e.role)<0) return;
+    const o={t:+(+e.t).toFixed(4),role:e.role};
+    if(typeof e.tempo==="number") o.tempo=e.tempo;
+    if(e.dur!=null) o.dur=+(+e.dur).toFixed(4);
+    if(e.role==="mix"){ if(!e.s) return; o.s={bass:e.s.bass,chord:e.s.chord,lead:e.s.lead,lim:e.s.lim}; }
+    else if(e.role==="dd"){ o.kit=e.kit; o.zone=e.zone; o.vel=e.vel; if(e.layerVel!=null) o.layerVel=e.layerVel; }
+    else if(e.role==="dd8"){ o.kit=e.kit; o.note=e.note; o.vel=e.vel; o.slide=e.slide||0; if(e.from!=null) o.from=e.from; }
+    else if(e.role==="perc"){ o.name=e.name; o.vel=e.vel;
+      if(e.pitch!=null) o.pitch=e.pitch; if(e.mute!=null) o.mute=e.mute; if(e.layerVel!=null) o.layerVel=e.layerVel; }
+    else { const i=PROGRAMS.indexOf(e.prog); if(i>=0) o.pi=i; else if(e.prog) o.p=e.prog; else return;
+      o.note=e.note; o.vel=e.vel; }
+    out.push(o);
+  });
+  return {v:1,n:out.length,ev:out};
+}
+/* the hostile-file gate for a take: every field ranged, every reference
+   resolved INTO this file, a bounded length (a 3600 s take would ask the
+   offline render for a 700 MB buffer). Returns the events or null. */
+function takeDeserialize(o){
+  if(!o||typeof o!=="object"||o.v!==1||!Array.isArray(o.ev)) return null;
+  if(o.ev.length>TAKE_MAX_EV) return null;
+  const num=(v,a,b)=>typeof v==="number"&&isFinite(v)&&v>=a&&v<=b;
+  const int=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b;
+  const own=(ob,k)=>typeof k==="string"&&Object.prototype.hasOwnProperty.call(ob,k);
+  const out=[];
+  for(let i=0;i<o.ev.length;i++){ const e=o.ev[i];
+    if(!e||typeof e!=="object"||TAKE_ROLES.indexOf(e.role)<0) return null;
+    if(!num(e.t,0,TAKE_MAX_SEC)) return null;
+    const r={t:e.t,role:e.role,tempo:num(e.tempo,40,300)?e.tempo:100,
+      dur:num(e.dur,0,60)?e.dur:(e.role==="mix"?0:e.role==="kit"||e.role==="perc"||e.role==="dd"?0.12:0.3)};
+    if(e.role==="mix"){ const st=e.s; if(!st||typeof st!=="object") return null;
+      if(!["bass","chord","lead","lim"].every(k=>num(st[k],0,1.5))) return null;
+      r.s={bass:st.bass,chord:st.chord,lead:st.lead,lim:st.lim}; }
+    else if(e.role==="dd"){
+      if(typeof e.kit!=="string"||DD_KIT_NAMES.indexOf(e.kit)<0||!int(e.zone,0,11)||!num(e.vel,0,1.5)) return null;
+      r.kit=e.kit; r.zone=e.zone; r.vel=e.vel; if(num(e.layerVel,0,1.5)) r.layerVel=e.layerVel; }
+    else if(e.role==="dd8"){
+      if(typeof e.kit!=="string"||DD_KIT_NAMES.indexOf(e.kit)<0||!int(e.note,0,127)||!num(e.vel,0,1.5)) return null;
+      r.kit=e.kit; r.note=e.note; r.vel=e.vel; r.slide=num(e.slide,0,10)?e.slide:0;
+      if(int(e.from,0,127)) r.from=e.from; }
+    else if(e.role==="perc"){
+      if(!own(LDR_RECIPE,e.name)||!num(e.vel,0,1.5)) return null;
+      r.name=e.name; r.vel=e.vel; r.pitch=num(e.pitch,.25,4)?e.pitch:1; r.mute=num(e.mute,0,1)?e.mute:1;
+      if(num(e.layerVel,0,1.5)) r.layerVel=e.layerVel; }
+    else { let prog=null;
+      if(int(e.pi,0,PROGRAMS.length-1)) prog=PROGRAMS[e.pi];
+      else if(e.p&&typeof e.p==="object"&&progValidate(e.p)) prog=JSON.parse(JSON.stringify(e.p));
+      if(!prog||!int(e.note,0,127)||!num(e.vel,0,1.5)) return null;
+      if(e.role==="kit"&&prog.cat!=="DRUMS") return null;
+      r.prog=prog; r.note=e.note; r.vel=e.vel; }
+    out.push(r);
+  }
+  out.sort((a,b)=>a.t-b.t);
+  return out;
+}
+/*TAKE-CODEC-END*/
 /* the take as writer-ready MIDI events: role → channel, drums → GM notes */
 function takeToMidiEvents(evs){
   const CH={you:0,bass:1,chord:2,lead:3,kit:9,perc:9,dd:9,dd8:1};
@@ -7108,13 +7443,15 @@ function saveChips(){
     (SAVE_OUT.wavUrl? '<a class="dlchip" download="'+SAVE_OUT.name+'.wav" href="'+SAVE_OUT.wavUrl+'">⤓ WAV</a> ' : "")+
     (SAVE_OUT.midUrl? '<a class="dlchip" download="'+SAVE_OUT.name+'.mid" href="'+SAVE_OUT.midUrl+'">⤓ MIDI</a> ' : "")+
     (SAVE_OUT.zipUrl? '<a class="dlchip" download="'+SAVE_OUT.name+'-session.zip" href="'+SAVE_OUT.zipUrl+'">⤓ ZIP</a>' : "");
+  if(typeof phoneFit==="function") phoneFit();
 }
 function setSaveUI(t){
   const e=document.getElementById("ldrSaveLbl");
   if(e){ if(!t&&SAVE_OUT&&typeof saveChips==="function") saveChips(); /* a clear falls back to the last bounce's chips */
     else e.textContent=t||""; }
+  if(typeof phoneFit==="function") phoneFit();
   ["fabSave","ldrSave"].forEach(id=>{ const b=document.getElementById(id);
-    if(b) b.classList.toggle("busy",!!t&&t.indexOf("RENDER")===0); });
+    if(b) b.classList.toggle("busy",!!t&&typeof exporting!=="undefined"&&exporting); }); /* round 9: 'MIX 40%' and 'SESSION… 12s' are renders too */
 }
 function _graphSnap(){ return {ctx,master,sum,analyser,progBus,shaper,dWet,dDry,post,
   cSend,dSend,rSend,chIn,dlyIn,dlyL,dlyR,fbA,fbB,convo,noiseBuf,WAVES,MIX,
@@ -7154,14 +7491,20 @@ function saveMenu(){
   if(typeof exporting!=="undefined"&&exporting) return;
   transportStop();                     /* the donor's law, made ours: nothing rings over a render */
   if(!ctx||!TAKE.ev.length){ setSaveUI("NOTHING TO SAVE — PRESS PLAY"); setTimeout(()=>setSaveUI(""),1800); return; }
+  doorsRender();
+}
+function doorsRender(){
   const e=document.getElementById("ldrSaveLbl"); if(!e) return;
   e.innerHTML='SAVE — <a class="dlchip" id="svMix" title="the mix — one WAV">MIX</a>'+
     '<a class="dlchip" id="svScore" title="the score — MIDI, instant">SCORE</a>'+
-    '<a class="dlchip" id="svSession" title="stems + mix + score + project.json, one reloadable zip">SESSION</a>';
+    '<a class="dlchip" id="svSession" title="stems + mix + score + take + project.json, one reloadable zip">SESSION</a>'+
+    '<a class="dlchip" id="svLink" title="the song\u2019s address — a URL that regrows it anywhere">LINK</a>';
   const on=(id,fn)=>{ const b=document.getElementById(id); if(b) b.addEventListener("click",fn); };
   on("svMix",()=>exportTake("mix"));
   on("svScore",saveScoreOnly);
   on("svSession",()=>exportTake("session"));
+  on("svLink",shareLink);
+  if(typeof phoneFit==="function") phoneFit();
 }
 /* THE SCORE: the take as SMF-1, no render needed — instant, like the donor */
 function saveScoreOnly(){
@@ -7211,21 +7554,15 @@ function duckKeysFor(evs){
 }
 /* one offline pass over a set of take events; label maps into [pct0,pct1].
    keys = the take's duck automation, applied identically in every pass */
+const RENDER_WIN=4; /* seconds of take instantiated per render-clock checkpoint (round 9) */
 async function renderPass(evs,label,pct0,pct1,keys,fxProg){
-  const end=evs.reduce((a,e)=>Math.max(a,e.t+(e.dur||0)),0)+2.5;
+  const end=evs.reduce((a,e)=>Math.max(a,e.t+(e.dur||0)+((e.prog&&e.prog.aEG)? Math.min(6,Math.max(.03,e.prog.aEG.r)*2) : 0)),0)+2.6;
   const sr=ctx.sampleRate;
   const S=_graphSnap();
   let buf=null, err=null;
   try{
     const oc=new OfflineAudioContext(2,Math.max(sr,Math.ceil(end*sr)),sr);
-    /* percent progress, the donor's way: checkpoint the render clock.
-       Registered BEFORE rendering starts; a platform that refuses suspend
-       falls back to the elapsed-seconds ticker in exportTake. */
-    for(let k=1;k<10;k++){
-      const tt=(oc.length/sr)*k/10;
-      try{ oc.suspend(tt).then(()=>{ setSaveUI(label+" "+Math.round(pct0+(pct1-pct0)*k/10)+"%"); oc.resume(); }).catch(()=>{}); }
-      catch(_){ break; }
-    }
+    const len=oc.length/sr;
     ctx=oc; buildGraph();
     /* the program is PINNED at export start: a browse mid-render used to
        change which FX every later pass was rendered through (round 8) */
@@ -7238,10 +7575,21 @@ async function renderPass(evs,label,pct0,pct1,keys,fxProg){
       if(n.pan) n.pan.value=p;
       n.connect((MIX&&MIX._ctx===ctx&&MIX[role])? MIX[role].in : progBus); return n; };
     const pans={bass:mk(0,"bass"),chord:mk(-.24,"chord"),lead:mk(.24,"lead")};
-    for(let i=0;i<evs.length;i++){
-      const e=evs[i];
-      if(e.role==="mix"){ if(typeof mixApplyStage==="function") mixApplyStage(e.s,e.t); }
-      else if(e.role==="dd"){ ddHit(e.kit,e.zone,e.vel,e.t,{_q:1}); } /* the kick keys the duck inside ddHit, exactly like the room */
+    /* round 9 (the court's performance lens): every voice of the take used to
+       be instantiated BEFORE startRendering — an unstarted voice still costs
+       the renderer about a third of a sounding one, so an 8-minute take
+       rendered at ~1× realtime with the instrument locked. Voices are now
+       instantiated in WINDOWS at the render clock's own checkpoints
+       (oc.suspend — the same checkpoints that carry the percent label), so
+       the graph only ever holds the voices of the next few seconds. Param
+       automation (the duck keys, the console stages) is cheap and goes in up
+       front. A platform that refuses suspend gets the whole take up front and
+       the elapsed-seconds ticker, as before. */
+    evs.forEach(e=>{ if(e.role==="mix"&&typeof mixApplyStage==="function") mixApplyStage(e.s,e.t); });
+    const sorted=evs.filter(e=>e.role!=="mix").sort((a,b)=>a.t-b.t);
+    let idx=0;
+    const playEv=e=>{
+      if(e.role==="dd"){ ddHit(e.kit,e.zone,e.vel,e.t,{_q:1,layerVel:e.layerVel}); } /* the kick keys the duck inside ddHit, exactly like the room; the layer follows the written velocity (round 9) */
       else if(e.role==="dd8"){ ddSub(e.kit,e.note,e.vel,e.t,e.dur,e.slide,e.from!=null?e.from:null,{_q:1}); }
       else if(e.role==="perc"){
         /* _g suppresses the duck (it marks grace notes) — the bounce must
@@ -7252,10 +7600,19 @@ async function renderPass(evs,label,pct0,pct1,keys,fxProg){
       }
       else spawnVoice(e.prog||cur||PROGRAMS[0],e.note,e.vel,e.t,e.dur,
         e.role==="bass"?pans.bass:e.role==="chord"?pans.chord:e.role==="lead"?pans.lead:null);
-      /* a long take is >100k nodes — yield so the page never hard-freezes
-         (the entry-point export gates keep stray input off the swapped graph) */
-      if((i&1023)===1023) await new Promise(r=>setTimeout(r,0));
+    };
+    const schedUpTo=tEnd=>{ while(idx<sorted.length&&sorted[idx].t<tEnd) playEv(sorted[idx++]); };
+    const WIN=RENDER_WIN; let lazy=true;
+    for(let tt=WIN; tt<len; tt+=WIN){ const t0=tt;
+      try{ oc.suspend(t0).then(()=>{
+          try{ schedUpTo(t0+WIN+.25); }catch(ex){ err=ex; }
+          setSaveUI(label+" "+Math.round(pct0+(pct1-pct0)*t0/len)+"%"); oc.resume(); }).catch(()=>{}); }
+      catch(_){ lazy=false; break; }
     }
+    /* the first window before the clock starts — the whole take if suspend is refused;
+       a long take is >100k nodes, so yield so the page never hard-freezes */
+    const first=lazy? WIN+.25 : Infinity;
+    for(let n=0; idx<sorted.length&&sorted[idx].t<first; n++){ playEv(sorted[idx++]); if((n&1023)===1023) await new Promise(r=>setTimeout(r,0)); }
     buf=await oc.startRendering();
   }catch(ex){ err=ex; }
   finally{ DUCK_MUTE=false; _graphRestore(S); }
@@ -7351,6 +7708,10 @@ async function exportTake(kind){
         if(mid) files.push({name:"take.mid",data:mid});
         files.push({name:"project.json",
           data:new TextEncoder().encode(JSON.stringify(projectEntries()))});
+        /* round 9: the performance itself rides along, so the zip reloads
+           as a take the doors can bounce again — not only as a regrowable world */
+        files.push({name:"take.json",
+          data:new TextEncoder().encode(JSON.stringify(takeSerialize(evs)))});
         zipBlob=zipStore(files);
       }
     } else {
@@ -7412,21 +7773,21 @@ function presetRender(){
   const host=document.getElementById("ldrPresets"); if(!host) return;
   host.innerHTML=PRESETS.map((e,i)=>'<button class="pchip4" data-k="'+i+'">★ '+esc(e.name)+'</button>').join("")+
     '<button class="pchip4" id="ldrLoad" title="reload a saved session zip or project.json">⤒ LOAD</button>';
+  phoneFit();
 }
+/* at phone scale the chip strip lives below the face; its box follows its content */
+function phoneFit(){ if(typeof document!=="undefined"&&document.body&&document.body.classList.contains("phone")&&typeof fit==="function") fit(); }
 /* ── LOAD (round 8): the session zip comes back. Reads project.json out of
    a session zip (or a bare project.json), passes it through the SAME
    hostile-file gate as the serialized presets (presetParse/presetValidate),
    merges into the ★ rail, and stands the first song up through the exact
    preset chip-tap path. The song regrows from its seed — the reloadable
    project the donor's #address promises, as a file. ── */
-function projectApply(entries){
-  /* the file READ is async — a render may have started since the picker */
-  if(typeof exporting!=="undefined"&&exporting){ notifyRow("RENDERING — LOAD AGAIN AFTER"); return false; }
-  if(!entries||!entries.length){ notifyRow("NO PROJECT IN FILE"); return false; }
-  /* NON-DESTRUCTIVE (round 8): the rail's own songs live only in the user's
-     saved copy of this file — a loaded project must never evict them. New
-     entries fill the room that is left; the rest are counted, not silently
-     dropped. The first entry PLAYS either way. */
+/* NON-DESTRUCTIVE (round 8): the rail's own songs live only in the user's
+   saved copy of this file — a loaded project must never evict them. New
+   entries fill the room that is left; the rest are counted, not silently
+   dropped. Shared by LOAD and the #address (round 9). */
+function railMerge(entries){
   const fresh=entries.filter(en=>!PRESETS.some(o=>o.seed===en.seed&&o.name===en.name));
   const room=Math.max(0,8-PRESETS.length);
   const took=fresh.slice(0,room);
@@ -7434,16 +7795,45 @@ function projectApply(entries){
   const live=document.getElementById("tritonPresets");
   if(live) live.textContent=JSON.stringify(PRESETS).replace(/</g,"\\u003c");
   presetRender();
+  return fresh.length-took.length; /* how many did not fit */
+}
+function projectApply(entries,take){
+  /* the file READ is async — a render may have started since the picker */
+  if(typeof exporting!=="undefined"&&exporting){ notifyRow("RENDERING — LOAD AGAIN AFTER"); return false; }
+  if(!entries||!entries.length){ notifyRow("NO PROJECT IN FILE"); return false; }
+  const unpinned=railMerge(entries);
   const en=entries[0];
   let p;
   try{ p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed; }
   catch(_){ notifyRow("NO PROJECT IN FILE"); return false; }
-  if(DREAM.on) DREAM.pending=p; else startWith(p,true);
+  /* with its take, a session comes back STOPPED, doors open on the
+     performance; without one the first entry PLAYS, as before */
+  const restored=(take&&take.length)? takeRestore(p,take) : false;
+  if(!restored){ if(DREAM.on) DREAM.pending=p; else startWith(p,true); }
   try{ if(typeof keptFromP==="function") keptFromP(p,en.seed); }
   catch(ex){ if(typeof console!=="undefined") console.error("LOAD:",ex); }
   const short=(en.name||"").slice(0,32);
-  notifyRow("PROJECT LOADED — "+short.toUpperCase()+
-    (fresh.length>took.length? " (RAIL FULL — "+(fresh.length-took.length)+" NOT PINNED)" : ""));
+  const msg=(restored? "TAKE RESTORED — " : "PROJECT LOADED — ")+short.toUpperCase()+
+    (restored? " · SAVE BOUNCES IT · PLAY REGROWS" : "")+
+    (unpinned? " (RAIL FULL — "+unpinned+" NOT PINNED)" : "");
+  if(restored){ flashRow(msg); saveMenu(); } else notifyRow(msg); /* the doors ARE the restore's label */
+  return true;
+}
+/* the performance comes back as a stopped take under its own song's console:
+   FX program, verb, tempo and pans applied (applyDream without the transport),
+   the take on the tape, the doors open. PLAY starts the STAGED song fresh. */
+function takeRestore(p,take){
+  if(typeof exporting!=="undefined"&&exporting) return false;
+  if(!state.powered) quickBoot();
+  if(!ctx) return false;
+  transportStop();
+  try{ applyDream(p,true); }catch(ex){ if(typeof console!=="undefined") console.error("LOAD:",ex); return false; }
+  DREAM.staged=p;
+  take.forEach(e=>{ if((e.role==="dd"||e.role==="dd8")&&typeof ddWarm==="function") ddWarm(e.kit); });
+  TAKE.gen++; TAKE.on=false; TAKE.open={}; TAKE.t0=0;
+  TAKE.ev=take.map(e=>Object.assign({},e));
+  /* a stale bounce must not wear the restored take's chips */
+  if(SAVE_OUT){ try{ ["wavUrl","midUrl","zipUrl"].forEach(k=>{ if(SAVE_OUT[k]) URL.revokeObjectURL(SAVE_OUT[k]); }); }catch(_){ } SAVE_OUT=null; }
   return true;
 }
 function projectLoad(file){
@@ -7452,19 +7842,110 @@ function projectLoad(file){
   rd.onload=()=>{
     try{
       const u8=new Uint8Array(rd.result);
-      let txt=null;
+      let txt=null, take=null;
       if(u8.length>4&&u8[0]===0x50&&u8[1]===0x4b){          /* PK — a zip */
         const files=zipReadStore(u8);
         const key=files&&Object.keys(files).find(k=>k==="project.json"||k.endsWith("/project.json"));
         if(key) txt=new TextDecoder().decode(files[key]);
+        /* round 9: the take rides back too — bounded before it is parsed */
+        const tk=files&&Object.keys(files).find(k=>k==="take.json"||k.endsWith("/take.json"));
+        if(tk&&files[tk].length<=8e6){
+          try{ take=takeDeserialize(JSON.parse(new TextDecoder().decode(files[tk]))); }catch(_){ take=null; } }
       } else txt=new TextDecoder().decode(u8);
-      projectApply(txt? presetParse(txt) : []);
+      projectApply(txt? presetParse(txt) : [], take);
     }catch(ex){ if(typeof console!=="undefined") console.error("LOAD:",ex);
       notifyRow("NO PROJECT IN FILE"); }
   };
   rd.onerror=()=>notifyRow("COULD NOT READ THAT FILE");
   rd.readAsArrayBuffer(file);
 }
+/*ADDR-BEGIN*/
+/* ── THE ADDRESS (round 9): the donor's #address, for a song. The URL hash
+   carries the song in the PRESET LAW's own shape — the same JSON the
+   presets tag and project.json carry — deflated and base64url'd, and it
+   boots through the same hostile-file gate (presetParse → presetValidate).
+   One schema, one validator, one door; a hand-packed base36 codec would be
+   a second format to keep honest, which ring 36 banned for the zip. The
+   boot has no gesture, so an address STAGES the song and PLAY starts it. ── */
+const ADDR_MAX=65536, ADDR_INFLATE_MAX=262144;
+let ADDR_SET=null; /* the hash this page itself wrote — not a load */
+function b64uEnc(u8){ let b=""; for(let i=0;i<u8.length;i++) b+=String.fromCharCode(u8[i]);
+  return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64uDec(str){
+  if(typeof str!=="string"||!str.length||/[^A-Za-z0-9_-]/.test(str)||str.length%4===1) return null;
+  const b64=str.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-str.length%4)%4);
+  try{ const b=atob(b64), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+  catch(_){ return null; } }
+/* bytes through a Compression/DecompressionStream, capped: an inflate bomb
+   in a URL stops at the cap instead of filling the tab */
+async function bytesThrough(u8,stream,cap){
+  const w=stream.writable.getWriter();
+  w.write(u8).catch(()=>{}); w.close().catch(()=>{});
+  const rd=stream.readable.getReader(); const parts=[]; let n=0;
+  for(;;){ const {value,done}=await rd.read(); if(done) break;
+    n+=value.length; if(n>cap){ try{ rd.cancel(); }catch(_){ } return null; } parts.push(value); }
+  const out=new Uint8Array(n); let o=0; parts.forEach(p=>{ out.set(p,o); o+=p.length; }); return out;
+}
+async function addrEncode(entries){
+  const json=new TextEncoder().encode(JSON.stringify(entries));
+  if(typeof CompressionStream==="function"){
+    try{ const z=await bytesThrough(json,new CompressionStream("deflate"),1<<24); if(z) return "p="+b64uEnc(z); }catch(_){ }
+  }
+  return "j="+b64uEnc(json); /* a browser without the stream still gets an address */
+}
+async function addrDecode(hash){
+  const h=String(hash||"").replace(/^#/,"");
+  if(h.length<3||h.length>ADDR_MAX) return [];
+  const kind=h.slice(0,2);
+  if(kind!=="p="&&kind!=="j=") return [];
+  const u8=b64uDec(h.slice(2)); if(!u8) return [];
+  let raw=u8;
+  if(kind==="p="){
+    if(typeof DecompressionStream!=="function") return [];
+    try{ raw=await bytesThrough(u8,new DecompressionStream("deflate"),ADDR_INFLATE_MAX); }catch(_){ return []; }
+    if(!raw) return [];
+  }
+  let txt; try{ txt=new TextDecoder("utf-8",{fatal:true}).decode(raw); }catch(_){ return []; }
+  return presetParse(txt); /* the gate the presets tag and project.json pass through */
+}
+/* an address stands a song on the rail and STAGES it: the boot has no
+   gesture, so PLAY starts it; mid-performance it hands off on the bar */
+function addrStage(entries){
+  if(typeof exporting!=="undefined"&&exporting) return false;
+  if(!entries||!entries.length) return false;
+  const unpinned=railMerge(entries);
+  const en=entries[0]; let p;
+  try{ p=JSON.parse(JSON.stringify(en.p)); p._seed=en.seed; }catch(_){ return false; }
+  if(DREAM.on) DREAM.pending=p; else DREAM.staged=p;
+  try{ if(typeof keptFromP==="function") keptFromP(p,en.seed); }
+  catch(ex){ if(typeof console!=="undefined") console.error("ADDRESS:",ex); }
+  notifyRow("ADDRESS LOADED — "+(en.name||"").slice(0,32).toUpperCase()+(DREAM.on?" · ON THE BAR":" · PRESS ▶ PLAY")+
+    (unpinned? " (RAIL FULL)":""));
+  return true;
+}
+function addrBoot(){
+  if(typeof location==="undefined") return;
+  const h=location.hash||"";
+  if(!/^#(p|j)=/.test(h)||h===ADDR_SET) return;
+  addrDecode(h).then(ents=>{ if(!addrStage(ents)) notifyRow("ADDRESS DID NOT LOAD"); })
+    .catch(()=>notifyRow("ADDRESS DID NOT LOAD"));
+}
+/* THE LINK DOOR: this song's address into the URL bar (and the clipboard
+   when the browser allows it) — the donor's crown feature, for a song */
+async function shareLink(){
+  if(typeof exporting!=="undefined"&&exporting) return;
+  const ents=projectEntries();
+  if(!ents.length){ setSaveUI("PLAY FIRST — NOTHING TO LINK"); setTimeout(()=>setSaveUI(""),1800); return; }
+  let addr; try{ addr=await addrEncode([ents[0]]); }catch(_){ setSaveUI("ADDRESS FAILED"); setTimeout(()=>setSaveUI(""),1800); return; }
+  ADDR_SET="#"+addr;
+  try{ history.replaceState(null,"","#"+addr); }catch(_){ try{ location.hash=addr; }catch(__){ } }
+  let copied=false;
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(String(location.href)); copied=true; } }catch(_){ }
+  const e=document.getElementById("ldrSaveLbl");
+  if(e) e.textContent="ADDRESS "+(copied?"COPIED · ":"")+"IN THE URL BAR — "+addr.length+" CHARS · SAVE FOR THE DOORS";
+  flashRow(copied? "ADDRESS COPIED — THE URL REGROWS THIS SONG" : "ADDRESS IN THE URL BAR — COPY IT TO SHARE");
+}
+/*ADDR-END*/
 function presetInit(){
   const tag=document.getElementById("tritonPresets");
   PRESETS=tag? presetParse(tag.textContent||"[]") : [];
@@ -7479,7 +7960,7 @@ function presetInit(){
       /* mid-performance a chip hands off on the bar line — the direct start
          wiped the rolling take (BREAK r3, same law as the figure chips) */
       if(DREAM.on) DREAM.pending=p;
-      else startWith(p,true);
+      else { try{ startWith(p,true); }catch(ex){ if(typeof console!=="undefined") console.error("DREAM:",ex); notifyRow("SONG WOULD NOT LOAD"); dreamStop(true); return; } }
       if(typeof keptFromP==="function") keptFromP(p,en.seed); /* the rail becomes this song — remixable */
     });
     const fi=document.getElementById("projFile");
@@ -7514,7 +7995,7 @@ function keepSerialize(presets){
   return html;
 }
 function keepPreset(){
-  if(!DREAM.p){ flashRow("PLAY FIRST — NOTHING TO KEEP"); return; }
+  if(!DREAM.p){ notifyRow("PLAY FIRST — NOTHING TO KEEP"); return; }
   const p=JSON.parse(JSON.stringify(DREAM.p)); delete p._seed;
   p.verb=VERB.pct; /* the verb decision is part of the song */
   const name=((p.name||"dream").slice(0,34)+" #"+(DREAM.seed||0)).slice(0,48);
@@ -7524,7 +8005,7 @@ function keepPreset(){
   if(live) live.textContent=JSON.stringify(PRESETS).replace(/</g,"\\u003c");
   presetRender();
   ldrDownload(keepSerialize(PRESETS),"text/html","triton-rack.html");
-  flashRow("KEPT — the file saved a copy of itself");
+  notifyRow("KEPT — THE FILE SAVED A COPY OF ITSELF");
 }
 function ldrConductorInit(){
   /* the dock (#fab) renders BELOW the scripts — this init must wait for the DOM.
@@ -7571,12 +8052,15 @@ function ldrConductorInit(){
   presetInit();
   builderRender();
   if(typeof theoryRender==="function") theoryRender();
+  addrBoot(); /* round 9: a #address stages its song for PLAY */
+  if(typeof window!=="undefined"&&!window._addrWired){ window._addrWired=true;
+    window.addEventListener("hashchange",addrBoot); }
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ldrConductorInit);
 else ldrConductorInit();
 </script>
 <div id="fab">
-  <div class="fbtn" id="fabSave" title="Save the take — WAV + MIDI">⤓</div>
+  <div class="fbtn" id="fabSave" title="Save — MIX · SCORE · SESSION · LINK">⤓</div>
   <div class="fbtn" id="fabDice" title="New combination">🎲</div>
   <div class="fbtn big" id="fabPlay" title="Play / stop">▶</div>
 </div>
@@ -7868,4 +8352,10 @@ BANNED (obvious answers set aside first): turning the saws down (the level was a
 KILL-TEST: node suites [0]–[10] green — [10] adds the zip round-trip through BOTH writers (house `zipStore` and the donor's `encodeZipStore`) read back byte-exact by `zipReadStore`, with hostile zips refused (truncated, garbage, deflate-marked, a lying local-header offset, an over-long name — a compressed or dishonest entry is skipped, never guessed at); the drive law READ OUT OF `applyFXP` itself (a re-implementation would test this file against itself and pass whatever ships) — level-neutral within 0.35 dB at the reference bus for every drive value, still compressing the top; the import range law (fb ≤ .85, drive/sends ≤ 1, reso ≤ 20, osc lvl ≤ 1.2, ABSENT fields refused — the old `||0` validated a copy the engine never uses while applyFXP assigned the raw undefined into an AudioParam); the preset law's OWN-KEY rule (a song naming `constructor`/`toString`/`__proto__` as its figure or scale used to pass a bare bracket lookup and then throw inside the scheduler); and the stem-parity laws (duck keys from the whole take, one mastering gain, a hot stem capped short of the writer's clamp). Every new gate was MUTATION-TESTED: the artifact was deliberately reverted and each gate confirmed to fire. The Chromium harness carries the live numbers — a fortissimo 3-note saw chord: bus pk 1.98, ZERO samples past the curve's domain, insert gain −2.22 dB (level-neutral; the old clipper ran +4.8), wet path alive at rms 0.37; a saw pad under latched STRUM: tube-in 1.127, 0.03% hot against the round-6 1% law; SAVE stops the track and opens three doors; the session zip carries 3 stems + mix + score + project.json, nothing clipped BEFORE the writer's clamp, and RELOADS its song (#777, knock) onto the ★ rail; the track stays stopped afterward with the take intact for a second door. Measured, drive .2 against a clean program at the same bus level: OLD +4.8 dB at bus 0.3 and +2.7 dB at 0.5 — drive was a volume knob AND a clipper; NEW 0.00 dB at the reference, exactly.
 THE NON-OBVIOUS CHOICE: a per-stem mastering gain is WRONG, and it took an adversarial pass to see it. The obvious build normalizes each stem the way it normalizes the mix — every file lands at a healthy level, every test passes, and the stems are useless: a sparse lead lifted 7× while the drums stay put no longer sums to anything resembling mix.wav. Stems now take the MIX's gain and the MIX's duck automation (derived once from the whole take, applied identically in every pass with in-pass keying muted), because a stem is that instrument's place in the record — if the stems cannot sum back to the mix, they are not stems, they are seven different mixes. Same reasoning made VERB and the FX program PINNED for the export's whole life. The deeper lesson landed on the TESTS: three round-8 gates were written, passed, and were WORTHLESS — the "does the insert rail" check tapped a node the curve's own normalization bounds at 0.6 (it could not fail for any signal), the session-zip clip checks read bytes the 24-bit writer had already clamped (clipping is exactly what the clamp erases), and the drive-law check re-derived the wet/dry math instead of reading it. A gate that cannot fail is worse than no gate: it reports safety. All three were rebuilt to measure the mechanism at its own cause — the fraction of bus samples past the curve's domain, the engine's PRE-clamp peak per rendered file, and the pair read straight out of `applyFXP` — and the first honest version immediately convicted 0.06% of samples still clipping, which widened the domain to ±4. The tests found the bug the tests were hiding.
 OPEN QUESTIONS: (1) The SESSION door renders one pass per lane — a seven-lane eight-minute take is eight full renders; worth a single pass with per-lane taps (one render, N recorders) if WebAudio's node budget allows? (2) project.json regrows the song from its seed but NOT the player's own performed notes (role "you" lives in the take, not the preset) — should a session zip carry the take itself so a reload replays the performance, not just the world? (3) The donor's #address (a base36 URL hash that regrows a beat anywhere) has no equivalent here; a KEEP copy is the whole file. A short shareable address for a song is a different door than any of these three. (4) `renderNote`'s pack export now carries the drive pre-trim, but the sampler pack still bypasses the DREAM strips and the master chain by design — is a pack of the same patch through the FULL chain a fourth door, or a different product?
+RING 37 · 2026-09-02 · the five-lens court sits; the bank court; the take rides in the zip; the address
+WHAT CHANGED: the ninth verdict was open — "leave no stone unturned" — so the round did the four things the rings had been owing. (1) THE FIVE-LENS BREAK COURT over the whole instrument, owed since ring 31: producer, audio engineer, attacker, performance, correctness — five independent lenses, each with its own headless-Chromium probe kit, ranked findings, adversarially verified, fixed down the ladder. What they convicted, and what changed: THE PRODUCER (11 findings): browsing a patch in the engine room while a song played RETUNED the band and swapped its FX to the browsed program (setProgram/setCombi wrote state.tempo and applyFX; the conductor owns the console while it plays — a browse now only feeds spawnVoice); the Z/X keys, the −/+ OCT buttons and the MODE buttons killed the WHOLE voice ledger mid-song (a bar of silence with PLAY lit — they now release the player's notes only; the transport and the power switch keep the full kill); the Export tab's sampler-pack render froze the playing song with PLAY lit and left a hole in the take (it now stops the transport like SAVE, and a gated PLAY answers "RENDERING — PLAY AFTER" instead of dropping the tap); ★ KEEP was a silent dead end on a fresh face and wrote its success into the folded LCD (notifyRow); a refused LOAD under the open doors said nothing visible (a message now takes the label for three seconds, then the doors return); the busy pulse died after the first checkpoint of a SESSION render (it follows the exporting flag, not a label prefix); ROLL on a standing song flipped an arc to LOOP (it reopens the KEPT shape); the MIDI hint never learned Web MIDI was absent; three strings still said "WAV + MIDI". THE AUDIO ENGINEER (9): the BLOCKER above (the envelope hold); tremolo added to the envelope's own gain param outlived the release at up to −9 dB for r·4 s and ended on a click — it is a multiplicative stage after the envelope now; a release or steal inside the attack cut to silence in one sample (the same hold); the 62-unit voice cap counted a whole bar of look-ahead notes and stole SOUNDING voices to admit them, 5-15 steals a second under a four-part song (the cap is on sounding units; released voices go first, then the oldest started one, never a future note; units free at 8 time constants, not 16); DD22 kit hits replayed through a DIFFERENT velocity layer in the bounce than the room (the written velocity is logged and the bounce picks the same baked layer); every offline pass began with the delay line sweeping 0→beat over 300 ms (setValueAtTime on a fresh context); the ana kick was cut at −32 dB; the render's tail follows the longest release; the pool cliffs (Bottle Blow inaudible, bells hot) — the bank court's laws. THE ATTACKER (7): four BLOCKERS — Bank B `cat` reached the LCD's innerHTML raw (stored XSS from a bank file; escaped at the sink, ranged at the gate); `leadOct` unvalidated threw inside the 40 ms tick from a URL, a zip or a KEEP'd copy, and the tick re-scheduled the same bar forever with the ledger pinned (ranged, defaulted, and a throw inside dreamScheduleBar now stops the transport ONCE); `comps` string-checked but not own-key-checked ("constructor" passed, PLAY died for the page and the poison was pinned on the rail — own keys on the figure's grid, and every gesture-time start fails loudly once); Bank B `tempo` unranged and `arpDefault` unvalidated froze the tab in the arp scheduler's while-loop on the first key (ranged, the scheduler refuses a step that cannot advance the clock). Plus the whole import range law widened to every field spawnVoice hands an AudioParam (a NaN attack or a 1e9 detune threw half-built with oscillators started and never stopped), the wave lookup made an own-key lookup, roman/name/tones escaped in the theory bar, `kit` an integer. THE CORRECTNESS REVIEWER (12): a COMBI's layers (one voice per timbre, transposed) closed one layer per release — the rest rang until STOP in the bounce, the score and take.json (holds are closed by their VOICE now; mono legato closes the note that glided away and opens the one it landed on); 12-pulse drummers played 16-step library phrases whose steps 12-15 landed in the NEXT bar on the old chord (phrases keep their shape inside the bar: 4 steps per beat over 3 pulses); the conducted figure obeyed the engine room's LDR.kit/mode/engine/hum, not the kept song (a KEEP'd kit-62 song replayed on A015; conducted, it plays the song's kit in KIT mode); the tape logged the live working program BY REFERENCE, so a knob turned after a note rewrote that note in the bounce and in take.json (an edited program rides as one frozen copy per edit generation; an unedited one as the bank object); powerOff left the dream running for a MIDI re-power inside the tick window; the 808 line dropped notes while its kit baked (the bass program covers them); the 808 previewed as piano in a DAW; a refused start lit a card the ear never heard; and four gates convicted as vacuous or pinned on legitimately-moving values (the hostile-address XSS gate used an INVALID entry so the name never reached a sink — it now drives a valid song wearing hostile strings through the rail, the LCD, the save label, the theory bar and the KEEP copy; the MIDI note-pairing gates scanned bytes and counted VLQ deltas as note-ons — they walk events now; the regrow claim had no content gate — two replays must log the same events; the figure/recipe counts are floors). THE PERFORMANCE ENGINEER (5): SAVE rendered at ~1× realtime because every voice of the take was instantiated before startRendering (an unstarted voice still costs a third of a sounding one) — voices are now instantiated in 4 s windows at the render clock's own suspend checkpoints: a 62.5 s full-band take renders in 15.1 s, 4.1× realtime (was 67 s); ddWarm's cold kick+snare slice blocked the main thread 465 ms, past the conductor's 220 ms lookahead — the DD22 block is pure JS sliced verbatim from the donor, so its own source text now IS a Worker (36 buffers of hyphyK in 1.26 s, longest main-thread task 93 ms, samples bit-identical to the main thread's, a one-hit-per-task fallback if the worker cannot be made); takeTrim rewrote the whole take on every event past minute 8 (hysteresis: once per 30 s of tape); 4-5 dead nodes per voice (a second pole and a full LFO branch for programs that never use them) are no longer built; the TRITON kit's kill timer joins its siblings' offline gate. (2) THE BANK COURT: all 128 programs rendered offline and MEASURED — a single C4 vel-1 note through the program insert over each program's own window (momentary loudness, 400 ms, the parity metric), a triad through the FULL chain, and the tube's input with the limiter and tube bypassed (a null WaveShaper curve is a pass-through, which makes the chain's own nodes the taps). The bank's momentary loudness spanned 32 dB. Convicted, with numbers: 60 of 120 programs drove the master tube PAST its curve domain on a plain vel-1 triad from the keyboard (tube input up to 1.42 — the round-6 bus trim staged the DREAM mix, whose roles pass strip trims; a human chord reaches the bus untrimmed), so EVERY saturator now wears the round-8 headroom law (`SAT_HEADROOM`=2, `mkSat`: domain ±2 through a pre-trim, transfer byte-identical inside ±1, n doubled; flat-top fraction on the hottest triads .018–.208% → .001–.003%, level unchanged within .1 dB). Bells summed their PARTIALS into the VCA (2.12 for the stock four) and were the hottest peaks in the bank by construction, 10 of 12 over the tube's domain — the sqrt partial-sum law (geometric mean of onset sum and steady fundamental, because partials decay at their own rates) put the bell family's median on the bank's median (−11.5 vs −10.4), where the full osc law pushed the mallets 3 dB under the first quartile. Every VOX formant program sat 8–10 dB under the bank (−19.9 vs −10.4; two Q-7 bandpasses pass one harmonic each, and osc level cannot fix it because the osc-stack law normalizes it away) — `VOX_MAKEUP` ×2.5 on the branch put the family at −10.4…−12.2; one of them (Whisper Hum, formants ON the fundamental) then ran +10 dB over and was trimmed at its source. Three programs were inaudible by construction — a Q 4–6 bandpass in front of a sine, −31 to −36 dB, 25 dB under the bank — and were re-voiced (lp12, measured into the family: −9.1/−9.3/−14.0). (3) THE TAKE RIDES IN THE ZIP: `take.json` — the take codec (programs by bank index, a foreign Bank-B program inline and re-validated by the same range law an imported bank passes, every field ranged, 40k events / 600 s caps, nine roles) — joins mix/stems/score/project.json; LOAD of a zip with a take comes back STOPPED under its song's console (applyDream without the transport: FX program, verb, tempo, pans) with the doors open — bounce it again at another VERB, pull the stem you did not pull — and PLAY regrows the song fresh, wiping the take exactly as any new performance does (the round-8 law). A bare project.json still stands the song up playing. (4) THE ADDRESS: the donor's `#address`, for a song — the preset-law JSON deflated and base64url'd into the URL hash (`#p=`; `#j=` raw where the browser has no CompressionStream), booting through the SAME hostile-file gate as the presets tag and project.json. An address STAGES its song on the ★ rail (`DREAM.staged`) and PLAY starts it — the boot has no gesture, so nothing plays before one; mid-performance it hands off on the bar like a chip. A fourth door, LINK, writes it into the URL bar and the clipboard when the browser allows. 342 chars for a full song. Inflate bomb capped at 256 KB, hash capped at 64 KB, hostile hashes refused ALOUD ("ADDRESS DID NOT LOAD"). (5) THE FACE AT PHONE SCALE: the court measured the ★ rail, ⤒ LOAD and the ⤓/door chips at 7–8 px on a 390 px phone — the file's own touch law (≥45 px) broken by the controls that exist FOR phones. Below .62 scale they leave the scaled 4U and become a CSS-pixel strip beneath it (fit() counter-scales them and grows the face's box; the save strip first, the rail under it): 44–46 px targets, measured.
+BANNED (obvious answers set aside first): a hand-packed base36 address codec like the donor's (its beat is a dozen small integers; a song is the whole preset law — a second format would be a second thing to keep honest, which ring 36 banned for the zip; the deflated JSON costs 342 chars and passes through the one validator); auto-starting an addressed song on boot (no gesture, no audio — a suspended context would have piled every scheduled event onto t=0); a per-program level trim table to fix the bank (a table hides the three MECHANISMS the court found — the tube's domain, the bell partial sum, the formant's missing makeup — and would have to be re-measured after every voice change; laws first, data only where the data was wrong); normalizing bells by the FULL partial sum like the osc stack (measured: the mallets fell 3 dB under the first quartile — partials decay, the sum is an onset number); `cancelAndHoldAtTime` for the envelope hold (Chrome-only in practice; the envelope is analytic, so the value is known and the hold renders identically offline and live everywhere); fixing the phone chips inside the scaled face (45 px at .385 scale is 117 design px — a third of the face's height; the honest move is a strip that is NOT scaled); silencing the take probe's dd-layer "mismatch" by accepting it (the probe modelled the OLD replay; the fix logs the written velocity and the bounce picks the same baked layer as the room).
+KILL-TEST: node suites [0]–[12] green — [11] adds the take codec (all nine roles round-trip, bank programs by identity, foreign programs re-validated, 14 hostiles refused, out-of-range optional fields DROPPED not passed) and the address (deflate/base64url regrows the entry through the preset law; garbage, wrong kind, over-cap, prototype figure refused; the inflate bomb stopped BY THE CAP — the first version of that gate passed with the cap removed because JSON.parse choked on 4 MB of zeros, a mutation found it); [12] the bank court (saturator headroom: the transfer inside ±1 unchanged to 7e-4 and the knee continuing past 1; the bandpass-on-sine data law; the bell sqrt law and the formant makeup present where the voice is built); [10] widened: the WHOLE stock bank passes the widened import law and 14 hostile programs are refused (cat markup, tempo −120 and 1e308, arpDefault oct 1e9, NaN attack, sustain 40, detune 1e9…), comps/kit/leadOct/extraKick in the preset law, `esc(c.roman)` at the theory bar, the tick's try around dreamScheduleBar. Every gate was MUTATION-TESTED (revert the fix on a copy, confirm the gate fires; 15 mutants). The Chromium harness carries the live numbers: the bank court probe renders every non-drum program over its own window each run (median −10.5 dB momentary, floor −19.5, ceiling −5.0, VOX −9.5…−12.2, the four hottest triads flat-topping ≤.001%); the phone probe (390 px: 8 chips ≥ 65×44 px in a strip under the face, pads 46 px, nothing overlapping the shelf); take.json in the session zip (32 events, mix/dd/perc/dd8, programs by index); LOAD with a take: stopped, 32 events back under song #777, staged, 4 doors; the SCORE door bounces the restored take; PLAY regrows it (fresh take, doors cleared); LINK writes a 342-char address; a fresh page regrows #777 (knock) on PLAY with nothing played before the gesture; hostile addresses refused aloud; a VALID song wearing hostile strings (name, progName, p.name) reaches the rail, the LCD, the save label, the theory bar and the KEEP copy escaped, nothing fires; the regrow is CONTENT-exact — two replays of the addressed song log the same first 24 events (t, role, note, vel, program) — which took anchoring the tape's zero to the first downbeat with a fixed 100 ms lead-in (takeStart stamped t0 at the tap and the bar landed a tick later: exact in content, jittered 0-40 ms in time); the lazy render counted at startRendering (voices standing < voices total on a take longer than one window); a cold kit baked off the main thread (36 buffers, longest main-thread task 0 ms, samples bit-identical); the score walked as events with zero unmatched note-ons. The court's own probes re-run against the fixes: a .2 s note on a .55 s attack peaks at −24 dB at .25 s and ends at −∞ with no stop jump (was silent, then −12 dB held for 4.7 s); the tremolo tail after release is −∞ on every tremolo program (was −8.6 dB relative for r·4 s ending on a click); a release at 50% of the attack steps −35 dB in one sample (was −20 dB, i.e. a cut) and keeps its tail; the offline delay line reads .450 s from the first sample (was a 0→.45 sweep over 300 ms); the attacker's eight payloads: bank `cat` not parsed, wave "constructor" starts 3 / stops 3 / leaks 0, comps "constructor" refused at the rail, leadOct 1e9 refused, roman `<style>` escaped in the theory bar, tempo −120 refused.
+THE NON-OBVIOUS CHOICE: the court's blocker was not a bug in a function but in a TIMELINE — WebAudio's cancelScheduledValues(t) removes a linearRamp whose END is after t, and the envelope's ramp ends at the attack's end, so every release that landed inside an attack (a written duration shorter than a pad's swell, a staccato key on a string patch, a stolen voice) erased the ramp it was standing on: silence for the written length, then a swell to full that held; or a one-sample cut with no tail. The obvious fix is the API made for it, cancelAndHoldAtTime — and it was set aside, because the envelope is ANALYTIC: the value at any moment inside the attack is a line the instrument itself drew, so the hold is computed and re-scheduled as a partial ramp ending on that value, identically live and in the offline bounce, on every engine. The first version of that hold used setValueAtTime and was silent until the release point — cancelling the ramp event also erases the segment before it — which the court's own probe caught on the re-run (the tests found the bug the fix was hiding, again). The second lesson of the round is about gates: three of the new gates passed with their fixes reverted (the inflate cap — JSON.parse choked on the bomb first; the lazy render and the worker bake — a regex that says the code EXISTS is not a gate that says it RUNS), and each was rebuilt to measure the mechanism: the cap stopping the stream, the voices counted at startRendering, the worker answering with the same samples as the main thread and no task over the lookahead.
+OPEN QUESTIONS: (1) The trait rail slots (12 px), VERB −/+ (10 px) and the rack ‹ › ◇ (18 px) still break the touch law at phone scale — the chips were the rescue controls and went first; the rest is a phone LAYOUT of the 4U, not a scale, and wants its own round. (2) The address is 342 chars for a full song; the donor's beat is a dozen integers. A dictionary-primed deflate (the preset law's key names as a preset dictionary) would roughly halve it without a second schema — CompressionStream has no dictionary API, so it would mean an inline inflater, which is the second implementation the round refused. (3) The SESSION door still renders one pass per lane; lazy instantiation made each pass 4× faster, but one pass with N recorders is still the honest end state. (4) The take's `you` role now survives a zip round-trip as a re-renderable performance; replaying it LIVE over the regrown band (an overdub track) is a new transport mode — alignment between the take's clock and the regrown song's bar start is deterministic (the court measured 421/421 identical events) so it is buildable. (5) The bank court judged single notes at C4 vel 1; a court over the RANGE (C2–C6, vel .3–1) would find the programs whose filter key-tracking or velocity law drifts out of family at the ends — the bandpass trap was a range problem the C4 note only half-showed. (6) Bells now ride the sqrt partial law, measured into family; a listening pass on the mallets (marimba −17, toy piano −16) against the keys would settle whether the quiet end wants a program-level lift.
 ═══ end rings ═══ -->

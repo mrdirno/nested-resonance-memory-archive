@@ -657,15 +657,31 @@ const path = __dirname + "/triton-rack.html";
      engine; ours swaps the graph — so it stops), then opens the three doors */
   await page.click("#ldrSave");
   const doors = await page.evaluate(() => ({ dream: DREAM.on, ldr: LDR.on, take: TAKE.on,
-    n: ["svMix", "svScore", "svSession"].filter(id => !!document.getElementById(id)).length,
+    n: ["svMix", "svScore", "svSession", "svLink"].filter(id => !!document.getElementById(id)).length,
     evs: TAKE.ev.length, arp: state.arp.on, voices: activeVoices }));
   if (doors.dream || doors.ldr || doors.take || doors.arp) fail("SAVE did not stop the track " + JSON.stringify(doors));
-  else if (doors.n !== 3) fail("the three doors did not open (" + doors.n + "/3)");
-  else ok("SAVE stops the track, keeps the take (" + doors.evs + " events), opens MIX · SCORE · SESSION");
+  else if (doors.n !== 4) fail("the four doors did not open (" + doors.n + "/4)");
+  else ok("SAVE stops the track, keeps the take (" + doors.evs + " events), opens MIX · SCORE · SESSION · LINK");
+  /* round 9 (the performance lens): the render must instantiate voices in
+     windows — count the voices standing when startRendering is called */
+  await page.evaluate(() => { window._lazy = { atStart: -1, total: 0, last: TAKE.ev.reduce((m, e) => Math.max(m, e.t), 0),
+      late: TAKE.ev.filter(e => e.role !== "mix" && e.t >= RENDER_WIN + .25).length };
+    /* every hit path counts: synth voices, DD kit hits, the 808 line, the physics percussion */
+    const sv = spawnVoice; spawnVoice = function () { window._lazy.total++; return sv.apply(this, arguments); };
+    const dh = ddHit; ddHit = function () { window._lazy.total++; return dh.apply(this, arguments); };
+    const ds = ddSub; ddSub = function () { window._lazy.total++; return ds.apply(this, arguments); };
+    const dp = drumHitP; drumHitP = function () { window._lazy.total++; return dp.apply(this, arguments); };
+    const sr0 = OfflineAudioContext.prototype.startRendering;
+    OfflineAudioContext.prototype.startRendering = function () { if (window._lazy.atStart < 0) window._lazy.atStart = window._lazy.total; return sr0.apply(this, arguments); }; });
   await page.click("#svMix");
   await page.waitForFunction(() => exporting, { timeout: 5000 }).catch(() => {});
   await page.waitForFunction(() => !exporting, { timeout: 60000 });
   await page.waitForTimeout(900);
+  const lazy = await page.evaluate(() => window._lazy);
+  if (!(lazy.total > 0) || lazy.atStart < 0) fail("lazy-render probe saw no render (" + JSON.stringify(lazy) + ")");
+  else if (lazy.late > 0 && !(lazy.atStart <= lazy.total - lazy.late)) fail("the render instantiated voices past the first window before startRendering (" + lazy.atStart + " of " + lazy.total + ", " + lazy.late + " past the window, take " + lazy.last.toFixed(1) + " s)");
+  else if (lazy.late === 0) ok("lazy render: take " + lazy.last.toFixed(1) + " s fits one window — " + lazy.atStart + " of " + lazy.total + " hits standing at startRendering (windowing not exercised by this take)");
+  else ok("lazy render: " + lazy.atStart + " of " + lazy.total + " hits standing at startRendering, " + lazy.late + " instantiated at checkpoints (take " + lazy.last.toFixed(1) + " s, windows of " + 4 + " s)");
   const newDls = downloads.slice(dl0);
   const wavD = newDls.find(d => d.suggestedFilename().endsWith(".wav"));
   const midD = newDls.find(d => d.suggestedFilename().endsWith(".mid"));
@@ -686,7 +702,20 @@ const path = __dirname + "/triton-rack.html";
     const crest = 20 * Math.log10(Math.max(1e-9, (peak / 8388607) / Math.max(1e-9, rms)));
     const okWav = w.slice(0, 4).toString() === "RIFF" && w.slice(8, 12).toString() === "WAVE" && w.length > 150000;
     const hasYou = m.includes(Buffer.from("YOU"));
-    let ons = 0; for (let i = 0; i < m.length - 2; i++) if ((m[i] & 0xF0) === 0x90 && m[i + 2] > 0) ons++;
+    /* walk events (round 9): a byte scan counted VLQ deltas as note-ons */
+    let ons = 0, unmatched = 0; { const ntrk = (m[10] << 8) | m[11]; let o = 14;
+      for (let k = 0; k < ntrk && o + 8 <= m.length; k++) { const len = (m[o+4] << 24) | (m[o+5] << 16) | (m[o+6] << 8) | m[o+7];
+        let i = o + 8; const end = i + len; let status = 0; const open = {};
+        while (i < end) { do {} while (m[i++] & 0x80); let x = m[i];
+          if (x === 0xFF) { i += 2; let L = 0; do { L = (L << 7) | (m[i] & 0x7f); } while (m[i++] & 0x80); i += L; continue; }
+          if (x === 0xF0 || x === 0xF7) { i++; let L = 0; do { L = (L << 7) | (m[i] & 0x7f); } while (m[i++] & 0x80); i += L; continue; }
+          if (x & 0x80) { status = x; i++; } const hi = status & 0xF0, ch = status & 0x0F;
+          if (hi === 0xC0 || hi === 0xD0) { i += 1; continue; }
+          const n = m[i], v = m[i+1]; i += 2;
+          if (hi === 0x90 && v > 0) { ons++; open[ch + ":" + n] = (open[ch + ":" + n] || 0) + 1; }
+          else if (hi === 0x80 || (hi === 0x90 && v === 0)) { if (open[ch + ":" + n]) open[ch + ":" + n]--; else unmatched++; } }
+        for (const q in open) unmatched += open[q]; o = end; } }
+    if (unmatched) fail("score has " + unmatched + " unmatched note-ons/offs (stuck notes)");
     if (!okWav) fail("bounced WAV malformed/short (" + w.length + " bytes)");
     else if (peak < 80000) fail("bounced WAV is near-silent (peak " + peak + " of 8388607)");
     else if (!(rmsDb > -24 && rmsDb < -8)) fail("master loudness off target: RMS " + rmsDb.toFixed(1) + " dBFS");
@@ -855,10 +884,75 @@ const path = __dirname + "/triton-rack.html";
   else if (drawer.wrapBack !== "cine") fail("‹ did not wrap back onto the shelf (" + drawer.wrapBack + ")");
   else ok("drums drawer: ‹ › one ring over TRITON kits + DD shelf (DD·HYPHYK → boombap → … → TRITON → ‹ cine)");
 
+  /* ROUND 9 — THE BANK COURT, standing: every program rendered offline at C4
+     vel 1 through its own insert; momentary loudness (400 ms) must sit in the
+     family, and the hottest chords must meet the master tube's KNEE, not the
+     clamp. Slow-attack programs (attack > .8 s) are reported, not judged. */
+  const bank = await page.evaluate(async () => {
+    if (DREAM.on) dreamStop(true);
+    const CEIL = master.gain.value;
+    const mom = (f, sr) => { const w = Math.round(.4 * sr); let best = 0, acc = 0;
+      for (let i = 0; i < f.length; i++) { acc += f[i] * f[i]; if (i >= w) acc -= f[i - w] * f[i - w]; if (i >= w - 1 && acc > best) best = acc; }
+      return 20 * Math.log10(Math.sqrt(best / w) + 1e-9); };
+    /* every program over ITS OWN window (renderPlan: slow attacks get their rise),
+       capped at 8 s; MOTION FX are effects by design and are reported, not judged */
+    const rows = [], slow = [];
+    for (let i = 0; i < PROGRAMS.length; i++) { const p = PROGRAMS[i]; if (p.cat === "DRUMS") continue;
+      const plan = renderPlan(p); const tot = Math.min(8, plan.total), hold = Math.min(plan.hold, tot - .5);
+      const f = await renderNote(JSON.parse(JSON.stringify(p)), 60, 1, { hold, total: tot });
+      const m = +mom(f, 48000).toFixed(1);
+      if (p.cat === "MOTION") { slow.push(p.id + " " + m); continue; }
+      rows.push({ id: p.id, name: p.name, mom: m }); }
+    rows.sort((a, b) => a.mom - b.mom);
+    const med = rows[Math.floor(rows.length / 2)].mom;
+    const flat = [];
+    for (const id of ["A071", "A021", "A028", "A038"]) { const prog = JSON.parse(JSON.stringify(PROGRAMS.find(p => p.id === id)));
+      const evs = [60, 64, 67].map(n => ({ t: .1, role: "you", prog, note: n, vel: 1, dur: 1.5, tempo: 100 }));
+      const buf = await renderPass(evs, "BANK", 0, 100, [], prog); const L = buf.getChannelData(0);
+      let pk = 0; for (let i = 0; i < L.length; i++) pk = Math.max(pk, Math.abs(L[i]));
+      let n = 0; for (let i = 0; i < L.length; i++) if (Math.abs(L[i]) >= .999 * pk) n++;
+      flat.push({ id, pkc: +(pk / CEIL).toFixed(3), flat: +(100 * n / L.length).toFixed(3) }); }
+    return { n: rows.length, med, lo: rows.slice(0, 4), hi: rows.slice(-4), slow, flat,
+      vox: rows.filter(r => /^A0(05|35|36|85|86)$/.test(r.id)).map(r => r.mom),
+      fixed: rows.filter(r => /^A(047|077|119)$/.test(r.id)).map(r => r.id + " " + r.mom) };
+  });
+  const under = bank.lo.filter(r => r.mom < bank.med - 12), over = bank.hi.filter(r => r.mom > bank.med + 8);
+  const hotFlat = bank.flat.filter(f => f.flat > .01 || f.pkc > 1.0);
+  if (!(bank.n >= 100)) fail("bank court rendered only " + bank.n + " programs");
+  else if (!(bank.med >= -13 && bank.med <= -8)) fail("bank median moved (" + bank.med + " dB momentary at C4 vel 1)");
+  else if (under.length) fail("programs more than 12 dB under the bank: " + under.map(r => r.id + " " + r.name + " " + r.mom).join(", "));
+  else if (over.length) fail("programs more than 8 dB over the bank: " + over.map(r => r.id + " " + r.name + " " + r.mom).join(", "));
+  else if (!bank.vox.every(v => v > bank.med - 6)) fail("VOX family still under the bank (" + bank.vox.join("/") + " vs median " + bank.med + ")");
+  else if (hotFlat.length) fail("hot chords still clamp the master tube: " + hotFlat.map(f => f.id + " flat " + f.flat + "% pkc " + f.pkc).join(", "));
+  else ok("bank court: " + bank.n + " programs, median " + bank.med + " dB, floor " + bank.lo[0].id + " " + bank.lo[0].mom + " / ceiling " + bank.hi[3].id + " " + bank.hi[3].mom +
+    " · VOX " + bank.vox.join("/") + " · re-voiced " + bank.fixed.join(", ") + " · hot triads flat " + bank.flat.map(f => f.flat + "%").join("/") + " (MOTION FX reported, not judged: " + bank.slow.join(" ") + ")");
+
+  /* ROUND 9 — THE BAKE OFF THE MAIN THREAD: a cold DD22 kit warms in a worker;
+     the longest main-thread task while it bakes must stay under the
+     conductor's 220 ms lookahead (the court measured a 465 ms block) */
+  const bake = await page.evaluate(async () => {
+    const kit = "cine"; const sr = ctx.sampleRate;
+    for (const k of DD_BUFS.keys()) if (k.startsWith(kit + "|")) DD_BUFS.delete(k);
+    delete DD_WARM[kit + "|" + sr];
+    let longest = 0, tasks = 0; const po = new PerformanceObserver(l => l.getEntries().forEach(en => { tasks++; longest = Math.max(longest, en.duration); }));
+    try { po.observe({ entryTypes: ["longtask"] }); } catch (_) { return { unsupported: true }; }
+    const t0 = performance.now(); ddWarm(kit);
+    while (!(DD_WARM[kit + "|" + sr] && DD_WARM[kit + "|" + sr].done) && performance.now() - t0 < 20000) await new Promise(r => setTimeout(r, 25));
+    await new Promise(r => setTimeout(r, 60)); po.disconnect();
+    let baked = 0; for (const k of DD_BUFS.keys()) if (k.startsWith(kit + "|")) baked++;
+    return { ms: Math.round(performance.now() - t0), baked, longest: Math.round(longest), tasks, worker: !!DD_WK, dead: DD_WK_DEAD };
+  });
+  if (bake.unsupported) ok("bake probe: longtask observer unsupported here (skipped)");
+  else if (!(bake.baked >= 36)) fail("cold kit did not bake in the worker (" + JSON.stringify(bake) + ")");
+  else if (!bake.worker || bake.dead) fail("kit bake fell back to the main thread " + JSON.stringify(bake));
+  else if (bake.longest > 220) fail("kit bake blocked the main thread " + bake.longest + " ms (lookahead 220)");
+  else ok("cold kit (cine) baked off the main thread: " + bake.baked + " buffers in " + bake.ms + " ms, longest main-thread task " + bake.longest + " ms");
+
   /* THE SESSION DOOR (round 8): stems + mix + score + project.json, one
      reloadable zip — rendered with the track stopped, then loaded BACK */
   const ddSeed = await page.evaluate(() => DREAM.seed);
   const dlDD = downloads.length;
+  let zipEntries = null; /* round 9: the take probe reads the same zip */
   await page.click("#ldrSave");
   const ddDoors = await page.evaluate(() => ({ dream: DREAM.on, sv: !!document.getElementById("svSession") }));
   if (ddDoors.dream || !ddDoors.sv) fail("session door not offered on a stopped track " + JSON.stringify(ddDoors));
@@ -887,6 +981,7 @@ const path = __dirname + "/triton-rack.html";
         entries[nm] = buf.slice(off + 30 + lnl + lel, off + 30 + lnl + lel + csz);
         o += 46 + nl + el + cl; } }
     const names = Object.keys(entries);
+    zipEntries = entries;
     const stems = names.filter(n => n.startsWith("stems/"));
     const pj = entries["project.json"] ? JSON.parse(entries["project.json"].toString()) : null;
     const wavPk = b => { if (!b || b.slice(0, 4).toString() !== "RIFF") return -1;
@@ -913,11 +1008,18 @@ const path = __dirname + "/triton-rack.html";
       mixPk.toFixed(2) + ", true pk " + (truePk["mix.wav"] || 0).toFixed(3) + ", none clipped pre-writer) + score + project.json (seed #" + pj[0].seed + ")");
   }
 
-  /* THE ZIP COMES BACK: LOAD reads project.json out of the session zip,
-     validates it through the preset law, and stands the song up */
-  if (zipPath) {
+  /* THE PROJECT COMES BACK: LOAD of a bare project.json (the zip minus its
+     take) validates through the preset law and stands the song up PLAYING —
+     round 9 gives a zip WITH a take a different law (stopped, doors open),
+     probed below */
+  let projPath = null;
+  if (zipPath && zipEntries && zipEntries["project.json"]) {
+    projPath = require("path").join(require("os").tmpdir(), "tr-project.json");
+    require("fs").writeFileSync(projPath, zipEntries["project.json"]);
+  }
+  if (projPath) {
     const pre = await page.evaluate(() => ({ n: PRESETS.length, dream: DREAM.on }));
-    await page.setInputFiles("#projFile", zipPath);
+    await page.setInputFiles("#projFile", projPath);
     await page.waitForFunction(s => DREAM.on && DREAM.seed === s, ddSeed, { timeout: 20000 }).catch(() => {});
     const post = await page.evaluate(() => ({ n: PRESETS.length, on: DREAM.on, seed: DREAM.seed,
       dsty: DREAM.p && DREAM.p.dsty, kept: !!BUILD.kept[0],
@@ -926,8 +1028,168 @@ const path = __dirname + "/triton-rack.html";
     if (!post.on || post.seed !== ddSeed) fail("loaded project did not stand up (" + JSON.stringify(post) + ")");
     else if (post.n <= pre.n - 1 || !post.chip || !post.load) fail("loaded project not on the ★ rail " + JSON.stringify(post));
     else if (post.dsty !== "knock" || !post.kept) fail("loaded project lost its language/rail (" + JSON.stringify(post) + ")");
-    else ok("LOAD: the session zip reloads — song #" + post.seed + " (" + post.dsty + ") standing, ★ rail carries it");
+    else ok("LOAD: project.json reloads — song #" + post.seed + " (" + post.dsty + ") standing, ★ rail carries it");
     await page.evaluate(() => dreamStop(true));
+  }
+
+  /* ROUND 9 — THE TAKE RIDES IN THE ZIP: take.json is the performance in the
+     take codec's shape; LOAD brings it back STOPPED under its song's console
+     with the doors open, and PLAY regrows the song fresh */
+  let addrHash = null;
+  if (zipPath && zipEntries) {
+    const tj = zipEntries["take.json"] ? JSON.parse(zipEntries["take.json"].toString()) : null;
+    const roles = tj ? [...new Set(tj.ev.map(e => e.role))] : [];
+    if (!tj || tj.v !== 1 || !(tj.n > 0) || tj.ev.length !== tj.n) fail("session zip carries no take.json (" + JSON.stringify(tj && { v: tj.v, n: tj.n }) + ")");
+    else if (!roles.includes("dd") || !roles.includes("mix")) fail("take.json lacks the roles the take had (" + roles.join(",") + ")");
+    else if (tj.ev.some(e => e.prog)) fail("take.json carries program objects for bank programs");
+    else {
+      ok("take.json: " + tj.n + " events, roles " + roles.join("/") + ", bank programs by index");
+      /* the wrong zip must not: LOAD the same zip while a DIFFERENT song plays → the take replaces the performance, stopped */
+      await page.evaluate(() => { const p = composeP(BUILD.kept, null, 5); if (p) startWith(p, true); });
+      await page.waitForFunction(() => DREAM.on && TAKE.ev.length >= 4, undefined, { timeout: 20000 }).catch(() => {});
+      await page.setInputFiles("#projFile", zipPath);
+      await page.waitForFunction(() => !DREAM.on && TAKE.ev.length > 0 && !!document.getElementById("svLink"), undefined, { timeout: 20000 }).catch(() => {});
+      const rs = await page.evaluate(() => ({ on: DREAM.on, takeOn: TAKE.on, n: TAKE.ev.length, seed: DREAM.seed,
+        staged: !!(DREAM.staged && DREAM.staged._seed === DREAM.seed), pending: !!DREAM.pending,
+        doors: ["svMix", "svScore", "svSession", "svLink"].filter(id => !!document.getElementById(id)).length,
+        chord: DREAM.p && DREAM.p.chord, lcd: (document.getElementById("lcd") || {}).textContent || "",
+        progs: TAKE.ev.filter(e => e.prog).every(e => PROGRAMS.indexOf(e.prog) >= 0) }));
+      if (rs.on || rs.takeOn || rs.pending) fail("restored take did not stop the transport " + JSON.stringify(rs));
+      else if (rs.n !== tj.n || rs.seed !== ddSeed || !rs.staged) fail("take not restored under its song (" + JSON.stringify(rs) + ")");
+      else if (rs.doors !== 4) fail("doors not open on the restored take (" + rs.doors + ")");
+      else if (!rs.progs) fail("restored events do not reference bank programs by identity");
+      else {
+        ok("LOAD with take: stopped, " + rs.n + " events back under song #" + rs.seed + ", staged for PLAY, 4 doors open");
+        /* the SCORE door bounces the restored performance — instant, no render */
+        const dlS = downloads.length;
+        await page.click("#svScore"); await page.waitForTimeout(700);
+        const mid = downloads.slice(dlS).find(d => d.suggestedFilename().endsWith(".mid"));
+        if (!mid) fail("SCORE door silent on a restored take"); else ok("SCORE door bounces the restored take (" + mid.suggestedFilename() + ")");
+        /* PLAY regrows the staged song: fresh take, same seed, staged consumed */
+        const genBefore = await page.evaluate(() => TAKE.ev.length);
+        await page.click("#dreamPlay");
+        await page.waitForFunction(s => DREAM.on && DREAM.seed === s, ddSeed, { timeout: 20000 }).catch(() => {});
+        const pl = await page.evaluate(g => ({ on: DREAM.on, seed: DREAM.seed, staged: !!DREAM.staged, takeOn: TAKE.on, fresh: TAKE.ev.length < g && TAKE.t0 > 0,
+          doors: !!document.getElementById("svMix"), dsty: DREAM.p && DREAM.p.dsty }), genBefore);
+        if (!pl.on || pl.seed !== ddSeed || pl.staged || !pl.takeOn || !pl.fresh || pl.doors) fail("PLAY did not regrow the staged song " + JSON.stringify(pl));
+        else ok("PLAY regrows the staged song #" + pl.seed + " (" + pl.dsty + "): fresh take, doors cleared");
+        await page.waitForFunction(() => TAKE.ev.length >= 6, undefined, { timeout: 20000 }).catch(() => {});
+        /* THE LINK DOOR: the song's address into the URL bar */
+        await page.click("#ldrSave");
+        await page.waitForFunction(() => !!document.getElementById("svLink"), undefined, { timeout: 5000 }).catch(() => {});
+        await page.click("#svLink");
+        await page.waitForFunction(() => /^#(p|j)=/.test(location.hash), undefined, { timeout: 5000 }).catch(() => {});
+        const lk = await page.evaluate(() => ({ hash: location.hash, lbl: (document.getElementById("ldrSaveLbl") || {}).textContent || "",
+          staged: !!DREAM.staged, on: DREAM.on }));
+        if (!/^#p=[A-Za-z0-9_-]+$/.test(lk.hash)) fail("LINK door wrote no address (" + lk.hash.slice(0, 24) + ")");
+        else if (lk.hash.length > 2000) fail("address is not compact (" + lk.hash.length + " chars)");
+        else if (lk.staged || lk.on) fail("LINK restaged its own song " + JSON.stringify({ staged: lk.staged, on: lk.on }));
+        else { addrHash = lk.hash; ok("LINK: address in the URL bar, " + lk.hash.length + " chars (" + lk.lbl.slice(0, 40) + ")"); }
+      }
+    }
+  }
+  /* ROUND 9 — THE TOUCH LAW AT PHONE SCALE: the ★ rail, ⤒ LOAD and the door
+     chips must be real tap targets on a 390 px phone (the face's own law:
+     ≥45 px; the court measured 7-8 px), and the strip must not run into the
+     rack shelf below */
+  {
+    const pp = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    const pErr = []; pp.on("pageerror", e => pErr.push(e.message));
+    await pp.goto("file://" + path); await pp.waitForTimeout(500);
+    await pp.evaluate(() => { quickBoot(); const kd = candDrums(mulberry(3)), kb = candBass(mulberry(4)), kc = candChords(mulberry(5), kb), kl = candLead(mulberry(6));
+      BUILD.kept = [kd, kb, kc, kl, FORMATS[0]]; BUILD.stage = 5; builderRender(); rackRender();
+      const p = composeP(BUILD.kept, null, 5); startWith(p, true); });
+    await pp.waitForFunction(() => TAKE.ev.length > 6, undefined, { timeout: 15000 }).catch(() => {});
+    await pp.evaluate(() => { PRESETS = [1, 2, 3].map(i => ({ name: "kept song number " + i, seed: i, p: {} })); presetRender(); saveMenu(); });
+    await pp.waitForTimeout(250);
+    const ph = await pp.evaluate(() => {
+      const box = e => { const r = e.getBoundingClientRect(); return { w: +r.width.toFixed(1), h: +r.height.toFixed(1), top: +r.top.toFixed(0), bottom: +r.bottom.toFixed(0), right: +r.right.toFixed(0) }; };
+      const chips = [...document.querySelectorAll("#ldrPresets .pchip4, #ldrSaveLbl .dlchip")].map(box);
+      const face = box(document.getElementById("ldru")), scaleBox = box(document.getElementById("ldrScale")), shelf = box(document.getElementById("rackScale"));
+      const pads = [...document.querySelectorAll("#dreamPlay,#dreamDice,#ldrSave,#ldrKeep")].map(box);
+      return { phone: document.body.classList.contains("phone"), n: chips.length, minH: Math.min(...chips.map(c => c.h)), minW: Math.min(...chips.map(c => c.w)),
+        maxRight: Math.max(...chips.map(c => c.right)), stripBottom: Math.max(...chips.map(c => c.bottom)), boxBottom: scaleBox.bottom, shelfTop: shelf.top,
+        padMin: Math.min(...pads.map(p => p.h)), faceW: face.w, vw: document.documentElement.clientWidth };
+    });
+    if (!ph.phone || ph.n < 6) fail("phone strip missing " + JSON.stringify(ph));
+    else if (!(ph.minH >= 44 && ph.minW >= 44)) fail("phone tap targets under the law: min " + ph.minW + "×" + ph.minH + " px");
+    else if (ph.maxRight > ph.vw + 1) fail("phone strip overflows the viewport (" + ph.maxRight + " > " + ph.vw + ")");
+    else if (ph.stripBottom > ph.boxBottom + 1 || ph.stripBottom > ph.shelfTop - 4) fail("phone strip runs into the rack shelf " + JSON.stringify({ strip: ph.stripBottom, box: ph.boxBottom, shelf: ph.shelfTop }));
+    else if (!(ph.padMin >= 45)) fail("phone pads under the law (" + ph.padMin + ")");
+    else ok("phone scale (390 px): " + ph.n + " chips ≥ " + ph.minW + "×" + ph.minH + " px in a strip under the face, pads " + ph.padMin + " px, nothing overlaps the shelf");
+    if (pErr.length) fail("phone page errors: " + pErr.join(" | "));
+    await pp.close();
+  }
+
+  /* THE ADDRESS REGROWS THE SONG in a fresh page: staged on the rail, PLAY starts it; hostiles say so and load nothing */
+  if (addrHash) {
+    const p2 = await browser.newPage({ viewport: { width: 1100, height: 900 } });
+    const p2errs = []; p2.on("pageerror", e => p2errs.push(e.message));
+    await p2.goto("file://" + path + addrHash);
+    await p2.waitForFunction(() => !!DREAM.staged, undefined, { timeout: 8000 }).catch(() => {});
+    const st = await p2.evaluate(() => ({ staged: !!DREAM.staged, seed: DREAM.staged && DREAM.staged._seed, on: DREAM.on,
+      chips: document.querySelectorAll("#ldrPresets .pchip4[data-k]").length, kept: !!BUILD.kept[0],
+      lbl: (document.getElementById("ldrSaveLbl") || {}).textContent || "", powered: state.powered }));
+    if (!st.staged || st.seed !== ddSeed) fail("address did not stage its song " + JSON.stringify(st));
+    else if (st.on || st.powered) fail("address started audio without a gesture " + JSON.stringify(st));
+    else if (!st.chips || !st.kept || !/ADDRESS LOADED/.test(st.lbl)) fail("address not on the rail / not announced " + JSON.stringify(st));
+    else {
+      await p2.click("#dreamPlay");
+      await p2.waitForFunction(s => DREAM.on && DREAM.seed === s, ddSeed, { timeout: 20000 }).catch(() => {});
+      const go = await p2.evaluate(() => ({ on: DREAM.on, seed: DREAM.seed, dsty: DREAM.p && DREAM.p.dsty, staged: !!DREAM.staged }));
+      if (!go.on || go.seed !== ddSeed || go.staged) fail("PLAY did not start the addressed song " + JSON.stringify(go));
+      else ok("ADDRESS: a fresh page regrows song #" + go.seed + " (" + go.dsty + ") on PLAY — the rail carries it, nothing played before the gesture");
+      /* the regrow is CONTENT, not a seed: two replays of the same song (after
+         the first run has baked its kit) must log the same events */
+      const snap = async () => { await p2.waitForFunction(() => TAKE.ev.length >= 24, undefined, { timeout: 30000 }).catch(() => {});
+        return p2.evaluate(() => TAKE.ev.slice(0, 24).map(e => [+e.t.toFixed(3), e.role, e.note != null ? e.note : (e.zone != null ? e.zone : e.name || ""), +(e.vel || 0).toFixed(3), e.prog ? PROGRAMS.indexOf(e.prog) : -1].join("|"))); };
+      await snap(); await p2.evaluate(() => dreamStop(true));
+      await p2.click("#ldrPresets .pchip4[data-k]"); const r2 = await snap(); await p2.evaluate(() => dreamStop(true));
+      await p2.click("#ldrPresets .pchip4[data-k]"); const r3 = await snap(); await p2.evaluate(() => dreamStop(true));
+      const diff = r2.filter((x, i) => x !== r3[i]).length;
+      if (r2.length < 24 || diff) fail("the address does not regrow the same song twice (" + diff + " of " + r2.length + " events differ)");
+      else ok("regrow is content-exact: two replays of #" + go.seed + " log the same first " + r2.length + " events (t, role, note, vel, program)");
+    }
+    if (p2errs.length) fail("address page errors: " + p2errs.join(" | "));
+    await p2.close();
+    /* hostiles */
+    const b64u = s => Buffer.from(s).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    for (const [nm, h] of [["garbage", "#p=AAAAAAAA"], ["prototype figure", "#j=" + b64u(JSON.stringify([{ name: "x", seed: 1, p: { fig: "constructor" } }]))]]) {
+      const p3 = await browser.newPage(); const e3 = []; p3.on("pageerror", e => e3.push(e.message));
+      await p3.goto("file://" + path + h); await p3.waitForTimeout(600);
+      const r3 = await p3.evaluate(() => ({ staged: !!DREAM.staged, n: PRESETS.length, pwned: !!window.__pwned,
+        lbl: (document.getElementById("ldrSaveLbl") || {}).textContent || "" }));
+      if (r3.staged || r3.n || r3.pwned || e3.length) fail("hostile address (" + nm + ") got through " + JSON.stringify(r3) + " " + e3.join("|"));
+      else if (!/DID NOT LOAD/.test(r3.lbl)) fail("hostile address (" + nm + ") refused silently");
+      await p3.close();
+    }
+    ok("hostile addresses refused aloud (garbage, prototype figure), nothing staged, no page errors");
+    /* a VALID song wearing hostile strings must reach every sink ESCAPED — the
+       old gate used an invalid entry, so the name never reached a sink (a gate
+       that cannot fail, round 9's correctness lens) */
+    const hostileEntry = await page.evaluate(() => { const kd = candDrums(mulberry(21)), kb = candBass(mulberry(22)), kc = candChords(mulberry(23), kb), kl = candLead(mulberry(24));
+      const p = composeP([kd, kb, kc, kl, FORMATS[0]], null, 5); delete p._seed; p.verb = 50;
+      p.name = "<img src=x onerror=window.__pwned=1>"; p.progName = "<b onmouseover=window.__pwned=2>x</b>";
+      return { name: "<img src=x onerror=window.__pwned=3>", seed: 9191, p }; });
+    { const px = await browser.newPage({ viewport: { width: 1100, height: 900 } }); const ex = []; px.on("pageerror", e => ex.push(e.message));
+      await px.goto("file://" + path + "#j=" + b64u(JSON.stringify([hostileEntry])));
+      await px.waitForFunction(() => !!DREAM.staged, undefined, { timeout: 8000 }).catch(() => {});
+      await px.click("#dreamPlay");
+      await px.waitForFunction(() => DREAM.on && TAKE.ev.length > 3, undefined, { timeout: 20000 }).catch(() => {});
+      await px.evaluate(() => { document.body.classList.add("engineOpen"); render(); });
+      const hx = await px.evaluate(() => ({ staged: DREAM.seed === 9191, pwned: window.__pwned || 0,
+        imgs: document.querySelectorAll("img, b[onmouseover]").length,
+        chip: (document.querySelector("#ldrPresets .pchip4[data-k]") || {}).textContent || "",
+        keep: keepSerialize(PRESETS), lcd: (document.getElementById("lcd") || {}).innerHTML || "",
+        lbl: (document.getElementById("ldrSaveLbl") || {}).innerHTML || "", th: (document.getElementById("thProgName") || {}).innerHTML || "" }));
+      await px.evaluate(() => dreamStop(true));
+      const rawIn = [hx.lcd, hx.lbl, hx.th].some(h => /<img\s|<b onmouseover/.test(h)) || /<img src=x onerror/.test(hx.keep);
+      if (!hx.staged) fail("hostile-string song did not stand (" + JSON.stringify({ seed: hx.staged }) + ")");
+      else if (hx.pwned || hx.imgs || rawIn) fail("hostile strings reached a sink raw " + JSON.stringify({ pwned: hx.pwned, imgs: hx.imgs, rawIn }));
+      else if (hx.chip.indexOf("<img") < 0) fail("rail chip does not show the escaped name (" + hx.chip + ")");
+      else ok("hostile strings in a VALID song: name/progName/p.name escaped at the rail, the LCD, the save label, the theory bar and the KEEP copy — nothing fired");
+      if (ex.length) fail("hostile-string page errors: " + ex.join(" | "));
+      await px.close(); }
   }
 
   /* hand the stage back to the full song before KEEP, then stop the dream —

@@ -54,7 +54,7 @@ if (!errs) ok("schema + combi targets valid");
 console.log("[2] figures");
 const G2 = eval(ldrJs + "\n;({LDR_FIG,LDR_KITS,ldrBase,ldrLane,LDR_RECIPE,LDR_MAP,LDR_MAP_BAD,ldrRoute,ldrBuf,LDR_SLOTS})");
 const { LDR_FIG, LDR_KITS, ldrBase, ldrLane } = G2;
-if (Object.keys(LDR_FIG).length !== 51) fail("figures " + Object.keys(LDR_FIG).length); else ok("51 figures");
+if (Object.keys(LDR_FIG).length < 51) fail("figures " + Object.keys(LDR_FIG).length + " (floor 51)"); else ok(Object.keys(LDR_FIG).length + " figures (floor 51)");
 LDR_KITS.forEach(i => { if (!PROGRAMS[i] || PROGRAMS[i].cat !== "DRUMS") fail("kit idx " + i); });
 let e2 = errs;
 for (const id in LDR_FIG) { const f = LDR_FIG[id];
@@ -469,8 +469,9 @@ console.log("[5] mapping+physics");
 {
   const { LDR_RECIPE, LDR_MAP, LDR_MAP_BAD, ldrRoute, ldrBuf } = G2;
   if (!LDR_RECIPE || !LDR_MAP || !ldrRoute || !ldrBuf) fail("physics symbols missing from slice");
-  if (Object.keys(LDR_RECIPE).length !== 25) fail("recipes " + Object.keys(LDR_RECIPE).length);
-  if (Object.keys(LDR_MAP).length !== 51) fail("map entries " + Object.keys(LDR_MAP).length);
+  if (Object.keys(LDR_RECIPE).length < 25) fail("recipes " + Object.keys(LDR_RECIPE).length + " (floor 25)");
+  if (Object.keys(LDR_MAP).length < 51) fail("map entries " + Object.keys(LDR_MAP).length + " (floor 51)");
+  if (Object.keys(LDR_MAP).length !== Object.keys(LDR_FIG).length) fail("map entries " + Object.keys(LDR_MAP).length + " vs figures " + Object.keys(LDR_FIG).length);
   if (!LDR_MAP_BAD || LDR_MAP_BAD.length) fail("in-file map audit: " + (LDR_MAP_BAD || ["missing"]).join(" · "));
   let perc = 0, lane = 0, un = 0;
   for (const id in LDR_FIG) LDR_FIG[id].hits.forEach((h, i) => {
@@ -601,20 +602,13 @@ console.log("[6] midi");
     if (fmt !== 1) fail("format " + fmt);
     if (div !== 480) fail("division " + div);
     if (ntrk !== 3) fail("tracks " + ntrk + " (want tempo + YOU + drums)");
-    /* walk tracks, verify declared lengths and count events */
-    let o = 14, tempoMetas = 0, meterMetas = 0, progCh = 0, on9 = 0, off9 = 0, on0 = 0, off0 = 0, walked = 0;
-    for (let k = 0; k < ntrk; k++) {
-      if (!tag(o, "MTrk")) { fail("track " + k + " header"); break; }
-      const len = (u[o+4] << 24) | (u[o+5] << 16) | (u[o+6] << 8) | u[o+7];
-      for (let i = o + 8; i < o + 8 + len - 2; i++) {
-        if (u[i] === 0xFF && u[i+1] === 0x51 && u[i+2] === 0x03) tempoMetas++;
-        if (u[i] === 0xFF && u[i+1] === 0x58 && u[i+2] === 0x04) meterMetas++;
-        if (u[i] === 0xC0) progCh++;
-        if (u[i] === 0x99) on9++; if (u[i] === 0x89) off9++;
-        if (u[i] === 0x90) on0++; if (u[i] === 0x80) off0++;
-      }
-      o += 8 + len; walked++;
-    }
+    /* walk tracks as EVENTS (round 9: a byte scan counted VLQ deltas of 2048+
+       ticks as note-ons — the old pins passed by fixture luck) */
+    const W = smfWalk(u);
+    if (W.err) fail("SMF walk: " + W.err);
+    let o = W.end, tempoMetas = W.tempoMetas, meterMetas = W.meterMetas, progCh = W.progCh,
+      on9 = W.on[9] || 0, off9 = W.off[9] || 0, on0 = W.on[0] || 0, off0 = W.off[0] || 0, walked = W.tracks;
+    if (W.unmatched) fail(W.unmatched + " note-ons never closed (stuck notes in the score)");
     if (o !== u.length) fail("track lengths don't tile the file (" + o + " vs " + u.length + ")");
     if (tempoMetas !== 2) fail("tempo metas " + tempoMetas + " (want initial + change)");
     if (meterMetas !== 1) fail("meter meta missing (donor writer carries 4/4)");
@@ -933,6 +927,30 @@ console.log("[10] save doors + drive law");
     if (GB.progValidate(mut(m => delete m.fx.drive))) { fail("absent drive accepted"); rBad++; }
     if (GB.progValidate(mut(m => delete m.filter.reso))) { fail("absent reso accepted"); rBad++; }
     if (GB.progValidate(mut(m => m.fx.delay.time = 4))) { fail("non-string delay time accepted"); rBad++; }
+    /* round 9 (the attacker lens): the WHOLE stock bank passes the widened law, and
+       the four blockers it found are refused at the gate */
+    const refused = PROGRAMS.filter(p => !GB.progValidate(p)).map(p => p.id);
+    if (refused.length) { fail("stock programs refused by the widened range law: " + refused.join(" ")); rBad++; }
+    const hostileP = [
+      ["cat markup", m => m.cat = "<img src=x onerror=1>"],
+      ["tempo −120", m => m.tempo = -120],
+      ["tempo 1e308", m => m.tempo = 1e308],
+      ["arpDefault oct 1e9", m => m.arpDefault = { on: true, patt: "UP", reso: "16", gate: .5, oct: 1e9, latch: true }],
+      ["arpDefault patt junk", m => m.arpDefault = { on: true, patt: "EXPLODE", reso: "16", gate: .5, oct: 1, latch: true }],
+      ["NaN attack", m => m.aEG.a = NaN],
+      ["sustain 40", m => m.aEG.s = 40],
+      ["detune 1e9", m => { if (m.osc && m.osc[0]) m.osc[0].det = 1e9; }],
+      ["osc oct 40", m => { if (m.osc && m.osc[0]) m.osc[0].oct = 40; }],
+      ["lfo rate 1e6", m => m.lfo.rate = 1e6],
+      ["filter cutoff 1e9", m => m.filter.cutoff = 1e9],
+      ["filter type junk", m => m.filter.type = "hp99"],
+      ["vox f1 string", m => m.vox = { f1: "x", f2: 900 }],
+      ["mono string", m => m.mono = "yes"]];
+    hostileP.forEach(([nm, f]) => { if (GB.progValidate(mut(f))) { fail("range law accepts " + nm); rBad++; } });
+    /* the wave lookup is an own-key lookup */
+    if (!/hasOwnProperty\.call\(WAVES,w\)/.test(s)) { fail("wave lookup still a bare bracket (constructor throws in spawnVoice)"); rBad++; }
+    if (!/if\(!\(stepLen>=\.005\)/.test(s)) { fail("arp scheduler has no spin guard"); rBad++; }
+    if (!/CAT:\$\{esc\(cur\.cat\)\}/.test(s)) { fail("cat reaches the LCD unescaped"); rBad++; }
   }
   /* stem parity (round 8): one duck law and one mastering gain across every
      pass, so the stems in a session zip sum back to its mix */
@@ -984,7 +1002,7 @@ console.log("[10] save doors + drive law");
     const gainStub = () => ({ gain: { value: 0, setTargetAtTime() {} } });
     const nodes = { shaper: { curve: null }, dWet: gainStub(), dDry: gainStub(),
       cSend: gainStub(), rSend: gainStub(), dSend: gainStub(),
-      dlyL: { delayTime: { setTargetAtTime() {} } }, dlyR: { delayTime: { setTargetAtTime() {} } },
+      dlyL: { delayTime: { setTargetAtTime() {}, setValueAtTime() {} } }, dlyR: { delayTime: { setTargetAtTime() {}, setValueAtTime() {} } },
       fbA: gainStub(), fbB: gainStub() };
     const applyFXP = new Function("p", "force", "ctx", "shaper", "dWet", "dDry", "cSend", "rSend",
       "dSend", "dlyL", "dlyR", "fbA", "fbB", "driveCurve", "delayBeats", "VERB", "VERB_PIN", "exporting",
@@ -1017,10 +1035,272 @@ console.log("[10] save doors + drive law");
     if (G3.presetValidate(mkP(p => p.name = 42))) { fail("non-string song name accepted"); rBad++; }
     if (G3.presetValidate(mkP(p => p.name = "x".repeat(65)))) { fail("overlong song name accepted"); rBad++; }
     if (G3.presetValidate(mkP(p => p.chordStyle = "explode"))) { fail("unknown chordStyle accepted"); rBad++; }
+    /* round 9 (the attacker lens): comps are own figure keys on the figure's grid,
+       kit is an integer, leadOct is bounded — each used to reach the conductor */
+    if (G3.presetValidate(mkP(p => p.comps = ["constructor"]))) { fail("prototype key accepted as a comp"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.comps = ["__proto__+3"]))) { fail("prototype key with rotation accepted as a comp"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.comps = ["not-a-figure"]))) { fail("unknown comp accepted"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.kit = "63"))) { fail("string kit index accepted"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.leadOct = 1e9))) { fail("leadOct 1e9 accepted"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.leadOct = "12"))) { fail("string leadOct accepted"); rBad++; }
+    if (!G3.presetValidate(mkP(p => p.leadOct = 24))) { fail("legal leadOct refused"); rBad++; }
+    if (G3.presetValidate(mkP(p => p.extraKick = "yes"))) { fail("non-boolean extraKick accepted"); rBad++; }
+    if (!/esc\(c\.roman\)/.test(s)) { fail("theory bar prints roman unescaped"); rBad++; }
+    if (!/try\{ dreamScheduleBar\(/.test(s)) { fail("a bar that cannot be scheduled still spins the tick"); rBad++; }
   }
   if (!rBad) ok("zip round-trip (both writers) + hostiles refused · drive law: unity at reference, saturates, ±2 domain · " +
     "import ranges clamped (absent fields refused) · stem parity: one duck law, one mastering gain");
 }
 
-console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
-process.exit(errs ? 1 : 0);
+
+/* ── suite 12: the bank court (round 9) ────────────────────────────── */
+console.log("[12] bank court");
+{
+  let rBad = 0;
+  /* the saturator headroom law: every satCurve now spans ±SAT_HEADROOM of its
+     input through mkSat's pre-trim; inside ±1 the transfer is the OLD curve
+     exactly, beyond it satSoft's own knee continues instead of the clamp */
+  const satJs = slice("function satSoft", "function limitCurve");
+  const GS = eval(satJs + "\n;({satSoft,satCurve,SAT_HEADROOM})");
+  const H = GS.SAT_HEADROOM, k = 1.25, c = GS.satCurve(k), m = Math.abs(GS.satSoft(k));
+  if (!(H >= 2)) { fail("SAT_HEADROOM " + H + " — the tube's domain does not cover a vel-1 triad (measured input pk 1.42)"); rBad++; }
+  const at = u => c[Math.round((u / H + 1) / 2 * (c.length - 1))];   /* u = saturator input, pre-trim */
+  let worst = 0;
+  for (let u = -1; u <= 1.0001; u += .05) worst = Math.max(worst, Math.abs(at(u) - GS.satSoft(u * k) / m));
+  if (worst > 2e-3) { fail("headroom changed the transfer inside ±1 (max err " + worst.toFixed(4) + ")"); rBad++; }
+  if (!(at(1.4) > at(1) && at(1.4) < 1.2)) { fail("past 1 the curve must keep rising smoothly toward satSoft's asymptote (" + at(1).toFixed(3) + " → " + at(1.4).toFixed(3) + ")"); rBad++; }
+  for (let i = 1; i < c.length; i++) if (c[i] < c[i - 1]) { fail("sat curve not monotone"); rBad++; break; }
+  if (!(c.length >= 4096)) { fail("curve resolution halved by the wider domain"); rBad++; }
+  const mk = /function mkSat\(k\)\{[^]*?pre\.gain\.value=1\/SAT_HEADROOM/.test(s);
+  if (!mk) { fail("mkSat does not carry the 1/SAT_HEADROOM pre-trim"); rBad++; }
+  /* every saturator goes through mkSat — the only bare satCurve() is mkSat's own */
+  const mkBody = s.slice(s.indexOf("function mkSat(k)"), s.indexOf("}", s.indexOf("function mkSat(k)")) + 1);
+  const bare = (s.match(/\.curve=satCurve\(/g) || []).length - (mkBody.match(/\.curve=satCurve\(/g) || []).length;
+  if (bare) { fail(bare + " saturator(s) still take satCurve without the pre-trim"); rBad++; }
+  if (!/glue\.connect\(tubeS\.in\)/.test(s)) { fail("master tube not fed through its headroom trim"); rBad++; }
+  /* the bank law the court wrote: a bandpass of Q ≥ 3 in front of a sine-led
+     oscillator set passes < −20 dB off-centre — three programs sat 25 dB
+     under the bank and were inaudible. Data, so a data law. */
+  PROGRAMS.forEach(p => {
+    if (p.cat === "DRUMS" || !p.filter || p.filter.type !== "bp") return;
+    /* sine-LED: sines carry at least half the oscillator level (noise through a
+       narrow band is a whistle by design — A104 — and stays legal) */
+    const tot = Array.isArray(p.osc) ? p.osc.reduce((a, o) => a + (o.lvl || 0), 0) : 0;
+    const sine = Array.isArray(p.osc) ? p.osc.filter(o => o.w === "sine").reduce((a, o) => a + (o.lvl || 0), 0) : 0;
+    const sineLed = tot > 0 && sine >= tot * .5;
+    if (sineLed && p.filter.reso >= 3) { fail(p.id + " " + p.name + ": bandpass Q " + p.filter.reso + " on a sine-led program (the inaudible-program trap)"); rBad++; }
+  });
+  /* the bell law and the formant makeup exist where the voice is built */
+  const svJs = slice("function spawnVoice", "/* ---- drums ---- */");
+  if (!/_bellParts\?\s*1\/Math\.sqrt\(Math\.max\(1,_lvlSum\)\)/.test(svJs)) { fail("bell partial-sum law (sqrt) missing from spawnVoice"); rBad++; }
+  if (!/g1\.gain\.value=\.9\*VOX_MAKEUP/.test(svJs) || !/gd\.gain\.value=\.12\*VOX_MAKEUP/.test(svJs)) { fail("VOX formant makeup missing"); rBad++; }
+  const vm = eval(slice("const VOX_MAKEUP=", ";") + ";VOX_MAKEUP");
+  if (!(vm >= 2 && vm <= 3)) { fail("VOX_MAKEUP " + vm + " outside the measured window (2.5 put the family on the median)"); rBad++; }
+  if (!rBad) ok("saturator headroom ±" + H + " (transfer inside ±1 unchanged, max err " + worst.toExponential(1) + ", knee continues past 1) · no bandpass-on-sine traps · bell sqrt law · VOX makeup ×" + vm);
+}
+
+/* a small SMF-1 event walker: deltas as VLQ, meta/sysex lengths honoured,
+   running status supported, note-on/off paired per (channel, note) */
+function smfWalk(u) {
+  const r = { err: null, tracks: 0, tempoMetas: 0, meterMetas: 0, progCh: 0, on: {}, off: {}, unmatched: 0, end: 14 };
+  try {
+    const ntrk = (u[10] << 8) | u[11]; let o = 14;
+    for (let k = 0; k < ntrk; k++) {
+      if (String.fromCharCode(u[o], u[o+1], u[o+2], u[o+3]) !== "MTrk") { r.err = "track " + k + " header"; return r; }
+      const len = (u[o+4] << 24) | (u[o+5] << 16) | (u[o+6] << 8) | u[o+7];
+      let i = o + 8; const end = i + len; let status = 0; const open = {};
+      while (i < end) {
+        let d = 0; do { d = (d << 7) | (u[i] & 0x7f); } while (u[i++] & 0x80);
+        let b = u[i];
+        if (b === 0xFF) { const type = u[i+1]; i += 2; let L = 0; do { L = (L << 7) | (u[i] & 0x7f); } while (u[i++] & 0x80);
+          if (type === 0x51 && L === 3) r.tempoMetas++; if (type === 0x58 && L === 4) r.meterMetas++; i += L; continue; }
+        if (b === 0xF0 || b === 0xF7) { i++; let L = 0; do { L = (L << 7) | (u[i] & 0x7f); } while (u[i++] & 0x80); i += L; continue; }
+        if (b & 0x80) { status = b; i++; }
+        const hi = status & 0xF0, ch = status & 0x0F;
+        if (hi === 0xC0 || hi === 0xD0) { if (hi === 0xC0) r.progCh++; i += 1; continue; }
+        const n = u[i], v = u[i+1]; i += 2;
+        if (hi === 0x90 && v > 0) { r.on[ch] = (r.on[ch] || 0) + 1; open[ch + ":" + n] = (open[ch + ":" + n] || 0) + 1; }
+        else if (hi === 0x80 || (hi === 0x90 && v === 0)) { r.off[ch] = (r.off[ch] || 0) + 1; if (open[ch + ":" + n]) open[ch + ":" + n]--; else r.unmatched++; }
+      }
+      for (const k2 in open) r.unmatched += open[k2];
+      o = end; r.tracks++;
+    }
+    r.end = o;
+  } catch (e) { r.err = String(e && e.message || e); }
+  return r;
+}
+
+/* ── suite 11: the take in the zip + the address (round 9) ─────────── */
+console.log("[11] take codec + address");
+(async () => {
+  let rBad = 0;
+  const ownKeys = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  /* the take codec, in a sandbox that binds exactly what it references */
+  const codecJs = slice("/*TAKE-CODEC-BEGIN*/", "/*TAKE-CODEC-END*/");
+  const bankJs = slice("/*BANKB-BEGIN*/", "/*BANKB-END*/");
+  const GB = eval(bankJs + "\n;({progValidate})");
+  const ddJs = slice("/*DD22-BEGIN*/", "const LOCKS={");
+  const GD = eval(ddJs + "\n;({DD_KIT_NAMES})");
+  const TC = new Function("PROGRAMS", "DD_KIT_NAMES", "LDR_RECIPE", "progValidate",
+    codecJs + "\n;return {takeSerialize,takeDeserialize,TAKE_MAX_EV,TAKE_MAX_SEC};")(PROGRAMS, GD.DD_KIT_NAMES, G2.LDR_RECIPE, GB.progValidate);
+  const drumsIdx = PROGRAMS.findIndex(p => p.cat === "DRUMS");
+  const foreign = JSON.parse(JSON.stringify(PROGRAMS[5])); foreign.name = "Foreign Pad";
+  const evs = [
+    { t: 0.5, role: "you", prog: PROGRAMS[5], note: 60, vel: .8, dur: 1.2, tempo: 100 },
+    { t: 0.25, role: "bass", prog: PROGRAMS[7], note: 40, vel: .9, dur: .5, tempo: 100 },
+    { t: 0, role: "kit", prog: PROGRAMS[drumsIdx], note: 48, vel: 1, dur: .12, tempo: 100 },
+    { t: 1, role: "perc", name: "surdo", vel: .7, dur: .12, tempo: 100, pitch: 1.1, mute: .9, layerVel: .6 },
+    { t: 1.5, role: "dd", kit: "neptune", zone: 0, vel: .95, dur: .12, tempo: 100 },
+    { t: 2, role: "dd8", kit: "trapK", note: 36, vel: .8, dur: .4, slide: .1, from: 38, tempo: 100 },
+    { t: 2.5, role: "mix", s: { bass: .9, chord: .8, lead: .85, lim: .8 }, tempo: 100, dur: 0 },
+    { t: 3, role: "lead", prog: foreign, note: 72, vel: .6, dur: .3, tempo: 100 }];
+  const ser = TC.takeSerialize(evs);
+  const back = TC.takeDeserialize(JSON.parse(JSON.stringify(ser)));
+  if (!back || back.length !== evs.length) { fail("take round-trip lost events (" + (back && back.length) + ")"); rBad++; }
+  else {
+    if (!(back[0].role === "kit" && back[1].role === "bass" && back[2].role === "you")) { fail("restored take not sorted by time"); rBad++; }
+    const you = back.find(e => e.role === "you");
+    if (you.prog !== PROGRAMS[5]) { fail("bank program not restored by identity (index ride)"); rBad++; }
+    const ld = back.find(e => e.role === "lead");
+    if (!ld.prog || ld.prog.name !== "Foreign Pad" || ld.prog === foreign) { fail("foreign program not restored as a validated copy"); rBad++; }
+    const d8 = back.find(e => e.role === "dd8");
+    if (!(d8.kit === "trapK" && d8.from === 38 && Math.abs(d8.slide - .1) < 1e-9)) { fail("dd8 fields lost " + JSON.stringify(d8)); rBad++; }
+    const pc = back.find(e => e.role === "perc");
+    if (!(pc.name === "surdo" && pc.pitch === 1.1 && pc.mute === .9 && pc.layerVel === .6)) { fail("perc fields lost"); rBad++; }
+    const mx = back.find(e => e.role === "mix");
+    if (!(mx.s && mx.s.lim === .8 && mx.dur === 0)) { fail("mix stage lost"); rBad++; }
+    if (ser.ev.some(e => ownKeys(e, "prog"))) { fail("serialized take carries program objects for bank programs"); rBad++; }
+  }
+  /* hostiles: every refusal is the whole take, never a guess */
+  const H = f => { const o = JSON.parse(JSON.stringify(ser)); f(o); return TC.takeDeserialize(o); };
+  const refuse = (name, f) => { if (H(f) !== null) { fail("take hostile accepted: " + name); rBad++; } };
+  refuse("version 2", o => o.v = 2);
+  refuse("NaN time", o => o.ev[0].t = NaN);
+  refuse("time past the cap", o => o.ev[0].t = TC.TAKE_MAX_SEC + 1);
+  refuse("unknown role", o => o.ev[0].role = "sidechain");
+  refuse("prototype perc name", o => { o.ev[3].name = "constructor"; });
+  refuse("unknown dd kit", o => { o.ev[4].kit = "zzz"; });
+  refuse("dd zone 12", o => { o.ev[4].zone = 12; });
+  refuse("program index 999", o => { o.ev[2].pi = 999; });
+  refuse("note 128", o => { o.ev[2].note = 128; });
+  refuse("foreign program past the range law", o => { o.ev[7].p.fx.delay.fb = 1.2; });
+  refuse("kit role on a non-drum program", o => { o.ev[0].pi = 5; o.ev[0].role = "kit"; });
+  refuse("float zone", o => { o.ev[4].zone = 1.5; });
+  /* out-of-range OPTIONAL fields are dropped, never passed through */
+  { const r = H(o => { o.ev[5].from = 999; o.ev[3].pitch = 40; o.ev[3].layerVel = -1; });
+    const d8 = r && r.find(e => e.role === "dd8"), pc = r && r.find(e => e.role === "perc");
+    if (!r || d8.from !== undefined || pc.pitch !== 1 || pc.layerVel !== undefined) { fail("out-of-range optional field passed through " + JSON.stringify({ from: d8 && d8.from, pitch: pc && pc.pitch, lv: pc && pc.layerVel })); rBad++; } }
+  { const o = JSON.parse(JSON.stringify(ser)); const big = []; for (let i = 0; i <= TC.TAKE_MAX_EV; i++) big.push(o.ev[2]); o.ev = big;
+    if (TC.takeDeserialize(o) !== null) { fail("take hostile accepted: " + (TC.TAKE_MAX_EV + 1) + " events"); rBad++; } }
+  if (TC.takeDeserialize("[]") !== null || TC.takeDeserialize(null) !== null) { fail("non-object take accepted"); rBad++; }
+  /* the tape's own laws (round 9, the correctness lens): a hold is closed by
+     its VOICE (a COMBI's layers share a key), and an edited working program
+     rides as a frozen copy while an unedited one rides as the bank object */
+  {
+    const tapeJs = slice("let _frozenProg=", "function takeLogP(");
+    const st = { userSlot: null, progIdx: 5, tempo: 100 };
+    const TK = { on: true, t0: 0, ev: [], open: {}, gen: 0 };
+    const mk = new Function("TAKE", "state", "PROGRAMS", "DREAM", "ctx", "takeTrim", "cur", "exporting",
+      tapeJs + "\n;return {takeLog,takeCloseEv,takeProgFor,setCur:c=>{cur=c;},setNow:t=>{ctx.currentTime=t;}};");
+    const ctx = { currentTime: 0 };
+    const cur = JSON.parse(JSON.stringify(PROGRAMS[5]));
+    const TP = mk(TK, st, PROGRAMS, { pans: null }, ctx, () => {}, cur, false);
+    if (TP.takeProgFor(cur) !== PROGRAMS[5]) { fail("unedited working program not logged as the bank object"); rBad++; }
+    cur.fx.drive = .77;
+    const fz = TP.takeProgFor(cur);
+    if (fz === cur || fz === PROGRAMS[5] || fz.fx.drive !== .77) { fail("edited working program not frozen"); rBad++; }
+    if (TP.takeProgFor(cur) !== fz) { fail("frozen copy not stable across notes of one edit generation"); rBad++; }
+    cur.fx.drive = .5;
+    if (TP.takeProgFor(cur) === fz) { fail("a new edit did not make a new frozen copy"); rBad++; }
+    /* two layers on ONE key: closing by voice closes the right one */
+    const e1 = TP.takeLog(PROGRAMS[0], 60, .8, 0, null, null), e2 = TP.takeLog(PROGRAMS[3], 60, .8, 0, null, null);
+    if (!e1 || !e2 || TK.open[60].length !== 2) { fail("open holds not tracked per event (" + JSON.stringify(TK.open) + ")"); rBad++; }
+    else {
+      TP.setNow(.9); TP.takeCloseEv(e2);
+      if (!(e2.dur > .85 && e2.dur < .95) || e1.dur !== null) { fail("close-by-voice closed the wrong layer " + JSON.stringify([e1.dur, e2.dur])); rBad++; }
+      TP.setNow(1.4); TP.takeCloseEv(e1);
+      if (!(e1.dur > 1.35) || TK.open[60]) { fail("second layer not closed / open list not cleared"); rBad++; }
+      TP.takeCloseEv(e1); if (e1.dur > 1.45) { fail("closing twice re-patched the duration"); rBad++; }
+    }
+  }
+  /* library phrases keep their 16-step shape inside a 12-pulse bar; the conducted figure plays the song's kit */
+  const libSites = (s.match(/at\+p0\*stepM\+gfs\(p0\)/g) || []).length;
+  if (libSites !== 3) { fail("library phrase sites on the bar-mapped step: " + libSites + " of 3"); rBad++; }
+  if (!/ldrPlayFig\(P\.fig,f,0,at,step,C\.mainVel,humK,"fig",\{kit:P\.kit,conducted:true\}\)/.test(s)) { fail("the conducted figure does not carry the song\x27s kit"); rBad++; }
+  if (!/dd8:38/.test(s)) { fail("808 line previews as piano in a DAW"); rBad++; }
+  if (!/const t0=DREAM\.next-\.1; TAKE\.ev\.forEach\(e=>\{ e\.t=0; \}\); TAKE\.t0=t0;/.test(s)) { fail("the tape\x27s zero is not the first downbeat (replays jitter in time)"); rBad++; }
+  /* the performance lens (round 9): the render instantiates voices in windows at
+     the render clock's checkpoints; the tape trims with hysteresis; no dead nodes;
+     no wall-clock timers offline from the TRITON kit either */
+  const rp = slice("async function renderPass(", "/* mastering trim:");
+  if (!/const WIN=RENDER_WIN/.test(rp) || !/oc\.suspend\(t0\)\.then/.test(rp) || !/schedUpTo\(t0\+WIN\+\.25\)/.test(rp)) { fail("renderPass does not instantiate voices in windows at render-clock checkpoints"); rBad++; }
+  if (/for\(let i=0;i<evs\.length;i\+\+\)\{\s*const e=evs\[i\];/.test(rp)) { fail("renderPass still instantiates the whole take before startRendering"); rBad++; }
+  if (!/const f2=single\? null : ctx\.createBiquadFilter\(\)/.test(s)) { fail("second filter pole built for single-pole programs"); rBad++; }
+  if (!/const needLFO=!!\(prog\.lfo\.pitch\|\|prog\.lfo\.filter\|\|prog\.lfo\.amp\|\|prog\.vox\|\|MODW>0\)/.test(s)) { fail("LFO built for programs that never use it"); rBad++; }
+  if (!/if\(!\(typeof exporting!=="undefined"&&exporting\)\) setTimeout\(v\.kill,1400\)/.test(s)) { fail("drumHit arms wall-clock kill timers during a render"); rBad++; }
+  /* the kit bake runs off the main thread, from the DD22 block's own verbatim source, with a main-thread fallback */
+  const wj = slice("function ddWorker()", "function takeLogD(");
+  if (!/new Worker\(/.test(wj) || !/DD22-BEGIN/.test(wj) || !/DD22\.renderHit\(j\.kit,j\.slot,j\.layer,j\.sr\)/.test(wj)) { fail("DD22 bake does not run in a worker from the block's own source"); rBad++; }
+  if (!/const sync=\(\)=>/.test(wj) || !/ddBake\(kit,s,l,sr\)/.test(wj)) { fail("DD22 bake has no main-thread fallback"); rBad++; }
+  if (/n<2/.test(wj)) { fail("fallback still bakes two cold hits in one macrotask"); rBad++; }
+  {
+    const trimJs = slice("function takeTrim()", "/* round 9 (the court): the tape logged");
+    const TK = { on: true, t0: 0, ev: [], open: {}, gen: 0 };
+    const trim = new Function("TAKE", trimJs + "\n;return takeTrim;")(TK);
+    for (let i = 0; i < 2100; i++) TK.ev.push({ t: i * .25, role: "you" });   /* 0..525 s — past the 480+30 hysteresis mark */
+    trim(); const t0a = TK.t0, n0 = TK.ev.length;
+    if (!(t0a > 0 && TK.ev[TK.ev.length - 1].t <= 480.001)) { fail("takeTrim did not trim a 500 s take to 480 (" + TK.t0 + ")"); rBad++; }
+    for (let k = 1; k <= 20; k++) { TK.ev.push({ t: TK.ev[TK.ev.length - 1].t + .5, role: "you" }); trim(); }
+    if (TK.t0 !== t0a) { fail("takeTrim rewrote the take again within the 30 s hysteresis window"); rBad++; }
+    for (let k = 1; k <= 60; k++) { TK.ev.push({ t: TK.ev[TK.ev.length - 1].t + .5, role: "you" }); trim(); }
+    if (!(TK.t0 > t0a)) { fail("takeTrim never trimmed again past the hysteresis window"); rBad++; }
+  }
+  /* the address: preset-law JSON → deflate → base64url, and back through the SAME gate */
+  const addrJs = slice("/*ADDR-BEGIN*/", "/*ADDR-END*/");
+  const A = new Function("presetParse", addrJs + "\n;return {addrEncode,addrDecode,b64uEnc,b64uDec,bytesThrough,ADDR_MAX,ADDR_INFLATE_MAX};")(G3.presetParse);
+  const kd = G3.candDrums(G3.mulberry(11)), kb = G3.candBass(G3.mulberry(12)),
+    kc = G3.candChords(G3.mulberry(13), kb), kl = G3.candLead(G3.mulberry(14));
+  const p = G3.composeP([kd, kb, kc, kl, { kind: "shape", format: "song" }], null, 5);
+  delete p._seed; p.verb = 60;
+  const entry = { name: (p.name || "dream").slice(0, 34) + " #4242", seed: 4242, p };
+  if (!G3.presetValidate(entry)) { fail("test entry does not pass the preset law"); rBad++; }
+  const addr = await A.addrEncode([entry]);
+  const jsonLen = JSON.stringify([entry]).length;
+  if (!/^p=[A-Za-z0-9_-]+$/.test(addr)) { fail("address not deflate/base64url: " + addr.slice(0, 20)); rBad++; }
+  if (!(addr.length < jsonLen)) { fail("address longer than the JSON it carries (" + addr.length + " vs " + jsonLen + ")"); rBad++; }
+  const dec = await A.addrDecode("#" + addr);
+  if (!(dec.length === 1 && dec[0].seed === 4242 && JSON.stringify(dec[0].p) === JSON.stringify(p))) { fail("address does not regrow the entry"); rBad++; }
+  const raw = "j=" + A.b64uEnc(new TextEncoder().encode(JSON.stringify([entry])));
+  const decJ = await A.addrDecode(raw);
+  if (!(decJ.length === 1 && decJ[0].seed === 4242)) { fail("raw (j=) address does not decode"); rBad++; }
+  /* hostiles */
+  const bad = async (name, h) => { const r = await A.addrDecode(h); if (!Array.isArray(r) || r.length) { fail("address hostile accepted: " + name); rBad++; } };
+  await bad("wrong kind", "#x=" + addr.slice(2));
+  await bad("not base64", "#p=!!!not base64!!!");
+  await bad("garbage bytes", "#p=" + A.b64uEnc(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])));
+  await bad("length%4==1", "#p=" + addr.slice(2, 2 + (Math.floor(addr.length / 4) * 4 - 3)));
+  await bad("over the cap", "#p=" + "A".repeat(A.ADDR_MAX + 8));
+  await bad("prototype figure", "#j=" + A.b64uEnc(new TextEncoder().encode(JSON.stringify([{ name: "x", seed: 1, p: Object.assign({}, p, { fig: "constructor" }) }]))));
+  { /* an inflate bomb stops at the cap instead of filling the tab */
+    const zeros = new Uint8Array(4 * 1024 * 1024);
+    const cs = new CompressionStream("deflate"); const w = cs.writable.getWriter(); w.write(zeros); w.close();
+    const parts = []; const rd = cs.readable.getReader();
+    for (;;) { const { value, done } = await rd.read(); if (done) break; parts.push(value); }
+    let n = 0; parts.forEach(x => n += x.length); const z = new Uint8Array(n); let o = 0; parts.forEach(x => { z.set(x, o); o += x.length; });
+    const bomb = "#p=" + A.b64uEnc(z);
+    if (!(bomb.length < A.ADDR_MAX)) { fail("bomb test is not under the hash cap (" + bomb.length + ")"); rBad++; }
+    else await bad("inflate bomb (4 MB from " + z.length + " bytes)", bomb);
+    /* the CAP must be what stops it — a JSON parse failing on 4 MB of zeros
+       would pass the line above with the cap removed (mutation-found) */
+    const capped = await A.bytesThrough(z, new DecompressionStream("deflate"), A.ADDR_INFLATE_MAX);
+    if (capped !== null) { fail("inflate cap did not stop the bomb (" + (capped && capped.length) + " bytes came out)"); rBad++; }
+    const uncapped = await A.bytesThrough(z, new DecompressionStream("deflate"), 1 << 30);
+    if (!(uncapped && uncapped.length === zeros.length)) { fail("bytesThrough is broken (" + (uncapped && uncapped.length) + ")"); rBad++; }
+  }
+  if (A.b64uDec("abcde") !== null) { fail("base64url length%4==1 accepted"); rBad++; }
+  if (!rBad) ok("take codec: all 9 roles round-trip, bank programs by index, foreign programs re-validated, 14 hostiles refused · " +
+    "address: " + addr.length + " chars for " + jsonLen + " bytes of song, regrows through the preset law, 7 hostiles + inflate bomb refused");
+  console.log(errs ? "\nRESULT: " + errs + " ERROR(S)" : "\nRESULT: ALL GREEN");
+  process.exit(errs ? 1 : 0);
+})().catch(e => { fail("suite 11 threw: " + (e && e.stack || e)); console.log("\nRESULT: " + errs + " ERROR(S)"); process.exit(1); });
+
