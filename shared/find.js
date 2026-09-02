@@ -118,9 +118,17 @@
  *
  *    AND THE LABEL IS NOT THE ONLY THING THAT HAS TO BE TRUE. A word in an item's
  *    TITLE outranks the same word used as somebody's nickname for a different
- *    item — "damage" is the Damage Note even though the Incident Report answers
- *    to it, "safety" is the Toolbox Talk / Safety Meeting Note even though the
- *    Incident Report answers to that too. That is rule 4's ladder below, and it
+ *    item — "toolbox" is the Toolbox Talk even where another document answers to
+ *    it, and "damage" is the Damage Note. BOTH WORKED EXAMPLES HERE WERE REWRITTEN
+ *    2026-09-02 and the reason is worth keeping: they used to read "damage … even
+ *    though the Incident Report answers to it" and "safety is the Toolbox Talk /
+ *    Safety Meeting Note". The shelf gate retired the first — the Incident Report
+ *    no longer answers to "damage" at all, so the tie this rule was resolving does
+ *    not exist — and renaming that document to stop its title eating "meeting" on
+ *    16 shelves took "safety" out of a TITLE, which flipped the second. "safety"
+ *    is now a declared alias there rather than an accident of the name. A comment
+ *    that names a behaviour is a claim; these two had quietly stopped being true.
+ *    That is rule 4's ladder below, and it
  *    is asserted per surface rather than reasoned about: an honest label over the
  *    wrong row is a better-dressed version of the same failure.
  *

@@ -8161,7 +8161,20 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   with the shared handover gone, block **12,740 chars**, the folded section and every line of
   it in the pasted output, 0 overflow, 0 page errors · `shared/docsindex.js` regenerated so
   the deploy's `--check` cannot diff. **Storefront unchanged — no new tool, no new trade.**
-  **NAMED AND NOT DONE, so it is not lost:** `doors` and `landscape` are the only two trades
+  **THE RENAME BROKE A DOCUMENTED BEHAVIOUR AND THE SWEEP FOR STALE COMMENTS IS WHAT
+  CAUGHT IT — no gate could have.** `shared/find.js`'s header cites this very document as
+  rule 4's worked example (*"safety is the Toolbox Talk / Safety Meeting Note even though
+  the Incident Report answers to that too"*), and taking *"Safety Meeting"* out of the name
+  to stop it eating `"meeting"` also took **"safety" out of a TITLE**. Measured on five
+  shelves: `"safety"` flipped to the Incident Report. The shelf gate is structurally blind
+  to it — `"safety"` is nobody's authored alias, so there was nothing to probe. **An outcome
+  that was reasoned about once does not get to change as a side effect of a different fix:**
+  `"safety"` is now DECLARED on the document rather than bought with a word in the name we
+  do not want, restored on all five re-measured shelves, `"meeting"` still reaching the
+  minutes. Both of that comment's worked examples had also quietly stopped being true — the
+  other one because this cycle retired the tie it described — and both are rewritten with
+  the history intact. **A comment that names a behaviour is a claim, and it rots silently.**
+  · **NAMED AND NOT DONE, so it is not lost:** `doors` and `landscape` are the only two trades
   on the rack with **zero `overrides`** — every other one of the 14 re-addresses between 1
   and 8 of the 11 shared documents, and those two inherit all 11 in the rack's generic voice.
   That is the next DOCS rung, and it is the 2026-08-15 roster lesson again: nobody asks a new

@@ -542,7 +542,18 @@
          trade's own word, not the corporate register), "safety meeting" stays an
          alias so nothing goes dark, and "meeting" now reaches the minutes. */
       name: "Toolbox Talk / Tailgate Note",
-      aka: ["toolbox", "tool box talk", "safety meeting", "tailgate", "jha", "pre task"],
+      /* "safety" IS AN ALIAS NOW BECAUSE THE RENAME ABOVE TOOK IT OUT OF THE TITLE.
+         `shared/find.js` rule 4 — a word in a TITLE outranks the same word used as
+         somebody's nickname for a different document — and that file's own header
+         cites this document as the worked example: "safety is the Toolbox Talk …
+         even though the Incident Report answers to that too". Dropping "Safety
+         Meeting" from the name to stop it eating "meeting" also dropped "safety"
+         out of the title, and measured on five shelves the ladder flipped: "safety"
+         led the Incident Report. That outcome was reasoned about and written down
+         once; it does not get to change as a side effect of a different fix. It is
+         declared here instead of re-bought with a word in the name we do not
+         want — and it is what the field says anyway ("we did safety this morning"). */
+      aka: ["toolbox", "tool box talk", "safety", "safety meeting", "tailgate", "jha", "pre task"],
       family: "minutes",
       from: "the lead on the job",
       to: "safety and the office",
