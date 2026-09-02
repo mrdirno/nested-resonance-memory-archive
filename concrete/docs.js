@@ -259,7 +259,8 @@ window.TRADE_DOCS = {
       "aka": [
         "weather day",
         "rained out",
-        "cold",
+        /* "cold" belongs to "Stopped Pour / Cold Joint" on this shelf (2026-09-02) —
+           it is in that document's NAME and was never leading this one. */
         "blankets",
         "protection",
         "froze",
@@ -412,7 +413,9 @@ window.TRADE_DOCS = {
       "aka": [
         "not our work",
         "crack",
-        "damage",
+        /* the bare "damage" belongs to `damage-found`, whose name opens with it
+           (2026-09-02) — this is the REPLY, and it is reached by what a man says
+           when somebody has put his name on something. */
         "they say it's ours",
         "somebody drove on it",
         "chipped it"
@@ -463,6 +466,12 @@ window.TRADE_DOCS = {
   "overrides": {
     "delay-notice": {
       "name": "We Got Held",
+      /* AKA TRIMMED 2026-09-02 by the alias-lead probe in
+         tools/toolkit-gates/docs-shelf.mjs: an alias its author wrote on THIS
+         document was handing back a DIFFERENT one, because that one carries the
+         word in its NAME and a name outranks an alias. The word goes to the
+         document named for it. */
+      "aka": ["delay", "delay notice", "held up", "waiting on", "impact notice", "notice"],
       "omit": "Who and what actually stood — the men by name and classification, the iron by piece, the pump and the trucks ordered and where they went — and what the crew would have been doing instead. \"We were held from morning to noon\" with no names and no idled equipment is a sentence nobody can check and nobody can act on.",
       "needs": ["who", "count", "notdone"],
       "sections": [

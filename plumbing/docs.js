@@ -289,7 +289,9 @@ window.TRADE_DOCS = {
         "service write-up",
         "work performed",
         "service report",
-        "call notes",
+        /* "call notes" was here AND on the shared `meeting-minutes`, whose whole
+           job is the notes from a call (2026-09-02). Given up rather than shared:
+           this document is reachable by six other names a service plumber says. */
         "what I did",
         "service ticket write-up",
         "invoice write-up"

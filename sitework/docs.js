@@ -458,6 +458,12 @@ window.TRADE_DOCS = {
     },
     "look-ahead": {
       "name": "What Has To Be True Before The Machine Moves",
+      /* AKA TRIMMED 2026-09-02 by the alias-lead probe in
+         tools/toolkit-gates/docs-shelf.mjs: an alias its author wrote on THIS
+         document was handing back a DIFFERENT one, because that one carries the
+         word in its NAME and a name outranks an alias. The word goes to the
+         document named for it. */
+      "aka": ["look ahead", "lookahead", "two week", "three week", "next week"],
       "to": "the GC and our PM",
       "omit": "WHAT HAS TO BE TRUE BEFORE EACH ITEM CAN START — locates on the ground, the area released, layout shot, the permit issued, a place to put the spoil, the structure or the material delivered, the inspection made, the other trade out of our footprint. A look-ahead with no preconditions is a wish list, and on a dirt job every single item has at least one.",
       "needs": ["notdone"],

@@ -42,12 +42,12 @@ window.TRADE_DOCS = {
       "aka": [
         "leak call",
         "leak report",
-        "service call",
+        /* "service call" is the NAME of the shared Service Call Write-Up on this
+           shelf and was handing that back instead of this one (2026-09-02). */
         "where is it coming in",
         "water intrusion",
         "roof leak",
-        "investigation",
-        "trouble call"
+        "investigation"
       ],
       "family": "verification",
       "from": "the service tech who went up",
@@ -141,7 +141,6 @@ window.TRADE_DOCS = {
         "not our damage",
         "callback",
         "denial",
-        "pre-existing",
         "wear and tear",
         "ponding",
         "response to a claim",
@@ -187,6 +186,11 @@ window.TRADE_DOCS = {
     {
       "id": "roof-turnover",
       "name": "Roof Turnover — It's Yours Now",
+      /* THE LAST FOUR ARE INHERITED WORDS, NOT NEW ONES (2026-09-02). The shared
+         `handover` is dropped below because this document IS it, in a roofer's
+         voice — but dropping a document must never drop its WORDS. "hand off",
+         "handoff", "close out" and "punch complete" were the shared document's
+         own aliases and are now this one's, so nothing a roofer types goes dark. */
       "aka": [
         "turnover",
         "closeout",
@@ -194,7 +198,11 @@ window.TRADE_DOCS = {
         "final walk",
         "completion",
         "warranty start",
-        "it's done"
+        "it's done",
+        "hand off",
+        "handoff",
+        "close out",
+        "punch complete"
       ],
       "family": "verification",
       "from": "the foreman who finished it",
@@ -204,7 +212,7 @@ window.TRADE_DOCS = {
       "omit": "WHO IS ALLOWED ON THE ROOF NOW AND HOW THEY CALL YOU. Every finished roof gets walked on within a fortnight by somebody with a drill, and the turnover that never named a procedure is the one that turns into a warranty argument.",
       "needs": ["who"],
       "halt": "Only if this is the first document in the thread and there is no job or address at all.",
-      "facts": ["completion date", "the job and which roof areas are being turned over", "what is complete and what is not", "who walked it and when", "who to call before anybody goes on the roof"],
+      "facts": ["completion date", "the job and which roof areas are being turned over", "what is complete and what is not", "who walked it and when", "what physically went with it — warranty paperwork, maintenance instructions, spare material — and to whom", "who to call before anybody goes on the roof"],
       "sections": [
         {
           "h": "WHAT IS BEING TURNED OVER, AND WHAT IS NOT",
@@ -219,6 +227,10 @@ window.TRADE_DOCS = {
           "r": "Punch items with an owner and a date each, plus anything you are waiting on somebody else for. If a punch item belongs to another trade, name the trade, not a person's shortcomings."
         },
         {
+          "h": "WHAT WENT WITH IT",
+          "r": "The paperwork and the material that physically changed hands, listed, with the name of the person who took it and the date: the manufacturer's warranty documents (named — they are theirs and are not retyped here), the maintenance and inspection instructions, spare membrane, flashing, tile or coating left on site and where it is stacked. This is the section that stops the March phone call asking for a document somebody was already handed."
+        },
+        {
           "h": "NOBODY ON THIS ROOF WITHOUT A CALL",
           "r": "The procedure, in one short paragraph: who to call before anybody goes up, what needs protection under foot traffic, and the plain fact that other trades cutting, welding, dragging or setting equipment on a finished roof creates damage that is a repair and not a punch item. State the request; never state a warranty term or a consequence you are not the one who decides."
         },
@@ -230,6 +242,20 @@ window.TRADE_DOCS = {
       "secondary": ["a short owner-facing version with the punch list stripped", "a maintenance-reminder note for the building engineer"]
     }
   ],
+
+  /* THE SHARED HANDOVER IS DROPPED, AND IT IS THE SECOND DROP IN THE PROGRAM
+     (2026-09-02). `creative` declared the first, where a shipped TOOL displaced a
+     shared DOCUMENT. This one is a shared document displaced by a document — the
+     shared `handover` and `roof-turnover` above are one artefact with two front
+     doors on one shelf, and §THE GATE says ONE job per tool. It was not an opinion:
+     driven at the real search box, "turnover", "closeout" and "handover" each
+     returned BOTH, generic first, so a roofer typing his own word got the rack's
+     version ahead of the one written for him. Read field by field, `roof-turnover`
+     answers everything the shared one asks — areas, what was walked and by whom,
+     what is still open with an owner and a date — in roofing's words, and the one
+     demand it did NOT carry (what physically changed hands) is folded in above
+     rather than lost. Dropping is only honest when nothing goes with it. */
+  "drop": ["handover"],
 
   /* Two shared documents that land differently on a roof. Overrides, not forks —
      each one restates only the field that changes and inherits everything else

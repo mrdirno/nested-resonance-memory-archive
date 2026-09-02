@@ -213,6 +213,31 @@ window.TRADE_DOCS = {
   ],
 
   "overrides": {
+    /* RENAMED AND TRIMMED 2026-09-02, and the fix is masonry's, not a new idea.
+       Shipped, this shelf carried "Delay / We're Held Up Notice" (inherited) one
+       row from "We're Held Up (and the wall can't close)" (ours) — two documents
+       whose names open on the same three words, sharing the alias "impact notice"
+       outright. Driven at the real box, "held up" and "impact notice" both
+       returned the GENERIC one first, on the one shelf where the specific one was
+       written for this crew. Masonry had already solved exactly this by renaming
+       the inherited notice ("We Got Held") and nobody carried it across. The wall
+       notice keeps "held up" and "impact notice"; this one is what a framer
+       reaches for when the hold is not a wall — a truss package, a submittal, a
+       decision, a hoist — and it is named so the two never read as one document. */
+    "delay-notice": {
+      "name": "We're Waiting On Somebody",
+      /* "stopped" is NOT here: "The Daily (what we closed, what stopped us)" carries
+         it in its NAME on this shelf, so it never led this document (2026-09-02). */
+      "aka": ["delay", "delay notice", "waiting on", "notice"]
+    },
+    "handover": {
+      /* AKA TRIMMED 2026-09-02 by the alias-lead probe in
+         tools/toolkit-gates/docs-shelf.mjs: an alias its author wrote on THIS
+         document was handing back a DIFFERENT one, because that one carries the
+         word in its NAME and a name outranks an alias. The word goes to the
+         document named for it. */
+      "aka": ["handover", "turnover", "hand off", "handoff", "close out", "punch complete"]
+    },
     "daily-report": {
       "name": "The Daily (what we closed, what stopped us)",
       "why": "This is YOUR account, not the GC's numbered log — and for this trade it is the only dated record of which walls closed on which day, which is the fact every later argument turns on.",

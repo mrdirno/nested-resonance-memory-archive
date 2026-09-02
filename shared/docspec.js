@@ -412,7 +412,17 @@
     {
       id: "incident-report",
       name: "Incident / Near-Miss Report",
-      aka: ["incident", "near miss", "accident", "injury", "damage", "safety report"],
+      /* "damage" IS NOT HERE, AND THAT IS THE FIX OF 2026-09-02. It was, and so is
+         the bare word on `damage-found` two entries down — whose NAME opens with it.
+         One word, two documents, on 12 of the 16 shelves. shared/docsindex.js has
+         refused to POOL a term meaning two documents since it was written ("a term
+         meaning two different documents anywhere on the rack is excluded" — 35 of
+         them refused, "damage" among them); nothing refused to AUTHOR one, so the
+         rail existed at the pooling layer and was absent at the authoring layer.
+         tools/toolkit-gates/docs-shelf.mjs is now that rail. This document keeps
+         five terms that name an EVENT — the word for a broken thing belongs to the
+         document called Damage. */
+      aka: ["incident", "near miss", "accident", "injury", "safety report"],
       family: "incident",
       from: "the person who was there",
       to: "safety and my PM",
@@ -524,7 +534,14 @@
     },
     {
       id: "toolbox-talk",
-      name: "Toolbox Talk / Safety Meeting Note",
+      /* RENAMED 2026-09-02, AND IT WAS A 16-OF-16 DEFECT. While this was called
+         "…/ Safety Meeting Note", the word "meeting" — typed whole, an alias its
+         author wrote on `meeting-minutes` — handed back THIS document on every
+         shelf on the rack, because a name outranks an alias and this name carried
+         the word. "Tailgate" is what the field calls it anyway (§FIELD-COOL: the
+         trade's own word, not the corporate register), "safety meeting" stays an
+         alias so nothing goes dark, and "meeting" now reaches the minutes. */
+      name: "Toolbox Talk / Tailgate Note",
       aka: ["toolbox", "tool box talk", "safety meeting", "tailgate", "jha", "pre task"],
       family: "minutes",
       from: "the lead on the job",

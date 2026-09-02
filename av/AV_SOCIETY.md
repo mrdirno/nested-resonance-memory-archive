@@ -1975,6 +1975,45 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-02 (C3697) — THE RAIL EXISTED ONE LAYER DOWN, SO NOBODY BUILT IT WHERE THE WORDS ARE WRITTEN
+`shared/docsindex.js` has refused, since the day it was generated, to POOL a term that
+means two different documents — its own header says so, names the count (35 refused), and
+the deploy regenerates the file and rejects a diff so the claim cannot rot. That rail is
+real, it works, and it looks like coverage. **It is not.** Pooling is the last step: it
+decides which of one trade's words get lent to another trade. Nothing at all stood between
+an AUTHOR and a word that already meant something else **on the same shelf**, and the shelf
+is the only thing a man ever sees.
+
+What that cost, measured on the merged libraries the pages actually render:
+
+- **19 ambiguous whole terms across 16 shelves.** `"damage"` alone on **12 of them** — an
+  alias on `incident-report` AND on `damage-found`, whose NAME opens with the word. The pool
+  had refused to lend `"damage"` to anybody for exactly this reason, correctly, while the
+  shared library shipped it on both documents to twelve trades.
+- **21 authored aliases, of 1,707 probed at the real search box, handed back a DIFFERENT
+  document than the one their author wrote them on.** `"meeting"` on **16 of 16** — an alias
+  on `meeting-minutes`, eaten every time by *"Toolbox Talk / Safety Meeting Note"*, because a
+  NAME outranks an alias and that name carried the word. Every man on the rack who typed the
+  most obvious word for *"I need the minutes"* got the safety talk.
+
+**Neither is visible to any gate that existed.** `docspec-config` drives every document and
+passes — each one composes. `find-honesty` drives the same box and passes — the LABEL is
+honest either way, because "exact" is a TRUE statement about a tie. `mobile-watertight`
+passes — the layout is watertight around the wrong answer. **A tie is not an error to any
+check that grades one document at a time.** Only asking the SHELF to name one document per
+word can see it, which is `tools/toolkit-gates/docs-shelf.mjs`, written this cycle.
+
+**THE GENERAL FORM, and it is the part worth carrying:** when a rail is enforced at the
+last layer of a pipeline, every layer above it looks covered and none of them is. Ask of
+every rail we own — where is this ENFORCED, and is that the same place the thing is
+WRITTEN? If not, the gap between them is unguarded and has been the whole time.
+
+**AND THE FIX PAID FOR ITSELF AT THE LAYER BELOW.** With the authoring ambiguity gone the
+pool could stop refusing: **302 → 304 pooled terms, 35 → 33 refusals.** `"damage"` is now
+lent to all 13 trades holding `damage-found`, and `"call notes"` to `meeting-minutes`. A
+rail that had been silently eating two good terms for months was not the problem; what it
+was protecting against was.
+
 ### 2026-09-01 (C3692) — A BLOCK UNDER A FILTERED LIST NAMED A ROW THE LIST DID NOT SHOW, ON A LIVE PAGE, FOR WEEKS
 `shared/rowlog.js` ships NAMED DOCUMENT FILTERS so a chase list can send a man only what is
 still open and only what is HIS. The engine's own blocks obey that scope, and its comment
@@ -8065,3 +8104,65 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the vibe-cards well has no credits surface, so an anonymous wish is credited only in the
   commit; `/gt/` is the remaining unlinked card and cannot take a slide until it has artwork.
   https://mrdirno.github.io/vibe-cards/
+
+- `2026-09-02` — **[AXIS:DOCS] C3697 — ONE WORD MEANT TWO DOCUMENTS ON 12 SHELVES, AND THE
+  MOST OBVIOUS WORD ON THE RACK MEANT THE WRONG ONE ON ALL 16** · **the well was verified
+  EMPTY on disk in both sinks** (`av_wishing_well --list` and `--list --status building`, 0
+  and 0; vibe-cards likewise) and no family was owed, so the stalest axis governed. ·
+  **before:** `shared/docsindex.js` refuses to POOL a term meaning two documents — 35 of
+  them, deploy-checked — and that rail sits at the LAST layer of the pipeline, so every layer
+  above it looked covered. Measured on the merged shelves instead: **19 ambiguous whole
+  terms across 16 trades**, `"damage"` on **12** of them (an alias on `incident-report` and
+  on `damage-found`, whose name opens with the word), and — found by a second probe the
+  first was structurally blind to — **21 of 1,707 authored aliases, typed whole at the real
+  search box, handing back a document their author never wrote them on**, led by `"meeting"`
+  on **16 of 16**, eaten every time by *"Toolbox Talk / Safety Meeting Note"* because a NAME
+  outranks an alias. **THE MEASUREMENT OUTRANKED THE PLAN, TWICE.** The cycle opened on a
+  different finding — doors and landscape are the only two trades with ZERO `overrides`
+  — and **driving the real pages killed 8 of the first 10 collisions as non-defects**: on
+  masonry, gc and concrete the ranking was already handing back the right document, and a
+  fix would have been invented work. The one that survived the drive is the one that
+  shipped. · **after: 19 → 0 and 21 → 0, verified at the artifact, and the two fixes with
+  the widest reach are one line each.** `incident-report` gives up the bare `"damage"` to
+  the document NAMED Damage (12 shelves); the safety note is renamed **"Toolbox Talk /
+  Tailgate Note"** — the field's own word, §FIELD-COOL, and it stops the name eating an
+  alias on 16 shelves. Then per-shelf: **roofing DROPS the shared `handover`** — the second
+  drop in the program and the first where a shared document is displaced by a DOCUMENT
+  rather than by a shipped tool (creative's was the first); it was not an opinion, the drive
+  showed `"turnover"`, `"closeout"` and `"handover"` each returning BOTH, generic first, on
+  the shelf where the roofer's own one was written for him — with the one demand the shared
+  document made that `roof-turnover` did not carry (**what physically changed hands**:
+  warranty paperwork, maintenance instructions, spare material, to whom, when) folded in as
+  a new section rather than lost, and all four of its orphaned aliases carried over, because
+  **dropping a document may not drop its words**. `framing` takes **masonry's** fix that
+  nobody had carried across — renaming the inherited notice (**"We're Waiting On Somebody"**)
+  so it stops opening on the same three words as *"We're Held Up (and the wall can't
+  close)"*. Plus five aka trims where a name owned a word: gc `dig-in`, plumbing `call
+  notes`, concrete `damage`/`cold`/`stopped`, electrical `write up`, sitework `plan`,
+  roofing `pre-existing`/`trouble call`/`service call`. · **THE RATCHET:
+  `tools/toolkit-gates/docs-shelf.mjs`**, all of it derived from the shipped engine and each
+  shelf's own data so a document added next month is covered the day it lands: **A** no whole
+  term resolves to two documents · **B** every authored alias, typed whole at the REAL box,
+  LEADS its own document (the half A is structurally blind to — nothing is ambiguous when a
+  name eats an alias outright) · **C** every `drop` names a real shared id, and the words a
+  drop takes off the shelf are COUNTED and printed rather than failed, because only a person
+  can tell roofing's drop (document displaced by document — **0 dark**) from creative's
+  (displaced by a shipped TOOL — **18 dark, on purpose**). **PROVED BY NEGATIVE CONTROL:
+  `--prove` re-authors the defect out of each shelf's own data and both detectors go RED on
+  16/16.** · **THE BACKPORT RIDER FIRED AS THE FINDING ITSELF** — the sweep across all 16
+  shelves is what produced the two rack-wide defects, and both were fixed in the SHARED
+  library in one line each rather than 12 and 16 times. · **THE FIX PAID AT THE LAYER
+  BELOW:** with the authoring ambiguity gone the pool stopped refusing — **302 → 304 pooled
+  terms, 35 → 33 refusals**; `"damage"` is now lent to all 13 trades holding `damage-found`.
+  · **GATES, all green:** shelf **16 trades / 1,701 checks / 0 failing** (negative control red
+  16/16, both detectors) · docspec **16 / 264 / 0** · find-honesty **8,958 / 0** · docs-pool
+  **98 / 0** · mobile-watertight on all four changed write-up pages at 320/360/390/430 ×
+  default and bumped, **0 failing** · roofing driven end to end at 390px: shelf 14 documents
+  with the shared handover gone, block **12,740 chars**, the folded section and every line of
+  it in the pasted output, 0 overflow, 0 page errors · `shared/docsindex.js` regenerated so
+  the deploy's `--check` cannot diff. **Storefront unchanged — no new tool, no new trade.**
+  **NAMED AND NOT DONE, so it is not lost:** `doors` and `landscape` are the only two trades
+  on the rack with **zero `overrides`** — every other one of the 14 re-addresses between 1
+  and 8 of the 11 shared documents, and those two inherit all 11 in the rack's generic voice.
+  That is the next DOCS rung, and it is the 2026-08-15 roster lesson again: nobody asks a new
+  trade what it was OWED. https://mrdirno.github.io/nested-resonance-memory-archive/roofing/write-up.html

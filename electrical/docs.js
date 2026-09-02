@@ -605,7 +605,8 @@ window.TRADE_DOCS = {
       "aka": [
         "service call",
         "service report",
-        "write up",
+        /* "write up" is in "Extra Work Write-Up"'s NAME on this shelf and was
+           handing that document back instead of this one (2026-09-02). */
         "found did recommend",
         "trouble call",
         "callback",

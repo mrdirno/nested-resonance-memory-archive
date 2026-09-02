@@ -342,6 +342,14 @@ window.TRADE_DOCS = {
   "overrides": {
     "delay-notice": {
       "name": "We Got Held",
+      /* AKA TRIMMED 2026-09-02. "stopped" and "waiting on" are shared aliases on
+         this document AND on `stopped-on-this-wall` above, so on a mason's shelf
+         one word pointed at two documents. He was already getting the right one
+         first — the wall notice is what a mason means — so the general notice
+         gives the words up rather than competing for them. It keeps everything
+         a man reaches for when the hold is NOT a wall: a submittal, a decision,
+         an inspection, a hoist. */
+      "aka": ["delay", "delay notice", "held up", "impact notice", "notice"],
       "omit": "Who and what actually stood — the layers and tenders by name and classification, the stage and the forklift, the mud that was mixed and went off — and what the crew would have been doing instead. \"We were held from morning to noon\" with no names and nothing idled is a sentence nobody can check and nobody can act on.",
       "needs": ["who", "count", "notdone"],
       "sections": [

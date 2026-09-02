@@ -263,8 +263,13 @@ window.TRADE_DOCS = {
         "near miss",
         "first report",
         "property damage",
-        "utility strike",
-        "dig-in"
+        /* "dig-in" LIVES ON `unforeseen-condition`, NOT HERE (2026-09-02). It was on
+           both, and a word on two documents is a shelf that cannot answer. A dig-in
+           is genuinely both things, so the split is by what a super TYPES it for:
+           he types "dig-in" to get paid for the hole, and this document stays
+           reachable for the safety half by "utility strike", which means one thing
+           and only here. */
+        "utility strike"
       ],
       "why": "This paragraph outlives everybody on the job. Write what you saw, because it becomes the exhibit.",
       "sections": [
