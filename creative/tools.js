@@ -59,12 +59,24 @@ window.TOOLKIT_TOOLS = [
     chip: "#A61457",
     audience: "Editor → the client, the night of the render"
   }
+  ,
+  {
+    name: "What’s in the Drop",
+    href: "whats-in-the-drop.html",
+    desc: "The message that goes next to the link. Which file to open, what each thing in the folder is for, and the four or five things that aren’t in there — each one ending in an open door rather than a fence. No clock, no “considered approved”, nothing about what they’re allowed to do with it. Next drop for the same client is a restore and two taps.",
+    chip: "#C2660F",
+    audience: "Editor → the client, with the files"
+  }
   // The loop appends new tools here as it builds them from wishing-well requests.
-  // NEXT, and it is the boundary lens's finding rather than the roster's: WHAT'S
-  // IN THE DROP, which §CREATIVE deferred as "a second output mode" of the page
-  // above. That was wrong in one word — it is not a second MODE, it is the other
-  // side of the render, addressed to a different moment: who signed, what's in
-  // the folder, and what is deliberately NOT in it. Same engine, its own page.
+  // SHIPPED 2026-09-03, and the panel that graded it took two of the three parts
+  // this comment used to name away. It scored 7 / 6 / 2 — one lens voted to KILL
+  // it — and the page is smaller for the 2: "who signed" is a header field in the
+  // sender's own first person, never a block and never a picker, because a typed
+  // "Approved by [name]" is a signature that lands on the OTHER party the moment
+  // it is forwarded; and the word "deliberately" is gone from the page entirely,
+  // because nobody says it about something they are volunteering. What both
+  // dissenting lenses agreed on is the ground it keeps: the transfer page already
+  // lists the FILES, and nothing anywhere generates ABSENCE.
   // Still owed after that: the PARTICIPANT half of Shoot Day Confirm (the "how
   // the day goes" note to talent or a client coming to set) — "Shoot Day
   // Confirm" shipped above as GETTING IN instead — "confirm" is the exact defect

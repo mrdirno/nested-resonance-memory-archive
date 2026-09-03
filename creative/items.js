@@ -662,3 +662,171 @@ window.TOOLKIT_ITEMS.beforeExport = {
   renderLine: "I'm starting the render {when}.",
   renderTail: "If something changes after that, send it over and I'll pick it back up — I'm asking now in case it's already on your mind."
 };
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * WHAT'S IN THE DROP — the message that goes NEXT TO THE LINK.
+ *
+ * THE PANEL SCORED THIS 7 / 6 / 2 AND THE 2 IS RECORDED, not softened: one lens
+ * voted to KILL it outright. What shipped is not the page the roadmap named — it
+ * is the ground the panel could agree on, and the roadmap lost two of its own
+ * three parts on the way through.
+ *
+ *  · THE ROADMAP SAID "who signed, what's in the folder, and what is
+ *    deliberately NOT in it". "WHO SIGNED" IS GONE as a block. The receiving lens
+ *    ranked it above the deemed-acceptance clause as the riskiest thing in the
+ *    proposal — that one this trade has already solved once. "Approved by [name]
+ *    on [date]" is a SIGNATURE: typed by one party, and the moment it is
+ *    forwarded it puts the OTHER party's name on an approval record that exists
+ *    nowhere else. What survives is a RECAP in the sender's own first person —
+ *    the last yes he HAS — ending in an invitation to correct it. The word
+ *    "approved" appears nowhere on this page.
+ *  · THE WORD "DELIBERATELY" IS GONE TOO: "nobody says deliberately about
+ *    something they're volunteering out of generosity — you say it when you're
+ *    pre-empting a complaint." Same family as "per scope", banned here by name.
+ *  · WHAT BOTH DISSENTING LENSES AGREED ON is the one inch of ground this page
+ *    owns: the transfer page already lists the FILES. Nothing anywhere generates
+ *    ABSENCE. They arrived from opposite ends — one calling it "the one inch of
+ *    real territory", the other "drop that line and this is just a nicer-looking
+ *    here-you-go."
+ *
+ * THE FORWARDING TEST governs every sentence below, and it is this trade's
+ * version of the handback rule: this message gets pasted into a thread with
+ * somebody's boss in it. So no "as discussed", no "per scope", no "just to be
+ * clear", no first-person hedging, and no sentence that reads colder to a
+ * stranger than to the person it was sent to. A defensive line stops belonging to
+ * the sender the moment it is forwarded and starts belonging to the receiver.
+ *
+ * AND NO CLOCK. Every freelance delivery template going carries "please review
+ * within N days, after which the work is considered accepted". It is banned here
+ * and the test is mechanical: a verb with legal weight — accepted, approved,
+ * considered final — attached to a timer. This trade has had a deemed-acceptance
+ * clause cut out of it twice already (§SCARS, and the 2026-08-15 adversarial
+ * fan-out on docs.js).
+ *
+ * ONE PLACEHOLDER PER ITEM, and it is an invariant the page depends on: NO ITEM
+ * CARRIES BOTH A {v} AND A {note}, and every `say` holding a {note} has a `sayNo`
+ * that does NOT. Break either and a ticked-but-unanswered row prints a sentence
+ * with a hole in it.
+ * ───────────────────────────────────────────────────────────────────────────── */
+window.TOOLKIT_ITEMS.theDrop = {
+  cats: [
+    {
+      id: "in",
+      name: "What's in this drop",
+      docName: "WHAT'S IN THIS DROP",
+      chip: "#8B12B4",
+      hint: "Six lines, not an inventory. The transfer page already lists your files — what it can't say is which one to open and what each one is for.",
+      items: [
+        {
+          n: "The one to open", sub: "its own file name", noQty: true,
+          say: "Open {note} first — that's the cut.",
+          sayNo: "The cut is in there — ask me if the file names don't make it obvious which one it is.",
+          notePlaceholder: "the file name, the way it reads in the folder"
+        },
+        {
+          n: "Where it stands", sub: "the answer to “is it done”", noQty: true,
+          ax: [{ k: "v", label: "it's", wide: true,
+                 opts: ["— haven't said", "finished — nothing waiting on me",
+                        "finished apart from what's below", "one to look at, not one to post yet"],
+                 def: "— haven't said" }],
+          say: "Where it stands: {v}.",
+          sayNo: "Ask me where this one stands before it goes anywhere — I'd rather tell you than have you guess.",
+          note: false
+        },
+        {
+          n: "The other shapes", noQty: true,
+          say: "The other shapes are in there as well — {note}.",
+          sayNo: "The other shapes are in there as well.",
+          notePlaceholder: "the vertical and the square"
+        },
+        {
+          n: "A version with no titles or graphics", sub: "the clean one", noQty: true,
+          say: "There's a clean version in there too — same cut, no titles and no graphics on it.",
+          note: false
+        },
+        {
+          n: "Captions", noQty: true,
+          ax: [{ k: "v", label: "they're", wide: true,
+                 opts: ["— haven't said", "a separate file", "burned into the picture", "both"],
+                 def: "— haven't said" }],
+          say: "Captions are in there — {v}.",
+          sayNo: "Captions are in there. Say if you need them another way and I'll send them over.",
+          note: false
+        },
+        {
+          n: "Stills", noQty: true,
+          say: "Stills off it are in there too — {note}.",
+          sayNo: "Stills off it are in there too.",
+          notePlaceholder: "and the frame I'd use for the thumbnail"
+        }
+      ]
+    },
+    {
+      id: "out",
+      name: "What's not in this drop",
+      docName: "WHAT'S NOT IN THIS DROP",
+      chip: "#C2660F",
+      /* THE HINT IS THE PAGE ARGUING WITH THE USER, and it is the working
+         editor's own sentence rather than a rule invented here. */
+      hint: "Four or five real ones, not an inventory. A short list reads like somebody being straight with you; a long one reads like a lawyer wrote it. Only put a thing here if they'd actually go looking for it.",
+      items: [
+        {
+          n: "The project file", sub: "not the video — the editing project", noQty: true,
+          say: "The project file itself isn't in there — that's the editing project, which is a different thing from the video. Ask me if you ever need it and we'll sort it out.",
+          note: false
+        },
+        {
+          n: "The footage from the shoot", noQty: true,
+          say: "The footage from the shoot isn't in there, only what ended up in the cut. It's on my drives and it stays backed up — ask me if you need it.",
+          note: false
+        },
+        {
+          n: "The fonts behind the text on screen", noQty: true,
+          say: "The fonts behind the text on screen aren't in there — they don't travel with a video file. If somebody your side is matching the look later, tell me and I'll tell them what it's set in.",
+          note: false
+        },
+        {
+          n: "The shapes that aren't cut yet", noQty: true,
+          say: "{note} isn't cut yet — I didn't want to hold this one up for it. Say the word and we'll sort it out.",
+          sayNo: "Anything not on the list up top isn't cut yet. Say the word and we'll sort it out.",
+          notePlaceholder: "the vertical"
+        },
+        {
+          n: "The older versions", noQty: true,
+          say: "The older versions aren't in there — one folder, one version, so nobody sends the wrong one on by mistake. Ask me if you need one back.",
+          note: false
+        }
+      ]
+    },
+    {
+      id: "mine",
+      name: "Anything else you'd say",
+      docName: "ALSO",
+      chip: "#1D6F63",
+      hint: "Your own line, in your own words. One per line.",
+      writein: true,
+      items: []
+    }
+  ],
+
+  writeinPlaceholder: "Anything else — one per line.\ne.g. the end card is the new address\nthe music is the one you sent Tuesday",
+
+  phProj: "Northgate brand film",
+  phTo: "Dana — Northgate",
+  phCut: "v4, the :60 — the one going out",
+  phYes: "you, Tuesday, on the :60",
+  phHow: "reply here, or text me — I'm around today",
+
+  opening: "It's all in the link. Here's what you've got, and the couple of things that aren't in there.",
+
+  /* THE RECAP, AND IT IS NOT A SIGNATURE. It says what the SENDER has, in the
+     sender's own first person, and it ends by inviting the correction — which is
+     the difference between a fact a receiver can fix in five words and an
+     approval record with their name on it that they have to dispute. */
+  yesLine: "The last yes I've got from your side is {yes}.",
+  yesTail: "If that's not how you remember it, say so and I'll square it before this goes any further.",
+
+  /* THE CLOSE. There is no clock here and there never will be — see the header
+     above. It is an open door and nothing else. */
+  closeTail: "If anything's off — the files or the cut — tell me and I'll pick it back up."
+};
