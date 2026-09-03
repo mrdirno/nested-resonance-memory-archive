@@ -1,0 +1,12 @@
+{
+ "cells": 60,
+ "fired": 32,
+ "fired_under_null": 30,
+ "discordant_real_only": 2,
+ "discordant_null_only": 0,
+ "both": 30,
+ "p_as_registered": 0.3494417138100028,
+ "null_rate_upper_95": 0.6125890369841318,
+ "p_conservative": 0.9170507621981886,
+ "p_paired_mcnemar": 0.25
+}

@@ -1,0 +1,774 @@
+{
+ "grid_complete": true,
+ "grid_note": "complete: 60 cells, 20 conditions, 3 seeds each",
+ "readings": [
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "break",
+    "keep",
+    "medmed"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "break",
+    "keep",
+    "pooled"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "break",
+    "drop",
+    "medmed"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "break",
+    "drop",
+    "pooled"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "close",
+    "keep",
+    "medmed"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "close",
+    "keep",
+    "pooled"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "close",
+    "drop",
+    "medmed"
+   ]
+  },
+  {
+   "verdict": "INCONCLUSIVE",
+   "cells": 60,
+   "fired": 32,
+   "fired_null": 30,
+   "p": 0.3494417138100028,
+   "passing": [],
+   "blocked": [
+    [
+     [
+      "default",
+      0.15,
+      0
+     ],
+     0.999
+    ],
+    [
+     [
+      "default",
+      0.15,
+      0.5
+     ],
+     0.998
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.3,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.5,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0
+     ],
+     1.0
+    ],
+    [
+     [
+      "default",
+      0.8,
+      0.5
+     ],
+     1.0
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0
+     ],
+     0.993
+    ],
+    [
+     [
+      "spinchladni",
+      0.8,
+      0.5
+     ],
+     0.997
+    ]
+   ],
+   "void_cells": 0,
+   "reading": [
+    "close",
+    "drop",
+    "pooled"
+   ]
+  }
+ ]
+}

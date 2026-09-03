@@ -1772,14 +1772,23 @@ kbd {
         transform) and decays as the digits redraw the figure; what matters is
         <b>Retained</b> &mdash; M just before the next zoom-out. <b>Two-back</b>
         is the same correlation against the relic from two zoom-outs ago, on
-        the inner quarter of the mesh: it is the control. A figure that recurs
-        because the digit script recurs, or a collapsed blob that simply
-        persists, scores on both; only the previous epoch imprinting the next
-        one lifts Retained above Two-back. In a validated numerical port of
-        this chamber, Retained sat within noise of Two-back and of a relic
-        from an unrelated run at self-gravity 0 to 0.3, and rose above zero
-        only once the swarm was self-bound (0.5 and up), where it measures the
-        persistence of a collapsed object rather than a memory of the epoch.
+        the inner quarter of the mesh: it was meant to be the control.
+        <b>It is not a sound one, and this pair should not be read as a
+        memory measurement.</b> The two arms sample the relic at different
+        strides &mdash; Retained every second cell, Two-back every fourth
+        &mdash; so their difference is positive for almost any centrally
+        peaked cloud, with or without memory. Measured 2026-09-03: a static
+        Plummer sphere, correlated with an identical copy of itself, with no
+        time and nothing to remember, scores Retained 0.749 against Two-back
+        0.332 &mdash; a gap of 0.42, four times the 0.10 that a
+        pre-registered test had set as its threshold. Seven of eight standard
+        profiles do the same. Across a 60-run grid at 4.19 M particles the
+        gap fired in 32 of 60 cells and fired in 30 of the same 60 when the
+        relic was swapped for an unrelated run's. Read Retained and Two-back
+        as a footprint diagnostic; the honest floor beside them is the
+        shuffled relic, which fired in 0 of 60.
+        <a href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/analysis/2026-09-02_cross_epoch_memory_preregistered.md">The
+        full result and what a valid test would have to change.</a>
         Needs epochs on and cascade out.
       </p>
     </div>
@@ -6927,7 +6936,7 @@ const LAB_EXPERIMENTS = {
   spin: { base: 'spinchladni', step: 9028, patch: { cosmos: { selfgrav: 0.45 } },
     hint: "Self-gravity 0.45 under the user's own settings: the ball holds, and the expansion rate is not what decides that. In a numerical port validated cell by cell against this page's own mesh, the threshold sits at 0.51 \u00b1 0.03 at helix 0.8 whether hubble is 0.3 or 2.4 (a log-log slope of 0.07), moves to 0.62 at helix 1.2 and 0.35 at helix 0.4, and the centrifugal balance of the 6 \u00d7 helix / damping spin predicts it. On this page at 262k particles the ball holds at 0.45 and folds at 0.6 with hubble at 0.3 and at 1.2 alike; at helix 1.2 it holds at 0.55 and folds at 0.75. Push self-gravity to 0.6 and a core forms. Drop the helix to 0.4 and the matter goes to the poles before gravity acts, and what gravity makes there are polar clumps. When the ceiling share nears 100% the core's size is the integrator's, not the physics'." },
   memory: { base: 'spinchladni', step: 9028, patch: { cosmos: { selfgrav: 0.3 } },
-    hint: "Spinning Chladni at self-gravity 0.3 with a zoom-out every 10 s. Watch Retained against Two-back over several epochs. In the port, both sit within \u00b10.05 of zero here and of each other; only above 0.5, where the swarm is self-bound, does Retained rise \u2014 and Two-back rises with it, because a collapsed core persists across any number of zoom-outs. This page's own first run read Retained 0.003 against Two-back 0.098. If Retained clears Two-back by more than 0.1 for several epochs running, the memory claim has a leg to stand on; nothing measured so far gives it one." },
+    hint: "Spinning Chladni at self-gravity 0.3 with a zoom-out every 10 s. Watch Retained against Two-back over several epochs. In the port, both sit within \u00b10.05 of zero here and of each other; only above 0.5, where the swarm is self-bound, does Retained rise \u2014 and Two-back rises with it, because a collapsed core persists across any number of zoom-outs. This page's own first run read Retained 0.003 against Two-back 0.098. That \"clears by 0.1\" rule was pre-registered and run over 60 cells at 4.19M particles on 2026-09-03, and it does not work: the same gap is 0.42 on a STATIC Plummer sphere correlated with a copy of itself, because the two arms sample the relic at different strides. Watch the pair as a footprint diagnostic, not as memory." },
   disc: { base: 'razordisc', step: 0, patch: {},
     hint: "The Razor Disc with the instruments on: nearly every sampled particle sits on the force ceiling, and \u03bb near zero says the disc is a fixed point. Now switch the magnetic step to exact rotation (Simulation panel): the same settings send the matter to the poles. Under Euler the disc's speed is 500 \u00d7 \u221a(dt / 2 damping) \u2014 88 predicted, 86 measured \u2014 and the disc exists wherever coupling\u00b2 \u00d7 dt exceeds damping / 55." },
   fieldonly: { base: 'default', step: 0, lab: { ledger: true }, patch: { fieldForm: 'chladni', fieldExp: 0, damping: 0, stepsPerSec: 0.02, smooth: false, colorMode: 1, centers: { on: false }, vessel: { form: 'off' }, substeps: 1, lorentz: 'euler', cosmos: { boundary: 'reflect', hubble: 0, epoch: false, mag: 0, twist: false, aniso: 0, helix: 0, cascade: 'out', selfgrav: 0, gainloss: 0 } },
@@ -9096,6 +9105,82 @@ unanswered: whether AirPlay mirroring reports a viewport this page can
 use, which needs a real Apple TV and not a headless browser; and the two
 larger halves of the wishes — a single 100M-particle frame, and whether
 Mandelbrot-style zoom yields anything in 3D.
+
+RING 15 · 2026-09-03 · the pre-registered memory test came back, and the statistic it
+registered fires on a static sphere
+WHAT CHANGED: no simulation code. The grid the page was built to run finished
+— 60 of 60 cells, 4,194,304 particles, 24 epochs of 10 s, two presets ×
+self-gravity {0,.15,.3,.5,.8} × gain/loss {0,.5} × 3 seeds, 0 void — and it
+was read, audited and published. Section 8's verdict is INCONCLUSIVE: ten
+conditions fire in 3/3 seeds on both arms and all ten are ceiling-bound. But
+§8 does not decide itself here — its NULL clause ("no condition satisfies
+(a)-(c)") and its INCONCLUSIVE clause are both true on this grid and the
+prose states no precedence, so both readings are published and the
+conservative one, which does NOT let the archive book a retirement, is the
+headline. What the page changed is one claim, in the Lab's memory help and
+in the Spinning Chladni preset hint: both said that only one epoch
+imprinting the next lifts Retained above Two-back. That is false. The two
+arms sample the relic at different strides (every 2nd cell against every
+4th), so their difference is positive for almost any centrally peaked
+cloud. A STATIC Plummer sphere correlated with an identical copy of itself
+— no time, no dynamics, no particles, no clamp — scores Retained 0.749 vs
+Two-back 0.332, a gap of 0.42 against a registered threshold of 0.10; 7 of
+8 standard profiles fire. Replace every stored mesh with its own spherical
+average, deleting all angular structure, and section 8 fires 43-45 of 60 on
+BOTH arms, more than the real data's 32 and 30.
+BANNED: re-running this grid on this estimator. Patching the deciding script
+after the confirmatory read — the §7.4 hole (page errors gate nothing) is
+recorded, not fixed, for exactly that reason. Reporting the +0.0150
+null-corrected lag excess (9/9 admissible conditions, sign-flip p=1/512) as
+support: C(1)>C(2) is what any finite decorrelation time gives. Changing the
+integrator, which §10 prescribes on an inconclusive result, BEFORE the
+estimator is fixed.
+DEAD BRANCHES: (1) "the force clamp is the reason." Delete gate 7.2 and the
+same ten conditions pass (a)(b)(c) while (d) still refuses at p=0.3494 —
+and §8 then names no branch at all. (2) "the region-matched arm removes the
+footprint confound." It matches the CURRENT block; the operative asymmetry
+is the relic side, where Two-back reads 4-5 non-zero cells of 512 with 99.8%
+of the variance in ONE — swap that whole relic for a 0/1 indicator of that
+cell and the arm moves by ≤0.0001 in 10 of 12 runs. (3) "the independent-seed
+arm is a null." Median cross-seed field correlation is 0.99988, ≥0.99999 in
+12 of 20 conditions: the seed does not survive the dynamics, so (d) compared
+a measurement with a copy of itself. The real floor is the shuffled relic,
+which fires 0/60. (4) "Recurrence proves the estimator could have seen
+memory." It fires 57/60 but does not beat its OWN seed null — median
+difference +0.0000 over 1320 cell-epochs.
+KILL-TEST: eleven agents, three auditing and eight told to refute rather than
+approve; all eight refuted, and every refutation that survived is in the
+published result. An independent re-implementation written from the frozen
+prose, sharing no code, reproduced all 6,768 estimator values to 1.9e-15 and
+agreed with the verdict table on 60/60 cells. Every load-bearing number was
+then re-derived a second time by hand before publication; the static-sphere
+table needs no data, no GPU and no meshes, and runs in a second
+(experiments/halo/memory_prereg_artefact.py). Provenance audited too: the
+freeze precedes the first data byte by 34 s, §§1-11 are byte-identical across
+five revisions, and 23 of 23 runs replicate BIT FOR BIT across two days and a
+browser restart (wall_seconds differ in 9 of them, so they were re-run, not
+copied) — better evidence of instrument identity than the checksum §13 rested
+on. Two things the audit found are now disclosed in §13: an undisclosed
+13-cell interim verdict dated 2026-09-02 15:47:44, and an admissible-subset
+block added to the deciding script 26 minutes after the freeze.
+THE NON-OBVIOUS CHOICE: report the pre-registered verdict and then say
+plainly that the pre-registered test could not have answered its question.
+The easy paper here was "a clean null retires the passive-relic claim" —
+the admissible subset does read NULL, and §8 has a clause that reaches it.
+It is not honest: a criterion that fires on a Plummer sphere never put the
+claim at risk, so it cannot retire it either. Nothing about nested
+resonance memory is settled by this cycle. What is settled is that this
+instrument was measuring its own index maps.
+OPEN QUESTIONS: the grid holds no condition that is BOTH off the clamp and
+looking at where the mass is — the matter sits in a shell at the wall while
+the scored blocks sit in the middle, holding 0.00 to 0.12 of it (the control
+block: 0.0000 to 0.0128). So does a footprint-matched, monopole-removed
+estimator with a shuffled-relic null, scored on a block that follows the
+shell, find anything at all? Is the +0.0150 excess anything but finite
+decorrelation time — it survives de-profiling at +0.0131 (7/9, p=0.043)?
+And what is the force clamp actually worth: gate 7.2 is decided by a 2048-
+particle subsample of 4.19M, and it is the only decision input in the whole
+protocol that cannot be recomputed from the exported meshes.
 
 ═══ end rings ═══ -->
 

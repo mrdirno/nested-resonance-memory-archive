@@ -33,16 +33,28 @@ OFFENDERS=$(printf '%s\n' "$BODY" | grep -iE \
   '^[[:space:]]*Co-Authored-By:.*(claude|anthropic|noreply@anthropic|gemini|google-labs|copilot|openai|gpt-[0-9]|chatgpt|codex|cursor|devin|\[bot\])' \
   || true)
 
+# The leading [^[:alnum:]]* is not decoration. The harness's own mandated tagline is
+# "🤖 Generated with [Claude Code](...)", and an emoji is not [[:space:]] — so anchoring
+# at whitespace alone let that exact line through, measured 2026-09-03. Any run of
+# non-alphanumerics may precede the keyword; a real word cannot, so the match stays
+# anchored to the start of a line and will not fire mid-sentence.
 TAGLINE=$(printf '%s\n' "$BODY" | grep -iE \
-  '^[[:space:]]*(Generated with|Co-authored with|Claude-Session:).*(claude|anthropic|copilot|openai)' \
+  '^[[:space:]]*[^[:alnum:]]*[[:space:]]*(Generated with|Co-authored with|Claude-Session:).*(claude|anthropic|copilot|openai)' \
   || true)
 
-if [ -n "$OFFENDERS" ] || [ -n "$TAGLINE" ]; then
+# A link to the tool credits the tool just as a trailer does, and survives any rewording
+# of the sentence around it.
+LINKLINE=$(printf '%s\n' "$BODY" | grep -iE \
+  '(claude\.ai/code|claude\.com/claude-code|github\.com/features/copilot)' \
+  || true)
+
+if [ -n "$OFFENDERS" ] || [ -n "$TAGLINE" ] || [ -n "$LINKLINE" ]; then
   echo "" >&2
   echo "COMMIT REFUSED: this message credits an AI tool as an author." >&2
   echo "" >&2
   [ -n "$OFFENDERS" ] && printf '%s\n' "$OFFENDERS" | sed 's/^/  /' >&2
   [ -n "$TAGLINE" ]   && printf '%s\n' "$TAGLINE"   | sed 's/^/  /' >&2
+  [ -n "$LINKLINE" ]  && printf '%s\n' "$LINKLINE"  | sed 's/^/  /' >&2
   echo "" >&2
   echo "Remove those lines. Attribution comes from the commit author field:" >&2
   echo "    $(git config user.name 2>/dev/null || echo '(user.name unset)') <$(git config user.email 2>/dev/null || echo '(user.email unset)')>" >&2

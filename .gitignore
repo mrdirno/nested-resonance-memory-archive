@@ -155,3 +155,9 @@ data/figures/cycle2568_starving_philosopher.png
 # reproducible tick for tick (tests/halo/memory_prereg_grid.sh). The per-run JSON,
 # the derived analysis and the verdict are committed; the meshes are not.
 data/results/halo/memory_prereg/*.mesh.f32
+# The voided grid's meshes were NOT covered by the line above, so a `git add` of the
+# results tree would have published 73 MB of runs that are void by their own record
+# (all 23 log `console: Failed to load resource: net::ERR_FILE_NOT_FOUND`). They are
+# kept locally because they are the bit-exact replication evidence for the instrument,
+# and their JSONs are small enough to commit; the meshes are not.
+data/results/halo/memory_prereg_voided/*.mesh.f32

@@ -49,7 +49,14 @@ def best_over_rotation(rho, relic, f):
 def main(indir):
     runs = {}
     for fn in sorted(os.listdir(indir)):
-        if not fn.endswith('.json') or fn in ('analysis.json', 'verdict.json', 'rotation.json'):
+        if not fn.endswith('.json'):
+            continue
+        # A denylist of derived products rots: nullrate.json and robustness.json were
+        # written by scripts that did not exist when this list did, and each one landed
+        # here as a KeyError on 'mesh_file'. A run is what declares the run schema.
+        with open(os.path.join(indir, fn)) as fh:
+            head = json.load(fh)
+        if not isinstance(head, dict) or head.get('schema') != 'halo-memory-prereg/1':
             continue
         d = load_run(os.path.join(indir, fn))
         runs.setdefault((d['params']['preset'], d['params']['selfgrav'],
