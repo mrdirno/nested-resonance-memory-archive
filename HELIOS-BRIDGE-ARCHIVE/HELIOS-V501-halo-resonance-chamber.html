@@ -983,6 +983,7 @@ kbd {
         <button data-scn="beadwork" aria-pressed="false">Beadwork</button>
         <button data-scn="rocker" aria-pressed="false">Rocking Necklace</button>
         <button data-scn="conveyor" aria-pressed="false">Antipodal Conveyor</button>
+        <button data-scn="moon" aria-pressed="false">The Moon</button>
       </div>
       <div class="group-label" style="margin-top:6px">Spinning Chladni &mdash; a family found by hand</div>
       <div class="seg" id="scenario-seg4" role="group" aria-label="The Spinning Chladni family">
@@ -4908,6 +4909,7 @@ const SCENARIO_HINTS = {
   spinexact: "The user's state under the exact-rotation magnetic step, with the coupling lowered from 0.4 to 0.3 so the figure comes back: measured on this page, thickness 7.1, radius 13.0, speed 35.5 against the Euler original's 3.95 / 12.2 / 57, and in the validated port the magnetic term injects no energy at all. At 0.4 under this step the matter goes to the poles; at helix 1.0 it streams at 48. This is the figure with nothing borrowed from the integrator.",
   stillspindle: "Changing only the boundary from reflect to wrap removes the wall that was converting the azimuthal shear into bulk rotation: the spin drops from 4.7 to 0.5 rad/s and what is left is a still prolate spindle carrying the strongest nodal figure in the family.",
   conveyor: "Wells at super-critical expansion: a reflecting boundary packs the matter onto the wall, while the wrapped one keeps a population circulating through the interior, because outflow re-enters at the antipode already heading inward.",
+  moon: "Found by hand on 2026-09-02 and kept as found: a chladni field at strength 10^1.1 with damping 6, four collapse centres that cycle every 24 steps, a box that wraps and expands at 0.4 with an epoch every 60 s, a little twist and almost no anisotropy, 4.17 million particles at about three digits per second, in the base-16 colour mode. Give it time: the face fills in and the craters come and go, like the Moon.",
 };
 const SCENARIOS = {
   jellyfish: {"fieldForm": "wells", "fieldExp": 1.25, "damping": 3, "stepsPerSec": 1.2311444133449163, "smooth": true, "base": 10, "constants": {"a": "phi", "b": "phi", "c": "phi"}, "strideIndex": 90, "offsetMode": "auto", "centers": {"on": false}, "cosmos": {"boundary": "wrap", "hubble": 1.2, "epoch": true, "epochLen": 10, "mag": 0.4, "twist": true, "aniso": 0.8, "helix": 0.9, "cascade": "out", "selfgrav": 0, "gainloss": 0}, "vessel": {"form": "off"}, "colorMode": 1, "particles": 1000000, "sound": {"voice": "bridge", "type": "lcm", "omega": 0.7, "omegaDigits": true, "register": -2, "level": 0.54, "pitchSpace": "shepard"}, "guides": false, "substeps": 1, "lorentz": "euler", "cam": [0.5849782369272978, 0.42037469190672155, 40.26430331961591]},
@@ -4954,7 +4956,8 @@ const SCENARIOS = {
     fieldForm: 'chladni', stepsPerSec: 2,
     centers: { on: true, count: 5, gain: 1.2, period: 18 },
     cosmos: { hubble: 1.1, epoch: true, epochLen: 30, mag: 0.8, twist: true, boundary: 'wrap' }
-  }
+  },
+  moon: {"fieldForm": "chladni", "fieldExp": 1.1, "damping": 6, "stepsPerSec": 3.0314331330207964, "smooth": true, "base": 16, "constants": {"a": "phi", "b": "phi", "c": "pi"}, "strideIndex": 90, "offsetMode": "auto", "offsets": {"a": 0, "b": 239, "c": 478}, "centers": {"on": true, "count": 4, "period": 24, "gain": 1.2}, "cosmos": {"boundary": "wrap", "hubble": 0.4, "epoch": true, "epochLen": 60, "mag": 0.2, "twist": true, "aniso": 0.05, "helix": 0, "cascade": "out", "selfgrav": 0, "gainloss": 0.75}, "vessel": {"form": "off", "gain": 1.2, "radius": 0.62, "girth": 0.02}, "colorMode": 2, "particles": 4169000, "sound": {"voice": "bridge", "type": "lcm", "omega": 0.7, "omegaDigits": true, "register": -2, "level": 0.54, "pitchSpace": "shepard"}, "guides": false, "substeps": 1, "lorentz": "euler", "cam": [0.42818828196318603, 0.35272374153870145, 36.182768249440144]},
 };
 function deepPatch(dst, src) {
   for (const k of Object.keys(src)) {
