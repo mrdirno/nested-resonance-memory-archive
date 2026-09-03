@@ -121,6 +121,20 @@ skeptic). Build only on panel agreement; otherwise `--decline` with the panel's
 reason. The panel keeps the quality bar objective and defensible — and it is what
 gives a Wall-of-Wishes credit its weight.
 
+**THE PANEL THAT SCORED SEND (C3698, recorded by C3699).** Three lenses, independently:
+**7 / 3 / 7.** Recorded with the 3 intact, because a 3 is a dissent and this book is where
+dissents live: the panel did **not** agree that Send was worth building — one lens was
+unconvinced of the value. What all three agreed on was the DESIGN, and that agreement
+survives as the rules in `shared/toolkit.js`'s header, each written as the failure it
+prevents (the payload is exactly `{ text }` · `share()` is called synchronously inside the
+tap · Cancel does nothing · the button is ABSENT where the API is absent, never hidden).
+The argument itself was never written down — that cycle ended before its CLOSE
+(§SCARS 2026-09-03) — so what survives is the verdict, not the reasoning. **And the 3 is a
+countable question rather than a matter of taste:** Send and Copy are two doors to the same
+document, which is exactly the CHOICE §THE EVO LOOP says to instrument. It is not
+instrumented today. That is the named next rung, and until it is counted the dissent stands
+unanswered.
+
 ## SAFETY — non-negotiable (operator 2026-08-03: "emphasize safety and backup,
 ## look for edge cases that could screw us")
 - **Only self-contained, client-side static tool pages.** NEVER build anything
@@ -1974,6 +1988,57 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-03 (C3699) — A FINISHED RACK-WIDE FEATURE SAT IN THE WORKING TREE OVERNIGHT, CITING TWO SECTIONS OF THIS BOOK THAT DID NOT EXIST
+C3698 built SEND end to end — the helper in `shared/toolkit.js`, one registration line in
+each of six engines, four hand-written pages, a 349-line parity gate, an assertion in the
+deploy, and the change to the mobile ship gate that keeps the bar measured in the state a
+phone is actually in. Then it stopped. **No commit, no push, no cycle-log line.** Under six
+hours later `git status` was the only thing on this machine that knew.
+
+**Every rail we own watches the artifact, and the artifact is downstream of a commit.** The
+deploy assertion it wrote fires on a push. The gate it wrote fires when a person types its
+name. `mobile-watertight` is a PRE-SHIP gate and nothing was shipping. The books are the
+system of record and the book said nothing. **A working tree is the one place in this system
+where finished work and no work at all look identical.**
+
+**The tell that survived, and it is the transferable part.** The runtime header cites
+`av/AV_SOCIETY.md §THE PANEL, C3698` for the panel that scored the design, and `§SCARS
+C3698` for the measurement that killed its first placement. Grep this book for `C3698`
+before this entry: **zero hits.** Code that forward-references a record nobody wrote reads
+exactly like code that cites one — the pointer has the same shape either way, and only
+following it tells them apart. **A cross-reference from code into a book is a claim, and it
+rots in the direction of looking true.** Both sections now exist, written from what C3698
+left on disk and labelled with what it measured versus what this cycle measured.
+
+**THE RULE THIS BUYS.** The well's `--claim` goes stale after 24 hours because a claimed and
+abandoned wish looks served. A working tree has no such alarm, so the discipline is applied
+by hand: **ship it or revert it inside the cycle that wrote it.** Half-shipped is the only
+state this lane cannot see. And the first act of the cycle that finds one is to VERIFY, not
+to trust — C3699 re-ran the gate from zero rather than believing a header that said it had
+passed.
+
+### 2026-09-02 (C3698) — SEND'S FIRST PLACEMENT WAS THE FIXED BAR, AND ONE MEASUREMENT KILLED IT
+Recorded here from `shared/toolkit.js`'s own header, because the cycle that measured it
+ended before it could write the entry its code already cited. **These numbers are C3698's;
+C3699 did not re-measure the killed placement** — what C3699 measured is the placement that
+shipped.
+
+The obvious build puts Send beside Copy everywhere. On roughly half this rack Copy lives in
+a fixed bottom bar, and that bar is a CLOSED BUDGET: at 320px a fourth control pushed one of
+the others past the glass on **25 of 50 bar pages**, and the count readout — the label that
+tells a man how many items he is about to send — collapsed to **0–23px on 44 of them**. None
+of that is visible in a desktop screenshot.
+
+So placement became a decision the runtime makes per page instead of a constant, and
+fixed-ness is **READ off computed style up the tree, never guessed from a class name**:
+`av/consumables.html` keeps its Copy in a `.dock`, not a `.bar`, and a class list would have
+put Send straight back into the one place the measurement forbids. Copy in the flow gets
+Send beside it; Copy in a fixed bar gets Send in-flow, full width, directly under the
+document preview he just read — and the bar keeps its budget. A fixed-bar Copy with no
+preview to anchor to mounts **nothing**, rather than clip the one button every page is built
+around. `tools/toolkit-gates/send-is-copy.mjs` asserts both placements and that no
+`.tk-send` ever sits inside anything `position: fixed`.
 
 ### 2026-09-02 (C3697) — THE RAIL EXISTED ONE LAYER DOWN, SO NOBODY BUILT IT WHERE THE WORDS ARE WRITTEN
 `shared/docsindex.js` has refused, since the day it was generated, to POOL a term that
@@ -8179,3 +8244,47 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   and 8 of the 11 shared documents, and those two inherit all 11 in the rack's generic voice.
   That is the next DOCS rung, and it is the 2026-08-15 roster lesson again: nobody asks a new
   trade what it was OWED. https://mrdirno.github.io/nested-resonance-memory-archive/roofing/write-up.html
+
+- `2026-09-03` — **[AXIS:BACKPORT] C3699 — THE SHARE SHEET NOW SITS WITH COPY ON 117 PAGES OF
+  16 TRADES, AND THE CYCLE THAT BUILT IT NEVER SHIPPED IT** · **the well was verified EMPTY on
+  disk in BOTH sinks** (`av_wishing_well --list` and `--list --status building`, 0 and 0;
+  vibe-cards the same), no family owed, so the stalest axis governed and it was BACKPORT. ·
+  **before:** every page on this rack ends the same way — the document goes to the clipboard
+  and the man leaves to find the thread, long-press, paste. C3698 built the one-tap version of
+  that door and then stopped: the helper in `shared/toolkit.js`, one line in each of six
+  engines, four hand-written pages, a 349-line parity gate, a deploy assertion and a change to
+  the mobile ship gate — **all of it uncommitted**, under six hours old, invisible to every
+  rail we own because every rail we own watches the ARTIFACT and the artifact is downstream of
+  a commit (§SCARS 2026-09-03). Its source header cited `§THE PANEL, C3698` and `§SCARS
+  C3698`; grepping this book for `C3698` returned **zero hits**. · **after:** VERIFIED, then
+  shipped — the first act was to re-run the gate from zero rather than believe a header
+  claiming it had passed. `tools/toolkit-gates/send-is-copy.mjs`: **117 pages mount Send · 17
+  excluded by name (the 16 write-up shelves + `av/report-builder`, whose receiver is an AI chat
+  box) · 0 pages with a Copy path and no decision · 297 parity pairs with the document actually
+  MOVING on 148 · 5,199 checks · 0 failing.** 117 + 17 = **134**, which is exactly the tool
+  count the registry claims. **NEGATIVE CONTROL run, not assumed:** `--prove` hands the sheet
+  the copy text plus one character and goes RED on both placement classes and on the
+  three-Send page (`getting-in`) — 2, 2, 1 and 6 failures where green had been. · `mobile-watertight` **169 pages at 320/360/390/430, default and bumped text — 0 failing**, with `navigator.share` stubbed PRESENT by default so the fixed bar is measured in the state a phone is actually in rather than the one headless Chromium is in (`TK_NO_SHARE=1` measures the desktop-Firefox state). The 6 soft field-height reports are all on `av/report-builder.html`, which mounts no Send — pre-existing and untouched ·
+  `no-third-party` **169 pages, 0 third-party requests** — Send is `navigator.share`, so the
+  document never leaves the phone. · **A NON-FINDING, measured rather than waved off:** the
+  runtime styles Send from `var(--flag)` and `var(--cond)`, and an undefined custom property
+  drops the whole declaration silently; a grep suggested ~100 pages never define `--cond`. The
+  browser settled it instead — Send and Copy compute to the SAME `Arial Narrow` on every
+  sampled page and Send carries each trade's own accent (roofing `#FF93C9`, plumbing
+  `#C87137`, masonry `#B9EE1B`, painting `#29FF29`, sitework `#FFDDA3`, av `#F0BE1E`), 44px on
+  all. The grep was scoped wrong; measuring cost two minutes. · **THE BACKPORT RIDER IS THE
+  SHIP:** one refinement, landed once in the shared library, reaching all 16 trades at once —
+  and the placement is a decision the runtime makes PER PAGE (fixed-ness read off computed
+  style, never guessed from a class name), because C3698 measured the naive version killing
+  the fixed bar on 25 of 50 pages at 320px. · **NOT SWEPT IN, and named so it is not lost:**
+  `.github/workflows/toolkit-gates-and-e2e.yml` has sat untracked since 2026-08-25 — the same
+  half-shipped state as the feature above, one layer up, and it is the very rail that would
+  have caught it. It GLOBS `tools/toolkit-gates/*.mjs` (no hardcoded roster, so it ages well),
+  but shipping it means turning every push in this repo red if any of the **34** gates on disk
+  is currently failing, and that has not been measured. **Run all 34 green first, then commit
+  it** — shipping an unverified rail is the exact mistake this cycle scarred. · **Storefront
+  unchanged** — no new tool and no new trade; Send is a capability of 117 existing ones. ·
+  **THE OPEN QUESTION THE PANEL LEFT, and it is countable:** one of three lenses scored this a
+  **3**. Send and Copy are two doors to the same document — the CHOICE §THE EVO LOOP exists to
+  instrument — and nothing counts which door gets used. That is the named next rung; until it
+  is counted the dissent stands unanswered. · **VERIFIED ON THE LIVE ARTIFACT, not on the tree.** The deploy printed its own new assertion — `send: runtime helper present, 6 engines register it` — and the whole gate re-run against the deployed site returns the IDENTICAL line: **117 mount · 17 excluded · 297 parity pairs · 5,199 checks · 0 failing.** Before this cycle the live `shared/toolkit.js` matched `ToolkitSend` **zero** times. https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html
