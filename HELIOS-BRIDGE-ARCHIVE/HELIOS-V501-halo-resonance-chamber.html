@@ -9032,8 +9032,16 @@ bottom-right at z-index 2147483000; this page's rail is position:fixed
 bottom-centre at z-index 70. Measured on the DEPLOYED site, elementFromPoint
 at each tab's centre: View/Lab/Tools unreachable at 360 and 390px, Lab/Tools
 at 430, 900 and 1280px, Tools at 768px. So Tools — the archive's whole
-navigation list, the one the deploy gate enforces — could not be opened by
-tap or click at ANY width from 360 to 1280. The "8" key still opened it,
+navigation list, the one the deploy gate enforces — was unreachable by touch
+at every phone width. CORRECTED in the same cycle by an independent reviewer
+who scanned every pixel of each tab instead of only its centre: on desktop it
+is not total. At 900 and 1280px Lab and Tools keep an 18.6% and 19.2% sliver —
+a strip about 9px tall along the top edge, above the button — which a mouse can
+hit and a thumb cannot. At 390px both are 0%. The honest claim is therefore
+UNREACHABLE BY TOUCH, awkward but possible with a pointer; this ring first said
+"could not be opened by tap or click at ANY width", which overstated the desktop
+case, because centre-point hit-testing cannot see a surviving 9px strip.
+The "8" key still opened it,
 which is why a keyboard never noticed and no phone could get in at all.
 feedback.js:94 already documented the escape (trigger:false, then call
 Feedback.open from your own control); this page had simply never used it.
