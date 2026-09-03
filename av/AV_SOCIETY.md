@@ -1123,8 +1123,8 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      (a slash between two digits is not a separator, so *"3/4 EMT strap"* now prints `Ignored
      “EMT”` and not two bare digits), but a hyphen is genuinely ambiguous — *Pre-Existing* is
      two words and *USB-A* is one — and no rule that was tried tells them apart.
-   - **THE NAMED NEXT RUNG — rule 6 only fires when rule 1 DELETED something, and the same
-     lie is available with nothing deleted.** Of the **675** unhedged-wrong answers left after
+   - ~~**THE NAMED NEXT RUNG — rule 6 only fires when rule 1 DELETED something, and the same
+     lie is available with nothing deleted.**~~ Of the **675** unhedged-wrong answers left after
      rule 6, **322 (47.7%) are queries where the surface has no row called that at all** and
      nothing was dropped: every word he typed IS a word of some row's name here, each one at
      full strength, and no row is CALLED any of what he typed. *"cut in"* and *"pipe wrenches"*
@@ -1140,6 +1140,64 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      *"damage"* is scored WRONG because the harness credits the first row carrying the word and
      the Damage Note carries it in its TITLE while the Incident Report carries it as a nickname,
      which is the ordering `find-honesty.mjs` class G already asserts is correct.
+   - **SHIPPED 2026-09-03 (C3700) AS RULE 7 — the rung was right that the label lies with an
+     empty sentence, and WRONG about why it is empty. Its own worked example gave it away.**
+     *"pipe wrenches"* on `av/write-up` was filed as *"nothing was dropped"*. A word WAS
+     dropped — `wrenches` — and the reason it left no trace is the MID-WORD HOLD-BACK: the
+     engine will not name a token it thinks is still under his thumb, `say` goes empty, and
+     **`say` empty makes rule 6's clause vacuous**, so the label goes out exact as well. Rule 6
+     did not leave a hole beside itself; it left the door it stands in unlocked. Driven over
+     **41,516 searches on 33 surfaces**, 3,181 answers were exact ONLY because the hold-back
+     had emptied `say`, and the decomposition of the 623 unhedged-wrong is not the one the rung
+     wrote down: **453 (72.7%) ride the hold-back · 124 (19.9%) really did drop nothing · 46
+     got past rule 6 on a real name.** The 322/47.7% split does not reproduce.
+   - **THE THRESHOLD IS EVIDENCE, NOT TASTE, and that is the whole rung.** "Still on a word"
+     is a claim the engine can check: at one character `tokenScore()` has no prefix path at
+     all (which is the real flicker window, and the reason C3678's `1/4 drill b` case is
+     genuine), at two the prefix path is live, at three both prefix and infix are. A trailing
+     token of **three** characters that matched NOTHING begins no word and sits inside no word
+     anywhere in the library — it is not a word in progress, it is a word this page does not
+     have, so it may be named and hedged on. `var UNDER_THUMB = 3` in `shared/find.js`, one
+     clause on the hold-back, nothing else touched.
+   - **THE NUMBERS, AND THE COST BAR WAS PRE-REGISTERED BEFORE THE PREDICATE WAS WRITTEN:**
+     zero on the KEYSTROKE corpus — every own name typed one character at a time, **13,659
+     queries, 12,813 of them exact, which is the only place a label can flicker.** Delivered:
+     **unhedged-wrong 623 → 172**, and diffed query by query rather than totalled — **759 newly
+     hedged (451 wrong answers + 308 below), 0 newly UNhedged, and the lead row moved 0 times
+     in 41,516 searches.** Good cases unmoved: verbatim name **586/586**, authored alias
+     **864/864**, mid-typing **12,813/12,813**, whole-name-plus-chrome **248/248** on the
+     document libraries and **60/60** on the commons. The 451 was PREDICTED from the baseline
+     run through the engine's own exported `wholeName` and then RETURNED by the patched
+     engine's diff — two paths, one number, and the same for the 308.
+   - **THE 308 IS NOT A COST, IT IS A TRANSITION REMOVED — and it names the next rung.** All
+     308 sit on the twelve-plus tap-to-tick lists, and on those surfaces the FINISHED form of
+     the identical query (*name* + *template* + a space) is **already hedged 272 of 280
+     today**. The change moves the flip from the space to the third character of a word that
+     was never here; the count of transitions goes from one to none. It rides a defect it did
+     not create, below.
+   - **THE NAMED NEXT RUNG, and it is bigger than the 124 this cycle left behind: rule 6 is
+     STRUCTURALLY BLIND on every pick surface.** `shared/pickfilter.js` indexes a row's whole
+     `<li>` textContent as its ONE primary field, so `wholeName()` — "is this row wholly
+     CALLED that" — can never be true there, and rule 6 hedges a man who typed an item's exact
+     name plus the word a search box taught him to add. Measured: class H **8/280 exact on the
+     pick surfaces against 248/248 on the document libraries and 60/60 on the commons**, so
+     **272 false hedges** on the shape rule 6 was explicitly written to leave alone. The fix is
+     a field spec, not a predicate — declare the row's NAME as the primary field and the `<li>`
+     text as `about: true` — and it moves ranking on fourteen surfaces, so it ships with its
+     own lead-movement diff or not at all.
+   - **AND THE 124 THAT REALLY DID DROP NOTHING, named with the number that killed the obvious
+     fix so it is not re-derived.** Every word he typed is a word of SOMETHING's name here at
+     full strength and no row is called any of it; 67 of the 124 are single-word, where the
+     honest label is exact (he typed a word of the title — `find-honesty.mjs` class G asserts
+     that ordering is correct). The candidate was **RUN**: hedge unless the tokens are a
+     contiguous whole-word run inside ONE naming part of the lead, last token allowed to prefix
+     while under his cursor. It was written into the engine, measured, and **taken back out:
+     it hedges 31 of the 124 and costs 24 mid-typing keystrokes** — *"What Was I"* on
+     `sitework/write-up` leads *What Was Already Like That When We Got Here* and RUN calls it
+     not-named — against a pre-registered bar of ZERO on that corpus. **A weaker variant, BAG
+     (same words, any order, one name), was measured in the same run and is worse: it sees 17.**
+     The rung is still "find the condition that separates a lead he has half-typed from a lead
+     he has not named at all", and RUN is now on the record as not being it.
 
 3. **GUIDES — refuse as written.** A guide is a procedure, and this page's own header says
    "not a how-to". A tutorial forbidden to state a number, a step order or a safe condition is
@@ -1988,6 +2046,26 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-03 (C3700) — A PROBE WHOSE EXISTENCE DEPENDED ON THE VALUE IT ASSERTS, SO REVERTING THE CODE MADE THE GATE GO QUIET INSTEAD OF RED
+`find-noise.mjs` class N10 asserts that a trailing word this page does not have is NAMED
+without waiting for a separator — the promise rule 7 shipped. The first draft built the probe
+as `(w1.length >= U && drops(w1)) ? read(...) : null`, reading `U` from the engine's own
+`Find.underThumb` so the gate would follow the constant instead of hardcoding a 3. That is the
+right instinct and it produced a gate that **cannot fail**: set the constant back to the
+pre-change behaviour and `w1.length >= 99` is false, the probe is never built, N10 disappears
+from the `by class:` summary, and the file prints **GREEN 363 checks**. The revert it exists to
+catch is the exact input that silences it.
+**THE RULE: a probe may read a constant to decide WHAT to type, never to decide WHETHER to
+run.** N10 is now gated only on `drops(w1)` — a question about the DATA — and if the engine's
+line sits above the probe word the promise is false and the gate is RED, which is what N0
+("a surface that runs no probe is a RED, not a quiet pass") already says one level up.
+**AND IT WAS FOUND BY RESTORING CODE, NOT BY READING IT.** The pair is red-verified in both
+directions on the same 33 surfaces: engine at `UNDER_THUMB = 99` (the old unconditional
+hold-back) → **N10 FAIL×33**, N9 green; engine at `0` (no hold-back at all, gate line forced to
+3) → **N9 FAIL×33**, N10 green; engine at 3 → **GREEN 396 checks**. A gate nobody has watched
+fail is a gate nobody has tested, and this one had already passed once while asserting nothing.
+
 
 ### 2026-09-03 (C3699) — A FINISHED RACK-WIDE FEATURE SAT IN THE WORKING TREE OVERNIGHT, CITING TWO SECTIONS OF THIS BOOK THAT DID NOT EXIST
 C3698 built SEND end to end — the helper in `shared/toolkit.js`, one registration line in

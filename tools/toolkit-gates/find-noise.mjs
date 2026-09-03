@@ -195,6 +195,9 @@ for (const s of SURFACES) {
     const holds = (ix) => !!own && ix.rows.some(r => r.f[ix.primary].whole.some(w => w.indexOf(own) !== -1));
     const IX = seen.filter(holds)[0] || null;
     if (!IX) return { err: 'index not captured' };
+    /* Kept for the N9/N10 pair below, which has to ask the engine whether it
+       DROPS a fragment before that fragment can test the hold-back. */
+    window.__NIX = IX;
 
     const absent = [];
     for (const w of pool) {
@@ -217,7 +220,6 @@ for (const s of SURFACES) {
     const res = await page.evaluate(({ ad, nm, w1, w2 }) => {
       const si = eval(ad.input);
       const read = (q) => { si.value = q; si.dispatchEvent(new Event('input', { bubbles: true })); return eval(ad.read); };
-      const noiseOf = (q) => (window.Find.search(window.__NIX, q) || {}).noise;
       return {
         base:   read(nm),
         one:    read(nm + ' ' + w1 + ' '),
@@ -288,12 +290,64 @@ for (const s of SURFACES) {
       fail('N8', at + ' + “' + acc.word + '” — came back shredded as ' + JSON.stringify(wAcc));
     else ok('N8');
 
-    if (SAYS.test(acc.mid.note))
-      fail('N9', at + ' — named “' + w1 + '” while he was still typing it: ' + JSON.stringify(acc.mid.note.trim()));
+    /* ── N9 + N10 ARE ONE PAIR, AND THE NUMBER BETWEEN THEM IS THE ENGINE'S ──
+       shared/find.js holds a trailing token back WHILE IT COULD STILL BE A WORD
+       IN PROGRESS, and names it once it cannot be one. Until 2026-09-03 there was
+       no "once": the hold-back ran to the next separator, and because `say` empty
+       also makes rule 6's clause vacuous, 453 answers that named a document the
+       page does not carry went out labelled EXACT with no sentence at all — the
+       failure rule 6 exists to end, through the door rule 6 left open.
+       `Find.underThumb` is where that line now sits, so this gate probes one
+       character either side of the ENGINE'S constant rather than a 3 written
+       here, and moving the constant re-points both probes. A fragment is only a
+       test of the hold-back if the engine actually DROPS it — at two characters
+       the prefix path is live, so "da" on a page that carries "damage" is a word
+       this page has — so every candidate is put to the engine first. */
+    const thr = await page.evaluate(({ ad, nm, w1, pool }) => {
+      const si = eval(ad.input);
+      const read = (q) => { si.value = q; si.dispatchEvent(new Event('input', { bubbles: true })); return eval(ad.read); };
+      const U = window.Find.underThumb;
+      const drops = (frag) => {
+        const r = window.Find.search(window.__NIX, nm + ' ' + frag);
+        return !!r && (r.noise || []).indexOf(window.Find.norm(frag)) !== -1;
+      };
+      /* ANY proven-absent word will do for the under-the-line probe, and taking
+         only the first one skipped four surfaces that happen to carry a word
+         starting "da" — the head has to be one the ENGINE drops, so the search
+         runs over every word it already proved absent. */
+      let f = null;
+      for (const w of [w1].concat(pool)) {
+        for (let n = 1; n < U; n++) { const c = w.slice(0, n); if (drops(c)) { f = c; break; } }
+        if (f) break;
+      }
+      return { U: U, frag: f, under: f ? read(nm + ' ' + f) : null,
+               /* NOT GUARDED ON `U`, AND THE RED TEST IS WHY. Gating this probe on
+                  w1.length >= U made the whole class VANISH the moment the engine's
+                  line moved above the probe word — reverting the constant left this
+                  file printing GREEN with N10 absent from the summary, which is the
+                  silent cap N0 exists to forbid. The promise being asserted is that
+                  a trailing word this page does not have is named without waiting
+                  for a separator; if the engine's line sits above that word, the
+                  promise is FALSE and this must be RED, not skipped. */
+               line: drops(w1) ? read(nm + ' ' + w1) : null };
+    }, { ad: AD[s.kind], nm, w1, pool: r.absent });
+
+    if (thr.frag === null) console.log('  SKIP  N9   ' + at + ' — no head of “' + w1 + '” under ' + thr.U + ' chars that the engine drops');
+    else if (SAYS.test(thr.under.note))
+      fail('N9', at + ' — named “' + thr.frag + '” while he was still typing it: ' + JSON.stringify(thr.under.note.trim()));
     else ok('N9');
     if (!SAYS.test(acc.done.note))
       fail('N9', at + ' — “' + w1 + '” stayed unnamed after he finished the word: ' + JSON.stringify(acc.done.note.trim()));
     else ok('N9');
+
+    if (thr.line === null) console.log('  SKIP  N10  ' + at + ' — “' + w1 + '” is shorter than the engine\'s ' + thr.U + '-character line');
+    else {
+      const wl = words(thr.line.note);
+      if (!wl) fail('N10', at + ' — “' + w1 + '” begins no word on this page and was not named without a separator: ' + JSON.stringify(thr.line.note.trim()));
+      else if (wl.map(x => x.toLowerCase()).indexOf(w1.toLowerCase()) === -1)
+        fail('N10', at + ' — named ' + JSON.stringify(wl) + ' instead of “' + w1 + '”');
+      else ok('N10');
+    }
     covered[s.id] = (covered[s.id] || 0) + 1;
     break;   // one name per surface is enough for the mechanical classes
   }

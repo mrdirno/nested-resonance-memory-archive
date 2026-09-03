@@ -286,6 +286,12 @@
   /* The query exactly as he typed it, for the one job the normalized copy cannot
      do: hand a dropped word back in his own characters. */
   var RAW = "";
+  /* How long a trailing token may be before the engine stops calling it "the
+     word under his thumb". Below this, a token that matches nothing is a word in
+     progress and is held back; at this length and above, nothing in the library
+     begins with it or contains it, so it is a word this page does not have.
+     Rule 7 in search() carries the measurement. */
+  var UNDER_THUMB = 3;
 
   /* One query token against one indexed field. Exact > prefix > infix > fuzzy,
      and the tiers never overlap, so an approximate hit cannot outscore a real
@@ -356,17 +362,41 @@
     /* WHAT MAY BE NAMED OUT LOUD, which is not the same set as what was dropped.
        The scorer already exempts the last token from strictness because it is the
        word under his cursor (`need` above), and the sentence has to make the same
-       trade or it contradicts the engine it reports on: a token of one or two
-       characters can only match EXACTLY, so the first letter of every word after
-       the first is noise for one keystroke. Naming it makes the line appear on
-       "1/4 drill b" and vanish on "1/4 drill bi" — text flickering under his
+       trade or it contradicts the engine it reports on: a one-character token has
+       no prefix path in tokenScore() at all, so the first letter of every word
+       after the first is noise for one keystroke. Naming it makes the line appear
+       on "1/4 drill b" and vanish on "1/4 drill bi" — text flickering under his
        thumb on essentially every two-word query, which is the default way this
-       box is used. So the trailing token is held back until a separator says he
-       is finished with it. The cost is honest and smaller: a last word that
-       really does match nothing goes unnamed until he types a space. */
+       box is used. So the trailing token is held back while he is still on it.
+
+       RULE 7. HELD BACK IS NOT THE SAME AS FINISHED, AND THE HOLD-BACK'S OWN
+       STATED COST WAS MEASURED WRONG. It read "a last word that really does
+       match nothing goes unnamed until he types a space", as though the only
+       casualty were a sentence. It is not: `say` empty makes rule 6's clause
+       VACUOUS, so the label goes out as "exact" as well. Driven over 41,516
+       searches on 33 surfaces, 3,181 answers were exact ONLY because the
+       hold-back had emptied `say`, and 453 of them were a document this surface
+       does not carry. "pipe wrenches" and "pipe lube" on av/write-up come back
+       as the Damage / Pre-Existing Condition Note, labelled exact, with no
+       sentence naming the word that was thrown away — the exact failure rule 6
+       was written to end, walking in through the door rule 6 left open.
+
+       SO THE HOLD-BACK IS THRESHOLDED, AND THE THRESHOLD IS EVIDENCE, NOT TASTE.
+       He is "still on" a word only while the engine cannot yet tell: at one
+       character there is no prefix path, at two the prefix path is live, and at
+       three both prefix and infix are live. A trailing token of three characters
+       that matched NOTHING begins no word and sits inside no word anywhere in
+       this library, so it is not a word in progress — it is a word this page
+       does not have, and it may be named and hedged on. Measured at that
+       threshold: 451 of the 453 hedged, and on the KEYSTROKE corpus — every own
+       name typed one character at a time, 13,659 queries, which is the only
+       place a label can flicker — the cost is ZERO. Verbatim names 586/586 and
+       authored aliases 864/864 unmoved; whole-name-plus-chrome 248/248 on the
+       document libraries and 60/60 on the commons unmoved, because what survived
+       is still the whole name of the row and rule 6 says so. */
     var say = noise;
     if (noise.length && qt.length > 1 && noise.indexOf(qt[qt.length - 1]) !== -1 &&
-        /[A-Za-z0-9]$/.test(RAW)) {
+        qt[qt.length - 1].length < UNDER_THUMB && /[A-Za-z0-9]$/.test(RAW)) {
       say = [];
       for (k = 0; k < qt.length - 1; k++) if (noise.indexOf(qt[k]) !== -1) say.push(qt[k]);
     }
@@ -499,6 +529,7 @@
     return false;
   }
 
+
   /* ── ADMITTING WHAT WAS THROWN AWAY ──────────────────────────────────────
    * Rule 1 drops a token that matches nothing in the library, and for
    * "template" and "form" that is exactly right — he added a word a search box
@@ -607,5 +638,8 @@
   }
 
   window.Find = { index: index, search: search, norm: norm, toks: toks, squash: squash,
-                  dist: dist, dropped: dropped };
+                  dist: dist, dropped: dropped,
+                  /* Rule 7's line, exported so tools/toolkit-gates/find-noise.mjs
+                     probes either side of THIS number and never a copy of it. */
+                  underThumb: UNDER_THUMB };
 })();
