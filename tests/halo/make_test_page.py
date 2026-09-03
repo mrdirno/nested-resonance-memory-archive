@@ -80,6 +80,8 @@ window.__probe = {
   get pmPot() { return pmPotA; },
   PM: { N: PM_N, TX: PM_TX, TY: PM_TY, HALF: EXTENT * 1.02 },
   lab: lab, applyScenario: applyScenario, TICK: TICK,
+  effectiveSubsteps: typeof effectiveSubsteps === 'function' ? effectiveSubsteps : null,
+  autoSubsteps: typeof autoSubsteps === 'function' ? autoSubsteps : null,
   labReadDensity: labReadDensity, labCorr: labCorr, PM_N: PM_N,
   get epochN() { return epochN; },
   caps: function () {
@@ -98,6 +100,18 @@ window.__probe = {
   get posPrev() { return posPrev; },
   get posB() { return posB; },
   get pmDens() { return pmDens; },
+  get pmPotB() { return pmPotB; },
+  pmSolve: pmSolve, pmDeposit: pmDeposit, simTick: simTick, syncPm: syncPm,
+  readTarget: readTarget, writeRow: writeRow,
+  get dimer() { return DIMER; }, dimerTick: dimerTick, dimerEig: dimerEig, dimerParams: dimerParams,
+  dimerDensityShare: dimerDensityShare, dimerDraw: dimerDraw, labReadDensity: labReadDensity,
+  get modeB() { return modeB; }, radialProfile: radialProfile, schmidt: schmidt, RAD_N: RAD_N,
+  get cons() { return lab.cons; },
+  get consRT() { return consRT; },
+  get velB() { return velB; },
+  consSample: labConsSample, consReduce: labConsReduce, consReset: labConsReset, consCopyUniforms: consCopyUniforms,
+  consLedgerLive: labConsLedgerLive, fieldAmp: fieldAmp, simStep: simStep, labConsPredict: labConsPredict,
+  PM_HALF_JS: PM_HALF_JS, SG_GAIN: SG_GAIN, EXTENT: EXTENT,
   look: function (az, el, dist) {
     markCamUser();
     cam.az = az; cam.el = el; cam.dist = dist;
@@ -109,5 +123,9 @@ marker = '\n})();\n</script>'
 assert src.count(marker) == 1, 'IIFE close marker not unique'
 out = out.replace(marker, PROBE + marker)
 
+# 4. site-root scripts cannot resolve under file:// (the wishing well's feedback.js is served
+#    from the site root); the test build drops them so console-error checks stay strict.
+out, n_site = re.subn(r'<script src="/nested-resonance-memory-archive/[^"]*"></script>\n?', '', out)
+print('site-root scripts dropped from the test build:', n_site)
 (d / 'rc-test.html').write_text(out)
 print('rc-test.html regenerated:', len(out), 'bytes')

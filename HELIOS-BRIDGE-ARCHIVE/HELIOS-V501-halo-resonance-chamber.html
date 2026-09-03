@@ -845,6 +845,47 @@ kbd {
         particle pass per tick.
       </p>
       <div class="slider-row">
+        <span class="slider-name">Self-gravity solver</span>
+        <div class="seg" id="pm-solver-seg" role="group" aria-label="How the self-gravity potential is solved">
+          <button data-pmsolver="jacobi" aria-pressed="true">Six sweeps (as found)</button>
+          <button data-pmsolver="exact" aria-pressed="false">Exact</button>
+        </div>
+        <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+          Six sweeps is what every preset was found with. Each tick the
+          potential is nudged six times toward the answer, starting from last
+          tick&rsquo;s potential. Small features settle in a fraction of a
+          second. The broadest part &mdash; the pull of the whole swarm on
+          itself &mdash; settles with a time constant near two seconds, so it
+          runs late: on a running Spinning Chladni swarm three seconds in, the
+          six-sweep potential was a third off the exact one. Exact solves the
+          same equation on the same mesh to the end, every tick, so the
+          long-wavelength part of the potential is no longer late. On a frozen
+          swarm, once the sweeps have caught up, the two agree to about two parts
+          in a million. What changes is how quickly a large mass feels its own
+          weight, not how hard. It costs about the same: within a millisecond
+          a tick at four million particles.
+        </p>
+      </div>
+      <div class="slider-row">
+        <span class="slider-name">Self-gravity mesh</span>
+        <div class="seg" id="pm-assign-seg" role="group" aria-label="How each particle's mass goes onto the mesh">
+          <button data-pmassign="ngp" aria-pressed="true">Nearest cell (as found)</button>
+          <button data-pmassign="cic" aria-pressed="false">Cloud-in-cell</button>
+        </div>
+        <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+          Nearest cell is what every preset was found with. A particle drops
+          its whole mass into the one mesh cell it is in and reads the pull at
+          that cell, so the pull jumps when a particle crosses a cell edge
+          (cells are 0.96 wide here). Cloud-in-cell shares each particle&rsquo;s
+          mass among its eight nearest cells by distance and reads the pull
+          back the same way, so forces change smoothly across the mesh and a
+          particle feels no pull from its own mass. It writes eight cells per
+          particle instead of one, and that is the cost. On the author&rsquo;s
+          Apple M4 Pro one tick at a million particles took 4 ms with nearest
+          cell and 24 ms with cloud-in-cell; at 4.2 million, 12 ms and 105 ms.
+        </p>
+      </div>
+      <div class="slider-row">
         <div class="slider-head">
           <span class="slider-name">Gain / loss</span>
           <span class="slider-val" id="val-gainloss">off</span>
@@ -1029,7 +1070,7 @@ kbd {
           <span class="slider-name">Damping</span>
           <span class="slider-val" id="val-damp">2.5 /s</span>
         </div>
-        <input type="range" id="in-damp" min="0.1" max="8" step="0.1" value="2.5" aria-label="Velocity damping">
+        <input type="range" id="in-damp" min="0" max="8" step="0.1" value="2.5" aria-label="Velocity damping">
       </div>
       <div class="slider-row">
         <span class="slider-name">Integrator</span>
@@ -1038,6 +1079,7 @@ kbd {
           <button data-sub="2" aria-pressed="false">2&times;</button>
           <button data-sub="3" aria-pressed="false">3&times;</button>
           <button data-sub="4" aria-pressed="false">4&times;</button>
+          <button data-sub="auto" aria-pressed="false" title="Picks the count from the magnetic coupling">Auto (1)</button>
         </div>
         <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
           Substeps per tick. The physics runs on a fixed tick of 1/20 s on
@@ -1050,6 +1092,11 @@ kbd {
           figure becomes a ring on the wall at 4&times; (measured here:
           radius 14.8, speed 64) and its self-gravity threshold drops (0.3
           folds at 2&times;, where 0.45 holds at 1&times;).
+          <b>Auto</b> picks the count itself: as many substeps as four allow,
+          so that each magnetic turn stays under a quarter radian &mdash; 1 at
+          coupling 0.4, 2 at 0.6, 4 from coupling 1.9 up (at 3, four substeps
+          still leave 0.39 radian per step) &mdash; and the button shows the count it
+          chose. It changes nothing until you choose it.
         </p>
       </div>
       <div class="slider-row">
@@ -1177,6 +1224,66 @@ kbd {
           <input type="number" class="num-input" id="off-c" min="0" step="1" value="478"></div>
       </div>
     </div>
+    <div class="group">
+      <div class="group-label">Mode dimer &mdash; two partner modes coupled, with gain and loss</div>
+      <button class="switch-row" id="sw-dimer" aria-pressed="false">
+        <span>Pair on
+          <span class="hint">The mode as drawn and the same figure a quarter phase on, run as one coupled pair; off, nothing changes</span></span>
+        <span class="switch"></span>
+      </button>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Coupling &kappa;</span>
+          <span class="slider-val" id="val-dimer-kappa">1.00 /s</span>
+        </div>
+        <input type="range" id="in-dimer-kappa" min="0.2" max="3" step="0.05" value="1" aria-label="Coupling between the two partner modes">
+      </div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Gain / loss &gamma;</span>
+          <span class="slider-val" id="val-dimer-gamma">0.00 /s</span>
+        </div>
+        <input type="range" id="in-dimer-gamma" min="-3" max="3" step="0.05" value="0" aria-label="Gain on partner 1 and loss on partner 2">
+      </div>
+      <div class="slider-row">
+        <div class="slider-head">
+          <span class="slider-name">Detuning &Delta;</span>
+          <span class="slider-val" id="val-dimer-delta">0.0 /s</span>
+        </div>
+        <input type="range" id="in-dimer-delta" min="-6" max="6" step="0.1" value="0" aria-label="Frequency difference between the two partner modes">
+      </div>
+      <div class="slider-row">
+        <span class="slider-name">Loop around the exceptional point</span>
+        <div class="seg" id="dimer-loop-seg" role="group" aria-label="Drive the pair once around the exceptional point every 20 seconds">
+          <button data-loop="off" aria-pressed="true">Off</button>
+          <button data-loop="cw" aria-pressed="false">Clockwise</button>
+          <button data-loop="ccw" aria-pressed="false">Counter-clockwise</button>
+          <button data-loop="flat" aria-pressed="false">Flat, no gain</button>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">|a&#8321;|&sup2;</div><div class="stat-v" id="dm-a1">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">|a&#8322;|&sup2;</div><div class="stat-v" id="dm-a2">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Loop</div><div class="stat-v" id="dm-circle">&ndash;</div></div>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        Every figure has a twin: the same shape moved a quarter of a lobe
+        around the axis. The two share one energy, so the cavity treats
+        them as one pair. This switch couples them. &kappa; is how fast
+        the pair trades its content, &gamma; feeds partner 1 and drains
+        partner 2 at the same rate, &Delta; pushes their pitches apart. At
+        &gamma; = &kappa; with &Delta; = 0 the pair reaches its exceptional
+        point: its two natural motions merge into one. The loop takes
+        &gamma; and &Delta; once around that point every 20 seconds,
+        starting and ending with no gain. Go clockwise and the pair ends
+        mostly on partner 1; go counter-clockwise and it ends mostly on
+        partner 2, whichever way it started. Flat sweeps &Delta; with no
+        gain and brings the pair back where it began. Wells form: the
+        particles feel the still part of the pair. Chladni form: they feel
+        the intensity of the pair. Off, nothing here touches the field.
+        The pair&rsquo;s rates and the result of each loop are in the Lab.
+      </p>
+    </div>
 
     <div class="group">
       <div class="group-label">State</div>
@@ -1300,6 +1407,10 @@ kbd {
       <button class="btn" id="btn-export">
         <svg viewBox="0 0 16 16"><path d="M8 1v8.6L4.7 6.3 3.6 7.4 8 11.8l4.4-4.4-1.1-1.1L8 9.6V1zM2 13h12v1.5H2z"/></svg>
         Export point cloud (CSV)
+      </button>
+      <button class="btn" id="btn-npz">
+        <svg viewBox="0 0 16 16"><path d="M8 1v8.6L4.7 6.3 3.6 7.4 8 11.8l4.4-4.4-1.1-1.1L8 9.6V1zM2 13h12v1.5H2z"/></svg>
+        Save NPZ (positions, velocities, mesh)
       </button>
       <div class="slider-row">
         <span class="slider-name">Export size</span>
@@ -1507,7 +1618,7 @@ kbd {
   <div class="panel-body">
     <button class="switch-row" id="sw-lab" aria-pressed="false">
       <span>Instruments on
-        <span class="hint">Reads the GPU back once a second: twin-particle Lyapunov, cross-epoch memory, realized spectrum</span></span>
+        <span class="hint">Reads the GPU back once a second: twin-particle Lyapunov, phase-space volume, cross-epoch memory, realized spectrum, energy and angular momentum</span></span>
       <span class="switch"></span>
     </button>
     <div class="group">
@@ -1533,6 +1644,47 @@ kbd {
         report the flow, not the wall. <b>On ceiling</b> is the share of the
         sampled particles whose total force hit the 500 ceiling this tick;
         near 100% the ceiling, not the model, is setting the speed.
+      </p>
+    </div>
+    <div class="group">
+      <div class="group-label">Phase-space volume rate</div>
+      <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="stat"><div class="stat-k">Measured</div><div class="stat-v" id="lab-vol">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Predicted</div><div class="stat-v" id="lab-vol-pred">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Scored</div><div class="stat-v" id="lab-vol-n">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Substeps</div><div class="stat-v" id="lab-vol-sub">&ndash;</div></div>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        Liouville: a frictionless, exactly rotated swarm keeps its
+        phase-space volume (rate 0); damping shrinks it at three times the
+        damping rate; the explicit magnetic kick inflates it. Measured
+        beside predicted. The meter follows 64 small clusters. Each is one
+        particle and six neighbours placed 0.001 away: three along the
+        position axes, three along the velocity axes, so together they
+        mark out a tiny box in the six numbers that describe a particle.
+        Every half second the box is read back, its volume compared with
+        the starting volume, and the box squared up and shrunk back to
+        0.001, the same reset the Lyapunov pairs get. <b>Predicted</b>
+        comes from the step itself: damping at rate &gamma; shrinks the box
+        at 3&gamma; per second; the Euler magnetic step also multiplies it
+        by 1 + &theta;&sup2; on every substep, with &theta; the turn per
+        substep (coupling &times; 10.5 &times; dt), so it adds
+        ln(1 + &theta;&sup2;) / dt; the exact rotation adds nothing. With
+        gain/loss on, the damping differs from place to place and the
+        prediction reads &ldquo;local&rdquo; instead of a number. Clusters
+        touching the wall at the end of the half second, on the force
+        ceiling at either end of it, or stretched past 0.1 &mdash; a hundred times their size,
+        where the force across them is no longer one straight line, and
+        a wrap may have split them &mdash; are reset and not scored, and
+        the half second around a zoom-out is skipped, as for the pairs.
+        <b>What a mismatch means</b>: with a full scored count and nothing
+        on the ceiling, measured and predicted should agree within a few
+        percent. A gap means something the formula does not know about
+        acted inside the half second, most often a wall bounce that ended
+        away from the wall. A scored count near zero means the swarm is
+        fast and near the wall, or the graphics card stores positions too
+        coarsely to hold a 0.001 offset. <b>Substeps</b> is the count that
+        ran.
       </p>
     </div>
     <div class="group">
@@ -1582,15 +1734,192 @@ kbd {
       </p>
     </div>
     <div class="group">
+      <div class="group-label">Conservation &mdash; energy and angular momentum</div>
+      <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="stat"><div class="stat-k">H, stored v</div><div class="stat-v" id="lab-H">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">H, centred</div><div class="stat-v" id="lab-Hc">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">&Delta;H / H<sub>0</sub></div><div class="stat-v" id="lab-dH">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Wall took</div><div class="stat-v" id="lab-wall-took">&ndash;</div></div>
+      </div>
+      <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="stat"><div class="stat-k">Rate, measured</div><div class="stat-v" id="lab-erate">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Rate, predicted</div><div class="stat-v" id="lab-erate-pred">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">On ceiling, all</div><div class="stat-v" id="lab-ceil">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Wall hits</div><div class="stat-v" id="lab-hits">&ndash;</div></div>
+      </div>
+      <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="stat"><div class="stat-k">|L| per particle</div><div class="stat-v" id="lab-L">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">|&Delta;L| / |L<sub>0</sub>|</div><div class="stat-v" id="lab-dL">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">L lined up</div><div class="stat-v" id="lab-Lalign">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Potential settled</div><div class="stat-v" id="lab-settled">&ndash;</div></div>
+      </div>
+      <canvas class="trace" id="lab-cv-cons" width="640" height="116" aria-label="Energy drift trace: stored-velocity H (grey) and centred H plus the wall's take (green)"></canvas>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="lab-cons-note">
+        Turn the instruments on to read the energy.
+      </p>
+      <div class="seg" id="lab-field-seg" role="group" aria-label="Field force">
+        <button data-lf="on" aria-pressed="true">Field force on</button>
+        <button data-lf="off" aria-pressed="false">Field force off</button>
+      </div>
+      <div class="seg" id="lab-ledger-seg" role="group" aria-label="Wall ledger">
+        <button data-ledger="off" aria-pressed="true">Wall ledger off</button>
+        <button data-ledger="on" aria-pressed="false">Wall ledger on</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        <b>H</b> adds up, over every particle, its kinetic energy, the field&rsquo;s
+        energy at its position, and its share of the swarm&rsquo;s own gravity. The
+        field energy is worked out from the force, so that the force is the downhill
+        slope of that energy; the gravity share is half the mesh potential at the
+        particle&rsquo;s cell, less the mean-density term the mesh subtracts. The
+        stored velocity sits half a step behind the position (that is how the step
+        works), so H is shown twice: at the stored velocity, and <b>centred</b>, with
+        half a step of the force added, at the position&rsquo;s own time. The band the
+        stored one swings in is the integrator&rsquo;s bookkeeping, not a leak; the
+        centred one is the number to watch. <b>H<sub>0</sub></b> is H when the
+        instruments came on or the settings last changed. It restarts at every digit
+        change, zoom-out and reseed. With the six-sweep solver it waits until the
+        mesh potential has settled; <b>Potential settled</b> says how well the potential
+        fits the matter right now. With damping, expansion, helix, gain/loss, centers,
+        vessel, overlays and the magnetic term off, and the field held still, the centred
+        H should stay in a narrow band that does not walk. The wall is the one thing
+        that is not part of H: a particle that hits it keeps half of its speed into the
+        wall. With the <b>wall ledger</b> on, the page replays each step&rsquo;s own
+        velocity program with the wall switched off, sees exactly what every hit took,
+        and adds it back: <b>&Delta;H / H<sub>0</sub></b> then includes what the wall
+        took, and should hold. The ledger costs about as much as the physics itself
+        while it is on. <b>Rate</b> is the energy change per second per unit of kinetic
+        energy over the last second, beside what the settings predict. Damping takes
+        twice its rate. The Euler magnetic step adds energy at a rate set by the size of
+        one step&rsquo;s turn and the share of motion across the field lines, measured,
+        not assumed. The exact-rotation step adds nothing but what the graphics
+        card&rsquo;s own cosine and sine lose, which the page measures too. A gap between
+        measured and predicted means something not on that list is doing work: the force
+        ceiling (<b>On ceiling, all</b> counts every particle), or the mesh force. The
+        mesh force is the potential&rsquo;s slope at the particle&rsquo;s cell, not
+        exactly the downhill direction of the energy written here; that gap is the
+        scheme&rsquo;s own error, and the number shown is its size. <b>L</b> is the total angular momentum,
+        <b>L lined up</b> its size as a share of what it would be if every particle
+        circled the same way. The field is not round, so L is not expected to hold while
+        the field is on. The wall pushes straight back along the radius and leaves L
+        alone; the wrap flips the contribution of every particle it moves. Under the
+        swarm&rsquo;s gravity alone L should nearly hold, and the cube-shaped mesh is
+        what breaks it. <b>Field force off</b> removes the field force without moving
+        the strength slider, for the gravity audit. Both switches are saved with the
+        rest of the settings.
+      </p>
+    </div>
+    <div class="group">
+      <div class="group-label">Mode dimer</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Rates, real</div><div class="stat-v" id="lab-dimer-re">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Rates, imaginary</div><div class="stat-v" id="lab-dimer-im">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">To the point</div><div class="stat-v" id="lab-dimer-ep">&ndash;</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">&kappa; now</div><div class="stat-v" id="lab-dimer-k">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">&gamma; now</div><div class="stat-v" id="lab-dimer-g">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">&Delta; now</div><div class="stat-v" id="lab-dimer-d">&ndash;</div></div>
+      </div>
+      <div class="stat-grid" style="grid-template-columns: 1fr 1fr 2fr">
+        <div class="stat"><div class="stat-k">|a&#8321;|&sup2;</div><div class="stat-v" id="lab-dimer-a1">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">|a&#8322;|&sup2;</div><div class="stat-v" id="lab-dimer-a2">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Matter on partner 1 &middot; seen / asked</div><div class="stat-v" id="lab-dimer-share">&ndash;</div></div>
+      </div>
+      <div class="stat"><div class="stat-k">Last loop</div><div class="stat-v" id="lab-dimer-loop" style="font-size:13px">&ndash;</div></div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        The pair has two natural rates, always opposites of each other:
+        &plusmn;(real + imaginary&nbsp;i). A real part is a frequency: how
+        fast the content sloshes between the partners. An imaginary part
+        is growth: one partner rising while the other fades. <b>To the
+        point</b> is the distance from the present (&Delta;, &gamma;) to
+        the exceptional point, &Delta; = 0 and &gamma; = &kappa;. There
+        both rates are zero and the two motions merge. |a&#8321;|&sup2;
+        and |a&#8322;|&sup2; are the two partners&rsquo; shares of the
+        pair, kept to a total of 1. <b>Matter on partner 1</b> reads the
+        same share off the matter itself, with the instruments on. The
+        density mesh is compared with the two figures: in the Chladni
+        form, which figure the matter avoids; in the wells form, which one
+        it fills. That reading sits beside the share the pair asks for.
+        <b>What a mismatch means</b>: with a settled swarm and a figure
+        that holds still, seen and asked should agree within about 0.1. A
+        larger gap means the matter has not caught up: the figure rotates,
+        a digit just changed it, or the damping is low. Two things to know.
+        The loop never stops between turns, so the pair keeps moving. To
+        hold it, set the detuning slider to twice the coupling (the
+        loop&rsquo;s own start point) and press Off the moment a loop
+        closes; the pair then stays put. And in the Chladni form, a pair
+        whose two amplitudes are out of step (as they are for most of a
+        loop) has dark lines where both figures vanish at once. Matter
+        that reaches them stays there. Once most of it has, this reading
+        sits near 0.5 whatever the pair asks. Reseed (Simulation panel) to
+        start over; the wells form has no such trap. <b>Last loop</b>
+        reports where each loop ended. Clockwise should read near 0.85 and
+        counter-clockwise near 0.15: the two natural mixes at the
+        loop&rsquo;s start. Flat should come back to where it started,
+        above 95% from a settled pair; a pair that was mid-slosh when flat
+        began comes back less. Those expectations come from an independent
+        integration of the same equation. A reading far from them means
+        the loop was cut short or the pair was changed mid-loop.
+      </p>
+    </div>
+    <div class="group">
       <div class="group-label">Experiments &mdash; the rings&rsquo; claims, one click each</div>
       <div class="seg" id="lab-exp-seg" role="group" aria-label="Lab experiments">
         <button data-exp="spin" aria-pressed="false">Spin holds the ball</button>
         <button data-exp="memory" aria-pressed="false">Memory, with its control</button>
         <button data-exp="disc" aria-pressed="false">The disc is the step</button>
+        <button data-exp="dimer" aria-pressed="false">Encircle the exceptional point</button>
+        <button data-exp="fieldonly" aria-pressed="false">Audit: field only</button>
+        <button data-exp="borisvseuler" aria-pressed="false">Audit: Boris vs Euler</button>
+        <button data-exp="gravity" aria-pressed="false">Audit: self-gravity</button>
+        <button data-exp="orbit" aria-pressed="false">Two clumps in orbit</button>
       </div>
       <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="lab-exp-hint">
         Each one loads a state at your particle count, switches the
         instruments on, and says what to watch and what was measured.
+      </p>
+    </div>
+    <div class="group" id="orbit-group" style="display:none">
+      <div class="group-label">Two clumps in orbit &mdash; does the solver keep up with a moving mass?</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-k">Period &middot; six sweeps</div><div class="stat-v" id="orbit-T-j">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Period &middot; exact</div><div class="stat-v" id="orbit-T-e">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Period &middot; predicted</div><div class="stat-v" id="orbit-Tpred">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Ratio &middot; six sweeps</div><div class="stat-v" id="orbit-ratio-j">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Ratio &middot; exact</div><div class="stat-v" id="orbit-ratio-e">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Ratio band &middot; cell jumps</div><div class="stat-v" id="orbit-band">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Drift per orbit &middot; six</div><div class="stat-v" id="orbit-drift-j">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Drift per orbit &middot; exact</div><div class="stat-v" id="orbit-drift-e">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Merged at &middot; six / exact</div><div class="stat-v" id="orbit-merge">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Cell jumps per tick &middot; six / exact</div><div class="stat-v" id="orbit-jumps">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Centre moved &middot; six / exact</div><div class="stat-v" id="orbit-centre">&ndash;</div></div>
+        <div class="stat"><div class="stat-k">Time</div><div class="stat-v" id="orbit-time">&ndash;</div></div>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="orbit-pred">
+        Not running.
+      </p>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="orbit-verdict">
+        Click the experiment to run it.
+      </p>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.5">
+        <b>Predicted</b> is the period of a circular orbit under the exact
+        pull at the starting cells, from a sine-transform solve of the
+        page&rsquo;s own mesh done here in the browser (its residual is
+        printed above; zero would be perfect). Each clump takes the pull of
+        the cell it is in, not of its own spot, so the pull changes in jumps
+        as the clumps cross cell edges, about once every 2.6 ticks each.
+        <b>Ratio band</b> is how far those jumps alone can move the period:
+        the exact pull sampled all around the starting circle, cell by cell.
+        <b>What the numbers mean</b>: a period inside the band with no merge
+        means the solver keeps up with the moving clumps. A merge means the
+        solver&rsquo;s potential is trailing them: each clump is pulled back
+        toward where it just was, and the orbit decays. Drift is the change
+        of the pair&rsquo;s separation per orbit (near zero when the orbit
+        holds). Centre moved is how far the midpoint of the pair wandered,
+        which the outer boundary of the mesh causes: the potential is pinned
+        to zero one cell outside the mesh, and the pair sits half a cell off
+        the mesh centre, so the two clumps are pulled unequally by about one
+        percent. Loading any scenario or moving a slider ends the run.
       </p>
     </div>
     <div class="group">
@@ -1599,10 +1928,15 @@ kbd {
         <svg viewBox="0 0 16 16"><path d="M8 1v8.6L4.7 6.3 3.6 7.4 8 11.8l4.4-4.4-1.1-1.1L8 9.6V1zM2 13h12v1.5H2z"/></svg>
         Export lab log (CSV)
       </button>
+      <button class="btn" id="btn-lab-npz">
+        <svg viewBox="0 0 16 16"><path d="M8 1v8.6L4.7 6.3 3.6 7.4 8 11.8l4.4-4.4-1.1-1.1L8 9.6V1zM2 13h12v1.5H2z"/></svg>
+        Save NPZ (positions, velocities, mesh)
+      </button>
       <p style="font-size:11.5px; color:var(--muted); line-height:1.5" id="lab-export-status">
         One row per second: time, step, &lambda;, M, two-back M, share on the
         force ceiling, prescribed and realized l, C<sub>1</sub>&hellip;C<sub>9</sub>,
-        and the cosmos settings.
+        the cosmos settings, the phase-space volume rate, and the energy audit:
+        H, &Delta;H/H<sub>0</sub>, |L|, what the wall took.
       </p>
     </div>
   </div>
@@ -1844,13 +2178,18 @@ kbd {
       shared as text.</p>
 
     <h3>Lab &mdash; the chamber measuring itself</h3>
-    <p>Three instruments (rail tab 7) read the GPU state back once a
+    <p>Four instruments (rail tab 7) read the GPU state back once a
       second and report numbers about the dynamics rather than pictures of
       it. <b>Lyapunov exponent</b>: Benettin&rsquo;s twin-particle method
       &mdash; pairs started 0.001 apart, separation logged every half second
       and renormalized along its own direction &mdash; gives the mean rate at
       which neighbouring paths diverge; positive is chaos, negative is
-      contraction onto the figure. <b>Memory across epochs</b>: at every
+      contraction onto the figure. <b>Phase-space volume</b>: small
+      seven-particle clusters mark out a box in position and velocity, and
+      the rate at which that box grows or shrinks is measured and shown
+      beside what the step predicts &mdash; zero for a frictionless exact
+      rotation, minus three times the damping, plus the inflation of an
+      explicit magnetic step. <b>Memory across epochs</b>: at every
       zoom-out the ending density is kept as a relic map, and M is the
       cell-by-cell correlation between the matter now and where the relics
       predict it; the value just before the next zoom-out is the memory the
@@ -1863,7 +2202,8 @@ kbd {
       <b>Realized spectrum</b>: a real spherical-harmonic transform of the
       density mesh gives the angular power the matter actually carries,
       against the degree the digits asked for. An <b>Integrator</b> control
-      (Simulation panel) adds substeps, because the magnetic term at high
+      (Simulation panel) adds substeps, or picks the count itself under
+      Auto, because the magnetic term at high
       coupling turns a velocity by more than a radian per clamped step and
       the instruments should describe the model, not the step; the meter
       also reports the share of particles on the force ceiling, which is the
@@ -1896,6 +2236,20 @@ kbd {
       strides by default) decorrelate the three streams. In bases other than
       ten, the fractional parts are re-expanded exactly with big-integer
       arithmetic and digits are rescaled to a common mode range.</p>
+
+    <h3>The mode dimer</h3>
+    <p>Every figure has a twin: the same figure a quarter phase on (cos
+      becomes sin in each term). The two share one energy, so the chamber
+      can run them as one coupled pair with gain on one and loss on the
+      other (Sequence panel). The pair's two amplitudes are integrated on
+      the CPU each tick and their mix sets the field the particles feel.
+      At gain equal to coupling with no detuning the pair sits at its
+      exceptional point, where its two natural motions merge into one.
+      Driving the pair once around that point sends it to one partner or
+      the other, depending on the direction: clockwise mostly partner 1,
+      counter-clockwise mostly partner 2. The same drive with no gain
+      brings it back. The Lab panel shows the pair's rates, the shares,
+      and what the matter itself reads.</p>
 
     <h3>Keyboard</h3>
     <div class="key-list">
@@ -2013,7 +2367,9 @@ const DEFAULTS = {
   autoOrbit: false,
   substeps: 1,
   lorentz: 'euler',
+  pm: { solver: 'jacobi', assign: 'ngp' },   // self-gravity mesh: 'jacobi' (six sweeps, as found) | 'exact'; 'ngp' (nearest cell, as found) | 'cic' (cloud-in-cell)
   lab: { on: false },
+  dimer: { on: false, kappa: 1, gamma: 0, delta: 0, loop: 'off' },   // mode dimer (Sequence panel): the mode and its quarter-phase partner as one coupled pair; off, the shader takes its original path
   sacred: 'off'         // kaleidoscope over the picture, for play (one of SACRED_MODES)
 };
 function sanitizeState(saved) {
@@ -2078,9 +2434,19 @@ function sanitizeState(saved) {
     if (!(s.constants[ax] in CONSTANTS)) s.constants[ax] = DEFAULTS.constants[ax];
   }
   s.strideIndex = Math.min(PRIMES.length - 1, Math.max(0, Math.round(+s.strideIndex) || 0));
-  s.substeps = [1, 2, 3, 4].includes(Math.round(+s.substeps)) ? Math.round(+s.substeps) : 1;
+  s.substeps = saved.substeps === 'auto' ? 'auto'   // Auto: the count follows the coupling (see autoSubsteps)
+    : [1, 2, 3, 4].includes(Math.round(+s.substeps)) ? Math.round(+s.substeps) : 1;
   s.lorentz = s.lorentz === 'boris' ? 'boris' : 'euler';
+  s.pm.solver = s.pm.solver === 'exact' ? 'exact' : 'jacobi';
+  s.pm.assign = s.pm.assign === 'cic' ? 'cic' : 'ngp';
   s.lab.on = !!s.lab.on;
+  s.lab.fieldOff = !!(saved.lab && typeof saved.lab === 'object' && saved.lab.fieldOff);   // Lab: field force off (strength 0 through its own uniform)
+  s.lab.ledger = !!(saved.lab && typeof saved.lab === 'object' && saved.lab.ledger);       // Lab: wall ledger (replays each substep to count what the wall takes)
+  s.dimer.on = !!s.dimer.on;
+  s.dimer.kappa = Number.isFinite(+s.dimer.kappa) ? Math.min(3, Math.max(0.2, +s.dimer.kappa)) : 1;
+  s.dimer.gamma = Number.isFinite(+s.dimer.gamma) ? Math.min(3, Math.max(-3, +s.dimer.gamma)) : 0;
+  s.dimer.delta = Number.isFinite(+s.dimer.delta) ? Math.min(6, Math.max(-6, +s.dimer.delta)) : 0;
+  if (!['off', 'cw', 'ccw', 'flat'].includes(s.dimer.loop)) s.dimer.loop = 'off';
   if (!SACRED_MODES.includes(s.sacred)) s.sacred = 'off';
   return s;
 }
@@ -2148,6 +2514,88 @@ const PM_GLSL = `
   float pmAt(sampler2D tex, vec3 c) {
     return pmInside(c) ? texture2D(tex, pmCellUV(c)).r : 0.0;
   }
+`;
+/* ---- the eigenmode field: radial table lookup, associated Legendre, one
+   spherical-harmonic term (value + gradient) and the cavity force. One text,
+   concatenated into the velocity shader exactly where it was, and into the
+   Lab's potential pass, so both derive from the same functions. ---- */
+const FIELD_GLSL = `    // Radial profiles j_l(z r/R) and derivatives, precomputed on the CPU
+    // with a stable downward recurrence; manually lerped (float textures
+    // cannot rely on linear filtering everywhere).
+    vec4 radialAt(float r) {
+      float u = clamp(r / EXTENT, 0.0, 1.0) * (RADN - 1.0);
+      float i0 = floor(u);
+      vec4 a = texture2D(uRad, vec2((i0 + 0.5) / RADN, 0.5));
+      vec4 b = texture2D(uRad, vec2((min(i0 + 1.0, RADN - 1.0) + 0.5) / RADN, 0.5));
+      return mix(a, b, u - i0);
+    }
+
+    // Associated Legendre P_l^m(cos t) (Condon-Shortley sign dropped) and
+    // dP/dt, by the standard stable recurrences; l, m <= 9.
+    void legendreP(int l, int m, float ct, float st, out float P, out float dP) {
+      float pmm = 1.0;
+      for (int i = 1; i <= 9; i++) {
+        if (i > m) break;
+        pmm *= float(2 * i - 1) * st;
+      }
+      float plm = pmm;
+      float plm1 = 0.0;
+      if (l > m) {
+        float prev = pmm;
+        float cur = ct * float(2 * m + 1) * pmm;
+        for (int k = 2; k <= 9; k++) {
+          int LL = m + k;
+          if (LL > l) break;
+          float nxt = (ct * float(2 * LL - 1) * cur - float(LL + m - 1) * prev)
+                      / float(LL - m);
+          prev = cur; cur = nxt;
+        }
+        plm = cur; plm1 = prev;
+      }
+      P = plm;
+      dP = (float(l) * ct * plm - float(l + m) * plm1) / st;
+    }
+
+    // One spherical-harmonic term: value and Cartesian gradient of
+    // j_l(kr) * P_l^m(cos t) * cos(m f - phase).
+    void shTerm(vec3 pos, float r, float ct, float st, float phi,
+                int l, int m, float nrm, float jr, float djr, float phase,
+                out float val, out vec3 grad) {
+      float P, dP;
+      legendreP(l, m, ct, st, P, dP);
+      P *= nrm; dP *= nrm;
+      float a = float(m) * phi - phase;
+      float ca = cos(a), sa = sin(a);
+      val = jr * P * ca;
+      float Fr = djr * P * ca;
+      float Ft = (jr / r) * dP * ca;
+      float Fp = -(jr / (r * st)) * P * float(m) * sa;
+      float cp = cos(phi), sp = sin(phi);
+      vec3 er = pos / r;
+      vec3 et = vec3(ct * cp, -st, ct * sp);
+      vec3 ep = vec3(-sp, 0.0, cp);
+      grad = Fr * er + Ft * et + Fp * ep;
+    }
+
+    // Wells: descend grad(Psi) of the (n,l,m) eigenmode.
+    // Chladni: superpose two degenerate azimuthal orders (m, m2) of the
+    // same (n,l) shell and descend grad(S^2), driving particles onto the
+    // nodal surface S = 0 - destructive interference made visible.
+    vec3 cavityForce(vec3 pos, vec4 mode, vec2 nrm, float jr, float djr, float twist) {
+      float r = max(length(pos), 0.35);
+      float ct = clamp(pos.y / r, -1.0, 1.0);
+      float st = max(sqrt(1.0 - ct * ct), 1e-3);
+      float phi = atan(pos.z, pos.x);
+      int l = int(mode.x + 0.5);
+      float v1; vec3 g1;
+      shTerm(pos, r, ct, st, phi, l, int(mode.y + 0.5), nrm.x, jr, djr, twist, v1, g1);
+      if (fieldForm < 0.5) return -g1;
+      float v2; vec3 g2;
+      shTerm(pos, r, ct, st, phi, l, int(mode.z + 0.5), nrm.y, jr, djr,
+             twist + 1.5707963, v2, g2);
+      float S = v1 - v2;
+      return -(S * (g1 - g2));
+    }
 `;
 const RAD_N = 1024;                 // radial lookup resolution
 
@@ -2347,7 +2795,9 @@ const velMat = new THREE.ShaderMaterial({
     uSelfGrav: { value: 0 },
     uPot: { value: null },
     uGainLoss: { value: 0 },
-    uBoris: { value: 0 }
+    uBoris: { value: 0 },
+    uCic: { value: 0 },
+    uDimer: { value: new THREE.Vector4() }   // mode dimer: x = on, yzw = the pair's weights (see DIMER); x = 0 is the original path
   },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
   fragmentShader: SIM_COMMON + `
@@ -2362,6 +2812,8 @@ const velMat = new THREE.ShaderMaterial({
     uniform float uSelfGrav;
     uniform sampler2D uPot;
     uniform float uGainLoss, uBoris;
+    uniform float uCic;                // 0 = nearest cell (as found), 1 = cloud-in-cell gather
+    uniform vec4 uDimer;               // mode dimer: x = on, yzw = pair weights; 0 = the original cavityForce path
     uniform vec3 ovCrystal, ovTopo;
     uniform vec2 ovHarmonic;
     uniform vec4 uCenters[8];    // xyz position, w signed strength
@@ -2375,82 +2827,33 @@ const velMat = new THREE.ShaderMaterial({
     const float RADN = ${RAD_N.toFixed(1)};
   ` + PM_GLSL + `
 
-    // Radial profiles j_l(z r/R) and derivatives, precomputed on the CPU
-    // with a stable downward recurrence; manually lerped (float textures
-    // cannot rely on linear filtering everywhere).
-    vec4 radialAt(float r) {
-      float u = clamp(r / EXTENT, 0.0, 1.0) * (RADN - 1.0);
-      float i0 = floor(u);
-      vec4 a = texture2D(uRad, vec2((i0 + 0.5) / RADN, 0.5));
-      vec4 b = texture2D(uRad, vec2((min(i0 + 1.0, RADN - 1.0) + 0.5) / RADN, 0.5));
-      return mix(a, b, u - i0);
-    }
-
-    // Associated Legendre P_l^m(cos t) (Condon-Shortley sign dropped) and
-    // dP/dt, by the standard stable recurrences; l, m <= 9.
-    void legendreP(int l, int m, float ct, float st, out float P, out float dP) {
-      float pmm = 1.0;
-      for (int i = 1; i <= 9; i++) {
-        if (i > m) break;
-        pmm *= float(2 * i - 1) * st;
-      }
-      float plm = pmm;
-      float plm1 = 0.0;
-      if (l > m) {
-        float prev = pmm;
-        float cur = ct * float(2 * m + 1) * pmm;
-        for (int k = 2; k <= 9; k++) {
-          int LL = m + k;
-          if (LL > l) break;
-          float nxt = (ct * float(2 * LL - 1) * cur - float(LL + m - 1) * prev)
-                      / float(LL - m);
-          prev = cur; cur = nxt;
-        }
-        plm = cur; plm1 = prev;
-      }
-      P = plm;
-      dP = (float(l) * ct * plm - float(l + m) * plm1) / st;
-    }
-
-    // One spherical-harmonic term: value and Cartesian gradient of
-    // j_l(kr) * P_l^m(cos t) * cos(m f - phase).
-    void shTerm(vec3 pos, float r, float ct, float st, float phi,
-                int l, int m, float nrm, float jr, float djr, float phase,
-                out float val, out vec3 grad) {
-      float P, dP;
-      legendreP(l, m, ct, st, P, dP);
-      P *= nrm; dP *= nrm;
-      float a = float(m) * phi - phase;
-      float ca = cos(a), sa = sin(a);
-      val = jr * P * ca;
-      float Fr = djr * P * ca;
-      float Ft = (jr / r) * dP * ca;
-      float Fp = -(jr / (r * st)) * P * float(m) * sa;
-      float cp = cos(phi), sp = sin(phi);
-      vec3 er = pos / r;
-      vec3 et = vec3(ct * cp, -st, ct * sp);
-      vec3 ep = vec3(-sp, 0.0, cp);
-      grad = Fr * er + Ft * et + Fp * ep;
-    }
-
-    // Wells: descend grad(Psi) of the (n,l,m) eigenmode.
-    // Chladni: superpose two degenerate azimuthal orders (m, m2) of the
-    // same (n,l) shell and descend grad(S^2), driving particles onto the
-    // nodal surface S = 0 - destructive interference made visible.
-    vec3 cavityForce(vec3 pos, vec4 mode, vec2 nrm, float jr, float djr, float twist) {
+` + FIELD_GLSL + `
+    // Mode dimer: the figure as drawn (partner 1) and the same figure a
+    // quarter phase on (partner 2, every cos(m phi - twist) term turned
+    // into sin), mixed by weights c the CPU integrates (see DIMER).
+    // Wells: descend c.x * P1 + c.y * P2 (c = the pair's still part).
+    // Chladni: descend the intensity of the pair, |a1 S1 + a2 S2|^2 / 2 =
+    // (c.x S1^2 + c.y S2^2 + 2 c.z S1 S2) / 2 with c = (|a1|^2, |a2|^2,
+    // Re a1 a2*). Only called while uDimer.x is 1; cavityForce above is
+    // what runs otherwise, unchanged.
+    vec3 dimerForce(vec3 pos, vec4 mode, vec2 nrm, float jr, float djr, float twist, vec3 c) {
       float r = max(length(pos), 0.35);
       float ct = clamp(pos.y / r, -1.0, 1.0);
       float st = max(sqrt(1.0 - ct * ct), 1e-3);
       float phi = atan(pos.z, pos.x);
       int l = int(mode.x + 0.5);
-      float v1; vec3 g1;
-      shTerm(pos, r, ct, st, phi, l, int(mode.y + 0.5), nrm.x, jr, djr, twist, v1, g1);
-      if (fieldForm < 0.5) return -g1;
-      float v2; vec3 g2;
-      shTerm(pos, r, ct, st, phi, l, int(mode.z + 0.5), nrm.y, jr, djr,
-             twist + 1.5707963, v2, g2);
-      float S = v1 - v2;
-      return -(S * (g1 - g2));
+      int m = int(mode.y + 0.5);
+      float p1, p2; vec3 q1, q2;
+      shTerm(pos, r, ct, st, phi, l, m, nrm.x, jr, djr, twist, p1, q1);
+      shTerm(pos, r, ct, st, phi, l, m, nrm.x, jr, djr, twist + 1.5707963, p2, q2);
+      if (fieldForm < 0.5) return -(c.x * q1 + c.y * q2);
+      int m2 = int(mode.z + 0.5);
+      float u1, u2; vec3 h1, h2;
+      shTerm(pos, r, ct, st, phi, l, m2, nrm.y, jr, djr, twist + 1.5707963, u1, h1);
+      shTerm(pos, r, ct, st, phi, l, m2, nrm.y, jr, djr, twist + 3.1415927, u2, h2);
+      float S1 = p1 - u1, S2 = p2 - u2;
+      vec3 G1 = q1 - h1, G2 = q2 - h2;
+      return -(c.x * S1 * G1 + c.y * S2 * G2 + c.z * (S1 * G2 + S2 * G1));
     }
 
     vec3 snapForce(vec3 p, float fold, float gain) {
@@ -2467,8 +2870,14 @@ const velMat = new THREE.ShaderMaterial({
 
       // Base cavity eigenmode force, blended across the digit transition
       vec4 rad = radialAt(length(p));
-      vec3 FA = cavityForce(p, uModeA, uNormA, rad.x, rad.y, uTwist.x);
-      vec3 FB = cavityForce(p, uModeB, uNormB, rad.z, rad.w, uTwist.y);
+      vec3 FA, FB;
+      if (uDimer.x > 0.5) {
+        FA = dimerForce(p, uModeA, uNormA, rad.x, rad.y, uTwist.x, uDimer.yzw);
+        FB = dimerForce(p, uModeB, uNormB, rad.z, rad.w, uTwist.y, uDimer.yzw);
+      } else {
+        FA = cavityForce(p, uModeA, uNormA, rad.x, rad.y, uTwist.x);
+        FB = cavityForce(p, uModeB, uNormB, rad.z, rad.w, uTwist.y);
+      }
       float fscale = fieldForm < 0.5 ? ${FORCE_SCALE.toFixed(1)} : ${CHLADNI_SCALE.toFixed(1)};
       vec3 F = amp * fscale * mix(FA, FB, blend);
 
@@ -2611,12 +3020,33 @@ const velMat = new THREE.ShaderMaterial({
       // potential, six texel fetches; the mesh is coarse, so this is a
       // smoothed self-force, which is exactly what a particle-mesh code is.
       if (uSelfGrav > 0.001) {
-        vec3 c = pmCellOf(p);
-        vec3 g = vec3(
-          pmAt(uPot, c + vec3(1.0, 0.0, 0.0)) - pmAt(uPot, c - vec3(1.0, 0.0, 0.0)),
-          pmAt(uPot, c + vec3(0.0, 1.0, 0.0)) - pmAt(uPot, c - vec3(0.0, 1.0, 0.0)),
-          pmAt(uPot, c + vec3(0.0, 0.0, 1.0)) - pmAt(uPot, c - vec3(0.0, 0.0, 1.0)));
-        F += -uSelfGrav * SG_GAIN * g / (2.0 * PM_CELL);
+        if (uCic > 0.5) {
+          // Cloud-in-cell: the same eight cells and the same weights the
+          // deposit used, each contributing the central difference at its
+          // cell, so a particle reads the force off exactly the mass it wrote.
+          vec3 u = (p / PM_HALF * 0.5 + 0.5) * PM_N - 0.5;   // cell-centre coordinates
+          vec3 b = floor(u);
+          vec3 f = u - b;
+          vec3 g = vec3(0.0);
+          for (int n = 0; n < 8; n++) {
+            float fn = float(n);
+            vec3 k = vec3(mod(fn, 2.0), mod(floor(fn / 2.0), 2.0), floor(fn / 4.0));
+            vec3 c = b + k;
+            vec3 w3 = mix(1.0 - f, f, k);
+            g += (w3.x * w3.y * w3.z) * vec3(
+              pmAt(uPot, c + vec3(1.0, 0.0, 0.0)) - pmAt(uPot, c - vec3(1.0, 0.0, 0.0)),
+              pmAt(uPot, c + vec3(0.0, 1.0, 0.0)) - pmAt(uPot, c - vec3(0.0, 1.0, 0.0)),
+              pmAt(uPot, c + vec3(0.0, 0.0, 1.0)) - pmAt(uPot, c - vec3(0.0, 0.0, 1.0)));
+          }
+          F += -uSelfGrav * SG_GAIN * g / (2.0 * PM_CELL);
+        } else {
+          vec3 c = pmCellOf(p);
+          vec3 g = vec3(
+            pmAt(uPot, c + vec3(1.0, 0.0, 0.0)) - pmAt(uPot, c - vec3(1.0, 0.0, 0.0)),
+            pmAt(uPot, c + vec3(0.0, 1.0, 0.0)) - pmAt(uPot, c - vec3(0.0, 1.0, 0.0)),
+            pmAt(uPot, c + vec3(0.0, 0.0, 1.0)) - pmAt(uPot, c - vec3(0.0, 0.0, 1.0)));
+          F += -uSelfGrav * SG_GAIN * g / (2.0 * PM_CELL);
+        }
       }
 
       // Lorentz coupling: rotational only, does no work on the particle.
@@ -2798,6 +3228,26 @@ let texSize = 0, posA, posB, velA, velB, points;
 // substep; a dedicated copy is kept only when there are more)
 const TICK = 1 / 20;
 let tickAccum = 0, lerpOK = true, posPrev = null;
+// Substeps "Auto": enough substeps that one magnetic turn stays under a
+// quarter radian. The turn per step is coupling x 30 x |B| x dt with
+// |B| = 0.35 (uniform, without centers), i.e. coupling x 10.5 x dt, so
+// n = ceil(mag x 10.5 x (1/20) / 0.25), clamped to 1..4: 1 at 0.4, 2 at
+// 0.6, 4 from 1.9 up (above that, four substeps no longer hold the turn
+// under a quarter radian). A numeric substeps value is returned unchanged.
+const AUTO_TURN = 0.25;
+const VOL_ROWS = 7;   // phase-space volume meter: the base row and six neighbour rows (Lab)
+// a cluster stretched past this (a hundred times its 0.001 size) in one
+// half second is reset, not scored: the force is no longer linear across
+// it. Measured on the start state: clusters kept under 0.1 read within 1%
+// of the prediction, clusters past it read anything from -4 to +16.
+const VOL_STRETCH = 0.1;
+function autoSubsteps(mag) {
+  const n = Math.ceil((+mag || 0) * 10.5 * TICK / AUTO_TURN);
+  return Math.min(4, Math.max(1, Number.isFinite(n) ? n : 1));
+}
+function effectiveSubsteps() {
+  return state.substeps === 'auto' ? autoSubsteps(state.cosmos.mag) : (state.substeps || 1);
+}
 
 function seedTexture(size) {
   const data = new Float32Array(size * size * 4);
@@ -2918,7 +3368,7 @@ function reseed() {
   blit(zero, velA); blit(zero, velB);
   zero.dispose();
   lerpOK = false;
-  if (lab.on) labPairTwins();
+  if (lab.on) { labPairTwins(); labConsReset(); }
 }
 
 function buildParticles(count) {
@@ -2985,15 +3435,32 @@ function updatePointScale() {
 let pmDens = null, pmPotA = null, pmPotB = null, pmPoints = null;
 
 const depositMat = new THREE.ShaderMaterial({
-  uniforms: { posTex: { value: null } },
+  uniforms: { posTex: { value: null }, uCic: { value: 0 }, uCorner: { value: 0 } },
   vertexShader: `
     uniform sampler2D posTex;
+    uniform float uCic, uCorner;       // cloud-in-cell: this draw carries corner 0..7 of each particle's cell cube
     attribute vec2 ref;
+    varying float vWeight;
     const float EXTENT = ${EXTENT.toFixed(1)};
   ` + PM_GLSL + `
     void main() {
       vec3 p = texture2D(posTex, ref).xyz;
-      vec3 c = pmCellOf(p);
+      vec3 c;
+      vWeight = 1.0;
+      if (uCic > 0.5) {
+        // cell-centre coordinates (cell i is centred on i): the particle's
+        // mass is shared among the eight cells around it, (1 - |offset|)
+        // per axis, so the eight weights sum to one.
+        vec3 u = (p / PM_HALF * 0.5 + 0.5) * PM_N - 0.5;
+        vec3 b = floor(u);
+        vec3 f = u - b;
+        vec3 k = vec3(mod(uCorner, 2.0), mod(floor(uCorner / 2.0), 2.0), floor(uCorner / 4.0));
+        vec3 w3 = mix(1.0 - f, f, k);
+        vWeight = w3.x * w3.y * w3.z;
+        c = b + k;
+      } else {
+        c = pmCellOf(p);
+      }
       if (!pmInside(c)) {                 // outside the mesh: contribute nothing
         gl_Position = vec4(2.0, 2.0, 0.0, 1.0);
         gl_PointSize = 0.0;
@@ -3005,7 +3472,12 @@ const depositMat = new THREE.ShaderMaterial({
   `,
   fragmentShader: `
     precision highp float;
-    void main() { gl_FragColor = vec4(${(1 / 1024).toFixed(8)}, 0.0, 0.0, 1.0); }
+    uniform float uCic;
+    varying float vWeight;
+    void main() {
+      if (uCic > 0.5) gl_FragColor = vec4(vWeight * ${(1 / 1024).toFixed(8)}, 0.0, 0.0, 1.0);
+      else gl_FragColor = vec4(${(1 / 1024).toFixed(8)}, 0.0, 0.0, 1.0);
+    }
   `,
   transparent: true,
   blending: THREE.AdditiveBlending,
@@ -3042,6 +3514,89 @@ const poissonMat = new THREE.ShaderMaterial({
   `
 });
 
+/* Exact solver: the converged solution of the very same equation the six
+   sweeps chase (7-point Laplacian in cell units, potential zero outside the
+   mesh). With zero outside, the discrete sine transform (DST-I) turns that
+   operator into one number per mode, lambda_x + lambda_y + lambda_z with
+   lambda_k = 2 cos(pi (k+1)/(N+1)) - 2, so: transform the contrast along x,
+   then y, then z (three fullscreen passes, each output texel a 32-term sum
+   with sin(pi (i+1)(k+1)/(N+1)) weights, no FFT), divide by the eigenvalue
+   sum, and transform back the same way (DST-I is its own inverse up to a
+   constant; sqrt(2/(N+1)) is applied on every pass so each pass is
+   orthogonal and a half-float target cannot overflow). Nothing is carried
+   between ticks: no warm start, no lag. Same atlas, same PM_GLSL indexing. */
+const dstMat = new THREE.ShaderMaterial({
+  uniforms: {
+    uSrc: { value: null }, uDens: { value: null },
+    uPmMean: { value: 0 }, uPmScale: { value: 1 },
+    uAxis: { value: 0 }, uStage: { value: 0 }
+  },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+  fragmentShader: `
+    precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uSrc, uDens;
+    uniform float uPmMean, uPmScale;
+    uniform float uAxis;     // 0, 1, 2: the axis this pass sums along
+    uniform float uStage;    // 0: first pass, reads the density contrast; 1: reads a transform; 2: last forward pass, also divides by the eigenvalue sum
+    const float EXTENT = ${EXTENT.toFixed(1)};
+    const float PI = 3.14159265358979;
+  ` + PM_GLSL + `
+    float srcAt(vec3 c) {
+      if (uStage < 0.5) return uPmScale * (texture2D(uDens, pmCellUV(c)).r - uPmMean);
+      return texture2D(uSrc, pmCellUV(c)).r;
+    }
+    // sin on [0, pi/2] to float precision (series to x^11: under 6e-8 at pi/2).
+    // The built-in sin() is only approximate on some GPUs, and six passes of
+    // 32-term sums turn a 1e-4 slip per weight into percent-level errors.
+    float sinQ(float x) {
+      float x2 = x * x;
+      return x * (1.0 + x2 * (-1.0 / 6.0 + x2 * (1.0 / 120.0 + x2 * (-1.0 / 5040.0 + x2 * (1.0 / 362880.0 - x2 / 39916800.0)))));
+    }
+    // sin(pi r / (N+1)) for an integer r in [0, 2(N+1)), folded to [0, pi/2] by symmetry
+    float sinPi(float r) {
+      float h = PM_N + 1.0;
+      float sgn = 1.0;
+      if (r >= h) { r -= h; sgn = -1.0; }
+      if (r > 0.5 * h) r = h - r;
+      return sgn * sinQ(PI * r / h);
+    }
+    // lambda_k = 2 cos(pi (k+1)/(N+1)) - 2 = -4 sin^2(pi (k+1) / 2(N+1)): no cancellation
+    float lam(float k) { float s = sinQ(PI * (k + 1.0) / (2.0 * (PM_N + 1.0))); return -4.0 * s * s; }
+    void main() {
+      vec2 px = floor(vUv * PM_ATLAS);
+      float tc = floor(px.x / PM_N), tr = floor(px.y / PM_N);
+      vec3 o = vec3(mod(px.x, PM_N), mod(px.y, PM_N), tr * PM_TX + tc);
+      vec3 e = uAxis < 0.5 ? vec3(1.0, 0.0, 0.0) : (uAxis < 1.5 ? vec3(0.0, 1.0, 0.0) : vec3(0.0, 0.0, 1.0));
+      float a = dot(o, e) + 1.0;
+      float sum = 0.0;
+      for (int n = 0; n < ${PM_N}; n++) {
+        float m = float(n) + 1.0;
+        sum += sinPi(mod(a * m, 2.0 * (PM_N + 1.0))) * srcAt(o * (1.0 - e) + e * (m - 1.0));
+      }
+      sum *= ${Math.sqrt(2 / (PM_N + 1)).toFixed(10)};
+      if (uStage > 1.5) sum /= lam(o.x) + lam(o.y) + lam(o.z);
+      gl_FragColor = vec4(sum, 0.0, 0.0, 1.0);
+    }
+  `
+});
+function pmSolveExact(total, cells) {
+  // six passes, ping-ponging between the two potential targets; the result lands in pmPotA
+  dstMat.uniforms.uDens.value = pmDens.texture;
+  dstMat.uniforms.uPmMean.value = total / cells / 1024;
+  dstMat.uniforms.uPmScale.value = cells * 1024 / Math.max(1, total);
+  quadMesh.material = dstMat;
+  const passes = [[0, 0], [1, 1], [2, 2], [0, 1], [1, 1], [2, 1]];   // [axis, stage]
+  for (let i = 0; i < passes.length; i++) {
+    dstMat.uniforms.uAxis.value = passes[i][0];
+    dstMat.uniforms.uStage.value = passes[i][1];
+    dstMat.uniforms.uSrc.value = pmPotA.texture;
+    renderer.setRenderTarget(pmPotB);
+    renderer.render(quadScene, quadCam);
+    const t = pmPotA; pmPotA = pmPotB; pmPotB = t;
+  }
+}
+
 function pmType() {
   // Additive deposit into a half-float target stops counting at 2048
   // particles per cell (the next 1/1024 falls below half an ulp), which a
@@ -3065,15 +3620,48 @@ function pmAlloc() {
 }
 
 const pmScene = new THREE.Scene();
+const pmSceneCic = new THREE.Scene();      // cloud-in-cell: eight draws of the swarm, one per corner of the cell cube
+const depositCicMats = Array.from({ length: 8 }, (_, k) => {
+  const m = depositMat.clone();
+  m.uniforms.uCic.value = 1;
+  m.uniforms.uCorner.value = k;
+  return m;
+});
+let pmCicPoints = [];
 function pmRebuild() {
   if (pmPoints) pmScene.remove(pmPoints);
+  for (const o of pmCicPoints) pmSceneCic.remove(o);
+  pmCicPoints = [];
   if (!points) return;
   pmPoints = new THREE.Points(points.geometry, depositMat);
   pmPoints.frustumCulled = false;
   pmScene.add(pmPoints);
+  for (const m of depositCicMats) {
+    const o = new THREE.Points(points.geometry, m);
+    o.frustumCulled = false;
+    pmSceneCic.add(o);
+    pmCicPoints.push(o);
+  }
 }
 
 const _pmClear = new THREE.Color();
+function pmDeposit() {
+  // Nearest cell (as found): one draw, the whole particle into its cell.
+  // Cloud-in-cell: eight draws, each carrying one corner of the cell cube
+  // with weight (1 - |offset|) per axis; the eight weights sum to one.
+  pmAlloc();
+  if (!pmPoints) pmRebuild();
+  if (!pmPoints) return;
+  const cic = state.pm.assign === 'cic';
+  depositMat.uniforms.posTex.value = posA.texture;
+  if (cic) for (const m of depositCicMats) m.uniforms.posTex.value = posA.texture;
+  renderer.getClearColor(_pmClear);
+  const prevAlpha = renderer.getClearAlpha();
+  renderer.setClearColor(0x000000, 0);
+  renderer.setRenderTarget(pmDens);
+  renderer.render(cic ? pmSceneCic : pmScene, quadCam);
+  renderer.setClearColor(_pmClear, prevAlpha);
+}
 function pmSolve() {
   if (!(state.cosmos.selfgrav > 0.001)) return;
   pmAlloc();
@@ -3081,13 +3669,7 @@ function pmSolve() {
   if (!pmPoints) return;
 
   // 1. deposit (additive; the render clears the target first)
-  depositMat.uniforms.posTex.value = posA.texture;
-  renderer.getClearColor(_pmClear);
-  const prevAlpha = renderer.getClearAlpha();
-  renderer.setClearColor(0x000000, 0);
-  renderer.setRenderTarget(pmDens);
-  renderer.render(pmScene, quadCam);
-  renderer.setClearColor(_pmClear, prevAlpha);
+  pmDeposit();
 
   // 2. solve, warm-started from last frame
   const total = Math.min(state.particles, texSize * texSize);
@@ -3095,12 +3677,16 @@ function pmSolve() {
   poissonMat.uniforms.uDens.value = pmDens.texture;
   poissonMat.uniforms.uPmMean.value = total / cells / 1024;
   poissonMat.uniforms.uPmScale.value = cells * 1024 / Math.max(1, total);
-  quadMesh.material = poissonMat;
-  for (let i = 0; i < PM_ITERS; i++) {
-    poissonMat.uniforms.uPot.value = pmPotA.texture;
-    renderer.setRenderTarget(pmPotB);
-    renderer.render(quadScene, quadCam);
-    const t = pmPotA; pmPotA = pmPotB; pmPotB = t;
+  if (state.pm.solver === 'exact') {
+    pmSolveExact(total, cells);       // the converged solution, every tick
+  } else {
+    quadMesh.material = poissonMat;
+    for (let i = 0; i < PM_ITERS; i++) {
+      poissonMat.uniforms.uPot.value = pmPotA.texture;
+      renderer.setRenderTarget(pmPotB);
+      renderer.render(quadScene, quadCam);
+      const t = pmPotA; pmPotA = pmPotB; pmPotB = t;
+    }
   }
   renderer.setRenderTarget(null);
 
@@ -3712,6 +4298,22 @@ async function saveTextFile(filename, data) {
     if (dl) { await dl.save({ filename, data }); return 'prompt'; }
   }
   const url = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return 'download';
+}
+
+// Save a binary file. The hosted viewer's save prompt takes text only, so
+// there the answer is a plain sentence; everywhere else a Blob and an anchor.
+async function saveBytes(filename, bytes) {
+  if (window.claude && typeof window.claude.use === 'function') {
+    const err = new Error('This file needs a regular browser. Open the page on the archive site and save it there.');
+    err.code = 'viewer';
+    throw err;
+  }
+  const url = URL.createObjectURL(new Blob([bytes], { type: 'application/octet-stream' }));
   const a = document.createElement('a');
   a.href = url; a.download = filename; a.rel = 'noopener';
   document.body.appendChild(a); a.click(); a.remove();
@@ -4369,6 +4971,7 @@ function restartUniverse() {
   epochN = 0; lastEpochT = 0; centerSpawns = 0; pendingRescale = 1;
   scaleAccum = 1; tickAccum = 0; lerpOK = false;
   labReset();
+  dimerReset();
   $('ro-epoch').textContent = '×1';
   $('cos-epoch').textContent = '0';
   $('cos-scale').textContent = '×1';
@@ -4382,6 +4985,7 @@ function applyScenario(key) {
   if (!('colorMode' in patch)) next.colorMode = state.colorMode;
   if (!('guides' in patch)) next.guides = state.guides;
   next.sacred = state.sacred;   // the kaleidoscope is a lens over the picture, not part of the scenario
+  if (!('pm' in patch)) next.pm = JSON.parse(JSON.stringify(state.pm));   // the mesh choices stay with the viewer, like the render settings
   if (!('sound' in patch)) next.sound = JSON.parse(JSON.stringify(state.sound));
   state = sanitizeState(next);
   restartUniverse();
@@ -4712,7 +5316,7 @@ wireSwitch($('sw-smooth'), () => state.smooth, v => { state.smooth = v; });
 $('in-field').addEventListener('input', e => {
   state.fieldExp = parseFloat(e.target.value);
   const amp = Math.pow(10, state.fieldExp);
-  velMat.uniforms.amp.value = amp;
+  velMat.uniforms.amp.value = state.lab.fieldOff ? 0 : amp;
   $('val-field').textContent = amp >= 10 ? amp.toFixed(0) + '×' : amp.toFixed(2) + '×';
   saveState();
 });
@@ -4919,6 +5523,7 @@ $('in-helix').addEventListener('input', e => {
 $('in-mag').addEventListener('input', e => {
   state.cosmos.mag = parseFloat(e.target.value);
   $('val-mag').textContent = state.cosmos.mag.toFixed(2);
+  syncSubsteps();   // the Auto button shows the count for this coupling
   saveState();
 });
 wireSwitch($('sw-twist'), () => state.cosmos.twist, v => {
@@ -5028,12 +5633,14 @@ function syncAllControls() {
   syncVessel();
   syncSubsteps();
   syncLorentz();
+  syncPm();
   syncLab();
+  syncDimer();
   syncSacredSeg();
 }
 
 function applyAllState() {
-  velMat.uniforms.amp.value = Math.pow(10, state.fieldExp);
+  velMat.uniforms.amp.value = fieldAmp();
   velMat.uniforms.damping.value = state.damping;
   pointsMat.uniforms.colorMode.value = state.colorMode;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio * state.quality, 2.5));
@@ -5044,6 +5651,7 @@ function applyAllState() {
   initCenters();
   updateCenters(0);
   updateTapeLabels(); updateTapes(); updateHud(); pushModes();
+  dimerPush();
 }
 
 /* ================================================================
@@ -5063,6 +5671,10 @@ const lab = {
   rescaled: false,        // an epoch rescale happened since the last score
   rhoRelic: null, relicMode: 0.5, rhoRelic2: null, memory2: NaN, retained2: NaN,
   scored: 0, clampFrac: NaN,
+  // phase-space volume meter: row of the base particles, cluster count,
+  // per-cluster ceiling flag at the start of the interval, the readouts
+  volRow: 0, volN: 0, volSeeded: false, volSkip: null,
+  vol: NaN, volPred: NaN, volLocal: false, volScored: 0,
   memory: NaN, memHist: [], retained: NaN, retHist: [], epochs: 0,
   lastSample: -1,
   cl: new Float32Array(10), lbar: NaN, lpre: NaN, couple: NaN,
@@ -5139,6 +5751,12 @@ function labOnRebuild() {
   if (2 * R > S / 4) R = Math.max(1, Math.floor(S / 8));
   lab.twinRows = R;
   lab.pairs = R * S;
+  // phase-space volume meter: one base row and six neighbour rows just
+  // under the twin block, 64 columns (fewer on a tiny texture)
+  const yb = S - 2 * R - VOL_ROWS;
+  lab.volN = yb >= 0 ? Math.min(64, S) : 0;
+  lab.volRow = Math.max(0, yb);
+  lab.volSeeded = false;
   if (lab.on) labPairTwins();
 }
 function labPairTwins() {
@@ -5163,6 +5781,7 @@ function labPairTwins() {
   }
   lab.twinLast = simTime;
   lab.rescaled = false;
+  labSeedSimplices();
 }
 function labLyapunov() {
   const S = texSize, R = lab.twinRows;
@@ -5216,19 +5835,131 @@ function labLyapunov() {
   }
 }
 
+/* --- phase-space volume: seven-particle clusters (a base and six
+       neighbours 0.001 away along the six phase-space axes) in the rows
+       just under the twins. Read every half second with the twins: the 6x6
+       matrix of offsets is orthonormalised (modified Gram-Schmidt), ln|det|
+       minus 6 ln 0.001 is the log volume ratio, and the cluster is re-set
+       around its base with the orthonormal frame at 0.001 - Benettin's
+       renormalisation in six dimensions. Reset without scoring, as the
+       twins do: a member touching the wall (r > 14.5), the half second
+       around an epoch rescale; and, for the volume, the force ceiling
+       flagged at either end of the half second, and a cluster stretched past
+       VOL_STRETCH (the force is no longer linear across it; this also catches
+       a wrap that split it, which the twins catch at 3). VOL_ROWS (7) and
+       VOL_STRETCH are declared beside TICK. --- */
+function labVolWriteFrame(pos, vel, frame, M, yb) {
+  // neighbour k of cluster x = base + 0.001 * frame column k (six numbers:
+  // three of position, three of velocity); pos/vel index the base row
+  const d0 = lab.twinD0;
+  const prow = new Float32Array(M * 4), vrow = new Float32Array(M * 4);
+  for (let k = 0; k < 6; k++) {
+    for (let x = 0; x < M; x++) {
+      const b = x * 4, f = (x * 6 + k) * 6;
+      prow[b] = pos[b] + frame[f] * d0; prow[b + 1] = pos[b + 1] + frame[f + 1] * d0;
+      prow[b + 2] = pos[b + 2] + frame[f + 2] * d0; prow[b + 3] = 1;
+      vrow[b] = vel[b] + frame[f + 3] * d0; vrow[b + 1] = vel[b + 1] + frame[f + 4] * d0;
+      vrow[b + 2] = vel[b + 2] + frame[f + 5] * d0; vrow[b + 3] = 1;
+    }
+    writeRow(posA, yb + 1 + k, prow, M);
+    writeRow(velA, yb + 1 + k, vrow, M);
+  }
+}
+function labSeedSimplices() {
+  const M = lab.volN, yb = lab.volRow;
+  if (!M || !posA) { lab.volSeeded = false; return; }
+  const pos = readTarget(posA, 0, yb, M, 1), vel = readTarget(velA, 0, yb, M, 1);
+  const frame = new Float32Array(M * 36);
+  for (let x = 0; x < M; x++) for (let k = 0; k < 6; k++) frame[(x * 6 + k) * 6 + k] = 1;
+  labVolWriteFrame(pos, vel, frame, M, yb);
+  lab.volSkip = new Uint8Array(M);
+  for (let x = 0; x < M; x++) lab.volSkip[x] = vel[x * 4 + 3] > 0.5 ? 1 : 0;   // on the ceiling now
+  lab.volSeeded = true;
+}
+function labVolume() {
+  const M = lab.volN, yb = lab.volRow;
+  if (!M || !lab.volSeeded || !posA) return;
+  const pos = readTarget(posA, 0, yb, M, VOL_ROWS), vel = readTarget(velA, 0, yb, M, VOL_ROWS);
+  const d0 = lab.twinD0, tau = simTime - lab.twinLast;
+  const score = !lab.rescaled && tau > 1e-3;   // the twins' rule: a rescale spoils the interval
+  const frame = new Float32Array(M * 36), skip = new Uint8Array(M);
+  const v = new Float64Array(36), q = new Float64Array(36);
+  let sum = 0, n = 0;
+  for (let x = 0; x < M; x++) {
+    const b = x * 4;
+    let ok = score && !lab.volSkip[x];
+    let bad = false;   // degenerate or split: reset without scoring
+    if (Math.hypot(pos[b], pos[b + 1], pos[b + 2]) > 14.5 || vel[b + 3] > 0.5) ok = false;
+    for (let k = 0; k < 6; k++) {
+      const o = ((k + 1) * M + x) * 4, f = k * 6;
+      v[f] = pos[o] - pos[b]; v[f + 1] = pos[o + 1] - pos[b + 1]; v[f + 2] = pos[o + 2] - pos[b + 2];
+      v[f + 3] = vel[o] - vel[b]; v[f + 4] = vel[o + 1] - vel[b + 1]; v[f + 5] = vel[o + 2] - vel[b + 2];
+      if (Math.hypot(pos[o], pos[o + 1], pos[o + 2]) > 14.5 || vel[o + 3] > 0.5) ok = false;
+      let s2 = 0;
+      for (let c = 0; c < 6; c++) s2 += v[f + c] * v[f + c];
+      // stretched past VOL_STRETCH (a hundred times its size): the force is
+      // no longer linear across the cluster, and a wrap may have split it
+      if (!(s2 <= VOL_STRETCH * VOL_STRETCH)) bad = true;
+    }
+    let lndet = 0;
+    for (let k = 0; k < 6 && !bad; k++) {
+      // modified Gram-Schmidt: q_k = (v_k - sum_{j<k} (v_k . q_j) q_j) / r_kk, |det| = prod r_kk
+      const f = k * 6;
+      for (let j = 0; j < k; j++) {
+        const g = j * 6;
+        let dot = 0;
+        for (let c = 0; c < 6; c++) dot += v[f + c] * q[g + c];
+        for (let c = 0; c < 6; c++) v[f + c] -= dot * q[g + c];
+      }
+      let nrm = 0;
+      for (let c = 0; c < 6; c++) nrm += v[f + c] * v[f + c];
+      nrm = Math.sqrt(nrm);
+      if (!(nrm > 1e-12) || !Number.isFinite(nrm)) { bad = true; break; }
+      lndet += Math.log(nrm);
+      for (let c = 0; c < 6; c++) q[f + c] = v[f + c] / nrm;
+    }
+    for (let k = 0; k < 6; k++) {
+      for (let c = 0; c < 6; c++) frame[(x * 6 + k) * 6 + c] = bad ? (k === c ? 1 : 0) : q[k * 6 + c];
+    }
+    if (!bad && ok) { sum += lndet - 6 * Math.log(d0); n++; }
+    skip[x] = vel[b + 3] > 0.5 ? 1 : 0;
+  }
+  labVolWriteFrame(pos, vel, frame, M, yb);   // the first M texels are the base row
+  lab.volSkip = skip;
+  if (score) lab.volScored = n;
+  if (n > 0) {
+    const inst = (sum / n) / tau;
+    lab.vol = Number.isFinite(lab.vol) ? 0.75 * lab.vol + 0.25 * inst : inst;
+  }
+}
+// Predicted rate. One substep of length h maps (p, v) to (p', v') with
+// v' = e^(-g h) (v + h F) and p' = p + h v'. F depends on p alone, except
+// the explicit magnetic kick F += mag * 30 * (v x B), which is linear in v.
+// The Jacobian is [[I + h C, h D], [C, D]] with C = dv'/dp and D = dv'/dv;
+// subtracting h times the second block row from the first leaves
+// [[I, 0], [C, D]], so det = det D: only the velocity map moves the volume.
+// With b = B/|B| and th = mag * 30 * |B| * h = mag * 10.5 * h (|B| = 0.35),
+// D = e^(-g h) (I + th [b]x), and I + th [b]x has eigenvalues 1, 1 +- i th,
+// so det D = e^(-3 g h) (1 + th^2). Per second: -3 g + ln(1 + th^2) / h.
+// Under the Boris step the kick is an exact rotation (det 1): the rate is
+// -3 g. Gain/loss makes g a function of position, and a center's dipole
+// makes th one: then there is no single number, and the readout says so.
+function labVolPrediction() {
+  const n = effectiveSubsteps(), h = TICK / n, c = state.cosmos;
+  const kick = c.mag > 0.001 && state.lorentz !== 'boris';   // the shader's own gate on the term
+  let rate = -3 * state.damping;
+  if (kick) { const th = c.mag * 10.5 * h; rate += Math.log(1 + th * th) / h; }
+  lab.volLocal = c.gainloss > 0.001 || (kick && state.centers.on);
+  lab.volPred = rate;
+  return rate;
+}
+
 /* --- density mesh readback: deposit on demand and unpack the atlas --- */
-const _labClear = new THREE.Color();
 function labReadDensity() {
   pmAlloc();
   if (!pmPoints) pmRebuild();
   if (!pmPoints) return null;
-  depositMat.uniforms.posTex.value = posA.texture;
-  renderer.getClearColor(_labClear);
-  const prevAlpha = renderer.getClearAlpha();
-  renderer.setClearColor(0x000000, 0);
-  renderer.setRenderTarget(pmDens);
-  renderer.render(pmScene, quadCam);
-  renderer.setClearColor(_labClear, prevAlpha);
+  pmDeposit();                          // the mass exactly as the solver sees it (nearest cell or cloud-in-cell)
   renderer.setRenderTarget(null);
   const W = PM_N * PM_TX, H = PM_N * PM_TY;
   const raw = readTarget(pmDens, 0, 0, W, H);
@@ -5371,6 +6102,7 @@ function labSpectrum(rho) {
 
 /* --- the once-a-second sample, the traces, and the log --- */
 function labSampleAll() {
+  labConsSample();                      // before the density readback below re-deposits: the tick's own deposit and potential are still paired
   const rho = labReadDensity();
   if (!rho) return;
   lab.memory = labMemory(rho);
@@ -5380,19 +6112,21 @@ function labSampleAll() {
     if (lab.memHist.length > 240) lab.memHist.shift();
   }
   labSpectrum(rho);
+  dimerDensityShare(rho);
   const c = state.cosmos;
   lab.log.push([simTime.toFixed(2), step, fmtNum(lab.lambda, 4), fmtNum(lab.memory, 4),
     fmtNum(lab.memory2, 4), fmtNum(lab.clampFrac, 3),
     Number.isFinite(lab.lpre) ? lab.lpre : '', fmtNum(lab.lbar, 3),
     ...Array.from(lab.cl.subarray(1, 10), v => v.toExponential(3)),
-    c.selfgrav, c.gainloss, c.hubble, epochN, state.substeps]);
+    c.selfgrav, c.gainloss, c.hubble, epochN, ...labConsLogCols(), effectiveSubsteps(),
+    fmtNum(lab.vol, 4), (labVolPrediction(), lab.volLocal ? 'local' : fmtNum(lab.volPred, 4))]);
   if (lab.log.length > 20000) lab.log.shift();
   labDraw();
 }
 const fmtNum = (v, d) => Number.isFinite(v) ? v.toFixed(d) : '';
 function labTick() {
   if (!lab.on || !playing) return;
-  if (simTime - lab.twinLast >= 0.5) labLyapunov();
+  if (simTime - lab.twinLast >= 0.5) { labVolume(); labLyapunov(); }
   if (simTime - lab.lastSample >= 1.0) { lab.lastSample = simTime; labSampleAll(); }
 }
 function labReset() {
@@ -5400,9 +6134,11 @@ function labReset() {
   lab.rhoRelic = null; lab.memory = NaN; lab.memHist = []; lab.retained = NaN;
   lab.rhoRelic2 = null; lab.memory2 = NaN; lab.retained2 = NaN; lab.relicMode = 0.5;
   lab.scored = 0; lab.clampFrac = NaN;
+  lab.vol = NaN; lab.volPred = NaN; lab.volLocal = false; lab.volScored = 0; lab.volSeeded = false;
   lab.retHist = []; lab.epochs = 0; lab.lastSample = -1;
   lab.cl.fill(0); lab.lbar = NaN; lab.lpre = NaN; lab.couple = NaN;
   lab.lpreHist = []; lab.lbarHist = [];
+  labConsReset();
   if (lab.on && posA) labPairTwins();
   labDraw();
 }
@@ -5429,8 +6165,14 @@ function traceLine(id, hist, lo, hi, color, zero) {
   ctx.stroke();
 }
 function labDraw() {
+  labConsDraw();
   const show = (id, v, d, suf) => { const el = $(id); if (el) el.textContent = Number.isFinite(v) ? v.toFixed(d) + (suf || '') : '–'; };
   show('lab-lambda', lab.lambda, 3, ' /s');
+  labVolPrediction();
+  show('lab-vol', lab.vol, 3, ' /s');
+  const vp = $('lab-vol-pred'); if (vp) vp.textContent = lab.volLocal ? 'local' : Number.isFinite(lab.volPred) ? lab.volPred.toFixed(3) + ' /s' : '–';
+  const vn = $('lab-vol-n'); if (vn) vn.textContent = lab.on && lab.volN > 0 ? lab.volScored + ' of ' + lab.volN : '–';
+  const vs = $('lab-vol-sub'); if (vs) vs.textContent = lab.on ? effectiveSubsteps() + (state.substeps === 'auto' ? ' (auto)' : '') : '–';
   show('lab-ltime', Number.isFinite(lab.lambda) && Math.abs(lab.lambda) > 1e-4 ? 1 / Math.abs(lab.lambda) : NaN, 2, ' s');
   const pe = $('lab-pairs'); if (pe) pe.textContent = lab.on && lab.pairs > 0 ? Math.round(100 * lab.scored / lab.pairs) + '% of ' + lab.pairs.toLocaleString() : '–';
   show('lab-clamp', Number.isFinite(lab.clampFrac) ? lab.clampFrac * 100 : NaN, 0, '%');
@@ -5465,15 +6207,603 @@ function labDraw() {
   }
 }
 
+/* ---- Conservation instruments (Lab): energy and angular momentum, summed on the GPU.
+
+   WHAT IS SUMMED. Once a second the potential pass (consMat: one fullscreen draw over the
+   state textures per output set) writes, per particle, values scaled by 1/N:
+     set 0: [ U_field * m,  U_mesh * d,  KE_c * m,  m ]
+     set 1: [ L_x, L_y, L_z, KE_perp ] * m          L = p x v_c; KE_perp = motion across the magnetic axis (y)
+     set 2: [ KE_stored, wall_took, wall_hits, on_ceiling ] * m
+     set 3: [ |p x v_c| * m,  d,  on_wall * m,  0 ]
+   and halving passes (each output texel is the sum of a 2x2 block of the input) fold the
+   texSize^2 texels down to one texel: a fixed-order pairwise tree whose float32 error grows
+   like log2(N) ulps, not N. m (the mask) is 0 for a texel past the particle count, for the
+   Lab's own probe rows (the twin copies re-seated every half second and the volume meter's
+   cluster neighbours, both rewritten by hand), and for a particle outside the mesh. d (the
+   deposit's own rule: in the count) is what the U_mesh sum uses, so that sum runs over
+   exactly the particles that made the potential (a particle outside the mesh deposited
+   nothing and reads a potential of zero there).
+
+   U_FIELD, derived from the force so that -grad(U_field) IS the applied field force. The
+   velocity shader applies  F = amp * fscale * mix(FA, FB, blend)  with
+     wells   : FA = -g1,            g1 = grad(v1), v1 the mode value              =>  U_A = v1
+     chladni : FA = -S (g1 - g2),   S = v1 - v2, grad(S) = g1 - g2,  S grad(S) = grad(S^2/2)  =>  U_A = S^2/2
+   so  U_field = amp * fscale * mix(U_A, U_B, blend);  amp, fscale and blend are constants of
+   the tick, so -grad(U_field) = F term by term. U_A is evaluated by cavityValue below, which
+   calls the same shTerm the force calls (FIELD_GLSL is one text shared by both shaders), with
+   the same r >= 0.35 and sin(theta) >= 1e-3 guards; where the guards bite (the centre, the
+   axis) the force is not a gradient, and the radial table is lerped, so its derivative column
+   is the derivative of its value column only to the table's spacing. The expansion term
+   F = hubble * aniso * p is the gradient of U_hubble = -hubble/2 * sum_i aniso_i p_i^2, added
+   to U_field. Helix, centres, vessels, overlays and gain/loss are not gradients of anything
+   static: left out, and while any of them is on the panel says so and predicts nothing.
+
+   U_MESH, the energy of the swindled Dirichlet system. The force is
+   -SG*s*(Phi[c+1] - Phi[c-1])/(2h) at the particle's cell (or the eight cloud-in-cell weights
+   of that), Phi solving the 7-point Laplacian  L Phi = delta,  delta_c = count_c/nbar - 1,
+   Phi = 0 outside the mesh, nbar = N/32^3. The energy of that field is
+       U = 1/2 * SG*s * sum_c (count_c - nbar) Phi_c
+         = 1/2 * SG*s * [ sum_p Phi(cell of p)  -  nbar * sum_c Phi_c ].
+   Why this is the energy: G = L^-1 (the discrete Dirichlet Green's function) is symmetric,
+   so with rho = count - nbar,  U = 1/2 SG s rho.G.rho  and  dU = SG s (d rho).G.rho
+   = SG s sum_c dcount_c Phi_c: moving one particle from cell a to cell b changes U by
+   SG*s*(Phi_b - Phi_a), the work of a force -SG*s*grad(Phi) over that move, i.e. -F.dx. The
+   nearest-cell force is that slope sampled at the cell: it is momentum-conserving (a pair
+   pushes itself equally and oppositely, up to the box faces where Phi is pinned) but not the
+   derivative of this U, which only changes when a particle crosses a cell face; cloud-in-cell
+   interpolates the force, not the gradient of the interpolated potential, and has the same
+   property. So H drifts by the scheme's own error, and the number shown IS that error. Per
+   particle the pass writes SG*s*Phi(cell) (or the eight-weight sum); sum_c Phi_c is a CPU sum
+   over the 256x128 potential atlas once a second, read beside the density atlas to give
+   "Potential settled" = 1 - |L Phi - delta| / |delta|: the six warm-started sweeps lag the
+   swarm (time constant near two seconds on the largest scales), the exact solver is settled
+   every tick. The potential used is the tick's own (the one the force read), so the energy
+   pairs the force with its potential.
+
+   THE VELOCITY'S TIME. The step is velocity-first: v' = v + F(x) dt, x' = x + v' dt, which is
+   leapfrog with the stored velocity half a step behind the position. Energy taken at
+   (x, v_stored) carries a sawtooth of relative size about omega*dt that is bookkeeping, not
+   physics (one oscillator at omega*dt = 0.087: an 8.7% band; the centred estimate: 0.19%).
+   The pass therefore also forms v_c = v_stored + F_conservative * h/2, h the substep, the
+   velocity at the position's own time; both H are shown so the reader sees the band is the
+   integrator's, not a leak. With no conservative force v_c is v_stored exactly.
+
+   THE WALL LEDGER (opt-in). The reflecting wall is inelastic (each hit keeps RESTITUTION of
+   the speed into the wall), so H is not conserved on the wall by construction, and nothing in
+   the state after a step tells a hit from an inward mover. So, while the ledger is on, every
+   substep replays the velocity shader ITSELF on the pre-step textures with uBoundary = 1,
+   which skips exactly the wall block and nothing else, giving the pre-reflection velocity v*
+   of every particle; the accumulator pass adds 1/2 |v*|^2 - 1/2 |v'|^2 (and one hit) wherever
+   v* differs from the stored v'. No force is re-implemented: centres, vessels, overlays, the
+   mesh, damping and the magnetic step are all replayed by the same program on the same
+   inputs. H + wall is then the complete account. Cost: one more velocity pass per substep
+   while it is on; it is cleared whenever H0 is taken.
+
+   PREDICTIONS, shown beside the measurement. rate = d ln KE / dt over the last second while
+   nothing conservative acts (field off, no gravity, no expansion), else d(H_c + wall)/dt per
+   unit of kinetic energy; the two agree while KE changes slowly.
+     damping gamma          : v' = (v + F dt) e^(-gamma dt)                     =>  -2 gamma
+     Euler magnetic kick    : v' = v + theta (v x yhat), theta = mag*30*0.35*h = mag*10.5*h,
+                              h = TICK / effectiveSubsteps();  |v'|^2 = |v|^2 + theta^2 |v_perp|^2
+                              because v . (v x yhat) = 0  =>  KE' = KE + theta^2 KE_perp,
+                              rate = ln(1 + theta^2 KE_perp/KE) / h   (2/3 theta^2/h for motion
+                              equal in all directions; the pass measures KE_perp, so nothing about
+                              the distribution is assumed)
+     exact rotation (Boris) : |v| unchanged  =>  0
+     gain/loss, helix, centres, vessel, overlays, a turning or morphing field: none.
+   L = sum p x v_c. The field is not round, so L is not expected to hold while it is on; the
+   reflecting wall pushes straight back along the radius and leaves L alone; the antipodal wrap
+   flips the contribution of every particle it moves; the mesh is a cube, so under gravity
+   alone L nearly holds, and the cube is what breaks it.
+   ---- */
+function fieldAmp() {
+  // the field strength the velocity shader receives: 10^fieldExp, or 0 with the Lab's switch
+  return state.lab && state.lab.fieldOff ? 0 : Math.pow(10, state.fieldExp);
+}
+const CONS_OVERLAYS = ['c3', 'c6', 'lattice', 'spiral', 'fifths', 'trefoil', 'torus', 'hopf'];
+lab.cons = {
+  sig: '', waiting: false, samples: 0, N: 0, M: 0, t0: 0, t: 0,
+  H: NaN, Hc: NaN, H0: NaN, Hs0: NaN, KE: NaN, KEs: NaN, Uf: NaN, Um: NaN, KEperp: NaN,
+  W: NaN, hits: NaN, ceil: NaN, wall: NaN, settled: NaN,
+  L: [0, 0, 0], L0: null, Labs: NaN, Labs0: NaN, dL: NaN, Lalign: NaN,
+  dH: NaN, dHs: NaN, rate: NaN, pred: NaN, basis: '', note: '', prev: null, hist: [], histS: []
+};
+const CONS_VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+const CONS_GLSL_HEAD = `
+  precision highp float;
+  varying vec2 vUv;
+  uniform sampler2D posTex, velTex, uRad, uPot, uAcc;
+  uniform float amp, blend, fieldForm, uSelfGrav, uCic, uHalfStep, uHubble;
+  uniform vec3 uAniso;
+  uniform vec4 uModeA, uModeB;
+  uniform vec2 uNormA, uNormB, uTwist;
+  uniform float uSize, uTotal, uRow0, uVolRow, uVolN, uPass, uInvN;
+  const float EXTENT = ${EXTENT.toFixed(1)};
+  const float PI = 3.14159265358979;
+  const float RADN = ${RAD_N.toFixed(1)};
+`;
+const consZeroTex = new THREE.DataTexture(new Float32Array(4), 1, 1, THREE.RGBAFormat, THREE.FloatType);
+consZeroTex.needsUpdate = true;
+const consMat = new THREE.ShaderMaterial({
+  uniforms: {
+    posTex: { value: null }, velTex: { value: null }, uRad: { value: null }, uPot: { value: consZeroTex }, uAcc: { value: consZeroTex },
+    amp: { value: 0 }, blend: { value: 1 }, fieldForm: { value: 1 }, uSelfGrav: { value: 0 }, uCic: { value: 0 },
+    uHalfStep: { value: 0 }, uHubble: { value: 0 }, uAniso: { value: new THREE.Vector3(1, 1, 1) },
+    uModeA: { value: new THREE.Vector4() }, uModeB: { value: new THREE.Vector4() },
+    uNormA: { value: new THREE.Vector2(1, 1) }, uNormB: { value: new THREE.Vector2(1, 1) }, uTwist: { value: new THREE.Vector2() },
+    uSize: { value: 1 }, uTotal: { value: 1 }, uRow0: { value: 1 }, uVolRow: { value: 0 }, uVolN: { value: 0 }, uPass: { value: 0 }, uInvN: { value: 1 }
+  },
+  vertexShader: CONS_VS,
+  fragmentShader: CONS_GLSL_HEAD + PM_GLSL + FIELD_GLSL + `
+    // The mode value whose gradient the force descends: cavityForce line by line, returning
+    // the value instead of the gradient (wells: v1; Chladni: S^2/2). See the derivation above.
+    float cavityValue(vec3 pos, vec4 mode, vec2 nrm, float jr, float djr, float twist) {
+      float r = max(length(pos), 0.35);
+      float ct = clamp(pos.y / r, -1.0, 1.0);
+      float st = max(sqrt(1.0 - ct * ct), 1e-3);
+      float phi = atan(pos.z, pos.x);
+      int l = int(mode.x + 0.5);
+      float v1; vec3 g1;
+      shTerm(pos, r, ct, st, phi, l, int(mode.y + 0.5), nrm.x, jr, djr, twist, v1, g1);
+      if (fieldForm < 0.5) return v1;
+      float v2; vec3 g2;
+      shTerm(pos, r, ct, st, phi, l, int(mode.z + 0.5), nrm.y, jr, djr,
+             twist + 1.5707963, v2, g2);
+      float S = v1 - v2;
+      return 0.5 * S * S;
+    }
+    // The mesh potential at the particle and the mesh force, with the gather the velocity
+    // shader uses: the cell's own value (nearest cell) or the eight cloud-in-cell weights.
+    void meshAt(vec3 p, out float Um, out vec3 Fm) {
+      float phi = 0.0;
+      vec3 g = vec3(0.0);
+      if (uCic > 0.5) {
+        vec3 u = (p / PM_HALF * 0.5 + 0.5) * PM_N - 0.5;
+        vec3 b = floor(u);
+        vec3 f = u - b;
+        for (int n = 0; n < 8; n++) {
+          float fn = float(n);
+          vec3 k = vec3(mod(fn, 2.0), mod(floor(fn / 2.0), 2.0), floor(fn / 4.0));
+          vec3 c = b + k;
+          vec3 w3 = mix(1.0 - f, f, k);
+          float w = w3.x * w3.y * w3.z;
+          phi += w * pmAt(uPot, c);
+          g += w * vec3(
+            pmAt(uPot, c + vec3(1.0, 0.0, 0.0)) - pmAt(uPot, c - vec3(1.0, 0.0, 0.0)),
+            pmAt(uPot, c + vec3(0.0, 1.0, 0.0)) - pmAt(uPot, c - vec3(0.0, 1.0, 0.0)),
+            pmAt(uPot, c + vec3(0.0, 0.0, 1.0)) - pmAt(uPot, c - vec3(0.0, 0.0, 1.0)));
+        }
+      } else {
+        vec3 c = pmCellOf(p);
+        phi = pmAt(uPot, c);
+        g = vec3(
+          pmAt(uPot, c + vec3(1.0, 0.0, 0.0)) - pmAt(uPot, c - vec3(1.0, 0.0, 0.0)),
+          pmAt(uPot, c + vec3(0.0, 1.0, 0.0)) - pmAt(uPot, c - vec3(0.0, 1.0, 0.0)),
+          pmAt(uPot, c + vec3(0.0, 0.0, 1.0)) - pmAt(uPot, c - vec3(0.0, 0.0, 1.0)));
+      }
+      Um = uSelfGrav * SG_GAIN * phi;
+      Fm = -uSelfGrav * SG_GAIN * g / (2.0 * PM_CELL);
+    }
+    void main() {
+      vec4 P = texture2D(posTex, vUv);
+      vec4 V = texture2D(velTex, vUv);
+      vec3 p = P.xyz, v = V.xyz;
+      vec2 px = floor(vUv * uSize);
+      float idx = px.y * uSize + px.x;
+      if (idx > uTotal - 0.5) { gl_FragColor = vec4(0.0); return; }        // past the particle count
+      bool probe = px.y > uRow0 - 0.5                                        // a twin copy row
+        || (uVolN > 0.5 && px.y > uVolRow + 0.5 && px.y < uVolRow + 6.5 && px.x < uVolN - 0.5);   // a cluster neighbour
+      float m = (!probe && pmInside(pmCellOf(p))) ? 1.0 : 0.0;
+      float d = 1.0;
+      vec4 rad = radialAt(length(p));
+      vec3 FA = cavityForce(p, uModeA, uNormA, rad.x, rad.y, uTwist.x);
+      vec3 FB = cavityForce(p, uModeB, uNormB, rad.z, rad.w, uTwist.y);
+      float UA = cavityValue(p, uModeA, uNormA, rad.x, rad.y, uTwist.x);
+      float UB = cavityValue(p, uModeB, uNormB, rad.z, rad.w, uTwist.y);
+      float fscale = fieldForm < 0.5 ? ${FORCE_SCALE.toFixed(1)} : ${CHLADNI_SCALE.toFixed(1)};
+      vec3 F = amp * fscale * mix(FA, FB, blend);
+      float Uf = amp * fscale * mix(UA, UB, blend);
+      F += uHubble * p * uAniso;                                             // expansion: a spring pushing outward
+      Uf += -0.5 * uHubble * dot(uAniso * p, p);
+      float Um = 0.0;
+      if (uSelfGrav > 0.001) { vec3 Fm; meshAt(p, Um, Fm); F += Fm; }
+      vec3 vc = v + F * uHalfStep;                                           // the velocity at the position's own time
+      vec3 L = cross(p, vc);
+      vec4 acc = texture2D(uAcc, vUv);                                       // the wall ledger: [took, hits]
+      vec4 o;
+      if (uPass < 0.5) o = vec4(Uf * m, Um * d, 0.5 * dot(vc, vc) * m, m);
+      else if (uPass < 1.5) o = vec4(L, 0.5 * (vc.x * vc.x + vc.z * vc.z)) * m;
+      else if (uPass < 2.5) o = vec4(0.5 * dot(v, v), acc.x, acc.y, V.w > 0.5 ? 1.0 : 0.0) * m;
+      else o = vec4(length(L) * m, d, length(p) > EXTENT - 1e-3 ? m : 0.0, 0.0);
+      gl_FragColor = o * uInvN;
+    }
+  `
+});
+// one halving pass: every output texel is the sum of a 2x2 block of the input (bounds-checked
+// so an odd size folds correctly)
+const consHalfMat = new THREE.ShaderMaterial({
+  uniforms: { src: { value: null }, uIn: { value: 1 }, uOut: { value: 1 } },
+  vertexShader: CONS_VS,
+  fragmentShader: `
+    precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D src;
+    uniform float uIn, uOut;
+    void main() {
+      vec2 o = floor(vUv * uOut) * 2.0;
+      vec4 s = vec4(0.0);
+      for (int j = 0; j < 2; j++) for (int i = 0; i < 2; i++) {
+        vec2 q = o + vec2(float(i), float(j));
+        if (q.x < uIn - 0.5 && q.y < uIn - 0.5) s += texture2D(src, (q + 0.5) / uIn);
+      }
+      gl_FragColor = s;
+    }
+  `
+});
+// the wall ledger's accumulator: per particle, what this substep's hit took and that it happened
+const consAccMat = new THREE.ShaderMaterial({
+  uniforms: { uStar: { value: null }, uNew: { value: null }, uAccIn: { value: null } },
+  vertexShader: CONS_VS,
+  fragmentShader: `
+    precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uStar, uNew, uAccIn;
+    void main() {
+      vec3 s = texture2D(uStar, vUv).xyz;        // the velocity the step would have stored with no wall
+      vec3 n = texture2D(uNew, vUv).xyz;         // the velocity it stored
+      vec4 a = texture2D(uAccIn, vUv);
+      bool hit = any(notEqual(s, n));
+      gl_FragColor = a + vec4(hit ? 0.5 * (dot(s, s) - dot(n, n)) : 0.0, hit ? 1.0 : 0.0, 0.0, 0.0);
+    }
+  `
+});
+let consRT = null;   // { size, levels: [texSize^2, ceil(texSize/2)^2, ..., 1x1], star, accA, accB }
+function consTarget(size) {
+  return new THREE.WebGLRenderTarget(size, size, {
+    minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter,
+    format: THREE.RGBAFormat, type: floatType,
+    depthBuffer: false, stencilBuffer: false
+  });
+}
+const _consClear = new THREE.Color();
+function consClear(t) {
+  renderer.getClearColor(_consClear);
+  const prevAlpha = renderer.getClearAlpha();
+  renderer.setClearColor(0x000000, 0);
+  renderer.setRenderTarget(t);
+  renderer.clear();
+  renderer.setClearColor(_consClear, prevAlpha);
+  renderer.setRenderTarget(null);
+}
+function labConsAlloc() {
+  if (consRT && consRT.size === texSize) return;
+  labConsFree();
+  const levels = [consTarget(texSize)];
+  let s = texSize;
+  while (s > 1) { s = Math.ceil(s / 2); levels.push(consTarget(s)); }
+  consRT = { size: texSize, levels, star: null, accA: null, accB: null };
+}
+function labConsFree() {
+  if (!consRT) return;
+  for (const t of consRT.levels) t.dispose();
+  for (const k of ['star', 'accA', 'accB']) if (consRT[k]) consRT[k].dispose();
+  consRT = null;
+}
+function labConsLedgerLive() {
+  return !!(lab.on && state.lab.ledger && state.cosmos.boundary !== 'wrap');
+}
+function labConsLedgerAlloc() {
+  labConsAlloc();
+  if (consRT.star) return;
+  consRT.star = consTarget(consRT.size);
+  consRT.accA = consTarget(consRT.size);
+  consRT.accB = consTarget(consRT.size);
+  consClear(consRT.accA); consClear(consRT.accB);
+}
+function labConsLedgerClear() {
+  if (consRT && consRT.accA) { consClear(consRT.accA); consClear(consRT.accB); }
+}
+function labWallTick(h) {
+  // after simStep(h): posB/velB hold the state the velocity shader read, velA what it wrote
+  if (!labConsLedgerLive() || !posA) return;
+  labConsLedgerAlloc();
+  const VU = velMat.uniforms, bnd = VU.uBoundary.value;
+  quadMesh.material = velMat;
+  VU.posTex.value = posB.texture; VU.velTex.value = velB.texture; VU.dt.value = h;
+  VU.uBoundary.value = 1;                       // skips the wall test and nothing else
+  renderer.setRenderTarget(consRT.star);
+  renderer.render(quadScene, quadCam);
+  VU.uBoundary.value = bnd;
+  const A = consAccMat.uniforms;
+  A.uStar.value = consRT.star.texture; A.uNew.value = velA.texture; A.uAccIn.value = consRT.accA.texture;
+  quadMesh.material = consAccMat;
+  renderer.setRenderTarget(consRT.accB);
+  renderer.render(quadScene, quadCam);
+  renderer.setRenderTarget(null);
+  const t = consRT.accA; consRT.accA = consRT.accB; consRT.accB = t;
+}
+function consFold(mat) {
+  // one pass of mat into level 0, then halve down to a single texel; returns that target
+  const L = consRT.levels;
+  quadMesh.material = mat;
+  renderer.setRenderTarget(L[0]);
+  renderer.render(quadScene, quadCam);
+  quadMesh.material = consHalfMat;
+  for (let i = 1; i < L.length; i++) {
+    consHalfMat.uniforms.src.value = L[i - 1].texture;
+    consHalfMat.uniforms.uIn.value = L[i - 1].width;
+    consHalfMat.uniforms.uOut.value = L[i].width;
+    renderer.setRenderTarget(L[i]);
+    renderer.render(quadScene, quadCam);
+  }
+  renderer.setRenderTarget(null);
+  return L[L.length - 1];
+}
+function consCopyUniforms() {
+  labConsAlloc();
+  const U = consMat.uniforms, VU = velMat.uniforms, S = texSize, total = Math.min(state.particles, S * S);
+  U.posTex.value = posA.texture; U.velTex.value = velA.texture;
+  U.uRad.value = VU.uRad.value; U.uPot.value = VU.uPot.value || consZeroTex;
+  U.uAcc.value = consRT && consRT.accA ? consRT.accA.texture : consZeroTex;
+  U.amp.value = VU.amp.value; U.blend.value = VU.blend.value; U.fieldForm.value = VU.fieldForm.value;
+  U.uSelfGrav.value = VU.uSelfGrav.value; U.uCic.value = VU.uCic.value; U.uHubble.value = VU.uHubble.value;
+  U.uAniso.value.copy(VU.uAniso.value);
+  U.uModeA.value.copy(VU.uModeA.value); U.uModeB.value.copy(VU.uModeB.value);
+  U.uNormA.value.copy(VU.uNormA.value); U.uNormB.value.copy(VU.uNormB.value); U.uTwist.value.copy(VU.uTwist.value);
+  U.uHalfStep.value = 0.5 * TICK / effectiveSubsteps();
+  U.uSize.value = S; U.uTotal.value = total; U.uInvN.value = 1 / total;
+  U.uRow0.value = S - lab.twinRows; U.uVolRow.value = lab.volRow; U.uVolN.value = lab.volN;
+  return total;
+}
+function labConsReduce(pass) {
+  labConsAlloc();
+  consMat.uniforms.uPass.value = pass;
+  return readTarget(consFold(consMat), 0, 0, 1, 1);
+}
+function labConsSettled(pot) {
+  // 1 - |L Phi - delta| / |delta| over the mesh, with this tick's deposit and potential
+  if (!pmDens) return NaN;
+  const N = PM_N, W = PM_N * PM_TX;
+  const dens = readTarget(pmDens, 0, 0, W, PM_N * PM_TY);
+  const total = Math.min(state.particles, texSize * texSize);
+  const scale = N * N * N * 1024 / Math.max(1, total), mean = total / (N * N * N) / 1024;
+  const at = (arr, i, j, k) => (i < 0 || j < 0 || k < 0 || i >= N || j >= N || k >= N)
+    ? 0 : arr[((Math.floor(k / PM_TX) * N + j) * W + (k % PM_TX) * N + i) * 4];
+  let rr = 0, dd = 0;
+  for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const delta = scale * (at(dens, i, j, k) - mean);
+    const lap = at(pot, i + 1, j, k) + at(pot, i - 1, j, k) + at(pot, i, j + 1, k) + at(pot, i, j - 1, k)
+      + at(pot, i, j, k + 1) + at(pot, i, j, k - 1) - 6 * at(pot, i, j, k);
+    rr += (lap - delta) * (lap - delta); dd += delta * delta;
+  }
+  return dd > 0 ? 1 - Math.sqrt(rr / dd) : NaN;
+}
+function labConsSig() {
+  const s = state, c = s.cosmos;
+  return [s.fieldForm, s.fieldExp, s.damping, s.substeps, s.lorentz, !!s.lab.fieldOff, !!s.lab.ledger, s.particles, texSize, step,
+    velMat.uniforms.blend.value < 1 ? 'morph' : 'set', c.boundary, c.hubble, c.mag, c.twist, c.aniso, c.helix,
+    c.selfgrav, c.gainloss, s.centers.on, s.vessel.form, s.vessel.gain, s.vessel.radius, s.vessel.girth, epochN,
+    s.pm.solver, s.pm.assign, CONS_OVERLAYS.filter(k => s.overlays[k]).join('+')].join('|');
+}
+let consTrig = { th: NaN, v: 1 };
+function labConsTrig(th) {
+  // cos^2 + sin^2 as this renderer computes it at the rotation angle the exact-rotation step uses:
+  // the only energy that step can lose, one texel, re-measured when the angle changes
+  if (consTrig.th === th) return consTrig.v;
+  const rt = consTarget(1);
+  const m = new THREE.ShaderMaterial({ uniforms: { th: { value: th } }, vertexShader: CONS_VS,
+    fragmentShader: 'precision highp float; uniform float th; void main(){ float c = cos(th), s = sin(th); gl_FragColor = vec4(c * c + s * s, c, s, 1.0); }' });
+  quadMesh.material = m;
+  renderer.setRenderTarget(rt); renderer.render(quadScene, quadCam); renderer.setRenderTarget(null);
+  const v = readTarget(rt, 0, 0, 1, 1)[0];
+  rt.dispose(); m.dispose();
+  consTrig = { th, v: Number.isFinite(v) && v > 0 ? v : 1 };
+  return consTrig.v;
+}
+function labConsPredict(share) {
+  const s = state, c = s.cosmos, on = [], fieldOn = velMat.uniforms.amp.value > 0;
+  if (c.gainloss > 0.001) on.push('gain/loss');
+  if (c.helix > 0.001) on.push('the helix');
+  if (s.centers.on) on.push('centers');
+  if (s.vessel.form !== 'off') on.push('the vessel');
+  if (CONS_OVERLAYS.some(k => s.overlays[k])) on.push('an overlay');
+  if (fieldOn && c.twist && modeA && modeB && (modeA.omega !== 0 || modeB.omega !== 0)) on.push('a turning field');
+  if (fieldOn && velMat.uniforms.blend.value < 1) on.push('a morphing field');
+  if (fieldOn && s.dimer && s.dimer.on) on.push('the mode dimer');   // the dimer reshapes the field every tick; the potential pass reads the undriven field
+  if (on.length) return { pred: NaN, note: 'On now: ' + on.join(', ') + '. These add or remove energy by design, so nothing is predicted; the drift shown is what they do.' };
+  const parts = [];
+  let pred = 0;
+  if (s.damping > 0) { pred -= 2 * s.damping; parts.push('damping ' + s.damping.toFixed(1) + ' takes ' + (2 * s.damping).toFixed(2) + ' per second'); }
+  if (c.mag > 0.001) {
+    const h = TICK / effectiveSubsteps(), th = c.mag * 10.5 * h;
+    if (s.lorentz === 'boris') {
+      // |v_perp| is multiplied by sqrt(cos^2 + sin^2) each substep: exactly 1 in arithmetic, and
+      // whatever this renderer's cos/sin make of it in practice (a software renderer loses ~4e-4 a step)
+      const tr = labConsTrig(th), loss = Number.isFinite(share) ? Math.log(tr) * share / h : 0;
+      pred += loss;
+      parts.push('the exact-rotation magnetic step adds nothing' + (Math.abs(Math.log(tr)) > 1e-6
+        ? ' but what this renderer’s cos and sin lose: ' + (tr - 1).toExponential(1) + ' of the motion across the field lines per step, ' + loss.toFixed(4) + ' per second here' : ''));
+    } else {
+      const pump = Number.isFinite(share) ? Math.log(1 + th * th * share) / h : NaN;
+      pred += pump;
+      parts.push('the Euler magnetic step adds ' + (Number.isFinite(pump) ? pump.toFixed(2) : '?') + ' per second (turn ' + th.toFixed(3)
+        + ' per step, ' + (Number.isFinite(share) ? Math.round(100 * share) : '?') + '% of the motion across the field lines)');
+    }
+  }
+  if (!parts.length) parts.push('nothing on the list takes or adds energy, so H should hold');
+  return { pred, note: parts.join('; ') + '.' };
+}
+function labConsSample() {
+  const cs = lab.cons;
+  if (!lab.on || !posA || !texSize || !lab.twinRows) return;
+  labConsAlloc();
+  const total = consCopyUniforms();
+  const a = labConsReduce(0), b = labConsReduce(1), c = labConsReduce(2), d = labConsReduce(3);
+  const M = a[3] * total;                       // particles counted by the mask
+  if (!(M > 0)) return;
+  const s = state.cosmos.selfgrav;
+  let meshTerm = 0, settled = NaN;
+  if (s > 0.001 && pmPotA) {
+    const pot = readTarget(pmPotA, 0, 0, PM_N * PM_TX, PM_N * PM_TY);
+    let sp = 0;
+    for (let i = 0; i < pot.length; i += 4) sp += pot[i];
+    meshTerm = -0.5 * SG_GAIN * s * (total / (PM_N * PM_N * PM_N)) * sp;   // -1/2 SG s nbar sum_c Phi_c
+    settled = labConsSettled(pot);
+  }
+  const KE = a[2] * total, Uf = a[0] * total, Um = 0.5 * a[1] * total + meshTerm;
+  const KEs = c[0] * total, W = c[1] * total, hits = c[2] * total, ceil = c[3] * total;
+  const L = [b[0] * total, b[1] * total, b[2] * total], KEperp = b[3] * total;
+  const Labs = Math.hypot(L[0], L[1], L[2]), Lsum = d[0] * total, onwall = d[2] * total;
+  const Hc = KE + Uf + Um, Hs = KEs + Uf + Um;
+  const ledger = labConsLedgerLive();
+  const sig = labConsSig();
+  const fresh = sig !== cs.sig || !Number.isFinite(cs.H0);
+  cs.sig = sig; cs.samples++; cs.N = total; cs.M = M; cs.t = simTime;
+  cs.KE = KE / M; cs.KEs = KEs / M; cs.Uf = Uf / M; cs.Um = Um / M; cs.Hc = Hc / M; cs.H = Hs / M; cs.KEperp = KEperp / M;
+  cs.W = ledger ? W / M : NaN; cs.hits = ledger ? hits / M : NaN; cs.ceil = ceil / total; cs.wall = onwall / M; cs.settled = settled;
+  cs.L = L.map(x => x / M); cs.Labs = Labs / M; cs.Lalign = Lsum > 0 ? Labs / Lsum : NaN;
+  if (fresh) {
+    cs.waiting = s > 0.001 && state.pm.solver !== 'exact' && !(settled >= 0.9);
+    cs.prev = null; cs.hist = []; cs.histS = []; cs.rate = NaN; cs.dH = NaN; cs.dHs = NaN; cs.dL = NaN; cs.basis = '';
+    if (cs.waiting) { cs.H0 = NaN; cs.Hs0 = NaN; cs.L0 = null; cs.Labs0 = NaN; }
+    else {
+      cs.H0 = cs.Hc; cs.Hs0 = cs.H; cs.L0 = cs.L.slice(); cs.Labs0 = cs.Labs; cs.t0 = simTime;
+      labConsLedgerClear();                       // the wall's take is counted from H0 on
+      if (ledger) { cs.W = 0; cs.hits = 0; }
+    }
+  }
+  if (Number.isFinite(cs.H0)) {
+    const Hw = cs.Hc + (ledger ? cs.W : 0);      // H plus what the wall took, per particle
+    const den = Math.abs(cs.H0) > 1e-12 ? Math.abs(cs.H0) : NaN;
+    cs.dH = (Hw - cs.H0) / den; cs.dHs = (cs.H + (ledger ? cs.W : 0) - cs.Hs0) / den;   // the grey trace differs from the green only by the centring
+    cs.hist.push(cs.dH); cs.histS.push(cs.dHs);
+    if (cs.hist.length > 240) { cs.hist.shift(); cs.histS.shift(); }
+    if (cs.L0) {
+      const dl = Math.hypot(cs.L[0] - cs.L0[0], cs.L[1] - cs.L0[1], cs.L[2] - cs.L0[2]);
+      cs.dL = cs.Labs0 > 1e-9 ? dl / cs.Labs0 : NaN;
+    }
+    if (cs.prev && simTime - cs.prev.t > 1e-3) {
+      const dt = simTime - cs.prev.t;
+      const kinetic = !(velMat.uniforms.amp.value > 0) && !(s > 0.001) && !(state.cosmos.hubble > 0.001);
+      cs.basis = kinetic ? 'kinetic' : (ledger ? 'total+wall' : 'total');
+      cs.rate = kinetic ? Math.log(cs.KE / cs.prev.KE) / dt : (Hw - cs.prev.Hw) / dt / (0.5 * (cs.KE + cs.prev.KE));
+    }
+    cs.prev = { t: simTime, Hw, KE: cs.KE };
+  }
+  const pr = labConsPredict(cs.KE > 0 ? cs.KEperp / cs.KE : NaN);
+  cs.pred = pr.pred; cs.note = pr.note;
+}
+function labConsReset() {
+  const cs = lab.cons;
+  if (!cs) return;
+  cs.sig = ''; cs.H0 = NaN; cs.Hs0 = NaN; cs.L0 = null; cs.Labs0 = NaN; cs.prev = null; cs.hist = []; cs.histS = []; cs.samples = 0;
+  cs.H = NaN; cs.Hc = NaN; cs.dH = NaN; cs.dHs = NaN; cs.rate = NaN; cs.pred = NaN; cs.Labs = NaN; cs.dL = NaN; cs.Lalign = NaN;
+  cs.settled = NaN; cs.W = NaN; cs.hits = NaN; cs.ceil = NaN; cs.wall = NaN; cs.note = ''; cs.basis = ''; cs.waiting = false;
+  labConsLedgerClear();
+}
+function labConsLogCols() {
+  const cs = lab.cons;
+  if (!cs) return ['', '', '', ''];
+  return [fmtNum(cs.Hc, 5), Number.isFinite(cs.dH) ? cs.dH.toExponential(3) : '', fmtNum(cs.Labs, 5), fmtNum(cs.W, 5)];
+}
+function labConsTrace(id, grey, green) {
+  const cv = $(id); if (!cv) return;
+  const ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(5,8,13,0.65)'; ctx.fillRect(0, 0, W, H);
+  const all = grey.concat(green).filter(Number.isFinite).map(Math.abs);
+  const m = all.length ? Math.max(1e-4, ...all) : 1e-3;
+  const y = v => H - 6 - (Math.min(m, Math.max(-m, v)) + m) / (2 * m) * (H - 12);
+  ctx.strokeStyle = '#2a3a52'; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
+  ctx.beginPath(); ctx.moveTo(0, y(0)); ctx.lineTo(W, y(0)); ctx.stroke();
+  ctx.setLineDash([]);
+  for (const [hist, color] of [[grey, '#7E8CA0'], [green, '#3FD3B4']]) {
+    if (hist.length < 2) continue;
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    const n = hist.length;
+    for (let i = 0; i < n; i++) {
+      const px = (i / Math.max(1, n - 1)) * (W - 8) + 4;
+      if (i === 0) ctx.moveTo(px, y(hist[i])); else ctx.lineTo(px, y(hist[i]));
+    }
+    ctx.stroke();
+  }
+}
+function labConsDraw() {
+  const cs = lab.cons;
+  if (!cs) return;
+  const show = (id, v, d, suf) => { const el = $(id); if (el) el.textContent = Number.isFinite(v) ? v.toFixed(d) + (suf || '') : '–'; };
+  const tiny = (id, v) => { const el = $(id); if (el) el.textContent = Number.isFinite(v) ? (Math.abs(v) >= 1e-3 || v === 0 ? v.toFixed(4) : v.toExponential(1)) : '–'; };
+  const ledger = labConsLedgerLive();
+  show('lab-H', cs.H, 3);
+  show('lab-Hc', cs.Hc, 3);
+  tiny('lab-dH', cs.dH);
+  show('lab-wall-took', ledger ? cs.W : NaN, 3);
+  show('lab-erate', cs.rate, 3, ' /s');
+  show('lab-erate-pred', cs.pred, 3, ' /s');
+  show('lab-ceil', Number.isFinite(cs.ceil) ? cs.ceil * 100 : NaN, 0, '%');
+  show('lab-hits', ledger ? cs.hits : NaN, 3);
+  show('lab-L', cs.Labs, 3);
+  tiny('lab-dL', cs.dL);
+  show('lab-Lalign', Number.isFinite(cs.Lalign) ? cs.Lalign * 100 : NaN, 1, '%');
+  show('lab-settled', Number.isFinite(cs.settled) ? cs.settled * 100 : NaN, 0, '%');
+  const note = $('lab-cons-note');
+  if (note) {
+    if (!lab.on) note.textContent = 'Turn the instruments on to read the energy.';
+    else if (!Number.isFinite(cs.Hc)) note.textContent = 'Reading…';
+    else {
+      const parts = [];
+      parts.push('Centred H = ' + cs.KE.toFixed(3) + ' kinetic + ' + cs.Uf.toFixed(3) + ' field + ' + cs.Um.toFixed(3) + ' gravity, per particle'
+        + (Number.isFinite(cs.dHs) ? '; at the stored velocity H has moved ' + (100 * cs.dHs).toFixed(2) + '% of H0.' : '.'));
+      if (cs.waiting) parts.push('Waiting for the mesh potential to settle before taking H0 (' + (Number.isFinite(cs.settled) ? Math.round(100 * cs.settled) : '?') + '% now, 90% needed).');
+      if (Number.isFinite(cs.H0) && Number.isFinite(cs.dH) && Math.abs(cs.H0) < 0.2 * (Math.abs(cs.KE) + Math.abs(cs.Uf) + Math.abs(cs.Um)))
+        parts.push('H0 (' + cs.H0.toFixed(2) + ') is small next to the parts that make it up, so the ratio reads large: H has moved ' + (cs.dH * Math.abs(cs.H0)).toFixed(2) + ' per particle since H0, against ' + cs.KE.toFixed(2) + ' of kinetic energy.');
+      if (cs.note) parts.push(cs.note.charAt(0).toUpperCase() + cs.note.slice(1));
+      if (state.lab.ledger && !cs.waiting) {
+        if (ledger) parts.push('The wall ledger is live: ' + (Number.isFinite(cs.hits) ? cs.hits.toFixed(3) : '–') + ' hits per particle since H0, the wall took '
+          + (Number.isFinite(cs.W) ? cs.W.toFixed(3) : '–') + ' per particle' + (Number.isFinite(cs.W) && Math.abs(cs.H0) > 1e-12 ? ' (' + (100 * cs.W / Math.abs(cs.H0)).toFixed(2) + '% of H0)' : '') + ', added back into ΔH.');
+        else parts.push('The wall ledger has nothing to count: the wrap has no wall.');
+      }
+      if (cs.basis) parts.push('The measured rate is ' + (cs.basis === 'kinetic' ? 'the change of the log of kinetic energy'
+        : cs.basis === 'total+wall' ? 'the change of H plus the wall’s take, per unit of kinetic energy' : 'the change of H per unit of kinetic energy') + ' over the last second.');
+      if (!Number.isFinite(cs.dL) && Number.isFinite(cs.Labs)) parts.push('L started at zero, so its change is shown as |L| alone.');
+      note.textContent = parts.join(' ');
+    }
+  }
+  labConsTrace('lab-cv-cons', cs.histS, cs.hist);
+}
+function labConsSync() {
+  document.querySelectorAll('#lab-field-seg button').forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.lf === 'off') === !!state.lab.fieldOff)));
+  document.querySelectorAll('#lab-ledger-seg button').forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.ledger === 'on') === !!state.lab.ledger)));
+}
+document.querySelectorAll('#lab-field-seg button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.lab.fieldOff = btn.dataset.lf === 'off';
+    velMat.uniforms.amp.value = fieldAmp();
+    labConsSync();
+    labConsReset();
+    saveState();
+  }));
+document.querySelectorAll('#lab-ledger-seg button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.lab.ledger = btn.dataset.ledger === 'on';
+    labConsSync();
+    labConsReset();
+    saveState();
+  }));
+
 /* --- UI wiring --- */
 function setLab(on) {
   lab.on = on;
   state.lab.on = on;
   $('sw-lab').setAttribute('aria-pressed', String(on));
-  if (on) { labOnRebuild(); labReset(); } else { labDraw(); }
+  if (on) { labOnRebuild(); labReset(); } else { labConsFree(); labDraw(); }
   saveState();
 }
 function syncLab() {
+  labConsSync();
   $('sw-lab').setAttribute('aria-pressed', String(state.lab.on));
   if (state.lab.on !== lab.on) { lab.on = state.lab.on; if (lab.on) { labOnRebuild(); labReset(); } }
 }
@@ -5486,10 +6816,18 @@ const LAB_EXPERIMENTS = {
     hint: "Spinning Chladni at self-gravity 0.3 with a zoom-out every 10 s. Watch Retained against Two-back over several epochs. In the port, both sit within \u00b10.05 of zero here and of each other; only above 0.5, where the swarm is self-bound, does Retained rise \u2014 and Two-back rises with it, because a collapsed core persists across any number of zoom-outs. This page's own first run read Retained 0.003 against Two-back 0.098. If Retained clears Two-back by more than 0.1 for several epochs running, the memory claim has a leg to stand on; nothing measured so far gives it one." },
   disc: { base: 'razordisc', step: 0, patch: {},
     hint: "The Razor Disc with the instruments on: nearly every sampled particle sits on the force ceiling, and \u03bb near zero says the disc is a fixed point. Now switch the magnetic step to exact rotation (Simulation panel): the same settings send the matter to the poles. Under Euler the disc's speed is 500 \u00d7 \u221a(dt / 2 damping) \u2014 88 predicted, 86 measured \u2014 and the disc exists wherever coupling\u00b2 \u00d7 dt exceeds damping / 55." },
+  fieldonly: { base: 'default', step: 0, lab: { ledger: true }, patch: { fieldForm: 'chladni', fieldExp: 0, damping: 0, stepsPerSec: 0.02, smooth: false, colorMode: 1, centers: { on: false }, vessel: { form: 'off' }, substeps: 1, lorentz: 'euler', cosmos: { boundary: 'reflect', hubble: 0, epoch: false, mag: 0, twist: false, aniso: 0, helix: 0, cascade: 'out', selfgrav: 0, gainloss: 0 } },
+    hint: "The field alone: damping, expansion, magnetism, gravity and the rest are off, the mode is held fixed (one digit lasts 50 s), the wall reflects, the wall ledger is on. Every particle starts at rest, so H is all field energy; as the particles roll, kinetic energy grows and field energy falls by the same amount. The velocity-first step keeps H in a band without walking, and the two H readouts show that the band belongs to the stored velocity: the centred one is far tighter. H itself does walk down a little, because this field has a valley along the wall and the wall keeps only half of the speed of anything that falls into it; the ledger counts that, and H plus what the wall took should hold. Measured at 65,536 particles over the first 10 s: H fell by 50% of its start, with 0.57 wall hits per particle, while H + wall stayed within 0.2% of H0; the stored-velocity H swung within 3.6%. L is not expected to hold: the field is not round." },
+  borisvseuler: { base: 'default', step: 0, lab: { ledger: true }, patch: { fieldForm: 'chladni', fieldExp: 0, damping: 0, stepsPerSec: 0.02, smooth: false, colorMode: 1, centers: { on: false }, vessel: { form: 'off' }, substeps: 1, lorentz: 'boris', cosmos: { boundary: 'reflect', hubble: 0, epoch: false, mag: 0.4, twist: false, aniso: 0, helix: 0, cascade: 'out', selfgrav: 0, gainloss: 0 } },
+    hint: "The same field with magnetic coupling 0.4, taken by the exact-rotation step. A rotation does no work, so H + wall should hold as in the field-only audit; measured: within 0.5% of H0 over 10 s. Now switch the magnetic step to Euler in the Simulation panel: the same coupling adds energy, and the predicted rate appears beside the measured one. The prediction comes from the size of one step's turn (coupling x 10.5 x the step) and the share of motion across the field lines, which the instruments measure. After that switch the measured rate read 0.83 per second here at 10 s, per unit of kinetic energy, and the prediction beside it read the same." },
+  gravity: { base: 'default', step: 0, lab: { fieldOff: true, ledger: true }, patch: { fieldForm: 'chladni', fieldExp: 0, damping: 0, stepsPerSec: 0.02, smooth: false, colorMode: 1, centers: { on: false }, vessel: { form: 'off' }, substeps: 1, lorentz: 'euler', cosmos: { boundary: 'reflect', hubble: 0, epoch: false, mag: 0, twist: false, aniso: 0, helix: 0, cascade: 'out', selfgrav: 0.3, gainloss: 0 } },
+    hint: "The swarm's own gravity alone: the field force is switched off (the switch above; the strength slider is untouched), self-gravity is 0.3, the wall ledger is on, and the mesh runs as you have it set in the Cosmos panel. The ball falls in on itself within a second and becomes a hot core. The energy is the mesh energy, worked out so that moving a particle one cell changes it by the work of the mesh force; with the six sweeps H0 waits until the potential has settled. That force is the potential's slope at the particle's cell. It is not exactly the downhill direction of this energy, which only changes when a particle crosses a cell face, so H drifts. In the core a particle crosses a cell in a single step and the force can reach the 500 ceiling, so the drift you see is the mesh's, the step's and the ceiling's together. H0 is small here, because kinetic and gravitational energy nearly cancel; the note under the readouts gives the drift per particle next to the kinetic energy. Measured at 65,536 particles over 10 s with the six sweeps and the nearest cell at one substep: H moved by +336 per particle against a kinetic energy of 404, with 0.31 wall hits per particle and 0% of the particles on the force ceiling at the end. With the exact solver H moved by +188 per particle. The mesh is a cube, so L is not exactly held either; it starts at zero and stays small." },
+  dimer: { base: 'chladni', step: 1, patch: { stepsPerSec: 0.02, smooth: false, damping: 3, fieldExp: 0.3, cosmos: { twist: false }, dimer: { on: true, kappa: 1, gamma: 0, delta: 2, loop: 'cw' } },
+    hint: "One Chladni figure (n 1, l 5, m 2 and 3), held for 50 s, the pair coupled at 1 per second, the loop running clockwise once every 20 s. The matter sits where the pair's intensity is zero, so as the pair turns, the figure turns with it. Watch the Mode dimer readouts. When the loop closes, partner 1 should hold about 0.85 of the pair (the expected number is beside the reading). Press Off in the Sequence panel the moment a loop closes. The sliders sit at the loop's own start point (detuning 2), so the pair holds still and the matter settles onto it within a few seconds. Matter on partner 1 should then read within about 0.1 of the share asked. Now press Counter-clockwise: that loop should end near 0.15. Same loop, opposite direction, the other partner survives. That is the one-way transfer around an exceptional point, and it does not depend on where the pair started. Then, the moment a loop closes, press Flat: the same sweep with no gain brings the pair back to where it started, above 95%. Predicted by an independent integration of the same equation: 0.858 clockwise, 0.158 counter-clockwise, 0.993 flat. Measured on this page at a million particles: 0.86, 0.16, 97%, with the matter at 0.78 against 0.88 asked after the first hold. One caution: while the loop runs, the two amplitudes are out of step and the figure has dark lines where both partners vanish; matter that reaches them stays. After a few loops most of it has, and the matter reading drifts toward 0.5 whatever the pair asks. Reseed (Simulation panel) to start over." },
 };
 function runLabExperiment(key) {
   const e = LAB_EXPERIMENTS[key];
-  if (!e) return;
+  if (!e) { if (key === 'orbit') benchStartOrbit(); return; }   // the orbit experiment builds its own state (a fixed count, the instruments off)
   const scn = SCENARIOS[e.base] || {};
   const next = JSON.parse(JSON.stringify(DEFAULTS));
   deepPatch(next, scn);
@@ -5498,7 +6836,8 @@ function runLabExperiment(key) {
   next.quality = state.quality;
   next.sound = JSON.parse(JSON.stringify(state.sound));
   next.sacred = state.sacred;   // the lens stays; the instruments read the swarm, not the picture
-  next.lab = { on: true };
+  if (!('pm' in e.patch)) next.pm = JSON.parse(JSON.stringify(state.pm));   // and so do the mesh choices
+  next.lab = Object.assign({ on: true }, e.lab || {});   // an audit may switch the field force off or the wall ledger on
   const cam = Array.isArray(scn.cam) && scn.cam.length >= 3
     ? { az: scn.cam[0], el: scn.cam[1], dist: scn.cam[2] } : null;
   applyPreset({ state: next, step: e.step, cam });
@@ -5512,12 +6851,14 @@ function runLabExperiment(key) {
 document.querySelectorAll('#lab-exp-seg button').forEach(btn =>
   btn.addEventListener('click', () => runLabExperiment(btn.dataset.exp)));
 function syncSubsteps() {
+  const auto = document.querySelector('#substep-seg [data-sub="auto"]');
+  if (auto) auto.textContent = 'Auto (' + autoSubsteps(state.cosmos.mag) + ')';
   document.querySelectorAll('#substep-seg button').forEach(b =>
-    b.setAttribute('aria-pressed', String(parseInt(b.dataset.sub, 10) === state.substeps)));
+    b.setAttribute('aria-pressed', String(b.dataset.sub === String(state.substeps))));
 }
 document.querySelectorAll('#substep-seg button').forEach(btn =>
   btn.addEventListener('click', () => {
-    state.substeps = parseInt(btn.dataset.sub, 10);
+    state.substeps = btn.dataset.sub === 'auto' ? 'auto' : parseInt(btn.dataset.sub, 10);
     syncSubsteps();
     saveState();
   }));
@@ -5532,11 +6873,30 @@ document.querySelectorAll('#lorentz-seg button').forEach(btn =>
     syncLorentz();
     saveState();
   }));
+function syncPm() {
+  document.querySelectorAll('#pm-solver-seg button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.pmsolver === state.pm.solver)));
+  document.querySelectorAll('#pm-assign-seg button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.pmassign === state.pm.assign)));
+  velMat.uniforms.uCic.value = state.pm.assign === 'cic' ? 1 : 0;
+}
+document.querySelectorAll('#pm-solver-seg button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.pm.solver = btn.dataset.pmsolver === 'exact' ? 'exact' : 'jacobi';
+    syncPm();
+    saveState();
+  }));
+document.querySelectorAll('#pm-assign-seg button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.pm.assign = btn.dataset.pmassign === 'cic' ? 'cic' : 'ngp';
+    syncPm();
+    saveState();
+  }));
 async function exportLabLog() {
   const el = $('lab-export-status');
   const say = t => { if (el) el.textContent = t; };
   if (!lab.log.length) { say('Nothing logged yet — turn the instruments on and let the chamber run.'); return; }
-  const head = 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,substeps';
+  const head = 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,H,dH_H0,L,wall_took,substeps,vol_rate,vol_pred';
   const csv = [head, ...lab.log.map(r => r.join(','))].join('\n');
   try {
     say('Saving…');
@@ -5548,6 +6908,833 @@ async function exportLabLog() {
   }
 }
 $('btn-lab-export').addEventListener('click', exportLabLog);
+
+/* ================================================================
+   Bench: a snapshot for numpy, and two clumps in orbit.
+
+   SAVE NPZ. One stored zip, written here by hand: positions (N,3) and
+   velocities (N,3) as float32 straight from the state textures, the
+   density mesh and the potential mesh as (32,32,32) float32 (zeros when
+   self-gravity is off), and meta.json with the state, the step, the
+   constants and the force in one line. numpy's load reads it.
+
+   TWO CLUMPS IN ORBIT. A Lab experiment that tests the self-gravity
+   solver on a problem with a known answer. Every particle in a mesh cell
+   takes the same pull, so a clump of particles at one spot with one
+   velocity moves as one body: two such clumps under nothing but each
+   other's gravity are a two-body problem on the page's own mesh. The
+   prediction comes from an exact solve of the page's operator (the
+   7-point Laplacian in cell units, potential zero one cell outside the
+   mesh), written below as a sine-transform solver. The same pair runs
+   from the same start under six sweeps and then under Exact, where the
+   page has that solver. Everything here only READS the simulation once
+   it runs (two rows of the position texture, once a tick); the one hook
+   in the tick returns at once otherwise.
+   ================================================================ */
+const BENCH_CELL = 2 * PM_HALF_JS / PM_N;          // one mesh cell, chamber units (0.95625)
+const BENCH_LE = new Uint8Array(new Uint16Array([1]).buffer)[0] === 1;
+
+/* --- .npy and a stored .zip, by hand --- */
+function benchNpy(arr, shape) {
+  let header = "{'descr': '<f4', 'fortran_order': False, 'shape': ("
+    + shape.join(', ') + (shape.length === 1 ? ',' : '') + "), }";
+  const pad = (64 - ((10 + header.length + 1) % 64)) % 64;
+  header += ' '.repeat(pad) + '\n';
+  const out = new Uint8Array(10 + header.length + arr.length * 4);
+  out.set([0x93, 0x4e, 0x55, 0x4d, 0x50, 0x59, 1, 0], 0);   // \x93NUMPY, version 1.0
+  out[8] = header.length & 0xff; out[9] = header.length >>> 8;
+  for (let i = 0; i < header.length; i++) out[10 + i] = header.charCodeAt(i);
+  const off = 10 + header.length;
+  if (BENCH_LE) out.set(new Uint8Array(arr.buffer, arr.byteOffset, arr.length * 4), off);
+  else { const dv = new DataView(out.buffer); for (let i = 0; i < arr.length; i++) dv.setFloat32(off + 4 * i, arr[i], true); }
+  return out;
+}
+const BENCH_CRC = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); t[n] = c >>> 0; }
+  return t;
+})();
+function benchCrc32(bytes) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) c = BENCH_CRC[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function benchZip(entries) {
+  // stored (no compression), CRC-32 per entry, one central directory: what numpy.load expects
+  const enc = new TextEncoder(), now = new Date();
+  const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+  const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  const u16 = v => [v & 0xff, (v >>> 8) & 0xff];
+  const u32 = v => [v & 0xff, (v >>> 8) & 0xff, (v >>> 16) & 0xff, (v >>> 24) & 0xff];
+  const parts = [], central = [];
+  let offset = 0;
+  for (const e of entries) {
+    const name = enc.encode(e.name), crc = benchCrc32(e.data), n = e.data.length;
+    const local = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0), ...u16(dosTime), ...u16(dosDate),
+      ...u32(crc), ...u32(n), ...u32(n), ...u16(name.length), ...u16(0), ...name]);
+    central.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(dosTime), ...u16(dosDate),
+      ...u32(crc), ...u32(n), ...u32(n), ...u16(name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset), ...name]));
+    parts.push(local, e.data);
+    offset += local.length + n;
+  }
+  const cdStart = offset;
+  let cdSize = 0;
+  for (const c of central) { parts.push(c); cdSize += c.length; }
+  parts.push(new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(entries.length), ...u16(entries.length), ...u32(cdSize), ...u32(cdStart), ...u16(0)]));
+  let total = 0;
+  for (const p of parts) total += p.length;
+  const out = new Uint8Array(total);
+  let o = 0;
+  for (const p of parts) { out.set(p, o); o += p.length; }
+  return out;
+}
+// the 256x128 atlas of 32 z-slices -> a (32,32,32) grid indexed [ix][iy][iz]
+function benchMeshGrid(raw, scale) {
+  const N = PM_N, W = PM_N * PM_TX, out = new Float32Array(N * N * N);
+  for (let k = 0; k < N; k++) {
+    const tc = k % PM_TX, tr = Math.floor(k / PM_TX);
+    for (let j = 0; j < N; j++) {
+      const py = tr * N + j;
+      for (let i = 0; i < N; i++) out[(i * N + j) * N + k] = raw[(py * W + tc * N + i) * 4] * scale;
+    }
+  }
+  return out;
+}
+async function exportSnapshotNpz(statusId) {
+  const el = $(statusId);
+  const say = t => { if (el) el.textContent = t; };
+  try {
+    const total = Math.min(state.particles, texSize * texSize), S = texSize;
+    say('Reading ' + fmtCount(total) + ' particles…');
+    const pos = readTarget(posA, 0, 0, S, S), vel = readTarget(velA, 0, 0, S, S);
+    const P = new Float32Array(total * 3), V = new Float32Array(total * 3);
+    for (let i = 0; i < total; i++) {
+      const j = i * 4, o = i * 3;
+      P[o] = pos[j]; P[o + 1] = pos[j + 1]; P[o + 2] = pos[j + 2];
+      V[o] = vel[j]; V[o + 1] = vel[j + 1]; V[o + 2] = vel[j + 2];
+    }
+    const N = PM_N, gravity = state.cosmos.selfgrav > 0.001 && !!pmDens && !!pmPotA;
+    const dens = new Float32Array(N * N * N);
+    let pot = new Float32Array(N * N * N);
+    if (gravity) {
+      const rho = labReadDensity();     // counts / 1024, indexed (k*N + j)*N + i, deposited the way the solver deposits
+      if (rho) for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++)
+        dens[(i * N + j) * N + k] = rho[(k * N + j) * N + i] * 1024;
+      pot = benchMeshGrid(readTarget(pmPotA, 0, 0, N * PM_TX, N * PM_TY), 1);
+    }
+    const pm = state.pm && typeof state.pm === 'object' ? state.pm : { solver: 'jacobi', assign: 'ngp' };
+    const meta = {
+      format: 'resonance-chamber snapshot 1',
+      savedAt: new Date().toISOString(),
+      particles: total, texSize: S, step: step, simTime: +simTime.toFixed(4),
+      tick: TICK, substeps: typeof effectiveSubsteps === 'function' ? effectiveSubsteps() : (state.substeps || 1), ceiling: 500,
+      EXTENT: EXTENT, PM_HALF: PM_HALF_JS, PM_CELL: BENCH_CELL, PM_N: N, SG_GAIN: SG_GAIN, PM_ITERS: PM_ITERS,
+      selfgrav: state.cosmos.selfgrav, solver: pm.solver, assign: pm.assign,
+      force: 'F = -selfgrav * SG_GAIN * (phi[c+1] - phi[c-1]) / (2 * PM_CELL) per axis at the particle\'s cell c = floor(p / PM_CELL + 16) (cloud-in-cell: the same over its eight cells, weighted); phi solves sum_6nbr(phi) - 6*phi = count/mean - 1 with phi = 0 outside the mesh, by PM_ITERS warm-started Jacobi sweeps per tick (solver jacobi) or an exact sine-transform solve (solver exact); |F| is capped at the ceiling; v = (v + F dt) exp(-damping dt), p = p + v dt, dt = tick / substeps',
+      layout: {
+        positions: 'row i = particle i, columns x y z, chamber units (the wall is at r = EXTENT)',
+        velocities: 'row i = particle i, columns vx vy vz, chamber units per second',
+        density: 'particles per cell, index [ix][iy][iz]; cell centre = (index + 0.5 - 16) * PM_CELL; zeros when self-gravity is off',
+        potential: 'the solver\'s phi when saved, same index order as the density, cell units; zeros when self-gravity is off'
+      },
+      state: JSON.parse(JSON.stringify(state))
+    };
+    const bytes = benchZip([
+      { name: 'positions.npy', data: benchNpy(P, [total, 3]) },
+      { name: 'velocities.npy', data: benchNpy(V, [total, 3]) },
+      { name: 'density.npy', data: benchNpy(dens, [N, N, N]) },
+      { name: 'potential.npy', data: benchNpy(pot, [N, N, N]) },
+      { name: 'meta.json', data: new TextEncoder().encode(JSON.stringify(meta, null, 1)) }
+    ]);
+    say('Saving…');
+    await saveBytes('resonance-chamber-snapshot.npz', bytes);
+    say('Saved ' + fmtCount(total) + ' positions and velocities, the 32×32×32 density and potential'
+      + (gravity ? '' : ' (zeros: self-gravity is off)') + ', and meta.json. Load it with numpy.');
+  } catch (err) {
+    if (err && err.code === 'viewer') say(err.message);
+    else say('Could not save the file' + (err && err.message ? ': ' + err.message : '') + '.');
+  }
+}
+$('btn-npz').addEventListener('click', () => exportSnapshotNpz('export-status'));
+$('btn-lab-npz').addEventListener('click', () => exportSnapshotNpz('lab-export-status'));
+
+/* --- an exact solver for the page's Poisson operator: the 7-point
+       Laplacian in cell units with the potential pinned to zero one cell
+       outside the mesh. Its eigenvectors are the sines
+       sin(pi (i+1)(a+1) / (N+1)), so a solve is three one-dimensional sine
+       transforms, a division by the eigenvalue sum, three transforms back.
+       For two point sources over a uniform background the transform of
+       the source is an outer product of sines, and the potential at one
+       cell is a sum over the modes: that is the cheap path used to sample
+       the pull around the orbit. --- */
+const benchPoisson = (() => {
+  const N = PM_N, M = N * N * N, norm = Math.pow(2 / (N + 1), 3);
+  const S = new Float64Array(N * N), lam = new Float64Array(N), invL = new Float64Array(M);
+  for (let a = 0; a < N; a++) {
+    lam[a] = 2 * Math.cos(Math.PI * (a + 1) / (N + 1)) - 2;
+    for (let i = 0; i < N; i++) S[a * N + i] = Math.sin(Math.PI * (i + 1) * (a + 1) / (N + 1));
+  }
+  for (let c = 0; c < N; c++) for (let b = 0; b < N; b++) for (let a = 0; a < N; a++)
+    invL[(c * N + b) * N + a] = norm / (lam[a] + lam[b] + lam[c]);
+  let bgHat = null;                      // the transform of the -1 background, over the eigenvalue
+  const t1 = new Float64Array(M), t2 = new Float64Array(M);
+  function transform(src) {              // grids indexed (k*N + j)*N + i; the transform is its own inverse up to norm
+    const out = new Float64Array(M);
+    for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) {
+      const base = (k * N + j) * N;
+      for (let a = 0; a < N; a++) { let s = 0; const row = a * N; for (let i = 0; i < N; i++) s += S[row + i] * src[base + i]; t1[base + a] = s; }
+    }
+    for (let k = 0; k < N; k++) for (let i = 0; i < N; i++) {
+      for (let b = 0; b < N; b++) { let s = 0; const row = b * N; for (let j = 0; j < N; j++) s += S[row + j] * t1[(k * N + j) * N + i]; t2[(k * N + b) * N + i] = s; }
+    }
+    for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+      for (let c = 0; c < N; c++) { let s = 0; const row = c * N; for (let k = 0; k < N; k++) s += S[row + k] * t2[(k * N + j) * N + i]; out[(c * N + j) * N + i] = s; }
+    }
+    return out;
+  }
+  function solve(delta) {
+    const d = transform(delta);
+    for (let m = 0; m < M; m++) d[m] *= invL[m];
+    return transform(d);
+  }
+  function source(cells, weight) {       // -1 everywhere, +weight at each source cell
+    const d = new Float64Array(M).fill(-1);
+    for (const c of cells) d[(c[2] * N + c[1]) * N + c[0]] += weight;
+    return d;
+  }
+  function laplacianResidual(phi, delta) {   // max |L phi - delta| / max |delta|, with phi = 0 outside
+    const at = (i, j, k) => (i < 0 || j < 0 || k < 0 || i >= N || j >= N || k >= N) ? 0 : phi[(k * N + j) * N + i];
+    let worst = 0, scale = 0;
+    for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+      const L = at(i + 1, j, k) + at(i - 1, j, k) + at(i, j + 1, k) + at(i, j - 1, k) + at(i, j, k + 1) + at(i, j, k - 1) - 6 * at(i, j, k);
+      const d = delta[(k * N + j) * N + i];
+      worst = Math.max(worst, Math.abs(L - d)); scale = Math.max(scale, Math.abs(d));
+    }
+    return worst / scale;
+  }
+  function modes(cells, weight, hat) {   // Phi-hat for the background plus point sources; hat is a scratch grid
+    if (!bgHat) { bgHat = transform(new Float64Array(M).fill(-1)); for (let m = 0; m < M; m++) bgHat[m] *= invL[m]; }
+    hat.set(bgHat);
+    for (const c of cells) {
+      const px = c[0] * N, py = c[1] * N, pz = c[2] * N;
+      for (let cc = 0; cc < N; cc++) {
+        const wz = weight * S[pz + cc];
+        for (let b = 0; b < N; b++) {
+          const wyz = wz * S[py + b], base = (cc * N + b) * N;
+          for (let a = 0; a < N; a++) hat[base + a] += wyz * S[px + a] * invL[base + a];
+        }
+      }
+    }
+    return hat;
+  }
+  function potAt(hat, i, j, k) {         // the potential at one cell from its modes; zero outside the mesh
+    if (i < 0 || j < 0 || k < 0 || i >= N || j >= N || k >= N) return 0;
+    const px = i * N, py = j * N, pz = k * N;
+    let s = 0;
+    for (let cc = 0; cc < N; cc++) {
+      const wz = S[pz + cc];
+      for (let b = 0; b < N; b++) {
+        const wyz = wz * S[py + b], base = (cc * N + b) * N;
+        let r = 0;
+        for (let a = 0; a < N; a++) r += S[px + a] * hat[base + a];
+        s += wyz * r;
+      }
+    }
+    return s;
+  }
+  function gridAt(phi, i, j, k) {
+    return (i < 0 || j < 0 || k < 0 || i >= N || j >= N || k >= N) ? 0 : phi[(k * N + j) * N + i];
+  }
+  // the page's gather: -(phi[c+1] - phi[c-1]) / (2 cell) per axis, at cell c, per unit selfgrav*SG_GAIN
+  function forceFromGrid(phi, c) {
+    return [-(gridAt(phi, c[0] + 1, c[1], c[2]) - gridAt(phi, c[0] - 1, c[1], c[2])) / (2 * BENCH_CELL),
+            -(gridAt(phi, c[0], c[1] + 1, c[2]) - gridAt(phi, c[0], c[1] - 1, c[2])) / (2 * BENCH_CELL),
+            -(gridAt(phi, c[0], c[1], c[2] + 1) - gridAt(phi, c[0], c[1], c[2] - 1)) / (2 * BENCH_CELL)];
+  }
+  function forceFromModes(hat, c) {
+    return [-(potAt(hat, c[0] + 1, c[1], c[2]) - potAt(hat, c[0] - 1, c[1], c[2])) / (2 * BENCH_CELL),
+            -(potAt(hat, c[0], c[1] + 1, c[2]) - potAt(hat, c[0], c[1] - 1, c[2])) / (2 * BENCH_CELL),
+            -(potAt(hat, c[0], c[1], c[2] + 1) - potAt(hat, c[0], c[1], c[2] - 1)) / (2 * BENCH_CELL)];
+  }
+  return { N, M, solve, source, laplacianResidual, modes, forceFromGrid, forceFromModes, scratch: () => new Float64Array(M) };
+})();
+
+/* --- the experiment --- */
+// n particles per clump, self-gravity s, the clumps d cells either side of the centre of the middle cell,
+// run seconds per solver, a sample every `sample` s, `warm` solves (six sweeps each) before the six-sweep
+// run so the potential starts converged, `angles` samples of the pull around the starting circle
+const BENCH_ORBIT = { n: 512, s: 0.05, d: 4, run: 10, sample: 0.25, warm: 400, angles: 72 };
+const BENCH_SOLVER_NAME = { jacobi: 'six sweeps', exact: 'Exact' };
+const bench = {
+  on: false, done: false, hasPm: false, viewerSolver: null, phases: [], phase: -1, results: {},
+  t0: 0, lastSim: -1, ticks: 0, crossings: 0, cellA: null, cellB: null, samples: [], clampSamples: 0, spread: 0,
+  total: 0, half: 0, weight: 0, rowA: 0, rowB: 0,
+  O: [0, 0, 0], pA: [0, 0, 0], pB: [0, 0, 0], vA: [0, 0, 0], vB: [0, 0, 0], e1: [1, 0, 0], e2: [0, 0, 1],
+  r0: 0, Tpred: NaN, vcirc: NaN, Fr: NaN, FA: [0, 0, 0], FB: [0, 0, 0], band: [NaN, NaN], residual: NaN, modeCheck: NaN,
+  jumpsPred: NaN, valid: true, note: '', hat: null
+};
+const benchCellOf = p => p.map(x => Math.floor((x / PM_HALF_JS * 0.5 + 0.5) * PM_N));   // the shader's pmCellOf
+const benchCC = u => (u / PM_N - 0.5) * 2 * PM_HALF_JS;   // chamber coordinate of continuous cell coordinate u (cell i spans [i, i+1))
+const benchLen = a => Math.hypot(a[0], a[1], a[2]);
+
+function benchPredict() {
+  const N = PM_N, s = BENCH_ORBIT.s, d = BENCH_ORBIT.d, h = N / 2;
+  const cA = [h - d, h, h], cB = [h + d, h, h];
+  const O = [benchCC(h + 0.5), benchCC(h + 0.5), benchCC(h + 0.5)];   // the centre of cell (16,16,16): the orbit's centre
+  bench.O = O;
+  bench.pA = [benchCC(cA[0] + 0.5), O[1], O[2]];
+  bench.pB = [benchCC(cB[0] + 0.5), O[1], O[2]];
+  // the exact potential of both clumps and the background, and its own checks
+  const src = benchPoisson.source([cA, cB], bench.weight);
+  const phi = benchPoisson.solve(src);
+  bench.residual = benchPoisson.laplacianResidual(phi, src);
+  const hat = bench.hat || (bench.hat = benchPoisson.scratch());
+  benchPoisson.modes([cA, cB], bench.weight, hat);
+  const Fg = benchPoisson.forceFromGrid(phi, cB), Fm = benchPoisson.forceFromModes(hat, cB);
+  bench.modeCheck = Math.max(...Fg.map((f, i) => Math.abs(f - Fm[i]))) / benchLen(Fg);
+  bench.FA = benchPoisson.forceFromGrid(phi, cA).map(f => f * SG_GAIN * s);
+  bench.FB = Fg.map(f => f * SG_GAIN * s);
+  // circular orbit of radius d cells about O under the pull on the +x clump (its partner's pull differs by
+  // about one percent: the two cells are not mirror images in the box, see the note under the readouts)
+  const r = d * BENCH_CELL, Fr = -bench.FB[0];
+  const vcirc = Math.sqrt(Fr * r);
+  bench.r0 = r; bench.Fr = Fr; bench.vcirc = vcirc; bench.Tpred = 2 * Math.PI * r / vcirc;
+  bench.jumpsPred = 2 * vcirc * TICK / BENCH_CELL;   // cells crossed per tick, both clumps together
+  bench.vA = [0, 0, -vcirc]; bench.vB = [0, 0, vcirc];   // the orbit runs in the x-z plane
+  // the cell-jump band: the exact radial pull sampled around the starting circle, the pair placed cell by
+  // cell as the orbit places it (mirror images through O), from the modes of two point sources
+  let fmin = Infinity, fmax = -Infinity;
+  for (let k = 0; k < BENCH_ORBIT.angles; k++) {
+    const th = 2 * Math.PI * k / BENCH_ORBIT.angles, cs = Math.cos(th), sn = Math.sin(th);
+    const q = [O[0] + r * cs, O[1], O[2] + r * sn], q2 = [2 * O[0] - q[0], O[1], 2 * O[2] - q[2]];
+    const c1 = benchCellOf(q), c2 = benchCellOf(q2);
+    benchPoisson.modes([c1, c2], bench.weight, hat);
+    const F = benchPoisson.forceFromModes(hat, c1);
+    const fr = -(F[0] * cs + F[2] * sn) * SG_GAIN * s;
+    fmin = Math.min(fmin, fr); fmax = Math.max(fmax, fr);
+  }
+  bench.band = [Math.sqrt(Fr / fmax), Math.sqrt(Fr / fmin)];
+}
+function benchPlaceClumps() {
+  // all n particles of a clump at one point at the centre of its cell, one velocity: a rigid body under
+  // nearest-cell gravity. Rows 0.. hold clump A, the rest clump B; the w channels are the page's (1 / not on the ceiling)
+  const S = texSize, half = bench.half;
+  const prow = new Float32Array(S * 4), vrow = new Float32Array(S * 4);
+  for (let row = 0; row < S; row++) {
+    for (let x = 0; x < S; x++) {
+      const i = row * S + x, A = i < half, p = A ? bench.pA : bench.pB, v = A ? bench.vA : bench.vB, j = x * 4;
+      prow[j] = p[0]; prow[j + 1] = p[1]; prow[j + 2] = p[2]; prow[j + 3] = 1;
+      vrow[j] = v[0]; vrow[j + 1] = v[1]; vrow[j + 2] = v[2]; vrow[j + 3] = 0;
+    }
+    writeRow(posA, row, prow, S); writeRow(velA, row, vrow, S);
+    writeRow(posB, row, prow, S); writeRow(velB, row, vrow, S);
+  }
+  lerpOK = false;
+}
+function benchStartOrbit() {
+  const hasPm = !!(state.pm && typeof state.pm === 'object' && 'solver' in state.pm);
+  bench.hasPm = hasPm;
+  bench.viewerSolver = hasPm ? state.pm.solver : null;
+  bench.phases = hasPm ? ['jacobi', 'exact'] : ['jacobi'];
+  bench.results = {}; bench.done = false; bench.on = false; bench.valid = true; bench.note = '';
+  // 1. the state: nothing acts but self-gravity. The field slider's floor is
+  //    0.01x, so the field is set to 10^-400 = 0 on the state (the label says
+  //    so); damping 0 is below the slider's floor too and is set the same way.
+  const next = JSON.parse(JSON.stringify(DEFAULTS));
+  deepPatch(next, {
+    particles: 2 * BENCH_ORBIT.n, stepsPerSec: 0.02, smooth: true, fieldForm: 'wells', fieldExp: -400, damping: 0,
+    overlays: { c3: false, c6: false, lattice: false, spiral: false, fifths: false, equal: false, trefoil: false, torus: false, hopf: false },
+    centers: { on: false }, vessel: { form: 'off' },
+    cosmos: { boundary: 'reflect', hubble: 0, epoch: false, mag: 0, twist: false, aniso: 0, helix: 0, cascade: 'out', selfgrav: BENCH_ORBIT.s, gainloss: 0 },
+    substeps: 1, lorentz: 'euler', lab: { on: false }, autoOrbit: false
+  });
+  next.quality = state.quality; next.colorMode = state.colorMode; next.guides = state.guides;
+  next.sound = JSON.parse(JSON.stringify(state.sound)); next.sacred = state.sacred;
+  if (hasPm) next.pm = { solver: 'jacobi', assign: 'ngp' };   // nearest cell, forced: the clumps stay rigid only under it
+  applyPreset({ state: next, step: 0, cam: { az: 0.6, el: 1.15, dist: 24 } });
+  const vf = $('val-field'); if (vf) vf.textContent = 'off (0, set by the experiment)';
+  bench.total = Math.min(state.particles, texSize * texSize); bench.half = bench.total >> 1;
+  bench.weight = PM_N * PM_N * PM_N * bench.half / bench.total;   // a clump cell's contrast above the -1 background (16384 here)
+  bench.rowA = 0; bench.rowB = Math.ceil(bench.half / texSize);   // one row of each clump is read back
+  // 2. the prediction, then the first run
+  benchPredict();
+  benchBeginPhase(0);
+  // 3. the panel
+  document.querySelectorAll('#lab-exp-seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.exp === 'orbit')));
+  const g = $('orbit-group'); if (g) g.style.display = '';
+  const hint = $('lab-exp-hint');
+  if (hint) hint.textContent = 'Two clumps of ' + bench.half.toLocaleString() + ' particles each, four cells either side of the centre of the middle mesh cell, '
+    + 'set moving at the speed that makes a circular orbit under the exact pull of the page’s own mesh (pull ' + bench.Fr.toFixed(2)
+    + ', far below the ceiling of 500; speed ' + bench.vcirc.toFixed(2) + '; predicted period ' + bench.Tpred.toFixed(2) + ' s). '
+    + 'Nothing else acts: field off, no damping, no expansion, no coupling, no epochs, nearest-cell mesh (forced: every particle in a cell feels the same pull, so each clump moves as one body), '
+    + 'and the instruments stay off, because their twin rows would nudge particles off the clumps. '
+    + (hasPm ? 'The same pair runs twice from the same start: ten seconds under six sweeps, with the potential already settled on the starting cells, then ten seconds under Exact; your solver choice comes back at the end. '
+             : 'The pair runs ten seconds under the six-sweep solver, with the potential already settled on the starting cells. ')
+    + 'Watch whether the pair keeps its orbit. Pick any scenario to leave.';
+  const sh = $('scenario-hint'); if (sh) sh.textContent = '';
+  benchReport();
+}
+function benchBeginPhase(i) {
+  bench.phase = i;
+  const solver = bench.phases[i];
+  if (bench.hasPm) { state.pm.solver = solver; syncPm(); }
+  benchPlaceClumps();
+  // the potential starts converged on the starting cells: 2,400 sweeps under six sweeps, one solve under Exact
+  const warm = solver === 'exact' ? 1 : BENCH_ORBIT.warm;
+  for (let k = 0; k < warm; k++) pmSolve();
+  bench.on = true; bench.t0 = simTime; bench.lastSim = simTime; bench.ticks = 0; bench.crossings = 0;
+  bench.samples = []; bench.clampSamples = 0; bench.spread = 0;
+  bench.cellA = benchCellOf(bench.pA); bench.cellB = benchCellOf(bench.pB);
+  benchSample();
+}
+function benchStateOk() {
+  const c = state.cosmos;
+  if (velMat.uniforms.amp.value !== 0) return 'the field was switched on';
+  if (c.selfgrav !== BENCH_ORBIT.s) return 'self-gravity was moved';
+  if (state.damping !== 0) return 'damping was moved';
+  if (c.mag !== 0 || c.hubble !== 0 || c.helix !== 0 || c.epoch || state.centers.on || (state.substeps || 1) !== 1) return 'another setting was changed';
+  if (bench.hasPm && (state.pm.assign !== 'ngp' || state.pm.solver !== bench.phases[bench.phase])) return 'the mesh choice was changed';
+  if (state.particles !== bench.total || texSize * texSize < bench.total || !posA) return 'the particle count changed';
+  return '';
+}
+function benchStop(reason) {
+  if (!bench.on) return;
+  bench.on = false; bench.valid = false; bench.note = reason || '';
+  if (bench.hasPm && bench.viewerSolver && state.pm) { state.pm.solver = bench.viewerSolver; syncPm(); }
+  benchReport();
+}
+function benchSample() {
+  const S = texSize, O = bench.O;
+  const pa = readTarget(posA, 0, bench.rowA, S, 1), pb = readTarget(posA, 0, bench.rowB, S, 1);
+  const va = readTarget(velA, 0, bench.rowA, S, 1), vb = readTarget(velA, 0, bench.rowB, S, 1);
+  const mean = p => { const m = [0, 0, 0]; for (let x = 0; x < S; x++) { m[0] += p[x * 4]; m[1] += p[x * 4 + 1]; m[2] += p[x * 4 + 2]; } return m.map(v => v / S); };
+  const A = mean(pa), B = mean(pb);
+  let spread = 0, clampN = 0;
+  for (let x = 0; x < S; x++) {
+    spread = Math.max(spread, Math.hypot(pa[x * 4] - A[0], pa[x * 4 + 1] - A[1], pa[x * 4 + 2] - A[2]),
+                              Math.hypot(pb[x * 4] - B[0], pb[x * 4 + 1] - B[1], pb[x * 4 + 2] - B[2]));
+    if (va[x * 4 + 3] > 0.5) clampN++;
+    if (vb[x * 4 + 3] > 0.5) clampN++;
+  }
+  const t = simTime - bench.t0, sep = [B[0] - A[0], B[1] - A[1], B[2] - A[2]];
+  bench.samples.push({ t, sep, dist: benchLen(sep), mid: benchLen([(A[0] + B[0]) / 2 - O[0], (A[1] + B[1]) / 2 - O[1], (A[2] + B[2]) / 2 - O[2]]), clamp: clampN / (2 * S) });
+  bench.spread = Math.max(bench.spread, spread);
+  if (clampN) bench.clampSamples++;
+}
+function benchFit(samples) {
+  // the unwrapped angle of the separation vector in the orbit plane against time, least squares; the
+  // separation's slope times the period is the drift per orbit; a merge is a separation under one cell
+  const n = samples.length;
+  if (n < 2) return { T: NaN, drift: NaN, merge: NaN, orbits: 0, n: 0 };
+  const d0 = samples[0].dist, th = new Float64Array(n);
+  let prev = 0;
+  for (let i = 0; i < n; i++) {
+    const s = samples[i].sep;
+    let a = Math.atan2(s[0] * bench.e2[0] + s[1] * bench.e2[1] + s[2] * bench.e2[2], s[0] * bench.e1[0] + s[1] * bench.e1[1] + s[2] * bench.e1[2]);
+    if (i) { while (a - prev > Math.PI) a -= 2 * Math.PI; while (a - prev < -Math.PI) a += 2 * Math.PI; }
+    th[i] = a; prev = a;
+  }
+  let merge = NaN, m = n;
+  for (let i = 0; i < n; i++) if (samples[i].dist < BENCH_CELL) { merge = samples[i].t; break; }
+  for (let i = 0; i < n; i++) if (samples[i].dist < 0.5 * d0) { m = i; break; }   // fit only while the pair is still a pair
+  const orbits = Math.abs(th[Math.max(0, m - 1)]) / (2 * Math.PI);
+  if (m < 3 || orbits < 0.25) return { T: NaN, drift: NaN, merge, orbits, n: m };   // a plunge before a quarter orbit has no period
+  let st = 0, sth = 0, sd = 0, stt = 0, stth = 0, std = 0;
+  for (let i = 0; i < m; i++) {
+    const t = samples[i].t;
+    st += t; sth += th[i]; sd += samples[i].dist; stt += t * t; stth += t * th[i]; std += t * samples[i].dist;
+  }
+  const den = m * stt - st * st;
+  const slope = (m * stth - st * sth) / den, dslope = (m * std - st * sd) / den;
+  const T = 2 * Math.PI / Math.abs(slope);
+  return { T, drift: dslope * T, merge, orbits, n: m };
+}
+function benchEndPhase() {
+  const solver = bench.phases[bench.phase], fit = benchFit(bench.samples);
+  let centre = 0;
+  for (const s of bench.samples) centre = Math.max(centre, s.mid);
+  const last = bench.samples[bench.samples.length - 1];
+  bench.results[solver] = {
+    T: fit.T, ratio: fit.T / bench.Tpred, drift: fit.drift, merge: fit.merge, orbits: fit.orbits, fitted: fit.n,
+    jumps: bench.crossings / Math.max(1, bench.ticks), ticks: bench.ticks, centre, clamp: bench.clampSamples / bench.samples.length,
+    spread: bench.spread, t: last.t, sep0: bench.samples[0].dist, sep: last.dist, valid: bench.valid, note: bench.note
+  };
+  bench.on = false;
+  if (bench.valid && bench.phase + 1 < bench.phases.length) benchBeginPhase(bench.phase + 1);
+  else {
+    bench.done = true;
+    if (bench.hasPm) { state.pm.solver = bench.viewerSolver; syncPm(); saveState(); }
+  }
+}
+function benchTick() {
+  if (!bench.on) return;
+  if (simTime < bench.lastSim) { benchStop('a scenario was loaded'); return; }
+  const bad = benchStateOk();
+  if (bad) { benchStop(bad); return; }
+  bench.lastSim = simTime; bench.ticks++;
+  // one texel of each clump: which cell is it in now?
+  const a = readTarget(posA, 0, bench.rowA, 1, 1), b = readTarget(posA, 0, bench.rowB, 1, 1);
+  const ca = benchCellOf([a[0], a[1], a[2]]), cb = benchCellOf([b[0], b[1], b[2]]);
+  if (ca[0] !== bench.cellA[0] || ca[1] !== bench.cellA[1] || ca[2] !== bench.cellA[2]) bench.crossings++;
+  if (cb[0] !== bench.cellB[0] || cb[1] !== bench.cellB[1] || cb[2] !== bench.cellB[2]) bench.crossings++;
+  bench.cellA = ca; bench.cellB = cb;
+  const every = Math.max(1, Math.round(BENCH_ORBIT.sample / TICK));
+  if (bench.ticks % every === 0) {
+    benchSample();
+    if (bench.spread > 1e-3) { benchStop('the clumps broke up (the swarm was reseeded or a force acted on part of it)'); return; }
+    if (simTime - bench.t0 + 1e-9 >= BENCH_ORBIT.run) benchEndPhase();
+    benchReport();
+  }
+}
+function benchReport() {
+  const show = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
+  const f2 = v => Number.isFinite(v) ? v.toFixed(2) : '–';
+  const R = bench.results, live = bench.on ? bench.phases[bench.phase] : null;
+  const t = bench.samples.length ? bench.samples[bench.samples.length - 1].t : 0;
+  const liveFit = live ? benchFit(bench.samples) : null;
+  const get = (solver, key) => {
+    if (R[solver]) return R[solver][key];
+    if (live === solver) {
+      if (key === 'T') return liveFit.T; if (key === 'ratio') return liveFit.T / bench.Tpred; if (key === 'drift') return liveFit.drift;
+      if (key === 'merge') return liveFit.merge; if (key === 'jumps') return bench.ticks ? bench.crossings / bench.ticks : NaN;
+      if (key === 'centre') { let c = 0; for (const s of bench.samples) c = Math.max(c, s.mid); return c; }
+    }
+    return NaN;
+  };
+  const per = solver => { const T = get(solver, 'T'), m = get(solver, 'merge'); return Number.isFinite(T) ? f2(T) + ' s' : (Number.isFinite(m) ? 'none: merged' : '–'); };
+  const pair = key => (bench.hasPm ? f2(get('jacobi', key)) + ' / ' + f2(get('exact', key)) : f2(get('jacobi', key)));
+  show('orbit-T-j', per('jacobi'));
+  show('orbit-T-e', bench.hasPm ? per('exact') : 'no exact solver here');
+  show('orbit-Tpred', f2(bench.Tpred) + ' s');
+  show('orbit-ratio-j', f2(get('jacobi', 'ratio')));
+  show('orbit-ratio-e', bench.hasPm ? f2(get('exact', 'ratio')) : '–');
+  show('orbit-band', f2(bench.band[0]) + '–' + f2(bench.band[1]));
+  show('orbit-drift-j', f2(get('jacobi', 'drift')));
+  show('orbit-drift-e', bench.hasPm ? f2(get('exact', 'drift')) : '–');
+  const mergeTxt = solver => { const m = get(solver, 'merge'); return Number.isFinite(m) ? f2(m) + ' s' : (R[solver] ? 'no' : '–'); };
+  show('orbit-merge', bench.hasPm ? mergeTxt('jacobi') + ' / ' + mergeTxt('exact') : mergeTxt('jacobi'));
+  show('orbit-jumps', pair('jumps') + ' · ' + f2(bench.jumpsPred) + ' expected');
+  show('orbit-centre', pair('centre'));
+  show('orbit-time', f2(t) + ' s' + (live ? ' under ' + BENCH_SOLVER_NAME[live] : ''));
+  show('orbit-pred', bench.samples.length || bench.done ? 'Exact pull at the start: ' + f2(bench.Fr) + ' on the clump at cell 20 and ' + f2(Math.abs(bench.FA[0]))
+    + ' on the one at cell 12 (cells 12 and 20 are not mirror images of each other in the 32-cell box: their wall images differ). Orbit speed '
+    + f2(bench.vcirc) + ', radius ' + f2(bench.r0) + ' (4 cells), ' + (bench.vcirc * TICK / BENCH_CELL).toFixed(2) + ' cells per tick. Residual of the exact solve '
+    + (Number.isFinite(bench.residual) ? bench.residual.toExponential(1) : '–') + '.' : 'Not running.');
+  const name = s => BENCH_SOLVER_NAME[s];
+  const clause = solver => {
+    const r = R[solver];
+    if (!r) return live === solver ? 'Running under ' + name(solver) + ': ' + f2(t) + ' of ' + BENCH_ORBIT.run + ' s.' : '';
+    if (Number.isFinite(r.merge)) return 'Under ' + name(solver) + ' the pair merged at ' + f2(r.merge) + ' s' + (r.orbits < 1 ? ', before one orbit' : '') + '.';
+    if (Number.isFinite(r.T)) {
+      const inside = r.ratio >= bench.band[0] - 0.02 && r.ratio <= bench.band[1] + 0.02;
+      return 'Under ' + name(solver) + ' the pair kept orbiting for ' + f2(r.t) + ' s: period ' + f2(r.T) + ' s against ' + f2(bench.Tpred)
+        + ' s predicted, ratio ' + f2(r.ratio) + ', ' + (inside ? 'inside' : 'outside') + ' the band the cell jumps allow; drift ' + f2(r.drift) + ' per orbit.';
+    }
+    return 'Under ' + name(solver) + ' the pair neither orbited nor merged in ' + f2(r.t) + ' s.';
+  };
+  let verdict;
+  if (!bench.valid) verdict = 'Stopped: ' + bench.note + '. Click the experiment to run it again.';
+  else {
+    verdict = [clause('jacobi'), bench.hasPm ? clause('exact') : ''].filter(Boolean).join(' ');
+    if (bench.done) {
+      const j = R.jacobi, e = R.exact;
+      if (j && e && Number.isFinite(j.merge) && !Number.isFinite(e.merge)) verdict += ' The solver, not gravity, undid the first orbit: with six sweeps a tick the potential trails the moving clumps, so each clump is pulled back toward where it just was.';
+      else if (j && e && Number.isFinite(j.merge) && Number.isFinite(e.merge)) verdict += ' Both merged: at these settings the mesh itself undoes the orbit, and this run does not separate the solver from the lattice.';
+      else if (j && e && !Number.isFinite(j.merge) && !Number.isFinite(e.merge)) verdict += ' Both solvers kept the pair apart here.';
+      else if (j && !e && Number.isFinite(j.merge)) verdict += ' A merge under six sweeps means the potential trails the moving clumps; an exact solve of the same mesh keeps the pair orbiting.';
+    }
+  }
+  show('orbit-verdict', verdict);
+  const g = $('orbit-group');
+  if (g) g.dataset.result = JSON.stringify({
+    t, on: bench.on, done: bench.done, valid: bench.valid, note: bench.note, live, phases: bench.phases, hasPm: bench.hasPm,
+    Tpred: bench.Tpred, vcirc: bench.vcirc, Fr: bench.Fr, FA: bench.FA, FB: bench.FB, r0: bench.r0, band: bench.band, jumpsPred: bench.jumpsPred,
+    residual: bench.residual, modeCheck: bench.modeCheck, weight: bench.weight, total: bench.total, results: R
+  });
+}
+
+/* ================================================================
+   Mode dimer: the current mode and its quarter-phase partner as one
+   coupled pair with gain and loss (Sequence panel; readouts in the Lab).
+
+   Partner 1 is the figure as drawn (azimuthal phase = the twist).
+   Partner 2 is the same figure a quarter phase on: every cos(m phi -
+   twist) term becomes sin(m phi - twist). Same (n, l), same shell, same
+   energy: the cavity cannot tell them apart, so mixing them changes
+   nothing radial or polar. The pair's complex amplitudes a = (a1, a2)
+   obey
+       i da/dt = H a,   H = [[D/2 + i g, k], [k, -D/2 - i g]]
+   k: coupling, g: gain on partner 1 and the same loss on partner 2, D:
+   detuning, all per second of chamber time. Integrated here on the CPU
+   every tick: RK4, four substeps, the parameters sampled at the start,
+   middle and end of each substep; |a1|^2 + |a2|^2 is set back to 1 after
+   every substep (the equation is linear, so the mix is untouched; only
+   the overall size, which would grow or shrink like exp(g t), is held).
+   Eigenvalues +-sqrt(k^2 + (D/2 + i g)^2): at D = 0 real below g = k,
+   imaginary above, and both zero at g = k, the exceptional point, where
+   the two eigenvectors also merge into one.
+
+   The loop drives (D, g) once around that point every LOOP_T seconds:
+   D = k (LOOP_DC + LOOP_DR sin th), g = k (1 - cos th), an ellipse that
+   touches the no-gain line g = 0 at its start and end, where the two
+   eigenstates are a partner-1-heavy and a partner-2-heavy mix (shares
+   cos^2 and sin^2 of atan(2 / LOOP_DC) / 2: 0.854 and 0.146). 'cw' runs
+   it clockwise (th decreasing), 'ccw' counter-clockwise, 'flat' sweeps
+   the same D with g held at 0 (the Hermitian control). Predicted by an
+   independent numpy integration of the same equation (k = 1, 20 s):
+   clockwise ends on the partner-1-heavy mix (share 0.858),
+   counter-clockwise on the partner-2-heavy one (0.158), from any start
+   (the two ends differ by 32x in |a1|^2 / |a2|^2); flat brings an
+   eigenstate back with overlap 0.993 (Landau-Zener leak 1.3e-4 per
+   crossing). The end shares stay within 0.01 of these for periods from
+   10 to 40 s.
+
+   What the particles feel (uDimer = on, c1, c2, c3). Chladni form: the
+   time-averaged intensity of the pair, |a1 S1 + a2 S2|^2 = c1 S1^2 +
+   c2 S2^2 + 2 c3 S1 S2 with (c1, c2, c3) = (|a1|^2, |a2|^2, Re a1 a2*),
+   descended like S^2 is; exact, and free of the pair's overall phase.
+   Wells form: the still part of the pair, w1 P1 + w2 P2 with w = Re(a
+   e^{-i phase}), phase = arg(a1^2 + a2^2) / 2 (the pair's major axis), so
+   an eigenstate is a still figure and the field never falls below 1/sqrt2
+   of its off strength; a purely rotating pair (as at the exceptional
+   point) has no axis and keeps the last one. Off: uDimer.x = 0 and the
+   shader takes its original path; on with a = (1, 0) the weights are
+   (1, 0, 0) and the force is the same.
+   ================================================================ */
+const DIMER = {
+  LOOP_T: 20, LOOP_DC: 2, LOOP_DR: 3, SUB: 4,
+  a: [1, 0, 0, 0],            // re a1, im a1, re a2, im a2 (unit total)
+  theta: 0, loops: 0, startA: [1, 0, 0, 0], last: null,
+  phase: 0, w: [1, 0],        // wells: the major-axis phase and the two pattern weights
+  share: NaN, sharePred: NaN, // matter on partner 1: read off the mesh / asked by the weights
+  live: [1, 0, 0], eig: [1, 0], ep: 1, drawAt: -1
+};
+function dimerEig(k, g, D) {
+  // +sqrt(z), z = k^2 + (D/2 + i g)^2, principal root; the other eigenvalue is its negative
+  const zr = D * D / 4 - g * g + k * k, zi = D * g;
+  const r = Math.hypot(zr, zi);
+  const re = Math.sqrt(Math.max(0, (r + zr) / 2));
+  const im = (zi < 0 ? -1 : 1) * Math.sqrt(Math.max(0, (r - zr) / 2));
+  return [re, im];
+}
+function dimerDeriv(a, p) {   // a' = -i H a ; a = [re a1, im a1, re a2, im a2], p = [k, g, D]
+  const k = p[0], g = p[1], D2 = p[2] / 2;
+  const r1 = a[0], i1 = a[1], r2 = a[2], i2 = a[3];
+  const h1r = D2 * r1 - g * i1 + k * r2, h1i = D2 * i1 + g * r1 + k * i2;   // (H a)_1
+  const h2r = k * r1 - D2 * r2 + g * i2, h2i = k * i1 - D2 * i2 - g * r2;   // (H a)_2
+  return [h1i, -h1r, h2i, -h2r];
+}
+function dimerRK4(a, p0, p1, p2, h) {   // parameters at the start, middle and end of the step; unit total after
+  const k1 = dimerDeriv(a, p0);
+  const k2 = dimerDeriv(a.map((v, i) => v + 0.5 * h * k1[i]), p1);
+  const k3 = dimerDeriv(a.map((v, i) => v + 0.5 * h * k2[i]), p1);
+  const k4 = dimerDeriv(a.map((v, i) => v + h * k3[i]), p2);
+  const out = a.map((v, i) => v + (h / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+  const n = Math.hypot(out[0], out[1], out[2], out[3]) || 1;
+  return out.map(v => v / n);
+}
+function dimerLoopDir() {
+  const L = state.dimer.loop;
+  return L === 'cw' ? -1 : (L === 'ccw' || L === 'flat') ? 1 : 0;
+}
+function dimerParams(th) {   // [k, g, D] at loop angle th (the sliders while the loop is off)
+  const d = state.dimer, k = d.kappa;
+  if (d.loop === 'off') return [k, d.gamma, d.delta];
+  return [k, d.loop === 'flat' ? 0 : k * (1 - Math.cos(th)),
+          k * (DIMER.LOOP_DC + DIMER.LOOP_DR * Math.sin(th))];
+}
+function dimerLoopPred(kind) {   // the share of partner 1 a loop should end on (an eigenstate of the start point)
+  const th = 0.5 * Math.atan2(2, DIMER.LOOP_DC);
+  return kind === 'cw' ? Math.cos(th) ** 2 : Math.sin(th) ** 2;
+}
+function dimerWeights() {
+  const a = DIMER.a;
+  const A = a[0] * a[0] + a[1] * a[1], B = a[2] * a[2] + a[3] * a[3];
+  const C = a[0] * a[2] + a[1] * a[3];   // Re(a1 conj a2)
+  const zr = a[0] * a[0] - a[1] * a[1] + a[2] * a[2] - a[3] * a[3];   // a1^2 + a2^2
+  const zi = 2 * (a[0] * a[1] + a[2] * a[3]);
+  if (Math.hypot(zr, zi) > 1e-6) DIMER.phase = 0.5 * Math.atan2(zi, zr);
+  const c = Math.cos(DIMER.phase), s = Math.sin(DIMER.phase);
+  let w1 = a[0] * c + a[1] * s, w2 = a[2] * c + a[3] * s;   // Re(a e^{-i phase})
+  if (w1 * DIMER.w[0] + w2 * DIMER.w[1] < 0) { w1 = -w1; w2 = -w2; }   // keep the sign continuous
+  DIMER.w = [w1, w2];
+  const ww = w1 * w1 + w2 * w2;
+  DIMER.sharePred = state.fieldForm === 'wells' ? (ww > 0 ? w1 * w1 / ww : NaN) : A;
+  if (state.fieldForm === 'wells') velMat.uniforms.uDimer.value.set(1, w1, w2, 0);
+  else velMat.uniforms.uDimer.value.set(1, A, B, C);
+}
+function dimerPush() {
+  if (state.dimer.on) dimerWeights();
+  else velMat.uniforms.uDimer.value.set(0, 0, 0, 0);
+}
+function dimerReset() {
+  DIMER.a = [1, 0, 0, 0]; DIMER.theta = 0; DIMER.loops = 0; DIMER.startA = [1, 0, 0, 0];
+  DIMER.last = null; DIMER.phase = 0; DIMER.w = [1, 0]; DIMER.share = NaN; DIMER.drawAt = -1;
+  const p = dimerParams(0);
+  DIMER.live = p; DIMER.eig = dimerEig(p[0], p[1], p[2]); DIMER.ep = Math.hypot(p[2], Math.abs(p[1]) - p[0]);
+  dimerPush();
+  dimerDraw();
+}
+function dimerRestartLoop() {   // a new loop starts from the pair as it is now
+  DIMER.theta = 0; DIMER.startA = DIMER.a.slice(); DIMER.last = null;
+}
+function dimerTick() {
+  const d = state.dimer;
+  if (!d.on) { velMat.uniforms.uDimer.value.set(0, 0, 0, 0); return; }
+  const dir = dimerLoopDir(), dth = dir * 2 * Math.PI * TICK / DIMER.LOOP_T;
+  const n = DIMER.SUB, h = TICK / n, sub = dth / n;
+  let a = DIMER.a, th = DIMER.theta;
+  for (let s = 0; s < n; s++) {
+    a = dimerRK4(a, dimerParams(th), dimerParams(th + sub / 2), dimerParams(th + sub), h);
+    th += sub;
+  }
+  DIMER.a = a;
+  if (dir !== 0 && Math.abs(th) >= 2 * Math.PI - 1e-9) {
+    th -= dir * 2 * Math.PI;
+    DIMER.loops++;
+    const s0 = DIMER.startA;
+    const ovr = s0[0] * a[0] + s0[1] * a[1] + s0[2] * a[2] + s0[3] * a[3];   // <start | a>
+    const ovi = s0[0] * a[1] - s0[1] * a[0] + s0[2] * a[3] - s0[3] * a[2];
+    DIMER.last = { loop: d.loop, n: DIMER.loops, share: a[0] * a[0] + a[1] * a[1], back: ovr * ovr + ovi * ovi };
+    DIMER.startA = a.slice();
+  }
+  DIMER.theta = dir === 0 ? 0 : th;
+  const p = dimerParams(DIMER.theta);
+  DIMER.live = p;
+  DIMER.eig = dimerEig(p[0], p[1], p[2]);
+  DIMER.ep = Math.hypot(p[2], Math.abs(p[1]) - p[0]);
+  dimerWeights();
+  if (DIMER.drawAt < 0 || simTime - DIMER.drawAt >= 0.5 || simTime < DIMER.drawAt) { DIMER.drawAt = simTime; dimerDraw(); }
+}
+/* Matter on partner 1, read off the density mesh once a second (instruments
+   on). The two partner figures are evaluated at every occupied cell in the
+   shell 0.3 R < r < 0.97 R from the same Legendre table, Schmidt factors,
+   radial table and twist the shader uses. Wells: matter sits in the wells,
+   so the density-weighted mean of each figure is large and negative on
+   the partner it fills; share = <P1>^2 / (<P1>^2 + <P2>^2) = w1^2 / (w1^2
+   + w2^2) for a settled swarm. Chladni: matter sits where the figure it
+   feels is zero, so the density-weighted mean of S1^2 is small on partner
+   1; share = <S2^2> / (<S1^2> + <S2^2>) = |a1|^2 for a settled swarm on a
+   phase-locked pair. A figure with m = 0 (and, in the Chladni form, m2 = 0
+   too) has no quarter-phase partner and reads nothing. */
+function dimerDensityShare(rho) {
+  DIMER.share = NaN;
+  const d = state.dimer;
+  if (!d.on || !modeB || !rho) return;
+  const wells = state.fieldForm === 'wells';
+  const l = modeB.l, m = modeB.m, m2 = modeB.m2;
+  if (m < 1 && (wells || m2 < 1)) return;
+  const N = PM_N, cell = 2 * PM_HALF_JS / N, h = N / 2;
+  const rmin = EXTENT * 0.3, rmax = EXTENT * 0.97;
+  const tw = velMat.uniforms.uTwist.value.y;
+  const rad = radialProfile(l, modeB.n);
+  const nm = _schmidt[l * 10 + m], nm2 = _schmidt[l * 10 + m2];
+  let A1 = 0, A2 = 0, B = 0, W = 0;
+  for (let k = 0; k < N; k++) {
+    const z = (k + 0.5 - h) * cell;
+    for (let j = 0; j < N; j++) {
+      const y = (j + 0.5 - h) * cell;
+      for (let i = 0; i < N; i++) {
+        const w = rho[(k * N + j) * N + i];
+        if (!(w > 0)) continue;
+        const x = (i + 0.5 - h) * cell;
+        const r = Math.hypot(x, y, z);
+        if (r < rmin || r > rmax) continue;
+        const ct = y / r, st = Math.max(1e-4, Math.sqrt(1 - ct * ct));
+        const phi = Math.atan2(z, x);
+        const u = Math.min(1, r / EXTENT) * (RAD_N - 1), i0 = Math.floor(u), i1 = Math.min(i0 + 1, RAD_N - 1);
+        const jr = rad[i0 * 2] + (rad[i1 * 2] - rad[i0 * 2]) * (u - i0);
+        legendreAll(ct, st);
+        const Pm = jr * nm * _plm[l * 10 + m];
+        let F1 = Pm * Math.cos(m * phi - tw), F2 = Pm * Math.sin(m * phi - tw);
+        if (!wells) {
+          // second term: cos(m2 phi - tw - pi/2) = sin(m2 phi - tw); its quarter-phase partner, cos(m2 phi - tw - pi) = -cos(m2 phi - tw)
+          const Pm2 = jr * nm2 * _plm[l * 10 + m2];
+          F1 -= Pm2 * Math.sin(m2 * phi - tw);
+          F2 += Pm2 * Math.cos(m2 * phi - tw);
+        }
+        if (wells) { A1 += w * F1; A2 += w * F2; B += w * (F1 * F1 + F2 * F2); }
+        else { A1 += w * F1 * F1; A2 += w * F2 * F2; }
+        W += w;
+      }
+    }
+  }
+  if (!(W > 0)) return;
+  if (wells) {
+    const t = A1 * A1 + A2 * A2;
+    DIMER.share = t > 1e-4 * B * W ? A1 * A1 / t : NaN;   // no figure yet: the means are both near zero
+  } else {
+    DIMER.share = A1 + A2 > 0 ? A2 / (A1 + A2) : NaN;
+  }
+}
+function dimerDraw() {
+  const d = state.dimer, on = d.on;
+  const put = (id, t) => { const el = $(id); if (el) el.textContent = t; };
+  const a = DIMER.a, s1 = a[0] * a[0] + a[1] * a[1], s2 = a[2] * a[2] + a[3] * a[3];
+  const dash = '–';
+  const loopName = { cw: 'clockwise', ccw: 'counter-clockwise', flat: 'flat' };
+  put('dm-a1', on ? s1.toFixed(3) : dash);
+  put('dm-a2', on ? s2.toFixed(3) : dash);
+  put('dm-circle', !on ? dash : d.loop === 'off' ? 'off'
+    : loopName[d.loop] + ' ' + Math.round(100 * Math.abs(DIMER.theta) / (2 * Math.PI)) + '%');
+  const e = DIMER.eig, p = DIMER.live;
+  put('lab-dimer-re', on ? '±' + e[0].toFixed(3) : dash);
+  put('lab-dimer-im', on ? '±' + Math.abs(e[1]).toFixed(3) : dash);
+  put('lab-dimer-ep', on ? DIMER.ep.toFixed(3) : dash);
+  put('lab-dimer-k', on ? p[0].toFixed(2) : dash);
+  put('lab-dimer-g', on ? p[1].toFixed(2) : dash);
+  put('lab-dimer-d', on ? p[2].toFixed(2) : dash);
+  put('lab-dimer-a1', on ? s1.toFixed(3) : dash);
+  put('lab-dimer-a2', on ? s2.toFixed(3) : dash);
+  const noPartner = modeB && modeB.m < 1 && (state.fieldForm === 'wells' || modeB.m2 < 1);
+  put('lab-dimer-share', !on ? dash
+    : noPartner ? 'no partner at m = 0'
+    : Number.isFinite(DIMER.share) ? DIMER.share.toFixed(2) + ' / ' + DIMER.sharePred.toFixed(2)
+    : (lab.on ? 'no figure yet' : 'instruments off') + ' / ' + (Number.isFinite(DIMER.sharePred) ? DIMER.sharePred.toFixed(2) : dash));
+  const L = DIMER.last;
+  put('lab-dimer-loop', !on || !L ? dash
+    : L.loop === 'flat'
+      ? 'flat #' + L.n + ': back to its start ' + Math.round(100 * L.back) + '% (expected above 95% from a settled pair)'
+      : loopName[L.loop] + ' #' + L.n + ': partner 1 share ' + L.share.toFixed(2) + ' (expected ' + dimerLoopPred(L.loop).toFixed(2) + ')');
+}
+/* --- controls (Sequence panel) --- */
+function syncDimer() {
+  const d = state.dimer;
+  $('sw-dimer').setAttribute('aria-pressed', String(d.on));
+  $('in-dimer-kappa').value = d.kappa; $('val-dimer-kappa').textContent = d.kappa.toFixed(2) + ' /s';
+  $('in-dimer-gamma').value = d.gamma; $('val-dimer-gamma').textContent = d.gamma.toFixed(2) + ' /s';
+  $('in-dimer-delta').value = d.delta; $('val-dimer-delta').textContent = d.delta.toFixed(1) + ' /s';
+  document.querySelectorAll('#dimer-loop-seg button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.loop === d.loop)));
+  dimerPush();
+  dimerDraw();
+}
+wireSwitch($('sw-dimer'), () => state.dimer.on, v => {
+  state.dimer.on = v;
+  if (v) dimerReset(); else { dimerPush(); dimerDraw(); }
+});
+$('in-dimer-kappa').addEventListener('input', e => {
+  state.dimer.kappa = parseFloat(e.target.value);
+  $('val-dimer-kappa').textContent = state.dimer.kappa.toFixed(2) + ' /s';
+  saveState();
+});
+$('in-dimer-gamma').addEventListener('input', e => {
+  state.dimer.gamma = parseFloat(e.target.value);
+  $('val-dimer-gamma').textContent = state.dimer.gamma.toFixed(2) + ' /s';
+  saveState();
+});
+$('in-dimer-delta').addEventListener('input', e => {
+  state.dimer.delta = parseFloat(e.target.value);
+  $('val-dimer-delta').textContent = state.dimer.delta.toFixed(1) + ' /s';
+  saveState();
+});
+document.querySelectorAll('#dimer-loop-seg button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    state.dimer.loop = btn.dataset.loop;
+    dimerRestartLoop();
+    syncDimer();
+    saveState();
+  }));
 
 /* ================================================================
    Main loop
@@ -5564,9 +7751,9 @@ let booted = false;
    ticks to keep simulation time level with the clock, a slow one takes one
    and lets it fall behind rather than spiral. Between ticks the renderer
    interpolates from the tick-start positions. */
-function prevTexture() { return posPrev && (state.substeps || 1) > 1 ? posPrev : posB; }
+function prevTexture() { return posPrev && effectiveSubsteps() > 1 ? posPrev : posB; }
 function snapshotPrev() {
-  if ((state.substeps || 1) <= 1) { if (posPrev) { posPrev.dispose(); posPrev = null; } return; }
+  if (effectiveSubsteps() <= 1) { if (posPrev) { posPrev.dispose(); posPrev = null; } return; }
   if (!posPrev || posPrev.width !== texSize) { if (posPrev) posPrev.dispose(); posPrev = makeTarget(texSize); }
   blit(posA.texture, posPrev);
 }
@@ -5593,6 +7780,7 @@ function simTick() {
   simTime += TICK;
   updateCenters(TICK);
   updateCosmos();
+  dimerTick();   // the mode pair advances on the same clock (does nothing while the dimer is off)
   snapshotPrev();
   lerpOK = pendingRescale === 1;   // a rescale is a jump: show it, do not blend it
 
@@ -5600,10 +7788,11 @@ function simTick() {
   // then the integrator takes one or more substeps through it. The epoch
   // rescale applies to exactly the first substep.
   pmSolve();
-  const nSub = state.substeps || 1;
+  const nSub = effectiveSubsteps();
   const h = TICK / nSub;
   for (let s = 0; s < nSub; s++) {
     simStep(h);
+    labWallTick(h);                                            // wall ledger (Lab, opt-in): replay this substep without the wall, count what the wall took
     if (s === 0 && pendingRescale !== 1) {
       pendingRescale = 1;
       velMat.uniforms.uRescale.value = 1;
@@ -5612,6 +7801,7 @@ function simTick() {
   }
   pendingRescale = 1;
   labTick();
+  benchTick();
 }
 
 function frame(now) {
@@ -6539,7 +8729,201 @@ Trinity and the rest) deserve siblings here; whether the sixteen
 toolkit sentences should be written by the toolkits themselves and
 read at deploy, so this page never lags a new trade; and what the Lab
 says about Jellyfish.
+
+RING 12
+DATE: 2026-09-02
+WHAT CHANGED: The wishing well is on this page. Two lines, the standard integration
+  documented at the top of shared/feedback.js, surface key "halo" writing to the same
+  av_tool_requests queue every other surface uses. A live sweep of the 22 published
+  surfaces found exactly four without a well, and they were the research arm and its
+  brand-new front page: / (this page), /archive/, /archive/classic/, /collage-beta/.
+  This one edit covers the first two, because /archive/ is served from this same file.
+BANNED: "add a mailto", "build a HALO-specific form", "wire it in React on the
+  persona500 side", "wait for the vibe card first", "put it behind the Tools panel".
+DEAD BRANCHES: a relative src="shared/feedback.js" — correct at the root, 404 at
+  /archive/, and a missing script tag surfaces no error to a visitor, so it would have
+  read as shipped while being dead on half its routes. Root-absolute is why the path
+  looks over-qualified.
+KILL-TEST: load both https://mrdirno.github.io/nested-resonance-memory-archive/ and
+  .../archive/ and confirm the floating control renders and a submission lands in
+  av_tool_requests with surface="halo". If the button appears on one and not the other,
+  the path assumption is wrong.
+THE NON-OBVIOUS CHOICE: fixing the ARCHIVE copy was free. The instinct is to treat the
+  root page and the archive page as two jobs; they are one file, so the second surface
+  cost nothing but the absolute path.
+OPEN QUESTIONS: /archive/classic/ (the Vite app) and /collage-beta/ still have no well —
+  different integration point, not this file. This page still has no vibe card; the ID
+  must not collide with the unpublished BOOK-ARCHIVE-017 on the book-archive branch.
+  wish-it-better.json is 13 days stale relative to HALO becoming the root page.
+RING 13 · 2026-09-02 · the chamber measures its own mesh, its own integrator, its own energy — and hosts an exceptional point
+WHAT CHANGED: (1) SELF-GRAVITY SOLVER, a labelled choice beside what
+exists: "Six sweeps (as found)" | "Exact". The six warm-started Jacobi
+sweeps chase the converged solution of the 7-point Laplacian in cell
+units with the potential pinned to zero one cell outside the mesh; Exact
+IS that solution, a separable sine transform (DST-I, basis
+sin(π(i+1)(k+1)/33)) done as six fullscreen matrix passes on the same
+256×128 atlas, divided by λx+λy+λz with λ = 2cos(π(k+1)/33) − 2. Nothing
+is carried between ticks. Measured against an independent reference on
+a frozen Spinning Chladni density (250k particles, self-gravity 0.45):
+Exact 5.0e-7 off; six sweeps from cold reach 2.7% of the slowest mode,
+2400 sweeps 1.6e-6; warm-started, each mode converges with a time
+constant of 6/(120·|λ|) seconds — 1.84 s for the longest mode — so the
+as-found potential is LATE for anything that moves on that timescale (a
+running swarm three seconds in read a third off the exact potential).
+(2) ASSIGNMENT, the same way: "Nearest cell (as found)" | "Cloud-in-
+cell": eight offset point draws with the trilinear weights and the
+matching eight-cell gather, so the force no longer jumps at cell edges.
+The eight weights of one particle sum to 0.999997. Cost on an Apple M4
+Pro: 1M particles 1.8 → 20 ms per deposit-and-solve, 4.2M: 7.7 → 86 ms;
+the hint says so. (3) THE FORCE LAW, measured: 1000 particles in one
+cell and a test particle at d = 1…14 cells; the velocity change per tick
+matches −SG·s·(Φ[c+1] − Φ[c−1])/(2·cell) of the reference potential to
+1e-5 at every d (d=1: −148.68 measured, −148.68 discrete, −112.94 if the
+lattice were the continuum; d=7: −2.3012 / −2.3012 / −2.3050); mirror
+clumps at cells 12 and 19 pull with equal and opposite force to 1e-4;
+cells 12 and 20 are not mirror images in a 32-cell box and differ by
+0.80%, the walls' images. (4) SUBSTEPS "Auto": n = ceil(mag·10.5·(1/20)
+/0.25), clamped to 1…4: as many substeps as four allow so that each
+magnetic turn per substep stays under a quarter radian — 1 at coupling
+0.4, 2 at 0.6, 4 from 1.9 up (at coupling 3 four substeps still leave
+0.39 radian per step). The button reads "Auto (n)". (5) PHASE-SPACE VOLUME RATE, a Lab instrument: 64 seven-
+particle clusters (a base and six neighbours 0.001 away along the six
+phase-space axes) in reserved rows under the Benettin twins; every half
+second the 6×6 offset matrix is read back, orthonormalised, ln|det|
+scored, and the cluster re-written at 0.001. Predicted beside measured:
+−3·damping under the exact rotation, plus ln(1+θ²)/dt_step under the
+Euler kick (the velocity map v → v + θ v×b has determinant 1+θ²).
+Measured: damping 1 alone −2.9996 vs −3.000; damping 0, coupling 0.4,
+exact rotation −0.007 vs 0; Euler at 0.4 +0.8634 vs +0.8631; Euler at
+coupling 3 with Auto (4) +11.531 vs +11.531; Jellyfish as found −8.06 vs
+−8.14 (1%); on the ceiling (coupling 3, one substep) the meter reads 2.8
+against 10.0 with 8 of 64 scored and 61% clamped, shown side by side.
+(6) TWO CLUMPS IN ORBIT, a Lab experiment that falsifies the solver
+in the page's own operator: 1,024 particles as two rigid clumps of 512
+in the cells four either side of the middle, field off, damping 0,
+self-gravity 0.05, nearest cell (under nearest cell every particle in a
+cell feels the same force, so a clump with one velocity moves as one
+body until it leaves the cell — a two-body problem on the mesh). The
+page predicts the circular orbit from its own exact solve (pull 14.58,
+speed 7.47, period 3.218 s, 0.39 cells per tick) and then runs the pair
+ten seconds under six sweeps and ten under Exact. Six sweeps: the lagged
+potential drags the clumps together and they MERGE at 1.50 s, before one
+orbit. Exact: 3.2 orbits, period 3.05 s, ratio 0.948 inside the cell-jump
+band 0.91–1.15, drift −0.10 per orbit, none on the ceiling. A numpy twin
+(experiments/halo/orbit_twin.py) gives the same numbers to four digits.
+(7) SAVE NPZ beside the CSV buttons: positions, velocities, the 32³
+density and potential and a meta record, as one .npz written by hand,
+readable with numpy; experiments/halo/load_chamber_npz.py checks it
+(density correlation 1.000000). (8) THE JEANS DISPERSION the sphere
+cannot host lives in experiments/halo/jeans_dispersion.py: a periodic
+box with the page's constants, plane waves m = 1, 2, 4, 8, measured
+growth against ω = sqrt(SG·s·D_m)/cell with the lattice factor D_m —
+the m = 1 ratio is 0.994. (9) CONSERVATION, a Lab group with its
+derivation in the code: a potential pass writes, per particle, the
+field's potential (wells: the mode value; Chladni: half the squared
+difference — derived so that its gradient is exactly the force the
+velocity shader applies, checked at 36 points to 1.5e-3 of the largest
+force), the mesh potential with the same gather as the force, the
+kinetic energy at the centred velocity, and the angular momentum;
+halving passes sum them on the GPU (equal to a CPU sum to 1e-7). The
+mesh energy is ½·SG·s·[Σ_p Φ(x_p) − n̄·Σ_c Φ_c], the energy the swindled
+Dirichlet system conserves; the hint says the nearest-cell force is
+momentum-conserving but not the gradient of that potential, so the
+drift shown IS the scheme's error. Three audits: "field only" (damping
+0, nothing else on) — the centred energy holds in a band of 2.0e-3 over
+200 ticks and the band does not grow (5.7e-4 at four substeps); the wall
+is inelastic and this field has a valley along it, so an opt-in ledger
+replays the velocity shader itself with the wall skipped and books what
+the wall took (51% of H in 10 s) — energy plus ledger then holds;
+"Boris vs Euler" — the exact rotation loses only what cos²+sin² loses
+(−2.1e-6/s measured, −2.2e-6 predicted from a 1×1 pass), the explicit
+kick pumps kinetic energy at 0.758/s measured against 0.796 predicted
+from the measured share of motion across the field lines; damping 1
+alone reads −2.0000/s; "self-gravity" — the collapse reaches the force
+ceiling and the energy moves +336 per particle under six sweeps and
++188 under Exact in 10 s, quoted as mesh + step + ceiling together.
+The damping slider now reaches 0. (10) A MODE DIMER — two partner modes
+of the current figure (the cos/sin pair of one azimuthal order) as a
+two-level non-Hermitian system with coupling κ, gain/loss γ and
+detuning Δ, integrated on the CPU each tick and written into the field
+through the same terms the shader already evaluates; off, the field is
+byte-identical. The eigenvalues match ±sqrt(κ² + (Δ/2 + iγ)²) (at γ =
+0.5 the splitting is 2·sqrt(0.75); at γ = κ they coalesce to 1e-6: the
+exceptional point). A loop in (Δ, γ) of period 20 s around the point,
+from the no-gain line at detuning 2κ: clockwise ends with 0.86 of the
+pair in partner 1, counter-clockwise with 0.16 — a 32-fold difference
+in the ratio, from every starting state — while the same loop with γ =
+0 comes back to its start at 99%. The particles follow: held on one
+partner for 10 s, the density mesh's azimuthal content lands on that
+partner (0.986 against 3e-7 in the wells form; 0.975 against 0.031 in
+the Chladni form). A Lab experiment "Encircle the exceptional point"
+runs it; a known limit is stated on the page: the Chladni form's dark
+lines drain matter for good, so the matter reading drifts toward one
+half after a few loops. (11) Every choice ships OFF: with the as-found
+pair, the instruments off and the dimer off, the position and velocity
+textures after 100 seeded ticks are byte-identical to the previous
+page, self-gravity off and on, in both field forms.
+BANNED: an FFT (a 32-cell Dirichlet problem is a sine transform, six
+matrix passes, no library); making Exact or cloud-in-cell the default
+(every preset was found under the as-found pair; ring 9's rule); the
+shader's built-in sin() for the transform weights (3.6e-4 on the
+potential through six passes — a reduced-argument series is used);
+a volume meter from the sliders alone; separate position and velocity
+determinants (not multiplicative under the flow); a second shader
+re-implementing the force law to book the wall's take (the velocity
+shader itself is replayed with the wall skipped); the cosmos gain/loss
+slider as the dimer's γ (a positional damping on particles, a different
+physics); a loop centred on the exceptional point (its end sits in the
+broken phase, where the gaining eigenvector always wins and the
+direction would not matter).
+DEAD BRANCHES: (1) A single instanced draw for the eight corners —
+WebGL1 has no instance id; eight draws. (2) Asserting six-hundred sweeps
+within 2e-3 of exact on a swarm — the slowest mode's time constant is
+221 sweeps, so 600 leaves 5e-3; asserted at 2400. (3) The literal
+OFF-equivalence recipe (seed once at load): three.js draws Math.random
+for every object id, so a new material shifts the seed before the swarm
+is seeded; the test re-seeds and reseeds right before the run, and first
+proves the previous build reproduces itself. (4) Reading the volume from
+the twins' one-dimensional separation times six — that is the top
+Lyapunov direction, not the volume.
+KILL-TEST: mesh_test 35/35, integ_test 29/29, bench_test 36/36, conserve_test 50/50, dimer_test 53/53, tick 15/15, smoke 132/132,
+lab 23/23; OFF-equivalence on the combined build PASS (position and velocity hashes identical after 100 seeded ticks; base = the previous page); an independent
+numpy oracle reproduces the force law, the mirror-cell asymmetry, the
+Jacobi lag fractions and the volume rates to the digits above; two
+independent reviewers re-ran the mesh and the volume meter and refuted
+neither (a raw random density solved by the GPU against a scipy sine
+transform: 8e-7; the cloud-in-cell gather against a numpy trilinear
+gather at generic, non-mirror positions: 3e-6; the volume-rate Jacobian
+for a moving base in a nonlinear force: 1e-9); on the served page in
+Chrome: the served copy at 1.0M particles in Jellyfish: eight Lab experiments listed; solver and mesh segs; substeps Auto (1); the dimer group; the wishing well; instruments on for 9 s read λ 2.308/s and a volume rate of −8.136/s against −8.137 predicted; no page errors.
+THE NON-OBVIOUS CHOICE: the exact solver is the converged limit of the
+SAME operator, not a better operator — so switching it on changes only
+what was late, and the difference it makes is itself a measurement of
+the lag the presets were found under.
+OPEN QUESTIONS: what the presets at self-gravity ≥ 0.45 do under Exact
+(the support they show may be the lag's); whether the force ceiling can
+come down now that cloud-in-cell removes the cell-edge kicks; whether
+the two-second lag is the "0.2 floor" of ring 9; what the phase-space
+volume meter and the conservation audit say about Jellyfish over a
+whole epoch; and whether the dimer's chiral transfer survives with
+self-gravity on — the first place this chamber could show a
+non-Hermitian effect acting on matter that acts back.
+NOTE: the block above this one, also numbered 12, is the wishing-well
+ring from the toolkit lane; the numbering continues from here.
 ═══ end rings ═══ -->
+
+<script>window.FEEDBACK = {
+  surface: "halo",
+  name: "HALO Resonance Chamber",
+  accent: "#38bdf8",
+  newLabel: "Wish it better"
+};</script>
+<!-- ROOT-ABSOLUTE on purpose: this same file is served BOTH at the site root (the
+     root page is a byte copy of it) and at /archive/. A relative "shared/feedback.js"
+     resolves correctly at the root and 404s at /archive/ — silently, since a missing
+     script logs nothing a visitor sees. The site base is fixed in HELIOS-BRIDGE/vite.config
+     as SITE_ROOT = '/nested-resonance-memory-archive/'. -->
+<script src="/nested-resonance-memory-archive/shared/feedback.js"></script>
 
 </body>
 </html>

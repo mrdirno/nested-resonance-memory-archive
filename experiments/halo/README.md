@@ -22,6 +22,28 @@ scripts use it to answer one question each:
 Each script writes its JSON next to itself; the copies that back the page are
 in `data/results/halo/`. Requirements: `numpy`; `numba` speeds some of them up.
 
+## jeans_dispersion.py — the growth rates the page's sphere cannot host
+
+`jeans_dispersion.py` runs the page's self-gravity operator (nearest-cell
+deposit, 7-point Laplacian, two-point gradient, tick 1/20, SG_GAIN 14,
+PM_CELL 0.95625) on a periodic box, where plane waves are eigenmodes, and
+measures the growth rate of cold-dust waves m = 1, 2, 4, 8 against two closed
+forms for the discrete operator: D = k sin k (sin(k/2)/(k/2)) / (4 sin²(k/2))
+for a smooth wave, and D = cos²(k/2) for the per-cell displacement that the
+scheme's kicks make, which is the one the dynamics follow. The derivation is
+in its docstring; the numbers go to `results/jeans_dispersion.json` (tracked).
+`orbit_twin.py` is the numpy twin of the page's "Two clumps in orbit"
+experiment: the same start, the same operator, both solvers, the same
+readouts. `load_chamber_npz.py` reads a snapshot saved by the page's "Save
+NPZ" button, checks it, recomputes the density on the page's grid and reports
+the correlation with the exported one.
+
+```bash
+python3 jeans_dispersion.py                              # ~30 s, numpy only
+python3 orbit_twin.py                                    # ~3 s
+python3 load_chamber_npz.py resonance-chamber-snapshot.npz
+```
+
 ## choreography/ — a four-charge choreography with a stability certificate
 
 `choreo4.py` searches for a periodic four-charge orbit in a magnetic field
