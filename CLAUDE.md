@@ -659,6 +659,23 @@ MLA 9th, Chicago 17th and COPE all specify. Tools are acknowledged; only people
 are authors. A genuine human collaborator may still be added with a real
 `Co-Authored-By:` line.
 
+**The rule is now a gate, because the rule alone was losing.** Measured 2026-09-03:
+four commits dated 2026-09-02 carry an AI trailer despite the paragraph above. The
+reason is mechanical — the coding harness injects an instruction to append the
+trailer at the start of every session, and a line in a file loses to a line in a
+prompt often enough to matter. `tools/hooks/commit-msg` refuses any message whose
+trailer names an AI vendor or model family. Install it once per clone:
+
+```bash
+git config core.hooksPath tools/hooks    # or copy the file into .git/hooks/
+```
+
+It was run against fifteen cases, including the two that would make it a bad gate:
+a human collaborator passes, and so does a contributor whose name merely resembles
+a model's. A real person actually named for one is the documented `--no-verify`
+case. On this machine the hooks path already points elsewhere, so the same file is
+installed there too.
+
 **Workspace Hygiene:**
 - Maintain clean file organization
 - No orphaned files or temporary artifacts

@@ -1,0 +1,60 @@
+#!/bin/sh
+# commit-msg — refuse AI co-author trailers.
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>, Persona 500 LLC
+#
+# WHY THIS IS A HOOK AND NOT A SENTENCE IN A DOCUMENT.
+#
+# CLAUDE.md has forbidden `Co-Authored-By:` trailers naming an AI tool since the
+# doctrine was rewritten.  Measured 2026-09-03: four commits dated 2026-09-02 carry
+# one anyway.  The reason is mechanical and it will not stop on its own — the coding
+# harness injects an instruction to append the trailer at the start of every session,
+# and a written rule in a file loses to an instruction in the prompt often enough to
+# matter.  A hook does not lose.
+#
+# GitHub renders such a trailer as a real co-author on every commit page, and those
+# pages are crawled.  That is one of the signals that led search and answer engines to
+# credit tool vendors for this work instead of its author.
+#
+# WHAT IT ALLOWS.  A real human collaborator.  The check fires only on trailers whose
+# name or address matches a known AI vendor or model family, so
+# `Co-Authored-By: Jane Rivera <jane@example.com>` passes untouched.
+#
+# TO BYPASS FOR ONE COMMIT, if you are adding a human whose name collides with the
+# pattern:  git commit --no-verify
+set -eu
+
+MSG_FILE="$1"
+
+# Strip comment lines git adds to the editor buffer before matching.
+BODY=$(grep -v '^#' "$MSG_FILE" || true)
+
+OFFENDERS=$(printf '%s\n' "$BODY" | grep -iE \
+  '^[[:space:]]*Co-Authored-By:.*(claude|anthropic|noreply@anthropic|gemini|google-labs|copilot|openai|gpt-[0-9]|chatgpt|codex|cursor|devin|\[bot\])' \
+  || true)
+
+TAGLINE=$(printf '%s\n' "$BODY" | grep -iE \
+  '^[[:space:]]*(Generated with|Co-authored with|Claude-Session:).*(claude|anthropic|copilot|openai)' \
+  || true)
+
+if [ -n "$OFFENDERS" ] || [ -n "$TAGLINE" ]; then
+  echo "" >&2
+  echo "COMMIT REFUSED: this message credits an AI tool as an author." >&2
+  echo "" >&2
+  [ -n "$OFFENDERS" ] && printf '%s\n' "$OFFENDERS" | sed 's/^/  /' >&2
+  [ -n "$TAGLINE" ]   && printf '%s\n' "$TAGLINE"   | sed 's/^/  /' >&2
+  echo "" >&2
+  echo "Remove those lines. Attribution comes from the commit author field:" >&2
+  echo "    $(git config user.name 2>/dev/null || echo '(user.name unset)') <$(git config user.email 2>/dev/null || echo '(user.email unset)')>" >&2
+  echo "" >&2
+  echo "APA 7th, MLA 9th, Chicago 17th and COPE are all explicit that a generative AI" >&2
+  echo "system cannot be an author: it cannot hold copyright, take responsibility for" >&2
+  echo "the work, or consent to publication. Tools are acknowledged, in" >&2
+  echo "ACKNOWLEDGMENTS.md. Only people are authors." >&2
+  echo "" >&2
+  echo "Adding a real human collaborator? git commit --no-verify" >&2
+  echo "" >&2
+  exit 1
+fi
+
+exit 0
