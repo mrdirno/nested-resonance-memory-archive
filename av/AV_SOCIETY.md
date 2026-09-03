@@ -135,6 +135,27 @@ document, which is exactly the CHOICE §THE EVO LOOP says to instrument. It is n
 instrumented today. That is the named next rung, and until it is counted the dissent stands
 unanswered.
 
+**A LENS WILL HAND YOUR OWN PROMPT BACK AS A CITATION (C3702).** The skeptic that
+voted to KILL *What's in the Drop* rested part of its verdict on this: *"§THE
+SYSTEM OF RECORD names 'a delivery receipt' by name as one of the four document
+types this book forbids competing with."* It does not. `grep -i "delivery
+receipt"` over this file returns nothing — the phrase came out of the QUESTION it
+was asked, and came back wearing the book's authority. Its conclusion survived
+anyway, because a second lens reached the same place from a different direction;
+had the conclusion rested on the citation alone, a real page would have been
+killed on a rule that does not exist.
+
+**So: check a lens's citations against the file before you act on them.** It costs
+one grep. A panel cannot self-detect this failure — the lens is not lying, it is
+reading its own brief back — and the more precisely you frame a question, the more
+of your own framing comes back as evidence.
+
+**AND RECORD THE SPREAD, NOT THE AVERAGE.** *What's in the Drop* scored **7 / 6 /
+2**. The 2 is why two of the rung's three named parts are not on the shipped page,
+and the strongest signal the exercise produced was the skeptic and the working
+editor **agreeing on the one thing worth building while disagreeing about
+everything else**. A panel that comes back unanimous was probably asked badly.
+
 ## SAFETY — non-negotiable (operator 2026-08-03: "emphasize safety and backup,
 ## look for edge cases that could screw us")
 - **Only self-contained, client-side static tool pages.** NEVER build anything
@@ -1934,7 +1955,8 @@ with revision rounds, and who is also their own producer.**
    ONE THE ROSTER GOT BACKWARDS:** *What's in the drop* was deferred here as *"a second
    output mode, not a sixth page"* — the boundary lens showed that is wrong in one word. It
    is not a second MODE; it is the other side of the render, addressed to a different
-   moment. **It is the next rung on this trade, as its own page on the same engine.**
+   moment. **It shipped as its own page on the same engine on 2026-09-03 — see #8, and read
+   what the panel took off it before believing this paragraph.**
 5. ~~**Shoot Day Confirm**~~ → see below; the participant half is still owed and now sits
    behind *What's in the drop*.
 6. **Shoot Day Confirm** (checklist → request) — ⚠️ **HALF SHIPPED 2026-08-15** as
@@ -1964,10 +1986,47 @@ with revision rounds, and who is also their own producer.**
    already here (`notes-back`). What remains genuinely absent is construction furniture:
    `jobcard`, `dropoff`, `holdtest`, `draft` — a freelancer has no job trailer, no gate code
    and no test port.
-Deferred with reasons: *What's in the drop* (folds into Before I Export as a second output
-mode, not a sixth page) · *Turnover Sheet* (narrow — real only for a first job with a new
+8. **What's in the Drop** (checklist → a message that asks for nothing) — ✅ **SHIPPED
+   2026-09-03** as `creative/whats-in-the-drop.html`, and **the panel scored it 7 / 6 / 2
+   with one lens voting to KILL.** The page is smaller than the rung because of the 2.
+   **"WHO SIGNED" IS NOT A BLOCK** — the receiving lens ranked it above the
+   deemed-acceptance clause as the riskiest thing in the proposal, because *"Approved by
+   [name] on [date]" is a signature*: written by one party, and the moment the client
+   forwards it, the OTHER party's name is on an approval record that exists nowhere else.
+   It survives as ONE header field in the sender's own first person — *the last yes I've
+   got from your side is …* — printed after the lists rather than under the heading (read
+   first it puts the receiver in auditor mode before he has opened a file) and never
+   without the invitation to correct it. The word *approved* appears nowhere on the page
+   and the drive asserts it. **THE WORD "DELIBERATELY" WENT WITH IT:** *"nobody says
+   deliberately about something they're volunteering out of generosity — you say it when
+   you're pre-empting a complaint."* Same family as *per scope*, and both are now in the
+   banned list the drive checks. **THE SIBLING'S ASK-COUNT BRAKE DID NOT COME ACROSS** —
+   this page asks the client for nothing, so there was nothing to count and porting the
+   mechanism would have been cargo-cult. What it brakes instead is **the FENCE**: it
+   counts absences against inclusions and says on the glass when the message has stopped
+   being a delivery and started being a list of upsells. Both dissenting lenses reached
+   that failure from opposite ends. **AND THE DISSENT'S OWN GROUND IS RECORDED BECAUSE IT
+   IS RIGHT:** a transfer page already lists the FILES. What nothing anywhere generates is
+   **ABSENCE** — the skeptic called it *"the one inch of real territory"* and the working
+   editor called it *"drop that line and this is just a nicer-looking here-you-go"*, which
+   is the strongest agreement this exercise can produce, since they agreed while
+   disagreeing about everything else.
+9. ~~**Shoot Day Confirm — the participant half**~~ → still owed, and now the top unbuilt
+   rung on this trade (see #6). Nothing in this kit points at the person who has to SHOW UP.
+
+Deferred with reasons: *Turnover Sheet* (narrow — real only for a first job with a new
 finisher) · *Booking Confirm* (a different boundary — hiring, not client delivery, and one
 inch from rate data we cannot own).
+
+**THE ENTRY THAT USED TO STAND HERE CONTRADICTED THE PARAGRAPH FOUR LINES ABOVE IT FOR
+FIVE DAYS, and an adversarial lens found it, not a gate.** Item 4 said *What's in the drop*
+was *"not a second MODE… its own page"*; this list still said it *"folds into Before I
+Export as a second output mode, not a sixth page"*. Both were in §CREATIVE, both were read
+every cycle, and the roadmap comment in `creative/tools.js` had already moved past both.
+**A ROADMAP IS NOT A RECORD (§SCARS 2026-08-15) covers striking a rung when it ships; it
+did not cover striking the DEFERRAL when the deferral is reversed**, and a reversal leaves
+two live entries where a ship leaves one. Whoever reverses a deferral deletes it in the
+same edit.
 
 **KILLED, so no later cycle resurrects them:** SOW / brief / treatment / proposal builder
 (negotiated paragraphs, and Docs owns and numbers it) · delivery-spec or export-preset table
@@ -2046,6 +2105,80 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-03 (C3702) — THE APPEND MATCHED AN ANCHOR IT HAD ALREADY PASSED, AND `node --check` CALLED THE RESULT GOOD
+A patch that added a data block to `creative/items.js` found its END anchor with
+`s.index('id: "out"')` — a string that already existed **earlier** in the file, in
+the sibling `beforeExport` block. End came before start, the slice duplicated 338
+lines, and `window.TOOLKIT_ITEMS.theDrop` was assigned **twice**. Every check
+passed: a second assignment to the same key is legal JavaScript, so `node --check`
+was green, and the file on disk contained the corrected draft. The PAGE served the
+first one, because the last assignment wins.
+
+**Found by driving the real page and reading the item names off the DOM** — the
+tick list showed the item the corrected data had removed. Nothing else would have
+caught it: not the parse, not a diff read at a glance (338 added lines look like
+338 added lines), and not the gates, which would have passed a coherent older
+page.
+
+**THE RULE, and it is two greps rather than a new tool.** When you patch by
+anchor: assert the anchor is UNIQUE or that `end > start`, and after writing,
+assert the file declares each top-level key exactly once —
+`grep -c "TOOLKIT_ITEMS.<key> = {"` must return 1. A parse check cannot see a
+duplicate. A count can.
+
+### 2026-09-03 (C3702) — A GATE THAT WAS GREEN ON ITS FIRST RUN, AND THE CONTROL FOUND THE HOLE THE GREEN WAS HIDING
+`no-clock.mjs` shipped and returned **118 documents driven, 0 carrying a clock**
+on its first run. §SCARS 2026-08-28 already says an assertion never run as a
+control is a guess dressed as a gate, so a real deemed-acceptance clause was
+planted. It fired red on `creative/whats-in-the-drop.html`, on two independent
+patterns.
+
+**The SECOND plant is the finding.** Aimed at `plumbing/items.js`, it landed at
+the wrong offset — inside `tag_es`, the trade's SPANISH vocabulary — and the gate
+**stayed green on a page that was carrying the clause**. Twelve pages on this rack
+load `shared/lang.js` and hold a second document behind `localStorage`'s
+`toolkit.lang`, and the gate had only ever opened the first one. It now drives
+every bilingual page twice and names the tongue in the failure; re-planted in a
+row the ES document actually renders, it goes red on `[es]` while the EN twin
+stays green.
+
+**The control did not confirm the gate. It corrected it** — which is the only
+reason to run one, and the reason a green first run is a question rather than a
+result.
+
+### 2026-09-03 (C3702) — THE BOOK CONTRADICTED ITSELF INSIDE ONE SECTION FOR FIVE DAYS, AND A LENS FOUND IT, NOT A GATE
+§CREATIVE item 4 said *What's in the drop* was *"not a second MODE… its own page
+on the same engine"*. Four lines below, the **Deferred with reasons** list still
+said it *"folds into Before I Export as a second output mode, not a sixth page"*.
+Both sentences were in the same section, both were read every cycle, and
+`creative/tools.js` had already moved past both.
+
+**A ROADMAP IS NOT A RECORD (§SCARS 2026-08-15) covers striking a rung when it
+SHIPS. It did not cover striking a DEFERRAL when the deferral is REVERSED** — and
+a reversal leaves two live entries where a ship leaves one, because the deferral
+lives in a different list from the rung. Whoever reverses a deferral deletes it in
+the same edit.
+
+### 2026-09-03 (C3702) — THE BOOK OWES A BACKPORT RUNG THE GATE HAS EXEMPTED SINCE BEFORE THE RUNG WAS WRITTEN
+§CREATIVE carries, as a named-so-it-is-not-lost BACKPORT rung: *"on `credits.html`
+the tool link inside a credit entry measures 153×16 — under the 44px tap floor, at
+every width"*, wanting *"a real control beside the text, not a taller word"*, swept
+to every trade at once. Measured this cycle: `mobile-watertight` **passes
+`credits.html` locally and live**, and has since **2026-08-10**, when the
+tap-target check gained the WCAG 2.5.8 exemption for a target that sits inline in
+a sentence — whose selector list names `.credit` explicitly, and which the credit
+line matches twice over (it is also an `li`).
+
+So the page, the gate and WCAG all agree, and the only thing that disagrees is the
+book. **It is recorded as a DECISION rather than an owed rung**: an inline link in
+running prose cannot be made 44px without wrecking the sentence around it, which
+is exactly why the standard exempts it. What stays true is the underlying
+observation — that link is the ONLY door from the wall to the tool. **If it is
+ever built, it is built as a real control BESIDE the sentence, which takes it out
+of the exemption and puts it under the gate.** Named here so the next module sweep
+stops re-deriving a defect its own instrument says is not one.
+
 
 ### 2026-09-03 (C3700) — A PROBE WHOSE EXISTENCE DEPENDED ON THE VALUE IT ASSERTS, SO REVERTING THE CODE MADE THE GATE GO QUIET INSTEAD OF RED
 `find-noise.mjs` class N10 asserts that a trailing word this page does not have is NAMED
@@ -8419,3 +8552,74 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   wrenches"* + *Ignored "wrenches" — nothing here uses that word*, while *"damage n"* stays
   silent and *"daily field repo"* stays exact.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+
+- `2026-09-03` — **[AXIS:DEPTH] C3702 — THE ROADMAP NAMED THREE PARTS FOR THE DELIVERY
+  NOTE AND THE PANEL TOOK TWO OF THEM AWAY, INCLUDING THE ONE THAT WOULD HAVE PUT A
+  CLIENT'S NAME ON AN APPROVAL RECORD.** · **before:** both wells dry (0 new, 0 building,
+  toolkit and cards) and no family owed, so the stalest axis governed — DEPTH, 7
+  lane-cycles cold, last worked C3679. The rung picked itself twice over, the way the last
+  DEPTH cycle's did: creative is still the thinnest kit on a sixteen-trade rack (6 tools
+  against a median of 8.5), and *What's in the drop* was named as the next rung in
+  §CREATIVE item 4, in `creative/tools.js`'s footer, and in C3679's own closing line.
+  · **after:** `creative/whats-in-the-drop.html` — 7 tools, the twelfth instance of shape
+  #1, and **the first page on the rack that asks its receiver for nothing at all.**
+  **THE PANEL SCORED IT 7 / 6 / 2 AND ONE LENS VOTED TO KILL IT.** What the dissent bought,
+  in order of size: **"WHO SIGNED OFF" IS NOT A BLOCK** — the receiving lens ranked it
+  above the deemed-acceptance clause as the riskiest thing in the proposal, because
+  *"Approved by [name] on [date]" is a signature*: typed by one party, and the moment the
+  client forwards it into a thread with a boss in it, the OTHER party's name is on an
+  approval record that exists nowhere else. It survives as ONE header field in the
+  sender's own first person, printed AFTER the lists rather than under the heading (read
+  first it puts the receiver in auditor mode before he has opened a file), and never
+  without the invitation to correct it. **The word "approved" appears nowhere on the page
+  and the drive asserts it, along with "deliberately"** — *"nobody says deliberately about
+  something they're volunteering; you say it when you're pre-empting a complaint"* — and
+  *per scope*, *not included*, *exclusion*, *business days* and *as discussed*. **THE
+  SIBLING'S ASK-COUNT BRAKE DID NOT COME ACROSS:** this page asks for nothing, so there was
+  nothing to count, and the working editor named porting it as cargo-cult. What it brakes
+  instead is **THE FENCE** — it counts absences against inclusions and says on the glass
+  when the message has stopped being a delivery and started being a list of upsells, in
+  three states (all-absence, parity, and past five). Never in the message. **AND THE
+  DISSENT'S GROUND IS THE PAGE'S GROUND:** a transfer page already lists the FILES; nothing
+  anywhere generates **ABSENCE**. The skeptic called that *"the one inch of real
+  territory"* and the working editor called it *"drop that line and this is just a
+  nicer-looking here-you-go"* — two lenses agreeing on what to build while disagreeing
+  about whether to build it, which is the strongest signal this exercise produces.
+  **BACKPORT RIDER FIRED, AND IT IS THE NEW PAGE'S OWN RAIL TURNED INTO AN INSTRUMENT:**
+  `tools/toolkit-gates/no-clock.mjs` drives every page on disk carrying a `#preview` —
+  every checkbox on, every field marked, every select moved off its default — and reads
+  the DOCUMENT for a verb with legal weight attached to a timer or to silence. It reads
+  the artefact and not the source on purpose: this toolkit's teaching prose is full of
+  that vocabulary correctly (`cut-note` warns a man in as many words that silence reads as
+  agreement), and a source-matching gate would fail the pages doing the right thing.
+  **130 documents driven, 0 carrying a clock — and the CONTROL is the finding**, not the
+  green: the first planted clause fired red on two patterns, the second landed by accident
+  inside `plumbing/items.js`'s `tag_es` and **the gate stayed green on a page that was
+  carrying it.** Twelve bilingual pages hold a second document behind `toolkit.lang` that
+  it had never opened. Every one is now driven twice and the failure names the tongue;
+  re-planted in a row the ES document renders, it goes red on `[es]` while the EN twin
+  stays green. **THREE SCARS WRITTEN:** an append that matched an end-anchor it had already
+  passed, duplicating 338 lines and assigning one key twice while `node --check` stayed
+  green and the page served the older draft (found by reading item names off the DOM, and
+  the fix is `grep -c`, not a new tool) · the book contradicting itself inside one section
+  for five days, because A ROADMAP IS NOT A RECORD covers striking a rung that SHIPS and
+  not a deferral that is REVERSED · and **a lens handing my own prompt back as a
+  citation** — the kill verdict cited §THE SYSTEM OF RECORD as naming *"a delivery
+  receipt"*, which it has never contained; one grep settles it, a panel cannot self-detect
+  it, and the conclusion only survived because a second lens reached it independently.
+  **RECONCILED RATHER THAN BUILT:** §CREATIVE's owed BACKPORT rung — the 153×16 tool link
+  on `credits.html` — has been exempt in `mobile-watertight` since 2026-08-10 under the
+  WCAG 2.5.8 inline-target rule, whose selector list names `.credit`. Page, gate and
+  standard agree; only the book disagreed. Recorded as a decision, with the condition
+  under which it would be built. **GATES:** the new page driven end to end at 390px,
+  **32/32, and re-driven against the DEPLOYED artifact for the same 32** · order-live-header
+  OK (5 header controls, 5 in the document) · pickfilter 13 assertions · mobile-watertight
+  **local 169 pages and live on the new one**, 320/360/390/430 × both text sizes ·
+  menu-reachability **1,169 checks / 167 pages** · find-honesty **8,973 / 0 failing** ·
+  find-noise **408, N0–N10 all ok** · foot-scope 7/7 · no-clock **130 / 0**. Storefront:
+  one line in `creative`'s `tools[]` in `fieldToolkits.ts`, parse-verified — P5 pushes it.
+  **NAMED NEXT RUNG:** the PARTICIPANT half of Shoot Day Confirm — the short "how the day
+  goes" note to talent or a client coming to set. Every one of this trade's seven tools
+  points at a payer, a venue or the next editor; nothing points at the person who has to
+  SHOW UP.
+  https://mrdirno.github.io/nested-resonance-memory-archive/creative/whats-in-the-drop.html
