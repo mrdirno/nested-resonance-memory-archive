@@ -305,6 +305,38 @@ button { font-family: inherit; color: inherit; }
 .icon-btn svg { width: 15px; height: 15px; fill: var(--text); }
 .icon-btn.primary { background: var(--accent); border-color: var(--accent); }
 .icon-btn.primary svg { fill: var(--accent-ink); }
+/* display:grid above outranks the browser's own [hidden]{display:none}, so a button
+   left hidden would still paint as a dead square. Say it here instead. */
+.icon-btn[hidden] { display: none; }
+
+/* ---------------- Immersive ----------------
+   Wish a2d9cd38: "maximizes the window to any size window ... pushing to my TV using
+   Apple TV ... would like to see it full screen". The canvas was ALREADY full-viewport
+   (setSize tracks window.innerWidth/Height), so the thing in the way was never the
+   renderer — it was the chrome painted over it. This hides the chrome and asks for
+   real fullscreen as a bonus; if the browser refuses (iOS Safari will not fullscreen a
+   non-video element, and AirPlay mirroring is the case the wish names) the mode still
+   does its whole job, because hiding the chrome was the job. Nothing here touches the
+   render loop, the resize handler or the pixel-ratio clamp.
+   Ships OFF, and leaving restores exactly what was there — ring 9's rule. */
+.topbar, .rail { transition: opacity 0.22s ease; }
+body.immersive .topbar,
+body.immersive .rail { opacity: 0; pointer-events: none; }
+body.immersive .panel { visibility: hidden; }
+#btn-unimmerse {
+  position: fixed; z-index: 90; display: none;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  width: 44px; height: 44px; place-items: center;
+  background: var(--panel); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 50%;
+  cursor: pointer; opacity: 0.5;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.2s, border-color 0.2s;
+}
+#btn-unimmerse svg { width: 17px; height: 17px; fill: currentColor; }
+#btn-unimmerse:hover, #btn-unimmerse:focus-visible { opacity: 1; border-color: var(--accent); }
+body.immersive #btn-unimmerse { display: grid; }
 
 /* ---------------- Tab rail ---------------- */
 .rail {
@@ -351,7 +383,10 @@ button { font-family: inherit; color: inherit; }
   border-radius: 14px 14px 0 0;
   transform: translateY(105%);
   transition: transform 0.28s cubic-bezier(0.32, 0.72, 0.25, 1);
-  padding-bottom: 74px; /* clear the rail */
+  /* the rail is offset by max(10px, safe-area-inset), so clearing it with a fixed
+     number leaves the last inset-worth of every panel underneath it on a phone with a
+     home indicator. Identical 74px when the inset is zero. */
+  padding-bottom: calc(64px + max(10px, env(safe-area-inset-bottom)));
   visibility: hidden;
 }
 .panel.open { transform: translateY(0); visibility: visible; }
@@ -643,8 +678,13 @@ kbd {
 @media (max-width: 620px) {
   .brand-sub { display: none; }
   .rail-label { display: none; }
-  .rail-tab { padding: 12px 14px; }
+  .rail-tab { padding: 12px 14px; min-width: 44px; min-height: 44px; }
   .rail-tab svg { width: 19px; height: 19px; }
+  .icon-btn { width: 44px; height: 44px; }
+  /* the repo link is 10.5px type: the hit box grows by the padding and the negative
+     margin gives the space straight back, so the header does not move at all. */
+  .brand-link { display: inline-block; padding: 16px 0; margin: -16px 0; }
+  .btn { min-height: 44px; }
   .top-actions { order: 2; margin-left: auto; }
   .readouts { order: 3; width: 100%; justify-content: space-between; margin-left: 0; }
   .readout { min-width: 0; flex: 1; padding: 2px 5px; }
@@ -658,8 +698,14 @@ kbd {
   .rail-tab svg { width: 19px; height: 19px; }
 }
 @media (max-width: 620px) {
-  /* the brand shares its row with the three buttons; the repo link wraps inside it */
+  /* the brand shares its row with the buttons; the repo link wraps inside it */
   .brand { flex: 1 1 0; }
+}
+@media (max-width: 400px) {
+  /* eight tabs at a 44px thumb need 381px in one row. A 320 or 360px phone has not got
+     it, and shrinking them back under 44px is the defect. Two rows of four instead. */
+  .rail { display: grid; grid-template-columns: repeat(4, 44px); justify-content: center; }
+  .panel { padding-bottom: calc(110px + max(10px, env(safe-area-inset-bottom))); }
 }
 </style>
 <noscript><style>
@@ -711,6 +757,12 @@ kbd {
     <button class="icon-btn" id="btn-info" aria-label="About this simulation" title="About (I)">
       <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a1 1 0 110 2 1 1 0 010-2zm-1 3h2v5H7z"/></svg>
     </button>
+    <button class="icon-btn" id="btn-immerse" aria-label="Full screen" title="Full screen (F)">
+      <svg viewBox="0 0 16 16"><path d="M1 1h5v2H3v3H1V1zm14 0v5h-2V3h-3V1h5zM1 10h2v3h3v2H1v-5zm12 0h2v5h-5v-2h3v-3z"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-wish" aria-label="Wish it better" title="Wish it better" hidden>
+      <svg viewBox="0 0 16 16"><path d="M8 0l1.9 4.1L14 6l-4.1 1.9L8 12 6.1 7.9 2 6l4.1-1.9z"/></svg>
+    </button>
   </div>
 </header>
 
@@ -748,6 +800,21 @@ kbd {
     <span class="rail-label">Tools</span>
   </button>
 </nav>
+
+<!-- The one control that survives immersive mode, and it must be in the DOM BEFORE the
+     script that binds it: the binding runs inside the main script block far above the
+     end of the document, so a button declared down there is null at bind time.
+     Do NOT write a literal script tag in prose here: html_scar_check.cjs regexes
+     script blocks WITHOUT stripping HTML comments, so a mention inside a comment
+     opens a block it then parses as JavaScript. This very comment failed that way
+     on its first draft. Caught by
+     tools/toolkit-gates/mobile-watertight.mjs as a pageerror at all four widths, which
+     is the class of defect html_scar_check.cjs provably cannot see — it compiles, it
+     just does not run. -->
+<button id="btn-unimmerse" type="button" aria-label="Show the controls" title="Show the controls (Esc)">
+  <svg viewBox="0 0 16 16"><path d="M2 2h4v2H4v2H2V2zm12 0v4h-2V4h-2V2h4zM2 10h2v2h2v2H2v-4zm10 2v-2h2v4h-4v-2h2z"/></svg>
+</button>
+
 
 <!-- Cosmos panel -->
 <section class="panel" id="panel-cosmos" aria-label="Cosmology controls">
@@ -4863,6 +4930,46 @@ const scrim = $('info-scrim');
 function setInfo(open) { scrim.classList.toggle('open', open); }
 $('btn-info').addEventListener('click', () => setInfo(true));
 $('btn-info-close').addEventListener('click', () => setInfo(false));
+
+/* ---------------- Immersive mode ----------------
+   Two states only: chrome shown (the default, unchanged) and chrome hidden. Real
+   fullscreen is REQUESTED, never required — Element.requestFullscreen rejects on iOS
+   Safari for anything that is not a <video>, and AirPlay mirroring is exactly the case
+   the wish describes, so the mode must do its job with the request refused. It does:
+   hiding the chrome IS the feature, and the canvas was already the size of the window.
+   The class is the single source of truth; the Fullscreen API is a listener on it, so
+   a viewer who leaves fullscreen by the browser's own Esc gets the controls back
+   without this file having to guess. */
+const immerse = {
+  on: false,
+  set(want) {
+    if (want === this.on) return;
+    this.on = want;
+    document.body.classList.toggle('immersive', want);
+    if (want) closePanels();
+    $('btn-immerse').setAttribute('aria-pressed', String(want));
+    /* Best effort, both ways. A rejected request leaves `on` true on purpose: the
+       chrome is hidden, which is what was asked for, and the corner bubble is the way
+       back regardless of whether the browser ever went fullscreen. */
+    try {
+      if (want && !document.fullscreenElement) {
+        const p = document.documentElement.requestFullscreen();
+        if (p && p.catch) p.catch(() => {});
+      } else if (!want && document.fullscreenElement) {
+        const p = document.exitFullscreen();
+        if (p && p.catch) p.catch(() => {});
+      }
+    } catch (_) { /* no Fullscreen API at all: chrome-hiding still works */ }
+  },
+};
+$('btn-immerse').addEventListener('click', () => immerse.set(!immerse.on));
+$('btn-unimmerse').addEventListener('click', () => immerse.set(false));
+/* Leaving fullscreen by any route the page does not own — the browser's Esc, the OS,
+   a swipe — must restore the controls, or the viewer is left with a black screen and
+   one 44px bubble. */
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && immerse.on) immerse.set(false);
+});
 scrim.addEventListener('click', e => { if (e.target === scrim) setInfo(false); });
 
 /* Generic switch helper */
@@ -5566,8 +5673,12 @@ window.addEventListener('keydown', e => {
     case '6': togglePanel('panel-sound'); break;
     case '7': togglePanel('panel-lab'); break;
     case '8': togglePanel('panel-tools'); break;
+    case 'f': case 'F': immerse.set(!immerse.on); break;
     case 'Escape':
+      /* Ordered by what the viewer can see: the About scrim sits over everything, then
+         immersive (where no panel is open by construction), then the panels. */
       if (scrim.classList.contains('open')) setInfo(false);
+      else if (immerse.on) immerse.set(false);
       else closePanels();
       break;
     case 'ArrowLeft':  markCamUser(); cam.az -= 0.12; applyCamera(); break;
@@ -8913,13 +9024,90 @@ self-gravity on — the first place this chamber could show a
 non-Hermitian effect acting on matter that acts back.
 NOTE: the block above this one, also numbered 12, is the wishing-well
 ring from the toolkit lane; the numbering continues from here.
+
+RING 14 · 2026-09-03 · the front door's navigation could not be tapped, and the chamber can now fill a television
+WHAT CHANGED: two visitor wishes, both closed here. (1) The wishing-well
+pill covered the tab rail. shared/feedback.js paints it position:fixed
+bottom-right at z-index 2147483000; this page's rail is position:fixed
+bottom-centre at z-index 70. Measured on the DEPLOYED site, elementFromPoint
+at each tab's centre: View/Lab/Tools unreachable at 360 and 390px, Lab/Tools
+at 430, 900 and 1280px, Tools at 768px. So Tools — the archive's whole
+navigation list, the one the deploy gate enforces — could not be opened by
+tap or click at ANY width from 360 to 1280. The "8" key still opened it,
+which is why a keyboard never noticed and no phone could get in at all.
+feedback.js:94 already documented the escape (trigger:false, then call
+Feedback.open from your own control); this page had simply never used it.
+The pill is off, a star in the top bar opens the same modal, and nothing
+is fixed to the bottom-right corner any more. (2) Immersive mode: hides
+the chrome, asks for real fullscreen, and leaves one 44px bubble in the
+now-vacant bottom-right corner to bring the controls back. Button, F key,
+Esc. Plus six controls raised to a 44px thumb at phone widths, and the
+panels' fixed 74px rail-clearance made safe-area-aware.
+BANNED: editing any earlier ring. Turning the pill back on here without
+first moving the rail out of the bottom-right band — the two do not fit,
+and the next surface to mount the well on a page with its own bottom
+chrome will hit this again. Making immersive the default: it ships OFF
+like everything since ring 9, and leaving it restores exactly what was
+there. Touching the render loop, the resize handler or the pixel-ratio
+clamp — this ring changed no rendering code at all.
+DEAD BRANCHES: (1) Lowering the pill's z-index. Not a stacking bug: at
+390px the rail is 343px and the pill 123px, and 343+123 does not fit in
+390 at any stacking order — lowering it would only make the pill the
+unreachable thing. (2) Lifting the pill above the rail with a CSS
+variable. Works, but leaves the corner occupied, and the second wish
+wanted that exact corner. (3) Keeping eight 44px tabs on one row: they
+need 381px and a 320px phone has not got it, so below 400px they wrap to
+two rows of four rather than shrinking back under the thumb. (4)
+Gating the bigger controls on (pointer:coarse) instead of width — the
+mobile gate drives a desktop browser at a narrow viewport, so a coarse
+rule is invisible to it and the gate would stay red while the page looked
+fixed. (5) Declaring the corner bubble at the end of body next to the
+feedback config: it binds inside the main script block far above, so it
+was null at bind time. It is declared under the rail instead.
+KILL-TEST: tools/toolkit-gates/mobile-watertight.mjs --only=<this page> —
+was 24 findings across 320/360/390/430 (six controls under 44px), now
+PASS, 0 findings. Then, served over HTTP at the site base path so the real
+feedback.js loads, at 320/360/390/430/768/900/1280: 8 of 8 tabs hit-test
+to themselves at every width (was 2-3 blocked at each), no .fb-btn in the
+document, window.Feedback present, the star unhidden; immersive makes the
+rail inert and unhittable and shows a reachable bubble, and the bubble
+restores every tab; zero pageerrors. The FIRST run of that harness was a
+false green — read from file://, where the page's root-absolute
+feedback.js 404s and the pill never exists, so every tab passed. A local
+read cannot see this bug; it must be served at the base path or read live.
+THE NON-OBVIOUS CHOICE: the fix is not in shared/feedback.js. The widget
+already carried the hook for a surface that wants its own button, and
+editing the shared file would have put 100+ other pages at risk to fix
+one. The page that has the conflict is the page that resolves it.
+OPEN QUESTIONS: the gate at tools/toolkit-gates/mobile-watertight.mjs
+discovers pages by looking for a trade.js in each top-level directory, so
+it covers 16 trades and skips this file — which the deploy workflow makes
+the SITE ROOT. It caught all six tap targets and the null binding the
+moment it was pointed here by hand. Nothing in CI points it here. Also
+unanswered: whether AirPlay mirroring reports a viewport this page can
+use, which needs a real Apple TV and not a headless browser; and the two
+larger halves of the wishes — a single 100M-particle frame, and whether
+Mandelbrot-style zoom yields anything in 3D.
+
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
   surface: "halo",
   name: "HALO Resonance Chamber",
   accent: "#38bdf8",
-  newLabel: "Wish it better"
+  newLabel: "Wish it better",
+  /* The well's own floating pill is position:fixed bottom-right at z-index 2147483000,
+     which is exactly where this page's tab rail lives. Measured on the deployed site:
+     it covered View, Lab and Tools at 360-390px, Lab and Tools at 430/900/1280px, and
+     Tools at 768px — so the Tools panel, the archive's whole navigation list, could not
+     be opened by tap or click at ANY width from 360 to 1280. Only the "8" key still
+     reached it, which is why desktop never noticed and no phone could get in at all.
+     Not a z-index bug: at 390px the rail is 343px and the pill 123px, and 343+123 does
+     not fit in 390 at any stacking order — lowering the pill would just make the pill
+     the unreachable thing. feedback.js:94 documents this exact escape (trigger:false,
+     then call Feedback.open() from your own control), so the star in the top bar opens
+     the same modal and nothing is fixed to the bottom-right corner any more. */
+  trigger: false
 };</script>
 <!-- ROOT-ABSOLUTE on purpose: this same file is served BOTH at the site root (the
      root page is a byte copy of it) and at /archive/. A relative "shared/feedback.js"
@@ -8927,6 +9115,17 @@ ring from the toolkit lane; the numbering continues from here.
      script logs nothing a visitor sees. The site base is fixed in HELIOS-BRIDGE/vite.config
      as SITE_ROOT = '/nested-resonance-memory-archive/'. -->
 <script src="/nested-resonance-memory-archive/shared/feedback.js"></script>
+<script>
+  /* Unhidden only once feedback.js has actually defined its handle, so the 404 path
+     documented above leaves no dead button in the bar rather than a star that does
+     nothing when tapped. */
+  (function () {
+    var b = document.getElementById('btn-wish');
+    if (!b || !window.Feedback) return;
+    b.hidden = false;
+    b.addEventListener('click', function () { window.Feedback.open(); });
+  })();
+</script>
 
 </body>
 </html>
