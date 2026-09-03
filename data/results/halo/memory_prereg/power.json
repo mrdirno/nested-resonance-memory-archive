@@ -1,0 +1,506 @@
+[
+ {
+  "alpha": 0.0,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 32,
+  "fired_null": 30,
+  "p_value": 0.3494417138100028,
+  "verdict": "INCONCLUSIVE",
+  "passing": [],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.01,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 33,
+  "fired_null": 30,
+  "p_value": 0.2594790015948259,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.015,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 34,
+  "fired_null": 30,
+  "p_value": 0.18314700335164552,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.019,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 35,
+  "fired_null": 30,
+  "p_value": 0.12253041651147285,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.02,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 41,
+  "fired_null": 30,
+  "p_value": 0.0031088013296633353,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.03,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 46,
+  "fired_null": 30,
+  "p_value": 2.1118522811339885e-05,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.05,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 52,
+  "fired_null": 30,
+  "p_value": 2.602845736686399e-09,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.1,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 57,
+  "fired_null": 30,
+  "p_value": 3.1269258016219936e-14,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.2,
+  "null_injected": false,
+  "cells": 60,
+  "fired": 60,
+  "fired_null": 30,
+  "p_value": 8.673617379884035e-19,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0
+   ],
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.0,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 32,
+  "fired_null": 30,
+  "p_value": 0.3494417138100028,
+  "verdict": "INCONCLUSIVE",
+  "passing": [],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.01,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 33,
+  "fired_null": 31,
+  "p_value": 0.34981808847695234,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.015,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 34,
+  "fired_null": 32,
+  "p_value": 0.3500358313522718,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.019,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 35,
+  "fired_null": 33,
+  "p_value": 0.35009344909075585,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.02,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 41,
+  "fired_null": 39,
+  "p_value": 0.34677475825412835,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ]
+  ],
+  "blocked": 10
+ },
+ {
+  "alpha": 0.03,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 46,
+  "fired_null": 43,
+  "p_value": 0.240243092054073,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.05,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 52,
+  "fired_null": 49,
+  "p_value": 0.20516071400501848,
+  "verdict": "INCONCLUSIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.1,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 57,
+  "fired_null": 51,
+  "p_value": 0.014834849082813906,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ },
+ {
+  "alpha": 0.2,
+  "null_injected": true,
+  "cells": 60,
+  "fired": 60,
+  "fired_null": 56,
+  "p_value": 0.015929663336438048,
+  "verdict": "POSITIVE",
+  "passing": [
+   [
+    "default",
+    0,
+    0
+   ],
+   [
+    "default",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0,
+    0
+   ],
+   [
+    "spinchladni",
+    0,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0
+   ],
+   [
+    "spinchladni",
+    0.15,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0
+   ],
+   [
+    "spinchladni",
+    0.3,
+    0.5
+   ],
+   [
+    "spinchladni",
+    0.5,
+    0
+   ]
+  ],
+  "blocked": 11
+ }
+]

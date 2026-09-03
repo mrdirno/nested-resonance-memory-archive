@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-02 (pre-registered) · 2026-09-03 (grid completed, read, and audited) · **Pre-registration:** [`docs/preregistrations/2026-09-02_halo_cross_epoch_memory.md`](../docs/preregistrations/2026-09-02_halo_cross_epoch_memory.md), frozen at commit `a30ada56` before any confirmatory run existed
 **Instrument:** `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html` (HALO, V501), test build md5 `e91d5a1d44a1dde519195e4e925fa515` · **Data:** `data/results/halo/memory_prereg/`
-**Code:** `tests/halo/memory_prereg_run.js` · `memory_prereg_grid.sh` · `experiments/halo/memory_prereg_analyze.py` · `_verdict.py` · `_nullrate.py` · `_robustness.py` · `_rotation.py` · `_artefact.py` · `_figure.py`
+**Code:** `tests/halo/memory_prereg_run.js` · `memory_prereg_grid.sh` · `experiments/halo/memory_prereg_analyze.py` · `_verdict.py` · `_nullrate.py` · `_robustness.py` · `_rotation.py` · `_artefact.py` · `_power.py` · `_figure.py`
 
 ## Claim
 
@@ -22,10 +22,11 @@ structure, all figure, every trace of a relic pattern — makes the criterion fi
 **And the registered control is not a control.** In the ten conditions that fire, the Two-back
 arm's relic block holds four or five non-zero cells out of 512 with 99.8 % of its variance in
 one of them; swapping that whole relic for a bare 0/1 indicator of the single dominant cell
-changes Two-back by at most 0.0001 in ten of the twelve runs measured. Meanwhile the independent-seed *null* is not independent: across
-conditions the median correlation between a run's own relic and another seed's is 0.99988, and
-in twelve of twenty conditions it is 0.99999 or better. Criterion 8(d) was comparing a
-measurement with a copy of itself.
+changes Two-back by at most 0.0001 in ten of the twelve runs measured. Meanwhile the
+independent-seed *null* is degenerate exactly where the criterion fires: in the shipped-defaults
+family a run's own relic and another seed's correlate at 0.99999 or better, so criterion 8(d)
+compared a measurement with a copy of itself. It is a sound null in the Spinning Chladni family
+at self-gravity 0.3 and above (0.64, 0.10, 0.07), which is where the criterion does not fire.
 
 So the passive-relic reading of nested resonance memory is **not** retired here, and it is not
 supported. It was never actually put at risk. The instrument this cycle retires is the test.
@@ -132,31 +133,38 @@ asymmetry is on the *relic* side: Two-back reads the whole cube at stride 4 whil
 reads the central eighth at stride 2 — a roughly tenfold denser sample. So the matched arm tracks
 Retained (0.5763 against 0.5775 at defaults, self-gravity 0.8) and reproduces the same artefact.
 
-### 3. The null arm is not independent
+### 3. The null arm is degenerate exactly where the criterion fires
 
-Correlating each run's density against another seed's at the same epoch, over the full mesh:
+Correlating each run's density against another seed's at the same epoch, over the full mesh
+(median across the scored epochs, per condition):
 
-| | median cross-seed correlation |
+| condition family | cross-seed correlation |
 |---|---|
-| across all 20 conditions | **0.99988** |
-| ≥ 0.99999 | 12 of 20 conditions |
-| lowest | 0.069 (Spinning Chladni, self-gravity 0.8, gain/loss 0) |
+| shipped defaults, every self-gravity | **0.99999 – 1.00000** (7 of 8 conditions) |
+| Spinning Chladni, self-gravity 0 and 0.15 | 0.910 – 0.9998 |
+| Spinning Chladni, self-gravity 0.3 | 0.638 – 0.922 |
+| Spinning Chladni, self-gravity 0.5 and 0.8, gain/loss 0 | **0.101 and 0.069** |
 
-For most of the grid the seed does not survive the dynamics: the three "independent realisations"
-are the same field. That is why the two arms track each other to four decimals in the firing
-conditions, why 30 of 32 real firings are matched one-for-one by a null firing, and why 8(d)
-could never have discriminated. The estimator's genuine memoryless floor is ShuffleNull, which
-fires in **0 of 60** cells.
+The seed survives the dynamics only where the swarm is strongly self-bound. Across the whole
+grid the median is 0.99988, and in twelve of twenty conditions it is 0.99999 or better — and
+those twelve include every condition that fires. So the null is a near-duplicate of the
+treatment exactly where 8(d) has to discriminate, and a sound null only where nothing fires.
+That is why the two arms track each other to four decimals in the firing conditions and why 30
+of 32 real firings are matched one-for-one by a null firing. The estimator's genuine memoryless
+floor is ShuffleNull, which fires in **0 of 60** cells.
 
 ### 4. The clamp is not the binding constraint, and gate 7.2 names the wrong mechanism
 
 §10 instructs the next cycle to change the integrator on an inconclusive result. That plan is
 aimed at the wrong dial. Delete gate §7.2 entirely and apply §8 literally: the same ten
 conditions now satisfy (a), (b) and (c) — and 8(d) still refuses a positive at p = 0.3494. §8
-then names no branch at all: not POSITIVE, not NULL, and its INCONCLUSIVE clause is false. A
-positive was structurally unreachable with or without the clamp, because every condition that
-fires is ceiling-bound (10 of 10) while the highest median clamp share among the nine admissible
-conditions is 0.1702 — the gate is collinear with the outcome.
+then names no branch at all: not POSITIVE, not NULL, and its INCONCLUSIVE clause is false. On
+this grid the gate is perfectly collinear with the outcome: every condition that fires is
+ceiling-bound (10 of 10), while the highest median clamp share among the nine admissible
+conditions is 0.1702. That collinearity is a fact about this physics and **not** a proof that
+the design could not have returned a positive — §6 shows by injection that it could, at 2 % of
+the scored block's mass. An earlier draft of this document claimed the stronger thing; the
+injection test refuted it.
 
 The gate's stated rationale, that a clamped condition's "numbers measure the 500-unit force
 clamp, not the physics", is also not what those numbers measure. They measure the monopole: the
@@ -206,7 +214,49 @@ its control arm's block holds 1.3 %.
 mass is.** Every cell is either clamped — where Δ is the monopole artefact — or scoring a region
 that is nearly empty. That, and not the clamp alone, is why the test could not answer.
 
-### 6. The one contrast that cancels the offsets — exploratory, and it does not decide
+### 6. How much memory this design would have caught — the number that makes the rest readable
+
+A non-result is only readable beside the effect the design could detect, and the
+pre-registration never asked. Injection–recovery answers it. At every scored epoch a fraction
+α of the scored block's mass is replaced by a verbatim copy of exactly what the strong reading
+predicts — the previous epoch's relic, read through the ×2 map so it lands where the map says
+it should reappear, rescaled to leave the block's mass unchanged. Nothing else changes: same
+meshes, same gates, same §8 rule. α = 0 is the archive's own dataset.
+
+| α (fraction of the scored block's mass) | fired | p (8d) | conditions passing (a)(b)(c) | verdict |
+|---|---|---|---|---|
+| 0.000 — the confirmatory grid | 32 | 0.349 | 0 | INCONCLUSIVE |
+| 0.019 | 35 | 0.123 | 1 | INCONCLUSIVE |
+| **0.020** | **41** | **0.003** | **2** | **POSITIVE** |
+| 0.050 | 52 | <0.001 | 5 | POSITIVE |
+| 0.200 | 60 | <0.001 | 9 | POSITIVE |
+
+**So this design was not powerless, and a positive was not structurally unreachable.** A passive
+relic carrying 2.0 % of the scored block's mass flips this exact grid to POSITIVE under §8
+unchanged. Nothing of that strength is present.
+
+That reading holds the SeedNull arm at its measured value. Recomputing the null on the injected
+field too — strictly conservative, and the right thing to do given §3, since in the defaults
+family the two seeds' fields are near-duplicates and the injection leaks into the null — moves
+the threshold to **α = 0.10**. The honest bound is therefore between 2 % and 10 % of the scored
+block's mass, and the block itself holds 0.00 to 0.12 of the matter, so in absolute terms the
+design could see a lab-frame relic of a few parts per thousand of all matter and saw none.
+
+### 7. Two corrections the estimator needs, both measured
+
+**Half the headline contrast is an index offset.** A shrink by *f* about the origin sends cell
+centre *c* to *f·c* − 15.5(*f*−1), that is 2*c* − 15.5 and 4*c* − 46.5. `labCorr` uses 2*c* − 16
+and 4*c* − 48: half a cell out on the primary arm and **1.5 cells out on the control arm**.
+Re-centring only the control arm, leaving the primary exactly as shipped, drops the grid-wide
+median Δ from **+0.1356 to +0.0684**.
+
+**Removing the monopole empties the result completely.** Subtract each mesh's own spherical
+average and re-run §8 over the admissible subset: **0 of 27 cells fire on the real arm and 0 of
+27 on the null.** No baseline bias, nothing left to explain. What survives on angular structure
+alone is a paired excess of a run's own relic over a stranger's of **+0.0079 ± 0.0686
+(t = +2.82, n = 594 scored cell-epochs)** — real, and an order of magnitude below the criterion.
+
+### 8. The one contrast that cancels the offsets — exploratory, and it does not decide
 
 Differencing each arm against its **own** matched null makes the map offsets cancel inside each
 term. The quantity §1 actually names — lag-1 excess minus lag-2 excess, (Retained^M − SeedNull^M)
@@ -258,16 +308,22 @@ Not the integrator — the estimator. In order:
 
 1. **Match the relic footprint, not the current block.** The two arms must sample the relic at the
    same sparsity, or the difference of their Pearsons measures the sampling.
-2. **Remove the monopole before correlating.** Subtract each mesh's own spherical average; the
-   static-sphere table is what survives when this is skipped. Under that correction the
-   sign-consistent excess of §6 drops only to +0.0131 (7 of 9 positive, p = 0.043), so it is not
-   merely the envelope.
-3. **Get a null that is actually independent.** Cross-seed correlation of 0.99988 means the seed
+2. **Re-centre the maps.** A shrink by *f* about the origin sends cell centre *c* to
+   *f·c* − 15.5(*f*−1). The control arm is 1.5 cells out, and correcting it alone halves the
+   grid-wide median contrast (§7).
+3. **Remove the monopole before correlating.** Subtract each mesh's own spherical average; the
+   static-sphere table is what survives when this is skipped. It empties the admissible subset
+   completely (0 of 27 on both arms), and the sign-consistent excess of §8 drops only to +0.0131
+   (7 of 9 positive, p = 0.043), so that residue is not merely the envelope.
+4. **Score where the matter is.** The block must follow the shell at the cavity wall; on this
+   grid it held 0.00 to 0.12 of the matter and its control block held 0.0000 to 0.0128.
+5. **Get a null that is actually independent.** Cross-seed correlation of 0.99988 means the seed
    is not the right randomisation. ShuffleNull is the only arm on this grid that behaves like a
    null; a phase-randomised or time-reversed surrogate would be better than either.
-4. **Calibrate the criterion against a no-memory field before freezing it.** Ten minutes with a
-   Plummer sphere would have shown that 0.10 was below the artefact floor, before ninety minutes
-   of GPU time and a frozen protocol were spent on it.
+6. **Calibrate the criterion against a no-memory field, and compute the design's power, before
+   freezing it.** Ten minutes with a Plummer sphere would have shown that 0.10 sits below the
+   artefact floor, and one injection–recovery pass would have given the detectable effect size —
+   both before ninety minutes of GPU time and a frozen protocol were spent on them.
 
 ## Reproduction
 
@@ -290,6 +346,7 @@ python3 ../../experiments/halo/memory_prereg_nullrate.py
 python3 ../../experiments/halo/memory_prereg_robustness.py
 python3 ../../experiments/halo/memory_prereg_rotation.py    # exploratory
 python3 ../../experiments/halo/memory_prereg_artefact.py    # the static-sphere and surrogate checks
+python3 ../../experiments/halo/memory_prereg_power.py       # injection-recovery: what this design could catch
 python3 ../../experiments/halo/memory_prereg_figure.py
 ```
 

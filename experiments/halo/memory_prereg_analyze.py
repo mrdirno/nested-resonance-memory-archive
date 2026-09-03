@@ -118,8 +118,16 @@ def main(indir):
     for fn in sorted(os.listdir(indir)):
         if not fn.endswith('.json'):
             continue
-        with open(os.path.join(indir, fn)) as fh:
-            head = json.load(fh)
+        try:
+            with open(os.path.join(indir, fn)) as fh:
+                head = json.load(fh)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # The schema guard below anticipated derived products in this directory but
+            # not a half-written one. A sibling script crashed mid-write on 2026-09-03
+            # and left a truncated artefact.json that sorts before every run file, so
+            # this loop aborted at 0 of 60 runs on an unguarded json.load.
+            print(f'  skipping {fn}: not valid JSON', file=sys.stderr)
+            continue
         # derived products live in the same directory; a run is what carries a mesh
         if not isinstance(head, dict) or head.get('schema') != 'halo-memory-prereg/1':
             continue
