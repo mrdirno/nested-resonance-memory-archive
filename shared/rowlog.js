@@ -1353,6 +1353,10 @@
       persistNow(); render();
     });
     if (tsvBtn) tsvBtn.addEventListener("click", function () { copyText(tsv(), tsvBtn, cfg.onFlash); });
+    /* Send shares the same text() the Copy button copies, and a SENT list is a
+     * copied list: the delta ("what changed since your last copy") advances when
+     * the share sheet resolves, not when it opens (C3698). */
+    if (copyBtn && window.ToolkitSend) ToolkitSend(copyBtn, text, { after: previewEl, onSent: function () { copiedAt = touch; persistNow(); render(); } });
 
     /* THE RESTORE MOUNTS ITSELF, on every page that already offers the copy.
      * The claim it repairs is printed on twenty pages across nine trades, and a

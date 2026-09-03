@@ -297,6 +297,21 @@ jobs:
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
 
+          # SEND IS IN THE RUNTIME AND EVERY DOCUMENT ENGINE REGISTERS IT (C3698).
+          # shared/toolkit.js mounts a Send button beside Copy wherever the
+          # browser has a share sheet; each shared engine registers its own
+          # document function once, where it binds Copy. A runtime shipped
+          # without the helper, or an engine shipped without its one line,
+          # is a rack of pages whose Send silently never appears — no error,
+          # no 404, nothing to notice. Asserted on the ARTIFACT, not the tree.
+          grep -q 'window.ToolkitSend = mountSend' HELIOS-BRIDGE/dist/shared/toolkit.js \
+            || { echo "FAIL: shared/toolkit.js in the artifact does not define ToolkitSend — Send would be absent from every page"; exit 1; }
+          for e in checklist-request note rowlog package holdtest whatcameback; do
+            grep -q 'ToolkitSend(' "HELIOS-BRIDGE/dist/shared/$e.js" \
+              || { echo "FAIL: shared/$e.js in the artifact never calls ToolkitSend — every page on that engine ships without Send"; exit 1; }
+          done
+          echo "send: runtime helper present, 6 engines register it"
+
           # THE ROOT IS THE HALO PAGE AND THE CLASSIC APP IS WHOLE UNDER IT.
           # Two pages changed places in the staging step, and each can fail
           # silently: a skipped root copy leaves the classic bundle's index.html

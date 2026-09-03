@@ -315,7 +315,7 @@ ul.items{list-style:none;margin:0;padding:0}
 
 </div>
 
-<div class="dock">
+<div class="dock" data-fixed-bar>
   <div class="dock-in">
     <div class="readout"><b id="count">00</b><span id="countLabel">items needed</span></div>
     <button class="btn" id="clear" type="button">Clear all</button>
@@ -566,6 +566,14 @@ function asText(){
 }
 
 const copyBtn = document.getElementById("copy");
+/* Send: the same asText(), through the share sheet (C3698). This page loads the
+ * shared runtime AFTER its own script, so the helper is not here yet — it is
+ * registered on the runtime's ready event instead, the same signal the engines
+ * already re-render on. */
+(function () {
+  function mountSend() { if (window.ToolkitSend) ToolkitSend(copyBtn, asText, { after: document.getElementById("preview") }); }
+  if (window.ToolkitSend) mountSend(); else document.addEventListener("av:ready", mountSend);
+})();
 function flash(msg){
   const was = copyBtn.textContent;
   copyBtn.textContent = msg;

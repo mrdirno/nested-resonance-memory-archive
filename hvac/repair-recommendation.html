@@ -737,6 +737,7 @@ ul.ticks li:has(input:checked){background:var(--tint)}
       navigator.clipboard.writeText(text).then(function () { flash("Copied. Go paste it."); }, fallback);
     } else fallback();
   });
+  if (window.ToolkitSend) ToolkitSend($("copy"), buildDoc, { after: $("preview") });   // Send: the same buildDoc(), through the share sheet (C3698)
 
   $("clear").addEventListener("click", function () {
     if (!confirm("Clear this one? Your name and company stay.")) return;

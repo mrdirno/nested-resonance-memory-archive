@@ -898,6 +898,7 @@
       copyBtn.addEventListener("click", function () {
         copyText(buildDoc(), copyBtn, cfg.copiedLabel, cfg.copyFailLabel);
       });
+      if (window.ToolkitSend) ToolkitSend(copyBtn, buildDoc, { after: previewEl });   // Send: the same buildDoc(), through the share sheet (C3698)
     }
     var clearBtn = byId(cfg.clear || "clear");
     if (clearBtn) {

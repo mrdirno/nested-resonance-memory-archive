@@ -739,6 +739,7 @@
     if (copyBtn) copyBtn.addEventListener("click", function () {
       copyText(asText(), copyBtn, cfg.copiedLabel || "Copied");
     });
+    if (copyBtn && window.ToolkitSend) ToolkitSend(copyBtn, asText, { after: byId(cfg.preview) });   // Send: the same asText(), through the share sheet (C3698)
     var clearBtn = byId(cfg.clear);
     if (clearBtn) clearBtn.addEventListener("click", function () {
       if (!window.confirm(cfg.clearConfirm || "Wipe every figure off this sheet?")) return;

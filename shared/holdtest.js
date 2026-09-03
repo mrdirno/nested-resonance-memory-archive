@@ -611,6 +611,7 @@
 
     if (btnCopy) {
       btnCopy.addEventListener("click", function () { copyText(doc(), btnCopy); });
+      if (window.ToolkitSend) ToolkitSend(btnCopy, doc, { after: elPrev });   // Send: the same doc(), through the share sheet (C3698)
     }
 
     /* The runtime paints the trade colours and the nav after boot; re-render so a

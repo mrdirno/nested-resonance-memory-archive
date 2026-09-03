@@ -591,6 +591,10 @@ ul.ticks.pick .nm{font-weight:700}
     btn.textContent = msg;
     setTimeout(function () { btn.textContent = old; }, 1600);
   }
+  function stashLast() {
+    try { var st = readState(); st.shots = []; localStorage.setItem(LAST_KEY, JSON.stringify(st)); } catch (e) {}
+    paintCarry();
+  }
   $("copy").addEventListener("click", function () {
     var t = text(), btn = this;
 
@@ -605,8 +609,7 @@ ul.ticks.pick .nm{font-weight:700}
      * question, and he can always select the preview by hand.
      * §SCARS, generalised: never hang a state change off the success branch of
      * a capability you already know is unavailable on the target device. */
-    try { var st = readState(); st.shots = []; localStorage.setItem(LAST_KEY, JSON.stringify(st)); } catch (e) {}
-    paintCarry();
+    stashLast();
 
     function done() { flash(btn, "Copied ✓"); }
     function fallback() {
@@ -625,6 +628,10 @@ ul.ticks.pick .nm{font-weight:700}
       navigator.clipboard.writeText(t).then(done, fallback);
     } else { fallback(); }
   });
+  /* Send shares the same text(); a SENT note is a finished note, so the carry-forward
+   * arms when the share sheet resolves — not when it opens, because a cancelled
+   * sheet is not a sent note (C3698). */
+  if (window.ToolkitSend) ToolkitSend($("copy"), text, { after: $("preview"), onSent: stashLast });
 
   /* Start fresh keeps the two sticky fields — the job and his own name are typed
    * once per job, not once per storm — and it stashes nothing it did not already

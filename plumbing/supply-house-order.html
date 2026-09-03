@@ -552,6 +552,7 @@ ul.items{list-style:none;margin:0;padding:0}
   });
 
   var copyBtn = document.getElementById("copy");
+  if (window.ToolkitSend) ToolkitSend(copyBtn, asText, { after: preview });   // Send: the same asText(), through the share sheet (C3698)
   function flash(msg){
     var was = copyBtn.textContent;
     copyBtn.textContent = msg;

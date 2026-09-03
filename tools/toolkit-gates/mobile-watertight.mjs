@@ -655,6 +655,17 @@ for (const page of PAGES) {
     const p = await ctx.newPage();
     const errs = [];
     p.on('pageerror', e => errs.push(String(e)));
+    /* SEND IS ON EVERY PHONE AND ON NO HEADLESS CHROMIUM (C3698). shared/toolkit.js
+       mounts a Send button beside Copy only where navigator.share exists — which
+       is every iPhone and Android this toolkit is built for, and NOT this gate's
+       headless Chromium on macOS, where the API is undefined. Left alone, this
+       gate would measure the fixed bar in the one state no phone is in, and a
+       fourth control that wraps the count or clips Copy at 320px would pass here
+       and ship. So the API is stubbed PRESENT by default and the bar is measured
+       with Send in it; TK_NO_SHARE=1 measures the desktop-Firefox state instead.
+       The stub never opens a sheet — layout is the only question here; parity and
+       behaviour are tools/toolkit-gates/send-is-copy.mjs. */
+    if (!process.env.TK_NO_SHARE) await p.addInitScript(() => { navigator.share = () => Promise.resolve(); });
 
     for (const state of STATES) {
       /* Re-loaded per state on purpose: pass B leaves the root font bumped, and

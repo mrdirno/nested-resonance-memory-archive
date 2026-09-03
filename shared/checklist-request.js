@@ -612,6 +612,7 @@
     if (clearBtn) clearBtn.addEventListener("click", clearAll);
 
     if (copyBtn) copyBtn.addEventListener("click", function () { copyText(text(), copyBtn, cfg.onFlash); });
+    if (copyBtn && window.ToolkitSend) ToolkitSend(copyBtn, text, { after: preview });   // Send: the same text(), through the share sheet (C3698)
 
     /* ── NARROWING THE LIST ────────────────────────────────────────────────────
      * These lists run 35 to 151 items and had no way to get down them but the

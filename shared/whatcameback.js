@@ -557,6 +557,7 @@
 
     $("#wcbCopy").addEventListener("click", function () { copyText(brief(), this, "Copied — send it to your crew"); });
     $("#wcbRe").addEventListener("click", function () { copyText(reconfirm(), this, "Copied — send it to them"); });
+    if (window.ToolkitSend) { ToolkitSend($("#wcbCopy"), brief); ToolkitSend($("#wcbRe"), reconfirm); }   // Send: same brief()/reconfirm() (C3698)
 
     if (!state.on) { state.on = todayISO(); fields.on.value = state.on; }
 

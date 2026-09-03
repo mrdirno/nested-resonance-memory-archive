@@ -416,6 +416,22 @@
   .av-done h3{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.03em;font-size:19px;margin:0 0 8px}
   .av-done p{font-size:13.5px;color:var(--av-muted);line-height:1.5;max-width:42ch;margin:0 auto 14px}
   @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+  /* SEND (C3698) — the share sheet, mounted by ToolkitSend() below and ONLY where
+     navigator.share exists, so this rule is idle on a desktop Firefox. Copy keeps
+     the filled accent and stays the default; Send is the accent as an outline with
+     the same 44px floor. Beside Copy where Copy is in the flow; under the preview
+     (.tk-sendrow, full width) where Copy lives in a fixed bar — never inside one.
+     The doubled selector outranks the pages' own ".bar button{padding}" rule. */
+  button.tk-send,.bar button.tk-send{font-family:var(--cond,inherit);text-transform:uppercase;letter-spacing:.06em;
+    font-size:15px;font-weight:700;border-radius:2px;padding:11px 12px;min-height:44px;cursor:pointer;
+    white-space:nowrap;background:transparent;border:1px solid var(--flag);color:var(--flag)}
+  button.tk-send:hover{filter:brightness(1.15)}
+  button.tk-send[disabled]{opacity:.45;cursor:default;filter:none}
+  button.tk-send:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+  /* Under the preview, on the pages whose Copy lives in a fixed bar: full width,
+     one tap, the document he just read directly above it. */
+  .tk-sendrow{margin:10px 0 0}
+  .tk-sendrow button.tk-send{display:block;width:100%;padding:12px 14px}
   `;
 
 
@@ -1164,6 +1180,117 @@
   }
 
   /* ------------------------------------------------------------------- boot */
+  /* ── SEND — the OS share sheet next to Copy, on every document surface (C3698) ──
+   * Every page here ends in Copy: the document goes to the clipboard and the man
+   * switches apps, finds the thread, long-presses, pastes. On a phone the share
+   * sheet is the door he already uses for everything else — WhatsApp, Messages,
+   * Mail, the thread itself in the suggestions row — so Send hands the SAME text
+   * to that sheet in one tap. A three-lens panel (av/AV_SOCIETY.md §THE PANEL,
+   * C3698) scored it 7 / 3 / 7 and agreed on every line of this design:
+   *
+   *  · MOUNTED ONLY WHERE `navigator.share` EXISTS. Otherwise it is not in the DOM
+   *    at all — no phantom tap target, no screen-reader ghost, Copy unaffected.
+   *  · THE PAYLOAD IS EXACTLY { text }. Never a title (it becomes a Subject on
+   *    mail targets and vanishes on SMS), never a url (iOS appends a link chip).
+   *    The text is whatever the page's own Copy would have copied, from the same
+   *    function, so the two cannot drift (tools/toolkit-gates/send-is-copy.mjs
+   *    asserts it byte for byte and that the object has no other key).
+   *  · CALLED SYNCHRONOUSLY INSIDE THE TAP. share() needs the gesture that is
+   *    still in flight; one await before it and iOS rejects NotAllowedError,
+   *    which the fallback would then hide forever. Nothing here awaits first.
+   *  · DISABLED WHILE A SHEET IS UP. A second tap mid-share throws
+   *    InvalidStateError; a glove finds that in a week.
+   *  · CANCEL DOES NOTHING. AbortError is him closing the sheet — no toast, and
+   *    NEVER a clipboard write he did not ask for.
+   *  · ANY OTHER FAILURE SAYS SO ON THE BUTTON — "Tap Copy" — and writes nothing.
+   *    The gesture is gone by then, so a clipboard write would itself fail on
+   *    iOS and leave a stray textarea; the honest move is to point at the button
+   *    that still works, two fingers to the left.
+   *  · NO SUCCESS TOAST. The sheet resolving means the target app took the text,
+   *    not that a person read it; the app he picked is already on screen.
+   *  · IT MIRRORS COPY'S disabled STATE (a page that disables Copy at zero lines
+   *    gets a Send that is disabled too), and it follows the language layer:
+   *    "Enviar" when the page flips to Spanish.
+   *  · IT NEVER ENTERS A FIXED BAR. The first build put Send beside Copy in the
+   *    fixed bottom bar and the measurement killed it in one run: at 320px, 25 of
+   *    50 bar pages pushed a control past the glass and the count label fell to
+   *    0–23px on 44 of them (§SCARS C3698). So when Copy lives in a fixed bar,
+   *    Send mounts IN-FLOW, full width, directly under the document preview the
+   *    caller hands over as `opts.after` — he reads what he is about to send and
+   *    the door is right under it — and Copy keeps the bar to itself. Where Copy
+   *    is already in-flow (the row logs, the hold tests, the access brief), Send
+   *    sits beside it. A fixed-bar Copy with no `after` mounts NOTHING rather
+   *    than clip the one button every page is built around.
+   *
+   * WHO REGISTERS: each shared engine, once, where it binds its own Copy — and the
+   * four pages that still carry a hand-written copy handler. `provider` is the
+   * engine's own document function. `opts.onSent` runs when the share resolves
+   * (rowlog uses it to advance "what changed since your last copy", because a
+   * sent list is a copied list). Pages whose receiver is an AI chat box rather
+   * than a person (the write-up shelves, the report builder) do not register —
+   * the gate names them, so the exclusion is a list and not an accident. */
+  function mountSend(copyBtn, provider, opts) {
+    opts = opts || {};
+    if (!copyBtn || typeof provider !== "function") return null;
+    if (typeof navigator.share !== "function") return null;
+    /* Fixed-ness is READ, never guessed from a class name: av/consumables keeps
+       its Copy in a fixed `.dock`, not a `.bar`, and a class list would have put
+       Send straight back into the one place the measurement forbids. */
+    var fixed = false;
+    try {
+      for (var a = copyBtn; a && a !== document.body; a = a.parentElement) {
+        if (getComputedStyle(a).position === "fixed") { fixed = true; break; }
+      }
+    } catch (e) { fixed = false; }
+    var host = opts.after && opts.after.nodeType === 1 ? opts.after : null;
+    if (fixed && !host) return null;
+    if (!copyBtn.id) copyBtn.id = "tk-copy-" + (++sendSeq);
+    var existing = null, all = document.querySelectorAll(".tk-send");
+    for (var i = 0; i < all.length; i++) if (all[i].getAttribute("data-for") === copyBtn.id) existing = all[i];
+    if (existing) return existing;
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "tk-send"; b.setAttribute("data-for", copyBtn.id);
+    var busy = false;
+    function es() { return /^es\b/i.test(document.documentElement.lang || ""); }
+    function label() { b.textContent = es() ? (opts.labelEs || "Enviar") : (opts.label || "Send"); }
+    function mirror() { if (!busy) b.disabled = !!copyBtn.disabled; }
+    label(); mirror();
+    try {
+      new MutationObserver(mirror).observe(copyBtn, { attributes: true, attributeFilter: ["disabled"] });
+      new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    } catch (e) {}
+    b.addEventListener("click", function () {
+      if (busy || copyBtn.disabled) return;
+      var text = "";
+      try { var v = provider(); text = v == null ? "" : String(v); } catch (e) { text = ""; }
+      if (!text) return;
+      busy = true; b.disabled = true;
+      var p;
+      try { p = navigator.share({ text: text }); } catch (e) { p = Promise.reject(e); }
+      function settle() { busy = false; b.disabled = !!copyBtn.disabled; }
+      Promise.resolve(p).then(function () {
+        settle();
+        if (typeof opts.onSent === "function") { try { opts.onSent(text); } catch (e) {} }
+      }, function (err) {
+        settle();
+        if (err && err.name === "AbortError") return;
+        b.textContent = es() ? "Toca Copiar" : "Tap Copy";
+        setTimeout(label, 2000);
+      });
+    });
+    if (fixed) {
+      var row = document.createElement("div");
+      row.className = "tk-sendrow";
+      row.appendChild(b);
+      host.insertAdjacentElement("afterend", row);
+    } else {
+      copyBtn.insertAdjacentElement("afterend", b);
+    }
+    return b;
+  }
+  var sendSeq = 0;
+  window.ToolkitSend = mountSend;
+
   function boot() {
     // Base sheet, then the trade's accent overrides the AV yellow. One runtime,
     // many trades — a trade is recognisable at a glance without forking the CSS.
@@ -1181,7 +1308,7 @@
     // toolkit already shipped (which calls AV.today() / AV.toggleFav()) keeps working.
     window.Toolkit = { openWell: openWell, tools: TOOLS, trade: TRADE, trades: TRADES,
                        today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); },
-                       favorites: favLoad, isFav: favIs, toggleFav: favToggle };
+                       favorites: favLoad, isFav: favIs, toggleFav: favToggle, send: mountSend };
     window.AV = window.Toolkit;
     resolveToday();
     document.dispatchEvent(new CustomEvent("av:ready"));
