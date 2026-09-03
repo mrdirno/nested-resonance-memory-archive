@@ -8366,3 +8366,56 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   **3**. Send and Copy are two doors to the same document — the CHOICE §THE EVO LOOP exists to
   instrument — and nothing counts which door gets used. That is the named next rung; until it
   is counted the dissent stands unanswered. · **VERIFIED ON THE LIVE ARTIFACT, not on the tree.** The deploy printed its own new assertion — `send: runtime helper present, 6 engines register it` — and the whole gate re-run against the deployed site returns the IDENTICAL line: **117 mount · 17 excluded · 297 parity pairs · 5,199 checks · 0 failing.** Before this cycle the live `shared/toolkit.js` matched `ToolkitSend` **zero** times. https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/supply-house-order.html
+
+- `2026-09-03` — **[AXIS:COMMONS] C3700 — THE WORD HE FINISHED TYPING WAS TREATED AS ONE HE
+  WAS STILL ON, AND 453 WRONG ANSWERS RODE OUT THROUGH THE GAP.** The named COMMONS rung said
+  the remaining lie lived where *nothing* was dropped, and cited *"pipe wrenches"* on
+  `av/write-up` as its example. That query DROPS A WORD. `shared/find.js` would not name a
+  trailing token until a separator arrived — right, while the word could still be in progress
+  — but `say` empty ALSO makes rule 6's clause vacuous, so the answer went out labelled
+  **exact** with no sentence at all. Rule 6 did not leave a hole beside itself; it left the
+  door it stands in unlocked. · **MEASURED FIRST, RUNG WRITTEN SECOND: 41,516 searches on 33
+  surfaces.** 3,181 answers were exact only because the hold-back had emptied `say`; the 623
+  unhedged-wrong decompose **453 hold-back · 124 nothing-dropped · 46 past rule 6 on a real
+  name**, not the 322/47.7% the book had written down. · **THE THRESHOLD IS EVIDENCE, NOT
+  TASTE:** at one character `tokenScore()` has no prefix path (the real flicker window), at
+  three both prefix and infix are live, so a three-character trailing token that matched
+  NOTHING begins no word and sits inside no word anywhere in the library — a word this page
+  does not have, not a word in progress. `var UNDER_THUMB = 3`, one clause, nothing else
+  touched. · **BEFORE → AFTER: unhedged-wrong 623 → 172**, diffed query by query rather than
+  totalled — **759 newly hedged, 0 newly UNhedged, lead row moved 0 times in 41,516
+  searches**; verbatim 586/586, alias 864/864, mid-typing **12,813/12,813**, whole-name-plus
+  -chrome 248/248 on the libraries and 60/60 on the commons. The 451 was PREDICTED from the
+  baseline run through the engine's exported `wholeName` and then RETURNED by the patched
+  engine's diff — **two paths, one number**. · **THE CANDIDATE THAT LOST IS ON THE RECORD:**
+  RUN (a contiguous whole-word run inside one name) was written into the engine, measured at
+  31 of the 124 nothing-dropped class for **24 mid-typing keystrokes**, and TAKEN BACK OUT
+  against a pre-registered bar of zero; BAG (any order) sees 17. · **BACKPORT RIDER FIRED, and
+  structurally — one engine, every surface that loads it.** Asserted rather than assumed: the
+  451 distribute **198 document libraries · 217 tap-to-tick lists · 36 commons**, and all 33
+  surfaces were driven. · **GATE:** `find-noise.mjs` N9 + N10 are ONE PAIR either side of the
+  engine's own `Find.underThumb`, red-verified by restoring code — at 99 (old behaviour) N10
+  fails on 33 surfaces, at 0 N9 fails on the same 33, at 3 **GREEN 396 checks** (was 363).
+  `find-honesty.mjs` 8,973 checks 0 failing, unmoved. · **THE SCAR THIS CYCLE EARNED:** the
+  first N10 read the constant to decide WHETHER to run, so reverting the engine made the class
+  VANISH and the file printed GREEN — a probe may read a constant to choose what to TYPE, never
+  whether to RUN. · **THE NAMED NEXT RUNG IS BIGGER THAN WHAT WAS LEFT:** rule 6 is
+  structurally blind on the tap-to-tick surfaces, because `shared/pickfilter.js` indexes the
+  whole `<li>` text as its one primary field and `wholeName()` can never be true there — class
+  H is **8/280 exact on pick against 248/248 on the libraries**, so **272 false hedges** on the
+  shape rule 6 was written to leave alone. It is a field spec, not a predicate, and it moves
+  ranking on fourteen surfaces, so it ships with its own lead-movement diff or not at all. ·
+  **ALL 34 GATES RUN THIS CYCLE: 33 green on `file://`, and the 34th
+  (`rowlog-commit-merge`) green too once served — its red is `ERR_CONNECTION_REFUSED` on
+  127.0.0.1:8777, an environment requirement, not a defect.** That answers C3699's open
+  condition for shipping `.github/workflows/toolkit-gates-and-e2e.yml` and finds the reason it
+  would STILL fail: the gates job globs every gate but starts no static server, so that one
+  gate needs a server step (or a served default) before the rail goes on. Left untracked
+  deliberately — shipping it unmeasured is the exact mistake C3699 scarred. · **Storefront
+  unchanged** — no new tool, no new trade; this is a correctness fix inside the engine that
+  134 registered tools already load. · **VERIFIED ON THE LIVE ARTIFACT, not on the tree:**
+  `find-noise.mjs` re-run against the deployed site returns the identical **GREEN 396 checks**
+  with N10 present, and the live page answers *"pipe wrenches"* with *Closest to "pipe
+  wrenches"* + *Ignored "wrenches" — nothing here uses that word*, while *"damage n"* stays
+  silent and *"daily field repo"* stays exact.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
