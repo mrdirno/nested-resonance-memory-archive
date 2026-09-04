@@ -318,7 +318,7 @@ select option { background: var(--slab-solid); color: var(--ink); }
       </div>
       <div class="orbit" id="playOrbit">
         <div class="ring" aria-hidden="true"></div>
-        <button id="playButton" type="button" aria-label="Play">
+        <button id="playButton" type="button" aria-label="Play" aria-disabled="true">
           <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8L18.6 12z"></path></svg>
           <svg class="pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.4" height="14" rx="1"></rect><rect x="13.6" y="5" width="3.4" height="14" rx="1"></rect></svg>
         </button>
@@ -4627,6 +4627,10 @@ visual.onFrame = function () {
     if (el.prepFill) el.prepFill.style.width = Math.round(p * 100) + '%';
     if (el.prep) el.prep.classList.toggle('show', p < 1);
     if (engine.ready) engine.syncBuffers();
+    /* Advisory, not a block: pressing play early still works, because
+       ensureAudio finishes the eight zones the music lives in before the first
+       note is scheduled. It tells a screen reader the instrument is still
+       being built, which is what the progress chip tells everyone else. */
     if (bank.readyCount >= 8 && el.playButton) el.playButton.removeAttribute('aria-disabled');
   }
   composer.primeQueue();
