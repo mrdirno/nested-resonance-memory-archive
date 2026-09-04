@@ -258,19 +258,41 @@ console.log('');
   else pass('RESET', 'a reused composer plays the seed exactly');
 }
 
-/* SEARCH BUDGET INDEPENDENCE — how many attempts the section search made must
-   not change the music that follows it, or the queue and the transport diverge. */
+/* ONE PIECE — the page renders a seed three ways: through the transport, which
+   plays sections pumped into a queue ahead of time; through the offline bounce,
+   which builds a fresh composer and takes bars straight from it; and into a
+   MIDI file. If pumping the queue changes the music, those are three different
+   performances wearing the same seed. */
 {
   const s = Object.assign({}, K.PRESETS[PRESET]);
-  const shapes = [4, 10].map(budget => {
-    const c = new K.Composer(SEED, s);
-    const out = [];
-    for (let i = 0; i < 6; i++) { const sec = c.generateSection(budget); out.push(sec.bars.length); }
-    return out.join(',');
-  });
-  console.log('SEARCH'.padEnd(14) + 'section lengths at budget 4 vs 10: ' + shapes[0] + ' / ' + shapes[1] +
-              '   last quality ' + (main.composer.lastQuality ?? '?') +
-              '   attempts ' + (main.composer.attempts ?? '?'));
+  const straight = new K.Composer(SEED, s);
+  const a = [];
+  for (let i = 0; i < 64; i++) a.push(fingerprintBar(straight.nextBar()));
+
+  const queued = new K.Composer(SEED, s);
+  const b = [];
+  for (let i = 0; i < 64; i++) {
+    /* pump at an irregular rhythm, the way a frame loop actually does */
+    if (i % 3 === 0) queued.pump(12);
+    if (i % 7 === 0) queued.pump(20);
+    b.push(fingerprintBar(queued.nextBar()));
+  }
+  const at = a.findIndex((x, i) => x !== b[i]);
+  if (at >= 0) fail('ONE PIECE', 'the queued performance and the un-queued one differ from bar ' + at +
+    ' — how far ahead the composer runs is changing what it writes');
+  else pass('ONE PIECE', 'queued or not, a seed is one performance (64 bars compared)');
+
+  /* And the search itself must not spend the player's randomness. */
+  const easy = new K.Composer(SEED, s);
+  const hard = new K.Composer(SEED, s);
+  hard.validateSection = function (sec) { const v = K.Composer.prototype.validateSection.call(this, sec);
+                                          return { score: Math.min(v.score, 87), issues: v.issues }; };
+  const ea = [], ha = [];
+  for (let i = 0; i < 24; i++) { ea.push(fingerprintBar(easy.nextBar())); ha.push(fingerprintBar(hard.nextBar())); }
+  const differ = ea.filter((x, i) => x !== ha[i]).length;
+  console.log('SEARCH'.padEnd(14) + 'quality ' + (main.composer.lastQuality ?? '?') +
+              ' after ' + (main.composer.attempts ?? '?') + ' of ' + (K.SEARCH_BUDGET ?? '?') + ' attempts' +
+              '   forcing every attempt to run changes ' + differ + '/24 bars');
 }
 
 /* PRESETS — every character survives a long run at several seeds. */

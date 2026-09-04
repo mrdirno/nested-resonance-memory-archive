@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#070a0d">
-<meta name="description" content="An endless phrase-grown piano performance. Forty contextual playing rudiments coordinate harmony, touch, pedal, timing and tone so each passage breathes without repeating. Exports MIDI and WAV.">
+<meta name="description" content="An endless phrase-grown piano performance. Contextual playing rudiments coordinate harmony, touch, pedal, timing and tone so each passage breathes without repeating. Nothing sounds that a hand did not strike. Exports MIDI and WAV.">
 <title>Improvisator ∞ · Soul v4</title>
 <style>
 :root {
@@ -678,7 +678,15 @@ Composer.prototype.updateSettings = function (settings) { this.settings = settin
 
 Composer.prototype.reset = function (seed, settings) {
   this.seed = seed;
+  /* Two independent streams. `rng` writes the music; `playRng` performs it --
+     the tempo drift, the two hands' timing, the small things that vary between
+     one reading of a bar and the next. They have to be separate, because the
+     page composes ahead of playback in idle time and how far ahead it happens
+     to have got must not change a single note. Sharing one stream, a seed
+     played straight and the same seed played from a filled queue diverged at
+     bar eighteen. */
   this.rng = new RNG(seed);
+  this.playRng = new RNG(seed + ':performance');
   this.field = new Field(seed);
   this.settings = settings;
   this.tonic = settings.tonic;
@@ -686,6 +694,12 @@ Composer.prototype.reset = function (seed, settings) {
   this.sectionIndex = 0;
   this.barGlobal = 0;
   this.beatGlobal = 0;
+  /* Where the next section to be WRITTEN begins, which is not where the bar
+     being played begins: the page composes ahead of playback in idle time.
+     Reading the field at barGlobal meant a section written four bars early
+     looked up a different register bias, so the same seed played from a filled
+     queue diverged from the same seed played straight. */
+  this.composeBar = 0;
   this.prevVoicing = null;
   this.prevBass = 39 + settings.tonic;
   this.prevMelody = 67 + settings.tonic;
@@ -1060,11 +1074,18 @@ Composer.prototype.chooseMelodyPitch = function (chord, nextChord, ctx) {
     score -= Math.abs(n - desiredCenter) * 0.16;
     score += ctx.strong ? (isChord ? 4.6 : -3.8) : (isChord ? 1.8 : 1.0);
     if (ctx.duration > 1.05 && !isChord) score -= 1.6;
-    if (absLeap <= 2) score += 2.1;
-    else if (absLeap <= 5) score += 1.0;
-    else if (absLeap <= 7) score -= 0.5;
-    else if (absLeap <= 9) score -= 3.2;
-    else score -= 10;
+    /* A leap used to cost up to twelve points against a step, unconditionally.
+       Measured over eight presets, that left 91% of sections with no interval
+       wider than a fourth and exactly one section in five hundred with a leap
+       of a sixth: a scale walk, not a melody. The penalty is real -- a line
+       that leaps constantly is not a line either -- but a pianist leaps in
+       particular places, and those places are where the penalty should lift.
+       After a rest the hand has been still and is free to move; at the top of
+       a phrase the leap is the point of the phrase; and a leap already begun
+       gets recovered by step, which the next clause rewards. */
+    var licence = clamp((ctx.afterRest || 0) * 0.42 + (ctx.peakPull || 0) * 0.55, 0, 0.88);
+    var leapCost = absLeap <= 2 ? -2.1 : absLeap <= 5 ? -1.0 : absLeap <= 7 ? 0.5 : absLeap <= 9 ? 3.2 : 7.0;
+    score -= leapCost * (leapCost > 0 ? 1 - licence : 1);
     if (ctx.prevLeap && Math.abs(ctx.prevLeap) >= 5) {
       if (Math.sign(leap) === -Math.sign(ctx.prevLeap) && absLeap <= 4) score += 2.7;
       else if (Math.sign(leap) === Math.sign(ctx.prevLeap)) score -= 2.4;
@@ -1253,7 +1274,7 @@ Composer.prototype.generateAttempt = function () {
   var blueprint = this.chooseBlueprint();
   var f = this.field.at(this.sectionIndex);
   var role = ROLES[Math.floor(f.a * ROLES.length) % ROLES.length];
-  var registerBias = role.register * 5 + this.field.flow(this.barGlobal).w * 2.5;
+  var registerBias = role.register * 5 + this.field.flow(this.composeBar).w * 2.5;
   var handIndex = Math.floor(f.c * HAND_PATTERNS.length) % HAND_PATTERNS.length;
   var hand = HAND_PATTERNS[handIndex];
   if (this.settings.texture < 0.2 && hand === 'ostinato') hand = 'suspended';
@@ -1394,14 +1415,31 @@ Composer.prototype.restoreState = function (s) {
   this.previousBlueprint = s.previousBlueprint;
 };
 
+/* How many candidate sections the search looks at. It is one number, used
+   everywhere, because it is not a tuning knob: a search that tries four
+   candidates writes different music from one that tries eight, and this page
+   renders the same seed three ways -- through the transport, through the
+   offline bounce and into the MIDI file. The page used to pump the queue at
+   eight and fall back to six, so the bounce and the thing you had been
+   listening to were different performances. */
+var SEARCH_BUDGET = 8;
+
 /* Search a handful of candidate sections, keep the best. Budgeted: this runs
-   ahead of playback in idle time, never on the scheduler's critical path. */
-Composer.prototype.generateSection = function (budget) {
-  budget = budget || 10;
+   ahead of playback in idle time, never on the scheduler's critical path.
+
+   Each attempt draws from its own stream, derived from the seed and the
+   section's index, and the player's own stream is untouched by the search.
+   Otherwise the number of attempts -- which depends on how good the first one
+   happened to be -- would shift every random draw that came after it, and the
+   cost of looking for a better section would change the music that followed
+   it. */
+Composer.prototype.generateSection = function () {
   this.maybeJourney();
   var best = null, bestState = null, bestScore = -1, bestIssues = [];
-  for (var attempt = 0; attempt < budget; attempt++) {
+  var playerRng = this.rng;
+  for (var attempt = 0; attempt < SEARCH_BUDGET; attempt++) {
     var startState = this.captureState();
+    this.rng = new RNG(this.seed + ':section:' + this.sectionIndex + ':' + attempt);
     var candidate = this.generateAttempt();
     var endState = this.captureState();
     var v = this.validateSection(candidate);
@@ -1409,15 +1447,19 @@ Composer.prototype.generateSection = function (budget) {
     if (v.score >= 88) break;
     this.restoreState(startState);
   }
+  this.rng = playerRng;
   if (!best || bestScore < 60) {
+    this.rng = new RNG(this.seed + ':fallback:' + this.sectionIndex);
     best = this.fallbackSection();
+    this.rng = playerRng;
     bestState = this.captureState();
     var fv = this.validateSection(best);
     bestScore = fv.score; bestIssues = fv.issues;
   } else if (bestState) this.restoreState(bestState);
 
   this.lastQuality = bestScore;
-  this.attempts = attempt + 1;
+  this.attempts = Math.min(attempt + 1, SEARCH_BUDGET);
+  this.composeBar += best.bars.length;
   best.quality = bestScore;
   best.issues = bestIssues;
   best.chapter = this.chapterTitle;
@@ -1436,9 +1478,9 @@ Composer.prototype.queueLength = function () {
   for (var i = 0; i < this.pending.length; i++) n += this.pending[i].bars.length;
   return n;
 };
-Composer.prototype.pump = function (targetBars, budget) {
+Composer.prototype.pump = function (targetBars) {
   if (this.queueLength() >= (targetBars || 12)) return false;
-  this.pending.push(this.generateSection(budget));
+  this.pending.push(this.generateSection());
   return true;
 };
 Composer.prototype.primeQueue = function () { this.pending = this.pending || []; };
@@ -1446,7 +1488,7 @@ Composer.prototype.primeQueue = function () { this.pending = this.pending || [];
 Composer.prototype.nextBar = function () {
   if (!this.pending) this.pending = [];
   if (!this.section || this.sectionBar >= this.section.bars.length) {
-    this.section = this.pending.length ? this.pending.shift() : this.generateSection(6);
+    this.section = this.pending.length ? this.pending.shift() : this.generateSection();
     this.sectionBar = 0;
   }
   var bar = this.section.bars[this.sectionBar];
@@ -1465,7 +1507,7 @@ Composer.prototype.nextBar = function () {
 
   /* Tempo is resolved at consumption time so the tempo control responds now,
      not sixteen bars from now. */
-  this.tempoWalk = clamp(this.tempoWalk + this.rng.gaussian() * 0.004, -0.018, 0.018);
+  this.tempoWalk = clamp(this.tempoWalk + this.playRng.gaussian() * 0.004, -0.018, 0.018);
 
   /* Two nested arches rather than one shallow wobble. Players accelerate into
      a group and slow at its close, and the slowing is bigger the more
@@ -1864,6 +1906,7 @@ root.IMPROV = {
   NOTE_NAMES: NOTE_NAMES, MODE_DEFS: MODE_DEFS, MODE_KEYS: MODE_KEYS,
   ROLES: ROLES, HAND_PATTERNS: HAND_PATTERNS, PRESETS: PRESETS,
   qualityName: qualityName, Composer: Composer, lowIntervalFloor: lowIntervalFloor,
+  SEARCH_BUDGET: SEARCH_BUDGET,
   PIANO_ZONES: PIANO_ZONES, ZONE_ORDER: ZONE_ORDER, ZoneRenderer: ZoneRenderer,
   partialTable: partialTable, inharmonicity: inharmonicity, fundamentalDecay: fundamentalDecay,
   pickZone: pickZone, BarClock: BarClock,
@@ -1876,11 +1919,14 @@ root.IMPROV = {
 /* ============================================================================
    Improvisator ∞ — Soul Performance Layer v7 · single-player dry-focus · no ghost reflections
 
-   Forty reusable performance rudiments are coordinated by a persistent player
-   state. The composer reasons at movement → phrase → gesture → hand → finger
-   levels, carries common tones instead of re-triggering every chord, breathes
-   in elastic 3/4–5/4 spans, and makes timing, dynamics and pedal tell the same
-   musical story.
+   Reusable performance rudiments are coordinated by a persistent player state.
+   The composer reasons at movement → phrase → gesture → hand → finger levels,
+   breathes in elastic 3/4–5/4 spans, and makes timing, dynamics and pedal tell
+   the same musical story.
+
+   Nothing here sounds that a hand did not strike. There is no echo voice, no
+   delay, no note inherited across a bar line from the one before it: if you
+   hear it, it is in the score, and it is in the MIDI export.
    ========================================================================== */
 (function (root) {
 'use strict';
@@ -1933,7 +1979,15 @@ var MELODY_RUDIMENTS = [
   { id:'suspension', family:'melody', label:'suspension', degrees:[1,0,2,1], gaps:[1.28,0.64,1.04,1.48], breath:1.08, calm:0.72, close:0.55, dissonance:1.0 },
   { id:'echoPhrase', family:'melody', label:'answering figure', degrees:[0,2,1,0,2,1], gaps:[0.62,0.70,1.24,1.08,0.72,1.36], breath:0.95, calm:0.35, repeat:0.8 },
   { id:'fragment', family:'melody', label:'fragment', degrees:[0,3], gaps:[0.92,2.18], breath:1.42, calm:0.9, close:0.9 },
-  { id:'octaveBloom', family:'melody', label:'octave bloom', degrees:[0,2,4,7,4], gaps:[0.72,0.72,0.86,1.46,1.62], breath:1.10, active:0.75, peak:1.0 }
+  { id:'octaveBloom', family:'melody', label:'octave bloom', degrees:[0,2,4,7,4], gaps:[0.72,0.72,0.86,1.46,1.62], breath:1.10, active:0.75, peak:1.0 },
+  /* Two shapes with a real gesture in them. Of the eight cells above, exactly
+     one spanned more than a fourth, so the widest thing the player could say
+     was a scale run -- 91% of sections went by without an interval bigger than
+     a fifth. These are the two a session player reaches for: a fall from the
+     top of the phrase into the middle of the keyboard, and a sixth up to a
+     held note with somewhere to come down to. */
+  { id:'fallingSixth', family:'melody', label:'falling sixth', degrees:[5,0,1,-1,0], gaps:[0.88,0.66,0.94,0.78,1.52], breath:1.06, calm:0.62, close:0.70 },
+  { id:'reachAndSettle', family:'melody', label:'reach and settle', degrees:[0,-1,4,3,1], gaps:[0.74,0.62,1.34,0.82,1.44], breath:0.98, peak:0.85, active:0.62 }
 ];
 
 var ACCOMP_RUDIMENTS = [
@@ -1977,7 +2031,24 @@ var PEDAL_RUDIMENTS = [
 ];
 
 var RUDIMENTS = MELODY_RUDIMENTS.concat(ACCOMP_RUDIMENTS, BASS_RUDIMENTS, TIMING_RUDIMENTS, PEDAL_RUDIMENTS);
-if (RUDIMENTS.length !== 40) throw new Error('Soul layer requires exactly forty rudiments');
+/* Every family has to be represented and none may be empty -- a missing family
+   is a real bug, and one this catches. An exact total is not the same check: it
+   only pinned the vocabulary at whatever size it happened to have, and made
+   adding a shape to it fail at load. */
+(function () {
+  var families = { melody:MELODY_RUDIMENTS, accompaniment:ACCOMP_RUDIMENTS, bass:BASS_RUDIMENTS,
+                   timing:TIMING_RUDIMENTS, pedal:PEDAL_RUDIMENTS }, name, seen = {};
+  for (name in families) {
+    if (!families[name] || families[name].length < 3)
+      throw new Error('the ' + name + ' rudiments are missing or too few');
+    for (var i = 0; i < families[name].length; i++) {
+      var r = families[name][i];
+      if (r.family !== name) throw new Error(r.id + ' is filed under ' + name + ' but declares ' + r.family);
+      if (seen[r.id]) throw new Error('two rudiments share the id ' + r.id);
+      seen[r.id] = true;
+    }
+  }
+})();
 
 var ROLE_TRANSITIONS = {
   statement:['departure','shadow','lift'],
@@ -2508,6 +2579,16 @@ SoulComposer.prototype.generateSoulMelody = function (chords, plan, registerBias
     }
     starts.sort(function(a,b){return a-b;});
 
+    /* Where this phrase sits. It starts from where the last one left off, so
+       the line is continuous across the seam, and is drawn toward the hand's
+       preferred register so a long performance does not wander off the end of
+       the keyboard. */
+    var phraseCentre=lerp(62,72,clamp(this.settings.range,0,1)) + registerBias*0.20;
+    var anchorIndex=Math.round(lerp(nearestIndex(scaleAll,phraseCentre),
+                                    nearestIndex(scaleAll,prev), 0.55));
+    anchorIndex += plan.role.id==='lift' ? 2 : plan.role.id==='shadow' ? -2 : 0;
+    anchorIndex = clamp(anchorIndex, 1, scaleAll.length-2);
+
     for (var ei=0;ei<starts.length;ei++) {
       var absolute = starts[ei], localBar=0;
       while (localBar+1<barOffsets.length && absolute>=barOffsets[localBar+1]) localBar++;
@@ -2522,7 +2603,15 @@ SoulComposer.prototype.generateSoulMelody = function (chords, plan, registerBias
       var cycleShift=Math.floor(ei/degrees.length);
       if (tr.mode==='sequenceUp') degreeOffset += Math.min(2,cycleShift);
       if (plan.role.id==='dissolve' && cycleShift>0) degreeOffset -= Math.min(2,cycleShift);
-      var baseIndex=nearestIndex(scaleAll,prev) + degreeOffset;
+      /* A rudiment's degrees are a SHAPE, read from where the phrase sits --
+         not a list of intervals from whatever note happened last. Added to the
+         previous note each time, a cell written [0,2,4,7,4] became a climb of
+         seventeen scale steps that the centring correction then had to fight
+         on every note, and what came out the other side was a scale walk: 91%
+         of sections contained no interval wider than a fourth. Read from an
+         anchor the phrase holds, the same cell is what it says it is -- a rise
+         to a seventh and a fall back to the fourth. */
+      var baseIndex=anchorIndex + degreeOffset;
       var peakPull=Math.exp(-Math.pow((barIndex-plan.peakBar)/Math.max(1,plan.length*0.20),2));
       /* Range 0 is not merely a ceiling: it is a hand-position prior. The
          melody stays physically centred and earns excursions instead of
@@ -2530,9 +2619,8 @@ SoulComposer.prototype.generateSoulMelody = function (chords, plan, registerBias
       var rangeIntent=clamp(this.settings.range,0,1);
       var liftSteps=(plan.role.id==='lift'?3:1) * lerp(0.18,1.0,rangeIntent);
       baseIndex += Math.round(peakPull*liftSteps);
-      var preferredMidi=lerp(62,72,rangeIntent) + registerBias*0.20;
-      var preferredIndex=nearestIndex(scaleAll,preferredMidi);
-      baseIndex=Math.round(lerp(preferredIndex,baseIndex,lerp(0.42,0.92,rangeIntent)));
+      /* The hand-position prior belongs to the phrase, and the phrase already
+         has one: the anchor above. All that is left here is the ceiling. */
       baseIndex=clamp(baseIndex,0,scaleAll.length-1);
       var target=scaleAll[baseIndex] || prev;
       var strong=Math.abs(localBeat-Math.round(localBeat))<0.09 && (Math.round(localBeat)%2===0);
@@ -2540,10 +2628,12 @@ SoulComposer.prototype.generateSoulMelody = function (chords, plan, registerBias
       var nextAbs=ei+1<starts.length?starts[ei+1]:total;
       var rawDur=clamp(nextAbs-absolute,0.38,2.7);
       if (finalNote) rawDur=Math.max(rawDur,2.4);
+      var gapBefore=ei===0?2.0:starts[ei]-starts[ei-1];
       var pitch=this.chooseMelodyPitch(chord,nextChord,{
         strong:strong, phrasePos:sectionProgress, target:target, finalNote:finalNote,
         previous:prev, prevLeap:prevLeap, contourDirection:barIndex<=plan.peakBar?1:-1,
-        duration:rawDur, registerBias:registerBias-3.8
+        duration:rawDur, registerBias:registerBias-3.8,
+        afterRest:clamp((gapBefore-0.9)/1.6,0,1), peakPull:peakPull
       });
       var leap=pitch-prev;
       var phraseArc=0.76+0.24*Math.sin(Math.PI*phraseProgress);
@@ -2698,7 +2788,7 @@ SoulComposer.prototype.generateAttempt = function () {
   var plan=this.planSection();
   var degrees=this.buildDegreePath(plan);
   var role=plan.role;
-  var registerBias=role.register*5 + this.field.flow(this.barGlobal).w*2.25;
+  var registerBias=role.register*5 + this.field.flow(this.composeBar).w*2.25;
   var chords=[],i;
   for(i=0;i<plan.length;i++)chords.push(this.buildSoulChord(degrees[i],plan.bars[i],degrees));
 
@@ -2880,6 +2970,14 @@ SoulComposer.prototype.validateSection = function (section) {
       }
     }
   }
+  /* A section that never moves further than a fourth has no gesture in it. The
+     penalty is small on purpose: the search should prefer a section that says
+     something, not be forced to shout in every one. */
+  var widest=0;
+  for(i=1;i<melody.length;i++)widest=Math.max(widest,Math.abs(melody[i]-melody[i-1]));
+  if(melody.length>=6&&widest<7){score-=6;issues.push('no gesture');}
+  if(widest>=7&&widest<=16)score+=2;
+
   var history=this.soul.sectionFingerprints.slice(0,-1);
   if(history.indexOf(section.fingerprint)>=0){score-=8;issues.push('recent form repeated');}
   var uniqIssues={};for(i=0;i<issues.length;i++)uniqIssues[issues[i]]=1;
@@ -2895,6 +2993,19 @@ SoulComposer.prototype.fallbackSection = function () {
 
 function hammerTravel(velocity){return 0.019+0.150*Math.pow(1-clamp(velocity,0,1),2.2);}
 function hammerDelay(velocity){var ref=0.44;return clamp(hammerTravel(velocity)-hammerTravel(ref),-0.055,0.090);}
+
+/* A soft note takes longer to travel from key to string than a hard one, and
+   this player had the physics without the pianist. The accompaniment is the
+   quietest part of the texture, so it arrived forty-one milliseconds late,
+   dragging behind a melody that was nearly on the beat -- exactly backwards. A
+   pianist compensates: they move earlier when they play softly, because they
+   know where the note has to land. What survives that compensation is a few
+   milliseconds of scatter, plus one deliberate choice -- the tune sits behind
+   the beat and the hands keeping time do not. That is what makes a rhythm
+   section feel like a rhythm section and a soloist feel like a soloist, and it
+   is a decision, not a side effect of how hard the note was struck. */
+var TOUCH_COMPENSATION = { bass:0.88, harmony:0.84, melody:0.52 };
+var LAY_BACK = { bass:-0.003, harmony:0.003, melody:0.028 };
 function flexibleBeatDurations(meter,bar,amount){
   var d=[],i,s=0,a=clamp(amount,0,1);
   for(i=0;i<meter;i++)d.push(1);
@@ -2916,7 +3027,7 @@ function warpFlexible(beat,durs){
 SoulComposer.prototype.nextBar = function () {
   if(!this.pending)this.pending=[];
   if(!this.section||this.sectionBar>=this.section.bars.length){
-    this.section=this.pending.length?this.pending.shift():this.generateSection(6);this.sectionBar=0;
+    this.section=this.pending.length?this.pending.shift():this.generateSection();this.sectionBar=0;
   }
   var bar=this.section.bars[this.sectionBar];
   bar.indexInSection=this.sectionBar;
@@ -2932,7 +3043,7 @@ SoulComposer.prototype.nextBar = function () {
   this.sectionBar++;this.barGlobal++;
   this.beatGlobal+=bar.lengthBeats||bar.meter||4;
 
-  this.tempoWalk=clamp(this.tempoWalk+this.rng.gaussian()*0.0032,-0.015,0.015);
+  this.tempoWalk=clamp(this.tempoWalk+this.playRng.gaussian()*0.0032,-0.015,0.015);
   var phraseArch=Math.sin(Math.PI*bar.phrasePos)*0.020;
   var sectionArch=Math.sin(Math.PI*bar.sectionPos)*0.018;
   var close=bar.barInPhrase===bar.phraseLength-1?bar.timingRudiment.arch-0.020:0;
@@ -2944,17 +3055,21 @@ SoulComposer.prototype.nextBar = function () {
 
   var durs=flexibleBeatDurations(bar.meter||4,bar,this.settings.humanize);
   var spb=60/bar.bpm;
-  this.soul.handTiming.L=clamp(this.soul.handTiming.L+this.rng.gaussian()*0.0022,-0.020,0.010);
-  this.soul.handTiming.R=clamp(this.soul.handTiming.R+this.rng.gaussian()*0.0020,-0.008,0.024);
+  this.soul.handTiming.L=clamp(this.soul.handTiming.L+this.playRng.gaussian()*0.0022,-0.020,0.010);
+  this.soul.handTiming.R=clamp(this.soul.handTiming.R+this.playRng.gaussian()*0.0020,-0.008,0.024);
   for(var ei=0;ei<bar.events.length;ei++){
     var e=bar.events[ei];if(e.performed)continue;e.performed=true;e.scoreBeat=e.beat;e.beat=warpFlexible(e.beat,durs);
     var down=e.scoreBeat<0.025;
     var hand=e.hand==='L'?this.soul.handTiming.L:this.soul.handTiming.R;
-    var bassLead=e.role==='bass'&&down?-0.032:0;
-    var melodyLead=e.role==='melody'?-0.004*(0.5+bar.intensity):0;
-    var physical=hammerDelay(e.velocity);
+    var comp=TOUCH_COMPENSATION[e.role];if(comp===undefined)comp=0.80;
+    var lay=LAY_BACK[e.role];if(lay===undefined)lay=0;
+    /* The tune leans further back when the music is calm and pulls toward the
+       beat as it lifts, which is the difference between a ballad and a burn. */
+    if(e.role==='melody')lay*=1.25-bar.intensity*0.55;
+    var physical=hammerDelay(e.velocity)*(1-comp);
+    var bassLead=e.role==='bass'&&down?-0.010:0;
     var gesture=e.gestureMicro||0;
-    e.micro=clamp((physical+hand+bassLead+melodyLead+gesture)*(0.30+0.70*this.settings.humanize),-0.085,0.105);
+    e.micro=clamp((physical+lay+hand+bassLead+gesture)*(0.30+0.70*this.settings.humanize),-0.085,0.105);
   }
   bar.beatDurations=durs;bar.secondsPerBeat=spb;bar.durationSeconds=(bar.lengthBeats||bar.meter||4)*spb;
   this.lastChordName=bar.chord.name;
@@ -3819,7 +3934,7 @@ visual.onFrame = function () {
     if (bank.readyCount >= 6 && el.playButton) el.playButton.removeAttribute('aria-disabled');
   }
   composer.primeQueue();
-  if (frameCount % 3 === 0) composer.pump(12, 8);
+  if (frameCount % 3 === 0) composer.pump(12);
 
   if (engine.ready) cues.drain(engine.ctx.currentTime);
   if (transport && frameCount % 15 === 0) {
