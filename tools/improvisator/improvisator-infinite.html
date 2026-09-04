@@ -87,7 +87,12 @@ button { -webkit-appearance: none; appearance: none; }
 .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---- stage ---- */
-.stage { min-height: 0; display: grid; place-items: center; text-align: center; }
+/* The stage has to clip. It is the 1fr row of a three-row grid, so opening the
+   settings panel squeezes it to nothing -- and with nothing stopping it, .piece
+   spills out of its row and over the console beneath. The play button carries
+   z-index 2, so it paints on top of the MIDI button and takes its taps: on a
+   320 px phone with the panel open, MIDI started playback instead of exporting. */
+.stage { min-height: 0; display: grid; place-items: center; text-align: center; overflow: hidden; }
 .piece { width: min(760px, 94vw); display: grid; justify-items: center; }
 .chapter { min-height: 15px; color: var(--mute); font-size: 13px; font-style: italic; font-family: var(--serif); }
 .role { color: var(--faint); font-size: 12px; margin-top: 2px; min-height: 14px; }
@@ -227,6 +232,17 @@ select option { background: var(--slab-solid); color: var(--ink); }
   .settings { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 14px; max-height: 46vh; overflow-y: auto; }
   .console.open .settings { display: grid; }
   .notice { bottom: calc(88px + var(--safe-bottom)); }
+}
+/* On a short phone the settings panel at 46vh leaves the stage nothing, and
+   the play button -- which the stage now clips rather than painting over the
+   console -- disappears while the panel is open. The panel scrolls anyway, so
+   giving back a fifth of its height costs a row of controls and keeps the
+   transport reachable without closing it first. */
+@media (max-width: 640px) and (max-height: 700px) {
+  .settings { max-height: 30vh; }
+  .orbit { width: 84px; height: 84px; margin-top: 14px; }
+  #playButton { width: 58px; height: 58px; }
+  .harmony { font-size: clamp(34px, 12vw, 56px); }
 }
 @media (max-height: 640px) and (orientation: landscape) {
   .shell { padding-top: calc(8px + var(--safe-top)); padding-bottom: calc(7px + var(--safe-bottom)); }

@@ -288,6 +288,44 @@ const w = await bounce('check');
   else pass('REPEATABLE', 'two bounces of one seed are the same take to ' + rel.toFixed(1) + ' dB');
 }
 
+/* --- LAYOUT: every control has to be tappable at every size, with the settings
+   panel open and shut. The panel opening squeezes the stage, and the play
+   button sits above the console in paint order, so this is where a control
+   ends up under another one and takes its taps. --- */
+{
+  const problems = [];
+  for (const [w, h, label] of [[320, 568, 'iPhone SE'], [360, 640, 'small phone'],
+                               [390, 844, 'phone'], [768, 1024, 'tablet'], [1440, 900, 'desktop']]) {
+    await page.setViewportSize({ width: w, height: h });
+    await page.waitForTimeout(200);
+    for (const open of [false, true]) {
+      if (open) { await page.click('#settingsToggle').catch(() => {}); await page.waitForTimeout(220); }
+      const r = await page.evaluate(() => {
+        const out = {}; const vw = innerWidth, vh = innerHeight;
+        for (const id of ['playButton', 'exportMidi', 'exportWav', 'newButton']) {
+          const e = document.getElementById(id); if (!e) continue;
+          const b = e.getBoundingClientRect();
+          if (b.width === 0 || b.height === 0) continue;           /* deliberately hidden */
+          if (b.width < 30 || b.height < 30) { out[id] = 'only ' + Math.round(b.width) + 'x' + Math.round(b.height) + ' px'; continue; }
+          const cx = Math.min(vw - 1, Math.max(1, b.left + b.width / 2));
+          const cy = Math.min(vh - 1, Math.max(1, b.top + b.height / 2));
+          const t = document.elementFromPoint(cx, cy);
+          if (t && !e.contains(t) && !t.contains(e))
+            out[id] = 'covered by ' + (t.id || t.className || t.tagName);
+        }
+        if (document.documentElement.scrollWidth > vw + 1) out.page = 'scrolls sideways';
+        return out;
+      });
+      for (const [k, v] of Object.entries(r))
+        problems.push(label + (open ? ' (panel open)' : '') + ' ' + k + ': ' + v);
+      if (open) { await page.click('#settingsToggle').catch(() => {}); await page.waitForTimeout(150); }
+    }
+  }
+  await page.setViewportSize({ width: 1280, height: 800 });
+  if (problems.length) fail('LAYOUT', problems.slice(0, 4).join(' | ') + (problems.length > 4 ? ' …' + problems.length : ''));
+  else pass('LAYOUT', 'every control is reachable at five sizes, panel open and shut');
+}
+
 /* --- errors --- */
 console.log('  script errors   ' + (errors.length ? errors.slice(0, 4).join(' | ') : 'none'));
 if (errors.length) fail('NO ERRORS', errors.length + ' console/page errors');
