@@ -238,26 +238,53 @@ else {
   const bytes = Buffer.from(midiB64, 'base64');
   try {
     const m = parseMidi(bytes);
-    let on = 0, off = 0, unmatched = 0, cc64 = 0, tempo = 0;
-    const held = new Map();
-    for (const tr of m.tracks) for (const e of tr) {
-      if (e.meta === 0x51) tempo++;
-      if (!e.status) continue;
-      const hi = e.status & 0xf0, ch = e.status & 0x0f;
-      if (hi === 0xb0 && e.a === 64) cc64++;
-      if (hi === 0x90 && e.b > 0) { on++; const k = ch + ':' + e.a; held.set(k, (held.get(k) || 0) + 1); }
-      if (hi === 0x80 || (hi === 0x90 && e.b === 0)) {
-        off++; const k = ch + ':' + e.a;
-        if (!held.get(k)) unmatched++; else held.set(k, held.get(k) - 1);
+    let on = 0, off = 0, unmatched = 0, tempo = 0, timesig = 0, firstTick = Infinity, badText = 0;
+    const cc64ByChannel = new Map(), noteChannels = new Set(), overlaps = [];
+    const held = new Map(), sounding = new Map();
+    for (const tr of m.tracks) {
+      /* per track, in time order, so an overlap is a real overlap */
+      const seq = [...tr].sort((a, b) => a.tick - b.tick);
+      for (const e of seq) {
+        if (e.meta === 0x51) tempo++;
+        if (e.meta === 0x58) timesig++;
+        if ((e.meta === 0x01 || e.meta === 0x06 || e.meta === 0x03) && e.data &&
+            [...e.data].includes(0x3f)) badText++;
+        if (!e.status) continue;
+        const hi = e.status & 0xf0, ch = e.status & 0x0f;
+        if (hi === 0xb0 && e.a === 64) cc64ByChannel.set(ch, (cc64ByChannel.get(ch) || 0) + 1);
+        if (hi === 0x90 && e.b > 0) {
+          on++; noteChannels.add(ch);
+          if (e.tick < firstTick) firstTick = e.tick;
+          const k = ch + ':' + e.a;
+          if (sounding.get(k)) overlaps.push(k + ' at tick ' + e.tick);
+          sounding.set(k, true);
+          held.set(k, (held.get(k) || 0) + 1);
+        }
+        if (hi === 0x80 || (hi === 0x90 && e.b === 0)) {
+          off++; const k = ch + ':' + e.a;
+          sounding.set(k, false);
+          if (!held.get(k)) unmatched++; else held.set(k, held.get(k) - 1);
+        }
       }
     }
     for (const v of held.values()) unmatched += v;
+    const pedalChannels = [...cc64ByChannel.keys()].sort();
+    const missingPedal = [...noteChannels].filter(c => !cc64ByChannel.has(c));
     console.log('  midi            ' + (bytes.length / 1024).toFixed(0) + ' kB, format ' + m.format +
-                ', ' + m.tracks.length + ' tracks, ' + m.ppq + ' ppq');
-    console.log('  notes           ' + on + ' on / ' + off + ' off, ' + unmatched + ' unmatched · ' +
-                cc64 + ' CC64 · ' + tempo + ' tempo metas');
-    if (unmatched || !on || !tempo) fail('MIDI', unmatched + ' unmatched notes, ' + on + ' note-ons, ' + tempo + ' tempo events');
-    else pass('MIDI', 'every note paired, tempo map present');
+                ', ' + m.tracks.length + ' tracks, ' + m.ppq + ' ppq, first note at tick ' + firstTick);
+    console.log('  notes           ' + on + ' on / ' + off + ' off, ' + unmatched + ' unmatched · CC64 on channels [' +
+                pedalChannels.join(',') + '] · ' + tempo + ' tempo · ' + timesig + ' time signature');
+    const problems = [];
+    if (unmatched) problems.push(unmatched + ' unmatched notes');
+    if (!on) problems.push('no notes');
+    if (!tempo) problems.push('no tempo map');
+    if (!timesig) problems.push('no time signature, though the composer writes 3/4 and 5/4 bars');
+    if (missingPedal.length) problems.push('channels ' + missingPedal.join(',') + ' carry notes but no pedal');
+    if (overlaps.length) problems.push(overlaps.length + ' notes retrigger a pitch already sounding on the same channel (' + overlaps[0] + ')');
+    if (badText) problems.push(badText + ' text metas contain a literal "?" where a non-ASCII character was flattened');
+    if (firstTick > m.ppq * 8) problems.push('the file opens with ' + (firstTick / m.ppq).toFixed(0) + ' beats of silence');
+    if (problems.length) fail('MIDI', problems.join('; '));
+    else pass('MIDI', 'notes paired, tempo and meter present, pedal on every channel that carries notes, no retriggers, no lost characters');
     writeFileSync(path.join(OUT, 'improvisator-check.mid'), bytes);
   } catch (err) { fail('MIDI', 'could not parse the exported file: ' + err.message); }
 }

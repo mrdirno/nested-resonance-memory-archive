@@ -1818,12 +1818,32 @@ function vlq(n) {
   while (n > 0) { buf.unshift((n & 0x7f) | 0x80); n = Math.floor(n / 128); }
   return buf;
 }
+/* Chunk identifiers are ASCII by definition. */
 function pushAscii(arr, s) {
   for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); arr.push(c < 128 ? c : 63); }
 }
+/* Text metas are byte strings, so they can carry UTF-8. Flattening them to
+   ASCII put a literal question mark in place of the middot in every marker of
+   every file this page has ever exported, and would have done the same to a
+   flat or a sharp in a chord name. */
+function pushUtf8(arr, s) {
+  for (var i = 0; i < s.length; i++) {
+    var c = s.codePointAt(i);
+    if (c > 0xffff) i++;
+    if (c < 0x80) arr.push(c);
+    else if (c < 0x800) arr.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+    else if (c < 0x10000) arr.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+    else arr.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+  }
+}
 function metaText(type, s) {
-  var body = []; pushAscii(body, s);
-  if (body.length > 127) body = body.slice(0, 127);
+  var body = []; pushUtf8(body, s);
+  /* Trim on a code-point boundary, never mid-sequence. */
+  if (body.length > 127) {
+    body = body.slice(0, 127);
+    while (body.length && (body[body.length - 1] & 0xc0) === 0x80) body.pop();
+    if (body.length && (body[body.length - 1] & 0x80)) body.pop();
+  }
   return [0xff, type, body.length].concat(body);
 }
 function buildTrack(events, name) {
@@ -1846,7 +1866,16 @@ function buildTrack(events, name) {
 function buildMidi(log, opts) {
   opts = opts || {};
   var ppq = opts.ppq || 480;
-  var toTick = function (beat) { return Math.max(0, Math.round(beat * ppq)); };
+  /* An endless page trims its note log, and the survivors keep the absolute
+     beat positions they had. Without this the first note of a long session's
+     export lands at bar four thousand and the file opens with an hour of
+     silence in front of it. */
+  var origin = 0;
+  for (var oi = 0; oi < log.length; oi++)
+    if (log[oi] && isFinite(log[oi].beat)) { origin = log[oi].beat; break; }
+  for (oi = 0; oi < log.length; oi++)
+    if (log[oi] && isFinite(log[oi].beat)) origin = Math.min(origin, log[oi].beat);
+  var toTick = function (beat) { return Math.max(0, Math.round((beat - origin) * ppq)); };
   var tracks = [
     { name: opts.name || 'Improvisator', events: [] },   /* conductor */
     { name: 'melody',  events: [], channel: 0 },
@@ -1871,13 +1900,34 @@ function buildMidi(log, opts) {
     tracks[0].events.push({ tick: toTick(opts.markers[m].beat), order: 1, bytes: metaText(0x06, opts.markers[m].text) });
   }
 
+  /* The meter, which the composer varies between 3/4 and 5/4 and the page
+     displays. Without a time-signature meta an importer bars everything as 4/4,
+     and the bar lines are wrong from the first bar that is not. */
+  var meters = (opts.meters || []).slice().sort(function (a, b) { return a.beat - b.beat; });
+  var lastMeter = null;
+  for (var mm = 0; mm < meters.length; mm++) {
+    var num = Math.max(1, Math.min(32, Math.round(meters[mm].meter || 4)));
+    if (num === lastMeter) continue;
+    lastMeter = num;
+    tracks[0].events.push({ tick: toTick(meters[mm].beat), order: 0,
+      bytes: [0xff, 0x58, 0x04, num, 2, 24, 8] });
+  }
+  if (lastMeter === null)
+    tracks[0].events.push({ tick: 0, order: 0, bytes: [0xff, 0x58, 0x04, 4, 2, 24, 8] });
+
   var noteCount = 0;
   for (var i = 0; i < log.length; i++) {
     var e = log[i];
     if (e.type === 'pedal') {
       var pedalValue = e.value === true ? 127 : e.value === false ? 0 :
         clamp(Math.round(clamp(Number(e.value) || 0, 0, 1) * 127), 0, 127);
-      tracks[2].events.push({ tick: toTick(e.beat), order: 2, bytes: [0xb1, 64, pedalValue] });
+      /* On every channel. The pedal used to go to the harmony track alone, so
+         a file imported into a multi-channel piano played the melody and the
+         bass completely dry while the comping sustained -- which is not what
+         the page plays, and the pedal is half of what this instrument is. */
+      for (var pl = 1; pl <= 3; pl++)
+        tracks[pl].events.push({ tick: toTick(e.beat), order: 2,
+          bytes: [0xb0 | tracks[pl].channel, 64, pedalValue] });
       continue;
     }
     var lane = laneFor[e.role] || 2;
@@ -1886,9 +1936,33 @@ function buildMidi(log, opts) {
     var pitch = clamp(Math.round(e.pitch), 0, 127);
     var on = toTick(e.beat);
     var off = Math.max(on + 1, toTick(e.beat + e.beats));
-    tracks[lane].events.push({ tick: on, order: 3, bytes: [0x90 | ch, pitch, vel] });
-    tracks[lane].events.push({ tick: off, order: 1, bytes: [0x80 | ch, pitch, 64] });
+    tracks[lane].notes = tracks[lane].notes || [];
+    tracks[lane].notes.push({ on: on, off: off, pitch: pitch, vel: vel, ch: ch });
     noteCount++;
+  }
+
+  /* MIDI has one voice per pitch per channel: a note-on for a pitch already
+     sounding retriggers it and the earlier note's note-off then cuts the new
+     one short. The engine has no such limit -- it allocates a fresh source per
+     strike, so two overlapping strikes of one pitch both ring -- so where the
+     score overlaps a pitch with itself, the earlier note is ended a tick before
+     the later one begins. Measured on the build this comes from, 21% of harmony
+     notes were affected and the worst lost more than five beats of sustain. */
+  for (var ln = 1; ln <= 3; ln++) {
+    var ns = tracks[ln].notes;
+    if (!ns) continue;
+    ns.sort(function (a, b) { return a.on - b.on || a.pitch - b.pitch; });
+    var openAt = {};
+    for (var ni = 0; ni < ns.length; ni++) {
+      var n = ns[ni], prev = openAt[n.pitch];
+      if (prev !== undefined && ns[prev].off > n.on) ns[prev].off = Math.max(ns[prev].on + 1, n.on - 1);
+      openAt[n.pitch] = ni;
+    }
+    for (ni = 0; ni < ns.length; ni++) {
+      tracks[ln].events.push({ tick: ns[ni].on, order: 3, bytes: [0x90 | ns[ni].ch, ns[ni].pitch, ns[ni].vel] });
+      tracks[ln].events.push({ tick: Math.max(ns[ni].on + 1, ns[ni].off), order: 1,
+                               bytes: [0x80 | ns[ni].ch, ns[ni].pitch, 64] });
+    }
   }
 
   var used = tracks.filter(function (tr, i) { return i === 0 || tr.events.length; });
@@ -3701,6 +3775,16 @@ Engine.prototype.peakVoices = function () { return this.voices.length; };
    the pedal mechanism, and never brought the pedal back down after a lift.
    ---------------------------------------------------------------------- */
 
+/* An engine that swallows everything, so the code that turns a bar into events
+   can be run purely to collect the log. The MIDI button used to carry a second,
+   hand-written copy of renderBar's logging for the case where nothing had been
+   played yet, and a second copy is a copy that drifts. */
+var SILENT_ENGINE = {
+  pedalDepth: 0.70,
+  play: function () {}, damp: function () {}, pedalMechanic: function () {},
+  setPedalDepth: function (d) { this.pedalDepth = d; }, tuneResonance: function () {}
+};
+
 function defaultPedal (bar, engine) {
   return { depth:bar.pedalLift ? 0.70 : engine.pedalDepth, lift:!!bar.pedalLift,
            hardClear:false, liftLead:-0.012, repedalDelay:0.05, dampTau:0.26,
@@ -3779,6 +3863,9 @@ function Transport(engine, composer, hooks) {
   this.log = [];
   this.tempoMap = [];
   this.markers = [];
+  /* The composer writes elastic 3/4 to 5/4 bars and the page displays them, so
+     the export has to say so or a DAW bars the whole piece as 4/4. */
+  this.meterMap = [];
   this.currentBarSeconds = 0;
   this.currentBarStartedAt = 0;
   this.logLimit = 24000;
@@ -3824,7 +3911,8 @@ Transport.prototype.stop = function (resetClock) {
   this.playing = false;
   this.clock.stop();
   this.engine.silence(0.24);
-  if (resetClock) { this.elapsedBefore = 0; this.log.length = 0; this.tempoMap.length = 0; this.markers.length = 0; }
+  if (resetClock) { this.elapsedBefore = 0; this.log.length = 0; this.tempoMap.length = 0;
+                    this.meterMap.length = 0; this.markers.length = 0; }
 };
 
 Transport.prototype.elapsed = function () {
@@ -3850,9 +3938,11 @@ Transport.prototype.emitBar = function (time) {
   this.currentBarSeconds = barLen;
 
   this.tempoMap.push({ beat:bar.beatStart, bpm:bar.bpm });
+  this.meterMap.push({ beat:bar.beatStart, meter:bar.meter });
   if (bar.indexInSection === 0) this.markers.push({ beat:bar.beatStart,
     text:bar.chapter + ' / ' + bar.sectionRole.label + ' / ' + (bar.gestureLabel || bar.hand) });
   if (this.tempoMap.length > 2400) this.tempoMap.splice(0, 600);
+  if (this.meterMap.length > 2400) this.meterMap.splice(0, 600);
   if (this.markers.length > 400) this.markers.splice(0, 100);
   if (this.hooks.onBar) this.hooks.onBar(bar, time, barLen);
   return barLen;
@@ -4209,39 +4299,29 @@ function settingsLabel() {
 
 function exportMidi() {
   var log = transport && transport.log.length ? transport.log : null;
-  var tempo, markers, note;
+  var tempo, markers, meters, note;
   if (log) {
-    tempo = transport.tempoMap; markers = transport.markers;
+    tempo = transport.tempoMap; markers = transport.markers; meters = transport.meterMap;
     note = 'exported ' + log.filter(function (e) { return !e.type; }).length + ' notes';
   } else {
-    /* nothing played yet — render the passage this seed *would* play, so the
-       button always produces the piece it promises */
+    /* Nothing played yet — render the passage this seed *would* play, through
+       the same renderBar the transport and the bounce use, with an engine that
+       makes no sound. This used to be a hand-written copy of renderBar's
+       logging, kept in step by hand and therefore not in step. */
     var c = new K.Composer(seed, settings);
-    log = []; tempo = []; markers = [];
+    log = []; tempo = []; markers = []; meters = [];
+    var t = 0;
     for (var i = 0; i < 64; i++) {
       var bar = c.nextBar();
       tempo.push({ beat: bar.beatStart, bpm: bar.bpm });
+      meters.push({ beat: bar.beatStart, meter: bar.meter });
       if (bar.indexInSection === 0) markers.push({ beat:bar.beatStart,
         text:bar.chapter + ' / ' + (bar.gestureLabel || bar.hand) });
-      var pedal = bar.pedal || { depth:0.70, lift:!!bar.pedalLift, liftLead:-0.012, repedalDelay:0.05 };
-      var spb = 60 / bar.bpm;
-      if (pedal.lift) log.push({ type:'pedal', beat:Math.max(0, bar.beatStart + (pedal.liftLead || 0) / spb), value:0 });
-      log.push({ type:'pedal', beat:bar.beatStart + Math.max(0.008, pedal.repedalDelay || 0.04) / spb, value:pedal.depth });
-      if (pedal.flutterAt !== null && pedal.flutterAt !== undefined) {
-        log.push({ type:'pedal', beat:bar.beatStart + pedal.flutterAt, value:Math.max(0.10, pedal.depth * 0.18) });
-        log.push({ type:'pedal', beat:bar.beatStart + pedal.flutterAt + 0.045 / spb, value:pedal.depth });
-      }
-      if (pedal.endLiftAt !== null && pedal.endLiftAt !== undefined)
-        log.push({ type:'pedal', beat:bar.beatStart + pedal.endLiftAt, value:0 });
-      for (var j = 0; j < bar.events.length; j++) {
-        var e = bar.events[j];
-        log.push({ beat:bar.beatStart + e.beat + (e.micro || 0) / spb, beats:e.duration,
-                   pitch:e.pitch, velocity:e.velocity, role:e.role });
-      }
+      t += renderBar(SILENT_ENGINE, bar, t, function (entry) { log.push(entry); }, null);
     }
     note = 'exported 64 bars from this seed';
   }
-  var bytes = K.buildMidi(log, { ppq: 480, tempo: tempo, markers: markers,
+  var bytes = K.buildMidi(log, { ppq: 480, tempo: tempo, markers: markers, meters: meters,
                                  name: 'Improvisator ' + seed, text: settingsLabel() });
   download(bytes, 'improvisator-' + seed + '.mid', 'audio/midi');
   notice(note);
