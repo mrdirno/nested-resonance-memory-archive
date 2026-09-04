@@ -1500,7 +1500,25 @@ Composer.prototype.planBassLine = function (segments, role, intensity) {
       if (tone !== 0 && n < 40) cost += 12;
       if (cost < pickCost) { pickCost = cost; pickBest = n; }
     }
-    line.push({ main: pickBest, approach: null, tone: tone });
+    var entry = { main: pickBest, approach: null, tone: tone, figure: null };
+    /* A repeating two-bar figure under a harmony that is staying put: root on
+       the beat, the fifth or the seventh in the second half, alternating. This
+       style existed by name only until now — it picked its notes exactly the
+       way 'roots' did. */
+    if (style === 'ostinato' && !forced && segments[i].len >= 4) {
+      /* The chord's own fifth, which on a half-diminished or a diminished
+         seventh is not a perfect one — a ♮5 over a ♭5 is a semitone rub in the
+         bass register, the worst place for it. */
+      var fifth = chord.intervals.indexOf(7) >= 0 ? 7
+                : chord.intervals.indexOf(6) >= 0 ? 6
+                : chord.intervals.indexOf(8) >= 0 ? 8 : chord.third;
+      var step = (i % 2 === 0) ? fifth : (chord.seventh === null ? fifth : chord.seventh);
+      var fig = pickBest + step;
+      while (fig > REG.bassHi + 2) fig -= 12;
+      while (fig < REG.bassLo - 2) fig += 12;
+      if (fig !== pickBest) entry.figure = { beat: segments[i].len >= 8 ? 4.5 : 2.5, pitch: fig };
+    }
+    line.push(entry);
     prev = pickBest;
   }
 
@@ -2537,6 +2555,12 @@ Composer.prototype.generateAttempt = function () {
     handEvents.push({ beat: s.beat0, duration: (2.6 + this.setting('sustain', 0.7) * 0.9) * (s.len >= 8 ? 1.5 : 1),
                       pitch: bass.main, role: 'bass',
                       velocity: clamp((0.36 + intensities[barOfSeg] * 0.12) * arcGain + this.rng.float(-0.03, 0.03), 0.20, 0.60) });
+    if (bass.figure) {
+      handEvents.push({ beat: s.beat0 + bass.figure.beat, duration: 0.55 + this.setting('sustain', 0.7) * 0.35,
+                        pitch: bass.figure.pitch,
+                        velocity: clamp((0.24 + intensities[barOfSeg] * 0.08) * arcGain, 0.12, 0.5),
+                        role: 'bass', figure: true });
+    }
     if (bass.approach !== null && s.len >= 3 && i < segments.length - 1) {
       handEvents.push({ beat: s.beat0 + s.len - this.rng.pick([1, 1.25, 1.5]),
                         duration: 0.42 + this.setting('sustain', 0.7) * 0.30,
@@ -4183,7 +4207,7 @@ function scheduleBar (engine, bar, time, onNote, log) {
   if (!bar.pedalLift) {
     for (i = 0; i < bar.events.length; i++) {
       e = bar.events[i];
-      if (e.role !== 'bass' || !e.approach) continue;
+      if (e.role !== 'bass' || !(e.approach || e.figure)) continue;
       when = time + e.beat * spb + (e.micro || 0);
       engine.dampBelow(when + 0.06, 56, mod(e.pitch, 12), 0.30);
     }
