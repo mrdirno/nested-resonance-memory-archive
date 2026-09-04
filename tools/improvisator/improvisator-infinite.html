@@ -892,7 +892,17 @@ Composer.prototype.buildDiatonicChord = function (degree, barIndex, progression,
            name: NOTE_NAMES[rootPc] + q, borrowed: borrowed, intensity: intensity };
 };
 
-Composer.prototype.voicingCandidates = function (chord, voiceCount, lo, hi) {
+/* Two notes close together low on a piano beat against each other and the
+   sound turns to mud: the partials are dense down there and the ear cannot
+   separate them. A pianist keeps roughly an octave under E2, a fifth to C3, a
+   fourth to G3, a major third to E4, and stops worrying above that. Measured
+   before this existed, twelve per cent of the simultaneous low intervals this
+   composer wrote were inside the floor. */
+function lowIntervalFloor (midi) {
+  return midi < 40 ? 12 : midi < 48 ? 7 : midi < 55 ? 5 : midi < 60 ? 4 : midi < 64 ? 3 : 2;
+}
+
+Composer.prototype.voicingCandidates = function (chord, voiceCount, lo, hi, strict) {
   var essential = chord.pcs.filter(function (pc) { return pc !== chord.rootPc; });
   var pool = essential.length >= voiceCount ? essential : chord.pcs;
   var pcSets = combinations(pool, Math.min(voiceCount, pool.length));
@@ -916,11 +926,15 @@ Composer.prototype.voicingCandidates = function (chord, voiceCount, lo, hi) {
       if (k === options.length) {
         var notes = picked.slice().sort(function (a, b) { return a - b; });
         for (var j = 1; j < notes.length; j++) if (notes[j] === notes[j - 1]) return;
+        /* A four-note voicing wants air in it; a two-note shell is allowed to
+           be a third wide, and has to be, because the window between a clear
+           bass and a tune in the tenor is often only six or seven semitones
+           and a minimum span of seven rejected every shell that would fit. */
         var span = notes[notes.length - 1] - notes[0];
-        if (span < 7 || span > 26) return;
+        if (span < (notes.length <= 2 ? 3 : notes.length === 3 ? 5 : 7) || span > 26) return;
         for (j = 1; j < notes.length; j++) {
           var gap = notes[j] - notes[j - 1];
-          if (gap < 2 && notes[j] < 67) return;
+          if (gap < (strict === false ? 2 : lowIntervalFloor(notes[j - 1]))) return;
           if (gap > 12) return;
         }
         out.push(notes); return;
@@ -939,8 +953,8 @@ Composer.prototype.voicingCost = function (notes, prev, intensity, centerBias) {
   cost += Math.max(0, 51 - notes[0]) * 1.7 + Math.max(0, notes[notes.length - 1] - 78) * 1.7;
   for (i = 1; i < notes.length; i++) {
     var gap = notes[i] - notes[i - 1];
-    if (gap === 1) cost += 8;
-    if (gap === 2 && notes[i] < 64) cost += 4;
+    var floor = lowIntervalFloor(notes[i - 1]);
+    if (gap < floor) cost += (floor - gap) * 3.2;
     if (gap > 9) cost += (gap - 9) * 0.4;
   }
   if (prev && prev.length) {
@@ -1849,7 +1863,7 @@ root.IMPROV = {
   RNG: RNG, Field: Field,
   NOTE_NAMES: NOTE_NAMES, MODE_DEFS: MODE_DEFS, MODE_KEYS: MODE_KEYS,
   ROLES: ROLES, HAND_PATTERNS: HAND_PATTERNS, PRESETS: PRESETS,
-  qualityName: qualityName, Composer: Composer,
+  qualityName: qualityName, Composer: Composer, lowIntervalFloor: lowIntervalFloor,
   PIANO_ZONES: PIANO_ZONES, ZONE_ORDER: ZONE_ORDER, ZoneRenderer: ZoneRenderer,
   partialTable: partialTable, inharmonicity: inharmonicity, fundamentalDecay: fundamentalDecay,
   pickZone: pickZone, BarClock: BarClock,
@@ -1876,6 +1890,7 @@ if (!K || !K.Composer) return;
 
 var BaseComposer = K.Composer;
 var clamp = K.clamp, lerp = K.lerp, mod = K.mod, TAU = K.TAU;
+var lowIntervalFloor = K.lowIntervalFloor;
 var NOTE_NAMES = K.NOTE_NAMES, MODE_DEFS = K.MODE_DEFS;
 
 function clone(value) {
@@ -2026,6 +2041,10 @@ SoulComposer.prototype.reset = function (seed, settings) {
   this.soul.rightPosition = this.prevMelody;
   this.touch = 0;
   this.melodyTouch = 0;
+  /* The lowest note the tune has sung, so the comping stays under it through a
+     bar the melody sits out. Part of the composer's state, so a rejected search
+     attempt does not leak its ceiling into the one that is kept. */
+  this.melodyFloorHeard = this.prevMelody;
   this._safeMode = false;
 };
 
@@ -2034,6 +2053,7 @@ SoulComposer.prototype.captureState = function () {
   s.soul = clone(this.soul);
   s.touch = this.touch;
   s.melodyTouch = this.melodyTouch;
+  s.melodyFloorHeard = this.melodyFloorHeard;
   return s;
 };
 SoulComposer.prototype.restoreState = function (s) {
@@ -2041,6 +2061,7 @@ SoulComposer.prototype.restoreState = function (s) {
   this.soul = clone(s.soul);
   this.touch = s.touch || 0;
   this.melodyTouch = s.melodyTouch || 0;
+  this.melodyFloorHeard = s.melodyFloorHeard;
 };
 
 SoulComposer.prototype.chooseRole = function () {
@@ -2284,15 +2305,20 @@ SoulComposer.prototype.chooseSoulBass = function (chord, nextChord, rud, ctx) {
   else if (ctx.sameChord && this.rng.chance(0.40) && chord.pcs.indexOf(chordThird) >= 0) bassPc = chordThird;
   else if (kind === 'fifth' && this.rng.chance(0.30)) bassPc = fifthPc;
 
+  /* A bass note. The search used to run to E3 and its median landed on A2,
+     which is a tenor note, not a foundation -- and everything else in the
+     texture had to be voiced above it, so the tune and the comping were fighting
+     for the same octave. E1 to C3, centred on E2, is where a left hand actually
+     puts the bottom of a piano voicing. */
   var candidates = [], n;
-  for (n = 34; n <= 52; n++) if (mod(n,12) === bassPc) candidates.push(n);
+  for (n = 30; n <= 48; n++) if (mod(n,12) === bassPc) candidates.push(n);
   if (!candidates.length) candidates = [36 + bassPc];
   var best = candidates[0], bestCost = Infinity;
   for (var i = 0; i < candidates.length; i++) {
     n = candidates[i];
-    var c = Math.abs(n - this.prevBass) * 0.90 + Math.abs(n - 41) * 0.16;
+    var c = Math.abs(n - this.prevBass) * 0.90 + Math.abs(n - 40) * 0.16;
     if (Math.abs(n - this.prevBass) > 10) c += 5.5;
-    if (n < 36) c += (36-n)*0.72;
+    if (n < 33) c += (33-n)*0.72;
     if (c < bestCost) { bestCost = c; best = n; }
   }
   this.prevBass = best;
@@ -2307,26 +2333,26 @@ SoulComposer.prototype.chooseSoulBass = function (chord, nextChord, rud, ctx) {
        wrong notes; searching for a real chord tone leaves none. */
     var f = null, step;
     for (step = 5; step <= 9 && f === null; step++)
-      if (best + step <= 55 && chord.pcs.indexOf(mod(best + step, 12)) >= 0) f = best + step;
-    if (f === null) f = best + 12 <= 55 ? best + 12 : best - 12;
+      if (best + step <= 51 && chord.pcs.indexOf(mod(best + step, 12)) >= 0) f = best + step;
+    if (f === null) f = best + 12 <= 51 ? best + 12 : best;
     extras.push({ beat:meter * 0.58, pitch:f, duration:meter * 0.30, velocityMul:0.70 });
   } else if (kind === 'octave') {
-    var oct = best + 12 <= 55 ? best + 12 : best;
+    var oct = best + 12 <= 52 ? best + 12 : best;
     extras.push({ beat:meter * 0.53, pitch:oct, duration:meter * 0.34, velocityMul:0.68 });
   } else if ((kind === 'step' || kind === 'chromatic') && nextChord) {
     var targetNotes = [];
-    for (n = 34; n <= 52; n++) if (mod(n,12) === nextChord.rootPc) targetNotes.push(n);
+    for (n = 30; n <= 48; n++) if (mod(n,12) === nextChord.rootPc) targetNotes.push(n);
     targetNotes.sort(function (a,b) { return Math.abs(a-best)-Math.abs(b-best); });
     var target = targetNotes[0];
     if (target !== undefined) {
       var approach = kind === 'chromatic' ? target + (best <= target ? -1 : 1) : null;
       if (kind === 'step') {
-        var sc = this.scaleMidi(32,55);
+        var sc = this.scaleMidi(29,50);
         var opts = sc.filter(function (m) { return m !== target && Math.abs(m-target) <= 2 && Math.abs(m-best) <= 8; });
         opts.sort(function (a,b) { return Math.abs(a-best)-Math.abs(b-best); });
         approach = opts[0];
       }
-      if (approach !== undefined && approach !== null && approach >= 32 && approach <= 55)
+      if (approach !== undefined && approach !== null && approach >= 29 && approach <= 50)
         extras.push({ beat:Math.max(1, meter - 0.62), pitch:approach, duration:0.54, velocityMul:0.60 });
     }
   } else if (kind === 'tenth' && chord.pcs.length > 1) {
@@ -2341,10 +2367,42 @@ SoulComposer.prototype.chooseSoulVoicing = function (chord, ctx, topTarget, rud)
   var texture = this.settings.texture;
   var count = rud.kind === 'suspended' ? 3 : texture > 0.68 && ctx.intensity > 0.62 ? 5 : (texture < 0.30 ? 3 : 4);
   var centerBias = ctx.registerBias;
+  /* The floor is whichever is higher: where this register wants the hand, or
+     far enough above the top note the left hand is already holding that the
+     two do not beat against each other. */
   var lo = Math.round(clamp(46 + centerBias * 0.5, 43, 55));
+  if (ctx.bassCeil !== undefined)
+    lo = Math.max(lo, ctx.bassCeil + lowIntervalFloor(ctx.bassCeil));
   var hi = Math.round(clamp(80 + centerBias * 0.7, 72, 86));
-  var candidates = this.voicingCandidates(chord, count, lo, hi);
-  if (!candidates.length) candidates = this.voicingCandidates(chord, Math.min(4,count), 45,81);
+
+  /* The tune has to be the top of the texture. topTarget is the lowest melody
+     note in this bar, so the accompaniment must finish below it -- and in a bar
+     the melody sits out, below the last one it sang, or the comping climbs
+     through the rest and the next entry arrives underneath it.
+
+     Scoring that was not enough: at a cost of seven it lost to the voice
+     leading in more than a quarter of bars. But filtering a fixed four-note
+     block was not enough either, because when the tune is down in the tenor
+     there is no room under it for four notes and a clear bass, and the filter
+     simply emptied -- in forty-seven per cent of bars. What a pianist does
+     there is play fewer notes, so that is what happens here: the hand tries
+     its full voicing, then a shell, then two notes, and takes the first size
+     that fits underneath the tune. */
+  var ceiling = topTarget === null || topTarget === undefined ? this.melodyFloorHeard : topTarget;
+  if (topTarget !== null && topTarget !== undefined) this.melodyFloorHeard = topTarget;
+  var headroom = rud.kind === 'topBell' ? 2 : 3;
+  var candidates = [], sizes = [count], k;
+  for (k = count - 1; k >= 2; k--) sizes.push(k);
+  for (k = 0; k < sizes.length; k++) {
+    var pool = this.voicingCandidates(chord, sizes[k], lo, hi, true);
+    if (!pool.length) pool = this.voicingCandidates(chord, sizes[k], Math.max(45, lo - 2), 81, true);
+    if (!pool.length) continue;
+    if (ceiling === null || ceiling === undefined) { candidates = pool; break; }
+    var under = pool.filter(function (n) { return n[n.length - 1] <= ceiling - headroom; });
+    if (under.length) { candidates = under; break; }
+    if (!candidates.length) candidates = pool;   /* remember the widest fallback */
+  }
+  if (!candidates.length) candidates = this.voicingCandidates(chord, Math.min(3, count), 45, 81, false);
   if (!candidates.length) return [55,60,64,67];
   var prev = this.prevVoicing, self = this;
   var scored = candidates.map(function (notes) {
@@ -2355,7 +2413,7 @@ SoulComposer.prototype.chooseSoulVoicing = function (chord, ctx, topTarget, rud)
     if (topTarget !== null && topTarget !== undefined) {
       var desiredTop = topTarget - (rud.kind === 'topBell' ? 2 : 4);
       cost += Math.abs(notes[notes.length-1]-desiredTop)*0.34;
-      if (notes[notes.length-1] >= topTarget-1) cost += 7;
+      if (notes[notes.length-1] >= topTarget-1) cost += 24;
     }
     if (notes[0] < 52 && notes.length > 1 && notes[1]-notes[0] < 5) cost += 4;
     return { notes:notes, cost:cost };
@@ -2650,8 +2708,15 @@ SoulComposer.prototype.generateAttempt = function () {
     var ctx=plan.bars[i];ctx.registerBias=registerBias;
     ctx.sameChord=i>0&&chords[i].rootPc===chords[i-1].rootPc&&chords[i].baseName===chords[i-1].baseName;
     ctx.closing=ctx.barInPhrase===ctx.phraseLength-1;
+    /* The bass is chosen first and the hand voices above it. It used to be the
+       other way round, and since the bass reaches to 55 with its answers and
+       the voicing started as low as 43, the two hands were writing into the
+       same octave: measured, six thousand simultaneous pairs closer than the
+       ear can separate down there. Neither part knew about the other. */
+    var bass=this.chooseSoulBass(chords[i],chords[Math.min(plan.length-1,i+1)],ctx.phrase.bass,ctx);
+    ctx.bassCeil=bass.extras.reduce(function(m,x){return x.pitch<56?Math.max(m,x.pitch):m;},bass.main);
+    basses.push(bass);
     voicings.push(this.chooseSoulVoicing(chords[i],ctx,melody.topTargets[i],ctx.phrase.accompaniment));
-    basses.push(this.chooseSoulBass(chords[i],chords[Math.min(plan.length-1,i+1)],ctx.phrase.bass,ctx));
   }
 
   var bars=[],self=this;
@@ -2702,7 +2767,17 @@ SoulComposer.prototype.generateAttempt = function () {
 
     var bassBeat=bass.delayed?clamp(0.11+bc.phrase.timing.attack*1.8,0.07,0.34):0;
     var bassVel=clamp(0.31+bc.intensity*0.110+this.rng.float(-0.013,0.013),0.26,0.55);
-    events.push({beat:bassBeat,duration:bc.meter*0.77+bc.tailHold+this.settings.sustain*0.72,
+    /* The bass lets go before its own answer arrives. Held for the whole bar it
+       was still sounding underneath the approach note that leads to the next
+       root -- a semitone apart, three octaves below middle C, which is the
+       muddiest interval on the instrument. Measured, 725 of those per run. */
+    var bassEnd=bc.meter*0.77+bc.tailHold+this.settings.sustain*0.72;
+    for(var bx=0;bx<bass.extras.length;bx++){
+      var gapNeeded=lowIntervalFloor(Math.min(bass.main,bass.extras[bx].pitch));
+      if(Math.abs(bass.extras[bx].pitch-bass.main)<gapNeeded)
+        bassEnd=Math.min(bassEnd,Math.max(0.75,bass.extras[bx].beat-bassBeat-0.06));
+    }
+    events.push({beat:bassBeat,duration:bassEnd,
       pitch:bass.main,velocity:bassVel,role:'bass',hand:'L',articulation:'tenuto',attackWeight:0.64,
       gesture:bc.phrase.bass.id,gestureMicro:bc.phrase.timing.attack*(bass.delayed?0.4:0)});
     for(var ex=0;ex<bass.extras.length;ex++){

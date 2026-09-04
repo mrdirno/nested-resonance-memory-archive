@@ -190,6 +190,50 @@ console.log('');
   if (rate > 0.001) fail('HARMONY', line); else console.log('HARMONY'.padEnd(14) + line);
 }
 
+/* TEXTURE — two things a listener notices before anything else: whether the
+   bottom of the piano is muddy, and whether the tune is on top. Both measured
+   at simultaneity across every preset, because both are about notes sounding
+   together rather than notes written near each other. */
+{
+  let mud = 0, pairs = 0, buried = 0, structural = 0;
+  const worst = [];
+  for (const preset of Object.keys(K.PRESETS)) {
+    for (const sd4 of ['a-1', 'b-2', 'c-3']) {
+      for (const b of run(K, { seed: sd4, preset, bars: 96 }).bars) {
+        const times = [...new Set(b.events.map(e => Math.round(e.beat * 24) / 24))];
+        for (const t of times) {
+          const on = b.events.filter(e => e.beat <= t + 1e-6 && e.beat + e.duration > t + 1e-6)
+                             .slice().sort((x, y) => x.pitch - y.pitch);
+          for (let i = 1; i < on.length; i++) {
+            pairs++;
+            const gap = on[i].pitch - on[i - 1].pitch;
+            if (gap > 0 && gap < K.lowIntervalFloor(on[i - 1].pitch)) {
+              mud++;
+              if (worst.length < 3) worst.push(preset + ' ' + b.chord.name + ' ' +
+                on[i-1].role + ' ' + on[i-1].pitch + ' + ' + on[i].role + ' ' + on[i].pitch + ' (gap ' + gap + ')');
+            }
+          }
+        }
+        for (const m of b.events) {
+          if (m.role !== 'melody' || m.duration < 0.75 || m.velocity < 0.34) continue;
+          structural++;
+          const t = m.beat + 1e-6;
+          if (b.events.some(e => e.role !== 'melody' && e.pitch > m.pitch &&
+                                 e.beat <= t && e.beat + e.duration > t)) buried++;
+        }
+      }
+    }
+  }
+  const mudRate = mud / pairs, buriedRate = buried / structural;
+  console.log('TEXTURE'.padEnd(14) + 'muddy simultaneous pairs ' + mud + '/' + pairs +
+              ' (' + (100 * mudRate).toFixed(2) + '%)   structural melody notes under the accompaniment ' +
+              buried + '/' + structural + ' (' + (100 * buriedRate).toFixed(2) + '%)');
+  if (mudRate > 0.04) fail('TEXTURE', 'the bottom of the instrument is muddy in ' +
+    (100 * mudRate).toFixed(2) + '% of simultaneous pairs: ' + worst.join('; '));
+  else if (buriedRate > 0.10) fail('TEXTURE', (100 * buriedRate).toFixed(2) +
+    '% of structural melody notes have an accompaniment note sounding above them');
+}
+
 /* DETERMINISM — one seed, one performance. */
 {
   const a = fingerprint(run(K, { seed: SEED, preset: PRESET, bars: 96 }).bars);
