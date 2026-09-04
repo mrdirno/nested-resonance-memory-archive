@@ -3704,16 +3704,29 @@ Engine.prototype.buildImpulse = function (seconds, seed) {
       var at = pre + Math.floor((tp.t + (ch ? tp.dt : 0)) * rate);
       if (at >= 0 && at < len) d[at] += tp.g * (ch ? tp.dg : 1);
     }
+    /* The three decays used to be three Math.exp calls per sample, about
+       820,000 of them per rebuild, and a rebuild sits inside the click that
+       changes a preset. An exponential is its own ratio, so one multiply per
+       sample draws the same curve: e(t + 1/rate) = e(t) * exp(-6.9/(rt*rate)).
+       The gate is likewise only doing arithmetic for the 45 ms it ramps over,
+       so the samples before and after it are found by index instead. */
+    var dLow = Math.exp(-6.9 / (rtLow * rate));
+    var dMid = Math.exp(-6.9 / (rtMid * rate));
+    var dHigh = Math.exp(-6.9 / (rtHigh * rate));
+    var eLow = 1, eMid = 1, eHigh = 1;
+    var gateOn = pre + Math.ceil(0.028 * rate);
+    var gateFull = pre + Math.ceil(0.073 * rate);
     for (var i = pre; i < len; i++) {
-      var t = (i - pre) / rate;
       var w = rng.float(-1, 1);
       a1 = a1 * 0.9880 + w * 0.0120;
       a2 = a2 * 0.7900 + w * 0.2100;
-      var low = a1, mid = a2 - a1, high = w - a2;
-      var gate = t < 0.028 ? 0 : smoothstep((t - 0.028) / 0.045);
-      d[i] += (low * Math.exp(-6.9 * t / rtLow) * 1.00 +
-               mid * Math.exp(-6.9 * t / rtMid) * 0.85 +
-               high * Math.exp(-6.9 * t / rtHigh) * 0.55) * 0.5 * gate;
+      if (i >= gateOn) {
+        var gate = i >= gateFull ? 1 : smoothstep(((i - pre) / rate - 0.028) / 0.045);
+        d[i] += (a1 * eLow * 1.00 +
+                 (a2 - a1) * eMid * 0.85 +
+                 (w - a2) * eHigh * 0.55) * 0.5 * gate;
+      }
+      eLow *= dLow; eMid *= dMid; eHigh *= dHigh;
     }
   }
   return buf;
@@ -3884,8 +3897,10 @@ Engine.prototype.applySettings = function (settings, immediate) {
   this.wet.gain.setTargetAtTime(wetTarget, t, tc);
   /* Resonance is now sympathetic depth, which is what the label promised. */
   this.stringSend.gain.setTargetAtTime(lerp(0.02, 0.13, clamp(s.resonance, 0, 1)), t, 0.3);
-  /* Rebuilding the impulse costs a couple of milliseconds, so only when the
-     room has actually changed size. */
+  /* Rebuilding the impulse costs 3.4 ms at the median and 5.9 ms at the worst
+     end of the slider, measured -- it was 10 and 23 before the decays came out
+     of the sample loop. Cheap, but not free, and it sits inside a click, so it
+     still runs only when the room has actually changed size. */
   var space = clamp(s.space, 0, 1);
   if (Math.abs(space - this._irSpace) > 0.12 || this._irSpace < 0) {
     this._irSpace = space;
@@ -4692,7 +4707,7 @@ function refreshStage() {
 
 /* ---------- housekeeping: one frame loop for everything non-audio ------- */
 
-var lastReady = 0, frameCount = 0;
+var lastReady = 0, frameCount = 0, staleFrom = 0;
 visual.onFrame = function () {
   frameCount++;
   var frameStart = now();
@@ -4710,6 +4725,7 @@ visual.onFrame = function () {
        being built, which is what the progress chip tells everyone else. */
     if (bank.readyCount >= 8 && el.playButton) el.playButton.removeAttribute('aria-disabled');
   }
+  if (staleFrom && now() >= staleFrom) { staleFrom = 0; if (composer.pending) composer.pending.length = 0; }
   composer.primeQueue();
   /* Refill under a deadline rather than once every third frame, so clearing
      the queue from a slider does not push generation onto the scheduler. */
@@ -4873,11 +4889,48 @@ function bounceWav(seconds) {
     offEngine.resetRng(seed);
     var c = new K.Composer(seed, snapshot);
     var t = 0.3, afterFermata = false;
-    while (t < seconds) {
-      var bar = c.nextBar();
-      if (afterFermata) { bar.extraHold = 0.18; afterFermata = false; }
-      if ((bar.barBeats || 4) > 4.01) afterFermata = true;
-      t += scheduleBar(offEngine, bar, t, null, null);
+    function scheduleUntil (limit) {
+      while (t < limit && t < seconds) {
+        var bar = c.nextBar();
+        if (afterFermata) { bar.extraHold = 0.18; afterFermata = false; }
+        if ((bar.barBeats || 4) > 4.01) afterFermata = true;
+        t += scheduleBar(offEngine, bar, t, null, null);
+      }
+    }
+
+    /* Scheduling the whole take before startRendering builds every note of it
+       as live nodes at once, and an offline context never runs the event loop
+       while it renders, so no voice's `ended` ever fires and none of them ever
+       leave the graph. The per-quantum cost then grows with the whole piece:
+       measured, 60 s took 15.7 s but 240 s took 143.5 s -- quadratic, and only
+       1.7x faster than recording it in real time. Suspending every eight
+       seconds hands the main thread back, which is what lets the finished
+       voices disconnect, and it is also the only place a progress number can
+       come from. Firefox and Safari before 14.1 have no suspend; there the
+       whole take is scheduled at once, exactly as before. */
+    /* Stay a whole chunk ahead of the render head. Scheduling only up to the
+       next suspend point left the first event of a bar sitting behind the
+       resumed clock -- Engine.play clamps a late note to now + 2 ms, and one
+       note moved 33 ms was enough to make the chunked take differ from the
+       whole-piece one by 24 dB at the peak. With a chunk of lead the earliest
+       unscheduled event is eight seconds ahead and the clamp never fires. */
+    var CHUNK = 8, LEAD = 16;
+    var chunked = typeof oc.suspend === 'function' && seconds > LEAD;
+    if (!chunked) scheduleUntil(seconds);
+    else {
+      scheduleUntil(LEAD);
+      var stops = [], stop;
+      for (stop = CHUNK; stop < seconds; stop += CHUNK) stops.push(stop);
+      stops.forEach(function (at) {
+        oc.suspend(at).then(function () {
+          /* Resume whatever happens: a render left suspended never resolves,
+             and the button would stay busy for the life of the page. */
+          try {
+            scheduleUntil(at + LEAD);
+            setStatus('bouncing ' + Math.round(100 * at / seconds) + '%', 'working');
+          } finally { oc.resume(); }
+        }).catch(function () { /* the suspend point had already passed */ });
+      });
     }
     oc.startRendering().then(function (rendered) {
       var L = rendered.getChannelData(0);
@@ -5026,7 +5079,14 @@ RANGES.forEach(function (pair) {
     var out = $(id + 'Value'); if (out) out.textContent = raw + (pair[2] || '');
     markCustom();
     composer.updateSettings(settings);
-    if (REGENERATE_ON[key] && composer.pending) composer.pending.length = 0;
+    /* A range input fires on every pixel of the drag. Emptying the queue here
+       made the next frame refill it -- one or two whole sections, eight search
+       attempts each -- and the next event threw that away again: measured, 295
+       sections composed and one heard for a three-second drag, with a third of
+       the frames over 16.7 ms and the seeded section stream silently consumed.
+       The queue is marked stale instead and cleared once the hand stops, which
+       the ear cannot tell apart because the queue runs fourteen bars ahead. */
+    if (REGENERATE_ON[key] && composer.pending) staleFrom = now() + 150;
     if (engine.ready) engine.applySettings(settings);
     if (key === 'bpm') el.tempoLabel.textContent = Math.round(settings.bpm) + ' bpm';
   });

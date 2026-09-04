@@ -26,7 +26,7 @@ not randomness, incommensurability.
 - **Play / pause** — space, or the centre button
 - **New passage** — `N`
 - **Export MIDI** — `M` (format 1, real tempo map, parts on separate tracks, pedal on every lane)
-- **Bounce 60 s to WAV** — `B`
+- **Bounce to WAV** — `B` for a minute, `Shift+B` for four
 - **Record what you hear** — `R`
 - **Controls** — `C`
 
@@ -111,12 +111,19 @@ Everything is in the first `<script>` — a pure-JS kernel with no DOM and no We
 | The pedal | `pedalGesture`, and `scheduleBar` in the instrument layer |
 | The instrument | `partialTable`, `ZoneRenderer`, `Engine.play`, `Engine.release`, `Engine.attach` |
 
-## Two things worth knowing before you edit
+## Three things worth knowing before you edit
 
 **Every timing offset goes in `e.micro`, never in `e.beat`.** `e.beat` is what the bar clock measures
 its own length from; putting lay-back, roll offsets or grace notes there makes the bar longer and the
 tempo map wrong. `e.micro` is read identically by the realtime scheduler, the offline bounce and the
 MIDI log, which is what keeps the three renderings the same performance.
+
+**An offline render must stay a chunk ahead of itself.** `bounceWav` suspends the
+`OfflineAudioContext` every eight seconds so finished voices can disconnect — without that the graph
+only grows and the render is quadratic in the length of the take. But `Engine.play` clamps any note
+scheduled behind `ctx.currentTime` to now + 2 ms, and once the render clock is running that clamp can
+fire. Scheduling is therefore kept sixteen seconds ahead of the suspend point, not eight. Scheduling
+only to the next suspend point moved one note by 33 ms and changed the take by 24 dB at the peak.
 
 **On `lowpass` and `highpass` nodes, Web Audio reads `Q` in decibels.** Not as a quality factor.
 `Q = 0.5` is half a decibel of resonance at the corner, so a filter that looks heavily damped is
