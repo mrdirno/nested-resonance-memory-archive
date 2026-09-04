@@ -1387,9 +1387,15 @@ Composer.prototype.planHarmonicRhythm = function (role) {
   var lens = body.concat(turn), sum = 0, i;
   for (i = 0; i < lens.length; i++) sum += lens[i];
   /* The table entries all total 32; this is the guard that keeps the section
-     exactly eight bars if one is ever mistyped. */
-  while (sum > 32) { sum -= lens.pop(); }
-  while (sum < 32) { lens.push(Math.min(4, 32 - sum)); sum += Math.min(4, 32 - sum); }
+     exactly eight bars if one is ever mistyped. It has to be able to fail
+     safely — popping an empty array would make sum NaN and spin the page. */
+  while (sum > 32 && lens.length) sum -= lens.pop();
+  for (var guard = 0; sum < 32 && guard < 16; guard++) {
+    var add = Math.min(4, 32 - sum);
+    if (!(add > 0)) break;
+    lens.push(add); sum += add;
+  }
+  if (sum !== 32) return [4, 4, 4, 4, 4, 4, 4, 4];
   return lens;
 };
 
