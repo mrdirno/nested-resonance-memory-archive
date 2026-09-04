@@ -205,6 +205,46 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
   tempo         ${fmt(Math.min(...bpms))} .. ${fmt(Math.max(...bpms))} bpm  (sd ${fmt(stdev(bpms))})
 `);
 
+/* ---- does every note belong to the chord it lands on? ------------------
+   An accompaniment note that is neither a chord tone, nor the bass, nor an
+   available tension, nor a deliberate approach note, is a wrong note. This is
+   the check that caught the left-hand tenth being built from an inverted bass,
+   which put a natural eleventh against the third of a dominant. */
+{
+  let attacks = 0, wrong = 0, slashBad = 0;
+  const worst = [];
+  for (const name of Object.keys(K.PRESETS)) {
+    for (const sd of ['h1', 'h2', 'h3']) {
+      const c = new K.Composer(name + sd, Object.assign({}, K.PRESETS[name]));
+      const timeline = [];
+      for (let i = 0; i < 64; i++) {
+        const b = c.nextBar();
+        for (const ch of b.changes) {
+          timeline.push({ t: b.beatStart + (ch.scoreBeat === undefined ? ch.beat : ch.scoreBeat), chord: ch.chord, bass: ch.bass });
+        }
+        for (const e of b.events) {
+          if (e.role === 'melody' || e.approach) continue;
+          const t = b.beatStart + e.scoreBeat;
+          let cur = timeline[0];
+          for (const seg of timeline) if (seg.t <= t + 1e-6) cur = seg;
+          attacks++;
+          const pc = mod(e.pitch, 12);
+          if (cur.chord.pcs.indexOf(pc) >= 0 || pc === mod(cur.bass, 12)) continue;
+          if (K.tensionOK(cur.chord.intervals, mod(pc - cur.chord.rootPc, 12) + 12, cur.chord.fn === 'D')) continue;
+          wrong++;
+          if (worst.length < 4) worst.push(`${cur.chord.name} + ${mod(pc - cur.chord.rootPc, 12)}`);
+        }
+        const named = b.chord.name.indexOf('/') >= 0;
+        if (named !== (mod(b.bass, 12) !== b.chord.rootPc)) slashBad++;
+      }
+    }
+  }
+  console.log(`HARMONY        ${wrong}/${attacks} accompaniment attacks (${pct(wrong / attacks)}) are neither a chord tone, the bass, nor an available tension` +
+              (worst.length ? '\n  worst        ' + worst.join('  ') : ''));
+  console.log(`SLASH NAMES    ${slashBad ? slashBad + ' bars where the printed bass and the played bass disagree' : 'PASS — the printed chord always names the bass that is played'}`);
+  if (wrong / attacks > 0.005 || slashBad) process.exitCode = 1;
+}
+
 /* ---- gesture, seams and rails ----------------------------------------- */
 {
   const c = new K.Composer(seed, Object.assign({}, settings));

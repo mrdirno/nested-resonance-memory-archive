@@ -633,8 +633,9 @@ function chordLabel (quality, tensions) {
   else if (quality === 'dom7') name = stack ? String(stack) : '7';
   else if (quality === 'sus7') name = (stack ? String(stack) : '7') + 'sus4';
   else if (quality === 'm7b5') name = stack === 11 ? 'm11♭5' : 'm7♭5';
-  else if (quality === 'maj6') name = has(14) ? '6/9' : '6';
-  else if (quality === 'm6')   name = has(14) ? 'm6/9' : 'm6';
+  /* Not "6/9": the display appends a slash bass, and "E♭6/9/G" is unreadable. */
+  else if (quality === 'maj6') name = has(14) ? '6(9)' : '6';
+  else if (quality === 'm6')   name = has(14) ? 'm6(9)' : 'm6';
   else if (quality === 'mMaj7')name = stack ? 'm(maj' + stack + ')' : 'm(maj7)';
   else if (quality === 'maj')  name = has(14) ? 'add9' : '';
   else if (quality === 'm')    name = has(14) ? 'm(add9)' : 'm';
@@ -1594,15 +1595,20 @@ Composer.prototype.shapePool = function (chord, count) {
   if (count >= 3) {
     var sc = MODE_DEFS[this.mode].intervals;
     for (i = 0; i < 7; i++) {
-      var asc = [], prev = -1, covers = 0;
+      var asc = [], prev = -1, covers = 0, clean = true;
       for (k = 0; k < count; k++) {
         var idx = i + k * 3;
         var off = mod(this.tonic + sc[idx % 7] - chord.rootPc, 12);
         while (off <= prev) off += 12;
         asc.push(off); prev = off;
         if (chord.pcs.indexOf(mod(chord.rootPc + off, 12)) >= 0) covers++;
+        /* A quartal stack is built from scale degrees, so it can put a note a
+           minor ninth above a chord tone — exactly the clash the tension gate
+           exists to prevent, arriving by the back door. Measured, this was
+           nine percent of all accompaniment attacks. */
+        else if (!tensionOK(chord.intervals, off, chord.fn === 'D')) clean = false;
       }
-      if (covers >= Math.min(2, count - 1)) shapes.push(asc);
+      if (clean && covers >= Math.min(2, count - 1)) shapes.push(asc);
     }
   }
   return shapes;
@@ -2368,7 +2374,10 @@ Composer.prototype.layAlone = function (ctx) {
     var degs = this.currentCell.deg.slice(0, 2);
     for (i = 0; i < degs.length; i++) {
       var n = scale[clamp(idx + degs[i], 0, scale.length - 1)];
-      if (ctx.chord.pcs.indexOf(mod(n, 12)) === -1 && this.rng.chance(0.6)) continue;
+      /* The answer quotes the tune, but it is still accompaniment: a chord tone
+         or an available tension, never a note that rubs the harmony. */
+      if (ctx.chord.pcs.indexOf(mod(n, 12)) === -1 &&
+          !tensionOK(ctx.chord.intervals, mod(n - ctx.chord.rootPc, 12) + 12, ctx.chord.fn === 'D')) continue;
       push([1.5, 2.5][i], 1.2, n, vel(0.62));
     }
   }
@@ -2495,6 +2504,14 @@ Composer.prototype.generateAttempt = function () {
     var barOfSeg = Math.min(7, Math.floor(s.beat0 / 4));
     var pattern = (s.beat0 >= 16 ? handB : hand);
     if (s.len <= 2) pattern = this.rng.chance(0.6) ? 'block' : 'rolled';
+    /* The left-hand tenth and the shell are built up from the note the left
+       hand is holding, so they only mean anything when that note is the root.
+       Over an inversion or a pedal point they were putting a major third above
+       the fifth — a natural eleventh against the third of a dominant, which is
+       the sharpest wrong note in the idiom. */
+    if ((pattern === 'tenth' || pattern === 'shell') && mod(bass.main, 12) !== s.chord.rootPc) {
+      pattern = this.rng.chance(0.5) ? 'rolled' : 'block';
+    }
     if (barOfSeg === 7 && pattern === 'ostinato') pattern = 'block';
     var restKind = restPlan[barOfSeg] ? ((barOfSeg === 3 || barOfSeg === 7) ? 'cadential' : 'interior') : null;
 
@@ -2933,6 +2950,16 @@ Composer.prototype.nextBar = function () {
               this.layback(e, spb, phrasePos, pocket) +
               (e.offsetSec || 0);
   }
+  /* The changes carry score beats; the events have just been warped and
+     swung. Warp the changes the same way or a mid-bar chord is pedalled at the
+     position it was written at rather than the one it is played at. */
+  for (var ci = 0; ci < bar.changes.length; ci++) {
+    var ch = bar.changes[ci];
+    if (ch.performed) continue;
+    ch.performed = true;
+    ch.scoreBeat = ch.beat;
+    ch.beat = warpBeat(swingBeat(ch.beat, swing), durs);
+  }
   bar.beatDurations = durs;
   bar.barBeats = total;
   bar.secondsPerBeat = spb;
@@ -3214,7 +3241,8 @@ function pedalGesture (change, events, spb, extraHold) {
   for (i = 0; i < events.length; i++) {
     var e = events[i];
     if (e.role !== 'bass') continue;
-    if (Math.abs((e.scoreBeat === undefined ? e.beat : e.scoreBeat) - change.beat) > 0.51) continue;
+    var cb = change.scoreBeat === undefined ? change.beat : change.scoreBeat;
+    if (Math.abs((e.scoreBeat === undefined ? e.beat : e.scoreBeat) - cb) > 0.51) continue;
     var w = e.beat * spb + (e.micro || 0);
     if (onset === null || w < onset) onset = w;
   }
@@ -3397,7 +3425,7 @@ root.IMPROV = {
   RNG: RNG, Field: Field,
   NOTE_NAMES: NOTE_NAMES, MODE_DEFS: MODE_DEFS, MODE_KEYS: MODE_KEYS,
   ROLES: ROLES, HAND_PATTERNS: HAND_PATTERNS, PRESETS: PRESETS,
-  qualityName: qualityName, Composer: Composer,
+  qualityName: qualityName, Composer: Composer, tensionOK: tensionOK, QUALITY: QUALITY,
   PIANO_ZONES: PIANO_ZONES, ZONE_ORDER: ZONE_ORDER, ZoneRenderer: ZoneRenderer,
   partialTable: partialTable, inharmonicity: inharmonicity, fundamentalDecay: fundamentalDecay,
   pickZone: pickZone, BarClock: BarClock, pedalGesture: pedalGesture,
@@ -3750,7 +3778,7 @@ Engine.prototype.pedalThump = function (when) {
     var sh = ctx.createBiquadFilter(); sh.type = 'highshelf'; sh.frequency.value = 900; sh.gain.value = -12;
     var g = ctx.createGain();
     g.gain.setValueAtTime(0.00001, t);
-    g.gain.exponentialRampToValueAtTime(0.020, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0065, t + 0.004);
     g.gain.exponentialRampToValueAtTime(0.00001, t + 0.070);
     ns.connect(bp); bp.connect(sh); sh.connect(g); g.connect(this.input);
     ns.start(t, this.rng.float(0, Math.max(0.001, this.noise.duration - 0.12)), 0.09);
