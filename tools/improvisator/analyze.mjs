@@ -371,29 +371,40 @@ console.log('');
 }
 
 /* PRESET IDENTITY — a character button must actually change the performance.
-   Two presets that differ only in a label are a lie in the interface. */
+   Measured through characterSettings(), which is what the page applies, not
+   through the raw preset table: the page used to overwrite every musical
+   dimension with the reference posture, so eight buttons produced the same
+   player in eight keys. Two characters that differ only in a label are a lie
+   in the interface. */
 {
-  const sig = {};
+  const rows = [];
   for (const name of Object.keys(K.PRESETS)) {
-    const r = run(K, { seed: 'identity-0001', preset: name, bars: 24 });
+    const settings = K.characterSettings(name);
+    const r = run(K, { seed: 'identity-0001', preset: name, bars: 48, settings });
     const ev = r.bars.flatMap(b => b.events);
-    sig[name] = {
+    const mel = ev.filter(e => e.role === 'melody');
+    rows.push({
+      name,
+      body: JSON.stringify(Object.keys(settings).filter(k => k !== 'tonic' && k !== 'mode')
+        .sort().map(k => k + '=' + settings[k])),
       notes: ev.length,
-      melody: ev.filter(e => e.role === 'melody').length,
-      bpm: mean(r.bars.map(b => b.bpm)),
-      settings: JSON.stringify(r.settings),
-    };
+      melody: mel.length,
+      tonics: new Set(r.bars.map(b => b.tonic)).size,
+      voices: (ev.filter(e => e.role === 'harmony').length / r.bars.length).toFixed(1),
+    });
   }
   const bodies = new Map();
-  for (const [name, v] of Object.entries(sig)) {
-    const key = JSON.parse(v.settings) && (() => { const s = JSON.parse(v.settings); delete s.tonic; delete s.mode; return JSON.stringify(s); })();
-    bodies.set(key, [...(bodies.get(key) || []), name]);
-  }
+  for (const r of rows) bodies.set(r.body, [...(bodies.get(r.body) || []), r.name]);
   const collapsed = [...bodies.values()].filter(g => g.length > 1);
   if (collapsed.length) fail('PRESET IDENTITY', collapsed.map(g => g.join('=')).join(' | ') +
-    ' — these presets differ only in key and mode; every other control is identical');
-  else pass('PRESET IDENTITY', 'each of the ' + Object.keys(K.PRESETS).length + ' presets has its own performance settings');
-  console.log('  melody notes  ' + Object.entries(sig).map(([n, v]) => n.slice(0, 4) + ' ' + v.melody).join('  '));
+    ' — these characters differ only in key and mode; every other setting is identical');
+  else pass('PRESET IDENTITY', 'each of the ' + rows.length + ' characters has settings of its own');
+  console.log('  per character ' + rows.map(r => r.name.slice(0, 4) + ' ' + r.notes + 'n/' + r.melody + 'm').join('  '));
+
+  /* And they must sound different, not merely be configured differently. */
+  const spread = Math.max(...rows.map(r => r.melody)) / Math.max(1, Math.min(...rows.map(r => r.melody)));
+  if (spread < 1.4) fail('PRESET IDENTITY', 'the busiest character carries only ' + spread.toFixed(2) +
+    'x the melody of the sparsest — the settings differ but the music does not');
 }
 
 console.log('');

@@ -1882,10 +1882,39 @@ function limiterCurve(samples, drive) {
 
 /* ---------- 11. defaults ------------------------------------------------ */
 
+/* The posture the owner approved: the tempo, how the keys are struck, and the
+   mix. A character button does not touch any of it. */
 var LOCKED_PERFORMANCE = {
   bpm:132, motion:0.62, space:0.22, warmth:1.00, humanize:1.00, wander:0.30,
   melody:0.02, sustain:0.78, texture:0.44, resonance:0.00, range:0.00, reverb:0.07
 };
+
+/* Which of those a character may move. The engine reads exactly four settings
+   -- warmth, resonance, reverb and space -- and those four are the mix; sustain
+   and humanize are how the hands behave; bpm is the tempo. None of them are
+   here. What is left is compositional: how busy the gait is, how much lead the
+   right hand carries, how thick the voicings are, how far the key travels, and
+   where the tune sits.
+
+   Without this the eight buttons changed the key and the mode and nothing else
+   -- eight characters that were the same player in eight keys, which is a
+   label with nothing behind it. The reference button is still exactly the
+   approved posture, because reference is what that posture is called. */
+var CHARACTER_KEYS = ['motion', 'melody', 'texture', 'wander', 'range'];
+
+/* A character's settings: the approved posture, with only the compositional
+   dimensions taken from the character itself. */
+function characterSettings (name) {
+  var p = PRESETS[name];
+  if (!p) return null;
+  var out = { tonic: p.tonic, mode: p.mode };
+  for (var k in LOCKED_PERFORMANCE) out[k] = LOCKED_PERFORMANCE[k];
+  for (var i = 0; i < CHARACTER_KEYS.length; i++) {
+    var c = CHARACTER_KEYS[i];
+    if (p[c] !== undefined) out[c] = p[c];
+  }
+  return out;
+}
 
 var PRESETS = {
   reference: { tonic: 4, mode: 'ionian',     bpm: 132, motion: 0.62, space: 0.22, warmth: 1.00, humanize: 1.00, wander: 0.30, melody: 0.02, sustain: 0.78, texture: 0.44, resonance: 0.00, range: 0.00, reverb: 0.07 },
@@ -1906,7 +1935,8 @@ root.IMPROV = {
   NOTE_NAMES: NOTE_NAMES, MODE_DEFS: MODE_DEFS, MODE_KEYS: MODE_KEYS,
   ROLES: ROLES, HAND_PATTERNS: HAND_PATTERNS, PRESETS: PRESETS,
   qualityName: qualityName, Composer: Composer, lowIntervalFloor: lowIntervalFloor,
-  SEARCH_BUDGET: SEARCH_BUDGET,
+  SEARCH_BUDGET: SEARCH_BUDGET, LOCKED_PERFORMANCE: LOCKED_PERFORMANCE,
+  CHARACTER_KEYS: CHARACTER_KEYS, characterSettings: characterSettings,
   PIANO_ZONES: PIANO_ZONES, ZONE_ORDER: ZONE_ORDER, ZoneRenderer: ZoneRenderer,
   partialTable: partialTable, inharmonicity: inharmonicity, fundamentalDecay: fundamentalDecay,
   pickZone: pickZone, BarClock: BarClock,
@@ -4237,9 +4267,7 @@ function applyPreset(name) {
   currentPreset = name;
   /* Character buttons change harmonic identity only. The player's physical
      state and the mix stay at the user-approved reference posture. */
-  settings.tonic = p.tonic;
-  settings.mode = p.mode;
-  Object.assign(settings, LOCKED_PERFORMANCE);
+  Object.assign(settings, K.characterSettings(name));
   Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (b) {
     b.classList.toggle('active', b.dataset.preset === name);
     b.setAttribute('aria-pressed', String(b.dataset.preset === name));
@@ -4248,7 +4276,7 @@ function applyPreset(name) {
   composer.updateSettings(settings);
   if (composer.pending) composer.pending.length = 0;
   if (engine.ready) engine.applySettings(settings);
-  notice(name + ' · performance locked');
+  notice(name + ' · ' + keyText(settings.tonic, settings.mode));
 }
 
 function populate() {
