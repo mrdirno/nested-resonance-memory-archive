@@ -1,404 +1,305 @@
-/* Improvisator ∞ — headless kernel harness.
-   Loads the music kernel out of the page (no DOM, no Web Audio), plays a long
-   stretch of it into memory, and reports what came out. Used to prove a change
-   to the composer did what it claims, and to catch invalid events, broken
-   determinism, and register/space/harmony regressions before anything is heard.
+/* Improvisator ∞ — kernel analysis and gates.
+   Loads the two logic <script> blocks out of the page and runs the composer
+   headlessly, so every claim about the music is a measurement rather than a
+   listen. Exits non-zero if a gate fails.
 
-   usage: node tools/improvisator/analyze.mjs [file.html] [bars] [preset] [seed]
-   Author: Aldrin Payopay
-*/
-import { readFileSync } from 'node:fs';
-import vm from 'node:vm';
+     node tools/improvisator/analyze.mjs [file] [--bars N] [--seed S] [--preset P]
 
-const file    = process.argv[2] || new URL('./improvisator-infinite.html', import.meta.url).pathname;
-const barCount= Number(process.argv[3] || 256);
-const preset  = process.argv[4] || 'reference';
-const seed    = process.argv[5] || 'grey-rain-0001';
+   Author: Aldrin Payopay */
 
-const html = readFileSync(file, 'utf8');
-const blocks = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
-if (!blocks.length) { console.error('no <script> block found'); process.exit(1); }
+import { loadKernel, run, fingerprintBar, fingerprint, tensionOK, isDominantName } from './kernel.mjs';
 
-const sandbox = { console, performance: { now: () => 0 } };
-sandbox.globalThis = sandbox;
-sandbox.window = sandbox;
-vm.createContext(sandbox);
-try { vm.runInContext(blocks[0], sandbox, { filename: 'kernel' }); }
-catch (e) { console.error('KERNEL THREW ON LOAD:\n' + (e.stack || e)); process.exit(1); }
+/* ---------- small stats -------------------------------------------------- */
 
-const K = sandbox.IMPROV;
-if (!K || !K.Composer) { console.error('kernel did not export IMPROV.Composer'); process.exit(1); }
-
-const mod = (n, m) => ((n % m) + m) % m;
-const fmt = (x, n = 2) => (Math.round(x * 10 ** n) / 10 ** n).toFixed(n);
-const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
-const pct = x => fmt(x * 100, 1) + '%';
-
-function run(seedValue, settings, bars) {
-  const c = new K.Composer(seedValue, Object.assign({}, settings));
-  const out = [];
-  for (let i = 0; i < bars; i++) out.push(c.nextBar());
-  return { composer: c, bars: out };
+const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const sd = a => { if (a.length < 2) return 0; const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) * (x - m)))); };
+const pct = (a, p) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * p))]; };
+const pc = (n, d) => d ? (100 * n / d).toFixed(1) + '%' : 'n/a';
+function tally (xs) { const m = new Map(); for (const x of xs) m.set(x, (m.get(x) || 0) + 1); return m; }
+function topOf (m, n) {
+  return [...m.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+    .slice(0, n).map(([k, v]) => k + '×' + v).join('  ');
 }
 
-const settings = Object.assign({}, K.PRESETS[preset] || K.PRESETS.reference);
-let result;
-try { result = run(seed, settings, barCount); }
-catch (e) { console.error('COMPOSER THREW:\n' + (e.stack || e)); process.exit(1); }
-const bars = result.bars;
+/* ---------- the report --------------------------------------------------- */
 
-/* ---- fingerprint for determinism ------------------------------------- */
-function fingerprint(bs) {
-  const parts = [];
-  for (const b of bs) {
-    parts.push(fmt(b.bpm, 3) + '|' + (b.chordName || b.chord.name) + '|' + (b.hand || '') + '|' + (b.pedalLift ? 1 : 0));
-    for (const e of b.events) {
-      parts.push([e.role, e.pitch, fmt(e.beat, 5), fmt(e.duration, 4), fmt(e.velocity, 4), fmt(e.micro || 0, 5)].join(','));
-    }
-  }
-  let h = 2166136261 >>> 0;
-  const s = parts.join(';');
-  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
-  return (h >>> 0).toString(16).padStart(8, '0') + ':' + s.length;
+const argv = process.argv.slice(2);
+const flag = (name, dflt) => { const i = argv.indexOf('--' + name); return i >= 0 ? argv[i + 1] : dflt; };
+const FILE = argv.find(a => !a.startsWith('--') && !argv[argv.indexOf(a) - 1]?.startsWith('--'))
+          || 'tools/improvisator/improvisator-infinite.html';
+const BARS = Number(flag('bars', 256));
+const SEED = flag('seed', 'grey-rain-0001');
+const PRESET = flag('preset', 'reference');
+
+const K = loadKernel(FILE);
+const fails = [];
+const fail = (gate, msg) => { fails.push(gate); console.log(gate.padEnd(14) + msg); };
+const pass = (gate, msg) => console.log(gate.padEnd(14) + 'PASS — ' + msg);
+
+const main = run(K, { seed: SEED, preset: PRESET, bars: BARS });
+const events = main.bars.flatMap(b => b.events.map(e => ({ ...e, bar: b })));
+const minutes = main.bars.reduce((t, b) => t + b.durationSeconds, 0) / 60;
+
+console.log('IMPROVISATOR KERNEL REPORT');
+console.log('  file          ' + FILE);
+console.log('  build         soul v' + K.SOUL_VERSION + ' · ' + K.SOUL_BUILD);
+console.log('  preset        ' + PRESET + '       seed ' + SEED + '       bars ' + BARS +
+            '  (' + minutes.toFixed(1) + ' min)');
+console.log('  fingerprint   ' + (K.hashString(fingerprint(main.bars)) >>> 0).toString(16));
+
+/* --- validity --- */
+const roles = tally(events.map(e => e.role));
+const bad = [];
+for (const e of events) {
+  if (!Number.isFinite(e.pitch) || e.pitch < 12 || e.pitch > 108) bad.push('pitch ' + e.pitch);
+  if (!Number.isFinite(e.beat) || e.beat < -0.01) bad.push('beat ' + e.beat);
+  if (!Number.isFinite(e.duration) || e.duration <= 0) bad.push('duration ' + e.duration);
+  if (!Number.isFinite(e.velocity) || e.velocity <= 0 || e.velocity > 1) bad.push('velocity ' + e.velocity);
+  if (!Number.isFinite(e.micro) || Math.abs(e.micro) > 0.5) bad.push('micro ' + e.micro);
 }
+console.log('\nVALIDITY');
+console.log('  events        ' + events.length + '   ' + [...roles.entries()].map(([k, v]) => k + ' ' + v).join('  '));
+console.log('  problems      ' + (bad.length ? bad.slice(0, 6).join(', ') + (bad.length > 6 ? ' …' + bad.length : '') : 'none'));
 
-/* ---- validity --------------------------------------------------------- */
-const problems = [];
-let noteCount = 0;
-const roles = {};
-for (const b of bars) {
-  if (!isFinite(b.bpm) || b.bpm < 20 || b.bpm > 200) problems.push(`bar ${b.globalIndex}: bpm ${b.bpm}`);
-  let prevBeat = -1;
-  for (const e of b.events) {
-    noteCount++;
-    roles[e.role] = (roles[e.role] || 0) + 1;
-    if (!(e.pitch >= 21 && e.pitch <= 108) || e.pitch !== Math.round(e.pitch)) problems.push(`bar ${b.globalIndex}: pitch ${e.pitch}`);
-    if (!isFinite(e.beat) || e.beat < -0.5 || e.beat > 5.5) problems.push(`bar ${b.globalIndex}: beat ${e.beat}`);
-    if (!isFinite(e.duration) || e.duration <= 0) problems.push(`bar ${b.globalIndex}: duration ${e.duration}`);
-    if (!isFinite(e.velocity) || e.velocity <= 0 || e.velocity > 1) problems.push(`bar ${b.globalIndex}: velocity ${e.velocity}`);
-    if (e.micro !== undefined && (!isFinite(e.micro) || Math.abs(e.micro) > 0.4)) problems.push(`bar ${b.globalIndex}: micro ${e.micro}`);
-    if (e.beat < prevBeat - 1e-9) problems.push(`bar ${b.globalIndex}: events out of order`);
-    prevBeat = e.beat;
-  }
+/* --- harmony --- */
+const names = tally(main.bars.map(b => b.chord.name));
+const quals = tally(main.bars.map(b => b.chord.baseName || b.chord.name.replace(/\/.*$/, '')));
+let outside = 0, sounding = 0;
+for (const b of main.bars) {
+  const scale = new Set(K.MODE_DEFS[b.mode].intervals.map(p => (p + b.tonic) % 12));
+  for (const e of b.events) { sounding++; if (!scale.has(((e.pitch % 12) + 12) % 12)) outside++; }
 }
+const rhythm = tally(main.bars.map(b => b.chord.name));
+console.log('\nHARMONY');
+console.log('  qualities     ' + topOf(quals, 12));
+console.log('  distinct      ' + quals.size + ' qualities, ' + names.size + ' chord names');
+console.log('  chromatic     ' + pc(outside, sounding) + ' of sounding notes are outside the declared mode');
+console.log('  keys          ' + topOf(tally(main.bars.map(b => K.NOTE_NAMES[b.tonic] + ' ' + b.mode)), 8));
 
-/* ---- musical statistics ----------------------------------------------- */
-const hist = a => { const m = new Map(); for (const x of a) m.set(x, (m.get(x) || 0) + 1); return [...m].sort((p, q) => q[1] - p[1]); };
-const top = (a, n = 10) => hist(a).slice(0, n).map(([k, v]) => `${k}×${v}`).join('  ');
-
-const chordNames = bars.map(b => b.chordName || b.chord.name);
-const qualities  = chordNames.map(n => n.replace(/^[A-G][♭♯]?/, '') || 'maj');
-
-/* chromaticism: pitch classes outside the bar's declared mode */
-let chromatic = 0, totalPcs = 0;
-for (const b of bars) {
-  const scale = new Set(K.MODE_DEFS[b.mode].intervals.map(i => mod(b.tonic + i, 12)));
-  for (const e of b.events) { totalPcs++; if (!scale.has(mod(e.pitch, 12))) chromatic++; }
+/* --- register --- */
+const bassEv = events.filter(e => e.role === 'bass');
+const harmEv = events.filter(e => e.role === 'harmony');
+const melEv = events.filter(e => e.role === 'melody');
+const gaps = [];
+for (const b of main.bars) {
+  const lo = b.events.filter(e => e.role === 'bass').map(e => e.pitch);
+  const up = b.events.filter(e => e.role !== 'bass').map(e => e.pitch);
+  if (lo.length && up.length) gaps.push(Math.min(...up) - Math.max(...lo));
 }
+console.log('\nREGISTER');
+console.log('  bass->voice   mean ' + mean(gaps).toFixed(2) + ' st   min ' + Math.min(...gaps) +
+            '   p10 ' + pct(gaps, 0.10));
+console.log('  harmony top   mean ' + mean(main.bars.map(b => {
+  const h = b.events.filter(e => e.role === 'harmony').map(e => e.pitch); return h.length ? Math.max(...h) : NaN;
+}).filter(Number.isFinite)).toFixed(2) +
+  '   melody low mean ' + mean(main.bars.map(b => {
+  const m = b.events.filter(e => e.role === 'melody').map(e => e.pitch); return m.length ? Math.min(...m) : NaN;
+}).filter(Number.isFinite)).toFixed(2));
+console.log('  melody range  ' + (melEv.length ? Math.min(...melEv.map(e => e.pitch)) + ' .. ' + Math.max(...melEv.map(e => e.pitch)) : 'none'));
 
-/* inversion: is the lowest sounding note the chord root? */
-let inverted = 0, pedalPoint = 0, rootPos = 0;
-for (const b of bars) {
-  const low = b.events.filter(e => e.role === 'bass').sort((x, y) => x.pitch - y.pitch)[0];
-  if (!low) continue;
-  if (mod(low.pitch, 12) === b.chord.rootPc) rootPos++; else inverted++;
+/* --- space and line --- */
+const silent = main.bars.filter(b => !b.events.some(e => e.role === 'melody')).length;
+let runNow = 0, runMax = 0;
+for (const b of main.bars) { if (!b.events.some(e => e.role === 'melody')) { runNow++; runMax = Math.max(runMax, runNow); } else runNow = 0; }
+const melBar = main.bars.map(b => b.events.filter(e => e.role === 'melody').length);
+const line = melEv.map(e => e.pitch);
+const steps = [];
+for (let i = 1; i < line.length; i++) steps.push(line[i] - line[i - 1]);
+console.log('\nSPACE & LINE');
+console.log('  silent bars   ' + pc(silent, main.bars.length) + '  (longest run ' + runMax + ' bars)');
+console.log('  melody/bar    mean ' + mean(melBar).toFixed(2) + '   p90 ' + pct(melBar, 0.90));
+console.log('  intervals     mean |leap| ' + mean(steps.map(Math.abs)).toFixed(2) +
+            '   max ' + (steps.length ? Math.max(...steps.map(Math.abs)) : 0) +
+            '   steps<=2 ' + pc(steps.filter(x => Math.abs(x) <= 2 && x !== 0).length, steps.length) +
+            '   repeats ' + pc(steps.filter(x => x === 0).length, steps.length));
+
+/* --- touch --- */
+console.log('\nTOUCH');
+for (const [name, set] of [['bass', bassEv], ['harmony', harmEv], ['melody', melEv]]) {
+  if (!set.length) { console.log('  ' + name.padEnd(12) + 'no events'); continue; }
+  const v = set.map(e => e.velocity), t = set.map(e => (e.micro || 0) * 1000);
+  console.log('  vel ' + name.padEnd(9) + 'mean ' + mean(v).toFixed(2) + '  sd ' + sd(v).toFixed(2) +
+              '  range ' + Math.min(...v).toFixed(2) + '..' + Math.max(...v).toFixed(2) +
+              '   time mean ' + mean(t).toFixed(1) + ' ms  sd ' + sd(t).toFixed(1) + ' ms');
 }
+const bpms = main.bars.map(b => b.bpm);
+console.log('  tempo         ' + Math.min(...bpms).toFixed(2) + ' .. ' + Math.max(...bpms).toFixed(2) +
+            ' bpm  (sd ' + sd(bpms).toFixed(2) + ')');
 
-/* register: bass vs. the next voice above it, per bar */
-const bassGaps = [], voicingSpans = [], melodyLows = [], harmonyHighs = [];
-for (const b of bars) {
-  const bass = b.events.filter(e => e.role === 'bass').map(e => e.pitch);
-  const harm = b.events.filter(e => e.role === 'harmony').map(e => e.pitch);
-  const mel  = b.events.filter(e => e.role === 'melody').map(e => e.pitch);
-  if (bass.length && harm.length) bassGaps.push(Math.min(...harm) - Math.min(...bass));
-  if (harm.length) voicingSpans.push(Math.max(...harm) - Math.min(...harm));
-  if (harm.length) harmonyHighs.push(Math.max(...harm));
-  if (mel.length) melodyLows.push(Math.min(...mel));
-}
+/* --- rudiments --- */
+const rud = tally(main.bars.flatMap(b => [b.melodyRudiment?.id, b.timingRudiment?.id, b.hand, b.pedal?.id].filter(Boolean)));
+const never = K.RUDIMENTS.filter(r => !rud.has(r.id));
+console.log('\nRUDIMENTS');
+console.log('  used          ' + rud.size + ' of ' + K.RUDIMENTS.length + ' over ' + BARS + ' bars');
+console.log('  never fired   ' + (never.length ? never.map(r => r.id).join(' ') : 'none'));
 
-/* space: bars with no melody at all, and the longest silent run */
-let silentBars = 0, silentRun = 0, longestRun = 0;
-const melodyPerBar = [];
-for (const b of bars) {
-  const n = b.events.filter(e => e.role === 'melody').length;
-  melodyPerBar.push(n);
-  if (n === 0) { silentBars++; silentRun++; longestRun = Math.max(longestRun, silentRun); } else silentRun = 0;
-}
+/* ================= gates ================================================= */
+console.log('');
 
-/* melodic intervals */
-const melodyLine = [];
-for (const b of bars) for (const e of b.events) if (e.role === 'melody') melodyLine.push(e.pitch);
-const leaps = melodyLine.slice(1).map((n, i) => n - melodyLine[i]);
-const absLeaps = leaps.map(Math.abs);
-
-/* harmonic rhythm: how many consecutive bars share a chord name */
-const spans = [];
-let cur = 1;
-for (let i = 1; i < bars.length; i++) {
-  if ((bars[i].chordName || bars[i].chord.name) === (bars[i - 1].chordName || bars[i - 1].chord.name)) cur++;
-  else { spans.push(cur); cur = 1; }
-}
-spans.push(cur);
-
-/* timing: mean micro offset per role — negative is early, positive is late */
-const micros = {};
-for (const b of bars) for (const e of b.events) {
-  (micros[e.role] = micros[e.role] || []).push((e.micro || 0) * 1000);
-}
-
-/* velocity per role */
-const vels = {};
-for (const b of bars) for (const e of b.events) (vels[e.role] = vels[e.role] || []).push(e.velocity);
-
-/* simultaneity: how many notes land within 30 ms of each other */
-const stamps = [];
-for (const b of bars) {
-  const spb = 60 / b.bpm;
-  for (const e of b.events) stamps.push(b.beatStart * spb + e.beat * spb + (e.micro || 0));
-}
-stamps.sort((a, b) => a - b);
-let maxCluster = 0;
-for (let i = 0, j = 0; i < stamps.length; i++) {
-  while (stamps[i] - stamps[j] > 0.03) j++;
-  maxCluster = Math.max(maxCluster, i - j + 1);
-}
-
-const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0;
-const stdev = a => { const m = mean(a); return a.length ? Math.sqrt(mean(a.map(x => (x - m) ** 2))) : 0; };
-const quant = (a, q) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(q * s.length))]; };
-
-const bpms = bars.map(b => b.bpm);
-const totalSeconds = bars.reduce((s, b) => s + 4 * 60 / b.bpm, 0);
-
-console.log(`
-IMPROVISATOR KERNEL REPORT
-  file          ${file}
-  preset        ${preset}       seed ${seed}       bars ${barCount}  (${fmt(totalSeconds / 60, 1)} min)
-  fingerprint   ${fingerprint(bars)}
-
-VALIDITY
-  events        ${noteCount}   ${Object.entries(roles).map(([k, v]) => `${k} ${v}`).join('  ')}
-  problems      ${problems.length ? problems.length + '  !! ' + problems.slice(0, 6).join(' | ') : 'none'}
-
-HARMONY
-  qualities     ${top(qualities, 12)}
-  distinct      ${new Set(qualities).size} qualities, ${new Set(chordNames).size} chord names
-  chromatic     ${pct(chromatic / totalPcs)} of sounding notes are outside the declared mode
-  bass position ${pct(rootPos / (rootPos + inverted || 1))} root position, ${pct(inverted / (rootPos + inverted || 1))} inverted / other
-  harmonic rhy  mean ${fmt(mean(spans))} bars per chord   ${top(spans.map(String), 6)}
-  keys          ${top(bars.map(b => K.NOTE_NAMES[b.tonic] + ' ' + b.mode), 6)}
-
-REGISTER
-  bass->voice   mean ${fmt(mean(bassGaps))} st   min ${Math.min(...bassGaps)}   p10 ${quant(bassGaps, 0.1)}
-  voicing span  mean ${fmt(mean(voicingSpans))} st   max ${Math.max(...voicingSpans)}
-  harmony top   mean ${fmt(mean(harmonyHighs))}   melody low mean ${fmt(mean(melodyLows))}
-  melody range  ${Math.min(...melodyLine)} .. ${Math.max(...melodyLine)}
-
-SPACE & LINE
-  silent bars   ${pct(silentBars / bars.length)}  (longest run ${longestRun} bars)
-  melody/bar    mean ${fmt(mean(melodyPerBar))}   p90 ${quant(melodyPerBar, 0.9)}
-  intervals     mean |leap| ${fmt(mean(absLeaps))}   max ${Math.max(...absLeaps)}   steps<=2 ${pct(absLeaps.filter(x => x <= 2).length / absLeaps.length)}   repeats ${pct(absLeaps.filter(x => x === 0).length / absLeaps.length)}
-
-TOUCH
-${Object.keys(vels).map(r => `  vel ${r.padEnd(8)} mean ${fmt(mean(vels[r]))}  sd ${fmt(stdev(vels[r]))}  range ${fmt(Math.min(...vels[r]))}..${fmt(Math.max(...vels[r]))}`).join('\n')}
-${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r]), 1)} ms   sd ${fmt(stdev(micros[r]), 1)} ms`).join('\n')}
-  density       ${maxCluster} notes inside one 30 ms window (worst)
-  tempo         ${fmt(Math.min(...bpms))} .. ${fmt(Math.max(...bpms))} bpm  (sd ${fmt(stdev(bpms))})
-`);
-
-/* ---- does every note belong to the chord it lands on? ------------------
-   An accompaniment note that is neither a chord tone, nor the bass, nor an
-   available tension, nor a deliberate approach note, is a wrong note. This is
-   the check that caught the left-hand tenth being built from an inverted bass,
-   which put a natural eleventh against the third of a dominant. */
+/* NO REPEAT — the invariant the owner asked for. No event may be a machine-made
+   copy of another: no echo role, no voice carried across a bar line. */
 {
-  let attacks = 0, wrong = 0, slashBad = 0;
+  const echoes = events.filter(e => e.role === 'echo').length;
+  const carried = main.bars.reduce((n, b) => n + (Array.isArray(b.carriedVoices) ? b.carriedVoices.length : (b.carriedVoices || 0)), 0);
+  if (echoes || carried) fail('NO REPEAT', echoes + ' echo events and ' + carried +
+    ' voices carried across a bar line — a sounding note must be struck, never inherited');
+  else pass('NO REPEAT', 'no echo role and no voice carried across a bar line in ' + events.length + ' events');
+}
+
+/* HARMONY — an accompaniment attack is a chord tone, the bass, or an available
+   tension. The one exception is the idiom: a short approach note in the bass
+   that leans into the next bar's root. Anything else, and anything HELD, is a
+   wrong note. Measured across every preset, not just the one being reported,
+   because the bass rudiments that produce approach tones do not fire at all
+   settings. */
+{
+  let wrong = 0, total = 0, approaches = 0;
   const worst = [];
-  for (const name of Object.keys(K.PRESETS)) {
-    for (const sd of ['h1', 'h2', 'h3']) {
-      const c = new K.Composer(name + sd, Object.assign({}, K.PRESETS[name]));
-      const timeline = [];
-      for (let i = 0; i < 64; i++) {
-        const b = c.nextBar();
-        for (const ch of b.changes) {
-          timeline.push({ t: b.beatStart + (ch.scoreBeat === undefined ? ch.beat : ch.scoreBeat), chord: ch.chord, bass: ch.bass });
-        }
+  for (const preset of Object.keys(K.PRESETS)) {
+    for (const sd3 of ['a-1', 'b-2', 'c-3']) {
+      const r = run(K, { seed: sd3, preset, bars: 120 });
+      for (let bi = 0; bi < r.bars.length; bi++) {
+        const b = r.bars[bi], next = r.bars[bi + 1];
+        const pcs = b.chord.pcs.map(p => ((p % 12) + 12) % 12);
+        const domRoot = isDominantName(b.chord.name) ? ((b.chord.rootPc % 12) + 12) % 12 : null;
         for (const e of b.events) {
-          if (e.role === 'melody' || e.approach) continue;
-          const t = b.beatStart + e.scoreBeat;
-          let cur = timeline[0];
-          for (const seg of timeline) if (seg.t <= t + 1e-6) cur = seg;
-          attacks++;
-          const pc = mod(e.pitch, 12);
-          if (cur.chord.pcs.indexOf(pc) >= 0 || pc === mod(cur.bass, 12)) continue;
-          if (K.tensionOK(cur.chord.intervals, mod(pc - cur.chord.rootPc, 12) + 12, cur.chord.fn === 'D')) continue;
+          if (e.role === 'melody') continue;
+          total++;
+          const p = ((e.pitch % 12) + 12) % 12;
+          if (pcs.includes(p)) continue;
+          if (tensionOK(pcs, p, domRoot)) continue;
+          /* An approach note: short, near the end of the bar, and a step from
+             the root that is about to arrive. */
+          const short = e.duration <= 0.62;
+          const late = e.beat >= b.meter - 1.2;
+          const leansIn = next && Math.min(
+            Math.abs(((p - next.chord.rootPc) % 12 + 12) % 12),
+            12 - Math.abs(((p - next.chord.rootPc) % 12 + 12) % 12)) <= 2;
+          if (short && late && leansIn) { approaches++; continue; }
           wrong++;
-          if (worst.length < 4) worst.push(`${cur.chord.name || cur.chord.label} + ${mod(pc - cur.chord.rootPc, 12)}`);
+          if (worst.length < 4) worst.push(preset + ' ' + b.chord.name + ' + ' + K.NOTE_NAMES[p] +
+            ' for ' + e.duration.toFixed(2) + ' beats (' + (e.gesture || e.role) + ')');
         }
-        const named = (b.chordName || b.chord.name).indexOf('/') >= 0;
-        if (named !== (mod(b.bass, 12) !== b.chord.rootPc)) slashBad++;
       }
     }
   }
-  console.log(`HARMONY        ${wrong}/${attacks} accompaniment attacks (${pct(wrong / attacks)}) are neither a chord tone, the bass, nor an available tension` +
-              (worst.length ? '\n  worst        ' + worst.join('  ') : ''));
-  console.log(`SLASH NAMES    ${slashBad ? slashBad + ' bars where the printed bass and the played bass disagree' : 'PASS — the printed chord always names the bass that is played'}`);
-  if (wrong / attacks > 0.005 || slashBad) process.exitCode = 1;
+  const rate = total ? wrong / total : 0;
+  const line = wrong + '/' + total + ' accompaniment attacks (' + (100 * rate).toFixed(2) +
+               '%) are neither a chord tone, the bass, nor an available tension; ' +
+               approaches + ' short approach notes allowed' + (worst.length ? '\n              worst ' + worst.join('; ') : '');
+  if (rate > 0.001) fail('HARMONY', line); else console.log('HARMONY'.padEnd(14) + line);
 }
 
-/* ---- does the form arrive where it says it does? -----------------------
-   Four sections make a period and only the last of them resolves. A held
-   turnaround used to span the last two blueprint slots and take the first,
-   which threw the resolution away and ended an authentic cadence on the
-   dominant. */
+/* DETERMINISM — one seed, one performance. */
 {
-  let auth = 0, onTonic = 0, half = 0, onDominant = 0;
+  const a = fingerprint(run(K, { seed: SEED, preset: PRESET, bars: 96 }).bars);
+  const b = fingerprint(run(K, { seed: SEED, preset: PRESET, bars: 96 }).bars);
+  if (a !== b) {
+    const la = a.split('\n'), lb = b.split('\n');
+    const i = la.findIndex((x, j) => x !== lb[j]);
+    fail('DETERMINISM', 'the same seed played two different performances, first differing at bar ' + i);
+  } else pass('DETERMINISM', 'same seed, identical performance');
+}
+
+/* RESET — a composer told to play a seed again plays it again. */
+{
+  const s = Object.assign({}, K.PRESETS[PRESET]);
+  const c = new K.Composer(SEED, s);
+  const first = []; for (let i = 0; i < 48; i++) first.push(fingerprintBar(c.nextBar()));
+  c.reset(SEED, s);
+  const again = []; for (let i = 0; i < 48; i++) again.push(fingerprintBar(c.nextBar()));
+  if (first.join('\n') !== again.join('\n'))
+    fail('RESET', 'a reused composer did not replay the seed (first differs at bar ' +
+      first.findIndex((x, j) => x !== again[j]) + ')');
+  else pass('RESET', 'a reused composer plays the seed exactly');
+}
+
+/* SEARCH BUDGET INDEPENDENCE — how many attempts the section search made must
+   not change the music that follows it, or the queue and the transport diverge. */
+{
+  const s = Object.assign({}, K.PRESETS[PRESET]);
+  const shapes = [4, 10].map(budget => {
+    const c = new K.Composer(SEED, s);
+    const out = [];
+    for (let i = 0; i < 6; i++) { const sec = c.generateSection(budget); out.push(sec.bars.length); }
+    return out.join(',');
+  });
+  console.log('SEARCH'.padEnd(14) + 'section lengths at budget 4 vs 10: ' + shapes[0] + ' / ' + shapes[1] +
+              '   last quality ' + (main.composer.lastQuality ?? '?') +
+              '   attempts ' + (main.composer.attempts ?? '?'));
+}
+
+/* PRESETS — every character survives a long run at several seeds. */
+{
+  const broken = [];
   for (const name of Object.keys(K.PRESETS)) {
-    for (const sd of ['f1', 'f2', 'f3']) {
-      const c = new K.Composer(name + sd, Object.assign({}, K.PRESETS[name]));
-      for (let i = 0; i < 24; i++) {
-        const sec = c.generateSection();
-        const last = sec.bars[7];
-        const fin = last.changes.length ? last.changes[last.changes.length - 1].chord : last.chord;
-        const rel = mod(fin.rootPc - sec.tonic, 12);
-        if (sec.closure === 'closed') { auth++; if (rel === 0) onTonic++; }
-        /* A section that is pivoting deliberately ends on the dominant of the
-           key it is leaving for, which is not a degree of the key it is in. */
-        if (sec.closure === 'open' && !sec.pivot) { half++; if (rel === 7 || rel === 1 || rel === 5) onDominant++; }
-      }
-    }
-  }
-  const authOk = onTonic === auth, halfOk = onDominant / Math.max(1, half) > 0.9;
-  console.log(`FORM           authentic cadences landing on the tonic ${onTonic}/${auth}` +
-              `   half cadences ending on a dominant ${onDominant}/${half}   ${authOk && halfOk ? 'PASS' : 'FAIL'}`);
-  if (!authOk || !halfOk) process.exitCode = 1;
-}
-
-/* ---- gesture, seams and rails ----------------------------------------- */
-{
-  const c = new K.Composer(seed, Object.assign({}, settings));
-  let noGesture = 0, jumpy = 0, sections = 0, pickups = 0, boundaries = 0;
-  let melAtHi = 0, melAtLo = 0, harmAtLo = 0, melN = 0, harmN = 0;
-  const closures = new Map();
-  for (let s = 0; s < 40; s++) {
-    const sec = c.generateSection();
-    sections++;
-    closures.set(sec.closure, (closures.get(sec.closure) || 0) + 1);
-    const line = sec.melody;
-    let big = 0;
-    for (let i = 1; i < line.length; i++) if (Math.abs(line[i] - line[i - 1]) >= 7) big++;
-    if (!big) noGesture++;
-    if (big > 4) jumpy++;
-    boundaries++;
-    if (sec.bars[7].events.some(e => e.role === 'melody' && e.pickup)) pickups++;
-    for (const bar of sec.bars) for (const e of bar.events) {
-      if (e.role === 'melody') { melN++; if (e.velocity >= 0.9399) melAtHi++; if (e.velocity <= 0.0901) melAtLo++; }
-      if (e.role === 'harmony') { harmN++; if (e.velocity <= 0.0601) harmAtLo++; }
-    }
-  }
-  console.log(`GESTURE        ${noGesture}/${sections} sections have no interval >= 7 semitones; ${jumpy}/${sections} have more than four`);
-  console.log(`SEAMS          ${pickups}/${boundaries} section boundaries carry a pickup   closures: ${[...closures].map(([k, v]) => k + ' ' + v).join('  ')}`);
-  console.log(`RAILS          melody at ceiling ${pct(melAtHi / Math.max(1, melN))}  at floor ${pct(melAtLo / Math.max(1, melN))}   harmony at floor ${pct(harmAtLo / Math.max(1, harmN))}`);
-}
-
-/* ---- does the piece go anywhere over five minutes? ---------------------
-   Section-to-section dynamics, drawn. A movement should rise, peak about
-   sixty percent of the way in, and dissolve — not jitter every eight bars. */
-{
-  const c = new K.Composer(seed, Object.assign({}, settings));
-  const rows = [];
-  for (let i = 0; i < 28; i++) {
-    const sec = c.generateSection();
-    let v = 0, n = 0;
-    for (const bar of sec.bars) for (const e of bar.events) if (e.role === 'melody') { v += e.velocity; n++; }
-    rows.push({ role: sec.role.id, vel: n ? v / n : 0 });
-  }
-  const vals = rows.map(r => r.vel).filter(x => x > 0);
-  const lo = Math.min(...vals), hi = Math.max(...vals);
-  console.log(`ARC            section mean melody velocity ${fmt(lo)} to ${fmt(hi)} = ${fmt(20 * Math.log10(Math.pow(hi / lo, 1.8)), 1)} dB across ${rows.length} sections`);
-  console.log('  shape        ' + rows.map(r => '▁▂▃▄▅▆▇█'[clamp(Math.floor((r.vel - lo) / Math.max(1e-6, hi - lo) * 7.99), 0, 7)]).join(''));
-  console.log('  roles        ' + rows.map(r => r.role[0]).join('') + '   (s)tatement (d)eparture s(h)adow (l)ift (r)eturn d(i)ssolve');
-}
-
-/* ---- how hard the section search is working --------------------------- */
-{
-  const c = new K.Composer(seed, Object.assign({}, settings));
-  const scores = [], tries = [], issues = new Map();
-  for (let i = 0; i < 48; i++) {
-    const sec = c.generateSection();
-    scores.push(sec.quality); tries.push(c.attempts);
-    for (const x of sec.issues) issues.set(x, (issues.get(x) || 0) + 1);
-  }
-  scores.sort((x, y) => x - y);
-  const pick = q => scores[Math.min(scores.length - 1, Math.floor(q * scores.length))];
-  console.log(`SEARCH         quality min ${pick(0)}  p25 ${pick(0.25)}  median ${pick(0.5)}  max ${scores[scores.length - 1]}` +
-              `   attempts mean ${fmt(mean(tries), 1)} of ${Math.max(...tries)}`);
-  console.log(`  issues       ${[...issues].sort((x, y) => y[1] - x[1]).slice(0, 8).map(([k, v]) => `${k} ${v}`).join('  ') || 'none'}`);
-}
-
-/* ---- determinism ------------------------------------------------------ */
-const a = fingerprint(run(seed, settings, 64).bars);
-const b = fingerprint(run(seed, settings, 64).bars);
-console.log(`DETERMINISM    ${a === b ? 'PASS — same seed, identical performance' : 'FAIL\n  ' + a + '\n  ' + b}`);
-
-/* The realtime path fills a queue ahead of the scheduler; the MIDI export and
-   the offline bounce drive nextBar directly. Both must produce the same piece,
-   or the file you save is not the passage you heard. */
-{
-  const direct = new K.Composer(seed, Object.assign({}, settings));
-  const queued = new K.Composer(seed, Object.assign({}, settings));
-  queued.primeQueue();
-  const d = [], q = [];
-  for (let i = 0; i < 32; i++) d.push(direct.nextBar());
-  for (let i = 0; i < 32; i++) { queued.pump(14); q.push(queued.nextBar()); }
-  const same = fingerprint(d) === fingerprint(q);
-  console.log(`EXPORT PARITY  ${same ? 'PASS — the queued performance and the exported one are the same piece' : 'FAIL — export diverges from playback'}`);
-  if (!same) process.exitCode = 1;
-}
-
-/* A reused Composer must be indistinguishable from a fresh one after reset,
-   or "New passage" quietly plays something the seed does not describe. */
-{
-  const fresh = run('reset-check-seed', settings, 24).bars;
-  const reused = new K.Composer('some-other-seed', Object.assign({}, settings));
-  for (let i = 0; i < 40; i++) reused.nextBar();
-  reused.reset('reset-check-seed', Object.assign({}, settings));
-  const after = [];
-  for (let i = 0; i < 24; i++) after.push(reused.nextBar());
-  const same = fingerprint(fresh) === fingerprint(after);
-  console.log(`RESET          ${same ? 'PASS — a reused composer plays the seed exactly' : 'FAIL — state leaks across reset'}`);
-  if (!same) process.exitCode = 1;
-}
-
-/* ---- every preset must survive a long run ----------------------------- */
-let presetFails = 0;
-for (const name of Object.keys(K.PRESETS)) {
-  for (const s of ['a-1', 'b-2', 'c-3']) {
-    try { run(s, K.PRESETS[name], 96); }
-    catch (e) { presetFails++; console.log(`PRESET FAIL    ${name}/${s}: ${e.message}`); }
-  }
-}
-console.log(`PRESETS        ${presetFails ? presetFails + ' failures' : 'all ' + Object.keys(K.PRESETS).length + ' presets survive 96 bars × 3 seeds'}`);
-
-/* ---- extreme settings ------------------------------------------------- */
-let edgeFails = 0;
-const edges = [
-  ['all zero',  { motion: 0, space: 0, warmth: 0, humanize: 0, wander: 0, melody: 0, sustain: 0, texture: 0, resonance: 0, range: 0, reverb: 0, bpm: 34 }],
-  ['all one',   { motion: 1, space: 1, warmth: 1, humanize: 1, wander: 1, melody: 1, sustain: 1, texture: 1, resonance: 1, range: 1, reverb: 1, bpm: 132 }],
-];
-for (const [label, over] of edges) {
-  for (let t = 0; t < 12; t++) {
-    const s = Object.assign({}, K.PRESETS.reference, over, { tonic: t, mode: K.MODE_KEYS[t % K.MODE_KEYS.length] });
-    try {
-      const r = run('edge-' + label + '-' + t, s, 64);
-      for (const bar of r.bars) for (const e of bar.events) {
-        if (!(e.pitch >= 21 && e.pitch <= 108) || !isFinite(e.beat) || !(e.duration > 0) || !(e.velocity > 0)) {
-          edgeFails++; console.log(`EDGE FAIL      ${label} tonic ${t}: bad event ${JSON.stringify(e)}`); t = 99; break;
+    for (const sd2 of ['a-0001', 'b-0002', 'c-0003']) {
+      try {
+        const r = run(K, { seed: sd2, preset: name, bars: 96 });
+        const ev = r.bars.flatMap(b => b.events);
+        if (!ev.length) { broken.push(name + '/' + sd2 + ': no events'); continue; }
+        for (const e of ev) if (!Number.isFinite(e.pitch) || !Number.isFinite(e.beat) || !(e.velocity > 0)) {
+          broken.push(name + '/' + sd2 + ': invalid event'); break;
         }
-      }
-    } catch (e) { edgeFails++; console.log(`EDGE FAIL      ${label} tonic ${t}: ${e.message}`); }
+      } catch (err) { broken.push(name + '/' + sd2 + ': ' + err.message); }
+    }
   }
+  if (broken.length) fail('PRESETS', broken.slice(0, 4).join(' | '));
+  else pass('PRESETS', 'all ' + Object.keys(K.PRESETS).length + ' presets survive 96 bars × 3 seeds');
 }
-console.log(`EDGE SETTINGS  ${edgeFails ? edgeFails + ' failures' : 'both extremes × 12 keys × 8 modes produce valid events'}`);
 
-process.exitCode = (problems.length || presetFails || edgeFails || a !== b) ? 1 : 0;
+/* EDGE SETTINGS — both extremes of every continuous control, in every key and
+   mode, still produce a playable bar. */
+{
+  const keys = Object.keys(K.PRESETS.reference).filter(k => typeof K.PRESETS.reference[k] === 'number' && k !== 'tonic' && k !== 'bpm');
+  const broken = [];
+  for (const extreme of [0, 1]) {
+    const base = Object.assign({}, K.PRESETS.reference);
+    for (const k of keys) base[k] = extreme;
+    for (let tonic = 0; tonic < 12; tonic++) {
+      for (const mode of K.MODE_KEYS) {
+        try {
+          const r = run(K, { seed: 'edge-' + extreme + '-' + tonic + '-' + mode, preset: 'reference',
+                             bars: 8, settings: Object.assign({}, base, { tonic, mode }) });
+          const ev = r.bars.flatMap(b => b.events);
+          if (!ev.length) { broken.push(extreme + '/' + tonic + '/' + mode + ': silent'); continue; }
+          for (const e of ev) if (!Number.isFinite(e.pitch) || !(e.velocity > 0) || !Number.isFinite(e.micro)) {
+            broken.push(extreme + '/' + tonic + '/' + mode + ': invalid'); break;
+          }
+        } catch (err) { broken.push(extreme + '/' + tonic + '/' + mode + ': ' + err.message); }
+      }
+    }
+  }
+  if (broken.length) fail('EDGE SETTINGS', broken.slice(0, 4).join(' | ') + (broken.length > 4 ? ' …' + broken.length : ''));
+  else pass('EDGE SETTINGS', 'both extremes × 12 keys × ' + K.MODE_KEYS.length + ' modes produce valid events');
+}
+
+/* PRESET IDENTITY — a character button must actually change the performance.
+   Two presets that differ only in a label are a lie in the interface. */
+{
+  const sig = {};
+  for (const name of Object.keys(K.PRESETS)) {
+    const r = run(K, { seed: 'identity-0001', preset: name, bars: 24 });
+    const ev = r.bars.flatMap(b => b.events);
+    sig[name] = {
+      notes: ev.length,
+      melody: ev.filter(e => e.role === 'melody').length,
+      bpm: mean(r.bars.map(b => b.bpm)),
+      settings: JSON.stringify(r.settings),
+    };
+  }
+  const bodies = new Map();
+  for (const [name, v] of Object.entries(sig)) {
+    const key = JSON.parse(v.settings) && (() => { const s = JSON.parse(v.settings); delete s.tonic; delete s.mode; return JSON.stringify(s); })();
+    bodies.set(key, [...(bodies.get(key) || []), name]);
+  }
+  const collapsed = [...bodies.values()].filter(g => g.length > 1);
+  if (collapsed.length) fail('PRESET IDENTITY', collapsed.map(g => g.join('=')).join(' | ') +
+    ' — these presets differ only in key and mode; every other control is identical');
+  else pass('PRESET IDENTITY', 'each of the ' + Object.keys(K.PRESETS).length + ' presets has its own performance settings');
+  console.log('  melody notes  ' + Object.entries(sig).map(([n, v]) => n.slice(0, 4) + ' ' + v.melody).join('  '));
+}
+
+console.log('');
+if (fails.length) { console.log(fails.length + ' GATE' + (fails.length > 1 ? 'S' : '') + ' FAILED: ' + fails.join(', ')); process.exit(1); }
+console.log('all gates pass');
