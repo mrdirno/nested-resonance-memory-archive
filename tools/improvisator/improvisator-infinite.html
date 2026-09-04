@@ -2396,15 +2396,28 @@ SoulComposer.prototype.pickRudiment = function (family, ctx) {
   var motion = Number(ctx.motion) || 0, openness = ctx.openness === undefined ? 0.5 : ctx.openness;
   var recent = this.soul.recent[family] || [];
   var weights = [];
+  /* How well a rudiment fits this moment, and then how much that is allowed to
+     matter. The context terms used to be ADDED to a base weight of 1, and a
+     rudiment carries one or two tags, so the best fit scored about 2 against a
+     base of 1 -- across a bank of fourteen that is a two-to-one preference,
+     which is indistinguishable from picking at random. Measured, the selection
+     entropy was 0.992 to 0.999 of uniform in every family: the page advertises
+     "contextual playing rudiments" and what it had was a shuffle.
+
+     The fit is squared and scaled against a small floor now, so a rudiment that
+     suits the moment is several times likelier than one that does not, while
+     the floor keeps every one of them reachable -- which the VOCABULARY gate
+     checks. */
   for (var i = 0; i < bank.length; i++) {
-    var r = bank[i], w = 1;
-    w += (r.calm || 0) * (1 - motion) * 1.15;
-    w += (r.active || 0) * motion * 1.15;
-    w += (r.close || 0) * (ctx.closing ? 1.35 : 0.10);
-    w += (r.open || 0) * (ctx.opening ? 0.90 : 0.15);
-    w += (r.peak || 0) * (ctx.peak ? 0.90 : 0.05);
-    w += (r.openness || 0) * openness * 0.50;
-    w += (r.tension || 0) * (ctx.tension || 0) * 0.55;
+    var r = bank[i], fit = 0;
+    fit += (r.calm || 0) * (1 - motion);
+    fit += (r.active || 0) * motion;
+    fit += (r.close || 0) * (ctx.closing ? 1.30 : 0.05);
+    fit += (r.open || 0) * (ctx.opening ? 1.00 : 0.08);
+    fit += (r.peak || 0) * (ctx.peak ? 1.00 : 0.04);
+    fit += (r.openness || 0) * openness * 0.55;
+    fit += (r.tension || 0) * (ctx.tension || 0) * 0.60;
+    var w = 0.20 + fit * fit * 1.9;
     var back = recent.lastIndexOf(r.id);
     if (back >= 0) w *= back === recent.length - 1 ? 0.12 : 0.45;
     weights.push(Math.max(0.02, w));

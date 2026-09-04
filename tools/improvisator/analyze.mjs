@@ -159,8 +159,9 @@ console.log('  tempo         ' + Math.min(...bpms).toFixed(2) + ' .. ' + Math.ma
   const byFamily = new Map();
   for (const r of K.RUDIMENTS) {
     const k = r.family;
-    const v = byFamily.get(k) || { used: 0, total: 0 };
+    const v = byFamily.get(k) || { used: 0, total: 0, counts: [] };
     v.total++; if (seen.has(r.id)) v.used++;
+    v.counts.push(seen.get(r.id) || 0);
     byFamily.set(k, v);
   }
   console.log('\nRUDIMENTS');
@@ -169,8 +170,24 @@ console.log('  tempo         ' + Math.min(...bpms).toFixed(2) + ' .. ' + Math.ma
   const rare = [...seen.entries()].sort((a, b) => a[1] - b[1]).slice(0, 4);
   console.log('  rarest        ' + rare.map(([k, v]) => k + '×' + v).join('  '));
   console.log('  never fired   ' + (never.length ? never.map(r => r.id).join(' ') : 'none'));
+
+  /* A vocabulary that is selected uniformly is a shuffle, not a choice. The
+     page advertises contextual rudiments, so the distribution has to show the
+     context doing something — while every rudiment stays reachable. */
+  const ent = [];
+  for (const [k, v] of byFamily) {
+    const total = v.counts.reduce((a, b) => a + b, 0);
+    if (!total || v.counts.length < 2) continue;
+    let H = 0;
+    for (const c of v.counts) if (c) { const pr = c / total; H -= pr * Math.log2(pr); }
+    ent.push({ family: k, h: H / Math.log2(v.counts.length) });
+  }
+  console.log('  selection     ' + ent.map(e => e.family + ' ' + e.h.toFixed(3)).join('  ') + '  (1.000 = uniform)');
+  const flat = ent.filter(e => e.h > 0.990);
   if (never.length > 2) fail('VOCABULARY', never.length + ' of ' + K.RUDIMENTS.length +
-    ' rudiments are never selected at any preset or seed: ' + never.map(r => r.id).join(' '));
+    ' rudiments are never selected at any character or seed: ' + never.map(r => r.id).join(' '));
+  else if (flat.length >= 3) fail('VOCABULARY', flat.map(e => e.family).join(', ') +
+    ' are selected essentially uniformly — the context weights are not doing anything');
 }
 
 /* ================= gates ================================================= */
