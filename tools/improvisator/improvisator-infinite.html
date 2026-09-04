@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#070a0d">
 <meta name="description" content="An endless phrase-grown piano performance. Contextual playing rudiments coordinate harmony, touch, pedal, timing and tone so each passage breathes without repeating. Nothing sounds that a hand did not strike. Exports MIDI and WAV.">
-<title>Improvisator ∞ · Soul v4</title>
+<title>Improvisator ∞</title>
 <style>
 :root {
   color-scheme: dark;
@@ -16,7 +16,11 @@
   --line-firm: rgba(198, 216, 220, .26);
   --ink: #dbe4e6;
   --mute: rgba(219, 228, 230, .58);
-  --faint: rgba(219, 228, 230, .33);
+  /* .33 composited to about 2.5:1 against the ground, and three of the four
+     things using it are live readouts a listener actually watches -- the role
+     line, the timecode and the voice count. WCAG AA wants 4.5:1 at this size. */
+  --faint: rgba(219, 228, 230, .62);
+  --decor: rgba(219, 228, 230, .34);
   /* register triad — these encode pitch height, in the canvas and the chrome */
   --deep: #8794d6;
   --lume: #7fd1c1;
@@ -61,7 +65,7 @@ button { -webkit-appearance: none; appearance: none; }
 .bar-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .mark { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .mark h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 17px; letter-spacing: .01em; white-space: nowrap; }
-.mark .sub { font-size: 12px; color: var(--faint); white-space: nowrap; }
+.mark .sub { font-size: 12px; color: var(--decor); white-space: nowrap; }
 .tools { display: flex; align-items: center; gap: 8px; }
 
 .state {
@@ -69,7 +73,7 @@ button { -webkit-appearance: none; appearance: none; }
   background: rgba(255, 255, 255, .02); display: flex; align-items: center; gap: 8px;
   color: var(--mute); font-size: 12px; font-variant-numeric: tabular-nums;
 }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--faint); flex: 0 0 auto; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--decor); flex: 0 0 auto; }
 .state.playing .dot { background: var(--lume); box-shadow: 0 0 9px rgba(127, 209, 193, .6); animation: pulse 2.6s ease-in-out infinite; }
 .state.recording .dot { background: var(--gold); box-shadow: 0 0 9px rgba(216, 178, 106, .65); animation: pulse 1.2s ease-in-out infinite; }
 .state.working .dot { background: var(--deep); animation: pulse 1s ease-in-out infinite; }
@@ -1488,6 +1492,34 @@ Composer.prototype.restoreState = function (s) {
   this.previousBlueprint = s.previousBlueprint;
 };
 
+/* Everything that says where the composer IS, as opposed to what it last wrote:
+   the key it has journeyed to, the chapter, the section index, the compose
+   cursor and the position of its random stream. Composing a section ahead
+   changes all of these, so throwing that section away has to put them back --
+   otherwise a preset click, which drops the queue, moved the key and skipped a
+   section. */
+Composer.prototype.capturePosition = function () {
+  var s = this.captureState();
+  s.rngState = this.rng.state;
+  s.tonic = this.tonic; s.mode = this.mode;
+  s.pivotTo = this.pivotTo === undefined ? null : this.pivotTo;
+  s.chapterTitle = this.chapterTitle;
+  s.sectionIndex = this.sectionIndex;
+  s.composeBar = this.composeBar;
+  s.lastQuality = this.lastQuality;
+  return s;
+};
+Composer.prototype.restorePosition = function (s) {
+  this.restoreState(s);
+  this.rng.state = s.rngState;
+  this.tonic = s.tonic; this.mode = s.mode;
+  this.pivotTo = s.pivotTo;
+  this.chapterTitle = s.chapterTitle;
+  this.sectionIndex = s.sectionIndex;
+  this.composeBar = s.composeBar;
+  this.lastQuality = s.lastQuality;
+};
+
 /* How many candidate sections the search looks at. It is one number, used
    everywhere, because it is not a tuning knob: a search that tries four
    candidates writes different music from one that tries eight, and this page
@@ -1553,10 +1585,28 @@ Composer.prototype.queueLength = function () {
 };
 Composer.prototype.pump = function (targetBars) {
   if (this.queueLength() >= (targetBars || 12)) return false;
-  this.pending.push(this.generateSection());
+  var before = this.capturePosition();
+  var section = this.generateSection();
+  section.positionBefore = before;
+  this.pending.push(section);
   return true;
 };
 Composer.prototype.primeQueue = function () { this.pending = this.pending || []; };
+
+/* Throwing away what has been composed ahead has to roll the write head back
+   with it. generateSection advances the section index and the compose cursor as
+   it fills the queue; dropping the queue without rewinding them meant a preset
+   click silently skipped however many sections had been queued -- and the
+   compose cursor, which is where a section reads the field from, stayed
+   permanently ahead of the music. */
+Composer.prototype.dropQueue = function () {
+  if (!this.pending || !this.pending.length) return 0;
+  var dropped = this.pending.length;
+  var back = this.pending[0].positionBefore;
+  this.pending.length = 0;
+  if (back) this.restorePosition(back);
+  return dropped;
+};
 
 Composer.prototype.nextBar = function () {
   if (!this.pending) this.pending = [];
@@ -3403,7 +3453,10 @@ SoulComposer.prototype.nextBar = function () {
 K.LegacyComposer = BaseComposer;
 K.Composer = SoulComposer;
 K.RUDIMENTS = RUDIMENTS;
-K.SOUL_VERSION = 5;
+/* One number. The document title said v4, this header said v7 and the constant
+   said 5; the title is just the instrument's name now and this is the version
+   of the performance layer. */
+K.SOUL_VERSION = 8;
 K.SOUL_BUILD = 'low-hand-fast-harmony-2026.09.04';
 
 })(typeof globalThis !== 'undefined' ? globalThis : this);
@@ -4294,7 +4347,9 @@ visual.onFrame = function () {
     if (el.prepFill) el.prepFill.style.width = Math.round(p * 100) + '%';
     if (el.prep) el.prep.classList.toggle('show', p < 1);
     if (engine.ready) engine.syncBuffers();
-    if (bank.readyCount >= 6 && el.playButton) el.playButton.removeAttribute('aria-disabled');
+    /* This removed an aria-disabled attribute that nothing ever set -- grep
+       found the one hit. The play button is usable while the bank builds
+       anyway: the first zones it needs finish before the first note. */
   }
   composer.primeQueue();
   if (frameCount % 3 === 0) composer.pump(12);
@@ -4319,6 +4374,16 @@ function ensureAudio() {
   if (!initialised) {
     if (bank.readyCount < 6) { setStatus('preparing', 'working'); bank.finishEnough(6, 260); }
     var ctx = new AC({ latencyHint: 'interactive' });
+    /* The timecode reads the wall clock, so when the audio context suspends --
+       a call on iOS, a Bluetooth handover, Android taking audio focus -- the
+       transport stopped scheduling while the status chip went on pulsing
+       "playing" over a running clock and total silence. Twenty seconds of that
+       reads as a broken instrument rather than an interrupted one. */
+    ctx.onstatechange = function () {
+      if (!transport) return;
+      if (ctx.state === 'suspended' && transport.playing) setStatus('tap to resume', 'working');
+      else if (ctx.state === 'running' && transport.playing) setStatus('playing', 'playing');
+    };
     engine.attach(ctx, settings);
     try {
       mediaDest = ctx.createMediaStreamDestination();
@@ -4352,7 +4417,9 @@ function onBar(bar, time) {
     el.barLabel.textContent = 'bar ' + (bar.globalIndex + 1) + ((bar.meter || 4) !== 4 ? ' · ' + bar.meter + '/4' : '');
     visual.setKey(bar.tonic);
     visual.intensity = bar.intensity;
-    document.title = bar.chord.name + ' · Improvisator ∞';
+    /* The title used to be rewritten on every bar, which is nine changes in
+       fourteen seconds: a bookmark saved mid-performance was called "G♭m7 ·
+       Improvisator ∞", and some screen readers announce every change. */
   });
 }
 
@@ -4552,7 +4619,7 @@ function applyPreset(name) {
   });
   syncControls();
   composer.updateSettings(settings);
-  if (composer.pending) composer.pending.length = 0;
+  composer.dropQueue();
   if (engine.ready) engine.applySettings(settings);
   notice(name + ' · ' + keyText(settings.tonic, settings.mode));
 }
@@ -4589,7 +4656,7 @@ RANGES.forEach(function (pair) {
     var out = $(id + 'Value'); if (out) out.textContent = raw + (pair[2] || '');
     markCustom();
     composer.updateSettings(settings);
-    if (REGENERATE_ON[key] && composer.pending) composer.pending.length = 0;
+    if (REGENERATE_ON[key]) composer.dropQueue();
     if (engine.ready) engine.applySettings(settings);
     if (key === 'bpm') el.tempoLabel.textContent = Math.round(settings.bpm) + ' bpm';
   });

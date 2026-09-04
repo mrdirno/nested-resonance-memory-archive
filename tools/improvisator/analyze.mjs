@@ -442,6 +442,24 @@ console.log('');
     ' — how far ahead the composer runs is changing what it writes');
   else pass('ONE PIECE', 'queued or not, a seed is one performance (64 bars compared)');
 
+  /* And composing ahead then changing your mind must cost nothing. Clicking a
+     character or moving a slider drops whatever has been queued; if that does
+     not put the composer back where it was, the click silently skips a section
+     and can move the key. */
+  if (typeof K.Composer.prototype.dropQueue === 'function') {
+    const plain = new K.Composer(SEED, s);
+    const churn = new K.Composer(SEED, s);
+    const P = [], C = [];
+    for (let i = 0; i < 48; i++) {
+      P.push(fingerprintBar(plain.nextBar()));
+      if (i % 5 === 0) { churn.pump(20); churn.pump(20); churn.dropQueue(); }
+      C.push(fingerprintBar(churn.nextBar()));
+    }
+    const at = P.findIndex((x, i) => x !== C[i]);
+    if (at >= 0) fail('ONE PIECE', 'filling the queue and dropping it changed the music from bar ' + at +
+      ' — a preset click or a slider move skips ahead');
+  } else fail('ONE PIECE', 'the composer cannot drop its queue reversibly');
+
   /* And the search itself must not spend the player's randomness. */
   const easy = new K.Composer(SEED, s);
   const hard = new K.Composer(SEED, s);
