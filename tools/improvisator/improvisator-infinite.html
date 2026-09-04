@@ -87,7 +87,7 @@ button { -webkit-appearance: none; appearance: none; }
 .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---- stage ---- */
-.stage { min-height: 0; display: grid; place-items: center; text-align: center; }
+.stage { min-height: 0; display: grid; place-items: center; text-align: center; overflow: hidden; }
 .piece { width: min(760px, 94vw); display: grid; justify-items: center; }
 .chapter { min-height: 15px; color: var(--mute); font-size: 13px; font-style: italic; font-family: var(--serif); }
 .role { color: var(--faint); font-size: 12px; margin-top: 2px; min-height: 14px; }
@@ -893,6 +893,7 @@ Composer.prototype.reset = function (seed, settings) {
   this.melodyTouch = 0;
   this.attempts = 0;
   this.pivotTo = null;
+  this.sinceJourney = 0;
   /* Anything that survives a reset is a way for the previous passage to leak
      into the next one, and the seed is advertised as reproducing a passage
      exactly. arcLen and arcPos are the worst two — the arc phase picks the
@@ -1084,10 +1085,20 @@ Composer.prototype.maybeShade = function () {
 
 Composer.prototype.maybeJourney = function () {
   if (this.pivotTo !== null) { this.tonic = this.pivotTo; this.pivotTo = null; this.chapterTitle = this.makeChapterTitle(); return; }
-  if (this.sectionIndex === 0 || this.sectionIndex % 6 !== 0) return;
+  /* Every fourth section, which is also where the four-section form closes, so
+     the journey clock and the pivot machinery agree. Halving the opportunities
+     and the acceptance threshold at the same time made modulation about four
+     and a half times rarer than the version this replaced. And because the
+     field is low-discrepancy, a threshold either catches a sample or it does
+     not — on the quietest presets it caught none, leaving seeds that never
+     left their home key at all, so a piece that has not moved in ten minutes
+     moves. */
+  if (this.sectionIndex === 0 || this.sectionIndex % 4 !== 0) return;
   var journey = this.setting('wander', 0.2);
   var f = this.field.at(this.sectionIndex * 5 + 3);
-  if (f.b > journey * 0.5) return;
+  this.sinceJourney = (this.sinceJourney || 0) + 4;
+  if (f.b > journey * 1.1 + 0.06 && this.sinceJourney < 24) return;
+  this.sinceJourney = 0;
   var options = [5, 7, -5, -1, 3, -3, 2, -2, 9, -9];
   var weights = [1.4, 1.4, 1.1, 0.5, 0.6, 0.6, 0.5, 0.5, 0.25, 0.25];
   this.pivotTo = mod(this.tonic + this.rng.weighted(options, weights), 12);
@@ -1239,6 +1250,7 @@ Composer.prototype.chromaticize = function (slots) {
   for (i = 1; i < slots.length - 1 && used < budget; i++) {
     var s = slots[i], next = slots[i + 1];
     if (s.locked || s.degree < 0 || !next || next.degree < 0) continue;
+    if (next.locked) continue;
     var dn = next.degree, r = this.rng.next(), p;
 
     /* Applied dominant of the next chord, and its ii when there is room. */
@@ -1254,7 +1266,10 @@ Composer.prototype.chromaticize = function (slots) {
         dom = makeChord(mod(vRoot + 6, 12), 'dom7', [14, 18], { fn: 'D', chromatic: true });
       }
       s.chord = dom;
-      s.locked = true; used++;
+      /* Lock the target too. Leaving it open let the next iteration replace the
+         chord this dominant exists to resolve to, so eighteen percent of
+         applied dominants pointed at something that never arrived. */
+      s.locked = true; next.locked = true; used++;
       if (s.len >= 4 && this.rng.chance(0.42)) {
         /* planChanges plays s.chord first and s.split second, so the ii has to
            be the one in s.chord. Written the other way round the segment
@@ -1446,6 +1461,20 @@ Composer.prototype.planChanges = function (blueprint, role) {
       out.push({ beat0: s.beat0, len: s.len, chord: s.chord });
     }
   }
+  /* Two adjacent segments on the same root must not disagree about the third.
+     A half cadence can put an altered dominant and then the modal v on the
+     same root, which sounds a ♮3 and then a ♭3 across two beats — a
+     cross-relation, not a colour. The earlier chord wins, so the section ends
+     on the one with the leading tone. Sus chords are exempt: resolving a
+     suspension to its own third is the point of it. */
+  for (i = 1; i < out.length; i++) {
+    var pa = out[i - 1].chord, pb = out[i].chord;
+    if (pa === pb || pa.rootPc !== pb.rootPc) continue;
+    if (pa.third === pb.third) continue;
+    if (!(pa.third === 3 || pa.third === 4) || !(pb.third === 3 || pb.third === 4)) continue;
+    out[i].chord = pa;
+  }
+
   /* A sus that resolves to its own third inside the bar is a signature move
      and costs nothing now that segments exist. */
   for (i = 0; i < out.length; i++) {
@@ -1929,7 +1958,11 @@ Composer.prototype.pickCell = function () {
 /* Where the right hand stops. Bar 0 states, so it is never empty; bars 3 and 6
    are phrase ends and are the likeliest; bar 4 opens the consequent and almost
    never rests. */
-var REST_WEIGHT = [0.00, 0.10, 0.34, 0.46, 0.06, 0.14, 0.40, 0.30];
+/* Bar 7 carries the cadence — the held final note, the closure's choice of
+   which degree to land on, and the validator's check that the ending is not
+   weak. Silencing it as often as bar 3 meant four sections in ten declared a
+   closure that never sounded. */
+var REST_WEIGHT = [0.00, 0.12, 0.36, 0.48, 0.06, 0.16, 0.44, 0.10];
 
 Composer.prototype.planRests = function (role) {
   var plan = [false, false, false, false, false, false, false, false];
@@ -2051,7 +2084,11 @@ Composer.prototype.chooseMelodyPitch = function (chord, nextChord, ctx) {
       var d = Math.min(mod(mod(n, 12) - chord.pcs[k], 12), mod(chord.pcs[k] - mod(n, 12), 12));
       if (d === 1) { collides = true; break; }
     }
-    if (collides && !isChord && ctx.strong) score -= 3.5;
+    /* A semitone against a chord tone is a passing colour when it moves and a
+       wrong note when it is held. Gating this on the strong beats left long
+       avoid notes on beats two and four unpenalised, and the motif pull is
+       strong enough to choose them. */
+    if (collides && !isChord) score -= (ctx.strong ? 3.5 : 1.2) + (ctx.duration > 1.0 ? 9.0 : 0);
     if (ctx.finalNote) {
       if (ctx.closure === 'closed') {
         if (mod(n, 12) === this.tonic) score += 5;
@@ -2210,6 +2247,16 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
             barOrn = 1; this.ornCount++;
           }
         }
+      }
+      /* A pianist doubling the tune an octave down under a peak. Quiet, rare,
+         and gated on a texture with room for it — the role was carried by the
+         engine, the MIDI lane map and the timing model, and nothing emitted
+         it. */
+      if (strong && dur0 >= 0.8 && velocity > 0.5 && pitch - 12 >= REG.melodyLo &&
+          this.setting('texture', 0.5) > 0.45 && intensities[bar] > 0.7 &&
+          chord.pcs.indexOf(mod(pitch, 12)) >= 0 && this.rng.chance(0.14)) {
+        eventsByBar[bar].push({ beat: beat, duration: Math.min(dur, 1.6), pitch: pitch - 12,
+                                velocity: velocity * 0.46, role: 'echo' });
       }
       prevLeap = leap; prev = pitch;
     }
@@ -2510,7 +2557,9 @@ Composer.prototype.generateAttempt = function () {
   var restPlan = this.planRests(role);
   /* A movement that trails off into left hand alone is what makes the next
      statement land. */
-  if (this.arcLen && this.arcPos === this.arcLen - 1) { restPlan[6] = true; restPlan[7] = true; }
+  /* A movement that trails off into left hand alone is what makes the next
+     statement land — but it still has to end on a played note. */
+  if (this.arcLen && this.arcPos === this.arcLen - 1) { restPlan[5] = true; restPlan[6] = true; restPlan[7] = false; }
 
   var melody = this.generateMelodyForSection(chordAt, intensities, role, registerBias, restPlan, closure, arcGain);
 
@@ -2710,11 +2759,16 @@ Composer.prototype.generateAttempt = function () {
     for (j = 0; j < segments.length; j++) if (segments[j].beat0 <= i * 4 + 0.001) vSeg = j;
     bar.voicing = voicings[vSeg] || [];
     bar.restKind = restPlan[i] ? ((i === 3 || i === 7) ? 'cadential' : 'interior') : null;
-    /* Name the chord with its bass, because the display has been lying about
-       inversions for as long as chooseBass has played anything but the root. */
-    var nm = rootName(bar.chord.rootPc, this.tonic, bar.chord.fn) + bar.chord.label;
-    if (mod(bar.bass, 12) !== bar.chord.rootPc) nm += '/' + rootName(mod(bar.bass, 12), this.tonic, 'T');
-    bar.chord.name = nm;
+    /* Name the chord with its bass, because the display lied about inversions
+       for as long as the bass played anything but the root. The slash lives on
+       the BAR, not on the chord: one chord object can be held across bars with
+       different bass notes under it, and writing the name into the shared
+       object made the earlier bar display the later bar's inversion. */
+    if (!bar.chord.name) bar.chord.name = rootName(bar.chord.rootPc, this.tonic, bar.chord.fn) + bar.chord.label;
+    bar.chordName = bar.chord.name;
+    if (mod(bar.bass, 12) !== bar.chord.rootPc) {
+      bar.chordName += '/' + rootName(mod(bar.bass, 12), this.tonic, 'T');
+    }
     bar.events.sort(function (a, b) { return a.beat - b.beat || a.pitch - b.pitch; });
   }
   for (i = 0; i < changes.length; i++) {
@@ -2784,6 +2838,9 @@ Composer.prototype.validateSection = function (section) {
       ok = mod(finalMelody.pitch, 12) === sc[1] || mod(finalMelody.pitch, 12) === sc[6];
     }
     if (!ok) { score -= 10; issues.push('weak cadence'); }
+  } else if (section.closure === 'closed') {
+    /* A section that declares it resolves has to have a note to resolve on. */
+    score -= 10; issues.push('weak cadence');
   }
 
   for (i = 0; i < 8; i++) {
@@ -2907,6 +2964,7 @@ Composer.prototype.generateSectionInner = function (budget) {
   best.tonic = this.tonic;
   best.mode = this.mode;
   best.index = this.sectionIndex;
+  best.pivot = this.pivotTo !== null;
   this.sectionIndex++;
   this.arcPos++;
   if (this.arcPos >= this.arcLen) { this.arcPos = 0; this.arcLen = this.rng.int(5, 8); }
@@ -3039,7 +3097,7 @@ Composer.prototype.nextBar = function () {
   bar.barBeats = total;
   bar.secondsPerBeat = spb;
   this.beatGlobal += total;
-  this.lastChordName = bar.chord.name;
+  this.lastChordName = bar.chordName || bar.chord.name;
   return bar;
 };
 
@@ -3365,12 +3423,16 @@ function buildTrack(events, name) {
   events = events.slice().sort(function (a, b) { return a.tick - b.tick || a.order - b.order; });
   if (name) { body = body.concat(vlq(0), metaText(0x03, name)); }
   var last = 0;
+  /* concat allocates and copies the whole accumulated array once per event,
+     which is quadratic — at the transport's 24000-entry log cap that froze the
+     tab for nine seconds inside the click handler. */
   for (i = 0; i < events.length; i++) {
-    var e = events[i];
-    body = body.concat(vlq(Math.max(0, e.tick - last)), e.bytes);
+    var e = events[i], d = vlq(Math.max(0, e.tick - last)), k;
+    for (k = 0; k < d.length; k++) body.push(d[k]);
+    for (k = 0; k < e.bytes.length; k++) body.push(e.bytes[k]);
     last = e.tick;
   }
-  body = body.concat(vlq(0), [0xff, 0x2f, 0x00]);
+  body.push(0, 0xff, 0x2f, 0x00);
   var head = [];
   pushAscii(head, 'MTrk');
   head.push((body.length >>> 24) & 255, (body.length >>> 16) & 255, (body.length >>> 8) & 255, body.length & 255);
@@ -3444,7 +3506,10 @@ function buildMidi(log, opts) {
   var out = [];
   pushAscii(out, 'MThd');
   out.push(0, 0, 0, 6, 0, 1, (used.length >> 8) & 255, used.length & 255, (ppq >> 8) & 255, ppq & 255);
-  for (var k = 0; k < used.length; k++) out = out.concat(buildTrack(used[k].events, used[k].name));
+  for (var k = 0; k < used.length; k++) {
+    var tr = buildTrack(used[k].events, used[k].name);
+    for (var ti = 0; ti < tr.length; ti++) out.push(tr[ti]);
+  }
   var bytes = new Uint8Array(out.length);
   for (k = 0; k < out.length; k++) bytes[k] = out[k] & 255;
   bytes.noteCount = noteCount;
@@ -3651,10 +3716,13 @@ Engine.prototype.attach = function (ctx, settings) {
   this.ctx = ctx;
   this.settings = settings;
 
-  /* Zone buffers live on this context, at this context's rate. Declaring them
-     at 44100 on a 48 kHz device put the whole bank through the browser's
-     resampler on every note, on top of the zone transposition. */
-  var rate = ctx.sampleRate;
+  /* Declare the buffer at the rate its samples were actually rendered at, not
+     at the context's. The bank's rate comes from a probe taken at page load
+     and the playback context is created later — plug in a 48 kHz headset
+     before pressing play and the two disagree, and reinterpreting 44.1 kHz
+     data as 48 puts the whole instrument 1.47 semitones sharp. When they do
+     differ the browser resamples, which is the correct and inaudible outcome. */
+  var rate = this.bank.sampleRate;
   this.buffers = this.bank.zones.map(function (slot) {
     if (!slot.data) return null;
     var b = ctx.createBuffer(1, slot.data.length, rate);
@@ -3777,7 +3845,7 @@ Engine.prototype.syncBuffers = function () {
   for (var i = 0; i < this.bank.zones.length; i++) {
     if (this.buffers[i] || !this.bank.zones[i].data) continue;
     var data = this.bank.zones[i].data;
-    var b = this.ctx.createBuffer(1, data.length, this.ctx.sampleRate);
+    var b = this.ctx.createBuffer(1, data.length, this.bank.sampleRate);
     if (b.copyToChannel) b.copyToChannel(data, 0); else b.getChannelData(0).set(data);
     this.buffers[i] = b;
   }
@@ -3811,7 +3879,10 @@ Engine.prototype.applySettings = function (settings, immediate) {
   var space = clamp(s.space, 0, 1);
   if (Math.abs(space - this._irSpace) > 0.12 || this._irSpace < 0) {
     this._irSpace = space;
-    var buf = this.buildImpulse(lerp(1.25, 2.30, space), 'soundboard');
+    /* The version this replaced had a fixed 3.6 s hall, which blurred every
+       attack. A studio is shorter — but capping the top of the range at 2.3 s
+       took the room away from the two presets that were voiced around one. */
+    var buf = this.buildImpulse(lerp(1.5, 3.1, space), 'soundboard');
     if (immediate || !this.reverb.buffer) { this.reverb.buffer = buf; }
     else {
       /* Assigning to a live ConvolverNode discards whatever tail is ringing —
@@ -4617,7 +4688,7 @@ visual.onFrame = function () {
   var frameStart = now();
   var budgetEnd = frameStart + 8;
   while (!bank.complete() && now() < budgetEnd) bank.work(90000);
-  if (bank.readyCount !== lastReady) {
+  if (bank.readyCount !== lastReady || frameCount === 1) {
     lastReady = bank.readyCount;
     var p = bank.progress();
     if (el.prepFill) el.prepFill.style.width = Math.round(p * 100) + '%';
@@ -4675,9 +4746,10 @@ function ensureAudio() {
 
 function onBar(bar, time) {
   cues.at(time, function () {
-    if (el.harmony.textContent !== bar.chord.name) {
+    var shown = bar.chordName || bar.chord.name;
+    if (el.harmony.textContent !== shown) {
       el.harmony.classList.add('change');
-      el.harmony.textContent = bar.chord.name;
+      el.harmony.textContent = shown;
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { el.harmony.classList.remove('change'); });
       });
@@ -4690,7 +4762,7 @@ function onBar(bar, time) {
     visual.setKey(bar.tonic);
     visual.barBeats = bar.barBeats || 4;
     visual.intensity = bar.intensity;
-    document.title = bar.chord.name + ' · Improvisator ∞';
+    document.title = shown + ' · Improvisator ∞';
   });
 }
 
@@ -4880,7 +4952,10 @@ function syncControls() {
 
 function markCustom() {
   currentPreset = 'custom';
-  Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (b) { b.classList.remove('active'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (b) {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
 }
 
 function applyPreset(name) {

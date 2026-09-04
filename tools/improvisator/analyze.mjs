@@ -51,7 +51,7 @@ const bars = result.bars;
 function fingerprint(bs) {
   const parts = [];
   for (const b of bs) {
-    parts.push(fmt(b.bpm, 3) + '|' + b.chord.name + '|' + (b.hand || '') + '|' + (b.pedalLift ? 1 : 0));
+    parts.push(fmt(b.bpm, 3) + '|' + (b.chordName || b.chord.name) + '|' + (b.hand || '') + '|' + (b.pedalLift ? 1 : 0));
     for (const e of b.events) {
       parts.push([e.role, e.pitch, fmt(e.beat, 5), fmt(e.duration, 4), fmt(e.velocity, 4), fmt(e.micro || 0, 5)].join(','));
     }
@@ -86,7 +86,7 @@ for (const b of bars) {
 const hist = a => { const m = new Map(); for (const x of a) m.set(x, (m.get(x) || 0) + 1); return [...m].sort((p, q) => q[1] - p[1]); };
 const top = (a, n = 10) => hist(a).slice(0, n).map(([k, v]) => `${k}×${v}`).join('  ');
 
-const chordNames = bars.map(b => b.chord.name);
+const chordNames = bars.map(b => b.chordName || b.chord.name);
 const qualities  = chordNames.map(n => n.replace(/^[A-G][♭♯]?/, '') || 'maj');
 
 /* chromaticism: pitch classes outside the bar's declared mode */
@@ -135,7 +135,7 @@ const absLeaps = leaps.map(Math.abs);
 const spans = [];
 let cur = 1;
 for (let i = 1; i < bars.length; i++) {
-  if (bars[i].chord.name === bars[i - 1].chord.name) cur++;
+  if ((bars[i].chordName || bars[i].chord.name) === (bars[i - 1].chordName || bars[i - 1].chord.name)) cur++;
   else { spans.push(cur); cur = 1; }
 }
 spans.push(cur);
@@ -233,9 +233,9 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
           if (cur.chord.pcs.indexOf(pc) >= 0 || pc === mod(cur.bass, 12)) continue;
           if (K.tensionOK(cur.chord.intervals, mod(pc - cur.chord.rootPc, 12) + 12, cur.chord.fn === 'D')) continue;
           wrong++;
-          if (worst.length < 4) worst.push(`${cur.chord.name} + ${mod(pc - cur.chord.rootPc, 12)}`);
+          if (worst.length < 4) worst.push(`${cur.chord.name || cur.chord.label} + ${mod(pc - cur.chord.rootPc, 12)}`);
         }
-        const named = b.chord.name.indexOf('/') >= 0;
+        const named = (b.chordName || b.chord.name).indexOf('/') >= 0;
         if (named !== (mod(b.bass, 12) !== b.chord.rootPc)) slashBad++;
       }
     }
@@ -262,7 +262,9 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
         const fin = last.changes.length ? last.changes[last.changes.length - 1].chord : last.chord;
         const rel = mod(fin.rootPc - sec.tonic, 12);
         if (sec.closure === 'closed') { auth++; if (rel === 0) onTonic++; }
-        if (sec.closure === 'open') { half++; if (rel === 7 || rel === 1 || rel === 5) onDominant++; }
+        /* A section that is pivoting deliberately ends on the dominant of the
+           key it is leaving for, which is not a degree of the key it is in. */
+        if (sec.closure === 'open' && !sec.pivot) { half++; if (rel === 7 || rel === 1 || rel === 5) onDominant++; }
       }
     }
   }
