@@ -31,6 +31,7 @@ if (!K || !K.Composer) { console.error('kernel did not export IMPROV.Composer');
 
 const mod = (n, m) => ((n % m) + m) % m;
 const fmt = (x, n = 2) => (Math.round(x * 10 ** n) / 10 ** n).toFixed(n);
+const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const pct = x => fmt(x * 100, 1) + '%';
 
 function run(seedValue, settings, bars) {
@@ -296,6 +297,25 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
   console.log(`GESTURE        ${noGesture}/${sections} sections have no interval >= 7 semitones; ${jumpy}/${sections} have more than four`);
   console.log(`SEAMS          ${pickups}/${boundaries} section boundaries carry a pickup   closures: ${[...closures].map(([k, v]) => k + ' ' + v).join('  ')}`);
   console.log(`RAILS          melody at ceiling ${pct(melAtHi / Math.max(1, melN))}  at floor ${pct(melAtLo / Math.max(1, melN))}   harmony at floor ${pct(harmAtLo / Math.max(1, harmN))}`);
+}
+
+/* ---- does the piece go anywhere over five minutes? ---------------------
+   Section-to-section dynamics, drawn. A movement should rise, peak about
+   sixty percent of the way in, and dissolve — not jitter every eight bars. */
+{
+  const c = new K.Composer(seed, Object.assign({}, settings));
+  const rows = [];
+  for (let i = 0; i < 28; i++) {
+    const sec = c.generateSection();
+    let v = 0, n = 0;
+    for (const bar of sec.bars) for (const e of bar.events) if (e.role === 'melody') { v += e.velocity; n++; }
+    rows.push({ role: sec.role.id, vel: n ? v / n : 0 });
+  }
+  const vals = rows.map(r => r.vel).filter(x => x > 0);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  console.log(`ARC            section mean melody velocity ${fmt(lo)} to ${fmt(hi)} = ${fmt(20 * Math.log10(Math.pow(hi / lo, 1.8)), 1)} dB across ${rows.length} sections`);
+  console.log('  shape        ' + rows.map(r => '▁▂▃▄▅▆▇█'[clamp(Math.floor((r.vel - lo) / Math.max(1e-6, hi - lo) * 7.99), 0, 7)]).join(''));
+  console.log('  roles        ' + rows.map(r => r.role[0]).join('') + '   (s)tatement (d)eparture s(h)adow (l)ift (r)eturn d(i)ssolve');
 }
 
 /* ---- how hard the section search is working --------------------------- */
