@@ -657,4 +657,57 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
       'and the verb retires with the correction',
     ).toHaveCount(0);
   });
+  /**
+   * T6 — THE CRASH-SAFE SNAPSHOT CARRIES IT TOO.
+   *
+   * The third writer, and the one nobody would notice was missing until they
+   * needed it: `flushSession` serialises the same analyses the archive and the
+   * SVG do, so before this the autosave that exists to survive an OOM during a
+   * 4K capture wrote the pool WITHOUT the correction — you would come back to
+   * your collage with every photograph cropped where the detector had put it.
+   *
+   * Read straight out of IndexedDB rather than through a restore, because the
+   * claim is about what was WRITTEN. The restore path itself is covered by
+   * session-recovery.spec, and driving it here would test that file's subject
+   * instead of this one's.
+   */
+  test('T6 — the autosave writes the correction into the session', async ({ page }) => {
+    test.setTimeout(240_000);
+    await boot(page);
+    await enterFullBleed(page);
+
+    const target = await biggestCell(page);
+    const before = await stableColour(page, target);
+    await armCell(page, target);
+    await dragPicture(page, target, 1);
+    expect(dist(await stableColour(page, target), before), 'the drag must have done something').toBeGreaterThan(30);
+
+    // Past the debounce (AUTOSAVE_DEBOUNCE_MS = 1500) with room for the write.
+    await page.waitForTimeout(4000);
+
+    const manifest = await page.evaluate(async () => {
+      const db: IDBDatabase = await new Promise((res, rej) => {
+        const rq = indexedDB.open('collage-session', 2);
+        rq.onsuccess = () => res(rq.result);
+        rq.onerror = () => rej(rq.error);
+      });
+      const rec: any = await new Promise((res, rej) => {
+        const rq = db.transaction('project', 'readonly').objectStore('project').get('current');
+        rq.onsuccess = () => res(rq.result);
+        rq.onerror = () => rej(rq.error);
+      });
+      db.close();
+      return rec?.manifest ?? null;
+    });
+
+    expect(manifest, 'nothing was autosaved at all').not.toBeNull();
+    const framed = (manifest.images ?? []).filter((i: any) => i?.analysis?.frame);
+    expect(
+      framed.length,
+      `the snapshot carries ${manifest.images?.length ?? 0} images and not one correction — ` +
+        'a crash here would come back with the crop the detector chose',
+    ).toBe(1);
+    const f = framed[0].analysis.frame;
+    expect(Number.isFinite(f.x) && Number.isFinite(f.y), 'the frame in the snapshot is not a pair of numbers').toBe(true);
+  });
 });

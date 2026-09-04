@@ -5982,9 +5982,11 @@ frontier. Today's ceiling is tomorrow's floor.
   this spec (60 -> 30, measured 49.5 on an unlucky deal), and one vacuous search
   loop of my own making. **GATES:** 36/36 unit sweeps (the new one is 9
   invariants, mutation-checked three ways: wrong index, null-instead-of-drop, and
-  a deal that reads the frame — each lights a different set) · reframe 10/10 on
-  chromium AND Mobile Chrome · svg-project 16/16 (byte-identity round trips, both
-  engines) · session-recovery 7/7 · project-roundtrip 1/1 · mobile-watertight 7/7
+  a deal that reads the frame — each lights a different set) · reframe 12/12 on
+  chromium AND Mobile Chrome, including T6, which reads the crash-safe snapshot
+  straight out of IndexedDB and goes red on the third writer alone (`images`
+  instead of `poolForSave`: "4 images and not one correction") · svg-project
+  16/16 (byte-identity round trips, both engines) · session-recovery 7/7 · project-roundtrip 1/1 · mobile-watertight 7/7
   · swap/undo/intake/one-layout 25/25 · tsc clean · vite build clean. Storefront
   unchanged: a capability inside Collage Studio, no new tool, no new trade.
   **NAMED NEXT RUNG:** disclose under the composition code what a code does NOT
