@@ -61,16 +61,18 @@ DOM and is deliberately not evaluated — and runs the composer for as many bars
 
 | Gate | What it means |
 |---|---|
-| **NO REPEAT** | No event carries the `echo` role and no voice is inherited across a bar line. Every sounding note was struck by a hand that decided to strike it. |
+| **NO REPEAT** | No event carries the `echo` role, no voice is inherited across a bar line, and no bass answer re-strikes the note already sounding under it. Every sounding note was struck by a hand that decided to strike it — never inherited, and never by a fallback. |
 | **HARMONY** | An accompaniment attack is a chord tone, the bass, or an available tension. A short bass approach note leaning into the next root is allowed; anything held is not. Measured across every character, because the bass rudiments that write approach tones do not fire at all settings. |
-| **TEXTURE** | Two things a listener notices first: whether the bottom of the piano is muddy, and whether the tune is on top. Both measured at simultaneity — notes actually sounding together, not notes written near each other. |
+| **TEXTURE** | Three things a listener notices first: whether the bottom of the piano is muddy, whether the tune is on top, and whether it sounds a minor ninth against a note the hand is holding. All measured at simultaneity — notes actually sounding together, not notes written near each other. |
+| **FORM** | A section can end in more than one way, and the chord that resolves has a third in it to resolve with. |
+| **RHYTHM** | The melody is written in note values, not floats, and the tempo has somewhere to go — a nominal tempo sitting on its own clamp throws away half the rubato. |
 | **DETERMINISM** | One seed, one performance. |
 | **RESET** | A composer told to play a seed again plays it again. |
-| **ONE PIECE** | A seed played straight and the same seed played from a filled queue are the same music, bar for bar. The page composes ahead of playback in idle time; how far ahead it has got must not change a note. |
+| **ONE PIECE** | A seed played straight and the same seed played from a filled queue are the same music, bar for bar — and filling the queue then dropping it, which is what a character click does, leaves the composer exactly where it was. The page composes ahead of playback in idle time; how far ahead it has got must not change a note. |
 | **PRESETS** | Every character survives 96 bars at three seeds. |
 | **EDGE SETTINGS** | Both extremes of every continuous control, in twelve keys and eight modes. |
 | **PRESET IDENTITY** | Each character has settings of its own, applied the way the page applies them, and the busiest carries at least 1.4× the melody of the sparsest. |
-| **VOCABULARY** | Every rudiment is reachable at some character and seed. |
+| **VOCABULARY** | Every rudiment is reachable at some character and seed, and no more than two families are selected essentially uniformly — a vocabulary picked at random is a shuffle, not a choice. |
 
 `browser-check.mjs` drives the real page:
 
@@ -78,7 +80,11 @@ DOM and is deliberately not evaluated — and runs the composer for as many bars
 |---|---|
 | **ONE RENDERER** | Exactly one function turns a bar into engine calls. The transport and the offline bounce used to carry separate copies, and the copies had drifted. |
 | **SAMPLE RATE** | No buffer is declared at a literal rate. The bank renders at the rate fixed on page load and the playback context is created later; 44.1 kHz read as 48 is 1.47 semitones sharp. |
-| **PLAYS / MIDI / BOUNCE** | It plays; the exported MIDI parses back with every note paired and a tempo map; the bounce has audio, no clipping. |
+| **CHARACTERS** | Every character button applies, becomes the active one, produces a distinct key and posture, and throws nothing. |
+| **PLAYS / BOUNCE** | It plays; the bounce has audio and no clipping. |
+| **MIDI** | The export parses back with every note paired, a tempo map, a time signature (the composer writes 3/4 to 5/4), the pedal on every channel that carries notes, no note retriggering a pitch already sounding on its channel, no character lost to ASCII flattening, and no silent lead-in. |
+| **LAYOUT** | Every control is reachable and big enough at ten viewport sizes, portrait and landscape, panel open and shut — scrolled into view the way a browser does. |
+| **KEYBOARD** | Space activates the focused control and reaches the transport only when nothing is focused; `r` respects a record button hidden by a stylesheet. |
 | **REPEATABLE** | Two bounces of one seed differ by less than −60 dB. |
 | **NO ERRORS** | No console or page errors across the whole run. |
 
@@ -95,11 +101,13 @@ DOM and is deliberately not evaluated — and runs the composer for as many bars
 | The tune | `MELODY_RUDIMENTS`, `transformMotif`, `generateSoulMelody`, `chooseMelodyPitch` |
 | The left hand | `laySoulHand`, `ACCOMP_RUDIMENTS`, and the lay-out decision in `generateAttempt` |
 | Time feel | `hammerTravel`, `TOUCH_COMPENSATION`, `LAY_BACK`, `flexibleBeatDurations`, `warpFlexible` |
+| Cadences and the long form | `CADENCES`, `chooseCadence`, `buildDegreePath`, `buildSoulChord` |
 | The pedal | `PEDAL_RUDIMENTS`, `makePedalPlan`, `renderBar` |
+| Which rudiment fires when | `pickRudiment` |
 | What counts as a good section | `validateSection`, `SEARCH_BUDGET` |
 | The instrument | `partialTable`, `ZoneRenderer`, `Engine.play`, `Engine.release`, `Engine.attach` |
 
-## Four things worth knowing before you edit
+## Five things worth knowing before you edit
 
 **Nothing may be inherited.** If a note is not in the event stream, it must not be audible. The
 composer may decide the hand plays fewer notes — that is a musical decision and it is written
@@ -119,6 +127,13 @@ The "no gesture" penalty at 6 left 59% of sections with no interval wider than a
 **Composition and performance draw from separate random streams,** and the section search draws
 from a third derived from the section's own index. Otherwise how good the first candidate happened
 to be shifts every note that follows it, and composing ahead of playback changes the music.
+Composing ahead must also be reversible: `pump` records the composer's whole position and
+`dropQueue` restores it, or a character click skips a section and can move the key.
+
+**The eight character buttons move only the settings in `CHARACTER_KEYS`.** The engine reads
+`warmth`, `resonance`, `reverb` and `space` — those four are the mix; `sustain` and `humanize` are
+how the hands behave; `bpm` is the tempo. None of them are a character's business, and `reference`
+is that posture by name.
 
 ---
 
