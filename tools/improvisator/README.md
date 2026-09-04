@@ -4,8 +4,16 @@ An endless generative solo piano in one HTML file. No build step, no dependencie
 Open `improvisator-infinite.html` in a browser and press the centre button.
 
 Every passage is reproducible from its seed, which is in the URL hash. The same seed and settings
-produce the same performance in the browser, in the offline WAV bounce and in the MIDI export — that
-is checked, not asserted; see **Proof** below.
+produce the same *performance* — the same notes, at the same moments, with the same touch — in the
+browser, in the offline WAV bounce and in the MIDI export. That is checked, not asserted; see
+**Proof** below.
+
+The rendered audio is reproducible to about −83 dB rather than bit-for-bit, and the reason is worth
+knowing: the sympathetic-string bank is twelve feedback delay lines, and Chromium does not render a
+graph containing a feedback cycle bit-identically twice. Measured, two bounces of one seed differ by
+−83 dB rms with a peak difference of −69 dBFS — a few bits of a sixteen-bit word, well under the
+noise floor of the format. `browser-check.mjs` measures it on every run and fails if it ever rises above −60 dB, because
+that would mean a per-note random value had stopped following the seed.
 
 ---
 

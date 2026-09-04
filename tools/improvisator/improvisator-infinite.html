@@ -3752,19 +3752,44 @@ Engine.prototype.applySettings = function (settings, immediate) {
   /* Reverb is a straight wet/dry percentage — 0 is a dry piano, 100 is all
      room. Space sets how big and how long that room is. */
   var rv = s.reverb === undefined ? 0.55 : clamp(s.reverb, 0, 1);
+  var wetTarget = Math.sin(rv * Math.PI / 2) * lerp(0.55, 1.0, s.space);
   this.dry.gain.setTargetAtTime(Math.cos(rv * Math.PI / 2) * 0.92, t, tc);
-  this.wet.gain.setTargetAtTime(Math.sin(rv * Math.PI / 2) * lerp(0.55, 1.0, s.space), t, tc);
+  this.wet.gain.setTargetAtTime(wetTarget, t, tc);
   /* Resonance is now sympathetic depth, which is what the label promised. */
   this.stringSend.gain.setTargetAtTime(lerp(0.02, 0.13, clamp(s.resonance, 0, 1)), t, 0.3);
   /* Rebuilding the impulse costs a couple of milliseconds, so only when the
      room has actually changed size. */
   var space = clamp(s.space, 0, 1);
-  if (Math.abs(space - this._irSpace) > 0.08 || this._irSpace < 0) {
+  if (Math.abs(space - this._irSpace) > 0.12 || this._irSpace < 0) {
     this._irSpace = space;
-    this.reverb.buffer = this.buildImpulse(lerp(1.25, 2.30, space), 'soundboard');
+    var buf = this.buildImpulse(lerp(1.25, 2.30, space), 'soundboard');
+    if (immediate || !this.reverb.buffer) { this.reverb.buffer = buf; }
+    else {
+      /* Assigning to a live ConvolverNode discards whatever tail is ringing —
+         the room does not shrink, it vanishes. Duck the send, swap, bring it
+         back: the listener hears the room change size. */
+      var self = this, wet = this.wet.gain, now0 = this.ctx.currentTime;
+      wet.cancelScheduledValues(now0);
+      wet.setValueAtTime(wet.value, now0);
+      wet.linearRampToValueAtTime(0.0001, now0 + 0.035);
+      setTimeout(function () {
+        try {
+          self.reverb.buffer = buf;
+          var t2 = self.ctx.currentTime;
+          wet.cancelScheduledValues(t2);
+          wet.setValueAtTime(0.0001, t2);
+          wet.linearRampToValueAtTime(wetTarget, t2 + 0.07);
+        } catch (_) {}
+      }, 55);
+    }
   }
 };
 
+/* Per-note detune, pan and noise offsets are drawn here, so the stream has to
+   be a function of the piece and not of how many notes the page has played
+   since it loaded — otherwise the bounce is a different take from the one that
+   was heard, which is exactly what the seed promises it is not. */
+Engine.prototype.resetRng = function (seed) { this.rng = new K.RNG('engine:' + (seed || '')); };
 Engine.prototype.setPedal = function (down) { this.pedalDown = !!down; };
 Engine.prototype.setPedalAt = function (when, down) {
   this.pedalPlan.push({ t: when, down: !!down });
@@ -4087,13 +4112,21 @@ Engine.prototype.silence = function (fade) {
   for (var i = 0; i < this.voices.length; i++) {
     var v = this.voices[i];
     try {
-      v.gain.gain.cancelScheduledValues(t);
-      /* Cancelling removes the setValueAtTime that play() scheduled, and a
-         GainNode's intrinsic value is 1 — so without this line a note still
-         waiting in the scheduler faded from full scale instead of from its own
-         level, up to sixteen decibels too loud, on every pause. */
-      v.gain.gain.setValueAtTime(v.startedAt > t ? 0.00001 : v.level, t);
-      v.gain.gain.setTargetAtTime(0.00001, t, fade / 4);
+      /* Three cases, and getting any of them wrong is audible on every pause.
+         Cancelling removes the setValueAtTime play() scheduled, and a
+         GainNode's intrinsic value is 1, so a note still waiting in the
+         scheduler would fade from full scale — silence it instead. A note
+         already sounding fades from its struck level. And a note the pedal
+         damped a moment ago is somewhere below that level: v.level is what it
+         was struck at, not where it is, so using it here steps the note back
+         up by ten to fifteen decibels before fading it — which is the very
+         click release() has a guard against. */
+      var g = v.gain.gain;
+      var held = v.startedAt > t ? 0.00001
+               : (v.releaseAt !== undefined && v.releaseAt <= t) ? g.value : v.level;
+      g.cancelScheduledValues(t);
+      g.setValueAtTime(Math.max(0.000001, held), t);
+      g.setTargetAtTime(0.00001, t, fade / 4);
       v.src.stop(t + fade);
     } catch (_) {}
   }
@@ -4122,6 +4155,7 @@ function Transport(engine, composer, hooks) {
 
 Transport.prototype.start = function () {
   if (this.playing) return;
+  if (this.engine.resetRng) this.engine.resetRng(this.engine.pieceSeed);
   this.playing = true;
   this.startWall = performance.now();
   this.clock.start(this.engine.ctx.currentTime);
@@ -4533,6 +4567,7 @@ function ensureAudio() {
     if (bank.readyCount < 8) { setStatus('preparing', 'working'); bank.finishEnough(8, 340); }
     var ctx = new AC({ latencyHint: 'interactive' });
     engine.attach(ctx, settings);
+    engine.pieceSeed = seed;
     try {
       mediaDest = ctx.createMediaStreamDestination();
       engine.master.connect(mediaDest);
@@ -4595,6 +4630,8 @@ function newPassage() {
     cues.clear();
     setPlayingUI(false);
     seed = makeSeed(); writeSeed();
+    engine.pieceSeed = seed;
+    engine.resetRng(seed);
     el.seedText.textContent = seed;
     composer.reset(seed, settings);
     visual.field = composer.field;
@@ -4663,6 +4700,7 @@ function bounceWav(seconds) {
     if (!bank.complete()) bank.finishAll();
     var offEngine = new Engine(bank);
     offEngine.attach(oc, snapshot);
+    offEngine.resetRng(seed);
     var c = new K.Composer(seed, snapshot);
     var t = 0.3, afterFermata = false;
     while (t < seconds) {

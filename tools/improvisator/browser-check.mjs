@@ -128,6 +128,28 @@ const wavB64 = await page.waitForFunction(() => {
   return window.__wav || null;
 }, null, { timeout: 180000, polling: 500 }).then(h => h.jsonValue()).catch(() => null);
 
+/* Bounce the same seed a second time. The note stream is deterministic by
+   construction (analyze.mjs proves that), so any difference here comes from
+   the audio graph — and a large one means a per-note random value is not
+   seeded from the piece. The residue is Web Audio's own: a graph containing
+   feedback delay lines does not render bit-identically in Chromium. */
+await page.evaluate(() => { window.__blobs.length = 0; window.__wav2p = null; window.__wav2 = null; });
+await page.keyboard.press('b');
+const wav2B64 = await page.waitForFunction(() => {
+  const b = window.__blobs.find(x => x.type === 'audio/wav');
+  if (!b) return null;
+  if (!window.__wav2p) {
+    window.__wav2p = b.arrayBuffer().then(ab => {
+      const u = new Uint8Array(ab);
+      let s = '';
+      for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192));
+      window.__wav2 = btoa(s);
+    });
+    return null;
+  }
+  return window.__wav2 || null;
+}, null, { timeout: 240000, polling: 500 }).then(h => h.jsonValue()).catch(() => null);
+
 const notices = await page.evaluate(() => (document.getElementById('notice') || {}).textContent);
 await browser.close();
 
@@ -211,7 +233,24 @@ if (!wavB64) {
   clipped samples ${clipped}${clipped ? '  !!' : ''}
   dc offset       ${(dc / n).toExponential(2)}
   silence         ${silent}/${winCount} of the 50 ms windows are below -66 dBFS${outWav ? '\n  written         ' + outWav : ''}`);
-  const bad = clipped > 0 || peak < 0.02 || silent / winCount > 0.35 || errors.length;
+  let repeatDb = null;
+  if (wav2B64) {
+    const b2 = Buffer.from(wav2B64, 'base64');
+    let maxd = 0, dsum = 0, ssum = 0, cmp = 0;
+    const frames = Math.min(n, (b2.length - 44) / 2 / ch);
+    for (let i = 0; i < frames; i++) {
+      const x = buf.readInt16LE(44 + i * ch * 2) / 32768;
+      const y = b2.readInt16LE(44 + i * ch * 2) / 32768;
+      const dd = Math.abs(x - y);
+      if (dd > maxd) maxd = dd;
+      dsum += dd * dd; ssum += x * x; cmp++;
+    }
+    repeatDb = 10 * Math.log10(Math.max(1e-20, dsum) / Math.max(1e-20, ssum));
+    console.log(`  repeatability   two bounces of the same seed differ by ${repeatDb.toFixed(1)} dB rms (peak ${db(maxd)} dBFS)` +
+                `\n                  ${repeatDb < -60 ? 'inaudible — this is Web Audio\'s own float reproducibility in a feedback graph' : '!! large enough to be a different take'}`);
+  }
+  const bad = clipped > 0 || peak < 0.02 || silent / winCount > 0.35 || errors.length ||
+              (repeatDb !== null && repeatDb > -60);
   console.log(`  verdict         ${bad ? 'FAIL' : 'PASS'}`);
   process.exitCode = bad ? 1 : 0;
 }
