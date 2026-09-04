@@ -3812,13 +3812,21 @@ Engine.prototype.applySettings = function (settings, immediate) {
       wet.cancelScheduledValues(now0);
       wet.setValueAtTime(wet.value, now0);
       wet.linearRampToValueAtTime(0.0001, now0 + 0.035);
-      setTimeout(function () {
+      if (this._irTimer) clearTimeout(this._irTimer);
+      this._irTimer = setTimeout(function () {
+        self._irTimer = null;
         try {
           self.reverb.buffer = buf;
+          /* Read the target again rather than closing over it: a fast drag can
+             move reverb or space between the duck and the restore, and the
+             captured value would put the send back where it no longer is. */
+          var s2 = self.settings;
+          var rv2 = s2.reverb === undefined ? 0.55 : clamp(s2.reverb, 0, 1);
+          var back = Math.sin(rv2 * Math.PI / 2) * lerp(0.55, 1.0, clamp(s2.space, 0, 1));
           var t2 = self.ctx.currentTime;
           wet.cancelScheduledValues(t2);
           wet.setValueAtTime(0.0001, t2);
-          wet.linearRampToValueAtTime(wetTarget, t2 + 0.07);
+          wet.linearRampToValueAtTime(back, t2 + 0.07);
         } catch (_) {}
       }, 55);
     }
@@ -4570,6 +4578,28 @@ function formatTime(ms) {
 }
 function keyText(tonic, mode) { return NOTE_NAMES[tonic] + ' ' + MODE_DEFS[mode].label.toLowerCase(); }
 
+/* What the piece will open on, before a bar has been played. This was hard
+   coded to "maj9", so every minor and modal preset announced a major chord it
+   was about to contradict. */
+function openingChordName() {
+  try {
+    var q = composer.diatonicQuality(0).quality;
+    var g = K.QUALITY[q].guide[0];
+    var suffix = q === 'm7b5' ? 'm7♭5' : q === 'dim7' ? 'dim7'
+               : q === 'mMaj7' ? 'm(maj9)' : (g === 3 ? 'm9' : 'maj9');
+    return NOTE_NAMES[composer.tonic] + suffix;
+  } catch (_) { return NOTE_NAMES[settings.tonic] + 'maj9'; }
+}
+
+/* The stage reports the music; the console reports the settings. Key and mode
+   only take effect on the next passage, so showing the setting on the stage
+   said the piece was in a key it was not going to play in. */
+function refreshStage() {
+  el.keyLabel.textContent = keyText(composer.tonic, composer.mode);
+  el.harmony.textContent = openingChordName();
+  el.chapter.textContent = composer.chapterTitle;
+}
+
 /* ---------- housekeeping: one frame loop for everything non-audio ------- */
 
 var lastReady = 0, frameCount = 0;
@@ -4681,8 +4711,7 @@ function newPassage() {
     el.seedText.textContent = seed;
     composer.reset(seed, settings);
     visual.field = composer.field;
-    el.chapter.textContent = composer.chapterTitle;
-    el.harmony.textContent = NOTE_NAMES[settings.tonic] + 'maj9';
+    refreshStage();
     el.barLabel.textContent = 'bar 1';
     if (wasPlaying) setTimeout(function () { transport.start(); setPlayingUI(true); }, 140);
     else notice('new passage ready');
@@ -4832,7 +4861,6 @@ function syncControls() {
   });
   $('tonicSelect').value = settings.tonic;
   $('modeSelect').value = settings.mode;
-  el.keyLabel.textContent = keyText(settings.tonic, settings.mode);
   el.tempoLabel.textContent = Math.round(settings.bpm) + ' bpm';
 }
 
@@ -4858,7 +4886,10 @@ function applyPreset(name) {
      as well, or the notes stay put for a minute after the character changes. */
   if (composer.pending) composer.pending.length = 0;
   if (engine.ready) engine.applySettings(settings);
-  notice(name);
+  if (!transport || !transport.playing) refreshStage();
+  notice(p.tonic !== composer.tonic || p.mode !== composer.mode
+    ? name + ' — its key arrives with the next passage'
+    : name);
 }
 
 function populate() {
@@ -4902,13 +4933,11 @@ RANGES.forEach(function (pair) {
 $('tonicSelect').addEventListener('change', function (e) {
   settings.tonic = Number(e.target.value);
   markCustom(); composer.updateSettings(settings);
-  el.keyLabel.textContent = keyText(settings.tonic, settings.mode);
   notice('key changes on the next passage');
 });
 $('modeSelect').addEventListener('change', function (e) {
   settings.mode = e.target.value;
   markCustom(); composer.updateSettings(settings);
-  el.keyLabel.textContent = keyText(settings.tonic, settings.mode);
   notice('mode changes on the next passage');
 });
 
@@ -4972,8 +5001,7 @@ populate();
 syncControls();
 el.seedText.textContent = seed;
 writeSeed();
-el.chapter.textContent = composer.chapterTitle;
-el.harmony.textContent = NOTE_NAMES[settings.tonic] + 'maj9';
+refreshStage();
 composer.primeQueue();
 if (!(window.AudioContext || window.webkitAudioContext)) el.unsupported.classList.add('show');
 
