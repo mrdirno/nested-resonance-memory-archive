@@ -245,6 +245,32 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
   if (wrong / attacks > 0.005 || slashBad) process.exitCode = 1;
 }
 
+/* ---- does the form arrive where it says it does? -----------------------
+   Four sections make a period and only the last of them resolves. A held
+   turnaround used to span the last two blueprint slots and take the first,
+   which threw the resolution away and ended an authentic cadence on the
+   dominant. */
+{
+  let auth = 0, onTonic = 0, half = 0, onDominant = 0;
+  for (const name of Object.keys(K.PRESETS)) {
+    for (const sd of ['f1', 'f2', 'f3']) {
+      const c = new K.Composer(name + sd, Object.assign({}, K.PRESETS[name]));
+      for (let i = 0; i < 24; i++) {
+        const sec = c.generateSection();
+        const last = sec.bars[7];
+        const fin = last.changes.length ? last.changes[last.changes.length - 1].chord : last.chord;
+        const rel = mod(fin.rootPc - sec.tonic, 12);
+        if (sec.closure === 'closed') { auth++; if (rel === 0) onTonic++; }
+        if (sec.closure === 'open') { half++; if (rel === 7 || rel === 1 || rel === 5) onDominant++; }
+      }
+    }
+  }
+  const authOk = onTonic === auth, halfOk = onDominant / Math.max(1, half) > 0.9;
+  console.log(`FORM           authentic cadences landing on the tonic ${onTonic}/${auth}` +
+              `   half cadences ending on a dominant ${onDominant}/${half}   ${authOk && halfOk ? 'PASS' : 'FAIL'}`);
+  if (!authOk || !halfOk) process.exitCode = 1;
+}
+
 /* ---- gesture, seams and rails ----------------------------------------- */
 {
   const c = new K.Composer(seed, Object.assign({}, settings));

@@ -1119,15 +1119,22 @@ Composer.prototype.chooseBlueprint = function () {
   }
 
   var pos = this.formPosition();
-  p[0] = [0, this.rng.weighted([0, 5], [0.6, 0.4]),
-             this.rng.weighted([3, 1, 5], [0.40, 0.35, 0.25]), 0][pos];
+  /* startDegreeFor is the single source of truth for where a section opens,
+     because the previous section's pickup notes are aimed at it. Re-rolling it
+     here meant the gesture whose whole purpose is to hide the seam led into a
+     note the next bar did not play, 42% of the time. */
+  p[0] = this.startDegreeFor(this.sectionIndex);
   var cadence = ['half', 'deceptive', 'half', 'authentic'][pos];
   if (cadence === 'authentic') { p[7] = 0; if (p[6] === 0) p[6] = 4; }
   else if (cadence === 'deceptive') { p[6] = 4; p[7] = family === 'major' ? 5 : 5; }
   else { p[7] = 4; if (p[6] === 0 || p[6] === 4) p[6] = family === 'major' ? 1 : 1; }
   /* A pivot has to be led into, not announced. The last two slots become a
      ii-V pointing at the new tonic; the tonic itself changes next section. */
-  if (this.pivotTo !== null && pos === 2) p[6] = p[7] = -1;
+  /* A pending pivot always takes the last two slots. Gating it on the form
+     position meant the two clocks — journeys every sixth section, form every
+     fourth — agreed only half the time, and the other half the key simply
+     changed with nothing leading into it. */
+  if (this.pivotTo !== null) p[6] = p[7] = -1;
   this.previousBlueprint = p.join(',');
   this.cadence = cadence;
   return p;
@@ -1242,18 +1249,23 @@ Composer.prototype.chromaticize = function (slots) {
     if (dn > 0 && dn < 6 && s.degree !== dn && r < p) {
       var vRoot = mod(T + MODE_DEFS[this.mode].intervals[dn] + 7, 12);
       var tgtMinor = minorDegree(dn);
-      s.chord = makeChord(vRoot, 'dom7', this.dominantColour(tgtMinor, true),
+      var dom = makeChord(vRoot, 'dom7', this.dominantColour(tgtMinor, true),
                           { fn: 'D', chromatic: true });
-      s.locked = true; used++;
-      if (s.len >= 4 && this.rng.chance(0.42)) {
-        var iiRoot = mod(T + MODE_DEFS[this.mode].intervals[dn] + 2, 12);
-        s.split = makeChord(iiRoot, tgtMinor ? 'm7b5' : 'm7', tgtMinor ? [17] : [14],
-                            { fn: 'SD', chromatic: true });
-      }
       /* The semitone drop. A tritone sub only works if it lands a half step
          above where the music is going, which it does by construction. */
       if (this.rng.chance(0.12 + wander * 0.22)) {
-        s.chord = makeChord(mod(vRoot + 6, 12), 'dom7', [14, 18], { fn: 'D', chromatic: true });
+        dom = makeChord(mod(vRoot + 6, 12), 'dom7', [14, 18], { fn: 'D', chromatic: true });
+      }
+      s.chord = dom;
+      s.locked = true; used++;
+      if (s.len >= 4 && this.rng.chance(0.42)) {
+        /* planChanges plays s.chord first and s.split second, so the ii has to
+           be the one in s.chord. Written the other way round the segment
+           played its dominant and then its own predecessor. */
+        var iiRoot = mod(T + MODE_DEFS[this.mode].intervals[dn] + 2, 12);
+        s.chord = makeChord(iiRoot, tgtMinor ? 'm7b5' : 'm7', tgtMinor ? [17] : [14],
+                            { fn: 'SD', chromatic: true });
+        s.split = dom;
       }
       continue;
     }
@@ -1389,7 +1401,14 @@ Composer.prototype.planChanges = function (blueprint, role) {
   var slots = [], beat = 0, i;
   for (i = 0; i < lens.length; i++) {
     var slot = Math.min(7, Math.floor(beat / 4));
-    slots.push({ beat0: beat, len: lens[i], degree: blueprint[slot], slotIndex: slot, chord: null, split: null, locked: false });
+    /* A segment that spans two slots normally keeps the first — it is one
+       chord held. The exception is the last segment of the section: a held
+       turnaround crosses slots six and seven, and slot seven is where the
+       resolution is, so taking slot six ended an authentic cadence on the
+       dominant. */
+    var endSlot = Math.min(7, Math.floor((beat + lens[i] - 0.001) / 4));
+    var deg = (i === lens.length - 1) ? blueprint[endSlot] : blueprint[slot];
+    slots.push({ beat0: beat, len: lens[i], degree: deg, slotIndex: slot, chord: null, split: null, locked: false });
     beat += lens[i];
   }
   var last = slots[slots.length - 1];
@@ -1809,7 +1828,10 @@ Composer.prototype.reVoiceTopOnly = function (voicing, chord, rising) {
     if (d === 0) continue;
     var n = top + d;
     if (chord.pcs.indexOf(mod(n, 12)) === -1) continue;
-    if (n - out[out.length - 2 < 0 ? 0 : out.length - 2] < 1 && out.length > 1) continue;
+    /* The same spacing rule chooseVoicing rejects on, rather than a bare
+       semitone — otherwise this hands back a voicing the search would have
+       thrown away and it is played as a block chord. */
+    if (out.length > 1 && n - out[out.length - 2] < minInterval(out[out.length - 2])) continue;
     opts.push({ n: n, w: (rising ? (d > 0 ? 2 : 1) : (d < 0 ? 2 : 1)) / Math.abs(d) });
   }
   if (!opts.length) return out;
@@ -2061,7 +2083,7 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
   var ceiling = this.melodyCeiling();
   var prev = this.prevMelody, prevLeap = 0;
   var sequence = [], motifHits = 0, motifNotes = 0;
-  var sectionPeak = -1000, peakBar = 4 + (this.rng.chance(0.6) ? 1 : 0), hadLeap = false;
+  var sectionPeak = -1000, peakBar = 4 + (this.rng.chance(0.6) ? 1 : 0), hadLeap = false, firstNote = true;
   this.ornCount = 0; this.ornCooldown = 0;
 
   for (bar = 0; bar < 8; bar++) {
@@ -2115,7 +2137,12 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
         motifWeight: motifWeight, sectionPeak: sectionPeak, bar: bar, peakBar: peakBar,
         closure: closure, needGesture: !hadLeap && bar >= 2
       });
-      if (Math.abs(pitch - prev) >= 7) hadLeap = true;
+      /* Only intervals inside this section count — prev starts as the last
+         note of the previous one, and the validator scores this section's own
+         line, so a boundary leap used to disarm the rule and then be docked
+         for it. */
+      if (!firstNote && Math.abs(pitch - prev) >= 7) hadLeap = true;
+      firstNote = false;
       if (pitch > sectionPeak) sectionPeak = pitch;
       if (useCell && j < dev.deg.length && pitch === target) motifHits++;
 
