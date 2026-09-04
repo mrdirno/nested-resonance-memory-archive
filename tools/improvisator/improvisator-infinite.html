@@ -3103,7 +3103,11 @@ function flexibleBeatDurations(meter,bar,amount){
   if(meter){d[0]+=0.050*a;d[meter-1]+=0.024*a;}
   if(meter>2)d[2]+=0.016*a;
   if(bar.barInPhrase===bar.phraseLength-1)d[meter-1]+=0.095*a*(1+bar.tailHold*0.35);
-  if(bar.pedal&&bar.pedal.lift)d[meter-1]+=0.022*a;
+  /* A term here used to lengthen the last beat of any bar whose pedal lifted:
+     3 to 7 ms, which is around the threshold where an onset shift is audible.
+     It is small, but it is the pedal steering the beat map, which is precisely
+     the kind of causality this build is removing. The breath that wanted it is
+     already here, one line up, and belongs to the phrase rather than the foot. */
   if(bar.timingRudiment&&bar.timingRudiment.id==='leanForward'&&meter>2){d[1]-=0.030*a;d[meter-1]-=0.018*a;}
   for(i=0;i<meter;i++){d[i]=Math.max(0.58,d[i]);s+=d[i];}
   for(i=0;i<meter;i++)d[i]*=meter/s;
@@ -3255,7 +3259,12 @@ function Engine(bank) {
   this.buffers = [];
   this.rng = new K.RNG('engine');
   this.settings = null;
-  this.pedalDown = true;
+  /* How far the pedal is down. It is a per-note parameter -- renderBar passes
+     it to every play() explicitly -- and this field is only the default for a
+     note scheduled outside a bar. There used to be a `pedalDown` boolean beside
+     it, written twice and read nowhere, and a setPedal(true/false) with no
+     callers: residue that made the pedal look like a stateful machine when it
+     is one number handed to each strike. */
   this.pedalDepth = 0.76;
   this.keyStrikes = {};
   this.maxVoices = 72;
@@ -3451,9 +3460,7 @@ Engine.prototype.tuneResonance = function (pcs, tonic, when) {
 
 Engine.prototype.setPedalDepth = function (depth) {
   this.pedalDepth = clamp(Number(depth) || 0, 0, 1);
-  this.pedalDown = this.pedalDepth > 0.08;
 };
-Engine.prototype.setPedal = function (down) { this.setPedalDepth(down ? 1 : 0); };
 
 Engine.prototype.pedalMechanic = function (when, down, amount) {
   if (!this.ready || !this.mechanicNoise || !(amount > 0.01)) return;
@@ -3672,6 +3679,11 @@ function renderBar (engine, bar, time, log, onNote) {
                 pedal.dampTau || 0.26, !!pedal.hardClear);
     if (log) log({ type:'pedal', beat:Math.max(0, bar.beatStart + (pedal.liftLead || 0) / spb), value:0 });
   }
+  /* When the foot comes back down. The only audible consequence is the thump:
+     the depth itself is handed to each note as it is scheduled, so a note
+     struck after the repedal already carries the new depth, and nothing about
+     the pedal defers a pitched sound. The name used to be repedalDelay, which
+     read like the pedal delaying something. */
   var repedalLead = Math.max(0.008, pedal.repedalDelay || 0.04);
   engine.setPedalDepth(pedal.depth);
   if (pedal.lift) engine.pedalMechanic(time + repedalLead, true, pedal.depth);
