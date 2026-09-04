@@ -2809,11 +2809,34 @@ SoulComposer.prototype.generateAttempt = function () {
     voicings.push(this.chooseSoulVoicing(chords[i],ctx,melody.topTargets[i],ctx.phrase.accompaniment));
   }
 
-  var bars=[],self=this;
+  var bars=[],self=this,restedLastBar=false;
   for(i=0;i<plan.length;i++){
     var bc=plan.bars[i], chord=chords[i], voicing=voicings[i], bass=basses[i];
     var pedal=this.makePedalPlan(bc,chord,i?chords[i-1]:null);
-    var events=this.laySoulHand(bc.phrase.accompaniment,voicing,bc);
+
+    /* The hand lays out. Measured on the player this replaces, the left hand
+       comped in one hundred per cent of bars, five attacks in each, from the
+       first bar to the last -- which is the one thing a session player never
+       does. They leave the tune alone under a long note, and they stop at the
+       end of a phrase to let it land. So: not in the first bar of a phrase,
+       where the harmony has to be stated; not twice running, which reads as
+       the player having lost their place; and only where the tune is actually
+       carrying something. The bass keeps the floor under it either way. */
+    var melBar=melody.eventsByBar[i]||[];
+    var melHeld=0,mb;
+    for(mb=0;mb<melBar.length;mb++)melHeld=Math.max(melHeld,melBar[mb].duration);
+    var restWeight=0;
+    if(i>0 && bc.barInPhrase>0 && !restedLastBar && melBar.length){
+      restWeight=0.10;
+      if(melHeld>=bc.meter*0.50)restWeight+=0.22;      /* the tune is holding */
+      if(bc.intensity<0.45)restWeight+=0.12;           /* nothing is at stake */
+      if(bc.sameChord)restWeight+=0.10;                /* nothing to announce */
+      if(bc.closing)restWeight+=0.14;                  /* let the phrase land */
+      restWeight*=lerp(1.35,0.55,this.settings.motion);
+    }
+    var handRests=restWeight>0 && this.rng.chance(clamp(restWeight,0,0.52));
+    restedLastBar=handRests;
+    var events=handRests?[]:this.laySoulHand(bc.phrase.accompaniment,voicing,bc);
 
     /* A repeated harmony is not re-hammered as a fresh block -- but the way it
        is not re-hammered matters. This used to delete an onset from the score
@@ -2829,7 +2852,7 @@ SoulComposer.prototype.generateAttempt = function () {
        inherited, the score is a complete account of what sounds, and the
        texture still opens up on a repeat instead of stamping. */
     var restruck=0;
-    if(i>0&&voicings[i-1]&&events.length){
+    if(i>0&&!handRests&&voicings[i-1]&&events.length){
       var prevExact={};for(var pv=0;pv<voicings[i-1].length;pv++)prevExact[voicings[i-1][pv]]=1;
       var onsets=events.filter(function(e){return e.role==='harmony'&&e.beat<0.38;});
       var moved=onsets.filter(function(e){return !prevExact[e.pitch];}).length;
@@ -2958,10 +2981,11 @@ SoulComposer.prototype.validateSection = function (section) {
   if(Object.keys(meterSet).length<2&&section.role&&section.role.id!=='statement')score-=2;
   if(secondaryAttacks>structuralAttacks*1.8+8){score-=7;issues.push('over-articulated texture');}
   if(bars.length>=7&&breathBars<2){score-=7;issues.push('no phrase breath');}
-  /* A section in which every repeated chord is stamped out identically at the
-     front of every bar has no inner life. At least one common tone should be
-     answered late instead of doubled on the downbeat. */
-  if(bars.length>=7&&displacedTotal===0){score-=3;issues.push('no inner answer');}
+  /* There was a penalty here for a section with no displaced inner voice. It
+     fired on seven sections in ten, which is not a criterion -- it is a
+     constant subtracted from every candidate, and it ranked nothing. Displacing
+     an inner voice is a decision the hand makes when the texture allows it, not
+     a quota the section has to fill. */
   if(maxIntensity-minIntensity<0.10){score-=5;issues.push('flat dynamics');}
   if(melody.length>=12){
     for(i=0;i<=melody.length-12;i++){
@@ -2973,9 +2997,16 @@ SoulComposer.prototype.validateSection = function (section) {
   /* A section that never moves further than a fourth has no gesture in it. The
      penalty is small on purpose: the search should prefer a section that says
      something, not be forced to shout in every one. */
+  /* Fourteen, not six, and the number matters more than it looks. The search
+     stops as soon as a candidate reaches 88, so a penalty small enough to leave
+     a gesture-less section above that line is one the search never acts on.
+     Swept: at 6 and at 9, 59% of sections went by without an interval wider
+     than a fourth; at 14, 12% -- and the median section score went UP, because
+     the search simply looks a little longer, three attempts instead of one. At
+     20 nothing improves further and the worst sections get worse. */
   var widest=0;
   for(i=1;i<melody.length;i++)widest=Math.max(widest,Math.abs(melody[i]-melody[i-1]));
-  if(melody.length>=6&&widest<7){score-=6;issues.push('no gesture');}
+  if(melody.length>=6&&widest<7){score-=14;issues.push('no gesture');}
   if(widest>=7&&widest<=16)score+=2;
 
   var history=this.soul.sectionFingerprints.slice(0,-1);

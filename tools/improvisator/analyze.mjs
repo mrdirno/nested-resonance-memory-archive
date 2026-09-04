@@ -127,11 +127,41 @@ console.log('  tempo         ' + Math.min(...bpms).toFixed(2) + ' .. ' + Math.ma
             ' bpm  (sd ' + sd(bpms).toFixed(2) + ')');
 
 /* --- rudiments --- */
-const rud = tally(main.bars.flatMap(b => [b.melodyRudiment?.id, b.timingRudiment?.id, b.hand, b.pedal?.id].filter(Boolean)));
-const never = K.RUDIMENTS.filter(r => !rud.has(r.id));
-console.log('\nRUDIMENTS');
-console.log('  used          ' + rud.size + ' of ' + K.RUDIMENTS.length + ' over ' + BARS + ' bars');
-console.log('  never fired   ' + (never.length ? never.map(r => r.id).join(' ') : 'none'));
+/* Across every preset, because a rudiment can be reachable only at settings
+   the reported preset does not use — and the bass family is named on the
+   events rather than on the bar, which an earlier version of this report
+   missed entirely and so declared eight rudiments dead that were not. */
+{
+  const seen = new Map();
+  const note = id => { if (id) seen.set(id, (seen.get(id) || 0) + 1); };
+  for (const preset of Object.keys(K.PRESETS)) {
+    for (const sd5 of ['a-1', 'b-2', 'c-3']) {
+      for (const b of run(K, { seed: sd5, preset, bars: 96 }).bars) {
+        note(b.melodyRudiment && b.melodyRudiment.id);
+        note(b.timingRudiment && b.timingRudiment.id);
+        note(b.hand);
+        note(b.pedal && b.pedal.id);
+        for (const e of b.events) if (e.role === 'bass') note(e.gesture);
+      }
+    }
+  }
+  const never = K.RUDIMENTS.filter(r => !seen.has(r.id));
+  const byFamily = new Map();
+  for (const r of K.RUDIMENTS) {
+    const k = r.family;
+    const v = byFamily.get(k) || { used: 0, total: 0 };
+    v.total++; if (seen.has(r.id)) v.used++;
+    byFamily.set(k, v);
+  }
+  console.log('\nRUDIMENTS');
+  console.log('  used          ' + seen.size + ' of ' + K.RUDIMENTS.length +
+              '   ' + [...byFamily.entries()].map(([k, v]) => k + ' ' + v.used + '/' + v.total).join('  '));
+  const rare = [...seen.entries()].sort((a, b) => a[1] - b[1]).slice(0, 4);
+  console.log('  rarest        ' + rare.map(([k, v]) => k + '×' + v).join('  '));
+  console.log('  never fired   ' + (never.length ? never.map(r => r.id).join(' ') : 'none'));
+  if (never.length > 2) fail('VOCABULARY', never.length + ' of ' + K.RUDIMENTS.length +
+    ' rudiments are never selected at any preset or seed: ' + never.map(r => r.id).join(' '));
+}
 
 /* ================= gates ================================================= */
 console.log('');
