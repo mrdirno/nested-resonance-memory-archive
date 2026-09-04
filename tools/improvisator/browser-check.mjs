@@ -78,6 +78,24 @@ const bankReady = await page.evaluate(() => {
   return f ? f.style.width : 'unknown';
 });
 
+/* The MIDI export, through the page's own button, parsed back from the bytes
+   it actually writes. */
+await page.click('#exportMidi');
+const midiB64 = await page.waitForFunction(() => {
+  const b = window.__blobs.find(x => x.type === 'audio/midi');
+  if (!b) return null;
+  if (!window.__midiPromise) {
+    window.__midiPromise = b.arrayBuffer().then(ab => {
+      const u = new Uint8Array(ab);
+      let s = '';
+      for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192));
+      window.__midi = btoa(s);
+    });
+    return null;
+  }
+  return window.__midi || null;
+}, null, { timeout: 60000, polling: 300 }).then(h => h.jsonValue()).catch(() => null);
+
 /* drive the real transport */
 await page.click('#playButton');
 await page.waitForTimeout(6000);
@@ -120,6 +138,52 @@ IMPROVISATOR BROWSER REPORT
   after 6 s live  ${live.bar} · ${live.chord} · ${live.key} · ${live.tempo} · ${live.ringing} · ${live.time} · "${live.status}"
   last notice     ${notices}
   script errors   ${errors.length ? errors.length + '\n    ' + errors.slice(0, 10).join('\n    ') : 'none'}`);
+
+/* ---- the exported MIDI must be a well-formed file of the same performance -- */
+if (!midiB64) {
+  console.log('  midi            FAILED — no MIDI produced');
+  process.exitCode = 1;
+} else {
+  const m = Buffer.from(midiB64, 'base64');
+  let ok = m.toString('ascii', 0, 4) === 'MThd';
+  const fmt = ok ? m.readUInt16BE(8) : -1, ntrk = ok ? m.readUInt16BE(10) : 0, ppq = ok ? m.readUInt16BE(12) : 0;
+  let off = 14, on = 0, offs = 0, cc = 0, dangling = 0, tempos = 0, badTrack = false;
+  const open = new Map();
+  for (let t = 0; t < ntrk && !badTrack; t++) {
+    if (m.toString('ascii', off, off + 4) !== 'MTrk') { badTrack = true; break; }
+    const len = m.readUInt32BE(off + 4), end = off + 8 + len;
+    let p = off + 8, run = 0;
+    while (p < end) {
+      let d = 0, byte;
+      do { byte = m[p++]; d = (d << 7) | (byte & 0x7f); } while (byte & 0x80);
+      let st = m[p];
+      if (st & 0x80) { p++; run = st; } else st = run;
+      if (st === 0xff) {
+        const type = m[p++];
+        let l = 0, by; do { by = m[p++]; l = (l << 7) | (by & 0x7f); } while (by & 0x80);
+        if (type === 0x51) tempos++;
+        p += l;
+      } else if ((st & 0xf0) === 0x90) {
+        const n = m[p++], v = m[p++];
+        if (v > 0) { on++; const k = (st & 0xf) + ':' + n; open.set(k, (open.get(k) || 0) + 1); }
+        else { offs++; const k = (st & 0xf) + ':' + n; const c0 = open.get(k) || 0; if (c0 <= 0) dangling++; else open.set(k, c0 - 1); }
+      } else if ((st & 0xf0) === 0x80) {
+        const n = m[p++]; p++;
+        offs++; const k = (st & 0xf) + ':' + n; const c0 = open.get(k) || 0; if (c0 <= 0) dangling++; else open.set(k, c0 - 1);
+      } else if ((st & 0xf0) === 0xb0) { const c1 = m[p++]; p++; if (c1 === 64) cc++; }
+      else if ((st & 0xf0) === 0xc0 || (st & 0xf0) === 0xd0) p += 1;
+      else p += 2;
+    }
+    off = end;
+  }
+  for (const [, v] of open) if (v > 0) dangling += v;
+  const bad = !ok || badTrack || fmt !== 1 || on === 0 || dangling > 0 || cc === 0 || tempos === 0;
+  console.log(`  midi            ${(m.length / 1024).toFixed(0)} kB, format ${fmt}, ${ntrk} tracks, ${ppq} ppq
+  notes           ${on} on / ${offs} off, ${dangling} unmatched${dangling ? '  !!' : ''}
+  pedal + tempo   ${cc} CC64 events across the lanes, ${tempos} tempo changes
+  midi verdict    ${bad ? 'FAIL' : 'PASS'}`);
+  if (bad) process.exitCode = 1;
+}
 
 if (!wavB64) {
   console.log('  bounce          FAILED — no WAV produced');
