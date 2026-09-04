@@ -3371,7 +3371,13 @@ function buildTrack(events, name) {
 function buildMidi(log, opts) {
   opts = opts || {};
   var ppq = opts.ppq || 480;
-  var toTick = function (beat) { return Math.max(0, Math.round(beat * ppq)); };
+  /* An event's logged beat carries e.micro, which is negative for the left
+     hand and for loud notes — on bar 0 that puts it before beat zero. Clamping
+     it to tick 0 silently deleted the lead the whole performance model exists
+     to produce, so the file is offset instead. */
+  var base = 0, bi;
+  for (bi = 0; bi < log.length; bi++) if (log[bi].beat < base) base = log[bi].beat;
+  var toTick = function (beat) { return Math.max(0, Math.round((beat - base) * ppq)); };
   var tracks = [
     { name: opts.name || 'Improvisator', events: [] },   /* conductor */
     { name: 'melody',  events: [], channel: 0 },
@@ -3383,6 +3389,13 @@ function buildMidi(log, opts) {
   if (opts.text) tracks[0].events.push({ tick: 0, order: 0, bytes: metaText(0x01, opts.text) });
   var tempos = (opts.tempo || []).slice().sort(function (a, b) { return a.beat - b.beat; });
   if (!tempos.length) tempos = [{ beat: 0, bpm: 64 }];
+  /* The note log and the tempo map are trimmed on different clocks, so after a
+     few hours the log can still hold notes older than the oldest surviving
+     tempo event — and a Standard MIDI File plays anything before its first
+     tempo meta at 120 bpm. Reach the first tempo back to cover the head. */
+  var firstBeat = base;
+  for (bi = 0; bi < log.length; bi++) if (log[bi].beat < firstBeat) firstBeat = log[bi].beat;
+  if (log.length && tempos[0].beat > firstBeat) tempos[0] = { beat: firstBeat, bpm: tempos[0].bpm };
   var lastBpm = null;
   for (var t = 0; t < tempos.length; t++) {
     var bpm = Math.round(tempos[t].bpm * 100) / 100;
@@ -4221,7 +4234,13 @@ Transport.prototype.stop = function (resetClock) {
   this.playing = false;
   this.clock.stop();
   this.engine.silence(0.24);
-  if (resetClock) { this.elapsedBefore = 0; this.log.length = 0; this.tempoMap.length = 0; this.markers.length = 0; }
+  if (resetClock) {
+    this.elapsedBefore = 0; this.log.length = 0; this.tempoMap.length = 0; this.markers.length = 0;
+    /* The export and the bounce each start from a fresh flag, so leaving this
+       set would give bar 0 of a new passage an extra hold in playback that
+       neither of them renders. */
+    this.afterFermata = false;
+  }
 };
 
 Transport.prototype.elapsed = function () {
@@ -4833,6 +4852,11 @@ function applyPreset(name) {
   });
   syncControls();
   composer.updateSettings(settings);
+  /* Every preset moves the settings the composer reads at composition time, so
+     the two sections already queued ahead of the scheduler are the previous
+     preset's music. The slider handler throws them away; a preset click has to
+     as well, or the notes stay put for a minute after the character changes. */
+  if (composer.pending) composer.pending.length = 0;
   if (engine.ready) engine.applySettings(settings);
   notice(name);
 }
