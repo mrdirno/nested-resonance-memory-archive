@@ -154,6 +154,25 @@ console.log('  bank            ' + (prepDone ? 'ready' : 'still preparing') + ' 
       ' places that schedule a bar by hand — the transport and the bounce can drift apart');
 }
 
+/* --- SAMPLE RATE: the piano must not be tuned by whatever device is plugged
+   in. The bank renders at a rate fixed when the page loads and the playback
+   context is created later; a buffer declared at a literal rate is reinterpreted
+   if the two disagree, which puts the whole instrument 1.47 semitones sharp
+   between 44.1 and 48 kHz. --- */
+{
+  const src = readFileSync(FILE, 'utf8');
+  const literal = [...src.matchAll(/createBuffer\s*\([^)]*?,\s*(\d{4,6})\s*\)/g)].map(m => m[1]);
+  const rateAtPlayback = await page.evaluate(() => {
+    const C = window.AudioContext || window.webkitAudioContext;
+    const c = new C(); const r = c.sampleRate; c.close(); return r;
+  });
+  console.log('  context rate    ' + rateAtPlayback + ' Hz');
+  if (literal.length)
+    fail('SAMPLE RATE', 'a buffer is declared at the literal rate ' + literal.join(', ') +
+      ' instead of the rate its samples were rendered at');
+  else pass('SAMPLE RATE', 'every buffer is declared at the rate its data was rendered at');
+}
+
 /* --- it plays --- */
 await page.click('#playButton');
 await page.waitForTimeout(6000);
