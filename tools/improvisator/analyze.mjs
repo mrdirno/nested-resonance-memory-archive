@@ -268,7 +268,7 @@ console.log('');
    at simultaneity across every preset, because both are about notes sounding
    together rather than notes written near each other. */
 {
-  let mud = 0, pairs = 0, buried = 0, structural = 0;
+  let mud = 0, pairs = 0, buried = 0, structural = 0, ninths = 0;
   const worst = [];
   for (const preset of Object.keys(K.PRESETS)) {
     for (const sd4 of ['a-1', 'b-2', 'c-3']) {
@@ -291,20 +291,29 @@ console.log('');
           if (m.role !== 'melody' || m.duration < 0.75 || m.velocity < 0.34) continue;
           structural++;
           const t = m.beat + 1e-6;
-          if (b.events.some(e => e.role !== 'melody' && e.pitch > m.pitch &&
-                                 e.beat <= t && e.beat + e.duration > t)) buried++;
+          const under = b.events.filter(e => e.role !== 'melody' && e.beat <= t && e.beat + e.duration > t);
+          if (under.some(e => e.pitch > m.pitch)) buried++;
+          /* A minor second or a minor ninth: the melody a semitone above a note
+             the hand is holding, within an octave and a semitone of it. Wider
+             than that and the two are far enough apart not to beat — a melody
+             note two octaves and a semitone above an inner voice is a colour,
+             not a clash, so counting every semitone pitch-class would overstate
+             this by a factor of two. */
+          if (under.some(e => { const d = m.pitch - e.pitch; return d === 1 || d === 13; })) ninths++;
         }
       }
     }
   }
-  const mudRate = mud / pairs, buriedRate = buried / structural;
-  console.log('TEXTURE'.padEnd(14) + 'muddy simultaneous pairs ' + mud + '/' + pairs +
-              ' (' + (100 * mudRate).toFixed(2) + '%)   structural melody notes under the accompaniment ' +
-              buried + '/' + structural + ' (' + (100 * buriedRate).toFixed(2) + '%)');
+  const mudRate = mud / pairs, buriedRate = buried / structural, ninthRate = ninths / structural;
+  console.log('TEXTURE'.padEnd(14) + 'muddy pairs ' + (100 * mudRate).toFixed(2) +
+              '%   structural melody notes buried ' + (100 * buriedRate).toFixed(2) +
+              '%   sounding a minor ninth against the accompaniment ' + (100 * ninthRate).toFixed(2) + '%');
   if (mudRate > 0.04) fail('TEXTURE', 'the bottom of the instrument is muddy in ' +
     (100 * mudRate).toFixed(2) + '% of simultaneous pairs: ' + worst.join('; '));
   else if (buriedRate > 0.10) fail('TEXTURE', (100 * buriedRate).toFixed(2) +
     '% of structural melody notes have an accompaniment note sounding above them');
+  else if (ninthRate > 0.05) fail('TEXTURE', (100 * ninthRate).toFixed(2) +
+    '% of structural melody notes sound a minor ninth against a note the hand is holding');
 }
 
 /* FORM — a section has to be able to end in more than one way, and the chord
