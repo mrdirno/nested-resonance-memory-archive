@@ -22,6 +22,20 @@ export interface AnalysisResult {
   face: { x: number; y: number } | null;
   energy: { x: number; y: number };
   color: { r: number; g: number; b: number; h: number; s: number; l: number }; // New Color Data
+  /**
+   * THE REFRAME, COMMITTED — a hand-set anchor in the photograph's own
+   * normalised coordinates (lib/reframe.ts), read by `calculateSmartCrop` at
+   * the FRONT of the anchor chain. Absent on everything the detector was left
+   * to decide, which is why it is optional.
+   *
+   * DECLARED HERE AND NOT ONLY ON `PhotoLike` because this is the type the
+   * three writers serialise: `ProjectManifest.images[].analysis`,
+   * `SessionAssetEntry.analysis` and `SvgImageMeta.analysis` are all this
+   * interface. An undeclared field would round-trip anyway — `JSON.stringify`
+   * does not read types — and that is exactly the problem: the manifest would
+   * be carrying something no reader of the type could know was there.
+   */
+  frame?: { x: number; y: number } | null;
 }
 
 export const analyzeImage = async (img: HTMLImageElement, model: any): Promise<AnalysisResult> => {

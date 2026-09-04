@@ -112,7 +112,19 @@ or re-documenting an existing capability is DD, not delivery.
   1.2 s cooldown and a floor of one decoder), or `fine`. Before: the pixel cap
   was `count × 1080p` (phone 6.2 Mpx), so any 4K clip (8.3 Mpx) pinned a phone
   to ONE playing clip with a notice that read like a hardware fact;
-  THE POST — the exported SVG IS the project file. A composition code is a
+  THE FRAME TRAVELS — a hand-set crop is now IN the file. THE REFRAME lived in
+  one place, a `Map<assetId, Frame>` in App state, and every surface that DRAWS
+  read it while every surface that WRITES read the pool: the `.collage` archive,
+  the crash-safe snapshot and the exported SVG all serialise `img.analysis`, and
+  the correction was never in it. So the SVG drew a reframed collage and REOPENED
+  as the un-reframed one, and the autosave that exists to survive an OOM dropped
+  the correction silently. `lib/reframe.ts` now owns the ONE seam between the two
+  representations — `poolWithFrames` on the way out, `framesFromPool` +
+  `poolWithoutFrames` on the way in — and App holds a single `poolForSave` memo
+  that the three writers take instead of `images`. Both directions are identity-
+  preserving when nobody has dragged a picture, so every file this app writes for
+  everybody else is byte-for-byte what it was;
+    THE POST — the exported SVG IS the project file. A composition code is a
   RECIPE and carries no pictures; the SVG already held both and could not be
   opened. `lib/svgProject.ts` is the one pure seam between the writer
   (`vectorExport`) and the reader (`project.ts:loadFromSVG`): the manifest lives
@@ -1382,17 +1394,45 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       legal precisely because `sw`/`sh`/`dw`/`dh`/`twist` are invariant under a
       reframe, which is unit invariant I7. Any future free-form drag in this app
       inherits the same trap and the same fix.
-- [ ] **A REFRAME DOES NOT TRAVEL — not in a code, not in a project file, not in
-      the SVG.** It joins pinned fragments, the swap and the title on the "in the
-      app but not in the code" list, and for the code it is the same structural
-      reason: a per-picture anchor is unbounded information and a code is a
-      fixed-length recipe. The PROJECT FILE is the different case and the honest
-      gap: `ProjectManifest` already persists each asset's `analysis`, so a frame
-      written into the pool asset would round-trip for free — and it cannot be,
-      because `computeLayout`'s effect depends on `images`, so mutating the pool
-      per drag frame would RE-DEAL THE WHOLE WALL on every pointermove. The fix
-      is to commit the frame into the pool on `pointerup` only, which is its own
-      increment and needs the re-deal question answered first.
+- [x] **A REFRAME DOES NOT TRAVEL — not in a code, not in a project file, not in
+      the SVG.** CLOSED for the FILE, still true for the code (a per-picture
+      anchor is unbounded information and a code is a fixed-length recipe, which
+      is the same structural reason pinned fragments and the swap are on that
+      list). See THE FRAME TRAVELS in CURRENT STATE.
+      **THE OPEN QUESTION THIS ENTRY LEFT WAS ANSWERED, AND THE ANSWER WAS NO —
+      AND THE NAMED FIX WAS STILL WRONG.** The fear was a re-deal: `images` is a
+      dependency of the layout effect and of the assignment effect. It does not
+      re-deal — the deal reads `analysis.color` (`arrangeBag`'s `metricOf`) and
+      the layout reads pixels and `images.length`, and a frame write moves none
+      of them, swept over 440 deals as I6 of
+      `tests/unit/reframe-travel.invariants.mjs`. What the entry did NOT name is
+      the dependency that actually bites: `layoutItems` is a dependency of the
+      DISARM effect (`setArmedCell(null) ... [layoutItems, maximized,
+      shuffledIndices]`), so committing on `pointerup` took the puck away from
+      under the finger that had just let go and a second drag on the same picture
+      became impossible. reframe.spec T1 went from green to "fragment 2: no point
+      in it takes a drag" on both engines. So the pool is the FILE FORMAT and the
+      Map stays the LIVE STATE, and the merge happens at the writers.
+      **THE GENERAL LESSON**, which is bigger than this feature: in this app
+      `images` is not "the pictures", it is an INPUT TO THE DEAL, and anything
+      written into it is a composition event whether or not it changes the
+      composition. A fact about a photograph that the user set by hand belongs in
+      the file, not in the pool the effects watch.
+- [ ] **A FRAME STILL CANNOT TRAVEL IN A COMPOSITION CODE, and now it is the
+      only one of the four that has a FILE.** Pinned fragments, the swap, the
+      title and the reframe are the "in the app but not in the code" list; the
+      reframe has just moved onto the "in the FILE" side of it, along with the
+      title and (through the whole `AppState`) the pins and the swap. What is
+      left is honest and small: the strip does not DISCLOSE that a code you are
+      about to send carries none of them. One sentence under the code would close
+      it, and the roster of what a code drops is now long enough to deserve one.
+- [ ] **THE RESTORE BANNER IS THE FOURTH THING TO COVER A CONTROL, and the
+      pattern is now a rule this app needs rather than a run of coincidences.**
+      Fixed this cycle (`top-28 md:top-3`), but the shape has recurred often
+      enough — the pending pill, the verbs puck, the full-bleed rail, now a
+      fixed-position card over the header — that the honest next cut is a single
+      overlay LAYER with a declared safe area, instead of four components each
+      choosing a `top`/`bottom` and being measured after the fact.
 - [ ] **A REFRAME AT THE EDGE MAKES THE MOVE CLAMP.** `sampleMove` sizes its pan
       from the room the ZOOM leaves and assumes the anchor is central enough for
       the crop clamp to have nothing to do — which was true of every anchor the
@@ -1459,6 +1499,72 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-03 (C3704) — THE FIX THE LADDER NAMED WAS THE ONE THAT BROKE THE GESTURE
+
+**What I did.** The ladder said: commit the frame into the pool on `pointerup`,
+and it named the risk itself — `images` is a dependency of the layout effect, so
+"mutating the pool per drag frame would RE-DEAL THE WHOLE WALL". I built exactly
+that, proved the re-deal fear was unfounded (I6: 440 deals, `arrangeBag` places
+identically), and shipped it into the spec.
+
+**What actually happened.** reframe.spec T1 — which had been green for a week —
+failed on both engines with `fragment 2: no point in it takes a drag`. The commit
+sets `images`, the layout effect re-runs and sets `layoutItems`, and
+`layoutItems` is a dependency of `useEffect(() => { setArmedCell(null); ... })`.
+So letting go of the picture DISARMED the fragment. Not a re-deal, not a wrong
+picture — the puck vanished from under the finger, and a second drag on the same
+photograph was impossible without re-tapping it.
+
+**The lesson, and it generalises past this feature.** The entry was right that
+`images` is dangerous and wrong about WHY, and being right about the risk while
+wrong about the mechanism is worse than not having named it: I proved the named
+risk absent and took that as clearance. `images` in this app is an INPUT TO THE
+DEAL, and the deal's outputs are dependencies of things that have nothing to do
+with dealing. A fact about a photograph that a person set by hand belongs in the
+FILE FORMAT, not in the array the effects watch — so `poolWithFrames` merges at
+the writers and the live app never sees it.
+
+**And the mutant that proved the point was wrong twice.** The first "before"
+mutant removed the commit and LEFT the Map delete, which reverted the whole
+gesture at pointerup and failed the drag rather than the claim. A mutation that
+breaks something OTHER than the thing under test is not evidence about the thing
+under test; the honest before-state removed both, and then T4 failed on exactly
+the sentence it exists to assert (no `"frame":{"x"` anywhere in the file) and T5
+on `found = -1`.
+
+### 2026-09-03 (C3704) — THE OFFER TO COME BACK COVERED THE DOOR OUT
+
+The restore banner is `fixed top-3 left-1/2 -translate-x-1/2 w-[min(28rem,94vw)]`.
+On a 390px phone that is x 12..381, y 12..78; the header's OPEN button is at
+x 294..378, y 8..52. The card covered it completely, so a centre-tap on Open hit
+the card and no file chooser ever opened — the offer to bring back the last
+session physically blocked the one control that opens a DIFFERENT one. At 320 and
+360 the header wraps to y 61..105 and the same card clipped its top third. On a
+1280px desktop the card is 448px centred and the button is at the far right, so
+it never touched it: the defect existed only where the app is actually used.
+
+Found because reframe.spec T4 could not reach Open on Mobile Chrome and passed on
+chromium. **A Playwright "waiting for event filechooser" timeout is what an
+element covering a button looks like from the test side** — it reads as flake and
+it is a product bug, so T4/T5 now assert `document.elementFromPoint` at the
+centre of Open resolves INSIDE Open, which fails with the name of whatever is on
+top instead of with a timeout.
+
+FOURTH instance of "the affordance covers the gesture it documents" — the pending
+pill, the verbs puck, the full-bleed rail, now this. Filed as a rung: four
+components each choosing their own `top` is not a coincidence any more.
+
+### 2026-09-03 (C3704) — A SEARCH LOOP THAT NEVER SEARCHED
+
+T5's first draft hunted for the reopened correction by arming every fragment in
+turn: `for (i…) { await armCell(page, i); if (recentre) found = i; }`. `armCell`
+returns as soon as ANY puck is up — so after the first iteration it never clicked
+again, and the loop asserted one cell ten times. It went green on chromium by
+luck (the corrected picture was in cell 0) and red on a phone, which is the
+signature of a vacuous test rather than a real one. Replaced with the claim T4
+had already earned: the reopened project re-exports byte for byte, so the picture
+is in the slot it was corrected in and there is nothing to hunt for.
 
 ### 2026-08-29 (C3680) — THE DRAG THAT READ ITS OWN STATE BACK, AND THE TEST THAT COULD NOT SEE IT
 Two bugs, one root, and the test found both because it measured PIXELS rather
@@ -5849,4 +5955,39 @@ frontier. Today's ceiling is tomorrow's floor.
   manifest already persists `analysis`, and the only thing in the way is that
   `computeLayout` depends on `images`, so the write has to happen once at the
   end of the gesture rather than per frame.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **[AXIS:COLLAGE] 2026-09-03 (C3704) — THE FRAME TRAVELS.** A hand-set crop is
+  now in the file. BEFORE: THE REFRAME lived only in App's `frames` Map; every
+  surface that DREW it read the Map and every surface that WROTE read the pool,
+  so the exported SVG rendered a reframed collage and REOPENED as the un-reframed
+  one (measured: no `"frame":{"x"` anywhere in the manifest), the `.collage`
+  archive lost it, the crash-safe autosave dropped it without a word, and a
+  correction reopened from a file had no Recentre verb because the verb was gated
+  on memory (`found = -1`). AFTER: `lib/reframe.ts` owns the one seam between the
+  two representations — `poolWithFrames` out, `framesFromPool` + `poolWithoutFrames`
+  in — and a single `poolForSave` memo feeds all three writers, so the Map stays
+  the live state and the pool is the file format. **THE LADDER'S NAMED FIX WAS
+  WRONG AND THE MEASUREMENT IS WHY:** committing into the pool on `pointerup`
+  does NOT re-deal the wall (I6, 440 deals, `arrangeBag` identical) — it DISARMS
+  the fragment, because `layoutItems` is a dependency of the disarm effect, and
+  T1 went red with "no point in it takes a drag" on both engines. **BACKPORT
+  RIDER FIRED** — the class swept was "an overlay covering the control under it":
+  the restore banner (`top-3`, 94vw, centred) covered the header's Open button at
+  390 and 430px, so on a phone the offer to restore the last session blocked the
+  door to a different one; fixed (`top-28 md:top-3`) and now ASSERTED with
+  `elementFromPoint` rather than inferred from a filechooser timeout. It is the
+  fourth instance of that shape, so a single overlay layer with a declared safe
+  area is filed as a rung. Also swept: the two seed-dependent RGB thresholds in
+  this spec (60 -> 30, measured 49.5 on an unlucky deal), and one vacuous search
+  loop of my own making. **GATES:** 36/36 unit sweeps (the new one is 9
+  invariants, mutation-checked three ways: wrong index, null-instead-of-drop, and
+  a deal that reads the frame — each lights a different set) · reframe 10/10 on
+  chromium AND Mobile Chrome · svg-project 16/16 (byte-identity round trips, both
+  engines) · session-recovery 7/7 · project-roundtrip 1/1 · mobile-watertight 7/7
+  · swap/undo/intake/one-layout 25/25 · tsc clean · vite build clean. Storefront
+  unchanged: a capability inside Collage Studio, no new tool, no new trade.
+  **NAMED NEXT RUNG:** disclose under the composition code what a code does NOT
+  carry — pins, the swap, the title and now the frame all travel in the FILE and
+  none of them travel in a link, and the strip says nothing.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

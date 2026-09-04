@@ -168,6 +168,12 @@ export const dragToFrame = (
 export const withReframe = <T extends PhotoLike>(photo: T, frame?: Frame | null): T => {
   if (!photo || !frame || !finite(frame.x) || !finite(frame.y)) return photo;
   const a = photo.analysis;
+  // AND IDENTITY WHEN IT IS ALREADY SAID. Once THE COMMIT below writes a frame
+  // onto the pool asset itself, `orderedAssets` folds the same value in on every
+  // render; without this the fold would allocate a fresh photograph per
+  // reframed fragment per render, forever, to write a value already there.
+  const at = a?.frame;
+  if (at && Object.is(at.x, frame.x) && Object.is(at.y, frame.y)) return photo;
   return {
     ...photo,
     analysis: {
@@ -189,4 +195,133 @@ export const withReframe = <T extends PhotoLike>(photo: T, frame?: Frame | null)
 export const isMeaningful = (frame: Frame, was: Frame, img: SourceSize): boolean => {
   const px = 0.5 / Math.max(1, Math.min(img.width || 1, img.height || 1));
   return Math.abs(frame.x - was.x) > px || Math.abs(frame.y - was.y) > px;
+};
+
+// =============================================================================
+// THE FRAME TRAVELS — a correction stops being a session fact and reaches every
+// file this app writes.
+//
+// WHAT WAS WRONG. The frame lived in ONE place: a `Map<assetId, Frame>` in App
+// state. Every surface that DRAWS read it (`orderedAssets` folds it in), so the
+// screen was right — and every surface that WRITES read the pool instead. The
+// `.collage` archive (`buildProjectBlob`), the crash-safe snapshot
+// (`sessionEntries`) and the exported SVG (`generateVectorExport`'s
+// `sourcePool`) all serialise `img.analysis`, and the correction was never in
+// it. So the SVG DREW a reframed collage and REOPENED as the un-reframed one — a
+// file that renders one picture and restores another — and the autosave that
+// exists to survive an OOM dropped the correction silently.
+//
+// WHY THE POOL IS THE RIGHT PLACE IN A FILE. `vectorExport` already draws the
+// line this needs: it carries "the pool's own untouched analyses" because the
+// FOCUS and the TWIST are DERIVED per slot from focus/twist/seed and must be
+// re-derived on open, never restored. A hand-set frame is on the other side of
+// that line — it is not derived from anything, it is the one thing in an
+// analysis a person put there — so all three writers and both readers then work
+// with no format change at all.
+//
+// AND WHY IT IS NOT THE RIGHT PLACE IN THE RUNNING APP. The obvious version of
+// this — commit into the pool on `pointerup` — was built, measured and thrown
+// away. `images` is a dependency of the layout effect, which sets `layoutItems`,
+// and `layoutItems` is a dependency of the DISARM effect (App.tsx: "setArmedCell
+// (null) ... [layoutItems, maximized, shuffledIndices]"). So the commit took the
+// puck away from under the finger that had just let go, and a second drag on the
+// same picture was impossible without re-tapping it — reframe.spec T1 went from
+// green to "fragment 2: no point in it takes a drag" on every engine. The
+// ladder's open question was "does a pool write re-deal the wall"; the answer is
+// that it does not (the deal reads `analysis.color`, swept as I6) and that the
+// re-deal was never the thing to be afraid of.
+//
+// SO: THE MAP IS THE LIVE STATE, THE POOL IS THE FILE FORMAT, and these three
+// functions are the only seam between them — merge on the way out, lift on the
+// way in. Both directions are identity-preserving when there is nothing to say,
+// so a session in which nobody drags a picture hands the writers the very array
+// they were handed before this existed.
+// =============================================================================
+
+/** The minimum a POOL entry has to be for a frame to be written onto it. */
+export interface PoolPhoto extends PhotoLike {
+  id: string;
+}
+
+/** What is COMMITTED on this photograph, or null. */
+export const frameOf = (photo?: PhotoLike | null): Frame | null => {
+  const f = photo?.analysis?.frame;
+  return f && finite(f.x) && finite(f.y) ? { x: f.x, y: f.y } : null;
+};
+
+/** Value equality, `Object.is` per axis so a round trip through JSON — which is
+ *  bit-exact for doubles — reads as unchanged rather than as a new correction. */
+const sameFrame = (a: Frame | null, b: Frame | null): boolean =>
+  a === b || (!!a && !!b && Object.is(a.x, b.x) && Object.is(a.y, b.y));
+
+/** Drop the key rather than write a null, so lift-then-merge is byte-identical
+ *  and a picture whose correction was removed serialises exactly like one nobody
+ *  ever touched. */
+const withoutFrame = <T extends PhotoLike>(photo: T): T => {
+  const a = photo?.analysis;
+  if (!a || a.frame == null) return photo;
+  const { frame: _drop, ...rest } = a;
+  return { ...photo, analysis: rest } as T;
+};
+
+/**
+ * WRITE (or REMOVE, with `null`) one photograph's frame in a pool.
+ *
+ * IDENTITY WHEN THERE IS NOTHING TO SAY, at both levels: the same ARRAY back
+ * when the frame is already what it should be or the id is not in the pool, and
+ * the same ELEMENT back for every photograph but the one named.
+ */
+export const commitFrame = <T extends PoolPhoto>(
+  pool: T[],
+  id: string,
+  frame?: Frame | null,
+): T[] => {
+  const want = frame && finite(frame.x) && finite(frame.y) ? { x: frame.x, y: frame.y } : null;
+  const i = pool.findIndex(p => p && p.id === id);
+  if (i < 0) return pool;
+  if (sameFrame(frameOf(pool[i]), want)) return pool;
+  const next = pool.slice();
+  next[i] = want ? withReframe(pool[i], want) : withoutFrame(pool[i]);
+  return next;
+};
+
+/**
+ * ON THE WAY OUT — the pool AS IT IS WRITTEN TO A FILE.
+ *
+ * The one value the three writers take instead of `images`. `Object.is`-identical
+ * to the pool it was given whenever nobody has dragged a picture, which is what
+ * makes every existing archive, snapshot and SVG byte-identical to the ones this
+ * app wrote before the feature existed.
+ */
+export const poolWithFrames = <T extends PoolPhoto>(
+  pool: T[],
+  frames: ReadonlyMap<string, Frame>,
+): T[] => {
+  if (!frames || frames.size === 0) return pool;
+  let out = pool;
+  frames.forEach((f, id) => { out = commitFrame(out, id, f); });
+  return out;
+};
+
+/**
+ * ON THE WAY IN — every committed frame lifted out of a loaded pool.
+ *
+ * Called with `poolWithoutFrames` below, in `applyLoadedProject`, which is the
+ * ONE hydration path Open and Restore share. Splitting them would be the second
+ * apply path that file's own comment exists to prevent.
+ */
+export const framesFromPool = (pool: readonly PoolPhoto[]): Map<string, Frame> => {
+  const m = new Map<string, Frame>();
+  for (const p of pool ?? []) {
+    const f = p && frameOf(p);
+    if (f && p.id) m.set(p.id, f);
+  }
+  return m;
+};
+
+/** The pool as the RUNNING APP holds it: no committed frame, because the Map
+ *  owns it while the app is open. Identity when there was nothing to lift. */
+export const poolWithoutFrames = <T extends PoolPhoto>(pool: T[]): T[] => {
+  if (!pool?.some(p => p && p.analysis?.frame != null)) return pool;
+  return pool.map(p => (p && p.analysis?.frame != null ? withoutFrame(p) : p));
 };

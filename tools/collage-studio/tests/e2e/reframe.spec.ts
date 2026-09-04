@@ -31,6 +31,9 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 import zlib from 'node:zlib';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const APP_URL = process.env.COLLAGE_BASE_URL || '/';
 
@@ -220,6 +223,67 @@ async function enterFullBleed(page: Page) {
   await page.waitForTimeout(600);
 }
 
+// --- THE FILE ROUND TRIP (T4/T5) --------------------------------------------
+// Lifted verbatim from svg-project.spec.ts, which is where the SVG-as-project
+// claim is proved for everything EXCEPT the reframe. Same three helpers, same
+// real Export sheet and real file chooser — a round trip driven any other way
+// would be a round trip through a path the user does not have.
+
+/** Drives the real Export sheet, takes the real download, returns the bytes. */
+async function downloadSvg(page: Page): Promise<string> {
+  await page.getByRole('button', { name: 'Export' }).first().click();
+  const dialog = page.getByRole('dialog').filter({ hasText: 'Export' }).first();
+  await expect(dialog).toBeVisible();
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 90_000 }),
+    dialog.getByRole('button', { name: /Vector SVG/ }).first().click(),
+  ]);
+  const stream = await download.createReadStream();
+  const chunks: Buffer[] = [];
+  for await (const c of stream) chunks.push(c as Buffer);
+  await page.waitForTimeout(600);
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+/** Drives the real Open button through the real file chooser. */
+async function openFile(page: Page, path: string) {
+  const [chooser] = await Promise.all([
+    page.waitForEvent('filechooser', { timeout: 30_000 }),
+    page.getByRole('button', { name: 'Open' }).first().click(),
+  ]);
+  await chooser.setFiles(path);
+}
+
+const onDisk = (name: string, text: string): string => {
+  const p = join(mkdtempSync(join(tmpdir(), 'collage-reframe-')), name);
+  writeFileSync(p, text, 'utf8');
+  return p;
+};
+
+/**
+ * THE WAY IN HAS TO BE REACHABLE, and after a reload it is offered a rival.
+ *
+ * The pool is empty and there is an autosaved session on disk, so the restore
+ * banner renders — and at `top-3` it is 94vw wide, centred, and lands exactly on
+ * the header's Open button on a phone. `.click()` then hits the CARD, no file
+ * chooser opens, and the failure reads as a Playwright timeout rather than as
+ * what it is: the offer to bring back the last session covering the one control
+ * that opens a different one. Asserted, because a click that lands on the wrong
+ * element is invisible to every other assertion in this file.
+ */
+async function expectOpenReachable(page: Page) {
+  const hit = await page.evaluate(() => {
+    const btn = Array.from(document.querySelectorAll('button'))
+      .find((b) => /^open$/i.test((b.getAttribute('aria-label') || b.textContent || '').trim()));
+    if (!btn) return 'no Open button on the page';
+    const r = btn.getBoundingClientRect();
+    const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+    if (!top) return 'nothing at the centre of Open';
+    return btn.contains(top) ? 'ok' : `covered by <${top.tagName.toLowerCase()} class="${(top.className || '').toString().slice(0, 70)}">`;
+  });
+  expect(hit, 'the Open button is not the thing on top of the Open button').toBe('ok');
+}
+
 /** Point at a fragment and wait until the puck is up. */
 async function armCell(page: Page, n: number) {
   const puck = page.getByTestId('cell-actions');
@@ -400,7 +464,13 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
 
     await dragPicture(page, target, 1);
     const moved = await stableColour(page, target);
-    expect(dist(moved, before), 'the drag must have done something to measure').toBeGreaterThan(60);
+    // 30, NOT 60. How far a drag can travel in RGB depends on the seed — which
+    // photograph landed in the biggest fragment, and how much of it the crop
+    // already showed — so a threshold set from one lucky deal fails on an
+    // unlucky one (measured: 49.5 on a run this file used to call a no-op).
+    // 30 is the smallest number that still makes the restore assertion below
+    // non-vacuous, because it is outside that assertion's own 22-RGB band.
+    expect(dist(moved, before), 'the drag must have done something to measure').toBeGreaterThan(30);
 
     const recentre = page.getByTestId('cell-actions').getByTestId('cell-recentre');
     await expect(recentre, 'a moved picture offers the way back').toBeVisible({ timeout: 10_000 });
@@ -455,5 +525,136 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
       found,
       `source ${s} must still be parked at its top somewhere after the re-deal (top ${TOP(s)}); saw ${JSON.stringify(after.map((c) => c.map(Math.round)))}`,
     ).toBe(true);
+  });
+
+  /**
+   * T4 — THE CORRECTION IS IN THE FILE.
+   *
+   * The three tests above prove the reframe on SCREEN. This one proves it in the
+   * ARTIFACT, and it is the test that was red before the commit shipped: the SVG
+   * is this app's project file, it already DREW the corrected crop, and it
+   * carried "the pool's own untouched analyses" — which did not include the one
+   * thing in an analysis a person put there. So the file rendered one collage
+   * and REOPENED as another, silently, and the crash-safe autosave (which
+   * serialises the same analyses) dropped the correction with it.
+   *
+   * BYTE-IDENTICAL IS THE ASSERTION, not "looks similar". Every `<image>` in the
+   * file carries the transform its crop produced, so a lost frame moves bytes;
+   * S1 in svg-project.spec.ts proves the round trip is exact for everything
+   * else, which is what makes equality here a claim about the frame alone.
+   */
+  test('T4 — the correction travels in the file: export, reload, open, export again', async ({ page }) => {
+    test.setTimeout(300_000);
+    await boot(page);
+    await enterFullBleed(page);
+
+    const target = await biggestCell(page);
+    const before = await stableColour(page, target);
+    await armCell(page, target);
+    await dragPicture(page, target, 1);
+    const moved = await stableColour(page, target);
+    // 30 for the reason T2 above spells out: the travel a drag can express is
+    // a property of the seed, not of the gesture.
+    expect(dist(moved, before), 'the drag must have done something to measure').toBeGreaterThan(30);
+
+    // Out of full bleed and back to the ordinary preview, which is what the
+    // colour fingerprint below is read from on both sides of the round trip.
+    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.waitForTimeout(1200);
+    const fingerprint = await allColours(page);
+
+    const first = await downloadSvg(page);
+    expect(first, 'the export carries a project manifest').toContain('id="collage-project"');
+    expect(
+      first,
+      'THE CLAIM: the hand-set frame is in the manifest the file carries',
+    ).toMatch(/"frame":\s*\{\s*"x"/);
+
+    const path = onDisk('reframed.svg', first);
+
+    // RELOAD. Nothing survives in memory — the file is the only thing carrying
+    // this correction, which is the whole point.
+    await page.goto(APP_URL);
+    await page.waitForTimeout(1200);
+    expect(await page.locator('img[src^="blob:"], canvas').count(), 'a collage survived the reload').toBe(0);
+    await expectOpenReachable(page);
+
+    await openFile(page, path);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.waitForTimeout(2600);
+
+    // WHAT A PERSON SEES: the same photographs, showing the same parts of
+    // themselves. Read off the rendered preview, fragment by fragment.
+    const after = await allColours(page);
+    expect(after.length, 'the reopened project has the same number of fragments').toBe(fingerprint.length);
+    const worst = Math.max(...after.map((c, i) => dist(c, fingerprint[i])));
+    expect(
+      worst,
+      `a fragment came back cropped somewhere else (worst ${Math.round(worst)} RGB apart)\n` +
+        `  saved: ${JSON.stringify(fingerprint.map((c) => c.map(Math.round)))}\n` +
+        `  opened: ${JSON.stringify(after.map((c) => c.map(Math.round)))}`,
+    ).toBeLessThan(24);
+
+    // AND THE FILE IT PRODUCES IS THE FILE IT CAME FROM.
+    const second = await downloadSvg(page);
+    expect(
+      second.length,
+      `the reopened project re-exports a different file (${first.length} bytes out, ${second.length} back)`,
+    ).toBe(first.length);
+    expect(second === first, 'the round trip is not byte-exact').toBe(true);
+  });
+
+  /**
+   * T5 — RECENTRE REACHES A CORRECTION MADE IN A PREVIOUS SESSION.
+   *
+   * The verb used to be gated on the in-memory Map, so a picture corrected,
+   * saved and reopened drew its correction with no way back — the way IN is a
+   * drag and the way OUT was gone. The predicate now asks the PHOTOGRAPH.
+   */
+  test('T5 — the way back survives the round trip', async ({ page }) => {
+    test.setTimeout(300_000);
+    await boot(page);
+    await enterFullBleed(page);
+
+    const target = await biggestCell(page);
+    const before = await stableColour(page, target);
+    await armCell(page, target);
+    await dragPicture(page, target, 1);
+    expect(dist(await stableColour(page, target), before), 'the drag must have done something').toBeGreaterThan(30);
+
+    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.waitForTimeout(1000);
+    const path = onDisk('recentre.svg', await downloadSvg(page));
+
+    await page.goto(APP_URL);
+    await page.waitForTimeout(1200);
+    await expectOpenReachable(page);
+    await openFile(page, path);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.waitForTimeout(2600);
+
+    await enterFullBleed(page);
+    // THE SAME FRAGMENT, and that is T4's result rather than an assumption: the
+    // reopened project re-exports byte for byte, so the deal it came back with
+    // is the deal it was saved with and the corrected picture is in the slot it
+    // was corrected in. Hunting for it by arming every cell in turn is what the
+    // first version did, and it was silently vacuous — `armCell` returns as soon
+    // as ANY puck is up, so after the first iteration it never clicked again.
+    await armCell(page, target);
+    const recentre = page.getByTestId('cell-actions').getByTestId('cell-recentre');
+    await expect(
+      recentre,
+      'a reopened correction offers no way back — the verb was gated on memory',
+    ).toBeVisible({ timeout: 15_000 });
+
+    const wasCorrected = await stableColour(page, target);
+    await recentre.click();
+    await page.waitForTimeout(1400);
+    const back = await stableColour(page, target);
+    expect(dist(back, wasCorrected), 'Recentre on a reopened correction must actually move the picture').toBeGreaterThan(30);
+    await expect(
+      page.getByTestId('cell-actions').getByTestId('cell-recentre'),
+      'and the verb retires with the correction',
+    ).toHaveCount(0);
   });
 });

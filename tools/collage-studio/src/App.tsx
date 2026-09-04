@@ -21,7 +21,7 @@ import { withMove, type MoveId } from './lib/motion';
 import { isTurning, type TurnId } from './lib/turn';
 import { type PaceId } from './lib/pace';
 import { renderCanvas, calculateSmartCrop } from './lib/renderer';
-import { withReframe, dragToFrame, type Frame } from './lib/reframe';
+import { withReframe, dragToFrame, poolWithFrames, framesFromPool, poolWithoutFrames, type Frame } from './lib/reframe';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
@@ -1590,6 +1590,11 @@ export default function App() {
     reframeRef.current = null;
     try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
     if (st.moved) reframedRef.current = true;
+    // AND NOTHING IS WRITTEN INTO THE POOL HERE — measured, not assumed. See
+    // lib/reframe.ts: `images` reaches the DISARM effect through `layoutItems`,
+    // so a commit on pointerup takes the puck away from under the finger that
+    // just let go and a second drag on the same picture becomes impossible.
+    // The frame reaches the FILES through `poolForSave` instead.
   };
 
   // Said ONCE per session, on the first arm: a gesture with no affordance is a
@@ -2563,12 +2568,32 @@ export default function App() {
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
         // SVG is the project file, so it carries the pool that made it.
-        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, lookRef, images);
+        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, lookRef, poolForSave);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
         setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 2000);
     } catch (e) { setExportStatus('error'); }
   };
+
+  /**
+   * THE POOL AS IT IS WRITTEN TO A FILE — `buildStateForSave`'s counterpart for
+   * the pictures, and the ONE value the three writers take instead of `images`.
+   *
+   * WHY IT EXISTS. A hand-set frame (THE REFRAME) lives in the `frames` Map while
+   * the app is open, and every writer serialises `img.analysis` — so the archive,
+   * the crash-safe snapshot and the exported SVG all carried the pool without the
+   * one thing in an analysis a person put there. The SVG DREW a reframed collage
+   * and REOPENED as the un-reframed one.
+   *
+   * WHY NOT WRITE IT INTO `images` WHEN THE DRAG ENDS, which is the obvious fix
+   * and was the one this ladder named: `images` reaches the DISARM effect through
+   * `layoutItems`, so the commit took the puck away from under the finger that
+   * had just let go. Measured — see lib/reframe.ts.
+   *
+   * `Object.is`-identical to `images` whenever nobody has dragged a picture, so
+   * every file this app writes for everybody else is byte-for-byte what it was.
+   */
+  const poolForSave = useMemo(() => poolWithFrames(images, frames), [images, frames]);
 
   // THE ONE `AppState` BUILDER. Save (download), autosave (crash-safe session)
   // and Clear (history) each described the project by writing this same literal
@@ -2576,7 +2601,7 @@ export default function App() {
   // field-omission becomes a wrong answer on reopen. One source of truth now.
   const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look, adjust: adjust ?? undefined }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
 
-  const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
+  const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), poolForSave); dirtyRef.current = false; };
 
   // Write the working project to IndexedDB — the crash-safe snapshot behind the
   // first well bug ("capturing at 4k ... lost what I was doing"), and the source
@@ -2659,7 +2684,7 @@ export default function App() {
       // So the snapshot EXCLUDES what it could not capture rather than refusing
       // to exist. A recovery that is one photograph short is a real recovery;
       // an autosave that stopped an hour ago without saying so is not.
-      const snapshot = uncaptured.size ? images.filter(i => !uncaptured.has(i.id)) : images;
+      const snapshot = uncaptured.size ? poolForSave.filter(i => !uncaptured.has(i.id)) : poolForSave;
       if (snapshot.length === 0) return; // nothing capturable — leave the last good one
       await sessionStore.putSession({
         // ONE manifest shape: the same `AppState` every save writes, plus the
@@ -2704,7 +2729,7 @@ export default function App() {
         const ld = loaded.state.layout;
         const ldOwned = ld.countOwned ?? true;
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(poolWithoutFrames(loaded.images)); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -2722,7 +2747,13 @@ export default function App() {
           // layout being replaced and the recipe name to a roll this project did
           // not make — the same reasoning `applyCompositionCode` uses.
           for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
-          setClips([]); setStageOk(true); setLockedCells(new Map()); setLastRecipe(undefined);
+          // THE FRAMES COME OUT OF THE FILE AND INTO THE MAP. Not `new Map()` —
+          // that is what the other resets here are, and it would drop every
+          // correction the file carries at the moment of opening it. Lifted from
+          // `loaded.images` (the pool as it arrived), while `setImages` above was
+          // handed the same pool with the frames taken OFF, so the app runs with
+          // one source of truth and the writers put it back.
+          setClips([]); setStageOk(true); setLockedCells(new Map()); setFrames(framesFromPool(loaded.images)); setLastRecipe(undefined);
           // RETIRE THE LATCH WITH THE LOAD THAT ARMED IT. Nothing else bumps
           // `dropId` here, so the latch stayed live past the Open and the NEXT
           // import paid for it: its final effect pass took the `drop !== dropId`
@@ -2866,7 +2897,7 @@ export default function App() {
     dirtyRef.current = true; // there is now work that isn't on disk
     const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
     return () => window.clearTimeout(t);
-  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, adjust, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
+  }, [images, frames, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, adjust, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
 
   // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
   // (large) blob is pulled only if the user actually taps Restore. The banner's
@@ -3122,6 +3153,10 @@ export default function App() {
                        // Reframe verb would be a control for a gesture that is
                        // already available, while the way BACK has no gesture
                        // at all. Absent on every fragment nobody has touched.
+                       // THE MAP IS THE ONLY PLACE A FRAME LIVES while the app is open —
+                       // a correction reopened from a file is lifted into it by
+                       // `applyLoadedProject`, so this one predicate covers a drag from a
+                       // moment ago and one made in a previous session alike.
                        const reframed = !!(target?.id && frames.has(target.id));
                        // Kept whole against the edges: a puck half off the artwork is
                        // clipped by the band, and the button you cannot reach is the
@@ -3389,8 +3424,21 @@ export default function App() {
       {/* CRASH RECOVERY. Shown only into an empty pool (shouldPromptRestore), so
           it never shadows a project already on the stage. One-handed sizes: the
           card caps at the viewport, the label truncates, both taps clear 44px. */}
+      {/* BELOW THE HEADER ON A PHONE, and that is a fix rather than a taste.
+          At `top-3` this card is 94vw wide and centred, so on a 390px screen it
+          spans x 12..381 and y 12..78 — and the header's OPEN button sits at
+          x 294..378, y 8..52. The banner covered it completely: the offer to
+          bring back the last session physically blocked the one control that
+          opens a DIFFERENT one, and a centre-tap on Open hit the card. Measured
+          on a Pixel 5 (reframe.spec T4 could not reach Open at all); at 320 and
+          360 the header wraps to y 61..105 and the same card clipped its top
+          third. `top-28` (112px) clears the wrapped header and the unwrapped
+          one alike, and `md:top-3` leaves every desktop pixel where it was.
+          FOURTH TIME for this shape — the pending pill, the verbs puck, the
+          full-bleed rail, now this — so it is a thing this app does whenever it
+          puts something over the canvas, not an accident of one component. */}
       {restorePrompt && shouldPromptRestore(true, images.length) && (
-        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[300] w-[min(28rem,94vw)] animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="fixed top-28 md:top-3 left-1/2 -translate-x-1/2 z-[300] w-[min(28rem,94vw)] animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="rounded-xl bg-[#0d0d0d]/95 border border-emerald-500/40 shadow-2xl backdrop-blur px-3 py-2.5">
             <div className="flex items-center gap-2.5">
               <RefreshCw size={15} className={`text-emerald-400 shrink-0${restoring ? ' animate-spin' : ''}`} />
