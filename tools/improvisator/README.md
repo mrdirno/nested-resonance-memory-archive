@@ -3,133 +3,122 @@
 An endless generative solo piano in one HTML file. No build step, no dependencies, no network.
 Open `improvisator-infinite.html` in a browser and press the centre button.
 
-Every passage is reproducible from its seed, which is in the URL hash. The same seed and settings
-produce the same *performance* — the same notes, at the same moments, with the same touch — in the
-browser, in the offline WAV bounce and in the MIDI export. That is checked, not asserted; see
-**Proof** below.
+**Nothing here sounds that a hand did not strike.** There is no echo voice, no delay line, no
+pre-delay, no discrete early reflection, and no note inherited across a bar line from the one
+before it. If you can hear it, it is in the score, and it is in the MIDI export. That is a
+property the harness checks on every run, not a claim in a comment — see **NO REPEAT** below.
 
-The rendered audio is reproducible to about −83 dB rather than bit-for-bit, and the reason is worth
-knowing: the sympathetic-string bank is twelve feedback delay lines, and Chromium does not render a
-graph containing a feedback cycle bit-identically twice. Measured, two bounces of one seed differ by
-−83 dB rms with a peak difference of −69 dBFS — a few bits of a sixteen-bit word, well under the
-noise floor of the format. `browser-check.mjs` measures it on every run and fails if it ever rises above −60 dB, because
-that would mean a per-note random value had stopped following the seed.
+Every passage is reproducible from its seed, which is in the URL hash. The same seed and settings
+produce the same *performance* — the same notes, at the same moments, with the same touch —
+through the transport, through the offline bounce, and into the MIDI file.
 
 ---
 
 ## What it does
 
-Harmony, phrasing and timbre are computed from four incommensurable constants (φ, √2, e, π), so the
-piece comes arbitrarily close to every state and returns to none of them. That is the "endless" —
-not randomness, incommensurability.
+Harmony, phrasing and timbre are computed from four incommensurable constants (φ, √2, e, π), so
+the piece comes arbitrarily close to every state and returns to none of them. That is the
+"endless" — not randomness, incommensurability.
+
+Forty-two performance rudiments — melodic shapes, hand patterns, bass figures, timing characters
+and pedal characters — are selected by context and coordinated by a persistent player state. The
+composer reasons at movement → phrase → gesture → hand → finger.
 
 - **Play / pause** — space, or the centre button
 - **New passage** — `N`
 - **Export MIDI** — `M` (format 1, real tempo map, parts on separate tracks, pedal on every lane)
-- **Bounce to WAV** — `B` for a minute, `Shift+B` for four
+- **Bounce 60 s to WAV** — `B`
 - **Record what you hear** — `R`
 - **Controls** — `C`
 
-## The controls that matter
+## The characters
 
-| Control | What it changes |
-|---|---|
-| **Pocket** | How far behind the beat the right hand sits. 0 is on top of the beat; 100 is about 30 ms behind a left hand that keeps time. |
-| **Colour** | How far the harmony travels outside the key — applied dominants, tritone subs, passing diminished, borrowed chords. |
-| **Swing** | How late the off-beat eighths land. Subtle at the default; a real ballad lilt at the top. Never triplet swing. |
-| **Range** | Where the tune sits. The default keeps it in the tenor octave and saves the top for one moment a chorus. |
-| **Melody / Motion / Texture** | Density of the line, of the rhythm and of the left hand. |
-| **Sustain** | How slowly a finger comes off a key. The pedal-lift damper stays physical whatever this is set to. |
-| **Resonance** | Depth of the sympathetic strings that ring under the pedal. |
-| **Room size / Reverb / Warmth** | The room, and how much of it you hear. |
-| **Journey** | How often the key moves. The mode underneath it shifts far more often than the key does. |
+The eight buttons choose a key, a mode, and a compositional posture: how busy the gait is, how
+much lead the right hand carries, how thick the voicings are, how far the key travels, and where
+the tune sits. They do **not** change the tempo, how the keys are struck, or the mix — those are
+one approved posture (`LOCKED_PERFORMANCE`), and `reference` is that posture by name. Which
+settings a character may move is the list `CHARACTER_KEYS`; the engine reads only `warmth`,
+`resonance`, `reverb` and `space`, and none of those are in it.
+
+Over 48 bars from one seed the characters run from 272 to 454 notes; Ascent carries twice the
+tune of Vigil.
+
+---
 
 ## Proof
 
-Three scripts, in this directory. Run them from the repository root.
+Two harnesses. Both exit non-zero on failure, so they work in CI.
 
-```bash
-# The kernel, headless: statistics, plus four gates that must pass.
-node tools/improvisator/analyze.mjs tools/improvisator/improvisator-infinite.html 256 session
-
-# The real page in headless Chromium: script errors, the live transport,
-# and a measurement of the audio the offline bounce actually produces.
-IMPROV_SEED=grey-rain-0001 node tools/improvisator/browser-check.mjs \
-  tools/improvisator/improvisator-infinite.html out.wav
-
-# Level, band balance, stereo width, attack density and dynamic range of a bounce.
-node tools/improvisator/audio-report.mjs before.wav after.wav
+```sh
+node tools/improvisator/analyze.mjs                      # the composer, headless
+PLAYWRIGHT_CORE=node_modules/playwright-core \
+  node tools/improvisator/browser-check.mjs              # the page, in a real Chromium
+node tools/improvisator/audio-report.mjs some.wav        # level, balance, width, dynamics
 ```
 
-`analyze.mjs` fails loudly on any of:
+`analyze.mjs` loads the two logic `<script>` blocks into a bare V8 context — the third needs a
+DOM and is deliberately not evaluated — and runs the composer for as many bars as you ask.
 
-- **DETERMINISM** — the same seed twice must give an identical event stream.
-- **EXPORT PARITY** — a composer driven bar-by-bar (the MIDI export and the offline bounce) must
-  produce the same piece as one driven through the realtime queue. Reading `barGlobal` or
-  `sectionIndex` during composition breaks this, because those advance with playback.
-- **RESET** — a reused composer must play a seed exactly as a fresh one does.
-- **HARMONY** — every accompaniment attack must be a chord tone, the bass, an available tension, or
-  a deliberate approach note. This is the check that caught a left-hand tenth built from an inverted
-  bass, which put a natural eleventh against the third of a dominant.
-- **SLASH NAMES** — the printed chord must always name the bass that is played.
-- **FORM** — an authentic cadence must land on the tonic. A held turnaround spanning the last two
-  blueprint slots used to take the first of them and end on the dominant instead.
-- **PRESETS / EDGE SETTINGS** — every preset over 96 bars × 3 seeds, and both extremes of every
-  slider across 12 keys and 8 modes, must produce only valid events.
+| Gate | What it means |
+|---|---|
+| **NO REPEAT** | No event carries the `echo` role and no voice is inherited across a bar line. Every sounding note was struck by a hand that decided to strike it. |
+| **HARMONY** | An accompaniment attack is a chord tone, the bass, or an available tension. A short bass approach note leaning into the next root is allowed; anything held is not. Measured across every character, because the bass rudiments that write approach tones do not fire at all settings. |
+| **TEXTURE** | Two things a listener notices first: whether the bottom of the piano is muddy, and whether the tune is on top. Both measured at simultaneity — notes actually sounding together, not notes written near each other. |
+| **DETERMINISM** | One seed, one performance. |
+| **RESET** | A composer told to play a seed again plays it again. |
+| **ONE PIECE** | A seed played straight and the same seed played from a filled queue are the same music, bar for bar. The page composes ahead of playback in idle time; how far ahead it has got must not change a note. |
+| **PRESETS** | Every character survives 96 bars at three seeds. |
+| **EDGE SETTINGS** | Both extremes of every continuous control, in twelve keys and eight modes. |
+| **PRESET IDENTITY** | Each character has settings of its own, applied the way the page applies them, and the busiest carries at least 1.4× the melody of the sparsest. |
+| **VOCABULARY** | Every rudiment is reachable at some character and seed. |
 
-It also reports, without failing on them: **GESTURE** (how many sections contain no interval wider
-than a fifth, and how many are jumpy), **SEAMS** (how many section boundaries carry a pickup, and
-the distribution of closure types), and **RAILS** (how often the velocity clamps bind, which is how
-you find out that the clamp rather than the phrase shape is deciding what the top of a line sounds
-like).
+`browser-check.mjs` drives the real page:
 
-`browser-check.mjs` additionally parses the exported MIDI back from the bytes the button writes —
-every note-on paired, the tempo map present, CC64 on all three lanes — and bounces the same seed
-twice to confirm the two renders differ only at the level Web Audio itself is reproducible to.
+| Gate | What it means |
+|---|---|
+| **ONE RENDERER** | Exactly one function turns a bar into engine calls. The transport and the offline bounce used to carry separate copies, and the copies had drifted. |
+| **SAMPLE RATE** | No buffer is declared at a literal rate. The bank renders at the rate fixed on page load and the playback context is created later; 44.1 kHz read as 48 is 1.47 semitones sharp. |
+| **PLAYS / MIDI / BOUNCE** | It plays; the exported MIDI parses back with every note paired and a tempo map; the bounce has audio, no clipping. |
+| **REPEATABLE** | Two bounces of one seed differ by less than −60 dB. |
+| **NO ERRORS** | No console or page errors across the whole run. |
 
-It also reports the section search: quality distribution and how many of the eight candidate
-sections it took. A median near 95 at three attempts means the gate is doing work without fighting
-the generator; a median pinned at the floor with eight attempts every time means a rule is
-miscalibrated, not that the music is bad.
+---
 
-## Where the musical decisions live
-
-Everything is in the first `<script>` — a pure-JS kernel with no DOM and no Web Audio, exported as
-`window.IMPROV`. The second `<script>` only makes it audible and visible.
+## Where each concern lives
 
 | Concern | Look at |
 |---|---|
-| Chord identity, tensions, avoid notes | `QUALITY`, `makeChord`, `tensionOK`, `diatonicTensions` |
-| Chromatic harmony | `chromaticize`, `cadenceChord`, `dominantColour` |
-| Harmonic rhythm | `RHYTHM_PLANS`, `TURNAROUNDS`, `planChanges` |
-| Long form | `formPosition`, `chooseBlueprint`, `maybeShade`, `maybeJourney`, `ARC_POOLS` |
-| Two hands, register | `REG`, `minInterval`, `bassClearance`, `shapePool`, `chooseVoicing` |
-| The bass line | `planBassLine` |
-| The tune | `MOTIF_CELLS`, `developCell`, `planRests`, `APEX_PLAN`, `chooseMelodyPitch` |
-| The left hand | `layHand`, `layAlone`, `voiceWeight`, `rollOffsets` |
-| Time feel | `hammerDelay`, `handLead`, `layback`, `swingRatio`, `beatDurations`, `warpBeat` |
-| The pedal | `pedalGesture`, and `scheduleBar` in the instrument layer |
+| The rule against inherited notes | `generateAttempt` (the displaced inner answer), `buildImpulse` |
+| Chords and their qualities | `buildSoulChord`, `buildDegreePath`, `QUALITY` naming in `qualityName` |
+| Two hands, register, mud | `lowIntervalFloor`, `voicingCandidates`, `voicingCost`, `chooseSoulVoicing`, `chooseSoulBass` |
+| The bass line | `chooseSoulBass` and the `BASS_RUDIMENTS` table |
+| The tune | `MELODY_RUDIMENTS`, `transformMotif`, `generateSoulMelody`, `chooseMelodyPitch` |
+| The left hand | `laySoulHand`, `ACCOMP_RUDIMENTS`, and the lay-out decision in `generateAttempt` |
+| Time feel | `hammerTravel`, `TOUCH_COMPENSATION`, `LAY_BACK`, `flexibleBeatDurations`, `warpFlexible` |
+| The pedal | `PEDAL_RUDIMENTS`, `makePedalPlan`, `renderBar` |
+| What counts as a good section | `validateSection`, `SEARCH_BUDGET` |
 | The instrument | `partialTable`, `ZoneRenderer`, `Engine.play`, `Engine.release`, `Engine.attach` |
 
-## Three things worth knowing before you edit
+## Four things worth knowing before you edit
 
-**Every timing offset goes in `e.micro`, never in `e.beat`.** `e.beat` is what the bar clock measures
-its own length from; putting lay-back, roll offsets or grace notes there makes the bar longer and the
-tempo map wrong. `e.micro` is read identically by the realtime scheduler, the offline bounce and the
-MIDI log, which is what keeps the three renderings the same performance.
+**Nothing may be inherited.** If a note is not in the event stream, it must not be audible. The
+composer may decide the hand plays fewer notes — that is a musical decision and it is written
+down — but it may never delete a note on the assumption that the pedal is still holding one. That
+is what makes the score, the MIDI and the audio the same performance.
 
-**An offline render must stay a chunk ahead of itself.** `bounceWav` suspends the
-`OfflineAudioContext` every eight seconds so finished voices can disconnect — without that the graph
-only grows and the render is quadratic in the length of the take. But `Engine.play` clamps any note
-scheduled behind `ctx.currentTime` to now + 2 ms, and once the render clock is running that clamp can
-fire. Scheduling is therefore kept sixteen seconds ahead of the suspend point, not eight. Scheduling
-only to the next suspend point moved one note by 33 ms and changed the take by 24 dB at the peak.
+**Every timing offset goes in `e.micro`, never in `e.beat`.** `e.beat` is what the bar clock
+measures its own length from; putting lay-back, roll offsets or grace notes there makes the bar
+longer and the tempo map wrong.
 
-**On `lowpass` and `highpass` nodes, Web Audio reads `Q` in decibels.** Not as a quality factor.
-`Q = 0.5` is half a decibel of resonance at the corner, so a filter that looks heavily damped is
-actually boosting. A comb filter built with two such filters inside its feedback loop has a loop gain
-above one and runs to full scale in about six seconds. Measure with `getFrequencyResponse` before
-trusting any filter in this file.
+**A penalty in `validateSection` only does something if it can push a candidate below 88.** The
+search stops at the first candidate scoring 88 or more, so a penalty smaller than the gap between
+a typical score and that threshold is a constant subtracted from everything, and ranks nothing.
+The "no gesture" penalty at 6 left 59% of sections with no interval wider than a fourth; at 14,
+12%, at a cost of three search attempts instead of one.
+
+**Composition and performance draw from separate random streams,** and the section search draws
+from a third derived from the section's own index. Otherwise how good the first candidate happened
+to be shifts every note that follows it, and composing ahead of playback changes the music.
 
 ---
 
