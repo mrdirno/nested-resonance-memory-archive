@@ -3681,20 +3681,28 @@ Engine.prototype.buildImpulse = function (seconds, seed) {
   /* A three-second bright hall behind a solo piano is the sound of New Age
      wallpaper: it blurs every attack and fills every rest. This is a
      well-treated medium studio — short, dense, and darker as it decays,
-     because real rooms lose their top long before their bottom. The two
-     channels draw their taps independently rather than mirroring with a
-     polarity flip, so the early field survives being summed to mono on a
-     phone. */
+     because real rooms lose their top long before their bottom. */
   var rtLow = 1.55, rtMid = 1.15, rtHigh = 0.45;
+  /* One set of reflections, heard twice. Drawing the early field independently
+     per channel decorrelates it, and an uncorrelated early cluster cancels
+     when the two channels are summed — measured, that cost 3.5 dB of level and
+     left the two channels anti-correlated (-0.11). The taps are shared now,
+     separated by a fraction of a millisecond and a little level, which is what
+     a close pair of microphones a few inches apart actually hears. */
+  var taps = [], k;
+  for (k = 0; k < 20; k++) {
+    var tk = 0.007 + 0.075 * Math.pow((k + rng.float(0, 1)) / 20, 1.6);
+    taps.push({ t: tk, g: 0.62 * Math.exp(-tk / 0.030) * rng.float(0.55, 1.0) * (rng.chance(0.5) ? 1 : -1),
+                dt: rng.float(-0.0006, 0.0006), dg: rng.float(0.8, 1.0) });
+  }
   for (var ch = 0; ch < 2; ch++) {
     var d = buf.getChannelData(ch);
-    var pre = Math.floor(rate * (ch ? 0.009 : 0.007));
-    var a1 = 0, a2 = 0, k;
-    for (k = 0; k < 20; k++) {
-      var tk = 0.007 + 0.075 * Math.pow((k + rng.float(0, 1)) / 20, 1.6);
-      var gk = 0.62 * Math.exp(-tk / 0.030) * rng.float(0.55, 1.0) * (rng.chance(0.5) ? 1 : -1);
-      var at = pre + Math.floor(tk * rate);
-      if (at < len) d[at] += gk;
+    var pre = Math.floor(rate * (ch ? 0.0078 : 0.007));
+    var a1 = 0, a2 = 0;
+    for (k = 0; k < taps.length; k++) {
+      var tp = taps[k];
+      var at = pre + Math.floor((tp.t + (ch ? tp.dt : 0)) * rate);
+      if (at >= 0 && at < len) d[at] += tp.g * (ch ? tp.dg : 1);
     }
     for (var i = pre; i < len; i++) {
       var t = (i - pre) / rate;
@@ -3796,8 +3804,10 @@ Engine.prototype.attach = function (ctx, settings) {
   /* Two short, feedbackless offsets into the room bus — a microphone pair,
      not the tempo-synced echo that used to sit here filling in every rest the
      player left with a quieter copy of what they had just played. */
-  this.preL = ctx.createDelay(0.05); this.preL.delayTime.value = 0.019;
-  this.preR = ctx.createDelay(0.05); this.preR.delayTime.value = 0.027;
+  /* A close pair inside the lid, not a spaced pair across the room: eight
+     milliseconds between the channels combs the mono sum every 125 Hz. */
+  this.preL = ctx.createDelay(0.05); this.preL.delayTime.value = 0.0115;
+  this.preR = ctx.createDelay(0.05); this.preR.delayTime.value = 0.0132;
   this.preMerge = ctx.createChannelMerger ? ctx.createChannelMerger(2) : null;
 
   this.sum = ctx.createGain(); this.sum.gain.value = 1;
