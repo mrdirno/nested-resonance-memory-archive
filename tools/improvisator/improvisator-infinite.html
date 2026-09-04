@@ -363,7 +363,7 @@ select option { background: var(--slab-solid); color: var(--ink); }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"></path><path d="M19 12a7 7 0 1 1-2.1-5"></path></svg><span>New passage</span>
         </button>
         <button class="chip wide" id="exportMidi" type="button" title="Save the notes as MIDI (M)">MIDI</button>
-        <button class="chip wide" id="exportWav" type="button" title="Render 60 seconds to WAV (B)">Bounce</button>
+        <button class="chip wide" id="exportWav" type="button" title="Render 60 seconds to WAV — hold Shift for four minutes (B)">Bounce</button>
         <button class="chip square" id="settingsToggle" type="button" aria-label="Controls" aria-expanded="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"></path></svg>
         </button>
@@ -2154,7 +2154,14 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
 
       var leap = pitch - prev;
       var dur = dur0 * (0.86 + this.setting('sustain', 0.7) * 0.32);
-      if (finalNote) dur = Math.max(dur, closure === 'closed' ? 2.3 : 1.2);
+      /* A closed section arrives and holds. An open one leaves the phrase
+         hanging. An elided one does neither: the last note is short and the
+         next section's first note is the resolution, so the two are the same
+         gesture and there is no seam to hear. */
+      if (finalNote) {
+        dur = closure === 'elided' ? Math.min(dur, 0.9)
+            : Math.max(dur, closure === 'closed' ? 2.3 : 1.2);
+      }
       /* Dynamics follow the line: the phrase arch, where the note sits in the
          bar, whether it is rising, how long it is held — and a slow touch
          drift so the hand is never mechanical. */
@@ -2624,7 +2631,7 @@ Composer.prototype.generateAttempt = function () {
   /* Anacrusis: the next section's first note, approached by step across the
      barline, so the seam stops advertising itself. */
   var nextStart = this.startDegreeFor(this.sectionIndex + 1);
-  if (closure !== 'closed' && this.rng.chance(0.55)) {
+  if (closure !== 'closed' && this.rng.chance(closure === 'elided' ? 0.85 : 0.55)) {
     var target = mod(this.tonic + MODE_DEFS[this.mode].intervals[nextStart], 12);
     var sc = this.scaleMidi(REG.melodyLo + 2, this.melodyCeiling());
     var landing = null, bd = Infinity;
@@ -4808,7 +4815,8 @@ function bounceWav(seconds) {
         Lc[Lc.length - 1 - i] *= g; Rc[Rc.length - 1 - i] *= g;
       }
       download(K.encodeWav([Lc, Rc], sr), 'improvisator-' + seed + '.wav', 'audio/wav');
-      notice(Math.round(seconds) + ' s bounced, peak ' + (20 * Math.log10(peak)).toFixed(1) + ' dBFS');
+      notice((seconds >= 120 ? (seconds / 60).toFixed(0) + ' min' : Math.round(seconds) + ' s') +
+             ' bounced, peak ' + (20 * Math.log10(peak)).toFixed(1) + ' dBFS');
       busy = false;
       setStatus(transport && transport.playing ? 'playing' : 'ready', transport && transport.playing ? 'playing' : null);
     }).catch(function (err) {
@@ -4914,7 +4922,10 @@ function populate() {
 el.playButton.addEventListener('click', togglePlay);
 el.newButton.addEventListener('click', newPassage);
 el.exportMidi.addEventListener('click', exportMidi);
-el.exportWav.addEventListener('click', function () { bounceWav(60); });
+/* A minute is enough to judge a texture. The long form — a movement rising,
+   peaking and dissolving — takes five to eight sections, so there is a longer
+   take behind Shift for anyone who wants to hear one. */
+el.exportWav.addEventListener('click', function (e) { bounceWav(e.shiftKey ? 240 : 60); });
 el.recordButton.addEventListener('click', toggleRecording);
 
 Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (b) {
@@ -4989,7 +5000,7 @@ document.addEventListener('keydown', function (e) {
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
   else if (k === 'n') newPassage();
   else if (k === 'm') exportMidi();
-  else if (k === 'b') bounceWav(60);
+  else if (k === 'b') bounceWav(e.shiftKey ? 240 : 60);
   else if (k === 'r' && el.recordButton.style.display !== 'none') toggleRecording();
   else if (k === 'c') el.settingsToggle.click();
 });
