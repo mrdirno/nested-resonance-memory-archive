@@ -68,8 +68,24 @@ node tools/improvisator/audio-report.mjs before.wav after.wav
   produce the same piece as one driven through the realtime queue. Reading `barGlobal` or
   `sectionIndex` during composition breaks this, because those advance with playback.
 - **RESET** — a reused composer must play a seed exactly as a fresh one does.
+- **HARMONY** — every accompaniment attack must be a chord tone, the bass, an available tension, or
+  a deliberate approach note. This is the check that caught a left-hand tenth built from an inverted
+  bass, which put a natural eleventh against the third of a dominant.
+- **SLASH NAMES** — the printed chord must always name the bass that is played.
+- **FORM** — an authentic cadence must land on the tonic. A held turnaround spanning the last two
+  blueprint slots used to take the first of them and end on the dominant instead.
 - **PRESETS / EDGE SETTINGS** — every preset over 96 bars × 3 seeds, and both extremes of every
   slider across 12 keys and 8 modes, must produce only valid events.
+
+It also reports, without failing on them: **GESTURE** (how many sections contain no interval wider
+than a fifth, and how many are jumpy), **SEAMS** (how many section boundaries carry a pickup, and
+the distribution of closure types), and **RAILS** (how often the velocity clamps bind, which is how
+you find out that the clamp rather than the phrase shape is deciding what the top of a line sounds
+like).
+
+`browser-check.mjs` additionally parses the exported MIDI back from the bytes the button writes —
+every note-on paired, the tempo map present, CC64 on all three lanes — and bounces the same seed
+twice to confirm the two renders differ only at the level Web Audio itself is reproducible to.
 
 It also reports the section search: quality distribution and how many of the eight candidate
 sections it took. A median near 95 at three attempts means the gate is doing work without fighting
