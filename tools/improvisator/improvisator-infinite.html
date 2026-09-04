@@ -2023,7 +2023,10 @@ var MELODY_RUDIMENTS = [
   { id:'fallingThirds', family:'melody', label:'falling thirds', degrees:[4,2,3,1,0], gaps:[0.72,0.78,0.74,0.86,1.38], breath:0.78, close:0.72, active:0.45 },
   { id:'ascendingCells', family:'melody', label:'ascending cells', degrees:[0,1,2,4], gaps:[0.58,0.62,0.78,1.08], breath:0.62, active:1.0, peak:0.72 },
   { id:'suspension', family:'melody', label:'suspension', degrees:[1,0,2,1], gaps:[1.28,0.64,1.04,1.48], breath:1.08, calm:0.72, close:0.55, dissonance:1.0 },
-  { id:'echoPhrase', family:'melody', label:'answering figure', degrees:[0,2,1,0,2,1], gaps:[0.62,0.70,1.24,1.08,0.72,1.36], breath:0.95, calm:0.35, repeat:0.8 },
+  /* Named for what it is. It was called 'echoPhrase', which in a file whose
+     whole doctrine is that nothing echoes reads as a delay -- it is not one: it
+     is a written contour that answers itself, and the answer is played. */
+  { id:'answeringFigure', family:'melody', label:'answering figure', degrees:[0,2,1,0,2,1], gaps:[0.62,0.70,1.24,1.08,0.72,1.36], breath:0.95, calm:0.35, repeat:0.8 },
   { id:'fragment', family:'melody', label:'fragment', degrees:[0,3], gaps:[0.92,2.18], breath:1.42, calm:0.9, close:0.9 },
   { id:'octaveBloom', family:'melody', label:'octave bloom', degrees:[0,2,4,7,4], gaps:[0.72,0.72,0.86,1.46,1.62], breath:1.10, active:0.75, peak:1.0 },
   /* Two shapes with a real gesture in them. Of the eight cells above, exactly
@@ -2451,11 +2454,19 @@ SoulComposer.prototype.chooseSoulBass = function (chord, nextChord, rud, ctx) {
     var f = null, step;
     for (step = 5; step <= 9 && f === null; step++)
       if (best + step <= 51 && chord.pcs.indexOf(mod(best + step, 12)) >= 0) f = best + step;
-    if (f === null) f = best + 12 <= 51 ? best + 12 : best;
-    extras.push({ beat:meter * 0.58, pitch:f, duration:meter * 0.30, velocityMul:0.70 });
+    if (f === null && best + 12 <= 51) f = best + 12;
+    /* If nothing fits, the hand plays nothing. The fallback used to be the root
+       itself, which is the note already ringing since the downbeat -- a bass
+       note struck twice and called an answer. */
+    if (f !== null && f !== best)
+      extras.push({ beat:meter * 0.58, pitch:f, duration:meter * 0.30, velocityMul:0.70 });
   } else if (kind === 'octave') {
-    var oct = best + 12 <= 52 ? best + 12 : best;
-    extras.push({ beat:meter * 0.53, pitch:oct, duration:meter * 0.34, velocityMul:0.68 });
+    /* An octave breath, or nothing. The clamp used to fall back to `best` when
+       the octave was out of range, so on any root at or above the middle of the
+       bass register -- 61% of them, measured -- the "octave" was the root
+       struck again mid-bar over the top of itself. */
+    if (best + 12 <= 52)
+      extras.push({ beat:meter * 0.53, pitch:best + 12, duration:meter * 0.34, velocityMul:0.68 });
   } else if ((kind === 'step' || kind === 'chromatic') && nextChord) {
     var targetNotes = [];
     for (n = 30; n <= 48; n++) if (mod(n,12) === nextChord.rootPc) targetNotes.push(n);
@@ -2465,11 +2476,14 @@ SoulComposer.prototype.chooseSoulBass = function (chord, nextChord, rud, ctx) {
       var approach = kind === 'chromatic' ? target + (best <= target ? -1 : 1) : null;
       if (kind === 'step') {
         var sc = this.scaleMidi(29,50);
-        var opts = sc.filter(function (m) { return m !== target && Math.abs(m-target) <= 2 && Math.abs(m-best) <= 8; });
+        /* Not the target it is approaching, and not the root it is leaving --
+           a step approach that steps nowhere is the bass note struck twice. */
+        var opts = sc.filter(function (m) { return m !== target && m !== best && Math.abs(m-target) <= 2 && Math.abs(m-best) <= 8; });
         opts.sort(function (a,b) { return Math.abs(a-best)-Math.abs(b-best); });
         approach = opts[0];
       }
-      if (approach !== undefined && approach !== null && approach >= 29 && approach <= 50)
+      if (approach !== undefined && approach !== null && approach !== best &&
+          approach >= 29 && approach <= 50)
         extras.push({ beat:Math.max(1, meter - 0.62), pitch:approach, duration:0.54, velocityMul:0.60 });
     }
   } else if (kind === 'tenth' && chord.pcs.length > 1) {
@@ -3411,8 +3425,10 @@ Engine.prototype.applySettings = function (settings, immediate) {
   this.bodyHigh.gain.setTargetAtTime(lerp(-4.8, -1.2, s.resonance), t, tc);
 
   var rv = s.reverb === undefined ? 0.07 : clamp(s.reverb, 0, 1);
-  /* Reverb is ambience only. At the locked 7% setting the wet path is around
-     two percent of the dry level, with no discrete reflections to expose it. */
+  /* Reverb is ambience only. At the approved 7% setting the wet path measures
+     0.9% of the dry level -- 0.07^1.15 x 0.19 against 0.96 -- with no discrete
+     reflections and no pre-delay to expose it. The character buttons do not
+     move it: reverb is part of the mix, and the mix is the locked posture. */
   this.dry.gain.setTargetAtTime(0.96, t, tc);
   this.wet.gain.setTargetAtTime(Math.pow(rv,1.15) * lerp(0.16, 0.30, s.space), t, tc);
   for (var i = 0; i < this.resonators.length; i++) {

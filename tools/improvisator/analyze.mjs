@@ -32,6 +32,16 @@ const SEED = flag('seed', 'grey-rain-0001');
 const PRESET = flag('preset', 'reference');
 
 const K = loadKernel(FILE);
+
+/* An older build of this page has no characterSettings(): fall back to the raw
+   preset table so the report still runs against it and the numbers can be
+   compared. */
+const settingsFor = name => (typeof K.characterSettings === 'function'
+  ? K.characterSettings(name) : Object.assign({}, K.PRESETS[name]));
+/* Likewise the low-interval rule, so the texture of an older build can be
+   measured against the same yardstick rather than its own. */
+const lowFloor = typeof K.lowIntervalFloor === 'function' ? K.lowIntervalFloor
+  : (m => m < 40 ? 12 : m < 48 ? 7 : m < 55 ? 5 : m < 60 ? 4 : m < 64 ? 3 : 2);
 const fails = [];
 const fail = (gate, msg) => { fails.push(gate); console.log(gate.padEnd(14) + msg); };
 const pass = (gate, msg) => console.log(gate.padEnd(14) + 'PASS — ' + msg);
@@ -171,9 +181,42 @@ console.log('');
 {
   const echoes = events.filter(e => e.role === 'echo').length;
   const carried = main.bars.reduce((n, b) => n + (Array.isArray(b.carriedVoices) ? b.carriedVoices.length : (b.carriedVoices || 0)), 0);
-  if (echoes || carried) fail('NO REPEAT', echoes + ' echo events and ' + carried +
-    ' voices carried across a bar line — a sounding note must be struck, never inherited');
-  else pass('NO REPEAT', 'no echo role and no voice carried across a bar line in ' + events.length + ' events');
+
+  /* And the subtler form, which is not a role and not an inheritance: a figure
+     that was supposed to play a DIFFERENT note and fell back to the one already
+     sounding. An octave that clamps to the root, a step approach whose step
+     lands where it started. The listener hears the bass struck twice; the code
+     believes it played an answer. Counted across every character, because the
+     bass rudiments that produce these do not all fire at one setting. */
+  let sameAgain = 0, extras = 0;
+  const examples = [];
+  for (const preset of Object.keys(K.PRESETS)) {
+    for (const sd6 of ['a-1', 'b-2', 'c-3']) {
+      for (const b of run(K, { seed: sd6, preset, bars: 96, settings: settingsFor(preset) }).bars) {
+        const bass = b.events.filter(e => e.role === 'bass').sort((x, y) => x.beat - y.beat);
+        if (bass.length < 2) continue;
+        const root = bass[0];
+        for (let i = 1; i < bass.length; i++) {
+          extras++;
+          const e = bass[i];
+          const stillSounding = root.beat + root.duration > e.beat + 0.01;
+          if (e.pitch === root.pitch && stillSounding) {
+            sameAgain++;
+            if (examples.length < 3) examples.push(preset + ' ' + b.chord.name + ' ' + (e.gesture || '?') +
+              ' plays ' + e.pitch + ' again at beat ' + e.beat.toFixed(2));
+          }
+        }
+      }
+    }
+  }
+
+  const problems = [];
+  if (echoes) problems.push(echoes + ' events carry the echo role');
+  if (carried) problems.push(carried + ' voices are inherited across a bar line');
+  if (sameAgain) problems.push(sameAgain + '/' + extras + ' bass answers re-strike the root already sounding (' + examples.join('; ') + ')');
+  if (problems.length) fail('NO REPEAT', problems.join('; ') + ' — a sounding note must be struck on purpose, never inherited and never by fallback');
+  else pass('NO REPEAT', 'no echo role, no inherited voice, and no bass answer that re-strikes the note under it (' +
+    extras + ' bass answers checked)');
 }
 
 /* HARMONY — an accompaniment attack is a chord tone, the bass, or an available
@@ -237,7 +280,7 @@ console.log('');
           for (let i = 1; i < on.length; i++) {
             pairs++;
             const gap = on[i].pitch - on[i - 1].pitch;
-            if (gap > 0 && gap < K.lowIntervalFloor(on[i - 1].pitch)) {
+            if (gap > 0 && gap < lowFloor(on[i - 1].pitch)) {
               mud++;
               if (worst.length < 3) worst.push(preset + ' ' + b.chord.name + ' ' +
                 on[i-1].role + ' ' + on[i-1].pitch + ' + ' + on[i].role + ' ' + on[i].pitch + ' (gap ' + gap + ')');
@@ -379,7 +422,7 @@ console.log('');
 {
   const rows = [];
   for (const name of Object.keys(K.PRESETS)) {
-    const settings = K.characterSettings(name);
+    const settings = settingsFor(name);
     const r = run(K, { seed: 'identity-0001', preset: name, bars: 48, settings });
     const ev = r.bars.flatMap(b => b.events);
     const mel = ev.filter(e => e.role === 'melody');
