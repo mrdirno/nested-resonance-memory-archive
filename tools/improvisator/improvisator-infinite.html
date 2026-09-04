@@ -891,11 +891,8 @@ Composer.prototype.reset = function (seed, settings) {
   this.tempoWalk = 0;
   this.touch = 0;
   this.melodyTouch = 0;
-  this.role = ROLES[0];
-  this.hand = 'block';
   this.attempts = 0;
   this.pivotTo = null;
-  this.lastFinalChord = null;
   /* Anything that survives a reset is a way for the previous passage to leak
      into the next one, and the seed is advertised as reproducing a passage
      exactly. arcLen and arcPos are the worst two — the arc phase picks the
@@ -1954,7 +1951,7 @@ Composer.prototype.planRests = function (role) {
 
 Composer.prototype.melodyCeiling = function () {
   var r = this.setting('range', 0.4);
-  return Math.round(lerp(72, 88, clamp(r, 0, 1)));
+  return Math.round(lerp(72, REG.melodyHi, clamp(r, 0, 1)));
 };
 
 Composer.prototype.selectRhythm = function (intensity, barInSection, density) {
@@ -2910,7 +2907,6 @@ Composer.prototype.generateSectionInner = function (budget) {
   best.tonic = this.tonic;
   best.mode = this.mode;
   best.index = this.sectionIndex;
-  this.lastFinalChord = best.bars[7].chord;
   this.sectionIndex++;
   this.arcPos++;
   if (this.arcPos >= this.arcLen) { this.arcPos = 0; this.arcLen = this.rng.int(5, 8); }
