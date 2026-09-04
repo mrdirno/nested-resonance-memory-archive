@@ -307,6 +307,84 @@ console.log('');
     '% of structural melody notes have an accompaniment note sounding above them');
 }
 
+/* FORM — a section has to be able to end in more than one way, and the chord
+   that resolves has to be able to resolve. Every section used to close V-I with
+   a 7sus4 on the V: one shape, and a dominant with no third in it. */
+{
+  const shapes = new Map();
+  let sections = 0, doms = 0, withThird = 0;
+  for (const preset of Object.keys(K.PRESETS)) {
+    for (const sd8 of ['a-1', 'b-2', 'c-3']) {
+      const r = run(K, { seed: sd8, preset, bars: 160, settings: settingsFor(preset) });
+      const byIdx = new Map();
+      for (const b of r.bars) {
+        if (!byIdx.has(b.sectionIndex)) byIdx.set(b.sectionIndex, []);
+        byIdx.get(b.sectionIndex).push(b);
+      }
+      for (const bars of byIdx.values()) {
+        const last = bars[bars.length - 1];
+        if (bars.length < 3 || last.indexInSection !== last.sectionLength - 1) continue;
+        sections++;
+        const pen = bars[bars.length - 2];
+        shapes.set(pen.chord.degree + '->' + last.chord.degree,
+                   (shapes.get(pen.chord.degree + '->' + last.chord.degree) || 0) + 1);
+        if (pen.chord.degree === 4) {
+          doms++;
+          const third = (pen.chord.rootPc + 4) % 12;
+          if (pen.chord.pcs.map(p => ((p % 12) + 12) % 12).includes(third)) withThird++;
+        }
+      }
+    }
+  }
+  const ranked = [...shapes.entries()].sort((a, b) => b[1] - a[1]);
+  const commonest = ranked.length ? ranked[0][1] / sections : 1;
+  const thirdRate = doms ? withThird / doms : 1;
+  console.log('FORM'.padEnd(14) + sections + ' section endings: ' +
+              ranked.slice(0, 6).map(([k, v]) => k + ' ' + (100 * v / sections).toFixed(0) + '%').join('  ') +
+              '   dominants with a third ' + (100 * thirdRate).toFixed(0) + '%');
+  if (commonest > 0.55) fail('FORM', (100 * commonest).toFixed(0) +
+    '% of sections end the same way (' + ranked[0][0] + ') — the form has one shape');
+  else if (thirdRate < 0.5) fail('FORM', 'only ' + (100 * thirdRate).toFixed(0) +
+    '% of cadential dominants contain a third, so the chord that resolves cannot');
+}
+
+/* RHYTHM — a listener locks onto rhythm before anything else, so the melody has
+   to be written in note values. The expressive deviation belongs in e.micro,
+   which is applied after this and is not measured here. Also: the tempo has to
+   have somewhere to go. A nominal tempo sitting on its own clamp throws away
+   every positive term in the rubato. */
+{
+  let onGrid = 0, notes = 0, pinned = 0, bars = 0;
+  const bpmSpread = [];
+  for (const preset of Object.keys(K.PRESETS)) {
+    const nominal = settingsFor(preset).bpm;
+    for (const sd7 of ['a-1', 'b-2', 'c-3']) {
+      for (const b of run(K, { seed: sd7, preset, bars: 96, settings: settingsFor(preset) }).bars) {
+        bars++;
+        bpmSpread.push(b.bpm / nominal);
+        if (b.bpm >= nominal * 1.0895 || b.bpm <= nominal * 0.8605) pinned++;
+        for (const e of b.events) {
+          if (e.role !== 'melody') continue;
+          notes++;
+          const sb = e.scoreBeat === undefined ? e.beat : e.scoreBeat;
+          const d = Math.min(Math.abs(sb * 4 - Math.round(sb * 4)) / 4,
+                             Math.abs(sb * 3 - Math.round(sb * 3)) / 3);
+          if (d < 0.02) onGrid++;
+        }
+      }
+    }
+  }
+  const rate = onGrid / notes, pinRate = pinned / bars;
+  const lo = Math.min(...bpmSpread), hi = Math.max(...bpmSpread);
+  console.log('RHYTHM'.padEnd(14) + (100 * rate).toFixed(1) + '% of melody onsets land on a sixteenth or a triplet   tempo ' +
+              (100 * lo).toFixed(0) + '-' + (100 * hi).toFixed(0) + '% of nominal, ' +
+              (100 * pinRate).toFixed(1) + '% of bars against a limit');
+  if (rate < 0.85) fail('RHYTHM', 'only ' + (100 * rate).toFixed(1) +
+    '% of melody onsets are on a subdivision — the tune is floating, not phrasing');
+  else if (pinRate > 0.05) fail('RHYTHM', (100 * pinRate).toFixed(1) +
+    '% of bars sit against the tempo clamp, so the rubato is one-sided');
+}
+
 /* DETERMINISM — one seed, one performance. */
 {
   const a = fingerprint(run(K, { seed: SEED, preset: PRESET, bars: 96 }).bars);

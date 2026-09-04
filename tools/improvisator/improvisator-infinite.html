@@ -2272,6 +2272,7 @@ SoulComposer.prototype.reset = function (seed, settings) {
     recent:{ melody:[], accompaniment:[], bass:[], timing:[], pedal:[] },
     handTiming:{ L:-0.006, R:0.004 },
     leftPosition:40, rightPosition:68, phraseSerial:0, lastDegree:0,
+    lastCadence:null,
     sectionFingerprints:[]
   };
   /* Begin where the reference player actually sings: around middle C to G4,
@@ -2436,11 +2437,46 @@ SoulComposer.prototype.degreePathScore = function (path, plan, tensions, transit
     if (path[end] === 0 || path[end] === 5 || path[end] === 3) score += 1.0;
   }
   if (path[0] === 0) score += 2;
-  if (path[path.length-1] === 0) score += 5;
-  if (path.length > 1 && path[path.length-2] === 4) score += 3;
+  /* The last two degrees are the cadence and are chosen, not searched, so
+     rewarding them here would be a constant. What is worth rewarding is the bar
+     that leads INTO the cadence being a plausible approach to it. */
+  if (path.length > 2) {
+    var into = path[path.length-3], pen = path[path.length-2];
+    if ((transitions[into] || []).indexOf(pen) >= 0) score += 3;
+    if (into === pen) score -= 2;
+  }
   if (Object.keys(counts).length < Math.min(4, path.length)) score -= 3;
   if (path.join(',') === this.previousBlueprint) score -= 8;
   return score;
+};
+
+/* How a section can end. Every section used to end V-I, unconditionally: over
+   429 minutes of music that is 828 sections with one formal shape, and a
+   listener learns it inside two minutes. These are the endings a pianist
+   actually has, weighted by what the section was for -- a statement resolves, a
+   departure leaves the door open, a dissolve settles rather than concludes. */
+var CADENCES = [
+  { id:'authentic', pen:4, fin:0, w:{ statement:1.00, departure:0.30, shadow:0.45, lift:0.35, ret:1.10, dissolve:0.30 } },
+  { id:'plagal',    pen:3, fin:0, w:{ statement:0.35, departure:0.25, shadow:0.85, lift:0.20, ret:0.40, dissolve:1.00 } },
+  { id:'deceptive', pen:4, fin:5, w:{ statement:0.30, departure:1.00, shadow:0.40, lift:0.70, ret:0.25, dissolve:0.35 } },
+  { id:'half',      pen:1, fin:4, w:{ statement:0.25, departure:0.85, shadow:0.30, lift:1.00, ret:0.20, dissolve:0.45 } },
+  { id:'modal',     pen:6, fin:0, w:{ statement:0.30, departure:0.45, shadow:0.70, lift:0.30, ret:0.35, dissolve:0.60 } }
+];
+
+SoulComposer.prototype.chooseCadence = function (plan) {
+  var role = plan.role.id === 'return' ? 'ret' : plan.role.id;
+  var recent = this.soul.lastCadence;
+  var items = [], weights = [];
+  for (var i = 0; i < CADENCES.length; i++) {
+    var c = CADENCES[i], w = c.w[role] === undefined ? 0.4 : c.w[role];
+    /* Not the same ending twice running: the point is that the form has more
+       than one, and hearing one twice is how a listener decides it has one. */
+    if (c.id === recent) w *= 0.22;
+    items.push(c); weights.push(w);
+  }
+  var chosen = this.rng.weighted(items, weights) || CADENCES[0];
+  this.soul.lastCadence = chosen.id;
+  return chosen;
 };
 
 SoulComposer.prototype.buildDegreePath = function (plan) {
@@ -2448,13 +2484,15 @@ SoulComposer.prototype.buildDegreePath = function (plan) {
   var family = MODE_DEFS[this.mode].family;
   var tensions = family === 'major' ? DEGREE_TENSION_MAJOR : DEGREE_TENSION_MINOR;
   var transitions = family === 'major' ? TRANSITIONS_MAJOR : TRANSITIONS_MINOR;
+  var cadence = this.chooseCadence(plan);
+  plan.cadence = cadence.id;
   var best = null, bestScore = -Infinity;
   for (var attempt = 0; attempt < 28; attempt++) {
     var path = [0];
     if (plan.role.id === 'shadow' && this.rng.chance(0.34)) path[0] = 5;
     for (var i = 1; i < plan.length; i++) {
-      if (i === plan.length - 1) { path.push(0); continue; }
-      if (i === plan.length - 2) { path.push(4); continue; }
+      if (i === plan.length - 1) { path.push(cadence.fin); continue; }
+      if (i === plan.length - 2) { path.push(cadence.pen); continue; }
       var prev = path[i-1];
       var pool = (transitions[prev] || [0,3,4,5]).slice();
       var target = this.targetTension(plan, i), ctx = plan.bars[i];
@@ -2496,7 +2534,16 @@ SoulComposer.prototype.buildSoulChord = function (degree, ctx, progression) {
                   r < 0.76 ? [0,stack[1],stack[2],9,stack[4]] : [0,2,stack[2],stack[3],stack[4]];
     }
   } else if (degree === 4 && ctx.index >= progression.length - 2) {
-    intervals = family === 'major' ? [0,5,7,10,14] : [0,5,7,10,13];
+    /* The cadential dominant. This was a 7sus4 every time -- no third, and
+       therefore no leading tone -- so the one chord in the form whose job is to
+       pull could not pull anywhere, in every section of every character. The
+       sus is a real colour and it keeps a quarter of them; the rest get a third,
+       which in a minor-family mode and in mixolydian means raising it, because
+       that is what a cadence is. */
+    intervals = r < 0.24 ? (family === 'major' ? [0,5,7,10,14] : [0,5,7,10,13])
+              : r < 0.58 ? [0,4,7,10,14]
+              : r < 0.82 ? (family === 'major' ? [0,4,7,10,14,21] : [0,4,7,10,13])
+              : [0,4,7,10];
   } else {
     intervals = r < 0.34 ? [0,stack[1],stack[2],stack[3]] :
                 r < 0.78 ? [0,stack[1],stack[2],stack[4]] : [0,stack[1],stack[2],stack[3],stack[4]];
@@ -2758,6 +2805,33 @@ SoulComposer.prototype.generateSoulMelody = function (chords, plan, registerBias
     }
     starts.sort(function(a,b){return a-b;});
 
+    /* Onto a grid. The onsets were an accumulation of floats -- only 28% of
+       them landed on a sixteenth or a triplet, and 36% were nowhere near one --
+       so the tune floated over a left hand that does keep time. That does not
+       read as rubato; it reads as an inability to play in time, and rhythm is
+       the first dimension a listener locks onto.
+
+       A pianist plays note values and then leans on them. So the score is
+       quantised here and the leaning stays where the file's own rule puts it,
+       in e.micro: the hammer physics, the hand drift and the lay-back are all
+       applied later and are unaffected. Busy gestures get a sixteenth grid,
+       calm ones an eighth, and a cell whose gaps are near-triplet gets thirds
+       of a beat so a triplet figure stays a triplet. */
+    var gridStep=phrase.melody.active>=0.70||motion>0.66 ? 0.25 : 0.5;
+    var meanGap=0;
+    for (var gj=0;gj<gapSource.length;gj++) meanGap+=gapSource[gj];
+    meanGap/=Math.max(1,gapSource.length);
+    if (Math.abs(meanGap*densityScale-1/3)<0.06||Math.abs(meanGap*densityScale-2/3)<0.08) gridStep=1/3;
+    var snapped=[],lastSnap=-1;
+    for (var si=0;si<starts.length;si++){
+      var g=Math.round(starts[si]/gridStep)*gridStep;
+      /* Two notes may not land on one point: push the second to the next. */
+      if (g<=lastSnap+1e-6) g=lastSnap+gridStep;
+      if (g>=total-0.05) break;
+      snapped.push(g); lastSnap=g;
+    }
+    if (snapped.length) starts=snapped;
+
     /* Where this phrase sits. It starts from where the last one left off, so
        the line is continuous across the seam, and is drawn toward the hand's
        preferred register so a long performance does not wander off the end of
@@ -2982,7 +3056,11 @@ SoulComposer.prototype.generateAttempt = function () {
        the voicing started as low as 43, the two hands were writing into the
        same octave: measured, six thousand simultaneous pairs closer than the
        ear can separate down there. Neither part knew about the other. */
-    var bass=this.chooseSoulBass(chords[i],chords[Math.min(plan.length-1,i+1)],ctx.phrase.bass,ctx);
+    /* No next chord on the last bar of the section: passing the current one
+       made the bass "approach" the note it was already on, so a chromatic
+       approach became a chromatic neighbour of nothing. The approach branch
+       skips instead. */
+    var bass=this.chooseSoulBass(chords[i],i+1<plan.length?chords[i+1]:null,ctx.phrase.bass,ctx);
     ctx.bassCeil=bass.extras.reduce(function(m,x){return x.pitch<56?Math.max(m,x.pitch):m;},bass.main);
     basses.push(bass);
     voicings.push(this.chooseSoulVoicing(chords[i],ctx,melody.topTargets[i],ctx.phrase.accompaniment));
@@ -3265,7 +3343,14 @@ SoulComposer.prototype.nextBar = function () {
   var fieldDrift=this.field.flow(bar.globalIndex).v*0.010;
   var rolePush=bar.sectionRole.id==='lift'?0.012*bar.sectionPos:bar.sectionRole.id==='dissolve'?-0.018*bar.sectionPos:0;
   var shape=this.tempoWalk+phraseArch+sectionArch+close+opening+fieldDrift+rolePush;
-  bar.bpm=clamp(this.settings.bpm*(1+shape*this.settings.humanize),34,132);
+  /* Rubato is a proportion of the tempo, not a position in a fixed window. The
+     clamp used to run 34 to 132 -- and the reference character's tempo IS 132,
+     so every positive term in the shaping was thrown away and 55% of its bars
+     sat exactly on the ceiling. The character whose expressive timing was
+     half-disabled was the one the page opens on. */
+  var nominal=this.settings.bpm;
+  bar.bpm=clamp(nominal*(1+shape*this.settings.humanize),
+                Math.max(30,nominal*0.86),Math.min(168,nominal*1.09));
 
   var durs=flexibleBeatDurations(bar.meter||4,bar,this.settings.humanize);
   var spb=60/bar.bpm;
