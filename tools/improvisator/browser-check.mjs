@@ -7,15 +7,41 @@
    usage: node tools/improvisator/browser-check.mjs [file.html] [out.wav]
    Author: Aldrin Payopay
 */
-import { chromium } from 'playwright-core';
+/* playwright-core is a dev dependency, not part of the page. Resolve it from
+   the usual place, or from PLAYWRIGHT_CORE when it lives outside the repo. */
+const pw = await (async () => {
+  const paths = [];
+  if (process.env.PLAYWRIGHT_CORE) paths.push(process.env.PLAYWRIGHT_CORE);
+  paths.push('playwright-core');
+  for (const p of paths) {
+    try { const m = await import(p); return m.chromium ? m : m.default; } catch (_) {}
+  }
+  console.error('playwright-core not found. npm i playwright-core, or set PLAYWRIGHT_CORE to its index.js');
+  process.exit(2);
+})();
+const chromium = pw.chromium;
 import { resolve } from 'node:path';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const file = resolve(process.argv[2] || 'tools/improvisator/improvisator-infinite.html');
 const outWav = process.argv[3] || null;   /* the page bounces a fixed 60 s */
 /* Pin the seed so a before/after pair is the same piece played two ways. */
 const seed = process.env.IMPROV_SEED || '';
-const EXEC = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+/* Playwright's own browser download, wherever this machine put it. */
+const EXEC = process.env.CHROMIUM_PATH || (() => {
+  const roots = [process.env.PLAYWRIGHT_BROWSERS_PATH, '/opt/pw-browsers'].filter(Boolean);
+  for (const r of roots) {
+    try {
+      for (const d of readdirSync(r)) {
+        if (!d.startsWith('chromium-')) continue;
+        const c = join(r, d, 'chrome-linux', 'chrome');
+        if (existsSync(c)) return c;
+      }
+    } catch (_) {}
+  }
+  return undefined;
+})();
 
 const browser = await chromium.launch({
   executablePath: EXEC,

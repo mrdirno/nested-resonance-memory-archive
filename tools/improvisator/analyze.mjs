@@ -205,6 +205,33 @@ ${Object.keys(micros).map(r => `  time ${r.padEnd(7)} mean ${fmt(mean(micros[r])
   tempo         ${fmt(Math.min(...bpms))} .. ${fmt(Math.max(...bpms))} bpm  (sd ${fmt(stdev(bpms))})
 `);
 
+/* ---- gesture, seams and rails ----------------------------------------- */
+{
+  const c = new K.Composer(seed, Object.assign({}, settings));
+  let noGesture = 0, jumpy = 0, sections = 0, pickups = 0, boundaries = 0;
+  let melAtHi = 0, melAtLo = 0, harmAtLo = 0, melN = 0, harmN = 0;
+  const closures = new Map();
+  for (let s = 0; s < 40; s++) {
+    const sec = c.generateSection();
+    sections++;
+    closures.set(sec.closure, (closures.get(sec.closure) || 0) + 1);
+    const line = sec.melody;
+    let big = 0;
+    for (let i = 1; i < line.length; i++) if (Math.abs(line[i] - line[i - 1]) >= 7) big++;
+    if (!big) noGesture++;
+    if (big > 4) jumpy++;
+    boundaries++;
+    if (sec.bars[7].events.some(e => e.role === 'melody' && e.pickup)) pickups++;
+    for (const bar of sec.bars) for (const e of bar.events) {
+      if (e.role === 'melody') { melN++; if (e.velocity >= 0.9399) melAtHi++; if (e.velocity <= 0.0901) melAtLo++; }
+      if (e.role === 'harmony') { harmN++; if (e.velocity <= 0.0601) harmAtLo++; }
+    }
+  }
+  console.log(`GESTURE        ${noGesture}/${sections} sections have no interval >= 7 semitones; ${jumpy}/${sections} have more than four`);
+  console.log(`SEAMS          ${pickups}/${boundaries} section boundaries carry a pickup   closures: ${[...closures].map(([k, v]) => k + ' ' + v).join('  ')}`);
+  console.log(`RAILS          melody at ceiling ${pct(melAtHi / Math.max(1, melN))}  at floor ${pct(melAtLo / Math.max(1, melN))}   harmony at floor ${pct(harmAtLo / Math.max(1, harmN))}`);
+}
+
 /* ---- how hard the section search is working --------------------------- */
 {
   const c = new K.Composer(seed, Object.assign({}, settings));

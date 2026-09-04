@@ -817,7 +817,7 @@ var REG = {
 /* Velocity rails. Measured, these were binding on seven to thirteen percent of
    melody notes, so the clamp rather than the phrase shape was deciding what
    the top of every line sounded like. */
-var VEL = { melLo: 0.09, melHi: 0.94, harmLo: 0.06, harmHi: 0.62 };
+var VEL = { melLo: 0.09, melHi: 0.97, harmLo: 0.06, harmHi: 0.62 };
 
 /* Every candidate section is searched with the same budget, in realtime, in
    the offline bounce and in the MIDI export — different budgets consumed
@@ -954,12 +954,14 @@ function handLead (role, downbeat) {
    land a cadence, so the lateness breathes instead of being a fixed lag.
    Past about 80 ms it stops reading as behind and starts reading as wrong,
    which is what the length and tempo factors are holding it under. */
-var LAYBACK_MS = { melody: 40, echo: 30, harmony: 4, bass: 0 };
+var LAYBACK_MS = { melody: 46, echo: 34, harmony: 4, bass: 0 };
 Composer.prototype.layback = function (e, spb, phrasePos, amount) {
   var base = LAYBACK_MS[e.role] || 0;
   if (!base) return 0;
   var tempoK = clamp(Math.pow(spb / 0.9375, 0.6), 0.55, 1.35);
-  var lenK = clamp(0.55 + 0.45 * Math.min(e.duration, 1.6) / 1.6, 0.55, 1.0);
+  /* A short note is still played late; the length factor should shade the
+     lay-back, not strip it. */
+  var lenK = clamp(0.70 + 0.30 * Math.min(e.duration, 1.6) / 1.6, 0.70, 1.0);
   var p = clamp(phrasePos, 0, 1);
   var posK = 0.80 + 0.35 * Math.sin(Math.PI * p) - 0.30 * Math.pow(p, 6);
   /* The walk breathes once a bar, not once a note: advancing it per note put
@@ -968,15 +970,22 @@ Composer.prototype.layback = function (e, spb, phrasePos, amount) {
   var ms = base * tempoK * lenK * posK * (1 + (this.layWalk || 0));
   if (e.tight) ms *= 0.25;
   if (e.tenuto) ms *= 1.30;
-  return (ms / 1000) * clamp(amount === undefined ? 0.68 : amount, 0, 1);
+  /* Past about eighty milliseconds it stops reading as behind the beat and
+     starts reading as wrong. */
+  return Math.min(0.078, (ms / 1000) * clamp(amount === undefined ? 0.68 : amount, 0, 1));
 };
 
 /* How far the off-beat eighth is displaced, as a fraction of the beat. The
    ratio has to shrink as the tempo rises or a ballad lilt turns into a lounge
    act; 0.667 is triplet swing and belongs to a different music. */
 function swingRatio (bpm, amount) {
+  var a = clamp(amount === undefined ? 0.3 : amount, 0, 1);
+  if (!(a > 0.02)) return 0.5;
   var r = clamp(0.635 - 0.00110 * clamp(bpm, 40, 150), 0.52, 0.63);
-  return 0.5 + (r - 0.5) * clamp(amount === undefined ? 0.3 : amount, 0, 1);
+  /* A floor under the amount, so a small setting is a small lilt rather than
+     nothing at all — the control used to gate itself off on exactly the two
+     presets whose settings were lowest. */
+  return 0.5 + (r - 0.5) * (0.30 + 0.70 * a);
 }
 /* Off-beat eighths land late. Ratio 0.5 is straight; 0.56 is a ballad lilt. */
 function swingBeat (beat, ratio) {
@@ -1936,9 +1945,21 @@ Composer.prototype.chooseMelodyPitch = function (chord, nextChord, ctx) {
     else if (absLeap <= 9) score -= 2.2;
     else if (absLeap <= 12) score -= 5.5;
     else score -= 12;
+    /* A step scored +2.1 and a seventh -2.2, and nothing ever pushed the other
+       way, so a fifth of all sections contained no interval wider than a fifth
+       — and the validator then docked them for a shape the generator was
+       structurally prevented from making. Once a section has gone three bars
+       without one, a leap becomes the preferred move, but only onto a chord
+       tone: a leap to a passing note reads as a mistake, a leap to the 9th
+       reads as a gesture. The softmax still gets to decline it. */
+    if (ctx.needGesture && isChord) {
+      if (absLeap >= 7 && absLeap <= 10) score += 9.5;
+      else if (absLeap === 11 || absLeap === 12) score += 6.0;
+      else if (absLeap <= 2) score -= 2.2;
+    }
     if (ctx.prevLeap && Math.abs(ctx.prevLeap) >= 5) {
-      if (Math.sign(leap) === -Math.sign(ctx.prevLeap) && absLeap <= 4) score += 2.7;
-      else if (Math.sign(leap) === Math.sign(ctx.prevLeap)) score -= 2.4;
+      if (Math.sign(leap) === -Math.sign(ctx.prevLeap) && absLeap <= 4) score += 3.4;
+      else if (absLeap > 4) score -= 2.0;
     }
     if (ctx.contourDirection && Math.sign(leap) === ctx.contourDirection) score += 0.55;
     if (n < lo + 3) score -= 0.7;
@@ -2001,7 +2022,7 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
   var ceiling = this.melodyCeiling();
   var prev = this.prevMelody, prevLeap = 0;
   var sequence = [], motifHits = 0, motifNotes = 0;
-  var sectionPeak = -1000, peakBar = 4 + (this.rng.chance(0.6) ? 1 : 0);
+  var sectionPeak = -1000, peakBar = 4 + (this.rng.chance(0.6) ? 1 : 0), hadLeap = false;
   this.ornCount = 0; this.ornCooldown = 0;
 
   for (bar = 0; bar < 8; bar++) {
@@ -2053,8 +2074,9 @@ Composer.prototype.generateMelodyForSection = function (chordAt, intensities, ro
         previous: prev, prevLeap: prevLeap, contourDirection: phrasePos < 0.52 ? 1 : -1,
         duration: dur0, registerBias: registerBias, desiredCenter: desiredCenter,
         motifWeight: motifWeight, sectionPeak: sectionPeak, bar: bar, peakBar: peakBar,
-        closure: closure
+        closure: closure, needGesture: !hadLeap && bar >= 2
       });
+      if (Math.abs(pitch - prev) >= 7) hadLeap = true;
       if (pitch > sectionPeak) sectionPeak = pitch;
       if (useCell && j < dev.deg.length && pitch === target) motifHits++;
 
@@ -2619,7 +2641,7 @@ Composer.prototype.generateAttempt = function () {
    on the first attempt and the ten-candidate search was dead code. These are
    the things this idiom actually requires. */
 Composer.prototype.validateSection = function (section) {
-  var score = 100, issues = [], i, j, seenVoicings = {};
+  var score = 100, issues = [], i, j, seenVoicings = {}, crowd = 0;
   var melody = section.melody;
   var restBars = 0;
   for (i = 0; i < 8; i++) {
@@ -2640,17 +2662,18 @@ Composer.prototype.validateSection = function (section) {
     if (max - min > 26) { score -= 8; issues.push('unfocused range'); }
   }
 
-  var big = 0;
+  var big = 0, unrecovered = 0;
   for (i = 1; i < melody.length; i++) {
     var d = Math.abs(melody[i] - melody[i - 1]);
     if (d >= 7) {
       big++;
       var nxt = i + 1 < melody.length ? melody[i + 1] - melody[i] : 0;
       var dir = Math.sign(melody[i] - melody[i - 1]);
-      if (i + 1 < melody.length && (Math.sign(nxt) === dir || Math.abs(nxt) > 4)) { score -= 5; issues.push('unrecovered leap'); }
+      if (i + 1 < melody.length && (Math.sign(nxt) === dir || Math.abs(nxt) > 4)) { unrecovered++; issues.push('unrecovered leap'); }
     }
     if (d > 16) { score -= 12; issues.push('unsingable leap'); }
   }
+  score -= Math.min(unrecovered * 5, 15);
   if (big === 0) { score -= 6; issues.push('no gesture'); }
   if (big > 4) { score -= 8; issues.push('jumpy'); }
   if (section.motifNotes >= 6 && section.motifHits / section.motifNotes < 0.35) { score -= 10; issues.push('motif not heard'); }
@@ -2691,8 +2714,8 @@ Composer.prototype.validateSection = function (section) {
         if (Math.abs(mel[mi].beat - he.beat) < 0.35) { stacked++; break; }
       }
     }
-    if (stacked > 4) { score -= 4; issues.push('hands crowded'); }
-    if (harm > 9) { score -= 6; issues.push('hands crowded'); }
+    if (stacked > 5) { crowd += 4; issues.push('hands crowded'); }
+    if (harm > 9) { crowd += 6; issues.push('hands crowded'); }
     var vkey = bar.voicing.join('-');
     if (!seenVoicings[vkey]) {
       seenVoicings[vkey] = true;
@@ -2701,6 +2724,7 @@ Composer.prototype.validateSection = function (section) {
       }
     }
   }
+  score -= Math.min(crowd, 12);
   var uniq = {}; for (i = 0; i < issues.length; i++) uniq[issues[i]] = true;
   return { score: clamp(score, 0, 100), issues: Object.keys(uniq) };
 };
