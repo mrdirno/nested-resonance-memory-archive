@@ -187,6 +187,39 @@ if (live.status !== 'playing' || !advanced)
   fail('PLAYS', 'after six seconds the status is ' + JSON.stringify(live.status) + ' and the clock reads ' + JSON.stringify(live.time));
 else pass('PLAYS', 'status "playing", clock at ' + live.time + ', chord ' + JSON.stringify(live.chord));
 
+/* --- CHARACTERS: every button has to apply, and none may throw. The build this
+   started from declared LOCKED_PERFORMANCE inside the kernel's closure and
+   never exported it, so applyPreset threw a ReferenceError on every click: all
+   eight buttons were inert, the key label never moved, and the active state
+   stayed on the first one. Nothing in the page surfaced it. --- */
+{
+  const names = await page.$$eval('.preset', bs => bs.map(x => x.dataset.preset));
+  const before = errors.length;
+  const seen = new Set();
+  const problems = [];
+  for (const n of names) {
+    await page.click('.preset[data-preset="' + n + '"]');
+    await page.waitForTimeout(150);
+    const st = await page.evaluate(() => ({
+      key: (document.getElementById('keyLabel') || {}).textContent,
+      active: [...document.querySelectorAll('.preset')].filter(b => b.classList.contains('active'))
+                .map(b => b.dataset.preset).join(','),
+      melody: (document.getElementById('melodyValue') || {}).textContent,
+      motion: (document.getElementById('motionValue') || {}).textContent,
+    }));
+    if (st.active !== n) problems.push(n + ' did not become the active character (active=' + st.active + ')');
+    seen.add(st.key + '|' + st.melody + '|' + st.motion);
+  }
+  const threw = errors.slice(before);
+  console.log('  characters      ' + names.length + ' buttons, ' + seen.size + ' distinct states');
+  if (threw.length) problems.push('threw: ' + threw[0].slice(0, 100));
+  if (seen.size < names.length - 1) problems.push('only ' + seen.size + ' of ' + names.length +
+    ' buttons produce a distinct key and posture');
+  if (problems.length) fail('CHARACTERS', problems.slice(0, 3).join(' | '));
+  else pass('CHARACTERS', 'all ' + names.length + ' character buttons apply, none throws, ' +
+    seen.size + ' distinct states');
+}
+
 /* --- MIDI --- */
 await page.evaluate(() => { window.__blobs.length = 0; });
 await page.keyboard.press('m');

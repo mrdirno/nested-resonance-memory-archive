@@ -3362,7 +3362,6 @@ Engine.prototype.attach = function (ctx, settings) {
     node.connect(f); node = f;
     this.resonators.push(f);
   }
-  this.resonChain = { head: chainHead, tail: node };
 
   this.sum = ctx.createGain(); this.sum.gain.value = 1;
   this.glue = ctx.createDynamicsCompressor();
