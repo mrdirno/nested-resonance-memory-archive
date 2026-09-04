@@ -290,9 +290,9 @@ else {
 }
 
 /* --- bounce --- */
-async function bounce (label) {
+async function bounce (label, key) {
   await page.evaluate(() => { window.__blobs.length = 0; window.__wp = null; window.__w = null; });
-  await page.keyboard.press('b');
+  await page.keyboard.press(key || 'b');
   const b64 = await page.waitForFunction(() => {
     const b = window.__blobs.find(x => x.type === 'audio/wav');
     if (!b) return null;
@@ -346,6 +346,25 @@ const w = await bounce('check');
   console.log('  repeatability   two bounces differ by ' + rel.toFixed(1) + ' dB rms (peak ' + db(dpk).toFixed(1) + ' dBFS)');
   if (rel > -60) fail('REPEATABLE', 'two bounces of one seed differ by ' + rel.toFixed(1) + ' dB — a per-note value is not following the seed');
   else pass('REPEATABLE', 'two bounces of one seed are the same take to ' + rel.toFixed(1) + ' dB');
+}
+
+/* --- LONG BOUNCE: a minute judges a texture, four judge a movement, and the
+   long one has to stay linear. Scheduling a whole take before startRendering
+   never lets a finished voice leave the graph, so the cost grows with the
+   length: measured, the same four minutes takes 255 seconds that way -- slower
+   than simply recording it -- against 42 with the render suspended every eight
+   seconds. --- */
+{
+  const t0 = Date.now();
+  const w4 = await bounce('long', 'Shift+B');
+  const secs = w4.n / w4.rate;
+  const wall = (Date.now() - t0) / 1000;
+  console.log('  long bounce     ' + secs.toFixed(0) + ' s of music rendered in ' + wall.toFixed(1) +
+              ' s (' + (secs / wall).toFixed(1) + 'x realtime)');
+  if (secs < 200) fail('LONG BOUNCE', 'Shift+B produced ' + secs.toFixed(0) + ' s, not four minutes');
+  else if (secs / wall < 1.5) fail('LONG BOUNCE', 'four minutes took ' + wall.toFixed(0) +
+    ' s to render (' + (secs / wall).toFixed(1) + 'x realtime) — the offline render is not linear in the length');
+  else pass('LONG BOUNCE', 'four minutes rendered at ' + (secs / wall).toFixed(1) + 'x realtime');
 }
 
 /* --- LAYOUT: every control has to be tappable at every size, with the settings

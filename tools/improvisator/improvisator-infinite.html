@@ -412,7 +412,7 @@ select option { background: var(--slab-solid); color: var(--ink); }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"></path><path d="M19 12a7 7 0 1 1-2.1-5"></path></svg><span>New passage</span>
         </button>
         <button class="chip wide" id="exportMidi" type="button" title="Save the notes as MIDI (M)">MIDI</button>
-        <button class="chip wide" id="exportWav" type="button" title="Render 60 seconds to WAV (B)">Bounce</button>
+        <button class="chip wide" id="exportWav" type="button" title="Render a minute to WAV — hold Shift for four (B)">Bounce</button>
         <button class="chip square" id="settingsToggle" type="button" aria-label="Controls" aria-expanded="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"></path></svg>
         </button>
@@ -4533,7 +4533,40 @@ function bounceWav(seconds) {
     offEngine.attach(oc, snapshot);
     var c = new K.Composer(seed, snapshot);
     var t = 0.3;
-    while (t < seconds) t += renderBar(offEngine, c.nextBar(), t, null, null);
+    function scheduleUntil (limit) {
+      while (t < limit && t < seconds) t += renderBar(offEngine, c.nextBar(), t, null, null);
+    }
+
+    /* Scheduling the whole take before startRendering builds every note of it
+       as live nodes at once, and an offline context never runs the event loop
+       while it renders, so no voice's `ended` ever fires and none of them leave
+       the graph -- the per-quantum cost grows with the whole piece. Suspending
+       periodically hands the main thread back, which is what lets the finished
+       voices disconnect, and is the only place a progress number can come from.
+
+       The lead matters: Engine.play clamps a note scheduled behind the render
+       clock to now + 2 ms, so scheduling only as far as the next suspend point
+       moves the first note of the next bar. Sixteen seconds ahead of an
+       eight-second suspend leaves no note behind the clock.
+
+       Firefox and Safari before 14.1 have no suspend; there the whole take is
+       scheduled at once, exactly as before. */
+    var CHUNK = 8, LEAD = 16;
+    if (typeof oc.suspend !== 'function' || seconds <= LEAD) scheduleUntil(seconds);
+    else {
+      scheduleUntil(LEAD);
+      for (var stop = CHUNK; stop < seconds; stop += CHUNK) {
+        (function (at) {
+          oc.suspend(at).then(function () {
+            /* Resume whatever happens: a render left suspended never resolves. */
+            try {
+              scheduleUntil(at + LEAD);
+              setStatus('bouncing ' + Math.round(100 * at / seconds) + '%', 'working');
+            } finally { oc.resume(); }
+          }).catch(function () { /* the suspend point had already passed */ });
+        })(stop);
+      }
+    }
     oc.startRendering().then(function (rendered) {
       var L = rendered.getChannelData(0);
       var R = rendered.numberOfChannels > 1 ? rendered.getChannelData(1) : L;
@@ -4552,7 +4585,8 @@ function bounceWav(seconds) {
         Lc[Lc.length - 1 - i] *= g; Rc[Rc.length - 1 - i] *= g;
       }
       download(K.encodeWav([Lc, Rc], sr), 'improvisator-' + seed + '.wav', 'audio/wav');
-      notice(Math.round(seconds) + ' s bounced, peak ' + (20 * Math.log10(peak)).toFixed(1) + ' dBFS');
+      notice((seconds >= 120 ? (seconds / 60).toFixed(0) + ' min' : Math.round(seconds) + ' s') +
+             ' bounced, peak ' + (20 * Math.log10(peak)).toFixed(1) + ' dBFS');
       busy = false;
       setStatus(transport && transport.playing ? 'playing' : 'ready', transport && transport.playing ? 'playing' : null);
     }).catch(function (err) {
@@ -4653,7 +4687,7 @@ function populate() {
 el.playButton.addEventListener('click', togglePlay);
 el.newButton.addEventListener('click', newPassage);
 el.exportMidi.addEventListener('click', exportMidi);
-el.exportWav.addEventListener('click', function () { bounceWav(60); });
+el.exportWav.addEventListener('click', function (e) { bounceWav(e.shiftKey ? 240 : 60); });
 el.recordButton.addEventListener('click', toggleRecording);
 
 Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (b) {
@@ -4736,7 +4770,10 @@ document.addEventListener('keydown', function (e) {
   if (e.code === 'Space') { if (onControl) return; e.preventDefault(); togglePlay(); }
   else if (k === 'n') newPassage();
   else if (k === 'm') exportMidi();
-  else if (k === 'b') bounceWav(60);
+  /* A minute is long enough to judge a texture and not long enough to hear a
+     movement: the form runs in eight-to-ten-bar sections and a passage needs
+     several of them to say anything. */
+  else if (k === 'b') bounceWav(e.shiftKey ? 240 : 60);
   /* Whether the record button is actually on screen, not whether an inline
      style says so. The hiding comes from a stylesheet rule under 640 px, which
      an inline-style check cannot see: r started a real recording with no

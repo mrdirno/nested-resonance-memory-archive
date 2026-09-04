@@ -27,7 +27,7 @@ composer reasons at movement → phrase → gesture → hand → finger.
 - **Play / pause** — space, or the centre button
 - **New passage** — `N`
 - **Export MIDI** — `M` (format 1, real tempo map, parts on separate tracks, pedal on every lane)
-- **Bounce 60 s to WAV** — `B`
+- **Bounce to WAV** — `B` for a minute, `Shift+B` for four
 - **Record what you hear** — `R`
 - **Controls** — `C`
 
@@ -85,6 +85,7 @@ DOM and is deliberately not evaluated — and runs the composer for as many bars
 | **MIDI** | The export parses back with every note paired, a tempo map, a time signature (the composer writes 3/4 to 5/4), the pedal on every channel that carries notes, no note retriggering a pitch already sounding on its channel, no character lost to ASCII flattening, and no silent lead-in. |
 | **LAYOUT** | Every control is reachable and big enough at ten viewport sizes, portrait and landscape, panel open and shut — scrolled into view the way a browser does. |
 | **KEYBOARD** | Space activates the focused control and reaches the transport only when nothing is focused; `r` respects a record button hidden by a stylesheet. |
+| **LONG BOUNCE** | Four minutes renders in linear time. Scheduling a whole take before `startRendering` never lets a finished voice leave the graph, so the cost grows with the length — 255 s for four minutes that way, against 31 with the render suspended every eight seconds. |
 | **REPEATABLE** | Two bounces of one seed differ by less than −60 dB. |
 | **NO ERRORS** | No console or page errors across the whole run. |
 
