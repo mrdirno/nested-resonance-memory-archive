@@ -3552,7 +3552,12 @@ function Engine(bank) {
   this.ready = false;
   this.voices = [];
   this.buffers = [];
-  this.rng = new K.RNG('engine');
+  /* The engine draws no randomness per note any more: everything that used to
+     come from a running stream -- the slice of felt noise under a hammer, the
+     slice under the pedal -- is derived from the note or the event instead, so
+     an engine that has been playing for an hour and a brand-new one built by
+     the offline bounce make identical sound from identical events. What is left
+     is the two fixed noise buffers, each with its own named seed. */
   this.settings = null;
   /* How far the pedal is down. It is a per-note parameter -- renderBar passes
      it to every play() explicitly -- and this field is only the default for a
@@ -3728,10 +3733,13 @@ Engine.prototype.applySettings = function (settings, immediate) {
   this.bodyHigh.gain.setTargetAtTime(lerp(-4.8, -1.2, s.resonance), t, tc);
 
   var rv = s.reverb === undefined ? 0.07 : clamp(s.reverb, 0, 1);
-  /* Reverb is ambience only. At the approved 7% setting the wet path measures
-     0.9% of the dry level -- 0.07^1.15 x 0.19 against 0.96 -- with no discrete
-     reflections and no pre-delay to expose it. The character buttons do not
-     move it: reverb is part of the mix, and the mix is the locked posture. */
+  /* Reverb is ambience only. At the approved 7% setting the wet gain is 0.93%
+     of the dry gain -- 0.07^1.15 x 0.19 against 0.96 -- and the normalised
+     convolver contributes about -10 dB of its own, so what reaches the sum is
+     0.29% of the dry signal: -50.7 dB, measured. There are no discrete
+     reflections and no pre-delay for it to expose in any case. The character
+     buttons do not move it: reverb is part of the mix, and the mix is the
+     locked posture. */
   this.dry.gain.setTargetAtTime(0.96, t, tc);
   this.wet.gain.setTargetAtTime(Math.pow(rv,1.15) * lerp(0.16, 0.30, s.space), t, tc);
   for (var i = 0; i < this.resonators.length; i++) {
@@ -3768,7 +3776,14 @@ Engine.prototype.pedalMechanic = function (when, down, amount) {
   gain.gain.exponentialRampToValueAtTime(Math.max(0.00002, peak), t + 0.004);
   gain.gain.exponentialRampToValueAtTime(0.00001, t + (down ? 0.10 : 0.075));
   src.connect(filter); filter.connect(gain); gain.connect(this.input);
-  var off = this.rng.float(0, Math.max(0.001, this.mechanicNoise.duration - 0.15));
+  /* Which slice of the felt noise, derived from the event rather than drawn
+     from the engine's own stream. A live engine has been running for however
+     long you have been listening; the one bounceWav builds is brand new. Draw
+     from engine state and the two are at different points in it, so the offline
+     render is not a recording of the live one even when every note matches. */
+  this.mechanicCount = (this.mechanicCount || 0) + 1;
+  var mspan = Math.max(0.001, this.mechanicNoise.duration - 0.15);
+  var off = (K.hashString('pedal-felt:' + this.mechanicCount) % 100000) / 100000 * mspan;
   src.start(t, off, 0.14); src.stop(t + 0.15);
 };
 
@@ -3831,7 +3846,7 @@ Engine.prototype.play = function (midi, when, durationSec, velocity, role, pedal
   var rate = Math.pow(2, (midi - zone.root) / 12);
   var bufSeconds = buf.duration / rate;
 
-  var f = midiToHz(midi), s = this.settings, rng = this.rng;
+  var f = midiToHz(midi), s = this.settings;
   var gain = ctx.createGain();
   var pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
   var colour = ctx.createBiquadFilter(); colour.type = 'lowpass'; colour.Q.value = 0.46;
@@ -3886,7 +3901,10 @@ Engine.prototype.play = function (midi, when, durationSec, velocity, role, pedal
     ng.gain.exponentialRampToValueAtTime(Math.max(0.00002, nPeak), when + 0.0020);
     ng.gain.exponentialRampToValueAtTime(0.00001, when + 0.038);
     nsrc.connect(nf); nf.connect(ng); ng.connect(pan || this.input);
-    var off = rng.float(0, Math.max(0.001, this.noise.duration - 0.065));
+    /* Likewise the hammer noise: keyed to the note and which strike of that key
+       it is, both of which the score already determines. */
+    var nspan = Math.max(0.001, this.noise.duration - 0.065);
+    var off = (K.hashString('hammer:' + midi + ':' + strike) % 100000) / 100000 * nspan;
     nsrc.start(when, off, 0.055); nsrc.stop(when + 0.062);
   }
 

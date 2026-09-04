@@ -173,6 +173,32 @@ console.log('  bank            ' + (prepDone ? 'ready' : 'still preparing') + ' 
   else pass('SAMPLE RATE', 'every buffer is declared at the rate its data was rendered at');
 }
 
+/* --- NO ENGINE STATE: nothing a note sounds like may come from how long the
+   engine has been running. The felt noise under a hammer and under the pedal
+   used to be drawn from a stream the engine advanced per event, so an engine
+   that had been playing for an hour and the brand-new one bounceWav builds made
+   different sound from identical events -- the bounce was not a recording of
+   what you had been listening to. --- */
+{
+  const src = readFileSync(FILE, 'utf8');
+  const body = f => {
+    const at = src.indexOf('Engine.prototype.' + f + ' = function');
+    if (at < 0) return null;
+    const end = src.indexOf('\n};', at);
+    return src.slice(at, end < 0 ? at + 4000 : end);
+  };
+  const problems = [];
+  for (const f of ['play', 'pedalMechanic', 'release', 'damp']) {
+    const b = body(f);
+    if (b === null) { problems.push('Engine.' + f + ' not found'); continue; }
+    if (/\brng\b|Math\.random/.test(b)) problems.push('Engine.' + f + ' draws from a random stream per event');
+  }
+  const seeds = [...src.matchAll(/new K\.RNG\(([^)]*)\)/g)].map(m => m[1].trim());
+  console.log('  engine seeds    ' + (seeds.length ? seeds.join(', ') : 'none'));
+  if (problems.length) fail('NO ENGINE STATE', problems.join('; '));
+  else pass('NO ENGINE STATE', 'no per-event value comes from the engine\'s own running state');
+}
+
 /* --- it plays --- */
 await page.click('#playButton');
 await page.waitForTimeout(6000);

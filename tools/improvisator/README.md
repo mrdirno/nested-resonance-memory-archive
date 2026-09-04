@@ -85,6 +85,7 @@ DOM and is deliberately not evaluated — and runs the composer for as many bars
 | **MIDI** | The export parses back with every note paired, a tempo map, a time signature (the composer writes 3/4 to 5/4), the pedal on every channel that carries notes, no note retriggering a pitch already sounding on its channel, no character lost to ASCII flattening, and no silent lead-in. |
 | **LAYOUT** | Every control is reachable and big enough at ten viewport sizes, portrait and landscape, panel open and shut — scrolled into view the way a browser does. |
 | **KEYBOARD** | Space activates the focused control and reaches the transport only when nothing is focused; `r` respects a record button hidden by a stylesheet. |
+| **NO ENGINE STATE** | Nothing a note sounds like comes from how long the engine has been running, so the bounce is a recording of what you were listening to and not merely the same notes. |
 | **LONG BOUNCE** | Four minutes renders in linear time. Scheduling a whole take before `startRendering` never lets a finished voice leave the graph, so the cost grows with the length — 255 s for four minutes that way, against 31 with the render suspended every eight seconds. |
 | **REPEATABLE** | Two bounces of one seed differ by less than −60 dB. |
 | **NO ERRORS** | No console or page errors across the whole run. |
