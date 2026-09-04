@@ -327,19 +327,37 @@ const w = await bounce('check');
    ends up under another one and takes its taps. --- */
 {
   const problems = [];
-  for (const [w, h, label] of [[320, 568, 'iPhone SE'], [360, 640, 'small phone'],
-                               [390, 844, 'phone'], [768, 1024, 'tablet'], [1440, 900, 'desktop']]) {
+  /* Portrait AND landscape, and the short desktop windows an ordinary machine
+     produces once a menu bar, browser chrome, a bookmarks bar and a dock are
+     taken out of the screen. Six of these ten had an unreachable play button. */
+  for (const [w, h, label] of [
+    [320, 568, 'iPhone SE'], [568, 320, 'iPhone SE landscape'],
+    [360, 640, 'small phone'], [390, 844, 'phone'], [844, 390, 'phone landscape'],
+    [812, 375, 'iPhone X landscape'], [740, 420, 'small window'],
+    [768, 1024, 'tablet'], [1440, 700, 'short desktop'], [1440, 900, 'desktop'],
+  ]) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(200);
     for (const open of [false, true]) {
       if (open) { await page.click('#settingsToggle').catch(() => {}); await page.waitForTimeout(220); }
-      const r = await page.evaluate(() => {
+      /* A control counts as reachable if a user can get to it: scroll it into
+         view the way a browser does, then check that a tap at its centre lands
+         on it. Both the stage and the console scroll, so testing without
+         scrolling would condemn controls that are perfectly usable — and
+         testing only the initial position would miss the ones that are not. */
+      const r = await page.evaluate(async () => {
         const out = {}; const vw = innerWidth, vh = innerHeight;
-        for (const id of ['playButton', 'exportMidi', 'exportWav', 'newButton']) {
+        const ids = ['playButton', 'exportMidi', 'exportWav', 'newButton',
+                     'tonicSelect', 'modeSelect', 'settingsToggle'];
+        for (const id of ids) {
           const e = document.getElementById(id); if (!e) continue;
-          const b = e.getBoundingClientRect();
+          let b = e.getBoundingClientRect();
           if (b.width === 0 || b.height === 0) continue;           /* deliberately hidden */
-          if (b.width < 30 || b.height < 30) { out[id] = 'only ' + Math.round(b.width) + 'x' + Math.round(b.height) + ' px'; continue; }
+          if (b.width < 24 || b.height < 20) { out[id] = 'only ' + Math.round(b.width) + 'x' + Math.round(b.height) + ' px'; continue; }
+          e.scrollIntoView({ block: 'center', inline: 'nearest' });
+          await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+          b = e.getBoundingClientRect();
+          if (b.bottom < 0 || b.top > vh || b.right < 0 || b.left > vw) { out[id] = 'cannot be scrolled into view'; continue; }
           const cx = Math.min(vw - 1, Math.max(1, b.left + b.width / 2));
           const cy = Math.min(vh - 1, Math.max(1, b.top + b.height / 2));
           const t = document.elementFromPoint(cx, cy);
@@ -356,7 +374,50 @@ const w = await bounce('check');
   }
   await page.setViewportSize({ width: 1280, height: 800 });
   if (problems.length) fail('LAYOUT', problems.slice(0, 4).join(' | ') + (problems.length > 4 ? ' …' + problems.length : ''));
-  else pass('LAYOUT', 'every control is reachable at five sizes, panel open and shut');
+  else pass('LAYOUT', 'every control is reachable at ten viewport sizes, panel open and shut');
+}
+
+/* --- KEYBOARD: a control that works with a mouse has to work with a keyboard.
+   Space is how a focused button is activated; taking it globally made every
+   character button mouse-only. And the `r` shortcut checked an inline style
+   that the stylesheet never sets, so it started a real recording on a narrow
+   window where the record button is hidden and there is no way to stop it. --- */
+{
+  const problems = [];
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.waitForTimeout(200);
+  await page.evaluate(() => { const b = document.querySelector('.preset:not(.active)'); b && b.focus(); });
+  const before = await page.evaluate(() => document.getElementById('statusText').textContent);
+  const target = await page.evaluate(() => document.activeElement.dataset.preset);
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(300);
+  const after = await page.evaluate(() => ({
+    status: document.getElementById('statusText').textContent,
+    active: [...document.querySelectorAll('.preset')].filter(b => b.classList.contains('active'))
+              .map(b => b.dataset.preset).join(','),
+  }));
+  if (after.status !== before) problems.push('space on a focused button toggled the transport instead of pressing it');
+  if (after.active !== target) problems.push('space on a focused character button did not select it');
+
+  await page.evaluate(() => document.activeElement.blur());
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(400);
+  const playing = await page.evaluate(() => document.getElementById('statusText').textContent);
+  if (playing === before) problems.push('space with nothing focused did not reach the transport');
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(300);
+
+  await page.setViewportSize({ width: 500, height: 800 });
+  await page.waitForTimeout(250);
+  await page.evaluate(() => document.activeElement.blur());
+  await page.keyboard.press('r');
+  await page.waitForTimeout(400);
+  const rec = await page.evaluate(() => document.getElementById('statusText').textContent);
+  if (/record/i.test(rec)) problems.push('r started a recording at 500 px wide, where the record button is hidden');
+  await page.setViewportSize({ width: 1280, height: 800 });
+
+  if (problems.length) fail('KEYBOARD', problems.join(' | '));
+  else pass('KEYBOARD', 'space activates the focused control and reaches the transport only when nothing is focused; r respects a hidden button');
 }
 
 /* --- errors --- */

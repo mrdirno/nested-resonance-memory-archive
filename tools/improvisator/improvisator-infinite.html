@@ -87,17 +87,26 @@ button { -webkit-appearance: none; appearance: none; }
 .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---- stage ---- */
-/* The stage has to clip. It is the 1fr row of a three-row grid, so opening the
-   settings panel squeezes it to nothing -- and with nothing stopping it, .piece
-   spills out of its row and over the console beneath. The play button carries
-   z-index 2, so it paints on top of the MIDI button and takes its taps: on a
-   320 px phone with the panel open, MIDI started playback instead of exporting. */
-.stage { min-height: 0; display: grid; place-items: center; text-align: center; overflow: hidden; }
-.piece { width: min(760px, 94vw); display: grid; justify-items: center; }
+/* The stage is the 1fr row of a three-row grid, so anything that shortens the
+   viewport -- landscape on a phone, a desktop window with a bookmarks bar and a
+   dock, the settings panel opening -- collapses it, and .piece spills out of its
+   row and over the console. Clipping alone was not enough: it stopped the play
+   button painting over the MIDI button and instead made the play button
+   unreachable, on six of ten ordinary viewports including a plain 1440x700
+   window. Nothing started the instrument.
+
+   Two rules together fix it. The piece is sized by whichever of the two
+   dimensions is scarcer, so it shrinks to fit a short window instead of
+   overflowing it; and the stage scrolls as a last resort, so there is no
+   viewport in which a control exists but cannot be reached. */
+.stage { min-height: 0; display: grid; place-items: center; text-align: center;
+         overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
+.stage::-webkit-scrollbar { width: 0; }
+.piece { width: min(760px, 94vw); display: grid; justify-items: center; padding: 4px 0; }
 .chapter { min-height: 15px; color: var(--mute); font-size: 13px; font-style: italic; font-family: var(--serif); }
 .role { color: var(--faint); font-size: 12px; margin-top: 2px; min-height: 14px; }
 .harmony {
-  font-family: var(--serif); font-weight: 400; font-size: clamp(52px, 9.5vw, 116px);
+  font-family: var(--serif); font-weight: 400; font-size: clamp(30px, min(9.5vw, 13vh), 116px);
   line-height: .94; letter-spacing: -.03em; margin: 10px 0 0; min-height: 1em;
   text-shadow: 0 16px 44px rgba(0, 0, 0, .45);
   transition: opacity .22s ease, transform .22s ease;
@@ -137,8 +146,15 @@ button { -webkit-appearance: none; appearance: none; }
   background: linear-gradient(180deg, rgba(16, 23, 30, .82), rgba(9, 13, 18, .8));
   box-shadow: 0 24px 70px rgba(0, 0, 0, .42);
   backdrop-filter: blur(22px) saturate(112%); -webkit-backdrop-filter: blur(22px) saturate(112%);
-  overflow: hidden;
+  /* Clipped for the rounded corners, but it may not clip its own controls away:
+     on a landscape phone the expanded settings panel was taller than the whole
+     viewport and the Key and Mode selects -- the two controls that decide what
+     the piece is -- existed in the DOM with no pointer gesture that could reach
+     them. It scrolls instead, and never takes more than three quarters of the
+     screen. */
+  overflow: hidden auto; max-height: 76vh; overscroll-behavior: contain;
 }
+.console::-webkit-scrollbar { width: 0; }
 .console-row {
   min-height: 64px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
   gap: 14px; padding: 11px 13px 11px 16px;
@@ -233,16 +249,29 @@ select option { background: var(--slab-solid); color: var(--ink); }
   .console.open .settings { display: grid; }
   .notice { bottom: calc(88px + var(--safe-bottom)); }
 }
-/* On a short phone the settings panel at 46vh leaves the stage nothing, and
-   the play button -- which the stage now clips rather than painting over the
-   console -- disappears while the panel is open. The panel scrolls anyway, so
-   giving back a fifth of its height costs a row of controls and keeps the
-   transport reachable without closing it first. */
-@media (max-width: 640px) and (max-height: 700px) {
+/* Short viewports, at any width. The rule this replaces asked for a narrow
+   screen as well, so a 1440x700 desktop window -- a MacBook with a menu bar,
+   browser chrome, a bookmarks bar and a dock -- got the full-height layout in a
+   space it does not fit, and the play button ended up under the console.
+   Everything here is a function of height only, because height is what is
+   scarce. */
+@media (max-height: 760px) {
   .settings { max-height: 30vh; }
-  .orbit { width: 84px; height: 84px; margin-top: 14px; }
-  #playButton { width: 58px; height: 58px; }
-  .harmony { font-size: clamp(34px, 12vw, 56px); }
+  .orbit { width: min(98px, 15vh); height: min(98px, 15vh); margin-top: min(20px, 2vh); }
+  #playButton { width: min(66px, 10vh); height: min(66px, 10vh); }
+  .chapter, .role { font-size: 11px; }
+  .meta { margin-top: min(12px, 1.4vh); }
+  .readout { margin-top: min(12px, 1.4vh); }
+}
+/* A short screen needs the panel collapsible whatever its width. The toggle
+   used to appear only under 640 px wide, so a phone turned sideways -- 812x375,
+   844x390 -- had a permanently expanded panel filling the screen, no way to
+   fold it, and no room left for the transport. */
+@media (max-height: 620px) {
+  #settingsToggle { display: inline-flex; }
+  .settings { display: none; }
+  .console.open .settings { display: grid; }
+  .console { max-height: 64vh; }
 }
 @media (max-height: 640px) and (orientation: landscape) {
   .shell { padding-top: calc(8px + var(--safe-top)); padding-bottom: calc(7px + var(--safe-bottom)); }
@@ -253,6 +282,22 @@ select option { background: var(--slab-solid); color: var(--ink); }
   .readout { margin-top: 8px; }
   .console-row { min-height: 52px; padding-top: 6px; padding-bottom: 6px; }
   .settings { padding: 11px 14px; }
+}
+/* Below about 420 px of height -- a small phone turned sideways -- there is not
+   room for the chapter title, the role line and the readout as well as the
+   chord and the transport, and the transport is the part that has to be there.
+   The console is capped at two fifths of the screen for the same reason: with
+   it taking 53% the stage had 101 px for a 213 px piece, so the one big button
+   sat below the fold and a tap where it looked landed on the console instead. */
+@media (max-height: 430px) {
+  .chapter, .role, .readout { display: none; }
+  .harmony { font-size: clamp(20px, 8vh, 42px); margin-top: 2px; }
+  .meta { margin-top: 4px; font-size: 10px; gap: 12px; }
+  .orbit { width: min(66px, 21vh); height: min(66px, 21vh); margin-top: 6px; }
+  #playButton { width: min(48px, 15vh); height: min(48px, 15vh); }
+  .console { max-height: 40vh; }
+  .console-row { min-height: 40px; padding: 5px 9px; gap: 6px; }
+  .preset { padding: 6px 9px; font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
@@ -4411,12 +4456,22 @@ document.addEventListener('fullscreenchange', function () {
 
 document.addEventListener('keydown', function (e) {
   if (e.target.matches('input, select, textarea')) return;
+  /* Space is how a keyboard user activates the button they have focused. Taking
+     it globally meant tabbing to a character button and pressing space started
+     and stopped the music instead of choosing the character, so every control
+     on the page was mouse-only for anyone navigating by keyboard. Space is only
+     the transport when nothing is focused. */
+  var onControl = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
   var k = e.key.toLowerCase();
-  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'Space') { if (onControl) return; e.preventDefault(); togglePlay(); }
   else if (k === 'n') newPassage();
   else if (k === 'm') exportMidi();
   else if (k === 'b') bounceWav(60);
-  else if (k === 'r' && el.recordButton.style.display !== 'none') toggleRecording();
+  /* Whether the record button is actually on screen, not whether an inline
+     style says so. The hiding comes from a stylesheet rule under 640 px, which
+     an inline-style check cannot see: r started a real recording with no
+     visible button and no visible way to stop it. */
+  else if (k === 'r' && el.recordButton.offsetParent !== null) toggleRecording();
   else if (k === 'c') el.settingsToggle.click();
 });
 
