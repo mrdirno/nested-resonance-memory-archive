@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bcp-perception"
 version = "1.0.0"
-description = "Budget-Constrained Perception: Universal attention allocation under resource constraints"
+description = "Budget-Constrained Perception: Greedy attention allocation under resource constraints"
 readme = "README.md"
 license = {text = "GPL-3.0"}
 authors = [

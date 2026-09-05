@@ -46,7 +46,7 @@ const CameraController: React.FC<{
       rotateSpeed={IS_TOUCH ? 0.55 : 1}
       zoomSpeed={IS_TOUCH ? 0.7 : 1}
       enablePan={!IS_TOUCH}
-      touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY }}
+      touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
       minDistance={IS_TOUCH ? 3 : 1}
       maxDistance={100}
       onStart={() => setTarget(null)} // Stop auto-move on user interaction

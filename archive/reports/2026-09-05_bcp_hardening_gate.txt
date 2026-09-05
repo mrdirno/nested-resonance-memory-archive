@@ -1,0 +1,110 @@
+BCP optional-module hardening gate — 2026-09-05
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0
+
+Measured locally in the development workspace; no library release attempted.
+Launched through automation/run_background.py, PID 3864.
+Working directory: /Volumes/dual/DUALITY-ZERO-V2/bcp_lib
+Command: PYTHONPATH=. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg COVERAGE_FILE=/Volumes/dual/DUALITY-ZERO-V2/archive/reports/.coverage-bcp-hardening python3 -m pytest -p pytest_cov -p no:cacheprovider tests --basetemp=/Volumes/dual/DUALITY-ZERO-V2/experiments/results/bcp-hardening-tests --cov=bcp --cov-report=term-missing --cov-report=json:/Volumes/dual/DUALITY-ZERO-V2/experiments/results/bcp-hardening-coverage.json --cov-fail-under=90.01
+
+Environment:
+{
+  "python": "3.13.5",
+  "platform": "macOS-26.6.1-arm64-arm-64bit-Mach-O",
+  "numpy": "2.3.5",
+  "psutil": "7.0.0",
+  "matplotlib": "3.10.3",
+  "pytest": "8.4.1",
+  "pytest_cov": "6.1.1"
+}
+
+SHA-256 of measured sources and reviewed documentation:
+31171dd6d351dd494abe41f182200859a7c146d952a458f978db6c424a77df1d  bcp_lib/bcp/__init__.py
+60ca59f58ca7580448e23c3b1bea9b8aac6c76c9b8ada1ae40376a54761bc322  bcp_lib/bcp/core.py
+21cf7e8f96839b5e559a8fb01436055ba8086fdf185f3716817a0f0d736958f6  bcp_lib/bcp/monitor.py
+1aff79d14d5d5e7da1917d00f6b7e2ce671d36349e520c3632276bb0d7137acf  bcp_lib/bcp/visualization.py
+a3b4ae6de5233e7bb0cf636b12a1d1cd40f3144628d4bcd16a1a25a5be50f60a  bcp_lib/tests/test_core.py
+b0e5d9450ca31a27e2b7383050b1aa26d53511932617e93b6de1088351356d29  bcp_lib/tests/test_monitor.py
+f3d58c856b8d00cb7c183caef52948d3854948e4bd105ea929fcacb841811cc9  bcp_lib/tests/test_visualization.py
+aff99feae1ba388703925a16b33053da1773d2bacf86bf057a7031c1e60f38ad  bcp_lib/pyproject.toml
+6081d07dea7725b989753465d9ef5b4d3960bb11b73ca19b2d86b2247048ce9f  bcp_lib/README.md
+
+Captured pytest output:
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.13/bin/python3.13
+rootdir: /Volumes/dual/DUALITY-ZERO-V2/bcp_lib
+configfile: pyproject.toml
+plugins: cov-6.1.1
+collecting ... collected 55 items
+
+tests/test_core.py::TestAttentionItem::test_creation PASSED              [  1%]
+tests/test_core.py::TestAttentionItem::test_priority_computation_low_lambda PASSED [  3%]
+tests/test_core.py::TestAttentionItem::test_priority_computation_high_lambda PASSED [  5%]
+tests/test_core.py::TestAttentionItem::test_priority_negative_means_ignore PASSED [  7%]
+tests/test_core.py::TestBCPModel::test_default_initialization PASSED     [  9%]
+tests/test_core.py::TestBCPModel::test_custom_initialization PASSED      [ 10%]
+tests/test_core.py::TestBCPModel::test_compute_lambda_high_budget PASSED [ 12%]
+tests/test_core.py::TestBCPModel::test_compute_lambda_formula PASSED     [ 14%]
+tests/test_core.py::TestBCPModel::test_determine_phase_abundance PASSED  [ 16%]
+tests/test_core.py::TestBCPModel::test_determine_phase_crisis PASSED     [ 18%]
+tests/test_core.py::TestBCPModel::test_determine_phase_scarcity PASSED   [ 20%]
+tests/test_core.py::TestBCPAllocation::test_allocation_abundance PASSED  [ 21%]
+tests/test_core.py::TestBCPAllocation::test_allocation_scarcity PASSED   [ 23%]
+tests/test_core.py::TestBCPAllocation::test_allocation_crisis PASSED     [ 25%]
+tests/test_core.py::TestBCPAllocation::test_allocation_respects_budget PASSED [ 27%]
+tests/test_core.py::TestBCPAllocation::test_allocation_priority_order PASSED [ 29%]
+tests/test_core.py::TestBCPAllocation::test_bcp_result_properties PASSED [ 30%]
+tests/test_core.py::TestDomainPresets::test_all_presets_exist PASSED     [ 32%]
+tests/test_core.py::TestDomainPresets::test_presets_return_items PASSED  [ 34%]
+tests/test_core.py::TestDomainPresets::test_preset_items_valid PASSED    [ 36%]
+tests/test_core.py::TestPhaseTransitions::test_phase_transition_consistency PASSED [ 38%]
+tests/test_core.py::TestPhaseTransitions::test_lambda_inverse_budget PASSED [ 40%]
+tests/test_core.py::TestBudgetSweep::test_sweep_returns_results PASSED   [ 41%]
+tests/test_core.py::TestBudgetSweep::test_find_phase_thresholds PASSED   [ 43%]
+tests/test_monitor.py::test_allocation_collects_selected_sqlite_and_file_metrics PASSED [ 45%]
+tests/test_monitor.py::test_collector_failures_are_distinct_from_measurements PASSED [ 47%]
+tests/test_monitor.py::test_monitor_run_persists_callback_samples_and_bounds_sleep PASSED [ 49%]
+tests/test_monitor.py::test_invalid_schedule_is_rejected_before_sampling[0-1] PASSED [ 50%]
+tests/test_monitor.py::test_invalid_schedule_is_rejected_before_sampling[-1-1] PASSED [ 52%]
+tests/test_monitor.py::test_invalid_schedule_is_rejected_before_sampling[inf-1] PASSED [ 54%]
+tests/test_monitor.py::test_invalid_schedule_is_rejected_before_sampling[1--1] PASSED [ 56%]
+tests/test_monitor.py::test_invalid_schedule_is_rejected_before_sampling[1-nan] PASSED [ 58%]
+tests/test_monitor.py::test_invalid_budget_is_rejected[-1] PASSED        [ 60%]
+tests/test_monitor.py::test_invalid_budget_is_rejected[nan] PASSED       [ 61%]
+tests/test_monitor.py::test_invalid_budget_is_rejected[inf] PASSED       [ 63%]
+tests/test_monitor.py::test_system_collectors_measure_the_running_host PASSED [ 65%]
+tests/test_visualization.py::test_plots_export_real_pngs_and_return_owned_figures[triage] PASSED [ 67%]
+tests/test_visualization.py::test_plots_export_real_pngs_and_return_owned_figures[phases] PASSED [ 69%]
+tests/test_visualization.py::test_plots_export_real_pngs_and_return_owned_figures[sweep] PASSED [ 70%]
+tests/test_visualization.py::test_plots_export_real_pngs_and_return_owned_figures[summary] PASSED [ 72%]
+tests/test_visualization.py::test_failed_export_releases_new_figure[triage] PASSED [ 74%]
+tests/test_visualization.py::test_failed_export_releases_new_figure[phases] PASSED [ 76%]
+tests/test_visualization.py::test_failed_export_releases_new_figure[sweep] PASSED [ 78%]
+tests/test_visualization.py::test_failed_export_releases_new_figure[summary] PASSED [ 80%]
+tests/test_visualization.py::test_heatmap_rows_match_item_labels_and_preserve_binary_scale PASSED [ 81%]
+tests/test_visualization.py::test_phase_regions_cover_full_requested_range_at_actual_thresholds PASSED [ 83%]
+tests/test_visualization.py::test_summary_and_triage_display_allocated_results PASSED [ 85%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs0] PASSED [ 87%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs1] PASSED [ 89%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs2] PASSED [ 90%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs3] PASSED [ 92%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs4] PASSED [ 94%]
+tests/test_visualization.py::test_invalid_sweep_arguments_do_not_allocate_figures[kwargs5] PASSED [ 96%]
+tests/test_visualization.py::test_missing_duplicate_and_changing_item_sets_are_rejected PASSED [ 98%]
+tests/test_visualization.py::test_summary_rejects_mismatched_or_nonfinite_budgets PASSED [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.5-final-0 _______________
+
+Name                   Stmts   Miss  Cover   Missing
+----------------------------------------------------
+bcp/__init__.py           14      2    86%   54-55
+bcp/core.py               98      0   100%
+bcp/domains.py            28      5    82%   22, 168-171
+bcp/monitor.py            80      4    95%   197-198, 261-262
+bcp/visualization.py     149      4    97%   18-19, 27, 134
+----------------------------------------------------
+TOTAL                    369     15    96%
+Coverage JSON written to file /Volumes/dual/DUALITY-ZERO-V2/experiments/results/bcp-hardening-coverage.json
+Required test coverage of 90.01% reached. Total coverage: 95.93%
+============================== 55 passed in 2.27s ==============================

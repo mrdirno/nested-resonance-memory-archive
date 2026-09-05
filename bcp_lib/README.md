@@ -6,7 +6,7 @@ A discrete attention allocator for resource-constrained decision making. Given a
 
 [Implementation: `bcp/core.py:156-222`](./bcp/core.py)
 
-The allocation maximizes total value over the attended set:
+The allocator greedily ranks positive per-item scores and selects items while they fit the budget. It reports the following score for the selected set; this greedy procedure does not guarantee the globally optimal set:
 
 ```
 TotalScore = Σ_attended [Gain(a) - λ(B) × Cost(a)] - γ × SetComplexity
@@ -58,7 +58,7 @@ items = [
 ]
 
 # Create model and allocate with budget
-model = BCPModel()
+model = BCPModel(lambda_scale=1.0)
 result = model.allocate(items, budget=1.0)
 
 print(f"Phase: {result.phase.value}")
@@ -70,7 +70,7 @@ Output:
 ```
 Phase: scarcity
 Attend to: ['Critical bug', 'New feature']
-Ignore: ['Refactor', 'Documentation']
+Ignore: ['Documentation', 'Refactor']
 ```
 
 ## Key Concepts
@@ -79,13 +79,13 @@ Ignore: ['Refactor', 'Documentation']
 
 [Implementation: `bcp/core.py:147-154`](./bcp/core.py) | [Tests: `tests/test_core.py:87-103`](./tests/test_core.py)
 
-BCP predicts three distinct phases based on resource availability:
+BCP assigns three labels using configurable budget thresholds:
 
 | Phase | Default Threshold | Behavior |
 |-------|-------------------|----------|
-| **ABUNDANCE** | B > 2.0 | Attend to all positive-Score items |
+| **ABUNDANCE** | B ≥ 2.0 | Select positive-Score items that fit the budget |
 | **SCARCITY** | 0.5 < B < 2.0 | Triage begins—ignore low-value items |
-| **CRISIS** | B < 0.5 | Focus on one or few highest-Score items |
+| **CRISIS** | B ≤ 0.5 | Select positive-Score items that fit the budget |
 
 > **Note**: Thresholds (2.0 and 0.5) are configurable defaults, not universal constants. Override via `BCPModel(abundance_threshold=..., crisis_threshold=...)` to match your domain's budget scale.
 
@@ -120,7 +120,7 @@ Where N is the number of items under consideration. This term:
 - Is applied **globally** to the decision, not per-item
 - Does not affect relative ranking between items
 - Captures that overhead scales sublinearly with option count
-- Default `γ = 0.1` makes this a minor adjustment; increase for domains where option count matters more
+- Default `γ = 0.0` disables this term; increase it to include a configured option-count penalty
 
 ### Domain Presets
 
@@ -179,21 +179,31 @@ triage_threshold, crisis_threshold = model.find_phase_thresholds(
 Monitor system resources with BCP-based triage:
 
 ```python
-from bcp import BCPMonitor
+from bcp.monitor import create_system_monitor
 
-monitor = BCPMonitor()
-
-# Add monitoring tasks
-monitor.add_task("cpu", gain=0.9, cost=0.1,
-                 collector=lambda: get_cpu_usage())
-monitor.add_task("memory", gain=0.8, cost=0.2,
-                 collector=lambda: get_memory_usage())
-
-# Sample with current budget
-sample = monitor.sample(budget=1.0)
+monitor = create_system_monitor()  # Requires pip install '.[monitor]'
+sample = monitor.sample(budget=5.0)  # Allocation budget chosen for this example
 print(f"Attended: {sample.attended_tasks}")
 print(f"Metrics: {sample.metrics}")
+print(f"Collector errors: {sample.errors}")
 ```
+
+These collectors read the running host through psutil. Their gain/cost weights are configuration, not measured collection overhead. CPU collection measures a 0.1-second interval. `compute_system_budget()` also requires psutil and raises `ImportError` when it is absent; it no longer returns a synthetic fallback budget.
+
+Failed, non-numeric or non-finite collectors produce `NaN` and an exception-class entry in `sample.errors`; exception messages are omitted to avoid leaking paths or data. Collectors for ignored tasks are never called. A monitor run uses a monotonic deadline and caps its final sleep; a collector or callback already in progress is allowed to finish.
+
+### Plotting and verification
+
+Install `.[viz]` to plot allocations. All four plotting functions return a Matplotlib figure owned by the caller: close it with `matplotlib.pyplot.close(fig)` after use. Failed exports close the new figure. Sweep item names must be unique and consistent, and plotted budgets must match the recorded results. Phase shading follows configured thresholds; it is not a measured phase transition.
+
+The optional-module tests use real SQLite databases, files, psutil readings and PNG exports with Matplotlib's Agg backend. Run the package gate with both optional modules installed:
+
+```sh
+python -m pip install '.[dev,monitor,viz]'
+MPLBACKEND=Agg python -m pytest tests --cov=bcp --cov-report=term-missing --cov-fail-under=90.01
+```
+
+See the [dated stewardship measurements](../archive/reports/2026-09-04_archive_stewardship.md) for test counts, coverage and limitations. Coverage measures executed statements; it does not establish comparative performance or scientific validity.
 
 ### Custom Model Parameters
 
@@ -209,7 +219,7 @@ model = BCPModel(
 
 ## Research Background
 
-BCP was developed through the DUALITY-ZERO research program, validated across **124 distinct domains**:
+BCP was developed through the DUALITY-ZERO research program. Historical scenario collections used domain-inspired task sets, including:
 
 1. **Physics** — Planck Scale Resolution Limit
 2. **Biology** — Metabolic Rate Allocation (Kleiber's Law)
@@ -222,7 +232,7 @@ BCP was developed through the DUALITY-ZERO research program, validated across **
 9. **Art** — Style Selection (Realism vs Minimalism)
 10. **Space** — Rocket Equation Constraints
 
-Scenarios were implemented as synthetic task sets with domain-inspired gain and cost distributions. In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), confirming BCP as a universal law of constrained optimization.
+These are synthetic gain/cost scenarios, not validation in the listed physical or social domains. The three phase labels come from configured budget thresholds. The maintained [domain presets](./bcp/domains.py) and [tests](./tests/test_core.py) expose the actual inputs and checks; they do not establish a universal law.
 
 ## API Reference
 

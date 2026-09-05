@@ -1,0 +1,18 @@
+{
+  "name": "halo-instrument-tests",
+  "version": "1.0.0",
+  "description": "These tests drive the page in a headless browser and check the physics tick, the instruments in the Lab panel, and the whole user interface. They were written for software rendering (SwiftShader), so they run the same on a laptop and in CI.",
+  "scripts": {
+    "test": "python3 make_test_page.py && node release_gate.js",
+    "test:observation": "python3 make_test_page.py && node observation_test.js",
+    "test:physics": "python3 make_test_page.py && node release_gate.js --physics"
+  },
+  "keywords": [],
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "license": "GPL-3.0-only",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "1.62.1"
+  },
+  "private": true
+}

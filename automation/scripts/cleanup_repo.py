@@ -1,83 +1,91 @@
 #!/usr/bin/env python3
-"""
-Repository Cleanup Utility
-Enforces the standards defined in docs/protocols/MAINTENANCE_PROTOCOL.md
+"""Preview root-file archival; apply only explicitly selected, reviewed files.
+
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0-only
 """
 
+import argparse
+from dataclasses import dataclass
+import fnmatch
 import os
-import shutil
-import glob
 from pathlib import Path
+import sys
 
-# --- CONFIGURATION ---
-ROOT_DIR = Path(".")
-
-# Define where things should go.
-# Format: "Destination": ["pattern1", "pattern2"]
 MOVES = {
     "archive/artifacts": ["agent_artifact_*.py"],
-    "archive/reports": ["FINAL_REPORT_V*.md", "FINAL_REPORT.md"], # Archive root reports, README is the truth
+    "archive/reports": ["FINAL_REPORT_V*.md", "FINAL_REPORT.md"],
     "archive/context": ["walkthrough.md", "task.md", "implementation_plan.md", "MESSAGE_TO_FUTURE_AI.md"],
     "backups": ["*.zip", "*.tar.gz"],
     "data/temp": ["temp_*", "*.log"],
 }
 
-# Files explicitly allowed to stay in root (The Allow-List)
-ALLOW_LIST = {
-    "README.md", "CLAUDE.md", "CONTRIBUTING.md", "LICENSE", "ATTRIBUTION.md",
-    "requirements.txt", "pyproject.toml", "Makefile", "docker-compose.yml", "Dockerfile",
-    ".gitignore", ".git-commit-template", "Gemfile",
-    "META_OBJECTIVES.md", "CYCLE_LOGS.md", "THE_MANIFESTO.md", "MOG_CYCLE_LOG.md",
-    "setup.py", "bootstrap.py",
-    "STEWARDSHIP_HELIOS_ARC_ROADMAP.md", # Key map
-    "CITATION.cff", "REPRODUCIBILITY_GUIDE.md", "DEPLOYMENT_GUIDE.md", "HIBERNATION_PROTOCOL.md", "SETUP_COMPLETE.md"
-}
 
-def clean_repo():
-    print("🧹 REPOSITORY CLEANUP PROTOCOL INITIATED")
-    print("----------------------------------------")
-    
-    # 1. Create Directories
-    for dest in MOVES.keys():
-        dest_path = ROOT_DIR / dest
-        if not dest_path.exists():
-            print(f"Creating directory: {dest}")
-            dest_path.mkdir(parents=True, exist_ok=True)
+@dataclass(frozen=True)
+class Move:
+    source: Path
+    target: Path
 
-    # 2. Execute Moves
-    moved_count = 0
-    
-    # Iterate through rules
-    for dest, patterns in MOVES.items():
-        for pattern in patterns:
-            # Find files matching pattern in ROOT only
-            files = list(ROOT_DIR.glob(pattern))
-            
-            for file_path in files:
-                if not file_path.is_file():
-                    continue
-                    
-                # Skip if in ALLOW_LIST (though patterns shouldn't match allow-list generally, good safety)
-                if file_path.name in ALLOW_LIST:
-                    continue
-                
-                target = ROOT_DIR / dest / file_path.name
-                
-                # Check for collision
-                if target.exists():
-                    print(f"⚠️  Skipping {file_path.name}: Target exists in {dest}")
-                    continue
-                    
-                print(f"Moving {file_path.name} -> {dest}/")
-                shutil.move(str(file_path), str(target))
-                moved_count += 1
 
-    # 3. General Scan for "Loose" Files (Optional - strict mode)
-    # For now, we only move what we know.
-    
-    print("----------------------------------------")
-    print(f"Cleanup Complete. Moved {moved_count} files.")
-    print("Check archive/ for moved items.")
+def plan_moves(root):
+    root = root.resolve()
+    moves = []
+    for source in sorted(root.iterdir()):
+        if source.is_symlink() or not source.is_file():
+            continue
+        for destination, patterns in MOVES.items():
+            if any(fnmatch.fnmatchcase(source.name, pattern) for pattern in patterns):
+                target = root / destination / source.name
+                if not target.resolve().is_relative_to(root):
+                    raise ValueError(f"Archive destination escapes repository: {destination}")
+                # lexists catches dangling symlinks as collisions too.
+                if os.path.lexists(target):
+                    print(f"SKIP {source.name}: destination already exists", file=sys.stderr)
+                else:
+                    moves.append(Move(source, target))
+                break
+    return moves
+
+
+def apply_move(move):
+    """Hard-link then unlink on the same volume; never overwrite a destination."""
+    if move.source.is_symlink() or not move.source.is_file():
+        raise ValueError(f"Source is no longer a regular file: {move.source.name}")
+    move.target.parent.mkdir(parents=True, exist_ok=True)
+    os.link(move.source, move.target, follow_symlinks=False)
+    move.source.unlink()
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=Path.cwd())
+    parser.add_argument("--apply", action="store_true", help="Apply reviewed names passed with --only")
+    parser.add_argument("--only", nargs="+", metavar="ROOT_FILENAME", help="Exact root filenames reviewed for archival")
+    args = parser.parse_args(argv)
+    if args.apply and not args.only:
+        parser.error("--apply requires --only with exact filenames after manual review")
+    if args.only and any(Path(p).name != p or p in {".", ".."} for p in args.only):
+        parser.error("--only accepts root filenames, not paths")
+    root = args.root.resolve()
+    try:
+        if not (root / "README.md").is_file() or not (root / "docs/protocols/MAINTENANCE_PROTOCOL.md").is_file():
+            raise ValueError("Root must contain README.md and the maintenance protocol")
+        moves = plan_moves(root)
+        if args.only:
+            missing = set(args.only) - {move.source.name for move in moves}
+            if missing:
+                raise ValueError("Not eligible (missing, collision, symlink or no rule): " + ", ".join(sorted(missing)))
+            moves = [move for move in moves if move.source.name in args.only]
+        for move in moves:
+            if args.apply:
+                apply_move(move)
+            print(f"{'MOVED' if args.apply else 'PREVIEW'} {move.source.name} -> {move.target.relative_to(root)}")
+        print(f"{len(moves)} {'files moved' if args.apply else 'candidates; no files changed'}")
+        return 0
+    except (OSError, ValueError) as exc:
+        print(f"Cleanup stopped: {exc}", file=sys.stderr)
+        return 1
+
 
 if __name__ == "__main__":
-    clean_repo()
+    raise SystemExit(main())

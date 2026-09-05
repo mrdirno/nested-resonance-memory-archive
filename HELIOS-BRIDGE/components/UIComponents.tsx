@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import type { LucideProps } from 'lucide-react';
 import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed, Sprout, TrafficCone } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
@@ -27,13 +28,13 @@ interface UIProps {
   setKaleidoMode?: (m: number) => void;
 }
 
-const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
+const NavItem: React.FC<{ icon: React.ReactElement<LucideProps>, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
   <button
     onClick={onClick}
     className={`flex flex-col items-center justify-center w-[60px] h-[60px] rounded-2xl transition-all duration-300 relative overflow-hidden group ${active ? 'bg-primary text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110' : 'bg-glass text-white/70 hover:bg-white/10'}`}
   >
     <div className="z-10 flex flex-col items-center">
-      {React.cloneElement(icon as React.ReactElement, { size: 24, className: 'mb-1' })}
+      {React.cloneElement(icon, { size: 24, className: 'mb-1' })}
       <span className="text-[10px] font-bold uppercase tracking-wide">{label}</span>
     </div>
     {/* Hover glow effect */}

@@ -6,9 +6,17 @@ software rendering (SwiftShader), so they run the same on a laptop and in CI.
 
 ## Run
 
+The observation bench and replay contract are documented in [HALO Observatory](../../docs/halo/OBSERVATORY.md). `observation_test.js` tests actual GPU state equality, paired integrators, a zero-coupling negative control, recipe downloads/imports, invalid inputs, interruptions, mobile layout and keyboard/reduced-motion behavior. Release receipts preserve canonical source and generated-page SHA-256, their binding and child exit statuses in the ignored `workspace/release/` directory. The package and lockfile are tracked so CI installs the same browser driver.
+
 ```bash
 cd tests/halo
-npm init -y >/dev/null && npm i playwright@1
+npm ci
+npx playwright install chromium
+npm test                    # release gate: tick, observation, Lab, smoke
+python3 -m venv workspace/physics-env
+. workspace/physics-env/bin/activate
+python -m pip install -r requirements-physics.txt
+npm run test:physics        # integrator, mesh, conservation, dimer, numerical bench
 python3 make_test_page.py      # builds rc-test.html from ../../HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html
 node tick_test.js              # fixed tick, interpolation, Boris toggle, float deposit — 13 checks, ~10 s
 node lab_test.js               # the instruments in three regimes — 23 checks, ~2 min

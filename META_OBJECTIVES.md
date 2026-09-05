@@ -1,39 +1,26 @@
 # META OBJECTIVES: NESTED RESONANCE MEMORY
 
-## Mission
+Author: Aldrin Payopay · Reviewed September 5, 2026
 
-Nested resonance memory, as stated, means the relics of one scale seed the next. This repository exists to test that claim and to say plainly what survives. It now has an instrument for the job: HALO, page V501 in the archive (`HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html`). The page runs its physics on a fixed 1/20 s tick, so a result means the same thing on every machine. Its Lab panel measures the page against its own claims: a memory index with a two-back control beside it, a meter for how fast nearby particles drift apart, a realized spectrum, and a CSV log. On the page's first run the memory index read Retained 0.003 against Two-back 0.098. The control scored higher, so nothing yet shows one epoch seeding the next. The program below is ranked by how much we learn per hour; the reasoning and the numbers behind it are in `HELIOS-BRIDGE/HALO_HANDOFF.md` §7 and §8. Status as of 2026-09-01: nothing below has started. The instrument exists.
+## Mission and present evidence
 
-## Program, ranked
+Maintain useful research instruments, make their experiments reproducible, and let controls discipline claims. HALO is the active browser particle laboratory; the [archive lifecycle registry](docs/archive/README.md) identifies the maintained software, experimental research and preserved historical projects. Science, mathematics, physics, art, culture and technology are connected here through runnable work and explicit assumptions, rather than a universal-law assertion.
 
-- [ ] **1. Pre-register the memory test and run it at full particle count.**
-  Write the protocol down before running: 4.19 M particles, the Spinning Chladni preset and the default preset, epochs of 10 s, at least 20 epochs, self-gravity {0, 0.15, 0.3, 0.5, 0.8}, gain/loss {0, 0.5}. The Lab's CSV is the record, one JSON per run as `data/results/halo_memory_<preset>_<gravity>.json` (that pattern is exempt from `.gitignore`'s `data/results/*.json`). Pass: Retained − Two-back > 0.10 for three consecutive epochs.
-  Status: not started. The instrument exists on the page; the protocol is not yet in the repository.
-  Proves the claim wrong: Retained never clears Two-back by more than 0.10 for three epochs running. Then the passive-relic version retires, and the README says only that a self-bound object persists across rescalings.
+The original cross-epoch memory protocol **has been registered and run**, over 60 cells at 4,194,304 particles. The [estimator audit](analysis/2026-09-02_cross_epoch_memory_preregistered.md) found a geometric confound: static centrally peaked fields can pass the same Retained-minus-Two-back criterion. This does not establish or retire NRM. Do not repeat the old instruction that registration and data collection have not started. The [frozen protocol](docs/preregistrations/2026-09-02_halo_cross_epoch_memory.md) and its deviations remain the historical record.
 
-- [ ] **2. Turn the two choreography theorems and the stability certificate into principle cards.**
-  Two failure cards: an axial field cannot confine like charges out of plane; a cyclic time-delay symmetry needs a drive periodic in the delay. One positive card: given a drive, the shooting method returns a periodic matter configuration with a stability certificate (24 multipliers, a million-cycle run). Failure cards already live in `src/tsf/engineering_engine/principle_cards/`.
-  Status: not started. The script and its logs are not yet in the repository.
-  Proves it wrong: a non-planar orbit under an axial field alone, a stable choreography whose drive is not periodic in the delay, or a multiplier off the unit circle.
+## Active work
 
-- [ ] **3. Audit the archive's magnetic family, V251 to V300, with the numpy port.**
-  Those fifty pages carry a magnetic term. If it is an explicit Euler kick, some of their signature states may be integrator states pinned at the force ceiling (the cap the simulation puts on any single force; matter held there is a numerical artefact), like the Razor Disc. Findings go into the archive README as labels, not retractions.
-  Status: not started. The port is not yet in the repository.
-  Proves the worry wrong: the pages do not use the Euler kick, or their states survive under the exact rotation step.
+1. **Make HALO's observations repeatable and inspectable.** The [Observatory bench](docs/halo/OBSERVATORY.md) adds seeded initial conditions, paired magnetic integrators, exact stopping ticks, a sampled energy trace, JSON recipes and interruption tracking. The original modes, presets, fixed tick and GPU physics remain the scientific substrate. The [HALO tests](tests/halo/README.md) and Pages dependency now gate changes to the instrument.
+2. **Repair the memory question before collecting another large grid.** Design a centered, support-matched, monopole-removed estimator; characterize its null rate and injected-effect recovery on the available meshes. State the spatial support and null degeneracy before freezing a new protocol. A positive is meaningful only if the estimator rejects static profiles and resolves the injected effect; a null is meaningful only beside measured power. No positive NRM result is being claimed.
+3. **Use paired starts for numerical sensitivity.** Compare Euler/exact rotation and substep refinements at matching settings and particle count; repeat across seeds before generalizing. Keep historical presets labeled with the integrator under which they were found. The single-seed A/B bench is an instrument check, not an ensemble result.
+4. **Maintain the archive by lifecycle and evidence.** [Component registry](docs/archive/components.json), [inventory audit](tools/archive/audit.py), safe cleanup preview and CI publication gates are the active maintenance tools. Historical work stays discoverable; a runnable entry point and passing check are prerequisites for promoting a dormant project.
+5. **Harvest libraries only through the release doctrine.** BCP's optional monitoring and plotting paths have been repaired and now have behavior tests. The latest full-package measurement and remaining release conditions are in the [stewardship report](archive/reports/2026-09-04_archive_stewardship.md). The release workflow enforces greater-than-90% coverage; coverage alone does not establish superiority or justify a release. No library release is authorized by a healthy browser demo alone.
 
-- [ ] **4. Refresh the front door so every sentence cites a measured number.**
-  Keep the Bridge as the visualizer. Put HALO beside it as the laboratory with its three measured numbers (self-gravity threshold: 0.45 holds, 0.6 folds; memory index 0.003 against its two-back control 0.098; disc speed 86 measured, 88 predicted), and cut any sentence the Lab cannot back. One entry in `CYCLE_LOGS.md` per iteration, in the format the log already uses.
-  Status: the README has a HALO section (added 2026-09-01: a description and a screenshot, none of the three numbers yet). The stale block in `CLAUDE.md` that the handoff names was replaced the same day.
-  Proves it wrong: a sentence on the front page with no measured number behind it.
+## Deferred until their prerequisites exist
 
-- [ ] **5. Test the "empty wells" idea where it is cheap.**
-  Matter pinned to nodal surfaces is invisible to the field's vector sum but carries mass into the scalar sum. The page has both, so "does nodal matter gravitate the figure?" is a page experiment: the realized spectrum against self-gravity at matched settings, with the ceiling share as the honesty check. Do it after item 1, not before.
-  Status: not started.
-  Proves the idea wrong: the realized spectrum is the same with and without self-gravity at matched settings. A high ceiling share means the run is integrator-bound and does not count either way.
+- New memory claims, papers and universality claims await a valid estimator and appropriate external validation.
+- Choreography principles and the fifty-page magnetic-family audit need their own source and result review; their presence in the archive is not a fresh validation.
+- FPGA synthesis belongs on the Ubuntu build machine; fabrication artifacts remain in private development storage.
+- A WebGPU rewrite or another gallery of variants needs a measured performance or scientific benefit before displacing the tested engine.
 
-- [ ] **6. A small library, only if item 1 or 2 lands.**
-  A `chamberlab` package (Boris and Euler steps, particle-mesh Poisson, twin-particle Lyapunov, memory index with its nulls, the stability certificate) with more than 90 % test coverage. Publish when ripe; ripe means a positive result to demonstrate on.
-  Status: not started, and gated on 1 or 2.
-  Proves it premature: no positive result from item 1 or 2.
-
-Not planned, because each is the obvious next move and would teach nothing new: rewriting the Bridge app in HALO's image, adding presets or variations, a paper before a positive result, a WebGPU port, filling cycle logs retroactively.
+The preceding 2026-09-01 checklist conflated intended work with current state. Its text remains in Git history; this page names the evidence and the next unresolved experiments. Update it from receipts, not from an assumed phase number.

@@ -1,3 +1,5 @@
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# License: GPL-3.0-only
 name: Publish BCP Library to PyPI
 
 on:
@@ -25,13 +27,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
+      # The library release doctrine requires greater than 90% coverage.
+      # Measure the WHOLE package, including optional monitor/visualization code.
+      - name: Install library test dependencies
+        run: python -m pip install './bcp_lib[dev,monitor,viz]'
+
+      - name: Enforce library release evidence
+        working-directory: ./bcp_lib
+        run: python -m pytest tests --cov=bcp --cov-report=term-missing --cov-fail-under=90.01
+
       - name: Build package
         working-directory: ./bcp_lib
         run: |
           python -m build
+          python -m twine check dist/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: bcp_lib/dist/
+          packages-dir: bcp_lib/dist/
           password: ${{ secrets.PYPI_API_TOKEN }}

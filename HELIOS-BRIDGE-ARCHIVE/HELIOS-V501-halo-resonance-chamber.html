@@ -629,6 +629,35 @@ kbd {
 }
 .panel a:hover, .modal a:hover { border-bottom-color: var(--accent); }
 
+
+/* Observatory: the field stays central; the bench uses blue/amber for A/B. */
+.bench-open { min-height: 38px; padding: 7px 13px; border-color: #425b74; }
+#panel-lab .panel-head { background: #101721; }
+.observation-bench { margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.observation-bench h2 { font-size: 22px; font-weight: 500; letter-spacing: -.025em; margin-bottom: 8px; }
+.observation-bench p { font-size: 12.5px; line-height: 1.55; color: #a8b7c9; margin: 8px 0 12px; }
+.bench-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 12px; }
+.bench-inputs label { display: grid; gap: 7px; color: #c5d0df; font-size: 12px; }
+.bench-inputs input { width: 100%; min-width: 0; padding: 9px; font: inherit; background: var(--well); color: var(--text); border: 1px solid #43516a; border-radius: 6px; }
+.bench-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.bench-actions .btn { flex: 1 1 auto; min-height: 38px; padding: 8px 10px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+#btn-session-a { border-color: #78c8ee; color: #b7e9ff; }
+#btn-session-b { border-color: #edbb76; color: #ffe0b4; }
+#session-progress { width: 100%; height: 5px; accent-color: #78c8ee; }
+#session-clock { display: block; font-size: 12px; margin: 8px 0; color: #b4c4d6; }
+#session-status { min-height: 38px; color: #d6e3f0; }
+.bench-table { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.bench-table th, .bench-table td { padding: 8px 3px; border-bottom: 1px solid #233246; text-align: right; font-weight: 400; }
+.bench-table th:first-child { text-align: left; }
+.bench-table thead th:nth-child(2) { color: #78c8ee; }
+.bench-table thead th:nth-child(3) { color: #edbb76; }
+#session-trace { width: 100%; height: 110px; display:block; }
+.bench-file { display: grid; gap: 8px; font-size: 12px; color: #b7c6d9; margin-top: 16px; }
+.bench-file input { max-width: 100%; font: inherit; }
+.bench-runtime { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 0; color: #adc0d7; font-size: 11px; }
+@media (max-width: 600px) { .bench-open { padding: 7px 9px; } .observation-bench h2 { font-size: 20px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; animation-duration: 0s !important; } }
 /* ---------------- Tools panel: cards that link to the other pages ---------------- */
 .link-cards { display: flex; flex-direction: column; gap: 8px; }
 .panel .link-card {
@@ -701,12 +730,19 @@ kbd {
   /* the brand shares its row with the buttons; the repo link wraps inside it */
   .brand { flex: 1 1 0; }
 }
-@media (max-width: 400px) {
+@media (max-width: 380px) {
   /* eight tabs at a 44px thumb need 381px in one row. A 320 or 360px phone has not got
      it, and shrinking them back under 44px is the defect. Two rows of four instead. */
   .rail { display: grid; grid-template-columns: repeat(4, 44px); justify-content: center; }
   .panel { padding-bottom: calc(110px + max(10px, env(safe-area-inset-bottom))); }
 }
+@media (max-width: 620px) {
+  .topbar { gap: 8px; }
+  .topbar > .brand { flex: 1 0 100%; }
+  .brand-link { font-family: var(--font-ui); }
+  .topbar > .top-actions { margin-left: 0; width: 100%; justify-content: space-between; }
+}
+.observation-bench { padding-top: 16px; }
 </style>
 <noscript><style>
   /* Without JavaScript the laboratory cannot start, so show the byline instead of an empty stage. */
@@ -734,8 +770,8 @@ kbd {
 <header class="topbar">
   <div class="brand">
     <h1 class="brand-name">HELIOS BRIDGE</h1>
-    <span class="brand-sub">Resonance Chamber · standing-wave particle lab</span>
-    <a class="brand-link" href="https://github.com/mrdirno/nested-resonance-memory-archive" target="_blank" rel="noopener">github.com/mrdirno/nested-resonance-memory-archive ↗</a>
+    <span class="brand-sub">HALO Observatory · standing-wave particle lab</span>
+    <a class="brand-link" href="https://github.com/mrdirno/nested-resonance-memory-archive" target="_blank" rel="noopener">By Aldrin Payopay · Source archive</a>
   </div>
   <div class="readouts" aria-live="off">
     <div class="readout"><span class="readout-label">Step</span><span class="readout-value" id="ro-step">0</span></div>
@@ -746,6 +782,7 @@ kbd {
     <div class="readout"><span class="readout-label">FPS</span><span class="readout-value" id="ro-fps">–</span></div>
   </div>
   <div class="top-actions">
+    <button class="btn bench-open" id="btn-open-bench" title="Open the observation bench">Observe</button>
     <button class="icon-btn" id="btn-audio" aria-label="Enable sound" aria-pressed="false" title="Sound (A)">
       <svg id="ic-snd-off" viewBox="0 0 16 16"><path d="M2 6v4h3l4 3V3L5 6H2zm10.7 2l2-2-1-1-2 2-2-2-1 1 2 2-2 2 1 1 2-2 2 2 1-1-2-2z"/></svg>
       <svg id="ic-snd-on" viewBox="0 0 16 16" style="display:none"><path d="M2 6v4h3l4 3V3L5 6H2zm9 2c0-1.2-.7-2.3-1.7-2.8v5.6C10.3 10.3 11 9.2 11 8zm-1.7-6v1.6C11.2 4.2 12.5 6 12.5 8s-1.3 3.8-3.2 4.4V14c2.7-.7 4.7-3.1 4.7-6s-2-5.3-4.7-6z"/></svg>
@@ -1684,6 +1721,31 @@ kbd {
     <div class="panel-sub">The chamber measuring its own dynamics</div>
   </div>
   <div class="panel-body">
+    <div class="observation-bench" aria-labelledby="bench-title">
+      <h2 id="bench-title">Same seed. One difference.</h2>
+      <p>Start two clouds from the same particles. Change the magnetic step and watch how the motion separates. A repeatable experiment in the chamber’s own equations.</p>
+      <div class="bench-runtime" aria-live="off"><span id="runtime-pace">Measuring pace…</span><span id="runtime-precision"></span><span id="runtime-integrator"></span></div>
+      <div class="bench-inputs">
+        <label for="session-seed">Particle seed<input id="session-seed" type="number" min="0" max="4294967295" step="1" value="12345"></label>
+        <label for="session-duration">Chamber seconds<input id="session-duration" type="number" min="1" max="120" step="1" value="10"></label>
+      </div>
+      <div class="bench-actions"><button class="btn" id="btn-session-a">Run A · current settings</button><button class="btn" id="btn-session-b" disabled>Run B · other magnetic step</button></div>
+      <p>Each run restarts from the current digit step with zero velocities. B changes only Euler ↔ exact rotation.</p>
+      <progress id="session-progress" max="1" value="0" aria-label="Observation progress"></progress><output id="session-clock">No run recorded</output>
+      <div class="bench-actions"><button class="btn" id="btn-session-tick">Advance one tick</button><button class="btn" id="btn-session-stop">Stop run</button><button class="btn" id="btn-session-replay" disabled>Repeat A</button></div>
+      <p id="session-status" role="status">Choose a seed and duration, then run A. One tick is 0.05 chamber seconds.</p>
+      <table class="bench-table"><caption>Final sampled measurements</caption><thead><tr><th scope="col">Measure</th><th scope="col">A <span id="session-a-label">—</span></th><th scope="col">B <span id="session-b-label">—</span></th></tr></thead><tbody>
+        <tr><th scope="row">RMS radius</th><td id="session-a-radius">—</td><td id="session-b-radius">—</td></tr>
+        <tr><th scope="row">Kinetic / particle</th><td id="session-a-energy">—</td><td id="session-b-energy">—</td></tr>
+        <tr><th scope="row">Ceiling fraction</th><td id="session-a-ceiling">—</td><td id="session-b-ceiling">—</td></tr>
+      </tbody></table>
+      <canvas id="session-trace" width="640" height="160" role="img" aria-label="Sampled kinetic energy over chamber time. Run A is blue; run B is amber. Final values appear in the table above."></canvas>
+      <p id="session-comparison">Run B repeats A’s seed, starting step, settings and duration, changing only the magnetic integrator.</p>
+      <p>Up to 2,048 particles are sampled each chamber second. Radius and energy use chamber units; ceiling fraction is 0–1. A matching sample is a check, not proof of whole-cloud identity. GPU arithmetic can differ between devices. This experiment does not test the NRM memory claim.</p>
+      <div class="bench-actions"><button class="btn" id="btn-session-save" disabled>Save observation</button></div>
+      <label class="bench-file" for="session-file">Open an observation to repeat A from its initial recipe<input id="session-file" type="file" accept=".json,application/json"></label>
+    </div>
+
     <button class="switch-row" id="sw-lab" aria-pressed="false">
       <span>Instruments on
         <span class="hint">Reads the GPU back once a second: twin-particle Lyapunov, phase-space volume, cross-epoch memory, realized spectrum, energy and angular momentum</span></span>
@@ -2273,13 +2335,13 @@ kbd {
       explicit magnetic step. <b>Memory across epochs</b>: at every
       zoom-out the ending density is kept as a relic map, and M is the
       cell-by-cell correlation between the matter now and where the relics
-      predict it; the value just before the next zoom-out is the memory the
-      scale retained, and the same correlation against the relic from two
-      zoom-outs ago is reported beside it as the control &mdash; a script that
-      recurs, or a blob that persists, scores on both, and only an epoch
-      imprinting the next lifts one above the other. This is the
-      project&rsquo;s own claim, nested resonance memory, made into a number
-      with its null built in.
+      predict it. Retained and Two-back sample different footprints and strides.
+      Their contrast also fires on static radial profiles, so these are
+      <b>footprint diagnostics, not a validated memory test</b>. The 60-run
+      pre-registered grid and subsequent estimator audit neither establish nor
+      retire nested resonance memory; the evidence is linked beside the Lab
+      readouts. A successor estimator needs matched support, radial controls
+      and measured injection recovery.
       <b>Realized spectrum</b>: a real spherical-harmonic transform of the
       density mesh gives the angular power the matter actually carries,
       against the degree the digits asked for. An <b>Integrator</b> control
@@ -2471,7 +2533,18 @@ function sanitizeState(saved) {
       }
     }
   }
-  s.particles = Math.min(4194304, Math.max(1000, Math.round(s.particles)));
+  const bounded = (value, fallback, lo, hi) => typeof value === 'number' && Number.isFinite(value)
+    ? Math.min(hi, Math.max(lo, value)) : fallback;
+  s.particles = Math.round(bounded(s.particles, DEFAULTS.particles, 1000, 4194304));
+  for (const [k, lo, hi] of [['stepsPerSec',0,32],['fieldExp',-400,2],['damping',0,8],['quality',0.4,2],['colorMode',0,3]])
+    s[k] = bounded(s[k], DEFAULTS[k], lo, hi);
+  s.colorMode = Math.round(s.colorMode);
+  for (const k of ['smooth','guides','autoOrbit']) s[k] = typeof s[k] === 'boolean' ? s[k] : DEFAULTS[k];
+  for (const k of Object.keys(s.overlays)) s.overlays[k] = s.overlays[k] === true;
+  for (const k of ['on']) s.centers[k] = s.centers[k] === true;
+  for (const k of ['epoch','twist']) s.cosmos[k] = typeof s.cosmos[k] === 'boolean' ? s.cosmos[k] : DEFAULTS.cosmos[k];
+  for (const ax of ['a','b','c']) s.offsets[ax] = Math.floor(bounded(s.offsets[ax], DEFAULTS.offsets[ax], 0, 2147483647));
+  s.offsetMode = s.offsetMode === 'manual' ? 'manual' : 'auto';
   if (!BASES.includes(s.base)) s.base = 10;
   if (s.fieldForm !== 'wells' && s.fieldForm !== 'chladni') s.fieldForm = 'chladni';
   s.centers.count = Math.min(8, Math.max(1, Math.round(s.centers.count) || 3));
@@ -2512,7 +2585,7 @@ function sanitizeState(saved) {
     ? Math.min(120, Math.max(0, +s.cam.dist)) : 0;
   s.cam.user = !!s.cam.user;
   for (const ax of ['a','b','c']) {
-    if (!(s.constants[ax] in CONSTANTS)) s.constants[ax] = DEFAULTS.constants[ax];
+    if (!Object.prototype.hasOwnProperty.call(CONSTANTS, s.constants[ax])) s.constants[ax] = DEFAULTS.constants[ax];
   }
   s.strideIndex = Math.min(PRIMES.length - 1, Math.max(0, Math.round(+s.strideIndex) || 0));
   s.substeps = saved.substeps === 'auto' ? 'auto'   // Auto: the count follows the coupling (see autoSubsteps)
@@ -2544,6 +2617,8 @@ function loadState() {
 let state = loadState();
 let saveTimer = 0;
 function saveState() {
+  if (SESSION.active && SESSION.active.status === 'running' && !SESSION.resetting && SESSION.active.signature !== benchPhysics(state))
+    benchInvalidate('Physics or instrument settings changed during the run.');
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -3331,14 +3406,15 @@ function effectiveSubsteps() {
 }
 
 function seedTexture(size) {
+  const random = SESSION.seedRandom || Math.random;
   const data = new Float32Array(size * size * 4);
   const n = size * size;
   for (let i = 0; i < n; i++) {
     // uniform density in the ball: r ~ R * cbrt(u)
-    const r = EXTENT * 0.94 * Math.cbrt(Math.random());
-    const ct = 2 * Math.random() - 1;
+    const r = EXTENT * 0.94 * Math.cbrt(random());
+    const ct = 2 * random() - 1;
     const st = Math.sqrt(1 - ct * ct);
-    const ph = Math.random() * 2 * Math.PI;
+    const ph = random() * 2 * Math.PI;
     const j = i * 4;
     data[j]     = r * st * Math.cos(ph);
     data[j + 1] = r * ct;
@@ -3440,6 +3516,7 @@ function sacredRender(now) {
 }
 
 function reseed() {
+  benchInvalidate('Particles were reseeded during the run.');
   const seed = seedTexture(texSize);
   blit(seed, posA); blit(seed, posB);
   seed.dispose();
@@ -5090,6 +5167,7 @@ function deepPatch(dst, src) {
   }
 }
 function restartUniverse() {
+  benchInvalidate('The universe was restarted during the run.');
   step = 0; stepAccum = 0; simTime = 0; spiralClock = 0;
   epochN = 0; lastEpochT = 0; centerSpawns = 0; pendingRescale = 1;
   scaleAccum = 1; tickAccum = 0; lerpOK = false;
@@ -5536,7 +5614,8 @@ $('in-stride').addEventListener('input', e => {
 });
 for (const ax of AXES) {
   $('off-' + ax).addEventListener('input', e => {
-    state.offsets[ax] = Math.max(0, parseInt(e.target.value, 10) || 0);
+    state.offsets[ax] = Math.min(2147483647, Math.max(0, parseInt(e.target.value, 10) || 0));
+    e.target.value = state.offsets[ax];
     updateTapes(); updateHud(); pushModes(); saveState();
   });
 }
@@ -5672,7 +5751,8 @@ $('btn-cam-reset').addEventListener('click', () => {
 
 /* Keyboard */
 window.addEventListener('keydown', e => {
-  if (e.target.matches('input, select, textarea')) return;
+  if (e.target.matches('input, select, textarea') || e.target.isContentEditable) return;
+  if ((e.key === ' ' || e.key === 'Enter') && e.target.closest('button, a')) return;
   switch (e.key) {
     case ' ': e.preventDefault(); setPlaying(!playing); break;
     case 'r': case 'R': reseed(); break;
@@ -7703,6 +7783,7 @@ function dimerReset() {
   dimerDraw();
 }
 function dimerRestartLoop() {   // a new loop starts from the pair as it is now
+  benchInvalidate('The mode-dimer loop was restarted during the run.');
   DIMER.theta = 0; DIMER.startA = DIMER.a.slice(); DIMER.last = null;
 }
 function dimerTick() {
@@ -7884,7 +7965,248 @@ function snapshotPrev() {
   if (!posPrev || posPrev.width !== texSize) { if (posPrev) posPrev.dispose(); posPrev = makeTarget(texSize); }
   blit(posA.texture, posPrev);
 }
+/* HALO observation bench. Author: Aldrin Payopay. GPL-3.0-only.
+   Records describe this computational instrument, not physical measurements.
+   The PRNG is local to particle initialization; historical presets retain Math.random. */
+const HALO_BUILD = 'halo-observatory-2026-09-04';
+const SESSION = { active: null, a: null, b: null, resetting: false, seedRandom: null };
+function benchClone(x) { return JSON.parse(JSON.stringify(x)); }
+function benchPhysics(s) {
+  const copy = benchClone(s);
+  for (const k of ['cam', 'sound', 'sacred', 'quality', 'colorMode', 'guides', 'autoOrbit']) delete copy[k];
+  return JSON.stringify(copy);
+}
+function benchRandom(seed) {
+  let n = seed >>> 0;
+  return () => { n = (Math.imul(1664525, n) + 1013904223) >>> 0; return n / 4294967296; };
+}
+function benchSay(message) { $('session-status').textContent = message; }
+function benchInvalidate(reason) {
+  const a = SESSION.active;
+  if (!a || a.status !== 'running' || SESSION.resetting) return;
+  a.status = 'interrupted'; a.reason = reason; a.finishedAt = new Date().toISOString();
+  setPlaying(false);
+  benchSay(reason + ' Start a new run to make a controlled comparison.');
+  benchDraw();
+}
+function benchEnvironment() {
+  return {
+    three: THREE.REVISION, webgl: gl.getParameter(gl.VERSION),
+    renderer: gl.getParameter(gl.RENDERER),
+    positionPrecision: floatType === THREE.FloatType ? 'float32' : 'float16',
+    floatBlend: !!gl.getExtension('EXT_float_blend'),
+    textureSize: texSize, mesh: PM_N, tickSeconds: TICK,
+    pixelRatio: renderer.getPixelRatio()
+  };
+}
+// At most 2,048 stratified particle samples; no full-swarm allocation or hidden
+// reduction. Skip the Lab's twin/volume rows and padding. Report the denominator.
+function benchObserve() {
+  let n = 0, r2 = 0, v2 = 0, speed = 0, clipped = 0, finite = true;
+  let hash = 2166136261;
+  const hashFloat = new Float32Array(1), hashBits = new Uint32Array(hashFloat.buffer);
+  const S = texSize, rowLimit = lab.on ? Math.max(1, lab.volRow) : S;
+  const rows = Math.min(8, rowLimit), stride = Math.max(1, Math.ceil(S / 256));
+  for (let j = 0; j < rows; j++) {
+    const row = Math.floor(j * rowLimit / rows);
+    const p = readTarget(posA, 0, row, S, 1), v = readTarget(velA, 0, row, S, 1);
+    for (let x = 0; x < S && row * S + x < state.particles; x += stride) {
+      const q = 4 * x; let rr = 0, vv = 0;
+      for (let k = 0; k < 3; k++) {
+        finite = finite && Number.isFinite(p[q+k]) && Number.isFinite(v[q+k]);
+        rr += p[q+k] * p[q+k]; vv += v[q+k] * v[q+k];
+        for (const value of [p[q+k], v[q+k]]) {
+          hashFloat[0] = value; hash = Math.imul(hash ^ hashBits[0], 16777619) >>> 0;
+        }
+      }
+      n++; r2 += rr; v2 += vv; speed += Math.sqrt(vv); clipped += v[q+3] > 0.5 ? 1 : 0;
+    }
+  }
+  return { ticks: SESSION.active ? SESSION.active.ticks : 0, timeSeconds: +simTime.toFixed(8),
+    sampledParticles: n, finite: finite && n > 0,
+    rmsRadius: n && finite ? Math.sqrt(r2/n) : null,
+    meanSpeed: n && finite ? speed/n : null,
+    kineticPerParticle: n && finite ? v2/(2*n) : null,
+    ceilingFraction: n ? clipped/n : null,
+    sampleFingerprint: hash.toString(16).padStart(8, '0') };
+}
+function benchRecipe() {
+  const seed = Number($('session-seed').value), duration = Number($('session-duration').value);
+  if (!Number.isInteger(seed) || seed < 0 || seed > 4294967295)
+    throw new Error('Seed must be a whole number from 0 to 4294967295.');
+  if (!Number.isFinite(duration) || duration < 1 || duration > 120)
+    throw new Error('Choose a duration from 1 to 120 chamber seconds.');
+  const preset = capturePreset('Observation');
+  return { state: sanitizeState(preset.state), cam: preset.cam, step: preset.step, seed,
+    ticks: Math.round(duration / TICK), generator: 'lcg32-1664525-1013904223' };
+}
+function benchStart(slot, recipe) {
+  if (SESSION.active && SESSION.active.status === 'running') benchInvalidate('Another run was started.');
+  setPlaying(false);
+  SESSION.resetting = true;
+  try {
+    recipe = { ...benchClone(recipe), state: sanitizeState(recipe.state) };
+    SESSION.seedRandom = benchRandom(recipe.seed);
+    // Disable old twins while resources are resized. applyAllState builds the
+    // new particles before re-enabling instruments on those new textures.
+    clearTimeout(rebuildTimer);
+    lab.on = false;
+    const initialState = benchClone(recipe.state);
+    initialState.lab.on = false;
+    applyPreset({ state: initialState, cam: recipe.cam, step: recipe.step });
+    for (const target of [pmDens, pmPotA, pmPotB]) if (target) target.dispose();
+    pmDens = null; pmPotA = null; pmPotB = null;
+    state.lab.on = recipe.state.lab.on; syncLab();
+    lab.log = [];
+    // Refresh the runtime uniforms at t=0, including a prior epoch's rescale.
+    updateCosmos();
+    velMat.uniforms.uRescale.value = 1; posMat.uniforms.uRescale.value = 1;
+    const run = { slot, status: 'running', startedAt: new Date().toISOString(),
+      recipe: benchClone(recipe), ticks: 0, signature: benchPhysics(state),
+      environment: benchEnvironment(), observations: [], initial: null, final: null };
+    SESSION.active = run; SESSION[slot.toLowerCase()] = run;
+    if (slot === 'A') SESSION.b = null;
+    run.initial = benchObserve();
+    run.observations.push(run.initial);
+    if (!run.initial.finite) throw new Error('The GPU returned non-finite initial positions.');
+    benchSay('Run ' + slot + ' started from seed ' + recipe.seed + '. It stops at ' + recipe.ticks + ' ticks.');
+    setPlaying(true);
+  } catch (error) {
+    if (SESSION.active) { SESSION.active.status = 'interrupted'; SESSION.active.reason = error.message; }
+    benchSay('Run could not start: ' + error.message);
+  } finally { SESSION.seedRandom = null; SESSION.resetting = false; benchDraw(); }
+}
+function benchBeforeTick() {
+  const a = SESSION.active;
+  if (!a || a.status !== 'running') return true;
+  if (a.signature !== benchPhysics(state)) {
+    benchInvalidate('Physics or instrument settings changed during the run.'); return false;
+  }
+  return true;
+}
+function benchAfterTick() {
+  const a = SESSION.active;
+  if (!a || a.status !== 'running') return;
+  a.ticks++;
+  const atEnd = a.ticks >= a.recipe.ticks;
+  if (a.ticks % 20 === 0 || atEnd) {
+    const observed = benchObserve(); a.observations.push(observed);
+    if (!observed.finite) { benchInvalidate('Non-finite GPU values were sampled.'); return; }
+    if (atEnd) {
+      a.final = observed; a.status = 'finished'; a.finishedAt = new Date().toISOString();
+      setPlaying(false);
+      benchSay('Run ' + a.slot + ' stopped at exactly ' + a.ticks + ' ticks (' + (a.ticks*TICK).toFixed(2) + ' s).');
+    }
+    benchDraw();
+  }
+}
+function benchDraw() {
+  const run = SESSION.active, a = SESSION.a, b = SESSION.b;
+  $('session-progress').max = run ? run.recipe.ticks : 1;
+  $('session-progress').value = run ? run.ticks : 0;
+  $('session-clock').textContent = run ? run.ticks + ' / ' + run.recipe.ticks + ' ticks' : 'No run recorded';
+  $('btn-session-b').disabled = !a || a.status !== 'finished' || !!(run && run.status === 'running');
+  $('btn-session-replay').disabled = !a || !!(run && run.status === 'running');
+  $('btn-session-save').disabled = !a;
+  const number = value => Number.isFinite(value) ? value.toFixed(4) : '—';
+  for (const [key, r] of [['a', a], ['b', b]]) {
+    $('session-' + key + '-label').textContent = r ? r.recipe.state.lorentz === 'boris' ? 'Exact rotation' : 'Euler kick' : '—';
+    for (const [field, metric] of [['radius', 'rmsRadius'], ['energy', 'kineticPerParticle'], ['ceiling', 'ceilingFraction']])
+      $('session-' + key + '-' + field).textContent = r && r.final ? number(r.final[metric]) : '—';
+  }
+  const pair = a && b && a.status === 'finished' && b.status === 'finished';
+  $('session-comparison').textContent = pair
+    ? (a.initial.sampleFingerprint === b.initial.sampleFingerprint
+      ? 'Matching sampled initial states. Only the magnetic step changed; both ran ' + a.ticks + ' ticks.'
+      : 'Initial sample fingerprints differ. This pair is not a matched comparison.')
+    : 'Run B repeats A’s seed, starting step, settings and duration, changing only the magnetic integrator.';
+  benchDrawTrace();
+}
+function benchDrawTrace() {
+  const cv = $('session-trace'), ctx = cv.getContext('2d'), W=cv.width, H=cv.height;
+  ctx.clearRect(0, 0, W, H);
+  const runs = [SESSION.a, SESSION.b].filter(Boolean);
+  const values = runs.flatMap(r=>r.observations.map(o=>o.kineticPerParticle)).filter(Number.isFinite);
+  const high = Math.max(1e-12, ...values), ticks = Math.max(1, ...runs.map(r=>r.recipe.ticks));
+  ctx.strokeStyle = '#354356'; ctx.beginPath(); ctx.moveTo(40, 8); ctx.lineTo(40, H-22); ctx.lineTo(W-10, H-22); ctx.stroke();
+  ctx.fillStyle = '#9badc3'; ctx.font = '12px sans-serif'; ctx.fillText(high.toPrecision(3), 43, 17); ctx.fillText('0', 24, H-22); ctx.fillText((ticks*TICK).toFixed(1)+' s', W-48, H-5);
+  for (const r of runs) {
+    ctx.strokeStyle = r.slot === 'A' ? '#78c8ee' : '#edbb76'; ctx.lineWidth=2; ctx.beginPath();
+    let first=true;
+    for (const o of r.observations) {
+      if (!Number.isFinite(o.kineticPerParticle)) continue;
+      const x=40+(W-50)*o.ticks/ticks, y=H-22-(H-36)*o.kineticPerParticle/high;
+      if(first) ctx.moveTo(x,y); else ctx.lineTo(x,y); first=false;
+    }
+    ctx.stroke();
+  }
+}
+function benchRecord() {
+  const clean = r => { if (!r) return null; const c=benchClone(r); delete c.signature; return c; };
+  return { format: 'halo-observation/v1', build: HALO_BUILD, author: 'Aldrin Payopay',
+    exportedAt: new Date().toISOString(), tickSeconds: TICK,
+    interpretation: 'Controlled numerical experiment, not empirical evidence for NRM. Kinetic energy and radius use at most 2048 stratified particles. The fingerprint covers that sample, not all particles. GPU arithmetic may differ across devices. Imports restart the initial recipe; they do not restore an evolved particle snapshot.',
+    comparison: { variable: 'lorentz', sampledInitialStatesMatch: !!(SESSION.a && SESSION.b && SESSION.a.initial && SESSION.b.initial && SESSION.a.initial.sampleFingerprint === SESSION.b.initial.sampleFingerprint) },
+    runs: [clean(SESSION.a), clean(SESSION.b)].filter(Boolean) };
+}
+function benchParseRecord(text) {
+  if (text.length > 1000000) throw new Error('Observation file exceeds 1 MB.');
+  const record = JSON.parse(text);
+  if (record.format !== 'halo-observation/v1' || record.build !== HALO_BUILD || record.tickSeconds !== TICK)
+    throw new Error('This file belongs to a different HALO observation format or build.');
+  const r = record.runs && record.runs[0] && record.runs[0].recipe;
+  if (!r || r.generator !== 'lcg32-1664525-1013904223' || !Number.isInteger(r.seed) || r.seed < 0 || r.seed > 4294967295
+    || !Number.isInteger(r.ticks) || r.ticks < 20 || r.ticks > 2400 || !Number.isSafeInteger(r.step) || r.step < 0
+    || !r.state || typeof r.state !== 'object') throw new Error('The initial recipe is missing or invalid.');
+  const normalized = sanitizeState(r.state);
+  if (JSON.stringify(normalized) !== JSON.stringify(r.state)) throw new Error('The recipe contains invalid or unsupported settings.');
+  return { state: normalized, cam: r.cam, step: r.step, seed: r.seed, ticks: r.ticks, generator: r.generator };
+}
+$('btn-session-a').addEventListener('click', () => { try { benchStart('A', benchRecipe()); } catch(e) { benchSay(e.message); } });
+$('btn-session-b').addEventListener('click', () => {
+  if (!SESSION.a || SESSION.a.status !== 'finished') return;
+  const recipe = benchClone(SESSION.a.recipe);
+  recipe.state.lorentz = recipe.state.lorentz === 'boris' ? 'euler' : 'boris';
+  benchStart('B', recipe);
+});
+$('btn-session-replay').addEventListener('click', () => { if (SESSION.a) benchStart('A', benchClone(SESSION.a.recipe)); });
+$('btn-session-tick').addEventListener('click', () => {
+  setPlaying(false); simTick(); tickAccum=0;
+  pointsMat.uniforms.posTex.value = posA.texture;
+  pointsMat.uniforms.uLerp.value = 1;
+  benchDraw();
+});
+$('btn-session-save').addEventListener('click', async () => {
+  try { await saveTextFile('halo-observation.json', JSON.stringify(benchRecord(), null, 2)); benchSay('Observation saved with recipes, sampled measurements and run status.'); }
+  catch(e) { benchSay('Could not save observation: ' + e.message); }
+});
+$('session-file').addEventListener('change', async e => {
+  const file=e.target.files[0]; if(!file) return;
+  try {
+    if(file.size>1000000) throw new Error('Observation file exceeds 1 MB.');
+    const recipe=benchParseRecord(await file.text());
+    $('session-seed').value=recipe.seed; $('session-duration').value=recipe.ticks*TICK;
+    benchStart('A', recipe);
+  } catch(error) { benchSay('Could not load observation: '+error.message); }
+  finally { e.target.value=''; }
+});
+$('btn-open-bench').addEventListener('click', () => {
+  togglePanel('panel-lab');
+  if ($('panel-lab').classList.contains('open')) $('session-seed').focus({preventScroll:true});
+});
+$('btn-session-stop').addEventListener('click', () => { benchInvalidate('Run stopped by the observer.'); setPlaying(false); });
+function benchRuntime(dtWall, ticks) {
+  benchRuntime.wall=(benchRuntime.wall||0)+dtWall;
+  benchRuntime.sim=(benchRuntime.sim||0)+ticks*TICK;
+  if(benchRuntime.wall<1) return;
+  $('runtime-pace').textContent=(benchRuntime.sim/benchRuntime.wall).toFixed(2)+'× real time';
+  $('runtime-precision').textContent=(floatType===THREE.FloatType?'32-bit':'16-bit')+' positions';
+  $('runtime-integrator').textContent=(state.lorentz==='boris'?'Exact rotation':'Euler kick')+' · '+effectiveSubsteps()+' substep'+(effectiveSubsteps()>1?'s':'');
+  benchRuntime.wall=0; benchRuntime.sim=0;
+}
+
 function simTick() {
+  if (!benchBeforeTick()) return;
   // The sequencer runs on the simulation clock, so slow hardware sees the
   // same structure per digit, only stretched in wall time.
   stepAccum += TICK * state.stepsPerSec;
@@ -7929,6 +8251,7 @@ function simTick() {
   pendingRescale = 1;
   labTick();
   benchTick();
+  benchAfterTick();
 }
 
 function frame(now) {
@@ -7938,16 +8261,19 @@ function frame(now) {
   if (dtWall <= 0) return;
   window.__camTick(dtWall);
 
-  if (playing) {
+  let frameTicks = 0;
+  if (playing && !document.hidden) {
     tickAccum += dtWall;
     const budget = dtWall < 0.07 ? 2 : 1;
     let ticks = 0;
-    while (tickAccum >= TICK && ticks < budget) { simTick(); tickAccum -= TICK; ticks++; }
+    while (tickAccum >= TICK && ticks < budget && playing) { simTick(); tickAccum -= TICK; ticks++; }
+    frameTicks = ticks;
     if (tickAccum > TICK) tickAccum = TICK;
     pointsMat.uniforms.posPrevTex.value = prevTexture().texture;
     pointsMat.uniforms.uLerp.value = lerpOK ? Math.min(1, tickAccum / TICK) : 1;
   }
 
+  benchRuntime(dtWall, frameTicks);
   fpsFrames++;
   fpsWindow += dtWall;
   if (fpsWindow >= 0.5) {
@@ -8009,6 +8335,8 @@ window.addEventListener('pagehide', flushState);
 
 renderer.domElement.addEventListener('webglcontextlost', e => {
   e.preventDefault();
+  benchInvalidate('The graphics context was lost.');
+  setPlaying(false);
   fatal('The graphics context was lost. Reload the page to restart the simulation.');
 });
 
@@ -8024,6 +8352,8 @@ if (state.cam.user) {
 syncAllControls();
 applyAllState();
 if (freshStart) startInJellyfish();
+benchDraw();
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) setPlaying(false);
 requestAnimationFrame(frame);
 
 })();

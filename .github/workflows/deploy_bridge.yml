@@ -13,6 +13,9 @@ on:
     branches: [ main ]
     paths:
       - 'HELIOS-BRIDGE/**'
+      - 'tests/halo/**'
+      - 'experiments/halo/*.py'
+      - '.github/workflows/halo-health.yml'
       - 'tools/collage-studio/**'
       - 'collage-beta/**'
       - 'HELIOS-BRIDGE-ARCHIVE/**'
@@ -55,7 +58,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  halo-validation:
+    uses: ./.github/workflows/halo-health.yml
   build:
+    needs: halo-validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -400,6 +406,8 @@ jobs:
           # into carries the whole board. So the measure is specificity, not
           # count, and the trade list is parsed from the shipped engine so a trade
           # added next month is covered the day it lands with no edit here.
+          # JavaScript templates and regex anchors must stay literal to the shell.
+          # shellcheck disable=SC2016
           node -e '
             const fs = require("fs");
             const D = "HELIOS-BRIDGE/dist/commons/";
@@ -442,6 +450,8 @@ jobs:
           # nothing on screen changes. So the join is COUNTED here, against the
           # artifact, through the engine's own exported fold rather than a second
           # copy of the rule.
+          # JavaScript templates and regex anchors must stay literal to the shell.
+          # shellcheck disable=SC2016
           node -e '
             const fs = require("fs");
             const D = "HELIOS-BRIDGE/dist/commons/";
@@ -483,6 +493,8 @@ jobs:
           # So assert the tag on the real page, with comments stripped: the reason
           # this hid in review is that tips.html *mentioned* names.js, in a comment
           # explaining why it was absent. A grep would have passed.
+          # JavaScript templates and regex anchors must stay literal to the shell.
+          # shellcheck disable=SC2016
           node -e '
             const fs = require("fs");
             const D = "HELIOS-BRIDGE/dist/commons/";
@@ -687,6 +699,8 @@ jobs:
           # a copy of the thing being checked drifts from it and then reports green
           # on the day it matters. Every trade is discovered from the artifact, so
           # trade #8 is covered the day it lands with no edit to this file.
+          # JavaScript templates and regex anchors must stay literal to the shell.
+          # shellcheck disable=SC2016
           node -e '
             const fs = require("fs");
             const D = "HELIOS-BRIDGE/dist";

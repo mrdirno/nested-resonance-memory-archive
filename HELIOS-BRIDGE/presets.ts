@@ -33,9 +33,9 @@ export const PRESETS: Record<string, SimulationPreset> = {
         exposure: 1.2,
         mode: SimulationMode.CRYSTAL,
         extensions: {
-            crystal: { threeFold: true, sixFold: true, lattice: false },
-            harmonic: { commaSpiral: false, perfectFifths: false, equalTemp: false },
-            topology: { trefoil: false, torus: false, hopf: false }
+            crystal: { threeFold: 1, sixFold: 1, lattice: 0 },
+            harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+            topology: { trefoil: 0, torus: 0, hopf: 0 }
         }
     }
 };

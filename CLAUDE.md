@@ -776,15 +776,9 @@ installed there too.
 
 ## ACTIVE TRAJECTORY (2026-09)
 
-The newest page in the archive, HALO (V501, `HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html`), turned the particle visualizer into an instrument. Three things are new:
+HALO is the live browser instrument. The pre-registered memory grid has already run over 60 cells at 4.19 million particles. Its contrast is confounded by spatial sampling and static radial profiles, so it neither establishes nor retires NRM. Read `analysis/2026-09-02_cross_epoch_memory_preregistered.md` before proposing a successor experiment.
 
-- **A fixed physics tick.** The simulation advances 1/20 s per step on every machine, and the rendering is interpolated between steps. A preset now means the same thing on a slow screen and a fast one.
-- **A Lab panel that measures the page against its own claims.** It holds a meter for how fast nearby particles drift apart (bounces off the wall are not counted; beside it, the share of particles held at the force ceiling — the cap the simulation puts on any single force, so a particle held there is a numerical artefact, not physics). It holds a memory index across epochs with its two-back control beside it, the same score taken two epochs back. It holds a realized spherical-harmonic spectrum and a CSV log. Press 7 on the page.
-- **A null on the memory claim.** The memory index says how much of one epoch's pattern survives into the next (0 = none, 1 = all). On the page's first run it read Retained 0.003 against its control, Two-back, 0.098. The control scored higher than the claim. Nothing measured so far shows one epoch seeding the next.
-
-**Next step:** the pre-registered memory test at full particle count. Write the protocol down, then run it; either outcome is a result. The protocol, the reasoning, and the ranked list of what follows are in `HELIOS-BRIDGE/HALO_HANDOFF.md` §8. The same list, with the status of each item today, is the checklist in `META_OBJECTIVES.md`.
-
----
+The Observatory bench adds seeded A/B integrator comparisons, exact stopping ticks, sampled measurements and versioned observation recipes. Current work is listed in `META_OBJECTIVES.md`; instrument methods and limitations are in `docs/halo/OBSERVATORY.md`. Repository lifecycle and preservation are recorded in `docs/archive/README.md`. Historical handoffs and phase numbers are evidence of their own time, not the current queue.
 
 ## REMEMBER THE MANDATE
 

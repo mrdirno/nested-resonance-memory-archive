@@ -1,0 +1,51 @@
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Captured local test output, 2026-09-04. GPL-3.0-only.
+
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.13/bin/python3.13
+rootdir: /Volumes/dual/nested-resonance-memory-archive/bcp_lib
+configfile: pyproject.toml
+plugins: cov-6.1.1
+collecting ... collected 24 items
+
+tests/test_core.py::TestAttentionItem::test_creation PASSED              [  4%]
+tests/test_core.py::TestAttentionItem::test_priority_computation_low_lambda PASSED [  8%]
+tests/test_core.py::TestAttentionItem::test_priority_computation_high_lambda PASSED [ 12%]
+tests/test_core.py::TestAttentionItem::test_priority_negative_means_ignore PASSED [ 16%]
+tests/test_core.py::TestBCPModel::test_default_initialization PASSED     [ 20%]
+tests/test_core.py::TestBCPModel::test_custom_initialization PASSED      [ 25%]
+tests/test_core.py::TestBCPModel::test_compute_lambda_high_budget PASSED [ 29%]
+tests/test_core.py::TestBCPModel::test_compute_lambda_formula PASSED     [ 33%]
+tests/test_core.py::TestBCPModel::test_determine_phase_abundance PASSED  [ 37%]
+tests/test_core.py::TestBCPModel::test_determine_phase_crisis PASSED     [ 41%]
+tests/test_core.py::TestBCPModel::test_determine_phase_scarcity PASSED   [ 45%]
+tests/test_core.py::TestBCPAllocation::test_allocation_abundance PASSED  [ 50%]
+tests/test_core.py::TestBCPAllocation::test_allocation_scarcity PASSED   [ 54%]
+tests/test_core.py::TestBCPAllocation::test_allocation_crisis PASSED     [ 58%]
+tests/test_core.py::TestBCPAllocation::test_allocation_respects_budget PASSED [ 62%]
+tests/test_core.py::TestBCPAllocation::test_allocation_priority_order PASSED [ 66%]
+tests/test_core.py::TestBCPAllocation::test_bcp_result_properties PASSED [ 70%]
+tests/test_core.py::TestDomainPresets::test_all_presets_exist PASSED     [ 75%]
+tests/test_core.py::TestDomainPresets::test_presets_return_items PASSED  [ 79%]
+tests/test_core.py::TestDomainPresets::test_preset_items_valid PASSED    [ 83%]
+tests/test_core.py::TestPhaseTransitions::test_phase_transition_consistency PASSED [ 87%]
+tests/test_core.py::TestPhaseTransitions::test_lambda_inverse_budget PASSED [ 91%]
+tests/test_core.py::TestBudgetSweep::test_sweep_returns_results PASSED   [ 95%]
+tests/test_core.py::TestBudgetSweep::test_find_phase_thresholds PASSED   [100%]
+ERROR: Coverage failure: total of 50 is less than fail-under=90
+
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.5-final-0 _______________
+
+Name                   Stmts   Miss  Cover   Missing
+----------------------------------------------------
+bcp/__init__.py           14      2    86%   54-55
+bcp/core.py               98      0   100%
+bcp/domains.py            28      5    82%   22, 168-171
+bcp/monitor.py            65     44    32%   55-56, 74, 82-83, 96-118, 147-160, 172-215, 229-235
+bcp/visualization.py     130    118     9%   15-16, 23-24, 46-85, 106-166, 189-236, 255-296
+----------------------------------------------------
+TOTAL                    335    169    50%
+FAIL Required test coverage of 90.01% not reached. Total coverage: 49.55%
+============================== 24 passed in 0.46s ==============================

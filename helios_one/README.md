@@ -1,3 +1,6 @@
+> **Archived in place — reviewed 2026-09-04.** This is the November 2025 repository snapshot, last changed in commit `7cca6cdc`. Its status and claims below are historical. Use the [current repository](../README.md), [maintained BCP source](../bcp_lib/README.md), and [lifecycle map](../docs/archive/README.md) for new work. The snapshot remains here to preserve citations and imports.
+> Steward: Aldrin Payopay.
+
 # DUALITY-ZERO: The Reality Compiler
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive

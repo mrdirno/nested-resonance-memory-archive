@@ -3,12 +3,16 @@ BCP Monitor - Real-time system monitoring with BCP-based triage.
 
 This module provides tools for monitoring system resources and
 applying BCP allocation to decide what to track.
+
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0
 """
 
+import math
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Callable
-from .core import BCPModel, AttentionItem, BCPResult, Phase
+from .core import BCPModel, AttentionItem, Phase
 
 
 @dataclass
@@ -21,6 +25,8 @@ class MonitorSample:
     attended_tasks: List[str]
     ignored_tasks: List[str]
     metrics: Dict[str, float]
+    # Exception classes only: exception messages may contain sensitive paths/data.
+    errors: Dict[str, str] = field(default_factory=dict)
 
 
 class BCPMonitor:
@@ -90,8 +96,11 @@ class BCPMonitor:
             budget: Current resource budget
 
         Returns:
-            MonitorSample with allocation results and collected metrics
+            MonitorSample with allocation results and collected metrics. Failed
+            or non-finite readings are NaN, with their exception class in errors.
         """
+        if not math.isfinite(budget) or budget < 0:
+            raise ValueError("budget must be finite and non-negative")
         # Create attention items
         items = [
             AttentionItem(
@@ -107,13 +116,18 @@ class BCPMonitor:
 
         # Collect metrics for attended tasks
         metrics = {}
+        errors = {}
         for name in result.attended:
             task = self.tasks.get(name)
             if task and task['collector']:
                 try:
-                    metrics[name] = task['collector']()
-                except Exception:
+                    value = float(task['collector']())
+                    if not math.isfinite(value):
+                        raise ValueError("collector returned a non-finite reading")
+                    metrics[name] = value
+                except Exception as exc:
                     metrics[name] = float('nan')
+                    errors[name] = type(exc).__name__
 
         return MonitorSample(
             timestamp=time.time(),
@@ -122,7 +136,8 @@ class BCPMonitor:
             lambda_=result.lambda_,
             attended_tasks=result.attended,
             ignored_tasks=result.ignored,
-            metrics=metrics
+            metrics=metrics,
+            errors=errors
         )
 
     def run(
@@ -137,17 +152,23 @@ class BCPMonitor:
 
         Args:
             budget_fn: Function that returns current budget
-            interval: Seconds between samples
-            duration: Total monitoring duration in seconds
+            interval: Positive seconds to wait after each sample/callback
+            duration: Non-negative duration in seconds. Sleep is bounded by the
+                remaining duration; a collector or callback already running is
+                not interrupted and may extend the total elapsed time.
             callback: Optional function called with each sample
 
         Returns:
             List of all collected samples
         """
+        if not math.isfinite(interval) or interval <= 0:
+            raise ValueError("interval must be finite and positive")
+        if not math.isfinite(duration) or duration < 0:
+            raise ValueError("duration must be finite and non-negative")
         samples = []
-        start_time = time.time()
+        deadline = time.monotonic() + duration
 
-        while time.time() - start_time < duration:
+        while time.monotonic() < deadline:
             budget = budget_fn()
             sample = self.sample(budget)
             samples.append(sample)
@@ -155,7 +176,9 @@ class BCPMonitor:
             if callback:
                 callback(sample)
 
-            time.sleep(interval)
+            remaining = deadline - time.monotonic()
+            if remaining > 0:
+                time.sleep(min(interval, remaining))
 
         return samples
 
@@ -176,12 +199,13 @@ def create_system_monitor() -> BCPMonitor:
 
     monitor = BCPMonitor()
 
-    # Add system monitoring tasks with realistic gain/cost
+    # Gains/costs are configurable allocation weights, not measured overheads.
     monitor.add_task(
         "cpu_percent",
         gain=0.9,
         cost=0.1,
-        collector=lambda: psutil.cpu_percent(interval=0)
+        # A blocking interval avoids psutil's meaningless first nonblocking 0.
+        collector=lambda: psutil.cpu_percent(interval=0.1)
     )
 
     monitor.add_task(
@@ -225,11 +249,14 @@ def compute_system_budget() -> float:
 
     Returns:
         Budget value between 0 and 1
+
+    Raises:
+        ImportError: If psutil is absent; no substitute measurement is returned.
     """
     try:
         import psutil
         cpu = psutil.cpu_percent(interval=0.1) / 100
         mem = psutil.virtual_memory().percent / 100
         return (1 - cpu) * (1 - mem)
-    except ImportError:
-        return 0.5  # Default if psutil not available
+    except ImportError as exc:
+        raise ImportError("psutil required for system monitoring. Install with: pip install psutil") from exc

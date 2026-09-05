@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "author": "Aldrin Payopay",
+  "reviewed_on": "2026-09-05",
+  "status_semantics": {
+    "active": "Current user-facing development; tests are still required.",
+    "maintained": "Supported bounded surface; does not imply release certification.",
+    "experimental": "Research or draft work; claims require specific evidence.",
+    "archived": "Historical source retained in place; not a default execution path.",
+    "dormant": "Prototype lacks current execution evidence; revival needs explicit acceptance criteria."
+  },
+  "components": [
+    {
+      "id": "halo",
+      "status": "active",
+      "paths": [
+        "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+        "experiments/halo",
+        "tests/halo"
+      ],
+      "entry_points": [
+        "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html"
+      ],
+      "evidence": [
+        "HELIOS-BRIDGE/HALO_HANDOFF.md",
+        "tests/halo/package.json"
+      ],
+      "summary": "Browser particle instrument with controlled numerical experiments. The memory claim remains under test.",
+      "next_action": "Repair and validate the estimator before interpreting the registered memory grid; keep browser evidence with numerical results."
+    },
+    {
+      "id": "helios-visual-studies",
+      "status": "archived",
+      "paths": [
+        "HELIOS-BRIDGE-ARCHIVE",
+        "generate_500_variations.mjs"
+      ],
+      "entry_points": [
+        "HELIOS-BRIDGE-ARCHIVE/index.html",
+        "HELIOS-BRIDGE-ARCHIVE/README.md"
+      ],
+      "evidence": [
+        "generate_500_variations.mjs"
+      ],
+      "summary": "The 500 generated visual studies remain browsable. Their field names are creative labels, not separately validated physical models. HALO V501 is classified separately as the active instrument.",
+      "next_action": "Preserve the published gallery and source. Promote a study into HALO only after specifying its equations, controls and measured behavior; do not regenerate the gallery over hand-edited pages."
+    },
+    {
+      "id": "classic-bridge",
+      "status": "maintained",
+      "paths": [
+        "HELIOS-BRIDGE"
+      ],
+      "entry_points": [
+        "HELIOS-BRIDGE/README.md",
+        "HELIOS-BRIDGE/package.json"
+      ],
+      "evidence": [
+        ".github/workflows/deploy_bridge.yml"
+      ],
+      "summary": "Compatibility interface deployed under archive/classic; HALO owns the site root.",
+      "next_action": "Preserve its build and public URL. Extend only for a demonstrated user need."
+    },
+    {
+      "id": "field-toolkits",
+      "status": "active",
+      "paths": [
+        "shared",
+        "av",
+        "plumbing",
+        "electrical",
+        "hvac",
+        "low-voltage",
+        "gc",
+        "framing",
+        "roofing",
+        "creative",
+        "concrete",
+        "masonry",
+        "sitework",
+        "flooring",
+        "painting",
+        "doors",
+        "landscape",
+        "paving",
+        "commons",
+        "tools/toolkit-gates"
+      ],
+      "entry_points": [
+        "av/index.html",
+        "commons/index.html"
+      ],
+      "evidence": [
+        ".github/workflows/deploy_bridge.yml",
+        "shared/toolkit.js"
+      ],
+      "summary": "Shared browser runtime and trade-specific tools deployed together.",
+      "next_action": "Keep deployed registry, links, trade configurations and gates in agreement."
+    },
+    {
+      "id": "collage-studio",
+      "status": "active",
+      "paths": [
+        "tools/collage-studio",
+        "collage-beta"
+      ],
+      "entry_points": [
+        "tools/collage-studio/package.json",
+        "collage-beta/index.html"
+      ],
+      "evidence": [
+        ".github/workflows/deploy_bridge.yml"
+      ],
+      "summary": "Creative browser workspace and served beta surface.",
+      "next_action": "Preserve type checks and interaction evidence for import, editing and export."
+    },
+    {
+      "id": "bcp-library",
+      "status": "maintained",
+      "paths": [
+        "bcp_lib"
+      ],
+      "entry_points": [
+        "bcp_lib/README.md",
+        "bcp_lib/pyproject.toml"
+      ],
+      "evidence": [
+        "bcp_lib/tests/test_core.py",
+        "bcp_lib/tests/test_monitor.py",
+        "bcp_lib/tests/test_visualization.py",
+        "archive/reports/2026-09-05_bcp_hardening_gate.txt"
+      ],
+      "summary": "Packaged discrete attention allocator; its implementation does not establish universal claims about the named application domains.",
+      "next_action": "Extend input-domain and performance validation beyond the 55 behavior checks; evaluate release usefulness and independence under the library release doctrine."
+    },
+    {
+      "id": "nrm-core",
+      "status": "experimental",
+      "paths": [
+        "nrm_core",
+        "src",
+        "bridge",
+        "reality",
+        "orchestration",
+        "integration",
+        "validation",
+        "tests",
+        "examples"
+      ],
+      "entry_points": [
+        "nrm_core/__init__.py",
+        "tests/test_fractal.py",
+        "tests/test_memory.py"
+      ],
+      "evidence": [
+        "pyproject.toml",
+        "tests/test_reality.py"
+      ],
+      "summary": "Research implementations with focused tests; the root project is not a uniformly validated production package.",
+      "next_action": "Define a narrow supported import/API boundary and run its focused tests before promotion."
+    },
+    {
+      "id": "research-record",
+      "status": "experimental",
+      "paths": [
+        "experiments",
+        "analysis",
+        "principle_cards",
+        "data",
+        "results"
+      ],
+      "entry_points": [
+        "experiments/cycle2568_starving_philosopher.py",
+        "analysis"
+      ],
+      "evidence": [
+        "docs/runbooks/QUICKSTART.md",
+        "REPRODUCIBILITY_GUIDE.md"
+      ],
+      "summary": "Experiment scripts, measurements and analyses with mixed levels of reproducibility.",
+      "next_action": "Review claims against original records. Retractions and negative findings retain their lineage."
+    },
+    {
+      "id": "historical-archive",
+      "status": "archived",
+      "paths": [
+        "archive",
+        "code/experiments",
+        "docs/legacy",
+        "workflows",
+        "backup",
+        "backups"
+      ],
+      "entry_points": [
+        "archive",
+        "docs/legacy/V6_TIMELINE_TRACKING.md"
+      ],
+      "evidence": [
+        "ARCHIVE_MANIFEST.md"
+      ],
+      "summary": "Historical cycles and former operating workflows retained as evidence, not current execution instructions. Conflict-resolution and dated backup copies are retained as historical records.",
+      "next_action": "Recover individual experiments only with an explicit protocol and a fresh runtime/dependency review."
+    },
+    {
+      "id": "helios-one-snapshot",
+      "status": "archived",
+      "paths": [
+        "helios_one"
+      ],
+      "entry_points": [
+        "helios_one/README.md"
+      ],
+      "evidence": [
+        "docs/archive/README.md"
+      ],
+      "summary": "Repository snapshot last changed in November 2025; contains copied core, BCP and research trees. Archived in place to preserve paths.",
+      "next_action": "Use root bcp_lib and nrm_core for new work; inspect provenance before extracting anything unique."
+    },
+    {
+      "id": "legacy-desktop",
+      "status": "archived",
+      "paths": [
+        "code/legacy"
+      ],
+      "entry_points": [
+        "code/legacy/README.md"
+      ],
+      "evidence": [
+        "docs/archive/README.md"
+      ],
+      "summary": "Prior Python desktop variants already located under legacy. Archived in place.",
+      "next_action": "Use the active browser instrument; preserve legacy source for historical comparison."
+    },
+    {
+      "id": "desktop-prototypes",
+      "status": "dormant",
+      "paths": [
+        "code/helios_3d_engine",
+        "code/helios_native_bridge",
+        "svd_app"
+      ],
+      "entry_points": [
+        "code/helios_3d_engine/README.md",
+        "svd_app/README.md"
+      ],
+      "evidence": [
+        "docs/archive/README.md"
+      ],
+      "summary": "Desktop/vision prototypes with platform and model prerequisites. No current production verification is recorded by this inventory.",
+      "next_action": "Revive only with a reproducible local dependency environment, explicit supported platforms and a measured end-to-end acceptance test."
+    },
+    {
+      "id": "papers-and-theory",
+      "status": "experimental",
+      "paths": [
+        "papers",
+        "docs",
+        "THE_MANIFESTO.md",
+        "THE_BCP_MANIFESTO.md"
+      ],
+      "entry_points": [
+        "papers",
+        "docs/philosophy"
+      ],
+      "evidence": [
+        "CITATION.cff"
+      ],
+      "summary": "Manuscripts, conceptual frameworks and historical reports. A file label does not verify publication or a scientific claim.",
+      "next_action": "Distinguish submitted/published work from drafts and attach reproducibility evidence to each promoted claim."
+    },
+    {
+      "id": "hardware",
+      "status": "experimental",
+      "paths": [
+        "fpga"
+      ],
+      "entry_points": [
+        "fpga"
+      ],
+      "evidence": [
+        "docs/protocols/FABRICATION_PROTOCOL.md"
+      ],
+      "summary": "Hardware interface and FPGA research; physical synthesis belongs on the build host. Proprietary fabrication artifacts are excluded.",
+      "next_action": "Verify documented hardware receipts before claiming physical behavior; do not synthesize on the Mac."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# License: GPL-3.0-only
+name: Archive health
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archive-boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test inventory and cleanup safety
+        run: python -m unittest discover -s tests/archive -v
+      - name: Validate lifecycle registry and publication boundary
+        run: python tools/archive/audit.py --check --output "$RUNNER_TEMP/archive-inventory.json"
+      - name: Preview repository cleanup
+        run: python automation/scripts/cleanup_repo.py --root .
+      - name: Preserve measured inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive-inventory
+          path: ${{ runner.temp }}/archive-inventory.json
+          if-no-files-found: warn
+          retention-days: 30

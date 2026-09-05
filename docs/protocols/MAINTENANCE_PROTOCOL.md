@@ -1,6 +1,8 @@
 # REPOSITORY MAINTENANCE PROTOCOL
 
-**Version:** 1.0
+**Version:** 1.1
+**Maintainer:** Aldrin Payopay
+**Updated:** 2026-09-04
 **Date:** 2025-11-30
 **Status:** ACTIVE
 **Mandate:** "Keep the Root Clean."
@@ -49,16 +51,18 @@ To maintain a high-signal, low-noise repository root directory (`/`) by enforcin
 
 ### 3.2 Script Execution (Last Resort)
 ```bash
-python3 automation/scripts/cleanup_repo.py
+python3 automation/scripts/cleanup_repo.py --root .
+# Only after reviewing the named root file and its callers:
+python3 automation/scripts/cleanup_repo.py --root . --apply --only temp_example.log
 ```
 
 ### 3.3 Script Logic
-The script will:
-1.  Scan the root directory.
-2.  Identify files matching the "Move" patterns (Section 2.2).
-3.  Move them to their designated target folders (creating folders if necessary).
-4.  **Delete** strictly temporary files (e.g., `.DS_Store`, empty `__init__.py` in root).
-5.  Report actions taken.
+The default invocation is a read-only preview. It creates no directories and moves no files. Applying changes requires `--apply --only` with exact reviewed root filenames; broad globs are not accepted as review.
+
+The script scans only root files matching its documented rules. It skips symlinks and existing destinations, rejects archive paths that escape the chosen root, and checks the root contains this protocol and README. A move creates a hard link at the destination before unlinking the source, so a collision cannot overwrite history. Cross-filesystem destinations fail rather than falling back to a destructive copy. It never deletes loose files as cleanup.
+
+The root allow-list above is historical guidance, not a command to move working entry points. New platform metadata, attribution files, deployment files and verified root entry points may remain when they serve the current repository. Before moving one, inspect references and deployment behavior. Prefer a lifecycle label in the [archive registry](../archive/components.json) for an old project whose paths still carry citations or imports.
+
 
 ## 4. Archival Strategy
 *   **Versioned Reports:** When a new `FINAL_REPORT_V(N).md` is created, immediately move `FINAL_REPORT_V(N-1).md` to `archive/reports/`.

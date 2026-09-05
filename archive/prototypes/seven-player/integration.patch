@@ -1,0 +1,22 @@
+diff --git a/HELIOS-BRIDGE/App.tsx b/HELIOS-BRIDGE/App.tsx
+index 62c4f8e0..497f3e9d 100644
+--- a/HELIOS-BRIDGE/App.tsx
++++ b/HELIOS-BRIDGE/App.tsx
+@@ -9,6 +9,7 @@ import { UIOverlay } from './components/UIComponents';
+ import { useSwarmWorker } from './services/SwarmWorker';
+ import { EvolvedArray } from './components/EvolvedArray';
+ import { KaleidoscopeEffect, KALEIDO_MODES } from './components/KaleidoscopeEffect';
++import { SevenPlayer } from './components/SevenPlayer';
+ 
+ // Coarse pointer (phone/tablet) → tune the camera controls for touch.
+ const IS_TOUCH = typeof window !== 'undefined' &&
+@@ -175,6 +176,9 @@ const App: React.FC = () => {
+         ))}
+       </div>
+ 
++      {/* Background music — drinoman SEVEN (STILL, then shuffle) */}
++      <SevenPlayer />
++
+       {/* UI Layer */}
+       <UIOverlay
+         config={config}

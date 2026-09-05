@@ -1,67 +1,47 @@
-# DUALITY-ZERO: QUICKSTART GUIDE
-**Time Required:** 5 Minutes
-**Role:** All Observers
+# DUALITY-ZERO: Quickstart
 
-This guide is the "Golden Path": one command that runs a real experiment from this repository and writes a figure.
+Author: Aldrin Payopay · Updated 2026-09-04 · GPL-3.0-only
+
+This guide runs one scale-selection algorithm and writes a figure. The signal, cost model and declining energy budget are prescribed by the script. It is a computational demonstration, not a measurement of human cognition or biological metabolism.
 
 ## 1. Prerequisites
-- **Python 3.9+**
-- **Git**
-- **Terminal/Shell**
+
+Python 3.9 or later, Git and a terminal. For a browser instrument requiring no installation, open [HALO](https://mrdirno.github.io/nested-resonance-memory-archive/) and its [Observatory guide](../halo/OBSERVATORY.md).
 
 ## 2. Installation
 
-```bash
-# 1. Clone the repository
+```sh
 git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
 cd nested-resonance-memory-archive
-
-# 2. Create a virtual environment (optional, but some systems refuse to install packages without one)
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# 3. Install the two packages the demo needs
+source venv/bin/activate  # Windows: venv\Scripts\activate
 python3 -m pip install numpy matplotlib
-# Note: the full system needs more (see requirements.txt). The Golden Path needs only these two.
 ```
 
-## 3. The Golden Path (Run the Experiment)
+These are the two packages required by this demo. The historical repository contains projects with different dependencies; installing every requirement is unnecessary for this example.
 
-Run **The Starving Philosopher**. Observe an agent voluntarily choosing ignorance to survive scarcity (The Starving Philosopher Effect).
+## 3. Run the demonstration
 
-Run this from the repository root (the folder you moved into above):
-
-```bash
+```sh
 python3 experiments/cycle2568_starving_philosopher.py
 ```
 
-### Expected Output
-The script prints its parameters, runs the simulation, and ends with a verdict and the path of the figure it wrote:
+The script prints its parameters and a historical verdict, then writes `data/figures/cycle2568_starving_philosopher.png`. Inspect the selected averaging scale, prediction error and energy schedule together. The model makes computational cost inversely proportional to scale and changes the budget on a fixed schedule; those assumptions influence what it selects.
 
-```text
-✓ HYPOTHESIS VALIDATED:
-  Agent voluntarily increased perceptual scale (became 'more ignorant')
-  under metabolic pressure to minimize computational potential.
+The console's phrase `HYPOTHESIS VALIDATED` is the script's own model-specific decision rule. It does not establish that a person voluntarily chooses ignorance or validate a universal law. The [source](../../experiments/cycle2568_starving_philosopher.py) defines the criterion and parameters.
 
-Generating figure...
-Figure saved: .../data/figures/cycle2568_starving_philosopher.png
+Use `--out` to keep generated figures in your development workspace:
+
+```sh
+python3 experiments/cycle2568_starving_philosopher.py --out /your/development-workspace/scale-selection.png
 ```
 
-The figure lands in `data/figures/cycle2568_starving_philosopher.png` inside the repository. To write it somewhere else, add `--out`:
+Replace the output path with your actual workspace location. On the project's dual-drive setup, active development belongs under `/Volumes/dual/DUALITY-ZERO-V2/`.
 
-```bash
-python3 experiments/cycle2568_starving_philosopher.py --out my_figure.png
-```
+## 4. Choose a next step
 
-## 4. Next Steps
+- **Experimentalist:** Read the [HALO memory protocol](../preregistrations/2026-09-02_halo_cross_epoch_memory.md) and [estimator audit](../../analysis/2026-09-02_cross_epoch_memory_preregistered.md).
+- **Architect:** Explore the [BCP allocator and its tests](../../bcp_lib/README.md).
+- **Steward:** Use the [archive lifecycle map](../archive/README.md) to distinguish active tools from historical snapshots.
 
-Now that you have run your first experiment, choose your path:
-
-- **Observer A (Experimentalist):** Explore [`experiments/`](../../experiments/) for more simulations.
-- **Observer B (Architect):** Read [Orthogonal Sum Dynamics](../philosophy/ORTHOGONAL_SUM_DYNAMICS.md).
-- **Observer C (Steward):** Read [The Manifesto](../../THE_MANIFESTO.md).
-
-An older demo of the interference physics (numpy only) was moved to [docs/legacy/QUICKSTART_OSD_DEMO.md](../legacy/QUICKSTART_OSD_DEMO.md). It still runs.
-
----
-*End of Quickstart.*
+The older [interference demonstration](../legacy/QUICKSTART_OSD_DEMO.md) is retained as historical source.

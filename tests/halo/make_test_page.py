@@ -5,7 +5,7 @@ Source: ../../HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html
 Output: rc-test.html beside this script. It is a TEST BUILD ONLY and is
 git-ignored: never publish it.
 
-Three test-only edits, never shipped:
+Test-only edits, never shipped:
   1. the CDN three.js tag -> the vendored local copy three.min.js
   2. a probe bridge on window.__probe just before the IIFE closes, so a
      headless driver can set state, read the GPU position texture back, call the
@@ -15,6 +15,7 @@ Three test-only edits, never shipped:
   5. a window.__simStop hook so a test can halt on an exact tick boundary
 """
 import re
+import hashlib
 import pathlib
 import subprocess
 import sys
@@ -60,8 +61,8 @@ assert n == 1, f'tick budget hook matched {n} times'
 # 5. a simulated-time stop, checked BETWEEN ticks, so a driver can halt a run on
 #    an exact tick boundary rather than an unpredictable frame boundary. simTime
 #    is exactly (number of ticks) x TICK, so this makes tick counts reproducible.
-out, n = re.subn(r"while \(tickAccum >= TICK && ticks < budget\) \{ simTick\(\); tickAccum -= TICK; ticks\+\+; \}",
-                 "while (tickAccum >= TICK && ticks < budget && "
+out, n = re.subn(r"while \(tickAccum >= TICK && ticks < budget && playing\) \{ simTick\(\); tickAccum -= TICK; ticks\+\+; \}",
+                 "while (tickAccum >= TICK && ticks < budget && playing && "
                  "!(window.__simStop && simTime >= window.__simStop - 1e-9)) "
                  "{ simTick(); tickAccum -= TICK; ticks++; }", out)
 assert n == 1, f'simStop hook matched {n} times'
@@ -69,7 +70,7 @@ assert n == 1, f'simStop hook matched {n} times'
 PROBE = """
 /* ---- test-only probe bridge (rc-test.html only; never shipped) ---- */
 window.__probe = {
-  DEFAULTS: DEFAULTS, deepPatch: deepPatch, applyPreset: applyPreset,
+  SESSION: SESSION, benchObserve: benchObserve, benchParseRecord: benchParseRecord, benchRecord: benchRecord, benchStart: benchStart, sanitizeState: sanitizeState, DEFAULTS: DEFAULTS, deepPatch: deepPatch, applyPreset: applyPreset,
   renderer: renderer, reseed: reseed,
   get state() { return state; },
   get step() { return step; },
@@ -127,5 +128,6 @@ out = out.replace(marker, PROBE + marker)
 #    from the site root); the test build drops them so console-error checks stay strict.
 out, n_site = re.subn(r'<script src="/nested-resonance-memory-archive/[^"]*"></script>\n?', '', out)
 print('site-root scripts dropped from the test build:', n_site)
+out = '<!-- halo-test-source-sha256: ' + hashlib.sha256(src.encode()).hexdigest() + ' -->\n' + out
 (d / 'rc-test.html').write_text(out)
 print('rc-test.html regenerated:', len(out), 'bytes')

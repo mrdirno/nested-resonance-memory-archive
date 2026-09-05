@@ -2,7 +2,7 @@
 Budget-Constrained Perception (BCP) Library
 ============================================
 
-A universal framework for attention allocation under resource constraints.
+A configurable allocator for attention under resource constraints.
 
 The BCP equation:
     V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity

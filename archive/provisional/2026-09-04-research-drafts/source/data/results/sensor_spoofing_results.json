@@ -1,0 +1,106 @@
+{
+  "hypothesis": "Sensor Spoofing & Memory Consolidation Hypothesis (SSMCH)",
+  "confirmed": true,
+  "parameters": {
+    "num_trials": 100,
+    "T_starve": 12,
+    "high_jitter_level": 0.25
+  },
+  "statistics": {
+    "t_statistic": 4.050587009047343,
+    "p_value": 7.447055628058766e-05,
+    "raw_mean_high_jitter": 218.9196793563034,
+    "filtered_mean_high_jitter": 220.09463142610227
+  },
+  "optimal_filter_alpha": 0.15,
+  "filter_sweeps": [
+    {
+      "alpha": 0.05,
+      "mean": 219.78989702953575,
+      "std": 1.831639421943264
+    },
+    {
+      "alpha": 0.15,
+      "mean": 220.12220522543257,
+      "std": 1.8149222124526851
+    },
+    {
+      "alpha": 0.3,
+      "mean": 220.08113966796182,
+      "std": 1.8086632036841708
+    },
+    {
+      "alpha": 0.5,
+      "mean": 220.08848060640818,
+      "std": 1.807016867152734
+    },
+    {
+      "alpha": 0.8,
+      "mean": 219.68955259301248,
+      "std": 1.9788899692479214
+    },
+    {
+      "alpha": 1.0,
+      "mean": 218.9196793563034,
+      "std": 2.248484467281884
+    }
+  ],
+  "noise_sweeps": {
+    "0.0": {
+      "deep_hibernation": {
+        "mean": 208.2863932572257,
+        "std": 0.0
+      },
+      "raw_volatility_sensing": {
+        "mean": 222.80870923960464,
+        "std": 2.842170943040401e-14
+      },
+      "filtered_volatility_sensing": {
+        "mean": 222.80870923960464,
+        "std": 2.842170943040401e-14
+      }
+    },
+    "0.1": {
+      "deep_hibernation": {
+        "mean": 207.81946658771582,
+        "std": 0.8865017278721901
+      },
+      "raw_volatility_sensing": {
+        "mean": 220.82787324994612,
+        "std": 1.0406659178363857
+      },
+      "filtered_volatility_sensing": {
+        "mean": 222.3463665291886,
+        "std": 0.5146287560495785
+      }
+    },
+    "0.25": {
+      "deep_hibernation": {
+        "mean": 205.96432754844955,
+        "std": 2.3914349609555003
+      },
+      "raw_volatility_sensing": {
+        "mean": 218.9196793563034,
+        "std": 2.248484467281884
+      },
+      "filtered_volatility_sensing": {
+        "mean": 220.09463142610227,
+        "std": 1.809478744126361
+      }
+    },
+    "0.4": {
+      "deep_hibernation": {
+        "mean": 202.65649994244367,
+        "std": 4.549342554987914
+      },
+      "raw_volatility_sensing": {
+        "mean": 215.44314284208386,
+        "std": 4.079904875568729
+      },
+      "filtered_volatility_sensing": {
+        "mean": 216.3232551809491,
+        "std": 3.9092741697417086
+      }
+    }
+  }
+}

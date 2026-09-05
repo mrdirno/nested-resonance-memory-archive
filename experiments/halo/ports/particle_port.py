@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """Numpy port of the Resonance Chamber PARTICLE DYNAMICS (velMat/posMat shaders).
 
-Faithful to resonance-chamber.html:
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0-only
+
+Historical numerical port. The HTML dependency supplies only four digit tables;
+changing its source does not update this module's independently ported physics.
+Set HALO_PORT_HTML to an explicit historical HTML file when reproducing a prior run.
+
+Originally ported from resonance-chamber.html:
   velocity pass : F = amp*fscale*cavityForce(modeB)  (blend=1, hard mode jumps)
                   + hubble*p + mag*30*cross(v, B),  B=(0,0.35,0)  (no centers)
                   |F| clamped to 500
@@ -18,9 +25,13 @@ Faithful to resonance-chamber.html:
 """
 import math, json, re, sys, os
 import numpy as np
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-HTML = os.path.join(HERE, "resonance-chamber.html")
+# Canonical tracked source works in a clean checkout and from any working directory.
+# Keep HTML as a string for callers which inspect this historical module's API.
+_CANONICAL_HTML = Path(__file__).resolve().parents[3] / "HELIOS-BRIDGE-ARCHIVE" / "HELIOS-V501-halo-resonance-chamber.html"
+HTML = str(Path(os.environ.get("HALO_PORT_HTML", str(_CANONICAL_HTML))).expanduser().resolve())
 
 EXTENT = 15.0
 FORCE_SCALE = 130.0
@@ -31,13 +42,16 @@ L_MAX, N_MAX = 9, 6
 DT = 1.0 / 30.0
 
 # ---------------- digits (validated in replica_sweep.py) ----------------
-src = open(HTML).read()
+try:
+    src = Path(HTML).read_text(encoding="utf-8")
+except FileNotFoundError as exc:
+    raise FileNotFoundError(f"HALO digit source is missing: {HTML}; set HALO_PORT_HTML to an explicit source file") from exc
 DEC = {}
 for key in ("pi", "e", "sqrt2", "phi"):
-    m = re.search(key + r":\s*'([0-9]+)'", src)
+    m = re.search(r"\b" + re.escape(key) + r":\s*'([0-9]+)'", src)
+    if m is None or len(m.group(1)) != 2500:
+        raise ValueError(f"HALO digit source {HTML} must contain exactly 2500 decimal digits for {key}")
     DEC[key] = m.group(1)
-for k, v in DEC.items():
-    assert len(v) == 2500, (k, len(v))
 
 PRIMES = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,
           73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,

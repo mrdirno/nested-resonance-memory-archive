@@ -1,4 +1,8 @@
-# HELIOS-BRIDGE ARCHIVE — 500 Variations
+# HELIOS-BRIDGE ARCHIVE — 500 visual studies
+
+Author: Aldrin Payopay · GPL-3.0-only
+
+[Open the gallery](index.html) or [enter HALO Observatory](HELIOS-V501-halo-resonance-chamber.html). The 500 generated studies are a preserved creative collection; HALO V501 is the active instrument, with its own equations, controls and [browser tests](../tests/halo/README.md). Scientific-sounding field names in the older studies are visual labels and do not certify physical fidelity.
 
 ## Nested Resonance Memory Archive × Persona500 LLC
 
@@ -6,7 +10,7 @@
 
 ### Architecture
 
-Every HTML file is **fully self-contained** — zero build step, zero dependencies beyond Three.js CDN. Open any file in a browser and it runs.
+The pages have no build step. They load Three.js and fonts from external CDNs, so they are not an offline bundle. Browser and GPU compatibility varies; this pass does not claim fresh runtime verification of all 500 studies.
 
 ### Variation Space
 
@@ -45,13 +49,9 @@ Every HTML file is **fully self-contained** — zero build step, zero dependenci
 - **Mode Buttons**: Three physics modes per force field type
 - **Touch**: 1-finger orbit, 2-finger pan + pinch zoom, double-tap reset
 
-### Generation Pipeline
+### Generation and preservation
 
-| Tier | Model | Role | Cost |
-|------|-------|------|------|
-| **Tier 1** | Programmatic (DeepSeek-equivalent) | Bulk generation of 500 variations | $0.00 |
-| **Tier 2** | Sonnet 4.6 | GLSL shader validation, syntax verification | ~$0.02 |
-| **Tier 3** | Opus 4.6 | Final UI polish, archive integration, documentation | Session cost |
+[`generate_500_variations.mjs`](../generate_500_variations.mjs) is the programmatic source of the variation collection. It writes HTML into this directory; rerunning it can replace hand-edited archive pages and the gallery. Preserve this snapshot and review generated differences before publication. The dimensions of the variation space describe configuration possibilities, not experimental coverage.
 
 ### File Naming Convention
 
@@ -65,15 +65,10 @@ Example: `HELIOS-V042-obsidian-interference.html`
 
 Open `index.html` for the full gallery with all 500 variations, or open any individual HTML file directly.
 
-### Beyond the 500 — V501 · HALO
+### Beyond the 500 — V501 · HALO Observatory
 
-`HELIOS-V501-halo-resonance-chamber.html` is not a point in the 5-axis variation space above. It is the Resonance
-Chamber at Ring 9 (code name HALO): a GPU particle laboratory in a spherical cavity whose eigenmodes are sequenced
-by the digits of π, e, √2 and φ, with self-gravity, an expanding background, a magnetic term stepped either as Euler
-(how every preset was found) or as the exact Boris rotation, and a Lab (press 7) that measures the chamber against
-its own claims — Lyapunov exponent, cross-epoch memory beside its two-back control, realized spectrum, force-ceiling
-share. Rings 1–12 are sealed in a comment at the end of the file. Self-contained: three.js from cdnjs, no build.
+[HALO](HELIOS-V501-halo-resonance-chamber.html) uses a fixed 0.05-second tick, spherical-cavity modes, particle-mesh gravity and Lab instruments. **Observe** starts seeded A/B experiments that change only the magnetic integrator, with exact tick stops and replayable JSON records. The [observation contract](../docs/halo/OBSERVATORY.md) explains sampling, GPU precision and interpretation limits.
 
-HALO is now the site's front page: https://mrdirno.github.io/nested-resonance-memory-archive/ opens it. The classic bridge, the
-visualizer that came before it, lives at `archive/classic/` on the published site
-(https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/), kept as it ran, at its own address.
+The existing Retained/Two-back readouts have a spatial-support confound. They remain footprint diagnostics, not a validated memory test; the [60-run estimator audit](../analysis/2026-09-02_cross_epoch_memory_preregistered.md) records why. No NRM result follows from a visually persistent shape.
+
+HALO is the [site front page](https://mrdirno.github.io/nested-resonance-memory-archive/). The [classic Bridge](https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/) retains its own address and receives compatibility and dependency fixes. Historical ring records remain inside the HALO source.

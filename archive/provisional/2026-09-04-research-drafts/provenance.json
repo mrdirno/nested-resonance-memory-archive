@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "author": "Aldrin Payopay",
+  "reviewed_on": "2026-09-04",
+  "status": "provisional_not_reexecuted",
+  "source_state": "Pre-existing local untracked research drafts; sensor JSON was ignored, not tracked. Original bytes preserved.",
+  "tracked_reference_scan": "git grep of all eleven exact filenames returned zero matches before relocation.",
+  "secret_review": "All preserved text scanned for common credential patterns; sensor JSON keys recursively inspected; no matches. This is a bounded check, not a universal secret-safety guarantee.",
+  "files": [
+    {
+      "original_path": "analysis/2026-09-02_phase_locking_governs_survival.md",
+      "archived_path": "source/analysis/2026-09-02_phase_locking_governs_survival.md",
+      "bytes": 6979,
+      "sha256": "9facc493ccd81216db30f37f705819d9ccdd9a6f8b5c7a5940524cd50640052a"
+    },
+    {
+      "original_path": "analysis/2026-09-02_uncontrolled_comparison_pattern.md",
+      "archived_path": "source/analysis/2026-09-02_uncontrolled_comparison_pattern.md",
+      "bytes": 6801,
+      "sha256": "ca46a11f22fdc5495f99c07a60f09c7f871214bd894bed33acd875b8799de47d"
+    },
+    {
+      "original_path": "analysis/retracted/2026-06-26_transcendental_substrate_experiment_report.SUPERSEDED.md",
+      "archived_path": "source/analysis/retracted/2026-06-26_transcendental_substrate_experiment_report.SUPERSEDED.md",
+      "bytes": 7639,
+      "sha256": "05a65a265c0ca5a8a4f43ada8d079b06aea568de6d4e0f116d85835d7525df6b"
+    },
+    {
+      "original_path": "analysis/sensor_spoofing_findings.md",
+      "archived_path": "source/analysis/sensor_spoofing_findings.md",
+      "bytes": 3507,
+      "sha256": "1748efbd24399564154a826a1e42606d647c9224789cd5c911d9c6b69a4d9413"
+    },
+    {
+      "original_path": "experiments/degree_control.py",
+      "archived_path": "source/experiments/degree_control.py",
+      "bytes": 2260,
+      "sha256": "dbf7f791a4bc12c7f85d442dd318779e2aa0ad7c324f9e47d88527b328385a90"
+    },
+    {
+      "original_path": "experiments/h_sweep.py",
+      "archived_path": "source/experiments/h_sweep.py",
+      "bytes": 1414,
+      "sha256": "605eee13ed07c9e276188a14aa1f3d59ebe70fb1947833574ba42f6cb5717d2f"
+    },
+    {
+      "original_path": "experiments/lock_law.py",
+      "archived_path": "source/experiments/lock_law.py",
+      "bytes": 2591,
+      "sha256": "e3a30aa68b8d92263dd9fefd0f8c422f01a4ae778fdbf3975fac9729dabe8126"
+    },
+    {
+      "original_path": "experiments/proper_control.py",
+      "archived_path": "source/experiments/proper_control.py",
+      "bytes": 3010,
+      "sha256": "3a74a4168f35ea75da1bf3a1705238f0fb42ccec54bd9a3378043848a8dc45f6"
+    },
+    {
+      "original_path": "experiments/replicate_structural.py",
+      "archived_path": "source/experiments/replicate_structural.py",
+      "bytes": 1576,
+      "sha256": "1fd180ca37932eb99f77d5ceac4195c93742cd4aed67baae36f86b50752eddb2"
+    },
+    {
+      "original_path": "experiments/test_sensor_spoofing.py",
+      "archived_path": "source/experiments/test_sensor_spoofing.py",
+      "bytes": 15479,
+      "sha256": "a8f8bd08ff1a794d76dfec2910fd8398a5e9606ab56dc67d1126b2205eb99c47"
+    },
+    {
+      "original_path": "data/results/sensor_spoofing_results.json",
+      "archived_path": "source/data/results/sensor_spoofing_results.json",
+      "bytes": 2479,
+      "sha256": "7b3a4d567d6c98a2e99faa2e131a37653f0c692e2dd3b3e806a988185f2e0c13"
+    }
+  ]
+}

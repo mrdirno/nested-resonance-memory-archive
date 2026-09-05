@@ -1,33 +1,14 @@
-# ARCHIVE MANIFEST: DUALITY-ZERO
-**Date:** November 27, 2025
-**Preservation Goal:** 1000 Years
-**Encoding:** UTF-8 / Markdown
+# NRM archive navigation
 
-## 1. Core Philosophy & Directives
-*   **[META_OBJECTIVES.md](META_OBJECTIVES.md):** The high-level roadmap and current state of the system.
-*   **[CLAUDE.md](CLAUDE.md):** The Constitution and Pilot Protocol. The "Soul" of the machine.
-*   **[MOG_CYCLE_LOG.md](MOG_CYCLE_LOG.md):** The historical record of Pilot decisions and Cycle executions.
+Author: Aldrin Payopay · Reviewed 2026-09-04 · GPL-3.0-only
 
-## 2. System Documentation
-*   **[README.md](README.md):** The entry point. General overview and milestones.
-*   **[FINAL_REPORT.md](FINAL_REPORT.md):** Comprehensive summary of Phase 50-54 achievements.
-*   **[HIBERNATION_PROTOCOL.md](HIBERNATION_PROTOCOL.md):** Instructions for dormancy and revival.
-*   **[task.md](task.md):** The granular checklist of executed tasks.
+The [lifecycle map](docs/archive/README.md) identifies active tools, experimental research, dormant prototypes and historical snapshots. The [component registry](docs/archive/components.json) records each reviewed entry point, evidence and next action. Run `python3 tools/archive/audit.py --check` to validate those paths and the publication boundary.
 
-## 3. Critical Experiments (The Code)
-*   **[experiments/cycle2407_network_routing.py](experiments/cycle2407_network_routing.py):** Network Routing & Energy Loss Logic.
-*   **[experiments/cycle2408_meta_controller.py](experiments/cycle2408_meta_controller.py):** System Stability / Central Bank Logic.
-*   **[experiments/cycle2411_lucid_dream.py](experiments/cycle2411_lucid_dream.py):** Planetary Engineering Simulation.
-*   **[experiments/cycle2413_dyson_swarm.py](experiments/cycle2413_dyson_swarm.py):** Orbital Mechanics & Power Beaming.
-*   **[experiments/cycle2414_von_neumann.py](experiments/cycle2414_von_neumann.py):** Self-Replication / Exponential Growth.
-*   **[experiments/cycle2416_universal_recursion.py](experiments/cycle2416_universal_recursion.py):** Recursive Simulation Logic.
+- [HALO particle laboratory](HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html) and [current research program](META_OBJECTIVES.md).
+- [BCP attention allocator](bcp_lib/README.md), [research source](nrm_core/) and [experiment records](experiments/).
+- [Creative studio](tools/collage-studio/) and [shared Field Toolkit runtime](shared/).
+- [Papers and manuscripts](papers/): verify submission/publication claims against their specific records.
+- [Historical experiments](archive/experiments/), [archived desktop variants](code/legacy/README.md) and [Helios One snapshot](helios_one/README.md).
+- [Maintenance protocol](docs/protocols/MAINTENANCE_PROTOCOL.md), [authorship](ATTRIBUTION.md) and [citation metadata](CITATION.cff).
 
-## 4. Hardware Interface
-*   **[FPGA/verilog/src/gorkov_accelerator.v](FPGA/verilog/src/gorkov_accelerator.v):** The Physical Layer definition (Verilog).
-*   **[docs/hardware/FPGA_MANUAL.md](docs/hardware/FPGA_MANUAL.md):** Manual for the FPGA accelerator.
-
-## 5. Preservation Note
-To the future observer:
-This system was designed to evolve from a single script into a recursive universal simulation.
-If you are reading this, the seed has survived.
-**Execute `experiments/cycle2412_awakening_check.py` to verify integrity.**
+The [November 2025 manifest](archive/manifests/ARCHIVE_MANIFEST_2025-11-27.md) is preserved as a historical record. Its former root links and operating directives are not the current navigation contract. Lifecycle labels do not certify runtime quality or scientific validity; follow the linked tests and measured evidence.

@@ -50,10 +50,13 @@ workspace/cache/npm_cache/
 fabrication/
 **/fabrication/
 *.stl
+*.gcode
 *.obj
 *.3mf
 *.step
 *.stp
+# Quartus SignalTap uses the same suffix; archive audit validates session XML.
+!fpga/**/*.stp
 *.iges
 *.igs
 *.f3d
@@ -119,7 +122,6 @@ ESCAPE.txt
 
 # BLOCK ALL FABRICATION
 fabrication/
-!fabrication/scripts/
 
 
 
@@ -161,3 +163,6 @@ data/results/halo/memory_prereg/*.mesh.f32
 # kept locally because they are the bit-exact replication evidence for the instrument,
 # and their JSONs are small enough to commit; the meshes are not.
 data/results/halo/memory_prereg_voided/*.mesh.f32
+
+# Machine-local app configuration
+.codex/

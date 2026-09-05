@@ -1,5 +1,7 @@
 # HALO — Helios Bridge iteration V501 · handoff for Claude Code on macOS
 
+> Current navigation, September 4, 2026: the Ring 9 integration instructions below are historical. HALO is already on main and served at the site root; the 60-run memory grid and estimator audit have been published. Follow [META_OBJECTIVES](../META_OBJECTIVES.md) and the [Observatory guide](../docs/halo/OBSERVATORY.md) for current work. The old “not yet in the repository” statements are package-era context.
+
 **Code name:** HALO (Helios Adaptive Lab Object). **Artifact:** `chamber/HELIOS-V501-halo-resonance-chamber.html`,
 a single self-contained page (three.js from cdnjs, no build step, ~290 KB) — the Resonance Chamber at Ring 9.
 **Live reference copy:** https://claude.ai/code/artifact/f81a4b50-694b-4580-9755-7639a4f001d0
