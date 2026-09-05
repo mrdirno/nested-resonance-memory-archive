@@ -16,6 +16,13 @@ The original cross-epoch memory protocol **has been registered and run**, over 6
 4. **Maintain the archive by lifecycle and evidence.** [Component registry](docs/archive/components.json), [inventory audit](tools/archive/audit.py), safe cleanup preview and CI publication gates are the active maintenance tools. Historical work stays discoverable; a runnable entry point and passing check are prerequisites for promoting a dormant project.
 5. **Harvest libraries only through the release doctrine.** BCP's optional monitoring and plotting paths have been repaired and now have behavior tests. The latest full-package measurement and remaining release conditions are in the [stewardship report](archive/reports/2026-09-04_archive_stewardship.md). The release workflow enforces greater-than-90% coverage; coverage alone does not establish superiority or justify a release. No library release is authorized by a healthy browser demo alone.
 
+6. **Build a dependable artist workflow in Collage Studio.** C3709 adds timed
+   lyrics, original procedural starter artwork, and caption/pin save integrity.
+   The [Collage evolution book](tools/collage-studio/COLLAGE_EVOLUTION.md) carries
+   the release and browser evidence. Prioritize packaging original music/video
+   before claiming full project portability; then add authored shot sequencing
+   and optional local generation that leaves existing edits usable offline.
+
 ## Deferred until their prerequisites exist
 
 - New memory claims, papers and universality claims await a valid estimator and appropriate external validation.

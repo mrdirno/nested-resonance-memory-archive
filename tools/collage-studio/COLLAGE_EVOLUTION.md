@@ -17,6 +17,16 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3709 — TIMED LYRICS (2026-09-05):** editable cue text and in/out timing,
+  playhead stamping, preview, plain SRT/WebVTT interchange, and one-step track
+  undo. The same planned text reaches the live canvas and recorded video;
+  still/PNG/SVG show time zero and SVG metadata carries the whole track.
+  `.collage` and crash recovery retain captions and manual pins. Saving refuses
+  unreadable required image originals; opening a picture project clears the
+  previous session's soundtrack. "Try a lyric film" supplies four original
+  procedural images and three timed cues, ready to edit and record. This does
+  not add transcription, word karaoke, a multi-shot timeline, or original
+  audio/video packaging. Live release receipt: code `9f535486`, [successful Pages run](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33988232971), 37/37 production browser cases and manual live sample/export review.
 - **Stack**: React 18 + TS + Vite; a framework-free Stage canvas compositor
   (Carmack frame-budget, one `<video>` per clip, decoder-economy admission);
   offline WebCodecs export + audio mix; PWA.
@@ -566,6 +576,26 @@ or re-documenting an existing capability is DD, not delivery.
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
 for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
+- [x] **TIMED LYRICS** — a single non-overlapping track of editable cues on the
+      output clock, with SRT/WebVTT import/export and project/recovery persistence.
+      A cue replaces the static title on [start,end); the title returns in gaps.
+      Caption geometry is planned once, including long-cue shrink-to-fit, then
+      reused by Stage and export. Cues do not ride a public composition URL.
+      Limits: 200 cues, 240 characters each, 50 ms minimum and one-hour range;
+      unsupported subtitle styling is visibly refused, never silently stripped.
+- [ ] **ORIGINAL AUDIO AND VIDEO MUST TRAVEL IN THE PROJECT** — highest-priority
+      independence gap. Current files preserve images, settings, pins and lyrics;
+      moving sources and soundtrack remain session media. Package the originals
+      with a versioned manifest/checksums and deliberate relinking. Acceptance:
+      fresh profile, network off, saved project reopened with the same sources,
+      audible music, pins and lyrics, then a verified second video export.
+- [ ] **AUTHOR A MUSICAL SEQUENCE** — split/reorder/trim several shots with a
+      global soundtrack and lyric clock. Start with cuts and one transition.
+      Every boundary must agree in preview, scrubbing, save/reopen and the file.
+- [ ] **OPTIONAL LOCAL GENERATION AS AN ASSET JOB** — one pinned workflow with
+      inputs, seed, provenance, progress, cancel/retry and rollback. Its output
+      becomes ordinary editable media. An unavailable model/worker must not stop
+      a saved project from opening or rendering previously generated assets.
 - [~] **Timeline & trim** — the single biggest CapCut gap, now part-shipped.
       **TRIM (in/out) is done**: `lib/clipWindow.ts` owns the one function that
       maps OUTPUT time to SOURCE time (`sourceTimeAt`), and the three timelines
@@ -787,6 +817,7 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       box is the margin box less the plate's own padding, because the thing that
       has to respect the margin is the SCRIM, not the glyphs (the naive rule
       pushes the scrim off the canvas on 326/756 swept plans, by up to 2*padX).
+      Timed cue text now ships separately as TIMED LYRICS (C3709).
       Still owed on this rung: a colour/weight choice, per-line styling, MOTION
       (animated titles and lower-thirds — the first thing here that needs a time
       axis), and auto-captions from the audio track.
@@ -1499,6 +1530,41 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-05 (C3709) — A PLAUSIBLE SAVE WAS NOT THE EDIT
+
+The earlier book claimed pins travelled in files, but no writer serialized the
+live lock Map. Project, SVG and crash recovery now share one state builder and
+canonical lock normalization. The archive writer also swallowed failed original
+reads and downloaded a broken archive. Required originals now fail the whole
+save visibly; an optional thumbnail may fall back to its original. The tests
+force a missing source, require no download, retry successfully, and compare
+saved/restored pins and exported geometry. They inspect actual archives and
+IndexedDB rows instead of calling the writer and treating its output as proof.
+
+### 2026-09-05 (C3709) — A NEGATIVE CLOCK ORIGIN IS VALID
+
+Seeking later than page uptime makes an output-clock origin negative. The old
+`-1`/`<0` sentinel treated that legitimate anchor as unset and restarted playback
+at zero. Stage now uses NaN/Number.isFinite for the unset state. The direct Stage
+browser check proves playback resumes from a late seek and a caption-only still
+composition keeps advancing. Cue edits use a dedicated plan setter so they do
+not reset the media scene or playhead. Caption timing uses output time directly,
+not the visual motion pace, and the export test decodes cue/gap pixels and audio.
+
+### 2026-09-05 (C3709) — VISIBLE IS NOT BIG ENOUGH TO EDIT
+
+The iPhone12 browser profile has a 390x664 usable viewport. A lyrics details panel
+capped alone at 34vh still left only 70px of artwork after transport, tabs and the
+stage rail. The whole lyrics dock now shares a bounded flex layout, reserving
+space for art and letting the editor scroll. The original >80px artwork test was
+kept: 390x664 now has 134px. Narrow-width gates also measure 44px targets; WebKit
+native selects needed explicit height/appearance rather than only min-height.
+Full-bleed visual inspection also caught bottom lyrics under the floating rail.
+The artwork band now reserves the measured rail height (including wrapped rows
+and safe-area padding) for bottom captions and static titles; export geometry
+is unchanged. The starter's asynchronous encoding/import is guarded against simultaneous
+project replacement, source intake and save, so it cannot overwrite real work.
 
 ### 2026-09-03 (C3704) — THE FIX THE LADDER NAMED WAS THE ONE THAT BROKE THE GESTURE
 
@@ -5993,3 +6059,19 @@ frontier. Today's ceiling is tomorrow's floor.
   carry — pins, the swap, the title and now the frame all travel in the FILE and
   none of them travel in a link, and the strip says nothing.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **2026-09-05 · [AXIS:COLLAGE] C3709 — TIMED LYRICS.** Before: a single static
+  title and no editable lyric timing. After: plain SRT/WebVTT or pasted/manual
+  cues, precise preview and in/out edits, captioned video, and complete lyric
+  persistence through project/SVG/recovery. A locally generated original-art
+  starter makes the workflow immediately usable. Supporting integrity fixes:
+  pins travel; missing originals refuse save; a reopened picture project cannot
+  inherit unrelated music; late seeks retain a valid clock. Independent audits
+  found and checked the clock sentinel, Safari layout and starter race. Wells:
+  collage 0 new / 0 building. New source dependencies: none. Local validation:
+  37/37 pure module suites; 38/38 browser cases (30 caption/project cases across Chromium, Mobile Chrome and Mobile Safari; mobile-watertight 7/7; direct Stage 1/1), typecheck and production build passed. Production evidence:
+  30/30 caption/project cases on Chromium, Mobile Chrome and Mobile Safari plus mobile-watertight 7/7 against the deployed URL; the JS, CSS, render worker and service worker are byte-identical to the tested build. Code `9f535486`; Pages run `33988232971` succeeded. Manual live starter, cue preview, full-bleed text and ten-second MP4 result visually checked. Build warnings retained: existing >500kB chunk
+  and stale Browserslist database. Remaining independence gap: original video
+  and soundtrack bytes are not packaged in saved projects. Next rung: portable
+  original media, then authored shot sequencing. Storefront unchanged; this is
+  a capability in the existing studio.
