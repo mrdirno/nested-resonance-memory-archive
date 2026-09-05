@@ -1,20 +1,15 @@
+"""SQLite memory behavior using pytest-owned temporary directories.
+
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0
+"""
+
 import pytest
-import shutil
-from pathlib import Path
 from nrm_core.memory import PatternMemory, Pattern, PatternType
 
 @pytest.fixture
-def memory_system():
-    db_dir = Path("tests/temp_db")
-    if db_dir.exists():
-        shutil.rmtree(db_dir)
-    db_dir.mkdir(parents=True, exist_ok=True)
-    
-    memory = PatternMemory(workspace_path=db_dir)
-    yield memory
-    
-    # Cleanup
-    shutil.rmtree(db_dir)
+def memory_system(tmp_path):
+    return PatternMemory(workspace_path=tmp_path)
 
 def test_store_and_retrieve_pattern(memory_system):
     pattern = Pattern(

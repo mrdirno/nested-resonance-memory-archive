@@ -1,0 +1,39 @@
+# Author: Aldrin Payopay. GPL-3.0-only.
+# This gate covers three small APIs, not the scientific validity of NRM.
+name: NRM core behavior
+on:
+  push:
+    branches: [main]
+    paths: ['nrm_core/**', 'tests/test_fractal.py', 'tests/test_memory.py', 'tests/test_reality.py', '.github/workflows/nrm-core-health.yml']
+  pull_request:
+    paths: ['nrm_core/**', 'tests/test_fractal.py', 'tests/test_memory.py', 'tests/test_reality.py', '.github/workflows/nrm-core-health.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  focused-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install focused runtime
+        run: python -m pip install pytest numpy psutil
+      - name: Check fractal, SQLite memory and real host metrics
+        run: python -m pytest tests/test_fractal.py tests/test_memory.py tests/test_reality.py
+      - name: Require actual host grounding
+        run: |
+          python - <<'PY'
+          from nrm_core.reality import RealityMonitor
+          metrics = RealityMonitor().capture()
+          assert metrics["grounded"] is True
+          assert metrics["process_count"] > 0
+          assert 0 <= metrics["cpu_percent"] <= 100
+          print("Grounded host metrics verified")
+          PY

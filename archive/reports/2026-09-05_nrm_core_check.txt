@@ -83,3 +83,63 @@ tests/test_reality.py::test_monitor_capture PASSED                       [ 87%]
 tests/test_reality.py::test_validator PASSED                             [100%]
 
 ============================== 8 passed in 0.11s ===============================
+
+Follow-up: memory fixture isolation — 2026-09-05
+
+The original measurement above is retained unchanged. Only the test fixture in
+tests/test_memory.py changed: it now receives pytest's tmp_path and creates its
+real PatternMemory SQLite database there. The fixed tests/temp_db path and its
+recursive deletion were removed. Core implementation and eight test cases are
+unchanged; an attribution/docstring was added to the test module.
+
+A second isolated DEV copy held a pre-existing sentinel at the old deletion
+path before pytest ran. All eight focused checks passed, and the sentinel still
+exists with identical size and SHA-256. Three distinct pytest-owned SQLite
+files remained after execution with 0, 1 and 2 pattern rows, matching the three
+memory test cases. Real psutil capture also reported grounded=true and a
+positive process count. No sync-checkout files were changed or tests run there.
+
+The previous fixture explicitly called shutil.rmtree on tests/temp_db when it
+existed; it would have removed this sentinel. That destructive baseline was
+established by source inspection, not rerun against any existing user data.
+
+The initial follow-up command lacked the parent directory for its explicit
+--basetemp=workspace/pytest-tmp setting: 5 passed, 3 fixture setup errors. The
+setup was corrected by creating workspace; source/tests were unchanged between
+attempts. That initial log remains at logs/archive-nrm-core-temp-safety.log in
+DEV. This was a test-command setup error, not an implementation failure.
+
+Working directory: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrm-core-check-2026-09-05-temp-safety
+Execution: automation/run_background.py, PID 10761.
+Prerequisite: mkdir -p workspace
+Command: PYTHONPATH=. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider tests/test_fractal.py tests/test_memory.py tests/test_reality.py --basetemp=workspace/pytest-tmp -v --tb=short
+
+Sentinel before and after (identical):
+{
+  "path": "tests/temp_db/existing-research-record.txt",
+  "bytes": 78,
+  "sha256": "5f8d074c49fdf98a10d736bf1ee195c8c89e5493edbd9b09d92e0cf3fed7551a"
+}
+
+Changed source SHA-256:
+9bd24e59aea4476304330651b783db6b6a6b0910a46f13c2e4aa3d1c6552731b  tests/test_memory.py
+All other 14 copied source/test files still match the original source manifest.
+This measures fixture safety and the same narrow behavior checks, not broader
+core correctness or scientific validity. The original limits continue to apply.
+
+Captured follow-up test output:
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.13/bin/python3.13
+rootdir: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrm-core-check-2026-09-05-temp-safety
+collecting ... collected 8 items
+
+tests/test_fractal.py::test_agent_init PASSED                            [ 12%]
+tests/test_fractal.py::test_agent_coherence PASSED                       [ 25%]
+tests/test_fractal.py::test_population_step PASSED                       [ 37%]
+tests/test_memory.py::test_store_and_retrieve_pattern PASSED             [ 50%]
+tests/test_memory.py::test_pattern_not_found PASSED                      [ 62%]
+tests/test_memory.py::test_search_patterns PASSED                        [ 75%]
+tests/test_reality.py::test_monitor_capture PASSED                       [ 87%]
+tests/test_reality.py::test_validator PASSED                             [100%]
+
+============================== 8 passed in 0.09s ===============================
