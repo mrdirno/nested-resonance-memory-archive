@@ -97,6 +97,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Foreman / striper → property manager / building engineer / GC super"
   },
   {
+    name: "Extra Work Tag",
+    href: "tm-tag.html",
+    desc: "Told to pave over something you'd have called out, stand while somebody cleared the lot, or come back after the window moved? Write the tag before the mat cools — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once it's rolled, nobody can see what was under it. En español también.",
+    chip: "#5E5300",
+    audience: "Foreman → GC super / PM"
+  },
+  {
     name: "Write-Up Setup",
     href: "write-up.html",
     desc: "The write-ups you put off — the base you were handed, what was under your mat when it rolled, the day you couldn't pave, the layout that didn't fit and who decided, the car that drove on fresh seal, the paint tracked into the lobby, the lot you handed back → dictate the mess at the tailgate, get back something the office can forward. Set up every one you write in a single block, and it never states a temperature, a density, a count or a cure time.",

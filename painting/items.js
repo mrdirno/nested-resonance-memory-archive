@@ -658,3 +658,160 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It's an ask, not a booking.</b> This page has no channel back &mdash; it puts text on your clipboard and that is all it does. Nothing on it is a permit, a reservation or an approval, and every heads-up on it ends by handing the process back to whoever owns it &mdash; the panel, the alarm, the air and the word to the tenants are the building's to run and to number, and we never will."
 };
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Everything here is something the man PICKS,
+ * and every `notin` line is a fence that keeps a tag from being read as a claim.
+ *
+ * BACKPORTED 2026-09-05 (C3711). The census on disk said eleven of seventeen
+ * trades carried the extra-work tag and this one did not — a trade with no tag
+ * has no way to write the one document that gets it paid for directed work.
+ * The engine and the nine-slot `notin` skeleton are the rack's; the words are
+ * this trade's, and `why` is where the trade actually lives.
+ *
+ * THE FENCE THAT MATTERS MOST is in `why` and in `notin`: nothing here asserts
+ * CAUSE. A tag that says who caused a condition is a tag doing the engineer's
+ * job. He writes what he was told and what his crew did; who caused what is
+ * somebody else's call. */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "GC superintendent",
+    "Our own general super",
+    "Another trade's foreman working in our area",
+    "GC project manager",
+    "Our PM or the office",
+    "Builder's field super (tract or custom home)",
+    "Architect or designer on a walk",
+    "Owner's rep or property manager",
+    "Homeowner",
+    "Building engineer or facilities (occupied building)"
+  ],
+  "how": [
+    { "v": "Face to face on the walk" },
+    { "v": "Text message" },
+    { "v": "Phone call" },
+    { "v": "Told to me at the morning huddle" },
+    { "v": "Radio on the site channel" },
+    { "v": "Email" },
+    { "v": "Marked-up finish schedule handed to me in the field" },
+    { "v": "Punch item assigned to us in the app" },
+    { "v": "Note or tape left on the wall" },
+    { "v": "Written direction from our own office" }
+  ],
+  "why": [
+    { "name": "Substrate wasn't ready and we were told to go", "sub": "Patch, texture, joints or bare spots still on the wall when we got there. Prepped past what we bid, or coated over it on somebody's say-so." },
+    { "name": "Color changed after the mockup was approved", "sub": "New color, new sheen or a new product after we'd bought and cut in." },
+    { "name": "Told to add coats", "sub": "Went back over it beyond the coats we carried, on somebody's say-so. How many, where, and who said so — the call on why is the office's and the maker's." },
+    { "name": "Told to paint out of sequence", "sub": "Ahead of the finish trades, ahead of the flooring, or after the casework and fixtures were in and had to be cut around." },
+    { "name": "Standing while another trade finished in our area", "sub": "Crew masked off and standing, rig and material in the room, waiting on it to be ours to work." },
+    { "name": "Damage after we finished the room", "sub": "Finished and walked, then scuffed, hand-printed, booted at the base or tape-lifted before we ever handed it off." },
+    { "name": "Touch-up that turned into a re-coat", "sub": "Spot work that wouldn't hold — flashing, burnished sheen or a color that wouldn't blend — so the wall or the run went whole." },
+    { "name": "Told to work the conditions", "sub": "Spray or roll in heat, cold, damp or dust we'd have called off, or fans, heat and cover we put in and kept running." },
+    { "name": "Masking and protection somebody else called for", "sub": "Paper, plastic, floor cover and barricade we put down, kept up and pulled on somebody's say-so." },
+    { "name": "What we found wasn't what we bid", "sub": "Old coating, wallpaper, adhesive, rust or a surface that wouldn't take ours. Stripped, sealed or primed past the bid." },
+    { "name": "Told to match something nobody could give us", "sub": "No color, no product and no record, so it went to draw-downs and site samples until somebody picked." },
+    { "name": "Access changed after we set up", "sub": "Lift, scaffold, staging or a shutdown window moved after we'd planned the reach." },
+    { "name": "Occupied-space rules added after we started", "sub": "Off-hours, low-odor product, containment or a smaller crew called for after we were mobilized." },
+    { "name": "Told to coat what was never on the schedule", "sub": "Doors and frames, exposed deck and structure, mechanical, piping, handrails — \"while you're in there, shoot it.\" Not on the finish schedule we bid." },
+    { "name": "Second trip to a room somebody re-opened", "sub": "Signed off, then cut into, patched or re-worked. Back to prime, cut and re-coat a room we had already finished." }
+  ],
+  "notin": [
+    { "name": "Not a price", "sub": "Hours, counts and conditions only. No rate, no total, no dollar figure anywhere on it." },
+    { "name": "Not a change order and not a claim", "sub": "This says we were directed and what it took. It becomes a change when the offices paper it, and entitlement is their letter, not the foreman's." },
+    { "name": "Not a question for the architect, and not a spec change", "sub": "Anything about the product, the system or the coat count goes up through the GC on their form. Nothing here approves a substitution." },
+    { "name": "Not the finish schedule or the product data sheet", "sub": "They own the color numbers, the product and the coat count. We attach them by what's already printed on them." },
+    { "name": "Not a coverage or warranty opinion", "sub": "Whether a coating holds is the manufacturer's call and the office's letter. We write what we were told and what we put on." },
+    { "name": "Not the inspector's report", "sub": "He writes his own. We write what our crew was told and what our crew did." },
+    { "name": "Not the GC's daily", "sub": "They keep theirs and number it. This is ours and it stands on its own." },
+    { "name": "Not a finding of cause", "sub": "We write what we found and what we coated. Who caused what is a call other people make." },
+    { "name": "Not a safety or incident report", "sub": "Injuries, near misses and equipment go on their own paper, right then, through the proper channel." },
+    { "name": "Not turnover or acceptance", "sub": "Signing that you were told isn't accepting the work, releasing anybody, or agreeing it's done." }
+  ],
+  "classes": [
+    "— class",
+    "JOURNEYMAN",
+    "APPRENTICE",
+    "FOREMAN",
+    "SPRAY MAN",
+    "PAPERHANGER"
+  ],
+  "pics": [
+    { "v": "In this message — shot before we coated over it" },
+    { "v": "None" }
+  ]
+};
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español. ──────────────
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPRENTICE)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "PISTOLERO (SPRAY MAN)", "en": "SPRAY MAN" },
+    { "es": "INSTALADOR DE TAPIZ (PAPERHANGER)", "en": "PAPERHANGER" }
+  ],
+  "how": [
+    { "es": "En persona, en el recorrido", "en": "Face to face on the walk" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijo en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Schedule de acabados marcado que me entregó en campo", "en": "Marked-up finish schedule handed to me in the field" },
+    { "es": "Punto de punch list asignado a nosotros en la app", "en": "Punch item assigned to us in the app" },
+    { "es": "Nota o cinta dejada en la pared", "en": "Note or tape left on the wall" },
+    { "es": "Orden por escrito de nuestra propia oficina", "en": "Written direction from our own office" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin ninguna cifra en dólares.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo documentan, y el derecho a cobrarlo lo pone la carta de la oficina, no el mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el arquitecto, ni cambio de especificación", "sub": "Todo lo del producto, el sistema o el número de manos sube por el GC en su formato. Nada de aquí aprueba una sustitución.", "en": "Not a question for the architect, and not a spec change" },
+    { "es": "No es el schedule de acabados ni la ficha técnica del producto", "sub": "Ellos son los dueños de los números de color, del producto y del número de manos. Los anexamos por lo que ya traen impreso.", "en": "Not the finish schedule or the product data sheet" },
+    { "es": "No es una opinión de cobertura ni de garantía", "sub": "Si una pintura aguanta lo dice el fabricante y la carta de la oficina. Nosotros escribimos qué nos ordenaron y qué aplicamos.", "en": "Not a coverage or warranty opinion" },
+    { "es": "No es el reporte del inspector", "sub": "Él escribe el suyo. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the inspector's report" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice quién tuvo la culpa", "sub": "Escribimos lo que encontramos y lo que pintamos. Quién causó qué es decisión de otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que corresponde.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se lo ordenaron no es aceptar el trabajo, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de pintar encima", "en": "In this message — shot before we coated over it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestra área", "en": "Another trade's foreman working in our area" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "El súper de campo del constructor (fraccionamiento o casa a la medida)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El arquitecto o el diseñador en un recorrido", "en": "Architect or designer on a walk" },
+    { "es": "El representante del dueño o el administrador de la propiedad", "en": "Owner's rep or property manager" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "El ingeniero del edificio o mantenimiento (edificio ocupado)", "en": "Building engineer or facilities (occupied building)" }
+  ],
+  "why": [
+    { "es": "La superficie no estaba lista y nos dijeron que le entráramos", "sub": "Resane, textura, juntas o partes desnudas todavía en la pared cuando llegamos. Preparamos más allá de lo que cotizamos, o pintamos encima porque alguien lo dijo.", "en": "Substrate wasn't ready and we were told to go" },
+    { "es": "El color cambió después de aprobar la muestra", "sub": "Color nuevo, brillo nuevo o producto nuevo después de que ya habíamos comprado y recortado.", "en": "Color changed after the mockup was approved" },
+    { "es": "Nos dijeron que le diéramos más manos", "sub": "Le volvimos a dar más manos de las que traíamos, porque alguien lo dijo. Cuántas, dónde y quién lo dijo — el porqué lo dicen la oficina y el fabricante.", "en": "Told to add coats" },
+    { "es": "Nos dijeron que pintáramos fuera de secuencia", "sub": "Antes de los oficios de acabado, antes del piso, o después de que ya estaban la carpintería y las luminarias y hubo que recortar alrededor.", "en": "Told to paint out of sequence" },
+    { "es": "Parados mientras otro oficio terminaba en nuestra área", "sub": "Cuadrilla ya con todo tapado y parada, equipo y material en el cuarto, esperando a que fuera nuestro para trabajar.", "en": "Standing while another trade finished in our area" },
+    { "es": "Daño después de que terminamos el cuarto", "sub": "Terminado y revisado, y luego lo rayaron, lo mancharon de manos, lo patearon en el rodapié o la cinta se llevó la pintura antes de que lo entregáramos.", "en": "Damage after we finished the room" },
+    { "es": "Retoque que se volvió otra mano", "sub": "Trabajo por puntos que no aguantaba — se marcaba, se quemaba el brillo o el color no empataba — así que se fue la pared o el tramo completo.", "en": "Touch-up that turned into a re-coat" },
+    { "es": "Nos dijeron que le entráramos con las condiciones", "sub": "Pistola o rodillo con calor, frío, humedad o polvo que habríamos cancelado, o ventiladores, calor y cubiertas que pusimos y mantuvimos corriendo.", "en": "Told to work the conditions" },
+    { "es": "Enmascarado y protección que pidió alguien más", "sub": "Papel, plástico, cartón para el piso y barricada que pusimos, mantuvimos y quitamos porque alguien lo dijo.", "en": "Masking and protection somebody else called for" },
+    { "es": "Lo que encontramos no era lo que cotizamos", "sub": "Pintura vieja, tapiz, pegamento, óxido o una superficie que no aceptaba la nuestra. Se removió, se selló o se le dio primer más allá de la cotización.", "en": "What we found wasn't what we bid" },
+    { "es": "Nos dijeron que igualáramos algo que nadie nos pudo dar", "sub": "Sin color, sin producto y sin registro, así que se fue a drawdowns y pruebas en obra hasta que alguien escogió.", "en": "Told to match something nobody could give us" },
+    { "es": "El acceso cambió después de que nos instalamos", "sub": "La canastilla, el andamio, el área de material o la ventana de cierre se movieron después de que ya habíamos planeado el alcance.", "en": "Access changed after we set up" },
+    { "es": "Reglas de espacio ocupado agregadas después de empezar", "sub": "Horario fuera de turno, producto de bajo olor, confinamiento o una cuadrilla más chica que pidieron después de que ya estábamos movilizados.", "en": "Occupied-space rules added after we started" },
+    { "es": "Nos dijeron que pintáramos lo que nunca estuvo en el schedule", "sub": "Puertas y marcos, losa y estructura expuesta, mecánico, tubería, barandales — \"ya que anda ahí, écheselo.\" No venía en el schedule de acabados que cotizamos.", "en": "Told to coat what was never on the schedule" },
+    { "es": "Segundo viaje a un cuarto que alguien volvió a abrir", "sub": "Ya entregado, y luego lo cortaron, lo resanaron o lo rehicieron. Regresamos a dar primer, recortar y volver a pintar un cuarto que ya habíamos terminado.", "en": "Second trip to a room somebody re-opened" }
+  ]
+};

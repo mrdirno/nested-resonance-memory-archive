@@ -535,3 +535,158 @@ window.TOOLKIT_LONGPOLE = {
 
   emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
 };
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Everything here is something the man PICKS,
+ * and every `notin` line is a fence that keeps a tag from being read as a claim.
+ *
+ * BACKPORTED 2026-09-05 (C3711). The census on disk said eleven of seventeen
+ * trades carried the extra-work tag and this one did not — a trade with no tag
+ * has no way to write the one document that gets it paid for directed work.
+ * The engine and the nine-slot `notin` skeleton are the rack's; the words are
+ * this trade's, and `why` is where the trade actually lives.
+ *
+ * THE FENCE THAT MATTERS MOST is in `why` and in `notin`: nothing here asserts
+ * CAUSE. A tag that says who caused a condition is a tag doing the engineer's
+ * job. He writes what he was told and what his crew did; who caused what is
+ * somebody else's call. */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "GC superintendent",
+    "Our own general super",
+    "Another trade's foreman working in our openings",
+    "GC project manager",
+    "Our PM or the office",
+    "Builder's field super (tract or custom home)",
+    "The hardware supplier's rep on site",
+    "Owner's rep or facilities",
+    "Building engineer or house locksmith (occupied building)",
+    "Fire marshal or jurisdiction inspector on site"
+  ],
+  "how": [
+    { "v": "Face to face at the opening" },
+    { "v": "Text message" },
+    { "v": "Phone call" },
+    { "v": "Told to me at the morning huddle" },
+    { "v": "Radio on the site channel" },
+    { "v": "Email" },
+    { "v": "Marked-up door schedule handed to me in the field" },
+    { "v": "Change out of the keying meeting" },
+    { "v": "Note left on the frame or the door" },
+    { "v": "Written direction from our own office" }
+  ],
+  "why": [
+    { "name": "Opening isn't the size we were given", "sub": "Rough opening framed off something other than the schedule. Shimmed, re-worked, or the frame went back." },
+    { "name": "Frame out of plumb, racked or twisted", "sub": "Not set by us, or moved after it was set. The door wouldn't shut, wouldn't grab the latch, and wouldn't hold an even gap without work that isn't in a hang." },
+    { "name": "Hardware set changed after it was ordered", "sub": "Function, finish or trim changed off the approved set. Boxes opened, hardware pulled and swapped at the opening." },
+    { "name": "Keying changed after the cores were pinned", "sub": "New system, new group, or a re-key on somebody's say-so. Cores pulled, stamped and re-issued." },
+    { "name": "Floor came up after the doors were hung", "sub": "New flooring, underlayment or a leveled slab under a door already hung. Undercut, re-hung, or the bottom seal moved." },
+    { "name": "Door or frame damaged after we hung it", "sub": "Hung, then used as a ramp, propped, sprung or knocked out of square before we ever handed it off." },
+    { "name": "Told to hang what showed up wrong or short", "sub": "Wrong hand, wrong size, wrong finish, no factory prep or a short shipment, and the direction was to make it work in the field." },
+    { "name": "Told to hang out of sequence", "sub": "Hung ahead of the finish trades, or into openings still being worked, then back to clean, adjust and re-fit." },
+    { "name": "Closer, operator or hold-open added at the opening", "sub": "Not on the schedule when we ordered. Reinforcement, power or a whole new mount at the head." },
+    { "name": "Anchors or wall type not what we built to", "sub": "Grout, stud gauge, backing or an existing wall that wouldn't take the anchor the frame came with." },
+    { "name": "Standing while another trade finished in our openings", "sub": "Crew on site with the doors and hardware staged, waiting on somebody else to get out of the opening." },
+    { "name": "Told to make an existing door or frame work", "sub": "Reuse, patch, re-drill or fit new hardware into an opening nobody surveyed." },
+    { "name": "Second trip to an opening somebody re-opened", "sub": "Signed off, then cut into, moved or re-worked. Back to re-hang, re-adjust or re-set an opening we had already finished." },
+    { "name": "Electrified or access-control prep added late", "sub": "Raceway, power transfer or a prep for a device that showed up after our frames were set." }
+  ],
+  "notin": [
+    { "name": "Not a price", "sub": "Hours, counts and conditions only. No rate, no total, no dollar figure anywhere on it." },
+    { "name": "Not a change order and not a claim", "sub": "This says we were directed and what it took. It becomes a change when the offices paper it, and entitlement is their letter, not the lead's." },
+    { "name": "Not a question for the architect, and not a schedule change", "sub": "Anything about the opening's rating, function or design goes up through the GC on their form. Nothing here approves changing a label, a set, or the schedule in hand." },
+    { "name": "Not the door schedule or the hardware set", "sub": "They own the opening number, the set number and the finish. We attach them by what's already printed on them." },
+    { "name": "Not the keying record", "sub": "The system, the groups and who signed for the control key belong to the keying meeting record, not to this tag." },
+    { "name": "Not the inspector's report", "sub": "He writes his own. We write what our crew was told and what our crew did." },
+    { "name": "Not the GC's daily", "sub": "They keep theirs and number it. This is ours and it stands on its own." },
+    { "name": "Not a finding of cause", "sub": "We write what we found and what we hung. Who caused what is a call other people make." },
+    { "name": "Not a safety or incident report", "sub": "Injuries, near misses and equipment go on their own paper, right then, through the proper channel." },
+    { "name": "Not turnover or acceptance", "sub": "Signing that you were told isn't accepting the opening, releasing anybody, or agreeing it's done." }
+  ],
+  "classes": [
+    "— class",
+    "JOURNEYMAN",
+    "APPRENTICE",
+    "FOREMAN",
+    "HARDWARE TECH",
+    "INSTALLER"
+  ],
+  "pics": [
+    { "v": "In this message — shot at the opening before we moved on" },
+    { "v": "None" }
+  ]
+};
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español. ──────────────
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "OFICIAL (JOURNEYMAN)", "en": "JOURNEYMAN" },
+    { "es": "APRENDIZ (APPRENTICE)", "en": "APPRENTICE" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "TÉCNICO DE HERRAJES (HARDWARE TECH)", "en": "HARDWARE TECH" },
+    { "es": "INSTALADOR (INSTALLER)", "en": "INSTALLER" }
+  ],
+  "how": [
+    { "es": "En persona, en el hueco", "en": "Face to face at the opening" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijo en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Schedule de puertas marcado que me entregó en campo", "en": "Marked-up door schedule handed to me in the field" },
+    { "es": "Cambio salido de la junta de llaves", "en": "Change out of the keying meeting" },
+    { "es": "Nota dejada en el marco o en la puerta", "en": "Note left on the frame or the door" },
+    { "es": "Orden por escrito de nuestra propia oficina", "en": "Written direction from our own office" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin ninguna cifra en dólares.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo documentan, y el derecho a cobrarlo lo pone la carta de la oficina, no el líder.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el arquitecto, ni cambio al schedule", "sub": "Todo lo de la clasificación, la función o el diseño de el hueco sube por el GC en su formato. Nada de aquí aprueba cambiar una etiqueta, un juego, ni el schedule que trae en la mano.", "en": "Not a question for the architect, and not a schedule change" },
+    { "es": "No es el schedule de puertas ni el juego de herrajes", "sub": "Ellos son los dueños del número de hueco, del número de juego y del acabado. Los anexamos por lo que ya traen impreso.", "en": "Not the door schedule or the hardware set" },
+    { "es": "No es el registro de llaves", "sub": "El sistema, los grupos y quién firmó por la llave de control son del registro de la junta de llaves, no de este vale.", "en": "Not the keying record" },
+    { "es": "No es el reporte del inspector", "sub": "Él escribe el suyo. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the inspector's report" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice quién tuvo la culpa", "sub": "Escribimos lo que encontramos y lo que colgamos. Quién causó qué es decisión de otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que corresponde.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se lo ordenaron no es aceptar el hueco, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas en el hueco antes de seguir", "en": "In this message — shot at the opening before we moved on" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestros huecos", "en": "Another trade's foreman working in our openings" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "El súper de campo del constructor (fraccionamiento o casa a la medida)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El representante del proveedor de herrajes en la obra", "en": "The hardware supplier's rep on site" },
+    { "es": "El representante del dueño o mantenimiento", "en": "Owner's rep or facilities" },
+    { "es": "El ingeniero del edificio o el cerrajero de la casa (edificio ocupado)", "en": "Building engineer or house locksmith (occupied building)" },
+    { "es": "El inspector de bomberos o el inspector de la ciudad en la obra", "en": "Fire marshal or jurisdiction inspector on site" }
+  ],
+  "why": [
+    { "es": "El hueco no es del tamaño que nos dieron", "sub": "El hueco en obra negra se hizo con otra cosa que no era el schedule. Se calzó, se rehízo, o el marco se regresó.", "en": "Opening isn't the size we were given" },
+    { "es": "Marco fuera de plomo, chueco o torcido", "sub": "No lo pusimos nosotros, o lo movieron después de puesto. La puerta no cerraba, no agarraba el pestillo, y no mantenía la holgura pareja sin trabajo que no va en un colgado.", "en": "Frame out of plumb, racked or twisted" },
+    { "es": "El juego de herrajes cambió después de pedido", "sub": "La función, el acabado o el trim cambiaron respecto al juego aprobado. Se abrieron cajas, se quitó herraje y se cambió en el hueco.", "en": "Hardware set changed after it was ordered" },
+    { "es": "Las llaves cambiaron después de armar los cilindros", "sub": "Sistema nuevo, grupo nuevo, o volver a llavear porque alguien lo dijo. Se quitaron cilindros, se marcaron y se volvieron a entregar.", "en": "Keying changed after the cores were pinned" },
+    { "es": "El piso subió después de colgar las puertas", "sub": "Piso nuevo, underlayment o losa nivelada debajo de una puerta ya colgada. Se recortó abajo, se volvió a colgar, o se movió el sello inferior.", "en": "Floor came up after the doors were hung" },
+    { "es": "Puerta o marco dañado después de que lo colgamos", "sub": "Colgada, y luego la usaron de rampa, la atrancaron, se le vencieron las bisagras o la sacaron de escuadra antes de que la entregáramos.", "en": "Door or frame damaged after we hung it" },
+    { "es": "Nos dijeron que colgáramos lo que llegó mal o incompleto", "sub": "Mano equivocada, medida equivocada, acabado equivocado, sin preparación de fábrica o embarque incompleto, y la orden fue hacerlo funcionar en campo.", "en": "Told to hang what showed up wrong or short" },
+    { "es": "Nos dijeron que colgáramos fuera de secuencia", "sub": "Colgamos antes que los oficios de acabado, o en huecos que todavía trabajaban, y luego regresamos a limpiar, ajustar y volver a acomodar.", "en": "Told to hang out of sequence" },
+    { "es": "Cierrapuertas, operador o retenedor agregado en el hueco", "sub": "No estaba en el schedule cuando pedimos. Refuerzo, corriente o un montaje completamente nuevo en el cabezal.", "en": "Closer, operator or hold-open added at the opening" },
+    { "es": "Los anclajes o el tipo de muro no son con lo que armamos", "sub": "Grout, calibre del poste, respaldo o un muro existente que no aguantaba el anclaje con el que venía el marco.", "en": "Anchors or wall type not what we built to" },
+    { "es": "Parados mientras otro oficio terminaba en nuestros huecos", "sub": "Cuadrilla en la obra con las puertas y el herraje ya bajados, esperando a que alguien más se saliera de el hueco.", "en": "Standing while another trade finished in our openings" },
+    { "es": "Nos dijeron que hiciéramos funcionar una puerta o marco existente", "sub": "Reusar, parchar, volver a barrenar o meter herraje nuevo en un hueco que nadie levantó.", "en": "Told to make an existing door or frame work" },
+    { "es": "Segundo viaje a un hueco que alguien volvió a abrir", "sub": "Ya entregada, y luego la cortaron, la movieron o la rehicieron. Regresamos a colgar, ajustar o poner de nuevo un hueco que ya habíamos terminado.", "en": "Second trip to an opening somebody re-opened" },
+    { "es": "Preparación electrificada o de control de acceso agregada tarde", "sub": "Canalización, transferencia de corriente o preparación para un aparato que llegó después de que nuestros marcos ya estaban puestos.", "en": "Electrified or access-control prep added late" }
+  ]
+};

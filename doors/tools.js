@@ -106,6 +106,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Lead → property manager / building engineer"
   },
   {
+    name: "Extra Work Tag",
+    href: "tm-tag.html",
+    desc: "Told to make an opening work that isn't the one on the schedule, re-hang behind somebody, or stand while another trade got out of your openings? Write the tag before you move to the next door — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once the casing's on, nobody can see the frame you were fighting. En español también.",
+    chip: "#2F3C63",
+    audience: "Lead → super / PM"
+  },
+  {
     name: "Write-Up Setup",
     href: "write-up.html",
     desc: "The write-ups you put off — frames set wrong and nobody owning it, the opening you were told to hang anyway, the truck that came up short, what your number didn't cover, the day you couldn't hang, your own walk before the architect's → dictate the mess at the tailgate, get back something the office can forward. Set up every one you write in a single block, and it never states a label, a clearance or a setting.",

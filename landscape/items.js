@@ -518,3 +518,160 @@ window.TOOLKIT_GETIN = {
     "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first morning, where the pile and the plant sit, and where the water is — and the one that matters most, who charges the backflow back and who tests it, because it isn't us. If the answer on the locates behind your meter is a person, give me their name before our first day, not during it."
   ]
 };
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Everything here is something the man PICKS,
+ * and every `notin` line is a fence that keeps a tag from being read as a claim.
+ *
+ * BACKPORTED 2026-09-05 (C3711). The census on disk said eleven of seventeen
+ * trades carried the extra-work tag and this one did not — a trade with no tag
+ * has no way to write the one document that gets it paid for directed work.
+ * The engine and the nine-slot `notin` skeleton are the rack's; the words are
+ * this trade's, and `why` is where the trade actually lives.
+ *
+ * THE FENCE THAT MATTERS MOST is in `why` and in `notin`: nothing here asserts
+ * CAUSE. A tag that says who caused a condition is a tag doing the engineer's
+ * job. He writes what he was told and what his crew did; who caused what is
+ * somebody else's call. */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "GC superintendent",
+    "Our own general super",
+    "Another trade's foreman working in our beds",
+    "GC project manager",
+    "Our PM or the office",
+    "Landscape architect on site",
+    "Builder's field super (tract or custom home)",
+    "Owner's rep or property manager",
+    "Homeowner",
+    "City or agency inspector on site"
+  ],
+  "how": [
+    { "v": "Face to face in the field" },
+    { "v": "Text message" },
+    { "v": "Phone call" },
+    { "v": "Told to me at the morning huddle" },
+    { "v": "Radio on the site channel" },
+    { "v": "Email" },
+    { "v": "Marked-up planting plan handed to me in the field" },
+    { "v": "Flags or paint moved on the ground" },
+    { "v": "Note left at the trailer" },
+    { "v": "Written direction from our own office" }
+  ],
+  "why": [
+    { "name": "Grade wasn't what we planted to", "sub": "Finish grade high, low or still moving when we got there. Told to plant anyway, or told to fix it first." },
+    { "name": "Soil wouldn't take the plant", "sub": "Rock, rubble, clay or fill in the pit. Hand dug, augered, hauled out or amended past what we bid." },
+    { "name": "Standing while somebody got out of our beds", "sub": "Crew on site and the plants off the truck and drying, waiting on the beds to be ours to work." },
+    { "name": "Plant substituted at the nursery or in the field", "sub": "Size, species or container changed off the approved list on somebody's say-so. Re-tagged, re-staged or re-planted." },
+    { "name": "Told to plant out of season or out of sequence", "sub": "Ahead of the hardscape, ahead of the irrigation, or in heat or cold we'd have called off." },
+    { "name": "Irrigation point of connection moved", "sub": "The tie-in, the meter, the backflow or the sleeve wasn't where the plan or the site showed. New route, new trench, new mainline." },
+    { "name": "Sleeves missing or not where they were shown", "sub": "Told to bore, saw-cut or route around hardscape that went in without our sleeves." },
+    { "name": "Line in the ground nobody marked", "sub": "The trencher or the plow walked into it. Stopped, hand dug the mainline around it, and lost the day waiting on a locate." },
+    { "name": "Told to water before it was ours to water", "sub": "Hand watering, hoses or a temporary line kept running on somebody's direction, before the start date we agreed to." },
+    { "name": "Plant damaged after we set it", "sub": "Set, staked and watered, then run over, snapped, buried or driven around before we ever handed it off." },
+    { "name": "Told to pull and replace what we already planted", "sub": "The direction, the count and the day we pulled them. No call from us on why they came out — that is somebody else's." },
+    { "name": "Told to work the weather", "sub": "Keep planting, keep watering, cover it, or come back on a day we'd called off." },
+    { "name": "Beds or edges changed after we laid them out", "sub": "Lines, radii or square footage moved after we set to the first ones." },
+    { "name": "Told to keep it up while the job sat", "sub": "Mowing, weeding, re-mulching, blowing off the hardscape and cleaning up for owner walks, week after week, before the day it becomes theirs." },
+    { "name": "Cleanup or re-grade behind somebody else", "sub": "Tracking, spoil, washout or stacked material left in our beds that we got told to deal with." }
+  ],
+  "notin": [
+    { "name": "Not a price", "sub": "Hours, counts and conditions only. No rate, no total, no dollar figure anywhere on it." },
+    { "name": "Not a change order and not a claim", "sub": "This says we were directed and what it took. It becomes a change when the offices paper it, and entitlement is their letter, not the foreman's." },
+    { "name": "Not a question for the landscape architect, and not a design change", "sub": "Anything about the plan — species, size, spacing, the irrigation design — goes up through the GC on their form. Nothing here approves a substitution." },
+    { "name": "Not the nursery tag or the delivery ticket", "sub": "We attach them by the numbers already printed on them. We never retype what's on them." },
+    { "name": "Not the warranty start, and not a release", "sub": "The day it becomes theirs and who is watering from it are set where they were agreed. A tag doesn't move that date." },
+    { "name": "Not the inspector's report", "sub": "He writes his own. We write what our crew was told and what our crew did." },
+    { "name": "Not the GC's daily", "sub": "They keep theirs and number it. This is ours and it stands on its own." },
+    { "name": "Not a finding of cause", "sub": "We write what we found and what we planted. Who caused what is a call other people make." },
+    { "name": "Not a safety or incident report", "sub": "Injuries, near misses and equipment go on their own paper, right then, through the proper channel." },
+    { "name": "Not turnover or acceptance", "sub": "Signing that you were told isn't accepting the work, releasing anybody, or agreeing it's done." }
+  ],
+  "classes": [
+    "— class",
+    "FOREMAN",
+    "IRRIGATION TECH",
+    "LABORER",
+    "EQUIPMENT OPERATOR",
+    "TREE CLIMBER"
+  ],
+  "pics": [
+    { "v": "In this message — shot before we mulched it in" },
+    { "v": "None" }
+  ]
+};
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español. ──────────────
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "TÉCNICO DE RIEGO (IRRIGATION TECH)", "en": "IRRIGATION TECH" },
+    { "es": "PEÓN (LABORER)", "en": "LABORER" },
+    { "es": "OPERADOR DE EQUIPO (EQUIPMENT OPERATOR)", "en": "EQUIPMENT OPERATOR" },
+    { "es": "PODADOR / TREPADOR (TREE CLIMBER)", "en": "TREE CLIMBER" }
+  ],
+  "how": [
+    { "es": "En persona, en el campo", "en": "Face to face in the field" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijo en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Plano de plantación marcado que me entregó en campo", "en": "Marked-up planting plan handed to me in the field" },
+    { "es": "Banderas o pintura movidas en el terreno", "en": "Flags or paint moved on the ground" },
+    { "es": "Nota dejada en el tráiler", "en": "Note left at the trailer" },
+    { "es": "Orden por escrito de nuestra propia oficina", "en": "Written direction from our own office" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin ninguna cifra en dólares.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo documentan, y el derecho a cobrarlo lo pone la carta de la oficina, no el mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el arquitecto de paisaje, ni cambio de diseño", "sub": "Todo lo del plano — especie, tamaño, separación, el diseño del riego — sube por el GC en su formato. Nada de aquí aprueba una sustitución.", "en": "Not a question for the landscape architect, and not a design change" },
+    { "es": "No es la etiqueta del vivero ni el ticket de entrega", "sub": "Los anexamos por los números que ya traen impresos. Nunca volvemos a escribir lo que dicen.", "en": "Not the nursery tag or the delivery ticket" },
+    { "es": "No es el arranque de la garantía, ni una liberación", "sub": "El día en que pasa a ser de ellos y quién riega a partir de ahí se fijan donde se acordaron. Un vale no mueve esa fecha.", "en": "Not the warranty start, and not a release" },
+    { "es": "No es el reporte del inspector", "sub": "Él escribe el suyo. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the inspector's report" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice quién tuvo la culpa", "sub": "Escribimos lo que encontramos y lo que plantamos. Quién causó qué es decisión de otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que corresponde.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se lo ordenaron no es aceptar el trabajo, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de taparlo con mulch", "en": "In this message — shot before we mulched it in" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestras camas", "en": "Another trade's foreman working in our beds" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "El arquitecto de paisaje en la obra", "en": "Landscape architect on site" },
+    { "es": "El súper de campo del constructor (fraccionamiento o casa a la medida)", "en": "Builder's field super (tract or custom home)" },
+    { "es": "El representante del dueño o el administrador de la propiedad", "en": "Owner's rep or property manager" },
+    { "es": "El dueño de la casa", "en": "Homeowner" },
+    { "es": "El inspector de la ciudad o de la agencia en la obra", "en": "City or agency inspector on site" }
+  ],
+  "why": [
+    { "es": "El nivel no era el que nos dieron para plantar", "sub": "El nivel de acabado alto, bajo o todavía moviéndose cuando llegamos. Nos dijeron que plantáramos de todos modos, o que primero lo arregláramos.", "en": "Grade wasn't what we planted to" },
+    { "es": "El suelo no aceptaba la planta", "sub": "Roca, escombro, barro o relleno en la cepa. Excavado a mano, con barrena, sacado o mejorado más allá de lo que cotizamos.", "en": "Soil wouldn't take the plant" },
+    { "es": "Parados mientras alguien se salía de nuestras camas", "sub": "Cuadrilla en la obra y las plantas ya bajadas y secándose, esperando a que las camas fueran nuestras para trabajar.", "en": "Standing while somebody got out of our beds" },
+    { "es": "Planta sustituida en el vivero o en campo", "sub": "El tamaño, la especie o el contenedor cambiaron respecto a la lista aprobada porque alguien lo dijo. Se volvió a etiquetar, a acomodar o a plantar.", "en": "Plant substituted at the nursery or in the field" },
+    { "es": "Nos dijeron que plantáramos fuera de temporada o de secuencia", "sub": "Antes del hardscape, antes del riego, o con un calor o un frío que nosotros habríamos cancelado.", "en": "Told to plant out of season or out of sequence" },
+    { "es": "El punto de conexión del riego se movió", "sub": "La conexión, el medidor, el backflow o el sleeve no estaban donde el plano o el sitio mostraban. Ruta nueva, zanja nueva, línea principal nueva.", "en": "Irrigation point of connection moved" },
+    { "es": "Faltan sleeves o no están donde los marcaron", "sub": "Nos dijeron que barrenáramos, cortáramos con sierra o le diéramos la vuelta a hardscape que se puso sin nuestros sleeves.", "en": "Sleeves missing or not where they were shown" },
+    { "es": "Línea en el terreno que nadie marcó", "sub": "La zanjadora o el arado le pegaron. Paramos, excavamos la línea principal a mano por un lado, y perdimos el día esperando el locate.", "en": "Line in the ground nobody marked" },
+    { "es": "Nos dijeron que regáramos antes de que nos tocara", "sub": "Riego a mano, mangueras o una línea temporal que seguimos corriendo por orden de alguien, antes de la fecha de arranque que acordamos.", "en": "Told to water before it was ours to water" },
+    { "es": "Planta dañada después de que la pusimos", "sub": "Puesta, estacada y regada, y luego la pisaron, la quebraron, la enterraron o le pasaron por encima antes de que la entregáramos.", "en": "Plant damaged after we set it" },
+    { "es": "Nos dijeron que quitáramos y repusiéramos lo que ya habíamos plantado", "sub": "La orden, la cantidad y el día que las sacamos. Nosotros no decimos por qué salieron — eso le toca a otro.", "en": "Told to pull and replace what we already planted" },
+    { "es": "Nos dijeron que le entráramos con el clima", "sub": "Seguirle plantando, seguirle regando, taparlo, o regresar un día que ya habíamos cancelado.", "en": "Told to work the weather" },
+    { "es": "Camas o bordes cambiados después de que los trazamos", "sub": "Líneas, radios o metros cuadrados se movieron después de que ya habíamos trazado con los primeros.", "en": "Beds or edges changed after we laid them out" },
+    { "es": "Nos dijeron que lo mantuviéramos mientras la obra estaba parada", "sub": "Cortar, deshierbar, reponer mulch, soplar el hardscape y limpiar para los recorridos del dueño, semana tras semana, antes del día en que pasa a ser de ellos.", "en": "Told to keep it up while the job sat" },
+    { "es": "Limpieza o volver a nivelar detrás de alguien más", "sub": "Huellas, escombro, arrastre o material estibado que dejaron en nuestras camas y nos dijeron que lo resolviéramos.", "en": "Cleanup or re-grade behind somebody else" }
+  ]
+};

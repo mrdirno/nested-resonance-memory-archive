@@ -107,6 +107,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Foreman → property manager / building engineer / GC super"
   },
   {
+    name: "Extra Work Tag",
+    href: "tm-tag.html",
+    desc: "Told to plant into something you wouldn't have, water somebody else's plants, or stand while another trade got out of your beds? Write the tag the same day — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once it's mulched in, nobody can see what you were digging into. En español también.",
+    chip: "#355226",
+    audience: "Foreman → GC super / PM"
+  },
+  {
     name: "Write-Up Setup",
     href: "write-up.html",
     desc: "The write-ups you put off — the ground you were handed, the sleeves nobody put in, the day you couldn't plant, what you found when they died, the truck that came up short, what you left running, the trucks that drove across your finish grade → dictate the mess at the tailgate, get back something the office can forward. Set up every one you write in a single block, and it never states a rate, a run time or why a plant died.",

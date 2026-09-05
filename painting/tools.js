@@ -101,6 +101,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Foreman → property manager / building engineer"
   },
   {
+    name: "Extra Work Tag",
+    href: "tm-tag.html",
+    desc: "Told to paint over something you'd have called out, add a coat to make it cover, or come back to a room somebody else opened up? Write the tag the same day — who told you, what came up, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Once the last coat is on, nobody can see what you painted over. En español también.",
+    chip: "#146C12",
+    audience: "Foreman → GC super / PM"
+  },
+  {
     name: "Write-Up Setup",
     href: "write-up.html",
     desc: "The write-ups you put off — the wall you were told to coat anyway, the walk after final before the trades come back, who picked that color, the daily, the day you couldn't roll → dictate the mess at the tailgate, get back something the office can forward. Set up every one you write in a single block, and it never sets a number or says a surface was ready.",

@@ -515,3 +515,160 @@ window.TOOLKIT_GETIN = {
     "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first night, where the truck and the rig stage, and where the water is — and the one that matters most, who moves a car at seven and who tells the tenants, because it isn't us. If the answer on the road closure is a person, give me their name before our first night, not during it."
   ]
 };
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Everything here is something the man PICKS,
+ * and every `notin` line is a fence that keeps a tag from being read as a claim.
+ *
+ * BACKPORTED 2026-09-05 (C3711). The census on disk said eleven of seventeen
+ * trades carried the extra-work tag and this one did not — a trade with no tag
+ * has no way to write the one document that gets it paid for directed work.
+ * The engine and the nine-slot `notin` skeleton are the rack's; the words are
+ * this trade's, and `why` is where the trade actually lives.
+ *
+ * THE FENCE THAT MATTERS MOST is in `why` and in `notin`: nothing here asserts
+ * CAUSE. A tag that says who caused a condition is a tag doing the engineer's
+ * job. He writes what he was told and what his crew did; who caused what is
+ * somebody else's call. */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "GC superintendent",
+    "Our own general super",
+    "Another trade's foreman working in our area",
+    "GC project manager",
+    "Our PM or the office",
+    "Owner's rep or property manager",
+    "The store or center manager (occupied lot)",
+    "Grading contractor's superintendent",
+    "Engineer or paving inspector on site",
+    "City or agency inspector on site"
+  ],
+  "how": [
+    { "v": "Face to face on the mat" },
+    { "v": "Text message" },
+    { "v": "Phone call" },
+    { "v": "Told to me at the morning huddle" },
+    { "v": "Radio on the site channel" },
+    { "v": "Email" },
+    { "v": "Marked-up paving plan handed to me in the field" },
+    { "v": "Stakes or paint moved on the lot" },
+    { "v": "Note left at the trailer or on the truck" },
+    { "v": "Written direction from our own office" }
+  ],
+  "why": [
+    { "name": "Soft or wet subgrade", "sub": "Pumping, soft or wet under the truck and the roller. Told to go anyway, told to stand, or told to undercut and bring it back up." },
+    { "name": "Existing wasn't what the set showed", "sub": "What we cored or milled into didn't match what we bid. More mill, more mat, or a section that changed on us." },
+    { "name": "Standing while somebody cleared the lot", "sub": "Crew, trucks and a plant load committed, waiting on cars, containers or another trade to get out of our pull." },
+    { "name": "Closure window changed on us", "sub": "The hours, the phasing or the area we were given moved after we'd scheduled the crew and the plant." },
+    { "name": "Structure in the mat nobody told us about", "sub": "Valve can, cleanout, vault lid, old iron or a footing in our line that wasn't on anything we bid." },
+    { "name": "Iron adjusted on somebody's say-so", "sub": "Manholes, valves, boxes or grates raised, lowered or re-set outside what we carried." },
+    { "name": "Told to hand-work what the paver was supposed to get", "sub": "Around iron, up to a building, into a corner or under a canopy the machine couldn't reach after access changed." },
+    { "name": "Leveling course or extra tack directed in the field", "sub": "A wedge, a scratch course or extra tack called for on the day, on top of what we bid." },
+    { "name": "Told to work the weather", "sub": "Lay, roll or stripe in heat, cold, wind or damp we'd have called off, or come back on a day we'd already cancelled." },
+    { "name": "Traffic on the mat before it was handed off", "sub": "Traffic, a delivery, a dumpster or equipment on a fresh mat before anybody took it over." },
+    { "name": "Layout moved after we striped and set to it", "sub": "Stalls, islands, radii or the pull direction changed after we set to the first ones." },
+    { "name": "Striping changed after it was laid out", "sub": "Counts, accessible stalls, arrows or legends changed off the plan we striped to. Ground out, blacked out and re-laid." },
+    { "name": "Dig-outs called out in the field", "sub": "Full-depth patches and failure repair pointed at on the walk — \"while you're here, dig those out\" — on top of the overlay we bid." },
+    { "name": "Cleanup or repair behind somebody else", "sub": "Tracking, spillage, ruts or damage on our mat that we got told to deal with." },
+    { "name": "Told to hold or send back the load", "sub": "A load ordered, held on the truck, or sent back because the lot or the crew ahead of us wasn't ready." }
+  ],
+  "notin": [
+    { "name": "Not a price", "sub": "Hours, counts and conditions only. No rate, no total, no dollar figure anywhere on it." },
+    { "name": "Not a change order and not a claim", "sub": "This says we were directed and what it took. It becomes a change when the offices paper it, and entitlement is their letter, not the foreman's." },
+    { "name": "Not a question for the engineer, and not a design change", "sub": "Anything about the section, the mix or the drainage goes up through the GC on their form. Nothing here approves changing a depth or a mix." },
+    { "name": "Not the plant ticket or the lab's report", "sub": "We attach them by the numbers already printed on them. We never retype what's on them." },
+    { "name": "Not a compaction or thickness call", "sub": "What it tested and how thick it came out is the lab's paper and the engineer's call, by their numbers." },
+    { "name": "Not the inspector's report", "sub": "He writes his own. We write what our crew was told and what our crew did." },
+    { "name": "Not the GC's daily", "sub": "They keep theirs and number it. This is ours and it stands on its own." },
+    { "name": "Not a finding of cause", "sub": "We write what we found and what we laid. Who caused what is a call other people make." },
+    { "name": "Not a safety or incident report", "sub": "Injuries, near misses and equipment go on their own paper, right then, through the proper channel." },
+    { "name": "Not turnover or acceptance", "sub": "Signing that you were told isn't accepting the work, releasing anybody, or agreeing it's done." }
+  ],
+  "classes": [
+    "— class",
+    "FOREMAN",
+    "SCREED OPERATOR",
+    "ROLLER OPERATOR",
+    "RAKER",
+    "TRUCK DRIVER"
+  ],
+  "pics": [
+    { "v": "In this message — shot before we rolled over it" },
+    { "v": "None" }
+  ]
+};
+
+/* ── TAG_ES — the directed-work tag's vocabulary en español. ──────────────
+ * Every entry carries its own en-twin — nothing paired by index, nothing that can
+ * drift apart. The page composes what the document prints ("ES (EN)") from the
+ * pair; a <select> value carries its twin itself, house style "MAYORDOMO (FOREMAN)".
+ * Gated: tools/toolkit-gates/lang-layer.mjs asserts every twin matches an EN
+ * option verbatim, on every page that mounts shared/lang.js. */
+window.TOOLKIT_ITEMS.tag_es = {
+  "classes": [
+    { "es": "— clase", "en": "— class" },
+    { "es": "MAYORDOMO (FOREMAN)", "en": "FOREMAN" },
+    { "es": "OPERADOR DE SCREED (SCREED OPERATOR)", "en": "SCREED OPERATOR" },
+    { "es": "OPERADOR DE RODILLO (ROLLER OPERATOR)", "en": "ROLLER OPERATOR" },
+    { "es": "RASTRILLERO (RAKER)", "en": "RAKER" },
+    { "es": "CHOFER (TRUCK DRIVER)", "en": "TRUCK DRIVER" }
+  ],
+  "how": [
+    { "es": "En persona, en la carpeta", "en": "Face to face on the mat" },
+    { "es": "Mensaje de texto", "en": "Text message" },
+    { "es": "Llamada", "en": "Phone call" },
+    { "es": "Me lo dijo en la junta de la mañana", "en": "Told to me at the morning huddle" },
+    { "es": "Radio, en el canal de la obra", "en": "Radio on the site channel" },
+    { "es": "Correo", "en": "Email" },
+    { "es": "Plano de pavimentación marcado que me entregó en campo", "en": "Marked-up paving plan handed to me in the field" },
+    { "es": "Estacas o pintura movidas en el estacionamiento", "en": "Stakes or paint moved on the lot" },
+    { "es": "Nota dejada en el tráiler o en el camión", "en": "Note left at the trailer or on the truck" },
+    { "es": "Orden por escrito de nuestra propia oficina", "en": "Written direction from our own office" }
+  ],
+  "notin": [
+    { "es": "No es un precio", "sub": "Solo horas, cantidades y condiciones. Sin tarifa, sin total, sin ninguna cifra en dólares.", "en": "Not a price" },
+    { "es": "No es un CO ni un reclamo", "sub": "Esto dice que nos ordenaron y qué tomó. Se vuelve cambio cuando las oficinas lo documentan, y el derecho a cobrarlo lo pone la carta de la oficina, no el mayordomo.", "en": "Not a change order and not a claim" },
+    { "es": "No es pregunta para el ingeniero, ni cambio de diseño", "sub": "Todo lo de la sección, la mezcla o el drenaje sube por el GC en su formato. Nada de aquí aprueba cambiar un espesor ni una mezcla.", "en": "Not a question for the engineer, and not a design change" },
+    { "es": "No es el ticket de la planta ni el reporte del laboratorio", "sub": "Los anexamos por los números que ya traen impresos. Nunca volvemos a escribir lo que dicen.", "en": "Not the plant ticket or the lab's report" },
+    { "es": "No es un dictamen de compactación ni de espesor", "sub": "Lo que se probó y qué espesor salió es papel del laboratorio y decisión del ingeniero, con sus números.", "en": "Not a compaction or thickness call" },
+    { "es": "No es el reporte del inspector", "sub": "Él escribe el suyo. Nosotros escribimos qué le ordenaron a nuestra cuadrilla y qué hizo nuestra cuadrilla.", "en": "Not the inspector's report" },
+    { "es": "No es el reporte diario del GC", "sub": "Ellos llevan el suyo y le ponen número. Este es el nuestro y se sostiene solo.", "en": "Not the GC's daily" },
+    { "es": "No dice quién tuvo la culpa", "sub": "Escribimos lo que encontramos y lo que tendimos. Quién causó qué es decisión de otros.", "en": "Not a finding of cause" },
+    { "es": "No es reporte de seguridad ni de incidente", "sub": "Lesiones, casi-accidentes y equipo van en su propio papel, en el momento, por el canal que corresponde.", "en": "Not a safety or incident report" },
+    { "es": "No es entrega ni aceptación", "sub": "Firmar que se lo ordenaron no es aceptar el trabajo, liberar a nadie, ni decir que ya quedó.", "en": "Not turnover or acceptance" }
+  ],
+  "pics": [
+    { "es": "En este mensaje — tomadas antes de compactar encima", "en": "In this message — shot before we rolled over it" },
+    { "es": "Ninguna", "en": "None" }
+  ],
+  "roles": [
+    { "es": "El súper del GC", "en": "GC superintendent" },
+    { "es": "Nuestro propio súper general", "en": "Our own general super" },
+    { "es": "El mayordomo de otro oficio trabajando en nuestra área", "en": "Another trade's foreman working in our area" },
+    { "es": "El PM del GC", "en": "GC project manager" },
+    { "es": "Nuestro PM o la oficina", "en": "Our PM or the office" },
+    { "es": "El representante del dueño o el administrador de la propiedad", "en": "Owner's rep or property manager" },
+    { "es": "El gerente de la tienda o del centro comercial (estacionamiento en uso)", "en": "The store or center manager (occupied lot)" },
+    { "es": "El súper del contratista de terracerías", "en": "Grading contractor's superintendent" },
+    { "es": "El ingeniero o el inspector de pavimentos en la obra", "en": "Engineer or paving inspector on site" },
+    { "es": "El inspector de la ciudad o de la agencia en la obra", "en": "City or agency inspector on site" }
+  ],
+  "why": [
+    { "es": "Subrasante blanda o mojada", "sub": "Bombeando, blanda o mojada debajo del camión y del rodillo. Nos dijeron que le entráramos de todos modos, que esperáramos, o que excaváramos y la levantáramos otra vez.", "en": "Soft or wet subgrade" },
+    { "es": "Lo existente no era lo que mostraban los planos", "sub": "Lo que corazoneamos o milleamos no cuadraba con lo que cotizamos. Más milleo, más carpeta, o una sección que nos cambió.", "en": "Existing wasn't what the set showed" },
+    { "es": "Parados mientras alguien despejaba el estacionamiento", "sub": "Cuadrilla, camiones y una carga de planta comprometida, esperando a que carros, contenedores u otro oficio se salieran de nuestra pasada.", "en": "Standing while somebody cleared the lot" },
+    { "es": "La ventana de cierre nos cambió", "sub": "Las horas, las fases o el área que nos dieron se movieron después de que ya habíamos programado la cuadrilla y la planta.", "en": "Closure window changed on us" },
+    { "es": "Estructura en la carpeta de la que nadie nos avisó", "sub": "Caja de válvula, registro, registro grande, fierro viejo o una zapata en nuestra línea que no estaba en nada de lo que cotizamos.", "en": "Structure in the mat nobody told us about" },
+    { "es": "Fierro ajustado porque alguien lo dijo", "sub": "Pozos, válvulas, cajas o rejillas subidas, bajadas o vueltas a poner fuera de lo que traíamos.", "en": "Iron adjusted on somebody's say-so" },
+    { "es": "Nos dijeron que hiciéramos a mano lo que le tocaba a la finisher", "sub": "Alrededor del fierro, hasta el edificio, en una esquina o bajo una marquesina donde la máquina no llegaba después de que cambió el acceso.", "en": "Told to hand-work what the paver was supposed to get" },
+    { "es": "Capa de nivelación o riego de liga extra ordenado en campo", "sub": "Una cuña, una capa de regularización o riego de liga extra que pidieron ese día, encima de lo que cotizamos.", "en": "Leveling course or extra tack directed in the field" },
+    { "es": "Nos dijeron que le entráramos con el clima", "sub": "Tender, compactar o pintar con calor, frío, viento o humedad que habríamos cancelado, o regresar un día que ya habíamos cancelado.", "en": "Told to work the weather" },
+    { "es": "Tráfico en la carpeta antes de entregarla", "sub": "Tráfico, una entrega, un contenedor o equipo sobre carpeta fresca antes de que alguien la recibiera.", "en": "Traffic on the mat before it was handed off" },
+    { "es": "El trazo se movió después de que pintamos y nos guiamos por él", "sub": "Cajones, isletas, radios o la dirección de la pasada cambiaron después de que ya habíamos trazado con los primeros.", "en": "Layout moved after we striped and set to it" },
+    { "es": "El señalamiento cambió después de trazado", "sub": "Cantidades, cajones accesibles, flechas o leyendas cambiaron respecto al plano con el que pintamos. Se esmeriló, se tapó de negro y se volvió a trazar.", "en": "Striping changed after it was laid out" },
+    { "es": "Bacheo profundo ordenado en campo", "sub": "Parches de espesor completo y reparación de fallas que nos señalaron en el recorrido — \"ya que anda aquí, sáquelos\" — encima de la sobrecarpeta que cotizamos.", "en": "Dig-outs called out in the field" },
+    { "es": "Limpieza o reparación detrás de alguien más", "sub": "Huellas, derrames, roderas o daño en nuestra carpeta que nos dijeron que resolviéramos.", "en": "Cleanup or repair behind somebody else" },
+    { "es": "Nos dijeron que detuviéramos o regresáramos la carga", "sub": "Una carga pedida, detenida en el camión, o regresada porque el estacionamiento o la cuadrilla de adelante no estaban listos.", "en": "Told to hold or send back the load" }
+  ]
+};
