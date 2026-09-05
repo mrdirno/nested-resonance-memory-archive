@@ -4,6 +4,7 @@ Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 License: GPL-3.0-only
 """
 import importlib.util
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -26,6 +27,42 @@ cleanup = module("archive_cleanup", "automation/scripts/cleanup_repo.py")
 
 
 class ArchiveBoundaryTests(unittest.TestCase):
+    def test_slicer_profile_requires_content_not_a_generic_config_name(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "project_settings.config"
+            # Minimal test-only signature; no real machine configuration values.
+            profile = {key: None for key in ("nozzle_diameter", "printer_model",
+                       "printer_settings_id", "layer_height")}
+            path.write_text(json.dumps(profile))
+            self.assertTrue(audit.private_artifact(path.name, root))
+            (root / "renamed.json").write_bytes(path.read_bytes())
+            self.assertTrue(audit.private_artifact("renamed.json", root))
+            path.write_text(json.dumps({"name": "application", "layer_height": 1,
+                                        "display": {"theme": "dark"}}))
+            self.assertFalse(audit.private_artifact(path.name, root))
+            path.write_text("[display]\ntheme=dark\n")
+            self.assertFalse(audit.private_artifact(path.name, root))
+
+    def test_unpacked_3mf_package_identified_by_xml_even_without_geometry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            package = root / "export"
+            (package / "3D").mkdir(parents=True)
+            (package / "Metadata").mkdir()
+            types = package / "[Content_Types].xml"
+            model = package / "3D/3dmodel.model"
+            preview = package / "Metadata/preview.png"
+            types.write_text('<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>')
+            model.write_text('<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"><resources/><build/></model>')
+            preview.write_bytes(b"test preview")
+            for file in (types, model, preview):
+                self.assertTrue(audit.private_artifact(file.relative_to(root).as_posix(), root))
+            # Lookalike directory names and generic XML alone are insufficient.
+            model.write_text('<model><resources/></model>')
+            for file in (types, model, preview):
+                self.assertFalse(audit.private_artifact(file.relative_to(root).as_posix(), root))
+
     def test_proprietary_paths_are_rejected_case_insensitively(self):
         for path in ("fabrication/scripts/x.py", "data/model.OBJ", "a/job.gcode", "x/slicer_profiles/a.json", "x/printer_configs/a.ini", "x/workspace/cache/a.txt"):
             with self.subTest(path=path):

@@ -18,6 +18,8 @@ import xml.etree.ElementTree as ET
 STATUSES = {"active", "maintained", "experimental", "archived", "dormant"}
 PRIVATE_SUFFIXES = {".stl", ".obj", ".gcode", ".3mf", ".step", ".stp",
                     ".iges", ".igs", ".f3d", ".f3z"}
+THREEMF_MODEL_TAG = "{http://schemas.microsoft.com/3dmanufacturing/core/2015/02}model"
+OPC_TYPES_TAG = "{http://schemas.openxmlformats.org/package/2006/content-types}Types"
 
 
 def git(root, *args):
@@ -54,7 +56,62 @@ def private_artifact(path, root=None):
         private_suffix = not signaltap_session(root, path)
     return (bool(parts & {"fabrication", "slicer_profiles", "printer_configs"})
             or private_suffix
+            or (root is not None and slicer_artifact(root, path))
             or "workspace/cache/" in path or "npm_cache" in parts)
+
+
+def xml_root_tag(root, path):
+    """Inspect the XML root without loading potentially large mesh geometry."""
+    try:
+        with local_path(root, path).open("rb") as source:
+            for _, element in ET.iterparse(source, events=("start",)):
+                return element.tag
+    except (OSError, ValueError, ET.ParseError):
+        pass
+    return None
+
+
+def slicer_artifact(root, path):
+    """Recognize JSON slicer profiles and standard unpacked 3MF package members.
+
+    Names alone do not identify generic .config files as private. This bounded
+    signature check is a publication guard, not an exhaustive CAD format parser.
+    No setting values are reported or retained.
+    """
+    p = PurePosixPath(path)
+    if p.suffix.lower() in {".config", ".json"}:
+        try:
+            source = local_path(root, path)
+            if source.is_file() and source.stat().st_size <= 1_000_000:
+                document = json.loads(source.read_text())
+                if isinstance(document, dict):
+                    keys = set(document)
+                    machine_keys = {"printer_model", "printer_settings_id",
+                                    "machine_start_gcode", "machine_end_gcode",
+                                    "printable_area"}
+                    process_keys = {"layer_height", "filament_diameter",
+                                    "filament_settings_id"}
+                    if ("nozzle_diameter" in keys
+                            and len(keys & machine_keys) >= 2
+                            and keys & process_keys):
+                        return True
+        except (OSError, ValueError, UnicodeError):
+            pass
+    if p.suffix.lower() == ".model" and xml_root_tag(root, path) == THREEMF_MODEL_TAG:
+        return True
+    # Require actual OPC and 3MF XML roots, including for an empty model. An
+    # unpacked project can contain private machine settings without geometry.
+    candidates = set()
+    if p.name == "[Content_Types].xml":
+        candidates.add(p.parent)
+    for index, part in enumerate(p.parts[:-1]):
+        if part in {"3D", "Metadata", "_rels"}:
+            candidates.add(PurePosixPath(*p.parts[:index]))
+    for package in candidates:
+        if (xml_root_tag(root, str(package / "[Content_Types].xml")) == OPC_TYPES_TAG
+                and xml_root_tag(root, str(package / "3D/3dmodel.model")) == THREEMF_MODEL_TAG):
+            return True
+    return False
 
 
 def local_path(root, value):

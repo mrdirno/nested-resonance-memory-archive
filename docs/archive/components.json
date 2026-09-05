@@ -189,7 +189,17 @@
         "docs/legacy",
         "workflows",
         "backup",
-        "backups"
+        "backups",
+        "collage",
+        "playground",
+        "HIBERNATION_PROTOCOL.md",
+        "MOG_CYCLE_LOG.md",
+        "PAPER3_INTEGRATION_PLAN_CYCLE2063.md",
+        "PAPERS_SUBMISSION_MANIFEST_CYCLE2331.md",
+        "PAPERS_SUBMISSION_STATUS_CYCLE2061.md",
+        "PHYSICAL_MANIFEST.md",
+        "SETUP_COMPLETE.md",
+        "STEWARDSHIP_HELIOS_ARC_ROADMAP.md"
       ],
       "entry_points": [
         "archive",
@@ -198,7 +208,7 @@
       "evidence": [
         "ARCHIVE_MANIFEST.md"
       ],
-      "summary": "Historical cycles and former operating workflows retained as evidence, not current execution instructions. Conflict-resolution and dated backup copies are retained as historical records.",
+      "summary": "Historical cycles and former operating workflows retained as evidence, not current execution instructions. Conflict-resolution and dated backup copies are retained as historical records. The former root Collage build, file-host playground and dated root plans are also historical; submission plans do not verify publication.",
       "next_action": "Recover individual experiments only with an explicit protocol and a fresh runtime/dependency review."
     },
     {
@@ -237,7 +247,8 @@
       "paths": [
         "code/helios_3d_engine",
         "code/helios_native_bridge",
-        "svd_app"
+        "svd_app",
+        "LAUNCH_HELIOS.sh"
       ],
       "entry_points": [
         "code/helios_3d_engine/README.md",
@@ -282,6 +293,102 @@
       ],
       "summary": "Hardware interface and FPGA research; physical synthesis belongs on the build host. Proprietary fabrication artifacts are excluded.",
       "next_action": "Verify documented hardware receipts before claiming physical behavior; do not synthesize on the Mac."
+    },
+    {
+      "id": "repository-stewardship",
+      "status": "maintained",
+      "paths": [
+        ".git-commit-template",
+        ".github",
+        ".gitignore",
+        ".nojekyll",
+        ".zenodo.json",
+        "ACKNOWLEDGMENTS.md",
+        "AGENTS.md",
+        "ARCHIVE_MANIFEST.md",
+        "ATTRIBUTION.md",
+        "CITATION.cff",
+        "CLAUDE.md",
+        "CONTRIBUTING.md",
+        "COPYRIGHT",
+        "CYCLE_LOGS.md",
+        "DEPLOYMENT_GUIDE.md",
+        "LICENSE",
+        "META_OBJECTIVES.md",
+        "README.md",
+        "REPRODUCIBILITY_GUIDE.md",
+        "WISH_IT_BETTER.md",
+        "codemeta.json",
+        "wish-it-better.json",
+        "tools/archive",
+        "tools/hooks",
+        "automation/run_background.py",
+        "automation/scripts/cleanup_repo.py"
+      ],
+      "entry_points": [
+        "README.md",
+        "docs/archive/README.md",
+        "tools/archive/audit.py"
+      ],
+      "evidence": [
+        "tests/archive/test_archive.py",
+        ".github/workflows/archive-health.yml",
+        "tools/hooks/commit-msg"
+      ],
+      "summary": "Repository identity, citation metadata, current entry points, workflow definitions and bounded maintenance tools. Classification does not assert that every workflow or historical statement has passed a current execution check.",
+      "next_action": "Keep claims tied to dated receipts, inspect publication boundaries and review workflow results at the exact source revision."
+    },
+    {
+      "id": "research-environments",
+      "status": "experimental",
+      "paths": [
+        "Dockerfile",
+        "Dockerfile.fenicsx",
+        "Gemfile",
+        "Makefile",
+        "docker-compose.yml",
+        "environment.yml",
+        "pyproject.toml",
+        "requirements.txt"
+      ],
+      "entry_points": [
+        "pyproject.toml",
+        "Makefile",
+        "environment.yml"
+      ],
+      "evidence": [
+        "REPRODUCIBILITY_GUIDE.md",
+        "Dockerfile.fenicsx",
+        "docker-compose.yml"
+      ],
+      "summary": "Root package, paper-build and research-environment specifications. These include historical pinned experiments and do not establish a reproducible, supported monorepo environment.",
+      "next_action": "Choose a specific experiment or package, verify its exact environment and dependencies, and record that bounded result before reuse."
+    },
+    {
+      "id": "automation-prototypes",
+      "status": "dormant",
+      "paths": [
+        ".gemini",
+        "automation",
+        "scripts",
+        "bootstrap.py",
+        "bootstrap_bcp.py",
+        "code/bcp_daemon.py",
+        "evolution_agent.py",
+        "refactor.py"
+      ],
+      "entry_points": [
+        "automation/README.md",
+        "scripts/test_runner.py",
+        "code/bcp_daemon.py"
+      ],
+      "evidence": [
+        "automation/SETUP_COMPLETE.md",
+        "automation/pulse_monitor/README.md",
+        "docs/archive/README.md"
+      ],
+      "summary": "Legacy launch, GUI orchestration, batch, bootstrap and maintenance prototypes. Current background execution and cleanup utilities are separately maintained; this broader label does not override those focused entries. No fresh execution evidence is recorded for the remaining helpers.",
+      "next_action": "Review local paths, process effects, external-service assumptions and meaningful acceptance checks before executing a helper. The standalone daemon is outside the tested bcp_lib package boundary."
     }
   ]
 }

@@ -1,0 +1,50 @@
+Archive gate / lifecycle review receipt
+Author: Aldrin Payopay
+Date: 2026-09-05
+Scope: DEV changes; read-only validation against the real sync Git index. No synchronization, staging or commits by this lane.
+Registry API: validate_registry(sync_root, DEV_registry); inventory(sync_root, DEV_registry, tracked_files(sync_root)). CLI --registry only accepts paths beneath --root, so validation used the same public functions without copying a draft into sync.
+Command: PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Volumes/dual/DUALITY-ZERO-V2/artifacts/archive-gate-tmp python3 -m unittest discover -s tests/archive -v
+Execution: automation/run_background.py; logs/archive_registry_gate_20260905.log
+
+source_commit: 0e3085bba823d5ab0d74a7ee14f4219950f8fe9f
+tracked_file_count: 19301
+classified_file_count: 19301
+unclassified_file_count: 0
+private_artifact_violation_count: 0
+Registry validation errors: 0
+Local links in both edited/new Markdown files: 0 missing targets
+Coverage is lifecycle coverage, not execution or science certification.
+Slicer guard is bounded: JSON profile-key signatures, exact 3MF model XML root and OPC/3MF package structure. It is not an exhaustive format or secret scanner.
+Test fixture data is minimal synthetic structure only; no real machine settings were copied into tests or this receipt.
+Source SHA-256:
+049836b14cc26914cea16a09f84696130c0b24963fa927f980a7fb1656a618d7  tools/archive/audit.py
+858e941f43fd8e1ed2f35954991c0e15b2312e2fb5d6eb8b636aa839fbfa2597  tests/archive/test_archive.py
+6adb33f7969bf3470a4fab84c2a44a9c5d4d075f6a08e388dae06339822e63aa  docs/archive/components.json
+0b9e1a27d9bfd431dc8991c9ff015f661fdb3db92c1be757a767c40b6efa37de  docs/archive/README.md
+beb0147a93f9dba5bfaa7481c057c4d184fdbf040229dcc377ab8745d04771f1  docs/halo/NEXT_MEMORY_ESTIMATOR.md
+
+Test output:
+test_inventory_uses_real_git_index_excludes_untracked (test_archive.ArchiveBoundaryTests.test_inventory_uses_real_git_index_excludes_untracked) ... ok
+test_proprietary_paths_are_rejected_case_insensitively (test_archive.ArchiveBoundaryTests.test_proprietary_paths_are_rejected_case_insensitively) ... ok
+test_registry_requires_real_entry_points (test_archive.ArchiveBoundaryTests.test_registry_requires_real_entry_points) ... ok
+test_rejects_path_traversal_and_escaping_symlinks (test_archive.ArchiveBoundaryTests.test_rejects_path_traversal_and_escaping_symlinks) ... ok
+test_slicer_profile_requires_content_not_a_generic_config_name (test_archive.ArchiveBoundaryTests.test_slicer_profile_requires_content_not_a_generic_config_name) ... ok
+test_stp_exception_requires_actual_signaltap_xml_inside_fpga (test_archive.ArchiveBoundaryTests.test_stp_exception_requires_actual_signaltap_xml_inside_fpga) ... ok
+test_unpacked_3mf_package_identified_by_xml_even_without_geometry (test_archive.ArchiveBoundaryTests.test_unpacked_3mf_package_identified_by_xml_even_without_geometry) ... ok
+test_apply_requires_explicit_reviewed_names (test_archive.CleanupTests.test_apply_requires_explicit_reviewed_names) ... usage: python3.13 -m unittest [-h] [--root ROOT] [--apply]
+                              [--only ROOT_FILENAME [ROOT_FILENAME ...]]
+python3.13 -m unittest: error: --apply requires --only with exact filenames after manual review
+ok
+test_collision_at_apply_does_not_overwrite_or_remove_source (test_archive.CleanupTests.test_collision_at_apply_does_not_overwrite_or_remove_source) ... ok
+test_escaping_destination_is_rejected (test_archive.CleanupTests.test_escaping_destination_is_rejected) ... ok
+test_invalid_root_is_read_only_failure (test_archive.CleanupTests.test_invalid_root_is_read_only_failure) ... Cleanup stopped: Root must contain README.md and the maintenance protocol
+ok
+test_preview_creates_nothing_and_explicit_apply_preserves_bytes (test_archive.CleanupTests.test_preview_creates_nothing_and_explicit_apply_preserves_bytes) ... ok
+test_symlink_sources_and_dangling_destinations_are_not_moved (test_archive.CleanupTests.test_symlink_sources_and_dangling_destinations_are_not_moved) ... SKIP temp_collision.log: destination already exists
+ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.040s
+
+OK
+

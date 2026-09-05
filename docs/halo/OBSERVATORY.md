@@ -39,7 +39,7 @@ The record design follows the useful distinction between entities (recipe and ob
 
 The [frozen memory protocol](../preregistrations/2026-09-02_halo_cross_epoch_memory.md) was run over 60 cells at 4,194,304 particles. The [published estimator audit](../../analysis/2026-09-02_cross_epoch_memory_preregistered.md) found that the Retained-minus-Two-back contrast fires on static centrally peaked fields: the two arms sample different spatial supports and strides, and radial structure dominates much of the result. The original instrument cannot establish or retire the NRM claim. Its readouts remain visible as footprint diagnostics, with their limitations beside them.
 
-The next memory experiment must first validate a centered, support-matched estimator, remove the spherical-average confound, measure injection recovery, and test shuffled/independent controls. The observation bench supplies repeatable starts and accountable records; it does not substitute for that estimator work.
+The next memory experiment must first validate a centered, support-matched estimator, remove the spherical-average confound, measure injection recovery, and test shuffled/independent controls. The observation bench supplies repeatable starts and accountable records; it does not substitute for that estimator work. The [next qualification plan](NEXT_MEMORY_ESTIMATOR.md) identifies nine existing runs, their preserved inputs and the required rejection criteria.
 
 ## Validation
 
