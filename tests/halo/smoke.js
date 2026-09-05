@@ -364,6 +364,23 @@ const path = require('path');
   await page.waitForTimeout(400);
   const exact = await page.evaluate(() => ({ lor: window.__probe.state.lorentz, mag: window.__probe.state.cosmos.mag, u: window.__probe.velMat.uniforms.uBoris.value }));
   check('exact sibling selects the exact-rotation step at coupling 0.3', exact.lor === 'boris' && exact.mag === 0.3 && exact.u === 1, JSON.stringify(exact));
+  // This preset deliberately carries a large rendering count. Verify that
+  // contract, then use the real count control to restore the UI smoke budget
+  // before synchronous Lab readbacks. Large-count checks are separate; a
+  // preset must not silently turn this interaction test into a 4M GPU run.
+  check('exact preset applies its 4,169,000-particle setting',
+    await page.evaluate(() => window.__probe.state.particles === 4169000));
+  await page.keyboard.press('1');
+  await page.locator('#in-count-num').fill('20000');
+  await page.locator('#in-count-num').press('Tab');
+  await page.waitForFunction(() => window.__probe.state.particles === 20000 && window.__probe.texSize === 142);
+  check('Lab UI smoke uses 20,000 particles in the rebuilt 142-square texture',
+    await page.evaluate(() => window.__probe.state.particles === 20000 && window.__probe.texSize === 142));
+  // Click the rail to leave the focused numeric input before shortcuts.
+  await page.getByRole('button', {name:'Cosmos',exact:true}).click();
+  check('Cosmos panel is visible after the smoke-count rebuild',
+    await page.locator('#panel-cosmos').isVisible() &&
+    (await page.locator('#panel-cosmos').getAttribute('class')).includes('open'));
   check('self-gravity slider present', !!(await page.$('#in-selfgrav')));
   check('gain/loss slider present', !!(await page.$('#in-gainloss')));
   await page.evaluate(() => {
@@ -413,7 +430,7 @@ const path = require('path');
   });
   const clickLab = async () => {
     const began = Date.now();
-    console.log('Lab pointer action starts');
+    console.log('Lab pointer action starts '+JSON.stringify(await page.evaluate(() => ({particles:window.__probe.state.particles,textureSize:window.__probe.texSize}))));
     await page.click('#sw-lab', {timeout:120000});
     console.log('Lab pointer action returned after '+(Date.now()-began)+' ms');
   };

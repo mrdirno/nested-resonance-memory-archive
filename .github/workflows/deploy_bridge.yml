@@ -13,9 +13,6 @@ on:
     branches: [ main ]
     paths:
       - 'HELIOS-BRIDGE/**'
-      - 'tests/halo/**'
-      - 'experiments/halo/*.py'
-      - '.github/workflows/halo-health.yml'
       - 'tools/collage-studio/**'
       - 'collage-beta/**'
       - 'HELIOS-BRIDGE-ARCHIVE/**'
@@ -58,14 +55,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # The HALO instrument suite runs on every main push, ALONGSIDE the build and
-  # not in front of it. Its first run as a gate (2026-09-05, run 33953336199)
-  # failed on the runner's GPU-less page and skipped build + deploy — seventeen
-  # trades' toolkit pages and a new tool sat unpublished behind a physics
-  # instrument's browser test. A red here is still a red on the run; it does not
-  # decide whether the public site ships.
-  halo-validation:
-    uses: ./.github/workflows/halo-health.yml
+  # HALO's filtered workflow owns instrument checks. Keeping that work outside
+  # this concurrency group lets later toolkit deployments proceed promptly.
   build:
     runs-on: ubuntu-latest
     steps:

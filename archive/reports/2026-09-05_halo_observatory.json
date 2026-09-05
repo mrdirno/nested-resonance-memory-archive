@@ -1,7 +1,7 @@
 {
   "author": "Aldrin Payopay",
   "recordedAt": "2026-09-05T07:15:09.103731+00:00",
-  "scope": "Local numerical and production-build checks; hosted deployment is recorded separately after publication.",
+  "scope": "Local, hosted and live receipts. Failed runs remain recorded; see the latest hosted validation entry for current instrument status.",
   "baseCommit": "89457225f0064d7932471f10125b5ccc8d701c76",
   "release": {
     "startedAt": "2026-09-05T07:01:37.030Z",
@@ -1030,5 +1030,129 @@
     "testsPerVersion": 8,
     "conclusion": "success",
     "hostGrounding": "Explicit psutil grounding, positive process count and CPU bounds verified."
+  },
+  "independentSiteDeployment": {
+    "commit": "20b62dcc92e54d622c2481db2158c5a6f093b9ba",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33953911044",
+    "build": "success",
+    "deploy": "success",
+    "instrument": "failure",
+    "failure": "Same 30-second Lab activation pointer-action timeout; no rail interception in this run.",
+    "receipt": {
+      "startedAt": "2026-09-05T07:57:21.637Z",
+      "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+      "testPageSha256": "ac3213a471dba0d0370448f200bbffa5b3767bf92dcd81efae0630cc0ff0d48c",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "release",
+      "results": [
+        {
+          "test": "tick_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 25.825,
+          "passed": true
+        },
+        {
+          "test": "observation_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 24.013,
+          "passed": true
+        },
+        {
+          "test": "lab_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 307.536,
+          "passed": true
+        },
+        {
+          "test": "smoke.js",
+          "exitCode": 2,
+          "signal": null,
+          "seconds": 422.664,
+          "passed": false
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T08:10:21.678Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": false
+    }
+  },
+  "labWaitDiagnostic": {
+    "productionCodeChanged": false,
+    "clickTimeoutSeconds": 120,
+    "functionalAssertionsUnchanged": true,
+    "localFullSmoke": "Passed; activation pointer action 4128 ms and deactivation 1413 ms in the full drive.",
+    "isolatedEventTiming": {
+      "activationHandlerMs": 132.20000004768372,
+      "activationActionMs": 1661,
+      "deactivationHandlerMs": 0.5999999046325684,
+      "deactivationActionMs": 20
+    },
+    "interpretation": "These local timings are not hosted measurements or a responsiveness fix. Capture and bubble listeners bracket the existing click handler without replacing it."
+  },
+  "hostedLabTiming": {
+    "commit": "b5144d83e3f4467acb2907f166da8ee66cf1ce3d",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33954296682",
+    "conclusion": "failure",
+    "activationHandlerMs": 58562.4,
+    "activationActionMs": 71314,
+    "nextFailure": "The next read of the Lab meter exceeded 30 seconds.",
+    "finding": "The smoke initializer set 20,000 particles, but the spinexact preset intentionally replaced that with 4,169,000. This was a large-count instrument run on software rendering, not the intended UI budget.",
+    "correction": "Assert the preset count, then use the actual exact-count UI to restore 20,000 particles and wait for the 142-square texture before Lab interaction. No production count or equations change.",
+    "receipt": {
+      "startedAt": "2026-09-05T08:11:04.578Z",
+      "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+      "testPageSha256": "ac3213a471dba0d0370448f200bbffa5b3767bf92dcd81efae0630cc0ff0d48c",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "release",
+      "results": [
+        {
+          "test": "tick_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 25.481,
+          "passed": true
+        },
+        {
+          "test": "observation_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 24.013,
+          "passed": true
+        },
+        {
+          "test": "lab_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 304.521,
+          "passed": true
+        },
+        {
+          "test": "smoke.js",
+          "exitCode": 2,
+          "signal": null,
+          "seconds": 491.371,
+          "passed": false
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T08:25:09.969Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": false
+    },
+    "localCorrectionResult": "Full smoke passed with actual 20,000-particle state and 142-square GPU texture; count-preset and visible Cosmos-panel assertions also passed.",
+    "localHarnessCorrections": "An initial test assumption expected a power-of-two texture; the actual allocator uses ceil(sqrt(count)), or 142. Independent review also caught input focus blocking a keyboard shortcut; the harness now clicks the Cosmos rail and asserts visibility."
+  },
+  "workflowIsolation": {
+    "instrument": "Filtered standalone push/PR/manual workflow; release and physics on separate workers, all suites sequential within each group.",
+    "pages": "No HALO job in the Pages concurrency group. Actual canonical HALO and all prior public/build paths still trigger deployment.",
+    "assertions": "No retries, forced clicks, dropped numerical assertions or production changes."
   }
 }

@@ -1,8 +1,11 @@
 # Author: Aldrin Payopay. GPL-3.0-only.
 name: HALO instrument health
-# Main pushes enter through deploy_bridge's reusable job. Avoid running the same
-# nine suites twice on separate runners for every deployment.
+# Filter instrument changes independently of the shared Pages deployment.
+# A toolkit-only update must not wait behind GPU/numerical checks.
 on:
+  push:
+    branches: [main]
+    paths: ['HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html', 'tests/halo/**', 'experiments/halo/*.py', '.github/workflows/halo-health.yml']
   pull_request:
     paths: ['HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html', 'tests/halo/**', 'experiments/halo/*.py', '.github/workflows/halo-health.yml']
   workflow_dispatch:
@@ -13,6 +16,12 @@ jobs:
   instrument:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Independent workers keep a UI failure from hiding numerical results.
+    # Each worker still runs its suites sequentially against one sealed page.
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [release, physics]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,14 +40,19 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Install independent numerical references
         run: python -m pip install -r tests/halo/requirements-physics.txt
-      - name: Exercise the actual GPU page
+      - name: Exercise the GPU page and controls
+        if: matrix.suite == 'release'
         working-directory: tests/halo
-        run: npm test && npm run test:physics
+        run: npm test
+      - name: Check numerical behavior and independent references
+        if: matrix.suite == 'physics'
+        working-directory: tests/halo
+        run: npm run test:physics
       - name: Keep receipts and screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: halo-instrument-receipts
+          name: halo-instrument-receipts-${{ matrix.suite }}
           path: |
             tests/halo/workspace/release/
             tests/halo/shots/
