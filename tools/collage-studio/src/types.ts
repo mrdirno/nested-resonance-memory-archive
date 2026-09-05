@@ -1,5 +1,6 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
+import type { CaptionTrack } from './lib/captions';
 import type { Desk, LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
@@ -199,6 +200,10 @@ export interface AppState {
    * exactly what those projects had.
    */
   title?: TitleSpec;
+  /** Timed lyrics in output seconds; excluded from public composition links. */
+  captions?: CaptionTrack;
+  /** Manual source assignments, also used to preserve swaps. */
+  locks?: Array<[number, string]>;
 }
 
 export interface ProjectManifest extends AppState {

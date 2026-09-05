@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import { AppState, ImageAsset, ProjectManifest } from '../types';
 import { readProject, readImageSources } from './svgProject';
+import { normalizeCaptionTrack } from './captions';
 
 /**
  * Build the `.collage` archive as a Blob WITHOUT downloading it. Extracted from
@@ -59,17 +60,25 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
       const meta = imageMeta[i];
       try {
         const response = await fetch(img.src);
+        if (!response.ok) throw new Error(`source returned HTTP ${response.status}`);
         const blob = await response.blob();
+        if (blob.size === 0) throw new Error('source is empty');
         imgFolder.file(meta.storageFilename, blob);
-      } catch (e) {
-        console.warn(`Failed to save image ${img.id}`, e);
+      } catch {
+        // The reader refuses a missing required source. Do not download an
+        // archive that only LOOKS saved and cannot reopen: the caller reports
+        // this rejection and retains its unsaved-work state.
+        throw new Error(`Could not save ${img.originalName || 'a source image'} — its original could not be read. Your composition is still open; try saving again.`);
       }
       // Only when it is genuinely a different image: `createThumbnail` returns
       // the source unchanged under 1024px, and storing those bytes twice would
       // grow every archive for nothing.
       if (previewFolder && img.previewSrc && img.previewSrc !== img.src) {
         try {
-          const p = await (await fetch(img.previewSrc)).blob();
+          const response = await fetch(img.previewSrc);
+          if (!response.ok) throw new Error(`preview returned HTTP ${response.status}`);
+          const p = await response.blob();
+          if (p.size === 0) throw new Error('preview is empty');
           previewFolder.file(meta.storageFilename, p);
         } catch (e) {
           console.warn(`Failed to save preview for ${img.id}`, e);
@@ -155,6 +164,10 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
     
     const manifestStr = await manifestFile.async("text");
     const manifest: any = JSON.parse(manifestStr); // relaxed type for compat
+    // Validate timed text before any source is decoded or any editor state is
+    // replaced. A malformed track must refuse the file as a whole, not throw
+    // later from the render after its photographs have already been adopted.
+    if (manifest.captions !== undefined) manifest.captions = normalizeCaptionTrack(manifest.captions);
     
     const images: ImageAsset[] = [];
     const imgFolder = zip.folder("images");
@@ -258,6 +271,9 @@ const loadFromSVG = async (file: File): Promise<{state: AppState, images: ImageA
     // No manifest of ours: either not a Collage Studio export, or one made
     // before the SVG could carry image identity. Neither can be reopened.
     if (!project) return null;
+    if (project.state.captions !== undefined) {
+      project.state.captions = normalizeCaptionTrack(project.state.captions);
+    }
 
     const sources = readImageSources(text);
     const images: ImageAsset[] = [];

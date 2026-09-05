@@ -46,6 +46,7 @@ import { turnAt, assignmentAt, isTurning, NO_TURN, turnFadeFor, type TurnSchedul
 import { isMoving } from './motion';
 import { paceTime } from './pace';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
+import { captionPlanAt, type PlannedCaption } from './captions';
 import { cssFilterFor, type LookRef } from './grade';
 import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
@@ -151,6 +152,8 @@ export interface StageSceneInput {
    * the delivered MP4.
    */
   titlePlan?: TitlePlan | null;
+  /** Timed text in output seconds. Caption-only edits use setCaptionPlans. */
+  captionPlans?: readonly PlannedCaption[] | null;
   /**
    * THE LOOK — the colour grade, as a roster id (see `lib/grade.ts`). The Stage
    * is what both video recorders capture, so this is also the grade on the
@@ -879,6 +882,10 @@ export class Stage {
   private bg = '#050505';
   /** THE TITLE, already at this Stage's logical scale. Null draws nothing. */
   private title: TitlePlan | null = null;
+  /** Plans are scaled once on edit, never inside the frame loop. */
+  private captionPlans: PlannedCaption[] = [];
+  /** The plan last painted; a quiet photograph repaints only at cue boundaries. */
+  private paintedCaption: TitlePlan | null = null;
   /**
    * THE LOOK, resolved to a CSS filter string ONCE per scene.
    *
@@ -916,8 +923,8 @@ export class Stage {
   //
   /** Output seconds. 0 is rest, and rest is bit-identical to no motion. */
   private outTime = 0;
-  /** rAF timestamp of the first frame of this scene; -1 until one has run. */
-  private moveOriginMs = -1;
+  /** rAF origin; NaN until initialized. Negative origins are valid after a seek. */
+  private moveOriginMs = Number.NaN;
   /** Does ANY fragment in this scene move? False keeps every cost at zero. */
   private moving = false;
   /**
@@ -1182,6 +1189,8 @@ export class Stage {
     this.zoom = zoom;
     this.bg = scene.bgColor || '#050505';
     this.title = titlePlanFor(scene.titlePlan ?? null, this.logicalW);
+    // Omission preserves the separately edited track across ordinary scene changes.
+    if ('captionPlans' in scene) this.setCaptionPlans(scene.captionPlans);
     this.gradeCss = cssFilterFor(scene.look ?? null);
     this.logicalH = this.logicalW / aspect;
     this.lineWidth = this.logicalW * STROKE_RATIO;
@@ -1342,7 +1351,7 @@ export class Stage {
     // the raster export and the SVG all draw.
     if (!moving && !turning && (this.moving || this.turning)) this.outTime = 0;
     this.moving = moving;
-    this.moveOriginMs = -1;
+    this.moveOriginMs = Number.NaN;
     this.ensureStills(wanted);
     this.refreshAdmission();
     // A SCENE REBUILT MID-TAKE MUST LAND ON THE TAKE'S CURRENT DEAL. Every item
@@ -1352,6 +1361,20 @@ export class Stage {
     // `live = !offline && !parked`), so a scene rebuilt during a scrub would
     // sit on the base deal while the ruler says 12s.
     if (turning && this.outTime > 0) this.refreshTurn();
+    this.markDirty();
+    this.emitStatus();
+  }
+
+  /**
+   * Timed text changes without rebuilding media or restarting a parked take.
+   * Both realtime capture and offline rendering paint these same plans.
+   */
+  setCaptionPlans(plans?: readonly PlannedCaption[] | null): void {
+    if (this.destroyed) return;
+    this.captionPlans = (plans ?? []).map((cue) => ({
+      ...cue,
+      plan: titlePlanFor(cue.plan, this.logicalW)!,
+    }));
     this.markDirty();
     this.emitStatus();
   }
@@ -1538,7 +1561,7 @@ export class Stage {
     // last frame it encoded; resuming the live preview from there would drop it
     // mid-cycle for no reason the viewer can see.
     this.outTime = 0;
-    this.moveOriginMs = -1;
+    this.moveOriginMs = Number.NaN;
     this.clockRunning = false;
     // Restore the realtime decoder budget and RELEASE the extra decoders the
     // render admitted, BEFORE replaying: refreshAdmission evicts everything back
@@ -1601,11 +1624,10 @@ export class Stage {
     // into the file, where no amount of re-recording removes it.
     // THE TURN rides the same offline clock for the same reason, and the
     // assignment is written BEFORE the crops for the reason `tick` records.
-    if (this.moving || this.turning) {
-      this.outTime = Number.isFinite(timeSec) ? Math.max(0, timeSec) : 0;
-      if (this.turning) this.refreshTurn();
-      if (this.moving) this.refreshMoveCrops();
-    }
+    // The output clock also owns captions on an otherwise still photograph.
+    this.outTime = Number.isFinite(timeSec) ? Math.max(0, timeSec) : 0;
+    if (this.turning) this.refreshTurn();
+    if (this.moving) this.refreshMoveCrops();
     this.dirty = false;
     this.lastDrawAt = -1e9;      // never let the tick's skip-heuristic apply here
     this.drawFrame(0);
@@ -1690,7 +1712,7 @@ export class Stage {
   get takePosition(): number {
     if (!this.clockRunning || this.offline || this.parked) return this.outTime;
     const now = this.view?.performance?.now?.();
-    if (typeof now !== 'number' || !Number.isFinite(now) || this.moveOriginMs < 0) return this.outTime;
+    if (typeof now !== 'number' || !Number.isFinite(now) || !Number.isFinite(this.moveOriginMs)) return this.outTime;
     const t = Math.max(0, (now - this.moveOriginMs) / 1000);
     return this.takeSec > 0 ? lapAdjust(t, this.takeSec).position : t;
   }
@@ -1733,10 +1755,11 @@ export class Stage {
       this.pauseAll();
     }
     this.seekTrackTo(t);
-    // BEFORE the render, because `renderAtTime` writes `outTime` only when the
-    // scene MOVES — a still composition would otherwise be parked in the picture
-    // and not on the ruler, and the bar would spring back on the next frame.
+    // Park synchronously, before a video seek can yield to the next event.
     this.outTime = t;
+    // Seeking before the very first tick must still resume from the chosen time.
+    // An origin can be negative when the seek exceeds this page's uptime.
+    this.moveOriginMs = resumeOriginMs(this.view?.performance?.now?.() ?? 0, t);
     this.clockRunning = false;
     await this.renderAtTime(t, opts);
     this.emitStatus();
@@ -2011,13 +2034,13 @@ export class Stage {
     //   where it was.
     const live = !this.offline && !this.parked;
     if (live) {
-      // RE-ANCHOR ON RESUME, NOT JUST AT BIRTH. `moveOriginMs < 0` is the
+      // RE-ANCHOR ON RESUME, NOT JUST AT BIRTH. A non-finite origin is the
       // scene's first tick; `!this.clockRunning` is every tick after a pause, a
       // scrub or an idled loop, and without it the clock would count the seconds
       // the preview spent stopped and the playhead would jump forward by however
       // long you were parked.
-      if (this.moveOriginMs < 0 || !this.clockRunning) {
-        this.moveOriginMs = resumeOriginMs(ts, this.moveOriginMs < 0 ? 0 : this.outTime);
+      if (!Number.isFinite(this.moveOriginMs) || !this.clockRunning) {
+        this.moveOriginMs = resumeOriginMs(ts, !Number.isFinite(this.moveOriginMs) ? 0 : this.outTime);
         this.clockRunning = true;
       }
       this.outTime = Math.max(0, (ts - this.moveOriginMs) / 1000);
@@ -2049,6 +2072,9 @@ export class Stage {
       }
     }
 
+    // A cue uses OUTPUT seconds, never the accelerated motion/turn clock.
+    // Keep checking while the take runs, but repaint stills only when text changes.
+    if (captionPlanAt(this.captionPlans, this.outTime) !== this.paintedCaption) needDraw = true;
     if (needDraw) this.drawFrame(ts);
     if (this.admissionPending) { this.admissionPending = false; this.refreshAdmission(); }
     if (this.statusPending) { this.statusPending = false; this.emitStatus(); }
@@ -2057,7 +2083,7 @@ export class Stage {
     // scrub: the frame `renderAtTime` drew stays on the canvas for nothing,
     // instead of a moving composition holding a 60 Hz loop open to re-derive the
     // same crops from the same frozen clock.
-    if (playing > 0 || this.capturing || this.dirty || ((this.moving || this.turning) && live)) {
+    if (playing > 0 || this.capturing || this.dirty || ((this.moving || this.turning || this.captionPlans.length > 0) && live)) {
       this.rafId = this.view.requestAnimationFrame(this.tick);
     } else {
       // THE LAST TICK IS WHERE THE CLOCK STOPS. Nothing else knows this frame
@@ -2240,7 +2266,12 @@ export class Stage {
     // THE TITLE — after every fragment, before the bookkeeping. One plan, drawn
     // at k=1 because the Stage's logical space IS the plan's basis; `null` costs
     // one branch, which is what keeps an untitled frame the frame it always was.
-    if (this.title !== null) drawTitlePlan(ctx, this.title);
+    const caption = captionPlanAt(this.captionPlans, this.outTime);
+    // Timed words take precedence over the persistent title, on every surface.
+    // The title returns in the gaps; two text plates never cover one another.
+    if (caption !== null) drawTitlePlan(ctx, caption);
+    else if (this.title !== null) drawTitlePlan(ctx, this.title);
+    this.paintedCaption = caption;
 
     const clips = this.liveClips;
     for (let i = 0; i < clips.length; i++) {
@@ -4702,7 +4733,7 @@ export class Stage {
       // points in the cycle, and which one you got would depend on how long the
       // preview had been on screen before you pressed record.
       this.outTime = 0;
-      this.moveOriginMs = -1;
+      this.moveOriginMs = Number.NaN;
       // A TAKE IS NEVER PARKED. Recording out of a scrub would otherwise encode
       // whatever single frame the playhead was resting on for the whole take.
       this.parked = false;
@@ -4927,7 +4958,7 @@ export class Stage {
    */
   private get isRolling(): boolean {
     if (this.offline || this.parked) return false;
-    if (this.moving) return true;
+    if (this.moving || this.captionPlans.length > 0) return true;
     if (this.trackRolling) return true;
     const clips = this.liveClips;
     for (let i = 0; i < clips.length; i++) {

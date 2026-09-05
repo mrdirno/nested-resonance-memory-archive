@@ -69,6 +69,7 @@ import { takeLength } from '../lib/playhead';
 import { cutPlan, driftPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
+import type { PlannedCaption } from '../lib/captions';
 import type { LookRef } from '../lib/grade';
 
 /** The user's raw trim points for one clip. Absent = the whole clip. */
@@ -137,6 +138,10 @@ export interface VideoStageProps {
    * the caption that ends up in the file.
    */
   titlePlan?: TitlePlan | null;
+  captionPlans?: readonly PlannedCaption[] | null;
+  /** Keep the caption editor's ruler aligned with the selected export duration. */
+  onTakeChange?: (seconds: number) => void;
+  onRecordingChange?: (busy: boolean) => void;
   /**
    * THE LOOK — the colour grade, passed straight through to the Stage. This is
    * the surface both video recorders capture, so it is also the grade on the
@@ -211,6 +216,10 @@ export interface VideoStageProps {
 
 export interface StageRecorder {
   start: (seconds?: number, renderWidth?: number) => void;
+  /** Imperative timeline access for caption editing without per-frame React renders. */
+  getTime: () => number;
+  seek: (seconds: number) => void;
+  getTake: () => number;
   canRecord: boolean;
   isRecording: boolean;
   maxSeconds: number;
@@ -876,7 +885,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace, move, beat, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, captionPlans, onTakeChange, onRecordingChange, look, turn, pace, move, beat, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackLevel,
   onSoundtrackFade,
@@ -1135,6 +1144,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look, turn, pace,
       beatHold, beatFirst, beatFade]);
 
+  // Text edits preserve the scene, decoders and paused playhead. A full setScene
+  // resets the clock origin, so captions deliberately have their own update seam.
+  useEffect(() => {
+    stageRef.current?.setCaptionPlans(captionPlans);
+  }, [stageGen, captionPlans]);
+
   /**
    * THE MUSIC, handed over on its own effect and keyed on the URL, never on the
    * object. The parent rebuilds this prop on every render that touches its
@@ -1230,7 +1245,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    * monitor button was DISABLED, so the one thing the user had just added was
    * the one thing they could not hear.
    */
-  const takeable = liveCount > 0 || !!trackRow;
+  const takeable = liveCount > 0 || !!trackRow || !!captionPlans?.length;
 
   // STAGE OWNS `soundOn`, NOT US. It flips the flag itself in more places than
   // our toggle — `resumeFromGesture({sound})` sets it, and `setClipMuted(id,
@@ -1599,12 +1614,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     ? true                                   // not probed yet; assume yes
     : !!support?.supported || !!frameSupport?.supported;
   const busy = recPhase !== 'idle';
+  useEffect(() => {
+    onRecordingChange?.(busy);
+    return () => { onRecordingChange?.(false); };
+  }, [busy, onRecordingChange]);
 
   // Publish the handle the Export sheet calls into.
   useEffect(() => {
     if (!recorderRef) return;
     recorderRef.current = {
       start: startRecording,
+      getTime: () => stageRef.current?.takePosition ?? 0,
+      getTake: () => stageRef.current?.takeSeconds || takeLength(seconds, profile.maxSeconds),
+      seek: (time) => {
+        if (recPhase !== 'idle') return;
+        void stageRef.current?.scrubTo(time).catch(() => {
+          onNotice?.('The preview could not seek to that time. Try again.');
+        });
+      },
       canRecord: canRecord && takeable && !busy,
       isRecording: recPhase === 'running',
       maxSeconds: profile.maxSeconds,
@@ -1615,7 +1642,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       canChooseSize: !!frameSupport?.supported,
     };
     return () => { recorderRef.current = null; };
-  }, [recorderRef, startRecording, canRecord, takeable, busy, recPhase, profile.maxSeconds, sizes, frameSupport]);
+  }, [recorderRef, startRecording, canRecord, takeable, busy, recPhase, profile.maxSeconds, sizes, frameSupport, seconds, onNotice]);
 
   const clipRows = status?.clips ?? [];
   // What the EXPORT will carry — intent, exactly as `describeAudioSources`
@@ -1739,6 +1766,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   useEffect(() => {
     stageRef.current?.setTake(takeNow);
   }, [stageGen, takeNow]);
+  useEffect(() => {
+    onTakeChange?.(takeNow);
+  }, [onTakeChange, takeNow]);
 
   const fadeOnTake = fadeSpan(fadeSec, takeNow);
   const soundSummary = willCarrySound

@@ -23,6 +23,10 @@ import { type PaceId } from './lib/pace';
 import { renderCanvas, calculateSmartCrop } from './lib/renderer';
 import { withReframe, dragToFrame, poolWithFrames, framesFromPool, poolWithoutFrames, type Frame } from './lib/reframe';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
+import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt, type CaptionTrack } from './lib/captions';
+import { normalizeProjectLocks } from './lib/projectLocks';
+import { CaptionEditor } from './components/CaptionEditor';
+import { createLyricDemo } from './lib/lyricDemo';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
 import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
@@ -71,6 +75,8 @@ let clipSeq = 0;
 type AssetProvenance = Pick<ImageAsset, 'sourceKind' | 'sourceName' | 'sourceTime' | 'clipId'>;
 
 interface UploadOptions {
+  /** Procedural artwork has no faces; avoid loading inference for the starter. */
+  geometryOnly?: boolean;
   /** Distinct id namespace (video frames use 'vid'). */
   idPrefix?: string;
   /** Grow `count` so the new assets are actually visible on a non-empty canvas. */
@@ -273,6 +279,17 @@ export default function App() {
   // that anyone can open with their OWN photographs, and somebody else's
   // caption over your pictures is not the same collage.
   const [titleText, setTitleText] = useState('');
+  const [captions, setCaptions] = useState<CaptionTrack>(EMPTY_CAPTION_TRACK);
+  const [captionTake, setCaptionTake] = useState(10);
+  const [captionRecording, setCaptionRecording] = useState(false);
+  const [captionPanel, setCaptionPanel] = useState(false);
+  const [demoBusy, setDemoBusy] = useState(false);
+  // The sample awaits both image encoding and staged decoding. Ref gates are
+  // synchronous, so another entrypoint cannot race React's next paint.
+  const demoBusyRef = useRef(false);
+  const projectReadBusyRef = useRef(0);
+  const imageCountRef = useRef(images.length);
+  imageCountRef.current = images.length;
   const [titlePlace, setTitlePlace] = useState<TitlePlace>('bl');
   const [titleSize, setTitleSize] = useState<TitleSize>('md');
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
@@ -508,6 +525,24 @@ export default function App() {
   const [artBand, setArtBand] = useState<{ w: number; h: number } | null>(null);
   const bandObserverRef = useRef<ResizeObserver | null>(null);
   const bandElRef = useRef<HTMLDivElement | null>(null);
+  const fullBleedRailRef = useRef<HTMLDivElement | null>(null);
+  const [fullBleedRailHeight, setFullBleedRailHeight] = useState(0);
+  const protectBottomText = maximized && (
+    (captions.cues.length > 0 && captions.place === 'bc') ||
+    (titleText.trim().length > 0 && (titlePlace === 'bl' || titlePlace === 'bc'))
+  );
+  // The rail wraps on phones and includes their safe-area inset. Measure the
+  // actual occupied band; a fixed 44px guess would protect only its first row.
+  useLayoutEffect(() => {
+    const rail = fullBleedRailRef.current;
+    if (!maximized || !rail) return;
+    const measure = () => setFullBleedRailHeight(Math.ceil(rail.getBoundingClientRect().height));
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(rail);
+    return () => observer.disconnect();
+  }, [maximized, artBand?.w]);
 
   /** Read the band's content box right now, from layout. */
   const measureBand = useCallback((el: HTMLDivElement | null) => {
@@ -533,7 +568,7 @@ export default function App() {
    * and the frame is never wrong on screen. `maxWidth/maxHeight` below stay as
    * the backstop for the changes we do not drive (rotation, URL-bar collapse).
    */
-  useLayoutEffect(() => { measureBand(bandElRef.current); }, [maximized, measureBand]);
+  useLayoutEffect(() => { measureBand(bandElRef.current); }, [maximized, protectBottomText, fullBleedRailHeight, measureBand]);
 
   const setBandEl = useCallback((el: HTMLDivElement | null) => {
     bandObserverRef.current?.disconnect();
@@ -1027,7 +1062,7 @@ export default function App() {
   // re-cuts every few seconds is exactly the case the still path cannot show —
   // it draws one frame — so it joins the terms that claim the live surface, for
   // the same reason THE MOVE did.
-  const liveMode = images.length > 0 && (clips.length > 0 || moving || turning || !!soundtrack) && stageOk;
+  const liveMode = images.length > 0 && (clips.length > 0 || moving || turning || !!soundtrack || captions.cues.length > 0) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -1055,6 +1090,14 @@ export default function App() {
     return planTitle({ text: titleText, place: titlePlace, size: titleSize }, aspect, measureWith(mctx));
   }, [titleText, titlePlace, titleSize, aspect]);
 
+  // Measure once; every video frame and still export scales this same plan.
+  const captionPlans = useMemo(() => {
+    const ctx = measureCanvasRef.current;
+    return ctx ? planCaptions(captions, aspect, measureWith(ctx)) : [];
+  }, [captions, aspect, titlePlan]);
+  // Still formats show the opening frame. Active lyrics replace the static title.
+  const frameTitlePlan = captionPlanAt(captionPlans, 0) ?? titlePlan;
+
   // --- RENDER (still path) ---
   // Skipped entirely in live mode: the Stage is painting the same composition
   // onto a real canvas, so producing a JPEG of it every state change would be
@@ -1066,7 +1109,7 @@ export default function App() {
        try {
          const orderedImages = orderedAssets;
          const orderedPreviews = orderedImages.map(img => img ? ({ ...img, src: img.previewSrc || img.src }) : img);
-         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, titlePlan, lookRef);
+         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, frameTitlePlan, lookRef);
          canvas.toBlob(blob => {
              if (previewUrl) URL.revokeObjectURL(previewUrl);
              if (blob) setPreviewUrl(URL.createObjectURL(blob));
@@ -1075,9 +1118,9 @@ export default function App() {
     };
     const t = setTimeout(runRender, 50);
     return () => clearTimeout(t);
-  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan, lookRef]);
+  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, frameTitlePlan, lookRef]);
 
-  const handleShuffle = () => { pushHistory(); setShuffleTrigger(prev => prev + 1); };
+  const handleShuffle = () => { if (waitForLyricDemo()) return; pushHistory(); setShuffleTrigger(prev => prev + 1); };
   /**
    * ROLL EVERYTHING AT ONCE — layout, fragment count, chaos, frame shape,
    * gutter, background and seed.
@@ -1096,6 +1139,7 @@ export default function App() {
    * own note.
    */
   const handleDice = () => {
+    if (waitForLyricDemo()) return;
     // Every press of this button used to destroy the picture before it. Record
     // what is on screen FIRST — `compositionCode` is still this render's, i.e.
     // the composition about to be replaced.
@@ -1200,6 +1244,7 @@ export default function App() {
    * already looking at is a broken button.
    */
   const handleColourDice = () => {
+    if (waitForLyricDemo()) return;
     pushHistory();
     const deal = rollDeal({ layout: layoutMode, previous: { arrangement, focus, twist } });
     setArrangement(deal.arrangement);
@@ -1255,6 +1300,7 @@ export default function App() {
    * cannot tell which half moved.
    */
   const applyCompositionCode = (code: string, record = true): boolean => {
+    if (waitForLyricDemo()) return false;
     const s = decodeState(code);
     if (!s) return false;
     // Pasting a code replaces the whole composition, which is the same kind of
@@ -1437,6 +1483,7 @@ export default function App() {
   }, [compositionCode]);
 
   const handleRemix = async () => {
+      if (waitForLyricDemo()) return;
       // Recorded BEFORE the await: a remix re-rolls the seed and re-grafts the
       // pinned fragments onto a new layout, and both the seed and the pins are
       // in the snapshot. Doing it after would capture a composition the layout
@@ -1658,7 +1705,7 @@ export default function App() {
             el.onload=()=>r(el); el.onerror=()=>r(el); el.src=url;
         });
         if(!img.width) { URL.revokeObjectURL(url); return null; }
-        const analysis = await analyzeImage(img, globalModel);
+        const analysis = await analyzeImage(img, opts.geometryOnly ? null : globalModel);
         if(analysis.color) { totalR += analysis.color.r; totalG += analysis.color.g; totalB += analysis.color.b; colorCount++; }
         // NOTE: createThumbnail returns img.src unchanged when the image is
         // already <=1024px, so previewSrc may ALIAS src. Never revoke one
@@ -1813,8 +1860,47 @@ export default function App() {
    * `tests/unit/soundtrack.invariants.mjs`, and a rule written twice is the
    * drift this repo has already filed two scars about.
    */
+  const loadLyricDemo = async () => {
+    if (demoBusyRef.current || imageCountRef.current) return;
+    if (ingestRef.current.total > 0 || projectReadBusyRef.current > 0) {
+      flashNotice('Your media is still opening. Let it finish before starting a sample.');
+      return;
+    }
+    demoBusyRef.current = true;
+    setDemoBusy(true);
+    try {
+      const demo = await createLyricDemo();
+      // A real import that arrived while the shapes rendered owns the canvas.
+      if (imageCountRef.current) return;
+      const loaded = await handleUpload(demo.files, { track: false, geometryOnly: true });
+      if (!loaded.length) throw new Error('The sample artwork could not load. Try your own images.');
+      // A link supplies a recipe even before any pictures exist. The starter
+      // chooses its own complete recipe so a prior count, grade or turn cannot
+      // silently deform it; intentionally selected music remains the user's.
+      pendingCountRef.current = null;
+      ownCount(true); setCount(4); setPrimitive('rect'); setEntropy(0.5);
+      setAspect(9 / 16); setLayoutMode('kaleidoscope'); setSeed(500);
+      setDensity(1); setGutter(0.006); setBgColor('#101528');
+      setShuffleTrigger(0); setArrangement('natural'); setFocus('auto'); setTwist('none');
+      setLook('none'); setAdjust(null); setTurn('hold'); setPace('even'); setSync('off');
+      setLockedCells(new Map()); setFrames(new Map()); setAssignNonce(n => n + 1); setLastRecipe(undefined);
+      setMove('drift'); setTitleText(''); setCaptions(demo.captions);
+      setCaptionPanel(true);
+      flashNotice('Original shapes, timed words, and motion. Add your music, or replace the artwork with your own.');
+    } catch (error) {
+      flashNotice(error instanceof Error ? error.message : 'Could not load the sample.');
+    } finally { demoBusyRef.current = false; setDemoBusy(false); }
+  };
+
+  function waitForLyricDemo(): boolean {
+    if (!demoBusyRef.current) return false;
+    flashNotice('The sample is still loading. Try that action again when it appears.');
+    return true;
+  }
+
   const ingestFiles = (list: File[], intent: IntakeIntent = 'any') => {
       if (!list.length) return;
+      if (waitForLyricDemo()) return;
       // EXACTLY ONE BUCKET EACH — now by construction rather than by three
       // filters that had to stay disjoint by hand.
       const { music, video: videos, picture: pics, rejected } = splitIntake(list, intent);
@@ -2066,13 +2152,7 @@ export default function App() {
    * the other does not, and a restored entry silently loses a setting. One copy,
    * two callers.
    */
-  const poolSnapshotState = (): AppState => ({
-      version: "1.0",
-      mode: activeTab,
-      layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync },
-      style: { background: bgColor, look, adjust: adjust ?? undefined },
-      title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined,
-  });
+  const poolSnapshotState = (): AppState => buildStateForSave();
 
   /**
    * THROW ONE SOURCE OUT OF THE POOL — the fragment you are pointing at.
@@ -2257,6 +2337,7 @@ export default function App() {
   };
 
   const handleClear = () => {
+      if (waitForLyricDemo()) return;
       addToHistory(poolSnapshotState(), images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -2264,11 +2345,19 @@ export default function App() {
       setClips([]); setStageOk(true);
       // The music is the user's file too, and its URL is owned here.
       removeSoundtrack();
+      setCaptions(EMPTY_CAPTION_TRACK);
       setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setFrames(new Map()); setAvgColor(null);
       ownCount(false); // a fresh import after Clear auto-follows the upload count again
   };
 
   const handleRestoreHistory = (item: HistoryItem) => {
+      if (waitForLyricDemo()) return;
+      let restoredCaptions: CaptionTrack;
+      try { restoredCaptions = normalizeCaptionTrack(item.state.captions); }
+      catch { flashNotice('That history item has an invalid caption track. Your work is unchanged.'); return; }
+      setCaptions(restoredCaptions);
+      setLockedCells(new Map(normalizeProjectLocks(item.state.locks, item.images)));
+      setAssignNonce(n => n + 1);
       ownCount(true); // restoring a saved composition's own count
       setImages(item.images);
       const l = item.state.layout;
@@ -2384,7 +2473,7 @@ export default function App() {
               // object crosses the structured clone the same way the title plan does,
               // and the worker resolves it through the SAME `cssFilterFor` the preview
               // called, so there is still exactly one pipeline in one file.
-              zoom, bgColor, titlePlan, look: lookRef,
+              zoom, bgColor, titlePlan: frameTitlePlan, look: lookRef,
           });
       });
   };
@@ -2479,6 +2568,7 @@ export default function App() {
   };
 
   const handleExport = async (size: number) => {
+      if (waitForLyricDemo()) return;
       // MAX asks the ladder to start from the measured ceiling instead of a
       // number someone typed in 2026 — `deriveTiers` already knows what fits.
       await runExport(size === 30000 ? null : size);
@@ -2557,18 +2647,19 @@ export default function App() {
   };
 
   const handleExportSVG = async () => {
+    if (waitForLyricDemo()) return;
     setShowExportDialog(false); setExportStatus('processing'); setExportMsg('VECTORIZING...');
     try {
         const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive, 0, aspect);
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look, adjust: adjust ?? undefined }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave = buildStateForSave();
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
         // SVG is the project file, so it carries the pool that made it.
-        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, lookRef, poolForSave);
+        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, frameTitlePlan, lookRef, poolForSave);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
         setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 2000);
@@ -2599,9 +2690,27 @@ export default function App() {
   // and Clear (history) each described the project by writing this same literal
   // inline — three chances to drift, and the manifest is exactly where a silent
   // field-omission becomes a wrong answer on reopen. One source of truth now.
-  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync }, style: { background: bgColor, look, adjust: adjust ?? undefined }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
+  const buildStateForSave = (): AppState => ({
+    version: "1.0", mode: activeTab,
+    layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync },
+    style: { background: bgColor, look, adjust: adjust ?? undefined },
+    title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined,
+    captions: captions.cues.length ? captions : undefined,
+    locks: normalizeProjectLocks([...lockedCells], images),
+  });
 
-  const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), poolForSave); dirtyRef.current = false; };
+  const handleSaveProject = async () => {
+    if (waitForLyricDemo()) return;
+    setShowExportDialog(false);
+    try {
+      await saveProject(buildStateForSave(), poolForSave);
+      dirtyRef.current = false;
+      if (clips.length || soundtrack) flashNotice('Composition and lyrics saved. Video and music files stay in this session; export a video to keep the finished take.');
+    } catch (error) {
+      dirtyRef.current = true;
+      flashNotice(error instanceof Error ? error.message : 'Could not save the project. Your work is still here.');
+    }
+  };
 
   // Write the working project to IndexedDB — the crash-safe snapshot behind the
   // first well bug ("capturing at 4k ... lost what I was doing"), and the source
@@ -2710,6 +2819,9 @@ export default function App() {
   // bugs the comments below guard against is exactly what a second, hand-copied
   // apply path would reintroduce, so Restore reuses THIS one verbatim.
   const applyLoadedProject = (loaded: { state: AppState; images: ImageAsset[] }) => {
+        // Validate before changing any live state, including crash-recovery records.
+        const restoredCaptions = normalizeCaptionTrack(loaded.state.captions);
+        setCaptions(restoredCaptions);
         setOpenError(null);
         // `??`, NOT `||`, on every number here. `||` treats a legal ZERO as
         // absent, and three of these have a meaningful zero: seed 0 became
@@ -2753,7 +2865,10 @@ export default function App() {
           // `loaded.images` (the pool as it arrived), while `setImages` above was
           // handed the same pool with the frames taken OFF, so the app runs with
           // one source of truth and the writers put it back.
-          setClips([]); setStageOk(true); setLockedCells(new Map()); setFrames(framesFromPool(loaded.images)); setLastRecipe(undefined);
+          setClips([]); setStageOk(true); removeSoundtrack();
+          setLockedCells(new Map(normalizeProjectLocks(loaded.state.locks, loaded.images)));
+          setAssignNonce(n => n + 1);
+          setFrames(framesFromPool(loaded.images)); setLastRecipe(undefined);
           // RETIRE THE LATCH WITH THE LOAD THAT ARMED IT. Nothing else bumps
           // `dropId` here, so the latch stayed live past the Open and the NEXT
           // import paid for it: its final effect pass took the `drop !== dropId`
@@ -2768,9 +2883,13 @@ export default function App() {
   };
 
   const handleLoadProject = () => {
+    if (waitForLyricDemo()) return;
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
+        if (waitForLyricDemo()) return;
+        projectReadBusyRef.current++;
+        try {
         const loaded = await loadProject(file);
         // A refused file used to do NOTHING — no picture, no message, no way to
         // tell a rejected file from a slow one. `loadProject` fails closed by
@@ -2782,7 +2901,9 @@ export default function App() {
           setTimeout(() => setOpenError(null), 6000);
           return;
         }
-        applyLoadedProject(loaded);
+        try { applyLoadedProject(loaded); }
+        catch { setOpenError("COULDN'T OPEN THAT FILE"); flashNotice('The caption track is invalid. Your current work is unchanged.'); }
+        } finally { projectReadBusyRef.current--; }
     };
     input.click();
   };
@@ -2815,7 +2936,9 @@ export default function App() {
   // original round-trip rather than thrown away, because it is somebody's
   // unfinished work; the next flush rewrites it in the new shape.
   const handleRestoreSession = async () => {
+    if (waitForLyricDemo()) return;
     if (restoring) return;
+    projectReadBusyRef.current++;
     setRestoring(true);
     const minted: string[] = [];
     try {
@@ -2856,29 +2979,35 @@ export default function App() {
           await abandonSession('That session could not be restored.');
           return;
         }
-        minted.length = 0; // handed to the pool; the app owns them now
         // The store carries the settings half opaquely — it persists what this
         // app hands it and never inspects it — so the shape is asserted here,
         // where `buildStateForSave` is the thing that wrote it.
         const { images: _entries, ...state } = s.manifest;
         applyLoadedProject({ state: state as unknown as AppState, images: restored as ImageAsset[] });
+        minted.length = 0; // handed to the pool only after validation succeeds
       }
       // The banner clears itself the moment the pool is non-empty (the effect
       // below), so success needs no explicit dismissal — only failure does.
       flashNotice('Restored your last session.');
+    } catch {
+      setRestorePrompt(null);
+      flashNotice('That saved session could not be restored. It is still saved; your current work is unchanged.');
     } finally {
       for (const u of minted) { try { URL.revokeObjectURL(u); } catch { /* already gone */ } }
+      projectReadBusyRef.current--;
       setRestoring(false);
     }
   };
 
   const handleDismissRestore = async () => {
+    if (waitForLyricDemo()) return;
     setRestorePrompt(null);
     dirtyRef.current = false;
     await sessionStore.clearSession();
   };
 
   const handleApplyTemplate = (t: Template) => {
+      if (waitForLyricDemo()) return;
       ownCount(true); // a template carries its own explicit fragment count
       setLayoutMode(t.layout.mode); setCount(t.layout.count); setSeed(t.layout.seed); setAspect(t.layout.aspect); setGutter(t.layout.gutter);
   };
@@ -2897,7 +3026,7 @@ export default function App() {
     dirtyRef.current = true; // there is now work that isn't on disk
     const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
     return () => window.clearTimeout(t);
-  }, [images, frames, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, adjust, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
+  }, [images, frames, lockedCells, captions, sync, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, adjust, arrangement, focus, twist, move, turn, pace, titleText, titlePlace, titleSize, activeTab, soundtrack, captionRecording, exportStatus, restorePrompt, restoring]);
 
   // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
   // (large) blob is pulled only if the user actually taps Restore. The banner's
@@ -2987,16 +3116,25 @@ export default function App() {
             </div>
          )}
          {images.length === 0 ? (
-            <div onClick={() => fileInputRef.current?.click()} className="relative z-10 group flex flex-col items-center justify-center p-10 border border-dashed rounded-full border-gray-800 cursor-pointer hover:border-emerald-500/50 hover:bg-white/5 active:scale-95 transition-all">
+           <div className="relative z-10 flex flex-col items-center gap-3">
+            <button type="button" aria-label="Load source images or video" onClick={() => fileInputRef.current?.click()} disabled={demoBusy} className="group flex flex-col items-center justify-center p-8 border border-dashed rounded-full border-gray-800 cursor-pointer hover:border-emerald-500/50 hover:bg-white/5 active:scale-95 transition-all">
                <div className="flex items-center gap-2 mb-3 text-gray-600 group-hover:text-emerald-500 transition-colors">
                   <Upload size={26} />
                   <Film size={26} />
                </div>
                <span className="text-[9px] font-bold tracking-widest text-gray-500 group-hover:text-white">LOAD SOURCE</span>
                <span className="text-[8px] tracking-widest text-gray-700 mt-1 uppercase">Images or video</span>
-            </div>
+            </button>
+            <button type="button" onClick={loadLyricDemo} disabled={demoBusy} className="min-h-[44px] rounded-full border border-amber-300/30 px-5 py-2 text-sm text-amber-200 hover:bg-amber-300/10 disabled:opacity-50">{demoBusy ? 'Making your sample…' : 'Try a lyric film'}</button>
+           </div>
          ) : (
-            <div className={`relative z-10 w-full h-full flex justify-center ${railRow && !maximized ? 'items-end' : 'items-center'} ${maximized ? 'p-1 sm:p-2' : 'p-2 sm:p-4'}`} ref={setBandEl}>
+            <div
+              className={`relative z-10 w-full h-full flex justify-center ${railRow && !maximized ? 'items-end' : 'items-center'} ${maximized ? 'p-1 sm:p-2' : 'p-2 sm:p-4'}`}
+              ref={setBandEl}
+              // Display-only space: the whole composition remains visible above
+              // the controls; every exporter still draws the unchanged geometry.
+              style={protectBottomText ? { paddingBottom: fullBleedRailHeight + 8 } : undefined}
+            >
                {/* `items-end` under a laid-across rail: the fit already gave the
                    rail its 68px, and centring the remainder would put half of
                    that slack back ABOVE the artwork, under the buttons. */}
@@ -3026,6 +3164,9 @@ export default function App() {
                        zoom={zoom}
                        bgColor={bgColor}
                        titlePlan={titlePlan}
+                       captionPlans={captionPlans}
+                       onTakeChange={setCaptionTake}
+                       onRecordingChange={setCaptionRecording}
                        look={lookRef}
                        turn={turnScene}
                        pace={pace}
@@ -3274,6 +3415,9 @@ export default function App() {
                  // desktop, and the utility would win the cascade and take the
                  // pill's own 12px of air with it.
                  <div
+                   ref={fullBleedRailRef}
+                   role="toolbar"
+                   aria-label="Full bleed tools"
                    className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-2 min-[360px]:px-3 pointer-events-none"
                    style={{ paddingBottom: 'max(0.75rem, var(--safe-b))' }}
                  >
@@ -3393,7 +3537,14 @@ export default function App() {
           `display:none` (not an unmount) hides the dock when maximized, so the
           Stage's portal host survives. */}
       <div
-        style={{ display: maximized ? 'none' : undefined }}
+        // Budget the WHOLE lyrics dock, including the transport and tabs. A
+        // 34vh editor plus those fixed rows left only 70px of artwork in a
+        // 664px Safari viewport. The editor scrolls inside the remaining half.
+        style={{
+          display: maximized ? 'none' : captionPanel ? 'flex' : undefined,
+          flexDirection: captionPanel ? 'column' : undefined,
+          height: captionPanel ? 'min(50dvh, 480px)' : undefined,
+        }}
         className="bg-[#0a0a0a] border-t border-white/10 pb-safe z-50 relative shrink-0"
       >
          {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
@@ -3406,20 +3557,31 @@ export default function App() {
              not: music dropped before any photograph (measured), and clips on a
              device where the compositor could not start. */}
          {liveMode && (
-           <div className="flex items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
+           <div className="flex shrink-0 items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
              {/* The live stage portals its clip chips + transport in here. */}
              <div ref={setStageControlsHost} className="flex-1 flex items-center min-w-0" />
            </div>
          )}
-         <div className="flex border-b border-white/5 bg-[#0e0e0e]">
-             <button onClick={()=>setActiveTab('simple')} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
-             <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
+
+         <div className="flex shrink-0 border-b border-white/5 bg-[#0e0e0e]">
+             <button onClick={()=>{ setActiveTab('simple'); setCaptionPanel(false); }} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
+             <button onClick={()=>{ setActiveTab('advanced'); setCaptionPanel(false); }} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
+             <button onClick={() => setCaptionPanel(true)} disabled={!images.length} aria-label="Lyrics & captions" aria-pressed={captionPanel} className={`flex-1 min-h-[48px] px-2 text-xs font-medium ${captionPanel ? 'text-amber-200 bg-[#1a1a1a] border-t-2 border-amber-300' : 'text-gray-400 hover:text-white'} disabled:opacity-40`}>Lyrics</button>
          </div>
-         {activeTab === 'simple' ? (
+         {images.length > 0 && <div
+           className="min-h-0 flex-1 overflow-hidden"
+           style={{ display: captionPanel ? undefined : 'none', '--dock-max': '100%' } as React.CSSProperties}
+         ><CaptionEditor defaultOpen
+           track={captions} onChange={setCaptions} take={captionTake}
+           getTime={() => recorderRef.current?.getTime() ?? 0}
+           onSeek={(time) => recorderRef.current?.seek(time)}
+           disabled={exportStatus === 'processing' || captionRecording}
+         /></div>}
+         {!captionPanel && (activeTab === 'simple' ? (
            <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
-         )}
+         ))}
       </div>
       {/* CRASH RECOVERY. Shown only into an empty pool (shouldPromptRestore), so
           it never shadows a project already on the stage. One-handed sizes: the
