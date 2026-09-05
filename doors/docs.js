@@ -250,6 +250,107 @@ window.TRADE_DOCS = {
       }
     ],
 
+  /* ── WHAT THIS TRADE WAS OWED ON THE SHARED SHELF (2026-09-05) ───────────
+     doors shipped with ZERO overrides, so all eleven shared documents spoke in
+     the rack's generic voice on a door installer's page. Three of them are the
+     ones he actually sends, and the generic gets each one wrong in the same
+     way: it has no OPENING. A door man's world is numbered openings, leaves,
+     frames, hands and hardware sets — a write-up that does not name the opening
+     is a write-up nobody can act on, because the next man has to walk the
+     building to find out which door you meant. */
+  "overrides": {
+
+    "service-writeup": {
+      /* MEASURED 2026-09-05: typing "closer" — the single most common piece of
+         door hardware there is — handed back "Turnover / Handover Summary"
+         (fuzzy: closer ≈ closeout) on a shelf whose callback document is right
+         here. The words a door man reaches for when a door misbehaves were on
+         nobody's alias. */
+      "name": "Callback on an Opening",
+      "aka": ["callback", "service", "call", "repair", "closer", "door won't close",
+              "door dragging", "latch not catching", "won't latch", "adjustment",
+              "hardware adjustment", "warranty call", "service report"],
+      "omit": "WHETHER THIS IS YOURS. A door that will not latch six months out is usually the building — a frame that racked, a floor that lifted, a slab that moved — or somebody else's hands on your hardware. Say which, at the opening, on the first call, with what you read: the gap top and strike side, the reveal, whether the frame is still plumb. Leave it out and you have accepted the opening, and every callback after it is free work.",
+      "needs": ["where", "when", "notdone"],
+      "facts": [
+        "the opening number and where it is",
+        "the leaf and frame — hand, material, rating if it has one",
+        "the hardware on it, by function and make",
+        "what it is doing, and when it started",
+        "what you adjusted and to what",
+        "warranty, abuse or building movement — and what you read that says so"
+      ],
+      "sections": [
+        { "h": "The opening",
+          "r": "Opening number off the schedule and where it actually is in the building, so nobody has to walk it. Leaf and frame: hand, material, size, and the label if it is a rated opening. The hardware set as installed, by function and make — closer, lock or exit device, hinges, strike, coordinator, holder. If the opening number on the schedule and the number on the frame disagree, say both." },
+        { "h": "The complaint, in their words and then in yours",
+          "r": "What was called in, said the way they said it. Then what you found when you stood at it: does it latch, does it close from a set degree, does it drag, where does it bind, what is the gap at the top and at the strike, is the frame still plumb and square. Readings as read." },
+        { "h": "What I did",
+          "r": "Every adjustment by value, not by adjective: closer sweep and latch valves, spring power, backcheck, hinge shimmed and how many, strike moved and how far, coordinator or holder reset. If it is right now, say what it is doing now. If it is not, say that." },
+        { "h": "Whose it is",
+          "r": "Warranty, abuse, building movement or somebody else's adjustment — and the evidence you read AT the opening for whichever you name. Do not characterise anyone. \"Frame out of plumb 3/8 at the strike, gap 1/4 at the top and 1/16 at the bottom\" makes the point without saying it." },
+        { "h": "What I did not do, and what it needs",
+          "r": "Anything you could not get to, anything outside this call, anything you would not sign off — a leaf that has to be reordered with its lead time, a closer past adjusting, an opening where the fix is the frame and not the hardware. This is the section that stops the next call being a surprise." }
+      ]
+    },
+
+    "handover": {
+      "name": "Keys, Cores and the Openings I'm Turning Over",
+      "aka": ["handover", "turnover", "closeout", "hand off", "handoff", "close out",
+              "keys", "keying", "cores", "permanent cores", "control key"],
+      "omit": "THE CORES AND THE CONTROL KEY. Which construction cores came out, which permanent cores went in, opening by opening — and who took the control key, on what date, with a signature. Once the control key is loose in a building you can be called back to every lock in it and there is no paper that says you should not be.",
+      "needs": ["when", "who", "notdone"],
+      "facts": [
+        "the openings being turned over, by number",
+        "construction cores pulled and permanent cores set, by opening",
+        "who took the keys and the control key, when, and who signed",
+        "key bitting / keyway and who holds the schedule",
+        "what is still open, with the opening number",
+        "the hardware under warranty, from what date"
+      ],
+      "sections": [
+        { "h": "What is being turned over",
+          "r": "The openings by number, by area or floor, and the count. Say plainly which openings are NOT in this turnover and why, because a list that reads as complete converts every one you left out into warranty work." },
+        { "h": "Cores and keys",
+          "r": "Construction cores pulled and permanent cores set, opening by opening. Keys handed over by keyway and bitting, how many of each. The control key: who took it, the date, and who signed for it. Where the keying schedule lives and who owns it from here." },
+        { "h": "What was checked, and by whom",
+          "r": "What was operated and verified at each opening — latch, closing from a set degree, exit device dogging, rated openings closing and latching under their own power, gaps within tolerance on labelled leaves. Who walked it with you and when." },
+        { "h": "Open, and known",
+          "r": "Everything still open with the opening number, what it is waiting on, who owns it and by when — backordered hardware with its lead time, a leaf on order, an opening a decision has to come back on. Known and written down is warranty; found later is free." },
+        { "h": "Warranty and who to call",
+          "r": "What is covered, from what date, and by whom — yours or the manufacturer's. What voids it: an unauthorised adjustment, a closer wound past its setting, a door propped on the closer arm. The number to call and what to have ready (opening number, hardware make and function)." }
+      ]
+    },
+
+    "damage-found": {
+      "name": "My Doors, After Somebody Else Got To Them",
+      "aka": ["damage", "pre-existing", "found damage", "prior damage", "not us",
+              "damaged leaf", "dented frame", "scratched door", "door damaged after hanging"],
+      "omit": "THE DATE THE OPENING WAS ACCEPTED AND THE DATE THE DAMAGE WAS FOUND, with the opening number in both. A door man hangs early and everybody works past his openings for months. Without those two dates against one opening number, every dent in the building is arguably yours.",
+      "needs": ["when", "where"],
+      "facts": [
+        "the opening number and where it is",
+        "the date the opening was hung and accepted",
+        "the date and time the damage was found",
+        "what is damaged — leaf, frame, hardware, finish",
+        "photos taken, and where they live",
+        "who you told and how"
+      ],
+      "sections": [
+        { "h": "The opening and the two dates",
+          "r": "Opening number, location, and the date it was hung and accepted — then the date and time this was found. Both dates, against that number. That pair is the whole document." },
+        { "h": "What is damaged",
+          "r": "Leaf, frame, hardware or finish, and how far: a dent and its size and location off the floor, a bowed leaf and how much, a frame struck out of plumb, a closer arm bent, a finish scratched through. Say whether the opening still operates and whether a rated opening still meets its label." },
+        { "h": "What it will take",
+          "r": "Field repair, refinish, or replace — and if replace, the leaf or frame with its lead time written next to it, because that lead time is the schedule impact and nobody reads it anywhere else. No prices." },
+        { "h": "Photos and where they are",
+          "r": "How many, of what, timestamped, and where they live so somebody can pull them in six months. A description with no photo reference and no date is worth nothing in a back-charge meeting." },
+        { "h": "Who I told",
+          "r": "Who was told, when, how, and what came back. If the opening has to be protected or taken out of service until it is fixed, say that here and say who was told that too." }
+      ]
+    }
+  },
+
   /* What this trade dictates that a phone gets wrong. Only real corrections —
      the creative entry recorded 19 pairs that corrected nothing under a
      heading claiming they did, and that is the failure to avoid here. */

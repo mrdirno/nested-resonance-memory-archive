@@ -319,6 +319,100 @@ window.TRADE_DOCS = {
       }
     ],
 
+  /* ── WHAT THIS TRADE WAS OWED ON THE SHARED SHELF (2026-09-05) ───────────
+     landscape shipped with ZERO overrides, so all eleven shared documents spoke
+     in the rack's generic voice. Three of them are the ones that decide who
+     pays, and the generic misses the same thing in all three: LIVING MATERIAL
+     ON A CLOCK. Every other trade's work sits there until somebody breaks it.
+     Ours dies if the water stops for a weekend, and the only question that ever
+     matters afterwards is what day it stopped being ours. */
+  "overrides": {
+
+    "handover": {
+      "name": "The Day It Becomes Theirs",
+      "aka": ["handover", "turnover", "closeout", "hand off", "handoff", "close out",
+              "final acceptance", "warranty start", "maintenance period", "substantial completion"],
+      "omit": "THE DATE THE WARRANTY AND THE MAINTENANCE PERIOD START, AND WHO IS WATERING FROM THAT DATE. Nobody writes it, and it is the only line that matters: a plant warranty is void if the material was not watered, and the argument is always about which day the water became somebody else's problem. Name the date, name who waters, and name what happens if the controller gets shut off.",
+      "needs": ["when", "who", "notdone"],
+      "facts": [
+        "the areas being handed over, and the date",
+        "the date the warranty starts and the date it ends",
+        "the maintenance period — who, how long, what it covers",
+        "who is watering from that date, and by what schedule",
+        "the controller — where it is, who has the code, what it is programmed to",
+        "what is still open, and what is on order with its lead time"
+      ],
+      "sections": [
+        { "h": "What is being handed over, and when",
+          "r": "The areas by name or plan reference, the plant material by type and count, the irrigation zones by number, the sod and seed by area. The date. Say plainly what is NOT in this handover — a phase still fenced, an area re-graded by somebody else, material on backorder — because a list that reads as complete converts every one of them into warranty work." },
+        { "h": "The clock",
+          "r": "The date the warranty starts and the date it ends, for plant material and for the irrigation separately if they differ. The maintenance period: who is performing it, how long it runs, and exactly what it covers — mowing, watering, weeding, fertilising, pruning, replacements. What is NOT covered." },
+        { "h": "The water, from here",
+          "r": "Who waters from the handover date and on what schedule. The controller: where it is, who has the enclosure key and the code, what each zone is programmed to run and on which days, and what the seasonal adjust is set at. Which zones are on and which are deliberately off. Say in plain words that shutting the controller off, or a failed backflow left unrepaired, ends the plant warranty — and say who you told that to." },
+        { "h": "What was checked and what they were given",
+          "r": "Zones run and observed, heads adjusted, coverage checked, backflow tested and by whom, rain sensor operating. What physically changed hands: controller keys and codes, as-built or zone map, the plant list with sizes and sources, care and watering instructions, spare heads and nozzles, the backflow test report. To whom, on what date." },
+        { "h": "Open, and known",
+          "r": "Everything still open with its location, owner and date — material on order with the nursery lead time written next to it, a zone that cannot be commissioned until power is on, an area still held by another trade, a substitution waiting on approval. Known and written is warranty; found later is free." }
+      ]
+    },
+
+    "service-writeup": {
+      "name": "The Warranty Call — What I Found At The Plant",
+      "aka": ["warranty call", "service", "call", "repair", "callback", "replacement",
+              "came back out", "dead plants call", "irrigation repair", "service report"],
+      "omit": "WHETHER IT DIED OF SOMETHING YOU OWN OR SOMETHING YOU DO NOT — AND WHAT YOU READ AT THE PLANT THAT SAYS SO. Installation and stock are yours. No water, too much water, traffic, animals, salt, a shut-off controller and a broken backflow are not. Nobody writes the evidence down at the time, and six months later the only thing on paper is that you came out and it was dead.",
+      "needs": ["where", "when", "notdone"],
+      "facts": [
+        "what was called in, and by whom",
+        "the location and the material by type and size",
+        "what you found at the plant — soil moisture, rootball condition, canopy",
+        "the state of the irrigation serving it",
+        "cause, and the evidence you read for it",
+        "what you did, what you replaced, and what is still open"
+      ],
+      "sections": [
+        { "h": "The call",
+          "r": "What was reported and by whom, in their words, and the date. Where, by area or plan reference, and the material by type, size and count." },
+        { "h": "What I found, at the plant",
+          "r": "Read it at the plant and record it as read: soil moisture at the rootball and at depth, whether the rootball is dry through or sitting wet, whether the burlap or wire basket is still on, canopy condition, dieback, leaf scorch or drop, girdling, planting depth against grade. Do not judge whether a reading is acceptable — record it." },
+        { "h": "The water",
+          "r": "The zone serving it and what it is programmed to run. Heads: are they there, are they turning, do they reach it, are they buried or blocked. Controller state as found — on, off, in rain delay, or unplugged, and what the seasonal adjust was set at. Backflow condition. Whether a dripline emitter is at the plant at all. This section is why the document exists." },
+        { "h": "What it died of, and how I know",
+          "r": "Name the cause and put the evidence next to it — the reading, the controller state, the tyre track, the browse line, the salt at the curb. State it plainly and without characterising anyone: \"controller found in OFF, zone 4 rootballs dry through at 8 inches\" makes the point and does not accuse a person." },
+        { "h": "What I did and what is left",
+          "r": "What was replaced, by type and size and source, what was repaired, what was reprogrammed and to what. What you could NOT get to, what is outside this call, and what is on order with its nursery lead time. Whether this is warranty or billable, and why." }
+      ]
+    },
+
+    "look-ahead": {
+      "name": "What Has To Be True Before I Can Plant",
+      "aka": ["look ahead", "lookahead", "two week", "three week", "next week", "plan",
+              "what I need", "nursery lead time", "before I can plant"],
+      "omit": "THE NURSERY LEAD TIME AND THE TAG OR HOLD STATUS ON EACH ITEM, AND WHETHER THERE IS WATER AT THE POINT OF CONNECTION. You cannot plant what nobody ordered, a yard only holds tagged stock for a window, and a crew that arrives with a truck of B&B and no water on site loses the material as well as the day.",
+      "needs": ["when", "notdone"],
+      "facts": [
+        "the period this covers",
+        "crew count expected, and equipment",
+        "what is planned, in order, by area",
+        "material by type and size, with lead time and tag/hold status",
+        "water at the point of connection — available, by what date, from whom",
+        "what other trades have to finish first, and by when"
+      ],
+      "sections": [
+        { "h": "The period and the crew",
+          "r": "The dates this covers, the crew count expected each week, and the equipment that has to be there — skid steer, auger, water truck, tree spade. Say what changes if the crew count is not met." },
+        { "h": "In order, by area",
+          "r": "What is planned, in the order it has to happen, by area: rough grade, amendment, irrigation mainline and laterals, heads, fine grade, trees, shrubs, groundcover, sod or seed, mulch. Say which items cannot swap order — sleeves before flatwork, irrigation before fine grade, fine grade before sod." },
+        { "h": "Material — and the lead time nobody reads",
+          "r": "Every item by type, size and count, with the nursery lead time written next to it and whether it is tagged, held, ordered or unordered. Name the ones with a real wait — specimen trees, a size that is out of season, anything coming from out of state — and the date the hold expires. This line is the whole point of the document." },
+        { "h": "Water",
+          "r": "Whether there is water at the point of connection, from what date, and who owns getting it there. If it is not on, say what that costs: the plant date moves, or the material has to be hand-watered and who is paying for that. A landscape look-ahead without a water date is a wish list." },
+        { "h": "What has to be true first",
+          "r": "The precondition for each item and who owns it — beds brought to grade and by whom, flatwork poured and cured, sleeves in, power at the controller, fencing moved, an area released and swept. With the date you need it by, and the date you first asked." }
+      ]
+    }
+  },
+
   /* What this trade dictates that a phone gets wrong. Only real corrections —
      a pair that corrects nothing under a heading claiming it does is the
      failure to avoid, so this list is held to words that actually come back

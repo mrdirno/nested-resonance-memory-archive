@@ -106,10 +106,33 @@ for (const t of TRADES) {
       poolOnly: {},        // what search gained
       poolProbe: [],       // pooled term -> which ids came back
       ownProbe: [],        // the trade's own words, the regression half
-      labelProbe: null
+      labelProbe: null,
+      overrule: [],        // 9 — a loan taken over this shelf's own author
+      claims: 0
     };
     lib.forEach(d => out.libAka[d.id] = [d.name].concat(d.aka || []));
     pool.forEach(d => { if (d.poolOnly && d.poolOnly.length) out.poolOnly[d.id] = d.poolOnly.slice(); });
+    /* 9 · A CLAIM BEATS A LOAN. Every whole term this shelf's OWN authors wrote,
+       and who wrote it. Then: did the pool hand any of those words to a DIFFERENT
+       document on this same shelf? The pool is generated from the SHARED documents
+       only, so every trade-specific document is invisible to it — which is exactly
+       the kind that gets its word taken. Read off window.DOCS_POOL rather than off
+       poolOnly, because poolOnly is the engine's answer and this must be able to
+       fail when that answer is wrong. */
+    const claim = {};
+    lib.forEach(d => [d.name].concat(d.aka || []).forEach(w => {
+      const k = window.Find.norm(w);
+      if (k) claim[k] = (claim[k] && claim[k] !== d.id) ? '*' : d.id;   // '*' = shelf gate A's job
+    }));
+    out.claims = Object.keys(claim).length;
+    const P = window.DOCS_POOL || {};
+    lib.forEach(d => (P[d.id] || []).forEach(term => {
+      const k = window.Find.norm(term);
+      const owner = claim[k];
+      if (!owner || owner === '*' || owner === d.id) return;
+      const lent = (out.poolOnly[d.id] || []).some(x => window.Find.norm(x) === k);
+      if (lent) out.overrule.push([term, d.id, owner, search(term).ids[0] || '-']);
+    }));
     for (const id of Object.keys(out.poolOnly)) for (const term of out.poolOnly[id]) {
       const s = search(term);
       out.poolProbe.push([term, id, s.ids.includes(id), s.ids[0] === id]);
@@ -141,6 +164,18 @@ for (const t of TRADES) {
   }
   if (leaked) fail(`${t}: ${leaked} pooled term(s) reached the merged library — they would print in the ROUTER line of the block he pastes into his AI`);
   else ok(`block vocabulary untouched: ${Object.keys(r.poolOnly).length} document(s) widened for search only`);
+
+  /* 9 — A CLAIM BEATS A LOAN: the pool never takes a word off this shelf's own
+     author. Added 2026-09-05, and it is a gate because it already bit: paving's
+     author moved "delay" onto his own lost-day document and off the general
+     notice, and typing "delay" still led the general notice because sixteen other
+     shelves had voted the word onto `delay-notice` and the pool lent it back. The
+     shelf gate caught that one downstream, as a mis-led alias; this catches the
+     CAUSE, on every shelf, including the shared documents the shelf gate's B probe
+     would report only as somebody else's failure. */
+  if (r.overrule.length) fail(`${t}: ${r.overrule.length} pooled term(s) overrule this shelf's own author — ` +
+    r.overrule.map(([term, lent, owner, led]) => `"${term}" lent to ${lent} though ${owner} claims it (box led ${led})`).join('; '));
+  else ok(`no loan overrules an author: ${r.claims} claimed term(s) on this shelf, 0 taken by the pool`);
 
   /* 5 — every pooled term actually finds its document */
   const missed = r.poolProbe.filter(p => !p[2]);

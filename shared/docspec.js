@@ -1632,20 +1632,54 @@
      document on a page that did not have it and never changes a block: the man
      gets thirteen authors' words for his own shelf. It degrades to nothing if the
      file is absent, and the deploy asserts the tag on the real page. */
-  function poolTerms(d) {
+  /* THE POOL MAY NOT OVERRULE THE SHELF'S OWN AUTHOR (2026-09-05). The guard
+     above this line only ever asked whether the RECEIVING document already had
+     the word. It could not see the rest of the shelf — and the pool is generated
+     from the SHARED documents alone, so every trade-specific document is
+     invisible to the thing lending words onto the page it lives on.
+
+     What that costs, measured the first time this rung was worked: paving's
+     author moved "delay" onto `the-day-we-couldnt-pave` — a lost day is what a
+     paver means by the word, masonry's 2026-09-02 reasoning exactly — and took
+     it off the general notice, whose own `aka` and name then carried nothing of
+     it. Typing "delay" still led the general notice, because sixteen other
+     shelves had voted "delay" onto `delay-notice` and the pool lent it back.
+     A trade's author was overruled on his own shelf by trades he will never
+     meet, and the shelf gate is what caught it.
+
+     So a claim beats a loan. The pool exists to give a man thirteen authors'
+     words for his own shelf; it was never entitled to take one away. This is
+     also why the rule is stated over the WHOLE merged shelf rather than over
+     the shared documents: the word that gets taken is almost always taken from
+     a trade-specific document, which is the only kind the pool cannot see. */
+  function poolTerms(d, claimed) {
     var P = window.DOCS_POOL, extra = P && P[d.id];
     if (!extra || !extra.length || !window.Find) return [];
     var have = {}, mine = [d.name].concat(d.aka || []), i;
     for (i = 0; i < mine.length; i++) have[window.Find.norm(mine[i])] = 1;
-    return extra.filter(function (t) { return !have[window.Find.norm(t)]; });
+    return extra.filter(function (t) {
+      var k = window.Find.norm(t);
+      if (have[k]) return false;                       /* already his own word */
+      return !(claimed && claimed[k] && claimed[k] !== d.id);
+    });
   }
 
   /* Copies, never a mutation: library() hands back the live merged rows and
      compose() reads `aka` to build the ROUTER line a man pastes into his AI.
      Widening the SEARCH must not widen what the document tells him it is called. */
   function pooled(lib) {
+    /* every whole term the shelf's OWN authors claim, and who claims it. A term
+       written on two documents here is already the shelf gate's assertion A and
+       is left alone — this rail exists to protect a single clear claim. */
+    var claimed = {};
+    lib.forEach(function (d) {
+      [d.name].concat(d.aka || []).forEach(function (w) {
+        var k = window.Find && window.Find.norm(w);
+        if (k) claimed[k] = claimed[k] && claimed[k] !== d.id ? "*" : d.id;
+      });
+    });
     return lib.map(function (d) {
-      var extra = poolTerms(d);
+      var extra = poolTerms(d, claimed);
       if (!extra.length) return d;
       var c = {}, k;
       for (k in d) if (Object.prototype.hasOwnProperty.call(d, k)) c[k] = d[k];

@@ -164,7 +164,8 @@ window.TRADE_DOCS = {
       {
         "id": "the-day-we-couldnt-pave",
         "name": "The Day We Couldn't Pave",
-        "aka": ["rained out paving crew lost day", "cancelled the plant order sent the crew home", "loads on the road when we called it", "paving crew stood down base not ready", "idle paving crew write up", "showed up to pave and the lot was full of cars", "trucks could not get in lost the day", "plant order cancelled who called it", "non productive day paving crew", "lost paving day the base was wet", "crew and paver sat all morning"],
+        "aka": ["delay", "stopped", "lost day", "rained out",
+                "rained out paving crew lost day", "cancelled the plant order sent the crew home", "loads on the road when we called it", "paving crew stood down base not ready", "idle paving crew write up", "showed up to pave and the lot was full of cars", "trucks could not get in lost the day", "plant order cancelled who called it", "non productive day paving crew", "lost paving day the base was wet", "crew and paver sat all morning"],
         "family": "notice",
         "from": "the paving foreman who had the crew and the order",
         "to": "our PM, and the GC super the same day",
@@ -335,6 +336,124 @@ window.TRADE_DOCS = {
         ]
       }
     ],
+
+  /* ── WHAT THIS TRADE WAS OWED ON THE SHARED SHELF (2026-09-05) ───────────
+     paving shipped with ZERO overrides, so all eleven shared documents spoke in
+     the rack's generic voice. The first of these three is not an opinion, it is
+     a MEASUREMENT: driven at the real search box on 2026-09-05, typing "delay"
+     on this shelf returned the generic notice and NOTHING ELSE — "The Day We
+     Couldn't Pave", written for exactly that, never appeared, while doors and
+     landscape both showed their own lost-day document second because their
+     authors happened to write the word into an alias. This shelf's author did
+     not, so the paver's own document was unreachable by the one word he types.
+
+     The fix is masonry's, from 2026-09-02, which framing then took: the trade's
+     own document OWNS the words a man in that trade means, and the general
+     notice keeps the words for the holds that are NOT that. A paver saying
+     "delay" means a lost day — weather, a wet base, a lot full of cars, a plant
+     that would not load. He says "waiting on" when it is a submittal or a
+     decision. So the bare word moves and the general notice is renamed off it,
+     exactly as "We're Waiting On Somebody" was renamed on framing. Nothing goes
+     dark: every word this override gives up is picked up two entries down. */
+  "overrides": {
+
+    "delay-notice": {
+      "name": "We're Waiting On Somebody",
+      /* "delay", "delay notice" and "stopped" GIVEN UP 2026-09-05 to
+         `the-day-we-couldnt-pave`. "delay notice" had to go with the bare word:
+         the shelf gate failed this override on its first run because typing
+         "delay" still led HERE — a prefix hit on "delay notice" outranked the
+         exact hit on the paver's own document — which is the same lesson
+         masonry wrote, that a general notice competing for a trade's word beats
+         it on a technicality and serves nobody.
+         which is what a paver means by both. What stays is what he reaches for
+         when the hold is NOT a paving day: a submittal, a decision, an
+         inspection, a utility that has not been located, an area never released. */
+      "aka": ["held up", "waiting on", "impact notice", "notice", "no answer", "not released"],
+      "omit": "THE DATE YOU FIRST ASKED, and the date the paving window closes. Everyone writes the delay; almost nobody writes \"requested 07/22, no response as of 07/29\" — and on paving there is a second date nobody writes at all: the night temperatures that end the season. A hold that is a nuisance in June is a winter shutdown in October, and the notice has to say so while somebody can still act on it.",
+      "needs": ["when", "notdone"],
+      "facts": [
+        "what you are waiting on, and who owns it",
+        "the date you first asked, and every date since",
+        "what work is stopped, and what it holds behind it",
+        "the date you need it by",
+        "the temperature or seasonal window it has to happen inside"
+      ],
+      "sections": [
+        { "h": "What we are waiting on",
+          "r": "The one thing, named exactly, and who owns it: a mix design or submittal not returned, a striping plan not approved, a utility not located or not lowered, an inspection not made, an area never released, a decision on a detail. If more than one, list them separately — a notice about three things gets answered about none." },
+        { "h": "The dates",
+          "r": "The date you first asked, in writing, and every follow-up since with how it was sent. Then today's date and the status. This sequence is the whole legal weight of the document — the clock only starts when somebody is told in writing, and this is the paper that says when that was." },
+        { "h": "What is stopped, and what is behind it",
+          "r": "The work that cannot proceed and what it holds behind it — you cannot pave over an unlocated line, you cannot stripe what is not paved, you cannot seal what is not cured. Say what the crew is doing instead, or that there is nothing to move them to." },
+        { "h": "The window",
+          "r": "The date you need it by to hold the schedule, and the seasonal window it has to happen inside — night temperatures for mat compaction, surface temperature for sealer and for paint. If the answer arrives after that window closes, say plainly what that means: the work moves to next season, not next week. Nobody upstairs knows this unless the notice says it." },
+        { "h": "Who we told",
+          "r": "Who was told, when, how, and what came back. What you asked for specifically — the answer, a released area, a date. Do not characterise anyone; the dates do the arguing." }
+      ]
+    },
+
+    "handover": {
+      "name": "Turning the Lot Over For Good",
+      /* NOT the same document as `the-lot-i-handed-back` two entries down. That
+         one is a NIGHT: cones off a section, cars back on, what you told the
+         property manager at six. This is the END OF THE JOB — the whole lot,
+         once, with a warranty attached. Keeping both is deliberate, and each
+         one's name and words now say which is which. */
+      "aka": ["handover", "turnover", "closeout", "hand off", "handoff", "close out",
+              "final acceptance", "substantial completion", "punch complete"],
+      "omit": "HOW LONG BEFORE IT TAKES TRAFFIC, LOADS AND TURNING — AND WHAT YOU TOLD THEM ABOUT IT, IN WRITING. A fresh mat in August scars under a power-steering turn and marks under a dumpster leg or a trailer jack, and sealer and paint have their own cure times that have nothing to do with the mat's. Nobody writes down what the owner was told, so every scar becomes a defect claim against the paving.",
+      "needs": ["when", "who", "notdone"],
+      "facts": [
+        "the areas being turned over, and the date",
+        "cure and traffic restrictions, by surface, with dates",
+        "what was tested or verified, and by whom",
+        "what is still open, with location",
+        "warranty — what, from what date, and what voids it",
+        "who to call"
+      ],
+      "sections": [
+        { "h": "What is being turned over",
+          "r": "The areas by name or plan reference, the surfaces by type — new mat, overlay, sealcoat, striping, ADA stalls and access aisles, wheel stops, signage. Say plainly what is NOT in this turnover and why." },
+        { "h": "Cure, traffic and loads — in dates",
+          "r": "Per surface, when it takes foot traffic, when it takes cars, when it takes loaded trucks and turning, and when it can take a dumpster, a trailer jack or a jockeyed trailer. Give dates, not durations, because a duration gets converted wrong. Name what will mark it before then: power-steering scars, jack and leg indentations, hot tyres on fresh seal, tracking off unsealed edges." },
+        { "h": "What was checked",
+          "r": "What was verified and by whom — grades and drainage against the plan, ponding checked after a wet-down or a rain and where any is, stall count and dimensions against the striping sheet, ADA stalls, aisles, slopes and signage, joints and edges. Record readings as read; do not say whether a slope passes." },
+        { "h": "Open, and known",
+          "r": "Everything still open with its location — a section that cannot be sealed until it cures, striping waiting on a layout decision, a lid or valve box still to be raised, a saw cut to be sealed, a punch item on somebody else. What is on order, with lead time. Known and written is warranty; found later is free." },
+        { "h": "Warranty and who to call",
+          "r": "What is covered, from what date, for how long, and what is specifically not — raveling from an unsealed edge, damage from loads before the traffic date, settlement over somebody else's trench, a base you did not install. What voids it. The number to call and what to have ready." }
+      ]
+    },
+
+    "look-ahead": {
+      "name": "What Has To Line Up Before We Pave",
+      "aka": ["look ahead", "lookahead", "two week", "three week", "next week", "plan",
+              "what I need", "plant order", "closure notice"],
+      "omit": "WHO IS SENDING THE CLOSURE NOTICE TO THE TENANTS, AND BY WHEN. You cannot close a lot nobody was told about — the cars are there in the morning and the day is gone with the plant order already loaded. The paving is the easy part; the notice, the towing arrangement and the traffic control are what actually decide whether the day happens.",
+      "needs": ["when", "notdone"],
+      "facts": [
+        "the period this covers, by section",
+        "crew, paver and rollers expected",
+        "the plant — supplier, mix, tonnage, and the order date",
+        "the closure notice — who sends it, to whom, by when",
+        "traffic control, towing and who arranges each",
+        "the weather and temperature window each section needs"
+      ],
+      "sections": [
+        { "h": "The period, by section",
+          "r": "What is planned in what order, section by section, with the dates. Say which sections cannot swap — you cannot pave a section the tenants have to cross to reach the one you paved yesterday, and the phasing is the whole plan." },
+        { "h": "The plant and the crew",
+          "r": "Supplier, mix design, tonnage per section and the date the order has to be placed. Crew count, paver, rollers, and what changes if any of them is not there. Say what a late cancellation costs, because that is the number nobody upstairs has ever seen." },
+        { "h": "The closure — and who sends the notice",
+          "r": "Each section's closure dates and hours. Who sends the tenant or owner notice, to whom, and by what date. Traffic control: who arranges it, whether a permit is needed and who pulls it. Towing: who is authorised to call it and at what hour. This is the section that decides whether the day happens." },
+        { "h": "What has to be true first",
+          "r": "The precondition for each section and who owns it — base signed off and proof-rolled, lids and boxes raised, sleeves and conduit in and marked, sitework's punch closed, an area swept and released, striping layout approved. With the date you need it by and the date you first asked." },
+        { "h": "The window",
+          "r": "The temperature and weather window each section needs — night lows for mat compaction, surface temperature for sealer and paint, and the rain forecast against the cure. Name the date each section falls out of season if it slips. A paving look-ahead without that line reads as if any week is the same as any other, and no week is." }
+      ]
+    }
+  },
 
   "drop": [],
 
