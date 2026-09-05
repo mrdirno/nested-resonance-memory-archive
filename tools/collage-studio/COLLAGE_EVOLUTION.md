@@ -17,6 +17,7 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3711 — NATIVE ART RACK (2026-09-05), local validation / release verification pending:** eight original templates with real thumbnails; up to eight enabled, soloed, ordered, blended layers; seeds and dice locks; parameter automation; persistent editable recipes plus canonical PNG; native Stage/video rendering at requested time. Template gallery is primary; HTML player is secondary. Full public deployment evidence will replace this pending status after release.
 - **C3710 — ART ROOM + LYRIC HANDOFFS (2026-09-05):** the Art Room dock opens an original seeded Tidal Paper instrument or local self-contained HTML. An opaque sandbox and private session return validated still PNG pixels into the existing collage/project workflow. Show artwork reveals deferred Bifurcata worlds; local Bifurcata capture and saved originals passed on Chromium, Mobile Chrome and Mobile Safari. Lyrics now includes a copyable audio-transcription prompt, verified free/browser options and an Apple Silicon setup link. The [art and intelligence roadmap](ART_AND_INTELLIGENCE_ROADMAP.md) defines downloaded browser drafts, a native Mac handoff, deterministic animation adapters and portable audiovisual projects. These future capabilities are not shipped by this release. Code `3f3ede40`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143), **40/40 live browser cases** and actual live capture/guide review. Only captured pixels persist; editable HTML, seed recipes and live instrument motion do not.
 - **C3709 — TIMED LYRICS (2026-09-05):** editable cue text and in/out timing,
   playhead stamping, preview, plain SRT/WebVTT interchange, and one-step track
@@ -1531,6 +1532,18 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-05 (C3711) — A RECIPE REVISION NEEDS CURRENT PIXELS
+
+Recovery treats asset IDs as immutable. Reusing an ID after changing its recipe would save new metadata beside an old PNG. Apply now mints a new ID, atomically replaces the source slot and remaps pins, crop and history references. Archive, SVG and recovery preflight native recipes before adoption. Actual IndexedDB inspection and reopening compare the revised recipe and exact PNG bytes.
+
+### 2026-09-05 (C3711) — MOTION HAS MORE THAN ONE GATE
+
+Adding native animation to App and Stage was not enough: the dock's takeability test still recognized only video, music and captions. The dock now admits native animation, drift and turning, and the real encoded-video test requires Record to be enabled. Export supports the native loop duration and clears that extra duration when the pool becomes mixed. Source switching also retires the previous slider coalescing key, so the next edit always has an Undo entry.
+
+### 2026-09-05 (C3711) — CANVAS STATE AND READBACK ARE PART OF THE PROOF
+
+WebKit did not restore a filter property through save/restore in the tested context; the shared renderer now explicitly preserves that property. Repeated pixel readbacks can switch Chromium's raster backend. Exact repeat-seek tests warm that path before measurement; deterministic module and Stage tests remain exact, and encoded-video tests inspect actual decoded frames. Sliders carry the actual percentage into the shared CSS fill contract instead of displaying its default 50 percent.
 
 ### 2026-09-05 (C3710) — A LOADED INSTRUMENT MAY NEVER START DRAWING
 

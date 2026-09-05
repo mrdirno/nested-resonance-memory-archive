@@ -59,6 +59,7 @@
 
 import type { AppState } from '../types';
 import type { AnalysisResult } from './analysis';
+import { normalizeArtRecipe, type ArtRecipe } from './artRack';
 
 /** The element the manifest lives in, and the id that identifies it as ours. */
 export const PROJECT_EL = 'metadata';
@@ -84,6 +85,7 @@ export interface SvgImageMeta {
   id: string;
   originalName: string;
   analysis: AnalysisResult;
+  art?: ArtRecipe;
 }
 
 export interface SvgProject {
@@ -138,7 +140,7 @@ export const projectMetadata = (
   images: SvgImageMeta[] | null | undefined,
 ): string => {
   if (!state) return '';
-  const payload = { format: PROJECT_FORMAT, state, images: images ?? [] };
+  const payload = { format: PROJECT_FORMAT, state, images: (images ?? []).map(metaForAsset) };
   return `  <${PROJECT_EL} id="${PROJECT_ID}">${escapeXmlText(JSON.stringify(payload))}</${PROJECT_EL}>\n`;
 };
 
@@ -147,10 +149,12 @@ export const metaForAsset = (a: {
   id: string;
   originalName?: string;
   analysis: AnalysisResult;
+  art?: ArtRecipe;
 }): SvgImageMeta => ({
   id: a.id,
   originalName: a.originalName || 'image.png',
   analysis: a.analysis,
+  ...(a.art === undefined ? {} : { art: normalizeArtRecipe(a.art) }),
 });
 
 // -----------------------------------------------------------------------------
@@ -197,11 +201,14 @@ export const readProject = (svgText: string): SvgProject | null => {
     // An entry with no id cannot be matched to its pixels, and a pool with a
     // hole in it re-deals every slot after the hole. Refuse the whole file.
     if (!m || typeof m.id !== 'string' || m.id.length === 0) return null;
-    images.push({
-      id: m.id,
-      originalName: typeof m.originalName === 'string' ? m.originalName : 'image.png',
-      analysis: m.analysis as AnalysisResult,
-    });
+    try {
+      images.push({
+        id: m.id,
+        originalName: typeof m.originalName === 'string' ? m.originalName : 'image.png',
+        analysis: m.analysis as AnalysisResult,
+        ...(m.art === undefined ? {} : { art: normalizeArtRecipe(m.art) }),
+      });
+    } catch { return null; }
   }
 
   return { state, images };

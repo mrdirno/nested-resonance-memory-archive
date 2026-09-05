@@ -65,6 +65,7 @@ import {
 } from '../lib/soundtrack';
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TurnSchedule } from '../lib/turn';
+import { artIsAnimated } from '../lib/artRack';
 import { takeLength } from '../lib/playhead';
 import { cutPlan, driftPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
@@ -1245,7 +1246,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
    * monitor button was DISABLED, so the one thing the user had just added was
    * the one thing they could not hear.
    */
-  const takeable = liveCount > 0 || !!trackRow || !!captionPlans?.length;
+  const nativeMoving = orderedAssets.some(asset => asset?.art && artIsAnimated(asset.art));
+  const takeable = liveCount > 0 || !!trackRow || !!captionPlans?.length || nativeMoving || stageMoving || stageTurning;
 
   // STAGE OWNS `soundOn`, NOT US. It flips the flag itself in more places than
   // our toggle — `resumeFromGesture({sound})` sets it, and `setClipMuted(id,

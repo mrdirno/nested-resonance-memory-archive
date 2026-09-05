@@ -33,6 +33,8 @@
 // Author: Aldrin Payopay (aldrin.gdf@gmail.com)
 // -----------------------------------------------------------------------------
 
+import { normalizeArtRecipe, type ArtRecipe } from './artRack';
+
 /** IndexedDB coordinates. One database; the manifest row plus one row per image. */
 export const SESSION_DB = 'collage-session';
 export const SESSION_STORE = 'project';
@@ -162,6 +164,7 @@ export interface SessionAssetEntry {
   width: number;
   height: number;
   analysis: unknown;
+  art?: ArtRecipe;
 }
 
 /** The two URLs a restored asset needs. See `hydrateSessionAssets`. */
@@ -174,7 +177,7 @@ export interface AssetUrls {
 
 /** Live pool -> the manifest's image list. Pure; the caller adds the settings. */
 export function sessionEntries(
-  images: readonly { id: string; originalName?: string; width: number; height: number; analysis: unknown }[],
+  images: readonly { id: string; originalName?: string; width: number; height: number; analysis: unknown; art?: ArtRecipe }[],
 ): SessionAssetEntry[] {
   return images.map((i) => ({
     id: i.id,
@@ -182,7 +185,21 @@ export function sessionEntries(
     width: i.width,
     height: i.height,
     analysis: i.analysis,
+    ...(i.art === undefined ? {} : { art: normalizeArtRecipe(i.art) }),
   }));
+}
+
+/** Validate the entire native-art pool before the caller mints recovery URLs. */
+export function preflightSessionAssets(entries: unknown): SessionAssetEntry[] | null {
+  if (!Array.isArray(entries) || entries.length === 0) return null;
+  const out: SessionAssetEntry[] = [];
+  for (const entry of entries) {
+    if (!entry || typeof entry !== 'object' || typeof entry.id !== 'string' || !entry.id) return null;
+    try {
+      out.push({ ...entry, ...(entry.art === undefined ? {} : { art: normalizeArtRecipe(entry.art) }) });
+    } catch { return null; }
+  }
+  return out;
 }
 
 /**
@@ -209,10 +226,11 @@ export function sessionEntries(
 export function hydrateSessionAssets(
   entries: readonly SessionAssetEntry[] | undefined | null,
   urlById: Readonly<Record<string, AssetUrls>>,
-): { id: string; src: string; previewSrc: string; originalName: string; width: number; height: number; analysis: unknown }[] | null {
-  if (!Array.isArray(entries) || entries.length === 0) return null;
+): { id: string; src: string; previewSrc: string; originalName: string; width: number; height: number; analysis: unknown; art?: ArtRecipe }[] | null {
+  const checked = preflightSessionAssets(entries);
+  if (!checked) return null;
   const out = [];
-  for (const e of entries) {
+  for (const e of checked) {
     const u = urlById[e.id];
     if (!u || !u.src) return null;
     out.push({
@@ -226,6 +244,7 @@ export function hydrateSessionAssets(
       width: typeof e.width === 'number' && e.width > 0 ? e.width : 0,
       height: typeof e.height === 'number' && e.height > 0 ? e.height : 0,
       analysis: e.analysis,
+      ...(e.art === undefined ? {} : { art: e.art }),
     });
   }
   return out;

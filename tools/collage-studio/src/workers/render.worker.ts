@@ -31,10 +31,12 @@
 // (`RenderOutcome`), so this worker plugs into the tested ladder with no
 // translation layer.
 //
-import { calculateSmartCrop } from '../lib/renderer';
+import { calculateSmartCrop, artSourceSize } from '../lib/renderer';
 import { titlePlanFor, drawTitlePlan } from '../lib/title';
 import { cssFilterFor } from '../lib/grade';
 import { assertSurfaceLive } from '../lib/exportLimits';
+import { normalizeArtRecipe } from '../lib/artRack';
+import { drawArt } from '../lib/artRackRenderer';
 
 const ctx: Worker = self as any;
 
@@ -97,6 +99,8 @@ ctx.onmessage = async (e: MessageEvent) => {
 
   let failedImages = 0;
   let drawn = 0;
+  const artSources = new Map<string, OffscreenCanvas>();
+  let artPixels = 0;
 
   try {
     let canvas: OffscreenCanvas;
@@ -147,6 +151,7 @@ ctx.onmessage = async (e: MessageEvent) => {
         // job to have not sent one. (See generateBlob's alignment guard.)
         if (!imgMeta || !imgMeta.src) continue;
 
+        let bitmapToClose: ImageBitmap | null = null;
         try {
             // TWO SOURCES, IN ORDER OF QUALITY.
             //   The preview path draws `previewSrc` (a small, always-live JPEG
@@ -159,7 +164,26 @@ ctx.onmessage = async (e: MessageEvent) => {
             //   A softer fragment beats a hole, every time. We try the original
             //   and fall back to the preview, and only count a failure when
             //   BOTH are gone.
-            const imgBitmap = await decodeFirstAvailable([imgMeta.src, imgMeta.fallbackSrc]);
+            let imgBitmap: ImageBitmap | OffscreenCanvas | null;
+            if (imgMeta.art) {
+              imgBitmap = artSources.get(imgMeta.src) ?? null;
+              if (!imgBitmap) {
+                const art = normalizeArtRecipe(imgMeta.art);
+                const { width: w, height: h } = artSourceSize(art, Math.max(width, height));
+                while (artSources.size && artPixels + w * h > 16_000_000) {
+                  const [key, source] = artSources.entries().next().value!;
+                  artPixels -= source.width * source.height; source.width = 0; source.height = 0; artSources.delete(key);
+                }
+                const source = new OffscreenCanvas(w, h);
+                const artCtx = source.getContext('2d');
+                if (!artCtx || !assertSurfaceLive(artCtx, w, h)) throw new Error('Native artwork surface unavailable');
+                drawArt(artCtx, w, h, art, 0);
+                artSources.set(imgMeta.src, source); artPixels += w * h; imgBitmap = source;
+              }
+            } else {
+              imgBitmap = await decodeFirstAvailable([imgMeta.src, imgMeta.fallbackSrc]);
+              bitmapToClose = imgBitmap;
+            }
             if (!imgBitmap) throw new Error('no decodable source');
 
             // EVERY save() IS POPPED IN A `finally`.
@@ -182,8 +206,8 @@ ctx.onmessage = async (e: MessageEvent) => {
                 ctx2d.clip();
 
                 const crop = calculateSmartCrop(item.bounds, {
-                    width: imgMeta.width,
-                    height: imgMeta.height,
+                    width: imgBitmap.width,
+                    height: imgBitmap.height,
                     analysis: imgMeta.analysis
                 }, zoom);
 
@@ -204,7 +228,6 @@ ctx.onmessage = async (e: MessageEvent) => {
                 } finally {
                     if (spun) ctx2d.restore();
                 }
-                imgBitmap.close();
                 drawn++;
 
                 if (mode === 'complex') {
@@ -218,6 +241,8 @@ ctx.onmessage = async (e: MessageEvent) => {
         } catch (innerErr) {
             console.warn("Worker image load failed", innerErr);
             failedImages++;
+        } finally {
+            bitmapToClose?.close();
         }
     }
 
@@ -248,5 +273,7 @@ ctx.onmessage = async (e: MessageEvent) => {
   } catch (err: any) {
     ctx.postMessage({ id, success: false, surfaceLive: true, failedImages, drawn,
                       error: err?.message || String(err) });
+  } finally {
+    for (const source of artSources.values()) { source.width = 0; source.height = 0; }
   }
 };

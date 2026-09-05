@@ -20,6 +20,8 @@ interface ExportDialogProps {
   onExportVideo?: (seconds: number, renderWidth?: number) => void;
   /** Device ceiling, so the offered lengths are ones that will actually survive. */
   videoMaxSeconds?: number;
+  /** One exact loop when all native artwork sources share a duration. */
+  artLoopSeconds?: number;
   /**
    * The frame sizes THIS device accepted at THIS composition's shape, already
    * probed. Empty renders no row at all — an unprobed ladder is a guess, and a
@@ -41,12 +43,17 @@ const PRESETS = [
 export const ExportDialog: React.FC<ExportDialogProps> = ({
   isOpen, onClose, onExport, onExportSVG, onExportProject, canShare, onShare,
   canExportVideo = false, onExportVideo, videoMaxSeconds = 30,
-  videoSizes = [], canChooseVideoSize = false,
+  videoSizes = [], canChooseVideoSize = false, artLoopSeconds,
 }) => {
   const [resIndex, setResIndex] = useState(1); // 4K
   const current = PRESETS[resIndex];
-  const videoLengths = [5, 10, 15, 30].filter(v => v <= videoMaxSeconds);
+  const videoLengths = [...new Set([5, 10, 15, 30, ...(artLoopSeconds ? [artLoopSeconds] : [])])].filter(v => v <= videoMaxSeconds).sort((a,b) => a-b);
   const [vidSeconds, setVidSeconds] = useState(10);
+  useEffect(() => {
+    if (!isOpen) return;
+    if (artLoopSeconds && artLoopSeconds <= videoMaxSeconds) setVidSeconds(artLoopSeconds);
+    else setVidSeconds(previous => videoLengths.includes(previous) ? previous : (videoLengths.includes(10) ? 10 : videoLengths[0] ?? 5));
+  }, [isOpen, artLoopSeconds, videoMaxSeconds]);
 
   // THE SIZE ROW. Only rungs this device really accepted are selectable; the
   // refused ones stay visible with the reason, because "4K is missing" and "4K
@@ -247,8 +254,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </p>
                   </div>
                 )}
-                <div className="flex gap-2 items-center">
-                  <div className="flex items-center rounded-lg overflow-hidden border border-[color:var(--line-1)] shrink-0">
+                <div className="flex flex-wrap gap-2 items-center">
+                  <div className="flex items-center rounded-lg overflow-hidden border border-[color:var(--line-1)] shrink-0 max-w-full flex-wrap">
                     {videoLengths.map(v => (
                       <button
                         key={v}
@@ -263,7 +270,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         className={`min-h-[44px] min-w-[44px] px-2.5 text-[10px] font-black tracking-widest transition-colors ${
                           vidSeconds === v ? 'bg-white/15 text-white' : 'text-[color:var(--ink-3)] hover:text-white'
                         }`}
-                      >{v}s</button>
+                      >{v === artLoopSeconds ? `Loop ${v}s` : `${v}s`}</button>
                     ))}
                   </div>
                   <button

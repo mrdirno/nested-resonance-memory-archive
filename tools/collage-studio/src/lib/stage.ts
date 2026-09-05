@@ -2,10 +2,10 @@
 // -----------------------------------------------------------------------------
 // LIVE STAGE — the moving sibling of `renderCanvas`.
 //
-// MASTER: John Carmack's frame-budget workflow. Nothing is allocated, decoded,
-// awaited or parsed inside the draw loop. Every per-frame cost is precomputed
-// into a flat draw list at `setScene` time, and the loop is DEMAND-DRIVEN: with
-// no clip advancing it does not run at all.
+// MASTER: John Carmack's frame-budget workflow. Sources are cached; no surfaces
+// are allocated, decoded or encoded inside the draw loop. Fragment geometry is
+// precomputed into a flat draw list at `setScene` time. The loop is demand-driven:
+// only advancing video, motion, native art, captions or capture keeps it alive.
 //
 // WHAT THIS IS
 //   A framework-free compositor that paints the SAME composition `renderCanvas`
@@ -41,9 +41,11 @@
 // rendering bug).
 // -----------------------------------------------------------------------------
 
-import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
+import { calculateSmartCrop, twistedDest, twistOf, artSourceSize } from './renderer';
 import { turnAt, assignmentAt, isTurning, NO_TURN, turnFadeFor, type TurnSchedule } from './turn';
 import { isMoving } from './motion';
+import { ART_SIZES, artIsAnimated, type ArtRecipe } from './artRack';
+import { drawArt } from './artRackRenderer';
 import { paceTime } from './pace';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
 import { captionPlanAt, type PlannedCaption } from './captions';
@@ -88,6 +90,8 @@ export interface StageAssetLike {
   /** Filename of the clip this frame came from — the fallback binding key when `clipId` is absent. */
   sourceName?: string;
   sourceTime?: number;
+  /** Native parametric source; src/previewSrc remain opening-frame posters. */
+  art?: ArtRecipe;
 }
 
 /** A clip the Stage may bring to life. One decoder per entry, not per fragment. */
@@ -684,6 +688,21 @@ const stillW = (s: StillSource): number =>
 const stillH = (s: StillSource): number =>
   (s as HTMLImageElement).naturalHeight || s.height;
 
+interface NativeArtSource {
+  fullKey: string;
+  previewKey: string;
+  recipe: ArtRecipe;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  sourceW: number;
+  sourceH: number;
+  previewW: number;
+  previewH: number;
+  animated: boolean;
+  paintedTime: number;
+  seenFrame: number;
+}
+
 interface StillRecord {
   img: StillSource | null;
   state: 'loading' | 'ready' | 'error';
@@ -874,6 +893,11 @@ export class Stage {
   private clips = new Map<string, ClipRecord>();
   private liveClips: ClipRecord[] = [];
   private stills = new Map<string, StillRecord>();
+  /** One mutable source per artwork; every fragment and dissolve shares it. */
+  private nativeSources: NativeArtSource[] = [];
+  private nativeByKey = new Map<string, NativeArtSource>();
+  private nativeFrame = 0;
+  private artAnimated = false;
   /** Path2D cache keyed by LayoutItem identity: a shuffle never rebuilds a contour. */
   private paths = new WeakMap<object, Path2D>();
   private logicalH = DEFAULT_LOGICAL_W / 0.666;
@@ -1203,6 +1227,8 @@ export class Stage {
     const layout = scene.layoutItems || [];
     const ordered = scene.orderedAssets || [];
     const resolve = scene.resolveClipId ?? null;
+    const wasArtAnimated = this.artAnimated;
+    this.syncNativeSources(ordered);
 
     // Fragment counts / areas are recomputed from scratch every scene.
     this.clips.forEach((c) => { c.fragments = 0; c.area = 0; });
@@ -1349,7 +1375,7 @@ export class Stage {
     // that stops TURNING has the same obligation and for a sharper reason: it
     // would otherwise hand back a deal that is not the one the still preview,
     // the raster export and the SVG all draw.
-    if (!moving && !turning && (this.moving || this.turning)) this.outTime = 0;
+    if (!moving && !turning && !this.artAnimated && (this.moving || this.turning || wasArtAnimated)) this.outTime = 0;
     this.moving = moving;
     this.moveOriginMs = Number.NaN;
     this.ensureStills(wanted);
@@ -1555,6 +1581,7 @@ export class Stage {
       // Originals that failed once are worth trying again next take: a revoked
       // URL is the usual cause, and the pool may well have been reloaded since.
       this.deadOriginals.clear();
+      this.restoreNativePreviews();
       this.applyStillKeys();
     }
     // Put the MOVE back to rest and re-anchor. The render left `outTime` at the
@@ -2070,6 +2097,7 @@ export class Stage {
         this.refreshMoveCrops();
         needDraw = true;
       }
+      if (this.artAnimated) needDraw = true;
     }
 
     // A cue uses OUTPUT seconds, never the accelerated motion/turn clock.
@@ -2083,7 +2111,7 @@ export class Stage {
     // scrub: the frame `renderAtTime` drew stays on the canvas for nothing,
     // instead of a moving composition holding a 60 Hz loop open to re-derive the
     // same crops from the same frozen clock.
-    if (playing > 0 || this.capturing || this.dirty || ((this.moving || this.turning || this.captionPlans.length > 0) && live)) {
+    if (playing > 0 || this.capturing || this.dirty || ((this.moving || this.turning || this.artAnimated || this.captionPlans.length > 0) && live)) {
       this.rafId = this.view.requestAnimationFrame(this.tick);
     } else {
       // THE LAST TICK IS WHERE THE CLOCK STOPS. Nothing else knows this frame
@@ -2124,14 +2152,16 @@ export class Stage {
   }
 
   /**
-   * THE DRAW. Fully synchronous, zero allocation, no promises, no closures, no
-   * map lookups, no string building. Mirrors renderer.ts:57-108 exactly:
+   * THE DRAW. Synchronous: no decode, canvas allocation, promises or encoding.
+   * Native sources repaint once per used artwork, before fragment composition.
+   * The fragment pass mirrors the static compositor:
    * fillRect clear -> per item: save, clip(path), drawImage(crop -> bounds),
    * optional 'complex' hairline stroked through the SAME path, restore.
    */
   private drawFrame(ts: number): void {
     const ctx = this.ctx;
     const items = this.items;
+    this.paintNativeSources();
 
     ctx.fillStyle = this.bg;
     ctx.fillRect(0, 0, this.logicalW, this.logicalH);
@@ -2943,6 +2973,17 @@ export class Stage {
   ): Promise<{ px: number; clamped: boolean }> {
     const NONE = { px: 0, clamped: false };
     if (!key || typeof document === 'undefined') return NONE;
+    const native = this.nativeByKey.get(key);
+    if (native) {
+      if (signal?.aborted || this.destroyed) return NONE;
+      // Geometry demand was measured against the currently bound preview.
+      const wanted = wantScale * native.canvas.width / native.sourceW;
+      const scale = scaleForBudget(native.sourceW * native.sourceH, wanted, capPx);
+      const dims = rasterDims(native.sourceW, native.sourceH, scale, floorW, wanted, capPx);
+      if (!dims) return NONE;
+      this.resizeNativeSource(native, dims.w, dims.h);
+      return { px: dims.px, clamped: dims.clamped };
+    }
     let bmp: ImageBitmap | null = null;
     let el: HTMLImageElement | null = null;
     try {
@@ -3012,9 +3053,100 @@ export class Stage {
     }
   }
 
+  /** Preview source memory is bounded in aggregate, even for a repeated pool. */
+  private syncNativeSources(assets: (StageAssetLike | null | undefined)[]): void {
+    const unique = new Map<string, StageAssetLike>();
+    for (const asset of assets) {
+      if (asset?.art) unique.set(asset.src || asset.previewSrc || asset.id, asset);
+    }
+    const old = this.nativeByKey;
+    const next: NativeArtSource[] = [];
+    const aliases = new Map<string, NativeArtSource>();
+    const kept = new Set<NativeArtSource>();
+    const cap = Math.floor(8_000_000 / Math.max(1, unique.size));
+    for (const [fullKey, asset] of unique) {
+      const recipe = asset.art!;
+      const size = ART_SIZES[recipe.size];
+      const full = artSourceSize(recipe, 4096);
+      const scale = Math.min(1, 1024 / Math.max(size.width, size.height), Math.sqrt(cap / (size.width * size.height)));
+      const previewW = Math.max(1, Math.floor(size.width * scale));
+      const previewH = Math.max(1, Math.floor(size.height * scale));
+      const previewKey = asset.previewSrc || fullKey;
+      let source = old.get(fullKey);
+      if (!source) {
+        const canvas = this.doc.createElement('canvas');
+        canvas.width = previewW; canvas.height = previewH;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Could not create native artwork preview.');
+        source = { fullKey, previewKey, recipe, canvas, ctx, sourceW: full.width, sourceH: full.height,
+          previewW, previewH, animated: artIsAnimated(recipe), paintedTime: Number.NaN, seenFrame: -1 };
+      } else {
+        if (source.recipe !== recipe) source.paintedTime = Number.NaN;
+        source.recipe = recipe; source.fullKey = fullKey; source.previewKey = previewKey;
+        source.sourceW = full.width; source.sourceH = full.height;
+        source.previewW = previewW; source.previewH = previewH;
+        source.animated = artIsAnimated(recipe);
+        if (!this.offlineFullRes) this.resizeNativeSource(source, previewW, previewH);
+      }
+      next.push(source); kept.add(source);
+      aliases.set(fullKey, source); aliases.set(previewKey, source);
+    }
+    // Remove old aliases before publishing the new generation. A pending ordinary
+    // image decode cannot overwrite them because ensureStills checks its record.
+    for (const [key, source] of old) {
+      if (this.stills.get(key)?.img === source.canvas) this.stills.delete(key);
+    }
+    for (const source of this.nativeSources) {
+      if (!kept.has(source)) { source.canvas.width = 0; source.canvas.height = 0; }
+    }
+    this.nativeSources = next; this.nativeByKey = aliases;
+    this.artAnimated = next.some(source => source.animated);
+    for (const [key, source] of aliases) this.stills.set(key, { img: source.canvas, state: 'ready' });
+  }
+
+  private resizeNativeSource(source: NativeArtSource, width: number, height: number): void {
+    if (source.canvas.width !== width || source.canvas.height !== height) {
+      source.canvas.width = width; source.canvas.height = height;
+      source.paintedTime = Number.NaN;
+    }
+    this.stills.set(source.previewKey, { img: source.canvas, state: 'ready' });
+    this.stills.set(source.fullKey, { img: source.canvas, state: 'ready' });
+    this.adoptStill(source.previewKey, source.canvas);
+    if (source.fullKey !== source.previewKey) this.adoptStill(source.fullKey, source.canvas);
+  }
+
+  private restoreNativePreviews(): void {
+    for (const source of this.nativeSources) this.resizeNativeSource(source, source.previewW, source.previewH);
+  }
+
+  private paintNativeSource(key: string): void {
+    const source = this.nativeByKey.get(key);
+    if (!source || source.seenFrame === this.nativeFrame) return;
+    source.seenFrame = this.nativeFrame;
+    if (Number.isFinite(source.paintedTime) && (!source.animated || source.paintedTime === this.outTime)) return;
+    drawArt(source.ctx, source.canvas.width, source.canvas.height, source.recipe, this.outTime);
+    source.paintedTime = this.outTime;
+  }
+
+  private paintNativeSources(): void {
+    if (!this.nativeSources.length) return;
+    this.nativeFrame++;
+    for (let i = 0; i < this.items.length; i++) {
+      const item = this.items[i];
+      if (!item.clip) this.paintNativeSource(item.stillKey);
+      if (item.mix > 0 && item.stillKey2) this.paintNativeSource(item.stillKey2);
+    }
+  }
+
   private ensureStills(wanted: Set<string>): void {
     wanted.forEach((key) => {
       if (this.stills.has(key)) return;
+      const native = this.nativeByKey.get(key);
+      if (native) {
+        this.stills.set(key, { img: native.canvas, state: 'ready' });
+        this.adoptStill(key, native.canvas);
+        return;
+      }
       const rec: StillRecord = { img: null, state: 'loading' };
       this.stills.set(key, rec);
       const img = new Image();
@@ -3024,7 +3156,7 @@ export class Stage {
       let settled = false;
       const done = (): void => {
         // decode() and onload BOTH fire on success; adopt exactly once.
-        if (settled || this.destroyed) return;
+        if (settled || this.destroyed || this.stills.get(key) !== rec) return;
         settled = true;
         const w = img.naturalWidth || img.width;
         if (!w) { rec.state = 'error'; return; }
@@ -4958,7 +5090,7 @@ export class Stage {
    */
   private get isRolling(): boolean {
     if (this.offline || this.parked) return false;
-    if (this.moving || this.captionPlans.length > 0) return true;
+    if (this.moving || this.artAnimated || this.captionPlans.length > 0) return true;
     if (this.trackRolling) return true;
     const clips = this.liveClips;
     for (let i = 0; i < clips.length; i++) {
@@ -5038,6 +5170,9 @@ export class Stage {
     this.clips.clear();
     this.liveClips = [];
     this.items = [];
+    for (const source of this.nativeSources) { source.canvas.width = 0; source.canvas.height = 0; }
+    this.nativeSources = [];
+    this.nativeByKey.clear();
     this.stills.clear();   // the URLs belong to the caller; never revoked here
 
     if (this.host) { try { this.host.remove(); } catch { /* ignore */ } this.host = null; }

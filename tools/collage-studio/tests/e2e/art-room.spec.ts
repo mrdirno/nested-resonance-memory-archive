@@ -12,6 +12,7 @@ const ownedInstrument = `<!doctype html><html><body style="margin:0;background:#
 async function openRoom(page: Page) {
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
   await page.getByRole('button', { name: 'Art Room', exact: true }).click();
+  await page.getByRole('button', { name: 'Open an HTML instrument →', exact: true }).click();
   return page.getByRole('dialog', { name: 'Art Room', exact: true });
 }
 async function loadHTML(page: Page, html = ownedInstrument, name = 'owned-art.html') {

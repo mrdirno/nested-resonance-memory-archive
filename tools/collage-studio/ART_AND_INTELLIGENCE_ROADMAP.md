@@ -15,7 +15,8 @@ Keep the small browser editor useful everywhere. Offer heavier intelligence thro
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
 | Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
 | Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
-| Proposed | Downloaded browser transcription, native Mac handoff package, durable instrument provenance, deterministic renderer adapters, portable audiovisual projects, and authored sequences. |
+| C3711 implemented; release verification pending | Eight native art families, editable layered recipes, visibility/solo/blending, dice locks, parameter automation and exact-loop video duration. |
+| Proposed | Downloaded browser transcription, native Mac handoff package, third-party deterministic renderer adapters, global overlay/shot timelines, portable audiovisual projects, and authored sequences. |
 
 The implementation boundary is visible in the [caption module](src/lib/captions.ts), [project serialization](src/lib/project.ts), and [stage renderer](src/lib/stage.ts). Release status must come from deployment and real-page verification, not this roadmap.
 
@@ -49,7 +50,18 @@ A later compact arm64 package should use a pinned whisper.cpp worker with Metal,
 
 Acceptance requires a clean supported Mac installation, distribution/signing checks, decoder/model notices, a fresh offline process, cancellation/memory-pressure tests, and reviewed lyric/timing results. Imported SRT must survive Studio preview and exported-video inspection. Start with file handoff; a browser extension or localhost service adds no necessary value to that first release.
 
-## 3. Art Room: pixels before deterministic motion
+## 3. Art Room: native layers and imported instruments
+
+C3711 implements a template-first native rack with eight original families: Contour Atlas, Petal Engine, Orbit Press, Ribbon Choir, Branch Fans, Prism Garden, Woven Circuit and Satellite Dust. A rack holds up to eight ordered layers, each with its own seed, palette, visibility, dice lock, opacity, blend, geometry and automation. Solo preserves the other visibility flags. Global dice leaves locked and disabled layers unchanged. Layer edits have a bounded undo history; closing the room retains the draft for this session. Apply keeps an editable source in the composition; Save recipe downloads the working draft separately.
+
+Native recipes travel in `.collage`, SVG metadata and recovery with a matching opening-frame PNG. Updating an applied rack creates a new immutable asset ID and remaps its pins and crop, so recovery stores current pixels. The source selector reopens saved racks for editing. A rack is one procedural source with internal overlays; it is not yet a global overlay timeline above every collage fragment.
+
+One bounded Canvas renderer samples explicit output seconds in the room, the live Stage and offline video. Automation can change form, scale, rotation, opacity or drift, with amount, one to four cycles and phase across a 2–24 second loop. The export sheet offers the exact shared loop length. Static exports use time zero. Native source rasters sharpen on demand up to 4096 pixels per side and 16 MP; larger final artifacts scale that source. Identical pixels are checked within a fixed browser/rendering path; cross-device rasterization and encoded video are not promised byte-identical.
+
+The Vibe card source is 2066×1319 pixels, the current bleed canvas. Square, portrait and wide canvases are also available. These are source dimensions, not a guarantee that a downstream composition/export keeps the print trim or includes production bleed marks. The implementation ships original math and no third-party instrument engine or new runtime dependency. Recipe version 1 must retain its semantics; incompatible renderer changes require a new version or an explicit migration.
+
+HTML loading is secondary to the template gallery. Its current contract remains a still capture:
+
 
 The shipped player accepts user-selected self-contained HTML and supplies a real **Use this artwork** capture. **Show artwork** reveals a deferred canvas or Bifurcata grove so visibility-triggered rendering can start. Accept bounded PNG pixels through an isolated frame and authenticated private session, then use the normal image intake. Reject wrong-session, malformed, oversized, and stale captures; closing/replacing an instrument must retire its pending work. Demonstrate nonempty art, mobile controls, project reload, and blocked parent access/external resource requests as release gates. All passed for this release. The sandbox is for HTML the user owns or trusts; it does not promise universal containment of arbitrary code or every self-navigation.
 

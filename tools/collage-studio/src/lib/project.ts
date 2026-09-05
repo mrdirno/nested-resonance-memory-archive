@@ -2,6 +2,7 @@ import JSZip from 'jszip';
 import { AppState, ImageAsset, ProjectManifest } from '../types';
 import { readProject, readImageSources } from './svgProject';
 import { normalizeCaptionTrack } from './captions';
+import { normalizeArtRecipe } from './artRack';
 
 /**
  * Build the `.collage` archive as a Blob WITHOUT downloading it. Extracted from
@@ -31,7 +32,8 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
       // is why the load path still has a decode fallback.
       width: img.width,
       height: img.height,
-      analysis: img.analysis
+      analysis: img.analysis,
+      ...(img.art === undefined ? {} : { art: normalizeArtRecipe(img.art) }),
     };
   });
 
@@ -168,6 +170,13 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
     // replaced. A malformed track must refuse the file as a whole, not throw
     // later from the render after its photographs have already been adopted.
     if (manifest.captions !== undefined) manifest.captions = normalizeCaptionTrack(manifest.captions);
+    // Preflight the ENTIRE pool before any source URL is minted. A bad final
+    // recipe must not leave earlier images adopted, decoded or stranded.
+    if (!Array.isArray(manifest.images)) throw new Error('Invalid project image list');
+    for (const meta of manifest.images) {
+      if (!meta || typeof meta !== 'object') throw new Error('Invalid project image entry');
+      if (meta.art !== undefined) meta.art = normalizeArtRecipe(meta.art);
+    }
     
     const images: ImageAsset[] = [];
     const imgFolder = zip.folder("images");
@@ -224,7 +233,8 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
             originalName: meta.originalName || meta.filename,
             width: w,
             height: h,
-            analysis: meta.analysis
+            analysis: meta.analysis,
+            ...(meta.art === undefined ? {} : { art: meta.art }),
           });
         }
       }
@@ -305,6 +315,7 @@ const loadFromSVG = async (file: File): Promise<{state: AppState, images: ImageA
         width: el.naturalWidth,
         height: el.naturalHeight,
         analysis: meta.analysis,
+        ...(meta.art === undefined ? {} : { art: meta.art }),
       });
     }
 

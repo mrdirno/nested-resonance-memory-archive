@@ -3,6 +3,30 @@ import { ImageAsset } from '../types';
 import { TitlePlan, titlePlanFor, drawTitlePlan } from './title';
 import { cssFilterFor, type LookRef } from './grade';
 import { sampleMove, NO_MOVE } from './motion';
+import { ART_SIZES, type ArtRecipe } from './artRack';
+import { drawArt } from './artRackRenderer';
+
+/** Native sources can sharpen for export, independently of the artifact ceiling. */
+export function artSourceSize(art: ArtRecipe, wantedLongSide = 0): { width: number; height: number } {
+  const size = ART_SIZES[art.size];
+  const longest = Math.max(size.width, size.height);
+  const requested = Number.isFinite(wantedLongSide) ? Math.max(longest, wantedLongSide) : longest;
+  const scale = Math.min(requested / longest, 4096 / longest, Math.sqrt(16_000_000 / (size.width * size.height)));
+  return { width: Math.max(1, Math.floor(size.width * scale)), height: Math.max(1, Math.floor(size.height * scale)) };
+}
+
+/** Opening frame, rendered anew from the recipe; never a decoded thumbnail. */
+export function renderArtSource(art: ArtRecipe, wantedLongSide = 0): HTMLCanvasElement {
+  const size = artSourceSize(art, wantedLongSide);
+  const canvas = document.createElement('canvas');
+  canvas.width = size.width; canvas.height = size.height;
+  try {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Could not create the native artwork surface.');
+    drawArt(ctx, size.width, size.height, art, 0);
+    return canvas;
+  } catch (error) { canvas.width = 0; canvas.height = 0; throw error; }
+}
 
 export interface CropGeometry {
   sx: number; sy: number; sw: number; sh: number;
@@ -192,12 +216,32 @@ export const renderCanvas = async (
   const gradeCss = cssFilterFor(look);
   if (gradeCss !== 'none') ctx.filter = gradeCss;
 
+  // Repeated fragments share a source, with a bounded per-render raster cache.
+  const artSources = new Map<string, HTMLCanvasElement>();
+  let artPixels = 0;
+
+  try {
   for (let i = 0; i < layoutItems.length; i++) {
     const item = layoutItems[i];
     const imgData = orderedImages[i]; 
     if (!imgData) continue;
 
-    const img = await new Promise<HTMLImageElement>((resolve) => {
+    let img: HTMLImageElement | HTMLCanvasElement;
+    if (imgData.art) {
+      const key = imgData.src || imgData.id;
+      let source = artSources.get(key);
+      if (!source) {
+        const size = artSourceSize(imgData.art, Math.max(width, width / aspect));
+        const pixels = size.width * size.height;
+        while (artSources.size && artPixels + pixels > 16_000_000) {
+          const [oldKey, old] = artSources.entries().next().value!;
+          artPixels -= old.width * old.height; old.width = 0; old.height = 0; artSources.delete(oldKey);
+        }
+        source = renderArtSource(imgData.art, Math.max(width, width / aspect));
+        artSources.set(key, source); artPixels += source.width * source.height;
+      }
+      img = source;
+    } else img = await new Promise<HTMLImageElement>((resolve) => {
       const _i = new Image();
       _i.crossOrigin = 'anonymous';
       _i.onload = () => resolve(_i);
@@ -242,6 +286,10 @@ export const renderCanvas = async (
         ctx.stroke();
     }
     ctx.restore();
+  }
+
+  } finally {
+    for (const source of artSources.values()) { source.width = 0; source.height = 0; }
   }
 
   // The grade comes OFF before the caption. A title is something written on the

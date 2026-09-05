@@ -1,6 +1,7 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
 import type { CaptionTrack } from './lib/captions';
+import type { ArtRecipe } from './lib/artRack';
 import type { Desk, LookId } from './lib/grade';
 import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
@@ -48,9 +49,10 @@ export interface ImageAsset {
   width: number;
   height: number;
   analysis: AnalysisResult;
+  /** Native editable art. src/previewSrc retain its portable opening-frame PNG. */
+  art?: ArtRecipe;
   // --- provenance (optional; every consumer must tolerate their absence) -----
-  // NOTE: ProjectManifest below persists only id/storageFilename/originalName/
-  // analysis, so these three do NOT survive a .collage save/load round-trip.
+  // Video provenance below is session-only. Native `art` above is persisted.
   /** 'video' for a frame extracted from a clip. */
   sourceKind?: AssetSource;
   /** Filename of the clip a video frame came from. */
@@ -216,5 +218,7 @@ export interface ProjectManifest extends AppState {
     width?: number;
     height?: number;
     analysis: AnalysisResult;
+    /** Native art recipe; absent on ordinary photographs and legacy projects. */
+    art?: ArtRecipe;
   }[];
 }

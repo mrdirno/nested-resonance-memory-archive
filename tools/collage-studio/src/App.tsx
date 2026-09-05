@@ -27,10 +27,13 @@ import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt
 import { normalizeProjectLocks } from './lib/projectLocks';
 import { CaptionEditor } from './components/CaptionEditor';
 import { ArtRoom } from './components/ArtRoom';
+import { ArtRackRoom } from './components/ArtRackRoom';
+import { ART_SIZES, artIsAnimated, createDefaultArtRecipe, normalizeArtRecipe, type ArtRecipe } from './lib/artRack';
+import { drawArt } from './lib/artRackRenderer';
 import { createLyricDemo } from './lib/lyricDemo';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
-import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
+import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, preflightSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
 import type { AssetUrls } from './lib/session';
 import * as sessionStore from './lib/sessionStore';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -85,7 +88,9 @@ interface UploadOptions {
   /** Grow `count` so the new assets are actually visible on a non-empty canvas. */
   grow?: boolean;
   /** Per-file provenance, keyed by the File object itself. */
-  meta?: Map<File, AssetProvenance>;
+  meta?: Map<File, AssetProvenance & { art?: ArtRecipe }>;
+  /** Native artwork revisions have immutable ids and bytes in recovery. */
+  replaceId?: string;
   /** Noun for the progress strip ("images" / "frames"). */
   noun?: string;
   /**
@@ -164,6 +169,9 @@ const RAIL_COL_H = 16 + RAIL_BUTTONS * 44 + (RAIL_BUTTONS - 1) * 8 + 16;
 export default function App() {
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
   const [artRoomOpen, setArtRoomOpen] = useState(false);
+  const [artRoomMode, setArtRoomMode] = useState<'templates' | 'html'>('templates');
+  const [artDraft, setArtDraft] = useState<ArtRecipe>(createDefaultArtRecipe);
+  const [artSourceId, setArtSourceId] = useState<string | null>(null);
   const artRoomTriggerRef = useRef<HTMLButtonElement>(null);
   /**
    * FULL BLEED. The controls dock is `shrink-0` with no height cap, so every
@@ -1067,7 +1075,7 @@ export default function App() {
   // re-cuts every few seconds is exactly the case the still path cannot show —
   // it draws one frame — so it joins the terms that claim the live surface, for
   // the same reason THE MOVE did.
-  const liveMode = images.length > 0 && (clips.length > 0 || moving || turning || !!soundtrack || captions.cues.length > 0) && stageOk;
+  const liveMode = images.length > 0 && (clips.length > 0 || moving || turning || !!soundtrack || captions.cues.length > 0 || images.some(i => i.art && artIsAnimated(i.art))) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -1741,7 +1749,16 @@ export default function App() {
      */
     const commit = (batch: ImageAsset[]) => {
         if (!batch.length) return;
-        setImages(prev => [...prev, ...batch]);
+        if (opts.replaceId && batch.length === 1) {
+          const oldId = opts.replaceId, nextId = batch[0].id;
+          setImages(prev => prev.map(asset => asset.id === oldId ? batch[0] : asset));
+          setLockedCells(prev => new Map([...prev].map(([cell, id]) => [cell, id === oldId ? nextId : id])));
+          setFrames(prev => { const next = new Map(prev); const frame = next.get(oldId); next.delete(oldId); if (frame) next.set(nextId, frame); return next; });
+          setAssignNonce(n => n + 1);
+          // Old snapshots name immutable source ids; keep their layout history
+          // and remap the replaced source's pins to its new revision.
+          setHistory(h => ({ ...h, past: h.past.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]) })), future: h.future.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]) })) }));
+        } else setImages(prev => [...prev, ...batch]);
     };
 
     try {
@@ -2480,7 +2497,7 @@ export default function App() {
                   // The preview's source, carried so a revoked or undecodable
                   // original degrades to a softer fragment instead of a hole.
                   fallbackSrc: img.previewSrc || img.src,
-                  width: img.width, height: img.height, analysis: img.analysis,
+                  width: img.width, height: img.height, analysis: img.analysis, art: img.art,
               }) : null),
               // THE GRADE, as the id OR the five numbers — see `LookRef`. A plain
               // object crosses the structured clone the same way the title plan does,
@@ -2974,6 +2991,9 @@ export default function App() {
         if (!loaded) { await abandonSession('That session could not be restored.'); return; }
         applyLoadedProject(loaded);
       } else {
+        const entries = preflightSessionAssets(s.manifest.images);
+        if (!entries) throw new Error('Invalid art in the saved session.');
+        s.manifest.images = entries;
         const urlById: Record<string, AssetUrls> = {};
         for (const [id, a] of Object.entries(s.assets)) {
           const src = URL.createObjectURL(a.full);
@@ -3085,9 +3105,36 @@ export default function App() {
           recording indicator both live in the dock that full bleed hides, and
           Cmd-E still reaches this dialog while maximized because the Header
           stays mounted under `display:none`. */}
-      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); void flushSession(); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
+      <ExportDialog artLoopSeconds={images.length && images.every(i => i.art && i.art.duration === images[0].art?.duration) ? images[0].art?.duration : undefined} canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); void flushSession(); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
-      {artRoomOpen && <ArtRoom open onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
+      {artRoomOpen && artRoomMode === 'templates' && <ArtRackRoom recipe={artDraft} onChange={setArtDraft}
+        sourceId={images.some(i => i.id === artSourceId && i.art) ? artSourceId : null}
+        sources={images.filter(i => i.art).map(i => ({ id: i.id, name: i.originalName || 'Art rack', recipe: i.art! }))}
+        onSource={id => { setArtSourceId(id); setArtDraft(id ? normalizeArtRecipe(images.find(i => i.id === id)?.art) : createDefaultArtRecipe()); }}
+        onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
+        onHtml={() => setArtRoomMode('html')}
+        busy={demoBusy || exportStatus === 'processing' || captionRecording || restoring}
+        onApply={async (recipe, isCurrent) => {
+          if (!isCurrent()) return;
+          if (demoBusyRef.current || ingestRef.current.total > 0 || projectReadBusyRef.current > 0 || recorderRef.current?.isRecording || exportStatus === 'processing' || restoring) throw new Error('Let the current import or export finish, then apply the artwork.');
+          const snapshot = normalizeArtRecipe(recipe), size = ART_SIZES[snapshot.size];
+          const canvas = document.createElement('canvas'); canvas.width = size.width; canvas.height = size.height;
+          const ctx = canvas.getContext('2d'); if (!ctx) throw new Error('Could not create artwork pixels.');
+          let blob: Blob;
+          try { drawArt(ctx, size.width, size.height, snapshot, 0); blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error('Could not encode artwork.')), 'image/png')); }
+          finally { canvas.width = canvas.height = 0; }
+          if (!isCurrent()) return;
+          const file = new File([blob], `Art rack · ${snapshot.layers.length} layers.png`, { type: 'image/png' });
+          const replaceId = images.some(i => i.id === artSourceId && i.art) ? artSourceId! : undefined;
+          beginIngest(1, 'Applying artwork…');
+          const loaded = await handleUpload([file], { geometryOnly: true, idPrefix: 'rack', noun: 'artwork', shouldCommit: isCurrent, replaceId, meta: new Map([[file, { art: snapshot }]]) });
+          if (!isCurrent()) return;
+          if (!loaded.length) throw new Error('The artwork could not be decoded. Your current artwork is unchanged.');
+          setArtSourceId(loaded[0].id);
+          if (!images.length) { setLayoutMode('minimal'); setPrimitive('rect'); setAspect(size.width / size.height); setGutter(0); setEntropy(0); setMove('still'); setTurn('hold'); setTwist('none'); setLook('none'); setAdjust(null); }
+          flashNotice('Editable art and its animation are ready. Save a project to keep the layers.');
+        }} />}
+      {artRoomOpen && artRoomMode === 'html' && <ArtRoom open onTemplates={() => setArtRoomMode('templates')} onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
         busy={demoBusy || exportStatus === 'processing' || captionRecording || restoring}
         onImport={async (file, isCurrent) => {
           if (!isCurrent()) return;
@@ -3593,7 +3640,7 @@ export default function App() {
              <button onClick={()=>{ setActiveTab('simple'); setCaptionPanel(false); }} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
              <button onClick={()=>{ setActiveTab('advanced'); setCaptionPanel(false); }} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
              <button onClick={() => setCaptionPanel(true)} disabled={!images.length} aria-label="Lyrics & captions" aria-pressed={captionPanel} className={`flex-1 min-h-[48px] px-2 text-xs font-medium ${captionPanel ? 'text-amber-200 bg-[#1a1a1a] border-t-2 border-amber-300' : 'text-gray-400 hover:text-white'} disabled:opacity-40`}>Lyrics</button>
-             <button ref={artRoomTriggerRef} type="button" onClick={() => setArtRoomOpen(true)} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring} className="flex-1 min-h-[48px] px-2 text-xs font-medium text-cyan-200 hover:bg-white/5 disabled:opacity-40">Art Room</button>
+             <button ref={artRoomTriggerRef} type="button" onClick={() => { setArtRoomMode('templates'); setArtRoomOpen(true); }} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring} className="flex-1 min-h-[48px] px-2 text-xs font-medium text-cyan-200 hover:bg-white/5 disabled:opacity-40">Art Room</button>
          </div>
          {images.length > 0 && <div
            className="min-h-0 flex-1 overflow-hidden"

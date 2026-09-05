@@ -1,7 +1,7 @@
 // src/engine/color/vectorExport.ts
 import { LayoutItem, createRng } from '../../lib/layout';
 import { ImageAsset, AppState } from '../../types';
-import { calculateSmartCrop } from '../../lib/renderer';
+import { calculateSmartCrop, renderArtSource } from '../../lib/renderer';
 import { TitlePlan, titlePlanFor, titlePlanToSvg } from '../../lib/title';
 import { svgFilterFor, svgFilterAttrFor, type LookRef } from '../../lib/grade';
 import { projectMetadata, metaForAsset, srcIdAttr } from '../../lib/svgProject';
@@ -85,6 +85,19 @@ ${projectMetadata(fullState ?? null, sourcePool.map(metaForAsset))}  <defs>
   /** Which pool ids already have their bytes in the file. Drawn twice = written
    *  once as far as the READER is concerned; the undrawn sweep below reads it. */
   const embedded = new Set<string>();
+  const artData = new Map<string, string>();
+  const sourceData = async (asset: ImageAsset): Promise<string> => {
+    if (!asset.art) return blobToBase64(asset.src ?? '');
+    const key = asset.src || asset.id;
+    const found = artData.get(key);
+    if (found) return found;
+    const source = renderArtSource(asset.art, Math.max(width, width / aspect));
+    try {
+      const png = source.toDataURL('image/png');
+      if (!png.startsWith('data:image/png;')) throw new Error('Could not encode native artwork.');
+      artData.set(key, png); return png;
+    } finally { source.width = 0; source.height = 0; }
+  };
 
   for (let i = 0; i < layoutItems.length; i++) {
     const item = layoutItems[i];
@@ -103,7 +116,7 @@ ${projectMetadata(fullState ?? null, sourcePool.map(metaForAsset))}  <defs>
     const finalW = imgData.width * scale;
     const finalH = imgData.height * scale;
 
-    const base64 = await blobToBase64(imgData.src);
+    const base64 = await sourceData(imgData);
 
     // TWIST — a NESTED group, deliberately. Putting the rotation on the same
     // element that carries `clip-path` would rotate the clip along with the
@@ -165,7 +178,7 @@ ${projectMetadata(fullState ?? null, sourcePool.map(metaForAsset))}  <defs>
     svg += `  <defs id="collage-sources">
 `;
     for (const a of undrawn) {
-      const b64 = await blobToBase64(a.src ?? '');
+      const b64 = await sourceData(a);
       if (!b64) continue;
       svg += `    <image${srcIdAttr(a.id)} xlink:href="${b64}" width="1" height="1" />
 `;

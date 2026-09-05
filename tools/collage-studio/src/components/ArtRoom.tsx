@@ -6,13 +6,14 @@ import { ART_ROOM_STARTER_HTML, ART_ROOM_STARTER_NAME } from '../lib/artRoomStar
 export interface ArtRoomProps {
   open: boolean;
   onClose: () => void;
+  onTemplates?: () => void;
   onImport: (file: File, isCurrent: () => boolean) => Promise<void>;
   busy?: boolean;
 }
 const control = 'min-h-[44px] rounded-lg border border-white/20 bg-[#1c272c] px-3 py-2 text-sm text-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300 disabled:cursor-not-allowed disabled:opacity-40';
 const button = `${control} hover:bg-white/10`;
 
-export const ArtRoom: React.FC<ArtRoomProps> = ({open,onClose,onImport,busy=false}) => {
+export const ArtRoom: React.FC<ArtRoomProps> = ({open,onClose,onImport,busy=false,onTemplates}) => {
   const titleId = useId(), dialogRef = useRef<HTMLDialogElement>(null), mountRef = useRef<HTMLDivElement>(null), fileRef = useRef<HTMLInputElement>(null);
   const sessionRef = useRef<ArtRoomSession | null>(null), generationRef = useRef(0), readRef = useRef(0), capturingRef = useRef(false), refreshingRef = useRef(false);
   const openRef = useRef(open), busyRef = useRef(busy), onImportRef = useRef(onImport), onCloseRef = useRef(onClose);
@@ -95,7 +96,7 @@ export const ArtRoom: React.FC<ArtRoomProps> = ({open,onClose,onImport,busy=fals
     <div className="flex h-full min-h-0 flex-col">
       <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
         <div><h2 id={titleId} className="text-lg font-medium text-white">Art Room</h2><p className="text-xs text-gray-400">Play an instrument. Keep a moment.</p></div>
-        <button type="button" className={button} onClick={close} aria-label="Close Art Room">Close</button>
+        <div className="flex gap-2">{onTemplates&&<button type="button" className={button} onClick={()=>{openRef.current=false;retire();dialogRef.current?.close();onTemplates();}}>Templates</button>}<button type="button" className={button} onClick={close} aria-label="Close Art Room">Close</button></div>
       </header>
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4">
         <div className="mb-3 flex flex-wrap items-center gap-2">
