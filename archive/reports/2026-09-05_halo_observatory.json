@@ -1154,5 +1154,148 @@
     "instrument": "Filtered standalone push/PR/manual workflow; release and physics on separate workers, all suites sequential within each group.",
     "pages": "No HALO job in the Pages concurrency group. Actual canonical HALO and all prior public/build paths still trigger deployment.",
     "assertions": "No retries, forced clicks, dropped numerical assertions or production changes."
+  },
+  "hostedValidation": {
+    "commit": "bcb323e01c24a6d54533f8bf5bb135b7d5f014bd",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33955862162",
+    "physics": {
+      "startedAt": "2026-09-05T08:40:14.611Z",
+      "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+      "testPageSha256": "ac3213a471dba0d0370448f200bbffa5b3767bf92dcd81efae0630cc0ff0d48c",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "physics",
+      "results": [
+        {
+          "test": "integ_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 81.76,
+          "passed": true
+        },
+        {
+          "test": "mesh_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 100.036,
+          "passed": true
+        },
+        {
+          "test": "conserve_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 174.224,
+          "passed": true
+        },
+        {
+          "test": "dimer_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 49.431,
+          "passed": true
+        },
+        {
+          "test": "bench_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 89.699,
+          "passed": true
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T08:48:29.765Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": true
+    },
+    "release": {
+      "startedAt": "2026-09-05T08:40:10.964Z",
+      "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+      "testPageSha256": "ac3213a471dba0d0370448f200bbffa5b3767bf92dcd81efae0630cc0ff0d48c",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "release",
+      "results": [
+        {
+          "test": "tick_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 19.812,
+          "passed": true
+        },
+        {
+          "test": "observation_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 23.303,
+          "passed": true
+        },
+        {
+          "test": "lab_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 303.251,
+          "passed": true
+        },
+        {
+          "test": "smoke.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 432.175,
+          "passed": true
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T08:53:09.509Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": true
+    },
+    "conclusion": "success",
+    "totalSuites": 9,
+    "allReceiptsMatchPublishedSource": true,
+    "labActivationHandlerMs": 5379.3,
+    "labActivationActionMs": 10789,
+    "uiSmokeParticles": 20000,
+    "uiSmokeTextureSize": 142
+  },
+  "currentDeployment": {
+    "commit": "bcb323e01c24a6d54533f8bf5bb135b7d5f014bd",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33955862126",
+    "conclusion": "success",
+    "canonicalSourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea"
+  },
+  "supersededRun": {
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33954624762",
+    "conclusion": "cancelled",
+    "reason": "Its build and deployment had succeeded; the remaining old smoke workload was superseded by the corrected standalone instrument run. Cancellation is not a passing test."
+  },
+  "finalHttpVerification": {
+    "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+    "status": 200,
+    "bytes": 537350,
+    "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+    "verifiedAt": "2026-09-05T08:55:29.924534+00:00"
+  },
+  "archiveFinalBoundary": {
+    "runtimeCodeCommit": "666630d13d73f22b11058bfd346603076abf824a",
+    "ciUrl": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33955521664",
+    "tests": 13,
+    "lifecycleEntries": 17,
+    "unclassifiedPaths": 0,
+    "detectedPrivateArtifacts": 0,
+    "removedPrivatePaths": 19,
+    "historicalGitObjectsRewritten": false,
+    "scope": "Classification and bounded publication signatures, not certification of every project."
+  },
+  "inputIntegrity": {
+    "commit": "11a80f77",
+    "receipt": "2026-09-05_halo_memory_input_integrity.json",
+    "files": 18,
+    "runs": 9,
+    "cells": 7077888,
+    "positiveEpochTotals": 216,
+    "passed": true,
+    "scientificInference": false
   }
 }
