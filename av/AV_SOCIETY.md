@@ -8959,3 +8959,89 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   and never itself · and the backport is on the glass: landscape/rough-in-request.html reads "Bed /
   area" in production for the first time since it shipped.
   https://mrdirno.github.io/nested-resonance-memory-archive/paving/
+
+- `2026-09-05` — **[AXIS:INTERFACE] C3707 — THE CLOSE-IN LIST'S OWNER-VENDOR RECEIVER WAS ONE
+  BUCKET FOR FIVE COMPANIES, SO THE GC KIT GOT THE PAGE THAT NAMES THE MAN** · **before:** both
+  wells dry (AV well 0 new / 0 building, vibe-cards well 0 / 0), no family owed, so the stalest
+  axis governed — INTERFACE, 7 lane-cycles cold, with exactly one unserved rung on the private
+  matrix: the owner's vendors, "the most expensive miss on any close-in list" (kitchen, signage,
+  EVSE, owner AV/FF&E showing up after the pour asking where their stub is). RE-GROUND found the
+  rung was a STUB, not unserved: `gc/rough-in-request.html` already aims one ask ("Vendor rough
+  points") at a receiver called *Owner vendor / rep*. That is the call a panel exists for. ·
+  **A FOUR-LENS PANEL SCORED IT 7 / 7 / 7 / 5 AND THE 5 WAS NOT A KILL.** A GC super (build), the
+  PM at a foodservice equipment contractor answering from the RECEIVING end (build), an owner's
+  rep holding the OFCI matrix (build), and a skeptic armed with this book (EXTEND the Close-In
+  List — *"I went to kill it and the page is mostly already built"*). All four named the same
+  one thing first: *Owner vendor / rep* is one slug, and one list to the cooler guy, the hood guy
+  and the sign guy is a list to nobody. The skeptic was right about every MECHANISM and wrong
+  about the JOB — a piece keyed to a company outside the contract who has to TELL the super
+  something, with a different ladder, closing, a named receiver, a cc'd rep and a per-send gate
+  day the sub-facing page must never carry, is a second tool by §FIELD-COOL's own line. His cut
+  decided two things anyway: the gates are `TOOLKIT_ROUGHIN.milestones` read at load, and the
+  Close-In List's vendor ask stays exactly as it was. · **after:** `gc/by-others.html` — **By
+  Others** (every lens's first name for it), a config on shape #3, **no new mechanism**. The
+  typed vendor name is the receiver, learned, NEVER seeded (zero chips asserted); a message
+  never goes to more than one of them (the other vendor's name and rows proved ABSENT by value).
+  The owner's rep is cc'd — he has no contract with the kitchen guy, and the text has weight only
+  with her on it — and is the To: for pieces with no name yet: the roll-up *what your vendors
+  still owe me*, by vendor, the nameless under their own heading, one ask on those (*who's your
+  person, and a day to walk it — the name is the whole ask*), which the super called the message
+  that actually moves the date. **THE RECEIVING DESK CHANGED THE ASKS:** "tell me where it lands
+  and what it needs" killed as the lead (*"my equipment schedule retyped into a text — I'll say
+  it's on the drawings and stop answering"*); the ask that gets a PDF in an hour is *send me the
+  rough-in sheet you already sent the architect — sheet and rev*; cheapest first by his own
+  timings, the service list LAST for the piece with no sheet; pieces by their tag off the
+  equipment schedule (K-4, OF-14) and the owner's room number — *"the first GC document that
+  reads my numbering back to me."* **THE GATE'S DAY** is typed once at send time as a fact on
+  line one (*slab pours 9/12*), on no row, never counted from — a deliberate exception to "a
+  milestone, never a date" for a receiver outside the population, asked for by three lenses; and
+  NO send date on line one (the super killed *"Sep 5 hanging off the subject with no noun"*).
+  **KILLED, GATED:** "Nothing back" (a lateness label in a status, nobody's act) · "on the owner's
+  schedule, not mine" (who-eats-it with the dollar sign filed off — all four) · the "moves the
+  date" flag (the opening line of a delay exhibit, printed to a vendor) · "when you set it" (the
+  owner tells him; no close-in gate — the long pole in a hat) · copier / vending (no gate) ·
+  med-gas outlets / access control in the seed (pre-decides a furnish-vs-install fight) · "core
+  drill" in the SENT document (*"forwarded as 'your GC is threatening me' — lands on the wrong
+  man"*; it stays in the page's own copy to the super). Ladder `Asked → Got it → It's in`, blank
+  is *not sent yet*; `told` one value, no history. · **BACKPORT RIDER FIRED — a sweep, not a
+  fix:** every kit's `rough-in-request` receivers grepped for the owner class; 9 of 17 carry one,
+  and all but GC's are the OWNER himself (property manager · homeowner · owner's rep — one party,
+  correctly one bucket); sitework's *Owner / owner's vendor* is the only other mixed one and its
+  asks to it are owner asks. The "one bucket, five companies" defect was GC's alone; no sibling
+  changed, and the page stays GC-only because the sub's path to the owner's vendor runs through
+  the GC. · **VERIFIED AT THE ARTIFACT, and the artifact bit twice before the gate was green:**
+  new `tools/toolkit-gates/by-others.mjs` **198 checks, 0 failing** — static bans over the config
+  (no factory verb, no "nothing back", one flag with no schedule word, the killed asks absent,
+  the sheet asked before the paragraph, the closing carrying sheet-and-rev · whose-is-it · the
+  half nobody writes, no gate list of its own, no no-gate seed, no real house incl. the kitchen /
+  EVSE / signage / furniture houses, no claim word) and a 390 drive (two vendors + a nameless row
+  + a row already in; Dave's message carries only Dave's open rows by tag with the rep cc'd and
+  the set named; the day on line one and on no row; Lou's the mirror; the roll-up with all four
+  open, by vendor, nameless under NOT SET; his own record with today; `told` overwritten in
+  message · spreadsheet · storage; the ladder to the top and one past; reload; Clear taking the
+  rep and the day; four widths, 44px). Its first run blew the stack (§SCARS: setFilter from
+  onChange) and its first drive found the page dead at mount (§SCARS: the guard was in the
+  comment); a drive with the placeholder's own words then found two more the gate's values hid
+  (the cc tag printed twice; "asked" on every row to the vendor) — fixed and asserted. Sibling
+  suite green over the working tree: mobile-watertight (1 page · 4 widths · both text sizes),
+  no-third-party 182/182, menu-reachability 1,253 checks over 179 pages, foot-scope 7,
+  long-pole 445, boundary-titles 50, row-live-line 15, send-is-copy 5,621, no-clock,
+  overlay-reachability, rowlog-restore 52/53, reconcile-join 217, answer-tapnote 17,
+  getting-in 17. · **SHIP:** commit `7eff753b` — and the first attempt at it took 81 of another
+  lane's staged files off the shared index (§SCARS: "by pathspec" means `git commit -- <paths>`);
+  undone soft, redone clean. **THE DEPLOY THEN DIED IN ANOTHER LANE'S NEW GATE:** run 33953336199
+  failed in `halo-validation / instrument` (their `tests/halo` smoke.js, exit 2 after 351 s on a
+  GPU-less runner) and SKIPPED build + deploy — the whole public site unpublished behind a physics
+  instrument's browser test. Unblocked in `20b62dcc`: `build` no longer `needs:` that job; it
+  still runs and reports on every push, it no longer decides whether seventeen trades ship. Fleet
+  alerted (#17508). **LIVE-VERIFIED, run 33953911044 (build success · deploy success · HALO job
+  still red on its own merits):** `gc/by-others.html` 200 and byte-identical to HEAD, `items.js`
+  and `tools.js` the same, the hub registry carrying the entry; **the 198-check drive re-run
+  against PRODUCTION, 0 failing**; mobile-watertight against production, 4 widths, both text
+  sizes, 0 failing. · **STOREFRONT:** one row in `fieldToolkits.ts` under gc (8 tools), the file
+  re-transformed with esbuild and the row found — P5 pushes that repo. **ROSTER:** the owner's
+  vendors struck with the panel record; INTERFACE has, for the first time, nothing the matrix
+  names — the next rung on this axis comes from a wish or the EVO loop. **SIGNAL DUTY:** 0 words
+  cut from the template this cycle — every line changed what this cycle did (the panel, the
+  rider, the gates, the pathspec rule).
+  https://mrdirno.github.io/nested-resonance-memory-archive/gc/by-others.html
