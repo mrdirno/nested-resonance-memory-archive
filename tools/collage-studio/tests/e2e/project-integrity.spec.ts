@@ -30,9 +30,10 @@ async function boot(page: Page) {
     join(HERE, '../fixtures/img_a.jpg'), join(HERE, '../fixtures/img_b.jpg'),
   ]);
   await expect(cells(page).first()).toBeVisible({ timeout: 60_000 });
-  await page.getByRole('button', { name: 'Settings', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Layout', exact: true }).click();
+  await page.getByRole('button', { name: 'Canvas & crop', exact: true }).click();
   await page.getByRole('button', { name: 'Balanced', exact: true }).click();
-  await page.getByRole('button', { name: 'Layout', exact: true }).click();
+  await page.getByRole('button', { name: 'Close editing panel', exact: true }).click();
   await expect(page.locator('.animate-spin')).toHaveCount(0, { timeout: 15_000 });
 }
 

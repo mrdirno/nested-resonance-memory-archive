@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Download, Check, AlertCircle, Loader2, ScanFace, Ruler, FolderOpen, RefreshCw, MessageSquarePlus
+  Download, Check, AlertCircle, Loader2, ScanFace, Ruler, FolderOpen, RefreshCw, MessageSquarePlus, Maximize2
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -11,6 +11,8 @@ interface HeaderProps {
   hasImages: boolean;
   onSaveProject: () => void;
   onLoadProject: () => void;
+  onPreview?: () => void;
+  previewButtonRef?: React.RefObject<HTMLButtonElement>;
   /**
    * WHY THE LAST OPEN DID NOTHING. `loadProject` fails closed — a file it cannot
    * reopen EXACTLY is refused rather than half-opened — and a refusal that shows
@@ -24,14 +26,12 @@ interface HeaderProps {
 /**
  * Instrument chrome: one row, 44px targets, top safe-area honoured.
  *
- * Deliberately still in normal flow rather than overlaid on the canvas — the
- * canvas layer owns an absolutely-positioned button cluster in its top-right
- * corner, and floating this bar would land on top of it. The canvas wins its
- * space back from the capped control dock instead (see .ui-dock).
+ * Kept outside the measured artwork band. The header, compact transport and
+ * taskbar reserve their own space; the composition fits what remains.
  */
 export const Header: React.FC<HeaderProps> = ({
   aiState, exportStatus, exportMsg, onExport, hasImages,
-  onSaveProject, onLoadProject, openError = null
+  onSaveProject, onLoadProject, openError = null, onPreview, previewButtonRef
 }) => {
 
   // Desktop shortcuts. Costs no layout space, and gives onSaveProject a home
@@ -98,15 +98,16 @@ export const Header: React.FC<HeaderProps> = ({
             /collage/wish-it-better.json now names THIS page as the channel. This
             button is rendered at runtime, so index.html carries the same marker on
             the well's static config for the sweep, which reads the document text. */}
-        <button
+        {!hasImages && <button
           data-wish-well
+          aria-label="Feedback"
           onClick={() => (window as any).Feedback?.open('bug')}
           className="ui-btn ui-btn--quiet ui-btn--compact"
           title="Report a bug, wish it better, or ask for a feature — it goes straight to the loop that builds this"
         >
           <MessageSquarePlus size={15} />
           <span>Feedback</span>
-        </button>
+        </button>}
 
         <button
           onClick={onLoadProject}
@@ -138,6 +139,10 @@ export const Header: React.FC<HeaderProps> = ({
           {openError ? <AlertCircle size={15} /> : <FolderOpen size={15} />}
           <span>Open</span>
         </button>
+
+        {hasImages && onPreview && <button type="button" ref={previewButtonRef}
+          onClick={onPreview} aria-label="Expand preview" title="Expand preview (F)"
+          className="ui-btn ui-btn--quiet ui-btn--compact studio-header-preview"><Maximize2 size={18}/></button>}
 
         {hasImages && (
           <button

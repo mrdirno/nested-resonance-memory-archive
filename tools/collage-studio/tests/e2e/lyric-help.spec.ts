@@ -20,7 +20,7 @@ const LINKS = [
 async function prepareDraft(page: Page) {
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
   await page.locator('input[type=file][accept="image/*,video/*"]').setInputFiles(path.resolve('tests/fixtures/img_a.jpg'));
-  await page.getByRole('button', { name: 'Lyrics & captions', exact: true }).click();
+  await page.getByRole('button', { name: 'Text', exact: true }).click();
   await page.getByLabel('Import caption file', { exact: true }).setInputFiles({ name: 'help-check.srt', mimeType: 'application/x-subrip', buffer: Buffer.from(SRT) });
   await page.getByRole('button', { name: 'Edit caption 1: ORIGINAL WORDS', exact: true }).click();
   await page.getByLabel('Caption text', { exact: true }).fill('UNSAVED CUE WORDS');

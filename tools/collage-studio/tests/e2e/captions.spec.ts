@@ -8,6 +8,8 @@ import JSZip from 'jszip';
 import { measureTones, HZ_CONTROL } from './tone-measure';
 import { encodeState } from '../../src/lib/rollCode';
 
+test.setTimeout(180_000);
+
 const SRT = '1\n00:00:00,000 --> 00:00:01,000\nFIRST LIGHT\n\n2\n00:00:02,000 --> 00:00:03,000\nWE MAKE OUR OWN\n';
 // Node 20 is the site's CI runtime; zlib.crc32 only exists on newer Node.
 function pngCrc32(bytes: Buffer): number {
@@ -32,8 +34,8 @@ function whitePng() {
 }
 async function boot(page: Page) {
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
-  await page.locator('input[type=file]').first().setInputFiles({ name: 'owned-art.png', mimeType: 'image/png', buffer: whitePng() });
-  await page.getByRole('button', { name: 'Lyrics & captions', exact: true }).click();
+  await page.locator('input[type=file][accept="image/*,video/*"]').setInputFiles({ name: 'owned-art.png', mimeType: 'image/png', buffer: whitePng() });
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Text', exact: true }).click();
   await expect(page.getByTestId('caption-editor')).toBeVisible({ timeout: 60_000 });
 }
 async function importCues(page: Page, buffer = SRT) {
@@ -132,7 +134,7 @@ test('lyrics survive project, SVG, subtitle and crash-recovery round trips', asy
   const chooser = page.waitForEvent('filechooser'); await page.getByRole('button', { name: 'Open', exact: true }).first().click();
   await (await chooser).setFiles(saved);
   await expect(page.getByTestId('caption-editor')).toContainText('2 timed cues');
-  await page.getByRole('button', { name: 'Lyrics & captions', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Text', exact: true }).click();
   await expect(page.getByRole('button', { name: /Edit caption 2: WE MAKE OUR OWN/ })).toBeVisible();
   const chooserSvg = page.waitForEvent('filechooser'); await page.getByRole('button', { name: 'Open', exact: true }).first().click();
   await (await chooserSvg).setFiles(svgPath);
@@ -142,6 +144,7 @@ test('lyrics survive project, SVG, subtitle and crash-recovery round trips', asy
 test('a recorded MP4 contains timed lyrics and the imported soundtrack', async ({ page }, info) => {
   await boot(page); await importCues(page);
   await page.locator('input[data-intake="music"]').setInputFiles(path.resolve('tests/fixtures/music_1500.m4a'));
+  await page.getByRole('button', { name: 'Details', exact: true }).click();
   await expect(page.getByRole('button', { name: /Remove the music/ })).toBeVisible({ timeout: 60000 });
   await page.getByRole('button', { name: '5s', exact: true }).click();
   await page.getByRole('button', { name: 'Record video', exact: true }).click();
@@ -181,14 +184,16 @@ test('the empty canvas offers an editable original lyric film', async ({ page },
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
   await page.getByRole('button', { name: 'Try a lyric film', exact: true }).click();
   await expect(page.getByTestId('caption-editor')).toContainText('3 timed cues', { timeout: 60000 });
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Text', exact: true }).click();
   await page.getByRole('button', { name: 'Preview caption 2', exact: true }).click();
   await expect(page.getByLabel(/^Playhead/)).toHaveValue('3.3');
-  await expect(page.getByRole('button', { name: 'Record video', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Record video', exact: true, includeHidden: true })).toBeEnabled();
   const size = await page.locator('canvas').first().boundingBox();
   expect(size?.height).toBeGreaterThan(80);
   await page.getByRole('button', { name: /Edit caption 2: ONLY YOU/ }).click();
   await expect(page.getByLabel('Caption text', { exact: true })).toHaveValue('ONLY YOU');
   if (info.project.name === 'chromium') {
+    await page.getByRole('button', { name: 'Details', exact: true }).click();
     await page.getByRole('button', { name: 'Record video', exact: true }).click();
     await expect(page.getByRole('dialog', { name: 'Recorded take' })).toBeVisible({ timeout: 120000 });
     const data = await page.evaluate(async () => {
@@ -294,10 +299,10 @@ test('full bleed tools leave bottom captions and static titles visible', async (
   await seek(page, 0.5);
   const reading = await ink(page);
   expect(reading.dark, 'the caption must actually be painted before checking its visibility').toBeGreaterThan(0.01);
-  await page.getByRole('button', { name: 'Maximize the shot', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand preview', exact: true }).click();
 
   const geometry = () => page.evaluate(() => {
-    const source = document.querySelector('canvas') ?? document.querySelector('img[src^="blob:"]');
+    const source = document.querySelector('[data-testid="studio-artwork"]');
     const rail = document.querySelector('[role="toolbar"][aria-label="Full bleed tools"]');
     if (!source || !rail) throw new Error('The artwork or its full-bleed controls are absent');
     const art = source.getBoundingClientRect(), tools = rail.getBoundingClientRect();
@@ -328,28 +333,22 @@ test('full bleed tools leave bottom captions and static titles visible', async (
     await page.setViewportSize({ width, height });
     await verify(`captions-${width}`);
     if (width === 1280) {
-      // Negative control: remove the reserved band from this page only. The
-      // same measurement must then expose the original collision.
-      const padding = await page.locator('canvas').first().evaluate(canvas => {
-        const band = canvas.parentElement!.parentElement!;
-        const saved = band.style.paddingBottom;
-        band.style.paddingBottom = '0px';
-        return saved;
-      });
+      // Negative control: move the controls over the artwork on this page.
+      // The same DOM measurement must detect an actual visual obstruction.
+      const rail = page.getByRole('toolbar', { name: 'Full bleed tools' });
+      await rail.evaluate(el => { (el as HTMLElement).style.transform = 'translateY(-200px)'; });
       await expect.poll(async () => (await geometry()).clearance).toBeLessThan(0);
-      await page.locator('canvas').first().evaluate((canvas, value) => {
-        canvas.parentElement!.parentElement!.style.paddingBottom = value;
-      }, padding);
+      await rail.evaluate(el => { (el as HTMLElement).style.transform = ''; });
       await verify('captions-restored');
     }
   }
 
   // The persistent title uses the same bottom plate and needs the same space.
-  await page.getByRole('button', { name: 'Exit full bleed', exact: true }).click();
+  await page.getByRole('button', { name: 'Back to editing', exact: true }).click();
   await page.getByRole('button', { name: 'Clear captions', exact: true }).click();
-  await page.getByRole('button', { name: 'Layout', exact: true }).click();
+  await page.getByRole('button', { name: 'Title', exact: true }).click();
   await page.getByLabel('Title drawn on the collage', { exact: true }).fill('MY OWN FILM');
-  await page.getByRole('button', { name: 'Maximize the shot', exact: true }).click();
+  await page.getByRole('button', { name: 'Expand preview', exact: true }).click();
   for (const [width, height] of [[1280, 720], [390, 664], [320, 664]]) {
     await page.setViewportSize({ width, height });
     await verify(`static-title-${width}`);

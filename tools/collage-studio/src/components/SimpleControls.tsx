@@ -14,6 +14,7 @@ import { SYNCS, beatsLabel, type SyncId, type BeatGrid } from '../lib/beat';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
+  section?: 'all' | 'layout' | 'look' | 'motion' | 'title';
   layoutMode: LayoutMode;
   setLayoutMode: (m: LayoutMode) => void;
   primitive: PrimitiveType;
@@ -135,7 +136,7 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 ];
 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
-  layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
+  section = 'all', layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice, onColourDice,
   holdFrame = false, onHoldFrame, lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
@@ -155,6 +156,10 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
    * part of the composition, it does not travel in a code and reopening the app
    * should not put a panel back on the screen.
    */
+  const layoutSection = section === 'all' || section === 'layout';
+  const lookSection = section === 'all' || section === 'look';
+  const motionSection = section === 'all' || section === 'motion';
+  const titleSection = section === 'all' || section === 'title';
   const [deskOpen, setDeskOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
   const [pasted, setPasted] = React.useState('');
@@ -249,32 +254,15 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   return (
     <div className="ui-dock">
 
-      {/* ---- persistent caption: the whole panel state in one mono line ---- */}
-      {hasImages ? (
-        <div className="ui-readout" aria-live="polite">
-          <span><b>{activeLabel.toUpperCase()}</b></span>
-          {isClassic && <><i>/</i><span>{activeShape.label.toUpperCase()}</span></>}
-          {lastRecipe && <><i>/</i><span>“{lastRecipe.toUpperCase()}”</span></>}
-          <i>/</i>
-          <span><b>{effective}</b> FRAGMENTS</span>
-          {density > 1 && <><i>/</i><span>{count}&nbsp;×&nbsp;{density} DENSITY</span></>}
-          {usesChaos && <><i>/</i><span>CHAOS {(entropy * 100).toFixed(0)}%</span></>}
-        </div>
-      ) : (
-        <div className="ui-empty">
-          <div className="ui-empty__icon"><ImagePlus size={16} /></div>
-          <div className="min-w-0">
-            <div className="ui-label ui-label--on">No source loaded</div>
-            <div className="ui-caption mt-1">Tap the ring on the canvas — or drop files onto it — to load images or video. These controls unlock once the first one lands.</div>
-          </div>
-        </div>
-      )}
+      {layoutSection && hasImages && <div className="ui-readout" aria-live="polite">
+        <span><b>{activeLabel}</b></span><i>/</i><span>{effective} fragments</span>
+      </div>}
 
       {/* ---- DICE: the fastest route to something you did not expect --------
           The title and subtitle tell the truth per state: claiming "shape of
           frame" while the hold below pins it would be the button appearing to
           have done something it did not. ---------------------------------- */}
-      {onDice && (
+      {layoutSection && onDice && (
         <button
           disabled={!hasImages}
           onClick={onDice}
@@ -298,7 +286,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           layout. Rolls the colour sorting and the crop, touches nothing else.
           Narrower and cooler than the dice on purpose: the whole-composition
           roll stays the widest, warmest thing in the dock. ----------------- */}
-      {onColourDice && (
+      {layoutSection && onColourDice && (
         <button
           disabled={!hasImages}
           onClick={onColourDice}
@@ -315,7 +303,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
       )}
       {/* CREDIT ON THE PAGE, next to the thing they asked for — the ledger in
           av/credits.json is permanent, but nobody reads a JSON file. */}
-      {onColourDice && hasImages && (
+      {layoutSection && onColourDice && hasImages && (
         <p className="ui-credit">The colour dice was wished for by an anonymous Collage user.</p>
       )}
 
@@ -326,7 +314,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           and every press used to re-deal the shape of frame too — six of
           seven, on a roster of seven. OFF by default: until you pin it, the
           dice keeps its all-at-once promise exactly as it was. ------------ */}
-      {onHoldFrame && hasImages && (
+      {layoutSection && onHoldFrame && hasImages && (
         <div className="ui-looks">
           <div className="ui-looks__chips">
             <button
@@ -357,7 +345,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           composition and this is the way back from it. Same pair sits in the
           full-bleed rail — the wish came from there, and the dock's dice has
           exactly the same problem, so the fix lands on both. --------------- */}
-      {onUndo && onRedo && (
+      {layoutSection && onUndo && onRedo && (
         <div className="ui-undo" role="group" aria-label="Undo and redo">
           <button
             type="button"
@@ -397,8 +385,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           One row, one job. It reaches the preview, the live video, the exported
           picture and the SVG — and unlike the caption it IS in the composition
           code, because a grade is part of the recipe. ------------------- */}
-      {hasImages && onLook && (
+      {lookSection && hasImages && onLook && (
         <div className="ui-looks">
+          <h3 className="studio-section-label">Color presets</h3>
           <div className="ui-looks__chips" role="group" aria-label="Look">
             {LOOKS.map(l => (
               <button
@@ -492,8 +481,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           live preview and the exported video; a single frame has no time to
           sample, so the picture, the SVG and this preview's first instant are
           exactly what they were. It travels in the code. ------------------ */}
-      {hasImages && onMove && (
+      {motionSection && hasImages && onMove && (
         <div className="ui-looks">
+          <h3 className="studio-section-label">Movement</h3>
           <div className="ui-looks__chips" role="group" aria-label="Move">
             {MOVES.map(m => (
               <button
@@ -526,8 +516,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           the exported video; a single frame has no schedule to be at, so the
           picture, the SVG and this preview's first instant are exactly what
           they were. It travels in the code. ------------------------------- */}
-      {hasImages && onTurn && (
+      {motionSection && hasImages && onTurn && (
         <div className="ui-looks">
+          <h3 className="studio-section-label">Scene changes</h3>
           <div className="ui-looks__chips" role="group" aria-label="Turn">
             {TURNS.map(t => (
               <button
@@ -558,8 +549,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           clock. It scales the TIME the schedule is read against rather than
           each period, so the dissolve stays the same FRACTION of the hold at
           every rate (lib/pace.ts). It travels in the code. -------------- */}
-      {hasImages && onPace && (
+      {motionSection && hasImages && onPace && (
         <div className="ui-looks">
+          <h3 className="studio-section-label">Speed</h3>
           <div className="ui-looks__chips" role="group" aria-label="Pace">
             {PACES.map(p => (
               <button
@@ -602,8 +594,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           SAYS WHAT IT NEEDS RATHER THAN DISABLING ITSELF (scar C126): with no
           track this row is still here, still settable, and the caption is what
           tells you the piece that is missing. ---------------------------- */}
-      {hasImages && onSync && (
+      {motionSection && hasImages && onSync && (
         <div className="ui-looks">
+          <h3 className="studio-section-label">Beat sync</h3>
           <div className="ui-looks__chips" role="group" aria-label="Beat sync">
             {SYNCS.map(o => (
               <button
@@ -641,7 +634,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
         </div>
       )}
 
-      {hasImages && onTitleText && (
+      {titleSection && hasImages && onTitleText && (
         <div className="ui-titler">
           <div className="ui-titler__row">
             <span className="ui-titler__tag" aria-hidden="true"><Type size={13} /></span>
@@ -713,8 +706,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           Every composition has one, and it is in the address bar too, so the
           link you already have IS the collage. The photographs are not in it —
           that is what makes it worth sending. ---------------------------- */}
-      {compositionCode && (
-        <div className="ui-code">
+      {layoutSection && compositionCode && (
+        <details className="ui-code studio-disclosure"><summary>Share a composition</summary>
           <button
             type="button"
             onClick={copyCode}
@@ -775,9 +768,10 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
               ? 'Pinned fragments are not in the code — this opens unpinned, which deals the pictures differently.'
               : 'Your photographs, their composition. Sources are never in the code.'}
           </p>
-        </div>
+        </details>
       )}
 
+      {layoutSection && <>
       {/* ---- LAYOUT --------------------------------------------------------
           A ROSTER, NOT THREE BUTTONS. Grouped by family and scrolled
           horizontally: each row is short enough to scan, and the grouping is
@@ -803,6 +797,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           ))}
         </div>
 
+        <details className="studio-disclosure"><summary>More layouts</summary>
         {FAMILIES.map(fam => {
           const items = GENERATORS.filter(g => g.family === fam);
           if (!items.length) return null;
@@ -826,6 +821,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             </div>
           );
         })}
+
+        </details>
 
         <p className="ui-caption">{detail}</p>
       </div>
@@ -950,6 +947,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           <span>Remix<br />shapes</span>
         </button>
       </div>
+      </>}
     </div>
   );
 };

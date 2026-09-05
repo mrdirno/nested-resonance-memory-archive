@@ -11,11 +11,16 @@ test('native art alone advances, seeks deterministically and exports one complet
   await page.getByRole('button',{name:'Add artwork',exact:true}).click();
   await expect(page.locator('.art-footer p[role=status]')).toContainText('Editable artwork applied', {timeout:60_000});
   await page.getByRole('button',{name:'Close Art Room',exact:true}).click();
+  await page.getByRole('button',{name:'Details',exact:true}).click();
   await expect(page.getByRole('button',{name:'Record video',exact:true})).toBeEnabled();
+  await page.getByRole('button',{name:'Details',exact:true}).click();
+  // Compare parked frames at one settled raster size. The inline import
+  // status expires after four seconds and returns that space to the preview.
+  await expect(page.locator('.studio-notice')).toHaveCount(0, { timeout: 10_000 });
   const hash=()=>page.locator('canvas[aria-hidden=true]').first().evaluate((c:HTMLCanvasElement)=>{
     const x=document.createElement('canvas');x.width=240;x.height=150;const ctx=x.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(c,0,0,240,150);
     const pixels=ctx.getImageData(0,0,240,150).data;let hash=2166136261,lit=0;
-    for(let i=0;i<pixels.length;i+=4){hash=Math.imul(hash^pixels[i],16777619)>>>0;if(pixels[i]+pixels[i+1]+pixels[i+2]>160)lit++;}return{hash,lit,pixels:Array.from(pixels)};
+    for(let i=0;i<pixels.length;i+=4){hash=Math.imul(hash^pixels[i],16777619)>>>0;if(pixels[i]+pixels[i+1]+pixels[i+2]>160)lit++;}return{hash,lit,width:c.width,height:c.height,pixels:Array.from(pixels)};
   });
   await expect.poll(async()=>(await hash()).lit).toBeGreaterThan(100);
   const initial=await hash();await expect.poll(async()=>(await hash()).hash).not.toBe(initial.hash);
@@ -26,6 +31,7 @@ test('native art alone advances, seeks deterministically and exports one complet
   await playhead.fill('2');await page.waitForTimeout(160);const at2=await hash();
   await playhead.fill('5');await page.waitForTimeout(160);const at5=await hash();expect(at5.hash).not.toBe(at2.hash);
   await playhead.fill('2');await page.waitForTimeout(160);const back=await hash();
+  expect([back.width,back.height]).toEqual([at2.width,at2.height]);
   const diffs=back.pixels.map((v,i)=>Math.abs(v-at2.pixels[i]));
   const comparison={max:diffs.reduce((a,b)=>Math.max(a,b),0),mean:diffs.reduce((a,b)=>a+b,0)/diffs.length,changed:diffs.filter(d=>d>0).length,large:diffs.filter(d=>d>3).length};
   await fs.writeFile(info.outputPath('stage-seek-comparison.json'),JSON.stringify(comparison));

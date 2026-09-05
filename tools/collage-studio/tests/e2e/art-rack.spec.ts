@@ -10,7 +10,9 @@ test.use({ actionTimeout: 15_000 });
 const names = ['Contour Atlas', 'Petal Engine', 'Orbit Press', 'Ribbon Choir', 'Branch Fans', 'Prism Garden', 'Woven Circuit', 'Satellite Dust'];
 const sha = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 async function showRoom(page: Page) {
-  await page.getByRole('button', { name: 'Art Room', exact: true }).click();
+  const entry=page.getByRole('button', { name: /^Art Room(?:$| )/ });
+  if(!await entry.isVisible())await page.getByRole('button',{name:'Add',exact:true}).click();
+  await entry.click();
   const room = page.getByTestId('art-rack');
   await expect(room).toBeVisible();
   return room;
@@ -112,6 +114,7 @@ test('Art Rack opens eight real templates and preserves layer controls, dice loc
   const orbitId = initial.layers.find((layer: any) => layer.kind === 'rings').id;
   const contourId = initial.layers.find((layer: any) => layer.kind === 'contour').id;
   await room.getByRole('button', { name: 'Disable Contour Atlas layer', exact: true }).click();
+  await room.locator('details.art-layer-options > summary').click();
   await room.getByRole('button', { name: 'Lock Orbit Press dice', exact: true }).click();
   await room.getByRole('button', { name: 'Solo Orbit Press layer', exact: true }).click();
   await room.getByRole('button', { name: 'Move layer down', exact: true }).click();
@@ -174,6 +177,7 @@ test('editable Art Rack survives save, reopen, asset replacement and real crash 
   await (await chooser).setFiles(originalFile);
   await expect(page.getByRole('button', { name: 'Export', exact: true })).toBeVisible();
   room = await showRoom(page);
+  await settings(room);
   await room.getByLabel('Editing artwork', { exact: true }).selectOption(oldId);
   expect(await saveRecipe(page, room)).toEqual(originalRecipe);
   await room.getByRole('tab', { name: /^Layers/ }).click();
@@ -205,6 +209,7 @@ test('editable Art Rack survives save, reopen, asset replacement and real crash 
   const restoredPoster = await recovered.zip.file('images/' + recovered.manifest.images[0].storageFilename)!.async('nodebuffer');
   expect(restoredPoster.equals(poster)).toBe(true);
   room = await showRoom(page);
+  await settings(room);
   await room.getByLabel('Editing artwork', { exact: true }).selectOption(current.id);
   expect(await saveRecipe(page, room)).toEqual(updatedRecipe);
   expect(errors).toEqual([]);
@@ -241,7 +246,7 @@ test('Art Rack controls remain real 44px targets at 320px, 390px and a short pho
     await page.screenshot({ path: info.outputPath(`art-rack-${viewport.width}-${viewport.height}.png`) });
     await room.getByRole('button', { name: 'Close Art Room', exact: true }).click();
     await expect(page.getByTestId('art-rack')).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Art Room', exact: true })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Add', exact: true })).toBeFocused();
   }
 });
 
@@ -253,6 +258,7 @@ test('switching recipe sources keeps the next edit undoable and mixed media clea
   await expect(room.locator('.art-footer p[role="status"]')).toContainText('Editable artwork applied');
   await room.getByRole('tab',{name:/^Layers/}).click();
   await room.getByLabel('Opacity',{exact:true}).fill('0.3');
+  await settings(room);
   await room.getByLabel('Editing artwork',{exact:true}).selectOption('');
   await room.getByLabel('Opacity',{exact:true}).fill('0.55');
   await expect(room.getByRole('button',{name:'Undo art edit',exact:true})).toBeEnabled();

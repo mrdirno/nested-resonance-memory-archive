@@ -24,12 +24,22 @@ const RAMP = join(HERE, '..', 'fixtures', 'ramp_rgb.mp4');
 /** The widths a real phone actually reports, smallest first. */
 const WIDTHS = [320, 360, 390, 430];
 
+// Node 20 is the site's CI runtime; zlib.crc32 requires a newer Node.
+function pngCrc32(bytes: Buffer): number {
+  let crc = 0xffffffff;
+  for (const byte of bytes) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
 function makePng(r: number, g: number, b: number, size = 64): Buffer {
   const w = size, h = size;
   const chunk = (type: string, data: Buffer) => {
     const len = Buffer.alloc(4); len.writeUInt32BE(data.length, 0);
     const t = Buffer.from(type, 'ascii');
-    const crc = Buffer.alloc(4); crc.writeUInt32BE(zlib.crc32(Buffer.concat([t, data])) >>> 0, 0);
+    const crc = Buffer.alloc(4); crc.writeUInt32BE(pngCrc32(Buffer.concat([t, data])), 0);
     return Buffer.concat([len, t, data, crc]);
   };
   const ihdr = Buffer.alloc(13);
@@ -48,6 +58,20 @@ const shots = () => Array.from({ length: 6 }, (_, i) => ({
   mimeType: 'image/png',
   buffer: makePng(30 + i * 40, 90, 200 - i * 25),
 }));
+
+async function canvasAndCrop(page: Page) {
+  await page.getByRole('navigation', { name: 'Studio tools' })
+    .getByRole('button', { name: 'Layout', exact: true }).click();
+  await page.getByRole('button', { name: 'Canvas & crop', exact: true }).click();
+  await expect(page.getByRole('group', { name: 'Arrangement', exact: true })).toBeVisible();
+}
+
+async function mediaDetails(page: Page) {
+  await page.getByRole('button', { name: 'Details', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Media and recording details' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Trim ramp_rgb.mp4' }))
+    .toBeVisible({ timeout: 200_000 });
+}
 
 /** Horizontal overflow, and the widest element responsible for it. */
 async function overflow(page: Page) {
@@ -94,15 +118,14 @@ for (const width of WIDTHS) {
   test(`no horizontal overflow and thumb-sized controls at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 780 });
     await page.goto(APP_URL);
-    await page.locator('input[type="file"]').first().setInputFiles(shots());
-    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles(shots());
+    await expect(page.getByTestId('studio-artwork')).toBeVisible({ timeout: 120_000 });
 
     const before = await overflow(page);
     expect(before.over, `simple tab overflows by ${before.over}px — ${JSON.stringify(before.worst)}`).toBeLessThanOrEqual(0);
 
     // The panel carrying the new arrangement + focus pickers.
-    await page.getByRole('button', { name: 'Settings' }).first().click();
-    await page.waitForTimeout(400);
+    await canvasAndCrop(page);
 
     const after = await overflow(page);
     expect(after.over, `advanced tab overflows by ${after.over}px — ${JSON.stringify(after.worst)}`).toBeLessThanOrEqual(0);
@@ -139,13 +162,12 @@ test('the VIDEO dock is thumb-sized too, at 320/360/390/430', async ({ page }) =
   test.setTimeout(300_000);
   await page.setViewportSize({ width: 390, height: 780 });
   await page.goto(APP_URL);
-  await page.locator('input[type="file"]').first().setInputFiles([RAMP]);
-  await expect(page.locator('canvas').first()).toBeVisible({ timeout: 200_000 });
+  await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles([RAMP]);
+  await expect(page.getByTestId('studio-artwork')).toBeVisible({ timeout: 200_000 });
   // The dock only renders once the clip is admitted — wait for the clip's own
   // chip rather than a timer, so a slow decode does not silently grade an empty
   // bar and call it a pass.
-  await expect(page.getByRole('button', { name: 'Trim ramp_rgb.mp4' }))
-    .toBeVisible({ timeout: 200_000 });
+  await mediaDetails(page);
 
   for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 780 });
@@ -162,10 +184,15 @@ test('the VIDEO dock is thumb-sized too, at 320/360/390/430', async ({ page }) =
     // it is the reason the dock exists, and a wrapped row is exactly how a
     // primary action ends up behind a horizontal scroll nobody discovers.
     const rec = page.getByRole('button', { name: 'Record video' });
+    await rec.scrollIntoViewIfNeeded();
     const box = await rec.boundingBox();
     expect(box, 'Record video must be laid out').not.toBeNull();
+    expect(box!.x, `Record video sits past the left edge at ${width}px`).toBeGreaterThanOrEqual(-0.5);
     expect(box!.x + box!.width, `Record video sits past the right edge at ${width}px`)
       .toBeLessThanOrEqual(width + 0.5);
+    expect(box!.y, `Record video cannot be reached above the viewport at ${width}px`).toBeGreaterThanOrEqual(-0.5);
+    expect(box!.y + box!.height, `Record video cannot be reached below the viewport at ${width}px`)
+      .toBeLessThanOrEqual(780.5);
   }
 });
 
@@ -176,10 +203,11 @@ test('the export sheet\'s VIDEO SIZE row is watertight at 320/360/390/430', asyn
   test.setTimeout(300_000);
   await page.setViewportSize({ width: 390, height: 780 });
   await page.goto(APP_URL);
-  await page.locator('input[type="file"]').first().setInputFiles([RAMP]);
-  await expect(page.locator('canvas').first()).toBeVisible({ timeout: 200_000 });
-  await expect(page.getByRole('button', { name: 'Trim ramp_rgb.mp4' }))
-    .toBeVisible({ timeout: 200_000 });
+  await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles([RAMP]);
+  await expect(page.getByTestId('studio-artwork')).toBeVisible({ timeout: 200_000 });
+  await mediaDetails(page);
+  await page.getByRole('button', { name: 'Details', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Media and recording details' })).toBeHidden();
 
   for (const width of WIDTHS) {
     await page.setViewportSize({ width, height: 780 });
@@ -192,22 +220,20 @@ test('the export sheet\'s VIDEO SIZE row is watertight at 320/360/390/430', asyn
     await expect(sheet).toBeVisible({ timeout: 20_000 });
 
     const sizeRow = page.getByRole('radiogroup', { name: 'Video size' });
-    // The probe is async; on a device with no encoder there is legitimately no
-    // row, and asserting its absence is not this test's job.
-    if (await sizeRow.count() > 0) {
-      await expect(sizeRow).toBeVisible();
-      // Every rung sits inside the viewport — a rung you have to scroll
-      // sideways to find is a rung nobody picks.
-      const rungs = sizeRow.getByRole('radio');
-      const n = await rungs.count();
-      expect(n, 'the size row rendered with no rungs').toBeGreaterThan(0);
-      for (let i = 0; i < n; i++) {
-        const box = await rungs.nth(i).boundingBox();
-        expect(box, `rung ${i} is not laid out at ${width}px`).not.toBeNull();
-        expect(box!.x + box!.width, `size rung ${i} runs past the right edge at ${width}px`)
-          .toBeLessThanOrEqual(width + 0.5);
-        expect(box!.height, `size rung ${i} is under a thumb at ${width}px`).toBeGreaterThanOrEqual(44 - 0.5);
-      }
+    // These browser profiles are encoder-capable. Wait for the async probe
+    // instead of passing without inspecting the row while it is still loading.
+    await expect(sizeRow).toBeVisible({ timeout: 20_000 });
+    // Every rung sits inside the viewport — a rung you have to scroll
+    // sideways to find is a rung nobody picks.
+    const rungs = sizeRow.getByRole('radio');
+    const n = await rungs.count();
+    expect(n, 'the size row rendered with no rungs').toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      const box = await rungs.nth(i).boundingBox();
+      expect(box, `rung ${i} is not laid out at ${width}px`).not.toBeNull();
+      expect(box!.x + box!.width, `size rung ${i} runs past the right edge at ${width}px`)
+        .toBeLessThanOrEqual(width + 0.5);
+      expect(box!.height, `size rung ${i} is under a thumb at ${width}px`).toBeGreaterThanOrEqual(44 - 0.5);
     }
 
     const o = await overflow(page);
@@ -228,10 +254,9 @@ test('zoomed out, the page still does not scroll sideways', async ({ page }) => 
   // a small viewport with a large deviceScaleFactor reproduces.
   await page.setViewportSize({ width: 320, height: 600 });
   await page.goto(APP_URL);
-  await page.locator('input[type="file"]').first().setInputFiles(shots());
-  await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
-  await page.getByRole('button', { name: 'Settings' }).first().click();
-  await page.waitForTimeout(400);
+  await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles(shots());
+  await expect(page.getByTestId('studio-artwork')).toBeVisible({ timeout: 120_000 });
+  await canvasAndCrop(page);
   for (const scale of [0.5, 0.67, 0.8]) {
     await page.evaluate((s) => {
       document.documentElement.style.zoom = String(s);

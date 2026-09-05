@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair, Type, Wand2
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -27,6 +27,8 @@ import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt
 import { normalizeProjectLocks } from './lib/projectLocks';
 import { CaptionEditor } from './components/CaptionEditor';
 import { ArtRoom } from './components/ArtRoom';
+import { StudioStart } from './components/StudioStart';
+import './styles/workspace.css';
 import { ArtRackRoom } from './components/ArtRackRoom';
 import { ART_SIZES, artIsAnimated, createDefaultArtRecipe, normalizeArtRecipe, type ArtRecipe } from './lib/artRack';
 import { drawArt } from './lib/artRackRenderer';
@@ -145,28 +147,27 @@ const createThumbnail = async (img: HTMLImageElement, maxDim = 1024): Promise<st
     });
 };
 
-/** A laid-across stage rail: 44px of button, 16px inset, 8px of air. */
-const RAIL_ROW_H = 68;
-
-/**
- * HOW TALL THE STAGE RAIL IS AS A COLUMN — DERIVED, NOT GUESSED.
- *
- * Maximize · add · add video · add music · clear, at 44px with 8px between,
- * inset 16px from the top and given the same 16px back at the bottom. The
- * threshold that decides column-vs-row USED TO BE THE LITERAL 200, which was
- * already 16px short of the FOUR-button column it was written for — so a band
- * between 200 and 216px clipped the Clear button off the bottom, quietly,
- * because the rail sits inside an `overflow-hidden` parent and a clipped
- * absolute child costs the document no scrollWidth at all. Adding the music
- * button made that gap 68px wide and turned a latent edge into the ordinary
- * case: any phone with the video dock open lost Clear entirely.
- *
- * Deriving it means the next button added to the rail cannot reintroduce this.
- */
-const RAIL_BUTTONS = 5;
-const RAIL_COL_H = 16 + RAIL_BUTTONS * 44 + (RAIL_BUTTONS - 1) * 8 + 16;
+type StudioTool = 'add' | 'layout' | 'look' | 'motion' | 'text';
 
 export default function App() {
+  const [stageDetailsOpen, setStageDetailsOpen] = useState(false);
+  const handleStageDetails = useCallback((open: boolean) => { setStageDetailsOpen(open); if (open) setStudioTool(null); }, []);
+  const [studioTool, setStudioTool] = useState<StudioTool | null>(null);
+  const toolRefs = useRef<Partial<Record<StudioTool, HTMLButtonElement | null>>>({});
+  const studioToolRef = useRef(studioTool); studioToolRef.current = studioTool;
+  const inspectorCloseRef = useRef<HTMLButtonElement>(null);
+  const restoreToolFocusRef = useRef<StudioTool | null>(null);
+  const closeTool = () => { restoreToolFocusRef.current = studioToolRef.current; setStudioTool(null); };
+  // Short viewports hide the invoking taskbar while editing. Restore focus
+  // after the new layout exists; focusing a display:none button is a no-op.
+  useLayoutEffect(() => {
+    if (studioTool) {
+      if (!toolRefs.current[studioTool]?.getClientRects().length) inspectorCloseRef.current?.focus();
+    } else if (restoreToolFocusRef.current) {
+      toolRefs.current[restoreToolFocusRef.current]?.focus();
+      restoreToolFocusRef.current = null;
+    }
+  }, [studioTool]);
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
   const [artRoomOpen, setArtRoomOpen] = useState(false);
   const [artRoomMode, setArtRoomMode] = useState<'templates' | 'html'>('templates');
@@ -188,6 +189,7 @@ export default function App() {
    * keeps its decoder, its AudioContext and its playhead across the toggle.
    */
   const [maximized, setMaximized] = useState(false);
+  const maximizedRef = useRef(maximized); maximizedRef.current = maximized;
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('minimal');
   const [primitive, setPrimitive] = useState<PrimitiveType>('rect');
@@ -538,25 +540,6 @@ export default function App() {
   const [artBand, setArtBand] = useState<{ w: number; h: number } | null>(null);
   const bandObserverRef = useRef<ResizeObserver | null>(null);
   const bandElRef = useRef<HTMLDivElement | null>(null);
-  const fullBleedRailRef = useRef<HTMLDivElement | null>(null);
-  const [fullBleedRailHeight, setFullBleedRailHeight] = useState(0);
-  const protectBottomText = maximized && (
-    (captions.cues.length > 0 && captions.place === 'bc') ||
-    (titleText.trim().length > 0 && (titlePlace === 'bl' || titlePlace === 'bc'))
-  );
-  // The rail wraps on phones and includes their safe-area inset. Measure the
-  // actual occupied band; a fixed 44px guess would protect only its first row.
-  useLayoutEffect(() => {
-    const rail = fullBleedRailRef.current;
-    if (!maximized || !rail) return;
-    const measure = () => setFullBleedRailHeight(Math.ceil(rail.getBoundingClientRect().height));
-    measure();
-    if (typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(rail);
-    return () => observer.disconnect();
-  }, [maximized, artBand?.w]);
-
   /** Read the band's content box right now, from layout. */
   const measureBand = useCallback((el: HTMLDivElement | null) => {
     if (!el) return;
@@ -581,7 +564,7 @@ export default function App() {
    * and the frame is never wrong on screen. `maxWidth/maxHeight` below stay as
    * the backstop for the changes we do not drive (rotation, URL-bar collapse).
    */
-  useLayoutEffect(() => { measureBand(bandElRef.current); }, [maximized, protectBottomText, fullBleedRailHeight, measureBand]);
+  useLayoutEffect(() => { measureBand(bandElRef.current); }, [maximized, studioTool, stageDetailsOpen, captionPanel, activeTab, measureBand]);
 
   const setBandEl = useCallback((el: HTMLDivElement | null) => {
     bandObserverRef.current?.disconnect();
@@ -605,35 +588,17 @@ export default function App() {
   }, []);
   useEffect(() => () => bandObserverRef.current?.disconnect(), []);
 
-  /**
-   * The stage rail is four 44px buttons and three gaps — 200px of column, plus
-   * its 16px inset. A phone held LANDSCAPE leaves the band about 118px, and the
-   * band clips, so `Clear all` was simply gone off the bottom with nothing to
-   * scroll. Short band, lay the rail across instead of down.
-   */
-  const railRow = !!artBand && artBand.h < RAIL_COL_H;
-
-  /**
-   * The largest box of ratio `aspect` that fits the measured band.
-   *
-   * A rail laid ACROSS reaches back over the middle of a narrow viewport, where
-   * the column never did, so it would sit on top of the artwork instead of
-   * beside it — on a 320px phone it covered the picture outright. A row is
-   * therefore charged against the band (44px of buttons, 16px inset, 8px of
-   * air) and the artwork fits under it. Small, but never hidden — and full
-   * bleed, which is the honest answer at these heights, is one tap away.
-   */
+  // All chrome is outside the measured stage. Fit the entire composition to
+  // the actual available box, including after inspector and preview changes.
   const artFit = useMemo(() => {
     if (!artBand || artBand.w < 1 || artBand.h < 1) return null;
-    const bandH = railRow ? artBand.h - RAIL_ROW_H : artBand.h;
-    if (bandH < 1) return null;
-    const w = Math.min(artBand.w, bandH * aspect);
+    const w = Math.min(artBand.w, artBand.h * aspect);
     return { w: Math.floor(w), h: Math.floor(w / aspect) };
-  }, [artBand, aspect, railRow]);
+  }, [artBand, aspect]);
 
   /**
-   * Never strand anyone in full bleed. Both exits — the pill and the rail —
-   * live on the stage, and the stage only renders while there are images, so an
+   * Never strand anyone in expanded preview. Its return control
+   * lives beside the stage, and the stage only renders while there are images, so an
    * empty pool while maximized is a screen with no way out but a keyboard. The
    * REACHABLE way in was pressing F with nothing loaded (the shortcut had no
    * pool condition, this effect only re-runs when the COUNT changes, and F does
@@ -664,16 +629,17 @@ export default function App() {
   const maxSettled = useRef(false);
   useEffect(() => {
     if (!maxSettled.current) { maxSettled.current = true; return; }
-    (maximized ? exitBtnRef.current : maxBtnRef.current)?.focus();
+    const target = maximized ? exitBtnRef.current
+      : maxBtnRef.current?.getClientRects().length ? maxBtnRef.current : inspectorCloseRef.current;
+    target?.focus();
   }, [maximized]);
 
   const isMobile = useMemo(() => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent), []);
 
   /**
-   * F toggles full bleed, Escape leaves it. Deliberately deaf while a field has
-   * focus (the title box takes an `f` like any other letter) and while a dialog
-   * is open, because Export, Result and the trim sheet each own Escape already
-   * and stealing it would close two things with one press.
+   * F toggles expanded preview unless a field owns that letter. Escape closes
+   * the innermost editing view, including from a focused field. Open dialogs
+   * own their dismissal, so the shortcut never closes two views at once.
    */
   useEffect(() => {
     /**
@@ -730,23 +696,25 @@ export default function App() {
         }
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      // From here down the keys are plain characters, and ANY focused field
-      // gets to keep them.
-      if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
-      if (e.key === 'Escape') {
+      if (e.defaultPrevented) return;
+      // Escape closes the current view even when a range or text field has
+      // focus. Native select popups keep it for their own dismissal.
+      if (e.key === 'Escape' && t?.tagName !== 'SELECT') {
         // A pending trade is the innermost thing Escape can back out of, and
         // backing out of it must NOT also drop full bleed — you cancel a
         // mis-tap to try again, not to leave the room you are comparing in.
         if (swapFromRef.current !== null) { setSwapFrom(null); return; }
-        setMaximized(false);
+        if (maximizedRef.current) { setMaximized(false); return; }
+        const tool = studioToolRef.current;
+        if (tool) { restoreToolFocusRef.current = tool; setStudioTool(null); }
         return;
       }
+      if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
       // Nothing to maximize with an empty pool — F used to hide the whole UI
       // and leave the drop target alone on a black page.
       if (e.key === 'f' || e.key === 'F') {
         if (!canMaximizeRef.current) return;
-        // Stop lives in the transport row, and full bleed hides the dock. A take
-        // you cannot see and cannot stop is worse than no shortcut.
+        // Keep the current composition view stable while a take is recording.
         if (recorderRef.current?.isRecording) return;
         e.preventDefault();
         setMaximized(m => !m);
@@ -3094,24 +3062,22 @@ export default function App() {
   }, [images.length]);
 
   return (
-    <div className="fixed inset-0 bg-black text-white font-sans flex flex-col select-none overflow-hidden">
+    <div data-editing={!!studioTool && !maximized} className="studio-shell fixed inset-0 bg-black text-white font-sans flex flex-col select-none overflow-hidden">
       {/* `display: contents` so the wrapper is invisible to the flex column,
           `none` so maximizing costs the header its space WITHOUT unmounting it
           (it owns the export shortcut, and a remount would drop it). */}
       <div style={{ display: maximized ? 'none' : 'contents' }}>
-        <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} openError={openError} />
+        <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} openError={openError} onPreview={() => setMaximized(true)} previewButtonRef={maxBtnRef} />
       </div>
-      {/* Leaving full bleed BEFORE the take starts: the Stop button and the
-          recording indicator both live in the dock that full bleed hides, and
-          Cmd-E still reaches this dialog while maximized because the Header
-          stays mounted under `display:none`. */}
+      {/* Exports return to editing with recording progress in the persistent
+          transport. Header remains mounted so its export shortcut still works. */}
       <ExportDialog artLoopSeconds={images.length && images.every(i => i.art && i.art.duration === images[0].art?.duration) ? images[0].art?.duration : undefined} canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); void flushSession(); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
       {artRoomOpen && artRoomMode === 'templates' && <ArtRackRoom recipe={artDraft} onChange={setArtDraft}
         sourceId={images.some(i => i.id === artSourceId && i.art) ? artSourceId : null}
         sources={images.filter(i => i.art).map(i => ({ id: i.id, name: i.originalName || 'Art rack', recipe: i.art! }))}
         onSource={id => { setArtSourceId(id); setArtDraft(id ? normalizeArtRecipe(images.find(i => i.id === id)?.art) : createDefaultArtRecipe()); }}
-        onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
+        onClose={() => { setArtRoomOpen(false); (artRoomTriggerRef.current?.getClientRects().length ? artRoomTriggerRef.current : toolRefs.current.add)?.focus(); }}
         onHtml={() => setArtRoomMode('html')}
         busy={demoBusy || exportStatus === 'processing' || captionRecording || restoring}
         onApply={async (recipe, isCurrent) => {
@@ -3134,7 +3100,7 @@ export default function App() {
           if (!images.length) { setLayoutMode('minimal'); setPrimitive('rect'); setAspect(size.width / size.height); setGutter(0); setEntropy(0); setMove('still'); setTurn('hold'); setTwist('none'); setLook('none'); setAdjust(null); }
           flashNotice('Editable art and its animation are ready. Save a project to keep the layers.');
         }} />}
-      {artRoomOpen && artRoomMode === 'html' && <ArtRoom open onTemplates={() => setArtRoomMode('templates')} onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
+      {artRoomOpen && artRoomMode === 'html' && <ArtRoom open onTemplates={() => setArtRoomMode('templates')} onClose={() => { setArtRoomOpen(false); (artRoomTriggerRef.current?.getClientRects().length ? artRoomTriggerRef.current : toolRefs.current.add)?.focus(); }}
         busy={demoBusy || exportStatus === 'processing' || captionRecording || restoring}
         onImport={async (file, isCurrent) => {
           if (!isCurrent()) return;
@@ -3148,8 +3114,13 @@ export default function App() {
           flashNotice('Artwork added as a still image. Its pixels travel in your saved project.');
         }} />}
 
+      {notice && !artRoomOpen && <div className="studio-notice" role="status">{notice}</div>}
+
+      <div className="studio-workspace" data-panel={!!studioTool && !maximized} data-focus={maximized}>
+      <section className="studio-view" aria-label="Artwork and playback">
       <div
-        className="flex-1 relative bg-[#050505] flex items-center justify-center overflow-hidden"
+        data-testid="studio-stage"
+        className="studio-stage relative flex items-center justify-center overflow-hidden"
         onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}
       >
          <div className="absolute inset-0 opacity-[0.05] pointer-events-none z-0" style={{ backgroundImage: 'linear-gradient(#444 1px, transparent 1px), linear-gradient(90deg, #444 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
@@ -3189,32 +3160,21 @@ export default function App() {
             </div>
          )}
          {images.length === 0 ? (
-           <div className="relative z-10 flex flex-col items-center gap-3">
-            <button type="button" aria-label="Load source images or video" onClick={() => fileInputRef.current?.click()} disabled={demoBusy} className="group flex flex-col items-center justify-center p-8 border border-dashed rounded-full border-gray-800 cursor-pointer hover:border-emerald-500/50 hover:bg-white/5 active:scale-95 transition-all">
-               <div className="flex items-center gap-2 mb-3 text-gray-600 group-hover:text-emerald-500 transition-colors">
-                  <Upload size={26} />
-                  <Film size={26} />
-               </div>
-               <span className="text-[9px] font-bold tracking-widest text-gray-500 group-hover:text-white">LOAD SOURCE</span>
-               <span className="text-[8px] tracking-widest text-gray-700 mt-1 uppercase">Images or video</span>
-            </button>
-            <button type="button" onClick={loadLyricDemo} disabled={demoBusy} className="min-h-[44px] rounded-full border border-amber-300/30 px-5 py-2 text-sm text-amber-200 hover:bg-amber-300/10 disabled:opacity-50">{demoBusy ? 'Making your sample…' : 'Try a lyric film'}</button>
-           </div>
+           <StudioStart busy={demoBusy} artTriggerRef={artRoomTriggerRef}
+             onArt={() => { setArtRoomMode('templates'); setArtRoomOpen(true); }}
+             onImport={() => fileInputRef.current?.click()} onSample={loadLyricDemo} />
          ) : (
             <div
-              className={`relative z-10 w-full h-full flex justify-center ${railRow && !maximized ? 'items-end' : 'items-center'} ${maximized ? 'p-1 sm:p-2' : 'p-2 sm:p-4'}`}
+              className="studio-art-band relative z-10 w-full h-full flex justify-center items-center"
               ref={setBandEl}
               // Display-only space: the whole composition remains visible above
               // the controls; every exporter still draws the unchanged geometry.
-              style={protectBottomText ? { paddingBottom: fullBleedRailHeight + 8 } : undefined}
+              data-testid="studio-art-band"
             >
-               {/* `items-end` under a laid-across rail: the fit already gave the
-                   rail its 68px, and centring the remainder would put half of
-                   that slack back ABOVE the artwork, under the buttons. */}
                {/* Measured pixels once the band is known; the old content-sized
                    style stays as the first-paint fallback. */}
                <div
-                 className="relative shadow-2xl"
+                 className="relative shadow-2xl" data-testid="studio-artwork"
                  // maxWidth/maxHeight stay ON TOP of the measured pixels: a
                  // ResizeObserver is a frame behind layout, and without the CSS
                  // clamp the frame keeps its old size for that frame and
@@ -3248,6 +3208,9 @@ export default function App() {
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
                        controlsHost={stageControlsHost}
+                       focusMode={maximized}
+                       inspectorOpen={!!studioTool && !maximized}
+                       onDetailsChange={handleStageDetails}
                        onRemoveClip={removeClip}
                        recorderRef={recorderRef}
                        poolAssets={images}
@@ -3474,189 +3437,74 @@ export default function App() {
                        );
                    })()}
                </div>
-               {/* FULL BLEED: art, and one thumb-reachable bar. The three
-                   buttons here are the ones you are maximized IN ORDER to use —
-                   the operator maximizes to compare LAYOUTS, so rolling,
-                   reshuffling and remixing have to work without dropping back
-                   out to the dock every time. */}
-               {maximized && (
-                 // pb-safe: maximized hides the Header (pt-safe) and the dock
-                 // (pb-safe), so nothing else in the app honours the inset in
-                 // this state — and Exit is the only way out on a touch device,
-                 // which put it under the iOS home indicator.
-                 // `max(...)`, not the pb-safe utility: --safe-b is 0px on every
-                 // desktop, and the utility would win the cascade and take the
-                 // pill's own 12px of air with it.
-                 <div
-                   ref={fullBleedRailRef}
-                   role="toolbar"
-                   aria-label="Full bleed tools"
-                   className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-2 min-[360px]:px-3 pointer-events-none"
-                   style={{ paddingBottom: 'max(0.75rem, var(--safe-b))' }}
-                 >
-                   {/* IT WRAPS, AND THAT IS THE POINT.
-                       Six 44px targets at 320px was already 295 of the 304
-                       available — nine pixels from an overflow, so the SEVENTH
-                       (the colour dice, wished for from this rail) could not be
-                       added in a single row at any tap size that is still legal.
-                       Shrinking the buttons is not on the table: the 44px target
-                       is a law, the air between them is not, and neither is the
-                       row count.
-
-                       So the pill wraps — and the EIGHTH button (the frame
-                       hold) re-derived where: capped at five targets wide below
-                       430px, which keeps the split where it belongs: the five
-                       that MAKE a picture on one row — the hold rides beside
-                       the dice it modifies — the three that navigate between
-                       pictures on the next. `max-w` is border-box, so 250 =
-                       5x44 + 4x4 gap + 12 padding + 2 border, and the sixth
-                       button cannot fit however the gap rounds. From 430px one
-                       row again — 9 flex items (8 buttons plus the separator's
-                       1px and its 4 of margin), so 8 gaps: 352 + 32 + 5 + 12 +
-                       2 = 403 in the pill, + the band's 24 of padding = 427,
-                       3 to spare. The ninth button re-derives from HERE. */}
-                   <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-0.5 min-[360px]:gap-1 max-w-[250px] min-[430px]:max-w-none rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
-                     <button data-testid="rail-dice" onClick={handleDice} title={holdFrame ? 'Roll the dice — a new composition in the frame you kept' : 'Roll the dice — a whole new composition'} aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
-                     {/* THE FRAME HOLD — a toggle in a row of actions, pressed
-                         = held. It sits beside the dice because it is a claim
-                         about the dice: this rail is where you roll repeatedly
-                         to compare, and every press used to re-shape the
-                         canvas too. Same state as the dock chip — the fix
-                         lands on both. */}
-                     <button data-testid="rail-hold-frame" onClick={() => setHoldFrame(h => !h)} aria-pressed={holdFrame} title={holdFrame ? 'Frame held — the dice keeps this shape. Tap to let it roll again.' : 'Keep this shape of frame (aspect ratio) when the dice rolls'} aria-label="Keep the frame shape when the dice rolls" className={`w-11 h-11 rounded-xl flex items-center justify-center hover:bg-white/10 active:scale-95 transition ${holdFrame ? 'text-emerald-300 bg-white/10' : 'text-gray-200'}`}>{holdFrame ? <Lock size={18} /> : <Unlock size={18} />}</button>
-                     {/* THE COLOUR DICE — wished for FROM THIS RAIL: you maximize
-                         to compare, and the one roll that keeps the shape you
-                         just found had no button anywhere near your thumb. */}
-                     <button data-testid="rail-colour-dice" onClick={handleColourDice} title="Roll the colour sort and the crop — keeps your layout" aria-label="Roll the colour sort and the crop, keeping the layout" className="w-11 h-11 rounded-xl text-amber-300 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Palette size={19} /></button>
-                     <button data-testid="rail-shuffle" onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
-                     <button data-testid="rail-remix" onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
-                     {/* UNDO lives HERE because this is where the wish came from:
-                         you maximize to roll repeatedly and compare, and every
-                         roll used to destroy the one before it. Disabled rather
-                         than hidden — a control that appears and disappears under
-                         your thumb moves the other four every time. */}
-                     <button
-                       data-testid="undo"
-                       onClick={handleUndo}
-                       disabled={!canUndo}
-                       title="Undo — back to the composition before this one (⌘Z)"
-                       aria-label="Undo the last composition change"
-                       className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:active:scale-100"
-                     ><Undo2 size={18} /></button>
-                     <button
-                       data-testid="redo"
-                       onClick={handleRedo}
-                       disabled={!canRedo}
-                       title="Redo — forward again (⇧⌘Z)"
-                       aria-label="Redo the composition change"
-                       className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:active:scale-100"
-                     ><Redo2 size={18} /></button>
-                     <span className="mx-0.5 h-6 w-px bg-white/15" aria-hidden="true" />
-                     <button ref={exitBtnRef} onClick={() => setMaximized(false)} title="Exit full bleed (Esc)" aria-label="Exit full bleed" className="w-11 h-11 rounded-xl text-white bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95 transition"><Minimize2 size={18} /></button>
-                   </div>
-                 </div>
-               )}
-
-               {!maximized && (
-               <div className={`absolute top-4 right-4 flex gap-2 ${railRow ? 'flex-row' : 'flex-col'}`}>
-                   <button
-                     ref={maxBtnRef}
-                     onClick={() => { if (!recorderRef.current?.isRecording) setMaximized(true); }}
-                     title="Maximize the shot (F)"
-                     aria-label="Maximize the shot"
-                     className="w-11 h-11 rounded bg-[#111] text-white border border-gray-800 flex items-center justify-center hover:bg-white/10 transition-colors shadow-lg"
-                   ><Maximize2 size={18} /></button>
-                   <button
-                     onClick={() => fileInputRef.current?.click()}
-                     title="Add more images or video"
-                     aria-label="Add more images or video"
-                     className="w-11 h-11 rounded bg-[#111] text-gray-300 border border-gray-800 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors shadow-lg"
-                   ><Plus size={18} /></button>
-                   <button
-                     onClick={() => videoInputRef.current?.click()}
-                     title="Add a video — it loads and loops"
-                     aria-label="Add a video"
-                     className="w-11 h-11 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"
-                   ><Film size={18} /></button>
-                   <button
-                     onClick={() => musicInputRef.current?.click()}
-                     title={soundtrack ? `Music: ${soundtrack.name} — pick another to replace it` : 'Add music — or a video to take the sound from, without its pictures'}
-                     aria-label={soundtrack ? 'Replace the music' : 'Add music'}
-                     className={`w-11 h-11 rounded bg-[#111] border flex items-center justify-center transition-colors shadow-lg ${
-                       soundtrack
-                         ? 'text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/15'
-                         : 'text-gray-300 border-gray-800 hover:bg-white/10 hover:text-white'
-                     }`}
-                   ><Music size={18} /></button>
-                   <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-11 h-11 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
-               </div>
-               )}
 
             </div>
          )}
       </div>
 
-      {/* THE DOCK GIVES BACK ITS HEIGHT THROUGH THE SCROLLER IT ALREADY HAS.
-          It grew with every panel added and the stage got the leftovers — down
-          to 52px on a 320px phone. The first attempt wrapped the whole dock in a
-          SECOND capped scroller, and an adversarial audit caught what that costs:
-          `.ui-dock` is already a capped scroller (`--dock-max`) whose primary
-          action bar — the fragment count, Shuffle, Remix — is `position: sticky`
-          against ITS bottom. Nesting a second scroller pinned that bar to the
-          bottom of an inner box pushed below the outer scrollport, and the most
-          used controls in the app went off-screen (measured: 778..832 in a
-          844px viewport, to 869..923). So the cap moved to `--dock-max` itself,
-          where there is exactly one scroller and the sticky bar stays in it.
-          `display:none` (not an unmount) hides the dock when maximized, so the
-          Stage's portal host survives. */}
-      <div
-        // Budget the WHOLE lyrics dock, including the transport and tabs. A
-        // 34vh editor plus those fixed rows left only 70px of artwork in a
-        // 664px Safari viewport. The editor scrolls inside the remaining half.
-        style={{
-          display: maximized ? 'none' : captionPanel ? 'flex' : undefined,
-          flexDirection: captionPanel ? 'column' : undefined,
-          height: captionPanel ? 'min(50dvh, 480px)' : undefined,
-        }}
-        className="bg-[#0a0a0a] border-t border-white/10 pb-safe z-50 relative shrink-0"
-      >
-         {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
-             OUTSIDE the canvas. This used to float over the collage; chrome on
-             top of the artwork covers the thing the user is here to look at. */}
-         {/* THE BAR EXISTS TO HOST THE STAGE'S PORTAL, so its condition is
-             "is the Stage mounted" — which is `liveMode`, not a guess at what
-             the Stage would contain. Gated on `clips.length > 0` it rendered
-             13px of empty chrome whenever a source existed but the Stage did
-             not: music dropped before any photograph (measured), and clips on a
-             device where the compositor could not start. */}
-         {liveMode && (
-           <div className="flex shrink-0 items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
-             {/* The live stage portals its clip chips + transport in here. */}
-             <div ref={setStageControlsHost} className="flex-1 flex items-center min-w-0" />
-           </div>
-         )}
 
-         <div className="flex shrink-0 border-b border-white/5 bg-[#0e0e0e]">
-             <button onClick={()=>{ setActiveTab('simple'); setCaptionPanel(false); }} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
-             <button onClick={()=>{ setActiveTab('advanced'); setCaptionPanel(false); }} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
-             <button onClick={() => setCaptionPanel(true)} disabled={!images.length} aria-label="Lyrics & captions" aria-pressed={captionPanel} className={`flex-1 min-h-[48px] px-2 text-xs font-medium ${captionPanel ? 'text-amber-200 bg-[#1a1a1a] border-t-2 border-amber-300' : 'text-gray-400 hover:text-white'} disabled:opacity-40`}>Lyrics</button>
-             <button ref={artRoomTriggerRef} type="button" onClick={() => { setArtRoomMode('templates'); setArtRoomOpen(true); }} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring} className="flex-1 min-h-[48px] px-2 text-xs font-medium text-cyan-200 hover:bg-white/5 disabled:opacity-40">Art Room</button>
-         </div>
-         {images.length > 0 && <div
-           className="min-h-0 flex-1 overflow-hidden"
-           style={{ display: captionPanel ? undefined : 'none', '--dock-max': '100%' } as React.CSSProperties}
-         ><CaptionEditor defaultOpen
-           track={captions} onChange={setCaptions} take={captionTake}
-           getTime={() => recorderRef.current?.getTime() ?? 0}
-           onSeek={(time) => recorderRef.current?.seek(time)}
-           disabled={exportStatus === 'processing' || captionRecording}
-         /></div>}
-         {!captionPanel && (activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
-         ) : (
-           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
-         ))}
+      <div className="studio-playback" hidden={!liveMode}>
+        <div ref={setStageControlsHost} className="studio-playback-host" />
       </div>
+      {images.length > 0 && maximized && <div className="studio-preview-tools" role="toolbar" aria-label={maximized ? 'Full bleed tools' : 'Preview controls'}>
+        <span className="studio-source-count">{images.length} source{images.length === 1 ? '' : 's'}</span>
+        <button type="button" data-testid="quick-dice" onClick={handleDice} aria-label="Roll the dice"><Dices size={17}/><span>Dice</span></button>
+        <button type="button" data-testid={maximized ? 'undo' : 'quick-undo'} onClick={handleUndo} disabled={!canUndo} aria-label="Undo the last composition change"><Undo2 size={17}/><span>Undo</span></button>
+        <button type="button" ref={maximized ? exitBtnRef : maxBtnRef} className="studio-preview-toggle"
+          onClick={() => setMaximized(m => !m)} aria-label={maximized ? 'Back to editing' : 'Expand preview'}
+          title={maximized ? 'Back to editing (Esc)' : 'Expand preview (F)'}>
+          {maximized ? <Minimize2 size={17}/> : <Maximize2 size={17}/>}<span>{maximized ? 'Back to editing' : 'Expand preview'}</span>
+        </button>
+      </div>}
+      </section>
+
+      <aside id="studio-editing-panel" className="studio-inspector" hidden={!studioTool || maximized} aria-label="Editing panel">
+        <div className="studio-inspector-heading">
+          <h2>{studioTool === 'add' ? 'Add to your project' : studioTool === 'layout' ? 'Shape your composition' : studioTool === 'look' ? 'Set the look' : studioTool === 'motion' ? 'Make it move' : 'Words on screen'}</h2>
+          <button type="button" ref={inspectorCloseRef} onClick={closeTool} aria-label="Close editing panel" title="Back to preview"><span>Done</span><X size={16}/></button>
+        </div>
+        {studioTool === 'add' && <div className="studio-add-panel">
+          <button type="button" ref={images.length ? artRoomTriggerRef : undefined} aria-label="Art Room" onClick={() => { setArtRoomMode('templates'); setArtRoomOpen(true); }} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring}><Palette size={20}/><span><b>Art Room</b><small>Combine animated templates and layers</small></span></button>
+          <button type="button" onClick={() => fileInputRef.current?.click()} aria-label="Add more images or video"><Plus size={20}/><span><b>Add images or video</b><small>Drop files onto the artwork, too</small></span></button>
+          <button type="button" onClick={() => musicInputRef.current?.click()} aria-label={soundtrack ? 'Replace the music' : 'Add music'}><Music size={20}/><span><b>{soundtrack ? 'Replace music' : 'Add music'}</b><small>{soundtrack ? soundtrack.name : 'An audio file, or the sound from a video'}</small></span></button>
+          <button type="button" data-wish-well aria-label="Feedback" onClick={() => (window as any).Feedback?.open('bug')}><span><b>Feedback</b><small>Report a bug or wish it better</small></span></button>
+          <details className="studio-project-actions"><summary>Project actions</summary>
+            <button type="button" onClick={() => videoInputRef.current?.click()} aria-label="Add a video">Choose video only</button>
+            <button type="button" onClick={handleSaveProject}>Save editable project</button>
+            <button type="button" onClick={handleClear} aria-label="Clear all" className="studio-danger">Clear all sources</button>
+          </details>
+        </div>}
+        {studioTool === 'layout' && <div className="studio-subnav" role="group" aria-label="Layout controls">
+          <button type="button" onClick={() => setActiveTab('simple')} aria-pressed={activeTab === 'simple'}>Composition</button>
+          <button type="button" onClick={() => setActiveTab('advanced')} aria-label="Canvas & crop" aria-pressed={activeTab === 'advanced'}>Canvas & crop</button>
+        </div>}
+        {studioTool === 'text' && <div className="studio-subnav" role="group" aria-label="Text controls">
+          <button type="button" onClick={() => setCaptionPanel(true)} aria-pressed={captionPanel}>Lyrics & captions</button>
+          <button type="button" onClick={() => setCaptionPanel(false)} aria-pressed={!captionPanel}>Title</button>
+        </div>}
+        {images.length > 0 && <div className="studio-caption-panel" hidden={studioTool !== 'text' || !captionPanel}>
+          <CaptionEditor defaultOpen track={captions} onChange={setCaptions} take={captionTake}
+            getTime={() => recorderRef.current?.getTime() ?? 0} onSeek={time => recorderRef.current?.seek(time)}
+            disabled={exportStatus === 'processing' || captionRecording}/>
+        </div>}
+        <div className="studio-controls-panel" hidden={!studioTool || studioTool === 'add' || (studioTool === 'text' && captionPanel) || (studioTool === 'layout' && activeTab === 'advanced')}>
+          <SimpleControls section={studioTool === 'look' ? 'look' : studioTool === 'motion' ? 'motion' : studioTool === 'text' ? 'title' : 'layout'} layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
+        </div>
+        <div className="studio-controls-panel" hidden={studioTool !== 'layout' || activeTab !== 'advanced'}>
+          <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
+        </div>
+      </aside>
+      </div>
+
+      {images.length > 0 && <nav className="studio-taskbar" aria-label="Studio tools" hidden={maximized}>
+        {([{id:'add',label:'Add',icon:<Plus size={18}/>},{id:'layout',label:'Layout',icon:<Layout size={18}/>},{id:'look',label:'Look',icon:<Palette size={18}/>},{id:'motion',label:'Motion',icon:<Wand2 size={18}/>},{id:'text',label:'Text',icon:<Type size={18}/>} ] as const).map(tool => <button
+          key={tool.id} type="button" ref={el => { toolRefs.current[tool.id] = el; }}
+          aria-label={tool.label} aria-expanded={studioTool === tool.id}
+          aria-controls="studio-editing-panel" onClick={() => { setStudioTool(current => current === tool.id ? null : tool.id); if (tool.id === 'text') setCaptionPanel(true); }}>
+          {tool.icon}<span>{tool.label}</span>
+        </button>)}
+      </nav>}
+
       {/* CRASH RECOVERY. Shown only into an empty pool (shouldPromptRestore), so
           it never shadows a project already on the stage. One-handed sizes: the
           card caps at the viewport, the label truncates, both taps clear 44px. */}
@@ -3692,11 +3540,7 @@ export default function App() {
           </div>
         </div>
       )}
-      {notice && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[250] max-w-[92vw] px-4 py-2.5 rounded-xl bg-[#161616] border border-yellow-500/30 text-[10px] tracking-wide text-yellow-300 shadow-2xl">
-          {notice}
-        </div>
-      )}
+
 
       <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" className="hidden" onChange={onFileInputChange} />
       <input ref={videoInputRef} type="file" multiple accept="video/*,.mov,.mp4,.m4v,.webm" className="hidden" onChange={onFileInputChange} />

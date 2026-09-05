@@ -9,9 +9,15 @@ const ownedInstrument = `<!doctype html><html><body style="margin:0;background:#
 <canvas width="240" height="160" aria-label="Owned test artwork"></canvas>
 <script>const c=document.querySelector('canvas'),x=c.getContext('2d');x.fillStyle='#ff3355';x.fillRect(0,0,120,160);x.fillStyle='#22dd99';x.fillRect(120,0,120,160);</script></body></html>`;
 
+async function openNativeRoom(page: Page) {
+  const entry=page.getByRole('button',{name:'Art Room',exact:true});
+  if(!await entry.isVisible())await page.getByRole('button',{name:'Add',exact:true}).click();
+  await entry.click();
+}
 async function openRoom(page: Page) {
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
-  await page.getByRole('button', { name: 'Art Room', exact: true }).click();
+  await openNativeRoom(page);
+  await page.getByTestId('art-rack').locator('details.art-project-settings > summary').click();
   await page.getByRole('button', { name: 'Open an HTML instrument →', exact: true }).click();
   return page.getByRole('dialog', { name: 'Art Room', exact: true });
 }
@@ -19,6 +25,7 @@ async function loadHTML(page: Page, html = ownedInstrument, name = 'owned-art.ht
   await page.getByLabel('Open local art HTML', { exact: true }).setInputFiles({ name, mimeType: 'text/html', buffer: Buffer.from(html) });
 }
 async function saveArchive(page: Page, filename: string) {
+  await page.getByRole('button',{name:'Open',exact:true}).focus();
   const download = page.waitForEvent('download');
   await page.keyboard.press('Control+s');
   await (await download).saveAs(filename);
@@ -174,9 +181,10 @@ test('closing Art Room during the parent image decode never adds late pixels', a
 test('Art Room host shortcuts preserve a lyric draft behind the dialog', async ({ page }) => {
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
   await page.getByRole('button', { name: 'Try a lyric film', exact: true }).click();
+  await page.getByRole('button',{name:'Text',exact:true}).click();
   const draft = page.locator('textarea[placeholder="Paste the lines you want in this take"]');
   await draft.fill('THE WORDS I AM STILL WRITING');
-  await page.getByRole('button', { name: 'Art Room', exact: true }).click();
+  await openNativeRoom(page);
   const room = page.getByRole('dialog', { name: 'Art Room', exact: true });
   const close = room.getByRole('button', { name: 'Close Art Room', exact: true });
   for (const key of ['Control+z', 'Meta+z', 'Control+Shift+z', 'Meta+s', 'Control+e', 'Control+o']) {
@@ -184,8 +192,10 @@ test('Art Room host shortcuts preserve a lyric draft behind the dialog', async (
     await expect(room).toBeVisible();
   }
   await close.click();
-  await expect(draft).toHaveValue('THE WORDS I AM STILL WRITING');
   await expect(page.getByRole('button', { name: 'Art Room', exact: true })).toBeFocused();
+  await page.getByRole('button',{name:'Text',exact:true}).click();
+  await expect(draft).toBeVisible();
+  await expect(draft).toHaveValue('THE WORDS I AM STILL WRITING');
 });
 
 test('Art Room can capture a completed Bifurcata band from a local user-selected HTML file', async ({ page }, info) => {

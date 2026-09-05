@@ -69,6 +69,8 @@ import { artIsAnimated } from '../lib/artRack';
 import { takeLength } from '../lib/playhead';
 import { cutPlan, driftPlan, takeMap, type TakeSourceInput } from '../lib/takeMap';
 import { Playhead } from './Playhead';
+import { TakeStrip } from './TakeStrip';
+import './VideoStage.css';
 import type { TitlePlan } from '../lib/title';
 import type { PlannedCaption } from '../lib/captions';
 import type { LookRef } from '../lib/grade';
@@ -165,6 +167,12 @@ export interface VideoStageProps {
    * plays) rather than silently falling back to an overlay.
    */
   controlsHost?: HTMLElement | null;
+  /** Entering the large preview closes editing details; users may reopen them. */
+  focusMode?: boolean;
+  /** The main editor and media details share the available editing space. */
+  inspectorOpen?: boolean;
+  /** Synchronous on user actions so the parent can refit before painting. */
+  onDetailsChange?: (open: boolean) => void;
   /** Drop a clip back to its stills. Rendered in the dock beside its sound toggle. */
   onRemoveClip?: (id: string) => void;
   /**
@@ -887,7 +895,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, captionPlans, onTakeChange, onRecordingChange, look, turn, pace, move, beat, onNotice, onUnavailable,
-  controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
+  controlsHost, focusMode = false, inspectorOpen = false, onDetailsChange, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
   onSoundtrackLevel,
   onSoundtrackFade,
   onSoundtrackWindow,
@@ -905,6 +913,21 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const [progress, setProgress] = useState<RecordProgress | null>(null);
   const [result, setResult] = useState<RecordSuccess | null>(null);
   const [seconds, setSeconds] = useState(10);
+  // Editor chrome has its own lifetime; opening it never rebuilds the Stage.
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const detailsId = React.useId();
+  const detailsButton = useRef<HTMLButtonElement>(null);
+  const detailsChangeRef = useRef(onDetailsChange); detailsChangeRef.current = onDetailsChange;
+  React.useLayoutEffect(() => {
+    if (focusMode || inspectorOpen) {
+      setDetailsOpen(false);
+      detailsChangeRef.current?.(false);
+    }
+  }, [focusMode, inspectorOpen]);
+  const changeDetails = (open: boolean) => {
+    setDetailsOpen(open);
+    onDetailsChange?.(open);
+  };
   /**
    * THE FADE, in seconds, as REQUESTED — `lib/fade` clamps it against whatever
    * take actually runs.
@@ -1781,28 +1804,85 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       + (fadeOnTake > 0 ? `, fading in and out over ${fadeOnTake}s` : '')
     : ' · silent (nothing has its sound on)';
 
+  // Playback stays visible; the controls that change a source live behind
+  // Details. Both regions stay mounted so a disclosure costs no decoder,
+  // AudioContext, trim state or playhead position.
   const dock = (
-    /* THE BAR WRAPS ON A PHONE, and that is what makes 44px controls possible.
-       Every control in here used to be 24-32px, and the mobile gate could not
-       see a single one of them because it imports no media, so this whole strip
-       only exists once a video is loaded — measured at 390px: eleven controls
-       under the law, including `Record video` at 32x32. Simply growing them
-       overflows a 320px viewport (44*7 plus a clip chip does not fit on one
-       line), so the clip row takes its own line below the phone breakpoint
-       (`basis-full`) and the transport keeps its own. On sm+ it is one line
-       exactly as before. */
-    <div className="flex flex-wrap items-center gap-1 min-w-0 w-full">
-      {/* THE PLAYHEAD, on its own full-width row above everything else. It is
-          the only control here that is about the TAKE rather than about a
-          source, and it is the one the eye should find first — every other
-          thing in this bar edits what the take contains. */}
-      <Playhead stageRef={stageRef} take={takeNow} fadeSec={fadeSec} disabled={busy} map={strip} />
+    <div className="video-transport" data-testid="video-transport" onKeyDown={event => {
+      if (event.key === 'Escape' && detailsOpen && !event.defaultPrevented) {
+        event.preventDefault(); event.stopPropagation();
+        changeDetails(false); detailsButton.current?.focus();
+      }
+    }}>
+      <div className="video-transport__bar" role="group" aria-label="Preview playback">
+      <button
+        onClick={togglePlay}
+        // `liveCount === 0` was the gate, and it is the same bug `takeable` was
+        // invented for one control to the right: a photo collage with a move or
+        // a soundtrack has no decoder, so the one thing the user had just added
+        // was the one thing they could not start or stop.
+        disabled={busy || !(takeable || anyPlaying || !!status?.parked)}
+        title={anyPlaying ? 'Pause the preview' : 'Play the preview'}
+        aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
+        className="w-11 h-11 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
+      >
+        {anyPlaying ? <Pause size={17} /> : <Play size={17} />}
+      </button>
+
+      <div className="video-transport__playhead">
+        <Playhead stageRef={stageRef} take={takeNow} fadeSec={fadeSec} disabled={busy} />
+      </div>
+
+      <button
+        onClick={toggleSound}
+        disabled={!takeable || !status?.audioAvailable}
+        title={status?.soundOn
+          ? 'Mute the preview (does not change what the export contains)'
+          : 'Hear the preview'}
+        aria-label={status?.soundOn ? 'Mute preview' : 'Unmute preview'}
+        className={`w-11 h-11 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
+          status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
+        }`}
+      >
+        {status?.soundOn ? <Volume2 size={17} /> : <VolumeX size={17} />}
+      </button>
+
+
+        {recPhase === 'running' ? (
+          <button onClick={stopRecording} title="Stop recording" aria-label="Stop recording" className="video-transport__stop">
+            <Square size={14} fill="currentColor" /><span>Stop</span>
+          </button>
+        ) : (
+          <button ref={detailsButton} type="button" className="video-transport__details-toggle"
+            aria-expanded={detailsOpen} aria-controls={detailsId}
+            onClick={() => changeDetails(!detailsOpen)} disabled={busy}>
+            {recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : 'Details'}
+          </button>
+        )}
+      </div>
+      {recPhase === 'running' && progress && (
+        <div className="video-transport__progress" role="status">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          <span>Rendering · {remainingSeconds(progress)}s left</span>
+          <span>{fmtBytes(progress.bytes)}</span>
+          {progress.withAudio && <Volume2 size={12} />}
+        </div>
+      )}
+      {status?.message && !busy && (
+        <p className="video-transport__notice" role="status">{status.message}</p>
+      )}
+      <div id={detailsId} className="video-transport__details" hidden={!detailsOpen || busy}
+        role="region" aria-label="Media and recording details">
+        <div className="video-transport__details-heading">
+          <span>Media &amp; recording</span>
+          <span>Trim, sound and take length</span>
+        </div>
       {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
           a way out. Sound starts OFF for every clip — a collage that shouts on
           import is not a nice thing to build — but each switch is INDEPENDENT,
           so any combination of clips can be sounding, and that selection is
           exactly what the export renders. */}
-      <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto basis-full sm:basis-auto">
+      <div className="video-transport__sources">
         {clips.map((c) => {
           const st = clipRows.find((r) => r.id === c.id);
           // INTENT drives the button; audibility only tints it. `wantsAudio` is
@@ -2066,56 +2146,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         )}
       </div>
 
-      <div className="flex-1 min-w-0" />
-      {/* WHAT THE DEVICE COULD NOT DO — deferred clips render their still frame
-          rather than freezing, and the user is told which, and why. */}
-      {status?.message && !busy && (
-        <span className="text-[9px] tracking-wide text-gray-400 truncate mr-1 min-w-0" title={status.message}>
-          {status.message}
-        </span>
-      )}
-
-      {recPhase === 'running' && progress && (
-        <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-red-950/50 border border-red-500/40 shrink-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[10px] font-black tracking-[0.15em] text-white tabular-nums">
-            {remainingSeconds(progress)}s
-          </span>
-          <span className="text-[9px] tracking-widest text-gray-400 tabular-nums">
-            {fmtBytes(progress.bytes)}
-          </span>
-          {progress.withAudio && <Volume2 size={10} className="text-emerald-400" />}
-        </span>
-      )}
-
-      <button
-        onClick={togglePlay}
-        // `liveCount === 0` was the gate, and it is the same bug `takeable` was
-        // invented for one control to the right: a photo collage with a move or
-        // a soundtrack has no decoder, so the one thing the user had just added
-        // was the one thing they could not start or stop.
-        disabled={busy || !(takeable || anyPlaying || !!status?.parked)}
-        title={anyPlaying ? 'Pause the preview' : 'Play the preview'}
-        aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
-        className="w-11 h-11 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
-      >
-        {anyPlaying ? <Pause size={17} /> : <Play size={17} />}
-      </button>
-
-      <button
-        onClick={toggleSound}
-        disabled={!takeable || !status?.audioAvailable}
-        title={status?.soundOn
-          ? 'Mute the preview (does not change what the export contains)'
-          : 'Hear the preview'}
-        aria-label={status?.soundOn ? 'Mute preview' : 'Unmute preview'}
-        className={`w-11 h-11 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
-          status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
-        }`}
-      >
-        {status?.soundOn ? <Volume2 size={17} /> : <VolumeX size={17} />}
-      </button>
-
+        {strip && <div className="video-transport__tracks"><TakeStrip map={strip} take={takeNow} /></div>}
+        <div className="video-transport__render-options">
+          <span className="video-transport__length-label">Take length</span>
       {/* Take length. Only lengths this device can actually survive are offered. */}
       <div className="flex items-center rounded-lg overflow-hidden border border-white/10 shrink-0">
         {durations.map((d) => (
@@ -2130,14 +2163,6 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         ))}
       </div>
 
-      {recPhase === 'running' ? (
-        <button
-          onClick={stopRecording}
-          title="Stop recording"
-          aria-label="Stop recording"
-          className="w-11 h-11 rounded-lg bg-red-600/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shrink-0"
-        ><Square size={14} fill="currentColor" /></button>
-      ) : (
         <button
           onClick={() => startRecording()}
           disabled={!canRecord || !takeable || busy}
@@ -2153,9 +2178,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
               ? `Render ${takeNow}s — frame by frame, no dropped frames${soundSummary}`
               : `Record ${takeNow}s in real time`}
           aria-label="Record video"
-          className="w-11 h-11 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
-        >{recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : <Video size={17} />}</button>
-      )}
+          className="video-transport__record"
+        >{recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : <Video size={17} />}<span>Render video</span></button>
+        </div>
+      </div>
     </div>
   );
 
