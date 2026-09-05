@@ -26,6 +26,7 @@ import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/t
 import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt, type CaptionTrack } from './lib/captions';
 import { normalizeProjectLocks } from './lib/projectLocks';
 import { CaptionEditor } from './components/CaptionEditor';
+import { ArtRoom } from './components/ArtRoom';
 import { createLyricDemo } from './lib/lyricDemo';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
@@ -75,6 +76,8 @@ let clipSeq = 0;
 type AssetProvenance = Pick<ImageAsset, 'sourceKind' | 'sourceName' | 'sourceTime' | 'clipId'>;
 
 interface UploadOptions {
+  /** A retired Art Room capture must not land after asynchronous decoding. */
+  shouldCommit?: () => boolean;
   /** Procedural artwork has no faces; avoid loading inference for the starter. */
   geometryOnly?: boolean;
   /** Distinct id namespace (video frames use 'vid'). */
@@ -160,6 +163,8 @@ const RAIL_COL_H = 16 + RAIL_BUTTONS * 44 + (RAIL_BUTTONS - 1) * 8 + 16;
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
+  const [artRoomOpen, setArtRoomOpen] = useState(false);
+  const artRoomTriggerRef = useRef<HTMLButtonElement>(null);
   /**
    * FULL BLEED. The controls dock is `shrink-0` with no height cap, so every
    * control panel added over the life of this app took its space out of the ONE
@@ -1745,6 +1750,14 @@ export default function App() {
       while (i < files.length) {
           const chunk = files.slice(i, i + bite);
           const results = (await Promise.all(chunk.map(decodeOne))).filter(Boolean) as ImageAsset[];
+          if (opts.shouldCommit && !opts.shouldCommit()) {
+            for (const asset of results) {
+              URL.revokeObjectURL(asset.src);
+              if (asset.previewSrc && asset.previewSrc !== asset.src) URL.revokeObjectURL(asset.previewSrc);
+            }
+            if (track) stepIngest(files.length - i);
+            return allNewAssets;
+          }
           allNewAssets.push(...results);
           commit(results);
           i += chunk.length;
@@ -3074,6 +3087,19 @@ export default function App() {
           stays mounted under `display:none`. */}
       <ExportDialog canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); void flushSession(); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
+      {artRoomOpen && <ArtRoom open onClose={() => { setArtRoomOpen(false); artRoomTriggerRef.current?.focus(); }}
+        busy={demoBusy || exportStatus === 'processing' || captionRecording || restoring}
+        onImport={async (file, isCurrent) => {
+          if (!isCurrent()) return;
+          if (demoBusyRef.current || ingestRef.current.total > 0 || projectReadBusyRef.current > 0 || recorderRef.current?.isRecording || exportStatus === 'processing' || restoring) {
+            throw new Error('Let the current import or export finish, then add the artwork.');
+          }
+          beginIngest(1, 'Adding artwork…');
+          const loaded = await handleUpload([file], { geometryOnly: true, idPrefix: 'art', noun: 'artwork', shouldCommit: isCurrent });
+          if (!isCurrent()) return;
+          if (!loaded.length) throw new Error('The artwork could not be decoded. Try capturing again.');
+          flashNotice('Artwork added as a still image. Its pixels travel in your saved project.');
+        }} />}
 
       <div
         className="flex-1 relative bg-[#050505] flex items-center justify-center overflow-hidden"
@@ -3567,6 +3593,7 @@ export default function App() {
              <button onClick={()=>{ setActiveTab('simple'); setCaptionPanel(false); }} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
              <button onClick={()=>{ setActiveTab('advanced'); setCaptionPanel(false); }} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${!captionPanel && activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
              <button onClick={() => setCaptionPanel(true)} disabled={!images.length} aria-label="Lyrics & captions" aria-pressed={captionPanel} className={`flex-1 min-h-[48px] px-2 text-xs font-medium ${captionPanel ? 'text-amber-200 bg-[#1a1a1a] border-t-2 border-amber-300' : 'text-gray-400 hover:text-white'} disabled:opacity-40`}>Lyrics</button>
+             <button ref={artRoomTriggerRef} type="button" onClick={() => setArtRoomOpen(true)} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring} className="flex-1 min-h-[48px] px-2 text-xs font-medium text-cyan-200 hover:bg-white/5 disabled:opacity-40">Art Room</button>
          </div>
          {images.length > 0 && <div
            className="min-h-0 flex-1 overflow-hidden"

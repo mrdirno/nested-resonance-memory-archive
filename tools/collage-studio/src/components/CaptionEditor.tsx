@@ -1,5 +1,6 @@
 // Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 import React, { useRef, useState } from 'react';
+import { LyricImportHelp } from './LyricImportHelp';
 import { EMPTY_CAPTION_TRACK, cleanCaptionText, draftCaptions, normalizeCaptionTrack, parseCaptions, serializeSrt, serializeVtt, type CaptionCue, type CaptionTrack } from '../lib/captions';
 
 export interface CaptionEditorProps {
@@ -64,6 +65,7 @@ export const CaptionEditor: React.FC<CaptionEditorProps> = ({ track, onChange, t
         <label className="block text-xs text-gray-300">Position<select style={{ height: 44, appearance: 'none', WebkitAppearance: 'none' }} value={current.place} onChange={(e) => attempt(() => commit({ ...current, place: e.target.value as CaptionTrack['place'] }))} className={`${control} mt-1 w-full`}><option value="bc">Bottom center</option><option value="tc">Top center</option></select></label>
         <label className="block text-xs text-gray-300">Font size<select style={{ height: 44, appearance: 'none', WebkitAppearance: 'none' }} value={current.size} onChange={(e) => attempt(() => commit({ ...current, size: e.target.value as CaptionTrack['size'] }))} className={`${control} mt-1 w-full`}><option value="sm">Small</option><option value="md">Medium</option><option value="lg">Large</option></select></label>
       </div>
+      <LyricImportHelp />
       <label className="block text-xs text-gray-300">Lyrics, one line per cue<textarea value={lyrics} onChange={(e) => setLyrics(e.target.value)} rows={3} placeholder="Paste the lines you want in this take" className={`${control} mt-1 w-full resize-y`} /></label>
       <div className="flex flex-wrap gap-2">
         <button type="button" className={button} onClick={() => attempt(() => { commit({ ...current, cues: draftCaptions(lyrics, take) }); setEditing(null); setNotice('Evenly spaced draft created. Preview each cue and adjust the timing to your song.'); })}>{current.cues.length ? 'Replace with evenly spaced draft' : 'Create evenly spaced draft'}</button>
