@@ -39,75 +39,50 @@ const PHONES = [320, 360, 390, 430];
 
 type Shot = {
   vw: number; vh: number; overflowX: number;
-  art: { w: number; h: number; pct: number } | null;
-  dockPct: number | null;
+  art: { w: number; h: number; pct: number; fitPct: number } | null;
+  dockPct: number | null; scrollers: number | null;
+  controls: { name: string; clippedBy: number; overArt: boolean; overBand: boolean }[];
   videos: number; ct: number[]; paused: boolean[];
 };
 
-/** Everything this file judges, read off the REAL page in one pass. */
+/** Measure the actual composition, never the empty-state template thumbnail. */
 const readStage = () => {
-  const c = document.querySelector('canvas');
+  const c = document.querySelector('[data-testid="studio-artwork"] canvas');
   const r = c?.getBoundingClientRect();
   const vids = Array.from(document.querySelectorAll('video'));
-  const shell = document.querySelector('div.fixed.inset-0');
-  const dock = shell
-    ? Array.from(shell.children).find(
-        (k) => k.className.includes('border-t') && k.className.includes('shrink-0'),
-      )
-    : null;
+  const bandElement=document.querySelector('[data-testid="studio-art-band"]');
+  const band=bandElement?.getBoundingClientRect();
+  const padding=bandElement?getComputedStyle(bandElement):null;
+  const usableWidth=band&&padding?band.width-parseFloat(padding.paddingLeft)-parseFloat(padding.paddingRight):0;
+  const usableHeight=band&&padding?band.height-parseFloat(padding.paddingTop)-parseFloat(padding.paddingBottom):0;
+  const fittedWidth=r?Math.min(usableWidth,usableHeight*r.width/r.height):0;
+  const fittedHeight=r?fittedWidth*r.height/r.width:0;
+  const dock = document.querySelector('.studio-inspector');
   const dr = dock?.getBoundingClientRect();
-  const vis = dock ? getComputedStyle(dock as Element).display !== 'none' : false;
+  const vis = !!dock?.getClientRects().length;
+  const overlaps=(a:DOMRect,b:DOMRect)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
   return {
-    vw: window.innerWidth,
-    vh: window.innerHeight,
-    overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    art: r
-      ? {
-          w: Math.round(r.width),
-          h: Math.round(r.height),
-          pct: +(((r.width * r.height) / (window.innerWidth * window.innerHeight)) * 100).toFixed(1),
-        }
-      : null,
-    dockPct: dr && vis ? +((dr.height / window.innerHeight) * 100).toFixed(1) : null,
-    videos: vids.length,
-    ct: vids.map((v) => +v.currentTime.toFixed(2)),
-    paused: vids.map((v) => v.paused),
-    // How many nested scrollers the dock contains, and whether its sticky
-    // primary action bar (fragment count / Shuffle / Remix) is on screen.
-    scrollers: dock
-      ? Array.from(dock.querySelectorAll('*')).concat([dock]).filter((e) => {
-          const s = getComputedStyle(e);
-          return (s.overflowY === 'auto' || s.overflowY === 'scroll') && e.scrollHeight > e.clientHeight + 1;
-        }).length
-      : null,
-    stickyInView: (() => {
-      const ud = dock?.querySelector('.ui-dock');
-      if (!ud) return null;
-      const st = Array.from(ud.querySelectorAll('*')).filter((e) => getComputedStyle(e).position === 'sticky');
-      if (!st.length) return null;
-      const r2 = st[st.length - 1].getBoundingClientRect();
-      return r2.top >= 0 && r2.bottom <= window.innerHeight + 0.5;
-    })(),
-    // The stage rail must be wholly on the band and never sit on the picture.
-    rail: (() => {
-      const btn = document.querySelector('button[aria-label="Maximize the shot"]');
-      const rail = btn?.parentElement;
-      const band = rail?.parentElement;
-      if (!rail || !band || !r) return null;
-      const rr = rail.getBoundingClientRect();
-      const br = band.getBoundingClientRect();
-      return {
-        clippedBy: Math.max(0, Math.round(rr.bottom - br.bottom), Math.round(rr.right - br.right)),
-        overArt: rr.left < r.right && rr.right > r.left && rr.top < r.bottom && rr.bottom > r.top,
-      };
-    })(),
+    vw:innerWidth,vh:innerHeight,
+    overflowX:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+    art:r?{w:Math.round(r.width),h:Math.round(r.height),pct:+((r.width*r.height/(innerWidth*innerHeight))*100).toFixed(1),fitPct:r.width*r.height/(fittedWidth*fittedHeight)*100}:null,
+    dockPct:dr&&vis?+(dr.height/innerHeight*100).toFixed(1):null,
+    videos:vids.length,ct:vids.map(v=>+v.currentTime.toFixed(2)),paused:vids.map(v=>v.paused),
+    scrollers:vis&&dock?Array.from(dock.querySelectorAll('*')).concat([dock]).filter(e=>{
+      const style=getComputedStyle(e);
+      return e.getClientRects().length>0&&(style.overflowY==='auto'||style.overflowY==='scroll')&&e.scrollHeight>e.clientHeight+1;
+    }).length:null,
+    controls:Array.from(document.querySelectorAll('.ui-topbar,.studio-playback,.studio-preview-tools,.studio-taskbar,.studio-inspector'))
+      .filter(e=>e.getClientRects().length>0).map(e=>{const box=e.getBoundingClientRect();return {
+        name:e.className,clippedBy:Math.max(0,Math.round(-box.left),Math.round(-box.top),Math.round(box.right-innerWidth),Math.round(box.bottom-innerHeight)),
+        overArt:r?overlaps(box,r):false,overBand:band?overlaps(box,band):false,
+      };}),
   };
 };
 
 async function loadClip(page: Page) {
   await page.goto(APP_URL);
-  await page.locator('input[type="file"]').first().setInputFiles([CLIP]);
-  await page.locator('canvas').first().waitFor({ timeout: 120_000 });
+  await page.locator('input[type=file][accept="image/*,video/*"]').setInputFiles([CLIP]);
+  await page.getByTestId('studio-artwork').locator('canvas').waitFor({ timeout: 120_000 });
   // The band is measured by a ResizeObserver, so let the first fit land.
   await page.waitForTimeout(1200);
 }
@@ -115,28 +90,25 @@ async function loadClip(page: Page) {
 const snap = (page: Page) => page.evaluate(readStage) as Promise<Shot>;
 
 test.describe('the artwork gets the room', () => {
+  test.setTimeout(180_000);
   for (const width of PHONES) {
     test(`R1: the collage is big enough to see at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: width < 360 ? 568 : 844 });
       await loadClip(page);
       const s = await snap(page);
       expect(s.art, 'no canvas on screen at all').not.toBeNull();
-      /**
-       * HONEST FLOORS. 320x568 with a clip loaded is CHROME-BOUND, not layout-
-       * bound: 61px of header plus a transport row that wraps to 157px plus a
-       * 47px tab bar is 265px of things the app needs before any panel opens.
-       * The normal view there goes 3x4 -> 16x24 and no amount of capping fixes
-       * it — FULL BLEED does (312x467, 80% of the screen, asserted in R1b), and
-       * pretending otherwise with a floor this size cannot meet is how a gate
-       * starts lying. Everywhere else the floor is a real one.
-       */
-      const floor = width < 360 ? { w: 14, h: 20 } : { w: 150, h: 220 };
+      // C3712 no longer needs a near-zero exception for the smallest phone.
+      const floor = { w: 200, h: 300 };
       expect(s.art!.w, `artwork only ${s.art!.w}px wide at ${width}px`).toBeGreaterThanOrEqual(floor.w);
       expect(s.art!.h, `artwork only ${s.art!.h}px tall at ${width}px`).toBeGreaterThanOrEqual(floor.h);
       expect(s.overflowX, 'horizontal overflow').toBeLessThanOrEqual(0);
-      // The rail must be wholly on the band and never on the picture.
-      expect(s.rail!.clippedBy, `the stage rail hangs ${s.rail!.clippedBy}px off the band`).toBe(0);
-      expect(s.rail!.overArt, 'the stage rail is sitting on the artwork').toBe(false);
+      // Playback, navigation and editors occupy their own layout regions.
+      expect(s.controls.length).toBeGreaterThan(1);
+      for(const control of s.controls){
+        expect(control.clippedBy, `${control.name} leaves the viewport`).toBe(0);
+        expect(control.overArt, `${control.name} covers the artwork`).toBe(false);
+        expect(control.overBand, `${control.name} enters the measured artwork band`).toBe(false);
+      }
     });
   }
 
@@ -144,40 +116,37 @@ test.describe('the artwork gets the room', () => {
     for (const width of PHONES) {
       await page.setViewportSize({ width, height: width < 360 ? 568 : 844 });
       await loadClip(page);
-      await page.getByRole('button', { name: 'Maximize the shot' }).click();
+      await page.getByRole('button', { name: 'Expand preview' }).click();
       await page.waitForTimeout(700);
       const s = await snap(page);
-      expect(s.art!.pct, `full bleed only reached ${s.art!.pct}% of the screen at ${width}px`)
-        .toBeGreaterThan(60);
+      expect(s.art!.fitPct, `focus uses only ${s.art!.fitPct}% of the largest uncropped fit at ${width}px`)
+        .toBeGreaterThanOrEqual(99);
       expect(s.overflowX, `full bleed overflows sideways at ${width}px`).toBeLessThanOrEqual(0);
       await page.keyboard.press('Escape');
     }
   });
 
-  test('R11: the dock keeps ONE scroller and its primary actions stay on screen', async ({ page }) => {
-    /**
-     * The first version of this change wrapped the dock in a second capped
-     * scroller. `.ui-dock` is ALREADY a capped scroller whose primary action bar
-     * — fragment count, Shuffle, Remix — is `position: sticky` against its
-     * bottom, so nesting pinned that bar to the bottom of an inner box pushed
-     * below the outer scrollport and the most-used controls in the app went off
-     * screen (measured 778..832 in an 844px viewport, to 869..923). An
-     * adversarial audit caught it; the cap moved onto `--dock-max` instead.
-     */
-    for (const [width, height] of [[320, 568], [390, 844], [1280, 900]] as const) {
-      await page.setViewportSize({ width, height });
-      await loadClip(page);
-      const s = await snap(page);
-      expect(s.scrollers, `the dock has ${s.scrollers} nested scrollers at ${width}px`).toBeLessThanOrEqual(1);
-      expect(s.stickyInView, `the sticky primary action bar is off screen at ${width}px`).toBe(true);
-      // And the panel itself is genuinely capped, which is where the height
-      // now comes from.
-      const capped = await page.evaluate(() => {
-        const ud = document.querySelector('.ui-dock');
-        return ud ? parseFloat(getComputedStyle(ud).maxHeight) : null;
+  test('R11: each editing panel has one bounded scroller and its close action stays available', async ({ page }) => {
+    for (const [width, height] of [[320,568],[390,844],[1280,900]] as const) {
+      await page.setViewportSize({width,height});await loadClip(page);
+      await page.getByRole('button',{name:'Layout',exact:true}).click();
+      const s=await snap(page);
+      expect(s.dockPct,'the requested inspector is missing').not.toBeNull();
+      expect(s.scrollers,`nested inspector scrollers at ${width}px`).toBeLessThanOrEqual(1);
+      const geometry=await page.locator('.studio-inspector').evaluate(e=>{
+        const box=e.getBoundingClientRect(),dock=e.querySelector('.ui-dock')!,scroll=dock.getBoundingClientRect();
+        const close=e.querySelector('button[aria-label="Close editing panel"]')!,button=close.getBoundingClientRect();
+        const hit=document.elementFromPoint(button.x+button.width/2,button.y+button.height/2);
+        return {top:box.top,bottom:box.bottom,height:box.height,scrollTop:scroll.top,scrollBottom:scroll.bottom,
+          closeHit:hit===close||close.contains(hit),closeHeight:button.height};
       });
-      expect(capped, `the control panel is uncapped at ${width}px`).not.toBeNull();
-      expect(capped!, `the control panel cap is ${capped}px at ${width}px`).toBeLessThanOrEqual(300);
+      expect(geometry.top).toBeGreaterThanOrEqual(0);expect(geometry.bottom).toBeLessThanOrEqual(height+1);
+      if(width<1000)expect(geometry.height).toBeLessThanOrEqual(height*.43);
+      expect(geometry.scrollTop).toBeGreaterThanOrEqual(geometry.top);
+      expect(geometry.scrollBottom).toBeLessThanOrEqual(geometry.bottom+1);
+      expect(geometry.closeHit).toBe(true);expect(geometry.closeHeight).toBeGreaterThanOrEqual(43.5);
+      await page.getByRole('button',{name:'Close editing panel',exact:true}).click();
+      await expect(page.getByRole('button',{name:'Layout',exact:true})).toBeFocused();
     }
   });
 
@@ -196,12 +165,12 @@ test.describe('the artwork gets the room', () => {
     await loadClip(page);
     const before = await snap(page);
 
-    await page.getByRole('button', { name: 'Maximize the shot' }).click();
+    await page.getByRole('button', { name: 'Expand preview' }).click();
     await page.waitForTimeout(700);
     const max = await snap(page);
 
-    expect(max.art!.pct, `full bleed only reached ${max.art!.pct}% of the screen`)
-      .toBeGreaterThan(35);
+    expect(max.art!.fitPct, `focus uses only ${max.art!.fitPct}% of the available uncropped fit`)
+      .toBeGreaterThanOrEqual(99);
     expect(max.art!.h).toBeGreaterThan(before.art!.h);
     expect(max.dockPct, 'the dock is still taking space while maximized').toBeNull();
     expect(max.overflowX, 'full bleed overflows sideways').toBeLessThanOrEqual(0);
@@ -231,26 +200,26 @@ test.describe('the artwork gets the room', () => {
      */
     const stamp = () => page.evaluate(() => {
       const v = document.querySelector('video') as (HTMLVideoElement & { __room?: number }) | null;
-      const c = document.querySelector('canvas') as (HTMLCanvasElement & { __room?: number }) | null;
+      const c = document.querySelector('[data-testid="studio-artwork"] canvas') as (HTMLCanvasElement & { __room?: number }) | null;
       if (v) v.__room = 1234;
       if (c) c.__room = 5678;
       return { v: !!v, c: !!c };
     });
     const stamped = () => page.evaluate(() => {
       const v = document.querySelector('video') as (HTMLVideoElement & { __room?: number }) | null;
-      const c = document.querySelector('canvas') as (HTMLCanvasElement & { __room?: number }) | null;
+      const c = document.querySelector('[data-testid="studio-artwork"] canvas') as (HTMLCanvasElement & { __room?: number }) | null;
       return { video: v?.__room === 1234, canvas: c?.__room === 5678 };
     });
     expect(await stamp()).toEqual({ v: true, c: true });
 
-    await page.getByRole('button', { name: 'Maximize the shot' }).click();
+    await page.getByRole('button', { name: 'Expand preview' }).click();
     await page.waitForTimeout(900);
     const max = await snap(page);
     expect(max.videos, 'maximizing built a second decoder').toBe(1);
     expect(max.paused[0], 'maximizing stopped the clip').toBe(false);
     expect(await stamped(), 'maximizing REMOUNTED the stage').toEqual({ video: true, canvas: true });
 
-    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.getByRole('button', { name: 'Back to editing' }).click();
     await page.waitForTimeout(900);
     const back = await snap(page);
     expect(back.videos, 'restoring built a second decoder').toBe(1);
@@ -264,30 +233,18 @@ test.describe('the artwork gets the room', () => {
     expect(t1 === t2, `playhead frozen at ${t1}s after the toggle`).toBe(false);
   });
 
-  test('R6: the stage rail stays on screen on a phone held landscape', async ({ page }) => {
-    // 844x390 leaves a ~118px band. A 200px column of buttons does not fit in
-    // it, and the band clips, so `Clear all` was off the bottom with nothing to
-    // scroll to reach it.
-    await page.setViewportSize({ width: 844, height: 390 });
-    await loadClip(page);
-    const clipped = await page.evaluate(() => {
-      const btn = document.querySelector('button[aria-label="Maximize the shot"]');
-      const rail = btn?.parentElement;
-      const band = rail?.parentElement;
-      if (!rail || !band) return null;
-      const rr = rail.getBoundingClientRect();
-      const br = band.getBoundingClientRect();
-      return { below: Math.round(rr.bottom - br.bottom), right: Math.round(rr.right - br.right) };
-    });
-    expect(clipped, 'no stage rail found').not.toBeNull();
-    expect(clipped!.below, `the rail hangs ${clipped!.below}px past the bottom of the stage`)
-      .toBeLessThanOrEqual(0);
-    expect(clipped!.right, `the rail hangs ${clipped!.right}px past the right of the stage`)
-      .toBeLessThanOrEqual(0);
-    // Every button in it is still reachable, including the last one.
-    for (const name of ['Maximize the shot', 'Add more images or video', 'Clear all']) {
-      await expect(page.getByRole('button', { name })).toBeVisible();
-    }
+  test('R6: landscape keeps playback outside the artwork and project actions reachable', async ({ page }) => {
+    await page.setViewportSize({width:844,height:390});await loadClip(page);
+    const s=await snap(page);
+    for(const control of s.controls){expect(control.clippedBy,control.name).toBe(0);expect(control.overBand,control.name).toBe(false);}
+    await expect(page.getByRole('button',{name:'Expand preview',exact:true})).toBeVisible();
+    await page.getByRole('button',{name:'Add',exact:true}).click();
+    await expect(page.getByRole('button',{name:'Add more images or video',exact:true})).toBeVisible();
+    await page.getByText('Project actions',{exact:true}).click();
+    const clear=page.getByRole('button',{name:'Clear all',exact:true});
+    await clear.scrollIntoViewIfNeeded();
+    const hit=await clear.evaluate(e=>{const b=e.getBoundingClientRect(),h=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);return {hit:h===e||e.contains(h),bottom:b.bottom,height:b.height};});
+    expect(hit.hit).toBe(true);expect(hit.bottom).toBeLessThanOrEqual(390);expect(hit.height).toBeGreaterThanOrEqual(43.5);
   });
 
   test('R7: F toggles full bleed, and typing an f never does', async ({ page }) => {
@@ -297,8 +254,7 @@ test.describe('the artwork gets the room', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await loadClip(page);
     const isMax = () => page.evaluate(() =>
-      !document.querySelector('button[aria-label="Maximize the shot"]')
-      && !!document.querySelector('button[aria-label="Exit full bleed"]'));
+      document.querySelector('.studio-workspace')?.getAttribute('data-focus') === 'true');
 
     expect(await isMax()).toBe(false);
     await page.keyboard.press('f');
@@ -308,6 +264,8 @@ test.describe('the artwork gets the room', () => {
     await page.waitForTimeout(500);
     expect(await isMax(), 'F did not leave full bleed').toBe(false);
 
+    await page.getByRole('button',{name:'Text',exact:true}).click();
+    await page.getByRole('button',{name:'Title',exact:true}).click();
     const title = page.getByPlaceholder('Say what it is');
     await title.click();
     await title.fill('');
@@ -338,18 +296,18 @@ test.describe('the artwork gets the room', () => {
      */
     await page.setViewportSize({ width: 1280, height: 900 });
     await loadClip(page);
-    const src = readFileSync(join(HERE, '..', '..', '..', '..', 'shared', 'feedback.js'), 'utf8');
+    const src = readFileSync(process.env.COLLAGE_FEEDBACK_SCRIPT || join(HERE, '..', '..', '..', '..', 'shared', 'feedback.js'), 'utf8');
     await page.addScriptTag({ content: src });
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => !!(window as unknown as { Feedback?: unknown }).Feedback),
       'the shared wishing well did not load').toBe(true);
 
     const isMax = () => page.evaluate(() =>
-      !document.querySelector('button[aria-label="Maximize the shot"]')
-      && !!document.querySelector('button[aria-label="Exit full bleed"]'));
+      document.querySelector('.studio-workspace')?.getAttribute('data-focus') === 'true');
 
     // While it is genuinely open, the shortcut must stay out of the way.
-    await page.evaluate(() => (window as unknown as { Feedback: { open: (k: string) => void } }).Feedback.open('bug'));
+    await page.getByRole('button',{name:'Add',exact:true}).click();
+    await page.getByRole('button',{name:'Feedback',exact:true}).click();
     await page.waitForTimeout(400);
     await page.keyboard.press('f');
     await page.waitForTimeout(400);
@@ -375,14 +333,16 @@ test.describe('the artwork gets the room', () => {
   test('R9: F does nothing with an empty pool, and every full-screen sheet says it is one', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(APP_URL);
-    await expect(page.getByText('LOAD SOURCE')).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole('heading',{name:'Start a new piece',exact:true})).toBeVisible({ timeout: 60_000 });
     // There is nothing to maximize. F used to hide the header and the dock and
     // leave the drop target alone on a black page, and the strand-guard could
     // not fire because pressing F does not change images.length.
     await page.keyboard.press('f');
     await page.waitForTimeout(500);
-    await expect(page.getByText('LOAD SOURCE')).toBeVisible();
-    expect((await snap(page)).dockPct, 'F hid the whole UI with nothing loaded').not.toBeNull();
+    await expect(page.getByRole('heading',{name:'Start a new piece',exact:true})).toBeVisible();
+    await expect(page.getByRole('button',{name:'Art Room',exact:true})).toBeVisible();
+    await expect(page.getByRole('button',{name:'Open',exact:true})).toBeVisible();
+    await expect(page.getByRole('button',{name:'Back to editing',exact:true})).toHaveCount(0);
 
     // Every sheet that covers the screen must be findable as a dialog, or the
     // shortcut guard acts BEHIND it. The recorded-take preview was the one that
@@ -409,13 +369,13 @@ test.describe('the artwork gets the room', () => {
     const focused = () => page.evaluate(() =>
       (document.activeElement?.getAttribute('aria-label') || document.activeElement?.tagName || '?'));
 
-    await page.getByRole('button', { name: 'Maximize the shot' }).click();
+    await page.getByRole('button', { name: 'Expand preview' }).click();
     await page.waitForTimeout(600);
-    expect(await focused(), 'maximizing dropped focus to the body').toBe('Exit full bleed');
+    expect(await focused(), 'maximizing dropped focus to the body').toBe('Back to editing');
 
-    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.getByRole('button', { name: 'Back to editing' }).click();
     await page.waitForTimeout(600);
-    expect(await focused(), 'restoring dropped focus to the body').toBe('Maximize the shot');
+    expect(await focused(), 'restoring dropped focus to the body').toBe('Expand preview');
   });
 
   test('R12: the frame never overshoots its band while entering or leaving full bleed', async ({ page }) => {
@@ -444,7 +404,7 @@ test.describe('the artwork gets the room', () => {
       w.__over = []; w.__n = 0;
       const tick = () => {
         w.__n++;
-        const fr = document.querySelector('div.relative.shadow-2xl');
+        const fr = document.querySelector('[data-testid="studio-artwork"]');
         const band = fr?.parentElement;
         if (fr && band) {
           const a = fr.getBoundingClientRect();
@@ -461,9 +421,9 @@ test.describe('the artwork gets the room', () => {
     });
 
     for (let i = 0; i < 5; i++) {
-      await page.getByRole('button', { name: 'Maximize the shot' }).click();
+      await page.getByRole('button', { name: 'Expand preview' }).click();
       await page.waitForTimeout(400);
-      await page.getByRole('button', { name: 'Exit full bleed' }).click();
+      await page.getByRole('button', { name: 'Back to editing' }).click();
       await page.waitForTimeout(400);
     }
 
@@ -479,7 +439,7 @@ test.describe('the artwork gets the room', () => {
   test('R5: full bleed is watertight and thumb-sized on a phone', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await loadClip(page);
-    await page.getByRole('button', { name: 'Maximize the shot' }).click();
+    await page.getByRole('button', { name: 'Expand preview' }).click();
     await page.waitForTimeout(700);
 
     const s = await snap(page);
@@ -500,8 +460,17 @@ test.describe('the artwork gets the room', () => {
     expect(small, `full-bleed controls under 44px: ${JSON.stringify(small)}`).toEqual([]);
 
     // Every action you are maximized in order to reach has to be there.
-    for (const name of ['Roll the dice', 'Shuffle images', 'Remix shapes', 'Exit full bleed']) {
+    for (const name of ['Roll the dice', 'Undo the last composition change', 'Back to editing']) {
       await expect(page.getByRole('button', { name })).toBeVisible();
+    }
+    // The more specific composition operations remain reachable in Layout.
+    await page.getByRole('button',{name:'Back to editing',exact:true}).click();
+    await page.getByRole('button',{name:'Layout',exact:true}).click();
+    for(const name of ['Shuffle images','Remix shapes']){
+      const control=page.getByRole('button',{name,exact:true});
+      await control.scrollIntoViewIfNeeded();
+      const target=await control.evaluate(e=>{const b=e.getBoundingClientRect(),hit=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);return {height:b.height,width:b.width,hit:hit===e||e.contains(hit)};});
+      expect(target.height).toBeGreaterThanOrEqual(43.5);expect(target.width).toBeGreaterThanOrEqual(43.5);expect(target.hit).toBe(true);
     }
   });
 });

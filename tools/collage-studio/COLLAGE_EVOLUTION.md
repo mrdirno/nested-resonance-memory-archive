@@ -17,6 +17,7 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3712 — PREVIEW-FIRST STUDIO (2026-09-05), shipped and verified:** whole-artwork playback with one optional editor at a time, compact persistent transport, and a simplified template-first Art Room. The same lyric sample grew from 164×292 to 338×602 on a 390×844 viewport, and 111×199 to 273×487 on 1280×720; visible buttons fell from 19 to 11. Add / Layout / Look / Motion / Text replace the always-open control wall. Code `496a17ba`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33995354619), **173/173 public-site browser cases**, 40/40 unit suites, complete decoded native-video inspection, and matching public JS/CSS/worker/service-worker bytes. [Release and navigation guide](C3712_RELEASE.md).
 - **C3711 — NATIVE ART RACK (2026-09-05), shipped and verified:** eight original templates with real thumbnails; up to eight enabled, soloed, ordered, blended layers; seeds and dice locks; parameter automation; persistent editable recipes plus canonical PNG; native Stage/video rendering at requested time. Template gallery is primary; HTML player is secondary. Code `efdc4b9f`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33991651937), **58/58 public-site browser cases**, 40/40 unit suites, and real encoded-frame inspection. Native animation reaches video; imported HTML remains a still capture.
 - **C3710 — ART ROOM + LYRIC HANDOFFS (2026-09-05):** the Art Room dock opens an original seeded Tidal Paper instrument or local self-contained HTML. An opaque sandbox and private session return validated still PNG pixels into the existing collage/project workflow. Show artwork reveals deferred Bifurcata worlds; local Bifurcata capture and saved originals passed on Chromium, Mobile Chrome and Mobile Safari. Lyrics now includes a copyable audio-transcription prompt, verified free/browser options and an Apple Silicon setup link. The [art and intelligence roadmap](ART_AND_INTELLIGENCE_ROADMAP.md) defines downloaded browser drafts, a native Mac handoff, deterministic animation adapters and portable audiovisual projects. These future capabilities are not shipped by this release. Code `3f3ede40`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143), **40/40 live browser cases** and actual live capture/guide review. Only captured pixels persist; editable HTML, seed recipes and live instrument motion do not.
 - **C3709 — TIMED LYRICS (2026-09-05):** editable cue text and in/out timing,
@@ -44,8 +45,8 @@ or re-documenting an existing capability is DD, not delivery.
   and 5 crop-focus modes, both rolled by the dice and carried in the share code;
   THE COLOUR DICE — a second roll (`lib/dealRoll.ts`) over the arrangement, the
   focus and the twist ONLY, so a colour sort can be re-rolled without losing the
-  layout you just found; in the dock under the dice and in the full-bleed rail,
-  which now wraps 4/3 below 390px to hold its seventh 44px target;
+  layout you just found; now under Layout → Composition. Expanded preview
+  keeps Dice, Undo and Back to editing outside the artwork;
   INTENT-AWARE INTAKE — the MUSIC button takes a video for its SOUND and leaves
   its pictures out (`lib/intake.ts`, swept over extension x MIME x intent);
   EVICTION — in full bleed a tap arms a fragment and offers pin or REMOVE, and
@@ -84,13 +85,13 @@ or re-documenting an existing capability is DD, not delivery.
   (`clipWindow.audioSchedule`), so the sound laps with the picture instead of
   with the audio track;
   UNDO — the roll you liked comes back: undo+redo over the destructive
-  composition events (roll, shuffle, remix, applied code), in the full-bleed
-  rail, under the dice in the dock, and on Cmd-Z / Shift-Cmd-Z / Ctrl-Y;
+  composition events (roll, shuffle, remix, applied code), under Layout and
+  on Cmd-Z / Shift-Cmd-Z / Ctrl-Y; expanded preview keeps Undo visible;
   THE COMPOSITION CODE — every composition has a short code, shown under the
   dice, tap to copy, paste one back to open it, and carried in the address bar
   so a LINK is a collage. `lib/rollCode.ts` owns the one seam between app state
   and a `Roll` in both directions; the sources are deliberately not in it;
-  THE TITLE — a caption typed into the dock and drawn over the finished collage
+  THE TITLE — a caption typed under Text → Title and drawn over the finished collage
   by all four surfaces that produce pixels (still preview, live Stage and so
   both video recorders, the export WORKER's OffscreenCanvas, and the SVG as real
   `<text>`), from ONE plan wrapped once on the main thread at the 1200 basis
@@ -578,6 +579,7 @@ or re-documenting an existing capability is DD, not delivery.
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
 for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
+- [x] **PREVIEW FIRST, ONE EDITING TASK AT A TIME (C3712)** — native art templates, a media import or the original lyric sample start a project. Main editing opens Add, Layout, Look, Motion or Text in one bounded inspector; media Details uses the same screen-space budget. The whole artwork fits the measured remaining band and expanded preview retains playback. Art Room exposes the selected layer's controls and keeps secondary recipe/HTML actions collapsed. Browser geometry, input/keyboard focus, retained Stage/decoder/playhead, save/reopen and encoded video prove the route.
 - [x] **TIMED LYRICS** — a single non-overlapping track of editable cues on the
       output clock, with SRT/WebVTT import/export and project/recovery persistence.
       A cue replaces the static title on [start,end); the title returns in gaps.
@@ -1524,6 +1526,7 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
    before ship (it has caught real bugs — twice, on 2026-08).
 6. **RATCHET** — update this file: mark the rung `[x]`, add newly-found gaps, and
    append a cycle-log line at the bottom.
+7. **COORDINATE AFTER PUBLICATION** — send one factual release receipt to the existing fleet channel so Codex and Claude read the same shipped state at their next bump. Include commit, deployment, live evidence, limits, next owner and this book. Deduplicate by release thread; retain the read-back message ID. Posting is not peer acknowledgement. C3712 uses `persona500-collage-C3712-release`.
 
 ## QC GATES (fab-lab watertight — non-negotiable)
 `tsc --noEmit` clean · a unit sweep for any pure algorithm · e2e on :5199 for dev
@@ -1532,6 +1535,18 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-05 (C3712) — OPTIONAL PANELS MUST SHARE ONE SPACE BUDGET
+
+Making the old controls collapsible was insufficient while playback Details could open beside another editor and status toasts covered the scrubber. App and VideoStage now coordinate one disclosure; notices occupy their own row. The portal host and Stage remain mounted through task/focus changes. Tests park the playhead, retain the actual canvas and decoder, open competing panels and inspect controls against artwork bounds. Stop stays visible while recording, including in expanded preview.
+
+### 2026-09-05 (C3712) — FOCUS RETURNS AFTER THE LAYOUT EXISTS
+
+On a 360×448 screen the taskbar hides while editing. Focusing its trigger in the close event did nothing because CSS still hid the target until React committed the next view. A layout effect restores focus after the change and moves focus into a short-screen inspector on open. Returning from expanded preview chooses the visible header control or the inspector's Done button. Escape closes the innermost disclosure without also leaving expanded playback. Desktop and WebKit cases exercise opening, Done, focused inputs, F, Escape and the return path.
+
+### 2026-09-05 (C3712) — A THUMBNAIL IS NOT THE LOADED STAGE
+
+The new start tile has a canvas, so a generic first-canvas readiness check can pass before import. New and migrated gates identify the actual artwork container. A static title can render through the still path, so bounds tests measure the shared artwork wrapper rather than requiring a canvas. Pixel-repeat checks wait for the four-second inline status to retire and assert the same backing dimensions; comparing two preview raster sizes is not a determinism test. Focus geometry is checked against the maximum complete fit inside the measured band, with padding subtracted, rather than an arbitrary fraction of the entire screen.
 
 ### 2026-09-05 (C3711) — A RECIPE REVISION NEEDS CURRENT PIXELS
 
@@ -6127,3 +6142,5 @@ frontier. Today's ceiling is tomorrow's floor.
 
 
 - **2026-09-05 · [AXIS:COLLAGE] C3711 — EDITABLE NATIVE ART RACK.** Before: one HTML starter and a flattened captured PNG. After: eight original art families, a template-first visual browser, up to eight composited layers with visibility/solo/order/blend, protected dice, geometry controls and looped parameter automation. Apply persists the recipe with its opening-frame PNG; selecting saved artwork reopens its layers. A revised source gets a new immutable ID with pins/crops/history remapped, and recovery retains its current bytes. Native art ticks without music, captions or video and is sampled once per unique source at requested output time; turn/dissolve, still, SVG, worker and offline video paths share its renderer. The export sheet offers an exact shared loop duration. **Gates:** typecheck and production build passed; 40/40 actual-module unit suites; two native-engine pixel profiles, two Stage integration profiles and one prior caption Stage regression; **58/58 production cases** (15 rack, 3 real video, 21 HTML/Bifurcata, 9 lyric-help, 3 caption/project and 7 mobile). These repeat the same 58 distinct local cases; development test corrections and targeted reruns are retained as evidence, not hidden. Independent division covered recipe/geometry, serialization and compositor integration; review-found undo/duration state bugs and a root-found dock recording gate were fixed and tested. Code `efdc4b9f`; Pages `33991651937` succeeded; deployed JS/CSS/worker/SW are byte-identical to the tested build. Manual public template, dice and hold controls inspected. Public exports decoded into 240 desktop frames at 30 fps and 192 frames at 24 fps for each mobile profile; all contain artwork. A real live `.collage`, 2066×1319 PNG, recipe JSON and 8-second MP4 were saved as examples. Wells: 0 new / 0 building; cleanup: 0 candidates; no new runtime dependency or storefront entry. Limits: native source rasters cap at 4096 pixels per side / 16 MP, browser video color/raster results differ, HTML still captures do not gain motion, and original imported audio/video packaging plus global overlay/shot sequencing remain future work.
+
+- **2026-09-05 · [AXIS:COLLAGE] C3712 — PREVIEW-FIRST WORKFLOW.** User reported an unintuitive control wall and a playback viewport too small to see. The default project now opens with the full composition and a compact transport; one focused Add/Layout/Look/Motion/Text inspector or media Details takes space at a time. Templates lead the Art Room; layer actions and automation are disclosed on selection, with whole-art preview and an explicit return. Same-sample public measurements: desktop 111×199 → 273×487; phone 164×292 → 338×602; short landscape 19×34 → 88×157. Visible default buttons 19 → 11. **Gates:** 173 distinct local cases and **173/173 public browser cases** across Chromium, Mobile Chrome and Mobile Safari (legacy Stage tests cover Chromium/Safari), 40/40 unit suites, typecheck/build. Independent review found and fixed competing disclosures and short-screen focus loss. Migrated old selectors and fixed test assumptions are recorded in scars; no failed production gate is hidden. Native exports decoded to 240 desktop frames and 192 frames per mobile profile, all nonempty. Lyric/video exports retain timed text and their soundtrack; project/SVG/recovery and actual local Bifurcata capture passed. Code `496a17ba`; Pages `33995354619` green; public JS/CSS/worker/SW match the tested build. Wells: 0 new; cleanup: 0 candidates. Existing bundle-size/Browserslist and Actions deprecation warnings remain. Next owner reads this book and fleet release `persona500-collage-C3712-release`; continue portable audiovisual originals and authored sequencing without restoring an always-open control wall. Built-in transcription and moving HTML adapters remain roadmap work.

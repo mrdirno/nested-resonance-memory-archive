@@ -2,6 +2,8 @@
 
 **Evidence checked: 2026-09-05. C3711 native Art Rack shipped and verified live:** [code efdc4b9f](https://github.com/mrdirno/nested-resonance-memory-archive/commit/efdc4b9fcb62bbf7262549f65732e1f4a491863d), [successful Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33991651937), 58/58 public-site browser cases and complete decoded-video inspection. Art Room and lyric help previously shipped in C3710. [Code 3f3ede40](https://github.com/mrdirno/nested-resonance-memory-archive/commit/3f3ede40a00d008bdc1d6a40dcbb50de0385ed59) passed [Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143) and 40/40 public-site browser cases. The JS, CSS, render worker and service worker match the tested build byte for byte. Browser transcription and the native helper below are proposed, with no installation, model download, or performance benchmark completed during this research.
 
+**C3712 usability update (2026-09-05):** [preview-first Studio](https://mrdirno.github.io/nested-resonance-memory-archive/collage/) is [deployed](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33995354619) and verified by 173 public browser cases. Full playback, one task inspector, simpler selected-layer controls and retained editing state are now the base workflow. See [the release guide](C3712_RELEASE.md). This release adds no model, account requirement or runtime dependency.
+
 ## The product we are building
 
 An artist should bring their recording, pictures, and visual instruments; shape a sequence around the song; correct its words; and export a finished film with an editable project they own. The useful CapCut alternative is that complete workflow, with original generative art and portable source material. Adding model buttons without trustworthy editing, recovery, and export does not complete it.
@@ -15,6 +17,7 @@ Keep the small browser editor useful everywhere. Offer heavier intelligence thro
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
 | Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
 | Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
+| Shipped C3712 | Whole-art preview by default; compact persistent playback; one Add/Layout/Look/Motion/Text or media Details panel; simplified Art Room with selected-layer controls and expanded preview. |
 | Shipped C3711 | Eight native art families, editable layered recipes, visibility/solo/blending, dice locks, parameter automation and exact-loop video duration. |
 | Proposed | Downloaded browser transcription, native Mac handoff package, third-party deterministic renderer adapters, global overlay/shot timelines, portable audiovisual projects, and authored sequences. |
 
@@ -76,6 +79,8 @@ Define these **proposed semantic contracts**, rather than calling every message-
 Moving adapters must follow Studio's requested time rather than wall-clock animation. The stage awaits their frames alongside video seeks, with timeouts, cancellation, bounded dimensions, and bitmap disposal. Test repeated timestamps and out-of-order seeks against a reference render. Specify the supported determinism level: exact pixels on a pinned environment, or a documented cross-device tolerance. If the source cannot be preserved or re-executed, offer an explicit frozen image/video artifact and record the loss of procedural editability. Compare actual encoded frames before claiming reproducible export.
 
 ## 4. Remove the remaining CapCut dependencies in order
+
+**Preserve the preview-first flow.** New capability belongs in an existing task or a deliberate disclosure. Keep play/pause, scrub and the whole frame reachable; do not grow a permanent row for every feature. Native templates stay ahead of HTML import. Test the actual saved/exported result and the smallest viewport together.
 
 **Portable originals first.** Bundle or explicitly relink soundtrack/video originals, content hashes, trim/speed/volume settings, and rights/provenance metadata. Refuse incomplete “fully portable” saves. Acceptance: reopen on a clean offline device, recover every source, and reproduce the take. A thumbnail, proxy, or temporary object URL is insufficient.
 
