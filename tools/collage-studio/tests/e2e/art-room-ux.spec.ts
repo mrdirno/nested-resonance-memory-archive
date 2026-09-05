@@ -82,7 +82,8 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   await room.getByLabel('Opacity',{exact:true}).fill('0.65');
   await reveal(room.locator('details.art-layer-options'));
   await room.getByRole('button',{name:'Lock Woven Circuit dice',exact:true}).click();
-  await expect(room.getByRole('button',{name:'Dice layer',exact:true})).toBeDisabled();
+  await expect(room.getByLabel('Dice scope',{exact:true})).toHaveValue('layer');
+  await expect(room.getByRole('button',{name:'Dice selected layer',exact:true})).toBeDisabled();
   await room.getByRole('tab',{name:'Motion',exact:true}).click();
   await expect(room.getByLabel('Layer palette',{exact:true})).toHaveCount(0);
   await room.getByLabel('Automation target',{exact:true}).selectOption('rotation');
@@ -98,7 +99,7 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   expect(undone.layers.find((l:any)=>l.id===woven.id).automation.phase).not.toBe(.25);
   await room.getByRole('button',{name:'Redo art edit',exact:true}).click();
   expect(await recipe(page,room)).toEqual(changed);
-  await room.getByRole('button',{name:'Add another template',exact:true}).click();
+  await room.getByRole('button',{name:'Browse templates',exact:true}).click();
   await expect(room.getByRole('tab',{name:'Templates',exact:true})).toHaveAttribute('aria-selected','true');
   expect(await room.locator('.art-gallery .art-template').count()).toBe(8);
 });

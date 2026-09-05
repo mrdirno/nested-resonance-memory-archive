@@ -93,14 +93,14 @@ async function sessionSnapshot(page: Page): Promise<any> {
   });
 }
 
-test('Art Rack opens eight real templates and preserves layer controls, dice locks and invalid-file refusal', async ({ page }) => {
+test('Art Rack previews eight real templates and explicit Add preserves layers, dice locks and invalid-file refusal', async ({ page }) => {
   test.setTimeout(90_000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   const room = await bootRoom(page);
   await expect(room.getByRole('tab', { name: /^Templates/ })).toHaveAttribute('aria-selected', 'true');
   const hashes: number[] = [];
   for (const name of names) {
-    const tile = room.getByRole('button', { name: `Add ${name}`, exact: true });
+    const tile = room.getByRole('button', { name: `Use ${name}`, exact: true });
     await expect(tile).toBeAttached();
     const image = await pixels(tile.locator('canvas'));
     expect(image.colors, `${name} draws actual non-flat pixels`).toBeGreaterThan(5);
@@ -123,7 +123,8 @@ test('Art Rack opens eight real templates and preserves layer controls, dice loc
   expect(held.layers.findIndex((layer: any) => layer.id === orbitId)).toBe(2);
   expect(held.layers.find((layer: any) => layer.id === contourId).enabled).toBe(false);
   expect(held.layers.find((layer: any) => layer.id === orbitId).locked).toBe(true);
-  await room.getByRole('button', { name: 'Dice rack', exact: true }).click();
+  await room.getByLabel('Dice scope', { exact: true }).selectOption('composition');
+  await room.getByRole('button', { name: 'Dice composition', exact: true }).click();
   const rolled = await saveRecipe(page, room);
   expect(rolled.layers.find((layer: any) => layer.id === orbitId)).toEqual(held.layers.find((layer: any) => layer.id === orbitId));
   expect(rolled.layers.find((layer: any) => layer.id === contourId)).toEqual(held.layers.find((layer: any) => layer.id === contourId));
