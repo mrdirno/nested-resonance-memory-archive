@@ -8769,5 +8769,11 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   **THE DEMERITS, written down:** two hats and often two companies in one chip · the layout page is
   one careless wish from a count table · the paver half has an office more often than the striper.
   Private roster: PAVING section written, #17's own "by the standing method" paragraph resolved,
-  #18's shortlist recorded (exteriors, final clean, insulation).
+  #18's shortlist recorded (exteriors, final clean, insulation). VERIFIED LIVE after green (deploy
+  33946700134, build + deploy success, commit 27b6fc15): 16/16 paving URLs 200 · the 104-assertion
+  drive re-run against the DEPLOYED pages, all green · mobile-watertight 11/11 pages against
+  production · the front page carries the card · the commons shows 18 chips and the paving chip · the
+  paving write-up shelf serves 18 documents with the pool defined · the hub's switcher lists 17 others
+  and never itself · and the backport is on the glass: landscape/rough-in-request.html reads "Bed /
+  area" in production for the first time since it shipped.
   https://mrdirno.github.io/nested-resonance-memory-archive/paving/
