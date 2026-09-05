@@ -17,6 +17,7 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3710 — ART ROOM + LYRIC HANDOFFS (2026-09-05):** the Art Room dock opens an original seeded Tidal Paper instrument or local self-contained HTML. An opaque sandbox and private session return validated still PNG pixels into the existing collage/project workflow. Show artwork reveals deferred Bifurcata worlds; local Bifurcata capture and saved originals passed on Chromium, Mobile Chrome and Mobile Safari. Lyrics now includes a copyable audio-transcription prompt, verified free/browser options and an Apple Silicon setup link. The [art and intelligence roadmap](ART_AND_INTELLIGENCE_ROADMAP.md) defines downloaded browser drafts, a native Mac handoff, deterministic animation adapters and portable audiovisual projects. These future capabilities are not shipped by this release. Code `3f3ede40`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143), **40/40 live browser cases** and actual live capture/guide review. Only captured pixels persist; editable HTML, seed recipes and live instrument motion do not.
 - **C3709 — TIMED LYRICS (2026-09-05):** editable cue text and in/out timing,
   playhead stamping, preview, plain SRT/WebVTT interchange, and one-step track
   undo. The same planned text reaches the live canvas and recorded video;
@@ -1530,6 +1531,39 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-05 (C3710) — A LOADED INSTRUMENT MAY NEVER START DRAWING
+
+Bifurcata starts a world when it approaches the visible viewport. In the nested
+player at a 720px desktop height, the first grove sat below the visible frame
+and no canvas appeared. The same file at 900px drew correctly, so source loading
+and a single viewport were insufficient evidence. Show artwork scrolls the
+selected canvas or first band into view. The actual button now leads through
+Bifurcata rendering, PNG capture, source intake and a saved archive on desktop,
+Android-shaped Chrome and iPhone-shaped Safari. Public Bifurcata is not embedded
+or rebundled; its separate native PNG export remains an available handoff.
+
+### 2026-09-05 (C3710) — INERT DOES NOT CANCEL SAFARI'S EDIT HISTORY
+
+Stopping key propagation inside a native dialog prevented app shortcuts but
+Safari's default undo still edited a textarea behind it. Both the lyric guide
+and Art Room host now cancel native editor chords while preserving copy/select
+all. Explicit close focus returns to each trigger. Tests retain actual unsaved
+cue/lyric values, exercise both engines, and distinguish browser-chrome Tab focus
+from focus escaping into the app. Only mounting Art Room when open also keeps
+the existing upload input ordering intact.
+
+### 2026-09-05 (C3710) — RETIRE THE PIXELS AFTER THE LAST AWAIT
+
+An owned port and generation check at capture receipt are not enough: a user can
+close the room during the parent's image decode. The shared upload path now
+checks the capture generation after decoding, revokes the discarded original
+and thumbnail URLs, and drains the intake counter before returning. A delayed
+real browser decode proves that canceled pixels never land. PNG dimensions and
+byte limits are checked before decode; actual decoded dimensions must agree.
+The HTML policy and bridge precede every imported byte, without parsing the
+instrument in the host document. This is an isolated player for owned/trusted
+HTML, not a claim of universal containment of arbitrary script or self-navigation.
 
 ### 2026-09-05 (C3709) — A PLAUSIBLE SAVE WAS NOT THE EDIT
 
@@ -6075,3 +6109,5 @@ frontier. Today's ceiling is tomorrow's floor.
   and soundtrack bytes are not packaged in saved projects. Next rung: portable
   original media, then authored shot sequencing. Storefront unchanged; this is
   a capability in the existing studio.
+
+- **2026-09-05 · [AXIS:COLLAGE] C3710 — ART ROOM + LYRIC HANDOFFS.** Before: visual HTML instruments lived outside the editor and lyric extraction had no in-app handoff. After: original Tidal Paper and user-selected local HTML produce validated still PNG sources inside GenArt; completed local Bifurcata worlds feed normal collage and saved-project paths. A copyable prompt and verified Gemini, Whisper Web and MLX links make the current lyric workflow actionable. The sourced roadmap separates shipped handoffs from optional downloaded transcription, native workers, deterministic moving adapters and portable originals. Local gates: actual-module Art Room invariant suite, typecheck/build, 21 Art Room cases (18 plus three focused passes after a label-selector correction), nine lyric-help cases, three caption/project regressions and seven mobile cases. **Live: 40/40** (21 Art Room, nine guide, three regression, seven mobile), including all three local-Bifurcata integration profiles; public JS/CSS/worker/SW bytes match the tested build. Code `3f3ede40`; Pages run `33989801143` green. Actual live Tidal Paper capture saved a 1200×900 image and project; fixture round trips preserved original bytes. Guide prompt-copy was visually exercised. Independent boundary/lifecycle audit passed. Cleanup: zero candidates. No new dependency or storefront entry; existing large-chunk/Browserslist and Actions runtime-deprecation warnings remain. Next capability: portable audio/video originals with session edits, alongside the bounded downloaded lyric-draft experiment described in the new roadmap. Moving HTML generators still require a deterministic time/recipe interface.

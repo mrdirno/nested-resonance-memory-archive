@@ -1,6 +1,6 @@
 # Art and intelligence roadmap
 
-**Evidence checked: 2026-09-05. Release receipt: PENDING.** Lyric help and the Art Room HTML still-capture player are the current delivery target; this document does not claim the player is released. Browser transcription and the native helper below are proposed, with no installation, model download, or performance benchmark completed during this research.
+**Evidence checked: 2026-09-05. Art Room and lyric help shipped and verified live.** [Code 3f3ede40](https://github.com/mrdirno/nested-resonance-memory-archive/commit/3f3ede40a00d008bdc1d6a40dcbb50de0385ed59) passed [Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143) and 40/40 public-site browser cases. The JS, CSS, render worker and service worker match the tested build byte for byte. Browser transcription and the native helper below are proposed, with no installation, model download, or performance benchmark completed during this research.
 
 ## The product we are building
 
@@ -8,13 +8,13 @@ An artist should bring their recording, pictures, and visual instruments; shape 
 
 Keep the small browser editor useful everywhere. Offer heavier intelligence through explicit downloaded packages or an optional local-machine helper. Free at the point of use can mean no transcription API bill; it still requires bandwidth, storage, memory, electricity, and maintenance. Neither unlimited free compute nor universal GPU support is a product assumption.
 
-## Current, current delivery, and proposed
+## Current and proposed
 
 | State | Capability and boundary |
 |---|---|
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
 | Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
-| Current delivery, receipt pending | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
+| Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
 | Proposed | Downloaded browser transcription, native Mac handoff package, durable instrument provenance, deterministic renderer adapters, portable audiovisual projects, and authored sequences. |
 
 The implementation boundary is visible in the [caption module](src/lib/captions.ts), [project serialization](src/lib/project.ts), and [stage renderer](src/lib/stage.ts). Release status must come from deployment and real-page verification, not this roadmap.
@@ -51,7 +51,7 @@ Acceptance requires a clean supported Mac installation, distribution/signing che
 
 ## 3. Art Room: pixels before deterministic motion
 
-The current player delivery targets user-selected self-contained HTML and a real **Use this artwork** capture. Accept bounded PNG pixels through an isolated frame and authenticated private session, then use the normal image intake. Reject wrong-session, malformed, oversized, and stale captures; closing/replacing an instrument must retire its pending work. Demonstrate nonempty art, mobile controls, project reload, and blocked parent access/external resource requests before marking it released. The sandbox is for HTML the user owns or trusts; it does not promise universal containment of arbitrary code or every self-navigation.
+The shipped player accepts user-selected self-contained HTML and supplies a real **Use this artwork** capture. **Show artwork** reveals a deferred canvas or Bifurcata grove so visibility-triggered rendering can start. Accept bounded PNG pixels through an isolated frame and authenticated private session, then use the normal image intake. Reject wrong-session, malformed, oversized, and stale captures; closing/replacing an instrument must retire its pending work. Demonstrate nonempty art, mobile controls, project reload, and blocked parent access/external resource requests as release gates. All passed for this release. The sandbox is for HTML the user owns or trusts; it does not promise universal containment of arbitrary code or every self-navigation.
 
 Local source audits found reusable hosting principles in MIDI Room and HTML Gauntlet, but neither constitutes an existing universal video adapter. Bifurcata's seed-addressed engine has real PNG export seams; its crop depends on device geometry, and it has no declared Studio `renderAtTime` contract. Its current declaration is `LicenseRef-Persona500-Proprietary`. Public access is not permission to rebundle it as GPL. Keep the [public Bifurcata workflow](https://persona500.com/bifurcata) separate from distribution rights and adapter compatibility.
 
