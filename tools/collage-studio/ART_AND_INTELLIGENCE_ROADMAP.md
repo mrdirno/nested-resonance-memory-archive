@@ -1,6 +1,6 @@
 # Art and intelligence roadmap
 
-**Evidence checked: 2026-09-05. Art Room and lyric help shipped and verified live.** [Code 3f3ede40](https://github.com/mrdirno/nested-resonance-memory-archive/commit/3f3ede40a00d008bdc1d6a40dcbb50de0385ed59) passed [Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143) and 40/40 public-site browser cases. The JS, CSS, render worker and service worker match the tested build byte for byte. Browser transcription and the native helper below are proposed, with no installation, model download, or performance benchmark completed during this research.
+**Evidence checked: 2026-09-05. C3711 native Art Rack shipped and verified live:** [code efdc4b9f](https://github.com/mrdirno/nested-resonance-memory-archive/commit/efdc4b9fcb62bbf7262549f65732e1f4a491863d), [successful Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33991651937), 58/58 public-site browser cases and complete decoded-video inspection. Art Room and lyric help previously shipped in C3710. [Code 3f3ede40](https://github.com/mrdirno/nested-resonance-memory-archive/commit/3f3ede40a00d008bdc1d6a40dcbb50de0385ed59) passed [Pages deployment](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33989801143) and 40/40 public-site browser cases. The JS, CSS, render worker and service worker match the tested build byte for byte. Browser transcription and the native helper below are proposed, with no installation, model download, or performance benchmark completed during this research.
 
 ## The product we are building
 
@@ -15,7 +15,7 @@ Keep the small browser editor useful everywhere. Offer heavier intelligence thro
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
 | Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
 | Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
-| C3711 implemented; release verification pending | Eight native art families, editable layered recipes, visibility/solo/blending, dice locks, parameter automation and exact-loop video duration. |
+| Shipped C3711 | Eight native art families, editable layered recipes, visibility/solo/blending, dice locks, parameter automation and exact-loop video duration. |
 | Proposed | Downloaded browser transcription, native Mac handoff package, third-party deterministic renderer adapters, global overlay/shot timelines, portable audiovisual projects, and authored sequences. |
 
 The implementation boundary is visible in the [caption module](src/lib/captions.ts), [project serialization](src/lib/project.ts), and [stage renderer](src/lib/stage.ts). Release status must come from deployment and real-page verification, not this roadmap.
@@ -61,7 +61,6 @@ One bounded Canvas renderer samples explicit output seconds in the room, the liv
 The Vibe card source is 2066×1319 pixels, the current bleed canvas. Square, portrait and wide canvases are also available. These are source dimensions, not a guarantee that a downstream composition/export keeps the print trim or includes production bleed marks. The implementation ships original math and no third-party instrument engine or new runtime dependency. Recipe version 1 must retain its semantics; incompatible renderer changes require a new version or an explicit migration.
 
 HTML loading is secondary to the template gallery. Its current contract remains a still capture:
-
 
 The shipped player accepts user-selected self-contained HTML and supplies a real **Use this artwork** capture. **Show artwork** reveals a deferred canvas or Bifurcata grove so visibility-triggered rendering can start. Accept bounded PNG pixels through an isolated frame and authenticated private session, then use the normal image intake. Reject wrong-session, malformed, oversized, and stale captures; closing/replacing an instrument must retire its pending work. Demonstrate nonempty art, mobile controls, project reload, and blocked parent access/external resource requests as release gates. All passed for this release. The sandbox is for HTML the user owns or trusts; it does not promise universal containment of arbitrary code or every self-navigation.
 
