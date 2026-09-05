@@ -4,6 +4,8 @@
 
 **C3712 usability update (2026-09-05):** [preview-first Studio](https://mrdirno.github.io/nested-resonance-memory-archive/collage/) is [deployed](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33995354619) and verified by 173 public browser cases. Full playback, one task inspector, simpler selected-layer controls and retained editing state are now the base workflow. See [the release guide](C3712_RELEASE.md). This release adds no model, account requirement or runtime dependency.
 
+**C3713 template-intent update (2026-09-05):** choosing a native template replaces the current art stack, explicit Add layer combines looks, and dice shows its target. Draft history restores selection. [Ring and evidence](ART_CONTEXT_RING.md) · [Release](C3713_RELEASE.md). Strict recipe v1 and portable media boundaries are unchanged.
+
 ## The product we are building
 
 An artist should bring their recording, pictures, and visual instruments; shape a sequence around the song; correct its words; and export a finished film with an editable project they own. The useful CapCut alternative is that complete workflow, with original generative art and portable source material. Adding model buttons without trustworthy editing, recovery, and export does not complete it.
@@ -17,6 +19,7 @@ Keep the small browser editor useful everywhere. Offer heavier intelligence thro
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
 | Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
 | Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
+| Shipped C3713 | Use-template replacement, explicit Add, selection-aware draft undo and visible composition/layer dice scope. UI-only descriptors for real controls; old projects and originals retained. |
 | Shipped C3712 | Whole-art preview by default; compact persistent playback; one Add/Layout/Look/Motion/Text or media Details panel; simplified Art Room with selected-layer controls and expanded preview. |
 | Shipped C3711 | Eight native art families, editable layered recipes, visibility/solo/blending, dice locks, parameter automation and exact-loop video duration. |
 | Proposed | Downloaded browser transcription, native Mac handoff package, third-party deterministic renderer adapters, global overlay/shot timelines, portable audiovisual projects, and authored sequences. |
