@@ -26,12 +26,18 @@
  *     clock IS the notice's window lines. Its narrative half already lives in
  *     docs.js (the delay notice and the daily's clear-by line) — the note is
  *     the two-minute send. This is the strongest unbuilt rung in the kit.
- *   - THE LANGUAGE LAYER (EN/ES) — the tag pages carried Spanish to every
- *     trade at C3650 through shared/lang.js; this kit shipped no tag (the
- *     prune folded the extra-work story into the write-up library), so its ES
- *     debt lands on the pinned tool instead: Not Ready is the page a
- *     heavily Spanish-speaking trade opens at a doorway, and it is the first
- *     candidate for Lang.vocab treatment when the layer next expands.
+ *   - THE LANGUAGE LAYER (EN/ES) — PAID 2026-09-05 (C3711), and it was paid the
+ *     way this block predicted. What stood here said shared/lang.js rides on the
+ *     tag pages of twelve trades, this kit ships no tag because extra work was
+ *     folded into the write-up library, and therefore its ES debt lands on the
+ *     pinned tool instead. The BACKPORT census measured the same gap from the
+ *     other end — 13 of 17 trades carried the extra-work shape and four did not
+ *     — and the fix for both is one page. tm-tag.html ships EN/ES through
+ *     shared/lang.js with an en-twin on every vocabulary entry, so the debt is
+ *     no longer parked on a page that never asked for it. The write-up library
+ *     keeps the extra-work NARRATIVE (the instructions you dictate later); the
+ *     tag is the two-minute send you write at the work, the same day, and the
+ *     prune was folding two different products into one.
  *
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
@@ -122,10 +128,10 @@ window.TOOLKIT_TOOLS = [
        deferral gets WRITTEN DOWN. This one never was, which makes it a hole
        rather than a decision, and the module-adoption grep is what found it:
        painting loaded 10 of the 12 shared modules every sibling carries, and
-       `package` was one of the two missing. `lang` is the other and it is NOT
-       a hole — it rides on tm-tag.html across the other twelve trades and this
-       kit deliberately ships no tag page, so its ES debt is already recorded
-       above against Not Ready.
+       `package` was one of the two missing. `lang` was the other, and as of
+       C3711 it is no longer missing either: the extra-work tag shipped to this
+       kit on the BACKPORT axis and brought shared/lang.js with it, which is
+       what the omissions block above had predicted would pay the debt.
 
        Deeper chip on purpose, the masonry convention: this is the one page in
        the kit that is about the man rather than the wall. */

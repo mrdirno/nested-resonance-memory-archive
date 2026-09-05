@@ -47,11 +47,18 @@
  *     counter, owned by nobody, and it is the forget-list shape the flagship
  *     `av/consumables` already proves. Building it lights up all four missing
  *     modules at once, which is the tell that it is one rung and not four.
- *   - THE LANGUAGE LAYER (EN/ES) — shared/lang.js rides on the tag pages of
- *     twelve trades and this kit ships no tag (extra work is folded into the
- *     write-up library, the creative precedent). Its ES debt therefore lands
- *     on Not Ready To Hang, the page a heavily Spanish-speaking crew opens
- *     standing at an opening, and that is the first Lang.vocab candidate here.
+ *   - THE LANGUAGE LAYER (EN/ES) — PAID 2026-09-05 (C3711), and it was paid the
+ *     way this block predicted. What stood here said shared/lang.js rides on the
+ *     tag pages of twelve trades, this kit ships no tag because extra work was
+ *     folded into the write-up library, and therefore its ES debt lands on the
+ *     pinned tool instead. The BACKPORT census measured the same gap from the
+ *     other end — 13 of 17 trades carried the extra-work shape and four did not
+ *     — and the fix for both is one page. tm-tag.html ships EN/ES through
+ *     shared/lang.js with an en-twin on every vocabulary entry, so the debt is
+ *     no longer parked on a page that never asked for it. The write-up library
+ *     keeps the extra-work NARRATIVE (the instructions you dictate later); the
+ *     tag is the two-minute send you write at the work, the same day, and the
+ *     prune was folding two different products into one.
  *
  * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
  */
