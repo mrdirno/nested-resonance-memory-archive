@@ -5319,6 +5319,47 @@ line's true width, then let max-width clamp it): 160×161px → 292×82px, still
 LESSON: a comment that explains a mechanism is a CLAIM, and this book's comments are read
 as fact by the next cycle. Measure first, or write nothing.
 
+### 2026-09-05 — NO GATE ON THIS RACK READS A PAGE'S CHROME PROSE, AND I PROVED IT WITH THE FIX BACKED OUT
+Generating four trades' tag pages from `concrete/tm-tag.html` by string substitution, I made
+the generator assert that every replacement fired EXACTLY ONCE. One did not: the `warn`
+block's English text lives TWICE in the file — once in the static `<div class="warn">` and
+once inside the `warn: t(en, es)` call that `Lang.chrome` swaps in. A blind `.replace()`
+takes the first occurrence, so all four pages would have shipped with the visible warn in
+their own trade's words and the `Lang.chrome` warn still reading concrete's — *"the book and
+the GC's app own the numbering"* on a doors page, in both tongues.
+THE NEGATIVE CONTROL IS THE FINDING. I injected exactly that bug into `doors/tm-tag.html`
+and ran the gates: **lang-layer PASS, mobile-watertight 0 failing, boundary-titles 50 pages
+clean, note-live-fields all reach the message.** Four gates, all green, over a page telling a
+door lead about somebody else's paperwork. They are green because every one of them reads
+geometry, the produced DOCUMENT, the ES twins, or the tab title — and the warn block is none
+of those. It is the one place a page explains its own boundaries to the man using it, and
+nothing on this rack has ever read it. Restored, re-verified, and the generator's own
+one-fired-once assertion is the only thing that caught it.
+LESSON: the gates cover what a page DOES and not what a page SAYS about itself. A prose gate
+— every trade's chrome belongs to that trade — is a real unbuilt rung, and until it exists,
+any page built by copying another one must assert its substitutions rather than trust them.
+
+### 2026-09-05 — I BACKPORTED INTO FOUR TRADES THAT HAD EACH WRITTEN DOWN WHY THEY DIDN'T HAVE IT
+The census that chose this rung read the disk: 13 of 17 trades carry the extra-work shape,
+four do not, ship it to the four. I built, gated, drove, committed, pushed and verified live
+— and only THEN, reading `painting/tools.js` for an unrelated reason, found the sentence
+*"this kit deliberately ships no tag page."* All four had it, in a `WHAT THIS KIT
+DELIBERATELY SHIPPED WITHOUT` block, naming the same reason (the prune folded extra work into
+the write-up library) and the same consequence (`shared/lang.js` rides on the tag pages, so
+this kit's Spanish debt lands on whichever page is pinned instead).
+**A CENSUS READS WHAT IS ON DISK. A DEFERRAL IS A CLAIM ABOUT WHAT IS NOT, AND IT LIVES IN A
+COMMENT NO CENSUS READS.** §TRADE EXPANSION requires a deferral to be written down, and all
+four had obeyed — the rule worked and the tool that overruled it could not see it.
+The backport was still right, and the deferrals themselves say why: four different pages were
+carrying an ES debt that belonged to a page that did not exist, and one page pays it. The
+prune's actual error was folding two products into one — the write-up library is the
+extra-work NARRATIVE you dictate later, the tag is the two-minute send you write at the work
+before it is covered. But right-by-luck is not right-by-method: I shipped before I read.
+LESSON: before a BACKPORT touches a trade, `grep` that trade's `tools.js` header for its
+recorded deferrals. And a deferral that gets PAID must be marked paid in the same cycle — four
+shipped registries claiming "this kit ships no tag" eleven lines above the tag entry is a
+contradiction the next cycle would have believed.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -9152,3 +9193,60 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   "Nothing matched that" and hands back Coordination Meeting Notes, because the word is in
   nobody's name or alias. That is the next DOCS rung.
   https://mrdirno.github.io/nested-resonance-memory-archive/paving/write-up.html
+
+- `2026-09-05` — **[AXIS:BACKPORT] C3711 — FOUR TRADES COULD NOT WRITE THE ONE DOCUMENT THAT
+  GETS THEM PAID, AND EACH HAD WRITTEN DOWN WHY** · **the well was read UNSCOPED in both
+  sinks first and could not be served by this lane** — the AV well was empty (0 new, 0
+  building); the vibe-cards well held four, all on persona500-hosted pages this lane does not
+  push, and THREE of them point at `persona500.com/midi-room/` which returns **404** against a
+  local repo with no remote and 19 dirty files from another lane mid-flight. Nothing claimed
+  (a claimed wish nobody can finish reads as served), nothing declined, all four handed off
+  with the measurements. · **The census then chose the rung by measuring the shape, not the
+  filename: 13/17 trades carried the extra-work tag.** `electrical` has it as `tm-ticket.html`
+  and `creative/trade.js` names "That's Another Round" as its own extra-work tag in its own
+  words — both correctly out of scope, and finding the second one is why a filename census
+  would have shipped six pages instead of four. **doors, landscape, painting and paving had no
+  instance of the shape at all.** · **after: 17/17, four configs of shape #2's engine, ~51
+  vocabulary entries per trade in EN and ES with an en-twin on every one.** `why` is where the
+  trade lives: the hardware set changed after it was ordered and the floor that came up under a
+  hung door · the point of connection that moved and the beds kept up for owner walks while the
+  job sat · the coats added on somebody's say-so and the mech room shot "while you're in
+  there" · the soft subgrade, the closure window that moved, the dig-outs pointed at on the
+  walk. · **THE PANEL BLOCKED ALL FOUR AND IT WAS RIGHT EVERY TIME.** Two cold judges, neither
+  of which wrote the words. The boundary judge found a **fire-label-to-assembly determination**
+  on the doors page that `doors/trade.js` forbids by name, 575 lines below its own warning;
+  **seven subs that named who CAUSED a defect** ("hit by another trade", "left by others")
+  against the fence on the same page saying who caused what is somebody else's call — concrete's
+  counterparts are deliberately agentless and I un-reworded them; a **coverage opinion** on
+  painting contradicting its own slot-5 fence eighteen lines down; a **plant-establishment
+  verdict** on landscape; **a live retail brand** in a paving placeholder when paving's own
+  pages already use an invented one; and **the safety-and-incident fence dropped off the bottom
+  of all four `notin` lists** because I added a trade fence at slot 5 and never re-counted. The
+  voice judge found `TAPICERO` for PAPERHANGER (that is an *upholsterer*), `OPERADOR DE FINISHER`
+  for the screed seat (*la finisher* is the paver machine), "tack course" when tack is a coat,
+  cores "cut" when cores are pinned, `ARBORIST` where a payroll list wants TREE CLIMBER, and
+  **one landscape entry byte-identical to concrete's in both tongues** — the generic-voice
+  defect C3708 fixed, reappearing in the same cycle that swept for it. All fixed, re-swept to
+  zero violations over 8 authored surfaces, and three trades gained the `why` entry each judge
+  named as most conspicuously absent. · **THE DEFERRALS WERE REAL AND I READ THEM AFTER THE
+  PUSH.** All four kits carried "this kit ships no tag" in a written-down `DELIBERATELY SHIPPED
+  WITHOUT` block, each naming the same consequence: `shared/lang.js` rides on the tag pages, so
+  four different pinned pages were carrying an ES debt belonging to a page that did not exist.
+  One page pays it. Marked PAID in all four with the reasoning quoted, in a second commit.
+  Written up in §SCARS, along with the negative control that found the rack has **no gate that
+  reads a page's chrome prose** — four gates stayed green with concrete's warn injected into
+  the doors page. · **GATES, all green:** mobile-watertight 320/360/390/430 default + bumped
+  text, on disk AND against the live URL · lang-layer (twins complete, no Spanish overflow,
+  zero page errors, both tongues) · send-is-copy 0 failing · no-clock 0 · note-live-fields 13
+  in-document fields each · boundary-titles, answer-tapnote, foot-scope, reconcile-join
+  rack-wide · rack-wide before: no-third-party 186 pages, send-is-copy 5,765 checks,
+  menu-reachability 1,281 checks. · **BACKPORT RIDER: FIRED, and the sweep is the rung
+  itself** — all 17 trades measured for this shape, and the same census cleared the other
+  cross-trade shapes (`getting-in` 17/17, `write-up` 17/17; `answer-back`, `rough-in-request`
+  and `total-package` at 16/17 missing only `creative`, which is a different family by its own
+  trade.js). · **STOREFRONT:** four entries added to `persona500/src/data/fieldToolkits.ts` and
+  the derived `public/data/field_toolkits.json` rebuilt — drift checker reads local 149 /
+  origin 145, the exact four, and P5 owns that push. · **NAMED AND NOT DONE:** painting's
+  `WET AREA NOTICE` is still called "the strongest unbuilt rung in the kit" by its own
+  registry, and a CHROME-PROSE gate does not exist.
+  https://mrdirno.github.io/nested-resonance-memory-archive/painting/tm-tag.html
