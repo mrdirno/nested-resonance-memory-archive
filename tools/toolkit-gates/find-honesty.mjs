@@ -211,8 +211,19 @@ function buildProbes(items, vocab, extra) {
         P.push({ cls: 'D', q: tk.map((x, i) => i === li ? sl : x).join(' '),
                  want: (sole && !collides) ? it.key : null, hedged: true });
       }
-      /* E — the spaces taken out, which only an infix can find. */
-      if (tk.length > 1) P.push({ cls: 'E', q: tk.join(''), want: sole ? it.key : null, hedged: true });
+      /* E — the spaces taken out, which only an infix can find.
+         UNLESS THE JOINED FORM IS A WORD SOMEBODY AUTHORED (found 2026-09-04,
+         trade #17): the paving names row "String line" carries the alias
+         "stringline" — the paver operator's one word for the wire the machine's
+         sensor rides — and this probe asked the engine to HEDGE on a term rule B
+         two lines down asserts must be EXACT. The gate contradicted itself on one
+         row and called the honest label a defect. When the joined form is an
+         authored name or alias on any item, B owns the question and E has none. */
+      if (tk.length > 1) {
+        const joined = tk.join('');
+        const authored = items.some(o => norm(o.name) === joined || o.aka.some(a => norm(a) === joined));
+        if (!authored) P.push({ cls: 'E', q: joined, want: sole ? it.key : null, hedged: true });
+      }
       /* F — the word under the cursor: cut the last word short. */
       const last = tk[tk.length - 1];
       if (last.length >= 4 && nf.length > 5) {

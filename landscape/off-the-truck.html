@@ -143,6 +143,23 @@
     bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
     copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
     persistKey: KEY,
+    /* THE JOB HEADER PERSISTS WITH THE WALK (found 2026-09-04 by the trade #17
+       field drive): the header rides in the document and the listener below
+       calls schedulePersist() on every keystroke, but the mount never said what
+       to persist, so a reload — the camera app, a phone call — brought the rows
+       back under a document with no job, no sheet and no From line, and the
+       man copied it out that way. Same hooks the request page has carried
+       since it shipped. */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
     noun: "line", nounPlural: "lines", groupNoun: "delivery", groupNounPlural: "deliveries",
     ungroupedLabel: "not said",
     emptyText: "Nothing counted yet. Put in the first line — what the tag says, what came, and what's wrong with it.",

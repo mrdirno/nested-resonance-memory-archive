@@ -103,7 +103,14 @@
     // controller somebody changed, a restriction nobody passed on — and that
     // answer lives with whoever holds the controller, not with the man holding
     // the shovel. Not a refusal, not a commitment: an ask pointed elsewhere.
-    "its the water": "ask"
+    "its the water": "ask",
+    // paving/items.js — the walk-back rungs. [0], [1] and [2] are shared with
+    // painting, doors and landscape; only the fourth is new. On a lot punch a
+    // stall count, an arrow, a fire-lane length or an accessible pair the
+    // owner wants moved is the SHEET talking — a plan question that lives with
+    // the civil and the owner who stamp it, not with the man holding the
+    // striper. Not a refusal, not a commitment: an ask pointed elsewhere.
+    "its the plan": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score
@@ -197,6 +204,16 @@
     return -1;
   }
 
+  /* Grouped by anything other than his answer, the rung rides IN the line
+   * instead of in the heading above it. Read it off the end of the ask so the
+   * verdict is right either way. Shared by every candidate split of a line. */
+  function readOwn(ask, tail) {
+    var own = "";
+    var m = /\s*[·|]\s*([A-Za-z][A-Za-z' ]{1,14})\s*$/.exec(ask);
+    if (m && verdictOf(m[1])) { own = verdictOf(m[1]); ask = ask.slice(0, m.index).trim(); }
+    return { ask: ask, tail: tail, own: own };
+  }
+
   function parseAnswer(text) {
     /* A PASTED EMAIL DOES NOT CARRY THE SPACES IT LOOKS LIKE IT CARRIES. Mail
      * clients wrap an em dash in NO-BREAK SPACE so it never starts a line, and
@@ -257,21 +274,35 @@
        * to. Split on the FIRST one: everything left of it is our words coming
        * home, which is exactly what the join wants. */
       var body = t.replace(/^[-–—•*]\s+/, "");
-      var seam = body.indexOf(" — ");
-      if (seam < 0) seam = body.indexOf(" - ");
-      var ask = seam > -1 ? body.slice(0, seam).trim() : body;
-      var tail = seam > -1 ? body.slice(seam + 3).trim() : "";
-
-      /* Grouped by anything other than his answer, the rung rides IN the line
-       * instead of in the heading above it. Read it off the end of the ask so
-       * the verdict is right either way. */
-      var own = "";
-      var m = /\s*[·|]\s*([A-Za-z][A-Za-z' ]{1,14})\s*$/.exec(ask);
-      if (m && verdictOf(m[1])) { own = verdictOf(m[1]); ask = ask.slice(0, m.index).trim(); }
+      /* THE SEAM IS NOT ALWAYS THE FIRST DASH (found 2026-09-04, trade #17, by
+       * an adversarial drive of the round trip). A request line is our own
+       * words coming home, and our own words carry em dashes: "The set I'm
+       * paving to — sheet and rev" is one paving ask; painting ships 39 specs
+       * with one, framing 21, av 13 — every trade on the rack. Split on the
+       * FIRST dash and the ask comes home cut in half, the join scores it
+       * against a row it half-matches, and an answer that said Thursday lands
+       * as "couldn't place" or "not sure" — silently, on the loop this page
+       * exists for. So EVERY seam is offered: the first stays the default (a
+       * line with one dash is unchanged), and pair() below adopts whichever
+       * split a row actually matches, character for character where it can. */
+      var seams = [], sep = " — ", at = body.indexOf(sep);
+      if (at < 0) { sep = " - "; at = body.indexOf(sep); }
+      while (at > -1) { seams.push(at); at = body.indexOf(sep, at + sep.length); }
+      var splits = seams.length
+        ? seams.map(function (k) { return readOwn(body.slice(0, k).trim(), body.slice(k + sep.length).trim()); })
+        : [readOwn(body, "")];
+      /* AND THE LINE UNCUT. Grouped by date the answer rides in the heading and
+       * the line carries no tail at all — so a dash inside our own words is the
+       * only dash on the line, and the one cut on offer is the wrong one. The
+       * whole line is a candidate too; a row that matches it whole wins. */
+      if (seams.length) splits.push(readOwn(body, ""));
+      var first = splits[0];
 
       out.push({
-        ix: ix++, raw: t, ask: ask, tail: tail,
-        verdict: own || verdict, flagged: flagged
+        ix: ix++, raw: t, ask: first.ask, tail: first.tail,
+        verdict: first.own || verdict, flagged: flagged,
+        /* Every other way this line could be cut, for the join to try. */
+        alts: splits.slice(1).map(function (sp) { return { ask: sp.ask, tail: sp.tail, verdict: sp.own || verdict }; })
       });
     });
 
@@ -291,6 +322,39 @@
    */
   function pair(rowsIn, lines) {
     var cands = [];
+    /* A LINE WITH MORE THAN ONE DASH IS CUT WHERE A ROW SAYS IT IS CUT. Before
+     * any scoring, each line tries every split parseAnswer offered against
+     * every form of every row; the split with the best score wins the line
+     * (an exact match wins outright), and the default first-dash split is
+     * kept when nothing beats it — so a line with one dash behaves exactly as
+     * before. Done as a pass of its own so the pairing below sees one ask per
+     * line, never a moving target. */
+    var rowForms = (rowsIn || []).map(function (r) {
+      return (Array.isArray(r.text) ? r.text : [r.text])
+        .filter(function (s) { return s && String(s).trim(); })
+        .map(function (s) { return { toks: tokens(s), n: norm(s) }; })
+        .filter(function (f) { return f.toks.length; });
+    });
+    (lines || []).forEach(function (l) {
+      if (!l.alts || !l.alts.length) return;
+      var options = [{ ask: l.ask, tail: l.tail, verdict: l.verdict }].concat(l.alts);
+      var bestIx = 0, best = -1;
+      options.forEach(function (o, oi) {
+        var L = tokens(o.ask); if (!L.length) return;
+        var set = {}; L.forEach(function (t) { set[t] = 1; });
+        var nl = norm(o.ask), top = 0;
+        rowForms.forEach(function (forms) {
+          forms.forEach(function (f) {
+            if (f.n === nl) { top = 1; return; }
+            var hit = 0; f.toks.forEach(function (t) { if (set[t]) hit++; });
+            var sc = (2 * hit) / (f.toks.length + L.length);
+            if (sc > top) top = sc;
+          });
+        });
+        if (top > best) { best = top; bestIx = oi; }
+      });
+      if (bestIx > 0) { var w = options[bestIx]; l.ask = w.ask; l.tail = w.tail; l.verdict = w.verdict; }
+    });
     (rowsIn || []).forEach(function (r) {
       /* A ROW HAS MORE THAN ONE TRUE FORM. The document drops whichever axis it
        * is grouped by, because that axis is already the heading above the line

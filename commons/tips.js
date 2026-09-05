@@ -731,5 +731,47 @@ window.COMMONS_TIPS = [
     w: "The tag is the only thing on site that says what actually got planted, in the grower's own words, and it leaves with the cleanup crew on Friday. A season later the argument is whether the thing in the ground is the thing on the schedule, and everybody's memory is a guess. What you kept and photographed the day it landed is not a guess." },
   { id: "water-the-day-it-lands", t: ["landscape"],
     n: "Water everything the day it comes off the truck, not the day it goes in the ground.",
-    w: "Stock sits in staging while you wait on grade, on an answer, on the flatwork — and a pot in the wind on hot ground goes past saving without ever looking dead. It looks fine going in the hole and it dies later, on your warranty, in a bed you also planted. Whoever's on site last fills the tank and walks the staging." }
+    w: "Stock sits in staging while you wait on grade, on an answer, on the flatwork — and a pot in the wind on hot ground goes past saving without ever looking dead. It looks fine going in the hole and it dies later, on your warranty, in a bed you also planted. Whoever's on site last fills the tank and walks the staging." },
+
+  /* ---- paving & striping: trade #17 ---------------------------------------
+   EVERY ROW HERE IS ABOUT THE ONE HOUR HE GETS. Every other trade on this
+   rack can look at its work tomorrow; his sets while he stands on it, and the
+   base under it is somebody else's work he has one morning to read before it
+   disappears for the life of the lot. So the judgement in these tips is about
+   what to look at, say, string, shoot or photograph BEFORE the first truck
+   backs up — and, on the striper's side, before the gun fires — because the
+   same mistake found after is a saw cut, a grind-out, or a lot full of cars on
+   wet seal. No temperatures, no thicknesses, no dry times, no stall counts:
+   where a number belongs it comes off his own sheet, the plant's ticket, or
+   the sheet the civil stamped. */
+  { id: "paint-every-lid", t: ["paving"],
+    n: "Walk the lot with the super before the base rolls and paint a circle around every lid, box, cleanout and monument you can find.",
+    w: "Every one of them is under your mat by noon, and the one you didn't paint is the one the water company comes looking for with a saw in April. The circle is what tells your raker there's iron there and tells the man raising it which ones are his; the walk is what tells the super, in front of you, how many there are before the argument about the count." },
+  { id: "sleeve-end-against-footings", t: ["paving"],
+    n: "Photograph every sleeve end and every crossing you were handed against something with footings before your base covers it.",
+    w: "The landscaper's flag is gone the day your trucks come in, and his stake goes into your base with the rest. Shoot it against a column, a curb return, the corner of the building — something that will be standing when he comes looking. The photo is the only thing that proves the sleeve was where he said, and the day it earns its keep is the day somebody wants to saw your lot to find it." },
+  { id: "string-the-curb-first", t: ["paving"],
+    n: "String the base off the curb and read it yourself before you trust anybody's word that it's to grade.",
+    w: "\"It's been checked\" means somebody looked at it from a truck. The string finds the high spot that eats your lift and the low spot that drinks a load, and it finds them while the fix is still a grader and not a saw. What you read goes on your own sheet in your own words — where, against what, how far off. Whether the base passed is the lab's number and the civil's call, never yours." },
+  { id: "first-truck-never-sits", t: ["paving"],
+    n: "Never let the plant's first truck sit — if the crew isn't ready for the truck, the truck doesn't leave the plant.",
+    w: "The mat behind you is the clock, and a load cooling in the truck while you wait on a lid or an answer is a load that lays cold and rolls into a mat that ravels the first winter. Call the plant with a time you can hold, and call them again the minute it slips. The plant's cut-off for a cancel is theirs; find out what it is before you order, not after." },
+  { id: "accessible-pair-first", t: ["paving"],
+    n: "Lay the accessible pair out first, off the sheet, and get the super's nod on it before you chalk the rest of the lot.",
+    w: "Everything else on the sheet moves an inch and nobody notices; those stalls are the ones somebody with a tape and a complaint will measure, and they're the ones that decide where the rest of the row lands. Chalk them, walk the super to them, get the nod on the spot — in writing if he'll give it. How many there are, where they go and what they measure is the sheet's and the people who stamped it; your part is showing them the chalk before it's paint." },
+  { id: "cone-the-real-doors", t: ["paving"],
+    n: "Cone the doors people actually use, not the ones on the plan.",
+    w: "The plan shows the front entrance. The tenants use the side door by the smokers' bench, the loading door the cleaners prop open, and the gap in the hedge that isn't on any drawing. Walk the lot at the hour you're closing it and watch where the feet go; the door you didn't cone is the one that tracks seal across a lobby by morning." },
+  { id: "photograph-the-layout", t: ["paving"],
+    n: "Photograph the chalk layout, section by section, before the striper fires.",
+    w: "Chalk is the one version of the layout that still comes off with a broom, and the photo of it is the record of what the sheet said, what your tape found and what got decided — with the pole base and the hydrant right there in the frame. After paint the same conversation is a grind-out and an argument about who said which count; before paint it's a text with a picture in it." },
+  { id: "your-text-is-the-record", t: ["paving"],
+    n: "Cars come back when your sheet says and you say — and the text you send saying so is the record.",
+    w: "The manufacturer's sheet has the time; you copy it onto yours and say it in your own words to a named person at a named hour, and you keep the text. \"I told the guy\" is worth nothing the morning there's a tire track through the seal at the pharmacy door. Who told the tenants is theirs, not yours; that a named person got the message from you is the only part you can prove." },
+  { id: "where-the-truck-sat", t: ["paving"],
+    n: "Watch the proof roll from the ground beside the loaded truck, and write down where it pumped — the spot, not a verdict.",
+    w: "You are not the one who says the base passed; the lab's number and the civil's call do that. What you can say is that you stood there, the truck sat here, and the base moved under it at the spot you can point to. Named and sent before you roll, that's a soft spot somebody fixes. Found by the roller a week later, it's your mat, your warranty and your name on the crack." },
+  { id: "cut-the-tie-in-first", t: ["paving"],
+    n: "Saw the tie-in at the old mat and at the walk before the paver gets there, not after.",
+    w: "A feathered edge against old asphalt looks fine off the screed and breaks off under the first turning tire, and the ragged edge along the walk is the lip every cart finds. A straight cut, tacked, gives the new mat something to hold, and it's a morning's work while the lot is dry and yours — the same cut after the paver's been through is a joint you pulled up to fix." }
 ];

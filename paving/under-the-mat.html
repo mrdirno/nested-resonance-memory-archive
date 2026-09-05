@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Under the Mat — Paving &amp; Striping Field Toolkit</title>
+<meta name="description" content="One row per thing somebody else has under your base before it rolls — whose it is, what it is, who told you and off which list, whether you saw it go in or were only told, whether the iron's to grade, and the gate it has to beat. Sent back to landscape, low-voltage, the electrician and sitework, who all built you a chip and couldn't hear back. No cover depth, no separation, no sleeve size: what you were told and what you saw. Grouped by section, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Under the Mat">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Paving &middot; the base &rarr; everybody with something under it, before it rolls</span>
+    <h1 id="title">Under the Mat</h1>
+    <p class="lede" id="lede">Four kits on this rack wrote you a letter about what they&rsquo;ve got under your base &mdash; the landscaper&rsquo;s sleeves, the gate loop, the pole bases, the lids and the monuments &mdash; and none of them had anywhere to hear back from. This is the letter back. Walk the section before the base rolls and put a row on everything that&rsquo;s under it: whose it is, what it is, who told you and off which list, whether you watched it go in or were only told, and whether the iron&rsquo;s to grade. Send it to each outfit at the gate they already know. After the mat it&rsquo;s a saw cut, and everybody knows whose day that costs.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>What you were told and what you saw, not a drawing.</b> Every row is something <i>somebody else</i> has under <i>your</i> base, in your words, off the crossing lists and the civil named at the top, with what your own eyes found beside it. This page supplies no cover depth, no separation, no sleeve or pipe size and no spec &mdash; their plans, their submittals and whoever stamps them own all of that. It&rsquo;s an ask to close out what&rsquo;s under your mat before you roll: not an RFI, not a change order, and it doesn&rsquo;t authorize anybody to do extra work. <b>Double-check it before you send it</b>, because a sleeve nobody walked is a bore somebody pays for.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Willow Creek — Phase 2, north lot" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you walked it off</label><input type="text" id="hOff" placeholder="the crossing lists you were sent, and C-301 rev 2" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring from the trench" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the lists and the sheet. A sleeve counted against the landscaper&rsquo;s own crossing list is a fact he can confirm from his truck this afternoon; the same sleeve described from memory is a phone call nobody can find the day the saw comes out. And whatever somebody told you at the tailgate, put it in a row here with their name on it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each thing under it</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the spot once &mdash; it becomes a button and it carries. The section and the gate carry to the next row too, because you walk a section at a time. Leave anything blank you didn&rsquo;t see: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The walk so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="area" class="on">Section</button>
+        <button type="button" data-g="whose">Whose it is</button>
+        <button type="button" data-g="gate">The gate it has to beat</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is walked, then <b>Sent</b> when it went to whoever owns it, then <b>Confirmed</b> when they came back on it, then <b>In &mdash; I saw it</b> when you watched it go in and get capped. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes to each outfit at its gate</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not confirmed yet</button>
+        <button type="button" data-f="unseen">Only the ones I haven&rsquo;t seen</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the super wants beside his own crossing schedule, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole walk</button></div>
+  </section>
+
+  <p class="credit">Built for the Paving &amp; Striping Field Toolkit. Something under a base that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Paving &amp; Striping Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* UNDER THE MAT — a CONFIG on shape #3 (shared/rowlog.js): no CSS here, no
+ * DOM building, no state, no persistence, no document assembly. The engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY "SEEN" IS ITS OWN FIELD, and not a note: it is the single fact that
+ * decides who pays for the saw cut. A sleeve he watched go in and get capped
+ * is his to have missed if the roller crushes it; a sleeve on the
+ * landscaper's list that nobody marked on the base is the landscaper's when
+ * the mat closes over nothing; and "nobody's said" is the row that turns into
+ * a bore in November with three outfits pointing at each other. Everybody
+ * writes down what is under the base. Almost nobody writes down whether they
+ * were told or whether they saw it, which is why it is a first-class column
+ * here instead of something he might remember to mention.
+ *
+ * AND THE IRON IS ITS OWN AXIS, because a lid is the one thing under a mat
+ * that is also ON it. Low is a saw cut in a month, high is a lip and a plow
+ * blade, and "not mine to raise" is a question aimed at whoever owns the box
+ * — the page never says whose job it is; it says what he found against the
+ * base and lets the owner of the lid answer.
+ *
+ * WHAT IT REFUSES, and the reason the refusal sits in a data file rather than
+ * in a person's discipline: no cover depth, no separation, no sleeve or pipe
+ * size. Those belong to the outfit that put it in and the submittal it went
+ * in off; this page has no field shaped to hold one.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.under;
+  var KEY = "toolkit.paving.underthemat.v1";
+
+  var STATES = T.states;   /* ["Sent","Confirmed","In — I saw it"] — blank = walked */
+  var DONE = STATES[STATES.length - 1];
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function unseen(v) {
+    var s = String(v.seen || "").trim();
+    return s === "" || s === "Told, not seen" || s === "Nobody's said";
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    /* THE JOB HEADER PERSISTS WITH THE WALK (found 2026-09-04 by the trade #17
+       field drive): the header rides in the document and the listener below
+       calls schedulePersist() on every keystroke, but the mount never said what
+       to persist, so a reload — the camera app, a phone call — brought the rows
+       back under a document with no job, no sheet and no From line, and the
+       man copied it out that way. Same hooks the request page has carried
+       since it shipped. */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    noun: "crossing", nounPlural: "crossings", groupNoun: "section", groupNounPlural: "sections",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing walked yet. Put in the first thing under the base — where it is in your words, whose it is, and what it is.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "area", label: "Section" },
+      { key: "whose", label: "Whose it is" },
+      { key: "gate", label: "The gate it has to beat" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = T.gates.indexOf(a), ib = T.gates.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "whose") {
+        var wa = T.whose.indexOf(a), wb = T.whose.indexOf(b);
+        return (wa < 0 ? 99 : wa) - (wb < 0 ? 99 : wb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not confirmed yet",
+        emptyText: "Every crossing on here has come back confirmed. Good — be standing there when the base truck comes.",
+        test: function (v) { return isOpen(v); } },
+      { v: "unseen", label: "only the ones I haven't seen",
+        emptyText: "Every crossing on here you watched go in or found marked on the base. That is the walk done right, and worth saying so.",
+        test: function (v) { return unseen(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "Where it is — in your words", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "north curb, by the second light pole — then it's a button",
+        emptyHint: "Your name for the spot. It becomes a button, and it's how you and the man who put it in point at the same place on a base with nothing drawn on it." },
+      { key: "area", label: "Section", input: "learn", sticky: true,
+        placeholder: "north lot, rows A–D — then it's a button" },
+      { key: "whose", label: "Whose it is", input: "chips" },
+      { key: "what", label: "What it is", input: "chips" },
+      { key: "told", label: "Who told you, and off which list", input: "learn",
+        placeholder: "Ray T's crossing list 9/12 — then it's a button",
+        emptyHint: "The name and the list. A crossing counted against his own list is one he can confirm from the truck; one from memory is a phone call in November." },
+      { key: "seen", label: "Did you see it", input: "chips" },
+      { key: "iron", label: "The iron — lids and boxes against the mat", input: "chips" },
+      { key: "gate", label: "The gate it has to beat", input: "chips", sticky: true },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— walked; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the owner of it needs that the fields don't hold — how far the stub sticks past the base edge, in his words off his list" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "whose") return T.whose;
+      if (key === "what") return T.whats;
+      if (key === "seen") return T.seen;
+      if (key === "iron") return T.iron;
+      if (key === "gate") return T.gates;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.area, v.whose, v.told, v.seen, v.iron, v.gate, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "what's under my base before it rolls", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Walked off: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("unseen") > -1 && !unseen(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var ar = {}, nu = 0;
+      src.forEach(function (v) {
+        var a = String(v.area || "").trim(); if (a) ar[a] = 1;
+        if (unseen(v)) nu++;
+      });
+      var n = Object.keys(ar).length;
+      var line = c.shown + (c.shown === 1 ? " crossing" : " crossings");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " section" : " sections");
+      if (nu) line += " · " + nu + " I haven't seen";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "area";
+      var head = joinDots([v.mark, g === "area" ? null : v.area, v.what]);
+      var tail = [];
+      if (g !== "whose" && v.whose) tail.push(v.whose.toLowerCase());
+      if (v.told) tail.push("told by " + v.told);
+      if (v.seen) tail.push(v.seen.toLowerCase());
+      if (v.iron) tail.push("iron: " + v.iron.toLowerCase());
+      if (g !== "gate" && v.gate) tail.push(v.gate.toLowerCase());
+      /* As written, never lowercased: the top rung is "In — I saw it", and a
+         lowercase "i" is the one thing on the line the receiver notices. */
+      if (v.state) tail.push(String(v.state));
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Everything above is what I've been told is under my base and what I saw with my own eyes, in my words, off the lists and the sheet named at the top. Nothing here is a cover depth, a separation or a sleeve size — whoever put it in and the submittal it went in off own all of that.");
+      out.push("This is an ask to close out what's under my mat before I roll. It's not an RFI and not a change order, and it doesn't authorize anybody to do extra work.");
+      out.push("If something's under there that isn't on this list, tell me today and I'll walk it with you — after the mat it's a saw cut, and we both know whose day that costs.");
+      return out.join("\n");
+    }
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this walk is the only record of what was
+     under the base the day it rolled, and the base is gone under the mat. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lot Closed Tonight — Paving &amp; Striping Field Toolkit</title>
+<meta name="description" content="The night you close half a lot, the people who park there need to hear it from the building, not from a cone. Write down what you're closing and which sections, the night it's closed, when cars can come back in your own words off your own spec sheet, where the cones and tape go and what stays open — and the ask: you tell the tenants, a name who moves a car at seven, the fire lane's yours to name, nobody pulls a cone before I say. It's a notice, not a permit and not a traffic plan.">
+<meta name="apple-mobile-web-app-title" content="Lot Closed Tonight">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Paving &middot; the night the cones decide where everybody parks</span>
+    </div>
+    <h1 id="h1">Lot Closed Tonight</h1>
+    <p class="lede" id="lede">On an occupied lot your cones decide where two hundred people park tonight, and the one thing you can never be is surprised at seven by a car sitting on wet seal. So write down what you&rsquo;re closing and which sections, the night it&rsquo;s closed, when cars can come back <i>in your own words off your own spec sheet</i>, where the cones and tape go and what stays open &mdash; and the ask: the building tells the tenants, a name who moves a car, the fire lane is theirs to name, nobody pulls a cone before you say. It states no cure time and no product. It&rsquo;s what you&rsquo;re closing, written down so you both know.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a notice, not a permit and not a traffic plan.</b> What&rsquo;s on it is what <i>you</i> are closing and when cars come back in <i>your</i> words, copied off your own spec sheet &mdash; this page states no cure time, no open-to-traffic time, no product and no rate, and it never will; the manufacturer&rsquo;s time is the manufacturer&rsquo;s to state. The fire lane is the fire marshal&rsquo;s to name and nothing here marks one. The tow list, the tenant notice and the plan and the permit for anything on the street are the building&rsquo;s to hold, and nothing here is shaped like any of them.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; Something the building always asks you the night you close a lot that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the notice</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* LOT CLOSED TONIGHT — the NOTICE, and the one page in this kit that gets
+ * read at seven in the morning by somebody who is standing next to a car on
+ * wet seal. A CONFIG of shape #2's engine (shared/note.js): no CSS here, no
+ * DOM building, no state, no persistence, no document assembly — the engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * THE LINE THIS PAGE IS BUILT AROUND, and the one every refusal on this hub
+ * points at: WHEN CARS CAN COME BACK, IN HIS WORDS, COPIED OFF HIS OWN SPEC
+ * SHEET. It is a free-text area on purpose. The moment it became a field —
+ * hours, a temperature, a product — this page would be a cure time with our
+ * name on it, and a cure time is a manufacturer's sheet wearing a hat. What
+ * he types is HIS statement of what he is telling them; the page supplies
+ * nothing, suggests nothing and never says whether it is enough.
+ *
+ * AND THE FIRE LANE IS AN ASK, NOT A SECTION. It would be the easiest field
+ * on the page to draw — "fire lane stays open: yes/no" — and the moment it
+ * existed the page would be marking one. So it rides in the asks, pointed at
+ * the fire marshal's contact, which is the building's to give.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.closure;
+  var KEY = "toolkit.paving.lotclosed.v1";
+
+  Note.mount({
+    key: KEY,
+    docName: "LOT CLOSED TONIGHT",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this notice? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    /* THE NIGHT IT'S CLOSED RIDES IN THE TITLE — it is the one fact the
+       tenant notice has to carry. The job rides on the second line. */
+    titleSuffix: function (get, u) {
+      var d = u.doc("day");
+      return d ? "the night of " + d : "";
+    },
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox at seven in the morning, when the argument is about which half and which night.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Oakridge Corporate Center — north lot", docSkip: true }
+        ]
+      },
+      {
+        title: "Who's got the lot tonight",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that tells the tenants and moves a car. “The building” is not a name, and the night it's closed is a date, not “this week”.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who holds the lot", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Mara S — property manager", docLabel: "Name" },
+          { id: "day", kind: "date", label: "The day / night it's closed", docSkip: true }
+        ]
+      },
+      {
+        title: "What's closing",
+        docHead: "WHAT'S CLOSING",
+        why: "What you're doing and which sections, by the names on the lot — the rows by the pharmacy, not “the north side” — so the notice they send names the same spaces your cones are on.",
+        fields: [
+          { id: "kind", kind: "pick", label: "What we're doing", options: T.kinds, docLabel: "Doing" },
+          { id: "where", kind: "area", rows: 2, label: "Which sections", hint: "— and what stays open", ph: "the north half, both rows by the pharmacy; the drive stays open" }
+        ]
+      },
+      {
+        title: "When cars can come back",
+        tone: "loud",
+        docHead: "WHEN CARS COME BACK",
+        why: "In your words, copied off your own spec sheet — what YOU are telling them, not a time this page suggests. The manufacturer's time is theirs to state; yours is the text you send when it's open.",
+        fields: [
+          { id: "back", kind: "area", rows: 3, label: "When I say — in my words, off my sheet", hint: "— what you're telling them, not what anybody should", ph: "when I say — I'll text when it's open; off my spec sheet for this seal, in my words, and the manufacturer's time is theirs to state" }
+        ]
+      },
+      {
+        title: "Where the cones and tape go",
+        docHead: "CONES AND TAPE",
+        why: "Where the closure actually is on the ground, and what stays open — the doors people use, the entrance the delivery trucks use. The fire lane isn't drawn here; it's asked for below, from the man who owns it.",
+        fields: [
+          { id: "cones", kind: "area", rows: 2, label: "Where the cones and tape go, and what stays open", hint: "— your words", ph: "cones across both entrances to the north half, tape along the pharmacy walk; the south entrance and the drive stay open all night" }
+        ]
+      },
+      {
+        title: "What you need from them",
+        tone: "loud",
+        docHead: "WHAT I NEED FROM YOU",
+        why: "Every one of these is a car on wet seal at seven. Tap only what you actually need.",
+        fields: [
+          { id: "asks", kind: "ticks", options: T.asks },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the cart corral by the pharmacy — somebody has to move the carts or I'm sealing around them" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— of the cones, so where the closure was is on the record", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, the number that rings at seven when there's a car on it", ph: "Manny R — 559-555-0188", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Blacktop Bros Paving & Striping", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "This is a notice of what I'm closing and when, not a permit and not a traffic plan — the plan and the permit, where the road needs one, are yours to hold, and the fire lane is the fire marshal's to name. When cars come back is what I'm telling you in my words off my own sheet; nothing here is a cure time of ours.",
+      "Reply with who's telling the tenants and who moves a car — a name and a number — and I'll text you the minute it's open."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.asks || []).length;
+      if (n) return n + " ask" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

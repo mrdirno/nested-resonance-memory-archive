@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed, Sprout } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer, Umbrella, Clapperboard, Shovel, BrickWall, Tractor, Ruler, PaintRoller, DoorClosed, Sprout, TrafficCone } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -448,6 +448,24 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to the crew three other kits already name and none of them could reach \u2014 the one that puts the pipe in, grades it, plants it and turns the clock on. Where I cross first: walk every place your pipe has to get under somebody else\u2019s concrete before it closes and send it to whoever\u2019s pouring, in your words, with the sleeve you\u2019re putting in off your own submittal. It supplies no run time, no rate, no pipe size, no backflow test and no plant call, it never says a landscape is established, and the plant list and the irrigation design stay whoever\u2019s they already are \u2014 a line off their schedule here is an address, never a second copy of their document.',
     icon: <Sprout size={18} />,
+  },
+  {
+    // TRADE #17 (C3706). A four-lens panel over nine count-invisible candidates
+    // put paving & striping first on two lenses and second on the other two,
+    // vetoed by none (70 · 70 · 62 · 78). The rack had already built him two
+    // receiver chips and one letter — landscape's "walk my sleeves before the
+    // base rolls" aimed at `paving`, sitework's orphan "Paving / base" — and
+    // "before you pave" is the one irreversible gate word on the site rack no
+    // hub owned. The doctrine dissent is the design: the layout page quotes the
+    // sheet and his tape and never carries a stall count or a dimension.
+    //
+    // A traffic cone is GEAR: the thing he sets by the dozen to close a
+    // section, not the mat he lays. The sibling rule holds without bending.
+    name: 'Paving & Striping Field Toolkit',
+    href: './paving/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew two other kits already name and neither could reach — the one that reads the base, lays the mat and paints the lot. Doesn’t Fit first: the striping sheet quoted against what the tape found, row by row, before paint. Then what’s under the mat before it rolls, the lot not ready to pave, and the section closed tonight.',
+    icon: <TrafficCone size={18} />,
   },
 ];
 

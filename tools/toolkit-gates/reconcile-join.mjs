@@ -373,6 +373,48 @@ console.log('unicode — NBSP around the em dash must not swallow his date');
     'and it is still an exact, sure match to row 1', JSON.stringify(res.pairs));
 }
 
+/* ── 16. THE REAL VOCABULARY ROUND TRIP — every trade's own asks, with the dashes they carry ──
+   Found 2026-09-04 by an adversarial drive of trade #17: the parser split on the
+   FIRST em dash and paving's own labels carry one ("The set I'm paving to — sheet
+   and rev"), so the ask came home cut in half and an answer that said Thursday
+   landed as "couldn't place". Every section above joins SYNTHETIC AV rows with
+   the dash itself (line 60), so none of them could see it. This one reads each
+   trade's real items.js off disk and drives its real asks through the real
+   module, grouped both ways, and it REQUIRES the rack to carry dashed asks —
+   a control that finds nothing to test is a decoration. */
+console.log('real vocabulary — an ask whose own words carry an em dash must still come home exact');
+{
+  const trades = readdirSync(ROOT, { withFileTypes: true })
+    .filter(d => d.isDirectory() && existsSync(ROOT + d.name + '/items.js') && existsSync(ROOT + d.name + '/rough-in-request.html'))
+    .map(d => d.name).sort();
+  let dashed = 0, alted = 0;
+  for (const t of trades) {
+    const w = {};
+    try { new Function('window', readFileSync(ROOT + t + '/items.js', 'utf8'))(w); } catch (e) { ok(false, `${t}/items.js loads`, String(e)); continue; }
+    const cfg = w.TOOLKIT_ROUGHIN;
+    if (!cfg || !Array.isArray(cfg.asks)) continue;
+    const label = (list, v) => { const o = (list || []).find(x => x.v === v); return o ? o.label : v; };
+    const rows = cfg.asks.map((a, i) => ({ id: i + 1, area: '', ask: a.label, spec: (a.specs || [])[0] || '', place: '',
+                                           by: label(cfg.milestones, a.by), who: label(cfg.who, a.who), note: '' }));
+    rows.forEach(r => { if (/ — | - /.test(r.ask + ' ' + r.spec)) dashed++; });
+    for (const groupBy of ['status', 'when']) {
+      const items = rows.map(r => ({ line: sent(r, 'who'), status: 'Will do', when: 'Thursday', note: '' }));
+      const p = R.parse(reply(items, { groupBy }));
+      p.lines.forEach(l => { if (l.alts && l.alts.length) alted++; });
+      const res = R.pair(forMatch(rows), p.lines);
+      ok(p.lines.length === rows.length, `${t}: every one of ${rows.length} asks survives the parse (grouped by ${groupBy})`, `${p.lines.length} lines`);
+      ok(res.pairs.length === rows.length && res.pairs.every(x => x.exact),
+         `${t}: every ask comes home exact (grouped by ${groupBy})`,
+         JSON.stringify(res.pairs.filter(x => !x.exact).slice(0, 3)) + ' unplaced=' + JSON.stringify(res.unplaced.slice(0, 3)));
+      if (groupBy === 'status')
+        ok(p.lines.every(l => /Thursday/.test(l.tail)), `${t}: every answer keeps its date on the tail`,
+           JSON.stringify(p.lines.filter(l => !/Thursday/.test(l.tail)).slice(0, 2).map(l => l.raw)));
+    }
+  }
+  ok(dashed > 0, `the control has teeth: ${dashed} real asks on the rack carry a dash inside their own words`);
+  ok(alted > 0, `and the parser offered an alternative cut on ${alted} of their lines`);
+}
+
 console.log('');
 console.log(fails ? `RECONCILE JOIN GATE: ${fails} FAILED of ${checks}` : `RECONCILE JOIN GATE: ${checks} checks, all green`);
 process.exit(fails ? 1 : 0);

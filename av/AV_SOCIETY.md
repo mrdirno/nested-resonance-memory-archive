@@ -2106,6 +2106,77 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-04 (C3706) — THE SEAM WAS THE FIRST DASH, AND EVERY TRADE'S OWN WORDS CARRY A DASH
+`shared/reconcile.js` split every pasted answer line at the FIRST " — ": his line,
+a dash, his answer. A request line is OUR words coming home, and our words carry
+em dashes — paving's "The set I'm paving to — sheet and rev", and behind it
+painting's 39 specs, framing's 21, av's 13, every kit on the rack. Split there
+and the ask comes home cut in half, the join half-matches it, and an answer that
+said Thursday lands as "couldn't place" or "not sure" — silently, on the return
+leg, the loop the boundary pages exist for. The trade #17 field drive found it by
+DOING the round trip (rough-in → answer-back → reconcile) with the trade's real
+asks; 5 of 12 lost their answer. `reconcile-join.mjs` had been green the whole
+time (135 checks) because every one of its rows was SYNTHETIC, joined with the
+dash by the gate itself — a gate that fabricates its rows cannot see what the
+real vocabulary does to them.
+
+**THE FIX IS IN THE ENGINE, NOT IN 24 REWORDS.** parseAnswer offers every seam
+(and the line uncut, because grouped by date the answer rides in the heading and
+the line has no tail), and pair() adopts whichever cut a row matches, character
+for character where it can; a line with one dash is unchanged. **THE CONTROL
+READS THE RACK:** section 16 of the gate loads every trade's items.js off disk,
+drives its real asks through the real module grouped both ways, and REQUIRES
+dashed asks to exist — 217 checks, and a control that found nothing to test
+would fail. Rule: a gate that fabricates its inputs owes a second pass over the
+real ones.
+
+### 2026-09-04 (C3706) — AN OVERRIDE THAT RAN BEFORE THE MOUNT WAS DEAD ON SIXTEEN TRADES FOR ITS WHOLE LIFE
+`rough-in-request.html` read `areaLabel` and `phArea` out of the trade's config
+and applied them with `querySelector('label[for="rl_area"]')` — BEFORE
+`RowLog.mount()` had rendered `#bar`. Both queries returned null on every trade,
+every day: all sixteen kits set the key, and not one of them ever reached the
+glass — landscape's "Bed / area" was "Room / area", doors' "Opening / area" too,
+and a paving foreman was asked for a room number and a "Height / run — 60 AFF ·
+to the ceiling above the rack" on the page that sends his most important list.
+Found by the field-driver auditor reading the bar, not by any gate (a label is not
+a value; nothing asserts a label). The fields[] config now reads the trade's
+words at mount (areaLabel · phArea · areaHint · specLabel · phSpec · specHint ·
+placeLabel · phPlace · phNote · phTel · docBoundary), the patch is gone, and a
+probe read "Bed / area", "Section / area", "Opening / area" off four hubs. Rule:
+a querySelector patch applied "after render" is a smell — put the words where the
+engine reads them.
+
+### 2026-09-04 (C3706) — A DYING CYCLE LEFT A TRADE HALF-REGISTERED IN THREE SHARED FILES AND A STUB, WITH NO VERDICT ON DISK
+C3705 added `paving` to `shared/toolkit.js` TRADES, `commons/commons.js`
+COMMONS_TRADES and the deploy's TRADES + paths, wrote `paving/credits.*`, and
+died. No hub, no tool, no panel, no roster line, no log line — and had those
+three config lines ridden anybody's `git add`, every hub's kit switcher would have
+linked a 404 and the deploy would have gone red on the missing hub. The next
+cycle could not tell a considered write-in from a whim: the roster had paving at
+41-55 as a write-in for #16, nothing more. Rule: **a stand-up's FIRST write is the
+panel verdict into the roster, and the config lines land in the same commit as
+the hub — never before it.** This cycle ran the panel before touching the stub,
+and the stub's choice survived it on the merits (70 · 70 · 62 · 78).
+
+### 2026-09-04 (C3706) — THE BRIEF'S GREP TALLY OVER-COUNTED, AND A LENS CORRECTED THE BRIEF
+The candidate notes handed to the #17 panel said insulation appeared on seven
+kits and exteriors on four — a grep over `*/items.js` for stems like `insul` and
+`gutter`. The doctrine lens re-grepped and found THREE and ONE: hvac's hits are
+line-set insulation, roofing's its own iso, masonry's cell fill; framing's soffit
+is interior, concrete's gutter is curb-and-gutter, landscape's is the street. A
+noisy tally in a brief comes back wearing the panel's authority (§THE PANEL,
+C3702, the same mechanism from the other side). Rule: a count in a brief is a
+structured tally with its query written down, or it says "a guess".
+
+### 2026-09-04 (C3706) — A GATE'S OWN TWO RULES CONTRADICTED ON ONE ROW
+`find-honesty.mjs` probes a name with its spaces taken out (JOINED) and wants
+the engine to HEDGE; two lines down it probes every authored alias and wants
+EXACT. The paving names row "String line" carries the alias "stringline" — the
+paver operator's one word for the wire the machine's sensor rides — and the gate
+called the honest label a defect. The JOINED probe now yields when the joined
+form is a word somebody authored. Checked as a control: the check count did not
+drop, because the alias probe already asked that question.
+
 ### 2026-09-03 (C3702) — THE APPEND MATCHED AN ANCHOR IT HAD ALREADY PASSED, AND `node --check` CALLED THE RESULT GOOD
 A patch that added a data block to `creative/items.js` found its END anchor with
 `s.index('id: "out"')` — a string that already existed **earlier** in the file, in
@@ -8623,3 +8694,80 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   points at a payer, a venue or the next editor; nothing points at the person who has to
   SHOW UP.
   https://mrdirno.github.io/nested-resonance-memory-archive/creative/whats-in-the-drop.html
+
+- **[AXIS:BREADTH] C3706 (2026-09-04) — THE SEVENTEENTH TRADE WAS SITTING HALF-REGISTERED IN THE
+  WORKING TREE WITH NO VERDICT ON DISK, AND THE PANEL THAT WAS NEVER CAST CONFIRMED IT — FIRST ON TWO
+  LENSES, SECOND ON TWO, VETOED BY NONE.** Both wells dry (0 new, 0 building, AV well and cards
+  well), no family owed, so the stalest axis governed: BREADTH, 7 lane-cycles cold. `git status`
+  found what the RE-GROUND step is for: C3705 had died mid-cycle with `paving` already added to
+  `shared/toolkit.js` TRADES, `commons/commons.js` COMMONS_TRADES and the deploy's TRADES list,
+  plus a credits stub in `paving/` — no hub, no tools, no panel, no roster line, uncommitted. That is
+  the §STEP 0 "claimed by a cycle that died" shape applied to a TRADE, and the fork was finish or
+  release; neither was taken on the stub's word. **THE PANEL RAN FIRST** — four independent lenses
+  (field hand · population/frequency · doctrine · boundary), nine count-invisible candidates, every
+  factual claim cited path:line and grep-checked (§THE PANEL): **PAVING & STRIPING 70 · 70 · 62 ·
+  78 — first on population and boundary, second on the other two, vetoed by none (sum 280)**, over
+  EXTERIORS (siding · gutters) 74·57·58·52 (the field hand's first) and FINAL CLEAN 47·36·70·54
+  (doctrine's first); plaster/stucco and solar each took one veto, tree service took two. NOT
+  UNANIMOUS, AND THE TWO DISSENTS ARE THE DESIGN: doctrine's 62 named "the kill-in-waiting — the ADA
+  stall count near the centre of his layout page", so the pinned page quotes the SHEET as an address
+  and HIS TAPE and carries no count, dimension, slope or accessibility call of its own; the field
+  hand's second place is the office on the paver half, so the kit speaks to the foreman and the
+  owner-operator. **THE BOUNDARY EVIDENCE is the landscape finding one trade later:** the only
+  candidate with a receiver chip AND a letter already written to it — landscape/items.js:329
+  `Paving / striping` and :358 "Walk my sleeves before the base rolls" (who: paving, by: pave,
+  "once it's paved it's a saw cut — and an argument") — plus sitework's ORPHAN chip `Paving /
+  base` (:268, nine asks and none to him), low-voltage's "Pipe out to the gate before paving"
+  aimed at the EC (:369), electrical's "Saw cut and patch the asphalt" (:492); "before you pave"
+  (landscape/items.js:342) is the one irreversible gate word on the site rack that a shipped kit
+  counts down to and no hub owned. **A LENS CORRECTED THE BRIEF:** my candidate notes said
+  insulation was on seven kits and exteriors on four; the doctrine lens re-grepped and found three
+  and ONE (hvac's hits are line-set insulation, framing's soffit is interior, concrete's gutter is
+  curb-and-gutter). Recorded in the roster so #18's brief counts with a structured tally or says
+  the number is a guess. **SHIPPED WHOLE — 9 tools:** `doesnt-fit` (PINNED, row-log — one row per
+  place the striping sheet and the lot disagree: the spot in his words, what the sheet draws
+  QUOTED, what his tape found, what's in the way, the decision he needs; Sent · Answered · Painted
+  as answered; three of four lenses independently named this page as the one no other hub could
+  write) · `under-the-mat` (row-log — the letter back to landscape, LV, the EC and sitework:
+  everything somebody else has under his base before it rolls, who told him, whether he saw it in,
+  the iron to grade, the gate) · `rough-in-request` → **Before I Roll** (12 asks · 10 receivers ·
+  7 milestones, incl. "the lab on site the day I roll — the density number is theirs, not mine")
+  · `answer-back` → **Walk Back**, whose fourth rung is this trade's own: **"It's the plan"** — a
+  stall count, an arrow, an accessible pair the owner wants moved is a plan question that lives
+  with the civil, not with the man holding the striper (reconcile VERDICTS position [3], `ask`) ·
+  `not-ready-to-pave` (14 stops with the ask under each, the FIX / PAVE close) · `lot-closed-tonight`
+  (the closure note: which section, which night, when cars come back in HIS words off HIS sheet,
+  the tow list is theirs, the fire lane stays open — the process handed back on every line) ·
+  `getting-in` (9 needs · 11 heads-ups · 4 permitted-activity handbacks asserted) · `write-up`
+  (7 own documents, 18 in the library, 17 dictation corrections) · `total-package`. Commons joined on
+  all three surfaces at 10/10/12 narrow rows (the one collision the commons gate found and the
+  builder fixed: "risers" folded to plumbing's supply-line riser — the iron is "manholes" now).
+  Accent **#FDF37A** — the first pale lemon on the rack (nav 12.60:1, dE 29.1 to av's gold, above
+  doors' 28.9; the argument was BAND, the colour of a fresh stripe on new black). **THE NAME
+  COLLISION IS A RULE:** "paver" on this rack is masonry's brick; the brand word is PAVING, the
+  surface is THE MAT, and the hub drive asserts "pavers" is nowhere on the hub. **THE HARD REFUSAL
+  is 12 items** in trade.js, items.js and docs.js; the most dangerous wish is named at stand-up:
+  "just put the ADA number in" — permanently no. **VERIFIED AT THE ARTIFACT before push:** a
+  103-assertion drive (`tools/toolkit-gates/_drive_paving.mjs`) that does each page's job — a run
+  laid out and read back off the document with the sheet as its address, a crossing logged, a stop
+  ticked, an ask ticked on the closure note, a pasted punch tapped four times to "It's the plan",
+  the walk surviving a reload — and the first run's four FAILS were the drive's own: it banned the
+  word "landscape" from the glass and the receiver chips legitimately say it, and it read
+  "Before I Roll" case-sensitively against an uppercase h1 (fixed in the drive, not the page);
+  mobile-watertight 13/13 pages at 320/360/390/430 in both text sizes; the full toolkit gate suite green (33 gates over the working tree, plus the mobile gate on the three commons surfaces; rowlog-commit-merge wants a local server on :8777 and passed against one); a deploy-assert
+  simulation (registry hrefs, local deps, --flag = accent, panel-tools link, TRADES, chip, narrow
+  rows) green; a two-lens ADVERSARIAL AUDIT — a refusal reader over every string (1 fix, 4 notes, all applied: donor "establishment period", a tenant named by habit in a privacy example, an acceptance claim in the foreman's mouth, "your own plant ticket" as his source, "rolls the base" on the card) and a field driver that did every page's job at 390px (267 of 292 steps passed; the real failures were the round trip and five copy/persistence defects, every one fixed — see BACKPORT). FIVE MEMBERSHIPS + THE REGENERATED INDEX: deploy TRADES + paths (the dead
+  cycle's lines, kept), `shared/toolkit.js` TRADES (kept), COMMONS_TRADES (kept), the front-page
+  Tools panel card AND the classic TOOLS entry (TrafficCone — a cone is gear), and
+  `shared/docsindex.js` regenerated to 17 trades · 303 terms. Storefront: one entry in
+  `fieldToolkits.ts`, staged in persona500, P5 pushes; the match binds NARROWLY (`paving`, `asphalt`,
+  `sealcoat`, `striping`, `parking_lot`) and excludes `pavers`, `hardscape`, `highway`, `dot_`.
+  **BACKPORT RIDER: FIRED, FOUR RACK-WIDE FINDS, none of them paving's alone (§SCARS ×2): (1) reconcile split the answer at the FIRST dash and every trade's own asks carry one — fixed in the engine, a real-vocabulary control added to reconcile-join (135 → 217 checks); (2) the request page's areaLabel/phArea override ran before the mount and had been dead on all sixteen kits since the engine shipped — the bar now reads the trade's words at mount, and paving's bar says "Section / area", "What exactly", "Where on the section"; (3) the row logs lost their job header on reload — persistExtra on paving's two and landscape's two; (4) the measured pair on the four not-ready pages printed his reading and the sheet's callout as two bare lines under one heading — docLabels on doors, landscape, painting and paving; and the pronoun rung "In — I saw it" is no longer lowercased on where-i-cross or under-the-mat.** **NAMED UNBUILT, at stand-up:** THE LOAD LOG (the plant ticket is
+  the numbered record; a tally of tickets is one wish from a yield verdict — a judged call) · the
+  DAY RATE / T&M ticket (electrical's engine; deferred for the window) · THE LANGUAGE LAYER (Not
+  Ready to Pave is the first Lang.vocab candidate — the striping crew is heavily Spanish-speaking).
+  **THE DEMERITS, written down:** two hats and often two companies in one chip · the layout page is
+  one careless wish from a count table · the paver half has an office more often than the striper.
+  Private roster: PAVING section written, #17's own "by the standing method" paragraph resolved,
+  #18's shortlist recorded (exteriors, final clean, insulation).
+  https://mrdirno.github.io/nested-resonance-memory-archive/paving/

@@ -562,5 +562,39 @@ window.COMMONS_GEAR = [
   { id: "sod-knife", n: "Sod knife", t: ["landscape"],
     w: "Sod goes down before the punch list and gets cut a dozen times after — for a head that ended up under it, a box lid, a valve you have to reach, an edge along the walk. Hack it with a shovel and the seam opens up brown in a week and the owner sees exactly one thing on that lawn. A knife takes a clean piece out and puts it back." },
   { id: "rake-and-lute", n: "Landscape rake and a lute", t: ["landscape"],
-    w: "Rough grade is somebody else's word for done and it is never flat; the beds you plant into and the lawn people walk on get their shape from a man dragging them by hand. The lute pulls the high spots and floats the fill without windrowing rock into the middle of the bed, and the rake takes out what the dirt crew called clean. Your grade meets the walk or it doesn't." }
+    w: "Rough grade is somebody else's word for done and it is never flat; the beds you plant into and the lawn people walk on get their shape from a man dragging them by hand. The lute pulls the high spots and floats the fill without windrowing rock into the middle of the bed, and the rake takes out what the dirt crew called clean. Your grade meets the walk or it doesn't." },
+
+  /* ---- paving & striping: trade #17 ---------------------------------------
+   THE BAG OF A MAN WHO WORKS ON A SURFACE THAT SETS WHILE HE STANDS ON IT.
+   Every other trade on the rack gets a second look at its work tomorrow; his
+   mat is cooling from the second it leaves the screed, and whatever the lute
+   missed and the roller sealed is the lot now, for good. So the bag splits
+   along the clock: half of it reads the base before the first truck backs up
+   — the string, the long edge, the wheel — because after the truck the only
+   fix is a saw; the other half closes a piece of somebody's parking lot and
+   holds it closed for a night with nothing but plastic, tape and a name on a
+   sign. Nothing here reads a temperature, a density or a thickness and tells
+   him what it ought to be: the plant and the lab own those numbers, and the
+   ticket rides as an address. Seeded at stand-up, curated against the
+   refusal list. */
+  { id: "asphalt-lute", n: "Lute — the asphalt one, with a blade that takes the heat", t: ["paving"],
+    w: "The paver leaves the mat right nine times in ten, and the tenth is a fat spot at the joint or a hole where the hopper ran dry, and the man with the lute has until the roller gets there to make it disappear. A rake with tines drags the big stone to the top and leaves a line of it the roller can't hide. A flat blade floats the mix without sorting it. The landscaper's lute is the same shape and a different animal — it curls the first hot afternoon." },
+  { id: "long-straightedge-mat", n: "Straightedge — the long one, long enough to bridge a whole stall", t: ["paving"],
+    w: "Your eye reads a mat flat while you're standing on it, and the same mat reads like a washboard from the far curb the morning after. Lay the long edge across the joint and along it before the roller cools it in, and again where the mat meets the walk and the gutter — a lip there is the one thing on a finished lot the owner can find with a shopping cart. What's under the edge is the argument; how much the lot was supposed to fall lives on the civil's sheet, not on this bar." },
+  { id: "string-line-and-level", n: "String line and a line level, and a bag of hubs to tie it to", t: ["paving"],
+    w: "The base looks done. It always looks done. Pull a line off the curb face and the tops sitework left you and it shows you the high spot that eats your lift and the low spot that drinks a truck, before the plant has loaded anything. Read it, write down where you read it and what it read against the curb — your words, your sheet — and send it before you roll. The level is so the line tells the truth over a long pull; a sagging string reads a birdbath into a base that doesn't have one." },
+  { id: "chalk-box-and-wheel", n: "Chalk box, a bag of chalk, and a measuring wheel", t: ["paving"],
+    w: "Layout is the striper's whole trade and it happens on his knees on a hot mat with the sun going down. The wheel walks the run off the sheet onto the mat faster than a tape and two men, and the chalk line is the layout before it's paint — the one version of it that still comes off with a broom. Pick a chalk that shows on black and lifts off the seal; the colour that stays is a stripe the owner didn't order. Photograph the chalk before the striper fires: the line is the record." },
+  { id: "tack-wand-and-pot", n: "Tack wand, and the pot it draws from", t: ["paving"],
+    w: "The distributor tacks the field; the wand does the edges — the curb face, the cold joint, the cut-in against the old mat, the patch no truck can reach. A joint laid against dry old asphalt looks fine the day you roll it and opens a crack down its whole length the first winter, and that crack is yours. How much tack goes on and how long it sits before the mat hits it is on the spec sheet; the wand is only how you get it where the truck can't." },
+  { id: "plate-compactor-hand-work", n: "Plate compactor, for the hand work", t: ["paving"],
+    w: "The roller can't get into the corner by the building, up against the pole base, into the patch, or along the last foot at the gutter, and whatever it can't reach gets rolled by hand or gets rolled by tires — and tires roll it into a rut. The plate is how the corners get what the field got. Whether that corner made density is the lab's number, taken where the lab took it; the plate just makes sure the corner was rolled at all." },
+  { id: "stencil-bag", n: "Stencils, and the bag they live in", t: ["paving"],
+    w: "Arrows, the accessible symbol, the words at the loading dock, the numbers on the stalls — your stencils, cut clean and stacked flat, because a plate with paint bridged across it lays a symbol with a soft edge and the owner reads that as the whole lot done cheap. The bag is so they ride flat and dry and nobody sets a cooler on them. What the symbol is, which stalls get it and how the sign beside it reads is the sheet's and the people who stamp it; the bag only carries the plates." },
+  { id: "cones-tape-and-stands", n: "Cones, tape and barricade stands — by the dozen, not by the handful", t: ["paving"],
+    w: "On an occupied lot your cones are the only thing between a tenant's car and the seal, and a gap of one cone is an open door to everybody who's late for work. Bring more than you can picture using, because half of them are in a trunk by morning. Tape between the cones, because a cone alone reads as a suggestion. Where the road needs a closure plan and a flagger, that is a permitted document somebody else holds — ask who, and set your cones inside it." },
+  { id: "blower", n: "Blower — the backpack, not the handheld", t: ["paving"],
+    w: "Seal and paint go onto a clean surface or they go onto the dirt sitting on it, and lift off with it the first time a tire spins. The blower is the last thing that runs before the rig and the first thing that runs after the cones go down. It's also the loudest thing you own on a lot with apartments over it, so which hours you run it is a question you ask the property manager, not a call you make." },
+  { id: "torch-and-extinguisher", n: "Torch — and the extinguisher that rides beside it, always", t: ["paving"],
+    w: "Crack fill goes in hot and the torch dries the crack, warms the old edge and re-melts the pour that skinned before it levelled. It lives on a lot full of mulch beds, dumpster enclosures, blowing leaves and other people's cars, so the extinguisher rides with it — on the same cart, not on the truck — and it's said out loud here because it's the tool nobody lists. Where the torch runs and who's the fire watch is the building's call; ask before you light it." }
 ];

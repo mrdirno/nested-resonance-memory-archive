@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not Ready to Pave — Paving &amp; Striping Field Toolkit</title>
+<meta name="description" content="The base pumps under the truck, the curb's not cured, the lids aren't to grade, somebody's still trenching, there's a conex on your section, nobody's called the lab and the plant wants a cancel by three. Walk it before the trucks are ordered, name what stops the paving in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to pave it as it sits. Because a mat over a soft base is your warranty.">
+<meta name="apple-mobile-web-app-title" content="Not Ready to Pave">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Paving &middot; on the base, before the plant ships</span>
+    </div>
+    <h1 id="h1">Not Ready to Pave</h1>
+    <p class="lede" id="lede">Every trade on the site counts down to &ldquo;before you pave,&rdquo; and you are the one who finds out at six in the morning which of them didn&rsquo;t make it. Walk the section before the trucks are ordered and name what stops the paving, in your words: the base that pumps under the water truck, the curb that isn&rsquo;t cured, the lids that aren&rsquo;t to grade, the trench somebody&rsquo;s still in, the conex nobody moved. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to pave it as it sits. Because a mat over a base that wasn&rsquo;t ready is your warranty, and the plant doesn&rsquo;t take the loads back.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s base, curb or trench failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own string line and set beside what your own sheet says. It states no density, no compaction number, no thickness, no grade tolerance, no temperature and no threshold of any kind, it never says a base is ready or passed &mdash; that is the lab&rsquo;s numbered report and the civil&rsquo;s call &mdash; and it doesn&rsquo;t stop the job: it hands whoever runs the job the choice, on the record: clear it, or direct it paved as it sits.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY TO PAVE — the section note, and the twin of landscape's Not Ready
+ * To Plant and doors' Not Ready To Hang. A CONFIG of shape #2's engine
+ * (shared/note.js): no CSS here, no DOM building, no state, no persistence,
+ * no document assembly — the engine owns all of it. This file owns the
+ * WORDS, which is the half an engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: a mat over a base that was not ready is HIS
+ * warranty. The moment the mat is down, whatever the base carried becomes
+ * the paving crew's — so the record of what the base carried has to exist
+ * BEFORE the paving, and the choice (fix it / pave it anyway) has to be
+ * somebody else's, in writing. The stops list lives in items.js; every entry
+ * is a condition with the ASK riding under it, so the note reads as a list a
+ * super can clear by lunch, not a complaint.
+ *
+ * AND THE NUMBERS ARE HIS. "What your string line read" is a free-text
+ * field on purpose, and so is "what your own sheet says": the reading is his
+ * and the callout is the sheet's, and the page states no tolerance, no
+ * density and no threshold between them. The lab's number is the lab's; the
+ * plant's temperature is the plant's; "I'm not paving today" is his call in
+ * his words with no threshold of ours behind it.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.notready;
+  var KEY = "toolkit.paving.notreadytopave.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY TO PAVE",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox next spring, when the argument is about which section and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Willow Creek — Phase 2, north lot", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana K. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The section",
+        docHead: "THE SECTION",
+        why: "By the names on the civil and the names the crew uses, so his answer names the same section your trucks are lined up for.",
+        fields: [
+          { id: "rooms", kind: "area", rows: 2, label: "Which section / area", hint: "— the way the sheet says it, and how big", ph: "north lot, rows A–D and the drive to the loading dock — the whole first day's mat" }
+        ]
+      },
+      {
+        title: "What stops the paving",
+        tone: "loud",
+        docHead: "WHAT STOPS THE PAVING",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the storm inlet by the cart corral is sitting proud of the base — somebody has to say whether it's coming down or I'm feathering to it" }
+        ]
+      },
+      {
+        title: "What you measured — if you measured it",
+        docHead: "WHAT MY STRING LINE READ, WHAT MY SHEET SAYS",
+        why: "Both are yours: what your string line or your straightedge read on the base, and what your own sheet says beside it. The page supplies neither, and nobody here says which one wins or what passes — that is the lab's and the civil's, and it is exactly what makes this hold up.",
+        fields: [
+          { id: "reading", kind: "text", docLabel: "My string line", label: "What your string line read", hint: "— where on the base, and what time", ph: "string off the curb at the north end reads low, worst by the second pole — 6:40, with the super there" },
+          { id: "limit", kind: "text", docLabel: "My sheet", label: "What your own sheet says", hint: "— and which sheet", ph: "C-301 rev 2 grading callout for that section says … — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or paved", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday — the plant wants a cancel by a time of its own, and it isn't waiting for the meeting.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and what's on the trucks", ph: "crew of six, a roller and 18 loads ordered off the plant for 6 a.m. — the plant wants a cancel by three" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving to the south drive — a day of base and a day of patching there" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "Manny R — 559-555-0188", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Blacktop Bros Paving", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply FIX with who's fixing each one and when, and this section goes back on my board the day it's cleared — and the plant order moves with it.",
+      "Or reply PAVE and we lay it as it sits — in writing, because a mat over a soft base is my warranty, and this note is the record of what was under it.",
+      "Nothing here is a verdict on anybody's work — it's what I found, in my words, with anything I measured taken off my own string line and set beside my own sheet. Whether a base passed is the lab's number and the civil's call, not mine."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -121,8 +121,8 @@
         docHead: "WHAT I MEASURED, WHAT MY DRAWING SAYS",
         why: "Both numbers are yours: what your tape read at the opening, and what your own approved shop drawing says beside it. The page supplies neither, and nobody here says which one wins — that is exactly what makes it hold up.",
         fields: [
-          { id: "reading", kind: "text", label: "What your tape read", hint: "— where on the opening, and what time", ph: "throat at 304 measured 4-7/8 at the head — 6:40, with the super there" },
-          { id: "limit", kind: "text", label: "What your own drawing says", hint: "— and where it came from", ph: "my approved HM shop drawing sheet 3 says … — typed off the sheet in my hand" },
+          { id: "reading", kind: "text", docLabel: "My tape", label: "What your tape read", hint: "— where on the opening, and what time", ph: "throat at 304 measured 4-7/8 at the head — 6:40, with the super there" },
+          { id: "limit", kind: "text", docLabel: "My drawing", label: "What your own drawing says", hint: "— and where it came from", ph: "my approved HM shop drawing sheet 3 says … — typed off the sheet in my hand" },
           { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or hung", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
         ]
       },

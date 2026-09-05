@@ -121,8 +121,8 @@
         docHead: "MY READINGS, MY LIMITS",
         why: "Both numbers are yours: what your instrument read, and the limit off your own product data with the source named. The page supplies neither, and nobody here says which one wins — that's exactly what makes it hold up.",
         fields: [
-          { id: "reading", kind: "text", label: "What your instrument read", hint: "— your unit, where, what time", ph: "18% on the pin meter — 412 west wall, 6:40" },
-          { id: "limit", kind: "text", label: "The limit off your own data", hint: "— and where it came from", ph: "my primer's data sheet says … — typed off the sheet in my hand" },
+          { id: "reading", kind: "text", docLabel: "My instrument", label: "What your instrument read", hint: "— your unit, where, what time", ph: "18% on the pin meter — 412 west wall, 6:40" },
+          { id: "limit", kind: "text", docLabel: "My own limit", label: "The limit off your own data", hint: "— and where it came from", ph: "my primer's data sheet says … — typed off the sheet in my hand" },
           { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or coated", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
         ]
       },

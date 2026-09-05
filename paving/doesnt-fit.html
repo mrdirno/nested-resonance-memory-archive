@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Doesn't Fit — Paving &amp; Striping Field Toolkit</title>
+<meta name="description" content="Lay the striping sheet out on the lot and put a row on every place the two disagree — the spot in your words, what the sheet draws there quoted, what your tape found, what's in the way, and what you need decided — and send it to the super, the civil or the owner before paint hits the mat. No stall count, no dimension, no slope and no accessibility call of ours: the sheet is quoted and the tape is yours. One row per spot, grouped by section, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Doesn't Fit">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Paving &middot; the layout &rarr; whoever stamps the sheet, before paint</span>
+    <h1 id="title">Doesn&rsquo;t Fit</h1>
+    <p class="lede" id="lede">The striping sheet was drawn on a lot that didn&rsquo;t have a pole base in it yet, or a hydrant, or a curb return that came in a foot long. You find out with a chalk box and a wheel, the afternoon before paint. Put a row on every place the sheet and the lot disagree &mdash; the spot in your words, what the sheet draws there, quoted, what your tape found, what&rsquo;s in the way, and what you need decided &mdash; and send it to the man who can decide it while the layout is still chalk. After paint it&rsquo;s a grind-out, and it&rsquo;s an argument you already lost.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>The sheet is quoted and the tape is yours.</b> Every row says what <i>the sheet</i> draws at a spot, copied off the sheet and rev named at the top, and what <i>your</i> tape found there, in your words. This page carries no stall count, no stall or aisle dimension, no slope, no sign height and no accessible-stall call of its own &mdash; the sheet and the people who stamp it own every one of those, and this page asks them which one goes. It&rsquo;s an ask for a decision before paint: not an RFI, not a change order, and it doesn&rsquo;t authorize anybody to do extra work. <b>Double-check it before you send it</b>, because a row you forgot is a stall you paint twice.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="Willow Creek — Phase 2, north lot" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you laid it out off</label><input type="text" id="hOff" placeholder="the striping sheet and rev in your hand: C-201 rev 3" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring from the lot" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the sheet and its rev. It is the difference between a list the civil can answer against his own set by tonight and one striper&rsquo;s opinion he has to re-walk with you &mdash; and if he is holding a later rev than you are, that is its own answer and you want it before the paint truck is loaded.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each spot</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the spot once &mdash; it becomes a button and it carries. The section and the sheet carry to the next row too, because you lay out a section at a time off one sheet. Leave anything blank you didn&rsquo;t measure: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The layout so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="area" class="on">Section</button>
+        <button type="button" data-g="way">What&rsquo;s in the way</button>
+        <button type="button" data-g="ask">The ask</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is laid out, then <b>Sent</b> when it went to whoever stamps the sheet, then <b>Answered</b> when they came back on it, then <b>Painted as answered</b> when the line is on the mat the way they said. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes to the civil tonight</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not answered yet</button>
+        <button type="button" data-f="ada">Only the accessible ones</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the civil wants beside his own sheet, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole layout</button></div>
+  </section>
+
+  <p class="credit">Built for the Paving &amp; Striping Field Toolkit. Something a lot hands you that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Paving &amp; Striping Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* DOESN'T FIT — the pinned tool, and the page that could not exist on any
+ * other hub. A CONFIG on shape #3 (shared/rowlog.js): no CSS here, no DOM
+ * building, no state, no persistence, no document assembly. The engine owns
+ * all of it. This file owns the WORDS.
+ *
+ * WHY IT IS THE PINNED PAGE, stated once so a later cycle does not re-derive
+ * it: three of four lenses named it independently, and the one that did not
+ * put it first said why it is dangerous — "the kill-in-waiting is the ADA
+ * stall count near the centre of his layout page." The striper is the last
+ * man on the lot, laying a sheet drawn months ago onto a surface that has a
+ * pole base, a hydrant and a long curb return in it now. Every one of those
+ * is a stall that isn't there, and the man who decides which stall gives is
+ * the civil or the owner, never the man with the chalk box. So the page
+ * structures TWO QUOTATIONS and a question: what the sheet draws (sheet, rev,
+ * quoted), what his tape found (his words), and what he needs decided. It
+ * never holds a count table, a stall or aisle dimension, a slope or an
+ * accessibility call, and it has no field shaped to hold one.
+ *
+ * THE THREE FIELDS THAT EARN THE PAGE, in the order they cost money:
+ *   WHAT THE SHEET DRAWS — quoted, so the civil is reading his own line.
+ *   WHAT YOUR TAPE FOUND — his number, his words: "13 at the plan's width —
+ *     the pole base eats one" is a fact he can stand on in the meeting.
+ *   THE ASK — "paint it as drawn — in writing" is the row that saves him.
+ * The sheet is a LEARN axis and sticky: he lays out a section off one rev and
+ * it rides to the next row. The "accessible" filter finds the rows the owner
+ * will ask about first — by the word, off his own typing, never by a count.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.layout;
+  var KEY = "toolkit.paving.doesntfit.v1";
+
+  var STATES = T.states;               /* ["Sent","Answered","Painted as answered"] — blank = laid out */
+  var DONE = STATES[STATES.length - 1];
+  var ADA = /accessible|ADA/i;
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return STATES.indexOf(v.state) < 1; }
+  function accessible(v) {
+    return ADA.test([v.draws, v.found, v.ask, v.mark].filter(Boolean).join(" "));
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    /* THE JOB HEADER PERSISTS WITH THE WALK (found 2026-09-04 by the trade #17
+       field drive): the header rides in the document and the listener below
+       calls schedulePersist() on every keystroke, but the mount never said what
+       to persist, so a reload — the camera app, a phone call — brought the rows
+       back under a document with no job, no sheet and no From line, and the
+       man copied it out that way. Same hooks the request page has carried
+       since it shipped. */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    noun: "spot", nounPlural: "spots", groupNoun: "section", groupNounPlural: "sections",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing laid out yet. Put in the first spot — where it is in your words, what the sheet draws there, and what your tape found.",
+
+    statusKey: "state", statusOrder: STATES, statusDone: DONE,
+
+    groupOptions: [
+      { key: "area", label: "Section" },
+      { key: "way", label: "What's in the way" },
+      { key: "ask", label: "The ask" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "way") {
+        var ia = T.ways.indexOf(a), ib = T.ways.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "ask") {
+        var ka = T.asks.indexOf(a), kb = T.asks.indexOf(b);
+        return (ka < 0 ? 99 : ka) - (kb < 0 ? 99 : kb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not answered yet",
+        emptyText: "Every spot on here has come back answered. Good — paint it the way they said, and photograph the chalk first.",
+        test: function (v) { return isOpen(v); } },
+      { v: "ada", label: "only the accessible ones",
+        emptyText: "No row on here says accessible. If the pair laid out clean off the sheet, that is worth a photo of the chalk before paint.",
+        test: function (v) { return accessible(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "The spot — where, in your words", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "the run along the north curb — then it's a button",
+        emptyHint: "Your name for the spot. It becomes a button, and it's how you and the civil point at the same place on a lot he hasn't stood on." },
+      { key: "area", label: "Section", input: "learn", sticky: true,
+        placeholder: "north half, rows A–D — then it's a button" },
+      { key: "sheet", label: "The sheet and rev you laid it out off", input: "learn", sticky: true,
+        placeholder: "C-201 rev 3 — then it's a button",
+        emptyHint: "The sheet in your hand, by rev. If he's holding a later one, that's the answer and you want it tonight." },
+      { key: "draws", label: "What the sheet draws there — quoted", input: "text", wide: true,
+        placeholder: "14 stalls, the accessible pair at the east end — copied off the sheet, not from memory" },
+      { key: "found", label: "What your tape found", input: "text", wide: true,
+        placeholder: "13 at the plan's width — the pole base eats one" },
+      { key: "way", label: "What's in the way", input: "chips" },
+      { key: "ask", label: "What you need decided", input: "chips" },
+      { key: "state", label: "Where it stands", input: "select",
+        placeholder: "— laid out; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the civil needs that the fields don't hold — who was standing there, what the super said" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "way") return T.ways;
+      if (key === "ask") return T.asks;
+      if (key === "state") return STATES;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.way]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.area, v.sheet, v.draws, v.found, v.ask, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "laid out, doesn't fit", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Laid out off: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("ada") > -1 && !accessible(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var ar = {}, na = 0;
+      src.forEach(function (v) {
+        var a = String(v.area || "").trim(); if (a) ar[a] = 1;
+        if (accessible(v)) na++;
+      });
+      var n = Object.keys(ar).length;
+      var line = c.shown + (c.shown === 1 ? " spot" : " spots");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " section" : " sections");
+      if (na) line += " · " + na + (na === 1 ? " that says accessible" : " that say accessible");
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "area";
+      var head = joinDots([v.mark, g === "area" ? null : v.area]);
+      var tail = [];
+      if (v.sheet) tail.push("off " + v.sheet);
+      if (v.draws) tail.push("the sheet draws: " + v.draws);
+      if (v.found) tail.push("my tape found: " + v.found);
+      if (g !== "way" && v.way) tail.push("in the way: " + v.way.toLowerCase());
+      if (g !== "ask" && v.ask) tail.push("ask: " + v.ask.toLowerCase());
+      if (v.state) tail.push(String(v.state).toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Every spot above is a place the sheet and the lot disagree. What the sheet draws is quoted off the sheet and rev named at the top, and what my tape found is mine, in my words. Nothing here is a stall count, a dimension, a slope or an accessibility call of ours — the sheet and the people who stamp it own all of that.");
+      out.push("This is an ask for a decision before paint. It's not an RFI and not a change order, and it doesn't authorize anybody to do extra work.");
+      out.push("If a spot needs to move, tell me which way today — after paint it's a grind-out and an argument, and we both know whose day that costs.");
+      return out.join("\n");
+    }
+  });
+
+  /* THE JOB HEADER IS PART OF THE DOCUMENT, so a keystroke in it has to repaint
+     the preview AND get persisted — the same wiring every row-log page on the
+     rack uses. There is no refresh() on this engine; render() is the name. */
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this layout is the only record of where the
+     sheet and the lot disagreed before paint, it took an afternoon with a
+     wheel to collect, and it lives in one browser on one phone. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

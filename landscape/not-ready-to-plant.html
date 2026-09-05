@@ -123,8 +123,8 @@
         docHead: "WHAT I MEASURED, WHAT MY PLAN SAYS",
         why: "Both numbers are yours: what your level or your laser read in the bed, and what your own plan sheet says beside it. The page supplies neither, and nobody here says which one wins — that is exactly what makes it hold up.",
         fields: [
-          { id: "reading", kind: "text", label: "What your level read", hint: "— where in the bed, and what time", ph: "laser at the drive island reads low against the curb at the north end — 6:40, with the super there" },
-          { id: "limit", kind: "text", label: "What your own plan says", hint: "— and which sheet", ph: "L-201 rev 2 grading callout for that bed says … — typed off the sheet in my hand" },
+          { id: "reading", kind: "text", docLabel: "My level", label: "What your level read", hint: "— where in the bed, and what time", ph: "laser at the drive island reads low against the curb at the north end — 6:40, with the super there" },
+          { id: "limit", kind: "text", docLabel: "My plan", label: "What your own plan says", hint: "— and which sheet", ph: "L-201 rev 2 grading callout for that bed says … — typed off the sheet in my hand" },
           { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or planted", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
         ]
       },

@@ -163,13 +163,14 @@
   if (R.phJob) $("#hJob").placeholder = R.phJob;
   if (R.phOff) $("#hOff").placeholder = R.phOff;
   if (R.phFrom) $("#hFrom").placeholder = R.phFrom;
-  if (R.phArea) {
-    var la = document.querySelector('[data-learn="area"]'); if (la) la.placeholder = R.phArea;
-  }
-  if (R.areaLabel) {
-    var al = document.querySelector('label[for="rl_area"]');
-    if (al) al.childNodes[0].nodeValue = R.areaLabel + " ";
-  }
+  /* areaLabel / phArea / specLabel / phSpec / placeLabel / phPlace / phNote are
+     read by the fields[] config below, at mount. They were applied HERE by
+     querySelector until 2026-09-04 (trade #17), which ran before RowLog.mount()
+     had rendered #bar — both queries returned null on every trade, every day,
+     and landscape's "Bed / area" never once reached the glass. A page that
+     asks a paving foreman for a room number and a height AFF is the engine's
+     word showing through; the trade's word is now the config's, not a patch's. */
+  if (R.phTel) $("#hTel").placeholder = R.phTel;
   if (TRADE.name) $("#footName").textContent = TRADE.name;
 
   /* ── the receiver ─────────────────────────────────────────────────────────
@@ -245,16 +246,16 @@
       { key: "ask", label: "What you need", input: "select", lead: true, required: true,
         neutral: "Pick one", options: ASKS },
       { key: "who", label: "Who you're asking", input: "chips", sticky: true, wide: true },
-      { key: "area", label: "Room / area", input: "learn", sticky: true, placeholder: "CR-204 — then it's a button",
-        emptyHint: "Type the room off the drawing and it becomes a button for the rest of the walk." },
-      { key: "spec", label: "Size / type", input: "learn", wide: true, placeholder: "or type your own",
-        emptyHint: "Pick what you need above and the usual sizes show up here." },
-      { key: "place", label: "Height / run", input: "text",
-        placeholder: "60 AFF · or: to the ceiling above the rack" },
+      { key: "area", label: R.areaLabel || "Room / area", input: "learn", sticky: true, placeholder: R.phArea || "CR-204 — then it's a button",
+        emptyHint: R.areaHint || "Type the room off the drawing and it becomes a button for the rest of the walk." },
+      { key: "spec", label: R.specLabel || "Size / type", input: "learn", wide: true, placeholder: R.phSpec || "or type your own",
+        emptyHint: R.specHint || "Pick what you need above and the usual sizes show up here." },
+      { key: "place", label: R.placeLabel || "Height / run", input: "text",
+        placeholder: R.phPlace || "60 AFF · or: to the ceiling above the rack" },
       { key: "by", label: "Needed before", input: "chips", sticky: true, wide: true },
       { key: "status", label: "Where it's at", input: "chips" },
       { key: "note", label: "Note", input: "text", wide: true,
-        placeholder: "anything that won't fit above — what's in the way, what it feeds, who else is in that wall" }
+        placeholder: R.phNote || "anything that won't fit above — what's in the way, what it feeds, who else is in that wall" }
     ],
 
     /* THE ASK GATES THE SIZES. The presets are the phrasings a man would have
@@ -401,7 +402,8 @@
       var off = $("#hOff").value.trim();
       return (R.closing || "Reply on this one with anything you can't hit and I'll re-walk it with you.")
         + "\n" + "These are our locations off " + (off || "our drawings")
-        + " — check them against your own set before you rough anything in. This isn't an RFI or a change order and it doesn't authorize extra work.";
+        + " — " + (R.docBoundary || "check them against your own set before you rough anything in.")
+        + " This isn't an RFI or a change order and it doesn't authorize extra work.";
     },
 
     tsvPreamble: function (c) {
@@ -412,10 +414,10 @@
     },
     tsvColumns: [
       { label: "Who", key: "who", value: function (v) { return labelOf(WHO, v.who); } },
-      { label: "Room / area", key: "area" },
+      { label: R.areaLabel || "Room / area", key: "area" },
       { label: "What's needed", key: "ask", value: function (v) { return labelOf(ASKS, v.ask); } },
-      { label: "Size / type", key: "spec" },
-      { label: "Height / run", key: "place" },
+      { label: R.specLabel || "Size / type", key: "spec" },
+      { label: R.placeLabel || "Height / run", key: "place" },
       { label: "Needed before", key: "by", value: function (v) { return labelOf(MILES, v.by); } },
       { label: "Where it's at", key: "status" },
       { label: "Flag", value: function (v, r) { return r.flag || ""; } },
