@@ -2250,6 +2250,44 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-05 (C3708) — SIXTEEN SHELVES OUTVOTED THE SEVENTEENTH'S AUTHOR ON HIS OWN PAGE
+`shared/docsindex.js` is generated from the SHARED documents' names and akas and
+lent back to every trade that carries the document — "the man gets seventeen
+authors' words for his own shelf". The guard in `poolTerms()` asked one question:
+does the RECEIVING document already have this word? It could not see the rest of
+the shelf, and it structurally cannot see the part that matters, because **every
+trade-specific document is invisible to the generator** — the pool is built from
+the shared eleven, so a word written on `the-day-we-couldnt-pave` is not in the
+pool's world at all.
+
+What that costs showed up the first time this rung was worked. Paving's author
+moved `"delay"` onto his own lost-day document and off the general notice —
+masonry's 2026-09-02 reasoning exactly, the trade's own document owns the word a
+man in that trade means. Typing `"delay"` still led the general notice. Removing
+`"delay notice"` too did not fix it either. The word was coming back from
+**sixteen other shelves**, which had voted it onto `delay-notice`, and the pool
+was handing it to a document whose own `aka` and name no longer carried a trace
+of it.
+
+**A CLAIM BEATS A LOAN.** `poolTerms()` now reads what the whole MERGED shelf's
+own authors claim and refuses to lend a word another document there already owns.
+A term claimed twice on one shelf is left alone — that is the shelf gate's
+assertion A and not this rail's business. The pool exists to widen a man's
+vocabulary; it was never entitled to narrow his author's.
+
+**AND THE GATE FOR IT WAS GREEN WHILE THE DEFECT WAS LIVE.** The new pool-gate
+assertion passed on its first run *and* passed with the engine guard deliberately
+removed, while the shelf gate went correctly red beside it. It was reading
+`out.poolOnly` — the engine's own answer — from a position in the page script
+where that object had not been filled yet, so its "was this term lent?" test was
+always false and it could only ever report success. This is SCAR-C3702 again in a
+new costume: **a probe whose verdict depends on the value it is supposed to
+audit.** The reason it was caught at all is that the control was run against the
+real engine with the fix backed out, rather than against a re-authored fixture.
+**Run the negative control by breaking the SHIPPED code, not by simulating the
+break** — a fixture proves the detector can fire, and only backing out the fix
+proves it fires on THIS defect. Guard off: red. Guard on: green.
+
 ### 2026-09-05 (C3707) — A FILTER APPLIED FROM onChange IS A LOOP WITH NO FLOOR, AND THE MOUNT GUARD WAS IN THE COMMENT
 `by-others.html`'s `syncSelects()` ended by calling `applyFilters()`, which called
 `rl.setFilter(...)` unconditionally. `setFilter()` renders; `render()` fires
@@ -9045,3 +9083,72 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   cut from the template this cycle — every line changed what this cycle did (the panel, the
   rider, the gates, the pathspec rule).
   https://mrdirno.github.io/nested-resonance-memory-archive/gc/by-others.html
+
+- `2026-09-05` — **[AXIS:DOCS] C3708 — THREE TRADES SPOKE IN A VOICE THAT BELONGED TO
+  NOBODY, AND THE WORD THE FOURTH ONE TOOK BACK WAS RETURNED TO HIM BY SIXTEEN STRANGERS**
+  · **the well was verified EMPTY on disk in both sinks** (`av_wishing_well --list` and
+  `--list --status building`, 0 and 0; vibe-cards likewise), no family was owed, so the
+  stalest axis governed and C3697 had already NAMED this rung: doors and landscape carry
+  **zero `overrides`**, inheriting all eleven shared documents in the rack's generic voice.
+  · **The census on disk said the rung had grown while nobody was looking: THREE trades, not
+  two** — `paving` landed in C3706 with zero as well, which is the 2026-08-15 roster lesson
+  for the third time: nobody asks a new trade what it was OWED. · **FIVE FRAMINGS WERE
+  MEASURED AND FOUR DIED AT THE REAL PAGE, WHICH IS THE POINT.** A vocab-canon voice probe
+  (170/183 "silent") was junk — 51 of its hits were on documents that ARE overridden. A
+  short-word reach probe said 22 of 83 trade-authored documents were unreachable; driving
+  the box killed it, because `seal`, `base`, `cones`, `frames`, `hang` and `ruts` all LEAD
+  their own document at rank 1 and the engine substring-matches into a sentence-shaped
+  alias perfectly well. A body-index probe found 4,454 words — and its own top examples were
+  `"unlike"`, `"almost"`, `"audible"`, which is `shared/find.js` rule 5 explaining why prose
+  is not identification. An id-subject probe found 27 and 25 of them were id grammar
+  (`"writeup"`). **The shelf search survived every one of them, including the custom path:
+  a mason typing `CMU` is told "Nothing matched that" and offered "not in the list", which
+  is honest and is the designed graceful failure.** · **after: 3 trades at zero → 0, and
+  nine documents now written in the trade's terms** — doors gets the callback on an opening
+  (opening number, hand, the hardware set by function, and *whose it is* — warranty, abuse
+  or building movement, with what you read at the frame), keys and cores (the control key
+  and who signed for it, which is the line that gets a door man called back to every lock in
+  a building), and doors damaged after hanging (the accept date and the found date against
+  one opening number, because a door man hangs early and everybody works past his openings
+  for months); landscape gets the day it becomes theirs (**the date the warranty starts and
+  who is watering from it** — a plant warranty is void unwatered and the fight is always
+  about which day), the warranty call read AT the plant, and the pre-plant look-ahead
+  (nursery lead time and tag/hold status, and whether there is water at the point of
+  connection); paving gets the renamed general notice, the final turnover (**cure and
+  traffic in DATES, not durations** — power-steering scars on an August mat), and the
+  pre-pave look-ahead (**who sends the closure notice to the tenants, and by when**).
+  · **ONE OF THE NINE WAS A MEASUREMENT, NOT A JUDGEMENT, AND IT OPENED A RACK-WIDE HOLE.**
+  Typing `"delay"` on the paving shelf returned the generic notice and NOTHING ELSE — "The
+  Day We Couldn't Pave" never appeared — while doors and landscape both showed theirs second
+  because their authors happened to write the word into a sentence. Moving it masonry's way
+  **failed the shelf gate**: the word still led the generic. Removing `"delay notice"` too
+  did not fix it. **The word was coming back from the POOL** — sixteen other shelves had
+  voted `"delay"` onto `delay-notice`, and `shared/docsindex.js` is generated from the SHARED
+  documents alone, so every trade-specific document is invisible to the thing lending words
+  onto the page it lives on. **A trade's author was being overruled on his own shelf by
+  trades he will never meet.** · **THE RATCHET: A CLAIM BEATS A LOAN.** `poolTerms()` reads
+  what the whole merged shelf's own authors claim and refuses to lend a word another document
+  there already owns (a term claimed twice is left alone — that is the shelf gate's
+  assertion A). The pool gate gains assertion **9**, which catches the CAUSE rather than the
+  symptom the shelf gate sees downstream. Measured before the fix: **1 case rack-wide**, the
+  one this cycle created — so this was a latent trap, not a live defect, and it fired on the
+  very first attempt to do what this rung asks. · **THE NEGATIVE CONTROL FOUND A HOLE IN MY
+  OWN GATE** — assertion 9 was green on its first run AND green with the engine guard backed
+  out, while the shelf gate went correctly red beside it, because it read the engine's own
+  answer from a position where that object had not been filled yet. Written up in §SCARS.
+  Corrected: guard off → red, guard on → green. · **GATES, all green:** shelf **17 / 1,893 /
+  0** (negative control red 17/17, both detectors) · pool **17 / 121 / 0** · docspec **283 /
+  0** · needs **2,240 / 0** · say **3,696 / 0** · desk **0** · find-honesty **9,607 / 0** ·
+  find-noise **420 / 0** · mobile-watertight **0 failing** on all three changed write-up
+  pages at 320/360/390/430 × default and bumped. Paving driven end to end at 390px over
+  http: `"delay"` leads the paver's own document, block **18,752 chars**, the renamed general
+  notice **13,219** carrying its seasonal-window line and "first asked", **0 page errors**,
+  no overflow. Pooled vocabulary regenerated **303 → 340 terms** (ambiguous refused 35 → 37).
+  **Storefront unchanged — no new tool, no new trade.** · **THE BACKPORT RIDER FIRED TWICE:**
+  the zero-override sweep is what found paving (C3697 had named only two), and the pool fix
+  landed in the SHARED engine once rather than on three shelves. **NAMED AND NOT DONE:**
+  `hvac` is now the thinnest shelf on the rack at **1** override, and `refrigerant` — typed
+  on the HVAC shelf, whose leak document's id literally opens with the word — still answers
+  "Nothing matched that" and hands back Coordination Meeting Notes, because the word is in
+  nobody's name or alias. That is the next DOCS rung.
+  https://mrdirno.github.io/nested-resonance-memory-archive/paving/write-up.html
