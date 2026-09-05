@@ -1,5 +1,6 @@
 'use strict';
-/* Headless smoke-drive of the Resonance Chamber: console errors, panels,
+/* Author: Aldrin Payopay. GPL-3.0-only.
+   Headless smoke-drive of the Resonance Chamber: console errors, panels,
    vessels, scenarios, presets, sound toggle, screenshots. */
 const { chromium } = require('playwright');
 const path = require('path');
@@ -15,6 +16,7 @@ const path = require('path');
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => {
     if (m.type() === 'error') errors.push('console: ' + m.text());
+    if (m.text().startsWith('HALO_SMOKE_LAB ')) console.log(m.text());
   });
 
   // small particle count + low quality so SwiftShader keeps up
@@ -392,6 +394,30 @@ const path = require('path');
   });
   await page.keyboard.press('Escape');
 
+  // Measure real initialization without replacing its work. Lab activation
+  // synchronously reads GPU textures; software-rendered hosted workers can
+  // spend longer here than a normal DOM action. Keep a bounded 120s readback
+  // allowance, actual pointer dispatch and all state/persistence assertions.
+  await page.evaluate(() => {
+    const button = document.getElementById('sw-lab');
+    let began;
+    // Capture runs before the existing handler; this later bubble listener
+    // runs after it. The production closure and its work stay untouched.
+    button.addEventListener('click', () => {
+      began = performance.now();
+      console.log('HALO_SMOKE_LAB '+JSON.stringify({event:'handler-start',pressed:button.getAttribute('aria-pressed')}));
+    }, true);
+    button.addEventListener('click', () => {
+      console.log('HALO_SMOKE_LAB '+JSON.stringify({event:'handler-end',pressed:button.getAttribute('aria-pressed'),milliseconds:performance.now()-began}));
+    });
+  });
+  const clickLab = async () => {
+    const began = Date.now();
+    console.log('Lab pointer action starts');
+    await page.click('#sw-lab', {timeout:120000});
+    console.log('Lab pointer action returned after '+(Date.now()-began)+' ms');
+  };
+
   // the Lab: substep seg applies + persists, instruments switch persists
   await page.keyboard.press('1');
   await page.waitForTimeout(250);
@@ -422,7 +448,7 @@ const path = require('path');
   await page.keyboard.press('Escape');
   await page.keyboard.press('7');
   await page.waitForTimeout(250);
-  await page.click('#sw-lab');
+  await clickLab();
   check('instruments on', (await page.getAttribute('#sw-lab', 'aria-pressed')) === 'true');
   let lamTxt = '';
   for (let i = 0; i < 160; i++) {          // the meter reports after ~1 s of SIM time (slow under load)
@@ -446,7 +472,7 @@ const path = require('path');
   await page.waitForTimeout(600);
   const spinState = await page.evaluate(() => ({ sg: window.__probe.state.cosmos.selfgrav, helix: window.__probe.state.cosmos.helix }));
   check('spin experiment sets self-gravity 0.45 on the user\'s state', spinState.sg === 0.45 && spinState.helix === 0.8, JSON.stringify(spinState));
-  await page.click('#sw-lab');
+  await clickLab();
   await page.keyboard.press('Escape');
 
   // the vessel radius must reach the vase, not only the ring (was a dead knob)

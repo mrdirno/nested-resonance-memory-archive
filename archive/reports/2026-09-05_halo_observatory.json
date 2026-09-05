@@ -966,6 +966,69 @@
     "beforeRegression": "Failed pointer-target assertion at 1280x800 on the original source.",
     "afterRegression": "28 observation checks pass, including actual pointer targets and clicks at 1280x800, 900x600, 360x844 and 390x844.",
     "layout": "Desktop panel ends above navigation; scroll padding reserves header and mobile navigation hit areas.",
-    "hostedGating": "Main pushes run the reusable nine-suite HALO job through Pages once; pull requests and manual checks remain available."
+    "hostedGating": "Main pushes run the reusable nine-suite HALO job through Pages once; pull requests and manual checks remain available.",
+    "localFullSmoke": "Passed on the repaired CSS; logs/halo-navigation-fixed.log in the development workspace."
+  },
+  "secondHostedGate": {
+    "commit": "af697e5b5908e24030c0d83456e055850efa8001",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33953336199",
+    "conclusion": "failure",
+    "failedTest": "smoke.js",
+    "observation": "Tick, 28 observation and Lab suites passed. Smoke timed out at Lab activation after reaching the pointer action, without reporting rail interception. No page was deployed.",
+    "diagnosis": "Lab activation performs synchronous GPU readback. Timing instrumentation and a bounded 120-second readback allowance are being measured; this is not a responsiveness fix or a proven root cause.",
+    "receipt": {
+      "startedAt": "2026-09-05T07:44:08.654Z",
+      "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+      "testPageSha256": "ac3213a471dba0d0370448f200bbffa5b3767bf92dcd81efae0630cc0ff0d48c",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "release",
+      "results": [
+        {
+          "test": "tick_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 16.052,
+          "passed": true
+        },
+        {
+          "test": "observation_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 19.066,
+          "passed": true
+        },
+        {
+          "test": "lab_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 241.167,
+          "passed": true
+        },
+        {
+          "test": "smoke.js",
+          "exitCode": 2,
+          "signal": null,
+          "seconds": 351.401,
+          "passed": false
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T07:54:36.343Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": false
+    }
+  },
+  "coreHostedGate": {
+    "commit": "d1a540e84a5a36558ae2eddb0aa6758e5be2d6d6",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33953813071",
+    "python": [
+      "3.10",
+      "3.13"
+    ],
+    "testsPerVersion": 8,
+    "conclusion": "success",
+    "hostGrounding": "Explicit psutil grounding, positive process count and CPU bounds verified."
   }
 }
