@@ -1445,10 +1445,17 @@ answering with no idea we had the page open — *"all five boxes ticked on all f
 is not an ask, it's a survey, and it goes to the bottom"* — arrived at the same shape from
 opposite ends. It is not an axis you tick. **It is the message's spine, and the message
 carries exactly one of them.**
-(4) **The forward leg on the new boundary.** Ten trades can now ask a building for a night,
+~~(4) **The forward leg on the new boundary.** Ten trades can now ask a building for a night,
 and nothing reads the answer back the way `answer-back.html` reads a rough-in ask — the
 owner boundary is served in one direction only, and the GC's copy is the one that gets
-FORWARDED rather than sent.
+FORWARDED rather than sent.~~ — **SHIPPED 2026-08-28 (C3675) as `shared/whatcameback.js` on
+every `getting-in.html`; see §GETTING IN → THE RETURN LEG. This line outlived its ship by a
+week, which is the roadmap-is-not-a-record scar one more time.**
+~~(5) **The owner's vendors** — the most expensive miss on any close-in list per the matrix:
+kitchen, med-gas, signage, EVSE, owner AV/FF&E all show up after the pour asking where
+their stub is.~~ — **SHIPPED 2026-09-05 (C3707) as `gc/by-others.html`; see §BY OTHERS
+below.** What INTERFACE has left is, for the first time, nothing the matrix names — the next
+rung on this axis comes from a wish or from the EVO loop, not from the roster.
 
 ## THE LONG POLE — one question, and no rung of it is hearsay (2026-09-01)
 
@@ -1545,6 +1552,143 @@ elapsed-day count, overdue label or promised-versus-actual delta, including pars
 free-text dates · money and the word *quote*. All gated in
 `tools/toolkit-gates/long-pole.mjs`, **445 checks across four trades**.
 
+
+## BY OTHERS — the owner's vendors, one message each, and the rep on it (2026-09-05)
+
+`gc/by-others.html` — one page, one `TOOLKIT_BYOTHERS` config, shape #3 (`shared/rowlog.js`),
+**no new mechanism**. Everything on the job marked BY OTHERS / NIC / OFCI that still needs a
+hole in the super's slab or a box in his wall: one row per piece, the vendor's name as the
+receiver, one message per vendor — the sheet, the walk, the crate — before the gate.
+
+**THE PANEL IS THE ENTRY, AND IT WAS NOT UNANIMOUS.** Four lenses, independent: a GC super
+(7, BUILD_WITH_CHANGES), the PM at a foodservice equipment contractor answering from the
+RECEIVING end (7, BUILD_WITH_CHANGES), an owner's rep who holds the OFCI matrix and is the
+person this message gets forwarded through (7, BUILD_WITH_CHANGES), and a skeptic handed
+this book as weapons (5, EXTEND THE CLOSE-IN LIST INSTEAD — *"I went to kill it and the page
+is mostly already built"*). The 5 is recorded intact: the skeptic was right that every
+MECHANISM exists on `gc/rough-in-request.html`, and wrong that it is the same JOB — the
+Close-In List's row is an area keyed to a sub who has to DO something under contract; this
+row is a PIECE keyed to a company outside the contract who has to TELL the super something,
+with a different ladder, a different closing, a receiver he has to name, a rep he has to cc,
+and a per-send gate day the sub-facing page must never carry. Bolting all of that onto the
+Close-In List is §FIELD-COOL's *"if it does two things it is two tools"* — the skeptic's own
+citation, cutting the other way. What the skeptic's cut DID decide: the gates are
+`TOOLKIT_ROUGHIN.milestones`, read at load — one list, two tools, or they drift — and the
+Close-In List's own "Vendor rough points" ask stays exactly as it was, the trip-wire on the
+sub list. The page reads the Close-In List's gates and adds nothing to it.
+
+**1. THE ONE THING ALL FOUR NAMED FIRST: THE VENDOR'S NAME IS THE RECEIVER.** The Close-In
+List's "Owner vendor / rep" is one bucket for five companies. *"One list to the cooler guy,
+the hood guy and the sign guy is the same as sending it to nobody"* (the super); *"I only
+read the lines with my name on them and I miss the one that mattered"* (the receiving desk).
+So the vendor is typed once, learned, becomes a button AND the To: line, and a message never
+goes to more than one of them — asserted BY VALUE: the other vendor's name and rows must be
+ABSENT from the message. **And the field is never seeded.** A manufacturer, distributor or
+rep agency in a seed is impersonation with a shelf life (§SCARS, the branch picker), and the
+names on the owner's matrix change every job; the gate counts the chips under the vendor
+field before a man types one and requires zero.
+
+**2. THE REP IS ON IT, AND SHE IS THE To: WHEN THERE IS NO NAME YET.** Three lenses,
+independently: he has no contract with the kitchen guy, so his text alone sits behind the
+jobs where the man asking is the one paying; with the owner's rep cc'd it moves to the top,
+and *"the rep sees that the GC asked before the pour, which ends the 'who never coordinated'
+argument later."* And the super's own line, the one he would fight for: *"half the time I
+don't have the vendor's name until three weeks after the pour, and the only message that
+produces him is the one to her."* So `To:` offers each named vendor, then the rep — the
+roll-up of everything still open, by vendor, with the nameless pieces under their own
+heading and one ask on those: *who's your person on it, and a day they can walk it with my
+plumber — the name is the whole ask.* The owner's rep scored it 7 because she has never once
+received the document it produces, and wanted it on every job.
+
+**3. ASK FOR THE DOCUMENT, NOT THE PARAGRAPH — the receiving desk changed the asks.** The
+roadmap's lead ask was *"where it lands and what it needs — power / water / drain / gas /
+data / vent / floor sink or depression / blocking."* The receiving desk killed it as the
+lead in one line: *"that asks me to re-derive my equipment schedule in a text. I will say
+'it's on the drawings' and stop answering. The answer to that question is a document that
+already exists — ask for the document."* The ask that gets a PDF back in an hour is *send
+me the rough-in sheet you already sent the architect — sheet and rev, or tell me it isn't
+drawn yet.* The asks are ordered by his own timings, cheapest first — which of these are
+yours (one line, an hour; *"the most common answer I give"*) · the sheet and rev (a PDF, an
+hour) · a name and a day to walk it (a day) · heaviest piece, biggest crate, the opening it
+needs (an hour off the cut sheet) · and the service list LAST, for the piece that has no
+sheet. The gate asserts the sheet is asked before "where it lands", and that the page names
+the set the super is building off (*"I'm building off P-101 rev 4 and I've never seen
+yours"* — his line, so the vendor can say in one text whose set is stale). **Pieces ride by
+their tag off the equipment schedule** (K-4, OF-14) and the owner's room number — the
+owner's rep's blocking demand, and her reason: *"it is the first GC document that reads my
+numbering back to me."*
+
+**4. THE GATE'S DAY IS A FACT ON LINE ONE, TYPED ONCE, NEVER ON A ROW.** §THE INTERFACE's law
+is *a milestone, never a date*, and the rows keep it. But the owner's vendor is not on the
+GC's schedule — *"'before the pour' means nothing to me; 'slab pours Sep 5' I can act on"* —
+so three lenses independently asked for the day to be typed once at send time, in the
+subject line, as a fact he is telling them rather than a deadline he is giving them. It
+lives in the Send card, rides on line one verbatim, is on no row, in no spreadsheet column,
+and nothing counts from it. And the SEND date is NOT on line one: the super killed *"Sep 5
+hanging off the subject with no noun"* — his phone stamps the text; that line is for the man
+reading it. His own record (the "everything on the list" copy) keeps today's date, because
+that one is his.
+
+**5. KILLED, AND STAYING KILLED, each by name in `tools/toolkit-gates/by-others.mjs`:** the
+**"Nothing back"** rung — three lenses in the same words, *a lateness label wearing a
+status; nobody's act and nobody's eyes; blank-after-Asked already says it* · **"on the
+owner's schedule, not mine"** in the closing — all four: *who-eats-it with the dollar sign
+filed off* · a **"this is the one that moves the date"** flag — the owner's rep: *printed to
+an outside vendor that is "your piece is delaying my job", the opening line of a delay
+exhibit* — so there is ONE flag, *This one first*, and it says what the super needs ·
+**"when you set it / when you need the room"** as an ask — the receiving desk (*"the owner
+tells me when I set; wrong receiver"*) and the skeptic (*no close-in gate above it, and it is
+the one ask that turns the row into a delivery chase for gear the GC never bought — the long
+pole in a hat, which the GC gets never*) · **"anything you still need from us"** as a ROW
+ask — open-ended, gets silence; it lives in the closing, where the gate requires it ·
+**copier and vending** in the seed (no hole in the slab or the wall, no gate, no row) ·
+**med-gas outlets and access control** in the seed — the owner's rep: on every hospital job
+those are the furnish-vs-install fight, and *"the page must not pretend to settle it"*; a
+super can still type them, and then it is his call · and **"core drill" in the SENT
+document** — both receiving lenses: *"I forward that to the owner's rep with 'your GC is
+threatening me' and now it's a fight instead of an answer; nine times out of ten the hole in
+his set is nobody's doing but the trailer's."* The consequence survives as a fact about the
+gate — *what I don't have before the gate isn't in it* — and "core drill" stays in the page's
+own copy to the super, where it is his word.
+
+**THE LADDER IS `Asked → Got it → It's in`, and blank is *not sent yet*.** Every rung is his
+own act or his own eyes (§THE LONG POLE's law, gated against factory verbs AND against
+"nothing back"). *Got it* is his sheet in your hand OR his marks on your deck — the walk
+folded into one rung on the super's word. "Not theirs" is not a rung: it is the answer the
+receiving desk gives most, and it is his act to open the pencil and put the right name on
+the row, which keeps everything else. `told` holds one value and keeps no history — the
+long pole's exhibit rule, asserted the same way (gone from the message, the spreadsheet copy
+AND storage).
+
+**WHY GC ONLY.** The sub's path to the owner's vendor goes through the GC: the EC asks the GC
+on the Close-In List, the GC asks the vendor here. No other kit carries this page unless a
+wish says a sub talks to the owner's vendor direct. The rider sweep over every kit's
+`rough-in-request` receivers found nine owner-class buckets, and all but GC's are the OWNER
+himself — property manager, homeowner, owner's rep — one party, correctly one bucket;
+sitework's "Owner / owner's vendor" is the only other mixed one, and its asks to it are
+owner asks. The "one bucket, five companies" defect was GC's alone.
+
+**GATES:** `by-others.mjs`, 198 checks — the static bans over the config (no factory verb,
+no "nothing back", one flag with no schedule word, the killed asks absent, the sheet before
+the paragraph, the closing carrying the sheet-and-rev line and the whose-is-it line and the
+half nobody writes, no gate list of its own, no no-gate seed, no real house, no claim word)
+and the drive at 390: two vendors, a nameless row and a row already in; Dave's message
+carries only Dave's open rows, by tag, with the rep cc'd and the set named, and none of Lou's,
+none of the nameless, none of the one already in; the day on line one and on no row; Lou's
+message the mirror; the roll-up to the rep with all four open pieces, by vendor, the
+nameless under NOT SET, the one already in absent; his own record with today's date and every
+row; `told` overwritten in message, spreadsheet and storage; the ladder to the top and one
+past; reload; Clear taking the rep and the day with it; four widths and the 44px floor.
+**AND THE GATE'S OWN VALUES HID TWO DEFECTS THE PLACEHOLDER'S WORDS EXPOSED** (the C3706
+rule, one page later: a gate that fabricates its inputs owes a second pass over the real
+ones). Driven with the page's own example words — the rep typed as *"Priya — owner's rep"*
+the way the placeholder teaches — the cc line printed *owner's rep* twice, and the vendor
+message printed *asked* on every row: the super's own rung, which is his record and not the
+vendor's business, and on the skeptic's read a record of when you asked. The gate's rep was
+*"Priya, owner rep"* and its rows were tags, so it saw neither. Both fixed, both asserted
+now — the tag is appended only when his words don't carry it, and the rung prints on the
+roll-up to the rep (she needs to see which ones he asked direct) and on no row to the
+vendor himself.
 
 ## GETTING IN — the first tool aimed at a party that is not a trade (2026-08-15)
 
@@ -2105,6 +2249,44 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-05 (C3707) — A FILTER APPLIED FROM onChange IS A LOOP WITH NO FLOOR, AND THE MOUNT GUARD WAS IN THE COMMENT
+`by-others.html`'s `syncSelects()` ended by calling `applyFilters()`, which called
+`rl.setFilter(...)` unconditionally. `setFilter()` renders; `render()` fires
+`cfg.onChange`; `onChange` is `syncSelects`. The page's own gate blew the stack on
+its first run (`RangeError: Maximum call stack size exceeded`) and the list on
+screen stopped following the roll-up's grouping because the render that would
+have painted it never finished. The sibling page (`long-pole.html`) never had
+this bug because its `syncAskSelect` re-applies the filter ONLY when the pick was
+invalidated — a floor I copied the shape of and not the reason for. The fix is the
+rule: **an onChange handler may call the engine's `setFilter` / `setGroup` /
+`render` only after proving the state changed** — here, the wanted filter keys
+compared to `rl.filter()` first, and a handler that changes a value INSIDE the
+same key list (the vendor, the question) renders explicitly once, itself.
+
+And the same page, the same hour, hit the class this book has recorded three
+times: the engine renders once inside `mount()`, before `rl` exists, and
+`onChange` runs in that render. The guard (`if (!rl) return`) was in the file —
+in a COMMENT above `rowsNow()`, copied from the sibling — and not in the two
+functions that needed it. The page shipped its engine perfectly and every word
+this file owned was dead: no To-select, no listeners, no restore, and Add still
+worked, which is exactly why it looks fine. Rule: **the guard goes in every
+function `onChange` can reach, not in the one that was copied.** Both were caught
+by the drive, not by `node --check` — a page that dies at mount is syntactically
+perfect.
+
+### 2026-09-05 (C3707) — "COMMIT BY PATHSPEC" MEANS `git commit -- <paths>`, NOT `git add <paths> && git commit`
+The working tree is shared with other lanes, and the index is too. This cycle's
+`git add` named five files; the commit that followed carried **86** — the
+archive-stewardship lane had staged eighty-one of its own between the cycle's
+first `git status` and its commit, and `git commit` with no pathspec commits the
+index, all of it. Caught by reading `--stat` before the push, undone with
+`git reset --soft HEAD~1` (which puts every one of their entries back exactly as
+staged) and redone as `git commit -- <the five>`, which commits those paths and
+leaves the rest of the index alone. Rule: **on a shared index, name the paths on
+the COMMIT, and read the stat before you push** — a `git add` by pathspec proves
+nothing about what the next `git commit` will take.
+
 
 ### 2026-09-04 (C3706) — THE SEAM WAS THE FIRST DASH, AND EVERY TRADE'S OWN WORDS CARRY A DASH
 `shared/reconcile.js` split every pasted answer line at the FIRST " — ": his line,

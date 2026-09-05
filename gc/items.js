@@ -749,3 +749,188 @@ window.TOOLKIT_GETIN = {
 
   warn: "<b>It’s a request, not a permit and not a booking.</b> Anything on the heads-up list that needs a permit, a panel on test or a fire watch is theirs to issue and theirs to number — this page just tells them it’s coming and asks how they want it run. And check your contract before you send it: plenty of them say you don’t talk to the building direct. If yours does, send this to your GC and let him forward it — same words, right chain."
 };
+
+
+/* BY OTHERS (by-others.html) — the owner's vendors, one message each, before
+ * the gate. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says. The GATES are NOT here on purpose:
+ * they are TOOLKIT_ROUGHIN.milestones above, and one list that two tools read
+ * cannot drift out of step with itself — "before the pour" has to mean the same
+ * thing on the Close-In List and on the message to the kitchen guy.
+ *
+ * A FOUR-LENS PANEL SCORED THIS 7 / 7 / 7 / 5 (a GC super · the PM at a
+ * foodservice equipment contractor, answering from the RECEIVING end · an
+ * owner's rep who holds the OFCI matrix · a skeptic armed with the program's
+ * rules). What every one of them named first: the Close-In List's "Owner
+ * vendor / rep" is one bucket for five companies, and one list to the cooler
+ * guy, the hood guy and the sign guy is the same as sending it to nobody. So
+ * the VENDOR IS TYPED, LEARNED, AND IS THE RECEIVER — never seeded, because a
+ * manufacturer or a rep agency in a seed is impersonation with a shelf life and
+ * the names on the owner's matrix change every job.
+ *
+ * NOTHING HERE DECIDES SCOPE. No furnish/install call, no lead time, no delivery
+ * date, no number of its own: the owner's rep's equipment matrix and the
+ * equipment schedule own what the gear is and who buys it and sets it. This is
+ * only what the super SENDS (§THE SYSTEM OF RECORD). The seed carries no piece
+ * that has no gate (copier, vending) and none that pre-decides a furnish-vs-
+ * install fight (med-gas outlets, access control) — a super can still type
+ * those, and then they are his call, not the page's.
+ */
+window.TOOLKIT_BYOTHERS = {
+  toolName: "By Others",
+  eyebrow: "GC · you → the owner's vendors, with the rep on it",
+  lede: "Everything on your job marked <b>BY OTHERS / NIC</b> that still needs a hole in your slab or a box in your wall. One row per piece, the vendor&rsquo;s name as the receiver, and <b>one message per vendor</b> &mdash; the sheet, the walk, the crate &mdash; before the gate that turns it into a core drill.",
+
+  /* THE WARN NEVER TYPES THE WORDS IT BANS (§SCARS, the long pole's own lesson):
+     the gate reads this file blind and fires on a claim word wherever it finds one. */
+  warn: "<b>It&rsquo;s your own note of what you asked for and what you were last told &mdash; and that is all it is.</b> There is no money on it, no day count, and it decides nobody&rsquo;s scope: the owner&rsquo;s rep&rsquo;s equipment matrix and the equipment schedule own what the gear is and who buys it and sets it. This page is only what you <i>send</i>. <b>It lives in this browser, on this device, and nowhere else</b> &mdash; nothing typed here goes anywhere, and a new phone starts empty. The spreadsheet copy is your backup.",
+
+  offHint: "Name the set you&rsquo;re building off. When his floor sink is eighteen inches off yours, that line is how he tells you in one text whose set is stale &mdash; his plumber roughed off the P-sheets, and the P-sheets were drawn off an equipment package two revs old.",
+  repHint: "He&rsquo;s not under your contract. With the owner&rsquo;s rep on the message it gets answered; without her it sits behind the jobs where the man asking is the one paying. She&rsquo;s also who the message goes <b>to</b> when a piece has no name on it yet &mdash; the name is the whole ask.",
+  dayHint: "He&rsquo;s not on your schedule, so &ldquo;before the pour&rdquo; means nothing to him and gets filed. Say the day, once, here, as a fact &mdash; it rides on line one, where a lock-screen preview shows it. The rows keep the gate. Nothing counts from this and it never goes on a row.",
+  pencilNote: "The pencil opens a row for its tag, the vendor, where it lands, what you need, the gate, and <b>the last thing he told you</b> &mdash; his words, with who said it. If he says it isn&rsquo;t his, put the right name on the row there; it keeps everything else. A row flagged <b>This one first</b> lands in its own block at the bottom of the message.",
+  ladderNote: "blank is <i>not sent yet</i> &rarr; <b>Asked</b> (you sent it) &rarr; <b>Got it</b> (his sheet&rsquo;s in your hand, or his marks are on your deck) &rarr; <b>It&rsquo;s in</b> (the stub, the box, the sleeve &mdash; you saw it). Every rung is something you did or something you can see.",
+
+  phJob: "Rosewood ES",
+  phOff: "P-101 rev 4",
+  phFrom: "Ken — site super",
+  phTel: "the one they should call back",
+  phRep: "Priya — owner’s rep",
+  phDay: "“slab pours 9/12” · “we rock the 14th”",
+
+  /* THE PIECES. A jog, not a menu — the field is a write-in first and these are
+     taps underneath it. Every one names WORK the building has to do for a thing
+     somebody else is furnishing, and every one has a gate. Front-loaded with the
+     slab, because floor boxes off the furniture plan are the number-one
+     after-the-pour miss on every office and admin wing (the owner's rep, who
+     would know). No brand, no model, no rep agency, anywhere. */
+  items: [
+    "Floor boxes for the furniture — off the furniture plan",
+    "Walk-in cooler / freezer — the floor depression, the drain, the line-set chase",
+    "Kitchen line — floor sinks, gas stubs, the hood duct through the roof",
+    "Dish machine — the floor sink, water, power",
+    "Ice machine / beverage counter — water, drain, power in the wall",
+    "Grease interceptor — the tie-in under the slab",
+    "Their rooftop condensers and fans — the curb, the roof opening",
+    "EV chargers — conduit under the paving, the pedestal bases",
+    "Monument sign — the footing and the conduit to it",
+    "Scoreboard / bleachers — the footing, the conduit",
+    "Compactor / baler — the pad, the power, the bollards",
+    "ATM / drive-thru — the conduit, the pad, the bollards",
+    "Racking / dock levelers / lifts — slab thickness, the pit, the anchors",
+    "Fitness equipment — power in the floor",
+    "Casework with sinks — water, drain, power in the wall",
+    "Boardroom / classroom AV — the floor box, backing, conduit to the rack",
+    "Nurse call / headwall — boxes and backing",
+    "Ceiling lifts and booms — the steel above the ceiling",
+    "Imaging room — their site drawing: the trench, the steel, the path in",
+    "Donor wall / lit sign — backing and power for the letters"
+  ],
+
+  /* WHAT YOU NEED FROM HIM ON THIS ONE — the braid-breaker, ordered by how fast
+     the answer comes back, cheapest first. The receiving desk's own timings:
+     "which are yours" is one line in an hour; the sheet is a PDF he forwards in
+     an hour; a name and a day takes a day; the crate is an hour off the cut
+     sheet; "where it lands and what it needs" is his engineer and days — and he
+     killed it as the LEAD ask ("that's my equipment schedule retyped into a
+     text; I'll say it's on the drawings and stop answering"). It survives LAST,
+     for the piece that has no sheet.
+     NOT HERE, killed by the panel: "when you set it" (the owner tells him when
+     he sets, and it has no close-in gate — that ask makes the page a delivery
+     chase, which is the long pole in a hat) and "anything you still need from
+     us" as a row ask (open-ended, gets silence; it lives in the closing). */
+  asks: [
+    "Which of these are yours, and whose are the rest",
+    "Your rough-in sheet — the one the architect has, sheet and rev",
+    "Who's your person on it, and a day to walk it",
+    "Heaviest piece, biggest crate, the opening it needs",
+    "Where it lands and what it needs, off your set"
+  ],
+  /* The same five, short, for LINE ONE — the only line a lock screen shows. */
+  askShort: [
+    "which of these are yours",
+    "your rough-in sheet, sheet and rev",
+    "who walks it, and when",
+    "heaviest piece and the opening",
+    "where it lands and what it needs"
+  ],
+  /* And the same five, said out loud, once, under the subject — never per row. */
+  askLines: [
+    "One line back is enough: which of these are yours to rough in, and whose the rest are, so I chase the right man.",
+    "The one you already sent the architect or the consultant — sheet number and rev. If it isn't drawn yet, tell me that.",
+    "A name and a day. Your person walks it with my plumber before I close it up and marks it on the deck in paint.",
+    "Off your cut sheet: the heaviest single piece, the biggest crate it comes in, and the door or opening it has to fit through — before I close that opening.",
+    "Power / water / drain / gas / data / vent / floor sink or depression / blocking — off your set, checked against mine. Paint it on my deck or send me the sheet, not the cut sheet."
+  ],
+
+  /* WHERE IT STANDS — three rungs and a blank, and EVERY ONE IS SOMETHING HE DID
+     OR SOMETHING HE CAN SEE. "Nothing back" was proposed and killed by three of
+     four lenses in the same words: a lateness label wearing a status, nobody's
+     act and nobody's eyes. Blank-after-Asked already says nothing came back. */
+  states: ["Asked", "Got it", "It's in"],
+
+  /* ONE FLAG. "This is the one that moves the date" was killed by the owner's rep
+     — printed to an outside vendor it reads "your piece is delaying my job", the
+     opening line of a delay exhibit. "This one first" says what the super needs. */
+  flags: ["This one first"],
+
+  labItem: "The piece",
+  labVendor: "Who's furnishing it — the outfit, and a name",
+  labTag: "Its tag on the equipment schedule",
+  labWhere: "Where it lands",
+  labAsk: "What you need from him on it",
+  labGate: "Needed before",
+  labState: "Where it stands",
+  labTold: "Last thing he told you — his words, and who said it",
+
+  phItem: "walk-in cooler · floor boxes — then it's a button",
+  phVendor: "“the kitchen guy — Dave” · blank until you have a name",
+  vendorHint: "Type it the way you'd say it on the radio. It becomes a button, and the message goes to him by name. No name yet? Leave it blank — those go to the rep.",
+  phTag: "K-4 · OF-14 — if it has one",
+  phWhere: "Kitchen 114 — the owner's room number",
+  phAsk: "— what you need on this one",
+  phState: "— not sent yet",
+  phTold: "“Dave, 8/2 — FS-3 rev 2, sent to the architect in April”",
+  rowNoName: "no name yet",
+
+  toNeutral: "— pick who this goes to",
+  toRep: "everything still open, by vendor",
+  toRepAnon: "The owner's rep",
+  toAll: "Everything on the list — my own record",
+  askNeutral: "— pick the one thing this asks for",
+  askAll: "Everything I need from him — one message",
+  askHintNeutral: "<b>Pick who it goes to.</b> One vendor gets one message about his pieces; the rep gets the roll-up of what her people still owe you, with the pieces that have no name yet under their own heading.",
+  askHintNone: "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later. Ask for the one you actually need this week and send the rest next time.",
+  askHintPicked: "That is the whole message: one question, and the pieces it's about. He answers one thing today instead of picking through five and going quiet.",
+  askHintRep: "This one goes to the owner's rep: everything still open, by who's furnishing it. The pieces with no name yet sit under NOT SET — the name is the whole ask on those.",
+  askHintAll: "Your own record — every row, nobody's message. Pick a name up top to send one man his piece of it.",
+
+  docGateMany: "before I close it up",
+  docRepTag: " — owner's rep",
+  docOffLabel: "Building off",
+  docOffFallback: "my set",
+  docOnPieces: "On",
+  docEveryLede: "The pieces of yours I still need something on before I close them up — what I need is on each line:",
+  docRepSubject: "what your vendors still owe me",
+  docRepNoName: "The ones under NOT SET have no name on them yet: who's your person on each, and a day they can walk it with my plumber — the name is the whole ask.",
+  docSubjectAll: "by others — my own list",
+  docAllLede: "Everything on the list, my own record. Nothing here goes to anybody as-is — pick a name up top to send one man his piece of it.",
+
+  /* THE CLOSING IS THE RECEIVING DESK'S OWN TWO LINES, and it ends in an option.
+     The consequence is a fact about the gate, not a threat: "on the owner's
+     schedule, not mine" was killed by all four lenses as who-eats-it with the
+     dollar sign filed off, and "core drill" by the two receiving lenses — it
+     gets forwarded to the rep as "your GC is threatening me" and lands on the
+     wrong man, because nine times out of ten the hole in his set is nobody's
+     doing but the trailer's. The last clause is where "anything you still need
+     from us" lives — the closing, not a row. */
+  closing: "If it's already with the architect, just send me the sheet and the rev — I'm building off {off} and I've never seen yours. If a piece on here isn't yours, tell me whose. What I don't have before the gate isn't in it, so call me before then, not after — and if there's anything you need from the building that I didn't ask for, tell me now.",
+  closingRep: "The ones with a name on them I've asked direct, and you're on those. The ones without, I can't ask for yet — the name is the whole ask. Call me before the gate, not after.",
+  docBoundary: "That's my own list of what I need before I close it up, in my words. It isn't an RFI or a change order, it doesn't authorize extra work, and it doesn't decide whose scope anything is.",
+
+  emptyText: "Nothing on the list yet. Put in the first piece that isn't yours and still needs a hole in your slab — and the name of whoever's furnishing it, if you have one.",
+  emptyVendor: "Nothing open with his name on it — every piece he's furnishing is in.",
+  emptyAsk: "Nothing of his needs that right now. Open the pencil on the rows you want to ask about and set what you need on each.",
+  emptyRep: "Every piece on the list is in. Nothing left to chase.",
+  noNameHint: "Nobody to send those to yet — they go to the owner's rep as “who's your person on this”. When she tells you, open the pencil and put the name on the row; it keeps everything else."
+};

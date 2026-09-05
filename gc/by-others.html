@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>By Others — GC &amp; Site Super Toolkit</title>
+<meta name="description" content="Everything on your job marked BY OTHERS / NIC that still needs a hole in your slab or a box in your wall. One row per piece, the vendor's name as the receiver, one message per vendor — the sheet, the walk, the crate — before the gate.">
+<meta name="apple-mobile-web-app-title" content="By Others">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">GC &middot; you &rarr; the owner&rsquo;s vendors, with the rep on it</span>
+    <h1 id="title">By Others</h1>
+    <p class="lede" id="lede">Everything on your job marked <b>BY OTHERS / NIC</b> that still needs a hole in your slab or a box in your wall. One row per piece, the vendor&rsquo;s name as the receiver, and <b>one message per vendor</b> &mdash; before the gate that turns it into a core drill.</p>
+  </header>
+
+  <div class="warn" id="warn"></div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Project</label><input type="text" id="hJob" placeholder="Rosewood ES" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">The set you&rsquo;re building off</label><input type="text" id="hOff" placeholder="P-101 rev 4" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You</label><input type="text" id="hFrom" placeholder="Ken — site super" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they should call back" autocomplete="off"></div>
+      <div><label for="hRep">The owner&rsquo;s rep</label><input type="text" id="hRep" placeholder="Priya — owner’s rep" autocapitalize="words" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint"></p>
+    <p class="note" style="margin:6px 0 0" id="repHint"></p>
+  </section>
+
+  <section class="card">
+    <h2>The pieces</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Type the piece, or tap one of the usual ones underneath &mdash; whatever you type becomes a button. Put the vendor&rsquo;s name on it if you have one; leave it blank if you don&rsquo;t. Then <b>Add</b>. <b>Tap a row</b> to move it along: <span id="ladderHint"></span></p>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="gate" class="on">Needed before</button>
+        <button type="button" data-g="vendor">Who&rsquo;s furnishing it</button>
+        <button type="button" data-g="state">Where it stands</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="noname" style="margin:8px 0 0" hidden></p>
+    <p class="note" id="noask" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0" id="pencilNote"></p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; one vendor, one question</span></h2>
+
+    <div class="bararea" style="display:block">
+      <label class="lab" for="selTo" style="margin:0 0 6px">This message goes to</label>
+      <select id="selTo"></select>
+    </div>
+    <div class="bararea" style="display:block" id="askRow">
+      <label class="lab" for="selAsk" style="margin:0 0 6px">and asks for</label>
+      <select id="selAsk"></select>
+    </div>
+    <div class="bararea" style="display:block" id="dayRow">
+      <label class="lab" for="hDay" style="margin:0 0 6px">The day that gate lands &mdash; as a fact, typed once</label>
+      <input type="text" id="hDay" placeholder="“slab pours 9/12” · “we rock the 14th”" autocomplete="off" style="width:100%;box-sizing:border-box">
+    </div>
+    <p class="note" id="dayHint"></p>
+    <p class="note" id="askHint"></p>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; that one is <b>yours</b>, not a message, and it is your backup if the phone goes in a puddle.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the <span id="creditKit">GC &amp; Site Super Toolkit</span>. A piece you always end up chasing that isn&rsquo;t in the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">GC &amp; Site Super Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* BY OTHERS — the owner's vendors, one message each, before the gate.
+ * Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0
+ *
+ * A CONFIG ON SHAPE #3 (`shared/rowlog.js`). No new mechanism was built for this
+ * page and none should be: the engine already owns tap-to-advance, learned
+ * axes, grouping, named document filters, the TSV and the persistence. Every
+ * word below comes out of `gc/items.js` (TOOLKIT_BYOTHERS), and the gates come
+ * out of TOOLKIT_ROUGHIN.milestones — ONE list that two tools read, so "before
+ * the pour" means the same thing on the Close-In List and here.
+ *
+ * ── WHAT A FOUR-LENS PANEL SCORED 7 / 7 / 7 / 5, AND WHAT IT CHANGED ────────
+ * A GC super who has stood on a finished slab with a kitchen installer pointing
+ * at where his floor sink should have been · the PM at a foodservice equipment
+ * contractor, answering from the RECEIVING end · an owner's rep who holds the
+ * OFCI matrix and is the person this message gets FORWARDED through · a skeptic
+ * handed the program's rules as weapons. Three said build, one said extend the
+ * Close-In List. All four named the same one thing:
+ *
+ * 1. THE VENDOR'S NAME IS THE RECEIVER. The Close-In List's "Owner vendor / rep"
+ *    is one bucket for five companies — one list to the cooler guy, the hood guy
+ *    and the sign guy, which is the same as sending it to nobody. Here the
+ *    vendor is typed once, becomes a button, and is the To: line. A message
+ *    never goes to more than one of them.
+ *
+ * 2. THE REP IS ON IT, AND SHE IS THE To: WHEN THERE IS NO NAME YET. He has no
+ *    contract with the kitchen guy; his text alone sits behind the jobs where
+ *    the man asking is the one paying. With the owner's rep cc'd it gets
+ *    answered — and half the time he has no vendor name until weeks after the
+ *    pour, so the roll-up TO the rep ("what your vendors still owe me, and I
+ *    need a name for these") is the message that actually moves the date.
+ *
+ * 3. ASK FOR THE DOCUMENT, NOT THE PARAGRAPH. The receiving desk killed "tell me
+ *    where it lands and what it needs" as the lead ask — that is his equipment
+ *    schedule retyped into a text, and he will say "it's on the drawings" and
+ *    stop answering. The ask that gets a PDF back in an hour is "send me the
+ *    rough-in sheet you already sent the architect — sheet and rev". The
+ *    service-list ask survives, LAST, for the piece that has no sheet.
+ *
+ * 4. THE GATE'S DAY IS TYPED ONCE, AT SEND TIME, AS A FACT. The vendor is not on
+ *    the GC's schedule: "before the pour" with no day gets filed. So the rows
+ *    keep the MILESTONE (§THE INTERFACE — a milestone, never a date) and the
+ *    message carries "slab pours 9/12" on line one, typed here, never stored on
+ *    a row and never counted from. Three lenses asked for this independently.
+ *
+ * 5. KILLED, AND STAYING KILLED: a "Nothing back" rung (an overdue label wearing
+ *    a status — nobody's act, nobody's eyes) · "on the owner's schedule, not
+ *    mine" in the closing (who-eats-it with the dollar sign filed off) · a
+ *    "moves the date" flag printed to an outside vendor (the first sentence of a
+ *    delay claim) · "when you set it" as an ask (the owner tells him when he
+ *    sets; and it has no close-in gate, which makes the page a delivery chase —
+ *    the long pole in a hat, which the GC gets never) · seeds with no gate
+ *    (copier, vending) and seeds that pre-decide a furnish-vs-install fight
+ *    (med-gas outlets, access control) · any manufacturer or rep agency, ever.
+ *
+ * 6. `told` HOLDS ONE VALUE AND KEEPS NO HISTORY. Same law as The Long Pole: a
+ *    dated, repeatable "here is what you told me and when" is a delay-claim
+ *    exhibit, and this program bans that class outright.
+ */
+(function () {
+  "use strict";
+  function $(s) { return document.querySelector(s); }
+
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var B = window.TOOLKIT_BYOTHERS || {};
+  var R = window.TOOLKIT_ROUGHIN || {};
+
+  /* THE GATES ARE THE CLOSE-IN LIST'S OWN, read at load. One list, two tools, or
+     they drift — the sender lens and the skeptic said it in the same words. */
+  var MILES  = (R.milestones || []).map(function (m) { return m.label; });
+  var STATES = (B.states || []).slice();
+  var ASKS   = (B.asks   || []).slice();
+  var SHORT  = (B.askShort || []).slice();
+  var LINES  = (B.askLines || []).slice();
+  var SEEDS  = (B.items  || []).slice();
+  var FLAGS  = (B.flags  || ["This one first"]).slice();
+  var KEY = "toolkit." + (TRADE.slug || "trade") + ".byothers.v1";
+
+  /* THE SETTLED RUNG IS DECLARED BY POSITION, never by matching a word. */
+  var IN = STATES.length ? STATES[STATES.length - 1] : "";
+  function isOpen(v) { return v.state !== IN; }
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function soften(s) {
+    s = String(s == null ? "" : s);
+    return /[A-Z]{2,}/.test(s) ? s : s.toLowerCase();
+  }
+  function itemTag(v) { return v.tag ? v.item + " (" + v.tag + ")" : v.item; }
+
+  if (B.toolName) {
+    $("#title").textContent = B.toolName;
+    document.title = B.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (B.lede) $("#lede").innerHTML = B.lede;
+  if (B.eyebrow) $("#eyebrow").textContent = B.eyebrow;
+  if (B.warn) $("#warn").innerHTML = B.warn;
+  if (B.offHint) $("#offHint").innerHTML = B.offHint;
+  if (B.repHint) $("#repHint").innerHTML = B.repHint;
+  if (B.dayHint) $("#dayHint").innerHTML = B.dayHint;
+  if (B.pencilNote) $("#pencilNote").innerHTML = B.pencilNote;
+  if (B.phJob) $("#hJob").placeholder = B.phJob;
+  if (B.phOff) $("#hOff").placeholder = B.phOff;
+  if (B.phFrom) $("#hFrom").placeholder = B.phFrom;
+  if (B.phTel) $("#hTel").placeholder = B.phTel;
+  if (B.phRep) $("#hRep").placeholder = B.phRep;
+  if (B.phDay) $("#hDay").placeholder = B.phDay;
+  if (TRADE.name) { $("#footName").textContent = TRADE.name; $("#creditKit").textContent = TRADE.name; }
+  $("#ladderHint").innerHTML = B.ladderNote || (STATES.join(" → ") + ".");
+
+  /* The engine renders once inside mount(), before `rl` exists (§SCARS). */
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  /* ── WHO THIS MESSAGE GOES TO ──────────────────────────────────────────────
+     mode "vendor": one named vendor, his OPEN rows, one question.
+     mode "rep":    the owner's rep — everything still open, by vendor, and the
+                    rows with no name under their own heading.
+     mode "all":    his own record — every row, nobody's message.
+     Nothing is picked until he picks it: A DEFAULT IS A CLAIM. */
+  var to = { mode: "", vendor: "" };
+  var askPicked = "";
+
+  function repName() { return $("#hRep").value.trim(); }
+  function vendorsOnList() {
+    var seen = {}, out = [];
+    rowsNow().forEach(function (r) {
+      var v = String(r.values.vendor || "").trim();
+      if (!v || !isOpen(r.values)) return;
+      if (!seen[v]) { seen[v] = 0; out.push(v); }
+      seen[v]++;
+    });
+    return out.map(function (v) { return { v: v, n: seen[v] }; });
+  }
+  function noNameOpen() {
+    return rowsNow().filter(function (r) { return isOpen(r.values) && !String(r.values.vendor || "").trim(); });
+  }
+  function asksFor(vendor) {
+    var live = {};
+    rowsNow().forEach(function (r) {
+      if (!isOpen(r.values) || String(r.values.vendor || "").trim() !== vendor) return;
+      if (r.values.ask) live[r.values.ask] = (live[r.values.ask] || 0) + 1;
+    });
+    return ASKS.filter(function (a) { return live[a]; }).map(function (a) { return { a: a, n: live[a] }; });
+  }
+
+  /* THE ROWS THIS COPY ACTUALLY CONTAINS — computed the same way the engine
+     scopes the document, so a header count and a footer can never name a row the
+     body does not show (§SCARS, the block under a filtered list). */
+  function scopedNow() {
+    var src = rowsNow();
+    if (to.mode === "vendor") {
+      src = src.filter(function (r) { return isOpen(r.values) && String(r.values.vendor || "").trim() === to.vendor; });
+      if (askPicked) src = src.filter(function (r) { return r.values.ask === askPicked; });
+    } else if (to.mode === "rep") {
+      src = src.filter(function (r) { return isOpen(r.values); });
+    }
+    return src;
+  }
+
+  function buildToSelect() {
+    var sel = $("#selTo");
+    sel.innerHTML = "";
+    function opt(v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; sel.appendChild(o); }
+    opt("", B.toNeutral || "— pick who this goes to");
+    vendorsOnList().forEach(function (x) { opt("v:" + x.v, x.v + "  (" + x.n + ")"); });
+    var nn = noNameOpen().length;
+    opt("rep", (repName() || B.toRepAnon || "The owner's rep") + " — " + (B.toRep || "everything still open, by vendor")
+      + (nn ? "  (+" + nn + " with no name yet)" : ""));
+    opt("all", B.toAll || "Everything on the list — my own record");
+  }
+  function buildAskSelect() {
+    var sel = $("#selAsk");
+    sel.innerHTML = "";
+    function opt(v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; sel.appendChild(o); }
+    opt("", B.askNeutral || "— pick the one thing this asks for");
+    if (to.mode === "vendor") asksFor(to.vendor).forEach(function (x) { opt("a:" + x.a, x.a + "  (" + x.n + ")"); });
+    opt("every", B.askAll || "Everything I need from him — one message");
+  }
+
+  function syncSelects() {
+    if (!rl) return;                      // same guard: onChange fires from that first render too
+    var keepTo = $("#selTo").value, keepAsk = $("#selAsk").value;
+    buildToSelect();
+    var found = [].some.call($("#selTo").options, function (o) { return o.value === keepTo; });
+    $("#selTo").value = found ? keepTo : "";
+    if (!found) { to = { mode: "", vendor: "" }; askPicked = ""; }
+    buildAskSelect();
+    var asks = asksFor(to.vendor);
+    /* ONE question on the list is not a choice, it is the content — so it is
+       picked. Two or more, and the page does not get to decide which he is
+       asking today (the long-pole law): it shows him everything and says so. */
+    if (to.mode === "vendor" && asks.length === 1 && (!keepAsk || keepAsk === "")) keepAsk = "a:" + asks[0].a;
+    var foundA = [].some.call($("#selAsk").options, function (o) { return o.value === keepAsk; });
+    $("#selAsk").value = foundA ? keepAsk : "";
+    askPicked = (foundA && /^a:/.test(keepAsk)) ? keepAsk.slice(2) : "";
+    $("#askRow").hidden = to.mode !== "vendor";
+    applyFilters();
+  }
+
+  function desiredFilters() {
+    var f = [];
+    if (to.mode === "vendor") { f.push("to"); f.push("open"); if (askPicked) f.push("ask"); }
+    else if (to.mode === "rep") f.push("rep");
+    return f;
+  }
+  /* ONLY WHEN THE KEYS CHANGE. setFilter() renders, render() fires onChange, and
+     onChange lands back here — an unconditional setFilter is a loop with no floor
+     (the first run of this page's gate blew the stack on exactly that). The
+     filter TESTS read `to.vendor` and `askPicked` live, so a change inside the
+     same key list needs an explicit render from the handler that made it. */
+  function applyFilters() {
+    if (!rl) return;                      // the engine's first render runs inside mount(), before `rl` exists (§SCARS)
+    var want = desiredFilters(), have = rl.filter();
+    if (want.join("|") !== have.join("|")) rl.setFilter(want);
+    paintAskHint();
+  }
+
+  function paintAskHint() {
+    var el = $("#askHint"); if (!el) return;
+    if (to.mode === "vendor") {
+      el.innerHTML = askPicked
+        ? (B.askHintPicked || "That is the whole message: one question, and the pieces it's about. He answers one thing today instead of picking through five and going quiet.")
+        : (B.askHintNone || "<b>Pick one.</b> A message that asks five things gets one of them answered — usually the easiest one, three days later.");
+    } else if (to.mode === "rep") {
+      el.innerHTML = B.askHintRep || "This one goes to the owner's rep: everything still open, by who's furnishing it, and the pieces with no name yet under their own heading — the name is the whole ask on those.";
+    } else if (to.mode === "all") {
+      el.innerHTML = B.askHintAll || "Your own record — every row, nobody's message. Pick a name up top to send one man his piece of it.";
+    } else {
+      el.innerHTML = B.askHintNeutral || "<b>Pick who it goes to.</b> One vendor gets one message about his pieces; the rep gets the roll-up of what her people still owe you.";
+    }
+  }
+
+  /* ── the document ──────────────────────────────────────────────────────── */
+  function gateWord(scoped) {
+    var day = $("#hDay").value.trim();
+    if (day) return day;
+    var gates = {};
+    scoped.forEach(function (r) { if (r.values.gate) gates[r.values.gate] = 1; });
+    var ks = Object.keys(gates);
+    return ks.length === 1 ? soften(ks[0]) : (B.docGateMany || "before I close it up");
+  }
+  function tagsLine(scoped) {
+    var tags = scoped.map(function (r) { return String(r.values.tag || "").trim(); }).filter(Boolean);
+    var untagged = scoped.length - tags.length;
+    if (!tags.length) return scoped.length + (scoped.length === 1 ? " piece" : " pieces");
+    return tags.join(", ") + (untagged ? " + " + untagged + " more" : "");
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "piece", nounPlural: "pieces", groupNoun: "block", groupNounPlural: "blocks",
+    /* ONE label for the unset bucket across every grouping (the engine's law), so
+       it stays neutral: under "who's furnishing it" that bucket is the pieces
+       with no name yet, and the roll-up to the rep says so in its own lede. */
+    ungroupedLabel: "NOT SET",
+    emptyText: B.emptyText || "Nothing on the list yet. Put in the first piece that isn't yours and still needs a hole in your slab.",
+
+    /* THE LADDER DOES NOT WRAP. A stub that is in the slab is in the slab; a
+       stray second tap must never walk a row back to blank inside a message
+       that then asks a man for a sheet on a piece you already covered. */
+    statusKey: "state", statusOrder: STATES, statusDone: IN,
+    flagKey: "flag", flagValues: FLAGS,
+
+    groupOptions: [
+      { key: "gate", label: "Needed before" },
+      { key: "vendor", label: "Who's furnishing it" },
+      { key: "state", label: "Where it stands" }
+    ],
+    /* Grouped by gate the blocks read EARLIEST FIRST — the countdown, which is
+       the whole reason the gate is an axis and not a field (§THE INTERFACE). */
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = MILES.indexOf(a), ib = MILES.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "state") {
+        var ja = STATES.indexOf(a), jb = STATES.indexOf(b);
+        return (ja < 0 ? 99 : ja) - (jb < 0 ? 99 : jb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "to", label: "for one vendor",
+        emptyText: B.emptyVendor || "Nothing open with his name on it — every piece he's furnishing is in.",
+        test: function (v) { return String(v.vendor || "").trim() === to.vendor; } },
+      { v: "ask", label: "one question",
+        emptyText: B.emptyAsk || "Nothing of his needs that right now. Open the pencil on the rows you want to ask about and set what you need on each.",
+        test: function (v) { return v.ask === askPicked; } },
+      { v: "open", label: "still open", test: function (v) { return isOpen(v); } },
+      { v: "rep", label: "what your vendors still owe me",
+        emptyText: B.emptyRep || "Every piece on the list is in. Nothing left to chase.",
+        test: function (v) { return isOpen(v); } }
+    ],
+
+    fields: [
+      { key: "item", label: B.labItem || "The piece", input: "learn", lead: true, required: true,
+        placeholder: B.phItem || "walk-in cooler · floor boxes — then it's a button",
+        emptyHint: "Call it what you call it on the radio. Whatever you type becomes a button." },
+      /* THE VENDOR IS TYPED, NEVER SEEDED. A manufacturer, distributor or rep
+         agency in a seed list is impersonation with a shelf life (§SCARS); the
+         names on the owner's matrix change every job, so the field LEARNS. */
+      { key: "vendor", label: B.labVendor || "Who's furnishing it — the outfit, and a name", input: "learn", sticky: true,
+        placeholder: B.phVendor || "“the kitchen guy — Dave” · blank until you have a name",
+        emptyHint: B.vendorHint || "Type it the way you'd say it on the radio. It becomes a button, and the message goes to him by name. No name yet? Leave it blank — those go to the rep." },
+      { key: "tag", label: B.labTag || "Its tag on the equipment schedule", input: "text", identifier: true,
+        placeholder: B.phTag || "K-4 · OF-14 — if it has one" },
+      { key: "where", label: B.labWhere || "Where it lands", input: "learn", sticky: true,
+        placeholder: B.phWhere || "Kitchen 114 — the owner's room number",
+        emptyHint: "The owner's room number, off his set — that is the number his vendor reads." },
+      { key: "ask", label: B.labAsk || "What you need from him on it", input: "select", sticky: true,
+        placeholder: B.phAsk || "— what you need on this one" },
+      /* NO GATE, NO ROW. The owner's rep's own blocking demand: a piece with
+         nothing to beat has no reason to be on this list, and a list with no
+         gate is one furnish/install column away from a shadow equipment matrix. */
+      { key: "gate", label: B.labGate || "Needed before", input: "chips", sticky: true, required: true, wide: true },
+      { key: "state", label: B.labState || "Where it stands", input: "select",
+        placeholder: B.phState || "— not sent yet" },
+      { key: "told", label: B.labTold || "Last thing he told you — his words, and who said it", input: "text", wide: true,
+        placeholder: B.phTold || "“Dave, 8/2 — FS-3 rev 2, sent to the architect in April”" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "ask") return ASKS;
+      if (key === "gate") return MILES;
+      if (key === "vendor") return (learned || []).slice();      // learned only — no seed, ever
+      if (key === "where") return (learned || []).slice();
+      if (key === "item") {
+        var out = (learned || []).slice();
+        SEEDS.forEach(function (s) { if (out.indexOf(s) === -1) out.push(s); });
+        return out;
+      }
+      return null;
+    },
+
+    rowMain: function (v) { return itemTag(v) || "(nothing on this row)"; },
+    rowSub: function (v) {
+      return joinDots([
+        v.where || null,
+        v.vendor || (B.rowNoName || "no name yet"),
+        v.gate ? soften(v.gate) : null,
+        v.ask || null,
+        v.told ? "told: " + v.told : null
+      ]);
+    },
+
+    /* LINE 1 IS THE LOCK-SCREEN LINE and it names the PROJECT first, like every
+       document in this program — then the pieces by their tags, the question,
+       and the gate's day as a fact he can act on. NO send date on line one: the
+       sender lens killed "Sep 5 hanging off the subject with no noun". His phone
+       stamps the text; this line is for the man reading it. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var rep = repName();
+      var scoped = scopedNow();
+      var out = [];
+
+      if (to.mode === "vendor") {
+        var i = ASKS.indexOf(askPicked);
+        var q = askPicked ? (SHORT[i] || soften(askPicked)) : (scoped.length + (scoped.length === 1 ? " thing" : " things") + " I need from you");
+        out.push(joinDash([job, tagsLine(scoped) + ": " + q, gateWord(scoped)]));
+        out.push("");
+        if (job) out.push("Job: " + job);
+        out.push("To: " + to.vendor);
+        /* THE TAG IS ADDED ONLY WHEN HIS OWN WORDS DON'T CARRY IT. "Priya" needs
+           " — owner's rep" so the vendor knows who is on the thread; "Priya — owner's
+           rep" typed the way the placeholder teaches must not print it twice. */
+        if (rep) out.push("cc: " + rep + (/\b(rep|owner)\b/i.test(rep) ? "" : (B.docRepTag || " — owner's rep")));
+        if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+        else if (tel) out.push("Call me: " + tel);
+        if (off) out.push((B.docOffLabel || "Building off") + ": " + off);
+        out.push("");
+        if (askPicked) {
+          out.push((LINES[i] || askPicked) + " " + (B.docOnPieces || "On") + " " + scoped.length + (scoped.length === 1 ? " piece:" : " pieces:"));
+        } else {
+          out.push(B.docEveryLede || "The pieces of yours I still need something on before I close them up — what I need is on each line:");
+        }
+        out.push("");
+        return out.join("\n");
+      }
+
+      if (to.mode === "rep") {
+        out.push(joinDash([job, B.docRepSubject || "what your vendors still owe me", gateWord(scoped)]));
+        out.push("");
+        if (job) out.push("Job: " + job);
+        out.push("To: " + (rep || B.toRepAnon || "the owner's rep"));
+        if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+        else if (tel) out.push("Call me: " + tel);
+        if (off) out.push((B.docOffLabel || "Building off") + ": " + off);
+        out.push("");
+        var nn = noNameOpen().length;
+        out.push(scoped.length + (scoped.length === 1 ? " piece" : " pieces") + " still open, by who's furnishing it."
+          + (nn ? " " + (B.docRepNoName || "The ones under NOT SET have no name on them yet: who's your person on each, and a day they can walk it with my plumber — the name is the whole ask.") : ""));
+        out.push("");
+        return out.join("\n");
+      }
+
+      out.push(joinDash([job, B.docSubjectAll || "by others — my own list", c.today]));
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      if (off) out.push((B.docOffLabel || "Building off") + ": " + off);
+      out.push("");
+      out.push(B.docAllLede || "Everything on the list, my own record. Nothing here goes to anybody as-is — pick a name up top to send one man his piece of it.");
+      out.push("");
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, the way he would say it. The axis the list is grouped by
+       is dropped because it is the heading; the ASK is dropped when the question
+       is the spine — printing it on every row is how a message becomes a survey. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "gate";
+      var tail = [];
+      if (v.where) tail.push(v.where);
+      if (to.mode !== "vendor" && g !== "vendor" && v.vendor) tail.push(v.vendor);
+      if (g !== "gate" && v.gate) tail.push(soften(v.gate));
+      if (!(to.mode === "vendor" && askPicked) && v.ask) tail.push(soften(v.ask));
+      /* THE RUNG IS HIS RECORD, NOT THE VENDOR'S BUSINESS. A message to the man
+         himself carries only open pieces, so "asked" on a row is noise to him at
+         best and a record of when you asked at worst (the skeptic's read). The
+         roll-up to the rep keeps it — she needs to see which ones he asked direct. */
+      if (to.mode !== "vendor" && g !== "state" && v.state) tail.push(soften(v.state));
+      if (v.told) tail.push("last I heard: " + v.told);
+      return joinDash([itemTag(v), joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, itemTag(v), v.where || null, v.gate ? soften(v.gate) : null]);
+    },
+
+    /* THE CLOSING ENDS IN AN OPTION, like every closing this program ships — and
+       it is the receiving desk's own two lines: if it's with the architect, send
+       the sheet; if it isn't yours, tell me whose. The consequence is a fact
+       about the gate, not a threat aimed at a man who does not control the
+       owner's schedule. Then the boundary line says what this is not. */
+    docFoot: function (c) {
+      var out = [];
+      var off = $("#hOff").value.trim();
+      if (to.mode === "vendor" && B.closing) {
+        out.push(String(B.closing).replace("{off}", off || (B.docOffFallback || "my set")));
+      } else if (to.mode === "rep" && B.closingRep) {
+        out.push(B.closingRep);
+      }
+      if (B.docBoundary) { if (out.length) out.push(""); out.push(B.docBoundary); }
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + (B.docSubjectAll || "by others") + ", " + c.total
+        + (c.total === 1 ? " piece, " : " pieces, ") + c.today
+        + (off ? ", building off " + off : "")
+        + " — kept by hand, my own note of what I asked for and what I was told. No price, no rate, no day count, and it decides nobody's scope.";
+    },
+    tsvColumns: [
+      { label: "The piece", key: "item" },
+      { label: "Tag", key: "tag" },
+      { label: "Who's furnishing it", key: "vendor" },
+      { label: "Where it lands", key: "where" },
+      { label: "What I need", key: "ask" },
+      { label: "Needed before", key: "gate" },
+      { label: "Where it stands", key: "state" },
+      { label: "Last thing I was told", key: "told" },
+      { label: "Flagged", value: function (v, r) { return r.flag || ""; } }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      var p = $("#hRep").value.trim(), d = $("#hDay").value.trim();
+      return (j || o || f || t || p || d) ? { job: j, off: o, from: f, tel: t, rep: p, day: d } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+      $("#hRep").value = x.rep || ""; $("#hDay").value = x.day || "";
+    },
+    onChange: function () { paintNoName(); paintAsk(); syncSelects(); }
+  });
+
+  /* THE PIECES WITH NO NAME — named on the glass where he can fix it, and NOT in
+     the vendor message, where a man must never read somebody else's problem.
+     They ride in the roll-up to the rep, under their own heading. */
+  function paintNoName() {
+    var el = $("#noname"); if (!el || !rl) return;
+    var n = noNameOpen().length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " piece" + (n === 1 ? "" : "s") + " with no name on " + (n === 1 ? "it" : "them") + ".</b> "
+      + (B.noNameHint || "Nobody to send those to yet — they go to the owner's rep as “who's your person on this”. When she tells you, open the pencil and put the name on the row; it keeps everything else.");
+  }
+  /* A ROW WITH NO ASK RIDES IN NO QUESTION, and the page has to say so. */
+  function paintAsk() {
+    var el = $("#noask"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return isOpen(r.values) && !!String(r.values.vendor || "").trim() && !String(r.values.ask || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " open piece" + (n === 1 ? "" : "s") + " with nothing set under “" + (B.labAsk || "what you need from him") + "”.</b> "
+      + (n === 1 ? "That one rides in no question, so it never gets sent." : "Those ride in no question, so they never get sent.") + " Open the pencil and say what you actually need on " + (n === 1 ? "it" : "each") + ".";
+  }
+
+  /* The learn fields borrow the identifier's keyboard attributes; a piece, a
+     vendor and a room want sentences and autocorrect back on. The TAG keeps
+     them — K-4 is an identifier and a phone destroys those. */
+  ["item", "vendor", "where"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  function markGroup(k) {
+    [].forEach.call($("#segGroup").querySelectorAll("button"), function (x) { x.classList.toggle("on", x.getAttribute("data-g") === k); });
+  }
+
+  $("#selTo").addEventListener("change", function () {
+    var v = this.value;
+    if (/^v:/.test(v)) { to = { mode: "vendor", vendor: v.slice(2) }; }
+    else if (v === "rep") {
+      to = { mode: "rep", vendor: "" };
+      /* THE ROLL-UP READS BY VENDOR. The preview under the button is what the
+         button copies, so the list on screen follows it — no hidden grouping. */
+      rl.setGroup("vendor"); markGroup("vendor");
+    }
+    else if (v === "all") { to = { mode: "all", vendor: "" }; }
+    else { to = { mode: "", vendor: "" }; }
+    askPicked = "";
+    $("#selAsk").value = "";
+    syncSelects();
+    rl.render();                          // the receiver changed inside the same key list — repaint the preview
+  });
+  $("#selAsk").addEventListener("change", function () {
+    var v = this.value;
+    askPicked = /^a:/.test(v) ? v.slice(2) : "";
+    applyFilters();
+    rl.render();
+  });
+
+  /* TWO TAPS TO WIPE, never one. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel", "#hRep", "#hDay"].forEach(function (s) { $(s).value = ""; });
+    rl.clearAll();
+    to = { mode: "", vendor: "" }; askPicked = "";
+    $("#selTo").value = ""; $("#selAsk").value = "";
+    syncSelects();
+    paintNoName(); paintAsk();
+  });
+
+  /* The header fields and the gate's day ride on every message, so a keystroke
+     has to reach BOTH the preview and the saved copy (§SCARS). The rep's name
+     also changes the To-select's own label, so it rebuilds. */
+  ["#hJob", "#hOff", "#hFrom", "#hTel", "#hDay"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+  $("#hRep").addEventListener("input", function () { rl.schedulePersist(); syncSelects(); rl.render(); paintNoName(); });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  syncSelects();
+  paintNoName();
+  paintAsk();
+})();
+</script>
+</body>
+</html>

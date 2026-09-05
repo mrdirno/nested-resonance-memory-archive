@@ -68,6 +68,13 @@ window.TOOLKIT_TOOLS = [
     desc: "One of your subs needs into space the owner locks. Send the ask that gets a yes on the first try — the night, the rooms, whose crew it is, what you need open, and the heads-up that stops them getting walked out at nine. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#B4560F",
     audience: "GC → owner's rep / facilities / building engineer"
+  },
+  {
+    name: "By Others",
+    href: "by-others.html",
+    desc: "The stuff on your job marked BY OTHERS / NIC — the walk-in, the floor boxes, the sign footing — that still needs a hole in your slab or a box in your wall. One row per piece, the vendor's name as the receiver, and one message per vendor: the sheet, the walk, the crate, before the gate. No name yet? It goes to the owner's rep as the roll-up of what her people still owe you.",
+    chip: "#7A5C10",
+    audience: "Super → the owner's vendors, cc the rep"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
