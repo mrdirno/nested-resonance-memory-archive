@@ -107,6 +107,18 @@ const check = (name, condition) => { assert.ok(condition, name); console.log('PA
   await page.waitForFunction(()=>__probe.SESSION.a.status==='finished');
   const normalizedRecipe=await page.evaluate(()=>{const P=__probe;const r=P.benchParseRecord(JSON.stringify(P.benchRecord()));return {saved:r.state.offsets.a,executed:P.state.offsets.a};});
   check('large manual offsets execute and export the same importable recipe',normalizedRecipe.saved===2147483647&&normalizedRecipe.saved===normalizedRecipe.executed);
+  // Reveal a control at the panel's lower edge: the dock must not cover its hit target.
+  for(const viewport of [{width:1280,height:800},{width:900,height:600},{width:360,height:844},{width:390,height:844}]) {
+    await page.setViewportSize(viewport);
+    await page.locator('#sw-lab').evaluate(e=>e.scrollIntoView({block:'end'}));
+    const reachable=await page.locator('#sw-lab').evaluate(e=>{
+      const r=e.getBoundingClientRect();return e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));
+    });
+    check('Lab control clears the navigation at '+viewport.width+'×'+viewport.height,reachable);
+    const selected=await page.locator('#sw-lab').getAttribute('aria-pressed');
+    await page.locator('#sw-lab').click();
+    assert.notEqual(await page.locator('#sw-lab').getAttribute('aria-pressed'),selected);
+  }
   // Narrow screen and keyboard activation of the new controls.
   await page.setViewportSize({width:390,height:844});
   check('mobile bench stays in the viewport',await page.locator('.observation-bench').evaluate(e=>{const r=e.getBoundingClientRect();return r.x>=0&&r.right<=innerWidth;}));

@@ -138,6 +138,393 @@
   },
   "productionPreview": {
     "url": "http://127.0.0.1:8766/HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+    "observedAt": "2026-09-05T07:42:06.532Z",
+    "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+    "probeAbsent": true,
+    "browser": "151.0.7922.34",
+    "renderer": "Chromium SwiftShader",
+    "pageErrors": [],
+    "mobileInBounds": true,
+    "observation": {
+      "format": "halo-observation/v1",
+      "build": "halo-observatory-2026-09-04",
+      "author": "Aldrin Payopay",
+      "exportedAt": "2026-09-05T07:42:04.437Z",
+      "tickSeconds": 0.05,
+      "interpretation": "Controlled numerical experiment, not empirical evidence for NRM. Kinetic energy and radius use at most 2048 stratified particles. The fingerprint covers that sample, not all particles. GPU arithmetic may differ across devices. Imports restart the initial recipe; they do not restore an evolved particle snapshot.",
+      "comparison": {
+        "variable": "lorentz",
+        "sampledInitialStatesMatch": true
+      },
+      "runs": [
+        {
+          "slot": "A",
+          "status": "finished",
+          "startedAt": "2026-09-05T07:41:51.934Z",
+          "recipe": {
+            "state": {
+              "particles": 1048576,
+              "stepsPerSec": 2,
+              "smooth": true,
+              "fieldForm": "chladni",
+              "fieldExp": 0,
+              "damping": 2.5,
+              "quality": 0.7,
+              "colorMode": 0,
+              "base": 10,
+              "constants": {
+                "a": "phi",
+                "b": "phi",
+                "c": "pi"
+              },
+              "offsetMode": "auto",
+              "strideIndex": 51,
+              "offsets": {
+                "a": 0,
+                "b": 239,
+                "c": 478
+              },
+              "overlays": {
+                "c3": false,
+                "c6": false,
+                "lattice": false,
+                "spiral": false,
+                "fifths": false,
+                "equal": false,
+                "trefoil": false,
+                "torus": false,
+                "hopf": false
+              },
+              "centers": {
+                "on": false,
+                "count": 3,
+                "period": 24,
+                "gain": 1
+              },
+              "cosmos": {
+                "boundary": "reflect",
+                "hubble": 0.3,
+                "epoch": true,
+                "epochLen": 45,
+                "mag": 0.6,
+                "twist": true,
+                "aniso": 0,
+                "helix": 0,
+                "cascade": "out",
+                "selfgrav": 0,
+                "gainloss": 0
+              },
+              "sound": {
+                "voice": "bridge",
+                "type": "usim",
+                "omega": 0.7,
+                "omegaDigits": true,
+                "level": 0.5,
+                "register": -1,
+                "pitchSpace": "shepard"
+              },
+              "vessel": {
+                "form": "off",
+                "gain": 1.2,
+                "radius": 0.62,
+                "girth": 0.02
+              },
+              "cam": {
+                "az": 0.7854,
+                "el": 0.6155,
+                "dist": 0,
+                "user": false
+              },
+              "guides": true,
+              "autoOrbit": false,
+              "substeps": 1,
+              "lorentz": "euler",
+              "pm": {
+                "solver": "jacobi",
+                "assign": "ngp"
+              },
+              "lab": {
+                "on": false,
+                "fieldOff": false,
+                "ledger": false
+              },
+              "dimer": {
+                "on": false,
+                "kappa": 1,
+                "gamma": 0,
+                "delta": 0,
+                "loop": "off"
+              },
+              "sacred": "off"
+            },
+            "cam": {
+              "az": 0.7854,
+              "el": 0.6155,
+              "dist": 39.196888946291295
+            },
+            "step": 1,
+            "seed": 12345,
+            "ticks": 40,
+            "generator": "lcg32-1664525-1013904223"
+          },
+          "ticks": 40,
+          "environment": {
+            "three": "128",
+            "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+            "renderer": "WebKit WebGL",
+            "positionPrecision": "float32",
+            "floatBlend": true,
+            "textureSize": 1024,
+            "mesh": 32,
+            "tickSeconds": 0.05,
+            "pixelRatio": 0.7
+          },
+          "observations": [
+            {
+              "ticks": 0,
+              "timeSeconds": 0,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 10.882691635760942,
+              "meanSpeed": 0,
+              "kineticPerParticle": 0,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "ffc6cf63"
+            },
+            {
+              "ticks": 20,
+              "timeSeconds": 1,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 11.403721125261288,
+              "meanSpeed": 0.9074837949817813,
+              "kineticPerParticle": 0.5441577485113052,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "9f9e3b62"
+            },
+            {
+              "ticks": 40,
+              "timeSeconds": 2,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 11.95107805834791,
+              "meanSpeed": 1.1488988188841136,
+              "kineticPerParticle": 0.9891906964037829,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "248acc9f"
+            }
+          ],
+          "initial": {
+            "ticks": 0,
+            "timeSeconds": 0,
+            "sampledParticles": 2048,
+            "finite": true,
+            "rmsRadius": 10.882691635760942,
+            "meanSpeed": 0,
+            "kineticPerParticle": 0,
+            "ceilingFraction": 0,
+            "sampleFingerprint": "ffc6cf63"
+          },
+          "final": {
+            "ticks": 40,
+            "timeSeconds": 2,
+            "sampledParticles": 2048,
+            "finite": true,
+            "rmsRadius": 11.95107805834791,
+            "meanSpeed": 1.1488988188841136,
+            "kineticPerParticle": 0.9891906964037829,
+            "ceilingFraction": 0,
+            "sampleFingerprint": "248acc9f"
+          },
+          "finishedAt": "2026-09-05T07:41:58.418Z"
+        },
+        {
+          "slot": "B",
+          "status": "finished",
+          "startedAt": "2026-09-05T07:41:58.510Z",
+          "recipe": {
+            "state": {
+              "particles": 1048576,
+              "stepsPerSec": 2,
+              "smooth": true,
+              "fieldForm": "chladni",
+              "fieldExp": 0,
+              "damping": 2.5,
+              "quality": 0.7,
+              "colorMode": 0,
+              "base": 10,
+              "constants": {
+                "a": "phi",
+                "b": "phi",
+                "c": "pi"
+              },
+              "offsetMode": "auto",
+              "strideIndex": 51,
+              "offsets": {
+                "a": 0,
+                "b": 239,
+                "c": 478
+              },
+              "overlays": {
+                "c3": false,
+                "c6": false,
+                "lattice": false,
+                "spiral": false,
+                "fifths": false,
+                "equal": false,
+                "trefoil": false,
+                "torus": false,
+                "hopf": false
+              },
+              "centers": {
+                "on": false,
+                "count": 3,
+                "period": 24,
+                "gain": 1
+              },
+              "cosmos": {
+                "boundary": "reflect",
+                "hubble": 0.3,
+                "epoch": true,
+                "epochLen": 45,
+                "mag": 0.6,
+                "twist": true,
+                "aniso": 0,
+                "helix": 0,
+                "cascade": "out",
+                "selfgrav": 0,
+                "gainloss": 0
+              },
+              "sound": {
+                "voice": "bridge",
+                "type": "usim",
+                "omega": 0.7,
+                "omegaDigits": true,
+                "level": 0.5,
+                "register": -1,
+                "pitchSpace": "shepard"
+              },
+              "vessel": {
+                "form": "off",
+                "gain": 1.2,
+                "radius": 0.62,
+                "girth": 0.02
+              },
+              "cam": {
+                "az": 0.7854,
+                "el": 0.6155,
+                "dist": 0,
+                "user": false
+              },
+              "guides": true,
+              "autoOrbit": false,
+              "substeps": 1,
+              "lorentz": "boris",
+              "pm": {
+                "solver": "jacobi",
+                "assign": "ngp"
+              },
+              "lab": {
+                "on": false,
+                "fieldOff": false,
+                "ledger": false
+              },
+              "dimer": {
+                "on": false,
+                "kappa": 1,
+                "gamma": 0,
+                "delta": 0,
+                "loop": "off"
+              },
+              "sacred": "off"
+            },
+            "cam": {
+              "az": 0.7854,
+              "el": 0.6155,
+              "dist": 39.196888946291295
+            },
+            "step": 1,
+            "seed": 12345,
+            "ticks": 40,
+            "generator": "lcg32-1664525-1013904223"
+          },
+          "ticks": 40,
+          "environment": {
+            "three": "128",
+            "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+            "renderer": "WebKit WebGL",
+            "positionPrecision": "float32",
+            "floatBlend": true,
+            "textureSize": 1024,
+            "mesh": 32,
+            "tickSeconds": 0.05,
+            "pixelRatio": 0.7
+          },
+          "observations": [
+            {
+              "ticks": 0,
+              "timeSeconds": 0,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 10.882691635760942,
+              "meanSpeed": 0,
+              "kineticPerParticle": 0,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "ffc6cf63"
+            },
+            {
+              "ticks": 20,
+              "timeSeconds": 1,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 11.38463183803937,
+              "meanSpeed": 0.8349569756724434,
+              "kineticPerParticle": 0.44823240075050347,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "417d2b73"
+            },
+            {
+              "ticks": 40,
+              "timeSeconds": 2,
+              "sampledParticles": 2048,
+              "finite": true,
+              "rmsRadius": 11.913698322319583,
+              "meanSpeed": 1.057616104984074,
+              "kineticPerParticle": 0.844452479241626,
+              "ceilingFraction": 0,
+              "sampleFingerprint": "0471d1bc"
+            }
+          ],
+          "initial": {
+            "ticks": 0,
+            "timeSeconds": 0,
+            "sampledParticles": 2048,
+            "finite": true,
+            "rmsRadius": 10.882691635760942,
+            "meanSpeed": 0,
+            "kineticPerParticle": 0,
+            "ceilingFraction": 0,
+            "sampleFingerprint": "ffc6cf63"
+          },
+          "final": {
+            "ticks": 40,
+            "timeSeconds": 2,
+            "sampledParticles": 2048,
+            "finite": true,
+            "rmsRadius": 11.913698322319583,
+            "meanSpeed": 1.057616104984074,
+            "kineticPerParticle": 0.844452479241626,
+            "ceilingFraction": 0,
+            "sampleFingerprint": "0471d1bc"
+          },
+          "finishedAt": "2026-09-05T07:42:04.420Z"
+        }
+      ]
+    },
+    "passed": true
+  },
+  "preNavigationFixPreview": {
+    "url": "http://127.0.0.1:8766/HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
     "observedAt": "2026-09-05T07:22:04.968Z",
     "sourceSha256": "87bfc66c17cc359d76bd2e40a041032d175e6834b01694aa5564b19bc88c3769",
     "probeAbsent": true,
@@ -522,5 +909,63 @@
       ]
     },
     "passed": true
+  },
+  "firstHostedGate": {
+    "commit": "86c35980500d72ac360da51e7e1915d41b6778ab",
+    "url": "https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33952410864",
+    "conclusion": "failure",
+    "failedTest": "smoke.js",
+    "reason": "Bottom navigation intercepted the Lab switch at the lower edge of the desktop panel. Pages deployment also failed its gate; no new page was published.",
+    "receipt": {
+      "startedAt": "2026-09-05T07:24:05.206Z",
+      "sourceSha256": "87bfc66c17cc359d76bd2e40a041032d175e6834b01694aa5564b19bc88c3769",
+      "testPageSha256": "cdf2fd65cbe7717f07b46fb5f92da425484cd956616020907950ea6b5a81d017",
+      "node": "v22.23.2",
+      "playwright": "1.62.1",
+      "suite": "release",
+      "results": [
+        {
+          "test": "tick_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 18.651,
+          "passed": true
+        },
+        {
+          "test": "observation_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 18.87,
+          "passed": true
+        },
+        {
+          "test": "lab_test.js",
+          "exitCode": 0,
+          "signal": null,
+          "seconds": 255.499,
+          "passed": true
+        },
+        {
+          "test": "smoke.js",
+          "exitCode": 2,
+          "signal": null,
+          "seconds": 389.721,
+          "passed": false
+        }
+      ],
+      "testPageMatchesSource": true,
+      "finishedAt": "2026-09-05T07:35:27.951Z",
+      "sourceUnchanged": true,
+      "testPageUnchanged": true,
+      "passed": false
+    }
+  },
+  "navigationRepair": {
+    "sourceSha256": "e515335b1d4159b396779a9b3e3bac6132a6b24b2434eb8b20cf4710763724ea",
+    "inlineScriptsByteIdenticalToFirstCommit": true,
+    "beforeRegression": "Failed pointer-target assertion at 1280x800 on the original source.",
+    "afterRegression": "28 observation checks pass, including actual pointer targets and clicks at 1280x800, 900x600, 360x844 and 390x844.",
+    "layout": "Desktop panel ends above navigation; scroll padding reserves header and mobile navigation hit areas.",
+    "hostedGating": "Main pushes run the reusable nine-suite HALO job through Pages once; pull requests and manual checks remain available."
   }
 }

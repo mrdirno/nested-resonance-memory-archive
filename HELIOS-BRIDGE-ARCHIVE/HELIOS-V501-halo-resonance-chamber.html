@@ -375,6 +375,8 @@ body.immersive #btn-unimmerse { display: grid; }
   -webkit-backdrop-filter: blur(14px);
   overflow-y: auto;
   overscroll-behavior: contain;
+  scroll-padding-top: 72px;
+  scroll-padding-bottom: calc(64px + max(10px, env(safe-area-inset-bottom)));
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
   left: 0; right: 0;
@@ -392,7 +394,9 @@ body.immersive #btn-unimmerse { display: grid; }
 .panel.open { transform: translateY(0); visibility: visible; }
 @media (min-width: 900px) {
   .panel {
-    left: auto; right: 12px; top: 62px; bottom: 12px;
+    left: auto; right: 12px; top: 62px;
+    bottom: calc(72px + max(10px, env(safe-area-inset-bottom)));
+    scroll-padding-bottom: 16px;
     width: 360px; max-height: none;
     border-radius: 14px;
     transform: translateX(calc(100% + 24px));
@@ -734,7 +738,8 @@ kbd {
   /* eight tabs at a 44px thumb need 381px in one row. A 320 or 360px phone has not got
      it, and shrinking them back under 44px is the defect. Two rows of four instead. */
   .rail { display: grid; grid-template-columns: repeat(4, 44px); justify-content: center; }
-  .panel { padding-bottom: calc(110px + max(10px, env(safe-area-inset-bottom))); }
+  .panel { padding-bottom: calc(110px + max(10px, env(safe-area-inset-bottom)));
+    scroll-padding-bottom: calc(110px + max(10px, env(safe-area-inset-bottom))); }
 }
 @media (max-width: 620px) {
   .topbar { gap: 8px; }

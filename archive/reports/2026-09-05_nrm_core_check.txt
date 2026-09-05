@@ -1,0 +1,85 @@
+NRM core focused check — 2026-09-05
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+License: GPL-3.0-only
+
+Result: 8 existing tests passed in 0.11 seconds; no failures.
+Scope: test_fractal.py (3), test_memory.py (3), test_reality.py (2).
+No implementation or test source was edited. No mocks were introduced.
+Only the 15 unchanged files needed by these tests and package initialization
+were copied from the committed tree into an isolated development directory.
+All copied source/test hashes still match after execution.
+
+Source commit: 86c35980500d72ac360da51e7e1915d41b6778ab
+Isolated working directory: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrm-core-check-2026-09-05
+Execution: automation/run_background.py, PID 7635.
+Unrelated pytest plugins and the pytest cache were disabled.
+Command: PYTHONPATH=. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider tests/test_fractal.py tests/test_memory.py tests/test_reality.py -v --tb=short
+
+Grounding: memory tests used SQLite on the real filesystem. Their destructive
+cleanup target, tests/temp_db, was confined to the isolated directory and no
+longer existed afterward. An additional host capture verified grounded=true,
+finite CPU/memory percentages and a positive process count through real psutil.
+The imported nrm_core path was verified to be inside this isolated copy.
+
+Limits: these tests check initialization, identical-phase coherence, energy
+reduction, three SQLite CRUD/search paths, one host capture and filesystem
+validation. They do not test composition/decomposition, consolidation,
+cross-epoch retention, durability under interruption, broad input domains,
+performance, supported Python versions or the whole core API. The population
+test uses the existing unseeded initializer and checks energy reduction only.
+The existing reality test would also accept the explicitly ungrounded fallback;
+psutil was installed and grounded measurements were independently asserted here.
+No package coverage, production certification or evidence for NRM is inferred.
+
+Environment and actual host capture:
+{
+  "python": "3.13.5",
+  "numpy": "2.3.5",
+  "psutil": "7.0.0",
+  "pytest": "8.4.1",
+  "sqlite": "3.50.3",
+  "imported_core": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrm-core-check-2026-09-05/nrm_core/__init__.py",
+  "host_metrics": {
+    "timestamp": 1788593330.215047,
+    "cpu_percent": 12.6,
+    "memory_percent": 70.5,
+    "memory_used_mb": 11671.484375,
+    "process_count": 865,
+    "grounded": true
+  },
+  "isolated_temp_db_removed": true
+}
+
+SHA-256 of unchanged copied sources/tests:
+3b4dd1a506b6fede7c86496f4c36c077886b9098a9131ed703280d24302c99eb  nrm_core/__init__.py
+9b7505e1dcab086b72392770769ee44d0a9fe029bab20a6af88ec98837eaf421  nrm_core/vector.py
+c8ddc4ac1fa879e83677e3a2ceb3250daaaec2210d35a11a202164dbaf7b3c07  nrm_core/resonance.py
+2a4570ebe32b0ac2954bf6934a108586876fac0c4af6ddaf68f257c52b2f0e10  nrm_core/reality.py
+7c73e17d5daa2f72fc9dc4819a9bb98a4bddd80c70169df6f63450da994e45d7  nrm_core/fractal.py
+b3243c4ab8baa1adc90abc7f07a39e1e6322ff632afe17a6eb4cbd04e07b2bcc  nrm_core/soundhack_spectral.py
+22780948dfb303c7ce9eda67eebd20e9e860a40f23b4e290e4e8ec3004c394a5  nrm_core/soundhack_bridge.py
+1c3779ab5cccf3e3b01a0a8e6efef26d87dc080f2ca8c7847b9404208b1f70c5  nrm_core/constants.py
+32cb9fac79e40042ac266cd29b46a39c2f1b774495a8de9b3b89ba50201aa4c2  nrm_core/exceptions.py
+aa707f6478f2e8b5938f2ea9780b2f7cf77effccd497c9ad53b4ce44c72f64ae  nrm_core/memory/__init__.py
+4ed6e0758d0eb857d22fee3db4872d1d8d34b9d2fe70f28fecb7675e321a3e3a  nrm_core/memory/pattern_memory.py
+44e3c657cd3bd6757cf2d3c4cddb24f4b9bb0b4767ee8c0bc09877c60a74adeb  nrm_core/memory/consolidation_engine.py
+8792527ed92ed15240678e09baca93c90de0474f8c56b5cbf0e3c9be118a4f36  tests/test_fractal.py
+5d03bf6c2e087d5594e4547ef9d9a491f4f994a133e536c09016f176689dc14e  tests/test_memory.py
+fd5831030fb6a125828d807e1ae0d1d8a1d4bfdac4693526bc9ba3925ea25bf6  tests/test_reality.py
+
+Captured test output:
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.1, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.13/bin/python3.13
+rootdir: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrm-core-check-2026-09-05
+collecting ... collected 8 items
+
+tests/test_fractal.py::test_agent_init PASSED                            [ 12%]
+tests/test_fractal.py::test_agent_coherence PASSED                       [ 25%]
+tests/test_fractal.py::test_population_step PASSED                       [ 37%]
+tests/test_memory.py::test_store_and_retrieve_pattern PASSED             [ 50%]
+tests/test_memory.py::test_pattern_not_found PASSED                      [ 62%]
+tests/test_memory.py::test_search_patterns PASSED                        [ 75%]
+tests/test_reality.py::test_monitor_capture PASSED                       [ 87%]
+tests/test_reality.py::test_validator PASSED                             [100%]
+
+============================== 8 passed in 0.11s ===============================

@@ -1,9 +1,8 @@
 # Author: Aldrin Payopay. GPL-3.0-only.
 name: HALO instrument health
+# Main pushes enter through deploy_bridge's reusable job. Avoid running the same
+# nine suites twice on separate runners for every deployment.
 on:
-  push:
-    branches: [main]
-    paths: ['HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html', 'tests/halo/**', 'experiments/halo/*.py', '.github/workflows/halo-health.yml']
   pull_request:
     paths: ['HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html', 'tests/halo/**', 'experiments/halo/*.py', '.github/workflows/halo-health.yml']
   workflow_dispatch:
