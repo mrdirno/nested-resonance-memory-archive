@@ -193,7 +193,7 @@ window.TOOLKIT_ITEMS = (function () {
       I("Armored patch cord", [AX_LEN(LEN_FIB), ax("Fiber", FIB_TYPE, true), ax("Connectors", FIB_CONN, true)])
     ]},
 
-    { id: "power", name: "Power cords (rack)", chip: "#5D656E", items: [
+    { id: "power", name: "Power cords (rack)", chip: "#575E67", items: [
       I("IEC C13 → C14 jumper", [AX_LEN(LEN_PWR), ax("Gauge", GAUGE, true), ax("Color", COLOR)]),
       I("IEC C13 → C14, right-angle C13", [AX_LEN(LEN_PWR), ax("Gauge", GAUGE, true), ax("Color", COLOR)]),
       I("IEC C13 → C14, locking", [AX_LEN(LEN_PWR), ax("Gauge", GAUGE, true), ax("Color", COLOR)]),
@@ -203,7 +203,7 @@ window.TOOLKIT_ITEMS = (function () {
       I("5-15 extension cord (SJT)", [AX_LEN(LEN_PWR), ax("Gauge", GAUGE, true), ax("Color", COLOR)])
     ]},
 
-    { id: "writein", name: "Write-ins", chip: "#5D656E", writein: true, items: [] }
+    { id: "writein", name: "Write-ins", chip: "#575E67", writein: true, items: [] }
   ];
 
   /* ── THE T&M TAG (shape #2 — shared/note.js) ──────────────────────────────

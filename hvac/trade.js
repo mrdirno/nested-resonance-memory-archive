@@ -31,7 +31,7 @@ window.TOOLKIT_TRADE = {
   // Measured against #242A31: 8.8:1 for the accent on the bar · 9.8:1 for
   // accentInk sitting on the accent.
   // Gauge mint — the cold side of the trade, and far enough around the wheel from
-  // AV yellow (#F0BE1E), plumbing copper (#C87137) and electrical blue (#3FB6F5)
+  // AV yellow (#F0BE1E), plumbing copper (#CE7F4B) and electrical blue (#3FB6F5)
   // to name the trade at a glance in a tab strip.
   accent: "#4FE0C0",
   accentInk: "#052622", // readable text ON the accent
@@ -42,7 +42,7 @@ window.TOOLKIT_TRADE = {
   // that job (white text on it clears 5:1) and `accentTint` fills the impact
   // block. Hand-picked, not computed — color-mix() is not safe on the old
   // Android browsers these pages land on.
-  accentDeep: "#0C7A66",
+  accentDeep: "#0A6857",
   accentTint: "#E4FBF5",
 
   chain: "techs / service managers / dispatch",

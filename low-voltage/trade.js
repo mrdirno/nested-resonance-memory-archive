@@ -33,7 +33,7 @@ window.TOOLKIT_TRADE = {
   // Signal coral — the alarm/strobe end of the spectrum, which is this trade's
   // own colour, but LIGHT enough to read on dark steel where a fire-alarm red
   // would go muddy. Far enough around the wheel from AV yellow (#F0BE1E),
-  // plumbing copper (#C87137), electrical blue (#3FB6F5) and HVAC mint (#4FE0C0)
+  // plumbing copper (#CE7F4B), electrical blue (#3FB6F5) and HVAC mint (#4FE0C0)
   // to name the trade at a glance in a tab strip.
   accent: "#FF9E80",
   accentInk: "#2B0A02", // readable text ON the accent

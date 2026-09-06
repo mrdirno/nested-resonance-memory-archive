@@ -34,7 +34,7 @@
  */
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--ok:#0C6B4F;
+  --muted:#575E67;--ok:#0C6B4F;
   /* STATE, not trade — fixed in all six toolkits on purpose. */
   --warn:#E08A3C;--warn-ink:#8A3A00;--warn-bg:#FFF4E8;--bad:#C0392B;--bad-ink:#8E2B20;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;

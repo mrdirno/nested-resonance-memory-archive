@@ -69,7 +69,7 @@ window.TOOLKIT_TOOLS = [
     href: "what-goes-in.html",
     desc: "Tomorrow's pipe, fittings, structures, stone, tape and tracer — off a list instead of off your memory. Count it the way you say it: 20 joint, 4 ton, 2 roll. Everything that gets buried comes out at the bottom of the message on its own, because a short count anywhere else is a trip to the counter and a short count here is a re-dig.",
     // Its own step on this kit's ladder — the other six are #FFDDA3 / #F2C97F /
-    // #E0B368 / #CFA96B / #8A6718 / #7A5A16 and this sits in the one gap left.
+    // #E0B368 / #CFA96B / #755714 / #7A5A16 and this sits in the one gap left.
     chip: "#B98F42",
     audience: "Foreman → the yard / the pipe supplier"
   },
@@ -91,7 +91,7 @@ window.TOOLKIT_TOOLS = [
     name: "Extra Work Tag",
     href: "tm-tag.html",
     desc: "Hit rock, found a line nobody marked, hauled off material nobody said was bad, or stood by while another outfit got out of your ditch? Write the tag before the dirt goes back — who told you, what came up, why it's outside your contract, crew, iron and material as counts, and what is NOT in this tag. En español también.",
-    chip: "#8A6718",
+    chip: "#755714",
     audience: "Foreman → super / PM"
   },
   {
@@ -118,7 +118,7 @@ window.TOOLKIT_TOOLS = [
     name: "Write-Up Setup",
     href: "write-up.html",
     desc: "The write-ups you put off — what was in the ditch before you put it back, the rock nobody drew, the morning a line got hit, what you hauled and how you counted it, the grade you left. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dump the mess in the truck and get back something you can send. Never sets a compaction number, never says a locate was good, never says why it settled — it writes down what you measured and what you did.",
-    /* The rack's tightest pair already shipping here is #8A6718/#7A5A16 at
+    /* The rack's tightest pair already shipping here is #755714/#7A5A16 at
        CIELAB dE 7.3. This chip measures 12.0 from its nearest neighbour
        (#CFA96B) — 1.6x more separated than the closest pair the ladder already
        tolerates — and it fills the one real gap left between #CFA96B and

@@ -42,7 +42,7 @@ window.TOOLKIT_TRADE = {
      that exists on a bare floor and the chalk box is the one tool both halves of
      this family carry. Straight cyan-blue is electrical (#3FB6F5), so this sits
      in the violet-blue band, the only hue family the program had left: AV gold
-     #F0BE1E · plumbing copper #C87137 · electrical #3FB6F5 · HVAC/R mint #4FE0C0
+     #F0BE1E · plumbing copper #CE7F4B · electrical #3FB6F5 · HVAC/R mint #4FE0C0
      · low-voltage coral #FF9E80 · GC safety green #8CE86B · commons grey #BABEB6.
      MEASURED, not eyeballed: accent 7.1:1 on the #242A31 nav · accentInk 9.0:1
      sitting on the accent · white on accentDeep 8.5:1, well clear of the 5:1 the

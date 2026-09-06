@@ -111,7 +111,7 @@
     '.jc{margin:0 0 12px}',
     '.jc-row{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}',
     '.jc-chip{font:inherit;font-size:13px;line-height:1.25;min-height:44px;padding:8px 12px;cursor:pointer;',
-    '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#5D656E);',
+    '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#575E67);',
     '  display:inline-flex;align-items:center;text-align:left;max-width:100%;white-space:normal;',
     '  overflow-wrap:anywhere}',
     /* THE LIT CHIP IS DRAWN IN `--deep`, NOT `--flag`, AND THE NUMBERS ARE WHY.
@@ -136,15 +136,15 @@
      * trade's own colour, with no new token and no per-trade fork. The fallback
      * chain keeps a page that somehow ships without `--deep` exactly where it
      * was. */
-    '.jc-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#5D656E));color:var(--ink,#12161A);',
-    '  font-weight:600;box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#5D656E))}',
-    '.jc-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#5D656E));outline-offset:2px}',
+    '.jc-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#575E67));color:var(--ink,#12161A);',
+    '  font-weight:600;box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#575E67))}',
+    '.jc-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#575E67));outline-offset:2px}',
     '.jc-new{border-style:dashed}',
     '.jc-lab{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;',
-    '  color:var(--muted,#5D656E);margin:0 0 6px;display:block}',
-    '.jc-note{font-size:12px;color:var(--muted,#5D656E);margin:7px 0 0}',
+    '  color:var(--muted,#575E67);margin:0 0 6px;display:block}',
+    '.jc-note{font-size:12px;color:var(--muted,#575E67);margin:7px 0 0}',
     '.jc-drop{background:none;border:0;padding:0 4px;min-height:44px;font:inherit;font-size:12px;',
-    '  color:var(--muted,#5D656E);text-decoration:underline;cursor:pointer}'
+    '  color:var(--muted,#575E67);text-decoration:underline;cursor:pointer}'
   ].join('');
 
   function esc(s) {

@@ -57,7 +57,7 @@ window.TOOLKIT_TRADE = {
   // that job (white text on it clears 5:1) and `accentTint` fills the impact
   // block. Hand-picked, not computed — color-mix() is not safe on the old
   // Android browsers these pages land on.
-  accentDeep: "#2C6E1B",
+  accentDeep: "#2A691A",
   accentTint: "#EBFBE4",
 
   // Who the super is standing between. Every other trade in this toolkit sends

@@ -17,7 +17,7 @@
 <style>
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--flag:#2E7D4F;--tint:#EAF3EC;--flag-ink:#FFFFFF;
+  --muted:#575E67;--flag:#2E7D4F;--tint:#EAF3EC;--flag-ink:#FFFFFF;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -56,7 +56,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .seg button:first-child{border-radius:2px 0 0 2px}
 .seg button:last-child{border-radius:0 2px 2px 0}
 .seg button + button{border-left:0}
-.seg button.on{background:var(--flag);border-color:var(--flag);color:#fff}
+.seg button.on{background:var(--flag);border-color:var(--flag);color:var(--flag-ink,#12161A)}
 
 .cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
 .cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
@@ -118,7 +118,7 @@ ul.items{list-style:none;margin:0;padding:0}
   flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
   border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
-#copy{background:var(--flag);border:1px solid var(--flag);color:#fff}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink,#12161A)}
 #copy:hover{background:#379460}
 #clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
 #clear:hover{border-color:#8A929B;color:#EEF0EA}

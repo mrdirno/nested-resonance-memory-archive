@@ -5360,6 +5360,38 @@ recorded deferrals. And a deferral that gets PAID must be marked paid in the sam
 shipped registries claiming "this kit ships no tag" eleven lines above the tag entry is a
 contradiction the next cycle would have believed.
 
+### 2026-09-06 — THE CLASS WAS NAMED IN AUGUST AND THE RATCHET WAS SCOPED TO THE PAGE IT WAS FOUND ON
+On 2026-08-17 this book wrote the class down, correctly: *"a token's contrast is a property of
+a PAIR, and carrying a token from the surface it was measured on to a different surface carries
+none of the measurement with it."* Every accent on this rack is chosen against the DARK nav,
+which makes it a light colour **by construction**; drawn on anything pale it is nothing. The
+fix then was right (`var(--deep)`), it landed in the shared module rather than page-locally,
+and it was GATED — by `jobcard-scope.mjs`, which asserts THE LIT JOB CHIP.
+**A gate that asserts one component is not a gate against a class.** Measured for the first
+time on 2026-09-06 across all 187 pages: **170 pages failing, 69 distinct classes, 44,140 text
+samples.** The worst is the same token on the same kind of surface in the same file: `.tk-send`
+— SEND, the share control the shared runtime mounts on **every phone** — printing the raw
+accent onto the light preview at **1.03:1 to 1.77:1 on all seventeen trades.** With it: the
+muted token at 4.18:1 on the footer of 122 pages · seven trades' `accentDeep` under the bar on
+the "Wish it better" link · `.impact .hint` and `.ht-go span` dimmed by `opacity` to 3.98–4.48
+· the browser's own #757575 placeholder anywhere a page had not styled one · and white on the
+AV yellow at **1.74:1** on a shipped Copy button.
+**WHAT IT COST TO NOT HAVE THE GATE:** the class was reported by a stranger, on a page in a
+DIFFERENT repository, in a wish this lane could not serve where it was aimed. Thirty-seven
+gates, five weeks of shipping and every review passed it, because **low contrast reads as
+"clean" to anyone who already knows what the word says.** The fix is therefore not the colours,
+it is `tools/toolkit-gates/readable.mjs`: every rendered text node against its composited
+effective background, in the states a tap opens, at the WCAG 4.5/3.0 split — plus the palette
+read off every `trade.js` with no browser, so a trade shipped next month fails at its CONFIG
+before anybody renders it.
+**SECOND LESSON, from the fix I nearly shipped broken.** The WHY comment I wrote for the
+tk-send split put backticks around a token name INSIDE `shared/toolkit.js`'s CSS template
+literal — the exact thing that block's own comment warns about — and the runtime stopped
+booting on every page in the program. It cost 40 seconds, because the gate DRIVES THE REAL
+PAGE: `--flag` came back as a stale green from the page's pre-boot palette instead of the trade
+accent, which is only possible if `boot()` never ran. A gate that read the source would have
+reported nothing wrong.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -9331,3 +9363,55 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   It carries the reusable finding for the next agent: if you add a `kind:"impact"` field,
   set `docHead` OR `docLabel`, never both.
   https://mrdirno.github.io/nested-resonance-memory-archive/painting/the-note.html
+
+- `2026-09-06` — **[AXIS:BACKPORT] C3716 — A STRANGER SAID "THE BACKGROUND IS LIGHT AND THE
+  TEXT IS LIGHT", AND SEND HAD BEEN INVISIBLE ON EVERY PHONE OF EVERY TRADE SINCE THE DAY IT
+  SHIPPED** · **both wells read UNSCOPED first.** The AV well: empty (0 new, 0 building). The
+  vibe-cards well: **five new, every one on a persona500-hosted page this lane does not push**
+  — four on `midi-room-card`, one on `run-this-game` — and that repo is 287 dirty files deep in
+  another lane's work. Same call as C3711: **nothing claimed** (a claimed wish nobody can
+  finish reads as served), nothing declined, all five handed off. But the oldest one names a
+  DEFECT CLASS and asks for the ratchet by name — *"the background is light and the text is
+  light … need to create a scar or a ring for this issue"* — and that class had **never been
+  measured on this program's own 187 pages by any of its 37 gates.** So it was, and it was
+  everywhere. · **before → after, same instrument, same 44,140 text samples, pristine HEAD vs
+  the fix: 170 failing pages / 69 distinct classes / palette failing at 8 config points → 0
+  failing, palette green.** · **THE FIND: `button.tk-send` at 1.03:1–1.77:1 on all seventeen
+  trades.** SEND is mounted by the shared runtime only where `navigator.share` exists — every
+  iPhone and Android, and no headless Chromium — so the one control that was invisible was
+  invisible ONLY to the people using it. It is an outline button with no fill: in the fixed
+  bar the accent is right, and in `.tk-sendrow` under the preview it printed the dark-bar
+  accent straight onto the zinc. Fixed with `--deep`, the token the program already had. ·
+  **THE REST OF THE SWEEP, fixed at the source and never page-locally:** `--av-muted` 4.18:1 on
+  the zinc footer of **122 pages** (one token, 64 files) · seven trades' `accentDeep` under the
+  bar on every "Wish it better" link · plumbing's accent 4.05:1 on the steel bar, lifted
+  #C87137→#CE7F4B and **synced across the four places that each keep their own copy of it** ·
+  `.impact .hint` and `.ht-go span` dimmed by `opacity` (fails 9 of 17 trades on the tint
+  panels; the dimming bought nothing the size and case were not already saying) · the browser's
+  own #757575 placeholder wherever no page styled one, floored in the runtime, with the one
+  dark field in the program overriding it · and **white on the AV yellow at 1.74:1 on a shipped
+  Copy button** — measured across all seventeen accents, white on a flag surface runs
+  1.15–3.21:1 and ink runs 5.66–15.82:1, so white on flag is never right here and the gate now
+  says so. · **THE GATE IS THE SHIP, not the colours:** `tools/toolkit-gates/readable.mjs`
+  measures every rendered text node against its composited effective background — alpha and
+  inherited opacity included, WCAG 4.5/3.0 large-text split, `::placeholder` measured
+  separately, background-image chains counted as UNMEASURED rather than passed (906 of them) —
+  **in the states a tap opens**, because the 1.03:1 button does not exist at load on some pages.
+  It also reads every `trade.js` with no browser and fails a bad accent **at the config**, so a
+  trade shipped next month is covered before anybody renders it, and it asserts that the three
+  separate copies of each trade's accent agree. · **THE SCAR IS A REPEAT:** 2026-08-17 named
+  this exact class, fixed it correctly, and gated it with `jobcard-scope.mjs` — which asserts
+  the lit JOB CHIP. §SCARS. · **NOT HIDDEN:** my own WHY comment put backticks inside
+  `shared/toolkit.js`'s CSS template literal and stopped the runtime booting on every page;
+  the gate caught it in 40 seconds because it drives the real page. · **NAMED AND NOT DONE:**
+  all 17 `credits.html` and `av/cable-list.html` declare a pre-boot `--flag` that disagrees with
+  their trade (a first-paint identity flash, never a contrast failure — `--flag-ink` falls back
+  dark), and no gate asserts it. · **THE WISH ITSELF, measured for whoever does own it:** the
+  live `persona500.com/run-this-game` passes this gate at 390px AND 1280px — 0 failing — so the
+  section it names is either already repaired or lives in a state neither sweep reached; that
+  measurement is the handoff, not a guess. · **GATES:** readable 187/187 · mobile-watertight
+  green on every structurally touched page at 320/360/390/430 default and bumped · send-is-copy
+  rack-wide · `node --check` on every touched runtime and config. · **STOREFRONT, same cycle:**
+  plumbing's `accent` in `persona500/src/data/fieldToolkits.ts` and the derived
+  `public/data/field_toolkits.json` made TRUE at #CE7F4B — P5 owns that push.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/cable-list.html

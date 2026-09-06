@@ -21,7 +21,7 @@
   --zinc:#D7DAD3;
   --paper:#FBFBF8;
   --line:#BABEB6;
-  --muted:#5D656E;
+  --muted:#575E67;
   --flag:#FF6B1A;
   --flagink:#241000;
   --deep:#8C3400;
@@ -82,7 +82,7 @@ body{
   -webkit-appearance:none;appearance:none;
 }
 .find::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
-.find::placeholder{color:#8A9199}
+.find::placeholder{color:var(--muted,#575E67);opacity:1}
 .find:focus{outline:2px solid var(--flag);outline-offset:1px}
 .findx{
   position:absolute;right:0;top:0;width:44px;height:48px;
@@ -189,7 +189,7 @@ body{
 .aka .by{font-size:11.5px;color:#6C757E;line-height:1.35}
 .aka .by i{
   font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  font-style:normal;color:#828A93;margin-right:6px;white-space:nowrap;
+  font-style:normal;color:#6B737C;margin-right:6px;white-space:nowrap;
 }
 /* A trademark is the one alias that can hurt somebody on paper, so it does not
    look like the others. */

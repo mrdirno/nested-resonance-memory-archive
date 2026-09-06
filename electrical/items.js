@@ -209,7 +209,7 @@ window.TOOLKIT_ITEMS = (function () {
     {
       id: "else",
       name: "Everything else",
-      chip: "#5D656E",
+      chip: "#575E67",
       items: [
         { n: "Whips & flex", sub: "FIXTURE WHIPS, 3/8 + 1/2 FLEX, STRAIGHT AND 90", ax: [size(FLEX_SIZE)] },
         { n: "In-use covers & gaskets", sub: "BUBBLE COVERS — SAY THE GANG",

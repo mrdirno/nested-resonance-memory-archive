@@ -16,7 +16,7 @@
  */
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;
+  --muted:#575E67;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -88,7 +88,12 @@ h2.blk .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-si
    on the page louder than everything around it. */
 .impact{border:2px solid var(--deep);border-radius:2px;background:var(--tint);padding:10px 11px;margin-top:2px}
 .impact > label{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:var(--deep);margin-bottom:2px}
-.impact .hint{font-size:11.5px;color:var(--deep);opacity:.85;margin:0 0 8px}
+/* NO OPACITY ON THE HINT. accentDeep is already the light-background cut of the
+   trade colour and clears 5.57:1 to 9.48:1 on every trade's tint panel; dimmed to
+   .85 it drops to 4.22-5.37 and FAILS on nine of the seventeen. The dimming bought
+   nothing the size, the case and the mono face were not already saying, and it cost
+   the one thing this hint is for (C3716, tools/toolkit-gates/readable.mjs). */
+.impact .hint{font-size:11.5px;color:var(--deep);margin:0 0 8px}
 .impact textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:52px;resize:vertical;line-height:1.35}
 .impact textarea:focus{outline:2px solid var(--deep);outline-offset:-1px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}

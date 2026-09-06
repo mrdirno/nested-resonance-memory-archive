@@ -245,7 +245,7 @@
     st.setAttribute("data-fb", "1");
     st.textContent =
       ':root{--fb-accent:' + S.accent + ';--fb-ink:' + S.accentInk + ';'
-      + '--fb-steel:#242A31;--fb-paper:#F6F6F3;--fb-text:#12161A;--fb-line:#C3C7C0;--fb-muted:#5D656E;'
+      + '--fb-steel:#242A31;--fb-paper:#F6F6F3;--fb-text:#12161A;--fb-line:#C3C7C0;--fb-muted:#575E67;'
       + '--fb-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;'
       + '--fb-cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--fb-sans);'
       + '--fb-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;}'

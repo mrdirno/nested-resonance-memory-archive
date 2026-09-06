@@ -27,7 +27,7 @@
 window.COMMONS_TRADES = [
   { slug: "universal",   short: "Every trade",  name: "Every Trade",          color: "#FF6B1A" },
   { slug: "av",          short: "AV",           name: "AV",                   color: "#F0BE1E" },
-  { slug: "plumbing",    short: "Plumbing",     name: "Plumbing",             color: "#C87137" },
+  { slug: "plumbing",    short: "Plumbing",     name: "Plumbing",             color: "#CE7F4B" },
   { slug: "electrical",  short: "Electrical",   name: "Electrical",           color: "#3FB6F5" },
   { slug: "hvac",        short: "HVAC/R",       name: "HVAC/R",               color: "#4FE0C0" },
   { slug: "low-voltage", short: "Low-voltage",  name: "Low-Voltage & Fire",   color: "#FF9E80" },

@@ -209,7 +209,7 @@
     var defOf = new WeakMap();
 
     list.innerHTML = data.map(function (cat) {
-      return '<section class="cat" data-id="' + esc(cat.id) + '" style="--chip:' + esc(cat.chip || "#5D656E") + '">'
+      return '<section class="cat" data-id="' + esc(cat.id) + '" style="--chip:' + esc(cat.chip || "#575E67") + '">'
         + "<h2>" + esc(cat.name) + '<span class="n" data-n></span></h2>'
         + (cat.hint ? '<p class="cathint">' + esc(cat.hint) + "</p>" : "")
         + '<ul class="items">' + (cat.items || []).map(function (i) { return itemHTML(i, cfg, false); }).join("") + "</ul>"

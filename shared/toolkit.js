@@ -57,7 +57,7 @@
    * screen reader. */
   var TRADES = [
     { slug: "av",          name: "AV Field Toolkit",             short: "AV",         icon: "🧰", accent: "#F0BE1E" },
-    { slug: "plumbing",    name: "Plumbing Field Toolkit",       short: "Plumbing",   icon: "🔧", accent: "#C87137" },
+    { slug: "plumbing",    name: "Plumbing Field Toolkit",       short: "Plumbing",   icon: "🔧", accent: "#CE7F4B" },
     { slug: "electrical",  name: "Electrical Field Toolkit",     short: "Electrical", icon: "⚡", accent: "#3FB6F5" },
     { slug: "hvac",        name: "HVAC/R Field Toolkit",         short: "HVAC/R",     icon: "❄️", accent: "#4FE0C0" },
     { slug: "low-voltage", name: "Low-Voltage Field Toolkit",    short: "Low-Volt",   icon: "📹", accent: "#FF9E80" },
@@ -146,7 +146,7 @@
 
   /* ---- scoped styles (av- prefix so they never collide with a tool page) ---- */
   var CSS = `
-  :root{--av-steel:#242A31;--av-ink:#12161A;--av-paper:#FBFBF8;--av-line:#BABEB6;--av-muted:#5D656E;--av-flag:#F0BE1E;
+  :root{--av-steel:#242A31;--av-ink:#12161A;--av-paper:#FBFBF8;--av-line:#BABEB6;--av-muted:#575E67;--av-flag:#F0BE1E;
     --av-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --av-cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--av-sans);
     --av-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;}
@@ -160,6 +160,15 @@
      THIS file and so is the offset it costs. 70 = 62 + a line of air.
      NOTE: this block lives inside a template literal — no backticks in here. */
   html{scroll-padding-top:70px}
+  /* THE PLACEHOLDER IS THE INSTRUCTION, and left unstyled it is the browser's,
+     not ours. Chromium paints #757575, which is 4.44:1 on this paper — under the
+     bar, on the one line that tells a man what to type. Every page that styled
+     its own placeholder was fine and every page that did not was not, which is a
+     floor missing rather than a page at fault, so the floor is set here for all
+     of them. opacity:1 because Firefox dims placeholders on top of the colour.
+     A page on a DARK field must still override this (av/consumables.html does);
+     tools/toolkit-gates/readable.mjs is what says so if it forgets. */
+  input::placeholder,textarea::placeholder{color:var(--muted,#575E67);opacity:1}
   .av-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
     background:var(--av-steel);color:#EEF0EA;padding:8px 14px;border-bottom:2px solid var(--av-flag);
     font-family:var(--av-sans);}
@@ -425,10 +434,24 @@
      The doubled selector outranks the pages' own ".bar button{padding}" rule. */
   button.tk-send,.bar button.tk-send{font-family:var(--cond,inherit);text-transform:uppercase;letter-spacing:.06em;
     font-size:15px;font-weight:700;border-radius:2px;padding:11px 12px;min-height:44px;cursor:pointer;
-    white-space:nowrap;background:transparent;border:1px solid var(--flag);color:var(--flag)}
+    white-space:nowrap;background:transparent;border:1px solid var(--deep,#12161A);color:var(--deep,#12161A)}
+  /* THE ACCENT IS A DARK-BAR COLOUR AND SEND IS USUALLY NOT ON THE DARK BAR.
+     Every trade's accent is picked to carry on the steel bar, which is why all
+     seventeen clear 4.5:1 there — and why they are all far too light to be TEXT
+     on the light preview. Send is an outline button with no fill of its own, so
+     wherever Copy lives in the fixed bar, Send mounts in .tk-sendrow on the page
+     and printed the accent straight onto the zinc: measured 1.23:1 on
+     av/cable-list.html, on 33+ pages, on every phone (the row only exists where
+     navigator.share does). It was invisible to all 37 gates before this one and
+     to every screenshot, because the button is exactly where you expect it and
+     you already know what it says. accentDeep is the same hue re-cut for light
+     backgrounds and is already injected on every page — the fix is to use the
+     token the program already had. In the bar, the accent is still right. */
+  .bar button.tk-send{border-color:var(--flag);color:var(--flag)}
   button.tk-send:hover{filter:brightness(1.15)}
   button.tk-send[disabled]{opacity:.45;cursor:default;filter:none}
-  button.tk-send:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+  button.tk-send:focus-visible{outline:2px solid var(--deep,#12161A);outline-offset:2px}
+  .bar button.tk-send:focus-visible{outline-color:var(--flag)}
   /* Under the preview, on the pages whose Copy lives in a fixed bar: full width,
      one tap, the document he just read directly above it. */
   .tk-sendrow{margin:10px 0 0}

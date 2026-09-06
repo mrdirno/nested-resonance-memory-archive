@@ -41,7 +41,7 @@
   width: 11px;
   height: 11px;
   margin-top: -7px;
-  border: 2px solid var(--muted, #5D656E);
+  border: 2px solid var(--muted, #575E67);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -53,7 +53,7 @@
   width: 6px;
   height: 2px;
   margin-top: 3px;
-  background: var(--muted, #5D656E);
+  background: var(--muted, #575E67);
   transform: rotate(45deg);
   pointer-events: none;
 }
@@ -72,7 +72,7 @@
   -webkit-appearance: none;
   appearance: none;
 }
-.pf-q::placeholder { color: var(--muted, #5D656E); }
+.pf-q::placeholder { color: var(--muted, #575E67); }
 .pf-q:focus-visible,
 .pf-cat:focus-visible,
 .pf-check:focus-visible { outline: 2px solid var(--flag, #2DD758); outline-offset: 1px; }
@@ -86,8 +86,8 @@
   border: 1px solid var(--steel, #242A31);
   border-radius: 2px;
   background: var(--paper, #FBFBF8) no-repeat right 10px center;
-  background-image: linear-gradient(45deg, transparent 50%, var(--muted, #5D656E) 50%),
-                    linear-gradient(135deg, var(--muted, #5D656E) 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted, #575E67) 50%),
+                    linear-gradient(135deg, var(--muted, #575E67) 50%, transparent 50%);
   background-size: 6px 6px, 6px 6px;
   background-position: right 15px center, right 9px center;
   font-family: var(--cond, var(--sans, system-ui));
@@ -121,7 +121,7 @@
   display: none;
   margin: 0;
   padding: 18px 4px 4px;
-  color: var(--muted, #5D656E);
+  color: var(--muted, #575E67);
   font-family: var(--cond, var(--sans, system-ui));
   font-size: 17px;
   text-transform: uppercase;

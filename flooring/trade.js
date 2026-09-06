@@ -155,7 +155,7 @@ window.TOOLKIT_TRADE = {
      the tightest pair the rack already tolerates. */
   accent: "#8FECFF",
   accentInk: "#04222B",
-  accentDeep: "#0E6E86",
+  accentDeep: "#0D667C",
   accentTint: "#E6FAFF",
 
   // INSTALLERS AND MECHANICS, and the second word is load-bearing. A floor

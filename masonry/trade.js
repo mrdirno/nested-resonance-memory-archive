@@ -126,7 +126,7 @@ window.TOOLKIT_TRADE = {
      browsers these pages land on. */
   accent: "#B9EE1B",
   accentInk: "#1C2405",
-  accentDeep: "#566C13",
+  accentDeep: "#506512",
   accentTint: "#F3FAE1",
 
   // LAYERS AND TENDERS, and the second word is not decoration. The tender mixes

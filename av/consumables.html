@@ -19,7 +19,7 @@
   --zinc:#D7DAD3;
   --paper:#FBFBF8;
   --line:#BABEB6;
-  --muted:#5D656E;
+  --muted:#575E67;
   --flag:#F0BE1E;
   --tint:#FDF7E1;
   --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -79,6 +79,10 @@ body{
   width:100%;background:#171C22;border:1px solid #3A424B;color:#EEF0EA;
   font-family:var(--cond);font-size:14px;letter-spacing:.02em;padding:6px 9px;border-radius:2px;
 }
+/* THE ONE DARK FIELD IN THE PROGRAM, so it is the one that cannot take the shared
+   placeholder colour. Left alone it inherited the browser's own #757575, which is
+   3.72:1 on this #171C22 — the instruction inside the box, unreadable (C3716). */
+.field input::placeholder{color:#9AA3AC;opacity:1}
 .field input:focus-visible,.field select:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
 .needby{display:flex;gap:6px}
 .needby select{flex:1}
@@ -368,7 +372,7 @@ const DATA = [
     ["Blue Butt Splices","16-14 AWG crimp connectors"],
     ["Twist-On Wire Connectors","The twist-ons — standard assorted sizes"]
   ]},
-  { id:"writein", name:"Write-Ins", chip:"#5D656E", items:[], writein:true }
+  { id:"writein", name:"Write-Ins", chip:"#575E67", items:[], writein:true }
 ];
 
 const list = document.getElementById("list");

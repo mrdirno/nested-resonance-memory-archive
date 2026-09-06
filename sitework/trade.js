@@ -129,7 +129,7 @@ window.TOOLKIT_TRADE = {
      accentInk on accent 12.42:1 (bar 9) · white on accentDeep 5.21:1 (bar 5). */
   accent: "#FFDDA3",
   accentInk: "#2A1F08",
-  accentDeep: "#8A6718",
+  accentDeep: "#755714",
   accentTint: "#FFF6E4",
 
   // OPERATORS AND PIPELAYERS, and both words are load-bearing. The man in the

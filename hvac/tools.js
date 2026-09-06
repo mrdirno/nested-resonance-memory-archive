@@ -29,7 +29,7 @@ window.TOOLKIT_TOOLS = [
     name: "T&M Tag",
     href: "tm-tag.html",
     desc: "Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number. En español también.",
-    chip: "#0C7A66",
+    chip: "#0A6857",
     audience: "Tech → Site contact / Service manager"
   },
   {
@@ -57,7 +57,7 @@ window.TOOLKIT_TOOLS = [
     name: "Truck Stock",
     href: "truck-stock.html",
     desc: "What came off the van today. Type what you know, tick the restock list \u2014 counts already set the way a truck really fills \u2014 and send the shop one list instead of four texts from a roof.",
-    chip: "#0C7A66",
+    chip: "#0A6857",
     audience: "Tech \u2192 Shop / parts runner"
   },
   {

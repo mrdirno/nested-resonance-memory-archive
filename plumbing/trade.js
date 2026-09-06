@@ -19,7 +19,7 @@ window.TOOLKIT_TRADE = {
   icon: "🔧",
   brandLead: "Plumbing",
   brandTail: "Field Toolkit",
-  accent: "#C87137",    // copper
+  accent: "#CE7F4B",    // copper
   accentInk: "#1A0E05", // readable text ON the copper
   // THE DEEP PAIR — the DARK and PALEST ends of this trade's own hue, added when
   // shape #2's engine (shared/note.js + shared/note.css) went to one stylesheet

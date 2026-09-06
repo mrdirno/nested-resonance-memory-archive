@@ -57,7 +57,7 @@ window.TOOLKIT_TRADE = {
   /* MARKING-PAINT ROSE. Layout on a white membrane is snapped and sprayed in
      fluorescent pink or orange because nothing else shows on white TPO in full
      sun — it is the one colour this trade puts on a roof on purpose. Orange was
-     gone (low-voltage coral #FF9E80, plumbing copper #C87137), so this takes the
+     gone (low-voltage coral #FF9E80, plumbing copper #CE7F4B), so this takes the
      pink.
      IT IS ALSO THE ONLY BAND LEFT, and that was measured, not eyeballed. Hues in
      the program: low-voltage 14.2° · plumbing 24.0° · AV 45.7° · commons 90.0° ·
@@ -72,7 +72,7 @@ window.TOOLKIT_TRADE = {
      these pages land on. */
   accent: "#FF93C9",
   accentInk: "#260817",
-  accentDeep: "#B03171",
+  accentDeep: "#A42E69",
   accentTint: "#FBE6F1",
 
   chain: "roofers and service techs / foremen and leads / the office",

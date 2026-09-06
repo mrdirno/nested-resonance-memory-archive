@@ -40,7 +40,7 @@ window.TOOLKIT_TOOLS = [
     name: "Before I Open It",
     href: "rough-in-request.html",
     desc: "Everything that has to be off, set, moved or owned before you open a section — and before you cover one. Every curb, sleeve, post and drain another outfit owes you, with the gate it has to beat. One walk, one message each.",
-    chip: "#B03171",
+    chip: "#A42E69",
     audience: "Foreman → GC / mech / EC / owner"
   },
   {

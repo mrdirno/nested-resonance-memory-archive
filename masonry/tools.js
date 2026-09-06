@@ -86,7 +86,7 @@ window.TOOLKIT_TOOLS = [
     name: "Total Package",
     href: "total-package.html",
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, per diem — and put your real hours in, because a dollar an hour on a winter you couldn't lay is a different dollar.",
-    chip: "#566C13",
+    chip: "#506512",
     audience: "Layers · foremen · anybody weighing a move"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.

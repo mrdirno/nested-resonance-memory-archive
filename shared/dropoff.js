@@ -110,31 +110,31 @@
        block's own inputs is the kind of seam a man reads as "broken". */
     '.do-wrap .f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line,#BABEB6);',
     '  border-radius:2px;background:#fff;color:var(--ink,#12161A);min-height:44px;resize:vertical}',
-    '.do-wrap .f textarea:focus{outline:2px solid var(--flag,#5D656E);outline-offset:-1px}',
+    '.do-wrap .f textarea:focus{outline:2px solid var(--flag,#575E67);outline-offset:-1px}',
     '.do-chips{display:flex;flex-wrap:wrap;gap:6px}',
     '.do-chip{font:inherit;font-size:13px;line-height:1.2;min-height:44px;padding:8px 11px;cursor:pointer;',
-    '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#5D656E);',
+    '  background:#fff;border:1px solid var(--line,#BABEB6);border-radius:2px;color:var(--muted,#575E67);',
     '  display:inline-flex;align-items:center;text-align:left}',
     /* DRAWN IN `--deep`, for the reason measured and written out in full at the
      * same rule in shared/jobcard.js: the accent is picked against the DARK nav,
      * so it is a light colour, and this chip is on WHITE — 1.30–2.28:1 on eleven
      * of the twelve trades, and the twelfth (plumbing, 3.58) is the only trade
      * this block had ever shipped on, which is why the defect survived. */
-    '.do-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#5D656E));color:var(--ink,#12161A);font-weight:600;',
-    '  box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#5D656E))}',
-    '.do-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#5D656E));outline-offset:2px}',
+    '.do-chip.on{background:var(--tint,#F1F1EC);border-color:var(--deep,var(--flag,#575E67));color:var(--ink,#12161A);font-weight:600;',
+    '  box-shadow:inset 0 0 0 1px var(--deep,var(--flag,#575E67))}',
+    '.do-chip:focus-visible{outline:2px solid var(--deep,var(--flag,#575E67));outline-offset:2px}',
     '.do-when{display:flex;gap:6px;align-items:center;flex-wrap:wrap}',
     /* 44px on the clock, not the 38px the text fields inherit: this one is a
        discrete tap target with a stepper inside it, and it is the control a man
        reaches for with a glove on at 6am. */
     '.do-when input[type=time]{flex:0 1 140px;min-width:118px;min-height:44px}',
-    '.do-note{font-size:12px;color:var(--muted,#5D656E);margin:9px 0 0}',
+    '.do-note{font-size:12px;color:var(--muted,#575E67);margin:9px 0 0}',
     '.do-clear{background:none;border:0;padding:0 4px;min-height:44px;font:inherit;font-size:12px;',
-    '  color:var(--muted,#5D656E);text-decoration:underline;cursor:pointer}',
+    '  color:var(--muted,#575E67);text-decoration:underline;cursor:pointer}',
     '.do-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 9px}',
     '.do-head b{font-family:var(--cond,inherit);text-transform:uppercase;letter-spacing:.05em;font-size:15px}',
     '.do-head span{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;',
-    '  color:var(--muted,#5D656E)}'
+    '  color:var(--muted,#575E67)}'
   ].join('');
 
   /* THE CHIP AXES. Every option is a PLACE, a CLOCK, a pair of HANDS or a

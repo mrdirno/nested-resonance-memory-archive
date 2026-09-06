@@ -31,7 +31,7 @@ window.TOOLKIT_TOOLS = [
     name: "The Mix Order",
     href: "mix-order.html",
     desc: "The call you make at four o'clock and always half-forget a line of. Tick the placement, the delivery, the pump, the gear and the forget-list, put YOUR figures off YOUR approved mix design on it, and read the plant one order that doesn't come back as a question.",
-    chip: "#12742B",
+    chip: "#116C28",
     audience: "Foreman → batch plant / dispatch / the pumper"
   },
   {
