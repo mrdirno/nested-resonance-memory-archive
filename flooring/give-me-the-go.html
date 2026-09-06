@@ -212,8 +212,12 @@
               { v: "Need to know today", docToken: "answer needed today", hot: true },
               { v: "Before we start Monday", docToken: "answer needed before Monday" },
               { v: "This week", docToken: "answer needed this week" }
-            ],
-            docLabel: "WHAT THIS COSTS WHILE IT SITS"
+            ]
+            /* NO docLabel. The engine prefixes it to the sentence and the
+               section already prints it as the block heading, so setting both
+               made the sent document say "WHAT THIS COSTS WHILE IT SITS" twice
+               in a row — measured on this page 2026-09-06 (C3715), on the
+               artifact, not in the source. */
           }
         ]
       },

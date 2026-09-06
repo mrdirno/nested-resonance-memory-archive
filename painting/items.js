@@ -815,3 +815,110 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "Segundo viaje a un cuarto que alguien volvió a abrir", "sub": "Ya entregado, y luego lo cortaron, lo resanaron o lo rehicieron. Regresamos a dar primer, recortar y volver a pintar un cuarto que ya habíamos terminado.", "en": "Second trip to a room somebody re-opened" }
   ]
 };
+
+/* ── THE WET AREA NOTICE (shape #2 — shared/note.js) ────────────────────────
+ * THE RUNG THIS FILE'S OWN REGISTRY CALLED "the strongest unbuilt rung in the
+ * kit" FOR FOUR CYCLES. The 20-year prune kept it as the seventh tool and
+ * stand-up shipped six, so it stood in tools.js as a written-down deferral —
+ * which is the only reason it survived to be built instead of being rediscovered
+ * as a gap.
+ *
+ * IT IS THE ONLY PAGE IN THIS KIT THAT POINTS OUT. Every other tool here is the
+ * painter receiving — the room that is not ready, the punch list walked back,
+ * the ding somebody else put in his finish. This one is the painter TELLING the
+ * building something, and it is the one document a paint crew sends on an
+ * occupied job and has never once written down.
+ *
+ * THE PRUNE FOLDED TWO PAGES INTO THIS ONE, and the merge is the design:
+ * closed-for-spray and closed-while-wet are ONE closure with ONE receiver, and
+ * the "recoat clock" is not a second page — it IS this notice's window lines.
+ * Two pages would have been the same door twice.
+ *
+ * WHERE THE SECOND INSTANCE RULE LANDED. paving/lot-closed-tonight.html is the
+ * same class one trade over — an area closed, a re-entry line, one receiver —
+ * and it is already a CONFIG of shape #2's engine. So this is a config too, and
+ * §THE THREE SHAPES' extract-at-two never fires: the engine came out at the
+ * directed-work ticket in August and both closures are callers of it. What is
+ * NOT shared is every word below, which is the whole point of that boundary.
+ *
+ * THE REFUSAL THAT DEFINES THE PAGE, and it is sharper here than anywhere else
+ * in the kit. trade.js bans clock numbers (no dry-to-touch, dry-to-recoat, full
+ * cure, pot life) and bans exposure numbers (no PEL, no respirator selection, no
+ * ventilation rate). A wet-area notice is exactly where a lazy build would ship
+ * both. So:
+ *   · THE WINDOW IS THREE FREE-TEXT LINES, typed off HIS data sheet, in HIS
+ *     words. The registry wrote the target sentence four cycles ago — "walls
+ *     closed 2:40 · doors swing at 6 · nobody blue-tapes till Friday" — and
+ *     that is a man stating what he is telling them, not a table. The moment
+ *     any of the three became a picker with hours in it, this page would be a
+ *     recoat schedule with our name on it.
+ *   · NOTHING HERE SAYS THE AIR IS CLEAR. When a space can be breathed, what
+ *     the ventilation has to do and what anybody wears are his safety plan's,
+ *     his SDS's and the building's. The occupied-day lines below are therefore
+ *     ASKS AIMED AT WHOEVER OWNS THE EQUIPMENT — the same rule getting-in.html
+ *     already runs on the panel, the air and the alarm — never an instruction
+ *     this page issues and never a duration it supplies.
+ *   · AND NO RELEASE. "Touchable" and "workable" are scheduling statements he
+ *     is making about his own finish. Neither is an occupancy call, and the
+ *     page says so in the document itself, not only in the warn block.
+ *
+ * WHAT IT DELIBERATELY DOES NOT DUPLICATE: getting-in.html owns access, keys,
+ * the lift, the washout and where paint sleeps between shifts, so no ask below
+ * touches any of them; docs.js owns the delay NARRATIVE (`delay-notice`) and the
+ * daily's clear-by line, which is the write-up you dictate later. This is the
+ * two-minute send you write at the door, at the moment you close it.
+ */
+window.TOOLKIT_ITEMS.closure = {
+  /* WHO HOLDS THE AREA once the tape goes up. "The building" is not a name and
+     cannot answer at six in the morning. */
+  roles: [
+    "GC superintendent",
+    "Building engineer",
+    "Property manager",
+    "Facilities / maintenance",
+    "Owner's rep",
+    "The tenant contact",
+    "Our own boss / PM"
+  ],
+
+  /* WHAT PUT THE TAPE UP, the way he says it on the phone. Spray and wet are one
+     list because they are one closure — the merged page the prune called for. */
+  kinds: [
+    "Spraying — walls and ceilings",
+    "Spraying — doors, frames and trim",
+    "Rolling and cutting — walls still wet",
+    "Enamel — wet doors and frames",
+    "Floor coating — wet floor, nobody on it",
+    "Stain and lacquer — wet millwork",
+    "Wallcovering — wet paste and seams"
+  ],
+
+  /* THE OCCUPIED-DAY ASKS. Every one is aimed at the man who owns the thing
+     being asked about — nothing here directs anybody's equipment, and nothing
+     here sets a time for it. Seven, and the ones that died are as load-bearing
+     as the ones that lived: keys, the lift, the washout and where the rig sleeps
+     are getting-in.html's job, and putting them here would be that page again. */
+  asks: [
+    { name: "Tell the people in this building — you, not me", sub: "a name and a time it went out; somebody walking a wet corridor at seven is not a thing I can fix with a sign" },
+    { name: "The air handler for this area off while I'm in it — and back on when you say", sub: "whoever runs it runs it. Tell me who and when — I'm not touching your equipment and I'm not setting the times" },
+    { name: "The intakes and returns in this area sealed", sub: "tell me who does it and when it comes off. If it's mine to do, say so in writing and I'll tell you exactly what I covered" },
+    { name: "Clear the floor before I close it", sub: "carts, stock, somebody's ladder — whatever is still in there when I close it is in there wet until the window's up" },
+    { name: "Nobody opens this door till I say", sub: "the signs and the tape are mine to hang; the door is yours to hold. A door swung into wet enamel at six is the whole run again" },
+    { name: "Other trades out of this area for the window", sub: "tell me who's still scheduled in it — I'll work around them or you move them, but not both at five o'clock" },
+    { name: "Who I call if it has to open early", sub: "a name and a number tonight, not a policy tomorrow. If you have to have it back, I'd rather move than find out" }
+  ],
+
+  /* WHAT IT COSTS IF SOMEBODY WALKS IT. Chips are a jog for the sentence he
+     writes after them — the line this trade has always eaten in silence, because
+     a footprint in a wet floor coating is not a touch-up and never was. */
+  costs: [
+    "the whole run goes again, not a touch-up",
+    "my crew comes back off another job",
+    "it's the full room, not the one wall",
+    "the batch won't match by then",
+    "the floor goes back on your schedule, not mine",
+    "this pushes the turnover"
+  ],
+
+  pics: ["Sent with photos of the signs and tape", "Photos on request", "Walk it with me before it opens"]
+};

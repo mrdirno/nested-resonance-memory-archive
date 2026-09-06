@@ -25,7 +25,20 @@
  *     and closed-while-wet are one closure with one receiver, and the re-entry
  *     clock IS the notice's window lines. Its narrative half already lives in
  *     docs.js (the delay notice and the daily's clear-by line) — the note is
- *     the two-minute send. This is the strongest unbuilt rung in the kit.
+ *     the two-minute send. ~~This is the strongest unbuilt rung in the kit.~~
+ *     BUILT 2026-09-06 (C3715) as `the-note.html`, to the spec above and not
+ *     around it: the merge held (one closure, one receiver), the three window
+ *     lines shipped as FREE TEXT off his own sheet — the registry's own
+ *     sentence, "walls closed 2:40 · doors swing at 6 · nobody blue-tapes till
+ *     Friday", is the page's placeholder set — and the occupied-day fields
+ *     shipped as ASKS aimed at whoever runs the equipment, because trade.js
+ *     bans ventilation rates in the same breath as recoat times. What the build
+ *     ADDED to the spec: an `impact` block, since the cost of a hand on a wet
+ *     frame is the whole run and shape #2 exists for exactly that line. What it
+ *     CUT from its own first draft: keys, the lift, the washout and where the
+ *     rig sleeps — all four are getting-in.html, and putting them here would
+ *     have been that page a second time. With this the deliberate-omissions
+ *     list is EMPTY for the first time since the kit landed.
  *   - THE LANGUAGE LAYER (EN/ES) — PAID 2026-09-05 (C3711), and it was paid the
  *     way this block predicted. What stood here said shared/lang.js rides on the
  *     tag pages of twelve trades, this kit ships no tag because extra work was
@@ -63,6 +76,19 @@ window.TOOLKIT_TOOLS = [
     desc: "Ten kits on this board write 'before paint' into their own gate ladders; this is the painter standing behind the words. Walk the floor a week out and send everybody who owes you a wall their own list — walls sanded and walked, rooms cleared with a day on them, light, power, air, the schedule confirmed at its rev before the shaker runs — each ask against your own gate, one message per outfit. The doorway refusal is Not Ready; this page is how you never send it.",
     chip: "#29FF29",
     audience: "Foreman → GC super / every outfit that owes him a wall"
+  },
+  {
+    /* THE ONE PAGE IN THIS KIT THAT POINTS OUT. Everything else here is the
+       painter receiving — the room that isn't ready, the punch list walked
+       back, the ding somebody else put in his finish. This is him telling the
+       building something, and it is the document a paint crew sends on every
+       occupied job and has never once written down. It ships no dry time and
+       says nothing about the air; both are refusals trade.js names by hand. */
+    name: "Wet Area Notice",
+    href: "the-note.html",
+    desc: "You closed the room because there's wet paint in it, and to everybody walking past, that tape is a suggestion. Write it once: what's closed and which rooms, the time it went closed, and when it can be touched and when it can be worked in — your words, off your own sheet. Then what an occupied day needs: the air handler off while you're in it, the intakes sealed, the floor cleared, nobody through that door till you say. It never states a dry time and never says the air is clear.",
+    chip: "#29FF29",
+    audience: "Foreman → GC super / building engineer"
   },
   {
     name: "Walk Back",
