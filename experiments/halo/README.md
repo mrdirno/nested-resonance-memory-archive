@@ -44,6 +44,54 @@ python3 orbit_twin.py                                    # ~3 s
 python3 load_chamber_npz.py resonance-chamber-snapshot.npz
 ```
 
+## the memory estimator: qualification, and the pilot that looks for something to measure
+
+`memory_estimator_qualify.py` is the **frozen** scorer for the replacement
+cross-epoch memory estimator; it implements
+`docs/halo/2026-09-05_memory_estimator_qualification_protocol.md` section by
+section and must not be edited. It qualifies an instrument and claims nothing
+about memory. Scored on the recorded 60-run grid it returned *insufficient
+support*: 0 of 60 runs measurable
+([result](../../analysis/2026-09-06_memory_estimator_qualification.md)).
+
+Three small scripts around it run a **measurability pilot** — a search for
+settings the frozen estimator can measure at all, before any confirmatory grid
+is registered. They add no statistic and change no gate.
+
+- `../../tests/halo/memory_pilot_grid.sh` runs one *arm* (one particle count and
+  epoch length) over a set of self-gravity values at three seeds. It passes every
+  flag as its own argv word, and then re-reads each finished run's recorded
+  `params` and aborts if the seed, particle count, epoch length or epoch count is
+  not the one asked for. That gate exists because the runner matches flags by
+  prefix: a whole flag string passed through one shell variable arrives as a
+  single argument in zsh, only its first flag is read, and every other flag
+  silently falls back to its default while the run reports success.
+- `memory_pilot_manifest.py` writes the input manifest the frozen scorer checks
+  with `--manifest`. It is a self-attestation written between recording and
+  scoring, not an independent preservation audit.
+- `memory_pilot_report.py` reads the frozen scorer's own result documents and
+  prints the measurability diagnostic per run — eligible epochs, per-gate refusal
+  counts, the two run-level gates, the seed null values, and the median template
+  correlation, participation ratio and block mass. It computes nothing new, so it
+  cannot change a verdict.
+
+An arm needs its own output directory: the frozen scorer keys a condition on
+(preset, self-gravity, gain/loss) alone, and the run harness leaves epoch length
+out of the file name, so two arms sharing a self-gravity value would collide on
+the file name and then merge into a group the scorer skips.
+
+```bash
+OUT=../../data/results/halo/memory_pilot/<arm> N=4194304 EPOCHLEN=10 EPOCHS=24 \
+  PRESET=spinchladni SGS="0.3 0.4 0.5" GLS="0" SEEDS="777 12345 31337" \
+  bash ../../tests/halo/memory_pilot_grid.sh
+python3 memory_pilot_manifest.py ../../data/results/halo/memory_pilot/<arm> <arm>-manifest.json
+python3 memory_estimator_qualify.py --input-dir ../../data/results/halo/memory_pilot/<arm> \
+  --manifest <arm>-manifest.json \
+  --synthetic-json ../../data/results/halo/memory_estimator_qualification/synthetic.json \
+  --output <arm>.json
+python3 memory_pilot_report.py <arm>.json
+```
+
 ## choreography/ — a four-charge choreography with a stability certificate
 
 `choreo4.py` searches for a periodic four-charge orbit in a magnetic field

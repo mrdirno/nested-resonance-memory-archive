@@ -163,6 +163,12 @@ data/results/halo/memory_prereg/*.mesh.f32
 # kept locally because they are the bit-exact replication evidence for the instrument,
 # and their JSONs are small enough to commit; the meshes are not.
 data/results/halo/memory_prereg_voided/*.mesh.f32
+# The measurability pilot (2026-09-06) writes one directory per arm under
+# data/results/halo/memory_pilot/. The two lines above name their directories
+# literally, so a new directory would NOT have been covered and `git add` would
+# have published its meshes -- which is exactly how the voided grid's 73 MB
+# nearly reached the repository. Match every arm, present and future.
+data/results/halo/memory_pilot/**/*.mesh.f32
 
 # Machine-local app configuration
 .codex/
