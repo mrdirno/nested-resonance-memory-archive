@@ -9250,3 +9250,80 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `WET AREA NOTICE` is still called "the strongest unbuilt rung in the kit" by its own
   registry, and a CHROME-PROSE gate does not exist.
   https://mrdirno.github.io/nested-resonance-memory-archive/painting/tm-tag.html
+
+- `2026-09-06` — **[AXIS:DEPTH] C3715 — THE ONLY PAGE IN THE PAINTING KIT THAT POINTS OUT,
+  AND ITS OWN REGISTRY HAD BEEN NAMING IT "THE STRONGEST UNBUILT RUNG" FOR FOUR CYCLES** ·
+  **the well was read UNSCOPED in both sinks first and had nothing this lane could claim** —
+  the AV well was empty (0 new, 0 building, 32 shipped) and the vibe-cards well held 0 new
+  with **two `building`**, both on `open-archive`. The template says a `building` wish may be
+  a dead cycle's ghost, so I checked instead of assuming: a Codex lane owns them in **three
+  dedicated worktrees committed 01:52 UTC the same morning**
+  (`codex/open-archive-studio/-cloud/-production-20260905`). Live work, not a ghost — released
+  nothing, claimed nothing, double-built nothing. BREADTH: no family owed. So rung 3, and the
+  codex's own W1057 rotate rule fired hard: **the last five lane-cycles (C3709–C3713) were all
+  [AXIS:COLLAGE]**, which is a stalled route by the operator's bar. DEPTH, 5 cycles stale, with
+  the previous cycle's closing line handing over the target by name. · **before:** painting
+  shipped 11 tools and `painting/tools.js` carried THE WET AREA NOTICE in its
+  deliberate-omissions block since the kit landed — the 20-year prune kept it as the seventh
+  tool and stand-up shipped six — with a complete spec and the sentence *"This is the strongest
+  unbuilt rung in the kit."* Written-down deferral, which is the only reason it survived to be
+  built instead of rediscovered as a gap. · **after:** `painting/the-note.html` — the one page
+  in this kit that points OUT. Every other tool here is the painter RECEIVING (the room that is
+  not ready, the punch list walked back, the ding somebody else put in his finish); this is him
+  telling the building something, and it is the document a paint crew sends on every occupied
+  job and has never once written down. The prune's merge held: closed-for-spray and
+  closed-while-wet are ONE closure with ONE receiver, and the "recoat clock" is not a second
+  page — it IS this notice's window lines. · **THE REFUSAL IS THE PAGE, and this is where a
+  lazy build ships two banned things at once.** `trade.js` bans clock numbers (dry-to-touch,
+  dry-to-recoat, full cure, pot life) AND exposure numbers (PEL, respirator selection,
+  ventilation rate) — a wet-area notice wants both. So the window is **three free-text lines
+  typed off HIS data sheet**, and the registry's own four-cycle-old sentence — *"walls closed
+  2:40 · doors swing at 6 · nobody blue-tapes till Friday"* — is literally the page's
+  placeholder set. The occupied-day fields ship as **ASKS AIMED AT WHOEVER RUNS THE EQUIPMENT**
+  (the air handler, the intakes, the tenants), the same rule `getting-in.html` already runs on
+  the panel, the air and the alarm. **Nothing says a space is safe to breathe or safe to
+  occupy, and the document says so in its own CLOSING, not only in the warn block** — because
+  the warn block is not what gets pasted into the super's text message and the closing is. ·
+  **CUT FROM ITS OWN FIRST DRAFT, and the cuts are as load-bearing as the fields:** keys, the
+  lift, the washout and where the rig sleeps — all four are `getting-in.html`, and shipping
+  them here would have been that page a second time (§THE GATE, one job per tool). · **A CONFIG,
+  NOT A FORK:** `paving/lot-closed-tonight.html` is the same class one trade over and is also a
+  config of shape #2's engine, so extract-at-two never fired — it fired in August at the
+  directed-work ticket. Two closures, one engine, zero forks; the only new code is words.
+  · **BACKPORT RIDER: FIRED, ON A DEFECT IN A SHIPPED PAGE, MEASURED ON THE ARTIFACT RATHER
+  THAN INFERRED FROM THE SOURCE.** The class: *an `impact` field whose `docLabel` repeats its
+  own section's `docHead` prints the heading TWICE in the sent document.* Both callers in the
+  program had it — mine, because it copied the shipped pattern, and
+  `flooring/give-me-the-go.html`, which pioneered `kind:"impact"` in August and had been
+  double-printing **"WHAT THIS COSTS WHILE IT SITS"** in every document it produced since. My
+  first source-regex census got this WRONG (it windowed into the next section's `docHead` and
+  reported a mismatch), so I drove the real flooring page instead and counted lines: **2 before,
+  1 after, on disk and again on the live URL.** Fixed on both. · **GATES, all green:**
+  mobile-watertight 320/360/390/430 default AND bumped text, on disk and **against the live
+  URL**, both pages · a 36-assertion end-to-end drive of the REAL page — fill every field, stamp
+  the clock, tick the asks, read the document back, copy to the clipboard, reload and confirm
+  the draft survived — **36/36 on disk and 36/36 against the live URL** · that drive asserts the
+  REFUSALS on the artifact (no dry-to-X, no recoat time, no pot life, no cure time, no
+  ventilation rate, no PEL/respirator, no film build, and **zero durations the page supplied**),
+  and the occupancy-call assertion is scoped to the SENTENCE because a notice whose job is to
+  NAME what it refuses can never pass a blunt absent-string check — my own first cut of it
+  failed for exactly that reason · rack-wide: no-clock **148 documents driven, 0 carrying a
+  clock** · note-live-fields **551 in-document fields across 44 pages**, and 13/13 on each
+  touched page re-run after the fix · no-third-party **187 pages, 0 third-party requests** ·
+  boundary-titles 50 · answer-tapnote 17 · foot-scope 7 · send-is-copy **36 checks, 0 failing on
+  each touched page, on disk and live**. · **NOT HIDDEN:** the rack-wide `send-is-copy` run
+  CRASHED at 148-page scale (`Target page, context or browser has been closed`) — a harness
+  lifecycle flake, not a page defect; both touched pages pass it individually, locally and live,
+  and the crash is pre-existing and owed its own cycle. · **DEPLOY:** code `4484db95`, Pages run
+  `34036019670` green, and the deployed `the-note.html` is **byte-identical to the tested local
+  file** (`ac2f5d64`). · **STOREFRONT, same cycle:** one line in painting's `tools[]` in
+  `persona500/src/data/fieldToolkits.ts` with `shape: 'the-note'`, and the derived
+  `public/data/field_toolkits.json` regenerated — **17 live trades, 150 tools** (was 149). P5
+  owns that push. · **WITH THIS, PAINTING'S DELIBERATE-OMISSIONS LIST IS EMPTY** for the first
+  time since the kit landed; the block stays in `tools.js` with the deferral struck through and
+  what the build decided recorded under it, the way the LANGUAGE LAYER entry was marked PAID. ·
+  **NAMED AND NOT DONE:** a CHROME-PROSE gate still does not exist (nothing reads a page's
+  lede/warn prose, so the negative control from C3711 still stands), and no gate yet asserts
+  that a document line never repeats its own section heading — the fix landed on two callers,
+  the ratchet did not.
+  https://mrdirno.github.io/nested-resonance-memory-archive/painting/the-note.html
