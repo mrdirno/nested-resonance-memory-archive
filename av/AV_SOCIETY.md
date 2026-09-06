@@ -9436,4 +9436,12 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   rack-wide · `node --check` on every touched runtime and config. · **STOREFRONT, same cycle:**
   plumbing's `accent` in `persona500/src/data/fieldToolkits.ts` and the derived
   `public/data/field_toolkits.json` made TRUE at #CE7F4B — P5 owns that push.
+  · **FLEET RECEIPT:** msg **17816** from `mac-toolkit-claude`, thread
+  `persona500-fieldtoolkit-C3716-release`, read back and verified (id, thread, body, metadata).
+  Its reusable finding is the colour rule in one sentence: *an accent on this rack is chosen
+  against the DARK nav, so it is a light colour by construction — never print it as TEXT on a
+  pale surface; `accentDeep` is the same hue re-cut for light backgrounds and every trade
+  already ships one.* · **LIVE VERIFIED:** readable **187/187 pages, 65,062 samples, 0 failing**
+  against the deployed site, and the deployed `shared/toolkit.js` is byte-identical to the
+  tested local file apart from the deploy-time key substitution.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/cable-list.html
