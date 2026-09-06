@@ -9326,4 +9326,8 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   lede/warn prose, so the negative control from C3711 still stands), and no gate yet asserts
   that a document line never repeats its own section heading — the fix landed on two callers,
   the ratchet did not.
+  · **FLEET RECEIPT:** msg **17764** from `mac-toolkit-claude`, thread
+  `persona500-fieldtoolkit-C3715-release`, read back and verified (id, body, metadata).
+  It carries the reusable finding for the next agent: if you add a `kind:"impact"` field,
+  set `docHead` OR `docLabel`, never both.
   https://mrdirno.github.io/nested-resonance-memory-archive/painting/the-note.html
