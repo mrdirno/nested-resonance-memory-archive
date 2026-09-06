@@ -152,8 +152,20 @@ const REVEALS = [
        where fixing the shared palette fixes nothing. It is also the form a person
        uses to report that they cannot read something, which would be a poor place
        to be unreadable. */
+    /* NEVER A LINK THAT LEAVES. The first cut of this matched any a-or-button whose
+       words said "wish", and on electrical/answer-back.html LIVE that was an anchor
+       to another page: the click navigated, the measurement ran against a context
+       that no longer existed, and the gate reported a FAIL that was its own. A
+       reveal is supposed to open a state on THIS page, so the candidates are
+       buttons and same-page anchors only — an href that goes anywhere is not a
+       reveal, it is a different page, and that page is measured on its own turn. */
     run: () => {
-      const t = [...document.querySelectorAll('a,button')].find(e => /wish it better|wish|feedback/i.test(e.textContent || ''));
+      const sameDoc = e => e.tagName === 'BUTTON'
+        || !e.hasAttribute('href')
+        || /^(#|javascript:)/i.test(e.getAttribute('href') || '');
+      const t = [...document.querySelectorAll('a,button')]
+        .filter(sameDoc)
+        .find(e => /wish it better|wish|feedback/i.test(e.textContent || ''));
       if (!t) return null;
       t.click();
       return null;

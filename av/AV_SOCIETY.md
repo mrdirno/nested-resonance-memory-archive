@@ -5368,8 +5368,9 @@ which makes it a light colour **by construction**; drawn on anything pale it is 
 fix then was right (`var(--deep)`), it landed in the shared module rather than page-locally,
 and it was GATED — by `jobcard-scope.mjs`, which asserts THE LIT JOB CHIP.
 **A gate that asserts one component is not a gate against a class.** Measured for the first
-time on 2026-09-06 across all 187 pages: **170 pages failing, 69 distinct classes, 44,140 text
-samples.** The worst is the same token on the same kind of surface in the same file: `.tk-send`
+time on 2026-09-06 across all 187 pages: **187 of 187 failing, 87 distinct classes, 64,642 text
+samples.** Not one page in the program was clean. The worst is the same token on the same kind
+of surface in the same file: `.tk-send`
 — SEND, the share control the shared runtime mounts on **every phone** — printing the raw
 accent onto the light preview at **1.03:1 to 1.77:1 on all seventeen trades.** With it: the
 muted token at 4.18:1 on the footer of 122 pages · seven trades' `accentDeep` under the bar on
@@ -5384,6 +5385,18 @@ it is `tools/toolkit-gates/readable.mjs`: every rendered text node against its c
 effective background, in the states a tap opens, at the WCAG 4.5/3.0 split — plus the palette
 read off every `trade.js` with no browser, so a trade shipped next month fails at its CONFIG
 before anybody renders it.
+**THIRD TIME THE SAME SHAPE, INSIDE THIS CYCLE.** The first sweep reported **187/187 green**
+on disk AND live, and it was wrong: the reveal that opens the wishing well matched any
+a-or-button whose words said "wish", and on `electrical/answer-back.html` LIVE that was an
+anchor to another page — the click NAVIGATED, and the only reason I looked is that the gate
+reported a fail against a destroyed context instead of quietly finding nothing. Restricted to
+buttons and same-page anchors, the panel opened for the first time and the sample count went
+from 44,140 to **64,642** — twenty thousand text samples no sweep had ever reached — carrying
+`.av-sheet-hd .av-eye` at **1.68:1 on av, 2.20 on electrical, 3.00 on plumbing**: the trade
+accent on the paper sheet, the SAME class, in the SAME file, four hundred lines up. **A reveal
+that does not reach its state reports green, and green from a state you never entered is the
+most expensive number in the program.** §SCARS 2026-08-15 and 2026-08-17 both said this about
+mobile-watertight; it is now said about colour.
 **SECOND LESSON, from the fix I nearly shipped broken.** The WHY comment I wrote for the
 tk-send split put backticks around a token name INSIDE `shared/toolkit.js`'s CSS template
 literal — the exact thing that block's own comment warns about — and the runtime stopped
@@ -9374,9 +9387,9 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   DEFECT CLASS and asks for the ratchet by name — *"the background is light and the text is
   light … need to create a scar or a ring for this issue"* — and that class had **never been
   measured on this program's own 187 pages by any of its 37 gates.** So it was, and it was
-  everywhere. · **before → after, same instrument, same 44,140 text samples, pristine HEAD vs
-  the fix: 170 failing pages / 69 distinct classes / palette failing at 8 config points → 0
-  failing, palette green.** · **THE FIND: `button.tk-send` at 1.03:1–1.77:1 on all seventeen
+  everywhere. · **before → after, same instrument, same 64,642 text samples, pristine HEAD vs
+  the fix: 187 of 187 pages failing / 87 distinct classes / palette failing at 8 config points
+  → 0 failing, palette green.** Not one page was clean. · **THE FIND: `button.tk-send` at 1.03:1–1.77:1 on all seventeen
   trades.** SEND is mounted by the shared runtime only where `navigator.share` exists — every
   iPhone and Android, and no headless Chromium — so the one control that was invisible was
   invisible ONLY to the people using it. It is an outline button with no fill: in the fixed
@@ -9401,9 +9414,16 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   trade shipped next month is covered before anybody renders it, and it asserts that the three
   separate copies of each trade's accent agree. · **THE SCAR IS A REPEAT:** 2026-08-17 named
   this exact class, fixed it correctly, and gated it with `jobcard-scope.mjs` — which asserts
-  the lit JOB CHIP. §SCARS. · **NOT HIDDEN:** my own WHY comment put backticks inside
-  `shared/toolkit.js`'s CSS template literal and stopped the runtime booting on every page;
-  the gate caught it in 40 seconds because it drives the real page. · **NAMED AND NOT DONE:**
+  the lit JOB CHIP. §SCARS. · **NOT HIDDEN, AND IT COST A SECOND ROUND:** the first sweep read
+  **187/187 green on disk AND live**, and it was wrong — the wish-panel reveal matched any
+  a-or-button saying "wish", and on `electrical/answer-back.html` live that was an anchor that
+  NAVIGATED. Restricted to buttons and same-page anchors, the panel opened for the first time,
+  the sample count went 44,140 → **64,642**, and the wishing well's own eyebrow was the trade
+  accent on the paper sheet at **1.68–3.00:1** — the same class, the same file, four hundred
+  lines up from the tk-send fix. A reveal that does not reach its state reports green. Also:
+  my own WHY comment put backticks inside `shared/toolkit.js`'s CSS template literal and
+  stopped the runtime booting on every page; the gate caught it in 40 seconds because it
+  drives the real page. · **NAMED AND NOT DONE:**
   all 17 `credits.html` and `av/cable-list.html` declare a pre-boot `--flag` that disagrees with
   their trade (a first-paint identity flash, never a contrast failure — `--flag-ink` falls back
   dark), and no gate asserts it. · **THE WISH ITSELF, measured for whoever does own it:** the

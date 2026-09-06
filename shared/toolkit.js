@@ -373,7 +373,13 @@
     border-top:4px solid var(--av-flag);box-shadow:0 24px 60px rgba(0,0,0,.4);font-family:var(--av-sans);margin:auto;}
   .av-sheet-hd{display:flex;align-items:flex-start;gap:10px;padding:16px 18px 12px;border-bottom:1px solid var(--av-line)}
   .av-sheet-hd h2{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.04em;font-size:20px;margin:0;flex:1;line-height:1}
-  .av-sheet-hd .av-eye{display:block;font-family:var(--av-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--av-flag);margin-bottom:5px}
+  /* THE ACCENT ON THE PAPER SHEET, AGAIN, IN THIS FILE, AGAIN (C3716). The wishing
+     well opens on --av-paper and its eyebrow was drawn in --av-flag: 1.68:1 on av,
+     2.20:1 on electrical, 3.00:1 on plumbing. This state is behind a tap, and the
+     first cut of the reveal that opens it clicked a link that navigated instead —
+     so the FULL sweep that reported 187/187 green had never once seen inside the
+     panel. accentDeep measures 6.15:1 or better on this sheet for all seventeen. */
+  .av-sheet-hd .av-eye{display:block;font-family:var(--av-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--deep,#7A5A05);margin-bottom:5px}
   .av-x{border:1px solid var(--av-line);background:none;color:var(--av-muted);width:30px;height:30px;border-radius:2px;cursor:pointer;font-size:17px;line-height:1;flex:none}
   .av-x:hover{border-color:var(--av-ink);color:var(--av-ink)}
   .av-body{padding:14px 18px 18px}
@@ -384,7 +390,7 @@
   .av-guide .av-test{margin-top:8px;font-style:italic;color:#5a5030}
   .av-field{margin-bottom:11px}
   .av-field label{display:block;font-family:var(--av-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--av-muted);margin-bottom:5px}
-  .av-field label i{color:#b3671a;font-style:normal}
+  .av-field label i{color:#A76018;font-style:normal}   /* 4.16:1 -> 4.68:1 on the sheet (C3716) */
   /* 44px MINIMUM on every control in the well. This is the ship gate, not a
      preference — the well is filled in one-handed, on a phone, often in gloves,
      and it was shipping 37px inputs, 39px selects, 31px identity buttons and an
