@@ -1,0 +1,6054 @@
+{
+ "schema": "halo-memory-estimator-diagnostics/1",
+ "author": "Aldrin Payopay",
+ "measured_at": "2026-09-06T09:13:02.198288+00:00",
+ "qualification_result_sha256": "5ed4a4a03a4b63262a32f2a51a1a044730d6f18e2d1784f5e96119427b0c773a",
+ "qualify_script_sha256": "7619ef6bbe7409bef03c317076edda5ac6b55820e6c6f955da51783e7575dbd0",
+ "this_script_sha256": "035bb8c60d18760d93d17d42fa9b258529e22eaa1205df57fc617dbe6947d7a6",
+ "note": "reported-only diagnostics; nothing here is scored by the protocol",
+ "variants": {
+  "e2_pr4": {
+   "config": {
+    "e1_mass": 0.01,
+    "e2_pr": 4.0,
+    "e2_relvar": 1e-09,
+    "e3_xseed": 0.9,
+    "min_epochs": 12,
+    "support": "orbits",
+    "lag2": "box",
+    "model": "hybrid",
+    "den_min": 0.05,
+    "quality_ratio": 3.0
+   },
+   "runs": {
+    "default_sg0.3_gl0_seed777": {
+     "eligible_epochs": 21,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.004930865037958155,
+      0.6528694002434712,
+      0.5935740509428931
+     ],
+     "mean_mutual_coupling": 0.7028265333552257,
+     "mean_own_coupling": 0.07108950675462562,
+     "p_min": 0.0004572473708276177
+    },
+    "default_sg0.3_gl0_seed12345": {
+     "eligible_epochs": 17,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.004533252355881706,
+      0.695412713416932,
+      0.6547432793463264
+     ],
+     "mean_mutual_coupling": 0.07365003943782333,
+     "mean_own_coupling": 0.4120774817153879,
+     "p_min": 0.0013717421124828531
+    },
+    "default_sg0.3_gl0_seed31337": {
+     "eligible_epochs": 17,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.004533252355881706,
+      0.695412713416932,
+      0.6547432793463264
+     ],
+     "mean_mutual_coupling": 0.07324676262959647,
+     "mean_own_coupling": 0.4122791201195013,
+     "p_min": 0.0013717421124828531
+    },
+    "default_sg0.5_gl0_seed777": {
+     "eligible_epochs": 20,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.28831909103510456,
+      0.003636754271914615,
+      0.2714601071018917
+     ],
+     "mean_mutual_coupling": 0.0455766045916904,
+     "mean_own_coupling": 0.3401669727980577,
+     "p_min": 0.0004572473708276177
+    },
+    "default_sg0.5_gl0_seed12345": {
+     "eligible_epochs": 21,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.27853391857502463,
+      0.003978536284174964,
+      0.27153788321753575
+     ],
+     "mean_mutual_coupling": 0.6032084723481604,
+     "mean_own_coupling": 0.05084759555920384,
+     "p_min": 0.0004572473708276177
+    },
+    "default_sg0.5_gl0_seed31337": {
+     "eligible_epochs": 20,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.28831909103510456,
+      0.003636754271914615,
+      0.2714601071018917
+     ],
+     "mean_mutual_coupling": 0.05497844857429768,
+     "mean_own_coupling": 0.33546605080675407,
+     "p_min": 0.0004572473708276177
+    },
+    "default_sg0.8_gl0_seed777": {
+     "eligible_epochs": 17,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.5091515650030367,
+      0.4394982925843013,
+      0.428030977125012
+     ],
+     "mean_mutual_coupling": 0.4474500300163645,
+     "mean_own_coupling": 0.4735908250515783,
+     "p_min": 0.0013717421124828531,
+     "S": -0.02793705959986072,
+     "p": 0.6640839790052487,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      -0.1546668922013115,
+      0.043387147693982143
+     ],
+     "mean_c_own": 0.48121450540317595,
+     "mean_c_stranger": 0.47585303042355465,
+     "mean_c_shuffle": -0.0001615302906435029,
+     "template_rho_mean": 0.5289945349239131,
+     "lag1_autocorr_Q": 0.4449974395435504,
+     "multiplicative_weight_mean": 0.9861272229397393,
+     "unmapped_S": 0.029836687649256725,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      16,
+      17,
+      18,
+      20,
+      21,
+      23,
+      24
+     ]
+    },
+    "default_sg0.8_gl0_seed12345": {
+     "eligible_epochs": 17,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.5091515650030367,
+      0.4394982925843013,
+      0.428030977125012
+     ],
+     "mean_mutual_coupling": 0.46366477320530625,
+     "mean_own_coupling": 0.4654834534571075,
+     "p_min": 0.0013717421124828531,
+     "S": 0.04569278142948893,
+     "p": 0.1994501374656336,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      -0.004752126823503229,
+      0.12361442954222063
+     ],
+     "mean_c_own": 0.4851910740137902,
+     "mean_c_stranger": 0.4999980998648197,
+     "mean_c_shuffle": -0.00902958542179659,
+     "template_rho_mean": 0.524233075940903,
+     "lag1_autocorr_Q": -0.03151207101028703,
+     "multiplicative_weight_mean": 0.9841872117735808,
+     "unmapped_S": 0.0015666525807320295,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      16,
+      17,
+      18,
+      20,
+      21,
+      23,
+      24
+     ]
+    },
+    "default_sg0.8_gl0_seed31337": {
+     "eligible_epochs": 17,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.5091515650030367,
+      0.4394982925843013,
+      0.428030977125012
+     ],
+     "mean_mutual_coupling": 0.4835168768978504,
+     "mean_own_coupling": 0.45555740161083547,
+     "p_min": 0.0013717421124828531,
+     "S": 0.08783523338297006,
+     "p": 0.07673081729567609,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      -0.022133562307000542,
+      0.15270823314531096
+     ],
+     "mean_c_own": 0.515866210507982,
+     "mean_c_stranger": 0.4187805498311469,
+     "mean_c_shuffle": -0.005851548894144694,
+     "template_rho_mean": 0.5312278701929548,
+     "lag1_autocorr_Q": 0.35138765999547794,
+     "multiplicative_weight_mean": 0.99426166016933,
+     "unmapped_S": 0.045938165876178105,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      16,
+      17,
+      18,
+      20,
+      21,
+      23,
+      24
+     ]
+    },
+    "spinchladni_sg0.3_gl0_seed31337": {
+     "eligible_epochs": 12,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.017217733072081798,
+      0.047656136678913885,
+      0.06614386571194983
+     ],
+     "mean_mutual_coupling": 0.023992166101171702,
+     "mean_own_coupling": 0.03899516061409491,
+     "p_min": 0.012345679012345678
+    },
+    "spinchladni_sg0.5_gl0_seed777": {
+     "eligible_epochs": 15,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.05942951829245888,
+      0.019885686638089105,
+      0.03492950938748327
+     ],
+     "mean_mutual_coupling": 0.010788438160667239,
+     "mean_own_coupling": 0.019524079359866147,
+     "p_min": 0.00411522633744856,
+     "S": -0.013546962454362748,
+     "p": 0.5821044738815296,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      -0.038472779609340854,
+      0.014103942844130616
+     ],
+     "mean_c_own": 0.045882555838096126,
+     "mean_c_stranger": 0.010870332097319604,
+     "mean_c_shuffle": -0.0006225423019461713,
+     "template_rho_mean": 0.22414286800181102,
+     "lag1_autocorr_Q": -0.2994990486079496,
+     "multiplicative_weight_mean": 0.35416488719608297,
+     "unmapped_S": 0.03877698996529464,
+     "eligible_epoch_numbers": [
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      18,
+      23,
+      24
+     ]
+    },
+    "spinchladni_sg0.5_gl0_seed12345": {
+     "eligible_epochs": 17,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.06472174642809467,
+      0.009462372701762643,
+      0.04117095526953964
+     ],
+     "mean_mutual_coupling": 0.034045443659800355,
+     "mean_own_coupling": -0.0004086356346079478,
+     "p_min": 0.0013717421124828531
+    },
+    "spinchladni_sg0.5_gl0_seed31337": {
+     "eligible_epochs": 13,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.06693764761901894,
+      0.01994506440536725,
+      0.0361155910964375
+     ],
+     "mean_mutual_coupling": 0.0131703717567376,
+     "mean_own_coupling": 0.017775596120546952,
+     "p_min": 0.00411522633744856
+    },
+    "spinchladni_sg0.8_gl0_seed777": {
+     "eligible_epochs": 15,
+     "measurable": false,
+     "e5_collapse": true,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.025774064630897996,
+      0.0755303132950804,
+      0.09224601702045553
+     ],
+     "mean_mutual_coupling": 0.10555929552756439,
+     "mean_own_coupling": -0.08682415196777403,
+     "p_min": 0.00411522633744856
+    },
+    "spinchladni_sg0.8_gl0_seed12345": {
+     "eligible_epochs": 12,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      -0.011616411487673124,
+      0.0001526508290052627,
+      0.022124240296322612
+     ],
+     "mean_mutual_coupling": -0.06411923591207261,
+     "mean_own_coupling": -0.004411109709572823,
+     "p_min": 0.012345679012345678,
+     "S": 0.1723270972741191,
+     "p": 0.011997000749812546,
+     "detected": true,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      0.12583492773284216,
+      0.28236763737269227
+     ],
+     "mean_c_own": 0.1724797481031243,
+     "mean_c_stranger": 0.00981833688351171,
+     "mean_c_shuffle": -0.005199671609777077,
+     "template_rho_mean": 0.16120997118534705,
+     "lag1_autocorr_Q": -0.5375264753392003,
+     "multiplicative_weight_mean": 0.4298360466406357,
+     "unmapped_S": 0.23093880838102518,
+     "eligible_epoch_numbers": [
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      17,
+      19,
+      20,
+      22,
+      23,
+      24
+     ]
+    },
+    "spinchladni_sg0.8_gl0_seed31337": {
+     "eligible_epochs": 12,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      -0.011616411487673124,
+      0.0001526508290052627,
+      0.022124240296322612
+     ],
+     "mean_mutual_coupling": -0.04704153600076814,
+     "mean_own_coupling": -0.012949959665225058,
+     "p_min": 0.012345679012345678,
+     "S": 0.15327742481650344,
+     "p": 0.011997000749812546,
+     "detected": true,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      0.06559173383501153,
+      0.26690257555134406
+     ],
+     "mean_c_own": 0.17540166511282607,
+     "mean_c_stranger": -0.016918445319865822,
+     "mean_c_shuffle": 0.00207494070325135,
+     "template_rho_mean": 0.14506895899706843,
+     "lag1_autocorr_Q": -0.2682173211124402,
+     "multiplicative_weight_mean": 0.5089711790409523,
+     "unmapped_S": 0.18885646765073616,
+     "eligible_epoch_numbers": [
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      17,
+      19,
+      20,
+      22,
+      23,
+      24
+     ]
+    }
+   },
+   "measurable_runs": [
+    "default_sg0.8_gl0_seed12345",
+    "default_sg0.8_gl0_seed31337",
+    "default_sg0.8_gl0_seed777",
+    "spinchladni_sg0.5_gl0_seed777",
+    "spinchladni_sg0.8_gl0_seed12345",
+    "spinchladni_sg0.8_gl0_seed31337"
+   ],
+   "detected_runs": [
+    "spinchladni_sg0.8_gl0_seed12345",
+    "spinchladni_sg0.8_gl0_seed31337"
+   ]
+  },
+  "den_0.10": {
+   "config": {
+    "e1_mass": 0.01,
+    "e2_pr": 8.0,
+    "e2_relvar": 1e-09,
+    "e3_xseed": 0.9,
+    "min_epochs": 12,
+    "support": "orbits",
+    "lag2": "box",
+    "model": "hybrid",
+    "den_min": 0.1,
+    "quality_ratio": 3.0
+   },
+   "runs": {
+    "default_sg0.3_gl0_seed777": {
+     "eligible_epochs": 19,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.0007168699679992819,
+      0.6917997930873147,
+      0.6679164924528513
+     ],
+     "mean_mutual_coupling": 0.7389253572616314,
+     "mean_own_coupling": 0.07289391395747678,
+     "p_min": 0.0004572473708276177
+    },
+    "default_sg0.3_gl0_seed12345": {
+     "eligible_epochs": 17,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.0005041104952513908,
+      0.7037818553857945,
+      0.6846593508503175
+     ],
+     "mean_mutual_coupling": 0.07365003943782333,
+     "mean_own_coupling": 0.4120774817153879,
+     "p_min": 0.0013717421124828531
+    },
+    "default_sg0.3_gl0_seed31337": {
+     "eligible_epochs": 17,
+     "measurable": false,
+     "e5_collapse": false,
+     "e5_unbalanced": true,
+     "seed_null_values": [
+      0.0005041104952513908,
+      0.7037818553857945,
+      0.6846593508503175
+     ],
+     "mean_mutual_coupling": 0.07324676262959647,
+     "mean_own_coupling": 0.4122791201195013,
+     "p_min": 0.0013717421124828531
+    },
+    "default_sg0.5_gl0_seed777": {
+     "eligible_epochs": 15,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.38986242306532676,
+      -0.001463646858522225,
+      0.42882633768293404
+     ],
+     "mean_mutual_coupling": 0.04853813871824379,
+     "mean_own_coupling": 0.3654068436072457,
+     "p_min": 0.00411522633744856,
+     "S": 0.3021150391935239,
+     "p": 0.11172206948262935,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      0.14394101654409341,
+      0.44797203869404767
+     ],
+     "mean_c_own": 0.6919774622588505,
+     "mean_c_stranger": 0.3645220340551169,
+     "mean_c_shuffle": 0.0003651317298674526,
+     "template_rho_mean": 0.40328119503618487,
+     "lag1_autocorr_Q": -0.04485014576487613,
+     "multiplicative_weight_mean": 0.5402165149297126,
+     "unmapped_S": null,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      6,
+      7,
+      8,
+      9,
+      10,
+      13,
+      15,
+      16,
+      17,
+      19,
+      20,
+      23,
+      24
+     ]
+    },
+    "default_sg0.5_gl0_seed12345": {
+     "eligible_epochs": 15,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.38986242306532676,
+      -0.001463646858522225,
+      0.42882633768293404
+     ],
+     "mean_mutual_coupling": 0.6727894718785744,
+     "mean_own_coupling": 0.0532811770270804,
+     "p_min": 0.00411522633744856,
+     "S": 0.6469367528064954,
+     "p": 0.0034991252186953262,
+     "detected": true,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      0.6420922995167972,
+      0.6502727185788562
+     ],
+     "mean_c_own": 0.6454731059479732,
+     "mean_c_stranger": 0.062130107898883624,
+     "mean_c_shuffle": 0.002918729281858365,
+     "template_rho_mean": 0.19218025183636947,
+     "lag1_autocorr_Q": -0.5074905135436885,
+     "multiplicative_weight_mean": 0.988948215702038,
+     "unmapped_S": null,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      6,
+      7,
+      8,
+      9,
+      10,
+      13,
+      15,
+      16,
+      17,
+      19,
+      20,
+      23,
+      24
+     ]
+    },
+    "default_sg0.5_gl0_seed31337": {
+     "eligible_epochs": 15,
+     "measurable": true,
+     "e5_collapse": false,
+     "e5_unbalanced": false,
+     "seed_null_values": [
+      0.38986242306532676,
+      -0.001463646858522225,
+      0.42882633768293404
+     ],
+     "mean_mutual_coupling": 0.05802421533591702,
+     "mean_own_coupling": 0.3606638052984092,
+     "p_min": 0.00411522633744856,
+     "S": 0.23003571988533447,
+     "p": 0.23469132716820795,
+     "detected": false,
+     "below_floor": false,
+     "S_ci95_block_bootstrap": [
+      -0.00457477949735687,
+      0.3242964457518447
+     ],
+     "mean_c_own": 0.6588620575682685,
+     "mean_c_stranger": 0.3526996839787348,
+     "mean_c_shuffle": 0.0010607704722468368,
+     "template_rho_mean": 0.4027120377356607,
+     "lag1_autocorr_Q": 0.388179347354298,
+     "multiplicative_weight_mean": 0.49857212418628083,
+     "unmapped_S": null,
+     "eligible_epoch_numbers": [
+      3,
+      4,
+      6,
+      7,
+      8,
+      9,
+      10,
+      13,
+      15,
+      16,
+      17,
+      19,
+      20,
+      23,
+      24
+     ]
+    }
+   },
+   "measurable_runs": [
+    "default_sg0.5_gl0_seed12345",
+    "default_sg0.5_gl0_seed31337",
+    "default_sg0.5_gl0_seed777"
+   ],
+   "detected_runs": [
+    "default_sg0.5_gl0_seed12345"
+   ]
+  }
+ },
+ "static_runs": {
+  "default_sg0_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9216921613847313,
+   "consecutive_epoch_correlation_min": -7.56702713303824e-05,
+   "residual_consecutive_correlation_median": 0.013867110421300321,
+   "cells_for_99pct_mass_median": 4.0,
+   "centroid_xyz_median": [
+    15.499854922280086,
+    15.4953587052548,
+    15.500062815941497
+   ],
+   "top_cell_mass_share_median": 0.489137202501297,
+   "relvar_cur_min_max": [
+    0.4275312298203033,
+    0.9089989494242593
+   ]
+  },
+  "default_sg0_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9215529436082402,
+   "consecutive_epoch_correlation_min": -7.568633920868426e-05,
+   "residual_consecutive_correlation_median": 0.0066114418610918975,
+   "cells_for_99pct_mass_median": 4.0,
+   "centroid_xyz_median": [
+    15.49965526160678,
+    15.489332183244546,
+    15.499929547288641
+   ],
+   "top_cell_mass_share_median": 0.48946061730384827,
+   "relvar_cur_min_max": [
+    0.3868880620099371,
+    0.9097957575593143
+   ]
+  },
+  "default_sg0_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9215221391661702,
+   "consecutive_epoch_correlation_min": -7.567674856822589e-05,
+   "residual_consecutive_correlation_median": 0.006601667526731093,
+   "cells_for_99pct_mass_median": 4.0,
+   "centroid_xyz_median": [
+    15.500190377250615,
+    15.505397327609018,
+    15.50015354168876
+   ],
+   "top_cell_mass_share_median": 0.48913291096687317,
+   "relvar_cur_min_max": [
+    0.46247068236509026,
+    0.9091324289055365
+   ]
+  },
+  "default_sg0_gl0_seed777_n4194304_e24|default_sg0_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.9999999246546702,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0_gl0_seed777_n4194304_e24|default_sg0_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999997892776851,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0_gl0_seed12345_n4194304_e24|default_sg0_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999994619538101,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.5583245154325027,
+   "consecutive_epoch_correlation_min": 0.012364828228237904,
+   "residual_consecutive_correlation_median": 0.07117197852233274,
+   "cells_for_99pct_mass_median": 4.0,
+   "centroid_xyz_median": [
+    15.513858543102181,
+    15.929910375650136,
+    15.501879088878422
+   ],
+   "top_cell_mass_share_median": 0.4623761475086212,
+   "relvar_cur_min_max": [
+    0.5140369554831902,
+    0.9645180695963715
+   ]
+  },
+  "default_sg0_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.5587197360768302,
+   "consecutive_epoch_correlation_min": 0.012268795391994283,
+   "residual_consecutive_correlation_median": 0.05230567517608996,
+   "cells_for_99pct_mass_median": 4.0,
+   "centroid_xyz_median": [
+    15.513484464312342,
+    15.918270846809996,
+    15.50156413783576
+   ],
+   "top_cell_mass_share_median": 0.4624084532260895,
+   "relvar_cur_min_max": [
+    0.3582398124546375,
+    0.9634526302731543
+   ]
+  },
+  "default_sg0_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.5582952857850154,
+   "consecutive_epoch_correlation_min": 0.012441334130702586,
+   "residual_consecutive_correlation_median": 0.052511973995225156,
+   "cells_for_99pct_mass_median": 4.5,
+   "centroid_xyz_median": [
+    15.514076457709104,
+    15.936852715241399,
+    15.502072923123658
+   ],
+   "top_cell_mass_share_median": 0.462497740983963,
+   "relvar_cur_min_max": [
+    0.41849614186932327,
+    0.9630220227338662
+   ]
+  },
+  "default_sg0_gl0.5_seed777_n4194304_e24|default_sg0_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999997167467963,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0_gl0.5_seed777_n4194304_e24|default_sg0_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999999030112607,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0_gl0.5_seed12345_n4194304_e24|default_sg0_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999992882750154,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999824863243405,
+   "consecutive_epoch_correlation_min": 0.9996783896775114,
+   "residual_consecutive_correlation_median": 0.9972236458236651,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.499986529118935,
+    15.49999284721265,
+    15.500089049217962
+   ],
+   "top_cell_mass_share_median": 0.05831313505768776,
+   "relvar_cur_min_max": [
+    0.0030366043404307305,
+    0.0037671944646993213
+   ]
+  },
+  "default_sg0.15_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999770295728567,
+   "consecutive_epoch_correlation_min": 0.9996924327017129,
+   "residual_consecutive_correlation_median": 0.9963074970457483,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.499962449658911,
+    15.50007343304387,
+    15.500088334168346
+   ],
+   "top_cell_mass_share_median": 0.05835140123963356,
+   "relvar_cur_min_max": [
+    0.003042908241680466,
+    0.003736368011063625
+   ]
+  },
+  "default_sg0.15_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999834813581154,
+   "consecutive_epoch_correlation_min": 0.999658524907389,
+   "residual_consecutive_correlation_median": 0.9973115881573476,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.499899267909896,
+    15.500025629976836,
+    15.500075459621765
+   ],
+   "top_cell_mass_share_median": 0.058352235704660416,
+   "relvar_cur_min_max": [
+    0.0030817954456779533,
+    0.0037780678932752437
+   ]
+  },
+  "default_sg0.15_gl0_seed777_n4194304_e24|default_sg0.15_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.9999906099062947,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0_seed777_n4194304_e24|default_sg0.15_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.999993674502618,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0_seed12345_n4194304_e24|default_sg0.15_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999945862801626,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.7659201009139073,
+   "consecutive_epoch_correlation_min": 0.2184699616731702,
+   "residual_consecutive_correlation_median": 0.5793958470356643,
+   "cells_for_99pct_mass_median": 111.0,
+   "centroid_xyz_median": [
+    15.501505969328882,
+    15.492159127661406,
+    16.33828008293332
+   ],
+   "top_cell_mass_share_median": 0.05980384349822998,
+   "relvar_cur_min_max": [
+    0.0706234266408501,
+    0.706766168239579
+   ]
+  },
+  "default_sg0.15_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.7662019855336579,
+   "consecutive_epoch_correlation_min": 0.21706221543289853,
+   "residual_consecutive_correlation_median": 0.5786910607238467,
+   "cells_for_99pct_mass_median": 111.5,
+   "centroid_xyz_median": [
+    15.501450775652584,
+    15.493008136623835,
+    16.33625912773011
+   ],
+   "top_cell_mass_share_median": 0.059905290603637695,
+   "relvar_cur_min_max": [
+    0.0707558423546961,
+    0.7061884386872209
+   ]
+  },
+  "default_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.7657014932551734,
+   "consecutive_epoch_correlation_min": 0.21749511715809838,
+   "residual_consecutive_correlation_median": 0.5797841661548445,
+   "cells_for_99pct_mass_median": 111.5,
+   "centroid_xyz_median": [
+    15.501756071010202,
+    15.491695880601235,
+    16.337594749085277
+   ],
+   "top_cell_mass_share_median": 0.05993390083312988,
+   "relvar_cur_min_max": [
+    0.07251468355754494,
+    0.7062488899575088
+   ]
+  },
+  "default_sg0.15_gl0.5_seed777_n4194304_e24|default_sg0.15_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999910271183249,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0.5_seed777_n4194304_e24|default_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.999993894256268,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.15_gl0.5_seed12345_n4194304_e24|default_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.999994653063923,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999516508702841,
+   "consecutive_epoch_correlation_min": 0.9976207003505349,
+   "residual_consecutive_correlation_median": 0.9999270249241825,
+   "cells_for_99pct_mass_median": 103.0,
+   "centroid_xyz_median": [
+    15.499688150846168,
+    15.500111221657015,
+    14.50005126073921
+   ],
+   "top_cell_mass_share_median": 0.06195974349975586,
+   "relvar_cur_min_max": [
+    0.42879808021146476,
+    0.4814628010474677
+   ]
+  },
+  "default_sg0.3_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999861030163658,
+   "consecutive_epoch_correlation_min": 0.9999532177732233,
+   "residual_consecutive_correlation_median": 0.9735354356588236,
+   "cells_for_99pct_mass_median": 103.0,
+   "centroid_xyz_median": [
+    15.499980449658064,
+    15.499884724617328,
+    15.500001072889246
+   ],
+   "top_cell_mass_share_median": 0.06241894140839577,
+   "relvar_cur_min_max": [
+    0.00025792466462119877,
+    0.00038028331736084174
+   ]
+  },
+  "default_sg0.3_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999893764232776,
+   "consecutive_epoch_correlation_min": 0.9999523378954395,
+   "residual_consecutive_correlation_median": 0.9774489026682396,
+   "cells_for_99pct_mass_median": 103.0,
+   "centroid_xyz_median": [
+    15.500095248449659,
+    15.499889254386453,
+    15.500050663507793
+   ],
+   "top_cell_mass_share_median": 0.062384966760873795,
+   "relvar_cur_min_max": [
+    0.00028066182375233493,
+    0.0003915392598554992
+   ]
+  },
+  "default_sg0.3_gl0_seed777_n4194304_e24|default_sg0.3_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.998776602150979,
+   "shift_xyz": [
+    0,
+    0,
+    -1
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0_seed777_n4194304_e24|default_sg0.3_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9987688870531577,
+   "shift_xyz": [
+    0,
+    0,
+    -1
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0_seed12345_n4194304_e24|default_sg0.3_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999857890963124,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9738481457023641,
+   "consecutive_epoch_correlation_min": 0.6196293057476813,
+   "residual_consecutive_correlation_median": 0.9061869336486578,
+   "cells_for_99pct_mass_median": 110.5,
+   "centroid_xyz_median": [
+    15.44651806364373,
+    15.495767950638303,
+    15.37114155469581
+   ],
+   "top_cell_mass_share_median": 0.062782883644104,
+   "relvar_cur_min_max": [
+    0.0005343222242823908,
+    0.6589635109991105
+   ]
+  },
+  "default_sg0.3_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9738187669884009,
+   "consecutive_epoch_correlation_min": 0.6193478203245825,
+   "residual_consecutive_correlation_median": 0.9054881069691326,
+   "cells_for_99pct_mass_median": 110.5,
+   "centroid_xyz_median": [
+    15.446719527161788,
+    15.496164679254345,
+    15.371381761713895
+   ],
+   "top_cell_mass_share_median": 0.06277108192443848,
+   "relvar_cur_min_max": [
+    0.000537288981302465,
+    0.6588406785949651
+   ]
+  },
+  "default_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9739137123297316,
+   "consecutive_epoch_correlation_min": 0.6185907832671574,
+   "residual_consecutive_correlation_median": 0.9051490673065937,
+   "cells_for_99pct_mass_median": 111.0,
+   "centroid_xyz_median": [
+    15.446360588157269,
+    15.495982528100704,
+    15.3718829169214
+   ],
+   "top_cell_mass_share_median": 0.06270241737365723,
+   "relvar_cur_min_max": [
+    0.0005284970823729034,
+    0.6586846158661388
+   ]
+  },
+  "default_sg0.3_gl0.5_seed777_n4194304_e24|default_sg0.3_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999896229479989,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0.5_seed777_n4194304_e24|default_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.999988022899734,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.3_gl0.5_seed12345_n4194304_e24|default_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999912900857308,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999901229786141,
+   "consecutive_epoch_correlation_min": 0.9999768637173913,
+   "residual_consecutive_correlation_median": 0.9189100435494564,
+   "cells_for_99pct_mass_median": 101.5,
+   "centroid_xyz_median": [
+    15.499909520349622,
+    15.499970913164884,
+    15.499919295769267
+   ],
+   "top_cell_mass_share_median": 0.06350553035736084,
+   "relvar_cur_min_max": [
+    6.765624795790778e-05,
+    0.00011125047957495326
+   ]
+  },
+  "default_sg0.5_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999539504166676,
+   "consecutive_epoch_correlation_min": 0.9990659559246784,
+   "residual_consecutive_correlation_median": 0.9999514917618433,
+   "cells_for_99pct_mass_median": 102.0,
+   "centroid_xyz_median": [
+    15.499801397165502,
+    15.499998569352531,
+    14.500506043436769
+   ],
+   "top_cell_mass_share_median": 0.06304430961608887,
+   "relvar_cur_min_max": [
+    0.44381441314534376,
+    0.47756742359166193
+   ]
+  },
+  "default_sg0.5_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999887790462395,
+   "consecutive_epoch_correlation_min": 0.99996938344601,
+   "residual_consecutive_correlation_median": 0.9159114640256782,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.500154851967928,
+    15.500143765424838,
+    15.49996256823216
+   ],
+   "top_cell_mass_share_median": 0.06357216835021973,
+   "relvar_cur_min_max": [
+    7.313314722972152e-05,
+    0.00010487046346573697
+   ]
+  },
+  "default_sg0.5_gl0_seed777_n4194304_e24|default_sg0.5_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.9994384697659546,
+   "shift_xyz": [
+    0,
+    0,
+    1
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0_seed777_n4194304_e24|default_sg0.5_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.999995484670199,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0_seed12345_n4194304_e24|default_sg0.5_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9994669444616691,
+   "shift_xyz": [
+    0,
+    0,
+    -1
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9620496362851672,
+   "consecutive_epoch_correlation_min": 0.5702638046314933,
+   "residual_consecutive_correlation_median": 0.16836225009683564,
+   "cells_for_99pct_mass_median": 111.5,
+   "centroid_xyz_median": [
+    15.522211191270326,
+    15.497570396900183,
+    15.499740481494882
+   ],
+   "top_cell_mass_share_median": 0.0643080472946167,
+   "relvar_cur_min_max": [
+    0.0001393602669173867,
+    0.5703548983566594
+   ]
+  },
+  "default_sg0.5_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9608205912752551,
+   "consecutive_epoch_correlation_min": 0.5686994695516919,
+   "residual_consecutive_correlation_median": 0.18560101468153167,
+   "cells_for_99pct_mass_median": 113.5,
+   "centroid_xyz_median": [
+    15.522150036625028,
+    15.496923685009207,
+    15.500475883526772
+   ],
+   "top_cell_mass_share_median": 0.06323575973510742,
+   "relvar_cur_min_max": [
+    0.0001462629767674611,
+    0.5705017714222494
+   ]
+  },
+  "default_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9642019292364286,
+   "consecutive_epoch_correlation_min": 0.5687953139084015,
+   "residual_consecutive_correlation_median": 0.1774786305960131,
+   "cells_for_99pct_mass_median": 112.0,
+   "centroid_xyz_median": [
+    15.522123810746946,
+    15.498192312317226,
+    15.50003767030767
+   ],
+   "top_cell_mass_share_median": 0.06431734561920166,
+   "relvar_cur_min_max": [
+    0.0001748046829765705,
+    0.5702218598373237
+   ]
+  },
+  "default_sg0.5_gl0.5_seed777_n4194304_e24|default_sg0.5_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999954197673115,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0.5_seed777_n4194304_e24|default_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999954120261533,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.5_gl0.5_seed12345_n4194304_e24|default_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999937355958158,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999896171699676,
+   "consecutive_epoch_correlation_min": 0.9999761301034926,
+   "residual_consecutive_correlation_median": 0.7927115230129694,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.500197530125059,
+    15.500024199607578,
+    15.500000476750914
+   ],
+   "top_cell_mass_share_median": 0.06406795978546143,
+   "relvar_cur_min_max": [
+    2.4999854666954856e-05,
+    6.512502676503631e-05
+   ]
+  },
+  "default_sg0.8_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999893745033968,
+   "consecutive_epoch_correlation_min": 0.9999672089284971,
+   "residual_consecutive_correlation_median": 0.779931152224736,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.50031137472022,
+    15.500025153429174,
+    15.500028490804109
+   ],
+   "top_cell_mass_share_median": 0.06411504745483398,
+   "relvar_cur_min_max": [
+    2.8672333324472918e-05,
+    5.379059226634763e-05
+   ]
+  },
+  "default_sg0.8_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9999897495409125,
+   "consecutive_epoch_correlation_min": 0.9999802397157713,
+   "residual_consecutive_correlation_median": 0.7982595310315569,
+   "cells_for_99pct_mass_median": 101.0,
+   "centroid_xyz_median": [
+    15.500073671761415,
+    15.500028371872911,
+    15.500081300947086
+   ],
+   "top_cell_mass_share_median": 0.06408405303955078,
+   "relvar_cur_min_max": [
+    2.9049983640915047e-05,
+    4.8925489016632225e-05
+   ]
+  },
+  "default_sg0.8_gl0_seed777_n4194304_e24|default_sg0.8_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.999988790628131,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0_seed777_n4194304_e24|default_sg0.8_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999944101697388,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0_seed12345_n4194304_e24|default_sg0.8_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9999892884268485,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9615221154134489,
+   "consecutive_epoch_correlation_min": 0.5337602077509556,
+   "residual_consecutive_correlation_median": 0.13594629658775148,
+   "cells_for_99pct_mass_median": 113.5,
+   "centroid_xyz_median": [
+    15.513286227954715,
+    15.497250079770026,
+    15.499987959741649
+   ],
+   "top_cell_mass_share_median": 0.06462204456329346,
+   "relvar_cur_min_max": [
+    8.93456768044115e-05,
+    0.5677043718979021
+   ]
+  },
+  "default_sg0.8_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9619214365282456,
+   "consecutive_epoch_correlation_min": 0.5326699243951267,
+   "residual_consecutive_correlation_median": 0.12801011798347642,
+   "cells_for_99pct_mass_median": 113.5,
+   "centroid_xyz_median": [
+    15.512992377189205,
+    15.497236728339121,
+    15.500405788424427
+   ],
+   "top_cell_mass_share_median": 0.06458544731140137,
+   "relvar_cur_min_max": [
+    9.564380935163739e-05,
+    0.5673791111758821
+   ]
+  },
+  "default_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.9615182390259066,
+   "consecutive_epoch_correlation_min": 0.5326269869770153,
+   "residual_consecutive_correlation_median": 0.1407998281647415,
+   "cells_for_99pct_mass_median": 113.5,
+   "centroid_xyz_median": [
+    15.512812847964621,
+    15.49736487857433,
+    15.500185728125153
+   ],
+   "top_cell_mass_share_median": 0.06457960605621338,
+   "relvar_cur_min_max": [
+    9.612114311074396e-05,
+    0.5670399768659371
+   ]
+  },
+  "default_sg0.8_gl0.5_seed777_n4194304_e24|default_sg0.8_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999913945284846,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0.5_seed777_n4194304_e24|default_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999946865028069,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "default_sg0.8_gl0.5_seed12345_n4194304_e24|default_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.999994798215224,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.609108122117948,
+   "consecutive_epoch_correlation_min": 0.010879199598645558,
+   "residual_consecutive_correlation_median": 0.4896258021464558,
+   "cells_for_99pct_mass_median": 12016.5,
+   "centroid_xyz_median": [
+    15.499781249684952,
+    15.499792097513044,
+    15.498861191317676
+   ],
+   "top_cell_mass_share_median": 0.0010124449618160725,
+   "relvar_cur_min_max": [
+    0.19690906854130125,
+    0.825221860733915
+   ]
+  },
+  "spinchladni_sg0_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.6097421793873232,
+   "consecutive_epoch_correlation_min": 0.010628774011527823,
+   "residual_consecutive_correlation_median": 0.4789467662199374,
+   "cells_for_99pct_mass_median": 12023.5,
+   "centroid_xyz_median": [
+    15.499119756515253,
+    15.500469326604566,
+    15.498525499211944
+   ],
+   "top_cell_mass_share_median": 0.0010079150088131428,
+   "relvar_cur_min_max": [
+    0.19861561793959248,
+    0.8256192007939769
+   ]
+  },
+  "spinchladni_sg0_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.6093846705179988,
+   "consecutive_epoch_correlation_min": 0.010826231060295743,
+   "residual_consecutive_correlation_median": 0.4876392952367155,
+   "cells_for_99pct_mass_median": 12021.5,
+   "centroid_xyz_median": [
+    15.49873757396415,
+    15.499712109932943,
+    15.500163793528856
+   ],
+   "top_cell_mass_share_median": 0.0009998086607083678,
+   "relvar_cur_min_max": [
+    0.19519076954016837,
+    0.8260166340445455
+   ]
+  },
+  "spinchladni_sg0_gl0_seed777_n4194304_e24|spinchladni_sg0_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.9981098626219174,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0_seed777_n4194304_e24|spinchladni_sg0_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9981240183015107,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0_seed12345_n4194304_e24|spinchladni_sg0_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9981017242025648,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.3853029767555345,
+   "consecutive_epoch_correlation_min": 0.0029067117480733075,
+   "residual_consecutive_correlation_median": 0.3451242472808102,
+   "cells_for_99pct_mass_median": 12317.0,
+   "centroid_xyz_median": [
+    15.465628608175756,
+    8.507147620516186,
+    15.466851359304474
+   ],
+   "top_cell_mass_share_median": 0.006536724977195263,
+   "relvar_cur_min_max": [
+    0.19239706659098632,
+    0.8985880159330845
+   ]
+  },
+  "spinchladni_sg0_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.3853777709703654,
+   "consecutive_epoch_correlation_min": 0.0028045010006350173,
+   "residual_consecutive_correlation_median": 0.3527330070388955,
+   "cells_for_99pct_mass_median": 12341.5,
+   "centroid_xyz_median": [
+    15.46276163547294,
+    8.513030599539444,
+    15.469765791594153
+   ],
+   "top_cell_mass_share_median": 0.006538513116538525,
+   "relvar_cur_min_max": [
+    0.19129231646815215,
+    0.8978570298348635
+   ]
+  },
+  "spinchladni_sg0_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.385054233262414,
+   "consecutive_epoch_correlation_min": 0.0028224598679113897,
+   "residual_consecutive_correlation_median": 0.3518647204047155,
+   "cells_for_99pct_mass_median": 12325.0,
+   "centroid_xyz_median": [
+    15.461898436304262,
+    8.51032168902088,
+    15.469781405616192
+   ],
+   "top_cell_mass_share_median": 0.006530883722007275,
+   "relvar_cur_min_max": [
+    0.18834432750469007,
+    0.898799851224182
+   ]
+  },
+  "spinchladni_sg0_gl0.5_seed777_n4194304_e24|spinchladni_sg0_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9997715416554909,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0.5_seed777_n4194304_e24|spinchladni_sg0_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.999780877923205,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0_gl0.5_seed12345_n4194304_e24|spinchladni_sg0_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9997582207849912,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.4378893270148028,
+   "consecutive_epoch_correlation_min": -0.006448712312757808,
+   "residual_consecutive_correlation_median": 0.33974599728378135,
+   "cells_for_99pct_mass_median": 11258.0,
+   "centroid_xyz_median": [
+    15.50634324647665,
+    15.511154655288447,
+    15.487526412056518
+   ],
+   "top_cell_mass_share_median": 0.00210654828697443,
+   "relvar_cur_min_max": [
+    0.24628077079402627,
+    0.8767529093005065
+   ]
+  },
+  "spinchladni_sg0.15_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.43888874812744555,
+   "consecutive_epoch_correlation_min": -0.008085114639967663,
+   "residual_consecutive_correlation_median": 0.35011663307174046,
+   "cells_for_99pct_mass_median": 11268.5,
+   "centroid_xyz_median": [
+    15.515404114833142,
+    15.501489520410122,
+    15.470030780820546
+   ],
+   "top_cell_mass_share_median": 0.002045632340013981,
+   "relvar_cur_min_max": [
+    0.24400305463905747,
+    0.8771609347615915
+   ]
+  },
+  "spinchladni_sg0.15_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.43992869234731874,
+   "consecutive_epoch_correlation_min": -0.006520801635257739,
+   "residual_consecutive_correlation_median": 0.3814450993618465,
+   "cells_for_99pct_mass_median": 11357.0,
+   "centroid_xyz_median": [
+    15.497190715490428,
+    15.501827355225043,
+    15.496170524490655
+   ],
+   "top_cell_mass_share_median": 0.0022888192906975746,
+   "relvar_cur_min_max": [
+    0.24232825067541686,
+    0.8779693031365817
+   ]
+  },
+  "spinchladni_sg0.15_gl0_seed777_n4194304_e24|spinchladni_sg0.15_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.9974525085554539,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0_seed777_n4194304_e24|spinchladni_sg0.15_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9753284834457088,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0_seed12345_n4194304_e24|spinchladni_sg0.15_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9796763188404148,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.09708838959091674,
+   "consecutive_epoch_correlation_min": -0.01873956043048913,
+   "residual_consecutive_correlation_median": 0.24941266907551995,
+   "cells_for_99pct_mass_median": 11452.5,
+   "centroid_xyz_median": [
+    15.402301499221668,
+    9.153997211236414,
+    15.49678015389191
+   ],
+   "top_cell_mass_share_median": 0.009873989969491959,
+   "relvar_cur_min_max": [
+    0.4287191973332124,
+    0.979894870026526
+   ]
+  },
+  "spinchladni_sg0.15_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.12494853665816145,
+   "consecutive_epoch_correlation_min": -0.018028050370984768,
+   "residual_consecutive_correlation_median": 0.17559894508819404,
+   "cells_for_99pct_mass_median": 11597.0,
+   "centroid_xyz_median": [
+    15.38912937231309,
+    9.439684029426669,
+    15.404038681817102
+   ],
+   "top_cell_mass_share_median": 0.008959295228123665,
+   "relvar_cur_min_max": [
+    0.3478322693680086,
+    0.9743620329723753
+   ]
+  },
+  "spinchladni_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.14268033352477424,
+   "consecutive_epoch_correlation_min": -0.004112054072630828,
+   "residual_consecutive_correlation_median": 0.16504188746045007,
+   "cells_for_99pct_mass_median": 11890.0,
+   "centroid_xyz_median": [
+    15.49181829499195,
+    8.801813667973335,
+    15.514027698447695
+   ],
+   "top_cell_mass_share_median": 0.008295658975839615,
+   "relvar_cur_min_max": [
+    0.35356494584989356,
+    0.9727845026053109
+   ]
+  },
+  "spinchladni_sg0.15_gl0.5_seed777_n4194304_e24|spinchladni_sg0.15_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9044161253861562,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0.5_seed777_n4194304_e24|spinchladni_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.7089356944353443,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.15_gl0.5_seed12345_n4194304_e24|spinchladni_sg0.15_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.7746501696889208,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.1163774604117076,
+   "consecutive_epoch_correlation_min": -0.02561474007184548,
+   "residual_consecutive_correlation_median": 0.09717751080769661,
+   "cells_for_99pct_mass_median": 11624.0,
+   "centroid_xyz_median": [
+    15.649848423449592,
+    15.556159416713669,
+    15.548675557179326
+   ],
+   "top_cell_mass_share_median": 0.0040621766820549965,
+   "relvar_cur_min_max": [
+    0.12717430284179898,
+    0.941378700183633
+   ]
+  },
+  "spinchladni_sg0.3_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.13684487306563065,
+   "consecutive_epoch_correlation_min": -0.021387502996665912,
+   "residual_consecutive_correlation_median": 0.15488366985622895,
+   "cells_for_99pct_mass_median": 10814.0,
+   "centroid_xyz_median": [
+    15.496685368493964,
+    15.451741310209957,
+    15.529220222442557
+   ],
+   "top_cell_mass_share_median": 0.00406313082203269,
+   "relvar_cur_min_max": [
+    0.20779959091214562,
+    0.9750788309537157
+   ]
+  },
+  "spinchladni_sg0.3_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.20899538828146402,
+   "consecutive_epoch_correlation_min": -0.026620688366924487,
+   "residual_consecutive_correlation_median": 0.13843741453090205,
+   "cells_for_99pct_mass_median": 10442.0,
+   "centroid_xyz_median": [
+    15.421909553212304,
+    15.428868553707538,
+    15.400546054744167
+   ],
+   "top_cell_mass_share_median": 0.0037827505730092525,
+   "relvar_cur_min_max": [
+    0.2993487261795478,
+    0.9649599109024838
+   ]
+  },
+  "spinchladni_sg0.3_gl0_seed777_n4194304_e24|spinchladni_sg0.3_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.7671718392745964,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0_seed777_n4194304_e24|spinchladni_sg0.3_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.7308383064839225,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0_seed12345_n4194304_e24|spinchladni_sg0.3_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9930551337386773,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.04371008638799641,
+   "consecutive_epoch_correlation_min": -0.019559236497190113,
+   "residual_consecutive_correlation_median": 0.014573183768570844,
+   "cells_for_99pct_mass_median": 10585.5,
+   "centroid_xyz_median": [
+    15.510214451800955,
+    10.410373162762411,
+    16.416477014385165
+   ],
+   "top_cell_mass_share_median": 0.006741764023900032,
+   "relvar_cur_min_max": [
+    0.3566651872246622,
+    0.9738357888317277
+   ]
+  },
+  "spinchladni_sg0.3_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.03321153581348144,
+   "consecutive_epoch_correlation_min": -0.01705598735093412,
+   "residual_consecutive_correlation_median": 0.013575924363749992,
+   "cells_for_99pct_mass_median": 10530.0,
+   "centroid_xyz_median": [
+    15.345157482573331,
+    10.530627869372594,
+    16.50066757938557
+   ],
+   "top_cell_mass_share_median": 0.00842011347413063,
+   "relvar_cur_min_max": [
+    0.3639988831015508,
+    0.9803953676976189
+   ]
+  },
+  "spinchladni_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.01351709147451424,
+   "consecutive_epoch_correlation_min": -0.01895354706044862,
+   "residual_consecutive_correlation_median": 0.01763140700459523,
+   "cells_for_99pct_mass_median": 10410.0,
+   "centroid_xyz_median": [
+    15.504993831453717,
+    10.288560148101112,
+    16.094841160184487
+   ],
+   "top_cell_mass_share_median": 0.0076407212764024734,
+   "relvar_cur_min_max": [
+    0.3628605781857811,
+    0.9797106150629453
+   ]
+  },
+  "spinchladni_sg0.3_gl0.5_seed777_n4194304_e24|spinchladni_sg0.3_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.7503512413610727,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0.5_seed777_n4194304_e24|spinchladni_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.8597964380758308,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.3_gl0.5_seed12345_n4194304_e24|spinchladni_sg0.3_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.7147992763038854,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.10233217079387387,
+   "consecutive_epoch_correlation_min": -0.024166476389907526,
+   "residual_consecutive_correlation_median": 0.023495578345963605,
+   "cells_for_99pct_mass_median": 10577.5,
+   "centroid_xyz_median": [
+    15.467747313650644,
+    13.157034166612583,
+    15.537856856090485
+   ],
+   "top_cell_mass_share_median": 0.006085993722081184,
+   "relvar_cur_min_max": [
+    0.35744242246695085,
+    0.9814989377865492
+   ]
+  },
+  "spinchladni_sg0.5_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.05489893903947752,
+   "consecutive_epoch_correlation_min": -0.022759365057883955,
+   "residual_consecutive_correlation_median": 0.06294430257372084,
+   "cells_for_99pct_mass_median": 10808.0,
+   "centroid_xyz_median": [
+    15.440547490616098,
+    16.118875778086277,
+    15.807800196438428
+   ],
+   "top_cell_mass_share_median": 0.005492331460118294,
+   "relvar_cur_min_max": [
+    0.5235461361742629,
+    0.9736266200402728
+   ]
+  },
+  "spinchladni_sg0.5_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.16264224877079117,
+   "consecutive_epoch_correlation_min": -0.025554192692564492,
+   "residual_consecutive_correlation_median": 0.06737832276155459,
+   "cells_for_99pct_mass_median": 11473.5,
+   "centroid_xyz_median": [
+    15.438557602943256,
+    15.139114409832903,
+    15.52206959193965
+   ],
+   "top_cell_mass_share_median": 0.005741599015891552,
+   "relvar_cur_min_max": [
+    0.13001484392620138,
+    0.9708638783198025
+   ]
+  },
+  "spinchladni_sg0.5_gl0_seed777_n4194304_e24|spinchladni_sg0.5_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.0953900043125078,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0_seed777_n4194304_e24|spinchladni_sg0.5_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.9967466409755571,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0_seed12345_n4194304_e24|spinchladni_sg0.5_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.10234003086931655,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.0800355012452197,
+   "consecutive_epoch_correlation_min": -0.004442486781965688,
+   "residual_consecutive_correlation_median": 0.07684358026208399,
+   "cells_for_99pct_mass_median": 5811.0,
+   "centroid_xyz_median": [
+    15.71514722476422,
+    12.115626246466274,
+    14.775567749886928
+   ],
+   "top_cell_mass_share_median": 0.011713508516550064,
+   "relvar_cur_min_max": [
+    0.27831226931549563,
+    0.983638254204285
+   ]
+  },
+  "spinchladni_sg0.5_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.0771026189125143,
+   "consecutive_epoch_correlation_min": -0.004414885767222643,
+   "residual_consecutive_correlation_median": 0.05810676469491197,
+   "cells_for_99pct_mass_median": 6260.5,
+   "centroid_xyz_median": [
+    15.83051733017167,
+    12.036714333652228,
+    14.456662944428988
+   ],
+   "top_cell_mass_share_median": 0.019620785489678383,
+   "relvar_cur_min_max": [
+    0.2350908186058567,
+    0.9774304852394718
+   ]
+  },
+  "spinchladni_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.024370786244825103,
+   "consecutive_epoch_correlation_min": -0.004781560365263409,
+   "residual_consecutive_correlation_median": 0.025455748859092076,
+   "cells_for_99pct_mass_median": 7069.5,
+   "centroid_xyz_median": [
+    15.939950841346779,
+    12.273535070151784,
+    15.073245884257833
+   ],
+   "top_cell_mass_share_median": 0.016982678323984146,
+   "relvar_cur_min_max": [
+    0.4258159154560067,
+    0.9852925533604463
+   ]
+  },
+  "spinchladni_sg0.5_gl0.5_seed777_n4194304_e24|spinchladni_sg0.5_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9994180913611446,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0.5_seed777_n4194304_e24|spinchladni_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9998193703458959,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.5_gl0.5_seed12345_n4194304_e24|spinchladni_sg0.5_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9994529720404048,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.2553418129260694,
+   "consecutive_epoch_correlation_min": -0.01025550784112197,
+   "residual_consecutive_correlation_median": 0.07951008052746035,
+   "cells_for_99pct_mass_median": 2219.5,
+   "centroid_xyz_median": [
+    15.49679624998167,
+    15.497837065239525,
+    15.507130739795004
+   ],
+   "top_cell_mass_share_median": 0.029468419030308723,
+   "relvar_cur_min_max": [
+    0.0007701696367372633,
+    0.9742222760063729
+   ]
+  },
+  "spinchladni_sg0.8_gl0_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.24244818883501248,
+   "consecutive_epoch_correlation_min": -0.010197684860519425,
+   "residual_consecutive_correlation_median": 0.09918971648499268,
+   "cells_for_99pct_mass_median": 2489.5,
+   "centroid_xyz_median": [
+    15.500078202475931,
+    15.50125789765768,
+    15.489976649430982
+   ],
+   "top_cell_mass_share_median": 0.02861333265900612,
+   "relvar_cur_min_max": [
+    0.0007991366377001871,
+    0.9758580091132618
+   ]
+  },
+  "spinchladni_sg0.8_gl0_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.27473364569387343,
+   "consecutive_epoch_correlation_min": -0.010196611252609709,
+   "residual_consecutive_correlation_median": 0.06574284704988806,
+   "cells_for_99pct_mass_median": 2175.5,
+   "centroid_xyz_median": [
+    15.58110025623112,
+    15.49776827946955,
+    14.60332712502855
+   ],
+   "top_cell_mass_share_median": 0.02924978919327259,
+   "relvar_cur_min_max": [
+    0.0007934760160607842,
+    0.96599843655723
+   ]
+  },
+  "spinchladni_sg0.8_gl0_seed777_n4194304_e24|spinchladni_sg0.8_gl0_seed12345_n4194304_e24": {
+   "pearson": 0.04102602457336239,
+   "shift_xyz": [
+    1,
+    1,
+    -1
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0_seed777_n4194304_e24|spinchladni_sg0.8_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.21094056624144086,
+   "shift_xyz": [
+    0,
+    1,
+    -1
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0_seed12345_n4194304_e24|spinchladni_sg0.8_gl0_seed31337_n4194304_e24": {
+   "pearson": 0.08063386484040222,
+   "shift_xyz": [
+    -1,
+    -1,
+    -1
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0.5_seed777_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.37697890732317,
+   "consecutive_epoch_correlation_min": -0.0016584052801478645,
+   "residual_consecutive_correlation_median": 0.271442837891686,
+   "cells_for_99pct_mass_median": 1513.5,
+   "centroid_xyz_median": [
+    15.616682468911907,
+    12.001270176198956,
+    15.456866746256212
+   ],
+   "top_cell_mass_share_median": 0.02925300784409046,
+   "relvar_cur_min_max": [
+    0.0029684478292522094,
+    0.9773033587713265
+   ]
+  },
+  "spinchladni_sg0.8_gl0.5_seed12345_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.40408022119613385,
+   "consecutive_epoch_correlation_min": -0.001659103555551717,
+   "residual_consecutive_correlation_median": 0.3673767919938756,
+   "cells_for_99pct_mass_median": 1070.0,
+   "centroid_xyz_median": [
+    15.459769597913052,
+    11.470307111602796,
+    16.515119788966544
+   ],
+   "top_cell_mass_share_median": 0.03017425909638405,
+   "relvar_cur_min_max": [
+    0.002927068963702328,
+    0.9827104903020223
+   ]
+  },
+  "spinchladni_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "consecutive_epoch_correlation_median": 0.40451694012933515,
+   "consecutive_epoch_correlation_min": -0.0016611142151444767,
+   "residual_consecutive_correlation_median": 0.3306479009384341,
+   "cells_for_99pct_mass_median": 625.0,
+   "centroid_xyz_median": [
+    15.410409107236447,
+    11.470213413361396,
+    16.65421880496113
+   ],
+   "top_cell_mass_share_median": 0.030032996088266373,
+   "relvar_cur_min_max": [
+    0.00285669747961498,
+    0.9826850981373001
+   ]
+  },
+  "spinchladni_sg0.8_gl0.5_seed777_n4194304_e24|spinchladni_sg0.8_gl0.5_seed12345_n4194304_e24": {
+   "pearson": 0.9999747788098435,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0.5_seed777_n4194304_e24|spinchladni_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999792862196523,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  },
+  "spinchladni_sg0.8_gl0.5_seed12345_n4194304_e24|spinchladni_sg0.8_gl0.5_seed31337_n4194304_e24": {
+   "pearson": 0.9999804895197694,
+   "shift_xyz": [
+    0,
+    0,
+    0
+   ],
+   "epoch": 21
+  }
+ },
+ "resampling": {
+  "seed": 7,
+  "assumption": "the recorded fields are unchanged; only shot noise is added",
+  "counts": {
+   "3000000": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       9,
+       8,
+       10
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       15,
+       14,
+       14
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       4,
+       4,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       2,
+       2,
+       2
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       1,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       6,
+       6,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       2,
+       1,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       7
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       3,
+       4,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       2,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 0,
+    "measurable_conditions": [],
+    "detected_runs": []
+   },
+   "1048576": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       20,
+       20,
+       20
+      ],
+      "measurable": [
+       true,
+       true,
+       true
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       -0.0005433810360964686,
+       -0.0028183340186317906,
+       0.0006702226938785916
+      ],
+      "p": [
+       0.5811047238190452,
+       0.7253186703324169,
+       0.41039740064983754
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       12,
+       12,
+       12
+      ],
+      "measurable": [
+       true,
+       true,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       0.640690513578235,
+       0.3645751928224769,
+       null
+      ],
+      "p": [
+       0.011997000749812546,
+       0.10522369407648088,
+       null
+      ],
+      "detected": [
+       true,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       1,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       6,
+       6,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       2,
+       2,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       7
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       true,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       3,
+       4,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       2,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 5,
+    "measurable_conditions": [
+     "default_sg0.15_gl0"
+    ],
+    "detected_runs": [
+     "default_sg0.3_gl0_seed777"
+    ]
+   },
+   "400000": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       11,
+       11,
+       11
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       1,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       6,
+       7,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       2,
+       1,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       7
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       true,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       3,
+       4,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       2,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 0,
+    "measurable_conditions": [],
+    "detected_runs": []
+   },
+   "262144": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       9,
+       9,
+       9
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       1,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       6,
+       7,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       2,
+       2,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       7
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       3,
+       4,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       2,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 0,
+    "measurable_conditions": [],
+    "detected_runs": []
+   },
+   "65536": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       1,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       1,
+       1,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       8,
+       8,
+       7
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       4,
+       5,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       2,
+       2,
+       2
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       1,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 0,
+    "measurable_conditions": [],
+    "detected_runs": []
+   },
+   "16384": {
+    "conditions": {
+     "default_sg0_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "default_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       0,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0": {
+      "eligible_epochs": [
+       5,
+       5,
+       5
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0_gl0.5": {
+      "eligible_epochs": [
+       1,
+       1,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0": {
+      "eligible_epochs": [
+       3,
+       3,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.15_gl0.5": {
+      "eligible_epochs": [
+       1,
+       2,
+       1
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0": {
+      "eligible_epochs": [
+       8,
+       10,
+       6
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.3_gl0.5": {
+      "eligible_epochs": [
+       1,
+       2,
+       3
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0": {
+      "eligible_epochs": [
+       9,
+       11,
+       9
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.5_gl0.5": {
+      "eligible_epochs": [
+       4,
+       5,
+       4
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       true,
+       true,
+       true
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0": {
+      "eligible_epochs": [
+       2,
+       3,
+       2
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     },
+     "spinchladni_sg0.8_gl0.5": {
+      "eligible_epochs": [
+       2,
+       0,
+       0
+      ],
+      "measurable": [
+       false,
+       false,
+       false
+      ],
+      "e5b_unbalanced": [
+       false,
+       false,
+       false
+      ],
+      "S": [
+       null,
+       null,
+       null
+      ],
+      "p": [
+       null,
+       null,
+       null
+      ],
+      "detected": [
+       false,
+       false,
+       false
+      ]
+     }
+    },
+    "measurable_runs": 0,
+    "measurable_conditions": [],
+    "detected_runs": []
+   }
+  }
+ },
+ "seconds": 32.73761987686157
+}

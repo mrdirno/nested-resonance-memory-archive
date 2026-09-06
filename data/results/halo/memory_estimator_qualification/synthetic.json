@@ -1,9 +1,9 @@
 {
  "schema": "halo-memory-estimator-qualification/2/synthetic",
  "author": "Aldrin Payopay",
- "measured_at": "2026-09-06T00:56:54.913458+00:00",
+ "measured_at": "2026-09-06T08:18:44.661376+00:00",
  "script_sha256": "7619ef6bbe7409bef03c317076edda5ac6b55820e6c6f955da51783e7575dbd0",
- "protocol_sha256": "1b7898adc6b41aa1b33c06511ed2329c50a2f11226cc3285d9a4fdc350ca30cf",
+ "protocol_sha256": "e55a53a1043f31c3aee55ec38e0ed28bb59f270a257719ba66f3bdf6d8a59775",
  "config_main": {
   "e1_mass": 0.01,
   "e2_pr": 8.0,
@@ -612,5 +612,5 @@
    ]
   }
  },
- "seconds": 56.62965488433838
+ "seconds": 52.07770299911499
 }
