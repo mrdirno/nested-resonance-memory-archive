@@ -23,10 +23,12 @@
       ],
       "evidence": [
         "HELIOS-BRIDGE/HALO_HANDOFF.md",
-        "tests/halo/package.json"
+        "tests/halo/package.json",
+        "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+        "analysis/2026-09-06_memory_estimator_qualification.md"
       ],
       "summary": "Browser particle instrument with controlled numerical experiments. The memory claim remains under test.",
-      "next_action": "Repair and validate the estimator before interpreting the registered memory grid; keep browser evidence with numerical results."
+      "next_action": "Design a memory grid the frozen replacement estimator can measure (distinct seeds, relic footprint of at least 8 effective cells, no static runs) and show it measurable in a pilot before registering a confirmatory grid; the recorded 60-run grid declares 0 of 60 runs measurable."
     },
     {
       "id": "helios-visual-studies",

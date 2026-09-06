@@ -2,6 +2,8 @@
 
 Author: Aldrin Payopay · September 5, 2026 · GPL-3.0-only
 
+**Outcome (2026-09-06):** the step proposed here was carried out. The estimator was fixed in [the qualification protocol](2026-09-05_memory_estimator_qualification_protocol.md) and scored once on the recorded grid; it declares [0 of 60 runs measurable](../../analysis/2026-09-06_memory_estimator_qualification.md) (179 of 1,320 run-epochs eligible, result "insufficient support"). The saved meshes cannot qualify a replacement estimator, for reasons that are properties of the grid: near-copy seeds in 17 of 20 conditions, a compressed relic below 8 effective cells in about half of the collapse epochs, and 12 static runs whose fields barely change between epochs. An earlier, differently defined design ([angular recurrence on fixed support](MEMORY_ESTIMATOR_QUALIFICATION.md), [report](../../archive/reports/2026-09-05_halo_memory_estimator_report.md)) had already failed its own support criterion on the nine preserved runs; it is superseded and kept for the record. The remainder of this note is the proposal as written on 2026-09-05.
+
 This is a proposed offline qualification step, based on the [registered protocol](../preregistrations/2026-09-02_halo_cross_epoch_memory.md) and the [recorded 60-run audit](../../analysis/2026-09-02_cross_epoch_memory_preregistered.md). No new analysis or particle run was performed for this assessment. The original statistic was confounded by sampling support and radial geometry; the existing result supplies no NRM verdict.
 
 ## Available observations

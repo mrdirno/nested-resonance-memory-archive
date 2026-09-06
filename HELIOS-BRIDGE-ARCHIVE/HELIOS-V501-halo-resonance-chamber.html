@@ -9554,6 +9554,118 @@ And what is the force clamp actually worth: gate 7.2 is decided by a 2048-
 particle subsample of 4.19M, and it is the only decision input in the whole
 protocol that cannot be recomputed from the exported meshes.
 
+RING 16 · 2026-09-06 · the replacement estimator was frozen with five falsifiers,
+and the recorded grid cannot support it
+WHAT CHANGED: no simulation code. The statistic ring 15 retired has a
+replacement, fixed before it saw a single recorded score
+(docs/halo/2026-09-05_memory_estimator_qualification_protocol.md, commit
+183ebf10): a re-centred, footprint-matched, monopole-removed lag-one contrast
+whose null is predicted from the six off-diagonal entries of the 3x3
+run-by-relic matrix, four per-epoch eligibility gates, two run-level gates,
+and five falsifiers, with 23 synthetic controls run first. (Key: relic = the
+previous epoch's field shrunk by two onto the inner block; monopole-removed =
+the spherically symmetric part taken out; the run-by-relic matrix = each run's
+current field against each seed's relic; radialised = a mesh replaced by its
+spherical average; deposit = particles binned onto the mesh; hand-over = the
+scale at which the null prediction blends its two forms; E5b = the
+seed-balance gate.) Then the grid was scored ONCE, in 13 s: INSUFFICIENT
+SUPPORT. 0 of 60 runs measurable, 179 of 1,320 run-epochs eligible; F1 pass
+(radialised meshes: 0 eligible), F2 pass (on the receipt only), F3 not
+evaluable, F4 pass with nothing to compare, F5 fail (0 of the 3 conditions
+required). Nothing about memory is decided. What is retired is the plan to
+qualify a replacement on the saved meshes. Why, per
+gate: E3 - the two compressed relics being compared are near-copies (|r| >=
+0.9) - refuses 923 run-epochs. The seeds are independent draws; the dynamics
+make them near-copies in 17 of 20 conditions (whole defaults family 0.99999;
+every gain/loss 0.5 cell >= 0.970; where it was measured, Spinning Chladni
+at sg 0, what is left between seeds is the shot noise of a 4.19 M deposit; only
+Spinning Chladni gl 0 at sg 0.3/0.5/0.8 keeps them apart: 0.76, 0.22, 0.08),
+and more particles make the copies MORE exact. E2 - fewer than 8 effective
+cells in the current block or in a compressed relic - refuses 680 (609
+relic, 133 current): in about half of the collapse
+epochs the shrink by two sends the core below 8 effective cells, typically
+4-7, and in Spinning Chladni sg 0.5 the mass in the inner block swings 0.007
+<-> 0.998 between consecutive epochs, so the seed-diverse runs get 1-8
+eligible epochs of 22 and need 12. E1 (mass in the
+block) refuses only 142: the median run-epoch holds 97% of its mass there.
+And 12 of 60 runs are STATIC: every defaults run at gl 0 and sg >= 0.15
+correlates with its own previous epoch at a median 0.99995 or better over
+its 23 epoch pairs (lowest single pair 0.9976) - the same picture 24 times -
+pinned to one of exactly two lattice sites, centroid (15.5,15.5,15.5)
+or one cell lower in z. The only two conditions with >= 12 eligible epochs
+per run (defaults sg 0.3 and 0.5) each put three seeds on those two sites: a
+duplicate pair and a singleton one cell away, whose angular residual is
+45-48% of its block variance against 0.03% and 0.008% for the pair, own-relic
+correlation +0.64 against +0.09 / +0.06 for a stranger's - the
+persistent-asymmetry confound the protocol's own §1 names. The seed-balance
+gate refuses all six (null values 0.005 vs 0.68-0.70; 0.003 vs 0.31). Full
+numbers and provenance: analysis/2026-09-06_memory_estimator_qualification.md.
+BANNED: loosening a gate to get a number. The two variants that admit runs
+detect exactly the fields the gates were written to refuse: E2 at 4 detects
+Spinning Chladni sg 0.8 seeds 12345 and 31337 (S +0.172 / +0.153, p 0.0120 =
+the floor of a four-block test) on own templates of 4.1-10.4 effective cells,
+mostly 4-7, and hand-over 0.10 detects the static singleton of defaults sg
+0.5 (S +0.647, p 0.0035) by flipping the sign of a null value that is
++0.0031 +/- 0.0030.
+Scoring the variants. Calling the estimator qualified on the synthetic
+controls. Calling this a null for memory. More particles. Amending the freeze
+commit.
+DEAD BRANCHES: (1) "the freeze is broken": the receipt committed with the
+freeze certified a protocol hash that matched no committed text, and the
+script refused the first grid attempt, launched eleven seconds after the
+commit. The
+difference is ONE sentence of §9(f), reworded 34 s after the controls ran to
+say what the persistent-dipole control had just shown; reverting it
+reproduces the old hash exactly. Regenerated under the committed text with
+the same script: 23 controls byte-identical. Disclosed verbatim, freeze left
+as it is. (2) "the zero is a loader, indexing or precision defect": two
+re-implementations from the prose alone reproduced all 1,320 flags, 240 gate
+counts and 7,920 matrix entries to 4e-16; noise 1,700x float32 rounding moves
+no flag; the frozen map beats six other alignments. (3) "E1 binds": it binds
+least. (4) "fewer particles would open E3": Poisson-resampling the meshes at
+six counts from 3 M down to 16 k opens one condition at one count only (1 M:
+defaults sg 0.15, none detected; the static displaced seed of sg 0.3 is
+detected there), never three. (5) "the protocol was written blind": an
+earlier, differently
+defined design by the same author had scored the nine preserved runs eleven
+hours before this plan's first draft (37 of 207 pairs eligible, 8 of 9 runs
+under its own floor). Unpublished until now; added to the archive.
+KILL-TEST: ten workers - five re-deriving (gates and E5b from the prose
+alone, provenance, the physical reading, the variant contrasts) and five told
+to refute (defect, the E5b reading, the label, the receipt repair, "any grid
+would fail") - then a completeness critic, whose ten gaps were worked
+through before commit: eight text corrections made, two left to the pilot.
+Flags and counts reproduced exactly, matrix entries to 4e-16; the label
+"insufficient support" is what the frozen text and its committed test
+require; two skeptics changed the text above (the seeds are
+independent draws, not shared positions; E2 fails at collapse, not at the
+shell). pytest 12/12; the superseded design's 8 tests pass in place.
+THE NON-OBVIOUS CHOICE: publish "insufficient support" and retire the offline
+plan, rather than the two relaxed gates that would have produced nine
+measurable runs and three detections. A number bought by loosening the gate
+that refuses the artefact IS the artefact. And publish the two things a
+freeze audit found against the freeze - the reworded sentence and the earlier
+design - with the files that let a stranger check them, because a freeze
+whose flaws are hidden is worth less than one whose flaws are on the page.
+OPEN QUESTIONS: what keeps seeds apart in Spinning Chladni at gl 0 and sg
+0.3-0.5, and does it survive 48 epochs, or does the drift toward collapse
+(median block mass 0.05 -> 0.24 across the run) close the window? Is the
+two-site lattice pinning of the defaults core a clamp artefact, and is a field
+that does not move something a memory test should score at all - the next
+protocol needs a rule that names it, not a seed-balance gate that refuses it
+for the wrong reason and flips on the sign of a null within one SE of zero.
+The receipt's shared-drive controls give the seeds 10-50% of the power; a
+drive-locked 4.19 M deposit gives them 0.03% - F2 was certified in a regime
+the grid cannot enter. And the raw own-minus-stranger excess in the three
+seed-diverse conditions - own-relic entry minus the mean stranger entry over
+all 22 epochs, most of them ineligible: +0.01, +0.08 and +0.21 at sg 0.3,
+0.5 and 0.8 - the same shape as ring 15's +0.015, and equally what any finite
+decorrelation time gives. Two rules for the next protocol, found here, not
+patched: E3 cannot see a twin whose only difference is shot noise (the
+static pairs correlate 0.99999 raw and pass E3 at 0.86 / 0.65 on
+templates), and the prose ranks "not qualified" above "insufficient
+support" while the script tests support first.
+
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

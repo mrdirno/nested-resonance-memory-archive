@@ -776,7 +776,7 @@ installed there too.
 
 ## ACTIVE TRAJECTORY (2026-09)
 
-HALO is the live browser instrument. The pre-registered memory grid has already run over 60 cells at 4.19 million particles. Its contrast is confounded by spatial sampling and static radial profiles, so it neither establishes nor retires NRM. Read `analysis/2026-09-02_cross_epoch_memory_preregistered.md` before proposing a successor experiment.
+HALO is the live browser instrument. The pre-registered memory grid has already run over 60 cells at 4.19 million particles. Its contrast is confounded by spatial sampling and static radial profiles, so it neither establishes nor retires NRM. Read `analysis/2026-09-02_cross_epoch_memory_preregistered.md` before proposing a successor experiment. The replacement estimator, frozen with five falsifiers on 2026-09-05, finds that grid unmeasurable (0 of 60 runs; `analysis/2026-09-06_memory_estimator_qualification.md`), so a successor grid must first be shown measurable in a pilot: a regime whose dynamics do not erase the seed, a relic footprint of at least 8 effective cells, no static runs (fields that do not move between epochs).
 
 The Observatory bench adds seeded A/B integrator comparisons, exact stopping ticks, sampled measurements and versioned observation recipes. Current work is listed in `META_OBJECTIVES.md`; instrument methods and limitations are in `docs/halo/OBSERVATORY.md`. Repository lifecycle and preservation are recorded in `docs/archive/README.md`. Historical handoffs and phase numbers are evidence of their own time, not the current queue.
 
