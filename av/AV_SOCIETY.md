@@ -5392,8 +5392,9 @@ anchor to another page — the click NAVIGATED, and the only reason I looked is 
 reported a fail against a destroyed context instead of quietly finding nothing. Restricted to
 buttons and same-page anchors, the panel opened for the first time and the sample count went
 from 44,140 to **64,642** — twenty thousand text samples no sweep had ever reached — carrying
-`.av-sheet-hd .av-eye` at **1.68:1 on av, 2.20 on electrical, 3.00 on plumbing**: the trade
-accent on the paper sheet, the SAME class, in the SAME file, four hundred lines up. **A reveal
+`.av-sheet-hd .av-eye` at **1.11:1 to 3.45:1 on all seventeen trades, 184 pages** — seventeen
+of the eighty-seven classes are that one element: the trade accent on the paper sheet, the SAME
+class, in the SAME file, four hundred lines up. **A reveal
 that does not reach its state reports green, and green from a state you never entered is the
 most expensive number in the program.** §SCARS 2026-08-15 and 2026-08-17 both said this about
 mobile-watertight; it is now said about colour.
@@ -9419,8 +9420,9 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   a-or-button saying "wish", and on `electrical/answer-back.html` live that was an anchor that
   NAVIGATED. Restricted to buttons and same-page anchors, the panel opened for the first time,
   the sample count went 44,140 → **64,642**, and the wishing well's own eyebrow was the trade
-  accent on the paper sheet at **1.68–3.00:1** — the same class, the same file, four hundred
-  lines up from the tk-send fix. A reveal that does not reach its state reports green. Also:
+  accent on the paper sheet at **1.11–3.45:1 across all seventeen trades on 184 pages** —
+  seventeen of the eighty-seven classes are that one element, the same class and the same file
+  four hundred lines up from the tk-send fix. A reveal that does not reach its state reports green. Also:
   my own WHY comment put backticks inside `shared/toolkit.js`'s CSS template literal and
   stopped the runtime booting on every page; the gate caught it in 40 seconds because it
   drives the real page. · **NAMED AND NOT DONE:**
