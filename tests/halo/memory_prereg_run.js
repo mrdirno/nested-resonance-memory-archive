@@ -34,7 +34,11 @@ const BUDGET = parseInt(arg('budget', '10'), 10);
 const EPOCH_LEN = parseFloat(arg('epochlen', '10'));
 const OUT = arg('out', path.resolve(__dirname, '../../data/results/halo/memory_prereg'));
 const SW = process.argv.includes('--sw');
-const PRESET = arg('preset', 'spinchladni');   // 'spinchladni' | 'default'
+const PRESET = arg('preset', 'spinchladni');   // 'default', or any data-scn scenario the page ships
+// The digit-sequence position the drive starts from. 9028 is what the recorded
+// grid ran under for the scenario arms (it comes from the page's `spin` bench
+// recipe, not from the scenario button, which leaves step at 0).
+const STEP = parseInt(arg('step', '9028'), 10);
 const TICK = 0.05;
 
 const TAG = `${PRESET}_sg${SG}_gl${GL}_seed${SEED}_n${N}_e${EPOCHS}`;
@@ -58,12 +62,26 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
   await page.goto('file://' + path.resolve(__dirname, 'rc-test.html'));
   await page.waitForSelector('.boot.done', { timeout: 300000 });
   await page.waitForTimeout(800);
-  if (PRESET === 'spinchladni') {
-    await page.evaluate(() => document.querySelector('[data-scn="spinchladni"]').click());
+  // Any scenario the page itself ships can be the arm, not just Spinning Chladni.
+  // 'default' means the page's own DEFAULTS and clicks nothing. Every other value
+  // must name a real data-scn button, so a typo fails loudly here instead of
+  // silently recording the boot state under another scenario's name.
+  if (PRESET !== 'default') {
+    const clicked = await page.evaluate(p => {
+      const b = document.querySelector(`[data-scn="${p}"]`);
+      if (!b) return false;
+      b.click();
+      return true;
+    }, PRESET);
+    if (!clicked) {
+      console.error(`no scenario button [data-scn="${PRESET}"] on the page`);
+      await browser.close();
+      process.exit(2);
+    }
     await page.waitForTimeout(500);
   }
 
-  const applied = await page.evaluate(({ n, seed, sg, gl, budget, epochLen, preset }) => {
+  const applied = await page.evaluate(({ n, seed, sg, gl, budget, epochLen, preset, step }) => {
     let s = seed >>> 0;
     Math.random = () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; };
     const P = window.__probe;
@@ -79,15 +97,25 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     window.__simStop = 0;
     window.__tickBudget = budget;
     window.__forceDt = budget * 0.05;
-    P.applyPreset({ state: st, step: preset === 'default' ? 0 : 9028 });
+    // The digit-sequence position is NOT the scenario's. Clicking a data-scn
+    // button leaves P.step at 0; the 9028 the recorded grid ran under comes from
+    // the page's `spin` bench recipe, which names it explicitly. Reading P.step
+    // here instead looked like the tidy generalisation and silently moved the
+    // drive to a different digit position: a four-epoch A/B at 1,048,576
+    // particles produced different meshes. So the step stays explicit, defaults
+    // to the value the grid used, and is a flag. pageStep records what the click
+    // actually left behind, so the difference stays visible in every run record.
+    const stepNow = preset === 'default' ? 0 : step;
+    const stepAfterClick = P.step;          // read BEFORE applyPreset overwrites it
+    P.applyPreset({ state: st, step: stepNow });
     P.reseed();
-    return { particles: P.state.particles, texSize: P.texSize, simTime: P.simTime,
+    return { scenarioStep: stepNow, pageStep: stepAfterClick, particles: P.state.particles, texSize: P.texSize, simTime: P.simTime,
              cosmos: JSON.parse(JSON.stringify(P.state.cosmos)),
              lorentz: P.state.lorentz, substeps: P.state.substeps,
              smooth: P.state.smooth, damping: P.state.damping,
              stepsPerSec: P.state.stepsPerSec, fieldExp: P.state.fieldExp,
              caps: P.caps() };
-  }, { n: N, seed: SEED, sg: SG, gl: GL, budget: BUDGET, epochLen: EPOCH_LEN, preset: PRESET });
+  }, { n: N, seed: SEED, sg: SG, gl: GL, budget: BUDGET, epochLen: EPOCH_LEN, preset: PRESET, step: STEP });
 
   console.log(`[${TAG}] ${applied.particles} particles, tex ${applied.texSize}, ` +
               `${applied.caps.renderer.slice(0, 40)}, pmDens ${applied.caps.pmDensType}, ` +
@@ -136,7 +164,7 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     tag: TAG, schema: 'halo-memory-prereg/1',
     params: { selfgrav: SG, gainloss: GL, seed: SEED, epochs: EPOCHS, particles: N,
               tick_budget: BUDGET, epoch_len: EPOCH_LEN, preset: PRESET,
-              step: PRESET === 'default' ? 0 : 9028,
+              step: applied.scenarioStep,
               backend: SW ? 'swiftshader' : 'gpu' },
     applied, caps_end: capsEnd, mesh_file: path.basename(meshPath), mesh_n: 32, mesh_count: EPOCHS,
     csv_head: 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,substeps',
