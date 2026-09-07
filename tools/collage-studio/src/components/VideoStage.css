@@ -8,6 +8,12 @@
 .video-transport__playhead input[type=range] { display:block; height:44px; min-height:44px; }
 .video-transport__details-toggle,.video-transport__stop { display:flex; align-items:center; justify-content:center; gap:5px; border:1px solid #394447; border-radius:8px; background:#172023; color:#d7e0df; font-size:12px; }
 .video-transport__details-toggle[aria-expanded=true] { border-color:#6fa998; color:#a9dfcd; background:#192c27; }
+/* A SOLO IS STILL RUNNING BEHIND A SHUT PANEL — say so on the one control that
+   is always up. Wins over the expanded rule above on purpose: which source you
+   are hearing outranks whether a disclosure is open. */
+.video-transport__details-toggle--solo,
+.video-transport__details-toggle--solo[aria-expanded=true] { border-color:#4a8fb5; color:#bfe0f2; background:#132430; }
+.video-transport__details-toggle--solo > svg { display:inline; vertical-align:-2px; margin-right:4px; }
 .video-transport__stop { background:#a52830; border-color:#d64c55; color:#fff; }
 .video-transport__details-toggle:disabled { opacity:.5; }
 .video-transport :focus-visible { outline:2px solid #a9dfcd; outline-offset:2px; }
@@ -15,10 +21,27 @@
 .video-transport__details { max-height:min(30dvh,240px); min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:12px 4px 4px; border-top:1px solid #283235; margin-top:6px; }
 .video-transport__details-heading { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; font-size:12px; margin-bottom:10px; }
 .video-transport__details-heading span:last-child { color:#99a7a6; font-size:11px; }
-.video-transport__sources { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0; }
+.video-transport__sources { display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px; min-width:0; }
 .video-transport__sources > div { max-width:100%; }
+/* THE CHIP IS TWO ROWS, NAME OVER BUTTONS, and that is a panel finding rather
+   than a taste (av/AV_SOCIETY.md §THE PANEL, C3719). One line held a truncating
+   name plus three 44px buttons; SOLO is a fourth, and at 320px with the OS text
+   size bumped there was nothing left to give but the name — which truncates
+   toward nothing and defeats the one thing solo is for, telling sources apart.
+   Trading horizontal cramming for vertical growth is the trade the
+   no-horizontal-scroll ship gate is happy to take. */
+.video-transport__chip { display:flex; flex-direction:column; align-items:stretch; gap:2px; padding:4px 4px 2px; min-width:0; max-width:100%; }
+.video-transport__chip-name { display:block; padding:0 4px; min-width:0; max-width:14rem; }
+.video-transport__chip-actions { display:flex; align-items:center; gap:2px; }
+.video-transport__chip-actions > button { flex-shrink:0; }
 .video-transport__sources > div > span[title] { min-width:0; flex-shrink:1; }
 .video-transport__sources > div > button { flex-shrink:0; }
+/* THE BANNER, while a solo is held. Full width of the panel and above the chips
+   so it cannot be the thing that scrolls off — it is the sentence that says the
+   export has not changed, which is what makes the control safe to offer. */
+.video-transport__solo-banner { display:flex; align-items:center; gap:6px; margin:0 0 10px; padding:6px 8px; border:1px solid #3f6f8c; border-radius:8px; font-size:11px; line-height:1.35; color:#bfe0f2; background:#132430; }
+.video-transport__solo-banner > svg { flex-shrink:0; }
+.video-transport__credit { width:100%; margin:2px 0 0; font-size:10px; line-height:1.4; color:#7c8a89; }
 .video-transport__tracks { max-width:560px; margin-top:10px; }
 .video-transport__render-options { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
 .video-transport__length-label { width:100%; font-size:11px; color:#a9b6b4; }

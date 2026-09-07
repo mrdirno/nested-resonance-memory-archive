@@ -17,6 +17,7 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3719 — SOLO, AND SOUND THAT STARTS ITSELF (2026-09-07), served from the well:** adding music now starts it playing and opens Details on the row of sources, and every source — each clip and the music — has a SOLO button that puts everything else out of the room so you can decide what to keep. Solo is monitor state only: it never writes intent, never reaches the offline mix, is refused for the whole duration of a take, and releases itself when its source is removed. Decision logic is `src/lib/solo.ts` (pure; the pre-existing cut audition folded into the same rule), swept by `tests/unit/solo.invariants.mjs` — **7,354 checks, 0 failures, three mutants killed**. Code `PENDING`. Chip layout became two rows (name over buttons) on a panel finding, so the fourth 44px button costs no name at 320px.
 - **C3717 — THE WELL STAYS PUT (2026-09-06), served from the well:** an anonymous Collage user reported "wish it better is gone … also the add audio and aspect ratio are not visible", and all three measured true on the live site. The topbar keeps the wish trigger in every state (labelled "Wish" from 360px, icon-only under; Open goes icon-only once loaded under 600px to pay for it; padding/gap 8 under 400px and the mark's tracking .04em at 320 so the row never pushes a button off the edge); where the short-screen rule hides the topbar while editing, the trigger rides the editing panel's heading beside Done and only there. The Add panel tightens under 1000px to 52px tiles with one ellipsized line, so Art Room / Add images / Add music sit inside the pane unscrolled on an iPhone SE (168 of 170px). Canvas moves above Geometry in Canvas & crop, so the four aspect buttons are the pane's first row. Code `8a90c610`. Gate `tests/e2e/reachable.spec.ts` (config `playwright.reachable.config.ts`): 16/16 on dev across seven screens × Mobile Chrome/Mobile Safari plus the 360×448 editing case; red on its first assertion against the previous deploy. Backport sweep of all 17 trades: 68/68 trigger measurements pass, no trade hides its well. Live: [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34081662911), 18/18 reachable gate against the deployed url, bytes match. Fleet receipt msg **17848** (`mac-toolkit-claude`, thread `persona500-collage-C3717-release`).
 - **C3713 — TEMPLATE INTENT AND SCOPED DICE (2026-09-05), shipped and verified:** choosing a template replaces the native art stack; separate Add layer appends. Draft Undo/Redo restores layers, selection and dice scope. Dice visibly targets the art composition or the selected layer; held/disabled layers remain protected from dice. Old stacked projects and imported originals remain intact. Code `0b29eb28`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33996665537), **45/45 public browser cases**, three relevant unit suites and encoded native loops. [Release](C3713_RELEASE.md) · [Art context Ring](ART_CONTEXT_RING.md).
 - **C3712 — PREVIEW-FIRST STUDIO (2026-09-05), shipped and verified:** whole-artwork playback with one optional editor at a time, compact persistent transport, and a simplified template-first Art Room. The same lyric sample grew from 164×292 to 338×602 on a 390×844 viewport, and 111×199 to 273×487 on 1280×720; visible buttons fell from 19 to 11. Add / Layout / Look / Motion / Text replace the always-open control wall. Code `496a17ba`, [Pages success](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/33995354619), **173/173 public-site browser cases**, 40/40 unit suites, complete decoded native-video inspection, and matching public JS/CSS/worker/service-worker bytes. [Release and navigation guide](C3712_RELEASE.md).
@@ -1539,6 +1540,64 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+
+### 2026-09-07 (C3719) — THE TEST SUITE WAS PLAYING TONES INTO THE ROOM
+
+Reported by the owner, mid-run, in the middle of making music: *"you're playing
+loud pure tones what's the deal i'm trying to make music"*. Every audio fixture
+in this suite is a literal sine tone, and a growing share of its specs exist to
+prove that sound gets UNMUTED — the cut audition, levels, the window fade, and
+now solo. Twenty of them across four engines, unmuting tones through the
+machine's own output, on a machine somebody was working on. Nothing in the code
+was wrong; the harness simply had no reason to be audible. `--mute-audio` is now
+unconditional on both Chromium projects in `playwright.config.ts` (it silences
+the output device only — decoding, WebAudio, `OfflineAudioContext`, MediaRecorder
+capture and every `muted`/`paused`/`currentTime` assertion are untouched). WebKit
+and Firefox have no equivalent switch, so **those two projects still make noise
+and must not be run while the machine is being listened to**. The general rule:
+a test that proves something is audible is a test that is audible.
+
+### 2026-09-07 (C3719) — SCAR-C160 AGAIN: THE STAGE SOLOED AND THE UI NEVER HEARD
+
+`emitStatus` dedupes on a hand-built signature string, and the note beside it
+already says in so many words that a status field missing from that list is a
+control that reads back stale — it was written the last time exactly this
+happened, to `level`. Solo walked into it from a direction the note did not
+cover: solo changes NO field the signature already carried. It never writes
+`muted` (that is the whole design), and it only ever sets `soundOn` to true. So
+the elements went quiet, the export stayed correct, and the button, the chip tint
+and the banner all read back "no solo" — a working feature that was invisible.
+Found on the artifact, not by reading: `solo.spec.ts` T2 and T4 failed on the
+banner while every audibility assertion above them passed. Rule: adding a field
+to `StageStatus` is two edits, and the second one is the signature.
+
+### 2026-09-07 (C3719) — THE ARRIVAL FIRED INTO A COMPONENT THAT DID NOT EXIST YET
+
+"Start the audio when it is added" was first built the way this file's own note
+about gestures argues for: a synchronous `StageRecorder` handle call, made inside
+the file picker's change handler, because unmuting is gesture-bound and a prop
+routed through an effect arrives a task late. It never once ran.
+`VideoStage` mounts only when something can PLAY — with photographs alone there
+is no preview and no dock — so at the moment the music is adopted,
+`recorderRef.current` is null. Measured: `[DBG] handle false`, every publish of
+the handle logged AFTER the adoption. The shape that works is a bumped counter
+prop answered in a **layout** effect (React flushes a discrete event's render and
+commit in the same task, so the gesture survives) with `stageGen` in the deps, so
+a bump that lands too early is not marked seen and is re-answered the moment a
+Stage exists. Rule: an imperative handle is only reachable from a component that
+has mounted; if the event can precede the mount, the request has to be state.
+
+### 2026-09-07 (C3719) — WEBKIT PAUSES WHAT YOU GATE SHUT, AND A GATE IS NOT A TRANSPORT
+
+`applyMutes` writes gates, never transport — deliberately, because audibility and
+playback are different questions. But a source held inaudible for a while can end
+up genuinely PAUSED (WebKit does this), and then re-opening its gate is silence
+with all the right flags on it. `solo.spec.ts` T4 caught it on webkit-desktop
+only: remove the soloed clip and the music returned `muted: false, paused: true`.
+Chromium never showed it. The fix is the nudge `setSoundtrackMuted` already
+performs on an unmute, applied wherever a solo ENDS — and explicitly not when the
+preview is `parked`, because un-pausing a preview the user paused is a worse bug
+than the one being fixed.
 
 ### 2026-09-07 (C3718) — A CONTROL THREE TAPS DEEP UNDER THE WRONG WORD IS A CONTROL THAT DOES NOT EXIST
 

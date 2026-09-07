@@ -152,6 +152,8 @@ type StudioTool = 'add' | 'layout' | 'look' | 'motion' | 'text';
 
 export default function App() {
   const [stageDetailsOpen, setStageDetailsOpen] = useState(false);
+  /** Bumped when the user ADDS AUDIO — see `VideoStage`'s `soundArrival` prop. */
+  const [soundArrival, setSoundArrival] = useState(0);
   const handleStageDetails = useCallback((open: boolean) => { setStageDetailsOpen(open); if (open) setStudioTool(null); }, []);
   const [studioTool, setStudioTool] = useState<StudioTool | null>(null);
   const toolRefs = useRef<Partial<Record<StudioTool, HTMLButtonElement | null>>>({});
@@ -2015,15 +2017,43 @@ export default function App() {
       const started = !moveOwnedRef.current && move === 'still' && images.length > 0;
       if (started) setMove('drift');
 
+      /**
+       * START IT, AND OPEN THE ROOM WHERE THE DECISION LIVES.
+       *
+       * THE WISH (collage well, improve, about_tool=audio): *"When adding audio
+       * — Should start the added audio then take immediately to the details to
+       * see all audio playing that way user can solo the audio to determine what
+       * to keep enabled or muted should be intuitive."*
+       *
+       * ONCE PER BATCH, BY CONSTRUCTION rather than by a guard: `ingestFiles`
+       * adopts exactly one track however many are dropped ("the last one picked
+       * wins"), so this line cannot fire twice for one import. All three lenses
+       * of the C3719 panel independently named the alternative — a per-file
+       * auto-start during a bulk import — as the one change that would make this
+       * WORSE than today's confusing silence.
+       *
+       * SYNCHRONOUS, INSIDE THE PICKER'S OWN CHANGE HANDLER. Unmuting is
+       * gesture-bound and iOS grants the gesture only to the task it fired in,
+       * which is why this is a handle call and not a prop (`StageRecorder`).
+       *
+       * AND THE FULL-SCREEN PREVIEW HAS TO GO FIRST, because it force-closes
+       * Details — opening a panel that another piece of state immediately shuts
+       * is the inert-control defect this app is repeatedly scarred by.
+       */
+      if (images.length > 0) { setMaximized(false); setSoundArrival((n) => n + 1); }
+
       // THE NOTICE MUST NOT NAME A CONTROL THAT IS NOT ON SCREEN. With no
       // photographs there is no stage, so there is no dock, no chip and no
       // speaker — the music is adopted and waits, and saying so is the honest
       // version of "press the speaker".
+      // THE NOTICE SAYS WHAT ACTUALLY HAPPENED, which is now three different
+      // things. It still must not name a control that is not on screen — with no
+      // photographs there is no stage, no dock, no chip and no speaker — and it
+      // must not claim the music is playing when the gesture was refused or
+      // there was no Stage to ask.
       flashNotice(images.length === 0
           ? `Music: ${file.name} — add photos and it goes under them.`
-          : started
-            ? `Music: ${file.name} — the collage is drifting now. Press the speaker to hear it.`
-            : `Music: ${file.name} — press the speaker to hear it.`);
+          : `Music: ${file.name} — playing${started ? ', and the collage is drifting now' : ''}. Solo any source in Details to hear it on its own.`);
 
       try {
           const probe = document.createElement('audio');
@@ -3279,6 +3309,7 @@ export default function App() {
                        poolAssets={images}
                        soundtrack={soundtrack}
                        onRemoveSoundtrack={removeSoundtrack}
+                       soundArrival={soundArrival}
                        onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
                        onSoundtrackLevel={(level) => setSoundtrack((prev) => (prev ? { ...prev, level } : prev))}
                        /* THE RANGE FADE, held here for the level's reason: App

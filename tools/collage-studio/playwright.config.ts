@@ -1,5 +1,26 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/**
+ * TESTS DO NOT COME OUT OF THE SPEAKERS.
+ *
+ * WHY THIS EXISTS — 2026-09-07, reported by the owner mid-run: *"you're playing
+ * loud pure tones what's the deal i'm trying to make music"*. This suite's audio
+ * fixtures are literal sine tones, and a growing share of its specs exist
+ * precisely to prove that sound gets UNMUTED — the cut audition, the levels, the
+ * window fade, and now solo. Every one of them was therefore playing tones out
+ * of the machine's output while somebody was working on that machine.
+ *
+ * `--mute-audio` silences the OUTPUT DEVICE only. Decoding, WebAudio graphs,
+ * `OfflineAudioContext`, MediaRecorder capture and every `el.muted` / `paused` /
+ * `currentTime` fact these specs assert are untouched — which is why it can be
+ * unconditional rather than a flag somebody has to remember.
+ *
+ * IT COVERS CHROMIUM ONLY. WebKit and Firefox have no equivalent launch switch,
+ * so the two WebKit projects below still make noise: run them when the machine
+ * is not also being used to listen to something.
+ */
+const MUTED = ['--mute-audio'];
+
 export default defineConfig({
   // FAILS THE RUN if the URL is not this app. `reuseExistingServer` below
   // attaches to whatever is already listening, so without this a squatter on
@@ -37,11 +58,17 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      use: {
+        ...devices['Desktop Chrome'], channel: 'chromium',
+        launchOptions: { args: MUTED },
+      },
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'], channel: 'chromium' },
+      use: {
+        ...devices['Pixel 5'], channel: 'chromium',
+        launchOptions: { args: MUTED },
+      },
     },
     {
       name: 'Mobile Safari',

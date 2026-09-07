@@ -150,6 +150,29 @@ one grep. A panel cannot self-detect this failure — the lens is not lying, it 
 reading its own brief back — and the more precisely you frame a question, the more
 of your own framing comes back as evidence.
 
+**THE PANEL THAT SCORED SOLO (C3719): 8 / 5 / 3, and the 3 was right.** Three
+lenses, independently — a working editor, a mobile-interaction lens, an
+export-safety skeptic. The editor scored **8** and did the arithmetic that
+justified the rung: isolating one source today is press the speaker, open
+Details, then mute every OTHER source one at a time and un-mute them all again —
+about 2 + 2×(N−1) taps, so ~10 for five sources, against 2 with solo. The mobile
+lens scored **5** and refused the layout as specified: a fourth 44px button on a
+chip that already held three plus a truncating name leaves nothing to give but
+the name at 320px with the OS text size bumped, "which defeats the point of solo,
+telling sources apart" — so the chip became two rows, name over buttons, and that
+is why. The skeptic scored **3** and would have CUT solo outright, on a hazard
+neither other lens saw: the realtime capture path taps the same live gains solo
+writes, so a solo engaged MID-take records as an unexplained silent dropout in a
+file that otherwise looks fine, and "force-cleared when a take starts" only
+guards the start boundary. That dissent is answered in two places rather than
+argued with — `monitorPlan` takes `capturing` as an INPUT and returns the no-solo
+plan for the take's whole duration (invariant S4, and a mutant that removes it
+kills 171 checks), and the button is disabled while a take runs so the state is
+never entered. **All three independently named the same thing as the one change
+that would make this worse than today: auto-starting per FILE during a bulk
+import.** So the arrival fires once per batch, by construction — `ingestFiles`
+adopts exactly one track however many are dropped.
+
 **AND RECORD THE SPREAD, NOT THE AVERAGE.** *What's in the Drop* scored **7 / 6 /
 2**. The 2 is why two of the rung's three named parts are not on the shipped page,
 and the strongest signal the exercise produced was the skeptic and the working

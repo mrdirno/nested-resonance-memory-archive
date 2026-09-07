@@ -54,8 +54,12 @@ import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
   type ClipWindow, type WindowedPlayback,
 } from './clipWindow';
-import { soundtrackSource, soundtrackAudible } from './soundtrack';
+import { soundtrackSource, soundtrackAudible, SOUNDTRACK_ID } from './soundtrack';
 import { livePath, mixGain, safeLevel, FULL_LEVEL } from './level';
+import {
+  monitorPlan, pruneSolo, NO_EXCLUSIVE,
+  type Exclusive, type MonitorRow, type SoundSource,
+} from './solo';
 import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
 import { audibleLength, liveWindowRamps, safeFade, windowFadeSpan } from './windowFade';
 import { lapAdjust, resumeOriginMs } from './playhead';
@@ -313,6 +317,12 @@ export interface StageStatus {
   needsGesture: boolean;
   soundOn: boolean;
   audioAvailable: boolean;
+  /**
+   * THE SOURCE BEING SOLOED, or null. Monitor state — it says what you are
+   * HEARING, never what the piece contains, and a chip wired to it as though it
+   * were intent is the bug written up on `StageClipStatus.wantsAudio`.
+   */
+  soloId: string | null;
   /**
    * THE SOUNDTRACK, or null when there is none. `wantsAudio` and `audible` mean
    * exactly what they mean on a clip — intent vs the speakers — and a chip wired
@@ -1117,6 +1127,10 @@ export class Stage {
    *  audition is armed; 0 when parked. */
   private auditionRaf = 0;
   private soundOn = false;
+  /** The one source being auditioned alone, or null (`lib/solo.ts`). Monitor
+   *  state, never intent: it is not persisted, never reaches a project file and
+   *  never reaches the offline mix. */
+  private soloId: string | null = null;
   private needsGesture = false;
   private audioCtx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
@@ -3942,7 +3956,7 @@ export class Stage {
    * Resumes the AudioContext, optionally turns sound on, and plays every
    * admitted clip.
    */
-  resumeFromGesture(opts?: { sound?: boolean }): void {
+  resumeFromGesture(opts?: { sound?: boolean; rescue?: boolean }): void {
     if (this.destroyed) return;
     // A GESTURE IS A PLAY, so it is also the end of a park — otherwise pressing
     // Play after a scrub would start every element and leave the clock frozen,
@@ -3952,7 +3966,17 @@ export class Stage {
       try { void this.audioCtx.resume(); } catch { /* ignore */ }
     }
     if (opts && typeof opts.sound === 'boolean') this.soundOn = opts.sound;
-    if (this.soundOn) this.ensurePrimaryAudible();
+    // THE RESCUE IS OPT-OUT-ABLE, and exactly one caller opts out.
+    //
+    // `ensurePrimaryAudible` writes INTENT: with nothing audible it unmutes the
+    // first clip, so that pressing the speaker is never a no-op. That is right
+    // for the speaker. It is wrong for MUSIC ARRIVING, because the arriving
+    // track reaches this Stage one task later (React owns it and re-feeds it
+    // through `setSoundtrack`) — so at this instant the room looks silent, and
+    // the rescue would unmute a clip the user had deliberately silenced, as a
+    // side effect of dropping in a song. The track needs no rescue: it lands
+    // unmuted, into a monitor this call has already switched on.
+    if (this.soundOn && opts?.rescue !== false) this.ensurePrimaryAudible();
     this.applyMutes();
     const tel = this.track?.el;
     if (tel) {
@@ -4038,6 +4062,75 @@ export class Stage {
    * `exclusive` is kept as an opt-in for a caller that genuinely wants solo.
    * Unmuting must still happen inside a user gesture.
    */
+  /**
+   * SOLO — hear one source alone while you decide what to keep (`lib/solo.ts`).
+   *
+   * `null` releases. Passing the id already soloed is NOT a release here: the
+   * exclusive toggle is `nextSolo`, and it lives in the pure module so the
+   * button and any future keyboard route cannot drift into two different ideas
+   * of what a second tap means.
+   *
+   * IT TURNS THE MONITOR ON, exactly as `setClipMuted` and `setSoundtrackMuted`
+   * already do, and for the same reason: tapping solo is a statement that you
+   * want to HEAR something, and a control that answers it with silence is
+   * indistinguishable from a broken one. Gesture-sensitive, like every other
+   * route into `soundOn` — call it from inside the tap.
+   */
+  setSolo(id: string | null): void {
+    if (this.destroyed) return;
+    const next = id === null ? null : pruneSolo(id, this.audioRoster().map((s) => s.id));
+    if (next === this.soloId) return;
+    this.soloId = next;
+    if (next !== null) {
+      this.soundOn = true;
+      if (this.audioCtx && this.audioCtx.state === 'suspended') {
+        try { void this.audioCtx.resume(); } catch { /* ignore */ }
+      }
+      // DELIBERATELY NOT `ensurePrimaryAudible()`, which `setSound(true)` calls
+      // here: that method rescues a silent room by UNMUTING the first clip, and
+      // unmuting is intent — the very decision solo exists to help make, made
+      // for you, by the act of asking to listen. Under a solo the room cannot be
+      // silent for want of intent anyway: the soloed source sounds whatever its
+      // own speaker says (`lib/solo.ts`, rule 2).
+    }
+    this.applyMutes();
+    this.nudgeSound();
+    this.emitStatus();
+  }
+
+  /** The source being soloed, or null. */
+  get soloedId(): string | null { return this.soloId; }
+
+  /**
+   * A SOURCE COMING BACK INTO THE ROOM MAY HAVE STOPPED WHILE IT WAS OUT.
+   *
+   * `applyMutes` writes GATES, not transport — deliberately, because audibility
+   * and playback are different questions and the file is scarred by conflating
+   * them. But an element that is gated shut for a while can end up genuinely
+   * PAUSED (WebKit does this to media it has been told nobody is listening to),
+   * and then re-opening the gate is silence with the right flags on it.
+   *
+   * Measured on the artifact rather than reasoned about: `solo.spec.ts` T4 on
+   * webkit-desktop — remove the soloed clip and the music came back `muted:
+   * false`, `paused: true`. Chromium never showed it.
+   *
+   * NOT ON `parked`: the user pressed pause, and a feature that un-pauses a
+   * paused preview is a worse bug than the one this fixes. The same nudge, in
+   * the same shape, is what `setSoundtrackMuted` already does on an unmute.
+   */
+  private nudgeSound(): void {
+    if (this.parked || this.destroyed) return;
+    const t = this.track;
+    const tel = t?.el;
+    if (t && tel && !t.muted && !t.broken && tel.paused) {
+      try {
+        const p = tel.play();
+        if (p && typeof p.then === 'function') p.then(() => { /* rolling */ }, () => { /* still blocked */ });
+      } catch { /* ignore */ }
+    }
+    this.clips.forEach((c) => { if (c.live && c.wantPlay && !c.broken) this.tryPlay(c); });
+  }
+
   setClipMuted(clipId: string, muted: boolean, exclusive = false): void {
     const target = this.clips.get(clipId);
     if (!target) return;
@@ -4588,50 +4681,106 @@ export class Stage {
   }
 
   /**
+   * THE AUDIO ROSTER, in the order `applyMutes` walks it: the music first when
+   * there is one, then the clips. Positional — `lib/solo.ts` returns one row per
+   * source in the order given, and a roster that disagreed with the walk would
+   * write the music's gain onto a clip's decoder.
+   *
+   * THE TRACK IS NEVER `live: false`. That field is the REALTIME DECODER
+   * ADMISSION BUDGET, and a soundtrack holds no video decoder for the budget to
+   * defer. Its readiness probe is a different question and is asked in
+   * `exclusiveNow` below, where it belongs: it gates the AUDITION (a track still
+   * probing must not audibly play its head at 0:00), not the mix.
+   */
+  private audioRoster(): SoundSource[] {
+    const out: SoundSource[] = [];
+    const t = this.track;
+    if (t) out.push({ id: SOUNDTRACK_ID, wantsAudio: !t.muted, broken: t.broken, level: t.level });
+    this.clips.forEach((c) => {
+      out.push({ id: c.id, wantsAudio: !c.muted, broken: c.broken, live: c.live, level: c.level });
+    });
+    return out;
+  }
+
+  /**
+   * WHO OWNS THE ROOM RIGHT NOW.
+   *
+   * A held trim handle outranks a solo: it is a momentary gesture on a control
+   * whose whole output is the sound, and it ends when the finger lifts. Both are
+   * the same exclusivity rule with different terms — see `lib/solo.ts`.
+   */
+  private exclusiveNow(): Exclusive {
+    const t = this.track;
+    const ready = !!t?.el && Number.isFinite(t.el.duration) && (t.el.duration as number) > 0;
+    if (t && t.audition && !t.broken && ready) return { kind: 'audition', id: SOUNDTRACK_ID };
+    return this.soloId === null ? NO_EXCLUSIVE : { kind: 'solo', id: this.soloId };
+  }
+
+  /** The plan `applyMutes` writes and `getStatus` reports. One rule, one place. */
+  private monitorRows(): MonitorRow[] {
+    return monitorPlan({
+      sources: this.audioRoster(),
+      soundOn: this.soundOn,
+      exclusive: this.exclusiveNow(),
+      capturing: this.capturing,
+    });
+  }
+
+  /**
    * WHAT EVERY AUDIO SOURCE IS DOING RIGHT NOW, in two numbers per source.
+   *
+   * THE DECISION IS NOT HERE. Which sources may sound — the monitor switch, each
+   * source's own intent, a held trim handle, a solo, a running take — is
+   * `lib/solo.ts`, swept in `tests/unit/solo.invariants.mjs`. This method is the
+   * hand that writes it onto the elements, and it is deliberately incapable of
+   * disagreeing with the plan: it walks the same roster in the same order.
    *
    * THE LEVEL IS APPLIED EXACTLY ONCE and `lib/level.ts` decides where, because
    * the element's `volume` and the gain node it feeds are IN SERIES — the note
-   * three lines down about `muted` gating the graph is the same fact — so a level
-   * written into both would render 25% as 6%. `livePath` returns the pair and
-   * invariant I2 pins their product; nothing here re-derives it.
+   * about `muted` gating the graph below is the same fact — so a level written
+   * into both would render 25% as 6%. `livePath` returns the pair and invariant
+   * I2 pins their product; nothing here re-derives it.
+   *
+   * INTENT IS NEVER WRITTEN HERE. `soundOn`, `muted` and `soloId` are inputs;
+   * closing a trim sheet or dropping a solo restores exactly the mix the user
+   * left, through this same recompute. That split (audibility vs intent) is what
+   * `lib/soundtrack.ts` DECISION 2 exists for, and what kept the export honest
+   * when audibility grew a third master.
    */
   private applyMutes(): void {
+    // THE ONE CHOKE POINT for a solo whose source has gone. This runs on every
+    // mute, level, roster and monitor change, so pruning here catches the clip
+    // that left by removal, by replacement, by Clear and by project load —
+    // four routes, one of which any per-route prune would eventually miss, and
+    // the cost of missing it is a room that is silent for every remaining
+    // source with no chip left to tap to get out of it.
+    const roster = this.audioRoster();
+    const hadSolo = this.soloId;
+    this.soloId = pruneSolo(this.soloId, roster.map((s) => s.id));
+    /** The soloed source left the roster — the room is about to come back. */
+    const droppedSolo = hadSolo !== null && this.soloId === null;
+
+    const rows = monitorPlan({
+      sources: roster,
+      soundOn: this.soundOn,
+      exclusive: this.exclusiveNow(),
+      capturing: this.capturing,
+    });
+    let i = 0;
     const t = this.track;
     if (t) {
-      // No `live` term: a soundtrack holds no VIDEO decoder, so the realtime
-      // admission budget has nothing to say about it.
-      //
-      // THE AUDITION OVERRIDES AUDIBILITY, NEVER INTENT. While a trim handle
-      // is held (`setAudition`) the monitor must sound — that is the feature —
-      // even with the master sound off or this track's speaker out: both are
-      // statements about the MIX, and a cut audition is solo by definition.
-      // `soundOn` and `muted` are deliberately not written (audibility and
-      // intent are different fields — the exact split lib/soundtrack.ts
-      // DECISION 2 exists for), so closing the sheet restores the state the
-      // user left, through this same recompute. Gated on metadata so a track
-      // still probing cannot audibly play its head at 0:00, and on `broken`
-      // so a dead blob degrades to silence rather than to a frozen lie.
-      const ready = !!t.el && Number.isFinite(t.el.duration) && t.el.duration > 0;
-      const auditioning = !!t.audition && !t.broken && ready;
-      // Unity while auditioning: the level says how the music sits AGAINST the
-      // rest of the mix, and a solo audition has no rest of the mix.
-      const audible = auditioning || (this.soundOn && !t.muted && !t.broken);
-      const p = livePath(audible, auditioning ? FULL_LEVEL : t.level, !!t.gain);
+      const r = rows[i++];
+      const p = livePath(r.audible, r.level, !!t.gain);
       if (t.gain) { try { t.gain.gain.value = p.node; } catch { /* ignore */ } }
       const el = t.el;
       if (el) {
-        el.muted = !audible;
+        el.muted = !r.audible;
         el.volume = p.element;
       }
     }
-    // AUDITION IS SOLO: while a cut is being dialed, every other source steps
-    // out of the room — through this same audibility recompute, never through
-    // anyone's `muted` intent, so stopping restores exactly what was playing.
-    const solo = !!this.track?.audition;
     this.clips.forEach((c) => {
-      const audible = !solo && this.soundOn && !c.muted && c.live && !c.broken;
-      const p = livePath(audible, c.level, !!c.gain);
+      const r = rows[i++];
+      const p = livePath(r.audible, r.level, !!c.gain);
       if (c.gain) {
         try { c.gain.gain.value = p.node; } catch { /* ignore */ }
       }
@@ -4639,11 +4788,14 @@ export class Stage {
       if (!el) return;
       // The element's own `muted` still gates the signal entering the WebAudio
       // graph, so it is the real switch; the gain node is the mixer on top.
-      el.muted = !audible;
+      el.muted = !r.audible;
       el.volume = p.element;
       // The `muted` ATTRIBUTE is left in place on purpose: it is what iOS reads
       // for autoplay eligibility, and removing it buys nothing at runtime.
     });
+    // AFTER the gates, never before: `nudgeSound` reads `paused` on elements
+    // this loop has just re-opened.
+    if (droppedSolo) this.nudgeSound();
   }
 
   private buildAudioChain(clip: ClipRecord, el: HTMLVideoElement): void {
@@ -4853,6 +5005,13 @@ export class Stage {
   setCaptureActive(active: boolean): void {
     if (this.capturing === active || this.destroyed) return;
     this.capturing = active;
+    // A TAKE IS NEVER SOLOED. `monitorPlan` already refuses to apply a solo
+    // while `capturing` is true — for the take's whole duration, not merely at
+    // its start, which is the hole the C3719 panel's dissenting lens named. This
+    // line is the second half of that answer: the solo is RELEASED rather than
+    // suspended, so the room the take leaves behind is the mix, not a state the
+    // user set two minutes ago and cannot see any more.
+    if (active) this.soloId = null;
     this.applySize(true);
     if (active) {
       this.clips.forEach((c) => { if (c.live && c.wantPlay) this.tryPlay(c); });
@@ -4989,6 +5148,11 @@ export class Stage {
   // ===========================================================================
 
   getStatus(): StageStatus {
+    // ONE RULE, REPORTED NOT RE-DERIVED. Every `audible` below is the same plan
+    // `applyMutes` wrote onto the elements; a status that recomputed it would be
+    // a second opinion, and the chip tint would eventually disagree with the
+    // speakers it describes.
+    const audibleNow = new Map(this.monitorRows().map((r) => [r.id, r.audible]));
     const clips: StageClipStatus[] = [];
     let live = 0;
     let deferred = 0;
@@ -5007,7 +5171,7 @@ export class Stage {
         level: c.level,
         fade: c.fadeSec,
         wantsAudio: !c.muted && !c.broken,
-        audible: this.soundOn && !c.muted && c.live && !c.broken,
+        audible: !!audibleNow.get(c.id),
         ready: c.ready,
         fragments: c.fragments,
         area: c.area,
@@ -5057,15 +5221,13 @@ export class Stage {
       needsGesture: this.needsGesture,
       soundOn: this.soundOn,
       audioAvailable: this.audioAvailable,
+      soloId: this.soloId,
       soundtrack: this.track
         ? {
             name: this.track.name,
             muted: this.track.muted,
             wantsAudio: !this.track.muted && !this.track.broken,
-            audible: soundtrackAudible(
-              { url: this.track.url, name: this.track.name, durationSec: 0, muted: this.track.muted || this.track.broken },
-              this.soundOn,
-            ),
+            audible: !!audibleNow.get(SOUNDTRACK_ID),
             broken: this.track.broken,
             level: this.track.level,
             fade: this.track.fadeSec,
@@ -5124,6 +5286,14 @@ export class Stage {
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
       s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' + s.measuredLivePixels + '|' +
+      // SOLO IS IN THE SIGNATURE, and SCAR-C160 (the note below) is why this
+      // line exists rather than being obvious: solo changes NO field this list
+      // already carried — not `muted`, which it deliberately never writes, and
+      // not `soundOn`, which it only ever sets to true. So the Stage soloed, the
+      // elements went quiet, and the button, the chip tint and the banner all
+      // read back "no solo" because the status was deduped away. Measured on the
+      // artifact, not reasoned about: `tests/e2e/solo.spec.ts` T2 and T4.
+      (s.soloId || '-') + '|' +
       s.rolling + '|' + s.turning + '|' + s.moving + '|' + s.parked + '|' +
       (s.soundtrack
         ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken + ':' + s.soundtrack.level + ':' + s.soundtrack.fade

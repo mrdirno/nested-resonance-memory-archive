@@ -37,7 +37,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
-  AlertTriangle, Loader2, Scissors, RotateCcw, Music, Gauge, Waves,
+  AlertTriangle, Loader2, Scissors, RotateCcw, Music, Gauge, Waves, Headphones,
 } from 'lucide-react';
 
 import { createStage, type Stage, type StageStatus, type StageClipInput, type StageTurnInput } from '../lib/stage';
@@ -63,6 +63,7 @@ import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
   type SoundtrackSpec,
 } from '../lib/soundtrack';
+import { nextSolo, soloBanner } from '../lib/solo';
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
 import type { TurnSchedule } from '../lib/turn';
 import { artIsAnimated } from '../lib/artRack';
@@ -195,6 +196,29 @@ export interface VideoStageProps {
   onSoundtrackWindow?: (v: { inSec: number; outSec: number } | undefined) => void;
   /** Remove the music. The URL belongs to the parent, which revokes it. */
   onRemoveSoundtrack?: () => void;
+  /**
+   * SOUND JUST ARRIVED — bumped by the parent when the user ADDS AUDIO.
+   *
+   * THE WISH (collage well, improve, about_tool=audio): *"When adding audio —
+   * Should start the added audio then take immediately to the details to see all
+   * audio playing that way user can solo the audio to determine what to keep
+   * enabled or muted should be intuitive."*
+   *
+   * A COUNTER RATHER THAN A BOOLEAN, because the second song must do what the
+   * first one did; and a PROP rather than a `StageRecorder` handle call, which
+   * is what this was first built as and why it did not work: with photographs
+   * still settling, the picker's change handler runs BEFORE this component has
+   * mounted and published its handle, so `recorderRef.current` was null exactly
+   * in the case a user hits by adding music promptly. Measured, not theorised —
+   * the arrival fired into nothing and Details never opened.
+   *
+   * IT IS ANSWERED IN A LAYOUT EFFECT, and that is the whole reason the gesture
+   * survives: React flushes a discrete event's render and commit inside the same
+   * task, and layout effects run during commit — so `AudioContext.resume()` and
+   * the unmute still happen in the picker's own task, which is the only thing
+   * iOS grants a gesture to. A passive effect would arrive a task late.
+   */
+  soundArrival?: number;
   /** The music's INTENT changed. The parent owns it; the Stage is re-fed from
    *  it whenever a Stage is (re)built. */
   onSoundtrackMuted?: (muted: boolean) => void;
@@ -279,6 +303,54 @@ export interface StageRecorder {
  * a RULER instead: minute marks against the same time axis, which is the actual
  * question you are asking a song ("where is 1:30?") and costs nothing to answer.
  */
+/**
+ * THE SOLO BUTTON — one component, used by the clip chip AND the music chip.
+ *
+ * TWO CHIPS, ONE BUTTON, because the last time this row grew a control the two
+ * copies drifted into two different ideas of what it meant. A soundtrack is a
+ * clip with no picture; solo has no reason to know the difference.
+ *
+ * IT IS DEAD FOR THE WHOLE TAKE, not merely reset at its start. That is the
+ * C3719 panel's dissenting lens, verbatim: the realtime capture path taps the
+ * same live gains solo writes, so a solo engaged MID-recording lands in the file
+ * as an unexplained silent dropout that nobody would trace back to two taps on a
+ * control they were told was monitor-only. `lib/solo.ts` already refuses to
+ * apply a solo while `capturing` (invariant S4) — this disables the way IN, so
+ * the state is never even entered and the tooltip says why.
+ */
+const SoloButton: React.FC<{
+  id: string;
+  name: string;
+  soloId: string | null;
+  /** A take is running. */
+  busy: boolean;
+  /** There is an audio path at all, and this source is not broken. */
+  available: boolean;
+  onSolo: (id: string, current: string | null) => void;
+}> = ({ id, name, soloId, busy, available, onSolo }) => {
+  const on = soloId === id;
+  return (
+    <button
+      type="button"
+      onClick={() => onSolo(id, soloId)}
+      disabled={busy || !available}
+      aria-pressed={on}
+      /* THE NAME IS THE ACTION, like every other button on this row. */
+      aria-label={on ? `Stop soloing ${name}` : `Solo ${name}`}
+      title={busy
+        ? 'Solo is off while a take is recording — it changes what you hear, and a take records what the piece contains'
+        : on
+          ? `Stop soloing ${name} — put the rest of the mix back`
+          : `Hear ${name} on its own, to decide whether to keep it. Nothing about the export changes.`}
+      className={`w-11 h-11 rounded flex items-center justify-center transition-colors disabled:opacity-30 ${
+        on
+          ? 'text-sky-300 bg-sky-500/20 hover:bg-sky-500/30'
+          : 'text-gray-500 hover:text-white hover:bg-white/10'
+      }`}
+    ><Headphones size={15} /></button>
+  );
+};
+
 const TrimSheet: React.FC<{
   /** What is being cut, for every label in here. */
   name: string;
@@ -895,7 +967,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, captionPlans, onTakeChange, onRecordingChange, look, turn, pace, move, beat, onNotice, onUnavailable,
-  controlsHost, focusMode = false, inspectorOpen = false, onDetailsChange, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
+  controlsHost, focusMode = false, inspectorOpen = false, onDetailsChange, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, soundArrival, onSoundtrackMuted,
   onSoundtrackLevel,
   onSoundtrackFade,
   onSoundtrackWindow,
@@ -1255,6 +1327,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const anyPlaying = !!status?.rolling;
   const liveCount = status?.liveCount ?? 0;
   const trackRow = status?.soundtrack ?? null;
+  /** THE SOURCE BEING SOLOED — the Stage's, never a copy. A second copy here
+   *  would be a second answer to "what am I hearing", and the Stage releases the
+   *  solo on its own (a take starts, the source is removed). */
+  const soloId = status?.soloId ?? null;
   /** WILL THE WALL ACTUALLY CUT — the Stage's own ring test, not the chip's
    *  intent (`StageStatus.turning`). THE STRIP draws marks off this. */
   const stageTurning = !!status?.turning;
@@ -1573,6 +1649,19 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     onSoundtrackMuted?.(wanted);
   }, [onSoundtrackMuted]);
 
+  /**
+   * SOLO — "let me hear THAT one, alone" (`lib/solo.ts`).
+   *
+   * SYNCHRONOUS INSIDE THE CLICK, for `toggleTrackSound`'s reason exactly:
+   * `setSolo` turns the monitor on, unmuting is gesture-bound, and iOS grants a
+   * gesture only to the task it fired in. Nothing is routed to the parent
+   * because there is nothing for the parent to hold — a solo is monitor state,
+   * so a Stage that is rebuilt correctly comes back playing the mix.
+   */
+  const toggleSolo = useCallback((id: string, current: string | null) => {
+    stageRef.current?.setSolo(nextSolo(current, id));
+  }, []);
+
   /** A CLIP'S LEVEL — the Stage alone, exactly like `setClipMuted`: a clip's
    *  audio intent has never had a copy in the parent, so a level must not start
    *  one. It reads back off `status.clips[].level`. */
@@ -1643,6 +1732,46 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     onRecordingChange?.(busy);
     return () => { onRecordingChange?.(false); };
   }, [busy, onRecordingChange]);
+
+  /**
+   * PARTS 1 AND 2 OF THE WISH, in one call: the monitor comes on and the sound
+   * starts, and Details opens on the row of chips where the decision lives.
+   *
+   * NOT DURING A TAKE. Yanking a panel open under a recording user's thumb is
+   * the mid-take layout shift the C3719 panel's mobile lens named, and a take
+   * is the one moment the transport must not move.
+   *
+   * `rescue: false` matters and is explained at `Stage.resumeFromGesture`: the
+   * arriving track is not in the Stage yet, so the ordinary "make sure something
+   * is audible" rescue would unmute a clip the user had silenced.
+   */
+  const soundArrived = useCallback((): boolean => {
+    const stage = stageRef.current;
+    if (!stage || recPhase !== 'idle') return false;
+    soundRef.current = true;
+    stage.resumeFromGesture({ sound: true, rescue: false });
+    setDetailsOpen(true);
+    // The parent has to be told, not just asked to render: it closes the editing
+    // inspector when Details opens, and an inspector left open force-closes
+    // Details right back (see the effect on `focusMode || inspectorOpen`).
+    detailsChangeRef.current?.(true);
+    return true;
+  }, [recPhase]);
+
+  /**
+   * ANSWER THE ARRIVAL — once per bump, and retried while it cannot be answered.
+   *
+   * `stageGen` is in the dependency list on purpose: a bump that lands before
+   * the Stage exists returns false, is NOT marked seen, and comes back the
+   * moment there is a Stage to start. That is the ordering this whole prop was
+   * rebuilt for.
+   */
+  const arrivalSeen = useRef(0);
+  React.useLayoutEffect(() => {
+    const n = soundArrival ?? 0;
+    if (!n || arrivalSeen.current === n) return;
+    if (soundArrived()) arrivalSeen.current = n;
+  }, [soundArrival, soundArrived, stageGen]);
 
   // Publish the handle the Export sheet calls into.
   useEffect(() => {
@@ -1804,6 +1933,26 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       + (fadeOnTake > 0 ? `, fading in and out over ${fadeOnTake}s` : '')
     : ' · silent (nothing has its sound on)';
 
+  /**
+   * THE SOLOED SOURCE, resolved to the three things its banner needs. Read off
+   * the SAME status rows the chips draw, so the sentence and the tint can never
+   * describe two different sources.
+   */
+  const soloed = soloId === null
+    ? null
+    : soloId === SOUNDTRACK_ID
+      ? (trackRow ? { name: trackRow.name, level: trackRow.level, audible: trackRow.audible } : null)
+      : (() => {
+          const r = clipRows.find((c) => c.id === soloId);
+          return r ? { name: r.name, level: r.level, audible: r.audible } : null;
+        })();
+  const soloBanner_row = soloed ? (
+    <p className="video-transport__solo-banner" role="status" data-testid="solo-banner">
+      <Headphones size={12} aria-hidden="true" />
+      <span>{soloBanner(soloed.name, { level: soloed.level, audible: soloed.audible })}</span>
+    </p>
+  ) : null;
+
   // Playback stays visible; the controls that change a source live behind
   // Details. Both regions stay mounted so a disclosure costs no decoder,
   // AudioContext, trim state or playhead position.
@@ -1853,10 +2002,27 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             <Square size={14} fill="currentColor" /><span>Stop</span>
           </button>
         ) : (
-          <button ref={detailsButton} type="button" className="video-transport__details-toggle"
+          /* THE TOGGLE CARRIES THE SOLO when the panel is shut.
+             A solo is monitor state with no home on screen once Details is
+             collapsed — the C3719 panel's skeptic asked for "a persistent
+             indicator visible from every screen it can be toggled from", and
+             this is the one control that is always up while there is anything
+             to solo. Releasing the solo on close was the other answer and is
+             worse: it takes the decision away to make the state legible. The
+             accessible NAME stays "Details" — three sibling specs act on it by
+             name, and the fact belongs in the description, not the label. */
+          <button ref={detailsButton} type="button"
+            className={`video-transport__details-toggle${soloId ? ' video-transport__details-toggle--solo' : ''}`}
             aria-expanded={detailsOpen} aria-controls={detailsId}
+            aria-label="Details"
+            aria-description={soloed ? `Soloing ${soloed.name}` : undefined}
+            title={soloed
+              ? `Soloing ${soloed.name} — open Details to release it. The export is unchanged.`
+              : undefined}
             onClick={() => changeDetails(!detailsOpen)} disabled={busy}>
-            {recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : 'Details'}
+            {recPhase === 'saving'
+              ? <Loader2 size={16} className="animate-spin" />
+              : (<>{soloId && <Headphones size={12} aria-hidden="true" />}Details</>)}
           </button>
         )}
       </div>
@@ -1877,6 +2043,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           <span>Media &amp; recording</span>
           <span>Trim, sound and take length</span>
         </div>
+        {/* WHAT A SOLO IS, said while one is held. Three facts in one line: that
+            it is temporary, that the EXPORT IS UNTOUCHED — the whole reason a
+            listening mode is safe to offer next to the switches that are not —
+            and, when the soloed source is turned down, why it sounds faint. The
+            sentence is `lib/solo.ts`'s, not this file's: it is asserted there. */}
+        {soloBanner_row}
       {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
           a way out. Sound starts OFF for every clip — a collage that shouts on
           import is not a nice thing to build — but each switch is INDEPENDENT,
@@ -1900,8 +2072,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           const clipLevel = st?.level;
           const quieted = isQuieted(clipLevel);
           return (
-            <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
-              <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
+            <div key={c.id}
+              className={`video-transport__chip rounded-lg bg-[#161616] border shrink-0 ${
+                soloId === c.id ? 'border-sky-400/70 bg-sky-500/5' : 'border-white/10'
+              }`}
+              data-testid={`source-chip-${c.id}`}>
+              <span className="video-transport__chip-name text-[9px] tracking-wide text-gray-300 truncate" title={c.name}>{c.name}</span>
+              <div className="video-transport__chip-actions">
               {/* TRIM. A trimmed clip SAYS SO on the chip — the window is the one
                   edit here that changes what a finished export contains while
                   leaving the collage looking broadly the same, so it must be
@@ -1950,6 +2127,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   >{levelLabel(clipLevel)}</span>
                 )}
               </button>
+              <SoloButton id={c.id} name={c.name} soloId={soloId} busy={busy}
+                available={!!status?.audioAvailable && st?.state !== 'error'}
+                onSolo={toggleSolo} />
               <button
                 onClick={() => toggleClipSound(c.id, wantsAudio)}
                 disabled={!status?.audioAvailable || st?.state === 'error'}
@@ -1983,6 +2163,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   className="w-11 h-11 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
                 ><X size={14} /></button>
               )}
+              </div>
             </div>
           );
         })}
@@ -1991,21 +2172,26 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             and a way out. It sits in the same scroll row so a phone gets one
             horizontally-scrolling strip rather than a second line to find. */}
         {trackRow && (
-          <div className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-emerald-500/25 shrink-0">
-            <Music size={11} className={trackRow.audible ? 'text-emerald-400' : 'text-gray-500'} aria-hidden="true" />
-            <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem] ml-1" title={trackRow.name}>
+          <div
+            className={`video-transport__chip rounded-lg bg-[#161616] border shrink-0 ${
+              soloId === SOUNDTRACK_ID ? 'border-sky-400/70 bg-sky-500/5' : 'border-emerald-500/25'
+            }`}
+            data-testid="source-chip-music">
+            <span className="video-transport__chip-name text-[9px] tracking-wide text-gray-300 truncate" title={trackRow.name}>
+              <Music size={11} className={trackRow.audible ? 'text-emerald-400 inline mr-1' : 'text-gray-500 inline mr-1'} aria-hidden="true" />
               {trackRow.broken ? `${trackRow.name} — will not decode` : trackRow.name}
-            </span>
             {/* THE LENGTH, from the prop rather than from the Stage: the Stage
                 holds a url and an intent and has no reason to learn a duration
                 the render never reads (lib/soundtrack.ts, DECISION 1). This is
                 the ONE place that number is for — telling you which cut of the
                 song you just dropped in. */}
-            {!trackRow.broken && soundtrackLength(soundtrack?.durationSec ?? 0) && (
-              <span className="text-[9px] tracking-wide text-gray-500 tabular-nums shrink-0 ml-1">
-                {soundtrackLength(soundtrack?.durationSec ?? 0)}
-              </span>
-            )}
+              {!trackRow.broken && soundtrackLength(soundtrack?.durationSec ?? 0) && (
+                <span className="text-gray-500 tabular-nums ml-1">
+                  {soundtrackLength(soundtrack?.durationSec ?? 0)}
+                </span>
+              )}
+            </span>
+            <div className="video-transport__chip-actions">
             {/* THE RANGE — "click it and select the range", from the field. The
                 same button a clip gets, opening the same sheet, because a
                 soundtrack is a clip with no picture and the part of a song you
@@ -2063,6 +2249,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 already scarred by, one layer up. `aria-pressed` therefore
                 tracks INTENT (what the file will carry) and the NAME tracks the
                 next action, which are genuinely two different facts here. */}
+            <SoloButton id={SOUNDTRACK_ID} name={trackRow.name} soloId={soloId} busy={busy}
+              available={!!status?.audioAvailable && !trackRow.broken}
+              onSolo={toggleSolo} />
             <button
               onClick={() => toggleTrackSound(trackRow.wantsAudio, !!status?.soundOn)}
               disabled={trackRow.broken}
@@ -2085,7 +2274,17 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 className="w-11 h-11 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
               ><X size={14} /></button>
             )}
+            </div>
           </div>
+        )}
+        {/* CREDIT ON THE PAGE, not only in av/credits.json. Anonymous, as
+            wished. It rides the row it is about, so the person reading the
+            chips is the person who sees who asked for them. */}
+        {(clips.length > 0 || trackRow) && (
+          <p className="video-transport__credit">
+            Solo, and music that starts playing the moment you add it, were wished
+            for by an anonymous Collage user.
+          </p>
         )}
         {/* VIDEO-LENGTH SYNC — lives INSIDE the scroll row (shrink-0), so it scrolls
             with the clip chips and never steals width from the status readout that
