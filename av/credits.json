@@ -240,6 +240,16 @@
       "wished_date": "2026-09-06",
       "shipped_date": "2026-09-06",
       "shipped_commit": "8a90c610"
+    },
+    {
+      "tool_name": "Collage Studio — New canvas: the clear that hid three taps deep under the wrong word now rides the Add panel heading and asks first",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-09-07",
+      "shipped_date": "2026-09-07",
+      "shipped_commit": "413f110f"
     }
   ]
 }

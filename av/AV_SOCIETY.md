@@ -9445,3 +9445,23 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   against the deployed site, and the deployed `shared/toolkit.js` is byte-identical to the
   tested local file apart from the deploy-time key substitution.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/cable-list.html
+
+- `2026-09-07` — **[AXIS:BACKPORT] C3718 — EVERY TOOL PAGE HAD A CLEAR EXCEPT THE ONE ENGINE
+  SEVENTEEN TRADES SHARE.** Rider from the Collage wish "no way to reset canvas" (served in
+  `tools/collage-studio/COLLAGE_EVOLUTION.md` C3718: a `New canvas` in the Add panel heading, two
+  taps, never a dialog). Sweep: 17/17 trades — every tool page carries Clear / Reset / Start over
+  except `write-up.html`, where `shared/docspec.js` kept a setup (picks, desk, name, company,
+  house rules) in localStorage with no way back but emptying each field by hand. Before→after:
+  none → **Start over** at the foot of "2 · Make it yours" (two taps, `Tap again to wipe it`,
+  4 s to change your mind — answer-back's own pattern; keeps the AI you paste into and the
+  anonymous use counts; wipes screen AND storage, a reload agrees). Gate
+  `tools/toolkit-gates/docspec-startover.mjs` (pick → type a name → choose Claude → one tap wipes
+  nothing → second tap clears → reload): **17 trades / 272 checks / 0 failing LIVE**, and 17/17
+  red against the engine before its deploy — it bites. docspec-config 15/15 (av), docspec-desk,
+  docspec-needs 2240/2240, docspec-say 3696/3696, mobile-watertight av + electrical write-up
+  green; live `shared/docspec.js` and `docspec.css` byte-identical to the tested files. Code
+  `e4b8f4e4`; Pages run 34105281250. Fleet receipt **17868** from `mac-toolkit-claude`, thread
+  `persona500-collage-C3718-release`, read back. Storefront untouched (no new tool). · **NAMED
+  AND NOT DONE:** on `write-up.html` the house-rules sub-text (`.ticks .sb`) wraps to up to 8
+  lines at 390 — measured live, filed in the ideas ledger, no gate asserts it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
