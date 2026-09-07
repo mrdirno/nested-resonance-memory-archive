@@ -41,10 +41,16 @@ def main():
     ap.add_argument('--note', default='')
     args = ap.parse_args()
 
-    entries, runs = [], 0
+    # Only files the scorer will actually load: a run JSON of the right schema, and
+    # the mesh that JSON names. Hashing anything else is worse than useless. The
+    # scorer verifies the manifest by matching it against the files it loaded, so a
+    # stray mesh - one left by a crashed run, or by an arm that was re-run under a
+    # different name - would appear in the manifest, never be loaded, and turn the
+    # result into "inputs unverified". That verdict is then easy to miss, because
+    # the script reports support before it reports inputs.
+    entries, runs, extra = [], 0, []
+    keep = {}
     for fn in sorted(os.listdir(args.input_dir)):
-        if not (fn.endswith('.json') or fn.endswith('.mesh.f32')):
-            continue
         path = os.path.join(args.input_dir, fn)
         if not os.path.isfile(path):
             continue
@@ -53,12 +59,29 @@ def main():
                 with open(path) as fh:
                     head = json.load(fh)
             except (json.JSONDecodeError, UnicodeDecodeError):
+                extra.append(fn)
                 continue
             if not isinstance(head, dict) or head.get('schema') != 'halo-memory-prereg/1':
+                extra.append(fn)
                 continue
+            mesh = head.get('mesh_file')
+            if not mesh or not os.path.isfile(os.path.join(args.input_dir, mesh)):
+                sys.exit(f'{fn} names mesh {mesh!r}, which is not in {args.input_dir}')
             runs += 1
+            keep[fn] = None
+            keep[mesh] = None
+        elif not fn.endswith('.mesh.f32'):
+            extra.append(fn)
+    for fn in sorted(os.listdir(args.input_dir)):
+        if fn.endswith('.mesh.f32') and fn not in keep:
+            extra.append(fn)
+    for fn in sorted(keep):
+        path = os.path.join(args.input_dir, fn)
         entries.append({'file': fn, 'sha256': sha256_file(path),
                         'bytes': os.path.getsize(path)})
+    if extra:
+        print(f'not in the manifest ({len(extra)} file(s) the scorer will not load): '
+              + ', '.join(extra), file=sys.stderr)
 
     if not runs:
         sys.exit(f'no halo-memory-prereg/1 runs in {args.input_dir}')
@@ -67,7 +90,8 @@ def main():
            'author': 'Aldrin Payopay',
            'input_dir': os.path.relpath(os.path.abspath(args.input_dir),
                                         os.path.dirname(os.path.abspath(__file__))),
-           'runs': runs, 'note': args.note, 'files': entries}
+           'runs': runs, 'note': args.note,
+           'not_manifested': extra, 'files': entries}
     with open(args.output, 'w') as fh:
         json.dump(doc, fh, indent=1)
     print(f'{args.output}: {runs} runs, {len(entries)} files, '
