@@ -10,7 +10,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   globalSetup: './tests/globalSetup.ts',
   testDir: './tests/e2e',
-  testMatch: /reachable\.spec\.ts$/,
+  testMatch: /(reachable|new-canvas)\.spec\.ts$/,
   timeout: 120_000,
   fullyParallel: true,
   use: {

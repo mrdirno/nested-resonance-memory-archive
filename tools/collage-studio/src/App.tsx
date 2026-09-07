@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallba
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
   Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair, Type, Wand2,
-  MessageSquarePlus,
+  MessageSquarePlus, FilePlus,
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -156,6 +156,43 @@ export default function App() {
   const [studioTool, setStudioTool] = useState<StudioTool | null>(null);
   const toolRefs = useRef<Partial<Record<StudioTool, HTMLButtonElement | null>>>({});
   const studioToolRef = useRef(studioTool); studioToolRef.current = studioTool;
+  /**
+   * NEW CANVAS, ARMED.
+   *
+   * THE WISH (collage well, bug, about_tool=upload): *"How to reset canvas no
+   * way to create new canvas."* There WAS a way — `Clear all sources`, the third
+   * row of a collapsed "Project actions" disclosure at the foot of the Add
+   * panel, below the fold of a pane that fits exactly three tiles on an SE, and
+   * the word on it was "sources", never the wisher's "canvas". A control nobody
+   * can find is a control that does not exist.
+   *
+   * THE SHAPE was judged, not guessed (three lenses, independently: 8 / 7 / 8,
+   * all three landing on the same place): a button in the Add panel's HEADING
+   * row. The heading costs no vertical space in a pane that has none to spare,
+   * and it is the one row present whenever the panel is. Not the topbar (at
+   * 320 the loaded row already clips the mark by 4px), not a fourth tile (below
+   * the fold on an SE and an iPhone 12), not the disclosure opened by default
+   * (still below the fold).
+   *
+   * IT IS DESTRUCTIVE, so it is two taps and never a dialog: the first swaps the
+   * tiles for a question and lands focus on "Keep working"; only "Start over"
+   * clears. `armed` lives here rather than in the panel so that leaving the
+   * panel by any door — Done, Escape, another tool — disarms it, and the button
+   * itself is not rendered while the question is up: one path at a time.
+   */
+  const [newCanvasArmed, setNewCanvasArmed] = useState(false);
+  const newCanvasArmedRef = useRef(newCanvasArmed); newCanvasArmedRef.current = newCanvasArmed;
+  const newCanvasButtonRef = useRef<HTMLButtonElement>(null);
+  const keepWorkingRef = useRef<HTMLButtonElement>(null);
+  const refocusNewCanvasRef = useRef(false);
+  useEffect(() => { setNewCanvasArmed(false); }, [studioTool]);
+  useEffect(() => {
+    if (newCanvasArmed) { keepWorkingRef.current?.focus(); return; }
+    // Back from the question by Keep or Escape: focus returns to the button
+    // that asked it, which only exists again after this render.
+    if (refocusNewCanvasRef.current) { refocusNewCanvasRef.current = false; newCanvasButtonRef.current?.focus(); }
+  }, [newCanvasArmed]);
+  const disarmNewCanvas = () => { refocusNewCanvasRef.current = true; setNewCanvasArmed(false); };
   const inspectorCloseRef = useRef<HTMLButtonElement>(null);
   const restoreToolFocusRef = useRef<StudioTool | null>(null);
   const closeTool = () => { restoreToolFocusRef.current = studioToolRef.current; setStudioTool(null); };
@@ -704,6 +741,9 @@ export default function App() {
         // A pending trade is the innermost thing Escape can back out of, and
         // backing out of it must NOT also drop full bleed — you cancel a
         // mis-tap to try again, not to leave the room you are comparing in.
+        // A pending "Start over?" is the innermost thing to back out of, and
+        // backing out of it means "Keep working" — the panel stays open.
+        if (newCanvasArmedRef.current) { disarmNewCanvas(); return; }
         if (swapFromRef.current !== null) { setSwapFrom(null); return; }
         if (maximizedRef.current) { setMaximized(false); return; }
         const tool = studioToolRef.current;
@@ -2349,6 +2389,28 @@ export default function App() {
       ownCount(false); // a fresh import after Clear auto-follows the upload count again
   };
 
+  /**
+   * THE SECOND TAP of New canvas. Everything `handleClear` clears, plus the
+   * title's WORDS: a "new" canvas that still carries the old piece's title is
+   * the same surprise one step later. The look, motion, shape and desk stay —
+   * two of the three lenses shoot a series in one style and would pay five
+   * taps per piece to get it back; the words are retyped in seconds.
+   *
+   * NOTHING HERE CLAIMS AN UNDO. `handleClear` pushes a History snapshot, but
+   * the taskbar that reaches History unmounts with the pool, and the music and
+   * clip URLs are revoked on the way out — so the notice says what happened
+   * and not that it can be taken back.
+   */
+  const startNewCanvas = () => {
+      if (waitForLyricDemo()) return;
+      if (recorderRef.current?.isRecording) { flashNotice('Stop the take before starting a new canvas.'); return; }
+      handleClear();
+      setTitleText('');
+      setNewCanvasArmed(false);
+      closeTool();
+      flashNotice('Fresh canvas. Start a new piece.');
+  };
+
   const handleRestoreHistory = (item: HistoryItem) => {
       if (waitForLyricDemo()) return;
       let restoredCaptions: CaptionTrack;
@@ -3462,12 +3524,26 @@ export default function App() {
       <aside id="studio-editing-panel" className="studio-inspector" hidden={!studioTool || maximized} aria-label="Editing panel">
         <div className="studio-inspector-heading">
           <h2>{studioTool === 'add' ? 'Add to your project' : studioTool === 'layout' ? 'Shape your composition' : studioTool === 'look' ? 'Set the look' : studioTool === 'motion' ? 'Make it move' : 'Words on screen'}</h2>
+          {/* NEW CANVAS rides the heading of the Add panel and nowhere else: a
+              destructive control one tap from Done has no business in the Look
+              or Motion panels. Hidden while the question is up — one path. */}
+          {studioTool === 'add' && !newCanvasArmed && <button type="button" ref={newCanvasButtonRef} className="studio-inspector-new" aria-label="New canvas" title="Clear the artwork and start fresh" onClick={() => setNewCanvasArmed(true)} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring}><FilePlus size={16}/><span>New canvas</span></button>}
           {/* Shown only where the topbar hides while editing (workspace.css, the
               short-screen rule): the well must stay one tap away in every state. */}
           <button type="button" data-wish-well className="studio-inspector-wish" aria-label="Wish it better" title="Report a bug, wish it better, or ask for a feature" onClick={() => (window as any).Feedback?.open('bug')}><MessageSquarePlus size={16}/></button>
           <button type="button" ref={inspectorCloseRef} onClick={closeTool} aria-label="Close editing panel" title="Back to preview"><span>Done</span><X size={16}/></button>
         </div>
-        {studioTool === 'add' && <div className="studio-add-panel">
+        {studioTool === 'add' && newCanvasArmed && <div className="studio-new-canvas" role="group" aria-labelledby="studio-new-canvas-q">
+          {/* The question takes the tiles' place, not a dialog's: big targets,
+              far from Done, the safe answer first and focused. The copy names
+              exactly what goes and what stays, and promises no undo. */}
+          <p id="studio-new-canvas-q"><b>Start over?</b><small>Your images, music, captions and title go. The look, motion and shape stay.</small></p>
+          <div className="studio-new-canvas-actions">
+            <button type="button" ref={keepWorkingRef} onClick={disarmNewCanvas}>Keep working</button>
+            <button type="button" className="studio-danger-fill" onClick={startNewCanvas}>Start over</button>
+          </div>
+        </div>}
+        {studioTool === 'add' && !newCanvasArmed && <div className="studio-add-panel">
           <button type="button" ref={images.length ? artRoomTriggerRef : undefined} aria-label="Art Room" onClick={() => { setArtRoomMode('templates'); setArtRoomOpen(true); }} disabled={demoBusy || exportStatus === 'processing' || captionRecording || restoring}><Palette size={20}/><span><b>Art Room</b><small>Combine animated templates and layers</small></span></button>
           <button type="button" onClick={() => fileInputRef.current?.click()} aria-label="Add more images or video"><Plus size={20}/><span><b>Add images or video</b><small>Drop files onto the artwork, too</small></span></button>
           <button type="button" onClick={() => musicInputRef.current?.click()} aria-label={soundtrack ? 'Replace the music' : 'Add music'}><Music size={20}/><span><b>{soundtrack ? 'Replace music' : 'Add music'}</b><small>{soundtrack ? soundtrack.name : 'An audio file, or the sound from a video'}</small></span></button>
@@ -3475,8 +3551,12 @@ export default function App() {
           <details className="studio-project-actions"><summary>Project actions</summary>
             <button type="button" onClick={() => videoInputRef.current?.click()} aria-label="Add a video">Choose video only</button>
             <button type="button" onClick={handleSaveProject}>Save editable project</button>
-            <button type="button" onClick={handleClear} aria-label="Clear all" className="studio-danger">Clear all sources</button>
           </details>
+          {/* `Clear all sources` used to be the third row of that disclosure.
+              It left with New canvas: two doors to the same clearing, under two
+              different words, is how the wisher came to report there was none.
+              CREDIT ON THE PAGE, not only in av/credits.json. Anonymous. */}
+          <p className="ui-credit">New canvas was wished for by an anonymous Collage user.</p>
         </div>}
         {studioTool === 'layout' && <div className="studio-subnav" role="group" aria-label="Layout controls">
           <button type="button" onClick={() => setActiveTab('simple')} aria-pressed={activeTab === 'simple'}>Composition</button>

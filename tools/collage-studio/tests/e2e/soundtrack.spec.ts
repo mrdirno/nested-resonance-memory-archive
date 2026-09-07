@@ -314,7 +314,7 @@ test.describe('THE SOUNDTRACK', () => {
       // column-vs-row, and "Clear all" disappeared on every phone with the dock
       // open, with every existing gate green. So: walk each rail button's
       // clipping ancestors and require its box to be inside all of them.
-      for (const name of ['Maximize the shot', 'Add more images or video', 'Add a video', 'Add music', 'Replace the music', 'Clear all']) {
+      for (const name of ['Maximize the shot', 'Add more images or video', 'Add a video', 'Add music', 'Replace the music', 'New canvas']) {
         const btn = page.getByRole('button', { name, exact: true });
         if (!(await btn.count())) continue;
         const cut = await btn.first().evaluate((el) => {

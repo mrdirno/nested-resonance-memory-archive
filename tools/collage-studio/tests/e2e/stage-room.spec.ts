@@ -241,7 +241,10 @@ test.describe('the artwork gets the room', () => {
     await page.getByRole('button',{name:'Add',exact:true}).click();
     await expect(page.getByRole('button',{name:'Add more images or video',exact:true})).toBeVisible();
     await page.getByText('Project actions',{exact:true}).click();
-    const clear=page.getByRole('button',{name:'Clear all',exact:true});
+    // C3718: `Clear all sources` left this disclosure (New canvas in the panel
+    // heading is the one door now), so the row's reachability is graded on the
+    // button that still lives here.
+    const clear=page.getByRole('button',{name:'Save editable project',exact:true});
     await clear.scrollIntoViewIfNeeded();
     const hit=await clear.evaluate(e=>{const b=e.getBoundingClientRect(),h=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);return {hit:h===e||e.contains(h),bottom:b.bottom,height:b.height};});
     expect(hit.hit).toBe(true);expect(hit.bottom).toBeLessThanOrEqual(390);expect(hit.height).toBeGreaterThanOrEqual(43.5);

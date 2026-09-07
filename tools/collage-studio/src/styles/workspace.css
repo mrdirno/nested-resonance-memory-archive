@@ -93,8 +93,22 @@
    topbar-only trigger would be gone in exactly the state a person is editing in.
    This button exists in the heading always and SHOWS only under that rule — one
    trigger visible at a time, never two. */
-.studio-inspector-heading h2 { flex: 1; min-width: 0; }
+.studio-inspector-heading h2 { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .studio-inspector-heading .studio-inspector-wish { display: none; }
+/* NEW CANVAS in the Add panel's heading (C3718). The title is the only thing in
+   the row that may give, and it gives by ellipsis, never by wrapping: a wrapped
+   heading grows the 48px row and pushes the third tile under the fold — the bug
+   the button fixes, returning sideways. The question that follows the tap takes
+   the tiles' place in the pane, with both answers at 44px. */
+.studio-inspector-heading .studio-inspector-new { color: var(--ink-2); }
+.studio-new-canvas { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.studio-new-canvas p { margin: 0; }
+.studio-new-canvas b { display: block; font-size: 15px; font-weight: 600; color: var(--ink-1); }
+.studio-new-canvas small { display: block; font-size: 12px; line-height: 1.35; color: var(--ink-3); margin-top: 4px; }
+.studio-new-canvas-actions { display: flex; gap: 8px; }
+.studio-new-canvas-actions button { flex: 1; min-height: 44px; padding: 0 12px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--line-2); color: var(--ink-1); background: var(--surface-1); }
+.studio-new-canvas-actions .studio-danger-fill { background: var(--danger); border-color: transparent; color: #140505; }
+@media (max-width: 999px) { .studio-new-canvas { padding: 6px 12px 8px; gap: 8px; } }
 
 @media (min-width: 1000px), (min-width: 700px) and (max-height: 540px) {
   .studio-workspace { display: grid; grid-template-columns: minmax(0, 1fr); }
