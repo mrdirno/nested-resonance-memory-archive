@@ -37,9 +37,18 @@ mkdir -p "$OUT"
 printf 'arm: out=%s preset=%s n=%s epochlen=%s epochs=%s sg=[%s] gl=[%s] seeds=[%s]\n' \
   "$OUT" "$PRESET" "$N" "$EPOCHLEN" "$EPOCHS" "$SGS" "$GLS" "$SEEDS"
 
+# The runner names its output with JavaScript's own number-to-string of the parsed
+# flag, so `--sg=0.40` writes `_sg0.4_`. A shell loop that builds the tag from the
+# raw word would look for `_sg0.40_`, never find it, and re-run that cell on every
+# resume while the gate below reported a missing file. Normalise the same way
+# before the tag is built, and echo the normalised value to the runner too, so the
+# two spellings cannot drift apart.
+norm() { python3 -c "import sys; v=float(sys.argv[1]); print('%g' % v)" "$1"; }
+
 total=0; ran=0; skipped=0; failed=0
-for sg in $SGS; do for gl in $GLS; do for s in $SEEDS; do
+for sg_raw in $SGS; do for gl_raw in $GLS; do for s in $SEEDS; do
   total=$((total+1))
+  sg=$(norm "$sg_raw"); gl=$(norm "$gl_raw")
   tag="${PRESET}_sg${sg}_gl${gl}_seed${s}_n${N}_e${EPOCHS}"
   if [ -f "$OUT/$tag.json" ]; then skipped=$((skipped+1)); continue; fi
   echo "=== [$total] $tag (epochlen ${EPOCHLEN}) ==="
