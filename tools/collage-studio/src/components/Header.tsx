@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
   const exporting = exportStatus === 'processing';
 
   return (
-    <header className="ui-topbar">
+    <header className="ui-topbar" data-loaded={hasImages ? 'true' : 'false'}>
       <div className="min-w-0 overflow-hidden flex flex-col gap-1.5">
         <div className="ui-mark">GEN<b>ART</b></div>
         <span className="ui-status" data-tone={ai.tone} title={aiTitle}>
@@ -98,20 +98,35 @@ export const Header: React.FC<HeaderProps> = ({
             /collage/wish-it-better.json now names THIS page as the channel. This
             button is rendered at runtime, so index.html carries the same marker on
             the well's static config for the sweep, which reads the document text. */}
-        {!hasImages && <button
+        {/* ALWAYS. C3712 (496a17ba) guarded this on `!hasImages` to buy the
+            width for Expand and Export, and the only trigger left once a project
+            was loaded was the fourth 76px tile of the Add panel — below the fold
+            of a 42dvh inspector on every phone. The well vanished exactly when a
+            person had something to say about the artwork in front of them, and
+            the first report of it arrived through another surface: "wish it
+            better is gone". Measured live at 320: the row has 233px for actions
+            with the mark at its 63; Wish (44 icon-only) + Open (44 icon-only once
+            loaded) + Expand (44) + Export (93) + three 4px gaps = 237, so the mark
+            clips 4px — less than the 8px it clipped before. From 360 up the label
+            is shown, because the wisher missed the WORDS, not the icon. */}
+        <button
           data-wish-well
-          aria-label="Feedback"
+          aria-label="Wish it better"
           onClick={() => (window as any).Feedback?.open('bug')}
-          className="ui-btn ui-btn--quiet ui-btn--compact"
+          className="ui-btn ui-btn--quiet ui-btn--compact studio-header-wish"
           title="Report a bug, wish it better, or ask for a feature — it goes straight to the loop that builds this"
         >
           <MessageSquarePlus size={15} />
-          <span>Feedback</span>
-        </button>}
+          <span>Wish</span>
+        </button>
 
+        {/* ICON-ONLY ONCE A PROJECT IS LOADED, under 600px: the 40px its label
+            costs is what pays for the Wish button above. The accessible name
+            stays "Open" (aria-label), so nothing that reaches it by name moves. */}
         <button
           onClick={onLoadProject}
-          className={`ui-btn ui-btn--compact ${openError ? 'ui-btn--bad' : 'ui-btn--quiet'}`}
+          aria-label="Open"
+          className={`ui-btn ui-btn--compact studio-header-open ${openError ? 'ui-btn--bad' : 'ui-btn--quiet'}`}
           title={openError
             ? `${openError} — a .collage archive, or an SVG exported by this app.`
             : 'Open a saved .collage project or an exported SVG (⌘O)'}

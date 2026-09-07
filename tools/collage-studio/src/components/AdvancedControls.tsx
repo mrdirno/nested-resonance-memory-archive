@@ -129,6 +129,115 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   return (
     <div className="ui-dock">
 
+      {/* ================= CANVAS =========================================== */}
+      {/* FIRST, because the tab is named for it. Geometry follows. */}
+      <div className="ui-stack--tight">
+        <div className="ui-title"><Frame size={12} /> Canvas</div>
+
+        <div className="ui-grid-4">
+          {RATIOS.map(r => (
+            <button
+              key={r.l}
+              onClick={() => setAspect(r.v)}
+              data-active={Math.abs(aspect - r.v) < 0.01}
+              className="ui-ratio"
+              title={`${r.n} — ${r.l}`}
+            >
+              <span className="ui-ratio__box" style={ratioBox(r.v)} />
+              <span className="ui-ratio__label">{r.l}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* CREDIT. The frame now fills the space it is given, the controls stop
+            at half the screen, and there is a full-bleed view — all because
+            somebody said the artwork was too small to judge a layout by. This
+            wisher stayed anonymous too. See credits.json. */}
+        <p className="ui-caption ui-label--dim mt-1">
+          Full bleed (the <span className="font-bold">⤢</span> on the stage, or <span className="font-bold">F</span>) and
+          giving the artwork the room were wished for by an anonymous Collage user.
+        </p>
+        {/* CREDIT. Canvas used to sit under ~800px of Geometry in a pane whose
+            visible height is 178px on a phone, so the frame's shape was the last
+            thing anyone found in a tab named "Canvas & crop". Somebody said so —
+            with the Add music tile and the Wish button in the same breath — and
+            all three moved into view. Anonymous again. See credits.json. */}
+        <p className="ui-caption ui-label--dim mt-1">
+          Canvas first here, Add music on screen, and Wish staying in the top bar once a project is
+          loaded — wished for by an anonymous Collage user.
+        </p>
+
+        {/* CREDIT, AND THE ONLY PLACE THIS IS WRITTEN DOWN FOR A READER. In full
+            bleed there is artwork and one rail — no room for a sentence — so the
+            instruction for the gesture lives here, beside the wish that built the
+            view it happens in. Another anonymous Collage user. See credits.json. */}
+        <p className="ui-caption ui-label--dim mt-1">
+          In full bleed, tap a fragment to pin it or throw its picture out of the pool — wished for by
+          an anonymous Collage user.
+        </p>
+
+        <span className="ui-label mt-1">Background</span>
+        <div className="ui-grid-5">
+          <button
+            onClick={() => setBgColor('#050505')}
+            data-active={bgColor === '#050505'}
+            className="ui-swatch"
+            title="Near-black background"
+          >
+            <span className="ui-swatch__dot" style={{ background: '#050505' }} />
+            <span className="ui-swatch__label">Black</span>
+          </button>
+          <button
+            onClick={() => setBgColor('#f5f5f5')}
+            data-active={bgColor === '#f5f5f5'}
+            className="ui-swatch"
+            title="Paper-white background"
+          >
+            <span className="ui-swatch__dot" style={{ background: '#f5f5f5' }} />
+            <span className="ui-swatch__label">White</span>
+          </button>
+          <button
+            disabled={!avgColor}
+            onClick={() => setBgAdaptive('avg')}
+            data-active={!!avgColor && bgColor === avgCss}
+            className="ui-swatch"
+            title="Average colour of everything you loaded"
+          >
+            <span className="ui-swatch__dot" style={{ background: avgCss }}>
+              <Palette size={11} className="opacity-70" />
+            </span>
+            <span className="ui-swatch__label">Average</span>
+          </button>
+          <button
+            disabled={!avgColor}
+            onClick={() => setBgAdaptive('grey')}
+            data-active={!!avgColor && bgColor === greyCss}
+            className="ui-swatch"
+            title="Average brightness, no hue"
+          >
+            <span className="ui-swatch__dot" style={{ background: greyCss }}>
+              <Moon size={11} className="opacity-70" />
+            </span>
+            <span className="ui-swatch__label">Grey</span>
+          </button>
+          <button
+            disabled={!avgColor}
+            onClick={() => setBgAdaptive('contrast')}
+            data-active={!!avgColor && bgColor === invCss}
+            className="ui-swatch"
+            title="Inverse of the average colour — maximum separation"
+          >
+            <span className="ui-swatch__dot" style={{ background: invCss }}>
+              <Contrast size={11} className="opacity-70" />
+            </span>
+            <span className="ui-swatch__label">Invert</span>
+          </button>
+        </div>
+        {!avgColor && (
+          <p className="ui-caption">Adaptive backgrounds unlock once images are analysed.</p>
+        )}
+      </div>
+
       {/* ================= GEOMETRY ========================================= */}
       <div className="ui-stack--tight">
         <div className="ui-title"><Frame size={12} /> Geometry</div>
@@ -303,105 +412,6 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             Arrangement, Crop focus and Twist were wished for by an anonymous Collage user.
           </p>
         </div>
-      </div>
-
-      {/* ================= CANVAS =========================================== */}
-      <div className="ui-stack--tight">
-        <div className="ui-title"><Frame size={12} /> Canvas</div>
-
-        <div className="ui-grid-4">
-          {RATIOS.map(r => (
-            <button
-              key={r.l}
-              onClick={() => setAspect(r.v)}
-              data-active={Math.abs(aspect - r.v) < 0.01}
-              className="ui-ratio"
-              title={`${r.n} — ${r.l}`}
-            >
-              <span className="ui-ratio__box" style={ratioBox(r.v)} />
-              <span className="ui-ratio__label">{r.l}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* CREDIT. The frame now fills the space it is given, the controls stop
-            at half the screen, and there is a full-bleed view — all because
-            somebody said the artwork was too small to judge a layout by. This
-            wisher stayed anonymous too. See credits.json. */}
-        <p className="ui-caption ui-label--dim mt-1">
-          Full bleed (the <span className="font-bold">⤢</span> on the stage, or <span className="font-bold">F</span>) and
-          giving the artwork the room were wished for by an anonymous Collage user.
-        </p>
-
-        {/* CREDIT, AND THE ONLY PLACE THIS IS WRITTEN DOWN FOR A READER. In full
-            bleed there is artwork and one rail — no room for a sentence — so the
-            instruction for the gesture lives here, beside the wish that built the
-            view it happens in. Another anonymous Collage user. See credits.json. */}
-        <p className="ui-caption ui-label--dim mt-1">
-          In full bleed, tap a fragment to pin it or throw its picture out of the pool — wished for by
-          an anonymous Collage user.
-        </p>
-
-        <span className="ui-label mt-1">Background</span>
-        <div className="ui-grid-5">
-          <button
-            onClick={() => setBgColor('#050505')}
-            data-active={bgColor === '#050505'}
-            className="ui-swatch"
-            title="Near-black background"
-          >
-            <span className="ui-swatch__dot" style={{ background: '#050505' }} />
-            <span className="ui-swatch__label">Black</span>
-          </button>
-          <button
-            onClick={() => setBgColor('#f5f5f5')}
-            data-active={bgColor === '#f5f5f5'}
-            className="ui-swatch"
-            title="Paper-white background"
-          >
-            <span className="ui-swatch__dot" style={{ background: '#f5f5f5' }} />
-            <span className="ui-swatch__label">White</span>
-          </button>
-          <button
-            disabled={!avgColor}
-            onClick={() => setBgAdaptive('avg')}
-            data-active={!!avgColor && bgColor === avgCss}
-            className="ui-swatch"
-            title="Average colour of everything you loaded"
-          >
-            <span className="ui-swatch__dot" style={{ background: avgCss }}>
-              <Palette size={11} className="opacity-70" />
-            </span>
-            <span className="ui-swatch__label">Average</span>
-          </button>
-          <button
-            disabled={!avgColor}
-            onClick={() => setBgAdaptive('grey')}
-            data-active={!!avgColor && bgColor === greyCss}
-            className="ui-swatch"
-            title="Average brightness, no hue"
-          >
-            <span className="ui-swatch__dot" style={{ background: greyCss }}>
-              <Moon size={11} className="opacity-70" />
-            </span>
-            <span className="ui-swatch__label">Grey</span>
-          </button>
-          <button
-            disabled={!avgColor}
-            onClick={() => setBgAdaptive('contrast')}
-            data-active={!!avgColor && bgColor === invCss}
-            className="ui-swatch"
-            title="Inverse of the average colour — maximum separation"
-          >
-            <span className="ui-swatch__dot" style={{ background: invCss }}>
-              <Contrast size={11} className="opacity-70" />
-            </span>
-            <span className="ui-swatch__label">Invert</span>
-          </button>
-        </div>
-        {!avgColor && (
-          <p className="ui-caption">Adaptive backgrounds unlock once images are analysed.</p>
-        )}
       </div>
 
       {/* ================= SESSION ========================================== */}

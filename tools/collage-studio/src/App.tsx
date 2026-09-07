@@ -2,7 +2,8 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair, Type, Wand2
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette, ArrowLeftRight, Crosshair, Type, Wand2,
+  MessageSquarePlus,
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -3461,6 +3462,9 @@ export default function App() {
       <aside id="studio-editing-panel" className="studio-inspector" hidden={!studioTool || maximized} aria-label="Editing panel">
         <div className="studio-inspector-heading">
           <h2>{studioTool === 'add' ? 'Add to your project' : studioTool === 'layout' ? 'Shape your composition' : studioTool === 'look' ? 'Set the look' : studioTool === 'motion' ? 'Make it move' : 'Words on screen'}</h2>
+          {/* Shown only where the topbar hides while editing (workspace.css, the
+              short-screen rule): the well must stay one tap away in every state. */}
+          <button type="button" data-wish-well className="studio-inspector-wish" aria-label="Wish it better" title="Report a bug, wish it better, or ask for a feature" onClick={() => (window as any).Feedback?.open('bug')}><MessageSquarePlus size={16}/></button>
           <button type="button" ref={inspectorCloseRef} onClick={closeTool} aria-label="Close editing panel" title="Back to preview"><span>Done</span><X size={16}/></button>
         </div>
         {studioTool === 'add' && <div className="studio-add-panel">

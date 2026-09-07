@@ -63,9 +63,38 @@
 .studio-shell .ui-topbar .ui-mark { letter-spacing: .1em; }
 .studio-shell .ui-topbar__actions { flex-wrap: nowrap; gap: 4px; }
 .studio-shell .ui-topbar [data-wish-well] { min-width: 44px; padding: 0 10px; }
-.studio-shell .ui-topbar [data-wish-well] span { display: none; }
+/* THE WELL KEEPS ITS WORD. The label used to be hidden at every width; the
+   person who reported the trigger missing missed the WORDS ("wish it better is
+   gone"), so from 360px up the label shows. Under 360 the row cannot pay for it
+   once a project is loaded (Wish 44 + Open 44 + Expand 44 + Export 93 + gaps =
+   237 of the 233 the mark leaves), so there it is the icon alone. */
+@media (max-width: 359px) { .studio-shell .ui-topbar [data-wish-well] span { display: none; } }
 .studio-shell .ui-topbar .ui-btn { text-transform: none; letter-spacing: 0; font-size: 13px; }
 .studio-shell .studio-header-preview { width: 44px; padding: 0; }
+/* OPEN GOES ICON-ONLY ONCE A PROJECT IS LOADED, under 600px: its label's 40px
+   is what pays for the Wish button staying in the row (see Header.tsx). The
+   accessible name is the aria-label, so nothing that reaches Open by name moves. */
+@media (max-width: 599px) {
+  .studio-shell .ui-topbar[data-loaded=true] .studio-header-open { width: 44px; padding: 0; }
+  .studio-shell .ui-topbar[data-loaded=true] .studio-header-open span { display: none; }
+}
+/* Under 400px the topbar's 12px padding and gap drop to 8: at 360 the labelled
+   Wish button needs 265px of actions against the 261 the default spacing leaves. */
+@media (max-width: 399px) {
+  .studio-shell .ui-topbar { padding-left: calc(var(--safe-l) + 8px); padding-right: calc(var(--safe-r) + 8px); gap: 8px; }
+}
+/* At 320 the loaded row leaves the mark 59px; at .1em tracking it wants 63 and
+   lost its T. Tracking is the one thing here that costs no tap target. */
+@media (max-width: 359px) {
+  .studio-shell .ui-topbar .ui-mark { letter-spacing: .04em; }
+}
+/* THE WELL RIDES THE PANEL HEADING WHERE THE TOPBAR HIDES. On a short screen
+   (the 360x448 rule below) the topbar disappears while an editor is open, so a
+   topbar-only trigger would be gone in exactly the state a person is editing in.
+   This button exists in the heading always and SHOWS only under that rule — one
+   trigger visible at a time, never two. */
+.studio-inspector-heading h2 { flex: 1; min-width: 0; }
+.studio-inspector-heading .studio-inspector-wish { display: none; }
 
 @media (min-width: 1000px), (min-width: 700px) and (max-height: 540px) {
   .studio-workspace { display: grid; grid-template-columns: minmax(0, 1fr); }
@@ -91,6 +120,7 @@
 }
 @media (max-height: 550px) and (max-width: 699px) {
   .studio-shell[data-editing=true] .ui-topbar, .studio-shell[data-editing=true] .studio-taskbar { display: none; }
+  .studio-shell[data-editing=true] .studio-inspector-heading .studio-inspector-wish { display: inline-flex; }
   .studio-inspector { height: 48dvh; }
   .studio-shell[data-editing=true] .studio-notice { max-height: 36px; padding-block: 4px; }
   .studio-start { padding: 12px; gap: 8px; }
@@ -98,4 +128,21 @@
   .studio-start-art canvas { height: 86px; }
   .studio-start-import > button:first-child { min-height: 80px; padding: 8px 12px; }
   .studio-start-icons { display: none; }
+}
+
+/* THE ADD PANEL FITS ITS PANE. Three 76px tiles plus gaps and padding needed
+   300px; a 42dvh inspector gives 279 on an iPhone 12 and 232 on an SE, so
+   "Add music" was clipped on the first and eight pixels tall on the second, and
+   iOS draws no scrollbar to say there is more. Below 1000px the inspector is
+   docked and short, so tiles tighten to 52px (14px title + one 12px line at 1.2,
+   8px padding) and the description becomes one ellipsized line: three tiles +
+   two 6px gaps = 168px, inside the SE's 170. On a full-height side panel the
+   roomy tiles stay. The 1000px is the workspace's own side-panel breakpoint. */
+@media (max-width: 999px) {
+  .studio-add-panel { padding: 6px 12px 8px; gap: 6px; }
+  .studio-add-panel > button { min-height: 52px; padding: 8px 12px; }
+  .studio-add-panel > button > span { min-width: 0; flex: 1; }
+  .studio-add-panel b { line-height: 1.2; }
+  .studio-add-panel small { line-height: 1.2; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+  .studio-project-actions { margin-top: 4px; }
 }
