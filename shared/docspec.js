@@ -695,6 +695,29 @@
     q: "",            // search text
     adding: false     // THE DESK: the library is open to ADD a second document
   };
+  /* THE PAGE AS IT FIRST OPENED, taken before load() touches S. startOver()
+     returns to it — a copy, so the literal above stays the one place the
+     defaults are written. */
+  var FRESH = JSON.stringify(S);
+
+  /* START OVER — one action, back to the page as it first opened.
+     Backported from Collage Studio C3718 (wish 1885c683: "no way to reset
+     canvas"): every other tool page on every trade carries a Clear, and this
+     engine had none, so a setup typed for the last company stuck to the phone
+     until every field was emptied by hand and every desk document taken out one
+     × at a time. The AI he pastes into stays — a preference, not a setup, one
+     tap to change — and the use counts stay: anonymous counts, never content. */
+  function startOver() {
+    var keep = S.platform;
+    var f = JSON.parse(FRESH);
+    Object.keys(f).forEach(function (k) { S[k] = f[k]; });
+    S.platform = keep;
+    save();
+    var si = el.libCard && el.libCard.querySelector('input[type="search"]');
+    if (si) si.value = "";
+    renderAll();
+    if (el.libCard) el.libCard.scrollIntoView({ block: "start" });
+  }
 
   function load() {
     try {
@@ -2169,6 +2192,31 @@
     ta.addEventListener("input", function () { S.extra = ta.value; save(); renderOut(); });
     fx.appendChild(ta);
     box.appendChild(fx);
+
+    /* START OVER lives where the details live, at the foot of the card that
+       holds them. Two taps and never a dialog — the trades' own pattern
+       (answer-back's "Tap again to wipe it", four seconds to change your mind).
+       Gate: tools/toolkit-gates/docspec-startover.mjs, every trade, from disk
+       and from the live site. */
+    var SO_LABEL = "Start over — clear my picks and details";
+    var so = h("div", "startover");
+    var sb = h("button", "so", SO_LABEL);
+    sb.type = "button";
+    sb.setAttribute("aria-label", "Start over");
+    sb.addEventListener("click", function () {
+      if (sb.getAttribute("data-armed") !== "1") {
+        sb.setAttribute("data-armed", "1");
+        sb.textContent = "Tap again to wipe it";
+        setTimeout(function () {
+          if (sb.getAttribute("data-armed") === "1") { sb.removeAttribute("data-armed"); sb.textContent = SO_LABEL; }
+        }, 4000);
+        return;
+      }
+      startOver();
+    });
+    so.appendChild(sb);
+    so.appendChild(h("p", "sonote", "Clears this page's picks and details on this phone. The AI you paste into stays picked."));
+    box.appendChild(so);
 
     function sub(t) { return h("p", "subhead", t); }
   }

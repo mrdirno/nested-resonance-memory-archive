@@ -242,6 +242,13 @@ pre.block{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);fon
   color:var(--muted);font-size:19px;line-height:1;cursor:pointer;border-radius:2px}
 .deskl .x:hover{color:#B0201A;border-color:#B0201A}
 .desk .addrow{margin-top:0}
+/* START OVER (C3718 backport): the foot of "Make it yours", one dashed row like
+   the desk's add row, red only once armed. */
+.startover{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.startover .so{display:block;width:100%;min-height:44px;padding:10px 12px;border-radius:10px;font-weight:700;letter-spacing:.05em;font-size:12.5px;background:#fff;color:var(--muted);border:1px dashed var(--line);cursor:pointer;text-align:center}
+.startover .so:hover{color:var(--deep);border-color:var(--deep)}
+.startover .so[data-armed="1"]{color:#fff;background:#b3261e;border-style:solid;border-color:#b3261e}
+.startover .sonote{margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.4}
 .desk .addrow.on{background:var(--deep);color:#fff;border-style:solid}
 .desk .addrow[disabled]{border-style:solid;border-color:var(--line);color:var(--muted);cursor:default}
 .desk .addrow[disabled]:hover{background:#fff}
