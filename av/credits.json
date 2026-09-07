@@ -230,6 +230,16 @@
       "wished_date": "2026-08-25",
       "shipped_date": "2026-08-25",
       "shipped_commit": "0d45310"
+    },
+    {
+      "tool_name": "Collage Studio — the Wish button stays in the top bar once a project is loaded, Add music sits on screen, and the frame's shape is the first row of Canvas & crop",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-09-06",
+      "shipped_date": "2026-09-06",
+      "shipped_commit": "8a90c610"
     }
   ]
 }
