@@ -1,0 +1,11 @@
+arm: out=../../data/results/halo/memory_pilot/scn preset=goldstair n=4194304 epochlen=10 epochs=24 sg=[0.15 0.3] gl=[0] seeds=[777 12345 31337]
+=== [6] goldstair_sg0.3_gl0_seed31337_n4194304_e24 (epochlen 10) ===
+[goldstair_sg0.3_gl0_seed31337_n4194304_e24] 4194304 particles, tex 2048, ANGLE (Apple, ANGLE Metal Renderer: Appl, pmDens unallocated, float_blend true
+  epoch  4  t=40.0  retained= 0.557  twoback= 0.332  ceiling=1.000  [41s]
+  epoch  8  t=80.0  retained= 0.559  twoback= 0.329  ceiling=1.000  [84s]
+  epoch 12  t=120.0  retained= 0.553  twoback= 0.333  ceiling=1.000  [126s]
+  epoch 16  t=160.0  retained= 0.557  twoback= 0.332  ceiling=1.000  [169s]
+  epoch 20  t=200.0  retained= 0.555  twoback= 0.332  ceiling=1.000  [212s]
+  epoch 24  t=240.0  retained= 0.557  twoback= 0.331  ceiling=1.000  [254s]
+[goldstair_sg0.3_gl0_seed31337_n4194304_e24] wrote goldstair_sg0.3_gl0_seed31337_n4194304_e24.json + goldstair_sg0.3_gl0_seed31337_n4194304_e24.mesh.f32 (24 meshes, 254s wall)
+arm finished: 1 run, 5 already present, 0 failed, 6 cells

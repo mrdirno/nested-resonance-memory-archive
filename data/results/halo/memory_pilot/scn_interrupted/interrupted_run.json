@@ -1,0 +1,25 @@
+{
+ "schema": "halo-memory-pilot-interrupted-run/1",
+ "author": "Aldrin Payopay",
+ "tag": "goldstair_sg0.3_gl0_seed31337_n4194304_e24",
+ "what_happened": "The 21st registered run of the measurability pilot was interrupted mid-write in a session that ended before it finished. The runner writes its JSON record only after the last epoch, so the attempt left a mesh and no record - and therefore no page-error list. The pre-registration allows a crashed run to be re-run once, before scoring; it was, and only then was the arm scored.",
+ "interrupted": {
+  "bytes": 2490368,
+  "epochs": 19,
+  "sha256_whole_file": "ac5c78ffb370f47b29a9277ba90882be6d1685058d1ffc9c876a4ebb4fc0a253",
+  "mtime_local": "2026-09-07T12:22:22"
+ },
+ "rerun": {
+  "bytes": 3145728,
+  "epochs": 24,
+  "sha256_whole_file": "9410792a26f5ad6fc97c1aad60c2901ee7c23cb26bb8d0d859db49ef209a11bf",
+  "wall_seconds": 254
+ },
+ "check": {
+  "claim": "the re-run reproduced the interrupted attempt exactly over its 19 epochs",
+  "rule": "sha256 of the first 19*32768 float32 values of the re-run mesh equals the interrupted file's whole-file sha256",
+  "sha256_rerun_first_19_epochs": "ac5c78ffb370f47b29a9277ba90882be6d1685058d1ffc9c876a4ebb4fc0a253",
+  "bit_identical": true
+ },
+ "note": "The mesh files are excluded from the repository by .gitignore, as every mesh in this programme is. The check above is reproducible by anyone who re-runs the cell from its seed on the same build: hash the first 19 epochs of the result and compare. The pre-registration's \"re-run once\" is not machine-enforced; it is evidenced here by the retained partial mesh, this receipt and the re-run log beside it (rerun_2026-09-07.txt)."
+}

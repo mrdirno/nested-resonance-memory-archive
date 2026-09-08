@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "author": "Aldrin Payopay",
-  "reviewed_on": "2026-09-05",
+  "reviewed_on": "2026-09-07",
   "status_semantics": {
     "active": "Current user-facing development; tests are still required.",
     "maintained": "Supported bounded surface; does not imply release certification.",
@@ -25,10 +25,12 @@
         "HELIOS-BRIDGE/HALO_HANDOFF.md",
         "tests/halo/package.json",
         "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
-        "analysis/2026-09-06_memory_estimator_qualification.md"
+        "analysis/2026-09-06_memory_estimator_qualification.md",
+        "docs/halo/2026-09-06_measurability_pilot_preregistration.md",
+        "analysis/2026-09-07_measurability_pilot.md"
       ],
       "summary": "Browser particle instrument with controlled numerical experiments. The memory claim remains under test.",
-      "next_action": "Design a memory grid the frozen replacement estimator can measure (distinct seeds, relic footprint of at least 8 effective cells, no static runs) and show it measurable in a pilot before registering a confirmatory grid; the recorded 60-run grid declares 0 of 60 runs measurable."
+      "next_action": "The measurability pilot ran on 2026-09-07: 0 of 21 runs measurable over seven shipped field configurations, and no branch of its own frozen decision rule fires. Do not register a confirmatory grid under the frozen protocol. The successor protocol must predict relic footprint before seed separation (all seven bands were missed low), record the instrument's sha256 in every run record, name a rule for a field that does not move, and renormalise self-gravity when it cuts the imposed drive."
     },
     {
       "id": "helios-visual-studies",

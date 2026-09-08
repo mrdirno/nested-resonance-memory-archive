@@ -9666,6 +9666,111 @@ static pairs correlate 0.99999 raw and pass E3 at 0.86 / 0.65 on
 templates), and the prose ranks "not qualified" above "insufficient
 support" while the script tests support first.
 
+RING 17 · 2026-09-07 · nothing the frozen estimator can measure, and the
+recorded grid's instrument found by running it
+WHAT CHANGED: no simulation code. Ring 16 retired the plan to qualify the
+estimator on the saved meshes, so a measurability pilot was frozen first
+(docs/halo/2026-09-06_measurability_pilot_preregistration.md, commit a0c49ffc):
+ONE arm, 21 runs, 7 conditions x 3 seeds, all at 4,194,304 particles and 24
+ten-second epochs, five live shots and two anchors excluded from the count by
+construction, one scoring invocation, one named decider, five screens fixed
+before any run. It asked one thing: does the page ship a field where the three
+seeds' compressed relics genuinely diverge while the relic still holds 8
+effective cells? (Key: relic = the previous epoch's field shrunk by two onto the
+inner block; E2 = the 8-cell footprint gate; E3 = the gate that refuses two
+relics that are near-copies; E* = the eligible epochs of the worst seed; anchor =
+a recorded-grid condition re-run to measure drift.) Answer: NO, on all seven.
+INSUFFICIENT SUPPORT, 0 of 21 runs measurable, 0 conditions, 0 detected, 37 of
+462 run-epochs eligible; refusals E2 300, E3 175, E1 74, E4 0. The pilot metric
+is 0 of 5 live conditions against a target of 3 - its own modal outcome, which
+it gave 0.12 to beat. Full numbers, every screen and every condition:
+analysis/2026-09-07_measurability_pilot.md.
+Two things the arm settled that it was not looking for. FIRST, THE PRIMARY NEVER
+TESTED ITS OWN AXIS. goldstair was chosen to cut the imposed drive; the page
+computes field strength as 10^fieldExp, so exponent 2 -> 0.15 cuts the drive
+70.8x, and self-gravity was left where the spinning family had it. What ran was
+self-gravity with nothing to hold it up: a clamped point at the exact box centre
+(15.500, 15.500, 15.500), centroid travel 0.000-0.001 cells, lag-one self-
+correlation 0.99997, rms radius 1.38 cells, 55.5% of the mass in eight cells,
+the force ceiling saturated on every epoch of all six runs, and 69% of the
+residual the estimator compares being the shot noise of a 4.19 M deposit. Its
+raw template correlation of 0.50 is a collapsed estimate, not a broken drive
+lock: divide the noise out and the seeds share everything (structural 1.00,
+above the 0.9 screen). So the drive-cut axis is NOT dead - it was never put at
+risk, and the successor must move self-gravity down with the drive.
+SECOND, THE ANCHORS FOUND THE RECORDED GRID'S INSTRUMENT. They did not reproduce
+their recorded statistics (Spinning Chladni sg 0.3: 6,6,3 eligible epochs
+recorded, 10,10,9 now; same-tag meshes correlating -0.007 to 0.996 and ending at
+0.014). Seven controlled re-runs, one tag, one layer changed each: an immediate
+repeat, two Chromium builds, and three page revisions each built by ITS OWN
+make_test_page.py. Six give one identical sha256 - the instrument is
+deterministic to the bit - and the seventh, page c6cd2cbe with builder 5cb08e51,
+reproduces the recorded run BYTE FOR BYTE. The change is ring 13 (122d0a57), the
+commit that added a self-gravity solver choice, a mass-assignment choice and an
+integrator substep control, landed 2h38m after the recorded grid finished. Its
+defaults were meant to reproduce the old behaviour; PM_GLSL, PM_N, PM_ITERS,
+SG_GAIN and all four scenario presets are byte-identical across it. They do not.
+NO BRANCH OF THE FROZEN RULE FIRES. Commission needs 3 conditions at 12 eligible
+epochs (0). Keep-piloting (a) needs both template correlations below 0.9 with
+E* 8-11 (structural above, E* 0). Keep-piloting (b) needs 1-2 conditions at 12
+(0). Retire needs the anchors to reproduce - and they cannot, because their
+recorded numbers were made by an instrument replaced before the ink dried. The
+decider is void: it was read off the one condition all five of its own screens
+struck. Reported, not repaired; no branch invented, no second arm run.
+BANNED: reporting any branch as fired. Calling the drive-cut axis dead. Reading
+goldstair's 0.50 as separation. Scoring the E2-at-4 variant that would make 4
+runs measurable and detect two. Patching the frozen text. Treating three seeds
+as three independent draws of a condition.
+DEAD BRANCHES: (1) "the instrument is not reproducible run-to-run" - refuted,
+one sha256 across six controls. (2) "the page's 3,325-line diff since the grid
+is the cause, or is not" - the first control that looked like exoneration was
+built with the CURRENT builder against the OLD page; make_test_page.py raised
+AssertionError, wrote nothing, and the run silently used today's instrument. A
+draft published that. Period-match the builder to the page, and the answer
+inverts. (3) "0 of 21 is a code defect" - a worker who re-badged spinchladni
+meshes as goldstair got bit-identical gate counts, and injecting a perfect
+passive relic still returns 0 measurable: eligibility is fixed before any effect
+size, so the zero is about support geometry, not memory content. (4) "build
+drift explains the zero" - the drift moved the FAVOURABLE way, +4 eligible
+epochs, and still nothing reached 12. (5) "hardprint fails for a different
+reason, so a support region that follows the matter would rescue it" - tested
+and refused: E2's footprint stays under 8 wherever the block is placed.
+KILL-TEST: eleven workers - five re-deriving (the gates from the protocol prose
+alone: 462/462 eligibility flags, 84/84 gate counts, 21/21 eligible-epoch counts,
+zero disagreements, and five deliberately wrong readings all fail; the screens
+from the pre-registration prose alone, to 13-16 significant digits; the decision
+rule; the provenance; the physics from the raw meshes) and five told to refute,
+then a completeness critic. Three of its blockers changed the published text and
+one changed the title: the old-page control that never built, the 70.8x drive
+cut nobody had computed, and the footprint statistic - the registered D3 is the
+median of the per-epoch MINIMUM over three seeds (3.08 at goldstair), not the
+own-field value the diagnostic prints (4.3). Screen defects published, not
+fixed: A2 returns 1.075, which is not a possible correlation (honest 1.0043); A5
+is ~14% high and is not a particle-identity margin; A1 uses one epoch where the
+prose says median; A4's only strike sits on its threshold. None changes a zero.
+THE NON-OBVIOUS CHOICE: publish an outcome the frozen rule cannot dispose of,
+and run no second arm - rather than read the branch whose cause is confirmed in
+66 of 66 run-epochs as close enough to fire. And publish the control that
+silently did nothing, with the draft conclusion it produced, because the reason
+this took seven runs instead of one is that a build step failed quietly.
+OPEN QUESTIONS: ring 16 asked four. What keeps the seeds apart at Spinning
+Chladni sg 0.3-0.5 is ADVANCED, not closed: hardprint separates them far better
+than any spinning cell (pooled template 0.051 against 0.988, shot-noise share
+1e-05, all five screens passed) and fails on support instead - median inner-block
+mass 0.004-0.008, centroid travel 8-10 cells, E1 refusing 12-14 of 22. The
+48-epoch half is still unavailable: FIRST_SCORED, LAST_SCORED = 3, 24 is fixed in
+the frozen script with no flag. Whether a field that does not move should be
+scored at all is ADVANCED and still unruled: goldstair is a second static case,
+and E2 refused it for its size, not for standing still. F2's regime gap and the
+raw own-minus-stranger excess are UNTOUCHED - this arm cannot re-certify F2.
+The new one this arm earns: Spinning Chladni sg 0.3 now has SIX independent
+draws, because a build change re-draws the realisation exactly as a re-seed does
+- 6, 6, 3, 10, 10, 9, mean 7.33, sd 2.80, with the measurability floor of 12
+sitting 1.66 sd away. So how much of "measurable" is a threshold crossing on
+realisation noise, and what does a run record have to carry - starting with the
+sha256 of the instrument that drove it - for any of this to be regenerable at
+all? Nothing about nested resonance memory is decided here in either direction.
+
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
