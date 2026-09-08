@@ -72,7 +72,7 @@ Release evidence and exact production status are maintained in [C3721_RELEASE.md
 
 ## User intent and revised contract
 
-The artist wants to browse visual instruments against an existing artwork, keep a variation deliberately, and return quickly to numbered layers. C3713 solved accidental accumulation by making the large template tile replace the entire native stack. That historical fix is preserved above. The new candidate separates exploration from both replacement and accumulation: selecting A, then B, auditions only B while the kept recipe remains unchanged.
+The artist wants to browse visual instruments against an existing artwork, keep a variation deliberately, and return quickly to numbered layers. C3713 solved accidental accumulation by making the large template tile replace the entire native stack. That historical fix is preserved above. C3722 separates exploration from both replacement and accumulation: selecting A, then B, auditions only B while the kept recipe remains unchanged.
 
 | Context | Candidate behavior | Persistent boundary |
 |---|---|---|
@@ -91,7 +91,7 @@ Four additive kind values use original CPU geometry: `torus-knot`, `crystal-vaul
 
 `tests/unit/artDimension.invariants.mjs` passed nine groups. It checks real depth, finite normals/projection, whole default-model bounds, work limits, exact requested-time loops, seek-order independence, all palettes/automation targets, hidden-layer behavior and caller Canvas restoration. Frozen command hashes generated from actual source `e4e19604` preserve the old eight painters and default composition. These results do not substitute for browser pixels or decoded video.
 
-Final gates must exercise A→B audition without kept changes; candidate dice isolation; explicit Keep/Replace/start with undo; save while auditioning; source switching/closing; five visible slots and eight-layer preservation; whole artwork in narrow/landscape view; four visibly different rendered families; and actual moving exports. Existing soundtrack-original, lyrics, pins and project round trips remain required regressions. Pending deployment, public checks, artifact hashes and fleet evidence are tracked in [C3722_RELEASE.md](C3722_RELEASE.md).
+The retained gates exercise A→B audition without kept changes; candidate dice isolation; explicit Keep/Replace/start with undo; save while auditioning; source switching/closing; five visible slots and eight-layer preservation; whole artwork in narrow/landscape view; four visibly different rendered families; and actual moving exports. Existing soundtrack-original, lyrics, pins and project round trips remain required regressions. Final deployment, public checks, artifact hashes and fleet evidence are tracked in [C3722_RELEASE.md](C3722_RELEASE.md).
 
 ## Adjacent audio arrival found by the release gate
 
@@ -100,3 +100,7 @@ The broad Solo fixture waited for any canvas; the start screen's decorative canv
 `adoptSoundtrack` conditioned its arrival counter on `images.length > 0`, discarding a valid user action before VideoStage could exist. The repair queues the counter regardless of current pictures; VideoStage already retries it when its engine is ready. The prop is zero when there is no soundtrack, so a removed track cannot reopen a later clip's Details. Its counter remains monotonic across replacements. Open still clears imported-arrival state and restores authored music directly. Browser autoplay policy still applies.
 
 Ordinary Solo tests now wait for the actual `studio-artwork` and target the exact image/video intake. A second broad selector, the first file input, could target the mounted caption importer after artwork appeared; it is not evidence of a video decoder failure. A separate gated T6 retains the early-intake failure as a real regression. It checks the closed/muted old baseline, deferred opening/unmute, removal ownership and another explicit music arrival. Final results are recorded in the release receipt; the failed built runs are retained rather than hidden by readiness changes.
+
+**C3722 production close:** [506b6c62](https://github.com/mrdirno/nested-resonance-memory-archive/commit/506b6c625592d247152ea7a86b4f6a60f4a1260a) reached [Pages 34190005150](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34190005150); Archive health 34190005148 succeeded. The final frozen build passed 96/96 and the public site passed 96/96 serial muted Chromium/Mobile Chrome cases. Live old-eight PNG hashes match the previous release; all four new families animate; four native MP4s fully decode without errors. All five public runtime artifacts match the tested build. Failed earlier runs and both controlled music orders remain retained evidence.
+
+Fleet broadcast **17937** in `persona500-collage-C3722-release` was posted and read back with matching body and metadata. Codex/Claude peer acknowledgements were empty at close; stored delivery is not a claim of reading.

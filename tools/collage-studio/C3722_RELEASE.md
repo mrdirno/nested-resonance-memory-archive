@@ -2,7 +2,7 @@
 
 Author: Aldrin Payopay · September 7, 2026 · GPL-3.0-only
 
-**Validated release candidate. Deployment and public verification are pending.** This document records the intended release and completed evidence separately. [Open Studio](https://mrdirno.github.io/nested-resonance-memory-archive/collage/) still represents the last verified public build until the deployment receipt below is filled.
+**Shipped and verified live:** [code 506b6c62](https://github.com/mrdirno/nested-resonance-memory-archive/commit/506b6c625592d247152ea7a86b4f6a60f4a1260a) · [Pages 34190005150](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34190005150) · [Open Studio](https://mrdirno.github.io/nested-resonance-memory-archive/collage/).
 
 The artist asked to try more cinematic visual instruments against an existing layered artwork, keep a variation deliberately, and move quickly among numbered layers. C3713 made a template tile replace the whole native stack. C3722 changes that browsing gesture into a temporary audition; existing kept layers remain intact until an explicit Keep, Replace or starting-template action.
 
@@ -48,11 +48,11 @@ Blender's asset-thumbnail guidance favors recognizable shape, framing and select
 | Browser workflow and mobile/short-landscape layout | **Passed: 96/96 final built-app cases, 3.4 minutes, exit 0**, serial muted Chromium and Mobile Chrome. Includes 320×448, 320×664, 360×780, 390×844 and 844×390; keyboard focus, exact audition/Keep pixels, capacity/replace/solo/Undo, delayed Apply and source/project boundaries. Two source-import engine cases passed separately and are not counted as built/public coverage. |
 | Visual quality and saved/exported artwork | **Passed:** four distinct dimensional families inspected in a muted real browser, with changing pixels at separate requested times. Four final native MP4 exports cover the original starter stack and kept dimensional stack in both profiles, with distinct decoded frames and complete eight-second loops. Recipes/projects reopen with unchanged original bytes and layers. |
 | Existing music/lyrics/project regressions | **Passed within the 96 cases:** captions, music originals/authored mix, project integrity, Solo and forced early music arrival. QA output was muted; test media is owned/synthetic. No WebKit audio or physical-device certification is claimed. |
-| Production source commit | **Pending.** |
-| Pages deployment and archive health | **Pending run IDs and successful completion.** |
-| Public JS/CSS/render-worker/service-worker byte comparison | **Pending artifact names and hashes.** |
-| Public behavioral/visual verification | **Pending exact cases, target URL and result.** Local checks alone do not close the cycle. |
-| Fleet delivery and peer awareness | **Pending final stored message/readback receipt.** Codex/Claude read acknowledgements are separate evidence. |
+| Production source commit | [506b6c62](https://github.com/mrdirno/nested-resonance-memory-archive/commit/506b6c625592d247152ea7a86b4f6a60f4a1260a). |
+| Pages deployment and archive health | **Succeeded:** [Pages 34190005150](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34190005150), [Archive health 34190005148](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34190005148). |
+| Public JS/CSS/render-worker/service-worker byte comparison | **Passed:** all five public files, including the HTML entry, match the final tested bytes. JS SHA-256 `0506a986c3d14e02bc079dd241f8ebde2070d04137d688c17659bdbcf52ee2a1`. Names/cache are listed above; complete digests are retained in `source-artifact-match.json`. |
+| Public behavioral/visual verification | **Passed: 96/96 cases on the public URL, 3.6 minutes, exit 0**, muted Chromium/Mobile Chrome, one worker. Live fixed-time PNGs for all eight old families match the previous release; all four new families animate. Four live eight-second 1080×690 art MP4s fully decode without errors. |
+| Fleet delivery and peer awareness | **Posted and read back:** broadcast `17937`, thread `persona500-collage-C3722-release`, from `codex-collage-studio`. Exact body and metadata match. `read_by` was empty at close; peer reading is not yet confirmed. |
 
 The source task retains this cycle's working artifacts under `work/c3722` and earlier `work/c3722-*` runs. The demonstrated old public baseline has zero Preview actions where the new flow requires one. All four dimensional families show distinct moving pixels; original-family parity is measured separately.
 
@@ -62,7 +62,7 @@ Independent review found and repaired a pending Apply cancellation caused by nav
 
 The overlays are internal layers of one native Art Room source. They do not yet sit above every Studio photograph/video as global tracks, and C3722 is not a full CapCut replacement. C3721's manual soundtrack-original portability remains in place; original moving-video packaging, master take settings, authored shots, global overlay timelines and local lyric models remain separate roadmap work. No old project is rewritten merely by opening it.
 
-Keep the existing Monday 10 a.m. Pacific weekly evolution automation; no duplicate scheduler is required. After the final publish and public verification, send the concrete release, evidence, remaining limitations and next direction to the shared fleet so both Codex and Claude can discover it. Until that message is stored and read back, fleet completion remains pending.
+The existing Monday 10 a.m. Pacific weekly evolution remains active. Publication close updates the shared fleet with this release, evidence, limitations and next direction so Codex and Claude can discover it at their next bump; no duplicate scheduler is added.
 
 Repeat the built/public behavioral gate with the actual target URL; the source-only engine spec is deliberately separate:
 
@@ -71,3 +71,5 @@ COLLAGE_BASE_URL=https://mrdirno.github.io/nested-resonance-memory-archive/colla
 ```
 
 The final local log is `work/c3722/final-built-r3.log`. Earlier development failures, controlled negative music baseline, exact old-family pixels, final artifact hashes, layouts and downloaded media remain in the same source task. This is browser-profile coverage on this Mac, not a guarantee of equivalent frame rate or autoplay on another device.
+
+Final evidence: `work/c3722/live-browser.log`, `live-browser-receipt.json`, `live-visual-proof.json`, `live-full-decode.json`, and `source-artifact-match.json`. The task outputs include a ready-to-open `.collage` demo, editable recipe, phone screenshot and a silent moving dimensional video. The live demo pacing measured on this Mac is not a mobile hardware performance promise.
