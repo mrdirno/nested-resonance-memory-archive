@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import JSZip from 'jszip';
 
 test.use({ actionTimeout: 15_000 });
-const names = ['Contour Atlas', 'Petal Engine', 'Orbit Press', 'Ribbon Choir', 'Branch Fans', 'Prism Garden', 'Woven Circuit', 'Satellite Dust'];
+const names = ['Contour Atlas', 'Petal Engine', 'Orbit Press', 'Ribbon Choir', 'Branch Fans', 'Prism Garden', 'Woven Circuit', 'Satellite Dust', 'Knot Foundry', 'Crystal Vault', 'Stellar Passage', 'Tidal Surface'];
 const sha = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 async function showRoom(page: Page) {
   const entry=page.getByRole('button', { name: /^Art Room(?:$| )/ });
@@ -93,21 +93,24 @@ async function sessionSnapshot(page: Page): Promise<any> {
   });
 }
 
-test('Art Rack previews eight real templates and explicit Add preserves layers, dice locks and invalid-file refusal', async ({ page }) => {
+test('Art Rack previews twelve real templates and explicit Keep preserves layers, dice locks and invalid-file refusal', async ({ page }) => {
   test.setTimeout(90_000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   const room = await bootRoom(page);
   await expect(room.getByRole('tab', { name: /^Templates/ })).toHaveAttribute('aria-selected', 'true');
   const hashes: number[] = [];
   for (const name of names) {
-    const tile = room.getByRole('button', { name: `Use ${name}`, exact: true });
+    const tile = room.getByRole('button', { name: `Preview ${name}`, exact: true });
     await expect(tile).toBeAttached();
     const image = await pixels(tile.locator('canvas'));
     expect(image.colors, `${name} draws actual non-flat pixels`).toBeGreaterThan(5);
     hashes.push(image.hash);
   }
-  expect(new Set(hashes).size, 'eight visually distinct template previews').toBe(8);
-  await room.getByRole('button', { name: 'Add Orbit Press', exact: true }).click();
+  expect(new Set(hashes).size, 'twelve visually distinct template previews').toBe(12);
+  await room.getByRole('button', { name: 'Preview Orbit Press', exact: true }).click();
+  await room.getByRole('button', { name: 'Keep layer', exact: true }).click();
+  await expect(room.getByRole('tab', { name: 'Templates', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await room.getByRole('button', { name: 'Layer 4: Orbit Press', exact: true }).click();
   await expect(room.getByRole('tabpanel', { name: 'Layers', exact: true })).toBeVisible();
   const initial = await saveRecipe(page, room);
   expect(initial.layers).toHaveLength(4);
@@ -162,7 +165,7 @@ test('editable Art Rack survives save, reopen, asset replacement and real crash 
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   let room = await bootRoom(page);
   const originalRecipe = await saveRecipe(page, room);
-  await room.getByRole('button', { name: 'Add artwork', exact: true }).click();
+  await room.getByRole('button', { name: 'Use in Studio', exact: true }).click();
   await expect(room.locator('.art-footer p[role="status"]')).toContainText('Editable artwork applied', { timeout: 30_000 });
   await room.getByRole('button', { name: 'Close Art Room', exact: true }).click();
   const originalFile = info.outputPath('art-rack-original.collage');
@@ -186,7 +189,7 @@ test('editable Art Rack survives save, reopen, asset replacement and real crash 
   await room.getByLabel('Layer palette', { exact: true }).selectOption('ember');
   const updatedRecipe = await saveRecipe(page, room);
   expect(updatedRecipe).not.toEqual(originalRecipe);
-  await room.getByRole('button', { name: 'Update artwork', exact: true }).click();
+  await room.getByRole('button', { name: 'Update in Studio', exact: true }).click();
   await expect(room.locator('.art-footer p[role="status"]')).toContainText('Editable artwork applied', { timeout: 30_000 });
   await room.getByRole('button', { name: 'Close Art Room', exact: true }).click();
   const second = await saveArchive(page, info.outputPath('art-rack-updated.collage'));
@@ -228,7 +231,7 @@ test('Art Rack controls remain real 44px targets at 320px, 390px and a short pho
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
     const previewBox = await room.getByLabel('Animated art preview', { exact: true }).boundingBox();
     expect(previewBox!.height, 'the artwork remains large enough to inspect').toBeGreaterThanOrEqual(viewport.height < 530 ? 60 : 140);
-    for (const name of ['Close Art Room', 'Add artwork']) {
+    for (const name of ['Close Art Room', 'Use in Studio']) {
       const button = room.getByRole('button', { name, exact: true });
       const geometry = await button.evaluate(e => {
         const b = e.getBoundingClientRect(), hit = document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2);
@@ -239,10 +242,12 @@ test('Art Rack controls remain real 44px targets at 320px, 390px and a short pho
       expect(geometry.right).toBeLessThanOrEqual(viewport.width + 1); expect(geometry.bottom).toBeLessThanOrEqual(viewport.height + 1);
       expect(geometry.hit, `${name} is actually hittable at ${viewport.width} × ${viewport.height}`).toBe(true);
     }
-    const tile = room.getByRole('button', { name: 'Add Woven Circuit', exact: true });
+    const tile = room.getByRole('button', { name: 'Preview Woven Circuit', exact: true });
     await tile.click();
+    await room.getByRole('button', { name: 'Keep layer', exact: true }).click();
+    await room.getByRole('button', { name: 'Layer 4: Woven Circuit', exact: true }).click();
     await expect(room.getByRole('button', { name: 'Select Woven Circuit layer', exact: true })).toBeVisible();
-    await room.getByRole('button', { name: 'Add artwork', exact: true }).click();
+    await room.getByRole('button', { name: 'Use in Studio', exact: true }).click();
     await expect(room.locator('.art-footer p[role="status"]')).toContainText('Editable artwork applied', { timeout: 30_000 });
     await page.screenshot({ path: info.outputPath(`art-rack-${viewport.width}-${viewport.height}.png`) });
     await room.getByRole('button', { name: 'Close Art Room', exact: true }).click();
@@ -255,7 +260,7 @@ test('switching recipe sources keeps the next edit undoable and mixed media clea
   test.setTimeout(60_000);
   const room=await bootRoom(page);
   const png=await room.getByLabel('Animated art preview',{exact:true}).evaluate((c:HTMLCanvasElement)=>c.toDataURL());
-  await room.getByRole('button',{name:'Add artwork',exact:true}).click();
+  await room.getByRole('button',{name:'Use in Studio',exact:true}).click();
   await expect(room.locator('.art-footer p[role="status"]')).toContainText('Editable artwork applied');
   await room.getByRole('tab',{name:/^Layers/}).click();
   await room.getByLabel('Opacity',{exact:true}).fill('0.3');

@@ -12,7 +12,7 @@ try {
  for(const name of ['artIntent','artRack']){await esbuild.build({entryPoints:[join(root,`src/lib/${name}.ts`)],outfile:join(temp,`${name}.mjs`),bundle:true,platform:'neutral',format:'esm',logLevel:'silent'});modules[name]=await import(pathToFileURL(join(temp,`${name}.mjs`)).href);}
  const {artTemplateIntent,artHistoryEntry,artSelection}=modules.artIntent;
  const {createDefaultArtRecipe,createArtLayer,ART_TEMPLATES,normalizeArtRecipe}=modules.artRack;
- const full=createDefaultArtRecipe();full.layers=ART_TEMPLATES.map((t,i)=>createArtLayer(t.id,i+1,'original-'+i));full.soloId=full.layers[2].id;full.layers[2].locked=true;full.size='square';full.duration=12;
+ const full=createDefaultArtRecipe();full.layers=ART_TEMPLATES.slice(0,8).map((t,i)=>createArtLayer(t.id,i+1,'original-'+i));full.soloId=full.layers[2].id;full.layers[2].locked=true;full.size='square';full.duration=12;
  const before=structuredClone(full),selection={selectedId:full.layers[2].id,scope:'layer'};
  const snapshot=artHistoryEntry(full,selection),newLayer=createArtLayer('facets',42,'replacement');
  assert.throws(()=>artTemplateIntent(full,newLayer,'add'),/Eight layers/);
@@ -27,7 +27,7 @@ try {
  const one={...before,layers:[before.layers[2]]};const added=artTemplateIntent(one,newLayer,'add');assert.equal(added.layers[0],one.layers[0]);assert.equal(added.soloId,one.soloId);
  for(let seed=0;seed<32;seed++)for(let count=0;count<=8;count++){
   const r=createDefaultArtRecipe();r.layers=ART_TEMPLATES.slice(0,count).map((t,i)=>({...createArtLayer(t.id,seed,'item-'+i),locked:i%2===0,enabled:i%3!==0}));r.soloId=count?'item-0':null;
-  const frozen=structuredClone(r),fresh=createArtLayer(ART_TEMPLATES[seed%8].id,seed+100,'fresh-'+seed);
+  const frozen=structuredClone(r),fresh=createArtLayer(ART_TEMPLATES[seed%ART_TEMPLATES.length].id,seed+100,'fresh-'+seed);
   const used=normalizeArtRecipe(artTemplateIntent(r,fresh,'use'));assert.deepEqual(used.layers,[fresh]);assert.equal(used.soloId,null);assert.deepEqual(r,frozen);
   if(count<8){const added=normalizeArtRecipe(artTemplateIntent(r,fresh,'add'));assert.deepEqual(added.layers.slice(0,-1),r.layers);assert.equal(added.soloId,r.soloId);}else assert.throws(()=>artTemplateIntent(r,fresh,'add'));
  }

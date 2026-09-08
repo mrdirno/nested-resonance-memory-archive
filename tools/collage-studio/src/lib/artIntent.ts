@@ -51,4 +51,8 @@ export const ART_INSTRUMENT_UI: Record<ArtKind, { densityHelp: string; controls:
   facets: { densityHelp: 'How many crystals fill the canvas.', controls: ART_NATIVE_CONTROLS },
   weave: { densityHelp: 'How tightly the woven grid is spaced.', controls: ART_NATIVE_CONTROLS },
   particles: { densityHelp: 'How many particles fill the field.', controls: ART_NATIVE_CONTROLS },
+  'torus-knot': { densityHelp: 'The tube thickness and resolution of its shaded surface.', controls: ART_NATIVE_CONTROLS },
+  'crystal-vault': { densityHelp: 'How many faceted spires form the sculpture.', controls: ART_NATIVE_CONTROLS },
+  'star-tunnel': { densityHelp: 'The number of stars and luminous hoops in depth.', controls: ART_NATIVE_CONTROLS },
+  'wave-surface': { densityHelp: 'The mesh resolution of the reflective wave surface.', controls: ART_NATIVE_CONTROLS },
 };

@@ -3,12 +3,25 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs/promises';
 
-test('native art alone advances, seeks deterministically and exports one complete moving loop', async ({ page }, info) => {
+for(const composition of ['original starter stack','kept dimensional layers'])test(`${composition} advances, seeks deterministically and exports one complete moving loop`, async ({ page }, info) => {
   test.setTimeout(180_000);
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(process.env.COLLAGE_BASE_URL || '/');
   await page.getByRole('button',{name:'Art Room',exact:true}).click();
-  await page.getByRole('button',{name:'Add artwork',exact:true}).click();
+  if(composition==='kept dimensional layers'){
+    const room=page.getByTestId('art-rack');
+    await room.getByRole('button',{name:'Preview Knot Foundry',exact:true}).click();
+    await room.locator('details.art-preview-options > summary').click();
+    await room.getByRole('button',{name:'Use as starting template',exact:true}).click();
+    await room.getByRole('button',{name:'Preview Crystal Vault',exact:true}).click();
+    await room.locator('details.art-preview-options > summary').click();
+    await room.getByLabel('Preview opacity',{exact:true}).fill('0.65');
+    await room.getByLabel('Preview blend',{exact:true}).selectOption('screen');
+    await room.getByRole('button',{name:'Keep layer',exact:true}).click();
+    await expect(room.getByRole('button',{name:'Layer 1: Knot Foundry',exact:true})).toBeVisible();
+    await expect(room.getByRole('button',{name:'Layer 2: Crystal Vault',exact:true})).toBeVisible();
+  }
+  await page.getByRole('button',{name:'Use in Studio',exact:true}).click();
   await expect(page.locator('.art-footer p[role=status]')).toContainText('Editable artwork applied', {timeout:60_000});
   await page.getByRole('button',{name:'Close Art Room',exact:true}).click();
   await page.getByRole('button',{name:'Details',exact:true}).click();

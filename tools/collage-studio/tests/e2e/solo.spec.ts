@@ -63,10 +63,12 @@ async function boot(page: Page, errors: string[], opts?: { withClip?: boolean })
     if (regs?.length) await Promise.all(regs.map((r) => r.unregister()));
     if (typeof caches !== 'undefined') { for (const k of await caches.keys()) await caches.delete(k); }
   }).catch(() => { /* no SW in this context is fine */ });
-  await page.locator('input[type="file"]').first().setInputFiles([IMG_A, IMG_B]);
-  await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+  await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles([IMG_A, IMG_B]);
+  // The start page contains a decorative art canvas. Only this host marker
+  // proves an imported photograph has entered the actual composition.
+  await expect(page.getByTestId('studio-artwork')).toBeVisible({ timeout: 120_000 });
   if (opts?.withClip) {
-    await page.locator('input[type="file"]').first().setInputFiles([TONE_A]);
+    await page.locator('input[type="file"][accept="image/*,video/*"]').setInputFiles([TONE_A]);
     // THE CLIP IS IN WHEN ITS DECODER IS. Not when its chip is visible: the
     // chips live inside the collapsed Details panel, which nothing has opened
     // yet at this point in the boot — that is the state the next line is about
@@ -111,6 +113,54 @@ test.describe('solo', () => {
     await expect(page.getByText(/playing/i).first()).toBeVisible({ timeout: 10_000 });
 
     expect(realErrors(errors), `pageerrors: ${errors.join(' | ')}`).toEqual([]);
+  });
+
+  test('T6 — music added during pending photo decoding opens Details and becomes audible when the Stage arrives', async ({ page }, info) => {
+    test.setTimeout(60_000);
+    const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+    await page.route('**/cdn.jsdelivr.net/**',r=>r.abort());await page.goto(APP_URL);
+    // Defer only the real fixture photos' native src setter. The original
+    // image decoder, file bytes, Stage and audio implementation all still run.
+    // A bounded fallback and finally release prevent a stuck decoder.
+    await page.evaluate(()=>{
+      const make=URL.createObjectURL,native=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src')!;
+      const held=new Set<string>(),pending:Array<()=>void>=[];let released=false;
+      const gate={intercepted:0,timedOut:false,release:()=>{if(released)return;released=true;clearTimeout(timer);URL.createObjectURL=make;Object.defineProperty(HTMLImageElement.prototype,'src',native);for(const job of pending.splice(0))job();}};
+      const timer=setTimeout(()=>{gate.timedOut=true;gate.release();},15_000);(window as any).__soloPhotoGate=gate;
+      URL.createObjectURL=function(blob){const url=make.call(URL,blob);if(blob instanceof File&&/^img_[ab]\.jpg$/.test(blob.name))held.add(url);return url;};
+      Object.defineProperty(HTMLImageElement.prototype,'src',{...native,set(value:string){if(!released&&held.has(value)){gate.intercepted++;pending.push(()=>native.set!.call(this,value));}else native.set!.call(this,value);}});
+    });
+    const release=()=>page.evaluate(()=>(window as any).__soloPhotoGate?.release());
+    try{
+      await page.locator('input[type=file][accept="image/*,video/*"]').setInputFiles([IMG_A,IMG_B]);
+      await expect.poll(()=>page.evaluate(()=>(window as any).__soloPhotoGate.intercepted)).toBeGreaterThan(0);
+      await expect(page.getByTestId('studio-artwork')).toHaveCount(0);
+      await expect(page.locator('.studio-start canvas')).toBeVisible();
+      await musicInput(page).setInputFiles(MUSIC);
+      await release();await expect(page.getByTestId('studio-artwork')).toBeVisible();await expect(monitor(page)).toHaveCount(1);
+      await page.screenshot({path:info.outputPath('pending-photo-music-arrival.png')});
+      await expect(detailsToggle(page)).toHaveAttribute('aria-expanded','true',{timeout:5_000});
+      await expect(page.getByTestId('source-chip-music')).toBeVisible();
+      await expect.poll(async()=>(await audioState(page)).muted).toBe(false);
+      await expect.poll(async()=>(await audioState(page)).paused).toBe(false);
+      const before=await audioState(page);await expect.poll(async()=>(await audioState(page)).t).toBeGreaterThan(before.t);
+      const gate=await page.evaluate(()=>({intercepted:(window as any).__soloPhotoGate.intercepted,timedOut:(window as any).__soloPhotoGate.timedOut}));expect(gate.timedOut).toBe(false);
+      await info.attach('deferred-music-arrival',{body:JSON.stringify({gate,before,after:await audioState(page),details:await detailsToggle(page).getAttribute('aria-expanded')},null,2),contentType:'application/json'});
+      // Removing the deferred track must retire its arrival. With no clip and
+      // an authored still picture, this unmounts the playback Stage entirely.
+      await page.getByRole('button',{name:`Remove the music, ${MUSIC_NAME}`,exact:true}).click();
+      await expect(detailsToggle(page)).toHaveCount(0);await expect(monitor(page)).toHaveCount(0);
+      await page.locator('input[type=file][accept="image/*,video/*"]').setInputFiles([TONE_A]);
+      await expect.poll(()=>page.locator('video').evaluateAll(els=>els.some(e=>(e as HTMLVideoElement).readyState>=2)),{timeout:30_000}).toBe(true);
+      await expect(detailsToggle(page)).toHaveAttribute('aria-expanded','false');
+      await expect.poll(()=>clipMutes(page)).not.toContain(false);
+      // A genuinely new music selection still advances the monotonic arrival.
+      await musicInput(page).setInputFiles(MUSIC);
+      await expect(detailsToggle(page)).toHaveAttribute('aria-expanded','true');
+      await expect.poll(async()=>(await audioState(page)).muted).toBe(false);
+      await expect.poll(async()=>(await audioState(page)).paused).toBe(false);
+      expect(realErrors(errors)).toEqual([]);
+    }finally{await release();}
   });
 
   test('T2 — soloing the music puts the clip out of the room and changes no intent', async ({ page }) => {

@@ -53,7 +53,7 @@ test('whole artwork and playback remain available in portrait, short landscape a
     expect(fitted.x).toBeGreaterThanOrEqual(0);expect(fitted.y).toBeGreaterThanOrEqual(0);
     expect(fitted.x+fitted.width).toBeLessThanOrEqual(viewport.width+1);
     expect(fitted.y+fitted.height).toBeLessThanOrEqual(viewport.height+1);
-    await hittable(room.getByRole('button',{name:'Add artwork',exact:true}));
+    await hittable(room.getByRole('button',{name:'Use in Studio',exact:true}));
     const pause=room.getByRole('button',{name:'Pause art preview',exact:true});
     if(await pause.isVisible())await pause.click();
     await room.getByLabel('Art playhead',{exact:true}).fill('2.25');
@@ -73,7 +73,10 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   const room=await openRoom(page);
   await expect(room.getByLabel('Editing artwork',{exact:true})).toBeHidden();
   await expect(room.getByRole('button',{name:'Undo art edit',exact:true})).toBeHidden();
-  await room.getByRole('button',{name:'Add Woven Circuit',exact:true}).click();
+  await room.getByRole('button',{name:'Preview Woven Circuit',exact:true}).click();
+  await room.getByRole('button',{name:'Keep layer',exact:true}).click();
+  await expect(room.getByRole('tab',{name:'Templates',exact:true})).toHaveAttribute('aria-selected','true');
+  await room.getByRole('button',{name:'Layer 4: Woven Circuit',exact:true}).click();
   await expect(room.getByRole('tab',{name:'Look',exact:true})).toHaveAttribute('aria-selected','true');
   await expect(room.getByRole('button',{name:'Disable Woven Circuit layer',exact:true})).toBeVisible();
   await expect(room.getByRole('button',{name:'Solo Woven Circuit layer',exact:true})).toBeHidden();
@@ -101,7 +104,7 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   expect(await recipe(page,room)).toEqual(changed);
   await room.getByRole('button',{name:'Browse templates',exact:true}).click();
   await expect(room.getByRole('tab',{name:'Templates',exact:true})).toHaveAttribute('aria-selected','true');
-  expect(await room.locator('.art-gallery .art-template').count()).toBe(8);
+  expect(await room.locator('.art-gallery .art-template').count()).toBe(12);
 });
 
 test('portrait and wide recipes fit fully in the focus view without cropping',async({page})=>{

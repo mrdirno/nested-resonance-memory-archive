@@ -13,7 +13,7 @@ try{
   const {drawArt}=await import(pathToFileURL(join(temp,'artRackRenderer.mjs')).href);
   const fresh=()=>A.createDefaultArtRecipe(),copy=value=>structuredClone(value);
   const rejectEdit=edit=>{const r=fresh();edit(r);assert.throws(()=>A.normalizeArtRecipe(r),A.ArtRecipeError);};
-  assert.equal(A.ART_TEMPLATES.length,8);assert.equal(new Set(A.ART_TEMPLATES.map(t=>t.id)).size,8);
+  assert.equal(A.ART_TEMPLATES.length,12);assert.equal(new Set(A.ART_TEMPLATES.map(t=>t.id)).size,12);
   assert.deepEqual(A.ART_SIZES.card,{width:2066,height:1319,label:'Vibe card'});
   assert.deepEqual(A.normalizeArtRecipe(fresh()),fresh());
   const immutable=fresh(),before=JSON.stringify(immutable);A.normalizeArtRecipe(immutable);assert.equal(JSON.stringify(immutable),before);
@@ -35,8 +35,11 @@ try{
   for(const duration of [2,24]){
     const r=fresh();r.duration=duration;r.background='transparent';r.layers=[];assert.deepEqual(A.normalizeArtRecipe(r),r);
   }
-  const bounds=fresh();bounds.layers=A.ART_TEMPLATES.map((t,i)=>({...A.createArtLayer(t.id,i%2?0:0xffffffff,'layer-'+i),scale:i%2?.3:2,density:i%2?0:1,opacity:i%2?0:1,rotation:i%2?-180:180,x:i%2?-.75:.75,y:i%2?-.75:.75}));
-  assert.deepEqual(A.normalizeArtRecipe(bounds),bounds);
+  // Roster size can exceed the unchanged eight-layer composition capacity.
+  for(let offset=0;offset<A.ART_TEMPLATES.length;offset+=8){
+    const bounds=fresh();bounds.layers=A.ART_TEMPLATES.slice(offset,offset+8).map((t,j)=>{const i=offset+j;return {...A.createArtLayer(t.id,i%2?0:0xffffffff,'layer-'+i),scale:i%2?.3:2,density:i%2?0:1,opacity:i%2?0:1,rotation:i%2?-180:180,x:i%2?-.75:.75,y:i%2?-.75:.75};});
+    assert.deepEqual(A.normalizeArtRecipe(bounds),bounds);
+  }
 
   const r=fresh();r.layers[0].locked=true;r.layers[1].enabled=false;
   const frozen=JSON.stringify(r),rolled=A.rollArtRecipe(r,123456);

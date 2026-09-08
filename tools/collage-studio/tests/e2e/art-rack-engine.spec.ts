@@ -4,7 +4,7 @@ import {test,expect} from '@playwright/test';
 const APP_URL=process.env.COLLAGE_BASE_URL||'http://localhost:5199/';
 test.skip(!['localhost','127.0.0.1','[::1]'].includes(new URL(APP_URL).hostname),'This seam imports Vite source; it cannot certify a deployed bundle.');
 
-test('eight families have real distinct pixels, exact loops, editable alpha and deterministic seeks',async({page},testInfo)=>{
+test('twelve families have real distinct pixels, exact loops, editable alpha and deterministic seeks',async({page},testInfo)=>{
   test.setTimeout(60_000);await page.goto(APP_URL);
   const evidence=await page.evaluate(async()=>{
     const A=await import('/src/lib/artRack.ts'),{drawArt}=await import('/src/lib/artRackRenderer.ts');
@@ -35,13 +35,18 @@ test('eight families have real distinct pixels, exact loops, editable alpha and 
     drawArt(ctx,640,400,recipe,0);const restored=ctx.getImageData(0,0,640,400).data;
     const callerAfter={alpha:ctx.globalAlpha,filter:ctx.filter,shadow:ctx.shadowBlur,dash:ctx.getLineDash().join(','),translate:ctx.getTransform().e};
     const callerRestored=JSON.stringify(callerBefore)===JSON.stringify(callerAfter);
-    const times=[];const worst={...recipe,layers:A.ART_TEMPLATES.map((t:any,i:number)=>({...A.createArtLayer(t.id,i+1,'l'+i),density:1,scale:.3}))};
-    for(let i=0;i<6;i++){const start=performance.now();drawArt(ctx,640,400,worst,i/4);times.push(performance.now()-start);}
+    // Each batch keeps the real eight-layer recipe limit while exercising
+    // every family at maximum density, including the four new meshes.
+    const times=[];
+    for(let offset=0;offset<A.ART_TEMPLATES.length;offset+=8){
+      const worst={...recipe,layers:Array.from({length:8},(_,i)=>{const t=A.ART_TEMPLATES[(offset+i)%A.ART_TEMPLATES.length];return {...A.createArtLayer(t.id,i+1,'l'+i),density:1,scale:.3};})};
+      for(let i=0;i<6;i++){const start=performance.now();drawArt(ctx,640,400,worst,i/4);times.push(performance.now()-start);}
+    }
     const png=canvas.toDataURL('image/png');
     return{results,contextDifference:different(normal,restored),callerRestored,callerBefore,callerAfter,immutable:snapshot===JSON.stringify(recipe),times,pngBytes:png.length};
   });
   await testInfo.attach('engine-pixel-and-time-evidence',{body:JSON.stringify(evidence,null,2),contentType:'application/json'});
-  expect(new Set(evidence.results.map(x=>x.hash)).size).toBe(8);
+  expect(new Set(evidence.results.map(x=>x.hash)).size).toBe(12);
   for(const result of evidence.results){
     expect(result.painted,result.kind).toBeGreaterThan(100);expect(result.transparent,result.kind).toBeGreaterThan(100);
     expect(result.endpoint,result.kind).toBe(0);expect(result.seek,result.kind).toBe(0);expect(result.static,result.kind).toBe(0);

@@ -1,6 +1,7 @@
 // Author: Aldrin Payopay <aldrin.gdf@gmail.com>. GPL-3.0-only.
 // Recipes, including their random choices, are data. Rendering never advances RNG state.
-export type ArtKind = 'contour' | 'rosette' | 'rings' | 'ribbons' | 'branches' | 'facets' | 'weave' | 'particles';
+export type ArtKind = 'contour' | 'rosette' | 'rings' | 'ribbons' | 'branches' | 'facets' | 'weave' | 'particles'
+  | 'torus-knot' | 'crystal-vault' | 'star-tunnel' | 'wave-surface';
 export const ART_TEMPLATES: ReadonlyArray<{id: ArtKind; name: string; description: string; category: string}> = [
   {id:'contour',name:'Contour Atlas',description:'Fine contours moving through an imagined landscape.',category:'Fields'},
   {id:'rosette',name:'Petal Engine',description:'Nested geometric petals opening around a quiet center.',category:'Geometry'},
@@ -10,6 +11,10 @@ export const ART_TEMPLATES: ReadonlyArray<{id: ArtKind; name: string; descriptio
   {id:'facets',name:'Prism Garden',description:'Angular crystal forms catch a moving imaginary light.',category:'Geometry'},
   {id:'weave',name:'Woven Circuit',description:'Crossing bands turn a precise grid into a living textile.',category:'Pattern'},
   {id:'particles',name:'Satellite Dust',description:'Small marks and analytic trails float around closed paths.',category:'Atmosphere'},
+  {id:'torus-knot',name:'Knot Foundry',description:'A sculpted tube weaves through a lit three-dimensional knot.',category:'Dimensional'},
+  {id:'crystal-vault',name:'Crystal Vault',description:'Faceted mineral spires turn under a moving studio light.',category:'Dimensional'},
+  {id:'star-tunnel',name:'Stellar Passage',description:'Luminous hoops and stars stretch into a deep perspective tunnel.',category:'Dimensional'},
+  {id:'wave-surface',name:'Tidal Surface',description:'A reflective sculpted surface folds into flowing interference waves.',category:'Dimensional'},
 ];
 
 export const ART_PALETTES = {
@@ -107,8 +112,12 @@ export function createArtRandom(seed:number):()=>number {
 export function createArtLayer(kind:ArtKind,seed:number,id:string):ArtLayer {
   choice(kind,kinds,'Art family');number(seed,0,0xffffffff,'Seed',true);identifier(id);
   const random=createArtRandom(seed);
-  return {id,kind,seed,palette:'cobalt',enabled:true,locked:false,opacity:.8,blend:'source-over',scale:1,density:.5,
-    rotation:0,x:0,y:0,automation:{target:'form',amount:.4,cycles:1,phase:Math.round(random()*1000)/1000}};
+  // Only the new dimensional instruments get these starting materials. Existing
+  // templates and saved recipes retain every previous default and random choice.
+  const dimensional=kind==='torus-knot'||kind==='crystal-vault'||kind==='star-tunnel'||kind==='wave-surface';
+  const palette:ArtPaletteId=kind==='torus-knot'?'ember':kind==='crystal-vault'?'ink':kind==='wave-surface'?'orchid':'cobalt';
+  return {id,kind,seed,palette,enabled:true,locked:false,opacity:dimensional?.98:.8,blend:'source-over',scale:1,density:dimensional?.62:.5,
+    rotation:0,x:0,y:0,automation:{target:'form',amount:dimensional?.6:.4,cycles:1,phase:Math.round(random()*1000)/1000}};
 }
 
 export function createDefaultArtRecipe():ArtRecipe {

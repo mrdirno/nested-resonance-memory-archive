@@ -1,6 +1,7 @@
 // Author: Aldrin Payopay <aldrin.gdf@gmail.com>. GPL-3.0-only.
 // Original geometric painters. No imported instrument engine or media is used.
 import { ART_PALETTES, createArtRandom, sampleArtLayer, type ArtLayer, type ArtLayerSample, type ArtRecipe } from './artRack';
+import { drawDimensionalArt } from './artDimensionalRenderer';
 type Context=CanvasRenderingContext2D|OffscreenCanvasRenderingContext2D;
 type Colors=readonly string[];
 const TAU=Math.PI*2;
@@ -173,6 +174,8 @@ export function drawArt(ctx:Context,width:number,height:number,recipe:ArtRecipe,
           case 'facets':facets(ctx,s,colors,layer.seed,hx,hy);break;
           case 'weave':weave(ctx,s,colors,layer.seed,hx/s.scale,hy/s.scale);break;
           case 'particles':particles(ctx,s,colors,layer.seed,hx,hy);break;
+          case 'torus-knot':case 'crystal-vault':case 'star-tunnel':case 'wave-surface':
+            drawDimensionalArt(ctx,s,colors,layer.kind,layer.seed,hx/s.scale,hy/s.scale);break;
         }
       }finally{ctx.restore();}
     }

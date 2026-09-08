@@ -2063,15 +2063,18 @@ export default function App() {
        * auto-start during a bulk import — as the one change that would make this
        * WORSE than today's confusing silence.
        *
-       * SYNCHRONOUS, INSIDE THE PICKER'S OWN CHANGE HANDLER. Unmuting is
-       * gesture-bound and iOS grants the gesture only to the task it fired in,
-       * which is why this is a handle call and not a prop (`StageRecorder`).
+       * Queue the arrival synchronously inside the picker change handler.
+       * VideoStage answers the counter when its engine exists, including when
+       * photo decoding is still pending. Dropping the counter merely because
+       * images is empty loses the user's action before that stage can mount.
+       * This is an autoplay attempt; browser gesture policy still applies.
        *
        * AND THE FULL-SCREEN PREVIEW HAS TO GO FIRST, because it force-closes
        * Details — opening a panel that another piece of state immediately shuts
        * is the inert-control defect this app is repeatedly scarred by.
        */
-      if (images.length > 0) { setMaximized(false); setSoundArrival((n) => n + 1); }
+      setMaximized(false);
+      setSoundArrival((n) => n + 1);
 
       // THE NOTICE MUST NOT NAME A CONTROL THAT IS NOT ON SCREEN. With no
       // photographs there is no stage, so there is no dock, no chip and no
@@ -3384,7 +3387,8 @@ export default function App() {
                        poolAssets={images}
                        soundtrack={soundtrack}
                        onRemoveSoundtrack={removeSoundtrack}
-                       soundArrival={soundArrival}
+                       /* A removed track cannot replay its arrival in a later Stage. */
+                       soundArrival={soundtrack ? soundArrival : 0}
                        onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
                        onSoundtrackLevel={(level) => setSoundtrack((prev) => (prev ? { ...prev, level } : prev))}
                        /* THE RANGE FADE, held here for the level's reason: App

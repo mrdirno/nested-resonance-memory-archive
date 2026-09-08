@@ -2,6 +2,8 @@
 
 Author: Aldrin Payopay · GPL-3.0-only
 
+**Historical rings are retained below. C3722's candidate audition semantics are recorded at the end; publication and final verification are pending.**
+
 ## Observation
 
 After C3712, choosing a template still appended a layer. The large gallery tile called the same `add` operation as the layer-building path. A starter with three layers became four after choosing A and five after choosing B. The interface presented template browsing but executed accumulation.
@@ -64,3 +66,37 @@ Independent review found three additional failure modes: an earlier intake or a 
 Release evidence and exact production status are maintained in [C3721_RELEASE.md](C3721_RELEASE.md). Manual music-source portability does not establish portable video originals, persisted master take settings, music in crash recovery, or cold offline installation.
 
 **C3721 live close:** [code 1e89d3d9](https://github.com/mrdirno/nested-resonance-memory-archive/commit/1e89d3d92543e9749d96beae9abae52ec873c59e) reached [Pages 34184898401](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34184898401); 58 public cases passed on muted Chromium/Mobile Chrome. All four shipped runtime artifacts match the final tested build. Reopened MP4s decode fully and preserve the selected tone, quarter gain and lap fades. The failing old public archive and current exported artifacts remain with the source-task release receipt.
+
+
+# Ring C3722 — A preview is not a kept layer
+
+## User intent and revised contract
+
+The artist wants to browse visual instruments against an existing artwork, keep a variation deliberately, and return quickly to numbered layers. C3713 solved accidental accumulation by making the large template tile replace the entire native stack. That historical fix is preserved above. The new candidate separates exploration from both replacement and accumulation: selecting A, then B, auditions only B while the kept recipe remains unchanged.
+
+| Context | Candidate behavior | Persistent boundary |
+|---|---|---|
+| Template shelf | Horizontally browse/filter twelve families; select one temporary candidate | No kept-layer mutation or draft history entry merely from browsing |
+| Preview candidate | Dice, opacity/blend, overlay/selected-layer replacement and Preview alone | UI state; omitted from saved recipes until Keep |
+| Keep / Replace | Promote one candidate in one draft-history transaction | Append within the eight-layer limit, or replace the selected kept layer |
+| Starting template | Explicit disclosed action to make the candidate the sole kept layer | Undo restores the previous stack; loading old projects never does this automatically |
+| Numbered kept layer | Five immediately visible slots; scroll/access all existing layers up to eight | Select and edit the existing identity; selecting is not adding |
+| Use / Update in Studio | Apply the kept native artwork as one editable source | Candidate must first be kept or dismissed; no global overlay over outer photo/video sources |
+
+Preview alone and temporary solo suspension are monitoring decisions. Kept enabled/locked flags survive browsing; Undo must restore prior solo and selection after promotion. A ninth transient preview at capacity is allowed for comparison, while persistence still refuses a ninth kept layer. The source selector, history, closing and asynchronous Apply must not leak a stale candidate into a different source.
+
+## Dimensional language and executable checks
+
+Four additive kind values use original CPU geometry: `torus-knot`, `crystal-vault`, `star-tunnel` and `wave-surface`. Tube topology, faceted solids, depth-distributed marks and an interference heightfield give the shelf different silhouettes. Canvas projection, average-depth face sorting, directional/specular/rim shading and distance fades are bounded; this is not a physically based or globally exact occlusion engine. No executable project metadata or third-party engine is introduced.
+
+`tests/unit/artDimension.invariants.mjs` passed nine groups. It checks real depth, finite normals/projection, whole default-model bounds, work limits, exact requested-time loops, seek-order independence, all palettes/automation targets, hidden-layer behavior and caller Canvas restoration. Frozen command hashes generated from actual source `e4e19604` preserve the old eight painters and default composition. These results do not substitute for browser pixels or decoded video.
+
+Final gates must exercise A→B audition without kept changes; candidate dice isolation; explicit Keep/Replace/start with undo; save while auditioning; source switching/closing; five visible slots and eight-layer preservation; whole artwork in narrow/landscape view; four visibly different rendered families; and actual moving exports. Existing soundtrack-original, lyrics, pins and project round trips remain required regressions. Pending deployment, public checks, artifact hashes and fleet evidence are tracked in [C3722_RELEASE.md](C3722_RELEASE.md).
+
+## Adjacent audio arrival found by the release gate
+
+The broad Solo fixture waited for any canvas; the start screen's decorative canvas satisfied that before the uploaded photographs had landed. A controlled frozen-build experiment held both real photo decodes, added music, then released them. Details stayed closed and the audio clock advanced while muted. The ready-photo control opened Details and advanced unmuted. Thus test readiness and an actual early-arrival defect were both present.
+
+`adoptSoundtrack` conditioned its arrival counter on `images.length > 0`, discarding a valid user action before VideoStage could exist. The repair queues the counter regardless of current pictures; VideoStage already retries it when its engine is ready. The prop is zero when there is no soundtrack, so a removed track cannot reopen a later clip's Details. Its counter remains monotonic across replacements. Open still clears imported-arrival state and restores authored music directly. Browser autoplay policy still applies.
+
+Ordinary Solo tests now wait for the actual `studio-artwork` and target the exact image/video intake. A second broad selector, the first file input, could target the mounted caption importer after artwork appeared; it is not evidence of a video decoder failure. A separate gated T6 retains the early-intake failure as a real regression. It checks the closed/muted old baseline, deferred opening/unmute, removal ownership and another explicit music arrival. Final results are recorded in the release receipt; the failed built runs are retained rather than hidden by readiness changes.

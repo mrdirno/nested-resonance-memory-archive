@@ -1,8 +1,9 @@
 // Original visual instruments. Author: Aldrin Payopay · GPL-3.0-only
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { ART_TEMPLATES, ART_PALETTES, ART_SIZES, createArtLayer, createDefaultArtRecipe, normalizeArtRecipe, rollArtRecipe, type ArtRecipe, type ArtLayer, type ArtKind } from '../lib/artRack';
 import { drawArt } from '../lib/artRackRenderer';
-import { artSelection, artHistoryEntry, artTemplateIntent, ART_PARAMETER_UI, ART_INSTRUMENT_UI, type ArtSelection, type ArtHistoryEntry, type ArtDiceScope } from '../lib/artIntent';
+import { artSelection, artHistoryEntry, ART_PARAMETER_UI, ART_INSTRUMENT_UI, type ArtSelection, type ArtHistoryEntry, type ArtDiceScope } from '../lib/artIntent';
+import { previewArtRecipe, keepArtAudition, type ArtAudition } from '../lib/artAudition';
 import './ArtRackRoom.css';
 
 type Props = {
@@ -29,10 +30,20 @@ function Thumbnail({kind}: {kind:ArtKind}) {
 export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,onClose,onHtml,busy}:Props) {
   const dialog=useRef<HTMLDialogElement>(null), canvas=useRef<HTMLCanvasElement>(null), file=useRef<HTMLInputElement>(null);
   const title=useId(),workspaceId=useId(),propertiesId=useId();const alive=useRef(true),generation=useRef(0),current=useRef(recipe);current.current=recipe;
+  const [audition,setAudition]=useState<ArtAudition|null>(null),[alone,setAlone]=useState(false);
+  const [family,setFamily]=useState('All');
+  const gallery=useRef<HTMLDivElement>(null),returnToTemplate=useRef<ArtKind|null>(null);
+  const previewRecipe=useMemo(()=>previewArtRecipe(recipe,audition,alone),[recipe,audition,alone]);
+  const discardPreview=()=>{generation.current++;setAudition(null);setAlone(false);};
   const [panel,setPanel]=useState<'templates'|'layers'>('templates');
   const [properties,setProperties]=useState<'look'|'motion'>('look'),[focused,setFocused]=useState(false);
   const expandButton=useRef<HTMLButtonElement>(null),backButton=useRef<HTMLButtonElement>(null),focusChanged=useRef(false);
   const setPreviewFocus=(value:boolean)=>{focusChanged.current=true;setFocused(value);};
+  useEffect(()=>{
+    if(audition||!returnToTemplate.current)return;
+    const target=focused?backButton.current:gallery.current?.querySelector<HTMLButtonElement>(`[data-template-kind="${returnToTemplate.current}"]`)||dialog.current?.querySelector<HTMLSelectElement>('[aria-label="Template family"]');
+    target?.focus();returnToTemplate.current=null;
+  },[audition,focused]);
   useEffect(()=>{if(focusChanged.current)(focused?backButton:expandButton).current?.focus();},[focused]);
   const [selected,setSelected]=useState(recipe.layers.at(-1)?.id || '');
   const [scope,setScope]=useState<ArtDiceScope>('composition');
@@ -53,13 +64,13 @@ export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,o
     const paint=(stamp:number)=>{
       if(playingRef.current&&previous)timeRef.current=(timeRef.current+(stamp-previous)/1000)%recipe.duration;
       previous=stamp;
-      const c=canvas.current,ctx=c?.getContext('2d');if(c&&ctx)drawArt(ctx,c.width,c.height,recipe,timeRef.current);
+      const c=canvas.current,ctx=c?.getContext('2d');if(c&&ctx)drawArt(ctx,c.width,c.height,previewRecipe,timeRef.current);
       if(stamp-lastUI>80){setTime(timeRef.current);lastUI=stamp;}
       if(playingRef.current)frame=requestAnimationFrame(paint);
     };
     frame=requestAnimationFrame(paint);return()=>cancelAnimationFrame(frame);
-  },[recipe,playing]);
-  useEffect(()=>{if(!playing){const c=canvas.current,ctx=c?.getContext('2d');if(c&&ctx)drawArt(ctx,c.width,c.height,recipe,time);}},[time,recipe,playing]);
+  },[previewRecipe,playing]);
+  useEffect(()=>{if(!playing){const c=canvas.current,ctx=c?.getContext('2d');if(c&&ctx)drawArt(ctx,c.width,c.height,previewRecipe,time);}},[time,previewRecipe,playing]);
   // Render edits at the paused playhead; elapsed time is never part of the recipe.
   useEffect(()=>{timeRef.current %= recipe.duration;setTime(timeRef.current);},[recipe.duration]);
   const seek=(value:number)=>{playingRef.current=false;timeRef.current=value;setTime(value);setPlaying(false);};
@@ -67,7 +78,7 @@ export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,o
   const commit=(next:ArtRecipe,key?:string,nextSelection=selection.current)=>{
     // Reject an invalid intent before changing history or retiring an in-flight apply.
     const entry=artHistoryEntry(next,nextSelection),previous=artHistoryEntry(current.current,selection.current);
-    generation.current++;setNotice('');setError('');
+    discardPreview();setNotice('');setError('');
     const now=performance.now();
     if(!key||coalesce.current?.key!==key||now-coalesce.current.at>650){past.current=[...past.current.slice(-39),previous];}
     chooseSelection(entry.selection);coalesce.current=key?{key,at:now}:null;future.current=[];
@@ -75,45 +86,54 @@ export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,o
   };
   const edit=(patch:Partial<ArtLayer>,key?:string)=>{if(!layer)return;commit({...recipe,layers:recipe.layers.map(l=>l.id===layer.id?{...l,...patch}:l)},key,{selectedId:layer.id,scope:'layer'});};
   const undo=(redo=false)=>{
-    const from=redo?future:past,to=redo?past:future;if(!from.current.length)return;
+    if(audition)returnToTemplate.current=audition.layer.kind;
+    discardPreview();const from=redo?future:past,to=redo?past:future;if(!from.current.length)return;
     to.current=[...to.current.slice(-39),artHistoryEntry(current.current,selection.current)];const next=from.current.pop()!;generation.current++;
     chooseSelection(next.selection);current.current=next.recipe;onChange(next.recipe);setHistoryVersion(v=>v+1);setNotice(redo?'Change restored.':'Change undone.');
   };
   const roll=()=>{
+    if(audition){generation.current++;const rolled=rollArtRecipe({...recipe,layers:[audition.layer],soloId:null},freshSeed());setAudition({...audition,layer:rolled.layers[0]});setNotice('Preview variation rolled. Kept layers are unchanged.');return;}
     const target=scope==='layer'?selectedLayer:undefined;
     if(scope==='layer'&&!target){setNotice('Select a layer to roll.');return;}
     const next=rollArtRecipe(recipe,freshSeed(),target?.id);
     if(JSON.stringify(next)===JSON.stringify(recipe)){setNotice('Nothing to roll: unlock and enable a layer first.');return;}
     commit(next);setNotice(target?`${nameOf(target.kind)} variation rolled.`:'Unlocked, enabled layers in this art composition rolled.');
   };
-  const useTemplate=(kind:ArtKind,intent:'use'|'add')=>{
-    if(intent==='add'&&recipe.layers.length>=8){setNotice('Eight layers are in this composition. Remove one to add another.');setPanel('layers');return;}
-    const nextLayer=createArtLayer(kind,freshSeed(),crypto.randomUUID());
-    commit(artTemplateIntent(recipe,nextLayer,intent),undefined,{selectedId:nextLayer.id,scope:intent==='use'?'composition':'layer'});
-    setProperties('look');setPanel(intent==='use'?'templates':'layers');
-    setNotice(intent==='use'?`${nameOf(kind)} replaces the art composition. Undo restores the previous layers.`:`${nameOf(kind)} added as a layer.`);
+  const previewTemplate=(kind:ArtKind)=>{
+    generation.current++;setNotice('');setError('');
+    if(audition?.layer.kind===kind)return;
+    setAudition({layer:createArtLayer(kind,freshSeed(),crypto.randomUUID()),placement:'add',targetId:layer?.id||null});setAlone(false);
   };
+  const editPreview=(patch:Partial<ArtLayer>)=>{if(audition){generation.current++;setAudition({...audition,layer:{...audition.layer,...patch}});}};
+  const keepPreview=(start=false)=>{
+    if(!audition||pending||busy)return;
+    try{const next=keepArtAudition(recipe,audition,start);returnToTemplate.current=audition.layer.kind;const name=nameOf(audition.layer.kind);
+      commit(next,undefined,{selectedId:audition.layer.id,scope:start?'composition':'layer'});setProperties('look');setPanel('templates');
+      setNotice(start?`${name} is the starting template. Undo restores the previous stack.`:`${name} kept. Preview another look to build on it.`);
+    }catch(err){setError(err instanceof Error?err.message:'Could not keep preview.');}
+  };
+  const selectKept=(id:string)=>{discardPreview();chooseSelection({selectedId:id,scope:'layer'});setProperties('look');setPanel('layers');};
   const move=(id:string,offset:number)=>{const layers=[...recipe.layers],i=layers.findIndex(l=>l.id===id),j=i+offset;if(j<0||j>=layers.length)return;[layers[i],layers[j]]=[layers[j],layers[i]];commit({...recipe,layers});};
   const close=()=>{alive.current=false;generation.current++;dialog.current?.close();onClose();};
   const apply=async()=>{
-    if(pending||busy)return;setPending(true);setError('');const gen=++generation.current,snapshot=clone(recipe);
+    if(pending||busy||audition)return;setPending(true);setError('');const gen=++generation.current,snapshot=clone(recipe);
     const isCurrent=()=>alive.current&&generation.current===gen;
-    try{await onApply(snapshot,isCurrent);if(isCurrent())setNotice('Editable artwork applied. Close Art Room to arrange it or export a video.');}
+    try{await onApply(snapshot,isCurrent);if(isCurrent())setNotice('Editable artwork applied. Keep layering here, or close to arrange and export in Studio.');}
     catch(err){if(isCurrent())setError(err instanceof Error?err.message:'Could not apply artwork.');}
     finally{if(alive.current)setPending(false);}
   };
   const download=()=>{
     const url=URL.createObjectURL(new Blob([JSON.stringify(recipe,null,2)],{type:'application/json'}));
     const a=document.createElement('a');a.href=url;a.download='Persona500-art-recipe.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-    setNotice('Recipe saved. It includes every layer and automation setting.');
+    setNotice(audition?'Recipe saved with kept layers only. Keep the preview to include it.':'Recipe saved. It includes every layer and automation setting.');
   };
   const size=ART_SIZES[recipe.size];
   const parameter=(key:keyof typeof ART_PARAMETER_UI)=>{
     if(!layer)return null;const {label,min,max,step}=ART_PARAMETER_UI[key];
     return <label className="art-range" key={key}>{label}<output>{Number(layer[key].toFixed(2))}</output><input aria-label={label} aria-describedby={key==='density'?`${propertiesId}-density`:undefined} type="range" style={rangeStyle(layer[key],min,max)} min={min} max={max} step={step} value={layer[key]} onChange={e=>edit({[key]:Number(e.target.value)},`${layer.id}-${key}`)}/>{key==='density'&&<small id={`${propertiesId}-density`} className="art-control-help">{instrumentUI?.densityHelp}</small>}</label>;
   };
-  const diceDisabled=pending||busy||(scope==='layer'?(!selectedLayer||selectedLayer.locked||!selectedLayer.enabled):!recipe.layers.some(l=>l.enabled&&!l.locked));
-  return <dialog ref={dialog} aria-labelledby={title} className={`art-rack${focused?' is-preview-focus':''}`} data-testid="art-rack" onCancel={e=>{e.preventDefault();if(focused)setPreviewFocus(false);else close();}} onKeyDown={e=>{
+  const diceDisabled=pending||busy||(!audition&&(scope==='layer'?(!selectedLayer||selectedLayer.locked||!selectedLayer.enabled):!recipe.layers.some(l=>l.enabled&&!l.locked)));
+  return <dialog ref={dialog} aria-labelledby={title} className={`art-rack${focused?' is-preview-focus':''}${audition?' has-audition':''} is-${panel}`} data-testid="art-rack" onCancel={e=>{e.preventDefault();if(focused)setPreviewFocus(false);else close();}} onKeyDown={e=>{
     if((e.metaKey||e.ctrlKey)&&['z','y','s','e','o'].includes(e.key.toLowerCase())){e.preventDefault();if(!pending&&!busy){if(e.key.toLowerCase()==='z')undo(e.shiftKey);if(e.key.toLowerCase()==='y')undo(true);if(e.key.toLowerCase()==='s')download();}}
     e.stopPropagation();
   }}>
@@ -124,20 +144,25 @@ export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,o
     </header>
     <div className="art-workspace">
       <section className="art-stage" aria-label="Artwork preview">
-        <div className="art-stage-label"><span className="art-scope-context" data-testid="art-scope-context">{scope==='layer'?(selectedLayer?`Layer: ${nameOf(selectedLayer.kind)}`:'Choose a layer'):'Art composition'}<small>{size.label}</small></span><button ref={expandButton} onClick={()=>setPreviewFocus(true)} aria-label="Expand art preview">Expand preview</button></div>
+        <div className="art-stage-label"><span className="art-scope-context" data-testid="art-scope-context">{audition?`Preview only${recipe.soloId?' · solo paused':''} · ${nameOf(audition.layer.kind)}`:scope==='layer'?(selectedLayer?`Layer: ${nameOf(selectedLayer.kind)}`:'Choose a layer'):'Art composition'}<small>{size.label}</small></span><button ref={expandButton} onClick={()=>setPreviewFocus(true)} aria-label="Expand art preview">Expand preview</button></div>
         <div className="art-canvas-wrap"><canvas ref={canvas} width={Math.round(880*Math.min(1,size.width/size.height))} height={Math.round(880*Math.min(1,size.height/size.width))} aria-label="Animated art preview"/></div>
         <div className="art-transport"><button onClick={togglePlayback} aria-label={playing?'Pause art preview':'Play art preview'}>{playing?'Pause':'Play'}</button><input aria-label="Art playhead" type="range" style={rangeStyle(time,0,recipe.duration)} min={0} max={recipe.duration} step={0.01} value={time} onChange={e=>seek(Number(e.target.value))}/><output>{time.toFixed(1)} / {recipe.duration}s</output></div>
       </section>
       <section className="art-desk" aria-label="Art controls" hidden={focused}>
+        <div className="art-kept-strip" role="region" aria-label="Kept layers">{Array.from({length:Math.max(5,recipe.layers.length)},(_,i)=>{
+          const kept=recipe.layers[i];return kept?<button key={kept.id} className={kept.enabled?'':'is-off'} aria-label={`Layer ${i+1}: ${nameOf(kept.kind)}`} aria-pressed={!audition&&layer?.id===kept.id} disabled={pending||busy} onClick={()=>selectKept(kept.id)}><b>{i+1}</b><span>{nameOf(kept.kind)}</span></button>:<button key={`empty-${i}`} aria-label={`Browse for layer ${i+1}`} disabled={pending||busy} onClick={()=>setPanel('templates')}><b>{i+1}</b><span>＋</span></button>;
+        })}</div>
         <div className="art-tabs" role="tablist" aria-label="Art workspace">
-          <button id={`${workspaceId}-templates`} role="tab" aria-selected={panel==='templates'} aria-controls={`${workspaceId}-panel`} onClick={()=>setPanel('templates')}>Templates</button>
-          <button id={`${workspaceId}-layers`} role="tab" aria-selected={panel==='layers'} aria-controls={`${workspaceId}-panel`} onClick={()=>{setPanel('layers');if(layer)chooseSelection({selectedId:layer.id,scope:'layer'});}}>Layers <span>{recipe.layers.length}</span></button>
+          <button id={`${workspaceId}-templates`} role="tab" disabled={pending||busy} aria-selected={panel==='templates'} aria-controls={`${workspaceId}-panel`} onClick={()=>setPanel('templates')}>Templates</button>
+          <button id={`${workspaceId}-layers`} role="tab" disabled={pending||busy} aria-selected={panel==='layers'} aria-controls={`${workspaceId}-panel`} onClick={()=>{discardPreview();setPanel('layers');if(layer)chooseSelection({selectedId:layer.id,scope:'layer'});}}>Layers <span>{recipe.layers.length}</span></button>
         </div>
         <div className="art-scroll">
           <fieldset disabled={pending||busy}>
           {panel==='templates'?<div id={`${workspaceId}-panel`} role="tabpanel" aria-label="Templates">
-            <div className="art-section-head"><h3>Choose a look.</h3><p>Use a template to replace the art composition. Choose Add layer to combine looks.</p></div>
-            <div className="art-gallery">{ART_TEMPLATES.map(t=><div key={t.id} className="art-template"><button className="art-template-use" aria-label={`Use ${t.name}`} onClick={()=>useTemplate(t.id,'use')}><Thumbnail kind={t.id}/><span><strong>{t.name}</strong><small>{t.description}</small></span></button><button className="art-template-add" aria-label={`Add ${t.name}`} onClick={()=>useTemplate(t.id,'add')}>Add layer</button></div>)}</div>
+            <div className="art-section-head"><h3>Browse. Preview. Keep.</h3><p>Try a look over your layers, then keep the variation you like.</p></div>
+            <div className="art-library-nav"><label><span className="sr-only">Template family</span><select aria-label="Template family" value={family} onChange={e=>{setFamily(e.target.value);gallery.current?.scrollTo({left:0});}}>{['All',...new Set(ART_TEMPLATES.map(t=>t.category))].map(c=><option key={c} value={c}>{c==='All'?'All visual instruments':c}</option>)}</select></label><button aria-label="Previous templates" onClick={()=>gallery.current?.scrollBy({left:-240,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}>←</button><button aria-label="Next templates" onClick={()=>gallery.current?.scrollBy({left:240,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}>→</button></div>
+            <div className="art-gallery" ref={gallery}>{ART_TEMPLATES.filter(t=>family==='All'||t.category===family).map(t=><div key={t.id} className="art-template"><button className="art-template-use" data-template-kind={t.id} aria-label={`Preview ${t.name}`} aria-pressed={audition?.layer.kind===t.id} onClick={()=>previewTemplate(t.id)}><Thumbnail kind={t.id}/><span><strong>{t.name}</strong><small>{t.category}</small></span></button></div>)}</div>
+
           </div>:<div id={`${workspaceId}-panel`} role="tabpanel" aria-label="Layers">
             <div className="art-stack-heading"><p>Top layer appears in front.</p><button onClick={()=>setPanel('templates')}>Browse templates</button></div>
             <div className="art-stack">{[...recipe.layers].reverse().map((l,index)=><div key={l.id} className={`art-layer ${layer?.id===l.id?'is-selected':''}`} data-layer-id={l.id}>
@@ -170,18 +195,28 @@ export function ArtRackRoom({recipe,onChange,sources,sourceId,onSource,onApply,o
             </div>}
           </div>}
           <details className="art-project-settings"><summary>Canvas & recipe</summary>
-            <label>Editing artwork<select aria-label="Editing artwork" value={sourceId||''} onChange={e=>{generation.current++;coalesce.current=null;past.current=[];future.current=[];setHistoryVersion(v=>v+1);chooseSelection({selectedId:'',scope:'composition'});onSource(e.target.value||null);}}><option value="">New artwork</option>{sources.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
+            <label>Editing artwork<select aria-label="Editing artwork" value={sourceId||''} onChange={e=>{discardPreview();coalesce.current=null;past.current=[];future.current=[];setHistoryVersion(v=>v+1);chooseSelection({selectedId:'',scope:'composition'});onSource(e.target.value||null);}}><option value="">New artwork</option>{sources.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
             <div className="art-history" data-history-version={historyVersion}><button aria-label="Undo art edit" onClick={()=>undo()} disabled={!past.current.length}>Undo</button><button aria-label="Redo art edit" onClick={()=>undo(true)} disabled={!future.current.length}>Redo</button></div>
-            <div className="art-pair"><label>Canvas<select aria-label="Art canvas size" value={recipe.size} onChange={e=>commit({...recipe,size:e.target.value as ArtRecipe['size']})}>{Object.entries(ART_SIZES).map(([id,s])=><option key={id} value={id}>{s.label}</option>)}</select></label><label>Loop duration<select aria-label="Art loop duration" value={recipe.duration} onChange={e=>{timeRef.current=0;setTime(0);commit({...recipe,duration:Number(e.target.value)});}}>{!Number.isInteger(recipe.duration)&&<option value={recipe.duration}>{recipe.duration} seconds</option>}{Array.from({length:23},(_,i)=>i+2).map(n=><option key={n} value={n}>{n} seconds</option>)}</select></label></div><div className="art-pair"><label>Background<input aria-label="Art background" type="color" value={recipe.background==='transparent'?'#101820':recipe.background} onChange={e=>commit({...recipe,background:e.target.value},'background')}/></label><button aria-pressed={recipe.background==='transparent'} onClick={()=>commit({...recipe,background:recipe.background==='transparent'?'#101820':'transparent'})}>Transparent</button></div><div className="art-button-row"><button onClick={download}>Save recipe</button><button onClick={()=>file.current?.click()}>Open recipe</button></div><input ref={file} type="file" accept=".json,application/json" aria-label="Open art recipe" hidden onChange={async e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;const gen=++generation.current;try{if(f.size>128*1024)throw Error('Choose a recipe smaller than 128 KiB.');const parsed=normalizeArtRecipe(JSON.parse(await f.text()));if(!alive.current||generation.current!==gen)return;commit(parsed,undefined,{selectedId:parsed.layers.at(-1)?.id||'',scope:'composition'});setPanel('layers');setNotice('Recipe opened. Apply it to keep it in the composition.');}catch(err){if(alive.current&&generation.current===gen)setError(err instanceof Error?err.message:'Invalid recipe.');}}}/>
+            <div className="art-pair"><label>Canvas<select aria-label="Art canvas size" value={recipe.size} onChange={e=>commit({...recipe,size:e.target.value as ArtRecipe['size']})}>{Object.entries(ART_SIZES).map(([id,s])=><option key={id} value={id}>{s.label}</option>)}</select></label><label>Loop duration<select aria-label="Art loop duration" value={recipe.duration} onChange={e=>{timeRef.current=0;setTime(0);commit({...recipe,duration:Number(e.target.value)});}}>{!Number.isInteger(recipe.duration)&&<option value={recipe.duration}>{recipe.duration} seconds</option>}{Array.from({length:23},(_,i)=>i+2).map(n=><option key={n} value={n}>{n} seconds</option>)}</select></label></div><div className="art-pair"><label>Background<input aria-label="Art background" type="color" value={recipe.background==='transparent'?'#101820':recipe.background} onChange={e=>commit({...recipe,background:e.target.value},'background')}/></label><button aria-pressed={recipe.background==='transparent'} onClick={()=>commit({...recipe,background:recipe.background==='transparent'?'#101820':'transparent'})}>Transparent</button></div><div className="art-button-row"><button onClick={download}>Save recipe</button><button onClick={()=>file.current?.click()}>Open recipe</button></div><input ref={file} type="file" accept=".json,application/json" aria-label="Open art recipe" hidden onChange={async e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;discardPreview();const gen=++generation.current;try{if(f.size>128*1024)throw Error('Choose a recipe smaller than 128 KiB.');const parsed=normalizeArtRecipe(JSON.parse(await f.text()));if(!alive.current||generation.current!==gen)return;commit(parsed,undefined,{selectedId:parsed.layers.at(-1)?.id||'',scope:'composition'});setPanel('layers');setNotice('Recipe opened. Apply it to keep it in the composition.');}catch(err){if(alive.current&&generation.current===gen)setError(err instanceof Error?err.message:'Invalid recipe.');}}}/>
             <button className="art-html-link" onClick={()=>{alive.current=false;generation.current++;onHtml();}}>Open an HTML instrument →</button>
           </details>
           </fieldset>
         </div>
+        {audition&&<fieldset className="art-audition" data-testid="art-audition" disabled={pending||busy}>
+          <button className="art-dismiss" aria-label="Dismiss preview" onClick={()=>{returnToTemplate.current=audition.layer.kind;discardPreview();setNotice('Preview dismissed. Kept layers are unchanged.');}}>×</button>
+          <details className="art-preview-options"><summary><strong>{nameOf(audition.layer.kind)}</strong><span>Preview settings</span></summary>
+            <div className="art-audition-placement"><label><span className="sr-only">Preview placement</span><select aria-label="Preview placement" value={audition.placement} onChange={e=>{generation.current++;setAudition({...audition,placement:e.target.value as ArtAudition['placement'],targetId:layer?.id||null});}}><option value="add">Overlay · layer {recipe.layers.length+1}</option><option value="replace" disabled={!layer}>Replace layer {recipe.layers.findIndex(l=>l.id===layer?.id)+1}</option></select></label><button aria-pressed={alone} onClick={()=>setAlone(!alone)}>Preview alone</button></div>
+            <label>Preview opacity<input aria-label="Preview opacity" type="range" min={0} max={1} step={.01} style={rangeStyle(audition.layer.opacity)} value={audition.layer.opacity} onChange={e=>editPreview({opacity:Number(e.target.value)})}/></label><label>Preview blend<select aria-label="Preview blend" value={audition.layer.blend} onChange={e=>editPreview({blend:e.target.value as ArtLayer['blend']})}><option value="source-over">Normal</option><option value="screen">Screen</option><option value="multiply">Multiply</option><option value="lighter">Add light</option></select></label><button onClick={()=>keepPreview(true)}>Use as starting template</button>
+            {recipe.soloId&&<p className="art-preview-note">Solo paused for this preview. Keep shows the combined layers; Undo restores solo.</p>}
+          </details>
+          {audition.placement==='add'&&recipe.layers.length>=8&&<p className="art-preview-note">All eight layers are filled. Open preview settings and choose Replace.</p>}
+
+        </fieldset>}
       </section>
     </div>
     <footer className="art-footer">
       {(error||notice)&&<p role={error?'alert':'status'}>{error||notice}</p>}
-      <div className="art-footer-tools"><div className="art-dice-controls"><label><span className="sr-only">Dice scope</span><select aria-label="Dice scope" value={scope} disabled={pending||busy} onChange={e=>chooseSelection({selectedId:layer?.id||'',scope:e.target.value as ArtDiceScope})}><option value="composition">Art composition</option><option value="layer" disabled={!selectedLayer}>{selectedLayer?nameOf(selectedLayer.kind):'Selected layer'}</option></select></label><button aria-label={scope==='layer'?'Dice selected layer':'Dice composition'} title={scope==='layer'?(selectedLayer?`Roll ${nameOf(selectedLayer.kind)}`:'Select a layer to roll'):'Roll unlocked, enabled layers in this art composition'} onClick={roll} disabled={diceDisabled}>Dice</button></div><button className="art-apply" onClick={()=>void apply()} disabled={pending||busy}>{pending?'Applying…':sourceId?'Update artwork':'Add artwork'}</button></div>
+      <div className="art-footer-tools"><div className="art-dice-controls">{!audition&&<label><span className="sr-only">Dice scope</span><select aria-label="Dice scope" value={scope} disabled={pending||busy} onChange={e=>chooseSelection({selectedId:layer?.id||'',scope:e.target.value as ArtDiceScope})}><option value="composition">Art composition</option><option value="layer" disabled={!selectedLayer}>{selectedLayer?nameOf(selectedLayer.kind):'Selected layer'}</option></select></label>}<button aria-label={audition?'Dice preview':scope==='layer'?'Dice selected layer':'Dice composition'} onClick={roll} disabled={diceDisabled}>{audition?'Dice preview':'Dice'}</button></div>{audition?<div className="art-promote"><button className="art-apply" aria-label={audition.placement==='replace'?`Replace layer ${recipe.layers.findIndex(l=>l.id===audition.targetId)+1}`:'Keep layer'} onClick={()=>keepPreview()} disabled={pending||busy||(audition.placement==='add'&&recipe.layers.length>=8)}>{audition.placement==='replace'?`Replace layer ${recipe.layers.findIndex(l=>l.id===audition.targetId)+1}`:`Keep layer ${recipe.layers.length+1}`}</button><button className="art-studio-pending" disabled>Keep preview first</button></div>:<button className="art-apply" onClick={()=>void apply()} disabled={pending||busy}>{pending?'Applying…':sourceId?'Update in Studio':'Use in Studio'}</button>}</div>
     </footer>
   </dialog>;
 }
