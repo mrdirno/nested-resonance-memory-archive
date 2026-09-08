@@ -1321,6 +1321,20 @@
   var sendSeq = 0;
   window.ToolkitSend = mountSend;
 
+  /* A TYPE IS A BADGE; A RULE IS A SENTENCE. Tick-list asides (`.sb`) are two
+     different things wearing one class: 23% of the 958 on disk are a two-word
+     type ("OFE", "cond fan or blower") that reads as a badge at the right of the
+     name, and the rest are sentences that need a row of their own — note.css
+     draws both. note.js, docspec.js and hvac's repair-recommendation page each
+     build one of those lists, so the threshold lives HERE, once: three copies of
+     a number is how the badge and the sentence drift apart. 24 characters is p25
+     of the corpus and ~150px at 9.5px mono — it still fits beside a name at
+     320px, and wraps to its own line intact when it does not. */
+  var ASIDE_TAG_MAX = 24;
+  window.ToolkitAsideClass = function (sub) {
+    return String(sub == null ? "" : sub).length <= ASIDE_TAG_MAX ? "sb tag" : "sb";
+  };
+
   function boot() {
     // Base sheet, then the trade's accent overrides the AV yellow. One runtime,
     // many trades — a trade is recognisable at a glance without forking the CSS.

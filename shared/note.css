@@ -112,11 +112,49 @@ h2.blk .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-si
 ul.ticks{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
 ul.ticks li{border-bottom:1px solid #E4E6E0}
 ul.ticks li:last-child{border-bottom:0}
-ul.ticks label{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;min-height:44px;
+ul.ticks label{display:flex;flex-wrap:wrap;align-items:center;gap:10px;row-gap:3px;padding:8px 11px;cursor:pointer;min-height:44px;
   font-family:var(--sans);font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--ink);margin:0}
-ul.ticks input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer;min-height:0}
-ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0}
-ul.ticks .sb{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0;text-align:right}
+/* margin:0 IS LOAD-BEARING. A checkbox carries the UA's own 3-4px margins, so
+   the gap between the box and the name was never the 10px this file declares —
+   it was 37px, and the aside below it was indented 30px to "align under the
+   name" and landed 7px short of it on every row of every trade. A number that
+   describes a shape has to be the number the browser is using. */
+ul.ticks input{width:20px;height:20px;flex:none;margin:0;accent-color:var(--deep);cursor:pointer;min-height:0}
+/* THE NAME NEVER LEAVES THE CHECKBOX'S LINE. With `flex-wrap` on the label and a
+   basis of `auto`, a name wider than the space left goes to a line of ITS OWN and
+   the checkbox is stranded above it with nothing beside it — 320px did that to
+   most rows on most trades. A basis of 40% is always narrower than the line, so
+   the name stays put and wraps INSIDE its own box; it still GROWS into whatever
+   the row has left, so nothing is lost when there is room. The badge keeps the
+   adaptive behaviour that was wanted: it rides the name's row while it fits in
+   what the basis leaves over, and drops to its own right-aligned line when it
+   does not, instead of squeezing a name down to a word a line. */
+ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0;flex:1 1 60%}
+/* A TYPE IS A BADGE; A RULE IS A SENTENCE — AND ONE COLUMN WAS SERVING BOTH.
+   `.sb` was `flex:1; text-align:right`: a right-hand COLUMN sharing the name's
+   row, which is the badge shape. Only 23% of the 958 asides on disk are badges
+   (median 44 characters, 66 of them over 120), and `sub` is CONTENT — note.js
+   puts it in the document the client receives, so it cannot be clamped away to
+   fit a column. A paragraph in one that narrow stacks a word per line: measured
+   at 320px on the shipped build, painting/getting-in.html rendered one aside as
+   52 lines in a 708px-tall row, and 108 of 120 trade/page/width combinations
+   were over three lines. docspec.css found exactly this in 2026-08 and fixed it
+   for `.omitpick` alone, noting the shared list "keeps the behaviour it was
+   written for" — the behaviour was wrong for every list but that one.
+   A sentence now takes its own row at full width, aligned under the name (20px
+   box + 10px gap) and no longer uppercased: caps are for a two-word type, not
+   for a paragraph read on a phone in the sun. A short aside keeps the badge it
+   already shipped, unchanged; toolkit.js owns the one threshold that decides,
+   because three builders draw these lists. The badge does not shrink — squeezed
+   below its own nowrap width it would overflow the row, so it wraps to a line of
+   its own instead, where 24 characters fit at 320px with room to spare. */
+ul.ticks .sb{font-family:var(--mono);font-size:11px;letter-spacing:.01em;line-height:1.4;color:var(--muted);text-transform:none;
+  flex:1 1 100%;min-width:0;text-align:left;margin-left:30px}
+ul.ticks .sb.tag{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+  flex:0 0 auto;max-width:100%;text-align:right;margin-left:auto;white-space:nowrap}
+/* The custom-family list renders an EMPTY aside beside every radio; without this
+   each one claims a row-gap and a line box it has nothing to put in. */
+ul.ticks .sb:empty{display:none}
 ul.ticks li:has(input:checked){background:var(--tint)}
 
 /* REPEATABLE ROWS — crew and material are already lists on the real tag, so they

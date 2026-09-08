@@ -5429,6 +5429,25 @@ PAGE: `--flag` came back as a stale green from the page's pre-boot palette inste
 accent, which is only possible if `boot()` never ran. A gate that read the source would have
 reported nothing wrong.
 
+### 2026-09-08 — A DEAD CYCLE'S FIX SAT UNCOMMITTED IN A SHARED INDEX, AND IT WAS WRONG TWICE
+C3720 opened round 1 on the ideas ledger for the house-rules wrap, built the fix across six
+files — `note.css`, `note.js`, `docspec.css`, `docspec.js`, `toolkit.js` and hvac's
+`repair-recommendation.html` — and died before committing it or finishing the round. It sat in
+the working tree for a day. **Two lanes stage on this tree by pathspec**, so an unverified
+change to the runtime every page loads was one `git commit -- shared/` away from shipping with
+nothing measured, wearing comments that read like a finished job. It was not one: the shape it
+drew stranded the checkbox alone on its own line above the name on most rows at 320px, and its
+own comment's claim — *"aligned under the name (20px box + 10px gap)"* — was **false on every
+row of every trade**, because a checkbox carries the user agent's own 4px/3px margins and the
+name therefore starts 37px in, not 30. Both were invisible to every gate on the rack and to
+reading the diff; both fell out of the first measurement.
+**THE RE-GROUND STEP NOW INCLUDES `git diff --stat` AND A DECISION ON EVERY UNCOMMITTED FILE** —
+finish it, or back it out, before building anything else. An orphan is not neutral: it is a
+claim about the artifact that nobody has checked, sitting where somebody else's `git add` can
+reach it. And a comment describing a measurement is not the measurement — §SCARS 2026-08-25
+said this about a mechanism written down before it was measured; this is the same scar wearing
+a number.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -9487,4 +9506,47 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `persona500-collage-C3718-release`, read back. Storefront untouched (no new tool). · **NAMED
   AND NOT DONE:** on `write-up.html` the house-rules sub-text (`.ticks .sb`) wraps to up to 8
   lines at 390 — measured live, filed in the ideas ledger, no gate asserts it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+- `2026-09-08` — **[AXIS:BACKPORT] C3723 — THE SENTENCE WAS BEING TYPESET IN A COLUMN AS WIDE AS
+  ONE WORD, ON 63 PAGES OF ALL 17 TRADES** · **before:** `ul.ticks .sb` shipped as
+  `flex:1; text-align:right` — a right-hand COLUMN sharing the name's row. That is the right
+  shape for a two-word type and the wrong shape for a sentence, and **only 24% of the 967
+  `sub:` fields on disk are short enough to be types (median 44 characters)**. `sub` is
+  CONTENT — `note.js` puts it in the document the client receives — so it cannot be clamped
+  away to fit a column, and a paragraph in one that narrow stacks about a word a line: measured
+  on the shipped build, `painting/getting-in.html` rendered one 257-character aside as **52
+  line boxes** at 320px, and the write-up tuner's house rules ran to **8 lines at 390 on all
+  seventeen trades** (mean 6.00 over 119 asides) — the defect C3718's own log line named and
+  left. · **after:** a sentence takes its own row at full width, aligned under the name and no
+  longer uppercased; a short aside keeps the badge it already shipped, riding the name's row
+  while it fits and dropping to its own right-aligned line when it does not. **The registered
+  metric: 8 → 2 lines at 390, mean 6.00 → 1.14, target was 3.** Cross-surface worst **52 → 10**,
+  and the 10 is a 257-character sentence, which is what that sentence IS on a 320px phone.
+  **THE FIX ARRIVED ORPHANED AND WRONG TWICE** (§SCARS, today): C3720 built it, never committed
+  it and never closed its round. Its `.nm{flex:1 1 auto}` under `flex-wrap` pushed the NAME to a
+  line of its own and left the checkbox stranded above it on most rows at 320; and its 30px
+  indent was 7px short of the name on **every row of every trade**, because a checkbox carries
+  the UA's own 4/3px margins. `input{margin:0}` makes the declared 10px gap the real one and
+  `.nm{flex:1 1 60%}` keeps the name on the checkbox's line while still growing into whatever
+  the row has left. `ul.omitpick .nm{flex:1}` came out with them — a zero basis there would hand
+  the whole row to the badge. · **THE GATE IS NEW AND IT COUNTS LINE BOXES**, through
+  `Range.getClientRects()`, because a CSS fix has no test unless something asks the browser how
+  many lines a sentence became: `tools/toolkit-gates/tick-aside.mjs`, every page on disk that
+  draws a tick list, at 320/360/390/430 — **63 pages, 3,112 aside-measurements, 14,252 checks,
+  0 failing**, and **4,931 of 14,636 failing against HEAD**, so it bites. Its rail is
+  characters-per-rendered-line, not a line count, because the defect was density and not length:
+  the column shape measured **4.9 chars/line** at its worst, the fixed shape **18.3** at its
+  worst, and the floor sits at 15 between them. mobile-watertight, readable, docspec-startover,
+  docspec-desk and note-live-fields green. **BACKPORT RIDER FIRED — that is the whole cycle:**
+  the fix is in the one runtime, so all 63 tick pages across all 17 trades move together, and
+  the single page with its own inline copy of the rule (`hvac/repair-recommendation.html`) was
+  swept in the same commit. Storefront untouched — no new tool, no new trade. · **NAMED AND NOT
+  DONE:** the badge/sentence split is a LENGTH test (≤24 characters). **86 of the 229 short
+  asides — 38% — begin with a function word** (*"and list it to chase"*, *"for sending it on"*,
+  *"nobody has to stay"*): sentence fragments rendered as UPPERCASE badges. The data carries a
+  signal the length test ignores — the author's own capitalisation (`BY THE BAG`, `OFE`, `EACH`,
+  `SPRING · STRAP · PLASTIC` are written in caps). Not built here because ~30 rows are lowercase
+  trade names used as chips (`plumbing`, `av`, `fireprot`) and the caps signal alone would turn
+  those into sentences. Re-pitch condition, falsifiable: classify on authored caps OR a single
+  word, and show a panel that no chip becomes a sentence and no fragment stays a badge.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html

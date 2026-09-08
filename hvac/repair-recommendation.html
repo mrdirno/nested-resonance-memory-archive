@@ -97,10 +97,12 @@ details.more[open]>summary::before{content:"–"}
 ul.ticks{list-style:none;margin:9px 0 0;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
 ul.ticks li{border-bottom:1px solid #E4E6E0}
 ul.ticks li:last-child{border-bottom:0}
-ul.ticks label{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;min-height:44px}
-ul.ticks input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
-ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0}
-ul.ticks .sb{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0;text-align:right}
+ul.ticks label{display:flex;flex-wrap:wrap;align-items:center;gap:10px;row-gap:3px;padding:8px 11px;cursor:pointer;min-height:44px}
+ul.ticks input{width:20px;height:20px;flex:none;margin:0;accent-color:var(--deep);cursor:pointer}
+ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0;flex:1 1 60%}
+ul.ticks .sb{font-family:var(--mono);font-size:11px;letter-spacing:.01em;line-height:1.4;color:var(--muted);text-transform:none;flex:1 1 100%;min-width:0;text-align:left;margin-left:30px}
+ul.ticks .sb.tag{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;flex:0 0 auto;max-width:100%;text-align:right;margin-left:auto;white-space:nowrap}
+ul.ticks .sb:empty{display:none}
 ul.ticks li:has(input:checked){background:var(--tint)}
 
 .warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
@@ -367,7 +369,7 @@ ul.ticks li:has(input:checked){background:var(--tint)}
       cb.addEventListener("change", render);
       var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = it.name;
       lab.appendChild(cb); lab.appendChild(nm);
-      if (it.sub) { var sb = document.createElement("span"); sb.className = "sb"; sb.textContent = it.sub; lab.appendChild(sb); }
+      if (it.sub) { var sb = document.createElement("span"); sb.className = window.ToolkitAsideClass(it.sub); sb.textContent = it.sub; lab.appendChild(sb); }
       li.appendChild(lab); ul.appendChild(li);
     });
   }

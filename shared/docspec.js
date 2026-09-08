@@ -2172,7 +2172,7 @@
       cb.addEventListener("change", function () { S.tog[t.id] = cb.checked; save(); renderOut(); });
       lb.appendChild(cb);
       lb.appendChild(h("span", "nm", t.label));
-      if (t.sub) lb.appendChild(h("span", "sb", t.sub));
+      if (t.sub) lb.appendChild(h("span", window.ToolkitAsideClass(t.sub), t.sub));
       li.appendChild(lb);
       tl.appendChild(li);
     });
@@ -2321,7 +2321,9 @@
       });
       lb.appendChild(cb);
       lb.appendChild(h("span", "nm", c.label));
-      lb.appendChild(h("span", "sb", c.artefact));
+      /* Not the length test: an artefact is a two-word TYPE by construction, so
+         it asks for the badge by name rather than passing one every time. */
+      lb.appendChild(h("span", "sb tag", c.artefact));
       li.appendChild(lb);
       ul3.appendChild(li);
     });

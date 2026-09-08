@@ -133,8 +133,13 @@
    check passed it — no overflow, 44px targets — which is the same blind spot as
    the bar nobody measured the HEIGHT of. Scoped to .omitpick so the shared list
    everywhere else keeps the behaviour it was written for. */
-ul.omitpick .nm{flex:1}
-ul.omitpick .sb{flex:none;white-space:nowrap}
+/* THE OVERRIDE IS GONE, and so is what it was working around. `ul.ticks .nm`
+   is `flex:1 1 40%` now and the badge is `.sb.tag` in note.css, which the
+   builders ask for by name: the badge is a nowrap chip that rides the name's
+   row while it fits and takes its own right-aligned line when it does not, on
+   EVERY tick list, not just this one. `flex:1` here would give the name a basis
+   of zero and hand the whole row to the badge instead. Two descriptions of one
+   shape is how the two of them drift apart. */
 
 /* THE SPINE — the sections of the finished document, as a tick list with a
    handle-free reorder-free honesty: you choose what is IN, not where it goes,

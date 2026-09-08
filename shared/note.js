@@ -371,7 +371,7 @@
         cb.addEventListener("change", render);
         lab.appendChild(cb);
         lab.appendChild(el("span", "nm", name));
-        if (sub) lab.appendChild(el("span", "sb", sub));
+        if (sub) lab.appendChild(el("span", window.ToolkitAsideClass(sub), sub));
         li.appendChild(lab);
         ul.appendChild(li);
       });
