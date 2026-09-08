@@ -9548,5 +9548,10 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `SPRING · STRAP · PLASTIC` are written in caps). Not built here because ~30 rows are lowercase
   trade names used as chips (`plumbing`, `av`, `fireprot`) and the caps signal alone would turn
   those into sentences. Re-pitch condition, falsifiable: classify on authored caps OR a single
-  word, and show a panel that no chip becomes a sentence and no fragment stays a badge.
+  word, and show a panel that no chip becomes a sentence and no fragment stays a badge. · Code
+  `8439e4bc`; Pages run 34209333341; the gate is **0 failing against the LIVE site** and live
+  `note.css`/`docspec.css`/`note.js`/`docspec.js` are byte-identical to the tested files. Ideas
+  round 1 on `42c8b27b` recovered from the dead cycle and closed at **2 against a target of 3**,
+  then reviewed and archived. Fleet receipt **17961** from `mac-toolkit-claude`, thread
+  `persona500-collage-C3723-release`, read back.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
