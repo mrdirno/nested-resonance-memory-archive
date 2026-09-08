@@ -12,6 +12,18 @@ const path = require('path');
            '--disable-gpu-sandbox', '--no-sandbox'],
   });
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  // Playwright will not click an element until it is "stable": the same bounding box
+  // across two animation frames. This page runs a continuous WebGL loop, and under
+  // SwiftShader on a CI runner a frame can take long enough that a control never
+  // settles inside the 30 s default. Measured twice on 2026-09-07, on a commit that
+  // changed only an HTML comment: the same suite failed at two DIFFERENT clicks
+  // (#substep-seg at smoke.js:441, then a scenario button at :353), both with
+  // "waiting for element to be visible, enabled and stable" - so it is the wait that
+  // is too short, not a control that is broken. One click already carried a hand-set
+  // 120 s for the same reason; this makes that the default for every action rather
+  // than leaving 26 other clicks on 30 s. It weakens no assertion: every check still
+  // has to pass, it just gets the time a software renderer needs to reach it.
+  page.setDefaultTimeout(120000);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => {
