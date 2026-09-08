@@ -1787,7 +1787,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         });
       },
       canRecord: canRecord && takeable && !busy,
-      isRecording: recPhase === 'running',
+      isRecording: busy, // preparation/encoding also owns the current sources
       maxSeconds: profile.maxSeconds,
       sizes,
       // Only the offline renderer can spend pixels — the realtime paths sample

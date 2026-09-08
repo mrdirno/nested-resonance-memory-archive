@@ -3,16 +3,48 @@ import { AppState, ImageAsset, ProjectManifest } from '../types';
 import { readProject, readImageSources } from './svgProject';
 import { normalizeCaptionTrack } from './captions';
 import { normalizeArtRecipe } from './artRack';
+import type { SoundtrackSpec } from './soundtrack';
+import {
+  PROJECT_SOUNDTRACK_PATH, createProjectSoundtrackMetadata, normalizeProjectSoundtrack,
+  restoreProjectSoundtrack, verifyProjectSoundtrackBytes,
+} from './projectSoundtrack';
+
+export interface LoadedProject {
+  state: AppState;
+  images: ImageAsset[];
+  /** Absent/null means no soundtrack; never retain a previous project's music. */
+  soundtrack?: SoundtrackSpec | null;
+}
+
+/** Validate the shared hydration boundary without rejecting unknown legacy fields. */
+export function assertProjectState(value: unknown): asserts value is AppState {
+  const record = (v: unknown): v is Record<string, unknown> =>
+    !!v && typeof v === 'object' && !Array.isArray(v);
+  if (!record(value) || !record(value.layout) || !record(value.style)
+    || (value.mode !== undefined && value.mode !== 'simple' && value.mode !== 'advanced')) {
+    throw new Error('Invalid project settings: layout, style or mode.');
+  }
+}
+
+/** Discard a fully read candidate that became stale or was refused by its caller. */
+export const releaseLoadedProject = (loaded: LoadedProject): void => {
+  const urls = new Set(loaded.images.flatMap(image => [image.src, image.previewSrc]));
+  if (loaded.soundtrack?.url) urls.add(loaded.soundtrack.url);
+  for (const url of urls) {
+    if (url?.startsWith('blob:')) { try { URL.revokeObjectURL(url); } catch { /* already gone */ } }
+  }
+};
 
 /**
  * Build the `.collage` archive as a Blob WITHOUT downloading it. Extracted from
- * `saveProject` so autosave (lib/sessionStore) can persist the EXACT same bytes
- * a manual save produces — restore is then just `loadProject` on those bytes, so
- * there is one serialization format and no second one to drift out of sync.
- * The archive carries images + settings only; video bytes are never zipped, so
- * this stays cheap even beside a heavy video project.
+ * `saveProject`. Manual saves can include the original soundtrack container and
+ * its authored settings. Moving video clips remain represented by their frames.
+ * Crash recovery uses the separate incremental session store, not this ZIP path.
  */
-export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): Promise<Blob> => {
+export const buildProjectBlob = async (
+  state: AppState, images: ImageAsset[], soundtrack?: SoundtrackSpec | null,
+): Promise<Blob> => {
+  assertProjectState(state);
   const zip = new JSZip();
 
   // 1. Manifest
@@ -41,6 +73,22 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
     ...state,
     images: imageMeta
   };
+
+  if (soundtrack) {
+    // The app owns a File-backed URL. Never substitute a remote reference or a
+    // rendered mix: a saved project must carry the original container bytes.
+    if (!soundtrack.url?.startsWith('blob:')) throw new Error('Could not save the soundtrack — its local original is unavailable. Your work is still open.');
+    let original: Blob;
+    try {
+      const response = await fetch(soundtrack.url);
+      if (!response.ok) throw new Error('unreadable source');
+      original = await response.blob();
+    } catch {
+      throw new Error(`Could not save ${soundtrack.name || 'the soundtrack'} — its original could not be read. Your work is still open; try saving again.`);
+    }
+    manifest.soundtrack = await createProjectSoundtrackMetadata(soundtrack, original);
+    zip.file(PROJECT_SOUNDTRACK_PATH, original, { compression: 'STORE' });
+  }
 
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
 
@@ -93,8 +141,8 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
   return await zip.generateAsync({ type: "blob" });
 };
 
-export const saveProject = async (state: AppState, images: ImageAsset[]) => {
-  const content = await buildProjectBlob(state, images);
+export const saveProject = async (state: AppState, images: ImageAsset[], soundtrack?: SoundtrackSpec | null) => {
+  const content = await buildProjectBlob(state, images, soundtrack);
 
   // Download
   const url = URL.createObjectURL(content);
@@ -127,7 +175,7 @@ const DECODE_TIMEOUT_MS = 15_000;
  */
 const measureSource = (url: string, meta: any): Promise<{ w: number; h: number }> => {
   const mw = meta?.width, mh = meta?.height;
-  if (typeof mw === 'number' && typeof mh === 'number' && mw > 0 && mh > 0) {
+  if (typeof mw === 'number' && typeof mh === 'number' && Number.isFinite(mw) && Number.isFinite(mh) && mw > 0 && mh > 0) {
     return Promise.resolve({ w: mw, h: mh });
   }
   return new Promise((resolve) => {
@@ -146,7 +194,40 @@ const measureSource = (url: string, meta: any): Promise<{ w: number; h: number }
   });
 };
 
-export const loadProject = async (file: File): Promise<{state: AppState, images: ImageAsset[]} | null> => {
+/** Stop decompression at the declared, validated bound instead of allocating an
+ * untrusted member in full and discovering afterwards that it was too large. */
+const readSoundtrackBytes = (file: JSZip.JSZipObject, expected: number): Promise<ArrayBuffer> =>
+  new Promise((resolve, reject) => {
+    const chunks: Uint8Array[] = [];
+    let total = 0;
+    let stopped = false;
+    // JSZip 3.10 exposes this browser API but omits it from JSZipObject's types.
+    const stream = (file as JSZip.JSZipObject & {
+      internalStream(type: 'uint8array'): JSZip.JSZipStreamHelper<Uint8Array>;
+    }).internalStream('uint8array');
+    const fail = (error: Error) => {
+      if (stopped) return;
+      stopped = true; stream.pause(); chunks.length = 0; reject(error);
+    };
+    stream.on('data', (chunk: Uint8Array) => {
+      if (stopped) return;
+      total += chunk.byteLength;
+      if (total > expected) { fail(new Error('Invalid project soundtrack: original byte count exceeds its metadata.')); return; }
+      chunks.push(chunk);
+    });
+    stream.on('error', fail);
+    stream.on('end', () => {
+      if (stopped) return;
+      if (total !== expected) { fail(new Error('Invalid project soundtrack: original byte count does not match.')); return; }
+      const bytes = new Uint8Array(total);
+      let offset = 0;
+      for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+      chunks.length = 0; stopped = true; resolve(bytes.buffer);
+    });
+    stream.resume();
+  });
+
+export const loadProject = async (file: File): Promise<LoadedProject | null> => {
   // Every object URL minted on the way in, so a refusal releases them all. The
   // archive branch used to `return null` from its catch with every URL it had
   // minted still live — a whole pool of full-resolution bytes pinned for the
@@ -165,7 +246,9 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
     if (!manifestFile) throw new Error("Invalid project file: missing manifest");
     
     const manifestStr = await manifestFile.async("text");
-    const manifest: any = JSON.parse(manifestStr); // relaxed type for compat
+    const candidate: unknown = JSON.parse(manifestStr);
+    assertProjectState(candidate);
+    const manifest: any = candidate; // relaxed image metadata for legacy compat
     // Validate timed text before any source is decoded or any editor state is
     // replaced. A malformed track must refuse the file as a whole, not throw
     // later from the render after its photographs have already been adopted.
@@ -178,10 +261,23 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
       if (meta.art !== undefined) meta.art = normalizeArtRecipe(meta.art);
     }
     
+    const soundtrackMeta = normalizeProjectSoundtrack(manifest.soundtrack);
+    let soundtrackBlob: Blob | null = null;
+    if (soundtrackMeta) {
+      const member = zip.file(PROJECT_SOUNDTRACK_PATH);
+      if (!member) throw new Error('The project is missing its soundtrack original.');
+      const bytes = await readSoundtrackBytes(member, soundtrackMeta.sizeBytes);
+      await verifyProjectSoundtrackBytes(soundtrackMeta, bytes);
+      soundtrackBlob = new Blob([bytes], { type: soundtrackMeta.mimeType });
+    }
+
     const images: ImageAsset[] = [];
     const imgFolder = zip.folder("images");
     const previewFolder = zip.folder("previews");
+    const prepared: { meta: any; original: Blob; preview: Blob | null }[] = [];
 
+    // Read every required member before minting any URL. A missing late image
+    // or a corrupt soundtrack cannot leave a partly adopted candidate behind.
     if (imgFolder) {
       for (const meta of manifest.images) {
         // Fallback for legacy files that used 'filename' instead of 'storageFilename'
@@ -197,9 +293,17 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
         // the offer came straight back — the reported endless loop, on this exact
         // branch. A visible refusal beats a plausible picture that is not theirs.
         if (!file) throw new Error(`archive is missing ${fname}`);
-        {
-          const blob = await file.async("blob");
-          const url = URL.createObjectURL(blob);
+        const original = await file.async('blob');
+        if (!original.size) throw new Error(`archive source is empty: ${fname}`);
+        let preview: Blob | null = null;
+        const pf = previewFolder?.file(fname);
+        if (pf) { try { const blob = await pf.async('blob'); if (blob.size) preview = blob; } catch { /* original remains usable */ } }
+        prepared.push({ meta, original, preview });
+      }
+    }
+
+    for (const { meta, original, preview } of prepared) {
+          const url = URL.createObjectURL(original);
           minted.push(url);
 
           const { w, h } = await measureSource(url, meta);
@@ -217,9 +321,8 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
           // now on reopens with the small tier the preview path expects, instead
           // of quietly re-decoding full-resolution photographs on every drag.
           let previewUrl = url;
-          const pf = previewFolder?.file(fname);
-          if (pf) {
-            try { previewUrl = URL.createObjectURL(await pf.async("blob")); minted.push(previewUrl); } catch { previewUrl = url; }
+          if (preview) {
+            try { previewUrl = URL.createObjectURL(preview); minted.push(previewUrl); } catch { previewUrl = url; }
           }
 
           images.push({
@@ -236,15 +339,22 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
             analysis: meta.analysis,
             ...(meta.art === undefined ? {} : { art: meta.art }),
           });
-        }
-      }
+    }
+
+    // Audio is last: all image metadata, required bytes and necessary legacy
+    // decodes must have passed. No settings or editor state are adopted here.
+    let soundtrack: SoundtrackSpec | null = null;
+    if (soundtrackMeta && soundtrackBlob) {
+      const url = URL.createObjectURL(soundtrackBlob);
+      minted.push(url);
+      soundtrack = restoreProjectSoundtrack(soundtrackMeta, url);
     }
     
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { images: _ignore, ...state } = manifest;
+    const { images: _ignore, soundtrack: _soundtrack, ...state } = manifest;
     // Handed to the caller — the app owns these URLs for the rest of the session.
     minted.length = 0;
-    return { state, images };
+    return { state, images, soundtrack };
 
   } catch (e) {
     // Nothing partial escapes, and nothing leaks.
@@ -272,7 +382,7 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
  * and length, so one missing source re-deals every fragment after it. A refusal
  * the user can act on beats a plausible picture that is not theirs.
  */
-const loadFromSVG = async (file: File): Promise<{state: AppState, images: ImageAsset[]} | null> => {
+const loadFromSVG = async (file: File): Promise<LoadedProject | null> => {
   const minted: string[] = [];
   try {
     const text = await file.text();
@@ -281,6 +391,7 @@ const loadFromSVG = async (file: File): Promise<{state: AppState, images: ImageA
     // No manifest of ours: either not a Collage Studio export, or one made
     // before the SVG could carry image identity. Neither can be reopened.
     if (!project) return null;
+    assertProjectState(project.state);
     if (project.state.captions !== undefined) {
       project.state.captions = normalizeCaptionTrack(project.state.captions);
     }

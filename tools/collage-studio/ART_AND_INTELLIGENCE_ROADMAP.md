@@ -17,7 +17,7 @@ Keep the small browser editor useful everywhere. Offer heavier intelligence thro
 | State | Capability and boundary |
 |---|---|
 | Existing implementation | Collage composition, motion, soundtrack/video controls, titles, preview and MP4 export. Manual lyrics, evenly spaced paste drafts, plain SRT/VTT import/export, timed caption rendering, project/recovery integration, and an original procedural-art starter. |
-| Existing limitation | Projects preserve photographs and captions; original soundtrack/video files are not yet fully packaged. A saved project is not a complete portable film source. |
+| C3721 candidate, publication pending | Manual `.collage` now preserves the music original and its mute/level/trim/source-fade settings with content integrity. Original moving-video clips and complete take settings remain unbundled; SVG and incremental recovery omit music. A saved project is not a complete portable film source. |
 | Shipped C3710 | In-studio help for external lyric extraction; local HTML art instruments in an isolated player, capturing real still pixels for normal collage intake. Loading an instrument does not establish deterministic animation or compatibility with every HTML app. |
 | Shipped C3713 | Use-template replacement, explicit Add, selection-aware draft undo and visible composition/layer dice scope. UI-only descriptors for real controls; old projects and originals retained. |
 | Shipped C3712 | Whole-art preview by default; compact persistent playback; one Add/Layout/Look/Motion/Text or media Details panel; simplified Art Room with selected-layer controls and expanded preview. |
@@ -85,7 +85,7 @@ Moving adapters must follow Studio's requested time rather than wall-clock anima
 
 **Preserve the preview-first flow.** New capability belongs in an existing task or a deliberate disclosure. Keep play/pause, scrub and the whole frame reachable; do not grow a permanent row for every feature. Native templates stay ahead of HTML import. Test the actual saved/exported result and the smallest viewport together.
 
-**Portable originals first.** Bundle or explicitly relink soundtrack/video originals, content hashes, trim/speed/volume settings, and rights/provenance metadata. Refuse incomplete “fully portable” saves. Acceptance: reopen on a clean offline device, recover every source, and reproduce the take. A thumbnail, proxy, or temporary object URL is insufficient.
+**Portable originals first.** C3721 implements the manual soundtrack slice; see [its release status and boundaries](C3721_RELEASE.md). Next bundle or explicitly relink moving-video originals and complete take settings, content hashes, trim/speed/volume settings, and rights/provenance metadata. Refuse incomplete “fully portable” saves. Acceptance: reopen on a clean offline device, recover every source, and reproduce the take. A thumbnail, proxy, or temporary object URL is insufficient.
 
 **Authored shots next.** Add a bounded sequence of art states with duration, beat-aware cuts, per-shot motion, captions, and audio continuity. Start with three shots and reversible reorder/trim operations. Acceptance: preview and export agree at every boundary; reopening preserves the sequence without manual reconstruction.
 

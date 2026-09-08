@@ -315,7 +315,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
               <span className="ui-option__icon" style={{ color: '#c08bff' }}><FileJson size={16} /></span>
               <span className="min-w-0 flex-1">
                 <span className="block ui-label ui-label--on">Project file</span>
-                <span className="block ui-caption mt-1">A .collage archive of the sources and every setting. Reopen with Open.</span>
+                <span className="block ui-caption mt-1">Editable pictures, art, lyrics and original music with its mix settings. Reopen with Open. Video clips return as still frames.</span>
               </span>
             </button>
 

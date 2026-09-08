@@ -35,7 +35,7 @@ import { ART_SIZES, artIsAnimated, createDefaultArtRecipe, normalizeArtRecipe, t
 import { drawArt } from './lib/artRackRenderer';
 import { createLyricDemo } from './lib/lyricDemo';
 import { deskForLook, gradeFromDesk, sameDesk, snapDesk, type Desk, type LookId, type LookRef } from './lib/grade';
-import { saveProject, loadProject } from './lib/project';
+import { saveProject, loadProject, assertProjectState, releaseLoadedProject, type LoadedProject } from './lib/project';
 import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, preflightSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
 import type { AssetUrls } from './lib/session';
 import * as sessionStore from './lib/sessionStore';
@@ -287,10 +287,8 @@ export default function App() {
    * difference decides whether adopting music is allowed to start the collage
    * moving (see `adoptSoundtrack`).
    *
-   * Only a LIVE choice counts: the move control and the dice. A restored session
-   * is deliberately not one, because `sessionStore` does not carry the soundtrack
-   * — so adding music after a restore is always a fresh act, never a replay of
-   * one.
+   * The move control, dice and opening a saved project all establish intent.
+   * Replacing music after Open must preserve the motion the file restored.
    */
   const moveOwnedRef = useRef(false);
   const chooseMove = (m: MoveId) => { moveOwnedRef.current = true; setMove(m); };
@@ -343,6 +341,10 @@ export default function App() {
   // synchronous, so another entrypoint cannot race React's next paint.
   const demoBusyRef = useRef(false);
   const projectReadBusyRef = useRef(0);
+  // A newer Open or source replacement owns the editor, even if an older ZIP
+  // finishes reading later. The counter above only measures outstanding work.
+  const projectOpenEpoch = useRef(0);
+  const [projectPlaybackEpoch, setProjectPlaybackEpoch] = useState(0);
   const imageCountRef = useRef(images.length);
   imageCountRef.current = images.length;
   const [titlePlace, setTitlePlace] = useState<TitlePlace>('bl');
@@ -550,6 +552,7 @@ export default function App() {
   // what it is doing, and the tap cannot be fired twice.
   const [restoring, setRestoring] = useState(false);
   const dirtyRef = useRef(false);
+  const editRevisionRef = useRef(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -1942,6 +1945,7 @@ export default function App() {
   const ingestFiles = (list: File[], intent: IntakeIntent = 'any') => {
       if (!list.length) return;
       if (waitForLyricDemo()) return;
+      projectOpenEpoch.current++;
       // EXACTLY ONE BUCKET EACH — now by construction rather than by three
       // filters that had to stay disjoint by hand.
       const { music, video: videos, picture: pics, rejected } = splitIntake(list, intent);
@@ -1988,7 +1992,34 @@ export default function App() {
    * A probe that never fires leaves a fully working soundtrack with no length
    * on its chip, which is the correct degradation.
    */
+  // Metadata is measured locally on import and after restoring an unprobed
+  // original. The URL guard keeps a late probe off a replacement soundtrack.
+  const probeSoundtrackDuration = (url: string) => {
+      try {
+          const probe = document.createElement('audio');
+          probe.preload = 'metadata';
+          const timeout = window.setTimeout(() => land(0), 15_000);
+          const land = (v: number) => {
+              window.clearTimeout(timeout);
+              probe.onloadedmetadata = null; probe.onerror = null;
+              // RELEASE THE DECODER. A probe left holding a src is a decoder per
+              // adopted track, and picking a different song is a thing people do
+              // ten times in a row. `removeAttribute` + `load()` is the release;
+              // `src = ''` re-resolves against the document URL and fires a
+              // spurious error instead.
+              try { probe.removeAttribute('src'); probe.load(); } catch { /* ignore */ }
+              if (!(v > 0)) return;
+              setSoundtrack((prev) => (prev && prev.url === url ? { ...prev, durationSec: v } : prev));
+          };
+          probe.onloadedmetadata = () => land(Number.isFinite(probe.duration) ? probe.duration : 0);
+          probe.onerror = () => land(0);
+          probe.src = url;
+      } catch { /* the chip simply shows no length */ }
+
+  };
+
   const adoptSoundtrack = (file: File) => {
+      projectOpenEpoch.current++;
       const url = URL.createObjectURL(file);
       beatTrackRef.current = url;
       // Revoked HERE rather than inside the updater: a state updater must be a
@@ -2055,24 +2086,7 @@ export default function App() {
           ? `Music: ${file.name} — add photos and it goes under them.`
           : `Music: ${file.name} — playing${started ? ', and the collage is drifting now' : ''}. Solo any source in Details to hear it on its own.`);
 
-      try {
-          const probe = document.createElement('audio');
-          probe.preload = 'metadata';
-          const land = (v: number) => {
-              probe.onloadedmetadata = null; probe.onerror = null;
-              // RELEASE THE DECODER. A probe left holding a src is a decoder per
-              // adopted track, and picking a different song is a thing people do
-              // ten times in a row. `removeAttribute` + `load()` is the release;
-              // `src = ''` re-resolves against the document URL and fires a
-              // spurious error instead.
-              try { probe.removeAttribute('src'); probe.load(); } catch { /* ignore */ }
-              if (!(v > 0)) return;
-              setSoundtrack((prev) => (prev && prev.url === url ? { ...prev, durationSec: v } : prev));
-          };
-          probe.onloadedmetadata = () => land(Number.isFinite(probe.duration) ? probe.duration : 0);
-          probe.onerror = () => land(0);
-          probe.src = url;
-      } catch { /* the chip simply shows no length */ }
+      probeSoundtrackDuration(url);
 
       void analyseBeat(file, url);
   };
@@ -2136,15 +2150,17 @@ export default function App() {
       } catch {
           /* No grid. The chip says so, and the collage cuts on its own clock. */
       } finally {
-          setBeatBusy(false);
+          if (beatTrackRef.current === url) setBeatBusy(false);
       }
   };
 
   const removeSoundtrack = () => {
+      projectOpenEpoch.current++;
       if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
       beatTrackRef.current = null;
       setSoundtrack(null);
       setBeatGrid(null);
+      setBeatBusy(false);
   };
 
   /**
@@ -2793,10 +2809,13 @@ export default function App() {
   const handleSaveProject = async () => {
     if (waitForLyricDemo()) return;
     setShowExportDialog(false);
+    const revision = editRevisionRef.current;
     try {
-      await saveProject(buildStateForSave(), poolForSave);
-      dirtyRef.current = false;
-      if (clips.length || soundtrack) flashNotice('Composition and lyrics saved. Video and music files stay in this session; export a video to keep the finished take.');
+      await saveProject(buildStateForSave(), poolForSave, soundtrack);
+      if (editRevisionRef.current === revision) dirtyRef.current = clips.length > 0;
+      flashNotice(clips.length
+        ? `Project saved${soundtrack ? ' with its music and mix settings' : ''}. Video clips reopen as still frames.`
+        : soundtrack ? 'Project saved with the original music, trim, level and fade.' : 'Editable project saved.');
     } catch (error) {
       dirtyRef.current = true;
       flashNotice(error instanceof Error ? error.message : 'Could not save the project. Your work is still here.');
@@ -2909,9 +2928,18 @@ export default function App() {
   // inside `handleLoadProject`; the whole class of "the path that forgot it"
   // bugs the comments below guard against is exactly what a second, hand-copied
   // apply path would reintroduce, so Restore reuses THIS one verbatim.
-  const applyLoadedProject = (loaded: { state: AppState; images: ImageAsset[] }) => {
+  const applyLoadedProject = (loaded: LoadedProject) => {
+        // A take may have started while this file was reading. Refuse before
+        // retiring any source or Stage; that take owns its media until it ends.
+        if (recorderRef.current?.isRecording || ingestRef.current.total > 0) {
+          throw new Error('Let the current import or take finish before opening a project.');
+        }
         // Validate before changing any live state, including crash-recovery records.
+        assertProjectState(loaded.state);
         const restoredCaptions = normalizeCaptionTrack(loaded.state.captions);
+        const restoredImages = poolWithoutFrames(loaded.images);
+        const restoredLocks = new Map(normalizeProjectLocks(loaded.state.locks, loaded.images));
+        const restoredFrames = framesFromPool(loaded.images);
         setCaptions(restoredCaptions);
         setOpenError(null);
         // `??`, NOT `||`, on every number here. `||` treats a legal ZERO as
@@ -2931,8 +2959,9 @@ export default function App() {
         // is a default and the pool it lands next to is a better one.
         const ld = loaded.state.layout;
         const ldOwned = ld.countOwned ?? true;
+        moveOwnedRef.current = true; // Opening authored motion is itself a choice.
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(poolWithoutFrames(loaded.images)); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(restoredImages); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -2956,10 +2985,25 @@ export default function App() {
           // `loaded.images` (the pool as it arrived), while `setImages` above was
           // handed the same pool with the frames taken OFF, so the app runs with
           // one source of truth and the writers put it back.
-          setClips([]); setStageOk(true); removeSoundtrack();
-          setLockedCells(new Map(normalizeProjectLocks(loaded.state.locks, loaded.images)));
+          setClips([]); setStageOk(true);
+          // Restore authored audio directly. Importing is a separate gesture
+          // that chooses defaults and starts sound; Open must do neither.
+          if (beatTrackRef.current) URL.revokeObjectURL(beatTrackRef.current);
+          const restoredTrack = loaded.soundtrack ?? null;
+          beatTrackRef.current = restoredTrack?.url ?? null;
+          setSoundtrack(restoredTrack); setBeatGrid(null); setBeatBusy(false);
+          setSoundArrival(0);
+          setProjectPlaybackEpoch(n => n + 1); // retire monitor, solo and audition
+          if (restoredTrack) {
+            const { url, name } = restoredTrack;
+            if (!(restoredTrack.durationSec > 0)) probeSoundtrackDuration(url);
+            void fetch(url).then(r => r.blob()).then(blob => {
+              if (beatTrackRef.current === url) void analyseBeat(new File([blob], name, { type: blob.type }), url);
+            }).catch(() => { /* The original still plays if beat analysis fails. */ });
+          }
+          setLockedCells(restoredLocks);
           setAssignNonce(n => n + 1);
-          setFrames(framesFromPool(loaded.images)); setLastRecipe(undefined);
+          setFrames(restoredFrames); setLastRecipe(undefined);
           // RETIRE THE LATCH WITH THE LOAD THAT ARMED IT. Nothing else bumps
           // `dropId` here, so the latch stayed live past the Open and the NEXT
           // import paid for it: its final effect pass took the `drop !== dropId`
@@ -2975,26 +3019,43 @@ export default function App() {
 
   const handleLoadProject = () => {
     if (waitForLyricDemo()) return;
+    if (ingestRef.current.total > 0 || recorderRef.current?.isRecording) {
+      flashNotice('Let the current import or take finish before opening a project.'); return;
+    }
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         if (waitForLyricDemo()) return;
+        if (ingestRef.current.total > 0 || recorderRef.current?.isRecording) { flashNotice('Let the current import or take finish before opening a project.'); return; }
+        const epoch = ++projectOpenEpoch.current;
         projectReadBusyRef.current++;
+        let candidate: LoadedProject | null = null;
         try {
         const loaded = await loadProject(file);
+        candidate = loaded;
+        if (epoch !== projectOpenEpoch.current) return;
         // A refused file used to do NOTHING — no picture, no message, no way to
         // tell a rejected file from a slow one. `loadProject` fails closed by
         // design (see loadFromSVG), so the refusal has to be visible, and it
         // belongs on the button that was pressed.
         if(!loaded) {
           setOpenError("COULDN'T OPEN THAT FILE");
-          flashNotice("COULDN'T OPEN THAT FILE — it must be a .collage archive, or an SVG exported by this app. SVGs exported before 2026-08-08 carry no image identity and cannot be reopened.");
-          setTimeout(() => setOpenError(null), 6000);
+          flashNotice("Couldn't open that project. Its settings or original media may be missing or invalid. Use a .collage archive or an SVG saved by this app; your current work is unchanged.");
+          setTimeout(() => { if (epoch === projectOpenEpoch.current) setOpenError(null); }, 6000);
           return;
         }
-        try { applyLoadedProject(loaded); }
-        catch { setOpenError("COULDN'T OPEN THAT FILE"); flashNotice('The caption track is invalid. Your current work is unchanged.'); }
-        } finally { projectReadBusyRef.current--; }
+        applyLoadedProject(loaded);
+        candidate = null; // now owned by the editor
+        flashNotice(loaded.soundtrack ? 'Project opened with its music and mix settings. Preview sound is off.' : 'Project opened.');
+        } catch (error) {
+          if (epoch === projectOpenEpoch.current) {
+            setOpenError("COULDN'T OPEN THAT FILE");
+            flashNotice(`${error instanceof Error ? error.message : 'The project is invalid.'} Your current work is unchanged.`);
+          }
+        } finally {
+          if (candidate) releaseLoadedProject(candidate);
+          projectReadBusyRef.current--;
+        }
     };
     input.click();
   };
@@ -3029,11 +3090,17 @@ export default function App() {
   const handleRestoreSession = async () => {
     if (waitForLyricDemo()) return;
     if (restoring) return;
+    if (ingestRef.current.total > 0 || recorderRef.current?.isRecording) {
+      flashNotice('Let the current import or take finish before restoring a project.'); return;
+    }
+    const epoch = ++projectOpenEpoch.current;
     projectReadBusyRef.current++;
     setRestoring(true);
     const minted: string[] = [];
+    let candidate: LoadedProject | null = null;
     try {
       const s = await sessionStore.loadSession();
+      if (epoch !== projectOpenEpoch.current) return;
       if (!s) { await abandonSession('That session could not be read — starting fresh.'); return; }
       // THE READ BROKE, THE SESSION DID NOT. Keep it: the same memory pressure
       // that caused the crash is what makes pulling a whole pool back out fail,
@@ -3049,8 +3116,11 @@ export default function App() {
         // `loadProject` reads `file.name`; a bare Blob has none, so wrap it. The
         // name must not end in `.svg`, or it takes the SVG branch and fails.
         const loaded = await loadProject(new File([s.blob], 'session.collage', { type: 'application/zip' }));
+        candidate = loaded;
+        if (epoch !== projectOpenEpoch.current) return;
         if (!loaded) { await abandonSession('That session could not be restored.'); return; }
         applyLoadedProject(loaded);
+        candidate = null;
       } else {
         const entries = preflightSessionAssets(s.manifest.images);
         if (!entries) throw new Error('Invalid art in the saved session.');
@@ -3084,9 +3154,12 @@ export default function App() {
       // below), so success needs no explicit dismissal — only failure does.
       flashNotice('Restored your last session.');
     } catch {
-      setRestorePrompt(null);
-      flashNotice('That saved session could not be restored. It is still saved; your current work is unchanged.');
+      if (epoch === projectOpenEpoch.current) {
+        setRestorePrompt(null);
+        flashNotice('That saved session could not be restored. It is still saved; your current work is unchanged.');
+      }
     } finally {
+      if (candidate) releaseLoadedProject(candidate);
       for (const u of minted) { try { URL.revokeObjectURL(u); } catch { /* already gone */ } }
       projectReadBusyRef.current--;
       setRestoring(false);
@@ -3115,6 +3188,7 @@ export default function App() {
   // a dep, so each run re-schedules with the latest state; the timer replaces the
   // previous one, which is the debounce.
   useEffect(() => {
+    editRevisionRef.current++;
     const exporting = exportStatus === 'processing' || !!recorderRef.current?.isRecording;
     if (!canAutosave({ imageCount: images.length, isExporting: exporting, isRestoring: !!restorePrompt || restoring })) return;
     dirtyRef.current = true; // there is now work that isn't on disk
@@ -3282,6 +3356,7 @@ export default function App() {
                      // be recorded. The lock overlay below is unchanged because
                      // the Stage paints into the identical coordinate system.
                      <VideoStage
+                       key={projectPlaybackEpoch}
                        layoutItems={layoutItems}
                        orderedAssets={orderedAssets}
                        clips={clips}

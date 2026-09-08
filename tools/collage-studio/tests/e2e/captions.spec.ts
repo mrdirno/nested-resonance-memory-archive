@@ -144,7 +144,9 @@ test('lyrics survive project, SVG, subtitle and crash-recovery round trips', asy
 test('a recorded MP4 contains timed lyrics and the imported soundtrack', async ({ page }, info) => {
   await boot(page); await importCues(page);
   await page.locator('input[data-intake="music"]').setInputFiles(path.resolve('tests/fixtures/music_1500.m4a'));
-  await page.getByRole('button', { name: 'Details', exact: true }).click();
+  // Music arrival opens Details since C3719; an unconditional toggle closes it.
+  const details = page.getByRole('button', { name: 'Details', exact: true });
+  if (await details.getAttribute('aria-expanded') !== 'true') await details.click();
   await expect(page.getByRole('button', { name: /Remove the music/ })).toBeVisible({ timeout: 60000 });
   await page.getByRole('button', { name: '5s', exact: true }).click();
   await page.getByRole('button', { name: 'Record video', exact: true }).click();

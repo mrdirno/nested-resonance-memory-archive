@@ -250,6 +250,16 @@
       "wished_date": "2026-09-07",
       "shipped_date": "2026-09-07",
       "shipped_commit": "413f110f"
+    },
+    {
+      "tool_name": "Collage Studio — Solo: hear one source alone to decide what to keep, and music that starts playing the moment you add it",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-09-07",
+      "shipped_date": "2026-09-07",
+      "shipped_commit": "6702d390"
     }
   ]
 }

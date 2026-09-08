@@ -21,6 +21,28 @@ import { defineConfig, devices } from '@playwright/test';
  */
 const MUTED = ['--mute-audio'];
 
+/**
+ * SERIAL REMOTE CHECKS KEEP THE VERIFICATION LOAD BOUNDED.
+ *
+ * Observations — 2026-09-07 (C3720): the owner reported 4 failed / 6 passed
+ * when `tests/e2e/solo.spec.ts` ran against Pages with the default parallelism;
+ * the failures waited for video elements. The same owner reported that a
+ * single-browser manual intake decoded the clip in about two seconds.
+ * Retained `biudjcirz.output` records the ten Chromium + Mobile Chrome cases
+ * passing with one worker in 19.7s (exit 0). The owner identifies this as the
+ * production rerun; that output does not itself print the target URL.
+ *
+ * Decoder/resource pressure is a hypothesis, not an established cause of the
+ * parallel failures: these observations do not isolate network, scheduling or
+ * decoder admission. Preserve the failed run as evidence. Serial success is
+ * bounded functional coverage, not a concurrent-load guarantee.
+ *
+ * A remote base URL therefore pins workers to 1 and starts no local dev server.
+ * This avoids unnecessary local load and attaching the webServer block to
+ * whatever holds :5199 when the tests are aimed at an external deployment.
+ */
+const REMOTE = /^https?:\/\/(?!localhost|127\.0\.0\.1)/i.test(process.env.COLLAGE_BASE_URL || '');
+
 export default defineConfig({
   // FAILS THE RUN if the URL is not this app. `reuseExistingServer` below
   // attaches to whatever is already listening, so without this a squatter on
@@ -31,7 +53,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI || REMOTE ? 1 : undefined,
   reporter: 'html',
   use: {
     // :5199, NOT :5173. Vite's default port belongs to another project on this
@@ -82,7 +104,7 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-  webServer: {
+  webServer: REMOTE ? undefined : {
     // `--strictPort` so a busy 5199 FAILS the run instead of quietly sliding to
     // the next free port while `url` waits on one nothing will ever serve.
     command: 'npx vite --port 5199 --strictPort',

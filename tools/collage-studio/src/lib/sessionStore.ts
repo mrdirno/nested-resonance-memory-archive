@@ -31,7 +31,7 @@
 // offered. The app behaves identically with the store absent.
 //
 // The session persists images + all layout/style/title settings. It does NOT
-// carry live video clips or the soundtrack (neither does a manual save), so a
+// carry live video clips or the soundtrack (manual .collage saves can carry music), so a
 // restored video project comes back as its extracted stills plus every setting —
 // the 90% of "what I was doing" that used to vanish whole.
 //

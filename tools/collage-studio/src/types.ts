@@ -7,6 +7,7 @@ import type { MoveId } from './lib/motion';
 import type { TurnId } from './lib/turn';
 import type { PaceId } from './lib/pace';
 import type { SyncId } from './lib/beat';
+import type { ProjectSoundtrack } from './lib/projectSoundtrack';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -209,6 +210,8 @@ export interface AppState {
 }
 
 export interface ProjectManifest extends AppState {
+  /** Manual .collage only. Absent in legacy files, SVGs and crash-recovery state. */
+  soundtrack?: ProjectSoundtrack;
   images: {
     id: string;
     storageFilename: string;
