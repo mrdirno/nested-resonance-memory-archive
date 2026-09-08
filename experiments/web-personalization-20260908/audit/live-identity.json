@@ -1,0 +1,29 @@
+{
+  "schema": "wish-live-html-identity/v1",
+  "observed_at": "2026-09-08T13:04:22.522258+00:00",
+  "scope": "Two HTML response bodies only; dependency assets and other pages were not byte-matched.",
+  "results": [
+    {
+      "source_path": "collage-beta/index.html",
+      "requested_url": "https://mrdirno.github.io/nested-resonance-memory-archive/collage-beta/",
+      "response_url": "https://mrdirno.github.io/nested-resonance-memory-archive/collage-beta/",
+      "http_status": 200,
+      "source_sha256": "a0013f03fafe1b37e0a25b3b7fbd38844487f36ebb5f8f98378556ff9e684a37",
+      "response_sha256": "a0013f03fafe1b37e0a25b3b7fbd38844487f36ebb5f8f98378556ff9e684a37",
+      "source_bytes": 1030,
+      "response_bytes": 1030,
+      "byte_identical": true
+    },
+    {
+      "source_path": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V045-amethyst-interference.html",
+      "requested_url": "https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V045-amethyst-interference.html",
+      "response_url": "https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V045-amethyst-interference.html",
+      "http_status": 200,
+      "source_sha256": "3b772c47067965e4e61627c58496a5a1c952527cd88c5b3acc5ed6e2400b96b6",
+      "response_sha256": "3b772c47067965e4e61627c58496a5a1c952527cd88c5b3acc5ed6e2400b96b6",
+      "source_bytes": 27983,
+      "response_bytes": 27983,
+      "byte_identical": true
+    }
+  ]
+}

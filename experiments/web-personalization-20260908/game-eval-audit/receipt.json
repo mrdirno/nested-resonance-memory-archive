@@ -1,0 +1,114 @@
+{
+  "schema": "game-eval-falsifier/v1",
+  "measured_at": "2026-09-08T13:07:57.954Z",
+  "status": "falsifier_reproduced",
+  "runtime": {
+    "node": "v24.4.1",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "evaluator": {
+    "path": "/Volumes/dual/persona500/public/games/_shared/cycle_eval.mjs",
+    "source_sha256": "420c9d42b8faeade0058fb78e624059775def115edab6ac5ec1032bfe8fc14c5",
+    "function_sha256": "388a72b35fa739ad7a02088c44807f0f5fa2f99c18f9e0a76433f85185b805be",
+    "extraction": "Exact function between fingerprintFromText and main; pinned inspected bytes; no module import or main execution"
+  },
+  "fixture": {
+    "before_input": "const state = { score: 0 };\nfunction press() { state.score += 1; return state.score; }\n",
+    "appended_input": "\n// Audit control: this comment changes no game instruction.\n\n",
+    "after_input": "const state = { score: 0 };\nfunction press() { state.score += 1; return state.score; }\n\n// Audit control: this comment changes no game instruction.\n\n",
+    "before_sha256": "2fdc164fee2d4de27ae76a90e93c696f633b11fcefcc266220327c311cf0bdb7",
+    "after_sha256": "dc16edaa8620899c33183f36a95f1b686735bce140db3581dab37d3ad327f07b",
+    "before": {
+      "loc": 3,
+      "biggestArrayName": null,
+      "biggestArrayLen": 0,
+      "renderBranches": 0,
+      "inputHandlers": 0,
+      "stateFields": 0,
+      "setTimeouts": 0,
+      "fingerprint": "b33f52245ef6e4f5"
+    },
+    "after": {
+      "loc": 6,
+      "biggestArrayName": null,
+      "biggestArrayLen": 0,
+      "renderBranches": 0,
+      "inputHandlers": 0,
+      "stateFields": 0,
+      "setTimeouts": 0,
+      "fingerprint": "014b5f2492fe8290"
+    },
+    "executed_press_trace_before": [
+      1,
+      2,
+      3
+    ],
+    "executed_press_trace_after": [
+      1,
+      2,
+      3
+    ]
+  },
+  "real_game": {
+    "repo": "/Volumes/dual/persona500",
+    "head": "1bb38f1febfccc4868a9fcc35db3d2d145e36a09",
+    "path": "public/games/pulse-desk/game.js",
+    "head_blob": "e0e3ca47d39a18080b4e3242926bc33515cf18d4",
+    "head_source_sha256": "71279c90ba8fb676be02538f4b72243f49b17ce0951051e25bfc6361ad5f52d9",
+    "working_source_sha256": "71279c90ba8fb676be02538f4b72243f49b17ce0951051e25bfc6361ad5f52d9",
+    "working_matches_head": true,
+    "byte_length_before": 18274,
+    "exact_after_input": "Working source with recorded SHA-256 plus appended_input, UTF-8; no other change",
+    "appended_input": "\n// Audit control: this comment changes no game instruction.\n\n",
+    "after_sha256": "e21e26acbb26684f46c596615b73cbc578e53a57d3731da447a425e3c265a0a3",
+    "before": {
+      "loc": 505,
+      "biggestArrayName": "LANE_KEYS",
+      "biggestArrayLen": 1344,
+      "renderBranches": 20,
+      "inputHandlers": 4,
+      "stateFields": 39,
+      "setTimeouts": 2,
+      "fingerprint": "db299571da96c200"
+    },
+    "after": {
+      "loc": 508,
+      "biggestArrayName": "LANE_KEYS",
+      "biggestArrayLen": 1344,
+      "renderBranches": 20,
+      "inputHandlers": 4,
+      "stateFields": 39,
+      "setTimeouts": 2,
+      "fingerprint": "98e2b7b6c9403c0a"
+    },
+    "full_source_preserved": false,
+    "source_note": "Reopen recorded Git blob/working source locally; proprietary source is not copied to the research archive"
+  },
+  "history_lookup": {
+    "valid": {
+      "args": [
+        "show",
+        "1bb38f1febfccc4868a9fcc35db3d2d145e36a09:public/games/pulse-desk/game.js"
+      ],
+      "status": 0,
+      "stdout_sha256": "71279c90ba8fb676be02538f4b72243f49b17ce0951051e25bfc6361ad5f52d9"
+    },
+    "legacy": {
+      "args": [
+        "show",
+        "1bb38f1febfccc4868a9fcc35db3d2d145e36a09:games/pulse-desk/game.js"
+      ],
+      "status": 128,
+      "stderr": "fatal: path 'games/pulse-desk/game.js' does not exist in '1bb38f1febfccc4868a9fcc35db3d2d145e36a09'"
+    },
+    "implication": "The legacy priorFingerprint converts a failed root games/ lookup into no prior, which main labels NEW"
+  },
+  "limits": [
+    "Falsifies fingerprint difference as evidence of gameplay or product improvement; does not establish game health, usability, or enjoyment.",
+    "The fixture is an explicit constructed negative control. Only its three-call trace is executed; the real game source is fingerprinted without running it.",
+    "Comments are appended only in memory. The application checkout, history, and index are not mutated.",
+    "Checks one inspected evaluator version and one real tracked game, with the exact source and function hashes recorded.",
+    "No browser, deployment, model, external network, account, or scientific-engine validation is implied."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "author": "Aldrin Payopay",
+  "license": "GPL-3.0-only",
+  "capturedAt": "2026-09-08T13:10:29.972Z",
+  "scope": "Supplementary top-of-page visual screenshots, separate from browser.test.mjs acceptance run.",
+  "captures": [
+    {
+      "name": "visual-top-light-320.png",
+      "width": 320,
+      "mode": "light"
+    },
+    {
+      "name": "visual-top-dark-390.png",
+      "width": 390,
+      "mode": "dark"
+    },
+    {
+      "name": "visual-top-light-1280.png",
+      "width": 1280,
+      "mode": "light"
+    }
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "sourceSHA256": {
+    "index.html": "a117822454761576a5efcde28003931b4f239ae6d7ef966067c1cff8b8b2b35c",
+    "app.mjs": "0527e6e519c54caca5cd024fcca867bac759c556a5dc7eac8d69609ed0ef7e60",
+    "style.css": "0c92d7cddfa8438d345eed38c6aafc94b3f750b198896b71476e8c074752171a",
+    "engine.mjs": "5debd999b9d3c605ae6fab1b0f751aa7278aec0e53f71b4635b00e6ad1820362"
+  }
+}

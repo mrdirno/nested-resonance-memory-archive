@@ -1,0 +1,29 @@
+{
+  "schema": "game-eval-error-controls/v1",
+  "measured_at": "2026-09-08T13:09:00.666Z",
+  "status": "passed",
+  "successful_receipt_unchanged": true,
+  "cases": [
+    {
+      "name": "missing_evaluator",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "{\"status\":\"audit_error\",\"error\":\"ENOENT: no such file or directory, realpath '/Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/game-eval-audit/.error-controls-VAZFmu/missing.mjs'\"}",
+      "passed": true
+    },
+    {
+      "name": "unknown_extraction",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "{\"status\":\"audit_error\",\"error\":\"Expected exactly one known fingerprintFromText function; extraction unknown\"}",
+      "passed": true
+    },
+    {
+      "name": "changed_extracted_function",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "{\"status\":\"audit_error\",\"error\":\"Extracted function changed; inspect and explicitly repin before running\"}",
+      "passed": true
+    }
+  ]
+}

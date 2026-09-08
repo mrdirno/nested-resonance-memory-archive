@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- Author: Aldrin Payopay · GPL-3.0-only -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="A local exploration of repeatable, personal web pages.">
+  <title>A page of your own — Personalization study</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 36V18M20 24L7 9M20 18L32 4' fill='none' stroke='%23317897' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the page</a>
+  <header class="site-header">
+    <a class="brand" href="?view=explore" aria-label="Personalization study home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 36V18M20 24L7 9M20 18L32 4"/></svg><span>Page study</span></a>
+    <button id="wish-open" class="wish-button">Wish it better <span aria-hidden="true">✧</span></button>
+  </header>
+  <p class="study-note">Working local preview. Your choices stay in this browser. Account sync and AI are future integrations.</p>
+  <div class="layout">
+    <aside class="preferences" aria-labelledby="preferences-title">
+      <h2 id="preferences-title">Make yourself at home.</h2>
+      <p>A few choices become a page you can come back to.</p>
+      <form id="preferences-form">
+        <label for="palette">Which colors feel like you?</label>
+        <select id="palette" name="palette"><option value="tide">Tide</option><option value="orchard">Orchard</option><option value="mineral">Mineral</option></select>
+        <label for="density">How much room?</label>
+        <select id="density" name="density"><option value="comfortable">Spacious</option><option value="compact">Compact</option></select>
+        <label for="typeScale">Reading size</label>
+        <select id="typeScale" name="typeScale"><option value="standard">Standard</option><option value="large">Larger</option></select>
+        <label for="motif">What should grow here?</label>
+        <select id="motif" name="motif"><option value="branch">Branches</option><option value="orbit">Orbits</option><option value="quiet">Quiet</option></select>
+        <label for="mode">Light & dark</label>
+        <select id="mode" name="mode"><option value="time">Local time</option><option value="system">Device theme</option><option value="light">Always light</option><option value="dark">Always dark</option></select>
+        <p id="theme-explanation" class="detail"></p>
+      </form>
+      <p id="save-status" role="status" class="save-status"></p>
+      <div class="row"><button id="undo" disabled>Undo change</button><button id="reset">Reset choices</button></div>
+      <details class="recipe-details">
+        <summary>Your page recipe</summary>
+        <p>The same recipe produces the same pattern. Keep a copy or try it in another browser.</p>
+        <label for="seed">Pattern number</label>
+        <form id="seed-form" class="seed-row"><input id="seed" type="text" inputmode="numeric" pattern="[0-9]{1,10}" aria-describedby="seed-hint" required><button>Apply</button></form>
+        <p id="seed-hint" class="detail">A whole number from 0 to 4,294,967,295.</p>
+        <div class="row"><button id="export">Save recipe</button><button id="import-open">Open recipe</button></div>
+        <input id="import-file" type="file" accept=".json,application/json" hidden>
+        <pre id="recipe-json" tabindex="0" aria-label="Current recipe"></pre>
+      </details>
+    </aside>
+    <main id="main" class="page-preview">
+      <nav class="view-nav" aria-label="Preview pages"><a href="?view=explore" data-view="explore">Explore</a><a href="?view=desk" data-view="desk">Writing desk</a><span id="time-badge"></span></nav>
+      <section id="explore-view">
+        <div class="hero">
+          <div class="hero-copy"><h1>A page of<br>your own.</h1><p>Let a small set of choices shape the space around your work.</p><button id="another">Grow another pattern</button></div>
+          <svg id="art" viewBox="0 0 100 100" role="img" aria-label="An original branching pattern generated from your page recipe"><g id="art-shapes"></g></svg>
+        </div>
+        <div class="art-caption"><span id="pattern-caption"></span><span>Original procedural study</span></div>
+        <section class="next-section" aria-labelledby="familiar-title"><h2 id="familiar-title">Familiar tools. A space that fits.</h2><p>Colors, spacing and artwork can change around a tool while its controls and results stay dependable.</p>
+          <a class="destination" href="https://persona500.com/bifurcata" target="_blank" rel="noopener noreferrer"><span><strong>Explore Bifurcata</strong><small>Visit the existing generative world in a new tab.</small></span><span aria-hidden="true">↗</span></a>
+          <a class="destination" href="https://mrdirno.github.io/nested-resonance-memory-archive/collage/" target="_blank" rel="noopener noreferrer"><span><strong>Open Collage Studio</strong><small>Work with images, lyrics and sound in a new tab.</small></span><span aria-hidden="true">↗</span></a>
+          <p class="detail">These existing sites keep their current appearance. This preview does not change them or embed Bifurcata’s engine.</p>
+        </section>
+      </section>
+      <section id="desk-view" hidden class="desk">
+        <h1>Room for a thought.</h1><p>Your page choices follow you here. This little writing desk works locally, too.</p>
+        <label for="writing">What are you working on?</label><textarea id="writing" rows="10" maxlength="20000" placeholder="Start anywhere…"></textarea>
+        <div class="desk-foot"><span id="word-count" aria-live="polite">0 words</span><span id="desk-status" role="status"></span></div>
+        <button id="download-writing">Save a text file</button>
+      </section>
+      <footer><p>You can change these choices any time. They describe how this page looks, not who you are.</p><a href="DESIGN.md">Read the implementation proposal</a></footer>
+    </main>
+  </div>
+  <dialog id="wish-dialog" aria-labelledby="wish-title">
+    <div class="dialog-heading"><h2 id="wish-title">Wish it better</h2><button id="wish-close" aria-label="Close wish">×</button></div>
+    <p>This preview saves your wish on this device. It does not send it to the team.</p>
+    <label for="wish-text">What would make this page more useful?</label><textarea id="wish-text" rows="6" maxlength="2000"></textarea>
+    <p class="detail">Your draft survives closing this window, changing pages and reloading.</p>
+    <p id="wish-status" role="status"></p>
+    <button id="wish-download">Save wish as a file</button>
+  </dialog>
+</body>
+</html>

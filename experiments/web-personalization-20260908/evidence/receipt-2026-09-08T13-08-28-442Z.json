@@ -1,0 +1,1244 @@
+{
+  "schema": "page-study-browser-evidence/v1",
+  "author": "Aldrin Payopay",
+  "license": "GPL-3.0-only",
+  "runId": "2026-09-08T13-08-28-442Z",
+  "startedAt": "2026-09-08T13:08:28.442Z",
+  "finishedAt": "2026-09-08T13:08:37.781Z",
+  "url": "http://127.0.0.1:8768",
+  "browser": "145.0.7632.6",
+  "playwright": "1.58.2",
+  "environment": {
+    "timezone": "America/Los_Angeles",
+    "headless": true,
+    "reducedMotion": true
+  },
+  "scope": "Local preview only. Does not establish production deployment, account sync, AI service integration, or customer adoption.",
+  "injections": [
+    "Playwright clock for exact boundaries",
+    "Storage getItem/setItem exceptions in an isolated context",
+    "Invalid local recipe input"
+  ],
+  "passed": 10,
+  "failed": 1,
+  "sourceSHA256": {
+    "index.html": "a117822454761576a5efcde28003931b4f239ae6d7ef966067c1cff8b8b2b35c",
+    "app.mjs": "0527e6e519c54caca5cd024fcca867bac759c556a5dc7eac8d69609ed0ef7e60",
+    "style.css": "5b985120ca9b29959c0becaf024e3fc800457e4e8104006c855a5fd0bb23b0ab",
+    "engine.mjs": "5debd999b9d3c605ae6fab1b0f751aa7278aec0e53f71b4635b00e6ad1820362",
+    "browser.test.mjs": "f9e17d19fa9c1c34f34022aac3ad26ee3e88ba6526eb5699336e3801a6681045"
+  },
+  "externalRequests": [],
+  "pageErrors": [],
+  "screenshots": [
+    "2026-09-08T13-08-28-442Z-wish-320.png",
+    "2026-09-08T13-08-28-442Z-writing-320.png",
+    "2026-09-08T13-08-28-442Z-explore-light-320.png",
+    "2026-09-08T13-08-28-442Z-explore-dark-320.png",
+    "2026-09-08T13-08-28-442Z-wish-390.png",
+    "2026-09-08T13-08-28-442Z-writing-390.png",
+    "2026-09-08T13-08-28-442Z-explore-light-390.png",
+    "2026-09-08T13-08-28-442Z-explore-dark-390.png",
+    "2026-09-08T13-08-28-442Z-wish-1280.png",
+    "2026-09-08T13-08-28-442Z-writing-1280.png",
+    "2026-09-08T13-08-28-442Z-explore-light-1280.png",
+    "2026-09-08T13-08-28-442Z-explore-dark-1280.png",
+    "2026-09-08T13-08-28-442Z-storage-unavailable.png"
+  ],
+  "tests": [
+    {
+      "name": "explicit choices change recipe and art; recipe and SVG persist through pages and reload",
+      "status": "passed",
+      "durationMs": 743
+    },
+    {
+      "name": "explicit and system appearance obey choice while preserving seed and geometry",
+      "status": "passed",
+      "durationMs": 702
+    },
+    {
+      "name": "time appearance transitions at 07:00 and 19:00 without reloading",
+      "status": "passed",
+      "durationMs": 1164
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 320px",
+      "status": "passed",
+      "durationMs": 1242
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 390px",
+      "status": "passed",
+      "durationMs": 1240
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 1280px",
+      "status": "passed",
+      "durationMs": 1266
+    },
+    {
+      "name": "computed ordinary text and Wish contrast reach 4.5; input boundaries reach 3",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against paper',\n+     palette: 'tide',\n+     ratio: 1.586\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against fill',\n+     palette: 'tide',\n+     ratio: 1.708\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against paper',\n+     palette: 'tide',\n+     ratio: 2.706\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against fill',\n+     palette: 'tide',\n+     ratio: 2.263\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against paper',\n+     palette: 'orchard',\n+     ratio: 1.534\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against fill',\n+     palette: 'orchard',\n+     ratio: 1.655\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against paper',\n+     palette: 'orchard',\n+     ratio: 2.78\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against fill',\n+     palette: 'orchard',\n+     ratio: 2.248\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against paper',\n+     palette: 'mineral',\n+     ratio: 1.537\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'light',\n+     name: 'field boundary against fill',\n+     palette: 'mineral',\n+     ratio: 1.677\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against paper',\n+     palette: 'mineral',\n+     ratio: 2.745\n+   },\n+   {\n+     minimum: 3,\n+     mode: 'dark',\n+     name: 'field boundary against fill',\n+     palette: 'mineral',\n+     ratio: 2.249\n+   }\n+ ]\n- []\n\n    at file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:294:10\n    at check (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:78:11)\n    at file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:291:7",
+      "durationMs": 1
+    },
+    {
+      "name": "malformed and unknown imports leave recipe intact; exported recipe contains JSON only",
+      "status": "passed",
+      "durationMs": 669
+    },
+    {
+      "name": "storage failures preserve working controls and never claim a successful save",
+      "status": "passed",
+      "durationMs": 675
+    },
+    {
+      "name": "cross-tab changes update existing tabs and reject unsupported recipes",
+      "status": "passed",
+      "durationMs": 1140
+    },
+    {
+      "name": "no unexpected external network or uncaught browser errors occurred",
+      "status": "passed",
+      "durationMs": 0
+    }
+  ],
+  "geometry": [
+    {
+      "label": "320-tide-light-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-light-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-light-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-dark-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-dark-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-dark-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-light-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-light-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-light-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-dark-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-dark-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-orchard-dark-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-light-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-light-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-light-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-dark-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-dark-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-mineral-dark-scrolled",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-light-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-light-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-light-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-dark-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-dark-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-dark-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-light-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-light-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-light-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-dark-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-dark-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-orchard-dark-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-light-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-light-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-light-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-dark-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-dark-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-mineral-dark-scrolled",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-light-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-light-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-light-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-dark-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-dark-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-dark-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-light-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-light-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-light-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-dark-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-dark-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-orchard-dark-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-light-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-light-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-light-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-dark-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-dark-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-mineral-dark-scrolled",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    }
+  ],
+  "contrasts": [
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "body text",
+      "foreground": "rgb(24, 52, 62)",
+      "background": "rgb(237, 243, 246)",
+      "minimum": 4.5,
+      "ratio": 11.722910609075184
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "secondary text on paper",
+      "foreground": "rgb(70, 95, 107)",
+      "background": "rgb(237, 243, 246)",
+      "minimum": 4.5,
+      "ratio": 6.0303095695168825
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "hero text",
+      "foreground": "rgb(24, 52, 62)",
+      "background": "rgb(214, 230, 238)",
+      "minimum": 4.5,
+      "ratio": 10.260451023546173
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "Wish text",
+      "foreground": "rgb(248, 251, 252)",
+      "background": "rgb(24, 52, 62)",
+      "minimum": 4.5,
+      "ratio": 12.62558474865303
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "dialog text",
+      "foreground": "rgb(24, 52, 62)",
+      "background": "rgb(248, 251, 252)",
+      "minimum": 4.5,
+      "ratio": 12.62558474865303
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "dialog secondary text",
+      "foreground": "rgb(70, 95, 107)",
+      "background": "rgb(248, 251, 252)",
+      "minimum": 4.5,
+      "ratio": 6.494648562073708
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "writing text",
+      "foreground": "rgb(24, 52, 62)",
+      "background": "rgb(248, 251, 252)",
+      "minimum": 4.5,
+      "ratio": 12.62558474865303
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "field boundary against paper",
+      "foreground": "rgb(176, 198, 207)",
+      "background": "rgb(237, 243, 246)",
+      "minimum": 3,
+      "ratio": 1.5858313395824872
+    },
+    {
+      "palette": "tide",
+      "mode": "light",
+      "name": "field boundary against fill",
+      "foreground": "rgb(176, 198, 207)",
+      "background": "rgb(248, 251, 252)",
+      "minimum": 3,
+      "ratio": 1.7079417085607365
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "body text",
+      "foreground": "rgb(227, 238, 243)",
+      "background": "rgb(16, 31, 44)",
+      "minimum": 4.5,
+      "ratio": 14.182285837812675
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "secondary text on paper",
+      "foreground": "rgb(180, 202, 214)",
+      "background": "rgb(16, 31, 44)",
+      "minimum": 4.5,
+      "ratio": 9.853249867840313
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "hero text",
+      "foreground": "rgb(227, 238, 243)",
+      "background": "rgb(35, 63, 81)",
+      "minimum": 4.5,
+      "ratio": 9.356943374673866
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "Wish text",
+      "foreground": "rgb(16, 31, 44)",
+      "background": "rgb(154, 218, 243)",
+      "minimum": 4.5,
+      "ratio": 10.919021441201988
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "dialog text",
+      "foreground": "rgb(227, 238, 243)",
+      "background": "rgb(25, 46, 61)",
+      "minimum": 4.5,
+      "ratio": 11.863957180241561
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "dialog secondary text",
+      "foreground": "rgb(180, 202, 214)",
+      "background": "rgb(25, 46, 61)",
+      "minimum": 4.5,
+      "ratio": 8.242573577709493
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "writing text",
+      "foreground": "rgb(227, 238, 243)",
+      "background": "rgb(25, 46, 61)",
+      "minimum": 4.5,
+      "ratio": 11.863957180241561
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "field boundary against paper",
+      "foreground": "rgb(72, 101, 117)",
+      "background": "rgb(16, 31, 44)",
+      "minimum": 3,
+      "ratio": 2.7055936899769204
+    },
+    {
+      "palette": "tide",
+      "mode": "dark",
+      "name": "field boundary against fill",
+      "foreground": "rgb(72, 101, 117)",
+      "background": "rgb(25, 46, 61)",
+      "minimum": 3,
+      "ratio": 2.2633197533951663
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "body text",
+      "foreground": "rgb(34, 61, 51)",
+      "background": "rgb(237, 243, 238)",
+      "minimum": 4.5,
+      "ratio": 10.461265160663931
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "secondary text on paper",
+      "foreground": "rgb(72, 97, 81)",
+      "background": "rgb(237, 243, 238)",
+      "minimum": 4.5,
+      "ratio": 6.009769478046723
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "hero text",
+      "foreground": "rgb(34, 61, 51)",
+      "background": "rgb(214, 231, 216)",
+      "minimum": 4.5,
+      "ratio": 9.12971065396514
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "Wish text",
+      "foreground": "rgb(248, 251, 247)",
+      "background": "rgb(48, 101, 69)",
+      "minimum": 4.5,
+      "ratio": 6.551482699070697
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "dialog text",
+      "foreground": "rgb(34, 61, 51)",
+      "background": "rgb(248, 251, 247)",
+      "minimum": 4.5,
+      "ratio": 11.289773394553833
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "dialog secondary text",
+      "foreground": "rgb(72, 97, 81)",
+      "background": "rgb(248, 251, 247)",
+      "minimum": 4.5,
+      "ratio": 6.485729452282374
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "writing text",
+      "foreground": "rgb(34, 61, 51)",
+      "background": "rgb(248, 251, 247)",
+      "minimum": 4.5,
+      "ratio": 11.289773394553833
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "field boundary against paper",
+      "foreground": "rgb(182, 202, 188)",
+      "background": "rgb(237, 243, 238)",
+      "minimum": 3,
+      "ratio": 1.533761635719711
+    },
+    {
+      "palette": "orchard",
+      "mode": "light",
+      "name": "field boundary against fill",
+      "foreground": "rgb(182, 202, 188)",
+      "background": "rgb(248, 251, 247)",
+      "minimum": 3,
+      "ratio": 1.655232043409633
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "body text",
+      "foreground": "rgb(227, 240, 228)",
+      "background": "rgb(22, 39, 32)",
+      "minimum": 4.5,
+      "ratio": 13.269980778458676
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "secondary text on paper",
+      "foreground": "rgb(185, 204, 188)",
+      "background": "rgb(22, 39, 32)",
+      "minimum": 4.5,
+      "ratio": 9.237559179694282
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "hero text",
+      "foreground": "rgb(227, 240, 228)",
+      "background": "rgb(41, 74, 55)",
+      "minimum": 4.5,
+      "ratio": 8.3846021936164
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "Wish text",
+      "foreground": "rgb(22, 39, 32)",
+      "background": "rgb(178, 223, 169)",
+      "minimum": 4.5,
+      "ratio": 10.423132636103603
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "dialog text",
+      "foreground": "rgb(227, 240, 228)",
+      "background": "rgb(32, 56, 44)",
+      "minimum": 4.5,
+      "ratio": 10.730983223441578
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "dialog secondary text",
+      "foreground": "rgb(185, 204, 188)",
+      "background": "rgb(32, 56, 44)",
+      "minimum": 4.5,
+      "ratio": 7.470100691009587
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "writing text",
+      "foreground": "rgb(227, 240, 228)",
+      "background": "rgb(32, 56, 44)",
+      "minimum": 4.5,
+      "ratio": 10.730983223441578
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "field boundary against paper",
+      "foreground": "rgb(74, 112, 85)",
+      "background": "rgb(22, 39, 32)",
+      "minimum": 3,
+      "ratio": 2.7803083674015268
+    },
+    {
+      "palette": "orchard",
+      "mode": "dark",
+      "name": "field boundary against fill",
+      "foreground": "rgb(74, 112, 85)",
+      "background": "rgb(32, 56, 44)",
+      "minimum": 3,
+      "ratio": 2.248341044699347
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "body text",
+      "foreground": "rgb(50, 54, 71)",
+      "background": "rgb(240, 239, 244)",
+      "minimum": 4.5,
+      "ratio": 10.464712486032852
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "secondary text on paper",
+      "foreground": "rgb(94, 97, 115)",
+      "background": "rgb(240, 239, 244)",
+      "minimum": 4.5,
+      "ratio": 5.346920411757384
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "hero text",
+      "foreground": "rgb(50, 54, 71)",
+      "background": "rgb(227, 223, 234)",
+      "minimum": 4.5,
+      "ratio": 9.125907233737943
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "Wish text",
+      "foreground": "rgb(250, 249, 252)",
+      "background": "rgb(118, 83, 110)",
+      "minimum": 4.5,
+      "ratio": 6.193054721414956
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "dialog text",
+      "foreground": "rgb(50, 54, 71)",
+      "background": "rgb(250, 249, 252)",
+      "minimum": 4.5,
+      "ratio": 11.41253526140707
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "dialog secondary text",
+      "foreground": "rgb(94, 97, 115)",
+      "background": "rgb(250, 249, 252)",
+      "minimum": 4.5,
+      "ratio": 5.831208245860907
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "writing text",
+      "foreground": "rgb(50, 54, 71)",
+      "background": "rgb(250, 249, 252)",
+      "minimum": 4.5,
+      "ratio": 11.41253526140707
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "field boundary against paper",
+      "foreground": "rgb(194, 194, 210)",
+      "background": "rgb(240, 239, 244)",
+      "minimum": 3,
+      "ratio": 1.5373638364445938
+    },
+    {
+      "palette": "mineral",
+      "mode": "light",
+      "name": "field boundary against fill",
+      "foreground": "rgb(194, 194, 210)",
+      "background": "rgb(250, 249, 252)",
+      "minimum": 3,
+      "ratio": 1.6766078395802477
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "body text",
+      "foreground": "rgb(237, 237, 245)",
+      "background": "rgb(34, 35, 49)",
+      "minimum": 4.5,
+      "ratio": 13.330405093570363
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "secondary text on paper",
+      "foreground": "rgb(193, 193, 215)",
+      "background": "rgb(34, 35, 49)",
+      "minimum": 4.5,
+      "ratio": 8.779508640314786
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "hero text",
+      "foreground": "rgb(237, 237, 245)",
+      "background": "rgb(65, 59, 85)",
+      "minimum": 4.5,
+      "ratio": 9.100615089856149
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "Wish text",
+      "foreground": "rgb(34, 35, 49)",
+      "background": "rgb(224, 188, 224)",
+      "minimum": 4.5,
+      "ratio": 9.195226159489781
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "dialog text",
+      "foreground": "rgb(237, 237, 245)",
+      "background": "rgb(48, 49, 69)",
+      "minimum": 4.5,
+      "ratio": 10.922958370900222
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "dialog secondary text",
+      "foreground": "rgb(193, 193, 215)",
+      "background": "rgb(48, 49, 69)",
+      "minimum": 4.5,
+      "ratio": 7.193945474423104
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "writing text",
+      "foreground": "rgb(237, 237, 245)",
+      "background": "rgb(48, 49, 69)",
+      "minimum": 4.5,
+      "ratio": 10.922958370900222
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "field boundary against paper",
+      "foreground": "rgb(104, 100, 126)",
+      "background": "rgb(34, 35, 49)",
+      "minimum": 3,
+      "ratio": 2.7445362645364995
+    },
+    {
+      "palette": "mineral",
+      "mode": "dark",
+      "name": "field boundary against fill",
+      "foreground": "rgb(104, 100, 126)",
+      "background": "rgb(48, 49, 69)",
+      "minimum": 3,
+      "ratio": 2.248878046430686
+    }
+  ]
+}

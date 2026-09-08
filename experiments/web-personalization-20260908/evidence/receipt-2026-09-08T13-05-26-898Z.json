@@ -1,0 +1,180 @@
+{
+  "schema": "page-study-browser-evidence/v1",
+  "author": "Aldrin Payopay",
+  "license": "GPL-3.0-only",
+  "runId": "2026-09-08T13-05-26-898Z",
+  "startedAt": "2026-09-08T13:05:26.898Z",
+  "finishedAt": "2026-09-08T13:05:40.048Z",
+  "url": "http://127.0.0.1:8768",
+  "browser": "145.0.7632.6",
+  "playwright": "1.58.2",
+  "environment": {
+    "timezone": "America/Los_Angeles",
+    "headless": true,
+    "reducedMotion": true
+  },
+  "scope": "Local preview only. Does not establish production deployment, account sync, AI service integration, or customer adoption.",
+  "injections": [
+    "Playwright clock for exact boundaries",
+    "Storage getItem/setItem exceptions in an isolated context",
+    "Invalid local recipe input"
+  ],
+  "passed": 6,
+  "failed": 4,
+  "sourceSHA256": {
+    "index.html": "106c363e139f3f164a858688a1023a31948b0d8e89ec60b82a6e356d6c410162",
+    "app.mjs": "6b02fc4870efcee90d82138879ff8f42c3f560a27b0bddb936449f9cebe22a40",
+    "style.css": "5b985120ca9b29959c0becaf024e3fc800457e4e8104006c855a5fd0bb23b0ab",
+    "engine.mjs": "5debd999b9d3c605ae6fab1b0f751aa7278aec0e53f71b4635b00e6ad1820362",
+    "browser.test.mjs": "0dca18bc7fb4e9b9a7c7b2a1b57c2c20d083df26d6ade7edbb617ce472aec2c0"
+  },
+  "externalRequests": [],
+  "pageErrors": [],
+  "screenshots": [
+    "2026-09-08T13-05-26-898Z-failure-1-0.png",
+    "2026-09-08T13-05-26-898Z-wish-320.png",
+    "2026-09-08T13-05-26-898Z-writing-320.png",
+    "2026-09-08T13-05-26-898Z-failure-4-0.png",
+    "2026-09-08T13-05-26-898Z-wish-390.png",
+    "2026-09-08T13-05-26-898Z-writing-390.png",
+    "2026-09-08T13-05-26-898Z-failure-5-0.png",
+    "2026-09-08T13-05-26-898Z-wish-1280.png",
+    "2026-09-08T13-05-26-898Z-writing-1280.png",
+    "2026-09-08T13-05-26-898Z-failure-6-0.png",
+    "2026-09-08T13-05-26-898Z-storage-unavailable.png"
+  ],
+  "tests": [
+    {
+      "name": "explicit choices change recipe and art; recipe and SVG persist through pages and reload",
+      "status": "failed",
+      "error": "Error: expect(locator).toBeHidden() failed\n\nLocator:  locator('#art')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n  - Expect \"to.be.hidden\" with timeout 5000ms\n  - waiting for locator('#art')\n    9 × locator resolved to <svg id=\"art\" role=\"img\" viewBox=\"0 0 100 100\" aria-label=\"An original branching pattern generated from your page recipe\">…</svg>\n      - unexpected value \"visible\"\n\n    at Proxy.<anonymous> (/Volumes/dual/persona500/node_modules/playwright/lib/matchers/expect.js:213:24)\n    at file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:140:38\n    at async check (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:74:5)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:110:1",
+      "screenshot": "2026-09-08T13-05-26-898Z-failure-1-0.png",
+      "durationMs": 5901
+    },
+    {
+      "name": "explicit and system appearance obey choice while preserving seed and geometry",
+      "status": "passed",
+      "durationMs": 587
+    },
+    {
+      "name": "time appearance transitions at 07:00 and 19:00 without reloading",
+      "status": "passed",
+      "durationMs": 1164
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 320px",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: 320-tide-light-explore: Wish target under 44px\n    at assertGeometry (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:105:10)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:473:9)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:236:9\n    at async check (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:74:5)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:186:3",
+      "screenshot": "2026-09-08T13-05-26-898Z-failure-4-0.png",
+      "durationMs": 863
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 390px",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: 390-tide-light-explore: Wish target under 44px\n    at assertGeometry (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:105:10)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:236:9\n    at async check (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:74:5)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:186:3",
+      "screenshot": "2026-09-08T13-05-26-898Z-failure-5-0.png",
+      "durationMs": 841
+    },
+    {
+      "name": "Wish keyboard and modal behavior, draft persistence, and layout at 1280px",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: 1280-tide-light-explore: Wish target under 44px\n    at assertGeometry (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:105:10)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:236:9\n    at async check (file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:74:5)\n    at async file:///Volumes/dual/DUALITY-ZERO-V2/experiments/web-personalization-20260908/browser.test.mjs:186:3",
+      "screenshot": "2026-09-08T13-05-26-898Z-failure-6-0.png",
+      "durationMs": 848
+    },
+    {
+      "name": "malformed and unknown imports leave recipe intact; exported recipe contains JSON only",
+      "status": "passed",
+      "durationMs": 657
+    },
+    {
+      "name": "storage failures preserve working controls and never claim a successful save",
+      "status": "passed",
+      "durationMs": 703
+    },
+    {
+      "name": "cross-tab changes update existing tabs and reject unsupported recipes",
+      "status": "passed",
+      "durationMs": 1154
+    },
+    {
+      "name": "no unexpected external network or uncaught browser errors occurred",
+      "status": "passed",
+      "durationMs": 0
+    }
+  ],
+  "geometry": [
+    {
+      "label": "320-tide-light-desk",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "wish": {
+        "x": 170.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "320-tide-light-explore",
+      "viewport": 320,
+      "documentWidth": 320,
+      "bodyWidth": 304,
+      "wish": {
+        "x": 81.78125,
+        "y": 334,
+        "width": 108.078125,
+        "height": 21
+      }
+    },
+    {
+      "label": "390-tide-light-desk",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "wish": {
+        "x": 240.015625,
+        "y": 12,
+        "width": 133.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "390-tide-light-explore",
+      "viewport": 390,
+      "documentWidth": 390,
+      "bodyWidth": 374,
+      "wish": {
+        "x": 81.78125,
+        "y": 404,
+        "width": 108.078125,
+        "height": 21
+      }
+    },
+    {
+      "label": "1280-tide-light-desk",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1280,
+      "wish": {
+        "x": 1082.828125,
+        "y": 15.5,
+        "width": 145.984375,
+        "height": 44
+      }
+    },
+    {
+      "label": "1280-tide-light-explore",
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "bodyWidth": 1264,
+      "wish": {
+        "x": 81.78125,
+        "y": 1294,
+        "width": 108.078125,
+        "height": 21
+      }
+    }
+  ]
+}

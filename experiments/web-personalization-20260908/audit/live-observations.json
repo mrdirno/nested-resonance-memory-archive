@@ -1,0 +1,211 @@
+{
+  "schema": "wish-live-sample/v1",
+  "started_at": "2026-09-08T13:02:13.470Z",
+  "finished_at": "2026-09-08T13:02:18.613Z",
+  "browser": "Playwright Chromium, isolated contexts",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "mobile": true,
+    "touch": true,
+    "color_scheme": "dark"
+  },
+  "scope": "Five URL samples only. No full-site coverage, login persistence, server acceptance, theme schedule, or real-device conclusion is implied.",
+  "write_policy": "All non-GET/HEAD/OPTIONS network requests blocked. Synthetic text was filled, closed, reopened and reloaded; no submit action was taken.",
+  "results": [
+    {
+      "path": "av/consumables.html",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html",
+      "lifecycle": "maintained",
+      "submission_accepted": "not_tested",
+      "draft_close_reopen": "retained",
+      "draft_reload": "lost",
+      "http_status": 200,
+      "title": "Consumables List",
+      "runtime_handles": {
+        "feedback": false,
+        "toolkit": true
+      },
+      "runtime_loaded": true,
+      "feedback_config_ready": null,
+      "feedback_surface": null,
+      "toolkit_surface": "av",
+      "trigger": {
+        "selector": ".av-req-btn",
+        "found": true,
+        "has_visible_box": true,
+        "in_initial_viewport": true,
+        "center_hit_in_initial_viewport": true,
+        "accessible_name": "Wish this tool better — Consumables List",
+        "named_wish_or_feedback": true,
+        "center_hit_after_scroll": true,
+        "opened_by_real_click": true
+      },
+      "opens_correct_modal": true,
+      "theme_attribute": null,
+      "body_background": "rgb(215, 218, 211)",
+      "horizontal_overflow_px": 0,
+      "screenshots": [
+        "screenshots/av-consumables-html-page.png",
+        "screenshots/av-consumables-html-modal.png"
+      ],
+      "modal_surface_matches": true,
+      "page_errors": [],
+      "prevented_network_writes": []
+    },
+    {
+      "path": "commons/index.html",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/commons/index.html",
+      "lifecycle": "maintained",
+      "submission_accepted": "not_tested",
+      "draft_close_reopen": "retained",
+      "draft_reload": "lost",
+      "http_status": 200,
+      "title": "What's In The Bag — The Commons",
+      "runtime_handles": {
+        "feedback": true,
+        "toolkit": false
+      },
+      "runtime_loaded": true,
+      "feedback_config_ready": true,
+      "feedback_surface": "commons",
+      "toolkit_surface": null,
+      "trigger": {
+        "selector": "#addbtn",
+        "found": true,
+        "has_visible_box": true,
+        "in_initial_viewport": false,
+        "center_hit_in_initial_viewport": false,
+        "accessible_name": "＋ Add gear to the list",
+        "named_wish_or_feedback": false,
+        "center_hit_after_scroll": true,
+        "opened_by_real_click": true
+      },
+      "opens_correct_modal": true,
+      "theme_attribute": null,
+      "body_background": "rgb(215, 218, 211)",
+      "horizontal_overflow_px": 0,
+      "screenshots": [
+        "screenshots/commons-index-html-page.png",
+        "screenshots/commons-index-html-modal.png"
+      ],
+      "modal_surface_matches": true,
+      "page_errors": [],
+      "prevented_network_writes": []
+    },
+    {
+      "path": "collage/",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "lifecycle": "maintained",
+      "submission_accepted": "not_tested",
+      "draft_close_reopen": "retained",
+      "draft_reload": "lost",
+      "http_status": 200,
+      "title": "Smart Crop GenArt Studio",
+      "runtime_handles": {
+        "feedback": true,
+        "toolkit": false
+      },
+      "runtime_loaded": true,
+      "feedback_config_ready": true,
+      "feedback_surface": "collage",
+      "toolkit_surface": null,
+      "trigger": {
+        "selector": ".studio-header-wish",
+        "found": true,
+        "has_visible_box": true,
+        "in_initial_viewport": true,
+        "center_hit_in_initial_viewport": true,
+        "accessible_name": "Wish it better",
+        "named_wish_or_feedback": true,
+        "center_hit_after_scroll": true,
+        "opened_by_real_click": true
+      },
+      "opens_correct_modal": true,
+      "theme_attribute": null,
+      "body_background": "rgb(3, 4, 5)",
+      "horizontal_overflow_px": 0,
+      "screenshots": [
+        "screenshots/collage-page.png",
+        "screenshots/collage-modal.png"
+      ],
+      "modal_surface_matches": true,
+      "page_errors": [],
+      "prevented_network_writes": []
+    },
+    {
+      "path": "archive/HELIOS-V045-amethyst-interference.html",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/archive/HELIOS-V045-amethyst-interference.html",
+      "lifecycle": "legacy_or_archived",
+      "submission_accepted": "not_tested",
+      "draft_close_reopen": "not_tested",
+      "draft_reload": "not_tested",
+      "http_status": 200,
+      "title": "HELIOS V045: Amethyst × Interference",
+      "runtime_handles": {
+        "feedback": false,
+        "toolkit": false
+      },
+      "runtime_loaded": false,
+      "feedback_config_ready": null,
+      "feedback_surface": null,
+      "toolkit_surface": null,
+      "trigger": {
+        "selector": ".av-req-btn,.fb-btn,#btn-wish,button[data-wish-well],a[data-wish-well]",
+        "found": false,
+        "has_visible_box": false,
+        "in_initial_viewport": false,
+        "center_hit_in_initial_viewport": false,
+        "accessible_name": null,
+        "named_wish_or_feedback": false
+      },
+      "opens_correct_modal": "not_tested",
+      "theme_attribute": null,
+      "body_background": "rgb(30, 10, 62)",
+      "horizontal_overflow_px": 0,
+      "screenshots": [
+        "screenshots/archive-HELIOS-V045-amethyst-interference-html-page.png"
+      ],
+      "page_errors": [],
+      "prevented_network_writes": []
+    },
+    {
+      "path": "collage-beta/",
+      "url": "https://mrdirno.github.io/nested-resonance-memory-archive/collage-beta/",
+      "lifecycle": "legacy_or_archived",
+      "submission_accepted": "not_tested",
+      "draft_close_reopen": "not_tested",
+      "draft_reload": "not_tested",
+      "http_status": 200,
+      "title": "Smart Crop GenArt Studio",
+      "runtime_handles": {
+        "feedback": false,
+        "toolkit": false
+      },
+      "runtime_loaded": false,
+      "feedback_config_ready": null,
+      "feedback_surface": null,
+      "toolkit_surface": null,
+      "trigger": {
+        "selector": ".av-req-btn,.fb-btn,#btn-wish,button[data-wish-well],a[data-wish-well]",
+        "found": false,
+        "has_visible_box": false,
+        "in_initial_viewport": false,
+        "center_hit_in_initial_viewport": false,
+        "accessible_name": null,
+        "named_wish_or_feedback": false
+      },
+      "opens_correct_modal": "not_tested",
+      "theme_attribute": null,
+      "body_background": "rgba(0, 0, 0, 0)",
+      "horizontal_overflow_px": 0,
+      "screenshots": [
+        "screenshots/collage-beta-page.png"
+      ],
+      "page_errors": [
+        "Failed to register a ServiceWorker for scope ('https://mrdirno.github.io/') with script ('https://mrdirno.github.io/sw.js'): A bad HTTP response code (404) was received when fetching the script."
+      ],
+      "prevented_network_writes": []
+    }
+  ]
+}
