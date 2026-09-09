@@ -9555,3 +9555,9 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   then reviewed and archived. Fleet receipt **17961** from `mac-toolkit-claude`, thread
   `persona500-collage-C3723-release`, read back.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+- `2026-09-09` — **[AXIS:WELL] C3724 — collage: the Art Room's Undo moved to the top bar, a help card, and one-tap
+  Dice art / Dice layer in place of the which-part select** — worked in `tools/collage-studio/COLLAGE_EVOLUTION.md`
+  (C3724 entry; panel 9 / 9 / 8; live 24/24 + watertight 8/8; code `a40e4bce`, Pages 34335186310; fleet receipt
+  **18137**). BACKPORT rider fired: 184 trade pages swept — 0 bury undo/clear in a disclosure, 0 gate the primary
+  action behind a select, every registered tool renders its own `desc` line; nothing to carry.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
