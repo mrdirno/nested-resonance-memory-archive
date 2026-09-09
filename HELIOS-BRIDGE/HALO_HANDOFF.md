@@ -217,6 +217,8 @@ it is a positive, pre-registered result on the memory claim at full particle cou
 
 ## 8. What the next agent should pursue, and why it matters for NRM
 
+> **Currency note, 2026-09-08.** This ranking was written before the work ran and is kept as the record of what was intended, not as the queue. Item 1 was pre-registered on 2026-09-02 and has run — 60 of 60 cells at 4,194,304 particles, verdict inconclusive, and the registered statistic was retired because it fires on a static sphere ([the audit](../analysis/2026-09-02_cross_epoch_memory_preregistered.md), HALO ring 15). The replacement estimator, frozen 2026-09-05, found that grid unmeasurable ([qualification](../analysis/2026-09-06_memory_estimator_qualification.md), rings 16–17), and the 2026-09-07 measurability pilot found 0 of 21 runs measurable ([pilot](../analysis/2026-09-07_measurability_pilot.md)). Do not run item 1 again from this text. The live queue is the "Active work" list in [META_OBJECTIVES.md](../META_OBJECTIVES.md).
+
 The archive is large and much of it predates what HALO can now measure. The leverage is not more pages;
 it is that the project's namesake claim finally has an instrument, a validated CPU twin, and a stability
 certificate. Ranked by information per hour for NRM itself:
