@@ -248,6 +248,50 @@ test('the export sheet\'s VIDEO SIZE row is watertight at 320/360/390/430', asyn
   }
 });
 
+/**
+ * C3724 — THE ART ROOM IS A FULL-SCREEN DIALOG THE GATE NEVER OPENED. Its top bar
+ * now carries Undo · Redo · Help · Close (icon-only 44×44 on phones), its footer
+ * two dice buttons beside the apply button, and a help card stacks on top of it.
+ * A wish said Undo was missing; it was there, below the fold, in a closed
+ * disclosure. The gate measures the room at every phone width, then the card.
+ */
+test('the ART ROOM top bar, footer and help card are watertight at 320/360/390/430', async ({ page }) => {
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 780 });
+    await page.goto(APP_URL);
+    const open = page.getByRole('button', { name: 'Art Room', exact: true });
+    if (!(await open.isVisible())) await page.getByRole('button', { name: 'Add', exact: true }).click();
+    await open.click();
+    const room = page.getByTestId('art-rack');
+    await expect(room).toBeVisible();
+    for (const name of ['Undo art edit', 'Redo art edit', 'Help and report', 'Close Art Room', 'Dice art']) {
+      const b = await room.getByRole('button', { name, exact: true }).boundingBox();
+      expect(b, `${name} rendered at ${width}`).not.toBeNull();
+      expect(b!.x + b!.width, `${name} inside the viewport at ${width}`).toBeLessThanOrEqual(width + 0.5);
+      expect(b!.x, `${name} left edge at ${width}`).toBeGreaterThanOrEqual(-0.5);
+    }
+    let over = await overflow(page);
+    expect(over.over, `Art Room overflows by ${over.over}px at ${width} — ${JSON.stringify(over.worst)}`).toBeLessThanOrEqual(0);
+    let small = await smallTargets(page);
+    expect(small, `Art Room controls under 44px at ${width}: ${JSON.stringify(small)}`).toEqual([]);
+    await room.getByRole('button', { name: 'Help and report', exact: true }).click();
+    const card = room.getByRole('dialog', { name: 'How the Art Room works', exact: true });
+    await expect(card).toBeVisible();
+    const cardBox = await card.locator('.art-help-card').boundingBox();
+    expect(cardBox!.x).toBeGreaterThanOrEqual(-0.5);
+    expect(cardBox!.x + cardBox!.width).toBeLessThanOrEqual(width + 0.5);
+    over = await overflow(page);
+    expect(over.over, `help card overflows at ${width}`).toBeLessThanOrEqual(0);
+    small = await smallTargets(page);
+    expect(small, `help card controls under 44px at ${width}: ${JSON.stringify(small)}`).toEqual([]);
+    await page.keyboard.press('Escape');
+    await expect(card).toBeHidden();
+    await expect(room).toBeVisible();
+    await room.getByRole('button', { name: 'Close Art Room', exact: true }).click();
+    await expect(room).toBeHidden();
+  }
+});
+
 test('zoomed out, the page still does not scroll sideways', async ({ page }) => {
   // "don't make anything that's gonna clip or alter if zoomed out on phone" —
   // a pinch-out is a wider layout viewport at the same CSS width, which is what

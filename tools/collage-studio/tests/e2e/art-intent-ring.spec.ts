@@ -18,7 +18,8 @@ async function layers(room:Locator){await room.getByRole('tab',{name:/^Layers/})
 async function preview(room:Locator,name:string){await previewSettings(room,false);await templates(room);await room.getByRole('button',{name:`Preview ${name}`,exact:true}).click();}
 async function use(room:Locator,name:string){await preview(room,name);await previewSettings(room);await room.getByRole('button',{name:'Use as starting template',exact:true}).click();}
 async function add(room:Locator,name:string){await preview(room,name);await previewSettings(room);await room.getByLabel('Preview placement',{exact:true}).selectOption('add');await room.getByRole('button',{name:'Keep layer',exact:true}).click();}
-async function undo(room:Locator,redo=false){await settings(room);await room.getByRole('button',{name:redo?'Redo art edit':'Undo art edit',exact:true}).click();}
+// C3724: Undo and Redo ride the top bar; nothing needs opening first.
+async function undo(room:Locator,redo=false){await room.getByRole('button',{name:redo?'Redo art edit':'Undo art edit',exact:true}).click();}
 async function archive(page:Page){await page.getByRole('button',{name:'Open',exact:true}).focus();const download=page.waitForEvent('download');await page.keyboard.press('Control+s');const p=(await(await download).path())!;const bytes=await fs.readFile(p);const zip=await JSZip.loadAsync(bytes);const manifest=JSON.parse(await zip.file('manifest.json')!.async('text'));return{zip,manifest,bytes};}
 const hash=(v:Buffer)=>createHash('sha256').update(v).digest('hex');
 async function originals(a:Awaited<ReturnType<typeof archive>>){return Promise.all(a.manifest.images.map(async(i:any)=>({id:i.id,name:i.originalName,hash:hash(await a.zip.file('images/'+i.storageFilename)!.async('nodebuffer'))})));}
@@ -30,7 +31,7 @@ test('Ring C3713 explicit starting templates A then B replace the stack in one u
  await use(room,'Contour Atlas');const a=await recipe(page,room);expect(a.layers.map((l:any)=>l.kind)).toEqual(['contour']);expect(a.size).toBe('square');expect(a.duration).toBe(12);expect(a.background).toBe(original.background);
  await use(room,'Prism Garden');const b=await recipe(page,room);expect(b.layers.map((l:any)=>l.kind)).toEqual(['facets']);expect(b.soloId).toBeNull();expect(b.layers[0].id).not.toBe(a.layers[0].id);
  expect(await canvas!.evaluate(el=>el===document.querySelector('canvas[aria-label="Animated art preview"]'))).toBe(true);
- await undo(room);expect(await recipe(page,room)).toEqual(a);await expect(room.getByLabel('Dice scope',{exact:true})).toHaveValue('composition');await layers(room);await expect(room.getByRole('button',{name:'Select Contour Atlas layer',exact:true})).toHaveAttribute('aria-pressed','true');
+ await undo(room);expect(await recipe(page,room)).toEqual(a);await expect(room.getByTestId('art-scope-context')).toContainText('Art composition');await layers(room);await expect(room.getByRole('button',{name:'Select Contour Atlas layer',exact:true})).toHaveAttribute('aria-pressed','true');
  await undo(room,true);expect(await recipe(page,room)).toEqual(b);await layers(room);await expect(room.getByRole('button',{name:'Select Prism Garden layer',exact:true})).toHaveAttribute('aria-pressed','true');
  await fs.writeFile(info.outputPath('template-replacement.json'),JSON.stringify({before:original,a,b},null,2));expect(errors).toEqual([]);
 });
@@ -41,18 +42,18 @@ test('Ring C3713 explicit Keep preserves siblings and replacement undo restores 
  const a=await recipe(page,room);await add(room,'Prism Garden');const added=await recipe(page,room);
  expect(added.layers.map((l:any)=>l.kind)).toEqual(['contour','facets']);expect(added.layers[0]).toEqual(a.layers[0]);expect(added.soloId).toBeNull();expect(new Set(added.layers.map((l:any)=>l.id)).size).toBe(2);
  await undo(room);expect(await recipe(page,room)).toEqual(a);await undo(room,true);expect(await recipe(page,room)).toEqual(added);await layers(room);await room.getByRole('button',{name:'Select Contour Atlas layer',exact:true}).click();await use(room,'Orbit Press');expect((await recipe(page,room)).layers.map((l:any)=>l.kind)).toEqual(['rings']);
- await undo(room);expect(await recipe(page,room)).toEqual(added);await layers(room);await expect(room.getByRole('button',{name:'Select Contour Atlas layer',exact:true})).toHaveAttribute('aria-pressed','true');await expect(room.getByRole('button',{name:'Dice selected layer',exact:true})).toBeDisabled();
+ await undo(room);expect(await recipe(page,room)).toEqual(added);await layers(room);await expect(room.getByRole('button',{name:'Select Contour Atlas layer',exact:true})).toHaveAttribute('aria-pressed','true');await expect(room.getByRole('button',{name:/^Dice layer/})).toBeDisabled();
  await undo(room,true);expect((await recipe(page,room)).layers.map((l:any)=>l.kind)).toEqual(['rings']);
  await undo(room);await layers(room);await expect(room.getByLabel('Opacity',{exact:true})).toBeEnabled();await room.getByLabel('Opacity',{exact:true}).fill('0.42');const edited=await recipe(page,room);expect(edited.layers[0]).toEqual({...added.layers[0],opacity:.42});expect(edited.layers[1]).toEqual(added.layers[1]);await expect(room.locator('.art-control-help')).toContainText('contour lines');
 });
 
 test('Ring C3713 dice scope mutates only its unlocked enabled target',async({page})=>{
  const room=await boot(page);await layers(room);await room.getByRole('button',{name:'Select Petal Engine layer',exact:true}).click();
- const before=await recipe(page,room);await room.getByRole('button',{name:'Dice selected layer',exact:true}).click();const after=await recipe(page,room);const id=before.layers.find((l:any)=>l.kind==='rosette').id;
+ const before=await recipe(page,room);await room.getByRole('button',{name:/^Dice layer/}).click();const after=await recipe(page,room);const id=before.layers.find((l:any)=>l.kind==='rosette').id;
  for(const l of before.layers)if(l.id!==id)expect(after.layers.find((n:any)=>n.id===l.id)).toEqual(l);
  expect(after.layers.find((l:any)=>l.id===id)).not.toEqual(before.layers.find((l:any)=>l.id===id));
  await room.locator('details.art-layer-options > summary').click();await room.getByRole('button',{name:'Lock Petal Engine dice',exact:true}).click();await room.getByRole('button',{name:'Disable Contour Atlas layer',exact:true}).click();const held=await recipe(page,room);
- await room.getByLabel('Dice scope',{exact:true}).selectOption('composition');await room.getByRole('button',{name:'Dice composition',exact:true}).click();const all=await recipe(page,room);
+ await room.getByRole('button',{name:'Dice art',exact:true}).click();const all=await recipe(page,room);
  for(const l of held.layers)if(l.locked||!l.enabled)expect(all.layers.find((n:any)=>n.id===l.id)).toEqual(l);
  expect(all.layers.find((l:any)=>l.kind==='particles')).not.toEqual(held.layers.find((l:any)=>l.kind==='particles'));
  await undo(room);expect(await recipe(page,room)).toEqual(held);
@@ -78,7 +79,7 @@ test('Ring C3713 Preview and Keep remain separate reachable targets at narrow wi
   await preview(room,'Contour Atlas');
   for(const label of ['Dismiss preview','Keep layer']){const control=room.getByRole('button',{name:label,exact:true});await control.scrollIntoViewIfNeeded();const b=await control.evaluate(e=>{const r=e.getBoundingClientRect();const hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{w:r.width,h:r.height,right:r.right,bottom:r.bottom,hit:hit===e||e.contains(hit)};});expect(b.w).toBeGreaterThanOrEqual(43.5);expect(b.h).toBeGreaterThanOrEqual(43.5);expect(b.right).toBeLessThanOrEqual(size.width);expect(b.bottom).toBeLessThanOrEqual(size.height);expect(b.hit).toBe(true);}
   await room.getByRole('button',{name:'Dismiss preview',exact:true}).click();
-  const scope=room.getByLabel('Dice scope',{exact:true});const b=await scope.boundingBox();expect(b!.height).toBeGreaterThanOrEqual(43.5);expect(b!.x+b!.width).toBeLessThanOrEqual(size.width);
+  for(const name of ['Dice art',/^Dice layer/]){const b=await room.getByRole('button',{name}).boundingBox();expect(b!.height).toBeGreaterThanOrEqual(43.5);expect(b!.width).toBeGreaterThanOrEqual(43.5);expect(b!.x).toBeGreaterThanOrEqual(0);expect(b!.x+b!.width).toBeLessThanOrEqual(size.width);}
   await page.screenshot({path:info.outputPath(`template-intent-${size.width}.png`)});
  }
 });

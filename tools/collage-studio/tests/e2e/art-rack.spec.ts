@@ -126,8 +126,7 @@ test('Art Rack previews twelve real templates and explicit Keep preserves layers
   expect(held.layers.findIndex((layer: any) => layer.id === orbitId)).toBe(2);
   expect(held.layers.find((layer: any) => layer.id === contourId).enabled).toBe(false);
   expect(held.layers.find((layer: any) => layer.id === orbitId).locked).toBe(true);
-  await room.getByLabel('Dice scope', { exact: true }).selectOption('composition');
-  await room.getByRole('button', { name: 'Dice composition', exact: true }).click();
+  await room.getByRole('button', { name: 'Dice art', exact: true }).click();
   const rolled = await saveRecipe(page, room);
   expect(rolled.layers.find((layer: any) => layer.id === orbitId)).toEqual(held.layers.find((layer: any) => layer.id === orbitId));
   expect(rolled.layers.find((layer: any) => layer.id === contourId)).toEqual(held.layers.find((layer: any) => layer.id === contourId));

@@ -72,7 +72,8 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   test.setTimeout(60_000);
   const room=await openRoom(page);
   await expect(room.getByLabel('Editing artwork',{exact:true})).toBeHidden();
-  await expect(room.getByRole('button',{name:'Undo art edit',exact:true})).toBeHidden();
+  // C3724: Undo is in the top bar from the first frame — visible, and honestly dark until there is a step to take back.
+  await expect(room.getByRole('button',{name:'Undo art edit',exact:true})).toBeVisible();await expect(room.getByRole('button',{name:'Undo art edit',exact:true})).toBeDisabled();
   await room.getByRole('button',{name:'Preview Woven Circuit',exact:true}).click();
   await room.getByRole('button',{name:'Keep layer',exact:true}).click();
   await expect(room.getByRole('tab',{name:'Templates',exact:true})).toHaveAttribute('aria-selected','true');
@@ -85,8 +86,10 @@ test('layer editing reveals look, motion and recipe tools without losing recipe 
   await room.getByLabel('Opacity',{exact:true}).fill('0.65');
   await reveal(room.locator('details.art-layer-options'));
   await room.getByRole('button',{name:'Lock Woven Circuit dice',exact:true}).click();
-  await expect(room.getByLabel('Dice scope',{exact:true})).toHaveValue('layer');
-  await expect(room.getByRole('button',{name:'Dice selected layer',exact:true})).toBeDisabled();
+  await expect(room.getByTestId('art-scope-context')).toContainText('Layer: Woven Circuit');
+  await expect(room.getByRole('button',{name:/^Dice layer/})).toBeDisabled();
+  await expect(room.getByTestId('art-instrument-note')).toHaveAttribute('data-state','held');
+  await expect(room.getByTestId('art-scope-context')).toContainText('Layer: Woven Circuit · held');
   await room.getByRole('tab',{name:'Motion',exact:true}).click();
   await expect(room.getByLabel('Layer palette',{exact:true})).toHaveCount(0);
   await room.getByLabel('Automation target',{exact:true}).selectOption('rotation');

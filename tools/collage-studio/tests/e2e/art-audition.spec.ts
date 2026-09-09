@@ -30,7 +30,7 @@ async function preview(room:Locator,name:string){
 async function previewSettings(room:Locator){const details=room.locator('details.art-preview-options');if(await details.getAttribute('open')===null)await details.locator(':scope > summary').click();}
 async function keep(room:Locator){await room.getByRole('button',{name:/^(Keep layer|Replace layer \d+)$/}).click();await expect(room.getByTestId('art-audition')).toHaveCount(0);}
 async function start(room:Locator,name:string){await preview(room,name);await previewSettings(room);await room.getByRole('button',{name:'Use as starting template',exact:true}).click();}
-async function undo(room:Locator,redo=false){await settings(room);await room.getByRole('button',{name:redo?'Redo art edit':'Undo art edit',exact:true}).click();}
+async function undo(room:Locator,redo=false){await room.getByRole('button',{name:redo?'Redo art edit':'Undo art edit',exact:true}).click();}
 async function seek(room:Locator,time=2.25){
   const pause=room.getByRole('button',{name:'Pause art preview',exact:true});if(await pause.isVisible())await pause.click();
   await room.getByLabel('Art playhead',{exact:true}).fill(String(time));
@@ -112,7 +112,7 @@ test('audition suspends solo only for comparison and replacement Undo restores t
   expect(replaced.layers[0]).toEqual(held.layers[0]);expect(replaced.layers[2]).toEqual(held.layers[2]);expect(replaced.layers[1].kind).toBe('wave-surface');expect(replaced.layers[1].id).not.toBe(held.layers[1].id);
   await undo(room);expect(await recipe(page,room)).toEqual(held);await seek(room);expect(await pixels(room)).toEqual(solo);
   await room.getByRole('tab',{name:/^Layers/}).click();await expect(room.getByRole('button',{name:'Select Petal Engine layer',exact:true})).toHaveAttribute('aria-pressed','true');
-  await expect(room.getByRole('button',{name:'Dice selected layer',exact:true})).toBeDisabled();
+  await expect(room.getByRole('button',{name:/^Dice layer/})).toBeDisabled();
   await undo(room,true);expect(await recipe(page,room)).toEqual(replaced);
 });
 

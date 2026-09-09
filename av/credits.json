@@ -260,6 +260,16 @@
       "wished_date": "2026-09-07",
       "shipped_date": "2026-09-07",
       "shipped_commit": "6702d390"
+    },
+    {
+      "tool_name": "Collage Studio — Art Room: Undo and Redo in the top bar that name the step they take back, a help card with a report path, the instrument's own sentence on the stage, and one-tap Dice art / Dice layer in place of the which-part dropdown",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-09-09",
+      "shipped_date": "2026-09-09",
+      "shipped_commit": "pending"
     }
   ]
 }
