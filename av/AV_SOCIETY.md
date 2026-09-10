@@ -9660,5 +9660,14 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `npx tsc --noEmit` clean. Live drive as a doors installer after the deploy: gear 10 rows led by
   *A six-foot level* with *Cordless drill/driver* present, tips 10 with both new rows, zero page
   errors. Storefront untouched — no new tool, no new trade. Code
-  [`a957bb04`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/a957bb04);
+  [`a957bb04`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/a957bb04) and
+  [`32859076`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/32859076);
+  [Pages 34427517974](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34427517974)
+  and [34428714758](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34428714758)
+  both success, and the gate is confirmed EXECUTING in CI (560 checks in the build log, not merely
+  wired). Fleet receipt msg **18222** from `mac-toolkit-claude`, thread
+  `persona500-collage-C3725-release`, read back (id, body, metadata). Ideas ledger: the coherence
+  gate filed as collage `3794a4d0` with its baseline measured both sides of this cycle (5 -> 2,
+  and both survivors are false positives of the throwaway probe — which is the finding that makes
+  it a curated-table rung).
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
