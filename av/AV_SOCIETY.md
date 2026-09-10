@@ -9802,4 +9802,13 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   17 → 18 · tools registered 150 → 157 · commons gear 197 → 205, tips 208 → 216, names 155 → 163
   · shared commons rows carrying a review at roster 18: 0/17 → 17/17 · the outside of the
   building: nobody → one hub.**
+  · **THE WHOLE GATE SURFACE SWEPT, and the concurrency lesson is worth one line:** all 38
+  gates run — 15 fast, 23 browser — plus `mobile-watertight` on 9 pages and
+  `build-docsindex --check`. Four came back RED and **only two were real** (`getting-in`'s
+  banned word, `reconcile-join`'s unregistered rung); the other two — `send-is-copy` and
+  `menu-reachability` — were **browser starvation from two gate suites running at once**, and
+  `rowlog-commit-merge` was operator error, since it is the one gate that expects an EXTERNAL
+  server on :8777 rather than starting its own. Re-run serially they are green:
+  `send-is-copy` **6079 checks, 0 failing, 138 pages mount Send**, and every siding page `ok`.
+  Run the suite serially or read half its output as defects.
   https://mrdirno.github.io/nested-resonance-memory-archive/siding/
