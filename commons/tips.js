@@ -66,10 +66,28 @@
  */
 window.COMMONS_TIPS = [
   /* ---- the floor: every trade on the job eats these -------------------- */
-  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* REVIEWED AND LEFT, 2026-09-09. Masonry (you close the opening, and you get
+     asked to cut it back open) and landscape (boxed trees before the courtyard
+     wall) are honest candidates, but only after "racks, tubs, gear sections and
+     units" comes out of the why-line — and that vocabulary is the row. Every
+     other trade needs the same PRINCIPLE in its own irreversibility (sleeves
+     before the pour, frames with the wall, deep before shallow, pave toward
+     your way out), which is four new rows, not four new tags. Named, not done. */
+  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
     n: "Get the big stuff in before the last opening closes.",
     w: "Racks, tubs, gear sections and units don't fit through a finished door, and cutting the wall back open is somebody's change order." },
-  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* + doors ONLY, 2026-09-09, and the interesting half is the eight that were
+     refused. Concrete, masonry, sitework, flooring, landscape and paving each
+     already own a SHARPER version of this — shoot the steel, shoot the flashing,
+     photograph the marks, shoot the slab, shoot the crossing, photograph the
+     layout — and widening the generic row on top would have demoted six good
+     lines to duplicates of a worse one. Painting owns a better one still
+     (dings-before-the-drops, the inverted case: photograph the room BEFORE you
+     touch it, because painters go last and everything broken becomes theirs).
+     Doors was the one hole: frame anchors and grout really do get rocked over
+     and it had no photo tip of its own. Note the why-line names an object —
+     "the rock" is drywall — so this row is narrower than its title admits. */
+  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 17,
     n: "Shoot your work before it gets covered.",
     w: "Months later your phone is the only proof of what's behind the rock." },
   { id: "existing-damage", t: ["universal"],
@@ -105,7 +123,16 @@ window.COMMONS_TIPS = [
   { id: "last-hour", t: ["universal"],
     n: "Don't start the difficult piece in the last hour.",
     w: "Work rushed at quitting time is the piece that comes back, on your own time." },
-  { id: "check-the-revision", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* WIDENED TO SIXTEEN OF SEVENTEEN, 2026-09-09. This is not a tool, it is
+     paper discipline, and every trade that gets a drawing gets a revised one:
+     a door schedule revises hand and hardware sets with lead time behind the
+     mistake, a wrong invert is a re-dig, and you cannot unpour a slab. Creative
+     is the one exception and the reason this is NOT `universal` — a shooter
+     works off page colours, not sheet numbers, and the strict universal bar is
+     the only thing that makes the tag mean anything. Sixteen tags is one short
+     of the back door, deliberately. */
+  { id: "check-the-revision", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing",
+        "concrete", "masonry", "sitework", "flooring", "painting", "doors", "landscape", "paving"], rv: 17,
     n: "Check the revision, not just the sheet number.",
     w: "Work built off a superseded drawing comes back out, and nobody reimburses that." },
   { id: "number-off-the-print", t: ["universal"],
@@ -113,7 +140,7 @@ window.COMMONS_TIPS = [
     w: "The dimension you carried over from the last job is the one that gets ripped back out." },
 
   /* ---- AV ---------------------------------------------------------------- */
-  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"],
+  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"], rv: 17,
     n: "Rough to the approved submittal, not the design drawing.",
     w: "The plan draws a generic unit; the one that got approved moves your rough, and you find out at trim." },
   { id: "fiber-cable-direction", t: ["av"],
@@ -128,7 +155,7 @@ window.COMMONS_TIPS = [
   { id: "outline-the-display", t: ["av"],
     n: "Spray your display outline on the wall before anybody roughs it.",
     w: "Otherwise the stat, the strobe and the quad all land inside the panel footprint." },
-  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"],
+  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"], rv: 17,
     n: "Pull a backup of every program before you roll off.",
     w: "When that controller dies in year two, the only copy anywhere is the one you saved." },
   { id: "train-the-booker", t: ["av"],
@@ -176,24 +203,24 @@ window.COMMONS_TIPS = [
   { id: "naming-scheme-in-writing", t: ["low-voltage", "av"],
     n: "Get the naming scheme in writing before you print a label.",
     w: "The owner's IT has their own, and re-labelling a finished building is a week nobody's paying for." },
-  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"],
+  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"], rv: 17,
     n: "Shoot the data plate the first time you're at the equipment.",
     w: "The office needs model and serial to quote anything, and nobody makes that trip twice for a photo." },
-  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage"],
+  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage"], rv: 17,
     n: "Open the crate the day it lands and check it against the submittal.",
     w: "Wrong parts and freight damage found a month later are yours, and the replacement runs the original lead time again." },
-  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"],
+  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 17,
     n: "Ask what the finish is before you set your rough-in depth.",
     w: "Tile, furring or a second layer of board buries your rough, and trim day turns into a hunt for extensions." },
-  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"],
+  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"], rv: 17,
     n: "Measure the route the gear comes in on, not just the room.",
     w: "A section that clears the room but not the stairwell turns into a rigger and a hole in a wall." },
-  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"],
+  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 17,
     n: "Get your nail plates on before the rockers reach that wall, not on your next trip through.",
     w: "The screw goes through your homerun or your PEX on a day you're not there, and it turns up at trim in a painted wall." },
 
   /* ---- plumbing ---------------------------------------------------------- */
-  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"],
+  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"], rv: 17,
     n: "Treat a reinspection as a lost week, not a lost hour.",
     w: "You go back on the end of his list, and every trade stacked behind you sits." },
   { id: "count-test-plugs", t: ["plumbing"],

@@ -205,7 +205,7 @@ window.COMMONS_NAMES = [
         { n: "multipair", by: "the cable counter", k: "sup" }],
     no: "A wire-pulling fish tape — the steel snake an electrician hands over when you ask for a snake." },
   /* ---- plumbing ------------------------------------------------------ */
-  { id: "tongue-and-groove-pliers", n: "Tongue-and-groove pliers", t: ["plumbing", "hvac", "electrical", "gc"],
+  { id: "tongue-and-groove-pliers", n: "Tongue-and-groove pliers", t: ["plumbing", "hvac", "electrical", "gc"], rv: 17,
     o: "Pliers whose lower jaw slides along a grooved track cut into the handle.",
     a: [{ n: "Channellocks", by: "nearly everyone on site, plumbers first", k: "tm" },
         { n: "water pump pliers", by: "the counter, and most of Britain", k: "sup" },

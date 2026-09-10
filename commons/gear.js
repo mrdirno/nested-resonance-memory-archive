@@ -52,13 +52,37 @@ window.COMMONS_GEAR = [
      have told a shooter the shared floor of this program includes a drill and a
      voltage tester, which is the exact lie the strict `universal` bar exists to
      prevent. Re-tagged to the eight construction trades rather than deleted. */
-  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* + doors, 2026-09-09. The one widening three independent reviews agreed on,
+     and the only one this file proves against itself: the doors bag already
+     carried "self-centering bits, in every screw size you actually drive" and
+     "taps in the machine screw sizes" with nothing to turn either. Concrete,
+     flooring and creative were proposed and cut — concrete's levelling and
+     mixing are a screed and a straightedge it already carries, and a mixing
+     paddle is not the clutch-and-side-handle story this line tells. */
+  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 17,
     w: "Use the clutch and the side handle — a bit that catches will twist your wrist." },
-  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* REVIEWED AND LEFT WHERE IT IS, 2026-09-09. The why-line is the reason: it
+     says "nobody remembers your wiring", which is an installer's sentence and
+     is meaningless to a mason. Widening it means rewriting it neutral, and a
+     neutral why-line ("a level keeps your work straight") is the listicle this
+     file's header forbids — the specificity IS the anti-listicle property. The
+     rule that came out of it: a shared row splits when the WHY changes, not
+     when the tool does. Masonry lives on a 48-inch mason's level and paving on
+     a line level; both already carry theirs, and a generic torpedo on top
+     buries the better row. Doors got its own row instead, below. */
+  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
     w: "Nobody remembers your wiring. Everybody sees a crooked mount." },
   { id: "headlamp", n: "Headlamp", t: ["universal"],
     w: "Panels, ceilings, crawlspaces. Hands stay on the work instead of holding light." },
-  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"],
+  /* NEVER WIDENED, 2026-09-09, and this is the note that says so out loud. The
+     argument that will come back is that concrete cores walls and sitework digs
+     up primaries, so they need it more. That argument is backwards: the test is
+     whether the tool WORKS in that trade's context, never whether the hazard
+     exists there. An ncvt cannot see conduit through concrete or cable through
+     dirt, and cannot see the 24 volts DC at a door strike at all. Tagging it to
+     those trades would sell exactly the false confidence a 2026-08-13 review
+     already cut out of this row's why-line, in the trades where it kills. */
+  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
     w: "Lights up beside an energized conductor. First pass only — it never proves dead." },
   { id: "dikes", n: "Diagonal cutters (dikes)", t: ["universal"],
     w: "Every install ends in trimming zip ties. Don't do it with a knife." },
@@ -72,9 +96,9 @@ window.COMMONS_GEAR = [
     w: "Label both ends of every run. Unlabeled cable becomes somebody's whole afternoon." },
 
   /* ---- shared: more than one trade reaches for it, so it is ONE row ----- */
-  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"],
+  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"], rv: 17,
     w: "Cuts an access hole in drywall anywhere. No power, no cord." },
-  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"],
+  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"], rv: 17,
     w: "Somebody has to put the hole through the stud. Usually you." },
   { id: "glow-rods", n: "Glow rods (fish sticks)", t: ["av", "low-voltage", "electrical"],
     w: "Pushes a string above the grid so you lift two tiles instead of ten." },
@@ -520,6 +544,14 @@ window.COMMONS_GEAR = [
      on the things that make a cut land exactly where it was drawn, and on the
      things that undo a mistake at file-and-shim scale before it becomes a new
      leaf. Seeded at stand-up, curated against the refusal list. */
+  /* Added 2026-09-09. Two independent reviews landed on the same hole from
+     different directions: this trade's own tip says "set every frame off the
+     level line the building was laid out from", and its bag had nothing in it
+     to level with. A torpedo was proposed and refused — a torpedo reads plumb
+     at any one point on a jamb that is bowed between the hinges, which is the
+     failure this row exists to catch. */
+  { id: "door-long-level", n: "A six-foot level", t: ["doors"],
+    w: "A racked jamb swings itself shut, and everyone blames the closer." },
   { id: "self-centering-bits", n: "Self-centering bits, in every screw size you actually drive", t: ["doors"],
     w: "Drill a hinge pilot a hair off freehand and the screw drags the leaf sideways as it pulls down. You never see it at the hinge — you see it three hours later as a door that suddenly won't latch, and you go chase it at the strike where it isn't. Every hole these drill lands where the hardware says it lands, which is the only reason a set of butts pulls up flat." },
   { id: "door-jack", n: "Door jack — the foot lift, and blocks for the rest", t: ["doors"],

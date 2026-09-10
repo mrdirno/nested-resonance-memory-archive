@@ -431,6 +431,17 @@ jobs:
             process.exit(bad ? 1 : 0);
           ' || exit 1
 
+          # AND THE SHARED ROWS HAVE TO HAVE BEEN LOOKED AT SINCE THE LAST
+          # TRADE JOINED. The block above counts rows a trade OWNS, which is
+          # why it was green on 2026-09-09 while the nine trades that joined
+          # after framing held ZERO shared rows across all three surfaces —
+          # every one of them cleared its floor on its own narrow rows. A door
+          # installer's whole bag was self-centering bits and taps with no
+          # drill to turn them. `rv` on a shared row is the roster size the
+          # last time somebody decided who shares it; the gate reads the
+          # roster out of the same shipped data.
+          node tools/toolkit-gates/commons-scope.mjs --root=HELIOS-BRIDGE/dist || exit 1
+
           # THE NAME TABLE HAS TO ROUTE, OR IT IS A GLOSSARY.
           #
           # The panel that ranked this rung voted it down once on exactly one
