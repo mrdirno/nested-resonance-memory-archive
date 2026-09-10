@@ -27,11 +27,26 @@
  *     npx playwright test --config playwright.kit-switcher.config.ts
  */
 import { test, expect, type Page } from '@playwright/test';
+import { readFileSync } from 'fs';
 
 // RELATIVE, deliberately. The deployed site lives under a repo path
 // (/nested-resonance-memory-archive/) and a leading slash resolves against the
 // ORIGIN — silently dropping the prefix and 404ing every live run.
-const TRADES = ['av', 'plumbing', 'electrical', 'hvac', 'gc', 'low-voltage', 'framing', 'roofing'];
+// DERIVED FROM THE ROSTER, never typed here. This was a literal of the eight
+// trades that existed when the file was written, and NAV_KITS/HUB_KITS are
+// counted off it — so when trade #9 landed, this gate began asserting that the
+// hub renders 8 kit chips against a live hub that renders 17, for every trade,
+// at every width. A gate that is wrong about the whole program is not a gate.
+// Same rot, same week, as the commons shared rows: a list that already exists
+// never gets told that a trade joined. commons/commons.js is the one roster the
+// deploy already checks against the trades the runtime actually switches to.
+const ROSTER: { slug: string }[] = (() => {
+  const w: Record<string, unknown> = {};
+  const src = readFileSync(new URL('../../../../commons/commons.js', import.meta.url), 'utf8');
+  new Function('window', src)(w);
+  return w.COMMONS_TRADES as { slug: string }[];
+})();
+const TRADES = ROSTER.map((t) => t.slug).filter((s) => s !== 'universal');
 // One real tool page per trade — the half of the site that had no route out.
 const TOOLPAGE: Record<string, string> = {
   av: 'consumables.html',
@@ -46,6 +61,18 @@ const TOOLPAGE: Record<string, string> = {
   // Trade #8's signature tool — the night-seal record, and the only page in the
   // program that has to be used at a specific hour.
   roofing: 'whats-open.html',
+  // Trades #9-#17, added 2026-09-09 when TRADES stopped being a literal. Each is
+  // that trade's own page, never one of the eight documents every trade carries —
+  // a shared page would pass this test without proving the trade has a route out.
+  creative: 'whats-in-the-drop.html',
+  concrete: 'mix-order.html',
+  masonry: 'wheres-the-wall.html',
+  sitework: 'what-goes-in.html',
+  flooring: 'what-it-read.html',
+  painting: 'coat-count.html',
+  doors: 'not-ready-to-hang.html',
+  landscape: 'waters-yours.html',
+  paving: 'lot-closed-tonight.html',
 };
 const WIDTHS = [320, 360, 390, 430];
 const MIN_TAP = 44;
@@ -55,6 +82,14 @@ const MIN_TAP = 44;
  * the commons; the NAV dropdown renders everyone-who-is-not-me and omits the
  * commons (`kit:false`), because that menu already carries "What's in the bag"
  * three rows higher and the same destination twice in one menu is clutter. */
+const missingToolPage = TRADES.filter((t) => !TOOLPAGE[t]);
+if (missingToolPage.length) {
+  throw new Error(
+    `kit-switcher: no tool page listed for ${missingToolPage.join(', ')} — a trade joined the ` +
+    `roster and this map was not told. Pick that trade's own page, not one of the shared documents.`,
+  );
+}
+
 const NAV_KITS = TRADES.length - 1;
 const HUB_KITS = NAV_KITS + 1; // + the commons
 

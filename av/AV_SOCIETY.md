@@ -9561,3 +9561,104 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   **18137**). BACKPORT rider fired: 184 trade pages swept — 0 bury undo/clear in a disclosure, 0 gate the primary
   action behind a select, every registered tool renders its own `desc` line; nothing to carry.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- `2026-09-09` — **[AXIS:COMMONS] C3725 — A DOOR INSTALLER'S BAG LISTED THE BITS AND THE TAPS AND
+  NOTHING TO TURN THEM, AND EVERY GATE WAS GREEN** · **both wells read UNSCOPED first, and neither
+  could be served by this lane.** The AV well: 0 new, 0 building. The vibe-cards well: 0 new, one
+  `building` — `7ff1381e`, MIDI Room tempo sync — and the board flagged it a stale claim. It is not
+  one, and the measurement is the interesting part: the claiming lane FIXED it (`d611a32`, upstream
+  `mrdirno/midi-room`, one clock per follower, the wire dialog naming what a cable carries) and
+  **the fix is live at `mrdirno.github.io/midi-room/` — sw.js `ebc76f34b806df3e` — while
+  `persona500.com/midi-room/`, the page the wisher actually opened, still serves
+  `acb60440a2ae08a8`, the build before it.** The last mile is a vendoring commit in a repo this
+  lane does not push, whose tree is hundreds of dirty files deep in another lane's work. Same call
+  as C3711/C3716/C3724: not claimed, not declined, handed back with the two service-worker hashes,
+  which is a sharper handoff than "still open". Upstream `npm test` re-run here to confirm the fix
+  is real and not just committed: `one clock per follower: a second transport master is refused
+  while its notes still connect` and `the BPM readout follows one clock and clears when that clock
+  stops` both green, 24/24 on the two target files, TRITON 20/20. · **So the rung was the stalest
+  axis, and the census found the framing/roofing scar one floor up.** Every one of the 17 trades
+  now clears the FLOOR of 6 own rows on all three commons surfaces — that hole is closed. But a
+  row SHARED between trades carries a tag list that was true the day it was written and is never
+  revisited, and **every gate this program owns counts rows a trade OWNS**, so nothing goes red.
+  **Measured on the live data: the nine trades that joined after framing held ZERO shared rows
+  across all three surfaces — 27 of 27 cells — while the founding eight held 3–11 each.** Six rows
+  were tagged to exactly the roster of 2026-08-09. **The visible instance, driven on the live page
+  as a doors installer before anything was changed: his whole bag was 17 rows including
+  "self-centering bits, in every screw size you actually drive" and "taps in the machine screw
+  sizes" — with no drill to turn either and nothing to level with, on a page whose own tip tells
+  him to "set every frame off the level line the building was laid out from".** · **THE PANEL CUT
+  MOST OF WHAT WAS PROPOSED, and its three lenses disagreed with each other in the useful place.**
+  Journeyman 6/10, rails-and-partition 3/10, shape skeptic 5/10 — the two low scores were aimed at
+  the BALLOT (a blanket widen and a shape-detecting gate), not at the finding. Shipped only where
+  they agreed: the drill to **doors** (the one widening the file proves against itself), the photo
+  tip to **doors**, and "check the revision, not just the sheet number" to **sixteen of seventeen**.
+  **Refused, each with the reason written into the file beside the row so it is not re-derived:**
+  the torpedo level anywhere — its why-line says *"nobody remembers your wiring"*, which is
+  meaningless to a mason, and the rails lens's rule is that **a shared row splits when the WHY
+  changes, not when the tool does**, so a neutral rewrite would be the listicle the header forbids;
+  the voltage tester to any of the nine — **the test is whether the tool WORKS in that trade's
+  context, never whether the hazard exists there**, and an ncvt cannot see conduit through
+  concrete, cable through dirt, or the 24 volts DC at a door strike; and the photo tip to the six
+  trades that already own a sharper version (*shoot the steel · shoot the flashing · photograph the
+  marks · shoot the slab · shoot the crossing · photograph the layout*), where widening the generic
+  row would have demoted six good lines to duplicates of a worse one. **Creative is why
+  check-the-revision is 16 and not `universal`** — a shooter works off page colours, not sheet
+  numbers, and the strict bar is the only thing that makes the tag mean anything. **The skeptic's
+  own decisive check, run on the data and answered against its author's expectation:** concrete
+  carries a bull float, a screed straightedge and *"a long straightedge you trust"* — it levels
+  with a screed, so "no torpedo level" is correct and the innocent hypothesis survives on gear.
+  Painting likewise already owns the inverted photo row (`dings-before-the-drops`). Doors got **a
+  six-foot level of its own** rather than a torpedo widened onto it, because a torpedo reads plumb
+  at any one point on a jamb that is bowed between the hinges. **Dissent recorded:** the shape
+  skeptic would have spent the cycle on a cross-surface COHERENCE gate instead — *a gear row that
+  names an accessory whose host tool is absent from the same list* (bits/taps → driver, blades →
+  saw, receiver → laser) — which is the generalisation of both prior scars and catches doors
+  without any judgement call. Not built; it is the named next rung. The rails lens's 12–16 tag
+  band rule (each omitted trade named individually) is also named and not built. · **before →
+  after: shared rows held by the nine newer trades 0 → 10; shared rows carrying a recorded scope
+  review 0/17 → 17/17; doors gear 8 → 10, doors tips 8 → 10.** · **THE GATE, and the first design
+  of it died in review.** `tools/toolkit-gates/commons-scope.mjs`. The first version flagged any
+  wide row whose tag set was exactly the roster as of some past moment; two lenses killed it
+  independently and were right — **join order correlates with content**, so the first five trades
+  are the MEP+AV family and four correct rows (`fixture-cutsheet` and siblings) are a roster prefix
+  by accident, which would have demanded an excuse for correct data and taught reviewers to write
+  excuses; and **one cosmetic tag edit exempts a row forever**. Shape is the wrong signal, time is
+  the right one. `rv` is the roster size the last time somebody decided who shares a row: no
+  content false positives, no laundering, and the day an eighteenth trade joins **every shared row
+  in the commons comes back up for review at once**, which is the ratchet rather than a side
+  effect. The escape hatch is one integer, so what keeps it honest is that **failing prints every
+  trade the row leaves out, by name** — bumping the number means reading the list. **17 of 17
+  shared rows fail against the shipped data, 0 against the fix**, and the other four branches (a
+  17-tag row that is `universal` with the honesty removed · an `rv` from a roster that never
+  existed · a renamed trade left behind on a wide row · `rv` on a narrow row where it means
+  nothing) were each fired on a synthetic case. The deploy runs it with `--root=HELIOS-BRIDGE/dist`
+  against the ARTIFACT, not the source it was copied from. · **BACKPORT RIDER FIRED, and it found
+  the same class twice outside the commons — once where it had silently taken a whole gate
+  offline.** 5,253 tracked files swept for an incomplete hardcoded trade list; 19 literals in 5
+  files, 17 of them the commons rows just reviewed. The other two: **`tests/halo/smoke.js`** typed
+  sixteen trades and asserted *"links every sibling page and all 16 trades"* — paving joined and
+  neither was told, so the one link the assertion existed to demand was the one it stopped
+  demanding. And **`tools/collage-studio/tests/e2e/kit-switcher.spec.ts`** typed the founding
+  eight, with `NAV_KITS = TRADES.length - 1` and `HUB_KITS = NAV_KITS + 1` derived off it — **so
+  it asserted the hub renders 8 kit chips against a live hub that renders 17**, for every trade at
+  every width, and its config header still said *"all six trades"*: a third fossil of the same
+  count in one file. It could not even reach that failure, because the port-squatter guard added
+  to it (`tests/globalSetup.ts`, SCAR 2026-08-26) hardcodes the **Collage Studio** title and this
+  config's correct target is the toolkit site, so the guard refused its own target on every run. A
+  guard that cannot be aimed takes gates offline: it now reads the expected app and title mark from
+  the config's `metadata`, defaulting to Collage so nothing that worked changes. All three lists
+  now derive from `commons/commons.js`, the one roster the deploy already checks against the trades
+  the runtime switches to, and the kit-switcher map throws by name the day a trade has no page
+  picked for it. Nine signature tool pages added, each the trade's OWN page and never one of the
+  eight documents every trade carries — a shared page would pass without proving the trade has a
+  route out. **kit-switcher 187/187 GREEN AGAINST THE LIVE SITE across all 17 trades, from 8
+  trades and a gate that could not start.** · **Gates:** commons-scope 560 checks PASS on disk, on
+  a staged `dist/`, and against the three files re-fetched from the live URL; commons-bag 587
+  states across 3 surfaces; commons-names 425 checks with 137 routing probes and 48 hand-off
+  probes; deploy coverage green; mobile-watertight 320/360/390/430 on every commons surface;
+  `npx tsc --noEmit` clean. Live drive as a doors installer after the deploy: gear 10 rows led by
+  *A six-foot level* with *Cordless drill/driver* present, tips 10 with both new rows, zero page
+  errors. Storefront untouched — no new tool, no new trade. Code
+  [`a957bb04`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/a957bb04);
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/

@@ -36,9 +36,21 @@ import type { FullConfig } from '@playwright/test';
 /** The <title> this app's index.html has carried since it was named. */
 const MARK = 'Smart Crop GenArt Studio';
 
+/* NOT EVERY CONFIG IN THIS DIRECTORY POINTS AT COLLAGE. The kit-switcher gate
+ * drives the TOOLKIT site at the repo root, and this guard — added to it for
+ * the port-squatter reason above — then refused its own correct target on every
+ * run, because the marker was hardcoded to one of the two apps. A guard that
+ * cannot be aimed is a guard that gets deleted or, as here, one that quietly
+ * takes a whole gate offline. A config declares what it expects to find; the
+ * default stays Collage so nothing that worked has to change. (2026-09-09.) */
+type Marked = { expectTitleMark?: string; appName?: string };
+
 export default async function globalSetup(config: FullConfig) {
+  const meta = (config.metadata ?? {}) as Marked;
+  const mark = meta.expectTitleMark ?? MARK;
+  const app = meta.appName ?? 'COLLAGE STUDIO';
   const base =
-    process.env.COLLAGE_BASE_URL ||
+    (meta.expectTitleMark ? undefined : process.env.COLLAGE_BASE_URL) ||
     config.projects[0]?.use?.baseURL ||
     'http://localhost:5199';
 
@@ -57,11 +69,11 @@ export default async function globalSetup(config: FullConfig) {
     );
   }
 
-  if (!html.includes(MARK)) {
+  if (!html.includes(mark)) {
     const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1]?.trim() ?? '(no <title>)';
     throw new Error(
-      `E2E TARGET IS NOT COLLAGE STUDIO — ${base}\n` +
-        `  expected a page containing "${MARK}"\n` +
+      `E2E TARGET IS NOT ${app} — ${base}\n` +
+        `  expected a page containing "${mark}"\n` +
         `  got: "${title}"\n` +
         `  Something else is serving that port. Playwright's reuseExistingServer attaches to\n` +
         `  whatever is already listening, so the whole suite would have run against it.\n` +

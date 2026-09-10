@@ -156,11 +156,20 @@ const path = require('path');
   check('every Tools link is a folder relative to the site root',
     tools.hrefs.length > 0 && tools.hrefs.every(h => h.startsWith('./') && h.endsWith('/')),
     tools.hrefs.filter(h => !(h.startsWith('./') && h.endsWith('/'))).join(' '));
-  const trades = ['av', 'plumbing', 'electrical', 'hvac', 'low-voltage', 'gc', 'framing', 'roofing',
-                  'creative', 'concrete', 'masonry', 'sitework', 'flooring', 'painting', 'doors', 'landscape'];
+  // DERIVED FROM THE ROSTER, never typed here. This was a literal of sixteen
+  // trades and the check below said "all 16 trades" — paving joined and neither
+  // was told, so the one link this assertion existed to demand was the one it
+  // stopped demanding. commons/commons.js is the roster the deploy already
+  // checks against the trades the runtime switches to. (2026-09-09, swept with
+  // the same class in the commons shared rows and the kit-switcher spec.)
+  const rosterSrc = require('fs').readFileSync(
+    path.join(__dirname, '..', '..', 'commons', 'commons.js'), 'utf8');
+  const rosterWin = {};
+  new Function('window', rosterSrc)(rosterWin);
+  const trades = rosterWin.COMMONS_TRADES.map(t => t.slug).filter(s => s !== 'universal');
   const missingPages = ['archive/classic', 'archive', 'collage', 'collage-beta', 'commons', ...trades]
     .filter(s => !tools.hrefs.includes('./' + s + '/'));
-  check('Tools panel links every sibling page and all 16 trades', missingPages.length === 0, missingPages.join(' '));
+  check(`Tools panel links every sibling page and all ${trades.length} trades`, missingPages.length === 0, missingPages.join(' '));
   check('every Tools link opens in a new tab (target _blank, rel noopener)', tools.newTab);
   check('every Tools card has a title and a sentence', tools.titled);
   await page.keyboard.press('Escape');
