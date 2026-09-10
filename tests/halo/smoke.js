@@ -98,13 +98,33 @@ const path = require('path');
   await page.reload();
   await page.waitForSelector('.boot.done', { timeout: 30000 });
   await page.waitForTimeout(800);
+  // Whether the SAVE survived the reload is a separate fact from whether the PAGE restores
+  // it, and until 2026-09-09 this suite could not tell them apart. On the CI runner the
+  // file:// store came back empty after reload; addInitScript above then re-seeded
+  // {particles, quality} — an object with no cam key — on that same navigation, so
+  // loadState() found the key present, freshStart stayed false, every other assertion
+  // passed, and the two camera checks reported 45°/39.2 as "the camera did not persist".
+  // It had; the browser had dropped the store. Measured 2026-09-09: a file:// reload
+  // preserves localStorage on macOS and did not on ubuntu-latest. Name the real fact first,
+  // and do not assert a restore of something that is no longer there to restore.
+  const survived = await page.evaluate(() => {
+    try { return localStorage.getItem('resonance-chamber-v2'); } catch (e) { return null; }
+  });
+  const camSurvived = !!survived && /"user"\s*:\s*true/.test(survived);
+  check('saved camera survived the reload (storage, not the page)', camSurvived,
+    'localStorage after reload: ' + String(survived).slice(0, 90));
   const c2 = await camText();
-  check('camera persisted across reload (dist)',
-    storedCam && Math.abs(c2.d - storedCam.dist) < 0.15,
-    c2.d + ' vs stored ' + (storedCam && storedCam.dist));
-  check('camera persisted across reload (az)',
-    storedCam && Math.abs((parseFloat(c2.az) - (storedCam.az * 180 / Math.PI) % 360 + 540) % 360 - 180) < 1.5,
-    c2.az + ' vs stored ' + (storedCam && (storedCam.az * 180 / Math.PI).toFixed(1)));
+  if (!camSurvived) {
+    console.log('skip: camera persisted across reload (dist) — no saved camera to restore');
+    console.log('skip: camera persisted across reload (az) — no saved camera to restore');
+  } else {
+    check('camera persisted across reload (dist)',
+      storedCam && Math.abs(c2.d - storedCam.dist) < 0.15,
+      c2.d + ' vs stored ' + (storedCam && storedCam.dist));
+    check('camera persisted across reload (az)',
+      storedCam && Math.abs((parseFloat(c2.az) - (storedCam.az * 180 / Math.PI) % 360 + 540) % 360 - 180) < 1.5,
+      c2.az + ' vs stored ' + (storedCam && (storedCam.az * 180 / Math.PI).toFixed(1)));
+  }
 
   // Reset view returns to auto framing
   await page.keyboard.press('5');

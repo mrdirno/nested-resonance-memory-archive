@@ -20,6 +20,7 @@
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const arg = (k, d) => {
   const a = process.argv.find(s => s.startsWith('--' + k + '='));
@@ -160,6 +161,43 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
 
   const capsEnd = await page.evaluate(() => window.__probe.caps());
   const log = await page.evaluate(() => window.__probe.lab.log.map(r => r.join(',')));
+  // The header comes from the page, never from a copy in this file. A copy is what
+  // froze at 22 names when ring 13 widened the row to 28: every run recorded after
+  // that published six unnamed columns, with 'substeps' naming a conservation value.
+  const pageHead = await page.evaluate(() => window.__probe.LAB_LOG_HEAD || null);
+  const csvCols = log.length ? log[0].split(',').length : 0;
+  const csvHead = pageHead || '';
+  if (csvHead && csvCols && csvHead.split(',').length !== csvCols) {
+    throw new Error(`lab-log header names ${csvHead.split(',').length} columns but a row has ` +
+                    `${csvCols}. Refusing to write a record whose header mislabels its own data.`);
+  }
+  if (!csvHead) console.warn('[warn] this page revision does not expose LAB_LOG_HEAD; csv_head is empty');
+  // What made this run. Ring 17 spent seven controlled re-runs recovering one build
+  // because no record named its instrument; ring 18 measured that a whole-file hash
+  // over-reports (four page revisions, two behavioural classes) so the record pins the
+  // BYTES and the REVISION, and experiments/halo/instrument_identity.py decides the
+  // behavioural class from them. Schema stays halo-memory-prereg/1 on purpose: the
+  // frozen scorer rejects any other string (memory_estimator_qualify.py:550) and it
+  // must not be patched, so this is an added key, not a new schema.
+  const sha256 = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+  const gitOut = a => { try { return require('child_process')
+      .execFileSync('git', ['-C', path.resolve(__dirname, '..', '..')].concat(a),
+                    { encoding: 'utf8' }).trim(); } catch (e) { return null; } };
+  const instrument = {
+    test_page: 'tests/halo/rc-test.html',
+    test_page_sha256: sha256(path.resolve(__dirname, 'rc-test.html')),
+    source_page: 'HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html',
+    source_page_sha256: sha256(path.resolve(__dirname, '..', '..',
+      'HELIOS-BRIDGE-ARCHIVE', 'HELIOS-V501-halo-resonance-chamber.html')),
+    builder_sha256: sha256(path.resolve(__dirname, 'make_test_page.py')),
+    harness_sha256: sha256(__filename),
+    three_sha256: sha256(path.resolve(__dirname, 'three.min.js')),
+    git_rev: gitOut(['rev-parse', 'HEAD']),
+    git_dirty: (gitOut(['status', '--porcelain']) || '') !== '',
+    playwright: require('playwright/package.json').version,
+    browser: browser.version(),
+    node: process.version,
+  };
   const out = {
     tag: TAG, schema: 'halo-memory-prereg/1',
     params: { selfgrav: SG, gainloss: GL, seed: SEED, epochs: EPOCHS, particles: N,
@@ -167,7 +205,7 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
               step: applied.scenarioStep,
               backend: SW ? 'swiftshader' : 'gpu' },
     applied, caps_end: capsEnd, mesh_file: path.basename(meshPath), mesh_n: 32, mesh_count: EPOCHS,
-    csv_head: 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,substeps',
+    csv_head: csvHead, csv_cols: csvCols, instrument,
     csv_rows: log, epochs: rows,
     wall_seconds: Math.round((Date.now() - wall0) / 1000), pageerrors: errs.slice(0, 10),
   };

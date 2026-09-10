@@ -81,6 +81,9 @@ window.__probe = {
   get pmPot() { return pmPotA; },
   PM: { N: PM_N, TX: PM_TX, TY: PM_TY, HALF: EXTENT * 1.02 },
   lab: lab, applyScenario: applyScenario, TICK: TICK,
+  // The page's own lab-log name list, so a harness never carries a second copy that
+  // can freeze while the row grows. null on any revision older than the hoist.
+  LAB_LOG_HEAD: typeof LAB_LOG_HEAD === 'string' ? LAB_LOG_HEAD : null,
   effectiveSubsteps: typeof effectiveSubsteps === 'function' ? effectiveSubsteps : null,
   autoSubsteps: typeof autoSubsteps === 'function' ? autoSubsteps : null,
   labReadDensity: labReadDensity, labCorr: labCorr, PM_N: PM_N,

@@ -7104,11 +7104,17 @@ document.querySelectorAll('#pm-assign-seg button').forEach(btn =>
     syncPm();
     saveState();
   }));
+/* The one name list for a lab-log row. It used to live inside exportLabLog(), where
+   nothing else could read it: the memory-grid harness carried its OWN copy, that copy
+   froze at 22 names when ring 13 widened the row to 28, and every run recorded since
+   has published six unnamed columns with the name 'substeps' sitting on a conservation
+   value. One list, read by the exporter and by the harness through the test probe. */
+const LAB_LOG_HEAD = 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,H,dH_H0,L,wall_took,substeps,vol_rate,vol_pred';
 async function exportLabLog() {
   const el = $('lab-export-status');
   const say = t => { if (el) el.textContent = t; };
   if (!lab.log.length) { say('Nothing logged yet — turn the instruments on and let the chamber run.'); return; }
-  const head = 't,step,lambda,memory,memory_twoback,on_ceiling,l_prescribed,l_realized,C1,C2,C3,C4,C5,C6,C7,C8,C9,selfgrav,gainloss,hubble,epoch,H,dH_H0,L,wall_took,substeps,vol_rate,vol_pred';
+  const head = LAB_LOG_HEAD;
   const csv = [head, ...lab.log.map(r => r.join(','))].join('\n');
   try {
     say('Saving…');
@@ -9771,6 +9777,147 @@ realisation noise, and what does a run record have to carry - starting with the
 sha256 of the instrument that drove it - for any of this to be regenerable at
 all? Nothing about nested resonance memory is decided here in either direction.
 
+RING 18 · 2026-09-09 · the question ring 17 left could not be answered from the
+recorded data, and the record that could not name its instrument had been
+naming it by accident
+WHAT CHANGED: one JavaScript constant hoisted. The lab-log name list lived
+inside exportLabLog() where nothing else could read it, which is why the memory
+harness carried its own copy; it is now LAB_LOG_HEAD, read by the exporter and
+by the harness through the test probe. No GLSL, no constant, no preset, no
+DEFAULTS: sim_digest is unchanged at 40bfdb68 across this very edit while the
+page's sha256 moves 0fbc8201 -> b073aa69, which is the point of §5 below.
+Ring 17 left two questions meant to be answerable without a new grid. Full
+numbers: analysis/2026-09-09_measurability_noise_and_instrument_identity.md.
+Q1 - HOW MUCH OF "MEASURABLE" IS A THRESHOLD CROSSING ON REALISATION NOISE -
+CANNOT BE ANSWERED FROM THIS DATA, and not for want of runs. Ring 17's
+arithmetic on its six values is right (6,6,3,10,10,9 -> mean 7.3333, sample sd
+2.8048, floor 1.6638 sd away). Its label is wrong: those are THREE SEEDS UNDER
+TWO INSTRUMENTS, not six draws. Matched by seed every one moved the same way,
++4, +4, +6; of the twenty ways to split six numbers three-and-three the observed
+split is the single most extreme, exact one-sided p = 0.05. Programme-wide,
+exactly two conditions were ever run twice and BOTH changed instrument at the
+same moment - zero conditions have two realisations on one instrument - so
+realisation and instrument are perfectly confounded and no split between them is
+identified. No replacement point estimate is published here; ring 17's should
+not be leaned on. Nor are the three seeds three draws: E2's clause needs all
+three predicted fields, E3 reads the shared 3x3 template matrix and E4 needs all
+nine entries finite, so over 594 condition-epoch cells the seeds AGREE at 568
+(95.6%), are refused together at 506 (85.2%) and disagree at 26 (4.4%). And the
+threshold is not the gate that binds: SIX of the 81 runs already clear 12
+eligible epochs - default sg0.3 gl0 at 19,17,17 and sg0.5 gl0 at 15,15,15 - and
+all six die at E5b, the seed-balance gate ring 16 flagged as able to turn on the
+sign of a null within one standard error of zero. 43 of 81 runs sit at exactly
+zero. What would answer Q1 is one condition, one instrument, two independent
+TRIPLES, because the triple is the unit the gates act on. Not run here.
+RETIRED: "F4 PASS", IN BOTH ARMS. Both scored files report F4_robustness.pass =
+true and both rings and the README carry it. The rule is "violations <= max(1,
+ceil(0.05 * runs measurable under both))" and measurable_both is 0 in ALL ELEVEN
+variants of BOTH arms, 22 of 22 rows. No variant can register a violation, so F4
+passes by construction whenever the main configuration yields nothing. It is NOT
+EVALUABLE, and the robustness gate is blind in exactly the regime this programme
+has been in since 2026-09-06. No scored number moves.
+Q2 - WHAT MUST A RUN RECORD CARRY - was already half-answered twice, and the
+front page said otherwise. The build was pinned by revision AND md5 in
+analysis/2026-09-02_cross_epoch_memory_preregistered.md §13 at commit 155cf805 on
+2026-09-03, FOUR DAYS before ring 17 recovered it with seven re-runs, carrying
+the same traps ("do not use --from-git HEAD"). 155cf805 is an ancestor of the
+ring-17 seal and ring 17 never touched that file; the page at c6cd2cbe and at
+5cb08e51 is byte-identical (e3736b4c), so ring 17's winning control IS that
+recipe. README's "the first record of which build produced it" is false and is
+corrected in this commit, and its "reproducible to the byte" is narrowed: the
+receipt covers ONE tag and only one of its seven controls is an actual repeat.
+A FILE HASH IS THE WRONG PIN, MEASURED. Scored on ring 17's labelled set - four
+page revisions, two known behavioural classes - whole-file sha256 gives FOUR
+classes and over-reports; sim_digest (GLSL + named physics constants + driven
+presets + DEFAULTS) gives TWO and reproduces the partition: class A 40bfdb68 for
+{ring-17 HEAD, 122d0a57, 05dfa4ab}, class B bf9bd0c3 for {c6cd2cbe}, the build
+that reproduces the recorded grid. Two controls: appending ring 17's own comment
+leaves the digest still and moves the sha256, and so does this ring's own edit.
+What ring 13 changed is not arithmetic - every executed GLSL function on the
+default path is byte-identical across it; two new runtime branches and a shader
+refactor make the GPU compile a different program, and the classes are different
+trajectories, not one rounded twice (ring 17's per-epoch correlations between
+them run -0.0067 to 0.9957 and end at 0.5135). sim_digest does NOT cover most
+JavaScript; a tick-loop change does not move it, so the record pins bytes and
+revision too and the digest decides the class from them.
+AND THE RECORD HAS BEEN FINGERPRINTING ITS INSTRUMENT BY ACCIDENT, THROUGH A
+BUG. memory_prereg_run.js:170 hardcoded csv_head as a 22-name literal while
+csv_rows came live from the page; ring 13 widened the row to 28 and the literal
+did not move. All 60 grid records: head 22, rows 22, 14,160 rows, 0 unnamed. All
+21 pilot records: head 22, rows 28, 4,956 rows, SIX UNNAMED COLUMNS - and the
+header's 22nd name, "substeps", sits over a conservation value. No run mixes
+widths and the split is exactly the class-B/class-A boundary. Fixed forward: the
+harness now takes the header from the page, REFUSES to write a record whose
+header mislabels its own rows, and records an instrument block (test page and
+source page sha256, builder, harness, three.js, git rev and dirty flag,
+Playwright, browser, Node). Schema stays halo-memory-prereg/1 ON PURPOSE - the
+frozen scorer rejects any other string at memory_estimator_qualify.py:550 and
+must not be patched - so it is an added key, not a new schema.
+WHAT THE RECORD STILL CANNOT DO: six tags appear in BOTH arms with byte-
+identical recorded parameters and different mesh hashes. The run record has
+never been a sufficient key for its own output. Reported, not repaired: the
+recorded grid's inputs.manifest_check names input-provenance.json with a sha256
+and verified:true, and that file does not exist and has never been tracked -
+verified:true covers 18 of the 120 inputs it lists.
+THE RED GATE, DIAGNOSED NOT GREENED. HALO instrument health has failed three
+runs. The 2026-09-07 click-stability repair worked and uncovered a second
+failure that read as "camera persisted across reload 39.2 vs stored 23.518".
+The page is not at fault: 39.2 and 45 deg are its auto-fit defaults, the static
+markup is 0 deg / 25.0, so the page really re-fitted - because smoke.js's
+addInitScript runs on EVERY navigation and re-seeds {particles, quality}, an
+object with no cam, whenever the store reads empty. On the runner the file://
+store came back empty after reload; the seed then made loadState() see a key,
+freshStart stayed false, all 143 other checks passed and the two camera checks
+took the blame. Measured here: a file:// reload preserves localStorage on macOS
+and did not on ubuntu-latest. The suite now asserts the SAVE survived before
+asserting the page restored it, and skips the restore checks when there is
+nothing to restore. That makes the gate tell the truth; it does not make it
+green, and it was not made green by weakening an assertion.
+BANNED: publishing any split of ring 17's 2.80 between seed and instrument.
+Citing "F4 pass" as robustness. Reading "0 of 60 / 0 of 21" as anything but one
+configuration's answer. Treating the six runs over 12 epochs as near-misses on
+support. Patching the frozen scorer or protocol. Calling sim_digest an identity
+for the page. Changing the chamber's camera logic to green a gate.
+DEAD BRANCHES: (1) "the readouts were merely stale" - the static markup is 0 deg
+and 25.0, not 45 deg and 39.2. (2) "the boot restore is overwritten by a later
+re-fit" - instrumented; nothing overwrites it, the restore never runs. (3) "a
+writer between the read and the reload stores cam.user:false" - traced; the only
+writes in that window are two flushState calls, both storing user:true. (4) "the
+pin still verifies against today's rc-test.html" - it does not; that read caught
+a build another worker had transiently put in place, and today's file is
+6607876d against the pinned e91d5a1d. The pin is a RECIPE, not a live checksum.
+(5) "pool the 81 runs and publish an operating characteristic for the >=12 rule"
+- the seeds are not draws (95.6% agreement) and the rule is not what binds.
+KILL-TEST: sixteen agents in three phases - five deriving (the realisation
+spread, the gate attribution, the identity digest, the record census, and one
+told to make the whole cycle redundant) and ten told to refute, two per finding,
+one recomputing from the raw files with no shared code and one attacking the
+modelling - then a completeness critic. The critic killed this cycle's intended
+headline: it was the only agent to open verdict.F4_robustness, and it found the
+vacuous pass and the seed-coupling that made the planned noise estimate
+meaningless. The hostile premise worker found the false README priority claim.
+Every load-bearing number was then re-measured by the publisher before it was
+written down, which is how the contaminated md5 read in DEAD BRANCH (4) was
+caught: the worker's own sibling had rebuilt the file it checked.
+THE NON-OBVIOUS CHOICE: publish that the question cannot be answered, rather
+than the 4.7x smaller pooled standard deviation that was sitting one script away
+and would have looked like progress. It was computable, it was defensible as
+arithmetic, and it would have characterised a gate that refuses nothing while
+treating three coupled rows as three draws. Also: fix the harness and leave the
+CI gate red, because a test that names the wrong cause is worse than a red gate.
+OPEN QUESTIONS: ring 17 asked three. The drive-cut axis that cuts the imposed
+drive AND renormalises self-gravity to it is UNTOUCHED and still the successor's
+job. The 48-epoch half is still unavailable (FIRST_SCORED, LAST_SCORED = 3, 24,
+fixed with no flag). Whether a field that does not move should be scored at all
+is still unruled. What is now sharper: E5b, not support and not the epoch floor,
+is what refuses the only two conditions this programme has ever produced that
+clear 12 - so does the successor need a seed-balance gate at all, or does it
+need seeds that cannot be near-copies? Why does a file:// reload drop
+localStorage on ubuntu-latest and not on macOS, and should the suite be served
+over http so it tests the page instead of the browser's file-origin rules? And
+one this ring earns: an applyScenario path was found that reassigns state
+wholesale and drops the viewer's camera - reported here, not fixed, because it
+is a live public page and one agent's finding with no regression test yet.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

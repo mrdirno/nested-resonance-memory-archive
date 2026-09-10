@@ -1,0 +1,189 @@
+{
+ "schema": "halo-instrument-identity/1",
+ "author": "Aldrin Payopay",
+ "licence": "GPL-3.0-only",
+ "question": "Ring 17: what must a run record carry - starting with the sha256 of the instrument that drove it - for a grid to be regenerable at all?",
+ "script_sha256": "aac3af3e9b80223b0f8d4c2cc93e9ad21a60bddc4fe6003bd8ec962e5b585085",
+ "audit_sha256": "1083f1a834844638be4a6f980ad1c0f5db42b8bc62e74d792f02c2237d546495",
+ "page": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+ "designed_pin": {
+  "labelled_set": "data/results/halo/memory_pilot/reproduction_probe.json",
+  "revisions": {
+   "9e7e67c5": {
+    "true_class": "A",
+    "sim_digest": "40bfdb685f82902a02df2494462e3020fd82e11147d380d19580937668915f6b",
+    "whole_file_sha256": "0fbc8201eb7c9a415c900953527961948b21f8bfc39d4a5f9ec79243c34578bd",
+    "glsl_chunks": 29,
+    "glsl_bytes": 21304
+   },
+   "05dfa4ab": {
+    "true_class": "A",
+    "sim_digest": "40bfdb685f82902a02df2494462e3020fd82e11147d380d19580937668915f6b",
+    "whole_file_sha256": "7f0307121f59b2c452e05629f0f9d4f936381b873cef520011c186e87ed7bbac",
+    "glsl_chunks": 29,
+    "glsl_bytes": 21304
+   },
+   "122d0a57": {
+    "true_class": "A",
+    "sim_digest": "40bfdb685f82902a02df2494462e3020fd82e11147d380d19580937668915f6b",
+    "whole_file_sha256": "380fb1a100c3bdc9fee6ade389c37e3c70e35e79cf3b77e8976902dede91b076",
+    "glsl_chunks": 29,
+    "glsl_bytes": 21304
+   },
+   "c6cd2cbe": {
+    "true_class": "B",
+    "sim_digest": "bf9bd0c373bae72774f8c23bb7f1d59eafb2936d3786147065fa571e4c64f5c2",
+    "whole_file_sha256": "e3736b4c3b99deadeb0169c22ffa1a82c0b58a1c243ecd6877a08344ff38c86b",
+    "glsl_chunks": 19,
+    "glsl_bytes": 13205
+   }
+  },
+  "sim_digest_classes": {
+   "40bfdb685f82902a02df2494462e3020fd82e11147d380d19580937668915f6b": [
+    "05dfa4ab",
+    "122d0a57",
+    "9e7e67c5"
+   ],
+   "bf9bd0c373bae72774f8c23bb7f1d59eafb2936d3786147065fa571e4c64f5c2": [
+    "c6cd2cbe"
+   ]
+  },
+  "whole_file_sha256_classes": {
+   "0fbc8201eb7c9a41": [
+    "9e7e67c5"
+   ],
+   "7f0307121f59b2c4": [
+    "05dfa4ab"
+   ],
+   "380fb1a100c3bdc9": [
+    "122d0a57"
+   ],
+   "e3736b4c3b99dead": [
+    "c6cd2cbe"
+   ]
+  },
+  "sim_digest_classes_n": 2,
+  "whole_file_classes_n": 4,
+  "true_classes_n": 2,
+  "sim_digest_reproduces_partition": true,
+  "whole_file_reproduces_partition": false
+ },
+ "accidental_pin": {
+  "cause": "tests/halo/memory_prereg_run.js:170 hardcodes csv_head as a 22-name string literal; csv_rows is read live from window.__probe.lab.log. Ring 13 (122d0a57) widened the page row from 22 to 28 fields.",
+  "arms": {
+   "recorded_grid": {
+    "runs": 60,
+    "csv_head_names": 22,
+    "distinct_csv_head": 1,
+    "csv_row_widths": {
+     "22": 14160
+    },
+    "csv_rows_total": 14160,
+    "header_describes_rows": true,
+    "unnamed_columns": 0
+   },
+   "measurability_pilot": {
+    "runs": 21,
+    "csv_head_names": 22,
+    "distinct_csv_head": 1,
+    "csv_row_widths": {
+     "28": 4956
+    },
+    "csv_rows_total": 4956,
+    "header_describes_rows": false,
+    "unnamed_columns": 6
+   }
+  }
+ },
+ "record_is_not_a_key": {
+  "tags_in_both_arms": 6,
+  "all_have_identical_recorded_params": true,
+  "all_have_different_outputs": true,
+  "collisions": [
+   {
+    "tag": "spinchladni_sg0.15_gl0_seed12345_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "267b568cb83eaf0c",
+     "8c3fab3042f4a24d"
+    ],
+    "outputs_differ": true
+   },
+   {
+    "tag": "spinchladni_sg0.15_gl0_seed31337_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "55f9699462d21af7",
+     "f7c861be5d708021"
+    ],
+    "outputs_differ": true
+   },
+   {
+    "tag": "spinchladni_sg0.15_gl0_seed777_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "23c1e7926cdf0069",
+     "a601da76ee3b55df"
+    ],
+    "outputs_differ": true
+   },
+   {
+    "tag": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "b605766da6ca6101",
+     "ea8b1d81a010edb8"
+    ],
+    "outputs_differ": true
+   },
+   {
+    "tag": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "b90afc881e0be73a",
+     "dcef11358b380a71"
+    ],
+    "outputs_differ": true
+   },
+   {
+    "tag": "spinchladni_sg0.3_gl0_seed777_n4194304_e24",
+    "arms": [
+     "recorded_grid",
+     "measurability_pilot"
+    ],
+    "recorded_params_identical": true,
+    "mesh_sha256": [
+     "a360141a63e93a82",
+     "b80008087605ec7b"
+    ],
+    "outputs_differ": true
+   }
+  ]
+ },
+ "what_this_does_not_license": [
+  "It does not say the two classes differ by any particular amount, only that they differ.",
+  "The class-B stamp rests on ONE tag reproducing byte for byte in ring 17 s receipt; the other 59 recorded runs are stamped by shared provenance, not by re-running them.",
+  "sim_digest covers the GPU program, the named physics constants, the driven presets and DEFAULTS. A JavaScript-only change to the tick loop does not move it.",
+  "Nothing here measures memory, and nothing here changes any scored number."
+ ]
+}
