@@ -110,7 +110,17 @@
     // owner wants moved is the SHEET talking — a plan question that lives with
     // the civil and the owner who stamp it, not with the man holding the
     // striper. Not a refusal, not a commitment: an ask pointed elsewhere.
-    "its the plan": "ask"
+    "its the plan": "ask",
+    // siding/items.js — the walk-back rungs. [0], [1] and [2] are shared with
+    // painting, doors, landscape and paving; only the fourth is new. On an
+    // exterior walk, half of what gets written down is the WALL talking through
+    // the cladding — a stud that is proud, a sheathing joint, a corner that was
+    // never plumb. Cladding is thin and it lies down on what it is fastened to,
+    // so hanging it again the same way puts the wave straight back; making it go
+    // away is a decision about the wall and about money, and it belongs to the
+    // framer, the GC and the owner together. Not a refusal, not a commitment:
+    // an ask pointed at the substrate.
+    "its the wall": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score

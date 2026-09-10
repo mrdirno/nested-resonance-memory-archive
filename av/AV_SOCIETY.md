@@ -284,6 +284,33 @@ own paperwork/communication friction. Mechanics:
   the tap instruction; `boundary-titles.mjs` wants `<title>` and the apple-title to be the
   config's `toolName`. Copy the sibling's sentence where a gate names one, then localize
   around it — a paraphrase fails the build.
+- **AND THE FOURTH RUNG HAS TO BE REGISTERED IN THE ENGINE, NOT JUST WRITTEN — found at
+  trade #18.** A trade's `answer-back` ladder is four rungs and the fourth is always new,
+  because it is the one thing that trade can say that no sibling can. Writing it in
+  `items.js` is half the job: `shared/reconcile.js` carries a `VERDICTS` table that maps
+  each rung's normalised words to yes / in / no / ask, and a rung that is not in it
+  classifies as **nothing** — so every answer on that trade comes back reading "didn't say
+  yes or no" while the page looks completely normal. `reconcile-join.mjs` asserts it (*"is
+  classified in reconcile.js VERDICTS ... add it, or every answer on that trade reads as
+  'didn't say yes or no'"*), and `answer-tapnote.mjs` asserts the SECOND half nobody
+  expects either: the tap instruction under the list is prose in the page file, so a copied
+  `answer-back.html` teaches the SIBLING's four rungs while the buttons say yours. Siding
+  failed both at stand-up. Three edits, one rung: `items.js` `answers[]`, the tap-note
+  sentence, and the `VERDICTS` entry with its reason.
+- **AND EVERY SHARED COMMONS ROW COMES UP FOR REVIEW THE DAY YOU JOIN — found at trade #18,
+  by the gate built at #17's successor cycle.** `commons-scope.mjs` stamps each cross-trade
+  row with `rv`, the roster size the last time somebody decided who shares it; an eighteenth
+  trade makes every one of them stale at once and the deploy goes red until each is
+  re-decided. That is the ratchet working, and it is real work in the stand-up's window: 17
+  rows, each printing every trade it leaves out by name. **Do not pad.** The rule that
+  decides them is C3725's and it is easy to get backwards: *a shared row splits when the WHY
+  changes, not when the tool does*, and *the test is whether the tool WORKS in that trade's
+  context, never whether the hazard exists there*. Siding's first pass widened the torpedo
+  level and the voltage tester onto itself by reasoning from the hazard — the exact error —
+  and both were backed out with the reason written in beside the row. Three of seventeen
+  were real (the drill, check-the-revision, the crate on the day it lands); eleven were
+  deliberate exclusions; and a trade that already owns a sharper version of a generic row
+  takes the exclusion, or the widening demotes a good line to a duplicate of a worse one.
 - **Same bar, same safety, same ledger.** Every trade's tools face the identical
   "would a real &lt;trade&gt; pro use this to send their boss something, FAST?" test.
   The cross-trade demand DATA stays private (the moat); the pages stay open.

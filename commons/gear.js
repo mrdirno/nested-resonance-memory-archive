@@ -59,7 +59,7 @@ window.COMMONS_GEAR = [
      flooring and creative were proposed and cut — concrete's levelling and
      mixing are a screed and a straightedge it already carries, and a mixing
      paddle is not the clutch-and-side-handle story this line tells. */
-  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 17,
+  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors", "siding"], rv: 18,
     w: "Use the clutch and the side handle — a bit that catches will twist your wrist." },
   /* REVIEWED AND LEFT WHERE IT IS, 2026-09-09. The why-line is the reason: it
      says "nobody remembers your wiring", which is an installer's sentence and
@@ -70,7 +70,14 @@ window.COMMONS_GEAR = [
      when the tool does. Masonry lives on a 48-inch mason's level and paving on
      a line level; both already carry theirs, and a generic torpedo on top
      buries the better row. Doors got its own row instead, below. */
-  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
+  /* SIDING REFUSED, 2026-09-10, on C3725's rule: a shared row splits when the WHY
+     changes, not when the tool does. This why-line is an installer's sentence about a
+     MOUNT and this trade has none — and C3725 gave doors a six-foot level of its OWN
+     rather than widen this row, because a torpedo reads plumb at one point on a jamb
+     that is bowed between the hinges. A wall bowed between studs is the same argument.
+     His level is the four-footer under the starter strip and the story pole, and both
+     are on his own list. */
+  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
     w: "Nobody remembers your wiring. Everybody sees a crooked mount." },
   { id: "headlamp", n: "Headlamp", t: ["universal"],
     w: "Panels, ceilings, crawlspaces. Hands stay on the work instead of holding light." },
@@ -82,7 +89,14 @@ window.COMMONS_GEAR = [
      dirt, and cannot see the 24 volts DC at a door strike at all. Tagging it to
      those trades would sell exactly the false confidence a 2026-08-13 review
      already cut out of this row's why-line, in the trades where it kills. */
-  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
+  /* SIDING REFUSED, 2026-09-10, and it is the exact error C3725 named: the test is
+     whether the tool WORKS in that trade's context, never whether the hazard exists
+     there. He works at the mast, the meter and the exterior boxes, so the hazard is
+     as real as anybody's — and an ncvt cannot see a conductor through vinyl, through
+     sheathing or inside a meter base. What he actually does is not touch it and put it
+     on the list to the EC, which is a line in his own kit rather than a tester in his
+     pouch. */
+  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
     w: "Lights up beside an energized conductor. First pass only — it never proves dead." },
   { id: "dikes", n: "Diagonal cutters (dikes)", t: ["universal"],
     w: "Every install ends in trimming zip ties. Don't do it with a knife." },
@@ -96,9 +110,9 @@ window.COMMONS_GEAR = [
     w: "Label both ends of every run. Unlabeled cable becomes somebody's whole afternoon." },
 
   /* ---- shared: more than one trade reaches for it, so it is ONE row ----- */
-  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"], rv: 17,
+  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"], rv: 18,
     w: "Cuts an access hole in drywall anywhere. No power, no cord." },
-  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"], rv: 17,
+  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"], rv: 18,
     w: "Somebody has to put the hole through the stud. Usually you." },
   { id: "glow-rods", n: "Glow rods (fish sticks)", t: ["av", "low-voltage", "electrical"],
     w: "Pushes a string above the grid so you lift two tiles instead of ten." },
@@ -628,5 +642,32 @@ window.COMMONS_GEAR = [
   { id: "blower", n: "Blower — the backpack, not the handheld", t: ["paving"],
     w: "Seal and paint go onto a clean surface or they go onto the dirt sitting on it, and lift off with it the first time a tire spins. The blower is the last thing that runs before the rig and the first thing that runs after the cones go down. It's also the loudest thing you own on a lot with apartments over it, so which hours you run it is a question you ask the property manager, not a call you make." },
   { id: "torch-and-extinguisher", n: "Torch — and the extinguisher that rides beside it, always", t: ["paving"],
-    w: "Crack fill goes in hot and the torch dries the crack, warms the old edge and re-melts the pour that skinned before it levelled. It lives on a lot full of mulch beds, dumpster enclosures, blowing leaves and other people's cars, so the extinguisher rides with it — on the same cart, not on the truck — and it's said out loud here because it's the tool nobody lists. Where the torch runs and who's the fire watch is the building's call; ask before you light it." }
+    w: "Crack fill goes in hot and the torch dries the crack, warms the old edge and re-melts the pour that skinned before it levelled. It lives on a lot full of mulch beds, dumpster enclosures, blowing leaves and other people's cars, so the extinguisher rides with it — on the same cart, not on the truck — and it's said out loud here because it's the tool nobody lists. Where the torch runs and who's the fire watch is the building's call; ask before you light it." },
+
+  /* ---- SIDING & EXTERIORS -------------------------------------------------
+     Trade #18, seeded at stand-up. THE RULE THIS LIST WAS WRITTEN UNDER, and
+     it came out of the C3725 doors finding: no row names an accessory whose
+     host tool is missing from the same list. Every consumable here rides on
+     the same row as the thing that turns, fires or holds it — the blade with
+     the saw it lives in, the hole saws with the drill that spins them, the
+     punches as a pair. And nothing here reads a fastener, a gap, a clearance
+     or a rating and tells him what it ought to be: the printed instructions
+     he was handed own those, and on most of what he hangs the warranty is
+     written against them by name. */
+  { id: "siding-brake", n: "The brake — the long one, and a stand for it", t: ["siding"],
+    w: "Everything that is not a stock part gets made in the driveway on this: the head flashing over a window, the piece that dies into the brick, the sill pan the supplier does not sell, the cap that makes an ugly return look deliberate. A short brake bends a short piece and then you have a seam somebody can see from the street; the long one is why a whole head is one piece. It wants a stand and a flat spot, because a brake on two sawhorses on a slope bends a curve into everything. What you bend it to is the detail somebody drew and the instructions you were handed — the brake is only how you get there." },
+  { id: "siding-snips-three", n: "Aviation snips — the set of three, not the one in the bag", t: ["siding"],
+    w: "Straight, left and right, and the reason it is three is that a left cut with a right snip curls the drop into your wrist and leaves an edge that will not sit under a J. Buy them as a set, keep them as a set, and when one goes dull the set goes dull — a man cutting with one snip cuts everything the direction that snip likes, and it shows on the wall. Keep them out of the mud: the spring is the part that dies." },
+  { id: "siding-fc-saw", n: "A circular saw kept just for fibre cement, and the blade that lives in it", t: ["siding"],
+    w: "The board eats a wood blade in an afternoon and a wood blade tears the board while it is dying, so the saw that cuts board is a saw that only cuts board — mark it and mean it. Keep it outside, downwind, and cut with the dust going away from you and away from whoever is inside the house with a window open; what the dust is and what you should be wearing is on the manufacturer's sheet and on the safety data sheet, and that is where you read it, not here. A second saw for wood costs less than a day of ruined board." },
+  { id: "siding-vinyl-punches", n: "Snap-lock punch and a nail-hole punch — the pair, in the same pouch", t: ["siding"],
+    w: "The pair is how a top course and a cut-in around a hose bib end up looking like the rest of the wall instead of like a repair. One puts the tabs on the cut edge so the piece locks into the utility trim; the other opens a hole where you need one. They live in the same pouch because the job that needs one needs the other twenty seconds later, and a man walking back to the truck for the second one talks himself into a face nail instead." },
+  { id: "siding-pump-jacks", n: "Pump jacks, poles and planks — or the day rate on a lift", t: ["siding"],
+    w: "The whole trade is standing at the right height with both hands free, and the argument between jacks and a lift is decided by the ground, not by preference: soft, sloped, a deck, a bed of shrubs, a wall you cannot get a machine to. Walk it before you promise a day. Jacks go where a lift cannot and take an hour to set; a lift is faster on a clean flat elevation and is a phone call the week before, not the morning of. Whatever you set it on, the base is somebody's ground and worth asking about before you put a leg on it." },
+  { id: "siding-chalk-and-story-pole", n: "Chalk box and a story pole you made yourself", t: ["siding"],
+    w: "Courses drift. Measure off the last course all the way up a two-storey gable and the drift is a quarter of a course by the top, running out at the rake where everybody looks. The story pole is a stick with the courses marked on it from a datum you picked once, and it is how the left corner and the right corner arrive at the same place. Mark it, keep it, label it with the house — and snap off it, not off the piece you just hung. What the course height is comes off the product and the instructions; the pole only makes sure every wall gets the same one." },
+  { id: "siding-holesaws-and-drill", n: "Hole saws in a case, and the right-angle drill that spins them", t: ["siding"],
+    w: "Every wall has somebody else's fitting coming through it and the difference between a clean collar and a patch is one clean hole. Keep the saws in the case with the arbors and the pilot bits actually in it, because a hole saw with no arbor is a paperweight at the top of a jack. The right-angle drill is for the ones that land under an eave or beside a corner post where a straight drill will not sit square. Cut them before you close, from a list you wrote down — never on somebody's word at the tailgate." },
+  { id: "siding-magnet-and-broom", n: "A rolling magnet and a stiff broom — end of every day, not end of the job", t: ["siding"],
+    w: "Tear-off drops nails, and a nail in the driveway of the house you are working on is the one thing that turns a good job into a bad customer. Roll it at the end of every day while you can still see, not on Friday: the ones you leave overnight get driven onto. It is also the cheapest thing on this list that a homeowner notices and mentions to the neighbour who is thinking about a re-side." }
 ];

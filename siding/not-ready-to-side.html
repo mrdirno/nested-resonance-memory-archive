@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wall's Not Ready — Siding &amp; Exteriors Field Toolkit</title>
+<meta name="description" content="No wrap on it or it's torn, windows in and never flashed, sheathing loose, nothing to nail a corner to, rot behind the old wall, nobody's picked a colour, and the grade's at the sheathing. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits. Because once the wall is on, whatever's behind it is behind it.">
+<meta name="apple-mobile-web-app-title" content="Wall's Not Ready">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Siding &middot; at the wall, before the crew climbs</span>
+    </div>
+    <h1 id="h1">Wall&rsquo;s Not Ready</h1>
+    <p class="lede" id="lede">You work between dry-in and paint on the outside of a building, and you are the one who finds out at seven in the morning what didn&rsquo;t get done behind you. Walk the elevation before the crew climbs and name what stops the wall, in your words: the wrap that isn&rsquo;t on or is torn, the windows nobody flashed, the sheathing with gaps in it, nothing to nail a corner to, the rot you found when the old wall came off, the colour nobody&rsquo;s picked. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to close it as it sits. Because once the wall is on, whatever is behind it is behind it, and the man who closed it owns how it looks from the street.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, off your own tape and set beside what your own set says. It states no fastener, no spacing, no gap, no clearance to grade, to a roof or to a deck, no gutter size and no threshold of any kind; it never says a wall is ready, weathertight or complete; and it never says what caused what you found, what it needs, or whether anything on an old wall is safe to cut &mdash; those are an engineer&rsquo;s, an inspector&rsquo;s and a certified outfit&rsquo;s calls and this page stands in for none of them. It doesn&rsquo;t stop the job either: it hands whoever runs the job the choice, on the record: clear it, or direct it closed as it sits.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY TO PAVE — the section note, and the twin of landscape's Not Ready
+ * To Plant and doors' Not Ready To Hang. A CONFIG of shape #2's engine
+ * (shared/note.js): no CSS here, no DOM building, no state, no persistence,
+ * no document assembly — the engine owns all of it. This file owns the
+ * WORDS, which is the half an engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: a wall closed over something that was not
+ * ready is HIS problem. The moment the cladding is on, whatever the wall carried becomes
+ * the siding crew's — so the record of what the wall carried has to exist
+ * BEFORE the hanging, and the choice (fix it / close it anyway) has to be
+ * somebody else's, in writing. The stops list lives in items.js; every entry
+ * is a condition with the ASK riding under it, so the note reads as a list a
+ * super can clear by lunch, not a complaint.
+ *
+ * AND THE NUMBERS ARE HIS. "What you found, and where" is a free-text field
+ * on purpose, and so is "what your own set says": the finding is his, off his
+ * own tape, and the callout is the sheet's, and the page states no tolerance,
+ * no gap and no threshold between them. The manufacturer's instructions own
+ * the numbers this trade gets sued over; "I'm not hanging today" is his call,
+ * in his words, with no threshold of ours behind it.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.notready;
+  var KEY = "toolkit.siding.notreadytoside.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY TO PAVE",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox next spring, when the argument is about which section and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "412 Marchmont — full re-side", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Priya N. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The elevation",
+        docHead: "THE ELEVATION",
+        why: "By the names on the set and the names the crew uses, so his answer names the same wall your crew is standing at.",
+        fields: [
+          { id: "rooms", kind: "area", rows: 2, label: "Which elevation / area", hint: "— the way the set says it, and how much of it", ph: "the rear elevation and both gables — everything we were hanging this week" }
+        ]
+      },
+      {
+        title: "What stops the wall",
+        tone: "loud",
+        docHead: "WHAT STOPS THE WALL",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the deck ledger is bolted straight through the sheathing with no flashing on it — somebody has to say whether that's coming off before I close around it" }
+        ]
+      },
+      {
+        title: "What you found — if you looked behind it",
+        docHead: "WHAT I FOUND, WHAT MY SET SAYS",
+        why: "Both are yours: what you found with your own eyes and your own tape when the old wall came off, and what your own set says beside it. The page supplies neither, and nobody here says what caused it or what it needs — that is an engineer's and an inspector's call, and refusing it is exactly what makes this hold up.",
+        fields: [
+          { id: "reading", kind: "text", docLabel: "What I found", label: "What you found, and where", hint: "— off your own tape, and what time", ph: "pulled the wall left of the rear door and the sheathing is soft about four foot across off my tape — 7:20, photographed with the tape on it" },
+          { id: "limit", kind: "text", docLabel: "My set", label: "What your own set says", hint: "— and which sheet", ph: "A-201 rev 3 for that elevation shows … — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets covered or cleaned up", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday — a crew standing at a wall it cannot hang is somebody's money burning while the meeting gets scheduled.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and what's on the trucks", ph: "four of us on the wall, jacks up on that elevation and the coil already cut for it" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving to the front elevation — a day and a half there, then we are out of work on this house" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "Dale W — 559-555-0143", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Rivet Exteriors", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply FIX with who's fixing each one and when, and this elevation goes back on my board the day it's cleared — and my crew comes back to it instead of somebody else's house.",
+      "Or reply CLOSE and we hang it as it sits — in writing, because once the wall is on, whatever is behind it is behind it, and this note is the record of what was there when I closed it.",
+      "Nothing here is a verdict on anybody's work — it's what I found, in my words, off my own tape and set beside my own sheet. What caused it, what it needs, and whether anything on that wall is safe to cut are not mine to say: those are an engineer's, an inspector's and a certified outfit's calls, and I am not standing in for any of them."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

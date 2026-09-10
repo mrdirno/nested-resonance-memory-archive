@@ -73,7 +73,7 @@ window.COMMONS_TIPS = [
      other trade needs the same PRINCIPLE in its own irreversibility (sleeves
      before the pour, frames with the wall, deep before shallow, pave toward
      your way out), which is four new rows, not four new tags. Named, not done. */
-  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 17,
+  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
     n: "Get the big stuff in before the last opening closes.",
     w: "Racks, tubs, gear sections and units don't fit through a finished door, and cutting the wall back open is somebody's change order." },
   /* + doors ONLY, 2026-09-09, and the interesting half is the eight that were
@@ -87,7 +87,12 @@ window.COMMONS_TIPS = [
      Doors was the one hole: frame anchors and grout really do get rocked over
      and it had no photo tip of its own. Note the why-line names an object —
      "the rock" is drywall — so this row is narrower than its title admits. */
-  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 17,
+  /* SIDING REFUSED, 2026-09-10. He owns two sharper versions on his own list —
+     photograph the finished elevation the day you close it, and lay a straightedge on
+     the BARE wall and photograph it lying there. C3725 refused this row to the six
+     trades that already own a sharper one, because widening it demotes a good line to
+     a duplicate of a worse one. Same call, one trade later. */
+  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 18,
     n: "Shoot your work before it gets covered.",
     w: "Months later your phone is the only proof of what's behind the rock." },
   { id: "existing-damage", t: ["universal"],
@@ -132,7 +137,7 @@ window.COMMONS_TIPS = [
      the only thing that makes the tag mean anything. Sixteen tags is one short
      of the back door, deliberately. */
   { id: "check-the-revision", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing",
-        "concrete", "masonry", "sitework", "flooring", "painting", "doors", "landscape", "paving"], rv: 17,
+        "concrete", "masonry", "sitework", "flooring", "painting", "doors", "landscape", "paving", "siding"], rv: 18,
     n: "Check the revision, not just the sheet number.",
     w: "Work built off a superseded drawing comes back out, and nobody reimburses that." },
   { id: "number-off-the-print", t: ["universal"],
@@ -140,7 +145,7 @@ window.COMMONS_TIPS = [
     w: "The dimension you carried over from the last job is the one that gets ripped back out." },
 
   /* ---- AV ---------------------------------------------------------------- */
-  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"], rv: 17,
+  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"], rv: 18,
     n: "Rough to the approved submittal, not the design drawing.",
     w: "The plan draws a generic unit; the one that got approved moves your rough, and you find out at trim." },
   { id: "fiber-cable-direction", t: ["av"],
@@ -155,7 +160,7 @@ window.COMMONS_TIPS = [
   { id: "outline-the-display", t: ["av"],
     n: "Spray your display outline on the wall before anybody roughs it.",
     w: "Otherwise the stat, the strobe and the quad all land inside the panel footprint." },
-  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"], rv: 17,
+  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"], rv: 18,
     n: "Pull a backup of every program before you roll off.",
     w: "When that controller dies in year two, the only copy anywhere is the one you saved." },
   { id: "train-the-booker", t: ["av"],
@@ -203,24 +208,24 @@ window.COMMONS_TIPS = [
   { id: "naming-scheme-in-writing", t: ["low-voltage", "av"],
     n: "Get the naming scheme in writing before you print a label.",
     w: "The owner's IT has their own, and re-labelling a finished building is a week nobody's paying for." },
-  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"], rv: 17,
+  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"], rv: 18,
     n: "Shoot the data plate the first time you're at the equipment.",
     w: "The office needs model and serial to quote anything, and nobody makes that trip twice for a photo." },
-  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage"], rv: 17,
+  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage", "siding"], rv: 18,
     n: "Open the crate the day it lands and check it against the submittal.",
     w: "Wrong parts and freight damage found a month later are yours, and the replacement runs the original lead time again." },
-  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 17,
+  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 18,
     n: "Ask what the finish is before you set your rough-in depth.",
     w: "Tile, furring or a second layer of board buries your rough, and trim day turns into a hunt for extensions." },
-  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"], rv: 17,
+  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"], rv: 18,
     n: "Measure the route the gear comes in on, not just the room.",
     w: "A section that clears the room but not the stairwell turns into a rigger and a hole in a wall." },
-  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 17,
+  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 18,
     n: "Get your nail plates on before the rockers reach that wall, not on your next trip through.",
     w: "The screw goes through your homerun or your PEX on a day you're not there, and it turns up at trim in a painted wall." },
 
   /* ---- plumbing ---------------------------------------------------------- */
-  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"], rv: 17,
+  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"], rv: 18,
     n: "Treat a reinspection as a lost week, not a lost hour.",
     w: "You go back on the end of his list, and every trade stacked behind you sits." },
   { id: "count-test-plugs", t: ["plumbing"],
@@ -800,5 +805,37 @@ window.COMMONS_TIPS = [
     w: "You are not the one who says the base passed; the lab's number and the civil's call do that. What you can say is that you stood there, the truck sat here, and the base moved under it at the spot you can point to. Named and sent before you roll, that's a soft spot somebody fixes. Found by the roller a week later, it's your mat, your warranty and your name on the crack." },
   { id: "cut-the-tie-in-first", t: ["paving"],
     n: "Saw the tie-in at the old mat and at the walk before the paver gets there, not after.",
-    w: "A feathered edge against old asphalt looks fine off the screed and breaks off under the first turning tire, and the ragged edge along the walk is the lip every cart finds. A straight cut, tacked, gives the new mat something to hold, and it's a morning's work while the lot is dry and yours — the same cut after the paver's been through is a joint you pulled up to fix." }
+    w: "A feathered edge against old asphalt looks fine off the screed and breaks off under the first turning tire, and the ragged edge along the walk is the lip every cart finds. A straight cut, tacked, gives the new mat something to hold, and it's a morning's work while the lot is dry and yours — the same cut after the paver's been through is a joint you pulled up to fix." },
+
+  /* ---- SIDING & EXTERIORS -------------------------------------------------
+     Trade #18, seeded at stand-up. Every one of these is a thing that costs
+     nothing before the wall closes and costs a scaffold after it. No
+     fasteners, no gaps, no clearances, no gutter sizes and no call on what
+     anything is: where a number belongs it comes off the printed instructions
+     he was handed, and where a determination belongs it belongs to somebody
+     with a licence. */
+  { id: "photograph-the-day-you-closed-it", t: ["siding"],
+    n: "Photograph every elevation the day you finish it, whole, before you move the staging.",
+    w: "It costs four frames and it is the only proof that will ever exist that the wall left your hands without a hole in it. Every argument this trade has nine months later — the vent somebody cut, the scuff, the piece that got knocked at the corner — is settled by a dated picture of a finished wall or it is split down the middle. Get the whole elevation in one frame with something permanent in it, and get the date on the file. It is also the shot you send the next customer." },
+  { id: "straightedge-the-bare-wall", t: ["siding"],
+    n: "Lay a straightedge on the bare wall and photograph it lying there, before a single course goes on.",
+    w: "The complaint you will get is that the siding looks wavy, and the answer is almost always the wall — but \"that's the framing\" said out loud sounds like a dodge and loses every time. The same straightedge photographed at the same spot on two dates is not a dodge, it is a demonstration, and it ends the conversation in one message. Ten minutes on a bare wall, and the frames are worth more than anything else you will do that morning." },
+  { id: "walk-the-holes-before-the-wrap", t: ["siding"],
+    n: "Walk every penetration with the trades BEFORE the wrap goes on, and send the list.",
+    w: "The wall is open for a few days and then it is closed for thirty years. Everything that comes through it after you close is a hole saw in finished cladding, a patch that stays a patch, and a joint the owner can see from the driveway — and from the street it reads as your work. Ten minutes with the mechanical foreman and the electrician while the sheathing is bare, written down and sent, is the cheapest ten minutes in this trade." },
+  { id: "never-cut-on-a-tailgate-word", t: ["siding"],
+    n: "Never cut a hole in your own finished wall on somebody's word at the tailgate.",
+    w: "\"Just put it through about there\" is how you end up owning a penetration in the wrong place, in a wall you are responsible for, for free. Put it on the list with his name and the day beside it and let him answer it. If it is urgent, take a photograph of the mark with him standing next to it. Every hole in your wall should have a name attached to it that is not yours." },
+  { id: "story-pole-not-last-course", t: ["siding"],
+    n: "Run your courses off a story pole, never off the piece you just hung.",
+    w: "Every course carries the last one's error, and up a two-storey gable that drift arrives at the rake — which is exactly where a person standing in the street looks. A pole marked once off a datum you picked gets the left corner and the right corner to the same place, and gets this wall to the same place as the one around the return. Make it, label it with the house, and keep it until the job is done." },
+  { id: "order-trim-with-the-field", t: ["siding"],
+    n: "Order your trim and your accessories WITH the field, not after it.",
+    w: "Colour runs, and the corner post that shows up three weeks later beside a wall from an earlier run is a difference you will see on a bright day and the customer will see forever. Order it together, take delivery together, and if you have to split it, note which elevation got which delivery — because the day somebody asks why the front looks different from the side, that note is the whole answer." },
+  { id: "keep-a-cut-piece-of-everything", t: ["siding"],
+    n: "Keep a labelled offcut of every colour and profile you hang, in the truck, past the end of the job.",
+    w: "The callback is a year away and it is one board. With an offcut you match it in a morning; without one you are holding a phone up to a wall in the sun trying to describe a colour to a counter man. Write the house and the date on the back with a marker. It is also the fastest way to answer the neighbour who wants the same thing." },
+  { id: "the-year-is-the-owners-to-state", t: ["siding"],
+    n: "On an old house, get the year in writing from the owner — and never say what is on the wall.",
+    w: "You tear the outside off buildings for a living and some of them are old enough that what is on them is a testing question with a certified outfit attached to it. That call is not yours, it is not a look-and-see, and guessing it out loud in a text is the single most expensive sentence in this trade. Write down the year the owner gave you and who gave it, ask who holds the testing, and stand the crew down until somebody answers. Nobody has ever been sued for asking." }
 ];

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Through My Wall — Siding &amp; Exteriors Field Toolkit</title>
+<meta name="description" content="One row per hole somebody else needs through your wall before you close it — whose it is, what it is, which elevation and a corner you can point at, whether it's marked, through, or through with flashing on it, and the gate it has to beat. Sent to the super and every outfit on it while it's still a drill. No hole size, no clearance, no flashing detail, no verdict that anything is weathertight: what you were told and what you saw. Grouped by elevation, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Through My Wall">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Siding &middot; the wall &rarr; everybody who needs a hole through it, before it closes</span>
+    <h1 id="title">Through My Wall</h1>
+    <p class="lede" id="lede">Twelve kits on this rack count down to a wall closing and every one of them means the inside face &mdash; because that&rsquo;s where the rock hangs and the inspector looks. The outside face closes too. It closes once. And every hole anybody still needs after that is a hole saw through finished siding, a patch and a caulk joint the owner can see from the driveway &mdash; and from the street it looks like your work. So walk the elevation before you close it and put a row on every penetration somebody else needs: whose it is, what it is, where off a corner you can point at, whether it&rsquo;s marked, through, or through with flashing on it, and the gate it has to beat. Send it to each outfit while it&rsquo;s still a drill.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>What you were told and what you saw, not a detail.</b> Every row is a hole <i>somebody else</i> needs through <i>your</i> wall, in your words, off your own walk and the set named at the top. This page supplies no hole size, no spacing, no clearance to anything, no flashing detail and no sealant &mdash; the outfit that owns the penetration and the printed instructions you were handed own all of that. &ldquo;There&rsquo;s flashing on it&rdquo; means you looked at it and photographed it; it is never a call that the flashing is right, and nothing on this page says a wall or a penetration is weathertight, correct or complete. It&rsquo;s an ask to close out what has to come through before you hang: not an RFI, not a change order, and it doesn&rsquo;t authorize anybody to do extra work. <b>Double-check it before you send it</b>, because a hole nobody walked is a cut somebody pays for.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / address</label><input type="text" id="hJob" placeholder="412 Marchmont — full re-side" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you walked it off</label><input type="text" id="hOff" placeholder="A-201 rev 3, and what each outfit told me" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring from the job" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the set and its revision, and put a name on every row. A line set counted against what the mechanical foreman told you on Tuesday is something he can confirm from his truck this afternoon; the same line set described from memory is a phone call in November, after the wall is on. And whatever somebody told you at the tailgate, put it in a row with their name on it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each hole through it</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the spot once &mdash; it becomes a button and it carries. The elevation and the gate carry to the next row too, because you walk one face at a time. Leave anything blank you didn&rsquo;t see: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The walk so far</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="face" class="on">Elevation</button>
+        <button type="button" data-g="whose">Whose it is</button>
+        <button type="button" data-g="gate">The gate it has to beat</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is walked, then <b>Sent</b> when it went to whoever owns it, then <b>Answered</b> when they came back on it, then <b>Done &mdash; I saw it in</b> when you stood there and looked at it. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes to each outfit at its gate</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not answered yet</button>
+        <button type="button" data-f="notin">Only the ones not through yet</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the super wants beside his own list, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole walk</button></div>
+  </section>
+
+  <p class="credit">Built for the Siding &amp; Exteriors Field Toolkit. Something through a wall that isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Siding &amp; Exteriors Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* THROUGH MY WALL — a CONFIG on shape #3 (shared/rowlog.js): no CSS here, no
+ * DOM building, no state, no persistence, no document assembly. The engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY "WHAT YOU FOUND" IS ITS OWN FIELD AND NOT A NOTE. It is the single fact
+ * that decides whether a row is a reminder or a problem, and it is the one
+ * people leave out of the text they send. "Marked only" is a job for somebody
+ * today; "through, nothing on it yet" is a job for somebody today AND a
+ * question about who is putting the flashing on; "already closed over — found
+ * it after" is a saw cut that has already happened and a row that exists so
+ * nobody has to remember it in March.
+ *
+ * AND IT IS AN OBSERVATION, NEVER AN ASSESSMENT. "Through, and there's
+ * flashing on it" says a man stood at it and looked. It does not say the
+ * flashing is right, that it laps the way it should, or that the penetration
+ * is weathertight — that is refusal 4 and refusal 12 in trade.js, and those
+ * are calls that belong to whoever owns the penetration and to whoever wrote
+ * the instructions it went in off. There is no field on this page shaped to
+ * hold that verdict, which is the only way a refusal survives contact with a
+ * man in a hurry.
+ *
+ * WHY THE GATE IS A GATE AND NOT A DATE. A date slips and then everybody
+ * argues about which date it was. Nobody argues about when the corners went
+ * on. The gates are the crew's own words for the moments this wall stops
+ * being open, in the order they happen.
+ *
+ * WHAT IT REFUSES, and the reason the refusal sits in a data file rather than
+ * in a person's discipline: no hole size, no spacing, no clearance to grade,
+ * to a roof or to a deck, no flashing detail, no sealant, no fastener. This
+ * page has no field shaped to hold one.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.wall;
+  var KEY = "toolkit.siding.throughmywall.v1";
+
+  var SENT = T.sent;              /* ["Sent","Answered","Done — I saw it in"] — blank = walked */
+  var DONE = SENT[SENT.length - 1];
+  var MARKED = T.states[0];       /* "Marked only — nothing through yet" */
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return SENT.indexOf(v.sent) < 1; }
+  function notIn(v) {
+    var s = String(v.state || "").trim();
+    return s === "" || s === MARKED;
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    /* The job header persists WITH the walk. Without this a reload — the
+       camera app, a phone call up a jack — brings the rows back under a
+       document with no job, no set and no From line, and the man copies it out
+       that way (§SCARS, trade #17's field drive). */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    noun: "hole", nounPlural: "holes", groupNoun: "elevation", groupNounPlural: "elevations",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing walked yet. Put in the first hole somebody needs through the wall — where it is in your words, whose it is, and what it is.",
+
+    statusKey: "sent", statusOrder: SENT, statusDone: DONE,
+
+    groupOptions: [
+      { key: "face", label: "Elevation" },
+      { key: "whose", label: "Whose it is" },
+      { key: "gate", label: "The gate it has to beat" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = T.gates.indexOf(a), ib = T.gates.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "whose") {
+        var wa = T.whose.indexOf(a), wb = T.whose.indexOf(b);
+        return (wa < 0 ? 99 : wa) - (wb < 0 ? 99 : wb);
+      }
+      if (key === "face") {
+        var fa = T.faces.indexOf(a), fb = T.faces.indexOf(b);
+        return (fa < 0 ? 99 : fa) - (fb < 0 ? 99 : fb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not answered yet",
+        emptyText: "Every hole on here has come back answered. Good — now be standing there when they do it.",
+        test: function (v) { return isOpen(v); } },
+      { v: "notin", label: "only the ones not through yet",
+        emptyText: "Everything on this list is through the wall. That is the walk done right, and it is worth saying so in the message.",
+        test: function (v) { return notIn(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "Where it is — in your words", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "left of the rear door, under the deck — then it's a button",
+        emptyHint: "Your name for the spot, off something that will still be there in March — a corner, a window, a door, a post. It becomes a button, and it is how you and the man who owns the hole point at the same place on a wall with nothing on it yet." },
+      { key: "face", label: "Elevation", input: "chips", sticky: true },
+      { key: "whose", label: "Whose it is", input: "chips" },
+      { key: "what", label: "What it is", input: "chips" },
+      { key: "told", label: "Who told you, and when", input: "learn",
+        placeholder: "Ana C, mechanical — Tuesday at the tailgate — then it's a button",
+        emptyHint: "The name and the day. A hole with a name on it is one he can confirm this afternoon; one from memory is an argument after the wall is on." },
+      { key: "state", label: "What you found", input: "chips" },
+      { key: "ask", label: "What you need decided", input: "chips" },
+      { key: "gate", label: "The gate it has to beat", input: "chips", sticky: true },
+      { key: "sent", label: "Where it stands", input: "select",
+        placeholder: "— walked; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the outfit that owns it needs that the fields don't hold — what he told you it's for, what's behind it, who else wants that spot" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "whose") return T.whose;
+      if (key === "what") return T.whats;
+      if (key === "face") return T.faces;
+      if (key === "state") return T.states;
+      if (key === "ask") return T.asks;
+      if (key === "gate") return T.gates;
+      if (key === "sent") return SENT;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.face, v.whose, v.told, v.state, v.ask, v.gate, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "what has to come through before I close it", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Walked off: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("notin") > -1 && !notIn(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var fc = {}, nn = 0;
+      src.forEach(function (v) {
+        var a = String(v.face || "").trim(); if (a) fc[a] = 1;
+        if (notIn(v)) nn++;
+      });
+      var n = Object.keys(fc).length;
+      var line = c.shown + (c.shown === 1 ? " hole" : " holes");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " elevation" : " elevations");
+      if (nn) line += " · " + nn + " not through yet";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "face";
+      var head = joinDots([v.mark, g === "face" ? null : v.face, v.what]);
+      var tail = [];
+      if (g !== "whose" && v.whose) tail.push(v.whose.toLowerCase());
+      if (v.told) tail.push("told by " + v.told);
+      if (v.state) tail.push(v.state.toLowerCase());
+      if (v.ask) tail.push(v.ask);
+      if (g !== "gate" && v.gate) tail.push(v.gate.toLowerCase());
+      /* As written, never lowercased: the top rung is "Done — I saw it in",
+         and a lowercase "i" is the one thing on the line the receiver notices. */
+      if (v.sent) tail.push(String(v.sent));
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Everything above is what I've been told has to come through this wall and what I saw with my own eyes, in my words, off my own walk and the set named at the top. Nothing here is a hole size, a clearance, a flashing detail or a sealant — the outfit that owns the penetration and the printed instructions it goes in off own all of that. Where a row says there's flashing on it, that means I stood at it and looked, and I have the photograph; it is not a call that the flashing is right, and nothing on this list says any of it is weathertight.");
+      out.push("This is an ask to close out what has to come through before I start hanging. It's not an RFI and not a change order, and it doesn't authorize anybody to do extra work.");
+      out.push("If something has to come through that isn't on this list, tell me today and I'll walk it with you. After the corners go on it's a hole saw through a finished wall, a patch and a joint you can see from the driveway — and from the street it looks like mine.");
+      return out.join("\n");
+    }
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this walk is the only record of what was
+     supposed to come through the wall before it closed, and once it's closed
+     the wall doesn't tell you. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

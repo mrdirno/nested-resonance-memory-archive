@@ -205,7 +205,7 @@ window.COMMONS_NAMES = [
         { n: "multipair", by: "the cable counter", k: "sup" }],
     no: "A wire-pulling fish tape — the steel snake an electrician hands over when you ask for a snake." },
   /* ---- plumbing ------------------------------------------------------ */
-  { id: "tongue-and-groove-pliers", n: "Tongue-and-groove pliers", t: ["plumbing", "hvac", "electrical", "gc"], rv: 17,
+  { id: "tongue-and-groove-pliers", n: "Tongue-and-groove pliers", t: ["plumbing", "hvac", "electrical", "gc"], rv: 18,
     o: "Pliers whose lower jaw slides along a grooved track cut into the handle.",
     a: [{ n: "Channellocks", by: "nearly everyone on site, plumbers first", k: "tm" },
         { n: "water pump pliers", by: "the counter, and most of Britain", k: "sup" },
@@ -1160,5 +1160,64 @@ window.COMMONS_NAMES = [
         { n: "the line", by: "the crew, once everybody knows which one", k: "say" },
         { n: "dry line", by: "the counter and the masons", k: "sup" },
         { n: "stringline", by: "the paver operator, for the wire the machine's sensor rides", k: "say" }],
-    no: "Blue tops. Those are sitework's word and sitework's stakes — cut at finish grade by the grade checker for the blade to hold to. Your string reads against them; you never set them, and if they're wrong it's a call to the man who did, not a stake you move. And the paver's stringline is the wire the screed sensor rides — say which string before somebody pulls the wrong one." }
+    no: "Blue tops. Those are sitework's word and sitework's stakes — cut at finish grade by the grade checker for the blade to hold to. Your string reads against them; you never set them, and if they're wrong it's a call to the man who did, not a stake you move. And the paver's stringline is the wire the screed sensor rides — say which string before somebody pulls the wrong one." },
+
+  /* ---- SIDING & EXTERIORS -------------------------------------------------
+     Trade #18, seeded at stand-up. Five of these eight exist because the word
+     ALREADY MEANS SOMETHING ELSE somewhere on this rack — soffit is framing's
+     interior drop and roofing's intake vent, gutter is concrete's and paving's
+     curb-and-gutter, leader is electrical's fish leader, panel is the
+     electrician's load centre, trim is framing's interior casing. A man who
+     asks for the wrong one of those on a job with both trades on it gets the
+     other one. */
+  { id: "sid-j-channel", n: "J-channel", t: ["siding"],
+    o: "The receiving trim shaped like a J that the cut edge of a panel or a board tucks into — around windows and doors, at the rake, where a wall dies into a soffit.",
+    a: [{ n: "the J", by: "the crew, constantly", k: "say" },
+        { n: "J", by: "on a take-off and on the truck", k: "say" },
+        { n: "channel", by: "on a job with only one kind on it", k: "say" }],
+    no: "Not F-channel, which is a different shape doing a different job under a soffit, and not the drywall J-bead, which is framing's word on the inside of the same building. On a job with both trades in it, say J-channel and say siding, or you will get a box of bead." },
+  { id: "sid-housewrap", n: "Housewrap", t: ["siding"],
+    o: "The sheet weather-resistive barrier that goes over the sheathing and under the cladding — the layer that is supposed to shed whatever gets past the wall.",
+    a: [{ n: "the wrap", by: "the crew, all day", k: "say" },
+        { n: "WRB", by: "the architect and the spec section", k: "sup" },
+        { n: "weather barrier", by: "supers and inspectors", k: "sup" },
+        { n: "building paper", by: "older crews, meaning the felt kind", k: "reg" }],
+    no: "Never ask for it by the brand printed on the roll. Several different products in several different classes wear brand names people use as generic words, and the counter hands you whichever one is in the rack — which may not be what the spec section or the manufacturer's instructions on your cladding are written against. Ask for housewrap, then read the submittal." },
+  { id: "sid-starter-strip", n: "Starter strip", t: ["siding"],
+    o: "The piece fastened at the bottom of the wall that the first course locks into or sits on, so the first course sits at the same angle as every course above it.",
+    a: [{ n: "the starter", by: "the crew", k: "say" },
+        { n: "starter", by: "on the take-off", k: "say" }],
+    no: "Not the first course, and the two get confused on the phone constantly. If somebody says the starter is on, walk down and look at what is actually on the wall before you order the field — a wall started without one is a wall that leans out at the bottom for its whole life." },
+  { id: "sid-eave-soffit", n: "Eave soffit", t: ["siding"],
+    o: "The finished underside of the roof overhang, hung off the wall out to the fascia — the exterior one, outdoors, that you stand under.",
+    a: [{ n: "the soffit", by: "the crew, when it is the only one on the job", k: "say" },
+        { n: "the eave", by: "meaning the whole overhang", k: "say" },
+        { n: "soffit and fascia", by: "as the pair, because they get ordered together", k: "sup" }],
+    no: "On this rack soffit already means framing's interior dropped soffit over a cabinet run or a duct, and roofing calls its intake vent a soffit vent. Three trades, three soffits, one word. Say eave soffit, or say soffit and fascia, and nobody walks inside with a ladder." },
+  { id: "sid-downspout", n: "Downspout", t: ["siding"],
+    o: "The vertical pipe that takes the water from the gutter down the wall and away from the building.",
+    a: [{ n: "the spout", by: "the crew", k: "say" },
+        { n: "leader", by: "the north-east, and most gutter suppliers", k: "reg" },
+        { n: "conductor", by: "the spec section and commercial work", k: "sup" },
+        { n: "drainpipe", by: "homeowners, on the phone", k: "say" }],
+    no: "Leader is the word two other kits on this rack already use for something else — the electrician's fish leader and the landscaper's broken plant leader — and gutter on a site job means the concrete curb-and-gutter, not yours. On a site with civil work in it, say downspout and say eavestrough or roof gutter, and never leave gutter on its own." },
+  { id: "sid-utility-trim", n: "Utility trim", t: ["siding"],
+    o: "The shallow trim that goes under a sill or at the top course, that a punched cut edge locks up into where there is no room for a full lock.",
+    a: [{ n: "undersill", by: "most crews and most counters", k: "say" },
+        { n: "finish trim", by: "some catalogues", k: "sup" },
+        { n: "the undersill trim", by: "on a take-off", k: "say" }],
+    no: "Not J-channel, and this is the single most common wrong box on a delivery. J receives an edge and holds nothing; utility trim holds a punched edge up against the wall. Ask for J at the top course and the top course flaps for thirty years." },
+  { id: "sid-oil-canning", n: "Oil-canning", t: ["siding"],
+    o: "The visible waviness in the flat part of a metal or panel product, read as a soft shadow across the face in raking light.",
+    a: [{ n: "waves in it", by: "the crew and the customer", k: "say" },
+        { n: "the panel is canning", by: "metal crews", k: "say" },
+        { n: "telegraphing", by: "when it is the wall showing through", k: "say" }],
+    no: "It is a description of what light does on a face, not a verdict that anything is defective — most product literature says so itself. Say what you see and where, put a straightedge on it, photograph both, and let whoever owns the wall and whoever wrote the instructions have the argument about whether it matters." },
+  { id: "sid-brake", n: "Brake", t: ["siding"],
+    o: "The long bench tool that clamps flat coil stock and folds it to an angle — how a head flashing, a sill piece or a custom return gets made in the driveway.",
+    a: [{ n: "the brake", by: "the crew", k: "say" },
+        { n: "the bender", by: "some crews and most rental counters", k: "say" },
+        { n: "sheet metal brake", by: "the rental counter, to find the right one", k: "sup" },
+        { n: "siding brake", by: "when the length matters", k: "sup" }],
+    no: "Say brake in a truck and somebody looks under it. On the phone with a rental counter, say sheet metal brake and say the length you need, because the short ones and the long ones are both just called the brake and only one of them bends a whole window head in one piece." }
 ];

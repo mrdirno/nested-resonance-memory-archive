@@ -73,6 +73,7 @@
     { slug: "doors",       name: "Doors & Hardware Field Toolkit", short: "Doors",  icon: "🪛", accent: "#B7BEDC" },
     { slug: "landscape",   name: "Landscape & Irrigation Field Toolkit", short: "Landscape", icon: "🌱", accent: "#A1CB86" },
     { slug: "paving",      name: "Paving & Striping Field Toolkit", short: "Paving",  icon: "🚧", accent: "#FDF37A" },
+    { slug: "siding",      name: "Siding & Exteriors Field Toolkit", short: "Siding", icon: "🔨", accent: "#FEC8CC" },
     // NOT A TRADE — the commons, and the only entry here that is not a toolkit.
     // It rides this list on purpose: the six hubs each render "whoever is not me"
     // from it, so one line surfaces the human layer in every hub footer with zero
