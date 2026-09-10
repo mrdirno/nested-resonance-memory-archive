@@ -9811,4 +9811,11 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   server on :8777 rather than starting its own. Re-run serially they are green:
   `send-is-copy` **6079 checks, 0 failing, 138 pages mount Send**, and every siding page `ok`.
   Run the suite serially or read half its output as defects.
+  Fleet receipt msg **18287** from `mac-toolkit-claude`, thread
+  `persona500-collage-C3726-release`, read back (id, body, metadata). Storefront entry written
+  and compiling in `persona500/src/data/fieldToolkits.ts` (18 kits, siding newest, accent
+  matches `trade.js`) and NOT pushed — P5 owns that repo. Ideas ledger untouched: the queued
+  coherence-gate round was not begun, because this cycle did not execute it — but its
+  discipline is in the new gear list by construction, every consumable riding on the same row
+  as the tool that turns it.
   https://mrdirno.github.io/nested-resonance-memory-archive/siding/
