@@ -336,7 +336,11 @@ const fmt = v => Number.isFinite(v) ? (Math.abs(v) < 1e-3 ? v.toExponential(2) :
   console.log('  switches: ' + JSON.stringify(sw));
   check('field-force switch zeroes the strength uniform and restores it; ledger switch arms the replay; both saved', sw.ampOn === 1 && sw.ampOff === 0 && sw.stateOff === true && sw.pressedOff === 'true' && sw.ledger === true && sw.live === true && sw.saved.fieldOff === true && sw.saved.ledger === true && sw.ampBack === 1 && sw.liveBack === false, JSON.stringify(sw));
   await ticks(page, 20);
-  const lg = await page.evaluate(() => { const P = window.__probe; const row = P.lab.log[P.lab.log.length - 1]; const m = document.documentElement.innerHTML.match(/const head = '([^']*epoch,H,dH_H0,L,wall_took,substeps[^']*)'/); const cols = m ? m[1].split(',') : []; const at = cols.indexOf('H'); return { cols: row ? row.length : 0, headCols: cols.length, at, mine: row ? row.slice(at, at + 4) : null, last: row ? row[row.length - 1] : null }; });
+  const lg = await page.evaluate(() => { const P = window.__probe; const row = P.lab.log[P.lab.log.length - 1]; const src = P.LAB_LOG_HEAD || (document.documentElement.innerHTML.match(/const (?:head|LAB_LOG_HEAD) = '([^']*epoch,H,dH_H0,L,wall_took,substeps[^']*)'/) || [])[1] || ''; const cols = src ? src.split(',') : []; const at = cols.indexOf('H'); return { cols: row ? row.length : 0, headCols: cols.length, at, mine: row ? row.slice(at, at + 4) : null, last: row ? row[row.length - 1] : null }; });
+  // Reads the page's own LAB_LOG_HEAD through the probe, falling back to scraping either
+  // constant name. Ring 18 hoisted the literal out of exportLabLog() and this scrape - a
+  // second copy of the name list, kept as a regex - went to headCols 0 and turned the gate
+  // red. It was right to: it is the only guard that the row and its header agree.
   check('the Lab log row has exactly as many columns as the CSV header; H, dH_H0, L, wall_took sit under their names after epoch, the substeps and volume columns stay last', lg.cols === lg.headCols && lg.at > 0 && lg.mine && lg.mine[0] !== '' && Number.isFinite(+lg.mine[0]) && lg.last !== '', JSON.stringify(lg));
 
   // ---- (e) OFF-equivalence: the build before this change and this one, seeded alike ----

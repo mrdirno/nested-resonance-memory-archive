@@ -9918,6 +9918,29 @@ over http so it tests the page instead of the browser's file-origin rules? And
 one this ring earns: an applyScenario path was found that reassigns state
 wholesale and drops the viewer's camera - reported here, not fixed, because it
 is a live public page and one agent's finding with no regression test yet.
+SAME-CYCLE CORRECTION, appended after the gate this ring describes reported on
+the ring-18 commit itself. Nothing above is rewritten; two of its sentences are
+wrong and this says how. (1) "It does not make it green" is FALSIFIED for the
+release job: run 34438166745 passed it in 10m52s with smoke at 136 ok, 0 fail,
+0 skip - including "ok: saved camera survived the reload". So the runner's
+file:// store SURVIVED this time, having been lost identically on two earlier
+runs: the loss is INTERMITTENT, not the deterministic ubuntu-latest property the
+paragraph above implies. The new assertion is still the right one - it would
+have caught the loss had it recurred, and it did not paper over anything - but it
+did not merely make the gate honest, it also let the job pass. (2) The
+packages.microsoft.com 403 that had taken the physics job down was a FLAKE:
+Chromium installed cleanly and that job reached its own checks for the first time
+in four runs. It then failed ONE assertion, and the fault is this ring's:
+conserve_test.js checks "the Lab log row has exactly as many columns as the CSV
+header" by SCRAPING the page for `const head = '...'` - a second copy of the name
+list, kept as a regex - and the hoist to LAB_LOG_HEAD sent it to headCols 0. That
+same assertion read cols 28, headCols 28 on the last green physics run, so the
+PAGE was self-consistent all along and only the harness's copy had frozen, exactly
+as reported; the break is the hoist's, caught by the one guard that exists for it.
+Fixed by reading the value through the probe with a fallback to either constant
+name, so the guard no longer carries a copy either: conserve_test 47 passed, 0
+failed locally. The lesson is the ring's own: this cycle removed one duplicated
+name list and was immediately caught by a THIRD one it had not looked for.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

@@ -243,6 +243,36 @@ scored numbers are unaffected, and the missing manifest is the evidence.
 
 ---
 
+## 5.6 Correction, same day: what the gate did when this cycle's own commit ran
+
+This section was written after §5.3–5.5 shipped, because the gate they describe
+reported on the commit that contains them. Run `34438166745`:
+
+* **`instrument (release)` passed**, 10 m 52 s, smoke at **136 ok, 0 fail, 0 skip**,
+  including `ok: saved camera survived the reload (storage, not the page)`. The
+  runner's `file://` store **survived this time**, having been lost identically on
+  two earlier runs. So the loss is **intermittent**, not the deterministic
+  ubuntu-latest property the earlier wording implies. The added assertion did what
+  it was for — it would have caught a recurrence — but it also let the job pass,
+  which is not what was predicted.
+* **`instrument (physics)` reached its own checks for the first time in four runs.**
+  The `packages.microsoft.com` 403 that had been taking it down was a flake, not a
+  standing break; Chromium installed cleanly. It then failed exactly one assertion,
+  and **the fault was this cycle's**: `conserve_test.js` verifies "the Lab log row
+  has exactly as many columns as the CSV header" by scraping the page for
+  `const head = '…'` — a third copy of the name list, kept as a regex — and §5.3's
+  hoist sent it to `headCols: 0`. `integ_test` (28/28) and `mesh_test` (35/35) passed.
+
+That same assertion read `cols 28, headCols 28` on the last green physics run, which
+independently confirms §5.2: the **page** was self-consistent all along at 28 names
+over 28 columns, and only the harness's hardcoded copy had frozen at 22. The guard is
+now read through the probe with a fallback to either constant name, so it no longer
+carries a copy of the list either: `conserve_test` 47 passed, 0 failed locally.
+
+The cycle removed one duplicated name list and was immediately caught by a third one
+it had not gone looking for. That is the strongest available argument for §5.3's
+direction and against trusting any count of how many copies remain.
+
 ## 6. Limitations
 
 * Nothing here measures memory. No estimator was run, no scored number moved, and nothing
