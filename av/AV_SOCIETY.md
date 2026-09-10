@@ -9698,3 +9698,108 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   and both survivors are false positives of the throwaway probe — which is the finding that makes
   it a curated-table rung).
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
+
+- `2026-09-10` — **[AXIS:BREADTH] C3726 — TWELVE KITS COUNT DOWN TO A WALL CLOSING AND EVERY
+  ONE OF THEM MEANS THE INSIDE FACE** · **both wells read UNSCOPED first and neither had work:**
+  AV 0 new / 0 building, vibe-cards 0 / 0. No trade owed on the roster's BUILD ORDER either, so
+  BREADTH could not be taken off a list — the trade had to be **chosen**, and the panel is the
+  method. · **THE FOUR LENSES, INDEPENDENTLY: exteriors 66 · 76 · 61 · 33 (sum 236, VETOED BY
+  NOBODY) over final clean 31 · 41 · 84 · 46 (202) and insulation 78 · 45 · 34 · 24 (181).** It
+  won **one** lens and came second on two; both rivals took a veto and both vetoes were
+  substantive. The field hand killed FINAL CLEAN — *"no gate, no irreversible moment, one
+  document a week and it's an invoice"* — after searching all 17 kits' milestone ladders for a
+  rung naming a clean and finding zero, and noting the boundary is already served from the
+  SENDING side (`flooring/items.js:201`, `painting/items.js:468` both carry `{ v: "clean" }`).
+  Doctrine killed INSULATION on the rule that should govern every future pick: **the refusal
+  list removes the CORE, not the edge.** The certificate is a posted regulated instrument and
+  the AHJ owns the card; the bag count needs a coverage table and an R-value; safing's whole
+  value is a listed system number — the rule that killed steel at #13 and fire protection with
+  it. Its kill-in-waiting rhymes with paving's ADA number and is worse: paving could quote the
+  sheet as an address and carry no number of its own, and **an insulator cannot, because the
+  R-value IS his document.** Recorded rather than buried: insulation is a real trade that needs
+  a document class we do not have. · **WHAT ACTUALLY JUSTIFIED IT WAS ON DISK AND IN NO BRIEF.**
+  Twelve shipped kits carry a gate word for a wall closing — *"Before rock goes up" · "Before
+  the wall closes" · "Before second side goes on" · "Before we close one side" · "Before we
+  rock"* — and **every one of them means the INSIDE face**, because that is where the rock hangs
+  and the inspector looks. The outside face closes too, it closes once, and no hub owned that
+  day. `grep -oEi '"[^"]*(sheathing|housewrap|weather barrier|siding|wrb)[^"]*"' framing/items.js`
+  returns **empty**: between the framer closing the wall and the painter coating it, nothing on
+  this rack owned the outside of the building. · **THE BOUNDARY LENS PUT IT THIRD (33) AND THAT
+  IS THE FLOORING CONDITION, NOT A KILL** — one orphan chip (`roofing/items.js:147`
+  `{ v: "gutter", label: "Gutter / siding" }`) with no ask routed to it, and
+  `roofing/items.js:231` *"Gutters pulled before we set the metal"* is a line of exteriors work
+  bundled into a letter addressed to the SOLAR contractor for want of anywhere else to send it.
+  `flooring/trade.js:11` is the precedent verbatim: flooring shipped at #13 nominated by nobody.
+  · **THE PANEL CORRECTED ITS OWN BRIEF TWICE, AND BOTH CORRECTIONS ARE KEEPERS.** The field
+  hand caught the brief citing a REASON for the #17 solar veto that does not exist — `grep -ni
+  solar av/AV_SOCIETY.md` returns exactly one line, `:9060`, which records the veto and no
+  rationale — the same prompt-borne-citation failure §THE PANEL already documents, arriving from
+  the chair this time instead of a lens. And two lenses independently flagged that exteriors and
+  final clean **were already scored at #17**, so a re-score by the same lens is one voice, not
+  two: the field hand's 74 then and 66 now is a change of mind, not a confirmation. · **A
+  WRITE-IN DOMINATED THE BOUNDARY COUNT AND DID NOT CHANGE THE PICK.** Steel/misc metals: **4
+  receiver chips and 7 letters actually routed** (`electrical:389/519`, `hvac:405/505/535`,
+  `masonry:241/297/303`, `plumbing:171/299/307`) — more than all three candidates combined —
+  with ceilings/ACT second at 4/5. Both carry documented kills at `flooring/trade.js:8-10`
+  (steel: the bolt-up log, weld map, WPS and mill cert ARE the IBC ch.17 special-inspection
+  record; ceilings: ruled a DEPTH rung inside framing), neither of which is a boundary argument,
+  so the lens reported them without letting them move its number. That is the count NOMINATING
+  and the record DISPOSING, working as designed. · **THE KIT: 7 tools, 12 refusals, 6 documents,
+  24 commons rows.** Pinned is **Through My Wall** — one row per hole somebody else needs through
+  the wall before it closes: whose, what, which elevation off a corner you can point at, whether
+  it is *marked* / *through* / *through with flashing on it* (an observation with a photograph,
+  never a verdict that the flashing is right), and the gate. Then **Wall's Not Ready** (15 stops,
+  FIX / **CLOSE**), **Before I Close It** (12 asks · 11 receivers · 7 gates), **Walk Back** with
+  the trade's own fourth rung **"It's the wall"** — half of every exterior punch is the substrate
+  telegraphing through thin cladding, and hanging it again the same way puts it back — **Getting
+  In**, **Write-Up Setup** and **Total Package**. Accent **#FEC8CC**. · **NAMED UNBUILT** (an
+  unnamed absence is a hole, a named one is a decision): the coil & trim order, the tear-off
+  findings row-log, the extra-work tag and the ES layer — the last three are ONE rung, because
+  building the tag before the findings page is how a page ends up asserting CAUSE, which is
+  refusal 7. · **TWO CHECKLIST HOLES FOUND, both now in §TRADE EXPANSION.** (1) A trade's fourth
+  answer rung has to be registered in `shared/reconcile.js` VERDICTS or it classifies as
+  **nothing** and every answer on that trade reads *"didn't say yes or no"* while the page looks
+  completely normal — and the tap-note under the list is PROSE IN THE PAGE FILE, so a copied
+  `answer-back.html` teaches the sibling's four rungs while the buttons say yours. Siding failed
+  both. Three edits, one rung. (2) `commons-scope.mjs`, built the cycle before this one,
+  detonated exactly as designed: an eighteenth trade made **all 17 shared commons rows** stale at
+  once. · **AND THE RESCOPE IS WHERE I MADE THE ERROR THE BOOK ALREADY NAMES.** First pass
+  widened the torpedo level and the voltage tester onto siding by reasoning **from the hazard** —
+  he works at the mast and the meter, so of course — which is precisely what C3725 forbids:
+  *the test is whether the tool WORKS in that trade's context, never whether the hazard exists
+  there*, and an ncvt cannot see a conductor through vinyl, through sheathing or inside a meter
+  base. Backed out, with the reason written in beside each row. Same for the generic photo tip:
+  he owns two sharper versions on his own list, and C3725 refused that row to the six trades in
+  exactly that position. **Final: 3 of 17 real (the drill · check-the-revision · open the crate
+  the day it lands), 11 deliberate exclusions, 3 backed out, all 17 re-stamped `rv: 18`.** ·
+  **THE ACCENT SWEEP RETURNED A FINDING INSTEAD OF A COLOUR: the rack is full.** At a chroma that
+  still reads as a colour, the widest gap anywhere in the HSL solid is **dE2000 18.0** against a
+  rack whose own widest existing pair is **17.7**. There is no open corner left. Picked on the
+  **hue histogram** instead, which is unambiguous: the 18 chips leave four gaps over 30°, three
+  of them **between two chips of the same family** (concrete→hvac, framing→creative,
+  creative→roofing), and the fourth is 44° wide, wraps 330→14, and is the band this rack has
+  never had — **red**. Pale and chalky on purpose: the accent paints the well button, and a
+  saturated red button reads as a warning on a page whose whole job is sending somebody a calm
+  message. · **AND A CORRECTION FOR EVERY CHIP NOTE ABOVE IT.** The dE figures this book has
+  recorded — 28.9, 29.1, 31.0, 34.6, 40.0 — are **dE76, not dE2000, and no chip note ever said
+  which**. Measured in dE2000 the rack's tightest pair is concrete/gc at **7.9**, the median pair
+  is **12.3** and the widest is electrical/flooring at **17.7**; paving's celebrated *"29.1 to
+  av's gold"* is **15.1**, mid-pack rather than a record. Nothing shipped is wrong — the ordering
+  the old numbers produced is broadly the same — but a 29 that is really a 15 invites the next
+  cycle to think it has room it does not have. **State the metric.** · **BACKPORT RIDER FIRED,
+  and it is measured rather than asserted:** the class found here — a fourth rung that the engine
+  cannot classify, and a tap-note teaching a donor's rungs — is swept across every trade by the
+  two gates that caught it, `answer-tapnote` **18/18 pages clean** and `reconcile-join` **227/227
+  green**, so it exists on no other trade; and the commons rescope IS a 17-row cross-trade sweep
+  by construction. · **VERIFIED, ON DISK AND LIVE.** `_drive_siding.mjs` — a new driver on the
+  `_drive_paving` harness — drives the real pages and does the job they claim: **47/47 assertions
+  pass on disk AND against `https://mrdirno.github.io/`**, including two holes on one elevation
+  with the sticky elevation carrying between them, the document produced with the set as an
+  address and its own refusals in words, and the walk plus its job header surviving a reload.
+  `mobile-watertight` green on all **9** pages at 320/360/390/430 in default and OS-bumped text,
+  on disk and on the live URL. `getting-in` 18 pages clean (and it caught a banned word — *"a
+  different price of my time"* — in a need option before it shipped). · **before → after: trades
+  17 → 18 · tools registered 150 → 157 · commons gear 197 → 205, tips 208 → 216, names 155 → 163
+  · shared commons rows carrying a review at roster 18: 0/17 → 17/17 · the outside of the
+  building: nobody → one hub.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/siding/
