@@ -15,6 +15,9 @@
  
    usage: node memory_prereg_run.js --sg=0.3 --gl=0 --seed=12345 [--epochs=24]
                                     [--n=4194304] [--budget=10] [--out=DIR] [--sw]
+                                    [--preset=NAME] [--step=N] [--epochlen=S]
+                                    [--fieldexp=X] [--damping=X] [--sps=X]
+                                    [--hubble=X] [--helix=X] [--aniso=X] [--mag=X]
  
    Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0 */
 const { chromium } = require('playwright');
@@ -42,7 +45,29 @@ const PRESET = arg('preset', 'spinchladni');   // 'default', or any data-scn sce
 const STEP = parseInt(arg('step', '9028'), 10);
 const TICK = 0.05;
 
-const TAG = `${PRESET}_sg${SG}_gl${GL}_seed${SEED}_n${N}_e${EPOCHS}`;
+// --- similarity-group overrides (ring 19) -------------------------------------
+// The chamber's force is a sum of terms whose parameters enter at known powers:
+//   F = amp*fscale*field  +  uHubble*p*uAniso  +  uHelix*6*(-p.z,0,p.x)
+//       - uSelfGrav*SG_GAIN*g/(2*PM_CELL)  +  uMag*30*cross(v,B),   amp = 10^fieldExp
+// so cutting the drive is a coordinate change, not a preset swap. Until now the only
+// way to cut it from here was to name a different scenario, and the one the pilot used
+// (goldstair against spinchladni) moved many other keys at the same time. Each flag
+// below moves one coordinate and nothing else.
+// null means "leave the preset's own value alone": a run given none of these flags
+// takes the same code path and records the same tag as every run made before them.
+const numOv = k => {
+  const v = arg(k, null);
+  if (v === null) return null;
+  const f = parseFloat(v);
+  if (!Number.isFinite(f)) { console.error(`--${k}= needs a finite number, got "${v}"`); process.exit(2); }
+  return f;
+};
+const OV = { fieldExp: numOv('fieldexp'), damping: numOv('damping'), stepsPerSec: numOv('sps'),
+             hubble: numOv('hubble'), helix: numOv('helix'), aniso: numOv('aniso'), mag: numOv('mag') };
+const OV_ON = Object.entries(OV).filter(([, v]) => v !== null);
+const OV_TAG = OV_ON.length ? '_' + OV_ON.map(([k, v]) => `${k}${v}`).join('_') : '';
+
+const TAG = `${PRESET}_sg${SG}_gl${GL}_seed${SEED}_n${N}_e${EPOCHS}${OV_TAG}`;
 
 const SW_ARGS = ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-sandbox', '--no-sandbox'];
 const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist', '--disable-gpu-sandbox', '--no-sandbox'];
@@ -82,7 +107,7 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     await page.waitForTimeout(500);
   }
 
-  const applied = await page.evaluate(({ n, seed, sg, gl, budget, epochLen, preset, step }) => {
+  const applied = await page.evaluate(({ n, seed, sg, gl, budget, epochLen, preset, step, ov }) => {
     let s = seed >>> 0;
     Math.random = () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; };
     const P = window.__probe;
@@ -94,6 +119,13 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     st.sound = Object.assign({}, st.sound, { level: 0 });
     st.cosmos = Object.assign({}, st.cosmos,
       { selfgrav: sg, gainloss: gl, epoch: true, epochLen: epochLen, cascade: 'out' });
+    // One coordinate each, applied last so nothing above can overwrite them. What
+    // applyPreset then clamps or ignores is visible in `applied`, which is read back
+    // off the page's own state rather than echoed from these flags.
+    if (ov.fieldExp !== null) st.fieldExp = ov.fieldExp;
+    if (ov.damping !== null) st.damping = ov.damping;
+    if (ov.stepsPerSec !== null) st.stepsPerSec = ov.stepsPerSec;
+    for (const k of ['hubble', 'helix', 'aniso', 'mag']) if (ov[k] !== null) st.cosmos[k] = ov[k];
     st.lab = { on: true };
     window.__simStop = 0;
     window.__tickBudget = budget;
@@ -116,7 +148,7 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
              smooth: P.state.smooth, damping: P.state.damping,
              stepsPerSec: P.state.stepsPerSec, fieldExp: P.state.fieldExp,
              caps: P.caps() };
-  }, { n: N, seed: SEED, sg: SG, gl: GL, budget: BUDGET, epochLen: EPOCH_LEN, preset: PRESET, step: STEP });
+  }, { n: N, seed: SEED, sg: SG, gl: GL, budget: BUDGET, epochLen: EPOCH_LEN, preset: PRESET, step: STEP, ov: OV });
 
   console.log(`[${TAG}] ${applied.particles} particles, tex ${applied.texSize}, ` +
               `${applied.caps.renderer.slice(0, 40)}, pmDens ${applied.caps.pmDensType}, ` +
@@ -203,6 +235,7 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     params: { selfgrav: SG, gainloss: GL, seed: SEED, epochs: EPOCHS, particles: N,
               tick_budget: BUDGET, epoch_len: EPOCH_LEN, preset: PRESET,
               step: applied.scenarioStep,
+              overrides: Object.fromEntries(OV_ON),
               backend: SW ? 'swiftshader' : 'gpu' },
     applied, caps_end: capsEnd, mesh_file: path.basename(meshPath), mesh_n: 32, mesh_count: EPOCHS,
     csv_head: csvHead, csv_cols: csvCols, instrument,
