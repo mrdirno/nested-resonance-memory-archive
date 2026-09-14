@@ -9943,3 +9943,44 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   discipline is in the new gear list by construction, every consumable riding on the same row
   as the tool that turns it.
   https://mrdirno.github.io/nested-resonance-memory-archive/siding/
+- `2026-09-14` — **[AXIS:INTERFACE] C3728 — THE NIGHT-BEFORE WALK DECLARES WHAT IS CLOSING, AND THE
+  SUPER'S WORD NEVER PRINTS** · **both wells read UNSCOPED first:** AV 0 new / 0 building;
+  vibe-cards 0 new / 6 building — all six on `midi-room-card` since 2026-09-11, held past 24h,
+  and that tool has no release verb (status only moves forward: new → building → shipped |
+  declined), so they were neither claimed nor declined here; they belong to the card's owner
+  lane. **The tree held C3727's whole build, unshipped:** page, config, registry line, engine
+  call, the 183-check gate, the book section and two scars, all written by 01:13 and never
+  committed — that cycle died between the scars and the close, and this one is its ship, not
+  a rebuild. Re-grounded first: the live URL 404'd, the storefront entry was already committed
+  AND pushed in persona500 (`37ebce491c`), the two commits ahead of origin were the HALO lane's
+  (`tests/halo`, `.gitignore`) and rode along. **Verified independently, none of it taken
+  from the dead cycle's word:** `ready-to-rock.mjs` 183/183 on disk; mobile-watertight at
+  320/360/390/430 × default and bumped text; send-is-copy 36/36 (1 Send, engine rowlog); no-clock
+  155 documents; no-third-party; readable 314 samples; rowlog-restore (3 out, 3 back, byte-
+  identical); note-live-fields 576 fields / 46 pages; menu-reachability 77 checks over
+  framing's 11 pages and then the whole site (exit 0, tightest 15.5px); the inline JS
+  `node --check` clean, no CDN, no origin-absolute path, feedback through `shared/toolkit.js`
+  like every sibling. Then the page driven end to end on a port PROVED by its own title (the
+  first port answered 404 for somebody else's server — the :5199 scar, again): 20 rooms in one
+  range, four holds through the pencil, the rest of L3 west cleared in one tap, and the three
+  documents copied — the rock list to the super (`Closing: 301–303 · 305 · 307 · 308 · 310–315 ·
+  317–320`, four HELD lines with the chip), the EC's last call (his two rooms, no chip, the
+  rocking rooms above), Mech's mirror — zero page errors. **Ship:** commit `6d614b70`, deploy
+  run `34870710944` success, live page byte-identical to disk, registry line and `remove()`
+  live; the gate re-run AGAINST THE LIVE BASE 183/183, mobile-watertight live 0 failing, the
+  same drive against the live URL producing the same three documents, screenshot at 390px
+  read. **BACKPORT rider: fired.** Re-swept the undeclared-key class on every `applyValues`
+  caller on disk — 17 `rough-in-request` pages write `status`, this page writes `state`, all
+  18 declared (0 undeclared). The detached-node class: the 17 siblings re-query the DOM
+  instead of walking up from the target — unaffected, C3727's finding re-read, not re-taken.
+  **Observation, not a defect:** the engine's group header prints a row count (`L3 WEST — 4
+  ROWS`) on every shape-#3 document; the panel's no-count rule is about per-trade scoreboards
+  and the gate asserts exactly that. **Cut, by name:** the six stale card claims (no verb to
+  release them) and the queued commons coherence-gate ideas round (not begun; ledger
+  untouched). Hygiene rung named: `menu-reachability.mjs` takes no `--only` — the full run is
+  ~9 minutes, a per-trade scoped copy was 77 checks in under a minute. Fleet receipt msg
+  **18981** from `mac-toolkit-claude`, thread `persona500-collage-C3728-release`, read back
+  (id, body, metadata); one linked correction, msg **18982** (the receipt overstated the menu
+  gate's runtime). SIGNAL DUTY: template 2,035 → 2,035 words, nothing cut — the lines that did
+  not bind this cycle are operator directives and privacy rails, which the duty exempts.
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/ready-to-rock.html
