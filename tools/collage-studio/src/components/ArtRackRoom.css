@@ -88,10 +88,11 @@
 .art-button-row>*,.art-history>*{flex:1}
 .art-history{margin:12px 0}
 .art-footer{padding:8px 16px;border-top:1px solid #344650;background:#101b22;flex:none}
-.art-footer p{font-size:11px;color:#edcf9c;margin:0 0 6px;max-height:40px;overflow:auto}
+.art-feedback{flex:1 1 0;min-width:0;height:44px;overflow:auto;overflow-wrap:anywhere;overscroll-behavior:contain;font-size:11px;line-height:1.4}
+.art-feedback p{color:#edcf9c;margin:0}
 .art-footer p[role=alert]{color:#ffb5a8}
 .art-footer-tools{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.art-footer-tools{flex-wrap:wrap}
+.art-footer-tools{flex-wrap:nowrap}
 .art-dice-controls{display:flex;align-items:center;gap:6px;min-width:0}
 .art-rack .art-dice-controls button{padding:8px 10px;min-width:44px;white-space:nowrap}
 /* Two targets, two shapes: art is the solid pill, layer the dashed one — tellable in bad light. */
@@ -135,7 +136,6 @@
   .art-header{padding:2px 12px}
   .art-header h2{font-size:20px}
   .art-footer{padding:3px 12px}
-  .art-footer p{max-height:28px;margin-bottom:3px}
   .art-stage-label{height:44px}
   .art-rack.is-preview-focus .art-stage{padding:3px 12px}
 }
@@ -215,7 +215,6 @@
  .art-rack.has-audition .art-library-nav{display:none}
  .art-rack.has-audition .art-template canvas{height:52px}
  .art-rack.is-preview-focus .art-stage{height:auto;flex:1}
- .art-footer p{max-height:20px}
 }
 
 @media(max-height:530px) and (orientation:landscape){
@@ -244,3 +243,11 @@
 .art-rack .art-help-report{width:100%;margin-top:12px;text-align:left;display:block}
 .art-help-report small{display:block;font-size:11px;color:var(--art-muted);margin-top:2px}
 .art-help-credit{font-size:11px;color:var(--art-muted);margin:12px 0 0}
+
+/* Feedback shares the wide action row. On phones a stable two-line slot uses
+   desk space while editing, and preview space when expanded. The slot stays
+   the same height through empty, success and error states. */
+@media(max-width:760px) and (orientation:portrait){
+ .art-footer-tools{flex-wrap:wrap;column-gap:8px;row-gap:6px}
+ .art-feedback{order:-1;flex:1 0 100%;height:2.8em}
+}
