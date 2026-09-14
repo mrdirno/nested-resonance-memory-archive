@@ -18,6 +18,7 @@
                                     [--preset=NAME] [--step=N] [--epochlen=S]
                                     [--fieldexp=X] [--damping=X] [--sps=X]
                                     [--hubble=X] [--helix=X] [--aniso=X] [--mag=X]
+                                    [--substeps=1..4] [--twist=0|1]
  
    Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0 */
 const { chromium } = require('playwright');
@@ -62,8 +63,20 @@ const numOv = k => {
   if (!Number.isFinite(f)) { console.error(`--${k}= needs a finite number, got "${v}"`); process.exit(2); }
   return f;
 };
+// Two more coordinates the exact time-rescaled image needs (ring 19): the integrator
+// substep count, because the rescaled run is the base run integrated at a different
+// step, and the field's twist, because a turning drive advances its phase on raw
+// simulation time (omega * simTime) and so cannot be rescaled by any other flag.
+// Both are null by default and touch nothing when absent.
+const intOv = (k, lo, hi) => {
+  const v = numOv(k);
+  if (v === null) return null;
+  if (!Number.isInteger(v) || v < lo || v > hi) { console.error(`--${k}= needs an integer in ${lo}..${hi}, got "${v}"`); process.exit(2); }
+  return v;
+};
 const OV = { fieldExp: numOv('fieldexp'), damping: numOv('damping'), stepsPerSec: numOv('sps'),
-             hubble: numOv('hubble'), helix: numOv('helix'), aniso: numOv('aniso'), mag: numOv('mag') };
+             hubble: numOv('hubble'), helix: numOv('helix'), aniso: numOv('aniso'), mag: numOv('mag'),
+             substeps: intOv('substeps', 1, 4), twist: intOv('twist', 0, 1) };
 const OV_ON = Object.entries(OV).filter(([, v]) => v !== null);
 const OV_TAG = OV_ON.length ? '_' + OV_ON.map(([k, v]) => `${k}${v}`).join('_') : '';
 
@@ -126,6 +139,8 @@ const GPU_ARGS = ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist',
     if (ov.damping !== null) st.damping = ov.damping;
     if (ov.stepsPerSec !== null) st.stepsPerSec = ov.stepsPerSec;
     for (const k of ['hubble', 'helix', 'aniso', 'mag']) if (ov[k] !== null) st.cosmos[k] = ov[k];
+    if (ov.substeps !== null) st.substeps = ov.substeps;
+    if (ov.twist !== null) st.cosmos.twist = ov.twist === 1;
     st.lab = { on: true };
     window.__simStop = 0;
     window.__tickBudget = budget;

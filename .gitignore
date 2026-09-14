@@ -169,6 +169,14 @@ data/results/halo/memory_prereg_voided/*.mesh.f32
 # have published its meshes -- which is exactly how the voided grid's 73 MB
 # nearly reached the repository. Match every arm, present and future.
 data/results/halo/memory_pilot/**/*.mesh.f32
+# Third time. Each rule above names ONE directory, so every new arm directory has
+# arrived uncovered: memory_prereg_voided was uncovered when it was written, then
+# memory_pilot, then memory_similarity (2026-09-10, ring 19, four arms plus controls
+# at ~3 MB a mesh). The lesson the comment above already drew -- "match every arm,
+# present and future" -- cannot be carried out one directory at a time, so this line
+# covers the whole HALO results tree instead. A run's JSON is still committed; its
+# meshes are regenerable bit for bit from the seed and the recorded instrument.
+data/results/halo/**/*.mesh.f32
 
 # Machine-local app configuration
 .codex/
