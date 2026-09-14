@@ -2,7 +2,7 @@
 
 Author: Aldrin Payopay · September 14, 2026 · GPL-3.0-only
 
-Status: reviewed and verified locally; publication/live checks pending. Existing fleet task T-18986, codex-collage-studio.
+**Shipped and verified live.** Existing fleet task T-18986, codex-collage-studio.
 
 ## Reused evidence and chosen improvement
 
@@ -20,10 +20,18 @@ Draft/Apply/history semantics, recipes, renderer and encoded-media contracts are
 
 ## Gates and production receipt
 
-Independent code review found no data/logic blocker and required explicit portrait-expanded accounting plus narrow-landscape and enlarged-text checks. Typecheck and production build passed; existing Browserslist/chunk warnings remain. Final built-app behavioral gates passed: **34/34** existing Help/UX/audition/export cases on muted Chromium and Mobile Chrome, plus **12/12** new feedback cases across desktop/mobile Chromium and WebKit. Four actual native MP4s fully decode without errors. Existing artGuide invariants passed **4,660 checks**. Rebuilding the exact final source reproduces all five tested runtime artifact hashes. Deployment and public behavioral checks remain pending.
+Independent code review found no data/logic blocker and required explicit portrait-expanded accounting plus narrow-landscape and enlarged-text checks. Typecheck and production build passed; existing Browserslist/chunk warnings remain. Final built-app behavioral gates passed: **34/34** existing Help/UX/audition/export cases on muted Chromium and Mobile Chrome, plus **12/12** new feedback cases across desktop/mobile Chromium and WebKit. Four actual native MP4s fully decode without errors. Existing artGuide invariants passed **4,660 checks**. Rebuilding the exact final source reproduces all five tested runtime artifact hashes. Public gates and deployment have now passed; exact receipt follows.
 
 The source task retains measured public baseline, screenshots, browser logs and final receipt under work/weekly-2026-09-14. Prior C3721/C3722 exports and invariants remain evidence of those unchanged contracts; they are not counted as newly run tests.
 
 The new regression fails against the previous live build on its first geometry assertion (artwork x moves 16.747px; independent measurement records the 21.391px height loss). Its initial default-font keyboard-scroll assertion was overstrict because the real Apply message fits two lines. The corrected test explicitly enlarges feedback to 150% and proves full text, real overflow, End/Home scrolling and stable geometry. Both runs are retained. A first test-discovery command selected no tests; it is not negative-control evidence.
 
 Runtime: `index-f7a9d511.js`, `index-8bf057bd.css`, `render.worker-e06f7083.js`, service-worker cache `genart-v3-0a670611c36c`.
+
+## Production close
+
+[source 2f97494c](https://github.com/mrdirno/nested-resonance-memory-archive/commit/2f97494cc46525f7b85798299017c79cb2b7a69f); [Pages 34873757476](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34873757476) and [Archive health 34873757505](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34873757505) succeeded. **46/46 final built and 46/46 public browser cases passed** (34 existing regressions on desktop/mobile Chromium, plus 12 feedback cases on desktop/mobile Chromium and WebKit), with all five public runtime files matching. Four newly exported live native MP4s fully decode without errors. Live before/after geometry matches the measured build: desktop fitted artwork stays 498px high through Dice instead of shrinking to 476.609px; short-landscape stays 198px instead of 179.609px. Status, Undo, real import alerts, clearing and enlarged-text keyboard scrolling preserve geometry within 1px. The standalone fixed-viewport measurements record zero notice-driven movement after the fix.
+
+Fleet release thread: `persona500-collage-weekly-20260914-release`; delivery/readback is recorded below. Reading by Codex or Claude is separate evidence. Existing weekly Monday 10 a.m. Pacific evolution is retained. Next cycle checks scoped wishes/owners, then resumes portable moving-video sources with their authored clip settings; no duplicated media migration is started here.
+
+Fleet broadcast **18991** in `persona500-collage-weekly-20260914-release` was stored and read back with identical body/metadata. Peer acknowledgements at close: `[]`; storage is not a claim that both agents read it.

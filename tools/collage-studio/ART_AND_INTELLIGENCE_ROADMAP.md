@@ -92,7 +92,7 @@ Moving adapters must follow Studio's requested time rather than wall-clock anima
 
 **Preserve the preview-first flow.** New capability belongs in an existing task or a deliberate disclosure. Keep play/pause, scrub and the whole frame reachable; do not grow a permanent row for every feature. Native templates stay ahead of HTML import. Test the actual saved/exported result and the smallest viewport together.
 
-**Keep feedback from moving playback.** The September 14 candidate resumes C3724’s measured canvas jump instead of expanding the library again. Preserve the latest reachable Undo/Help and direct dice. [Current verification and portrait tradeoff](STEADY_ART_ROOM_RELEASE.md).
+**Keep feedback from moving playback.** The September 14 release fixes C3724’s measured canvas jump, verified by 46 built and 46 public browser cases plus actual moving exports. Preserve the latest reachable Undo/Help and direct dice. [Current verification and portrait tradeoff](STEADY_ART_ROOM_RELEASE.md).
 
 **Make the visual library useful in context.** C3722 ships reversible comparison against kept art, a readable horizontal shelf and four distinct dimensional families. Its release has 96 built and 96 public browser checks, preserved stack/history behavior, and fully decoded moving-export evidence. Subsequent cinematic additions should earn their place through a new silhouette or motion language while preserving explicit-time rendering and old recipes. Primary design references and their limited relationship to our original implementation are recorded in the [release DD](C3722_RELEASE.md#design-due-diligence).
 
