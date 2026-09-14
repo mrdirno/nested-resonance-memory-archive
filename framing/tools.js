@@ -29,6 +29,13 @@ window.TOOLKIT_TOOLS = [
     audience: "Foreman → EC / mech / plumber / LV / GC"
   },
   {
+    name: "Ready to Rock",
+    href: "ready-to-rock.html",
+    desc: "The walk before you hang. Tap the rooms that are clear, tag the ones that are held and by whom, one tap clears the rest of an area — then the super gets the rock list as ranges with every hold on it, and each trade gets the last call on just the rooms held for them. No counts, no clock, nothing signed off.",
+    chip: "#4A3BA8",
+    audience: "Foreman → GC super / the trade holding the room"
+  },
+  {
     name: "What I'll Put In",
     href: "answer-back.html",
     desc: "Somebody sent you a list of backing and holds. Paste it, tap each line will do / already in / can't / need a number, put a date on the yesses, and send one answer back before the wall closes instead of after.",

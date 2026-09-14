@@ -1740,6 +1740,105 @@ now — the tag is appended only when his words don't carry it, and the rung pri
 roll-up to the rep (she needs to see which ones he asked direct) and on no row to the
 vendor himself.
 
+## READY TO ROCK — the walk before you hang, and the first declaration on the rack (2026-09-14)
+
+`framing/ready-to-rock.html` — one page, one `TOOLKIT_ROCK` config, shape #3 (`shared/rowlog.js`),
+and the engine grew exactly one call for it, `remove(ids)`, so the rooms he closed can leave the
+list. The private roster ranked it the strongest unbuilt rung on the framing kit for five weeks —
+*"two taps a room: CLEAR is one tap, HELD is a tap plus a trade chip and six words … it ABSORBS
+Last Call Before Rock"* — and it lost the pin at stand-up only because it sits one inch from the
+GC's Close-In List, aimed at the same rooms from the other side.
+
+**THE PANEL IS THE ENTRY, AND IT CHANGED THE DESIGN IN EIGHT PLACES.** Four lenses, independent,
+no repository access: a commercial drywall foreman who walks the floor at 6:40 (**8**), the GC
+super who gets the first message and owns the Close-In List (**7**), the EC foreman who gets the
+last call (**8**), and a skeptic handed this book as weapons and told to kill it (**7**). All four
+BUILD_WITH_CHANGES. The skeptic's one line is the reason the page exists: *"'Before I Close It'
+asks; the Close-In List demands; nobody shipped declares."* It is the first document on this rack
+that is a declaration — here is what I am closing — and that holds only while the ladder stops at
+Clear.
+
+**1. NO HUNG RUNG — all four, unprompted.** The proposal offered a third rung so "the same list
+carries the day". Every lens killed it in the same words: hung-by-room-by-day is a production
+report, which is the daily log, which somebody else owns and numbers — and a list that carries it
+is a tracker he babysits all day. A hung room is a row that LEAVES: **Next walk** takes the closing
+rooms off and keeps what is still held and what he never walked. The engine grew `remove(ids)`
+for that and nothing else.
+
+**2. THE SUPER'S WORD NEVER PRINTS.** The receiving lens blocked the roster's own header, CLEAR
+TO HANG: *"Clear is my word — a room is clear when the sticker's on it and the test held, and
+that's my call, not his. If his text says CLEAR and my list says EC rough isn't signed, we argue at
+6:50 instead of acting."* So the rung reads Clear on the glass — his eyes, walked it, nothing in
+the way — and the document says **Closing:**, and the gate asserts the word is absent from every
+message.
+
+**3. RANGES, NOT ROWS.** *"He bulk-creates 301–320; I get '301–320 less 304 · 309', not twenty
+lines. Twenty lines gets a thumbs-up unread."* Both receivers and the author asked for it
+independently. Plain-number rooms sort and collapse — three make a run, two stay two — and a wall
+("304 north wall") is listed as typed. The one change every lens named as making it worse than a
+thumb-typed text: one line per room.
+
+**4. A HOLD IS ONE CHIP AND SIX WORDS ON THE CONDITION, NEVER THE MAN — and it is independent of
+the rung.** *"'304 · EC · no rings' reads as a charge. '304 — no rings north wall' reads as a
+task"* (the EC). The label and the placeholder are the only guardrail on six free words from a
+pissed rock foreman, so the label says it: *what's in the way — not who.* The hold survives the
+rung — a room can be clear from his side and held by the GC for his gear, the author's case, and
+the GC's: *"that's my hold reflected back, the one line proving he got my text"* — and untagging
+it erases the chip and the words in the same tap: one value, no history, gone from the message,
+the spreadsheet copy and storage. Retagging keeps the words, because half the "cable on the stud
+face" holds tagged EC are LV's Cat6 and *"he moves the chip without clearing the room and losing
+the six words."* Words with no chip never commit — a hold with nobody on it is not a hold.
+**Dissent, kept:** the EC lens wanted the row tap on a held room to erase the hold in the same
+tap. The engine's own law won — a flag is a separate toggle, never a ladder step, because a held
+room is held AT some state — and the author and the skeptic both wanted the hold to survive it.
+
+**5. NOT-WALKED ROOMS PRINT NOWHERE.** *"Pasted 40, walked 12, I get 12."* The moment untouched
+rooms print under any heading the tool drifts into "what everyone owes", which is the roster's own
+kill line for this page.
+
+**6. ONE TAP CLEARS THE REST — the skeptic's blocking change.** *"The 6:40 walk is
+exception-driven: three holds, everything else clear. Forty CLEAR taps loses to a thumb typing 'L3
+west clear except 304 309 312.'"* Every area with untouched rooms gets one button; it touches only
+blank, unheld rows, so a hold keeps its rung. Still his own act.
+
+**7. THE LAST CALL IS A FREE NARROWING OF THE SAME WALK.** The GC and the skeptic were honest
+about the seam: the trade's message *is* "Get out of my wall" with room numbers, one rung from the
+gate. It survives only because it falls out of the same walk at zero extra taps (§THE INTERFACE,
+one walk, N messages) — and the EC's blocking change gave it its shape: the rooms being rocked
+ride above his held rooms, because *"'get out' needs an address. A room he thinks is clear with my
+man still in it is a cut-in on me Friday."* His chip is never on his own line; nobody else's rooms
+are in his message; GC, inspection and "other" holds have no message of their own and ride in the
+super's. The day it grows an ask line it is Before I Close It again and one of them dies.
+
+**8. NO COUNTS IN THE TEXT, AND THE CLOSING IS A MILESTONE.** *"The day the GC's text reads
+'HELD: EC 4 · mech 1 · plumber 0', that's a scoreboard; he forwards it to my PM and the tool wrote
+line one of a backcharge."* Counts live on the glass. The GC killed "tell me tonight" — *"dead at
+6:40am, and 6:40 is when he walks"* — so the closing turns on *before the first sheet goes up*,
+true at 6pm and at 6:40, and the release comes through the holder or the super: *"for the
+inspection chip the release is mine, not the EC's."* The skeptic cut "not before" from the end of
+it as aimed at a later argument, not at Thursday. And the GC cut the "other" chip (*"a hold with no
+receiver isn't a hold; if he can't place it, it's mine"*); it stays, because the author and the EC
+kept it, and it prints only to the super — which is the GC's own rule with the label left honest.
+
+**WHERE IT SITS BESIDE `Before I Close It`.** All four said the same thing: that page is the ask,
+days ahead, by gate — ten milestones, every trade, a picklist of what I need from five companies.
+This is the verdict the night before, room by room, one gate, what I am closing. *"Same words,
+different moment"* (the EC). And beside the GC's own Close-In List — *"not competition, that's my
+Close-In List answered from the other side the night before."*
+
+**GATES:** `tools/toolkit-gates/ready-to-rock.mjs`, **183 checks** — the static bans over the
+config (no HUNG rung; the ladder exactly `[Clear]` and cycling; the super's word, "tonight" and
+"not before" absent from every document string; the closing on the milestone; no day arithmetic,
+no money, no real house, no spacing / height / rating; GC and inspection never receivers) and a
+390 drive: twelve rooms in one range with the area carried, four holds through the pencil, a hold
+with no chip refused at Add and at Save, a room on another floor never walked, the rest of one
+area cleared in one tap with the other floor untouched, the rock list by value (ranges, five held
+lines with the chip, the not-walked room absent, the day on line one and on no row, no clear /
+tonight / count), the super's copy, the EC's last call (only his two rooms, no chip, the rocking
+rooms above, nobody else's words), Mech's mirror, retag keeping the words, untag erasing them from
+message + spreadsheet + storage, the tap cycling both ways with the hold surviving, Next walk
+taking eight off and keeping six, reload, Clear — and four widths at the 44px floor.
+
 ## GETTING IN — the first tool aimed at a party that is not a trade (2026-08-15)
 
 `<trade>/getting-in.html`, **all ten kits including creative** — one page file, ten
@@ -2299,6 +2398,31 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
   identical to a wrong family. Measure opens before funding a batch two.
 
 ## SCARS — what went wrong, so it does not go wrong twice
+
+### 2026-09-14 (C3727) — A BATCH WRITE TO A KEY NO FIELD DECLARED IS A SILENT NO-OP, AND THE GATE CAUGHT IT ON ITS FIRST DRIVE
+`shared/rowlog.js`'s `applyValues` refuses a key the config never declared — by design (its own
+header: *"a caller that misspells the status key would otherwise write a field nothing renders,
+nothing copies and nothing can clear — a silent no-op that looks like a save"*). Ready to Rock's
+first draft kept its rung out of `fields:` so the add bar would stay lean, and the "rest of the
+area — clear" button then wrote `state` to eight rows and changed nothing: no error, no
+console line, and every later assertion fell over on a list with no closing rooms. The gate's
+first run found it (*"the untouched L3 west rooms are clear in one tap"* — FAIL) inside a
+cascade of sixteen. Fixed by declaring the rung as a field — one chip, Clear, not sticky — which
+also gave the add flow a one-tap Clear it did not have. **The rule: a page that calls
+`applyValues` writes only declared keys.** Swept the same cycle: all 17 `rough-in-request`
+callers write `status`, declared on every one.
+
+### 2026-09-14 (C3727) — A BUBBLE LISTENER BEHIND AN ENGINE REPAINT SEES A DETACHED NODE
+The page wanted *untag the chip → the words go with it*. Its listener sat on `#bar` in the bubble
+phase, behind the engine's own chip handler — which repaints the chip row with `innerHTML`. By
+the time the page's handler ran, `e.target` was a button with no parent, `closest('[data-chips=
+"who"] .rl-chip')` found no ancestor, and the handler returned without ever knowing which group
+the tap was in. It read correctly in the source; it did nothing in the browser. Fixed by
+registering in the CAPTURE phase (the node is still attached) and deferring the read with
+`setTimeout(0)` (the engine has toggled by then); asserted by the gate. Swept the same cycle: the
+17 `rough-in-request` pages listen on `#bar` too, but re-query the DOM instead of walking up from
+the target — unaffected.
+
 
 ### 2026-09-05 (C3708) — SIXTEEN SHELVES OUTVOTED THE SEVENTEENTH'S AUTHOR ON HIS OWN PAGE
 `shared/docsindex.js` is generated from the SHARED documents' names and akas and

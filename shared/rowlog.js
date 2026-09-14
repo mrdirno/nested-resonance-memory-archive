@@ -1417,6 +1417,22 @@
       text: text, tsv: tsv, render: render, restore: restore, clearAll: clearAll,
       persist: persistNow, schedulePersist: schedulePersist,
       addRange: addRange, addPasted: addPasted, applyValues: applyValues, importTsv: importTsv,
+      /* TAKE ROWS OFF THE LIST FROM OUTSIDE THE PENCIL — added at the tenth
+       * instance (framing/ready-to-rock, the walk before hanging). A room that
+       * got hung is not a rung, it is a row that LEAVES: the panel killed a
+       * HUNG rung as a production report the daily log already owns, so the
+       * page needs to drop the rooms it closed and keep the ones still held.
+       * One call, one render, one save; the pencil closes first if it is open
+       * on a row that is going (the photograph rule, §SCARS). */
+      remove: function (ids) {
+        var set = {}; (ids || []).forEach(function (i) { set[i] = 1; });
+        if (editingId != null && set[editingId]) stopEditing(true);
+        var before = rows.length;
+        rows = rows.filter(function (r) { return !set[r.id]; });
+        var n = before - rows.length;
+        if (n) { render(); persistNow(); }
+        return n;
+      },
       setGroup: function (k) { if (GROUPS.filter(function (g) { return g.key === k; }).length) { groupKey = k; render(); persistNow(); } },
       group: function () { return groupKey; },
       setDeltaOnly: function (b) { deltaOnly = !!b; render(); },

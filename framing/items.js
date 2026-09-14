@@ -851,3 +851,96 @@ window.TOOLKIT_ITEMS.tag_es = {
     { "es": "Lo dejamos abierto para alguien, y luego me mandaron cerrarlo de todos modos", "en": "Held for somebody, then told to close it anyway" }
   ]
 };
+
+/* ── READY TO ROCK (shape #3 — shared/rowlog.js) ─────────────────────────────
+ * The vocabulary for ready-to-rock.html — the walk before you hang. The roster
+ * ranked it the strongest unbuilt rung on this kit (2026-08-09): "two taps a
+ * room: CLEAR is one tap, HELD is a tap plus a trade chip and six words", and
+ * it absorbs "Last Call Before Rock" — one walk, one page.
+ *
+ * A FOUR-LENS PANEL SCORED IT 8 / 7 / 8 / 7 (C3727), all BUILD_WITH_CHANGES,
+ * and every word below is the panel's:
+ *   · NO HUNG RUNG. The ladder is blank -> Clear and stops. Hung-by-room-by-day
+ *     is the daily log, which somebody else owns and numbers. A hung room is a
+ *     row that LEAVES the list (Next walk), never a third rung.
+ *   · THE SUPER'S WORD NEVER PRINTS. "Clear" is what his eyes said; "clear" is
+ *     the super's sign-off word. So the rung reads Clear on the glass and the
+ *     document says "Closing:" — and never "CLEAR" (the GC super's block).
+ *   · RANGES, NOT ROWS. "301–303 · 305–308 · 310–312", never twenty lines.
+ *   · A HOLD IS ONE CHIP AND SIX WORDS ON THE CONDITION, NEVER THE MAN. It is
+ *     independent of the rung (a room can be clear from his side and held by
+ *     the GC for his gear), and untagging it erases the chip and the words —
+ *     one value, no history, nothing to paste back at anyone.
+ *   · NOT-WALKED ROOMS PRINT NOWHERE. Not closing, not held, not mentioned.
+ *   · THE LAST CALL IS A FREE NARROWING OF THE SAME WALK. Each trade gets only
+ *     the rooms held for HIM, without the chip on the line (it reads as a
+ *     charge), under the rooms being rocked (his address). GC, inspection and
+ *     "other" holds have no message of their own — they ride in the super's.
+ *   · NO COUNTS IN THE TEXT. "EC 4 · mech 1" is a scoreboard; counts stay on
+ *     the glass.
+ *   · THE CLOSING IS A MILESTONE, NOT A CLOCK. "before the first sheet goes up"
+ *     is true at 6pm and at 6:40am; "tonight" is dead by the second one.
+ * Nothing here sizes, rates, spaces or approves anything (§SAFETY).
+ */
+window.TOOLKIT_ROCK = {
+  toolName: "Ready to Rock",
+  eyebrow: "Framing & drywall · the walk before you hang",
+  lede: "Walk the floor the night before or at 6:40. Tap the rooms that are clear, tag the ones that are held and by whom. Then send the super the rock list, and each trade the last call on the rooms held for them.",
+  warn: "<b>This is your walk, not a sign-off.</b> It inspects nothing, tests nothing and signs nothing &mdash; the sticker is the inspector&rsquo;s and the go is the super&rsquo;s. It says what <i>you</i> are closing and what&rsquo;s holding the rest, in your words, and nothing on it rates, sizes or approves anything.",
+
+  phJob: "Bldg C",
+  phSuper: "Ken — site super",
+  phFrom: "Mike — Apex Interiors",
+  phTel: "so he can call you in the hallway",
+  phDay: "Thu · tomorrow · the 14th",
+  phArea: "L3 west — then it's a button",
+  phRoom: "304 · 304 north wall · 2114",
+  phHold: "no rings north wall · test not on the riser · sticker not on it",
+
+  labRoom: "Room / wall",
+  labArea: "Floor / wing",
+  labWho: "Held by",
+  labHold: "What's in the way — not who",
+
+  /* WHO CAN HOLD A ROOM. `send: true` is a trade that gets its own last call;
+     GC, inspection and other ride in the super's message only — a hold with no
+     receiver on the job is the super's to place. */
+  who: [
+    { v: "EC", send: true },
+    { v: "Mech", send: true },
+    { v: "Plumber", send: true },
+    { v: "Sprinkler", send: true },
+    { v: "LV/FA", send: true },
+    { v: "AV", send: true },
+    { v: "Doors", send: true },
+    { v: "GC", send: false },
+    { v: "Inspection", send: false },
+    { v: "Other", send: false }
+  ],
+
+  emptyText: "No rooms yet. Put in the first one you walked, or make the whole floor at once below and tap what's clear.",
+  emptyHeld: "Nothing held — every room on this list is clear.",
+  emptyTrade: "Nothing held for them — every room of theirs is clear.",
+
+  /* THE TWO DOCUMENTS. */
+  docSubject: "ROCK LIST",
+  docSubjectTrade: "LAST CALL BEFORE ROCK",
+  docHanging: "hanging {day}",
+  docClosing: "Closing:",
+  docClosingNone: "Closing: nothing marked clear yet — walk it first.",
+  docRocking: "Rocking {day}:",
+  docRockingNoDay: "Rocking:",
+  docRockingNone: "Rocking: nothing marked clear yet.",
+  docHeld: "HELD",
+  closing: "Want one held that isn't? Say so before the first sheet goes up. A held room comes off hold when I hear from them, or from you.",
+  docBoundary: "My walk, not a sign-off — it inspects, tests and approves nothing.",
+  closingTrade: "Get out before the first sheet goes up, or text me the day. I don't rock a held room till I hear from you.",
+
+  toNeutral: "— pick who this goes to (below is your own copy)",
+  toSuper: "the rock list — what I'm closing and what's held",
+  toSuperAnon: "The super",
+  toTrade: "last call on {n}",
+  hintNeutral: "<b>Pick who it goes to.</b> The super gets the rock list — what you're closing, and every hold with who's holding it. A trade gets only the rooms held for them, under the rooms you're rocking.",
+  hintSuper: "The rock list: what you're closing as ranges, then every held room with who's holding it and what's in the way. Not-walked rooms aren't on it.",
+  hintTrade: "Only the rooms held for them, and what's in the way — no chip on the line, nobody else's rooms. The rooms you're rocking ride above it so \"get out\" has an address."
+};

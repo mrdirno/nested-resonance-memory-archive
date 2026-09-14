@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ready to Rock — Framing &amp; Drywall Field Toolkit</title>
+<meta name="description" content="The walk before you hang. Tap the rooms that are clear, tag the ones that are held and by whom, then send the super the rock list as ranges and each trade the last call on the rooms held for them — no counts, no clock, nothing signed off.">
+<meta name="apple-mobile-web-app-title" content="Ready to Rock">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Framing &amp; drywall &middot; the walk before you hang</span>
+    <h1 id="title">Ready to Rock</h1>
+    <p class="lede" id="lede">Walk the floor the night before or at 6:40. Tap the rooms that are clear, tag the ones that are held and by whom. Then send the super the rock list, and each trade the last call on the rooms held for them.</p>
+  </header>
+
+  <div class="warn" id="warn"></div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / building</label><input type="text" id="hJob" placeholder="Bldg C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hSuper">The super</label><input type="text" id="hSuper" placeholder="Ken — site super" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="Mike — Apex Interiors" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so he can call you in the hallway" autocomplete="off"></div>
+      <div><label for="hDay">Hanging &mdash; the day</label><input type="text" id="hDay" placeholder="Thu · tomorrow · the 14th" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="dayHint">The day is yours to name. It rides on line one of every message and on no room. Leave it blank and the message says <i>before the first sheet goes up</i> and nothing else.</p>
+  </section>
+
+  <section class="card">
+    <h2>Walk it</h2>
+    <div id="bar"></div>
+    <p class="note" id="whoSay" style="margin:8px 0 0" hidden><b>Who&rsquo;s holding it?</b> Tap one. A hold with nobody on it isn&rsquo;t a hold &mdash; if you can&rsquo;t place it, it&rsquo;s the super&rsquo;s.</p>
+    <p class="note" style="margin:10px 0 0">Type the room, <b>Add</b> &mdash; or tap the next number the page offers. Held? Tap who&rsquo;s holding it, say what&rsquo;s in the way (not who), then Add. <b>Tap a row</b> to mark it clear; tap it again to take that back. A hold is its own tag: it stays until you untag it, whatever the row says.</p>
+
+    <details class="more" id="bulk">
+      <summary>Make the whole floor at once</summary>
+      <p class="note" style="margin:10px 0 8px"><b>A range.</b> First room, last room &mdash; they land not walked, ready to tap. Leading zeros are kept.</p>
+      <div class="bulkgrid">
+        <div><label for="bPre">Before</label><input type="text" id="bPre" placeholder="optional" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+        <div><label for="bFrom">First</label><input type="text" id="bFrom" inputmode="numeric" placeholder="301" autocomplete="off"></div>
+        <div><label for="bTo">Last</label><input type="text" id="bTo" inputmode="numeric" placeholder="320" autocomplete="off"></div>
+        <div><label for="bSuf">After</label><input type="text" id="bSuf" placeholder="optional" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+        <div class="go"><button type="button" class="btn" id="bGo">Make the rows</button></div>
+      </div>
+      <p class="note" style="margin:14px 0 8px"><b>Or paste a column.</b> One room per line, straight out of whatever you already have.</p>
+      <textarea id="bPaste" placeholder="301&#10;302&#10;304 north wall" autocapitalize="none" autocorrect="off" spellcheck="false"></textarea>
+      <div style="margin-top:8px"><button type="button" class="btn ghost" id="bPasteGo">Add these</button></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>The rooms</h2>
+    <div id="tally"></div>
+    <div class="outrow" id="restRow" hidden></div>
+    <p class="note" id="restHint" style="margin:0 0 10px" hidden>One tap marks every room you haven&rsquo;t touched in that area clear &mdash; tag the holds first, then the rest is clear. Your walk, your call.</p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row. Move the hold to another trade and the words stay; untag it and the words go with it &mdash; nothing is kept, so there is nothing to paste back at anybody later. Not-walked rooms are on no message.</p>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="nextBtn" hidden>Next walk</button></div>
+    <p class="note" id="nextHint" style="margin:8px 0 0" hidden>When the rooms you closed are hung, <b>Next walk</b> takes them off the list and keeps what&rsquo;s still held and what you haven&rsquo;t walked. No hung count, no day &mdash; a hung room just leaves.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; the super gets the list, a trade gets his rooms</span></h2>
+
+    <div class="bararea" style="display:block">
+      <label class="lab" for="selTo" style="margin:0 0 6px">This message goes to</label>
+      <select id="selTo"></select>
+    </div>
+    <p class="note" id="toHint"></p>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every room with a tab between the columns &mdash; that one is <b>yours</b>, not a message, and it is your backup: this lives in this browser on this phone.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the <span id="creditKit">Framing &amp; Drywall Field Toolkit</span>. Something in here not how your crew says it, or a hold you can&rsquo;t tag? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Framing &amp; Drywall Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* READY TO ROCK — the walk before you hang, and the last call it produces.
+ * Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0
+ *
+ * A CONFIG ON SHAPE #3 (`shared/rowlog.js`). The engine grew exactly one call
+ * for it — `remove(ids)`, so the rooms he closed can leave the list — and
+ * nothing else: tap-to-advance, the learned area, bulk create, the named
+ * filters, the TSV and the persistence are all the engine's. Every word comes
+ * out of `framing/items.js` (TOOLKIT_ROCK).
+ *
+ * ── WHAT A FOUR-LENS PANEL SCORED 8 / 7 / 8 / 7, AND WHAT IT CHANGED ────────
+ * A commercial drywall foreman who walks the floor at 6:40 (the author) · the
+ * GC super who gets the first message and owns the Close-In List · the EC
+ * foreman who gets the last call · a skeptic handed the rules and told to kill
+ * it. All four said build, all four with changes, and they changed the same
+ * things:
+ *
+ * 1. NO HUNG RUNG. The ladder is blank → Clear, two rungs, and the tap cycles
+ *    back (a fat finger at 6:40 needs one tap back, not delete-and-retype).
+ *    Hung-by-room-by-day is a production report — the daily log, which
+ *    somebody else owns and numbers. A hung room LEAVES the list: "Next walk"
+ *    takes the closing rooms off and keeps what is still held.
+ *
+ * 2. THE SUPER'S WORD NEVER PRINTS. "Clear" is his rung (his eyes: walked it,
+ *    nothing in the way). "Clear" is also the super's sign-off word, and a
+ *    text that says CLEAR against a Close-In List that says EC rough isn't
+ *    signed is an argument at 6:50 instead of an act. So the document reads
+ *    "Closing:" and never carries the word.
+ *
+ * 3. RANGES, NOT ROWS. "301–303 · 305–308 · 310–312", never twenty lines —
+ *    twenty lines gets a thumbs-up unread, and a hand-typed "rocking 301-320
+ *    tmrw, EC still in 304 309" beats a tool that prints a row per room.
+ *
+ * 4. A HOLD IS ONE CHIP AND SIX WORDS ON THE CONDITION, NEVER THE MAN. It is
+ *    independent of the rung (a room can be clear from his side and held by
+ *    the GC for his gear — that line is the proof he got the super's text).
+ *    Untag it and the words go with it: one value, no history, no "held
+ *    since", no count. A field holding one sentence cannot become an exhibit.
+ *
+ * 5. NOT-WALKED ROOMS PRINT NOWHERE. Pasted forty, walked twelve: the super
+ *    gets twelve. The moment untouched rooms print under any heading the tool
+ *    drifts into "what everyone owes", which is the roster's own kill line.
+ *
+ * 6. ONE TAP CLEARS THE REST. The 6:40 walk is exception-driven — three
+ *    holds, everything else clear — and forty Clear taps lose to a thumb. So
+ *    every area with untouched rooms gets one button that marks them clear.
+ *
+ * 7. THE LAST CALL IS A FREE NARROWING OF THE SAME WALK. A trade's message is
+ *    only the rooms held for HIM, without the chip on the line (it reads as a
+ *    charge), under the rooms being rocked — "get out" needs an address. GC,
+ *    inspection and "other" holds have no message of their own; they ride in
+ *    the super's. It grows no field of its own, ever: the day it wants an ask
+ *    line it is "Before I Close It" again and one of them dies.
+ *
+ * 8. NO COUNTS IN THE TEXT, and the closing is a MILESTONE, not a clock.
+ *    "before the first sheet goes up" is true at 6pm and at 6:40am.
+ *
+ * DISSENT, kept: the EC lens wanted the row tap on a held room to erase the
+ * hold in the same tap. The engine's own law won — a flag is a separate toggle,
+ * never a ladder step, because a held room is held AT some state — and the
+ * author and the skeptic both wanted the hold to survive the rung.
+ */
+(function () {
+  "use strict";
+  function $(s) { return document.querySelector(s); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c];
+    });
+  }
+
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var R = window.TOOLKIT_ROCK || {};
+  var WHO = (R.who || []).map(function (w) { return typeof w === "string" ? { v: w, send: true } : w; });
+  var SENDERS = WHO.filter(function (w) { return w.send; }).map(function (w) { return w.v; });
+  var CLEAR = "Clear";
+  var STATES = [CLEAR];
+  var KEY = "toolkit." + (TRADE.slug || "framing") + ".rock.v1";
+  var NOAREA = R.noArea || "NO AREA";
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  if (R.toolName) { $("#title").textContent = R.toolName; document.title = R.toolName + " — " + (TRADE.name || "Field Toolkit"); }
+  if (R.lede) $("#lede").textContent = R.lede;
+  if (R.eyebrow) $("#eyebrow").textContent = R.eyebrow;
+  if (R.warn) $("#warn").innerHTML = R.warn;
+  if (R.phJob) $("#hJob").placeholder = R.phJob;
+  if (R.phSuper) $("#hSuper").placeholder = R.phSuper;
+  if (R.phFrom) $("#hFrom").placeholder = R.phFrom;
+  if (R.phTel) $("#hTel").placeholder = R.phTel;
+  if (R.phDay) $("#hDay").placeholder = R.phDay;
+  if (TRADE.name) { $("#footName").textContent = TRADE.name; $("#creditKit").textContent = TRADE.name; }
+
+  /* The engine renders once inside mount(), before `rl` exists (§SCARS). */
+  function rowsNow() { return rl ? rl.rows() : []; }
+  function isHeld(v) { return !!String(v.who || "").trim(); }
+  function isClosing(v) { return v.state === CLEAR && !isHeld(v); }
+  function isWalked(v) { return v.state === CLEAR || isHeld(v); }
+
+  /* ── WHO THIS MESSAGE GOES TO ──────────────────────────────────────────────
+     mode "":      his own copy — the rock list with no To: line.
+     mode "super": the rock list, addressed.
+     mode "trade": one trade, only the rooms held for him.
+     Nothing is picked until he picks it: A DEFAULT IS A CLAIM. */
+  var to = { mode: "", who: "" };
+
+  /* ── RANGES, NOT ROWS ────────────────────────────────────────────────────
+     Rooms that are plain numbers sort and collapse: 301 302 303 305 → "301–303
+     · 305". Anything else ("304 north wall", "B-12") is listed as typed, after.
+     Three in a row make a range; two stay two. Leading zeros are respected —
+     004 005 006 is a run, 004 and 12 are not. */
+  function compress(ids) {
+    var seen = {}, nums = [], rest = [];
+    ids.forEach(function (t) {
+      t = String(t == null ? "" : t).trim();
+      if (!t || seen[t]) return;
+      seen[t] = 1;
+      if (/^\d+$/.test(t)) nums.push(t); else rest.push(t);
+    });
+    nums.sort(function (a, b) { return (parseInt(a, 10) - parseInt(b, 10)) || (a.length - b.length); });
+    var out = [], i = 0;
+    while (i < nums.length) {
+      var j = i;
+      while (j + 1 < nums.length && parseInt(nums[j + 1], 10) === parseInt(nums[j], 10) + 1 && nums[j + 1].length === nums[j].length) j++;
+      if (j - i >= 2) out.push(nums[i] + "\u2013" + nums[j]);
+      else for (var k = i; k <= j; k++) out.push(nums[k]);
+      i = j + 1;
+    }
+    return out.concat(rest).join(" · ");
+  }
+
+  /* THE CLOSING LINE — every room he marked clear and nobody holds, by area.
+     One area: one line. Several: the label, then one line per area. It is the
+     ADDRESS on the trade's last call and the whole point of the super's. */
+  function closingLines(label, none) {
+    var by = {}, order = [];
+    rowsNow().forEach(function (r) {
+      var v = r.values; if (!isClosing(v)) return;
+      var a = String(v.area || "").trim();
+      if (!by[a]) { by[a] = []; order.push(a); }
+      by[a].push(v.room);
+    });
+    if (!order.length) return [none];
+    if (order.length === 1) return [label + " " + compress(by[order[0]])];
+    var out = [label];
+    order.forEach(function (a) { out.push((a || NOAREA.toLowerCase()) + " — " + compress(by[a])); });
+    return out;
+  }
+  /* The area on line one, only when every walked room is in ONE area. */
+  function areaLine() {
+    var seen = {};
+    rowsNow().forEach(function (r) {
+      if (!isWalked(r.values)) return;
+      var a = String(r.values.area || "").trim();
+      if (a) seen[a] = 1;
+    });
+    var ks = Object.keys(seen);
+    return ks.length === 1 ? ks[0] : "";
+  }
+  function hangWord() {
+    var d = $("#hDay").value.trim();
+    return d ? (R.docHanging || "hanging {day}").replace("{day}", d) : "";
+  }
+
+  function tradesHeld() {
+    var c = {};
+    rowsNow().forEach(function (r) {
+      var w = String(r.values.who || "").trim();
+      if (w && SENDERS.indexOf(w) > -1) c[w] = (c[w] || 0) + 1;
+    });
+    return SENDERS.filter(function (w) { return c[w]; }).map(function (w) { return { v: w, n: c[w] }; });
+  }
+  function buildToSelect() {
+    var sel = $("#selTo");
+    sel.innerHTML = "";
+    function opt(v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; sel.appendChild(o); }
+    opt("", R.toNeutral || "— pick who this goes to");
+    opt("super", ($("#hSuper").value.trim() || R.toSuperAnon || "The super") + " — " + (R.toSuper || "the rock list"));
+    tradesHeld().forEach(function (x) {
+      opt("t:" + x.v, x.v + " — " + (R.toTrade || "last call on {n}").replace("{n}", x.n + (x.n === 1 ? " room" : " rooms")));
+    });
+  }
+  /* `to` IS THE SOURCE OF TRUTH — the select follows it, so the receiver he
+     picked survives a reload (it is restored with the draft) and a trade whose
+     last hold was released drops out of the select AND out of `to`. */
+  function syncSelects() {
+    if (!rl) return;                      // onChange fires from the engine's first render too
+    var want = to.mode === "trade" ? "t:" + to.who : (to.mode === "super" ? "super" : "");
+    buildToSelect();
+    var found = !!want && [].some.call($("#selTo").options, function (o) { return o.value === want; });
+    $("#selTo").value = found ? want : "";
+    if (!found) to = { mode: "", who: "" };
+    applyFilters();
+  }
+  function desiredFilters() { return to.mode === "trade" ? ["to", "held"] : ["held"]; }
+  /* ONLY WHEN THE KEYS CHANGE — setFilter renders, render fires onChange, and
+     onChange lands back here (§SCARS: a filter applied from onChange is a loop
+     with no floor). The "to" test reads `to.who` live. */
+  function applyFilters() {
+    if (!rl) return;
+    var want = desiredFilters(), have = rl.filter();
+    if (want.join("|") !== have.join("|")) rl.setFilter(want);
+    paintHint();
+  }
+  function paintHint() {
+    var el = $("#toHint"); if (!el) return;
+    if (to.mode === "trade") el.innerHTML = R.hintTrade || "";
+    else if (to.mode === "super") el.innerHTML = R.hintSuper || "";
+    else el.innerHTML = R.hintNeutral || "";
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "room", nounPlural: "rooms", groupNoun: "area", groupNounPlural: "areas",
+    ungroupedLabel: NOAREA,
+    emptyText: R.emptyText || "No rooms yet.",
+
+    /* TWO RUNGS, AND THE TAP CYCLES. blank → Clear → blank. A wrong tap at 6:40
+       is one tap back, and there is no rung above Clear to protect. */
+    statusKey: "state", statusOrder: STATES, statusDone: CLEAR, statusWrap: true,
+
+    groupOptions: [{ key: "area", label: "Floor / wing" }],
+
+    /* THE BODY OF EVERY DOCUMENT IS THE HELD ROOMS. The closing rooms ride in
+       the head as ranges, so "held" is always on; "to" narrows to one trade. */
+    filters: [
+      { v: "to", label: "for one trade",
+        emptyText: R.emptyTrade || "Nothing held for them.",
+        test: function (v) { return String(v.who || "").trim() === to.who; } },
+      { v: "held", label: "held",
+        emptyText: R.emptyHeld || "Nothing held — every room on this list is clear.",
+        test: function (v) { return isHeld(v); } }
+    ],
+
+    fields: [
+      { key: "room", label: R.labRoom || "Room / wall", input: "text", identifier: true, lead: true, required: true,
+        placeholder: R.phRoom || "304 · 304 north wall" },
+      { key: "area", label: R.labArea || "Floor / wing", input: "learn", sticky: true,
+        placeholder: R.phArea || "L3 west — then it's a button",
+        emptyHint: "Type the floor or wing the way your crew says it. It becomes a button and carries." },
+      /* NOT STICKY, either of them. A hold is a deliberate act per room; a chip
+         that carried to the next room would hold it by accident. */
+      /* THE RUNG IS A DECLARED FIELD so the batch write ("rest clear") may
+         touch it — the engine refuses a key no field declares. One chip,
+         Clear, not sticky: his eyes, per room. */
+      { key: "state", label: R.labState || "Clear — walked it, nothing in the way", input: "chips" },
+      { key: "who", label: R.labWho || "Held by", input: "chips", wide: true },
+      { key: "hold", label: R.labHold || "What's in the way — not who", input: "text", wide: true,
+        placeholder: R.phHold || "no rings north wall" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "state") return STATES;
+      if (key === "who") return WHO.map(function (w) { return w.v; });
+      if (key === "area") return (learned || []).slice();
+      return null;
+    },
+
+    rowMain: function (v) { return v.room || "(no room on this row)"; },
+    rowSub: function (v) { return joinDots([isHeld(v) ? "held · " + v.who : null, v.hold || null]); },
+
+    /* LINE 1 IS THE LOCK-SCREEN LINE: the subject, the job, the area when there
+       is one, and the day he named. NO send date — his phone stamps the text. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), sup = $("#hSuper").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var day = $("#hDay").value.trim();
+      var out = [];
+      if (to.mode === "trade") {
+        out.push(joinDash([R.docSubjectTrade || "LAST CALL BEFORE ROCK", to.who, joinDots([job, areaLine(), hangWord()])]));
+        out.push("");
+        out.push("To: " + to.who);
+        if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+        else if (tel) out.push("Call me: " + tel);
+        out.push("");
+        var lab = day ? (R.docRocking || "Rocking {day}:").replace("{day}", day) : (R.docRockingNoDay || "Rocking:");
+        closingLines(lab, R.docRockingNone || "Rocking: nothing marked clear yet.").forEach(function (l) { out.push(l); });
+        out.push("");
+        return out.join("\n");
+      }
+      out.push(joinDash([R.docSubject || "ROCK LIST", joinDots([job, areaLine(), hangWord()])]));
+      out.push("");
+      if (to.mode === "super") out.push("To: " + (sup || R.toSuperAnon || "the super"));
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      out.push("");
+      closingLines(R.docClosing || "Closing:", R.docClosingNone || "Closing: nothing marked clear yet.").forEach(function (l) { out.push(l); });
+      out.push("");
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER HELD ROOM. The area is the heading, so it is dropped. The
+       chip prints to the super and NEVER to the trade himself — "304 · EC · no
+       rings" reads as a charge; "304 — no rings north wall" reads as a task. */
+    docRow: function (v, r) {
+      var lead = (R.docHeld || "HELD") + " " + (v.room || "");
+      if (to.mode === "trade") return joinDash([lead, v.hold || null]);
+      return joinDash([lead, v.who || null, v.hold || null]);
+    },
+
+    /* THE CLOSING IS A MILESTONE. Then the boundary line, to the super only. */
+    docFoot: function (c) {
+      if (to.mode === "trade") return R.closingTrade || "";
+      var out = [];
+      if (R.closing) out.push(R.closing);
+      if (R.docBoundary) out.push(R.docBoundary);
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim();
+      return (job ? job + " — " : "") + "rock list, " + c.total + (c.total === 1 ? " room, " : " rooms, ") + c.today
+        + " — my own walk, kept by hand. No day count on it, and it signs nothing off.";
+    },
+    tsvColumns: [
+      { label: "Room / wall", key: "room" },
+      { label: "Floor / wing", key: "area" },
+      { label: "Clear", key: "state" },
+      { label: "Held by", key: "who" },
+      { label: "What's in the way", key: "hold" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), s = $("#hSuper").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim(), d = $("#hDay").value.trim();
+      return (j || s || f || t || d || to.mode) ? { job: j, sup: s, from: f, tel: t, day: d, mode: to.mode, who: to.who } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hSuper").value = x.sup || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || ""; $("#hDay").value = x.day || "";
+      to = { mode: x.mode || "", who: x.who || "" };
+    },
+    onChange: function () { paintTally(); paintRest(); paintNext(); syncSelects(); }
+  });
+
+  /* ── COUNTS LIVE ON THE GLASS, NEVER IN THE TEXT ─────────────────────────── */
+  function paintTally() {
+    var el = $("#tally"); if (!el || !rl) return;
+    var rs = rowsNow();
+    if (!rs.length) { el.innerHTML = ""; return; }
+    var clear = 0, held = 0, blank = 0;
+    rs.forEach(function (r) { var v = r.values; if (isHeld(v)) held++; else if (v.state === CLEAR) clear++; else blank++; });
+    el.innerHTML = "<b>" + rs.length + (rs.length === 1 ? " room" : " rooms") + "</b>"
+      + '<span class="rl-tsep">·</span><span class="rl-tchip" data-st="Clear">' + clear + " closing</span>"
+      + (held ? '<span class="rl-tchip rl-tflag">' + held + " held</span>" : "")
+      + (blank ? '<span class="rl-tchip rl-tnone">' + blank + " not walked</span>" : "");
+  }
+
+  /* ── ONE TAP CLEARS THE REST OF AN AREA ──────────────────────────────────── */
+  function restTargets() {
+    var by = {}, order = [];
+    rowsNow().forEach(function (r) {
+      var v = r.values; if (isWalked(v)) return;
+      var a = String(v.area || "").trim();
+      if (!by[a]) { by[a] = []; order.push(a); }
+      by[a].push(r.id);
+    });
+    return order.map(function (a) { return { area: a, ids: by[a] }; });
+  }
+  function paintRest() {
+    var box = $("#restRow"), hint = $("#restHint"); if (!box || !rl) return;
+    var t = restTargets();
+    box.hidden = !t.length; if (hint) hint.hidden = !t.length;
+    box.innerHTML = t.map(function (x) {
+      return '<button type="button" class="btn ghost" data-rest="' + esc(x.area) + '">'
+        + esc(x.area ? "Rest of " + x.area + " — clear" : "Everything else — clear") + " (" + x.ids.length + ")</button>";
+    }).join("");
+  }
+  $("#restRow").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("button[data-rest]") : null; if (!b) return;
+    var a = b.getAttribute("data-rest");
+    var t = restTargets().filter(function (x) { return x.area === a; })[0]; if (!t) return;
+    rl.applyValues(t.ids.map(function (id) { return { id: id, values: { state: CLEAR } }; }));
+  });
+
+  /* ── NEXT WALK: A HUNG ROOM LEAVES, IT DOES NOT GET A RUNG ───────────────── */
+  function hungIds() { return rowsNow().filter(function (r) { return isClosing(r.values); }).map(function (r) { return r.id; }); }
+  function paintNext() {
+    var b = $("#nextBtn"), h = $("#nextHint"); if (!b || !rl) return;
+    var n = hungIds().length;
+    b.hidden = !n; if (h) h.hidden = !n;
+    if (b.getAttribute("data-armed") !== "1") b.textContent = "Next walk — the " + n + (n === 1 ? " closing room" : " closing rooms") + " come off";
+  }
+  $("#nextBtn").addEventListener("click", function () {
+    var b = this, n = hungIds().length;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.textContent = "Tap again — " + n + " off, held and not-walked stay";
+      setTimeout(function () { if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); paintNext(); } }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    rl.remove(hungIds());
+    paintNext();
+  });
+
+  /* ── THE HOLD: A CHIP AND SIX WORDS, OR NOTHING ──────────────────────────
+     Untag the chip and the words go with it, in the add bar and in the pencil
+     alike — one value, no history. And words with no chip never commit: a hold
+     with nobody on it is not a hold. The guard runs in the CAPTURE phase on the
+     bar, ahead of the engine's own Add and Enter listeners. */
+  function whoVal() { var h = $('#bar [data-k="who"]'); return h ? String(h.value || "").trim() : ""; }
+  function holdEl() { return $('#bar [data-k="hold"]'); }
+  /* CAPTURE PHASE, on purpose: the engine's own chip handler repaints the
+     chips, which detaches the tapped button — a bubble listener behind it
+     would see a chip with no parent and never know which group it was in. */
+  $("#bar").addEventListener("click", function (e) {
+    var c = e.target.closest ? e.target.closest('[data-chips="who"] .rl-chip') : null; if (!c) return;
+    setTimeout(function () { var t = holdEl(); if (t && !whoVal()) t.value = ""; }, 0);
+  }, true);
+  function guardHold(e) {
+    var t = holdEl();
+    if (!t || !String(t.value || "").trim() || whoVal()) return;
+    e.stopPropagation();
+    var wrap = $('#bar [data-for="who"]');
+    if (wrap) { wrap.classList.add("rl-bad"); setTimeout(function () { wrap.classList.remove("rl-bad"); }, 900); }
+    var say = $("#whoSay");
+    if (say) { say.hidden = false; setTimeout(function () { say.hidden = true; }, 3500); }
+  }
+  $("#bar").addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("#rlAdd")) guardHold(e);
+  }, true);
+  $("#bar").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target && e.target.matches && e.target.matches('[data-k="room"],[data-k="hold"]')) guardHold(e);
+  }, true);
+
+  /* A room is "304 north wall" as often as "304": keep autocorrect off (a
+     phone would fix "rm" into "rim") but do not shout the wall. */
+  (function () {
+    var el = $('#bar [data-k="room"]');
+    if (el) el.setAttribute("autocapitalize", "none");
+    var a = document.querySelector('[data-learn="area"]');
+    if (a) { a.setAttribute("autocapitalize", "none"); a.setAttribute("autocorrect", "off"); }
+  })();
+
+  /* ── bulk ─────────────────────────────────────────────────────────────── */
+  function flashBtn(b, msg) {
+    var old = b.getAttribute("data-label") || b.textContent;
+    b.setAttribute("data-label", old); b.textContent = msg;
+    setTimeout(function () { b.textContent = old; }, 1500);
+  }
+  $("#bGo").addEventListener("click", function () {
+    var n = rl.addRange($("#bPre").value, $("#bFrom").value, $("#bTo").value, $("#bSuf").value);
+    flashBtn(this, n ? "Added " + n : "Check the numbers");
+    if (n) { $("#bFrom").value = ""; $("#bTo").value = ""; }
+  });
+  $("#bPasteGo").addEventListener("click", function () {
+    var n = rl.addPasted($("#bPaste").value);
+    flashBtn(this, n ? "Added " + n : "Nothing to add");
+    if (n) $("#bPaste").value = "";
+  });
+
+  $("#selTo").addEventListener("change", function () {
+    var v = this.value;
+    if (/^t:/.test(v)) to = { mode: "trade", who: v.slice(2) };
+    else if (v === "super") to = { mode: "super", who: "" };
+    else to = { mode: "", who: "" };
+    applyFilters();
+    rl.schedulePersist();
+    rl.render();                          // the receiver may change inside the same key list — repaint the preview
+  });
+
+  /* TWO TAPS TO WIPE, never one. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hSuper", "#hFrom", "#hTel", "#hDay"].forEach(function (s) { $(s).value = ""; });
+    to = { mode: "", who: "" };
+    rl.clearAll();
+    $("#selTo").value = "";
+    syncSelects();
+    paintTally(); paintRest(); paintNext();
+  });
+
+  /* The header rides on every message, so a keystroke has to reach BOTH the
+     preview and the saved copy (§SCARS). The super's name also labels an option. */
+  ["#hJob", "#hFrom", "#hTel", "#hDay"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+  $("#hSuper").addEventListener("input", function () { rl.schedulePersist(); syncSelects(); rl.render(); });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  syncSelects();
+  paintTally(); paintRest(); paintNext();
+})();
+</script>
+</body>
+</html>
