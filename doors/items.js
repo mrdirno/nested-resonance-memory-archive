@@ -218,6 +218,101 @@ window.TOOLKIT_ITEMS.nothang = {
   pics: ["Sent with photos", "Photos on request", "Come look with me"]
 };
 
+/* ── CALL THE KEYING (the keying ASK) ──────────────────────────────────────
+ * THE ASK ONLY, NEVER THE SCHEDULE. doors/tools.js carried this rung as a
+ * written-down deferral from the day the kit landed — "the strongest unbuilt
+ * rung, and it was kept by the prune" — and trade.js already says what it is
+ * allowed to be: the keying ASK, decide by this date or these go in
+ * construction cores, is a note he sends; the keying SCHEDULE is somebody
+ * else's document and stays it. So this vocabulary holds QUESTIONS and STATES,
+ * never answers: nothing below can carry a group, a master, a bitting or a
+ * cylinder crosswalk, because nothing on the page asks for one.
+ *
+ * HOW THE JOB ACTUALLY RUNS, which is why the ticks read the way they do: the
+ * owner, the hardware consultant and the distributor's keying department
+ * decide the keying in one meeting; until it happens the keying department
+ * cannot combinate a single permanent core. The installer's leaves still have
+ * to lock, so the locks go on with construction cores in them — and the
+ * permanent cores become a SECOND TRIP through every opening. The ask exists to
+ * put a date on the decision before the second trip becomes the plan.
+ *
+ * VERBS, per the C3730 panel's two in-trade lenses: the keying department
+ * COMBINATES (pins) cores; the installer PUTS THEM IN. "Before I pin" tells a
+ * super the author never hung hardware, so it is not in this vocabulary.
+ */
+window.TOOLKIT_ITEMS.keying = {
+  roles: [
+    "GC superintendent",
+    "GC project manager",
+    "Owner's rep / construction manager",
+    "Property / facility manager",
+    "Owner's security / locksmith",
+    "The distributor's inside man",
+    "Our own boss / PM"
+  ],
+
+  /* What is physically in the cartons — a state, not a verdict. Nothing is
+     pre-picked: an unpicked default is a claim (§SCARS). */
+  came: [
+    { v: "Construction cores in them",     doc: "cylinders came with construction cores in them" },
+    { v: "Cylinders, no cores",            doc: "cylinders came with no cores at all" },
+    { v: "Permanent cores, no door named", doc: "permanent cores came and nothing says which door" },
+    { v: "Cartons still sealed",           doc: "the cartons are still sealed" }
+  ],
+
+  /* WHAT NOBODY'S TOLD ME — every line is a question with the reason it stops
+     him riding under it, so the note reads as a list a super can clear by
+     Thursday, not a complaint. The `sub` prints into the document. None of
+     these is a place for the answer to land. */
+  missing: [
+    {
+      name: "There's been no keying meeting",
+      sub: "the owner, the consultant and the distributor decide it in one room — until that room happens the keying department can't cut a single permanent core, so name the day"
+    },
+    {
+      name: "It's decided and nobody sent it down",
+      sub: "if there's a schedule it's at the distributor's keying department, not with me — what I need is the permanent-core ship date, where they ship, and whose swap it is"
+    },
+    {
+      name: "Do we go on the construction key for now",
+      sub: "say the word: the locks go on with the temp cores in them, the floor locks on the construction key, and the permanent cores are a second trip through every opening"
+    },
+    {
+      name: "No construction cores came — who's putting temp cores in my hand",
+      sub: "I can't lock a door on an empty cylinder — the distributor or the owner's locksmith supplies them, or those leaves hang and don't lock"
+    },
+    {
+      name: "Whose trip is the core swap",
+      sub: "me, the distributor, or the owner's locksmith — say whose now, and whose scope it sits in, before it's a trip nobody planned"
+    },
+    {
+      name: "Who takes the permanent cores and the control key",
+      sub: "a name and a signature, not a company — a control key loose in a building is every lock in it, and it won't be me holding it"
+    },
+    {
+      name: "Which openings stay temp on purpose",
+      sub: "the ones the owner wants left on the construction key till move-in, so I don't do them twice"
+    },
+    {
+      name: "Which openings go on the building's existing system",
+      sub: "retrofit — the doors that have to open with keys the building already carries, and who has that system on file — not me"
+    }
+  ],
+
+  /* The impact chips — what the date is holding, in what he can picture. The
+     two the panel added are the ones that move a super: the permanent cores
+     are weeks out from a meeting nobody has held, and move-in is a date. */
+  costs: [
+    "the locks go on with temp cores and the building's on the construction key",
+    "re-coring is a second trip through every opening",
+    "permanent cores are weeks out from the meeting",
+    "the owner moves in on the construction key",
+    "the hardware hand leaves for the next job",
+    "every cylinder gets handled twice",
+    "turnover moves with it"
+  ]
+};
+
 /* ── SET IT FOR ME (the rough-in-request engine) ────────────────────────────
  * ONE MESSAGE PER OUTFIT, sent a week out, at the gate each outfit is already
  * counting down to. This is where the INTERFACE lives: low-voltage/items.js

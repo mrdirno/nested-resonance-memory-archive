@@ -15,7 +15,10 @@
  * WHAT THIS KIT DELIBERATELY SHIPPED WITHOUT, so the next cycle does not read
  * the gap as an oversight (§TRADE EXPANSION: an unnamed absence is a hole, a
  * named one is a decision):
- *   - THE KEYING ASK (the-note) — the strongest unbuilt rung, and it was kept
+ *   - ~~THE KEYING ASK (the-note)~~ — PAID 2026-09-16 (C3730): `call-the-keying.html`,
+ *     built exactly as this block said — the ASK only, never the schedule; no
+ *     field on it can carry a group, a master or a bitting. What stood here:
+ *     THE KEYING ASK (the-note) — the strongest unbuilt rung, and it was kept
  *     by the prune. He is holding forty-odd cylinders and nobody has told him
  *     keyed-alike groups, masters, or whether the construction cores come out
  *     — and the load-bearing line is the one nobody writes: DECIDE BY THIS
@@ -142,6 +145,20 @@ window.TOOLKIT_TOOLS = [
     desc: "Frames, doors, hardware and glass in one list, with what each one holds up and the date it has to beat. One order number sits over four different shops on four different clocks — so the message asks ONE question, and it names which shop you are asking.",
     chip: "#8A6A2F",
     audience: "Lead / PM → the shop inside the house that has it"
+  },
+  {
+    /* The keying ASK — the rung this file's own deferral block named "the
+       strongest unbuilt rung" the day the kit landed. Built 2026-09-16 (C3730)
+       as a config of shape #2's engine, and ONLY the ask: what he's holding,
+       what nobody's told him, the day he has to pin by and what that day looks
+       like without an answer. No field on it can carry a group, a master or a
+       bitting — the keying SCHEDULE stays somebody else's document, as trade.js
+       ruled before a line was written. */
+    name: "Call The Keying",
+    href: "call-the-keying.html",
+    desc: "Forty cylinders in the cage and nobody's called the keying. The ask with a date on it — what's in the cartons, what nobody's told you, the day you have to put them in by, and what that day looks like without an answer, in your words. Writes no groups, no master, no bitting, ever.",
+    chip: "#B7BEDC",
+    audience: "Lead → GC super / owner's rep / whoever can call the keying meeting"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

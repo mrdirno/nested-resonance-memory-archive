@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Call The Keying — Doors &amp; Hardware Field Toolkit</title>
+<meta name="description" content="Forty cylinders in the cage and nobody has called the keying. The ask with a date on it: what's in the cartons, what nobody's told you, the day you have to put them in by — and what that day looks like without an answer, in your words. It writes no groups, no master, no bitting, ever — that schedule is somebody else's document.">
+<meta name="apple-mobile-web-app-title" content="Call The Keying">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Doors &middot; the cage full of cylinders nobody has decided about</span>
+    </div>
+    <h1 id="h1">Call The Keying</h1>
+    <p class="lede" id="lede">You&rsquo;re holding forty-odd cylinders and nobody has called the keying &mdash; no meeting, no schedule, no word on whether you go on the construction key for now. Every day that stands, the second trip gets closer to being the plan. So send the ask, once, with a date on it: what&rsquo;s in the cartons, what nobody&rsquo;s told you, the day you have to put them in by &mdash; and what that day looks like without an answer, in your words. Either the direction comes down, or somebody says the word and the locks go on with temp cores so the building locks, and coming back to re-core is its own trip. It writes no groups, no master and no bitting, ever. It puts a date on somebody else&rsquo;s decision.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s an ask, not a keying schedule.</b> Nothing on it is a keyed-alike group, a master or grand-master structure, a bitting, a keyway or a cylinder-to-door crosswalk, and nothing on it asks for one &mdash; that schedule belongs to the owner, the hardware consultant and the distributor&rsquo;s keying desk, and a second copy of it on a phone is the problem, not the fix. What&rsquo;s here is what <i>you</i> are holding, what nobody has told <i>you</i>, and the day <i>you</i> have to put them in by. <b>Going on the construction key for now is not a keying decision</b> &mdash; a hung door has to lock &mdash; and this page never says the owner is fine with it: what that day looks like is yours to write, in your words, so the choice is theirs, on the record. <b>Photograph the cartons and the tags, never a key</b> &mdash; a clear photo of a key is its bitting. The doorway version of this &mdash; the opening that isn&rsquo;t ready because the keying isn&rsquo;t called &mdash; is a stop on <a href="not-ready-to-hang.html">Not Ready To Hang</a>; who takes the cores at the end of an occupied night is <a href="getting-in.html">Getting In</a>; the turnover you write when they finally do come out is <a href="write-up.html">Write-Up Setup</a>.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; Something the keying holds up on your jobs that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the ask</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* CALL THE KEYING — the keying ASK. doors/tools.js named it "the strongest unbuilt
+ * rung, and it was kept by the prune" the day the kit landed, and trade.js had
+ * already ruled what it may be: the ASK — decide by this date or these go in
+ * construction cores — is a note he sends; the keying SCHEDULE is somebody
+ * else's document and stays it. This is that rung, and only that half of it.
+ *
+ * A CONFIG of shape #2's engine (shared/note.js): no CSS here, no DOM building,
+ * no state, no persistence, no document assembly. This file owns the WORDS.
+ * painting/the-note.html and paving/lot-closed-tonight.html are the same class
+ * on other trades and are also configs — the only new code here is words.
+ *
+ * THE LINE THIS PAGE IS BUILT AROUND, written into the registry before a page
+ * existed: DECIDE BY THIS DATE OR THESE GO IN CONSTRUCTION CORES AND RE-CORING
+ * IS A SEPARATE TRIP. The judge panel (C3730: a door foreman, an AHC + the GC
+ * super as receiver, a doctrine skeptic — 6 / 6 / 7) changed HOW that line
+ * ships, and each change is a rule worth keeping:
+ *   · THE DEFAULT IS HIS, NOT THE PAGE'S. The first draft's closing stated
+ *     "construction cores go in" as a fact — and the page cannot know it: pick
+ *     "Cylinders, no cores" and the document contradicted itself. All three
+ *     lenses caught it from three directions (§SAFETY's liability guard: a
+ *     page must never supply a wrong value). So the closing carries the DATE
+ *     and the sentence that none of it is anybody agreeing to anything, and
+ *     what the day looks like lives ONLY in the impact line he writes;
+ *   · it is not silence-is-a-yes. The no-clock gate bans a timer with a verdict
+ *     on the end of it (deemed accepted · if I don't hear back I'll proceed).
+ *     This page deems nothing accepted and approves nothing on anyone's behalf;
+ *   · "PIN" IS NOT HIS VERB. Both in-trade lenses: the keying department
+ *     combinates cores; an installer puts them in. A document that says
+ *     "before I pin" tells a super the author never hung hardware;
+ *   · it carries no schedule. Every tick is a QUESTION with the reason it stops
+ *     him riding under it; nothing on the page ASKS for a group, a master, a
+ *     bitting or a keyway (the free-text boxes exist, and the warn says so
+ *     honestly rather than claiming no field could ever hold one).
+ *
+ * CUT BY THE PANEL: a Photos segment (nobody photographs cartons for a keying
+ * ask — the foreman), and the second closing paragraph (the warn block leaking
+ * into a text message — foreman and receiver). The one rail the photos line
+ * carried survives in the warn: a clear photograph of a key IS its bitting.
+ * WHAT NO LATER CYCLE MAY ADD, named by all three lenses as the one change that
+ * would make this worse than not shipping: a place for the ANSWER to land — a
+ * per-opening "keyed to" line, a system/master box, a which-system pick, or
+ * the rack's what-came-back answer layer. That is the schedule by another name.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.keying;
+  var KEY = "toolkit.doors.callthekeying.v1";
+
+  Note.mount({
+    key: KEY,
+    docName: "KEYING — WHAT I NEED DECIDED",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this ask? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    /* THE DATE RIDES IN THE TITLE. It is the one fact that has to survive being
+       forwarded twice, and "soon" is not a day. */
+    titleSuffix: function (get, u) {
+      var d = u.doc("by");
+      return d ? "decide by " + d : "";
+    },
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox the week the permanent cores show up and the argument is about who was told what, and when.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Alder Creek Medical — 3rd floor TI", docSkip: true }
+        ]
+      },
+      {
+        title: "Who decides",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can call the keying meeting, or the name that can say the word on the construction key. “The owner” is not a name, and the consultant is reached through the GC, not by you.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who this goes to", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana K. — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you sent it", hint: "— stamps itself when you start", docLabel: "Sent", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "What I'm holding",
+        docHead: "WHAT I'M HOLDING",
+        why: "The count, where it sits, and the openings by the numbers on the plan — so the answer names the same doors your cartons are labelled for. What came in the boxes is a state, not a verdict.",
+        fields: [
+          { id: "count", kind: "text", label: "How many, and where", hint: "— cylinders or cores, and the cage they're in", ph: "18 cylinders in the hardware cage on 3, still in the cartons — one per opening, two at the pairs" },
+          { id: "rooms", kind: "area", rows: 2, label: "The openings they're for", hint: "— the mark numbers, and the count", ph: "301 through 312, both stair doors, and the two IT rooms — sixteen openings", docLabel: "For" },
+          { id: "came", kind: "seg", label: "What came in the cartons", options: T.came, docLabel: "What came" }
+        ]
+      },
+      {
+        title: "What nobody's told me",
+        tone: "loud",
+        docHead: "WHAT NOBODY'S TOLD ME",
+        why: "Each one is a question with the reason it stops you riding under it — so this reads as a list somebody can clear by Thursday, not a complaint. Tick only what's actually open. None of these is a place to write the answer.",
+        fields: [
+          { id: "missing", kind: "ticks", options: T.missing },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words, never a group or a bitting", ph: "the IT rooms — somebody said they're on the owner's own system, and nobody's said who has it" }
+        ]
+      },
+      {
+        title: "The date, and what happens without it",
+        tone: "loud",
+        docHead: "THE DATE, AND WHAT HAPPENS WITHOUT IT",
+        why: "The two lines the whole ask exists for. The day you have to pin by to hold your schedule — and what that day looks like with no answer, in what he can picture. A date with no consequence is a wish; a consequence with no date is a threat. This is neither.",
+        fields: [
+          { id: "by", kind: "date", label: "I need it by", hint: "— the day you have to put them in by", docSkip: true },
+          {
+            id: "cost", kind: "impact",
+            label: "What that day looks like without an answer",
+            hint: "In what he can picture: what goes in, who leaves, what moves. The chips are a jog — your own sentence after them is what he believes.",
+            rows: 3,
+            ph: "the locks go on Friday with the temp cores in them so the floor locks — then every one of these sixteen gets opened again the day the permanent cores land, and my hardware hand is on another job by then",
+            chipHint: "Tap to add:",
+            chips: T.costs,
+            clock: [
+              { v: "Need it before they go on", docToken: "answer needed before the locks go on", hot: true },
+              { v: "Before the hardware hand's gone", docToken: "answer needed before the hardware hand leaves" },
+              { v: "Before turnover", docToken: "answer needed before turnover" }
+            ]
+            /* NO docLabel — docHead above is the block heading; a docLabel equal
+               to it prints the line twice (C3715, flooring/give-me-the-go). */
+          },
+          { id: "lead", kind: "text", label: "What the distributor said the permanent cores take", hint: "— after the meeting, in their words; this page has no lead time of its own", ph: "keying department said three weeks after the meeting — and move-in is the 14th", docLabel: "Lead time, their words" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "R. Tolliver — 559-555-0173", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Vantage Door & Hardware", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      function (get) {
+        var d = get("by");
+        /* THE CLOSING CARRIES THE DATE AND NOTHING THE PAGE CANNOT KNOW. What
+           the day looks like without an answer is HIS impact line above, in his
+           words — the panel struck the page-authored default from here because
+           it was false in three of the four carton states. Not "if I don't hear
+           back I'll proceed": the no-clock gate bans that family and the rack
+           bans it in words; nothing here deems anything approved. The date is
+           repeated because the closing is the part that gets pasted into a text
+           message, and the title is not. */
+        var day = d ? " by " + fmt(d) : " by that date";
+        return "Reply with the direction, or the name of who's giving it and the day. I have to put these in" + day + " — what that day looks like with no answer is above, in my words, and none of it is anybody agreeing to anything. Coming back to re-core is its own trip through every opening.";
+      },
+      "This is an ask with a date on it, not a keying schedule — that document is the owner's and the consultant's, it lives at the distributor's keying department, and the day it exists I install to it."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.missing || []).length;
+      if (n) return n + " open" + (n === 1 ? "" : "");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+
+  /* The closing repeats the date the DOCUMENT prints ("Fri, Sep 19"), not the
+     ISO the input holds — same reason the engine's own u.doc() exists. Kept
+     here rather than reaching into the engine: a closing gets `get`, and the
+     ISO → words step is four lines. */
+  function fmt(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+    if (!m) return String(iso || "");
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    try {
+      return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    } catch (e) { return iso; }
+  }
+})();
+</script>
+</body>
+</html>
