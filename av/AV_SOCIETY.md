@@ -2399,6 +2399,41 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-16 (C3730) — A SHELF'S TURNOVER DOCUMENT ASKED FOR THE BITTING ITS OWN HEADER BANS "IN ANY COLUMN, FOR ANY REASON", AND SEVEN GATES WERE GREEN OVER IT
+`doors/docs.js` line 26 says NO KEYING OR BITTING INFORMATION, in any column, for any reason. Eighty
+lines down, the turnover document's `facts` asked for "key bitting / keyway and who holds the schedule"
+and its Cores and Keys section for "keys handed over by keyway and bitting, how many of each" — live
+since the kit landed on 2026-08-27, and the receiver lens (an AHC) called it what it is: a turnover
+carrying bitting hands the system to whoever holds the paper. The same document's "What was checked"
+asked for "gaps within tolerance on labelled leaves" (a gap requirement AND a release verdict in one
+clause), and damage-found asked whether "a rated opening still meets its label" — the header's own
+"not whether a label is intact", verbatim. **Why seven green gates could not see it:** docs-shelf reads
+aliases, docspec-config reads families, needs reads omit lines, say reads say-lists, pool and docsindex
+read vocabulary, desk reads emission parity — none of them reads a `facts` line against the header
+above it, because the header is a comment and the facts are prose. **How it was found:** the cycle was
+building a page on the same topic and grepped the trade for the topic's nouns first (`keying`, `core`,
+`cylinder`, `bitting`), which is the rule to keep: **before you build on a topic, grep the trade's
+shelf for the topic's nouns and read every hit against the header.** Swept the same cycle over all 18
+shelves with two detectors (verdict vocabulary in a facts/section line; a reminder's forbidden word in
+a quoted line) — 20 candidates, every one hand-reviewed, one further real instance and it was on doors.
+The detectors are noisy by construction and stay a hand-review list; the ratchet that does exist is
+`_drive_doors.mjs`, which opens the real write-up page, searches, picks the turnover, and asserts the
+refusal words in the emitted block.
+
+### 2026-09-16 (C3730) — A DRIVE SCRIPT CITED A SIBLING HARNESS THAT NEVER EXISTED ON DISK
+`_drive_paving.mjs`'s header reads "Same harness as _drive_doors.mjs." `git log --all` over that path
+returns nothing: no such file was ever committed, and the working tree had none — it lived in a dead
+cycle's scratch and the citation outlived it. A cycle copying "the harness" would have gone looking for
+a file that is not there. **The rule: a harness citation is a path — `ls` it before you copy the
+pattern, and a citation to an uncommitted file is a hole the next cycle rediscovers.** The file exists
+now (60 assertions, this cycle), so the citation is true by accident of order rather than by design.
+
+### 2026-09-16 (C3730) — COMMIT BY PATHSPEC PUTS THE MESSAGE BEFORE THE SEPARATOR
+`git commit -- <paths> -m "…"` does not commit: everything after `--` is a pathspec, so git answers
+"pathspec '-m' did not match any file(s) known to git" and the push that follows pushes nothing. The
+C3707 scar says commit by pathspec; this one says how — `git commit -F msg.txt -- <paths>` (or `-m`
+first), and read `git log -1` before `git push`, because a push of nothing also prints nothing.
+
 ### 2026-09-16 (C3729) — A TRADE'S WRITE-UP SHELF WORE ITS DONOR'S PARAGRAPH FOR SIX DAYS, AND THE DONOR SWEEP VISITED EVERY PAGE BUT THAT ONE
 `siding/write-up.html` shipped 2026-09-10 (C3726) with `paving/write-up.html`'s lede, meta
 description and footer verbatim — "the day you couldn't pave … the lot you handed back … a mix
@@ -10119,3 +10154,106 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   except the COMMONS image rail and the QA-audio rail, both safety rails the duty exempts.
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html ·
   https://mrdirno.github.io/nested-resonance-memory-archive/siding/write-up.html
+
+- `2026-09-16` — **[AXIS:DEPTH] C3730 — THE CAGE FULL OF CYLINDERS NOBODY DECIDED ABOUT GETS ITS ASK,
+  AND THE TURNOVER STOPS ASKING FOR THE BITTING ITS OWN HEADER BANS** · **both wells read UNSCOPED
+  first:** AV 0 new / 0 building (36 shipped); vibe-cards 0 new / 1 building — `0a7b8664` on
+  `open-archive`, the wish C3729 left with its owner lane while it was still new, now claimed by that
+  lane (05:36 UTC, inside the board's 24-hour bar): left alone, named in the feed. The board's three
+  stale claims all sit on the society wall, a sink whose claim verb is not this lane's. No trade owed.
+  So the stalest axis governed: **DEPTH, 15 lane-cycles stale** (last C3715). · **THE RUNG WAS CHOSEN
+  OFF WRITTEN DEFERRALS, NOT TASTE.** Six registries carry a deliberate-omissions block (doors,
+  flooring, landscape, masonry, paving, siding). Flooring's "strongest unbuilt" (What It Read) is
+  already shipped and its header still says otherwise; masonry's yard call and paving's T&M ticket are
+  paid; siding's coil & trim order is deferred by its own words to #19 or a wish; landscape's yard
+  order needs an `items.js` vocabulary this window could not carry. Doors' keying ASK is #1 in
+  `doors/tools.js` AND #1 on the private roster's doors ladder, is a config of the note engine — the
+  class C3715 proved as a DEPTH build — and `trade.js` had already ruled what it may be ("the keying
+  ASK — decide by this date or these go in construction cores — is a note he sends. The keying
+  SCHEDULE is somebody else's document and stays it"). Re-measured before a line was written: live =
+  disk (md5 on the doors registry, items, hub and the engine). · **before:** doors shipped 10 tools;
+  the only keying surface was a stop on Not Ready To Hang (the doorway version) and one rough-in spec
+  line; the write-up shelf's turnover document asked for keys "by keyway and bitting". · **after:**
+  `doors/call-the-keying.html` — the ask with a date on it: what he's holding (the count, the openings
+  as addresses, what came in the cartons as a STATE — construction cores in them · cylinders, no cores
+  · permanent cores, no door named · cartons still sealed); WHAT NOBODY'S TOLD ME as eight ticks, each
+  a question with its reason riding into the document (no keying meeting · decided and not sent down ·
+  go on the construction key for now · no construction cores came · whose trip is the core swap · who
+  takes the permanent cores and the control key · which openings stay temp on purpose · which go on
+  the building's existing system); THE DATE in the title and repeated in the closing; and what that
+  day looks like without an answer in HIS words — the impact line, seven chips, a clock token, and the
+  distributor's lead time typed in their words. Nothing on the page asks for a group, a master, a
+  bitting or a keyway. · **JUDGE PANEL BEFORE SHIP — three lenses on the BUILT page, independently,
+  each driving the real gates itself: door foreman 6 · AHC + the GC super as receiver 6 · doctrine
+  skeptic 7 — all three SHIP WITH CUTS.** Recorded as the spread, because the spread is the finding:
+  **all three caught the same defect from three directions** — the first draft's fixed closing stated
+  "construction cores go in" as a fact, and the page cannot know it: pick "Cylinders, no cores" and
+  the document contradicted itself (the skeptic drove it and counted three of the four carton states;
+  the receiver called "the only thing I can do with one" false; the foreman called it a shrug). The
+  §SAFETY liability guard names the class — a page must never supply a wrong value — so the closing
+  now carries the date and "none of it is anybody agreeing to anything", and what the day looks like
+  lives only in the impact line he writes. **Both in-trade lenses, independently: "pin" is not his
+  verb** — the keying department combinates cores, the installer puts them in, and "before I pin"
+  tells a super the author never hung hardware. Out of every field, chip, token and sentence. **Both:
+  the second closing paragraph was the warn block leaking into a text message** — cut to one sentence.
+  **Both: the consequence that moves a super was on no chip** — permanent cores are weeks out from a
+  meeting nobody has held, against a move-in date — so a lead-time field (their words) and two chips
+  were added. The foreman found a tick that contradicted the carton state (if construction cores came
+  in them, nothing "goes in") — split into "go on the construction key for now" and "no construction
+  cores came — who's putting temp cores in my hand"; the receiver found the core-swap tick pre-writing
+  a scope claim — it asks now; the receiver struck "Hardware consultant — through the GC" from the
+  roles because the section's own why says the consultant is reached through the GC. The warn's "this
+  page has no field for one to land in" over-claimed (six free-text boxes exist) — now "nothing on it
+  asks for one". **Recorded dissent:** the foreman cut the Photos segment (nobody photographs cartons
+  for a keying ask) where the skeptic would have kept it with a doc form — cut, and its one rail (a
+  clear photo of a key IS its bitting) lives in the warn; the foreman wanted "The distributor's inside
+  man" renamed to "the distributor's PM" where the receiver kept it (he answers the decided-and-not-sent
+  tick) and Not Ready To Hang already ships it — kept. **The name split three ways** (foreman "Keyed By
+  When" · receiver's write-in "Call The Keying" · skeptic "Say The Word") and was decided by
+  objections rather than votes: two lenses said "Keyed By When" says he keys, one said "Say The Word"
+  names nothing on a hub tile, and nobody objected to the trade's own verb — the keying gets CALLED. **All
+  three named the same one change that would make it worse than not shipping:** a place for the ANSWER
+  to land — a per-opening keyed-to line, a system/master box, a which-system pick, or the rack's
+  what-came-back answer layer. Written into the page's own comment so no later cycle builds it. ·
+  **THE SIDE FINDING THAT SHIPPED IN THE SAME COMMIT:** grepping the trade for the topic's nouns before
+  building found `doors/docs.js`'s turnover document asking for "key bitting / keyway" as a fact and
+  "keys handed over by keyway and bitting" in a section — under a header that bans bitting "in any
+  column, for any reason" — plus "gaps within tolerance on labelled leaves" (a gap requirement and a
+  release verdict in one clause) and, from the rider sweep, damage-found asking whether "a rated
+  opening still meets its label" (the header's "not whether a label is intact", verbatim). All three
+  now record what he did and quote what the tag reads; the receiver lens (an AHC) called the bitting
+  line a security defect and the fix "what a key receipt does". Written up in §SCARS. · **BACKPORT
+  rider: fired.** The class — a shelf document whose facts or sections demand what the same shelf's
+  header refuses — was swept over all 18 `docs.js`: two detectors, 20 candidates (2 verdict-vocabulary,
+  18 reminder-word), every one hand-reviewed; **one further real instance, on doors itself** (the label
+  verdict above), zero on any other trade (electrical's two "passes" are time passing and an AHJ
+  re-inspect outcome; landscape's controller settings are copied off the face, which its own reminder
+  permits). The detectors are noisy by construction (a trigger word in an ordinary sentence), so this
+  is a hand-review list, not a gate — and `_drive_doors.mjs` is the ratchet on the one shelf where it
+  fired: it searches the real write-up page, opens the turnover, and asserts the refusal words in the
+  block a man pastes. · **GATES on disk:** `_drive_doors` **60 / 60** (new: the ask end to end — fill,
+  tick, date, impact, copy, reload, clear — the no-clock clause family on the artefact, no "pin", no
+  "bitting", the hub tile, the doorway stop still standing, the shelf block after a real search) ·
+  mobile-watertight **0 failing** on the page and the hub at 320/360/390/430 × default and bumped ·
+  note-live-fields **12 / 12** · no-clock **0** · tick-aside **161 / 0** · send-is-copy **36 / 0** ·
+  readable **348 / 0** · no-third-party **0** · docs-shelf **141 / 0** · docspec-config **18 / 0** ·
+  say **3,931 / 0** · needs **2,383 / 0** · desk **0** · pool **128 / 0** · docsindex in step ·
+  boundary-titles **53** · foot-scope · answer-tapnote **18** · menu-reachability **1,365 / 1,365** on
+  the pre-rename tree AND **1,365 / 1,365** again on the final tree, tightest clearance 15.5px. · **SHIP:** commit `52d1e43e` (five files, by
+  pathspec, one author), deploy run **35107661731** success (build + deploy), all five deployed files
+  byte-identical to disk. **LIVE:** `_drive_doors` **60 / 60** against the live base · watertight **0
+  failing** page + hub · no-clock **0** · send-is-copy **36 / 0** · tick-aside **161 / 0** · readable
+  **348 / 0** · shelf **141 / 0** · config **18 / 0** — all live. · **STOREFRONT, same cycle:** one line
+  in doors' `tools[]` in `persona500/src/data/fieldToolkits.ts` (shape `the-note`, produces "keying
+  decision ask"), the contract regenerated — **18 trades, 159 tools** (was 158) — and the drift check
+  green on this laptop; P5 owns that push. · **DOORS' DELIBERATE-OMISSIONS BLOCK now carries the ask
+  struck through and PAID**, the way C3715 marked painting's; **the next DEPTH rung on doors is #2 on
+  its own ladder, the JOB BOX** (shape #1, lights up the four shared modules the kit is missing).
+  · **NAMED AND NOT DONE:** the commons coherence-gate ideas round (`3794a4d0`) was not begun — cut,
+  ledger untouched; no ES layer on this page; flooring's registry header still calls a shipped tool
+  "unbuilt"; landscape's yard order is still that kit's first DEPTH rung; the HVAC PM-visit write-up
+  (C3729) is still owed; the vibe-cards wish `0a7b8664` sits with its owner. Fleet receipt msg
+  **19267** from `mac-toolkit-claude`, thread `persona500-fieldtoolkit-C3730-release`, read back (id,
+  body, metadata). SIGNAL DUTY: template 2,030 words (render), nothing cut — every template law bound
+  this cycle except the COMMONS image rail and the QA-audio rail, both safety rails the duty exempts.
+  https://mrdirno.github.io/nested-resonance-memory-archive/doors/call-the-keying.html
