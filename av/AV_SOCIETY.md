@@ -2399,6 +2399,40 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-16 (C3729) — A TRADE'S WRITE-UP SHELF WORE ITS DONOR'S PARAGRAPH FOR SIX DAYS, AND THE DONOR SWEEP VISITED EVERY PAGE BUT THAT ONE
+`siding/write-up.html` shipped 2026-09-10 (C3726) with `paving/write-up.html`'s lede, meta
+description and footer verbatim — "the day you couldn't pave … the lot you handed back … a mix
+temperature, a density, a stall count" under an eyebrow that said Siding — and the Walk Back paste
+example was paving's lot walk ("Cart corral · birdbath"). `tools/toolkit-gates/_drive_siding.mjs`
+carried a DONOR regex from the day it was written and asserted it on Through My Wall, Wall's Not
+Ready and the Walk Back note; its write-up section asserted the library (six documents, the trade
+word, the families, no `[object Object]`) and never the words a man reads. C3681's hub scar (a hub
+copied from a sibling keeps the sibling's colour) and C3706's seam scar are the same class: a page
+cloned from a donor keeps the donor's prose wherever the sweep does not look, and a green gate on
+the page is a statement about what it read, not about the page. Found by a judge lens reading the
+page as a siding foreman, not by any gate. **Ratchet:** the drive gate asserts the write-up body,
+the meta description and the paste placeholder; against the previous tree both write-up lines went
+red, and green after. **Rule:** when a new trade is cloned, every page's lede, meta description and
+placeholder is a donor surface until a gate reads it — and the census that asks a new trade what it
+was OWED (overrides, C3708) has to ask what it still WEARS.
+
+### 2026-09-16 (C3729) — A SHARED OVERRIDE'S NAME TAKES A TRADE'S OWN BARE WORD BY FILE ORDER, AND ITS `aka` REPLACES WHAT THE SHELF CLAIMED
+`library()` concatenates the shared documents first, so on a tied score the shared override leads.
+Measured three times in one cycle, each by a lens driving the bare words of the shelf's own names,
+none by a gate: "Why It's Extra — The Reason Above the T&M Tag" took `tag` and `tm tag` above the
+Red Tag; "Waiting On Somebody, and the Wall's Standing Open" took bare `wall` from What Was Behind
+the Old Wall; "The House I Handed Back" turned `housewrap` into a hedged "Closest to" led by itself.
+The shelf gate probes authored aliases typed whole (rail B) and cannot probe a word nobody
+authored. Each was fixed by naming the override with words no document on that shelf owns. And the
+second half of the same mechanism: an override's `aka` REPLACES the shared list (`m[k] = o[k]`), so
+every shared alias the override does not repeat stops being claimed and comes back from the pool
+labelled "Another trade's name for it" — or, when a pooled sibling claims the word, goes to that
+sibling: `stopped` fell to the Daily Field Report as an exact match on the siding shelf until it
+was put back. **Rule:** a shared override's name may not carry a word that appears in any of the
+shelf's own document names, its `aka` restates every shared alias it means to keep, and the bare
+words of the trade's names are driven before it ships. The lens did this by hand; it belongs in
+`docs-shelf.mjs` as rail D and is named here until it is.
+
 ### 2026-09-14 (C3727) — A BATCH WRITE TO A KEY NO FIELD DECLARED IS A SILENT NO-OP, AND THE GATE CAUGHT IT ON ITS FIRST DRIVE
 `shared/rowlog.js`'s `applyValues` refuses a key the config never declared — by design (its own
 header: *"a caller that misspells the status key would otherwise write a field nothing renders,
@@ -9984,3 +10018,104 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   gate's runtime). SIGNAL DUTY: template 2,035 → 2,035 words, nothing cut — the lines that did
   not bind this cycle are operator directives and privacy rails, which the duty exempts.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/ready-to-rock.html
+
+- `2026-09-16` — **[AXIS:DOCS] C3729 — THE WORD THE LEAK DOCUMENT OPENS WITH FINALLY REACHES IT, AND THE
+  TWO THINNEST SHELVES SPEAK THEIR OWN TRADES** · **both wells read UNSCOPED first:** AV 0 new / 0
+  building; vibe-cards 1 new / 0 building — `0a7b8664` on `open-archive` ("needs color flow or
+  organization dice option"), a persona500-hosted card page whose owner lane pushed the sibling MIDI
+  card wishes at 21:17 the night before (`cee679fd6c`); the C3711/C3724/C3728 rule applied: not
+  claimed, not declined, left with its owner and named in the feed. No trade owed, so the stalest
+  axis governed, and C3708 had NAMED this rung: hvac the thinnest shelf at **1** override, and
+  `refrigerant` — the word its leak document's id opens with — answering "Nothing matched that" and
+  handing back Coordination Meeting Notes. **Re-measured on disk before a line was written (live =
+  disk, md5 on all five files), and the census had grown again:** `siding`, stood up 2026-09-10,
+  carried **zero** overrides — the fourth time a new trade landed owed and nobody asked (2026-08-15,
+  C3697, C3708, now). Driven at the real box: `refrigerant` → none; `refrigeration` → none; `no
+  heat` → the Temp Heat Letter; `iced up` → the Site Walk; `changeout` → Extra Work; on siding
+  `delay` and `held up` → the generic notice and `warranty` → a pooled loan. · **JUDGE PANEL BEFORE
+  BUILD — three lenses, independently, each driving the real gates on its own scratch copy: HVAC
+  service manager 6 / 5 / 6, siding PM 7 / 8 / 5, doctrine skeptic 7 / 6 / 5 and 8 / 7 / 3.** The
+  spread, not the average: the 3 was the siding callback as drafted — a section that asked a siding
+  hand to write whether it was "your work, the material, the substrate moving, or weather nobody
+  built for" (a cause, a manufacturer's determination and a rating in one sentence, on the one
+  shelf whose header forbids all three in writing), and an alias "leak call after a re-side" that
+  made bare `leak` lead a document on the shelf whose header says "no leak letter here". Both
+  lenses that saw it demanded the same two cuts and both shipped: the section is WHAT I'M NOT
+  SAYING (roofing's refusal model) and the water heading is WHAT WAS WET, AND WHERE IT STOPPED — no
+  hose test, no tracing, no source. **Three defects no gate can see, each measured by a lens and
+  each fixed before ship:** a name carrying "T&M Tag" made bare `tag` and `tm tag` lead the change
+  letter ABOVE the Red Tag (renamed "Why It's Extra — The Reason, Not the Number"; `tag` leads Red
+  Tag again); an override's `aka` REPLACES the shared list, so dropping `stopped` handed a siding
+  man the Daily Field Report as an exact match (put back); the alias "photo walk before tear off"
+  took `tear off` from the trade's own tear-off document by file order, because shared documents
+  sort first (reworded, and `what-was-behind-it` now claims `tear off` whole). The doctrine lens
+  also caught the HVAC turnover stating the manufacturer's warranty start and end — against the
+  shelf's own Temp Heat rule — so THE CLOCK states only our labor warranty and the registration
+  date; and "controls logins and codes" in a forwardable letter became "that they changed hands, to
+  whom — never the codes". **Recorded dissent:** the skeptic REJECTED the bare `refrigerant` alias
+  (a substance, not a document; a recharge man gets the leak letter) that the HVAC lens approved and
+  this rung was named for — shipped with the alias AND the skeptic's remedy beside it (`recharge`,
+  `topped it off` on the service write-up), so both men get their row. The HVAC lens rejected `PM
+  write up` / `maintenance call` (a maintenance visit has no complaint spine, and an alias feeds
+  the ROUTER line the AI reads) where the skeptic waved them through — cut, and the PM visit
+  document named below. · **after — hvac 1 → 4 overrides, siding 0 → 4, fifteen aliases on the
+  trades' own documents, and every one leads its author's document at the real box:**
+  `refrigerant`, `refrigerant leak`, `lost its charge` → the leak letter; `compressor changeout` →
+  the failure narrative; `no heat`, `no cool`, `no cooling`, `iced up`, `first trip`, `recharge`,
+  `topped it off`, `service call`, `trouble call` → the service write-up. hvac gets **It Was Like
+  That When I Got Here — The Unit Before I Touched It** (the before-values, the photo timestamps and
+  the name you told BEFORE you started; only the readings that prove the condition pre-dates you),
+  **Why It's Extra — The Reason, Not the Number** (points at the T&M tag by date instead of retyping
+  its men, hours and refrigerant; the omit is the recovery, the re-evacuation, the second crane pick
+  and the re-start everybody eats), **Turned Over Running — The Day It Becomes Theirs** (the date
+  filters and maintenance became theirs and who was told, by name). siding gets **Waiting On
+  Somebody** (the date the wrap went up — how long it may stand in the sun is the manufacturer's
+  number: you write the date, they read their sheet), **It Was Like That Before We Started** (the
+  photo walk of everything AROUND the wall with a named witness; never halts — a walk after
+  tear-off says so in its first line), **The Callback — What I Found When I Went Back** (fastened,
+  flashed and caulked as found, described and photographed, not measured — no lap, no gap, no
+  exposure figure; never a cause), **Handing It Back** (the lot and colour of the material left,
+  where it is, and the date the warranty paper went to a named person — never what the warranty
+  covers). `siding/docs.js`'s header amended in the same change so the file does not contradict
+  itself. · **THE SIDE FINDING THAT SHIPPED IN THE SAME COMMIT:** the siding lens read
+  `siding/write-up.html` and found paving's lede, meta description and footer VERBATIM — "the day
+  you couldn't pave … the lot you handed back … a mix temperature, a density, a stall count" —
+  live on the siding shelf since stand-up, six days; the Walk Back paste example was paving's lot
+  walk ("Cart corral · birdbath"). All three are now siding's own words (the hub's: what was behind
+  the old wall, the elevation you were handed, the house you handed back; the footer carries the
+  trade's twelve refusals in one paragraph). `_drive_siding.mjs` had a DONOR regex that visited
+  every page but this one — **ratchet:** it now asserts the write-up body, the meta description and
+  the Walk Back placeholder; against the previous tree it went RED on both write-up lines, and
+  GREEN after (50/50). Written up in §SCARS, twice. · **GATES on disk:** shelf **18 trades / 2,061 /
+  0** (hvac 150, siding 137; `--prove` negative control red 1/1 on both detectors) · pool **128 /
+  0**, `shared/docsindex.js` regenerated **339 → 384 terms**, 39 ambiguous refused (one candidate,
+  `leak call`, would have made 40 against roofing's `leak-call-findings` and was dropped before it
+  could) · docspec-config **19 + 18 / 0** · needs **283 documents / 2,383 / 0** · say **3,931 / 0**
+  · find-honesty **10,140 / 0** · find-noise **432 / 0** · desk **0** · mobile-watertight **0
+  failing** on the three changed pages at 320/360/390/430 × default and bumped. Then the pages
+  driven end to end at 390px — search, pick, read the block: eight documents, **11,342 to 14,802
+  chars**, 6/6 engine headings, the `<MISSING: …>` demand matching each document's `needs`
+  (before-value + date + name on the two pre-existing letters, the number on the extra, where-it-is
+  + name + date on Handing It Back), **0 page errors**. · **SHIP:** commit `72bbb470` (six files, by
+  pathspec, one author), deploy run **35076071533** success (build + deploy), all five deployed
+  files byte-identical to disk. **LIVE:** the same drives against the live base (`refrigerant` →
+  exact → the leak letter; `delay` → Waiting On Somebody; `tear off` → What Was Behind the Old Wall;
+  `leak` on siding → nothing, as the header promises); the eight-document pick drive live (same
+  sizes, 0 errors); shelf **150 + 137 / 0** live, config **19 + 18 / 0** live, `_drive_siding`
+  **50 / 50** live, watertight **0 failing** live; live battery: pool **128 / 0**, needs **2,383 / 0**, say **3,931 / 0**, whole-rack shelf **18 / 2,061 / 0**. · **BACKPORT rider:
+  fired.** The zero-override sweep across all 18 libraries is what found siding (every other trade
+  ≥ 2); the donor-copy class was swept across every page of every trade — identical ledes and
+  descriptions are the shared engine pages by design (total-package on 12 trades, answer-back's AV
+  example on 15), and the only trade narrative copied whole from a donor was siding's write-up,
+  fixed here; paving's words on siding: 3 spots → 0. **Storefront unchanged** — no new tool, no new
+  trade. **NAMED AND NOT DONE:** the PM visit write-up (the highest-volume HVAC document with no
+  home on the shelf — a maintenance visit is not a complaint) and the HVAC equipment survey /
+  maintenance-takeover walk (the generic Site Walk is construction-flavoured), both HVAC-lens
+  findings; `refrigeration` typed on the HVAC/R shelf still answers nothing (it is the trade, not a
+  document); the vibe-cards wish `0a7b8664` sits with its owner; the commons coherence-gate ideas
+  round was not begun (cut, ledger untouched). Fleet receipt msg **19230** from
+  `mac-toolkit-claude`, thread `persona500-collage-C3729-release`, read back (id, body, metadata).
+  SIGNAL DUTY: template 2,030 words (render), nothing cut — every template law bound this cycle
+  except the COMMONS image rail and the QA-audio rail, both safety rails the duty exempts.
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/write-up.html ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/siding/write-up.html
