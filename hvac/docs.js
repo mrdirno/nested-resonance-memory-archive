@@ -98,7 +98,9 @@ window.TRADE_DOCS = {
         "compressor claim",
         "failed comp story",
         "warranty write up",
-        "what killed the compressor"
+        "what killed the compressor",
+        "compressor changeout",
+        "comp changeout"
       ],
       "family": "incident",
       "from": "the tech who changed the compressor",
@@ -159,7 +161,10 @@ window.TRADE_DOCS = {
         "leak search narrative",
         "gas loss write up",
         "low on charge write up",
-        "leak repair report"
+        "leak repair report",
+        "refrigerant leak",
+        "refrigerant",
+        "lost its charge"
       ],
       "family": "incident",
       "from": "the tech who chased the leak",
@@ -458,7 +463,16 @@ window.TRADE_DOCS = {
         "what I did on the call",
         "the narrative box",
         "job story",
-        "tech notes"
+        "tech notes",
+        "no heat",
+        "no cool",
+        "no cooling",
+        "iced up",
+        "first trip",
+        "recharge",
+        "topped it off",
+        "service call",
+        "trouble call"
       ],
       "why": "The narrative that goes in the ticket box — what the unit was doing, what you did about it, and what is still open, in words the customer can still read a year from now.",
       "sections": [
@@ -500,6 +514,185 @@ window.TRADE_DOCS = {
         "the short text you send the property manager the same day",
         "a heads-up to the service manager if this is the second call on the same unit"
       ]
+    },
+    "damage-found": {
+      "name": "It Was Like That When I Got Here — The Unit Before I Touched It",
+      "aka": [
+        "pre-existing",
+        "already like that",
+        "not us",
+        "previous contractor",
+        "somebody else's work",
+        "existing condition",
+        "before I touched it",
+        "found it this way",
+        "found damage",
+        "prior damage",
+        "damage"
+      ],
+      "from": "the tech who opened the unit",
+      "to": "the property manager or the GC's super, and my own service manager",
+      "why": "Puts on paper what the equipment was like before you put a hand on it — the burned contactor, the kinked lineset, the coil somebody else cut, the missing disconnect, the readings as found — so the next failure on that unit is not automatically yours.",
+      "note": "the condition you FOUND, not a repair you made or a recommendation — those go on the service write-up and the repair recommendation; on startup day, shipping and site damage goes on the Startup Narrative. This is the photo-with-words you send before you start",
+      "sections": [
+        {
+          "h": "UNIT AND WHEN I OPENED IT",
+          "r": "Building and address, the date and time, unit tag, where it sits, and why you were there. Then the sentence this whole document hangs on: what you found, exactly as found, before you did anything to it. One block per unit — never blend two units."
+        },
+        {
+          "h": "WHAT WAS ALREADY LIKE THAT",
+          "r": "Each thing, where it is, and how you can tell it was there before you: a contactor pitted black, a lineset kinked at the wall, a coil cut and taped, a condensate line run uphill, a disconnect gone, a flue pulled apart, a splice hanging outside the box. Say what you saw. Do not say who did it and do not call it wrong against a standard — only that it was like this when you got here."
+        },
+        {
+          "h": "THE READINGS AS FOUND",
+          "r": "Only the readings that prove the condition was there before you — taken before you touched anything, what you took them with, and the ambient. The rest of the trip's readings go on the service write-up. No target, no range, no typical, no rule of thumb — not even in brackets. Nothing here grades your number."
+        },
+        {
+          "h": "PHOTOS",
+          "r": "Where the photos are — how many, taken when, and where they live — so the picture that proves this can be found in a year, not described from memory. If there are no photos, say so."
+        },
+        {
+          "h": "WHAT I DID AND DID NOT TOUCH",
+          "r": "What you were there to do — one line, and the write-up of it is on the ticket, not here. Then, plainly, what you left exactly as found and why — not in scope, not authorized, unsafe to run, waiting on a decision. A condition you found and did not write down is a condition you own."
+        },
+        {
+          "h": "WHO I TOLD",
+          "r": "Who you showed or told, by name and title, how, and when — before you started. If nobody was available, say who you tried."
+        }
+      ],
+      "omit": "THE READINGS AND THE PHOTO TIMESTAMPS FROM BEFORE YOU TOUCHED IT, and the name of the person you told BEFORE you started. 'The compressor was already grounded' is a claim; 'grounded to case on arrival at 10:12, photo 3, told Marcus at the desk at 10:20' is a record. Without the before-value and the name, the next tech's finding on that unit is yours by silence.",
+      "needs": ["before", "when", "who"],
+      "halt": "Only stop and ask if it isn't clear what you found versus what you did — this document is the found condition only, and mixing in your repair turns your own evidence into an admission.",
+      "facts": [
+        "Building, address, date and time, and the unit tag",
+        "Why you were there, and what the call came in as",
+        "Each condition you found already there, and exactly where",
+        "How you can tell it was there before you — corrosion, dust, tape, age, the previous tag",
+        "The readings as found, what you took them with, and the ambient",
+        "Where the photos are, how many, and when they were taken",
+        "What you deliberately left as found, and why",
+        "Who you told, by name and title, how, and when"
+      ],
+      "secondary": ["the short text you send the property manager with the photos before you start", "a heads-up to the office if this unit is going to be a fight"]
+    },
+    "change-request": {
+      "name": "Why It's Extra — The Reason, Not the Number",
+      "aka": [
+        "extra",
+        "extra work",
+        "change order",
+        "co",
+        "COR",
+        "out of scope",
+        "not in our number",
+        "not on the drawings",
+        "why it's extra",
+        "T and M narrative",
+        "scope change",
+        "change order write up"
+      ],
+      "from": "the mechanical foreman or the lead tech",
+      "to": "the GC's PM, or the property manager who holds the agreement",
+      "why": "The T&M tag gets the yes at the unit; this is the paragraph that gets the number paid two weeks later — what you found, why it isn't in the agreement or the drawings, and what it takes beyond the tag, in a form the PM can forward without calling you.",
+      "note": "the reason, not the price and not the approval — the tag's GO/HOLD reply with a name and a time is the approval and the pricing sheet has the numbers. This letter carries neither",
+      "sections": [
+        {
+          "h": "WHAT WE FOUND OR WERE ASKED TO DO",
+          "r": "Job or site and address, the date, the unit tag or the area, then the work itself, physically: what you found on the roof or in the mechanical room, or what you were asked to add. Quantities and sizes as you know them. Never lead with the contract argument."
+        },
+        {
+          "h": "WHO DIRECTED IT AND WHEN",
+          "r": "Name, title, company, the date, and how it came — a walk, a text, an email, or verbally at the unit. If verbal, say verbal and say plainly this letter confirms it. If nobody directed it yet and you are asking, say that instead."
+        },
+        {
+          "h": "WHY IT ISN'T IN OUR NUMBER",
+          "r": "The specific basis: the drawing and revision the bid was on and what it showed, your own scope letter's exclusion, the agreement's list of covered equipment, or the field condition that was not there at bid — the curb that doesn't match the unit, the existing duct that doesn't match the new unit's connections, the gas line that isn't there, the electrical that isn't ours. Cite their documents by their own numbers only. Never cite a code section and never invent a document number."
+        },
+        {
+          "h": "WHAT IT TAKES",
+          "r": "Point at the T&M tag or tags by date — the men, hours, refrigerant and material are on the tag and do not get typed twice. Here only what no tag carries: the crane pick, the lift, the second trip, the controls point — and what you have to undo, recover, re-evacuate or re-start to do it."
+        },
+        {
+          "h": "WHAT HAPPENS IF WE DON'T",
+          "r": "The flat consequence: the unit sits, the space stays down, the startup slips, temp heat runs longer. No pressure language — one sentence of what is true."
+        },
+        {
+          "h": "HOW WE'RE PROCEEDING",
+          "r": "Either on hold pending the yes, or going ahead on T&M at a named person's direction. One or the other. Never both and never ambiguous."
+        }
+      ],
+      "omit": "THE WORK YOU HAVE TO UNDO OR REDO TO DO THE EXTRA, on its own lines — the recovery and the re-evacuation, the second crane pick, the controls point that has to be re-commissioned, the startup you have to run again, the temp filters you go through twice. Everybody prices the new curb adapter and eats the two days of pulling the unit back off it.",
+      "needs": ["count"],
+      "halt": "Only stop and ask if it isn't clear whether the work is on hold or already going ahead — the letter reads completely differently and it can't say both.",
+      "facts": [
+        "Job or site, address, the date, and the unit tag or area",
+        "What you found or were asked to do, physically, with quantities and sizes as known",
+        "Who directed it — name, title, company, date, and how",
+        "The drawing number and revision the bid was on, or the agreement's covered-equipment list, by its own number",
+        "The field condition that drives it, if that's the reason",
+        "The date of each T&M tag that carries the men, hours, refrigerant and material",
+        "What has to come back out, be recovered, re-evacuated, re-tested or re-started",
+        "What happens to the schedule or the space if it isn't done",
+        "Whether the work is on hold or going ahead, and on whose direction"
+      ],
+      "secondary": ["the same-afternoon text confirming the verbal at the unit", "a one-paragraph version to paste into the GC's change form", "the short scope paragraph for the top of the pricing sheet"]
+    },
+    "handover": {
+      "name": "Turned Over Running — The Day It Becomes Theirs",
+      "aka": [
+        "handover",
+        "turnover",
+        "closeout",
+        "hand off",
+        "handoff",
+        "close out",
+        "punch complete",
+        "owner training",
+        "warranty registration",
+        "turned it over",
+        "handed it over running",
+        "O and M turnover"
+      ],
+      "from": "the mechanical foreman or the startup tech",
+      "to": "the GC's PM and the owner's facilities lead",
+      "why": "Fixes the day the equipment stopped being yours: what was running and in what mode, who has the controls and the keys, what paperwork changed hands, when filters and maintenance became theirs, and what is still open — so a filter nobody changed in month four does not come back as your compressor in month nine.",
+      "note": "narrative only — the manufacturer's warranty registration, the commissioning agent's report and the GC's closeout log stay theirs; the day a unit was first run is the Startup Narrative, not this",
+      "sections": [
+        {
+          "h": "WHAT IS BEING TURNED OVER, AND WHEN",
+          "r": "Job and address, the date, the units by tag, and the areas or systems they serve. Say plainly what is NOT in this turnover — a unit still on temp power, a zone with controls not terminated, a chiller waiting on water treatment — because a list that reads complete turns each of them into warranty work."
+        },
+        {
+          "h": "HOW IT WAS RUNNING WHEN I LEFT",
+          "r": "Per unit: running or off, what mode, setpoints and schedule as programmed, what was locked out and why. New filters in or not, belts, condensate trapped and primed, charge as left. Every value is yours and nothing here grades it — no target, no range, no typical, no rule of thumb, not even in brackets."
+        },
+        {
+          "h": "THE CLOCK",
+          "r": "The date your labor warranty starts and ends. For the equipment: the date it was registered and where the registration lives — never its start, its end or what it requires; that is the manufacturer's to say. The date filter changes and maintenance became theirs, and who you told, by name."
+        },
+        {
+          "h": "WHO HAS WHAT",
+          "r": "What physically changed hands and to whom, by name, on what date: that the controls logins and codes were handed over — to whom and on what date, never the codes themselves — thermostat locks, panel and roof hatch keys, O&M manuals, as-builts or the controls points list, startup sheets, spare filters and belts, the refrigerant record. Training given — to whom, how long, what was covered."
+        },
+        {
+          "h": "OPEN, AND KNOWN",
+          "r": "Everything still open with its owner and date — a part on order with its lead time, a startup that could not be finished without load, a controls point waiting on the integrator, a punch item that belongs to another trade. Known and written is a punch list; found later is a callback."
+        }
+      ],
+      "omit": "THE DATE FILTERS AND MAINTENANCE BECAME THEIRS AND WHO WAS TOLD, by name. Everybody writes the units and the setpoints; nobody writes 'filters and maintenance are the owner's from 03/14, our labor warranty runs from 03/14, equipment registered 03/14 with the confirmation in the job folder, told Dana Reyes, facilities.' Nine months later a packed filter, a plugged coil and a failed compressor are yours because no paper says which day they stopped being.",
+      "needs": ["when", "who"],
+      "halt": "Only stop and ask if you can't tell whether the units were handed over running or left off and secured — the two are different documents.",
+      "facts": [
+        "Job, address, the date, and every unit tag being turned over",
+        "What each unit was doing when you left: mode, setpoints, schedule, lockouts",
+        "Filters and belts as left, condensate as left, charge as left — your readings",
+        "The date your labor warranty starts and ends; the date the equipment was registered and where",
+        "The date maintenance and filters become theirs, and who you told",
+        "What physically changed hands, to whom, on what date",
+        "Who was trained, for how long, on what",
+        "What is still open, who owns it, and any part on order with its lead time"
+      ],
+      "secondary": ["a one-paragraph email the PM can forward to the owner", "the note to the office with the registration confirmation and where the O&M binders went"]
     }
   },
   "drop": [],

@@ -3,11 +3,16 @@
  * Six write-ups this trade actually has to produce, and the test every one of
  * them had to pass before it was written down: CAN ROOFING ALREADY WRITE THIS?
  * The doctrine lens put that question on the record at the #18 panel, and it is
- * why there is no leak letter here, no flashing letter, no callback and no
- * roof-to-wall anything: roofing/docs.js ships all of it. What is left is the
- * WALL — what was behind it, what he was handed, what is telegraphing through
- * it, what somebody cut into it after he closed it, and where his joint stops
- * being his.
+ * why there is no leak letter here, no flashing letter and no roof-to-wall
+ * anything: roofing/docs.js ships all of it. What is left is the WALL — what
+ * was behind it, what he was handed, what is telegraphing through it, what
+ * somebody cut into it after he closed it, and where his joint stops being his.
+ * The `overrides` below (C3729) voice four SHARED documents in this trade's
+ * words — the wait on somebody, the walk before the first piece comes off, the
+ * callback on the WALL (a piece down, a joint open, a run buckled after
+ * turnover — never traced to a source, never a cause), and the house handed
+ * back. The callback is the shared Service Call Write-Up spoken here, not a
+ * leak letter; where the water came from stays roofing's.
  *
  * A SIDING HAND MAY SAY WHAT HE SAW AND WHAT HE DID. He may not be made to say
  * what caused it, what it needs, what it is rated for, or what is on it — those
@@ -39,7 +44,8 @@ window.TRADE_DOCS = {
         "window was never flashed",
         "found damage on a re-side",
         "extra work on a tear off",
-        "opened the wall and it's worse than we thought"
+        "opened the wall and it's worse than we thought",
+        "tear off"
       ],
       "family": "verification",
       "from": "the siding lead who took the wall off",
@@ -279,6 +285,242 @@ window.TRADE_DOCS = {
       ]
     }
   ],
+  "overrides": {
+    "delay-notice": {
+      "name": "Waiting On Somebody",
+      "aka": [
+        "held up",
+        "waiting on",
+        "stopped",
+        "delay",
+        "delay notice",
+        "impact notice",
+        "notice",
+        "no answer",
+        "not released",
+        "waiting on the roofer",
+        "waiting on the windows",
+        "waiting on the GC",
+        "the wall is open and we're waiting"
+      ],
+      "from": "the siding foreman",
+      "to": "the super or the GC's PM — and the homeowner on a re-side",
+      "why": "Puts the date on the day the wall stopped being your problem: what you're waiting on, who owns it, when you first asked, and what an open wall costs while it waits — wrap in the sun, an elevation half-hung, a lift on rent, a crew with nowhere to go.",
+      "note": "for a wait on SOMEBODY — a trade, a decision, a delivery. A wall handed over not ready has its own document (The Wall I Was Handed), and a day the crew lost has its own (The Day We Couldn't Hang)",
+      "sections": [
+        {
+          "h": "WHAT WE'RE WAITING ON",
+          "r": "The one thing, named exactly, and who owns it: the roofer's kick-outs and step flashing, the windows that aren't set, the electrician's boxes and the hose bibs that aren't through, the colour nobody picked, the trim profile not approved, material somebody else is furnishing that hasn't landed (owner-supplied windows, the GC's trim package), an elevation the GC hasn't released. If it's more than one, list them separately — a notice about three things gets answered about none."
+        },
+        {
+          "h": "THE DATES",
+          "r": "The date you first asked, in writing, and every follow-up since with how it was sent. If the ask went out as a Before I Close It list, that list and its date are the first ask — attach it. Then today's date and where it stands. This sequence is the whole weight of the document — the clock starts when somebody is told in writing, and this is the paper that says when that was."
+        },
+        {
+          "h": "WHAT'S STOPPED, AND WHAT'S EXPOSED",
+          "r": "Which elevations can't be hung and what's behind them right now: wrap open to the weather and since what date, tape and flashing exposed, a wall half-hung with an open lap at the edge, sheathing taking rain."
+        },
+        {
+          "h": "WHAT IT COSTS TO WAIT",
+          "r": "In plain words and in quantities, not prices: the lift or scaffold on rent by the day, the crew days, the wrap that has been in the sun since a named date, a second mobilization. Never price it here — that's the extra's paperwork — but say plainly that it is coming."
+        },
+        {
+          "h": "WHO WE TOLD",
+          "r": "Who was told, when, how, and what came back. What you asked for specifically — a date, a released elevation, a decision. Don't characterise anyone; the dates do the arguing."
+        }
+      ],
+      "omit": "THE DATE THE WRAP AND THE FLASHING TAPE WENT UP on the elevations that are standing open. Everyone writes the delay; nobody writes 'wrapped 04/02, asked for the windows 04/09, no answer as of 04/23.' The day the wrap went up is the date whoever holds the manufacturer's sheet needs to decide whether that wrap stays or comes off — and only if it was written while there was still time to act. How long a wrap can stand in the sun is the manufacturer's number, not yours: you write the date, they read their sheet.",
+      "needs": ["when", "notdone"],
+      "halt": "Only stop and ask if it isn't clear whether you're waiting on somebody or the wall was never ready to begin with — that's a different letter, and sending the wrong one hands them the argument.",
+      "facts": [
+        "Job or house and address, the date, and the elevations affected",
+        "What you're waiting on, exactly, and who owns it",
+        "The date you first asked and every date since, and how each was sent",
+        "The date the wrap and flashing went up on the open elevations",
+        "What is hung, what is open, and what's exposed to the weather",
+        "What the crew is doing instead, and what's on rent",
+        "The date you need it by to hold the schedule",
+        "Who you told, how, and what came back"
+      ],
+      "secondary": ["the short text to the super the same day", "a heads-up to the homeowner on a re-side, in plain words"]
+    },
+    "damage-found": {
+      "name": "It Was Like That Before We Started",
+      "aka": [
+        "pre-existing",
+        "already damaged",
+        "before we started",
+        "came in like this",
+        "not us",
+        "existing damage",
+        "photo walk before we start",
+        "the walk before the first piece comes off",
+        "cracked before we got there",
+        "prior damage",
+        "damage"
+      ],
+      "from": "the siding foreman who walked it before the first piece came off",
+      "to": "the homeowner or the super — and my own office",
+      "why": "The wall is the only thing you're touching, and everything around it is what you get blamed for: the cracked window, the dented gutter, the soft deck board, the bent downspout, the ruts where the trailer sits, the neighbour's fence. Write down what was already like that before the first piece came off and it stays theirs.",
+      "note": "what you FOUND around the work before you started — not what you found behind the old wall (that's its own document) and not damage somebody did to your finished siding (that's its own too)",
+      "sections": [
+        {
+          "h": "THE HOUSE, THE DAY, AND WHO WALKED IT WITH ME",
+          "r": "Address, the date and time of the walk, which elevations you're working, and who walked it with you — the homeowner, the super, nobody. Say if it was nobody, and who you asked."
+        },
+        {
+          "h": "WHAT WAS ALREADY LIKE THAT",
+          "r": "Each thing, where it is, and what it looks like, in plain words: a cracked pane in the second-floor bedroom window, a gutter dented at the northeast corner, a deck board soft under the slider, a downspout kinked, a screen torn, paint peeling on the fascia, a downed section of fence, a crack in the driveway where the trailer will sit. What you saw, not whose fault, and not what it will cost."
+        },
+        {
+          "h": "WHAT WE'RE NOT TOUCHING",
+          "r": "Say plainly what is outside the work and will be left exactly as it is — whatever your contract leaves alone: windows, decks, the roof edge, landscaping, the condenser and its lineset, and the gutters on a job that doesn't have them in it — so nobody reads your silence as 'we'll take care of that.'"
+        },
+        {
+          "h": "WHERE THE PHOTOS ARE",
+          "r": "How many, taken when, what they show, and where they live — the shared album, the job folder, the group chat. A photo you can't find in a year is a photo you never took. If there are none, say so."
+        },
+        {
+          "h": "WHAT WE'LL PROTECT, AND WHAT WE CAN'T",
+          "r": "What you're covering or moving — plants, furniture, the grill, the vehicles — and what you can't protect from the work: dust in the beds, tire marks on a wet lawn, the nail sweep at the end. Say it now, before, and not as an apology after."
+        }
+      ],
+      "omit": "THE PHOTO TIMESTAMPS AND THE NAME OF WHO WALKED IT WITH YOU, before the first piece came off. 'The window was already cracked' is your word against theirs; 'cracked pane, north bedroom, photo 4 taken 7:52am 05/11, walked with Mrs. Okafor' ends the conversation. A walk nobody witnessed and a photo with no time on it are worth what they cost you: nothing.",
+      "needs": ["before", "who", "where"],
+      "halt": "Never halt. If the walk happened after tear-off started, say so in the first line with the date — a before-record that pretends to be one is the one thing that gets it thrown out; one that says it isn't is still worth sending.",
+      "facts": [
+        "Address, the date and time of the walk, and the elevations being worked",
+        "Who walked it with you, by name — or who you asked and couldn't get",
+        "Each thing already damaged or worn, and exactly where",
+        "What's outside the work and being left as is",
+        "How many photos, when taken, and where they're stored",
+        "What you're protecting or moving, and what can't be protected",
+        "The condition of the ground where the trailer, the lift and the dumpster will sit, photographed"
+      ],
+      "secondary": ["the short text with the photos to the homeowner or super before the crew climbs", "a note to the office if something is going to be a fight later"]
+    },
+    "service-writeup": {
+      "name": "The Callback — What I Found When I Went Back",
+      "aka": [
+        "callback",
+        "warranty call",
+        "went back",
+        "come back",
+        "service",
+        "repair",
+        "a piece blew off",
+        "water showing inside after a re-side",
+        "the joint opened up",
+        "buckled panel",
+        "came loose",
+        "service call"
+      ],
+      "from": "the man who went back to the wall",
+      "to": "the homeowner or the property manager, and my PM",
+      "why": "You went back to a wall that's already done and somebody's unhappy with it — a piece down after wind, water showing inside, a course that moved, a joint that opened, a panel that buckled in the sun. This is what you found, what you did, and what you did not do, before it becomes 'they came out and didn't fix it.'",
+      "note": "records what you found and what you did. A wavy or telegraphing wall on a walk, before acceptance, is It's the Wall, Not the Siding; a piece down, a run buckled or a joint open after turnover, with the homeowner on the phone, is this. It never states a cause: write what you saw, what was wet, and where it stopped",
+      "sections": [
+        {
+          "h": "THE HOUSE AND THE COMPLAINT",
+          "r": "Address, the date, which elevation and where on it, and the complaint in their words — when they noticed it, what the weather did that day, what changed lately (a new roof, a new deck, a dish, a power wash). One block per location — never blend two spots into one story."
+        },
+        {
+          "h": "WHAT I FOUND",
+          "r": "How it was fastened as found — in or out, tight or standing off, into something or into nothing — whether the course above still covers the one below, whether the joint stands open or closed, the flashing as found, the wrap behind it wet or dry and where, the caulk joint open or closed. Described and photographed, not measured: no lap, no gap, no spacing, no exposure figure, and no manufacturer's instruction quoted. What the instructions say is an address, not a number of yours."
+        },
+        {
+          "h": "WHAT WAS WET, AND WHERE IT STOPPED",
+          "r": "What was wet and what was dry at named spots when you opened it — the wrap, the sheathing, the back of the panel — where the wet line runs and where it stops, photographed with something fixed in the frame. What you did not open. If the wet runs toward the roof edge, a window or the deck ledger, say where it runs and who has to come look; do not trace it, hose it or name a source. Where it came from is the leak letter, and that is roofing's, the window outfit's or the office's to write."
+        },
+        {
+          "h": "WHAT I DID",
+          "r": "Re-fastened, re-hung, re-flashed, re-caulked, replaced a panel — what, where, and whether it came from stock or had to be ordered. Whether you matched colour and profile and whether it's a visible patch. What you left open for them to see."
+        },
+        {
+          "h": "WHAT I'M NOT SAYING",
+          "r": "Said once, plainly: this does not say why the piece came down or the water came in, whether the material did what it should, whether the wall moved, or who owes what — the manufacturer's rep, the GC and the office hold those. If the piece that failed is mine, that is already in WHAT I DID. This is what one man found at a named spot on a dated morning, and what he did there."
+        },
+        {
+          "h": "WHAT I DIDN'T DO, AND WHY",
+          "r": "The section you didn't open, the other elevation you didn't check, the roof edge you couldn't reach, the panel you couldn't match today, the part on order. Left out, you own it by silence."
+        }
+      ],
+      "omit": "WHAT YOU DID NOT DO AND WHY, and how the wall was FASTENED AND FLASHED AS FOUND before you touched it — with the photo. 'Re-secured the loose panel' reads as a fix; 'panel loose at the north corner, two fasteners through the sheathing with nothing behind them as found (photo 2), re-fastened, did not open the adjacent course' is the record that keeps the next panel down from being your whole elevation.",
+      "needs": ["before", "notdone"],
+      "halt": "Only stop and ask if there is no as-found photo from before you touched it — that photo is the whole record, and without it the letter is your word against theirs.",
+      "facts": [
+        "Address, the date, elevation and exactly where on it",
+        "The complaint in their words, when they noticed, and what changed lately",
+        "How the wall was fastened, flashed and caulked as found, and whether the courses still covered each other — with photos",
+        "What was wet and what was dry behind it, at named spots, and where the wet stopped",
+        "What you did not open or check, and why",
+        "What you re-fastened, re-flashed, re-caulked or replaced, and whether it came from stock or had to be ordered",
+        "Whether the patch is visible and whether colour and profile match",
+        "Who you told on site, by name"
+      ],
+      "secondary": ["the plain paragraph for the homeowner", "a note to the PM if this wall is going to keep coming back"]
+    },
+    "handover": {
+      "name": "Handing It Back",
+      "aka": [
+        "handover",
+        "turnover",
+        "closeout",
+        "hand off",
+        "handoff",
+        "close out",
+        "punch complete",
+        "handed the house back",
+        "final walk on the siding",
+        "leftover material",
+        "warranty paperwork",
+        "the painter's joints"
+      ],
+      "from": "the siding foreman handing it back",
+      "to": "the homeowner or the super — and my own office",
+      "why": "Fixes the day the wall stopped being yours: what is done and what is not, the joints you are handing to the painter, the material you are leaving for the patch nobody has needed yet, and the paperwork that changed hands — so a nail pop in month six and a faded panel in year three both land on the right desk.",
+      "note": "narrative only — the manufacturer's warranty registration is theirs to fill and the GC's closeout log is his. This is what you say when you hand it back",
+      "sections": [
+        {
+          "h": "WHAT I'M HANDING BACK, AND WHEN",
+          "r": "Address, the date, and the elevations by name. What is complete and what is not, plainly: the elevation waiting on the painter, the corner waiting on the electrician's light, the gable you could not reach until the deck came off. A list that reads complete turns every open item into a callback."
+        },
+        {
+          "h": "THE JOINTS THAT ARE THE PAINTER'S NOW",
+          "r": "Where your sealant stops and the painter's begins, by location — the trim to the window, the band, the frieze — in the same words as the joint letter if one went out. Say what you sealed and what you deliberately left for the finish trade, and who agreed to that and when."
+        },
+        {
+          "h": "THE MATERIAL I'M LEAVING",
+          "r": "What is left on site for future patches, where it is stacked, and the colour and lot as printed on the carton or the label — copied, never restated. Say how much in pieces or bundles, not a footage guessed at. A patch three years out is only a match if somebody wrote down which box."
+        },
+        {
+          "h": "THE PAPER THAT CHANGED HANDS",
+          "r": "What you handed over and to whom, by name, on what date: the manufacturer's warranty registration or the card that says where to register, the colour and product record, the touch-up if there is one, the leftover trim. Name the documents and where they went. Do not state what the warranty covers or how long — that is the manufacturer's sheet, and if it matters, they read it."
+        },
+        {
+          "h": "THE WALK",
+          "r": "Who walked the finished elevations with you, when, and what they pointed at. What you fixed on the spot and what went on a list with a date. If nobody would walk it, say who you asked."
+        },
+        {
+          "h": "OPEN, AND KNOWN",
+          "r": "Everything still open with its owner and its date — the panel on backorder, the light block waiting on the fixture, the joint waiting on paint. Known and written is a punch list; found later is a callback."
+        }
+      ],
+      "omit": "THE LOT AND COLOUR OF THE MATERIAL YOU LEFT, WHERE IT IS, AND THE DATE THE WARRANTY PAPER WENT TO A NAMED PERSON. Everybody writes 'job complete'; nobody writes 'six pieces, colour and lot as printed, left in the garage on the north wall, warranty card handed to Mr. Alvarez 06/14.' Without the lot there is no match in year three, and without the name and the date the paperwork was never handed over.",
+      "needs": ["where", "who", "when"],
+      "halt": "Only stop and ask if it isn't clear which elevations are finished and which are not — a turnover that blurs the two is the one document that makes every open item yours.",
+      "facts": [
+        "Address, the date, and the elevations by name",
+        "What is complete and what is not, item by item",
+        "The joints you sealed and the joints you left for the painter, by location, and who agreed",
+        "The material left on site: pieces or bundles, colour and lot as printed, and where it is",
+        "The paperwork handed over, to whom, by name, on what date",
+        "Who walked the finished work with you and what they pointed at",
+        "What is still open, who owns it, and any material on backorder with its date"
+      ],
+      "secondary": ["the short text to the homeowner on the day, in plain words", "a note to the office with the lot numbers and where the leftovers sit"]
+    }
+  },
 
   /* WHAT A PHONE GETS WRONG WHEN THIS TRADE DICTATES. Every entry here was
      chosen because it produces a WRONG WORD rather than a misspelling — a

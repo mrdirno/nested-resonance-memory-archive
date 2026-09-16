@@ -176,6 +176,8 @@ const chip = async (p, key, label) => {
   const note = await p.evaluate(() => document.body.innerText);
   ok(/it.s the wall/i.test(note), "answer-back: the tap instruction teaches this trade's fourth rung");
   ok(!/it.s the plan/i.test(note), "answer-back: the donor's fourth rung is gone from the instructions");
+  const ph = await p.evaluate(() => ((document.getElementById('bPaste') || {}).placeholder || ''));
+  ok(!DONOR.test(ph), 'answer-back: the paste example is this trade\'s list, not the donor\'s lot walk');
   await ctx.close();
 }
 
@@ -193,6 +195,12 @@ const chip = async (p, key, label) => {
      `write-up: every family is one the engine declares (${lib.fams.join(', ')})`);
   const body = await p.evaluate(() => document.body.innerText);
   ok(!/\[object Object\]/.test(body), 'write-up: no stringified object anywhere on the shelf');
+  /* C3729: the shelf's lede and meta description were paving's, verbatim, for six days —
+     the donor sweep above never visited this page. The words a man reads on the shelf
+     are asserted like every other page's. */
+  ok(!DONOR.test(body), 'write-up: no donor-trade word anywhere a man can read it');
+  const wuMeta = await p.evaluate(() => (document.querySelector('meta[name=description]') || {}).content || '');
+  ok(!DONOR.test(wuMeta), 'write-up: no donor-trade word in the meta description');
   ok(errs.length === 0, 'write-up: zero page errors ' + errs.slice(0, 1));
   ok(await overflow(p) <= 0, 'write-up: no horizontal overflow at 390px');
   await ctx.close();
