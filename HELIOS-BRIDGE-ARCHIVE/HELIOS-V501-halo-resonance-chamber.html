@@ -5402,6 +5402,7 @@ function capturePreset(name) {
   };
 }
 function applyPreset(p) {
+  const keepCam = JSON.parse(JSON.stringify(state.cam));   // the viewer's framing, before this wholesale reassignment overwrites state.cam from p.state
   state = sanitizeState(p.state || {});
   restartUniverse();
   if (Number.isFinite(+p.step)) step = Math.max(0, Math.floor(+p.step));
@@ -5414,6 +5415,8 @@ function applyPreset(p) {
     cam.el = Math.max(-1.35, Math.min(1.35, +p.cam.el || 0));
     cam.dist = Math.max(4, Math.min(120, +p.cam.dist || 25));
     applyCamera();
+  } else {
+    state.cam = keepCam;   // a preset that names no camera keeps the viewer's framing, the same applyScenario invariant, at the chokepoint the lab experiments and From-text import share; the live cam object is untouched so the view does not move
   }
   updateTapes(); updateHud();
   saveState();
@@ -10038,6 +10041,113 @@ clear 12, so whether the successor needs a seed-balance gate at all or seeds tha
 cannot be near-copies is open; why a file:// reload drops localStorage on
 ubuntu-latest and not on macOS. Nothing about nested resonance memory is decided
 here.
+
+RING 20 · 2026-09-17 · the second wholesale-reset path ring 19 reported is now fixed,
+at the applyPreset chokepoint the lab experiments and the From-text import share; and
+the "what else reassigns state wholesale" ring 18 opened is closed by an exhaustive count
+WHAT CHANGED: one guarded branch inside applyPreset, a regression test for the CLASS,
+and its registration in the release suite. No GLSL, no physics constant, no preset, no
+DEFAULTS: sim_digest is 40bfdb68 and tick_digest f887b63f across the edit, both unmoved,
+while the page's sha256 moves 4976d385 -> 3cac95bc -- ring 18's class-A instrument,
+carried by a JavaScript-only change. applyPreset(p) rebuilds state from p.state
+(state = sanitizeState(p.state || {})), so state.cam becomes p.state.cam, and it restored
+the camera ONLY inside if (p.cam && Number.isFinite(+p.cam.az)). The fix captures
+keepCam = clone(state.cam) as the first statement, before the overwrite, and in the else
+-- no camera named -- restores it: state.cam = keepCam. The live THREE camera object is
+never touched on that path, so the picture does not move; what is preserved is the saved
+framing and, the load-bearing part, the cam.user flag. This is the exact applyScenario
+invariant (ring 19) applied one layer down, at the function ring 19 named. Full numbers:
+tests/halo/cam_preset_test.js.
+THE DECISION RING 19 LEFT OPEN, SETTLED FROM THE PAGE'S OWN DESIGN, NOT FROM TASTE.
+"When a lab experiment loads, is dropping to auto-fit the RIGHT behaviour (frame the new
+result) or the WRONG one (keep the viewer's comparison view)?" A wholesale reassignment
+that NAMES a camera flies to it; one that names NONE keeps the viewer's framing. The page
+already expresses "frame the fresh result" by giving a scenario a cam array -- spinchladni
+{0.739,0.708,38.8}, razordisc {0.6,1.3,34} -- and the spin/memory/disc lab experiments
+built on them still fly. The four that dropped -- fieldonly, borisvseuler, gravity, dimer
+-- name none, and each is a watch-and-compare audit read ON THE PANEL: borisvseuler is
+"Boris vs Euler", "switch the magnetic step to Euler ... the predicted rate appears beside
+the measured one"; gravity measures "H moved by +336 ... With the exact solver H moved by
++188"; dimer is "press Counter-clockwise ... the other partner survives". The viewer
+orbits to a vantage, then toggles ONE control and compares -- a refit between the two
+halves would sabotage the comparison the button exists to make. The only refit on offer
+is a drop to the DEFAULTS auto-fit sentinel {dist 0, user false}, which is not a framing
+of anything; curated framing is a cam array, which the author gave the three cam-bearing
+buttons and withheld from these four. Preserve is right for all four.
+WHAT THE FIX COVERS, MEASURED. cam_preset_test.js drives the class: run against the
+UNFIXED tree (built from git HEAD) it reports 9 passed / 4 FAILED, against the fixed tree
+13 / 0 (the saved receipt is the fixed run). The four failures are the two live paths ring
+19 named. (1) The LAB path, which drops EVERY time: clicking borisvseuler (base 'default',
+cam=null) took a viewer camera {1.234,0.321,52,user true} to the sentinel
+{0.7854,0.6155,0,user false}; dimer (base 'chladni') the same from {2.1,-0.24,44}. gravity
+rides the same base-'default' path, covered by the class, not clicked by name. After the
+fix both hold the viewer's framing exactly, user true. (2) The FROM-TEXT path, an EDGE not
+an always: a normally exported preset carries a top-level cam (capturePreset writes one)
+and still flies; only a preset that OMITS it -- hand-written or partial -- reached the
+drop, and there the unfixed page did worse than the sentinel, it adopted p.state.cam, the
+SHARER's baked camera {9.9,1,99}. The fix makes the viewer's own framing win. Two guards
+prove it is not "always preserve": a cam-bearing preset still flies to {0.6,1.15,24}, and
+the disc lab button still flies to razordisc's {0.6,1.3,34}; a third proves it invents
+nothing -- a never-orbited page (cam.user false) that clicks fieldonly STAYS user false,
+inheriting auto-fit, because keepCam carried user false. And because the fix keeps
+cam.user true, a preserved framing now SURVIVES reload, where the drop had lost it.
+THE "WHAT ELSE" RING 18 OPENED IS NOW CLOSED, COUNTED. An exhaustive scan for the class
+-- every wholesale reassignment of the global state -- finds exactly four code sites:
+state = loadState() at boot (2626, before any viewer camera exists), applyScenario (5201,
+fixed ring 19), applyPreset (5406, fixed ring 20), and btn-defaults (5494, a factory reset
+that drops the camera BY DESIGN, like btn-cam-reset). No URL-hash, postMessage, paste or
+popstate restore vector, and no Object.assign(state, .)/deepPatch(state, .) mutation.
+applyScenario and applyPreset were the only two VIEWER-FACING wholesale-reassign paths,
+and both now honor the invariant; every recipe/lab/bench loader funnels through applyPreset
+rather than reassigning state itself. The class is complete.
+BANNED: calling this a camera "jump" (the live position is retained; the cam.user CONTROL
+flag is what dropped). Calling the from-text case an always-bug (a normal export carries a
+cam and flies). Saying this "can no longer ship broken" -- the release suite is a CI HEALTH
+gate on push/PR (halo-health.yml); the site deploy (deploy_bridge.yml) does NOT run it
+(decoupled at 20b62dcc), so a regression is CAUGHT by the health check, not blocked from the
+page. Fixing by resetting to a framed default (DEFAULTS.cam is a sentinel). Forcing
+cam.user true on a never-orbited page. Patching the frozen memory scorer or protocol
+(untouched). Claiming the memory question moved.
+DEAD BRANCHES: (1) "the lab buttons visibly snap to a default view" -- the live cam object
+is untouched on the no-cam path, so the picture holds; the defect is the lost user flag and
+the deferred refit. (2) "fix it in runLabExperiment" -- that closes only the lab path and
+leaves From-text; applyPreset is the shared chokepoint, so one branch closes both. (3)
+"preserve always" -- refuted by the two fly-guards and the never-orbited guard. (4) "a
+normal shared preset was broken" -- no; capturePreset always writes a top-level cam, so
+exports fly; only a cam-omitting preset reached the drop. (5) "there is a third
+wholesale-reset path" -- searched, none: four sites, two fixed, one pre-viewer boot, one
+deliberate reset.
+KILL-TEST: six agents. Five verifiers, each reading the shipped file -- fix correctness
+across all five applyPreset callers, the completeness hunt for a third drop path, the
+test's validity, the intent steelman for a refit, and one re-deriving the mechanism from
+source alone -- then a completeness critic. All five returned CONFIRMED. The steelman
+could not name a button that wants a refit: gravity, its strongest candidate, measures an
+energy audit and is the field-off arm of the base-'default' triad, so refitting it alone
+would break clicking between the three under one frame. The critic returned SHIP with no
+blocker and earned its keep on framing, not code: it caught that "wired into the gate"
+must not be read as a deployment gate (the gate is health, the deploy is separate), and it
+named the commit hazard this shared tree makes real -- the untracked test must land in the
+SAME commit as the release_gate.js line that references it, or the health check
+spawn-errors on the very push that ships the fix.
+THE NON-OBVIOUS CHOICE: fix at the applyPreset chokepoint rather than mirror ring 19's own
+tidy one-liner in runLabExperiment. The one-liner would have looked symmetric with ring 19
+and passed the lab test, but it closes only the lab path and leaves From-text dropping; the
+chokepoint closes both live paths ring 19 named with a single branch, at the function ring
+19 pointed to. And settle the intent from the page's existing "named-cam-flies" design,
+which is evidence, rather than from a preference about what a lab button "should" do.
+OPEN QUESTIONS: this ring closes ring 19's earned question (preserve is right; both live
+paths fixed) and ring 18's "what else reassigns state wholesale" (the class is four sites,
+complete). What it earns is smaller and honest: the regression test drives the class by two
+of its base paths (base 'default' via borisvseuler, base 'chladni' via dimer) but does not
+reload-and-verify that a preserved framing restores, nor click gravity by name -- covered
+by class, not pinned by instance; a later ring could pin both. Carried forward, unchanged
+and NOT this lane's (an open ledger round owns them): the drive-cut axis that cuts the
+imposed drive AND renormalises self-gravity to it; the 48-epoch half still unavailable
+(FIRST_SCORED, LAST_SCORED = 3, 24, no flag); whether a field that does not move should be
+scored at all; E5b, not support and not the epoch floor, refuses the only two conditions
+that clear 12, so whether the successor needs a seed-balance gate at all or seeds that
+cannot be near-copies; why a file:// reload drops localStorage on ubuntu-latest and not on
+macOS. Nothing about nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
