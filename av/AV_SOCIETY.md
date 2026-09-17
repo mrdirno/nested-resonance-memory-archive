@@ -10305,3 +10305,48 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the coherence, verified; the HVAC PM-visit write-up (C3729) is still owed; landscape's yard
   order is still that kit's first DEPTH rung; the vibe-cards wish `0a7b8664` sits with its owner.
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
+
+- `2026-09-17` — **[AXIS:COMMONS] C3732 — A LANDSCAPE BAG COULD ASK FOR WATER SIX WAYS AND
+  COULD NOT NAME A TREE** · **both wells UNSCOPED first, neither serveable by this lane.** AV
+  well 0 new / 0 building; vibe-cards 0 new, one `building` — `0a7b8664`, the open-archive
+  colour wish, a persona500 card in a separate sink and its own live lane, left with its
+  owner. No trade owed. · **Stalest axis COMMONS, seven lane-cycles cold, and C3731 named this
+  exact rung in its own close:** "landscape's yard order is still that kit's first DEPTH rung."
+  · **THE MEASUREMENT THAT PICKED THE SHAPE:** landscape held the thinnest commons of any trade
+  — 8 gear / 9 tips / 8 names — while being a joint-largest 11-tool kit, and every one of its
+  eight names was irrigation vocabulary. The trade is half planting, soil and nursery, and that
+  half was empty. · **FOUR FLASHIER COMMONS MOVES WERE KILLED FIRST, EACH FOR A MEASURED
+  REASON, and the killing is the finding:** a field-photos surface (the contributed-image
+  safety rail forbids live render without a moderator and there is no seed content — a
+  multi-cycle build, not this one); pick-count telemetry on the picker (`shared/package.js`
+  already forbids it in writing — "the evo loop instruments CHOICES between variants; a wage is
+  not a variant," and a content pick is not a variant either); a fourth text surface (tips
+  already carries conduct — "Don't move another trade's work" — so a conduct surface forks the
+  shape); and a gear/tips content-RAILS gate, **killed by its own baseline probe** — the only
+  gear digit is "90s" (bends, not a spec), half the strongest why-lines run past sixteen words
+  on purpose, and every "dead/safe" hit is idiom or the row doing it RIGHT (`ncvt`: "it never
+  proves dead"). A regex rails gate over this prose is the false-positive machine
+  commons-coherence exists to warn against; the rails held because PEOPLE held them, a gate
+  cannot, so it was not built. · **THE BUILD:** 28 planting/soil/nursery candidates fanned out,
+  cut by a 3-lens panel scoring INDEPENDENTLY (journeyman / rails / placement), built only on
+  unanimous keep — 26 survived: 8 gear, 9 tips, 9 names. landscape 8/9/8 → 16/18/17. · **THE
+  PANEL CUT TWO ON PLACEMENT AND THE PARTITION WAS WORKING:** G9 marking-paint (three
+  marking-paint rows already span gc / concrete / sitework — a fourth landscape-only row is
+  one-tool-three-rows) and T6 the 811 locate (sitework owns the-ticket / white-lining /
+  marking-paint-locates; the private-line gap is cross-trade, not landscape's to claim). Rails
+  pulled a stated count from the haul-tarp line ("forty trips ... four" → "a load at a time ...
+  the whole pile in one drag"); three regional aliases attributed to cohorts moved to k:"say".
+  · **BACKPORT RIDER — no mechanical same-class sweep (content depth is not a bug class), one
+  deferred carry NAMED:** landscape does reach for marking paint at bed layout, and the right
+  carry is widening the existing `marking-paint` row's tags, not a new row — left for a cycle
+  that touches that shared line. · **SHIP:** commit `42ebdc73` (three files, by pathspec, one
+  author), deploy **35251798823** success. · **LIVE:** the deployed commons carries all 26
+  rows (8/9/9 ids curled from the served gear/tips/names.js), and both browser gates run
+  against the LIVE URL PASS — commons-names 172 rows / 136 routing probes (the new aliases
+  route on the live gear page), commons-bag 638 cross-trade states / 0 failing / watertight at
+  320-430px. Local before push: commons-scope 611 checks PASS · commons-coherence 415 PASS ·
+  mobile-watertight PASS on all three surfaces, default and bumped text. · **STOREFRONT N/A** —
+  commons rows add no tool page and no trade, so no `fieldToolkits.ts` entry; that step is for
+  a new tool or a new trade. · **STILL OWED:** the HVAC PM-visit write-up (C3729); the
+  marking-paint widening named above; the vibe-cards wish `0a7b8664` sits with its owner.
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/
