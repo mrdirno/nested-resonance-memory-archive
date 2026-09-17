@@ -480,6 +480,16 @@ window.COMMONS_GEAR = [
     w: "Roots, rock and pry work the hoe can't do without breaking something more expensive than the bar." },
   { id: "grade-rod", n: "Grade rod, and a cut stick you cut yourself", t: ["sitework"],
     w: "Every argument about grade ends the second somebody puts a rod on it — and yours is the one you trust in a ditch at half four." },
+  /* + rotary laser, 2026-09-17 (C3731). The accessory-host coherence gate's
+     first live catch, and the C3725 "receiver → laser" scar one trade over:
+     this bag carried a laser receiver and a grade rod and nothing that throws a
+     beam for either to read. Added as its own row, not folded into the receiver
+     line, because gc keeps the laser, its receiver and the rod on ONE line while
+     sitework splits them across three — which is right for a crew that hands the
+     rod to a second man on the far side of the cut. The gate that found it lives
+     at tools/toolkit-gates/commons-coherence.mjs. */
+  { id: "site-rotary-laser", n: "Rotary laser and tripod", t: ["sitework"],
+    w: "The receiver reads nothing without it — one setup holds grade across the cut." },
   { id: "laser-receiver", n: "Laser receiver and a pocket of batteries", t: ["sitework"],
     w: "A dead receiver stops the whole run, the rover dies mid-afternoon, and there is never a spare on the job." },
   { id: "gasket-lube", n: "Gasket lube, spare gaskets and a clean rag", t: ["sitework"],

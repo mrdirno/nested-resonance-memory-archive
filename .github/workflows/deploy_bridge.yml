@@ -443,6 +443,16 @@ jobs:
           # roster out of the same shipped data.
           node tools/toolkit-gates/commons-scope.mjs --root=HELIOS-BRIDGE/dist || exit 1
 
+          # AND AN ACCESSORY HAS TO HAVE A HOST. A gear row that names bits, taps,
+          # blades or a laser receiver, on a trade whose bag holds nothing that
+          # turns, fires or reads it, is C3725's door-installer scar as a CLASS —
+          # the generalisation the panel named and did not build. Curated pairs,
+          # not a regex: the throwaway probe that first measured this missed the
+          # live sitework receiver (its host token was the bare word "laser", so
+          # "Laser receiver" hosted itself) and flagged two rows that are fine.
+          # The gate self-tests and re-runs the pre-C3725 doors fixture every call.
+          node tools/toolkit-gates/commons-coherence.mjs --root=HELIOS-BRIDGE/dist || exit 1
+
           # THE NAME TABLE HAS TO ROUTE, OR IT IS A GLOSSARY.
           #
           # The panel that ranked this rung voted it down once on exactly one
