@@ -23,7 +23,7 @@ import { isTurning, type TurnId } from './lib/turn';
 import { type PaceId } from './lib/pace';
 import { renderCanvas, calculateSmartCrop } from './lib/renderer';
 import { withReframe, dragToFrame, poolWithFrames, framesFromPool, poolWithoutFrames, type Frame } from './lib/reframe';
-import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
+import { planTitle, measureWith, type TitlePlace, type TitleSize, type TitleColor } from './lib/title';
 import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt, type CaptionTrack } from './lib/captions';
 import { normalizeProjectLocks } from './lib/projectLocks';
 import { CaptionEditor } from './components/CaptionEditor';
@@ -349,6 +349,7 @@ export default function App() {
   imageCountRef.current = images.length;
   const [titlePlace, setTitlePlace] = useState<TitlePlace>('bl');
   const [titleSize, setTitleSize] = useState<TitleSize>('md');
+  const [titleColor, setTitleColor] = useState<TitleColor>('white');
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   const [look, setLook] = useState<LookId>('none');
   /**
@@ -1114,8 +1115,8 @@ export default function App() {
     }
     const mctx = measureCanvasRef.current;
     if (!mctx) return null;
-    return planTitle({ text: titleText, place: titlePlace, size: titleSize }, aspect, measureWith(mctx));
-  }, [titleText, titlePlace, titleSize, aspect]);
+    return planTitle({ text: titleText, place: titlePlace, size: titleSize, color: titleColor }, aspect, measureWith(mctx));
+  }, [titleText, titlePlace, titleSize, titleColor, aspect]);
 
   // Measure once; every video frame and still export scales this same plan.
   const captionPlans = useMemo(() => {
@@ -1928,7 +1929,7 @@ export default function App() {
       setShuffleTrigger(0); setArrangement('natural'); setFocus('auto'); setTwist('none');
       setLook('none'); setAdjust(null); setTurn('hold'); setPace('even'); setSync('off');
       setLockedCells(new Map()); setFrames(new Map()); setAssignNonce(n => n + 1); setLastRecipe(undefined);
-      setMove('drift'); setTitleText(''); setCaptions(demo.captions);
+      setMove('drift'); setTitleText(''); setTitleColor('white'); setCaptions(demo.captions);
       setCaptionPanel(true);
       flashNotice('Original shapes, timed words, and motion. Add your music, or replace the artwork with your own.');
     } catch (error) {
@@ -2454,7 +2455,7 @@ export default function App() {
       if (waitForLyricDemo()) return;
       if (recorderRef.current?.isRecording) { flashNotice('Stop the take before starting a new canvas.'); return; }
       handleClear();
-      setTitleText('');
+      setTitleText(''); setTitleColor('white');
       setNewCanvasArmed(false);
       closeTool();
       flashNotice('Fresh canvas. Start a new piece.');
@@ -2503,6 +2504,7 @@ export default function App() {
       setTitleText(item.state.title?.text ?? '');
       setTitlePlace(item.state.title?.place ?? 'bl');
       setTitleSize(item.state.title?.size ?? 'md');
+      setTitleColor(item.state.title?.color ?? 'white');
   };
 
   /**
@@ -2804,7 +2806,7 @@ export default function App() {
     version: "1.0", mode: activeTab,
     layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move, turn, pace, sync },
     style: { background: bgColor, look, adjust: adjust ?? undefined },
-    title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined,
+    title: titleText ? { text: titleText, place: titlePlace, size: titleSize, color: titleColor } : undefined,
     captions: captions.cues.length ? captions : undefined,
     locks: normalizeProjectLocks([...lockedCells], images),
   });
@@ -2964,7 +2966,7 @@ export default function App() {
         const ldOwned = ld.countOwned ?? true;
         moveOwnedRef.current = true; // Opening authored motion is itself a choice.
         if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
-        ownCount(ldOwned); setImages(restoredImages); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        ownCount(ldOwned); setImages(restoredImages); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); setAdjust(loaded.state.style?.adjust ?? null); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTurn(l.turn ?? 'hold'); setPace(l.pace ?? 'even'); setSync(l.sync ?? 'off'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); setTitleColor(loaded.state.title?.color ?? 'white');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -3682,7 +3684,7 @@ export default function App() {
             disabled={exportStatus === 'processing' || captionRecording}/>
         </div>}
         <div className="studio-controls-panel" hidden={!studioTool || studioTool === 'add' || (studioTool === 'text' && captionPanel) || (studioTool === 'layout' && activeTab === 'advanced')}>
-          <SimpleControls section={studioTool === 'look' ? 'look' : studioTool === 'motion' ? 'motion' : studioTool === 'text' ? 'title' : 'layout'} layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
+          <SimpleControls section={studioTool === 'look' ? 'look' : studioTool === 'motion' ? 'motion' : studioTool === 'text' ? 'title' : 'layout'} layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} holdFrame={holdFrame} onHoldFrame={setHoldFrame} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} titleColor={titleColor} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} onTitleColor={setTitleColor} look={look} onLook={(id) => { setLook(id); setAdjust(null); }} desk={deskShown} onDesk={applyDesk} deskCustom={!!adjust} move={move} onMove={chooseMove} turn={turn} onTurn={setTurn} pace={pace} onPace={setPace} sync={sync} onSync={setSync} beatGrid={beatGrid} beatBusy={beatBusy} beatBeats={beatSched?.beats ?? 0} hasMusic={!!soundtrack} />
         </div>
         <div className="studio-controls-panel" hidden={studioTool !== 'layout' || activeTab !== 'advanced'}>
           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />

@@ -37,10 +37,18 @@ export type TitlePlace = 'bl' | 'bc' | 'tl' | 'tc';
 /** HOW BIG, as a fraction of the canvas width. */
 export type TitleSize = 'sm' | 'md' | 'lg';
 
+/**
+ * WHAT COLOUR the words are. The scrim polarity underneath is DERIVED from this,
+ * never a second choice the user can get wrong — see `titlePalette`.
+ */
+export type TitleColor = 'white' | 'black' | 'yellow' | 'red' | 'blue' | 'pink';
+
 export interface TitleSpec {
   text: string;
   place: TitlePlace;
   size: TitleSize;
+  /** Absent means 'white' — the identity that keeps every old title byte-for-byte. */
+  color?: TitleColor;
 }
 
 export interface TitleLine {
@@ -57,6 +65,10 @@ export interface TitlePlan {
   lines: TitleLine[];
   fontPx: number;
   lineH: number;
+  /** The words' colour, resolved ONCE here so all four surfaces paint the same. */
+  ink: string;
+  /** The plate's colour, its polarity chosen against `ink` for legibility. */
+  scrim: string;
   /** The scrim the text sits on, so a caption stays readable over any photo. */
   plate: { x: number; y: number; w: number; h: number; r: number };
   /** The width this plan's numbers are expressed in. Callers scale by w/basis. */
@@ -95,6 +107,65 @@ export const TITLE_INK = '#ffffff';
 export const TITLE_PLATE = 'rgba(0,0,0,0.42)';
 export const TITLE_FAMILY = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 export const TITLE_WEIGHT = 800;
+
+/**
+ * THE INK. One legible hex per named colour. `white` reuses TITLE_INK so the
+ * default is literally the old constant; the rest are saturated enough to read
+ * as themselves over a photograph.
+ */
+const INK_HEX: Record<TitleColor, string> = {
+  white: TITLE_INK,   // '#ffffff' — the identity colour
+  black: '#111111',
+  yellow: '#ffd400',
+  red: '#ff453a',
+  blue: '#0a84ff',
+  pink: '#ff375f',
+};
+
+/** The two scrim families. The dark one is the legacy plate, unchanged. */
+const DARK_SCRIM = TITLE_PLATE;                 // 'rgba(0,0,0,0.42)'
+const LIGHT_SCRIM = 'rgba(255,255,255,0.60)';
+
+/** sRGB relative luminance of a #rgb / #rrggbb string (WCAG 2.x). */
+export const relLuminance = (hex: string): number => {
+  const h = hex.replace('#', '');
+  const n = h.length === 3
+    ? h.split('').map((c) => parseInt(c + c, 16))
+    : [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const lin = n.map((v) => {
+    const s = (Number.isFinite(v) ? v : 0) / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+};
+
+/** WCAG contrast ratio between two #rrggbb colours. Always in [1, 21]. */
+export const contrastRatio = (a: string, b: string): number => {
+  const la = relLuminance(a);
+  const lb = relLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+};
+
+/**
+ * THE PALETTE. Given a named colour, return the ink AND the scrim that reads
+ * best under it: the scrim family is whichever of near-black / near-white
+ * SEPARATES FURTHER from the ink, computed — never a second control the user
+ * can set wrong. `white` resolves to the exact legacy `{TITLE_INK, TITLE_PLATE}`,
+ * so an untouched title renders bit-for-bit as it did before this shipped.
+ */
+export const titlePalette = (color?: TitleColor): { ink: string; scrim: string } => {
+  const ink = INK_HEX[(color ?? 'white') as TitleColor] ?? TITLE_INK;
+  const scrim = contrastRatio(ink, '#000000') >= contrastRatio(ink, '#ffffff')
+    ? DARK_SCRIM
+    : LIGHT_SCRIM;
+  return { ink, scrim };
+};
+
+/** The offered colours, in swatch order. ONE list; the UI never re-lists them. */
+export const TITLE_COLORS: readonly TitleColor[] = ['white', 'black', 'yellow', 'red', 'blue', 'pink'];
+
+/** The ink hex for a colour — so a UI swatch is exactly what the render paints. */
+export const titleInk = (color: TitleColor): string => INK_HEX[color] ?? TITLE_INK;
 
 /** The one font string. Every measurer and every emitter asks for it. */
 export const titleFont = (px: number): string =>
@@ -192,7 +263,7 @@ const ellipsize = (line: string, maxW: number, fontPx: number, measure: Measure)
  * null plan is the signal every emitter treats as "draw nothing at all".
  */
 export const planTitle = (
-  spec: { text?: unknown; place?: unknown; size?: unknown } | null | undefined,
+  spec: { text?: unknown; place?: unknown; size?: unknown; color?: unknown } | null | undefined,
   aspect: number,
   measure: Measure,
 ): TitlePlan | null => {
@@ -203,6 +274,10 @@ export const planTitle = (
     spec?.place === 'bc' || spec?.place === 'tl' || spec?.place === 'tc' ? spec.place : 'bl';
   const size: TitleSize =
     spec?.size === 'sm' || spec?.size === 'lg' ? spec.size : 'md';
+  const color: TitleColor =
+    spec?.color === 'black' || spec?.color === 'yellow' || spec?.color === 'red' ||
+    spec?.color === 'blue' || spec?.color === 'pink' ? spec.color : 'white';
+  const { ink, scrim } = titlePalette(color);
 
   const W = TITLE_BASIS;
   const H = TITLE_BASIS / clampAspect(aspect);
@@ -269,6 +344,8 @@ export const planTitle = (
     lines: out,
     fontPx,
     lineH,
+    ink,
+    scrim,
     plate: {
       x: plateX, y: plateY, w: plateW, h: plateH,
       r: Math.min(fontPx * RADIUS_RATIO, plateH / 2, plateW / 2),
@@ -291,6 +368,8 @@ export const scaleTitlePlan = (plan: TitlePlan | null, k: number): TitlePlan | n
     lines: plan.lines.map((l) => ({ text: l.text, x: l.x * k, y: l.y * k, w: l.w * k })),
     fontPx: plan.fontPx * k,
     lineH: plan.lineH * k,
+    ink: plan.ink,
+    scrim: plan.scrim,
     plate: {
       x: plan.plate.x * k, y: plan.plate.y * k,
       w: plan.plate.w * k, h: plan.plate.h * k, r: plan.plate.r * k,
@@ -333,11 +412,11 @@ export const drawTitlePlan = (ctx: Ctx2D, plan: TitlePlan | null): void => {
   if (!plan || plan.lines.length === 0) return;
   ctx.save();
   try {
-    ctx.fillStyle = TITLE_PLATE;
+    ctx.fillStyle = plan.scrim;
     roundRectPath(ctx, plan.plate.x, plan.plate.y, plan.plate.w, plan.plate.h, plan.plate.r);
     ctx.fill();
 
-    ctx.fillStyle = TITLE_INK;
+    ctx.fillStyle = plan.ink;
     ctx.font = titleFont(plan.fontPx);
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
@@ -359,11 +438,11 @@ export const titlePlanToSvg = (plan: TitlePlan | null): string => {
   if (!plan || plan.lines.length === 0) return '';
   const p = plan.plate;
   let s = `  <g id="Title">
-    <rect x="${p.x.toFixed(2)}" y="${p.y.toFixed(2)}" width="${p.w.toFixed(2)}" height="${p.h.toFixed(2)}" rx="${p.r.toFixed(2)}" fill="${TITLE_PLATE}" />
+    <rect x="${p.x.toFixed(2)}" y="${p.y.toFixed(2)}" width="${p.w.toFixed(2)}" height="${p.h.toFixed(2)}" rx="${p.r.toFixed(2)}" fill="${plan.scrim}" />
 `;
   for (let i = 0; i < plan.lines.length; i++) {
     const l = plan.lines[i];
-    s += `    <text x="${l.x.toFixed(2)}" y="${l.y.toFixed(2)}" font-family='${TITLE_FAMILY}' font-size="${plan.fontPx.toFixed(2)}" font-weight="${TITLE_WEIGHT}" fill="${TITLE_INK}" xml:space="preserve">${esc(l.text)}</text>
+    s += `    <text x="${l.x.toFixed(2)}" y="${l.y.toFixed(2)}" font-family='${TITLE_FAMILY}' font-size="${plan.fontPx.toFixed(2)}" font-weight="${TITLE_WEIGHT}" fill="${plan.ink}" xml:space="preserve">${esc(l.text)}</text>
 `;
   }
   return s + `  </g>

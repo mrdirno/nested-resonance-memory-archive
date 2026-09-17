@@ -5,7 +5,7 @@ import {
   Undo2, Redo2, Palette, SlidersHorizontal
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
-import type { TitlePlace, TitleSize } from '../lib/title';
+import { type TitlePlace, type TitleSize, type TitleColor, TITLE_COLORS, titleInk } from '../lib/title';
 import { LOOKS, DESK_AXES, deskForLook, type Desk, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
@@ -64,9 +64,11 @@ interface SimpleControlsProps {
   titleText?: string;
   titlePlace?: TitlePlace;
   titleSize?: TitleSize;
+  titleColor?: TitleColor;
   onTitleText?: (t: string) => void;
   onTitlePlace?: (p: TitlePlace) => void;
   onTitleSize?: (s: TitleSize) => void;
+  onTitleColor?: (c: TitleColor) => void;
 
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   look?: LookId;
@@ -117,6 +119,11 @@ const TITLE_SIZES: { id: TitleSize; label: string; title: string }[] = [
   { id: 'lg', label: 'L', title: 'Large — a poster title.' },
 ];
 
+/** Plain names for the swatches — the tooltip and the screen-reader label. */
+const TITLE_COLOR_LABELS: Record<TitleColor, string> = {
+  white: 'White', black: 'Black', yellow: 'Yellow', red: 'Red', blue: 'Blue', pink: 'Pink',
+};
+
 /**
  * The two original grid modes. They are the only ones that read `primitive`,
  * and they are kept because "an even grid of squares" is a legitimate thing to
@@ -140,7 +147,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice, onColourDice,
   holdFrame = false, onHoldFrame, lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
-  titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
+  titleText = '', titlePlace = 'bl', titleSize = 'md', titleColor = 'white',
+  onTitleText, onTitlePlace, onTitleSize, onTitleColor,
   look = 'none', onLook, desk, onDesk, deskCustom = false, move = 'still', onMove, turn = 'hold', onTurn,
   pace = 'even', onPace,
   sync = 'off', onSync, beatGrid = null, beatBusy = false, beatBeats = 0, hasMusic = false
@@ -689,6 +697,37 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
                     aria-pressed={titleSize === z.id}
                     data-testid={`title-size-${z.id}`}
                   >{z.label}</button>
+                ))}
+              </div>
+              {/* THE COLOUR — a swatch is the ink the render paints, no text to
+                  read. The scrim behind it flips itself for legibility, so the
+                  only choice offered is the one that cannot be got wrong. Every
+                  button is 44px for a thumb even though the dot is 22px. */}
+              <div className="ui-titler__chips" role="group" aria-label="Title colour">
+                {TITLE_COLORS.map(c => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => onTitleColor?.(c)}
+                    title={TITLE_COLOR_LABELS[c]}
+                    aria-label={`Title colour ${TITLE_COLOR_LABELS[c]}`}
+                    aria-pressed={titleColor === c}
+                    data-active={titleColor === c}
+                    data-testid={`title-color-${c}`}
+                    className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg"
+                  >
+                    <span
+                      className="block rounded-full"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        background: titleInk(c),
+                        boxShadow: titleColor === c
+                          ? '0 0 0 2px rgba(0,0,0,0.85), 0 0 0 4px #ffffff'
+                          : 'inset 0 0 0 1px rgba(255,255,255,0.45)',
+                      }}
+                    />
+                  </button>
                 ))}
               </div>
             </>
