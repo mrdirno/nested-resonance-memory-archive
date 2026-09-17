@@ -1,0 +1,40 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_similarity/D_base_triple2",
+ "runs": 3,
+ "note": "ring 19 similarity arm D_base_triple2, written after recording and before scoring",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "default_sg0.5_gl0_seed16180_n4194304_e24.json",
+   "sha256": "9342e48a24c5c77d28ae525d66e7d4f213dd7c2f3864b7ac1f15159cddd41f0a",
+   "bytes": 54892
+  },
+  {
+   "file": "default_sg0.5_gl0_seed16180_n4194304_e24.mesh.f32",
+   "sha256": "09a18512040535fd3307769ccaff825288177d084c1609de710eb3d18c6521c9",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg0.5_gl0_seed2718_n4194304_e24.json",
+   "sha256": "bfde7f2a8a5eebeb84b1dc76acf19249badb8036f23cc73bf4754e7a30e2a34d",
+   "bytes": 54899
+  },
+  {
+   "file": "default_sg0.5_gl0_seed2718_n4194304_e24.mesh.f32",
+   "sha256": "4ab65e670769030eb482b3a72f7f63b4836a3956b2d899f06165c68baa932f14",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg0.5_gl0_seed57721_n4194304_e24.json",
+   "sha256": "eccd24f34d0541596492ec615e3c01c12f651f8dd6965b06c716bddd18c8ce58",
+   "bytes": 54882
+  },
+  {
+   "file": "default_sg0.5_gl0_seed57721_n4194304_e24.mesh.f32",
+   "sha256": "9ead1526ac22e07c738c1a945285fd5b9c9cff7237cd976c69a48ce3ad10aa0c",
+   "bytes": 3145728
+  }
+ ]
+}

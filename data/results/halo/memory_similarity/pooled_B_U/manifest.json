@@ -1,0 +1,70 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_similarity/pooled_B_U",
+ "runs": 6,
+ "note": "ring 19: arms B_quarter_full and U_quadruple_full pooled by relative links so the frozen scorer sees six measurable runs and can evaluate F3 and F4; written after recording and before scoring",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "default_sg0.125_gl0_seed12345_n4194304_e24_fieldExp-0.60206_mag0.15.json",
+   "sha256": "183ecb6a1ec186f81a87a0fda5c3f12d9e15dd8bd74d9dae66d650d32de6c9fc",
+   "bytes": 55830
+  },
+  {
+   "file": "default_sg0.125_gl0_seed12345_n4194304_e24_fieldExp-0.60206_mag0.15.mesh.f32",
+   "sha256": "f350e37bc4f566e6fb5d9e7ae5f93b3e3007d83fde705cea835e5dfc4d7d8da5",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg0.125_gl0_seed31337_n4194304_e24_fieldExp-0.60206_mag0.15.json",
+   "sha256": "ec52c8af60ebb947008c64c4bfa3220035bdf3b55945492cd4ef1abc4023552f",
+   "bytes": 55819
+  },
+  {
+   "file": "default_sg0.125_gl0_seed31337_n4194304_e24_fieldExp-0.60206_mag0.15.mesh.f32",
+   "sha256": "87d92677a42c2d8d6bee003c205b96d228a238d1dd44f44e34c2e3660762cb99",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg0.125_gl0_seed777_n4194304_e24_fieldExp-0.60206_mag0.15.json",
+   "sha256": "aa0a006689c255309437029b866928d2191de048bdec44044951416d4907d739",
+   "bytes": 55807
+  },
+  {
+   "file": "default_sg0.125_gl0_seed777_n4194304_e24_fieldExp-0.60206_mag0.15.mesh.f32",
+   "sha256": "550713217f86780c8d2a26949c2192621ce6a1ae045acf482381669b55ce1b62",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg2_gl0_seed12345_n4194304_e24_fieldExp0.60206_mag2.4.json",
+   "sha256": "afb2a90617d31751f8c504031c641a94ac0dc6c2de4c309b400e9d3bda4062f3",
+   "bytes": 54735
+  },
+  {
+   "file": "default_sg2_gl0_seed12345_n4194304_e24_fieldExp0.60206_mag2.4.mesh.f32",
+   "sha256": "3c2b48935407c7d715abac761d98c2f1a1a470a95e5f7555ad5dfa1cf4163cf0",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg2_gl0_seed31337_n4194304_e24_fieldExp0.60206_mag2.4.json",
+   "sha256": "d0401c23a21d0dc3997d57aa3010419281601dff9d7a9f9b53c94c107d256bf6",
+   "bytes": 54730
+  },
+  {
+   "file": "default_sg2_gl0_seed31337_n4194304_e24_fieldExp0.60206_mag2.4.mesh.f32",
+   "sha256": "611659fb2a9d0870846890dc5202ca850cf65401a242d05f9e8de0c52606d2f7",
+   "bytes": 3145728
+  },
+  {
+   "file": "default_sg2_gl0_seed777_n4194304_e24_fieldExp0.60206_mag2.4.json",
+   "sha256": "b38b28437366ae688c563cf1f7aab97d6394548c92c7276a1351af8d85a33819",
+   "bytes": 54743
+  },
+  {
+   "file": "default_sg2_gl0_seed777_n4194304_e24_fieldExp0.60206_mag2.4.mesh.f32",
+   "sha256": "2a0f8c6274b4b1fe961fdc83a8b6d8fc39bc7ba554a08c95d993963cbde1fbc8",
+   "bytes": 3145728
+  }
+ ]
+}
