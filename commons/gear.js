@@ -619,6 +619,22 @@ window.COMMONS_GEAR = [
     w: "Sod goes down before the punch list and gets cut a dozen times after — for a head that ended up under it, a box lid, a valve you have to reach, an edge along the walk. Hack it with a shovel and the seam opens up brown in a week and the owner sees exactly one thing on that lawn. A knife takes a clean piece out and puts it back." },
   { id: "rake-and-lute", n: "Landscape rake and a lute", t: ["landscape"],
     w: "Rough grade is somebody else's word for done and it is never flat; the beds you plant into and the lawn people walk on get their shape from a man dragging them by hand. The lute pulls the high spots and floats the fill without windrowing rock into the middle of the bed, and the rake takes out what the dirt crew called clean. Your grade meets the walk or it doesn't." },
+  { id: "soil-knife", n: "Soil knife — the hori-hori kind, with a scabbard", t: ["landscape"],
+    w: "It opens a hole for a plug, saws a root that's in your way, splits a pot off a rootbound ball and reads how deep you are off the blade — the one tool a planter's hand is on all day. A round-point can't do any of it and a razor knife does one and rusts. Wear it, because set down in a bed it's gone." },
+  { id: "planting-spade", n: "A planting spade — narrow, straight-sided, sharp", t: ["landscape"],
+    w: "The hole is the whole job, and a round-point shovel digs a bowl the roots circle in like the pot they came out of. A flat spade cuts a straight-walled hole the same width top and bottom and slices the glaze off the side so the roots have somewhere to go. Keep the edge on it; a dull spade is a bruise on your boot by noon." },
+  { id: "pick-mattock", n: "A pick mattock, for the hole the spade bounces off", t: ["landscape"],
+    w: "Native ground under the stripped topsoil is rock, hardpan or old fill full of somebody's demo, and the spade rings and stops. The mattock breaks the wall of the pit and cuts the root you're not going to move any other way. Every planting crew has one in the truck and needs it the day the spec calls for a tree in a parking island." },
+  { id: "bypass-pruners", n: "Bypass hand pruners — the kind that slice, not crush", t: ["landscape"],
+    w: "Stuff comes off the nursery truck torn, rubbing and half of it root-bound, and the cuts you make the day it goes in are the shape it keeps. The bypass jaw closes past itself and leaves a clean cut that heals; the anvil kind mashes the stem and the wound just sits there. Not loppers — the small ones, on your belt, for the cut you make one-handed while the other holds the branch." },
+  { id: "haul-tarp", n: "A haul tarp — the heavy one with the hand-holes", t: ["landscape"],
+    w: "Prunings, the spoil off the holes, the empties and the stripped sod all go to the truck, and a wheelbarrow does it a load at a time while a tarp takes the whole pile in one drag. Pull it across a finished lawn instead of rolling a rut into it. The cheap poly one splits the first load; the woven one with sewn corners is the one still folded in your truck next year." },
+  { id: "watering-wand", n: "A watering wand with a breaker on the end", t: ["landscape"],
+    w: "The first water on a new plant is what settles the soil into the roots, and a thumb over the hose blasts the hole back open and floats the mulch into the lawn. The breaker turns the pressure into rain you can hold right on the rootball. It's also how you reach the middle of a bed you just planted without walking through it." },
+  { id: "tree-ties", n: "Tree ties — the wide soft-webbing kind", t: ["landscape"],
+    w: "A tree that needs holding gets held by something flat and soft that gives as the trunk moves, not wire run through a piece of garden hose. The hose trick saws a ring into the bark and you find it two summers later strangling the tree the whole job was built around. Carry the webbing, and carry the reminder to come back and take it off." },
+  { id: "soil-probe", n: "A soil probe — a T-handle you push and pull a core with", t: ["landscape"],
+    w: "What's under the topsoil decides whether the thing you plant lives, and the spec is a drawing, not the ground. Push the probe and it tells you where the good dirt stops, where the water's sitting and where somebody buried a slab. You want to know that before the hole's dug and the tree's on the truck, not after." },
 
   /* ---- paving & striping: trade #17 ---------------------------------------
    THE BAG OF A MAN WHO WORKS ON A SURFACE THAT SETS WHILE HE STANDS ON IT.
