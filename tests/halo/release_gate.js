@@ -8,7 +8,7 @@ const crypto = require('node:crypto');
 const physics = process.argv.includes('--physics');
 const suite = physics
   ? ['integ_test.js','mesh_test.js','conserve_test.js','dimer_test.js','bench_test.js']
-  : ['tick_test.js','observation_test.js','lab_test.js','smoke.js'];
+  : ['tick_test.js','observation_test.js','lab_test.js','smoke.js','cam_scenario_test.js'];
 const out = path.resolve(process.env.HALO_RECEIPTS || path.join(__dirname,'workspace/release'));
 fs.mkdirSync(out,{recursive:true});
 const source=path.resolve(__dirname,'../../HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html');

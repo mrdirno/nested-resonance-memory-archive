@@ -70,7 +70,7 @@ assert n == 1, f'simStop hook matched {n} times'
 PROBE = """
 /* ---- test-only probe bridge (rc-test.html only; never shipped) ---- */
 window.__probe = {
-  SESSION: SESSION, benchObserve: benchObserve, benchParseRecord: benchParseRecord, benchRecord: benchRecord, benchStart: benchStart, sanitizeState: sanitizeState, DEFAULTS: DEFAULTS, deepPatch: deepPatch, applyPreset: applyPreset,
+  SESSION: SESSION, benchObserve: benchObserve, benchParseRecord: benchParseRecord, benchRecord: benchRecord, benchStart: benchStart, sanitizeState: sanitizeState, DEFAULTS: DEFAULTS, SCENARIOS: (typeof SCENARIOS !== 'undefined' ? SCENARIOS : null), deepPatch: deepPatch, applyPreset: applyPreset,
   renderer: renderer, reseed: reseed,
   get state() { return state; },
   get step() { return step; },

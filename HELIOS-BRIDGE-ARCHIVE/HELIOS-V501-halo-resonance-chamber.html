@@ -5197,6 +5197,7 @@ function applyScenario(key) {
   next.sacred = state.sacred;   // the kaleidoscope is a lens over the picture, not part of the scenario
   if (!('pm' in patch)) next.pm = JSON.parse(JSON.stringify(state.pm));   // the mesh choices stay with the viewer, like the render settings
   if (!('sound' in patch)) next.sound = JSON.parse(JSON.stringify(state.sound));
+  if (!(Array.isArray(patch.cam) && patch.cam.length >= 3)) next.cam = JSON.parse(JSON.stringify(state.cam));   // the framing stays with the viewer unless the scenario names its own camera (exact complement of the flyTo guard below), like the mesh and sound choices
   state = sanitizeState(next);
   restartUniverse();
   syncAllControls();
@@ -9945,6 +9946,98 @@ Fixed by reading the value through the probe with a fallback to either constant
 name, so the guard no longer carries a copy either: conserve_test 47 passed, 0
 failed locally. The lesson is the ring's own: this cycle removed one duplicated
 name list and was immediately caught by a THIRD one it had not looked for.
+
+RING 19 · 2026-09-17 · a scenario preset that named no camera reset the viewer's
+whole camera to DEFAULTS; fixed for applyScenario, found still open in applyPreset
+WHAT CHANGED: one line inside applyScenario, plus a regression test and a test-
+only probe field; no GLSL, no physics constant, no preset, no DEFAULTS, so
+sim_digest is unmoved. applyScenario(key) rebuilds state from a deep copy of
+DEFAULTS, deepPatches the scenario over it (deepPatch SKIPS 'cam'), then re-
+applies the settings that stay with the viewer -- particles, quality, colorMode,
+guides, sacred, the mesh choices (pm), sound. The viewer's CAMERA was never on
+that list. So the five scenarios of thirty whose patch carries no cam array --
+formation, chladni, orbitals, magnet, closed -- reset state.cam to DEFAULTS
+{az 0.7854, el 0.6155, dist 0, user false}. The added line is the exact
+complement of the flyTo guard below it: if (!(Array.isArray(patch.cam) &&
+patch.cam.length >= 3)) next.cam = JSON.parse(JSON.stringify(state.cam)); so a
+scenario that names its own camera still flies to it and every other scenario
+keeps the viewer's framing, the same way the mesh and sound choices already do.
+Full numbers: tests/halo/cam_scenario_test.js, now in the release suite.
+WHAT THE DROP COSTS, MEASURED. It is not a visible jump. az/el/dist survive a
+frame in the live camera object; what dies is state.cam.user, true -> false.
+DEFAULTS.cam is an auto-fit sentinel (dist 0, user false), not a framing: the
+page saves the camera only while cam.user is true (flushState), restores it on
+boot only while cam.user is true, and REFITS the view on the next resize whenever
+!cam.user (fitDefaultView). So after one of those five presets the viewer's
+orbited framing is silently no longer theirs: refit on the next window resize,
+not persisted across reload. Driven headless with a deterministically flushed
+baseline (a dispatched pagehide, not the debounce), applyScenario('magnet') took
+state.cam from {1.234, 0.321, 52, true} to the full DEFAULTS above: two of nine
+checks failed before the fix, nine of nine after, and a camera-bearing scenario
+(spinchladni) still flew to its own {0.739, 0.708, 38.8}.
+THE SECOND PATH, REPORTED NOT FIXED. Ring 18 asked what else reassigns state
+wholesale and belongs to the viewer. applyPreset (the recipe / lab-experiment
+loader) has the identical defect and the one-line fix does NOT reach it: it does
+state = sanitizeState(p.state) and restores the camera only inside
+if (p.cam && Number.isFinite(+p.cam.az)); when the caller passes no usable cam
+the viewer's state.cam is left at DEFAULTS. runLabExperiment passes cam = null
+whenever the base scenario carries no cam array, which is true for FOUR of the
+seven lab-experiment buttons -- fieldonly, borisvseuler, gravity (base 'default',
+not even a SCENARIOS key), dimer (base chladni) -- and the from-text preset
+import drops it too. spin/memory (spinchladni) and disc (razordisc) are safe, and
+recipe loads, benchStart and benchStartOrbit are safe because capturePreset
+always writes cam; btn-defaults resets by design. This is reported here, not
+patched in the same commit -- ring 18's own precedent for a live-page finding
+without a test, and because its right behaviour is unsettled (below). The
+regression test covers the applyScenario instance, NOT the class: a green gate
+does not mean the lab buttons are covered.
+BANNED: calling this a camera "jump" (the live position survives a frame; the
+CONTROL flag is what drops). Calling the second path fixed, or letting the green
+gate imply the lab buttons are covered. Fixing applyScenario by resetting to a
+framed default (DEFAULTS.cam is a sentinel, not a framing). Patching the frozen
+memory scorer or protocol (untouched). Claiming the memory question moved.
+DEAD BRANCHES: (1) "the camera visibly jumps to a default view" -- with no flush
+between, the live cam position is retained a frame; the defect is the lost user
+flag. (2) "!('cam' in patch) is the right guard" -- if a scenario ever set cam to
+null or a short array, that guard would skip preserve while the flyTo guard also
+skips, and the bug returns; the exact complement of the flyTo condition cannot.
+(3) "a cam-bearing scenario is now pinned to the old camera" -- tested false:
+spinchladni still flies to its own cam, user true. (4) "the one-line fix closes
+the class" -- refuted: applyPreset is a second live path it does not touch.
+KILL-TEST: five agents. Four verifying in parallel, each reading the shipped
+file: fix correctness, other drop paths, boot and no-regression, and test
+validity; two re-derived the mechanism from the source alone. Then a completeness
+critic. The other-drop-paths verifier returned INCOMPLETE and is why this ring
+names applyPreset; the fix-correctness verifier is why the guard was tightened to
+the flyTo condition's exact complement; the critic held the ring to scoping its
+claim to applyScenario. Empirically: built the test page from the unfixed tree
+and ran the test first -- it failed on the two camera checks -- then applied the
+fix and it passed 9 of 9; the full release suite is green on the fixed page
+(tick, observation, lab, smoke, cam_scenario), and the page boots with no console
+error.
+THE NON-OBVIOUS CHOICE: fix the one path ring 18 named and pin it with a test,
+but REPORT the second path rather than fix it in the same commit. The page's own
+invariant -- the framing stays with the viewer -- says preserve there too, and
+the fix is a few lines. The one thing that is not settled is intent: a scenario
+preset that names no camera plainly should not move one, but a lab experiment
+that computes a fresh result may WANT to refit to show it. Shipping a live-page
+change to the instrument's A/B comparison buttons without settling that, and
+without its own regression test, is the move ring 18 declined for this very bug.
+OPEN QUESTIONS: this ring closes ring 18's sixth (the applyScenario camera drop,
+fixed and gated by a test) and answers its "what else reassigns state wholesale":
+applyPreset does, on four of seven lab-experiment buttons and the from-text
+import -- reported, not fixed. The one it earns: when a lab experiment loads, is
+dropping to auto-fit the RIGHT behaviour (frame the new result) or the WRONG one
+(keep the viewer's comparison view)? Settle that before touching applyPreset.
+Carried forward, unchanged this ring: the drive-cut axis that cuts the imposed
+drive AND renormalises self-gravity to it is still the successor's job; the
+48-epoch half is still unavailable (FIRST_SCORED, LAST_SCORED = 3, 24, no flag);
+whether a field that does not move should be scored at all is still unruled; E5b,
+not support and not the epoch floor, is what refuses the only two conditions that
+clear 12, so whether the successor needs a seed-balance gate at all or seeds that
+cannot be near-copies is open; why a file:// reload drops localStorage on
+ubuntu-latest and not on macOS. Nothing about nested resonance memory is decided
+here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
