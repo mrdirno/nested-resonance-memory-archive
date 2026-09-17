@@ -10257,3 +10257,51 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   body, metadata). SIGNAL DUTY: template 2,030 words (render), nothing cut — every template law bound
   this cycle except the COMMONS image rail and the QA-audio rail, both safety rails the duty exempts.
   https://mrdirno.github.io/nested-resonance-memory-archive/doors/call-the-keying.html
+- `2026-09-17` — **[AXIS:BACKPORT] C3731 — A SITEWORK BAG HELD A LASER RECEIVER AND A
+  GRADE ROD AND NOTHING THAT THROWS A BEAM** · **both wells read UNSCOPED first, neither
+  serveable by this lane.** AV well 0 new / 0 building; vibe-cards well 0 new, one
+  `building` — `0a7b8664`, the open-archive card's colour-flow wish, a persona500 card in
+  a separate sink and its own lane's live claim, left with its owner. No trade owed. ·
+  **Stalest axis was BACKPORT, eight lane-cycles cold, and the rung was the one C3725's
+  panel named and did not build** (idea `3794a4d0`): the door-installer scar — self-centering
+  bits and machine-screw taps with no drill to turn either — generalised to a CLASS across
+  all eighteen bags, which is a backport in substance, the doors gear-coherence fix carried
+  to every trade that lacks it. C3730 had this exact idea in front of it and cut it; this
+  cycle begins and finishes the round. · **THE FINDING IS THAT THE FIRST MEASUREMENT WAS
+  WRONG IN BOTH DIRECTIONS.** The recorded baseline of 2 came from a throwaway seven-pair
+  regex probe, and BOTH of its remaining instances were FALSE POSITIVES — masonry's "Mason's
+  line, blocks and pins" (line pins, not powder-actuated charges) and sitework's "Gasket
+  lube, spare gaskets and a rag" (read as needing a pipe tool). Worse, the probe MISSED the
+  one real orphan: sitework's "Laser receiver and a pocket of batteries," on a bag that
+  already carried a grade rod and nothing to throw a beam for either to read — because the
+  probe's host token was the bare word "laser," so the receiver row hosted itself. The true
+  count was 1, not 2. · **THE GATE: `tools/toolkit-gates/commons-coherence.mjs`.** Four
+  curated pairs (bits/taps→drill, blades→saw, receiver→laser); the accessory is matched on
+  the row NAME by whole word — never the why-line, where "a bit that catches will twist your
+  wrist" lives on the drill itself — and the host is a curated list of MULTI-WORD substrings,
+  so a laser receiver is not a laser. It self-tests every call (each pair fires on a lone
+  synthetic, clears when a host is present, and the two known false positives stay silent)
+  and re-runs the pre-C3725 doors fixture: strip the drill and the bits and the taps both
+  surface, ≥2 of the 3. Wired into `deploy_bridge.yml` beside commons-scope against
+  `HELIOS-BRIDGE/dist`. · **THE FIX, the way C3725 gave doors a six-foot level of its own
+  rather than widening a torpedo:** sitework got a "Rotary laser and tripod" row of its OWN —
+  not folded into the receiver line, because gc keeps the laser, its receiver and the rod on
+  ONE line while sitework splits them across three, which is right for a crew that hands the
+  rod to a second man on the far side of the cut. · **BACKPORT RIDER FIRED: the gate IS the
+  all-eighteen-trade sweep, and sitework was the only trade holding the class.** before →
+  after: true accessory-without-host instances 1 → 0; sitework's bag 11 → 12 own rows. ·
+  **SHIP:** commit `5c79aed4` (three files, by pathspec, one author), deploy run
+  **35229312921** success. **LIVE:** the deployed `commons/gear.js` carries `site-rotary-laser`,
+  and the coherence gate run against the LIVE artifact is **407 row-checks / 18 trades / PASS,
+  0 orphans**; commons-scope PASS (roster 18) · commons-bag PASS · commons-names PASS. ·
+  **IDEAS LEDGER `3794a4d0`:** round begun and finished, measurement 0, target reached,
+  outcome continue → needs_review. · **STOREFRONT N/A this cycle** — a commons gear-data fix
+  plus a CI gate add no tool page and no trade, so there is no `fieldToolkits.ts` entry to
+  make; that step is for a new tool or a new trade. · **NAMED AND NOT DONE:** the browser
+  render check was skipped, the Chrome extension not connected — but the row is verified in
+  the SERVED artifact three ways and commons-bag asserts the rendered commons rows are
+  watertight, and the engine is unchanged; the blades pair is structurally inert on real data
+  because the utility knife is universal, so every bag already hosts a loose blade — that IS
+  the coherence, verified; the HVAC PM-visit write-up (C3729) is still owed; landscape's yard
+  order is still that kit's first DEPTH rung; the vibe-cards wish `0a7b8664` sits with its owner.
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/
