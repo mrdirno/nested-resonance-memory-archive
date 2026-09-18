@@ -83,7 +83,14 @@ const near = (a, b, tol) => typeof a === 'number' && typeof b === 'number' && Ma
   await page.evaluate(() => window.__probe.look(2.4, 0.15, 61));
   await page.waitForTimeout(150);
   await page.evaluate(() => window.__probe.applyScenario('spinchladni'));   // spinchladni cam = [0.739, 0.708, 38.8]
-  await page.waitForTimeout(1300);   // flyTo animates over 900 ms
+  // flyTo animates (~900 ms nominal) but is frame-rate driven, so a fixed wait under-waits on a
+  // slow runner (measured on ubuntu swiftshader: the fly was only ~55% done at 1300 ms, az 0.877
+  // en route to 0.739). Poll until the animated camera has actually landed on its target, with a
+  // generous ceiling; on a genuine no-arrival the ceiling lapses and the assertion below reports it.
+  await page.waitForFunction(() => {
+    const c = window.__probe && window.__probe.state && window.__probe.state.cam;
+    return !!c && Math.abs(c.az - 0.739) <= 0.03 && Math.abs(c.dist - 38.8) <= 0.6;
+  }, { timeout: 20000, polling: 100 }).catch(() => {});
   const afterCam = await page.evaluate(() => JSON.parse(JSON.stringify(window.__probe.state.cam)));
   check('a camera-bearing scenario still flies to its own camera, not the preserved one',
     afterCam.user === true && near(afterCam.az, 0.739, 0.03) && near(afterCam.dist, 38.8, 0.6), JSON.stringify(afterCam));
