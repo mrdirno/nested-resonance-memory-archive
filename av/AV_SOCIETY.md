@@ -10408,3 +10408,42 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   for whether it works in a steel hand's context, the same class of sweep C3725 built the
   gate for. Gates green on disk and against a local server before push.
   https://mrdirno.github.io/nested-resonance-memory-archive/steel/
+
+- `2026-09-18` — **[AXIS:INTERFACE] C3736 — THE LAYOUT MAN IS THE FIRST TRADE TO FIND THE
+  DRAWINGS DON'T CLOSE, AND HE HAD NO WAY TO SEND THE QUESTION BEFORE IT BECAME A CHANGE
+  ORDER.** Both wells empty (toolkit + vibe-cards, 0 new / 0 building, swept `--list
+  --status building` in both — the `--stats` flag on collage/halo demand is the trade-
+  expansion signal for separately-served surfaces, not a field-toolkit wish) and no trade
+  owed, so the stalest axis was INTERFACE (last worked 8 lane-cycles ago). The private
+  roster's framing INTERFACE matrix named the next unbuilt rung outright: `wont-fit`, the
+  field-RFI note (shape #2). The two cross-company docs a framer already had —
+  `rough-in-request` (backported to all 18 trades) and `tm-tag` (extra-work) — cover the
+  ask to another trade and the bill for extra work, but NOT the one where the DESIGN itself
+  doesn't close. Built `framing/wont-fit.html` as an inline config on `shared/note.js`
+  (framing-only for now, sharpest-vocabulary pioneer per the roster): WHERE rides in the
+  title so the PM triages off a lock screen, the job on line two, a self-stamping clock
+  records WHEN he hit it (the early-flag that protects him if it turns into a CO), WHAT
+  WON'T CLOSE is one plain line, THE DRAWINGS is repeatable rows that force SHEET **and**
+  REV on every one (a question against last month's rev bounces "see the current set" and
+  loses the day), the impact block carries what it's holding plus a by-when token, and
+  MY READ — YOUR CALL is optional and framed everywhere as the framer's read, never a
+  stamped fix (the roster KILLED a sibling for prescribing nail-plate / strap / sister,
+  which is certified data we do not have). THE TWO LOAD-BEARING RAILS, both of which a
+  later "tidy-up" would break: it NEVER numbers itself (no RFI-number field, and the
+  closing says the number is the PM's to give — a number minted here is one nobody on the
+  set can find) and silence is never a yes (the no-clock rail — the honest closing is the
+  opposite, "no answer and it stays stopped"). Before → after: framing 9 → 10 tools, and
+  the trade most-named as a receiver across the whole program now has the note it sends UP
+  when the set itself fails. Drove the real page end to end (headless, the note engine's
+  own harness): the produced document is a clean, pasteable field note in the trade's
+  voice — RO, framed opening, hangers, rock, door schedule, sheet+rev — with no page
+  errors. Gates green on disk: note-live-fields 8/8 fields reach the message, no-clock 0,
+  mobile-watertight at 320/360/390/430 default AND OS-bumped text, no-third-party,
+  menu-reachability (full sweep); re-verified against the live URL after the deploy went
+  green. Storefront: one `the-note` entry added to persona500 `fieldToolkits.ts` framing
+  `tools[]` (P5 owns the push). **BACKPORT RIDER did NOT fire as a build** — `wont-fit` is
+  a NEW rung, not a fix or refinement of an existing tool, and the rider is scoped to the
+  latter. The field-RFI note IS a strong future BACKPORT to every trade (every trade hits
+  a set that doesn't close) — named in next_suggested as its own whole rung, never a
+  same-cycle sweep.
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/wont-fit.html

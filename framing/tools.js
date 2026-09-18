@@ -76,6 +76,13 @@ window.TOOLKIT_TOOLS = [
     desc: "You're the loudest crew this building will host, and the one that shows up with the most material behind it. Send the ask that gets a yes on the first try — the route in, where it stages, how loud and for how long, and the heads-up that keeps your name off the complaint list. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#C4632B",
     audience: "Framing → building engineer / facilities / security"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "You snapped the line and the drawings don't close — a wall that can't land, an RO that fights the door schedule, two sheets that disagree. Send the field note up while a crew's standing and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Layout / foreman → our PM → GC / architect"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Won't Fit — Framing &amp; Drywall Field Toolkit</title>
+<meta name="description" content="You snapped the line and the drawings don't close — a wall that can't land, an RO that fights the door schedule, two sheets that disagree. The field note you send up with a crew standing: what won't close, every sheet and revision it's on, and what it's holding — the question your PM logs as an RFI, before it turns into a change order.">
+<meta name="apple-mobile-web-app-title" content="Won't Fit">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">you &rarr; your PM &rarr; the architect</span>
+    <h1 id="title">Won&rsquo;t Fit</h1>
+    <p class="lede" id="lede">You snapped the line and it won&rsquo;t close &mdash; a wall that can&rsquo;t land, an RO that fights the door schedule, two sheets that disagree. Written now, with a crew standing, it&rsquo;s a five-minute question. Written next week it&rsquo;s a change order. Send it up while it&rsquo;s still cheap.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send up</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn"></div>
+
+  <p class="credit">Built for the Framing &amp; Drywall Field Toolkit. Missing a line your set always needs &mdash; a phase, an area, a callout the way you actually mark it? Wish it better &mdash; it gets built, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* WON'T FIT — the field RFI note, and the INTERFACE rung the private roster named
+ * next for this trade after whats-in-the-wall, ready-to-rock and the-load shipped.
+ * Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0
+ *
+ * A CONFIG ON SHAPE #2 (`shared/note.js`), inline because it is framing-only for
+ * now — the layout man is the first trade on a job to discover the drawings do
+ * not close, and he finds out with a crew standing. §THE SYSTEM OF RECORD is the
+ * whole design of this file: "the field-condition note that becomes the PM's RFI"
+ * — so it is scoped to WHAT HE SENDS, never to the record of record.
+ *
+ * THREE THINGS THAT ARE LOAD-BEARING AND MUST NOT BE "TIDIED":
+ *   1. IT NEVER NUMBERS ITSELF. There is no RFI-number field and none is
+ *      generated. The RFI number belongs to the GC's / architect's system; a
+ *      number minted here is one nobody on the set can find, and it manufactures
+ *      the belief that this page issued an RFI. The closing says so every time.
+ *   2. SHEET *AND* REVISION on every drawing, as repeatable rows. A question
+ *      written against last month's revision comes back "see the current set" and
+ *      the day is lost — the one failure that turns a five-minute note back into a
+ *      week. The `why` on that section carries the reason to the man.
+ *   3. THE FIX IS HIS READ, NEVER THE ANSWER. The `read` field is optional and
+ *      framed "your call" in the label, the section prose AND the document. The
+ *      roster KILLED a sibling that prescribed repairs (nail plate / strap /
+ *      sister) because a stamped fix is certified data we do not have. A framer's
+ *      way out is worth sending; a framer's fix presented as the answer is not.
+ */
+(function () {
+  "use strict";
+  var TR = window.TOOLKIT_TRADE || {};
+
+  Note.mount({
+    key: "toolkit." + (TR.slug || "framing") + ".wontfit.v1",
+    docName: "FIELD NOTE",
+    copiedLabel: "Copied. Send it up.",
+    clearConfirm: "Clear this note? Your name and company stay on the phone.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Note started",
+
+    /* THE HEADING IS WHERE. The PM reads this on a lock screen between two other
+       jobs — a first line that says only FIELD NOTE makes him open the thread to
+       find out where, and a thread he has to open is one he answers tomorrow.
+       Location rides in the title, the job on the second line; both are docSkip'd
+       so they are not also printed halfway down as fields. */
+    titleSuffix: function (get, u) {
+      return get("where");
+    },
+    subline: function (get, u) {
+      return get("job");
+    },
+
+    sections: [
+      {
+        title: "Where you hit it",
+        why: "The way you'd say it on the radio — the column line, the RO, the room off the door. It rides on line one so he knows where before he opens the thread.",
+        fields: [
+          { id: "where", kind: "text", caps: true, label: "Where", hint: "— your words, not the job number", ph: "Line 4, C–D · RO at Rm 214", docSkip: true },
+          { id: "job", kind: "text", sticky: true, label: "Job / building", hint: "— the way your set names it", ph: "Bldg C — Riverside", docSkip: true },
+          { id: "hit", kind: "clock", label: "When you hit it", nowLabel: "Now", docLabel: "Hit it" }
+        ]
+      },
+      {
+        title: "What won't close",
+        docHead: "WHAT WON'T CLOSE",
+        why: "One line, plain — so the architect gets it cold with no trade shorthand. What fights what, the numbers if you have them. Not the fix — that comes lower and it's optional.",
+        fields: [
+          { id: "problem", kind: "area", rows: 3, label: "What fights what", hint: "— the conflict, in a sentence", ph: "Corridor framed to A-201 leaves 41\" clear. A-111 door schedule calls a 3'-0\" pair — needs 74\" RO. Won't fit." }
+        ]
+      },
+      {
+        title: "The drawings it's on",
+        docHead: "THE DRAWINGS",
+        why: "Sheet AND revision on every one — this is the line that keeps the answer from bouncing. A question written against last month's rev comes back “see the current set” and you've lost the day. Two sheets disagreeing? Put both down.",
+        fields: [
+          {
+            id: "dwgs", kind: "rows", label: "Every sheet this touches", addLabel: "+ Another sheet",
+            docJoin: "  ·  ",
+            cols: [
+              { id: "sheet", kind: "text", caps: true, label: "Sheet", ph: "A-201" },
+              { id: "rev", kind: "text", caps: true, label: "Rev", ph: "3 / Δ2", docPrefix: "Rev " },
+              { id: "shows", kind: "text", wide: true, label: "What it shows / the callout", ph: "corridor dim 3'-5\"" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "What it's holding",
+        tone: "loud",
+        docHead: "WHAT IT'S HOLDING",
+        why: "The line everybody leaves off, and the one that turns a question into an answer. Tap what it costs if it sits, then say it your way. A consequence with no when on it is a shrug.",
+        fields: [
+          {
+            id: "impact", kind: "impact",
+            label: "What's stopped until you answer",
+            hint: "— what this actually holds up",
+            chipHint: "what it costs if it sits:",
+            chips: ["Layout's stopped here", "Can't set these walls", "Crew standing on it", "Holds the rock", "Holds the inspection", "Boom truck's set for it"],
+            clock: [
+              { v: "Answer today", docToken: "today" },
+              { v: "By tomorrow AM", docToken: "by tomorrow" },
+              { v: "Before we rock", docToken: "before rock" },
+              { v: "No rush", docToken: "no rush" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Your read — if you've got one",
+        docHead: "MY READ — YOUR CALL",
+        why: "Optional, and it is never the answer. A way out you can see from the field saves everybody a week — but you flag it, they decide it. Never a fix you'd put your stamp on.",
+        fields: [
+          { id: "read", kind: "area", rows: 2, label: "How you'd clear it — if it were yours", hint: "— your read, plainly not the fix", ph: "Shift the corridor wall 2\" toward C and it clears without touching the door — but that's your call." }
+        ]
+      },
+      {
+        title: "Who's asking",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "to", kind: "text", label: "Sending it to", hint: "— your PM; he logs the RFI", ph: "Dave — our PM", docLabel: "To" },
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, they call you, not the office", ph: "Mike Reyes — 555-0141", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Apex Interiors", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    /* THE CLOSING IS FIXED TEXT, never a field — §THE SYSTEM OF RECORD, and the
+       no-clock rail: silence is never a yes on this rack, so the honest line is
+       the opposite one — no answer, work stops. And the RFI number stays theirs. */
+    closing: [
+      "This isn't the RFI — it's the field note it comes from. Log it your way; the RFI number is yours to give, and a number from me is one nobody on your set can find.",
+      "No answer and it stays stopped — nothing moves here till I hear back. I'm not guessing at the fix and calling it good."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.dwgs || []).filter(function (r) { return r && (r.sheet || r.shows); }).length;
+      if (n) return n + " sheet" + (n === 1 ? "" : "s") + " on the note";
+      return touched ? "Note started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>
