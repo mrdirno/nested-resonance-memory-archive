@@ -1,0 +1,35 @@
+{
+ "schema": "halo-sgsweep-manifest/1",
+ "files": [
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_mag0.6.json",
+   "sha256": "19315978723eb22288be949475d380c760dabc60d8a80dcd48527af5aedbeee2",
+   "bytes": 54848
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_mag0.6.mesh.f32",
+   "sha256": "891150b69f255ab37c839ecd9fd7329f4d61124e1cb744371bd9fbf906e85226",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_mag0.6.json",
+   "sha256": "0d2e1d85afd12d279a437d40f6b6e75d3fd1e40ef8f858a9e2f30a93a34d7827",
+   "bytes": 54864
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_mag0.6.mesh.f32",
+   "sha256": "1144707640a6055fd2aee7c07648011fa1bd7da14166547df3a1b57c61420f69",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_mag0.6.json",
+   "sha256": "0aab9d06965ca5cdf8bc7cab1b1bdcb8e807ceca3257420ce8ca220431223744",
+   "bytes": 54845
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_mag0.6.mesh.f32",
+   "sha256": "86897fe036034a86d4536cffb0f5a4402b8c3b3ec34b6de5723b401e812a72e4",
+   "bytes": 3145728
+  }
+ ]
+}

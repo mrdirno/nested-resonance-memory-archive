@@ -1,0 +1,35 @@
+{
+ "schema": "halo-sgsweep-manifest/1",
+ "files": [
+  {
+   "file": "spinchladni_sg0.3_gl0_seed16180_n4194304_e24_fieldExp1.7.json",
+   "sha256": "dbe7e38c55c4cdfc8d18278b41d1d83754a5015cdfeb737a79b7965d5652e0e8",
+   "bytes": 54591
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed16180_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "1f72fc9c276a3fc6ef8d46799a012c4af6c664767e934201a9a1cef86a05e238",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed2718_n4194304_e24_fieldExp1.7.json",
+   "sha256": "f481d0d707ca9a52b7df3c519b78e6cb26969af8d2f46c9216c76063706a957c",
+   "bytes": 54661
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed2718_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "6edacb4d239016c2e455f12f71b0b52c069c8c45c6b1c7f346ede83d462c758c",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed57721_n4194304_e24_fieldExp1.7.json",
+   "sha256": "ddb3362f9f9d91bfe0a5860dbfcb60a28bda11d9e6661bfad5d16eb82c8e7feb",
+   "bytes": 54451
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed57721_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "2c5089d6b31d58c3d848f9542137839e5215ae5edf3e27f475f705cfd6844251",
+   "bytes": 3145728
+  }
+ ]
+}

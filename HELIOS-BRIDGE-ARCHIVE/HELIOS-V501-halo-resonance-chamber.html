@@ -10445,6 +10445,73 @@ each its own two-triple generation screened for staticness before scoring, measu
 beat 10, falsifier that no non-static move clears 12? Carried forward, unchanged: whether it
 then becomes measurable at the condition level; the 48-epoch half stays dead under the frozen
 scorer ([3,24], no flag, patching banned). Nothing about nested resonance memory is decided here.
+
+RING 25 · 2026-09-18 · the seed lock ring 24 named is not a law of a moving field: a single-coordinate
+drive cut zeros E3 in every run of two triples, turning the ten-epoch near-miss into the first non-static
+MEASURABLE condition in the record -- but the own-relic detection does not survive the second triple
+WHAT WAS MEASURED. Ring 24 named the ceiling of spinchladni sg0.3 gl0 exactly -- E3, a cross-seed seed
+lock, refusing 8-10 of 22 epochs because the three seeds' relic templates are near-identical -- and asked
+which single-coordinate move lowers E3 while A3 stays < 0.99. Two moves were generated on the SAME pinned
+instrument (every run recorded test-page hash 46405b3d, git rev d67ddd16; the page's sim_digest is
+40bfdb68): the drive cut as TWO triples (six runs, grid seeds 777/12345/31337 and transcendental-digit
+seeds 2718/16180/57721) and the magnetism raise as ONE triple (grid seeds, three runs), nine runs in all,
+4,194,304 particles, 24 epochs, frozen scorer sha 7619ef6b unmodified, staticness screen unmodified. The
+force sums a drive amp*fscale*field (amp = 10^fieldExp) and a magnetism term mag*30*cross(v,B); each move
+touches one coordinate, read back off the page. Written up in analysis/2026-09-18_drivecut_breaks_seedlock.md.
+THE NUMBERS. Halving the drive (fieldExp 2 -> 1.7, amplitude 100 -> 50) sends E3 to 0 of 22 in EVERY one
+of the six runs, both triples. Triple 1 clears 19, 17, 17 eligible epochs (all three measurable); triple 2
+clears 13, 12, 10 (two measurable). Five of six runs clear the 12-epoch floor and five of six are
+measurable, all non-static (A3 0.043-0.136, below the 0.99 line and LOWER than base's 0.16-0.21). The
+independent raw cross-seed correlation of the final field falls from base's 0.43-0.79 to about zero
+(-0.013 to 0.145): the seeds decorrelate. Ring 22's standing invariant -- 0 of 81 recorded runs both
+measurable and non-static -- is inverted; here five of six are.
+WHY IT WORKS, AND WHY MAGNETISM BACK-FIRES. The drive is a fixed spatial pattern every seed feels
+identically; the scorer's own synthetic model notes a shared drive holds the templates' cross-correlation
+near 0.8, just inside E3. The base drive imprints past 0.9 (E3 fails); halving it lets each seed's own
+initial structure dominate the relic, so the templates separate. The opposite move proves it: mag 0.4 ->
+0.6 collapses eligibility to 0/1/0, drives E3 to 21-22, and correlates the three seeds at 0.996-0.998 --
+because at 0.6 the Lorentz term saturates the force cap (clamp share ~52% vs ~7%), and a clamped force is
+the cap's fixed geometry, the SAME for every seed, so they synchronise. The lock is loosened by LESS
+shared forcing, not more; the right direction keeps A3 lower than base, a field that moves more freely.
+THE HONEST LIMIT: MEASURABLE IS NOT REMEMBERED. Own-relic detection (S >= 0.02, p < 0.05) fires in 2 of 3
+triple-1 runs (S = 0.042, 0.035, just above the 0.02 line) and in 0 of 3 triple-2 runs (S = 0.015,
+-0.011, the sign even flips). Against the scorer's ~5-7% chance-detection family, two of six is above
+chance but NOT reproduced across seed sets. The drive cut delivers the precondition the programme never
+had -- a non-static measurable field -- but the memory signal is at or near the noise floor and
+seed-dependent. NO memory positive is claimed. The two triples' eligibility gap (19/17/17 vs 13/12/10) is
+an E2 participation effect of the seed set (E2 fails 2-5 vs 8-12), not a difference in the lock (E3 = 0 in both).
+BANNED: calling this a memory result (detection is 2/3 then 0/3, not reproduced). Calling the grid verdict
+a failure -- "insufficient support" here is not a falsifier firing but the cascade: qualified needs F5,
+which needs >= 3 measurable CONDITIONS (memory_estimator_qualify.py:827), and F3 needs >= 6 measurable
+runs, unreachable from one condition; F1, F2 and F4 all pass. Pooling with the grid or pilot (different
+instruments). Patching the frozen scorer or protocol. Reading the near-miss's disappearance as luck.
+DEAD BRANCHES: (1) "the seed lock is fundamental to a moving field" -- refuted, a single coordinate zeros
+E3 in six of six while A3 stays 0.04-0.14. (2) "more force separates the seeds" -- refuted, adding
+magnetism synchronised them to 0.996. (3) "E3 = 0 is a degeneracy read as passing" -- refuted, the
+independent raw cross-seed correlation is ~0 and the eligible epochs pass E1 (mass) and E2
+(participation), carrying real structure. (4) "the drive cut froze the field like ring 21" -- refuted, A3
+is lower than base and the field moves more. (5) "this is a memory positive" -- refuted by its own second triple.
+KILL-TEST: the pipeline was validated by reproducing ring 24's committed triple 1 exactly (10/10/9, E3
+8-10, A3 0.16-0.21) before any new data; the instrument pin was checked three ways (test-page hash
+constant across all nine runs, sim_digest 40bfdb68 on the working tree, single-coordinate override read
+back per run); E3 = 0 was corroborated by an independent raw cross-seed correlation, a different code path
+from the scorer's template E3; the verdict cascade was read from the scorer source. Two independent agents
+re-derived the per-run numbers (zero mismatched cells across the nine runs) and audited the write-up
+against the committed JSON (no memory claim, the F5:827 citation and the sole-author line confirmed); the
+audit caught one run-count slip -- twelve for nine, the magnetism arm being one triple not two -- fixed
+before ship. A physics-vocabulary content classifier (bio) blocked the larger automated panel, so the
+checks that ran are mechanical reads of committed outputs. One author, no AI trailer, no pooling, no memory claim.
+THE NON-OBVIOUS CHOICE: ring 24 listed self-gravity first; the mechanism -- a SHARED drive imprints the
+shared template -- pointed at the drive instead, and the magnetism arm was run as the branch that would
+prove the mechanism by contradiction, which it did, synchronising the seeds. The finding is read as a
+mechanism (the lock is the drive's strength), not as a near-miss finally beaten.
+OPEN QUESTIONS: this ring earns three. (1) Is the detection real but under-sampled or at the noise floor
+-- more triples of fieldExp 1.7 and the per-run S against the shuffled floor would settle it. (2) A drive
+SWEEP (fieldExp 1.6 / 1.7 / 1.8, three measurable conditions in one scoring) could make F3 recovery
+evaluable and, for the first time, let the frozen protocol return something other than "insufficient
+support". (3) Is 1.7 near a threshold -- does a gentler cut (1.85) also zero E3, and does the lock return
+smoothly as the drive is restored (a dose-response)? Carried: the E2 participation seed-dependence;
+measurability at the condition level. Nothing about nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
