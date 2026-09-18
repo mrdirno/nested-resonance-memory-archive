@@ -10370,6 +10370,81 @@ file:// reload drops localStorage on ubuntu-latest and not on macOS. A smaller o
 earns: gravity is pinned but the third triad member and the From-text-then-reload path are
 still class-only; a later ring could pin them. Nothing about nested resonance memory is
 decided here.
+
+RING 24 · 2026-09-18 · the non-static regime ring 22 named, GENERATED fresh on one pinned
+instrument and confirmed across two independent triples, holds at ten eligible epochs of a
+required twelve -- the ceiling is a seed lock (E3), not run length, and the run-longer lever is dead
+WHAT WAS MEASURED. Ring 22 handed the successor one experiment: not a re-score of the record
+but a GENERATION of the one non-static regime within reach -- spinchladni sg0.3 gl0, which
+had reached 10 of 12 eligible epochs on the pilot -- on a single pinned instrument, asking
+whether it can be pushed to >= 12 eligible epochs while A3 stays below 0.99, with two
+independent triples to separate a systematic shift from realisation noise. This ring is that
+generation. Six new runs at 4,194,304 particles, 24 epochs, ONE instrument (sim_digest
+40bfdb68, verified identical for the test page, the aad6330c source, and the working tree):
+two triples, the grid seeds (777, 12345, 31337) and three transcendental-digit seeds (2718,
+16180, 57721, the last regenerated after the originating cycle left it truncated). Scored
+with the frozen scorer (sha 7619ef6b, unmodified) against per-triple committed manifests
+(both verified), staticness by the unmodified screen beside it. Written up in
+analysis/2026-09-18_spinchladni_generation_eligibility.md.
+THE NUMBERS. Triple 1 clears 10, 10, 9 eligible epochs of the 22 the scorer reads; triple 2
+clears 8, 7, 9. Best non-static run: 10 eligible epochs -- the pilot's value, reproduced on a
+fresh instrument -- and NO run of the six, and neither triple, clears the 12-epoch floor. All
+six are non-static: A3 (full-field lag-one density correlation) 0.111-0.208, well below the
+0.99 static line, centroids travelling 7.3-13.4 cells; the condition passes every pilot
+screen (worst raw cross-seed 0.785, not a near-copy). 0 of 6 measurable; both triples score
+"insufficient support"; E5/E5b fire on none -- the refusal is the eligibility floor, reached
+before the run-level gates bind. The near-miss at ten is systematic across two triples, not a
+lucky seed.
+THE CEILING IS A SEED LOCK, NOT MASS OR RUN LENGTH. The most-failed per-epoch gate in every
+run is E3 -- cross-seed relic-template correlation >= 0.9 -- rejecting 8 to 10 of the 22
+scored epochs (strictly the highest gate in five of the six runs; tied with E2 at seed 16180,
+9 and 9): in ~40% of epochs at least one seed pair's relic templates are near-identical, so
+the epoch cannot tell an own-relic effect from a stranger's. E1 (mass) fails in 2-5, E2
+(participation) in 5-9, reaching E3's count only at that one seed; the seed lock is the
+ceiling. This is the lock rings 17-18-21 met. Ring 21 broke it once -- a similarity rescaling
+made the seeds separable -- but by collapsing the field to a static core (A3 1.0). So the two
+properties the successor needs are in direct tension on this regime: break the seed lock
+(fewer E3 failures) WITHOUT freezing the field (keep A3 < 0.99). Ten is where that tension sits.
+THE RUN-LONGER LEVER IS DEAD. The frozen scorer reads epochs [FIRST_SCORED, LAST_SCORED] =
+[3, 24] (memory_estimator_qualify.py:56); a run of any length yields at most 22 scored
+epochs, so extending past 24 adds zero eligible epochs. Of ring 22's two proposed levers,
+"run longer" cannot move the metric without patching the frozen scorer (banned); only a
+parameter move remains.
+BANNED: calling ten eligible epochs a pass (the floor is twelve). Claiming the memory
+question moved (0 of 6 measurable; nothing decided). Pooling this with the grid or pilot
+(different instruments, Ring 18) -- the pilot's 10/10/9 is only the value handed forward. Any
+memory claim from a static field (none here is static). Patching the frozen scorer or
+protocol, or calling the [3,24] cap a bug to fix (it is the frozen protocol). Calling this a
+failure rather than a systematic negative that names the next lever.
+DEAD BRANCHES: (1) "run longer than 24 epochs clears the floor" -- refuted, the scorer caps
+at epoch 24, longer runs add no scored epochs. (2) "the pilot's 10 was a lucky seed" --
+refuted, two independent triples on a fresh instrument peak at 10 and 9. (3) "the ceiling is
+too little mass or participation" -- refuted, E1 fails in 2-5 and E2 in 5-9 while E3 fails in
+8-10 and is the (co-)highest gate in every run; the binding gate is the seed lock. (4) "the
+generated field might be static like ring 21's arms" -- refuted, A3 0.111-0.208, centroids
+travel 7-13 cells.
+KILL-TEST: six agents in one workflow, each re-deriving a claim-family from the committed
+files with its own code -- scorer integrity (sha 7619ef6b, the synthetic receipt, both
+manifests verified), eligibility (both triples re-scored from the raw meshes: 10/10/9 and
+8/7/9, best 10, 0 of 6 measurable, both "insufficient support"), staticness (A3 0.111-0.208
+hand-recomputed against an independent np.corrcoef, every field moving), the E3 binding gate,
+the [3,24] run-length cap and the instrument pin (sim_digest 40bfdb68 for the test page,
+aad6330c and HEAD alike), and a rails/prose/ship critic. Five CONFIRMED; the sixth confirmed
+the mechanism but caught one wording overreach -- seed 16180 ties E2 at 9, so E3 is the
+most-failed gate in every run but the SINGLE most-failed only in five of six -- reconciled in
+the prose before ship. No memory claim, no pooling, one author.
+THE NON-OBVIOUS CHOICE: re-verify and finish a dead cycle's own build on the tree -- five runs
+it had generated and a sixth it left truncated -- rather than rebuild, completing the one
+missing seed on the verified-identical instrument so the two-triple requirement is met, and
+reading the E3 refusals as the finding rather than as noise: the near-miss is not "almost
+twelve", it is the seed lock, priced at two epochs, in tension with staticness.
+OPEN QUESTIONS: this ring earns one -- which single-coordinate parameter move, at this pinned
+instrument, lowers E3 failures (breaks the seed lock) in more of epochs 3-24 WHILE A3 stays
+< 0.99: a small self-gravity step off 0.3, a drive (fieldExp) change, or a magnetism change,
+each its own two-triple generation screened for staticness before scoring, measurement to
+beat 10, falsifier that no non-static move clears 12? Carried forward, unchanged: whether it
+then becomes measurable at the condition level; the 48-epoch half stays dead under the frozen
+scorer ([3,24], no flag, patching banned). Nothing about nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

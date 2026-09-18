@@ -1,0 +1,391 @@
+{
+ "schema": "halo-memory-pilot-staticness/1",
+ "author": "Aldrin Payopay",
+ "thresholds": {
+  "A1": 0.99,
+  "A2": 0.9,
+  "A3_full": 0.99,
+  "A3_resid": 0.7,
+  "A4": 0.5,
+  "A5": 0.01
+ },
+ "runs": [
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 12345,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.15870997620628524,
+   "self_full_min": -0.02722915220207385,
+   "self_resid_median": 0.122621990783644,
+   "self_resid_min": -0.00990875012495039,
+   "centroid_first": [
+    16.42252244544087,
+    15.607770018171227,
+    14.923103637617823
+   ],
+   "centroid_last": [
+    15.942074339322701,
+    25.833683436978088,
+    14.029693473548786
+   ],
+   "centroid_travel": 10.276104191417515,
+   "static": false,
+   "clamp_share_median": 0.083984375
+  },
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed16180_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 16180,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.1107802437550629,
+   "self_full_min": -0.026511073312343036,
+   "self_resid_median": 0.06794467697728888,
+   "self_resid_min": -0.025464598498454553,
+   "centroid_first": [
+    15.637095320638831,
+    12.383469176131452,
+    17.975286586394112
+   ],
+   "centroid_last": [
+    15.356340898992988,
+    23.136495087448612,
+    15.270114754338868
+   ],
+   "centroid_travel": 11.091633961489942,
+   "static": false,
+   "clamp_share_median": 0.0693359375
+  },
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed2718_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 2718,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.11345414092060306,
+   "self_full_min": -0.009899109752652728,
+   "self_resid_median": 0.1138490506972717,
+   "self_resid_min": 0.00022063691205793823,
+   "centroid_first": [
+    14.728502508539206,
+    17.73409573432781,
+    12.838752140220787
+   ],
+   "centroid_last": [
+    13.976468537346017,
+    5.029419005528339,
+    16.955617813753157
+   ],
+   "centroid_travel": 13.376208313682788,
+   "static": false,
+   "clamp_share_median": 0.076416015625
+  },
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 31337,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.19205726558064737,
+   "self_full_min": -0.023031798030763585,
+   "self_resid_median": 0.17340414855653696,
+   "self_resid_min": -0.01278728335526316,
+   "centroid_first": [
+    14.916487697040454,
+    14.211316491205276,
+    16.598190600330884
+   ],
+   "centroid_last": [
+    14.492389863982291,
+    22.5359197862674,
+    15.737001880443978
+   ],
+   "centroid_travel": 8.37976879176414,
+   "static": false,
+   "clamp_share_median": 0.05029296875
+  },
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed57721_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 57721,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.1991965754442318,
+   "self_full_min": -0.026261968749660605,
+   "self_resid_median": 0.18267572988623737,
+   "self_resid_min": -0.00613444029291176,
+   "centroid_first": [
+    15.628195123201634,
+    16.494841933413923,
+    13.631305269940034
+   ],
+   "centroid_last": [
+    16.18175097779988,
+    7.419987737461465,
+    15.59968238818828
+   ],
+   "centroid_travel": 9.302360519868019,
+   "static": false,
+   "clamp_share_median": 0.0654296875
+  },
+  {
+   "tag": "spinchladni_sg0.3_gl0_seed777_n4194304_e24",
+   "condition": "spinchladni_sg0.3_gl0",
+   "seed": 777,
+   "particles": 4194304,
+   "epoch_len": 10.0,
+   "epochs": 24,
+   "self_full_median": 0.20772955976421287,
+   "self_full_min": -0.026122699011227768,
+   "self_resid_median": 0.20483135665289753,
+   "self_resid_min": -0.0068335170143251165,
+   "centroid_first": [
+    16.439447879323723,
+    16.164210998331683,
+    14.908993891141055
+   ],
+   "centroid_last": [
+    15.131988370963818,
+    23.28584061917532,
+    15.764919387195095
+   ],
+   "centroid_travel": 7.2910676363118165,
+   "static": false,
+   "clamp_share_median": 0.07275390625
+  }
+ ],
+ "cross_seed_pairs": [
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    777,
+    2718
+   ],
+   "corr_shift0": 0.005514130533776486,
+   "corr_best": 0.005514130533776486,
+   "best_shift": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    777,
+    12345
+   ],
+   "corr_shift0": 0.43083795849557077,
+   "corr_best": 0.5845456304721237,
+   "best_shift": [
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    777,
+    16180
+   ],
+   "corr_shift0": 0.7854137404294286,
+   "corr_best": 0.7854137404294286,
+   "best_shift": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    777,
+    31337
+   ],
+   "corr_shift0": 0.13341631229818518,
+   "corr_best": 0.1561509906128804,
+   "best_shift": [
+    1,
+    0,
+    1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    777,
+    57721
+   ],
+   "corr_shift0": 0.006640541746038349,
+   "corr_best": 0.02243003315221015,
+   "best_shift": [
+    1,
+    1,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    2718,
+    12345
+   ],
+   "corr_shift0": -0.0025102377390567904,
+   "corr_best": -0.0020195943745019733,
+   "best_shift": [
+    1,
+    0,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    2718,
+    16180
+   ],
+   "corr_shift0": 0.004488047659365016,
+   "corr_best": 0.004488047659365016,
+   "best_shift": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    2718,
+    31337
+   ],
+   "corr_shift0": 0.002547500404249558,
+   "corr_best": 0.002647888998007872,
+   "best_shift": [
+    0,
+    -1,
+    1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    2718,
+    57721
+   ],
+   "corr_shift0": 0.36614869137821826,
+   "corr_best": 0.4456215408451496,
+   "best_shift": [
+    -1,
+    1,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    12345,
+    16180
+   ],
+   "corr_shift0": 0.4376209608024693,
+   "corr_best": 0.5466635279849265,
+   "best_shift": [
+    0,
+    -1,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    12345,
+    31337
+   ],
+   "corr_shift0": 0.10365012173712869,
+   "corr_best": 0.19178881946051113,
+   "best_shift": [
+    1,
+    0,
+    1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    12345,
+    57721
+   ],
+   "corr_shift0": 0.0006317504536642155,
+   "corr_best": 0.003785229977554787,
+   "best_shift": [
+    1,
+    1,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    16180,
+    31337
+   ],
+   "corr_shift0": 0.1029206645215037,
+   "corr_best": 0.14099085451433938,
+   "best_shift": [
+    1,
+    0,
+    1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    16180,
+    57721
+   ],
+   "corr_shift0": 0.00738485762036929,
+   "corr_best": 0.026518794835455443,
+   "best_shift": [
+    1,
+    1,
+    -1
+   ]
+  },
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "seeds": [
+    31337,
+    57721
+   ],
+   "corr_shift0": 0.011738624020753126,
+   "corr_best": 0.015398807337787816,
+   "best_shift": [
+    1,
+    1,
+    0
+   ]
+  }
+ ],
+ "screens": [
+  {
+   "condition": "spinchladni_sg0.3_gl0",
+   "A1_worst_raw_cross_seed": 0.7854137404294286,
+   "A2_tmpl_median": 0.682622034591688,
+   "A2_tstruct_median": 0.682655888045618,
+   "A3_self_full_max": 0.20772955976421287,
+   "A3_self_resid_max": 0.20483135665289753,
+   "A4_clamp_share_median": 0.071044921875,
+   "A5_noise_share_median": 6.745688150994631e-05,
+   "struck_by": [],
+   "passes_screens": true
+  }
+ ],
+ "static_conditions": []
+}
