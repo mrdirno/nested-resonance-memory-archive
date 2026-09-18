@@ -10319,6 +10319,57 @@ ring's to answer: the 48-epoch half still unavailable (FIRST_SCORED, LAST_SCORED
 no flag); from ring 20 the two camera coverage gaps (reload-and-restore, click gravity by
 name); why a file:// reload drops localStorage on ubuntu-latest and not on macOS. Nothing
 about nested resonance memory is decided here.
+
+RING 23 · 2026-09-18 · the two camera instances ring 20 left "covered by class, not pinned
+by instance" are pinned, and the reload survival the page had only claimed is measured: a
+preserved framing round-trips a reload exactly, and gravity by name holds it too
+WHAT WAS MEASURED. Ring 20 closed the wholesale-reset class (four sites, the applyPreset
+chokepoint) and earned one honest gap: its regression test drove the no-camera preserve by
+CLASS -- base 'default' via borisvseuler, base 'chladni' via dimer -- but never clicked
+gravity by name and never reloaded to verify a preserved framing restores; "a later ring
+could pin both." This is that ring. It is NOT the memory-science generation ring 22 earned
+(spinchladni sg0.3 gl0); that belongs to an open ledger round and is untouched here.
+cam_preset_test.js goes from 13 to 16 assertions. (6) The `gravity` lab button, clicked BY
+NAME -- the field-off, energy-audit arm of the base-'default' triad -- keeps the viewer in
+control (cam.user stays true) and holds the framing (az/el/dist within 0.02/0.02/1 of the
+pre-click view). (7) A preserved framing SURVIVES a reload: flushState persists state.cam
+into localStorage as the user's while cam.user is true, and the next boot restores it --
+{az 1.111, el 0.222, dist 47, user true} comes back to within 1e-3. That reload survival is
+the page's own claim in ring 20's block ("a preserved framing now SURVIVES reload"); it was
+asserted, never pinned. Now it is measured.
+THE SEED CHANGE. To observe restore at all, the test's localStorage seed became CONDITIONAL
+(only-if-absent, the cam_check idiom) so a persisted cam is not clobbered on reload; the
+never-orbited guard (8) now drops the user flag and reseeds no-cam BEFORE its reload,
+because the page's own pagehide flush would otherwise re-save the still-user:true cam during
+the reload's unload. The guard still boots cam.user=false and still refuses false
+preservation -- verified below, not assumed.
+KILL-TEST: two isolated page mutations, each on a throwaway rc-test copy beside the vendored
+assets, never the shipped page. (A) Break the no-camera preserve -- the else branch that
+restores keepCam -- so it drops the user flag: borisvseuler, dimer, From-text AND gravity
+all fail (4 of 16), so the gravity pin is bound to the real invariant, not a constant. (B)
+Force the restored cam.user false on load: EXACTLY the reload-restore assertion fails (1 of
+16), save-half and every preserve check still pass, so the round-trip pin is bound to the
+boot-restore path alone. Full release gate green afterward (six HALO tests, cam_preset 10.2s).
+Four agents re-derived the change from the tree (gap real, teeth on all three sites, prose
+exact); the page instrument digest is unmoved by this comment-only ring (sim_digest
+40bfdb68, tick_digest f887b63f; only the whole-file sha256 moves).
+BANNED: calling this a page fix (no page CODE changed -- only the test and this ring; the
+deploy renders identically). Calling the reload survival a NEW behavior (it was already
+true; this ring measures it). Calling it a new-file/gate hazard (ring 20's trap) -- the test
+is already tracked and already named in release_gate.js, so it lands in one commit with no
+gate line to co-land. Any claim about nested resonance memory (untouched).
+THE NON-OBVIOUS CHOICE: pin the two INSTANCES ring 20 named rather than open the memory
+generation the ledger round owns -- a non-competing coverage close, mutation-verified, is a
+real measured number this cycle where competing would not be. And read the seed as the thing
+that had HIDDEN the reload survival: the original unconditional seed wiped the cam on every
+reload, so the round-trip could never have been seen without the change.
+OPEN QUESTIONS: this ring closes ring 20's two carried-forward camera gaps (both pinned by
+instance, both mutation-verified). Carried forward, unchanged and NOT this ring's to answer:
+the memory-science generation at spinchladni sg0.3 gl0 (an open ledger round owns it); why a
+file:// reload drops localStorage on ubuntu-latest and not on macOS. A smaller one this ring
+earns: gravity is pinned but the third triad member and the From-text-then-reload path are
+still class-only; a later ring could pin them. Nothing about nested resonance memory is
+decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

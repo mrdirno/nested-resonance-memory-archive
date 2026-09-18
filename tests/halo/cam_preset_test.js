@@ -25,6 +25,15 @@
  * state.cam only tracks the live camera inside flushState() and only while cam.user is
  * true, so a pagehide event is dispatched to force that sync deterministically wherever a
  * flown-to camera must be read back -- no reliance on the debounced saveCamSoon timer.
+ *
+ * Ring 23 pins the two instances Ring 20 left "covered by class, not pinned by instance"
+ * for a later ring: (6) the `gravity` lab button BY NAME -- the field-off, energy-audit arm
+ * of the base-'default' triad, covered by class via borisvseuler (same base) but never
+ * clicked -- must itself preserve the viewer framing; and (7) a RELOAD-AND-RESTORE round
+ * trip -- a preserved (cam.user) framing is persisted by flushState and comes back on the
+ * next boot. The seed is now conditional (only-if-absent, the cam_check idiom) so a
+ * persisted cam survives a reload instead of being clobbered; the never-orbited guard (8)
+ * resets storage to the no-cam seed before its reload so it still boots a fresh page.
  */
 const { chromium } = require('playwright');
 const path = require('path');
@@ -39,7 +48,7 @@ const near = (a, b, tol) => typeof a === 'number' && typeof b === 'number' && Ma
   const errs = [];
   page.on('pageerror', e => errs.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errs.push(m.text()); });
-  await page.addInitScript(() => { try { localStorage.setItem('resonance-chamber-v2', JSON.stringify({ particles: 65536, quality: 0.5 })); } catch (e) {} });
+  await page.addInitScript(() => { try { if (!localStorage.getItem('resonance-chamber-v2')) localStorage.setItem('resonance-chamber-v2', JSON.stringify({ particles: 65536, quality: 0.5 })); } catch (e) {} });
   await page.goto('file://' + path.resolve(__dirname, 'rc-test.html'));
   await page.waitForSelector('.boot.done', { timeout: 90000 });
   await page.waitForTimeout(600);
@@ -118,10 +127,42 @@ const near = (a, b, tol) => typeof a === 'number' && typeof b === 'number' && Ma
   check('the disc lab button still flies to its scenario camera, not the viewer’s previous one',
     a5.user === true && near(a5.az, 0.6, 0.05) && near(a5.dist, 34, 1), JSON.stringify(a5));
 
-  // ---- direction 6 (guard): a viewer who never took the camera must NOT be falsely preserved ----
-  // Reload fresh: seeded state has no cam, so boot leaves cam.user=false (auto-fit). Clicking a
-  // no-cam lab button before any orbit must leave user=false, not pin an auto-fit sentinel as "the user's".
-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+  // ---- direction 6 (pin by instance): the `gravity` lab button, BY NAME. It is the field-off,
+  //      energy-audit arm of the base-'default' triad; direction 1 drives that base via borisvseuler,
+  //      so gravity is covered by CLASS but never clicked. Pin it: clicking gravity must itself keep
+  //      the viewer framing, so stepping between the triad's members stays under one comparison frame. ----
+  const bG = await setViewer(0.42, -0.11, 37);
+  await page.evaluate(() => document.querySelector('[data-exp="gravity"]').click());   // base 'default' -> cam=null
+  await page.waitForTimeout(400);
+  const aG = await camNow();
+  check('gravity (energy audit, field-off arm of base default) preserves the viewer framing by instance (user stays true, az/el/dist held)',
+    aG.user === true && near(aG.az, bG.az, 0.02) && near(aG.el, bG.el, 0.02) && near(aG.dist, bG.dist, 1), JSON.stringify(aG) + ' vs ' + JSON.stringify(bG));
+
+  // ---- direction 7 (round-trip): a PRESERVED viewer framing must survive a reload. flushState
+  //      persists state.cam only while cam.user is true, and the page restores it on boot. Ring 20
+  //      drove the preserve invariant but never reloaded to verify the framing comes back. Conditional
+  //      seeding (above) leaves a persisted cam intact across the reload. ----
+  const bR = await setViewer(1.111, 0.222, 47);
+  const storedR = await page.evaluate(() => { try { return JSON.parse(localStorage.getItem('resonance-chamber-v2')).cam; } catch (e) { return null; } });
+  check('flushState persisted the viewer framing into storage as the user’s (the save half of the round-trip)',
+    !!storedR && storedR.user === true && near(storedR.az, 1.111, 1e-3) && near(storedR.dist, 47, 1e-3), JSON.stringify(storedR));
+  await page.reload();
+  await page.waitForSelector('.boot.done', { timeout: 90000 });
+  await page.waitForTimeout(700);
+  const aR = await camNow();
+  check('after a reload the preserved framing is restored (user stays true, az/el/dist come back)',
+    aR.user === true && near(aR.az, bR.az, 1e-3) && near(aR.el, bR.el, 1e-3) && near(aR.dist, bR.dist, 1e-3), JSON.stringify(aR) + ' vs ' + JSON.stringify(bR));
+
+  // ---- direction 8 (guard): a viewer who never took the camera must NOT be falsely preserved ----
+  // Return to a never-orbited state deterministically. With the conditional seed the init script no
+  // longer clobbers a persisted cam, and the page's own pagehide flush would otherwise re-save the
+  // still-user:true cam during the reload's unload -- so drop the user flag first (flushState saves cam
+  // only when cam.user), THEN seed no-cam storage and reload. A no-cam lab button before any orbit must
+  // then leave user=false, not pin an auto-fit sentinel as "the user's".
+  await page.evaluate(() => {
+    try { window.__probe.state.cam.user = false; } catch (e) {}
+    localStorage.setItem('resonance-chamber-v2', JSON.stringify({ particles: 65536, quality: 0.5 }));
+  });
   await page.reload();
   await page.waitForSelector('.boot.done', { timeout: 90000 });
   await page.waitForTimeout(500);
