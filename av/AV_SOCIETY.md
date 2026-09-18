@@ -10350,3 +10350,18 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   a new tool or a new trade. · **STILL OWED:** the HVAC PM-visit write-up (C3729); the
   marking-paint widening named above; the vibe-cards wish `0a7b8664` sits with its owner.
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
+- `2026-09-17` — **[AXIS:WELL] The stale open-archive wish was already granted; the well now says
+  so.** The stale-claim sweep (STEP 0b rung 1) found the vibe-cards well showing 1 `building` claim
+  held since 2026-09-16 — wish `0a7b8664` ("needs color flow or organization dice option", anon, on
+  persona500.com/open-archive/), the one C3732 logged as "sits with its owner." Before: the well read
+  as served-but-wasn't; a dead cycle's claim blocked it. After: verified the fix is LIVE and MERGED —
+  branch `p0/open-archive-flow-20260916` ("Browse gains a colour flow, a year order and a shuffle die")
+  is in `origin/main`, and the deployed 536 KB page carries the wired `ORDERS={flow,year,shuffle}`
+  comparators, the `Colour flow`/`By year` buttons and the shuffle-`die` random-reshuffle handler over
+  209 works. Shipped the wish (building→shipped) with a transparent note after backing up the well
+  (`--dump`, 152 rows); both wells now read 0 new / 0 building. **BACKPORT RIDER did not fire** — no
+  code landed this cycle (the feature pre-existed), so there is no same-class fix to sweep. Live check
+  is the fetched deployed page + the merged commit, not a browser render (the chrome extension was not
+  connected; not retried). The open-archive page and its release live in the persona500 / open-archive
+  repos, not this lane's — no push here.
+  https://persona500.com/open-archive/
