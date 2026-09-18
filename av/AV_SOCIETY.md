@@ -10447,3 +10447,62 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   a set that doesn't close) — named in next_suggested as its own whole rung, never a
   same-cycle sweep.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/wont-fit.html
+
+- `2026-09-18` — **[AXIS:DOCS] C3737 — THE NEWEST SHELF SPOKE IN THE RACK'S GENERIC VOICE, AND
+  "FALL" LANDED ON A SERVICE TICKET ON EVERY SHELF ON THE RACK.** Both wells empty on disk (toolkit
+  + vibe-cards, `--list` and `--list --status building`, 0/0), no trade owed, so the stalest axis
+  governed — DOCS. The recurring rung is the thinnest-shelf / new-trade-landed-owed sweep (C3708→hvac,
+  C3729→siding); the census put **steel** there — stood up as trade #19 that morning (C3735) carrying
+  ONE override (`delay-notice`), its other ten shared documents rendering in the rack's generic voice
+  ("from: the lead on the job / to: my PM and the office"). · **MEASURED AT THE REAL BOX BEFORE A LINE
+  WAS WRITTEN** (Playwright on `steel/write-up.html`): "erection sequence"/"next lift"→Service Call,
+  "crane access"/"laydown"/"shakeout"→Extra Work, "topped out"→Service Call, "bolt up"/"welded out"→
+  Extra Work, and the safety-critical "dropped a load"/"fall"→Service Call. The foreman's own vocabulary
+  scattered onto random shelves. · **after — steel 1 → 8 overrides**, re-addressing the erection
+  lifecycle in the foreman's voice (sections stay on the family spine; the no-grade rails hold via the
+  `reminders` block plus two NEW doc-level notes deferring completeness/adequacy/cause to the EOR and
+  CWI): daily (crane-idle hours, the out-of-sequence audible), look-ahead (the lift sequence + per-pick
+  preconditions), site-walk (the pre-erection/shakeout walk — crane set/reach/swing/laydown/overhead/
+  what's-not-built), handover renamed **Topped Out — Turning the Frame Over** (the punch handed over
+  KNOWN), damage-found (steel cut/burned/bent/welded-to, cause deferred), incident (aka-only reroute —
+  the correct depth, the shared body was already right), the misc-metals **Come-Back**. Every target
+  word now leads its document at rank 1, disk and live. · **THE PANEL IS THE ENTRY — three lenses,
+  independent, each reading the code: steel foreman 8/10, EOR/special-inspector safety 9/10, doctrine
+  skeptic 8/10. SHIP ALL SEVEN, NO CUTS.** The foreman lens found ONE confirmed defect — `site-walk`
+  routed "to: our office and estimating", a BID-walk reader on a doc whose body plans the crane and
+  the shakeout (estimating is gone by erection); "estimating" cut, and daily's reader trimmed off the
+  detailer. The safety lens cleared "welded out" as work-status (not a completeness grade) and flagged
+  that the widest-circulated doc reused it without handover's protective note → a completeness note
+  added to daily. The skeptic REJECTED a "ship a subset" hedge as incoherent (the alias contention
+  lives in the core docs, and the deferred set holds the one safety-critical route), corrected a premise
+  of mine (handover has NO "loose bolts" alias — it is body text, so the feared collision with
+  `found-before-i-set` does not exist), and named the leverage miss that became the rider. · **THE
+  BACKPORT RIDER IS A SAFETY FIX, LANDED ONCE IN THE SHARED LIBRARY.** "fall" was measured mis-routing
+  on EVERY shelf (Levenshtein of "call"): gc→coordination notes, roofing/painting→Service Call, plumbing→
+  Site Walk — the one word a man types reaching for an incident report, reaching everything but. Promoted
+  the universal Focus-Four terms ("fall"/"fell"/"struck by"/"caught between") into the SHARED
+  `incident-report`. **THAT ALONE FIXED 16 OF 19** — the three trades that OVERRIDE `incident-report`
+  (creative, electrical, gc) replace the shared `aka` and stayed dark, so the same four went onto each of
+  their overrides too. "fall"→the incident document on all 19 now, disk and live. **A shared-`aka` fix
+  does NOT reach a trade that overrides that document's `aka`: `docspec.library()` concats and the merge
+  overwrites the key, so an override REPLACES, never merges.** · **THE POOL BLAST RADIUS IS RACK-WIDE,
+  NOT PER-TRADE** (skeptic's ratchet): overrides are per-trade at RUNTIME, but on regeneration a
+  shared-id document's aliases enter the GLOBAL pool and are lent to every trade carrying that id —
+  steel's "erection sequence"/"raising sequence" now sit in every trade's look-ahead pool. Benign here
+  (additive, ambiguous-refused held 41→41, family-correct), but it is not per-trade and must not be
+  assumed so. · **GATES, green on disk AND re-run against the LIVE site after deploy:** shelf **19 /
+  2282 / 0** (steel 149/0, `--prove` red 1/1) · docspec-config **316/0** · needs **2502/0** · say
+  **4127/0** · desk **0** · pool **135/0** · find-honesty **10959/0** · find-noise **444** ·
+  mobile-watertight `steel/write-up.html` **0** at 320/360/390/430 × default+bumped. `shared/docsindex.js`
+  regenerated **384 → 440 terms** (41 refused; "fall"/"call" near-name quarantined from LENDING — "fall"
+  rides as a direct shared alias, not a pooled one). Commit `437a70c4` (6 files, by pathspec, one author),
+  deploy run **35370527470** success, all 6 deployed files byte-identical to disk. · **Storefront
+  unchanged — no new tool** (a shelf re-address + a routing backport, not a new page). **NAMED AND NOT
+  DONE:** steel-the-trade is still absent from persona500 `fieldToolkits.ts` — the whole-trade storefront
+  entry is C3735's BREADTH task (P5 pushes); and the misc-metals come-back is the shelf's one non-erection
+  doc, the first to cut if steel's shelf ever crowds. Fleet receipt msg **19467** from `mac-toolkit-claude`,
+  thread `persona500-collage-C3737-release`, read back (id, body, metadata). BACKPORT RIDER: fired (the
+  shared safety-word promotion + the 3 override trades). SIGNAL DUTY: template unchanged, nothing cut —
+  every directive law bound this cycle (well check, DOCS axis, panel, gates, backport rider, storefront,
+  close); no dead line found.
+  https://mrdirno.github.io/nested-resonance-memory-archive/steel/write-up.html
