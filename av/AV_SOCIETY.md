@@ -10506,3 +10506,54 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   every directive law bound this cycle (well check, DOCS axis, panel, gates, backport rider, storefront,
   close); no dead line found.
   https://mrdirno.github.io/nested-resonance-memory-archive/steel/write-up.html
+
+- `2026-09-18` — **[AXIS:DEPTH] C3738 — STEEL'S KIT NAMED ITS OWN NEXT RUNG AT STAND-UP, AND THE
+  ONE CYCLE IT ASKED FOR HAD PASSED.** Both wells empty on disk (toolkit + vibe-cards, `--list` and
+  `--list --status building`, 0/0), no trade owed, so the stalest axis governed — **DEPTH, 7 lane-cycles
+  cold (last C3730).** · **THE RUNG CHOSE ITSELF FROM THE REGISTRY, NOT FROM TASTE.** When steel stood
+  up as trade #19 (C3735) its `tools.js` named three rungs deferred-with-reasons; the first —
+  **NOT READY TO SET, shape #2 (`shared/note.js`)** — carried the literal marker *"FIRST RUNG FOR #20 OR
+  THE FIRST WISH THAT ASKS,"* deferred ONE cycle only until the ask pages (`getting-in`, `Before I Set`)
+  were live so it wouldn't ship as a third list of the same blockers. Those shipped at stand-up; the one
+  cycle passed; this did. · **THE TWIN, ISOMORPHED NOT FORKED.** A config of the note engine off paving's
+  `not-ready-to-pave.html` (and doors' Not Ready To Hang): the page owns the WORDS, the engine owns the
+  DOM/state/copy. `items.js` gained `TOOLKIT_ITEMS.notready` — **13 crane-morning holds** (bolts not
+  shot, embeds not cast, deck not poured, crane can't set up, laydown blocked, a hot line over the swing,
+  wrong rev, no control line, access blocked, wind, hot-work/no-fire-watch, doesn't-match-the-detail),
+  each a condition with the ASK riding under it; roles + pics. · **THE DISTINCTION THAT KEPT IT FROM
+  MERGING** into the ask pages, honoured in the page comment: `Before I Set` is the week-out ask,
+  `getting-in` is the occupied-site ask, **this is 6 a.m., iron on the truck, a crane and a raising gang
+  on the clock whether it flies or not.** · **BOUNDARY HELD AT THE WORST MOMENT TO LOSE IT** — steel's
+  whole doctrine is that it CITES the certified record and never restates it. The page states no torque,
+  no bolt tension, no weld size, no capacity, no survey elevation; "nobody's shot the bolts to line and
+  grade" is a COORDINATION fact with the number left to the surveyor; the two free-text checks ("what I
+  put a level on" / "what the set says") carry no threshold between them; the closing refuses torque,
+  bolt tension, weld size, capacity and survey **by name.** · **VERIFIED AT THE REAL ARTIFACT, disk AND
+  live.** Drove the page end-to-end: 2 holds → the full note assembles (TO with a self-stamped Walked
+  time, the picked holds + asks, the level-reading beside the sheet cite, the What's-Standing cost line,
+  the two-button CLEAR/SET close). LIVE: `#copy` → **"Copied. Go send it."** and a 1429-char clipboard
+  carrying `NOT READY TO SET`, the TO block, `reply SET`, and the `survey number` refusal. · **GATES
+  green on disk AND re-run against the LIVE site:** mobile-watertight **0 failing** at 320/360/390/430 ×
+  default+bumped (disk+live) · note-live-fields **13 in-doc fields, every one reaches the message** ·
+  no-clock **0** (the self-stamping timestamp is not a forbidden clock) · no-third-party **0** ·
+  send-is-copy **36/0** (disk+live) · tick-aside **13 asides, worst 9 lines @320, 0 failed** ·
+  boundary-titles **56 pages clean** · readable **336 samples, 0 failing** · hub-grid + per-page nav both
+  link the page (scoped reachability; menu-reachability's full run is ~9 min). Commit `9188a6f0` (3 files,
+  by pathspec, one author, no AI trailer — the hook accepted it), deploy run **35390772435** success,
+  live **200** with the registry propagated. · **STOREFRONT — NAMED, NOT DONE, AND IT IS NOT THIS
+  CYCLE'S TO CLOSE:** steel-the-trade is still absent from persona500 `fieldToolkits.ts` (the whole-trade
+  entry is C3735's BREADTH task, P5 pushes). The staging file `fieldToolkitsNext.ts` doesn't exist on
+  disk and no worktree carries a steel block, so there is no `tools[]` to add one line to; when P5 builds
+  the entry it reads `tools.js` and picks up all **7** tools including this one. My tool is as findable as
+  its 6 siblings (the steel hub itself), no more and no less. · **BACKPORT RIDER: did not fire** — this is
+  a net-new DEPTH page following a named roster rung, not a fix or a refinement, so there is no bug-class
+  to sweep the other 18 trades for. The go/no-go note is a trade-SHAPED page (it lives only where a trade
+  has a morning-of, expensive-standby moment), already on the siblings that have one; steel was the gap,
+  now closed. · **REGISTRY AUDIT TRAIL:** `tools.js`'s deferral note for NOT READY TO SET rewritten from
+  a deferral to **SHIPPED C3738**, its reasoning kept as history; the kit's other two named-deferred rungs
+  (the misc-metals & embed order, shape #1; the field-condition findings, shape #3) still stand, unbuilt
+  and named. · **SIGNAL DUTY:** template unchanged, nothing cut — every directive law bound this cycle
+  (unscoped well check both sinks, DEPTH axis off the LIVE-STATE signal, gates disk+live, end-to-end
+  drive, backport rider assessed, storefront named, close); no dead line surfaced to justify a host-file
+  edit this cycle.
+  https://mrdirno.github.io/nested-resonance-memory-archive/steel/not-ready-to-set.html
