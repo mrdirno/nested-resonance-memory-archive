@@ -134,7 +134,7 @@ window.TRADE_DOCS = {
         "proceed under direction",
         "set it anyway"
       ],
-      "family": "directive",
+      "family": "notice",
       "from": "the foreman who was told to keep going",
       "to": "our PM and the GC super, on the record",
       "why": "The record that you raised it, named the condition, and were directed to set anyway — dated, before your steel covered it. It is the backup a change request or a claim is built on later.",
