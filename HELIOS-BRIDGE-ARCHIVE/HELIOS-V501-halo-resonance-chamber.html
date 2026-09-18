@@ -10224,6 +10224,97 @@ seed of six); none here is. Still open and unchanged: the 48-epoch half (FIRST_S
 LAST_SCORED = 3, 24, no flag); why a file:// reload drops localStorage on ubuntu-latest and not
 macOS; and, from ring 20, the two camera coverage gaps (reload-and-restore, click gravity by
 name). Nothing about nested resonance memory is decided here.
+
+RING 22 · 2026-09-17 · every eligibility-clearing run on the sealed 60-run grid is static,
+and no non-static run in the whole 81-run record reaches the 12-epoch floor -- the nearest
+is a spinning chamber at 10 of 12 -- so a staticness gate cannot be validated on the record
+WHAT WAS MEASURED. Ring 21 closed the drive-cut axis and handed the successor one
+requirement: not another grid under the frozen protocol but a protocol that GATES
+STATICNESS (A3) before it scores, because the frozen scorer calls a static collapsed field
+measurable through its monopole-removed residual. Ring 21 established that on the six
+similarity arms it scored; it did not ask the prior question of the whole record. This ring
+asks it, from committed sha-sealed outputs across the two recorded sets the programme has --
+the 60-run pre-registered grid (2026-09-06) and the 21-run measurability pilot (2026-09-07),
+81 runs, 27 conditions: has any recorded run ever been both MEASURABLE and NON-STATIC, and
+does anything non-static even reach the scorer's 12-epoch eligibility floor? Written up in
+analysis/2026-09-17_corpus_staticness_vs_eligibility.md; no gitignored mesh is trusted for
+the grid, and the pilot's is byte-verified against a committed manifest before it is read.
+THE NUMBERS, RE-VERIFIED. GRID (one instrument, sha-sealed): six of sixty runs clear the
+12-epoch floor -- default sg0.3 gl0 at 19/17/17 eligible, default sg0.5 gl0 at 15/15/15 --
+and ALL SIX ARE STATIC, per-run A3 0.99995-0.99999 by the >= 0.99 rule. Zero of the 48
+non-static runs clears the floor; the nearest a moving field comes is 8 (spinchladni sg0.5
+gl0, mean A3 0.107). The static/moving split is threshold-robust: the four static default
+gl0 conditions sit at mean A3 >= 0.99997 and the highest-A3 moving condition is default
+sg0.3 gl0.5 at 0.974, with nothing in (0.974, 0.99997). PILOT (a different behavioural
+class -- Ring 18, csv rows-28 vs the grid's rows-22): the coupling INVERTS. The single
+most-eligible condition is MOVING -- spinchladni sg0.3 gl0 at 10/10/9 eligible, mean A3
+0.19 -- while the only static arm, goldstair (A3 1.0000), gets ZERO. CORPUS INVARIANT: zero
+of 81 runs is both measurable and non-static, and zero non-static run anywhere clears the
+floor; the two moving fields that come closest are both a spinning chamber at moderate
+self-gravity, 10 of 12 (pilot) and 8 of 12 (grid), both un-measurable.
+THE MECHANISM IS A SHARED CAUSE, NOT A LAW. On the default preset the field collapses under
+self-gravity to a compact core. That collapse is what produces a persistent, separable
+relic -- what the scorer counts as an eligible epoch -- and it is the same collapse that
+freezes the field, driving A3 to 1. Eligibility and staticness are coupled on the grid
+because both are downstream of collapse: the scorer rewards a persistent relic, and the
+cheapest way to make one is to stop moving. That it inverts on the pilot's moving fields
+proves it is a property of the grid's collapsing instrument, not of the estimator. The two
+halves are on different instruments (Ring 18) and are NOT pooled; the invariant holds in
+each set separately, so no pooled statistic is smuggled in.
+THE CONSEQUENCE FOR THE SUCCESSOR. A staticness gate CANNOT be validated by screening the
+recorded grid: applied to it, the gate removes exactly the six runs within reach of
+measurable and leaves the eligible set EMPTY. The successor's non-static-and-measurable
+condition does not exist on disk and must be GENERATED, not selected. But it is not a
+phantom -- a moving field has already reached 10 of the 12 eligible epochs the floor needs.
+The concrete first experiment is whether spinchladni sg0.3 gl0 (spinning, moderate
+self-gravity, no gain/loss) can be pushed to sustain >= 12 eligible epochs -- longer runs
+or a small parameter move -- WHILE A3 STAYS BELOW 0.99, and whether it then becomes
+measurable at the condition level, on one pinned instrument.
+BANNED: calling "0 of 81 both measurable and non-static" a memory result -- measurability
+is 0 everywhere, so the conjunction is vacuous on the measurable side; it is the shape Ring
+21 named as a positive, and the record contains no instance. Calling a staticness gate
+validated by this screen (it empties the grid's eligible set). Pooling the grid and pilot
+(different instruments, Ring 18). Selecting the successor's condition from the record (none
+qualifies). Patching the frozen scorer or protocol (untouched, sha 7619ef6b). Claiming the
+memory question moved.
+DEAD BRANCHES: (1) "select a non-static measurable run from the record" -- refuted, 0 of
+81; the closest non-static is 10 of 12 eligible epochs, un-measurable. (2) "validate the
+staticness gate by re-screening the recorded grid" -- refuted, it leaves nothing eligible.
+(3) "the nearest non-static field is hopeless" -- refuted, spinchladni sg0.3 gl0 reaches 10
+of 12 on the pilot. (4) "grid static-implies-eligible is a law of the estimator" --
+refuted, it inverts on the pilot where the most-eligible field moves. (5) "the six
+floor-clearers' staticness is threshold-sensitive" -- refuted, a clean empty gap in
+(0.974, 0.99997).
+KILL-TEST: six agents in one workflow, each re-deriving a claim-family from the committed
+files with its own code -- grid staticness, grid eligibility, pilot byte-verify plus an
+unmodified re-run of the staticness screen, corpus invariants with the sha seals and the
+A3<->eligibility join, a shippability skeptic and a completeness critic -- beside an
+independent ground-truth recomputation. All six CONFIRMED; the pilot's 42 files byte-verify
+42/42 against the committed manifest; every grid, pilot and corpus number reproduced, the
+join is 60<->60 exact, and the seals hold (qualification.json 5ed4a4a0, scorer 7619ef6b).
+The critics earned their keep on the note, not the numbers: they caught that the two A3
+columns used different aggregations (grid mean, pilot max) and that "the next condition
+down" omitted two static conditions -- both fixed before ship (pilot A3 harmonised to the
+per-seed mean, the gap reworded), and the Ring-18 instrument-split source added to the
+note's file list. The skeptic named the artifact's weakest link -- the pilot meshes are
+gitignored, so pilot A3 rests on a byte-verified re-run, not on a committed number -- and
+confirmed it is disclosed as such.
+THE NON-OBVIOUS CHOICE: verify and ship a corpus re-analysis of the EXISTING sealed data
+rather than run a new grid. The record already answers "does a non-static measurable run
+exist?" (no) and names the one non-static regime within reach, so a rebuild would add
+nothing this cycle; a dead cycle's finding on the tree, re-verified, is worth more than a
+rebuild. And report it as a NEGATIVE that sharpens the successor's requirement and hands it
+a concrete non-static starting point, not as failure.
+OPEN QUESTIONS: this ring earns one -- can spinchladni sg0.3 gl0 (moving, already 10 of 12
+eligible) be pushed to sustain >= 12 eligible epochs while A3 stays < 0.99, and does it then
+become measurable at the condition level, under a protocol that gates staticness before it
+scores? That is the successor's first generation, at a named starting point on one pinned
+instrument, and it needs at least two independent triples at fixed instrument (Ring 18) to
+separate a systematic shift from realisation noise. Carried forward, unchanged and NOT this
+ring's to answer: the 48-epoch half still unavailable (FIRST_SCORED, LAST_SCORED = 3, 24,
+no flag); from ring 20 the two camera coverage gaps (reload-and-restore, click gravity by
+name); why a file:// reload drops localStorage on ubuntu-latest and not on macOS. Nothing
+about nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
