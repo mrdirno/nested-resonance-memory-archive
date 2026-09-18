@@ -10365,3 +10365,46 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   connected; not retried). The open-archive page and its release live in the persona500 / open-archive
   repos, not this lane's — no push here.
   https://persona500.com/open-archive/
+- `2026-09-18` — **[AXIS:BREADTH] C3735 — STEEL IS TRADE #19, AND THE FIRST NOMINEE THE
+  RACK KILLED FOUR TIMES AND THEN SEATED — BY CHANGING THE QUESTION, NOT THE ANSWER.**
+  Both wells empty (toolkit + vibe-cards, 0 new / 0 building, swept `--list --status
+  building` in both) and no trade owed, so BREADTH was the stalest axis (8 lane-cycles).
+  The roster's standing method nominated STEEL / MISC METALS over CEILINGS / ACT for #19;
+  a three-lens panel (field hand · doctrine · boundary), scoring independently off the
+  repo, disposed UNANIMOUSLY for steel — 82·90·85 against ceilings' 54·35·44 — and TWO
+  lenses VETOED ceilings on the never-overturned irreversibility kill (`concrete/trade.js`:
+  "a wall can be cut, A CEILING CAN BE PULLED"). Steel's only standing kill — its bolt-up
+  log, weld map, WPS and mill cert ARE the IBC ch.17 special-inspection record — is cleared
+  not by contesting it but by re-hearing steel against a DIFFERENT document class: not what
+  steel CERTIFIES, but what steel SENDS. The demand is the strongest ever recorded on the
+  rack, verified by grep at stand-up: FIVE receiver chips (electrical, plumbing, hvac,
+  masonry, concrete) and NINE asks routed AT steel (embeds/weld clips, loose lintels,
+  anchor bolts, roof openings, dunnage, hanger steel, roof-drain openings,
+  embeds/templates/pre-pour, elevated deck) — and no `steel/` on the rack for any of them
+  to land on. Scoped to EMBEDS & MISC-METALS coordination per the C3681 two-receiver
+  caution; the raising gang's crane-day coordination rides as a getting-in section, never
+  a silent merge. Before → after: 18 trades → 19, and the five kits that route asks at
+  steel now have a trade that can answer them, hold a WHERE and set a GATE. Shipped six
+  tools — **Before the Deck Pours** (PINNED leave-out ledger, the new document class: one
+  row per embed/clip/sleeve/opening/anchor/dunnage before the pour, whose·where·gate·status,
+  an observation never a verdict) · **Before I Set** (the outbound ask, boundary page) ·
+  **Walk Back** (return leg; the fourth rung is steel's own — "It's the detail," an ask
+  pointed at the approved set, wired into `reconcile.js` VERDICTS with "well set it" as [0]
+  because you SET steel, you don't hit it) · **Getting In** (crane/laydown/hot-work access,
+  every permitted activity handed back) · **Write-Up Setup** (docspec: three steel docs —
+  what the field didn't match, found-before-I-set, directed-to-set — plus a crane-day
+  delay override, guarded against torque/weld/tension/capacity/grade/tolerance/cause) ·
+  **Total Package**. Accent #B4C9CF, a galvanized-zinc blue-grey, dE2000 13.2 to its
+  nearest chip (above the rack's own tightest shipped pair, 7.9). NAMED UNBUILT: the
+  not-ready-to-set go/no-go, the misc-metals & embed order (shape #1), the field-findings
+  row log — each a decision, not an oversight. Joined all five lists (`shared/toolkit.js`
+  TRADES, `deploy_bridge.yml` paths + TRADES, `commons.js` COMMONS_TRADES, the HALO
+  site-root Tools panel, the `docsindex` rebuild); commons got 8 gear / 8 tips / 8 names
+  written for steel, and the 17 shared rows were re-decided at rv:19 — five widened onto
+  steel (the drill/driver, the magnetic torpedo level, shoot-before-cover,
+  check-the-revision, check-the-crate-when-it-lands) and twelve left off on purpose (the
+  NCVT, the jab saw and the wood augers are not in an ironworker's bag). **BACKPORT RIDER
+  fired:** the commons rv re-stamp IS the backport — every shared bag/tip/name row swept
+  for whether it works in a steel hand's context, the same class of sweep C3725 built the
+  gate for. Gates green on disk and against a local server before push.
+  https://mrdirno.github.io/nested-resonance-memory-archive/steel/

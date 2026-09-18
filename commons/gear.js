@@ -59,7 +59,7 @@ window.COMMONS_GEAR = [
      flooring and creative were proposed and cut — concrete's levelling and
      mixing are a screed and a straightedge it already carries, and a mixing
      paddle is not the clutch-and-side-handle story this line tells. */
-  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors", "siding"], rv: 18,
+  { id: "drill-driver", n: "Cordless drill/driver", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors", "siding", "steel"], rv: 19,
     w: "Use the clutch and the side handle — a bit that catches will twist your wrist." },
   /* REVIEWED AND LEFT WHERE IT IS, 2026-09-09. The why-line is the reason: it
      says "nobody remembers your wiring", which is an installer's sentence and
@@ -77,7 +77,7 @@ window.COMMONS_GEAR = [
      that is bowed between the hinges. A wall bowed between studs is the same argument.
      His level is the four-footer under the starter strip and the story pole, and both
      are on his own list. */
-  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
+  { id: "torpedo-level", n: "Torpedo level", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "steel"], rv: 19,
     w: "Nobody remembers your wiring. Everybody sees a crooked mount." },
   { id: "headlamp", n: "Headlamp", t: ["universal"],
     w: "Panels, ceilings, crawlspaces. Hands stay on the work instead of holding light." },
@@ -96,7 +96,7 @@ window.COMMONS_GEAR = [
      sheathing or inside a meter base. What he actually does is not touch it and put it
      on the list to the EC, which is a line in his own kit rather than a tester in his
      pouch. */
-  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
+  { id: "ncvt", n: "Non-contact voltage tester", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 19,
     w: "Lights up beside an energized conductor. First pass only — it never proves dead." },
   { id: "dikes", n: "Diagonal cutters (dikes)", t: ["universal"],
     w: "Every install ends in trimming zip ties. Don't do it with a knife." },
@@ -110,9 +110,9 @@ window.COMMONS_GEAR = [
     w: "Label both ends of every run. Unlabeled cable becomes somebody's whole afternoon." },
 
   /* ---- shared: more than one trade reaches for it, so it is ONE row ----- */
-  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"], rv: 18,
+  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"], rv: 19,
     w: "Cuts an access hole in drywall anywhere. No power, no cord." },
-  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"], rv: 18,
+  { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"], rv: 19,
     w: "Somebody has to put the hole through the stud. Usually you." },
   { id: "glow-rods", n: "Glow rods (fish sticks)", t: ["av", "low-voltage", "electrical"],
     w: "Pushes a string above the grid so you lift two tiles instead of ten." },
@@ -695,5 +695,22 @@ window.COMMONS_GEAR = [
   { id: "siding-holesaws-and-drill", n: "Hole saws in a case, and the right-angle drill that spins them", t: ["siding"],
     w: "Every wall has somebody else's fitting coming through it and the difference between a clean collar and a patch is one clean hole. Keep the saws in the case with the arbors and the pilot bits actually in it, because a hole saw with no arbor is a paperweight at the top of a jack. The right-angle drill is for the ones that land under an eave or beside a corner post where a straight drill will not sit square. Cut them before you close, from a list you wrote down — never on somebody's word at the tailgate." },
   { id: "siding-magnet-and-broom", n: "A rolling magnet and a stiff broom — end of every day, not end of the job", t: ["siding"],
-    w: "Tear-off drops nails, and a nail in the driveway of the house you are working on is the one thing that turns a good job into a bad customer. Roll it at the end of every day while you can still see, not on Friday: the ones you leave overnight get driven onto. It is also the cheapest thing on this list that a homeowner notices and mentions to the neighbour who is thinking about a re-side." }
+    w: "Tear-off drops nails, and a nail in the driveway of the house you are working on is the one thing that turns a good job into a bad customer. Roll it at the end of every day while you can still see, not on Friday: the ones you leave overnight get driven onto. It is also the cheapest thing on this list that a homeowner notices and mentions to the neighbour who is thinking about a re-side." },
+  /* ---- steel & misc metals (trade #19) --------------------------------- */
+  { id: "spud-wrench", n: "Spud wrench", t: ["steel"],
+    w: "Taper end lines the holes, box end runs the nut. The one you never lend out." },
+  { id: "connecting-bars", n: "Connecting bars — sleever and bull pin", t: ["steel"],
+    w: "Draws two members fair so the bolt starts. A hole that won't line up is a bar, not a bigger hammer." },
+  { id: "drift-pins", n: "Drift pins", t: ["steel"],
+    w: "Knock the holes fair so the bolt walks through. A fistful in the bag, one to a hole." },
+  { id: "impact-wrench-steel", n: "Cordless impact wrench", t: ["steel"],
+    w: "Runs the bolts up so your arm lasts the shift. The spud finishes what it starts." },
+  { id: "welding-lid-leathers", n: "Welding hood and leathers", t: ["steel"],
+    w: "You weld out clips and seats all day; the lid and the sleeves are on before the rod is." },
+  { id: "soapstone-keel", n: "Soapstone and a keel crayon", t: ["steel"],
+    w: "Marks steel a pencil won't — keel for the layout, soapstone rides the cut line into the sparks." },
+  { id: "mag-drill", n: "Magnetic drill", t: ["steel"],
+    w: "Sticks to the beam and bores clean where a hand drill walks. For the field hole the detail forgot." },
+  { id: "plumb-bob-string", n: "Plumb bob and a string line", t: ["steel"],
+    w: "Two columns and a string say the bay is in line before the crane ever lets go." }
 ];

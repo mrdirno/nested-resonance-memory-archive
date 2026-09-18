@@ -120,7 +120,18 @@
     // away is a decision about the wall and about money, and it belongs to the
     // framer, the GC and the owner together. Not a refusal, not a commitment:
     // an ask pointed at the substrate.
-    "its the wall": "ask"
+    "its the wall": "ask",
+    // steel/items.js — the walk-back rungs. [1] "already in" and [2] "not mine"
+    // are shared with creative and flooring; [0] and [3] are steel's own. [0] is
+    // "well set it" and not "well hit it" because you SET steel, you don't hit it.
+    // [3] is the rung this trade needed: on a steel walk a large share of what
+    // gets flagged is not a miss but how the connection is DETAILED on the
+    // approved set — a plate, a bolt pattern, an embed dimension the stamped
+    // drawing gives — and field-modifying engineered steel is a marked-up sheet
+    // back through the detailer and the engineer, never a fix on a walk. [0] is
+    // the promise with a date; [3] is an ask pointed at the set.
+    "well set it": "yes",
+    "its the detail": "ask"
   };
 
   /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score

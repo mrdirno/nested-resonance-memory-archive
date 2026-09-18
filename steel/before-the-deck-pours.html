@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Before the Deck Pours — Steel &amp; Misc Metals Field Toolkit</title>
+<meta name="description" content="One row per leave-out somebody else needs in your steel before the deck closes over it — whose it is, which column line, whether it's on the drawing, set, set-and-tied, not coming, or already poured over, and the gate it has to beat. Sent to the super and every outfit on it while it's still a clip. No torque, no weld size, no capacity, no verdict that a connection holds: what you were told and what you saw. Grouped by grid, TSV for the office.">
+<meta name="apple-mobile-web-app-title" content="Before the Deck Pours">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Steel &middot; the frame &rarr; everybody whose work lands in it, before the deck closes</span>
+    <h1 id="title">Before the Deck Pours</h1>
+    <p class="lede" id="lede">Five kits on this rack route a list at you &mdash; embeds and weld clips, loose lintels and angle, a roof opening, a dunnage stand, steel for a hanger, anchor bolts and templates. Every one of them lands in your iron or your deck, and the deck pours once. After it&rsquo;s screwed off and the pour goes green, a clip nobody welded is a field weld an inspector has to sign, and an opening nobody framed is a core bit through cured concrete &mdash; and it reads on the job like your steel held them up. So walk the deck before it closes and put a row on every leave-out somebody else needs in it: whose it is, what it is, which column line, whether it&rsquo;s on the drawing, set, set and tied, not coming, or already covered, and the gate it has to beat. Send it to each outfit while it&rsquo;s still a clip.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>What you were told and what you saw, not a certification.</b> Every row is a leave-out <i>somebody else</i> needs in <i>your</i> steel, in your words, off your own walk and the approved set named at the top. This page carries no torque, no weld size or map, no bolt tension, no material grade, no capacity and no embed tolerance &mdash; the shop drawing and the engineer own all of that, and it cites the sheet, never restates it. &ldquo;Set and tied in&rdquo; means you stood at it and looked, and you have the photograph; it is never a call that the weld is good, the bolt is tight or the connection holds &mdash; that is the special inspector&rsquo;s, and nothing here is his record. It&rsquo;s an ask to close out what has to be in the iron before the deck covers it: not an RFI, not a change order, and it doesn&rsquo;t authorize anybody to do extra work. <b>Double-check it before you send it</b>, because a leave-out nobody walked is a saw cut somebody pays for.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every copy</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / area</label><input type="text" id="hJob" placeholder="Building C — level 2 steel" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">What you walked it off</label><input type="text" id="hOff" placeholder="S-401 rev 2, erection E-3, and what each outfit told me" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name — your outfit" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="the one they ring from the deck" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">Name the set and its revision, and put a name on every row. A weld clip counted against what the electrician told you Tuesday is one he confirms from his truck this afternoon; the same clip described from memory is a phone call after the pour. And whatever somebody told you at the gang box, put it in a row with their name on it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Each leave-out in the iron</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Name the spot once &mdash; it becomes a button and it carries. The grid line and the gate carry to the next row too, because you walk one bay at a time. Leave anything blank you didn&rsquo;t see: an empty field is honest and a guessed one is not.</p>
+  </section>
+
+  <section class="card">
+    <h2>The walk of the deck</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="face" class="on">Grid / area</button>
+        <button type="button" data-g="whose">Whose it is</button>
+        <button type="button" data-g="gate">The gate it has to beat</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0"><b>Tap a row</b> as it moves: blank is walked, then <b>Sent</b> when it went to whoever owns it, then <b>Answered</b> when they came back on it, then <b>Set &mdash; I saw it in</b> when you stood there and looked at it. The pencil opens a row to fix a line, add a note, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Copy it <span class="why">&mdash; the block that goes to each outfit at its gate</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open">Not answered yet</button>
+        <button type="button" data-f="notin">Only the ones not set yet</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The spreadsheet copy is every row with a tab between the columns &mdash; it is what the super wants beside his own list, and it is also your backup: this lives in this browser on this phone, so copy it somewhere the day it matters.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole walk</button></div>
+  </section>
+
+  <p class="credit">Built for the Steel &amp; Misc Metals Field Toolkit. Something that lands in the iron and isn&rsquo;t on the list? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Steel &amp; Misc Metals Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* BEFORE THE DECK POURS — a CONFIG on shape #3 (shared/rowlog.js): no CSS here,
+ * no DOM building, no state, no persistence, no document assembly. The engine
+ * owns all of it. This file owns the WORDS.
+ *
+ * WHY "WHAT YOU FOUND" IS ITS OWN FIELD AND NOT A NOTE. It is the single fact
+ * that decides whether a row is a reminder or a problem, and it is the one
+ * people leave out of the text they send. "On the drawing" is a job for
+ * somebody this week; "set, not tied in" is a job for somebody today AND a
+ * question about who welds it out; "poured over — found it after" is a saw cut
+ * that has already happened and a row that exists so nobody has to remember it
+ * in a change-order meeting.
+ *
+ * AND IT IS AN OBSERVATION, NEVER AN ASSESSMENT. "Set and tied in" says a man
+ * stood at it and looked. It does not say the weld is good, the bolt is tight,
+ * the embed is in tolerance or the connection holds — that is refusal 1 and
+ * refusal 5 in trade.js, and those are the special inspector's and the
+ * engineer's calls. There is no field on this page shaped to hold that verdict,
+ * which is the only way a refusal survives contact with a man in a hurry.
+ *
+ * WHY THE GATE IS A GATE AND NOT A DATE. A date slips and then everybody argues
+ * about which date it was. Nobody argues about when the deck got screwed off or
+ * when the pour went green. The gates are the crew's own words for the moments
+ * this iron stops being open, in the order they happen.
+ *
+ * WHAT IT REFUSES, and the reason the refusal sits in a data file rather than
+ * in a person's discipline: no torque, no weld size, no bolt tension, no
+ * capacity, no material grade, no embed tolerance. This page has no field
+ * shaped to hold one.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var T = window.TOOLKIT_ITEMS.leaveout;
+  var KEY = "toolkit.steel.beforethedeckpours.v1";
+
+  var SENT = T.sent;              /* ["Sent","Answered","Set — I saw it in"] — blank = walked */
+  var DONE = SENT[SENT.length - 1];
+  var MARKED = T.states[0];       /* "On the drawing — nothing set yet" */
+
+  function joinDots(p) { return p.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(p) { return p.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function isOpen(v) { return SENT.indexOf(v.sent) < 1; }
+  function notIn(v) {
+    var s = String(v.state || "").trim();
+    return s === "" || s === MARKED;
+  }
+  function rowsNow() { return rl ? rl.rows() : []; }
+
+  function applyFilters() {
+    var s = $("#segScope").querySelector("button.on");
+    var f = (s && s.getAttribute("data-f")) ? [s.getAttribute("data-f")] : [];
+    rl.setFilter(f);
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    /* The job header persists WITH the walk. Without this a reload — the camera
+       app, a phone call across the deck — brings the rows back under a document
+       with no job, no set and no From line, and the man copies it out that way
+       (§SCARS, trade #17's field drive). */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+    },
+    noun: "leave-out", nounPlural: "leave-outs", groupNoun: "area", groupNounPlural: "areas",
+    ungroupedLabel: "not said",
+    emptyText: "Nothing walked yet. Put in the first leave-out somebody needs in the iron — where it is off the grid, whose it is, and what it is.",
+
+    statusKey: "sent", statusOrder: SENT, statusDone: DONE,
+
+    groupOptions: [
+      { key: "face", label: "Grid / area" },
+      { key: "whose", label: "Whose it is" },
+      { key: "gate", label: "The gate it has to beat" }
+    ],
+
+    groupSort: function (a, b, key) {
+      if (key === "gate") {
+        var ia = T.gates.indexOf(a), ib = T.gates.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      }
+      if (key === "whose") {
+        var wa = T.whose.indexOf(a), wb = T.whose.indexOf(b);
+        return (wa < 0 ? 99 : wa) - (wb < 0 ? 99 : wb);
+      }
+      if (key === "face") {
+        var fa = T.faces.indexOf(a), fb = T.faces.indexOf(b);
+        return (fa < 0 ? 99 : fa) - (fb < 0 ? 99 : fb);
+      }
+      return 0;
+    },
+
+    filters: [
+      { v: "open", label: "not answered yet",
+        emptyText: "Every leave-out on here has come back answered. Good — now be standing there when they set it.",
+        test: function (v) { return isOpen(v); } },
+      { v: "notin", label: "only the ones not set yet",
+        emptyText: "Everything on this list is set and tied in. That is the walk done right, and it is worth saying so in the message.",
+        test: function (v) { return notIn(v); } }
+    ],
+
+    fields: [
+      { key: "mark", label: "Where it is — off the grid", input: "learn", lead: true, required: true, sticky: false,
+        placeholder: "at column C-5, top of steel — then it's a button",
+        emptyHint: "Your name for the spot, off a line everybody shares — a column, a grid line, a beam. It becomes a button, and it is how you and the man who owns the leave-out point at the same place on a deck with nothing set yet." },
+      { key: "face", label: "Grid / column line", input: "chips", sticky: true },
+      { key: "whose", label: "Whose it is", input: "chips" },
+      { key: "what", label: "What it is", input: "chips" },
+      { key: "told", label: "Who told you, and when", input: "learn",
+        placeholder: "Ana, mechanical — Tuesday at the gang box — then it's a button",
+        emptyHint: "The name and the day. A leave-out with a name on it is one he can confirm this afternoon; one from memory is an argument after the pour." },
+      { key: "state", label: "What you found", input: "chips" },
+      { key: "ask", label: "What you need decided", input: "chips" },
+      { key: "gate", label: "The gate it has to beat", input: "chips", sticky: true },
+      { key: "sent", label: "Where it stands", input: "select",
+        placeholder: "— walked; tap the row as it moves" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the outfit that owns it needs that the fields don't hold — the sheet it's detailed on, what it's for, who else wants that spot" }
+    ],
+
+    optionsFor: function (key) {
+      if (key === "whose") return T.whose;
+      if (key === "what") return T.whats;
+      if (key === "face") return T.faces;
+      if (key === "state") return T.states;
+      if (key === "ask") return T.asks;
+      if (key === "gate") return T.gates;
+      if (key === "sent") return SENT;
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.mark, v.what]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.face, v.whose, v.told, v.state, v.ask, v.gate, v.note]); },
+
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var out = [joinDash([job, "what has to be in the iron before the deck pours", c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Walked off: " + off);
+      out.push("");
+
+      var src = rowsNow().filter(function (r) {
+        if (c.filters.indexOf("open") > -1 && !isOpen(r.values)) return false;
+        if (c.filters.indexOf("notin") > -1 && !notIn(r.values)) return false;
+        return true;
+      }).map(function (r) { return r.values; });
+
+      var fc = {}, nn = 0;
+      src.forEach(function (v) {
+        var a = String(v.face || "").trim(); if (a) fc[a] = 1;
+        if (notIn(v)) nn++;
+      });
+      var n = Object.keys(fc).length;
+      var line = c.shown + (c.shown === 1 ? " leave-out" : " leave-outs");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+      line += " · " + n + (n === 1 ? " area" : " areas");
+      if (nn) line += " · " + nn + " not set yet";
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    docRow: function (v) {
+      var g = rl ? rl.group() : "face";
+      var head = joinDots([v.mark, g === "face" ? null : v.face, v.what]);
+      var tail = [];
+      if (g !== "whose" && v.whose) tail.push(v.whose.toLowerCase());
+      if (v.told) tail.push("told by " + v.told);
+      if (v.state) tail.push(v.state.toLowerCase());
+      if (v.ask) tail.push(v.ask);
+      if (g !== "gate" && v.gate) tail.push(v.gate.toLowerCase());
+      /* As written, never lowercased: the top rung is "Set — I saw it in", and a
+         lowercase "i" is the one thing on the line the receiver notices. */
+      if (v.sent) tail.push(String(v.sent));
+      if (v.note) tail.push(v.note);
+      return joinDash([head, joinDots(tail)]);
+    },
+
+    docFoot: function () {
+      var out = [];
+      out.push("Everything above is what I've been told has to be in this iron before the deck pours and what I saw with my own eyes, in my words, off my own walk and the set named at the top. Nothing here is a torque, a weld size, a bolt tension, a capacity or a material grade — the shop drawing and the engineer own all of that. Where a row says it's set and tied in, that means I stood at it and looked, and I have the photograph; it is not a call that the weld is good, the bolt is tight or the connection holds, and none of that is mine to make.");
+      out.push("This is an ask to close out what has to be in the steel before the deck covers it. It's not an RFI and not a change order, and it doesn't authorize anybody to do extra work.");
+      out.push("If something has to go in that isn't on this list, tell me today and I'll walk the deck with you. After it's screwed off and the pour goes green it's a core bit through cured concrete and a field weld somebody has to sign — and on the job it reads like my steel held you up.");
+      return out.join("\n");
+    }
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+
+  /* TWO TAPS TO WIPE, never one — this walk is the only record of what was
+     supposed to be in the iron before the deck closed, and once it's poured the
+     deck doesn't tell you. */
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (sel) { $(sel).value = ""; });
+    rl.clearAll();
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  /* RESTORE IS NOT OPTIONAL AND IT RUNS LAST (§SCARS). */
+  rl.restore();
+  applyFilters();
+})();
+</script>
+</body>
+</html>

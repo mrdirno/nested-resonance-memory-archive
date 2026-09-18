@@ -73,7 +73,7 @@ window.COMMONS_TIPS = [
      other trade needs the same PRINCIPLE in its own irreversibility (sleeves
      before the pour, frames with the wall, deep before shallow, pave toward
      your way out), which is four new rows, not four new tags. Named, not done. */
-  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 18,
+  { id: "big-equipment-before-walls", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing"], rv: 19,
     n: "Get the big stuff in before the last opening closes.",
     w: "Racks, tubs, gear sections and units don't fit through a finished door, and cutting the wall back open is somebody's change order." },
   /* + doors ONLY, 2026-09-09, and the interesting half is the eight that were
@@ -92,7 +92,7 @@ window.COMMONS_TIPS = [
      the BARE wall and photograph it lying there. C3725 refused this row to the six
      trades that already own a sharper one, because widening it demotes a good line to
      a duplicate of a worse one. Same call, one trade later. */
-  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors"], rv: 18,
+  { id: "shoot-before-cover", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing", "doors", "steel"], rv: 19,
     n: "Shoot your work before it gets covered.",
     w: "Months later your phone is the only proof of what's behind the rock." },
   { id: "existing-damage", t: ["universal"],
@@ -137,7 +137,7 @@ window.COMMONS_TIPS = [
      the only thing that makes the tag mean anything. Sixteen tags is one short
      of the back door, deliberately. */
   { id: "check-the-revision", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "gc", "framing", "roofing",
-        "concrete", "masonry", "sitework", "flooring", "painting", "doors", "landscape", "paving", "siding"], rv: 18,
+        "concrete", "masonry", "sitework", "flooring", "painting", "doors", "landscape", "paving", "siding", "steel"], rv: 19,
     n: "Check the revision, not just the sheet number.",
     w: "Work built off a superseded drawing comes back out, and nobody reimburses that." },
   { id: "number-off-the-print", t: ["universal"],
@@ -145,7 +145,7 @@ window.COMMONS_TIPS = [
     w: "The dimension you carried over from the last job is the one that gets ripped back out." },
 
   /* ---- AV ---------------------------------------------------------------- */
-  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"], rv: 18,
+  { id: "fixture-cutsheet", t: ["plumbing", "electrical", "hvac", "av"], rv: 19,
     n: "Rough to the approved submittal, not the design drawing.",
     w: "The plan draws a generic unit; the one that got approved moves your rough, and you find out at trim." },
   { id: "fiber-cable-direction", t: ["av"],
@@ -160,7 +160,7 @@ window.COMMONS_TIPS = [
   { id: "outline-the-display", t: ["av"],
     n: "Spray your display outline on the wall before anybody roughs it.",
     w: "Otherwise the stat, the strobe and the quad all land inside the panel footprint." },
-  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"], rv: 18,
+  { id: "save-the-program", t: ["av", "low-voltage", "hvac", "electrical"], rv: 19,
     n: "Pull a backup of every program before you roll off.",
     w: "When that controller dies in year two, the only copy anywhere is the one you saved." },
   { id: "train-the-booker", t: ["av"],
@@ -208,24 +208,24 @@ window.COMMONS_TIPS = [
   { id: "naming-scheme-in-writing", t: ["low-voltage", "av"],
     n: "Get the naming scheme in writing before you print a label.",
     w: "The owner's IT has their own, and re-labelling a finished building is a week nobody's paying for." },
-  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"], rv: 18,
+  { id: "hvac-plate-going-up", t: ["hvac", "plumbing", "electrical", "av", "low-voltage"], rv: 19,
     n: "Shoot the data plate the first time you're at the equipment.",
     w: "The office needs model and serial to quote anything, and nobody makes that trip twice for a photo." },
-  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage", "siding"], rv: 18,
+  { id: "gear-crate-day-it-lands", t: ["electrical", "plumbing", "hvac", "av", "low-voltage", "siding", "steel"], rv: 19,
     n: "Open the crate the day it lands and check it against the submittal.",
     w: "Wrong parts and freight damage found a month later are yours, and the replacement runs the original lead time again." },
-  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 18,
+  { id: "ring-depth-vs-finish", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 19,
     n: "Ask what the finish is before you set your rough-in depth.",
     w: "Tile, furring or a second layer of board buries your rough, and trim day turns into a hunt for extensions." },
-  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"], rv: 18,
+  { id: "measure-the-gear-route", t: ["electrical", "av", "low-voltage", "hvac", "plumbing"], rv: 19,
     n: "Measure the route the gear comes in on, not just the room.",
     w: "A section that clears the room but not the stairwell turns into a rigger and a hole in a wall." },
-  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 18,
+  { id: "plate-before-the-rockers", t: ["electrical", "low-voltage", "plumbing", "av"], rv: 19,
     n: "Get your nail plates on before the rockers reach that wall, not on your next trip through.",
     w: "The screw goes through your homerun or your PEX on a day you're not there, and it turns up at trim in a painted wall." },
 
   /* ---- plumbing ---------------------------------------------------------- */
-  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"], rv: 18,
+  { id: "reinspection-is-a-week", t: ["gc", "electrical", "plumbing", "hvac", "low-voltage", "roofing"], rv: 19,
     n: "Treat a reinspection as a lost week, not a lost hour.",
     w: "You go back on the end of his list, and every trade stacked behind you sits." },
   { id: "count-test-plugs", t: ["plumbing"],
@@ -864,5 +864,30 @@ window.COMMONS_TIPS = [
     w: "The callback is a year away and it is one board. With an offcut you match it in a morning; without one you are holding a phone up to a wall in the sun trying to describe a colour to a counter man. Write the house and the date on the back with a marker. It is also the fastest way to answer the neighbour who wants the same thing." },
   { id: "the-year-is-the-owners-to-state", t: ["siding"],
     n: "On an old house, get the year in writing from the owner — and never say what is on the wall.",
-    w: "You tear the outside off buildings for a living and some of them are old enough that what is on them is a testing question with a certified outfit attached to it. That call is not yours, it is not a look-and-see, and guessing it out loud in a text is the single most expensive sentence in this trade. Write down the year the owner gave you and who gave it, ask who holds the testing, and stand the crew down until somebody answers. Nobody has ever been sued for asking." }
+    w: "You tear the outside off buildings for a living and some of them are old enough that what is on them is a testing question with a certified outfit attached to it. That call is not yours, it is not a look-and-see, and guessing it out loud in a text is the single most expensive sentence in this trade. Write down the year the owner gave you and who gave it, ask who holds the testing, and stand the crew down until somebody answers. Nobody has ever been sued for asking." },
+  /* ---- steel & misc metals (trade #19) --------------------------------- */
+  { id: "shake-before-you-unhook", t: ["steel"],
+    n: "Two bolts and a shake before you unhook the choker.",
+    w: "A member that isn't fastened can come down on the way to the next pick, and an unhooked column that was never bolted is how people get killed. Minimum connection in and a shake on it before the crane lets go — every time, no matter how far behind the day is." },
+  { id: "bolt-up-behind-the-gang", t: ["steel"],
+    n: "Bolt up behind the raising gang — don't leave a floor of pins.",
+    w: "A frame carried on drift pins is a frame nobody has closed and a wind event waiting for a reason. Close the connections as you go, floor by floor, so the iron that's up is iron that's staying up." },
+  { id: "walk-the-swing-first", t: ["steel"],
+    n: "Walk the crane's swing and the overhead before it sets up, not after.",
+    w: "The pick you can't reach because a conex moved overnight is the pick that costs a re-set and a day. The swing radius and any overhead line are the first walk of crane day — and the line is the utility's to clear, never yours to guess." },
+  { id: "dont-force-the-fit", t: ["steel"],
+    n: "A hole that won't come fair is an RFI, not a bigger hammer.",
+    w: "Reaming and beating a connection the detail didn't draw is how you weld out a crack two years later. Drift it fair if it's close; if it won't come, it's a field condition and it goes to the detailer before you force it." },
+  { id: "tie-off-to-the-structure", t: ["steel"],
+    n: "Tie off to the bolted iron, never the load or the lift.",
+    w: "The beam you're hanging on can swing, and the one that's bolted can't. Know which is which before you clip on, because your lanyard is only ever as good as what it's wrapped around." },
+  { id: "the-detailer-is-the-call", t: ["steel"],
+    n: "Field questions go to the detailer, not straight to the engineer.",
+    w: "The detailer drew it and can turn an RFI around with a seal on it; the engineer of record direct gets you a lecture and no drawing. Keep the sheet number in the message and you'll have an answer before the crane is back." },
+  { id: "grout-is-on-the-critical-path", t: ["steel"],
+    n: "Base-plate grout is the concrete crew's, and it holds up everybody behind you.",
+    w: "A column shimmed and not grouted is on your list and theirs; get it on the before-I-set message early, because set, plumb, grout and load go in an order and it is never the order the schedule wants." },
+  { id: "not-on-the-set-is-a-message", t: ["steel"],
+    n: "If it isn't on the approved set, it doesn't go in the steel — it goes in a message.",
+    w: "Every field cut, every added hole, every clip that isn't drawn is a change to an engineered member, and it comes back on you at the special inspection. Photograph it, name the sheet, and let the detailer draw it before you burn it." }
 ];
