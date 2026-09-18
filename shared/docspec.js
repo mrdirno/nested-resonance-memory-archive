@@ -422,7 +422,15 @@
          tools/toolkit-gates/docs-shelf.mjs is now that rail. This document keeps
          five terms that name an EVENT — the word for a broken thing belongs to the
          document called Damage. */
-      aka: ["incident", "near miss", "accident", "injury", "safety report"],
+      /* THE FOCUS-FOUR TERMS ARE UNIVERSAL, NOT ONE TRADE'S DIALECT (2026-09-18,
+         C3737). "fall" was measured mis-routing on every shelf — gc → the
+         coordination notes, roofing and painting → the Service Call, plumbing →
+         the Site Walk — because it Levenshtein-matched "call" and this document
+         never claimed the word. steel's override had already taken it back on the
+         one shelf; the same fix belongs here, once, for all nineteen. "struck by"
+         and "caught between" already led this document on most shelves and are
+         pinned so it cannot regress; "fall"/"fell" are the ones that were dark. */
+      aka: ["incident", "near miss", "accident", "injury", "safety report", "fall", "fell", "struck by", "caught between"],
       family: "incident",
       from: "the person who was there",
       to: "safety and my PM",

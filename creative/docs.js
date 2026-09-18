@@ -376,7 +376,7 @@ window.TRADE_DOCS = {
 
     "incident-report": {
       "name": "Something Happened (Incident / Near-Miss)",
-      "aka": ["incident", "near miss", "accident", "somebody got hurt", "gear damage", "on set", "safety"],
+      "aka": ["incident", "near miss", "accident", "somebody got hurt", "gear damage", "on set", "safety", "fall", "fell", "struck by", "caught between"],
       "to": "the producer, the client's contact, and whoever owns the space",
       "why": "Written once and read by people who were not there. On a small crew nobody else is writing this, so if you do not, it does not exist.",
       "secondary": ["a short message to the client and to whoever owns the space, with the internal detail taken out", "a follow-up once whatever caused it has been dealt with"]

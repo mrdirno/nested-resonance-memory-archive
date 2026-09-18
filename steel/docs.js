@@ -167,6 +167,18 @@ window.TRADE_DOCS = {
 
   "drop": [],
 
+  /* ── OVERRIDES — the shared documents, re-addressed to steel (measured at the
+   * real search box, C3737). Steel stood up as trade #19 carrying ONE override
+   * (delay-notice); the other ten shared documents rendered in the rack's generic
+   * voice, and a steel foreman's own words landed on the wrong shelf — "erection
+   * sequence" and "next lift" handed back the Service Call, "crane access" and
+   * "laydown" the Extra Work letter, "topped out" the Service Call, "bolt up" the
+   * Extra Work letter, "dropped a load" and "fall" the Service Call. These
+   * re-address the erection lifecycle in the foreman's voice and route his words
+   * to the document he means. Every one still obeys this file's rails: `reminders`
+   * below keeps torque, weld size, capacity, tolerance, grade and CAUSE out of
+   * whatever the AI writes on ALL of them, so none carries a graded value. Sections
+   * come from the family spine in shared/docspec.js, same as on every trade. */
   "overrides": {
     "delay-notice": {
       "name": "The Day We Couldn't Fly",
@@ -174,6 +186,69 @@ window.TRADE_DOCS = {
       "to": "the GC super and our PM",
       "omit": "THE GATE IT COST AND THE CLOCK ON THE CRANE. \"We couldn't work\" is a sentence nobody can price. \"Crane on site 6:30, wind held the pick until 11, released for the day at 2 — the level-2 beams that were the day's set didn't go\" is a hold a super and the office can both read, and the crane clock is the number the day turns on.",
       "needs": ["who", "where"]
+    },
+    "daily-report": {
+      "from": "the foreman on the steel",
+      "to": "our PM and the office, and the GC's daily",
+      "why": "The one your PM forwards and the GC pastes into his own. On steel it is the record of what got set, what got bolted up and welded out, and what is holding the next lift — the trail the whole sequence gets read back through.",
+      "omit": "THE THING YOU CHANGED TO KEEP THE HOOK MOVING — a piece flown out of sequence, a bolt bag robbed off another bay, an approved hour nobody logged, a connection made up a different way to fly the next one. Nobody writes it the day it happens, and at the change meeting three months on there is no paper for it.",
+      "note": "\"Bolted up\" and \"welded out\" state the crew's work for the day, not that a joint is complete, sound or accepted — inspection is the special inspector's and the CWI's.",
+      "needs": ["who", "change"],
+      "facts": ["the date and the area or grid line", "the raising gang and their hours", "what got set, bolted up and welded out", "what is left loose, unmade or unwelded", "what is holding the next lift", "crane hours, and the hours the hook stood idle"],
+      "aka": ["daily", "dfr", "end of day", "eod", "field report", "daily update", "erection daily", "what we set", "pieces set", "bolt up", "bolted up", "made up", "welded out", "set today", "crane time", "decking"]
+    },
+    "look-ahead": {
+      "from": "the foreman on the steel",
+      "to": "our PM and the GC, and the crane coordinator",
+      "why": "The one that keeps the raising gang and the crane from standing. On steel it is the sequence — which picks fly in what order next, and what has to be true before each one: the bolts in, the embeds set, the deck below poured, the crane's road clear.",
+      "omit": "WHAT HAS TO BE TRUE BEFORE EACH LIFT — the other trade's work, the survey, the delivery, the released RFI. A sequence with no preconditions is a wish list, and on steel it is the wish list that puts the crane on the ground.",
+      "needs": ["notdone"],
+      "facts": ["the period", "the raising gang expected", "the picks planned, in order", "what has to be shaken out and staged", "what has to be set, poured or released first"],
+      "aka": ["look ahead", "lookahead", "two week", "three week", "next week", "plan", "sequence", "erection sequence", "raising sequence", "next lift", "lift plan", "what's ready to set", "what has to be in before we fly"]
+    },
+    "site-walk": {
+      "from": "the foreman or PM walking it before the iron",
+      "to": "our office, and the crane coordinator",
+      "why": "Everything you saw before the steel shows up, in a form somebody who was not there can plan the crane and the shakeout from. On steel the walk is the ground and the air: where the crane sets, what it reaches, what it swings under, and where the iron lands.",
+      "omit": "ACCESS AND THE OVERHEAD — where the crane sets and what it swings under, where the trucks turn and lay down, the power line nobody drew, and what is NOT built yet that a pick has to clear. It never makes the notes, and it is what grounds the crane on the day.",
+      "needs": ["when", "where", "notdone"],
+      "facts": ["the date and the site", "who walked it", "where the crane can set and what it reaches", "where steel can be shaken out and staged", "what is overhead, and what is not built yet"],
+      "aka": ["walk", "site visit", "survey", "site survey", "walkthrough", "pre-erection walk", "crane access", "crane pad", "where the crane sits", "laydown", "laydown area", "shakeout", "shake out", "shakeout walk", "overhead line", "access for the crane"]
+    },
+    "handover": {
+      "name": "Topped Out — Turning the Frame Over",
+      "from": "the foreman on the steel",
+      "to": "the GC and our PM, and whoever takes the frame next",
+      "why": "The last thing read on the steel and the first thing blamed. Written right it ends our scope on the frame — set, bolted up, welded out, the punch named and owned. Written as if it is all finished, every loose bolt and every touch-up becomes warranty.",
+      "omit": "THE PUNCH YOU ARE HANDING OVER KNOWN — the loose bolts, the missing clips, the coating touch-up — each with an owner and a date. A turnover that reads as if the frame is complete adopts every one of them.",
+      "needs": ["when", "who", "notdone"],
+      "facts": ["the area or the frame being turned over", "what is set, bolted up and welded out", "what is still loose, unmade or missing a clip", "the coating touch-up left, and who owns it", "what the inspector still has open, and who you told"],
+      "note": "Never write that a connection, a weld or the frame is adequate, complete, sound or good — state what is set, bolted up and welded out, and what the special inspector and the CWI still have open. Completeness and adequacy are the EOR's and the inspector's, off their own record.",
+      "secondary": ["a version for the GC and the next trade", "the punch on its own, with an owner and a date on each line"],
+      "aka": ["handover", "turnover", "closeout", "hand off", "handoff", "close out", "punch complete", "punch", "punch list", "topping out", "frame complete", "final bolt-up", "touch up", "touch-up paint", "turned it over"]
+    },
+    "damage-found": {
+      "from": "the foreman who found it",
+      "to": "the GC super and our PM, and our detailer",
+      "why": "You found steel that was cut, burned, bent or welded to — in the yard, in shipping, or by another trade after it was set. This is the dated, photographed record that it was that way when you found it, before anyone goes looking for who pays.",
+      "omit": "THE DATE, THE GRID LINE OR PIECE MARK, AND WHERE THE PHOTOS LIVE. A description with no mark, no date and no photo reference is nothing in a back-charge meeting.",
+      "needs": ["when", "where"],
+      "facts": ["the date and time found", "the grid line or piece mark", "what was cut, burned, bent or welded to", "photos taken, and where they live", "who you told and how"],
+      "note": "Say what you found and photograph it. Never write who cut it or whose fault it is — who pays is the office's and the EOR's, off this dated record.",
+      "aka": ["damage", "pre-existing", "found damage", "prior damage", "damaged beam", "bent in the yard", "coating holiday", "they burned my steel", "they cut my beam", "welded to my steel"]
+    },
+    "incident-report": {
+      "aka": ["incident", "near miss", "accident", "injury", "safety report", "dropped load", "dropped a load", "a load came down", "fall", "fell", "struck by", "caught between", "flash burn", "hit by the load"]
+    },
+    "service-writeup": {
+      "name": "Misc-Metals Come-Back — What I Found When I Went Back",
+      "from": "the man who went back",
+      "to": "our office, and the GC or the building",
+      "why": "The misc-metals come-back — a rail that worked loose, a gate that dropped, a stair that moved, a bollard somebody backed into. What you found when you went back, what you did, and what is still open.",
+      "omit": "WHAT YOU DID NOT DO, AND WHY — the anchor you could not reach, the second rail you did not open, the thing you found that is outside this call. Leave it out and you own it by silence.",
+      "needs": ["notdone"],
+      "facts": ["the call as it came in", "what you found at the piece", "what you did", "what it is doing now", "what is still open"],
+      "aka": ["service", "call", "repair", "service report", "work order narrative", "trouble call", "came back", "callback", "rail came loose", "handrail loose", "gate dropped", "stair moved", "bollard hit"]
     }
   },
 

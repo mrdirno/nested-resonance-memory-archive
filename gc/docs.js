@@ -269,7 +269,11 @@ window.TRADE_DOCS = {
            he types "dig-in" to get paid for the hole, and this document stays
            reachable for the safety half by "utility strike", which means one thing
            and only here. */
-        "utility strike"
+        "utility strike",
+        "fall",
+        "fell",
+        "struck by",
+        "caught between"
       ],
       "why": "This paragraph outlives everybody on the job. Write what you saw, because it becomes the exhibit.",
       "sections": [

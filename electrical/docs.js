@@ -483,7 +483,11 @@ window.TRADE_DOCS = {
         "recordable",
         "accident write up",
         "witness statement",
-        "safety writeup"
+        "safety writeup",
+        "fall",
+        "fell",
+        "struck by",
+        "caught between"
       ],
       "why": "Your statement is the only version written while the details are still right; everything after it gets built on top of this one.",
       "sections": [
