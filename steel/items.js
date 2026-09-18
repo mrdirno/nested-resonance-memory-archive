@@ -335,3 +335,94 @@ window.TOOLKIT_GETIN = {
     "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first morning, where the pad and the laydown go, and where the power and the control lines are — and the ones that matter most, who owns the closure, the power-down on any overhead line, and the hot-work permit for the welding, because none of those is ours to issue. If a boom swings over anybody's head, name who clears the floor below it before we pick."
   ]
 };
+
+/* ── NOT READY TO SET (shape #2 — shared/note.js) ───────────────────────────
+ * THE GO/NO-GO, and the twin of paving's Not Ready To Pave and doors' Not Ready
+ * To Hang — steel's own, sent the ONE morning the crane's already on the clock.
+ * Before I Set is the week-out ask; getting-in is the occupied-site ask. This is
+ * neither: it is 6 a.m., the iron's on the truck, a crane and a raising gang are
+ * on standby whether it flies or not, and one of the things that had to be ready
+ * isn't. He walks the pick, names what stops the set IN HIS WORDS, and sends the
+ * only ask that matters — clear it and tell me when, or direct me IN WRITING to
+ * fly it as it sits. A crane day does not come back, and iron set on a condition
+ * somebody else owned is on HIS record; this note is what it stood on.
+ *
+ * WHAT IT NEVER CARRIES — the same refusal list every steel page stands on. No
+ * torque, no bolt tension, no weld size, no capacity, no survey elevation, no
+ * tolerance as a value, and no verdict that a connection is ready to load or a
+ * bolt is right. "Nobody's shot the bolts to line and grade" is a COORDINATION
+ * fact — the shot is somebody else's number and this page never states it. Every
+ * stop is a condition with the ASK riding under it, so the note reads as a list a
+ * super can clear by lunch, not a complaint — and the wind call and the level
+ * reading are HIS, in free text, with no threshold of ours behind either.
+ */
+window.TOOLKIT_ITEMS.notready = {
+  roles: [
+    "GC superintendent",
+    "GC project manager",
+    "Our own boss / PM",
+    "Concrete foreman (bolts / embeds / the deck)",
+    "Owner's rep / construction manager",
+    "Building / facility manager",
+    "The crane / rigging outfit",
+    "Detailer / engineer, through the office",
+    "Another trade's foreman"
+  ],
+
+  stops: [
+    {
+      name: "Anchor bolts aren't set — I've nothing to land on",
+      sub: "The columns land on them and they're not in, or not where the base plate wants them. Whoever set them brings them in off the approved anchor-bolt plan, or direct me in writing — I'm not coring and re-drilling on crane morning."
+    },
+    {
+      name: "Bolts are in, but nobody's shot them to line and grade",
+      sub: "I'm not dropping a column onto bolts nobody's confirmed — that shot is the surveyor's number, not mine, and I don't state it. Tell me who's confirming them and when."
+    },
+    {
+      name: "The embeds or plates I weld to aren't cast, or they moved",
+      sub: "The clips and the beam seats land on somebody's embed and it's not in the concrete, or it's not where the set puts it. Whoever cast it owns it — off their sheet — or direct me in writing to field-fit it, and that's a tag."
+    },
+    {
+      name: "The deck or slab I set off isn't poured, or isn't cured",
+      sub: "I can't land the next tier or a column off a floor that isn't there yet. Tell me the day it's poured and the day I can load it — the day, not the week; whether it's cured to carry is the engineer's call, not mine."
+    },
+    {
+      name: "The crane can't get set up — no pad, soft ground, radius not clear",
+      sub: "A crane that can't set where the pick needs it doesn't fly the steel. Tell me who's getting the mats down and the setup clear, and by when — the iron's on the truck at six either way."
+    },
+    {
+      name: "Laydown's blocked — nowhere to land the iron in the pick",
+      sub: "The steel's coming off the truck and there's nowhere in reach of the hook to set it down. Tell me the day the yard's actually mine, and keep it clear after that."
+    },
+    {
+      name: "Power lines over the swing, still hot",
+      sub: "The boom or the load swings inside the line and nobody's de-energized it or set a spotter. That's the utility's power-down and a permit — I own none of it, and I don't fly under a hot line."
+    },
+    {
+      name: "No approved erection set, or the wrong rev, for this pick",
+      sub: "I'm not flying iron off a sheet the engineer already changed. Send me the rev I'm erecting to and a name who answers when it doesn't fit."
+    },
+    {
+      name: "The control lines or the benchmark aren't set",
+      sub: "I set to line and grade and I've got no line to set to. Tell me who's shooting the control and when — that's the surveyor's, not mine."
+    },
+    {
+      name: "The crane and the trucks can't get in — access is blocked",
+      sub: "A loaded truck and a crane don't turn where a pickup turns. Tell me who moves the fence, the trailer or the pile, and by when."
+    },
+    {
+      name: "Wind's over the limit, or it's coming — my call, my words",
+      sub: "I'm not flying iron in this wind, and here's what I saw. No threshold of mine is on this note; the crane order stands or cancels on what I'm telling you now."
+    },
+    {
+      name: "Hot work near their people, no fire watch or permit",
+      sub: "I'm welding and burning near an occupied space and there's no watch and no hot-work permit. Whoever holds the building arranges both before I strike an arc."
+    },
+    {
+      name: "What's in front of me isn't how it's detailed",
+      sub: "The connection, the plate or the bolt pattern doesn't match the stamped set, and I don't field-modify engineered steel on a walk. It's a marked-up sheet back through the detailer and the engineer — their call, not a fix on crane morning."
+    }
+  ],
+
+  pics: ["Sent with photos", "Photos on request", "Come look with me"]
+};

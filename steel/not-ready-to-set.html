@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not Ready to Set — Steel &amp; Misc Metals Field Toolkit</title>
+<meta name="description" content="The crane's booked, the iron's on the truck, a raising gang's on the clock — and the anchor bolts aren't shot, the embeds never got cast, the deck below isn't poured or the swing's under a hot line. Walk the pick before you call the iron up, name what stops the set in your own words, and send the two-button ask: clear it and tell me when, or direct me in writing to fly it as it sits. Because a crane day doesn't come back.">
+<meta name="apple-mobile-web-app-title" content="Not Ready to Set">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Steel &middot; crane's booked, before the iron flies</span>
+    </div>
+    <h1 id="h1">Not Ready to Set</h1>
+    <p class="lede" id="lede">Every outfit on the job counts down to &ldquo;before you set,&rdquo; and you&rsquo;re the one who finds out at six in the morning &mdash; with a crane, an operator and a raising gang already on the clock &mdash; which of them didn&rsquo;t make it. Walk the pick before you call the iron up and name what stops the set, in your words: the anchor bolts that aren&rsquo;t in or nobody&rsquo;s shot, the embeds that never got cast, the deck below that isn&rsquo;t poured, the crane that can&rsquo;t get set up, the laydown that&rsquo;s still full, the line over the swing nobody de-energized. Then send the only ask that matters &mdash; clear it and tell me when, or tell me <b>in writing</b> to fly it as it sits. Because a crane day doesn&rsquo;t come back, and iron you set on somebody else&rsquo;s condition is on your record.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s anchor bolts, embeds or deck failed anything &mdash; it says what you found, where, in your words, with anything you checked taken off your own level and set beside what the approved erection set says. It states no torque, no bolt tension, no weld size, no capacity, no survey elevation and no threshold of any kind, and it never says a connection is ready to load or a bolt is right &mdash; that is the engineer&rsquo;s call and the special inspector&rsquo;s numbered record. It doesn&rsquo;t stop the job: it hands whoever runs it the choice, on the record &mdash; clear it, or direct it set as it sits.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A hold your crane mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* NOT READY TO SET — the go/no-go, and the twin of paving's Not Ready To Pave
+ * and doors' Not Ready To Hang. A CONFIG of shape #2's engine (shared/note.js):
+ * no CSS here, no DOM building, no state, no persistence, no document assembly —
+ * the engine owns all of it. This file owns the WORDS, which is the half an
+ * engine must never own.
+ *
+ * THE LAW THIS PAGE STANDS ON: a crane day is the most expensive standby on the
+ * job, and iron set on a condition somebody else owned is HIS record the moment
+ * it's flown. So the record of what the pick stood on has to exist BEFORE the
+ * lift, and the choice (clear it / fly it anyway) has to be somebody else's, in
+ * writing. The stops list lives in items.js; every entry is a condition with the
+ * ASK riding under it, so the note reads as a list a super can clear by lunch.
+ *
+ * AND THE NUMBERS ARE NOT HIS TO STATE. "What you shot or put a level on" is a
+ * free-text field on purpose, and so is "what the set says": the observation is
+ * his and the callout is the sheet's, and the page states no torque, no bolt
+ * tension, no survey elevation and no tolerance between them. The bolt shot is
+ * the surveyor's; whether the deck is cured to carry is the engineer's; "I'm not
+ * flying in this wind" is his call in his words with no threshold of ours behind
+ * it. Steel's whole boundary is that it CITES the certified record and never
+ * restates it, and this page holds that line at 6 a.m.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.notready;
+  var KEY = "toolkit.steel.notreadytoset.v1";
+
+  var api = Note.mount({
+    key: KEY,
+    docName: "NOT READY TO SET",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this note? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    // The job and the day ride on the SECOND line, never stacked onto the
+    // heading — findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox next spring, when the argument is about which pick and which morning.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Building C — structural steel, north frame", docSkip: true }
+        ]
+      },
+      {
+        title: "Who you're telling",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that can clear it, or the name that can direct it. “I told the job” is not a name.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Dana K — GC super", docLabel: "Name" },
+          { id: "when", kind: "clock", label: "When you walked it", hint: "— stamps itself when you start", docLabel: "Walked", ph: "stamps itself when you start", nowLabel: "Now" }
+        ]
+      },
+      {
+        title: "The pick",
+        docHead: "THE PICK",
+        why: "By the grid lines on the erection set and the way the gang calls it, so his answer names the same iron the crane's booked for.",
+        fields: [
+          { id: "site2", kind: "area", rows: 2, label: "Which lift / area", hint: "— the way the set says it, and what's flying", ph: "north frame, lines 4–7 — columns and the first tier of beams, crane booked 6 a.m." }
+        ]
+      },
+      {
+        title: "What stops the set",
+        tone: "loud",
+        docHead: "WHAT STOPS THE SET",
+        why: "Each one is a condition, not a verdict — and the ask that clears it rides right under it, so this reads as a list somebody can action, not a complaint.",
+        fields: [
+          { id: "stops", kind: "ticks", options: T.stops },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the pour stop for the deck isn't set on lines 5–6, so I've nowhere to screw the metal deck to after I land the beams — somebody has to say whose that is before Tuesday" }
+        ]
+      },
+      {
+        title: "What you checked — if you checked it",
+        docHead: "WHAT I PUT A LEVEL ON, WHAT THE SET SAYS",
+        why: "Both are yours: what you shot or put a level on at the pick, and what the approved set says beside it. The page supplies neither, and nobody here states a tolerance, a survey number or what passes — that's the surveyor's, the engineer's and the inspector's, and it's exactly what makes this hold up.",
+        fields: [
+          { id: "reading", kind: "text", docLabel: "What I checked", label: "What you shot or put a level on", hint: "— where at the pick, and what time", ph: "stood a level on the pier at line C-5, one base plate's got no bolt under a corner — 6:40, super there" },
+          { id: "limit", kind: "text", docLabel: "The set", label: "What the approved set says", hint: "— and which sheet", ph: "S-401 rev 2 anchor-bolt plan shows four bolts at that column — typed off the sheet in my hand" },
+          { id: "pics", kind: "seg", label: "Photos", hint: "— shot before anything gets cleared or flown", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "Photos" }
+        ]
+      },
+      {
+        title: "What it's costing",
+        tone: "loud",
+        docHead: "WHAT'S STANDING",
+        why: "The line everyone omits, and the reason this note gets answered today instead of Thursday — the crane wants a call by a time of its own, and it isn't waiting for the meeting.",
+        fields: [
+          { id: "standing", kind: "text", label: "Who's standing, and what's booked", ph: "connector, two ironworkers and a signalman, and a 90-ton crane with an operator and an oiler on standby from 6 — the crane wants a call by 4:30" },
+          { id: "instead", kind: "text", label: "What we're doing instead", hint: "— if there's an instead", ph: "moving the gang to detail the misc-metals in the shop trailer — half a day, then we're out of work" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "Ray T — 559-555-0143", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Ironclad Erectors", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply CLEAR with who's fixing each one and when, and this pick goes back on my board the day it's cleared — and the crane order moves with it.",
+      "Or reply SET and we fly it as it sits — in writing, because iron I set on a condition somebody else owned is on my record, and this note is what it stood on.",
+      "Nothing here is a verdict on anybody's work, and nothing on it states a torque, a bolt tension, a weld size, a capacity or a survey number — it's what I found, in my words, off the approved erection set. Whether the bolts, the embeds or the deck are ready to load is the engineer's call and the inspector's numbered record, not mine."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.stops || []).length;
+      if (n) return n + " hold" + (n === 1 ? "" : "s");
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

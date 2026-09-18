@@ -16,14 +16,18 @@
  * the gap as an oversight (§TRADE EXPANSION: an unnamed absence is a hole, a
  * named one is a decision):
  *
- *   - NOT READY TO SET (shape #2, shared/note.js) — the go/no-go the foreman
- *     sends the morning the crane's booked and the site isn't ready: anchor
- *     bolts not set or not grouted, no pad for the crane, laydown blocked,
- *     overhead lines nobody's de-energized, the approved set out of date. Every
- *     sibling ships the refusal page; this kit defers it ONE cycle because its
- *     stops overlap heavily with getting-in's heads and Before I Set's asks, and
- *     shipping it before the ask pages are live would be three lists of the same
- *     blockers to keep in step. FIRST RUNG FOR #20 OR THE FIRST WISH THAT ASKS.
+ *   - NOT READY TO SET (shape #2, shared/note.js) — SHIPPED C3738 as
+ *     not-ready-to-set.html, the go/no-go the foreman sends the ONE morning the
+ *     crane's already on the clock and the site isn't ready: anchor bolts not set
+ *     or nobody's shot them, embeds not cast, the deck below not poured, no pad
+ *     for the crane, laydown blocked, a line over the swing nobody de-energized,
+ *     the approved set out of date. Deferred ONE cycle when the kit stood up (the
+ *     ask pages getting-in and Before I Set had to be live first, or it'd be three
+ *     lists of the same blockers to keep in step); those shipped, so this did.
+ *     The overlap held to a distinction, not a merge: Before I Set is the week-out
+ *     ask, getting-in is the occupied-site ask, this is 6 a.m. with the iron on
+ *     the truck. It cites the certified record (the bolt shot, the cure, the
+ *     capacity) and never restates it, the way every steel page does.
  *
  *   - THE MISC-METALS & EMBED ORDER (shape #1, shared/checklist-request.js) —
  *     the loose lintels, angle, embeds, plates, anchor bolts, deck screws and
@@ -66,6 +70,13 @@ window.TOOLKIT_TOOLS = [
     desc: "You're setting iron everybody's work lands in, in a window that shuts when the deck pours. Walk it a week out and send each outfit its own list — the anchor bolts set to the template, the embeds and weld clips located off their sheet, the dunnage and openings framed, the hanger steel where their hangers land, the loose lintels before the head course, the approved set and the open RFIs from the detailer — each ask against your own gate, one message per outfit, all off THEIR stamped drawing and never a spec of yours. The refusal is telling the super the deck closed on him; this page is how you never send it.",
     chip: "#B4C9CF",
     audience: "Foreman → GC super / concrete / EC / mech / plumber / mason / LV / detailer / CM"
+  },
+  {
+    name: "Not Ready to Set",
+    href: "not-ready-to-set.html",
+    desc: "The crane's booked and the iron's on the truck, and one of the things that had to be ready — the anchor bolts nobody shot, the embeds that never got cast, the deck below that isn't poured, a crane that can't get set up, a laydown that's still full, a line over the swing nobody de-energized — isn't. Walk the pick before you call the iron up, name what stops the set in your own words, and send the two-button ask: clear it and tell me when, or direct me in writing to fly it as it sits. It states no torque, no bolt tension, no capacity and no survey number — it hands whoever runs the job the choice, on the record, because a crane day doesn't come back and iron you set on somebody else's condition is on your record.",
+    chip: "#B4C9CF",
+    audience: "Foreman → GC super / concrete foreman / crane outfit / CM / building engineer"
   },
   {
     name: "Walk Back",
