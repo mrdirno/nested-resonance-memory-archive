@@ -10557,3 +10557,55 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   drive, backport rider assessed, storefront named, close); no dead line surfaced to justify a host-file
   edit this cycle.
   https://mrdirno.github.io/nested-resonance-memory-archive/steel/not-ready-to-set.html
+
+- `2026-09-18` — **[AXIS:BACKPORT] C3739 — THE FIELD-RFI NOTE FRAMING PIONEERED WENT OUT TO THE SEVEN
+  TRADES THAT DISCOVER THE DRAWINGS DON'T CLOSE.** Both wells empty on disk (toolkit + vibe-cards,
+  `--list` and `--list --status building`, 0/0), no trade owed, so the stalest axis governed — **BACKPORT,
+  7 lane-cycles cold** — and it landed on the one rung the operator had already named for it. · **THE
+  RUNG NAMED ITSELF, C3736 → C3739.** When framing shipped `wont-fit.html` (the field note that becomes
+  the PM's RFI — "the design itself doesn't close"), its own cycle-log line called it *"a strong future
+  BACKPORT to every trade (every trade hits a set that doesn't close) — named in next_suggested as its own
+  whole rung."* This is that rung, carried to the trades that install to **other people's drawings** and
+  hit *it-won't-fit-as-detailed* hardest: **doors, hvac, plumbing, electrical, concrete, masonry, steel**
+  (framing 1 → 8 trades carrying the note). · **ISOMORPHED, NEVER FORKED** — each is an inline config on
+  shape #2 (`shared/note.js`): the engine owns the DOM, the state, the copy and the gates; the page owns
+  the WORDS. The THREE LOAD-BEARING RAILS are carried verbatim from the pioneer, because a "tidy-up" on
+  any one of them breaks the tool: **(1) it never numbers itself** — no RFI-number field, none generated,
+  and the closing says the number is the PM's to give (a number minted here is one nobody on the set can
+  find); **(2) sheet AND revision on every drawing** as repeatable rows (a question against last month's
+  rev bounces "see the current set" and loses the day); **(3) the read is the field hand's, never the
+  answer** — optional, framed "your call," and it defers the certified decision to the EOR / architect /
+  engineer by name (a stamped fix is data we do not have). · **THE WORDS ARE EACH TRADE'S OWN** — the
+  conflict example, the impact chips and the milestone clock token are authored per trade (doors: frame vs.
+  RO + rated-opening / *before we set*; hvac: trunk vs. beam + sprinkler main / *before the ceiling
+  closes*; plumbing: waste slope vs. footing invert / *before the slab pours*; electrical: gear working
+  clearance / *before the walls close*; concrete: slab edge vs. grid, embeds vs. rebar, ready-mix on
+  standby / *before we pour*; masonry: coursing vs. lintel bearing / *before we close the wall*; steel:
+  gusset vs. beam flange, crane on standby / *before the next lift*). Steel's carries its extra doctrine
+  in the page comment: it cites the certified record and states no torque, tension, weld size or capacity
+  — the conflict is a coordination fact, the connection design stays the EOR's. · **DROVE CONCRETE END TO
+  END** (note engine's own harness, `data-f` fills): a clean pasteable field note assembles — WHERE in the
+  title, the job on line two, a self-stamped hit time, WHAT WON'T CLOSE, THE DRAWINGS with sheet+rev, WHAT
+  IT'S HOLDING, the non-binding MY READ, and both closing rails. · **GATES GREEN, DISK AND LIVE, ALL SEVEN
+  PAGES:** mobile-watertight **0 failing** at 320/360/390/430 × default+bumped (disk AND live) ·
+  note-live-fields **8 in-doc fields, every one reaches the message** · no-clock **0** (the self-stamping
+  hit-time is not a forbidden clock) · no-third-party **0** · send-is-copy **36 checks, 0 failing** (disk
+  AND live) · each hub's live `tools.js` carries the entry, so the tool is reachable from the hub grid +
+  per-page nav (menu-reachability's full run is ~9 min; scoped). Commit `5af7919f` (14 files, by pathspec
+  on the shared index, one author, no AI trailer — the hook accepted it), deploy run **35409209146**
+  success, all seven live **200** with the registry propagated. · **STOREFRONT — SAME CYCLE, SIX OF SEVEN:**
+  `persona500 src/data/fieldToolkits.ts` gained one `tools[]` line per present trade (doors 11→12, hvac
+  10→11, plumbing 9→10, electrical 8→9, concrete 7→8, masonry 8→9; the count is derived from the array,
+  not a hand-kept number). **Steel is not in the storefront at all** — its whole-trade entry is C3735's
+  still-pending BREADTH task (P5 owns), so steel's wont-fit rides in when that entry lands. Also found a
+  **pre-existing uncommitted framing wont-fit storefront entry** in the same file — prior cycle's, P5's
+  push still pending. P5 owns pushing persona500 and regenerating `public/data/field_toolkits.json`; named
+  in next_suggested, not pushed here. · **BACKPORT RIDER — THE CYCLE IS THE RIDER.** This whole rung is the
+  backport (the pioneer's tool carried to every trade lacking it); there is no separate same-class sweep to
+  fire, because the build IS the propagation. **Ten installing trades still lack the note** (flooring,
+  roofing, siding, paving, sitework, landscape, gc, low-voltage, av) — named as the rung's continuation;
+  **creative is exempt** (it does not install to construction drawings — the same reason it carries no
+  rough-in or total-package). · **SIGNAL DUTY:** template unchanged, nothing cut — every directive law
+  bound this cycle (unscoped well check both sinks, BACKPORT off the LIVE-STATE signal, gates disk+live,
+  end-to-end drive, storefront same-cycle, close); no dead line surfaced to justify a host-file edit.
+  https://mrdirno.github.io/nested-resonance-memory-archive/doors/wont-fit.html
