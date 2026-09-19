@@ -5,7 +5,7 @@ import {
   Undo2, Redo2, Palette, SlidersHorizontal
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
-import { type TitlePlace, type TitleSize, type TitleColor, TITLE_COLORS, titleInk } from '../lib/title';
+import { type TitlePlace, type TitleSize, type TitleColor, type TitleFont, TITLE_COLORS, TITLE_FONTS, titleInk, titleFontFamily } from '../lib/title';
 import { LOOKS, DESK_AXES, deskForLook, type Desk, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
@@ -65,10 +65,12 @@ interface SimpleControlsProps {
   titlePlace?: TitlePlace;
   titleSize?: TitleSize;
   titleColor?: TitleColor;
+  titleFont?: TitleFont;
   onTitleText?: (t: string) => void;
   onTitlePlace?: (p: TitlePlace) => void;
   onTitleSize?: (s: TitleSize) => void;
   onTitleColor?: (c: TitleColor) => void;
+  onTitleFont?: (f: TitleFont) => void;
 
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   look?: LookId;
@@ -125,6 +127,18 @@ const TITLE_COLOR_LABELS: Record<TitleColor, string> = {
 };
 
 /**
+ * The font chips. Each chip shows its OWN name in its OWN face, so the choice is
+ * legible without a preview — a serif chip reads in serif, the poster chip in
+ * Impact. `sans` leads because it is the default and the identity face.
+ */
+const TITLE_FONT_LABELS: { id: TitleFont; label: string; title: string }[] = [
+  { id: 'sans',   label: 'Sans',   title: 'Sans-serif — the clean default.' },
+  { id: 'serif',  label: 'Serif',  title: 'Serif — an editorial, book-cover look.' },
+  { id: 'mono',   label: 'Mono',   title: 'Monospace — a typewriter / code look.' },
+  { id: 'poster', label: 'Poster', title: 'Heavy condensed display — a poster shout.' },
+];
+
+/**
  * The two original grid modes. They are the only ones that read `primitive`,
  * and they are kept because "an even grid of squares" is a legitimate thing to
  * want — it is just no longer the whole tool.
@@ -147,8 +161,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice, onColourDice,
   holdFrame = false, onHoldFrame, lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
-  titleText = '', titlePlace = 'bl', titleSize = 'md', titleColor = 'white',
-  onTitleText, onTitlePlace, onTitleSize, onTitleColor,
+  titleText = '', titlePlace = 'bl', titleSize = 'md', titleColor = 'white', titleFont = 'sans',
+  onTitleText, onTitlePlace, onTitleSize, onTitleColor, onTitleFont,
   look = 'none', onLook, desk, onDesk, deskCustom = false, move = 'still', onMove, turn = 'hold', onTurn,
   pace = 'even', onPace,
   sync = 'off', onSync, beatGrid = null, beatBusy = false, beatBeats = 0, hasMusic = false
@@ -697,6 +711,25 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
                     aria-pressed={titleSize === z.id}
                     data-testid={`title-size-${z.id}`}
                   >{z.label}</button>
+                ))}
+              </div>
+              {/* THE FACE — each chip is drawn in the font it selects, so the
+                  choice reads without a legend. The render paints this exact
+                  stack, so what you tap is what you get. */}
+              <div className="ui-titler__chips" role="group" aria-label="Title font">
+                {TITLE_FONT_LABELS.map(f => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    className="ui-chip ui-chip--mini"
+                    data-active={titleFont === f.id}
+                    onClick={() => onTitleFont?.(f.id)}
+                    title={f.title}
+                    aria-label={`Title font ${f.label}`}
+                    aria-pressed={titleFont === f.id}
+                    data-testid={`title-font-${f.id}`}
+                    style={{ fontFamily: titleFontFamily(f.id) }}
+                  >{f.label}</button>
                 ))}
               </div>
               {/* THE COLOUR — a swatch is the ink the render paints, no text to

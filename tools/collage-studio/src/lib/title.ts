@@ -43,12 +43,23 @@ export type TitleSize = 'sm' | 'md' | 'lg';
  */
 export type TitleColor = 'white' | 'black' | 'yellow' | 'red' | 'blue' | 'pink';
 
+/**
+ * WHICH TYPEFACE. A short roster of SYSTEM font stacks — never a web font, so
+ * nothing is fetched and the caption paints the instant it is typed, offline and
+ * on a worker thread alike. Every stack ends in a generic family, so a device
+ * missing the named face still lands on something legible. `sans` IS the legacy
+ * `TITLE_FAMILY`, so the default keeps every old title byte-for-byte.
+ */
+export type TitleFont = 'sans' | 'serif' | 'mono' | 'poster';
+
 export interface TitleSpec {
   text: string;
   place: TitlePlace;
   size: TitleSize;
   /** Absent means 'white' — the identity that keeps every old title byte-for-byte. */
   color?: TitleColor;
+  /** Absent means 'sans' — the legacy family, so an untouched title is unchanged. */
+  font?: TitleFont;
 }
 
 export interface TitleLine {
@@ -65,6 +76,9 @@ export interface TitlePlan {
   lines: TitleLine[];
   fontPx: number;
   lineH: number;
+  /** The CSS family every surface paints in, resolved ONCE here so the worker
+   *  thread and the main thread cannot disagree about which face to use. */
+  family: string;
   /** The words' colour, resolved ONCE here so all four surfaces paint the same. */
   ink: string;
   /** The plate's colour, its polarity chosen against `ink` for legibility. */
@@ -167,18 +181,45 @@ export const TITLE_COLORS: readonly TitleColor[] = ['white', 'black', 'yellow', 
 /** The ink hex for a colour — so a UI swatch is exactly what the render paints. */
 export const titleInk = (color: TitleColor): string => INK_HEX[color] ?? TITLE_INK;
 
-/** The one font string. Every measurer and every emitter asks for it. */
-export const titleFont = (px: number): string =>
-  `${TITLE_WEIGHT} ${px}px ${TITLE_FAMILY}`;
+/**
+ * THE FACES. One CSS stack per named font. `sans` is the exact legacy
+ * `TITLE_FAMILY`, so the default resolves to the constant this module has always
+ * painted with. The rest are ordinary system stacks — no `@font-face`, no
+ * download — each ending in a generic family so a device without the named face
+ * still lands somewhere legible.
+ */
+const FONT_STACKS: Record<TitleFont, string> = {
+  sans: TITLE_FAMILY,                                       // the identity face
+  serif: 'Georgia, "Times New Roman", Times, serif',
+  mono: '"Courier New", Courier, monospace',
+  poster: 'Impact, "Arial Narrow", "Helvetica Neue", sans-serif',
+};
 
-/** Measures a run at a size. Injected so the plan is pure and sweepable. */
-export type Measure = (text: string, fontPx: number) => number;
+/** The offered fonts, in chip order. ONE list; the UI never re-lists them. */
+export const TITLE_FONTS: readonly TitleFont[] = ['sans', 'serif', 'mono', 'poster'];
+
+/** The CSS family stack for a named font — what the UI previews AND every
+ *  surface paints, so a chip and its render can never drift apart. */
+export const titleFontFamily = (font?: TitleFont): string =>
+  FONT_STACKS[(font ?? 'sans') as TitleFont] ?? TITLE_FAMILY;
+
+/** The one font string. Every measurer and every emitter asks for it. `family`
+ *  defaults to the legacy stack, so a one-arg call is byte-identical to before. */
+export const titleFont = (px: number, family: string = TITLE_FAMILY): string =>
+  `${TITLE_WEIGHT} ${px}px ${family}`;
+
+/**
+ * Measures a run at a size, IN A GIVEN FAMILY. Injected so the plan is pure and
+ * sweepable. `family` is optional and defaults to the legacy stack, so an old
+ * caller — and every test stub that ignores the argument — measures as before.
+ */
+export type Measure = (text: string, fontPx: number, family?: string) => number;
 
 /** A measurer bound to a real 2D context — what the app passes in. */
 export const measureWith = (
   ctx: { font: string; measureText: (s: string) => { width: number } },
-): Measure => (text, fontPx) => {
-  ctx.font = titleFont(fontPx);
+): Measure => (text, fontPx, family) => {
+  ctx.font = titleFont(fontPx, family);
   const w = ctx.measureText(text).width;
   return Number.isFinite(w) && w >= 0 ? w : 0;
 };
@@ -263,7 +304,7 @@ const ellipsize = (line: string, maxW: number, fontPx: number, measure: Measure)
  * null plan is the signal every emitter treats as "draw nothing at all".
  */
 export const planTitle = (
-  spec: { text?: unknown; place?: unknown; size?: unknown; color?: unknown } | null | undefined,
+  spec: { text?: unknown; place?: unknown; size?: unknown; color?: unknown; font?: unknown } | null | undefined,
   aspect: number,
   measure: Measure,
 ): TitlePlan | null => {
@@ -278,6 +319,15 @@ export const planTitle = (
     spec?.color === 'black' || spec?.color === 'yellow' || spec?.color === 'red' ||
     spec?.color === 'blue' || spec?.color === 'pink' ? spec.color : 'white';
   const { ink, scrim } = titlePalette(color);
+
+  const font: TitleFont =
+    spec?.font === 'serif' || spec?.font === 'mono' || spec?.font === 'poster' ? spec.font : 'sans';
+  const family = titleFontFamily(font);
+  // The wrap and every width below must be MEASURED in the family that will be
+  // PAINTED — a wide face wrapped against a narrow face's metrics overruns the
+  // plate on the delivered surface. So bind the family into the measurer once,
+  // here, and let the rest of the function stay unaware of it.
+  const measFam: Measure = (t, px) => measure(t, px, family);
 
   const W = TITLE_BASIS;
   const H = TITLE_BASIS / clampAspect(aspect);
@@ -309,18 +359,18 @@ export const planTitle = (
   const byHeight = Math.floor((H - 2 * m - 2 * padY) / lineH);
   const lineBudget = Math.max(1, Math.min(MAX_LINES, byHeight));
 
-  let lines = wrapText(text, maxW, fontPx, measure);
+  let lines = wrapText(text, maxW, fontPx, measFam);
   if (lines.length === 0) return null;
 
   let truncated = false;
   if (lines.length > lineBudget) {
     truncated = true;
     lines = lines.slice(0, lineBudget);
-    lines[lines.length - 1] = ellipsize(lines[lines.length - 1], maxW, fontPx, measure);
+    lines[lines.length - 1] = ellipsize(lines[lines.length - 1], maxW, fontPx, measFam);
   }
 
   const widths = lines.map((l) => {
-    const w = measure(l, fontPx);
+    const w = measFam(l, fontPx);
     return Number.isFinite(w) && w > 0 ? Math.min(w, maxW) : 0;
   });
   const blockW = widths.reduce((a, b) => Math.max(a, b), 0);
@@ -344,6 +394,7 @@ export const planTitle = (
     lines: out,
     fontPx,
     lineH,
+    family,
     ink,
     scrim,
     plate: {
@@ -368,6 +419,7 @@ export const scaleTitlePlan = (plan: TitlePlan | null, k: number): TitlePlan | n
     lines: plan.lines.map((l) => ({ text: l.text, x: l.x * k, y: l.y * k, w: l.w * k })),
     fontPx: plan.fontPx * k,
     lineH: plan.lineH * k,
+    family: plan.family,
     ink: plan.ink,
     scrim: plan.scrim,
     plate: {
@@ -417,7 +469,7 @@ export const drawTitlePlan = (ctx: Ctx2D, plan: TitlePlan | null): void => {
     ctx.fill();
 
     ctx.fillStyle = plan.ink;
-    ctx.font = titleFont(plan.fontPx);
+    ctx.font = titleFont(plan.fontPx, plan.family);
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
     for (let i = 0; i < plan.lines.length; i++) {
@@ -442,7 +494,7 @@ export const titlePlanToSvg = (plan: TitlePlan | null): string => {
 `;
   for (let i = 0; i < plan.lines.length; i++) {
     const l = plan.lines[i];
-    s += `    <text x="${l.x.toFixed(2)}" y="${l.y.toFixed(2)}" font-family='${TITLE_FAMILY}' font-size="${plan.fontPx.toFixed(2)}" font-weight="${TITLE_WEIGHT}" fill="${plan.ink}" xml:space="preserve">${esc(l.text)}</text>
+    s += `    <text x="${l.x.toFixed(2)}" y="${l.y.toFixed(2)}" font-family='${plan.family}' font-size="${plan.fontPx.toFixed(2)}" font-weight="${TITLE_WEIGHT}" fill="${plan.ink}" xml:space="preserve">${esc(l.text)}</text>
 `;
   }
   return s + `  </g>
