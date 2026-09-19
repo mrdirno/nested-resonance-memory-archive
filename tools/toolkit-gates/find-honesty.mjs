@@ -60,7 +60,7 @@
  * Default base is the working tree (file://). Pass the live URL after a deploy.
  */
 import { createRequire } from 'module';
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 const require = createRequire(new URL('../collage-studio/package.json', import.meta.url));
@@ -73,6 +73,22 @@ const BASE = (args.find(a => !a.startsWith('--')) || 'file://' + ROOT).replace(/
 const TRADES = readdirSync(ROOT, { withFileTypes: true })
   .filter(d => d.isDirectory() && existsSync(ROOT + d.name + '/write-up.html'))
   .map(d => d.name).sort();
+
+/* The tap-to-tick lists, derived from what actually loads shared/pickfilter.js so
+   a list added next month is gated the day it lands — same discovery as
+   tools/toolkit-gates/find-noise.mjs. Until this adapter existed the honest-label
+   gate covered the document libraries and the commons and skipped every pick
+   surface, which is where the field-spec defect it now catches lived (class H
+   8/280 vs 248/248). */
+const PICK_SURFACES = [];
+for (const d of readdirSync(ROOT, { withFileTypes: true }).filter(x => x.isDirectory()).map(x => x.name)) {
+  let files = [];
+  try { files = readdirSync(ROOT + d); } catch { continue; }
+  for (const f of files) {
+    if (f.endsWith('.html') && /pickfilter\.js/.test(readFileSync(ROOT + d + '/' + f, 'utf8'))) PICK_SURFACES.push(d + '/' + f);
+  }
+}
+PICK_SURFACES.sort();
 
 /* The words a search box teaches people to add. Not a stopword list — this file
    ships none and shared/find.js says why — but the class rule 1 was written for,
@@ -155,6 +171,47 @@ const COMMONS = {
                    /Nothing on this page goes by that/.test(note);
     const nm = host.querySelector('li.item .nm');
     return { lead: nm ? (nm.textContent || '').replace(/\s+/g, ' ').trim() : '', hedged };
+  }
+};
+
+/* THE PICK SURFACES — the tap-to-tick lists shared/pickfilter.js drives. A row's
+   NAME is the `.name` span (the checklist engine and both forks emit it); the
+   whole <li> text is `about` because it carries the control strip and any spec
+   line. Distinct names only — a name that appears in two categories is one claim,
+   not two, so `owners()` still reports it sole and the lead assertion holds. The
+   note lives in `.pf-none` (rendered bar) or `#nomatch` (adopted bar). */
+const PICK = {
+  input: 'input[type=search]',
+  data: () => {
+    const lis = [...document.querySelectorAll('#list li.item, li.item')];
+    if (!lis.length) return null;
+    const seen = {}, items = [];
+    lis.forEach(li => {
+      const nm = ((li.querySelector('.name') || {}).textContent || '').replace(/\s+/g, ' ').trim();
+      if (!nm || seen[nm]) return;
+      seen[nm] = 1;
+      items.push({ key: nm, name: nm, aka: [],
+                   about: [(li.textContent || '').replace(/\s+/g, ' ').trim()] });
+    });
+    return items.length ? { vocab: [], items } : null;
+  },
+  probe: (q) => {
+    const si = document.querySelector('input[type=search]');
+    si.value = q; si.dispatchEvent(new Event('input', { bubbles: true }));
+    const note = (document.querySelector('#nomatch, .pf-none') || {}).textContent || '';
+    const hedged = /^Closest to/.test(note) || /^Nothing matched/.test(note);
+    /* A PICK FILTER HIDES AND SHOWS ROWS IN PLACE — IT NEVER REORDERS THEM, so a
+       category keeps its shape (shared/pickfilter.js). So "which row is first" is
+       DOM order, not the engine's rank, and the honest promise a filter makes is
+       not "your row is first" but "your row is SHOWN with an honest label". The
+       lead the generic check verifies is therefore the set of visible names: the
+       wanted row is present iff its name is in there. `hedged` is the claim this
+       gate exists for and it is read straight off the label the reader sees. */
+    const names = [...document.querySelectorAll('#list li.item, li.item')]
+      .filter(e => !e.classList.contains('is-hidden'))
+      .map(e => ((e.querySelector('.name') || {}).textContent || '').replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+    return { lead: names.join(' | '), hedged };
   }
 };
 
@@ -377,6 +434,7 @@ for (const [file, global] of [['index.html', 'COMMONS_GEAR'], ['tips.html', 'COM
   await run(page, 'commons/' + file, COMMONS, BASE + '/commons/' + file,
     new Function('window.__FH_ROWS = window.' + global + ' || [];'));
 }
+for (const p of PICK_SURFACES) await run(page, p.replace(/\.html$/, ''), PICK, BASE + '/' + p);
 await browser.close();
 
 console.log('\n  checks ' + checked + '  failing ' + failing);

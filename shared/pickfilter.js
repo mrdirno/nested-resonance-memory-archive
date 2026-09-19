@@ -165,6 +165,34 @@
 
     function items() { return arr(list.querySelectorAll(itemSel)); }
 
+    /* THE ROW'S NAME IS ONE FIELD; ITS WHOLE <li> TEXT IS ANOTHER, AND ONLY THE
+       first NAMES it. This file used to index a row as a SINGLE primary field —
+       the entire `<li>` textContent — so a row's "name" was its name plus every
+       word the control strip prints ("Qty", the axis labels, the option text) or
+       a fork's spec line. shared/find.js rule 6 asks "is what survived a WHOLE
+       NAME of this row?" and a whole name can never equal that blob, so typing an
+       item's exact name plus the word a search box teaches you to add — "washout
+       tub template" — was hedged "Closest to" on every tap-to-tick list while the
+       document libraries and the commons, which declare a real name field, were
+       not. Measured: whole-name-plus-chrome went out honest 8/280 on the pick
+       surfaces against 248/248 on the libraries (av/AV_SOCIETY.md §THE COMMONS).
+       The fix is a field spec, not a predicate: the `.name` span (the checklist
+       engine and both forks emit it) is the primary field, and the whole <li>
+       text carries `about: true` so a word found only in the description or the
+       controls still MATCHES but identifies nothing — which is exactly what
+       `about` means everywhere else this engine is used. `.item` with no `.name`
+       falls back to the old whole-text behaviour, so an adopted list cannot
+       regress. Built once, not per keystroke. */
+    var nameSel = cfg.nameSel === undefined ? ".name" : cfg.nameSel;
+    function rowName(el) {
+      var n = (nameSel && el.querySelector) ? el.querySelector(nameSel) : null;
+      return n ? n.textContent : el.textContent;
+    }
+    var IXFIELDS = [
+      { get: function (r) { return rowName(r.el); }, w: 1, primary: true },
+      { get: function (r) { return r.el.textContent; }, w: 1, about: true }
+    ];
+
     /* ── the one pass everything goes through ─────────────────────────────── */
     var mode = "all", drop = "";
     function apply() {
@@ -192,8 +220,7 @@
                a trimmed query can never say the second. Trimmed stays the display
                value, because a heading that quotes his trailing space is a typo. */
         var res = window.Find.search(
-          window.Find.index(pool.map(function (el) { return { el: el }; }),
-            [{ get: function (r) { return r.el.textContent; }, w: 1, primary: true }]), input.value);
+          window.Find.index(pool.map(function (el) { return { el: el }; }), IXFIELDS), input.value);
         mode = res.mode === "all" ? (pick ? "cat" : "all") : res.mode;
         drop = window.Find.dropped(res);
         show = res.hits.map(function (r) { return r.el; });
