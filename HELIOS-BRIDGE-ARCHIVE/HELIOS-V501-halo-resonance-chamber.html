@@ -10576,6 +10576,66 @@ key, open a scoreable direction where self-gravity's window is too narrow? (3) T
 minimal self-gravity first clears E1/E2 at the cut drive, between 0.15 and 0.3? Carried: detection
 reproducibility at sg0.3 (still 2/3); measurability at the condition level, still one. Nothing about nested
 resonance memory is decided here.
+
+RING 27 · 2026-09-19 · the finer self-gravity grid (0.25 / 0.3 / 0.35) at the cut drive makes FIVE of nine runs
+measurable, not three of fifteen -- but still ONE countable condition; the window has upward width Ring 26's
+knife-edge understated, and F3 is one measurable run short of evaluable
+WHAT WAS MEASURED. Ring 26 swept sg {0,0.15,0.3,0.5,0.8} at the cut drive, found one measurable condition (sg0.3),
+called it a knife-edge "narrower than one grid step", and asked (QN1) whether a finer grid 0.25/0.3/0.35 could put
+three measurable conditions in one scoring -- F5 needs >= 3 conditions, F3 needs >= 6 measurable runs, and the
+frozen protocol has never returned anything but "insufficient support". This ring runs it: sg {0.25, 0.3, 0.35}
+at fieldExp 1.7, gl0, three grid seeds each -- nine runs on the one pinned instrument (test-page 1a15b987,
+sim_digest 40bfdb68: the Ring 24/25/26 pin with Ring 26's comment block appended, sim_digest excludes comments),
+scored together on the frozen scorer (sha 7619ef6b). Four runs (sg0.25 x3, sg0.3 seed777) were REUSED after
+verification from an interrupted build on the tree that died mid-sg0.3; five (sg0.3 12345/31337, sg0.35 x3) were
+generated this cycle on the identical instrument -- reuse resting on the sim being deterministic per seed+page.
+Written up in analysis/2026-09-19_finegrain_sgsweep_window_width.md.
+THE NUMBERS. Five of nine runs measurable (Ring 26: three of fifteen), verdict still "insufficient support":
+F1/F2/F4 pass, F5 fails (1 measurable condition, needs 3), F3 NOT evaluable (5 measurable runs, needs 6 -- one
+short). Per condition, eligible epochs of 22 (777/12345/31337) and the binding gate: sg0.25 = 10/10/11, measurable
+0/3, E3=0 (lock broken) but E2 fails 9-10 per seed and all three below the 12 floor -- a systematic participation
+wall; sg0.3 = 19/17/17, E3=0, measurable 3/3, detection 2/3 (777, 31337) -- reproduces Rings 25/26 exactly on a
+freshly generated triple; sg0.35 = 15/11/17, E3=0, measurable 2/3 (777 and 31337 clear the floor; seed 12345 lands
+at 11, E2=10, one epoch short). No condition static (A3 0.05-0.09; the screen flags none).
+WHY THE WINDOW IS ONE-SIDED. E3=0 in ALL nine runs -- the drive cut breaks the seed lock across the whole finer
+grid; what moves is participation. BELOW (sg0.25) is a wall: every seed fails E2 in 9-10 of 22 epochs, 10-11
+eligible, uniformly below the floor -- too little self-gravity to build participating structure, and the
+uniformity across seeds marks a wall, not variance; the floor crossing sits between 0.25 and 0.3. ABOVE (sg0.35)
+is a gradual decay, NOT cap saturation: clamp share 0.074, identical to sg0.3, A3 0.053, a clean moving field
+(contrast Ring 26's sg0.5: clamp 0.967, cap-saturated). So the window has real upward width to at least 0.35; the
+knife-edge understated the high side. sg0.35's single miss is per-seed participation variance, one epoch short.
+BANNED: any nested-resonance-memory claim (detection is 2/3 in one condition, not reproduced). Calling the F5/F3
+shortfall a falsifier FIRING -- it is the cascade (F5 needs 3 conditions; F3 not evaluable below 6 runs; F1/F2/F4
+pass, none fires). Calling sg0.35 a measurable condition -- F5 counts a condition only when ALL its seeds are
+measurable (:730), and seed 12345 is not. Reading sg0.35's stronger self-gravity as cap saturation -- clamp is
+0.074, unsaturated. Pooling across instruments. Treating "upward width to 0.35" as settled -- it is 2 seeds of 3
+at n=3, exploratory mapping to be confirmed by a fresh triple.
+DEAD BRANCHES: (1) "the window is a single knife-edge point at 0.3" -- refuted, sg0.35 is measurable 2/3 and not
+cap-saturated. (2) "sg0.25 fails on the seed lock" -- refuted, E3=0; E1/E2 (participation) are the wall. (3)
+"sg0.35's miss is cap saturation like sg0.5" -- refuted, clamp 0.074 = sg0.3's, A3 0.053, moving. (4) "the finer
+grid reaches F5" -- refuted, one countable condition, five measurable runs. (5) "the fresh sg0.3 would drift on
+the post-Ring-26 build" -- refuted, it reproduces Rings 25/26 exactly (19/17/17, E3=0, detection 777/31337).
+KILL-TEST: six agents in one workflow re-derived from the committed files with their own code. Eligibility and
+verdict (per-run 10/10/11, 19/17/17, 15/11/17; 5/9 measurable, 1 condition, F3 not evaluable, "insufficient
+support") CONFIRMED; A3 recomputed from the raw meshes against np.corrcoef, none static, sg0.35 clamp 0.074 =
+sg0.3 CONFIRMED; the instrument pin (nine runs one test-page hash 1a15b987, sim_digest 40bfdb68, rc-test and
+source unchanged in git since Ring 26, git_dirty = untracked files) CONFIRMED; scorer sha 7619ef6b, synthetic and
+manifest verified, staticness/manifest builders unmodified, cond_meas = all-seeds and F3_MIN_RUNS = 6 re-read from
+source CONFIRMED; the sg0.3 reproduction of Ring 26 and detection-only-in-sg0.3 CONFIRMED. The overclaim critic
+corrected one imprecision (the manifest file has no 'verified' key -- the scorer's check runs at score time and
+set verdict.inputs_verified=true) and added the determinism and n=3 caveats, since folded in. One author, no AI
+trailer, no pooling, no memory claim.
+THE NON-OBVIOUS CHOICE: do not read "one condition again" as a repeat of Ring 26 -- the finer grid changes WHICH
+obstacle blocks F5, from "only one point is measurable" to "the second point is 2/3, one run short of a countable
+condition and of an evaluable F3", and the number that moved is 3/15 -> 5/9 measurable. And reuse the interrupted
+build's verified runs rather than rebuild the lot; regenerate only the truncated and missing ones.
+OPEN QUESTIONS: this ring earns three. (1) Is sg0.35's 2/3 realisation variance or a ceiling? A SECOND triple at
+sg0.35 (transcendental-digit seeds 2718/16180/57721, as Rings 24/25 used) -- if it makes sg0.35 3/3, two countable
+conditions exist, one more inside the window (e.g. sg0.32) would reach the three F5 needs, and >= 6 measurable runs
+would make F3 evaluable for the first time. (2) What minimal self-gravity first clears the 12 floor at the cut
+drive -- the lower wall is between 0.25 and 0.3? (3) The gain/loss axis (gl), still open from Ring 26 QN2. Carried:
+detection reproducibility at sg0.3 (still 2/3); measurability at the condition level, still one. Nothing about
+nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
