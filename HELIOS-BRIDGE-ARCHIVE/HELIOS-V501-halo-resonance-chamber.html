@@ -10512,6 +10512,70 @@ evaluable and, for the first time, let the frozen protocol return something othe
 support". (3) Is 1.7 near a threshold -- does a gentler cut (1.85) also zero E3, and does the lock return
 smoothly as the drive is restored (a dose-response)? Carried: the E2 participation seed-dependence;
 measurability at the condition level. Nothing about nested resonance memory is decided here.
+
+RING 26 · 2026-09-18 · the drive sweep ring 25 named cannot be three conditions to the frozen scorer at
+all -- it keys conditions on (preset, sg, gl), not the drive; and the axis that IS scoreable, self-gravity
+at the cut drive, makes sg 0.3 a MEASURABLE knife-edge, not a family -- one condition of five, F5 still short
+WHAT WAS MEASURED. Ring 25 proposed a drive sweep (fieldExp 1.6/1.7/1.8, "three measurable conditions in
+one scoring") as the path to the first verdict other than "insufficient support" -- the frozen protocol needs
+>= 3 measurable conditions (F5) and >= 6 measurable runs (F3). That path does not exist: the scorer keys a
+condition on (preset, selfgrav, gainloss) ONLY (memory_estimator_qualify.py:561), the drive override is not
+in the key, measure_grid skips any group that is not exactly three seeds (:600), and main reads one input dir
+(:1293) -- so a drive sweep at one (sg,gl) collapses to a single condition. Shown on committed runs, no new
+compute: a recorded sg0.3 run at base drive (overrides {}) and one at the cut drive (overrides {fieldExp
+1.7}) both return the load key ('spinchladni', 0.3, 0.0), identical despite the different drive. Ring 25's own
+method note already carried the fact: "the scorer keys a condition on preset/sg/gl and needs exactly three
+seeds." Because F5 counts (sg,gl) conditions, the scoreable axis is self-gravity, swept AT the cut drive. This
+ring runs that: the recorded grid's own self-gravity axis sg in {0, 0.15, 0.3, 0.5, 0.8} at gl0, all at
+fieldExp 1.7, three grid seeds each -- fifteen runs, one pinned instrument (test-page hash 46405b3d,
+sim_digest 40bfdb68), scored together. Written up in analysis/2026-09-18_cutdrive_sgsweep_knifeedge.md.
+THE NUMBERS. The scorer loads the fifteen runs as FIVE distinct conditions (the sg axis is scoreable, unlike
+the drive), and only ONE is measurable. Verdict "insufficient support": 3 of 15 runs measurable, 1 measurable
+condition (F5 needs 3), F3 not evaluable (needs 6 measurable runs); F1, F2, F4 pass. Per condition, eligible
+epochs of 22 and the binding gate: sg0 = 0/0/0, E3 fails 22 of 22 (a TOTAL seed lock, raw cross-seed 0.999);
+sg0.15 = 8/8/8, E3 fails only 1-2 (the lock breaks) but E1 and E2 fail 10-12 (no participation) and 8 is
+below the 12 floor; sg0.3 = 19/17/17, E3 = 0, measurable 3/3, detection 2/3 (seeds 777 and 31337, not 12345);
+sg0.5 = 1/2/1, force cap saturated (clamp share 0.967), E2 fails 17, e5-unbalanced; sg0.8 = 0/0/2, clamp
+0.999, E2 fails 20, E3 back to 14. No condition is static (A3 0.11-0.66, the screen flags none). sg0.3 is a
+knife-edge: the only self-gravity on the grid's own axis where the cut drive yields a measurable condition.
+WHY THE WINDOW HAS TWO WALLS. Measurability turns on mass (E1), participation (E2) and cross-seed separation
+(E3). BELOW sg0.3 the drive cut breaks the lock but the field will not participate: at sg0 the driven field is
+identical across seeds (E3 22/22), at sg0.15 the lock is gone (E3 1-2) yet E1/E2 fail for want of self-gravity
+to build structure. ABOVE sg0.3 the force cap saturates -- clamp share 0.070 -> 0.967 -> 0.999 as sg rises --
+and a clamped force is the cap's fixed geometry, the SAME for every seed, so participation collapses (E2
+17-20) and the seeds re-synchronise (E3 back to 14 at sg0.8). This is the exact mechanism that made ring 25's
+magnetism raise back-fire (Lorentz term saturating the cap); here strong self-gravity does it. More shared
+clamped forcing synchronises the seeds, whatever its source. The measurable window is bounded below by a
+participation floor and above by a cap-saturation ceiling, and on this axis it is narrower than one grid step.
+BANNED: calling this a memory result (detection is 2/3 in one condition only, not reproduced). Calling the F5
+shortfall a falsifier firing -- it is the cascade (F5 needs 3 measurable conditions, :827; F1/F2/F4 pass, none
+fires). Calling the retire a scorer bug to fix -- the (preset,sg,gl) key IS the frozen protocol. Pooling
+across instruments. Reading sg0.15's 8 eligible as "almost measurable" -- the wall there is participation, not
+the lock. Any memory claim from any condition.
+DEAD BRANCHES: (1) "a fieldExp sweep is three conditions" -- refuted, base and cut drive at sg0.3 return the
+same load key; the drive is absent from it. (2) "the drive cut generalises across sg to a measurable family"
+-- refuted, one of five. (3) "the high-sg failures are staticness" -- refuted, no condition is static (A3 <=
+0.66); it is cap saturation (clamp share tracks it 0.07 -> 0.97 -> 0.999). (4) "sg0.15 fails on the seed lock"
+-- refuted, E3 fails only 1-2 there; E1 and E2 are the walls. (5) "the fresh sg0.3 would drift on HEAD" --
+refuted, it reproduces ring 25's committed triple exactly (19/17/17, E3=0, detection 777/31337).
+KILL-TEST: the pipeline was validated by reproducing ring 25's committed cut-drive triple exactly BEFORE
+trusting the sweep. Five agents in one workflow re-derived from the committed files with their own code: the
+eligibility and verdict (per-run 0/0/0, 8/8/8, 19/17/17, 1/2/1, 0/0/2; F5 1 condition, "insufficient
+support") CONFIRMED; A3 recomputed against an independent np.corrcoef, matching the screen to machine
+precision, no condition static, CONFIRMED; the instrument pin (one test-page hash 46405b3d over all fifteen)
+CONFIRMED, noting git_dirty=true is untracked files, not a changed page; the condition-key collapse re-read
+from the scorer source (key omits the drive, one input dir) CONFIRMED the retire; scorer sha 7619ef6b, the
+synthetic receipt and manifest verified, CONFIRMED. One author, no AI trailer, no pooling, no memory claim.
+THE NON-OBVIOUS CHOICE: ban the obvious -- do not run the drive sweep the prior ring named; break it first
+(the frozen scorer cannot count it), reframe the axis to the one F5 keys on, and read the one-of-five result
+as the mechanism (a two-walled window) rather than a failure to reach F5.
+OPEN QUESTIONS: this ring earns three. (1) Are there three measurable conditions INSIDE the window -- a finer
+self-gravity grid between 0.15 and 0.5 (e.g. 0.25 / 0.3 / 0.35) at the cut drive, each screened before
+scoring, could reach F5 where the coarse grid does not. (2) Does the gain/loss axis (gl), also in the scorer's
+key, open a scoreable direction where self-gravity's window is too narrow? (3) The participation floor: what
+minimal self-gravity first clears E1/E2 at the cut drive, between 0.15 and 0.3? Carried: detection
+reproducibility at sg0.3 (still 2/3); measurability at the condition level, still one. Nothing about nested
+resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

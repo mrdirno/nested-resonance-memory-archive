@@ -1,0 +1,160 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_cutdrive_sgsweep",
+ "runs": 15,
+ "note": "Ring 26 sg-sweep at cut drive fieldExp1.7 (sg 0/0.15/0.3/0.5/0.8, gl0, grid seeds), sim_digest 40bfdb68",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "spinchladni_sg0.15_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "b698e6bc9e8c81393df8e5486005252e607de98f4358d6c18bb960e18898aca6",
+   "bytes": 54840
+  },
+  {
+   "file": "spinchladni_sg0.15_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "c9209b401eae042f1cfad947e71bcff2fc00bf81f236f1b1a33949edc15ea0ae",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.15_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "aadd763065eae5345c477337df2eca8c41c144fd50221816500b102065a261e7",
+   "bytes": 54802
+  },
+  {
+   "file": "spinchladni_sg0.15_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "d4100bcf57b8f98a38c06e3671d74a6684e1b700c64efa6f36915546612ea730",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.15_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "26309b8f638dcaca2204f9dbc6e6758863395689cacc01ef98fb97e8ca1ce9d5",
+   "bytes": 54776
+  },
+  {
+   "file": "spinchladni_sg0.15_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "62306fe198bb7fb2bd339ccbc8ac40820c017b7d1221a5e4ef2e87a2c43d0bb0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "af828ed4f4fc1a118f5bfe9e3c5c790d6992eee7dae341876f55e0bfebd251fb",
+   "bytes": 54668
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "bbe6c90acba2454a83353e93052f75d6ba5c58f68fd062d9fd634332e77084b9",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "7cd0ee179720969a60506bf24bf51da08410392a732d8ee44eb23a0480f76b2e",
+   "bytes": 54737
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "4ac2b599807f24d33f12cfe3d0608252338e41599d4e8aacb21210b8d21346d7",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "2513501264081a6b6a97c50c9e58c54fd29cbcb93e15dcfb9b128d496339ed7a",
+   "bytes": 54558
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "632599c214f210755aea028269f842534660f3aee187ee8d88694f5a8b72286b",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "bc560d04c0297c1176b4c5d8e150793b5d1a4153dbc92834fe68ffca14d2696a",
+   "bytes": 55932
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "6a2681ce5d6b82c00467ddec20a02fd1281fd87065b3e7e7a601d5719e3d43b2",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "0f8a8215fa9fff9416da387767d295b13d9b060b50b5911d9ca94e651c2ed26d",
+   "bytes": 56082
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "9595348ca468301e00c8c406a95492b1cacf77a6bdb91d163b464289e3d00fd0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "3e82ec8e46bda2834f8722510dfec1559a97887d6f911af8d9285e9d9af6805b",
+   "bytes": 56008
+  },
+  {
+   "file": "spinchladni_sg0.5_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "7a613634f3620a8a5cd0c8b6d32eafc3096675a52374eb88f2bb1708f2446942",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "1c24389b59d407bb9365b288710fae1a2aeaf457c39048d4668e74570c9b8569",
+   "bytes": 55885
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "f6ad24db0946f082db6c830ec9202751563869cad6c39797709e744804505d8f",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "78bb1ed0b7815b4d9b20c46e74054398ddd7cadd66ab273b03897f7d7cf52e34",
+   "bytes": 55897
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "3f2079978dbf34ff7cf8fa0359e52e87bfaf5e2f11442a80425162033f9462fd",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "7995e20fb041d152c57c9a4ab5e9b32fe5bba8b20659d226b55cc04c819ed811",
+   "bytes": 55926
+  },
+  {
+   "file": "spinchladni_sg0.8_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "19e0098cf34a964a8d284ccded6c442625986a7a17f2eab0e71711f5333d1400",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "6fe91e670bb5c640e6ca85dbc4698e9675e9690b71d100c0647c63800b3f6f22",
+   "bytes": 55776
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "eee670b7787c528169ae8c34c538e6ec2b8baf06a6e794421ae4202ac7db2931",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "9635e3ed85266c86a1b2dc3d410e04067114b1411dcbb866f788a73d22087b6f",
+   "bytes": 55793
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "00b858770f67e5d2c241258e811a1b70efacac75457ade1a97259b5e75ed0ff0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "f67d98e9444d03686a0add90b16ffe50b6e4d07a65fcadde3c3a7326247e92b9",
+   "bytes": 55763
+  },
+  {
+   "file": "spinchladni_sg0_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "c018adb1d054fbb37d19e92422dc6f58543fc8b4f731529ba81480d25f793c70",
+   "bytes": 3145728
+  }
+ ]
+}
