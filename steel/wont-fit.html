@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Won't Fit — Steel &amp; Misc Metals Field Toolkit</title>
+<meta name="description" content="The connection won't work as detailed, two members want the same steel — and the drawings don't close, with a crane on standby. The field note you send up before the next lift: what won't close, every sheet and revision it's on, and what it's holding — the question your PM logs as an RFI, before it turns into a change order.">
+<meta name="apple-mobile-web-app-title" content="Won't Fit">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">you &rarr; your PM &rarr; the EOR / detailer</span>
+    <h1 id="title">Won&rsquo;t Fit</h1>
+    <p class="lede" id="lede">The connection won&rsquo;t work as detailed, the gusset and the beam want the same steel &mdash; and it won&rsquo;t close, with a crane on standby. Written now, before the next lift, it&rsquo;s a five-minute question. Written next week it&rsquo;s a change order. Send it up while it&rsquo;s still cheap.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send up</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn"></div>
+
+  <p class="credit">Built for the Steel &amp; Misc Metals Field Toolkit. Missing a line your set always needs &mdash; a piece mark, a sequence, a callout the way you actually mark it? Wish it better &mdash; it gets built, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* WON'T FIT — the field RFI note, backported to steel from the framing pioneer
+ * (C3736). Aldrin Payopay <aldrin.gdf@gmail.com> — GPL-3.0
+ *
+ * A CONFIG ON SHAPE #2 (`shared/note.js`): the page owns the WORDS, the engine
+ * owns the DOM, the state, the copy and the gates. Scoped to WHAT HE SENDS UP,
+ * never to the record of record — it is the field note his PM turns into an RFI.
+ * Steel's whole doctrine is that it CITES the certified record and never restates
+ * it: this states no torque, no bolt tension, no weld size, no capacity — the
+ * conflict is a coordination fact; the connection design stays the EOR's.
+ *
+ * THREE RAILS THAT ARE LOAD-BEARING AND MUST NOT BE "TIDIED" (carried verbatim
+ * from the pioneer):
+ *   1. IT NEVER NUMBERS ITSELF — no RFI-number field, none generated.
+ *   2. SHEET *AND* REVISION on every drawing, as repeatable rows.
+ *   3. THE READ IS HIS, NEVER THE ANSWER — the connection call defers to the EOR
+ *      and detailer. A stamped fix is certified data we do not have.
+ */
+(function () {
+  "use strict";
+  var TR = window.TOOLKIT_TRADE || {};
+
+  Note.mount({
+    key: "toolkit." + (TR.slug || "steel") + ".wontfit.v1",
+    docName: "FIELD NOTE",
+    copiedLabel: "Copied. Send it up.",
+    clearConfirm: "Clear this note? Your name and company stay on the phone.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Note started",
+
+    titleSuffix: function (get, u) {
+      return get("where");
+    },
+    subline: function (get, u) {
+      return get("job");
+    },
+
+    sections: [
+      {
+        title: "Where you hit it",
+        why: "The way you'd call it — the gridline, the level, the piece mark. It rides on line one so he knows where before he opens the thread.",
+        fields: [
+          { id: "where", kind: "text", caps: true, label: "Where", hint: "— your words, not the job number", ph: "Grid C-4 · beam-to-column at Lvl 3", docSkip: true },
+          { id: "job", kind: "text", sticky: true, label: "Job / building", hint: "— the way your set names it", ph: "Bldg C — Riverside", docSkip: true },
+          { id: "hit", kind: "clock", label: "When you hit it", nowLabel: "Now", docLabel: "Hit it" }
+        ]
+      },
+      {
+        title: "What won't close",
+        docHead: "WHAT WON'T CLOSE",
+        why: "One line, plain — so whoever answers it gets it cold with no trade shorthand. What fights what, the numbers if you have them. Not the fix — that comes lower and it's optional.",
+        fields: [
+          { id: "problem", kind: "area", rows: 3, label: "What fights what", hint: "— the conflict, in a sentence", ph: "Beam on S-301 frames the column at the same elevation as the brace connection on S-302. The gusset and the beam flange want the same steel — the connection won't fit as detailed." }
+        ]
+      },
+      {
+        title: "The drawings it's on",
+        docHead: "THE DRAWINGS",
+        why: "Sheet AND revision on every one — this is the line that keeps the answer from bouncing. A question written against last month's rev comes back “see the current set” and you've lost the day. Two sheets disagreeing? Put both down.",
+        fields: [
+          {
+            id: "dwgs", kind: "rows", label: "Every sheet this touches", addLabel: "+ Another sheet",
+            docJoin: "  ·  ",
+            cols: [
+              { id: "sheet", kind: "text", caps: true, label: "Sheet", ph: "S-301" },
+              { id: "rev", kind: "text", caps: true, label: "Rev", ph: "2 / Δ1", docPrefix: "Rev " },
+              { id: "shows", kind: "text", wide: true, label: "What it shows / the callout", ph: "Beam / brace connection" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "What it's holding",
+        tone: "loud",
+        docHead: "WHAT IT'S HOLDING",
+        why: "The line everybody leaves off, and the one that turns a question into an answer. Tap what it costs if it sits, then say it your way. A consequence with no when on it is a shrug.",
+        fields: [
+          {
+            id: "impact", kind: "impact",
+            label: "What's stopped until you answer",
+            hint: "— what this actually holds up",
+            chipHint: "what it costs if it sits:",
+            chips: ["Can't make the connection", "Holds the lift", "Crane on standby", "Raising gang standing", "Holds the deck", "Holds the next pick"],
+            clock: [
+              { v: "Answer today", docToken: "today" },
+              { v: "By tomorrow AM", docToken: "by tomorrow" },
+              { v: "Before the next lift", docToken: "before the next lift" },
+              { v: "No rush", docToken: "no rush" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Your read — if you've got one",
+        docHead: "MY READ — YOUR CALL",
+        why: "Optional, and it is never the answer. A way out you can see from the field saves everybody a week — but you flag it, they decide it. Never a fix you'd put your stamp on.",
+        fields: [
+          { id: "read", kind: "area", rows: 2, label: "How you'd clear it — if it were yours", hint: "— your read, plainly not the fix", ph: "Drop the beam and field-bolt a seat clears the gusset — but the connection design is the EOR's and detailer's call." }
+        ]
+      },
+      {
+        title: "Who's asking",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "to", kind: "text", label: "Sending it to", hint: "— your PM; he logs the RFI", ph: "Dave — our PM", docLabel: "To" },
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, they call you, not the office", ph: "Mike Reyes — 555-0141", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Apex Steel", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "This isn't the RFI — it's the field note it comes from. Log it your way; the RFI number is yours to give, and a number from me is one nobody on your set can find.",
+      "No answer and it stays stopped — nothing moves here till I hear back. I'm not guessing at the fix and calling it good."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.dwgs || []).filter(function (r) { return r && (r.sheet || r.shows); }).length;
+      if (n) return n + " sheet" + (n === 1 ? "" : "s") + " on the note";
+      return touched ? "Note started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

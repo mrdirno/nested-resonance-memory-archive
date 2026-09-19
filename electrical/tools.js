@@ -73,6 +73,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The gear that sets your date \u2014 the board, the transformers, the gen, the lighting package \u2014 in one list, with what each one holds up and the date it has to beat. Then one message that asks ONE question about the few lines it\u2019s about, instead of a sixth \u201cany update?\u201d that asks five and gets one of them answered.",
     chip: "#1F7A6B",
     audience: "PM / foreman \u2192 whoever owns the order"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The gear won't fit the working clearance, the conduit fights the structure — and the drawings don't close. Send the field note up before the walls close and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / engineer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

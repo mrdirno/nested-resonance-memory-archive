@@ -76,6 +76,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The equipment that sets your date — heaters, the booster set, interceptors, specialty trim — in one list, with what each one holds up and the date it has to beat. Half of it has to be in before something closes, so the message asks ONE question about the few lines that are actually holding you up.",
     chip: "#2E5FA3",
     audience: "PM / foreman → whoever owns the order"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The waste won't hold slope and clear the footing, the rough fights the structure — and the drawings don't close. Send the field note up before the slab pours and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / engineer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

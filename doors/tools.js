@@ -159,6 +159,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Forty cylinders in the cage and nobody's called the keying. The ask with a date on it — what's in the cartons, what nobody's told you, the day you have to put them in by, and what that day looks like without an answer, in your words. Writes no groups, no master, no bitting, ever.",
     chip: "#B7BEDC",
     audience: "Lead → GC super / owner's rep / whoever can call the keying meeting"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The frame won't land in the rough, the hardware fights the schedule, or a rated opening got the wrong frame — and the drawings don't close. Send the field note up while frames are staged and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / architect"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

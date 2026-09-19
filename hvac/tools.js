@@ -87,6 +87,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The equipment that sets your date — the units, the chiller, the curbs, the controls — in one list, with what each one holds up and the date it has to beat (or the one it must NOT beat, because a unit that lands early is storage and a second crane). Then one message that asks ONE question about the few lines it’s about.",
     chip: "#8C5BD8",
     audience: "PM / foreman → the rep who owns the order"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The trunk won't fit above the ceiling, the duct clashes the beam or the sprinkler main — and the drawings don't close. Send the field note up before the ceiling closes and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / engineer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

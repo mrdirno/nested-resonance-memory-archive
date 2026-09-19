@@ -107,6 +107,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are the weather's and the crane's. Put yours next to theirs line by line — wages, fringes, dues, per diem, the travel, the truck — and put your real hours in, because a dollar an hour on a trade that stops for wind, stops for the crane and works off the ground is a different dollar than the same dollar on a bench.",
     chip: "#2C4A54",
     audience: "Ironworkers · connectors · foremen · anybody weighing a move"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The connection won't work as detailed, two members want the same steel — and the drawings don't close, with a crane on standby. Send the field note up before the next lift and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / EOR-detailer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

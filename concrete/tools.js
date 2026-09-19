@@ -68,6 +68,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The ask you send whoever holds the gate — the day, the route in, the lot for the trucks and the pump, and the heads-up that keeps a load from showing up to a locked gate. It's an ask, not a booking, and it says so. Then put whatever they send back against what you asked, and it names what they never answered — because “yeah that’s fine” is not an answer to eight things.",
     chip: "#7ECE92",
     audience: "Concrete → building engineer / facilities / property manager"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The slab edge won't close on the grid, the embeds fight the rebar — and the drawings don't close, with ready-mix on standby. Send the field note up before you pour and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / EOR"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

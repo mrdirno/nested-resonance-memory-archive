@@ -88,6 +88,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The rate is not the package, and the hours are not a given. Put yours next to theirs line by line — wages, fringes, dues, per diem — and put your real hours in, because a dollar an hour on a winter you couldn't lay is a different dollar.",
     chip: "#506512",
     audience: "Layers · foremen · anybody weighing a move"
+  },
+  {
+    name: "Won't Fit",
+    href: "wont-fit.html",
+    desc: "The coursing won't close on module, the opening lands a joint in the lintel bearing — and the drawings don't close. Send the field note up before you close the wall and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
+    chip: "#8A1C4B",
+    audience: "Field / foreman → our PM → GC / architect"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
