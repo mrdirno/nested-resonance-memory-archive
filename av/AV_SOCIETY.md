@@ -1246,16 +1246,42 @@ A three-lens panel scored the unbuilt parts and all three independently attacked
      today**. The change moves the flip from the space to the third character of a word that
      was never here; the count of transitions goes from one to none. It rides a defect it did
      not create, below.
-   - **THE NAMED NEXT RUNG, and it is bigger than the 124 this cycle left behind: rule 6 is
-     STRUCTURALLY BLIND on every pick surface.** `shared/pickfilter.js` indexes a row's whole
-     `<li>` textContent as its ONE primary field, so `wholeName()` — "is this row wholly
-     CALLED that" — can never be true there, and rule 6 hedges a man who typed an item's exact
-     name plus the word a search box taught him to add. Measured: class H **8/280 exact on the
-     pick surfaces against 248/248 on the document libraries and 60/60 on the commons**, so
-     **272 false hedges** on the shape rule 6 was explicitly written to leave alone. The fix is
-     a field spec, not a predicate — declare the row's NAME as the primary field and the `<li>`
-     text as `about: true` — and it moves ranking on fourteen surfaces, so it ships with its
-     own lead-movement diff or not at all.
+   - ~~**THE NAMED NEXT RUNG, and it is bigger than the 124 this cycle left behind: rule 6 is
+     STRUCTURALLY BLIND on every pick surface.**~~ **SHIPPED 2026-09-18 (C3740), and the rung
+     was right about the mechanism and the fix, right that no gate was watching, and WRONG that
+     there was a ranking to move.** `shared/pickfilter.js` indexed a row's whole `<li>`
+     textContent as its ONE primary field, so `wholeName()` could never be true there and rule
+     6 hedged a man who typed an item's exact name plus the word a search box taught him to add.
+     The `8/280` was a C3700 snapshot; re-driven on all **15** pick surfaces the class was
+     **805 of 820** name+chrome probes falsely hedged. The fix shipped exactly as written — the
+     `.name` span (the checklist engine and both forks emit it) is the primary field, the whole
+     `<li>` text carries `about: true` so a word found only in the description or the control
+     strip still MATCHES but names nothing, and a row with no `.name` falls back to the old
+     whole-text behaviour so an adopted list cannot regress. Base token scores are unchanged
+     (the about field IS the old field), so the change is honesty, not disruption. `find-honesty.mjs`
+     gained a PICK adapter — it had gated the libraries and the commons and skipped every pick
+     surface, precisely where this defect lived — and it is RED-VERIFIED by restoring the old
+     engine: the pick surfaces fail **H** (name+chrome, ~0 honest) AND **C** (prose shown as
+     EXACT, 0 honest — the single field made a description word strength-2), green on the fixed
+     engine, **10,959 → 17,572 checks, 0 failing** on disk and again on the live URL.
+     **WRONG ABOUT THE LEAD-MOVEMENT DIFF, and the reason is the whole point of a filter:** a
+     pick filter HIDES and SHOWS rows in place, it never reorders them (a category keeps its
+     shape), so there is no visible lead to move — the doc-library model the rung borrowed does
+     not apply. The diff was run anyway and it found the bonus: **10 first-visible rows changed
+     and every one is the fix MATCHING a row the old whole-`<li>` tokeniser had GLUED out of
+     reach** — "Integral color" tokenised as `coloroff` because `.name` and its hint concatenate
+     with no separator, so the old filter could not match "color" to it at all. No wanted row
+     was lost (its own name still shows it); `find-noise` stayed green 444, N7 included.
+   - **THE NAMED NEXT RUNG, and this cycle's own measurement named it: the `about` field still
+     GLUES adjacent element text.** `r.el.textContent` runs `.name` straight into the next span,
+     so a hint or spec word at that boundary — the `off` welded into `coloroff`, the `qty` into
+     `batchqty` — cannot be found by the word a man would actually type. The name half of the
+     search is clean because it reads `.name` alone; the description half is not. The fix is a
+     separator between child text nodes when the about field is built (a walk, not `textContent`),
+     and it ships with a count — derived from the surfaces' own markup, not asserted — of the
+     boundary words it makes searchable that were not, or it is chrome. The falsifier, run first:
+     it may not move any name-field result, because the name field already tokenises cleanly and
+     `find-honesty` is green on it end to end.
    - **AND THE 124 THAT REALLY DID DROP NOTHING, named with the number that killed the obvious
      fix so it is not re-derived.** Every word he typed is a word of SOMETHING's name here at
      full strength and no row is called any of it; 67 of the 124 are single-word, where the
@@ -10609,3 +10635,22 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   bound this cycle (unscoped well check both sinks, BACKPORT off the LIVE-STATE signal, gates disk+live,
   end-to-end drive, storefront same-cycle, close); no dead line surfaced to justify a host-file edit.
   https://mrdirno.github.io/nested-resonance-memory-archive/doors/wont-fit.html
+- 2026-09-18 · **[AXIS:COMMONS] THE ROW'S NAME IS THE FIELD — the honest-label ladder reaches the 15
+  pick surfaces it had skipped.** `shared/pickfilter.js` indexed each tap-to-tick row as ONE primary
+  field, the whole `<li>` textContent (name + the control strip's "Qty"/axis labels/options, or a
+  fork's spec line), so `shared/find.js` rule 6 could never see a WHOLE NAME and typing an item's exact
+  name plus a search-box word ("washout tub template") hedged "Closest to" on every list. Before→after
+  over all 15: **805 of 820** name+chrome probes falsely hedged → **0**, with **0 verbatim names newly
+  hedged**. Fix = a field spec (`.name` = primary, whole `<li>` = `about:true`, fallback to old
+  behaviour when no `.name`). `find-honesty.mjs` gained a PICK adapter — RED-VERIFIED on the old engine
+  (H ~0 honest, C 0 — prose shown as EXACT), green on the fixed one, **10,959 → 17,572 checks, 0 failing
+  on disk AND on the live URL**; `find-noise` green 444, mobile-watertight green. **BONUS:** the diff
+  surfaced a latent MATCHING bug — the old whole-`<li>` tokeniser glued adjacent element text ("Integral
+  color" → `coloroff`), which the clean `.name` field fixes; 10 first-visible rows corrected, no wanted
+  row lost. **BACKPORT RIDER — THE CYCLE IS THE RIDER:** one engine change fixes all 15 pick surfaces at
+  once; the same-class sweep IS the build. **STOREFRONT:** N/A — an engine refinement across existing
+  tools, no new tool or trade. Named next rung: the `about` field still glues boundary words
+  (`textContent`); walk the children with a separator. **SIGNAL DUTY:** template unchanged, nothing cut —
+  the work was the book's own named next rung and every gate law bound (well unscoped both sinks,
+  red-verify, gates disk+live, no storefront needed).
+  https://mrdirno.github.io/nested-resonance-memory-archive/concrete/mix-order.html
