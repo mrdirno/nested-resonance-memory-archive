@@ -2,9 +2,9 @@
 // C3733 — THE TITLE COLOUR reaches the export a person actually sends.
 //
 // The SVG export is the honest witness here: it is text, it is deterministic,
-// and `vectorExport` draws its title through the SAME `titlePlanToSvg` the live
-// canvas and the video worker draw through — so a colour proven in the SVG is a
-// colour proven on every surface. No pixels, no audio, no stubs: a real image is
+// and proves the vector emitter receives the selected palette. Canvas and the
+// raster worker use a separate emitter; their pixels need separate coverage.
+// No audio or stubs: a real image is
 // dropped, a real title is typed, a real swatch is tapped, and the real Export
 // sheet writes the real file.
 import { test, expect, type Page } from '@playwright/test';
@@ -64,7 +64,7 @@ function titleGroup(svg: string): string {
   return svg.slice(a, b + 4);
 }
 
-test('the title colour a person picks is the colour every export paints', async ({ page }) => {
+test('the title colour a person picks reaches the SVG palette', async ({ page }) => {
   await boot(page);
 
   // DEFAULT WHITE — the legacy pair, unchanged, so no old project moves.
@@ -81,9 +81,14 @@ test('the title colour a person picks is the colour every export paints', async 
   expect(g).toContain('fill="rgba(255,255,255,0.60)"'); // LIGHT plate
   expect(g).not.toContain('fill="rgba(0,0,0,0.42)"');   // never the dark one
 
-  // YELLOW — a luminous ink keeps the legacy dark plate; only a dark ink flips.
-  await page.getByTestId('title-color-yellow').click();
-  g = titleGroup(await exportSvg(page));
-  expect(g).toContain('fill="#ffd400"');
-  expect(g).toContain('fill="rgba(0,0,0,0.42)"');
+  // Bright inks keep a dark plate, with enough opacity after compositing.
+  for (const [color, ink, alpha] of [
+    ['yellow', '#ffd400', '0.53'], ['red', '#ff453a', '0.75'],
+    ['blue', '#0a84ff', '0.77'], ['pink', '#ff375f', '0.76'],
+  ]) {
+    await page.getByTestId(`title-color-${color}`).click();
+    g = titleGroup(await exportSvg(page));
+    expect(g).toContain(`fill="${ink}"`);
+    expect(g).toContain(`fill="rgba(0,0,0,${alpha})"`);
+  }
 });

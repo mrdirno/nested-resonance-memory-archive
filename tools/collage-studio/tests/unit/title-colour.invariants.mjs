@@ -1,7 +1,7 @@
 // Author: Aldrin Payopay · GPL-3.0-only
 // C3733 — THE TITLE COLOUR. The REAL title module, transpiled, swept across every
 // named colour: the derived scrim always separates further than the other family
-// and clears the large-text contrast floor; `white` is the byte-identical legacy
+// and clears the large-text contrast floor after compositing; `white` is the byte-identical legacy
 // pair; the ink and scrim the plan carries are the exact strings BOTH emitters
 // paint, so the four surfaces cannot diverge.
 import assert from 'node:assert/strict';
@@ -32,8 +32,20 @@ try {
   const COLORS = ['white', 'black', 'yellow', 'red', 'blue', 'pink'];
   const FLOOR = 3.0;               // WCAG AA for large text
   const LIGHT_SCRIM = 'rgba(255,255,255,0.60)';
-  // The solid anchor each scrim family is a translucent skin of.
-  const anchorOf = (scrim) => (scrim === TITLE_PLATE ? '#000000' : '#ffffff');
+  const parseScrim = (scrim) => {
+    const m = /^rgba\((0,0,0|255,255,255),(0\.\d+|1\.00)\)$/.exec(scrim);
+    assert.ok(m, `supported scrim: ${scrim}`);
+    return { anchor: m[1] === '0,0,0' ? 0 : 255, alpha: Number(m[2]) };
+  };
+  const hex = (rgb) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
+  const composite = (scrim, background) => {
+    const { anchor, alpha } = parseScrim(scrim);
+    return hex(background.map((v) => Math.round(anchor * alpha + v * (1 - alpha))));
+  };
+  // Exercise actual translucent source-over on all gray levels and RGB corners.
+  const backgrounds = Array.from({ length: 256 }, (_, v) => [v, v, v]);
+  for (const r of [0, 255]) for (const g of [0, 255]) for (const b of [0, 255])
+    backgrounds.push([r, g, b]);
 
   // ---- THE CONTRAST MATHS: known anchors ----------------------------------
   ok(Math.abs(contrastRatio('#ffffff', '#000000') - 21) < 1e-9, 'white vs black is exactly 21:1');
@@ -56,24 +68,36 @@ try {
   for (const c of COLORS) {
     const p = titlePalette(c);
     ok(/^#[0-9a-f]{6}$/i.test(p.ink), `${c}: ink is a #rrggbb hex`);
-    ok(p.scrim === TITLE_PLATE || p.scrim === LIGHT_SCRIM, `${c}: scrim is one of the two families`);
+    const { anchor, alpha } = parseScrim(p.scrim);
+    ok(alpha >= (anchor === 0 ? .42 : .60) && alpha <= 1, `${c}: scrim uses a bounded family opacity`);
     inkSeen.add(p.ink.toLowerCase());
 
     // THE POLARITY IS ARGMAX, not a guess: the chosen family separates at least
     // as far from the ink as the family we did not choose.
-    const chosen = contrastRatio(p.ink, anchorOf(p.scrim));
-    const other = contrastRatio(p.ink, anchorOf(p.scrim === TITLE_PLATE ? LIGHT_SCRIM : TITLE_PLATE));
-    ok(chosen >= other, `${c}: the derived scrim separates further than the other family (${chosen.toFixed(2)} ≥ ${other.toFixed(2)})`);
-    ok(chosen >= FLOOR, `${c}: ink clears the large-text floor against its scrim (${chosen.toFixed(2)} ≥ ${FLOOR})`);
+    const chosen = contrastRatio(p.ink, anchor === 0 ? '#000000' : '#ffffff');
+    const other = contrastRatio(p.ink, anchor === 0 ? '#ffffff' : '#000000');
+    ok(chosen >= other, `${c}: the derived scrim retains argmax polarity`);
+    for (const background of backgrounds) {
+      const ratio = contrastRatio(p.ink, composite(p.scrim, background));
+      ok(ratio >= FLOOR, `${c}: actual scrim over ${hex(background)} clears ${FLOOR}:1 (${ratio})`);
+    }
 
     assert.deepEqual(titlePalette(c), p); checks++;                 // deterministic
   }
   ok(inkSeen.size === COLORS.length, 'every named colour has a distinct ink');
   // Only a DARK ink flips the scrim to the light family; every luminous colour
-  // keeps the legacy dark plate. This is the whole visible promise.
+  // keeps the dark family; only white must retain the exact legacy opacity.
   ok(titlePalette('black').scrim === LIGHT_SCRIM, 'a black title gets the light scrim');
   for (const c of ['white', 'yellow', 'red', 'blue', 'pink'])
-    ok(titlePalette(c).scrim === TITLE_PLATE, `${c} keeps the legacy dark plate`);
+    ok(parseScrim(titlePalette(c).scrim).anchor === 0, `${c} keeps the dark family`);
+
+  // Negative control: opaque-anchor tests used to pass these broken palettes.
+  for (const c of ['yellow', 'red', 'blue', 'pink']) {
+    const ink = titlePalette(c).ink;
+    ok(contrastRatio(ink, '#000000') >= FLOOR, `${c}: opaque anchor hides the defect`);
+    ok(contrastRatio(ink, composite(TITLE_PLATE, [255, 255, 255])) < FLOOR,
+      `${c}: original translucent plate fails over white`);
+  }
 
   // ---- THE PLAN BAKES THE COLOUR, and the no-op rule survives -------------
   const measure = (text, px) => text.length * px * 0.5;   // deterministic, pure
@@ -137,7 +161,7 @@ try {
   ok(titlePlanToSvg(legacy).includes(`fill="${TITLE_INK}"`) && titlePlanToSvg(legacy).includes(`fill="${TITLE_PLATE}"`),
     'the default title still emits the exact legacy ink and plate');
 
-  console.log(`TITLE COLOUR invariants PASS: ${checks} checks — 6 colours, argmax scrim polarity, WCAG floor, the plan's ink/scrim are the exact strings both emitters paint, white is byte-identical to legacy`);
+  console.log(`TITLE COLOUR invariants PASS: ${checks} checks — 6 colours, argmax scrim polarity, composited large-text floor, the plan's ink/scrim are the exact strings both emitters paint, white is byte-identical to legacy`);
 } finally {
   rmSync(temp, { recursive: true, force: true });
 }

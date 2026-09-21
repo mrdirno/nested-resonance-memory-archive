@@ -136,7 +136,7 @@ const INK_HEX: Record<TitleColor, string> = {
   pink: '#ff375f',
 };
 
-/** The two scrim families. The dark one is the legacy plate, unchanged. */
+/** Starting opacities; retain these exact strings whenever sufficient. */
 const DARK_SCRIM = TITLE_PLATE;                 // 'rgba(0,0,0,0.42)'
 const LIGHT_SCRIM = 'rgba(255,255,255,0.60)';
 
@@ -161,17 +161,35 @@ export const contrastRatio = (a: string, b: string): number => {
 };
 
 /**
- * THE PALETTE. Given a named colour, return the ink AND the scrim that reads
- * best under it: the scrim family is whichever of near-black / near-white
- * SEPARATES FURTHER from the ink, computed — never a second control the user
- * can set wrong. `white` resolves to the exact legacy `{TITLE_INK, TITLE_PLATE}`,
- * so an untouched title renders bit-for-bit as it did before this shipped.
+ * Resolve one ink/scrim pair for every emitter. Keep the existing polarity and
+ * increase opacity only when needed to maintain 3:1 for large text over any
+ * opaque sRGB image. White retains the exact legacy pair.
+ *
+ * A dark scrim is lightest over white; a light scrim is darkest over black.
+ * Channel monotonicity bounds every other backdrop between those extremes.
+ * Use a directional ratio so the allowed background range never crosses the
+ * ink luminance, and round the worst-case channel toward the ink conservatively.
  */
 export const titlePalette = (color?: TitleColor): { ink: string; scrim: string } => {
   const ink = INK_HEX[(color ?? 'white') as TitleColor] ?? TITLE_INK;
-  const scrim = contrastRatio(ink, '#000000') >= contrastRatio(ink, '#ffffff')
-    ? DARK_SCRIM
-    : LIGHT_SCRIM;
+  const dark = contrastRatio(ink, '#000000') >= contrastRatio(ink, '#ffffff');
+  const start = dark ? 42 : 60;
+  const inkLuminance = relLuminance(ink);
+  let opacity = start;
+  for (; opacity < 100; opacity++) {
+    const channel = dark
+      ? Math.ceil(255 * (1 - opacity / 100))
+      : Math.floor(255 * opacity / 100);
+    const gray = `#${channel.toString(16).padStart(2, '0').repeat(3)}`;
+    const backgroundLuminance = relLuminance(gray);
+    const ratio = dark
+      ? (inkLuminance + 0.05) / (backgroundLuminance + 0.05)
+      : (backgroundLuminance + 0.05) / (inkLuminance + 0.05);
+    if (ratio >= 3) break;
+  }
+  const scrim = opacity === start
+    ? (dark ? DARK_SCRIM : LIGHT_SCRIM)
+    : `rgba(${dark ? '0,0,0' : '255,255,255'},${(opacity / 100).toFixed(2)})`;
   return { ink, scrim };
 };
 
