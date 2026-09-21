@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Going Dark — Electrical Field Toolkit</title>
+<meta name="description" content="You're killing power to a building somebody else runs — a panel, a floor, the service — for a window you set. Send the shutdown notice before you throw it: what goes dark and where, off at and back by in your words, every system that rides on it and whose call each one is, and what you need from the building to make the hour. A notice, not a lockout and not a permit. Free, no account, nothing leaves your phone.">
+<meta name="apple-mobile-web-app-title" content="Going Dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="platetop">
+      <span class="eyebrow" id="eyebrow">Electrical &middot; the shutdown notice, before you throw it</span>
+    </div>
+    <h1 id="h1">Going Dark</h1>
+    <p class="lede" id="lede">You&rsquo;re killing power to a building somebody else runs &mdash; a panel, a floor, the whole service &mdash; for a window you set and they have to live through. Everybody in it finds out one of two ways: from this notice, or when the elevator stops. Write it down once: what goes dark and where, the window in your words, every system that rides on it and whose call it is, what you need from the building to make the hour, and who answers the phone at both ends. Then send it, and don&rsquo;t throw it until the go comes back.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label" id="whatlabel">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn" id="warn">
+    <b>It&rsquo;s a notice, not a lockout and not a permit.</b> It tells the building what&rsquo;s going off, when, and what rides on it &mdash; in <i>your</i> words, off <i>your</i> own directory and one-line. It states no load, no ampacity, no clearance, no arc-flash boundary and no procedure; it never says a system is safe to shut down, safe to restart, or that a battery or a UPS will carry anything for any length of time. Lockout/tagout is on your program and your locks. The energized-work permit, the switching order and the utility&rsquo;s side are theirs to issue, theirs to number and theirs to run &mdash; this page never stands in for any of them.
+  </div>
+
+  <p class="credit" id="wishline">&#10022; A system the building always asks about after the lights go off that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the notice</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* GOING DARK — the shutdown / outage notice, the rung the private roster named
+ * sixth for this trade the day the kit was planned and no cycle had built: "the
+ * product is the SYSTEMS-AFFECTED forget-list; build that checklist first; the
+ * rest of the form is trim; page and output both state it is NOT a LOTO or
+ * energized-work permit." This is that rung, built to that sentence.
+ *
+ * A CONFIG of shape #2's engine (shared/note.js): no CSS here, no DOM building,
+ * no state, no persistence, no document assembly — the engine owns all of it.
+ * This file owns the WORDS. painting/the-note.html (the wet-area closure) and
+ * paving's lot closure are the same class two trades over and are configs too:
+ * a man telling a building what he is taking away from it, for a window, in his
+ * own words. Three closures, one engine, zero forks.
+ *
+ * WHY THIS IS AN INTERFACE PAGE AND NOT A FORM. An outage crosses every company
+ * boundary in the building at once — the GC forwards it to the owner, the owner
+ * to the tenants, the tenants to their IT and their vendors — and nobody's
+ * software numbers it. The GC's platform holds the schedule; the safety program
+ * holds the lockout; the utility holds its own side. The notice that ties the
+ * hour to the thirteen systems it kills belongs to none of them, which is why it
+ * has always been a text message nobody can find in the morning.
+ *
+ * THE WINDOW IS HIS, IN HIS WORDS. "Off at" and "back on by" are free text on
+ * purpose. The moment either became a clock this page computed, it would be a
+ * promise the page made — and the page has no way to know how long a feeder
+ * takes to land. He states the window; the page carries it, in the title, so
+ * it survives being forwarded twice.
+ *
+ * EVERY SYSTEM HANDS THE DECISION BACK. The sub on each line names what happens
+ * and whose call it is — that is the entire safety design of the forget-list.
+ * A page that said "the UPS will hold for twenty minutes" or "the fire alarm is
+ * fine on battery" would be a clearance manufactured by an interface, about
+ * equipment it has never seen. So the page reports the window and judges none
+ * of it, and the closing says so INSIDE the document, because the warn block on
+ * the glass does not get pasted into the super's text and the closing does.
+ *
+ * AND SILENCE IS NEVER A GO. The closing is the opposite of the clause every
+ * template in the genre carries: no reply, and it doesn't go off. Nobody puts a
+ * building in the dark on silence.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.outage;
+  var KEY = "toolkit.electrical.goingdark.v1";
+
+  Note.mount({
+    key: KEY,
+    docName: "OUTAGE NOTICE",
+    copiedLabel: "Copied. Go send it.",
+    copyFailLabel: "Select it and copy",
+    clearConfirm: "Clear this notice? Your name and company stay.",
+    emptyLabel: "Nothing yet",
+    startedLabel: "Started",
+
+    /* THE HOUR RIDES IN THE TITLE. It is the one fact that has to survive being
+       forwarded twice, and "this week" is not an hour. */
+    titleSuffix: function (get) {
+      var o = get("off");
+      return o ? "off " + o : "";
+    },
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox at six in the morning, when the argument is about which floor and which hour.",
+        fields: [
+          { id: "site", kind: "text", label: "Job / building", hint: "— the way everybody says it", ph: "Riverview Medical Office Building — 3rd floor north", docSkip: true }
+        ]
+      },
+      {
+        title: "Who holds the building",
+        tone: "loud",
+        docHead: "TO",
+        why: "The name that tells the tenants and answers the phone at the hour it goes off. “The building” is not a name, and a notice nobody was named on is a notice nobody got.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who runs this", options: T.roles, docLabel: "To" },
+          { id: "who", kind: "text", label: "Their name", ph: "Ray T — building engineer", docLabel: "Name" },
+          { id: "sent", kind: "clock", label: "When you're telling them", hint: "— stamps itself when you start", ph: "stamps itself when you start", nowLabel: "Now", docLabel: "Notice sent" }
+        ]
+      },
+      {
+        title: "The window — my words",
+        tone: "loud",
+        docHead: "THE WINDOW — MY WORDS",
+        why: "Off at, and back on by, the way you'd say it on the phone — the day and the hour, not “Thursday-ish”. It's yours to state, and it's the line that rides in the title. If it slips, they hear it from you before they hear it from the dark.",
+        fields: [
+          { id: "off", kind: "text", label: "Off at", hint: "— the day and the hour", ph: "Thursday the 24th, 6:00 a.m.", docLabel: "Off at" },
+          { id: "back", kind: "text", label: "Back on by — and how they'll know", ph: "8:30 a.m. — I'll call when it's live, and again if it slips", docLabel: "Back on by" },
+          { id: "late", kind: "text", label: "If it runs long", hint: "— who hears it first, and how", ph: "if you haven't heard from me by 8:30 it's still off — call me, don't wait on the dark", docLabel: "If it runs long" }
+        ]
+      },
+      {
+        title: "What goes dark, and where",
+        docHead: "WHAT GOES DARK",
+        why: "The size of the hole the way you'd say it, then the panels by the names on the directory and what stays up in the same breath — so the notice they forward names the same panels your tags are on.",
+        fields: [
+          { id: "scope", kind: "pick", label: "How big", options: T.scopes, docLabel: "Scope" },
+          { id: "where", kind: "area", rows: 2, label: "Which panels, which areas", hint: "— by the directory, and what stays up", ph: "3rd floor north — LP-3A, LP-3B and everything they feed. Corridor and exit lights on 3 stay up; they're off LP-E.", docLabel: "Where" }
+        ]
+      },
+      {
+        title: "What rides on it",
+        tone: "loud",
+        docHead: "WHAT RIDES ON IT — YOURS TO RIDE OUT, SHUT DOWN CLEAN OR RESTART",
+        why: "The forget-list. Every one of these is somebody's equipment that goes off with the power and doesn't always come back on its own — and every line says whose call it is, because it isn't yours. Tick what's in this building; the ones you don't know about are the ones that ring your phone at seven.",
+        fields: [
+          { id: "systems", kind: "ticks", options: T.systems },
+          { id: "extra", kind: "area", rows: 2, label: "The one that's not on the list", hint: "— your words", ph: "the dentist's compressor on 3 — it's on LP-3B and nobody told me it existed", docLabel: "And one more" }
+        ]
+      },
+      {
+        title: "What's waiting on this window",
+        docHead: "WHAT'S WAITING ON IT",
+        why: "The reason the go has to come this week and not next — the work that can't be done live, and what sits if the window moves. The chips are a jog; your own sentence after them is what he believes.",
+        fields: [
+          {
+            id: "why", kind: "impact",
+            label: "What this window is for",
+            hint: "In what he can picture: what lands, who's booked, and what sits if it moves.",
+            rows: 3,
+            ph: "the new feeder lands in the main and that can't be done live — the crew's booked for Thursday and the utility's got the meter side that morning",
+            chipHint: "Tap to add:",
+            chips: T.waiting,
+            clock: [
+              { v: "Need the go today", docToken: "need the go today", hot: true },
+              { v: "Need the go by tomorrow", docToken: "need the go by tomorrow" },
+              { v: "Need the go before the utility's date", docToken: "need the go before the utility's date" },
+              { v: "No rush — but it's yours to give", docToken: "no rush — the go is yours to give" }
+            ]
+            /* NO docLabel — docHead above is the block heading; a docLabel equal
+               to it prints the line twice (flooring/give-me-the-go.html's fix). */
+          }
+        ]
+      },
+      {
+        title: "What I need from you",
+        tone: "loud",
+        docHead: "WHAT I NEED FROM YOU",
+        why: "An occupied building, and every one of these is a name or a thing a man on your end does. The lockout is mine, on my locks. The permits, the fire watch and the tenants are yours — these are asks aimed at whoever owns them, and this page runs none of it.",
+        fields: [
+          { id: "needs", kind: "ticks", options: T.needs },
+          { id: "pics", kind: "seg", label: "The directory", hint: "— marked up, so the same panels are on both our lists", options: T.pics.map(function (p) { return { v: p }; }), docLabel: "With it" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, the number that rings when something didn't come back", ph: "Dave R — 415-555-0148", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Bayview Electric", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Reply GO with the name who's on site at the hour, or reply MOVE IT with a window that works. No reply and it doesn't go off — nobody puts a building in the dark on silence.",
+      "This is a notice, not a lockout/tagout, not an energized-work permit and not a switching order. The lockout is on our program and our locks; nothing here authorizes anybody to work on or near energized equipment, to operate a breaker or a switch, or to touch the utility's side — that's theirs, on their schedule.",
+      "Every system on the list is yours or your vendor's to ride out, shut down clean or restart. I bring the power back when I said I would; I don't bring your equipment back."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.systems || []).length;
+      if (n) return n + " system" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Started" : "Nothing yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

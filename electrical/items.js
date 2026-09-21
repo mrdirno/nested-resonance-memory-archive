@@ -847,3 +847,99 @@ window.TOOLKIT_LONGPOLE = {
 
   emptyText: "Nothing on the list yet. Put in the first thing you're chasing — what it is, and what you actually need out of him on it."
 };
+
+/* ── GOING DARK — the shutdown / outage notice (going-dark.html, shape #2) ────
+ *
+ * THE RUNG THE ROSTER NAMED SIXTH FOR THIS TRADE, and the product it named for it:
+ * the SYSTEMS-AFFECTED FORGET-LIST. Everything else on the page is trim. An
+ * electrician kills power to a building somebody else runs — a panel, a floor,
+ * the service — and everybody in it finds out one of two ways: from this notice,
+ * or when the elevator stops. The friction is that the list of what rides on the
+ * power is long, it is different in every building, and the man who knows it is
+ * never the man throwing the breaker.
+ *
+ * EVERY LINE HANDS THE DECISION BACK. The sub on each system says what happens
+ * and WHOSE CALL it is — IT decides the clean shutdown, the building decides the
+ * fire watch, the owner decides what's in the walk-in. This page never says a
+ * system is safe to shut down, safe to restart, or that a battery or a UPS will
+ * carry anything for any length of time. It reports the window; it judges none of
+ * it.
+ *
+ * WHAT IT REFUSES, in the data shape rather than in anybody's discipline: no
+ * load, no ampacity, no kVA, no UPS or battery runtime, no arc-flash category or
+ * boundary, no lockout/tagout step, no switching sequence, no code call. It is a
+ * NOTICE — not a LOTO, not an energized-work permit, not a switching order — and
+ * the closing says so inside the document, because the warn block on the page
+ * does not get pasted into the super's text message and the closing does.
+ */
+window.TOOLKIT_ITEMS.outage = {
+  /* WHO HOLDS THE BUILDING — the name that tells the tenants and answers the phone
+     at the hour it goes off. "The building" is not a name. */
+  roles: [
+    "GC superintendent",
+    "Building engineer / chief",
+    "Property manager",
+    "Owner's rep / facilities",
+    "The tenant contact",
+    "Our own boss / PM"
+  ],
+
+  /* WHAT GOES DARK, the way he says it on the phone — the size of the hole, never
+     a load. The directory names the panels; this names the reach. */
+  scopes: [
+    "The whole service — everything in the building",
+    "One floor or area — what its panels feed",
+    "One panel and everything it feeds",
+    "A feeder — the gear downstream of it",
+    "The emergency / standby side too — the gen and the transfer switch",
+    "The service tie-in — the utility's side goes with it",
+    "A circuit or two — but it's yours to know"
+  ],
+
+  /* THE FORGET-LIST. Every system that rides on the power and gets forgotten
+     until it doesn't come back. The sub is what happens and WHOSE CALL it is —
+     the page reports, the owner of the system decides. Nothing here says a UPS
+     will carry, a battery will last, or a system is safe to shut down or restart. */
+  systems: [
+    { name: "IT — the IDF / MDF, the servers, the phones", sub: "the UPS buys what it buys; how long that is and whether to shut down clean is IT's call — tell me who I'm talking to" },
+    { name: "Elevators", sub: "a car stops where it stops. The elevator outfit and the building decide about recall and riding it down before the window — nobody rides during it" },
+    { name: "Fire alarm", sub: "the panel drops to battery and monitoring may see trouble. Who calls the monitoring company, and whether the building stands a fire watch, is the building's and the fire alarm outfit's — not mine" },
+    { name: "Security, card access, cameras", sub: "doors go however they're set to fail — locked or unlocked. That's yours to know before the window, not after" },
+    { name: "Refrigeration — walk-ins, reach-ins, freezers, the pharmacy fridge", sub: "what's in them is the owner's to move or to sit on. I'm telling you the window, not what it'll hold" },
+    { name: "Heat and cooling — the units, the boiler, the controls", sub: "the mechanical guy and the building decide what rides and what restarts by hand — some of it doesn't come back on its own" },
+    { name: "Sump, sewage ejector, the booster pump", sub: "a pump that's off is a wet floor if it rains or somebody flushes. The plumber and the building own the workaround" },
+    { name: "Emergency and exit lighting", sub: "the battery packs run a while, then they don't. Whether anybody's in the building for the window is your call" },
+    { name: "Kitchen — the hood, the gas valve interlock, the line", sub: "the hood's off, the gas valve may drop and somebody resets it — whoever owns it. Tell the kitchen before I do" },
+    { name: "Medical, lab, dental — anything on a patient or a sample", sub: "not mine to judge. Tell me who signs off that it's clear for the window, and I'll wait for that name" },
+    { name: "Tenant computers, the POS, the register", sub: "whoever runs the store tells the store. A register that dies mid-sale is a call I get at seven" },
+    { name: "Gate operators, the garage door, the lift", sub: "the gate stays where it is. Tell me who has the release key so nobody's stuck in the garage" },
+    { name: "Temp heat, dewatering, anybody's cords on my temp panel", sub: "every cord on the temp panel dies with it — tell every trade who's plugged in, or they find out" }
+  ],
+
+  /* WHAT I NEED FROM YOU. Every one is a thing a man on his end does or a name he
+     gives — never a fact about us, never a step in anybody's procedure. */
+  needs: [
+    { name: "The go in writing — a reply, not a nod in the hallway", sub: "the window doesn't happen on a verbal" },
+    { name: "A name that answers at the hour it goes off", sub: "and the same name when it comes back" },
+    { name: "Every gear room on the path open", sub: "the main, the floor panels, the roof — I'm not tracing keys with the building dark" },
+    { name: "Your people told — by you", sub: "tenants, the cleaners, the night guy. A sign on the door isn't a notice" },
+    { name: "The fire alarm outfit and monitoring told, by whoever owns that call", sub: "and whether there's a fire watch. I'll work around it; I won't run it" },
+    { name: "IT told, so they shut down clean", sub: "a server that dies hard is a Monday neither of us wants" },
+    { name: "Anything that restarts by hand, named — and who's restarting it", sub: "boilers, chillers, controls, the gate. I bring the power back; I don't bring your equipment back" },
+    { name: "What can't be off — before the window, not during", sub: "if there's a thing that can't go dark, I need to know now, so it rides on temp power or the window moves" }
+  ],
+
+  /* WHAT'S WAITING ON THE WINDOW. Chips are a jog for the sentence he writes after
+     them — the reason the go has to come this week and not next. */
+  waiting: [
+    "the new feeder lands in the main — can't be done live",
+    "the panel swap",
+    "the service upgrade — the utility's booked",
+    "the transfer switch",
+    "the inspection's waiting on it",
+    "the crew's booked for this window",
+    "the next window is weeks out"
+  ],
+
+  pics: ["Sent with the directory marked up", "Photos of the gear on request", "Walk the gear rooms with me before"]
+};

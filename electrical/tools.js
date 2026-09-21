@@ -80,6 +80,17 @@ window.TOOLKIT_TOOLS = [
     desc: "The gear won't fit the working clearance, the conduit fights the structure — and the drawings don't close. Send the field note up before the walls close and it's still a five-minute question: what won't close, every sheet and rev it's on, and what it's holding. It never numbers itself — the RFI number stays your PM's.",
     chip: "#8A1C4B",
     audience: "Field / foreman → our PM → GC / engineer"
+  },
+  {
+    /* The shutdown notice — the rung the roster named sixth for this trade and
+       no cycle had built. The product is the SYSTEMS-AFFECTED forget-list; the
+       rest of the form is trim. It is a NOTICE: not a LOTO, not an energized-work
+       permit, not a switching order, and the document says so itself. */
+    name: "Going Dark",
+    href: "going-dark.html",
+    desc: "You're killing power to a building somebody else runs — a panel, a floor, the service — for a window you set. Send the notice before you throw it: what goes dark and where, off at and back by in your words, the forget-list of everything that rides on it (IT, the elevators, the fire alarm, the walk-ins, the sump, the kitchen, the gate) with whose call each one is, and what you need from the building to make the hour. It's a notice, not a lockout and not a permit — your locks, your program, their permits — and the document says so. No reply and it doesn't go off.",
+    chip: "#1B2A41",
+    audience: "EC → GC super / building engineer / property manager → every tenant and vendor on it"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
