@@ -2,7 +2,7 @@
 
 Author: Aldrin Payopay · GPL-3.0-only
 
-**Historical rings are retained below. C3722's candidate audition semantics are recorded at the end; publication and final verification are pending.**
+**Historical rings are retained below. Release status is recorded in their verified-close sections; preparation entries are not the latest status.**
 
 ## Observation
 
@@ -112,3 +112,8 @@ C3724 explicitly left a notice-driven desktop jump. Fresh public Dice reproduced
 **Verified close:** [source 2f97494c](https://github.com/mrdirno/nested-resonance-memory-archive/commit/2f97494cc46525f7b85798299017c79cb2b7a69f); [Pages 34873757476](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34873757476) and [Archive health 34873757505](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/34873757505) succeeded. **46/46 final built and 46/46 public browser cases passed** (34 existing regressions on desktop/mobile Chromium, plus 12 feedback cases on desktop/mobile Chromium and WebKit), with all five public runtime files matching. Four newly exported live native MP4s fully decode without errors. Live before/after geometry matches the measured build: desktop fitted artwork stays 498px high through Dice instead of shrinking to 476.609px; short-landscape stays 198px instead of 179.609px. Status, Undo, real import alerts, clearing and enlarged-text keyboard scrolling preserve geometry within 1px. The standalone fixed-viewport measurements record zero notice-driven movement after the fix.
 
 Fleet broadcast **18991** in `persona500-collage-weekly-20260914-release` was stored and read back with identical body/metadata. Peer acknowledgements at close: `[]`; storage is not a claim that both agents read it.
+
+
+# Ring — 2026-09-21: the background behind the title
+
+A title palette must be judged against the translucent plate as actually composited over the source, not against its opaque black/white anchor. Source `7ba19031` corrects four bright inks without adding controls or changing layout. Still preview, worker JPEG, SVG, reopened projects, live Stage and decoded MP4 are separate witnesses; one emitter passing does not certify another. Solid sampled interiors meet the existing large-title floor; small text, antialiased edges and arbitrary compressed/HDR pixels remain outside that claim. [Release](TITLE_CONTRAST_RELEASE.md). The native-art audition/Keep/Apply and original-media boundaries remain unchanged.
