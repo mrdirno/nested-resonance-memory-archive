@@ -95,6 +95,12 @@ const path = require('path');
   });
   check('camera pose stored with user flag', storedCam && storedCam.user === true,
     JSON.stringify(storedCam));
+  // A sentinel written beside the page's key tells two facts apart after the reload. If the
+  // sentinel is gone, the browser dropped the whole file:// store — a runner fact, measured on
+  // ubuntu-latest on 2026-09-09 and again on 2026-09-19 on two pushes that changed only an
+  // HTML comment (the same suite was green on that runner 8 h earlier). If the sentinel
+  // survives and the camera save does not, the page lost it — an instrument fault.
+  await page.evaluate(() => { try { localStorage.setItem('halo-smoke-sentinel', '1'); } catch (e) {} });
   await page.reload();
   await page.waitForSelector('.boot.done', { timeout: 30000 });
   await page.waitForTimeout(800);
@@ -107,12 +113,25 @@ const path = require('path');
   // It had; the browser had dropped the store. Measured 2026-09-09: a file:// reload
   // preserves localStorage on macOS and did not on ubuntu-latest. Name the real fact first,
   // and do not assert a restore of something that is no longer there to restore.
-  const survived = await page.evaluate(() => {
-    try { return localStorage.getItem('resonance-chamber-v2'); } catch (e) { return null; }
+  const [survived, sentinel] = await page.evaluate(() => {
+    try {
+      const pair = [localStorage.getItem('resonance-chamber-v2'), localStorage.getItem('halo-smoke-sentinel')];
+      localStorage.removeItem('halo-smoke-sentinel');
+      return pair;
+    } catch (e) { return [null, null]; }
   });
   const camSurvived = !!survived && /"user"\s*:\s*true/.test(survived);
-  check('saved camera survived the reload (storage, not the page)', camSurvived,
-    'localStorage after reload: ' + String(survived).slice(0, 90));
+  if (sentinel === null) {
+    // The whole store went with the reload, so there is nothing the page could have kept.
+    // Reported, not scored: it says what this browser on this runner does with file://
+    // storage, and nothing about the instrument. A page that LOSES a save it was handed is
+    // still caught by the branch below, because then the sentinel is there and the save is not.
+    console.log('note: the browser dropped the file:// store on reload (sentinel gone; runner fact, not the page) — ' +
+      'localStorage after reload: ' + String(survived).slice(0, 90));
+  } else {
+    check('saved camera survived the reload (storage, not the page)', camSurvived,
+      'localStorage after reload: ' + String(survived).slice(0, 90));
+  }
   const c2 = await camText();
   if (!camSurvived) {
     console.log('skip: camera persisted across reload (dist) — no saved camera to restore');
