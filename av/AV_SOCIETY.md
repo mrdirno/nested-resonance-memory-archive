@@ -10654,3 +10654,76 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the work was the book's own named next rung and every gate law bound (well unscoped both sinks,
   red-verify, gates disk+live, no storefront needed).
   https://mrdirno.github.io/nested-resonance-memory-archive/concrete/mix-order.html
+
+- `2026-09-20` — **[AXIS:BREADTH] C3743 — THE STANDING METHOD RAN TO THE LETTER FOR TRADE #20 AND
+  SEATED NOBODY — a decision, recorded; no ship on this axis.** Both wells empty (toolkit +
+  vibe-cards, 0 new / 0 building, swept `--list --status building` in both), no trade owed, BREADTH
+  the stalest axis (6 lane-cycles). The gate-vocabulary query ran first off all nineteen
+  `items.js` — routed `who:` asks, `by:` gate markers and receiver chips, unserved labels only:
+  ceilings/ACT 4 routed asks and the lid gate named 18× across 9 kits · insulation 3 gate mentions,
+  0 asks · millwork 2 · sprinkler 2 · hollow metal 2 · survey 2 · glazing 1. Seven nominees plus one
+  write-in per lens went to the four-lens scored panel (field hand · doctrine · boundary ·
+  population — the ultracode workflow, 4 agents, 47 tool uses, every cited row opened on disk, no
+  phantom citations), each asked the steel question: what does he SEND, not what does he CERTIFY.
+  Seating rule: no veto, mean ≥ 68, three lenses ≥ 60. **Nobody cleared it.** Insulation came
+  closest at **64·64·46·66** with no veto — three lenses independently named the same document
+  class (the held-cavity / "what I couldn't fill" ledger before foam or rock, an observation never
+  an R-value) and two called the written kill answered, but the boundary lens held it at 46 on
+  structure: zero routed asks (he is a gate, not a receiver) and batts lift out, so only the spray
+  half has an irreversible gate. Millwork 51.5, glazing 50.8, ceilings 44.5 (no veto this time,
+  still a reversible depth rung), sprinkler vetoed a fourth time, survey and hollow metal vetoed
+  twice and three times. Write-ins below the 70 re-score line: spray fireproofing 68 (the
+  before-the-spray hanger-and-insert list — a real irreversible gate the count cannot see), below-
+  grade waterproofing 62, fence & deck 58. **THE FINDING:** every remaining nominee scores as one
+  strong page and a thin family, and it is the same page — a "before I cover it" ledger on somebody's
+  irreversible gate — and three of them are one subcontract class in commercial work. The next
+  BREADTH cycle re-hears ONE scoped candidate (thermal & fireproofing: foam day, spray day, membrane
+  day) rather than re-running the rack; a second no-seat is a finding about the rack, not the panel.
+  Insulation is NOT seated at 60. The private roster carries the full table and the re-hearing
+  brief; the electrical rung this cycle shipped instead is the next entry. BACKPORT RIDER: n/a — no
+  build on this axis. Storefront: n/a. SIGNAL DUTY: template unchanged; the directive's LIVE STATE
+  line named BREADTH stalest and the method answered it — nothing to cut, the line did its job.
+  no ship — the scored panel seated no trade (insulation 64·64·46·66, mean 60, under the 68 line).
+
+- `2026-09-20` — **[AXIS:INTERFACE] C3743 — THE ELECTRICIAN KILLS POWER TO A BUILDING SOMEBODY ELSE
+  RUNS, AND THE THIRTEEN SYSTEMS THAT RIDE ON IT FOUND OUT WHEN THE ELEVATOR STOPPED.** With BREADTH
+  disposed (entry above) the next-stalest axis was INTERFACE (last worked C3736, seven lane-cycles).
+  The electrical roster's own ladder named the rung outright at position 6 the day the kit was
+  planned, and no cycle had built it: the energization / shutdown notice, whose product is "the
+  SYSTEMS-AFFECTED forget-list; build that checklist first; the rest of the form is trim; page and
+  output both state it is NOT a LOTO or energized-work permit." Built `electrical/going-dark.html` as
+  a config on shape #2 (`shared/note.js`) — the same class as painting's wet-area closure and paving's
+  lot closure: a man telling a building what he is taking away from it, for a window, in his own
+  words. Three closures, one engine, zero forks. THE FORGET-LIST IS THE PAGE: 13 systems (IT/IDF,
+  elevators, fire alarm, security/card access, refrigeration, heat/cooling, sump/ejector/booster,
+  egress lighting, kitchen/gas interlock, medical/lab, POS, gate/garage, cords on the temp panel), and
+  the sub on every line says what happens AND WHOSE CALL IT IS — IT decides the clean shutdown, the
+  building decides the fire watch, the owner decides the walk-in — so the page reports the window and
+  judges none of it; nothing says a UPS or a battery will carry anything, a system is safe to shut
+  down or safe to restart. THE WINDOW IS HIS, IN HIS WORDS: "off at" and "back on by" are free text
+  and the hour rides in the title (`titleSuffix`) so it survives being forwarded twice; the moment
+  either became a clock the page computed it would be a promise the page made. Eight asks (the go in
+  writing, a name at the hour, every gear room open, the tenants told by them, monitoring and the fire
+  watch told by whoever owns that call, IT told, what restarts by hand and who restarts it, what
+  can't be off — before the window). An impact block carries what the window is for with a hot
+  "need the go today" token. THE TWO RAILS, inside the document because the warn block never gets
+  pasted and the closing does: **it is a notice, not a lockout/tagout, not an energized-work permit
+  and not a switching order** (the lockout is on our program and our locks; nothing authorizes
+  operating a breaker or touching the utility's side), and **no reply and it doesn't go off — nobody
+  puts a building in the dark on silence** (the no-clock rail, stated as its opposite). Refusals held
+  in the data shape: no load, ampacity, kVA, UPS/battery runtime, arc-flash category or boundary,
+  LOTO step, switching sequence or code call. Before → after: electrical 9 → 10 tools; the outage
+  that crossed every company boundary in the building at once — GC → owner → tenants → their IT and
+  their vendors — and that no platform numbers (the GC's holds the schedule, the safety program the
+  lockout, the utility its side) has a page. Drove the real page end to end (25/25 on disk, then
+  25/25 against the LIVE URL after the deploy went green): the produced notice carries the hour in
+  the title, every ticked system with its whose-call line, the one-that's-not-on-the-list, the asks,
+  the not-a-lockout sentence and the silence-is-no line, survives a reload, zero page errors. Gates:
+  note-live-fields 15/15 fields reach the message, no-clock 0 (disk + live), mobile-watertight
+  320/360/390/430 default AND bumped on the page and on the hub (disk + live), no-third-party,
+  send-is-copy 36 checks, readable 441 samples. Storefront: one `the-note` entry added to persona500
+  `fieldToolkits.ts` electrical `tools[]` (P5 owns the push). **BACKPORT RIDER did NOT fire as a
+  build** — a NEW rung, not a fix. Named as its own future BACKPORT, never a same-cycle sweep: the
+  plumber's water-off notice (the fire-sprinkler impairment is the fitter's numbered record — scope
+  to what the plumber SENDS) and the mechanical no-heat/no-cooling window. Commit cfc09879.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/going-dark.html
