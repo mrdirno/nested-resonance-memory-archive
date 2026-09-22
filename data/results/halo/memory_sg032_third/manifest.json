@@ -1,0 +1,100 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_sg032_third",
+ "runs": 9,
+ "note": "",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "spinchladni_sg0.32_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "0f651106656a3b928bf377b8c2592052c0db608f0d9c166cdf2eb7bc11353376",
+   "bytes": 54922
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "47fedfad10608fc58ec05fdbf2c7fbf09552e08f1ef25b2a6b2118bf8218b2cc",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "4d77a238bbb65a334541efa715067e96782bcc040b6f943330aaba02947c9ea5",
+   "bytes": 54964
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "dfde73964f32e667b854fc8f666151704a119e18436fc4bf0f91b2f22489e9db",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "160dded1fa4f4aed881794c9630f260df560f488c2efa715e0ba36a62b0b3828",
+   "bytes": 55079
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "ce15f08155e34fff22c234a802ef1784549c8bf3e6af1e282d72beb946e34177",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed16180_n4194304_e24_fieldExp1.7.json",
+   "sha256": "2a1ea605ca09354921ab4c6ba929a3f84cdd79d6d879b67fdd686e3804c440ac",
+   "bytes": 55115
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed16180_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "84e69ab7ac4d5ed4212f9ef77526cc36c484b151c33b6a8a8ea99dab50d6c370",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed2718_n4194304_e24_fieldExp1.7.json",
+   "sha256": "779e9737c653f0eb4df8b1ba9fe2d44d004ff371875516686618270f699de146",
+   "bytes": 55403
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed2718_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "fbac35aafb0112b5025c26af5105da2f817e700bccbd63544e297db2385501c0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed57721_n4194304_e24_fieldExp1.7.json",
+   "sha256": "2a550e882de4937fa1af314a3c7099e42e89a54d7665b001f58f33eda9e4c932",
+   "bytes": 55225
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed57721_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "cd196ff8d54c0043497267f874343b6afa4b84c06fbe937aa025ded56a9b9f88",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7.json",
+   "sha256": "8a62c9fea46c7fc4242e726cbabe03e13822eed46a58fe349eca1636032e01e8",
+   "bytes": 54668
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "bbe6c90acba2454a83353e93052f75d6ba5c58f68fd062d9fd634332e77084b9",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7.json",
+   "sha256": "48086dbc7cd6b2c4b1fe7bf2c94ce4dcc282c736d4d3c1058cd41e352dc4002a",
+   "bytes": 54737
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "4ac2b599807f24d33f12cfe3d0608252338e41599d4e8aacb21210b8d21346d7",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7.json",
+   "sha256": "365b170b424951c525b89e752c808342c42a1066e16fd26d01dfe0faa1afaa41",
+   "bytes": 54558
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7.mesh.f32",
+   "sha256": "632599c214f210755aea028269f842534660f3aee187ee8d88694f5a8b72286b",
+   "bytes": 3145728
+  }
+ ]
+}

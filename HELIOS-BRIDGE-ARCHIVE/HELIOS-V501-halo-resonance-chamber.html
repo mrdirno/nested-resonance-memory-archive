@@ -10695,6 +10695,103 @@ noise-floor (consistent with F2's shared-drive controls) or under-sampled? More 
 shuffled floor would settle it. (3) The lower wall -- the 12-floor crossing between sg0.25 and sg0.3 (Ring 27 QN2),
 still open. Carried: measurability at the condition level, now two; detection reproducibility, still sparse. Nothing
 about nested resonance memory is decided here.
+RING 29 · 2026-09-22 · the pre-registered third condition sg0.32 (cut drive) is 3-of-3 on BOTH pre-committed triples
+-- three countable conditions, nine of nine measurable runs, F5 satisfied with F1-F4 holding (F2 by receipt, one F4
+variant vacuous), and the frozen scorer returns its first "qualified": the ESTIMATOR qualifies as able to measure on
+this support; nothing about memory
+WHAT WAS MEASURED. Ring 28's QN1 named the test; analysis/2026-09-21_sg032_third_condition.md (commit 556f017b,
+pushed before any sg0.32 run existed) fixed everything else: the instrument (test-page 1a15b987, sim_digest
+40bfdb68), the frozen scorer (7619ef6b) and receipt (8670e193), the condition (spinchladni gl0, fieldExp 1.7,
+4,194,304 particles, 24 epochs), two arms in a fixed order -- Arm 1, verdict-bearing, sg0.32 on the grid seeds
+777/12345/31337 (the reused sg0.3 triple's seeds); Arm 2, a pre-committed second realisation, sg0.32 on
+2718/16180/57721 (e/phi/gamma, the reused sg0.35 triple's seeds), run unconditionally -- each arm's directory
+holding its three new runs plus the twelve reused sg0.3/sg0.35 files pinned by sha256 from Ring 28. The six runs
+were generated on 2026-09-21 by a session that ended before scoring; this ring re-verified them (every git_rev =
+556f017b = P, ancestry rc 0; applied selfgrav 0.32 in all six; pageerrors []; 24 of 24 reused files byte-matching
+the table and commit 6560d802; a regeneration of seed 777 today returning the mesh byte-identical, ce15f081, and
+every data field equal) and scored them once, in the pre-registered order. Nothing was rerun, re-seeded or moved.
+THE NUMBERS. Arm 1: sg0.32 eligible 16/14/14, measurable 3/3; reused sg0.3 19/17/17 and sg0.35 16/17/16 reproduce
+Ring 28 exactly. Nine of nine measurable, three conditions, F5 passes (146 of 198 cell-epochs eligible), F1 pass (0
+radialised / Plummer eligible epochs), F2 pass by the 2026-09-06 receipt, F3 evaluable and passing (median
+alpha*_eff 0.0177 <= 0.10, 0 unrecovered; per run 0.016-0.040), F4 pass (measurable_both 9 in nine variants, 8 in
+den_0.03, 0 in e2_pr16 -- vacuous, read as not evaluable there; 0 violations in every variant against an allowance
+of 1 -- the one symmetric difference, sg0.3 777 becoming undetected under 'classes', is an in-band flip at main p
+0.0225, reported and not scored; F3 main and variant agree everywhere evaluable), inputs verified, result
+"qualified". Arm 2: sg0.32 eligible 15/15/12 (57721 exactly AT the 12 floor), measurable 3/3, nine of nine, F5 pass
+with F1-F4 holding, F3 median 0.0173, F4 with one newly-undetected strong run (2718, p 0.007) in each of e1_0.02 and
+e3_0.95 -- one violation = the allowance, in two variants, within tolerance -- result "qualified" (144 of 198
+cell-epochs). The second seed family at sg0.32 was 3/3 measurable and its directory returned "qualified" -- reported
+beside Arm 1, never substituted; four of the six triples on record at the three support conditions (two per
+condition) are now 3/3. No condition static (sg0.32 A3 per-run medians 0.094/0.051/0.070 for 777/12345/31337 and
+0.082/0.070/0.064 for 2718/16180/57721, all << 0.99; clamp 0.07-0.09, unsaturated). Wall 87-93 s per run vs 112-131
+s for the reused runs -- same browser, driver, node and renderer; host throughput, and the regeneration above shows
+the bytes do not depend on it.
+DETECTION, KEPT SEPARATE. Arm 1: 4 of 9 (sg0.3 777/31337; sg0.32 777 -- S 0.033, p 0.004, CI95 [0.007, 0.052], no
+autocorrelation caveat, contrast additive_only only, unmapped arm S 0.026 p 0.215 not detected; sg0.35 2718 --
+unmapped S 0.070 p 0.0007 detected). Arm 2: 5 of 9 (sg0.32 16180 -- S 0.044, p 0.004, CI95 [0.009, 0.083], all four
+contrasts; 2718 -- S 0.026, p 0.007, CI95 [0.012, 0.043], shells only; 57721 S -0.011, p 0.96). The unmapped arm is
+NOT MEASURABLE (E5/E5b seed balance) for Arm 2's sg0.32 runs and for the reused sg0.3 triple, so the protocol
+section 5 direction (mapped clearly above unmapped) can be read only for sg0.32 777 (above, with three of four
+contrasts undetected) and sg0.35 2718 (both detected). Within sg0.32: 1/3 and 2/3 -- NOT reproduced within the
+condition in either arm. Seed 777 detects at sg0.3 AND sg0.32, seed 2718 at sg0.35 AND sg0.32: the seeds fix the
+initial positions across conditions, so this is the pre-read SEED-SPECIFIC PERSISTENT STRUCTURE (protocol section
+1's confound), not reproduction of memory. The pre-registered unscored diagnostic
+(experiments/halo/mesh_epoch_correlation.py), numbers only: the per-epoch full-field correlation between a seed's
+fields at sg0.3 and at sg0.32, median over the scored epochs 3-24, is 0.058/0.210/0.128 (777/12345/31337), beside
+0.062/0.071/0.241 between different seeds inside sg0.32 and 0.140/0.087/0.122 inside sg0.3; Arm 2 (sg0.35 vs sg0.32)
+0.023/0.049/0.177 beside 0.050/0.141/0.060 and -0.004/0.002/0.211. Single epochs reach 0.97 (same seed 12345, epoch
+18, inside the scored window) and 0.78-0.89 between different seeds. Three pairs against three, no test; the
+diagnostic decides nothing.
+WHAT "QUALIFIED" MEANS AND DOES NOT. The frozen estimator is qualified as able to measure on exactly this support:
+spinchladni gl0 at the cut drive fieldExp 1.7, self-gravity 0.3/0.32/0.35 (three points spanning 0.05 of one axis),
+4,194,304 particles, 24 epochs of 10 s, one instrument (sim_digest 40bfdb68). It says nothing about any other
+preset, drive, gain/loss, particle count or instrument, and nothing about nested resonance memory (protocol section
+1: a pass does not establish memory). Its decomposition was fixed before the runs: F1 a check, F2 by receipt only,
+F3's median bounded at <= 0.0383 by the reused six whatever the new three did, so the verdict reduced to F5 (3/3)
+plus F4 band stability on nine runs plus manifest verification -- and that is what passed.
+BANNED: any nested-resonance-memory claim (detection 1/3 and 2/3 within sg0.32; same-seed hits across conditions are
+seed structure). "Two qualifications" -- the arms share six of nine runs, F2 by one receipt, F3 dominated by the
+shared six. Converting detection counts to a rate or comparing them with F2's 5 %. Reading Arm 2's F4 at the
+allowance as a near-fail or a fail -- it is within the frozen tolerance, reported as such. Calling 57721's 12
+eligible "comfortable" -- it is at the floor. Pooling the two triples into one six-seed condition. Reading the
+wall-time difference as an instrument change. Presenting the 2026-09-21 generation as this cycle's -- it was a dead
+session's build, re-verified here, not rebuilt. Re-choosing the self-gravity value after the runs. Rerunning the
+sg0.35 grid triple to give seed 12345 another chance (bit-deterministic: 11 again). Substituting, averaging or
+tie-breaking with Arm 2 -- the verdict is Arm 1's string, copied. Reading the numbers-only diagnostic as showing or
+ruling out a seed trace.
+DEAD BRANCHES: (1) "sg0.32 might not be 3/3 on the grid seeds" -- 16/14/14. (2) "or on the second family" --
+15/15/12. (3) "a falsifier fires at three conditions" -- F1/F3/F4 pass in both arms. (4) "the dead cycle's runs came
+from a different tree" -- git_rev = P exactly, and seed 777 regenerates byte-identical. (5) "the third condition's
+detection replicates the first's" -- one shared seed each way (777, 2718); detection within sg0.32 is 1/3 and 2/3,
+not a replication.
+KILL-TEST: five lenses in one workflow re-derived from the files with their own code. The frozen scorer (7619ef6b)
+re-run from scratch in fresh dirs for both arms -- every verdict, run, F1-F5 field and F4 row identical, only the
+manifest path and the clock differ; staticness re-run 0 diffs -- CONFIRMED. Raw meshes: the six sg0.32
+epoch-to-epoch medians to 1e-16 and the 18 diagnostic medians to 5e-7 against np.corrcoef, no consecutive-epoch pair
+>= 0.99 (worst 0.51) -- CONFIRMED. Provenance: 24 reused hashes against the table and commit 6560d802, six git_rev =
+P with ancestry rc 0, every frozen hash, sim_digest 40bfdb68 invariant across rc-test and the appended page (diff
++69/-0, all inside the comment), the seed-777 regeneration byte-identical -- CONFIRMED. Decision rule: both arms
+branch 1, the successor matches the frozen pass branch -- CONFIRMED. The overclaim critic and the rule auditor
+caught five prose faults, all folded before ship: the draft said the diagnostic's per-epoch maxima sat "only in
+epochs 1-2" (false: 0.97 at epoch 18, inside the window); it read the diagnostic ("no more alike", "do not carry
+field identity") where the pre-registration fixed it as numbers only (Arm 1's same-seed 0.128 is ABOVE the
+cross-seed 0.071 and 0.122); it called Arm 1's one 'classes' flip a spent allowance (an in-band run at p 0.0225; 0
+violations); it said "eight" variants at measurable_both 9 (nine); and its open question 2 proposed comparing
+detection counts with F2's controls, which the pre-registration bans. Unmapped arms are now reported for every
+detected run, the staticness triples are labelled by seed, and three fixed BANNED items were restored. One author,
+no AI trailer, no pooling, no memory claim.
+THE NON-OBVIOUS CHOICE: score the dead session's runs rather than regenerate them -- their provenance (git_rev = P,
+the pre-registered seeds, the pinned instrument, a byte-identical regeneration of one) is stronger evidence of order
+than a fresh run whose git_rev would post-date the runs' own modification times -- and let "qualified" say exactly
+what the pre-registration said it could and nothing more.
+OPEN QUESTIONS: this ring earns three. (1) The pass branch's fixed successor: a REGISTERED INTERVENTION on the
+qualified support (protocol section 1) -- a pre-registered relic-scramble or relic-swap arm at sg0.3/0.32/0.35, not
+another point in the window, not a correlation, not a memory claim. (2) Detection is 4/9 and 5/9 across arms, never
+reproduced within a condition, and same-seed hits cross conditions; under the pass branch the only registered way to
+separate seed structure from memory is the intervention in (1) -- no comparison of detection counts with F2's
+controls is made. (3) The lower wall (12-floor crossing between sg0.25 and sg0.3, Ring 27 QN2) and the gl axis (Ring
+26 QN2), still open. Carried: measurability at the condition level, now three; detection reproducibility, still
+absent. Nothing about nested resonance memory is decided here.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
