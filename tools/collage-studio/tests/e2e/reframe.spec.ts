@@ -210,16 +210,19 @@ async function boot(page: Page) {
   await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
   // A rectangular partition, so a fragment's bounding-box centre is really
   // inside the fragment — every measurement here depends on it.
-  await page.getByRole('button', { name: 'Settings' }).first().click();
+  // C3712 moved Balanced out of a Settings sheet into Studio tools > Layout, and
+  // the sheet's toggle into "Close editing panel" (C3748 caught this spec still
+  // asking for the old names, so it had not run since).
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Layout', exact: true }).click();
   await page.getByRole('button', { name: 'Balanced', exact: true }).first().click();
   await page.waitForTimeout(1500);
-  await page.getByRole('button', { name: 'Settings' }).first().click();
+  await page.getByRole('button', { name: 'Close editing panel', exact: true }).click();
   await page.waitForTimeout(400);
 }
 
 async function enterFullBleed(page: Page) {
-  await page.getByRole('button', { name: 'Maximize the shot' }).click();
-  await expect(page.getByRole('button', { name: 'Exit full bleed' })).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Expand preview', exact: true }).first().click();
+  await expect(page.getByRole('button', { name: 'Back to editing', exact: true }).first()).toBeVisible({ timeout: 15_000 });
   await page.waitForTimeout(600);
 }
 
@@ -504,7 +507,14 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
     // SHUFFLE re-deals which picture sits in which fragment. Retried, because a
     // random permutation is free to be the identity and a vacuous re-deal would
     // make the claim below unfalsifiable.
-    const shuffle = page.getByRole('button', { name: /shuffle/i }).first();
+    // Since C3712 Shuffle lives in Studio tools > Layout, which full bleed hides;
+    // the claim is about the picture, not the view, so the re-deal is driven
+    // from the editing view (C3748 found this test waiting on a button that was
+    // no longer on screen).
+    await page.getByRole('button', { name: 'Back to editing', exact: true }).first().click();
+    await page.waitForTimeout(800);
+    await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Layout', exact: true }).click();
+    const shuffle = page.getByRole('button', { name: /shuffle\s*images/i }).first();
     let dealt = false;
     for (let i = 0; i < 5 && !dealt; i++) {
       const was = await allColours(page);
@@ -559,7 +569,7 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
 
     // Out of full bleed and back to the ordinary preview, which is what the
     // colour fingerprint below is read from on both sides of the round trip.
-    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.getByRole('button', { name: 'Back to editing', exact: true }).first().click();
     await page.waitForTimeout(1200);
     const fingerprint = await allColours(page);
 
@@ -576,7 +586,11 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
     // this correction, which is the whole point.
     await page.goto(APP_URL);
     await page.waitForTimeout(1200);
-    expect(await page.locator('img[src^="blob:"], canvas').count(), 'a collage survived the reload').toBe(0);
+    // Since C3712 the empty app is the "Start a new piece" screen, whose template
+    // thumbnails are canvases — so "nothing survived" is asked of the fragment
+    // overlay, which only a loaded collage draws.
+    await expect(page.getByRole('heading', { name: 'Start a new piece' })).toBeVisible({ timeout: 15_000 });
+    expect(await page.locator('svg[viewBox^="0 0 1200 "] > g').count(), 'a collage survived the reload').toBe(0);
     await expectOpenReachable(page);
 
     await openFile(page, path);
@@ -622,7 +636,7 @@ test.describe('THE REFRAME — the picture moves inside its fragment', () => {
     await dragPicture(page, target, 1);
     expect(dist(await stableColour(page, target), before), 'the drag must have done something').toBeGreaterThan(30);
 
-    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.getByRole('button', { name: 'Back to editing', exact: true }).first().click();
     await page.waitForTimeout(1000);
     const path = onDisk('recentre.svg', await downloadSvg(page));
 

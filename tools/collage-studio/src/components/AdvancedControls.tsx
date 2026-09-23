@@ -124,7 +124,13 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
     if (type === 'contrast') setBgColor(invCss);
   };
 
-  const countMax = Math.max(60, count + 12);
+  // THE RANGE HOLDS STILL UNDER ITS OWN DRAG. The ceiling follows the count
+  // (count + 12) so the stepper and the dice can run past 60 — but recomputed on
+  // every onChange it rescaled the track under a finger that had not moved, and
+  // each further touchmove added ~12: eight 1 px jiggles at the end ran 104 to
+  // 188 (C3748 sweep, real touch). Frozen from pointerdown to release.
+  const [frozenCountMax, setFrozenCountMax] = useState<number | null>(null);
+  const countMax = frozenCountMax ?? Math.max(60, count + 12);
 
   return (
     <div className="ui-dock">
@@ -278,6 +284,11 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             value={Math.max(1, count)}
             disabled={!ready}
             onChange={e => setCount(parseInt(e.target.value, 10))}
+            onPointerDown={() => setFrozenCountMax(countMax)}
+            onPointerUp={() => setFrozenCountMax(null)}
+            onPointerCancel={() => setFrozenCountMax(null)}
+            onLostPointerCapture={() => setFrozenCountMax(null)}
+            onBlur={() => setFrozenCountMax(null)}
             style={{ ['--fill' as string]: `${((Math.max(1, count) - 1) / (countMax - 1)) * 100}%` } as React.CSSProperties}
             aria-label="Fragment count"
           />
@@ -375,6 +386,19 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             ))}
           </div>
           <p className="ui-caption -mt-1">{FOCUS_BY_ID[focus]?.blurb}</p>
+          {/* CREDIT, AND THE WRITTEN INSTRUCTION FOR A GESTURE THAT HAS NO
+              BUTTON. Crop focus is where somebody unhappy with a crop looks, so
+              the way to overrule it by hand is written here — nothing is put on
+              the artwork. Somebody asked to press a tile, drag, and let go to
+              set what it shows; they stayed anonymous. See credits.json. */}
+          {/* The INSTRUCTION is full-contrast caption ink (5.5:1, like the blurb
+              above it); only the credit clause is dimmed. All-dim measured
+              2.46:1 in the C3748 audit — too faint to be the one written
+              instruction for a gesture with no button. */}
+          <p className="ui-caption" data-testid="grab-credit">
+            Drag any picture on the artwork to move it inside its fragment — Undo takes it back.{' '}
+            <span className="ui-label--dim">Wished for by an anonymous Collage user.</span>
+          </p>
         </div>
 
         {/* ---- TWIST ------------------------------------------------------

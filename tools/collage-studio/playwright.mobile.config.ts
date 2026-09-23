@@ -21,6 +21,9 @@ export default defineConfig({
     isMobile: true,
   },
   projects: [
-    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'], channel: 'chromium' } },
+    // MUTED: the spec intakes ramp_rgb.mp4, which carries an AAC track, and the
+    // main config's "TESTS DO NOT COME OUT OF THE SPEAKERS" rule never reached
+    // the standalone configs (C3748 found 38 without it; this one is fixed).
+    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'], channel: 'chromium', launchOptions: { args: ['--mute-audio'] } } },
   ],
 });

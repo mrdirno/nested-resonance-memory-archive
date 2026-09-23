@@ -313,7 +313,7 @@ test.describe('undo — the roll you liked, brought back', () => {
 
   test('U4 — the full-bleed rail, which is where this was wished from', async ({ page, browserName }) => {
     await boot(page, browserName);
-    await page.getByRole('button', { name: /Maximize the shot/i }).click();
+    await page.getByRole('button', { name: 'Expand preview', exact: true }).first().click();
     await expect(undoBtn(page, true)).toBeVisible();
 
     // Roll from the RAIL, not the dock — full bleed hides the dock entirely, and
@@ -367,7 +367,7 @@ test.describe('undo — the roll you liked, brought back', () => {
     // never OVERLAP each other, wherever they wrap to. Same guarantee, one fewer
     // assumption about the layout that provides it.
     await boot(page, browserName);
-    await page.getByRole('button', { name: /Maximize the shot/i }).click();
+    await page.getByRole('button', { name: 'Expand preview', exact: true }).first().click();
     await expect(page.getByTestId('undo')).toBeVisible();
 
     for (const width of [320, 360, 390, 430]) {

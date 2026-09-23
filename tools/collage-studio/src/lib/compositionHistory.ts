@@ -56,6 +56,14 @@ export interface CompositionSnapshot {
   locks: Array<[number, string]>;
   /** Name of the recipe the last roll drew from, so the readout matches the picture. */
   recipe?: string;
+  /**
+   * Hand-set frames (THE REFRAME): `[assetId, {x, y}]`. Not in the code either —
+   * a frame is a correction to one photograph, keyed by the photograph. Carried
+   * here so a DRAG is an undo step like a roll: in the editing view there is no
+   * Recentre on screen, and Undo is the way back. Absent means "none", which is
+   * what every snapshot recorded before frames were carried also meant.
+   */
+  frames?: Array<[string, { x: number; y: number }]>;
 }
 
 /**
@@ -88,13 +96,26 @@ const locksKey = (locks: Array<[number, string]>): string =>
     .join('|');
 
 /**
+ * Frames arrive from a Map too, so order means nothing; and two drags that land
+ * on the same picture a hair apart ARE two different pictures — the key is the
+ * exact numbers, because a frame below half a source pixel is never stored
+ * (`isMeaningful`), so there is no near-duplicate to round away.
+ */
+const framesKey = (frames: CompositionSnapshot['frames']): string =>
+  (frames ?? [])
+    .map(([id, f]) => `${id}@${f.x},${f.y}`)
+    .sort()
+    .join('|');
+
+/**
  * Two snapshots describing the same picture. Used ONLY to refuse a duplicate
  * step: pressing the dice twice before React has re-rendered would otherwise
  * push the same composition twice, and the first undo would then appear to do
  * nothing — which reads as a broken button, not as a no-op.
  */
 export const sameSnapshot = (a: CompositionSnapshot, b: CompositionSnapshot): boolean =>
-  a.code === b.code && a.recipe === b.recipe && locksKey(a.locks) === locksKey(b.locks);
+  a.code === b.code && a.recipe === b.recipe && locksKey(a.locks) === locksKey(b.locks)
+  && framesKey(a.frames) === framesKey(b.frames);
 
 export const canUndo = (h: CompositionHistory): boolean => h.past.length > 0;
 export const canRedo = (h: CompositionHistory): boolean => h.future.length > 0;

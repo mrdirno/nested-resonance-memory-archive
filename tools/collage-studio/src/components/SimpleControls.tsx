@@ -9,6 +9,7 @@ import { type TitlePlace, type TitleSize, type TitleColor, type TitleFont, TITLE
 import { LOOKS, DESK_AXES, deskForLook, type Desk, type LookId } from '../lib/grade';
 import { MOVES, type MoveId } from '../lib/motion';
 import { TURNS, type TurnId } from '../lib/turn';
+import { clickBelongsToDrag } from '../lib/grab';
 import { PACES, type PaceId } from '../lib/pace';
 import { SYNCS, beatsLabel, type SyncId, type BeatGrid } from '../lib/beat';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
@@ -238,9 +239,21 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
      normal tap still runs through onClick so the keyboard path is intact. */
   const holdRef = useRef<number | null>(null);
   const repeatedRef = useRef(false);
+  /**
+   * WHEN A HOLD THAT REPEATED ENDED — the only click it may eat is its own, by
+   * TIME (lib/grab.ts `clickBelongsToDrag`). It used to be a flag cleared only
+   * by a click, and a hold that ends with no click on the button (slid off, or
+   * a touch hold the platform cancelled) left it set to swallow the next Enter,
+   * Space or switch activation — the same leak THE GRAB had (C3748 sweep).
+   */
+  const holdEndedAtRef = useRef<number | null>(null);
 
-  const endHold = useCallback(() => {
+  const endHold = useCallback((e?: { timeStamp: number }) => {
     if (holdRef.current !== null) { window.clearTimeout(holdRef.current); holdRef.current = null; }
+    if (repeatedRef.current) {
+      repeatedRef.current = false;
+      holdEndedAtRef.current = e && Number.isFinite(e.timeStamp) ? e.timeStamp : performance.now();
+    }
   }, []);
 
   const startHold = useCallback((delta: number) => {
@@ -255,14 +268,19 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
     holdRef.current = window.setTimeout(tick, delay);
   }, [adjustCount]);
 
-  useEffect(() => endHold, [endHold]);
+  useEffect(() => () => endHold(), [endHold]);
 
   const stepProps = (delta: number) => ({
     onPointerDown: () => hasImages && startHold(delta),
     onPointerUp: endHold,
     onPointerLeave: endHold,
     onPointerCancel: endHold,
-    onClick: () => { if (repeatedRef.current) { repeatedRef.current = false; return; } adjustCount(delta); },
+    onClick: (e: React.MouseEvent) => {
+      const own = clickBelongsToDrag(holdEndedAtRef.current, e.timeStamp);
+      holdEndedAtRef.current = null;
+      if (own) return;
+      adjustCount(delta);
+    },
   });
 
   const classic = CLASSIC.find(m => m.id === layoutMode);

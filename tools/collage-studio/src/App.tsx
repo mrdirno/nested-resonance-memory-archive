@@ -22,7 +22,8 @@ import { withMove, type MoveId } from './lib/motion';
 import { isTurning, type TurnId } from './lib/turn';
 import { type PaceId } from './lib/pace';
 import { renderCanvas, calculateSmartCrop } from './lib/renderer';
-import { withReframe, dragToFrame, poolWithFrames, framesFromPool, poolWithoutFrames, type Frame } from './lib/reframe';
+import { withReframe, dragToFrame, frameOfCrop, isMeaningful, poolWithFrames, framesFromPool, poolWithoutFrames, type Frame } from './lib/reframe';
+import { GRAB, stepGrab, pressGrab, pointerKind, clickBelongsToDrag, type Grab } from './lib/grab';
 import { planTitle, measureWith, type TitlePlace, type TitleSize, type TitleColor, type TitleFont } from './lib/title';
 import { EMPTY_CAPTION_TRACK, normalizeCaptionTrack, planCaptions, captionPlanAt, type CaptionTrack } from './lib/captions';
 import { normalizeProjectLocks } from './lib/projectLocks';
@@ -476,7 +477,27 @@ export default function App() {
    * would make this feature worse than not having it: a Remove button sitting
    * over a picture other than the one it would delete.
    */
-  useEffect(() => { setArmedCell(null); setSwapFrom(null); }, [layoutItems, maximized, shuffledIndices]);
+  useEffect(() => {
+    setArmedCell(null); setSwapFrom(null);
+    // A LIVE GRAB IS BOUND TO THE CELL IT PRESSED — its slot, crop and scale
+    // are read at the press. If that cell now holds another picture, has moved,
+    // or the view changed, the grab would drive a stale slot: the outline on one
+    // fragment and a picture moving in another (measured by the C3748 audit, an
+    // import landing mid-drag). It ends as a cancel, so the picture goes back.
+    // Only THAT cell is asked: `layoutItems` is a new array on every re-layout,
+    // and a video's later frame batches re-lay out without moving anything —
+    // cancelling on identity would snap back a drag on an unrelated photo.
+    const st = reframeRef.current;
+    if (!st) return;
+    const b = layoutItems[st.slot]?.bounds;
+    const idx = shuffledIndices[st.slot];
+    const idNow = idx === undefined || idx < 0 ? undefined : images[idx]?.id;
+    const near = (a: number, c: number) => Math.abs(a - c) < 0.01;
+    const same = idNow === st.id && st.maximized === maximized && !!b
+      && near(b.x, st.bounds.x) && near(b.y, st.bounds.y) && near(b.w, st.bounds.w) && near(b.h, st.bounds.h);
+    if (!same) cancelGrabRef.current();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layoutItems, maximized, shuffledIndices]);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   /**
@@ -745,6 +766,10 @@ export default function App() {
       // Escape closes the current view even when a range or text field has
       // focus. Native select popups keep it for their own dismissal.
       if (e.key === 'Escape' && t?.tagName !== 'SELECT') {
+        // A LIVE GRAB is innermost of all: Escape puts the picture back where
+        // the press found it and changes no view — closing a panel or leaving
+        // full bleed mid-drag would move the artwork out from under the pointer.
+        if (grabLiveRef.current()) { e.preventDefault(); cancelGrabRef.current(); return; }
         // A pending trade is the innermost thing Escape can back out of, and
         // backing out of it must NOT also drop full bleed — you cancel a
         // mis-tap to try again, not to leave the room you are comparing in.
@@ -762,8 +787,9 @@ export default function App() {
       // and leave the drop target alone on a black page.
       if (e.key === 'f' || e.key === 'F') {
         if (!canMaximizeRef.current) return;
-        // Keep the current composition view stable while a take is recording.
-        if (recorderRef.current?.isRecording) return;
+        // Keep the current composition view stable while a take is recording,
+        // and while a press owns the artwork (THE GRAB).
+        if (recorderRef.current?.isRecording || grabLiveRef.current()) return;
         e.preventDefault();
         setMaximized(m => !m);
       }
@@ -1409,6 +1435,7 @@ export default function App() {
     code: compositionCode,
     locks: Array.from(lockedCells.entries()),
     recipe: lastRecipe,
+    frames: Array.from(frames.entries()),
   });
 
   /** Record the composition that is on screen, immediately before something replaces it. */
@@ -1425,6 +1452,9 @@ export default function App() {
     applyCompositionCode(s.code, false);
     setLockedCells(new Map(s.locks));
     setLastRecipe(s.recipe);
+    // THE FRAMES, after the code for the same reason as the pins: a drag is an
+    // undo step (THE GRAB), and the code knows nothing about hand-set frames.
+    setFrames(new Map(s.frames ?? []));
     // The pins are half of what decides the deal and they are NOT a dependency
     // of the assignment effect (a pin is a preference about future rolls). So a
     // restore has to say "re-derive" out loud, or an undo whose code fields are
@@ -1436,6 +1466,11 @@ export default function App() {
   const canRedo = histCanRedo(history);
 
   const handleUndo = () => {
+    // UNDO WAITS FOR THE RELEASE. A step taken mid-drag would restore under the
+    // pointer, and the release would then record the undone composition paired
+    // with frames from before the press — a state that never existed — and
+    // throw the redo away (found by the C3748 audit). Escape cancels a drag.
+    if (reframeRef.current) return;
     const step = undoHistory(history, liveSnapshot());
     if (!step) return;
     setHistory(step.history);
@@ -1443,6 +1478,7 @@ export default function App() {
   };
 
   const handleRedo = () => {
+    if (reframeRef.current) return;   // same rule as Undo, above
     const step = redoHistory(history, liveSnapshot());
     if (!step) return;
     setHistory(step.history);
@@ -1577,26 +1613,68 @@ export default function App() {
     });
   };
 
+  // A NOTICE NEVER MOVES THE ARTWORK UNDER A FINGER. `.studio-notice` is a row
+  // in the page's own column, so showing or clearing one resizes the art band —
+  // and the fragment being dragged with it, mid-gesture (the full-bleed hint
+  // that used to fire on the first arm could do exactly that four seconds into
+  // the drag it was teaching). While a press owns the artwork (THE GRAB, below)
+  // a new notice waits for the release and a live one outstays its four seconds
+  // until then. Every notice raised through here passes this gate. Two rows do
+  // NOT: the Stage transport's own status line (VideoStage's
+  // `.video-transport__notice`) and the recording progress row come from
+  // Stage/recorder state and can still resize the art band during a press —
+  // named in COLLAGE_EVOLUTION.md as the remaining source.
+  const gestureLiveRef = useRef(false);
+  const heldNoticeRef = useRef<string | null>(null);
   const flashNotice = (msg: string) => {
+      if (gestureLiveRef.current) { heldNoticeRef.current = msg; return; }
       setNotice(msg);
       if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current);
-      noticeTimer.current = window.setTimeout(() => setNotice(null), 4000);
+      const clear = () => {
+        if (gestureLiveRef.current) { noticeTimer.current = window.setTimeout(clear, 400); return; }
+        noticeTimer.current = null;
+        setNotice(null);
+      };
+      noticeTimer.current = window.setTimeout(clear, 4000);
   };
   useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current); }, []);
 
-  // --- THE REFRAME'S GESTURE ------------------------------------------------
+  // --- THE GRAB: press any fragment, drag its picture, let go ---------------
   //
-  // DRAG THE ARMED FRAGMENT'S PICTURE. Arming already exists and already means
-  // "this is the fragment I am talking about", so the reframe needs no mode and
-  // no fourth verb on the puck to enter — only a Recentre verb to leave, and
-  // that one appears only on a picture somebody actually moved.
+  // THE REFRAME's arithmetic (lib/reframe.ts) used to be reachable only in full
+  // bleed, only on the ARMED fragment: Expand preview, tap, then drag. A Collage
+  // user wished for the gesture everybody already knows — "click a tile and hold
+  // down with a finger and drag and release" — and on the build before this one
+  // that exact gesture moved the picture 0.0 RGB. Now any fragment holding a
+  // picture or a clip takes it, in the editing view and in full bleed alike.
+  // What a press MEANS (tap, hold, drag) and which click a drag owns is decided
+  // in lib/grab.ts, pure and swept; this block only wires it to the DOM.
   //
-  // WHY THE ARMED ONE AND NOT ANY FRAGMENT. Outside full bleed a tap PINS, and
-  // a drag that begins as a tap would pin whatever it passed over. Scoping the
-  // drag to the armed fragment keeps every shipped gesture byte for byte, and
-  // it is what lets `touch-action: none` be scoped too — the overlay only stops
-  // the page scrolling while something is armed, which only happens in full
-  // bleed, where there is nothing to scroll.
+  // WHY ANY FRAGMENT IS SAFE NOW, when it was scoped to the armed one before.
+  //   The scoping was there because outside full bleed a tap PINS, and "a drag
+  //   that begins as a tap would pin whatever it passed over". A tap and a drag
+  //   are told apart by DISTANCE (a per-kind slop — a fingertip gets 10 px, a
+  //   cursor 5), and the click a drag ends in is eaten by TIME, so the pin, the
+  //   arm and the trade keep their shipped meaning for every press that stays a
+  //   tap. And there is nothing else a drag on the artwork could have meant: the
+  //   page is one fixed surface that never scrolls (styles/base.css), with
+  //   overscroll off and zoom refused by the viewport — which is why the overlay
+  //   can carry `touch-action: pinch-zoom` for good: no pan for the browser to
+  //   claim from a finger, and iOS, which zooms whatever the viewport says,
+  //   still can.
+  //
+  // WHAT A DRAG IS ALLOWED TO LEAVE BEHIND, decided by a judge panel of three:
+  //   - ONLY A MEANINGFUL FRAME. `isMeaningful` was written for this and never
+  //     called: a jitter, or a drag along an axis the photograph has no room on,
+  //     wrote a frame anyway — which lit Recentre on a picture nobody moved,
+  //     stopped it following Crop focus, and rode into every saved file.
+  //   - ONE UNDO STEP, recorded at the release with the frames from BEFORE the
+  //     press. In the editing view there is no Recentre; Undo is the way back.
+  //   - NOTHING, IF IT DID NOT FINISH. A cancel — a second finger landing, the
+  //     OS taking the pointer — puts back the frame the gesture started from and
+  //     records no step.
+  //   - NOTHING DURING A TAKE. Swap, evict and New canvas already refuse while
+  //     the recorder runs; so does this, and it says so once the finger lifts.
   //
   // A DRAG ACCUMULATES FROM ITS ORIGIN, and that is not a style choice.
   //   The first version asked `calculateSmartCrop` for the CURRENT crop on every
@@ -1611,20 +1689,118 @@ export default function App() {
   //   reframe (that is invariant I7), so the crop taken at the start stays the
   //   right basis for the whole gesture, and the clamp lands on the TOTAL —
   //   which is what makes the edge release on the very first pixel back.
-  const REFRAME_SLOP = 5;
   const reframeRef = useRef<{
-    pid: number; slot: number; id: string;
-    ox: number; oy: number; k: number;
+    grab: Grab; slot: number; id: string; k: number;
     crop: ReturnType<typeof calculateSmartCrop>;
     size: { width: number; height: number };
-    moved: boolean;
+    /** Where the picture sat when the press landed — the bar a frame must clear to be worth keeping. */
+    start: Frame;
+    /** The whole frames map as it was at the press: the Undo step's "before", and what a cancel puts back. */
+    before: Map<string, Frame>;
+    timer: number | null;
+    /** A meaningful frame has been written by this gesture. */
+    wrote: boolean;
+    /** A take is recording: the press may still be a tap, but a drag moves nothing. */
+    blocked: boolean;
+    /** The cell and the view the press landed in — a re-layout that changes either ends the grab. */
+    bounds: { x: number; y: number; w: number; h: number };
+    maximized: boolean;
   } | null>(null);
-  /** A drag ends with a click on the same element; this eats exactly that one. */
-  const reframedRef = useRef(false);
-  const reframeHintRef = useRef(false);
+  /** When the last DRAG ended (event time) — the only click it may eat is its own. See lib/grab.ts. */
+  const dragEndedAtRef = useRef<number | null>(null);
+  /** The fragment whose picture is under a finger: lit while held or dragged, so you can see which one moves. */
+  const [grabCell, setGrabCell] = useState<number | null>(null);
+
+  // NO TEACHING NOTICE, and that is a measured decision. The judge panel asked
+  // for one sentence on the first tap; the C3748 audit then measured what it
+  // cost: `.studio-notice` is a row in the page's column, so it pushed a phone's
+  // artwork down 37 px and shrank it 23 px the instant the finger lifted, and a
+  // second tap 300 ms later pinned the fragment ABOVE the one aimed at. The
+  // gesture is taught where it cannot move anything: the lit fragment under a
+  // still finger, the grab cursor, and the written line under Crop focus.
+
+  /** Ends the gesture however the release arrived. Idempotent: the second caller finds nothing. */
+  const endGesture = (pid: number, how: 'up' | 'cancel', t: number, el?: Element | null) => {
+    const st = reframeRef.current;
+    if (!st || st.grab.pid !== pid) return;
+    const out = stepGrab(st.grab, { type: how, pid, t });
+    if (st.timer !== null) window.clearTimeout(st.timer);
+    reframeRef.current = null;
+    try { el?.releasePointerCapture(pid); } catch { /* already gone */ }
+    if (st.wrote && how === 'cancel') {
+      // PUT BACK what the press found, for this picture only — the rest of the
+      // map may have moved on (a load, a swap) and is not this gesture's to undo.
+      const was = st.before.get(st.id);
+      setFrames(prev => { const m = new Map(prev); if (was) m.set(st.id, was); else m.delete(st.id); return m; });
+    } else if (st.wrote) {
+      setHistory(h => commitHistory(h, { ...liveSnapshot(), frames: Array.from(st.before.entries()) }));
+    }
+    dragEndedAtRef.current = out.endedDrag ? t : null;
+    setGrabCell(null);
+    gestureLiveRef.current = false;
+    // A REFUSED DRAG SAYS WHY — asked at the release, not at the press, and
+    // never over a notice the press was already holding (a take's own
+    // end-of-take warning is the likeliest, and it is the only sign a take went
+    // wrong). A still export is not a take and has nothing to stop.
+    if (st.blocked && out.endedDrag && !heldNoticeRef.current) {
+      heldNoticeRef.current = recorderRef.current?.isRecording ? 'Stop the take before moving a picture.'
+        : exportStatus === 'processing' ? 'Let the export finish before moving a picture.'
+        : null;
+    }
+    const held = heldNoticeRef.current;
+    heldNoticeRef.current = null;
+    if (held) flashNotice(held);
+    // AND NOTHING IS WRITTEN INTO THE POOL HERE — measured, not assumed. See
+    // lib/reframe.ts: `images` reaches the DISARM effect through `layoutItems`,
+    // so a commit on pointerup takes the puck away from under the finger that
+    // just let go and a second drag on the same picture becomes impossible.
+    // The frame reaches the FILES through `poolForSave` instead.
+  };
+  // The window-level fallback below is registered once, so it reaches the
+  // CURRENT render's `endGesture` through this ref — a first-render closure would
+  // record a first-render `liveSnapshot()` as the Undo step.
+  const endGestureRef = useRef(endGesture);
+  endGestureRef.current = endGesture;
+  /**
+   * POINTERS WHOSE GESTURE THE APP ENDED WHILE THEY WERE STILL DOWN — Escape, a
+   * re-layout under the finger, a second finger. A cancel means NOTHING
+   * happens, and that includes the click a mouse release still sends: the
+   * browser's own pointercancel sends none, but these pointers are still down,
+   * and their release would otherwise pin, arm or trade (measured by grab.spec:
+   * Escape put the picture back and the release then pinned the fragment). The
+   * release of each is claimed the way a drag's is: by time.
+   */
+  const abortedPidsRef = useRef<Set<number>>(new Set());
+  const abortGesture = (pid: number, t: number) => {
+    abortedPidsRef.current.add(pid);
+    endGestureRef.current(pid, 'cancel', t);
+  };
+  // The keyboard handler is registered once, too: Escape cancels a live grab
+  // (the picture goes back to where the press found it, no step recorded) and
+  // F waits for the release. Both read the gesture only through refs.
+  const grabLiveRef = useRef(() => reframeRef.current !== null);
+  const cancelGrabRef = useRef(() => {
+    const live = reframeRef.current;
+    if (live) abortGesture(live.grab.pid, performance.now());
+  });
 
   const beginReframe = (e: React.PointerEvent<SVGGElement>, slot: number) => {
-    if (!maximized || armedCell !== slot) return;
+    // A new press means any click still owed to the last drag is not coming.
+    dragEndedAtRef.current = null;
+    // A pointer whose press just ended someone else's grab starts nothing.
+    if (abortedPidsRef.current.has(e.pointerId)) return;
+    // A PENDING TRADE owns every tap on the canvas, and a secondary button is
+    // the context menu's — neither is a grab.
+    if (swapping) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    const live = reframeRef.current;
+    if (live) {
+      // A SECOND FINGER ENDS THE GESTURE it lands on — a pinch, a palm, a
+      // second thought — and starts nothing. The same pointer pressing again
+      // means its release was never heard (a mouse only ever has one).
+      endGesture(live.grab.pid, 'cancel', e.timeStamp);
+      if (live.grab.pid !== e.pointerId) return;
+    }
     const rect = e.currentTarget.ownerSVGElement?.getBoundingClientRect();
     if (!rect || !(rect.width > 0) || !(rect.height > 0)) return;
     const imgIdx = shuffledIndices[slot];
@@ -1644,42 +1820,92 @@ export default function App() {
     // gesture land somewhere different depending on which instant you grabbed.
     const size = { width: asset.width, height: asset.height };
     const crop = calculateSmartCrop(bounds, { ...size, analysis: asset.analysis }, zoom);
-    reframeRef.current = { pid: e.pointerId, slot, id, ox: e.clientX, oy: e.clientY, k, crop, size, moved: false };
+    const grab = pressGrab(e.pointerId, pointerKind(e.pointerType), e.clientX, e.clientY, e.timeStamp);
+    // THE HOLD LIGHTS THE FRAGMENT, which is how the wisher's own gesture
+    // ("hold down ... and drag") says it has been understood. It is a signal,
+    // never a gate — see lib/grab.ts — and a late timer is still a hold.
+    const timer = window.setTimeout(() => {
+      const st = reframeRef.current;
+      if (!st || st.grab.pid !== grab.pid) return;
+      st.timer = null;
+      const out = stepGrab(st.grab, { type: 'hold', pid: grab.pid, t: performance.now() });
+      if (out.grab) st.grab = out.grab;
+      if (out.heldNow && !st.blocked) setGrabCell(slot);
+    }, GRAB.holdMs);
+    reframeRef.current = {
+      grab, slot, id, k, crop, size,
+      start: frameOfCrop(crop, size),
+      before: new Map(frames),
+      timer,
+      wrote: false,
+      blocked: exportStatus === 'processing' || !!recorderRef.current?.isRecording,
+      bounds: { x: bounds.x, y: bounds.y, w: bounds.w, h: bounds.h },
+      maximized,
+    };
+    gestureLiveRef.current = true;
     try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* capture is a convenience */ }
   };
 
   const moveReframe = (e: React.PointerEvent<SVGGElement>) => {
     const st = reframeRef.current;
-    if (!st || st.pid !== e.pointerId) return;
-    const dxc = e.clientX - st.ox;
-    const dyc = e.clientY - st.oy;
-    if (!st.moved && Math.hypot(dxc, dyc) < REFRAME_SLOP) return;
-    st.moved = true;
-    const next = dragToFrame(st.crop, st.size, dxc * st.k, dyc * st.k);
-    setFrames(prev => { const m = new Map(prev); m.set(st.id, next); return m; });
+    if (!st || st.grab.pid !== e.pointerId) return;
+    const out = stepGrab(st.grab, { type: 'move', pid: e.pointerId, x: e.clientX, y: e.clientY, t: e.timeStamp });
+    if (!out.grab) return;
+    st.grab = out.grab;
+    if (st.blocked) return;
+    if (out.heldNow || out.drag) setGrabCell(st.slot);
+    if (!out.drag) return;
+    const next = dragToFrame(st.crop, st.size, out.drag.dx * st.k, out.drag.dy * st.k);
+    if (isMeaningful(next, st.start, st.size)) {
+      st.wrote = true;
+      setFrames(prev => { const m = new Map(prev); m.set(st.id, next); return m; });
+    } else if (st.wrote) {
+      // BACK WHERE IT STARTED: the map goes back to what the press found, so a
+      // drag out and home again leaves no frame — and no Recentre — behind.
+      const was = st.before.get(st.id);
+      setFrames(prev => { const m = new Map(prev); if (was) m.set(st.id, was); else m.delete(st.id); return m; });
+      st.wrote = false;
+    }
     e.preventDefault();
   };
 
-  const endReframe = (e: React.PointerEvent<SVGGElement>) => {
-    const st = reframeRef.current;
-    if (!st || st.pid !== e.pointerId) return;
-    reframeRef.current = null;
-    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
-    if (st.moved) reframedRef.current = true;
-    // AND NOTHING IS WRITTEN INTO THE POOL HERE — measured, not assumed. See
-    // lib/reframe.ts: `images` reaches the DISARM effect through `layoutItems`,
-    // so a commit on pointerup takes the puck away from under the finger that
-    // just let go and a second drag on the same picture becomes impossible.
-    // The frame reaches the FILES through `poolForSave` instead.
-  };
+  const endReframe = (e: React.PointerEvent<SVGGElement>) =>
+    endGesture(e.pointerId, e.type === 'pointerup' ? 'up' : 'cancel', e.timeStamp, e.currentTarget);
 
-  // Said ONCE per session, on the first arm: a gesture with no affordance is a
-  // gesture nobody finds, and a phone has no hover to teach it with.
+  // A RELEASE THE FRAGMENT NEVER HEARS — capture refused, or the pointer let go
+  // somewhere else entirely — must still end the gesture, or the next press on
+  // any fragment would be read as a second finger. The fragment's own handler
+  // runs first and empties the ref, so this is a no-op on every normal release.
+  // A SECOND POINTER ANYWHERE ends a live grab — on the letterbox, the dock or
+  // the header as much as on another fragment: with zoom refused by the
+  // viewport nothing sends a cancel, so a pinch that starts with one finger off
+  // the art would otherwise drag the picture under the other (C3748 audit).
+  // CAPTURE phase, so it runs before any fragment's own press handler; the
+  // pointer that did it is then swallowed rather than starting a grab of its own.
   useEffect(() => {
-    if (!maximized || armedCell === null || reframeHintRef.current) return;
-    reframeHintRef.current = true;
-    flashNotice('Drag the picture to move it inside its fragment.');
-  }, [maximized, armedCell]);
+    const down = (e: PointerEvent) => {
+      const st = reframeRef.current;
+      if (!st || st.grab.pid === e.pointerId) return;
+      abortGesture(st.grab.pid, e.timeStamp);
+      abortedPidsRef.current.add(e.pointerId);
+    };
+    window.addEventListener('pointerdown', down, true);
+    return () => window.removeEventListener('pointerdown', down, true);
+  }, []);
+
+  useEffect(() => {
+    const end = (e: PointerEvent) => {
+      endGestureRef.current(e.pointerId, e.type === 'pointerup' ? 'up' : 'cancel', e.timeStamp);
+      // An aborted pointer's release: whatever click follows it is the abort's.
+      if (abortedPidsRef.current.delete(e.pointerId) && e.type === 'pointerup') dragEndedAtRef.current = e.timeStamp;
+    };
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+    return () => {
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+    };
+  }, []);
 
   // --- INGEST PROGRESS ------------------------------------------------------
   // Held in a ref as well as state because two selections can overlap: the
@@ -1773,7 +1999,11 @@ export default function App() {
           setAssignNonce(n => n + 1);
           // Old snapshots name immutable source ids; keep their layout history
           // and remap the replaced source's pins to its new revision.
-          setHistory(h => ({ ...h, past: h.past.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]) })), future: h.future.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]) })) }));
+          // Frames too, since a drag is an undo step (C3748): a frame is keyed by
+          // the source id exactly as a pin's picture is.
+          setHistory(h => ({ ...h,
+            past: h.past.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]), frames: s.frames?.map(([id,f]) => [id===oldId?nextId:id, f]) })),
+            future: h.future.map(s => ({ ...s, locks: s.locks.map(([cell,id]) => [cell,id===oldId?nextId:id]), frames: s.frames?.map(([id,f]) => [id===oldId?nextId:id, f]) })) }));
         } else setImages(prev => [...prev, ...batch]);
     };
 
@@ -2274,7 +2504,7 @@ export default function App() {
       // that went stale under a re-layout. Silence is the right answer to both.
       if (plan.count === 0) { setArmedCell(null); return; }
 
-      addToHistory(poolSnapshotState(), images, previewUrl || undefined);
+      addToHistory(poolSnapshotState(), poolForSave, previewUrl || undefined);
 
       const gone = new Set(plan.imageIds);
       if (plan.clipIds.length) {
@@ -2428,7 +2658,7 @@ export default function App() {
 
   const handleClear = () => {
       if (waitForLyricDemo()) return;
-      addToHistory(poolSnapshotState(), images, previewUrl || undefined);
+      addToHistory(poolSnapshotState(), poolForSave, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
       for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
@@ -2471,7 +2701,11 @@ export default function App() {
       setLockedCells(new Map(normalizeProjectLocks(item.state.locks, item.images)));
       setAssignNonce(n => n + 1);
       ownCount(true); // restoring a saved composition's own count
-      setImages(item.images);
+      // A HISTORY ITEM IS A FOURTH WRITER (after the SVG, the .collage and the
+      // autosave): it now stores `poolForSave`, so the hand-set frames ride in
+      // the analyses and are lifted back into the map exactly as an Open does.
+      setImages(poolWithoutFrames(item.images));
+      setFrames(framesFromPool(item.images));
       const l = item.state.layout;
       setLayoutMode(l.mode); if(l.primitive) setPrimitive(l.primitive);
       setCount(l.count); setSeed(l.seed); setAspect(l.aspect); setGutter(l.gutter); setActiveTab(item.state.mode);
@@ -3011,6 +3245,13 @@ export default function App() {
           setLockedCells(restoredLocks);
           setAssignNonce(n => n + 1);
           setFrames(restoredFrames); setLastRecipe(undefined);
+          // A LOADED PROJECT STARTS ITS OWN UNDO HISTORY. Undo restores
+          // compositions, never pools: a step recorded before the Open names
+          // another pool's pictures, and since a drag became an undo step
+          // (C3748) restoring one would also wipe the frames this file just
+          // brought in — measured by the C3748 audit: Open, then one Undo, and
+          // the file's hand-set crop was gone.
+          setHistory(emptyHistory());
           // RETIRE THE LATCH WITH THE LOAD THAT ARMED IT. Nothing else bumps
           // `dropId` here, so the latch stayed live past the Open and the NEXT
           // import paid for it: its final effect pass took the `drop !== dropId`
@@ -3417,15 +3658,24 @@ export default function App() {
                    <svg
                      className="absolute inset-0 w-full h-full"
                      viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}
-                     /* THE REFRAME needs the browser to stop treating a drag on
-                        the artwork as a scroll — but only while a fragment is
-                        armed, which is a full-bleed-only state with nothing to
-                        scroll. Outside that this attribute is absent and touch
-                        behaves exactly as it shipped. */
-                     style={armedCell !== null ? { touchAction: 'none' } : undefined}
+                     /* THE GRAB needs the browser never to claim a finger that
+                        moves on the artwork — and there is no pan here for it to
+                        claim: the page is one fixed surface. `pinch-zoom` rather
+                        than `none` so iOS, which zooms whatever the viewport
+                        says, still can. STATIC, never toggled: the browser reads
+                        it at touchstart, so a value that changed on arm would
+                        always be one gesture late. No callout and no selection
+                        under a still finger — the hold is a grab here. */
+                     style={{ touchAction: 'pinch-zoom', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', userSelect: 'none' }}
+                     /* A finger that rests is a grab, not a request for the
+                        context menu. Only while a press owns the artwork — a
+                        right click never starts one, so the desktop menu is
+                        untouched. */
+                     onContextMenu={(e) => { if (reframeRef.current) e.preventDefault(); }}
                    >
                        {layoutItems.map((item, i) => {
-                           const isLocked = lockedCells.has(i); const isArmed = maximized && armedCell === i; const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+                           const isLocked = lockedCells.has(i); const isArmed = maximized && armedCell === i; const isGrabbed = grabCell === i; const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+                           const slotImg = shuffledIndices[i]; const holdsPicture = slotImg !== undefined && slotImg >= 0 && !!images[slotImg];
                            // A PENDING TRADE RE-POINTS EVERY FRAGMENT. While one is parked,
                            // the canvas is not arming anything — every other fragment is a
                            // destination and the parked one is the way out. That is why the
@@ -3443,12 +3693,16 @@ export default function App() {
                                // means the third thing: trade with this one.
                                <g
                                  key={i}
-                                 onClick={() => {
-                                   // A REFRAME ENDS IN A CLICK on this same
-                                   // element. Eating exactly that one is what
-                                   // stops a drag from also disarming the
-                                   // fragment you were just correcting.
-                                   if (reframedRef.current) { reframedRef.current = false; return; }
+                                 onClick={(e) => {
+                                   // A MOUSE DRAG ENDS IN A CLICK on this same
+                                   // element; a finger's does not. Eating the
+                                   // drag's own click — by time, never by a flag
+                                   // a touch drag would leave set for the NEXT
+                                   // tap (lib/grab.ts) — is what stops a drag
+                                   // from also pinning, arming or disarming.
+                                   const own = clickBelongsToDrag(dragEndedAtRef.current, e.timeStamp);
+                                   dragEndedAtRef.current = null;
+                                   if (own) return;
                                    if (swapping) return performSwap(i);
                                    if (maximized) return setArmedCell(prev => (prev === i ? null : i));
                                    return toggleLock(i);
@@ -3457,16 +3711,18 @@ export default function App() {
                                  onPointerMove={moveReframe}
                                  onPointerUp={endReframe}
                                  onPointerCancel={endReframe}
-                                 className={`group ${isArmed && !swapping ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
+                                 onLostPointerCapture={(e) => endGesture(e.pointerId, 'cancel', e.timeStamp)}
+                                 className={`group ${holdsPicture && !swapping ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
                                >
                                    <path d={d} fill="transparent" stroke="transparent" />
                                    <path
                                      d={d}
                                      fill="none"
-                                     stroke={isSwapSource || isSwapTarget ? '#38bdf8' : isArmed ? '#34d399' : isLocked ? '#facc15' : 'white'}
-                                     strokeWidth={isSwapSource ? 6 : isSwapTarget ? 3 : isArmed ? 5 : isLocked ? 4 : 2}
+                                     stroke={isSwapSource || isSwapTarget ? '#38bdf8' : isArmed || isGrabbed ? '#34d399' : isLocked ? '#facc15' : 'white'}
+                                     strokeWidth={isSwapSource ? 6 : isSwapTarget ? 3 : isArmed || isGrabbed ? 5 : isLocked ? 4 : 2}
                                      strokeDasharray={isSwapTarget ? '14 10' : undefined}
-                                     className={`transition-all ${isSwapSource ? 'opacity-100' : isSwapTarget ? 'opacity-70' : isArmed || isLocked ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`}
+                                     data-grabbed={isGrabbed || undefined}
+                                     className={`transition-all ${isSwapSource ? 'opacity-100' : isSwapTarget ? 'opacity-70' : isArmed || isLocked || isGrabbed ? 'opacity-100' : 'opacity-0 group-hover:opacity-30'}`}
                                    />
                                    {isLocked && (() => { const c = getCentroid(item.path); return ( <foreignObject x={c.x - 12} y={c.y - 12} width="24" height="24"><div className="bg-black/50 p-1 rounded-full backdrop-blur flex items-center justify-center w-full h-full"><Lock size={12} className="text-yellow-400" /></div></foreignObject> ); })()}
                                </g>
@@ -3591,11 +3847,17 @@ export default function App() {
                                {reframed && (
                                  <button
                                      data-testid="cell-recentre"
-                                     onClick={() => setFrames(prev => {
-                                       const m = new Map(prev);
-                                       if (target?.id) m.delete(target.id);
-                                       return m;
-                                     })}
+                                     onClick={() => {
+                                       // ONE UNDO STEP, like the drag it reverses —
+                                       // otherwise the next Undo restores a snapshot
+                                       // equal to the screen and spends itself.
+                                       pushHistory();
+                                       setFrames(prev => {
+                                         const m = new Map(prev);
+                                         if (target?.id) m.delete(target.id);
+                                         return m;
+                                       });
+                                     }}
                                      title={`Recentre ${what} — back to the crop the app chose`}
                                      aria-label="Recentre this picture"
                                      className="w-11 h-11 rounded-xl text-emerald-300 hover:bg-emerald-400/20 flex items-center justify-center active:scale-95 transition"

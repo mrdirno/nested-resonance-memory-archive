@@ -140,16 +140,19 @@ async function boot(page: Page) {
   await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
   // A rectangular partition, so a fragment's bounding-box centre really is
   // inside the fragment — the measurement above depends on it.
-  await page.getByRole('button', { name: 'Settings' }).first().click();
+  // C3712 moved Balanced out of a Settings sheet into Studio tools > Layout, and
+  // the sheet's toggle into "Close editing panel" (C3748 caught this spec still
+  // asking for the old names, so it had not run since).
+  await page.getByRole('navigation', { name: 'Studio tools' }).getByRole('button', { name: 'Layout', exact: true }).click();
   await page.getByRole('button', { name: 'Balanced', exact: true }).first().click();
   await page.waitForTimeout(1500);
-  await page.getByRole('button', { name: 'Settings' }).first().click();
+  await page.getByRole('button', { name: 'Close editing panel', exact: true }).click();
   await page.waitForTimeout(400);
 }
 
 async function enterFullBleed(page: Page) {
-  await page.getByRole('button', { name: 'Maximize the shot' }).click();
-  await expect(page.getByRole('button', { name: 'Exit full bleed' })).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Expand preview', exact: true }).first().click();
+  await expect(page.getByRole('button', { name: 'Back to editing', exact: true }).first()).toBeVisible({ timeout: 15_000 });
   await page.waitForTimeout(600);
 }
 
@@ -274,7 +277,7 @@ test.describe('THE SWAP — direct manipulation of the sources', () => {
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('swap-pending'), 'Escape backs out of the trade').toHaveCount(0);
     await expect(
-      page.getByRole('button', { name: 'Exit full bleed' }),
+      page.getByRole('button', { name: 'Back to editing', exact: true }).first(),
       'and it must NOT also cost you full bleed — you cancel a mis-tap to try again',
     ).toBeVisible();
 
@@ -335,7 +338,7 @@ test.describe('THE SWAP — direct manipulation of the sources', () => {
 
     // A collage with ONE picture has nobody to trade with, and offering a dead
     // button over it is the inert-control defect this repo has been filed for.
-    await page.getByRole('button', { name: 'Exit full bleed' }).click();
+    await page.getByRole('button', { name: 'Back to editing', exact: true }).first().click();
     await page.waitForTimeout(400);
     await page.reload();
     await page.evaluate(async () => {

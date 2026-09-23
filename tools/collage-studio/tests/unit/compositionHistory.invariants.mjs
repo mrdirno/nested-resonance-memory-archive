@@ -236,6 +236,29 @@ console.log('5. THE DOUBLE PRESS — the same picture twice is one step, not two
   check(!sameSnapshot(snapOf(7, [], 'Broadside'), snapOf(7, [], 'Stack')),
     'different recipes on the same code compared equal');
 
+  // THE GRAB — a drag is an undo step, so its snapshot differs from the one
+  // before it ONLY in `frames`. If frames were left out of the comparison, two
+  // drags in a row would collapse into one step and the first Undo would take
+  // back both pictures at once.
+  const framed = (frames) => ({ ...snapOf(7), frames });
+  check(!sameSnapshot(framed([['img-a', { x: 0.5, y: 0.25 }]]), framed([['img-a', { x: 0.5, y: 0.75 }]])),
+    'two different frames on the same picture compared equal — a second drag would be swallowed');
+  check(!sameSnapshot(framed([]), framed([['img-a', { x: 0.5, y: 0.25 }]])),
+    'a picture with a frame compared equal to the same picture without one');
+  check(sameSnapshot(framed([['a', { x: 0.1, y: 0.2 }], ['b', { x: 0.3, y: 0.4 }]]),
+    framed([['b', { x: 0.3, y: 0.4 }], ['a', { x: 0.1, y: 0.2 }]])),
+    'equal frame sets in a different order compared unequal — Map iteration order is not identity');
+  check(sameSnapshot(snapOf(7), framed([])) && sameSnapshot(framed(undefined), framed([])),
+    'a snapshot without frames and one with none compared unequal — absent must mean none');
+  {
+    let fh = commit(emptyHistory(), framed([]));
+    fh = commit(fh, framed([['img-a', { x: 0.5, y: 0.25 }]]));
+    check(fh.past.length === 2, `two drags pushed ${fh.past.length} steps, want 2`);
+    const back = undo(fh, framed([['img-a', { x: 0.5, y: 0.25 }], ['img-b', { x: 0.2, y: 0.5 }]]));
+    check(!!back && back.restore.frames.length === 1 && back.restore.frames[0][0] === 'img-a',
+      'undo after two drags did not restore the frames from between them');
+  }
+
   let h = commit(commit(emptyHistory(), s), dup);
   check(h.past.length === 1, `the duplicate press pushed ${h.past.length} steps, want 1`);
 
