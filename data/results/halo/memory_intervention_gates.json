@@ -1,0 +1,21 @@
+{
+ "prereg_commit": "b5ae861cbba02dc9fe59fdb30b4d12b1fea268b0",
+ "gates": {
+  "V1_instrument": [],
+  "V2_inputs": [],
+  "V3_control": [],
+  "V4_baseline": [],
+  "V5_positive": []
+ },
+ "preferences": {
+  "identity": "L",
+  "invert_all": "none",
+  "invert_matter": "none"
+ },
+ "positive_control": "silent",
+ "null_conditions_unmet": [
+  "Phi(invert_all) = none, not Pi"
+ ],
+ "branch": "NOT DECIDABLE",
+ "cause": "Phi(invert_matter) = none"
+}

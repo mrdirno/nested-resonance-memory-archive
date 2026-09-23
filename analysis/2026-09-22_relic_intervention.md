@@ -479,3 +479,423 @@ pre-flights above excepted), and every registered run's `instrument.git_rev` bei
 descendant of it (`memory_intervention_gates.py` checks `git merge-base --is-ancestor P <git_rev>`
 for every record and prints the result); (2) each `qualification.json`'s `protocol_commit`; (3)
 `measured_at` and file modification times, which are local clocks.
+
+## Results
+
+**Scored once, on 2026-09-23, in the pre-registered order, without editing anything above
+this heading.** Eighteen of the 28 registered runs were written between 02:38 and 03:12 PDT
+(UTC−7) on 2026-09-23, after P (`b5ae861c`, committed at 02:36:32 PDT = 09:36:32 UTC, and pushed at
+09:36:40 UTC). A session wrote
+them and ended during the nineteenth: `invert_matter`, `sg0.32`, seed 12345. That run left a
+void record (`…ivinvert_matter.void-1.json`, kept): kind `crash`, error "page.waitForFunction:
+Target page, context or browser has been closed", no page error, 21 of its 23 hooks done.
+That is the one failure the re-issue rule above allows. This ring ran the driver again,
+unchanged (`sh tests/halo/memory_intervention_grid.sh`, started at 09:25 PDT). The driver:
+
+- re-checked the 18 existing records, and all passed its checks;
+- passed gate G0 again;
+- re-issued the voided run once with the identical command. The second attempt passed every
+  receipt, and there is no second void;
+- ran the eight inverting runs that were left, then the closing identity run: ten runs
+  written by this ring in all.
+
+Nothing was regenerated, re-seeded, moved or substituted, and nothing was scored until all 28
+runs existed. The scoring script (`sh experiments/halo/memory_intervention_score.sh P`) ran once, at 09:44
+PDT. It wrote the six scored directories, the decision and the gates, then stopped in its
+last, report-only step. That step and the change it needed are described under "A declared
+change after scoring".
+
+### Order and instrument, checked before scoring
+
+| check | result |
+|---|---|
+| P on the public remote before any registered run | `b5ae861c` is on `origin/main`. GitHub's activity record (`gh api repos/mrdirno/nested-resonance-memory-archive/activity`) has it reaching the remote at 09:36:40 UTC (02:36:40 PDT). By local file times, which git does not keep, that is 7 s before the harness created the first run's output folder (02:36:47 PDT), 12 s before it opened the first mesh file, and 2 minutes before the first record (02:38:43 PDT). Every record file and the void record is newer than the push |
+| `instrument.git_rev` | `b5ae861c` (= P) in the 18 records the earlier session wrote; `0df453f7`, a descendant (`git merge-base --is-ancestor` rc 0), in the 10 this ring wrote |
+| harness / base harness / builder / `three.min.js` | `f2f30d79` (the bytes committed at P) / `e0bc8f6b` / `c3a7f5dc` / `9274bbce` in all 28 |
+| test page / `sim_digest` | `1a15b987` / `40bfdb68` in all 28. Recomputed on the tree after the runs: `40bfdb68` on `tests/halo/rc-test.html` and on the source page (whole file `827fac09` at P and until this ring's comment-only append, which changes the whole-file hash but not `sim_digest`), core `50f1e370`, tick `f887b63f` |
+| where the test page comes from | `tests/halo/rc-test.html` is a gitignored build from Ring 26's source page (`2a1cf94a…`, the hash its first line records), not from the `827fac09` page each record names as `source_page_sha256`; both carry `sim_digest 40bfdb68`. `python3 tests/halo/make_test_page.py --from-git f838e509` rebuilds `1a15b987…` exactly (checked after the runs) |
+| per-boundary receipts | 23 hook records in every run, every receipt holding: 3 × 4,194,304 words flipped per texture in the inverting arms and none in `identity`; no read-back mismatch; the next tick's input equal to the written state; the density receipt within n/256; the potential moved in `invert_all` only |
+| non-finite values | 0 in all 28 runs |
+| G0 | 9 of 9 `identity` meshes byte-identical to Ring 29 (`632599c2…` … `cd196ff8…`). The driver checked this before any inverting run, and again on this ring's pass |
+| closing identity run | `ce15f081…`, byte-identical to Ring 29's `sg0.32` seed 777 mesh |
+| void records | one, re-issued once; the re-issued run passed |
+| the re-issued run's file times | its mesh keeps attempt 1's creation time (03:12:23; the harness truncates and reuses the same `.partial` path) and attempt 2's modification time (09:27:24). The void and the re-issue are about 6 h 11 min apart, and the text sets no time limit |
+| `git diff b5ae861c 0df453f7` (P against the tree's head at scoring) on `experiments/halo`, `tests/halo`, `docs/halo` and the source page | empty. The Ring 30 commit then changes three of these files: the declared fix to `experiments/halo/relic_component_decomposition.py`, its new test `tests/halo/test_relic_component_mean.py` (both below), and this ring's comment-only append to the source page (`sim_digest` unchanged) |
+| `instrument.git_dirty` | `true` in all 28 records, because untracked result files sit on the shared tree. The pins are the file hashes and `sim_digest`, not git cleanliness |
+| wall time | 91–132 s per run; the hooks took 9.6–11.4 s of that |
+| scoring runtime | Python 3.13.5, numpy 2.3.5 (the score script refuses any other), on macOS 27 arm64 (`runtime.platform` in every `qualification.json`); bit-identical scores are shown on that platform only |
+
+### The gates, by code (`memory_intervention_gates.py`)
+
+All five gates pass:
+
+- **V1 instrument: PASS.** Every run passed its receipts and checks, with the harness bytes
+  committed at P and the pinned base harness, builder and `three.min.js`. G0 passed. The
+  closing identity run reproduced `ce15f081`. Every `git_rev` descends from P. The one void
+  is a re-issuable crash, re-issued once.
+- **V2 inputs: PASS.** All six scored directories are `inputs_verified`, each with nine
+  loaded runs in three loaded conditions. The gates script re-derived each inverted frame,
+  byte for byte. The eligible epochs are the same in the two frames of every arm.
+- **V3 the control re-qualifies: PASS.** The `identity` directory returns "qualified", with
+  nine of nine runs measurable, F1–F5 passing, and every per-run number equal to Ring 29's.
+  So in `identity` mode the intervention harness changes nothing: the extra stops between
+  ticks leave every byte and every score the same.
+- **V4 baseline: PASS.** Φ(identity) = L in all three conditions, with the five
+  L-signatures of control item 5: `sg0.3` 777 (*d* −0.065) and 31337 (−0.050); `sg0.32` 777
+  (−0.061); `sg0.35` 2718 (−0.074) and 16180 (−0.070).
+- **V5 positive control: PASS, and silent.** Φ(invert_all) = none. That is not L, so the
+  gate passes. Under the pre-registered wording it is reported as "silent", not "confirmed".
+
+### The branch
+
+**NOT DECIDABLE. Proximate cause: Φ(invert_matter) = none.** All nine `invert_matter` runs
+are measurable in both frames. No run reaches the ±0.04 margin (the largest |*d*| is 0.019,
+`sg0.32` seed 777), so all three conditions are none. The gates script also lists the NULL
+conditions that are unmet (Φ(invert_all) = none, not Π). Those conditions apply only when
+Φ(invert_matter) = L, so they change nothing here.
+
+The reading was fixed before the runs and is repeated here. A none is
+reported as none. Competing carriers, a regime change and too few signatures can each produce
+it, and this design cannot tell them apart, so none of them is named as its cause. The
+outcome is neither MOVED nor NULL. **This ring does not retire the detection-as-memory reading, and it gives no support to that reading either. It decides nothing about memory.** These two sentences only restate what the branch rules and the forbidden list already imply.
+
+**The positive control was silent.** In `invert_all` the whole carried state is inverted,
+which is a symmetry of the chamber's equations. That arm reached one Π-signature (`sg0.35`
+seed 2718, *d* +0.063) and no L-signature, so its conditions read none, none, Π and its
+preference is none. Eight of its nine runs are measurable in both frames. The ninth, `sg0.32`
+seed 12345, has 11 eligible epochs, below the frozen floor of 12, in both frames. The
+positive control existed to show that the pipeline can see a carried contrast in the inverted
+frame. On these realisations it did not show that.
+
+**The base rate of a none, as the pre-registration gave it** (control item 6; computed by
+re-orienting the control's bytes, so a guide and not a guarantee): an arm that behaves like a
+fresh realisation of the control reaches a preference about 3 times in 4. It is not read
+toward either carrier, and nothing further is computed from it here.
+
+### Every scored directory (the frozen scorer, unchanged)
+
+A derived frame's verdict is a reading of that frame only. No directory's string is a
+qualification except the `identity` directory's, and that one is V3. The `invert_matter`
+directory's string "qualified" is listed because every directory's verdict string is reported.
+It is not a qualification, and it is not read as evidence that the estimator had power on that
+arm's fields.
+
+| directory | inputs verified | measurable runs | conditions measurable | F1 | F2 | F3 evaluable / pass / median α*_eff | F4 | F5 (cell-epochs) | result |
+|---|---|---:|---|---|---|---|---|---|---|
+| `memory_intervention_identity` | yes | 9 | 3 | yes | yes | yes / yes / 0.0177 | yes | yes (146/198) | "qualified" |
+| `memory_intervention_identity_frame_point` | yes | 9 | 3 | yes | yes | yes / yes / 0.0405 | yes | yes (146/198) | "qualified" |
+| `memory_intervention_invert_all` | yes | 8 | 2 | yes | yes | yes / yes / 0.0392 | yes | no (124/198) | "insufficient support" |
+| `memory_intervention_invert_all_frame_point` | yes | 8 | 2 | yes | yes | yes / yes / 0.0162 | yes | no (124/198) | "insufficient support" |
+| `memory_intervention_invert_matter` | yes | 9 | 3 | yes | yes | yes / yes / 0.0161 | yes | yes (131/198) | "qualified" |
+| `memory_intervention_invert_matter_frame_point` | yes | 9 | 3 | yes | yes | yes / yes / 0.0168 | yes | yes (131/198) | "qualified" |
+
+F2 passes in every directory through the 2026-09-06 synthetic receipt. In F4, variant
+`e2_pr16` has `measurable_both` 0 in all six directories, so it is vacuous there, as it was
+in Ring 29. No F4 variant is unstable in any directory. One variant records one violation, within its allowance of one: `den_0.10` in `memory_intervention_invert_all_frame_point` loses the strong detection of `sg0.35` seed 2718 (p 0.0197, just below the strong threshold 0.02; the table rounds it to 0.020). That is the run with the F4 flag in the `invert_all` table.
+
+### Every run, both frames
+
+*d* = S_Π − S_L. A signature needs |*d*| ≥ 0.04 in a run that is measurable in both frames.
+Eligible epochs and gate failures are identical in the two frames by construction (V2).
+
+#### `identity` — preference **L**; conditions sg0.3 L, sg0.32 L, sg0.35 L
+
+| run | frame | measurable | eligible | gate fails e1/e2/e3/e4 | S | p | CI95 (block bootstrap) | ρ₁(Q) | caveat | detected | F4 flag | d = S_Π − S_L | signature |
+|---|---|---|---:|---|---:|---:|---|---:|---|---|---|---:|---|
+| sg0.3 777 | L | yes | 19 | 3/2/0/0 | 0.042 | 0.022 | [-0.001, 0.084] | 0.43 | yes | yes | no | -0.065 | L |
+|  | Π | yes | 19 | 3/2/0/0 | -0.022 | 0.925 | [-0.046, 0.000] | -0.09 | no | no | no |  |  |
+| sg0.3 12345 | L | yes | 17 | 4/3/0/0 | 0.006 | 0.096 | [-0.011, 0.034] | 0.20 | no | no | no | -0.011 | - |
+|  | Π | yes | 17 | 4/3/0/0 | -0.005 | 0.341 | [-0.008, 0.005] | 0.03 | no | no | no |  |  |
+| sg0.3 31337 | L | yes | 17 | 3/5/0/0 | 0.035 | 0.002 | [0.013, 0.057] | -0.19 | no | yes | no | -0.050 | L |
+|  | Π | yes | 17 | 3/5/0/0 | -0.014 | 0.969 | [-0.038, 0.021] | -0.06 | no | no | no |  |  |
+| sg0.32 777 | L | yes | 16 | 2/5/0/0 | 0.033 | 0.004 | [0.007, 0.052] | 0.08 | no | yes | no | -0.061 | L |
+|  | Π | yes | 16 | 2/5/0/0 | -0.028 | 0.985 | [-0.057, -0.001] | 0.12 | no | no | no |  |  |
+| sg0.32 12345 | L | yes | 14 | 2/7/0/0 | -0.011 | 0.661 | [-0.052, 0.007] | -0.05 | no | no | no | 0.010 | - |
+|  | Π | yes | 14 | 2/7/0/0 | -0.001 | 0.422 | [-0.002, 0.003] | -0.65 | no | no | no |  |  |
+| sg0.32 31337 | L | yes | 14 | 1/8/0/0 | 0.009 | 0.384 | [-0.001, 0.024] | -0.14 | no | no | no | -0.011 | - |
+|  | Π | yes | 14 | 1/8/0/0 | -0.002 | 0.345 | [-0.013, 0.014] | 0.03 | no | no | no |  |  |
+| sg0.35 2718 | L | yes | 16 | 1/6/0/0 | 0.069 | 0.001 | [0.033, 0.114] | 0.24 | no | yes | no | -0.074 | L |
+|  | Π | yes | 16 | 1/6/0/0 | -0.004 | 0.836 | [-0.047, 0.060] | -0.02 | no | no | no |  |  |
+| sg0.35 16180 | L | yes | 17 | 1/4/0/0 | 0.046 | 0.215 | [0.012, 0.095] | 0.12 | no | no | no | -0.070 | L |
+|  | Π | yes | 17 | 1/4/0/0 | -0.024 | 0.886 | [-0.070, 0.007] | -0.15 | no | no | no |  |  |
+| sg0.35 57721 | L | yes | 16 | 1/5/0/0 | -0.010 | 0.336 | [-0.016, -0.001] | -0.16 | no | no | no | -0.000 | - |
+|  | Π | yes | 16 | 1/5/0/0 | -0.010 | 0.450 | [-0.023, 0.001] | -0.05 | no | no | no |  |  |
+
+#### `invert_all` — preference **none**; conditions sg0.3 none, sg0.32 none, sg0.35 Π
+
+| run | frame | measurable | eligible | gate fails e1/e2/e3/e4 | S | p | CI95 (block bootstrap) | ρ₁(Q) | caveat | detected | F4 flag | d = S_Π − S_L | signature |
+|---|---|---|---:|---|---:|---:|---|---:|---|---|---|---:|---|
+| sg0.3 777 | L | yes | 14 | 3/6/0/0 | 0.003 | 0.240 | [-0.012, 0.022] | 0.32 | no | no | no | -0.001 | - |
+|  | Π | yes | 14 | 3/6/0/0 | 0.002 | 0.526 | [-0.043, 0.042] | -0.19 | no | no | no |  |  |
+| sg0.3 12345 | L | yes | 15 | 3/7/0/0 | -0.026 | 0.593 | [-0.123, 0.017] | 0.25 | no | no | no | 0.025 | - |
+|  | Π | yes | 15 | 3/7/0/0 | -0.000 | 0.427 | [-0.045, 0.070] | -0.23 | no | no | no |  |  |
+| sg0.3 31337 | L | yes | 17 | 1/5/0/0 | -0.007 | 0.489 | [-0.037, 0.012] | 0.14 | no | no | no | 0.021 | - |
+|  | Π | yes | 17 | 1/5/0/0 | 0.015 | 0.032 | [0.003, 0.033] | 0.07 | no | no | no |  |  |
+| sg0.32 777 | L | yes | 13 | 3/7/0/0 | -0.005 | 0.850 | [-0.011, 0.002] | -0.38 | no | no | no | 0.008 | - |
+|  | Π | yes | 13 | 3/7/0/0 | 0.003 | 0.276 | [-0.004, 0.018] | 0.02 | no | no | no |  |  |
+| sg0.32 12345 | L | no | 11 | 3/11/0/0 | – | – | – | – | – | – | no | – | unmeasured |
+|  | Π | no | 11 | 3/11/0/0 | – | – | – | – | – | – | no |  |  |
+| sg0.32 31337 | L | yes | 12 | 2/10/0/0 | -0.002 | 0.745 | [-0.014, 0.002] | 0.42 | no | no | no | -0.004 | - |
+|  | Π | yes | 12 | 2/10/0/0 | -0.007 | 0.840 | [-0.022, 0.006] | -0.41 | no | no | no |  |  |
+| sg0.35 2718 | L | yes | 17 | 0/5/0/0 | -0.029 | 0.999 | [-0.056, -0.008] | -0.20 | no | no | no | 0.063 | Π |
+|  | Π | yes | 17 | 0/5/0/0 | 0.034 | 0.020 | [-0.006, 0.098] | 0.24 | no | yes | yes |  |  |
+| sg0.35 16180 | L | yes | 13 | 2/7/3/0 | -0.009 | 0.599 | [-0.020, 0.003] | -0.15 | no | no | no | 0.008 | - |
+|  | Π | yes | 13 | 2/7/3/0 | -0.001 | 0.263 | [-0.015, 0.005] | -0.32 | no | no | no |  |  |
+| sg0.35 57721 | L | yes | 12 | 0/8/3/0 | -0.019 | 0.849 | [-0.034, -0.006] | -0.27 | no | no | no | 0.007 | - |
+|  | Π | yes | 12 | 0/8/3/0 | -0.012 | 0.635 | [-0.041, 0.005] | -0.34 | no | no | no |  |  |
+
+#### `invert_matter` — preference **none**; conditions sg0.3 none, sg0.32 none, sg0.35 none
+
+| run | frame | measurable | eligible | gate fails e1/e2/e3/e4 | S | p | CI95 (block bootstrap) | ρ₁(Q) | caveat | detected | F4 flag | d = S_Π − S_L | signature |
+|---|---|---|---:|---|---:|---:|---|---:|---|---|---|---:|---|
+| sg0.3 777 | L | yes | 14 | 4/7/0/0 | 0.001 | 0.537 | [-0.012, 0.017] | -0.03 | no | no | no | -0.008 | - |
+|  | Π | yes | 14 | 4/7/0/0 | -0.007 | 0.741 | [-0.031, 0.011] | -0.03 | no | no | no |  |  |
+| sg0.3 12345 | L | yes | 15 | 3/6/0/0 | -0.006 | 0.889 | [-0.023, 0.005] | -0.19 | no | no | no | 0.003 | - |
+|  | Π | yes | 15 | 3/6/0/0 | -0.003 | 0.535 | [-0.011, 0.008] | -0.27 | no | no | no |  |  |
+| sg0.3 31337 | L | yes | 18 | 1/4/0/0 | -0.003 | 0.350 | [-0.009, 0.010] | -0.25 | no | no | no | 0.006 | - |
+|  | Π | yes | 18 | 1/4/0/0 | 0.003 | 0.365 | [-0.020, 0.027] | -0.53 | no | no | no |  |  |
+| sg0.32 777 | L | yes | 16 | 1/5/1/0 | -0.015 | 0.923 | [-0.033, -0.002] | -0.01 | no | no | no | 0.019 | - |
+|  | Π | yes | 16 | 1/5/1/0 | 0.004 | 0.316 | [-0.011, 0.016] | -0.01 | no | no | no |  |  |
+| sg0.32 12345 | L | yes | 13 | 2/9/1/0 | -0.015 | 0.948 | [-0.052, 0.007] | -0.37 | no | no | no | 0.003 | - |
+|  | Π | yes | 13 | 2/9/1/0 | -0.012 | 0.612 | [-0.022, 0.008] | -0.33 | no | no | no |  |  |
+| sg0.32 31337 | L | yes | 16 | 2/6/0/0 | 0.005 | 0.218 | [-0.020, 0.016] | -0.15 | no | no | no | -0.010 | - |
+|  | Π | yes | 16 | 2/6/0/0 | -0.005 | 0.588 | [-0.033, 0.009] | -0.19 | no | no | no |  |  |
+| sg0.35 2718 | L | yes | 12 | 2/8/2/0 | 0.002 | 0.120 | [-0.004, 0.007] | -0.28 | no | no | no | -0.015 | - |
+|  | Π | yes | 12 | 2/8/2/0 | -0.013 | 0.990 | [-0.025, 0.001] | -0.11 | no | no | no |  |  |
+| sg0.35 16180 | L | yes | 14 | 1/6/2/0 | -0.007 | 0.706 | [-0.014, -0.002] | -0.01 | no | no | no | 0.001 | - |
+|  | Π | yes | 14 | 1/6/2/0 | -0.006 | 0.745 | [-0.014, 0.001] | -0.18 | no | no | no |  |  |
+| sg0.35 57721 | L | yes | 13 | 1/8/2/0 | -0.005 | 0.704 | [-0.027, 0.005] | -0.01 | no | no | no | 0.001 | - |
+|  | Π | yes | 13 | 1/8/2/0 | -0.004 | 0.601 | [-0.010, 0.005] | 0.29 | no | no | no |  |  |
+
+Detection counts, reported as counts:
+
+| arm | lab frame | inverted frame |
+|---|---|---|
+| `identity` | 4 (the four Ring 29 detections) | 0 |
+| `invert_all` | 0 | 1 (`sg0.35` 2718, with an F4 flag) |
+| `invert_matter` | 0 | 0 |
+
+No detection is read as a property of its run.
+
+### Reported, decides nothing
+
+The numbers below were fixed as reported numbers. None of them is read as MOVED, NULL or a
+lean. Each arm has its own table: no row holds two arms, and no number is compared across
+arms or with the identity run of the same seed. O is the point-odd part of a run's own relic
+correlation. For the `invert_all` run that is unmeasurable, O is computed over its 11
+eligible epochs and was never scored.
+
+#### `identity`
+
+| run | O | same-sign (of 22) | hook s | non-finite |
+|---|---:|---:|---:|---:|
+| sg0.3 777 | 0.037 | 16 | 9.7 | 0 |
+| sg0.3 12345 | 0.021 | 16 | 9.9 | 0 |
+| sg0.3 31337 | 0.023 | 17 | 9.6 | 0 |
+| sg0.32 777 | 0.011 | 16 | 10.1 | 0 |
+| sg0.32 12345 | 0.008 | 18 | 10.0 | 0 |
+| sg0.32 31337 | 0.018 | 16 | 9.9 | 0 |
+| sg0.35 2718 | 0.033 | 21 | 10.3 | 0 |
+| sg0.35 16180 | 0.059 | 20 | 10.2 | 0 |
+| sg0.35 57721 | 0.014 | 17 | 10.1 | 0 |
+
+#### `invert_all`
+
+| run | O | same-sign (of 22) | hook s | non-finite |
+|---|---:|---:|---:|---:|
+| sg0.3 777 | -0.017 | 5 | 10.9 | 0 |
+| sg0.3 12345 | -0.014 | 9 | 10.5 | 0 |
+| sg0.3 31337 | -0.003 | 7 | 11.0 | 0 |
+| sg0.32 777 | -0.009 | 6 | 10.6 | 0 |
+| sg0.32 12345 | -0.026 | 6 | 10.4 | 0 |
+| sg0.32 31337 | -0.006 | 4 | 11.0 | 0 |
+| sg0.35 2718 | -0.024 | 4 | 11.2 | 0 |
+| sg0.35 16180 | -0.011 | 2 | 11.4 | 0 |
+| sg0.35 57721 | -0.002 | 4 | 11.3 | 0 |
+
+#### `invert_matter`
+
+| run | O | same-sign (of 22) | hook s | non-finite |
+|---|---:|---:|---:|---:|
+| sg0.3 777 | 0.001 | 11 | 10.7 | 0 |
+| sg0.3 12345 | 0.001 | 10 | 10.4 | 0 |
+| sg0.3 31337 | -0.013 | 12 | 10.6 | 0 |
+| sg0.32 777 | -0.004 | 7 | 10.6 | 0 |
+| sg0.32 12345 | -0.001 | 9 | 11.1 | 0 |
+| sg0.32 31337 | 0.012 | 11 | 10.5 | 0 |
+| sg0.35 2718 | 0.000 | 7 | 11.4 | 0 |
+| sg0.35 16180 | -0.004 | 10 | 10.8 | 0 |
+| sg0.35 57721 | 0.002 | 12 | 11.1 | 0 |
+
+Per arm, the number of runs failing each gate, beside the identity arm's, as the
+pre-registration asks (descriptive; decides nothing). A run counts once for a gate if at least
+one of its epochs fails it.
+
+| arm | E1 | E2 | E3 | E4 | E5 collapse | E5b unbalanced | measurable |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `identity` | 9 | 9 | 0 | 0 | 0 | 0 | 9 |
+| `invert_all` | 7 | 9 | 2 | 0 | 0 | 0 | 8 |
+| `invert_matter` | 9 | 9 | 5 | 0 | 0 | 0 | 9 |
+
+For every pair of seeds in a condition, `hemisphere.json` also records how many of the 22
+scored meshes put the two seeds in the same hemisphere. Those counts are reported there and
+not read here.
+
+### A declared change after scoring (report-only, decides nothing)
+
+The score script's last step runs two report-only diagnostics on each raw arm. By then the
+decision, the gates and the branch had already been written. One of the two,
+`experiments/halo/relic_component_decomposition.py` (committed at P; it computes O), stopped
+on inputs the Ring 29 control never had:
+
+- In one lag-one-eligible epoch of two runs, the frozen scorer recorded the lag-two row as
+  JSON null: `invert_all` `sg0.3` 31337 and `invert_matter` `sg0.32` 31337, epoch 15 of
+  each. The script's `mean()` already dropped NaN but not null.
+- The one unmeasurable `invert_all` run has no recorded S or p.
+
+The fix (in this commit) drops null the way NaN was already dropped, in `mean()` and in the two
+stranger means that called `np.mean` directly, and writes None for the recorded S and p of a run
+the scorer left unmeasurable. The frozen scorer writes every NaN as null. On every input without a null, its
+output is byte-identical: the Ring 29 control and the `identity` arm both give `1cff7160…`,
+equal to the file committed at P (`memory_intervention_design/control_components.json`).
+`invert_matter` has one null, so it has no unfixed output to compare against. The second part
+of the fix leaves its output unchanged at `39204941…`.
+
+A test pins `mean()`'s null handling (`tests/halo/test_relic_component_mean.py`). The two stranger
+means and the recorded S/p fallback in `main()` are covered by the byte comparisons above, not by the
+test. The remaining
+report-only commands were then run exactly as the score script writes them. The two
+`hemisphere.json` files already written were re-run and came back unchanged.
+
+### What changes, and what does not
+
+- **Changes:**
+  - The registered intervention has run to its end: 28 runs on the pinned instrument, every
+    receipt and gate passing, and the pre-registered branch is NOT DECIDABLE. The planning
+    metric, "intervention contrasts decided", stays at 0 of 1.
+  - The intervention harness is shown to leave the chamber unchanged in `identity` mode: 10
+    of 10 meshes are byte-identical to Ring 29, and every per-run number is equal (V3).
+- **Does not change:**
+  - Nothing about nested resonance memory.
+  - The detection-as-memory reading is neither retired nor supported.
+  - Ring 29's "qualified" still describes its nine recorded runs and nothing more.
+  - No rerun, re-key, added seed, substituted arm or new threshold is scored in this ring.
+
+### Files
+
+Each directory's `manifest.json` pins the sha256 of every file it scored. The `*.mesh.f32`
+files are gitignored; how to regenerate and re-check them is below.
+
+| file | sha256 (first 16) |
+|---|---|
+| `memory_intervention_identity/` manifest · qualification | `dfdefedadcf80c5f` · `6359e7c55846f0cc` |
+| `memory_intervention_identity_frame_point/` manifest · qualification | `daa57a2ecdac1c4a` · `7fae9ee3bbd38b19` |
+| `memory_intervention_invert_all/` manifest · qualification | `ca1a5e0ea4e29232` · `885a25f529c18a80` |
+| `memory_intervention_invert_all_frame_point/` manifest · qualification | `c241f1f45995f8fe` · `0da0376eadf28e78` |
+| `memory_intervention_invert_matter/` manifest · qualification | `c9fda586dbe735b8` · `56e9dff77d6406db` |
+| `memory_intervention_invert_matter_frame_point/` manifest · qualification | `b88eb8cf1b0c5cd4` · `6eac365a0289b009` |
+| `memory_intervention_decision.json` · `memory_intervention_gates.json` | `c40df390e843c8be` · `1aa1f620d40a8a03` |
+| `hemisphere.json`: identity · invert_all · invert_matter | `8870db2af48ed5b7` · `04b09fe45a07dbb4` · `cafb9761b8212f23` |
+| `components.json`: identity · invert_all · invert_matter | `1cff71608f736cc2` · `897f0c1f783d9c90` · `39204941fd2eda8b` |
+
+The ring on the page is a comment-only append: the source page's whole-file hash moves from
+`827fac09` to `457cf783`, and `sim_digest` stays `40bfdb68` (recomputed with
+`experiments/halo/instrument_identity.py`). The test page `tests/halo/rc-test.html` is
+`1a15b987`, rebuilt from `f838e509` as described below.
+
+### How a stranger re-checks this
+
+- **Re-score a directory:**
+  - Copy its nine run records and their meshes into a scratch directory.
+  - Run the pre-registration's "Frames and scoring" commands there: manifest, staticness
+    screen, frozen scorer.
+  - Every scored leaf reproduces. Only leaves that record a path or a time differ.
+
+  Scoring in place instead rewrites the committed files: the manifest builder then lists the
+  outputs already in the directory as not manifested.
+- **Regenerate the meshes (gitignored):**
+  - Build the pinned test page first with
+    `python3 tests/halo/make_test_page.py --from-git f838e509`. It gives `1a15b987…`.
+  - The builder takes no `--help`. Run without `--from-git`, it rebuilds the page from the
+    working tree and overwrites the pinned file, and the harness then refuses to start.
+  - Then run each record's harness command (above, "Arms, seeds, directories, order,
+    commands") with `--out` set to a scratch directory. That is about two minutes per run
+    on the recording GPU.
+  - Keep each mesh whose sha256 matches the directory's manifest.
+
+  Byte-identical regeneration is shown at full scale for the identity arm (G0 and the closing
+  run). For the inverting arms it is shown only at 65,536 particles, in the pre-flights.
+- **Re-run the gates:**
+  - With the meshes in place, derive the inverted frames (`memory_intervention_frames.py DIR
+    --op point --out DIR_frame_point`).
+  - Run `python3 experiments/halo/memory_intervention_gates.py --prereg-commit b5ae861c
+    --json <scratch>/gates.json`. It prints the branch above and writes a file byte-identical
+    to `memory_intervention_gates.json`.
+  - Without the meshes it stops with `FileNotFoundError` before printing a gate.
+
+### Kill-test
+
+Five independent lenses re-derived the result from the files with their own code, read-only,
+in one workflow. Any discrepancy a lens reported went to a second agent to reproduce.
+
+- **Scorer reproduction: CONFIRMED.** The six directories were copied to fresh scratch
+  directories, their manifests rebuilt and the frozen scorer re-run. Every verdict, run entry,
+  F1–F5 field and F4 row is identical. The only leaves that differ record a path or the time of
+  the run: the manifest's `input_dir` (and so the manifest's path and sha256 inside
+  `qualification.json`), `measured_at` and `seconds`. The void record differs too: the
+  repository's manifest lists it as not manifested, and the copy left it out. The decision re-derived from the reproduced files is identical.
+- **Frames and rule, own code: CONFIRMED.** All 27 inverted-frame meshes are byte-identical to
+  an independent flip of the odd-indexed meshes. Every derived record equals its source except
+  for `mesh_file` and the added `derivation`. All 26 values of *d* (the 27th run, `invert_all` `sg0.32` 12345, is unmeasured in both frames
+  and has none), every signature, condition label and preference, re-derived from the text's rule,
+  equal the decision file. That file
+  writes its internal code "X" for a Π-signature.
+- **Provenance and order: CONFIRMED.** P reached the public remote at 09:36:40 UTC by
+  GitHub's activity record. By local file times, that is 7 seconds before the harness created the
+  first run's output folder and 2 minutes before the first record. Other findings:
+  - 28 records and 644 hook records, with 0 receipt faults;
+  - harness bytes equal to P's in all 28, and the five frozen hashes match;
+  - `identity` and closing meshes equal to Ring 29's;
+  - at most 27 particles moved by edge rounding in any inverting hook (the limit is 16,384);
+  - one void, a crash with no page error;
+  - the patched report-only script's output is unchanged on null-free inputs;
+  - `sim_digest 40bfdb68` recomputed on the test page.
+- **Gates and branch against the text: CONFIRMED.** The gates script re-ran byte-identical.
+  V3 was checked independently: 10,832 numeric, boolean and null leaves, 0 differing, and all
+  nine tags, each differing only by the `_ividentity` suffix. The branch was derived from the
+  text alone: NOT DECIDABLE, with proximate cause Φ(invert_matter) = none. The lens listed 17
+  places where the gate code looked looser or stricter than the pre-registered wording. The
+  re-check confirmed 15 of them and refuted 2: a NaN comparison that cannot misfire on values
+  `json.load` reads, and a density check that is exactly the text's. Examples of the 15:
+  - V3 compares with Python equality rather than bit patterns;
+  - V2's byte check runs one way only;
+  - V5 is coded as "Π or none" rather than "not L";
+  - the unmet NULL conditions are printed even when they do not apply.
+
+  None of the 15 could change the branch on these data.
+- **Diagnostics: CONFIRMED.** Both report-only scripts re-ran to identical files. The
+  hemisphere same-sign counts were re-derived with independent code. The `identity` arm's
+  decomposition is byte-identical to the one committed at P from the Ring 29 control.
+
+Each reported discrepancy was reproduced by a second agent. Each traced to a path, a label
+or the copy rule, and none touches a number the decision reads.
+
+**Review of this write-up, before commit.** Four more lenses read the new text against the
+pre-registration and the files: overclaim, numbers, rails and format, and a stranger's
+reproduction. They found two blockers and about a dozen distinct major faults, all fixed
+above:
+
+- A table set each identity run beside the intervened runs of its seed. That is the banned
+  comparison in form, so it is now three per-arm tables.
+- A sentence said no F4 variant records a violation. `den_0.10` loses one strong detection,
+  within its allowance.
+- Carrier-conditional base rates invited a lean. Only the base rate of a none is kept.
+- The `invert_matter` "qualified" was glossed like a qualification.
+- The README gave the silent positive control as the cause.
+- The count said 27 values of *d*; 26 exist.
+- A before-and-after byte identity was claimed for a file the unfixed script cannot produce.
+- The test's scope was overstated.
+- Nothing said how to rebuild the pinned test page (`--from-git f838e509`), and nothing warned
+  that re-scoring in place or re-running the gates on a fresh clone fails.
+
+Minor fixes added time zones, `git_dirty`, the runtime platform and the full banned list.

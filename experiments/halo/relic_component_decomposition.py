@@ -84,7 +84,11 @@ def add_null(M, i):
 
 
 def mean(x):
-    x = [v for v in x if v == v]
+    # None is the frozen scorer's JSON null for a value it could not form (its NaN/inf -> None),
+    # dropped here exactly as NaN always was. Added with Ring 30's results: the recorded lag-two
+    # row is null in one lag-one-eligible epoch of two intervened runs, which crashed this
+    # report; on every input without a null the output is byte-identical.
+    x = [v for v in x if v is not None and v == v]
     return float(np.mean(x)) if x else float('nan')
 
 
@@ -167,7 +171,9 @@ def main():
             test = mq.block_relabel_test(Q, np.random.default_rng(mq.PERM_SEED))
             res = {'condition_sg': key[1], 'seed': seed, 'detected_main': (key[1], seed) in DETECTED,
                    'eligible_epochs': n, 'S_hybrid': test['own']['S'], 'p_hybrid': test['own']['p'],
-                   'recorded_S': rec['lag1']['own']['S'], 'recorded_p': rec['lag1']['own']['p'],
+                   # a run the frozen scorer left unmeasurable (below its eligible-epoch floor) has
+                   # no recorded 'own': None here; its decomposition is still reported, never scored
+                   'recorded_S': rec['lag1'].get('own', {}).get('S'), 'recorded_p': rec['lag1'].get('own', {}).get('p'),
                    'mean_M_own': mean([pe['M'][i][i] for pe in rows]),
                    'mean_M_strangers': mean([np.mean([pe['M'][i][j] for j in strangers]) for pe in rows]),
                    'mean_P_hybrid': mean([mq.predict_cell(pe['M'], i, i) for pe in rows]),
@@ -266,10 +272,10 @@ def main():
             ee = [e for e in rec['epochs'] if e['eligible']]
             res['unmapped'] = {'recorded': arm_summary('unmapped'),
                                'mean_U_own_lag1elig': mean([e['U_row'][i] for e in ee]),
-                               'mean_U_strangers_lag1elig': mean([np.mean([e['U_row'][j] for j in strangers]) for e in ee])}
+                               'mean_U_strangers_lag1elig': mean([mean([e['U_row'][j] for j in strangers]) for e in ee])}
             res['lag2'] = {'recorded': arm_summary('lag2'), 'recorded_trilinear': arm_summary('lag2_tri'),
                            'mean_M2_own_lag1elig': mean([e['M2_row'][i] for e in ee]),
-                           'mean_M2_strangers_lag1elig': mean([np.mean([e['M2_row'][j] for j in strangers]) for e in ee])}
+                           'mean_M2_strangers_lag1elig': mean([mean([e['M2_row'][j] for j in strangers]) for e in ee])}
             # lag decorrelation: current B2 vs x2 prediction of mesh k-1-L (L=1 is the scored relic)
             lagd = {}
             for L in range(0, 5):
@@ -317,7 +323,8 @@ def main():
                         (meshes[j][k - 2][:, 16:, :].astype(np.float64).sum() - meshes[j][k - 2][:, :16, :].astype(np.float64).sum()))
                     for k in ks)) for j in strangers}}
             out_runs.append(res)
-            print(f"{key[1]} {seed} n={n} S={res['S_hybrid']:.4f} (rec {res['recorded_S']:.4f}) "
+            rs = 'unmeasurable' if res['recorded_S'] is None else f"{res['recorded_S']:.4f}"
+            print(f"{key[1]} {seed} n={n} S={res['S_hybrid']:.4f} (rec {rs}) "
                   f"Mown={res['mean_M_own']:.4f}", file=sys.stderr)
     # hemisphere-sign agreement between seeds of a condition (all 24 meshes, |asym| > 0.1 in both)
     hemi = {}

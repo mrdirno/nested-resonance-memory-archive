@@ -1,0 +1,100 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_intervention_invert_matter_frame_point",
+ "runs": 9,
+ "note": "",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "spinchladni_sg0.32_gl0_seed12345_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "e425aedd5892315788dbe424fe586dfc9beacfebb8c6b2dd15db7afd3e3de230",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed12345_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "b06809ae6a6d4fb9713d5f88209b51581f76907c699ce36045529c5ebac70032",
+   "bytes": 89553
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed31337_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "15af4c79ed035cc542b73e00748f2f2c7ce1610e994b38dbd9269558571405eb",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed31337_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "753ca67eea377aa7cc54d648f8c841989fef60a9aae08a598d38ac61d6774ac9",
+   "bytes": 89330
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed777_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "74ccb69a76fc0750bd2061d59816875ec913aa90eb8026f24f626d9c3a083e9a",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed777_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "4724a5d0b3ec77018867a8e366977a6d1f60393aeceb070dd32683567c065e8b",
+   "bytes": 89658
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed16180_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "60868c612867751132df430aadd7c655eaf6304ffe6f2def1d1bfe85fc49c6a4",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed16180_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "539c375121cf26631c06067eee99ba9a60ce21bc93839d2f2626ff3fe33af06d",
+   "bytes": 89685
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed2718_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "f018a4a4fd423097ab5c381dc6d555a6b472476917dd27754ca9a0522e335b8d",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed2718_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "c388be79744f9e6ef14415b6fe3b9d98520d89b2d9779962ec16d2951b7d01de",
+   "bytes": 89875
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed57721_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "e63e5c4b839ba91b072959252c08b4e5ebf97c7aa7d3412939889f29a98c2b02",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed57721_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "619de2c9f4797b20b9ea4360ad66ce26c3e62e80e1940e3615702bd146173e0d",
+   "bytes": 89637
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "c48680248340a6cc42761263aecd8faeb3b2df1b6e435f51b7c2339a9d91d2b0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed12345_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "307185dd629a80809ddee5859df30c9281b1cc769685f3ad828f73b3427fbd72",
+   "bytes": 89118
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "2907ac139d941ede89a3982eb3875bfdac410baa47dba2b834b1bd13f48dee5b",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed31337_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "82efdd434435ef060acece7f471cafadc87e3e4e3554fc1b34dafc2330eef59c",
+   "bytes": 89323
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "55a781fa1eb7ef5228f6a49d5454cd17e4c0d23d851be6a5a596f61ce4df4585",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed777_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "6193c7654e86a6c6fb7cdb157667b79a7d66868650d47726b60315ce162a2c4b",
+   "bytes": 89100
+  }
+ ]
+}

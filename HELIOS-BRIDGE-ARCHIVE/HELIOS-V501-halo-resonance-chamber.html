@@ -10792,6 +10792,115 @@ separate seed structure from memory is the intervention in (1) -- no comparison 
 controls is made. (3) The lower wall (12-floor crossing between sg0.25 and sg0.3, Ring 27 QN2) and the gl axis (Ring
 26 QN2), still open. Carried: measurability at the condition level, now three; detection reproducibility, still
 absent. Nothing about nested resonance memory is decided here.
+RING 30 · 2026-09-23 · the registered intervention ran to its end -- 28 runs on the pinned instrument, every receipt
+and gate passing -- and its pre-registered rule returns NOT DECIDABLE: the decided arm (the matter inverted through
+the centre after every zoom-out, the gravity solver's warm start left pointing the old way) prefers neither frame in
+any condition, and the positive control (everything inverted) is silent; nothing about memory
+PARENTS: Ring 29 (74732839); the pre-registration analysis/2026-09-22_relic_intervention.md (commit b5ae861c = P,
+pushed before any registered run existed); results appended to that file under "## Results".
+WHAT WAS MEASURED. Ring 29's pass branch fixed a registered intervention as its successor, and the pre-registration
+fixed everything before the first run. Three arms ran on Ring 29's nine (condition, seed) pairs:
+- identity, the gate arm;
+- invert_all, the positive control: particles and the solver's warm start inverted right after every zoom-out, a
+  symmetry of the chamber's equations of motion (exact in real arithmetic; the Lab's fallback re-seatings sit about
+  10^-3 off it);
+- invert_matter, the decided arm: particles inverted, warm start left.
+One closing identity run followed. Every run: 24 epochs at 4,194,304 particles on the pinned instrument (test page
+1a15b987, sim_digest 40bfdb68), read by the frozen scorer (7619ef6b, receipt 8670e193) twice within the run -- in the
+lab frame L and in the inverted frame Pi. Each arm gets a frame preference from d = S_Pi - S_L with one margin
+(0.04). Gates V1-V5 come first; then one of three branches: MOVED, NULL or NOT DECIDABLE. A session wrote 18 runs
+after P and ended during the nineteenth. That run left a void record of the one kind the rule lets be re-issued: the
+browser closed, with no page error. This ring ran the unchanged driver:
+- it re-checked the 18 records;
+- G0 passed again: 9 of 9 identity meshes byte-identical to Ring 29;
+- it re-issued the voided run once, and the re-issue passed;
+- it made the last eight inverting runs, then the closing identity run, byte-identical to Ring 29 (ce15f081).
+The runs were scored once.
+THE NUMBERS. Gates:
+- V1 PASS.
+- V2 PASS.
+- V3 PASS: identity is "qualified", nine of nine measurable, F1-F5 passing, and every per-run number equals Ring
+  29's. The intervention harness's extra stops change no byte.
+- V4 PASS: identity prefers L in all three conditions, with the control's five L-signatures (d -0.065 and -0.050 at
+  sg0.3; -0.061 at sg0.32; -0.074 and -0.070 at sg0.35).
+- V5 PASS, as "silent".
+The decided arm: invert_matter prefers NONE. Nine of nine runs are measurable in both frames, no run reaches the
+margin (largest |d| 0.019), and every condition is none. The positive control: invert_all also prefers none. It has
+one Pi-signature (sg0.35 seed 2718, d +0.063) and no L-signature, so its conditions read none/none/Pi. Eight of its
+nine runs are measurable in both frames; sg0.32 seed 12345 has 11 eligible epochs, below the frozen floor of 12.
+Detection, counts only (lab frame, then inverted frame): identity 4 and 0 (L is Ring 29's four); invert_all 0 and
+1; invert_matter 0 and 0. No run had a non-finite value; the hooks took 9.6-11.4 s per run.
+THE BRANCH: NOT DECIDABLE, proximate cause Phi(invert_matter) = none. As fixed before the runs: a none is reported
+as none. Competing carriers, a regime change and too few signatures all produce it, and this design cannot tell them
+apart, so no cause is named. The outcome is neither MOVED nor NULL, so the detection-as-memory reading is neither
+retired nor supported. The pre-registered base rate came from re-orienting the control's bytes, so it is a guide, not
+a guarantee: an arm that behaves like a fresh realisation of the control reaches a preference about 3 times in 4.
+It is not read toward either carrier.
+REPORTED, DECIDES NOTHING. The analysis file and each arm's components.json and hemisphere.json hold, per run, O
+(the point-odd part of the own relic correlation) and the hemisphere same-sign count. Each run record's
+intervention_log and the analysis file hold the hook time, and the analysis file gives, per arm, the gate failures
+beside identity's. None of these is read as MOVED, NULL or a lean, and none is compared across
+arms.
+A DECLARED CHANGE AFTER SCORING. The report-only component decomposition, committed at P, stopped on two inputs the
+control never had. Two intervened runs have a JSON null in one eligible epoch's lag-two row, and one unmeasurable
+run has no recorded S. The script now drops null the way it already dropped NaN. Its output is byte-identical on
+every input without a null: the control and identity both give 1cff7160, as committed at P. On invert_matter, which
+has one null, the second part of the fix leaves the output unchanged at 39204941. A test pins mean()'s null
+handling. The decision, the gates and the branch were written before the diagnostic ran.
+BANNED:
+- any memory claim;
+- reading NOT DECIDABLE as a null, or as a lean toward either carrier;
+- naming a cause for the none;
+- comparing an intervened run with the identity run of the same seed (they are different realisations after the
+  first boundary);
+- reading O, the hemisphere counts, the gate failures or the detection counts as evidence of which carrier holds the
+  contrast;
+- quoting invert_matter's "qualified", or any inverted frame's verdict, as a qualification;
+- turning counts into rates, or pooling runs, arms, frames or instruments;
+- a test across the nine runs, or comparing counts with F2's 5 %;
+- reading one run's detection as that run's property;
+- quoting the page's own in-record memory readouts (retained, memory, twoback) across arms;
+- any claim off this support (spinchladni gl0, fieldExp 1.7, sg 0.3/0.32/0.35, 4,194,304 particles, 24 epochs,
+  sim_digest 40bfdb68);
+- rerunning, re-keying, adding seeds or moving the margin to rescue a decision in this ring.
+REJECTED PATHS: (1) Regenerating the dead session's 18 runs. Their git_rev is P and every check passes, so a
+regeneration would only post-date them. (2) Re-issuing the voided run in a fresh directory. The registered re-issue
+continues the driver in place and keeps the void record. (3) Re-running the whole score script to get the
+diagnostics. The verdicts were already written once; only the report-only step was completed. (4) Dropping O from the
+report because its script stopped. O is a pre-registered reported number, so the script was fixed in the open
+instead. The pre-registration's own banned and dead designs stand (a whole-state swap or scramble, a rotation about
+the spin axis, the y-mirror as the decided arm).
+KILL-TEST: five lenses in one workflow, own code, read-only; each discrepancy re-checked by a second
+agent. (1) Scorer re-run from scratch in fresh directories: every verdict, run and F-field identical, and only
+path-bearing leaves differ. CONFIRMED. (2) Frames and rule with own numpy code: 27 of 27 derived meshes
+byte-identical, and all 26 d values (the 27th run is unmeasured), every signature, condition label and preference
+equal. CONFIRMED. (3) Provenance: P pushed 7 s
+before the first output folder was created (local file times), 644 hook records with 0 faults, harness bytes equal to P's, frozen hashes match, at
+most 27 particles moved by edge rounding (limit 16,384). CONFIRMED. (4) Gates against the text: re-run
+byte-identical, V3 over 10,832 leaves with 0 differing, branch derived from the text alone. The re-check confirmed 15 small
+code/text departures (2 more were refuted), and none can change the branch here. CONFIRMED. (5) Diagnostics re-run identical.
+CONFIRMED. Then four review lenses read the write-up (overclaim, numbers, rails, stranger reproduction). Fixed before
+ship: a table that set each identity run beside its seed's intervened runs (the banned comparison, in form) became
+per-arm tables; a false 'no F4 violation' (den_0.10 loses one strong detection, within the allowance); base rates
+that invited a carrier lean; '27 d values' (26 exist); a byte-identity claim for a file the unfixed script cannot
+produce; and the missing recipe for rebuilding the pinned test page (make_test_page.py --from-git f838e509).
+THE NON-OBVIOUS CHOICE: the re-issue ran detached from the agent session. The first attempt's void record says only
+that the page, context or browser closed, with no page error, and nothing was written after it until this ring; the
+records do not say why. Running the one allowed re-issue detached removed one possible cause, the end of the agent
+session that launched it.
+OPEN QUESTIONS: this ring earns three.
+(1) The positive control's power on fresh runs. The pre-registered decision rates were computed by re-orienting the
+control's bytes, not from independent realisations, and one run per pair does not identify how often the symmetry
+arm returns Pi on fresh runs. It should be measured under a pre-registration before a decided arm runs again. This
+ring does not say why either arm returned none.
+(2) A statistic that does not depend on the strangers. Control item 6, computed before the runs, showed that the
+frozen contrast's frame difference depends on how a triple's hemispheres line up; this ring does not show that this
+produced its nones. A successor should fix, before its runs, a within-run statistic qualified with its own synthetic
+receipt. O and the hemisphere count are reported here, not qualified.
+(3) Carried from earlier rings: the lower wall (the 12-floor crossing between sg0.25 and sg0.3), the gl axis, and
+the pre-registration's open designs (a sham-controlled random half-inversion; the whole-state y-mirror).
+Nothing about nested resonance memory is decided here.
+SUPERSEDES: nothing. Ring 29's "qualified" stands as a reading of its nine recorded runs.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {
