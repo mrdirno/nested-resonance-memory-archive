@@ -177,6 +177,9 @@ data/results/halo/memory_pilot/**/*.mesh.f32
 # covers the whole HALO results tree instead. A run's JSON is still committed; its
 # meshes are regenerable bit for bit from the seed and the recorded instrument.
 data/results/halo/**/*.mesh.f32
+# A Ring 30 intervention run writes its mesh as <tag>.mesh.f32.partial and renames it only
+# after every receipt has passed; a voided run leaves the partial file behind. Never publish it.
+data/results/halo/**/*.mesh.f32.partial
 
 # Machine-local app configuration
 .codex/

@@ -1,0 +1,592 @@
+{
+ "source": "data/results/halo/memory_sg032_third",
+ "classes": {
+  "as_recorded": {
+   "inverted_positions_in_each_triple": [],
+   "verdict": "qualified",
+   "detected": [
+    "sg0.3/777",
+    "sg0.3/31337",
+    "sg0.32/777",
+    "sg0.35/2718"
+   ],
+   "runs": [
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 19,
+     "S": 0.04217171004122234,
+     "p": 0.022494376405898527,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.0056601992391466125,
+     "p": 0.09622594351412148,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.03541277180072284,
+     "p": 0.001999500124968758,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.03308897558499424,
+     "p": 0.003999000249937516,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 14,
+     "S": -0.010809302097552079,
+     "p": 0.6613346663334166,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 14,
+     "S": 0.009430282511527667,
+     "p": 0.3844038990252437,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 2718,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.06937067652184102,
+     "p": 0.0007498125468632841,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 16180,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.046051818985506775,
+     "p": 0.21494626343414147,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 57721,
+     "measurable": true,
+     "eligible": 16,
+     "S": -0.009630822484398982,
+     "p": 0.3364158960259935,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    }
+   ]
+  },
+  "second_inverted": {
+   "inverted_positions_in_each_triple": [
+    1
+   ],
+   "verdict": "qualified",
+   "detected": [
+    "sg0.3/777",
+    "sg0.32/31337"
+   ],
+   "runs": [
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 19,
+     "S": 0.05896669093220385,
+     "p": 0.021994501374656337,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.014784226888334055,
+     "p": 0.06348412896775806,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.007387558762545056,
+     "p": 0.26268432891777055,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.0016616616898460328,
+     "p": 0.4753811547113222,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 14,
+     "S": -0.0030682305596440042,
+     "p": 0.3631592101974506,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 14,
+     "S": 0.030698527588548494,
+     "p": 0.0069982504373906525,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 2718,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.013869003155434725,
+     "p": 0.5503624093976506,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 16180,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.01937090987599645,
+     "p": 0.03899025243689078,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 57721,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.017853545208111048,
+     "p": 0.026243439140214948,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    }
+   ]
+  },
+  "third_inverted": {
+   "inverted_positions_in_each_triple": [
+    2
+   ],
+   "verdict": "qualified",
+   "detected": [
+    "sg0.35/16180"
+   ],
+   "runs": [
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 19,
+     "S": 0.004014668713854042,
+     "p": 0.3839040239940015,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.009914826935681706,
+     "p": 0.1842039490127468,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.0071816093441924985,
+     "p": 0.3096725818545364,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.002399159990048294,
+     "p": 0.533116720819795,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 14,
+     "S": 0.012392571237565334,
+     "p": 0.0034991252186953262,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 14,
+     "S": -0.003434489104724174,
+     "p": 0.35891027243189205,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 2718,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.013184379879871038,
+     "p": 0.4768807798050487,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 16180,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.10487684739449599,
+     "p": 0.0007498125468632841,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 57721,
+     "measurable": true,
+     "eligible": 16,
+     "S": 0.0038287267184196356,
+     "p": 0.3074231442139465,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    }
+   ]
+  },
+  "second_and_third_inverted": {
+   "inverted_positions_in_each_triple": [
+    1,
+    2
+   ],
+   "verdict": "insufficient support",
+   "detected": [
+    "sg0.3/12345"
+   ],
+   "runs": [
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 19,
+     "S": 0.016895884474862167,
+     "p": 0.4823794051487128,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.03575456129422386,
+     "p": 0.049237690577355664,
+     "detected": true,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.3,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.010909448363049974,
+     "p": 0.19320169957510622,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 777,
+     "measurable": true,
+     "eligible": 16,
+     "S": -0.004382312409796526,
+     "p": 0.6138465383654087,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 12345,
+     "measurable": false,
+     "eligible": 14,
+     "S": null,
+     "p": null,
+     "detected": null,
+     "e5_unbalanced": true,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.32,
+      "gainloss": 0.0
+     },
+     "seed": 31337,
+     "measurable": true,
+     "eligible": 14,
+     "S": -0.03359029731912751,
+     "p": 0.8847788052986754,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 2718,
+     "measurable": true,
+     "eligible": 16,
+     "S": -0.004079064074435078,
+     "p": 0.841539615096226,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 16180,
+     "measurable": true,
+     "eligible": 17,
+     "S": 0.023004103862650303,
+     "p": 0.1562109472631842,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    },
+    {
+     "condition": {
+      "preset": "spinchladni",
+      "selfgrav": 0.35,
+      "gainloss": 0.0
+     },
+     "seed": 57721,
+     "measurable": true,
+     "eligible": 16,
+     "S": -0.013903344491040564,
+     "p": 0.6390902274431393,
+     "detected": false,
+     "e5_unbalanced": false,
+     "e5_collapse": false
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,540 @@
+{
+ "source": "data/results/halo/memory_sg032_third",
+ "margin": 0.04,
+ "classes": {
+  "as_recorded": {
+   "inverted_positions_in_each_triple": [],
+   "lab_verdict": "qualified",
+   "pi_verdict": "qualified",
+   "registered_rule": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "detection_gated_variant": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "detection_alone_variant": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "lab_F1_F4": {
+    "F1_identity": true,
+    "F2_false_positives": true,
+    "F3_recovery": true,
+    "F4_robustness": true
+   },
+   "runs": [
+    {
+     "run": "spinchladni_sg0.3_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.04217171004122234,
+     "S_pi": -0.022414502446774523,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.06458621248799687,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.0056601992391466125,
+     "S_pi": -0.0051286393746455715,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.010788838613792184,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.03541277180072284,
+     "S_pi": -0.014176546787912452,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.04958931858863529,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.03308897558499424,
+     "S_pi": -0.028369692079477975,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.061458667664472215,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.010809302097552079,
+     "S_pi": -0.0005841537284533829,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": 0.010225148369098696,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.009430282511527667,
+     "S_pi": -0.0015754927207963676,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.011005775232324036,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed2718",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.06937067652184102,
+     "S_pi": -0.004208062921295904,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.07357873944313692,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed16180",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.046051818985506775,
+     "S_pi": -0.02396820268808483,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.0700200216735916,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed57721",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.009630822484398982,
+     "S_pi": -0.010115075238744796,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.00048425275434581423,
+     "signature": "-"
+    }
+   ]
+  },
+  "second_inverted": {
+   "inverted_positions_in_each_triple": [
+    1
+   ],
+   "lab_verdict": "qualified",
+   "pi_verdict": "qualified",
+   "registered_rule": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "detection_gated_variant": {
+    "sg0.3": "none",
+    "sg0.32": "L",
+    "sg0.35": "none"
+   },
+   "detection_alone_variant": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "none"
+   },
+   "lab_F1_F4": {
+    "F1_identity": true,
+    "F2_false_positives": true,
+    "F3_recovery": true,
+    "F4_robustness": true
+   },
+   "runs": [
+    {
+     "run": "spinchladni_sg0.3_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.05896669093220385,
+     "S_pi": -0.02804821964253587,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.08701491057473973,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.014784226888334055,
+     "S_pi": -0.008899909437135908,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.023684136325469965,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.007387558762545056,
+     "S_pi": -0.01246737881857968,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.019854937581124735,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.0016616616898460328,
+     "S_pi": -0.006887473566809034,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.008549135256655066,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.0030682305596440042,
+     "S_pi": -0.009839376888384854,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.006771146328740849,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.030698527588548494,
+     "S_pi": -0.03233761038154827,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.06303613797009676,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed2718",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.013869003155434725,
+     "S_pi": 0.0006564635331956789,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.013212539622239047,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed16180",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.01937090987599645,
+     "S_pi": -0.030167851079441074,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.04953876095543752,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed57721",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.017853545208111048,
+     "S_pi": -0.048167839735001425,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.06602138494311247,
+     "signature": "L"
+    }
+   ]
+  },
+  "third_inverted": {
+   "inverted_positions_in_each_triple": [
+    2
+   ],
+   "lab_verdict": "qualified",
+   "pi_verdict": "qualified",
+   "registered_rule": {
+    "sg0.3": "none",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "detection_gated_variant": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "L"
+   },
+   "detection_alone_variant": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "L"
+   },
+   "lab_F1_F4": {
+    "F1_identity": true,
+    "F2_false_positives": true,
+    "F3_recovery": true,
+    "F4_robustness": true
+   },
+   "runs": [
+    {
+     "run": "spinchladni_sg0.3_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.004014668713854042,
+     "S_pi": -0.0032084492417241532,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.007223117955578195,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.009914826935681706,
+     "S_pi": -0.008924990860156752,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.01883981779583846,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.0071816093441924985,
+     "S_pi": -0.011365221602931607,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.018546830947124105,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.002399159990048294,
+     "S_pi": -0.0025647034902618903,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.004963863480310185,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.012392571237565334,
+     "S_pi": -0.03986101213314698,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.052253583370712314,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.003434489104724174,
+     "S_pi": -0.003910238474218227,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.0004757493694940531,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed2718",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.013184379879871038,
+     "S_pi": -0.008706684604926105,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.02189106448479714,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed16180",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.10487684739449599,
+     "S_pi": -0.038239424872845505,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.1431162722673415,
+     "signature": "L"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed57721",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.0038287267184196356,
+     "S_pi": -0.029406920945795646,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.03323564766421528,
+     "signature": "-"
+    }
+   ]
+  },
+  "second_and_third_inverted": {
+   "inverted_positions_in_each_triple": [
+    1,
+    2
+   ],
+   "lab_verdict": "insufficient support",
+   "pi_verdict": "qualified",
+   "registered_rule": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "none"
+   },
+   "detection_gated_variant": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "none"
+   },
+   "detection_alone_variant": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "none"
+   },
+   "lab_F1_F4": {
+    "F1_identity": true,
+    "F2_false_positives": true,
+    "F3_recovery": true,
+    "F4_robustness": true
+   },
+   "runs": [
+    {
+     "run": "spinchladni_sg0.3_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.016895884474862167,
+     "S_pi": -0.016275925549365612,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.03317181002422778,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed12345",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.03575456129422386,
+     "S_pi": 0.0012273386732183432,
+     "detected_lab": true,
+     "detected_pi": false,
+     "d": -0.034527222621005514,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.3_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.010909448363049974,
+     "S_pi": -0.006562263819253578,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.01747171218230355,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed777",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.004382312409796526,
+     "S_pi": 0.0028945707933326226,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": 0.0072768832031291485,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed12345",
+     "measurable_lab": false,
+     "measurable_pi": true,
+     "S_lab": null,
+     "S_pi": 0.0007450595491559816,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": null,
+     "signature": "unmeasured"
+    },
+    {
+     "run": "spinchladni_sg0.32_gl0_seed31337",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.03359029731912751,
+     "S_pi": 0.002355905082130104,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": 0.035946202401257614,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed2718",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.004079064074435078,
+     "S_pi": 0.007616797324387414,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": 0.011695861398822492,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed16180",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": 0.023004103862650303,
+     "S_pi": 0.0019166434793800391,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": -0.021087460383270265,
+     "signature": "-"
+    },
+    {
+     "run": "spinchladni_sg0.35_gl0_seed57721",
+     "measurable_lab": true,
+     "measurable_pi": true,
+     "S_lab": -0.013903344491040564,
+     "S_pi": 0.002754802302153213,
+     "detected_lab": false,
+     "detected_pi": false,
+     "d": 0.016658146793193777,
+     "signature": "-"
+    }
+   ]
+  }
+ },
+ "configurations": 64,
+ "preference_counts": {
+  "registered_rule": {
+   "L": 48,
+   "Pi": 0,
+   "none": 16
+  },
+  "detection_gated_variant": {
+   "L": 24,
+   "Pi": 0,
+   "none": 40
+  },
+  "detection_alone_variant": {
+   "L": 32,
+   "Pi": 0,
+   "none": 32
+  }
+ },
+ "lab_every_condition_measurable_with_F1_F4_passing_in_every_class": 48
+}
