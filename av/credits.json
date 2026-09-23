@@ -270,6 +270,16 @@
       "wished_date": "2026-09-09",
       "shipped_date": "2026-09-09",
       "shipped_commit": "a40e4bce"
+    },
+    {
+      "tool_name": "Collage Studio — press any picture, drag, let go: the picture moves inside its fragment from the editing view, photos and clips alike, and a finger's drag no longer eats the next tap",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-09-23",
+      "shipped_date": "2026-09-23",
+      "shipped_commit": "41b3c5e9"
     }
   ]
 }

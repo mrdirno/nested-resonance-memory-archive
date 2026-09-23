@@ -17,6 +17,7 @@ proof (a passing e2e against production + a visual/functional check). Re-derivin
 or re-documenting an existing capability is DD, not delivery.
 
 ## CURRENT STATE (update every cycle)
+- **C3748 — THE GRAB: PRESS ANY PICTURE, DRAG, LET GO (September 23), served from the well:** wish `ca4727a3` (anonymous) asked to "click a tile and hold down with a finger and drag and release to set new image focal point". THE REFRAME's drag used to sit behind Expand preview → tap to arm → drag. The wisher's own gesture in the editing view moved the picture **0.0 RGB** (real CDP touch, Pixel 5, 600 ms hold, 160 px drag). Now any fragment holding a picture or a clip drags, in either view, and the tap keeps its meaning (pin / arm / trade). A per-kind slop tells a tap from a drag: a finger gets 10 px, a cursor 5. A still press lights the fragment after 350 ms; that is a signal, never a gate. A completed drag is one Undo step. A cancel puts the picture back: a second finger anywhere, Escape, a re-layout under the finger, or the OS taking the pointer. A frame is stored only if `isMeaningful`, and nothing moves during a take or export. Fixed on the way: the shipped touch bug where the first tap after a touch drag was eaten. Pure `lib/grab.ts` (**371,779** checks, five planted mutants all caught). Undo carries frames (`compositionHistory` **569,259**), an opened project starts its own history, and Recentre is an undo step. Code [`41b3c5e9`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/41b3c5e90e94d63c817e0876b27b3ddc6d8e93e3), Pages [35933353312](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/35933353312) (build + deploy success).
 - **C3733 — TITLE COLOUR (September 17), shipped and verified live:** the caption drawn over the collage gets a colour — six swatches under Text → Title (white, black, yellow, red, blue, pink) — and the plate behind it derives its own polarity (argmax WCAG contrast against near-black / near-white), so a black title flips to a light scrim and reads while every luminous colour keeps the legacy dark plate. `white` is byte-identical to the old `{#ffffff, rgba(0,0,0,0.42)}` pair, so no existing title/project/SVG moves. The colour is baked once into the title plan (`ink`/`scrim`) so the four surfaces paint it through the two shared emitters; it rides `.collage`, session and SVG round-trips; captions default to white. Source `a8f4cbe8`, [Pages 35275044209](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/35275044209). `title-colour.invariants.mjs` **101 checks**; the existing containment sweep still **82,871/0**; `title-colour.spec.ts` **4/4 dev and 4/4 against the LIVE url** (Chromium, Mobile Chrome, Mobile Safari, WebKit); collage mobile-watertight 16/16; independent adversarial audit clean.
 - **September 14 steady feedback, shipped and verified live:** resumes the measured C3724 notice-driven canvas jump. Independent review, typecheck/build, 46 built and 46 public browser cases, four fully decoded live MP4s and exact served artifacts passed. Source `2f97494c`, Pages `34873757476`. [Release and boundaries](STEADY_ART_ROOM_RELEASE.md).
 - **C3724 — REACHABLE UNDO, HELP AND DIRECT DICE (September 9), shipped:** Undo/Redo/Help occupy the top bar; instrument descriptions appear at the decision; separate Dice art and Dice layer replace the scope select. Source `a40e4bce`, fleet `18137`; exact validation and the remaining notice jump are retained in its cycle entry below.
@@ -1496,20 +1497,50 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       it is the THIRD instance of "the affordance covers the gesture it
       documents" (the pending pill, the verbs puck, now the rail), which makes
       it a shape this app meets whenever it puts something over the canvas.
-- [ ] **THE REFRAME IS FULL-BLEED ONLY**, because arming is. Outside full bleed
-      a tap PINS, so a drag beginning as a tap would pin whatever it crossed;
-      scoping the gesture to the ARMED fragment is what keeps every shipped
-      gesture byte for byte and what lets `touch-action: none` be scoped to a
-      state with nothing to scroll. The cost is discoverability: the correction
-      is one tap further away than the complaint is.
+- [x] **THE REFRAME IS FULL-BLEED ONLY — CLOSED C3748 by THE GRAB.** A tap
+      and a drag are told apart by DISTANCE (a per-kind slop, `lib/grab.ts`),
+      and the click a drag ends in is eaten by TIME, so the pin, the arm and the
+      trade keep their shipped meaning while any fragment in either view drags.
+      The page never scrolls, so a static `touch-action: pinch-zoom` costs
+      nothing. The wish that closed it: "click a tile and hold down with a
+      finger and drag and release".
 - [ ] **A CONTINUOUS COMPOSITION CONTROL RESTARTS THE TAKE.** `turnScene` is a
       dependency of the Stage's scene effect and `setScene` resets
       `moveOriginMs`, so anything that re-derives `orderedAssets` per event —
       the gutter slider, the entropy slider, and now a reframe drag — restarts
-      the clock under the user's finger. Pre-existing and shipped, but a drag on
+      the clock under the user's finger. **C3748 made this reachable from the
+      editing view**: every applied move of THE GRAB re-derives `orderedAssets`.
+      A default project (Motion still, Turn hold) shows nothing; with a Move or
+      Turn on, the take restarts under the finger, and under a Turn the grab
+      resolves the slot's HOME picture rather than the one on screen (fix both
+      together: resolve the displayed source from the Stage's assignment once
+      the scene is re-pointable). Pre-existing and shipped, but a drag on
       the ARTWORK is the first one where you are looking straight at it. The fix
       is a re-pointable scene (`stage.setAssets`) rather than a rebuild, which
       is the same shape as `setAudition`'s retarget.
+- [ ] **A ROW IN THE COLUMN RESIZES THE ART BAND (C3748).** `.studio-notice`
+      is held while a press owns the artwork, but it still reflows the art
+      whenever it appears between gestures — which is why THE GRAB's teaching
+      sentence was cut (a quick second tap pinned the fragment above). Two more
+      rows are not held at all: the Stage transport's status line and the
+      `.studio-playback` row that appears when music or a clip lands (measured:
+      a song landing mid-drag shrank the band 609 → 328 px under the finger).
+      In the grid layout a notice also moves the inspector under a slider drag.
+      The general fix is a notice that does not live in the flow (an overlay or
+      a reserved row, as the Art Room did for T-18986); then the grab can teach.
+- [ ] **THE TRIM AUDITION STARTS ON A NON-ACTIVATING POINTERDOWN (C3748
+      sweep).** For touch only pointerup/touchend grant user activation, so on
+      iOS the cut audition's unmute may be refused and the blur that stops it
+      may never come. Its only e2e drives a mouse. Needs a CDP-touch case and a
+      device.
+- [ ] **37 STANDALONE PLAYWRIGHT CONFIGS LAUNCH CHROMIUM UNMUTED (C3748).**
+      The main config made `--mute-audio` unconditional after C3719's tones
+      scar; the per-feature configs never got it (mobile fixed in C3748).
+- [ ] **EIGHT SPECS STILL DRIVE THE PRE-C3712 SHELL**: intake-intent,
+      frame-hold, soundtrack, colour-dice, one-layout, swap T2 (`rail-shuffle`
+      no longer exists), swap T6 (Redo is not in full bleed), undo.spec (its
+      dock lives in Layout now). reframe, swap's labels and undo's labels were
+      repaired in C3748; T3/T4 were proven rotted on a pristine HEAD tree first.
 
 - [ ] **A DENSE LANE IS A HATCH AND SAYS NOTHING ABOUT HOW DENSE.** Past 48
       seams the lane draws one hatched bar; the exact count rides in the `title`
@@ -1547,6 +1578,55 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+### 2026-09-23 (C3748) — A GESTURE ONLY EVER DRIVEN WITH A MOUSE HID A TOUCH BUG FOR A MONTH
+THE REFRAME's click-eater was a flag: `reframedRef` set at pointerup, cleared
+only inside the fragment's `onClick`. A mouse drag ends in a click, so the flag
+was spent the same instant. A FINGER'S drag ends in no click at all (browsers
+synthesise one only for a tap), so the flag outlived the gesture and swallowed
+the NEXT genuine tap. Measured on the build that shipped it, real Chromium touch
+through CDP on a Pixel 5: arm a fragment, drag its picture, tap once. The puck
+stayed up, and only the second tap disarmed it. Every reframe spec drove
+`page.mouse`, so the suite stayed green over a gesture that failed its first tap
+on every phone. **Rule:** a gesture that exists for a finger is proven with a
+finger (`Input.dispatchTouchEvent`, never `page.mouse` or synthetic
+PointerEvents, which skip touch-action and click synthesis). A click-eater is
+bounded by TIME (`clickBelongsToDrag`, event timestamps, 250 ms), never by
+waiting for the click it expects.
+
+### 2026-09-23 (C3748) — EIGHT SPECS STILL ASKED FOR BUTTONS C3712 HAD RENAMED
+`reframe`, `swap`, `undo`, `intake-intent`, `frame-hold`, `soundtrack`,
+`colour-dice` and `one-layout` all still clicked 'Maximize the shot', 'Exit full
+bleed' or 'Settings'. The shell renamed those on 2026-09-05 (Expand preview /
+Back to editing / Studio tools › Layout + Close editing panel). A missing button
+is a TIMEOUT, not a red assertion, which is why nobody read it as a regression.
+The gates for the reframe, the trade and undo had not run green for eighteen
+days. Repaired here: reframe (labels + T3's re-deal now driven from Layout +
+T4's reload check asks the fragment overlay, not "any canvas"), swap (labels),
+undo (labels). **Proven pre-existing before touching them:** T3/T4 fail
+IDENTICALLY on a pristine `git archive HEAD` tree served on :5198. Still
+rotted, named and not claimed: intake-intent, frame-hold, soundtrack,
+colour-dice, one-layout, and swap's `rail-shuffle` control, which no longer
+exists anywhere in `src`.
+
+### 2026-09-23 (C3748) — `isMeaningful` WAS WRITTEN AND SWEPT, AND HAD NO CALLER
+`lib/reframe.ts` exports `isMeaningful` ("storing it would light the Recentre
+verb on a fragment nobody touched"), and the reframe sweep tests it. The drag
+never called it. A tremble past the slop, or a drag along an axis the photograph
+has no room on, wrote a frame. That lit Recentre, stopped the picture following
+Crop focus, and rode into every saved file. The judge panel's safety lens found
+it by grepping for call sites. **Rule:** a guard that is unit-swept but has no
+call site is a claim, not a guard. Grep for its callers before trusting it.
+
+### 2026-09-23 (C3748) — THE HINT THAT TAUGHT THE DRAG COULD MOVE THE ARTWORK UNDER IT
+`.studio-notice` is a row in the page's own column, so showing or clearing one
+resizes the art band. The shipped first-arm hint ("Drag the picture…") started a
+four-second timer at exactly the moment a person began the drag it described,
+and its disappearance could shift the fragment under the finger mid-gesture.
+`flashNotice` now holds any new notice while a press owns the artwork and defers
+clearing a live one until the release. Every notice in the app passes through
+that one gate. The grab spec asserts the art box is identical at press and just
+before release, with the teaching notice up.
+
 
 ### 2026-09-07 (C3719) — THE TEST SUITE WAS PLAYING TONES INTO THE ROOM
 
@@ -6272,3 +6352,64 @@ Fleet broadcast **18991** in `persona500-collage-weekly-20260914-release` was st
 Resumed the prepared C3733 correction rather than rebuilding it or starting another queue. Bright original images previously washed out four title colours despite an opaque-anchor test claiming contrast. The shared plan now derives sufficient plate opacity after source-over: yellow 53%, red 75%, blue 77%, pink 76%; white/black pairs, C3742 fonts, geometry and project formats stay exact. Tradeoff: a darker plate in the same area. Source `7ba19031fdf71a554d3c7b6a32ce0d44b181a39c`; [Pages 35631462820](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/35631462820) and Archive health succeeded. 34 built + 34 public browser cases; 1,687 colour + 82,871 geometry + 26,958 font checks; typecheck/build; independent runtime/test review; exact five-file public artifact match; two built + two public MP4 full decodes. The unchanged public build fails the real preview/JPEG contrast gate first. [Release and bounds](TITLE_CONTRAST_RELEASE.md). BACKPORT rider: this repair belongs to Collage's shared title renderer; no shared toolkit engine or storefront changes.
 
 Status reconciliation: the desktop notice jump named again in C3742 was already repaired and live-verified in the September 14 steady-feedback release (`2f97494`, close `fcdc0a29`); do not reopen that issue from the stale sentence. Portable moving-video originals remain unfinished: preserve poster bindings and authored trim, requested speed, length-sync mode, mute, level and source fade together. No new wishes or demand are inferred from this engineering repair.
+
+- **2026-09-23 · [AXIS:WELL] C3748 — THE GRAB: PRESS ANY PICTURE, DRAG, LET GO, shipped and verified live.** Wish `ca4727a3` served: the picture now moves under the finger in the editing view, 0.0 RGB before; live grab.spec 6/6. BACKPORT rider fired: nothing to carry to the 19 trades (no pointer gestures), and two same-class fixes in-app (the stepper's hold flag, the Fragment slider).
+
+  **The wish.** Wish `ca4727a3` (anonymous, `new_tool`, posted 19:13Z, claimed within three hours; the toolkit well's only wish), verbatim: *"Wish I had the ability to move the image or video around if I click a tile and hold down with a finger and drag and release to set new image focal point"*. The vibe-cards well's two stale claims (midi-room lead-in toggle, tomo-world) belong to the live persona500 lane. Its lead-in switch shipped and was reverted in `68d2151168`, and tomo carries W2638 commits from today. They were left with that lane: this lane does not push persona500.
+
+  **Before.** THE REFRAME existed but sat behind Expand preview → tap to arm → drag. The wisher's own gesture in the editing view moved the picture **0.0 RGB** (real Chromium touch via CDP on a Pixel 5, held 600 ms, dragged 160 px). The shipped armed drag also ate the first tap after any touch drag. Measured: arm, drag, tap once, and the puck stayed up.
+
+  **Judge panel (three lenses, independent, read-only).** All three said build.
+  - Product owner: no-hold drag 9, required hold 5.
+  - Mobile editor: no-hold drag 8, hold 5.
+  - Safety skeptic: amended hold 8.
+
+  The spread was the hold. The page never scrolls (a fixed surface, overscroll off, `user-scalable=no`), so a required hold protects no scroll and only makes a quick drag do nothing. The hold was therefore built as feedback, not a gate. Adopted from two or more lenses: 10 px touch slop, a static `touch-action: pinch-zoom`, `isMeaningful` gating, one Undo step per drag, revert on cancel, a second finger cancels, no grab while swapping or recording. **Dissent recorded:** the skeptic wanted a click eaten only after a *meaningful* drag. Built as "a drag past the slop owns its click", because a drag along an axis with no room must not pin.
+
+  **After.**
+  - Pure `lib/grab.ts`: tap / hold / drag / refused, per-kind slop, a late timer is still a hold, and `clickBelongsToDrag` eats a click by event time (250 ms), never by a flag. Swept **371,779 checks**; five planted mutants were all caught.
+  - App's GRAB block: any fragment, both views. Frames are written only when `isMeaningful`. A completed drag commits one undo step carrying the pre-press frames. A cancel restores the frame and records nothing.
+  - `flashNotice` holds new notices and defers clearing while a press owns the artwork.
+  - Undo carries frames: `CompositionSnapshot.frames` with an order-insensitive `sameSnapshot`, **569,259 checks**.
+  - Credit and written instruction under Crop focus.
+
+  **The adversarial audit workflow** (four lenses, then refute-by-default verifiers) found 22 issues. Everything serious was fixed and re-proven with the auditors' own probes:
+  - Undo right after Open wiped the file's frames. Fixed: an opened project starts its own history.
+  - A first-tap teaching notice reflowed the art 37 px, so a quick second tap pinned the fragment above. The notice was cut: the hold highlight, the cursor and the written line teach instead.
+  - A re-layout mid-grab drove a stale slot. Fixed: it cancels the grab.
+  - Escape, Undo or F mid-drag. Escape now cancels, and Undo and F wait for the release.
+  - A cancel the app makes while the pointer is still down now swallows that release's click. grab.spec caught Escape pinning the fragment on release.
+  - Recentre is now an undo step.
+  - An Art Room re-apply now remaps history frames.
+  - Session History now keeps frames (a fourth writer, `poolForSave`).
+  - The blocked-drag notice now names its cause and no longer overwrites a take's warning.
+  - The caption's instruction moved from 2.46:1 to full caption ink.
+
+  **Backported in-app from the sweep lens:**
+  - The Fragments stepper's hold flag leaked exactly like the grab's. Now time-bounded; verified by code only, because the probe could not make the hold repeat under Playwright.
+  - The Fragment-count slider rescaled itself under the finger: eight jiggles ran 104 → 188. Its range is now frozen for the drag; after release it reads 67, with max 67 → 79.
+
+  **Gates.**
+  - `tsc --noEmit` and `vite build` clean.
+  - All 49 unit sweeps green.
+  - New `grab.spec.ts` covers: the wisher's gesture, taps and 8 px-jitter taps still pin, the first tap after a drag acts, press-and-go, Undo/Redo, a second finger, Escape, Recentre-undo, swap-pending, a video clip whose picture follows while `currentTime` advances, and the credit. **6/6 dev.** Against the **pre-change live site it fails 5 of 6**, as it must.
+  - Dev regressions: reframe **11/12**. T3/T4 were repaired after being proven rotted identically on a pristine `git archive HEAD` tree served on :5198. T6 (autosave) failed once under concurrent audit load, finding 2 framed pictures where 1 is expected; it then passed 3/3 in isolation on the new build and 3/3 on the unchanged one (unconfirmed hypothesis: a late re-deal let a retry pass frame a second picture now that any fragment drags). Swap **8/12**: T2 (`rail-shuffle`) and T6 (Redo in full bleed) fail identically on the unchanged build.
+  - mobile-watertight **8/8** on dev, run through a muted scratch config because the shipped one was unmuted, now fixed.
+  - **Live:** entry `index-d77f9aba.js` is byte-identical to the local build (sha256 `84730ce5…`) and carries the new strings. Against the LIVE url: grab.spec **6/6** (real touch: the wisher's gesture, the clip, Escape, Recentre-undo, swap pending), reframe.spec **12/12**, mobile-watertight **8/8**.
+  - Code [`41b3c5e9`](https://github.com/mrdirno/nested-resonance-memory-archive/commit/41b3c5e90e94d63c817e0876b27b3ddc6d8e93e3); Pages [35933353312](https://github.com/mrdirno/nested-resonance-memory-archive/actions/runs/35933353312) (build + deploy success); live https://mrdirno.github.io/nested-resonance-memory-archive/collage/ . Credit in `av/credits.json` and on the page.
+
+  **BACKPORT rider fired.**
+  - Trades: zero pointer or touch handlers across all 19 trades, commons and `shared/*.js`, so nothing to carry.
+  - In-app: the stepper and slider fixes above.
+
+  **Storefront untouched:** Collage is not a trade tool.
+
+  **Named and not done:**
+  - "Restarts the take" (the rung below) is now reachable from the editing view.
+  - With Turn active, the grab moves the slot's home picture.
+  - A song or clip landing mid-grab, and the Stage status line, can still resize the art band.
+  - In the grid layout, notices move the inspector under a slider drag.
+  - The iOS trim-handle audition starts on a non-activating pointerdown.
+  - 37 standalone Playwright configs still launch Chromium unmuted (mobile fixed here).
+  - Rotted specs still driving pre-C3712 controls: intake-intent, frame-hold, soundtrack, colour-dice, one-layout, swap T2 (`rail-shuffle`), swap T6 (Redo in full bleed), undo.spec (the dock now lives in Layout).
+  - No device run: iOS is unverified on glass.
