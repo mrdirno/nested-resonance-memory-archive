@@ -285,7 +285,7 @@ window.TRADE_DOCS = {
       ]
     },
     "service-writeup": {
-      "name": "Service Call Write-Up (the ticket narrative)",
+      "name": "Service Call Write-Up — Ticket Narrative",
       "aka": [
         "service",
         "service ticket",
@@ -344,6 +344,193 @@ window.TRADE_DOCS = {
         "a plain-English summary email for the client contact",
         "a no-access / nothing-found letter when you got turned away at the door"
       ]
+    },
+    "delay-notice": {
+      "aka": [
+        "delay",
+        "held up",
+        "stopped",
+        "waiting on",
+        "impact notice",
+        "notice",
+        "delay notice",
+        "backorder",
+        "backordered",
+        "remobilization"
+      ],
+      "from": "the lead tech on site",
+      "to": "the GC super, or the client's project lead when we're direct, and my PM",
+      "why": "You showed up and the room couldn't take you: no grid, no power, no drop or network, no millwork, no way in, or the owner's gear isn't here — the room's not ready and you got turned away. Written the same day, it's their hold. Not written, it's a day you didn't show. Our own gear on backorder goes on this notice too — before the date slips, not after.",
+      "omit": "The date you first asked, and the trip it already wasted. Everybody writes \"waiting on network\". Almost nobody writes \"port activation and VLAN requested from IT 07/22, drops still dead 07/29, crew of two left site 09:40, told the super 09:35\". The first-asked date says how long it has really been sitting, and the time you left and who you told is the whole claim for the return trip.",
+      "needs": ["when", "who"],
+      "facts": [
+        "what the room was missing — grid, power, a live drop, millwork, blocking, a way in — or the gear that isn't here",
+        "who owes it, by name or by company",
+        "the date you first asked, and how",
+        "what you could not do because of it",
+        "if you left site: the time, and who you told before you left",
+        "the date you need it by to hold the install"
+      ],
+      "note": "Facts and dates only — never whose fault. A trip charge or a remobilization is the office's number; this is the dated paper it stands on.",
+      "secondary": [
+        "a two-line text to the super before you pull out of the lot",
+        "a follow-up that carries the first-asked date forward",
+        "the ask to IT, written so it pastes straight into their ticket"
+      ]
+    },
+    "change-request": {
+      "name": "Extra Work Write-Up — Adds, Moves & Changes",
+      "aka": [
+        "change order",
+        "co",
+        "extra",
+        "out of scope",
+        "t and m narrative",
+        "scope change",
+        "relocate",
+        "relocation",
+        "ofe",
+        "ofci",
+        "revised drawings",
+        "moves adds changes"
+      ],
+      "to": "the GC's PM or the client's project lead, and my PM",
+      "why": "The narrative that rides with the ticket. A display added, a mic moved, a poke-through in the wrong place after the furniture changed, owner-furnished gear you're now told to make work, a drawing revision that landed after rough-in. Prices are the office's — this is the part that says why it's extra, which is the part that gets argued.",
+      "omit": "Who said yes, when, and on what channel — and everything the change drags along. An added display is never just the display: it's the pull, the mount, a switcher output and the extender, the control programming, the EDID, the DSP if it carries sound, and a re-test of the whole room. Write only the hardware and the change order pays for the bracket while the programming, the DSP time and the second commissioning pass get eaten.",
+      "needs": ["when", "who"],
+      "facts": [
+        "what was asked for, by whom, and where in the room",
+        "when it was authorized, and by what channel",
+        "the drawing revision or scope line you were building to",
+        "what it drags along — pulls, programming, DSP, a re-test",
+        "what it displaced or held up"
+      ],
+      "secondary": [
+        "a one-paragraph version to paste into the GC's change form",
+        "a heads-up to the office that programming and DSP time ride with this one"
+      ]
+    },
+    "handover": {
+      "name": "Turnover — Warranty Starts",
+      "aka": [
+        "handover",
+        "turnover",
+        "closeout",
+        "hand off",
+        "handoff",
+        "close out",
+        "punch complete",
+        "punch",
+        "punch list",
+        "spares"
+      ],
+      "from": "the lead who built the rooms",
+      "to": "the client's facilities or IT lead, and whoever runs their help desk",
+      "why": "The last thing anybody reads on the job and the first thing they blame. Written right it ends the install on the record — what they got, whose account the licenses and subscriptions sit on, what's still open, and the day our warranty starts. Written as if everything is finished, every leftover comes back to you as free warranty.",
+      "omit": "The day OUR warranty starts, as a calendar date, and who on their side took the rooms — plus the day they actually started using them. \"Upon completion\" lets the client decide when completion was, and three weeks of meetings in rooms nobody signed for become three weeks of warranty calls on your truck. Say it's ours: the makers' warranties run from their own ship or registration dates, and a turnover that doesn't say so makes every dead display yours.",
+      "needs": ["when", "who"],
+      "sections": [
+        {
+          "h": "ROOMS AND DATES",
+          "r": "Site and rooms as the client calls them and as the drawings label them; the turnover date; the date our warranty starts, and where that date comes from — the contract, your PM or the client's written acceptance; the date they started using each room, if earlier. Never a date you worked out yourself."
+        },
+        {
+          "h": "WHO WAS TRAINED",
+          "r": "Who, on what, and when — and who was supposed to be there and wasn't."
+        },
+        {
+          "h": "WHAT WE HANDED OVER",
+          "r": "As-builts, manuals, spares, remotes, rack keys, and where the final DSP, control and codec files are kept and who has a copy. Say a password, PIN or a room account's sign-in exists and who holds it; never the value."
+        },
+        {
+          "h": "ACCOUNTS AND RENEWALS",
+          "r": "Every license and subscription the rooms need to keep working: whose account it's on and the date it renews. Nothing about what it costs."
+        },
+        {
+          "h": "STILL OPEN",
+          "r": "Each open item with an owner and a date. Nothing reads as finished that isn't."
+        },
+        {
+          "h": "WHO TO CALL",
+          "r": "For what, during our warranty and after it."
+        }
+      ],
+      "facts": [
+        "the rooms or systems turned over, as the client names them",
+        "the date our warranty starts, as a calendar date, and where that date comes from — the makers' warranties run from their own dates",
+        "who on their side took the rooms",
+        "the date they started using the rooms, if before turnover",
+        "who was trained, on what, and when",
+        "what was handed over — as-builts, manuals, spares, remotes, rack keys",
+        "where the final DSP, control and codec files are kept, and who has a copy",
+        "whose account the licenses and subscriptions sit on, and when each one renews",
+        "what's still open, with an owner and a date",
+        "who to call for what"
+      ],
+      "note": "A password, PIN, license key, tech-page code or a room account's sign-in never goes in this document — say it exists and who holds it. How long the warranty runs and what it covers is the office's letter; this gives it the dates.",
+      "secondary": [
+        "a version for the client's help desk",
+        "the punch on its own, with an owner and a date on each line",
+        "a one-page who-to-call sheet for the room"
+      ]
+    },
+    "damage-found": {
+      "aka": [
+        "damage",
+        "pre-existing",
+        "found damage",
+        "prior damage",
+        "not us",
+        "doa"
+      ],
+      "from": "the tech who found it",
+      "to": "the GC super and my PM",
+      "why": "Something reached your gear before you did — cracked in the carton, dead on arrival, backbox buried behind somebody's finish, painted over, cut after it was in. This is the dated, photographed note that says it was that way when you found it, before anybody goes looking for who to charge.",
+      "omit": "The serial, the date it came in, and where the carton is right now. A cracked display or a dead amp out of the box gets claimed off those three, and they're the first things gone — the carton's in the dumpster by lunch and nobody wrote the serial before it went up the wall. Without them the replacement comes out of your margin.",
+      "needs": ["when", "where"],
+      "facts": [
+        "the date and time found",
+        "the room, and exactly where in it",
+        "what the damage is, and the last time anybody saw it whole — received, unboxed, installed — if you know",
+        "for gear: the serial, the date it came in, and whether the carton was kept",
+        "for freight: who signed for it, and whether the damage was written on the delivery receipt",
+        "photos taken, and where they live",
+        "who you told and how"
+      ],
+      "note": "Say what you found and photograph it. Never write who did it or whose fault it is — who pays is the office's call, off this dated record.",
+      "secondary": [
+        "a note to the office for the freight claim or the RMA — serial, date received, carton kept or not; whoever's form it is owns the number"
+      ]
+    },
+    "look-ahead": {
+      "name": "Look-Ahead — What Has To Be True First",
+      "aka": [
+        "look ahead",
+        "lookahead",
+        "two week",
+        "three week",
+        "next week",
+        "plan",
+        "programming"
+      ],
+      "from": "the lead tech",
+      "to": "my PM, the office and the GC super",
+      "why": "The one that stops the crew standing in a room that can't take them next week. On AV it's the install sequence — rough-in, trim-out, programming and commissioning, room by room, with the manpower, the receiving and the gear it takes — and what has to be true before each one: open for rough, closed and painted for trim, furniture in, power on, ports active, gear here.",
+      "omit": "What has to be TRUE before each room can start, and who makes it true. Trim before paint's done and you're back to re-hang it; ceiling mics before the grid's in is a second trip; programming before IT has the drops live and the room account made is a tech sitting in a chair on the clock. A look-ahead with no preconditions is a wish list — on AV it's a wish list and a second trip.",
+      "needs": ["notdone", "who"],
+      "facts": [
+        "the period",
+        "techs expected, and who's programming",
+        "the rooms in order, and the phase each is in — rough, trim, rack, program, commission, train",
+        "the gear that has to arrive and be received",
+        "what has to be true first — grid, walls, ceiling, paint, furniture, power, live drops, room accounts made",
+        "who owns each of those"
+      ],
+      "secondary": [
+        "a manpower request for the office",
+        "the ask to IT — drops, VLANs and room accounts, each by date",
+        "a coordination note for the GC super"
+      ]
     }
   },
   "drop": [],
@@ -377,7 +564,7 @@ window.TRADE_DOCS = {
     "When anything goes above a ceiling or inside a wall -> shoot the photo with the tile out and a tape in frame BEFORE it closes. Once the grid is back in, the only record is your word.",
     "When a DSP file, control code, firmware or preset gets changed -> write the before value beside the after value in the same sentence. That pair is what makes the next fault diagnosable instead of a second truck roll.",
     "When you get sent home, turned away, or the room isn't ready -> name the person you told and the time you told them, before you leave the parking lot. That sentence is the whole claim.",
-    "When a password, PIN, room account, license key or tech-page code comes up -> it does not go in the document. Say the credential exists and who holds it, nothing more.",
+    "When a password, PIN, a room account's sign-in, license key or tech-page code comes up -> it does not go in the document. Say the credential exists and who holds it, nothing more.",
     "When a room gets handed over, 'they've already started using it', or a device gets added or moved -> put the warranty start date in as a calendar date, and say whether programming, DSP changes and a re-test pass are included. Those are the two lines that get eaten silently."
   ]
 };

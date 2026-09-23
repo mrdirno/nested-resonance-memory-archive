@@ -430,7 +430,30 @@
          one shelf; the same fix belongs here, once, for all nineteen. "struck by"
          and "caught between" already led this document on most shelves and are
          pinned so it cannot regress; "fall"/"fell" are the ones that were dark. */
-      aka: ["incident", "near miss", "accident", "injury", "safety report", "fall", "fell", "struck by", "caught between"],
+      /* THE WORDS A MAN TYPES FOR THE EVENT, NOT ONLY ITS NAME (2026-09-22, C3746).
+         "fell off ladder" opened the AV Room Sign-Off and "fell off the lift" missed this
+         document on 19 of 19 shelves: the one alias word "fell" (weight 6) lost to one
+         TITLE word ("off", "the") at 10. "fell off" and "fell from" put a second query
+         word on this document, so it wins on coverage before weight is compared —
+         measured on all 19 shelves: "fell off the ladder" 6 -> 19, "fell off the lift"
+         0 -> 14, "fell off the scaffold" 6 -> 19, "fell from the lift" 8 -> 19,
+         "display fell off the wall" 3 -> 17. "got hurt" and "hurt" are PINS: both
+         already led here through creative's pooled "somebody got hurt".
+         THE PRICE, MEASURED AND ACCEPTED: every word of an alias is a word this document
+         answers to, and "off"/"from" are function words — bare "off" and "from" lead it
+         on 18 and 17 shelves, and so do "change from the architect" (19), "rfi from the
+         architect" (18), "dropped off" (18) and "damage from the painters" (17). A wrong
+         answer on those costs less than a dark injury route; when shared/find.js learns
+         to discount function words, these two aliases come out.
+         REFUSED ON MEASUREMENT: "trip and fall" (took "tripped breaker" here on 18
+         shelves, the electrician's among them), "cut my hand" (took "saw cut" and
+         "cut and patch"), "fell off the lift / roof / scaffold" (took the bare nouns).
+         STILL DARK: "tripped and fell", "slipped and fell", "passed out", "cut my
+         hand" on most shelves — an engine rule (a phrase-only alias), not another alias.
+         An override REPLACES this list (it never merges), so each override carries the
+         same phrases. */
+      aka: ["incident", "near miss", "accident", "injury", "safety report", "fall", "fell", "struck by", "caught between",
+            "fell off", "fell from", "got hurt", "hurt"],
       family: "incident",
       from: "the person who was there",
       to: "safety and my PM",

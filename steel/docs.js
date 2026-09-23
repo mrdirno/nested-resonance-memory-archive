@@ -238,7 +238,7 @@ window.TRADE_DOCS = {
       "aka": ["damage", "pre-existing", "found damage", "prior damage", "damaged beam", "bent in the yard", "coating holiday", "they burned my steel", "they cut my beam", "welded to my steel"]
     },
     "incident-report": {
-      "aka": ["incident", "near miss", "accident", "injury", "safety report", "dropped load", "dropped a load", "a load came down", "fall", "fell", "struck by", "caught between", "flash burn", "hit by the load"]
+      "aka": ["incident", "near miss", "accident", "injury", "safety report", "dropped load", "dropped a load", "a load came down", "fall", "fell", "struck by", "caught between", "fell off", "fell from", "got hurt", "hurt", "flash burn", "hit by the load"]
     },
     "service-writeup": {
       "name": "Misc-Metals Come-Back — What I Found When I Went Back",

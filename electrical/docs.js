@@ -487,7 +487,11 @@ window.TRADE_DOCS = {
         "fall",
         "fell",
         "struck by",
-        "caught between"
+        "caught between",
+        "fell off",
+        "fell from",
+        "got hurt",
+        "hurt"
       ],
       "why": "Your statement is the only version written while the details are still right; everything after it gets built on top of this one.",
       "sections": [

@@ -273,7 +273,11 @@ window.TRADE_DOCS = {
         "fall",
         "fell",
         "struck by",
-        "caught between"
+        "caught between",
+        "fell off",
+        "fell from",
+        "got hurt",
+        "hurt"
       ],
       "why": "This paragraph outlives everybody on the job. Write what you saw, because it becomes the exhibit.",
       "sections": [
