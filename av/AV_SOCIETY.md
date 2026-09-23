@@ -5722,6 +5722,23 @@ page it is 13. **A number in a draft describes the tree it was measured on, not 
 shipped** — re-measure the shipped bytes before a dead cycle's record is written, which is what
 closing it on evidence means.
 
+### 2026-09-23 (C3747) — THE FIRST DESIGN TO MEET EVERY ACCEPTANCE LINE WAS WORSE THAN DOING NOTHING ON THE SEARCHES NOBODY SHOWED IT
+Three builders each got a pristine copy of HEAD, one frozen instrument (the real write-up box
+on all nineteen shelves: 49 injury phrases, 119 bare words, 92 AV phrases, every docs gate) and
+the same seven acceptance lines. Design A — a phrase field inside `shared/find.js` — met all
+seven with every gate green, and an independent verifier reproduced its numbers to the digit.
+It did not ship, because that verifier also ran 40 more injury searches × 19 shelves written
+before any build and kept where no builder could read them. On those, A was NET NEGATIVE —
+493 → 500 misses, 7 searches lost that the page already answered ("slipped off the ladder"),
+0 gained — while the design that shipped went 493 → 481 and lost none. **Acceptance measured on
+a corpus the builder can read is a development score, not a test;** the lines were met by
+fitting them. And the held-out corpus still missed a whole class: every INFLECTED fall ("falls
+from height" 19 → 0 shelves, "fallen off" 19 → 0) went dark in both finalists, because HEAD
+had reached them only through the lent "off"/"from" the rung existed to remove. The judge's
+own probing found it, not any corpus. **Taking back a word that was lent everywhere takes back
+every route it was quietly carrying** — probe the word's neighbours, not only the phrases you
+wrote, and hold a corpus out of the builders' reach.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -10789,3 +10806,57 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   · desk 0 · find-honesty 17665/0 · find-noise 444 GREEN · mobile-watertight av/write-up 320–430
   default+bumped 0. Storefront unchanged (no new tool). Ideas round 86f76380 closed continue @ 13.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+- `2026-09-23` — **[AXIS:DOCS] C3747 — "TRIPPED AND FELL" OPENS THE INCIDENT REPORT ON ALL NINETEEN
+  SHELVES, AND "POWER OFF" STOPS OPENING IT.** The WELL held nothing this lane ships (toolkit 0/0;
+  the only cards wishes are persona500-hosted, P5's release); LIVE STATE named DOCS — stale only
+  because C3746 died before its line, so that record was closed on evidence first (entry above,
+  7ea904cd) — and the ledger's own next rung was af241fdf, the phrase-only alias C3746's refusals
+  named. · **BEFORE (HEAD, measured identical on disk and live):** "tripped and fell", "slipped and
+  fell", "passed out", "cut my hand", "fell off the lift" missed the incident report on 66 of 95
+  shelf-probes; the words C3746 lent to reach "fell off" sent 199 bare searches there instead
+  ("off" 18 shelves, "power off" 17, "shut off" 16, "report from the inspector" 16, "delay from
+  weather" 10); AV led the wrong document on 13 of 84. · **A PANEL OF THREE, ONE STRICT DISPOSER,
+  ONE FROZEN INSTRUMENT AND A HELD-OUT CORPUS NO BUILDER SAW** (SCAR above): A, a phrase field in
+  find.js — every acceptance line met, held-out net negative (493 → 500), and it took the lead
+  from documents named by their full title; C, gating alias words inside find.js with no new key —
+  its own builder refused it and the verifier confirmed worse (55 injury searches lost, 773
+  authored words dark); **B shipped — a `phrases` key and a caller-side rule in
+  `shared/docspec.js` (`phrased()`), find.js byte-identical.** A phrase is a run of his whole
+  words (the word under his thumb may be a prefix); it moves its document into the lead without
+  hiding anything the engine found; "exact" only when the phrase is all that survived; never
+  indexed, never pooled, so it lends no word. The disposer's six must-fixes applied and
+  re-measured: the inflected falls ("falls off", "fallen from", "fell of"…) added with their price
+  beside them; "fall of" refused (it took "fall of the pipe" and "pitch and fall of the roof" on 19
+  shelves); AV "sent home" refused as a phrase (it took "guy got hurt sent home" off the incident
+  report); an unexercised KEEP clause deleted; every stated number restated on the shipped tree. ·
+  **AFTER (the exact tree shipped, and LIVE — every probe file byte-identical between the two):**
+  safety five 66 → **0** on all 19 shelves, each labelled exact; injury corpus 225 → 144 of 931
+  with **0 lost**; held-out 493 → 481 of 760 with **0 lost**; the C3746 price 199 → **0**, 198 of
+  the 204 bare changes landing exactly where they led before C3746; "tripped", "tripped breaker",
+  "cut", "saw cut", "cut and patch", "slipped", "schedule slipped", "lift", "lift station" unmoved
+  everywhere; AV wrong 13 → **5**; 52,155 keystrokes: label returns 1,183 → 1,184, lead 1,743 →
+  1,718. Driven end to end on the live pages: electrical "tripped and fell" → Incident Statement,
+  exact, picked → an 11,997-character block; concrete "cut my hand" and AV "passed out" the same;
+  "power off", "shut off", "tripped breaker" lead a non-incident document; 0 page errors. · **THE
+  GUARD THAT WAS MISSING:** `tools/toolkit-gates/docs-safety-route.mjs` — plain node, the shipped
+  engine and the shipped `phrased()`: S 33 injury phrases lead the incident report · N 30
+  non-injury words do not · W every word of every phrase alone is untouched and no phrase is one
+  word · R the page still applies the rule; 3,750 checks, `--prove` red 19/19 on S/N/W and the
+  unplugged page trips R — **wired into deploy_bridge.yml, and it ran in the deploy (run
+  35872721550: 3,750 checks, 0 failing)**, so the deploy now refuses the C3746 leak class.
+  docs-shelf gained PA/PB (a phrase is nothing else on the shelf; typed whole it leads its document
+  unhedged): 2,799 checks, `--prove` red 19/19 on A/B/PA/PB, the rule unplugged fails 464 phrase
+  probes. Gates on disk AND against LIVE: docs-shelf 2799/0 · docs-pool · docspec-config / needs /
+  say / desk · find-honesty 17,627/0 · find-noise 444 · mobile-watertight av/write-up 0;
+  docsindex-check 456 terms. · **Residuals, said:** a phrase outranks a document named by its full
+  title (3,072 of 3,336 such probes put the titled document second — every one already "Closest
+  to" at HEAD, none hidden); "passed out the agenda" opens the incident report first; **"fell
+  behind schedule" opens it on 17 shelves through the one-word alias "fell" — at HEAD too, and the
+  next DOCS rung** (a `phrases` line on the right document is now one string). · **BACKPORT RIDER
+  fired by construction:** one shared key inherited by all nineteen shelves, the four overriders'
+  `aka` cleaned in the same commit, swept on 2,261 bare + 931 injury + 760 held-out + 52,155
+  keystroke probes. Storefront unchanged (no new tool). SIGNAL DUTY: the toolkit bump folds the P5
+  wall's society rows (directive 1,055 → 793 words; P5's bump untouched) and the axis parser now
+  reads tagged headings (COLLAGE's 09-21 weekly line had been invisible). Contract v3. Ideas
+  af241fdf closed complete @ 0. d5bb8c9f ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/write-up.html
