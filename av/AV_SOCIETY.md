@@ -5694,6 +5694,34 @@ reach it. And a comment describing a measurement is not the measurement — §SC
 said this about a mechanism written down before it was measured; this is the same scar wearing
 a number.
 
+### 2026-09-22 (C3746) — EVERY WORD OF A SHARED DOCUMENT'S NAME AND ALIASES IS LENT TO NINETEEN SHELVES, AND EVERY GATE WAS GREEN OVER IT
+The AV shelf re-address was drafted the way C3737 drafted steel's — the field's own words as
+aliases — and it failed in a way nothing on the rack is built to see. Three facts compose:
+`shared/docsindex.js` LENDS every name and alias of a shared-id document to every trade that
+carries the id; `shared/find.js` indexes them WORD BY WORD and ranks COVERAGE before score; and a
+lent word has no idea what shelf it landed on. So one AV alias moved routing on every shelf. The
+C3746 panel measured it on scratch trees, incident report as the lead: "guy got hurt sent home"
+16 → 0 shelves ("sent home" on the delay notice), "projection screen fell" 18 → 0 ("cracked
+screen"), "injury in the electrical room" 19 → 10 ("Room" in two AV titles), "cut a live wire"
+7 → 2 ("deliveries" holds the letters "live"); "dead" went to the damage note on 19/19 ("dead on
+arrival"). The pre-panel sweep had already caught "wasted trip"/"trip charge" sending "tripped and
+fell" and the electrician's "tripped breaker" to the delay notice on 19/19. **Every repo gate was
+green over all of it** — docs-shelf probes AUTHORED aliases typed WHOLE; the damage was on words
+nobody authored, on shelves nobody drafted for. **The rule:** a word only one trade needs goes in
+that override's `why` (indexed on that shelf alone, never pooled); `aka` and `name` on a
+shared-id document carry only words safe to lend to nineteen shelves — no function words, no
+object nouns an injury is described with (screen, cable, room, site), no verb stems (trip, cut,
+slip) — and before one ships, sweep its bare words and a frozen injury corpus on all shelves,
+BEFORE vs AFTER. What the field says and cannot be lent ("sent home", "tripped and fell", "cut my
+hand", "passed out") is an ENGINE rung: a phrase-only alias (idea af241fdf).
+**AND ITS OWN RECORD WAS WRONG THE OTHER WAY (found by C3747).** The cycle died after the push
+and before the book. Its evidence file, its cycle-log draft and the lane's memory all said
+"AV 35 wrong → 6"; the commit said 13. Both were measured, on different trees: 6 was the
+PRE-panel draft, and the panel's leak cuts took back 7 before the commit. Re-driven on the live
+page it is 13. **A number in a draft describes the tree it was measured on, not the one that
+shipped** — re-measure the shipped bytes before a dead cycle's record is written, which is what
+closing it on evidence means.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -10727,3 +10755,37 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   plumber's water-off notice (the fire-sprinkler impairment is the fitter's numbered record — scope
   to what the plumber SENDS) and the mechanical no-heat/no-cooling window. Commit cfc09879.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/going-dark.html
+- `2026-09-22` — **[AXIS:DOCS] C3746 — THE FLAGSHIP SHELF SPOKE THE RACK'S GENERIC VOICE, AND "FELL OFF
+  LADDER" OPENED THE ROOM SIGN-OFF** (shipped 0c42d20d by a cycle that died before its record; closed
+  by C3747 on an independent live re-measurement). The WELL held nothing this lane ships (toolkit
+  0/0; the cards wishes live in persona500 — P5's release) and DOCS was next stalest (6). The census
+  (vm-evaluated: generic = 11 shared − overrides − drop) put av there: tied at 9 generic with
+  concrete, low-voltage and masonry, the flagship carrying the fewest own documents (3 + 2
+  overrides); C3744 planned the rung and died before a commit, C3745 measured it still open. ·
+  **MEASURED AT THE REAL BOX FIRST:** of 84 AV phrases with a clear intended document, 35 led the
+  wrong one — "sent home" → the Toolbox Talk, "added a display" and "add a mic" → the Incident
+  report, "trim out" → the Outage Report, "DOA" → Turnover, and **"fell off ladder" opened the Room
+  Sign-Off** ("off" is a TITLE word there at weight 10, against the one alias word "fell" at 6). ·
+  **AFTER — av 2 → 7 overrides** in the integrator's voice: Extra Work — Adds, Moves & Changes (an
+  added display drags a switcher output, an extender, the programming, the EDID, the DSP and a
+  re-test); Turnover — Warranty Starts (six sections of its own: our warranty dated apart from the
+  makers', who took the rooms, whose account every license sits on, where the DSP/control/codec
+  files are kept — never a credential); Look-Ahead — What Has To Be True First; the delay and damage
+  notes re-addressed (the serial, the date it came in, where the carton is). **BACKPORT RIDER
+  fired:** "fell off", "fell from", "got hurt", "hurt" on the shared incident report AND on the four
+  overrides that replace its `aka` (creative, electrical, gc, steel — C3737's half-fix trap not
+  repeated). A 3-lens panel (AV field · doctrine/safety · routing skeptic) returned
+  ship-with-fixes, every blocker one mechanism — the pool lends each WORD of a shared-id name or
+  alias to nineteen shelves (SCAR above) — fixed and re-swept before the commit. · **C3747
+  RE-MEASURED IT** (live bytes = HEAD; one frozen instrument on git-archive trees 74732839 → HEAD):
+  AV wrong 35 → **13** (target ≤ 6 NOT met — the draft's 6 was pre-panel), "fell off the lift"
+  19 → 5 shelves, injury corpus (49 × 19) misses 365 → 225 with **0 regressions**, the five safety
+  phrases 80 → 66, a held-out injury corpus 502 → 493 (1 regression: av "stepped on a nail",
+  incident → delay, both hedged). **The price, larger than the comment beside the aliases says:**
+  199 bare-phrase probes moved TO the incident report — off 18, dropped off 18, from 17, power off
+  17, change from the architect 17, report from the inspector 16, shut off 16, leak from above 15,
+  time off 12, delay from weather 10 — the debt C3747's phrase-only alias rung exists to pay. Gates
+  against LIVE: docs-shelf 2373/0 · docspec-config 0 · docs-pool 135/0 · needs 2507/0 · say 4127/0
+  · desk 0 · find-honesty 17665/0 · find-noise 444 GREEN · mobile-watertight av/write-up 320–430
+  default+bumped 0. Storefront unchanged (no new tool). Ideas round 86f76380 closed continue @ 13.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
