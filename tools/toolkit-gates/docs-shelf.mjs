@@ -40,13 +40,27 @@
  *                  words had to be carried over and were; creative's is a
  *                  document displaced by a shipped TOOL, so its words leave on
  *                  purpose. Only a human can tell those apart, so this reports.
+ *   PA PHRASE      (2026-09-23) a document's `phrases` are routed WHOLE by
+ *      CLAIM       shared/docspec.js phrased() and lend no word — which only stays
+ *                  true while a phrase is nothing else on the shelf. No phrase is
+ *                  claimed by two documents, and no phrase is ALSO a name, an
+ *                  alias or a pooled term of ANY document here: on another
+ *                  document it is two answers to one whole string; on its own it
+ *                  lends the phrase's words back one at a time, which is the price
+ *                  `phrases` exists to stop paying ("fell off" took bare "off" on
+ *                  18 shelves as an alias). The pooled vocabulary is read too —
+ *                  another trade authoring the phrase as an alias would pool it.
+ *   PB PHRASE      every phrase, typed whole into the real box, LEADS its own
+ *      LEAD        document, is NOT hedged, and the page names none of its words
+ *                  as ignored. B's rule for aliases, held for the new key.
  *
  * NEGATIVE CONTROL — a gate nobody has watched fail is a decoration.
  *     node tools/toolkit-gates/docs-shelf.mjs --prove
  * re-authors the defect on every shelf out of that shelf's OWN data (A: copy one
  * document's alias onto another; B: probe a word that lives in a different
- * document's name) and REQUIRES both to go red. --prove exits non-zero if the
- * detectors stay green.
+ * document's name; PA: copy a phrase onto another document as an alias; PB: probe
+ * a phrase as if another document had written it) and REQUIRES every one to go
+ * red on every shelf. --prove exits non-zero if a detector stays green.
  *
  *     node tools/toolkit-gates/docs-shelf.mjs [base-url] [--only=trade] [--prove]
  *
@@ -80,7 +94,8 @@ const EXERCISE = async (prove) => {
   const lib = window.DocSpec.library();
   const dropped = (window.TRADE_DOCS && window.TRADE_DOCS.drop) || [];
   const sharedIds = window.DocSpec.shared.map(d => d.id);
-  const out = { ambiguous: [], lead: [], drop: [], darkened: [], probes: 0 };
+  const out = { ambiguous: [], lead: [], drop: [], darkened: [], probes: 0,
+                phraseClaim: [], phraseLead: [], phrases: 0 };
 
   /* ── A · AMBIGUITY ─────────────────────────────────────────────────────── */
   const claims = {};
@@ -118,6 +133,52 @@ const EXERCISE = async (prove) => {
   }
   await type('');
 
+  /* ── PA · PHRASE CLAIM ─────────────────────────────────────────────────── */
+  /* Every whole term the page can be searched by — name, alias, and the pooled
+     loan the page adds — against every phrase on the shelf. */
+  const pooledLib = window.DocSpec.pooled(lib);
+  const terms = {};
+  pooledLib.forEach(d => [d.name, ...(d.aka || [])].forEach(t => {
+    const k = norm(t); if (k) (terms[k] = terms[k] || new Set()).add(d.id);
+  }));
+  const phr = [];
+  lib.forEach(d => (d.phrases || []).forEach(p => { if (norm(p)) phr.push({ id: d.id, doc: d.name, p, k: norm(p) }); }));
+  if (prove && phr.length) {
+    /* the phrase re-authored as an alias of another document — the exact shape
+       that lends its words back */
+    const other = lib.find(d => d.id !== phr[0].id);
+    if (other) (terms[phr[0].k] = terms[phr[0].k] || new Set()).add(other.id);
+  }
+  const owners = {};
+  phr.forEach(x => (owners[x.k] = owners[x.k] || new Set()).add(x.id));
+  for (const x of phr) {
+    if (owners[x.k].size > 1) out.phraseClaim.push({ p: x.p, why: 'phrase on ' + [...owners[x.k]].join(' , ') });
+    if (terms[x.k]) out.phraseClaim.push({ p: x.p, why: 'also a name/alias/pooled term of ' + [...terms[x.k]].join(' , ') });
+  }
+
+  /* ── PB · PHRASE LEAD ──────────────────────────────────────────────────── */
+  const heads = async (q) => {
+    const rows = await type(q);
+    const g = [...document.querySelectorAll('ul.lib > li.grp')][0];
+    return {
+      lead: rows[0] || '(nothing)',
+      hedged: !!g && /^(Closest to|Nothing matched)/.test(g.textContent || ''),
+      drop: (document.querySelector('ul.lib li[data-drop]') || {}).textContent || ''
+    };
+  };
+  const pprobes = phr.map(x => ({ p: x.p, doc: x.doc }));
+  if (prove && phr.length) {
+    const wrong = lib.find(d => d.id !== phr[0].id);
+    if (wrong) pprobes.push({ p: phr[0].p, doc: wrong.name });
+  }
+  for (const x of pprobes) {
+    out.phrases++;
+    const r = await heads(x.p);
+    if (r.lead !== x.doc || r.hedged || r.drop)
+      out.phraseLead.push({ p: x.p, wrote: x.doc, led: r.lead, hedged: r.hedged, drop: r.drop });
+  }
+  await type('');
+
   /* ── C · DROP ──────────────────────────────────────────────────────────── */
   for (const id of dropped) {
     if (!sharedIds.includes(id)) { out.drop.push(id); continue; }
@@ -129,7 +190,7 @@ const EXERCISE = async (prove) => {
 };
 
 const browser = await chromium.launch();
-const fails = []; let checked = 0, darkened = 0, provedA = 0, provedB = 0;
+const fails = []; let checked = 0, darkened = 0, provedA = 0, provedB = 0, provedPA = 0, provedPB = 0, phraseShelves = 0;
 
 for (const trade of TRADES) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 800 }, isMobile: true, hasTouch: true });
@@ -139,29 +200,38 @@ for (const trade of TRADES) {
   await page.waitForTimeout(400);
 
   const r = await page.evaluate(EXERCISE, PROVE);
-  checked += r.probes + r.ambiguous.length;
+  checked += r.probes + r.ambiguous.length + r.phrases + r.phraseClaim.length;
   darkened += r.darkened.length;
-  if (PROVE) { if (r.ambiguous.length) provedA++; if (r.lead.length) provedB++; }
+  if (r.phrases) phraseShelves++;
+  if (PROVE) { if (r.ambiguous.length) provedA++; if (r.lead.length) provedB++;
+               if (r.phraseClaim.length) provedPA++; if (r.phraseLead.length) provedPB++; }
 
   const bad = [];
   if (errs.length) bad.push(`page error: ${errs[0]}`);
   r.ambiguous.forEach(a => bad.push(`A ambiguous "${a.term}" → ${a.ids.join(' , ')}`));
   r.lead.forEach(l => bad.push(`B "${l.alias}" was written on «${l.wrote}» and led «${l.led}»`));
   r.drop.forEach(d => bad.push(`C drop "${d}" is not a shared document id — it drops nothing`));
+  r.phraseClaim.forEach(c => bad.push(`PA phrase "${c.p}" is ${c.why} — a phrase must be nothing else on the shelf`));
+  r.phraseLead.forEach(l => bad.push(`PB phrase "${l.p}" was written on «${l.wrote}» and led «${l.led}»` +
+    (l.hedged ? ', hedged' : '') + (l.drop ? `, and the page said ${JSON.stringify(l.drop)}` : '')));
 
   if (!PROVE && bad.length) fails.push({ trade, bad });
   console.log(`  ${trade.padEnd(12)} ${String(r.probes).padStart(4)} alias probe(s) · ` +
               `${r.ambiguous.length} ambiguous · ${r.lead.length} mis-led · ` +
-              `${r.darkened.length} word(s) dark by drop${bad.length && !PROVE ? '   ** FAIL **' : ''}`);
+              `${r.darkened.length} word(s) dark by drop · ` +
+              `${String(r.phrases).padStart(2)} phrase probe(s), ${r.phraseClaim.length + r.phraseLead.length} phrase fault(s)` +
+              `${bad.length && !PROVE ? '   ** FAIL **' : ''}`);
   await ctx.close();
 }
 await browser.close();
 
 console.log('');
 if (PROVE) {
-  const ok = provedA === TRADES.length && provedB === TRADES.length;
+  const ok = provedA === TRADES.length && provedB === TRADES.length &&
+             provedPA === phraseShelves && provedPB === phraseShelves && phraseShelves > 0;
   console.log(`NEGATIVE CONTROL — A went red on ${provedA}/${TRADES.length} shelves, ` +
-              `B went red on ${provedB}/${TRADES.length}. ${ok ? 'Both detectors work.' : 'A DETECTOR IS BLIND.'}`);
+              `B went red on ${provedB}/${TRADES.length}, PA on ${provedPA}/${phraseShelves} phrase shelves, ` +
+              `PB on ${provedPB}/${phraseShelves}. ${ok ? 'Every detector works.' : 'A DETECTOR IS BLIND.'}`);
   process.exit(ok ? 0 : 1);
 }
 console.log(`SHELF GATE — ${TRADES.length} trade(s), ${checked} checks, ${fails.length} trade(s) failing` +

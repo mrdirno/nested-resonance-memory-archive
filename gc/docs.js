@@ -256,6 +256,8 @@ window.TRADE_DOCS = {
     },
     "incident-report": {
       "name": "The Incident Write-Up",
+      /* "fell off" / "fell from" left this list 2026-09-23: they are whole phrases on the
+         shared incident-report now, inherited here, and lend "off" / "from" to nothing. */
       "aka": [
         "incident report",
         "injury report",
@@ -274,8 +276,6 @@ window.TRADE_DOCS = {
         "fell",
         "struck by",
         "caught between",
-        "fell off",
-        "fell from",
         "got hurt",
         "hurt"
       ],

@@ -376,7 +376,9 @@ window.TRADE_DOCS = {
 
     "incident-report": {
       "name": "Something Happened (Incident / Near-Miss)",
-      "aka": ["incident", "near miss", "accident", "somebody got hurt", "gear damage", "on set", "safety", "fall", "fell", "struck by", "caught between", "fell off", "fell from", "got hurt", "hurt"],
+      /* "fell off" / "fell from" left this list 2026-09-23: they are whole phrases on the
+         shared incident-report now, inherited here, and lend "off" / "from" to nothing. */
+      "aka": ["incident", "near miss", "accident", "somebody got hurt", "gear damage", "on set", "safety", "fall", "fell", "struck by", "caught between", "got hurt", "hurt"],
       "to": "the producer, the client's contact, and whoever owns the space",
       "why": "Written once and read by people who were not there. On a small crew nobody else is writing this, so if you do not, it does not exist.",
       "secondary": ["a short message to the client and to whoever owns the space, with the internal detail taken out", "a follow-up once whatever caused it has been dealt with"]

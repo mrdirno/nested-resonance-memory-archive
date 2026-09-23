@@ -444,16 +444,65 @@
          on 18 and 17 shelves, and so do "change from the architect" (19), "rfi from the
          architect" (18), "dropped off" (18) and "damage from the painters" (17). A wrong
          answer on those costs less than a dark injury route; when shared/find.js learns
-         to discount function words, these two aliases come out.
+         to discount function words, these two aliases come out. [They came out
+         2026-09-23 with find.js untouched: `phrases`, below.]
          REFUSED ON MEASUREMENT: "trip and fall" (took "tripped breaker" here on 18
          shelves, the electrician's among them), "cut my hand" (took "saw cut" and
          "cut and patch"), "fell off the lift / roof / scaffold" (took the bare nouns).
          STILL DARK: "tripped and fell", "slipped and fell", "passed out", "cut my
          hand" on most shelves — an engine rule (a phrase-only alias), not another alias.
+         [Lit 2026-09-23 by that rule, written caller-side in phrased() beside findIx().]
          An override REPLACES this list (it never merges), so each override carries the
-         same phrases. */
+         same aliases — and none restates `phrases`, so every shelf inherits those. */
       aka: ["incident", "near miss", "accident", "injury", "safety report", "fall", "fell", "struck by", "caught between",
-            "fell off", "fell from", "got hurt", "hurt"],
+            "got hurt", "hurt"],
+      /* WHOLE PHRASES, ROUTED WHOLE (2026-09-23, ledger af241fdf). "fell off" and "fell
+         from" left `aka` for this key, and the four dark phrases above joined them. A
+         phrase is matched as a run of his words and moves this document into the lead
+         (phrased(), beside findIx()); it is never indexed, pooled or lent a word at a
+         time, so "off" and "from" stop being words this document answers to while
+         "fell off the lift" still reaches it. creative, electrical, gc and steel restate
+         `aka` and dropped the same two words; none restates `phrases`, and library()
+         merges key by key, so all nineteen shelves carry this list (verified on the
+         merge). Measured on the frozen instrument, HEAD b5ae861c -> this list:
+           the five dark phrases     66 of 95 probes missing this document -> 0
+           the 49-phrase injury set  225 of 931 missing -> 144, 0 of its hits lost
+           the C3746 price           199 bare searches leading this document -> 0 of
+                                     them; 198 of the 204 bare changes land exactly
+                                     where they led before C3746
+           40 held-out injury searches 493 of 760 missing -> 481, 0 of its hits lost
+         "fall off" and "dropped a tool" are here because the frozen corpus asked for
+         them: with only the six this began with ("fell off", "fell from" and the four
+         dark ones), 15 injury searches that lead here at HEAD went dark once "off" and
+         "from" stopped being lent — "dropped a tool from the lift" on 13 shelves, "fall
+         off" on 2. The lent words had been carrying EVERY "<verb> off / from" injury
+         search, so the rest of the list carries the verbs that are an injury event in
+         this box. Twenty more such searches, written after the fact and outside the
+         frozen corpora ("falling off the ladder", "thrown from the lift", "tool dropped
+         from the lift"...), led here 272 times at HEAD: the six lose 147, this list 40
+         and gains 64 (296).
+         Those 40 are refused on purpose — "knocked off" is quitting time (7), "came
+         off" is a part coming loose (8), "blown off" is weather damage (6), a dropped
+         tool by its own name ("hammer", "wrench") is a word list, not a phrase (18), and
+         "struck by debris from above" (1) is one shelf's engine. "trip and fall" and
+         "slip and fall" are the words a claim is filed under; as phrases they cannot
+         take "trip charge" or "slip sheet", which is what refused "trip and fall" as
+         an alias. "falls off", "falls from", "fallen off", "fallen from", "fell of" and
+         "falling of" came last, from the C3747 panel: the lent "off"/"from" had been
+         carrying every inflected fall — "falls from height" 19 -> 0 shelves without
+         them, "fallen off" 19 -> 0, "fell of the ladder" 19 -> 1 — and with them the
+         frozen corpora do not move. Their price, measured: "the cover has fallen off",
+         "label fallen off the panel", "paint falls off the wall" and "siding falls off"
+         now open this document on 19 shelves, hedged, and "trim falls off" reads exact
+         on 17. "fall of" is REFUSED: it took "fall of the pipe" and "fall of the slab"
+         1 -> 19 shelves and "pitch and fall of the roof" and "the fall of next year"
+         0 -> 19 — slope and season, not a man. The shelf gate (PA / PB) holds the key:
+         a phrase that is also an alias anywhere on the shelf is red, and
+         tools/toolkit-gates/docs-safety-route.mjs holds the route itself. */
+      phrases: ["fell off", "fell from", "fall off", "fall from", "falling off", "falling from",
+                "slipped off", "slid off", "jumped off", "thrown from", "tripped and fell", "trip and fall",
+                "slipped and fell", "slip and fall", "passed out", "cut my hand", "dropped a tool", "tool dropped",
+                "falls off", "falls from", "fallen off", "fallen from", "fell of", "falling of"],
       family: "incident",
       from: "the person who was there",
       to: "safety and my PM",
@@ -1754,6 +1803,207 @@
     return IX;
   }
 
+  /* ── PHRASES: A WHOLE PHRASE ROUTES, AND LENDS NO WORD (2026-09-23) ─────────
+     shared/find.js indexes every alias WORD BY WORD — rule 1 through rule 7 are all
+     about words — so a field phrase could not be aliased without lending its words:
+     "tripped and fell" would take bare "tripped" and "tripped breaker", "cut my hand"
+     would take "saw cut" and "cut and patch", "fell off the lift" would take "lift
+     station". C3746 paid that price on purpose for "fell off" / "fell from" (the note
+     on `incident-report`), and the price was measured at 199 bare searches handing the
+     INCIDENT REPORT back for "off", "dropped off", "power off", "from", "change from
+     the architect", "rfi from the architect", "damage from the painters"... on up to
+     18 shelves each. And "tripped and fell", "slipped and fell", "passed out", "cut my
+     hand", "fell off the lift" still missed the incident report on 66 of 95 probes.
+
+     SO A DOCUMENT MAY CARRY `phrases`: whole strings, routed whole, never indexed.
+     find.js is not touched — it serves ~37 surfaces that have no phrases — and the
+     key is invisible to everything that reads `aka`: the pool generator
+     (tools/toolkit-gates/build-docsindex.mjs reads name + aka only, so a phrase is
+     never lent to another shelf), the ROUTER line of the block, the index. It is
+     merged like every other key — an override that does not name it inherits it.
+
+     THE RULE, after the engine has ranked:
+       · A HIT is a phrase sitting in the query as a contiguous run of his tokens
+         (the engine's own norm/toks). Every word whole — except the LAST word of
+         the query while he is still on it (no separator typed yet), which may be a
+         2+ letter prefix of the phrase's last word. That is rule 5's one exemption,
+         for rule 5's reason: without it "fell of" handed the lead to the Room
+         Sign-Off between "fell" and "fell off" on 18 shelves.
+       · TIES: the document with the longer phrase first; equal length, the order
+         the engine gave the whole query; then shelf order.
+       · THE LEAD goes to the first phrase document — pulled in from outside the
+         engine's coverage tier when it is not in it — and any other phrase document
+         goes straight under it. The rest of the engine's list follows unchanged, so
+         nothing the engine found is ever hidden; on "none" its closest-three
+         guesses are dropped, because something did match.
+       · THE LABEL is "exact" only when every word he typed outside the lead's own
+         phrases is a word the engine DROPPED as naming nothing here — the phrase is
+         then the whole of what survived, which is rule 6's "Washout template" case.
+         Anything else is "Closest to".
+       · THE SENTENCE (Find.dropped): a word a phrase spent was not ignored, so it
+         is taken out of `noise` / `noiseRaw` before the sentence is built.
+
+     MEASURED with the frozen C3747 instrument (the write-up box on all 19 shelves),
+     HEAD b5ae861c -> this change:
+       "tripped and fell" "slipped and fell" "passed out" "cut my hand" "fell off
+       the lift" missing the incident report       66 of 95 -> 0
+       49 injury searches x 19 shelves, missing     225 of 931 -> 144; 0 hits lost
+       40 held-out injury searches x 19 (never shown to whoever wrote the list)
+                                                    493 of 760 missing -> 481; 0 lost
+       119 bare words x 19 shelves                  204 leads changed: 199 of them
+         the C3746 price leaving the incident report (0 went to it), 198 of the 204
+         landing exactly where they led before C3746 — the other six are five AV
+         phrases routed on purpose and AV "rfi from the architect", now the meeting
+         notes; "tripped", "tripped breaker", "cut", "saw cut", "cut and patch",
+         "slipped", "schedule slipped", "lift", "lift station" unmoved on every shelf
+       84 AV searches with a clear document, wrong  13 -> 5 (the single words
+         "progress", "blocking", "vlan", "deliveries" — not this rung — and "sent
+         home", refused as a phrase in av/docs.js); the AV phrases live on AV's own
+         overrides, so no other shelf can see them
+       the keystroke corpus — those three corpora plus every phrase, 246 strings,
+         typed one character at a time on all 19 shelves, 52,155 keystrokes —
+         counting every keystroke where the label or
+         the lead RETURNS to an earlier state while he is still on the same word:
+         label 1,183 -> 1,184, lead 1,743 -> 1,718. The 98 lead returns this adds
+         are on "fro…", "report fro…", "frei…", "pain…" — the engine's own behaviour
+         before C3746, which the lent "from" had been masking — and 123 go away. Of
+         the 24 label returns it adds, 23 are "height" typed after "fall from" ("fall
+         from h" reads exact, "…he" Closest to, "…heig" exact again: "he" begins a
+         word somewhere on the shelf and "heig" begins none) and one is "damage from
+         the painte…"; 23 go away.
+
+     WHAT IT DOES NOT DO, measured on the same tree:
+       · a phrase outranks a document named by its full title. On 3,336 probes of a
+         document's own name followed by an injury phrase, the titled document goes
+         SECOND on 3,072 — every one of them already "Closest to" at HEAD — and below
+         second on none. Nothing is hidden; the injury route wins the tie on purpose.
+       · "passed out" is also "handed out": "passed out the agenda" opens the
+         incident report first (hedged) and the minutes second, on 19 shelves.
+       · still dark because nobody wrote them: "fell of ladder" ("fall of" is refused
+         on `incident-report`), "knocked off / came off / blown off the ladder",
+         "dropped a hammer from the lift", "fel off", and "tripped & fell" (norm()
+         drops the "&"). And "fell behind schedule" opens the incident report on 17
+         shelves through the one-word alias "fell" — at HEAD too, and the next rung.
+
+     TRIED AND REFUSED, each on the same instrument:
+       · a KEEP clause: the engine's lead held when it said "exact" AND a word outside
+         every phrase was one it had not dropped. It was written for AV "sent home" as
+         a delay phrase, which took "hurt sent home", "sent home hurt" and "guy got hurt
+         sent home" off the incident report; once "sent home" was refused as a phrase
+         (av/docs.js) the clause changed 0 of the 4,044 frozen probes and 0 of 190 aimed
+         at it (a document's own name + an injury phrase) — a query carrying a phrase
+         and a second document's words is almost never "exact". An unexercised branch
+         is a claim nobody checks, so it came out.
+       · a phrase field inside shared/find.js (an opt-in rule 8 crediting the spanned
+         words with coverage and a rule-4 bonus). The same frozen numbers, but on 40
+         held-out injury searches x 19 shelves it lost 7 that the page reaches today
+         (493 -> 500 misses, where this rule goes 493 -> 481 and loses none), and its
+         coverage credit took the lead from a document named by its full title on 466
+         of 3,336 title + phrase probes and pushed it below second on 225. This rule
+         never hides it: the titled document goes second, under "Closest to", which
+         is where every one of those probes already stood at HEAD.
+       · fixing the leak class inside find.js with no new key — a word of a multi-word
+         alias counting only when another word of that alias comes with it. At its
+         narrowest scope it lost 55 injury searches and 7 held-out ones and moved 9 of
+         the frozen bare words; at the general scope (own aliases and the pool's loans)
+         it moved 1,170 bare leads, 136 injury and 130 frozen-word probes, and 773
+         authored content words ("cx", "punch", "leak", "rfi") stopped leading their
+         own document. Measured and refused; do not retry it without a new idea.
+       · asking the engine to judge the words outside the phrase (a second search,
+         exact on this document counts as named). Same leads, and the label then
+         inherits every mid-word turn of the engine on those words: label returns
+         1,194 against 1,179 ("cut my hand on a sa" exact, "…saw" not).
+       · whole words only, including the word under his thumb: lead returns 1,967
+         against HEAD's 1,743 — "fell of" leads the Room Sign-Off on 18 shelves
+         between "fell" and "fell off", both of which lead the incident report.
+       · `aka` instead of `phrases`: the C3746 note on `incident-report`, and the nine
+         AV phrases,
+         whose words would pool onto delay-notice / change-request / damage-found /
+         look-ahead on every shelf that carries them. */
+  var PHR = null;
+  /* Every document on this shelf that carries `phrases`, each phrase already cut
+     into the engine's own tokens. Built once per index, like the index itself. */
+  function phraseRows(ix) {
+    if (PHR && PHR.ix === ix) return PHR.rows;
+    var rows = [], i, k, ps, t, list;
+    for (i = 0; i < ix.rows.length; i++) {
+      ps = ix.rows[i].it.phrases;
+      if (!ps || !ps.length) continue;
+      list = [];
+      for (k = 0; k < ps.length; k++) {
+        t = window.Find.toks(ps[k]);
+        if (t.length) list.push(t);
+      }
+      if (list.length) rows.push({ i: i, it: ix.rows[i].it, ph: list });
+    }
+    PHR = { ix: ix, rows: rows };
+    return rows;
+  }
+
+  /* Every place `pt` sits in `qt` as a contiguous run of his tokens. `open` is true
+     while the last token is still under his thumb, and only then may that token be
+     a prefix (two letters or more, the engine's own floor) of the phrase's last word. */
+  function runsOf(qt, pt, open) {
+    var at = [], s, j, last = qt.length - 1;
+    for (s = 0; s + pt.length <= qt.length; s++) {
+      j = 0;
+      while (j < pt.length && qt[s + j] === pt[j]) j++;
+      if (j === pt.length) at.push(s);
+      else if (open && j === pt.length - 1 && s + j === last && qt[last].length >= 2 &&
+               pt[j].length > qt[last].length && pt[j].indexOf(qt[last]) === 0) at.push(s);
+    }
+    return at;
+  }
+
+  function phrased(ix, res, raw) {
+    var F = window.Find;
+    if (!F || !res || res.mode === "all") return res;
+    var qt = F.toks(raw), rows = phraseRows(ix);
+    if (!qt.length || !rows.length) return res;
+    /* the engine's own test for "still on the last word" (find.js, the `say` block) */
+    var open = /[A-Za-z0-9]$/.test(String(raw || ""));
+
+    var found = [], r, k, s, i, pt, at, h;
+    for (r = 0; r < rows.length; r++) {
+      h = null;
+      for (k = 0; k < rows[r].ph.length; k++) {
+        pt = rows[r].ph[k];
+        at = runsOf(qt, pt, open);
+        for (s = 0; s < at.length; s++) {
+          if (!h) h = { it: rows[r].it, i: rows[r].i, n: 0, s: 0, pos: {} };
+          for (i = 0; i < pt.length; i++) h.pos[at[s] + i] = 1;
+          if (pt.length > h.n || (pt.length === h.n && at[s] < h.s)) { h.n = pt.length; h.s = at[s]; }
+        }
+      }
+      if (h) found.push(h);
+    }
+    if (!found.length) return res;
+
+    var ranked = res.mode === "none" ? [] : res.hits;
+    var rank = function (d) { var x = ranked.indexOf(d); return x === -1 ? ranked.length + 1 : x; };
+    found.sort(function (a, b) { return b.n - a.n || rank(a.it) - rank(b.it) || a.i - b.i; });
+
+    var spent = {}, used = {}, gone = {};
+    for (i = 0; i < found.length; i++) for (k in found[i].pos) spent[k] = 1;
+    for (k in spent) used[qt[k]] = 1;
+    for (i = 0; i < (res.noise || []).length; i++) gone[res.noise[i]] = 1;
+
+    var p = found[0], mode = "exact";
+    var order = [], add = function (d) { if (d && order.indexOf(d) === -1) order.push(d); };
+    for (i = 0; i < found.length; i++) add(found[i].it);
+    if (res.mode !== "none") for (i = 0; i < res.hits.length; i++) add(res.hits[i]);
+    for (k = 0; k < qt.length; k++) if (!p.pos[k] && (spent[k] || !gone[qt[k]])) mode = "relaxed";
+
+    var noise = [], noiseRaw = [], nr = res.noiseRaw || [], wt, all;
+    for (i = 0; i < (res.noise || []).length; i++) if (!used[res.noise[i]]) noise.push(res.noise[i]);
+    for (i = 0; i < nr.length; i++) {
+      wt = F.toks(nr[i]); all = wt.length > 0;
+      for (k = 0; k < wt.length; k++) if (!used[wt[k]]) all = false;
+      if (!all) noiseRaw.push(nr[i]);
+    }
+    return { hits: order, mode: mode, noise: noise, noiseRaw: noiseRaw, q: res.q, phrase: p.it.id };
+  }
+
   function renderLibrary() {
     var box = el.lib;
     box.innerHTML = "";
@@ -1766,6 +2016,10 @@
        a trimmed query can never say the second. Trimmed stays the display
        value, because a heading that quotes his trailing space is a typo. */
     var res = window.Find.search(findIx(), S.q);
+    /* The engine ranks first; a whole phrase he typed then decides the lead, the
+       label and the sentence together (phrased(), beside findIx). A query that
+       carries no phrase comes back as the very object the engine returned. */
+    res = phrased(findIx(), res, S.q);
     var hits = res.hits.slice();
 
     if (!q || res.mode === "all") {
@@ -2539,7 +2793,11 @@
                      factsOf: factsOf, sayCue: sayCue, sayCueSentence: sayCueSentence,
                      /* The REAL search index, so a gate can ask the engine what it did
                         instead of rebuilding the field spec beside it and drifting. */
-                     findIx: findIx };
+                     findIx: findIx,
+                     /* The phrase rule the page applies on top of the engine, exported
+                        so tools/toolkit-gates/docs-safety-route.mjs asks the SHIPPED
+                        rule in plain node — which is what lets the deploy run it. */
+                     phrased: phrased };
 
   if (typeof document === "undefined") return;
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);

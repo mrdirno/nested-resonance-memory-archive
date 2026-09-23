@@ -358,6 +358,18 @@ window.TRADE_DOCS = {
         "backordered",
         "remobilization"
       ],
+      /* PHRASES, NOT ALIASES (2026-09-23). Each led the wrong document here — "room not
+         ready" and "not ready" the Look-Ahead, "no access" the Site Walk, "ceiling not
+         closed" the Service Call, "port activation" the Daily Field Report — and as
+         aliases on this shared id their words would pool onto delay-notice on every
+         shelf that carries it. A phrase is routed whole and never pooled
+         (shared/docspec.js, phrased()). Same for "owner furnished", "painted over" and
+         "rough in" below. "sent home" is NOT here, on measurement: as a delay phrase it
+         took "guy got hurt sent home", "hurt sent home" and "sent home hurt" off the
+         incident report and made "sent home injured" an exact, one-row Delay Notice.
+         A man sent home hurt owes the incident report first; "sent home" still leads
+         the Toolbox Talk here, the one AV miss this rung chose to keep. */
+      "phrases": ["room not ready", "not ready", "no access", "ceiling not closed", "port activation"],
       "from": "the lead tech on site",
       "to": "the GC super, or the client's project lead when we're direct, and my PM",
       "why": "You showed up and the room couldn't take you: no grid, no power, no drop or network, no millwork, no way in, or the owner's gear isn't here — the room's not ready and you got turned away. Written the same day, it's their hold. Not written, it's a day you didn't show. Our own gear on backorder goes on this notice too — before the date slips, not after.",
@@ -394,6 +406,7 @@ window.TRADE_DOCS = {
         "revised drawings",
         "moves adds changes"
       ],
+      "phrases": ["owner furnished"],
       "to": "the GC's PM or the client's project lead, and my PM",
       "why": "The narrative that rides with the ticket. A display added, a mic moved, a poke-through in the wrong place after the furniture changed, owner-furnished gear you're now told to make work, a drawing revision that landed after rough-in. Prices are the office's — this is the part that says why it's extra, which is the part that gets argued.",
       "omit": "Who said yes, when, and on what channel — and everything the change drags along. An added display is never just the display: it's the pull, the mount, a switcher output and the extender, the control programming, the EDID, the DSP if it carries sound, and a re-test of the whole room. Write only the hardware and the change order pays for the bracket while the programming, the DSP time and the second commissioning pass get eaten.",
@@ -483,6 +496,7 @@ window.TRADE_DOCS = {
         "not us",
         "doa"
       ],
+      "phrases": ["painted over"],
       "from": "the tech who found it",
       "to": "the GC super and my PM",
       "why": "Something reached your gear before you did — cracked in the carton, dead on arrival, backbox buried behind somebody's finish, painted over, cut after it was in. This is the dated, photographed note that says it was that way when you found it, before anybody goes looking for who to charge.",
@@ -513,6 +527,7 @@ window.TRADE_DOCS = {
         "plan",
         "programming"
       ],
+      "phrases": ["rough in"],
       "from": "the lead tech",
       "to": "my PM, the office and the GC super",
       "why": "The one that stops the crew standing in a room that can't take them next week. On AV it's the install sequence — rough-in, trim-out, programming and commissioning, room by room, with the manpower, the receiving and the gear it takes — and what has to be true before each one: open for rough, closed and painted for trim, furniture in, power on, ports active, gear here.",

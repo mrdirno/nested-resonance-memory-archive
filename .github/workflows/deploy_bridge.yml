@@ -813,6 +813,18 @@ jobs:
           done
           echo "pooled vocabulary: in step with the staged libraries, and loaded on every write-up page"
 
+          # THE SAFETY ROUTE, ASKED OF THE SHIPPED ENGINE (C3747). An injury typed into
+          # any shelf search must open the incident report, and a word that is not an
+          # injury must not. Before this, "tripped and fell", "passed out" and "cut my
+          # hand" missed it on 66 of 95 probes, and the aliases written to fix that sent
+          # "off", "power off", "shut off" and "delay from weather" there on up to 19
+          # shelves, with every browser gate green, because none of them probes a word
+          # nobody authored. Plain node on the staged files, through the phrase rule
+          # the page runs (shared/docspec.js phrased()) and never a copy of it; the
+          # negative control (--prove) is run by the lane, not here.
+          node tools/toolkit-gates/docs-safety-route.mjs --root=HELIOS-BRIDGE/dist \
+            || { echo "FAIL: the safety route broke - an injury search misses the incident report, or a non-injury word reaches it"; exit 1; }
+
           # FEEDBACK IS BUILT IN — the standard, asserted rather than remembered
           # (operator 2026-08-04: "make sure we have a solid scalable way of
           # addressing open item wishes/feedback for anything — standardize the
