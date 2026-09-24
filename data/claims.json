@@ -1,0 +1,2963 @@
+{
+  "schema": "nrm-archive-claims/1",
+  "title": "Evidence index for the Nested Resonance Memory archive",
+  "description": "Every number the README gives in digits, as claims with a status and the committed file that holds each number. The Nested Resonance Memory hypothesis is open: no claim here establishes it.",
+  "author": "Aldrin Payopay",
+  "license": "GPL-3.0-only",
+  "repository": "https://github.com/mrdirno/nested-resonance-memory-archive",
+  "site": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+  "as_of": "2026-09-23",
+  "readme": "README.md",
+  "check": "python3 tools/archive/claims_index.py --check",
+  "check_copy": "python3 tools/archive/claims_index.py --copy FILE",
+  "rule": {
+    "normalize": "every run of whitespace becomes one space, and every '*' and '`' is deleted",
+    "needle": "a needle is a verbatim excerpt of its evidence file; it matches when its normalized text is a substring of the normalized file",
+    "number": "a quoted number is found when its value (thousands commas and a trailing % removed) is a number token inside a matching needle; dates (YYYY-MM-DD) and fractions (1/20) must appear literally",
+    "coverage": "every number written in digits in README prose (code, link targets, URLs, HTML tags and list markers are not prose) lies inside exactly one claim's or non-claim's quote",
+    "quote": "each quote occurs exactly once in README.md, and its numbers are exactly the digits inside it",
+    "tracked": "every evidence file is tracked by git, so a fresh clone has it",
+    "words": "numbers written as words are indexed by hand where they carry a result; they are not machine-counted"
+  },
+  "statuses": {
+    "established": "a measured number or fact that the cited file holds, stated within that file's own scope",
+    "qualified": "holds only inside the scope written beside it; quote the scope with the claim",
+    "open": "a question the archive has not decided; the hypothesis itself is open",
+    "retired": "a claim the archive has withdrawn; the evidence names the file that withdrew it; do not cite it as current"
+  },
+  "kinds": {
+    "measurement": "a number measured from runs or records",
+    "instrument": "what the instrument does or records",
+    "software": "what a tool or library does, with its tests",
+    "procedure": "a step a reader can run",
+    "historical-count": "a count of past work, not a count of validations",
+    "hypothesis": "a proposition under test; always open",
+    "label": "a name or pointer, such as a ring number in a link"
+  },
+  "terms": {
+    "F1-F5": "the memory estimator's five pre-declared tests; F1 is labelled a check, F2-F5 falsifiers (F3 injected-effect recovery, F4 robustness across alternative settings, F5 at least three measurable conditions)",
+    "E1-E5b": "the estimator's eligibility gates for a run-epoch; E5b is the seed-balance gate",
+    "V1-V5": "Ring 30's gates, checked before its decision rule is read",
+    "L and Pi frames": "Ring 30 scores each run as recorded (L, the lab frame) and with its inversions undone (Pi)",
+    "invert_all / invert_matter": "Ring 30's arms: everything inverted through the chamber's centre (the positive control), or only the matter (the decided arm)",
+    "sg": "self-gravity strength",
+    "gl": "gain/loss setting",
+    "fieldExp": "the drive exponent",
+    "monopole": "the spherically symmetric part of a field, removed before scoring",
+    "lag-one": "consecutive epochs",
+    "run-epoch": "one epoch of one run",
+    "effective cells": "a participation ratio: how many cells effectively carry a pattern",
+    "sim_digest": "a hash over the page's GPU program, named physics constants and drive; runs with the same digest ran the same simulation"
+  },
+  "claims": [
+    {
+      "id": "author-aldrin-payopay-mrdirno",
+      "status": "established",
+      "kind": "label",
+      "claim": "Aldrin Payopay (GitHub mrdirno) is the author of record; the README names Persona500 LLC as the affiliation.",
+      "scope": "Authorship of record for the archive as a whole.",
+      "quote": "**Author:** Aldrin Payopay ([@mrdirno](https://github.com/mrdirno)) · Persona500 LLC",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "CITATION.cff",
+          "needles": [
+            "family-names: \"Payopay\" given-names: \"Aldrin\" alias: \"mrdirno\"",
+            "affiliation: \"Persona500 LLC\""
+          ]
+        },
+        {
+          "file": "COPYRIGHT",
+          "needles": [
+            "Sole author, sole creator, sole copyright holder.",
+            "They are not authors and must not be cited as authors, co-authors, creators or originators of this work."
+          ]
+        }
+      ],
+      "readme_links_evidence": false,
+      "falsifier": "A committed record naming another person as an author of the archive as a whole."
+    },
+    {
+      "id": "copyright-2025-2026-gpl-3-0-only",
+      "status": "established",
+      "kind": "label",
+      "claim": "The copyright notice names Aldrin Payopay for 2025–2026 under the GPL-3.0-only licence.",
+      "scope": "Copyright notice and licence identifier for the archive.",
+      "quote": "**Copyright:** © 2025–2026 Aldrin Payopay · [GPL-3.0-only](LICENSE)",
+      "numbers": [
+        "2025",
+        "2026"
+      ],
+      "evidence": [
+        {
+          "file": "LICENSE",
+          "needles": [
+            "Copyright (C) 2025-2026 Aldrin Payopay"
+          ]
+        },
+        {
+          "file": "COPYRIGHT",
+          "needles": [
+            "Copyright (C) 2025-2026 Aldrin Payopay",
+            "subject to the terms of the GNU General Public License version 3.0 only (GPL-3.0-only)"
+          ]
+        },
+        {
+          "file": "CITATION.cff",
+          "needles": [
+            "license: GPL-3.0-only"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed licence or copyright notice giving a different year range, holder or GPL version grant."
+    },
+    {
+      "id": "nrm-hypothesis-undecided",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "Nested Resonance Memory is presented as a hypothesis that the archive has not decided.",
+      "scope": "The NRM memory question as of Ring 30 (2026-09-23); a label, not a result.",
+      "quote": "**Frameworks:** Nested Resonance Memory hypothesis",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "This ring does not retire the detection-as-memory reading, and it gives no support to that reading either. It decides nothing about memory.",
+            "Neither outcome shows memory, and about one time in four or more the rule will not decide."
+          ]
+        },
+        {
+          "file": "docs/archive/README.md",
+          "needles": [
+            "Active instrument; registered memory results need a valid estimator before a claim is accepted or rejected."
+          ]
+        }
+      ],
+      "readme_links_evidence": false,
+      "falsifier": "A registered HALO arm on a qualified estimator, with a powered positive control, returning a decided memory verdict."
+    },
+    {
+      "id": "readme-evidence-index-checked-on-push",
+      "status": "established",
+      "kind": "software",
+      "claim": "Each number the README gives in digits outside code is listed in data/claims.json with a status and an excerpt from the committed file that holds it, and a test checks this on every push to main.",
+      "scope": "Numbers written in digits in README prose, outside code; numbers written as words are indexed by hand where they carry a result, not machine-counted. The test runs in the archive-health workflow on every push to main and on every pull request.",
+      "quote": "each number this README gives in digits outside code is listed in [claims.json](data/claims.json) with a status (established, qualified, open or retired) and an excerpt from the committed file that holds it, and [a test](tests/archive/test_claims_index.py) checks that on every push to main.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": ".github/workflows/archive-health.yml",
+          "needles": [
+            "run: python -m unittest discover -s tests/archive -v"
+          ]
+        },
+        {
+          "file": "tests/archive/test_claims_index.py",
+          "needles": [
+            "def test_every_readme_number_resolves_to_a_committed_file(self):"
+          ]
+        },
+        {
+          "file": "tools/archive/claims_index.py",
+          "needles": [
+            "every digit in README prose lies inside an indexed passage"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A number written in digits in README prose that the checker does not report, or an archive-health run on a push that does not execute tests/archive."
+    },
+    {
+      "id": "prereg-grid-heading-measures-geometry",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The registered decision statistic fires on static, centrally peaked fields and on its own sampling geometry, so its firing is not a measurement of memory; the audit also shows by injection that it would catch a planted relic.",
+      "scope": "The Retained − Two-back statistic frozen on 2026-09-02. This is a statement about the test, not about NRM.",
+      "quote": "**A memory test that measures geometry:**",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "The memory test fires on a static sphere",
+            "The registered decision statistic is not a measurement of memory."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A no-memory field (static sphere or radially averaged mesh) on which the registered criterion does not fire."
+    },
+    {
+      "id": "prereg-grid-60-runs-4194304-particles-24-epochs",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "The registered memory grid consists of 60 runs, each with 4,194,304 particles and 24 epochs.",
+      "scope": "The confirmatory grid only: 2 presets × 5 self-gravity × 2 gain/loss × 3 seeds. The 23 voided runs of the first attempt are separate (prereg:427-430). It ran on the pinned test build (md5 e91d5a1d44a1dde519195e4e925fa515, page blob 809c4cd1 at 5cb08e51; prereg:315, 320-322). The page changed after the runs (prereg:330-337), so the per-run numbers describe that build, not today's chamber.",
+      "quote": "The registered grid contains 60 runs at 4,194,304 particles and 24 epochs each.",
+      "numbers": [
+        "60",
+        "4,194,304",
+        "24"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "The grid ran to completion: 60 of 60 cells, 4,194,304 particles each, 24 epochs, no void runs.",
+            "Every run is 4,194,304 particles for 24 epochs of 10 s on the fixed 1/20 s tick."
+          ]
+        },
+        {
+          "file": "docs/preregistrations/2026-09-02_halo_cross_epoch_memory.md",
+          "needles": [
+            "| particles | 4,194,304 (the page's maximum; sanitizeState clamps there) |",
+            "| epoch | 10 s, cascade out, 24 epochs per run |",
+            "The grid is exactly the 60 cells §5 specifies, with 0 missing, 0 extra, 0 duplicate"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_prereg/verdict.json",
+          "needles": [
+            "\"verdict\": \"INCONCLUSIVE\", \"cells\": 60,"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_prereg/default_sg0.3_gl0_seed777_n4194304_e24.json",
+          "needles": [
+            "\"seed\": 777, \"epochs\": 24, \"particles\": 4194304,"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed run header under data/results/halo/memory_prereg/ with other than 4,194,304 particles or 24 epochs, or a confirmatory run count other than 60."
+    },
+    {
+      "id": "prereg-statistic-fires-on-static-profiles",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The registered Retained − Two-back statistic fires on static, centrally peaked radial profiles that cannot remember anything, and its value depends on how differently its two arms sample the relic.",
+      "scope": "The labCorr-based Δ with the registered ×2/×4 maps. 7 of 8 static analytic profiles fire (the uniform ball does not). Real meshes reduced to their spherical averages fire in 45, 43 and 45 of 60 cells. Half the grid-wide median Δ is an index offset (analysis:247-251).",
+      "quote": "Its Retained − Two-back statistic also fires on static radial profiles and is confounded by sampling geometry.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "fires on a static analytic sphere: a Plummer profile, correlated with an identical copy of itself, with no time, no dynamics, no particles and no force clamp",
+            "compares two relic samplings of very different stride and sparsity, so it is positive for almost any centrally-peaked field, with or without dynamics.",
+            "Replace every mesh by its own spherical average — every angular mode deleted — and the criterion fires 45, 43 and 45 times of 60"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_prereg/artefact.json",
+          "needles": [
+            "\"profile\": \"Plummer a=2\", \"retained\": 0.7488493851521497, \"twoback\": 0.3316632879145322, \"delta\": 0.4171860972376175, \"fires\": true"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-running experiments/halo/memory_prereg_artefact.py and finding Δ ≤ 0.10 on the centrally peaked static profiles."
+    },
+    {
+      "id": "prereg-audit-nrm-undecided",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "The 2026-09-02 audit neither supports nor retires the NRM passive-relic claim.",
+      "scope": "Covers only the strong, lab-frame passive-relic reading. The weak reading (a self-bound object persists across rescalings) was not under test (analysis:42-44, 288-289). The frozen §8 rule is itself ambiguous on this grid: its NULL antecedent is also true, and the headline INCONCLUSIVE follows the script's branch order, chosen as the conservative reading (analysis:82-89).",
+      "quote": "This audit supports neither acceptance nor rejection of the NRM claim.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "So the passive-relic reading of nested resonance memory is not retired here, and it is not supported.",
+            "The claim itself. Nothing here supports or retires the passive-relic reading."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A registered test whose statistic is shown not to fire on no-memory fields and that returns a decided POSITIVE or NULL for the passive-relic reading."
+    },
+    {
+      "id": "estimator-heading-grid-cannot-support",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The recorded grid cannot support the replacement memory estimator.",
+      "scope": "The 60 recorded runs, scored by the estimator frozen at commit 183ebf10.",
+      "quote": "**A replacement estimator the recorded grid cannot support:**",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "The recorded grid cannot support the replacement memory estimator",
+            "the saved meshes cannot qualify it, and the reasons are properties of the grid"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A re-score of the recorded meshes under the frozen protocol that yields at least 3 measurable conditions."
+    },
+    {
+      "id": "estimator-design-five-falsifiers",
+      "status": "qualified",
+      "kind": "procedure",
+      "claim": "The replacement estimator shrinks each previous snapshot about the chamber's centre onto the current one, compares only the region both cover, removes the spherically symmetric part, and carries five named tests (F1 to F5) declared before it was scored.",
+      "scope": "The protocol labels F1 a check, not a falsifier. Monopole removal subtracts cube-orbit means, which also removes cube-symmetric angular patterns. A related fixed-support estimator had been scored on 9 of the 60 runs before this protocol was drafted, so the analysis calls its 'fixed before any score' line overbroad as written.",
+      "quote": "An estimator that shrinks each previous snapshot about the chamber's centre onto the current one, compares only the region both snapshots cover and removes the spherically symmetric part, with five falsifiers declared in advance",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "asked for a support-matched, re-centred, monopole-removed estimator with predeclared falsifiers",
+            "A shrink by factor f about the centre sends a relic cell centre r to the current coordinate x with r = f·x − 15.5(f − 1).",
+            "These cannot fail unless the implementation is defective; they are checks, not falsifiers, and are labelled so."
+          ]
+        },
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "The protocol's status line, \"fixed before any score on the recorded meshes was computed\", is true of this estimator and its drafts and overbroad as literally written."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The frozen script at 183ebf10 shifting each snapshot to its own centroid, not subtracting orbit means, or scoring a test outside F1-F5."
+    },
+    {
+      "id": "estimator-frozen-2026-09-05-scored-once",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "The estimator's protocol was frozen on 2026-09-05 and then scored once on the 60 recorded runs of the registered grid.",
+      "scope": "Freeze commit 183ebf10 is dated 2026-09-05 21:04:06 −0700 in local time, which is 2026-09-06 04:04:06 UTC. 'Once' means one score under the frozen protocol; a first attempt was refused before any score was written (analysis:87). The diagnostics file re-uses the frozen functions for reported-only variants. Inputs are the 60 committed headers and 60 local meshes, all hashed in the result; 9 of the 60 were also checked against a preservation manifest (analysis:90).",
+      "quote": "was frozen on 2026-09-05 and scored once on the same 60 runs.",
+      "numbers": [
+        "2026-09-05",
+        "60"
+      ],
+      "evidence": [
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "Date: 2026-09-05 · License: GPL-3.0 · Status: analysis plan fixed before any score on the recorded meshes was computed.",
+            "The 60 recorded runs of the registered grid"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "frozen at commit 183ebf10 before any score on the recorded meshes existed",
+            "the 60 recorded runs of the registered grid, 4,194,304 particles, 24 epochs each",
+            "The replacement estimator was run once, under the frozen protocol, on the recorded grid."
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/qualification.json",
+          "needles": [
+            "\"protocol_commit\": \"183ebf10393b066e12212ca03ab442ac24b613bb\","
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A score of this estimator on the recorded meshes that is older than commit 183ebf10, or a second main-configuration scoring of the grid."
+    },
+    {
+      "id": "estimator-0-of-60-measurable",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "Under its frozen main configuration, the estimator finds none of the 60 recorded runs measurable.",
+      "scope": "Main configuration only. Two of the eleven robustness variants admit runs: E2 = 4 admits six and hand-over scale 0.10 admits three (analysis:77-80). A recount from qualification.json shows 54 runs miss the 12-eligible-epoch minimum. The six that reach it (default sg0.3 gl0 and default sg0.5 gl0) are refused by the seed-balance gate E5b (analysis:73).",
+      "quote": "It declares 0 of 60 runs measurable",
+      "numbers": [
+        "0",
+        "60"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "The result is insufficient support: the estimator declares 0 of 60 runs measurable"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/qualification.json",
+          "needles": [
+            "\"inputs\": { \"runs\": 60, \"conditions\": 20,",
+            "\"F5_support\": { \"measurable_runs\": 0, \"measurable_conditions\": [],"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-running experiments/halo/memory_estimator_qualify.py at 183ebf10 on the recorded meshes and getting any measurable run under the main configuration."
+    },
+    {
+      "id": "estimator-179-of-1320-eligible",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "179 of the grid's 1,320 scored run-epochs pass the estimator's four per-epoch eligibility gates.",
+      "scope": "Run-epochs are the scored epochs 3-24 of each run (60 × 22 = 1,320; analysis:25), not all 24 epochs. Eligible means passing the lag-one gates E1-E4 (protocol §6). The JSON calls them cell_epochs.",
+      "quote": "179 of 1,320 run-epochs (one epoch of one run) pass its eligibility gates",
+      "numbers": [
+        "179",
+        "1,320"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "| F5 support | fail | 0 measurable conditions of the 3 required; 179 of 1,320 run-epochs eligible |",
+            "Over the 1,320 run-epochs (60 runs × epochs 3 to 24):",
+            "| none (eligible) | 179 |"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/qualification.json",
+          "needles": [
+            "\"eligible_cell_epochs\": 179, \"of_cell_epochs\": 1320,"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A recount of runs[*].epochs[*].eligible in qualification.json that differs from 179 of 1,320."
+    },
+    {
+      "id": "estimator-result-insufficient-support",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The frozen scorer's overall verdict on the recorded grid is 'insufficient support'.",
+      "scope": "F5 needs at least 3 measurable conditions and 0 were measurable. Under the protocol's order of precedence, 'insufficient support' outranks 'not evaluable' (protocol:75).",
+      "quote": "so its result is \"insufficient support\"",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "the protocol needs three conditions with all three seeds measurable before any of its recovery or robustness verdicts mean anything"
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "If fewer than 3 conditions are measurable the result is insufficient support"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/qualification.json",
+          "needles": [
+            "\"inputs_verified\": true, \"result\": \"insufficient support\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "qualification.json verdict.result reading anything else, or a re-score that finds at least 3 measurable conditions."
+    },
+    {
+      "id": "estimator-recovery-not-evaluable",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The estimator's recovery test (F3) could not be evaluated because no recorded run was measurable.",
+      "scope": "F3 needs at least six measurable runs (protocol:79).",
+      "quote": "its recovery test could not be evaluated",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "| F3 recovery | not evaluable | no measurable run to inject into;"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/qualification.json",
+          "needles": [
+            "\"F3_recovery\": { \"pass\": null, \"evaluable\": false, \"reason\": \"no measurable run\","
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Six or more measurable recorded runs under the main configuration, which would make F3 evaluable."
+    },
+    {
+      "id": "estimator-sensitivity-synthetic-only",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The estimator's sensitivity is given only by synthetic injection ladders, as the protocol prescribes when recovery cannot be evaluated.",
+      "scope": "The white-noise, Poisson-deposited-sphere and shared-drive ladders in synthetic.json (analysis:15). No sensitivity was measured on this grid's particle runs.",
+      "quote": "its sensitivity is stated on synthetic controls only",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "the estimator's stated sensitivity is therefore the synthetic ladders of the receipt, as the protocol prescribes"
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "With fewer than six measurable runs F3 is not evaluable on the recorded data and the white-noise, deposited-sphere and shared-drive ladders are the estimator's stated sensitivity."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "An F3 recovery measured on this grid's recorded particle runs and reported as the estimator's sensitivity."
+    },
+    {
+      "id": "grid-seeds-near-copies-17-of-20",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "In 17 of the grid's 20 conditions, the three seeds end up as near-copies of one another.",
+      "scope": "Counted on the raw 32³ density, where the median correlation with the most similar stranger is 0.97 or higher. On the compressed templates that the estimator's E3 gate compares, the count is 14 of 20 (analysis:69). Only Spinning Chladni at gain/loss 0 and self-gravity 0.3, 0.5 and 0.8 keeps three distinct seeds.",
+      "quote": "The three seeds of a condition are near-copies in 17 of 20 conditions",
+      "numbers": [
+        "17",
+        "20"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "by the raw field (correlation with the most similar stranger 0.97 or higher) 17 of 20 conditions are copies; by the templates E3 actually compares (median largest template correlation at or above 0.9) 14 of 20 are.",
+            "The seed survives the dynamics in 3 of 20 conditions.",
+            "The difference is the twin pairs of the two static conditions below"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A recount of per-condition median raw cross-seed correlation that gives other than 17 conditions at 0.97 or higher."
+    },
+    {
+      "id": "grid-collapsed-relic-4-to-7-cells",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "In about half of the grid's collapse epochs, the shrunken copy of the previous snapshot has fewer than 8 effective cells, typically 4 to 7.",
+      "scope": "328 of 691 collapse run-epochs, where collapse means the inner block holds at least 90 % of the mass; 65 % once the 12 static runs are excluded. 'Cells' means effective cells, the participation ratio of the monopole-removed residual (protocol:56), not the cells the shrunken snapshot spans. 4 to 7 is the typical value, not a bound.",
+      "quote": "the shrunken copy of the previous snapshot it compares against has fewer than 8 effective cells (typically 4 to 7) in about half of the epochs where the matter has collapsed",
+      "numbers": [
+        "8",
+        "4",
+        "7"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "In the 691 collapse run-epochs of the grid, a shrink by two sends the core below 8 effective cells in 328, about half (65 % once the 12 static runs are excluded), typically to 4 to 7",
+            "A shrink by two compresses a collapsed core into 4 to 7 cells.",
+            "the failing relics have a median of 4.9 effective cells (273 of the 609 in [4, 7], 210 below 4)"
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "the participation ratio (Σr²)²/Σr⁴ of the residual, the number of cells that effectively carry it, is at least 8"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A recount of pr_pred in the collapse epochs showing far fewer than half below 8 effective cells, or most of them outside 4 to 7."
+    },
+    {
+      "id": "grid-12-static-runs",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "Twelve runs of the grid are static: their density field barely changes from one epoch to the next.",
+      "scope": "The shipped-defaults preset at gain/loss 0 and self-gravity 0.15-0.8 (4 conditions × 3 seeds). The full density correlates with the previous epoch at 0.99995-0.99999 (median over 23 pairs). The monopole-removed residual that the estimator scores still changes in some of these runs: medians 0.78-0.80 at sg0.8 and 0.92-0.98 in the sg0.3/0.5 twin pairs.",
+      "quote": "12 runs are static fields that barely change between epochs",
+      "numbers": [
+        "12"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "65 % once the 12 static runs are excluded",
+            "every run's full density correlates with its own previous epoch at 0.99995 to 0.99999",
+            "the angular residual the estimator scores does evolve in the twin runs (median epoch-to-epoch correlation 0.78 to 0.98)"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/diagnostics_2026-09-06.json",
+          "needles": [
+            "\"default_sg0.8_gl0_seed12345_n4194304_e24\": { \"consecutive_epoch_correlation_median\": 0.9999893745033968, \"consecutive_epoch_correlation_min\": 0.9999672089284971, \"residual_consecutive_correlation_median\": 0.779931152224736,"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A 13th run in diagnostics_2026-09-06.json with a full-density consecutive-epoch correlation median of 0.99995 or more, or one of the twelve below that."
+    },
+    {
+      "id": "estimator-result-not-about-nrm",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "The qualification result is about the recorded grid and the estimator, and says nothing about NRM either way.",
+      "scope": "NRM stays undecided. This is an instrument result only.",
+      "quote": "This is a result about the grid, not about NRM",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "This is an instrument result. It says nothing about nested resonance memory, in either direction."
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-05_memory_estimator_qualification_protocol.md",
+          "needles": [
+            "This qualifies an instrument. It makes no claim about nested resonance memory."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A showing that the grid's non-measurability itself comes from cross-epoch seeding rather than from seed copying, collapse and static fields."
+    },
+    {
+      "id": "next-grid-measurable-first",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Before another confirmatory grid is registered, a pilot must first show that the new grid is measurable.",
+      "scope": "The archive's stated next step, fixed in analysis:104.",
+      "quote": "the next grid has to be shown measurable first",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "The next step is a pilot, not a grid",
+            "Only then is a confirmatory grid worth registering."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A confirmatory grid registered under the frozen protocol without a measurability pilot first."
+    },
+    {
+      "id": "pilot-arm-21-runs-4194304",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "A pilot frozen before it ran made one arm of 21 runs at 4,194,304 particles over seven conditions drawn from four shipped field configurations, scored once by the frozen estimator.",
+      "scope": "The 21 runs are 7 conditions: four shipped presets (spinchladni, hardprint, stillspindle, goldstair) at self-gravity 0.15 and/or 0.3, gain/loss 0, 24 epochs of 10 s, seeds 777 / 12345 / 31337.",
+      "quote": "Before registering another grid, a pilot was frozen and run: one arm, 21 runs at 4,194,304 particles over seven conditions drawn from four of the page's shipped field configurations, scored once by the same frozen estimator.",
+      "numbers": [
+        "21",
+        "4,194,304"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "21 runs, 7 conditions, 3 seeds each (777, 12345, 31337), every run at 4,194,304 particles",
+            "The scorer was invoked once, on the whole directory."
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-06_measurability_pilot_preregistration.md",
+          "needles": [
+            "**Fixed before any run of the arm it describes.** The commit that carries this file is the freeze.",
+            "One scoring invocation of the frozen script. Every run: gain/loss 0, 4,194,304 particles, 24 epochs",
+            "21 runs, 7 condition keys."
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_pilot/scn_qualification.json",
+          "needles": [
+            "\"runs\": 21, \"conditions\": 7,",
+            "\"script_sha256\": \"7619ef6bbe7409bef03c317076edda5ac6b55820e6c6f955da51783e7575dbd0\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A record in data/results/halo/memory_pilot/scn/ with a particle count other than 4,194,304, a run count other than 21, or a second scoring invocation on that directory."
+    },
+    {
+      "id": "pilot-0-of-21-measurable-37-of-462-eligible",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The frozen estimator found none of the 21 pilot runs measurable, and 37 of 462 run-epochs passed its eligibility gates.",
+      "scope": "The frozen scorer's main configuration on the pilot arm; 462 = 21 runs x 22 scored epochs. A reported, unscored robustness variant with the footprint floor lowered from 8 to 4 makes 4 runs measurable; the scored result stays 0.",
+      "quote": "**0 of 21 runs are measurable** and 37 of 462 run-epochs eligible",
+      "numbers": [
+        "0",
+        "21",
+        "37",
+        "462"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "**Insufficient support. 0 of 21 runs measurable, 0 of 7 conditions, 0 detected.** 37 of 462 run-epochs eligible"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_pilot/scn_qualification.json",
+          "needles": [
+            "\"measurable_runs\": 0, \"measurable_conditions\": [],",
+            "\"eligible_cell_epochs\": 37, \"of_cell_epochs\": 462,",
+            "\"result\": \"insufficient support\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-running the frozen scorer (sha256 7619ef6b) on scn/ and getting a measurable run under the main configuration, or an eligible count other than 37 of 462."
+    },
+    {
+      "id": "pilot-none-of-seven-conditions-measurable",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "None of the pilot's seven conditions gives the frozen estimator something to measure.",
+      "scope": "The seven conditions run: four of the page's thirty shipped scenarios (spinchladni, hardprint, stillspindle, goldstair) at self-gravity 0.15 / 0.3, gain/loss 0, 4,194,304 particles, 24 epochs, under the estimator's main configuration. Says nothing about the other shipped configurations; a reported, unscored robustness variant (footprint floor lowered from 8 to 4) makes 4 runs measurable.",
+      "quote": "so none of the seven conditions it ran gives that estimator something to measure.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "The answer is **no**, on all seven conditions run, and the pre-registered decision rule has no branch that disposes of the outcome.",
+            "no conclusion that the drive-cut axis is dead can be drawn from this arm."
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-06_measurability_pilot_preregistration.md",
+          "needles": [
+            "**The one axis never tried is the field configuration itself.** The page ships thirty scenarios."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Any shipped scenario, or one of the four tested at another self-gravity or gain/loss, on which the frozen scorer finds measurable runs."
+    },
+    {
+      "id": "pilot-unscored-variant-floor-4-admits-4",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "A pre-registered robustness variant that lowers the footprint floor from 8 to 4 makes 4 of the pilot's runs measurable.",
+      "scope": "A robustness row reported beside the pilot's result and not scored; the scored result stays 0 of 21. The pilot's own analysis says the headline should carry it.",
+      "quote": "A reported but unscored variant that lowers the footprint floor from 8 to 4 admits 4 runs.",
+      "numbers": [
+        "8",
+        "4",
+        "4"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "The frozen scorer's own F4 row `e2_pr4` — the footprint floor lowered from 8 to 4 — makes 4 runs measurable",
+            "**A pre-registered robustness variant is not zero, and the headline should carry it.**"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The e2_pr4 row of data/results/halo/memory_pilot/scn_qualification.json showing other than 4 measurable runs."
+    },
+    {
+      "id": "pilot-anchors-did-not-reproduce",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The two anchor conditions, registered to measure instrument drift, did not reproduce their recorded statistics.",
+      "scope": "spinchladni gl0 at self-gravity 0.15 and 0.3: eligible epochs went from 0,0,0 to 1,1,1 and from 6,6,3 to 10,10,9.",
+      "quote": "The two conditions registered only to measure drift did not reproduce their recorded numbers;",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "The second answer came from the two conditions the pre-registration excluded from its own success count by construction — the anchors, whose only job was to measure instrument drift. They did not reproduce their recorded statistics",
+            "| `spinchladni` 0.3, eligible epochs | **6, 6, 3** | **10, 10, 9** |"
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-06_measurability_pilot_preregistration.md",
+          "needles": [
+            "The two anchors are recorded conditions re-run on the current build: they measure instrument drift, and they are **excluded from the success count by construction**."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The pilot's anchor records scoring the recorded eligible-epoch counts (0,0,0 and 6,6,3)."
+    },
+    {
+      "id": "pilot-reruns-recorded-grid-one-tag-byte-for-byte",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "Seven controlled re-runs of one recorded run tag show that run reproduces byte for byte under the page as it stood before one commit dated 2026-09-02; the other 59 recorded runs are attributed to that build by shared provenance and were not re-run.",
+      "scope": "One tag (spinchladni sg0.3 gl0 seed 777) was rebuilt from page c6cd2cbe with the period-matched builder 5cb08e51. The other 59 recorded runs are attributed to that build by shared provenance; they were not re-run.",
+      "quote": "seven controlled re-runs on one run tag show that run comes back byte for byte under the page as it stood before one commit on 2026-09-02. The other 59 recorded runs share its provenance and were not re-run.",
+      "numbers": [
+        "2026-09-02",
+        "59"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "| page `c6cd2cbe` (2026-09-01 22:37), builder `5cb08e51` | **`b8000808…`** | **yes, byte for byte** |",
+            "| page `122d0a57` — **ring 13**, 2026-09-02 18:59 — its own builder | `a360141a…` | no |"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_pilot/reproduction_probe.json",
+          "needles": [
+            "\"note\": \"spinchladni sg0.3 gl0 seed 777, 4194304 particles, 24 epochs of 10 s, step 9028.",
+            "\"label\": \"page c6cd2cbe, builder 5cb08e51\",",
+            "\"any_control_reproduces_recorded\": true"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "The other 59 recorded runs are stamped by shared provenance, not by re-running them.",
+            "it covers one tag, and only one of its seven controls is an actual repeat"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Rebuilding page c6cd2cbe with builder 5cb08e51 and re-running another recorded tag gives a mesh sha256 different from the recorded one."
+    },
+    {
+      "id": "audit-pinned-build-by-revision-and-checksum",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The cross-epoch memory audit had already pinned the recorded grid's build by git revision and md5 checksum.",
+      "scope": "The pin is page and builder taken from 5cb08e51, md5 e91d5a1d44a1dde519195e4e925fa515. The page at 5cb08e51 is byte-identical to the page at c6cd2cbe. '2026-09-02' names the file (the pre-registration date); the audit itself and its pin are dated 2026-09-03 (commit 155cf805).",
+      "quote": "That build was already pinned, by revision and checksum, in the [2026-09-02 audit]",
+      "numbers": [
+        "2026-09-02"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "**Date:** 2026-09-02 (pre-registered) · 2026-09-03 (grid completed, read, and audited)",
+            "# must read e91d5a1d44a1dde519195e4e925fa515",
+            "The pin above is by revision *and* checksum so a reader can tell whether they have the right page before spending ninety minutes finding out they do not."
+          ]
+        },
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "The chamber page at `c6cd2cbe` and at `5cb08e51` is byte-identical (`e3736b4c3b99dead…`), so ring 17's winning control \"page c6cd2cbe, builder 5cb08e51\" **is** the recipe already written down."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The audit at HEAD lacks the 5cb08e51 revision pin or the e91d5a1d checksum, or the page at 5cb08e51 differs from the page at c6cd2cbe."
+    },
+    {
+      "id": "audit-pin-four-days-before-reruns",
+      "status": "established",
+      "kind": "historical-count",
+      "claim": "The pin was committed four days before the pilot's re-runs, so the re-runs confirmed it rather than establishing it.",
+      "scope": "Pin commit 155cf805 (2026-09-03 16:19:55 -0700); ring 17 seal 9e7e67c5 (2026-09-07 17:29:47 -0700).",
+      "quote": "four days earlier; the re-runs confirmed the pin rather than establishing it.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "The build was pinned publicly four days before ring 17 recovered it by re-running",
+            "since commit `155cf805` on **2026-09-03 16:19:55 −0700** — four days before ring 17"
+          ]
+        }
+      ],
+      "readme_links_evidence": false,
+      "falsifier": "Git shows the pin entered the audit on a date other than 2026-09-03, or after the ring 17 seal."
+    },
+    {
+      "id": "pilot-nrm-undecided",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "The pilot decides nothing about nested resonance memory in either direction.",
+      "scope": "NRM remains undecided; the pilot tested only whether the estimator can measure these fields.",
+      "quote": "Nothing about NRM is decided in either direction.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "Nothing here establishes or retires nested resonance memory.",
+            "No S, no p and no falsifier verdict from this arm may be read as evidence about memory in either direction."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed analysis that reads a decision about memory from this arm's S, p or falsifier verdicts."
+    },
+    {
+      "id": "records-never-named-build",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "None of the recorded run records named the build that produced it.",
+      "scope": "The 81 records of the recorded grid (60) and the pilot (21), written before ring 18.",
+      "quote": "The recorded runs never named the build that produced them.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "the record that could not name its instrument was naming it by accident"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "no recorded run in this programme names the build that produced it"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Any of the 81 records carries an instrument hash or build identifier."
+    },
+    {
+      "id": "whole-file-hash-four-answers-where-two",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The page changes without changing its simulation (its ring history is a comment, and interface edits land in the same file), so a whole-file hash gives four values for four revisions that fall into two behavioural classes.",
+      "scope": "Ring 17's labelled set: 9e7e67c5, 122d0a57 and 05dfa4ab (class A) and c6cd2cbe (class B).",
+      "quote": "A file hash is the wrong name for it — the page carries its own history as a comment, so publishing prose changes the hash while changing no simulation, and on the four page revisions with known behaviour a whole-file hash gives four answers where there are two.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "The chamber carries every sealed ring as one HTML comment, so publishing prose changes the page's sha256 while changing no simulation.",
+            "four page revisions in two known behavioural classes",
+            "| whole-file sha256 of the page | 4 | 2 | **over-reports** |"
+          ]
+        },
+        {
+          "file": "data/results/halo/instrument_identity.json",
+          "needles": [
+            "\"sim_digest_classes_n\": 2, \"whole_file_classes_n\": 4, \"true_classes_n\": 2,",
+            "\"sim_digest_reproduces_partition\": true, \"whole_file_reproduces_partition\": false"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Two of the four labelled revisions share a whole-file sha256, or a run shows the revisions fall into more than two behavioural classes."
+    },
+    {
+      "id": "sim-digest-two-classes-runs-record-build",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "A digest over the GPU code, the named physics constants and the driven presets splits the four revisions into exactly the two behavioural classes, and the run harness now writes the build's identity into every new record.",
+      "scope": "The digest was checked only on the four-revision labelled set and does not cover JavaScript outside the named constants and DEFAULTS. The record stores the test-page and source-page sha256 and the git revision, not the digest; experiments/halo/instrument_identity.py computes the class afterwards. 'Every future run' means records written by the memory harnesses (tests/halo/memory_prereg_run.js; memory_intervention_run.js also writes the block).",
+      "quote": "A digest over the GPU program, the named physics constants and the drive gives exactly two, and every future run now records the build that made it.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "| `sim_digest` (GLSL + named physics constants + driven presets + `DEFAULTS`) | 2 | 2 | **reproduces the partition** |",
+            "records an `instrument` block: the test page and shipped page sha256, the builder, the harness, three.js, the git revision and dirty flag, and the Playwright, browser and Node versions.",
+            "it is not proven correct on revisions outside it, and it deliberately does not cover most JavaScript."
+          ]
+        },
+        {
+          "file": "data/results/halo/instrument_identity.json",
+          "needles": [
+            "\"sim_digest_classes_n\": 2, \"whole_file_classes_n\": 4, \"true_classes_n\": 2,"
+          ]
+        },
+        {
+          "file": "tests/halo/memory_prereg_run.js",
+          "needles": [
+            "test_page_sha256: sha256(path.resolve(__dirname, 'rc-test.html')),"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A revision whose sim_digest class disagrees with its run behaviour, or a record written by the harness after ring 18 without an instrument block."
+    },
+    {
+      "id": "lab-log-header-22-names-rows-28-columns",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The run records told the two builds apart only by accident: their header stayed at 22 names while the pilot's rows grew to 28 columns.",
+      "scope": "Recorded grid: 60 records with a 22-name header over 22-wide rows (14,160 rows). Pilot: 21 records with a 22-name header over 28-wide rows (4,956 rows).",
+      "quote": "Separately: the recorded records had been distinguishing those two builds by accident, through a header that froze at 22 names while the data grew to 28 columns;",
+      "numbers": [
+        "22",
+        "28"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "hardcoded `csv_head` as a 22-name string literal while `csv_rows` was read live from the page. Ring 13 widened the page's lab-log row from 22 fields to 28 and the literal did not move.",
+            "| measurability pilot | 21 | 22 | **28** | 4,956 | **6** |",
+            "No run mixes widths, and the split is exactly the class-B / class-A boundary of the labelled set."
+          ]
+        },
+        {
+          "file": "data/results/halo/instrument_identity.json",
+          "needles": [
+            "\"cause\": \"tests/halo/memory_prereg_run.js:170 hardcodes csv_head as a 22-name string literal; csv_rows is read live from window.__probe.lab.log. Ring 13 (122d0a57) widened the page row from 22 to 28 fields.\"",
+            "\"csv_row_widths\": { \"28\": 4956 },"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A recorded-grid or pilot record whose header has other than 22 names, or pilot rows of a width other than 28."
+    },
+    {
+      "id": "q1-chance-share-not-identified",
+      "status": "qualified",
+      "kind": "procedure",
+      "claim": "The recorded runs cannot say how much of 'measurable' is chance, because every condition that was re-run was also run on a different instrument.",
+      "scope": "The 81 runs of the recorded grid and the pilot, as of 2026-09-09. The two conditions run twice (spinchladni gl0 at self-gravity 0.15 and 0.3) both changed build when they were re-run.",
+      "quote": "the follow-up question the pilot raised — how much of \"measurable\" is chance — cannot be answered from these runs, because no condition was ever repeated without also changing the instrument.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "**Q1 cannot be answered from the recorded data, and the reason is a property of the design rather than a shortage of runs.**",
+            "**both changed instrument at the same moment they were re-run.** No condition anywhere has two realisations on one instrument.",
+            "§2's claim that no condition has two realisations on one instrument is a statement about this programme's recorded arms, not about what is possible."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A condition among the 81 runs that has two independent realisations on one instrument."
+    },
+    {
+      "id": "halo-cutdrive-sg-walk-four-rings",
+      "status": "established",
+      "kind": "historical-count",
+      "claim": "Working with newly generated runs at the cut drive (fieldExp 1.7) rather than runs selected from the record, four rings (26 to 29) varied one axis, self-gravity.",
+      "scope": "Ring 25 cut the drive (fieldExp 2 to 1.7) at self-gravity 0.3 and separately tried a magnetism raise; Rings 26, 27 and 29 stepped self-gravity at the cut drive, and Ring 28 re-seeded self-gravity 0.35.",
+      "quote": "Generating at the cut drive (`fieldExp 1.7`) instead of selecting from the record, four rings walked one axis",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-19_sg035_second_triple.md",
+          "needles": [
+            "Ring 27 ran a finer self-gravity grid"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "Ring 28 (`analysis/2026-09-19_sg035_second_triple.md`) left two countable conditions at the cut drive (`spinchladni`, `fieldExp 1.7`, `gl0`)"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-18_cutdrive_sgsweep_knifeedge.md",
+          "needles": [
+            "Ring 25 cut the drive (`fieldExp 2 -> 1.7`) and broke the cross-seed seed lock at `spinchladni sg0.3 gl0`, the first non-static measurable condition in the record.",
+            "Because F5 counts `(sg, gl)` conditions, the axis that yields three *scoreable* conditions is self-gravity, swept **at** the cut drive."
+          ]
+        },
+        {
+          "file": "analysis/2026-09-19_finegrain_sgsweep_window_width.md",
+          "needles": [
+            "Ring 26 swept the recorded grid's self-gravity axis at the cut drive"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-18_drivecut_breaks_seedlock.md",
+          "needles": [
+            "Two moves were generated on the same pinned instrument as Ring 24: the drive cut as two triples",
+            "and the magnetism raise as one triple (grid seeds, three runs)"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A ring other than 26 to 29 that varied self-gravity at the cut drive, or one of them that did not, would make 'four' wrong."
+    },
+    {
+      "id": "halo-ring29-three-conditions-measurable",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "At the cut drive, self-gravity 0.3, 0.32 and 0.35 each had three measurable runs, all on one pinned instrument (sim_digest 40bfdb68).",
+      "scope": "spinchladni gl0, fieldExp 1.7, 4,194,304 particles, 24 epochs of 10 s, test page 1a15b987 / sim_digest 40bfdb68; nine runs in each Ring 29 directory, six of them the reused sg0.3 and sg0.35 triples.",
+      "quote": "until three conditions (0.3 / 0.32 / 0.35) each had three measurable runs on one pinned instrument",
+      "numbers": [
+        "0.3",
+        "0.32",
+        "0.35"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "self-gravity 0.3 / 0.32 / 0.35 (three points spanning 0.05 of one axis), 4,194,304 particles, 24 epochs of 10 s, one instrument (`sim_digest 40bfdb68`)",
+            "| F5 support | **pass** | 3 measurable conditions (`sg0.3`, `sg0.32`, `sg0.35`), 9 of 9 runs, fraction 1.0 each"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_sg032_third/qualification.json",
+          "needles": [
+            "\"measurable_fraction_by_condition\": { \"spinchladni_sg0.3_gl0\": 1.0, \"spinchladni_sg0.32_gl0\": 1.0, \"spinchladni_sg0.35_gl0\": 1.0 }"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A qualification.json in either Ring 29 directory listing fewer than three measurable conditions, or a run record whose sim_digest is not 40bfdb68."
+    },
+    {
+      "id": "halo-ring29-sg032-preregistered",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "The sg0.32 condition's seeds, directories and decision rule were committed before its runs were made.",
+      "scope": "The six registered sg0.32 runs of Ring 29. A headless 65,536-particle pre-flight applying self-gravity 0.32 preceded the commit, and each directory's six reused sg0.3/sg0.35 runs existed before it, by design.",
+      "quote": "The third condition was pre-registered with its seeds, directories and decision rule before any of its registered runs existed",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "**Status of this block: pre-registration, committed and pushed before any `sg0.32` run of this ring existed.**",
+            "This block fixes the seeds, the directories, the commands, the order and the decision rule before the first run.",
+            "`instrument.git_rev` of each new run | `556f017b`"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A new sg0.32 run record whose instrument.git_rev does not descend from 556f017b, or history showing the text above \"## Results\" edited after the runs."
+    },
+    {
+      "id": "halo-ring29-sg032-3of3-both-triples",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "At self-gravity 0.32, all three runs were measurable on each of the two seed triples fixed in advance.",
+      "scope": "Arm 1 seeds 777/12345/31337 (16/14/14 eligible epochs) and Arm 2 seeds 2718/16180/57721 (15/15/12; seed 57721 is exactly at the 12-epoch floor); one instrument.",
+      "quote": "then found measurable **3 of 3 on both pre-committed seed triples**",
+      "numbers": [
+        "3",
+        "3"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "The two arms agree on `sg0.32` measurability (3/3 and 3/3) and on `verdict.result`",
+            "the second seed family at `sg0.32` was 3/3 measurable, and its directory returned \"qualified\"",
+            "**\"`sg0.32` measurable in 2 of 2 pre-committed triples\"**"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-scoring either Ring 29 directory with the frozen scorer and finding an sg0.32 run below 12 eligible epochs or not measurable."
+    },
+    {
+      "id": "halo-ring29-falsifiers-pass",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "All five falsifiers (F1-F5) passed in Ring 29; the false-positive falsifier F2 passed only through the synthetic receipt written on 2026-09-06.",
+      "scope": "F1-F5 on each Ring 29 directory's nine runs. F2 is decided by the 2026-09-06 synthetic receipt alone, not by these fields; F4's e2_pr16 variant has no run measurable under both settings.",
+      "quote": "every falsifier passes (the false-positive one by its 2026-09-06 synthetic receipt)",
+      "numbers": [
+        "2026-09-06"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "**by the 2026-09-06 synthetic receipt only**",
+            "| F3 recovery | **evaluable, pass** |",
+            "0 in `e2_pr16` (vacuous"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_estimator_qualification/synthetic.json",
+          "needles": [
+            "\"measured_at\": \"2026-09-06T08:18:44.661376+00:00\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Any F1-F5 pass flag false in memory_sg032_third/qualification.json, or a synthetic receipt whose date or script/protocol hashes differ from 2026-09-06 / 7619ef6b / e55a53a1."
+    },
+    {
+      "id": "halo-ring29-first-qualified-verdict",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "In Ring 29 the frozen scorer returned the verdict 'qualified' for the first time in the programme.",
+      "scope": "The estimator on spinchladni gl0, fieldExp 1.7, sg 0.3/0.32/0.35, 4,194,304 particles, 24 epochs, sim_digest 40bfdb68 (per Ring 30, the nine recorded runs in their recorded orientation); a statement about the estimator, not about memory.",
+      "quote": "the frozen scorer returns **\"qualified\"** for the first time",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "**`verdict.result` = \"qualified\".**",
+            "the programme has its first \"qualified\" verdict, on a support of three"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_sg032_third/qualification.json",
+          "needles": [
+            "\"inputs_verified\": true, \"result\": \"qualified\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "An earlier committed qualification.json with result 'qualified', or the frozen scorer re-run on memory_sg032_third returning a different result."
+    },
+    {
+      "id": "halo-ring29-qualified-describes-nine-runs",
+      "status": "qualified",
+      "kind": "instrument",
+      "claim": "Ring 29's 'qualified' verdict describes its nine recorded runs on one support. Because a run mirrored through the chamber's centre is an equally likely run, the same data can be read in 64 equally valid mirrored versions; Ring 30 found that 48 of them return 'qualified'.",
+      "scope": "spinchladni gl0, fieldExp 1.7, self-gravity 0.3/0.32/0.35, 4,194,304 particles, 24 epochs, sim_digest 40bfdb68, in the recorded orientation; nothing about memory.",
+      "quote": "That word describes those nine recorded runs on exactly this support, and nothing more. A run mirrored through the chamber's centre is an equally likely run, so the same data can be read in 64 equally valid mirrored versions, and Ring 30 found that 48 of them return \"qualified\".",
+      "numbers": [
+        "64",
+        "30",
+        "48"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "and says nothing about any other preset, drive, gain/loss, particle count or instrument, and nothing about nested resonance memory"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "# Ring 30 pre-registration and result: a registered intervention on the qualified support",
+            "a run with all 24 meshes inverted is an equally probable realisation",
+            "so the four classes give 4³ = 64 equally valid configurations of the same bytes",
+            "\"qualified\" belongs to the recorded configuration — 48 of the 64 configurations return it"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed re-scoring in which all 64 equally valid orientation configurations of the same bytes return 'qualified' would restore the support-level reading; applying 'qualified' to another preset, drive, particle count or instrument would break the scope."
+    },
+    {
+      "id": "halo-ring29-detection-4of9-5of9",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The scorer detected a signal in 4 of 9 runs in the first Ring 29 directory and in 5 of 9 in the second.",
+      "scope": "Counts per nine-run directory in the recorded orientation; the two directories share six byte-identical runs; a detection is not a memory result.",
+      "quote": "Detection is sparse (4 of 9 and 5 of 9 runs)",
+      "numbers": [
+        "4",
+        "9",
+        "5",
+        "9"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "Detection: 4 of 9 distinct runs",
+            "9 of 9 runs, 144 of 198 cell-epochs. Detection 5 of 9",
+            "every count in the ring separates new runs (six) from reused ones"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_sg032_third/qualification.json",
+          "needles": [
+            "\"condition_detected_counts\": { \"spinchladni_sg0.3_gl0\": 2, \"spinchladni_sg0.32_gl0\": 1, \"spinchladni_sg0.35_gl0\": 1 }"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_sg032_third_r2/qualification.json",
+          "needles": [
+            "\"condition_detected_counts\": { \"spinchladni_sg0.3_gl0\": 2, \"spinchladni_sg0.32_gl0\": 2, \"spinchladni_sg0.35_gl0\": 1 }"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "the frozen scorer detects **4, 2, 1 and 1** runs"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A detected_runs_main list in either Ring 29 qualification.json with a length other than 4 or 5."
+    },
+    {
+      "id": "halo-ring29-detection-unreproduced-seed-following",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "No condition had a detection on all three of its runs, and the detections that recur across conditions recur on the same seeds.",
+      "scope": "Ring 29's two directories. In the file's usage 'not reproduced' means fewer than 3 of 3: sg0.3 detects on 2 of 3 seeds in both directories and sg0.32 on 2 of 3 in the second. The seed pairs are 777 (sg0.3, sg0.32) and 2718 (sg0.35, sg0.32).",
+      "quote": "is not reproduced within a condition, and its cross-condition hits follow the seeds",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "Detection is sparse, unreproduced within any condition, and its cross-condition hits follow the seeds.",
+            "Seed 777 detects at `sg0.3` and at `sg0.32`; seed 2718 detects at `sg0.35` and at `sg0.32`.",
+            "**Not reproduced within `sg0.32` (1 of 3).**"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A Ring 29 condition with all three runs detected, or a cross-condition detection pair on different seeds."
+    },
+    {
+      "id": "nrm-memory-not-claimed-ring29",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "Ring 29 claims no memory result.",
+      "scope": "Nested Resonance Memory is undecided after Ring 29; detection counts are not read as memory.",
+      "quote": "No memory result is claimed;",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "no memory claim from detection counts at any outcome",
+            "**Does not change:** nothing about nested resonance memory."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Only a registered, decided intervention could move this reading; nothing in Ring 29 does."
+    },
+    {
+      "id": "halo-ring29-successor-registered-intervention",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Ring 29 fixed a registered intervention on this support as the next step, and Ring 30 ran it.",
+      "scope": "Ring 30 substituted an in-chamber point inversion for the relic scramble or swap Ring 29 named, and declared the substitution before its runs.",
+      "quote": "the fixed next step was a registered intervention on this support, which Ring 30 ran",
+      "numbers": [
+        "30"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "The successor is fixed by the pass branch above: a **registered intervention** on this support"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "Ring 29's pass branch fixed a registered intervention as the successor.",
+            "**A declared substitution.** Ring 29's pre-registration named the successor \"for example\" as a relic-scramble or relic-swap arm",
+            "# Ring 30 pre-registration and result: a registered intervention on the qualified support"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A Ring 29 pass branch naming a different successor, or a Ring 30 that was not registered on this support."
+    },
+    {
+      "id": "halo-ring28-label-second-condition",
+      "status": "established",
+      "kind": "label",
+      "claim": "Ring 28 is the ring that made self-gravity 0.35 the second countable condition.",
+      "scope": "Link label for analysis/2026-09-19_sg035_second_triple.md.",
+      "quote": "[Ring 28, the second condition]",
+      "numbers": [
+        "28"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-19_sg035_second_triple.md",
+          "needles": [
+            "| number | Ring 26 | Ring 27 | Ring 28 |",
+            "**two** measurable conditions, up from Ring 27's one"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "Ring 28 (`analysis/2026-09-19_sg035_second_triple.md`) left two countable conditions"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed file assigning analysis/2026-09-19_sg035_second_triple.md to a ring other than 28."
+    },
+    {
+      "id": "halo-ring30-lopsidedness-carries-score",
+      "status": "qualified",
+      "kind": "measurement",
+      "claim": "Across most ten-second epoch boundaries a run keeps a north-south imbalance of matter, and most of the detected runs' additive own-relic contrast sits in that imbalance.",
+      "scope": "Measured on the nine unperturbed Ring 29 control runs. The hemisphere sign is kept in 16-21 of 22 lag-one pairs per run (157 of 198). The point-odd part carries almost all of each detected run's additive own-relic contrast, and the north-south profile is its largest piece (0.177 of 0.295 over the four detected runs; the largest single piece in three of the four). This is not a memory reading.",
+      "quote": "Between ten-second epochs the chamber zooms out, and each run carries a lopsidedness (more matter in the north or the south half) across that moment; the estimator's score lives mostly in it.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "from one ten-second epoch into the next, and the frozen scorer's \"own-relic\" signal lives mostly in it.",
+            "0.177 of the four detected runs' 0.295, and the largest single piece in three of the four.",
+            "the current's inner-block north/south sign equals the relic's in"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A re-run of relic_component_decomposition.py or hemisphere_persistence.py on the Ring 29 control giving the north-south piece under half of the odd part, or same-sign counts near 11 of 22."
+    },
+    {
+      "id": "halo-ring30-carrier-question",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Ring 30 asked whether the particles, or the gravity solver's leftover potential that the page does not rescale at the zoom-out, carry that imbalance.",
+      "scope": "The question as registered on the Ring 29 support. That the page does not rescale the potential comes from the page source (mechanics item 2).",
+      "quote": "Ring 30 asked what carries it: the particles themselves, or the gravity solver's leftover potential, which the page does not rescale when it zooms out.",
+      "numbers": [
+        "30"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "# Ring 30 pre-registration and result: a registered intervention on the qualified support",
+            "the particles themselves, or the gravity solver's leftover potential, which the page does not rescale at the zoom-out",
+            "the potential is never rescaled: for the first second of every epoch the zoomed matter moves in the potential of the unzoomed relic."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Page source showing the solver's potential rescaled at the zoom-out."
+    },
+    {
+      "id": "halo-ring30-point-inversion-after-zoom",
+      "status": "qualified",
+      "kind": "procedure",
+      "claim": "Right after each zoom-out, the intervention moved every particle to the point opposite it through the chamber's centre.",
+      "scope": "Only in the two inverting arms (invert_all and invert_matter, 18 of the 28 runs), at each of the 23 boundaries, with positions and velocities both inverted; the 10 identity runs were not changed.",
+      "quote": "Right after every zoom-out, it moved every particle to the opposite point through the chamber's centre.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "turns the particles inside out through the centre right after every zoom-out.",
+            "the particles are inverted and the stale potential is not",
+            "| `identity` | unchanged | unchanged | re-qualification; the gate arm |"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Hook records showing an inverting-arm boundary with fewer than 3 x 4,194,304 flipped words, or a hook run before the zoom-out tick."
+    },
+    {
+      "id": "halo-ring30-28-runs-preregistered",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Ring 30 made 28 registered runs on one pinned instrument, after committing their seeds, folders, checks and decision rule.",
+      "scope": "The 28 registered runs (identity 9, invert_all 9, invert_matter 9, closing identity 1) on test page 1a15b987 / sim_digest 40bfdb68. Unscored pre-flights ran before the commit.",
+      "quote": "There were 28 runs on one pinned instrument, with their seeds, folders, checks and decision rule committed before any registered run existed.",
+      "numbers": [
+        "28"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "**Status of this block: pre-registration, committed and pushed before any of the 28 registered runs existed.**",
+            "The registered intervention has run to its end: 28 runs on the pinned instrument, every receipt and gate passing",
+            "The mechanics pre-flights described below (none scored, none in a registered directory) preceded it and are disclosed there."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A registered run record whose git_rev does not descend from b5ae861c, or a scored arm directory holding other than nine runs."
+    },
+    {
+      "id": "halo-ring30-checks-pass-identity-byte-identical",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "All of Ring 30's pre-set checks passed, and the untouched identity runs reproduced Ring 29's runs byte for byte with every score equal.",
+      "scope": "Gates V1-V5 as coded (V5 passes as 'silent': Φ(invert_all) = none, which is not L); 10 of 10 identity meshes byte-identical; per-run equality checked with Python equality on Python 3.13.5 / numpy 2.3.5, macOS arm64.",
+      "quote": "Every pre-set check passed, and the untouched control runs (the gate arm) reproduced the earlier runs byte for byte, with every score equal.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "### The gates, by code (`memory_intervention_gates.py`) All five gates pass:",
+            "10 of 10 meshes are byte-identical to Ring 29, and every per-run number is equal (V3).",
+            "| G0 | 9 of 9 `identity` meshes byte-identical to Ring 29"
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_intervention_gates.json",
+          "needles": [
+            "\"gates\": { \"V1_instrument\": [], \"V2_inputs\": [], \"V3_control\": [], \"V4_baseline\": [], \"V5_positive\": [] }"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A non-empty gate list in memory_intervention_gates.json, or an identity mesh whose sha256 differs from its Ring 29 mesh."
+    },
+    {
+      "id": "halo-ring30-scored-in-two-frames",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Each inverted run was scored twice by the frozen scorer: as recorded, and with the inversions undone.",
+      "scope": "All three arms were read in both frames; in the identity arm the second frame adds inversions rather than undoing them.",
+      "quote": "Each flipped run was scored twice: as recorded, and with the flips undone.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "are read by the frozen scorer twice, within the run: in the lab frame L (as recorded)",
+            "in the intervened arms it undoes the interventions, in the identity arm it introduces them."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Inverted-frame meshes that are not the odd-indexed meshes flipped (the kill-test found 27 of 27 byte-identical)."
+    },
+    {
+      "id": "halo-ring30-not-decidable",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "In the particles-only arm no run's score differed between the two frames by as much as the 0.04 margin, so the registered rule returned 'not decidable'.",
+      "scope": "Ring 30's registered rule on the invert_matter arm (largest |d| 0.019 against the 0.04 margin). The rule reports a proximate cause (the decided arm prefers neither frame) and does not name what produced it. Decides nothing about memory.",
+      "quote": "In the tested runs, where only the particles were flipped, the score did not clearly favour either reading, so the pre-registered rule returns **not decidable**; the rule does not say why.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "**NOT DECIDABLE. Proximate cause:",
+            "All nine `invert_matter` runs are measurable in both frames.",
+            "this design cannot tell them apart, so none of them is named as its cause."
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_intervention_gates.json",
+          "needles": [
+            "\"branch\": \"NOT DECIDABLE\", \"cause\": \"Phi(invert_matter) = none\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A re-derived |d| of 0.04 or more in any invert_matter run, or a gates re-run returning a branch other than NOT DECIDABLE."
+    },
+    {
+      "id": "halo-ring30-positive-control-silent",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The check arm, which also flipped the leftover potential, did not reach a preference for the undone frame either.",
+      "scope": "invert_all: one Π-signature (sg0.35 seed 2718, d +0.063), conditions none/none/Π, preference none; 8 of 9 runs measurable in both frames; V5 passes because none is not L.",
+      "quote": "The check runs, which flip the leftover potential as well, did not clearly favour the undone reading either.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "**V5 positive control: PASS, and silent.**",
+            "seed 2718, *d* +0.063) and no L-signature",
+            "Eight of its nine runs are measurable in both frames."
+          ]
+        },
+        {
+          "file": "data/results/halo/memory_intervention_gates.json",
+          "needles": [
+            "\"positive_control\": \"silent\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Two or more invert_all conditions reading Π on re-derivation."
+    },
+    {
+      "id": "nrm-memory-not-claimed-ring30",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "Ring 30 makes no memory claim in either direction.",
+      "scope": "The detection-as-memory reading is neither retired nor supported; Nested Resonance Memory stays undecided.",
+      "quote": "No memory result is claimed either way.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "**This ring does not retire the detection-as-memory reading, and it gives no support to that reading either. It decides nothing about memory.**"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A later registered ring returning MOVED or NULL under its own rule would change what can be read; Ring 30 does not."
+    },
+    {
+      "id": "halo-ring30-next-step-control-power",
+      "status": "open",
+      "kind": "procedure",
+      "claim": "Before another decided arm runs, two steps come first: measure on fresh, pre-registered runs how often the positive control gives its expected answer, and qualify a within-run statistic on its own synthetic test.",
+      "scope": "A planned step, not a result.",
+      "quote": "Before another tested arm runs, the next steps are a pre-registered measurement, on fresh runs, of how often the check runs give their expected answer, and a statistic read within each run, qualified first on its own synthetic test.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "(1) The positive control's power on fresh runs.",
+            "It should be measured under a pre-registration before a decided arm runs again.",
+            "A successor should fix, before its runs, a within-run statistic qualified with its own synthetic receipt."
+          ]
+        },
+        {
+          "file": "META_OBJECTIVES.md",
+          "needles": [
+            "Before any decided arm runs again, the next step is a within-run carrier statistic with its own synthetic receipt, and the positive control's power measured on fresh, pre-registered runs."
+          ]
+        },
+        {
+          "file": "CYCLE_LOGS.md",
+          "needles": [
+            "(1) The positive control's power on fresh intervened runs, measured under a pre-registration before a decided arm runs again."
+          ]
+        }
+      ],
+      "readme_links_evidence": false,
+      "falsifier": "A committed pre-registration for a decided arm made before any measurement of the positive control's power on fresh runs."
+    },
+    {
+      "id": "halo-ring29-label-first-qualified",
+      "status": "established",
+      "kind": "label",
+      "claim": "The linked analysis is Ring 29, the ring in which the frozen scorer first returned 'qualified'.",
+      "scope": "Link label for analysis/2026-09-21_sg032_third_condition.md.",
+      "quote": "[Ring 29, the first \"qualified\"]",
+      "numbers": [
+        "29"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "# Ring 29 pre-registration and result: a third condition inside the measurable self-gravity window at the cut drive"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "Ring 29 (`analysis/2026-09-21_sg032_third_condition.md`) returned the frozen scorer's first \"qualified\" on its nine recorded runs"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed file assigning analysis/2026-09-21_sg032_third_condition.md to a ring other than 29."
+    },
+    {
+      "id": "bench-seeded-ab-stop-ticks-recipes",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "HALO's observation bench runs a seeded Run A and a Run B that changes only the magnetic integrator, stops each run on the requested tick, and saves both recipes as a JSON observation.",
+      "scope": "A software feature of the HALO page, documented in docs/halo/OBSERVATORY.md and covered by tests/halo/observation_test.js; not a physical result.",
+      "quote": "HALO adds seeded A/B magnetic comparisons, exact stopping ticks and JSON observation recipes.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/halo/OBSERVATORY.md",
+          "needles": [
+            "Choose an unsigned 32-bit seed and 1–120 chamber seconds.",
+            "A stops on the requested tick. **Run B** repeats A's initial recipe, changing only the magnetic integrator: Euler becomes exact rotation, or vice versa.",
+            "**Save observation** downloads both recipes, runtime capabilities, timestamps, status and sampled measurements. Open that JSON file to repeat A."
+          ]
+        },
+        {
+          "file": "tests/halo/observation_test.js",
+          "needles": [
+            "check('A halts on exactly 20 ticks',a.status==='finished'&&a.ticks===20&&a.final.timeSeconds===1);",
+            "check('B changes only the magnetic integrator',pair.runs[1].recipe.state.lorentz==='boris');",
+            "check('download carries build, initial recipe and both results'"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "tests/halo/observation_test.js failing 'A halts on exactly 20 ticks' or 'B changes only the magnetic integrator' on the current page, or the bench controls missing from it."
+    },
+    {
+      "id": "bench-scope-and-replay-limits-stated",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The Observatory guide states that an A/B difference is a sensitivity to the numerical method, not evidence for NRM, and that a replay re-runs the initial recipe while GPU arithmetic may differ across devices.",
+      "scope": "Documentation of the bench limits in docs/halo/OBSERVATORY.md.",
+      "quote": "These are tools for testing numerical behavior, with their scope and replay limits stated in the [Observatory guide](docs/halo/OBSERVATORY.md).",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/halo/OBSERVATORY.md",
+          "needles": [
+            "An A/B difference is a sensitivity to the numerical method at that seed, setting, count and duration. It is not an ensemble estimate, a new physical law, or evidence for NRM.",
+            "Imports execute no code and do not trust an imported outcome. They reproduce the initial recipe and measure it again. Cross-device GPU arithmetic may diverge even when settings and seed match."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The guide lacking a statement of what an A/B difference means or of the cross-device replay limit."
+    },
+    {
+      "id": "archive-lifecycle-map-and-registry",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "A reviewed lifecycle map (docs/archive/README.md) and a machine-readable registry (docs/archive/components.json) label each archive component active, maintained, experimental, archived or dormant.",
+      "scope": "The labels are stewardship decisions, not test results (docs/archive/README.md:7).",
+      "quote": "Active tools, experimental work, dormant prototypes and historical snapshots have a [reviewed map](docs/archive/README.md) and [machine-readable registry](docs/archive/components.json).",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/archive/README.md",
+          "needles": [
+            "# Archive lifecycle map\n\nAuthor: Aldrin Payopay · Reviewed September 5, 2026 · GPL-3.0-only",
+            "records lifecycle, entry points, evidence and a next action for each reviewed component. Its labels are stewardship decisions."
+          ]
+        },
+        {
+          "file": "docs/archive/components.json",
+          "needles": [
+            "\"active\": \"Current user-facing development; tests are still required.\"",
+            "\"archived\": \"Historical source retained in place; not a default execution path.\"",
+            "\"dormant\": \"Prototype lacks current execution evidence; revival needs explicit acceptance criteria.\""
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A registry component whose status is not one of the five defined in status_semantics, or the map and registry assigning one component different lifecycles."
+    },
+    {
+      "id": "archive-read-only-audit",
+      "status": "established",
+      "kind": "software",
+      "claim": "tools/archive/audit.py is a read-only audit that fails on missing registry entry points, unsafe paths and tracked fabrication or manufacturing artifacts.",
+      "scope": "It checks the Git index and registry paths; it does not run projects or certify their science (docs/archive/README.md:7).",
+      "quote": "A read-only audit checks entry points and the publication boundary.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/archive/README.md",
+          "needles": [
+            "The audit refuses missing registry entry points, unsafe paths and tracked fabrication/manufacturing artifacts.",
+            "The audit checks paths and the publication boundary; it does not run the projects or certify their science.",
+            "python3 tools/archive/audit.py --check"
+          ]
+        },
+        {
+          "file": "tools/archive/audit.py",
+          "needles": [
+            "\"\"\"Read-only archive inventory and publication-boundary checks.",
+            "parser.add_argument(\"--check\", action=\"store_true\", help=\"Fail on broken registry paths or private tracked artifacts\")"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The audit writing to the tree without --output, or --check passing with a registry entry point missing or a fabrication/ or .stl/.gcode/.3mf path tracked."
+    },
+    {
+      "id": "halo-fixed-tick-1-20-interpolated",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "HALO advances its physics in fixed ticks of 1/20 s (const TICK = 1 / 20), and the renderer interpolates between ticks.",
+      "scope": "The HALO page source at HEAD; substeps subdivide a tick without changing it.",
+      "quote": "HALO advances its numerical model in fixed 1/20 s steps and interpolates the rendered frames.",
+      "numbers": [
+        "1/20"
+      ],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "Physics advances 1/20 s per tick on every machine, so a preset means the same thing at 30 Hz and at 120 Hz",
+            "Between ticks the renderer interpolates from the tick-start positions.",
+            "// fixed physics tick, its wall-time accumulator, and the tick-start\n// positions the renderer interpolates from (posB serves when there is one\n// substep; a dedicated copy is kept only when there are more)\nconst TICK = 1 / 20;"
+          ]
+        },
+        {
+          "file": "tests/halo/tick_test.js",
+          "needles": [
+            "check('sim time advances in ticks of 1/20'",
+            "check('60 Hz: renderer interpolates between ticks'"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "TICK defined as anything other than 1/20 in the page, or tick_test.js failing 'sim time advances in ticks of 1/20'."
+    },
+    {
+      "id": "halo-euler-vs-exact-rotation-ceiling-spectrum",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The Lab runs the Euler magnetic step against exact rotation, reads out the fraction of particles at the force ceiling and the realized spectrum, and saves an observation.",
+      "scope": "Instruments in the HALO page source at HEAD.",
+      "quote": "Compare the original Euler magnetic kick with the exact magnetic rotation, inspect force-ceiling occupancy and the realized spectrum, and save an observation recipe.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "Each run restarts from the current digit step with zero velocities. B changes only Euler ↔ exact rotation.",
+            "Reads the GPU back once a second: twin-particle Lyapunov, phase-space volume, cross-epoch memory, realized spectrum, energy and angular momentum",
+            "<button class=\"btn\" id=\"btn-session-save\" disabled>Save observation</button>"
+          ]
+        },
+        {
+          "file": "docs/halo/OBSERVATORY.md",
+          "needles": [
+            "| Ceiling fraction | Sample fraction with the velocity texture's force-cap flag set |"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The Run B control, the ceiling-fraction readout, the realized-spectrum instrument or the Save observation button absent from the page."
+    },
+    {
+      "id": "halo-tick-no-wall-clock-or-gpu-bit-guarantee",
+      "status": "qualified",
+      "kind": "instrument",
+      "claim": "The 1/20 s tick fixes simulated time per step, but the page runs at most two ticks per frame (one when a frame takes 0.07 s or more) and lets simulated time fall behind, so a slow device runs fewer than 20 ticks per wall-clock second; GPU arithmetic can also differ between devices.",
+      "scope": "Twenty ticks make one simulated second (tests/halo/observation_test.js:29); the wall-clock rate depends on frame time and the per-frame tick budget, and bit equality of repeated runs is tested on one software-rendered device only.",
+      "quote": "A fixed tick controls simulation time; it does not guarantee that every device processes 20 ticks per wall-clock second or produces bit-identical GPU results.",
+      "numbers": [
+        "20"
+      ],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "Physics advances 1/20 s per tick on every machine, so a preset means the same thing at 30 Hz and at 120 Hz, and every number in the rings was measured at this tick. Wall time accumulates; a quick frame may take two ticks to keep simulation time level with the clock, a slow one takes one and lets it fall behind rather than spiral.",
+            "const budget = dtWall < 0.07 ? 2 : 1;",
+            "GPU arithmetic can differ between devices."
+          ]
+        },
+        {
+          "file": "tests/halo/tick_test.js",
+          "needles": [
+            "// a slow machine: one tick per frame, sim time falls behind rather than spiralling",
+            "check('slow frames: 10 frames advance exactly 0.5 s'"
+          ]
+        },
+        {
+          "file": "tests/halo/observation_test.js",
+          "needles": [
+            "check('A halts on exactly 20 ticks',a.status==='finished'&&a.ticks===20&&a.final.timeSeconds===1);"
+          ]
+        },
+        {
+          "file": "docs/halo/OBSERVATORY.md",
+          "needles": [
+            "| Pace | Ticks advanced divided by elapsed wall time | A slow display runs fewer ticks, rather than changing the physics step |",
+            "Cross-device GPU arithmetic may diverge even when settings and seed match."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A page change that always catches simulated time up to wall time, or a cross-device record showing bit-identical GPU states on every device."
+    },
+    {
+      "id": "halo-keys-7-lab-8-tools",
+      "status": "established",
+      "kind": "software",
+      "claim": "In HALO the 7 key toggles the Lab panel and the 8 key toggles the Tools panel.",
+      "scope": "Keyboard handler in the HALO page source at HEAD; it ignores keys typed into inputs.",
+      "quote": "Press **7** for the Lab and **8** for Tools.",
+      "numbers": [
+        "7",
+        "8"
+      ],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "case '7': togglePanel('panel-lab'); break;",
+            "case '8': togglePanel('panel-tools'); break;",
+            "<section class=\"panel\" id=\"panel-lab\" aria-label=\"Instruments\">\n  <div class=\"panel-head\">\n    <div class=\"panel-title\">Lab</div>"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The keydown handler mapping 7 or 8 to a different panel or to nothing."
+    },
+    {
+      "id": "halo-memory-indicators-confounded",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "The Lab's Retained and Two-back readouts keep their names, but their comparison fires on static centrally peaked profiles and is not a measurement of memory.",
+      "scope": "An instrument result of the 2026-09-02/03 audit; it neither supports nor retires NRM.",
+      "quote": "The memory indicators retain their historical labels, but their original comparison is confounded",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "**The registered decision statistic is not a measurement of memory.**",
+            "Δ = Retained − Two-back\nfires on a *static analytic sphere*"
+          ]
+        },
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "It is not a sound one, and this pair should not be read as a\n        memory measurement.",
+            "Read Retained and Two-back\n        as a footprint diagnostic"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Recomputing the contrast on a static Plummer sphere or on radialized meshes without it firing."
+    },
+    {
+      "id": "halo-conditions-not-physical-validation",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "HALO's settings and outputs are computational conditions and observations, not physical measurements.",
+      "scope": "The chamber is a numerical model; its records describe the computation, not a physical apparatus.",
+      "quote": "Particle count, force caps, browser performance and discretization are experimental conditions, not evidence of physical validation.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/halo/OBSERVATORY.md",
+          "needles": [
+            "These are computational observations, not sensor data from a physical apparatus."
+          ]
+        },
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "Records describe this computational instrument, not physical measurements."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed record presenting a HALO run as validation of a physical system."
+    },
+    {
+      "id": "bridge-classic-staged-at-archive-classic",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "The deploy workflow stages the classic Bridge app at /archive/classic/ and fails if its bundle does not load there, and the HALO Tools panel links it.",
+      "scope": "What the committed workflow and page define; no committed file records a live fetch of the published URL.",
+      "quote": "The [classic Bridge](https://mrdirno.github.io/nested-resonance-memory-archive/archive/classic/) remains accessible.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": ".github/workflows/deploy_bridge.yml",
+          "needles": [
+            "mkdir -p HELIOS-BRIDGE/dist/archive/classic",
+            "echo \"staged classic app: archive/classic/; root page: HALO\"",
+            "FAIL: archive/classic/index.html does not load a built bundle"
+          ]
+        },
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "<a class=\"link-card\" href=\"./archive/classic/\" target=\"_blank\" rel=\"noopener\">\n          <span class=\"link-card-title\">Classic Bridge (2025–2026)</span>"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The published /archive/classic/ URL returning 404, or a deploy run failing the classic-bundle check."
+    },
+    {
+      "id": "bridge-tools-panel-toolkits-commons-collage",
+      "status": "established",
+      "kind": "software",
+      "claim": "The HALO Tools panel links the Field toolkits, The Commons and Collage Studio.",
+      "scope": "Links in the HALO page source at HEAD.",
+      "quote": "Field Toolkits, Commons and Collage Studio are reached through Tools.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "<div class=\"group-label\">Field toolkits</div>",
+            "<span class=\"link-card-title\">The Commons</span>",
+            "<span class=\"link-card-title\">Collage Studio</span>"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Any of the three link cards missing from the Tools panel."
+    },
+    {
+      "id": "bridge-deploy-workflow-defines-served",
+      "status": "established",
+      "kind": "software",
+      "claim": "The deploy workflow's Pages artifact is the published site: a path it does not copy in is not served.",
+      "scope": "As written in the workflow; not a record of a deploy run.",
+      "quote": "Their [deployment workflow](.github/workflows/deploy_bridge.yml) defines which sources are actually served.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": ".github/workflows/deploy_bridge.yml",
+          "needles": [
+            "# The artifact IS the published site: anything not copied in here is a\n          # 404, no matter that it exists at repo root.",
+            "cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/",
+            "# The repo-root collage/ and collage-beta/ directories are NOT served and never\n# were -- only the artifact uploaded below reaches Pages."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A deploy that serves a path the workflow does not copy into HELIOS-BRIDGE/dist."
+    },
+    {
+      "id": "demo-scale-selection-cost-function",
+      "status": "established",
+      "kind": "software",
+      "claim": "experiments/cycle2568_starving_philosopher.py selects an averaging scale by minimizing V(s) = E_pred(s) + λ(e_buffer)·β·E_comp(s).",
+      "scope": "A synthetic computational model with no external data.",
+      "quote": "Run a small computational demonstration of scale selection under a specified cost function:",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "V(s) = E_pred(s) + λ(e_buffer) * β * E_comp(s)",
+            "Select optimal scale by minimizing potential V(s)."
+          ]
+        },
+        {
+          "file": "docs/runbooks/QUICKSTART.md",
+          "needles": [
+            "This guide runs one scale-selection algorithm and writes a figure."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script choosing its scale by a rule other than minimizing V(s)."
+    },
+    {
+      "id": "demo-install-numpy-matplotlib",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "The demo needs only numpy and matplotlib beyond the Python standard library.",
+      "scope": "The one demo script; other archive projects have other dependencies (docs/runbooks/QUICKSTART.md:21).",
+      "quote": "Install the demo dependencies: `python3 -m pip install numpy matplotlib` in a virtual environment.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/runbooks/QUICKSTART.md",
+          "needles": [
+            "python3 -m pip install numpy matplotlib",
+            "These are the two packages required by this demo."
+          ]
+        },
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "import numpy as np\nimport matplotlib"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script importing another third-party package."
+    },
+    {
+      "id": "demo-run-command",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "Running python3 experiments/cycle2568_starving_philosopher.py from the repository root runs the demo.",
+      "scope": "Python 3.9 or later with numpy and matplotlib (docs/runbooks/QUICKSTART.md:9, 18).",
+      "quote": "From the repository root, run `python3 experiments/cycle2568_starving_philosopher.py`.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "python3 experiments/cycle2568_starving_philosopher.py [--out PATH]"
+          ]
+        },
+        {
+          "file": "docs/runbooks/QUICKSTART.md",
+          "needles": [
+            "```sh\npython3 experiments/cycle2568_starving_philosopher.py\n```"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The command exiting non-zero on a fresh clone with numpy and matplotlib installed."
+    },
+    {
+      "id": "demo-scale-vs-prescribed-budget",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "The demo's energy budget follows a prescribed schedule (constant, then a linear drain, then near zero), and the figure plots the selected averaging scale against it.",
+      "scope": "Model output under the script's fixed seed, cost model and budget schedule.",
+      "quote": "Inspect the selected averaging scale as the script's prescribed energy budget decreases.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "# Downsample by averaging groups of 'scale' points",
+            "Phase 1 (Golden Age):   Constant high energy\n    Phase 2 (Collapse):     Linear drain\n    Phase 3 (Dark Age):     Near-zero asymptote"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script's energy budget not following its prescribed schedule (constant, then a linear drain, then a floor), or the figure not plotting the selected scale beside that budget."
+    },
+    {
+      "id": "demo-output-figure-path-and-out",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "The demo writes its figure to data/figures/cycle2568_starving_philosopher.png by default, and --out writes it elsewhere.",
+      "scope": "The path is the script default output; the PNG is regenerated on each run and is not committed (.gitignore:152-153).",
+      "quote": "The output figure is `data/figures/cycle2568_starving_philosopher.png`; use `--out` to write to your development workspace.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "The figure is written to data/figures/cycle2568_starving_philosopher.png\n    at the repository root (the folder is created if missing). Use --out to\n    write it somewhere else."
+          ]
+        },
+        {
+          "file": ".gitignore",
+          "needles": [
+            "# regenerated by the README golden path (experiments/cycle2568_starving_philosopher.py); not tracked\ndata/figures/cycle2568_starving_philosopher.png"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script writing its default figure to another path, or ignoring --out."
+    },
+    {
+      "id": "demo-script-synthetic-signal-inverse-cost-schedule",
+      "status": "established",
+      "kind": "software",
+      "claim": "The script builds a synthetic signal (two sinusoids plus Gaussian noise), sets compute cost inversely proportional to scale, and sets the energy budget by phase.",
+      "scope": "The committed script at HEAD.",
+      "quote": "The [script](experiments/cycle2568_starving_philosopher.py) generates a synthetic signal, assigns computational cost inversely to scale and schedules the energy decline.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "Generate composite signal Y(t) = trend + detail + noise.",
+            "Compute cost is inversely proportional to scale.",
+            "Update energy buffer based on simulation phase."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script reading an external signal, or its cost not falling with scale."
+    },
+    {
+      "id": "demo-not-a-measurement-of-people",
+      "status": "established",
+      "kind": "software",
+      "claim": "The demo's output illustrates its own assumptions and does not measure human ignorance, biological metabolism or voluntary behavior.",
+      "scope": "What a synthetic model with a prescribed signal, cost and budget can show.",
+      "quote": "Its output illustrates those assumptions. It does not measure human ignorance, biological metabolism or voluntary behavior.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/runbooks/QUICKSTART.md",
+          "needles": [
+            "It is a computational demonstration, not a measurement of human cognition or biological metabolism."
+          ]
+        },
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "Generate composite signal Y(t) = trend + detail + noise."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The script reading data from people or organisms."
+    },
+    {
+      "id": "demo-console-verdict-within-model",
+      "status": "established",
+      "kind": "software",
+      "claim": "The demo's console verdict is the script's own rule, which compares only the first and last selected scale; it does not isolate the budget effect it names.",
+      "scope": "A model-internal rule (scales[0] < scales[-1]); it says nothing outside the model. A run of the script with its fixed seed (42) meets the rule early, while the budget is still full.",
+      "quote": "Its historical console verdict should be read within that model, and even there it compares only the first and last selected scale, so it does not isolate the budget effect it names.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "experiments/cycle2568_starving_philosopher.py",
+          "needles": [
+            "if scales[0] < scales[-1]:"
+          ]
+        },
+        {
+          "file": "docs/runbooks/QUICKSTART.md",
+          "needles": [
+            "The console's phrase `HYPOTHESIS VALIDATED` is the script's own model-specific decision rule."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A verdict rule that compares the scale chosen at full budget with the scale chosen after the drain and still passes on this run."
+    },
+    {
+      "id": "hardware-proprietary-designs-excluded",
+      "status": "established",
+      "kind": "procedure",
+      "claim": "The Git index holds no fabrication/ directory and no STL, OBJ, G-code or 3MF file; .gitignore excludes them and the archive audit refuses them.",
+      "scope": "Tracked files at HEAD; the one tracked .stp file is a Quartus SignalTap session in fpga/, which the audit accepts.",
+      "quote": "Proprietary designs are excluded from the public working tree.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": ".gitignore",
+          "needles": [
+            "fabrication/\n**/fabrication/\n*.stl\n*.gcode\n*.obj\n*.3mf"
+          ]
+        },
+        {
+          "file": "tools/archive/audit.py",
+          "needles": [
+            "PRIVATE_SUFFIXES = {\".stl\", \".obj\", \".gcode\", \".3mf\", \".step\", \".stp\","
+          ]
+        },
+        {
+          "file": "docs/archive/README.md",
+          "needles": [
+            "The audit refuses missing registry entry points, unsafe paths and tracked fabrication/manufacturing artifacts."
+          ]
+        }
+      ],
+      "readme_links_evidence": false,
+      "falsifier": "git ls-files listing a path under fabrication/ or a file with a print or CAD geometry suffix."
+    },
+    {
+      "id": "capabilities-controlled-particle-comparisons",
+      "status": "established",
+      "kind": "instrument",
+      "claim": "HALO's fixed tick, a switch between Euler and exact-rotation magnetic steps, and saved recipes that carry the settings let paired runs be compared; the tests check that Run B differs from Run A only in the magnetic step.",
+      "scope": "Numerical comparisons inside the HALO page; bit equality of a repeated run is tested on one software-rendered device.",
+      "quote": "A fixed tick, alternative magnetic integration steps and recorded settings make numerical comparisons inspectable.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "HELIOS-BRIDGE-ARCHIVE/HELIOS-V501-halo-resonance-chamber.html",
+          "needles": [
+            "const TICK = 1 / 20;",
+            "B changes only Euler ↔ exact rotation."
+          ]
+        },
+        {
+          "file": "tests/halo/observation_test.js",
+          "needles": [
+            "rb.state.lorentz=ra.state.lorentz;assert.deepEqual(ra,rb);",
+            "check('Repeat A reproduces every GPU position and velocity bit',true);"
+          ]
+        },
+        {
+          "file": "tests/halo/tick_test.js",
+          "needles": [
+            "check('exact rotation selected, uniform and storage follow'"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "observation_test.js finding the A and B recipes differing in more than the magnetic step, or a repeated A run not reproducing its state."
+    },
+    {
+      "id": "bcp-score-gain-minus-budget-cost",
+      "status": "established",
+      "kind": "software",
+      "claim": "BCP scores each item as gain − λ(B) × cost with λ(B) = k/(ε + B), then attends to positive-score items in score order while their total cost fits the budget.",
+      "scope": "bcp_lib/bcp/core.py at HEAD (BCPModel.allocate).",
+      "quote": "BCP scores candidates by gain minus budget-dependent cost, then chooses an attention set subject to its rules.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "bcp_lib/bcp/core.py",
+          "needles": [
+            "self.priority = self.gain - lambda_ * self.cost",
+            "- λ(B) = lambda_scale / (lambda_epsilon + B) is metabolic pressure",
+            "4. Greedily select items with positive priority until budget exhausted"
+          ]
+        },
+        {
+          "file": "bcp_lib/tests/test_core.py",
+          "needles": [
+            "# Score = 0.8 - 0.5 * 0.3 = 0.65"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "allocate() attending an item with a non-positive score or spending more than the budget."
+    },
+    {
+      "id": "bcp-tests-core-presets-are-examples",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "bcp_lib/tests/test_core.py checks the allocator's arithmetic, phases, budget limit and preset structure; the domain presets are synthetic scenarios, not validation in those domains.",
+      "scope": "Unit tests of the allocator and of preset structure (presets exist, return items, keep gain in [0, 1.5] and cost in [0, 3.0]); no domain data is used.",
+      "quote": "Tests cover its core behavior; the application-domain presets are examples, not independent validation of those domains.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "bcp_lib/tests/test_core.py",
+          "needles": [
+            "def test_allocation_respects_budget(self):",
+            "\"\"\"Preset items have valid gain/cost values.\"\"\""
+          ]
+        },
+        {
+          "file": "bcp_lib/README.md",
+          "needles": [
+            "These are synthetic gain/cost scenarios, not validation in the listed physical or social domains."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A test failure in test_core.py, or a preset test that checks outcomes against domain data."
+    },
+    {
+      "id": "memory-audit-static-radialized-confound",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The registered Retained − Two-back statistic fires on a static Plummer sphere, on seven of eight standard centrally peaked profiles, and on recorded meshes replaced by their spherical averages.",
+      "scope": "The 60-run registered grid and the synthetic profiles of the 2026-09-02/03 audit; an instrument result.",
+      "quote": "Static profiles and radialized recorded meshes expose an estimator confound.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "Δ = Retained − Two-back\nfires on a *static analytic sphere*",
+            "Seven of eight standard\ncentrally-peaked profiles fire.",
+            "replacing every density mesh with its own spherical average"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Recomputing the statistic from the stored meshes and profiles without it firing on the static sphere or on the radialized meshes."
+    },
+    {
+      "id": "memory-nrm-undecided-by-audit",
+      "status": "open",
+      "kind": "hypothesis",
+      "claim": "The audit and its successor estimator say nothing about Nested Resonance Memory in either direction; the hypothesis stays untested by this grid.",
+      "scope": "The passive-relic reading of NRM was not put at risk by the recorded grid.",
+      "quote": "This is a result about the instrument, not a verdict on NRM.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "So the passive-relic reading of nested resonance memory is **not** retired here, and it is not\nsupported. It was never actually put at risk. The instrument this cycle retires is the test."
+          ]
+        },
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "This is an instrument result. It says nothing about nested resonance memory, in either direction."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A pre-registered test on a measurable support that returns a decided verdict on NRM."
+    },
+    {
+      "id": "memory-replacement-estimator-0-of-60-179-of-1320",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The replacement estimator, frozen before scoring with five falsifiers, declares 0 of the 60 recorded runs measurable, with 179 of 1,320 run-epochs eligible.",
+      "scope": "The recorded 60-run grid scored once under the frozen protocol; a result about the grid and estimator, not about NRM.",
+      "quote": "Its replacement, frozen with predeclared falsifiers, finds the recorded grid unmeasurable: 0 of 60 runs, 179 of 1,320 run-epochs eligible.",
+      "numbers": [
+        "0",
+        "60",
+        "179",
+        "1,320"
+      ],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "the estimator declares **0 of 60 runs measurable**",
+            "| F5 support | **fail** | 0 measurable conditions of the 3 required; 179 of 1,320 run-epochs eligible |",
+            "frozen at commit `183ebf10` before any score on the recorded meshes existed"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-scoring the recorded meshes under the frozen protocol and finding a measurable run or a different eligible count."
+    },
+    {
+      "id": "historical-closed-loop-damping-and-cooperation",
+      "status": "qualified",
+      "kind": "software",
+      "claim": "The archive keeps a closed-loop damping script with its recorded passive and active settling times, and a cooperation script whose agents leave a group when their summed reputation score for it falls below zero.",
+      "scope": "Historical scripts judged by their own equations and settling rule; neither is part of the current program, and neither runs as archived.",
+      "quote": "Earlier reports include closed-loop damping and threshold-based cooperation models. Their findings are bounded by their original equations and experimental conditions.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "archive/experiments/cycle340_closed_loop_levitation.py",
+          "needles": [
+            "CYCLE 340: Closed-Loop Levitation (Active Damping)",
+            "if not settled and dist < 0.1 and np.linalg.norm(particle.vel) < 0.1:"
+          ]
+        },
+        {
+          "file": "archive/experiments/results/c340_closed_loop.json",
+          "needles": [
+            "\"active\": {\n    \"time\": 0.04,"
+          ]
+        },
+        {
+          "file": "archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py",
+          "needles": [
+            "print(\"MOG ONLINE: Cycle 2077 - The Harsh Winter\", flush=True)",
+            "if score < 0.0: # I hate this group"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The linked scripts or result file missing from the index, or the cooperation script having no threshold rule."
+    },
+    {
+      "id": "bcp-discrete-attention-allocator",
+      "status": "established",
+      "kind": "software",
+      "claim": "BCP is packaged as a discrete attention allocator that selects items to attend to within a budget.",
+      "scope": "The packaged bcp_lib library: greedy, budget-limited item selection with configured phase thresholds; not a validated law.",
+      "quote": "a discrete attention allocator for resource-constrained decisions.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "bcp_lib/README.md",
+          "needles": [
+            "A discrete attention allocator for resource-constrained decision making.",
+            "this greedy procedure does not guarantee the globally optimal set"
+          ]
+        },
+        {
+          "file": "docs/archive/components.json",
+          "needles": [
+            "Packaged discrete attention allocator; its implementation does not establish universal claims about the named application domains."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "bcp_lib's allocate() returning something other than a budget-limited selection of items."
+    },
+    {
+      "id": "bcp-hardening-sept-5-55-tests",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "The September 5 BCP hardening pass ran 55 tests covering allocation, system monitoring, SQLite and file output, and plotting.",
+      "scope": "pytest items in bcp_lib/tests on 2026-09-05: 24 core, 12 monitor, 19 visualization, from 38 test functions (5 of them parametrized).",
+      "quote": "The September 5 hardening pass runs 55 tests against allocation, real system monitoring, SQLite/files and plotted output.",
+      "numbers": [
+        "5",
+        "55"
+      ],
+      "evidence": [
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "BCP optional-module hardening — September 5 follow-up",
+            "After the focused monitoring and plotting fixes, 55 tests pass in 2.27 seconds",
+            "The added tests use actual SQLite databases, temporary files, host psutil readings and headless Matplotlib rendering."
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-05_bcp_hardening_gate.txt",
+          "needles": [
+            "collecting ... collected 55 items",
+            "55 passed in 2.27s"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "pytest collecting other than 55 items from bcp_lib/tests at HEAD, or any of them failing."
+    },
+    {
+      "id": "bcp-coverage-95-93-from-49-55",
+      "status": "established",
+      "kind": "measurement",
+      "claim": "BCP's whole-package statement coverage measured 95.93% after the hardening pass, up from 49.55% at the September 4 baseline.",
+      "scope": "pytest-cov statement coverage of package bcp with the dev, monitor and viz extras: 354 of 369 statements (2026-09-05) against 166 of 335 (2026-09-04, 24 tests). monitor.py and visualization.py grew between the two runs, so the two percentages cover different code.",
+      "quote": "Whole-package statement coverage is 95.93%, up from the initial 49.55%.",
+      "numbers": [
+        "95.93%",
+        "49.55%"
+      ],
+      "evidence": [
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "Package-wide statement coverage is 49.55%, rounded to 50% in the console summary.",
+            "with 354 of 369 statements covered (95.9349593495935%)"
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-05_bcp_hardening_gate.txt",
+          "needles": [
+            "Required test coverage of 90.01% reached. Total coverage: 95.93%",
+            "TOTAL 369 15 96%"
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-04_bcp_release_gate.txt",
+          "needles": [
+            "FAIL Required test coverage of 90.01% not reached. Total coverage: 49.55%",
+            "TOTAL 335 169 50%"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Re-running the recorded command on HEAD with the dev, monitor and viz extras giving a total other than 95.93%."
+    },
+    {
+      "id": "bcp-coverage-threshold-cleared",
+      "status": "qualified",
+      "kind": "procedure",
+      "claim": "The measured coverage passes the release gate's coverage requirement of more than 90%.",
+      "scope": "The coverage condition only (--cov-fail-under=90.01), on the committed local run of 2026-09-05; not the other release conditions.",
+      "quote": "This clears the coverage threshold",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "package-wide coverage clears the >90% gate locally",
+            "The release gate now runs tests across the whole package and requires more than 90% coverage before build/upload.",
+            "their hosted execution must be read from the subsequent CI run"
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-05_bcp_hardening_gate.txt",
+          "needles": [
+            "Required test coverage of 90.01% reached. Total coverage: 95.93%",
+            "Measured locally in the development workspace; no library release attempted."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The bcp-health or publish-bcp workflow failing its --cov-fail-under=90.01 step on unchanged bcp_lib sources."
+    },
+    {
+      "id": "bcp-release-usefulness-independence-unevaluated",
+      "status": "open",
+      "kind": "procedure",
+      "claim": "Whether BCP meets the other release conditions, usefulness and independence, has not been evaluated.",
+      "scope": "Release conditions of the Library Release Doctrine; the evaluation has not been done.",
+      "quote": "a new release still requires the repository's evidence of usefulness and independence.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "docs/archive/README.md",
+          "needles": [
+            "Release usefulness and independence still need evaluation."
+          ]
+        },
+        {
+          "file": "docs/archive/components.json",
+          "needles": [
+            "Extend input-domain and performance validation beyond the 55 behavior checks; evaluate release usefulness and independence under the library release doctrine."
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "Cross-version hosted CI, comparative performance, scientific validity and release suitability require their own evidence."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "A committed evaluation recording that BCP meets the usefulness and independence conditions."
+    },
+    {
+      "id": "manuscripts-publication-state-unestablished",
+      "status": "open",
+      "kind": "label",
+      "claim": "The archive does not establish that any linked manuscript was peer reviewed, submitted or accepted.",
+      "scope": "Publication state of the manuscripts linked on the manuscripts listed under the README's RESEARCH & PAPERS; checking it against actual records is listed as remaining work.",
+      "quote": "A filename or old readiness label does not establish peer review, submission or acceptance.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "Manuscripts are identified as artifacts rather than asserting submission or acceptance.",
+            "and checking manuscript publication states against actual records"
+          ]
+        },
+        {
+          "file": "papers/compiled/paper1/README.md",
+          "needles": [
+            "Status: arXiv submission ready (pending endorsement)"
+          ]
+        },
+        {
+          "file": "papers/compiled/paper5d/README.md",
+          "needles": [
+            "Status: arXiv submission ready (pending endorsement)"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "An arXiv identifier, submission receipt or acceptance record for one of the linked manuscripts."
+    },
+    {
+      "id": "v8-synthesis-122-domains-3438-cycles",
+      "status": "qualified",
+      "kind": "historical-count",
+      "claim": "The report dated November 29, 2025 states 122 unified domains and 3,438 research cycles.",
+      "scope": "The counts as the report's own SYSTEM STATE lines give them on 2025-11-29, with no list or derivation. 3,438 is that day's running cycle counter: experiments/cycle3430 to cycle3436 were added that day, and tracked file names cover 3,029 distinct cycle numbers up to 3,438. Domains added after that date are not in the total.",
+      "quote": "The [November 2025 synthesis](archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md) reports 122 domains and 3,438 research cycles.",
+      "numbers": [
+        "2025",
+        "122",
+        "3,438"
+      ],
+      "evidence": [
+        {
+          "file": "archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md",
+          "needles": [
+            "Date: November 29, 2025",
+            "Unified Domains: 122 - Research Cycles: 3,438"
+          ]
+        },
+        {
+          "file": "docs/legacy/README_RETIRED_CLAIMS.md",
+          "needles": [
+            "The documents that do state a total disagree with each other (archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md says 122; bcp_lib/README.md says 124)",
+            "Later phase scripts keep adding domains one at a time, but no later document states a new total."
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "The linked report at HEAD giving a different date, domain total or cycle count."
+    },
+    {
+      "id": "v8-counts-are-scope-not-validations",
+      "status": "established",
+      "kind": "historical-count",
+      "claim": "The synthesis's 122 domains are historical scope counts, not 122 independent validations of BCP or evidence of a grand unified theory; the report's validation reading is withdrawn.",
+      "scope": "The report's own wording ('successfully validated ... across 122 distinct domains') is the withdrawn reading, listed below as retired.",
+      "quote": "These are historical scope counts, not 122 independent empirical validations or evidence of a grand unified theory.",
+      "numbers": [
+        "122"
+      ],
+      "evidence": [
+        {
+          "file": "archive/reports/FINAL_REPORT_V8_GRAND_UNIFICATION.md",
+          "needles": [
+            "We have successfully validated the Budget-Constrained Perception (BCP) framework across 122 distinct domains",
+            "The research confirms that a single equation governs decision-making in all resource-constrained systems"
+          ]
+        },
+        {
+          "file": "archive/reports/2026-09-04_archive_stewardship.md",
+          "needles": [
+            "keep historical scope counts separate from validation"
+          ]
+        },
+        {
+          "file": "bcp_lib/README.md",
+          "needles": [
+            "These are synthetic gain/cost scenarios, not validation in the listed physical or social domains.",
+            "they do not establish a universal law"
+          ]
+        }
+      ],
+      "readme_links_evidence": true,
+      "falsifier": "Committed per-domain protocols with controls and results for the 122 domains, which would reopen the validation reading."
+    },
+    {
+      "id": "bcp-122-domains-as-validation",
+      "status": "retired",
+      "kind": "historical-count",
+      "claim": "The November 2025 synthesis's counts (122 domains, 3,438 research cycles) show that the Budget-Constrained Perception framework was validated as a universal law or grand unified theory.",
+      "scope": "withdrawn 2026-09-05; replaced by: The README presents BCP as a discrete attention allocator. Its tests cover core behaviour, and its application-domain presets are examples, not independent validation of those domains. Current claims should cite a protocol, a result and an appropriate control.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "README.md",
+          "needles": [
+            "These are historical scope counts, not 122 independent empirical validations or evidence of a grand unified theory.",
+            "A shared mathematical objective does not establish a universal physical or social law."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "citation-cff-format-1-2-0",
+      "status": "established",
+      "kind": "label",
+      "claim": "CITATION.cff is written in version 1.2.0 of the Citation File Format.",
+      "scope": "The format version, as llms.txt states it.",
+      "numbers": [
+        "1.2.0"
+      ],
+      "evidence": [
+        {
+          "file": "CITATION.cff",
+          "needles": [
+            "cff-version: 1.2.0"
+          ]
+        }
+      ],
+      "falsifier": "A cff-version other than 1.2.0."
+    },
+    {
+      "id": "citation-version-7-0-0",
+      "status": "established",
+      "kind": "label",
+      "claim": "The archive's citation metadata gives its software version as 7.0.0.",
+      "scope": "CITATION.cff, the version cited in llms.txt's canonical citation.",
+      "numbers": [
+        "7.0.0"
+      ],
+      "evidence": [
+        {
+          "file": "CITATION.cff",
+          "needles": [
+            "version: \"7.0.0\""
+          ]
+        }
+      ],
+      "falsifier": "A CITATION.cff version other than 7.0.0."
+    },
+    {
+      "id": "drive-sweep-as-three-conditions",
+      "status": "retired",
+      "kind": "procedure",
+      "claim": "A drive sweep at one self-gravity (fieldExp 1.6 / 1.7 / 1.8, Ring 25's proposal) can put three measurable conditions in one scoring and give the frozen protocol its first verdict other than 'insufficient support'.",
+      "scope": "withdrawn 2026-09-18; replaced by: Sweep self-gravity at the cut drive (fieldExp 1.7), an axis the scorer keys on. Rings 26-29 followed this to three measurable conditions (sg 0.3 / 0.32 / 0.35).",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-18_cutdrive_sgsweep_knifeedge.md",
+          "needles": [
+            "That path does not exist, and the reason is in the scorer's own code.",
+            "A drive sweep can never be three conditions to this scorer."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "f4-pass-as-robustness",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "The F4 robustness falsifier passes in both scored arms (the 60-run grid and the 21-run pilot), so those results hold under the estimator's alternative settings.",
+      "scope": "withdrawn 2026-09-09; replaced by: F4 is read as not evaluable whenever no run is measurable under both the main configuration and a variant. measurable_both was 0 in all 11 variants of both arms (22 of 22 rows). Rings 29-30 report such a variant (e2_pr16, also measurable_both 0 in Ring 28) as vacuous, not as passing.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "## 3. A claim retired: \"F4 pass\" is vacuous in both scored arms",
+            "It should be read as not evaluable, never as evidence that the result is threshold-robust."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "force-clamp-as-cause-of-inconclusive",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "The registered grid came back INCONCLUSIVE because of the 500-unit force clamp (gate 7.2), so the next step is to change the integrator, as protocol §10 prescribes.",
+      "scope": "withdrawn 2026-09-03; replaced by: 'Not the integrator — the estimator.' Before any new protocol is frozen: match the relic footprint, re-centre the maps, remove the monopole, score where the matter is, use an independent null, and calibrate the criterion and its power against a field with no memory.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "the reason the pre-registration expected — the force clamp — is not the reason",
+            "§10 instructs the next cycle to change the integrator on an inconclusive result. That plan is aimed at the wrong dial."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "meta-objectives-2026-09-01-checklist",
+      "status": "retired",
+      "kind": "procedure",
+      "claim": "The 2026-09-01 META_OBJECTIVES checklist describes the programme's current state, including that registration and data collection for the memory test had not started.",
+      "scope": "withdrawn 2026-09-05; replaced by: The current META_OBJECTIVES page (header 'Reviewed September 6, 2026'). It names the evidence and the next unresolved experiments and is updated 'from receipts, not from an assumed phase number'. The old text is in Git history (the version before commit 86c35980).",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "META_OBJECTIVES.md",
+          "needles": [
+            "The preceding 2026-09-01 checklist conflated intended work with current state.",
+            "Do not repeat the old instruction that registration and data collection have not started."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "pilot-every-shipped-configuration-unmeasurable",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "No field configuration the page ships gives the frozen estimator something to measure.",
+      "scope": "Withdrawn 2026-09-23: the pilot ran seven conditions drawn from four of the page's thirty shipped scenarios, and its result covers only those.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "README.md",
+          "needles": [
+            "none of the seven conditions it ran gives that estimator something to measure"
+          ]
+        },
+        {
+          "file": "analysis/2026-09-07_measurability_pilot.md",
+          "needles": [
+            "on all seven conditions run"
+          ]
+        },
+        {
+          "file": "docs/halo/2026-09-06_measurability_pilot_preregistration.md",
+          "needles": [
+            "The page ships thirty scenarios."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "pilot-six-independent-draws",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "The six eligible-epoch counts for spinchladni sg0.3 gl0 (6, 6, 3 recorded; 10, 10, 9 in the pilot) are six independent draws, giving a realisation-noise estimate of mean 7.33 and sd 2.80, with the 12-epoch floor 1.66 sd away.",
+      "scope": "withdrawn 2026-09-09; replaced by: How much of 'measurable' is chance is not identified by the recorded data, because realisation and instrument are perfectly confounded. Answering it needs at least two independent triples on one instrument. Rings 24-29 later ran two triples per condition on one pinned instrument but estimate no standard deviation or chance fraction from them.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "Two claims are retired: ring 17's \"six independent draws\" (§2), and \"F4 pass\" in both scored arms (§3).",
+            "The label is wrong. Those are three seeds scored under two instruments, not six draws."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "qualified-verdict-as-support-property",
+      "status": "retired",
+      "kind": "instrument",
+      "claim": "Ring 29's 'qualified' verdict means the frozen estimator can measure on the support itself: spinchladni gl0, fieldExp 1.7, self-gravity 0.3 / 0.32 / 0.35, 4,194,304 particles, 24 epochs, sim_digest 40bfdb68.",
+      "scope": "withdrawn 2026-09-23; replaced by: 'Qualified' describes the nine recorded runs in their recorded orientation. Of 64 equally valid point-inversion configurations of the same bytes, 48 return it and 16 return 'insufficient support'. The verdict itself is kept: the page's Ring 30 note reads 'SUPERSEDES: nothing. Ring 29's \"qualified\" stands as a reading of its nine recorded runs.'",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-22_relic_intervention.md",
+          "needles": [
+            "the word describes these nine recorded runs, not the support.",
+            "\"qualified\" belongs to the recorded configuration — 48 of the 64 configurations return it"
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "readme-first-build-record-claim",
+      "status": "retired",
+      "kind": "instrument",
+      "claim": "Ring 17's seven controlled re-runs produced the first record of which build made the recorded 60-run grid, and showed that the simulation is reproducible to the byte.",
+      "scope": "withdrawn 2026-09-09; replaced by: The build had already been pinned by revision and checksum in the 2026-09-02 audit §13 (commit 155cf805, 2026-09-03). the README's pilot bullet now says the re-runs 'confirmed the pin rather than establishing it'. Byte reproduction is established for one tag.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "README.md says of ring 17's seven controlled re-runs that they produced \"the first record of which build produced it\". They did not.",
+            "ring 17's receipt licenses less than \"the simulation is reproducible to the byte\": it covers one tag, and only one of its seven controls is an actual repeat."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "recorded-grid-as-qualification-set",
+      "status": "retired",
+      "kind": "procedure",
+      "claim": "The replacement memory estimator can be qualified on the saved meshes of the recorded 60-run grid before a new grid is commissioned (the plan in docs/halo/NEXT_MEMORY_ESTIMATOR.md).",
+      "scope": "withdrawn 2026-09-06; replaced by: A measurability pilot on new runs (frozen 2026-09-06, scored 2026-09-07: 0 of 21 measurable), then conditions generated on one pinned instrument (Rings 21-29). META_OBJECTIVES.md:14 records 'The recorded grid is retired as a qualification set.'",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-06_memory_estimator_qualification.md",
+          "needles": [
+            "This is an instrument result. It says nothing about nested resonance memory, in either direction. What it retires is the plan in",
+            "to qualify the estimator on the saved meshes before commissioning another grid: the saved meshes cannot qualify it"
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "recorded-grid-reproduces-byte-for-byte-whole",
+      "status": "retired",
+      "kind": "instrument",
+      "claim": "Seven controlled re-runs show that the whole recorded 60-run grid comes back byte for byte.",
+      "scope": "Withdrawn 2026-09-09 for the record and corrected in the README on 2026-09-23: one run tag was reproduced byte for byte; the other 59 recorded runs share its provenance and were not re-run.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-09_measurability_noise_and_instrument_identity.md",
+          "needles": [
+            "The other 59 recorded runs are stamped by shared provenance, not by re-running them.",
+            "it covers one tag, and only one of its seven controls is an actual repeat"
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "retained-minus-two-back-as-memory-measure",
+      "status": "retired",
+      "kind": "instrument",
+      "claim": "The pre-registered statistic Δ = Retained − Two-back, shown on the HALO Lab page and used to decide the 60-run grid, measures cross-epoch memory.",
+      "scope": "withdrawn 2026-09-03; replaced by: A re-centred, footprint-matched, monopole-removed lag-one estimator frozen with five falsifiers on 2026-09-05 (docs/halo/2026-09-05_memory_estimator_qualification_protocol.md). The page's Retained/Two-back readouts keep their old labels only as footprint diagnostics.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-02_cross_epoch_memory_preregistered.md",
+          "needles": [
+            "The registered decision statistic is not a measurement of memory.",
+            "So the passive-relic reading of nested resonance memory is not retired here, and it is not supported. It was never actually put at risk. The instrument this cycle retires is the test."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "ring29-mesh-correlation-reading",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "Ring 29's unscored mesh-correlation diagnostic shows that one seed's fields at two self-gravity values are 'no more alike' than two different seeds' fields and 'do not carry field identity' (a draft reading).",
+      "scope": "withdrawn 2026-09-22; replaced by: The pre-registered numbers-only report: same-seed cross-condition medians of 0.058 / 0.210 / 0.128 (Arm 1) and 0.023 / 0.049 / 0.177 (Arm 2), beside the cross-seed medians, with no test and no reading.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-21_sg032_third_condition.md",
+          "needles": [
+            "interpretive readings of the diagnostic (\"no more alike\", \"do not carry field identity\") where the pre-registration fixed it as numbers only",
+            "Three pairs against three, no test; numbers only; nothing is decided by them."
+          ]
+        }
+      ],
+      "falsifier": ""
+    },
+    {
+      "id": "sg03-knife-edge-window",
+      "status": "retired",
+      "kind": "measurement",
+      "claim": "At the cut drive (fieldExp 1.7), the measurable self-gravity window is a single knife-edge at sg 0.3, narrower than one grid step and closed above by force-cap saturation (Ring 26).",
+      "scope": "withdrawn 2026-09-19; replaced by: Ring 27 found a one-sided window: a participation wall between sg 0.25 and 0.3, and sg 0.35 measurable 2 of 3 at an unsaturated clamp share of 0.074. Ring 28 then found sg 0.35 measurable 3 of 3 on a pre-registered second triple, so Ring 27's 2 of 3 was one seed's variance, not a ceiling. Ring 29 found sg 0.32 measurable 3 of 3 on both pre-committed triples.",
+      "numbers": [],
+      "evidence": [
+        {
+          "file": "analysis/2026-09-19_finegrain_sgsweep_window_width.md",
+          "needles": [
+            "Ring 26's \"narrower than one grid step\" understated the high side.",
+            "The knife-edge understated the width above 0.3."
+          ]
+        }
+      ],
+      "falsifier": ""
+    }
+  ],
+  "non_claims": []
+}

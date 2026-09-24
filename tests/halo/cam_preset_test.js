@@ -33,7 +33,7 @@
  * trip -- a preserved (cam.user) framing is persisted by flushState and comes back on the
  * next boot. The seed is now conditional (only-if-absent, the cam_check idiom) so a
  * persisted cam survives a reload instead of being clobbered; the never-orbited guard (8)
- * resets storage to the no-cam seed before its reload so it still boots a fresh page.
+ * boots in a new browser context, whose storage starts empty, so it is always a fresh page.
  */
 const { chromium } = require('playwright');
 const path = require('path');
@@ -164,25 +164,30 @@ const near = (a, b, tol) => typeof a === 'number' && typeof b === 'number' && Ma
   }
 
   // ---- direction 8 (guard): a viewer who never took the camera must NOT be falsely preserved ----
-  // Return to a never-orbited state deterministically. With the conditional seed the init script no
-  // longer clobbers a persisted cam, and the page's own pagehide flush would otherwise re-save the
-  // still-user:true cam during the reload's unload -- so drop the user flag first (flushState saves cam
-  // only when cam.user), THEN seed no-cam storage and reload. A no-cam lab button before any orbit must
-  // then leave user=false, not pin an auto-fit sentinel as "the user's".
-  await page.evaluate(() => {
-    try { window.__probe.state.cam.user = false; } catch (e) {}
-    localStorage.setItem('resonance-chamber-v2', JSON.stringify({ particles: 65536, quality: 0.5 }));
-  });
-  await page.reload();
-  await page.waitForSelector('.boot.done', { timeout: 90000 });
-  await page.waitForTimeout(500);
-  const fresh = await camNow();
+  // A never-orbited viewer is a fresh browser profile, so this direction boots in a NEW browser
+  // context, whose storage starts empty. It used to reset storage and reload the page above, which
+  // raced: on ubuntu-latest a file:// reload once handed back the framing an earlier step had saved
+  // (2026-09-23, "a fresh, never-orbited page boots with cam.user=false" failed; the re-run passed).
+  // A no-cam lab button before any orbit must leave user=false, not pin an auto-fit sentinel as
+  // "the user's".
+  await page.close();
+  const freshContext = await browser.newContext({ viewport: { width: 900, height: 640 } });
+  const freshPage = await freshContext.newPage();
+  freshPage.on('pageerror', e => errs.push(e.message));
+  freshPage.on('console', m => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errs.push(m.text()); });
+  await freshPage.addInitScript(() => { try { if (!localStorage.getItem('resonance-chamber-v2')) localStorage.setItem('resonance-chamber-v2', JSON.stringify({ particles: 65536, quality: 0.5 })); } catch (e) {} });
+  await freshPage.goto('file://' + path.resolve(__dirname, 'rc-test.html'));
+  await freshPage.waitForSelector('.boot.done', { timeout: 90000 });
+  await freshPage.waitForTimeout(500);
+  const freshCam = () => freshPage.evaluate(() => JSON.parse(JSON.stringify(window.__probe.state.cam)));
+  const fresh = await freshCam();
   check('a fresh, never-orbited page boots with cam.user=false', fresh.user === false, JSON.stringify(fresh));
-  await page.evaluate(() => document.querySelector('[data-exp="fieldonly"]').click());
-  await page.waitForTimeout(400);
-  const a6 = await camNow();
+  await freshPage.evaluate(() => document.querySelector('[data-exp="fieldonly"]').click());
+  await freshPage.waitForTimeout(400);
+  const a6 = await freshCam();
   check('a no-cam lab button on a never-orbited page leaves cam.user=false (no false preservation)',
     a6.user === false, JSON.stringify(a6));
+  await freshContext.close();
 
   check('no console/page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
   console.log('\n' + pass + ' passed, ' + fail + ' failed');

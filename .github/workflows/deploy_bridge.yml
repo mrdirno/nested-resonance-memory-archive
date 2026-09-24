@@ -44,6 +44,9 @@ on:
       # edit on disk that never reaches the web, and the file says L1 in the repo
       # while the published copy still says L0. Editing the manifest IS a deploy.
       - 'wish-it-better.json'
+      # The evidence index is staged from data/ to the site root below, so it
+      # needs its own trigger for the same reason as the manifest above.
+      - 'data/claims.json'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -235,6 +238,22 @@ jobs:
             echo "staged network manifest: /$dest (per-surface, tracked at its source)"
           done
 
+          # THE EVIDENCE INDEX, for readers that are programs. data/claims.json lists
+          # every number the README gives in digits, with its status and the committed
+          # file that holds it; tools/archive/claims_index.py checks it on every push
+          # (tests/archive, the archive-health workflow). It is served at the site root
+          # beside /llms.txt, which is NOT staged here: its one source is
+          # HELIOS-BRIDGE/public/llms.txt (the author-of-record note, which also points
+          # agents at this index), and the Vite build copies it. A second copy staged
+          # from elsewhere would silently replace it.
+          test -f data/claims.json || { echo "MISSING: data/claims.json"; exit 1; }
+          cp data/claims.json HELIOS-BRIDGE/dist/claims.json
+          node -e 'JSON.parse(require("fs").readFileSync("HELIOS-BRIDGE/dist/claims.json", "utf8"))' \
+            || { echo "FAIL: claims.json in the artifact is not valid JSON"; exit 1; }
+          cmp -s HELIOS-BRIDGE/public/llms.txt HELIOS-BRIDGE/dist/llms.txt \
+            || { echo "FAIL: dist/llms.txt is not HELIOS-BRIDGE/public/llms.txt -- one source for /llms.txt"; exit 1; }
+          echo "staged evidence index: /claims.json (beside /llms.txt from public/)"
+
       # The wishing well POSTs to Supabase with the PUBLIC anon key. It is
       # public-by-design, but a JWT-shaped string cannot live in this public repo
       # (secret-scan guard), so it is injected HERE from repo secrets into the
@@ -289,7 +308,7 @@ jobs:
           head -40 "$tree_file"
 
           echo "--- every published entry point present ---"
-          for f in index.html .nojekyll \
+          for f in index.html .nojekyll llms.txt claims.json \
                    collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
                    archive/index.html archive/HELIOS-V501-halo-resonance-chamber.html archive/HELIOS-V501-halo-og.jpg og-bridge.jpg \
