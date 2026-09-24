@@ -554,3 +554,96 @@ Computed by `python3 experiments/halo/carrier_statistic.py receipt --design-comm
 | 0.222 | 0.01 | 0.503 | 0.118 | 0.111 | 0.086 |
 | 0.222 | 0.025 | 0.446 | 0.118 | 0.101 | 0.204 |
 
+## Results
+
+**Scored once.** `sh experiments/halo/memory_carrier_score.sh 59d7d4af` ran once on September 24, 2026, under Python 3.13.5 with numpy 2.3.5. It started at 16:53:39 UTC, took 40 s and exited 0. It began after the batch's own log printed "all 20 runs done"; the last record, the closing repeat, was written at 11:42:05 UTC. The decision (`computed_at` 16:53:41 UTC) was written before the reported steps ran. Nothing above this heading has changed since R.
+
+**The runs.**
+
+- The launch ledger holds 20 launches in the registered order, one per run, each attempt 1. There was no void and no re-issue.
+- The records' wall times sum to 2,113 s of the 2,181 s between the first launch and the last record, so no run outside the ledger fits.
+- R reached the public remote at 11:05:32 UTC by GitHub's activity record, 12 s before the first launch.
+- The canary reproduced Ring 29's `sg0.32` seed 777 mesh byte for byte (`ce15f081…`). The closing repeat reproduced the first fresh `identity` run byte for byte (`9d3b974b…`).
+
+**The branch: CONFIRMED.** The positive control, `invert_all`, prefers Π, with 5 Π calls and no L call. The table, walked in its order:
+
+| branch | what was checked | fires |
+|---|---|---|
+| VOID | V1: 0 failures, 0 void records | no |
+| STATIC | the largest median lag-one full-field Pearson over the 18 fresh runs is 0.122 (the larger of the lab and inverted frames) | no |
+| UNMEASURED | every condition in both arms has 3 of 3 runs scored (*n* from 12 to 19) | no |
+| BROKEN | Φ(`identity`) = L; Φ(`invert_all`) = Π; 0 Π calls in `identity`; 0 L calls in `invert_all` | no |
+| BASELINE SILENT | Φ(`identity`) = L | no |
+| CONFIRMED | Φ(`invert_all`) = Π with 5 Π calls (the licence needs at least 4) | **yes** |
+
+**V1, instrument: pass.**
+
+- Every record and every hook passes Ring 30's checks, and every run passes the runtime pins.
+- The receipt on disk is the one committed at R (sha256 `6ea5c90e…`), and its design commit 1e2810a5 is a strict ancestor of R.
+- Every run's *T*, *n*, *p* and call, re-derived from its mesh, equals the score.
+- No partial mesh lies beside a record, and there is no void.
+- Every record's `git_rev` descends from R. By the launch ledger, the first two launches ran on R and the other eighteen on f7416441, Ring 32's own commit, which reached the public remote at 11:08:57 UTC, during the second run. When the harness writes a record, it reads HEAD (`git rev-parse HEAD`) and stores the answer as `git_rev`; it does not read it at launch. So 19 of the 20 records carry f7416441, and only the canary's carries R. f7416441 changed prose only: CYCLE_LOGS.md, README.md, META_OBJECTIVES.md, CLAUDE.md and the page's comment block. Every record carries the test page the chamber loads, `1a15b987`, and `sim_digest 40bfdb68`.
+- In each of the nine (self-gravity, seed) pairs, the two arms' first meshes are byte-identical, and the nine first meshes are distinct.
+
+**The two counts, side by side and never pooled:**
+
+- `invert_all`: Π in **5 of the 9 scored** (L in 0, none in 4).
+- `identity`: L in **6 of the 9 scored** (Π in 0, none in 3).
+
+These are counts, not rates. In each pair the two arms share their first mesh, and in real arithmetic an `invert_all` run's inverted frame is an `identity` run. So the two counts are not independent, and nothing here compares them.
+
+**Per condition and per arm** (the registered aggregation):
+
+| arm | sg0.3 | sg0.32 | sg0.35 | Φ |
+|---|---|---|---|---|
+| `identity` | L | L | L | L |
+| `invert_all` | Π | none | Π | Π |
+
+**Every run.** *T* and *p* are read in the lab frame. In the inverted frame, every run gives −*T* with the same eligible pairs. *n*_eff and the top-3 share are descriptive.
+
+| arm | run | *T* | *n* | *p* | call | *n*_eff | top-3 share |
+|---|---|---:|---:|---:|---|---:|---:|
+| `identity` | sg0.3 seed 14142 | +0.0197 | 18 | 0.1002 | none | 4.5 | 0.75 |
+| `identity` | sg0.3 seed 17320 | +0.0531 | 15 | 0.0118 | L | 4.7 | 0.75 |
+| `identity` | sg0.3 seed 22360 | +0.0490 | 15 | 0.0127 | L | 2.4 | 0.89 |
+| `identity` | sg0.32 seed 24494 | +0.0602 | 19 | 0.0051 | L | 5.4 | 0.71 |
+| `identity` | sg0.32 seed 26457 | +0.0372 | 16 | 0.1305 | none | 3.7 | 0.79 |
+| `identity` | sg0.32 seed 28284 | +0.0167 | 14 | 0.1704 | none | 7.5 | 0.54 |
+| `identity` | sg0.35 seed 31622 | +0.0327 | 18 | 0.0152 | L | 4.8 | 0.70 |
+| `identity` | sg0.35 seed 33166 | +0.0886 | 15 | 0.0417 | L | 3.7 | 0.88 |
+| `identity` | sg0.35 seed 34641 | +0.0574 | 19 | 0.0144 | L | 6.7 | 0.61 |
+| `invert_all` | sg0.3 seed 14142 | −0.0197 | 15 | 0.0264 | Π | 5.8 | 0.60 |
+| `invert_all` | sg0.3 seed 17320 | −0.0515 | 16 | 0.0201 | Π | 3.3 | 0.84 |
+| `invert_all` | sg0.3 seed 22360 | −0.0280 | 15 | 0.0755 | none | 7.7 | 0.52 |
+| `invert_all` | sg0.32 seed 24494 | −0.0228 | 15 | 0.2208 | none | 3.2 | 0.68 |
+| `invert_all` | sg0.32 seed 26457 | −0.0249 | 15 | 0.1306 | none | 6.8 | 0.57 |
+| `invert_all` | sg0.32 seed 28284 | −0.0121 | 16 | 0.1780 | none | 8.3 | 0.47 |
+| `invert_all` | sg0.35 seed 31622 | −0.0652 | 17 | 0.0346 | Π | 4.8 | 0.63 |
+| `invert_all` | sg0.35 seed 33166 | −0.1082 | 12 | 0.0054 | Π | 2.7 | 0.90 |
+| `invert_all` | sg0.35 seed 34641 | −0.0505 | 16 | 0.0211 | Π | 6.2 | 0.57 |
+
+**Reported: between-run pinning.** `identity`: mean cosine −0.0137 over 36 pairs of different runs (16 positive), exact one-sided *p* 0.727 over 512 run-level inversions. `invert_all`, in its lab frame: −0.0171 over 36 pairs (17 positive), *p* 0.910 over 512.
+
+**Reported, deciding nothing: Ring 30's frozen rule on the fresh arms.** This is Ring 30's open question 1, asked again on fresh runs. It never stands in for the branch above, and the two are not compared.
+
+- `identity` prefers L, and each of its conditions is L. Five runs carry an L-signature (sg0.3 seeds 14142, 17320 and 22360; sg0.32 seed 24494; sg0.35 seed 33166), and none carries a Π-signature.
+- `invert_all` prefers neither frame. Its conditions are sg0.3 none, sg0.32 none and sg0.35 Π. One run carries a Π-signature (sg0.35 seed 31622, *d* +0.045), and none carries an L-signature. Eight of its nine runs are measurable in both frames; sg0.35 seed 33166 has 10 eligible epochs, below the floor of 12.
+- The frozen verdict strings are "qualified" for `identity` in both frames (9 of 9 runs measurable). They are "insufficient support" for `invert_all` in both frames (8 of 9 runs measurable, 2 of 3 conditions measurable). Each string is a reading of those nine runs only. It is not a re-qualification, and it is not compared with Ring 29's.
+
+**What CONFIRMED licenses, and what it does not.** In the table's words, fixed before the runs: "On fresh runs the positive control returns its known answer. This licenses one thing only: pre-registering the decided arm, on the seeds named above, scored by this statistic under this rule."
+
+- It says nothing about memory.
+- It says nothing about whether the matter or the solver's warm start carries anything, because `invert_all` inverts both.
+- An L call on an unperturbed run is not memory. Protocol §1 names "an angular asymmetry that persists in the lab frame" as the first confound.
+- A positive control shows little beyond this by construction. In real arithmetic, an `invert_all` run's inverted frame is an `identity` run. So its Π calls read the same kind of signal that gives `identity` its L calls, seen through the frame flip. What CONFIRMED shows is that the statistic reads the inversion's sign on fresh runs, which is what the licence needs.
+- The disclosure above stands. CONFIRMED was the expected outcome, because a near-copy of this statistic was already public for Ring 30's arms. So these fresh runs are not a blind test.
+
+**Kill-test, before this section was committed.** Two read-only workflows ran first: four lenses on the result, then three on this write-up, each with its own code. None edited the repository, and none ran the scoring script.
+
+1. **An independent re-derivation.** It imported only the frozen scorer's primitives, and a second variant imported none of them. On the same mesh bytes (18 of 18 sha256 equal), both reproduce every run's eligible pairs and *n* exactly and *T* to 3 × 10⁻¹⁷. A third, exact-integer enumeration agrees on every *p* bitwise, and every call and the branch come out the same. Every inverted-frame file is byte-identical to the lab meshes with P applied *j* times to mesh *j*. No gate value lies within 0.2 % of its threshold.
+2. **Provenance.** Every record, pin, seed, hash and launch, and the public push order, checks out. One ledger line's commit (R) differs from its record's `git_rev` (f7416441); the cause is identified above. It is not a V1 condition.
+3. **STATIC, the frames and the reported numbers,** recomputed independently. They are equal bit for bit, and the STATIC median is at most 0.122 under either pair convention. The canary and the closing repeat are not static either (at most 0.094).
+4. **A breaker.** It checked the branch logic against the table on 79,380,000 inputs with no disagreement, and the unit tests pass, 49 of 49. It found gaps that do not bear on this result; they are listed as open questions on the HALO page. It also found that one sentence under Predictions does not hold at mesh level: "a fresh realisation within seconds". For one epoch, neither does the reason the carried Ring 30 ban gives: "they are different realisations after the first boundary". With `invert_all` read in its inverted frame, the two arms' meshes are still near-identical one epoch after the first inversion. At mesh 1 the median full-field Pearson is 0.963, and the median cosine of the point-odd parts is 0.998. By mesh 2 they have decorrelated (0.089 and 0.012). Mesh 1 enters only the first scored pair, as its relic. The five Π calls' three largest pairs sit at *k* = 9 to 23. The pre-registration already bans calling the arms independent, and the ban itself stands.
+5. **A review of this write-up,** by three read-only lenses: banned readings, every number against its file, and leak and integrity. It found two blockers, both fixed before commit. A sentence on the HALO page gave one *p* range for both arms' calls, which pooled them; it now gives each arm's. The upper end of the *k* range read 22, where the files give 23. Its other findings made three more changes. The README now says which reading gave the positive control's answer, and that the original score again did not. A "replicate" that read the disclosed pattern as agreement is gone. Four smaller wordings are corrected.
+
+**How close the branch sits to another.** It clears the licence minimum by one call. Turning any one Π call to none leaves CONFIRMED; turning any two to none gives LOW POWER or SILENT. One L call in `invert_all` would give CONTRARY, and one Π call in `identity` would give BASELINE SILENT. Unregistered and deciding nothing: in 3 of the 5 Π runs, removing one eligible pair can remove the call. That is 5 of 17 pairs for sg0.35 seed 31622 and 4 of 15 for sg0.3 seed 14142. For sg0.35 seed 33166, which sits at the 12-pair floor, it is any pair. In the other two runs, no single pair can.

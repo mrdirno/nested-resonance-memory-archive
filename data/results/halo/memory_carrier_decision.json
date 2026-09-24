@@ -1,0 +1,56 @@
+{
+ "V1_instrument": {
+  "failures": [],
+  "pass": true,
+  "void_records": 0
+ },
+ "arms": {
+  "identity": {
+   "call_counts": {
+    "L": 6,
+    "Pi": 0,
+    "none": 3,
+    "unscored": 0
+   },
+   "conditions": {
+    "sg0.3": "L",
+    "sg0.32": "L",
+    "sg0.35": "L"
+   },
+   "preference": "L",
+   "scored_per_condition": {
+    "sg0.3": 3,
+    "sg0.32": 3,
+    "sg0.35": 3
+   }
+  },
+  "invert_all": {
+   "call_counts": {
+    "L": 0,
+    "Pi": 5,
+    "none": 4,
+    "unscored": 0
+   },
+   "conditions": {
+    "sg0.3": "Pi",
+    "sg0.32": "none",
+    "sg0.35": "Pi"
+   },
+   "preference": "Pi",
+   "scored_per_condition": {
+    "sg0.3": 3,
+    "sg0.32": 3,
+    "sg0.35": 3
+   }
+  }
+ },
+ "branch": "CONFIRMED",
+ "computed_at": "2026-09-24T16:53:41+00:00",
+ "identity_L_calls": 6,
+ "invert_all_Pi_calls": 5,
+ "prereg_commit": "59d7d4af7ab1ea8582762828083979dc340008c5",
+ "proximate_cause": "invert_all prefers Pi with 5 Pi calls",
+ "schema": "halo-carrier-decision/1",
+ "script_sha256": "020eb6549a1ce163d2cd87165dc19d9dcd550a1600912c8119d0163bd0de47ab",
+ "static_runs": 0
+}

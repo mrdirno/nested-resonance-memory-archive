@@ -6,7 +6,7 @@
   "license": "GPL-3.0-only",
   "repository": "https://github.com/mrdirno/nested-resonance-memory-archive",
   "site": "https://mrdirno.github.io/nested-resonance-memory-archive/",
-  "as_of": "2026-09-23",
+  "as_of": "2026-09-24",
   "readme": "README.md",
   "check": "python3 tools/archive/claims_index.py --check",
   "check_copy": "python3 tools/archive/claims_index.py --copy FILE",
@@ -1583,10 +1583,10 @@
     },
     {
       "id": "halo-ring30-next-step-control-power",
-      "status": "open",
+      "status": "established",
       "kind": "procedure",
       "claim": "Before another decided arm runs, two steps come first: measure on fresh, pre-registered runs how often the positive control gives its expected answer, and qualify a within-run statistic on its own synthetic test.",
-      "scope": "A planned step, not a result.",
+      "scope": "Both steps came first, as planned: Ring 32 qualified the within-run statistic on its own synthetic receipt before any fresh run, and Ring 33 scored the positive control's fresh, pre-registered runs once with that statistic (Pi in 5 of the 9 scored; Ring 30's frozen rule, reported beside it on the same runs, prefers neither frame). No decided arm has run. A procedure, not a memory result.",
       "quote": "Before another tested arm runs, the next steps are a pre-registered measurement, on fresh runs, of how often the check runs give their expected answer, and a statistic read within each run, qualified first on its own synthetic test.",
       "numbers": [],
       "evidence": [
@@ -1609,9 +1609,16 @@
           "needles": [
             "(1) The positive control's power on fresh intervened runs, measured under a pre-registration before a decided arm runs again."
           ]
+        },
+        {
+          "file": "analysis/2026-09-24_within_run_carrier_statistic.md",
+          "needles": [
+            "**The receipt passed.** This describes the receipt on these twelve recorded runs and their synthetic draws",
+            "**The branch: CONFIRMED.** The positive control, `invert_all`, prefers Π, with 5 Π calls and no L call."
+          ]
         }
       ],
-      "readme_links_evidence": false,
+      "readme_links_evidence": true,
       "falsifier": "A committed pre-registration for a decided arm made before any measurement of the positive control's power on fresh runs."
     },
     {

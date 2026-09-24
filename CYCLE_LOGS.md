@@ -1670,3 +1670,41 @@ The first hosted HALO gate refused deployment because the navigation covered a s
   - The page change is a comment-only ring append: sim_digest 40bfdb68 unchanged, and the pinned test page 1a15b987 untouched.
   - Committed by pathspec, one author, no AI trailer.
 - **QN:** (1) When the batch prints "all 20 runs done", run `sh experiments/halo/memory_carrier_score.sh 59d7d4af` once, append the branch and both counts under "## Results", and seal them as Ring 33 with a kill-test. (2) On CONFIRMED, pre-register invert_matter on the nine seeds already named. (3) Carried: the lower self-gravity wall, the gain/loss axis, linked files that still say more than the README, and indexing the rings' own numbers.
+
+## [RESEARCH] HALO Ring 33: the twenty registered Ring 32 runs, scored once, return CONFIRMED; the positive control calls Π in 5 of its 9 scored fresh runs and L in none, and the untouched arm calls L in 6 of its 9 and Π in none; every instrument check passes, and the one thing licensed is pre-registering the decided arm on nine seeds already named; nothing about memory - COMPLETE
+- **Goal:** Ring 32's open question 1: score the twenty registered runs once, in the registered order, and seal the branch. Proved unfinished before starting:
+  - no `memory_carrier_scores/` directory and no decision file existed;
+  - the pre-registration had no "## Results";
+  - the page's newest ring was 32;
+  - the planning record for the scoring was queued and not started.
+- **Action:**
+  1. Confirmed the batch was finished and clean. Its log reads "all 20 runs done": 20 launches, one per run, no void and no re-issue. The canary (ce15f081) and the closing repeat (9d3b974b) were both byte-identical.
+  2. Confirmed the runtime was Python 3.13.5 with numpy 2.3.5, and that every scoring file was byte-identical to R.
+  3. Ran `sh experiments/halo/memory_carrier_score.sh 59d7d4af` once, at 16:53:39 UTC: 40 s, exit 0.
+  4. Appended the branch, V1, both counts, every run's numbers and the reported frozen rule under "## Results". Nothing above that heading was edited.
+  5. Kill-tested the result with a four-lens, read-only workflow before any commit.
+  6. The README's Ring 30 bullet (digit-free), META_OBJECTIVES, the CLAUDE.md trajectory, one evidence-index entry and the site's llms.txt research list follow the ring.
+- **Method:** The registered `score` step refuses to run unless the receipt passed, was written by the script bytes committed at the design commit, and matches the pinned scripts and runtime; unless the canary and the closing repeat have records; and unless each arm holds exactly its nine runs. The `decide` step checks V1, which includes that the receipt is the one committed at R, then walks the branch table in its order: VOID, STATIC, UNMEASURED, BROKEN, BASELINE SILENT, CONFIRMED, LOW POWER, CONTRARY, SILENT. It writes the branch before Ring 30's frozen rule runs; that rule is reported only.
+- **Result:** CONFIRMED.
+  - `invert_all`: Π in 5 of the 9 scored (L 0, none 4). Its preference Φ = Π (sg0.3 Π, sg0.32 none, sg0.35 Π).
+  - `identity`: L in 6 of the 9 scored (Π 0, none 3). Its preference Φ = L (all three conditions L).
+  - V1 passes with 0 failures. No run is static, and every condition in both arms has 3 of 3 runs scored.
+  - By the launch ledger, launches 1 and 2 ran on R and the other eighteen on f7416441, Ring 32's own commit, which was pushed during run 2. The harness reads HEAD when it writes a record, so 19 of the 20 records carry f7416441. It descends from R and changed prose only, and every record keeps the pinned test page (1a15b987) and `sim_digest` 40bfdb68.
+  - Reported only: Ring 30's frozen rule prefers L in `identity` and neither frame in `invert_all` (one Π-signature).
+  - These are counts, not rates. The two arms share their first meshes, so they are not independent. Nothing here is about memory.
+- **Status:** KILL-TEST.
+  - One workflow of four read-only lenses, each with its own code; none edited the repository or ran the scoring script.
+  - A re-derivation importing only the frozen scorer's primitives, plus a variant importing none, matched every eligible pair, *n*, *p* (bitwise) and call, and *T* to 3e-17. An exact-integer enumeration agrees.
+  - Provenance: every pin, seed, hash and launch checks out, and the GitHub activity record puts R 12 s before the first launch. One ledger line's commit differs from its record's `git_rev`, for the cause above; it is not a V1 condition.
+  - STATIC, the frames and the reported numbers are equal bit for bit.
+  - The breaker found no disagreement between the branch logic and the table on 79,380,000 inputs, and the unit tests pass 49 of 49. It found that one sentence of the pre-registration's Predictions does not hold at mesh level ("a fresh realisation within seconds"): the arms' meshes are near-identical at mesh 1 (point-odd cosine 0.998) and decorrelated by mesh 2 (0.012). It also found gaps in `decide` that do not bear on this result (ring QN 2).
+  - How sure: CONFIRMED clears the licence minimum of 4 by one call.
+  - A second workflow of three read-only lenses reviewed this write-up. Its two blockers were fixed before commit: a page sentence that pooled the two arms' calls into one *p* range, and a *k* range that read 22 where the files give 23. Its majors were fixed too: the README now names the reading that gave the answer and says the original score again did not, and a "replicate" that read the disclosed pattern as agreement is gone.
+  - tests/halo and tests/archive: 121 passed; the full suite: 254 passed. The evidence index resolves 95 of 95 README claims.
+  - The page change is a comment-only ring append: 125 lines added, 0 removed, `sim_digest` 40bfdb68 unchanged.
+  - Committed by pathspec on the shared tree, one author, no AI trailer.
+- **QN:**
+  1. Pre-register `invert_matter` on the nine seeds Ring 32 named, under this statistic and this rule, with its branch readings pushed before any run.
+  2. Carried: the lower self-gravity wall and the gain/loss axis.
+  3. Carried: linked files that still say more than the README.
+  4. Carried: the rings' own numbers are not indexed.
