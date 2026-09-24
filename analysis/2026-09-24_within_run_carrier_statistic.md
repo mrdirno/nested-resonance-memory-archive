@@ -504,3 +504,53 @@ The run records carry no wall clock. The order is evidenced by, in decreasing st
    that commit.
 3. **The launch ledger.** Each launch line records its time and the commit it ran on.
 4. **File modification times,** which are local clocks.
+
+## The receipt, computed once from the design commit
+
+Computed by `python3 experiments/halo/carrier_statistic.py receipt --design-commit 1e2810a5 --control data/results/halo/memory_sg032_third --control data/results/halo/memory_sg032_third_r2 --json data/results/halo/carrier_statistic/receipt.json`. It ran after the design commit reached the public remote (GitHub's activity record: pushed 11:04:20 UTC on September 24; the receipt's `computed_at`: 11:05:05 UTC), under Python 3.13.5 with numpy 2.3.5. The script checked that it and this file were byte-identical to the design commit before it read any mesh. Receipt sha256 `6ea5c90efca11fc6…`; script sha256 `020eb6549a1ce163…`; frozen scorer `7619ef6bbe7409be…`, unchanged.
+
+| gate | result | pass |
+|---|---|---|
+| G1 exactness | inverting one member of a pair changes ρ by at most 0 (bitwise) from −ρ, inverting both by at most 0 (bitwise); the odd part of the residual equals the odd part of the field to 5.5e-17 of the field's largest value under all five supports; *T*_Π = −*T*_L to 0 (bitwise), with the same pairs in every run | yes |
+| G2 the null end to end | 107 of 2,400 null runs called (47 L, 60 Π), inside the band 100–141 | yes |
+| G2b one p two ways | 72 of 72 p-values identical by both enumerations | yes |
+| G3 one run in | 12 of 12 runs bitwise identical from their own file alone | yes |
+| G4 recovery | lower median α* 0.05 (per-run lower medians 0.02, 0.05, 0.1; limit 0.1); called L at α = 0.2 in 231 of 231 kept draws; 9 of 240 draws excluded at α = 0; 0 Π calls at any α > 0 | yes |
+
+**The receipt passed.** This describes the receipt on these twelve recorded runs and their synthetic draws, nothing about the chamber or the support. The fresh runs may be launched once this section's commit (R) is on the public remote.
+
+**Reported, deciding nothing: the unperturbed control (G5).** L in 8, none in 4, Π in 0 of 12 runs.
+
+| run | *T* | *n* | *p* | call | *n*_eff | top-3 share |
+|---|---:|---:|---:|---|---:|---:|
+| sg0.3 seed 777 | +0.0677 | 19 | 0.0005 | L | 4.4 | 0.73 |
+| sg0.3 seed 12345 | +0.0368 | 17 | 0.0972 | none | 3.5 | 0.72 |
+| sg0.3 seed 31337 | +0.0417 | 17 | 0.0048 | L | 5.2 | 0.69 |
+| sg0.32 seed 777 | +0.0270 | 17 | 0.0465 | L | 7.2 | 0.54 |
+| sg0.32 seed 2718 | +0.0445 | 17 | 0.0092 | L | 10.8 | 0.34 |
+| sg0.32 seed 12345 | +0.0424 | 16 | 0.0728 | none | 3.0 | 0.75 |
+| sg0.32 seed 16180 | +0.0602 | 17 | 0.0113 | L | 5.1 | 0.69 |
+| sg0.32 seed 31337 | +0.0650 | 16 | 0.0203 | L | 3.4 | 0.82 |
+| sg0.32 seed 57721 | +0.0467 | 14 | 0.1292 | none | 4.2 | 0.78 |
+| sg0.35 seed 2718 | +0.0560 | 17 | 0.0001 | L | 5.4 | 0.69 |
+| sg0.35 seed 16180 | +0.0856 | 19 | 0.0019 | L | 6.0 | 0.66 |
+| sg0.35 seed 57721 | +0.0237 | 18 | 0.0891 | none | 3.3 | 0.77 |
+
+**Reported: lab pinning on the control.** Mean cosine -0.0071 over 66 pairs of different runs (32 positive), exact one-sided *p* 0.589 over 4,096 run-level inversions.
+
+**Reported: lag specificity** (the relic of a random non-adjacent epoch of the same run, 50 draws per run): mean *T* sg0.3 seed 777 +0.010, sg0.3 seed 12345 -0.007, sg0.3 seed 31337 +0.008, sg0.32 seed 777 +0.004, sg0.32 seed 2718 -0.001, sg0.32 seed 12345 +0.001, sg0.32 seed 16180 -0.006, sg0.32 seed 31337 +0.013, sg0.32 seed 57721 +0.003, sg0.35 seed 2718 +0.039, sg0.35 seed 16180 +0.028, sg0.35 seed 57721 +0.015.
+
+**Reported: the planning table.** The chance, for one nine-run arm under the registered aggregation, that it prefers the known answer (Φ), that it has at least four calls in that direction, and that it meets CONFIRMED's conditions for this arm (both, and no contrary call). The branch also needs the identity arm to prefer L; the two arms are not independent, so no joint chance is given. The per-run rate *q* of calls in the known direction is taken from G5 (and at half of it, and at 2 of 9); *w* is the per-run rate of contrary calls. These are planning numbers, not thresholds.
+
+| *q* | *w* | Φ = known answer | 4 or more calls | this arm meets CONFIRMED's conditions | any contrary call |
+|---:|---:|---:|---:|---:|---:|
+| 0.667 | 0.0 | 0.996 | 0.958 | 0.958 | 0.000 |
+| 0.667 | 0.01 | 0.910 | 0.958 | 0.878 | 0.086 |
+| 0.667 | 0.025 | 0.794 | 0.958 | 0.770 | 0.204 |
+| 0.333 | 0.0 | 0.789 | 0.350 | 0.350 | 0.000 |
+| 0.333 | 0.01 | 0.726 | 0.350 | 0.327 | 0.086 |
+| 0.333 | 0.025 | 0.639 | 0.350 | 0.295 | 0.204 |
+| 0.222 | 0.0 | 0.544 | 0.118 | 0.118 | 0.000 |
+| 0.222 | 0.01 | 0.503 | 0.118 | 0.111 | 0.086 |
+| 0.222 | 0.025 | 0.446 | 0.118 | 0.101 | 0.204 |
+
