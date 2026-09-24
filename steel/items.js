@@ -153,7 +153,7 @@ window.TOOLKIT_ROUGHIN = {
   offHint: "The approved erection set and its revision is half the argument. Name the sheet you took this off and the detailer and the super can work your list against the stamped drawings; leave it off and it's one foreman's memory until somebody re-walks the deck with you — the morning the crane's already booked.",
   phJob: "Building C — structural steel + misc metals",
   phOff: "S-401 rev 2, erection dwgs E-1 thru E-6",
-  phFrom: "Ray T — Ironclad Erectors",
+  phFrom: "Ray T — Kingpost Erectors",
   phArea: "the second level, lines 4 through 7",
   areaLabel: "Area / grid lines",
   areaHint: "Type the area the way the crew says it — a level, a grid range, a bay — and it becomes a button for the rest of the walk.",
@@ -237,7 +237,7 @@ window.TOOLKIT_ROUGHIN = {
     ] },
     { v: "access", label: "The pad, the laydown and the crane day", who: "owner", by: "crane", specs: [
       "The crane pad, the swing area and laydown for the iron on the day you give me — that's coordinated on my access ask, one page",
-      "Overhead clear of power lines in the swing, or tell me who owns the de-energize — that's the utility's, never mine",
+      "Overhead clear of power lines in the swing — a line in it is killed by the utility, on its own paper, before we swing; that's never mine to call",
       "The route the trucks take in and where they turn around with forty feet of steel on the trailer",
       "Who I meet the first morning to walk the pad, the laydown and the lines"
     ] }
@@ -264,7 +264,7 @@ window.TOOLKIT_ANSWER = {
   answers: ["We'll set it", "Already in", "Not mine", "It's the detail"],
   phJob: "Building C — structural steel",
   phTo: "Dana K — GC super",
-  phFrom: "Ray T — Ironclad Erectors",
+  phFrom: "Ray T — Kingpost Erectors",
   phOff: "steel walk 9/12, off S-401 rev 2",
   paste: "Building C — steel walk — Sep 12\n\nJob: Building C — structural steel\nFrom: Dana K — GC super\n\n14. line 4 — two weld clips missing at the beam for the mechanical dunnage\n15. line C-5 — anchor bolts look off the column, plate hanging over\n16. level 2 — roof-drain opening not framed, plumbing's waiting\n17. line 6 — knife plate at the girder doesn't match the sheet\n18. stair 2 — rail post base not set, guard's open\n19. line 3 — embed for the mason's lintel not in, head course this week\n20. deck — three sleeves not through before you closed it"
 };
@@ -306,12 +306,12 @@ window.TOOLKIT_GETIN = {
 
   heads: [
     { name: "The crane sets up and the boom swings over the building", sub: "tell me who owns the lift plan and the crane permit and who clears the swing area of people — a boom over an occupied building is coordinated by whoever runs the site, never on my say-so" },
-    { name: "There are overhead power lines in the swing or on the truck route", sub: "tell me who owns the power-down or the line cover and who confirms it's de-energized — that's the utility's and yours, and my crane does not swing until somebody who owns it says so" },
+    { name: "There are overhead power lines in the swing or on the truck route", sub: "tell me who's getting the line killed, and when — a covered line is still a hot line, and killing it and saying so is the line owner's, on its own paper; my crane does not swing near it until they have" },
     { name: "A lane, a sidewalk or a drive under the crane needs a closure while we lift", sub: "tell me who owns the closure and the permit — I'll cone and barricade what you tell me to, where you tell me, and the notice is yours to run" },
     { name: "The welder and the torch are hot work near their people", sub: "tell me who owns the hot-work permit and the fire watch and which hours you'll take the sparks and the smoke — the permit is the building's, never a checkbox on my page" },
     { name: "We may need roof or deck access to set or tie off", sub: "tell me who owns access and whether anybody has to be with us — I'm not stepping onto a deck or a roof on my own say-so" },
     { name: "The impact wrench, the grinder and the welder run most of the day", sub: "tell me which hours you'll take it and which side of the building sleeps, takes calls or has a fresh-air intake" },
-    { name: "Steel gets craned over a space that's occupied or open below", sub: "tell me who clears the floor below the pick and who tells the people under it — nothing swings over somebody's head until you name who owns that" },
+    { name: "Steel gets craned over a space that's occupied or open below", sub: "tell me who clears the floor below the pick and who tells the people under it — nothing swings over that floor until it's clear and whoever cleared it says so; a name on this page isn't a clear floor" },
     { name: "A trailer of steel sits in the gate or the lane while we pick it clean", sub: "tell me who owns the gate and the traffic control for a delivery that can't move until the crane empties it — forty feet of iron doesn't pull out fast" },
     { name: "Fall-protection anchors may have to go into your structure", sub: "tell me who owns the structure we tie to and who signs off on an anchor point — I'm not drilling a tie-off into somebody's building on my own call" }
   ],
@@ -323,7 +323,7 @@ window.TOOLKIT_GETIN = {
   phLoud: "the crane, the impact wrench and the welder, most of the day",
   phTo: "Marcus D — CM",
   phMe: "Ray T — 559-555-0143",
-  phCo: "Ironclad Erectors",
+  phCo: "Kingpost Erectors",
 
   /* THE THREE FIELDS THE ENGINE REQUIRES. `closing` is CONCATENATED by the page
      (`G.closing.concat([...])`), so omitting it is a TypeError on load and a
@@ -332,7 +332,7 @@ window.TOOLKIT_GETIN = {
 
   closing: [
     "This is an ask, not a booking — nothing gets craned until you answer. Wrong days? Name the ones the site can live with and we'll take them.",
-    "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first morning, where the pad and the laydown go, and where the power and the control lines are — and the ones that matter most, who owns the closure, the power-down on any overhead line, and the hot-work permit for the welding, because none of those is ours to issue. If a boom swings over anybody's head, name who clears the floor below it before we pick."
+    "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first morning, where the pad and the laydown go, and where the power and the control lines are — and the ones that matter most, who owns the closure, the power-down on any overhead line, and the hot-work permit for the welding, because none of those is ours to issue. If a boom swings over any floor, it's cleared and whoever cleared it has said so before we pick — a name isn't a clear floor."
   ]
 };
 
@@ -343,9 +343,13 @@ window.TOOLKIT_GETIN = {
  * neither: it is 6 a.m., the iron's on the truck, a crane and a raising gang are
  * on standby whether it flies or not, and one of the things that had to be ready
  * isn't. He walks the pick, names what stops the set IN HIS WORDS, and sends the
- * only ask that matters — clear it and tell me when, or direct me IN WRITING to
- * fly it as it sits. A crane day does not come back, and iron set on a condition
- * somebody else owned is on HIS record; this note is what it stood on.
+ * only ask that matters — fix it and tell me who and when, or give me a NEW DAY
+ * for the crew and the crane, in writing. There is NO fly-it-as-it-sits reply
+ * (C3749): a hot line, an anchor bolt, an embed, the deck below and a detail that
+ * doesn't match clear with whoever owns them, never on a super's written go — and
+ * no stop below may ask for one. A crane day does not come back, and iron set on
+ * a condition somebody else owned is on HIS record; this note is what the hold
+ * stood on.
  *
  * WHAT IT NEVER CARRIES — the same refusal list every steel page stands on. No
  * torque, no bolt tension, no weld size, no capacity, no survey elevation, no
@@ -372,7 +376,7 @@ window.TOOLKIT_ITEMS.notready = {
   stops: [
     {
       name: "Anchor bolts aren't set — I've nothing to land on",
-      sub: "The columns land on them and they're not in, or not where the base plate wants them. Whoever set them brings them in off the approved anchor-bolt plan, or direct me in writing — I'm not coring and re-drilling on crane morning."
+      sub: "The columns land on them and they're not in, or not where the base plate wants them. Whoever set them brings them in off the approved anchor-bolt plan; a bolt fixed or moved comes back on the engineer's paper, not somebody's say-so, before a column lands on it."
     },
     {
       name: "Bolts are in, but nobody's shot them to line and grade",
@@ -380,11 +384,11 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "The embeds or plates I weld to aren't cast, or they moved",
-      sub: "The clips and the beam seats land on somebody's embed and it's not in the concrete, or it's not where the set puts it. Whoever cast it owns it — off their sheet — or direct me in writing to field-fit it, and that's a tag."
+      sub: "The clips and the beam seats land on somebody's embed and it's not in the concrete, or it's not where the set puts it. Whoever cast it owns it — off their sheet — and a fix is a revised detail back through the detailer and the engineer, not a field-fit on a tag."
     },
     {
       name: "The deck or slab I set off isn't poured, or isn't cured",
-      sub: "I can't land the next tier or a column off a floor that isn't there yet. Tell me the day it's poured and the day I can load it — the day, not the week; whether it's cured to carry is the engineer's call, not mine."
+      sub: "I can't land the next tier or a column off a floor that isn't there yet. Tell me the day it's poured, and the day the engineer's release to load it comes back on paper — the day, not the week; whether it's cured to carry is the engineer's call, not mine or yours."
     },
     {
       name: "The crane can't get set up — no pad, soft ground, radius not clear",
@@ -396,7 +400,7 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Power lines over the swing, still hot",
-      sub: "The boom or the load swings inside the line and nobody's de-energized it or set a spotter. That's the utility's power-down and a permit — I own none of it, and I don't fly under a hot line."
+      sub: "The boom or the load could reach the line and nobody's had it de-energized. Killing it is the utility's, on its own paper — a spotter keeps a clearance, he doesn't make one. I own none of it, and I don't fly under a hot line."
     },
     {
       name: "No approved erection set, or the wrong rev, for this pick",

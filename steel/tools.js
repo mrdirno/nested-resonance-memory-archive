@@ -74,7 +74,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Not Ready to Set",
     href: "not-ready-to-set.html",
-    desc: "The crane's booked and the iron's on the truck, and one of the things that had to be ready — the anchor bolts nobody shot, the embeds that never got cast, the deck below that isn't poured, a crane that can't get set up, a laydown that's still full, a line over the swing nobody de-energized — isn't. Walk the pick before you call the iron up, name what stops the set in your own words, and send the two-button ask: clear it and tell me when, or direct me in writing to fly it as it sits. It states no torque, no bolt tension, no capacity and no survey number — it hands whoever runs the job the choice, on the record, because a crane day doesn't come back and iron you set on somebody else's condition is on your record.",
+    desc: "The crane's booked and the iron's on the truck, and one of the things that had to be ready — the anchor bolts nobody shot, the embeds that never got cast, the deck below that isn't poured, a crane that can't get set up, a laydown that's still full, a line over the swing nobody de-energized — isn't. Walk the pick before you call the iron up, name what stops the set in your own words, and send the ask: who owns each hold and when it clears, or a new day for the crew and the crane. It states no torque, no bolt tension, no capacity and no survey number, and a written reply is never permission to fly it as it sits or to change engineered steel — each hold clears with whoever owns it, on the record, because a crane day doesn't come back and iron you set on somebody else's condition is on your record.",
     chip: "#B4C9CF",
     audience: "Foreman → GC super / concrete foreman / crane outfit / CM / building engineer"
   },
@@ -95,7 +95,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Write-Up Setup",
     href: "write-up.html",
-    desc: "The write-ups you put off — what the field didn't match on the stamped set, the day the crane couldn't fly, the embed that was cast wrong before you got there, the RFI you're still waiting on, the area you were directed to set anyway → dictate the mess at the gang box, get back something the detailer and the office can forward. Set up every one you write in a single block, and it never states a torque, a weld size, a material grade, a capacity or a cause, and never says a connection holds.",
+    desc: "The write-ups you put off — what the field didn't match on the stamped set, the day the crane couldn't fly, the embed that was cast wrong before you got there, the RFI you're still waiting on, the sleeve or the opening you were directed to set past → dictate the mess at the gang box, get back something the detailer and the office can forward. Set up every one you write in a single block, and it never states a torque, a weld size, a material grade, a capacity or a cause, and never says a connection holds.",
     chip: "#B4C9CF",
     audience: "Foreman → office / detailer / GC / EOR-through-the-office"
   },

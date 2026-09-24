@@ -138,15 +138,15 @@ window.TRADE_DOCS = {
       "from": "the foreman who was told to keep going",
       "to": "our PM and the GC super, on the record",
       "why": "The record that you raised it, named the condition, and were directed to set anyway — dated, before your steel covered it. It is the backup a change request or a claim is built on later.",
-      "note": "This states that you were directed and by whom, and what the condition was — never that the direction was wrong, and never what it will cost. The office owns the price and the change number.",
+      "note": "This states that you were directed and by whom, and what the condition was — never that the direction was wrong, and never what it will cost. The office owns the price and the change number. It is the record of a COORDINATION call — a sleeve, an opening or a leave-out somebody else still owed, a sequence changed — never of a hold only its owner can clear: an anchor bolt, an embed a connection sits on, the deck below, a hot line, the crane's own setup, hot work without the building's permit and a watch, the wind, or a detail that doesn't match. No direction from the job clears those, so they are not set on one.",
       "omit": "WHO DIRECTED YOU, WHEN, AND HOW — a name, a time, and whether it was verbal, texted or on a sheet. \"They told me to keep going\" is not a record. \"Super D, 7:15 at the gang box, verbal, asked to confirm in writing\" is.",
       "needs": ["when", "who"],
-      "halt": "Only if there is no condition named — a directed-to-proceed with nothing you flagged first is just a day's work.",
+      "halt": "Only if there is no condition named — a directed-to-proceed with nothing you flagged first is just a day's work. And if the condition is an anchor bolt, an embed a connection sits on, the deck below, a hot line, the crane's own setup, hot work without the building's permit and a watch, the wind, or a detail that doesn't match, this is the wrong document: that is Won't Fit or a hold on Not Ready to Set, cleared by whoever owns it, never set under direction.",
       "facts": ["the date and time", "who directed you and how", "the condition you flagged first", "the area or grid line", "what you did after"],
       "sections": [
         {
           "h": "WHAT I FLAGGED, AND WHEN",
-          "r": "The condition you raised before you set — the open RFI, the embed not in, the bolt off, the drawing that didn't match — and the time you raised it, off your leave-out or field-condition record if you have one. Point to it."
+          "r": "The condition you raised before you set — an RFI on a sleeve or an opening, the sleeve or the opening somebody else still owed, the leave-out not in, the sequence that changed — and the time you raised it, off your leave-out or field-condition record if you have one. Point to it."
         },
         {
           "h": "WHO DIRECTED ME TO SET IT",
