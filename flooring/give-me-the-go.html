@@ -111,8 +111,16 @@
     { name: "I don't know which way it goes or where the seam lands",
       sub: "and that's a decision somebody makes once and everybody lives with." },
     { name: "It might be the old stuff",
-      sub: "9x9s, black mastic, or something pre-1978 — we stopped and nobody has touched it." }
+      sub: "9x9s, black mastic, or something pre-1978 — we stopped and nobody has touched it.",
+      fence: "the old stuff" }
   ];
+  /* THE FENCE (C3751), read off the DATA, never off a name — siding's pattern.
+     A hold whose `fence` is set is one no written go clears: suspect old goods
+     wait on the owner's survey, and the page's own warn already says so. The
+     closing used to offer "give me the go in writing … laid over … as it is
+     today" over it anyway. */
+  var FENCE = {};
+  STUCK.forEach(function (x) { if (x.fence) FENCE[x.name] = x.fence; });
 
   /* WHAT USUALLY GETS LEFT OFF. The forget-list is the half of shape #2 that
      turns a complaint into a document: it names the things that will be argued
@@ -249,7 +257,23 @@
        never states a consequence, a legal effect or a warranty position: it says
        what he will and will not do, which is the only thing he actually owns. */
     closing: [
-      "I'm not covering it on a conversation. Either give me the go in writing — that you want it laid over what's written above, as it is today — or tell me who's fixing it and by when, and I'll work to that date.",
+      /* THE GO NEVER REACHES THE OLD STUFF (C3751). A note of nothing but fenced
+         holds offers no go at all; a mixed one keeps the go for the holds that
+         are the receiver's to direct and says what it never reaches. */
+      function (get) {
+        var s = get("stuck") || [];
+        var f = s.filter(function (nm) { return FENCE[nm]; });
+        if (f.length && f.length === s.length)
+          return "I'm not covering it on a conversation, and a go in writing doesn't cover it either. Tell me who's getting the owner's survey done and by when, and I'll work to that date.";
+        return "I'm not covering it on a conversation. Either give me the go in writing — that you want it laid over what's written above, as it is today — or tell me who's fixing it and by when, and I'll work to that date.";
+      },
+      function (get) {
+        var s = get("stuck") || [];
+        var f = s.filter(function (nm) { return FENCE[nm]; }).map(function (nm) { return FENCE[nm]; });
+        if (!f.length) return "";
+        return (f.length === s.length ? "There's no go on this — " : "The go never reaches ")
+          + f.join(" or ") + ": that holds until the owner's survey says what it is, whatever the reply says, and nobody on my crew touches it till then.";
+      },
       "Once the glue is down nobody gets this slab back, and there's no way to show anybody what was under it. That's the whole reason this is in writing instead of a phone call."
     ],
 

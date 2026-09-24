@@ -217,7 +217,7 @@ window.TOOLKIT_ROUGHIN = {
     { v: "slab", label: "The floor I'm actually going over", who: "gc", by: "prep", specs: [
       "Broom clean and empty, with the joints, cracks and core holes filled by whoever owns that — I am not patching a slab on the day and calling it mobilisation.",
       "Tell me what came off it and what is still stuck to it. Old adhesive is a different day than a bare slab, and I would rather find that this week.",
-      "If it is old resilient or black mastic, stop and tell me — that is the owner's survey and somebody else's licence, and nobody on my crew touches it until you say.",
+      "If it is old resilient or black mastic, stop and tell me — that is the owner's survey and somebody else's licence, and nobody on my crew touches it until the survey says what it is. A say-so isn't a survey.",
       "Walk it with me with a straightedge before you hand it over. What is under it is invisible the day after I cover it, and after that it is mine."
     ] },
     { v: "readings", label: "Who is testing it, and when", who: "gc", by: "prep", specs: [
