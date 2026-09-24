@@ -421,6 +421,40 @@ for (const { rel, trade, src } of list) {
     fail(rel, 'no legacyKey declared — a page that had a sticky header must adopt it or the foreman loses it. A page born with a card declares `legacyKey: null` and says so');
   }
 
+  /* ── TYPE, THEN TAP (C3749) ─────────────────────────────────────────────
+   * Every check above fills fields BY SCRIPT and never has a field focused when
+   * it taps a chip — and that is the one sequence a man always performs: he
+   * types the job's name (or its lot, or its PO) and his next touch is "+ Another
+   * job". The field's blur fires `change` on that touch's press, the card used to
+   * repaint its whole chip row right then, and the button under his finger was
+   * gone before the release: no click, nothing visible, and the next house's
+   * name he typed RENAMED the job he was still on — its gate code, its lot and
+   * its PO riding onto the new house's order. A real pointer tap, focus still in
+   * the name box, in a fresh profile so nothing above leaks in. */
+  {
+    const nameField = (src.match(/nameField:\s*"([^"]+)"/) || [])[1] || 'fJob';
+    const c3 = await browser.newContext({ viewport: { width: 390, height: 780 } });
+    await c3.addInitScript(STUB);
+    const p3 = await c3.newPage();
+    await p3.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
+    await p3.waitForSelector('#jobcard .jc-new', { state: 'visible', timeout: 5000 }).catch(() => {});
+    let jobs = -1;
+    if (await p3.$('#' + nameField) && await p3.$('#jobcard .jc-new')) {
+      await p3.fill('#' + nameField, 'TAPTEST first house');
+      await p3.click('#jobcard .jc-new');
+      await p3.waitForTimeout(120);
+      jobs = await p3.evaluate(k => { try { const s = JSON.parse(localStorage.getItem(k) || 'null'); return s && s.jobs ? s.jobs.length : 0; } catch (e) { return 0; } }, KEY);
+      if (jobs !== 2) fail(rel, `a tap on "+ Another job" straight after typing in #${nameField} was lost (${jobs} job(s) after the tap) — the next name he types renames the job he is on, and its gate, lot and PO ride along`);
+      else {
+        await p3.fill('#' + nameField, 'TAPTEST second house');
+        await p3.waitForTimeout(80);
+        const names = await p3.evaluate(k => { try { return JSON.parse(localStorage.getItem(k)).jobs.map(j => j.name); } catch (e) { return []; } }, KEY);
+        if (!names.includes('TAPTEST first house')) fail(rel, `after type-then-tap the first job was renamed (jobs: ${JSON.stringify(names)})`);
+      }
+    } else fail(rel, `type-then-tap could not run — no #${nameField} or no "+ Another job" on the page`);
+    await c3.close();
+  }
+
   /* THE BLOCK COUNT IS PRINTED, not just asserted. An assertion that quietly
    * covers nothing reads exactly like an assertion that passed — and the block
    * ids are the ones a leak would actually be measured in on the one page that

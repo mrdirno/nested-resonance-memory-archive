@@ -239,17 +239,24 @@
 
     /* ── write-ins: same row shape, same axes as a normal line, removable ───── */
     var wiSection = list.querySelector(".cat .wi-add") ? list.querySelector(".wi-add").closest(".cat") : null;
+    var addWriteIn = null, wiInput = null;
     if (wiSection) {
       var wiUL = wiSection.querySelector("ul.items");
-      var wiInput = wiSection.querySelector(".wi-input");
-      var addWriteIn = function () {
+      wiInput = wiSection.querySelector(".wi-input");
+      addWriteIn = function (quiet) {
         var raw = wiInput.value;
         // One row per line when the caller opted into the textarea; otherwise the
         // whole value is one row exactly as before.
+        // A takeoff pasted out of a notes app keeps its bullets and its list
+        // numbers, and "- 3. 2 roll trim coil" puts a list number against a count
+        // (C3750): a pasted line loses them, a typed "3.5 in" or "2x4" does not.
         var vals = (cfg.writeinTextarea ? raw.split(/\r?\n/) : [raw])
-          .map(function (s) { return s.trim(); })
+          .map(function (s) {
+            s = s.trim();
+            return cfg.writeinTextarea ? s.replace(/^(?:(?:[-*\u2022\u00b7\u2013\u2014]+|\d{1,3}[.)])\s+)+/, "") : s;
+          })
           .filter(function (s) { return s.length; });
-        if (!vals.length) { wiInput.focus(); return; }
+        if (!vals.length) { if (quiet !== true) wiInput.focus(); return; }
         vals.forEach(function (v) {
           var wiDef = { n: v, ax: cfg.writeinAx || [], flags: cfg.writeinFlags || [],
                         qtyDefault: cfg.writeinQtyDefault };
@@ -259,9 +266,12 @@
           li.querySelector(".tick").checked = true;
           li.classList.add("is-checked");
         });
-        wiInput.value = ""; wiInput.focus(); refresh();
+        wiInput.value = "";
+        if (quiet !== true) wiInput.focus();
+        refresh();
       };
-      wiSection.querySelector(".wi-add").addEventListener("click", addWriteIn);
+      wiSection.querySelector(".wi-add").addEventListener("click", function () { addWriteIn(); });
+      wiInput.addEventListener("input", function () { paintCount(tickedCount()); });
       wiInput.addEventListener("keydown", function (e) {
         if (e.key !== "Enter") return;
         // In a textarea Enter is a NEWLINE — that is the whole point of the
@@ -384,6 +394,24 @@
       });
     }
 
+    /* THE COUNT SAYS WHAT IS STILL IN THE BOX (C3750). Copy and Send add an
+     * un-Added write-in before they read the list, so lines typed but never
+     * Added reach the message — and until the tap they were on no preview and in
+     * no count. The count now carries them, updated as he types. */
+    function pendingInBox() {
+      if (!wiInput) return 0;
+      var v = wiInput.value;
+      if (!v.trim()) return 0;
+      return cfg.writeinTextarea ? v.split(/\r?\n/).filter(function (x) { return x.trim(); }).length : 1;
+    }
+    function paintCount(n) {
+      if (!countEl) return;
+      var t = cfg.countLabel
+        ? cfg.countLabel(n)
+        : (n ? n + " line" + (n === 1 ? "" : "s") + " on the list" : "Nothing on the list yet");
+      var p = pendingInBox();
+      countEl.textContent = p ? t + " · +" + p + " in the box" : t;
+    }
     function refresh() {
       data.forEach(function (cat) {
         var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
@@ -413,11 +441,7 @@
        * chrome, so the product is written first: a caller bug in the chrome can
        * no longer freeze the product. */
       if (preview) preview.textContent = text();
-      if (countEl) {
-        countEl.textContent = cfg.countLabel
-          ? cfg.countLabel(n)
-          : (n ? n + " line" + (n === 1 ? "" : "s") + " on the list" : "Nothing on the list yet");
-      }
+      paintCount(n);
       if (cfg.onRefresh) cfg.onRefresh(n);
       schedulePersist();
     }
@@ -436,7 +460,9 @@
     var persistTimer = null;
     function persist() {
       if (!cfg.persistKey) return;
-      var payload = { v: 1, cats: {}, extra: cfg.persistExtra ? cfg.persistExtra() : null };
+      // `t` is when the list was saved, on this device's own clock — compared only
+      // with itself (restoreLast: same day or not), never printed (C3750).
+      var payload = { v: 1, t: Date.now(), cats: {}, extra: cfg.persistExtra ? cfg.persistExtra() : null };
       data.forEach(function (cat) {
         var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
         var rows = [].slice.call(sec.querySelectorAll(".item.is-checked")).map(function (li) {
@@ -447,6 +473,14 @@
       });
       try {
         if (Object.keys(payload.cats).length || payload.extra) {
+          /* `t` IS WHEN THE LIST LAST CHANGED, NOT WHEN IT WAS LAST WRITTEN (C3751).
+           * Opening the page, a blur and Clear's own pre-stash save all re-save an
+           * unchanged list, and a `t` they restamped made yesterday's call read as
+           * today's: its SHORT ON THE WALL, its day and its driver rode into the
+           * next call through the same-day rule that exists to drop them. */
+          var prev = null;
+          try { prev = JSON.parse(localStorage.getItem(cfg.persistKey) || "null"); } catch (e) {}
+          if (prev && prev.t && JSON.stringify([prev.cats, prev.extra || null]) === JSON.stringify([payload.cats, payload.extra || null])) payload.t = prev.t;
           localStorage.setItem(cfg.persistKey, JSON.stringify(payload));
         } else {
           localStorage.removeItem(cfg.persistKey);
@@ -520,7 +554,9 @@
       return o;
     }
 
-    function restore(key) {
+    var restored = { header: false, t: 0 };
+    function restore(key, opts) {
+      restored = { header: false, t: 0 };
       if (!cfg.persistKey) return false;
       var raw = null;
       try { raw = localStorage.getItem(key || cfg.persistKey); } catch (e) { return false; }
@@ -528,7 +564,11 @@
       var p;
       try { p = JSON.parse(raw); } catch (e) { return false; }
       if (!p || !p.cats) return false;
-      if (cfg.onRestoreExtra && p.extra) cfg.onRestoreExtra(p.extra);
+      restored.t = +p.t || 0;
+      if (cfg.onRestoreExtra && p.extra && !(opts && opts.header === false)) {
+        cfg.onRestoreExtra(p.extra);
+        restored.header = true;
+      }
       var any = false;
       data.forEach(function (cat) {
         var rows = p.cats[cat.id];
@@ -566,33 +606,35 @@
      * exact page. Clear is the only thing that ever destroys a list, so Clear is
      * where the copy gets kept: one slot, overwritten each time. */
     var LAST_KEY = cfg.persistKey ? cfg.persistKey + ".last" : null;
+    /* A LIST WITH NO LINES IS NOT A LAST CALL (C3751). A Clear after touching
+     * only the header (the HOT flag, the day) stashed a record with no lines over
+     * the real last call, and a Clear on an empty list told the page a call had
+     * been stashed when none had. The swap's own rule, applied to Clear: an empty
+     * list leaves the slot alone. Returns whether it stashed, and onClear is told. */
     function stashLast() {
-      if (!LAST_KEY) return;
+      if (!LAST_KEY) return false;
       try {
         var raw = localStorage.getItem(cfg.persistKey);
-        if (raw) localStorage.setItem(LAST_KEY, raw);
+        var p = raw ? JSON.parse(raw) : null;
+        if (p && p.cats && Object.keys(p.cats).length) { localStorage.setItem(LAST_KEY, raw); return true; }
       } catch (e) {}
+      return false;
     }
     function hasLast() {
       if (!LAST_KEY) return false;
       try { return !!localStorage.getItem(LAST_KEY); } catch (e) { return false; }
     }
-    function restoreLast() {
-      if (!LAST_KEY) return false;
-      // Strip the current list first, or a restore stacks on top of what is there.
-      [].forEach.call(list.querySelectorAll(".item .rm"), function (b) { b.closest(".item").remove(); });
-      [].forEach.call(list.querySelectorAll(".tick"), function (t) {
-        t.checked = false; t.closest(".item").classList.remove("is-checked");
-      });
-      var ok = restore(LAST_KEY);
-      refresh();
-      return ok;
-    }
-
-    function clearAll() {
-      // The list about to be destroyed is the one worth keeping — stash before wipe.
-      persist();
-      stashLast();
+    /* ONE RESET, FOR BOTH THINGS THAT START A LIST OVER (C3749). Clear used to
+     * blank the count and the note and leave every row's SELECTS and FLAGS as the
+     * last list left them, and Start-from-last reset even less — so the next list
+     * that re-ticked a row printed yesterday's "Left" on an end cap, yesterday's
+     * back on a roll of coil, yesterday's MATCH on a line nobody matched, as if
+     * picked today, and each of those switched off the question the neutral
+     * option exists to ask. And a restored row whose saved count was blank kept
+     * whatever count was sitting in the hidden box. A row goes back to exactly
+     * what it rendered with: its default option, its default flag (a `fixed`
+     * flag is disabled and keeps its tick), its default count, no note. */
+    function resetRows() {
       // Clones and write-ins are removable rows — clearing must actually remove
       // them, not just untick them, or the next list starts with yesterday's
       // duplicates sitting unticked in the middle of it.
@@ -600,10 +642,69 @@
       [].forEach.call(list.querySelectorAll(".tick"), function (t) {
         t.checked = false; t.closest(".item").classList.remove("is-checked");
       });
-      [].forEach.call(list.querySelectorAll(".i-qty"), function (q) { q.value = qtyDefault(null, cfg); });
+      // Each row's OWN default, which itemHTML wrote to data-def — never the
+      // tool-wide one (C3750): hvac's truck stock renders every row at its own
+      // par, and a reset that wrote the tool default put a "1" on thirty of them.
+      [].forEach.call(list.querySelectorAll(".i-qty"), function (q) {
+        var d = q.getAttribute("data-def");
+        q.value = d != null ? d : qtyDefault(null, cfg);
+      });
       [].forEach.call(list.querySelectorAll(".i-note"), function (x) { x.value = ""; });
+      [].forEach.call(list.querySelectorAll(".i-ax"), function (sel) {
+        var i = 0;
+        [].forEach.call(sel.options, function (o, k) { if (o.defaultSelected) i = k; });
+        sel.selectedIndex = i;
+      });
+      [].forEach.call(list.querySelectorAll(".i-flag"), function (c) { if (!c.disabled) c.checked = c.defaultChecked; });
+    }
+
+    /* START FROM LAST IS A SWAP, NOT A WIPE (C3749). The button sits above the
+     * list on every page that has one, and it replaced whatever was on the glass
+     * with no stash and no undo: one stray tap at 6:15 and the list he had been
+     * building was gone. Now the list on the glass becomes the "last" one, so a
+     * second tap brings it straight back. An empty list is not worth keeping and
+     * leaves the slot alone. */
+    /* THE HEADER GOES WITH ITS LIST (C3750). A swap only swapped ROWS: the list
+     * that came back wore the header of the one that left whenever its own had
+     * been saved untouched — the other call's HOT flag, its day, its driver. And
+     * on a start (nothing ticked) the saved header overwrote the one he had just
+     * typed for today. So: when a live list is swapped out its header rides into
+     * "last" with it, the page's own Clear resets the header, and the incoming
+     * list's header is applied — both ways, nothing lost. When nothing is ticked
+     * there is no swap, and a header he has already touched today wins; an
+     * untouched one (a fresh page, or one a stray Clear just blanked) takes the
+     * saved header. onRestoreLast is told whether the header came back and when
+     * the list was saved, so a page can drop YESTERDAY's urgency without dropping
+     * the urgency of a list it is only undoing. */
+    function restoreLast() {
+      if (!LAST_KEY) return false;
+      var lastRaw = null;
+      try { lastRaw = localStorage.getItem(LAST_KEY); } catch (e) { return false; }
+      if (!lastRaw) return false;
+      persist();
+      var liveRaw = null;
+      if (tickedCount()) { try { liveRaw = localStorage.getItem(cfg.persistKey); } catch (e) {} }
+      var typedHeader = !!(cfg.persistExtra && cfg.persistExtra());
+      resetRows();
+      if (liveRaw && cfg.onClear) cfg.onClear(true);
+      var ok = restore(LAST_KEY, { header: !!liveRaw || !typedHeader });
+      if (liveRaw) { try { localStorage.setItem(LAST_KEY, liveRaw); } catch (e) {} }
+      if (cfg.onRestoreLast) cfg.onRestoreLast(restored.header, restored.t);
+      refresh();
+      return ok;
+    }
+
+    function clearAll() {
+      // The list about to be destroyed is the one worth keeping — stash before wipe.
+      persist();
+      var stashed = stashLast();
+      resetRows();
+      // And the box (C3750): Copy and Send now flush whatever sits in it, so a
+      // list pasted before a Clear and never Added went out on the NEXT call,
+      // under "Copied", in no preview he had read.
+      if (wiInput) wiInput.value = "";
       try { if (cfg.persistKey) localStorage.removeItem(cfg.persistKey); } catch (e) {}
-      if (cfg.onClear) cfg.onClear();
+      if (cfg.onClear) cfg.onClear(stashed);
       // A wiped list that is still filtered down to three rows reads as a broken
       // page rather than a fresh one.
       if (filter) filter.reset();
@@ -611,8 +712,17 @@
     }
     if (clearBtn) clearBtn.addEventListener("click", clearAll);
 
-    if (copyBtn) copyBtn.addEventListener("click", function () { copyText(text(), copyBtn, cfg.onFlash); });
-    if (copyBtn && window.ToolkitSend) ToolkitSend(copyBtn, text, { after: preview });   // Send: the same text(), through the share sheet (C3698)
+    /* WHAT IS STILL IN THE BOX GOES ON THE LIST (C3749). A pasted list that was
+     * never Added was silently left out of the copied message — and on a page
+     * whose main material exists ONLY as his typed lines (siding's Counter Call:
+     * nobody forgets the siding, so the siding is the write-in) one missed tap on
+     * Add sent the forget-list with no siding in it, under "Copied. Go send it."
+     * Copy and Send now add it first, the way Add would, without pulling the
+     * keyboard up. */
+    function flushWriteIn() { if (addWriteIn && wiInput && wiInput.value.trim()) addWriteIn(true); }
+    function sendText() { flushWriteIn(); return text(); }
+    if (copyBtn) copyBtn.addEventListener("click", function () { copyText(sendText(), copyBtn, cfg.onFlash); });
+    if (copyBtn && window.ToolkitSend) ToolkitSend(copyBtn, sendText, { after: preview });   // Send: the same text(), through the share sheet (C3698)
 
     /* ── NARROWING THE LIST ────────────────────────────────────────────────────
      * These lists run 35 to 151 items and had no way to get down them but the

@@ -316,7 +316,25 @@
       }
       DEV.forEach(function (id) { var el = $(id); if (el) store.device[id] = el.value; });
       write();
-      paint();
+      relabel();
+    }
+
+    /* THE ROW IS NOT REBUILT ON A KEYSTROKE (C3749). collect() used to end in
+     * paint(), which replaces the whole chip row with innerHTML — and collect()
+     * runs on the `change` a field fires when it BLURS, which is the mousedown or
+     * touchstart of the very tap that leaves it. So a man who typed the lot and
+     * then tapped "+ Another job" or the other job's chip had the button swapped
+     * out from under his finger between press and release: no click landed,
+     * nothing visibly happened, and the next thing he typed — the next house's
+     * name — RENAMED the job he was still on, carrying its lot, its gate and its
+     * PO onto the new house's order. jobcard-scope set values by script and never
+     * focused a field before tapping, so it could not see it. A keystroke changes
+     * one label, so one label is what changes; paint() stays for the three events
+     * that change the SET of chips (new, switch, drop), which all go through
+     * apply(). */
+    function relabel() {
+      var j = cur(), on = host.querySelector('.jc-chip.on');
+      if (j && on && on.textContent !== label(j)) on.textContent = label(j);
     }
 
     /* ── the chips ─────────────────────────────────────────────────────────────
