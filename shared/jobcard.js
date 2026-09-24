@@ -376,9 +376,34 @@
             : '');
     }
 
+    /* ONE TAP, ONE CHANGE (C3751). C3749 made the first tap on "+ Another job"
+     * land, and the habit the old row taught (tap twice, because the first tap
+     * was eaten) now lands a SECOND tap on whatever the repaint put under the
+     * finger: at one job the row is only that button, at two the label appears
+     * and the job he just left sits where the button was — so the second tap
+     * switched him back, and the next house's name renamed the job he left. A
+     * drop has the same shape. A tap within 700 ms and 30 px of the last tap that
+     * changed the set of chips is the same tap, and does nothing. */
+    var lastAct = null;
+    function sameTap(e) {
+      return !!(lastAct && e.timeStamp - lastAct.t < 700
+        && Math.abs(e.clientX - lastAct.x) < 30 && Math.abs(e.clientY - lastAct.y) < 30);
+    }
+    /* ...and the same tap does not take the focus either: the new card put his
+     * cursor in the name box, and a ghost tap landing on a chip would pull it
+     * out and drop the keyboard. */
+    host.addEventListener('mousedown', function (e) { if (sameTap(e)) e.preventDefault(); });
+    /* A tap after he has typed anything is deliberate: the guard is for the
+     * second tap of a double tap, which has nothing typed between the two. */
+    document.addEventListener('input', function () { lastAct = null; }, true);
     host.addEventListener('click', function (e) {
       var b = e.target.closest('button');
       if (!b || !host.contains(b)) return;
+      if (sameTap(e)) return;
+      if (b.getAttribute('data-new') || b.getAttribute('data-drop')
+          || (b.getAttribute('data-j') && b.getAttribute('data-j') !== store.cur)) {
+        lastAct = { t: e.timeStamp, x: e.clientX, y: e.clientY };
+      }
 
       if (b.getAttribute('data-new')) {
         /* SAVE THE ONE HE IS LEAVING FIRST. Minting the new card before

@@ -460,8 +460,8 @@
     var persistTimer = null;
     function persist() {
       if (!cfg.persistKey) return;
-      // `t` is when the list was saved, on this device's own clock — compared only
-      // with itself (restoreLast: same day or not), never printed (C3750).
+      // `t` is when the list's content last changed (see below), on this device's
+      // own clock; the page's onRestoreLast compares it with that clock; never printed.
       var payload = { v: 1, t: Date.now(), cats: {}, extra: cfg.persistExtra ? cfg.persistExtra() : null };
       data.forEach(function (cat) {
         var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
