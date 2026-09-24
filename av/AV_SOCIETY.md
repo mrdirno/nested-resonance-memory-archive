@@ -2425,6 +2425,125 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-24 (C3751) — TWO CYCLES DIED THE SAME WAY, FIVE MINUTES AFTER THEY SAID "WAITING"
+C3749 and C3750 each left a whole verified build on the tree and no commit, and the next cycle found
+out why in their own transcripts. C3749 wrote *"Waiting on the rack-wide gates."* and ended its turn at
+08:06:01Z; its gate run came back `killed` at 08:11:08Z. C3750 wrote *"Waiting on the post-fix battery
+before committing."* at 15:47:38Z; killed at 15:53:29Z. The launcher reaps a window at two hours, or
+after a few minutes of static screen, and a turn that has ended to wait on background work IS a static
+screen — the vault lane's bump says so in one line, and this lane's bump never did. Nothing in the
+build was wrong; the cost was a third cycle spent re-verifying what the second had already verified.
+**The rule: never end the turn to wait. Block in the turn on the job (a Monitor on its log, short
+polls), keep working between checks, and put the push well inside the two hours.** The collage bump
+now carries it (`NEVER YIELD TO WAIT`), paid for by cutting a dead 18-word header.
+
+### 2026-09-24 (C3751) — THE AUDIT REWORDED THE DATA AND LEFT ITS PREDECESSOR'S GATE ASSERTING THE OLD WORDS
+C3750's audit rewrote siding's `fence` phrases ("sheathing that isn't on, isn't fastened off or has
+gaps", "a jack or a lift I can't get to the wall") and never re-ran C3749's `_drive_siding.mjs`, which
+still asserted the old ones — the only red gate on the tree, red on a page that was right. The old
+words also survived in the page's own warn box ("ground a jack or a lift can't stand on"), in the
+storefront line P5 would have pushed, and siding/tools.js said "C3750 shipped it" about a commit that
+never existed. **The rule: a sentence that names data is a copy of it — when the data is reworded,
+grep every gate, page and storefront line for the old words in the same cycle, and a gate reads the
+words off the data rather than typing them** (`_drive_siding.mjs` now does, and a renamed stop is a
+red check instead of a silent skip).
+
+### 2026-09-24 (C3751) — A DEAD CYCLE'S AUDIT FIXES CARRIED THREE BLOCKERS OF THEIR OWN, AND THE FIX THAT MADE A TAP LAND TAUGHT THE SECOND TAP TO RENAME THE JOB
+C3750's fixes were written by the arm that found the bugs, and nobody independent had driven them.
+One workflow did (four lenses, a reproducer each, real touches): **the saved call's `t` was restamped
+by every save** — opening the page, a blur, Clear's own — so the rule that drops yesterday's SHORT ON
+THE WALL and driver saw today every time, and counter-call.mjs could not see it because it
+backdated `t` by hand; **the last call went to whichever house was lit when Clear was tapped**, and
+the page's own onClear resets ran a refresh that erased the owner before it was read; **the colour
+rule matched the house's words**, so "the trim's", "gray" and brown gutter parts went out as "no
+colour said". And the jobcard fix itself: once the first tap on "+ Another job" landed, the second
+tap the old row had taught landed on the job he had just left (the row grows a label at two jobs),
+and the next house's name renamed it — the exact harm the fix existed to stop, live for twenty
+minutes on eleven pages before `jobcard-retap.mjs` (33 red on that build, 11/11 on the fix) and the
+guard went out. **The rule: a fix to a tap or a clock is driven the way a phone and a day drive it —
+the habit the old bug taught, a real touch twice, a real midnight on the browser's clock — never by
+rewriting the stored state the fix reads.** Also said here, not buried: `go-no-go-scope.mjs`
+classifies holds on steel, siding and flooring only; C3749's scar sentence that it asserts the rule
+rack-wide overclaimed it, and the four sibling notes' proceed replies with nothing ticked are the
+next rung.
+
+### 2026-09-24 (C3750) — A DEAD CYCLE'S ENGINE FIXES BROKE THREE THINGS ON THIRTEEN PAGES IT NEVER OPENED, AND TWO OF ITS SCARS DESCRIBED CODE THAT DID NOT EXIST
+C3749 died with its whole build on the tree — the Counter Call, steel's close, siding's fence, and three
+changes to `shared/checklist-request.js` (one reset for Clear and Start-from-last, Start-from-last as a
+swap, Copy/Send flushing an un-Added write-in). Every gate on disk was green over it. A five-lens audit
+with a refuter per lens (41 findings, 39 confirmed) found the engine changes had broken three things on
+the thirteen OTHER pages the engine mounts, which no gate drove: the reset wrote the tool's "1" into every
+count instead of the row's own default (hvac's truck stock renders thirty rows at their par, and
+Start-from-last now ran that reset); Clear left the write-in box full while Copy now flushed it, so a list
+pasted before a Clear went out on the NEXT call in no preview he had read; and a swap brought rows back
+under the other list's header. The one gate that drove any of it was siding's, on the one page that hides
+Start-from-last over a live list — the swap had never been run by anything. And two claims in C3749's own
+record were false in code: "CLOSE is offered only when something closable is ticked" (with nothing ticked
+it was offered, over a hold typed in words the page cannot classify), and the page-word gate's claim to
+read placeholders (it read attributes; the textarea's placeholder, where the siding is typed, lives in the
+script, and a `<` in `ymd.length < 3` swallowed nine thousand characters of it). **The rule: a change to a
+shared engine ships with a gate that drives the changed path on EVERY page the engine mounts — found by
+its mount call, not listed — and proven red on the old engine; and a sentence in a scar is a hypothesis
+until a gate runs it.** `tools/toolkit-gates/start-from-last.mjs` (14 pages, 237 checks: red 54 on
+C3749's engine, 87 on HEAD's, 0 on the fix) and go-no-go-scope S4b (siding's CLOSE run in a sandbox, not
+read) are those gates.
+
+### 2026-09-24 (C3749) — A TWO-BUTTON CLOSE COPIED OFF THE FINISH TRADES OFFERED A CRANE A WRITTEN GO OVER A HOT LINE, AND NO GATE READ A CLOSE AGAINST THE STOPS ABOVE IT
+`steel/not-ready-to-set.html` (C3738) was built as "the twin" of paving's and doors' go/no-go notes
+and inherited their second button whole: *"Or reply SET and we fly it as it sits — in writing."* On a
+finish trade that button is a warranty choice the receiver may lawfully make. On steel, ten of the
+thirteen stops risk a PERSON — an energized line in the swing, anchor bolts nobody approved, the deck
+below not poured, a crane on unprepared ground, hot work with no watch, the wind — and a GC super's
+one-word reply can clear none of them; the model the job actually runs on points the other way (the
+controlling contractor tells the erector in writing that the footings and rods ARE ready). The note
+contradicted itself in one message — the stop read *"I don't fly under a hot line"*, the close under it
+offered to — and resolved toward flying, under the page's own cost pressure. Two stop subs even asked
+for the written go ("or direct me in writing" on anchor bolts, "direct me in writing to field-fit it"
+on embeds). Live six days. **Found not by a gate but by reading the storefront:** P5's copy already
+described the page as *"a written reply is not permission to fly it as it sits"*, and the page still
+offered it. A safety lens asked to REFUTE the hazard could not. **Fixed:** FIX / NEW DAY and *"There's
+no reply that flies it as it sits"*; the bolt and embed stops routed to the engineer's paper; a spotter
+no longer reads as the way past a hot line; FIX not CLEAR (with SET gone, a one-word "CLEAR" texted at
+6 a.m. was the all-clear the page exists to refuse — the audit's catch); the Directed-to-Set write-up
+scoped to coordination calls and made to name all eight holds; steel's Getting In stopped offering a line
+cover as the way past a live line. **The class, swept the same cycle:** paving, landscape, painting and
+doors are warranty and finish holds and keep their buttons; siding's CLOSE also reached an untested old
+house, ground a jack can't stand on, rot, unfastened sheathing and the weather — now `fence` in the data,
+and CLOSE is offered only when something closable is ticked. **The rule: a mechanism carried to another
+trade carries its SAFETY CLASS with it — before a twin inherits a button that proceeds over a hold,
+classify every hold it reaches, product or person.** `tools/toolkit-gates/go-no-go-scope.mjs` asserts
+it in the deploy (red 7 of 12 on the pre-fix files).
+
+### 2026-09-24 (C3749) — THE NOTE'S FIRST LINE WAS THE DONOR'S NAME FOR FOURTEEN DAYS, AND THE DONOR SWEEP NEVER LISTED THE DONOR'S VERB
+Siding's Wall's Not Ready kept paving's `docName: "NOT READY TO PAVE"`, and shared/note.js prints docName
+as the FIRST LINE of the copied note — so every one a siding lead sent a GC super since the kit stood up
+(C3726) was headed NOT READY TO PAVE. `_drive_siding.mjs` swept the page for the donor's words — mat,
+striper, sealcoat, the plant — and not for its verb. Same class as C3729's shelf that wore its donor's
+paragraph for six days: the sweep lists the donor's NOUNS, and the copy that survives is the one word
+nobody thought of as vocabulary. Two audit lenses found it independently while reviewing a different
+change on the same kit. The drive now reads the note's first line and sweeps "pave"; go-no-go-scope S5
+pins every go/no-go note's heading to its own trade, rack-wide.
+
+### 2026-09-24 (C3749) — THE STATE BUGS LIVED IN SEQUENCES, AND EVERY GATE ON THE PAGE CHECKED END STATES
+A new page shipped green on twelve gates, and an adversarial drive that did what a man does — in order —
+found five defects in modules it did not write. **Type, then tap:** shared/jobcard.js repainted its chip
+row on the `change` a field fires as it blurs, which is the press of the very tap that leaves it; the
+button under his finger was replaced before the release, the tap was lost, and the next house's name he
+typed RENAMED the job he was on — its gate, lot and PO riding onto the new house's order. Every page with
+a job card, since it shipped; jobcard-scope filled fields by script and never had one focused when it
+tapped. **Paste, then Copy:** a takeoff pasted into the write-in box and never Added was left out of the
+copied message under "Copied. Go send it." **Clear, then re-tick:** Clear blanked the count and the note
+and kept each row's selects and MATCH flags, so yesterday's "Left" printed as today's answer and switched
+off the question. **Start-from-last over a live list:** it replaced the list with no undo and mixed
+leftover counts into the restored lines. The fixes are one each in the shared engines (relabel instead of
+repaint; flush the box on Copy and Send; one reset for Clear and restore; restore SWAPS a live list into
+"last"), and jobcard-scope now does a real type-then-tap on every page — red on the old module, green on
+the new. **And the gate this cycle wrote for the page's words had the same blindness:** it stripped tags
+with their attributes, so no placeholder and no meta description was ever read, and its profile pattern
+missed "Double 4" for want of an `i`. The rule: **after a page goes green, drive it as a sequence —
+type-then-tap, paste-then-copy, clear-then-retick, restore-over-live — because an end-state gate cannot
+see a bug that lives between two taps.**
+
 ### 2026-09-16 (C3730) — A SHELF'S TURNOVER DOCUMENT ASKED FOR THE BITTING ITS OWN HEADER BANS "IN ANY COLUMN, FOR ANY REASON", AND SEVEN GATES WERE GREEN OVER IT
 `doors/docs.js` line 26 says NO KEYING OR BITTING INFORMATION, in any column, for any reason. Eighty
 lines down, the turnover document's `facts` asked for "key bitting / keyway and who holds the schedule"
@@ -10860,3 +10979,49 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   reads tagged headings (COLLAGE's 09-21 weekly line had been invisible). Contract v3. Ideas
   af241fdf closed complete @ 0. d5bb8c9f ·
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/write-up.html
+- `2026-09-24` — **[AXIS:DEPTH] C3751 — SIDING'S EIGHTH TOOL, THE COUNTER CALL, SHIPPED OFF TWO DEAD
+  CYCLES' TREE; STEEL STOPS OFFERING TO FLY THE IRON AS IT SITS; AND THE CLASS SWEEP FOUND FLOORING
+  ASKING FOR A WRITTEN GO OVER SUSPECTED ASBESTOS.** The WELL held nothing this lane ships (toolkit
+  0/0; the one cards wish building is persona500-hosted, P5's); no trade owed; LIVE STATE named DEPTH,
+  and the tree already held it: C3749 built the Counter Call, steel's close, siding's fence and three
+  engine changes and died; C3750 audited them (five lenses, 39 confirmed), fixed them, wrote four
+  scars and died too — both, their transcripts show, five minutes after ending the turn to wait on a
+  background job (SCAR above; the bump now says NEVER YIELD TO WAIT). · **BEFORE (live, measured this
+  cycle):** siding/counter-call.html 404; siding's registry 7 tools; steel's crane-morning note closed
+  "Or reply SET and we fly it as it sits — in writing"; siding's note opened NOT READY TO PAVE;
+  flooring's Give Me The Go offered "give me the go in writing … laid over … as it is today" with "It
+  might be the old stuff" ticked; on HEAD start-from-last 83 of 224 checks red, jobcard-scope's
+  type-then-tap red, go-no-go-scope 8 of 13 red. · **RE-VERIFIED, NOT REBUILT, THEN AUDITED:** every
+  gate on disk (the only red one, C3749's `_drive_siding.mjs`, asserted fence words C3750 had
+  reworded — it reads them off the data now); the deploy's plain-node gates on a simulated artifact;
+  `--prove` 28/28 and 11/11. One Workflow, four lenses with a reproducer each (contract v4): the safety
+  lens found no regression in the bundle and nineteen holds across the rack (verdicts: 14 confirmed, 5
+  refuted); the Counter Call lens found three blockers in C3750's own fixes (all 17 findings
+  confirmed); the job-card lens found the double-tap regression (SCAR above). **Fixed and gated this
+  cycle:** the restamped `t`, the last call handed to the wrong house, the colour rule (counter-call.mjs
+  checks 8 and 9 — red 3/52 on C3750's code, 52/52 on the fix); "Some of each" needs the split; End
+  caps "Either hand"; a list with no lines is never stashed; one tap, one change on the job card (new
+  `jobcard-retap.mjs`: 33 red over 11 pages on the build it replaced, 11/11 after). · **AFTER
+  (LIVE, every changed file byte-identical to HEAD):** siding 8 tools, The Counter Call driven end to
+  end on the live URL (counter-call.mjs 52/52 live, `_drive_siding` 58/58 live); steel closes FIX /
+  NEW DAY with no reply that flies it; siding opens WALL'S NOT READY and fences CLOSE; flooring's
+  letter offers no go over the old stuff and names it where a mixed letter keeps one (driven live);
+  start-from-last 14 pages 237/0, jobcard-scope 11/11, jobcard-retap 11/11 live, order-live-header 16,
+  row-live-line 16, pickfilter 15/195, dropoff-block 10, no-clock 172/0, go-no-go-scope 16/16 (in the
+  deploy, with counter-call --static 18/18), menu-reachability whole-site, mobile-watertight 0 failing
+  at 320–430 default and bumped on every changed page, disk and live. Deploys 36052423154 and
+  36054834644 green. · **BACKPORT RIDER fired:** the class (a written go or a name that clears a hold
+  that risks a person) swept all 19 trades and 58 note pages; fixed in the same cycle where it was a
+  blocker — flooring's asbestos go (S6), flooring's "until you say", steel's pick over an occupied
+  floor, deck release and power-line spec (S2b); the rest is the next rung, named, not buried: the
+  four sibling notes' proceed replies over a typed hold (SAFE-06), plumbing's line strike and
+  concrete's grade notice (SAFE-11/12), flooring's directed write-up (SAFE-13), hvac's HOLD on a
+  locked-out unit (SAFE-14), flooring's phantom RH reading (SAFE-15); and on the Counter Call CC-5
+  (count parsing), CC-9 (the list follows the house), CC-10 (size callback), CC-11 (double tap on
+  Start from last), CC-12/13/16/17, the engine lens's CR-1..CR-10. **Judged, not rot:** Clear still
+  empties the write-in box (CC-7/CR-3 — the paste is recoverable from where he copied it; a stray line
+  on the next call is a wrong order); send-is-copy timed out twice under a four-agent load after 103
+  pages clean, rowlog-commit-merge needs a server on :8777 (green with one). Storefront: the Counter
+  Call line and the siding/steel wording are true in persona500's fieldToolkits.ts (P5 pushes).
+  Contract v4. Ideas 8ab4f072 closed @ 8. 9fe473f9 · d4e31ddd · cd8ebd9a · a4e18699 · fdc191b7 ·
+  https://mrdirno.github.io/nested-resonance-memory-archive/siding/counter-call.html
