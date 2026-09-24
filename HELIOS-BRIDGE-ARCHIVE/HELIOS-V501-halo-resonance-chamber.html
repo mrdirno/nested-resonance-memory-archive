@@ -11005,6 +11005,121 @@ Nothing about nested resonance memory is decided here.
 SUPERSEDES: the README wording listed above. No ring's text is edited. Where a ring states a reading the index lists as
 retired, that reading is not current; among them is Ring 29's "qualified" as a property of the support, narrowed by
 Ring 30.
+RING 32 · 2026-09-24 · a reading that looks inside one run only -- does each epoch's point-odd part line up with
+its own relic's, or with its mirror image -- was pushed before its own synthetic receipt existed, and the receipt
+passes on the twelve Ring 29 control runs; eighteen fresh runs and two reproduction checks are registered to count
+how often its positive control returns the known answer, and were launched after the receipt was pushed; none is
+scored here, and nothing about memory
+PARENTS: Ring 30 (793400ea) and its open questions 1 and 2; Ring 31 (fb3a89b7); the pre-registration
+analysis/2026-09-24_within_run_carrier_statistic.md, in two commits: the design (1e2810a5, on GitHub at 11:04:20
+UTC) and the receipt commit R (59d7d4af, 11:05:32 UTC), both on the public remote before the first fresh run was
+launched (11:05:44 UTC, on R, by the launch ledger).
+WHAT CHANGED. Ring 30's scorer compares a run's own relic with a null predicted from the two other runs of its
+condition, so how much it can see depends on how the three runs happen to line up (Ring 30 control item 6,
+computed before Ring 30's runs). Ring 30 does not say why its positive control was silent, and neither does this
+ring. This ring adds experiments/halo/carrier_statistic.py:
+- per lag-one pair, rho = the correlation of the current's point-odd part with its own relic prediction's, in the
+  frozen scorer's inner block (its sub, predicted and orbit residual, imported unchanged);
+- eligible pairs by the frozen gates on the run's own fields only (E1, E2 on the current and its own prediction,
+  the same participation floor on the two odd parts, rho finite): no other run enters, by construction;
+- T = the mean rho, n the eligible pairs (unscored below 12), p the exact two-sided sign-flip p over all 2^n sign
+  vectors, and a call: L (T > 0, p < 0.05), Pi (T < 0, p < 0.05) or none.
+Ring 30's inverted frame inverts one member of every lag-one pair, so T changes sign and nothing else changes: the
+within-run frame preference is the call. The null is the random-frame model (each mesh inverted or not by
+independent fair coins), under which the test is exact. It cannot see a point-odd structure pinned to the lab; the
+positive control and a between-run diagnostic can.
+THE NUMBERS (the receipt, computed once from the design commit's bytes at 11:05:05 UTC, on the twelve distinct Ring
+29 runs -- the nine Ring 30 called the control plus Ring 29's second sg0.32 triple -- and synthetic injections only;
+receipt sha256 6ea5c90e, script 020eb654, frozen scorer 7619ef6b unchanged):
+- G1 exactness: 0 (bitwise) deviation in rho under inverting one or both members of every pair, the odd part of the
+  residual equal to the odd part of the field under all five supports to 5.5e-17 of the field's largest value, and
+  T in the inverted frame equal to minus T in the lab frame with the same pairs. PASS (a construction check).
+- G2 the null end to end: 107 of 2,400 random-frame null draws (200 of each of 12 runs) called, inside the 95 %
+  band 100-141 for 0.05 (47 L, 60 Pi). PASS. The test is exact under this null by construction, so this checks
+  the code, not the chamber. G2b: the meet-in-the-middle p equals direct enumeration in 72 of 72 checks. PASS.
+- G3 one run in: every run's T, n and p computed from its own file alone are bitwise the directory's. PASS.
+- G4 recovery, the falsifier: after a null draw, the frozen scorer's F3 relic injection is called L at a lower
+  median alpha* of 0.05 (per-run lower medians 0.02 to 0.1; limit 0.10), 231 of 231 kept draws are called L at
+  alpha 0.2 (9 of 240 draws excluded because they were already called at alpha 0), and no draw at any alpha is
+  called Pi. PASS.
+- Reported, deciding nothing: the twelve unperturbed control runs call L in 8, none in 4, Pi in 0 (T from +0.024
+  to +0.086, positive in all twelve). The between-run lab-pinning diagnostic gives a mean cosine of -0.007 across
+  66 pairs of different runs at the same mesh index (32 positive), exact one-sided p 0.59 over 4,096 run-level
+  inversions: no sign of a structure pinned to the lab in these runs. A relic drawn from another epoch of the same
+  run (not the current's own or the next) gives mean T from -0.007 to +0.039. Planning, from the control's 8 of
+  12: if fresh runs behave like the control, the positive-control arm meets CONFIRMED's conditions with chance
+  0.96 with no contrary call (0.77 at a 2.5 % contrary rate per run); these are planning numbers, not thresholds.
+THE FRESH RUNS, registered in the design commit and launched after R: nine seeds, three per condition, the first
+five digits of sqrt(n) for the first nine non-square n (14142, 17320, 22360 at sg0.3; 24494, 26457, 28284 at
+sg0.32; 31622, 33166, 34641 at sg0.35), none used by any HALO run (six were seeds of unrelated older experiments
+outside HALO); arms identity and invert_all
+(the positive control), 18 runs, between a canary (Ring 29's sg0.32 seed 777, which must reproduce ce15f081) and a
+closing repeat of the first fresh run: 20 runs, one at a time, on the pinned instrument (test page 1a15b987,
+sim_digest 40bfdb68, Ring 30's harness f2f30d79 unchanged), each launch first written to a launch ledger. The
+decision rule is fixed: V1 (every record, hook, pin, void and launch; the canary; the closing repeat; each pair's
+two arms share their first mesh; every call re-derived from its mesh), then STATIC, UNMEASURED, BROKEN, BASELINE
+SILENT, CONFIRMED (the positive control prefers Pi with at least 4 Pi calls), LOW POWER, CONTRARY or SILENT, each
+with its reading written down. A
+CONFIRMED licenses one thing: pre-registering the decided arm on nine seeds already named. Ring 30's frozen rule is
+reported beside it on the same runs (its open question 1, on fresh runs), never in its place. The batch's first
+gate has run: the canary reproduced Ring 29's sg0.32 seed 777 mesh byte for byte (ce15f081, 109 s), so the
+instrument on this machine is the one Rings 24-30 used; the eighteen fresh runs followed it.
+DISCLOSED, AND WHY ONLY THE FRESH RUNS COUNT: T is the per-pair normalised form of Ring 30's O. The mean of the same
+rho over the frozen scorer's eligible epochs was already public in all three Ring 30 arms' component files: positive
+in the nine control runs, negative in eight of the nine invert_all runs. So CONFIRMED is the expected outcome, the
+fresh runs are a replication of a pattern already seen, not a blind test, and none of those numbers is used here.
+The statistic was computed on the control bytes before the design was frozen: two dry runs of an earlier receipt and
+a design review whose four reviewers recomputed it. What the review changed is listed in the file.
+BANNED: Ring 30's list, carried word for word, with one ban lifted for this statistic only (it reads one run, so its
+call is that run's reading; it is still not the seed's property and never compared across arms for one seed); and:
+reading "power" as a rate (it is k of the m scored); calling the fresh runs independent across arms; stating
+independence from the strangers or a null size as a finding (both hold by construction); quoting any Ring 30 number
+as support, result, agreement or prior; computing this statistic on any Ring 30 intervened run; claiming it is more
+powerful than the frozen contrast; reading CONFIRMED as the matter rather than the warm start carrying anything;
+pooling identity L calls with invert_all Pi calls; comparing the counts with Ring 30's 3 in 4; reading an L call on
+unperturbed runs as memory (protocol section 1's first-named confound: an asymmetry that persists); any memory claim.
+REJECTED PATHS: (1) A within-run relic shuffle as the null: every epoch continues the one before it, so a shuffle
+keeps the carried orientation (it is reported as lag specificity). (2) The hemisphere sign alone: one component of
+the point-odd part, and only its sign. (3) The frozen scorer's blocked relabelling: under this null the pair signs
+are independent. (4) The same three seeds at every self-gravity: three starts seen three ways. (5) The frozen
+binom_interval for the pooled band: it overflows a float above n = 1,029, so the band is the same computation in log
+space. (6) The unperturbed control's calls as a gate: keeping or alternating an orientation is the chamber's
+property, and G4 already fixes the sign. (7) Running the decided arm now: the positive control comes first.
+KILL-TEST: two workflows, read-only, each lens with its own code.
+(1) Before any code froze, a design review with four lenses (the null's mathematics, the receipt's power, the fresh
+runs' mechanics, doctrine) returned 2 blockers, 18 majors and 23 minors, several found by more than one lens. What
+changed: G5 had cited a Ring 30 number to justify a gate, so it is now reported only and G4 took the sign check;
+the frozen binomial band overflows at 2,400, so the same computation runs in log space; three seeds shared by every
+condition made nine runs three starts, so there are nine seeds; the dropped byte-identity checks became the canary
+and the closing repeat; the branch table was completed; and the near-copy of this statistic already public for Ring
+30's arms is disclosed.
+(2) Before the design commit, a kill-test with three lenses:
+- an independent reproduction matched every per-run T, n, p and call, G1, G2's 107, G2b, G4, the pinning and the
+  planning numbers bit for bit;
+- a breaker ran 15 mutants, 11 of which survived the first 38 tests. It found that the decision trusted the score
+  file's calls and the receipt's own fields. The decision now re-derives every call from its mesh, the receipt is
+  bound to R, and 11 tests were added;
+- a text reader found 3 blockers, all fixed before the design commit: an undisclosed dry run of this receipt (now
+  disclosed), a seed sentence that was false outside HALO (corrected), and a reading that contradicted SILENT
+  (removed).
+The registered receipt equals the final dry run in every section. Committed by pathspec on the shared tree, one
+author, no AI trailer; the page change is a comment-only ring append (sim_digest 40bfdb68 unchanged, the pinned test
+page 1a15b987 untouched).
+EVIDENCE: analysis/2026-09-24_within_run_carrier_statistic.md; experiments/halo/carrier_statistic.py;
+data/results/halo/carrier_statistic/receipt.json; tests/halo/test_carrier_statistic.py;
+tests/halo/memory_carrier_power_grid.sh; experiments/halo/memory_carrier_score.sh.
+THE NON-OBVIOUS CHOICE: the design was pushed before its receipt existed, and the receipt refuses to run on script
+or text bytes that differ from that commit. The receipt could not be tuned to the control after the fact without the
+public history showing it.
+OPEN QUESTIONS: this ring earns two and carries three.
+(1) The twenty registered runs: score them once, in the registered order, and append the branch and both counts
+to the pre-registration's Results.
+(2) If CONFIRMED: pre-register the decided arm (invert_matter, the nine seeds named) under this statistic; if not,
+the branch's reading says what the statistic may not do.
+(3) Carried from Ring 30 and Ring 31: the lower self-gravity wall (between 0.25 and 0.3), the gain/loss axis, the
+open designs; linked files that still say more than the README; the rings' own numbers are not indexed.
+Nothing about nested resonance memory is decided here.
+SUPERSEDES: nothing. Ring 30's NOT DECIDABLE stands as its registered result.
 ═══ end rings ═══ -->
 
 <script>window.FEEDBACK = {

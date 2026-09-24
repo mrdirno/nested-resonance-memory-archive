@@ -1641,3 +1641,32 @@ The first hosted HALO gate refused deployment because the navigation covered a s
   - The page change is a comment-only ring append: sim_digest 40bfdb68 unchanged, and the pinned test page `tests/halo/rc-test.html` (1a15b987) untouched.
   - Committed by pathspec on the shared tree, one author, no AI trailer. On push, archive-health, halo-health and deploy_bridge run; the live render is checked after.
 - **QN:** (1) Linked files that still say more than the README: four linked manuscripts name an AI system as an author (Paper 2, Paper 3, the Book of BCP, The Manifesto); the demo's console verdict fires while its budget is still full; two historical scripts no longer import; two analyses carry later-withdrawn readings without a note; the deploy workflow's header contradicts its own staging. (2) Index the HALO page's own rings. (3) Numbers written as words. (4) Next ring: Ring 30's carrier-statistic successor and the positive control's power on fresh runs, which take the next ring number.
+
+## [RESEARCH] HALO Ring 32: a within-run carrier statistic, pushed before its own synthetic receipt existed, passes that receipt on the twelve Ring 29 control runs; eighteen fresh runs and two reproduction checks are registered to count how often its positive control returns the known answer, launched after the receipt was pushed and not yet scored; nothing about memory - COMPLETE
+- **Goal:** Ring 30's open questions 1 and 2. Build a statistic read within one run, qualified by its own synthetic receipt and frozen before any new intervention run. Register the fresh runs that measure its positive control on fresh seeds. Proved unfinished before starting: no within-run statistic or receipt existed in `experiments/halo/` or `analysis/`, the newest ring (31) carried both questions forward, and the planning record for this work had not been started.
+- **Action:** Wrote `experiments/halo/carrier_statistic.py` (the statistic, its exact sign-flip p, receipt gates G1–G4 with G5 reported, `score`, and `decide` with a full branch table), 49 tests, the driver `tests/halo/memory_carrier_power_grid.sh` and `experiments/halo/memory_carrier_score.sh`. Then, in order:
+  1. A four-lens design review before any code froze.
+  2. A three-lens kill-test before the design commit.
+  3. The design commit 1e2810a5, pushed at 11:04:20 UTC.
+  4. The receipt, computed from those bytes at 11:05:05 UTC.
+  5. The receipt commit R 59d7d4af, pushed at 11:05:32 UTC.
+  6. The 20-run batch, launched detached on R at 11:05:44 UTC.
+- **Method:** ρ_k is the correlation of the current's point-odd inner block with its own ×2 relic prediction's, on the frozen scorer's gates for the run's own fields only. T is the mean ρ. p is the exact two-sided sign-flip p over all 2^n sign vectors. In Ring 30's inverted frame T only changes sign, so the frame preference is the call. The receipt reads the Ring 29 control bytes and synthetic injections only, and the frozen scorer 7619ef6b is untouched.
+- **Result:** The receipt passed.
+  - G1: exact (0 bitwise).
+  - G2: 107 of 2,400 null draws called, inside the band 100–141.
+  - G2b: 72 of 72.
+  - G3: 12 of 12.
+  - G4: lower-median α* 0.05, 231 of 231 kept draws recovered at 0.2, and no Π call at any α.
+
+  Reported only: the unperturbed control calls L in 8 of 12 and Π in none, and the between-run pinning check shows no lab-pinned structure (mean cosine −0.007, p 0.59). Disclosed: a near-copy of T was already public in Ring 30's component files (positive in all 9 control runs, negative in 8 of the 9 invert_all runs). So CONFIRMED is the expected outcome, and only the fresh runs count.
+- **Status:** KILL-TEST.
+  - The design review returned 2 blockers, 18 majors and 23 minors. Among its changes: G5 made reported-only, a log-space band, nine distinct seeds, a canary and a closing repeat, the full branch table, and the disclosure.
+  - The kill-test reproduced every receipt number bit for bit with independent code.
+  - Its breaker's 15 mutants showed that `decide` trusted the score file. `decide` now re-derives every call from the meshes, the receipt is bound to R, and 11 tests were added.
+  - Its text lens's 3 blockers (an undisclosed dry run, a seed sentence false outside HALO, a reading that contradicted SILENT) were fixed before the design commit.
+  - tests/halo passes 85 of 85, and the full suite 254; the evidence index still resolves 95 of 95 README claims.
+  - The batch's canary reproduced Ring 29's mesh byte for byte (ce15f081) before any fresh run.
+  - The page change is a comment-only ring append: sim_digest 40bfdb68 unchanged, and the pinned test page 1a15b987 untouched.
+  - Committed by pathspec, one author, no AI trailer.
+- **QN:** (1) When the batch prints "all 20 runs done", run `sh experiments/halo/memory_carrier_score.sh 59d7d4af` once, append the branch and both counts under "## Results", and seal them as Ring 33 with a kill-test. (2) On CONFIRMED, pre-register invert_matter on the nine seeds already named. (3) Carried: the lower self-gravity wall, the gain/loss axis, linked files that still say more than the README, and indexing the rings' own numbers.
