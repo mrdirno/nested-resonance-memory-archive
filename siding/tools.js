@@ -16,19 +16,26 @@
  * the gap as an oversight (§TRADE EXPANSION: an unnamed absence is a hole, a
  * named one is a decision):
  *
- *   - THE COIL & TRIM ORDER (shape #1, shared/checklist-request.js) — the
- *     panel's field hand called it "the most thumb-typed document of the three
- *     candidates and I want it", and he is right; it is deferred for the
- *     stand-up's window, not for doctrine. It is the ONE tool in this kit that
- *     needs an items.js vocabulary this file does not yet carry — profiles,
- *     trim families, accessory ladders, coil widths, unit-of-issue in squares
- *     and lineal feet — and half of that vocabulary is manufacturer-specific,
- *     which is exactly where refusal 3 gets tested. It ships as a WRITE-IN-
- *     FIRST list with a short forget-it picker (starter, corners, J, utility
- *     trim, F-channel, drip cap, soffit, fascia cover, hangers, elbows,
- *     ferrules, sealant, fasteners as a word and never a schedule) — the
- *     electrical/pull-list shape, not a full product picker, which §THE GATE
- *     forbids. FIRST RUNG FOR #19 OR THE FIRST WISH THAT ASKS.
+ *   - THE COIL & TRIM ORDER (shape #1, shared/checklist-request.js) — BUILT
+ *     C3749 as counter-call.html, "The Counter Call"; that cycle died before its
+ *     commit, C3750 ran a five-lens audit and fixed its confirmed findings and
+ *     died before its commit too, and C3751 shipped it after an independent
+ *     re-verification (av/AV_SOCIETY.md, C3750 and C3751). Deferred at stand-up for
+ *     the window, not for doctrine, and marked FIRST RUNG FOR #19; #19 (steel)
+ *     came and went and C3738 took steel's own first rung, so it stood overdue
+ *     for five days until the stalest axis landed on it. A four-lens panel (the
+ *     siding lead · the counter man · doctrine · the skeptic) scored it
+ *     6 · 7 · 7 · 6 and renamed it: the working title printed bare "trim" in
+ *     every page's Tools menu and bare "coil" beside HVAC's, and the rack
+ *     already had the family (The Yard Call, The Dealer Call, The Store Call).
+ *     It shipped WRITE-IN-FIRST with a 27-line forget-it jog, as this note
+ *     said it would — and the named list itself was corrected on the way in:
+ *     "starter" became "siding starter strip" (a counter with a roofing desk
+ *     hands you the shingle one), "soffit" became the eave soffit, "hangers"
+ *     became hangers for the gutter, and the ferrule left the picker with its
+ *     spike (refusal 2 names nail types). Why each line is or is not on it
+ *     lives above TOOLKIT_ITEMS.order in items.js; the page's own words are
+ *     asserted by tools/toolkit-gates/counter-call.mjs.
  *
  *   - THE EXTRA WORK TAG (shape #2, shared/note.js) — thirteen of seventeen
  *     kits carry it and this one does not, on purpose for one cycle: this
@@ -70,7 +77,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Wall's Not Ready",
     href: "not-ready-to-side.html",
-    desc: "No wrap on it, or it's torn. Windows in and never flashed. Sheathing loose, gaps, nothing to nail the corners to. You took the old wall off and there's rot behind it. Nobody's picked a colour. The grade's at the sheathing and there's nowhere to start. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits — because once it's closed, whatever's behind it is behind it, and the man who closed it owns how it looks.",
+    desc: "No wrap on it, or it's torn. Windows in and never flashed. Sheathing loose, gaps, nothing to nail the corners to. You took the old wall off and there's rot behind it. Nobody's picked a colour. The grade's at the sheathing and there's nowhere to start. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits, where that call is yours to make — because once it's closed, whatever's behind it is behind it, and the man who closed it owns how it looks.",
     chip: "#FEC8CC",
     audience: "Lead → GC super / PM / owner / architect"
   },
@@ -94,6 +101,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Working the outside of a building full of people — the ask to whoever holds it: which elevations and which days, the cars off the wall by an hour you name, ground that takes a jack or tell me it's a lift, where the trailer, the brake and the bin go, water and power, which doors people actually use, the gate code and the dog. And the heads-ups: jacks going up outside somebody's window, a walk under us that needs a closure, the meter coming off the wall, roof access to tie staging, a saw that runs all day — each one handed back to whoever owns it. Then put what they sent back against what you asked, and it names what they never answered.",
     chip: "#FEC8CC",
     audience: "Lead → owner / property manager / building engineer / GC super"
+  },
+  {
+    name: "The Counter Call",
+    href: "counter-call.html",
+    desc: "Tomorrow's material called into the counter off your takeoff, not off your memory. Paste your lines the way you'd text them — the siding in your own words, with SAME LOT ticked where it has to come off the lot already on the wall — then run down what's never on the truck: siding starter strip, corners, J-channel, utility, F-channel, the eave soffit, blocks and hoods for every hole, trim coil with its back said, the downspout elbows and end caps. The colours of the house and the lot on its wall are typed once per job and ride every top-up. It counts nothing for you: a line with no count, a bare number on something sold two ways, an end cap with no hand or a piece that shows with no colour goes in the message as the counter's question, before it's a callback at three. Deliver it or will-call; field request, not a PO.",
+    chip: "#FEC8CC",
+    audience: "Lead → the supply house counter / their dispatch"
   },
   {
     name: "Write-Up Setup",

@@ -26,9 +26,14 @@ async function page(path, w = 390) {
 }
 const overflow = async p => p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 /* The donor kit's words must not survive anywhere a man can read them. The donor
- * for every page in this kit is PAVING. "wall" and "trim" are ours; "mat", "lot",
- * "striper", "curb" and "the plant" are the words that would prove a bad copy. */
-const DONOR = /\bmat\b|striper|sealcoat|asphalt|\bthe plant\b|stall count|birdbath/i;
+ * for every page in this kit is PAVING. "wall" and "trim" are ours; "mat",
+ * "striper", "curb" and "the plant" are the words that would prove a bad copy.
+ * NOT "lot": paving's parking lot is the donor word, but the colour lot on the
+ * wall is this kit's own and The Counter Call (C3749) lives on it — a later sweep
+ * that "fixes" the regex to include a bare lot would turn that page red for being
+ * right. Its donor is roofing, and tools/toolkit-gates/counter-call.mjs sweeps
+ * roofing's words off it. */
+const DONOR = /\bmat\b|striper|sealcoat|asphalt|\bthe plant\b|stall count|birdbath|\bpave\b|\bpaving\b/i;
 
 const typeIn = async (p, key, value) => {
   const sel = `#bar [data-for="${key}"] input.rl-in, #bar [data-for="${key}"] textarea.rl-in`;
@@ -126,6 +131,39 @@ const chip = async (p, key, label) => {
   ok(/reply CLOSE/i.test(body), "not-ready-to-side: the trade's own second button is CLOSE, not the donor's PAVE");
   ok(!/reply PAVE/i.test(body), 'not-ready-to-side: the donor two-button word is gone');
   ok(!DONOR.test(body), 'not-ready-to-side: no donor-trade word anywhere a man can read it');
+  /* C3749: the note's FIRST LINE was the donor's docName, "NOT READY TO PAVE",
+     for fourteen days — this sweep read the body and had no "pave" in it. */
+  const nrDoc = (await p.textContent('#preview')) || '';
+  ok(/^WALL'S NOT READY/.test(nrDoc.trim()), `not-ready-to-side: the copied note opens with its own heading ("${nrDoc.trim().split('\n')[0]}")`);
+  /* THE FENCE WORDS ARE READ OFF THE DATA, NEVER TYPED HERE (C3751). This drive
+     carried C3749's phrases — "isn't on or fastened off", "ground a jack or a lift
+     can't stand on" — and C3750 reworded the `fence` values in items.js, so it
+     went red on a page that was right. The note prints items.js; so does this. */
+  const FENCED = await p.evaluate(() => ((window.TOOLKIT_ITEMS.notready || {}).stops || []).filter(s => s && s.fence).map(s => ({ name: s.name, fence: s.fence })));
+  ok(FENCED.length >= 5, `not-ready-to-side: the fence lives in the data (${FENCED.length} fenced holds)`);
+  const ticked1 = await p.$$eval('[data-f="stops"] li input:checked, .ticks li input:checked', els => els.map(e => e.getAttribute('data-name')));
+  const f1 = FENCED.filter(s => ticked1.includes(s.name));
+  const closable1 = ticked1.some(nm => !FENCED.some(s => s.name === nm));
+  const reach = (nrDoc.match(/CLOSE never reaches ([^:]+):/) || [])[1] || '';
+  ok(f1.length > 0 && closable1 && /reply CLOSE/i.test(nrDoc) && f1.every(s => reach.includes(s.fence)),
+    `not-ready-to-side: a note with a fenced hold ticked says CLOSE never reaches it ("${reach}")`);
+
+  /* THE FENCE IS TIED TO THE TICKS: a note of nothing but holds no written word
+     can clear offers no CLOSE at all. A stop renamed out from under this drive is
+     a red check, not a silent skip. */
+  for (const b of await p.$$('[data-f="stops"] li input:checked, .ticks li input:checked')) await b.click();
+  const fenceOnly = FENCED.slice(-3);
+  for (const s of fenceOnly) {
+    const cb = await p.$(`input[data-name="${s.name.replace(/"/g, '\\"')}"]`);
+    ok(!!cb, `not-ready-to-side: the fenced stop "${s.name}" is on the page`);
+    if (cb) await cb.click();
+  }
+  await p.waitForTimeout(250);
+  const fenced = (await p.textContent('#preview')) || '';
+  const held = (fenced.match(/There's no CLOSE on these — ([^:]+):/) || [])[1] || '';
+  ok(!/reply CLOSE/i.test(fenced) && fenceOnly.every(s => held.includes(s.fence)),
+    `not-ready-to-side: fenced holds alone offer no CLOSE, and name themselves as holding ("${held}")`);
+  ok(/Reply FIX/.test(fenced), 'not-ready-to-side: FIX is still offered on fenced holds');
   ok(await overflow(p) <= 0, 'not-ready-to-side: no horizontal overflow at 390px');
   ok(errs.length === 0, "not-ready-to-side: zero page errors " + errs.slice(0, 1));
   await ctx.close();
@@ -220,7 +258,10 @@ const chip = async (p, key, label) => {
     hasSiding: !!document.querySelector('a[href="../siding/"]') || location.pathname.includes('/siding/'),
   }));
   ok(hub.flag === String(hub.accent).toUpperCase(), `hub wears its own colour (--flag ${hub.flag} = accent ${hub.accent})`);
-  ok(hub.cards === 7, `hub renders every registry entry (${hub.cards} cards)`);
+  /* READ OFF THE REGISTRY, NOT A NUMBER TYPED AT STAND-UP: this said 7 until the
+     eighth tool landed (C3749), which is how a hardcoded roster goes blind. */
+  const reg = await p.evaluate(() => (window.TOOLKIT_TOOLS || []).length);
+  ok(hub.cards === reg && reg >= 8, `hub renders every registry entry (${hub.cards} cards of ${reg})`);
   ok(/Through My Wall/i.test(hub.pinnedFirst || ''), `the pinned tool is first on the hub ("${hub.pinnedFirst}")`);
   ok(hub.siblings >= 17, `the kit switcher offers every sibling (${hub.siblings} relative links)`);
   ok(errs.length === 0, 'hub: zero page errors ' + errs.slice(0, 1));

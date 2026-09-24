@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wall's Not Ready — Siding &amp; Exteriors Field Toolkit</title>
-<meta name="description" content="No wrap on it or it's torn, windows in and never flashed, sheathing loose, nothing to nail a corner to, rot behind the old wall, nobody's picked a colour, and the grade's at the sheathing. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits. Because once the wall is on, whatever's behind it is behind it.">
+<meta name="description" content="No wrap on it or it's torn, windows in and never flashed, sheathing loose, nothing to nail a corner to, rot behind the old wall, nobody's picked a colour, and the grade's at the sheathing. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits, where that call is yours to make. Because once the wall is on, whatever's behind it is behind it.">
 <meta name="apple-mobile-web-app-title" content="Wall's Not Ready">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +19,7 @@
       <span class="eyebrow" id="eyebrow">Siding &middot; at the wall, before the crew climbs</span>
     </div>
     <h1 id="h1">Wall&rsquo;s Not Ready</h1>
-    <p class="lede" id="lede">You work between dry-in and paint on the outside of a building, and you are the one who finds out at seven in the morning what didn&rsquo;t get done behind you. Walk the elevation before the crew climbs and name what stops the wall, in your words: the wrap that isn&rsquo;t on or is torn, the windows nobody flashed, the sheathing with gaps in it, nothing to nail a corner to, the rot you found when the old wall came off, the colour nobody&rsquo;s picked. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to close it as it sits. Because once the wall is on, whatever is behind it is behind it, and the man who closed it owns how it looks from the street.</p>
+    <p class="lede" id="lede">You work between dry-in and paint on the outside of a building, and you are the one who finds out at seven in the morning what didn&rsquo;t get done behind you. Walk the elevation before the crew climbs and name what stops the wall, in your words: the wrap that isn&rsquo;t on or is torn, the windows nobody flashed, the sheathing with gaps in it, nothing to nail a corner to, the rot you found when the old wall came off, the colour nobody&rsquo;s picked. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to close it as it sits, where that call is yours to make. Because once the wall is on, whatever is behind it is behind it, and the man who closed it owns how it looks from the street.</p>
   </header>
 
   <div id="form"></div>
@@ -28,7 +28,7 @@
   <div class="preview" id="preview"></div>
 
   <div class="warn" id="warn">
-    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, off your own tape and set beside what your own set says. It states no fastener, no spacing, no gap, no clearance to grade, to a roof or to a deck, no gutter size and no threshold of any kind; it never says a wall is ready, weathertight or complete; and it never says what caused what you found, what it needs, or whether anything on an old wall is safe to cut &mdash; those are an engineer&rsquo;s, an inspector&rsquo;s and a certified outfit&rsquo;s calls and this page stands in for none of them. It doesn&rsquo;t stop the job either: it hands whoever runs the job the choice, on the record: clear it, or direct it closed as it sits.
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, off your own tape and set beside what your own set says. It states no fastener, no spacing, no gap, no clearance to grade, to a roof or to a deck, no gutter size and no threshold of any kind; it never says a wall is ready, weathertight or complete; and it never says what caused what you found, what it needs, or whether anything on an old wall is safe to cut &mdash; those are an engineer&rsquo;s, an inspector&rsquo;s and a certified outfit&rsquo;s calls and this page stands in for none of them. It doesn&rsquo;t stop the job either: it hands whoever runs the job the choice, on the record: clear it, or direct it closed as it sits. A direction to close never reaches sheathing that isn&rsquo;t on, isn&rsquo;t fastened off or has gaps, nothing to nail to, the rot behind the old wall, who&rsquo;s testing an old house, a wall you can&rsquo;t get a jack or a lift to, or the weather &mdash; those hold until whoever owns them clears them.
   </div>
 
   <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
@@ -47,8 +47,13 @@
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/note.js"></script>
 <script>
-/* NOT READY TO PAVE — the section note, and the twin of landscape's Not Ready
- * To Plant and doors' Not Ready To Hang. A CONFIG of shape #2's engine
+/* WALL'S NOT READY — the refusal note, and the twin of paving's Not Ready To
+ * Pave, landscape's Not Ready To Plant and doors' Not Ready To Hang. (This line
+ * read "NOT READY TO PAVE" from stand-up until C3749 — and so did the config's
+ * docName, which the engine prints as the FIRST LINE of every note a siding lead
+ * copies: fourteen days of GC supers reading NOT READY TO PAVE on a wall. The
+ * siding drive's donor sweep never listed "pave"; it does now.) A CONFIG of
+ * shape #2's engine
  * (shared/note.js): no CSS here, no DOM building, no state, no persistence,
  * no document assembly — the engine owns all of it. This file owns the
  * WORDS, which is the half an engine must never own.
@@ -57,7 +62,15 @@
  * ready is HIS problem. The moment the cladding is on, whatever the wall carried becomes
  * the siding crew's — so the record of what the wall carried has to exist
  * BEFORE the hanging, and the choice (fix it / close it anyway) has to be
- * somebody else's, in writing. The stops list lives in items.js; every entry
+ * somebody else's, in writing. CLOSE IS FENCED (C3749): a stop that carries
+ * `fence` in items.js — sheathing that isn't on, nothing to nail to, rot behind
+ * the old wall, an old house nobody's tested, ground a jack can't stand on, the
+ * weather — is one no written direction can clear. CLOSE is offered only when
+ * something closable is ticked, and the fence line names the fenced holds that
+ * are, so a note of nothing but fenced holds never offers to hang over them.
+ * Steel's twin learned the same thing the harder way and lost its second button
+ * altogether; this one keeps it, fenced.
+ * The stops list lives in items.js; every entry
  * is a condition with the ASK riding under it, so the note reads as a list a
  * super can clear by lunch, not a complaint.
  *
@@ -71,11 +84,14 @@
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.notready;
+  /* The fenced holds, read off the DATA (items.js `fence`), never off a name. */
+  var FENCE = {};
+  (T.stops || []).forEach(function (x) { if (x && x.fence) FENCE[x.name] = x.fence; });
   var KEY = "toolkit.siding.notreadytoside.v1";
 
   var api = Note.mount({
     key: KEY,
-    docName: "NOT READY TO PAVE",
+    docName: "WALL'S NOT READY",
     copiedLabel: "Copied. Go send it.",
     copyFailLabel: "Select it and copy",
     clearConfirm: "Clear this note? Your name and company stay.",
@@ -91,7 +107,7 @@
     sections: [
       {
         title: "The job",
-        why: "So it's findable in somebody's inbox next spring, when the argument is about which section and which morning.",
+        why: "So it's findable in somebody's inbox next spring, when the argument is about which elevation and which morning.",
         fields: [
           { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "412 Marchmont — full re-side", docSkip: true }
         ]
@@ -158,7 +174,30 @@
 
     closing: [
       "Reply FIX with who's fixing each one and when, and this elevation goes back on my board the day it's cleared — and my crew comes back to it instead of somebody else's house.",
-      "Or reply CLOSE and we hang it as it sits — in writing, because once the wall is on, whatever is behind it is behind it, and this note is the record of what was there when I closed it.",
+      /* CLOSE ONLY WHERE THERE IS SOMETHING TO CLOSE — a note of nothing but
+         fenced holds offers no hanging over them. And CLOSE needs a TICKED
+         closable stop (C3750): with nothing ticked the note used to offer it
+         anyway, over a hold typed in his own words that the page cannot
+         classify — a live service drop, say, which no stop names. */
+      function (get) {
+        var s = get("stops") || [];
+        if (!s.some(function (nm) { return !FENCE[nm]; })) return "";
+        return "Or reply CLOSE and we hang it as it sits — in writing, because once the wall is on, whatever is behind it is behind it, and this note is the record of what was there when I closed it.";
+      },
+      function (get) {
+        var s = get("stops") || [];
+        var f = s.filter(function (nm) { return FENCE[nm]; }).map(function (nm) { return FENCE[nm]; });
+        /* The hold he typed is unclassified, so CLOSE never reaches it either —
+           said only where a CLOSE is on the note to be misread (C3750). */
+        var allFenced = s.length > 0 && f.length === s.length;
+        var typed = String(get("extra") || "").trim();
+        if (typed && !allFenced && s.length) f.push("the one I've written in");
+        if (!f.length) return "";
+        var list = f.length === 1 ? f[0] : f.slice(0, -1).join(", ") + " and " + f[f.length - 1];
+        return (allFenced ? (f.length === 1 ? "There's no CLOSE on this — " : "There's no CLOSE on these — ") : "CLOSE never reaches ")
+          + list + ": " + (f.length === 1 ? "that holds" : "those hold") + " until whoever owns "
+          + (f.length === 1 ? "it clears it" : "them clears them") + ", whatever the reply says.";
+      },
       "Nothing here is a verdict on anybody's work — it's what I found, in my words, off my own tape and set beside my own sheet. What caused it, what it needs, and whether anything on that wall is safe to cut are not mine to say: those are an engineer's, an inspector's and a certified outfit's calls, and I am not standing in for any of them."
     ],
 

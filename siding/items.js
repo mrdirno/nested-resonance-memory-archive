@@ -138,6 +138,10 @@ window.TOOLKIT_ITEMS.wall = {
 };
 
 /* ── WALL'S NOT READY (shape #2 — shared/note.js) ───────────────────────────
+ * `fence` (C3749) marks a hold no written direction can clear — structure, rot,
+ * an old house nobody has tested, ground a jack can't stand on, the weather. The
+ * page's CLOSE reply is offered only when something closable is ticked, and the
+ * fence line names the fenced holds that are ticked, in these words.
  * The refusal. Every trade on this rack has one and they are all the same
  * widget; the trade lives in the STOPS, and this one has two that no sibling
  * has. The first is the tear-off: he is the only man on the rack whose job
@@ -169,14 +173,17 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Sheathing's not on, not fastened off, or there are gaps",
+      fence: "sheathing that isn't on, isn't fastened off or has gaps",
       sub: "What's under it telegraphs through it — I can't hang a flat wall on a wall that isn't. Tell me who's closing it out and the day."
     },
     {
       name: "No nailers or blocking where the trim lands",
+      fence: "nothing to nail to",
       sub: "Corners, bands, the frieze, the fascia, a light block — every one of them needs something behind it. Tell me who's putting it in, or I'm nailing to air and we both know how that ends."
     },
     {
       name: "Took the old wall off and there's rot behind it",
+      fence: "the rot behind the old wall",
       sub: "Here's where it is, how big it is off my tape, and what it looked like — photographed. What caused it and what it needs is not my call. Tell me who's looking at it and whether I'm stopped on that elevation."
     },
     {
@@ -201,10 +208,12 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "The house is old and nobody's said who's testing before we cut",
-      sub: "The owner tells me the house is from <year>. I'm not the man who says what's on that wall or whether it's fine to cut, sand or pull — that's a test and a certified outfit, and neither is mine. Tell me who holds it and I'll stand my crew down until you do."
+      fence: "who's testing an old house",
+      sub: "The owner tells me the house is from <year>. I'm not the man who says what's on that wall or whether it's fine to cut, sand or pull — that's a test and a certified outfit, and neither is mine. Tell me who holds the testing — my crew stands down on that wall until they've cleared it, not until somebody's named."
     },
     {
       name: "I can't get a jack or a lift to the wall",
+      fence: "a jack or a lift I can't get to the wall",
       sub: "Soft ground, a slope, cars, a deck, somebody's material stacked on my elevation. Tell me who's clearing it and the day, because a wall I can't stand at is a wall I can't hang."
     },
     {
@@ -217,6 +226,7 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Weather — my call, my words",
+      fence: "the weather",
       sub: "I'm not hanging a wall today, and here's what I saw. No threshold of mine is on this note; I'm telling you now so the schedule moves with a day's notice instead of at seven tomorrow."
     }
   ],
@@ -412,7 +422,7 @@ window.TOOLKIT_GETIN = {
     { name: "The saw and the shear run most of the day, and the saw is dusty", sub: "tell me which hours you'll take it and which side of the building sleeps or takes calls" },
     { name: "Tear-off drops debris and nails under the wall", sub: "tell me where you want people kept off and who puts the sign on it; we sweep and magnet at the end of every day either way" },
     { name: "Dust and cutting near an open window or a fresh-air intake", sub: "tell me which windows and intakes you want us to work around, and who tells the people inside to keep them shut" },
-    { name: "An old wall coming off a house of a certain age", sub: "tell me the year you have for it and who holds the testing and the certified outfit — that call isn't mine to make or to guess, and my crew stands down until you name it" },
+    { name: "An old wall coming off a house of a certain age", sub: "tell me the year you have for it and who holds the testing and the certified outfit — that call isn't mine to make or to guess, and my crew stands down on that wall until whoever holds the testing has cleared it — not until somebody's named" },
     { name: "Something on the wall gets pulled and put back — lights, numbers, a mount, a rail", sub: "tell me what you want reused and what you want replaced, and who's buying the replacement" },
     { name: "The weather turns and we come off the wall", sub: "tell me who I call at six in the morning, and who tells the people inside it's off" }
   ],
@@ -436,3 +446,200 @@ window.TOOLKIT_GETIN = {
     "Saying yes: tell me the gate, the window you're actually giving us, who meets us the first morning, where the trailer and the bin go, and where the water and the power are — and the one that matters most, who tells the people inside, because it isn't us. If the answer on an old wall is a name, give it to me before we take anything off, not during."
   ]
 };
+
+/* ── THE COUNTER CALL (shape #1 — shared/checklist-request.js) ───────────────
+ *
+ * The order he calls into the supply house the afternoon before. tools.js named
+ * it at stand-up as THE COIL & TRIM ORDER; it ships as THE COUNTER CALL because
+ * that working title would have printed bare "trim" in the Tools menu of every
+ * page in this kit (trade.js THE NAME COLLISIONS) and bare "coil" next to HVAC's
+ * coils in a rack search — and because the rack already has a family for this
+ * document: The Yard Call, The Dealer Call, The Store Call.
+ *
+ * A four-lens panel — the siding lead, the counter man who pulls it at three for
+ * a six o'clock truck, the doctrine lens, the skeptic — scored it 6 · 7 · 7 · 6,
+ * build-with-changes. Every change is in this data or in counter-call.html:
+ *
+ *  · NOBODY FORGETS THE SIDING, so the siding is HIS: the write-in, first and
+ *    largest, in his own words, never converted. The SAME LOT tick rides the
+ *    write-in (writeinFlags), because the siding is the one line where the lot
+ *    matters most — a picker-only flag would land on the J and miss the wall.
+ *  · A TICK MEANS "REMEMBER THIS", NOT "ONE". Every Qty opens blank, and a line
+ *    with no count is named in the message ("don't pull it till I give you the
+ *    number") instead of going out as a confident 1 he never typed.
+ *  · THE UNIT IS WELDED ONLY WHERE THE COUNTER SELLS IT ONE WAY (`unit`). A line
+ *    sold two ways carries `ways` instead — the two words the counter would ask
+ *    between — and a bare number on it is named in the message, never guessed.
+ *    Squares are never turned into boxes, pieces never into feet (refusal 11).
+ *  · COLOUR BY NAME, NEVER A COLOUR LIST (`colour: true` marks a line that
+ *    shows). One of those whose note is empty, or says only a size, a count or a
+ *    hand, is named in the message (C3751 — the note is his words). A
+ *    house has two colours, the body and the trim, and "J to match" is the
+ *    counter's most common wrong pull.
+ *  · A SELECT ONLY WHERE THE COUNTER CANNOT PULL WITHOUT THE ANSWER: an end
+ *    cap's hand, an elbow's way, the back of a roll of trim coil (`ask` names
+ *    the axis). Each opens on a neutral question that never prints, and a ticked
+ *    line left on it is named in the message. No profile, texture, width or size
+ *    select anywhere: that is the product picker THE GATE forbids, and the
+ *    manufacturer-specific half of the vocabulary where refusal 3 is tested.
+ *
+ * WHAT IS NOT HERE, ON PURPOSE — each a panel finding, not an oversight:
+ *  - Drip edge, shingle starter, step and counter flashing, kickout, ice-and-
+ *    water, valley metal, the gable and ridge vents: roofing's, and roofing's
+ *    Order The Load carries every one. "Siding starter strip" is written in full
+ *    because a counter that also runs a roofing desk hands you the shingle one
+ *    for a bare "starter".
+ *  - Any fastener by type, length or kind (refusal 2): one line, one word. That
+ *    takes the spike-and-ferrule off the picker too — the spike is a nail type;
+ *    he writes it in if the old gutter he's matching wants it.
+ *  - Any gutter or downspout size and any hanger layout (refusal 5); the gutter
+ *    itself (nobody forgets the gutter — it goes in the write-in); gutter coil
+ *    for the machine, mitres and guards, which are the seamless hand's own order
+ *    — a wish for that is the trigger trade.js demerit (1) names.
+ *  - Numbered profiles, plank widths, the word for how much of a course shows
+ *    (refusal 3). He may type his own off his selection sheet; the page never
+ *    prints one.
+ *  - Sheathing, anything for rot, poly or containment for a tear-off (refusals
+ *    6 and 7): the findings rung and Getting In own those.
+ *  - Window and door flashing tape and pans (refusal 4; the window side's).
+ *  - "T&M / extra" as a charge: the extra-work tag is deferred on purpose until
+ *    the findings page exists (tools.js), and a money-adjacent page is not where
+ *    it sneaks in.
+ *  - A landing on every line. Siding lands in one spot and the crew carries it,
+ *    so the drop-off block says it once, for the whole call.
+ *
+ * tools/toolkit-gates/counter-call.mjs reads every string below against the
+ * refusals, the name collisions, roofing's words and the brands, and drives the
+ * page's own document; the deploy runs its static half.
+ */
+(function () {
+  "use strict";
+  /* §THE NEUTRAL — the question, never a default; any value starting with an
+   * em-dash is dropped from the message. */
+  function n(q) { return "— " + q + " —"; }
+  function ax(label, opts) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts };
+  }
+  var LOT = [{ k: "lot", label: "Same lot as the wall" }];
+
+  window.TOOLKIT_ITEMS.order = {
+    writeinFlags: LOT,
+    writeinAx: [],
+
+    cats: [
+      {
+        id: "list",
+        name: "What are you calling in?",
+        docName: "The order",
+        hint: "Paste your takeoff — one line each, the way you'd text it. Say squares or boxes, pieces or cartons: the counter sells the siding both ways and a box isn't a square. Tick SAME LOT on anything that has to come off the lot that's already hung.",
+        writein: true,
+        items: []
+      },
+
+      {
+        id: "ladder",
+        name: "Siding starter, corners & J-channel",
+        docName: "Siding starter, corners & J-channel",
+        hint: "The ladder nobody writes down — the siding starter strip at the bottom, the utility at the top, corners and J-channel everywhere between. Colour by name on every one that shows: the body's or the trim's.",
+        items: [
+          { n: "Siding starter strip", sub: "PIECES OR FEET — SAY WHICH", ways: "pieces or feet",
+            notePlaceholder: "for the lap or the shakes, off your order" },
+          { n: "Outside corners", sub: "BY THE PIECE — SAY THE COLOUR", unit: "piece", colour: true,
+            notePlaceholder: "the colour — the body's or the trim's" },
+          { n: "Inside corners", sub: "BY THE PIECE — SAY THE COLOUR", unit: "piece", colour: true,
+            notePlaceholder: "the colour — the body's or the trim's" },
+          { n: "J-channel", sub: "PIECES OR FEET — SAY WHICH, AND THE COLOUR", ways: "pieces or feet", colour: true,
+            notePlaceholder: "the colour, and which J-channel — the siding's, the narrow one for the eave soffit, or the wide one around the windows and doors" },
+          { n: "Utility trim / undersill", sub: "PIECES OR FEET — UNDER THE SILLS AND THE TOP COURSE", ways: "pieces or feet", colour: true,
+            notePlaceholder: "the colour" },
+          { n: "Drip cap / Z-flashing", sub: "PIECES OR FEET — SAY WHICH, AND THE COLOUR IF IT SHOWS", ways: "pieces or feet", colour: true,
+            notePlaceholder: "the profile off your order, and the colour if it shows" }
+        ]
+      },
+
+      {
+        id: "eave",
+        name: "Eave soffit & fascia",
+        docName: "Eave soffit & fascia",
+        hint: "The eave, and what catches it at the wall. Vented or solid is off your order — this page doesn't figure the vent. Tick SAME LOT where it has to line up with what's already up.",
+        items: [
+          { n: "Eave soffit — vented", sub: "PIECES OR CARTONS — SAY WHICH, AND THE COLOUR", ways: "pieces or cartons", colour: true,
+            flags: LOT, notePlaceholder: "the colour" },
+          { n: "Eave soffit — solid", sub: "PIECES OR CARTONS — SAY WHICH, AND THE COLOUR", ways: "pieces or cartons", colour: true,
+            flags: LOT, notePlaceholder: "the colour" },
+          { n: "F-channel", sub: "PIECES OR FEET — CATCHES THE EAVE SOFFIT AT THE WALL", ways: "pieces or feet", colour: true,
+            notePlaceholder: "the colour" },
+          { n: "Fascia cover", sub: "PIECES OR FEET — SAY WHICH, AND THE COLOUR", ways: "pieces or feet", colour: true,
+            flags: LOT, notePlaceholder: "the colour — or order trim coil below if you're bending it" }
+        ]
+      },
+
+      {
+        id: "trim",
+        name: "Exterior trim, trim coil & blocks",
+        docName: "Exterior trim, trim coil & blocks",
+        hint: "What the brake eats and what shows from the street. Say the back of the trim coil — the counter can't pull a roll without it. For the blocks and the hoods, your Through My Wall rows are the count.",
+        items: [
+          { n: "Trim coil", sub: "BY THE ROLL — SAY THE FACE COLOUR AND THE BACK", unit: "roll", colour: true,
+            flags: LOT, ask: ["theback"],
+            ax: [ax("The back", [n("which back"), "White back", "Same colour both sides", "Mill back"])],
+            notePlaceholder: "the face colour, and smooth or grain — off your order" },
+          { n: "Exterior trim boards", sub: "PIECES OR FEET — PRIMED OR PRE-FINISHED", ways: "pieces or feet", colour: true,
+            flags: LOT, notePlaceholder: "which boards and the lengths off your takeoff, and the colour" },
+          { n: "Exterior window & door trim", sub: "PIECES OR FEET — SAY WHICH PIECE", ways: "pieces or feet", colour: true,
+            notePlaceholder: "which piece, and the colour" },
+          { n: "Mounting blocks", sub: "EACH — LIGHT, RECEPTACLE, BIB, METER — HOW MANY OF EACH", unit: "ea", colour: true,
+            notePlaceholder: "how many of each kind, and the colour" },
+          { n: "Vent hoods", sub: "EACH — DRYER, BATH, KITCHEN — HOW MANY OF EACH", unit: "ea", colour: true,
+            notePlaceholder: "how many of each, and the colour" },
+          { n: "Touch-up for the pre-finished", sub: "EACH — SAY THE COLOUR", unit: "ea", colour: true,
+            notePlaceholder: "the colour of the pre-finished you're cutting" }
+        ]
+      },
+
+      {
+        id: "gutter",
+        name: "The gutter & its downspouts",
+        docName: "The gutter & its downspouts",
+        hint: "The parts, not the gutter — nobody forgets the gutter, so write it in up top in your own words. Every size is yours off the job: this page sizes no gutter and no downspout and lays out no hanger.",
+        items: [
+          { n: "Downspout", sub: "BY THE PIECE — SAY THE SIZE AND THE COLOUR, THIS PAGE WON'T", unit: "piece", colour: true,
+            notePlaceholder: "the size and the colour off your job" },
+          { n: "Downspout elbows", sub: "EACH — WHICH WAY THEY TURN, AND THE COLOUR", unit: "ea", colour: true,
+            ask: ["whichway"],
+            ax: [ax("Which way", [n("front or side"), "Front (A)", "Side (B)", "Some of each — in the note"])],
+            notePlaceholder: "the size and the colour — and how many each way if it's both" },
+          { n: "End caps", sub: "EACH — LEFT OR RIGHT, THE SIZE AND THE COLOUR", unit: "ea", colour: true,
+            ask: ["whichhand"],
+            ax: [ax("Which hand", [n("left or right"), "Left", "Right", "Either hand", "Some of each — in the note"])],
+            notePlaceholder: "the colour — and how many each hand if it's both" },
+          { n: "Downspout outlets", sub: "EACH — SAY THE SIZE, THIS PAGE WON'T", unit: "ea", colour: true,
+            notePlaceholder: "the size and the colour off your job" },
+          { n: "Hangers — for the gutter", sub: "BOXES OR EACH — SAY WHICH, WHICH KIND AND THE SIZE", ways: "boxes or each",
+            notePlaceholder: "which kind, and how many off your own run" },
+          { n: "Downspout straps", sub: "BOXES OR EACH — SAY WHICH, THE SIZE AND THE COLOUR", ways: "boxes or each", colour: true,
+            notePlaceholder: "the colour" }
+        ]
+      },
+
+      {
+        id: "seal",
+        name: "Sealant, fasteners & the rest",
+        docName: "Sealant, fasteners & the rest",
+        hint: "How it stays on and how it stays shut. Which sealant and which fastener is off the printed instructions you were handed, by name — this page names neither.",
+        items: [
+          { n: "Sealant / caulk", sub: "TUBES OR CASES — SAY WHICH, AND THE COLOUR", ways: "tubes or cases", colour: true,
+            notePlaceholder: "the colour, and the one your instructions name — this page names none" },
+          { n: "Fasteners", sub: "WHAT YOUR PRINTED INSTRUCTIONS CALL FOR — THIS PAGE WON'T NAME ONE", ways: "boxes or pounds",
+            notePlaceholder: "which ones and how many — the way the counter will know them" },
+          { n: "Housewrap", sub: "BY THE ROLL", unit: "roll",
+            notePlaceholder: "which one, off your set" },
+          { n: "Wrap tape", sub: "BY THE ROLL", unit: "roll",
+            notePlaceholder: "the one that goes with your wrap" },
+          { n: "Saw blades", sub: "EACH — SAY WHAT YOU'RE CUTTING", unit: "ea",
+            notePlaceholder: "what you're cutting, and the saw it goes on" }
+        ]
+      }
+    ]
+  };
+})();

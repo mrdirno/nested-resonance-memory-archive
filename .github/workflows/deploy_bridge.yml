@@ -844,6 +844,31 @@ jobs:
           node tools/toolkit-gates/docs-safety-route.mjs --root=HELIOS-BRIDGE/dist \
             || { echo "FAIL: the safety route broke - an injury search misses the incident report, or a non-injury word reaches it"; exit 1; }
 
+          # THE COUNTER CALL SAYS ONLY WHAT HE TYPED (C3749). Siding's supply-house
+          # order carries more words that collide with another trade's than any page
+          # in its kit, and the panel that scored it found no shipped gate reading a
+          # shape #1 page's WORDS: a nail type in a placeholder, a gutter size offered
+          # as a choice, a numbered profile, roofing's pink left in :root would all
+          # have shipped green. Plain node on the staged files: the vocabulary against
+          # the twelve refusals, the name collisions, roofing's words and the brands;
+          # one-way vs two-way units; the page's own words and palette. The browser
+          # half (the document it produces) and --prove are run by the lane.
+          node tools/toolkit-gates/counter-call.mjs --static --root=HELIOS-BRIDGE/dist \
+            || { echo "FAIL: siding/counter-call.html or its vocabulary says something he did not type, or something a refusal forbids"; exit 1; }
+
+          # NO WRITTEN WORD CLEARS A HOLD THAT RISKS A PERSON (C3749). Steel's crane-
+          # morning note inherited the finish trades' second button — "reply SET and
+          # we fly it as it sits, in writing" — over a hot line in the swing, anchor
+          # bolts nobody approved and an unpoured deck, and siding's CLOSE reached an
+          # untested old house; no gate read a close against the stops above it.
+          # Plain node on the staged files: steel's FIX / NEW DAY close and no offer
+          # to proceed, no stop asking for a written direction, the write-up naming
+          # all eight holds, siding's CLOSE fenced off the data, and every go/no-go
+          # note opening with its own trade's heading (siding's opened NOT READY TO
+          # PAVE for fourteen days). --prove is run by the lane.
+          node tools/toolkit-gates/go-no-go-scope.mjs --root=HELIOS-BRIDGE/dist \
+            || { echo "FAIL: a go/no-go note offers to proceed over a hold no written word can clear, or wears another trade's heading"; exit 1; }
+
           # FEEDBACK IS BUILT IN — the standard, asserted rather than remembered
           # (operator 2026-08-04: "make sure we have a solid scalable way of
           # addressing open item wishes/feedback for anything — standardize the

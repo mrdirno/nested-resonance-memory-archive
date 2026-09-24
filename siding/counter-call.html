@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Counter Call — Siding &amp; Exteriors Field Toolkit</title>
+<meta name="description" content="Tomorrow's siding order called into the counter off your takeoff — your lines the way you'd text them, then the forget-list: siding starter strip, corners, J-channel, F-channel, blocks, trim coil with its back said, the eave soffit and the gutter's parts. Colour by name, same lot as the wall, and no count the page made up.">
+<meta name="apple-mobile-web-app-title" content="The Counter Call">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+/* THE KIT'S OWN PALETTE, off siding/trade.js — the one red on the rack. The
+   sibling this page shares a chassis with is roofing's Order The Load, and a
+   page copied from it keeps roofing's pink in :root with nothing to notice it
+   but a man comparing two tabs; tools/toolkit-gates/counter-call.mjs asserts
+   every value below against trade.js. */
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#575E67;--flag:#FEC8CC;--tint:#FFF1F2;--deep:#6E1F29;--flag-ink:#2A0E10;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
+   instead of fixing it and hides exactly the defect the pre-ship mobile gate is
+   there to catch (tools/toolkit-gates/mobile-watertight.mjs). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal}
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+/* 44px, MEASURED, NOT ASSUMED — the shape #1 sweep of 2026-08-14 found every
+   header text input at 37.6px and every select at 36.5px on seven order pages at
+   once, because they are one rule copied seven times. Scoped off checkbox/radio:
+   a 44px checkbox is not a bigger target, it is a broken layout. */
+.f input:not([type=checkbox]):not([type=radio]),.f select,.f textarea{min-height:44px}
+.f textarea{resize:vertical;min-height:42px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer;min-height:44px}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+
+/* THE HOUSE: its colours and the lot on the wall, per job, and the one field
+   this page exists for. Tinted so it reads as the job's, not the order's. */
+.house{margin:12px 0 0;padding:10px 11px;border:1px solid var(--line);border-left:4px solid var(--deep);border-radius:2px;background:var(--tint)}
+
+/* THE HOT FLAG. One binary, never a low/medium/high — because it is binary it
+   gets used honestly and the counter learns to trust it. */
+.hot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;cursor:pointer}
+.hot input{width:22px;height:22px;flex:none;accent-color:#C4342B;cursor:pointer}
+.hot span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:var(--muted)}
+.hot input:checked ~ span{color:#B0201A}
+.hot:has(input:checked){border-color:#C4342B;background:#FFF4F3}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+details.more>summary{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:14px;color:var(--deep);font-weight:700}
+details.more[open]>summary::before{content:"–"}
+details.more .hgrid{margin-top:9px}
+
+.lastwrap{margin:0 0 12px}
+.lastbtn{width:100%;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.lastbtn:hover{background:var(--tint)}
+
+.jog{background:var(--steel);color:#EEF0EA;border-radius:2px;padding:11px 13px;margin:16px 0 12px}
+.jog b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:16px;display:block;color:var(--flag)}
+.jog span{display:block;font-size:12.5px;color:#B9BFC6;margin-top:2px}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+.cathint{margin:0;padding:8px 12px;font-size:12px;color:var(--muted);background:#F4F5F1;border-bottom:1px solid var(--line)}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 90px;min-width:84px}
+.cfg .f.wide{flex:2 1 170px}
+/* Qty is FREE TEXT because one call leaves the counter in five different units —
+   6 box, 14 pc, 2 roll, a case, 160 ft. A number spinner is a desk person's idea
+   of how a wall is counted. */
+.cfg .f.qty{flex:0 0 100px;min-width:100px}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+/* SAME LOT. The one tick a second call lives or dies on, so it does not look
+   like the others — and it is short on purpose: roofing's longer label wraps to
+   48px at 320. */
+.cfg .flags{margin-top:2px}
+.cfg .flag{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px 4px 8px;border:1px solid var(--deep);
+  border-radius:2px;background:var(--tint);cursor:pointer;font-family:var(--cond);text-transform:uppercase;
+  letter-spacing:.04em;font-size:13.5px;font-weight:700;color:var(--deep)}
+.cfg .flag input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+
+/* THE WRITE-IN GOES FIRST AND IT IS THE BIGGEST THING ON THE PAGE. Nobody
+ * forgets the siding — it is his takeoff, pasted — so the picker underneath is
+ * the jog, never the way in. */
+.cat:first-of-type{border:2px solid var(--deep)}
+.cat:first-of-type h2{background:var(--deep);color:#fff;border-left-color:var(--deep)}
+.cat:first-of-type h2 .n{color:#F7D5D8}
+.cat:first-of-type .cathint{background:var(--tint);color:#4A121A;font-size:12.5px}
+.cat:first-of-type .addrow{background:var(--tint);padding:12px}
+.cat:first-of-type .wi-input{min-height:96px}
+.cat:first-of-type .addbtn{background:var(--deep);border-color:var(--deep)}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1;align-items:stretch}
+.addrow .wi-input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px;
+  background:#fff;color:var(--ink);resize:vertical;line-height:1.35}
+.addrow .wi-input:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 16px;cursor:pointer;
+  min-height:44px;flex:none}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none;min-width:44px;min-height:44px}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+/* "The Copy button has to be big enough to hit with a dirty glove without
+   looking." Ink on the pale accent, never white on it: 12.28:1 (trade.js). */
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+/* THE COUNT GIVES UP BEFORE THE BUTTONS DO — the same measured threshold as the
+   sibling order pages: on the narrowest phone the ticks and the preview already
+   say how many lines are on the call. */
+@media (max-width:356px){ .bar .count{display:none} .bar #clear{margin-left:auto} }
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Siding &middot; Field &rarr; Counter</span>
+    <h1>The Counter Call</h1>
+    <p class="lede">Tomorrow&rsquo;s material, called in off your takeoff instead of off your memory. Paste it the way you&rsquo;d text it, then run down what&rsquo;s never on the truck &mdash; siding starter strip, utility, F-channel, a block for every hole, trim coil, the eave soffit, the downspout elbows and end caps. Say the colour on every piece that shows, tick SAME LOT on anything that has to line up with what&rsquo;s already hung, and send it before the counter closes.</p>
+  </header>
+
+  <div class="head">
+    <!-- THE JOB CARD (shared/jobcard.js). The house's colours, the lot on its
+         wall, the charge and the PO belong to a JOB, not to this phone: a lot
+         carried onto the next house does not go stale, it tells the counter to
+         pull a lot that was never there. -->
+    <div id="jobcard"></div>
+    <div class="hgrid">
+      <div class="f span2"><label>Job / site <i>(name and street &mdash; a driver can&rsquo;t find a job name)</i></label><input id="fJob" type="text" placeholder="412 Marchmont — full re-side" autocomplete="off"></div>
+      <div class="f span2"><label>Who's calling <i>(name, outfit, cell &mdash; the outfit&rsquo;s the account)</i></label><input id="fBy" type="text" placeholder="Dale W — Rivet Exteriors — 559-555-0143" autocomplete="off"></div>
+      <div class="f"><label>Getting it</label>
+        <div class="seg" id="segMode">
+          <button type="button" class="on" data-v="Deliver it">Deliver it</button>
+          <button type="button" data-v="Will-call">Will-call</button>
+        </div>
+      </div>
+      <div class="f"><label>Need it</label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="In the morning">In the AM</button>
+          <button type="button" data-v="Today">Today</button>
+          <button type="button" data-v="date">Pick&hellip;</button>
+        </div>
+      </div>
+      <div class="f span2" id="dateWrap" style="display:none"><label>On the job by</label><input id="fDate" type="datetime-local"></div>
+      <div class="f span2" id="pickWrap" style="display:none"><label>Who's coming for it <i>(and about when &mdash; whoever&rsquo;s driving today)</i></label><input id="fPick" type="text" placeholder="Luis, in the box truck — about 7" autocomplete="off"></div>
+      <div class="f span2"><label>What you're hanging <i>(he reads this first &mdash; he&rsquo;ll catch what you forgot)</i></label><input id="fFor" type="text" placeholder="rear and both gables — tear-off Thursday" autocomplete="off"></div>
+      <label class="hot"><input id="fHot" type="checkbox"><span>&#9888; Short on the wall &mdash; crew's standing</span></label>
+    </div>
+
+    <!-- THE HOUSE. Passthrough only: this page holds nobody's colours and nobody's
+         lots, looks nothing up and names no maker's colour. It is what the man
+         types off the selection and off a carton end, said once per job and
+         carried on every top-up after the first. -->
+    <div class="house">
+      <div class="hgrid">
+        <div class="f span2"><label>Colours on this house <i>(body, trim, anything else &mdash; off the selection)</i></label><input id="fCol" type="text" placeholder="body clay · trim white · gable shakes grey" autocomplete="off"></div>
+        <div class="f span2"><label>Lots already up <i>(off the carton ends or the first ticket &mdash; not from memory; each product has its own)</i></label><input id="fLot" type="text" placeholder="siding 0417-B · eave soffit 22 — off the carton ends" autocomplete="off"></div>
+      </div>
+    </div>
+
+    <details class="more">
+      <summary>How the truck gets in, where it lands, who signs, the PO &mdash; typed once, saved with this job</summary>
+      <!-- THE DROP-OFF BLOCK (shared/dropoff.js), shown only on Deliver it: a
+           will-call carrying a gate code is the same lie in the other direction.
+           ONE landing for the whole call — siding lands in one spot and the crew
+           carries it, so no line of this order carries a landing of its own. -->
+      <div id="dropoff"></div>
+      <div class="hgrid">
+        <div class="f"><label>Charge to</label>
+          <select id="fCharge">
+            <option>Job</option>
+            <option>Shop stock</option>
+          </select>
+        </div>
+        <div class="f span2"><label>PO / cost code <i>(if your office needs one)</i></label><input id="fPO" type="text" placeholder="26-412-07" autocomplete="off"></div>
+      </div>
+    </details>
+  </div>
+
+  <p class="lastwrap" id="lastwrap" style="display:none">
+    <button type="button" class="lastbtn" id="last">&#8635; Start from last call</button>
+  </p>
+
+  <main id="list"></main>
+
+  <!-- UNDER THE LIST, NOT ABOVE THE WRITE-IN. Measured on the sibling chassis at
+       320px, every box above the write-in pushed his own lines further past the
+       second screen; this one is the least often used. -->
+  <div class="head" style="border-left-color:var(--muted);margin-bottom:14px">
+    <div class="f"><label>Anything else &mdash; not material <i>(the pallets back, a call before you load &mdash; the gate code lives in the drawer above)</i></label>
+      <input id="fNotes" type="text" placeholder="take the pallets back · call me before you load it, I might add to it" autocomplete="off"></div>
+  </div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every square, box, piece, colour and count on here is what <i>you</i> typed.</b> This page specs nothing and knows nothing about your wall &mdash; no squares figured off a drawing, no fastener, no gap, no exposure, no clearance, no gutter or downspout size, no hanger layout, no flashing detail, no rating and no warranty term. All of that is on the printed instructions you were handed, your selection and your contract. <b>Double-check it before you send it</b> &mdash; it&rsquo;s not a substitute for the manufacturer&rsquo;s instructions or the code &mdash; and count what comes off the truck before the driver leaves. It&rsquo;s a field request, not a purchase order.
+  </div>
+
+  <p class="credit">&#10022; A line missing that came in wrong, or a piece your counter calls something else? Wish for it &mdash; it gets added, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the call</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script src="../shared/jobcard.js"></script>
+<script src="../shared/dropoff.js"></script>
+<script>
+/* THE COUNTER CALL — siding's supply-house order, and an instance of shape #1
+ * (av/AV_SOCIETY.md §THE THREE SHAPES: CHECKLIST → A REQUEST). Nothing about the
+ * mechanism is written here — it is all shared/checklist-request.js. This file
+ * owns the WORDS and the readings; siding/items.js (TOOLKIT_ITEMS.order) owns
+ * the vocabulary and says why each line is or is not on it.
+ *
+ * ROOFING'S ORDER THE LOAD IS THE CHASSIS AND NOT THE DOCUMENT. A siding lead
+ * cannot send that one: it says "Covering:", "ROOF'S OPEN" and "a square carried
+ * up a ladder", it lands bulk on a roof slope, and its only starter strip is a
+ * bundle of shingle starter. What this page does that its siblings do not:
+ *
+ *  1. THE SIDING IS HIS WORDS AND THE LOT RIDES THEM. The write-in carries the
+ *     SAME LOT tick (writeinFlags), so the lot reaches the line where it matters
+ *     most. The house's colours and the lot on its wall are header fields, per
+ *     JOB, passed straight through and never looked up.
+ *  2. NOTHING IS COUNTED FOR HIM. Every Qty opens blank; a unit is welded to a
+ *     bare number only on a line the counter sells one way; a bare number on a
+ *     line sold two ways is NAMED in the message ("pieces or cartons? I didn't
+ *     say") instead of guessed. A tool must never re-count a man's order.
+ *  3. THE COUNTER'S CALLBACKS GO IN THE MESSAGE, and only those: a line with no
+ *     count, a bare number on a two-way line, an end cap with no hand, an elbow
+ *     with no way, a roll of trim coil with no back, a line that shows with no
+ *     colour said, a delivery with nowhere to land. Each is a question the
+ *     counter would otherwise phone him about at three. Guesses about what he
+ *     MEANT to order are not on this page at all — the ones worth asking would
+ *     have to read his typed siding, and a regex on a man's words is a
+ *     classifier nobody maintains (§SCARS 2026-08-26).
+ *  4. WILL-CALL IS A REAL MODE. Half of a siding short is a pickup at the
+ *     counter on the way to the job, so the drop-off block shows and prints only
+ *     on Deliver it, and the truck's half prints AFTER his lines: the counter
+ *     keys the lines at three, dispatch reads the gate at six.
+ *
+ * WHAT THE PANEL KILLED, deliberately absent: a landing on every line, the
+ * "X and no Y — on purpose?" questions, the filter bar (27 lines read whole, and
+ * the filter sat above the write-in), a clone button, a profile / texture /
+ * size / width select, "T&M / extra" as a charge, and any sentence that says a
+ * colour, a lot or a count is right.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS.order;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ── the vocabulary, read off the DATA, never off a name ─────────────────
+   * `unit` (sold one way), `ways` (sold two ways), `colour` (it shows), `ask`
+   * (the axis the counter cannot pull without). A clone or a write-in whose text
+   * matches a catalogue name resolves as that catalogue line, which is what it
+   * is (flooring/dealer-call.html found the `.rm` test to be a trap). */
+  var UNITS = { piece: ["piece", "pieces"], roll: ["roll", "rolls"], ea: ["ea", "ea"] };
+  var UNIT = {}, WAYS = {}, COLOUR = {}, ASK = {}, CAT = {};
+  D.cats.forEach(function (c) {
+    (c.items || []).forEach(function (i) {
+      CAT[i.n] = true;
+      if (i.unit) UNIT[i.n] = i.unit;
+      if (i.ways) WAYS[i.n] = i.ways;
+      if (i.colour) COLOUR[i.n] = true;
+      /* ASK[name][axis key] = the question the neutral asks ("left or right"),
+       * which is exactly what the message asks back when it is left unanswered. */
+      if (i.ask) {
+        ASK[i.n] = {};
+        (i.ax || []).forEach(function (a) {
+          if (i.ask.indexOf(a.k) !== -1) ASK[i.n][a.k] = String(a.opts[0] || "").replace(/^—\s*|\s*—$/g, "");
+        });
+      }
+    });
+  });
+  /* A WRITE-IN IS WHERE IT LIVES, NOT WHAT IT IS CALLED. Keyed on the name, a
+   * pasted "end caps" that iOS capitalised into "End caps" became the catalogue
+   * line — it picked up a unit he never typed and a left-or-right question its
+   * row has no select to answer (the C3749 audit). A row in the write-in section
+   * is his sentence; a clone sits in its catalogue section and stays catalogue. */
+  function isWriteIn(l) {
+    var c = l.el && l.el.closest(".cat");
+    return !c || c.getAttribute("data-id") === "list" || !CAT[l.name];
+  }
+  function bare(q) { return /^[0-9]+(\.[0-9]+)?$/.test(q); }
+  function qtyOf(l) {
+    var q = (l.qty || "").trim();
+    if (!q) return "";
+    var u = isWriteIn(l) ? null : UNITS[UNIT[l.name]];
+    if (!u || !bare(q)) return q;   // his words stand
+    return q + " " + (parseFloat(q) === 1 ? u[0] : u[1]);
+  }
+
+  /* §THE NEUTRAL — a value starting with an em-dash was never picked, and a
+   * value nobody picked must never reach the counter. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function lotTicked(l) { return !!(l.flags && l.flags.lot); }
+
+  /* ── THE JOB CARD ─────────────────────────────────────────────────────────
+   * See shared/jobcard.js — the picker IS the guard. fCol and fLot are the most
+   * per-job fields on the page: the colours of ONE house and the lot on ITS
+   * wall. fBy is the phone's. Born with a card, so there is no older store to
+   * adopt, and the gate fails a page that is silent about its predecessor. */
+  var LASTJOB = "toolkit.siding.counterCall.v1.lastJob";
+  /* THE CALL ON THE GLASS REMEMBERS WHICH HOUSE IT WAS STARTED ON (C3751). Clear
+   * used to stamp the "last" slot with whatever house was lit when it was tapped —
+   * a stray Clear on the next house's empty call, or "+ Another job" then Clear,
+   * handed the first house's call to the second, SAME LOT and all. */
+  var LIVEJOB = "toolkit.siding.counterCall.v1.liveJob";
+  function jobId() { var j = jc ? jc.current() : null; return (j && j.id) || "j1"; }
+  var jc = JobCard.mount({
+    mount: "jobcard",
+    trade: "siding",
+    label: "Which job",
+    nameField: "fJob",
+    perJob: ["fCol", "fLot", "fCharge", "fPO"],
+    device: ["fBy"],
+    legacyKey: null,
+    onApply: function () { syncJob(); }
+  });
+
+  /* ── THE DROP-OFF BLOCK — per job through the card, shown only on Deliver. */
+  var DKEY = "toolkit.siding.counterCall.dropoff.v1";
+  function dropKey(j) { return DKEY + "." + ((j && j.id) || "j1"); }
+  var drop = Dropoff.mount({
+    mount: "dropoff",
+    key: dropKey(jc ? jc.current() : null),
+    jobField: "fJob",
+    load: "truck",
+    perJob: true,
+    bare: true,
+    onChange: function () { if (api) api.refresh(); }
+  });
+  function syncJob() {
+    if (drop && jc) drop.rekey(dropKey(jc.current()));
+    if (api) api.refresh();
+  }
+
+  var mode = "Deliver it";
+  function modeUI() {
+    if (drop) drop.show(mode === "Deliver it");
+    var pw = $("pickWrap");
+    if (pw) pw.style.display = (mode === "Will-call") ? "" : "none";
+  }
+
+  /* THE DEFAULT IS THE MORNING: he calls in the afternoon for a crew that is on
+   * the wall at seven. */
+  var when = "In the morning";
+  /* "PICK A TIME" IS THE PAGE TALKING TO HIM, and it used to print into his
+   * message, where the counter reads it as "you pick". An unsaid day now prints
+   * as unsaid and is asked about in BEFORE YOU PULL IT. A will-call is READY by
+   * a time; a delivery is ON THE JOB by one. */
+  function noDay() {
+    if (when !== "date") return false;
+    var d = $("fDate").value, p = d.split("T"), ymd = (p[0] || "").split("-");
+    return !d || ymd.length < 3;
+  }
+  function whenText() {
+    if (when !== "date") return when === "Today" ? "today" : "in the morning";
+    if (noDay()) return "a day I haven't said yet";
+    var d = $("fDate").value;
+    var p = d.split("T"), ymd = (p[0] || "").split("-"), hm = (p[1] || "").split(":");
+    var dt = new Date(+ymd[0], +ymd[1] - 1, +ymd[2], +(hm[0] || 0), +(hm[1] || 0));
+    return (mode === "Will-call" ? "ready by " : "on the job by ")
+         + dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+         + " " + dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  }
+
+  function seg(id, v) {
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+
+  /* One line the way the counter keys it: how many (in his unit, or in his
+   * words), the thing, whatever he picked that the counter needs to pull the
+   * right one, the lot tag, then his note. */
+  function line(l) {
+    var q = qtyOf(l);
+    var out = (q ? q + "  " : "") + l.name;
+    var picked = [];
+    Object.keys(l.ax || {}).forEach(function (k) { if (!none(l.ax[k])) picked.push(l.ax[k]); });
+    if (picked.length) out += "  ·  " + picked.join("  ·  ");
+    if (lotTicked(l)) out += "  [SAME LOT]";
+    if (l.note) out += "  (" + l.note + ")";
+    return out;
+  }
+
+  function plural(n, one, many) { return n === 1 ? one : many; }
+
+  var api = ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.siding.counterCall.v1",
+    filter: false,
+    qtyText: true,
+    qtyDefault: "",
+    writeinTextarea: true,
+    writeinQtyDefault: "",
+    data: D.cats,
+    writeinAx: D.writeinAx,
+    writeinFlags: D.writeinFlags,
+    // How a siding lead already texts this, units and all — a placeholder that
+    // does not look like his own message does not get read. It never prints a
+    // numbered profile, a plank width, a gutter size or anybody's brand.
+    writeinPlaceholder: "6 box dutch lap — the clay\n14 pc J-channel — white\n2 roll trim coil — white both sides\n160 ft of gutter & 6 downspouts — white\n— one per line. Say squares or boxes, then tick SAME LOT where it has to match.",
+    notePlaceholder: "e.g. the colour — the body's or the trim's — and anything the counter always asks back",
+    watch: ["fJob", "fBy", "fFor", "fCol", "fLot", "fNotes", "fDate", "fPick", "fCharge", "fPO"],
+    persistExtra: function () {
+      var x = { forr: $("fFor").value, notes: $("fNotes").value, date: $("fDate").value,
+                when: when, mode: mode, pick: $("fPick").value, hot: $("fHot").checked };
+      var touched = x.forr || x.notes || x.date || x.pick || x.hot
+                 || x.when !== "In the morning" || x.mode !== "Deliver it";
+      return touched ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      $("fFor").value = x.forr || "";
+      $("fNotes").value = x.notes || "";
+      $("fDate").value = x.date || "";
+      $("fPick").value = x.pick || "";
+      $("fHot").checked = !!x.hot;
+      if (x.when) seg("segWhen", x.when);
+      if (x.mode) seg("segMode", x.mode);
+    },
+    onClear: function (stashed) {
+      // Read the call's own house FIRST: the segment resets below run a refresh,
+      // and a refresh of the emptied list forgets which house it was started on.
+      var owner = null;
+      try { owner = localStorage.getItem(LIVEJOB); } catch (e) {}
+      ["fFor", "fNotes", "fDate", "fPick"].forEach(function (id) { $(id).value = ""; });
+      $("fHot").checked = false;
+      seg("segWhen", "In the morning");
+      seg("segMode", "Deliver it");
+      // The call just stashed as "last" belongs to the house it was started on
+      // (C3750, C3751) — and a Clear that stashed nothing changes no owner.
+      if (stashed) {
+        try { localStorage.setItem(LASTJOB, owner || jobId()); } catch (e) {}
+      }
+      showLast();
+    },
+    segments: [
+      { key: "when", id: "segWhen", def: "In the morning", onChange: function (v) {
+          when = v;
+          $("dateWrap").style.display = (v === "date") ? "" : "none";
+        } },
+      { key: "mode", id: "segMode", def: "Deliver it", onChange: function (v) {
+          mode = v;
+          modeUI();
+        } }
+    ],
+    countLabel: function (n) {
+      return n ? n + " line" + (n === 1 ? "" : "s") + " on the call" : "Nothing on it yet";
+    },
+    /* START FROM LAST CALL IS OFFERED ONLY ON AN EMPTY CALL — above a live one it
+     * was one stray tap from replacing it — and it brings back the LINES, never
+     * yesterday's urgency, day or driver: SHORT ON THE WALL and a need-by date in
+     * the past are the two things the counter must be able to trust. */
+    onRefresh: function (n) {
+      try {
+        if (n && !localStorage.getItem(LIVEJOB)) localStorage.setItem(LIVEJOB, jobId());
+        if (!n) localStorage.removeItem(LIVEJOB);
+      } catch (e) {}
+      showLast();
+    },
+    /* ...and only YESTERDAY's (C3750). The engine says whether the saved header
+     * came back and when that call was saved: a header he typed today is never
+     * replaced, and a call saved today is his own list coming back after a stray
+     * Clear, urgency and all. */
+    onRestoreLast: function (header, savedAt) {
+      if (!header) return;
+      if (savedAt && new Date(savedAt).toDateString() === new Date().toDateString()) return;
+      $("fHot").checked = false;
+      $("fDate").value = "";
+      $("fPick").value = "";
+      seg("segWhen", "In the morning");
+    },
+    onFlash: function (msg) {
+      var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+      b.setAttribute("data-label", was);
+      b.textContent = (msg === "Copied") ? "Copied. Go send it." : msg;
+      setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+    },
+    document: function (ctx) {
+      var job = $("fJob").value.trim(), by = $("fBy").value.trim(), forr = $("fFor").value.trim();
+      var col = $("fCol").value.trim(), lot = $("fLot").value.trim();
+      var notes = $("fNotes").value.trim(), pick = $("fPick").value.trim(), po = $("fPO").value.trim();
+
+      var out = "COUNTER CALL";
+      if (job) out += " — " + job;
+      // Labelled "Date", never "Sent": this page puts text on a clipboard and has
+      // no idea whether anything was ever sent.
+      out += "\nDate: " + ctx.today + "  ·  " + mode + "  ·  Need it: " + whenText();
+      if (by) out += "\nFrom: " + by;
+      if (mode === "Will-call" && pick) out += "\nComing for it: " + pick;
+      if (forr) out += "\nHanging: " + forr;
+      if (col) out += "\nColours on this house: " + col;
+      if ($("fHot").checked) out += "\n** SHORT ON THE WALL — CREW'S STANDING **";
+
+      if (!ctx.count) {
+        if (lot) out += "\nLots already up: " + lot;
+        return out.trim() + "\n\n(nothing on it yet)";
+      }
+
+      ctx.sections.forEach(function (s) {
+        out += "\n\n" + (s.docName || s.name).toUpperCase() + "\n";
+        out += s.lines.map(function (l) { return "- " + line(l); }).join("\n");
+      });
+
+      /* ── THE SECOND READING: every line that has to come off the same lot as
+       * what's already up, gathered where the man pulling it cannot miss it.
+       * EACH PRODUCT HAS ITS OWN LOT — the siding's carton, the soffit's, the
+       * coil's roll — so the block never says it all comes off ONE lot (it did,
+       * for a day, and the audit caught it telling the counter grey shakes and
+       * white trim came off a clay carton's lot). It stays a STRICT SUBSET of the
+       * order (§SCARS 2026-09-01), so when every line carries the tick it says
+       * "every line" instead of printing the order twice. */
+      var all = [], same = [];
+      ctx.sections.forEach(function (s) { s.lines.forEach(function (l) { all.push(l); if (lotTicked(l)) same.push(l); }); });
+      var lotLine = lot
+        ? "Lots already up: " + lot
+        : "I haven't got the lots in front of me — pull each one off ONE lot and put the lot on the ticket.";
+      if (same.length) {
+        out += "\n\n— — — SAME LOT AS WHAT'S ALREADY UP — — —\n";
+        out += same.length === all.length
+          ? "- every line on this call"
+          : same.map(function (l) { return "- " + l.name; }).join("\n");
+        out += "\n" + lotLine;
+      } else if (lot) {
+        /* THE INVERSE CASE: lots typed and nothing ticked still go out — the
+         * counter decides whether they matter, and a line that says "same lot" in
+         * his own words is covered by them. */
+        out += "\n\nLots already up: " + lot;
+      }
+
+      /* ── BEFORE YOU PULL IT: the counter's callbacks, and only those. A write-in
+       * is his sentence and is asked only for a count it plainly lacks; every
+       * other check reads a CATALOGUE line. Kept rare on purpose: a nag on a line the counter
+       * could pull anyway teaches both ends to skim. */
+      var noQty = [], twoWay = [], open = [], noCol = [];
+      /* THE HOUSE'S OWN COLOUR WORDS, off "Colours on this house" (C3750). A note
+       * used to switch the colour question off just by existing — and the same
+       * box is where this page asks for the size, the left/right split and the
+       * lengths, so the lead who answered those and forgot the colour got no
+       * question. Now a showing line is asked unless its note names one of the
+       * words he typed for the house; with no house colours typed, only an empty
+       * note is asked, as before. */
+      /* ...AND A NOTE IS HIS WORDS (C3751). Matching the house's words asked "no
+       * colour said" of "the trim's" (this page's own prompt), of "gray" against
+       * "grey" and of brown gutter parts. So a note is asked only when it is
+       * empty or says nothing but a size, a count, a hand or a way — the short
+       * list of other things this page asks the same box for, never a list of
+       * colours. The house's words only decide whether "more than one colour" is
+       * true. */
+      var NOT_COLOUR = /^(a|an|b|and|or|of|the|for|to|on|at|by|in|inch|inches|ft|feet|foot|x|lf|sq|pc|pcs|piece|pieces|ea|each|box|boxes|roll|rolls|carton|cartons|case|cases|tube|tubes|long|length|lengths|size|sizes|left|lefts|right|rights|lh|rh|hand|hands|either|front|side|sides|way|ways|both|some|how|many|more|per|plus|k|style|half|round|one|two|three|four|five|six|seven|eight|nine|ten|twelve|dozen|off|my|order|takeoff|run|job)$/;
+      var colWords = col.toLowerCase().split(/[^a-z]+/).filter(function (w) {
+        return w.length > 2 && !/^(body|trim|the|and|gable|gables|shakes|shake|accent|accents|main|side|sides|house|front|back|colour|color|colours|colors|siding|soffit|fascia|corners?|doors?|windows?|garage|with|for)$/.test(w);
+      });
+      function namesColour(note) {
+        return String(note || "").toLowerCase().split(/[^a-z]+/).some(function (w) { return w && !NOT_COLOUR.test(w); });
+      }
+      /* A WRITE-IN'S COUNT IS HIS SENTENCE — unless he typed a bare number in its
+       * own Qty box, where "24" on the siding is the one number the counter sells
+       * two ways; or there is no number anywhere, in the box or in his words
+       * (C3750). A digit glued to a letter ("D4") is a name, not a count. */
+      all.forEach(function (l) {
+        if (!isWriteIn(l)) return;
+        var q = (l.qty || "").trim();
+        if (q && bare(q)) twoWay.push("a bare " + q + " on " + l.name + " — " + q + " what?");
+        else if (!q && !/(^|[^A-Za-z0-9])\d/.test(l.name)) noQty.push(l.name);
+      });
+      all.forEach(function (l) {
+        if (isWriteIn(l)) return;
+        var q = (l.qty || "").trim();
+        if (!q) noQty.push(l.name);
+        else if (WAYS[l.name] && bare(q)) twoWay.push("a bare " + q + " on " + l.name + " — " + WAYS[l.name] + "?");
+        var qs = ASK[l.name] || {};
+        Object.keys(qs).forEach(function (k) {
+          var v = l.ax && l.ax[k];
+          if (none(v)) open.push(l.name + " — " + qs[k] + "?");
+          /* "SOME OF EACH — IN THE NOTE" IS AN ANSWER ONLY WHEN THE NOTE IS THERE.
+           * With the note empty it pointed the counter at nothing and switched the
+           * question off. */
+          else if (/^Some of each/.test(v) && !/\d/.test(l.note || "")) open.push(l.name + " — how many of each?");
+        });
+        /* A LINE THAT SHOWS WITH NO COLOUR SAID IS ASKED, SAME LOT OR NOT. The lot
+         * field used to switch this off for every SAME LOT line, and one siding
+         * lot silenced the soffit, the fascia and the coil with it. */
+        if (COLOUR[l.name] && !namesColour(l.note)) noCol.push(l.name);
+      });
+      var noLand = false;
+      if (mode === "Deliver it" && drop) {
+        var st = drop.state() || {};
+        noLand = !st.land && !(st.where || "").trim();
+      }
+      var noSite = mode === "Deliver it" && !job;
+      var ask = [];
+      if (noQty.length) ask.push(noQty.length + plural(noQty.length, " line", " lines") + " with no count on "
+        + plural(noQty.length, "it", "them") + " (" + noQty.join(", ") + ") — don't pull "
+        + plural(noQty.length, "it", "those") + " till I give you the number.");
+      if (twoWay.length) ask.push(twoWay.join("  ·  ") + " I didn't say which — call me before you pull "
+        + plural(twoWay.length, "it", "them") + ".");
+      if (open.length) ask.push(open.join("  ·  ") + " I didn't say — call me before you pull "
+        + plural(open.length, "it", "them") + ".");
+      if (noCol.length) ask.push(noCol.length + plural(noCol.length, " line", " lines") + " with no colour said ("
+        + noCol.join(", ") + ") — "
+        + (colWords.length > 1 ? "the house has more than one colour (up top), so don't pull those till I tell you which."
+               : "don't pull a colour I didn't give you."));
+      if (noDay()) ask.push("I picked a day and didn't say which — call me before you schedule it.");
+      if (noSite) ask.push("No job or street on it — call me before it goes on a truck.");
+      if (noLand) ask.push("Nothing on here says where it lands — call me before it goes on the truck.");
+      if (ask.length) {
+        out += "\n\nBEFORE YOU PULL IT — if any of this looks wrong to you, call me:\n";
+        out += ask.map(function (a) { return "- " + a; }).join("\n");
+      }
+
+      if (notes) out += "\n\nNOT MATERIAL — need these too:\n- " + notes;
+
+      /* THE TRUCK'S HALF, AFTER HIS LINES and only on a delivery
+         (shared/dropoff.js): the gate and the one clock, who the driver calls,
+         where it lands, who signs, and the line that says it is an ask. */
+      if (mode === "Deliver it" && drop) out += drop.text();
+
+      out += "\n\nCharge to: " + $("fCharge").value + (po ? "  ·  PO / cost code: " + po : "");
+
+      /* THE CLOSE THE COUNTER TRUSTS. "Text me back your order number" because
+       * their number is the record (§THE SYSTEM OF RECORD); "no money on it"
+       * rather than the sibling pages' "no number on it", which printed right
+       * under the PO he had just typed. */
+      out += "\n\nThat's the call. Short on anything, "
+           + (mode === "Will-call" ? "have what you've got ready" : "send what you've got")
+           + " and tell me the lead time on the rest — "
+           + "don't sub a colour, a profile, a finish or a lot without calling me, because it goes on the wall and it shows from the street. "
+           + "Text me back your order number."
+           + "\nField request — not a PO, and there's no money on it.";
+      return out.trim();
+    }
+  });
+  modeUI();
+
+  /* THE JOG. The picker is not a catalog and must never read like one. */
+  (function jog() {
+    var cats = document.querySelectorAll("#list .cat");
+    if (cats.length > 1) {
+      cats[1].insertAdjacentHTML("beforebegin",
+        '<div class="jog"><b>Count it the way the counter sells it</b>'
+        + "<span>Sold one way &mdash; the roll, the piece, each &mdash; and a bare number gets that word. "
+        + "Sold two ways &mdash; pieces or feet, pieces or cartons, boxes or each &mdash; and you say which, or it goes out bare and the counter gets asked. "
+        + "Colour by name in the note. It&rsquo;s a jog, not a catalog: write in the rest.</span></div>");
+    }
+  })();
+
+  /* START FROM LAST CALL — half of tomorrow's call is today's. Offered only when
+   * there actually is one, and only on the job it was called for (C3750): the
+   * lines, their SAME LOT ticks and their colour words belong to one house, and
+   * on another house's card they printed under THAT house's colours and lot — a
+   * wrong call the counter would pull. A call saved before the slot knew its job
+   * is still offered. */
+  function showLast() {
+    var on = !!document.querySelector("#list .item.is-checked");
+    var mine = true;
+    try { var lj = localStorage.getItem(LASTJOB); mine = !lj || lj === jobId(); } catch (e) {}
+    $("lastwrap").style.display = (api && api.hasLast() && !on && mine) ? "" : "none";
+  }
+  $("last").addEventListener("click", function () {
+    api.restoreLast();
+    showLast();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  showLast();
+})();
+</script>
+</body>
+</html>
