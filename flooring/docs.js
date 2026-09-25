@@ -246,8 +246,9 @@ window.TRADE_DOCS = {
          resilient nobody has surveyed as a hold no direction clears — no year,
          because the survey decides what counts, not a date — and the halt names
          the documents the finding and the ask go on instead. Its reminder rides
-         every block on the shelf, so it refuses only this write-up and prep, and
-         tells every other one to record the finding whole: at first it said "it
+         every block on the shelf, so it refuses only the two write-ups that
+         would clear the stuff — a direction to proceed over it and prep done to
+         it — and every block records the finding whole: at first it said "it
          stops the write-up", and an incident report of mastic somebody scraped
          was told nothing records it scraped. */
       "family": "incident",
