@@ -259,6 +259,15 @@ window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
  * this page supplied, and never the word "failed". The closing is the
  * two-button ask: FIX it and tell me when, or tell me in writing to PROCEED
  * over it as-is — and it gets coated, noted.
+ * PROCEED IS FENCED (C3752, siding's C3749 pattern). `fence` marks a hold no
+ * written word clears, because it risks a person: old paint nobody's tested
+ * (the owner's test clears it, not a reply) and the weather on an exterior
+ * (his today call, with his crew up a ladder or a lift in it). The page offers
+ * PROCEED only when a TICKED stop is closable, and its fence line names the
+ * fenced holds that are ticked, in these words — each one a condition, never a
+ * question and never the crew's own gear. Light, heat and air stay closable:
+ * what PROCEED directs over them is the finish, and the light and the air his
+ * crew works in are his own gear and his own plan, which no reply touches.
  */
 window.TOOLKIT_ITEMS.notready = {
   roles: [
@@ -317,11 +326,17 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Exterior — weather's on it",
-      sub: "Rain, dew or a surface I can see is wet. When it's dry as my own data sheet talks about, we roll — that's a today call, not a schedule slip."
+      fence: "the weather, which is my call",
+      sub: "Rain, dew, a surface I can see is wet, or wind I won't put a ladder or a lift in. When it's dry as my own data sheet talks about and the wind's down, we roll — that's a today call, not a schedule slip."
     },
     {
       name: "No light or power to work by",
       sub: "Temporary light or power is down in my rooms. Paint by phone-flashlight is how holidays happen — tell me when it's back."
+    },
+    {
+      name: "Old paint, and nobody's tested it for lead",
+      fence: "old paint nobody's tested",
+      sub: "Old building, and the prep is sanding, scraping or stripping it. I don't say what's in it and neither does this note — the owner's test does. Tell me who's testing it and when. My crew leaves it alone until that test clears it — not when somebody's named, not on a reply."
     }
   ],
   pics: ["Sent with photos", "Photos on request", "Come look with me"]

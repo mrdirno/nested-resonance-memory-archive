@@ -152,6 +152,20 @@ window.TOOLKIT_ITEMS.truck = {
  * hung into a room that is not finished, gets adjusted twice and blamed once.
  * Each stop carries the ASK under it, so the note reads as a list a super can
  * clear by lunch rather than a complaint.
+ * `fence` (C3752) marks a hold no written direction can clear — wire at the
+ * frame that could be live. The page's PROCEED reply is offered only when
+ * something closable is ticked, and the fence line names the fenced holds that
+ * are ticked, in these words — so each one names the CONDITION, never a
+ * question a name answers, and a fenced stop never asks for a written
+ * direction. Not fenced, on purpose: a frame that isn't grouted moves LATER —
+ * adjustment and rework, the direction the shelf's You Told Me To Hang It
+ * records — and an electrified opening with nothing pulled to it has nothing
+ * at the frame to be live. Wire that IS there is its own stop, and that one is
+ * fenced whatever anybody has said about it: a say-so that it's dead is not a
+ * clear. The closable stop's NAME says only what its sub says — nothing pulled.
+ * It was "No power or wire at an electrified opening", the stop a man told "no
+ * power yet" ticked over conductors in the box, and PROCEED rode it; the rename
+ * also drops a tick saved under the old name instead of giving it a new meaning.
  */
 window.TOOLKIT_ITEMS.nothang = {
   roles: [
@@ -190,8 +204,13 @@ window.TOOLKIT_ITEMS.nothang = {
       sub: "Paint after hardware means somebody masks my finish or gets paint on it — and the one they get paint on is always the lever. Say which order you want, in writing."
     },
     {
-      name: "No power or wire at an electrified opening",
-      sub: "Nothing's landed at the frame. I'll hang the leaf, but the head end isn't testable and I'm not the one who makes it work — tell me who's landing it and when."
+      name: "Nothing pulled to an electrified opening",
+      sub: "Nothing's pulled to the frame. I'll hang the leaf, but the head end isn't testable and I'm not the one who makes it work — tell me who's pulling and landing it, and when."
+    },
+    {
+      name: "Wire in the box at the frame — nobody's cleared it",
+      fence: "wire at the frame that could be live",
+      sub: "Somebody saying it's dead isn't a clear. My crew doesn't touch it or the frame it's in — tell me who owns it, and we stay off that opening until they've cleared it, not until somebody's named."
     },
     {
       name: "Hardware's not here",

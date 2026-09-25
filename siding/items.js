@@ -141,7 +141,11 @@ window.TOOLKIT_ITEMS.wall = {
  * `fence` (C3749) marks a hold no written direction can clear — structure, rot,
  * an old house nobody has tested, ground a jack can't stand on, the weather. The
  * page's CLOSE reply is offered only when something closable is ticked, and the
- * fence line names the fenced holds that are ticked, in these words.
+ * fence line names the fenced holds that are ticked, in these words. So each one
+ * names the CONDITION (C3752): "who's testing an old house" read as a question a
+ * name answers, and a name clears nothing; "a jack or a lift I can't get to the
+ * wall" read as the crew's own gear. A fence may carry a comma — the page then
+ * joins the list on semicolons.
  * The refusal. Every trade on this rack has one and they are all the same
  * widget; the trade lives in the STOPS, and this one has two that no sibling
  * has. The first is the tear-off: he is the only man on the rack whose job
@@ -208,12 +212,12 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "The house is old and nobody's said who's testing before we cut",
-      fence: "who's testing an old house",
-      sub: "The owner tells me the house is from <year>. I'm not the man who says what's on that wall or whether it's fine to cut, sand or pull — that's a test and a certified outfit, and neither is mine. Tell me who holds the testing — my crew stands down on that wall until they've cleared it, not until somebody's named."
+      fence: "an old house nobody has tested",
+      sub: "I'm not the man who says what's on that wall or whether it's fine to cut, sand or pull — that's a test and a certified outfit, and neither is mine. Tell me who holds the testing — my crew stands down on that wall until they've cleared it, not until somebody's named."
     },
     {
       name: "I can't get a jack or a lift to the wall",
-      fence: "a jack or a lift I can't get to the wall",
+      fence: "ground or access that won't take a jack or a lift",
       sub: "Soft ground, a slope, cars, a deck, somebody's material stacked on my elevation. Tell me who's clearing it and the day, because a wall I can't stand at is a wall I can't hang."
     },
     {
@@ -226,7 +230,7 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Weather — my call, my words",
-      fence: "the weather",
+      fence: "the weather, which is my call",
       sub: "I'm not hanging a wall today, and here's what I saw. No threshold of mine is on this note; I'm telling you now so the schedule moves with a day's notice instead of at seven tomorrow."
     }
   ],

@@ -104,7 +104,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Not Ready To Hang",
     href: "not-ready-to-hang.html",
-    desc: "Frame's not grouted, floor's not in, wall's not painted, nothing landed at the electrified openings — and a leaf hung to that gets adjusted twice and blamed once. Walk it before the cart comes off the truck, name what stops the hang in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to hang it as it stands.",
+    desc: "Frame's not grouted, floor's not in, wall's not painted, nothing pulled to the electrified openings — and a leaf hung to that gets adjusted twice and blamed once. Walk it before the cart comes off the truck, name what stops the hang in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to hang it as it stands, where that call is theirs to make. An opening with wire at the frame that could be live never gets hung on a written word.",
     chip: "#B7BEDC",
     audience: "Lead → GC super"
   },

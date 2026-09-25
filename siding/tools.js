@@ -77,7 +77,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Wall's Not Ready",
     href: "not-ready-to-side.html",
-    desc: "No wrap on it, or it's torn. Windows in and never flashed. Sheathing loose, gaps, nothing to nail the corners to. You took the old wall off and there's rot behind it. Nobody's picked a colour. The grade's at the sheathing and there's nowhere to start. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits, where that call is yours to make — because once it's closed, whatever's behind it is behind it, and the man who closed it owns how it looks.",
+    desc: "No wrap on it, or it's torn. Windows in and never flashed. Sheathing loose, gaps, nothing to nail the corners to. You took the old wall off and there's rot behind it. Nobody's picked a colour. The grade's at the sheathing and there's nowhere to start. Walk it before the crew climbs, name what stops the wall in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to close it as it sits, where that call is theirs to make — because once it's closed, whatever's behind it is behind it, and the man who closed it owns how it looks.",
     chip: "#FEC8CC",
     audience: "Lead → GC super / PM / owner / architect"
   },

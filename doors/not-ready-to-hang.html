@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Not Ready To Hang — Doors &amp; Hardware Field Toolkit</title>
-<meta name="description" content="Frame's not grouted, floor's not in, wall's not painted, nothing landed at the electrified openings. Walk the openings before the cart comes off the truck, name what stops the hang in your own words, and send the two-button ask: fix it, or tell me in writing to hang it as it stands. Because a leaf hung to that gets adjusted twice and blamed once.">
+<meta name="description" content="Frame's not grouted, floor's not in, wall's not painted, nothing pulled to the electrified openings. Walk the openings before the cart comes off the truck, name what stops the hang in your own words, and send the two-button ask: fix it, or tell me in writing to hang it as it stands, where that call is theirs to make. Because a leaf hung to that gets adjusted twice and blamed once.">
 <meta name="apple-mobile-web-app-title" content="Not Ready To Hang">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +19,7 @@
       <span class="eyebrow" id="eyebrow">Doors &middot; at the opening, before the cart comes off the truck</span>
     </div>
     <h1 id="h1">Not Ready To Hang</h1>
-    <p class="lede" id="lede">Five kits on this rack write doors into their own gate ladders &mdash; this is the answer back. Walk the openings before the cart comes off the truck and name what stops the hang, in your words: the frame that isn&rsquo;t grouted, the floor that isn&rsquo;t in, the wall nobody painted, the electrified opening with nothing landed at it. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to hang it as it stands. Because once a leaf is on and adjusted, everything wrong behind it reads as your work, and you are the one standing there with a screwdriver explaining it.</p>
+    <p class="lede" id="lede">Five kits on this rack write doors into their own gate ladders &mdash; this is the answer back. Walk the openings before the cart comes off the truck and name what stops the hang, in your words: the frame that isn&rsquo;t grouted, the floor that isn&rsquo;t in, the wall nobody painted, the electrified opening with nothing pulled to it. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to hang it as it stands, where that call is theirs to make. Because once a leaf is on and adjusted, everything wrong behind it reads as your work, and you are the one standing there with a screwdriver explaining it.</p>
   </header>
 
   <div id="form"></div>
@@ -28,7 +28,7 @@
   <div class="preview" id="preview"></div>
 
   <div class="warn" id="warn">
-    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own tape and set beside what your own approved shop drawing says. It states no clearance, no undercut, no tolerance, no closer setting and no label value, it never says an opening is ready, and it doesn&rsquo;t stop the job &mdash; it hands whoever runs the job the choice, on the record: clear it, or direct it hung as it stands.
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s work failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own tape and set beside what your own approved shop drawing says. It states no clearance, no undercut, no tolerance, no closer setting and no label value, it never says an opening is ready, and it doesn&rsquo;t stop the job &mdash; it hands whoever runs the job the choice, on the record: clear it, or direct it hung as it stands. A direction to hang never reaches wire at the frame that could be live or the one you write in yourself &mdash; those hold until whoever owns them clears them.
   </div>
 
   <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
@@ -52,16 +52,26 @@
  * no state, no persistence, no document assembly — the engine owns all of it.
  * This file owns the WORDS, which is the half an engine must never own.
  *
- * THE LAW THIS PAGE STANDS ON: commencement is acceptance. The moment the
- * roller loads, whatever the wall carries becomes the painter's work — so the
- * record of what the wall carried has to exist BEFORE the coat, and the choice
- * (fix it / coat it anyway) has to be somebody else's, in writing. The stops
- * list lives in items.js; every entry is a condition with the ASK riding under
- * it, so the note reads as a list a super can clear by lunch, not a complaint.
+ * THE LAW THIS PAGE STANDS ON: commencement is acceptance. The moment a leaf
+ * is on and adjusted, whatever the opening carries reads as the hanger's work
+ * — so the record of what the opening carried has to exist BEFORE the hang, and
+ * the choice (fix it / hang it anyway) has to be somebody else's, in writing.
+ * (This comment read "the roller loads … BEFORE the coat" from the day it was
+ * copied off painting's twin, until C3752.) PROCEED IS FENCED (C3752): a stop
+ * that carries `fence` in items.js — wire at the frame that could be live — is
+ * one no written direction can clear. PROCEED is offered only when something
+ * closable is ticked, and the fence line names the fenced holds that are, so a
+ * note of nothing ticked, or of nothing but fenced holds, never offers to hang.
+ * The stops list lives in items.js; every entry is a condition with the ASK
+ * riding under it, so the note reads as a list a super can clear by lunch, not
+ * a complaint.
  */
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.nothang;
+  /* The fenced holds, read off the DATA (items.js `fence`), never off a name. */
+  var FENCE = {};
+  (T.stops || []).forEach(function (x) { if (x && x.fence) FENCE[x.name] = x.fence; });
   var KEY = "toolkit.doors.notreadytohang.v1";
 
   var api = Note.mount({
@@ -149,7 +159,34 @@
 
     closing: [
       "Reply FIX with who's fixing each one and when, and these openings go back on my board the hour they're cleared.",
-      "Or reply PROCEED and we hang them as they stand — in writing, because once a leaf is on and adjusted, everything on this list reads as my work, and this note is the record of what was behind it.",
+      /* PROCEED ONLY WHERE THERE IS SOMETHING TO PROCEED OVER — siding's two
+         closings, ported (C3752). This line was a fixed string: an empty note
+         offered to hang them as they stand, and so did a note carrying nothing
+         but "conductors hanging out of the box at 214 and nobody knows if they
+         are live", typed in his own words, which the page cannot classify.
+         PROCEED now needs a TICKED stop with no `fence`. */
+      function (get) {
+        var s = get("stops") || [];
+        if (!s.some(function (nm) { return !FENCE[nm]; })) return "";
+        return "Or reply PROCEED and we hang them as they stand — in writing, because once a leaf is on and adjusted, everything on this list reads as my work, and this note is the record of what was behind it.";
+      },
+      function (get) {
+        var s = get("stops") || [];
+        var f = s.filter(function (nm) { return FENCE[nm]; }).map(function (nm) { return FENCE[nm]; });
+        /* The hold he typed is unclassified, so PROCEED never reaches it either —
+           said only where a PROCEED is on the note to be misread. */
+        var allFenced = s.length > 0 && f.length === s.length;
+        var typed = String(get("extra") || "").trim();
+        if (typed && !allFenced && s.length) f.push("the one I've written in");
+        if (!f.length) return "";
+        /* A fence with its own comma runs into its neighbours on commas, so one
+           comma anywhere in the list turns every join into a semicolon (C3752). */
+        var semi = f.some(function (x) { return x.indexOf(",") !== -1; });
+        var list = f.length === 1 ? f[0] : f.slice(0, -1).join(semi ? "; " : ", ") + (semi ? "; and " : " and ") + f[f.length - 1];
+        return (allFenced ? (f.length === 1 ? "There's no PROCEED on this — " : "There's no PROCEED on these — ") : "PROCEED never reaches ")
+          + list + ": " + (f.length === 1 ? "that holds" : "those hold") + " until whoever owns "
+          + (f.length === 1 ? "it clears it" : "them clears them") + ", whatever the reply says.";
+      },
       "Nothing here is a verdict on anybody's work — it's what I found, in my words, with anything I measured taken off my own tape and set beside my own approved drawing."
     ],
 

@@ -80,7 +80,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Not Ready To Plant",
     href: "not-ready-to-plant.html",
-    desc: "The grade's been driven on all winter, there's base rock and busted block in the beds, no topsoil, it won't drain, no water on site, nothing at the clock, your sleeves never went in and the flatwork's poured. Walk it before the truck comes, name what stops the planting in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to plant it as it sits — because a plant that goes in that ground is your warranty claim.",
+    desc: "The grade's been driven on all winter, there's base rock and busted block in the beds, no topsoil, it won't drain, no water on site, nothing at the clock, your sleeves never went in and the flatwork's poured. Walk it before the truck comes, name what stops the planting in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to plant it as it sits, where that call is theirs to make — because a plant that goes in that ground is your warranty claim. Lines nobody's located and a tree flagged to stay that got hit are never dug around on a written word.",
     chip: "#A1CB86",
     audience: "Foreman → GC super / builder"
   },

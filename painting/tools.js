@@ -65,7 +65,7 @@ window.TOOLKIT_TOOLS = [
     // painter's, forever.
     name: "Not Ready",
     href: "not-ready.html",
-    desc: "The super says the rooms are ready. They aren't. Walk them before the crew sets up, name what stops paint in your own words — mud still soft, trades still in it, dings that aren't yours, your reading beside your own limit — and send the two-button ask: FIX it and tell me when, or direct me in writing to coat it as it sits. The first coat makes it mine; this is the record it wasn't.",
+    desc: "The super says the rooms are ready. They aren't. Walk them before the crew sets up, name what stops paint in your own words — mud still soft, trades still in it, dings that aren't yours, your reading beside your own limit — and send the two-button ask: FIX it and tell me when, or direct me in writing to coat it as it sits, where that call is theirs to make. The first coat makes it mine; this is the record it wasn't. Old paint nobody's tested and the weather on an exterior are never coated over on a written word.",
     chip: "#29FF29",
     audience: "Foreman → GC super",
     pinned: true

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Not Ready to Pave — Paving &amp; Striping Field Toolkit</title>
-<meta name="description" content="The base pumps under the truck, the curb's not cured, the lids aren't to grade, somebody's still trenching, there's a conex on your section, nobody's called the lab and the plant wants a cancel by three. Walk it before the trucks are ordered, name what stops the paving in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to pave it as it sits. Because a mat over a soft base is your warranty.">
+<meta name="description" content="The base pumps under the truck, the curb's not cured, the lids aren't to grade, somebody's still trenching, there's a conex on your section, nobody's called the lab and the plant wants a cancel by three. Walk it before the trucks are ordered, name what stops the paving in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to pave it as it sits, where that call is theirs to make. Because a mat over a soft base is your warranty.">
 <meta name="apple-mobile-web-app-title" content="Not Ready to Pave">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +19,7 @@
       <span class="eyebrow" id="eyebrow">Paving &middot; on the base, before the plant ships</span>
     </div>
     <h1 id="h1">Not Ready to Pave</h1>
-    <p class="lede" id="lede">Every trade on the site counts down to &ldquo;before you pave,&rdquo; and you are the one who finds out at six in the morning which of them didn&rsquo;t make it. Walk the section before the trucks are ordered and name what stops the paving, in your words: the base that pumps under the water truck, the curb that isn&rsquo;t cured, the lids that aren&rsquo;t to grade, the trench somebody&rsquo;s still in, the conex nobody moved. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to pave it as it sits. Because a mat over a base that wasn&rsquo;t ready is your warranty, and the plant doesn&rsquo;t take the loads back.</p>
+    <p class="lede" id="lede">Every trade on the site counts down to &ldquo;before you pave,&rdquo; and you are the one who finds out at six in the morning which of them didn&rsquo;t make it. Walk the section before the trucks are ordered and name what stops the paving, in your words: the base that pumps under the water truck, the curb that isn&rsquo;t cured, the lids that aren&rsquo;t to grade, the trench somebody&rsquo;s still in, the conex nobody moved. Then send the only ask that matters &mdash; fix it and tell me when, or tell me <b>in writing</b> to pave it as it sits, where that call is theirs to make. Because a mat over a base that wasn&rsquo;t ready is your warranty, and the plant doesn&rsquo;t take the loads back.</p>
   </header>
 
   <div id="form"></div>
@@ -28,7 +28,7 @@
   <div class="preview" id="preview"></div>
 
   <div class="warn" id="warn">
-    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s base, curb or trench failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own string line and set beside what your own sheet says. It states no density, no compaction number, no thickness, no grade tolerance, no temperature and no threshold of any kind, it never says a base is ready or passed &mdash; that is the lab&rsquo;s numbered report and the civil&rsquo;s call &mdash; and it doesn&rsquo;t stop the job: it hands whoever runs the job the choice, on the record: clear it, or direct it paved as it sits.
+    <b>It&rsquo;s a condition list, not a verdict.</b> Nothing on it says anybody&rsquo;s base, curb or trench failed anything &mdash; it says what you found, where, in your words, with anything you measured taken off your own string line and set beside what your own sheet says. It states no density, no compaction number, no thickness, no grade tolerance, no temperature and no threshold of any kind, it never says a base is ready or passed &mdash; that is the lab&rsquo;s numbered report and the civil&rsquo;s call &mdash; and it doesn&rsquo;t stop the job: it hands whoever runs the job the choice, on the record: clear it, or direct it paved as it sits. A direction to pave never reaches the trench somebody&rsquo;s still in; the weather, which is your call; or the one you&rsquo;ve written in yourself &mdash; those hold until whoever owns them clears them.
   </div>
 
   <p class="credit" id="wishline">&#10022; A hold your mornings hit that isn&rsquo;t on the list? Wish for it &mdash; it gets added, and you get the credit.</p>
@@ -57,7 +57,17 @@
  * warranty. The moment the mat is down, whatever the base carried becomes
  * the paving crew's — so the record of what the base carried has to exist
  * BEFORE the paving, and the choice (fix it / pave it anyway) has to be
- * somebody else's, in writing. The stops list lives in items.js; every entry
+ * somebody else's, in writing. PAVE IS FENCED (C3752): a written PAVE is a
+ * warranty choice and never more than one. A stop that carries `fence` in
+ * items.js — the trench somebody's still in, and the weather, which is his
+ * call — is one no written direction can clear. PAVE is offered only when
+ * something closable is TICKED, and the fence line names the fenced holds that
+ * are. Until C3752 it printed on an empty note,
+ * and with nothing ticked over "open utility trench across the drive aisle,
+ * nobody shored it, a crew is still in it" typed in his own words — a hold the
+ * page cannot classify, so PAVE never reaches it either. Siding's CLOSE (C3749)
+ * is the model.
+ * The stops list lives in items.js; every entry
  * is a condition with the ASK riding under it, so the note reads as a list a
  * super can clear by lunch, not a complaint.
  *
@@ -66,11 +76,15 @@
  * and the callout is the sheet's, and the page states no tolerance, no
  * density and no threshold between them. The lab's number is the lab's; the
  * plant's temperature is the plant's; "I'm not paving today" is his call in
- * his words with no threshold of ours behind it.
+ * his words with no threshold of ours behind it, and no PAVE reply overrules
+ * it — the weather stop is fenced (C3752).
  */
 (function () {
   "use strict";
   var T = window.TOOLKIT_ITEMS.notready;
+  /* The fenced holds, read off the DATA (items.js `fence`), never off a name. */
+  var FENCE = {};
+  (T.stops || []).forEach(function (x) { if (x && x.fence) FENCE[x.name] = x.fence; });
   var KEY = "toolkit.paving.notreadytopave.v1";
 
   var api = Note.mount({
@@ -158,7 +172,33 @@
 
     closing: [
       "Reply FIX with who's fixing each one and when, and this section goes back on my board the day it's cleared — and the plant order moves with it.",
-      "Or reply PAVE and we lay it as it sits — in writing, because a mat over a soft base is my warranty, and this note is the record of what was under it.",
+      /* PAVE ONLY WHERE THERE IS SOMETHING TO PAVE — and it needs a TICKED
+         closable stop. A note of nothing but fenced holds offers no mat over
+         them, and a note of nothing ticked offers none over a hold typed in
+         his own words, which the page cannot classify. */
+      function (get) {
+        var s = get("stops") || [];
+        if (!s.some(function (nm) { return !FENCE[nm]; })) return "";
+        return "Or reply PAVE and we lay it as it sits — in writing, because a mat over a soft base is my warranty, and this note is the record of what was under it.";
+      },
+      function (get) {
+        var s = get("stops") || [];
+        var f = s.filter(function (nm) { return FENCE[nm]; }).map(function (nm) { return FENCE[nm]; });
+        /* The hold he typed is unclassified, so PAVE never reaches it either —
+           said only where a PAVE is on the note to be misread. */
+        var allFenced = s.length > 0 && f.length === s.length;
+        var typed = String(get("extra") || "").trim();
+        if (typed && !allFenced && s.length) f.push("the one I've written in");
+        if (!f.length) return "";
+        /* A fence that carries its own comma ("the weather, which is my
+           call") joins on semicolons (C3752), or one hold reads as two. */
+        var semi = f.some(function (x) { return x.indexOf(",") !== -1; });
+        var list = f.length === 1 ? f[0]
+          : f.slice(0, -1).join(semi ? "; " : ", ") + (semi ? "; and " : " and ") + f[f.length - 1];
+        return (allFenced ? (f.length === 1 ? "There's no PAVE on this — " : "There's no PAVE on these — ") : "PAVE never reaches ")
+          + list + ": " + (f.length === 1 ? "that holds" : "those hold") + " until whoever owns "
+          + (f.length === 1 ? "it clears it" : "them clears them") + ", whatever the reply says.";
+      },
       "Nothing here is a verdict on anybody's work — it's what I found, in my words, with anything I measured taken off my own string line and set beside my own sheet. Whether a base passed is the lab's number and the civil's call, not mine."
     ],
 

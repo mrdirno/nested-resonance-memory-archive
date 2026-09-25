@@ -150,6 +150,16 @@ window.TOOLKIT_ITEMS.truck = {
  * that was not ready dies on HIS warranty, and he is the one digging it out
  * in July. Each stop carries the ASK under it, so the note reads as a list a
  * super can clear by lunch rather than a complaint.
+ *
+ * `fence` (C3752, siding's C3749 fence ported) marks a hold no written word
+ * clears, because what it risks is a person, not a plant: lines nobody has
+ * located, and a tree flagged to stay that got hit — whether that tree is safe
+ * to dig around is the arborist's call (trade.js, NO TREE VERDICT), never the
+ * reply's. The page's PROCEED is offered only when a closable stop is ticked,
+ * and the fence line names the fenced holds that are, in these words: the
+ * condition, never a question and never our own gear. Until C3752 there was no
+ * locate stop at all, so the only way to name that hold was to type it — and
+ * PROCEED rode over whatever he typed.
  */
 window.TOOLKIT_ITEMS.notready = {
   roles: [
@@ -193,6 +203,11 @@ window.TOOLKIT_ITEMS.notready = {
       sub: "I sent the crossing list before forms. It's a bore or a saw cut now — say who owns that before I re-route."
     },
     {
+      name: "No locates on the ground, or the private lines aren't marked",
+      fence: "lines nobody's located",
+      sub: "No spade, auger or trencher goes in ground nobody's located. The one-call covers the street, not the private lines behind the meter — tell me who's locating those; my crew doesn't dig these beds until the marks are on the ground."
+    },
+    {
       name: "Trades still parked and staged in my beds",
       sub: "A bed with a conex on it isn't a bed. Tell me the day it's actually mine, and keep the trucks off it after that."
     },
@@ -202,7 +217,8 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Trees that were flagged to stay got hit",
-      sub: "Roots cut, bark off, fill piled on the trunk. That's not mine and it's on the record today — somebody who can make that call needs to look at it."
+      fence: "a tree flagged to stay that got hit",
+      sub: "Roots cut, bark off, fill piled on the trunk. That's not mine and it's on the record today — somebody who can make that call needs to look at it, and my crew doesn't dig around it until they've cleared it."
     },
     {
       name: "Nobody's answered the substitution",

@@ -85,7 +85,7 @@ window.TOOLKIT_TOOLS = [
   {
     name: "Not Ready to Pave",
     href: "not-ready-to-pave.html",
-    desc: "The base pumps under the truck, the curb isn't cured, the lids are still low, somebody's still trenching across your section, there's a conex and six cars on it, the haul route's blocked and nobody's called the lab — and you've got a crew standing and loads ordered off the plant for six a.m. Walk it before the first truck, name what stops the paving in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to pave it as it sits — because a mat over a soft base is your warranty, and this note is the record of what was under it.",
+    desc: "The base pumps under the truck, the curb isn't cured, the lids are still low, somebody's still trenching across your section, there's a conex and six cars on it, the haul route's blocked and nobody's called the lab — and you've got a crew standing and loads ordered off the plant for six a.m. Walk it before the first truck, name what stops the paving in your own words, and send the two-button ask: fix it and tell me when, or direct me in writing to pave it as it sits, where that call is theirs to make — because a mat over a soft base is your warranty, and this note is the record of what was under it. A trench somebody's still in never gets paved on a written word, and neither does my call on the weather.",
     chip: "#FDF37A",
     audience: "Foreman → GC super / PM / owner's rep / civil"
   },

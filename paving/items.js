@@ -163,6 +163,18 @@ window.TOOLKIT_ITEMS.under = {
 };
 
 /* ── NOT READY TO PAVE (shape #2 — shared/note.js) ──────────────────────────
+ * `fence` (C3752) marks a hold no written direction can clear, named as the
+ * condition it is: a trench somebody's still in, and the weather, which is his
+ * call — the stop says "my call, my words", and a reply doesn't make it anybody
+ * else's (siding fences its weather the same way, painting its own). The page's
+ * PAVE reply is offered only when something closable is ticked, and the fence
+ * line names the fenced holds that are ticked, in these words: a condition,
+ * never a question, never the crew's own gear. The weather's own comma turns
+ * the page's joins to semicolons. Every other stop risks the work, not a man —
+ * a soft base, iron under the mat, a lab nobody called — and a written PAVE
+ * over it is the warranty choice the receiver may make. Loaded trucks and a
+ * roller beside a trench with a man in it is nobody's warranty, and neither is
+ * a crew rolling a wet grade the morning he called it off.
  * The section note, and the twin of landscape's Not Ready To Plant and doors'
  * Not Ready To Hang. The asymmetry that makes it necessary: a mat over a base
  * that was soft is HIS warranty, and the plant does not take the loads back.
@@ -201,6 +213,7 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Sleeves and crossings not in — somebody's still trenching",
+      fence: "the trench somebody's still in",
       sub: "I've got the crossing lists. A trench through my base after I roll is a patch with my name on it. Tell me the day the last one's in and capped."
     },
     {
@@ -217,6 +230,7 @@ window.TOOLKIT_ITEMS.notready = {
     },
     {
       name: "Wet base, or rain on the way — my call, my words",
+      fence: "the weather, which is my call",
       sub: "I'm not paving today, and here's what I saw. No threshold of mine is on this note; the plant order stands or cancels on what I'm telling you now."
     },
     {
