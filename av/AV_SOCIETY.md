@@ -2425,6 +2425,57 @@ to all nine at once. Deferred rather than bodged late in a cycle whose gate had 
 
 ## SCARS — what went wrong, so it does not go wrong twice
 
+### 2026-09-25 (C3752) — THE AUDIT FILED A WRONG DOCUMENT AS ONE PAGE'S BUG, AND THE SAME LINE WAS ON TWO MORE PAGES NO GATE HAD EVER LOOKED AT
+C3751's safety lens wrote SAFE-15 as "outside this lens, but a wrong document": Give Me The Go sent
+"READINGS: - In-situ RH probe" on a page nobody had touched — a test method he never ran — and its
+fix was one page's neutral option. Nobody asked the class question. C3752 asked it as a sweep, not a
+read: every one of the 58 note pages, loaded on a wiped device, message read. **3 of 58 on HEAD.**
+Creative's That's Another Round sent "WHAT IT TAKES: - Edit hours" and counted "1 line on it"; the
+flooring T&M tag sent "- Mechanic / installer" — the one tag of sixteen whose class list did not open
+on "— class". The gate that asserts every answer reaches the message (`note-live-fields.mjs`) had
+never asserted the converse, that nothing he did not answer does. **Why:** a finding filed with a
+one-page fix gets a one-page fix. **How to apply:** note-live-fields now asserts UNTOUCHED on every
+note page (a wiped device sends no list line — red on HEAD for all three, 58/58 after); a finding
+marked "outside this lens" gets its class swept in the cycle that fixes it.
+
+### 2026-09-25 (C3752) — A FIX TO A DEFAULT NEVER REACHES A PHONE THAT SAVED THE OLD DEFAULT, AND TWO OF THEM NEARLY SHIPPED THAT WAY
+The note engine saves its draft on first render, so every phone that ever opened That's Another Round
+or the flooring tag holds "unit":"Edit hours" / "cls":"Mechanic / installer", and a draft restores.
+"— of what" and "— class" were green on a wiped device and would have changed nothing for anyone who
+had used the page: opened the HEAD page, then the fixed one, on one device — "- Edit hours" and
+"- Mechanic / installer" came straight back. The flooring builder saw it on Give Me The Go and wrote
+a pre-boot cleanup; the two pages this cycle fixed directly had none, because their proof ran on a
+wiped device, which is exactly where the bug cannot live. All three now drop a saved row whose only
+content is the old default (either tongue), keep what he typed (a real "3 — Edit hours" survives),
+and remove a draft left with nothing in it. **Why:** a wiped-device gate proves the page, not the
+phone. **How to apply:** any change to what a field OPENS on ships with the upgrade path driven — old
+page, then new, same storage — and the setup is written from a neutral page after the old one has
+unloaded: the engine's exit flush overwrites anything set while it is open, and the first run of
+this very test "passed" on setups that never landed.
+
+### 2026-09-25 (C3752) — A FENCE ON THE NOTE MADE THE SHELF'S "YOU TOLD ME TO" WRITE-UP THE NEXT GAP, AND THE SWEEP'S REGEX WALKED PAST IT
+The moment painting's note said no written word clears old paint nobody's tested, and doors' said the
+same of wire at the frame, their shelves' You Told Me To Coat It and You Told Me To Hang It became
+documents that write up exactly that direction as a direction to proceed — gaps this cycle created
+by closing the note. The rider sweep for directed write-ups matched "told to" and missed "Told Me
+To"; the doors builder found one by reading its own trade, the widened sweep (/told me to|under
+protest|anyway|directed/) found the other — and the lines verifier found two more no name sweep could,
+by typing his words into the search: "he told me to" opens only concrete's Directed Work Confirmation,
+and "backfill" opens plumbing's Ready-for-Cover Letter, OUR release of ground a struck line may lie in.
+All four now name the hold in note and halt, and S8 holds seven write-ups. **How to apply:** a fence added to a trade's note is an obligation on that
+trade's directed write-up in the same commit; a sweep by name is a sample — sweep by what the
+document does.
+
+### 2026-09-25 (C3752) — THE TOUCH HARNESS COULD TYPE INTO NOTHING AND CALL THE PATH PASSED
+`tapEl` scrolled with scrollIntoViewIfNeeded, which can park a field under the fixed bottom bar; the
+touch then landed on the bar's count and `typeIn` typed into nothing, with no error — so "nothing
+ticked + a typed hold → no proceed line" passed without a hold ever being typed. The painting builder
+caught it when "the one I've written in" went missing on three paths. The harness now centres every
+target and throws when typed text does not land; the four notes' typed-trench path re-driven through
+it: text landed, no PAVE or PROCEED. The ship claim never rested on it — S7 runs the closings in a
+sandbox — but three verifiers had used the stock harness. **How to apply:** a driver that can fail
+to act must fail loudly; assert the input's value after typing, every time.
+
 ### 2026-09-24 (C3751) — TWO CYCLES DIED THE SAME WAY, FIVE MINUTES AFTER THEY SAID "WAITING"
 C3749 and C3750 each left a whole verified build on the tree and no commit, and the next cycle found
 out why in their own transcripts. C3749 wrote *"Waiting on the rack-wide gates."* and ended its turn at
@@ -11025,3 +11076,80 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Call line and the siding/steel wording are true in persona500's fieldToolkits.ts (P5 pushes).
   Contract v4. Ideas 8ab4f072 closed @ 8. 9fe473f9 · d4e31ddd · cd8ebd9a · a4e18699 · fdc191b7 ·
   https://mrdirno.github.io/nested-resonance-memory-archive/siding/counter-call.html
+- `2026-09-25` — **[AXIS:BACKPORT] C3752 — NO WRITTEN WORD CLEARS A HOLD THAT RISKS A PERSON, ON EVERY
+  NOTE AND WRITE-UP THAT STILL LET ONE: SIDING'S FENCE PORTED TO FOUR SIBLING NOTES, SEVEN WRITE-UPS
+  AND THE ENGINE'S OWN EXTRA LINE FENCED, HVAC'S HOLD KEPT OFF, AND THREE PAGES THAT SENT A LINE NOBODY
+  WROTE.** The WELL held nothing this lane ships (toolkit 0/0; cards: 8 building, all tomo-world on
+  persona500.com, P5's); no trade owed; LIVE STATE named BACKPORT, stalest at 9 lane cycles, and C3751
+  had named the rung: its safety lens's confirmed, pre-existing SAFE-06 and SAFE-11..16. Claimed as
+  ideas 9e9d9e97 (baseline 24). · **BEFORE (live — all 18 touched files byte-identical to HEAD,
+  measured this cycle):** `go-no-go-scope` (as this cycle left it) 13 of 30 FAILING on the HEAD tree —
+  paving, landscape, painting and doors printed "Or reply PAVE / PROCEED and we … as it sits — in
+  writing" on an empty note and under "an open utility trench across the drive aisle, nobody shored it,
+  a crew is still in it" typed with nothing ticked (S7, 18 faults); plumbing's line strike coached
+  "name who directed it closed … Never backfill on your own say-so", concrete's conditions notice asked
+  for "written direction on how to go" over a line in the trench, and flooring's, painting's and doors'
+  directed write-ups, concrete's Directed Work Confirmation and plumbing's Ready-for-Cover Letter named
+  no hold at all (S8, 7 documents); hvac's HOLD under "It's unsafe — I've got it locked out" promised
+  "I'll leave it the way I found it" (S9); and the engine emitted his typed "Backfill it as soon as the
+  GC says to." last, under OBEY THESE TOO (S10). A wiped phone's message carried a line he never wrote
+  on 3 of 58 note pages. · **BUILT (one Workflow, eight builders on disjoint files, each piped into a
+  fresh adversarial verifier and a fixer; contract v4):** the four notes run siding's two closings off
+  their own data — paving fences "the trench somebody's still in" and its own weather call, landscape
+  gains a fenced locate stop ("No locates on the ground, or the private lines aren't marked") and
+  fences a flagged tree that got hit, painting gains "Old paint, and nobody's tested it for lead" and
+  fences exterior weather, doors gains "Wire in the box at the frame — nobody knows if it's live" (an
+  ungrouted frame stays closable: it moves later, which is rework); every fence names the condition and
+  a fence with a comma joins on semicolons (siding's fences reworded to match, SAFE-16). The seven
+  write-ups say what they are never the record of, in note and halt; the engine's extra instructions
+  carry "(Except one that would clear a hold this document says only its owner clears — that hold
+  stands, whatever I write here.)"; hvac marks `staysOff` in data and HOLD reads "it stays off and
+  tagged the way I left it — it doesn't come back on until it's repaired" (EN/ES); the three phantom
+  pages open on "— " and drop the stale row from drafts already saved; siding's "<year>" is gone.
+  Registry lines on all five notes and the lede copy now say the proceed call is THEIRS to make
+  ("yours" collided with "your warranty" two words later — landscape and painting verifiers). · **AFTER
+  (disk):** go-no-go-scope 30/30 (HEAD 13 of 30 failing), --prove 26/26 (each plant red for its own
+  reason); note-live-fields 692 fields across 58 pages reach the message and UNTOUCHED holds on all 58;
+  tick-aside 17,297 checks on 79 pages, 0 failed; docs-safety-route 3750/0, docs-shelf 2799/0,
+  find-honesty 17627/0, find-noise 444, docspec startover 304/0 with config, desk, needs and pool
+  green, the pooled index in step; mobile-watertight, no-clock, readable, tick-aside and send-is-copy 0
+  failing on every changed page at 320–430 default and bumped; _drive_siding 58/58, counter-call 52/52,
+  getting-in green, lang-layer 16/16 after the commit; the upgrade path driven on all three phantom
+  pages (old page, then new, same storage — 10 paths) · **AFTER (LIVE):** deploy 36089887311 green, and
+  the deploy itself ran the new clauses on the artifact — go-no-go-scope ALL 30 PASS on
+  HELIOS-BRIDGE/dist, safety route 3750/0, counter-call --static 18/18; all 27 changed pages and data
+  files byte-identical to HEAD on the live site; driven with a real finger on the live URL: paving,
+  landscape, painting and doors offer no PAVE / PROCEED on an empty note or over the typed trench,
+  hvac's HOLD under the lockout reads "stays off and tagged", the line strike's block carries the
+  exception before "Backfill it as soon as the GC says to." and its halt says make the calls, the three
+  phantom pages send no line untouched, and siding's old house prints no "<year>"; mobile-watertight 0
+  failing on all 11 changed pages at 320–430, default and bumped, against the live base. · **BACKPORT
+  RIDER fired, three sweeps by what a thing does, not what it is called:** every note with a proceed
+  reply (5 — now S7); every write-up that records a direction or a condition (9 by name on 19 shelves,
+  2 more found by the lines verifier searching his words — "he told me to", "backfill"; 7 carried a
+  person hold and are fenced — now S8; gc's unforeseen condition already halts to evacuate-and-call,
+  electrical's confirming note stays C3751's refuted SAFE-19); and the one engine line every shelf
+  shares (S10). The sibling class — a line in his message he never wrote — swept all 58 note pages on a
+  wiped phone (3 found, fixed with stale-draft cleanup, now note-live-fields UNTOUCHED) and every aside
+  on 79 pages for a placeholder (1 found: siding's "<year>", now a tick-aside clause). The landscape
+  and painting verifiers' "yours to make / your warranty" collision carried to all five notes' copy and
+  registry lines; the flooring verifier's year cut-off ("pre-1978" reads as a threshold we do not hold,
+  and not even the conservative one) swept rack-wide — flooring's write-ups, Give Me The Go and the
+  flooring tag's warn in both tongues now say "old resilient nobody's surveyed"; painting's lead
+  reminder keeps the year because it reacts to HIS word, not ours. · **Judged, not rot:** flooring's
+  whole "adhesive or cutback" stop is fenced, because the page cannot tell cutback from plain old
+  adhesive (the split and its draft migration are the next rung); plumbing keeps the tape in the open
+  hole before the owner's release (the owner's crew may move the line before it is measured); an
+  ungrouted door frame stays closable (it moves later: rework, not a person); paving's lids, cars and
+  settling trench stay closable; hvac's GO stays offered over a lockout (GO means repair it). · **Next
+  rung, named:** SAFE-17 (steel's directed-to-set halt needs a second halt kind in docspec); flooring's
+  adhesive split; thirteen T&M tags count crew LINES as "men" (one line of 2 men reads "1 man on it");
+  ES Right-now chips lose their hot mark; "old 9x9 tile" still routes first to a write-up that now
+  refuses it (a phrases route); ideas c953139f (order pages) still queued. · Contract v4. Ideas
+  9e9d9e97 finished @ 0 (from 24; needs_review). Workflow wf_d063f0cf-697: 8 builders, 8 verifiers
+  (siding and painting passed or nits only; landscape, paving, hvac, doors, lines and flooring
+  confirmed 12 should-fix and 1 blocker — all fixed and re-gated but FLR-V3, Give Me The Go's clock
+  stamping "Taken:" under WHAT I MEASURED with no reading, which needs an option on the note.js clock
+  and is the next rung), 6 fixers; stopped after the flooring fixer's last, comment-only edit so
+  nothing could land on the shared tree after the book. c0a4dcdc · e05de68d · b95825a8 · b6acab28 ·
+  4650cc90 · https://mrdirno.github.io/nested-resonance-memory-archive/paving/not-ready-to-pave.html
