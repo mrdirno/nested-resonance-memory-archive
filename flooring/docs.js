@@ -152,7 +152,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "WHAT I DID TO IT",
-          "r": "The prep in the order you did it — ground, skimmed, patched, pulled cutback, undercut jambs, primed — with the area and roughly how long each took. Counts and areas, never prices; the office prices it off this."
+          "r": "The prep in the order you did it — ground, skimmed, patched, undercut jambs, primed — with the area and roughly how long each took. Counts and areas, never prices; the office prices it off this."
         },
         {
           "h": "WHAT IT COST THE DAY",
@@ -238,15 +238,26 @@ window.TRADE_DOCS = {
          a direction given over the objection — written once, read years later,
          non-delta. §SAFETY's hardest edge lives here: it must NOT declare a
          warranty void or predict a failure. It states the honest half — what his
-         own instructions require and that he was directed to proceed over it. */
+         own instructions require and that he was directed to proceed over it.
+         And it is never the record of suspect old goods (C3752): search "told to
+         lay over the black mastic" and this is the first row, while the halt
+         said the only reason to stop was no condition at all. Steel's pattern
+         now: the note and the halt name 9x9s, black mastic or cutback and old
+         resilient nobody has surveyed as a hold no direction clears — no year,
+         because the survey decides what counts, not a date — and the halt names
+         the documents the finding and the ask go on instead. Its reminder rides
+         every block on the shelf, so it refuses only this write-up and prep, and
+         tells every other one to record the finding whole: at first it said "it
+         stops the write-up", and an incident report of mastic somebody scraped
+         was told nothing records it scraped. */
       "family": "incident",
       "from": "the installer who raised it",
       "to": "the GC super, my PM, and whoever gave the direction",
       "why": "You looked at what you were told to cover, it was not what your own instructions call for, you said so, and you were told to put it in anyway. This is the record that you raised it and were directed to proceed — written the same day, because once the floor is bonded the thing you covered is gone, and so is the argument, unless this exists.",
-      "note": "It records what you found, what your own instructions require, that you raised it, and that you were directed to proceed. It never declares a warranty void, never says the floor will fail, and never grades the substrate. It states the honest half — what your instructions require and what you were told to do over it — which is the half that actually holds up. If the floor is not ready and you want the go-ahead in writing BEFORE you cover it, that is Give Me The Go (give-me-the-go.html) — it owns the not-ready-to-install case and ends in the ask. This is the record for AFTER you were directed to proceed over your objection and covered it anyway, the dated proof when the go will not come in writing. Keep the two apart or the kit has two doors onto one job.",
+      "note": "It records what you found, what your own instructions require, that you raised it, and that you were directed to proceed. It never declares a warranty void, never says the floor will fail, and never grades the substrate. It states the honest half — what your instructions require and what you were told to do over it — which is the half that actually holds up. It is the record of a call the job gets to make over your objection — a slab reading wet, heat that never ran, joints nobody filled — never of suspect old goods: 9x9s, black mastic or cutback, old resilient nobody has surveyed. No direction clears those. They wait on the owner's survey, the work stops there, and a direction to lay over them is never written up as a direction to proceed. If the floor is not ready and you want the go-ahead in writing BEFORE you cover it, that is Give Me The Go (give-me-the-go.html) — it owns the not-ready-to-install case and ends in the ask. This is the record for AFTER you were directed to proceed over your objection and covered it anyway, the dated proof when the go will not come in writing. Keep the two apart or the kit has two doors onto one job.",
       "omit": "WHO DIRECTED YOU, WHEN, AND HOW — the name, the date and the channel of the go-ahead, plus the condition as it was before you covered it and where the photos live. \"They told me to\" with no name and no date on it is worth nothing; the direction with a name and a time on it is the whole document.",
       "needs": ["when", "who", "before", "where"],
-      "halt": "Only if no condition and no direction to proceed are described at all.",
+      "halt": "Only stop and ask if no condition and no direction to proceed are described at all. Suspect old goods are not that question: if the condition is 9x9s, black mastic or cutback, or old resilient nobody has surveyed, no direction clears it, and this is the wrong document: that holds until the owner's survey clears it — the finding goes on How the Slab Was When I Got There and the ask on Give Me The Go, never covered under direction.",
       "facts": ["the date and area", "the condition you found", "what your own instructions require of it", "who directed you to proceed and how", "what you covered, and where the proof is"],
       "sections": [
         {
@@ -421,8 +432,9 @@ window.TRADE_DOCS = {
     "When a moisture reading, RH, calcium chloride, pH or a meter comes up -> remind them to record the number they measured and, beside it, the limit off their OWN adhesive bucket or the mill's printed instructions, and where the reading was taken and by which probe. Never let the document say whether the reading is acceptable, and never let it supply a limit — one adhesive's maximum is not the next one's, and the write-up that asserts a number is the one that gets quoted back.",
     "When flatness, levelness, a low spot, a straightedge or FF/FL comes up -> remind them to describe what they found and where, and to state the tolerance as the one on THEIR contract or the mill's instructions if they have it, marked <MISSING> if they do not. Never let the document supply a fraction in ten feet; that is the concrete sub's ASTM record and the architect's spec, not the floor layer's to set.",
     "When acclimation, conditioning, temperature or \"operational and conditioned\" comes up -> remind them to record the conditions they observed and the dates, not a required range. What the material needs is in the box; this document reports what was, never what should be.",
-    "When a substrate condition, grinding, a skim, a patch or cutback comes up -> remind them to write the BEFORE — what it was and what they measured before they touched it, with where the photos live. Once it is ground, skimmed or covered the evidence is demolished, and the before written the same day is the only record that survives.",
-    "When somebody directs them to install over a condition they flagged -> remind them to record who directed it, when, and by what channel, and to state what their own instructions require — never that the warranty is void or that the floor will fail. The name and the date on the direction is the whole protection; the determination is not theirs to make.",
+    "When a substrate condition, grinding, a skim or a patch comes up -> remind them to write the BEFORE — what it was and what they measured before they touched it, with where the photos live. Once it is ground, skimmed or covered the evidence is demolished, and the before written the same day is the only record that survives.",
+    "When 9x9s, black mastic, cutback, old resilient nobody has surveyed or asbestos comes up -> that is suspect old goods: no direction clears it, the owner's survey does. Until the survey clears it, nothing records it laid over, ground, scraped or pulled up as work — it is never written up as a direction to proceed, which is the wrong document for it, and never as prep they did. What goes in is the finding, whole: what was found, where, when the work stopped and who was told — and if anybody already disturbed it, exactly what was disturbed, how, where and who was there. Never let the document say what it is or isn't.",
+    "When somebody directs them to install over a condition they flagged -> remind them to record who directed it, when, and by what channel, and to state what their own instructions require — never that the warranty is void or that the floor will fail. The name and the date on the direction is the whole protection; the determination is not theirs to make. Suspect old goods are never that condition: no direction clears them, so none gets written up over them.",
     "When an appearance concern comes up — shading, pile reversal, watermarking, telegraphing, a lighter run -> remind them to record what was raised, the light and the direction they observed it under, and how it was installed, and to route the determination to the mill rep in writing. Never let the document call it a defect OR a characteristic; that call belongs to whoever owns the material.",
     "When extra work, prep, a change or \"one more room\" comes up -> remind them to name who asked, when, and how it was authorized, and to keep every price out of it. The record made on the day is what makes it a change rather than a favor; the office owns the number."
   ]

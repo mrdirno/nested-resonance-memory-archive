@@ -161,10 +161,10 @@ window.TRADE_DOCS = {
       "from": "the foreman who was directed",
       "to": "whoever gave the direction, copy to the GC and our PM",
       "why": "A conversation on a form deck becomes a record the same day or it becomes two people remembering it differently in November.",
-      "note": "Narrative only. No rate, no total, no hours priced out — the tag carries the counts and the office owns the number.",
+      "note": "Narrative only. No rate, no total, no hours priced out — the tag carries the counts and the office owns the number. It is never the record of going ahead over a line in the trench its owner hasn't cleared, or in a hole whose walls are running or sloughing: the line waits for its owner and the locate, the walls for the competent person, no direction from the job clears them, and nothing is dug or poured on one.",
       "omit": "The line that says you asked for it in writing and what came back — \"I asked for written direction on the twelfth; as of this letter I still don't have it.\" Every one of these names who gave the direction. Almost none record the ask for paper and the silence after it, which is the whole reason the letter exists.",
       "needs": ["when", "notdone"],
-      "halt": "Only if there is no stated direction and no person who gave it.",
+      "halt": "Only stop and ask if there is no stated direction and no person who gave it. And if we were told to go ahead over a line in the trench its owner hasn't cleared, or in a hole whose walls are running or sloughing, this is the wrong document: the line holds until its owner clears it, the walls until the competent person does — it goes on Not What We Came For, never dug or poured under direction.",
       "facts": [
         "who gave the direction and when",
         "how it arrived",
@@ -215,10 +215,10 @@ window.TRADE_DOCS = {
       "from": "the foreman on the hole",
       "to": "the GC super and our PM",
       "why": "The hole is open for one afternoon. A condition nobody wrote down while it was open is a condition that never existed.",
-      "note": "States what was seen and what the crew did. It never states a cause, never grades the material, and never says what the design should have been.",
+      "note": "States what was seen and what the crew did. It never states a cause, never grades the material, and never says what the design should have been. Direction on the grade and the bottom is the engineer's and the GC's to give, and that's all it covers: a line in the trench goes to its owner and the locate; walls running or sloughing go to the competent person; and no direction or say-so clears either one — the line holds until its owner clears it, the walls until the competent person does.",
       "omit": "The line that pins the condition to a place and a time while it was still open — footing mark, grid, station or address, what day and what hour, who saw it standing there, and that the crew stopped and called before covering it. A picture of mud with nothing in the frame to locate it proves nothing to anybody.",
       "needs": ["when", "who", "where"],
-      "halt": "Only if the condition itself is not described.",
+      "halt": "Only stop and ask if the condition itself is not described. But a line in the trench goes to its owner and the locate before anything else, and walls running or sloughing go to the competent person — no direction or say-so clears either one until they do, and a hole with a line in it nobody has identified gets no cover date.",
       "facts": [
         "where — footing mark, grid, station or address",
         "what you found",
@@ -241,7 +241,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "What the crew did when we found it",
-          "r": "Stopped or kept going, who got told, what time, how, and what came back. If we were told to keep going, say who said it and what they said."
+          "r": "Stopped or kept going, who got told, what time, how, and what came back. If we were told to keep going, say who said it and what they said. Over a line in the trench, or walls running or sloughing, nobody's say-so clears it — if we kept going anyway, say it was before the line's owner or the competent person cleared it."
         },
         {
           "h": "What it's doing to our work",
@@ -249,7 +249,7 @@ window.TRADE_DOCS = {
         },
         {
           "h": "The ask",
-          "r": "Ask somebody to come look while it's still open, and ask for written direction on how to go. Say when the hole has to get covered or the crew has to move — that's our constraint, stated as ours."
+          "r": "Ask somebody to come look while it's still open, and ask for written direction on how to go. Say when the hole has to get covered or the crew has to move — that's our constraint, stated as ours. A hole with a line in it nobody has identified gets no cover date from us."
         }
       ]
     },

@@ -1486,6 +1486,12 @@
     if (!nz(S.extra, "")) return;
     L.push("");
     L.push("EXTRA INSTRUCTIONS FROM ME — OBEY THESE TOO");
+    /* EXCEPT PAST A HOLD (C3752). This block is emitted last, so "backfill it as
+       soon as the GC says" typed here used to ride over a note and halt that had
+       just said no direction releases a struck line — the document version of a
+       typed hold riding under a proceed reply. Inert on a document that names no
+       such hold. */
+    L.push("(Except one that would clear a hold this document says only its owner clears — that hold stands, whatever I write here.)");
     L.push("");
     L.push(S.extra.trim());
   }

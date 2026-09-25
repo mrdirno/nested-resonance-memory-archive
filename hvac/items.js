@@ -240,6 +240,12 @@ window.TOOLKIT_ITEMS = (function () {
    *  · WHAT I FOUND HAS A WRITE-IN UNDER IT, always. On a roof with gloves on and
    *    the super waiting, the moment his finding isn't in the chip row and the
    *    keyboard comes up anyway, texting the super direct is faster than this page.
+   *  · `staysOff` MARKS A UNIT THAT IS OFF AND STAYS OFF (C3752): the unsafe tick
+   *    he's locked out, and the Off-and-tagged pick. Under either one, "HOLD and
+   *    I'll leave it the way I found it" promised to put back on a unit he'd shut
+   *    down as unsafe — the way he found it was running. tm-tag.html reads the
+   *    flag off this data, never off a name, and over it HOLD leaves it off and
+   *    tagged until it's repaired.
  */
 window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
 window.TOOLKIT_ITEMS.tag = {
@@ -290,7 +296,8 @@ window.TOOLKIT_ITEMS.tag = {
       "sub": "defrost or door heater"
     },
     {
-      "name": "It's unsafe — I've got it locked out"
+      "name": "It's unsafe — I've got it locked out",
+      "staysOff": 1
     }
   ],
   "why": [
@@ -326,7 +333,8 @@ window.TOOLKIT_ITEMS.tag = {
     },
     {
       "v": "Off and tagged — I shut it down",
-      "hot": 1
+      "hot": 1,
+      "staysOff": 1
     }
   ],
   "classes": [

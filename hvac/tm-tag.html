@@ -76,6 +76,42 @@
    *    items.js untouched, ES mode composes "ES (EN)" from each en-twin ── */
   var V = Lang.vocab(T, ES, { classes: "plain", found: "tick", how: "opt", refdir: "plain", refs: "plain", right: "opt", roles: "opt", why: "tick" });
 
+  /* ── HOLD NEVER PUTS A LOCKED-OUT UNIT BACK ON (C3752). "Or HOLD and I'll
+   *    leave it the way I found it" sat under "It's unsafe — I've got it locked
+   *    out" and "Off and tagged — I shut it down", where the way he found it was
+   *    RUNNING — so HOLD promised to turn a unit he'd locked out as unsafe back
+   *    on. A tick or pick carrying `staysOff` in items.js is read off the DATA,
+   *    in both tongues through its en-twin, never off a name: over it HOLD leaves
+   *    it off and tagged until it's repaired, whatever the reply says.
+   *    HIS OWN WORDS ARE NOT DATA. "Cracked heat exchanger, CO in the space —
+   *    shut it down" typed under WHAT I FOUND ticks nothing and the page cannot
+   *    read it, so over anything typed HOLD still leaves it the way he found it
+   *    but never reaches what he shut down as unsafe — siding's "the one I've
+   *    written in". With nothing flagged and nothing typed, the line is the one
+   *    it always was. Where the line says "tagged" for the lockout, the tag
+   *    calls itself the T&M tag, so "today only" never reads as the lockout
+   *    lapsing tomorrow. ── */
+  var OFF = { found: {}, right: {} };
+  [["found", "name"], ["right", "v"]].forEach(function (k) {
+    (T[k[0]] || []).forEach(function (x) { if (x && x.staysOff) OFF[k[0]][x[k[1]]] = 1; });
+    (ES[k[0]] || []).forEach(function (p) { if (p && OFF[k[0]][p.en]) OFF[k[0]][p.es] = 1; });
+  });
+  function goHold(get) {
+    var off = (get("found") || []).some(function (nm) { return OFF.found[nm]; }) || !!OFF.right[get("right")];
+    var typed = String(get("did") || "").trim();
+    var en = off
+      ? "Reply GO and I'll get on it, or HOLD and it stays off and tagged the way I left it — it doesn't come back on until it's repaired. Your reply with a name and a time on it is the record. This T&M tag is today only — tomorrow gets its own."
+      : typed
+      ? "Reply GO and I'll get on it, or HOLD and I'll leave it the way I found it — anything I shut down as unsafe stays off and tagged till it's repaired, whatever the reply says. Your reply with a name and a time on it is the record. This T&M tag is today only — tomorrow gets its own."
+      : "Reply GO and I'll get on it, or HOLD and I'll leave it the way I found it. Your reply with a name and a time on it is the record. This tag is today only — tomorrow gets its own.";
+    if (L !== "es") return en;
+    return (off
+      ? "Conteste GO (adelante) y le entro, o HOLD (espere) y se queda apagada y etiquetada como yo la dejé — no se vuelve a prender hasta que quede reparada. La respuesta de usted, con nombre y hora, es el registro. Este vale es solo de hoy — mañana lleva el suyo."
+      : typed
+      ? "Conteste GO (adelante) y le entro, o HOLD (espere) y lo dejo como lo encontré — lo que yo apagué por no ser seguro se queda apagado y etiquetado hasta que quede reparado, diga lo que diga la respuesta. La respuesta de usted, con nombre y hora, es el registro. Este vale es solo de hoy — mañana lleva el suyo."
+      : "Conteste GO (adelante) y le entro, o HOLD (espere) y lo dejo como lo encontré. La respuesta de usted, con nombre y hora, es el registro. Este vale es solo de hoy — mañana lleva el suyo.") + "\n" + en;
+  }
+
   /* ── page chrome outside the engine's mount — swapped before it renders ── */
   Lang.chrome({
     title: t("T&M Tag — HVAC/R Field Toolkit", "Vale T&M — HVAC/R Field Toolkit"),
@@ -198,11 +234,11 @@
 
       "Aquí nada lleva precio y nada se convierte — yo respondo por lo que leí y lo que encontré; la oficina responde por el precio, la cobertura y el programa.\nNothing on here is priced and nothing on here is converted — I own what I read and what I found, the office owns price, coverage and schedule.",
 
-      "Conteste GO (adelante) y le entro, o HOLD (espere) y lo dejo como lo encontré. La respuesta de usted, con nombre y hora, es el registro. Este vale es solo de hoy — mañana lleva el suyo.\nReply GO and I'll get on it, or HOLD and I'll leave it the way I found it. Your reply with a name and a time on it is the record. This tag is today only — tomorrow gets its own."
+      goHold
 
     ] : [
       "Nothing on here is priced and nothing on here is converted — I own what I read and what I found, the office owns price, coverage and schedule.",
-      "Reply GO and I'll get on it, or HOLD and I'll leave it the way I found it. Your reply with a name and a time on it is the record. This tag is today only — tomorrow gets its own."
+      goHold
 
     ],
 

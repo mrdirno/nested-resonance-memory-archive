@@ -109,7 +109,7 @@ window.TRADE_DOCS = {
       "from": "the underground foreman",
       "to": "my PM, the GC's super and the owner of the line we hit",
       "why": "Whether you eat the utility's repair bill comes down to what was marked, how deep it was, and whether you measured it before the hole got closed.",
-      "note": "narrative only — the utility's own damage form is theirs to number",
+      "note": "narrative only — the utility's own damage form is theirs to number. A struck line stays exposed, protected and barricaded until its owner has looked at it and released it, and no direction from the GC or anybody else releases it.",
       "sections": [
         {
           "h": "TICKET AND MARKS",
@@ -125,11 +125,11 @@ window.TRADE_DOCS = {
         },
         {
           "h": "WHAT HAPPENED NEXT",
-          "r": "Clock times: contact, work stopped, who was called (the line owner, one-call, the GC, the owner), when they showed up, whether anybody lost service and who."
+          "r": "Clock times: contact, work stopped, who was called (emergency services if they were called, the line owner, one-call, the GC, the owner), when they showed up, whether anybody lost service and who."
         },
         {
           "h": "CONDITION OF THE HOLE",
-          "r": "That the excavation was left open, protected and barricaded for the line owner to look at. If it had to be closed — and on a live job the GC will push you to close it — name who directed it closed, their company and the time. Never backfill on your own say-so."
+          "r": "That the excavation was left open, protected and barricaded for the line owner, and it stays that way until the owner has looked at it and released it — name who and when. The GC's direction doesn't release a struck line, and neither does ours. If it got covered anyway, say it was closed before the line owner released it, and name who directed that, their company and the time."
         },
         {
           "h": "PHOTOS",
@@ -138,7 +138,7 @@ window.TRADE_DOCS = {
       ],
       "omit": "The depth from finish grade and the horizontal offset from the paint, measured with a tape while the line is still lying in the hole and with the tape in the frame. Nobody measures it — they call it in, take the chewing, and backfill. \"38 inches from finish grade, 6 foot 4 east of the nearest orange mark,\" with a photo of the tape, is usually the whole defense, and once the hole is closed there isn't one.",
       "needs": ["where", "count"],
-      "halt": "Only stop and ask if there is neither a locate ticket number nor a clear statement that no ticket existed — that single fact decides who pays.",
+      "halt": "Only stop and ask if there is neither a locate ticket number nor a clear statement that no ticket existed — that single fact decides who pays. But if anybody is still at risk, or the line is live or damaged and the calls haven't been made, this document is not the priority — make the calls, clear the area, and write it after. The hole stays open until the line's owner has looked at it and released it; no direction from the GC or anybody else releases it.",
       "facts": [
         "Locate ticket number and the date it was called in",
         "Which utilities responded and what colors were on the ground",
@@ -149,7 +149,8 @@ window.TRADE_DOCS = {
         "Depth from finish grade and offset from the nearest mark, off a tape",
         "Times: strike, work stopped, calls made, who responded",
         "Whether anybody lost service and who",
-        "Whether the hole was left open, and who directed it closed if it wasn't",
+        "Whether the hole was left open, protected and barricaded, and when the line owner looked at it and released it",
+        "If it got covered before the line owner released it: who directed that, their company and the time",
         "What photos were taken, by whom, and when"
       ],
       "secondary": [
@@ -174,7 +175,7 @@ window.TRADE_DOCS = {
       "from": "the rough-in foreman",
       "to": "the GC super and my PM",
       "why": "Once it's under the slab or behind the rock, the only version of what you installed is what you wrote down the day before.",
-      "note": "narrative only — the inspector's card and the test log stay theirs",
+      "note": "narrative only — the inspector's card and the test log stay theirs. It never releases ground holding a struck line its owner hasn't released, or a line nobody has identified — no direction from the GC clears that, and neither does this letter.",
       "sections": [
         {
           "h": "WHAT'S READY AND WHERE",
@@ -198,12 +199,12 @@ window.TRADE_DOCS = {
         },
         {
           "h": "RELEASE",
-          "r": "A plain statement that the area is released for cover as of a date and time, and that anything after that — another trade's penetration, a re-route, damage during the pour — is a separate ticket."
+          "r": "A plain statement that the area is released for cover as of a date and time, and that anything after that — another trade's penetration, a re-route, damage during the pour — is a separate ticket. Carve out by grid any ground holding a struck line its owner hasn't released, or a line nobody has identified, and say why."
         }
       ],
       "omit": "The invert elevations at the tie-in points, off the rod, written into the letter. Everybody writes \"ready for cover\" and leaves the inverts on a markup that lives in a truck. When the next man comes to tie in and those numbers aren't in anybody's mail, the next version of that pipe is a jackhammer and it's on your bill.",
       "needs": ["where", "count"],
-      "halt": "Only stop and ask if the area boundary can't be identified — you cannot release \"some of the underground.\" Everything else gets a <MISSING>.",
+      "halt": "Only stop and ask if the area boundary can't be identified — you cannot release \"some of the underground.\" Everything else gets a <MISSING>. And if a line got hit in that area and its owner hasn't released it, or there's a line in it nobody has identified, that ground is not ours to release: carve it out by grid — a struck line goes on the Line Strike Report.",
       "facts": [
         "Building, grid or column lines, floors and rooms in the area being released",
         "Systems installed: sizes, materials, joint method",
