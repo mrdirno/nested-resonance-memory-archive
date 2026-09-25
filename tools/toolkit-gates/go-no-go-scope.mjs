@@ -33,12 +33,26 @@
  *       suspect old flooring).
  *   S6  flooring's Give Me The Go — a SEVENTH note the list above never named —
  *       run in the sandbox: its written go never reaches "the old stuff" (C3751).
+ *   S7  EVERY note with a proceed reply (siding CLOSE, paving PAVE, landscape,
+ *       painting and doors PROCEED), run in the sandbox (C3752): never on an
+ *       empty note, never over a hold he typed with nothing ticked, never over a
+ *       fenced hold alone or all of them; still offered on a closable hold; a
+ *       mixed or typed note says what it never reaches; a fenced stop asks for no
+ *       written go; landscape fences unlocated lines and painting untested paint.
+ *   S8  the write-ups that record a direction or a condition — plumbing's line
+ *       strike and ready-for-cover, concrete's conditions notice and directed
+ *       work, flooring's, painting's and doors' directed write-ups — name the hold
+ *       no direction clears in note AND halt.
+ *   S9  hvac's T&M tag, run in EN and ES: HOLD over a locked-out or off-and-
+ *       tagged unit keeps it off until it's repaired, never "the way I found it".
+ *   S10 the write-up engine's EXTRA INSTRUCTIONS, emitted last, carry the
+ *       exception: nothing he types there clears a hold the document names.
  *
- * WHAT IT DOES NOT YET DO (C3751, said so the scar does not overclaim it): it
- * classifies holds on steel, siding and flooring only. Paving, landscape,
- * painting and doors keep a proceed reply that is offered with nothing ticked,
- * over a hold typed in words the page cannot classify; generalising S4b to every
- * note found by its mount call is the next rung, not a claim of this one.
+ * WHAT IT DOES NOT DO (said so a scar does not overclaim it): it reads each note's
+ * DATA for which holds are fenced; whether a stop left closable really risks no
+ * one is a judgement the audit makes, not this gate. On HEAD before C3752, S7 was
+ * red on four of five notes (18 faults: PAVE and PROCEED printed on an empty note
+ * and under "an open trench nobody shored, a crew still in it").
  *
  *   node tools/toolkit-gates/go-no-go-scope.mjs [--root=HELIOS-BRIDGE/dist] [--prove]
  */
@@ -182,6 +196,136 @@ function flooringGoBehaviour(pageSrc) {
   if (fenced.length && open.length && !/go never reaches/.test(say([open[0], fenced[0]]))) f.push('a mixed letter keeps the go without saying what it never reaches');
   return f;
 }
+/* S7 — EVERY NOTE'S PROCEED REPLY, RUN (C3752). S4b ran siding's close and no
+ * other: paving, landscape, painting and doors still printed "Or reply PAVE /
+ * PROCEED and we … as it sits — in writing" on an empty note and under a hold
+ * typed in words the page cannot classify — "an open utility trench, nobody
+ * shored it, a crew is still in it" got PAVE. Each note's own script runs in the
+ * sandbox with Note.mount captured; its closings are asked what the note says. */
+const NOTES = [
+  { page: 'siding/not-ready-to-side.html', items: 'siding/items.js', key: 'notready', word: 'CLOSE' },
+  { page: 'paving/not-ready-to-pave.html', items: 'paving/items.js', key: 'notready', word: 'PAVE' },
+  { page: 'landscape/not-ready-to-plant.html', items: 'landscape/items.js', key: 'notready', word: 'PROCEED', must: [/locate/i, 'stop for lines nobody has located'] },
+  { page: 'painting/not-ready.html', items: 'painting/items.js', key: 'notready', word: 'PROCEED', must: [/old paint|tested|pre-?1978|lead/i, 'stop for old paint nobody has tested'] },
+  { page: 'doors/not-ready-to-hang.html', items: 'doors/items.js', key: 'nothang', word: 'PROCEED' },
+];
+function noteBehaviour(n, itemsSrc, pageSrc) {
+  const f = [];
+  const sb = { window: {} };
+  vm.createContext(sb);
+  let cfg = null;
+  try {
+    vm.runInContext(itemsSrc, sb);
+    sb.Note = { mount: c => { cfg = c; return { refresh() {}, get() {} }; } };
+    const js = (pageSrc.match(/<script>([\s\S]*?)<\/script>/g) || []).map(m => m.replace(/^<script>|<\/script>$/g, '')).join('\n');
+    vm.runInContext(js, sb);
+  } catch (e) { return [`${n.page} would not run in the sandbox: ` + String(e).split('\n')[0]]; }
+  if (!cfg) return [`${n.page} never mounted a note`];
+  const stops = ((sb.window.TOOLKIT_ITEMS || {})[n.key] || {}).stops || [];
+  const say = (ticked, typed) => (cfg.closing || []).map(x => typeof x === 'function' ? x(k => (k === 'stops' ? ticked : k === 'extra' ? (typed || '') : '')) : x).join('\n');
+  const offers = t => new RegExp('reply ' + n.word + '\\b').test(t);
+  const fenced = stops.filter(x => x.fence).map(x => x.name);
+  const open = stops.filter(x => !x.fence).map(x => x.name);
+  if (!fenced.length) f.push(`no ${n.page.split('/')[0]} stop carries a fence`);
+  if (!open.length) f.push(`every ${n.page.split('/')[0]} stop is fenced — ${n.word} can never be offered`);
+  if (n.must && !stops.some(x => x.fence && (n.must[0].test(x.name) || n.must[0].test(x.fence)))) f.push(`no fenced ${n.must[1]}`);
+  stops.filter(x => x.fence && WRITTEN_GO.test((x.sub || '') + ' ' + (x.ask || ''))).forEach(x => f.push(`the fenced stop "${x.name}" still asks for a written direction`));
+  if (offers(say([], ''))) f.push(`${n.word} is offered on an empty note`);
+  if (offers(say([], 'an open trench nobody shored, a crew still in it'))) f.push(`with nothing ticked, ${n.word} is offered over a hold he typed`);
+  fenced.forEach(nm => { if (offers(say([nm], ''))) f.push(`${n.word} is offered over "${nm}" alone`); });
+  if (fenced.length && offers(say(fenced, ''))) f.push(`${n.word} is offered over every fenced hold at once`);
+  if (open.length && !offers(say([open[0]], ''))) f.push(`${n.word} is not offered on "${open[0]}", a hold whose call is theirs`);
+  if (open.length && fenced.length && !new RegExp(n.word + ' never reaches').test(say([open[0], fenced[0]], ''))) f.push(`a mixed note offers ${n.word} without saying what it never reaches`);
+  if (open.length && !new RegExp(n.word + " never reaches[^\\n]*the one I've written in").test(say([open[0]], 'a live drop'))) f.push(`a ${n.word} note is silent about the hold he typed`);
+  return f;
+}
+/* S8 — A WRITE-UP THAT RECORDS A DIRECTION NAMES THE HOLD NO DIRECTION CLEARS
+ * (C3752), in its note AND its halt, the way S3 holds steel's Directed to Set.
+ * Plumbing's line strike coached "name who directed it closed … never backfill
+ * on your own say-so" — a GC's say-so as the way past a struck line; concrete's
+ * conditions notice asked for "written direction on how to go" over "a line in
+ * the trench" and walls "sloughing"; flooring's You Told Me To Put It In Anyway
+ * was the first answer for "old 9x9 tile" and never named the stuff. */
+const WRITEUPS = [
+  { rel: 'plumbing/docs.js', id: 'line-strike', note: [/owner/i, /releas/i], halt: [/make the calls/i],
+    never: /who directed it closed if it wasn't|never backfill on your own say-so/i },
+  { rel: 'concrete/docs.js', id: 'conditions-notice', note: [/locate/i, /competent person/i], halt: [/locate/i, /competent person/i] },
+  { rel: 'flooring/docs.js', id: 'directed-to-proceed', note: [/9x9|9-by-9|nine-by-nine/i, /mastic|cutback/i, /survey|tested/i],
+    halt: [/9x9|9-by-9|nine-by-nine/i, /mastic|cutback/i, /survey|tested/i] },
+  /* The two directed write-ups whose own trade's note gained a fence this cycle —
+   * found by the rider, not the audit: once the note says no written word clears
+   * untested old paint or wire at the frame, a shelf that writes up "you told me
+   * to coat / hang it" over exactly that is the gap the note just closed. */
+  { rel: 'painting/docs.js', id: 'coated-under-protest', note: [/old paint nobody's tested/i, /no direction/i], halt: [/old paint nobody's tested/i, /wrong document/i] },
+  { rel: 'doors/docs.js', id: 'hung-under-protest', note: [/wire at the frame/i, /no direction/i], halt: [/wire at the frame/i, /wrong document/i] },
+  /* And two the lines verifier found by searching his words, not the shelf's names: concrete's
+   * Directed Work Confirmation is the only answer to "he told me to", and plumbing's
+   * Ready-for-Cover Letter is OUR release of the ground a struck line may lie in. */
+  { rel: 'concrete/docs.js', id: 'directed-work-confirmation', note: [/line in the trench/i, /competent person/i, /no direction/i], halt: [/line in the trench/i, /competent person/i, /wrong document/i] },
+  { rel: 'plumbing/docs.js', id: 'ready-for-cover', note: [/struck line/i, /owner/i, /no direction/i], halt: [/owner hasn't released|line got hit/i, /not ours to release/i] },
+];
+function writeupFaults(w, src) {
+  const sb = { window: {} };
+  vm.createContext(sb);
+  try { vm.runInContext(src, sb); } catch (e) { return [`${w.rel} would not load: ` + String(e).split('\n')[0]]; }
+  const d = (((sb.window.TRADE_DOCS || {}).docs) || []).find(x => x.id === w.id);
+  if (!d) return [`no ${w.id} on ${w.rel.split('/')[0]}'s shelf`];
+  const f = [];
+  const note = String(d.note || ''), halt = [].concat(d.halt || []).join(' ');
+  w.note.forEach(re => { if (!re.test(note)) f.push(`${w.id}'s note never says ${re}`); });
+  w.halt.forEach(re => { if (!re.test(halt)) f.push(`${w.id}'s halt never says ${re}`); });
+  if (w.never && w.never.test(JSON.stringify(d))) f.push(`${w.id} still coaches a say-so past the hold: ${JSON.stringify(d).match(w.never)[0]}`);
+  return f;
+}
+/* S9 — HOLD NEVER PUTS A LOCKED-OUT UNIT BACK ON (C3752). HVAC's T&M tag closed
+ * "or HOLD and I'll leave it the way I found it" under "It's unsafe — I've got it
+ * locked out" and "Off and tagged — I shut it down", where the way he found it was
+ * running. Run in both tongues through the SHIPPED shared/lang.js, with the ES
+ * twins the ES page actually stores. */
+function tmTagHoldFaults(itemsSrc, pageSrc, langSrc) {
+  const f = [];
+  for (const lang of ['en', 'es']) {
+    const sb = { window: {}, localStorage: { getItem: () => lang, setItem() {} }, navigator: { language: 'en-US' },
+      document: { documentElement: {}, getElementById: () => null, querySelector: () => null, createElement: () => ({ appendChild() {}, setAttribute() {} }) },
+      location: { reload() {} } };
+    vm.createContext(sb);
+    let cfg = null;
+    try {
+      vm.runInContext(langSrc, sb);
+      sb.Lang = sb.window.Lang;
+      vm.runInContext(itemsSrc, sb);
+      sb.Note = { mount: c => { cfg = c; return { refresh() {}, get() {} }; } };
+      const js = (pageSrc.match(/<script>([\s\S]*?)<\/script>/g) || []).map(m => m.replace(/^<script>|<\/script>$/g, '')).join('\n');
+      vm.runInContext(js, sb);
+    } catch (e) { if (!cfg) return [`the hvac tag would not run in the sandbox (${lang}): ` + String(e).split('\n')[0]]; }
+    if (!cfg) return ['the hvac tag never mounted a note'];
+    const T = sb.window.TOOLKIT_ITEMS.tag || {}, ES = sb.window.TOOLKIT_ITEMS.tag_es || {};
+    const tw = (k, en) => lang === 'en' ? en : ((ES[k] || []).find(p => p.en === en) || { es: en }).es;
+    const unsafe = (T.found || []).filter(x => x.staysOff).map(x => tw('found', x.name));
+    const off = (T.right || []).filter(x => x.staysOff).map(x => tw('right', x.v));
+    if (!unsafe.length || !off.length) return ['no found tick or right-now pick carries staysOff — the locked-out unit is not marked in the data'];
+    const say = (found, right) => (cfg.closing || []).map(x => typeof x === 'function' ? x(k => (k === 'found' ? found : k === 'right' ? right : '')) : x).join('\n');
+    const BACK = /the way I found it|como lo encontré/;
+    unsafe.forEach(nm => { if (BACK.test(say([nm], ''))) f.push(`(${lang}) HOLD under "${nm}" still leaves it the way he found it`); });
+    off.forEach(v => { if (BACK.test(say([], v))) f.push(`(${lang}) HOLD under "${v}" still leaves it the way he found it`); });
+    if (!BACK.test(say([], ''))) f.push(`(${lang}) with nothing locked out, HOLD lost the line it always had`);
+  }
+  return f;
+}
+/* S10 — HIS OWN EXTRA LINE NEVER CLEARS THE HOLD EITHER (C3752). The engine emits
+ * "EXTRA INSTRUCTIONS FROM ME — OBEY THESE TOO" last, after the note and the halt,
+ * so "backfill it as soon as the GC says" typed there rode over a halt that had
+ * just said no direction releases a struck line. Read off the SHIPPED engine: the
+ * exception sits between that heading and his text, on every shelf at once. */
+function extraFaults(engineSrc) {
+  const m = engineSrc.match(/function emitExtra\(L\) \{([\s\S]*?)\n  \}/);
+  if (!m) return ['shared/docspec.js has no emitExtra'];
+  const body = noComments(m[1]);
+  const head = body.indexOf('OBEY THESE TOO'), exc = body.search(/Except one that would clear a hold this document says only its owner clears/), his = body.indexOf('S.extra.trim()');
+  if (exc === -1) return ['the extra-instructions block carries no exception for a hold only its owner clears'];
+  if (!(head < exc && exc < his)) return ['the exception is not between the heading and his text'];
+  return [];
+}
 const headOf = page => (page.match(/docName:\s*"([^"]*)"/) || [, ''])[1].replace(/\\'/g, "'");
 
 if (PROVE) {
@@ -202,6 +346,25 @@ if (PROVE) {
   ok(NAMED_CLEAR.test("nothing swings over somebody's head until you name who owns that") && NAMED_CLEAR.test('nobody on my crew touches it until you say.'), 'PROVE  a name-or-say-so clear goes red (S2b)');
   ok(steelCloseFaults(good.replace("Or reply NEW DAY", "Or reply PROCEED and we set them as they stand. Or reply NEW DAY")).length > 0, 'PROVE  a reworded proceed offer goes red');
   ok(steelStopFaults([{ name: 'x', sub: 'give me the ok to set it on the bolts we have' }]).length > 0, 'PROVE  a reworded written-go ask goes red');
+  NOTES.forEach(n => {
+    const pg = read(n.page);
+    const planted = pg.replace(/closing: \[/, 'closing: [\n      "Or reply ' + n.word + ' and we do it as it sits — in writing.",');
+    ok(planted !== pg && noteBehaviour(n, read(n.items), planted).length > 0, `PROVE  a static ${n.word} line planted on ${n.page} goes red (S7)`);
+  });
+  const shelf = (id, note, halt) => 'window.TRADE_DOCS = ' + JSON.stringify({ docs: [{ id, note, halt }] }) + ';';
+  WRITEUPS.forEach(w => {
+    const bare = writeupFaults(w, shelf(w.id, 'narrative only', 'Only if the condition itself is not described.'));
+    ok(bare.length > 0 && bare.every(x => /never says/.test(x)), `PROVE  ${w.id} with no fence in its note or halt goes red, for that reason (S8)`);
+  });
+  const sayso = writeupFaults(WRITEUPS[0], shelf('line-strike', 'the owner released it', 'make the calls. Never backfill on your own say-so.'));
+  ok(sayso.length === 1 && /say-so/.test(sayso[0]), 'PROVE  the old say-so coaching planted back in the line strike goes red (S8)');
+  const eng = read('shared/docspec.js');
+  const engCut = eng.replace(/\n    L\.push\("\(Except one that would clear[^\n]*\n/, '\n');
+  ok(engCut !== eng && extraFaults(engCut).length > 0, 'PROVE  the extra-instructions exception taken out goes red (S10)');
+  const hvItems = read('hvac/items.js'), hvPage = read('hvac/tm-tag.html');
+  const hvPlanted = hvPage.replace(/var off = \(get\("found"\)[\s\S]*?get\("right"\)\];/, 'var off = false;');
+  const hvF = tmTagHoldFaults(hvItems, hvPlanted, read('shared/lang.js'));
+  ok(hvPlanted !== hvPage && hvF.length > 0 && hvF.every(x => /still leaves it the way he found it/.test(x)), "PROVE  hvac's HOLD switched back to 'the way I found it' goes red, for that reason (S9)");
 } else {
   const steelPage = read('steel/not-ready-to-set.html');
   const sf = steelCloseFaults(steelPage);
@@ -228,6 +391,18 @@ if (PROVE) {
   ok(fb.length === 0, 'S4b siding\'s CLOSE, run: never over nothing ticked, a fenced hold or a typed one; offered on a closable hold' + (fb.length ? ': ' + fb.join('; ') : ''));
   const flb = flooringGoBehaviour(read('flooring/give-me-the-go.html'));
   ok(flb.length === 0, "S6  flooring's go, run: never over the old stuff alone, and named where a mixed letter keeps it" + (flb.length ? ': ' + flb.join('; ') : ''));
+  NOTES.forEach(n => {
+    const nb = noteBehaviour(n, read(n.items), read(n.page));
+    ok(nb.length === 0, `S7  ${n.page}, run: ${n.word} never on an empty note, a typed hold or a fenced one; offered on a closable hold; fenced stops ask for no written go` + (nb.length ? ': ' + nb.join('; ') : ''));
+  });
+  WRITEUPS.forEach(w => {
+    const wf = writeupFaults(w, read(w.rel));
+    ok(wf.length === 0, `S8  ${w.rel.split('/')[0]}'s ${w.id} names the hold no direction clears, in its note and its halt` + (wf.length ? ': ' + wf.join('; ') : ''));
+  });
+  const ex = extraFaults(read('shared/docspec.js'));
+  ok(ex.length === 0, "S10 the write-up engine's extra instructions never clear a hold the document says only its owner clears" + (ex.length ? ': ' + ex.join('; ') : ''));
+  const hv = tmTagHoldFaults(read('hvac/items.js'), read('hvac/tm-tag.html'), read('shared/lang.js'));
+  ok(hv.length === 0, "S9  hvac's T&M tag, run in EN and ES: HOLD over a locked-out or off-and-tagged unit keeps it off until it's repaired" + (hv.length ? ': ' + hv.join('; ') : ''));
   Object.keys(HEADS).forEach(rel => {
     if (!existsSync(join(ROOT, rel))) { ok(false, `S5  ${rel} is missing`); return; }
     const h = headOf(read(rel));

@@ -26,6 +26,9 @@
  * — read out of the page's own source, so an author cannot silence this gate
  * without saying in the config that the omission was on purpose.
  *
+ * And the converse (C3752): a wiped device's message carries no list line at all,
+ * because a line he never wrote is a claim he never made.
+ *
  *   node tools/toolkit-gates/note-live-fields.mjs
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'fs';
@@ -152,6 +155,15 @@ for (const rel of list) {
   await probe.goto(`http://127.0.0.1:${port}/${rel}`, { waitUntil: 'load' });
   await probe.waitForSelector('[data-f]', { state: 'attached' });
   const ids = await probe.$$eval('[data-f]', els => els.map(e => e.getAttribute('data-f')));
+  /* UNTOUCHED (C3752): the other half of "every answer reaches the message" is
+     that nothing he never answered does. A <select> opens on its first option,
+     so a rows field whose select starts on a real value printed a line on a
+     wiped device — give-me-the-go's "In-situ RH probe" (a test he never ran),
+     the flooring tag's "Mechanic / installer", creative's "Edit hours" — 3 of 58
+     note pages on HEAD, found by a sweep, not by any gate. */
+  const blank = await copied(probe);
+  const ghost = blank.split('\n').filter(l => /^\s*[-•]\s+\S/.test(l));
+  if (ghost.length) fail(rel, `a wiped device sends a line nobody wrote: "${ghost[0].trim()}" — a select that opens on a real option reads as his answer; open it on a "— " option (isNone drops it)`);
   await ctx0.close();
 
   if (new Set(ids).size !== ids.length) fail(rel, `duplicate field id in the config — only the last one is tracked: ${ids.filter((v, i) => ids.indexOf(v) !== i).join(', ')}`);

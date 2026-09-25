@@ -141,6 +141,10 @@ for (const p of LIST) {
         ok(r.height < 0.5, `${p} @${w}: an EMPTY aside is holding ${r.height.toFixed(1)}px of row`);
         continue;
       }
+      /* C3752: the aside is CONTENT — note.js prints it into his message — so a
+         template's "<year>" nobody filled in went out on every siding note that
+         ticked the old-house stop. A placeholder on the glass is a placeholder sent. */
+      if (w === WIDTHS[0]) ok(!/<[a-z][a-z ]*>/i.test(r.text), `${p}: an aside carries a placeholder nobody fills in — "${(r.text.match(/<[a-z][a-z ]*>/i) || [''])[0]}" in "${r.text.slice(0, 60)}" — and it prints into his message`);
       if (r.lines > pageWorst) pageWorst = r.lines;
       if (r.lines > worst) { worst = r.lines; worstWhere = `${p} @${w} "${r.text.slice(0, 48)}"`; }
       ok(r.nmOnBoxLine !== false,
