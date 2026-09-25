@@ -32,7 +32,7 @@
   <div class="preview" id="preview"></div>
 
   <div class="warn" id="warn">
-    <b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or anything pre-1978, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.
+    <b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or old resilient nobody's surveyed, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.
   </div>
 
   <p class="credit" id="wishline">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
@@ -89,7 +89,7 @@
     h1: t("Extra Work Tag", "Vale de extra"),
     lede: t("Ground it, skimmed it, filled the joints, pulled cutback, undercut fourteen jambs, moved a fridge nobody moved, or stood in the corridor because the room wasn't clear? Write the tag the day it happened — who told you, what you were told to do, why it's outside your number, and the part everybody argues about in April: what is NOT in this tag. Sixty days from now it's covered up and nobody can see what you were kneeling on.", "¿Pulió la losa, le echó skim, llenó las juntas, raspó el cutback, les hizo undercut a catorce jambas, movió un refri que nadie movió, o se quedó parado en el pasillo porque el cuarto no estaba libre? Escriba el vale el mismo día que pasó — quién se lo ordenó, qué le dijeron que hiciera, por qué está fuera de su presupuesto, y la parte por la que todos pelean en abril: qué NO entra en este vale. En sesenta días ya está tapado y nadie puede ver sobre qué estaba usted hincado."),
     whatlabel: t("What you send", "Lo que manda"),
-    warn: t("<b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or anything pre-1978, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.", "<b>Un extra, un día, un vale.</b> Sin precios, sin totales, sin precios unitarios y sin línea de firma — un bloque pegado no se puede firmar, y la respuesta con su hora y fecha es el respaldo. El vale no lleva número: la app del GC y el sistema del dealer son los dueños de los números de CO y PCO, y un número inventado es como le tumban un ticket. <b>Si son losetas de 9x9, mastique negro o cualquier cosa de antes de 1978, la única línea que va aquí es que usted paró y le avisó a alguien</b> — esta página no dice qué es, y el vale tampoco debe decirlo. El vale sale en los dos idiomas — usted lo lee, y el súper también — y lo que usted escribe sale tal como lo escribió."),
+    warn: t("<b>One extra, one day, one tag.</b> No prices, no totals, no unit rates and no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail. The tag carries no number: the GC's app and the dealer's system own CO and PCO numbering, and a made-up number is how a ticket gets thrown out. <b>If it's 9x9s, black mastic or old resilient nobody's surveyed, the only line that goes on here is that you stopped and told somebody</b> — this page does not say what it is and neither should the tag.", "<b>Un extra, un día, un vale.</b> Sin precios, sin totales, sin precios unitarios y sin línea de firma — un bloque pegado no se puede firmar, y la respuesta con su hora y fecha es el respaldo. El vale no lleva número: la app del GC y el sistema del dealer son los dueños de los números de CO y PCO, y un número inventado es como le tumban un ticket. <b>Si son losetas de 9x9, mastique negro o piso resiliente viejo que nadie ha revisado, la única línea que va aquí es que usted paró y le avisó a alguien</b> — esta página no dice qué es, y el vale tampoco debe decirlo. El vale sale en los dos idiomas — usted lo lee, y el súper también — y lo que usted escribe sale tal como lo escribió."),
     wishline: t("✦ Something on here in the wrong order, or missing the line your office always asks for? Wish for it — it gets fixed, and you get the credit.", "✦ ¿Algo en el orden equivocado, o falta la línea que su oficina siempre pide? Pídalo — se arregla, y usted se lleva el crédito."),
     creditby: t("✦ The Spanish on this page was wished into existence by an anonymous GC hand, and carried to every trade.", "✦ El español de esta página lo hizo realidad el deseo de un compañero GC anónimo, y llegó a todos los oficios."),
     clear: t("Clear", "Borrar"),
@@ -104,6 +104,33 @@
     lists: [{ id: "notin", key: "notin" }, { id: "why", key: "why" }],
     rows: [{ id: "crew", col: "cls", key: "classes" }]
   });
+
+  /* THE CREW LINE NOBODY WROTE, ON EVERY PHONE THAT ALREADY OPENED THIS (C3752).
+     While Class opened on "Mechanic / installer", the first render saved that
+     row into the draft — in either tongue — and a draft restores, so "— class"
+     alone never reaches a phone that has been here. Before the engine boots, a
+     saved crew row with no men, no hours and that old default comes off, and a
+     draft with nothing else in it goes, so the tag reads untouched again. */
+  (function () {
+    var OLD = { "Mechanic / installer": 1, "Instalador (Mechanic / installer)": 1 };
+    var blank = function (v) { return !String(v == null ? "" : v).trim(); };
+    try {
+      /* Once per phone: after this runs, "Mechanic / installer" is a pick he made, never the default. */
+      if (localStorage.getItem("toolkit.migrated.c3752.flooring-tmtag")) return;
+      localStorage.setItem("toolkit.migrated.c3752.flooring-tmtag", "1");
+      var d = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (!d || !d.crew) return;
+      var keep = d.crew.filter(function (r) { return !(r && blank(r.men) && blank(r.hrs) && OLD[r.cls]); });
+      if (keep.length === d.crew.length) return;
+      d.crew = keep;
+      var left = Object.keys(d).some(function (k) {
+        var v = d[k];
+        if (k === "me" || k === "co") return false;
+        return Array.isArray(v) ? v.length > 0 : !blank(v);
+      });
+      if (left) localStorage.setItem(KEY, JSON.stringify(d)); else localStorage.removeItem(KEY);
+    } catch (e) {}
+  })();
 
   var api = Note.mount({
     key: KEY,

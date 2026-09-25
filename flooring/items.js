@@ -149,6 +149,7 @@ window.TOOLKIT_ITEMS.tag = {
   ],
 
   classes: [
+    "— class",
     "Mechanic / installer",
     "Helper",
     "Lead / foreman",
@@ -393,6 +394,7 @@ window.TOOLKIT_GETIN = {
  * option verbatim, on every page that mounts shared/lang.js. */
 window.TOOLKIT_ITEMS.tag_es = {
   "classes": [
+    { "es": "— clase", "en": "— class" },
     { "es": "Instalador (Mechanic / installer)", "en": "Mechanic / installer" },
     { "es": "Ayudante (Helper)", "en": "Helper" },
     { "es": "Mayordomo (Lead / foreman)", "en": "Lead / foreman" },

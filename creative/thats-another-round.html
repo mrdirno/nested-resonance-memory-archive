@@ -71,6 +71,32 @@
   "use strict";
   var T = window.TOOLKIT_ITEMS.tag;
 
+  /* THE ROW NOBODY WROTE, ON EVERY PHONE THAT ALREADY OPENED THIS (C3752).
+     While "Of what" opened on "Edit hours", the first render saved that row
+     into the draft, and a draft restores — "— of what" alone never reaches a
+     phone that has been here. Before the engine boots, a saved row with no
+     count and that old default comes off, and a draft with nothing else in it
+     goes, so the page reads untouched again. */
+  (function () {
+    var K = "toolkit.creative.another-round.v1", M = "toolkit.migrated.c3752.creative-another-round";
+    try {
+      /* Once per phone: after this runs, "Edit hours" is a pick he made, never the default. */
+      if (localStorage.getItem(M)) return;
+      localStorage.setItem(M, "1");
+      var d = JSON.parse(localStorage.getItem(K) || "null");
+      if (!d || !d.cost) return;
+      var keep = d.cost.filter(function (r) { return !(r && !String(r.qty == null ? "" : r.qty).trim() && r.unit === "Edit hours"); });
+      if (keep.length === d.cost.length) return;
+      d.cost = keep;
+      var left = Object.keys(d).some(function (k) {
+        var v = d[k];
+        if (k === "me" || k === "co") return false;
+        return Array.isArray(v) ? v.length > 0 : !!String(v == null ? "" : v).trim();
+      });
+      if (left) localStorage.setItem(K, JSON.stringify(d)); else localStorage.removeItem(K);
+    } catch (e) {}
+  })();
+
   Note.mount({
     key: "toolkit.creative.another-round.v1",
     docName: "HEADS-UP — ONE OUTSIDE THE ROUNDS",
@@ -125,7 +151,10 @@
             id: "cost", kind: "rows", label: "What it takes", addLabel: "+ Another line", docLabel: "WHAT IT TAKES",
             cols: [
               { id: "qty", kind: "stepper", label: "How many", ph: "qty" },
-              { id: "unit", kind: "select", label: "Of what", options: T.units }
+              /* "— of what" first (C3752): a select opens on its first option, so
+                 an untouched row read "- Edit hours" and the count said "1 line on
+                 it" before he had typed a thing. isNone drops the dash. */
+              { id: "unit", kind: "select", label: "Of what", options: ["— of what"].concat(T.units) }
             ]
           }
         ]
