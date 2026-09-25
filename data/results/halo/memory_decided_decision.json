@@ -1,0 +1,60 @@
+{
+ "V1_instrument": {
+  "failures": [],
+  "pass": true,
+  "void_records": 0
+ },
+ "arms": {
+  "identity": {
+   "call_counts": {
+    "L": 4,
+    "Pi": 0,
+    "none": 5,
+    "unscored": 0
+   },
+   "conditions": {
+    "sg0.3": "L",
+    "sg0.32": "none",
+    "sg0.35": "L"
+   },
+   "preference": "L",
+   "scored_per_condition": {
+    "sg0.3": 3,
+    "sg0.32": 3,
+    "sg0.35": 3
+   }
+  },
+  "invert_matter": {
+   "call_counts": {
+    "L": 0,
+    "Pi": 0,
+    "none": 9,
+    "unscored": 0
+   },
+   "conditions": {
+    "sg0.3": "none",
+    "sg0.32": "none",
+    "sg0.35": "none"
+   },
+   "preference": "none",
+   "scored_per_condition": {
+    "sg0.3": 3,
+    "sg0.32": 3,
+    "sg0.35": 3
+   }
+  }
+ },
+ "branch": "NO PREFERENCE",
+ "computed_at": "2026-09-25T06:41:31+00:00",
+ "decided_L_calls": 0,
+ "decided_Pi_calls": 0,
+ "identity_L_calls": 4,
+ "identity_Pi_calls": 0,
+ "prereg_commit": "06e321c160999d527e4a7746e0d2c335c1b51510",
+ "proximate_cause": "invert_matter prefers neither frame (0 Pi, 0 L calls)",
+ "receipt_commit": "59d7d4af7ab1ea8582762828083979dc340008c5",
+ "schema": "halo-decided-arm-decision/1",
+ "script_sha256": "e0b0aa0c7b75210826abc791d27d161a8399420e22eddf25731064626b69eb58",
+ "static_runs": 0,
+ "statistic_sha256": "020eb6549a1ce163d2cd87165dc19d9dcd550a1600912c8119d0163bd0de47ab"
+}

@@ -523,3 +523,156 @@ The run records carry no wall clock. The order is evidenced by, in decreasing st
 3. **The launch ledger.** Each launch line records its time and the commit checked out at launch.
    Every ledger commit and every record's commit must descend from P, which `decide` checks.
 4. **File modification times,** which are local clocks.
+
+## Results
+
+**Scored once.** `sh experiments/halo/memory_decided_score.sh 06e321c160999d527e4a7746e0d2c335c1b51510` (the full sha
+of P) ran once on September 25, 2026 (UTC), under Python 3.13.5 with numpy 2.3.5. It started at 06:41:29 UTC, took 36 s and exited 0. It began after
+the batch's own log printed "all 20 runs done"; the last record, the closing repeat, was written at 06:41:17 UTC. The
+decision (`computed_at` 06:41:31 UTC) was written before the reported steps ran. Nothing above this heading has
+changed since P.
+
+**The runs.**
+
+- P reached the public remote at 06:02:11 UTC by GitHub's activity record. The driver's refusal checks passed, and the
+  canary launched 14 s later, at 06:02:25 UTC.
+- The launch ledger holds 20 launches in the registered order, one per run, each attempt 1 and each on P. There was no
+  void, no partial mesh and no re-issue.
+- The records' wall times sum to 2,236 s of the 2,332.7 s between the first launch (06:02:25) and the last record
+  (06:41:17.7), and the
+  shortest run took 99 s, so no further run fits between them when runs go one at a time, as the driver launches
+  them. The sum does not exclude a concurrent run outside the ledger.
+- All 20 records carry `git_rev` 06e321c1, which is P: nothing was committed to the repository while the batch ran.
+- The canary reproduced Ring 29's `sg0.32` seed 777 mesh byte for byte (`ce15f081…`). The closing repeat reproduced
+  the first `invert_matter` run byte for byte (`1c89f9ba…`).
+
+**The branch: NO PREFERENCE.** The decided arm, `invert_matter`, made no call in any of its 9 scored runs: 0 Π and
+0 L. The table, walked in its order:
+
+| branch | what was checked | fires |
+|---|---|---|
+| VOID | V1: 0 failures, 0 void records | no |
+| STATIC | the largest median lag-one full-field Pearson over the 18 arm runs is 0.144 (the larger of the lab and inverted frames) | no |
+| UNMEASURED | every condition in both arms has 3 of 3 runs scored (*n* from 12 to 18) | no |
+| BROKEN | Φ(`identity`) = L; 0 Π calls in `identity` | no |
+| BASELINE SILENT | Φ(`identity`) = L (sg0.3 L, sg0.32 none, sg0.35 L) | no |
+| FOLLOWS THE MATTER, STAYS IN THE LAB FRAME, FEW CALLS | Φ(`invert_matter`) = none | no |
+| SPLIT | 0 Π and 0 L calls in `invert_matter` | no |
+| NO PREFERENCE | Φ(`invert_matter`) = none, with calls in no direction | **yes** |
+
+**V1, instrument: pass.**
+
+- Every record and every hook passes Ring 30's checks, every run passes the runtime pins, and every record's commit
+  is a full sha that descends from P.
+- The receipt on disk is the one committed at R.
+- Every run's *T*, *n*, *p* and call, re-derived from its mesh, equals the score, and each score holds exactly its
+  directory's nine registered runs.
+- Every record is a registered record of its directory, found once, with its registered seed, self-gravity and mode.
+  There is no partial mesh and no void.
+- Every ledger row names a registered run on P, attempt 1, in the registered order, and every run has a row.
+- In each of the nine (self-gravity, seed) pairs, the two arms' first meshes are byte-identical, and the nine first
+  meshes are distinct.
+
+**The counts, side by side and never pooled:**
+
+- `invert_matter`: Π in **0 of the 9 scored** and L in **0 of the 9 scored** (none in 9).
+- `identity`: L in **4 of the 9 scored** (Π in 0, none in 5).
+
+These are counts, not rates. In each pair the two arms share their first mesh, so they are not independent, and
+nothing here compares them.
+
+**Per condition and per arm** (the registered aggregation):
+
+| arm | sg0.3 | sg0.32 | sg0.35 | Φ |
+|---|---|---|---|---|
+| `identity` | L | none | L | L |
+| `invert_matter` | none | none | none | none |
+
+**Every run.** *T* and *p* are read in the lab frame. In the inverted frame, every run gives −*T* with the same eligible
+pairs. *n*_eff and the top-3 share are descriptive.
+
+| arm | run | *T* | *n* | *p* | call | *n*_eff | top-3 share |
+|---|---|---:|---:|---:|---|---:|---:|
+| `identity` | sg0.3 seed 36055 | +0.0258 | 12 | 0.0049 | L | 5.3 | 0.70 |
+| `identity` | sg0.3 seed 37416 | +0.0315 | 16 | 0.4084 | none | 3.8 | 0.77 |
+| `identity` | sg0.3 seed 38729 | +0.0251 | 13 | 0.0261 | L | 2.9 | 0.87 |
+| `identity` | sg0.32 seed 41231 | +0.0408 | 13 | 0.1316 | none | 3.2 | 0.80 |
+| `identity` | sg0.32 seed 42426 | +0.0155 | 15 | 0.4725 | none | 5.8 | 0.66 |
+| `identity` | sg0.32 seed 43588 | +0.0273 | 14 | 0.0604 | none | 5.1 | 0.69 |
+| `identity` | sg0.35 seed 44721 | +0.0182 | 17 | 0.4740 | none | 5.0 | 0.68 |
+| `identity` | sg0.35 seed 45825 | +0.0607 | 17 | 0.0113 | L | 5.1 | 0.70 |
+| `identity` | sg0.35 seed 46904 | +0.0729 | 18 | 0.0009 | L | 5.6 | 0.67 |
+| `invert_matter` | sg0.3 seed 36055 | −0.0138 | 14 | 0.0559 | none | 5.4 | 0.58 |
+| `invert_matter` | sg0.3 seed 37416 | −0.0433 | 15 | 0.1331 | none | 3.1 | 0.84 |
+| `invert_matter` | sg0.3 seed 38729 | +0.0064 | 17 | 0.4056 | none | 5.8 | 0.67 |
+| `invert_matter` | sg0.32 seed 41231 | −0.0341 | 17 | 0.1364 | none | 6.3 | 0.62 |
+| `invert_matter` | sg0.32 seed 42426 | −0.0242 | 18 | 0.2041 | none | 5.2 | 0.71 |
+| `invert_matter` | sg0.32 seed 43588 | −0.0013 | 15 | 0.8005 | none | 4.6 | 0.74 |
+| `invert_matter` | sg0.35 seed 44721 | −0.0037 | 18 | 0.8308 | none | 9.1 | 0.44 |
+| `invert_matter` | sg0.35 seed 45825 | +0.0109 | 17 | 0.6194 | none | 5.4 | 0.63 |
+| `invert_matter` | sg0.35 seed 46904 | −0.0332 | 17 | 0.1585 | none | 5.0 | 0.76 |
+
+**Reported: between-run pinning.** `identity`: mean cosine −0.0227 over 36 pairs of different runs (13 positive),
+exact one-sided *p* 0.984 over 512 run-level inversions. `invert_matter`, in its lab frame: −0.0067 over 36 pairs (15
+positive), *p* 0.637 over 512.
+
+**Reported, deciding nothing: Ring 30's frozen rule on these arms.** It never stands in for the branch above, the two
+are not compared, and Ring 30's MOVED and NULL are not evaluated.
+
+- `identity` prefers neither frame. Its conditions are sg0.3 none, sg0.32 none and sg0.35 L. One run carries an
+  L-signature (sg0.35 seed 45825, *d* −0.055), and none carries a Π-signature. Six of its nine runs are measurable in
+  both frames; the three sg0.32 runs have 10 or 11 eligible epochs, below the floor of 12.
+- `invert_matter` prefers neither frame. Its conditions are sg0.3 Π, sg0.32 none and sg0.35 none. One run carries a
+  Π-signature (sg0.3 seed 37416, *d* +0.062), and none carries an L-signature. All nine of its runs are measurable in
+  both frames.
+- The frozen verdict strings are "insufficient support" for `identity` in both frames and "qualified" for
+  `invert_matter` in both frames. Each string is a reading of those nine runs only. It is not a qualification or a
+  re-qualification, and it is not compared with any other ring's.
+
+**What NO PREFERENCE means, in the words fixed before the runs:** "The orientation neither follows the matter nor
+stays often enough for this rule. It is not a null. The design does not say whether the hook, competition between
+the two carriers, or chance produced it."
+
+- It names no carrier, and it is not a lean toward either.
+- It says nothing about memory.
+- The identity gate passed on these seeds (Φ(`identity`) = L), so BASELINE SILENT does not fire and the rule could
+  decide the arm. The arm's runs made no call in either direction, and the design does not say why.
+- The disclosure above stands as written: the public near-copy pointed to a branch that names no carrier, so these
+  fresh runs are not a blind test. It is not evidence and not a prior for any branch, and this branch is not read as
+  agreeing with it.
+- No branch licenses re-running these seeds, adding seeds or moving any threshold. The next experiment is chosen
+  after this result and registered as its own ring.
+
+**Kill-test, before this section was committed.** Two read-only workflows ran concurrently first: four compute lenses
+on the result and three lenses on this write-up. None edited the repository, and none ran the scoring script.
+
+1. **Two independent re-derivations,** written and checked against Ring 32's 18 runs before these runs existed. One
+   imports only the frozen scorer's primitives; the other imports nothing. Both reproduce every run's eligible pairs,
+   *n*, *p* (exactly) and call, and *T* to 2 × 10⁻¹⁷. A third, exact-integer enumeration agrees on every *p*, and the
+   two implementations disagree on 0 of the 396 pair eligibilities.
+2. **Provenance.** Every record, pin, seed, hash and launch checks out from the bytes. The 460 hook records show the
+   arm did what was registered: at every boundary `invert_matter` flipped 12,582,912 position and velocity words and
+   left the potential atlas unchanged (230 of 230 hooks), while `identity` changed nothing. P reached the public
+   remote 14 s before the first launch. Two limits are recorded here. The ledger's stamps have one-second resolution,
+   so the ledger alone cannot order a record against the next launch within the same second (the driver's log can).
+   And this file now carries its Results, so the registered script refuses to run again; re-scoring needs P's copy of
+   the file.
+3. **STATIC, the frames and the reported numbers,** recomputed independently, agree. The inverted-frame meshes are
+   byte-identical to an independent derivation.
+4. **The branch,** walked by hand from the score files, is NO PREFERENCE, and the module's tests pass 51 of 51.
+5. **A review of this write-up** found three blockers, all fixed before commit. A log line read the disclosed
+   near-copy as a prediction that "held", and two open questions turned the gate's count into a rate. It also removed
+   wording that set the arms against each other, and restored Ring 33's disclaimer where the trajectory had dropped
+   it.
+
+The meshes are gitignored. A stranger regenerates them with the harness, since each run is deterministic for its seed
+and test page (the canary and the closing repeat show this), and checks each one's sha256 against the score files.
+
+**How close the branch sits to another.** Unregistered, and deciding nothing. The decided arm is far from naming a
+carrier: none of its runs reaches the 0.05 call level (the nearest, sg0.3 seed 36055, has *p* 0.056), and a named
+branch needs at least 4 calls in one direction. An exhaustive search over changed calls finds that two changed calls
+would give FEW CALLS or SPLIT, and four would give FOLLOWS THE MATTER or STAYS IN THE LAB FRAME. The gate is the
+nearer edge. One Π call in `identity` gives BASELINE SILENT. Dropping each sg0.3 gate run's single largest pair
+removes both of its L calls (seed 36055 sits at the 12-pair floor), which would give BASELINE SILENT too. One
+`invert_matter` pair sits 0.002 % below the participation floor (sg0.3 seed 36055, *k* = 8). Counted as eligible, it
+would make that run a Π call, and that alone leaves NO PREFERENCE.

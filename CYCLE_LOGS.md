@@ -1708,3 +1708,37 @@ The first hosted HALO gate refused deployment because the navigation covered a s
   2. Carried: the lower self-gravity wall and the gain/loss axis.
   3. Carried: linked files that still say more than the README.
   4. Carried: the rings' own numbers are not indexed.
+
+## [RESEARCH] HALO Ring 34: the decided arm, registered and pushed before any of its runs, ran twenty runs and was scored once; the branch is NO PREFERENCE: with the matter inverted after every zoom-out and the solver's warm start left, the arm calls neither Π nor L in any of its 9 scored fresh runs, while the untouched gate on the same seeds calls L in 4 of its 9; every instrument check passes; it names no carrier, and nothing about memory - COMPLETE
+- **Goal:** Ring 33's open questions 1 and 2: register the decided arm (the matter inverted after every zoom-out, the solver's warm start left) on the nine seeds Ring 32 named, scored by Ring 32's statistic under its rule; close the breaker's gaps before the freeze; push before any run; then run it and score it once. Incumbent: none for this statistic (no branch predicted). Ring 30's registered result for this arm (the frozen contrast preferred neither frame) stands whatever this ring returns and is not compared with it. Acceptance: P pushed before the first launch, V1 passing, the branch walked in its registered order, one ring, Actions green, the live page rendering. Falsifier: a record commit or launch before P, a second scoring, or any V1 failure. Proved unfinished before starting:
+  - no `memory_decided_*` directory, ledger or pre-registration existed;
+  - the page's newest ring was 33;
+  - the ring had been started and not finished, and an earlier session had left the decided-arm module and its tests uncommitted, never run.
+- **Action:**
+  1. Ran the uncommitted module's tests for the first time (46 of 46), then wrote the batch driver, the scoring script and the pre-registration.
+  2. Before the freeze: a four-lens read-only breaker on the code and a three-lens read-only review of the text, run concurrently. Every blocker was fixed, and the list is in the pre-registration's Disclosures. Tests went from 46 to 51; the HALO and archive suites passed, 172 of 172.
+  3. Committed P (06e321c1) by pathspec and pushed it; GitHub's activity record has it at 06:02:11 UTC. The driver refused a commit lacking the registered files (fa691c82) and an unknown commit, then launched on P 14 s after the push.
+  4. The batch ran detached from 06:02:25 to 06:41:17 UTC: 20 launches, one per run, no void, all on P. Nothing was committed meanwhile.
+  5. Ran `sh experiments/halo/memory_decided_score.sh 06e321c1…` once at 06:41:29 UTC: 36 s, exit 0.
+  6. Appended "## Results" (only insertions against P) and kill-tested the result (below). Ring 34 is on the page. The README's Ring 30 bullet (digit-free), META_OBJECTIVES, the CLAUDE.md trajectory, the site's llms.txt and one evidence-index scope follow the ring.
+  7. Independently re-checked Ring 32's and Ring 33's records (hashes, push order and CI); a re-derivation matched all 18 of Ring 33's runs.
+- **Method:** The statistic, its receipt and its rule are Ring 32's, imported unchanged and pinned by R. The module adds only the decided arm's registered runs, its branch table and a V1 with Ring 33's breaker gaps closed. A duplicate record cannot hide behind a key. A kept-aside first attempt is the only partial mesh allowed. Ledger rows must be full shas descending from P, one per launch, with every run present and first launches in order. Calls are re-derived from the meshes as the score file stores them. The driver refuses to launch unless P is on the public remote, the checked-out commit descends from P, every registered file on disk is P's blob, and node and Playwright are pinned. `score` refuses unless the module, the pre-registration, the driver and the scoring script are P's bytes. `decide` writes V1 and the branch before Ring 30's frozen rule, which is reported only.
+- **Result:** NO PREFERENCE.
+  - `invert_matter`: Π in 0 of the 9 scored and L in 0 of the 9 scored (none 9). All three conditions none; Φ = none.
+  - `identity`: L in 4 of the 9 scored (Π 0, none 5). By condition sg0.3 L, sg0.32 none, sg0.35 L; Φ = L, so the gate passes.
+  - V1 passes with 0 failures and 0 voids. STATIC's maximum is 0.144, and every condition in both arms has 3 of 3 runs scored.
+  - All 20 records carry `git_rev` P. The canary reproduced Ring 29's `ce15f081`, and the closing repeat reproduced the first decided run (`1c89f9ba`).
+  - Reported only: Ring 30's frozen rule prefers neither frame in either arm. `identity` has one L-signature; `invert_matter` has one Π-signature (sg0.3 seed 37416, *d* +0.062). Neither is read.
+  - The Disclosures stand as written: before P, the public near-copy pointed to a branch that names no carrier, so this was not a blind test. The near-copy is not evidence and not a prior, and this branch is not read as agreeing with it. Counts are counts, and nothing about memory is decided.
+- **Status:** KILL-TEST.
+  - Two read-only workflows ran concurrently before any commit: four compute lenses and three text lenses. None edited the repository or ran the scoring script.
+  - Two re-derivations, validated on Ring 32's 18 runs before these runs existed (one imports only the frozen scorer's primitives, one imports nothing), reproduce every eligible pair, *n*, *p* (exactly) and call, and *T* to 2e-17. An exact-integer enumeration agrees, and the two disagree on 0 of 396 pair eligibilities.
+  - Provenance: every pin, seed, hash and launch checks out. The 460 hook records show `invert_matter` flipped 12,582,912 words per boundary and left the potential atlas unchanged in 230 of 230 hooks. Two limits are recorded: one-second ledger stamps, and a prereg that now carries its Results, so re-scoring needs P's copy.
+  - STATIC, the frames, the pinning diagnostic and the frozen rule, recomputed independently, agree; the branch walked by hand is NO PREFERENCE; tests pass 51 of 51.
+  - The text review's three blockers (a disclosure read as a prediction that "held", two counts read as rates) and its other findings were fixed before commit.
+  - Unregistered: the gate is the nearer edge. One Π call in `identity`, or dropping each sg0.3 gate run's largest pair, gives BASELINE SILENT; the decided arm needs two changed calls to leave NO PREFERENCE.
+- **QN:**
+  1. The successor to NO PREFERENCE must separate three readings: neither state carries the orientation once the two are set against each other; both carry it and cancel; or too few calls to see on nine runs. Candidates, none registered: an arm that inverts only the warm start, and a power measurement for this reading at a per-run call rate stated as an assumption, not read from this ring's counts. It must be a new registration on fresh seeds.
+  2. New: V1 cannot see a mesh swapped by hand in both arms with the scores regenerated. A driver-written ledger of mesh hashes would close it.
+  3. Carried: the lower self-gravity wall and the gain/loss axis.
+  4. Carried: linked files that still say more than the README; the rings' own numbers are not indexed.

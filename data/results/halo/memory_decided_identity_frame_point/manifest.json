@@ -1,0 +1,100 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_decided_identity_frame_point",
+ "runs": 9,
+ "note": "",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "spinchladni_sg0.32_gl0_seed41231_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "6e69e2830a637ac97b2fe0eae80529361d323678282b4e22a809e019a0754625",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed41231_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "c8cffd88c89b52d482b279c08090822d03106a4191f56f8146321564f4c0be1e",
+   "bytes": 89163
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed42426_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "1946272b04afdb7d798811cbc04c9aac1ffcdd7a49162a87415262a5b26292f7",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed42426_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "3950d437b3dbd8a0845d373c3981239115e64469050e0b1c1abdbad217e14391",
+   "bytes": 88759
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed43588_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "67fa70ebdef5860ed837b62ac0c6d85c54c906efc4cd5db1c8fea111067e3213",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed43588_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "371c47814406fdcefed31bd6d2cc2bf597fd14d47b53529cea6fdeebd8e27d39",
+   "bytes": 88971
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed44721_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "61653a20b91589e9df0dc8cf86ef99f776aba6b18d0f3e91c4768bc6bc0dd085",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed44721_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "50de7fac30cd193356580ff8f48cd324ce7e616d30d590f15b8c6b8359a18b1c",
+   "bytes": 88939
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed45825_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "831101bedcd5b1b0fd389ef7fb960e03812e0e4782830521ab73d47cb9336b5d",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed45825_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "ee86981694a36417d73b336bfed54dbd611a3cb214efa6594ac8678abd7ccb91",
+   "bytes": 88936
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed46904_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "1311f01a89d46345f93bed59f433257a6882b37481661e5b2a213d26e446e0bd",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed46904_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "ad223afde92756b7c3ab35be3701f844814e63880e46e1f3c04aa00c7f495a6a",
+   "bytes": 89172
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed36055_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "163020654ee1521d224ecfdf71872521c60a24641636cd81e0e32fbbdc520d3f",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed36055_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "80df745c5ce95d01be372acb92dd797009033ef5a903d12f5c5fb2291593eab9",
+   "bytes": 88452
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed37416_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "41b59117bce2cc7a59364e88ac959922209f7e96b0c53e3335a65b9ef9e88e85",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed37416_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "a44278b27ae21d24ac301578d2b41cefc1d4647009de96fc71099f62ddad899e",
+   "bytes": 88616
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed38729_n4194304_e24_fieldExp1.7_ividentity.frame-point.mesh.f32",
+   "sha256": "4192496cdc56806bcc0b2ab059e66b4b47f9df021acc9b0c859562ccac2647d2",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed38729_n4194304_e24_fieldExp1.7_ividentity.json",
+   "sha256": "d789277e4e33b878f7a3989bea1b6410180a2ebfe0b5e27c82066f348adafdd6",
+   "bytes": 88694
+  }
+ ]
+}

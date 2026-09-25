@@ -1,0 +1,100 @@
+{
+ "schema": "halo-memory-pilot-manifest/1",
+ "author": "Aldrin Payopay",
+ "input_dir": "../../data/results/halo/memory_decided_invert_matter_frame_point",
+ "runs": 9,
+ "note": "",
+ "not_manifested": [],
+ "files": [
+  {
+   "file": "spinchladni_sg0.32_gl0_seed41231_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "ef4f989d6363c2dec48d9c7a0e917b5b73629f06bb52f1e3d85140297e31949c",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed41231_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "d4795190a7947d50d5088931bbe206c36fcf86350dd5d3d1c70d7b4ec3902b92",
+   "bytes": 89493
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed42426_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "fe6c0ab9aa6b12c263f022e7cca2103dcbec7b2ab73d16d591a7a4aeccb91870",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed42426_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "d2216d4f78f5c7132599b147c2b8828678451a1503591a205df0b55897b695d4",
+   "bytes": 89556
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed43588_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "ecabebaa1f0eddd8da66b13e9bd32390663171a96dd3bc323eca46f772faccc0",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.32_gl0_seed43588_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "bd8b7b845ce6469fb3de55abf7bb9ed55a91527ae57e7c134a44968d6f327fde",
+   "bytes": 89606
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed44721_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "6ff84fd37d6c767ee584d3cbcf130f2f2fcf4f22227353bde76b76ae14c4d2d1",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed44721_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "3d0625e0523397d7997f1ce8ba96e1cc2c62ec63bba26c3e652628dc9d83591b",
+   "bytes": 89627
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed45825_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "4618786b7846ce2ef8201b10b5c05b30527a18209e6543894c300176dfec78e1",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed45825_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "2286df805a4fde45ffb2522c8aa94aa54e78cf0fe4c902da37f99d5177cd4c9a",
+   "bytes": 89754
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed46904_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "482c94b0dffb2cc823441da40b4762bff6b20376bb7ecbf017a10a55ddc6cebb",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.35_gl0_seed46904_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "8875cdf0e67a616cad10e267c776a7f3be7e6036a9e3fc85b13159843422cba4",
+   "bytes": 89656
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed36055_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "cd17c79ced20612d466188e0be0d34d142b8b2c4427c9669dd217445bba6dc8b",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed36055_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "19d006f0d52984550f3023b07773e68c5c73d387ca348d83fdfd5e1532f7c79e",
+   "bytes": 89088
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed37416_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "771a50b850fa2c82586c50abc8f2bfa6d49343f6c1e1536f0cdb31f3db3baf30",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed37416_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "8e1adfa1a4fabe59a773813b03272c9cd18dab321cdf7fdf58a25c78e4838c61",
+   "bytes": 89017
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed38729_n4194304_e24_fieldExp1.7_ivinvert_matter.frame-point.mesh.f32",
+   "sha256": "84157fcb52b51a3748c2d56f4f8e0b926f425eabc15443a301165045188d101f",
+   "bytes": 3145728
+  },
+  {
+   "file": "spinchladni_sg0.3_gl0_seed38729_n4194304_e24_fieldExp1.7_ivinvert_matter.json",
+   "sha256": "dc1bba8d3b4d53f3de1eded689d2ba23345daa17318ca5643996314d24cd4e48",
+   "bytes": 89237
+  }
+ ]
+}

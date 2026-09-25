@@ -1586,7 +1586,7 @@
       "status": "established",
       "kind": "procedure",
       "claim": "Before another decided arm runs, two steps come first: measure on fresh, pre-registered runs how often the positive control gives its expected answer, and qualify a within-run statistic on its own synthetic test.",
-      "scope": "Both steps came first, as planned: Ring 32 qualified the within-run statistic on its own synthetic receipt before any fresh run, and Ring 33 scored the positive control's fresh, pre-registered runs once with that statistic (Pi in 5 of the 9 scored; Ring 30's frozen rule, reported beside it on the same runs, prefers neither frame). No decided arm has run. A procedure, not a memory result.",
+      "scope": "Both steps came first, as planned: Ring 32 qualified the within-run statistic on its own synthetic receipt before any fresh run, and Ring 33 scored the positive control's fresh, pre-registered runs once with that statistic (Pi in 5 of the 9 scored; Ring 30's frozen rule, reported beside it on the same runs, prefers neither frame). Ring 34 then registered the decided arm on the named seeds, pushed it before any of its runs and scored it once: NO PREFERENCE, no call in any of its 9 scored runs beside the untouched gate's L in 4 of the 9 scored; it names no carrier and is not a null (analysis/2026-09-24_decided_arm_invert_matter.md). A procedure, not a memory result.",
       "quote": "Before another tested arm runs, the next steps are a pre-registered measurement, on fresh runs, of how often the check runs give their expected answer, and a statistic read within each run, qualified first on its own synthetic test.",
       "numbers": [],
       "evidence": [
